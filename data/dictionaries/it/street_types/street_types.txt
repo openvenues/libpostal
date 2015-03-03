@@ -1,0 +1,55 @@
+accesso|acc.so|acc so|accso
+autostrada|aut.da|autda|aut da
+audostradale|aut.sle|autsle|aut sle|aut.ale|autale|aut ale
+autostrade|aut.de|autde|aut de
+bretella|br.lla|brlla|br lla
+bretelle|br.lle|brlle|br lle
+calle|c.le|c le|cle
+campo|c.po|c po|cpo
+cavalcavia|cavalc.a|cavalc a
+chiusa|c.usa|c usa
+circonvallazione|circonv.e|circonv e
+contrada|contr.a|contr a
+corso|c.so|c so|cso
+corte|c.te|c te|cte
+cortile|c.ile|c ile
+ferrata|f.rata|f rata
+fondamenta|f.ta|f ta|fta
+forca|f.ca|f ca
+forcella|forc.la|forc la
+frazione|fraz.e|fraz e
+frazioni|fraz.i|fraz i
+galleria|gall.a|gall a
+gallerie|gall.e|gall e
+genna|g.na|g na
+genne|g.ne|g ne
+largo|l.go|l go|lgo
+localita|loc|loc.ta|loc ta
+piazza|p.za|p.zza|p za|p zza|pza|pzza
+piazzale|p.le|p le|ple
+piazzetta|p.ta|p ta|pta
+ponte|p.te|p te|pte
+porta|p.ta|p ta|pta
+provinciale
+salizada|s.da|s da|sda
+stazione|staz
+strada|s|str.a|str a|stra
+strada comunale|sc|s c
+strada provinciale|sp|s p|str provinciale|s provinciale
+strada regionale|sr|s r
+strada statale|ss|s s
+strada vicinale|sv|s v
+stretta|str.ta|str ta|strta
+strette|str.te|str te|strte
+stretti|str.ti|str ti|strti
+stretto|str.to|str to|strto
+superstrada
+tangenziale
+traversa
+via|v
+via comunale|vc|v c
+via provincale|vp|v p|v provinciale
+via statale|vs|v s
+viale|v.le|v le|vle
+vicolo|v.lo|v lo|vlo
+vico

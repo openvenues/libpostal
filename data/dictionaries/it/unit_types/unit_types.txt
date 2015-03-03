@@ -1,0 +1,13 @@
+blocco|bl.o|blo|bl o
+blocchi|bl.i|bli|bl i
+cantina|c.tina|c tina|ctina
+casa|c
+casetto|c.etto|c etto
+dipartimento|dipart.o|dipart o
+edificio|edif.o|edif o
+garage|g.ge|g ge
+giardino|g.no|g no
+numero|no|n.o|n o|n
+officina|off.a|off a|off
+palazzo|pal.zo|pal zo|palzo
+piano|p.o|p o|p.no|p no|pno

@@ -1,0 +1,10 @@
+nord|n
+nord est|nordest|ne|n e
+nord ovest|nordovest|no|n o
+est|e
+occidentale|occid.le|occid le
+orientale|orrient.le|orrient le
+ovest|o
+sud|s
+sud est|sudest|se|s e
+sud ovest|sudovest|so|s o

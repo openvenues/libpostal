@@ -1,0 +1,16 @@
+associazione calcio|ac|a c
+compagnia|co|comp
+cooperativa|coop.va|coop va|coopva
+cooperativo|coop.vo|coop vo|coopvo
+gruppo di interesse economico|gruppo d'interesse economico|gruppo d' interesse economico|gie|g i e
+ditta individuale
+football club|fc|f c
+societa|sta
+societa cooperativa a responabilita limitata|scrl|s c r l
+societa semplice|ss|s s
+societa in accomandita semplice|sas|s a s
+societa in nome collettivo|snc|s n c
+societa per azioni|spa|s p a
+societa in accomandita per azioni|sapa|s a p a
+societa a garanzia limitata|sagl|s a g l
+societa a responsabilita limitata|srl|s r l
