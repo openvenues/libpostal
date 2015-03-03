@@ -1,0 +1,12 @@
+allee
+brucke|br
+burgermeister|bgm
+damm
+gasse
+hof
+kamp
+pfad
+platz|pl
+quelle|qu
+strasse|str
+weg|w

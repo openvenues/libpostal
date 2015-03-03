@@ -1,0 +1,4 @@
+aktiengesellschaft|ag
+firma|fa
+fussball club|fc|f c
+gmbh

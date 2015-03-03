@@ -1,0 +1,7 @@
+doktor|dr
+burgermeister|bgm
+direktor|dir
+herr|hr
+herrn|hrn
+ingnieur|ing
+sankt|st

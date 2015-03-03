@@ -1,0 +1,28 @@
+altstoffsammelzentrum|asz|a s z
+apotheke
+bundesgymnasium|bg|b g
+bundesrealgymnasium|brg|b r g
+allgemeiner deutscher automobil club|adac|a d a c
+auswartiges amt|aa|a a
+bank
+bustenhalter|bh
+cafe
+denkmal|dkm
+deutsche bahn|db|d b
+deutscher alpenverein|dav|d a v
+fabrik|fb
+fachhochschule|fh
+freiwillige feuerwehr|ff
+gasthaus|gh
+gasthof|ghf
+hafen
+haus
+handelsakademie|hak
+handelsschule|hasch
+hotel
+jungenherberge|jh|j h
+kaffee
+markt|mkt
+marktplatz|markt platz|markt pl|mkt pl|marktpl
+sportplatz|sport platz|sport pl|sportpl
+restaurant
