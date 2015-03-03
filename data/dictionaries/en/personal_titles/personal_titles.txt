@@ -1,0 +1,76 @@
+ambassador
+arch bishop|archbishop
+bishop
+brigadier general|brig gen
+cardinal
+colonel|col
+commander|cmdr
+congressman|congress man
+congresswoman|congress woman
+corporal|cpl
+captain|capt|cpt
+chairman|chair man
+chairwoman|chair woman
+czar|tsar
+dame
+deputy prime minister|deputy pm
+district judge
+doctor|dr|doc
+doctors|drs|docs
+duke
+dutchess
+emperor
+honorable|hon|hounourable
+his royal highness|hrh|h r h
+her royal highness|hrh|h r h
+general|gen
+his honor|his honour
+her honor|her honour
+honorable|honourable|hon
+judge
+lady
+lieutenant|lieut|lgt|lt
+lieutenant governor|lieut governor|lgt governor|lieut gov|lgt gov|lt governor|lt gov
+lieutenant colonel|lieut colonel|lgt colonel|lieut col|lgt col|lt colonel|lt col
+lieutenant commander|lieut commander|lgt commander|lieut cmdr|lgt cmdr|lt commander|lt cmdr
+lieutenant general|lieut general|lgt general|lieut gen|lgt gen|lt general|lt gen
+lord
+king|kg
+madame
+madames
+major|maj
+major general|maj gen|maj general|major gen
+messrs
+mp|member of parliament
+mps|members of parliament
+mr|mister
+mrs|misses
+ms|miss
+officer|ofcr
+pope
+president|pres
+prime minister|pm
+prince
+princess
+private first class|pfc|p f c
+professor|prof
+professors|profs
+queen
+reverend|rev
+right honorable|right honorable|right honourable|right hon|rt honorable|rt honorable|rt honourable|rt hon|rh|r h|r hon|right and honorable|right and honourable
+saint|st
+san|s
+santa|sta
+sargeant|sgt
+secretary|sec
+sir
+sirs
+representative|rep
+representatives|reps
+senator|sen
+senators|sens
+vice chairman|vice chair man
+vice chairperson|vice chair|vice chair person
+vice chairwoman|vice chair woman
+vice president|vice pres
+vice prime minister|vice pm

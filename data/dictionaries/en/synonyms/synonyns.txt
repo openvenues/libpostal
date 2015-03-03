@@ -1,0 +1,16 @@
+brothers|bros
+cape|cpe|cp
+county|co
+flats|flts
+forest|frst|fst
+lake|lk
+lakes|lks
+lock|lck
+locks|lcks
+mount|mt|mnt
+neck|nck
+orchard|orch
+paradise|pde|pdse
+park|pk
+river|r|riv|rvr
+stream|strm|stm

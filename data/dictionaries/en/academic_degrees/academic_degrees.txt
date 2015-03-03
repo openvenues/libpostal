@@ -1,0 +1,27 @@
+attorney|atty|attorney at law|atty at law
+ba|b a|bachelor of arts|bachelor of art
+bs|b s|bachelor of science|bachelor of sciences
+esquire|esq
+jd|juris doctor|j d
+phd|ph d|doctor of philosophy|d phil
+mba|m b a|master of business administration
+ms|m s|master of science
+llb|ll b|bachelor of laws
+ma|m a|master of arts
+dd|d d|doctor of divinity
+mfa|m f a|master in arts|master of fine arts
+md|m d|doctor of medicine|medical doctor
+scd|sc d|d sc|dsc|doctor of science
+llm|ll m|master of laws
+dlitt|d litt|d lit|litt d|lit d|doctor of letters
+mpa|m p a|m p adm|master of public administration
+mpp|m p p|master of public policy
+b ed|bachelor of education
+m ed|mse|ms ed|m s ed|m s e|master of education
+lld|ll d|doctor of laws|legum doctor
+m phil|mphil|ph m|phm|master of philosophy
+th d|d th|doctor of theology
+m eng|master of engineering
+registered nurse|rn
+d o|doctor of osteopathic medicine
+pharm d|pharmd|doctor of pharmacy

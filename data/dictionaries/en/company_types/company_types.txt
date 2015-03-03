@@ -1,0 +1,59 @@
+bank
+b corporation|b corp|bcorp
+charitable incorporated organization|cio|c i o
+chartered
+close corporation|cc
+company|co
+and company|& company|and co|& co
+community interest company|cic|c i c
+cooperative|coop|co op
+corporation|corp
+doing business as|d / b / a|dba|d b a
+economic development corporation|edc|e d c
+enterprise|ent
+european economic interest grouping|eeig|e e i g
+exempted limited partnership|elp|e l p
+federal credit union
+federal savings bank
+football club|fc|f c
+foundation
+fund
+general patnership|gp|g p
+hindu undivided family|huf|h u f
+incorporated|inc
+international business company|ibc|i b c
+intermediary|nt|n t
+investment company with variable capital|icvc|i c v c
+joint venture
+limited|ltd
+limited by guarantee|ltd gte|ltd / gte
+limited company|lc|l c|ltd co
+limited duration company|ldc|l d c
+limited liability company|llc|l l c|ltd liability company|ltd liability co
+limited liability limited partnership|lllp|l l l p
+limited liability partnership|llp|l l p
+limited partnership|lp|l p
+look through company|look through co|lookthrough company|lookthrough co|ltc
+national association|na|n a
+national trust and savings association|national trust & savings association|nt & sa|nt and sa|nt sa|ntsa
+no liability|nl|n l
+nonprofit|non profit
+open ended investment company|oeic|o e i c
+private limited company|pvt ltd
+professional limited liability company|pllc|p l l c
+professional service corporation|psc|p s c
+proprietary|pty
+proprietary limited|pty ltd
+public limited company|plc|p l c|pc ltd|prc|pr c
+public sector unit|psu|p s u|public sector enterprise|pse|p s e
+s corporation|s corp|scorp
+sole proprietorship|sp|s p
+european cooperative society|societa cooperativa europaea|sce
+european company|societa europaea|se|s e
+european private company|societa privata europaea|spe|s p e
+single member company|sme pvt|sme ltd
+society
+trust
+undertakings for collective onvestment in transferable securities|ucits|u c i t s
+unlimited|ultd|unltd
+union

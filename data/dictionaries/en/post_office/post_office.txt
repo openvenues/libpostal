@@ -1,0 +1,8 @@
+bag|lb|lmb|mailbag|lockedbag|mail bag|locked bag|locked mail bag
+post box|pobox|postbox|post box|po box|post office box|p o box|p office box|pb
+post mail box|post mail box|pmb
+mail|m|ml
+mailservice|ms|m s|mail service
+mailcenter|mail center|mail centre|mc|m c
+rmb|road mail box|r m b|roadside mail box|roadside mailbox|rms box
+post office|po|postoffice|pst
