@@ -1,0 +1,8 @@
+noord|n
+noordoost|noord oost|noordoosten|noord oosten|no|n o
+noordwest|noord west|noordwesten|noord westen|nw|n w
+oost|o
+west|w
+zuidoost|zuid oost|zuidoosten|zuid oosten|zo|z o
+zuidwest|zuidwesten|zw|z w
+zuid|z

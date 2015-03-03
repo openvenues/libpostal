@@ -1,0 +1,12 @@
+gracht|gr
+hof|h
+laan|ln
+lange|l
+lang|l
+plain|pln
+singel|sngl
+straat|str
+steenweg|stwg
+verlengde|verl
+vliet|vlt
+weg|wg

@@ -1,0 +1,4 @@
+noordzijde|nz|n z
+oostzijde|oz|o z
+westzijde|wz|w z
+zuidzijde|zz|z z
