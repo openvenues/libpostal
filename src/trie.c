@@ -486,27 +486,30 @@ void trie_tail_merge(trie_t *self, uint32_t old_node_id, unsigned char *suffix, 
         c = old_tail[i];
         log_debug("merge tail, c=%c, node_id=%d\n", c, node_id);
         next_id = trie_add_transition(self, node_id, c);
-        if (next_id == TRIE_INDEX_ERROR)
-            goto fail;
+        if (next_id == TRIE_INDEX_ERROR) {
+            goto exit_prune;
+        }
         node_id = next_id;
     }
 
     uint32_t old_tail_index = trie_add_transition(self, node_id, *(old_tail+common_prefix));
     log_debug("old_tail_index=%d\n", old_tail_index);
-    if (old_tail_index == TRIE_INDEX_ERROR)
-        goto fail;
+    if (old_tail_index == TRIE_INDEX_ERROR) {
+        goto exit_prune;
+    }
 
     old_tail += common_prefix;
-    if (*old_tail != '\0')
+    if (*old_tail != '\0') {
         old_tail++;
+    }
 
     trie_set_base(self, old_tail_index, -1 * old_data_index);
     trie_set_tail(self, old_tail, old_tail_pos);
 
     trie_separate_tail(self, node_id, suffix+common_prefix, data);
     return;
-fail:
-    log_error("fail\n");
+
+exit_prune:
     trie_prune_up_to(self, old_node_id, node_id);
     trie_set_tail(self, original_tail, old_tail_pos);
     return;
@@ -783,7 +786,7 @@ trie_t *trie_read(FILE *file) {
     if (!file_read_int32(file, (int32_t *)&alphabet_size))
         goto exit_file_read;
 
-    log_info("alphabet_size=%d\n", alphabet_size);
+    log_debug("alphabet_size=%d\n", alphabet_size);
 
     if (!file_read_chars(file, (char *)alphabet, alphabet_size))
         goto exit_file_read;
@@ -797,7 +800,7 @@ trie_t *trie_read(FILE *file) {
     if (!file_read_int32(file, (int32_t *)&num_nodes))
         goto exit_trie_created;
 
-    log_info("num_nodes=%d\n", num_nodes);
+    log_debug("num_nodes=%d\n", num_nodes);
     trie_node_array_resize(trie->nodes, num_nodes);
 
     int32_t base;
@@ -818,7 +821,7 @@ trie_t *trie_read(FILE *file) {
         goto exit_trie_created;
 
     trie_data_array_resize(trie->data, num_data_nodes);
-    log_info("num_data_nodes=%d\n", num_data_nodes);
+    log_debug("num_data_nodes=%d\n", num_data_nodes);
 
     uint32_t tail_ptr;
     uint32_t data;
