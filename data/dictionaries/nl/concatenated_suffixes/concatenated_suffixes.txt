@@ -1,8 +1,8 @@
 gracht|gr
-hof|h
+hof|h.
 laan|ln
-lange|l
-lang|l
+lange|l.
+lang|l.
 plain|pln
 singel|sngl
 straat|str
