@@ -1,0 +1,21 @@
+castel|cst
+centre commercial|cc|c c
+chateau
+cottage|cott
+cottages|cott|cotts
+eglise|egl
+gare
+mont|mt|mnt|montagne
+musee|mus
+palais|pal
+parc|prc
+parc industriel
+pont
+ponts
+station|sta
+zone artisanale|za|z a
+zone d'activites|zone dactivites|s a c
+zone d'amenagement concerte|zone damenagement concerte|zac|z a c
+zone d'amenagement differe|zone damenagement differe|zad|z a d
+zone industrielle|zi|z i
+zone a urbaniser en priorite|zup|z u p

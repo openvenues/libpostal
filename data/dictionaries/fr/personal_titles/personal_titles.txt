@@ -1,0 +1,43 @@
+amiral|am
+baron
+baronne
+capitaine|capte
+colonel|col|cel
+commandant|cdt
+comte|cte
+comtesse|ctesse
+docteur|dr
+docteurs|drs
+frere
+general|gal
+lieutenant colonel|lt col
+lieutenant|lt
+madame|mme
+mesdames|mmes
+mademoiselle|mlle|mle
+mademoiselles|mlles|mles
+maitre|me
+maitres
+major|maj
+marechal|mal
+marquis|mis
+marquise|mise
+messiuers|mm|mrs
+monseigneur|mgr
+monsieur|m|mr
+pere
+professeur|prof|pr
+professeurs|profs|prs
+reverende pere|rp|r p
+reverende pere jesuit|rpj|r p j
+sa saintete|ss|s s
+saint|st
+sainte|ste
+son altesse|sa|s a
+son altesse imperiale|sai|s a i
+son altesse royale|sar|s a r
+son eminence|s em
+son excellence|se|s e|s exc
+sous lieutenant|souslieutenant|slt|s lt
+veuve|vve
+vice amiral|viceamiral|vam|v am

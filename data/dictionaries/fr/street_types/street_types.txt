@@ -1,0 +1,230 @@
+abbaye|abe
+agglomeration|agl|agglom
+aire
+aires
+allee|all
+ancien chemin|ach|a ch
+ancienne route|art
+anciennes routes|arts
+anse
+arcade|arc
+autoroute|aut
+avenue|av|ave|aven|avenu|avn|avnu|avnue
+avenues|avs|aves|avens|avenus|avns|avnus|avnues
+barriere|bre
+barrieres|bres
+bas chemin|bch|b ch
+bastide|bstd
+baston|bast
+beguinage|begi
+beguinages|begis
+berge|ber
+berges|bers
+bois
+boucle|bcle
+boulevard|bd|bde|blv|blvd|blvde|blvrd|boulavard|boul|boulv|bvd|boulevarde|bld
+bourg|brg
+butte|but
+cite
+cites
+cote
+coteau
+cale
+camp
+campagne|cgne
+camping|cpg
+carreau|cau|carru
+carrefour|carf|carref
+carriere|care
+carrieres|cares
+carre|carr|car
+cavee|cav
+central|ctrl
+centre|c|ctre|cntre
+cercle|cercl
+chalet|chl
+champ
+chapelle|chp
+charmille|chi
+chaussee|chs|chee
+chaussees|chss|chees
+chemin|ch|che
+chemin vicinal|chv|chev|ch v|che v
+cheminement|chem
+chemins|ches
+chemins vicinaux|chsv|chs v
+chez|chz
+chateau|cht
+cloitre|cloi
+clos
+col
+colline|coli
+collines|colis
+contour|ctr
+corniche|cor
+corniches|cors
+cour
+cours|crs
+darse|dars
+degre|deg
+degres|degs
+descente|dsg
+descentes|dsgs
+digue|dig
+digues|digs
+domaine|dom
+domaines|doms
+ecluse|ecl
+ecluses|ecls
+enceinte|en
+enclave|env
+enclos|enc
+escalier|esc
+escaliers|escs
+espace|esp
+esplanade|esp
+esplanades|esps
+etang
+faubourg|fg|fbg
+ferme|frm
+fermes|frms
+fontaine|fon
+fort|ft
+forum|form
+fosse|fos
+fosses|fos|foss
+foyer|foyr
+galerie|gal
+galeries|gals
+gare
+garenne|garn
+grand boulevard|gbd|grbd|grdbd|gdbd|g bd|gr bd|grd bd|gd bd|g blvd|gr blvd|grd blvd|gd blvd|g bde|gr bde|grd bde|gd bde|g blvrd|gr blvrd|grd blvrd|gd blvrd|g boul|gr boul|grd boul|gd boul|g bvd|gr bvd|grd bvd|gd bvd|g bld|gr bld|grd bld|gd bld
+grand chemin|gch|grch|gdch|grdch|g ch|gr ch|grd ch|gd ch|g chemin|gr chemin|grd chemin|gd chemin
+grand ensemble|gden|gd en|g en|gr en|gdens|gd ens|g ens|gr ens
+grand rue|grand'rue|grandrue|gr|grdr|gdr|g r|gr r|grd r|gd r|g rue|gr rue|grd rue|gd rue
+grand rues|grs|g rs|gr rs|grd rs|gd rs|g rues|gr rues|grd rues|gd rues
+grands ensembles|gdsen|gds ens|gs ens|grs ens|grds ens|gdsens
+grille|gri
+grimpette|grim
+halle|hle
+halles|hles|hls
+hameau|ham
+haut chemin|hch|h ch
+hauts chemins|hchs|h chs|hschs|hs chs
+hippodrome|hip
+hlm
+immeuble|imm
+immeubles|imms
+impasse|imp
+impasses|imps
+jardin|jard|jrd
+jardins|jards|jrds
+jetee|jte
+jetees|jtes
+levee|leve|lve
+lieu-dit|lieu dit|lieudit|ld|ldit|l dit|l-dit
+lotissement|lot
+lotissements|lots
+mail
+maison forestiere|mf|m f
+manoir|man
+marche|mar
+marches|mars
+mas
+mont|mt|mnt|montagne
+montee|mte
+montees|mtes
+moulin|mln
+moulins|mlns
+metro|met
+nouvelle route|nte
+parc|prc
+parcs|prcs
+parking|pkg
+parvis|prv
+passage|pas|psg
+passage a niveau|pn|p n
+passe|pass
+passerelle|ple
+passerelles|ples
+passes
+patio|pat
+pavillon|pav
+pavillons|pavs
+petit chemin|p ch|p chemin|pt ch|pt chemin
+petite allee|pta|pt a|pt allee|p a|p allee
+petite avenue|pae|pt ae|pt ave|p ave|pt avn|p avn
+petite impasse|pim|p im|pt im|p impasse|pt impasse
+petite route|prt|p rt|pt rt|p route|pt route|p rte|pt rte
+petite rue|ptr|pt r|p rue|pt rue
+petites allees|ptas|pt as|pt allees|p a|p allees
+place|pl
+placis|plci
+plage|plag
+plages|plags
+plaine|pln
+plan
+plateau|plt|plat
+plateaux|pltx|platx
+pointe|pte|pnte
+pont
+ponts
+porche|pch|prch
+port
+porte|pte
+portique|porq|portq
+portiques|porqs|portqs
+poterne|pot|potrn
+pourtour|pour
+presqu'lle|prq|prql
+promenade|prom
+pre
+peripherique|peri
+peristyle|psty
+quai|au
+raccourci|rac|racc
+raidillon|raid
+rampe|rpe|rmpe|rmp
+rempart|rem|remp
+roc
+rocade|rocd
+ronde|rnde
+rond point|rondpoint|rdpt|rd pt|rpt
+roquet|roqt
+rotonde|rtd|rtnd|rtde|rtnde
+route|rt|rte
+routes|rts|rtes
+route nationale|rn|r n
+rue|r
+ruelle|rle
+ruelles|rles
+rues|rs
+residence|res
+residences|ress
+sente|sen
+sentes|sens
+sentier|sent
+sentiers|sents
+square|sq
+stade|stde
+terrain|terr|trn
+terrasse|tsse
+terrasses|tsses
+terre plein|tpl|t pl|trpl|tr pl
+terte|trt
+tertes|trts
+tour
+traverse|tra|trvs|trvrs
+vallon|val
+vallee|val
+venelle|ven
+venelles|vens
+via
+vieille route|vte|v rt|vrt|v rte|vrte|v route|vroute
+vieux chemin|vche|v che|vch|v ch|v chemin
+village|vge
+villages|vges
+villas|vlas
+voie|voi
+voies|vois
+zone

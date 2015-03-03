@@ -1,0 +1,4 @@
+est|e
+nord|n
+ouest|o
+sud|s
