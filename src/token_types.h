@@ -1,7 +1,6 @@
 #ifndef TOKEN_TYPES_H
 #define TOKEN_TYPES_H
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif

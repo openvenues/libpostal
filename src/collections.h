@@ -1,7 +1,6 @@
 #ifndef COLLECTIONS_H
 #define COLLECTIONS_H
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif

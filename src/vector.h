@@ -1,7 +1,6 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif

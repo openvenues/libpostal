@@ -1,13 +1,9 @@
-
-
 #ifndef SCANNER_H
 #define SCANNER_H
-
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 #include "token_types.h"
 #include "tokens.h"
