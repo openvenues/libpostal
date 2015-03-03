@@ -1,0 +1,27 @@
+andar
+apartamento|apt|apto
+batalhao|btl
+cave|cv
+departamento|dep|depto
+departamentos|deps|deptos
+direito|dto
+escadas|esc
+escadinhas|escnh
+esquerdo|esq
+frente|ft
+habitacao|hab
+jardim|jrd|jard|jd
+loja|lj
+lojas|ljs
+lote|lt
+numero|no|n|nro|nmro|nro
+loteamento|loteam
+patio|pto
+quarta
+quarto|qt|qto
+res do chao|resdochao|r / c|rc|r c
+residencia|res
+sala
+sobre loja|slj
+sub cave|scv
+terreiro

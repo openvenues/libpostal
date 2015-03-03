@@ -1,0 +1,26 @@
+academia|acad
+associacao|ass
+arquitecto|arq|arqo
+bairro|b|bo|br
+bombeiros voluntarios|bv|b v
+camara municipal|cm|c m
+casal|csl
+castelo|cast
+centro comercial|cc|c c
+ciclo do ensino basico|ceb|c e b
+escola basica|eb|e b
+estacao de tratamento de aguas residuais|etar|e t a r
+fonte
+galeria|gal
+guarda nacional republicana|gnr|g n r
+instituto|inst
+loja
+lojas
+parque|pq|prq|parq
+pavilhao|pav
+policia de seguranca publica|psp|p s p
+policia judiciaria|pj|p j
+ponte|pont|pte|pnte
+rodoviaria|rdv
+seminario|sem|semin
+universidade|univ|univers

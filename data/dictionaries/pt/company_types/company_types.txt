@@ -1,0 +1,31 @@
+agrupamento complementar de empresas|ace|a c e
+associacao desportiva|ad|a d
+associacao em sentido estrito
+clube desportivo|cd|c d
+companhia|cia|comp
+companhia anonima|ca|c a
+companhia de responsabilidao limitada|crl|c r l
+empresa individual|ei|e i|firma individual
+empresa individual de responsabilidade limitada|eireli|e i r e l i
+empresa publica|ep|e p
+fundacao privada
+fundacao publica
+futebol clube|fc|f c
+limitada|ltda|lt da
+organizacao nao governamental|ong|o n g
+organizacao da sociedade civil de interesse publico|oscip|o s c i p
+sociedade aberta|sa|s a
+sociedade anonima|sa|s a|s / a
+sociedade anonima de responsabilidade limitada|sarl|s a r l
+sociedade anonima desportiva|sad|s a d
+sociedade em nome coletivo|snc|s n c
+sociedade em conta de participacao|scp|s c p
+sociedade em comandita simples|scs|s c s
+sociedade em comum
+sociedade fechada|sf|s f
+sociedade gestora de participacoes socials|sgps|s g p s
+sociedade limitada|sociedade por quotas limitada|limitada|lda|sl|s l
+sociedade por acoes|sa|s a
+sociedade simples|pllc|p l l c
+sport clube|sc|s c
+unipessoal lda|ulda|u l d a

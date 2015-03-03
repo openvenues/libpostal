@@ -1,0 +1,50 @@
+acesso
+alameda|al
+auto estrada|autoestrada|auto estr|autoestr
+avenida|av|ava|ave
+avenida marginal|ave marg|av marg|ava marg 
+azinhaga|az
+bairro|b|bo|br
+beco|bc|bco
+calcada|cc
+caclcadinha|ccnh
+caminho|cam|camno
+direito|dto
+esquerdo|esq
+estrada|estr
+astrada marginal|estr marg
+estrada municipal|em|e m|estr m
+estrada nacional|en|e n|estr n
+estrada regional|er|e r|estr r
+frei|fr
+frente|ft
+itinerario complementar|ic|i c
+itinerario principal|ip|i p
+largo|lg|l
+lugar|lg|lug
+parada|pda
+particular|part
+ponto|pto|pnto
+praca|pc|pr|pca
+praceta|pct|pcta
+projectada|proj
+prolongamento|prolng
+quinta|qu|qta
+rampa
+retorno|ret
+rodovia|rod|rvia|rdvia
+rotunda|rot
+rua|r
+rua particular|r part|rpart
+ruas|rs
+sitio
+transversal|transv
+travessa|tv|trav|trv
+tunel
+urbanizacao|urb
+via|v
+viaduto|vd|vdto
+viela|ve
+vila|vl
+volta
+zona|zn

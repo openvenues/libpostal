@@ -1,0 +1,101 @@
+advogado|advo|adv o
+alferes|alf
+almirante|alm
+arcebispo|arco|arc o
+barao|bar
+baronesa
+bispo|bpo|b po
+brigadeiro|brg|brig
+cacique|cac
+capitao|cap|capt
+capitao de corveta|cap corv
+capitao de fragata|cap frag
+capitao de mar e guerra|cap m g|cap mg
+capitao tenente|cap ten|cap tte
+cardeal|card
+comandante|cmdt
+comendador|comend|cmdr|comor|com or
+conde|cde
+condessa|cdessa
+conselheiro|cons
+coronel|cor|cel
+contra almirante|c alm
+deputado|dep
+desembargador|des
+desembargadora|desa|des a
+diacono|diac
+diacona|diaca
+dom|d
+dona|da
+doutor|dr
+doutora|dra
+duque|dq
+duquesa|dqsa|dqa
+embaixador|emb
+eminencia|ema|em a
+eminentissimo|emmo|em mo
+enfermeira|enfa|enf a
+enfermeiro|enfo|enf
+engenheira|enga
+engenheiro|eng|engo
+excelencia|exa|ex a
+excelentissima|exma|ex ma
+excelentissimo|exmo|ex mo
+frei|fr
+general|gen|gal|g al
+governador|gov|govdor|govd or|gov dor
+ilustrissima|ilma|il ma
+ilustrissimo|ilmo|il mo
+infante|inf
+irma|ima|im
+irmao|imo|im
+juiz|jz
+maestra|mta|mtra|mstra
+maestro|mto|mtro|mstro
+major|maj
+major brigadeiro|maj brig
+marechal|mar|mal|m al
+marques|mq|marq
+marquesa|mqsa|marqa
+madre|me
+medico|med
+mestra|ma|m a
+mestre|me|m e
+ministerio|min
+monsenhor|mons
+nossa senhora|nsa|ns a|n sa|n s a
+nosso senhor|ns|n s
+padre|pe|p e
+pastor|pr
+prefeito|pref
+presidente|presid|pres
+professor|prof
+professora|profa
+professoras|profas
+professores|profs
+reverenda|revda|rev da
+reverendo|revdo|rev do
+reverendissima|revma|rev ma
+reverendissimo|revmo|rev mo
+santa|sta
+santo|st|sto
+sao|s
+sargento|sarg|sgto|sargto
+sargento ajudante|sarg ajte|sarg aj te
+secretaria|sec a|secr a|secra
+secretario|sec|secr
+senador|sen
+senhor|s|sr|s r
+senhores|srs|s rs
+senhora|sa|sra|sr a|s ra
+senhoras|sras|s ras
+senhorita|srta|sr ta
+senhoritas|srtas|sr tas
+tenente|ten|tte|t te
+tenente coronel|ten c el|ten cel|tte cel|t te c el
+tesoureiro|tes
+vereador|ver
+vice almirante|v alm
+vigario|vig|vigo|vig o
+visconde|visc|vde|v de
+viscondesa|vdessa|v dessa
