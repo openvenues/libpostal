@@ -1,0 +1,54 @@
+abril|abr|abl
+agosto|ag|agto|ag to|agt
+altura|alt
+alturas|alts
+arboleda|arb
+arrabal|arral
+bosque|bsq
+brigada|brig
+cabo|cbo
+campo|cpo|cmpo
+campos|cpos|cmpos
+canal|cnl
+capital federal|cap fed
+centro|cntro|ctro
+cerro|crro
+codigo postal|cp|c p
+distrito federal|df|d f
+distrito postal|dp|d p
+enero|en|eno|ene|en o
+diciembre|dic|dicbre|dic bre|dice|dic e|dbre|d bre|10bre|10 bre
+febrero|febo|feb o|febro|feb ro|febr|feb
+gobierno|gob|gobno|gob no
+grande|gr
+guerra|ga
+independencia|indep
+infanteria|infa|ynfa|ynfanta
+junio|jun|jn
+julio|jul|jl
+lago|lg
+lagos|lgs
+laguna|lgna
+llanura|llnra
+llanuras|llnras
+marzo|mzo|mar
+mayo|my|may
+militar|milr
+monte|mt|mte|mnte
+montes|mts|mtes|mntes|mnts
+nacional|nal|nacl
+noviembre|nbre|n bre|nvre|n vre|nove|nov e|novre|nov re|novbre|nov bre|9bre|9 bre
+octubre|oct|octbre|oct bre|octe|oct e|8bre|8 bre
+prado|prdo
+primeros|pros
+privada|priv
+punta|pnta
+real|rl
+republica|rep
+revolucion|rev
+ribera|ribr
+septiembre|setbre|set bre|sepe|sep e|sepbre|sep bre|7bre|7 re|7 bre|sep|set
+sierra|srra
+valle|vlle
+volcan|vlcn
+voluntarios|voluntos

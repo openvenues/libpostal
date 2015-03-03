@@ -1,0 +1,7 @@
+caserio|csrio
+casa
+chalet|chlet
+complejo|compj|compl|complj
+condominio|cond
+edificio|edifc|edfc|edif
+viviendas|vvdas

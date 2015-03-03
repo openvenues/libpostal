@@ -1,0 +1,10 @@
+este|e
+norte|n
+noreste|nordeste|ne|n e
+noroeste|nw|n w
+oeste|w
+oriente|ote
+poniente|pte
+sur|s
+sureste|se|s e
+suroeste|sw|s w

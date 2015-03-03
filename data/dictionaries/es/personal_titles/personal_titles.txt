@@ -1,0 +1,132 @@
+abad|abd
+abogada|abga|abgda|abg da
+abogado|abg|abgdo|abg do
+administrador|admor|adm or|admr
+administradora|admora|adm ora|admra
+agrimensor|agrim
+alcalde|alcde
+alferez|alf|alfz
+almirante|alm|almte|alte
+alteza
+arquitecto|arq
+arquitecta|arqa
+arquitectors|arqs|arqos
+arzobispo|arz
+baron|bar
+baronesa
+brigadier|brg|bg|brig
+brigadier general|brg general|brg gral|brg genl|brg gnal|brg gn|bg general|bg gral|bg genl|bg gnal|bg gn|brig general|brig gral|brig genl|brig gnal|brig gn
+caballero|cab
+cabo primero|cp|c p
+cabo segundo|cs|c s
+cabo tercero|ct|c t
+cacique|cque
+capitan|cap|capt|ctn|cptn
+cardenal|card|cnal
+clerigo|clg
+comandante|cmdt|cmte|comte|cte
+comisario|cmro
+conde|cde
+condesa|cdesa
+consejal|cjal
+consejero|cons|consejo
+contralmirante|contralmte
+coronel|cnel|col|crn
+diacono|diac
+diacona|diaca
+diputado|dip
+director|dir
+directora|dira|dir a
+doctor|dr
+doctora|dra
+don|d
+dona|da|dna|d a
+dragoneante|dg
+duque|dq
+duquesa|dqsa|dqa
+embajador|emb
+enfermera|enf|enfa
+escritor
+escritora
+excelencia|exca|exc a
+excelentisima|excma
+excelentisimo|excmo
+fray|fr
+gendarme|gdme
+general|gral|genl|gnal|gn
+gobernadora|gdora|goba
+gobernador|gdor|gob
+hermana|hna
+hermanas|hnas
+hermano|hno
+hermanos|hnos
+infanta|infa|infta
+infante|inf|infte
+ingeniera|inga
+ingeniero|ing|ingo
+inspector|insp
+intendente|int
+jefe|jf
+juez|jz
+licenciada|lda|lica|lic a
+licenciado|ldo|lic|lico|lic o
+locutor|loc
+madre|me|m e
+maestro|mstro|mtro
+majestad
+mariscal|mscal
+marques|mq|marqs
+marquesa|mqa|marqsa
+mayor|my|may
+mayor de brigada|may brig|my brig
+mayor general|mg|m g|my gen|my gral
+ministerio|min
+ministro|mtro
+monsenor|mons|msnr
+notario|not
+nuestra senora|ns|n s|ntra sra
+obispo|ob
+padre|pe|p e|pdre|p dre
+piloto fluvial|plto flvial
+presidenta|pdta|presa|pres a|presida|presid a|pta
+presidente|pdte|pres|presid|pte
+principe
+principal|pral
+procurador|proc
+profesor|prof|profr
+profesora|profa|profra
+reina|ra
+reverendo|rvdo|rdo|rvd|rev
+reverendo|rvdo|rdo|rvd|rev
+reverendisima|rma|rvdma
+reverendisimo|rmo|rvdmo
+rey
+reyes
+san|s
+santa|sta
+sant|st
+santo|sto
+sargento|sarg|sgto|sargto
+sargento ayudante|sarg ay|sgto ay|sargto ay
+sargento mayor|sm|s m|sarg my|sgto my|sargto my
+sargento primero|sp|s p
+sargento segundo|sg|s g
+sargento viceprimero|sargento vice primero|sv|s v
+secretario|secreto|secto
+secretaria|secreta|secta
+senador|sen
+senor|sr
+senora|sra
+senores|srs|sres
+senorita|srta
+serenisima|serma|ser ma
+serenisimo|sermo|ser mo
+soldado|sold
+subteniente|subte|stn
+teniente|tn|tte
+teniente coronel|tcnl|tte cnel|tte col|tn cnel|tn col
+teniente general|tn gral|tte gral|tn gen|tte gen
+teniente primero|tte pro|tn pro
+vicealmirante|vice almirante|v alm|v alte|v almte
+vizconde|vde
+vizcondesa|vdesa

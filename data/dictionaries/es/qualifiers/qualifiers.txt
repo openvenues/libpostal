@@ -1,0 +1,19 @@
+aldea
+auzoa
+barriada|barda
+barrio|bo|brio|brrio
+barrios|bos|brios|brrios
+bloque|blque|bloq|blq
+colonia|col
+ciudad|cdad|cd
+distrito|dtto
+estado|edo
+isla|isl|is
+islas|isls|iss
+poligono|polig
+poligono residencial|polig res|pgres|pg res|pr|p r
+poligono industrial|polig ind|pgind|pg ind|pi|p i
+seccion|secc|sccn|scn|sec
+sector|sect
+urbanizacion|urb
+zona|zna
