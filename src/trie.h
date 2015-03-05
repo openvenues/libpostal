@@ -68,7 +68,8 @@ typedef struct trie {
     int alphabet_size;
 } trie_t;
 
-trie_t *trie_new(uint8_t *alphabet, uint32_t alphabet_size);
+trie_t *trie_new_alphabet(uint8_t *alphabet, uint32_t alphabet_size);
+trie_t *trie_new(void);
 
 uint32_t trie_get_char_index(trie_t *self, unsigned char c);
 uint32_t trie_get_transition_index(trie_t *self, trie_node_t node, unsigned char c);

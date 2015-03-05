@@ -1,6 +1,35 @@
 #include "trie.h"
 #include <math.h>
 
+
+/* 
+* Maps the 256 characters (suitable for UTF-8 strings) to array indices
+* ordered by frequency of usage in Wikipedia titles.
+* In practice the order of the chars shouldn't matter for larger key sets
+* but may save space for a small number of keys
+*/
+uint8_t DEFAULT_ALPHABET[] = {
+32, 97, 101, 105, 111, 110, 114, 0, 116, 108, 115, 117, 104, 99, 100, 109,
+103, 121, 83, 112, 67, 98, 107, 77, 65, 102, 118, 66, 80, 84, 41, 40,
+119, 82, 72, 68, 76, 71, 70, 87, 49, 44, 78, 75, 69, 74, 73, 48,
+195, 122, 45, 50, 57, 79, 86, 46, 120, 85, 106, 39, 56, 51, 52, 89,
+128, 226, 147, 55, 53, 54, 197, 113, 196, 90, 169, 161, 81, 179, 58, 88,
+173, 188, 141, 182, 153, 177, 38, 130, 135, 164, 159, 47, 168, 33, 186, 167,
+129, 200, 131, 162, 155, 184, 163, 171, 160, 137, 132, 190, 133, 34, 225, 187,
+165, 189, 176, 63, 201, 140, 154, 180, 151, 170, 145, 175, 43, 152, 150, 166,
+158, 194, 198, 178, 144, 181, 148, 134, 136, 42, 185, 174, 156, 143, 172, 191,
+142, 96, 59, 202, 139, 183, 64, 206, 157, 61, 146, 36, 37, 199, 149, 126,
+229, 230, 204, 233, 231, 207, 138, 208, 232, 92, 227, 228, 209, 94, 224, 239,
+217, 205, 221, 218, 211, 4, 8, 12, 16, 20, 24, 28, 60, 203, 215, 219,
+223, 235, 243, 247, 251, 124, 254, 3, 7, 11, 15, 19, 23, 27, 31, 35,
+192, 212, 216, 91, 220, 95, 236, 240, 244, 248, 123, 252, 127, 2, 6, 10,
+14, 18, 22, 26, 30, 62, 193, 213, 237, 241, 245, 249, 253, 1, 5, 9,
+13, 17, 21, 25, 29, 210, 214, 93, 222, 234, 238, 242, 246, 250, 125, 255
+};
+
+#define DEFAULT_ALPHABET_SIZE sizeof(DEFAULT_ALPHABET)
+
+
 /*
 Constructors
 */
@@ -49,7 +78,7 @@ exit_no_malloc:
     return NULL;
 }
 
-trie_t *trie_new(uint8_t *alphabet, uint32_t alphabet_size) {
+trie_t *trie_new_alphabet(uint8_t *alphabet, uint32_t alphabet_size) {
     trie_t *self = trie_new_empty(alphabet, alphabet_size);
     if (!self)
         return NULL;
@@ -65,6 +94,10 @@ trie_t *trie_new(uint8_t *alphabet, uint32_t alphabet_size) {
     trie_data_array_push(self->data, (trie_data_node_t){0, 0});
 
     return self;
+}
+
+trie_t *trie_new(void) {
+    return trie_new_alphabet(DEFAULT_ALPHABET, sizeof(DEFAULT_ALPHABET));
 }
 
 bool trie_node_is_free(trie_node_t node) {
@@ -787,6 +820,8 @@ trie_t *trie_read(FILE *file) {
         goto exit_file_read;
 
     log_debug("alphabet_size=%d\n", alphabet_size);
+    if (alphabet_size > NUM_CHARS)
+        goto exit_file_read;
 
     if (!file_read_chars(file, (char *)alphabet, alphabet_size))
         goto exit_file_read;
