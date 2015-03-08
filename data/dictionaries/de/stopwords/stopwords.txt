@@ -18,18 +18,19 @@ fur
 gegenuber
 im|i
 in|i
-in der|id|i d
+in der|i d
 mit
 nach
 nachst
 neben
 ob|o
+oder|od
 uber
 und|&
 unter
 vor|v
 von|v
-von der|v d|vd
+von der|v d
 zu
 zu der
 zur

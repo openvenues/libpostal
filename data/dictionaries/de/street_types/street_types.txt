@@ -14,7 +14,6 @@ graben|gr
 grosser
 grosse|gr|g
 grosses
-hauptbahnhof|hbf
 heiligen
 hof|h
 kamp|k
@@ -24,10 +23,10 @@ kleines
 obere|ob
 oberer|ob
 oberes
-pfad|p
+pfad
 platz|pl
 quelle|qu
-rhein|rh
+rundwanderweg|rww
 strasse|str
 untere|u
 unterer

@@ -2,3 +2,4 @@ diplom ingenieur|dipl ing
 diplom kaufmann|dipl kfm
 doktor de medizin|dr med
 doktor der philosophie|dr phil
+magister|mag

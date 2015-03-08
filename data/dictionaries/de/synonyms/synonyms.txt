@@ -1,3 +1,14 @@
 deutsch|dt
 ehemalige|ehem
+gebruder|gebr
 haltestelle|hst
+hinter|hint|ht
+internationale|int
+kleine|kl
+kogel|kg
+niedere|nd
+rhein|rh
+see|s
+spitze|sp
+vordere|vd|vord
+wiese|ws

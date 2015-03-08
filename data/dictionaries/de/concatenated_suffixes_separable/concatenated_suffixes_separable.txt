@@ -4,9 +4,6 @@ burgermeister|bgm
 damm
 gasse
 hof
-kamp
-pfad
-platz|pl
-quelle|qu
-strasse|str
+quelle|qu|q
+rundwanderweg|rww
 weg|w

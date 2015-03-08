@@ -1,7 +1,18 @@
 doktor|dr
 burgermeister|bgm
 direktor|dir
+frau|fr
+fraulein|fri
+heilige|hl
+heiliger
+heiliges
 herr|hr
 herrn|hrn
 ingnieur|ing
+kapitanleutnant|ka leut
+mitglied des bundestages|mdb
+mitglied des landtages|mdl
+oberburgermeister|ob|obgm
+pater
+professor|prof
 sankt|st

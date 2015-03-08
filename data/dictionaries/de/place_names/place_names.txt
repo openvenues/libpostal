@@ -19,10 +19,36 @@ hafen
 haus
 handelsakademie|hak
 handelsschule|hasch
+hauptbahnhof|hbf
+hohle
+hohere technische lehranstalt|htl|h t l
 hotel
+hutte|htt
+jagdhaus
+jagdhutte|jhtt
 jungenherberge|jh|j h
 kaffee
+kapelle|kap|kpl
+klaranlage|ka
+konzentrationslager|kz|kl
+magistratsabteilung|ma
 markt|mkt
 marktplatz|markt platz|markt pl|mkt pl|marktpl
+nationalpark|np|national park
+naturschutzgebiet|nsg
+neue mittelschule|nms
+padagogische hochschule|ph
 sportplatz|sport platz|sport pl|sportpl
+resevoir|res
 restaurant
+ruine
+schloss|schl
+steinbruch|stb
+technische universitat|tu|t u
+truppenubungsplatz|tupl
+universitat|uni
+universitatsbibliothek|ub|u b
+volksschule|vs
+wald
+wasserfall|wsf|wssf
+wirtshaus|wh

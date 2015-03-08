@@ -1,0 +1,17 @@
+nord|n
+norden
+nordliche|nordl
+nordost|no
+nordwest|nw
+ost|o
+osten
+ostliche|ostl
+suden|s
+sudliche|sudl
+sudost|so
+sudosten
+sudwest|sw
+sudwesten
+west|w
+westen
+westliche|westl

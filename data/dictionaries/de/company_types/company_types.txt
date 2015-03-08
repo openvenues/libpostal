@@ -1,4 +1,8 @@
-aktiengesellschaft|ag
+ag|aktiengesellschaft
+eingetragener verein|e v
 firma|fa
 fussball club|fc|f c
-gmbh
+gmbh|gesellschaft mit beschrankter haftung
+gesellschaft|ges
+kg|kommanditgesellschaft
+ohg|offene handelsgesellschaft
