@@ -1,0 +1,24 @@
+autopista|auto|autop
+autovia|autov
+avinguda|av|avd|avda
+cami
+carrer|carr
+carrero|cro|carro|carr
+carretera|ctra
+cinturo|cint
+drecera|drec
+eix
+eix diagonal
+entrada|entr
+gran via|gv|g v
+passadis|pdis
+passatge|ptge
+passeig|pg
+placa|pl|pca
+portal|ptal
+rambla|rbla
+ronda|rda
+sortida|sort
+travessera|trav
+travessia|trv|trav
+via|v

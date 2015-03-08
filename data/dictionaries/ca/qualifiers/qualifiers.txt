@@ -1,0 +1,7 @@
+barri|b
+bloc|bl
+cantonada|cant
+districte|distr
+poligon|pol
+poligon industrial|pi|pol ind
+urbanitzacio|urb

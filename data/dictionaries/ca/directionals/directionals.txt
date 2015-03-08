@@ -1,0 +1,9 @@
+est|e
+nord|nort|n
+nordest|nord est|ne|n e
+nordoest|nord oest|no|n o
+occident
+oest|o
+sud|s
+sudest|sud est|se|s e
+sudoest|sud oest|so|s o

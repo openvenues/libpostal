@@ -1,0 +1,12 @@
+aparcament|aparc
+apartament|apmt
+apartat|apt
+atic|at
+dreta|dta
+entrada|entr
+escala|esc
+habitacio|hab
+numero|num|n|#
+parcella|parcel la|parc
+porta|pta
+sobreatic|s / at|s at

@@ -1,0 +1,21 @@
+biblioteca|bibl
+cementiri|cem
+collegi|col legi|col l|coll
+collegi public|col legi public|cp
+comissaria|com
+convent|convt
+correus|corr
+escola|esc
+escola universitaria|eu|e u
+esglesia|esgl
+estacio|est
+estacionament|estac
+font
+hospital|hop
+hotel|h
+monestir|mtir
+monument|mon
+museu|mus
+pavello|pav
+planta|pl
+pont

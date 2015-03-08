@@ -1,0 +1,14 @@
+baixada|bda
+baixos|bxs
+barranc|bnc
+dreta|dta
+finca|fca
+municipal|mpal
+nacional|nac
+nombre|nre
+parada|par
+població|pobl
+principal|pral
+pujada|pda
+sagrada|sgda
+sagrat|sgt
