@@ -21,6 +21,7 @@ pavilhao|pav
 policia de seguranca publica|psp|p s p
 policia judiciaria|pj|p j
 ponte|pont|pte|pnte
+porto|pto
 rodoviaria|rdv
 seminario|sem|semin
 universidade|univ|univers

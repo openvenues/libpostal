@@ -1,6 +1,6 @@
 acesso
 alameda|al
-auto estrada|autoestrada|auto estr|autoestr
+autoestrada|auto estrada|auto estr|autoestr
 avenida|av|ava|ave
 avenida marginal|ave marg|av marg|ava marg 
 azinhaga|az
@@ -33,10 +33,12 @@ quinta|qu|qta
 rampa
 retorno|ret
 rodovia|rod|rvia|rdvia
+rodoanel
 rotunda|rot
 rua|r
 rua particular|r part|rpart
 ruas|rs
+ruela
 sitio
 transversal|transv
 travessa|tv|trav|trv

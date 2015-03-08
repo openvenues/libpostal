@@ -2,6 +2,7 @@ andar
 apartamento|apt|apto
 batalhao|btl
 cave|cv
+condominio
 departamento|dep|depto
 departamentos|deps|deptos
 direito|dto
