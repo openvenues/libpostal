@@ -32,6 +32,10 @@ char *file_getline(FILE * f)
     return ret;
 }
 
+bool is_relative_path(struct dirent *ent) {
+    return strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0;
+}
+
 
 bool file_read_int32(FILE *file, int32_t *value) {
     unsigned char buf[4];
