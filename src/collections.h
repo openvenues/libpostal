@@ -30,9 +30,10 @@ KHASH_MAP_INIT_STR(str_str, char *)
 
 VECTOR_INIT(int32_array, int32_t)
 VECTOR_INIT(uint32_array, uint32_t)
+VECTOR_INIT(float_array, float)
+VECTOR_INIT(double_array, double)
 VECTOR_INIT(char_array, char)
 VECTOR_INIT(uchar_array, unsigned char)
-
 
 #ifdef __cplusplus
 }
