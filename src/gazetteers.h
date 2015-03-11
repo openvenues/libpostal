@@ -8,23 +8,25 @@ extern "C" {
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 
-#define ADDRESS_ANY UINT64_C(1) << 0
-#define ADDRESS_NAME UINT64_C(1) << 1
-#define ADDRESS_HOUSE_NUMBER UINT64_C(1) << 2
-#define ADDRESS_STREET UINT64_C(1) << 3
-#define ADDRESS_UNIT UINT64_C(1) << 4
+/* Bit set, should be able to keep it at a short (uint16_t)
+*  so the set can be bit-packed into a 32-bit value in our trie
+*/
+#define ADDRESS_ANY 1 << 0
+#define ADDRESS_NAME 1 << 1
+#define ADDRESS_HOUSE_NUMBER 1 << 2
+#define ADDRESS_STREET 1 << 3
+#define ADDRESS_UNIT 1 << 4
 
-#define ADDRESS_LOCALITY UINT64_C(1) << 32
-#define ADDRESS_ADMIN1 UINT64_C(1) << 33
-#define ADDRESS_ADMIN2 UINT64_C(1) << 34
-#define ADDRESS_ADMIN3 UINT64_C(1) << 35
-#define ADDRESS_ADMIN4 UINT64_C(1) << 36
-#define ADDRESS_ADMIN_OTHER UINT64_C(1) << 37
-#define ADDRESS_COUNTRY UINT64_C(1) << 38
-#define ADDRESS_POSTAL_CODE UINT64_C(1) << 39
-#define ADDRESS_NEIGHBORHOOD UINT64_C(1) << 40
+#define ADDRESS_LOCALITY 1 << 7
+#define ADDRESS_ADMIN1 1 << 8
+#define ADDRESS_ADMIN2 1 << 9
+#define ADDRESS_ADMIN3 1 << 10
+#define ADDRESS_ADMIN4 1 << 11
+#define ADDRESS_ADMIN_OTHER 1 << 12
+#define ADDRESS_COUNTRY 1 << 13
+#define ADDRESS_POSTAL_CODE 1 << 14
+#define ADDRESS_NEIGHBORHOOD 1 << 15
 
 typedef enum dictionary_type {
     DICTIONARY_ANY = 1,
@@ -70,7 +72,7 @@ typedef enum dictionary_type {
 typedef struct gazetteer {
     char name[64];
     dictionary_type_t type;
-    uint64_t address_components;
+    uint16_t address_components;
 } gazetteer_t;
 
 // Only need these for the in-memory dictionaries
