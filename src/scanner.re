@@ -149,7 +149,7 @@ abbreviation = ({word})"\.";
 
 {numeric}                       { return NUMERIC; }
 {apos_word}                     { return WORD; }
-{ideographic_symbol}            { return IDEOGRAPH; }
+{ideographic_symbol}            { return IDEOGRAM; }
 {word}                          { return WORD; }
 {katakana}                      { return WORD; }
 {any_word}                      { return WORD; }
