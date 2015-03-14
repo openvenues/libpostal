@@ -270,7 +270,7 @@ POSTAL_FIELDS_HEADER_FILE = '''enum gn_postal_fields {{
     NUM_POSTAL_FIELDS
 }};
 '''.format(fields=''',
-    '''.join(['{}={},'.format(f.c_constant, i) for i, f in enumerate(postal_code_fields)]))
+    '''.join(['{}={}'.format(f.c_constant, i) for i, f in enumerate(postal_code_fields)]))
 
 
 def write_postal_fields_header(filename=POSTAL_FIELDS_HEADER):
