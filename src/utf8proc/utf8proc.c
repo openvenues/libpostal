@@ -43,7 +43,7 @@
 #include "utf8proc_data.c"
 
 
-const int8_t utf8proc_utf8class[256] = {
+DLLEXPORT const int8_t utf8proc_utf8class[256] = {
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -81,25 +81,14 @@ const int8_t utf8proc_utf8class[256] = {
 #define UTF8PROC_HANGUL_S_START  0xAC00
 #define UTF8PROC_HANGUL_S_END    0xD7A4
 
-
-#define UTF8PROC_BOUNDCLASS_START    0
-#define UTF8PROC_BOUNDCLASS_OTHER    1
-#define UTF8PROC_BOUNDCLASS_CR       2
-#define UTF8PROC_BOUNDCLASS_LF       3
-#define UTF8PROC_BOUNDCLASS_CONTROL  4
-#define UTF8PROC_BOUNDCLASS_EXTEND   5
-#define UTF8PROC_BOUNDCLASS_L        6
-#define UTF8PROC_BOUNDCLASS_V        7
-#define UTF8PROC_BOUNDCLASS_T        8
-#define UTF8PROC_BOUNDCLASS_LV       9
-#define UTF8PROC_BOUNDCLASS_LVT     10
-
-
-const char *utf8proc_version(void) {
-  return "1.1.6";
+/* Should follow semantic-versioning rules (semver.org) based on API
+   compatibility.  (Note that the shared-library version number will
+   be different, being based on ABI compatibility.): */
+DLLEXPORT const char *utf8proc_version(void) {
+  return "1.2-dev";
 }
 
-const char *utf8proc_errmsg(ssize_t errcode) {
+DLLEXPORT const char *utf8proc_errmsg(ssize_t errcode) {
   switch (errcode) {
     case UTF8PROC_ERROR_NOMEM:
     return "Memory for processing UTF-8 data could not be allocated.";
@@ -112,11 +101,11 @@ const char *utf8proc_errmsg(ssize_t errcode) {
     case UTF8PROC_ERROR_INVALIDOPTS:
     return "Invalid options for UTF-8 processing chosen.";
     default:
-    return "An unknown error occured while processing UTF-8 data.";
+    return "An unknown error occurred while processing UTF-8 data.";
   }
 }
 
-ssize_t utf8proc_iterate(
+DLLEXPORT ssize_t utf8proc_iterate(
   const uint8_t *str, ssize_t strlen, int32_t *dst
 ) {
   int length;
@@ -156,14 +145,14 @@ ssize_t utf8proc_iterate(
   return length;
 }
 
-bool utf8proc_codepoint_valid(int32_t uc) {
+DLLEXPORT bool utf8proc_codepoint_valid(int32_t uc) {
   if (uc < 0 || uc >= 0x110000 ||
     ((uc & 0xFFFF) >= 0xFFFE) || (uc >= 0xD800 && uc < 0xE000) ||
     (uc >= 0xFDD0 && uc < 0xFDF0)) return false;
   else return true;
 }
 
-ssize_t utf8proc_encode_char(int32_t uc, uint8_t *dst) {
+DLLEXPORT ssize_t utf8proc_encode_char(int32_t uc, uint8_t *dst) {
   if (uc < 0x00) {
     return 0;
   } else if (uc < 0x80) {
@@ -193,7 +182,8 @@ ssize_t utf8proc_encode_char(int32_t uc, uint8_t *dst) {
   } else return 0;
 }
 
-const utf8proc_property_t *utf8proc_get_property(int32_t uc) {
+/* internal "unsafe" version that does not check whether uc is in range */
+static const utf8proc_property_t *get_property(int32_t uc) {
   /* ASSERT: uc >= 0 && uc < 0x110000 */
   return utf8proc_properties + (
     utf8proc_stage2table[
@@ -202,17 +192,67 @@ const utf8proc_property_t *utf8proc_get_property(int32_t uc) {
   );
 }
 
+DLLEXPORT const utf8proc_property_t *utf8proc_get_property(int32_t uc) {
+     return uc < 0 || uc >= 0x110000 ? utf8proc_properties : get_property(uc);
+}
+
+/* return whether there is a grapheme break between boundclasses lbc and tbc */
+static bool grapheme_break(int lbc, int tbc) {
+     return 
+          (lbc == UTF8PROC_BOUNDCLASS_START) ? true :
+          (lbc == UTF8PROC_BOUNDCLASS_CR &&
+           tbc == UTF8PROC_BOUNDCLASS_LF) ? false :
+          (lbc >= UTF8PROC_BOUNDCLASS_CR && lbc <= UTF8PROC_BOUNDCLASS_CONTROL) ? true :
+          (tbc >= UTF8PROC_BOUNDCLASS_CR && tbc <= UTF8PROC_BOUNDCLASS_CONTROL) ? true :
+          (tbc == UTF8PROC_BOUNDCLASS_EXTEND) ? false :
+          (lbc == UTF8PROC_BOUNDCLASS_L &&
+           (tbc == UTF8PROC_BOUNDCLASS_L ||
+            tbc == UTF8PROC_BOUNDCLASS_V ||
+            tbc == UTF8PROC_BOUNDCLASS_LV ||
+            tbc == UTF8PROC_BOUNDCLASS_LVT)) ? false :
+          ((lbc == UTF8PROC_BOUNDCLASS_LV ||
+            lbc == UTF8PROC_BOUNDCLASS_V) &&
+           (tbc == UTF8PROC_BOUNDCLASS_V ||
+            tbc == UTF8PROC_BOUNDCLASS_T)) ? false :
+          ((lbc == UTF8PROC_BOUNDCLASS_LVT ||
+            lbc == UTF8PROC_BOUNDCLASS_T) &&
+           tbc == UTF8PROC_BOUNDCLASS_T) ? false :
+          (lbc == UTF8PROC_BOUNDCLASS_REGIONAL_INDICATOR &&
+           tbc == UTF8PROC_BOUNDCLASS_REGIONAL_INDICATOR) ? false :
+          (tbc != UTF8PROC_BOUNDCLASS_SPACINGMARK);
+}
+
+/* return whether there is a grapheme break between codepoints c1 and c2 */
+DLLEXPORT bool utf8proc_grapheme_break(int32_t c1, int32_t c2) {
+     return grapheme_break(utf8proc_get_property(c1)->boundclass,
+                           utf8proc_get_property(c2)->boundclass);
+}
+
+/* return a character width analogous to wcwidth (except portable and
+   hopefully less buggy than most system wcwidth functions). */
+DLLEXPORT int utf8proc_charwidth(int32_t c) {
+     return utf8proc_get_property(c)->charwidth;
+}
+
+DLLEXPORT int utf8proc_category(int32_t c) {
+     return utf8proc_get_property(c)->category;
+}
+
+DLLEXPORT const char *utf8proc_category_string(int32_t c) {
+     static const char s[][3] = {"Cn","Lu","Ll","Lt","Lm","Lo","Mn","Mc","Me","Nd","Nl","No","Pc","Pd","Ps","Pe","Pi","Pf","Po","Sm","Sc","Sk","So","Zs","Zl","Zp","Cc","Cf","Cs","Co"};
+     return s[utf8proc_category(c)];
+}
+
 #define utf8proc_decompose_lump(replacement_uc) \
   return utf8proc_decompose_char((replacement_uc), dst, bufsize, \
   options & ~UTF8PROC_LUMP, last_boundclass)
 
-ssize_t utf8proc_decompose_char(int32_t uc, int32_t *dst, ssize_t bufsize,
-    int options, int *last_boundclass) {
-  /* ASSERT: uc >= 0 && uc < 0x110000 */
+DLLEXPORT ssize_t utf8proc_decompose_char(int32_t uc, int32_t *dst, ssize_t bufsize, int options, int *last_boundclass) {
   const utf8proc_property_t *property;
   utf8proc_propval_t category;
   int32_t hangul_sindex;
-  property = utf8proc_get_property(uc);
+  if (uc < 0 || uc >= 0x110000) return UTF8PROC_ERROR_NOTASSIGNED;
+  property = get_property(uc);
   category = property->category;
   hangul_sindex = uc - UTF8PROC_HANGUL_SBASE;
   if (options & (UTF8PROC_COMPOSE|UTF8PROC_DECOMPOSE)) {
@@ -298,48 +338,8 @@ ssize_t utf8proc_decompose_char(int32_t uc, int32_t *dst, ssize_t bufsize,
   }
   if (options & UTF8PROC_CHARBOUND) {
     bool boundary;
-    int tbc, lbc;
-    tbc =
-      (uc == 0x000D) ? UTF8PROC_BOUNDCLASS_CR :
-      (uc == 0x000A) ? UTF8PROC_BOUNDCLASS_LF :
-      ((category == UTF8PROC_CATEGORY_ZL ||
-        category == UTF8PROC_CATEGORY_ZP ||
-        category == UTF8PROC_CATEGORY_CC ||
-        category == UTF8PROC_CATEGORY_CF) &&
-        !(uc == 0x200C || uc == 0x200D)) ? UTF8PROC_BOUNDCLASS_CONTROL :
-      property->extend ? UTF8PROC_BOUNDCLASS_EXTEND :
-      ((uc >= UTF8PROC_HANGUL_L_START && uc < UTF8PROC_HANGUL_L_END) ||
-        uc == UTF8PROC_HANGUL_L_FILLER) ? UTF8PROC_BOUNDCLASS_L :
-      (uc >= UTF8PROC_HANGUL_V_START && uc < UTF8PROC_HANGUL_V_END) ?
-        UTF8PROC_BOUNDCLASS_V :
-      (uc >= UTF8PROC_HANGUL_T_START && uc < UTF8PROC_HANGUL_T_END) ?
-        UTF8PROC_BOUNDCLASS_T :
-      (uc >= UTF8PROC_HANGUL_S_START && uc < UTF8PROC_HANGUL_S_END) ? (
-        ((uc-UTF8PROC_HANGUL_SBASE) % UTF8PROC_HANGUL_TCOUNT == 0) ?
-          UTF8PROC_BOUNDCLASS_LV : UTF8PROC_BOUNDCLASS_LVT
-      ) :
-      UTF8PROC_BOUNDCLASS_OTHER;
-    lbc = *last_boundclass;
-    boundary =
-      (tbc == UTF8PROC_BOUNDCLASS_EXTEND) ? false :
-      (lbc == UTF8PROC_BOUNDCLASS_START) ? true :
-      (lbc == UTF8PROC_BOUNDCLASS_CR &&
-       tbc == UTF8PROC_BOUNDCLASS_LF) ? false :
-      (lbc == UTF8PROC_BOUNDCLASS_CONTROL) ? true :
-      (tbc == UTF8PROC_BOUNDCLASS_CONTROL) ? true :
-      (lbc == UTF8PROC_BOUNDCLASS_L &&
-       (tbc == UTF8PROC_BOUNDCLASS_L ||
-        tbc == UTF8PROC_BOUNDCLASS_V ||
-        tbc == UTF8PROC_BOUNDCLASS_LV ||
-        tbc == UTF8PROC_BOUNDCLASS_LVT)) ? false :
-      ((lbc == UTF8PROC_BOUNDCLASS_LV ||
-        lbc == UTF8PROC_BOUNDCLASS_V) &&
-       (tbc == UTF8PROC_BOUNDCLASS_V ||
-        tbc == UTF8PROC_BOUNDCLASS_T)) ? false :
-      ((lbc == UTF8PROC_BOUNDCLASS_LVT ||
-        lbc == UTF8PROC_BOUNDCLASS_T) &&
-       tbc == UTF8PROC_BOUNDCLASS_T) ? false :
-       true;
+    int tbc = property->boundclass;
+    boundary = grapheme_break(*last_boundclass, tbc);
     *last_boundclass = tbc;
     if (boundary) {
       if (bufsize >= 1) dst[0] = 0xFFFF;
@@ -351,7 +351,7 @@ ssize_t utf8proc_decompose_char(int32_t uc, int32_t *dst, ssize_t bufsize,
   return 1;
 }
 
-ssize_t utf8proc_decompose(
+DLLEXPORT ssize_t utf8proc_decompose(
   const uint8_t *str, ssize_t strlen,
   int32_t *buffer, ssize_t bufsize, int options
 ) {
@@ -370,7 +370,7 @@ ssize_t utf8proc_decompose(
     while (1) {
       if (options & UTF8PROC_NULLTERM) {
         rpos += utf8proc_iterate(str + rpos, -1, &uc);
-        /* checking of return value is not neccessary,
+        /* checking of return value is not necessary,
            as 'uc' is < 0 in case of error */
         if (uc < 0) return UTF8PROC_ERROR_INVALIDUTF8;
         if (rpos < 0) return UTF8PROC_ERROR_OVERFLOW;
@@ -398,8 +398,8 @@ ssize_t utf8proc_decompose(
       const utf8proc_property_t *property1, *property2;
       uc1 = buffer[pos];
       uc2 = buffer[pos+1];
-      property1 = utf8proc_get_property(uc1);
-      property2 = utf8proc_get_property(uc2);
+      property1 = get_property(uc1);
+      property2 = get_property(uc2);
       if (property1->combining_class > property2->combining_class &&
           property2->combining_class > 0) {
         buffer[pos] = uc2;
@@ -413,7 +413,7 @@ ssize_t utf8proc_decompose(
   return wpos;
 }
 
-ssize_t utf8proc_reencode(int32_t *buffer, ssize_t length, int options) {
+DLLEXPORT ssize_t utf8proc_reencode(int32_t *buffer, ssize_t length, int options) {
   /* UTF8PROC_NULLTERM option will be ignored, 'length' is never ignored
      ASSERT: 'buffer' has one spare byte of free space at the end! */
   if (options & (UTF8PROC_NLF2LS | UTF8PROC_NLF2PS | UTF8PROC_STRIPCC)) {
@@ -457,7 +457,7 @@ ssize_t utf8proc_reencode(int32_t *buffer, ssize_t length, int options) {
     int32_t composition;
     for (rpos = 0; rpos < length; rpos++) {
       current_char = buffer[rpos];
-      current_property = utf8proc_get_property(current_char);
+      current_property = get_property(current_char);
       if (starter && current_property->combining_class > max_combining_class) {
         /* combination perhaps possible */
         int32_t hangul_lindex;
@@ -486,7 +486,7 @@ ssize_t utf8proc_reencode(int32_t *buffer, ssize_t length, int options) {
           }
         }
         if (!starter_property) {
-          starter_property = utf8proc_get_property(*starter);
+          starter_property = get_property(*starter);
         }
         if (starter_property->comb1st_index >= 0 &&
             current_property->comb2nd_index >= 0) {
@@ -495,7 +495,7 @@ ssize_t utf8proc_reencode(int32_t *buffer, ssize_t length, int options) {
             current_property->comb2nd_index
           ];
           if (composition >= 0 && (!(options & UTF8PROC_STABLE) ||
-              !(utf8proc_get_property(composition)->comp_exclusion))) {
+              !(get_property(composition)->comp_exclusion))) {
             *starter = composition;
             starter_property = NULL;
             continue;
@@ -528,7 +528,7 @@ ssize_t utf8proc_reencode(int32_t *buffer, ssize_t length, int options) {
   }
 }
 
-ssize_t utf8proc_map(
+DLLEXPORT ssize_t utf8proc_map(
   const uint8_t *str, ssize_t strlen, uint8_t **dstptr, int options
 ) {
   int32_t *buffer;
@@ -536,7 +536,7 @@ ssize_t utf8proc_map(
   *dstptr = NULL;
   result = utf8proc_decompose(str, strlen, NULL, 0, options);
   if (result < 0) return result;
-  buffer = malloc(result * sizeof(int32_t) + 1);
+  buffer = (int32_t *) malloc(result * sizeof(int32_t) + 1);
   if (!buffer) return UTF8PROC_ERROR_NOMEM;
   result = utf8proc_decompose(str, strlen, buffer, result, options);
   if (result < 0) {
@@ -550,38 +550,37 @@ ssize_t utf8proc_map(
   }
   {
     int32_t *newptr;
-    newptr = realloc(buffer, (size_t)result+1);
+    newptr = (int32_t *) realloc(buffer, (size_t)result+1);
     if (newptr) buffer = newptr;
   }
   *dstptr = (uint8_t *)buffer;
   return result;
 }
 
-uint8_t *utf8proc_NFD(const uint8_t *str) {
+DLLEXPORT uint8_t *utf8proc_NFD(const uint8_t *str) {
   uint8_t *retval;
   utf8proc_map(str, 0, &retval, UTF8PROC_NULLTERM | UTF8PROC_STABLE |
     UTF8PROC_DECOMPOSE);
   return retval;
 }
 
-uint8_t *utf8proc_NFC(const uint8_t *str) {
+DLLEXPORT uint8_t *utf8proc_NFC(const uint8_t *str) {
   uint8_t *retval;
   utf8proc_map(str, 0, &retval, UTF8PROC_NULLTERM | UTF8PROC_STABLE |
     UTF8PROC_COMPOSE);
   return retval;
 }
 
-uint8_t *utf8proc_NFKD(const uint8_t *str) {
+DLLEXPORT uint8_t *utf8proc_NFKD(const uint8_t *str) {
   uint8_t *retval;
   utf8proc_map(str, 0, &retval, UTF8PROC_NULLTERM | UTF8PROC_STABLE |
     UTF8PROC_DECOMPOSE | UTF8PROC_COMPAT);
   return retval;
 }
 
-uint8_t *utf8proc_NFKC(const uint8_t *str) {
+DLLEXPORT uint8_t *utf8proc_NFKC(const uint8_t *str) {
   uint8_t *retval;
   utf8proc_map(str, 0, &retval, UTF8PROC_NULLTERM | UTF8PROC_STABLE |
     UTF8PROC_COMPOSE | UTF8PROC_COMPAT);
   return retval;
 }
-

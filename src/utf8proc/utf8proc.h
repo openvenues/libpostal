@@ -25,7 +25,7 @@
  *  File name:    utf8proc.h
  *
  *  Description:
- *  Header files for libutf8proc, which is a mapping tool for UTF-8 strings
+ *  Header files for utf8proc, which is a mapping tool for UTF-8 strings
  *  with following features:
  *  - decomposing and composing of strings
  *  - replacing compatibility characters with their equivalents
@@ -44,7 +44,7 @@
  *  - rejection of illegal UTF-8 data
  *    (i.e. UTF-8 encoded UTF-16 surrogates)
  *  - support for korean hangul characters
- *  Unicode Version 5.0.0 is supported.
+ *  Unicode Version 7.0.0 is supported.
  */
 
 
@@ -60,18 +60,32 @@ typedef unsigned char uint8_t;
 typedef short int16_t;
 typedef unsigned short uint16_t;
 typedef int int32_t;
-#ifdef _WIN64
-#define ssize_t __int64
-#else
-#define ssize_t int
-#endif
+#  ifdef _WIN64
+#    define ssize_t __int64
+#  else
+#    define ssize_t int
+#  endif
+#  ifndef __cplusplus
 typedef unsigned char bool;
 enum {false, true};
+#  endif
 #else
-#include <stdbool.h>
-#include <inttypes.h>
+#  include <stdbool.h>
+#  include <inttypes.h>
 #endif
 #include <limits.h>
+
+#ifdef _WIN32
+#  ifdef UTF8PROC_EXPORTS
+#    define DLLEXPORT __declspec(dllexport)
+#  else
+#    define DLLEXPORT __declspec(dllimport)
+#  endif
+#elif __GNUC__ >= 4
+#  define DLLEXPORT __attribute__ ((visibility("default")))
+#else
+#  define DLLEXPORT
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -100,7 +114,7 @@ extern "C" {
  *  Flags being regarded by several functions in the library:
  *  NULLTERM:  The given UTF-8 input is NULL terminated.
  *  STABLE:    Unicode Versioning Stability has to be respected.
- *  COMPAT:    Compatiblity decomposition
+ *  COMPAT:    Compatibility decomposition
  *             (i.e. formatting information is lost)
  *  COMPOSE:   Return a result with composed characters.
  *  DECOMPOSE: Return a result with decomposed characters.
@@ -126,7 +140,7 @@ extern "C" {
  *             is representing a single grapheme cluster (see UAX#29).
  *  LUMP:      Lumps certain characters together
  *             (e.g. HYPHEN U+2010 and MINUS U+2212 to ASCII "-").
- *             (See lump.txt for details.)
+ *             (See lump.md for details.)
  *             If NLF2LF is set, this includes a transformation of
  *             paragraph and line separators to ASCII line-feed (LF).
  *  STRIPMARK: Strips all character markings
@@ -156,19 +170,21 @@ typedef struct utf8proc_property_struct {
   utf8proc_propval_t bidi_class;
   utf8proc_propval_t decomp_type;
   const int32_t *decomp_mapping;
-  unsigned bidi_mirrored:1;
+  const int32_t *casefold_mapping;
   int32_t uppercase_mapping;
   int32_t lowercase_mapping;
   int32_t titlecase_mapping;
   int32_t comb1st_index;
   int32_t comb2nd_index;
+  unsigned bidi_mirrored:1;
   unsigned comp_exclusion:1;
   unsigned ignorable:1;
   unsigned control_boundary:1;
-  unsigned extend:1;
-  const int32_t *casefold_mapping;
+  unsigned boundclass:4;
+  unsigned charwidth:2;
 } utf8proc_property_t;
 
+#define UTF8PROC_CATEGORY_CN  0
 #define UTF8PROC_CATEGORY_LU  1
 #define UTF8PROC_CATEGORY_LL  2
 #define UTF8PROC_CATEGORY_LT  3
@@ -198,7 +214,6 @@ typedef struct utf8proc_property_struct {
 #define UTF8PROC_CATEGORY_CF 27
 #define UTF8PROC_CATEGORY_CS 28
 #define UTF8PROC_CATEGORY_CO 29
-#define UTF8PROC_CATEGORY_CN 30
 #define UTF8PROC_BIDI_CLASS_L    1
 #define UTF8PROC_BIDI_CLASS_LRE  2
 #define UTF8PROC_BIDI_CLASS_LRO  3
@@ -218,6 +233,10 @@ typedef struct utf8proc_property_struct {
 #define UTF8PROC_BIDI_CLASS_S   17
 #define UTF8PROC_BIDI_CLASS_WS  18
 #define UTF8PROC_BIDI_CLASS_ON  19
+#define UTF8PROC_BIDI_CLASS_LRI  20 /* new in Unicode 6.3 */
+#define UTF8PROC_BIDI_CLASS_RLI  21 /* new in Unicode 6.3 */
+#define UTF8PROC_BIDI_CLASS_FSI  22 /* new in Unicode 6.3 */
+#define UTF8PROC_BIDI_CLASS_PDI  23 /* new in Unicode 6.3 */
 #define UTF8PROC_DECOMP_TYPE_FONT      1
 #define UTF8PROC_DECOMP_TYPE_NOBREAK   2
 #define UTF8PROC_DECOMP_TYPE_INITIAL   3
@@ -235,16 +254,31 @@ typedef struct utf8proc_property_struct {
 #define UTF8PROC_DECOMP_TYPE_FRACTION 15
 #define UTF8PROC_DECOMP_TYPE_COMPAT   16
 
-extern const int8_t utf8proc_utf8class[256];
+/* values for boundclass property: */
+#define UTF8PROC_BOUNDCLASS_START    0
+#define UTF8PROC_BOUNDCLASS_OTHER    1
+#define UTF8PROC_BOUNDCLASS_CR       2
+#define UTF8PROC_BOUNDCLASS_LF       3
+#define UTF8PROC_BOUNDCLASS_CONTROL  4
+#define UTF8PROC_BOUNDCLASS_EXTEND   5
+#define UTF8PROC_BOUNDCLASS_L        6
+#define UTF8PROC_BOUNDCLASS_V        7
+#define UTF8PROC_BOUNDCLASS_T        8
+#define UTF8PROC_BOUNDCLASS_LV       9
+#define UTF8PROC_BOUNDCLASS_LVT     10
+#define UTF8PROC_BOUNDCLASS_REGIONAL_INDICATOR 11
+#define UTF8PROC_BOUNDCLASS_SPACINGMARK 12
 
-const char *utf8proc_version(void);
+DLLEXPORT extern const int8_t utf8proc_utf8class[256];
 
-const char *utf8proc_errmsg(ssize_t errcode);
+DLLEXPORT const char *utf8proc_version(void);
+
+DLLEXPORT const char *utf8proc_errmsg(ssize_t errcode);
 /*
  *  Returns a static error string for the given error code.
  */
 
-ssize_t utf8proc_iterate(const uint8_t *str, ssize_t strlen, int32_t *dst);
+DLLEXPORT ssize_t utf8proc_iterate(const uint8_t *str, ssize_t strlen, int32_t *dst);
 /*
  *  Reads a single char from the UTF-8 sequence being pointed to by 'str'.
  *  The maximum number of bytes read is 'strlen', unless 'strlen' is
@@ -255,12 +289,12 @@ ssize_t utf8proc_iterate(const uint8_t *str, ssize_t strlen, int32_t *dst);
  *  negative error code is returned.
  */
 
-bool utf8proc_codepoint_valid(int32_t uc);
+DLLEXPORT bool utf8proc_codepoint_valid(int32_t uc);
 /*
  *  Returns 1, if the given unicode code-point is valid, otherwise 0.
  */
 
-ssize_t utf8proc_encode_char(int32_t uc, uint8_t *dst);
+DLLEXPORT ssize_t utf8proc_encode_char(int32_t uc, uint8_t *dst);
 /*
  *  Encodes the unicode char with the code point 'uc' as an UTF-8 string in
  *  the byte array being pointed to by 'dst'. This array has to be at least
@@ -270,17 +304,15 @@ ssize_t utf8proc_encode_char(int32_t uc, uint8_t *dst);
  *  This function does not check if 'uc' is a valid unicode code point.
  */
 
-const utf8proc_property_t *utf8proc_get_property(int32_t uc);
+DLLEXPORT const utf8proc_property_t *utf8proc_get_property(int32_t uc);
 /*
  *  Returns a pointer to a (constant) struct containing information about
  *  the unicode char with the given code point 'uc'.
  *  If the character is not existent a pointer to a special struct is
- *  returned, where 'category' is a NULL pointer.
- *  WARNING: The parameter 'uc' has to be in the range of 0x0000 to
- *           0x10FFFF, otherwise the program might crash!
+ *  returned, where 'category' is 0 (UTF8PROC_CATEGORY_CN).
  */
 
-ssize_t utf8proc_decompose_char(
+DLLEXPORT ssize_t utf8proc_decompose_char(
   int32_t uc, int32_t *dst, ssize_t bufsize,
   int options, int *last_boundclass
 );
@@ -304,11 +336,9 @@ ssize_t utf8proc_decompose_char(
  *  If the number of written chars would be bigger than 'bufsize',
  *  the buffer (up to 'bufsize') has inpredictable data, and the needed
  *  buffer size is returned.
- *  WARNING: The parameter 'uc' has to be in the range of 0x0000 to
- *           0x10FFFF, otherwise the program might crash!
  */
 
-ssize_t utf8proc_decompose(
+DLLEXPORT ssize_t utf8proc_decompose(
   const uint8_t *str, ssize_t strlen,
   int32_t *buffer, ssize_t bufsize, int options
 );
@@ -326,7 +356,7 @@ ssize_t utf8proc_decompose(
  *  buffer size is returned.
  */
 
-ssize_t utf8proc_reencode(int32_t *buffer, ssize_t length, int options);
+DLLEXPORT ssize_t utf8proc_reencode(int32_t *buffer, ssize_t length, int options);
 /*
  *  Reencodes the sequence of unicode characters given by the pointer
  *  'buffer' and 'length' as UTF-8.
@@ -349,7 +379,28 @@ ssize_t utf8proc_reencode(int32_t *buffer, ssize_t length, int options);
  *           crash!
  */
 
-ssize_t utf8proc_map(
+DLLEXPORT bool utf8proc_grapheme_break(int32_t c1, int32_t c2);
+/*
+ * Given a pair of consecutive codepoints (c1,c2), return whether a grapheme break is
+ * permitted between them (as defined by the extended grapheme clusters in UAX#29).
+ */
+
+DLLEXPORT int utf8proc_charwidth(int32_t c);
+/* Given a codepoint c, return a character width analogous to wcwidth(c),
+   except that a width of 0 is returned for non-printable characters
+   instead of -1 as in wcwidth.
+   If you want to check for particular types of non-printable characters,
+   (analogous to isprint or iscntrl), use utf8proc_category(c). */
+
+DLLEXPORT int utf8proc_category(int32_t c);
+/* Return the Unicode character category for c (one of the
+   UTF8PROC_CATEGORY_* constants.) */
+
+DLLEXPORT const char *utf8proc_category_string(int32_t c);
+/* Return the two-letter (nul-terminated) Unicode category string for
+   c (e.g. "Lu" or "Co"). */
+
+DLLEXPORT ssize_t utf8proc_map(
   const uint8_t *str, ssize_t strlen, uint8_t **dstptr, int options
 );
 /*
@@ -368,10 +419,10 @@ ssize_t utf8proc_map(
  *          'malloc', and has theirfore to be freed with 'free'.
  */
 
-uint8_t *utf8proc_NFD(const uint8_t *str);
-uint8_t *utf8proc_NFC(const uint8_t *str);
-uint8_t *utf8proc_NFKD(const uint8_t *str);
-uint8_t *utf8proc_NFKC(const uint8_t *str);
+DLLEXPORT uint8_t *utf8proc_NFD(const uint8_t *str);
+DLLEXPORT uint8_t *utf8proc_NFC(const uint8_t *str);
+DLLEXPORT uint8_t *utf8proc_NFKD(const uint8_t *str);
+DLLEXPORT uint8_t *utf8proc_NFKC(const uint8_t *str);
 /*
  *  Returns a pointer to newly allocated memory of a NFD, NFC, NFKD or NFKC
  *  normalized version of the null-terminated string 'str'.
@@ -382,4 +433,3 @@ uint8_t *utf8proc_NFKC(const uint8_t *str);
 #endif
 
 #endif
-
