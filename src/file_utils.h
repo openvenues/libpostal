@@ -24,6 +24,12 @@ extern "C" {
 
 #define PATH_SEPERATOR_LEN strlen(PATH_SEPERATOR)
 
+#define TAB_SEPARATOR "\t"
+#define TAB_SEPARATOR_LEN strlen(TAB_SEPARATOR)
+
+#define COMMA_SEPARATOR ","
+#define COMMA_SEPARATOR_LEN strlen(COMMA_SEPARATOR)
+
 char *file_getline(FILE * f);
 
 bool is_relative_path(struct dirent *ent);
