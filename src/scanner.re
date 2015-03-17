@@ -184,10 +184,7 @@ abbreviation = ({word})"\.";
 
 }
 
-tokenized_string_t *tokenize(const char *input) {
-    size_t token_start, token_length;
-    int token_type;
-
+scanner_t scanner_from_string(const char *input) {
     unsigned char *s = (unsigned char *)input;
 
     scanner_t scanner;
@@ -195,6 +192,15 @@ tokenized_string_t *tokenize(const char *input) {
     scanner.cursor = s;
     scanner.start = s;
     scanner.end = s + strlen(input);
+
+    return scanner;
+}
+
+tokenized_string_t *tokenize(const char *input) {
+    size_t token_start, token_length;
+    int token_type;
+
+    scanner_t scanner = scanner_from_string(input);
 
     tokenized_string_t *response = tokenized_string_new();
 
