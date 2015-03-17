@@ -34,11 +34,26 @@ PLANET_O5M="planet-latest.o5m"
 osmconvert $PLANET_PBF -o=$PLANET_O5M
 rm $PLANET_PBF
 echo "Filtering for records with address tags: `date`"
-PLANET_ADDRESSES_OSM="planet-addresses.osm"
-osmfilter $PLANET_O5M --keep="addr:street= and ( ( name= and amenity= ) or addr:housename= or addr:housenumber= )" --ignore-dependencies --drop-author --drop-version -o=$PLANET_ADDRESSES_OSM
+PLANET_ADDRESSES_O5M="planet-addresses.o5m"
+osmfilter $PLANET_O5M --keep="addr:street= and ( ( name= and amenity= ) or addr:housename= or addr:housenumber= )" --drop-author --drop-version -o=$PLANET_ADDRESSES_O5M
+PLANET_ADDRESSES_LATLONS="planet-addresses-latlons.o5m"
+osmconvert $PLANET_ADDRESSES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_ADDRESSES_LATLONS
+rm $PLANET_ADDRESSES_O5M
+PLANET_ADDRESSES="planet-addresses.osm"
+osmfilter $PLANET_ADDRESSES_LATLONS --keep="addr:street= and ( ( name= and amenity= ) or addr:housename= or addr:housenumber= )" -o $PLANET_ADDRESSES
+rm $PLANET_ADDRESSES_LATLONS
+
+
 echo "Filtering for venue records: `date`"
-PLANET_VENUES_OSM="planet-venues.osm"
-osmfilter $PLANET_O5M --keep="name= and amenity=" --ignore-dependencies --drop-author --drop-version -o=$PLANET_VENUES_OSM
+PLANET_VENUES_O5M="planet-venues.o5m"
+osmfilter $PLANET_O5M --keep="name= and amenity=" --drop-author --drop-version -o=$PLANET_VENUES_O5M
+PLANET_VENUES_LATLONS="planet-venues-latlons.o5m"
+osmconvert $PLANET_VENUES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_VENUES_LATLONS
+rm $PLANET_VENUES_O5M
+PLANET_VENUES="planet-venues.osm"
+osmfilter $PLANET_VENUES_LATLONS --keep="name= and amenity=" -o=$PLANET_VENUES
+rm $PLANET_VENUES_LATLONS
+
 echo "Filtering ways: `date`"
 PLANET_WAYS_O5M="planet-ways.o5m"
 osmfilter planet-latest.o5m --keep="name= and highway=" --drop-relations --drop-author --drop-version -o=$PLANET_WAYS_O5M
