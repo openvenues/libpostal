@@ -4,10 +4,6 @@
 
 #include "scanner.h"
 
-typedef struct scanner {
-    unsigned char *src, *cursor, *start, *end;
-} scanner_t;
-
 int scan_token(scanner_t *s)
 {
     s->start = s->cursor;
