@@ -9,8 +9,8 @@ from cStringIO import StringIO
 from lxml import etree
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
-DEFAULT_DIR = os.path.join(os.pardir, os.pardir, os.pardir,
-                           'data', 'language', 'countries')
+DEFAULT_LANGUAGES_DIR = os.path.join(os.pardir, os.pardir, os.pardir,
+                                     'data', 'language', 'countries')
 
 CLDR_URL = 'http://unicode.org/repos/cldr/trunk/common'
 CLDR_SUPPLEMENTAL_DATA = CLDR_URL + '/supplemental/supplementalData.xml'
@@ -21,6 +21,7 @@ ISO_MACROLANGUAGES = 'http://www-01.sil.org/iso639-3/iso-639-3-macrolanguages.ta
 ISO_LANGUAGES_FILENAME = 'iso_languages.tsv'
 MACROLANGUAGES_FILENAME = 'iso_macrolanguages.tsv'
 COUNTRY_LANGUAGES_FILENAME = 'country_language.tsv'
+SCRIPT_LANGUAGES_FILENAME = 'script_languages.tsv'
 
 REGIONAL = 'official_regional'
 UNKNOWN_COUNTRY = 'zz'
@@ -37,17 +38,17 @@ def write_country_official_languages_file(xml, out_dir):
     lang_scripts = {}
     for lang in xml.xpath('//languageData/language'):
         language_code = lang.attrib['type'].lower()
-        script = lang.get('scripts')
-        if not script:
+        scripts = lang.get('scripts')
+        if not scripts:
             continue
         territories = lang.get('territories')
         if (language_code, None) not in lang_scripts:
-            lang_scripts[(language_code, None)] = script
+            lang_scripts[(language_code, None)] = scripts
 
         if not territories:
             continue
         for territory in territories.strip().split():
-            lang_scripts[(language_code, territory.lower())] = script
+            lang_scripts[(language_code, territory.lower())] = scripts
 
     for territory in xml.xpath('//territoryInfo/territory'):
         country_code = territory.attrib['type'].lower()
@@ -113,7 +114,7 @@ def write_languages_file(langs, macro, out_dir):
                              iso639_1, scope, macro))
 
 
-def main(out_dir):
+def fetch_cldr_languages(out_dir=DEFAULT_LANGUAGES_DIR):
     response = requests.get(ISO_639_3)
     langs = response.content
 
@@ -129,8 +130,8 @@ def main(out_dir):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-o', '--out',
-                        default=DEFAULT_DIR,
+                        default=DEFAULT_LANGUAGES_DIR,
                         help='Out directory')
     args = parser.parse_args()
 
-    main(args.out)
+    fetch_cldr_languages(args.out)
