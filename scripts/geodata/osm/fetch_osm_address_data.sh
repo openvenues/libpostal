@@ -40,7 +40,7 @@ PLANET_ADDRESSES_LATLONS="planet-addresses-latlons.o5m"
 osmconvert $PLANET_ADDRESSES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_ADDRESSES_LATLONS
 rm $PLANET_ADDRESSES_O5M
 PLANET_ADDRESSES="planet-addresses.osm"
-osmfilter $PLANET_ADDRESSES_LATLONS --keep="addr:street= and ( ( name= and amenity= ) or addr:housename= or addr:housenumber= )" -o $PLANET_ADDRESSES
+osmfilter $PLANET_ADDRESSES_LATLONS --keep="addr:street= and ( ( name= and amenity= ) or addr:housename= or addr:housenumber= )" -o=$PLANET_ADDRESSES
 rm $PLANET_ADDRESSES_LATLONS
 
 

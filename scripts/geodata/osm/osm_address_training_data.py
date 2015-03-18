@@ -127,7 +127,6 @@ class AddressFormatter(object):
         ('addr:postal_code', 'postcode'),
         ('addr:postcode', 'postcode'),
         ('addr:country', 'country'),
-        ('building', 'house'),
         ('street', 'road'),
         ('street_name', 'road'),
         ('residential', 'road'),
