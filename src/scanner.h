@@ -12,11 +12,11 @@ typedef struct scanner {
     unsigned char *src, *cursor, *start, *end;
 } scanner_t;
 
-int scan_token(scanner_t *s);
+uint16_t scan_token(scanner_t *s);
 
 inline scanner_t scanner_from_string(const char *input);
 
-tokenized_string_t *tokenize(const char *str);
+token_array *tokenize(const char *input);
 
 
 #ifdef __cplusplus
