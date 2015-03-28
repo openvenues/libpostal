@@ -70,26 +70,27 @@ array->str = {'f', 'o', 'o', '\0', 'b', 'a', 'r', '\0', 'b', 'a', 'z', '\0'};
 
 */
 
-typedef struct cstring_array {
+typedef struct {
     uint32_array *indices;
     char_array *str;
-} cstring_array_t;
+} cstring_array;
 
-cstring_array_t *cstring_array_new(void);
+cstring_array *cstring_array_new(void);
 
-cstring_array_t *cstring_array_new_size(size_t size);
+cstring_array *cstring_array_new_size(size_t size);
 
-cstring_array_t *cstring_array_from_char_array(char_array *str);
+cstring_array *cstring_array_from_char_array(char_array *str);
 
-cstring_array_t *cstring_array_split(char *str, const char *separator, size_t separator_len, int *count);
+cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, int *count);
 
-void cstring_array_join_strings(cstring_array_t *self, char *separator, int count, ...);
-void cstring_array_add_string(cstring_array_t *self, char *s);
-void cstring_array_add_string_len(cstring_array_t *self, char *s, size_t len);
-int32_t cstring_array_get_offset(cstring_array_t *self, uint32_t i);
-char *cstring_array_get_token(cstring_array_t *self, uint32_t i);
+void cstring_array_join_strings(cstring_array *self, char *separator, int count, ...);
+void cstring_array_start_token(cstring_array *self);
+void cstring_array_add_string(cstring_array *self, char *s);
+void cstring_array_add_string_len(cstring_array *self, char *s, size_t len);
+int32_t cstring_array_get_offset(cstring_array *self, uint32_t i);
+char *cstring_array_get_token(cstring_array *self, uint32_t i);
 
-void cstring_array_destroy(cstring_array_t *self);
+void cstring_array_destroy(cstring_array *self);
 
 #ifdef __cplusplus
 }

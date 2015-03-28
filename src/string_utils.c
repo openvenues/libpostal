@@ -309,8 +309,8 @@ void char_array_cat_printf(char_array *array, char *format, ...) {
     va_end(args);
 }
 
-cstring_array_t *cstring_array_new(void) {
-    cstring_array_t *array = malloc(sizeof(cstring_array_t));
+cstring_array *cstring_array_new(void) {
+    cstring_array *array = malloc(sizeof(cstring_array));
     if (array == NULL) return NULL;
 
     array->indices = uint32_array_new();
@@ -329,7 +329,7 @@ cstring_array_t *cstring_array_new(void) {
 }
 
 
-void cstring_array_destroy(cstring_array_t *self) {
+void cstring_array_destroy(cstring_array *self) {
     if (self == NULL) return;
     if (self->indices) {
         uint32_array_destroy(self->indices);
@@ -340,14 +340,14 @@ void cstring_array_destroy(cstring_array_t *self) {
     free(self);
 }
 
-cstring_array_t *cstring_array_new_size(size_t size) {
-    cstring_array_t *array = cstring_array_new();
+cstring_array *cstring_array_new_size(size_t size) {
+    cstring_array *array = cstring_array_new();
     char_array_resize(array->str, size);
     return array;
 }
 
-cstring_array_t *cstring_array_from_char_array(char_array *str) {
-    cstring_array_t *array = malloc(sizeof(cstring_array_t));
+cstring_array *cstring_array_from_char_array(char_array *str) {
+    cstring_array *array = malloc(sizeof(cstring_array));
     if (array == NULL) return NULL;
 
     array->str = str;
@@ -363,35 +363,35 @@ cstring_array_t *cstring_array_from_char_array(char_array *str) {
     return array;
 }
 
-void cstring_array_start_token(cstring_array_t *self) {
+void cstring_array_start_token(cstring_array *self) {
     uint32_array_push(self->indices, self->str->n);
 }
 
-void cstring_array_add_string(cstring_array_t *self, char *str) {
+void cstring_array_add_string(cstring_array *self, char *str) {
     cstring_array_start_token(self);
     char_array_append(self->str, str);
     char_array_terminate(self->str);
 }
 
-void cstring_array_add_string_len(cstring_array_t *self, char *str, size_t len) {
+void cstring_array_add_string_len(cstring_array *self, char *str, size_t len) {
     cstring_array_start_token(self);
     char_array_append_len(self->str, str, len);
     char_array_terminate(self->str);
 }
 
-int32_t cstring_array_get_offset(cstring_array_t *self, uint32_t i) {
+int32_t cstring_array_get_offset(cstring_array *self, uint32_t i) {
     if (INVALID_INDEX(i, self->indices->n)) {
         return -1;
     }
     return (int32_t)self->indices->a[i];
 }
 
-char *cstring_array_get_token(cstring_array_t *self, uint32_t i) {
+char *cstring_array_get_token(cstring_array *self, uint32_t i) {
     int32_t data_index = cstring_array_get_offset(self, i);
     return self->str->a + data_index;
 }
 
-cstring_array_t *cstring_array_split(char *str, const char *separator, size_t separator_len, int *count) {
+cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, int *count) {
     *count = 0;
     char_array *array = char_array_new_size(strlen(str));
 
