@@ -9,9 +9,10 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 
-/* Bit set, should be able to keep it at a short (uint16_t)
-*  so the set can be bit-packed into a 32-bit value in our trie
-*/
+#include "klib/kvec.h"
+#include "vector.h"
+
+// Bit set, should be able to keep it at a short (uint16_t)
 #define ADDRESS_ANY 1 << 0
 #define ADDRESS_NAME 1 << 1
 #define ADDRESS_HOUSE_NUMBER 1 << 2
@@ -56,6 +57,9 @@ typedef enum dictionary_type {
     DICTIONARY_PERSONAL_SUFFIX = 55,
     DICTIONARY_ACADEMIC_DEGREE = 56,
 
+    DICTIONARY_NAMED_PERSON = 60,
+    DICTIONARY_NAMED_ORGANIZATION = 61,
+
     DICTIONARY_LOCALITY = 100,
     DICTIONARY_ADMIN1 = 101,
     DICTIONARY_ADMIN2 = 102,
@@ -70,37 +74,46 @@ typedef enum dictionary_type {
 } dictionary_type_t;
 
 typedef struct gazetteer {
-    char name[64];
     dictionary_type_t type;
     uint16_t address_components;
 } gazetteer_t;
 
+typdef struct named_gazetteer {
+    char name[64];
+    gazetteer_t gazetteer;
+} named_gazetteer_t;
+
 // Only need these for the in-memory dictionaries
-gazetteer_t gazetteers[] = {
-    {"academic_degrees", DICTIONARY_ACADEMIC_DEGREE, ADDRESS_NAME},
-    {"building_types", DICTIONARY_BUILDING_TYPE, ADDRESS_NAME | ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_UNIT},
-    {"company_types", DICTIONARY_COMPANY_TYPE, ADDRESS_NAME},
-    {"concatenated_prefixes_inseparable", DICTIONARY_CONCATENATED_PREFIX_SEPARABLE, ADDRESS_STREET},
-    {"concatenated_suffixes_inseparable", DICTIONARY_CONCATENATED_SUFFIX_INSEPARABLE, ADDRESS_STREET},
-    {"concatenated_suffixes_separable", DICTIONARY_CONCATENATED_SUFFIX_SEPARABLE, ADDRESS_STREET},
-    {"directionals", DICTIONARY_DIRECTIONAL, ADDRESS_ANY},
-    {"elisions", DICTIONARY_ELISION, ADDRESS_ANY},
-    {"given_names", DICTIONARY_GIVEN_NAME, ADDRESS_STREET | ADDRESS_NAME},
-    {"level_types", DICTIONARY_LEVEL, ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_UNIT},
-    {"no_number", DICTIONARY_NO_ADDRESS, ADDRESS_HOUSE_NUMBER | ADDRESS_STREET},
-    {"nulls", DICTIONARY_NULL, ADDRESS_ANY},
-    {"personal_suffixes", DICTIONARY_PERSONAL_SUFFIX, ADDRESS_NAME | ADDRESS_STREET},
-    {"personal_titles", DICTIONARY_PERSONAL_TITLE, ADDRESS_NAME | ADDRESS_STREET},
-    {"place_names", DICTIONARY_PLACE_NAME, ADDRESS_NAME | ADDRESS_STREET},
-    {"post_office", DICTIONARY_POST_OFFICE, ADDRESS_HOUSE_NUMBER | ADDRESS_STREET},
-    {"qualifiers", DICTIONARY_QUALIFIER, ADDRESS_STREET},
-    {"stopwords", DICTIONARY_STOPWORD, ADDRESS_ANY},
-    {"street_types", DICTIONARY_STREET_TYPE, ADDRESS_STREET},
-    {"surnames", DICTIONARY_SURNAME, ADDRESS_STREET | ADDRESS_NAME},
-    {"synonyms", DICTIONARY_SYNONYM, ADDRESS_ANY},
-    {"toponyms", DICTIONARY_TOPONYM, ADDRESS_LOCALITY | ADDRESS_ADMIN1 | ADDRESS_ADMIN2 | ADDRESS_ADMIN3 | ADDRESS_ADMIN4 | ADDRESS_ADMIN_OTHER | ADDRESS_NEIGHBORHOOD},
-    {"unit_types", DICTIONARY_UNIT, ADDRESS_NAME | ADDRESS_HOUSE_NUMBER | ADDRESS_STREET}
+named_gazetteer_t gazetteer_config[] = {
+    {"academic_degrees", {DICTIONARY_ACADEMIC_DEGREE, ADDRESS_NAME}},
+    {"building_types", {DICTIONARY_BUILDING_TYPE, ADDRESS_NAME | ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_UNIT}},
+    {"company_types", {DICTIONARY_COMPANY_TYPE, ADDRESS_NAME}},
+    {"concatenated_prefixes_inseparable", {DICTIONARY_CONCATENATED_PREFIX_SEPARABLE, ADDRESS_STREET}},
+    {"concatenated_suffixes_inseparable", {DICTIONARY_CONCATENATED_SUFFIX_INSEPARABLE, ADDRESS_STREET}},
+    {"concatenated_suffixes_separable", {DICTIONARY_CONCATENATED_SUFFIX_SEPARABLE, ADDRESS_STREET}},
+    {"directionals", {DICTIONARY_DIRECTIONAL, ADDRESS_ANY}},
+    {"elisions", {DICTIONARY_ELISION, ADDRESS_ANY}},
+    {"given_names", {DICTIONARY_GIVEN_NAME, ADDRESS_STREET | ADDRESS_NAME}},
+    {"level_types", {DICTIONARY_LEVEL, ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_UNIT}},
+    {"no_number", {DICTIONARY_NO_ADDRESS, ADDRESS_HOUSE_NUMBER | ADDRESS_STREET}},
+    {"nulls", {DICTIONARY_NULL, ADDRESS_ANY}},
+    {"organizations", {DICTIONARY_NAMED_ORGANIZATION, ADDRESS_NAME}},
+    {"people", {DICTIONARY_NAMED_PERSON, ADDRESS_NAME | ADDRESS_STREET}},
+    {"personal_suffixes", {DICTIONARY_PERSONAL_SUFFIX, ADDRESS_NAME | ADDRESS_STREET}},
+    {"personal_titles", {DICTIONARY_PERSONAL_TITLE, ADDRESS_NAME | ADDRESS_STREET}},
+    {"place_names", {DICTIONARY_PLACE_NAME, ADDRESS_NAME | ADDRESS_STREET}},
+    {"post_office", {DICTIONARY_POST_OFFICE, ADDRESS_HOUSE_NUMBER | ADDRESS_STREET}},
+    {"qualifiers", {DICTIONARY_QUALIFIER, ADDRESS_STREET}},
+    {"stopwords", {DICTIONARY_STOPWORD, ADDRESS_ANY}},
+    {"street_types", {DICTIONARY_STREET_TYPE, ADDRESS_STREET}},
+    {"surnames", {DICTIONARY_SURNAME, ADDRESS_STREET | ADDRESS_NAME}},
+    {"synonyms", {DICTIONARY_SYNONYM, ADDRESS_ANY}},
+    {"toponyms", {DICTIONARY_TOPONYM, ADDRESS_LOCALITY | ADDRESS_ADMIN1 | ADDRESS_ADMIN2 | ADDRESS_ADMIN3 | ADDRESS_ADMIN4 | ADDRESS_ADMIN_OTHER | ADDRESS_NEIGHBORHOOD}},
+    {"unit_types", {DICTIONARY_UNIT, ADDRESS_NAME | ADDRESS_HOUSE_NUMBER | ADDRESS_STREET}}
 };
+
+
+VECTOR_INIT(gazetteer_array, gazetteer_t)
 
 #define NUM_DICTIONARY_TYPES sizeof(gazetteers) / sizeof(gazetteer_t)
 
