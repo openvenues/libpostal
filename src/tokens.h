@@ -18,19 +18,19 @@ typedef struct token {
     size_t offset;
     size_t len;
     uint16_t type;
-    uint64_t src_position;
 } token_t;
 
 VECTOR_INIT(token_array, token_t)
 
 typedef struct tokenized_string {
-    char_array *str;
+    cstring_array_t *str;
     token_array *tokens;
 } tokenized_string_t;
 
 tokenized_string_t *tokenized_string_new(void);
-void tokenized_string_add_token(tokenized_string_t *self, const char *src, size_t len, uint16_t token_type, uint64_t src_position);
-char *tokenized_string_get_token(tokenized_string_t *self, uint64_t index);
+tokenized_string_t *tokenized_string_from_tokens(char *src, token_array *tokens);
+void tokenized_string_add_token(tokenized_string_t *self, const char *src, size_t len, uint16_t token_type, size_t position);
+char *tokenized_string_get_token(tokenized_string_t *self, uint32_t index);
 void tokenized_string_destroy(tokenized_string_t *self);
 
 

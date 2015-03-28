@@ -1,8 +1,8 @@
-#include "string_utils.h"
 #include <stdio.h>
 
+#include "string_utils.h"
 
-#define INVALID_INDEX(i, n) ((i) < 0 || (i) >= (n) - 1)
+#define INVALID_INDEX(i, n) ((i) < 0 || (i) >= (n))
 
 int string_compare_case_insensitive(const char *str1, const char *str2) {
     int c1, c2;
@@ -80,9 +80,9 @@ void string_lower(char *s) {
     for (; *s; ++s) *s = tolower(*s);
 }
 
-uint string_translate(sds str, char *word_chars, char *word_repls, size_t trans_len) {
+uint string_translate(char *str, size_t len, char *word_chars, char *word_repls, size_t trans_len) {
     uint num_replacements = 0;
-    size_t len = sdslen(str);
+    
     for (int i = 0; i < len; i++) {
         for (int j = 0; j < trans_len; j++) {
             if (str[i] == word_chars[j]) {
@@ -93,6 +93,21 @@ uint string_translate(sds str, char *word_chars, char *word_repls, size_t trans_
         }
     }
     return num_replacements;
+}
+
+ssize_t utf8proc_iterate_reversed(const uint8_t *str, const uint8_t *start, int32_t *dst) {
+    ssize_t len;
+
+    const uint8_t *ptr = str;
+
+    *dst = -1;
+
+    do {
+        if (ptr <= start) return 0;
+        ptr--; len++;
+    } while ((*ptr & 0xC0) == 0x80);
+
+    return utf8proc_iterate(ptr, len, dst);
 }
 
 char *utf8_reversed_string(const char *s) {
@@ -136,13 +151,30 @@ bool utf8_is_letter(int32_t ch) {
 
 }
 
+/* Caution: this function does not make a copy of str. Keep original pointer and free that, e.g.
+
+char *str = strdup("foobar");
+// Use stripped for comparison, etc. but copy the string if you need to keep a pointer to it
+char *stripped = string_strip_whitespace(str);
+// Only free the original pointer to str
+free(str);
+*/
+
 char *string_strip_whitespace(char *str) {
     char *end;
 
-    while (isspace(*str)) str++;
+    size_t initial_spaces = 0;
+    size_t ending_spaces = 0;
 
-    if (*str == '\0')
+    char *ptr = str;
+
+    while (isspace(*ptr++)) {
+        initial_spaces++;
+    }
+
+    if (*ptr == '\0')
         return str;
+
 
     end = str + strlen(str) - 1;
     while (end > str && isspace(*end)) end--;
@@ -152,47 +184,229 @@ char *string_strip_whitespace(char *str) {
     return str;
 }
 
-void contiguous_string_array_add_string_unterminated(char_array *array, char *str) {
-    while (*str) {
+char_array *char_array_from_string(char *str) {
+    char_array *array = char_array_new();
+    array->a = str;
+    array->m = array->n = strlen(str);
+}
+
+char *char_array_to_string(char_array *array, bool free_array) {
+    if (free_array) free(array);
+    return array->a;
+}
+
+static inline void char_array_strip_nul_byte(char_array *array) {
+    if (array->n > 0 && array->a[array->n - 1] == '\0') {
+        array->n--;
+    }
+}
+
+void char_array_append(char_array *array, char *str) {
+    while(*str) {
         char_array_push(array, *str++);
     }    
 }
 
-void contiguous_string_array_add_string(char_array *array, char *str) {
-    contiguous_string_array_add_string_unterminated(array, str);
-    char_array_push(array, '\0');
-}
-
-void contiguous_string_array_add_string_unterminated_len(char_array *array, char *str, size_t len) {
-    for (int i = 0; i < len; i++) {
+void char_array_append_len(char_array *array, char *str, size_t len) {
+    for (size_t i = 0; i < len; i++) {
         char_array_push(array, *str++);
     }
 }
 
-void contiguous_string_array_add_string_len(char_array *array, char *str, size_t len) {
-    contiguous_string_array_add_string_unterminated_len(array, str, len);
+void char_array_terminate(char_array *array) {
     char_array_push(array, '\0');
 }
 
-// Designed for using the char_array and uchar_array to store lots of short strings
-int contiguous_string_array_next_index(char_array *string_array, int i, size_t n) {
-    if (INVALID_INDEX(i, string_array->n)) {
+void char_array_cat(char_array *array, char *str) {
+    char_array_strip_nul_byte(array);
+    char_array_append(array, str);
+    char_array_terminate(array);
+}
+
+void char_array_cat_len(char_array *array, char *str, size_t len) {
+    char_array_strip_nul_byte(array);
+    char_array_append_len(array, str, len);
+    char_array_terminate(array);
+}
+
+void char_array_add(char_array *array, char *str) {
+    char_array_append(array, str);
+    char_array_terminate(array);
+}
+
+void char_array_add_len(char_array *array, char *str, size_t len) {
+    char_array_append_len(array, str, len);
+    char_array_terminate(array);
+}
+
+
+static void vchar_array_append_joined(char_array *array, char *separator, int count, va_list args) {
+    if (count <= 0) {
+        return;        
+    }
+
+    for (size_t i = 0; i < count - 1; i++) {
+        char *arg = va_arg(args, char *);
+        char_array_append(array, arg);
+        char_array_append(array, separator);
+    }
+
+    char *arg = va_arg(args, char *);
+    char_array_append(array, arg);
+    char_array_terminate(array);
+
+}
+
+void char_array_add_joined(char_array *array, char *separator, int count, ...) {
+    va_list args;
+    va_start(args, count);
+    vchar_array_append_joined(array, separator, count, args);
+    va_end(args);
+}
+
+void char_array_cat_joined(char_array *array, char *separator, int count, ...) {
+    char_array_strip_nul_byte(array);
+    va_list args;
+    va_start(args, count);
+    vchar_array_append_joined(array, separator, count, args);
+    va_end(args);
+}
+
+// Based on antirez's sdscatvprintf implementation
+void char_array_cat_printf(char_array *array, char *format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    char_array_strip_nul_byte(array);
+
+    va_list cpy;
+
+    char *arg;
+
+    char *buf;
+    size_t buflen;
+
+    size_t last_n = array->n;
+    size_t size = array->m < 8 ? 16 : array->m * 2;
+
+    while(1) {
+        char_array_resize(array, size);
+        buf = array->a + last_n;
+        buflen = size - last_n;
+        if (buf == NULL) return;
+        array->a[size-2] = '\0';
+        va_copy(cpy, args);
+        vsnprintf(buf, buflen, format, cpy);
+        if (array->a[size-2] != '\0') {
+            size *= 2;
+            continue;
+        } else {
+            array->n += strlen(buf);
+        }
+        break;
+    }
+
+    va_end(args);
+}
+
+cstring_array_t *cstring_array_new(void) {
+    cstring_array_t *array = malloc(sizeof(cstring_array_t));
+    if (array == NULL) return NULL;
+
+    array->indices = uint32_array_new();
+    if (array->indices == NULL) {
+        cstring_array_destroy(array);
+        return NULL;
+    }
+
+    array->str = char_array_new();
+    if (array->str == NULL) {
+        cstring_array_destroy(array);
+        return NULL;
+    }
+
+    return array;
+}
+
+
+void cstring_array_destroy(cstring_array_t *self) {
+    if (self == NULL) return;
+    if (self->indices) {
+        uint32_array_destroy(self->indices);
+    }
+    if (self->str) {
+        char_array_destroy(self->str);
+    }
+    free(self);
+}
+
+cstring_array_t *cstring_array_new_size(size_t size) {
+    cstring_array_t *array = cstring_array_new();
+    char_array_resize(array->str, size);
+    return array;
+}
+
+cstring_array_t *cstring_array_from_char_array(char_array *str) {
+    cstring_array_t *array = malloc(sizeof(cstring_array_t));
+    if (array == NULL) return NULL;
+
+    array->str = str;
+    array->indices = uint32_array_new_size(1);
+    uint32_array_push(array->indices, 0);
+    char *ptr = str->a;
+    uint32_t i = 0;
+    for (i = 0; i < str->n - 1; i++, ptr++) {
+        if (*ptr == '\0') {
+            uint32_array_push(array->indices, i + 1);
+        }
+    }
+    return array;
+}
+
+void cstring_array_start_token(cstring_array_t *self) {
+    uint32_array_push(self->indices, self->str->n);
+}
+
+void cstring_array_add_string(cstring_array_t *self, char *str) {
+    cstring_array_start_token(self);
+    char_array_append(self->str, str);
+    char_array_terminate(self->str);
+}
+
+void cstring_array_add_string_len(cstring_array_t *self, char *str, size_t len) {
+    cstring_array_start_token(self);
+    char_array_append_len(self->str, str, len);
+    char_array_terminate(self->str);
+}
+
+int32_t cstring_array_get_offset(cstring_array_t *self, uint32_t i) {
+    if (INVALID_INDEX(i, self->indices->n)) {
         return -1;
     }
+    return (int32_t)self->indices->a[i];
+}
 
-    int len = 0;
-    char *array = string_array->a + i;
+char *cstring_array_get_token(cstring_array_t *self, uint32_t i) {
+    int32_t data_index = cstring_array_get_offset(self, i);
+    return self->str->a + data_index;
+}
 
+cstring_array_t *cstring_array_split(char *str, const char *separator, size_t separator_len, int *count) {
+    *count = 0;
+    char_array *array = char_array_new_size(strlen(str));
 
-    while (*array && i + len <= n - 1) {
-        array++; 
-        len++;
+    uint32_t index = 0;
+
+    while (*str) {
+        if ((separator_len == 1 && *str == separator[0]) || (memcmp(str, separator, separator_len) == 0)) {
+            char_array_push(array, '\0');
+            str += separator_len;
+        } else {
+            char_array_push(array, *str);
+            str++;
+        }
     }
+    char_array_push(array, '\0');
 
-    if (len < n - 1) {
-        return len + 1;
-    }
-
-    return -1;
-
+    return cstring_array_from_char_array(array);
 }
