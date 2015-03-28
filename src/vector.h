@@ -23,13 +23,15 @@ extern "C" {
     static inline void name##_push(name *array, type value) {           \
         kv_push(type, *array, value);                                   \
     }                                                                   \
+    static inline void name##_pop(name *array) {                        \
+        kv_pop(*array);                                                 \
+    }                                                                   \
     static inline void name##_clear(name *array) {                      \
         kv_clear(*array);                                               \
     }                                                                   \
     static inline void name##_resize(name *array, size_t size) {        \
         kv_resize(type, *array, size);                                  \
-    }                          
-
+    }
 
 #define __VECTOR_DESTROY(name, type)                                    \
     static inline void name##_destroy(name *array) {                    \
