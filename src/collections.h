@@ -9,6 +9,7 @@ extern "C" {
 
 #include "klib/khash.h"
 #include "vector.h"
+#include "vector_math.h"
 
 // Init collections used in multiple places
 
@@ -28,10 +29,13 @@ KHASH_MAP_INIT_STR(str_str, char *)
 
 // Vectors
 
-VECTOR_INIT(int32_array, int32_t)
-VECTOR_INIT(uint32_array, uint32_t)
-VECTOR_INIT(float_array, float)
-VECTOR_INIT(double_array, double)
+VECTOR_INIT_NUMERIC(int32_array, int32_t)
+VECTOR_INIT_NUMERIC(uint32_array, uint32_t)
+VECTOR_INIT_NUMERIC(int64_array, int64_t)
+VECTOR_INIT_NUMERIC(uint64_array, uint64_t)
+VECTOR_INIT_NUMERIC(float_array, float)
+VECTOR_INIT_NUMERIC(double_array, double)
+
 VECTOR_INIT(char_array, char)
 VECTOR_INIT(uchar_array, unsigned char)
 
