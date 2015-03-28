@@ -12,7 +12,7 @@ extern "C" {
 
 #define FEATURE_SEPARATOR_CHAR "|"
 
-void feature_array_add(char_array *features, int num_args, ...);
+void feature_array_add(contiguous_string_array_t *features, size_t count, ...);
 
 
 #ifdef __cplusplus
