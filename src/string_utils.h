@@ -45,6 +45,8 @@ void char_array_append(char_array *array, char *str);
 void char_array_append_len(char_array *array, char *str, size_t len);
 void char_array_terminate(char_array *array);
 
+char_array *char_array_copy(char_array *array);
+
 // Similar to strcat, strips NUL-byte and guarantees 0-terminated
 void char_array_cat(char_array *array, char *str);
 void char_array_cat_len(char_array *array, char *str, size_t len);
@@ -84,9 +86,9 @@ cstring_array *cstring_array_from_char_array(char_array *str);
 cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, int *count);
 
 void cstring_array_join_strings(cstring_array *self, char *separator, int count, ...);
-void cstring_array_start_token(cstring_array *self);
-void cstring_array_add_string(cstring_array *self, char *s);
-void cstring_array_add_string_len(cstring_array *self, char *s, size_t len);
+uint32_t cstring_array_start_token(cstring_array *self);
+uint32_t cstring_array_add_string(cstring_array *self, char *str);
+uint32_t cstring_array_add_string_len(cstring_array *self, char *str, size_t len);
 int32_t cstring_array_get_offset(cstring_array *self, uint32_t i);
 char *cstring_array_get_token(cstring_array *self, uint32_t i);
 
