@@ -8,7 +8,6 @@ extern "C" {
 #endif
 
 #include "klib/khash.h"
-#include "sds/sds.h"
 #include "collections.h"
 #include "string_utils.h"
 #include "token_types.h"
@@ -23,7 +22,7 @@ typedef struct token {
 VECTOR_INIT(token_array, token_t)
 
 typedef struct tokenized_string {
-    cstring_array_t *str;
+    cstring_array *str;
     token_array *tokens;
 } tokenized_string_t;
 
