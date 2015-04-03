@@ -28,6 +28,7 @@ bool string_ends_with(const char *str, const char *ending);
 uint string_translate(char *str, size_t len, char *word_chars, char *word_repls, size_t trans_len);
 
 char *utf8_reversed_string(const char *s); // returns a copy, caller frees
+ssize_t utf8proc_iterate_reversed(const uint8_t *str, const uint8_t *start, int32_t *dst);
 bool utf8_is_letter(int32_t ch);
 
 char *string_strip_whitespace(char *str);

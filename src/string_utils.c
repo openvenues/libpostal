@@ -382,7 +382,6 @@ uint32_t cstring_array_add_string(cstring_array *self, char *str) {
 
 uint32_t cstring_array_add_string_len(cstring_array *self, char *str, size_t len) {
     uint32_t index = cstring_array_start_token(self);
-    cstring_array_start_token(self);
     char_array_append_len(self->str, str, len);
     char_array_terminate(self->str);
     return index;
@@ -397,6 +396,7 @@ int32_t cstring_array_get_offset(cstring_array *self, uint32_t i) {
 
 char *cstring_array_get_token(cstring_array *self, uint32_t i) {
     int32_t data_index = cstring_array_get_offset(self, i);
+    if (data_index < 0) return NULL;
     return self->str->a + data_index;
 }
 
