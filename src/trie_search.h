@@ -10,6 +10,7 @@ extern "C" {
 #include "collections.h"
 #include "klib/kvec.h"
 #include "log/log.h"
+#include "string_utils.h"
 #include "tokens.h"
 #include "vector.h"
 #include "utf8proc/utf8proc.h"
