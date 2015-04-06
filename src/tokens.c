@@ -22,7 +22,7 @@ void tokenized_string_add_token(tokenized_string_t *self, const char *src, size_
 
 tokenized_string_t *tokenized_string_from_tokens(char *src, token_array *tokens) {
     tokenized_string_t *self = malloc(sizeof(tokenized_string_t));
-    self->str = cstring_array_new_size(strlen(src));
+    self->str = cstring_array_new_size(strlen(src) + tokens->n);
     self->tokens = tokens;
 
     token_t token;
