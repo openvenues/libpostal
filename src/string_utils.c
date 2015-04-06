@@ -151,16 +151,7 @@ bool utf8_is_letter(int32_t ch) {
 
 }
 
-/* Caution: this function does not make a copy of str. Keep original pointer and free that, e.g.
-
-char *str = strdup("foobar");
-// Use stripped for comparison, etc. but copy the string if you need to keep a pointer to it
-char *stripped = string_strip_whitespace(str);
-// Only free the original pointer to str
-free(str);
-*/
-
-size_t string_rstrip(char *str) {
+size_t string_rtrim(char *str) {
     size_t spaces = 0;
 
     char *end = str + strlen(str) - 1;
@@ -174,7 +165,7 @@ size_t string_rstrip(char *str) {
     return spaces;
 }
 
-size_t string_lstrip(char *str) {
+size_t string_ltrim(char *str) {
     char *end;
 
     size_t spaces = 0;
@@ -193,7 +184,7 @@ size_t string_lstrip(char *str) {
     return spaces;
 }
 
-size_t string_strip(char *str) {
+size_t string_trim(char *str) {
     size_t spaces = string_lstrip(str);
     spaces += string_rstrip(str);
     return spaces;

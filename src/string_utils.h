@@ -30,9 +30,9 @@ char *utf8_reversed_string(const char *s); // returns a copy, caller frees
 ssize_t utf8proc_iterate_reversed(const uint8_t *str, const uint8_t *start, int32_t *dst);
 bool utf8_is_letter(int32_t ch);
 
-size_t string_lstrip(char *str);
-size_t string_rstrip(char *str);
-size_t string_strip(char *str);
+size_t string_ltrim(char *str);
+size_t string_rtrim(char *str);
+size_t string_trim(char *str);
 
 /* Caller has to free the original string,
    also keep in mind that after operating on a char array,
