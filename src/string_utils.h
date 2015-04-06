@@ -10,7 +10,6 @@ extern "C" {
 #include <stdbool.h>
 #include <stdarg.h>
 #include "collections.h"
-#include "sds/sds.h"
 #include "utf8proc/utf8proc.h"
 #include "vector.h"
 
@@ -31,7 +30,9 @@ char *utf8_reversed_string(const char *s); // returns a copy, caller frees
 ssize_t utf8proc_iterate_reversed(const uint8_t *str, const uint8_t *start, int32_t *dst);
 bool utf8_is_letter(int32_t ch);
 
-char *string_strip_whitespace(char *str);
+size_t string_lstrip(char *str);
+size_t string_rstrip(char *str);
+size_t string_strip(char *str);
 
 /* Caller has to free the original string,
    also keep in mind that after operating on a char array,
@@ -40,7 +41,12 @@ char *string_strip_whitespace(char *str);
    Consider a macro which does this consistently
 */
 char_array *char_array_from_string(char *str);
-char *char_array_to_string(char_array *array, bool free_array);
+char *char_array_get_string(char_array *array);
+
+// Frees the char_array and returns a standard NUL-terminated string
+char *char_array_to_string(char_array *array);
+
+size_t char_array_len(char_array *array);
 
 void char_array_append(char_array *array, char *str);
 void char_array_append_len(char_array *array, char *str, size_t len);
@@ -94,6 +100,7 @@ int32_t cstring_array_get_offset(cstring_array *self, uint32_t i);
 char *cstring_array_get_token(cstring_array *self, uint32_t i);
 
 void cstring_array_destroy(cstring_array *self);
+
 
 #ifdef __cplusplus
 }

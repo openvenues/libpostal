@@ -160,43 +160,77 @@ char *stripped = string_strip_whitespace(str);
 free(str);
 */
 
-char *string_strip_whitespace(char *str) {
-    char *end;
+size_t string_rstrip(char *str) {
+    size_t spaces = 0;
 
-    size_t initial_spaces = 0;
-
-    char *ptr = str;
-
-    while (isspace(*ptr++)) {
-        initial_spaces++;
+    char *end = str + strlen(str) - 1;
+    while (end > str && isspace(*end)) {
+        spaces++;
+        end--;
     }
-
-    if (*ptr == '\0')
-        return str;
-
-
-    end = str + strlen(str) - 1;
-    while (end > str && isspace(*end)) end--;
 
     *(end+1) = '\0';
 
-    return ptr;
+    return spaces;
+}
+
+size_t string_lstrip(char *str) {
+    char *end;
+
+    size_t spaces = 0;
+
+    size_t len = strlen(str) - 1;
+    char *ptr = str;
+
+    while (isspace(*ptr++)) {
+        spaces++;
+    }
+
+    if (spaces > 0) {
+        memmove(str, str + spaces, len + 1 - spaces);
+    }
+
+    return spaces;
+}
+
+size_t string_strip(char *str) {
+    size_t spaces = string_lstrip(str);
+    spaces += string_rstrip(str);
+    return spaces;
 }
 
 char_array *char_array_from_string(char *str) {
     char_array *array = char_array_new();
     array->a = str;
     array->m = array->n = strlen(str);
+    return array;
 }
 
-char *char_array_to_string(char_array *array, bool free_array) {
-    if (free_array) free(array);
+inline char *char_array_get_string(char_array *array) {
     return array->a;
 }
+
+inline char *char_array_to_string(char_array *array) {
+    if (array->n == 0 || array->a[array->n - 1] != '\0') {
+        char_array_terminate(array);
+    }
+    char *a = array->a;
+    free(array);
+    return a;
+}
+
 
 static inline void char_array_strip_nul_byte(char_array *array) {
     if (array->n > 0 && array->a[array->n - 1] == '\0') {
         array->n--;
+    }
+}
+
+size_t char_array_len(char_array *array) {
+    if (array->n > 0 && array->a[array->n - 1] == '\0') {
+        return array->n - 1;
+    } else {
+        return array->n;
     }
 }
 
@@ -417,4 +451,3 @@ cstring_array *cstring_array_split(char *str, const char *separator, size_t sepa
 
     return cstring_array_from_char_array(array);
 }
-
