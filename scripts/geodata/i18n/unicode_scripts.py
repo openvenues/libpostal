@@ -85,6 +85,68 @@ def script_name_constant(i, u):
 UNKNOWN_SCRIPT = 'Unknown'
 
 
+def get_chars_by_script():
+    response = requests.get(SCRIPTS_URL)
+
+    chars = [None] * NUM_CHARS
+
+    # Lines look like:
+    # 0041..005A    ; Latin # L&  [26] LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER Z
+    for char_range, script, char_class in script_regex.findall(response.content):
+        script_range = [unicode_to_integer(u) for u in char_range.split('..') if len(u) < 5]
+        if len(script_range) == 2:
+            for i in xrange(script_range[0], script_range[1] + 1):
+                chars[i] = script
+        elif script_range:
+            chars[script_range[0]] = script
+
+    return chars
+
+
+def build_master_scripts_list(chars):
+    all_scripts = OrderedDict.fromkeys(filter(bool, chars))
+
+    for i, script in enumerate(all_scripts.keys()):
+        all_scripts[script] = i + 1
+
+    # Unknown script for all characters not covered
+    all_scripts[UNKNOWN_SCRIPT] = 0
+
+    return all_scripts
+
+
+def get_script_codes(all_scripts):
+    temp_dir = tempfile.gettempdir()
+    script_codes_filename = os.path.join(temp_dir, ISO_15924_URL.rsplit('/')[-1])
+
+    # This comes as a .zip
+    script_codes_response = requests.get(ISO_15924_URL)
+    zf = ZipFile(StringIO(script_codes_response.content))
+    iso15924_filename = [name for name in zf.namelist() if name.startswith('iso15924')][0]
+
+    # Strip out the comments, etc.
+    temp_iso15924_file = u'\n'.join([line.rstrip() for line in safe_decode(zf.read(iso15924_filename)).split('\n')
+                                    if line.strip() and not line.strip().startswith('#')])
+
+    script_codes_file = StringIO(safe_encode(temp_iso15924_file))
+
+    script_codes = {}
+    seen_scripts = set()
+
+    # Scripts in the CLDR repos use 4-letter ISO-15924 codes, so map those
+    for code, _, name, _, _, _ in csv.reader(script_codes_file, delimiter=';'):
+        if name in all_scripts:
+            script_codes[code] = name
+            seen_scripts.add(name)
+        else:
+            normalized_name = name.split('(')[0].strip()
+            if normalized_name in all_scripts and normalized_name not in seen_scripts:
+                script_codes[code] = normalized_name
+                seen_scripts.add(normalized_name)
+
+    return script_codes
+
+
 def extract_language_scripts(xml):
     language_scripts = defaultdict(list)
 
@@ -99,62 +161,9 @@ def extract_language_scripts(xml):
     return language_scripts
 
 
-def main(out_dir):
-    response = requests.get(SCRIPTS_URL)
-
-    # Output is a C header and data file, see templates
-    out_file = open(os.path.join(out_dir, SCRIPTS_DATA_FILENAME), 'w')
-    out_header = open(os.path.join(out_dir, SCRIPTS_HEADER), 'w')
-
-    temp_dir = tempfile.gettempdir()
-    script_codes_filename = os.path.join(temp_dir, ISO_15924_URL.rsplit('/')[-1])
-
-    # This comes as a .zip
-    script_codes_response = requests.get(ISO_15924_URL)
-    zf = ZipFile(StringIO(script_codes_response.content))
-    iso15924_filename = [name for name in zf.namelist() if name.startswith('iso15924')][0]
-
-    # Strip out the comments, etc.
-    temp_iso15924_file = u'\n'.join([line.rstrip() for line in safe_decode(zf.read(iso15924_filename)).split('\n')
-                                    if line.strip() and not line.strip().startswith('#')])
-
-    script_codes_file = StringIO(safe_encode(temp_iso15924_file))
-    chars = [None] * NUM_CHARS
-
-    # Lines look like:
-    # 0041..005A    ; Latin # L&  [26] LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER Z
-    for char_range, script, char_class in script_regex.findall(response.content):
-        script_range = [unicode_to_integer(u) for u in char_range.split('..') if len(u) < 5]
-        if len(script_range) == 2:
-            for i in xrange(script_range[0], script_range[1] + 1):
-                chars[i] = script.upper()
-        elif script_range:
-            chars[script_range[0]] = script.upper()
-
-    all_scripts = OrderedDict.fromkeys(filter(bool, chars))
-
-    for i, script in enumerate(all_scripts.keys()):
-        all_scripts[script] = i + 1
-
-    # Unknown script for all characters not covered
-    all_scripts[UNKNOWN_SCRIPT.upper()] = 0
-
-    script_codes = {}
-    seen_scripts = set()
-
-    # Scripts in the CLDR repos use 4-letter ISO-15924 codes, so map those
-    for code, _, name, _, _, _ in csv.reader(script_codes_file, delimiter=';'):
-        if name.upper() in all_scripts:
-            script_codes[code] = name.upper()
-            seen_scripts.add(name.upper())
-        else:
-            normalized_name = name.split('(')[0].strip().upper()
-            if normalized_name in all_scripts and normalized_name not in seen_scripts:
-                script_codes[code] = normalized_name
-                seen_scripts.add(normalized_name)
-
+def get_script_languages():
     # For some languages (Greek, Thai, etc.), use of an unambiguous script is sufficient
-    # to identify the language. We keep track of those single_language scripts to inform
+    # to identify the language. We keep track of those single language scripts to inform
     # the language classifier
 
     cldr_response = requests.get(CLDR_SUPPLEMENTAL_DATA)
@@ -178,31 +187,38 @@ def main(out_dir):
         for script in scripts:
             script_languages[script].append(language)
 
-    single_language_scripts = set([script for script, languages in script_languages.iteritems()
-                                  if len(languages) == 1])
+    return script_languages
 
-    all_official_scripts = set.union(*(set(scripts) for language, scripts in language_scripts.iteritems()))
+
+def main(out_dir):
+    # Output is a C header and data file, see templates
+    out_file = open(os.path.join(out_dir, SCRIPTS_DATA_FILENAME), 'w')
+    out_header = open(os.path.join(out_dir, SCRIPTS_HEADER), 'w')
+
+    chars = get_chars_by_script()
+    all_scripts = build_master_scripts_list(chars)
+    script_codes = get_script_codes(all_scripts)
+
+    script_code_languages = get_script_languages()
+
+    script_languages = {}
 
     max_langs = 0
 
-    script_types = defaultdict(list)
     for script_code, script_name in script_codes.iteritems():
-        langs = script_languages.get(script_code, [])
+        langs = script_code_languages.get(script_code, [])
         num_langs = len(langs)
         if num_langs > max_langs:
             max_langs = num_langs
-        script_types[script_name] = langs
-
-    script_types = dict(script_types)
+        script_languages[script_name] = langs
 
     for name in all_scripts.iterkeys():
-        if name not in script_types:
-            script_types[name] = []
+        script_languages.setdefault(name, [])
 
     # Generate C header and constants
 
     script_enum = u''',
-    '''.join(['SCRIPT_{} = {}'.format(s, i) for s, i in sorted(all_scripts.iteritems(), key=itemgetter(1))])
+    '''.join(['SCRIPT_{} = {}'.format(s.upper(), i) for s, i in sorted(all_scripts.iteritems(), key=itemgetter(1))])
 
     out_header.write(scripts_header_template.format(num_chars=NUM_CHARS,
                      max_langs=max_langs,
@@ -212,17 +228,17 @@ def main(out_dir):
     # Generate C data file
 
     char_scripts_data = u''',
-    '''.join(['SCRIPT_{}'.format(script or UNKNOWN_SCRIPT.upper()) for script in chars])
+    '''.join(['SCRIPT_{}'.format((script or UNKNOWN_SCRIPT).upper()) for script in chars])
 
     script_codes_data = u''',
-    '''.join([script_code_template.format(name=name, code=code) for code, name in script_codes.iteritems()])
+    '''.join([script_code_template.format(name=name.upper(), code=code) for code, name in script_codes.iteritems()])
 
-    sorted_script_types = [script_types[s] for s, i in sorted(all_scripts.iteritems(), key=itemgetter(1))]
+    sorted_lang_scripts = [script_languages[s] for s, i in sorted(all_scripts.iteritems(), key=itemgetter(1))]
 
     script_language_data = u''',
     '''.join([script_language_template.format(num_langs=len(langs),
               languages='{{{}}}'.format(', '.join(['"{}"'.format(l) for l in langs])) if langs else 'NULL')
-              for langs in sorted_script_types])
+              for langs in sorted_lang_scripts])
 
     out_file.write(scripts_c_data_template.format(header_name=SCRIPTS_HEADER,
                    char_scripts=char_scripts_data,
