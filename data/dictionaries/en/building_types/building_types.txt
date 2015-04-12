@@ -1,10 +1,8 @@
 annex|anex|annx|anx|annexe
-block|blk|bl|blck
 building|bdg|bldg|blg
 bungalow|bongalow|bunglow|bungalo|bngw|bnglw
 cabin|cabn
 cottage|ctg|ctge
-department|dept
 duplex|dup
 factory|fcty|fty|fy
 farm|frm
@@ -12,7 +10,6 @@ garage|grge
 house|hous|hs|hse|ho
 maisonette|msnt
 reserve|rsve|rsrv|rsv
-section|sec
 shed|shd
 tower|twr
 townhouse|tnhs
