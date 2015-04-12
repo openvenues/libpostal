@@ -161,7 +161,7 @@ def extract_language_scripts(xml):
     return language_scripts
 
 
-def get_script_languages():
+def get_script_languages(script_codes):
     # For some languages (Greek, Thai, etc.), use of an unambiguous script is sufficient
     # to identify the language. We keep track of those single language scripts to inform
     # the language classifier
@@ -180,12 +180,18 @@ def get_script_languages():
     spoken_languages = set([lang for country, lang, script, pct, is_official
                             in country_language_reader])
 
-    script_languages = defaultdict(list)
+    script_code_languages = defaultdict(list)
     for language, scripts in language_scripts.iteritems():
         if language not in spoken_languages:
             continue
         for script in scripts:
-            script_languages[script].append(language)
+            script_code_languages[script].append(language)
+
+    script_languages = {}
+
+    for script_code, script_name in script_codes.iteritems():
+        langs = script_code_languages.get(script_code, [])
+        script_languages[script_name] = langs
 
     return script_languages
 
@@ -199,18 +205,14 @@ def main(out_dir):
     all_scripts = build_master_scripts_list(chars)
     script_codes = get_script_codes(all_scripts)
 
-    script_code_languages = get_script_languages()
-
-    script_languages = {}
+    script_languages = get_script_languages(script_codes)
 
     max_langs = 0
 
-    for script_code, script_name in script_codes.iteritems():
-        langs = script_code_languages.get(script_code, [])
+    for script, langs in script_languages.iteritems():
         num_langs = len(langs)
         if num_langs > max_langs:
             max_langs = num_langs
-        script_languages[script_name] = langs
 
     for name in all_scripts.iterkeys():
         script_languages.setdefault(name, [])
