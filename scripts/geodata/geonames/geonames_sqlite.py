@@ -64,7 +64,8 @@ def download_file(url, dest):
 
 
 def admin_ddl(admin_level):
-    columns = ['admin{}_code TEXT'.format(i)
+    columns = ['country_code'] + \
+              ['admin{}_code TEXT'.format(i)
                for i in xrange(1, admin_level)]
 
     create = '''
@@ -72,7 +73,6 @@ def admin_ddl(admin_level):
     geonames_id INT,
     code TEXT,
     name TEXT,
-    country_code TEXT,
     {fields}
     )'''.format(level=admin_level,
                 fields=''',
