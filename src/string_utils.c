@@ -50,9 +50,9 @@ int string_common_prefix(const char *str1, const char *str2) {
 
 int string_common_suffix(const char *str1, const char *str2) {
     int common_suffix = 0;
-    int str1_len = strlen(str1);
-    int str2_len = strlen(str2);
-    int min_len = (str1_len < str2_len) ? str1_len : str2_len;
+    size_t str1_len = strlen(str1);
+    size_t str2_len = strlen(str2);
+    size_t min_len = (str1_len < str2_len) ? str1_len : str2_len;
     for (int i=1; i <= min_len && str1[str1_len-i] == str2[str2_len-i]; i++)
         common_suffix++;
     return common_suffix;
@@ -185,8 +185,8 @@ size_t string_ltrim(char *str) {
 }
 
 size_t string_trim(char *str) {
-    size_t spaces = string_lstrip(str);
-    spaces += string_rstrip(str);
+    size_t spaces = string_ltrim(str);
+    spaces += string_rtrim(str);
     return spaces;
 }
 
