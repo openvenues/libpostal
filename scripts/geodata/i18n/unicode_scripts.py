@@ -12,6 +12,7 @@ import requests
 import sys
 import tempfile
 import requests
+import subprocess
 
 from cStringIO import StringIO
 
@@ -27,9 +28,14 @@ this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.encoding import safe_encode, safe_decode
+from geodata.file_utils import ensure_dir
 
-from word_breaks import script_regex, regex_char_range
-from cldr_languages import *
+from geodata.i18n.cldr_languages import *
+from geodata.i18n.unicode_data import UNICODE_DATA_DIR
+from geodata.i18n.word_breaks import script_regex, regex_char_range
+
+SCRIPTS_DATA_DIR = os.path.join(UNICODE_DATA_DIR, 'scripts')
+LOCAL_SCRIPTS_FILE = os.path.join(SCRIPTS_DATA_DIR, 'Scripts.txt')
 
 SCRIPTS_HEADER = 'unicode_script_types.h'
 SCRIPTS_DATA_FILENAME = 'unicode_scripts_data.c'
@@ -85,22 +91,26 @@ def script_name_constant(i, u):
 UNKNOWN_SCRIPT = 'Unknown'
 
 
-def get_chars_by_script():
-    response = requests.get(SCRIPTS_URL)
+def download_scripts_file():
+    ensure_dir(SCRIPTS_DATA_DIR)
+    subprocess.check_call(['wget', SCRIPTS_URL, '-O', LOCAL_SCRIPTS_FILE])
 
-    chars = [None] * NUM_CHARS
+
+def get_chars_by_script(scripts_filename=LOCAL_SCRIPTS_FILE):
+    scripts_file = open(scripts_filename)
+    scripts = [None] * NUM_CHARS
 
     # Lines look like:
     # 0041..005A    ; Latin # L&  [26] LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER Z
-    for char_range, script, char_class in script_regex.findall(response.content):
+    for char_range, script, char_class in script_regex.findall(scripts_file.read()):
         script_range = [unicode_to_integer(u) for u in char_range.split('..') if len(u) < 5]
         if len(script_range) == 2:
             for i in xrange(script_range[0], script_range[1] + 1):
-                chars[i] = script
+                scripts[i] = script
         elif script_range:
-            chars[script_range[0]] = script
+            scripts[script_range[0]] = script
 
-    return chars
+    return scripts
 
 
 def build_master_scripts_list(chars):
@@ -166,8 +176,8 @@ def get_script_languages(script_codes):
     # to identify the language. We keep track of those single language scripts to inform
     # the language classifier
 
-    cldr_response = requests.get(CLDR_SUPPLEMENTAL_DATA)
-    cldr_xml = etree.fromstring(cldr_response.content)
+    cldr_supplemental_data = open(CLDR_SUPPLEMENTAL_DATA)
+    cldr_xml = etree.parse(cldr_supplemental_data)
     language_scripts = extract_language_scripts(cldr_xml)
 
     country_languages_path = os.path.join(DEFAULT_LANGUAGES_DIR, COUNTRY_LANGUAGES_FILENAME)
@@ -201,6 +211,7 @@ def main(out_dir):
     out_file = open(os.path.join(out_dir, SCRIPTS_DATA_FILENAME), 'w')
     out_header = open(os.path.join(out_dir, SCRIPTS_HEADER), 'w')
 
+    download_scripts_file()
     chars = get_chars_by_script()
     all_scripts = build_master_scripts_list(chars)
     script_codes = get_script_codes(all_scripts)
