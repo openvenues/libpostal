@@ -6,6 +6,9 @@ import tempfile
 
 from cldr_data import CLDR_DIR
 
+this_dir = os.path.realpath(os.path.dirname(__file__))
+sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
+
 CLDR_URL = 'http://www.unicode.org/Public/cldr/latest/core.zip'
 
 CLDR_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
