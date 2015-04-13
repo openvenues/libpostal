@@ -58,9 +58,7 @@ GEONAMES_FILES = [(DUMP_URL, '', True, ALL_COUNTRIES_ZIP_FILE),
 
 def download_file(url, dest):
     logger.info('Downloading file from {}'.format(url))
-    req = urllib2.urlopen(url)
-    with open(dest, 'wb') as fp:
-        shutil.copyfileobj(req, fp)
+    subprocess.check_call(['wget', url, '-O', dest])
 
 
 def admin_ddl(admin_level):
