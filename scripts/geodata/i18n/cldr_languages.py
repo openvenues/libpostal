@@ -8,12 +8,14 @@ from collections import Counter
 from cStringIO import StringIO
 from lxml import etree
 
+from geodata.i18n.unicode_data import CLDR_DIR
+
 this_dir = os.path.realpath(os.path.dirname(__file__))
 DEFAULT_LANGUAGES_DIR = os.path.join(os.pardir, os.pardir, os.pardir,
                                      'data', 'language', 'countries')
 
-CLDR_URL = 'http://unicode.org/repos/cldr/trunk/common'
-CLDR_SUPPLEMENTAL_DATA = CLDR_URL + '/supplemental/supplementalData.xml'
+CLDR_SUPPLEMENTAL_DATA = os.path.join(CLDR_DIR, 'common', 'supplemental',
+                                      'supplementalData.xml')
 
 ISO_639_3 = 'http://www-01.sil.org/iso639-3/iso-639-3.tab'
 ISO_MACROLANGUAGES = 'http://www-01.sil.org/iso639-3/iso-639-3-macrolanguages.tab'
@@ -122,8 +124,8 @@ def fetch_cldr_languages(out_dir=DEFAULT_LANGUAGES_DIR):
     macro = response.content
     write_languages_file(langs, macro, out_dir)
 
-    response = requests.get(CLDR_SUPPLEMENTAL_DATA)
-    xml = etree.fromstring(response.content)
+    supplemental = open(CLDR_SUPPLEMENTAL_DATA)
+    xml = etree.parse(supplemental)
     write_country_official_languages_file(xml, out_dir)
 
 
