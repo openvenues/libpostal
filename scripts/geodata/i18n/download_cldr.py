@@ -4,7 +4,7 @@ import subprocess
 import sys
 import tempfile
 
-from cldr_data import CLDR_DIR
+from unicode_paths import CLDR_DIR
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))

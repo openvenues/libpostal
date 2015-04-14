@@ -8,7 +8,7 @@ from collections import Counter
 from cStringIO import StringIO
 from lxml import etree
 
-from geodata.i18n.unicode_data import CLDR_DIR
+from unicode_paths import CLDR_DIR
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 DEFAULT_LANGUAGES_DIR = os.path.join(os.pardir, os.pardir, os.pardir,

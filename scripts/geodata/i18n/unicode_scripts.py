@@ -30,9 +30,9 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 from geodata.encoding import safe_encode, safe_decode
 from geodata.file_utils import ensure_dir
 
-from geodata.i18n.cldr_languages import *
-from geodata.i18n.unicode_data import UNICODE_DATA_DIR
-from geodata.i18n.word_breaks import script_regex, regex_char_range
+from cldr_languages import *
+from unicode_paths import UNICODE_DATA_DIR
+from word_breaks import script_regex, regex_char_range
 
 SCRIPTS_DATA_DIR = os.path.join(UNICODE_DATA_DIR, 'scripts')
 LOCAL_SCRIPTS_FILE = os.path.join(SCRIPTS_DATA_DIR, 'Scripts.txt')
