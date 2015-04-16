@@ -392,37 +392,48 @@ cstring_array *cstring_array_from_char_array(char_array *str) {
     return array;
 }
 
-uint32_t cstring_array_start_token(cstring_array *self) {
+inline uint32_t cstring_array_start_token(cstring_array *self) {
     uint32_t index = self->str->n;
     uint32_array_push(self->indices, index);
     return index;
 }
 
-uint32_t cstring_array_add_string(cstring_array *self, char *str) {
+inline uint32_t cstring_array_add_string(cstring_array *self, char *str) {
     uint32_t index = cstring_array_start_token(self);
     char_array_append(self->str, str);
     char_array_terminate(self->str);
     return index;
 }
 
-uint32_t cstring_array_add_string_len(cstring_array *self, char *str, size_t len) {
+inline uint32_t cstring_array_add_string_len(cstring_array *self, char *str, size_t len) {
     uint32_t index = cstring_array_start_token(self);
     char_array_append_len(self->str, str, len);
     char_array_terminate(self->str);
     return index;
 }
 
-int32_t cstring_array_get_offset(cstring_array *self, uint32_t i) {
+inline int32_t cstring_array_get_offset(cstring_array *self, uint32_t i) {
     if (INVALID_INDEX(i, self->indices->n)) {
         return -1;
     }
     return (int32_t)self->indices->a[i];
 }
 
-char *cstring_array_get_token(cstring_array *self, uint32_t i) {
+inline char *cstring_array_get_token(cstring_array *self, uint32_t i) {
     int32_t data_index = cstring_array_get_offset(self, i);
     if (data_index < 0) return NULL;
     return self->str->a + data_index;
+}
+
+inline int64_t cstring_array_token_length(cstring_array *self, uint32_t i) {
+    if (INVALID_INDEX(i, self->indices->n)) {
+        return -1;
+    }
+    if (i < self->indices->n - 1) {
+        return self->indices->a[i+1] - self->indices->a[i] - 1;
+    } else {        
+        return self->str->n - self->indices->a[i] - 1;
+    }
 }
 
 cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, int *count) {
