@@ -86,12 +86,14 @@ hyphen = [\-];
 minus = [\u2212];
 figure_dash = [\u2012];
 ndash = [\u2013];
-mdash = [\u2014];
+mdash = [\u2014\u2e3a\u2e3b\ufe31\ufe58];
 hbar = [\u2015];
 swung_dash = [\u2053];
 
-other_non_breaking_dash = ({figure_dash}|{minus}|{ndash});
-non_breaking_dash = ({hyphen}|{other_non_breaking_dash});
+
+other_non_breaking_dash = [\u058a\u05be\u1400\u1806\u2010-\u2013\u2212\u2e17\u2e1a\ufe32\ufe63\uff0d];
+
+non_breaking_dash = (({hyphen}{1,1})|{other_non_breaking_dash});
 breaking_dash = ({mdash}|{hbar}|{swung_dash}|({hyphen}{2,}));
 
 // WB5
@@ -115,7 +117,7 @@ katakana = {katakana_chars}+;
 // WB13a and WB13b
 word_extend_num_letter = ({letter}|{numeric_chars}|{katakana}|{extend_num_letter_chars})+{extend_num_letter_chars}({letter}|{numeric_chars}|{katakana}|{extend_num_letter_chars})*;
 
-possible_word_char = {letter}|{mark_spacing_combining_chars}|{mark_enclosing_chars}|{mark_nonspacing_chars}|{punct_connector_chars}|{punct_dash_chars}|{currency_symbol_chars}|{symbol_modifier_chars}|{symbol_math_chars}|{symbol_other_chars}|{digit};
+possible_word_char = {letter}|{mark_spacing_combining_chars}|{mark_enclosing_chars}|{mark_nonspacing_chars}|{non_breaking_dash}|{punct_connector_chars}|{currency_symbol_chars}|{symbol_modifier_chars}|{symbol_math_chars}|{symbol_other_chars}|{digit};
 //possible_word_char = [^\+\(\)\[\]}{\/\\\,:;!"&\? 0-9\t\u00A0\u2000-\u200A\u3000\r\n\u2028\u2029\u000B\u000C\u0085\u0096\u0097\u2013\u2014\u2015\u0000];
 any_word = ({possible_word_char}*{letter}+{possible_word_char}*);
 
