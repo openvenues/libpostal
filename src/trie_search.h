@@ -24,7 +24,7 @@ typedef struct phrase {
 VECTOR_INIT(phrase_array, phrase_t)
 
 phrase_array *trie_search(trie_t *self, char *text);
-phrase_array *trie_search_tokens(trie_t *self, tokenized_string_t *response);
+phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens);
 phrase_t trie_search_suffixes(trie_t *self, char *word);
 
 phrase_t trie_search_prefixes(trie_t *self, char *word);
