@@ -27,6 +27,11 @@ KHASH_MAP_INIT_STR(str_int, uint32_t)
 KHASH_MAP_INIT_INT(int_str, char *)
 KHASH_MAP_INIT_STR(str_str, char *)
 
+// Sets
+
+KHASH_SET_INIT_INT(int_set)
+KHASH_SET_INIT_STR(str_set)
+
 // Vectors
 
 VECTOR_INIT_NUMERIC(int32_array, int32_t)
