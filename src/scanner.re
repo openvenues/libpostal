@@ -107,9 +107,10 @@ hebrew_word_single_quote = ({hebrew_letter_chars}+{single_quote})+;
 // WB7b and WB7c
 hebrew_word_double_quote = ({hebrew_letter_chars}+{double_quote})+{hebrew_letter_chars}*;
 
-// WB11 and WB12
+// WB11 and WB12 (modified slightly)
+// N.B. this does not capture German-style ordinals such as 2. as that is too ambiguous and can be accounted for in parsing
 possible_numeric_chars = ({numeric_chars}|{letter}|{non_breaking_dash}|{mid_number_chars}|{mid_num_letter_chars}|{single_quote});
-numeric = ({possible_numeric_chars}*{numeric_chars}+{possible_numeric_chars}*);
+numeric = (({non_breaking_dash}?|((({numeric_chars}|{letter})+{possible_numeric_chars}*)*)){numeric_chars}+({possible_numeric_chars}*({numeric_chars}|{letter})+)*);
 
 // WB13
 katakana = {katakana_chars}+;
@@ -118,7 +119,6 @@ katakana = {katakana_chars}+;
 word_extend_num_letter = ({letter}|{numeric_chars}|{katakana}|{extend_num_letter_chars})+{extend_num_letter_chars}({letter}|{numeric_chars}|{katakana}|{extend_num_letter_chars})*;
 
 possible_word_char = {letter}|{mark_spacing_combining_chars}|{mark_enclosing_chars}|{mark_nonspacing_chars}|{punct_connector_chars}|{currency_symbol_chars}|{symbol_modifier_chars}|{symbol_math_chars}|{symbol_other_chars}|{digit};
-//possible_word_char = [^\+\(\)\[\]}{\/\\\,:;!"&\? 0-9\t\u00A0\u2000-\u200A\u3000\r\n\u2028\u2029\u000B\u000C\u0085\u0096\u0097\u2013\u2014\u2015\u0000];
 any_word = (({possible_word_char}*{letter}+{possible_word_char}*{non_breaking_dash})*{possible_word_char}*{letter}+{possible_word_char}*);
 
 apos_word = ("'"?({latinish_letter}+"'")+{latinish_letter}+"'"?);
