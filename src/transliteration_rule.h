@@ -13,21 +13,31 @@ typedef enum {
 
 typedef struct transliteration_rule_source {
     char *key;
+    size_t key_len;
 
     context_type_t pre_context_type;
     size_t pre_context_max_len;
     char *pre_context;
+    size_t pre_context_len;
 
     context_type_t post_context_type;
     size_t post_context_max_len;
     char *post_context;
+    size_t post_context_len;
 
     char *replacement;
+    size_t replacement_len;
 
     int move;
     char *group_regex_str;
+    size_t group_regex_len;
 } transliteration_rule_source_t;
 
+typedef enum {
+    STEP_RULESET,
+    STEP_TRANSFORM,
+    STEP_UNICODE_NORMALIZATION
+} step_type_t;
 
 typedef struct transliteration_step_source {
     step_type_t type;

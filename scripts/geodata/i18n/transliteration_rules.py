@@ -50,7 +50,10 @@ POST_CONTEXT_INDICATOR = '}'
 
 REVISIT_INDICATOR = '|'
 
-WORD_BOUNDARY_VAR = 'wordBoundary'
+WORD_BOUNDARY_VAR_NAME = 'wordBoundary'
+WORD_BOUNDARY_VAR = '${}'.format(WORD_BOUNDARY_VAR_NAME)
+
+word_boundary_var_regex = re.compile(WORD_BOUNDARY_VAR.replace('$', '\$'))
 
 EMPTY_TRANSITION = u'\u007f'
 
@@ -503,8 +506,28 @@ def char_permutations(s):
     return list(itertools.product(char_types)), move
 
 
+string_replacements = {
+    u'[': u'\[',
+    u']': u'\]',
+    u'': EMPTY_TRANSITION,
+    u'*': u'\*',
+    u'+': u'\+',
+    PLUS: u'+',
+    STAR: u'*',
+}
+
+escape_sequence_long_regex = re.compile(r'(\\x[0-9a-f]{2})([0-9a-f])', re.I)
+
+
+def replace_long_escape_sequence(s):
+    def replace_match(m):
+        return u'{}""{}'.format(m.group(1), m.group(2))
+
+    return escape_sequence_long_regex.sub(replace_match, s)
+
+
 def quote_string(s):
-    return u'"{}"'.format(s.replace('"', '\\"'))
+    return u'"{}"'.format(replace_long_escape_sequence(safe_decode(s).replace('"', '\\"')))
 
 
 def char_types_string(char_types):
@@ -519,19 +542,7 @@ def char_types_string(char_types):
         template = u'{}' if len(chars) == 1 else u'[{}]'
         norm = []
         for c in chars:
-            if c == '[':
-                c = '\['
-            elif c == '':
-                c = EMPTY_TRANSITION
-            elif c == '*':
-                c = '\*'
-            elif c == '+':
-                c = '\+'
-            elif c == PLUS:
-                c = '+'
-            elif c == STAR:
-                c = '*'
-
+            c = string_replacements.get(c, c)
             norm.append(c)
 
         ret.append(template.format(u''.join(norm)))
@@ -555,48 +566,68 @@ def format_groups(char_types, groups):
 charset_regex = re.compile(r'(?<!\\)\[')
 
 
+def encode_string(s):
+    return safe_encode(s).encode('string-escape')
+
+
 def format_rule(rule):
     '''
     Creates the C literal for a given transliteration rule
     '''
-    pre_context = rule[0]
-    if not pre_context:
-        pre_context_type = CONTEXT_TYPE_NONE
-    elif charset_regex.search(pre_context):
-        pre_context_type = CONTEXT_TYPE_REGEX
+    key = rule[0]
+
+    pre_context_type = rule[1]
+    pre_context = rule[2]
+    if pre_context is None:
+        pre_context = 'NULL'
+        pre_context_len = 0
     else:
-        pre_context_type = CONTEXT_TYPE_STRING
+        pre_context_len = len(pre_context)
+        pre_context = quote_string(encode_string(pre_context))
 
-    pre_context_max_len = rule[1]
+    pre_context_max_len = rule[3]
 
-    key = rule[2]
+    post_context_type = rule[4]
+    post_context = rule[5]
 
-    post_context = rule[3]
-    if not post_context:
-        post_context_type = CONTEXT_TYPE_NONE
-    elif charset_regex.search(post_context):
-        post_context_type = CONTEXT_TYPE_REGEX
+    if post_context is None:
+        post_context = 'NULL'
+        post_context_len = 0
     else:
-        post_context_type = CONTEXT_TYPE_STRING
+        post_context_len = len(post_context)
+        post_context = quote_string(encode_string(post_context))
 
-    post_context_max_len = rule[4]
-    groups = rule[5]
-    replacement = rule[6]
-    move = rule[7]
+    post_context_max_len = rule[6]
+
+    groups = rule[7]
+    if not groups:
+        groups = 'NULL'
+        groups_len = 0
+    else:
+        groups_len = len(groups)
+        groups = quote_string(encode_string(groups))
+
+    replacement = rule[8]
+    move = rule[9]
 
     output_rule = (
-        quote_string(key),
+        quote_string(encode_string(key)),
+        str(len(key)),
         pre_context_type,
         str(pre_context_max_len),
-        u'NULL' if pre_context_type == CONTEXT_TYPE_NONE else quote_string(pre_context),
+        pre_context,
+        str(pre_context_len),
 
         post_context_type,
         str(post_context_max_len),
-        u'NULL' if post_context_type == CONTEXT_TYPE_NONE else quote_string(post_context),
+        post_context,
+        str(post_context_len),
 
-        quote_string(replacement),
+        quote_string(encode_string(replacement)),
+        str(len(replacement)),
         str(move),
-        u'NULL' if not groups else quote_string(groups),
+        groups,
+        str(groups_len),
     )
 
     return output_rule
@@ -627,6 +658,8 @@ def parse_transform_rules(xml):
         if num_found == 0:
             break
 
+    variables[WORD_BOUNDARY_VAR_NAME] = WORD_BOUNDARY_VAR
+
     for rule_type, rule in rules:
         if rule_type in (BIDIRECTIONAL_TRANSFORM, FORWARD_TRANSFORM):
             left, right = rule
@@ -639,14 +672,25 @@ def parse_transform_rules(xml):
             left_pre_context_max_len = 0
             left_post_context_max_len = 0
 
+            left_pre_context_type = CONTEXT_TYPE_NONE
+            left_post_context_type = CONTEXT_TYPE_NONE
+
             move = 0
             left_groups = []
             right_groups = []
 
             if left_pre_context:
-                left_pre_context, _, _ = char_permutations(left_pre_context.strip())
-                left_pre_context_max_len = len(left_pre_context or [])
-                left_pre_context = char_types_string(left_pre_context)
+                if left_pre_context.strip() == WORD_BOUNDARY_VAR:
+                    left_pre_context = None
+                    left_pre_context_type = CONTEXT_TYPE_WORD_BOUNDARY
+                else:
+                    left_pre_context, _, _ = char_permutations(left_pre_context.strip())
+                    left_pre_context_max_len = len(left_pre_context or [])
+                    left_pre_context = char_types_string(left_pre_context)
+                    if charset_regex.search(left_pre_context):
+                        left_pre_context_type = CONTEXT_TYPE_REGEX
+                    else:
+                        left_pre_context_type = CONTEXT_TYPE_STRING
 
             if left:
                 left, _, left_groups = char_permutations(left.strip())
@@ -657,16 +701,24 @@ def parse_transform_rules(xml):
                 left = char_types_string(left)
 
             if left_post_context:
-                left_post_context, _, _ = char_permutations(left_post_context.strip())
-                left_post_context_max_len = len(left_post_context or [])
-                left_post_context = char_types_string(left_post_context)
+                if left_post_context.strip() == WORD_BOUNDARY_VAR:
+                    left_post_context = None
+                    left_post_context_type = CONTEXT_TYPE_WORD_BOUNDARY
+                else:
+                    left_post_context, _, _ = char_permutations(left_post_context.strip())
+                    left_post_context_max_len = len(left_post_context or [])
+                    left_post_context = char_types_string(left_post_context)
+                    if charset_regex.search(left_post_context):
+                        left_post_context_type = CONTEXT_TYPE_REGEX
+                    else:
+                        left_post_context_type = CONTEXT_TYPE_STRING
 
             if right:
                 right, move, right_groups = char_permutations(right.strip())
                 right = char_types_string(right)
 
-            yield RULE, (left_pre_context, left_pre_context_max_len, left,
-                         left_post_context, left_post_context_max_len, left_groups, right, move)
+            yield RULE, (left, left_pre_context_type, left_pre_context, left_pre_context_max_len,
+                         left_post_context_type, left_post_context, left_post_context_max_len, left_groups, right, move)
 
         elif rule_type == PRE_TRANSFORM and '[' in rule and ']' in rule:
             continue
@@ -688,10 +740,10 @@ EXISTING_STEP = 'EXISTING_STEP'
 supplemental_transliterations = {
     'latin-ascii': (EXISTING_STEP, [
         # German transliterations not handled by standard NFD normalization
-        (u'"ä"', CONTEXT_TYPE_NONE, '0', 'NULL', CONTEXT_TYPE_NONE, '0', 'NULL', u'"ae"', '0', 'NULL'),
-        (u'"ö"', CONTEXT_TYPE_NONE, '0', 'NULL', CONTEXT_TYPE_NONE, '0', 'NULL', u'"oe"', '0', 'NULL'),
-        (u'"ü"', CONTEXT_TYPE_NONE, '0', 'NULL', CONTEXT_TYPE_NONE, '0', 'NULL', u'"ue"', '0', 'NULL'),
-        (u'"ß"', CONTEXT_TYPE_NONE, '0', 'NULL', CONTEXT_TYPE_NONE, '0', 'NULL', u'"ss"', '0', 'NULL'),
+        (u'"\xc3\xa4"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ae"', '2', '0', 'NULL', '0'),       # ä => ae
+        (u'"\xc3\xb6"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', '0', 'NULL', '0'),       # ö => oe
+        (u'"\xc3\xbc"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ue"', '2', '0', 'NULL', '0'),       # ü => ue
+        (u'"\xc3\x9f"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ss"', '2', '0', 'NULL', '0'),       # ß => ss
     ]),
 }
 
@@ -766,7 +818,7 @@ def get_all_transform_rules():
             elif step_type == STEP_TRANSFORM:
                 step = (STEP_TRANSFORM, '-1', '-1', quote_string(data))
             elif step_type == STEP_UNICODE_NORMALIZATION:
-                step = (STEP_UNICODE_NORMALIZATION, '-1', '-1', data)
+                step = (STEP_UNICODE_NORMALIZATION, '-1', '-1', quote_string(data))
             all_steps.append(step)
 
         internal = int(name not in to_latin)
@@ -778,9 +830,6 @@ def get_all_transform_rules():
 
 
 transliteration_data_template = u'''#include <stdlib.h>
-#include <stdbool.h>
-
-#include "transliteration_rule.h"
 
 transliteration_rule_source_t rules_source[] = {{
     {all_rules}
