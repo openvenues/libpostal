@@ -702,6 +702,7 @@ bool trie_add_suffix(trie_t *self, char *key, uint32_t data) {
     return success;
 }
 
+
 uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i) {
     if (word == NULL) return NULL_ID;
 
@@ -713,15 +714,14 @@ uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i) {
 
     uint32_t next_id;
 
-    /* Include NUL-byte if we're looking for whole phrases.
-    *  It may be stored if this phrase is a prefix of a longer one */
+    // Include NUL-byte. It may be stored if this phrase is a prefix of a longer one
 
     for (int i = 0; i < len + 1; i++, ptr++, node_id = next_id) {
         next_id = trie_get_transition_index(self, node, *ptr);
         node = trie_get_node(self, next_id);
 
         if (node.check != node_id) {
-            return 0;
+            return NULL_ID;
         }
 
         if (node.check == node_id && node.base < 0) {
@@ -736,7 +736,7 @@ uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i) {
             int tail_match = strncmp((char *)current_tail, query_tail, query_tail_len);
 
             if (tail_match == 0) {
-                return data_node.data;
+                return next_id;
             } else {
                 return NULL_ID;
             }
