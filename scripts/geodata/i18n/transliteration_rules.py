@@ -55,7 +55,7 @@ WORD_BOUNDARY_VAR = '${}'.format(WORD_BOUNDARY_VAR_NAME)
 
 word_boundary_var_regex = re.compile(WORD_BOUNDARY_VAR.replace('$', '\$'))
 
-EMPTY_TRANSITION = u'\u007f'
+EMPTY_TRANSITION = u'\u0000'
 
 EXCLUDE_TRANSLITERATORS = set([
     'Hangul-Latin',
@@ -509,6 +509,10 @@ def char_permutations(s):
 string_replacements = {
     u'[': u'\[',
     u']': u'\]',
+    u'(': u'\(',
+    u')': u'\)',
+    u'\\': u'\\\\',
+    u'\u0000': '',
     u'': EMPTY_TRANSITION,
     u'*': u'\*',
     u'+': u'\+',
@@ -566,15 +570,16 @@ def format_groups(char_types, groups):
 charset_regex = re.compile(r'(?<!\\)\[')
 
 
-def encode_string(s):
-    return safe_encode(s).encode('string-escape')
+def escape_string(s):
+    return s.encode('string-escape')
 
 
 def format_rule(rule):
     '''
     Creates the C literal for a given transliteration rule
     '''
-    key = rule[0]
+    key = safe_encode(rule[0])
+    key_len = len(key)
 
     pre_context_type = rule[1]
     pre_context = rule[2]
@@ -582,8 +587,9 @@ def format_rule(rule):
         pre_context = 'NULL'
         pre_context_len = 0
     else:
+        pre_context = safe_encode(pre_context)
         pre_context_len = len(pre_context)
-        pre_context = quote_string(encode_string(pre_context))
+        pre_context = quote_string(escape_string(pre_context))
 
     pre_context_max_len = rule[3]
 
@@ -594,8 +600,9 @@ def format_rule(rule):
         post_context = 'NULL'
         post_context_len = 0
     else:
+        post_context = safe_encode(post_context)
         post_context_len = len(post_context)
-        post_context = quote_string(encode_string(post_context))
+        post_context = quote_string(escape_string(post_context))
 
     post_context_max_len = rule[6]
 
@@ -604,15 +611,17 @@ def format_rule(rule):
         groups = 'NULL'
         groups_len = 0
     else:
+        groups = safe_encode(groups)
         groups_len = len(groups)
-        groups = quote_string(encode_string(groups))
+        groups = quote_string(escape_string(groups))
 
-    replacement = rule[8]
+    replacement = safe_encode(rule[8])
+    replacement_len = len(replacement)
     move = rule[9]
 
     output_rule = (
-        quote_string(encode_string(key)),
-        str(len(key)),
+        quote_string(escape_string(key)),
+        str(key_len),
         pre_context_type,
         str(pre_context_max_len),
         pre_context,
@@ -623,8 +632,8 @@ def format_rule(rule):
         post_context,
         str(post_context_len),
 
-        quote_string(encode_string(replacement)),
-        str(len(replacement)),
+        quote_string(escape_string(replacement)),
+        str(replacement_len),
         str(move),
         groups,
         str(groups_len),
