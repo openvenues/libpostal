@@ -294,6 +294,8 @@ phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens) {
                 i = last_match_index;
                 last_match_index = -1;
                 phrase_start = 0;
+                last_node = trie_get_root(self);
+                last_node_id = ROOT_ID;
                 continue;
             } else if (last_state == SEARCH_STATE_PARTIAL_MATCH) {
                 log_debug("last_state == SEARCH_STATE_PARTIAL_MATCH\n");
