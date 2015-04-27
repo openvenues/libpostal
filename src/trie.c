@@ -609,34 +609,35 @@ void trie_print(trie_t *self) {
 
 }
 
-void trie_add_to_node(trie_t *self, uint32_t node_id, char *key, uint32_t data) {
+void trie_add_at_index(trie_t *self, uint32_t node_id, char *key, uint32_t data) {
     int num_chars = strlen(key);
     unsigned char *ptr = (unsigned char *)key; 
-    trie_node_t node = trie_get_node(self, node_id);
+    uint32_t last_node_id = node_id;
+    trie_node_t last_node = trie_get_node(self, node_id);
+    if (last_node.base == NULL_ID) return;
 
-    trie_node_t next;
-    uint32_t next_id;
+    trie_node_t node;
 
     // Walks node until prefix reached, including the trailing \0
 
-    for (int i = 0; i < num_chars + 1; ptr++, i++, node_id = next_id, node = next) {
+    for (int i = 0; i < num_chars + 1; ptr++, i++, last_node_id = node_id, last_node = node) {
 
         log_debug("--- char=%c\n", *ptr);
-        next_id = trie_get_transition_index(self, node, *ptr);
-        log_debug("next_id=%d\n", next_id);
-        if (next_id != NULL_ID)
-            trie_make_room_for(self, next_id);
+        node_id = trie_get_transition_index(self, last_node, *ptr);
+        log_debug("node_id=%d\n", node_id);
+        if (node_id != NULL_ID)
+            trie_make_room_for(self, node_id);
 
-        next = trie_get_node(self, next_id);
-        log_debug("next.check=%d, node_id=%d, next.base=%d\n", next.check, node_id, next.base);
+        node = trie_get_node(self, node_id);
+        log_debug("node.check=%d, last_node_id=%d, node.base=%d\n", node.check, last_node_id, node.base);
 
-        if (next.check < 0 || (next.check != node_id)) {
-            log_debug("node_id=%d, ptr=%s, tail_pos=%zu\n", node_id,  ptr, self->tail->n);
-            trie_separate_tail(self, node_id, ptr, data);
+        if (node.check < 0 || (node.check != last_node_id)) {
+            log_debug("last_node_id=%d, ptr=%s, tail_pos=%zu\n", last_node_id,  ptr, self->tail->n);
+            trie_separate_tail(self, last_node_id, ptr, data);
             return;
-        } else if (next.base < 0 && next.check == node_id) {
+        } else if (node.base < 0 && node.check == last_node_id) {
             log_debug("Case 3 insertion\n");
-            trie_tail_merge(self, next_id, ptr + 1, data);
+            trie_tail_merge(self, node_id, ptr + 1, data);
             return;
         }
     }
@@ -644,9 +645,10 @@ void trie_add_to_node(trie_t *self, uint32_t node_id, char *key, uint32_t data) 
     return;
 }
 
+
 void trie_add(trie_t *self, char *key, uint32_t data) {
     if (strlen(key) == 0) return;
-    trie_add_to_node(self, ROOT_ID, key, data);
+    trie_add_at_index(self, ROOT_ID, key, data);
 }
 
 void trie_add_suffix(trie_t *self, char *key, uint32_t data) {
@@ -659,27 +661,26 @@ void trie_add_suffix(trie_t *self, char *key, uint32_t data) {
         node_id = trie_add_transition(self, ROOT_ID, '\0');
     }
 
-    char *suffix = utf8_reversed_string(key);    
-    trie_add_to_node(self, node_id, suffix, data);
+    char *suffix = utf8_reversed_string(key); 
+    trie_add_at_index(self, node_id, suffix, data);
     free(suffix);
-
 }
 
-uint32_t trie_get(trie_t *self, char *word, bool whole_word) {
-    if (word == NULL) return 0;
+uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i) {
+    if (word == NULL) return NULL_ID;
 
     unsigned char *ptr = (unsigned char *)word;
 
-    trie_node_t node = trie_get_root(self);
-    uint32_t node_id = ROOT_ID;
+    uint32_t node_id = i;
+    trie_node_t node = trie_get_node(self, i);
+    if (node.base == NULL_ID) return NULL_ID;
+
     uint32_t next_id;
 
-    size_t word_len = strlen(word);
     /* Include NUL-byte if we're looking for whole phrases.
     *  It may be stored if this phrase is a prefix of a longer one */
-    int chars = whole_word ? word_len + 1 : word_len;
 
-    for (int i = 0; i < chars; i++, ptr++, node_id = next_id) {
+    for (int i = 0; i < len; i++, ptr++, node_id = next_id) {
         next_id = trie_get_transition_index(self, node, *ptr);
         node = trie_get_node(self, next_id);
 
@@ -696,18 +697,12 @@ uint32_t trie_get(trie_t *self, char *word, bool whole_word) {
             char *query_tail = (char *)(*ptr ? ptr + 1 : ptr);
             size_t query_tail_len = strlen((char *)query_tail);
 
-            int tail_match;
-
-            if (whole_word && query_tail_len == tail_len) {
-                tail_match = strncmp((char *)current_tail, query_tail, tail_len);
-            } else {
-                tail_match = strncmp((char *)current_tail, query_tail, query_tail_len);
-            }
+            int tail_match = strncmp((char *)current_tail, query_tail, query_tail_len);
 
             if (tail_match == 0) {
                 return next_id;
             } else {
-                return 0;
+                return NULL_ID;
             }
 
         }
@@ -716,6 +711,15 @@ uint32_t trie_get(trie_t *self, char *word, bool whole_word) {
 
     return next_id;
 
+}
+
+uint32_t trie_get_len(trie_t *self, char *word, size_t len) {
+    return trie_get_from_index(self, word, len, ROOT_ID);
+}
+
+uint32_t trie_get(trie_t *self, char *word) {
+    size_t word_len = strlen(word);
+    return trie_get_from_index(self, word, word_len, ROOT_ID);
 }
 
 /*
