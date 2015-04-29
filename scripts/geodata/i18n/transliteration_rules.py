@@ -818,11 +818,11 @@ def get_all_transform_rules():
             continue
         step_index = len(all_steps)
         num_steps = len(steps)
-        for step_type, data in steps:
+        for i, (step_type, data) in enumerate(steps):
             if step_type == STEP_RULESET:
                 rule_index = len(all_rules)
                 num_rules = len(data)
-                step = (STEP_RULESET, str(rule_index), str(num_rules), 'NULL')
+                step = (STEP_RULESET, str(rule_index), str(num_rules), quote_string(str(i)))
                 all_rules.extend(data)
             elif step_type == STEP_TRANSFORM:
                 step = (STEP_TRANSFORM, '-1', '-1', quote_string(data))
