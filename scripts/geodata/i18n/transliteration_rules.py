@@ -511,6 +511,8 @@ string_replacements = {
     u']': u'\]',
     u'(': u'\(',
     u')': u'\)',
+    u'{': u'\{',
+    u'}': u'\{',
     u'\\': u'\\\\',
     u'\u0000': '',
     u'': EMPTY_TRANSITION,
