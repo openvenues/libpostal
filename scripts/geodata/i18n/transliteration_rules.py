@@ -55,7 +55,8 @@ WORD_BOUNDARY_VAR = '${}'.format(WORD_BOUNDARY_VAR_NAME)
 
 word_boundary_var_regex = re.compile(WORD_BOUNDARY_VAR.replace('$', '\$'))
 
-EMPTY_TRANSITION = u'\u0000'
+WORD_BOUNDARY_CHAR = u'\u0001'
+EMPTY_TRANSITION = u'\u0004'
 
 EXCLUDE_TRANSLITERATORS = set([
     'Hangul-Latin',
@@ -187,6 +188,7 @@ OPEN_GROUP = 'OPEN_GROUP'
 CLOSE_GROUP = 'CLOSE_GROUP'
 GROUP_REF = 'GROUP_REF'
 CHAR_SET = 'CHAR_SET'
+CHAR_MULTI_SET = 'CHAR_MULTI_SET'
 CHAR_CLASS = 'CHAR_CLASS'
 OPTIONAL = 'OPTIONAL'
 CHARACTER = 'CHARACTER'
@@ -235,21 +237,24 @@ CHAR_RANGE = 'CHAR_RANGE'
 WORD_BOUNDARY = 'WORD_BOUNDARY'
 NEGATION = 'NEGATION'
 INTERSECTION = 'INTERSECTION'
+DIFFERENCE = 'DIFFERENCE'
 
 # Scanner for a character set (yes, a regex regex)
 
 char_set_scanner = Scanner([
     ('^\^', NEGATION),
-    (r'[\\]?[^\\]\-[\\]?.', CHAR_RANGE),
+    (r'[\\]?[^\\\s]\-[\\]?[^\s]', CHAR_RANGE),
     (r'[\\].', ESCAPED_CHARACTER),
     (r'\'\'', SINGLE_QUOTE),
     (r'\'.*?\'', QUOTED_STRING),
     (':[^:]+:', CHAR_CLASS),
     # Char set
     ('\[[^\[\]]+\]', CHAR_SET),
+    ('\[.*\]', CHAR_MULTI_SET),
     ('\[', OPEN_SET),
     ('\]', CLOSE_SET),
     ('&', INTERSECTION),
+    ('(?<=[\s])-(?=[\s])', DIFFERENCE),
     ('\$', WORD_BOUNDARY),
     (r'[^\s]', CHARACTER),
 ])
@@ -257,6 +262,8 @@ char_set_scanner = Scanner([
 NUM_CHARS = 65536
 
 all_chars = set([unichr(i) for i in xrange(NUM_CHARS)])
+
+control_chars = set([c for c in all_chars if unicodedata.category(c) == 'Cc'])
 
 
 def get_transforms():
@@ -310,9 +317,36 @@ def parse_regex_char_class(c):
         chars = []
 
     if is_negation:
-        chars = sorted(all_chars - set(chars))
+        chars = all_chars - set(chars)
 
-    return chars
+    return sorted(set(chars) - control_chars)
+
+
+def parse_balanced_sets(s):
+    open_brackets = 0
+    max_nesting = 0
+
+    skip = False
+
+    for i, ch in enumerate(s):
+        if ch == '[':
+            if open_brackets == 0:
+                start = i
+            max_nesting
+            open_brackets += 1
+        elif ch == ']':
+            open_brackets -= 1
+            if open_brackets == 0:
+                skip = False
+                yield (s[start:i + 1], CHAR_MULTI_SET)
+                (start, i + 1)
+        elif open_brackets == 0 and not skip:
+            for token, token_class in char_set_scanner.scan(s[i:]):
+                if token_class not in (CHAR_SET, CHAR_MULTI_SET, OPEN_SET, CLOSE_SET):
+                    yield token, token_class
+                else:
+                    break
+            skip = True
 
 
 def parse_regex_char_set(s):
@@ -330,9 +364,10 @@ def parse_regex_char_set(s):
     is_negation = False
     this_group = set()
     is_intersection = False
+    is_difference = False
     is_word_boundary = False
 
-    for token, token_class in char_set_scanner.scan(s):
+    for token, token_class in parse_balanced_sets(s):
         if token_class == CHAR_RANGE:
             this_char_set = set(parse_regex_char_range(token))
             this_group |= this_char_set
@@ -347,16 +382,21 @@ def parse_regex_char_set(s):
             is_negation = True
         elif token_class == CHAR_CLASS:
             this_group |= set(parse_regex_char_class(token))
-        elif token_class == CHAR_SET:
+        elif token_class in (CHAR_SET, CHAR_MULTI_SET):
             # Recursive calls, as performance doesn't matter here and nesting is shallow
             this_char_set = set(parse_regex_char_set(token))
-            # Shouldn't be complex set expression logic here
             if is_intersection:
                 this_group &= this_char_set
+                is_intersection = False
+            elif is_difference:
+                this_group -= this_char_set
+                is_difference = False
             else:
                 this_group |= this_char_set
         elif token_class == INTERSECTION:
             is_intersection = True
+        elif token_class == DIFFERENCE:
+            is_difference = True
         elif token_class == CHARACTER:
             this_group.add(token)
         elif token_class == WORD_BOUNDARY:
@@ -365,7 +405,7 @@ def parse_regex_char_set(s):
     if is_negation:
         this_group = all_chars - this_group
 
-    return sorted(this_group) + (['$'] if is_word_boundary else [])
+    return sorted(this_group - control_chars) + (['$'] if is_word_boundary else [])
 
 
 for name, regex_range in unicode_property_regexes:
