@@ -402,7 +402,7 @@ def main(out_dir):
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print 'Usage: python scripts.py out_dir'
+        print 'Usage: python unicode_properties.py out_dir'
         sys.exit(1)
 
     main(sys.argv[1])
