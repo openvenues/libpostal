@@ -27,7 +27,7 @@ from collections import defaultdict
 from lxml import etree
 
 from scanner import Scanner
-from unicode_scripts import get_chars_by_script
+from unicode_scripts import *
 from unicode_paths import CLDR_DIR
 from geodata.encoding import safe_decode, safe_encode
 
@@ -39,9 +39,9 @@ BACKWARD_TRANSFORM = 3
 BIDIRECTIONAL_TRANSFORM = 4
 
 PRE_TRANSFORM_OP = '::'
-BACKWARD_TRANSFORM_OP = u'←'
-FORWARD_TRANSFORM_OP = u'→'
-BIDIRECTIONAL_TRANSFORM_OP = u'↔'
+BACKWARD_TRANSFORM_OPS = set([u'←', u'<'])
+FORWARD_TRANSFORM_OPS = set([u'→', u'>'])
+BIDIRECTIONAL_TRANSFORM_OPS = set([u'↔', u'<>'])
 
 ASSIGNMENT_OP = '='
 
@@ -57,6 +57,18 @@ word_boundary_var_regex = re.compile(WORD_BOUNDARY_VAR.replace('$', '\$'))
 
 WORD_BOUNDARY_CHAR = u'\u0001'
 EMPTY_TRANSITION = u'\u0004'
+
+NAMESPACE_SEPARATOR_CHAR = u"|"
+
+WORD_BOUNDARY_CHAR = u"\x01"
+PRE_CONTEXT_CHAR = u"\x02"
+POST_CONTEXT_CHAR = u"\x03"
+EMPTY_TRANSITION_CHAR = u"\x04"
+REPEAT_ZERO_CHAR = u"\x05"
+REPEAT_ONE_CHAR = u"\x06"
+BEGIN_SET_CHAR = u"\x07"
+END_SET_CHAR = u"\x08"
+GROUP_INDICATOR_CHAR = u"\x09"
 
 EXCLUDE_TRANSLITERATORS = set([
     'Hangul-Latin',
@@ -94,27 +106,74 @@ unicode_category_aliases = {
 }
 
 unicode_categories = defaultdict(list)
+unicode_blocks = defaultdict(list)
+unicode_combining_classes = defaultdict(list)
 unicode_general_categories = defaultdict(list)
 unicode_scripts = defaultdict(list)
+unicode_properties = {}
+
+unicode_blocks = {}
+unicode_category_aliases = {}
+unicode_property_aliases = {}
+unicode_property_value_aliases = {}
+unicode_word_breaks = {}
+
+COMBINING_CLASS_PROP = 'canonical_combining_class'
+BLOCK_PROP = 'block'
+GENERAL_CATEGORY_PROP = 'general_category'
+SCRIPT_PROP = 'script'
+WORD_BREAK_PROP = 'word_break'
+
+
+class TransliterationParseError(Exception):
+    pass
 
 
 def init_unicode_categories():
-    global unicode_categories, unicode_general_categories, unicode_scripts
+    global unicode_categories, unicode_general_categories, unicode_scripts, unicode_category_aliases
+    global unicode_blocks, unicode_combining_classes, unicode_properties, unicode_property_aliases
+    global unicode_property_value_aliases, unicode_scripts, unicode_word_breaks
 
     for i in xrange(65536):
         unicode_categories[unicodedata.category(unichr(i))].append(unichr(i))
+        unicode_combining_classes[str(unicodedata.combining(unichr(i)))].append(unichr(i))
+
+    unicode_categories = dict(unicode_categories)
+    unicode_combining_classes = dict(unicode_combining_classes)
 
     for key in unicode_categories.keys():
         unicode_general_categories[key[0]].extend(unicode_categories[key])
+
+    unicode_general_categories = dict(unicode_general_categories)
 
     script_chars = get_chars_by_script()
     for i, script in enumerate(script_chars):
         if script:
             unicode_scripts[script.lower()].append(unichr(i))
 
+    unicode_scripts = dict(unicode_scripts)
+
+    unicode_blocks.update(get_unicode_blocks())
+    unicode_properties.update(get_unicode_properties())
+    unicode_property_aliases.update(get_property_aliases())
+
+    unicode_word_breaks.update(get_word_break_properties())
+
+    for key, value in get_property_value_aliases().iteritems():
+        key = unicode_property_aliases.get(key, key)
+        if key == GENERAL_CATEGORY_PROP:
+            for k, v in value.iteritems():
+                k = k.lower()
+                unicode_category_aliases[k] = v
+                if '_' in k:
+                    unicode_category_aliases[k.replace('_', '')] = v
+
+        unicode_property_value_aliases[key] = value
+
 
 RULE = 'RULE'
 TRANSFORM = 'TRANSFORM'
+FILTER = 'FILTER'
 
 UTF8PROC_TRANSFORMS = {
     'Any-NFC': NFC,
@@ -136,7 +195,7 @@ all_transforms = set()
 
 pre_transform_full_regex = re.compile('::[\s]*(.*)[\s]*', re.UNICODE)
 pre_transform_regex = re.compile('[\s]*([^\s\(\)]*)[\s]*(?:\(.*\)[\s]*)?', re.UNICODE)
-transform_regex = re.compile(u"(?:[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)([←→↔=])(?:[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)", re.UNICODE)
+transform_regex = re.compile(u"(?:[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)((?:<>)|[←<→>↔=])(?:[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)", re.UNICODE)
 
 quoted_string_regex = re.compile(r'\'.*?\'', re.UNICODE)
 
@@ -176,7 +235,7 @@ char_class_regex_str = '\[(?:[^\[\]]*\[[^\[\]]*\][^\[\]]*)*[^\[\]]*\]'
 
 nested_char_class_regex = re.compile('\[(?:[^\[\]]*\[[^\[\]]*\][^\[\]]*)+[^\[\]]*\]', re.UNICODE)
 
-range_regex = re.compile(r'([^\\])\-([^\\])', re.UNICODE)
+range_regex = re.compile(r'[\\]?([^\\])\-[\\]?([^\\])', re.UNICODE)
 var_regex = re.compile('\$([A-Za-z_\-]+)')
 
 context_regex = re.compile(u'(?:[\s]*(?!=[\s])(.*?)(?<![\s])[\s]*{)?(?:[\s]*([^}{]*)[\s]*)(?:}[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)?', re.UNICODE)
@@ -240,6 +299,7 @@ transform_scanner = Scanner([
 ], re.UNICODE)
 
 CHAR_RANGE = 'CHAR_RANGE'
+CHAR_CLASS_PCRE = 'CHAR_CLASS_PCRE'
 WORD_BOUNDARY = 'WORD_BOUNDARY'
 NEGATION = 'NEGATION'
 INTERSECTION = 'INTERSECTION'
@@ -249,6 +309,7 @@ DIFFERENCE = 'DIFFERENCE'
 
 char_set_scanner = Scanner([
     ('^\^', NEGATION),
+    (r'\\p\{[^\{\}]+\}', CHAR_CLASS_PCRE),
     (r'[\\]?[^\\\s]\-[\\]?[^\s]', CHAR_RANGE),
     (r'[\\].', ESCAPED_CHARACTER),
     (r'\'\'', SINGLE_QUOTE),
@@ -288,6 +349,7 @@ def parse_regex_char_range(regex):
     chars = [ord(c) for c in regex]
 
     for start, end in ranges:
+
         if ord(end) > ord(start):
             # Ranges are inclusive
             chars.extend([unichr(c) for c in range(ord(start), ord(end) + 1)])
@@ -295,37 +357,62 @@ def parse_regex_char_range(regex):
     return chars
 
 
-def parse_regex_char_class(c):
+def parse_regex_char_class(c, current_filter=all_chars):
     chars = []
     orig = c
-    c = c.strip(':')
+    if c.startswith('\\p'):
+        c = c.split('{')[-1].split('}')[0]
+
+    c = c.strip(': ')
     is_negation = False
     if c.startswith('^'):
         is_negation = True
         c = c.strip('^')
 
     if '=' in c:
-        cat, c = c.split('=')
-        if cat.strip() in ('script', 'sc'):
-            c = c.strip()
+        prop, value = c.split('=')
+        prop = unicode_property_aliases.get(prop.lower(), prop)
 
-    c = unicode_category_aliases.get(c.lower(), c)
+        value = unicode_property_value_aliases.get(prop.lower(), {}).get(value, value)
 
-    if c in unicode_general_categories:
-        chars = unicode_general_categories[c]
-    elif c in unicode_categories:
-        chars = unicode_categories.get(c)
-    elif c.lower() in unicode_scripts:
-        chars = unicode_scripts[c.lower()]
-    elif c.lower() in unicode_properties:
-        chars = unicode_properties[c.lower()]
+        if prop == COMBINING_CLASS_PROP:
+            chars = unicode_combining_classes[value]
+        elif prop == GENERAL_CATEGORY_PROP:
+            chars = unicode_categories.get(value, unicode_general_categories[value])
+        elif prop == BLOCK_PROP:
+            chars = unicode_blocks[value.lower()]
+        elif prop == SCRIPT_PROP:
+            chars = unicode_scripts[value.lower()]
+        elif prop == WORD_BREAK_PROP:
+            chars = unicode_word_breaks[value]
+        else:
+            raise TransliterationParseError(c)
     else:
-        chars = []
+        c = c.replace('-', '_').replace(' ', '_')
+
+        if c.lower() in unicode_property_aliases:
+            c = unicode_property_aliases[c.lower()]
+        elif c.lower() in unicode_category_aliases:
+            c = unicode_category_aliases[c.lower()]
+
+        if c in unicode_general_categories:
+            chars = unicode_general_categories[c]
+        elif c in unicode_categories:
+            chars = unicode_categories[c]
+        elif c.lower() in unicode_properties:
+            chars = unicode_properties[c.lower()]
+
+        elif c.lower() in unicode_scripts:
+            chars = unicode_scripts[c.lower()]
+        elif c.lower() in unicode_properties:
+            chars = unicode_properties[c.lower()]
+        else:
+            raise TransliterationParseError(c)
 
     if is_negation:
-        chars = all_chars - set(chars)
+        chars = current_filter - set(chars)
 
-    return sorted(set(chars) - control_chars)
+    return sorted((set(chars) & current_filter) - control_chars)
 
 
 def parse_balanced_sets(s):
@@ -355,7 +442,7 @@ def parse_balanced_sets(s):
             skip = True
 
 
-def parse_regex_char_set(s):
+def parse_regex_char_set(s, current_filter=all_chars):
     '''
     Given a regex character set, which may look something like:
 
@@ -389,11 +476,11 @@ def parse_regex_char_set(s):
             this_group.add(token.strip("'"))
         elif token_class == NEGATION:
             is_negation = True
-        elif token_class == CHAR_CLASS:
-            this_group |= set(parse_regex_char_class(token))
+        elif token_class in (CHAR_CLASS, CHAR_CLASS_PCRE):
+            this_group |= set(parse_regex_char_class(token, current_filter=current_filter))
         elif token_class in (CHAR_SET, CHAR_MULTI_SET):
             # Recursive calls, as performance doesn't matter here and nesting is shallow
-            this_char_set = set(parse_regex_char_set(token))
+            this_char_set = set(parse_regex_char_set(token, current_filter=current_filter))
             if is_intersection:
                 this_group &= this_char_set
                 is_intersection = False
@@ -412,9 +499,9 @@ def parse_regex_char_set(s):
             is_word_boundary = True
 
     if is_negation:
-        this_group = all_chars - this_group
+        this_group = current_filter - this_group
 
-    return sorted(this_group - control_chars) + (['$'] if is_word_boundary else [])
+    return sorted((this_group & current_filter) - control_chars) + ([WORD_BOUNDARY_CHAR] if is_word_boundary else [])
 
 
 for name, regex_range in unicode_property_regexes:
@@ -437,33 +524,48 @@ def get_raw_rules_and_variables(xml):
     rules = []
     variables = {}
 
+    in_compound_rule = False
+    compound_rule = []
+
     for rule in xml.xpath('*//tRule'):
         if not rule.text:
             continue
+
         rule = safe_decode(rule.text.rsplit(COMMENT_CHAR)[0].strip())
         rule = literal_space_regex.sub(replace_literal_space, rule)
         rule = escaped_unicode_regex.sub(unescape_unicode_char, rule)
         rule = rule.rstrip(END_CHAR).strip()
 
+        if rule.strip().endswith('\\'):
+            compound_rule.append(rule.rstrip('\\'))
+            continue
+        elif in_compound_rule:
+            compound_rule.append(rule)
+            rule = u''.join(compound_rule)
+            in_compound_rule = False
+
         transform = transform_regex.match(rule)
-        if transform:
+        pre_transform = pre_transform_full_regex.match(rule)
+
+        if pre_transform:
+            rules.append((PRE_TRANSFORM, pre_transform.group(1)))
+
+        elif transform:
             lvalue, op, rvalue = transform.groups()
             lvalue = lvalue.strip()
             rvalue = rvalue.strip()
 
-            if op == FORWARD_TRANSFORM_OP:
+            if op in FORWARD_TRANSFORM_OPS:
                 rules.append((FORWARD_TRANSFORM, (lvalue, rvalue)))
-            elif op == BIDIRECTIONAL_TRANSFORM_OP:
+            elif op in BIDIRECTIONAL_TRANSFORM_OPS:
                 rules.append((BIDIRECTIONAL_TRANSFORM, (lvalue, rvalue)))
-            elif op == BACKWARD_TRANSFORM_OP:
+            elif op in BACKWARD_TRANSFORM_OPS:
                 rules.append((BACKWARD_TRANSFORM, (lvalue, rvalue)))
             elif op == ASSIGNMENT_OP:
                 var_name = lvalue.lstrip('$')
                 variables[var_name] = rvalue
         else:
-            pre_transform = pre_transform_full_regex.match(rule)
-            if pre_transform:
-                rules.append((PRE_TRANSFORM, pre_transform.group(1)))
+            print 'non-rule', rule, get_source_and_target(xml)
 
     return rules, variables
 
@@ -476,7 +578,7 @@ CHAR_CLASSES = set([
 ])
 
 
-def char_permutations(s):
+def char_permutations(s, current_filter=all_chars):
     '''
     char_permutations
 
@@ -520,22 +622,22 @@ def char_permutations(s):
             open_brackets -= 1
             current_set.append(token)
             if open_brackets == 0:
-                char_types.append(parse_regex_char_set(u''.join(current_set)))
+                char_types.append(parse_regex_char_set(u''.join(current_set), current_filter=current_filter))
                 current_set = []
         elif token_type == QUOTED_STRING:
             token = token.strip("'")
             for c in token:
                 char_types.append([c])
         elif token_type == GROUP_REF:
-            char_types.append([token])
+            char_types.append([token.replace('$', GROUP_INDICATOR_CHAR)])
         elif token_type == REVISIT:
             in_revisit = True
         elif token_type == REPEAT:
-            char_types.append([STAR])
+            char_types.append([REPEAT_ZERO_CHAR])
         elif token_type == PLUS:
-            char_types.append([PLUS])
+            char_types.append([REPEAT_ONE_CHAR])
         elif token_type == OPTIONAL:
-            char_types[-1].append('')
+            char_types[-1].append(EMPTY_TRANSITION_CHAR)
         elif token_type == REVISIT:
             in_revisit = True
         elif token_type == HTML_ENTITY:
@@ -554,7 +656,6 @@ def char_permutations(s):
 
     return list(itertools.product(char_types)), move
 
-
 string_replacements = {
     u'[': u'\[',
     u']': u'\]',
@@ -564,13 +665,10 @@ string_replacements = {
     u'}': u'\{',
     u'$': u'\$',
     u'^': u'\^',
+    u'-': u'\-',
     u'\\': u'\\\\',
-    u'\u0000': '',
-    u'': EMPTY_TRANSITION,
     u'*': u'\*',
     u'+': u'\+',
-    PLUS: u'+',
-    STAR: u'*',
 }
 
 escape_sequence_long_regex = re.compile(r'(\\x[0-9a-f]{2})([0-9a-f])', re.I)
@@ -722,6 +820,8 @@ def parse_transform_rules(xml):
 
     variables[WORD_BOUNDARY_VAR_NAME] = WORD_BOUNDARY_VAR
 
+    current_filter = all_chars
+
     for rule_type, rule in rules:
         if rule_type in (BIDIRECTIONAL_TRANSFORM, FORWARD_TRANSFORM):
             left, right = rule
@@ -746,16 +846,17 @@ def parse_transform_rules(xml):
                     left_pre_context = None
                     left_pre_context_type = CONTEXT_TYPE_WORD_BOUNDARY
                 else:
-                    left_pre_context, _, _ = char_permutations(left_pre_context.strip())
+                    left_pre_context, _, _ = char_permutations(left_pre_context.strip(), current_filter=current_filter)
                     left_pre_context_max_len = len(left_pre_context or [])
                     left_pre_context = char_types_string(left_pre_context)
+
                     if charset_regex.search(left_pre_context):
                         left_pre_context_type = CONTEXT_TYPE_REGEX
                     else:
                         left_pre_context_type = CONTEXT_TYPE_STRING
 
             if left:
-                left, _, left_groups = char_permutations(left.strip())
+                left, _, left_groups = char_permutations(left.strip(), current_filter=current_filter)
                 if left_groups:
                     left_groups = format_groups(left, left_groups)
                 else:
@@ -767,7 +868,7 @@ def parse_transform_rules(xml):
                     left_post_context = None
                     left_post_context_type = CONTEXT_TYPE_WORD_BOUNDARY
                 else:
-                    left_post_context, _, _ = char_permutations(left_post_context.strip())
+                    left_post_context, _, _ = char_permutations(left_post_context.strip(), current_filter=current_filter)
                     left_post_context_max_len = len(left_post_context or [])
                     left_post_context = char_types_string(left_post_context)
                     if charset_regex.search(left_post_context):
@@ -776,14 +877,18 @@ def parse_transform_rules(xml):
                         left_post_context_type = CONTEXT_TYPE_STRING
 
             if right:
-                right, move, right_groups = char_permutations(right.strip())
+                right, move, right_groups = char_permutations(right.strip(), current_filter=current_filter)
                 right = char_types_string(right)
 
             yield RULE, (left, left_pre_context_type, left_pre_context, left_pre_context_max_len,
                          left_post_context_type, left_post_context, left_post_context_max_len, left_groups, right, move)
-
-        elif rule_type == PRE_TRANSFORM and '[' in rule and ']' in rule:
+        elif rule_type == PRE_TRANSFORM and rule.strip(': ').startswith('('):
             continue
+        elif rule_type == PRE_TRANSFORM and '[' in rule and ']' in rule:
+            filter_rule = regex_char_set_greedy.search(rule)
+            current_filter = set(parse_regex_char_set(filter_rule.group(0)))
+            if 92 in current_filter:
+                raise TransliterationParseError(rule)
         elif rule_type == PRE_TRANSFORM:
             pre_transform = pre_transform_regex.match(rule)
             if pre_transform:
@@ -831,8 +936,11 @@ def get_all_transform_rules():
             to_latin.add(name)
             retain_transforms.add(name)
 
+        print 'doing', filename
+
         steps = []
         rule_set = []
+
         for rule_type, rule in parse_transform_rules(xml):
             if rule_type == RULE:
                 rule = format_rule(rule)
