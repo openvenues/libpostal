@@ -22,7 +22,7 @@ import time
 import urlparse
 import unicodedata
 
-from collections import defaultdict
+from collections import defaultdict, deque
 
 from lxml import etree
 
@@ -71,9 +71,11 @@ END_SET_CHAR = u"\x08"
 GROUP_INDICATOR_CHAR = u"\x09"
 
 EXCLUDE_TRANSLITERATORS = set([
-    'Hangul-Latin',
-    'InterIndic-Latin',
-    'Jamo-Latin',
+    'hangul-latin',
+    'interindic-latin',
+    'jamo-latin',
+    # Don't care about spaced Han because 
+    'han-spacedhan',
 ])
 
 NFD = 'NFD'
@@ -538,11 +540,13 @@ def get_raw_rules_and_variables(xml):
 
         if rule.strip().endswith('\\'):
             compound_rule.append(rule.rstrip('\\'))
+            in_compound_rule = True
             continue
         elif in_compound_rule:
             compound_rule.append(rule)
             rule = u''.join(compound_rule)
             in_compound_rule = False
+            compound_rule = []
 
         transform = transform_regex.match(rule)
         pre_transform = pre_transform_full_regex.match(rule)
@@ -887,10 +891,8 @@ def parse_transform_rules(xml):
         elif rule_type == PRE_TRANSFORM and '[' in rule and ']' in rule:
             filter_rule = regex_char_set_greedy.search(rule)
             current_filter = set(parse_regex_char_set(filter_rule.group(0)))
-            if 92 in current_filter:
-                raise TransliterationParseError(rule)
         elif rule_type == PRE_TRANSFORM:
-            pre_transform = pre_transform_regex.match(rule)
+            pre_transform = pre_transform_regex.search(rule)
             if pre_transform:
                 yield TRANSFORM, pre_transform.group(1)
 
@@ -923,10 +925,12 @@ def get_all_transform_rules():
 
     init_unicode_categories()
 
-    all_transforms = set([name.strip('.xml').lower() for name in get_transforms()])
+    all_transforms = set([name.split('.xml')[0].lower() for name in get_transforms()])
+
+    dependencies = defaultdict(list)
 
     for filename in get_transforms():
-        name = filename.strip('.xml').lower()
+        name = filename.split('.xml')[0].lower()
 
         f = open(os.path.join(CLDR_TRANSFORMS_DIR, filename))
         xml = etree.parse(f)
@@ -949,9 +953,10 @@ def get_all_transform_rules():
                 if rule_set:
                     steps.append((STEP_RULESET, rule_set))
                     rule_set = []
-                if name in to_latin and rule.lower() in all_transforms:
-                    retain_transforms.add(rule.lower())
-                    steps.append((STEP_TRANSFORM, rule))
+
+                if rule.lower() in all_transforms and rule.lower() not in EXCLUDE_TRANSLITERATORS:
+                    dependencies[name].append(rule.lower())
+                    steps.append((STEP_TRANSFORM, rule.lower()))
 
                 rule = UTF8PROC_TRANSFORMS.get(rule, rule)
                 if rule in UNICODE_NORMALIZATION_TRANSFORMS:
@@ -961,6 +966,19 @@ def get_all_transform_rules():
             steps.append((STEP_RULESET, rule_set))
 
         transforms[name] = steps
+
+    dependency_queue = deque(to_latin)
+    retain_transforms |= to_latin
+
+    seen = set()
+
+    while dependency_queue:
+        name = dependency_queue.popleft()
+        for dep in dependencies.get(name, []):
+            retain_transforms.add(dep)
+            if dep not in seen:
+                dependency_queue.append(dep)
+                seen.add(dep)
 
     all_rules = []
     all_steps = []
