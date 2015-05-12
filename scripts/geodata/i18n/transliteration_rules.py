@@ -27,7 +27,7 @@ from collections import defaultdict
 from lxml import etree
 
 from scanner import Scanner
-from unicode_scripts import *
+from unicode_properties import *
 from unicode_paths import CLDR_DIR
 from geodata.encoding import safe_decode, safe_encode
 
