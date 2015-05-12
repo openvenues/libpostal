@@ -9,6 +9,7 @@ belongs to.
 import csv
 import os
 import requests
+import re
 import sys
 import tempfile
 import requests
@@ -28,7 +29,7 @@ this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.encoding import safe_encode, safe_decode
-from geodata.file_utils import ensure_dir
+from geodata.file_utils import ensure_dir, download_file
 
 from cldr_languages import *
 from unicode_paths import UNICODE_DATA_DIR
@@ -37,10 +38,28 @@ from word_breaks import script_regex, regex_char_range
 SCRIPTS_DATA_DIR = os.path.join(UNICODE_DATA_DIR, 'scripts')
 LOCAL_SCRIPTS_FILE = os.path.join(SCRIPTS_DATA_DIR, 'Scripts.txt')
 
+BLOCKS_DATA_DIR = os.path.join(UNICODE_DATA_DIR, 'blocks')
+LOCAL_BLOCKS_FILE = os.path.join(BLOCKS_DATA_DIR, 'Blocks.txt')
+
+PROPS_DATA_DIR = os.path.join(UNICODE_DATA_DIR, 'props')
+LOCAL_PROPS_FILE = os.path.join(PROPS_DATA_DIR, 'PropList.txt')
+LOCAL_PROP_ALIASES_FILE = os.path.join(PROPS_DATA_DIR, 'PropertyAliases.txt')
+LOCAL_PROP_VALUE_ALIASES_FILE = os.path.join(PROPS_DATA_DIR, 'PropertyValueAliases.txt')
+LOCAL_DERIVED_CORE_PROPS_FILE = os.path.join(PROPS_DATA_DIR, 'DerivedCoreProperties.txt')
+
+WORD_BREAKS_DIR = os.path.join(UNICODE_DATA_DIR, 'word_breaks')
+LOCAL_WORD_BREAKS_FILE = os.path.join(WORD_BREAKS_DIR, 'WordBreakProperty.txt')
+
 SCRIPTS_HEADER = 'unicode_script_types.h'
 SCRIPTS_DATA_FILENAME = 'unicode_scripts_data.c'
 
 SCRIPTS_URL = 'http://unicode.org/Public/UNIDATA/Scripts.txt'
+BLOCKS_URL = 'http://unicode.org/Public/UNIDATA/Blocks.txt'
+PROPS_URL = 'http://unicode.org/Public/UNIDATA/PropList.txt'
+PROP_ALIASES_URL = 'http://unicode.org/Public/UNIDATA/PropertyAliases.txt'
+PROP_VALUE_ALIASES_URL = 'http://unicode.org/Public/UNIDATA/PropertyValueAliases.txt'
+DERIVED_CORE_PROPS_URL = 'http://unicode.org/Public/UNIDATA/DerivedCoreProperties.txt'
+WORD_BREAKS_URL = 'http://unicode.org/Public/UNIDATA/auxiliary/WordBreakProperty.txt'
 
 ISO_15924_URL = 'http://unicode.org/iso15924/iso15924.txt.zip'
 
@@ -91,19 +110,18 @@ def script_name_constant(i, u):
 UNKNOWN_SCRIPT = 'Unknown'
 
 
-def download_scripts_file():
-    ensure_dir(SCRIPTS_DATA_DIR)
-    subprocess.check_call(['wget', SCRIPTS_URL, '-O', LOCAL_SCRIPTS_FILE])
+def parse_char_range(r):
+    return [unicode_to_integer(u) for u in r.split('..') if len(u) < 5]
 
 
-def get_chars_by_script(scripts_filename=LOCAL_SCRIPTS_FILE):
-    scripts_file = open(scripts_filename)
+def get_chars_by_script():
+    scripts_file = open(LOCAL_SCRIPTS_FILE)
     scripts = [None] * NUM_CHARS
 
     # Lines look like:
     # 0041..005A    ; Latin # L&  [26] LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER Z
     for char_range, script, char_class in script_regex.findall(scripts_file.read()):
-        script_range = [unicode_to_integer(u) for u in char_range.split('..') if len(u) < 5]
+        script_range = parse_char_range(char_range)
         if len(script_range) == 2:
             for i in xrange(script_range[0], script_range[1] + 1):
                 scripts[i] = script
@@ -112,6 +130,121 @@ def get_chars_by_script(scripts_filename=LOCAL_SCRIPTS_FILE):
 
     return scripts
 
+
+COMMENT_CHAR = '#'
+DELIMITER_CHAR = ';'
+
+
+def parse_file(f):
+    for line in f:
+        line = line.split(COMMENT_CHAR)[0].strip()
+        if not line:
+            continue
+        tokens = line.split(DELIMITER_CHAR)
+        if tokens:
+            yield [t.strip() for t in tokens]
+
+
+def get_property_aliases():
+    prop_aliases_file = open(LOCAL_PROP_ALIASES_FILE)
+
+    aliases = {}
+
+    for line in parse_file(prop_aliases_file):
+        prop = line[1]
+        prop_aliases = [line[0]] + line[2:]
+
+        for alias in prop_aliases:
+            aliases[alias.lower()] = prop.lower()
+
+    return aliases
+
+
+def get_property_value_aliases():
+    prop_value_aliases_file = open(LOCAL_PROP_VALUE_ALIASES_FILE)
+
+    value_aliases = defaultdict(dict)
+
+    for line in parse_file(prop_value_aliases_file):
+        prop = line[0]
+        if prop not in ('ccc', 'gc'):
+            value = line[2]
+            aliases = [line[1]] + line[3:]
+        else:
+            value = line[1]
+            aliases = line[2:]
+
+        for alias in aliases:
+            value_aliases[prop.lower()][alias] = value
+
+    return dict(value_aliases)
+
+
+def get_unicode_blocks():
+    blocks_file = open(LOCAL_BLOCKS_FILE)
+
+    blocks = defaultdict(list)
+
+    for line in parse_file(blocks_file):
+        char_range, block = line
+        char_range = parse_char_range(char_range)
+
+        if len(char_range) == 2:
+            for i in xrange(char_range[0], char_range[1] + 1):
+                blocks[block.lower()].append(unichr(i))
+        elif char_range:
+            blocks[block.lower()].append(unichr(char_range[0]))
+
+    return dict(blocks)
+
+
+def get_unicode_properties():
+    props_file = open(LOCAL_PROPS_FILE)
+
+    props = defaultdict(list)
+
+    for line in parse_file(props_file):
+        char_range, prop = line
+
+        char_range = parse_char_range(char_range)
+
+        if len(char_range) == 2:
+            for i in xrange(char_range[0], char_range[1] + 1):
+                props[prop.lower()].append(unichr(i))
+        elif char_range:
+            props[prop.lower()].append(unichr(char_range[0]))
+
+    derived_props_file = open(LOCAL_DERIVED_CORE_PROPS_FILE)
+    for line in parse_file(derived_props_file):
+        char_range, prop = line
+        char_range = parse_char_range(char_range)
+
+        if len(char_range) == 2:
+            for i in xrange(char_range[0], char_range[1] + 1):
+                props[prop.lower()].append(unichr(i))
+        elif char_range:
+            props[prop.lower()].append(unichr(char_range[0]))
+
+    return dict(props)
+
+
+def get_word_break_properties():
+    props_file = open(LOCAL_WORD_BREAKS_FILE)
+
+    props = defaultdict(list)
+
+    for line in parse_file(props_file):
+        char_range, prop = line
+
+        char_range = parse_char_range(char_range)
+
+        if len(char_range) == 2:
+            for i in xrange(char_range[0], char_range[1] + 1):
+                props[prop].append(unichr(i))
+        elif char_range:
+            props[prop].append(unichr(char_range[0]))
+
+    return dict(props)
 
 def build_master_scripts_list(chars):
     all_scripts = OrderedDict.fromkeys(filter(bool, chars))
@@ -211,7 +344,14 @@ def main(out_dir):
     out_file = open(os.path.join(out_dir, SCRIPTS_DATA_FILENAME), 'w')
     out_header = open(os.path.join(out_dir, SCRIPTS_HEADER), 'w')
 
-    download_scripts_file()
+    download_file(SCRIPTS_URL, LOCAL_SCRIPTS_FILE)
+    download_file(BLOCKS_URL, LOCAL_BLOCKS_FILE)
+    download_file(PROPS_URL, LOCAL_PROPS_FILE)
+    download_file(PROP_ALIASES_URL, LOCAL_PROP_ALIASES_FILE)
+    download_file(PROP_VALUE_ALIASES_URL, LOCAL_PROP_VALUE_ALIASES_FILE)
+    download_file(DERIVED_CORE_PROPS_URL, LOCAL_DERIVED_CORE_PROPS_FILE)
+    download_file(WORD_BREAKS_URL, LOCAL_WORD_BREAKS_FILE)
+
     chars = get_chars_by_script()
     all_scripts = build_master_scripts_list(chars)
     script_codes = get_script_codes(all_scripts)
