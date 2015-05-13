@@ -34,6 +34,9 @@ char *file_getline(FILE * f);
 
 bool is_relative_path(struct dirent *ent);
 
+bool file_read_int64(FILE *file, int64_t *value);
+bool file_write_int64(FILE *file, int64_t value);
+
 bool file_read_int32(FILE *file, int32_t *value);
 bool file_write_int32(FILE *file, int32_t value);
 

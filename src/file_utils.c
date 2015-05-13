@@ -36,6 +36,36 @@ bool is_relative_path(struct dirent *ent) {
     return strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0;
 }
 
+bool file_read_int64(FILE *file, int64_t *value) {
+    unsigned char buf[8];
+
+    if (fread(buf, 8, 1, file) == 1) {
+        *value = ((uint64_t)buf[0] << 56) | 
+                 ((uint64_t)buf[1] << 48) |
+                 ((uint64_t)buf[2] << 40) |
+                 ((uint64_t)buf[3] << 32) |
+                 ((uint64_t)buf[4] << 24) |
+                 ((uint64_t)buf[5] << 16) |
+                 ((uint64_t)buf[6] << 8) |
+                  (uint64_t)buf[7];
+        return true;
+    }
+    return false;
+}
+
+bool file_write_int64(FILE *file, int64_t value) {
+    unsigned char buf[8];
+    buf[0] = ((value >> 56) & 0xff);
+    buf[1] = ((value >> 48) & 0xff);
+    buf[2] = ((value >> 40) & 0xff);
+    buf[3] = ((value >> 32) & 0xff);
+    buf[4] = ((value >> 24) & 0xff);
+    buf[5] = ((value >> 16) & 0xff);
+    buf[6] = ((value >> 8) & 0xff);
+    buf[7] = value & 0xff;
+
+    return (fwrite(buf, 8, 1, file) == 1);
+}
 
 bool file_read_int32(FILE *file, int32_t *value) {
     unsigned char buf[4];
