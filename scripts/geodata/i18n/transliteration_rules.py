@@ -53,6 +53,11 @@ REVISIT_INDICATOR = '|'
 WORD_BOUNDARY_VAR_NAME = 'wordBoundary'
 WORD_BOUNDARY_VAR = '${}'.format(WORD_BOUNDARY_VAR_NAME)
 
+START_OF_HAN_VAR_NAME = 'startOfHanMarker'
+START_OF_HAN_VAR = '${}'.format(START_OF_HAN_VAR_NAME)
+
+start_of_han_regex = re.compile(START_OF_HAN_VAR.replace('$', '\$'))
+
 word_boundary_var_regex = re.compile(WORD_BOUNDARY_VAR.replace('$', '\$'))
 
 WORD_BOUNDARY_CHAR = u'\u0001'
@@ -70,11 +75,12 @@ BEGIN_SET_CHAR = u"\x07"
 END_SET_CHAR = u"\x08"
 GROUP_INDICATOR_CHAR = u"\x09"
 
+
 EXCLUDE_TRANSLITERATORS = set([
     'hangul-latin',
     'interindic-latin',
     'jamo-latin',
-    # Don't care about spaced Han because 
+    # Don't care about spaced Han because our tokenizer does it already
     'han-spacedhan',
 ])
 
@@ -197,7 +203,8 @@ all_transforms = set()
 
 pre_transform_full_regex = re.compile('::[\s]*(.*)[\s]*', re.UNICODE)
 pre_transform_regex = re.compile('[\s]*([^\s\(\)]*)[\s]*(?:\(.*\)[\s]*)?', re.UNICODE)
-transform_regex = re.compile(u"(?:[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)((?:<>)|[←<→>↔=])(?:[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)", re.UNICODE)
+assignment_regex = re.compile(u"(?:[\s]*(\$[^\s\=]+)[\s]*\=[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)", re.UNICODE)
+transform_regex = re.compile(u"(?:[\s]*(?!=[\s])(.*?)(?<![\s])[\s]*)((?:<>)|[←<→>↔])(?:[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)", re.UNICODE)
 
 quoted_string_regex = re.compile(r'\'.*?\'', re.UNICODE)
 
@@ -208,7 +215,8 @@ END_CHAR = ';'
 def unescape_unicode_char(m):
     return m.group(0).decode('unicode-escape')
 
-escaped_unicode_regex = re.compile(r'(?:\\u[0-9A-Fa-f]{4}|\\U[0-9A-Fa-f]{8})')
+escaped_unicode_regex = re.compile(r'\\u[0-9A-Fa-f]{4}')
+escaped_wide_unicode_regex = re.compile(r'\\U[0-9A-Fa-f]{8}')
 
 literal_space_regex = re.compile(r'(?:\\u0020|\\U00000020)')
 
@@ -259,6 +267,7 @@ CHAR_MULTI_SET = 'CHAR_MULTI_SET'
 CHAR_CLASS = 'CHAR_CLASS'
 OPTIONAL = 'OPTIONAL'
 CHARACTER = 'CHARACTER'
+WIDE_CHARACTER = 'WIDE_CHARACTER'
 REVISIT = 'REVISIT'
 REPEAT = 'REPEAT'
 LPAREN = 'LPAREN'
@@ -269,6 +278,7 @@ SINGLE_QUOTE = 'SINGLE_QUOTE'
 HTML_ENTITY = 'HTML_ENTITY'
 SINGLE_QUOTE = 'SINGLE_QUOTE'
 ESCAPED_CHARACTER = 'ESCAPED_CHARACTER'
+
 
 BEFORE_CONTEXT = '{'
 AFTER_CONTEXT = '}'
@@ -297,6 +307,7 @@ transform_scanner = Scanner([
     ('\)', RPAREN),
     ('\|', REVISIT),
     ('[\s]+', WHITESPACE),
+    (r'[\ud800-\udbff][\udc00-\udfff]', WIDE_CHARACTER),
     (r'[\\]?[^\s]', CHARACTER),
 ], re.UNICODE)
 
@@ -325,6 +336,7 @@ char_set_scanner = Scanner([
     ('&', INTERSECTION),
     ('(?<=[\s])-(?=[\s])', DIFFERENCE),
     ('\$', WORD_BOUNDARY),
+    (ur'[\ud800-\udbff][\udc00-\udfff]', WIDE_CHARACTER),
     (r'[^\s]', CHARACTER),
 ])
 
@@ -332,7 +344,7 @@ NUM_CHARS = 65536
 
 all_chars = set([unichr(i) for i in xrange(NUM_CHARS)])
 
-control_chars = set([c for c in all_chars if unicodedata.category(c) == 'Cc'])
+control_chars = set([c for c in all_chars if unicodedata.category(c) in ('Cc', 'Cn', 'Cs')])
 
 
 def get_transforms():
@@ -465,6 +477,8 @@ def parse_regex_char_set(s, current_filter=all_chars):
     is_difference = False
     is_word_boundary = False
 
+    real_chars = set()
+
     for token, token_class in parse_balanced_sets(s):
         if token_class == CHAR_RANGE:
             this_char_set = set(parse_regex_char_range(token))
@@ -472,10 +486,15 @@ def parse_regex_char_set(s, current_filter=all_chars):
         elif token_class == ESCAPED_CHARACTER:
             token = token.strip('\\')
             this_group.add(token)
+            real_chars.add(token)
         elif token_class == SINGLE_QUOTE:
-            this_group.add("'")
+            t = "'"
+            this_group.add(t)
+            real_chars.add(t)
         elif token_class == QUOTED_STRING:
-            this_group.add(token.strip("'"))
+            t = token.strip("'")
+            this_group.add(t)
+            real_chars.add(t)
         elif token_class == NEGATION:
             is_negation = True
         elif token_class in (CHAR_CLASS, CHAR_CLASS_PCRE):
@@ -495,15 +514,18 @@ def parse_regex_char_set(s, current_filter=all_chars):
             is_intersection = True
         elif token_class == DIFFERENCE:
             is_difference = True
-        elif token_class == CHARACTER:
+        elif token_class == CHARACTER and token not in control_chars:
             this_group.add(token)
+            real_chars.add(token)
+        elif token_class == WIDE_CHARACTER:
+            continue
         elif token_class == WORD_BOUNDARY:
             is_word_boundary = True
 
     if is_negation:
         this_group = current_filter - this_group
 
-    return sorted((this_group & current_filter) - control_chars) + ([WORD_BOUNDARY_CHAR] if is_word_boundary else [])
+    return sorted((this_group & (current_filter | real_chars)) - control_chars) + ([WORD_BOUNDARY_CHAR] if is_word_boundary else [])
 
 
 for name, regex_range in unicode_property_regexes:
@@ -535,6 +557,7 @@ def get_raw_rules_and_variables(xml):
 
         rule = safe_decode(rule.text.rsplit(COMMENT_CHAR)[0].strip())
         rule = literal_space_regex.sub(replace_literal_space, rule)
+        rule = escaped_wide_unicode_regex.sub('', rule)
         rule = escaped_unicode_regex.sub(unescape_unicode_char, rule)
         rule = rule.rstrip(END_CHAR).strip()
 
@@ -548,12 +571,17 @@ def get_raw_rules_and_variables(xml):
             in_compound_rule = False
             compound_rule = []
 
+        assignment = assignment_regex.match(rule)
         transform = transform_regex.match(rule)
         pre_transform = pre_transform_full_regex.match(rule)
 
         if pre_transform:
             rules.append((PRE_TRANSFORM, pre_transform.group(1)))
-
+        elif assignment:
+            lvalue, rvalue = assignment.groups()
+            var_name = lvalue.strip().lstrip('$')
+            rvalue = rvalue.strip()
+            variables[var_name] = rvalue
         elif transform:
             lvalue, op, rvalue = transform.groups()
             lvalue = lvalue.strip()
@@ -565,11 +593,6 @@ def get_raw_rules_and_variables(xml):
                 rules.append((BIDIRECTIONAL_TRANSFORM, (lvalue, rvalue)))
             elif op in BACKWARD_TRANSFORM_OPS:
                 rules.append((BACKWARD_TRANSFORM, (lvalue, rvalue)))
-            elif op == ASSIGNMENT_OP:
-                var_name = lvalue.lstrip('$')
-                variables[var_name] = rvalue
-        else:
-            print 'non-rule', rule, get_source_and_target(xml)
 
     return rules, variables
 
@@ -626,7 +649,9 @@ def char_permutations(s, current_filter=all_chars):
             open_brackets -= 1
             current_set.append(token)
             if open_brackets == 0:
-                char_types.append(parse_regex_char_set(u''.join(current_set), current_filter=current_filter))
+                char_set = parse_regex_char_set(u''.join(current_set), current_filter=current_filter)
+                if char_set:
+                    char_types.append(char_set)
                 current_set = []
         elif token_type == QUOTED_STRING:
             token = token.strip("'")
@@ -648,7 +673,8 @@ def char_permutations(s, current_filter=all_chars):
             char_types.append([replace_html_entity(token)])
         elif token_type == CHARACTER:
             char_types.append([token])
-
+        elif token_type == WIDE_CHARACTER:
+            continue
         if in_group and last_token_group_start:
             start_group = len(char_types)
             last_token_group_start = False
@@ -720,7 +746,6 @@ def format_groups(char_types, groups):
         last_end = end
     group_regex.append(char_types_string(char_types[last_end + 1:]))
     return u''.join(group_regex)
-
 
 charset_regex = re.compile(r'(?<!\\)\[')
 
@@ -823,17 +848,22 @@ def parse_transform_rules(xml):
             break
 
     variables[WORD_BOUNDARY_VAR_NAME] = WORD_BOUNDARY_VAR
+    variables[START_OF_HAN_VAR_NAME] = START_OF_HAN_VAR
 
     current_filter = all_chars
 
     for rule_type, rule in rules:
         if rule_type in (BIDIRECTIONAL_TRANSFORM, FORWARD_TRANSFORM):
             left, right = rule
+
             left = var_regex.sub(get_var, left)
             right = var_regex.sub(get_var, right)
 
             left_pre_context, left, left_post_context = context_regex.match(left).groups()
             right_pre_context, right, right_post_context = context_regex.match(right).groups()
+
+            if start_of_han_regex.search(left) or start_of_han_regex.search(right):
+                continue
 
             left_pre_context_max_len = 0
             left_post_context_max_len = 0
@@ -849,6 +879,9 @@ def parse_transform_rules(xml):
                 if left_pre_context.strip() == WORD_BOUNDARY_VAR:
                     left_pre_context = None
                     left_pre_context_type = CONTEXT_TYPE_WORD_BOUNDARY
+                elif left_pre_context.strip() == START_OF_HAN_VAR:
+                    left_pre_context = None
+                    left_pre_context_type = CONTEXT_TYPE_NONE
                 else:
                     left_pre_context, _, _ = char_permutations(left_pre_context.strip(), current_filter=current_filter)
                     left_pre_context_max_len = len(left_pre_context or [])
@@ -871,6 +904,9 @@ def parse_transform_rules(xml):
                 if left_post_context.strip() == WORD_BOUNDARY_VAR:
                     left_post_context = None
                     left_post_context_type = CONTEXT_TYPE_WORD_BOUNDARY
+                elif left_post_context.strip() == START_OF_HAN_VAR:
+                    left_pre_context_type = None
+                    left_pre_context_type = CONTEXT_TYPE_NONE
                 else:
                     left_post_context, _, _ = char_permutations(left_post_context.strip(), current_filter=current_filter)
                     left_post_context_max_len = len(left_post_context or [])
@@ -881,6 +917,8 @@ def parse_transform_rules(xml):
                         left_post_context_type = CONTEXT_TYPE_STRING
 
             if right:
+                if start_of_han_regex.search(right):
+                    continue
                 right, move, right_groups = char_permutations(right.strip(), current_filter=current_filter)
                 right = char_types_string(right)
 
