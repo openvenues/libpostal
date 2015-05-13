@@ -2,6 +2,9 @@
 #define TRANSLITERATION_RULE_H
 
 #include <stdlib.h>
+#include "transliterate.h"
+
+#define MAX_GROUPS_LEN 5
 
 typedef enum {
     CONTEXT_TYPE_NONE,
@@ -9,7 +12,6 @@ typedef enum {
     CONTEXT_TYPE_WORD_BOUNDARY,
     CONTEXT_TYPE_REGEX
 } context_type_t;
-
 
 typedef struct transliteration_rule_source {
     char *key;
@@ -29,15 +31,11 @@ typedef struct transliteration_rule_source {
     size_t replacement_len;
 
     int move;
+
     char *group_regex_str;
     size_t group_regex_len;
-} transliteration_rule_source_t;
 
-typedef enum {
-    STEP_RULESET,
-    STEP_TRANSFORM,
-    STEP_UNICODE_NORMALIZATION
-} step_type_t;
+} transliteration_rule_source_t;
 
 typedef struct transliteration_step_source {
     step_type_t type;
