@@ -71,9 +71,9 @@ POST_CONTEXT_CHAR = u"\x03"
 EMPTY_TRANSITION_CHAR = u"\x04"
 REPEAT_ZERO_CHAR = u"\x05"
 REPEAT_ONE_CHAR = u"\x06"
-BEGIN_SET_CHAR = u"\x07"
-END_SET_CHAR = u"\x08"
-GROUP_INDICATOR_CHAR = u"\x09"
+BEGIN_SET_CHAR = u"\x0e"
+END_SET_CHAR = u"\x0f"
+GROUP_INDICATOR_CHAR = u"\x10"
 
 
 EXCLUDE_TRANSLITERATORS = set([
@@ -246,7 +246,7 @@ char_class_regex_str = '\[(?:[^\[\]]*\[[^\[\]]*\][^\[\]]*)*[^\[\]]*\]'
 nested_char_class_regex = re.compile('\[(?:[^\[\]]*\[[^\[\]]*\][^\[\]]*)+[^\[\]]*\]', re.UNICODE)
 
 range_regex = re.compile(r'[\\]?([^\\])\-[\\]?([^\\])', re.UNICODE)
-var_regex = re.compile('\$([A-Za-z_\-]+)')
+var_regex = re.compile('[\s]*\$([A-Za-z_\-]+)[\s]*')
 
 context_regex = re.compile(u'(?:[\s]*(?!=[\s])(.*?)(?<![\s])[\s]*{)?(?:[\s]*([^}{]*)[\s]*)(?:}[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)?', re.UNICODE)
 
@@ -280,11 +280,24 @@ SINGLE_QUOTE = 'SINGLE_QUOTE'
 ESCAPED_CHARACTER = 'ESCAPED_CHARACTER'
 
 
-BEFORE_CONTEXT = '{'
-AFTER_CONTEXT = '}'
+BEFORE_CONTEXT = 'BEFORE_CONTEXT'
+AFTER_CONTEXT = 'AFTER_CONTEXT'
 
 PLUS = 'PLUS'
 STAR = 'STAR'
+
+rule_scanner = Scanner([
+    (r'[\\].', ESCAPED_CHARACTER),
+    ('\[', OPEN_SET),
+    ('\]', CLOSE_SET),
+    ('\(', OPEN_GROUP),
+    ('\)', CLOSE_GROUP),
+    ('\{', BEFORE_CONTEXT),
+    ('\}', AFTER_CONTEXT),
+    ('[\s]+', WHITESPACE),
+    (r'[^\s]', CHARACTER),
+])
+
 
 # Scanner for the lvalue or rvalue of a transform rule
 
@@ -302,13 +315,13 @@ transform_scanner = Scanner([
     (r'&.*?;', HTML_ENTITY),
     (r'(?<![\\])\*', REPEAT),
     (r'(?<![\\])\+', PLUS),
-    ('\?', OPTIONAL),
+    ('(?<=[^\s])\?', OPTIONAL),
     ('\(', LPAREN),
     ('\)', RPAREN),
     ('\|', REVISIT),
     ('[\s]+', WHITESPACE),
-    (r'[\ud800-\udbff][\udc00-\udfff]', WIDE_CHARACTER),
-    (r'[\\]?[^\s]', CHARACTER),
+    (ur'[\ud800-\udbff][\udc00-\udfff]', WIDE_CHARACTER),
+    (r'[^\s]', CHARACTER),
 ], re.UNICODE)
 
 CHAR_RANGE = 'CHAR_RANGE'
@@ -317,6 +330,7 @@ WORD_BOUNDARY = 'WORD_BOUNDARY'
 NEGATION = 'NEGATION'
 INTERSECTION = 'INTERSECTION'
 DIFFERENCE = 'DIFFERENCE'
+BRACKETED_CHARACTER = 'BRACKETED_CHARACTER'
 
 # Scanner for a character set (yes, a regex regex)
 
@@ -337,6 +351,7 @@ char_set_scanner = Scanner([
     ('(?<=[\s])-(?=[\s])', DIFFERENCE),
     ('\$', WORD_BOUNDARY),
     (ur'[\ud800-\udbff][\udc00-\udfff]', WIDE_CHARACTER),
+    (r'\{[^\s]+\}', BRACKETED_CHARACTER),
     (r'[^\s]', CHARACTER),
 ])
 
@@ -519,6 +534,10 @@ def parse_regex_char_set(s, current_filter=all_chars):
             real_chars.add(token)
         elif token_class == WIDE_CHARACTER:
             continue
+        elif token_class == BRACKETED_CHARACTER:
+            if token.strip('{{}}') not in control_chars:
+                this_group.add(token)
+                real_chars.add(token)
         elif token_class == WORD_BOUNDARY:
             is_word_boundary = True
 
@@ -859,8 +878,75 @@ def parse_transform_rules(xml):
             left = var_regex.sub(get_var, left)
             right = var_regex.sub(get_var, right)
 
-            left_pre_context, left, left_post_context = context_regex.match(left).groups()
-            right_pre_context, right, right_post_context = context_regex.match(right).groups()
+            left_pre_context = None
+            left_post_context = None
+            have_post_context = False
+            current_token = []
+
+            in_set = False
+            in_group = False
+            open_brackets = 0
+
+            for token, token_type in rule_scanner.scan(left):
+                if token_type == ESCAPED_CHARACTER:
+                    current_token.append(token)
+                elif token_type == OPEN_SET:
+                    in_set = True
+                    open_brackets += 1
+                    current_token.append(token)
+                elif token_type == CLOSE_SET:
+                    open_brackets -= 1
+                    current_token.append(token)
+                    if open_brackets == 0:
+                        in_set = False
+                elif token_type == BEFORE_CONTEXT and not in_set:
+                    left_pre_context = u''.join(current_token)
+                    current_token = []
+                elif token_type == AFTER_CONTEXT and not in_set:
+                    have_post_context = True
+                    left = u''.join(current_token)
+                    current_token = []
+                else:
+                    current_token.append(token)
+
+            if have_post_context:
+                left_post_context = u''.join(current_token)
+            else:
+                left = u''.join(current_token).strip()
+
+            right_pre_context = None
+            right_post_context = None
+            have_post_context = False
+            current_token = []
+
+            in_set = False
+            in_group = False
+            open_brackets = 0
+
+            for token, token_type in rule_scanner.scan(right):
+                if token_type == OPEN_SET:
+                    in_set = True
+                    open_brackets += 1
+                    current_token.append(token)
+                elif token_type == CLOSE_SET:
+                    open_brackets -= 1
+                    current_token.append(token)
+                    if open_brackets == 0:
+                        in_set = False
+                elif token_type == BEFORE_CONTEXT and not in_set:
+                    right_pre_context = u''.join(current_token)
+                    current_token = []
+                elif token_type == AFTER_CONTEXT and not in_set:
+                    have_post_context = True
+                    right = u''.join(current_token)
+                    current_token = []
+                else:
+                    current_token.append(token)
+
+            if have_post_context:
+                right_post_context = u''.join(current_token)
+            else:
+                right = u''.join(current_token)
 
             if start_of_han_regex.search(left) or start_of_han_regex.search(right):
                 continue
@@ -884,15 +970,19 @@ def parse_transform_rules(xml):
                     left_pre_context_type = CONTEXT_TYPE_NONE
                 else:
                     left_pre_context, _, _ = char_permutations(left_pre_context.strip(), current_filter=current_filter)
-                    left_pre_context_max_len = len(left_pre_context or [])
-                    left_pre_context = char_types_string(left_pre_context)
+                    if left_pre_context:
+                        left_pre_context_max_len = len(left_pre_context or [])
+                        left_pre_context = char_types_string(left_pre_context)
 
-                    if charset_regex.search(left_pre_context):
-                        left_pre_context_type = CONTEXT_TYPE_REGEX
+                        if charset_regex.search(left_pre_context):
+                            left_pre_context_type = CONTEXT_TYPE_REGEX
+                        else:
+                            left_pre_context_type = CONTEXT_TYPE_STRING
                     else:
-                        left_pre_context_type = CONTEXT_TYPE_STRING
+                        left_pre_context = None
+                        left_pre_context_type = CONTEXT_TYPE_NONE
 
-            if left:
+            if left is not None:
                 left, _, left_groups = char_permutations(left.strip(), current_filter=current_filter)
                 if left_groups:
                     left_groups = format_groups(left, left_groups)
@@ -909,16 +999,18 @@ def parse_transform_rules(xml):
                     left_pre_context_type = CONTEXT_TYPE_NONE
                 else:
                     left_post_context, _, _ = char_permutations(left_post_context.strip(), current_filter=current_filter)
-                    left_post_context_max_len = len(left_post_context or [])
-                    left_post_context = char_types_string(left_post_context)
-                    if charset_regex.search(left_post_context):
-                        left_post_context_type = CONTEXT_TYPE_REGEX
+                    if left_post_context:
+                        left_post_context_max_len = len(left_post_context or [])
+                        left_post_context = char_types_string(left_post_context)
+                        if charset_regex.search(left_post_context):
+                            left_post_context_type = CONTEXT_TYPE_REGEX
+                        elif left_post_context:
+                            left_post_context_type = CONTEXT_TYPE_STRING
                     else:
-                        left_post_context_type = CONTEXT_TYPE_STRING
+                        left_post_context = None
+                        left_post_context_type = CONTEXT_TYPE_NONE
 
             if right:
-                if start_of_han_regex.search(right):
-                    continue
                 right, move, right_groups = char_permutations(right.strip(), current_filter=current_filter)
                 right = char_types_string(right)
 
@@ -974,7 +1066,10 @@ def get_all_transform_rules():
         xml = etree.parse(f)
         source, target = get_source_and_target(xml)
 
-        if (target.lower() == 'latin' or name == 'latin-ascii') and name not in EXCLUDE_TRANSLITERATORS:
+        if name in EXCLUDE_TRANSLITERATORS:
+            continue
+
+        if (target.lower() == 'latin' or name == 'latin-ascii'):
             to_latin.add(name)
             retain_transforms.add(name)
 
