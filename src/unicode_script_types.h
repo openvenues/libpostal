@@ -78,7 +78,8 @@ typedef enum {
     SCRIPT_JAVANESE = 68,
     SCRIPT_CHAM = 69,
     SCRIPT_TAI_VIET = 70,
-    SCRIPT_MEETEI_MAYEK = 71
+    SCRIPT_MEETEI_MAYEK = 71,
+    NUM_SCRIPTS
 } script_t;
 
 #endif

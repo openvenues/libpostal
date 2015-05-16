@@ -75,6 +75,7 @@ scripts_header_template = u'''#ifndef UNICODE_SCRIPT_TYPES_H
 
 typedef enum {{
     {script_enum}
+    NUM_SCRIPTS
 }} script_t;
 
 #endif
@@ -370,8 +371,8 @@ def main(out_dir):
 
     # Generate C header and constants
 
-    script_enum = u''',
-    '''.join(['SCRIPT_{} = {}'.format(s.upper(), i) for s, i in sorted(all_scripts.iteritems(), key=itemgetter(1))])
+    script_enum = u'''
+    '''.join(['SCRIPT_{} = {},'.format(s.upper(), i) for s, i in sorted(all_scripts.iteritems(), key=itemgetter(1))])
 
     out_header.write(scripts_header_template.format(num_chars=NUM_CHARS,
                      max_langs=max_langs,
