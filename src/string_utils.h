@@ -77,6 +77,12 @@ Instead of storing an array of char pointers (char **), cstring_arrays use this 
 array->indices = {0, 4, 9};
 array->str = {'f', 'o', 'o', '\0', 'b', 'a', 'r', '\0', 'b', 'a', 'z', '\0'};
 
+Each value in array->indices is the start position of a token in array->str. Each string
+is NUL-terminated, so array->str->a + 4 is "bar", a valid NUL-terminated C string
+
+array->str is a char_array, so all of the powerful methods like char_array_cat_printf above
+can be used when building the contiguous string arrays as well.
+
 */
 
 typedef struct {
@@ -88,6 +94,11 @@ cstring_array *cstring_array_new(void);
 
 cstring_array *cstring_array_new_size(size_t size);
 
+size_t cstring_array_capacity(cstring_array *self);
+size_t cstring_array_used(cstring_array *self);
+size_t cstring_array_num_strings(cstring_array *self);
+void cstring_array_resize(cstring_array *self, size_t size);
+
 cstring_array *cstring_array_from_char_array(char_array *str);
 
 cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, int *count);
@@ -96,12 +107,73 @@ void cstring_array_join_strings(cstring_array *self, char *separator, int count,
 uint32_t cstring_array_start_token(cstring_array *self);
 uint32_t cstring_array_add_string(cstring_array *self, char *str);
 uint32_t cstring_array_add_string_len(cstring_array *self, char *str, size_t len);
+
+
+void cstring_array_append_string(cstring_array *self, char *str);
+void cstring_array_append_string_len(cstring_array *self, char *str, size_t len);
 int32_t cstring_array_get_offset(cstring_array *self, uint32_t i);
 char *cstring_array_get_token(cstring_array *self, uint32_t i);
 int64_t cstring_array_token_length(cstring_array *self, uint32_t i); 
 
 void cstring_array_destroy(cstring_array *self);
 
+/*
+String trees are a way of storing alternative representations of a tokenized string concisely
+
+Particularly with hyphens, we may want the string "twenty-five" to normalize to both:
+
+twenty five
+twentyfive
+
+so when we encounter "twenty-five", we'd propose both alternative representations as possible
+normalizations of the token.
+
+string_tree is similar to a CSR (compressed sparse row) sparse matrix.
+
+@tokens - for token i, tree->tokens[i] is the index in strings->indices where token i's alternatives begin
+@strings - a contiguous string array which only contains as many tokens as there are alternatives
+
+Since we typically only normalize on mid-word hyphens, periods and non-ASCII characters, a string_tree
+might not need to store anything at all in many languages.
+
+*/
+
+typedef struct string_tree {
+    uint32_array *token_indices;
+    cstring_array *strings;
+} string_tree_t;
+
+string_tree_t *string_tree_new(void);
+string_tree_t *string_tree_new_size(size_t size);
+
+// finalize
+void string_tree_finalize_token(string_tree_t *self);
+// terminated
+void string_tree_add_string(string_tree_t *self, char *str);
+void string_tree_add_string_len(string_tree_t *self, char *str, size_t len);
+// unterminated
+void string_tree_append_string(string_tree_t *self, char *str);
+void string_tree_append_string_len(string_tree_t *self, char *str, size_t len);
+
+uint32_t string_tree_num_alternatives(string_tree_t *self, uint32_t i);
+
+void string_tree_destroy(string_tree_t *self);
+
+typedef struct string_tree_iterator {
+    string_tree_t *tree;
+    uint32_t *path;
+    uint32_t *num_alternatives;
+    uint32_t num_tokens;
+    uint32_t cursor;
+    int8_t direction;           // 1 or -1
+    uint32_t remaining;
+} string_tree_iterator_t;
+
+string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree);
+void string_tree_iterator_next(string_tree_iterator_t *self);
+char *string_tree_iterator_get_string(string_tree_iterator_t *self, uint32_t i);
+bool string_tree_iterator_done(string_tree_iterator_t *self);
+void string_tree_iterator_destroy(string_tree_iterator_t *self);
 
 #ifdef __cplusplus
 }

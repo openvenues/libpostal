@@ -191,9 +191,10 @@ size_t string_trim(char *str) {
 }
 
 char_array *char_array_from_string(char *str) {
-    char_array *array = char_array_new();
-    array->a = str;
-    array->m = array->n = strlen(str);
+    size_t len = strlen(str);
+    char_array *array = char_array_new_size(len+1);
+    strcpy(array->a, str);
+    array->n = strlen(str);
     return array;
 }
 
@@ -213,6 +214,7 @@ inline char *char_array_to_string(char_array *array) {
 
 static inline void char_array_strip_nul_byte(char_array *array) {
     if (array->n > 0 && array->a[array->n - 1] == '\0') {
+        array->a[array->n - 1] = '\0';
         array->n--;
     }
 }
@@ -392,6 +394,24 @@ cstring_array *cstring_array_from_char_array(char_array *str) {
     return array;
 }
 
+inline size_t cstring_array_capacity(cstring_array *self) {
+    return self->str->m;
+}
+
+inline size_t cstring_array_used(cstring_array *self) {
+    return self->str->n;
+}
+
+inline size_t cstring_array_num_strings(cstring_array *self) {
+    if (self == NULL) return 0;
+    return self->indices->n;
+}
+
+inline void cstring_array_resize(cstring_array *self, size_t size) {
+    if (size < cstring_array_capacity(self)) return;
+    char_array_resize(self->str, size);
+}
+
 inline uint32_t cstring_array_start_token(cstring_array *self) {
     uint32_t index = self->str->n;
     uint32_array_push(self->indices, index);
@@ -410,6 +430,14 @@ inline uint32_t cstring_array_add_string_len(cstring_array *self, char *str, siz
     char_array_append_len(self->str, str, len);
     char_array_terminate(self->str);
     return index;
+}
+
+inline void cstring_array_append_string(cstring_array *self, char *str) {
+    char_array_append(self->str, str);
+}
+
+inline void cstring_array_append_string_len(cstring_array *self, char *str, size_t len) {
+    char_array_append_len(self->str, str, len);
 }
 
 inline int32_t cstring_array_get_offset(cstring_array *self, uint32_t i) {
@@ -452,4 +480,187 @@ cstring_array *cstring_array_split(char *str, const char *separator, size_t sepa
     char_array_push(array, '\0');
 
     return cstring_array_from_char_array(array);
+}
+
+
+string_tree_t *string_tree_new_size(size_t size) {
+    string_tree_t *self = malloc(sizeof(string_tree_t));
+    if (self == NULL) {
+        return NULL;
+    }
+
+    self->token_indices = uint32_array_new_size(size);
+    if (self->token_indices == NULL) {
+        free(self);
+        return NULL;
+    }
+
+    uint32_array_push(self->token_indices, 0);
+
+    self->strings = cstring_array_new();
+    if (self->strings == NULL) {
+        uint32_array_destroy(self->token_indices);
+        free(self);
+        return NULL;
+    }
+
+    return self;
+}
+
+#define DEFAULT_STRING_TREE_SIZE 8
+
+string_tree_t *string_tree_new(void) {
+    return string_tree_new_size((size_t)DEFAULT_STRING_TREE_SIZE);
+}
+
+inline void string_tree_finalize_token(string_tree_t *self) {
+    uint32_array_push(self->token_indices, cstring_array_num_strings(self->strings));
+}
+
+// terminated
+inline void string_tree_add_string(string_tree_t *self, char *str) {
+    cstring_array_add_string(self->strings, str);
+}
+
+inline void string_tree_add_string_len(string_tree_t *self, char *str, size_t len) {
+    cstring_array_add_string_len(self->strings, str, len);
+}
+
+// unterminated
+inline void string_tree_append_string(string_tree_t *self, char *str) {
+    cstring_array_append_string(self->strings, str);
+}
+
+inline void string_tree_append_string_len(string_tree_t *self, char *str, size_t len) {
+    cstring_array_append_string_len(self->strings, str, len);
+}
+
+inline uint32_t string_tree_num_alternatives(string_tree_t *self, uint32_t i) {
+    if (i >= self->token_indices->n) return 0;
+    return self->token_indices->a[i + 1] - self->token_indices->a[i];
+}
+
+void string_tree_destroy(string_tree_t *self) {
+    if (self == NULL) return;
+
+    if (self->token_indices != NULL) {
+        uint32_array_destroy(self->token_indices);
+    }
+
+    if (self->strings != NULL) {
+        cstring_array_destroy(self->strings);
+    }
+
+    free(self);
+}
+
+#define STRING_TREE_ITER_DIRECTION_LEFT -1
+#define STRING_TREE_ITER_DIRECTION_RIGHT 1
+
+
+string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
+    string_tree_iterator_t *self = malloc(sizeof(string_tree_iterator_t));
+    self->tree = tree;
+
+    uint32_t num_tokens = tree->token_indices->n - 1;
+    self->num_tokens = num_tokens;
+
+    // calloc since the first path through the tree is all zeros
+    self->path = calloc(num_tokens, sizeof(uint32_t));
+
+    self->num_alternatives = calloc(num_tokens, sizeof(uint32_t));
+
+    uint64_t permutations = 1;
+    uint32_t num_strings;
+
+    for (int i = 0; i < num_tokens; i++) {
+        // N + 1 indices stored in token_indices, so this is always valid
+        num_strings = string_tree_num_alternatives(tree, i);
+        if (num_strings > 0) {
+            self->num_alternatives[i] = num_strings;
+            // 1 or more strings in the string_tree means use those instead of the actual token
+            permutations *= num_strings;
+        }
+    }
+
+
+    self->remaining = permutations - 1;
+
+    // Start on the right going backward
+    self->cursor = self->num_tokens - 1;
+    self->direction = -1;
+
+    return self;
+}
+
+static inline void string_tree_iterator_switch_direction(string_tree_iterator_t *self) {
+    self->direction *= -1;
+}
+
+static inline void string_tree_iterator_reset_right(string_tree_iterator_t *self) {
+    size_t offset = self->cursor + 1;
+    size_t num_bytes = self->num_tokens - offset;
+    memset(self->path + offset, 0, sizeof(uint32_t) * num_bytes);
+}
+
+static int string_tree_iterator_do_iteration(string_tree_iterator_t *self) {
+    uint32_t num_alternatives;
+    int32_t direction = self->direction;
+    string_tree_t *tree = self->tree;
+
+    uint32_t sentinel = (direction == STRING_TREE_ITER_DIRECTION_LEFT ? -1 : self->num_tokens); 
+
+    for (uint32_t cursor = self->cursor; cursor != sentinel; cursor += direction) {
+        self->cursor = cursor;
+        num_alternatives = self->num_alternatives[cursor];
+        if (num_alternatives > 1 && self->path[cursor] < num_alternatives - 1) {
+            self->path[cursor]++;
+            if (direction == STRING_TREE_ITER_DIRECTION_LEFT && self->cursor < self->num_tokens - 1) {
+                string_tree_iterator_reset_right(self);
+                self->cursor++;
+            }
+            string_tree_iterator_switch_direction(self);
+            self->remaining--;
+            return 1;
+        }
+    }
+    return -1;
+}
+
+void string_tree_iterator_next(string_tree_iterator_t *self) {
+    if (string_tree_iterator_do_iteration(self) == -1 && self->remaining > 0) {
+        string_tree_iterator_switch_direction(self);
+        if (string_tree_iterator_do_iteration(self) == -1) {
+            self->remaining = 0;
+        }
+    }
+}
+
+
+char *string_tree_iterator_get_string(string_tree_iterator_t *self, uint32_t i) {
+    if (i >= self->num_tokens) {
+        return NULL;
+    }
+    uint32_t base_index = self->tree->token_indices->a[i];
+    uint32_t offset = self->path[i];
+
+    return cstring_array_get_token(self->tree->strings, base_index + offset);
+}
+
+bool string_tree_iterator_done(string_tree_iterator_t *self) {
+    return self->remaining > 0;
+}
+
+void string_tree_iterator_destroy(string_tree_iterator_t *self) {
+    if (self == NULL) return;
+
+    if (self->path) {
+        free(self->path);
+    }
+
+    if (self->num_alternatives) {
+        free(self->num_alternatives);
+    }
+
+    free(self);
 }
