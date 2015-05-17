@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-#define NUM_CHARS 65536
+#define NUM_CODEPOINTS 65536
 #define MAX_LANGS 122
 
 typedef enum {

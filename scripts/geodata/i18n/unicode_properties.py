@@ -63,14 +63,14 @@ WORD_BREAKS_URL = 'http://unicode.org/Public/UNIDATA/auxiliary/WordBreakProperty
 
 ISO_15924_URL = 'http://unicode.org/iso15924/iso15924.txt.zip'
 
-NUM_CHARS = 65536
+NUM_CODEPOINTS = 65536
 
 scripts_header_template = u'''#ifndef UNICODE_SCRIPT_TYPES_H
 #define UNICODE_SCRIPT_TYPES_H
 
 #include <stdlib.h>
 
-#define NUM_CHARS {num_chars}
+#define NUM_CODEPOINTS {num_codepoints}
 #define MAX_LANGS {max_langs}
 
 typedef enum {{
@@ -117,7 +117,7 @@ def parse_char_range(r):
 
 def get_chars_by_script():
     scripts_file = open(LOCAL_SCRIPTS_FILE)
-    scripts = [None] * NUM_CHARS
+    scripts = [None] * NUM_CODEPOINTS
 
     # Lines look like:
     # 0041..005A    ; Latin # L&  [26] LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER Z
@@ -374,7 +374,7 @@ def main(out_dir):
     script_enum = u'''
     '''.join(['SCRIPT_{} = {},'.format(s.upper(), i) for s, i in sorted(all_scripts.iteritems(), key=itemgetter(1))])
 
-    out_header.write(scripts_header_template.format(num_chars=NUM_CHARS,
+    out_header.write(scripts_header_template.format(num_codepoints=NUM_CODEPOINTS,
                      max_langs=max_langs,
                      script_enum=script_enum))
     out_header.close()
