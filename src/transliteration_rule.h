@@ -2,7 +2,6 @@
 #define TRANSLITERATION_RULE_H
 
 #include <stdlib.h>
-#include "transliterate.h"
 
 #define MAX_GROUPS_LEN 5
 
