@@ -76,6 +76,7 @@ uint32_t trie_get_transition_index(trie_t *self, trie_node_t node, unsigned char
 trie_node_t trie_get_transition(trie_t *self, trie_node_t node, unsigned char c);
 bool trie_node_is_free(trie_node_t node);
 
+
 trie_node_t trie_get_node(trie_t *self, uint32_t index);
 void trie_set_base(trie_t *self, uint32_t index, int32_t base);
 void trie_set_check(trie_t *self, uint32_t index, int32_t check);
@@ -91,7 +92,6 @@ void trie_set_tail(trie_t *self, unsigned char *tail, int32_t tail_pos);
 int32_t trie_separate_tail(trie_t *self, uint32_t from_index, unsigned char *tail, uint32_t data);
 void trie_tail_merge(trie_t *self, uint32_t old_node_id, unsigned char *suffix, uint32_t data);
 
-uint32_t trie_add_nodes_only(trie_t *self, uint32_t node_id, char *key, size_t len);
 bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, uint32_t data);
 bool trie_add(trie_t *self, char *key, uint32_t data);
 bool trie_add_suffix(trie_t *self, char *key, uint32_t data);
@@ -99,6 +99,10 @@ bool trie_add_suffix(trie_t *self, char *key, uint32_t data);
 uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i);
 uint32_t trie_get_len(trie_t *self, char *word, size_t len);
 uint32_t trie_get(trie_t *self, char *word);
+
+uint32_t trie_get_prefix(trie_t *self, char *key);
+uint32_t trie_get_prefix_len(trie_t *self, char *key, size_t len);
+uint32_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t i);
 
 void trie_print(trie_t *self);
 

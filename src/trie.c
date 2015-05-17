@@ -58,6 +58,7 @@ trie_t *trie_new_empty(uint8_t *alphabet, uint32_t alphabet_size) {
 
     for (int i = 0; i < self->alphabet_size; i++) {
         self->alpha_map[alphabet[i]] = i;
+        log_debug("setting alpha_map[%d] = %d\n", alphabet[i], i);
     }
 
     self->data = trie_data_array_new_size(1);
@@ -100,31 +101,31 @@ trie_t *trie_new(void) {
     return trie_new_alphabet(DEFAULT_ALPHABET, sizeof(DEFAULT_ALPHABET));
 }
 
-bool trie_node_is_free(trie_node_t node) {
+inline bool trie_node_is_free(trie_node_t node) {
     return node.check < 0;
 }
 
-trie_node_t trie_get_node(trie_t *self, uint32_t index) {
+inline trie_node_t trie_get_node(trie_t *self, uint32_t index) {
     if ((index >= self->nodes->n) || index < ROOT_ID) return self->null_node;
     return self->nodes->a[index];
 }
 
-void trie_set_base(trie_t *self, uint32_t index, int32_t base) {
+inline void trie_set_base(trie_t *self, uint32_t index, int32_t base) {
     log_debug("Setting base at %d to %d\n", index, base);
     self->nodes->a[index].base = base;
 }
 
-void trie_set_check(trie_t *self, uint32_t index, int32_t check) {
+inline void trie_set_check(trie_t *self, uint32_t index, int32_t check) {
     log_debug("Setting check at %d to %d\n", index, check);
     self->nodes->a[index].check = check;
 }
 
 
-trie_node_t trie_get_root(trie_t *self) {
+inline trie_node_t trie_get_root(trie_t *self) {
     return self->nodes->a[ROOT_ID];
 }
 
-trie_node_t trie_get_free_list(trie_t *self) {
+inline trie_node_t trie_get_free_list(trie_t *self) {
     return self->nodes->a[FREE_LIST_ID];
 }
 
@@ -239,7 +240,6 @@ static void trie_get_transition_chars(trie_t *self, uint32_t node_id, unsigned c
     uint32_t index;
     uint32_t j = 0;
     trie_node_t node = trie_get_node(self, node_id);
-    log_debug("In get_transition_chars with node_id=%d\n", node_id);
     for (int i = 0; i < self->alphabet_size; i++) {
         unsigned char c = self->alphabet[i];
         index = trie_get_transition_index(self, node, c);
@@ -384,7 +384,6 @@ inline uint32_t trie_get_char_index(trie_t *self, unsigned char c) {
 
 inline uint32_t trie_get_transition_index(trie_t *self, trie_node_t node, unsigned char c) {
     uint32_t char_index = trie_get_char_index(self, c);
-    //log_debug("char=%c, char_index=%d\n", c, char_index);
     return node.base + char_index;
 }
 
@@ -437,11 +436,13 @@ uint32_t trie_add_transition(trie_t *self, uint32_t node_id, unsigned char c) {
     node = trie_get_node(self, node_id);
     uint32_t char_index = trie_get_char_index(self, c);
 
-    log_debug("adding transition %c to node_id %d + char_index %d\n", c, node_id, char_index);
+    log_debug("adding transition %c to node_id %d + char_index %d, base=%d, check=%d\n", c, node_id, char_index, node.base, node.check);
 
 
     if (node.base > 0) {
+        log_debug("node.base > 0\n");
         next_id = node.base + char_index;
+        log_debug("next_id=%d\n", next_id);
         trie_make_room_for(self, next_id);
 
         next = trie_get_node(self, next_id);
@@ -450,7 +451,10 @@ uint32_t trie_add_transition(trie_t *self, uint32_t node_id, unsigned char c) {
             return next_id;
         }
 
+        log_debug("next.base=%d, next.check=%d\n", next.base, next.check);
+
         if (node.base > TRIE_MAX_INDEX - char_index || !trie_node_is_free(next)) {
+            log_debug("node.base > TRIE_MAX_INDEX\n");
             uint32_t num_transitions;
             unsigned char transitions[self->alphabet_size];
             trie_get_transition_chars(self, node_id, transitions, &num_transitions);
@@ -470,7 +474,9 @@ uint32_t trie_add_transition(trie_t *self, uint32_t node_id, unsigned char c) {
         trie_set_base(self, node_id, new_base);
         next_id = new_base + char_index;
     }
+    log_debug("init_node\n");
     trie_init_node(self, next_id);
+    log_debug("setting check\n");
     trie_set_check(self, next_id, node_id);
 
     return next_id;
@@ -508,7 +514,8 @@ void trie_tail_merge(trie_t *self, uint32_t old_node_id, unsigned char *suffix, 
     int old_tail_len = strlen((char *)old_tail);
     int suffix_len = strlen((char *)suffix);
     if (common_prefix == old_tail_len && old_tail_len == suffix_len) {
-        log_debug("Key already exists, exiting early\n");
+        log_debug("Key already exists, setting value to %d\n", data);
+        self->data->a[old_data_index] = (trie_data_node_t) {old_tail_pos, data};
         return;
     }
 
@@ -609,59 +616,29 @@ void trie_print(trie_t *self) {
 
 }
 
-
-uint32_t trie_add_nodes_only(trie_t *self, uint32_t node_id, char *key, size_t len) {
-    unsigned char *ptr = (unsigned char *)key; 
-    uint32_t last_node_id = node_id;
-    trie_node_t last_node = trie_get_node(self, node_id);
-    if (last_node.base == NULL_ID) return NULL_ID;
-
-    uint32_t original_node_id = node_id;
-
-    trie_node_t node;
-
-    // Walks node until prefix reached, including the trailing \0
-
-    for (int i = 0; i < len; ptr++, i++, last_node_id = node_id, last_node = node) {
-        log_debug("--- char=%c\n", *ptr);
-        node_id = trie_get_transition_index(self, last_node, *ptr);
-        log_debug("node_id=%d\n", node_id);
-        if (node_id != NULL_ID) {
-            trie_make_room_for(self, node_id);
-        }
-
-        node = trie_get_node(self, node_id);
-        log_debug("node.check=%d, last_node_id=%d, node.base=%d\n", node.check, last_node_id, node.base);
-
-        if (node.check < 0 || (node.check != last_node_id)) {
-            node_id = trie_add_transition(self, last_node_id, *ptr);
-            if (node_id == TRIE_INDEX_ERROR) {
-                trie_prune_up_to(self, original_node_id, last_node_id);
-                return NULL_ID;
-            }
-        }
-    }
-    return node_id;
-}
-
 bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, uint32_t data) {
     int num_chars = strlen(key);
     unsigned char *ptr = (unsigned char *)key; 
     uint32_t last_node_id = node_id;
     trie_node_t last_node = trie_get_node(self, node_id);
-    if (last_node.base == NULL_ID) return false;
-
+    if (last_node.base == NULL_ID) {
+        log_debug("last_node.base == NULL_ID, node_id = %d\n", node_id);
+        return false;
+    }
+    
     trie_node_t node;
 
     // Walks node until prefix reached, including the trailing \0
 
     for (int i = 0; i < num_chars + 1; ptr++, i++, last_node_id = node_id, last_node = node) {
 
-        log_debug("--- char=%c\n", *ptr);
+        log_debug("--- char=%d\n", *ptr);
         node_id = trie_get_transition_index(self, last_node, *ptr);
-        log_debug("node_id=%d\n", node_id);
-        if (node_id != NULL_ID)
+        log_debug("node_id=%d, last_node.base=%d, last_node.check=%d, char_index=%d\n", node_id, last_node.base, last_node.check, trie_get_char_index(self, *ptr));
+
+        if (node_id != NULL_ID) {
             trie_make_room_for(self, node_id);
+        }
 
         node = trie_get_node(self, node_id);
         log_debug("node.check=%d, last_node_id=%d, node.base=%d\n", node.check, last_node_id, node.base);
@@ -702,6 +679,40 @@ bool trie_add_suffix(trie_t *self, char *key, uint32_t data) {
     return success;
 }
 
+
+uint32_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t i) {
+    if (key == NULL) return NULL_ID;
+
+    unsigned char *ptr = (unsigned char *)key;
+
+    uint32_t node_id = i;
+    trie_node_t node = trie_get_node(self, i);
+    if (node.base == NULL_ID) return NULL_ID;
+
+    uint32_t next_id = NULL_ID;
+
+    // Include NUL-byte. It may be stored if this phrase is a prefix of a longer one
+
+    for (int i = 0; i < len; i++, ptr++, node_id = next_id) {
+        next_id = trie_get_transition_index(self, node, *ptr);
+        node = trie_get_node(self, next_id);
+
+        if (node.check != node_id) {
+            return NULL_ID;
+        }
+    }
+
+    return next_id;
+
+}
+
+uint32_t trie_get_prefix_len(trie_t *self, char *key, size_t len) {
+    return trie_get_prefix_from_index(self, key, len, ROOT_ID);
+}
+
+uint32_t trie_get_prefix(trie_t *self, char *key) {
+    return trie_get_prefix_from_index(self, key, strlen(key), ROOT_ID);
+}
 
 uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i) {
     if (word == NULL) return NULL_ID;
