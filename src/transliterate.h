@@ -98,11 +98,11 @@ typedef struct transliteration_table {
 #define REPEAT_ONE_CHAR "\x06"
 #define REPEAT_ONE_CODEPOINT 6
 #define REPEAT_ONE_CHAR_LEN strlen(REPEAT_ONE_CHAR)
-#define BEGIN_SET_CHAR "\x0e"
-#define BEGIN_SET_CODEPOINT 14
+#define BEGIN_SET_CHAR "\x0f"
+#define BEGIN_SET_CODEPOINT 15
 #define BEGIN_SET_CHAR_LEN strlen(BEGIN_SET_CHAR)
-#define END_SET_CHAR "\x0f"
-#define END_SET_CODEPOINT 15
+#define END_SET_CHAR "\x0e"
+#define END_SET_CODEPOINT 14
 #define END_SET_CHAR_LEN strlen(END_SET_CHAR)
 
 #define GROUP_INDICATOR_CHAR "\x10"
