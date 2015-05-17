@@ -23,8 +23,8 @@ extern "C" {
     static inline void name##_push(name *array, type value) {           \
         kv_push(type, *array, value);                                   \
     }                                                                   \
-    static inline void name##_pop(name *array) {                        \
-        kv_pop(*array);                                                 \
+    static inline type name##_pop(name *array) {                        \
+        return kv_pop(*array);                                          \
     }                                                                   \
     static inline void name##_clear(name *array) {                      \
         kv_clear(*array);                                               \
