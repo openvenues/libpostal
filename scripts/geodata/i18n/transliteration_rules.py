@@ -708,11 +708,14 @@ def char_permutations(s, current_filter=all_chars):
             char_types.append([replace_html_entity(token)])
         elif token_type == CHARACTER:
             char_types.append([token])
+        elif token_type == SINGLE_QUOTE:
+            char_types.append(["'"])
         elif token_type == UNICODE_CHARACTER:
             token = token.decode('unicode-escape')
             char_types.append([token])
         elif token_type in (WIDE_CHARACTER, UNICODE_WIDE_CHARACTER):
             continue
+
         if in_group and last_token_group_start:
             start_group = len(char_types)
             last_token_group_start = False
@@ -1006,12 +1009,15 @@ def parse_transform_rules(xml):
                 left_pre_context_type = CONTEXT_TYPE_NONE
 
             if left:
-                left, _, left_groups = char_permutations(left.strip(), current_filter=current_filter)
+                left_chars, _, left_groups = char_permutations(left.strip(), current_filter=current_filter)
+                if not left_chars and (left.strip() or not (left_pre_context and left_post_context)):
+                    print 'ignoring', rule
+                    continue
                 if left_groups:
-                    left_groups = format_groups(left, left_groups)
+                    left_groups = format_groups(left_chars, left_groups)
                 else:
                     left_groups = None
-                left = char_types_string(left)
+                left = char_types_string(left_chars)
 
             if left_post_context:
                 if left_post_context.strip() == WORD_BOUNDARY_VAR:
