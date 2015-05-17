@@ -88,6 +88,7 @@ NFD = 'NFD'
 NFKD = 'NFKD'
 NFC = 'NFC'
 NFKC = 'NFKC'
+STRIP_MARK = 'STRIP_MARK'
 
 LOWER = 'lower'
 UPPER = 'upper'
@@ -98,6 +99,7 @@ UNICODE_NORMALIZATION_TRANSFORMS = set([
     NFKD,
     NFC,
     NFKC,
+    STRIP_MARK,
 ])
 
 unicode_category_aliases = {
@@ -120,6 +122,8 @@ unicode_general_categories = defaultdict(list)
 unicode_scripts = defaultdict(list)
 unicode_properties = {}
 
+unicode_script_ids = {}
+
 unicode_blocks = {}
 unicode_category_aliases = {}
 unicode_property_aliases = {}
@@ -140,9 +144,9 @@ class TransliterationParseError(Exception):
 def init_unicode_categories():
     global unicode_categories, unicode_general_categories, unicode_scripts, unicode_category_aliases
     global unicode_blocks, unicode_combining_classes, unicode_properties, unicode_property_aliases
-    global unicode_property_value_aliases, unicode_scripts, unicode_word_breaks
+    global unicode_property_value_aliases, unicode_scripts, unicode_script_ids, unicode_word_breaks
 
-    for i in xrange(65536):
+    for i in xrange(NUM_CHARS):
         unicode_categories[unicodedata.category(unichr(i))].append(unichr(i))
         unicode_combining_classes[str(unicodedata.combining(unichr(i)))].append(unichr(i))
 
@@ -160,6 +164,8 @@ def init_unicode_categories():
             unicode_scripts[script.lower()].append(unichr(i))
 
     unicode_scripts = dict(unicode_scripts)
+
+    unicode_script_ids.update(build_master_scripts_list(script_chars))
 
     unicode_blocks.update(get_unicode_blocks())
     unicode_properties.update(get_unicode_properties())
@@ -226,10 +232,8 @@ unicode_property_regexes = [
     ('logical_order_exception', '[เ-ไ ເ-ໄ ꪵ ꪶ ꪹ ꪻ ꪼ]'),
 ]
 
-char_set_map = {
-    '[^[:ccc=Not_Reordered:][:ccc=Above:]]': u'[֑ ֖ ֚ ֛ ֢-֧ ֪ ֭ ֮ ֽ ׅ ؘ-ؚ ۣ ۪ ۭ ݄ ݈ ࣭-࣯ ॒ ༘ ༙ ༵ ༷ ࿆ ᩿ ᭬ ᳔-᳙ ᳜-᳟ ᳢-᳨ ⵿ ︨ ︪-︭ 𝅥𐋠-𝅩𝅭-𝅲 𝅻-𝆂 𝆊 𝆋 𞣐-𞣖 ̲ ̸ ̧ ̨ ̕ ̚ ͝ ͞ ᷍ ᷎ ̖-̙ ̜-̠ ̩-̬ ̯ ̳ ̺-̼ ͇-͉ ͍ ͎ ͓-͖ ͙ ͚ ͜ ͟ ͢ ݂ ݆ ࡙-࡛ ᪵-᪺ ᪽ ᷂ ᷏ ᷐ ᷼ ᷽ ᷿ ⃬-⃯ ︧ 𐨍 𐫦 ̶ ̷ ⃘-⃚ ⃥ ⃪ ⃫ 𛲞 ゙ ゚ ̵ ̛ ̡-̦ ̭ ̮ ̰ ̱ ̴ ̹ ͅ ͘ ͠ ︩ ͡ ְ-ָ ׇ ֹ-ֻ ׂ ׁ ּ ֿ ﬞ ً ࣰ ٌ ࣱ ٍ ࣲ ࣩ َ-ِ ࣦ ࣶ ّ ْ ٕ ٟ ٖ ٜ ࣹ ࣺ ٰ ܑ ܱ ܴ ܷ-ܹ ܻ ܼ ܾ ߲ 𖫰-𖫴 ़ ় ਼ ઼ ଼ ಼ ᬴ ᯦ ᰷ ꦳ 𑂺 𑅳 𑈶 𑋩 𑌼 𑓃 𑗀 𑚷 ᳭ 𐨹 𐨺 ่-๋ ່-໋ ༹ ꤫-꤭ ့ ᤹ ᤻ 〪-〯 ⃒ ⃓ ⃦ ⃨ 𐇽 ᷊ ् ্ ੍ ્ ୍ ் ్ ౕ ౖ ್ ് ් ꯭ ꫶ ꠆ ꣄ 𑂹 𑇀 𑈵 𑋪 𑍍 𑓂 𑖿 𑘿 𑚶 ᮪ ᮫ 𑁆 𑁿 𐨿 ุ-ฺ ຸ ູ ꪴ ཱ ི ྀ ུ ེ-ཽ ྄ ᜔ ᜴ ᨘ ᯲ ᯳ ꥓ ္ ် ႍ 𑄳 𑄴 ្ ᩠ ᭄ ꧀ ᢩ]',
-    '[[:^ccc=0:] & [:^ccc=230:]]': u'[֑ ֖ ֚ ֛ ֢-֧ ֪ ֭ ֮ ֽ ׅ ؘ-ؚ ۣ ۪ ۭ ݄ ݈ ࣭-࣯ ॒ ༘ ༙ ༵ ༷ ࿆ ᩿ ᭬ ᳔-᳙ ᳜-᳟ ᳢-᳨ ⵿ ︨ ︪-︭ 𝅥𐋠-𝅩𝅭-𝅲 𝅻-𝆂 𝆊 𝆋 𞣐-𞣖 ̲ ̸ ̧ ̨ ̕ ̚ ͝ ͞ ᷍ ᷎ ̖-̙ ̜-̠ ̩-̬ ̯ ̳ ̺-̼ ͇-͉ ͍ ͎ ͓-͖ ͙ ͚ ͜ ͟ ͢ ݂ ݆ ࡙-࡛ ᪵-᪺ ᪽ ᷂ ᷏ ᷐ ᷼ ᷽ ᷿ ⃬-⃯ ︧ 𐨍 𐫦 ̶ ̷ ⃘-⃚ ⃥ ⃪ ⃫ 𛲞 ゙ ゚ ̵ ̛ ̡-̦ ̭ ̮ ̰ ̱ ̴ ̹ ͅ ͘ ͠ ︩ ͡ ְ-ָ ׇ ֹ-ֻ ׂ ׁ ּ ֿ ﬞ ً ࣰ ٌ ࣱ ٍ ࣲ ࣩ َ-ِ ࣦ ࣶ ّ ْ ٕ ٟ ٖ ٜ ࣹ ࣺ ٰ ܑ ܱ ܴ ܷ-ܹ ܻ ܼ ܾ ߲ 𖫰-𖫴 ़ ় ਼ ઼ ଼ ಼ ᬴ ᯦ ᰷ ꦳ 𑂺 𑅳 𑈶 𑋩 𑌼 𑓃 𑗀 𑚷 ᳭ 𐨹 𐨺 ่-๋ ່-໋ ༹ ꤫-꤭ ့ ᤹ ᤻ 〪-〯 ⃒ ⃓ ⃦ ⃨ 𐇽 ᷊ ् ্ ੍ ્ ୍ ் ్ ౕ ౖ ್ ് ් ꯭ ꫶ ꠆ ꣄ 𑂹 𑇀 𑈵 𑋪 𑍍 𑓂 𑖿 𑘿 𑚶 ᮪ ᮫ 𑁆 𑁿 𐨿 ุ-ฺ ຸ ູ ꪴ ཱ ི ྀ ུ ེ-ཽ ྄ ᜔ ᜴ ᨘ ᯲ ᯳ ꥓ ္ ် ႍ 𑄳 𑄴 ្ ᩠ ᭄ ꧀ ᢩ]',
-    '[^\p{ccc=0}\p{ccc=above}]': u'[֑ ֖ ֚ ֛ ֢-֧ ֪ ֭ ֮ ֽ ׅ ؘ-ؚ ۣ ۪ ۭ ݄ ݈ ࣭-࣯ ॒ ༘ ༙ ༵ ༷ ࿆ ᩿ ᭬ ᳔-᳙ ᳜-᳟ ᳢-᳨ ⵿ ︨ ︪-︭ 𝅥𐋠-𝅩𝅭-𝅲 𝅻-𝆂 𝆊 𝆋 𞣐-𞣖 ̲ ̸ ̧ ̨ ̕ ̚ ͝ ͞ ᷍ ᷎ ̖-̙ ̜-̠ ̩-̬ ̯ ̳ ̺-̼ ͇-͉ ͍ ͎ ͓-͖ ͙ ͚ ͜ ͟ ͢ ݂ ݆ ࡙-࡛ ᪵-᪺ ᪽ ᷂ ᷏ ᷐ ᷼ ᷽ ᷿ ⃬-⃯ ︧ 𐨍 𐫦 ̶ ̷ ⃘-⃚ ⃥ ⃪ ⃫ 𛲞 ゙ ゚ ̵ ̛ ̡-̦ ̭ ̮ ̰ ̱ ̴ ̹ ͅ ͘ ͠ ︩ ͡ ְ-ָ ׇ ֹ-ֻ ׂ ׁ ּ ֿ ﬞ ً ࣰ ٌ ࣱ ٍ ࣲ ࣩ َ-ِ ࣦ ࣶ ّ ْ ٕ ٟ ٖ ٜ ࣹ ࣺ ٰ ܑ ܱ ܴ ܷ-ܹ ܻ ܼ ܾ ߲ 𖫰-𖫴 ़ ় ਼ ઼ ଼ ಼ ᬴ ᯦ ᰷ ꦳ 𑂺 𑅳 𑈶 𑋩 𑌼 𑓃 𑗀 𑚷 ᳭ 𐨹 𐨺 ่-๋ ່-໋ ༹ ꤫-꤭ ့ ᤹ ᤻ 〪-〯 ⃒ ⃓ ⃦ ⃨ 𐇽 ᷊ ् ্ ੍ ્ ୍ ் ్ ౕ ౖ ್ ് ් ꯭ ꫶ ꠆ ꣄ 𑂹 𑇀 𑈵 𑋪 𑍍 𑓂 𑖿 𑘿 𑚶 ᮪ ᮫ 𑁆 𑁿 𐨿 ุ-ฺ ຸ ູ ꪴ ཱ ི ྀ ུ ེ-ཽ ྄ ᜔ ᜴ ᨘ ᯲ ᯳ ꥓ ္ ် ႍ 𑄳 𑄴 ្ ᩠ ᭄ ꧀ ᢩ]',
+rule_map = {
+    u'[:Latin:] { [:Mn:]+ → ;': ':: {}'.format(STRIP_MARK)
 }
 
 unicode_properties = {}
@@ -277,6 +281,8 @@ QUOTED_STRING = 'QUOTED_STRING'
 SINGLE_QUOTE = 'SINGLE_QUOTE'
 HTML_ENTITY = 'HTML_ENTITY'
 SINGLE_QUOTE = 'SINGLE_QUOTE'
+UNICODE_CHARACTER = 'UNICODE_CHARACTER'
+UNICODE_WIDE_CHARACTER = 'UNICODE_WIDE_CHARACTER'
 ESCAPED_CHARACTER = 'ESCAPED_CHARACTER'
 
 
@@ -302,6 +308,8 @@ rule_scanner = Scanner([
 # Scanner for the lvalue or rvalue of a transform rule
 
 transform_scanner = Scanner([
+    (r'\\u[0-9A-Fa-f]{4}', UNICODE_CHARACTER),
+    (r'\\U[0-9A-Fa-f]{8}', UNICODE_WIDE_CHARACTER),
     (r'[\\].', ESCAPED_CHARACTER),
     (r'\'\'', SINGLE_QUOTE),
     (r'\'.*?\'', QUOTED_STRING),
@@ -338,6 +346,8 @@ char_set_scanner = Scanner([
     ('^\^', NEGATION),
     (r'\\p\{[^\{\}]+\}', CHAR_CLASS_PCRE),
     (r'[\\]?[^\\\s]\-[\\]?[^\s]', CHAR_RANGE),
+    (r'\\u[0-9A-Fa-f]{4}', UNICODE_CHARACTER),
+    (r'\\U[0-9A-Fa-f]{8}', UNICODE_WIDE_CHARACTER),
     (r'[\\].', ESCAPED_CHARACTER),
     (r'\'\'', SINGLE_QUOTE),
     (r'\'.*?\'', QUOTED_STRING),
@@ -348,7 +358,7 @@ char_set_scanner = Scanner([
     ('\[', OPEN_SET),
     ('\]', CLOSE_SET),
     ('&', INTERSECTION),
-    ('(?<=[\s])-(?=[\s])', DIFFERENCE),
+    ('-', DIFFERENCE),
     ('\$', WORD_BOUNDARY),
     (ur'[\ud800-\udbff][\udc00-\udfff]', WIDE_CHARACTER),
     (r'\{[^\s]+\}', BRACKETED_CHARACTER),
@@ -482,8 +492,6 @@ def parse_regex_char_set(s, current_filter=all_chars):
     Parse into a single, flat character set without the unicode properties,
     ranges, unions/intersections, etc.
     '''
-    if s in char_set_map:
-        s = char_set_map[s]
 
     s = s[1:-1]
     is_negation = False
@@ -532,7 +540,12 @@ def parse_regex_char_set(s, current_filter=all_chars):
         elif token_class == CHARACTER and token not in control_chars:
             this_group.add(token)
             real_chars.add(token)
-        elif token_class == WIDE_CHARACTER:
+        elif token_class == UNICODE_CHARACTER:
+            token = token.decode('unicode-escape')
+            if token not in control_chars:
+                this_group.add(token)
+                real_chars.add(token)
+        elif token_class in (WIDE_CHARACTER, UNICODE_WIDE_CHARACTER):
             continue
         elif token_class == BRACKETED_CHARACTER:
             if token.strip('{{}}') not in control_chars:
@@ -575,10 +588,11 @@ def get_raw_rules_and_variables(xml):
             continue
 
         rule = safe_decode(rule.text.rsplit(COMMENT_CHAR)[0].strip())
-        rule = literal_space_regex.sub(replace_literal_space, rule)
-        rule = escaped_wide_unicode_regex.sub('', rule)
-        rule = escaped_unicode_regex.sub(unescape_unicode_char, rule)
-        rule = rule.rstrip(END_CHAR).strip()
+        if rule not in rule_map:
+            rule = literal_space_regex.sub(replace_literal_space, rule)
+            rule = rule.rstrip(END_CHAR).strip()
+        else:
+            rule = rule_map[rule]
 
         if rule.strip().endswith('\\'):
             compound_rule.append(rule.rstrip('\\'))
@@ -692,7 +706,10 @@ def char_permutations(s, current_filter=all_chars):
             char_types.append([replace_html_entity(token)])
         elif token_type == CHARACTER:
             char_types.append([token])
-        elif token_type == WIDE_CHARACTER:
+        elif token_type == UNICODE_CHARACTER:
+            token = token.decode('unicode-escape')
+            char_types.append([token])
+        elif token_type in (WIDE_CHARACTER, UNICODE_WIDE_CHARACTER):
             continue
         if in_group and last_token_group_start:
             start_group = len(char_types)
@@ -760,10 +777,10 @@ def format_groups(char_types, groups):
     for start, end in groups:
         group_regex.append(char_types_string(char_types[last_end:start]))
         group_regex.append(u'(')
-        group_regex.append(char_types_string(char_types[start:end + 1]))
+        group_regex.append(char_types_string(char_types[start:end]))
         group_regex.append(u')')
         last_end = end
-    group_regex.append(char_types_string(char_types[last_end + 1:]))
+    group_regex.append(char_types_string(char_types[last_end:]))
     return u''.join(group_regex)
 
 charset_regex = re.compile(r'(?<!\\)\[')
@@ -901,6 +918,7 @@ def parse_transform_rules(xml):
                         in_set = False
                 elif token_type == BEFORE_CONTEXT and not in_set:
                     left_pre_context = u''.join(current_token)
+
                     current_token = []
                 elif token_type == AFTER_CONTEXT and not in_set:
                     have_post_context = True
@@ -968,7 +986,7 @@ def parse_transform_rules(xml):
                 elif left_pre_context.strip() == START_OF_HAN_VAR:
                     left_pre_context = None
                     left_pre_context_type = CONTEXT_TYPE_NONE
-                else:
+                elif left_pre_context.strip():
                     left_pre_context, _, _ = char_permutations(left_pre_context.strip(), current_filter=current_filter)
                     if left_pre_context:
                         left_pre_context_max_len = len(left_pre_context or [])
@@ -981,8 +999,11 @@ def parse_transform_rules(xml):
                     else:
                         left_pre_context = None
                         left_pre_context_type = CONTEXT_TYPE_NONE
+            else:
+                left_pre_context = None
+                left_pre_context_type = CONTEXT_TYPE_NONE
 
-            if left is not None:
+            if left:
                 left, _, left_groups = char_permutations(left.strip(), current_filter=current_filter)
                 if left_groups:
                     left_groups = format_groups(left, left_groups)
@@ -997,7 +1018,7 @@ def parse_transform_rules(xml):
                 elif left_post_context.strip() == START_OF_HAN_VAR:
                     left_pre_context_type = None
                     left_pre_context_type = CONTEXT_TYPE_NONE
-                else:
+                elif left_post_context.strip():
                     left_post_context, _, _ = char_permutations(left_post_context.strip(), current_filter=current_filter)
                     if left_post_context:
                         left_post_context_max_len = len(left_post_context or [])
@@ -1009,6 +1030,10 @@ def parse_transform_rules(xml):
                     else:
                         left_post_context = None
                         left_post_context_type = CONTEXT_TYPE_NONE
+            else:
+                left_post_context = None
+                left_post_context_type = CONTEXT_TYPE_NONE
+
 
             if right:
                 right, move, right_groups = char_permutations(right.strip(), current_filter=current_filter)
@@ -1039,10 +1064,15 @@ EXISTING_STEP = 'EXISTING_STEP'
 supplemental_transliterations = {
     'latin-ascii': (EXISTING_STEP, [
         # German transliterations not handled by standard NFD normalization
-        (u'"\xc3\xa4"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ae"', '2', '0', 'NULL', '0'),       # ä => ae
-        (u'"\xc3\xb6"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', '0', 'NULL', '0'),       # ö => oe
-        (u'"\xc3\xbc"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ue"', '2', '0', 'NULL', '0'),       # ü => ue
-        (u'"\xc3\x9f"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ss"', '2', '0', 'NULL', '0'),       # ß => ss
+        # ä => ae
+        (u'"\xc3\xa4"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ae"', '2', '0', 'NULL', '0'),
+        # ö => oe
+        (u'"\xc3\xb6"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', '0', 'NULL', '0'),
+        # ü => ue
+        (u'"\xc3\xbc"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ue"', '2', '0', 'NULL', '0'),
+        # ß => ss
+        (u'"\xc3\x9f"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ss"', '2', '0', 'NULL', '0'),
+
     ]),
 }
 
@@ -1090,6 +1120,9 @@ def get_all_transform_rules():
                 if rule.lower() in all_transforms and rule.lower() not in EXCLUDE_TRANSLITERATORS:
                     dependencies[name].append(rule.lower())
                     steps.append((STEP_TRANSFORM, rule.lower()))
+                elif rule.split('-')[0].lower() in all_transforms and rule.split('-')[0].lower() not in EXCLUDE_TRANSLITERATORS:
+                    dependencies[name].append(rule.split('-')[0].lower())
+                    steps.append((STEP_TRANSFORM, rule.split('-')[0].lower()))
 
                 rule = UTF8PROC_TRANSFORMS.get(rule, rule)
                 if rule in UNICODE_NORMALIZATION_TRANSFORMS:
@@ -1166,16 +1199,152 @@ transliterator_source_t transliterators_source[] = {{
 
 '''
 
+transliterator_script_data_template = u'''
+#ifndef TRANSLITERATION_SCRIPTS_H
+#define TRANSLITERATION_SCRIPTS_H
 
-def create_transliterator(name, internal, steps):
-    return transliterator_template.format(name=name, internal=int(internal), num_steps=len(steps))
+#include <stdlib.h>
+#include "unicode_scripts.h"
+#include "transliterate.h"
+
+typedef struct script_transliteration_rule {{
+    script_type_t script;
+    char *language;
+    uint32_t index;
+    uint32_t len;
+}} script_transliteration_rule_t;
+
+script_transliteration_rule_t script_transliteration_rules[] = {{
+    {rules}
+}};
+
+char *script_transliterators[] = {{
+    {transliterators}
+}}
+
+#endif
+'''
 
 
-TRANSLITERATION_DATA_FILENAME = 'transliteration_data.c'
+script_transliterators = {
+    'arabic': {None: ['arabic-latin', 'arabic-latin-bgn'],
+               'fa': ['persian-latin-bgn'],
+               'ps': ['pashto-latin-bgn'],
+               },
+    'armenian': {None: ['armenian-latin-bgn']},
+    'balinese': None,
+    'bamum': None,
+    'batak': None,
+    'bengali': {None: ['bengali-latin']},
+    'bopomofo': None,
+    'braille': None,
+    'buginese': None,
+    'buhid': None,
+    'canadian_aboriginal': {None: ['canadianaboriginal-latin']},
+    'cham': None,
+    'cherokee': None,
+    'common': {None: ['latin-ascii']},
+    'coptic': None,
+    'cyrillic': {None: ['cyrillic-latin'],
+                 'be': ['belarusian-latin-bgn'],
+                 'ru': ['russian-latin-bgn'],
+                 'bg': ['bulgarian-latin-bgn'],
+                 'kk': ['kazakh-latin-bgn'],
+                 'ky': ['kirghiz-latin-bgn'],
+                 'mk': ['macedonian-latin-bgn'],
+                 'mn': ['mongolian-latin-bgn'],
+                 'sr': ['serbian-latin-bgn'],
+                 'uk': ['ukrainian-latin-bgn'],
+                 'uz': ['uzbek-latin-bgn'],
+                 },
+    'devanagari': {None: ['devanagari-latin']},
+    'ethiopic': None,
+    'georgian': {None: ['georgian-latin', 'georgian-latin-bgn']},
+    'glagolitic': None,
+    'greek': {None: ['greek-latin', 'greek-latin-bgn', 'greek_latin_ungegn']},
+    'gujarati': {None: ['gujarati-latin']},
+    'gurmukhi': {None: ['gurmukhi-latin']},
+    'han': {None: ['han-latin']},
+    'hangul': {None: ['korean-latin-bgn']},
+    'hanunoo': None,
+    'hebrew': {None: ['hebrew-latin', 'hebrew-latin-bgn']},
+    'hiragana': {None: ['hiragana-latin']},
+    'inherited': None,
+    'javanese': None,
+    'kannada': {None: ['kannada-latin']},
+    'katakana': {None: ['katakana-latin-bgn']},
+    'kayah_li': None,
+    'khmer': None,
+    'lao': None,
+    'latin': {None: ['latin-ascii']},
+    'lepcha': None,
+    'limbu': None,
+    'lisu': None,
+    'malayalam': {None: ['malayam-latin']},
+    'mandaic': None,
+    'meetei_mayek': None,
+    'mongolian': None,
+    'myanmar': None,
+    'new_tai_lue': None,
+    'nko': None,
+    'ogham': None,
+    'ol_chiki': None,
+    'oriya': {None: ['oriya-latin']},
+    'phags_pa': None,
+    'rejang': None,
+    'runic': None,
+    'samaritan': None,
+    'saurashtra': None,
+    'sinhala': None,
+    'sundanese': None,
+    'syloti_nagri': None,
+    'syriac': None,
+    'tagalog': None,
+    'tagbanwa': None,
+    'tai_le': None,
+    'tai_tham': None,
+    'tai_viet': None,
+    'tamil': {None: ['tamil-latin']},
+    'telugu': {None: ['telugu-latin']},
+    'thaana': None,
+    'thai': {None: ['thai-latin']},
+    'tibetan': None,
+    'tifinagh': None,
+    'unknown': None,
+    'vai': None,
+    'yi': None
+}
 
 
-def main(out_dir):
-    f = open(os.path.join(out_dir, TRANSLITERATION_DATA_FILENAME), 'w')
+def write_transliterator_scripts_file(filename):
+    transliterator_rule_template = '''{{{script_type}, {lang}, {start}, {length}}}'''
+    rules = []
+    all_transliterators = []
+    index = 0
+    for script, i in unicode_script_ids.iteritems():
+        spec = script_transliterators.get(script.lower())
+        if not spec:
+            continue
+        script_type = 'SCRIPT_{}'.format(script.upper())
+        for lang, transliterators in spec.iteritems():
+            lang = 'NULL' if not lang else quote_string(lang)
+            num_transliterators = len(transliterators)
+            rules.append(transliterator_rule_template.format(script_type=script_type,
+                         lang=lang, start=index, length=num_transliterators))
+            for trans in transliterators:
+                all_transliterators.append(quote_string(trans))
+
+            index += num_transliterators
+
+    template = transliterator_script_data_template.format(rules=''',
+    '''.join(rules), transliterators=''',
+    '''.join(all_transliterators))
+
+    f = open(filename, 'w')
+    f.write(safe_encode(template))
+
+
+def write_transliteration_data_file(filename):
     transforms, steps, rules = get_all_transform_rules()
 
     all_transforms = u''',
@@ -1193,8 +1362,18 @@ def main(out_dir):
         all_rules=all_rules
     )
 
+    f = open(filename, 'w')
     f.write(safe_encode(template))
 
+
+TRANSLITERATION_DATA_FILENAME = 'transliteration_data.c'
+TRANSLITERATION_SCRIPTS_FILENAME = 'transliteration_scripts.h'
+
+
+def main(out_dir):
+    write_transliteration_data_file(os.path.join(out_dir, TRANSLITERATION_DATA_FILENAME))
+
+    write_transliterator_scripts_file(os.path.join(out_dir, TRANSLITERATION_SCRIPTS_FILENAME))
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
