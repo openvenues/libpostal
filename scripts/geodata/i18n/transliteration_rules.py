@@ -233,7 +233,9 @@ unicode_property_regexes = [
 ]
 
 rule_map = {
-    u'[:Latin:] { [:Mn:]+ → ;': ':: {}'.format(STRIP_MARK)
+    u'[:Latin:] { [:Mn:]+ → ;': ':: {}'.format(STRIP_MARK),
+    u':: [[[:Greek:][:Mn:][:Me:]] [\:-;?·;·]] ;': u':: [[[:Greek:][́̀᾿᾿˜̑῀¨ͺ´`῀᾿῎῍῏῾῞῝῟΅῭῁ˉ˘]] [\'\:-;?·;·]]',
+
 }
 
 unicode_properties = {}
@@ -1034,7 +1036,6 @@ def parse_transform_rules(xml):
                 left_post_context = None
                 left_post_context_type = CONTEXT_TYPE_NONE
 
-
             if right:
                 right, move, right_groups = char_permutations(right.strip(), current_filter=current_filter)
                 right = char_types_string(right)
@@ -1044,7 +1045,7 @@ def parse_transform_rules(xml):
         elif rule_type == PRE_TRANSFORM and rule.strip(': ').startswith('('):
             continue
         elif rule_type == PRE_TRANSFORM and '[' in rule and ']' in rule:
-            filter_rule = regex_char_set_greedy.search(rule)
+            filter_rule = regex_char_set_greedy.search(rule)    
             current_filter = set(parse_regex_char_set(filter_rule.group(0)))
         elif rule_type == PRE_TRANSFORM:
             pre_transform = pre_transform_regex.search(rule)
@@ -1087,6 +1088,18 @@ def get_all_transform_rules():
 
     all_transforms = set([name.split('.xml')[0].lower() for name in get_transforms()])
 
+    name_aliases = {}
+
+    for filename in get_transforms():
+        name = name = filename.split('.xml')[0].lower()
+
+        f = open(os.path.join(CLDR_TRANSFORMS_DIR, filename))
+        xml = etree.parse(f)
+        source, target = get_source_and_target(xml)
+        name_alias = '-'.join([source.lower(), target.lower()])
+        if name_alias not in name_aliases:
+            name_aliases[name_alias] = name
+
     dependencies = defaultdict(list)
 
     for filename in get_transforms():
@@ -1120,6 +1133,10 @@ def get_all_transform_rules():
                 if rule.lower() in all_transforms and rule.lower() not in EXCLUDE_TRANSLITERATORS:
                     dependencies[name].append(rule.lower())
                     steps.append((STEP_TRANSFORM, rule.lower()))
+                elif rule.lower() in name_aliases and rule.lower() not in EXCLUDE_TRANSLITERATORS:
+                    dep = name_aliases[rule.lower()]
+                    dependencies[name].append(dep)
+                    steps.append((STEP_TRANSFORM, dep))
                 elif rule.split('-')[0].lower() in all_transforms and rule.split('-')[0].lower() not in EXCLUDE_TRANSLITERATORS:
                     dependencies[name].append(rule.split('-')[0].lower())
                     steps.append((STEP_TRANSFORM, rule.split('-')[0].lower()))
