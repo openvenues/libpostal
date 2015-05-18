@@ -39,7 +39,7 @@ string_tree_t *regex_string_tree(char *regex, size_t len) {
     string_tree_t *tree = string_tree_new();
 
     if (len == 0) {
-        // Single token with no 
+        // Single token with zero-length
         string_tree_add_string_len(tree, regex, len);
         string_tree_finalize_token(tree);
         return tree;
@@ -72,7 +72,7 @@ string_tree_t *regex_string_tree(char *regex, size_t len) {
         if (codepoint == LSQUARE_CODEPOINT && last_codepoint != BACKSLASH_CODEPOINT) {
             log_debug("begin set\n");
             in_set = true;
-            add_to_index = false;
+            codepoint = BEGIN_SET_CODEPOINT;
             uint32_array_clear(char_set);
         } else if (codepoint == RSQUARE_CODEPOINT && last_codepoint != BACKSLASH_CODEPOINT && in_set) {
             log_debug("end set");
@@ -88,7 +88,6 @@ string_tree_t *regex_string_tree(char *regex, size_t len) {
             // Add a special codepoint to the sequence to distinguish from an escaped square bracket
             codepoint = END_SET_CODEPOINT;
             in_set = false;
-            add_to_index = false;
         } else if (codepoint == LCURLY_CODEPOINT && last_codepoint != BACKSLASH_CODEPOINT) {
             in_brackets = true;
             bracket_start = idx + char_len;
@@ -303,6 +302,9 @@ int main(int argc, char **argv) {
             char_array_cat(step_key, step_source.name);
             char_array_cat(step_key, NAMESPACE_SEPARATOR_CHAR);
 
+            char *step_key_str = char_array_get_string(step_key);
+            size_t step_key_len = strlen(step_key_str);
+
             for (int k = 0; k < step_source.rules_length; k++) {
                 transliteration_rule_source_t rule_source = rules_source[step_source.rules_start + k];
                 key = rule_source.key;
@@ -326,9 +328,8 @@ int main(int argc, char **argv) {
                 group_regex_len = rule_source.group_regex_len;
 
                 uint32_t data = trans_table->replacements->n;
-
-                char_array *rule_key = char_array_from_string(char_array_get_string(step_key));
-                size_t step_len = rule_key->n;
+                
+                char_array *rule_key = char_array_from_string(step_key_str);
 
                 uint32_t replacement_string_index = cstring_array_num_strings(trans_table->replacement_strings);
                 cstring_array_add_string_len(trans_table->replacement_strings, replacement, replacement_len);
@@ -343,6 +344,8 @@ int main(int argc, char **argv) {
                 int c;
 
                 char *token;
+
+                log_debug("Doing rule: %s\n", key);
 
                 string_tree_t *tree = regex_string_tree(key, key_len);
 
@@ -391,14 +394,11 @@ int main(int argc, char **argv) {
                     cstring_array_add_string(pre_context_strings, WORD_BOUNDARY_CHAR);
                 }
 
-                size_t num_pre_context_strings;
+                size_t num_pre_context_strings = 0;
                 if (pre_context_type != CONTEXT_TYPE_NONE) {
                     num_pre_context_strings = cstring_array_num_strings(pre_context_strings);
                     log_info("num_pre_context_strings = %zu\n", num_pre_context_strings);
-                } else {
-                    num_pre_context_strings = 0;
                 }
-
 
                 string_tree_t *post_context_tree = NULL;
                 string_tree_iterator_t *post_context_iter = NULL;
@@ -474,8 +474,10 @@ int main(int argc, char **argv) {
                         }
 
                         char_array_cat(context, token);
+                        size_t context_len = strlen(char_array_get_string(context));
 
                         for (post = 0; post < num_post_context_strings; post++) {
+                            context->n = context_len;
                             char_array_cat(context, POST_CONTEXT_CHAR);
                             token = cstring_array_get_token(post_context_strings, post);
                             char_array_cat(context, token);
@@ -515,12 +517,12 @@ int main(int argc, char **argv) {
 
                 string_tree_iterator_t *iter = string_tree_iterator_new(tree);
 
-                //log_info("iter->remaining=%d\n", iter->remaining);
+                log_info("iter->remaining=%d\n", iter->remaining);
                 
                 char *key_str;
-                
+
                 for (; string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
-                    rule_key->n = step_len;
+                    rule_key->n = step_key_len;
 
                     for (c = 0; c < iter->num_tokens; c++) {
                         token = string_tree_iterator_get_string(iter, c);
@@ -529,17 +531,21 @@ int main(int argc, char **argv) {
                             goto exit_teardown;
                         }
                         char_array_cat(rule_key, token);
+                        log_debug("string_tree token was %s\n", token);
                     }
+
+                    log_debug("rule_key=%s\n", char_array_get_string(rule_key));
 
 
                     size_t context_key_len;
 
                     if (num_context_strings == 0) {
+
                         token = char_array_get_string(rule_key);
                         trie_add(trans_table->trie, token, replacement_index);
                     } else {
                         char_array_cat(rule_key, context_start_char);
-                        context_key_len = rule_key->n;
+                        context_key_len = strlen(char_array_get_string(rule_key));
 
                         for (c = 0; c < num_context_strings; c++) {
                             rule_key->n = context_key_len;
