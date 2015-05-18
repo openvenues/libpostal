@@ -31,9 +31,9 @@ extern "C" {
 #include "string_utils.h"
 
 #define TRIE_SIGNATURE 0xABABABAB
-#define NULL_ID 0
+#define NULL_NODE_ID 0
 #define FREE_LIST_ID 1
-#define ROOT_ID 2
+#define ROOT_NODE_ID 2
 #define TRIE_POOL_BEGIN 3
 #define DEFAULT_NODE_ARRAY_SIZE 32
 
