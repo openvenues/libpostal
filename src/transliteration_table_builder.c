@@ -17,8 +17,6 @@ Only used once at setup/make time, not overly concerned with optimization
 
 #include "utf8proc/utf8proc.h"
 
-#define MAX_UTF8_CHAR_SIZE 4
-
 string_tree_t *regex_string_tree(char *regex, size_t len) {
     uint8_t *char_ptr = (uint8_t *)regex;
     char last_ch = '\0';
@@ -535,7 +533,6 @@ int main(int argc, char **argv) {
                     }
 
                     log_debug("rule_key=%s\n", char_array_get_string(rule_key));
-
 
                     size_t context_key_len;
 

@@ -13,6 +13,8 @@ extern "C" {
 #include "utf8proc/utf8proc.h"
 #include "vector.h"
 
+  #define MAX_UTF8_CHAR_SIZE 4
+
 // NOTE: this particular implementation works only for ASCII strings
 int string_compare_case_insensitive(const char *str1, const char *str2);
 int string_compare_n_case_insensitive(const char *str1, const char *str2, size_t len);
