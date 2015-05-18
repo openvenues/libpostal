@@ -161,6 +161,7 @@ void string_tree_destroy(string_tree_t *self);
 
 typedef struct string_tree_iterator {
     string_tree_t *tree;
+    bool single_path;
     uint32_t *path;
     uint32_t *num_alternatives;
     uint32_t num_tokens;

@@ -583,8 +583,13 @@ string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
         }
     }
 
-
-    self->remaining = permutations - 1;
+    if (permutations > 1) {
+        self->remaining = permutations;
+        self->single_path = false;
+    } else{
+        self->remaining = 1;
+        self->single_path = true;
+    }
 
     // Start on the right going backward
     self->cursor = self->num_tokens - 1;
@@ -624,15 +629,19 @@ static int string_tree_iterator_do_iteration(string_tree_iterator_t *self) {
             return 1;
         }
     }
+    
     return -1;
 }
 
 void string_tree_iterator_next(string_tree_iterator_t *self) {
-    if (string_tree_iterator_do_iteration(self) == -1 && self->remaining > 0) {
+    if (!self->single_path && string_tree_iterator_do_iteration(self) == -1 && self->remaining > 0) {
         string_tree_iterator_switch_direction(self);
         if (string_tree_iterator_do_iteration(self) == -1) {
             self->remaining = 0;
         }
+    } else if (self->single_path) {       
+        self->remaining--;
+        return;
     }
 }
 
