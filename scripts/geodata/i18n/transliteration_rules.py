@@ -1072,13 +1072,13 @@ supplemental_transliterations = {
     'latin-ascii': (EXISTING_STEP, [
         # German transliterations not handled by standard NFD normalization
         # ä => ae
-        (u'"\xc3\xa4"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ae"', '2', '0', 'NULL', '0'),
+        (u'"\\xc3\\xa4"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ae"', '2', '0', 'NULL', '0'),
         # ö => oe
-        (u'"\xc3\xb6"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', '0', 'NULL', '0'),
+        (u'"\\xc3\\xb6"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', '0', 'NULL', '0'),
         # ü => ue
-        (u'"\xc3\xbc"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ue"', '2', '0', 'NULL', '0'),
+        (u'"\\xc3\\xbc"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ue"', '2', '0', 'NULL', '0'),
         # ß => ss
-        (u'"\xc3\x9f"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ss"', '2', '0', 'NULL', '0'),
+        (u'"\\xc3\\x9f"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ss"', '2', '0', 'NULL', '0'),
 
     ]),
 }
