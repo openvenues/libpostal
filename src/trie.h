@@ -55,6 +55,8 @@ typedef struct trie_data_node {
     uint32_t data;
 } trie_data_node_t;
 
+#define NULL_DATA_NODE (trie_data_node_t){0, 0};
+
 VECTOR_INIT(trie_node_array, trie_node_t)
 VECTOR_INIT(trie_data_array, trie_data_node_t)
 
@@ -82,6 +84,8 @@ void trie_set_base(trie_t *self, uint32_t index, int32_t base);
 void trie_set_check(trie_t *self, uint32_t index, int32_t check);
 trie_node_t trie_get_root(trie_t *self);
 trie_node_t trie_get_free_list(trie_t *self);
+
+trie_data_node_t trie_get_data_node(trie_t *self, trie_node_t node, char *str);
 
 uint32_t trie_add_transition(trie_t *self, uint32_t node_id, unsigned char c);
 

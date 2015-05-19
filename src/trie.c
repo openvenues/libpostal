@@ -34,7 +34,7 @@ uint8_t DEFAULT_ALPHABET[] = {
 Constructors
 */
 
-trie_t *trie_new_empty(uint8_t *alphabet, uint32_t alphabet_size) {
+static trie_t *trie_new_empty(uint8_t *alphabet, uint32_t alphabet_size) {
     trie_t *self = malloc(sizeof(trie_t));
     if (!self)
         goto exit_no_malloc;
@@ -679,6 +679,26 @@ bool trie_add_suffix(trie_t *self, char *key, uint32_t data) {
     return success;
 }
 
+trie_data_node_t trie_get_data_node(trie_t *self, trie_node_t node, char *str) {
+    if (node.base >= 0) {
+        return NULL_DATA_NODE;
+    }
+    int32_t data_index = -1*node.base;
+    trie_data_node_t data_node = self->data->a[data_index];
+    unsigned char *current_tail = self->tail->a + data_node.tail;
+
+    size_t tail_len = strlen((char *)current_tail);
+    char *query_tail = *str ? str + 1 : str;
+    size_t query_tail_len = strlen(query_tail);
+
+    int tail_match = strncmp((char *)current_tail, query_tail, query_tail_len);
+
+    if (tail_match == 0) {
+        return data_node;
+    } else {
+        return NULL_DATA_NODE;
+    }
+}
 
 uint32_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t i) {
     if (key == NULL) return NULL_NODE_ID;
@@ -736,17 +756,9 @@ uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i) {
         }
 
         if (node.check == node_id && node.base < 0) {
-            int32_t data_index = -1*node.base;
-            trie_data_node_t data_node = self->data->a[data_index];
-            unsigned char *current_tail = self->tail->a + data_node.tail;
+            trie_data_node_t data_node = trie_get_data_node(self, node, (char *)ptr);
 
-            size_t tail_len = strlen((char *)current_tail);
-            char *query_tail = (char *)(*ptr ? ptr + 1 : ptr);
-            size_t query_tail_len = strlen((char *)query_tail);
-
-            int tail_match = strncmp((char *)current_tail, query_tail, query_tail_len);
-
-            if (tail_match == 0) {
+            if (data_node.tail != 0) {
                 return next_id;
             } else {
                 return NULL_NODE_ID;
