@@ -19,8 +19,6 @@ Only used once at setup/make time, not overly concerned with optimization
 
 string_tree_t *regex_string_tree(char *regex, size_t len) {
     uint8_t *char_ptr = (uint8_t *)regex;
-    char last_ch = '\0';
-    bool in_group = false;
     bool in_set = false;
     bool in_brackets = false;
 
@@ -47,7 +45,7 @@ string_tree_t *regex_string_tree(char *regex, size_t len) {
 
     size_t idx = 0;
 
-    int i, j, k;
+    int i, j;
 
     bool add_to_index = false;
 
@@ -90,6 +88,7 @@ string_tree_t *regex_string_tree(char *regex, size_t len) {
             in_brackets = true;
             bracket_start = idx + char_len;
             bracket_len = 0;
+            add_to_index = false;
         } else if (codepoint == RCURLY_CODEPOINT && last_codepoint != BACKSLASH_CODEPOINT && in_brackets) {
             log_debug("Adding bracketed string: %.*s\n", regex + bracket_start, bracket_len);
             string_tree_add_string_len(tree, regex + bracket_start, bracket_len);
@@ -164,8 +163,6 @@ group_capture_array *parse_groups(char *regex, size_t len) {
 
     size_t idx = 0;
 
-    int i, j, k;
-
     size_t pos = 0;
     size_t group_start = 0;
     size_t chars_in_group = 0;
@@ -238,8 +235,6 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    size_t num_source_rules = sizeof(rules_source) / sizeof(transliteration_rule_source_t);
-    size_t num_source_steps = sizeof(steps_source) / sizeof(transliteration_step_source_t);
     size_t num_source_transliterators = sizeof(transliterators_source) / sizeof(transliterator_source_t);
 
     char *key;
@@ -539,7 +534,7 @@ int main(int argc, char **argv) {
                     if (num_context_strings == 0) {
 
                         token = char_array_get_string(rule_key);
-                        trie_add(trans_table->trie, token, replacement_index);
+                        trie_add(trie, token, replacement_index);
                     } else {
                         char_array_cat(rule_key, context_start_char);
                         context_key_len = strlen(char_array_get_string(rule_key));
@@ -552,7 +547,7 @@ int main(int argc, char **argv) {
                             }
                             char_array_cat(rule_key, token);
                             token = char_array_get_string(rule_key);
-                            trie_add(trans_table->trie, token, replacement_index);
+                            trie_add(trie, token, replacement_index);
                         }
 
                     }
