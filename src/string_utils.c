@@ -611,7 +611,6 @@ static inline void string_tree_iterator_reset_right(string_tree_iterator_t *self
 static int string_tree_iterator_do_iteration(string_tree_iterator_t *self) {
     uint32_t num_alternatives;
     int32_t direction = self->direction;
-    string_tree_t *tree = self->tree;
 
     uint32_t sentinel = (direction == STRING_TREE_ITER_DIRECTION_LEFT ? -1 : self->num_tokens); 
 
