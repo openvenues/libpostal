@@ -85,7 +85,8 @@ void trie_set_check(trie_t *self, uint32_t index, int32_t check);
 trie_node_t trie_get_root(trie_t *self);
 trie_node_t trie_get_free_list(trie_t *self);
 
-trie_data_node_t trie_get_data_node(trie_t *self, trie_node_t node, char *str);
+trie_data_node_t trie_get_data_node(trie_t *self, trie_node_t node);
+bool trie_tail_match(trie_t *self, char *str, uint32_t tail_index);
 
 uint32_t trie_add_transition(trie_t *self, uint32_t node_id, unsigned char c);
 
