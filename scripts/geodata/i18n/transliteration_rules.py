@@ -1051,7 +1051,7 @@ def parse_transform_rules(xml):
         elif rule_type == PRE_TRANSFORM and rule.strip(': ').startswith('('):
             continue
         elif rule_type == PRE_TRANSFORM and '[' in rule and ']' in rule:
-            filter_rule = regex_char_set_greedy.search(rule)    
+            filter_rule = regex_char_set_greedy.search(rule)
             current_filter = set(parse_regex_char_set(filter_rule.group(0)))
         elif rule_type == PRE_TRANSFORM:
             pre_transform = pre_transform_regex.search(rule)
@@ -1066,21 +1066,33 @@ STEP_UNICODE_NORMALIZATION = 'STEP_UNICODE_NORMALIZATION'
 
 NEW_STEP = 'NEW_STEP'
 EXISTING_STEP = 'EXISTING_STEP'
+PREPEND_STEP = 'PREPEND_STEP'
+
+
+html_escapes = {'&{};'.format(name): escape_string(safe_encode(unichr(value)))
+                for name, value in htmlentitydefs.name2codepoint.iteritems()
+                }
 
 # Extra rules defined here
 supplemental_transliterations = {
-    'latin-ascii': (EXISTING_STEP, [
-        # German transliterations not handled by standard NFD normalization
-        # ä => ae
-        (u'"\\xc3\\xa4"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ae"', '2', '0', 'NULL', '0'),
-        # ö => oe
-        (u'"\\xc3\\xb6"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', '0', 'NULL', '0'),
-        # ü => ue
-        (u'"\\xc3\\xbc"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ue"', '2', '0', 'NULL', '0'),
-        # ß => ss
-        (u'"\\xc3\\x9f"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ss"', '2', '0', 'NULL', '0'),
+    'latin-ascii': [
+        (PREPEND_STEP, [(quote_string(name), str(len(name) + 2), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', quote_string(value), str(len(value)), '0', 'NULL', '0')
+                        for name, value in html_escapes.iteritems()
+                        ]
+         ),
+        (EXISTING_STEP, [
+            # German transliterations not handled by standard NFD normalization
+            # ä => ae
+            (u'"\\xc3\\xa4"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ae"', '2', '0', 'NULL', '0'),
+            # ö => oe
+            (u'"\\xc3\\xb6"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', '0', 'NULL', '0'),
+            # ü => ue
+            (u'"\\xc3\\xbc"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ue"', '2', '0', 'NULL', '0'),
+            # ß => ss
+            (u'"\\xc3\\x9f"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ss"', '2', '0', 'NULL', '0'),
 
-    ]),
+        ]),
+    ],
 }
 
 
@@ -1175,11 +1187,13 @@ def get_all_transform_rules():
 
     for name, steps in transforms.iteritems():
         if name in supplemental_transliterations:
-            step_type, rules = supplemental_transliterations[name]
-            if step_type == EXISTING_STEP:
-                steps[-1][1].extend(rules)
-            else:
-                steps[-1].append((STEP_RULESET, rules))
+            for step_type, rules in supplemental_transliterations[name]:
+                if step_type == EXISTING_STEP:
+                    steps[-1][1].extend(rules)
+                elif step_type == PREPEND_STEP:
+                    steps = [(STEP_RULESET, rules)] + steps
+                else:
+                    steps.append((STEP_RULESET, rules))
         # Only care if it's a transform to Latin/ASCII or a dependency
         # for a transform to Latin/ASCII
         elif name not in retain_transforms:
