@@ -679,14 +679,9 @@ bool trie_add_suffix(trie_t *self, char *key, uint32_t data) {
     return success;
 }
 
-bool trie_compare_tail(trie_t *self, char *str, uint32_t tail_index) {
+bool trie_compare_tail(trie_t *self, char *str, size_t len, uint32_t tail_index) {
     unsigned char *current_tail = self->tail->a + tail_index;
-
-    size_t tail_len = strlen((char *)current_tail);
-    char *query_tail = *str ? str + 1 : str;
-    size_t query_tail_len = strlen(query_tail);
-
-    return strncmp((char *)current_tail, query_tail, query_tail_len) == 0;
+    return strncmp((char *)current_tail, str, len) == 0;
 }
 
 inline trie_data_node_t trie_get_data_node(trie_t *self, trie_node_t node) {
@@ -720,8 +715,18 @@ uint32_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_
         }
 
         if (node.base < 0) {
-            return next_id;
+            trie_data_node_t data_node = trie_get_data_node(self, node);
+
+            char *query_tail = *ptr ? (char *)ptr + 1 : (char *)ptr;
+
+            if (data_node.tail != 0 && trie_compare_tail(self, query_tail, strlen(query_tail), data_node.tail)) {
+                return next_id;
+            } else {
+                return NULL_NODE_ID;
+            }
+
         }
+
     }
 
     return next_id;
@@ -760,7 +765,9 @@ uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i) {
         if (node.check == node_id && node.base < 0) {
             trie_data_node_t data_node = trie_get_data_node(self, node);
 
-            if (data_node.tail != 0 && trie_compare_tail(self, (char *)ptr, data_node.tail)) {
+            char *query_tail = *ptr ? (char *) ptr + 1 : (char *) ptr;
+
+            if (data_node.tail != 0 && trie_compare_tail(self, query_tail, strlen(query_tail) + 1, data_node.tail)) {
                 return next_id;
             } else {
                 return NULL_NODE_ID;
