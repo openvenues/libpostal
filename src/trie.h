@@ -105,9 +105,9 @@ uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i);
 uint32_t trie_get_len(trie_t *self, char *word, size_t len);
 uint32_t trie_get(trie_t *self, char *word);
 
-uint32_t trie_get_prefix(trie_t *self, char *key);
-uint32_t trie_get_prefix_len(trie_t *self, char *key, size_t len);
-uint32_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t i);
+uint32_t trie_get_prefix(trie_t *self, char *key, size_t *tail_pos);
+uint32_t trie_get_prefix_len(trie_t *self, char *key, size_t len, size_t *tail_pos);
+uint32_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t i, size_t *tail_pos);
 
 void trie_print(trie_t *self);
 
