@@ -695,10 +695,9 @@ inline trie_data_node_t trie_get_data_node(trie_t *self, trie_node_t node) {
     return data_node;
 }
 
-uint32_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t i, size_t *tail_pos) {
+trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t i) {
     if (key == NULL) {
-        *tail_pos = 0;
-        return NULL_NODE_ID;
+        return (trie_prefix_result_t){NULL_NODE_ID, 0};
     }
 
     unsigned char *ptr = (unsigned char *)key;
@@ -706,8 +705,7 @@ uint32_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_
     uint32_t node_id = i;
     trie_node_t node = trie_get_node(self, i);
     if (node.base == NULL_NODE_ID) {
-        *tail_pos = 0;
-        return NULL_NODE_ID;
+        return (trie_prefix_result_t){NULL_NODE_ID, 0};
     }
 
     uint32_t next_id = NULL_NODE_ID;
@@ -719,7 +717,7 @@ uint32_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_
             node = trie_get_node(self, next_id);
 
             if (node.check != node_id) {
-                return NULL_NODE_ID;
+                return (trie_prefix_result_t){NULL_NODE_ID, 0};
             }
 
             if (node.base < 0) break;
@@ -733,25 +731,24 @@ uint32_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_
         size_t query_len = strlen(query_tail);
 
         if (data_node.tail != 0 && trie_compare_tail(self, query_tail, query_len, data_node.tail)) {
-            *tail_pos = query_len;
-            return next_id;
+            return (trie_prefix_result_t){next_id, query_len};
         } else {
-            *tail_pos = 0;
-            return NULL_NODE_ID;
+            return (trie_prefix_result_t){NULL_NODE_ID, 0};
+
         }
 
     }
 
-    return next_id;
+    return (trie_prefix_result_t){next_id, 0};
 
 }
 
-uint32_t trie_get_prefix_len(trie_t *self, char *key, size_t len, size_t *tail_pos) {
-    return trie_get_prefix_from_index(self, key, len, ROOT_NODE_ID, tail_pos);
+trie_prefix_result_t trie_get_prefix_len(trie_t *self, char *key, size_t len) {
+    return trie_get_prefix_from_index(self, key, len, ROOT_NODE_ID);
 }
 
-uint32_t trie_get_prefix(trie_t *self, char *key, size_t *tail_pos) {
-    return trie_get_prefix_from_index(self, key, strlen(key), ROOT_NODE_ID, tail_pos);
+trie_prefix_result_t trie_get_prefix(trie_t *self, char *key) {
+    return trie_get_prefix_from_index(self, key, strlen(key), ROOT_NODE_ID);
 }
 
 uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i) {
