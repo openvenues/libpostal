@@ -110,9 +110,11 @@ typedef struct trie_prefix_result {
     size_t tail_pos;
 } trie_prefix_result_t;
 
+const trie_prefix_result_t NULL_PREFIX_RESULT = {NULL_NODE_ID, 0};
+
 trie_prefix_result_t trie_get_prefix(trie_t *self, char *key);
 trie_prefix_result_t trie_get_prefix_len(trie_t *self, char *key, size_t len);
-trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t i);
+trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t i, size_t tail_pos);
 
 void trie_print(trie_t *self);
 

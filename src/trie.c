@@ -697,7 +697,7 @@ inline trie_data_node_t trie_get_data_node(trie_t *self, trie_node_t node) {
 
 trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t i, size_t tail_pos) {
     if (key == NULL) {
-        return (trie_prefix_result_t){NULL_NODE_ID, 0};
+        return NULL_PREFIX_RESULT;
     }
 
     unsigned char *ptr = (unsigned char *)key;
@@ -705,7 +705,7 @@ trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t 
     uint32_t node_id = i;
     trie_node_t node = trie_get_node(self, i);
     if (node.base == NULL_NODE_ID) {
-        return (trie_prefix_result_t){NULL_NODE_ID, 0};
+        return NULL_PREFIX_RESULT;
     }
 
     uint32_t next_id = NULL_NODE_ID;
@@ -719,7 +719,7 @@ trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t 
             node = trie_get_node(self, next_id);
 
             if (node.check != node_id) {
-                return (trie_prefix_result_t){NULL_NODE_ID, 0};
+                return NULL_PREFIX_RESULT;
             }
 
             if (node.base < 0) break;
@@ -737,13 +737,13 @@ trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t 
         if (data_node.tail != 0 && trie_compare_tail(self, query_tail, query_len, data_node.tail + tail_pos)) {
             return (trie_prefix_result_t){next_id, query_len};
         } else {
-            return (trie_prefix_result_t){NULL_NODE_ID, 0};
+            return NULL_PREFIX_RESULT;
 
         }
 
     }
 
-    return (trie_prefix_result_t){next_id, 0};
+    return NULL_PREFIX_RESULT;
 
 }
 
