@@ -6876,7 +6876,7 @@ transliterator_source_t transliterators_source[] = {
     {"uzbek-latin-bgn",0,84,2},
     {"oriya-latin",0,86,3},
     {"pashto-latin-bgn",0,89,2},
-    {"greek_latin_ungegn",0,91,3},
+    {"greek-latin-ungegn",0,91,3},
     {"greek-latin-bgn",0,94,2},
     {"arabic-latin",0,96,3},
     {"malayalam-latin",0,99,3},

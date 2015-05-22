@@ -1214,7 +1214,7 @@ def get_all_transform_rules():
 
         internal = int(name not in to_latin)
 
-        transliterator = (quote_string(name), str(internal), str(step_index), str(num_steps))
+        transliterator = (quote_string(name.replace('_', '-')), str(internal), str(step_index), str(num_steps))
         all_transforms.append(transliterator)
 
     return all_transforms, all_steps, all_rules
@@ -1298,7 +1298,7 @@ script_transliterators = {
     'ethiopic': None,
     'georgian': {None: ['georgian-latin', 'georgian-latin-bgn']},
     'glagolitic': None,
-    'greek': {None: ['greek-latin', 'greek-latin-bgn', 'greek_latin_ungegn']},
+    'greek': {None: ['greek-latin', 'greek-latin-bgn', 'greek-latin-ungegn']},
     'gujarati': {None: ['gujarati-latin']},
     'gurmukhi': {None: ['gurmukhi-latin']},
     'han': {None: ['han-latin']},
