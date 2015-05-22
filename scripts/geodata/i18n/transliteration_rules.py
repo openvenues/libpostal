@@ -69,11 +69,10 @@ WORD_BOUNDARY_CHAR = u"\x01"
 PRE_CONTEXT_CHAR = u"\x02"
 POST_CONTEXT_CHAR = u"\x03"
 EMPTY_TRANSITION_CHAR = u"\x04"
-REPEAT_ZERO_CHAR = u"\x05"
-REPEAT_ONE_CHAR = u"\x06"
+REPEAT_CHAR = u"\x05"
+GROUP_INDICATOR_CHAR = u"\x06"
 BEGIN_SET_CHAR = u"\x0e"
 END_SET_CHAR = u"\x0f"
-GROUP_INDICATOR_CHAR = u"\x10"
 
 
 EXCLUDE_TRANSLITERATORS = set([
@@ -276,6 +275,7 @@ CHARACTER = 'CHARACTER'
 WIDE_CHARACTER = 'WIDE_CHARACTER'
 REVISIT = 'REVISIT'
 REPEAT = 'REPEAT'
+REPEAT_ONE = 'REPEAT_ONE'
 LPAREN = 'LPAREN'
 RPAREN = 'RPAREN'
 WHITESPACE = 'WHITESPACE'
@@ -324,7 +324,7 @@ transform_scanner = Scanner([
     (r'\|', REVISIT),
     (r'&.*?;', HTML_ENTITY),
     (r'(?<![\\])\*', REPEAT),
-    (r'(?<![\\])\+', PLUS),
+    (r'(?<![\\])\+', REPEAT_ONE),
     ('(?<=[^\s])\?', OPTIONAL),
     ('\(', LPAREN),
     ('\)', RPAREN),
@@ -648,6 +648,10 @@ def char_permutations(s, current_filter=all_chars):
     a list of character permutations, in addition to keeping
     track of revisits and regex groups
     '''
+
+    if not s:
+        return [EMPTY_TRANSITION_CHAR], 0, []
+
     char_types = []
     move = 0
     in_revisit = False
@@ -697,9 +701,10 @@ def char_permutations(s, current_filter=all_chars):
         elif token_type == REVISIT:
             in_revisit = True
         elif token_type == REPEAT:
-            char_types.append([REPEAT_ZERO_CHAR])
-        elif token_type == PLUS:
-            char_types.append([REPEAT_ONE_CHAR])
+            char_types[-1].append(EMPTY_TRANSITION_CHAR)
+            char_types.append([REPEAT_CHAR])
+        elif token_type == REPEAT_ONE:
+            char_types.append([REPEAT_CHAR])
         elif token_type == OPTIONAL:
             char_types[-1].append(EMPTY_TRANSITION_CHAR)
         elif token_type == REVISIT:
