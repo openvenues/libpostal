@@ -96,21 +96,6 @@ string_tree_t *regex_string_tree(char *regex, size_t len) {
         } else if ((codepoint == LPAREN_CODEPOINT || codepoint == RPAREN_CODEPOINT) && last_codepoint != BACKSLASH_CODEPOINT) {
             log_debug("group\n");
             add_to_index = false;
-        } else if (codepoint == STAR_CODEPOINT && last_codepoint != BACKSLASH_CODEPOINT) {
-            log_debug("star\n");
-            // For *, we add an optional transition to the empty
-            codepoint = REPEAT_ZERO_CODEPOINT;
-        } else if (codepoint == PLUS_CODEPOINT && last_codepoint != BACKSLASH_CODEPOINT) {
-            log_debug("plus\n");
-            codepoint = REPEAT_ONE_CODEPOINT;
-        } else if (codepoint == DOLLAR_CODEPOINT && last_codepoint != BACKSLASH_CODEPOINT) {
-            log_debug("dollar\n");
-            codepoint = WORD_BOUNDARY_CODEPOINT;
-
-            if (in_set) {
-                uint32_array_push(char_set, codepoint);
-                add_to_index = false;
-            }
         } else if (in_set) {
             log_debug("in set\n");
             // Queue node, we'll add them to the trie
