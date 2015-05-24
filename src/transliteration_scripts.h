@@ -82,7 +82,7 @@ char *script_transliterators[] = {
     "thai-latin",
     "greek-latin",
     "greek-latin-bgn",
-    "greek_latin_ungegn",
+    "greek-latin-ungegn",
     "canadianaboriginal-latin",
     "persian-latin-bgn",
     "arabic-latin",
