@@ -95,15 +95,15 @@ uint string_translate(char *str, size_t len, char *word_chars, char *word_repls,
     return num_replacements;
 }
 
-ssize_t utf8proc_iterate_reversed(const uint8_t *str, const uint8_t *start, int32_t *dst) {
+ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *dst) {
     ssize_t len = 0;
 
-    const uint8_t *ptr = str;
+    const uint8_t *ptr = str + start;
 
     *dst = -1;
 
     do {
-        if (ptr <= start) return 0;
+        if (ptr <= str) return 0;
         ptr--; len++;
     } while ((*ptr & 0xC0) == 0x80);
 
