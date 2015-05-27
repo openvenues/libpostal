@@ -379,44 +379,46 @@ phrase_t trie_search_suffixes(trie_t *self, char *word) {
 
     uint32_t value = 0, phrase_start = 0, phrase_len = 0;
 
-    ssize_t len;
+    ssize_t char_len;
+    size_t len = strlen(word);
 
     int32_t unich = 0;
 
-    const uint8_t *start = (const uint8_t *)word;
-    const uint8_t *ptr = (const uint8_t *)word + strlen(word);
+    ssize_t index = len;
+    const uint8_t *ptr = (const uint8_t *)word + len;
     const uint8_t *char_ptr;
 
     bool done = false;
     bool in_tail = false;
-    unsigned char *current_tail = {0};
+    unsigned char *current_tail = (unsigned char *)"";
     size_t tail_remaining = 0;
 
     uint32_t tail_value = 0;
 
-    while(1) {
-        len = utf8proc_iterate_reversed(ptr, start, &unich);
+    while(index > 0) {
+        char_len = utf8proc_iterate_reversed(ptr, index, &unich);
 
-        if (len <= 0) break;
+        if (char_len <= 0) break;
         if (!(utf8proc_codepoint_valid(unich))) break;
 
-        ptr -= len;
+        ptr -= char_len;
+        index -= char_len;
         char_ptr = ptr;
 
-        for (int i=0; i < len; i++, char_ptr++, last_node = node, last_node_id = node_id) {
+        for (int i=0; i < char_len; i++, char_ptr++, last_node = node, last_node_id = node_id) {
             log_debug("char=%c\n", (unsigned char)*char_ptr);
 
             if (in_tail && *current_tail && *current_tail == *char_ptr) {
                 tail_remaining--;
                 current_tail++;
-                if (i == len - 1) {
-                    phrase_len += len;
-                    phrase_start = ptr - start;
+                if (i == char_len - 1) {
+                    phrase_len += char_len;
+                    phrase_start = index;
                 }
                 continue;
-            } else if (in_tail && tail_remaining == 0 && i == len - 1) {
+            } else if (in_tail && tail_remaining == 0 && i == char_len - 1) {
                 log_debug("tail match!\n", NULL);
-                phrase_start = ptr - start;
+                phrase_start = index;
                 phrase_len = strlen((char *)ptr);
                 value = tail_value;
                 done = true;
