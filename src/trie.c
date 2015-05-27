@@ -695,15 +695,15 @@ inline trie_data_node_t trie_get_data_node(trie_t *self, trie_node_t node) {
     return data_node;
 }
 
-trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t i, size_t tail_pos) {
+trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t start_index, size_t tail_pos) {
     if (key == NULL) {
         return NULL_PREFIX_RESULT;
     }
 
     unsigned char *ptr = (unsigned char *)key;
 
-    uint32_t node_id = i;
-    trie_node_t node = trie_get_node(self, i);
+    uint32_t node_id = start_index;
+    trie_node_t node = trie_get_node(self, node_id);
     if (node.base == NULL_NODE_ID) {
         return NULL_PREFIX_RESULT;
     }
@@ -712,9 +712,11 @@ trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t 
 
     bool original_node_no_tail = node.base >= 0;
 
+    int i = 0;
+
     if (node.base >= 0) {
         // Include NUL-byte. It may be stored if this phrase is a prefix of a longer one
-        for (int i = 0; i < len; i++, ptr++, node_id = next_id) {
+        for (i = 0; i < len; i++, ptr++, node_id = next_id) {
             next_id = trie_get_transition_index(self, node, *ptr);
             node = trie_get_node(self, next_id);
 
@@ -726,13 +728,14 @@ trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t 
         }
     } else {
         next_id = node_id;
+        node = trie_get_node(self, node_id);
     }
 
     if (node.base < 0) {
         trie_data_node_t data_node = trie_get_data_node(self, node);
 
-        char *query_tail = *ptr && original_node_no_tail ? (char *)ptr + 1 : (char *)ptr;
-        size_t query_len = strlen(query_tail);
+        char *query_tail = (*ptr && original_node_no_tail) ? (char *)ptr + 1 : (char *)ptr;
+        size_t query_len = (*ptr && original_node_no_tail) ? len - i - 1 : len - i;
 
         if (data_node.tail != 0 && trie_compare_tail(self, query_tail, query_len, data_node.tail + tail_pos)) {
             return (trie_prefix_result_t){next_id, query_len};
@@ -740,7 +743,8 @@ trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t 
             return NULL_PREFIX_RESULT;
 
         }
-
+    } else {
+        return (trie_prefix_result_t){next_id, 0};
     }
 
     return NULL_PREFIX_RESULT;
@@ -829,13 +833,13 @@ I/O methods
 */
 
 bool trie_write(trie_t *self, FILE *file) {
-    if (!file_write_int32(file, (int32_t)TRIE_SIGNATURE)) 
+    if (!file_write_uint32(file, TRIE_SIGNATURE)) 
         return false;
-    if (!file_write_int32(file, (int32_t)self->alphabet_size))
+    if (!file_write_uint32(file, (uint32_t)self->alphabet_size))
         return false;
     if (!file_write_chars(file, (char *)self->alphabet, self->alphabet_size)) 
         return false;
-    if (!file_write_int32(file, (int32_t)self->nodes->n))
+    if (!file_write_uint32(file, (uint32_t)self->nodes->n))
         return false;
 
     int i;
@@ -843,25 +847,25 @@ bool trie_write(trie_t *self, FILE *file) {
 
     for (i = 0; i < self->nodes->n; i++) {
         node = self->nodes->a[i];
-        if (!file_write_int32(file, node.base) ||
-            !file_write_int32(file, node.check)) {
+        if (!file_write_uint32(file, (uint32_t)node.base) ||
+            !file_write_uint32(file, (uint32_t)node.check)) {
             return false;
         }
     }
 
-    if (!file_write_int32(file, (int32_t)self->data->n))
+    if (!file_write_uint32(file, (uint32_t)self->data->n))
         return false;
 
     trie_data_node_t data_node;
     for (i = 0; i < self->data->n; i++) {
         data_node = self->data->a[i];
-        if (!file_write_int32(file, (int32_t)data_node.tail) ||
-            !file_write_int32(file, (int32_t)data_node.data)) {
+        if (!file_write_uint32(file, data_node.tail) ||
+            !file_write_uint32(file, data_node.data)) {
             return false;
         }
     }
 
-    if (!file_write_int32(file, (int32_t)self->tail->n))
+    if (!file_write_uint32(file, (uint32_t)self->tail->n))
         return false;
 
     if (!file_write_chars(file, (char *)self->tail->a, self->tail->n))
@@ -894,7 +898,7 @@ trie_t *trie_read(FILE *file) {
 
     uint32_t signature;
 
-    if (!file_read_int32(file, (int32_t *)&signature)) 
+    if (!file_read_uint32(file, &signature)) 
         goto exit_file_read;
 
     if (signature != TRIE_SIGNATURE)
@@ -902,7 +906,7 @@ trie_t *trie_read(FILE *file) {
 
     uint32_t alphabet_size;
 
-    if (!file_read_int32(file, (int32_t *)&alphabet_size))
+    if (!file_read_uint32(file, &alphabet_size))
         goto exit_file_read;
 
     log_debug("alphabet_size=%d\n", alphabet_size);
@@ -918,7 +922,7 @@ trie_t *trie_read(FILE *file) {
 
     uint32_t num_nodes;
 
-    if (!file_read_int32(file, (int32_t *)&num_nodes))
+    if (!file_read_uint32(file, &num_nodes))
         goto exit_trie_created;
 
     log_debug("num_nodes=%d\n", num_nodes);
@@ -928,8 +932,8 @@ trie_t *trie_read(FILE *file) {
     int32_t check;
     trie_node_t node;
     for (i = 0; i < num_nodes; i++) {
-        if (!file_read_int32(file, (int32_t *)&base) ||
-            !file_read_int32(file, (int32_t *)&check))
+        if (!file_read_uint32(file, (uint32_t *)&base) ||
+            !file_read_uint32(file, (uint32_t *)&check))
             goto exit_trie_created;
 
         node.base = base;
@@ -938,7 +942,7 @@ trie_t *trie_read(FILE *file) {
     }
 
     uint32_t num_data_nodes;
-    if (!file_read_int32(file, (int32_t *)&num_data_nodes))
+    if (!file_read_uint32(file, &num_data_nodes))
         goto exit_trie_created;
 
     trie_data_array_resize(trie->data, num_data_nodes);
@@ -949,8 +953,8 @@ trie_t *trie_read(FILE *file) {
     trie_data_node_t data_node;
 
     for (i = 0; i < num_data_nodes; i++) {
-        if (!file_read_int32(file, (int32_t *)&tail_ptr) ||
-            !file_read_int32(file, (int32_t *)&data))
+        if (!file_read_uint32(file, &tail_ptr) ||
+            !file_read_uint32(file, &data))
             goto exit_trie_created;
         data_node.tail = tail_ptr;
         data_node.data = data;
@@ -958,7 +962,7 @@ trie_t *trie_read(FILE *file) {
     }
 
     uint32_t tail_len;
-    if (!file_read_int32(file, (int32_t *)&tail_len))
+    if (!file_read_uint32(file, &tail_len))
         goto exit_trie_created;
 
     uchar_array_resize(trie->tail, tail_len);
