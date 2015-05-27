@@ -34,17 +34,20 @@ char *file_getline(FILE * f);
 
 bool is_relative_path(struct dirent *ent);
 
-bool file_read_int64(FILE *file, int64_t *value);
-bool file_write_int64(FILE *file, int64_t value);
+bool file_read_uint64(FILE *file, uint64_t *value);
+bool file_write_uint64(FILE *file, uint64_t value);
 
-bool file_read_int32(FILE *file, int32_t *value);
-bool file_write_int32(FILE *file, int32_t value);
+bool file_read_double(FILE *file, double *value);
+bool file_write_double(FILE *file, double value);
 
-bool file_read_int16(FILE *file, int16_t *value);
-bool file_write_int16(FILE *file, int16_t value);
+bool file_read_uint32(FILE *file, uint32_t *value);
+bool file_write_uint32(FILE *file, uint32_t value);
 
-bool file_read_int8(FILE *file, int8_t *value);
-bool file_write_int8(FILE *file, int8_t value);
+bool file_read_uint16(FILE *file, uint16_t *value);
+bool file_write_uint16(FILE *file, uint16_t value);
+
+bool file_read_uint8(FILE *file, uint8_t *value);
+bool file_write_uint8(FILE *file, uint8_t value);
 
 bool file_read_chars(FILE *file, char *buf, size_t len);
 bool file_write_chars(FILE *file, const char *buf, size_t len);
