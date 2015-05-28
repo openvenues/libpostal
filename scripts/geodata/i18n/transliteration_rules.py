@@ -679,7 +679,7 @@ def char_permutations(s, current_filter=all_chars):
             last_token_group_start = True
         elif token_type == CLOSE_GROUP:
             in_group = False
-            end_group = len(char_types)
+            end_group = len([c for c in char_types if c[0] != REPEAT_CHAR])
             groups.append((start_group, end_group))
         elif token_type == OPEN_SET:
             open_brackets += 1
