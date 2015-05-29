@@ -49,14 +49,14 @@ VECTOR_INIT(group_capture_array, group_capture_t)
 
 typedef struct transliteration_replacement {
     uint32_t string_index;
-    int32_t move;
+    uint32_t revisit_index;
     size_t num_groups;
     group_capture_array *groups;
 } transliteration_replacement_t;
 
 transliteration_replacement_t *transliteration_replacement_new(
-    uint32_t string_index, 
-    int32_t move,
+    uint32_t string_index,
+    uint32_t revisit_index,
     group_capture_array *groups
 );
 
@@ -74,6 +74,7 @@ typedef struct transliteration_table {
 
     transliteration_replacement_array *replacements;
     cstring_array *replacement_strings;
+    cstring_array *revisit_strings;
 } transliteration_table_t;
 
 #define NAMESPACE_SEPARATOR_CHAR "|"

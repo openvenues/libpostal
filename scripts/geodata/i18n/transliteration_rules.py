@@ -650,10 +650,10 @@ def char_permutations(s, current_filter=all_chars):
     '''
 
     if not s:
-        return [EMPTY_TRANSITION_CHAR], 0, []
+        return [EMPTY_TRANSITION_CHAR], [], []
 
     char_types = []
-    move = 0
+    revisit_char_types = []
     in_revisit = False
 
     in_group = False
@@ -665,6 +665,8 @@ def char_permutations(s, current_filter=all_chars):
     open_brackets = 0
     current_set = []
 
+    current_chars = char_types
+
     groups = []
 
     for token, token_type in transform_scanner.scan(s):
@@ -673,13 +675,13 @@ def char_permutations(s, current_filter=all_chars):
             continue
 
         if token_type == ESCAPED_CHARACTER:
-            char_types.append([token.strip('\\')])
+            current_chars.append([token.strip('\\')])
         elif token_type == OPEN_GROUP:
             in_group = True
             last_token_group_start = True
         elif token_type == CLOSE_GROUP:
             in_group = False
-            end_group = len([c for c in char_types if c[0] != REPEAT_CHAR])
+            end_group = len([c for c in current_chars if c[0] != REPEAT_CHAR])
             groups.append((start_group, end_group))
         elif token_type == OPEN_SET:
             open_brackets += 1
@@ -690,47 +692,41 @@ def char_permutations(s, current_filter=all_chars):
             if open_brackets == 0:
                 char_set = parse_regex_char_set(u''.join(current_set), current_filter=current_filter)
                 if char_set:
-                    char_types.append(char_set)
+                    current_chars.append(char_set)
                 current_set = []
         elif token_type == QUOTED_STRING:
             token = token.strip("'")
             for c in token:
-                char_types.append([c])
+                current_chars.append([c])
         elif token_type == GROUP_REF:
-            char_types.append([token.replace('$', GROUP_INDICATOR_CHAR)])
+            current_chars.append([token.replace('$', GROUP_INDICATOR_CHAR)])
         elif token_type == REVISIT:
             in_revisit = True
+            current_chars = revisit_char_types
         elif token_type == REPEAT:
-            char_types[-1].append(EMPTY_TRANSITION_CHAR)
-            char_types.append([REPEAT_CHAR])
+            current_chars[-1].append(EMPTY_TRANSITION_CHAR)
+            current_chars.append([REPEAT_CHAR])
         elif token_type == REPEAT_ONE:
-            char_types.append([REPEAT_CHAR])
+            current_chars.append([REPEAT_CHAR])
         elif token_type == OPTIONAL:
-            char_types[-1].append(EMPTY_TRANSITION_CHAR)
-        elif token_type == REVISIT:
-            in_revisit = True
+            current_chars[-1].append(EMPTY_TRANSITION_CHAR)
         elif token_type == HTML_ENTITY:
-            char_types.append([replace_html_entity(token)])
+            current_chars.append([replace_html_entity(token)])
         elif token_type == CHARACTER:
-            char_types.append([token])
+            current_chars.append([token])
         elif token_type == SINGLE_QUOTE:
-            char_types.append(["'"])
+            current_chars.append(["'"])
         elif token_type == UNICODE_CHARACTER:
             token = token.decode('unicode-escape')
-            char_types.append([token])
+            current_chars.append([token])
         elif token_type in (WIDE_CHARACTER, UNICODE_WIDE_CHARACTER):
             continue
 
         if in_group and last_token_group_start:
-            start_group = len(char_types)
+            start_group = len(current_chars)
             last_token_group_start = False
 
-        if in_revisit and token_type in CHAR_CLASSES:
-            move += 1
-
-    return char_types, move, groups
-
-    return list(itertools.product(char_types)), move
+    return char_types, revisit_char_types, groups
 
 string_replacements = {
     u'[': u'\[',
@@ -843,7 +839,14 @@ def format_rule(rule):
 
     replacement = safe_encode(rule[8])
     replacement_len = len(replacement)
-    move = rule[9]
+    revisit = rule[9]
+    if not revisit:
+        revisit = 'NULL'
+        revisit_len = 0
+    else:
+        revisit = safe_encode(revisit)
+        revisit_len = len(revisit)
+        revisit = quote_string(escape_string(revisit))
 
     output_rule = (
         quote_string(escape_string(key)),
@@ -860,7 +863,8 @@ def format_rule(rule):
 
         quote_string(escape_string(replacement)),
         str(replacement_len),
-        str(move),
+        revisit,
+        str(revisit_len),
         groups,
         str(groups_len),
     )
@@ -985,9 +989,10 @@ def parse_transform_rules(xml):
             left_pre_context_type = CONTEXT_TYPE_NONE
             left_post_context_type = CONTEXT_TYPE_NONE
 
-            move = 0
             left_groups = []
             right_groups = []
+
+            revisit = None
 
             if left_pre_context:
                 if left_pre_context.strip() == WORD_BOUNDARY_VAR:
@@ -1048,11 +1053,15 @@ def parse_transform_rules(xml):
                 left_post_context_type = CONTEXT_TYPE_NONE
 
             if right:
-                right, move, right_groups = char_permutations(right.strip(), current_filter=current_filter)
+                right, revisit, right_groups = char_permutations(right.strip(), current_filter=current_filter)
                 right = char_types_string(right)
+                if revisit:
+                    revisit = char_types_string(revisit)
+                else:
+                    revisit = None
 
             yield RULE, (left, left_pre_context_type, left_pre_context, left_pre_context_max_len,
-                         left_post_context_type, left_post_context, left_post_context_max_len, left_groups, right, move)
+                         left_post_context_type, left_post_context, left_post_context_max_len, left_groups, right, revisit)
         elif rule_type == PRE_TRANSFORM and rule.strip(': ').startswith('('):
             continue
         elif rule_type == PRE_TRANSFORM and '[' in rule and ']' in rule:
@@ -1081,22 +1090,23 @@ html_escapes = {'&{};'.format(name): escape_string(safe_encode(unichr(value)))
 # Extra rules defined here
 supplemental_transliterations = {
     'latin-ascii': [
-        (PREPEND_STEP, [(quote_string(name), str(len(name) + 2), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', quote_string(value), str(len(value)), '0', 'NULL', '0')
+        # Prepend transformations get applied in the reverse order of their appearance here
+        (PREPEND_STEP, [
+            # German transliterations not handled by standard NFD normalization
+            # ä => ae
+            (u'"\\xc3\\xa4"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ae"', '2', 'NULL', '0', 'NULL', '0'),
+            # ö => oe
+            (u'"\\xc3\\xb6"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', 'NULL', '0', 'NULL', '0'),
+            # ü => ue
+            (u'"\\xc3\\xbc"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ue"', '2', 'NULL', '0', 'NULL', '0'),
+            # ß => ss
+            (u'"\\xc3\\x9f"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ss"', '2', 'NULL', '0', 'NULL', '0'),
+
+        ]),
+        (PREPEND_STEP, [(quote_string(name), str(len(name) + 2), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', quote_string(value), str(len(value)), 'NULL', '0', 'NULL', '0')
                         for name, value in html_escapes.iteritems()
                         ]
          ),
-        (EXISTING_STEP, [
-            # German transliterations not handled by standard NFD normalization
-            # ä => ae
-            (u'"\\xc3\\xa4"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ae"', '2', '0', 'NULL', '0'),
-            # ö => oe
-            (u'"\\xc3\\xb6"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', '0', 'NULL', '0'),
-            # ü => ue
-            (u'"\\xc3\\xbc"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ue"', '2', '0', 'NULL', '0'),
-            # ß => ss
-            (u'"\\xc3\\x9f"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ss"', '2', '0', 'NULL', '0'),
-
-        ]),
     ],
 }
 
@@ -1394,6 +1404,13 @@ def write_transliteration_data_file(filename):
 
     all_steps = u''',
     '''.join([u'{{{}}}'.format(u','.join(s)) for s in steps])
+
+    for r in rules:
+        try:
+            r = u','.join(r)
+        except Exception:
+            print 'Problem with rule'
+            print r
 
     all_rules = u''',
     '''.join([u'{{{}}}'.format(u','.join(r)) for r in rules])

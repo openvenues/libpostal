@@ -29,7 +29,8 @@ typedef struct transliteration_rule_source {
     char *replacement;
     size_t replacement_len;
 
-    int move;
+    char *revisit;
+    size_t revisit_len;
 
     char *group_regex_str;
     size_t group_regex_len;

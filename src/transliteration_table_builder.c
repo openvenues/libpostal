@@ -238,7 +238,9 @@ int main(int argc, char **argv) {
     char *replacement;
     size_t replacement_len;
 
-    int move;
+    char *revisit;
+    size_t revisit_len;
+
     char *group_regex_str;
     size_t group_regex_len;
 
@@ -301,7 +303,9 @@ int main(int argc, char **argv) {
                 replacement = rule_source.replacement;
                 replacement_len = rule_source.replacement_len;
 
-                move = rule_source.move;
+                revisit = rule_source.revisit;
+                revisit_len = rule_source.revisit_len;
+
                 group_regex_str = rule_source.group_regex_str;
                 group_regex_len = rule_source.group_regex_len;
 
@@ -312,9 +316,15 @@ int main(int argc, char **argv) {
                 uint32_t replacement_string_index = cstring_array_num_strings(trans_table->replacement_strings);
                 cstring_array_add_string_len(trans_table->replacement_strings, replacement, replacement_len);
 
+                uint32_t revisit_index = 0;
+                if (revisit != NULL && revisit_len > 0) {
+                    revisit_index = cstring_array_num_strings(trans_table->revisit_strings);
+                    cstring_array_add_string_len(trans_table->revisit_strings, revisit, revisit_len);
+                }
+
                 group_capture_array *groups = parse_groups(group_regex_str, group_regex_len);
 
-                transliteration_replacement_t *trans_repl = transliteration_replacement_new(replacement_string_index, move, groups);
+                transliteration_replacement_t *trans_repl = transliteration_replacement_new(replacement_string_index, revisit_index, groups);
 
                 uint32_t replacement_index = trans_table->replacements->n;
                 transliteration_replacement_array_push(trans_table->replacements, trans_repl);
@@ -519,7 +529,11 @@ int main(int argc, char **argv) {
                     if (num_context_strings == 0) {
 
                         token = char_array_get_string(rule_key);
-                        trie_add(trie, token, replacement_index);
+                        if (trie_get(trie, token) == NULL_NODE_ID) {
+                            trie_add(trie, token, replacement_index);
+                        } else {
+                            log_warn("Key exists: %s, skipping\n", token);                            
+                        }
                     } else {
                         char_array_cat(rule_key, context_start_char);
                         context_key_len = strlen(char_array_get_string(rule_key));
@@ -532,7 +546,11 @@ int main(int argc, char **argv) {
                             }
                             char_array_cat(rule_key, token);
                             token = char_array_get_string(rule_key);
-                            trie_add(trie, token, replacement_index);
+                            if (trie_get(trie, token) == NULL_NODE_ID) {
+                                trie_add(trie, token, replacement_index);
+                            } else {
+                                log_warn("Key exists: %s, skipping\n", token);
+                            }
                         }
 
                     }
