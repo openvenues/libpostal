@@ -181,7 +181,7 @@ group_capture_array *parse_groups(char *regex, size_t len) {
             log_debug("close group\n");
             in_group = false;
             group_capture_array_push(groups, (group_capture_t){group_start, pos - group_start});
-        } else {
+        } else if (!in_set) {
             log_debug("other char\n");
             pos++;
         }
