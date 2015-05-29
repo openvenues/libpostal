@@ -77,7 +77,6 @@ END_SET_CHAR = u"\x0f"
 
 EXCLUDE_TRANSLITERATORS = set([
     'hangul-latin',
-    'interindic-latin',
     'jamo-latin',
     # Don't care about spaced Han because our tokenizer does it already
     'han-spacedhan',
@@ -568,6 +567,10 @@ for name, regex_range in unicode_property_regexes:
 
 def get_source_and_target(xml):
     return xml.xpath('//transform/@source')[0], xml.xpath('//transform/@target')[0]
+
+
+def is_internal(xml):
+    return xml.xpath('//transform/@visibility="internal"')
 
 
 def get_raw_rules_and_variables(xml):
@@ -1099,11 +1102,8 @@ supplemental_transliterations = {
             (u'"\\xc3\\xb6"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', 'NULL', '0', 'NULL', '0'),
             # ü => ue
             (u'"\\xc3\\xbc"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ue"', '2', 'NULL', '0', 'NULL', '0'),
-            # ß => ss
-            (u'"\\xc3\\x9f"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ss"', '2', 'NULL', '0', 'NULL', '0'),
-
         ]),
-        (PREPEND_STEP, [(quote_string(name), str(len(name) + 2), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', quote_string(value), str(len(value)), 'NULL', '0', 'NULL', '0')
+        (PREPEND_STEP, [(quote_string(name), str(len(name)), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', quote_string(value), str(len(value)), 'NULL', '0', 'NULL', '0')
                         for name, value in html_escapes.iteritems()
                         ]
          ),
@@ -1141,11 +1141,12 @@ def get_all_transform_rules():
         f = open(os.path.join(CLDR_TRANSFORMS_DIR, filename))
         xml = etree.parse(f)
         source, target = get_source_and_target(xml)
+        internal = is_internal(xml)
 
         if name in EXCLUDE_TRANSLITERATORS:
             continue
 
-        if (target.lower() == 'latin' or name == 'latin-ascii'):
+        if (target.lower() == 'latin' or name == 'latin-ascii') and not internal:
             to_latin.add(name)
             retain_transforms.add(name)
 
