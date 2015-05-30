@@ -805,7 +805,7 @@ char *transliterate(char *trans_name, char *str) {
                         }
 
                         char_array_cat(new_str, replacement_string);
-                        log_debug("Replacement = %s, revisit = %s\n", replacement_string, (revisit_string == NULL) ? "", revisit_strings);
+                        log_debug("Replacement = %s, revisit = %s\n", replacement_string, revisit_string);
 
                         if (free_replacement) {
                             free(replacement_string);
