@@ -604,7 +604,6 @@ static inline phrase_array *phrase_array_create_if_null(phrase_array *phrases) {
 }
 
 
-// N.B. stub
 char *transliterate(char *trans_name, char *str) {
     if (trans_name == NULL || str == NULL || trans_table == NULL) return NULL;
 
@@ -842,10 +841,6 @@ char *transliterate(char *trans_name, char *str) {
                     state.advance_index = false;
                     state.advance_state = false;
                 }
-
-
-                    //phrases = phrase_array_create_if_null(phrases);
-                    //phrase_array_push(phrases, (phrase_t) prev_state.phrase_start, prev_state.phrase_len, data_node.data);
                 
                 if (state.advance_index) {
                     ptr += char_len;
