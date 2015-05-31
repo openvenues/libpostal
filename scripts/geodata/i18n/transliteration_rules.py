@@ -74,6 +74,13 @@ GROUP_INDICATOR_CHAR = u"\x06"
 BEGIN_SET_CHAR = u"\x0e"
 END_SET_CHAR = u"\x0f"
 
+BIDIRECTIONAL_TRANSLITERATORS = {
+    'fullwidth-halfwidth': 'halfwidth-fullwidth'
+}
+
+REVERSE_TRANSLITERATORS = {
+    'latin-katakana': 'katakana-latin',
+}
 
 EXCLUDE_TRANSLITERATORS = set([
     'hangul-latin',
@@ -206,7 +213,7 @@ CONTEXT_TYPE_REGEX = 'CONTEXT_TYPE_REGEX'
 all_transforms = set()
 
 pre_transform_full_regex = re.compile('::[\s]*(.*)[\s]*', re.UNICODE)
-pre_transform_regex = re.compile('[\s]*([^\s\(\)]*)[\s]*(?:\(.*\)[\s]*)?', re.UNICODE)
+pre_transform_regex = re.compile('[\s]*([^\s\(\)]*)[\s]*(?:\((.*)\)[\s]*)?', re.UNICODE)
 assignment_regex = re.compile(u"(?:[\s]*(\$[^\s\=]+)[\s]*\=[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)", re.UNICODE)
 transform_regex = re.compile(u"(?:[\s]*(?!=[\s])(.*?)(?<![\s])[\s]*)((?:<>)|[←<→>↔])(?:[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)", re.UNICODE)
 
@@ -573,7 +580,7 @@ def is_internal(xml):
     return xml.xpath('//transform/@visibility="internal"')
 
 
-def get_raw_rules_and_variables(xml):
+def get_raw_rules_and_variables(xml, reverse=False):
     '''
     Parse tRule nodes from the transform XML
 
@@ -588,7 +595,11 @@ def get_raw_rules_and_variables(xml):
     in_compound_rule = False
     compound_rule = []
 
-    for rule in xml.xpath('*//tRule'):
+    nodes = xml.xpath('*//tRule')
+    if reverse:
+        nodes = reversed(nodes)
+
+    for rule in nodes:
         if not rule.text:
             continue
 
@@ -875,7 +886,7 @@ def format_rule(rule):
     return output_rule
 
 
-def parse_transform_rules(xml):
+def parse_transform_rules(xml, reverse=False):
     '''
     parse_transform_rules takes a parsed xml document as input
     and generates rules suitable for use in the C code.
@@ -884,7 +895,7 @@ def parse_transform_rules(xml):
     we don't care about backward transforms or two-way contexts.
     Only the lvalue's context needs to be used.
     '''
-    rules, variables = get_raw_rules_and_variables(xml)
+    rules, variables = get_raw_rules_and_variables(xml, reverse=reverse)
 
     def get_var(m):
         return variables.get(m.group(1))
@@ -906,9 +917,16 @@ def parse_transform_rules(xml):
     current_filter = all_chars
 
     for rule_type, rule in rules:
-        if rule_type in (BIDIRECTIONAL_TRANSFORM, FORWARD_TRANSFORM):
+        if not reverse and rule_type in (BIDIRECTIONAL_TRANSFORM, FORWARD_TRANSFORM):
             left, right = rule
+        elif reverse and rule_type in (BIDIRECTIONAL_TRANSFORM, FORWARD_TRANSFORM, BACKWARD_TRANSFORM):
+            right, left = rule
+            if rule_type == BACKWARD_TRANSFORM:
+                rule_type = FORWARD_TRANSFORM
+            elif rule_type == FORWARD_TRANSFORM:
+                rule_type = BACKWARD_TRANSFORM
 
+        if rule_type in (BIDIRECTIONAL_TRANSFORM, FORWARD_TRANSFORM):
             left = var_regex.sub(get_var, left)
             right = var_regex.sub(get_var, right)
 
@@ -1065,15 +1083,27 @@ def parse_transform_rules(xml):
 
             yield RULE, (left, left_pre_context_type, left_pre_context, left_pre_context_max_len,
                          left_post_context_type, left_post_context, left_post_context_max_len, left_groups, right, revisit)
-        elif rule_type == PRE_TRANSFORM and rule.strip(': ').startswith('('):
+        elif rule_type == PRE_TRANSFORM and not reverse and rule.strip(': ').startswith('('):
             continue
-        elif rule_type == PRE_TRANSFORM and '[' in rule and ']' in rule:
+        elif not reverse and rule_type == PRE_TRANSFORM and '[' in rule and ']' in rule:
             filter_rule = regex_char_set_greedy.search(rule)
             current_filter = set(parse_regex_char_set(filter_rule.group(0)))
-        elif rule_type == PRE_TRANSFORM:
+        elif reverse and rule_type == PRE_TRANSFORM and '(' in rule and '[' in rule and ']' in rule and ')' in rule:
+            rule = rule.strip(': ()')
+            filter_rule = regex_char_set_greedy.search(rule)
+            rule = regex_char_set_greedy.sub('', rule).strip()
+            if rule:
+                yield TRANSFORM, rule
+            else:
+                current_filter = set(parse_regex_char_set(filter_rule.group(0)))
+        elif rule_type == PRE_TRANSFORM and not reverse:
             pre_transform = pre_transform_regex.search(rule)
-            if pre_transform:
+            if pre_transform and pre_transform.group(1):
                 yield TRANSFORM, pre_transform.group(1)
+        elif rule_type == PRE_TRANSFORM and reverse:
+            pre_transform = pre_transform_regex.search(rule)
+            if pre_transform and pre_transform.group(2):
+                yield TRANSFORM, pre_transform.group(2)
 
 
 STEP_RULESET = 'STEP_RULESET'
@@ -1124,7 +1154,7 @@ def get_all_transform_rules():
     name_aliases = {}
 
     for filename in get_transforms():
-        name = name = filename.split('.xml')[0].lower()
+        name = filename.split('.xml')[0].lower()
 
         f = open(os.path.join(CLDR_TRANSFORMS_DIR, filename))
         xml = etree.parse(f)
@@ -1133,29 +1163,18 @@ def get_all_transform_rules():
         if name_alias not in name_aliases:
             name_aliases[name_alias] = name
 
+        if name in REVERSE_TRANSLITERATORS:
+            all_transforms.add(REVERSE_TRANSLITERATORS[name])
+        elif name in BIDIRECTIONAL_TRANSLITERATORS:
+            all_transforms.add(BIDIRECTIONAL_TRANSLITERATORS[name])
+
     dependencies = defaultdict(list)
 
-    for filename in get_transforms():
-        name = filename.split('.xml')[0].lower()
-
-        f = open(os.path.join(CLDR_TRANSFORMS_DIR, filename))
-        xml = etree.parse(f)
-        source, target = get_source_and_target(xml)
-        internal = is_internal(xml)
-
-        if name in EXCLUDE_TRANSLITERATORS:
-            continue
-
-        if (target.lower() == 'latin' or name == 'latin-ascii') and not internal:
-            to_latin.add(name)
-            retain_transforms.add(name)
-
-        print 'doing', filename
-
+    def parse_steps(name, xml, reverse=False):
         steps = []
         rule_set = []
 
-        for rule_type, rule in parse_transform_rules(xml):
+        for rule_type, rule in parse_transform_rules(xml, reverse=reverse):
             if rule_type == RULE:
                 rule = format_rule(rule)
                 rule_set.append(rule)
@@ -1182,7 +1201,49 @@ def get_all_transform_rules():
         if rule_set:
             steps.append((STEP_RULESET, rule_set))
 
-        transforms[name] = steps
+        return steps
+
+    for filename in get_transforms():
+        name = filename.split('.xml')[0].lower()
+
+        f = open(os.path.join(CLDR_TRANSFORMS_DIR, filename))
+        xml = etree.parse(f)
+        source, target = get_source_and_target(xml)
+        internal = is_internal(xml)
+
+        if name in EXCLUDE_TRANSLITERATORS:
+            continue
+
+        reverse = name in REVERSE_TRANSLITERATORS
+
+        bidirectional = name in BIDIRECTIONAL_TRANSLITERATORS
+
+        if target.lower() == 'latin' or name == 'latin-ascii' and not internal:
+            to_latin.add(name)
+            retain_transforms.add(name)
+        elif (reverse and source.lower() == 'latin') and not internal:
+            to_latin.add(REVERSE_TRANSLITERATORS[name])
+            retain_transforms.add(REVERSE_TRANSLITERATORS[name])
+        elif (bidirectional and source.lower() == 'latin') and not internal:
+            to_latin.add(BIDIRECTIONAL_TRANSLITERATORS[name])
+            retain_transforms.add(BIDIRECTIONAL_TRANSLITERATORS[name])
+
+        print 'doing', filename
+
+        if not reverse and not bidirectional:
+            steps = parse_steps(name, xml, reverse=False)
+            transforms[name] = steps
+        elif reverse:
+            name = REVERSE_TRANSLITERATORS[name]
+            steps = parse_steps(name, xml, reverse=True)
+            transforms[name] = steps
+        elif bidirectional:
+            steps = parse_steps(name, xml, reverse=False)
+            transforms[name] = steps
+            name = BIDIRECTIONAL_TRANSLITERATORS[name]
+            all_transforms.add(name)
+            steps = parse_steps(name, xml, reverse=True)
+            transforms[name] = steps
 
     dependency_queue = deque(to_latin)
     retain_transforms |= to_latin
@@ -1252,6 +1313,7 @@ transliterator_source_t transliterators_source[] = {{
 
 '''
 
+
 transliterator_script_data_template = u'''
 #ifndef TRANSLITERATION_SCRIPTS_H
 #define TRANSLITERATION_SCRIPTS_H
@@ -1277,6 +1339,8 @@ char *script_transliterators[] = {{
 
 #endif
 '''
+
+
 
 
 script_transliterators = {
@@ -1325,7 +1389,7 @@ script_transliterators = {
     'inherited': None,
     'javanese': None,
     'kannada': {None: ['kannada-latin']},
-    'katakana': {None: ['katakana-latin-bgn']},
+    'katakana': {None: ['katakana-latin', 'katakana-latin-bgn']},
     'kayah_li': None,
     'khmer': None,
     'lao': None,
@@ -1419,7 +1483,7 @@ def write_transliteration_data_file(filename):
     template = transliteration_data_template.format(
         all_transforms=all_transforms,
         all_steps=all_steps,
-        all_rules=all_rules
+        all_rules=all_rules,
     )
 
     f = open(filename, 'w')
@@ -1432,7 +1496,6 @@ TRANSLITERATION_SCRIPTS_FILENAME = 'transliteration_scripts.h'
 
 def main(out_dir):
     write_transliteration_data_file(os.path.join(out_dir, TRANSLITERATION_DATA_FILENAME))
-
     write_transliterator_scripts_file(os.path.join(out_dir, TRANSLITERATION_SCRIPTS_FILENAME))
 
 if __name__ == '__main__':
