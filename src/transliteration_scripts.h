@@ -47,8 +47,8 @@ script_transliteration_rule_t script_transliteration_rules[] = {
     {SCRIPT_ARABIC, NULL, 33, 2},
     {SCRIPT_ARABIC, "ps", 35, 1},
     {SCRIPT_HEBREW, NULL, 36, 2},
-    {SCRIPT_KATAKANA, NULL, 38, 1},
-    {SCRIPT_COMMON, NULL, 39, 1}
+    {SCRIPT_KATAKANA, NULL, 38, 2},
+    {SCRIPT_COMMON, NULL, 40, 1}
 };
 
 char *script_transliterators[] = {
@@ -90,6 +90,7 @@ char *script_transliterators[] = {
     "pashto-latin-bgn",
     "hebrew-latin",
     "hebrew-latin-bgn",
+    "katakana-latin",
     "katakana-latin-bgn",
     "latin-ascii"
 }
