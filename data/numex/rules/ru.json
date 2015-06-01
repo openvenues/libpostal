@@ -1,0 +1,451 @@
+{
+    "rules": [
+        {
+            "name": "ноль",
+            "value": 0,
+            "type": "cardinal"
+        },
+        {
+            "name": "один",
+            "value": 1,
+            "type": "cardinal"
+        },
+        {
+            "name": "два",
+            "value": 2,
+            "type": "cardinal"
+        },
+        {
+            "name": "три",
+            "value": 3,
+            "type": "cardinal"
+        },
+        {
+            "name": "четыре",
+            "value": 4,
+            "type": "cardinal"
+        },
+        {
+            "name": "пять",
+            "value": 5,
+            "type": "cardinal"
+        },
+        {
+            "name": "шесть",
+            "value": 6,
+            "type": "cardinal"
+        },
+        {
+            "name": "семь",
+            "value": 7,
+            "type": "cardinal"
+        },
+        {
+            "name": "восемь",
+            "value": 8,
+            "type": "cardinal"
+        },
+        {
+            "name": "девять",
+            "value": 9,
+            "type": "cardinal"
+        },
+        {
+            "name": "десять",
+            "value": 10,
+            "type": "cardinal"
+        },
+        {
+            "name": "одиннадцать",
+            "value": 11,
+            "type": "cardinal"
+        },
+        {
+            "name": "двенадцать",
+            "value": 12,
+            "type": "cardinal"
+        },
+        {
+            "name": "тринадцать",
+            "value": 13,
+            "type": "cardinal"
+        },
+        {
+            "name": "четырнадцать",
+            "value": 14,
+            "type": "cardinal"
+        },
+        {
+            "name": "пятнадцать",
+            "value": 15,
+            "type": "cardinal"
+        },
+        {
+            "name": "шестнадцать",
+            "value": 16,
+            "type": "cardinal"
+        },
+        {
+            "name": "семнадцать",
+            "value": 17,
+            "type": "cardinal"
+        },
+        {
+            "name": "восемнадцать",
+            "value": 18,
+            "type": "cardinal"
+        },
+        {
+            "name": "девятнадцать",
+            "value": 19,
+            "type": "cardinal"
+        },
+        {
+            "name": "двадцать",
+            "value": 20,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "тридцать",
+            "value": 30,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "сорок",
+            "value": 40,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "пятьдесят",
+            "value": 50,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "шестьдесят",
+            "value": 60,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "семьдесят",
+            "value": 70,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "восемьдесят",
+            "value": 80,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "девяносто",
+            "value": 90,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "сто",
+            "value": 100,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "двести",
+            "value": 200,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "триста",
+            "value": 300,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "четыреста",
+            "value": 400,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "пятьсот",
+            "value": 500,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "шестьсот",
+            "value": 600,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "семьсот",
+            "value": 700,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "восемьсот",
+            "value": 800,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "девятьсот",
+            "value": 900,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "тысяча",
+            "value": 1000,
+            "type": "cardinal",
+            "right": "add",
+            "left": "multiply"
+        },
+        {
+            "name": "тысячи",
+            "value": 1000,
+            "type": "cardinal",
+            "right": "add",
+            "left": "multiply"
+        },
+        {
+            "name": "тысяч",
+            "value": 1000,
+            "type": "cardinal",
+            "right": "add",
+            "left": "multiply"
+        },
+        {
+            "name": "нулевой",
+            "value": 0,
+            "type": "ordinal"
+        },
+        {
+            "name": "первый",
+            "value": 1,
+            "type": "ordinal"
+        },
+        {
+            "name": "второй",
+            "value": 2,
+            "type": "ordinal"
+        },
+        {
+            "name": "третий",
+            "value": 3,
+            "type": "ordinal"
+        },
+        {
+            "name": "четвертый",
+            "value": 4,
+            "type": "ordinal"
+        },
+        {
+            "name": "пятый",
+            "value": 5,
+            "type": "ordinal"
+        },
+        {
+            "name": "шестой",
+            "value": 6,
+            "type": "ordinal"
+        },
+        {
+            "name": "седьмой",
+            "value": 7,
+            "type": "ordinal"
+        },
+        {
+            "name": "восьмой",
+            "value": 8,
+            "type": "ordinal"
+        },
+        {
+            "name": "девятый",
+            "value": 9,
+            "type": "ordinal"
+        },
+        {
+            "name": "десятый",
+            "value": 10,
+            "type": "ordinal"
+        },
+        {
+            "name": "одиннадцатый",
+            "value": 11,
+            "type": "ordinal"
+        },
+        {
+            "name": "двенадцатый",
+            "value": 12,
+            "type": "ordinal"
+        },
+        {
+            "name": "тринадцатый",
+            "value": 13,
+            "type": "ordinal"
+        },
+        {
+            "name": "четырнадцатый",
+            "value": 14,
+            "type": "ordinal"
+        },
+        {
+            "name": "пятнадцатый",
+            "value": 15,
+            "type": "ordinal"
+        },
+        {
+            "name": "шестнадцатый",
+            "value": 16,
+            "type": "ordinal"
+        },
+        {
+            "name": "семнадцатый",
+            "value": 17,
+            "type": "ordinal"
+        },
+        {
+            "name": "восемнадцатый",
+            "value": 18,
+            "type": "ordinal"
+        },
+        {
+            "name": "девятнадцатый",
+            "value": 19,
+            "type": "ordinal"
+        },
+        {
+            "name": "двадцатый",
+            "value": 20,
+            "type": "ordinal"
+        },
+        {
+            "name": "двадцатый",
+            "value": 20,
+            "type": "ordinal",
+            "right": "add"
+        },
+        {
+            "name": "тридцатый",
+            "value": 30,
+            "type": "ordinal"
+        },
+        {
+            "name": "тридцать",
+            "value": 30,
+            "type": "ordinal",
+            "right": "add"
+        },
+        {
+            "name": "сороковой",
+            "value": 40,
+            "type": "ordinal"
+        },
+        {
+            "name": "сорок",
+            "value": 40,
+            "type": "ordinal",
+            "right": "add"
+        },
+        {
+            "name": "пятидесятый",
+            "value": 50,
+            "type": "ordinal"
+        },
+        {
+            "name": "пятьдесят",
+            "value": 50,
+            "type": "ordinal",
+            "right": "add"
+        },
+        {
+            "name": "шестидесятый",
+            "value": 60,
+            "type": "ordinal"
+        },
+        {
+            "name": "шестьдесят",
+            "value": 60,
+            "type": "ordinal",
+            "right": "add"
+        },
+        {
+            "name": "семидесятый",
+            "value": 70,
+            "type": "ordinal"
+        },
+        {
+            "name": "семьдесят",
+            "value": 70,
+            "type": "ordinal",
+            "right": "add"
+        },
+        {
+            "name": "восьмидесятый",
+            "value": 80,
+            "type": "ordinal"
+        },
+        {
+            "name": "восемьдесят",
+            "value": 80,
+            "type": "ordinal",
+            "right": "add"
+        },
+        {
+            "name": "девяностый",
+            "value": 90,
+            "type": "ordinal"
+        },
+        {
+            "name": "девяносто",
+            "value": 90,
+            "type": "ordinal",
+            "right": "add"
+        },
+        {
+            "name": "сотый",
+            "value": 100,
+            "type": "ordinal"
+        },
+        {
+            "name": "тысяч",
+            "value": 1000,
+            "type": "ordinal",
+            "right": "add"
+        },
+        {
+            "name": "одна тысяч",
+            "value": 1000,
+            "type": "ordinal",
+            "right": "add"
+        }
+    ],
+    "ordinal_indicators": [
+        {
+            "suffixes": [
+                "й",
+                "й",
+                "й",
+                "й",
+                "й",
+                "й",
+                "й",
+                "й",
+                "й",
+                "й"
+            ]
+        }
+    ],
+    "stopwords": [
+        "и"
+    ]
+}
