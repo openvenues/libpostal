@@ -46,6 +46,9 @@ ideographic_scripts = set([
 
 def regex_char_range(match):
     r = match.split('..')
+    # Wide version
+    # return u'-'.join([('\u{}' if len(c) < 5 else '\U{}').format(c) for c in r])
+
     if len(r[0]) < 5 and len(r[-1]) < 5:
         return '-'.join(['\u{}'.format(c.lower()) for c in r])
     else:

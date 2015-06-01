@@ -11,9 +11,6 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 CLDR_URL = 'http://www.unicode.org/Public/cldr/latest/core.zip'
 
-CLDR_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                        'data', 'unicode', 'cldr')
-
 
 def download_cldr(temp_dir=None):
     if os.path.exists(CLDR_DIR):
