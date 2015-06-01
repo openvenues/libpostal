@@ -1,9 +1,8 @@
 #ifndef TRANSLITERATE_H
 #define TRANSLITERATE_H
 
-#include <regex.h>
-#include <stdbool.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "collections.h"
 #include "klib/khash.h"
