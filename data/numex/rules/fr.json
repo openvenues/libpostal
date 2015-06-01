@@ -1,0 +1,490 @@
+{
+    "rules": [
+        {
+            "name": "zero",
+            "value": 0,
+            "type": "cardinal"
+        },
+        {
+            "name": "un",
+            "value": 1,
+            "type": "cardinal",
+            "gender": "m"
+        },
+        {
+            "name": "une",
+            "value": 1,
+            "type": "cardinal",
+            "gender": "f"
+        },
+        {
+            "name": "deux",
+            "value": 2,
+            "type": "cardinal"
+        },
+        {
+            "name": "trois",
+            "value": 3,
+            "type": "cardinal"
+        },
+        {
+            "name": "quatre",
+            "value": 4,
+            "type": "cardinal"
+        },
+        {
+            "name": "cinq",
+            "value": 5,
+            "type": "cardinal"
+        },
+        {
+            "name": "six",
+            "value": 6,
+            "type": "cardinal"
+        },
+        {
+            "name": "sept",
+            "value": 7,
+            "type": "cardinal"
+        },
+        {
+            "name": "huit",
+            "value": 8,
+            "type": "cardinal"
+        },
+        {
+            "name": "neuf",
+            "value": 9,
+            "type": "cardinal"
+        },
+        {
+            "name": "dix",
+            "value": 10,
+            "type": "cardinal"
+        },
+        {
+            "name": "onze",
+            "value": 11,
+            "type": "cardinal",
+            "smaller": "right"
+        },
+        {
+            "name": "douze",
+            "value": 12,
+            "type": "cardinal"
+        },
+        {
+            "name": "treize",
+            "value": 13,
+            "type": "cardinal"
+        },
+        {
+            "name": "quatorze",
+            "value": 14,
+            "type": "cardinal"
+        },
+        {
+            "name": "quinze",
+            "value": 15,
+            "type": "cardinal"
+        },
+        {
+            "name": "seize",
+            "value": 16,
+            "type": "cardinal"
+        },
+        {
+            "name": "dix sept",
+            "value": 17,
+            "type": "cardinal"
+        },
+        {
+            "name": "dix huit",
+            "value": 18,
+            "type": "cardinal"
+        },
+        {
+            "name": "dixhuit",
+            "value": 18,
+            "type": "cardinal"
+        },
+        {
+            "name": "dix neuf",
+            "value": 19,
+            "type": "cardinal"
+        },
+        {
+            "name": "dixneuf",
+            "value": 19,
+            "type": "cardinal"
+        },
+        {
+            "name": "vingt",
+            "value": 20,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "trente",
+            "value": 30,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "quarante",
+            "value": 40,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "cinquante",
+            "value": 50,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "soixante",
+            "value": 60,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "septante",
+            "value": 70,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "soixante",
+            "value": 70,
+            "type": "cardinal",
+            "radix": 20,
+            "right": "add"
+        },
+        {
+            "name": "huitante",
+            "value": 80,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "octante",
+            "value": 80,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "quatre vignts",
+            "value": 80,
+            "type": "cardinal",
+            "radix": 20,
+            "right": "add"
+        },
+        {
+            "name": "nonante",
+            "value": 90,
+            "type": "cardinal",
+            "right": "add"
+        },
+        {
+            "name": "cent",
+            "value": 100,
+            "type": "cardinal",
+            "left": "multiply",
+            "right": "add"
+        },
+        {
+            "name": "cents",
+            "value": 100,
+            "type": "cardinal",
+            "left": "multiply",
+            "right": "add"
+        },
+        {
+            "name": "mille",
+            "value": 1000,
+            "type": "cardinal",
+            "left": "multiply",
+            "right": "add"
+        },
+        {
+            "name": "million",
+            "value": 1000000,
+            "type": "cardinal",
+            "left": "multiply",
+            "right": "add"
+        },
+        {
+            "name": "millions",
+            "value": 1000000,
+            "type": "cardinal",
+            "left": "multiply",
+            "right": "add"
+        },
+        {
+            "name": "milliard",
+            "value": 1000000000,
+            "type": "cardinal",
+            "left": "multiply",
+            "right": "add"
+        },
+        {
+            "name": "milliards",
+            "value": 1000000000,
+            "type": "cardinal",
+            "left": "multiply",
+            "right": "add"
+        },
+        {
+            "name": "billion",
+            "value": 1000000000000,
+            "type": "cardinal",
+            "left": "multiply",
+            "right": "add"
+        },
+        {
+            "name": "billions",
+            "value": 1000000000000,
+            "type": "cardinal",
+            "left": "multiply",
+            "right": "add"
+        },
+        {
+            "name": "billiard",
+            "value": 1000000000000000,
+            "type": "cardinal",
+            "left": "multiply",
+            "right": "add"
+        },
+        {
+            "name": "billiards",
+            "value": 1000000000000000,
+            "type": "cardinal",
+            "left": "multiply",
+            "right": "add"
+        },
+        {
+            "name": "zeroieme",
+            "value": 0,
+            "type": "ordinal"
+        },
+        {
+            "name": "unieme",
+            "value": 1,
+            "type": "ordinal"
+        },
+        {
+            "name": "premier",
+            "value": 1,
+            "type": "ordinal"
+        },
+        {
+            "name": "premiere",
+            "value": 1,
+            "type": "ordinal",
+            "gender": "f"
+        },
+        {
+            "name": "deuxieme",
+            "value": 2,
+            "type": "ordinal"
+        },
+        {
+            "name": "troisieme",
+            "value": 3,
+            "type": "ordinal"
+        },
+        {
+            "name": "quatrieme",
+            "value": 4,
+            "type": "ordinal"
+        },
+        {
+            "name": "cinquieme",
+            "value": 5,
+            "type": "ordinal"
+        },
+        {
+            "name": "sixieme",
+            "value": 6,
+            "type": "ordinal"
+        },
+        {
+            "name": "septieme",
+            "value": 7,
+            "type": "ordinal"
+        },
+        {
+            "name": "huitieme",
+            "value": 8,
+            "type": "ordinal"
+        },
+        {
+            "name": "neuvieme",
+            "value": 9,
+            "type": "ordinal"
+        },
+        {
+            "name": "dixieme",
+            "value": 10,
+            "type": "ordinal"
+        },
+        {
+            "name": "onzieme",
+            "value": 11,
+            "type": "ordinal"
+        },
+        {
+            "name": "douzieme",
+            "value": 12,
+            "type": "ordinal"
+        },
+        {
+            "name": "treizieme",
+            "value": 13,
+            "type": "ordinal"
+        },
+        {
+            "name": "quatorzieme",
+            "value": 14,
+            "type": "ordinal"
+        },
+        {
+            "name": "quinzieme",
+            "value": 15,
+            "type": "ordinal"
+        },
+        {
+            "name": "seizieme",
+            "value": 16,
+            "type": "ordinal"
+        },
+        {
+            "name": "dix septieme",
+            "value": 17,
+            "type": "ordinal"
+        },
+        {
+            "name": "dixseptieme",
+            "value": 17,
+            "type": "ordinal"
+        },
+        {
+            "name": "dix huitieme",
+            "value": 18,
+            "type": "ordinal"
+        },
+        {
+            "name": "dixhuitieme",
+            "value": 18,
+            "type": "ordinal"
+        },
+        {
+            "name": "dix neuvieme",
+            "value": 19,
+            "type": "ordinal"   
+        },
+        {
+            "name": "dixneuvieme",
+            "value": 19,
+            "type": "ordinal"        
+        },
+        {
+            "name": "vigntieme",
+            "value": 20,
+            "type": "ordinal"
+        },
+        {
+            "name": "trentieme",
+            "value": 30,
+            "type": "ordinal"
+        },
+        {
+            "name": "quarantieme",
+            "value": 40,
+            "type": "ordinal"
+        },
+        {
+            "name": "cinquantieme",
+            "value": 50,
+            "type": "ordinal"
+        },
+        {
+            "name": "soixantieme",
+            "value": 60,
+            "type": "ordinal"
+        },
+        {
+            "name": "septantieme",
+            "value": 70,
+            "type": "ordinal"
+        },
+        {
+            "name": "quatre vigntieme",
+            "value": 80,
+            "type": "ordinal"
+        },
+        {
+            "name": "quatrevigntieme",
+            "value": 80,
+            "type": "ordinal"
+        },
+        {
+            "name": "huitantieme",
+            "value": 80,
+            "type": "ordinal"
+        },
+        {
+            "name": "nonantieme",
+            "value": 90,
+            "type": "ordinal"
+        },
+        {
+            "name": "centieme",
+            "value": 100,
+            "type": "ordinal",
+            "left": "multiply"
+        },
+        {
+            "name": "millieme",
+            "value": 1000,
+            "type": "ordinal",
+            "left": "multiply"
+        }
+    ],
+    "ordinal_indicators": [
+        {
+            "suffixes": [
+                "e",
+                "er",
+                "e",
+                "e",
+                "e",
+                "e",
+                "e",
+                "e",
+                "e",
+                "e"
+            ]
+        },
+        {
+            "gender": "f",
+            "suffixes": [
+                "e",
+                "re",
+                "e",
+                "e",
+                "e",
+                "e",
+                "e",
+                "e",
+                "e",
+                "e"
+
+            ]
+        }
+    ],
+    "stopwords": [
+        "et"
+    ]
+}
