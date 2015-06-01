@@ -85,12 +85,11 @@ numex_table_t *numex_table_new(void) {
 }
 
 
-numex_language_t *numex_language_new(char *name, bool concatenated, size_t rules_index, size_t num_rules, size_t ordinals_index, size_t num_ordinals) {
+numex_language_t *numex_language_new(char *name, size_t rules_index, size_t num_rules, size_t ordinals_index, size_t num_ordinals) {
     numex_language_t *language = malloc(sizeof(numex_language_t));
     if (language == NULL) return NULL;
 
     language->name = strdup(name);
-    language->concatenated = concatenated;
     language->rules_index = rules_index;
     language->num_rules = num_rules;
     language->ordinals_index = ordinals_index;
@@ -144,11 +143,6 @@ numex_language_t *numex_language_read(FILE *f) {
         return NULL;
     }
 
-    bool concatenated;
-    if (!file_read_uint8(f, (uint8_t *)&concatenated)) {
-        return NULL;
-    }
-
     size_t rules_index;
     if (!file_read_uint64(f, (uint64_t *)&rules_index)) {
         return NULL;
@@ -169,7 +163,7 @@ numex_language_t *numex_language_read(FILE *f) {
         return NULL;
     }
 
-    numex_language_t *language = numex_language_new(name, concatenated, rules_index, num_rules, ordinals_index, num_ordinals);
+    numex_language_t *language = numex_language_new(name, rules_index, num_rules, ordinals_index, num_ordinals);
 
     return language;
 
@@ -183,10 +177,6 @@ bool numex_language_write(numex_language_t *language, FILE *f) {
     }
 
     if (!file_write_chars(f, language->name, lang_name_len)) {
-        return false;
-    }
-
-    if (!file_write_uint8(f, language->concatenated)) {
         return false;
     }
 

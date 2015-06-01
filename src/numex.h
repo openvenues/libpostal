@@ -68,7 +68,6 @@ VECTOR_INIT_FREE_DATA(ordinal_indicator_array, ordinal_indicator_t *, ordinal_in
 
 typedef struct numex_language {
     char *name;
-    bool concatenated;
     size_t rules_index;
     size_t num_rules;
     size_t ordinals_index;
@@ -86,7 +85,7 @@ typedef struct {
 
 numex_table_t *get_numex_table(void);
 
-numex_language_t *numex_language_new(char *name, bool concatenated, size_t rules_index, size_t num_rules, size_t ordinals_index, size_t num_ordinals)
+numex_language_t *numex_language_new(char *name, size_t rules_index, size_t num_rules, size_t ordinals_index, size_t num_ordinals)
 void numex_language_destroy(numex_language_t *self);
 
 bool numex_table_add_language(numex_language_t *language);
