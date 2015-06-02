@@ -193,6 +193,7 @@ numex_rule_source_t numex_rules[] = {
     {"billiardenste", (numex_rule_t){LEFT_CONTEXT_MULTIPLY, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 1000000000000000LL}},
     {"billiardenster", (numex_rule_t){LEFT_CONTEXT_MULTIPLY, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 1000000000000000LL}},
     {"billiardenstes", (numex_rule_t){LEFT_CONTEXT_MULTIPLY, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 1000000000000000LL}},
+    {"und", NUMEX_STOPWORD_RULE},
     {"zero", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 0LL}},
     {"oh", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 0LL}},
     {"one", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 1LL}},
@@ -262,6 +263,7 @@ numex_rule_source_t numex_rules[] = {
     {"thousandth", (numex_rule_t){LEFT_CONTEXT_MULTIPLY, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 1000LL}},
     {"millionth", (numex_rule_t){LEFT_CONTEXT_MULTIPLY, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 1000000LL}},
     {"billionth", (numex_rule_t){LEFT_CONTEXT_MULTIPLY, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 1000000000LL}},
+    {"and", NUMEX_STOPWORD_RULE},
     {"cero", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 0LL}},
     {"un", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 1LL}},
     {"uno", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 1LL}},
@@ -394,6 +396,7 @@ numex_rule_source_t numex_rules[] = {
     {"millonesima", (numex_rule_t){LEFT_CONTEXT_MULTIPLY, RIGHT_CONTEXT_ADD, NUMEX_RULE_TYPE_ORDINAL, GENDER_FEMININE, 10, 1000000LL}},
     {"billonesimo", (numex_rule_t){LEFT_CONTEXT_MULTIPLY, RIGHT_CONTEXT_ADD, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 1000000000LL}},
     {"billonesima", (numex_rule_t){LEFT_CONTEXT_MULTIPLY, RIGHT_CONTEXT_ADD, NUMEX_RULE_TYPE_ORDINAL, GENDER_FEMININE, 10, 1000000000LL}},
+    {"y", NUMEX_STOPWORD_RULE},
     {"zero", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 0LL}},
     {"un", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_MASCULINE, 10, 1LL}},
     {"une", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_FEMININE, 10, 1LL}},
@@ -476,6 +479,7 @@ numex_rule_source_t numex_rules[] = {
     {"nonantieme", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 90LL}},
     {"centieme", (numex_rule_t){LEFT_CONTEXT_MULTIPLY, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 100LL}},
     {"millieme", (numex_rule_t){LEFT_CONTEXT_MULTIPLY, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 1000LL}},
+    {"et", NUMEX_STOPWORD_RULE},
     {"zero", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 0LL}},
     {"un", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_MASCULINE, 10, 1LL}},
     {"uno", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 1LL}},
@@ -637,6 +641,8 @@ numex_rule_source_t numex_rules[] = {
     {"novantesima", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_FEMININE, 10, 90LL}},
     {"novantunesima", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_FEMININE, 10, 91LL}},
     {"novantottesima", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_FEMININE, 10, 98LL}},
+    {"e", NUMEX_STOPWORD_RULE},
+    {"ed", NUMEX_STOPWORD_RULE},
     {"i", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 1LL}},
     {"ii", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 2LL}},
     {"iii", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 3LL}},
@@ -837,6 +843,7 @@ numex_rule_source_t numex_rules[] = {
     {"trilionesima", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_FEMININE, 10, 1000000000000LL}},
     {"quadrilionésima", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_FEMININE, 10, 1000000000000000LL}},
     {"quadrilionesima", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_FEMININE, 10, 1000000000000000LL}},
+    {"e", NUMEX_STOPWORD_RULE},
     {"ноль", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 0LL}},
     {"один", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 1LL}},
     {"два", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_CARDINAL, GENDER_NONE, 10, 2LL}},
@@ -915,7 +922,8 @@ numex_rule_source_t numex_rules[] = {
     {"девяносто", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_ADD, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 90LL}},
     {"сотый", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_NONE, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 100LL}},
     {"тысяч", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_ADD, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 1000LL}},
-    {"одна тысяч", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_ADD, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 1000LL}}
+    {"одна тысяч", (numex_rule_t){LEFT_CONTEXT_NONE, RIGHT_CONTEXT_ADD, NUMEX_RULE_TYPE_ORDINAL, GENDER_NONE, 10, 1000LL}},
+    {"и", NUMEX_STOPWORD_RULE}
 };
 
 ordinal_indicator_t ordinal_indicator_rules[] = {
@@ -1021,24 +1029,13 @@ ordinal_indicator_t ordinal_indicator_rules[] = {
     {9, GENDER_NONE, "й"}
 };
 
-char *numex_stopwords[] = {
-    "und",
-    "and",
-    "y",
-    "et",
-    "e",
-    "ed",
-    "e",
-    "и"
-};
-
 numex_language_source_t numex_languages[] = {
-    {"de", 0, 193, 0, 0, 0, 1},
-    {"en", 193, 69, 0, 10, 1, 1},
-    {"es", 262, 132, 10, 20, 2, 1},
-    {"fr", 394, 82, 30, 20, 3, 1},
-    {"it", 476, 161, 50, 20, 4, 2},
-    {"la", 637, 31, 70, 0, 6, 0},
-    {"pt", 668, 169, 70, 20, 6, 1},
-    {"ru", 837, 79, 90, 10, 7, 1}
+    {"de", 0, 194, 0, 0, 0, 1},
+    {"en", 194, 70, 0, 10, 0, 1},
+    {"es", 264, 133, 10, 20, 0, 1},
+    {"fr", 397, 83, 30, 20, 0, 1},
+    {"it", 480, 163, 50, 20, 0, 2},
+    {"la", 643, 31, 70, 0, 0, 0},
+    {"pt", 674, 170, 70, 20, 0, 1},
+    {"ru", 844, 80, 90, 10, 0, 1}
 };
