@@ -12,9 +12,12 @@ extern "C" {
 #include <string.h>
 
 #include "collections.h"
+#include "config.h"
 #include "constants.h"
+#include "klib/khash.h"
 #include "string_utils.h"
 #include "tokens.h"
+#include "trie.h"
 
 #define DEFAULT_NUMEX_PATH LIBPOSTAL_DATA_DIR "/numex/numex.dat"
 
@@ -45,13 +48,15 @@ typedef enum {
 } numex_rule_type;
 
 typedef struct numex_rule {
-    numex_left_context_type left_context_type;
-    numex_right_context_type right_context_type;
+    numex_left_context left_context_type;
+    numex_right_context right_context_type;
     numex_rule_type rule_type;
     gender_t gender;
     uint32_t radix;
     int64_t value;
 } numex_rule_t;
+
+#define NUMEX_STOPWORD_INDEX 0
 
 #define NUMEX_STOPWORD_RULE (numex_rule_t) {NUMEX_LEFT_CONTEXT_NONE, NUMEX_RIGHT_CONTEXT_NONE, NUMEX_STOPWORD, GENDER_NONE, 0, 0};
 
@@ -60,9 +65,11 @@ VECTOR_INIT(numex_rule_array, numex_rule_t)
 typedef struct ordinal_indicator {
     uint8_t number;
     gender_t gender;
-    char *indicator;
+    char *suffix;
 } ordinal_indicator_t;
 
+
+ordinal_indicator_t *ordinal_indicator_new(uint8_t number, gender_t gender, char *suffix);
 void ordinal_indicator_destroy(ordinal_indicator_t *self);
 
 VECTOR_INIT_FREE_DATA(ordinal_indicator_array, ordinal_indicator_t *, ordinal_indicator_destroy)
@@ -86,18 +93,18 @@ typedef struct {
 
 numex_table_t *get_numex_table(void);
 
-numex_language_t *numex_language_new(char *name, size_t rules_index, size_t num_rules, size_t ordinals_index, size_t num_ordinals)
+numex_language_t *numex_language_new(char *name, size_t rules_index, size_t num_rules, size_t ordinals_index, size_t num_ordinals);
 void numex_language_destroy(numex_language_t *self);
 
 bool numex_table_add_language(numex_language_t *language);
 
 numex_language_t *get_numex_language(char *name);
-char *convert_numeric_expressions(char *input, token_array *input);
+char *convert_numeric_expressions(char *input, token_array *tokens);
 
 bool numex_table_write(FILE *file);
 bool numex_table_save(char *filename);
 
-void numex_module_setup(char *filename);
+bool numex_module_setup(char *filename);
 void numex_module_teardown(void);
 
 #ifdef __cplusplus

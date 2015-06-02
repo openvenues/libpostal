@@ -21,7 +21,7 @@ void numex_table_destroy(void) {
 
     if (numex_table->languages != NULL) {
         numex_language_t *language;
-        kh_foreach(numex_table->languages, language, {
+        kh_foreach_value(numex_table->languages, language, {
             numex_language_destroy(language);
         })
 
@@ -36,7 +36,7 @@ void numex_table_destroy(void) {
         ordinal_indicator_array_destroy(numex_table->ordinal_indicators);
     }
 
-    free(self);
+    free(numex_table);
 }
 
 numex_table_t *numex_table_init(void) {
@@ -79,7 +79,8 @@ exit_numex_table_created:
 numex_table_t *numex_table_new(void) {
     numex_table_t *numex_table = numex_table_init();
     if (numex_table != NULL) {
-        numex_rule_array_push(numex_table->rules, NUMEX_STOPWORD_RULE);
+        numex_rule_t stopword_rule = NUMEX_STOPWORD_RULE;
+        numex_rule_array_push(numex_table->rules, stopword_rule);
     }
     return numex_table;
 }
@@ -127,7 +128,7 @@ numex_language_t *get_numex_language(char *name) {
 
     khiter_t k;
     k = kh_get(str_numex_language, numex_table->languages, name);
-    return (k != kh_end(numex_table->languages) ? kh_value(numex_table->languages, k) : NULL);
+    return k != kh_end(numex_table->languages) ? kh_value(numex_table->languages, k) : NULL;
 }
 
 numex_language_t *numex_language_read(FILE *f) {
@@ -201,27 +202,27 @@ bool numex_language_write(numex_language_t *language, FILE *f) {
 }
 
 bool numex_rule_read(FILE *f, numex_rule_t *rule) {
-    if (!file_read_uint64(f, rule->left_context_type)) {
+    if (!file_read_uint64(f, (uint64_t *)&rule->left_context_type)) {
         return false;
     }
 
-    if (!file_read_uint64(f, rule->right_context_type)) {
+    if (!file_read_uint64(f, (uint64_t *)&rule->right_context_type)) {
         return false;
     }
 
-    if (!file_read_uint64(f, rule->rule_type)) {
+    if (!file_read_uint64(f, (uint64_t *)&rule->rule_type)) {
         return false;
     }
 
-    if (!file_read_uint64(f, rule->gender)) {
+    if (!file_read_uint64(f, (uint64_t *)&rule->gender)) {
         return false;
     }
 
-    if (!file_read_uint32(f, rule->radix)) {
+    if (!file_read_uint32(f, &rule->radix)) {
         return false;
     }
 
-    if (!file_read_uint64(f, (uint64_t *)rule->value)) {
+    if (!file_read_uint64(f, (uint64_t *)&rule->value)) {
         return false;
     }
 
@@ -259,21 +260,21 @@ bool numex_rule_write(numex_rule_t rule, FILE *f) {
 void ordinal_indicator_destroy(ordinal_indicator_t *self) {
     if (self == NULL) return;
 
-    if (self->name != NULL) {
-        free(self->name);
+    if (self->suffix != NULL) {
+        free(self->suffix);
     }
 
     free(self);
 }
 
-ordinal_indicator_t *ordinal_indicator_new(uint8_t number, gender_t gender, char *name) {
+ordinal_indicator_t *ordinal_indicator_new(uint8_t number, gender_t gender, char *suffix) {
     ordinal_indicator_t *ordinal = malloc(sizeof(ordinal_indicator_t));
     if (ordinal == NULL) {
         return NULL;
     }
 
-    ordinal->name = strdup(name);
-    if (ordinal->name == NULL) {
+    ordinal->suffix = strdup(suffix);
+    if (ordinal->suffix == NULL) {
         ordinal_indicator_destroy(ordinal);
         return NULL;
     }
@@ -295,18 +296,18 @@ ordinal_indicator_t *ordinal_indicator_read(FILE *f) {
         return NULL;
     }
 
-    size_t ordinal_name_len;
-    if (!file_read_uint64(f, &ordinal_name_len)) {
+    size_t ordinal_suffix_len;
+    if (!file_read_uint64(f, (uint64_t *)&ordinal_suffix_len)) {
         return NULL;
     }
 
-    char ordinal_name[ordinal_name_len];
+    char ordinal_suffix[ordinal_suffix_len];
 
-    if (!file_read_chars(f, ordinal_name, ordinal_name_len)) {
+    if (!file_read_chars(f, ordinal_suffix, ordinal_suffix_len)) {
         return NULL;
     }
 
-    return ordinal_indicator_new(number, gender, ordinal_name);
+    return ordinal_indicator_new(number, gender, ordinal_suffix);
 }
 
 
@@ -319,9 +320,9 @@ bool ordinal_indicator_write(ordinal_indicator_t *ordinal, FILE *f) {
         return false;
     }
 
-    size_t name_len = strlen(ordinal->name) + 1;
+    size_t name_len = strlen(ordinal->suffix) + 1;
     if (!file_write_uint64(f, name_len) ||
-        !file_write_chars(f, ordinal->name, name_len)) {
+        !file_write_chars(f, ordinal->suffix, name_len)) {
         return false;
     }
 
@@ -396,7 +397,7 @@ bool numex_table_read(FILE *f) {
     }
 
     numex_table->trie = trie_read(f);
-    if (numex_table->trie == MNULL) {
+    if (numex_table->trie == NULL) {
         goto exit_numex_table_load_error;
     }
 
@@ -407,7 +408,7 @@ exit_numex_table_load_error:
     return false;
 }
 
-numex_table_t *numex_table_load(char *filename) {
+bool numex_table_load(char *filename) {
     FILE *f;
     if ((f = fopen(filename, "rb")) == NULL) {
         return NULL;
@@ -441,6 +442,8 @@ bool numex_table_write(FILE *f) {
     }
 
     numex_rule_t rule;
+
+    int i = 0;
 
     for (i = 0; i < num_rules; i++) {
         rule = numex_table->rules->a[i];
@@ -492,11 +495,12 @@ bool numex_table_save(char *filename) {
 /* Initializes numex trie/module
 Must be called only once before the module can be used
 */
-void numex_module_setup(char *filename) {
+bool numex_module_setup(char *filename) {
     if (filename == NULL) {
-        numex_table_new();
+        numex_table = numex_table_new();
+        return numex_table != NULL;
     } else if (numex_table == NULL) {
-        numex_table = numex_table_load(filename);
+        return numex_table_load(filename);
     }
 
 }
