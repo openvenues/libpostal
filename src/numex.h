@@ -99,7 +99,7 @@ void numex_language_destroy(numex_language_t *self);
 bool numex_table_add_language(numex_language_t *language);
 
 numex_language_t *get_numex_language(char *name);
-char *convert_numeric_expressions(char *input, token_array *tokens);
+char *convert_numeric_expressions(char *text, char *lang, token_array *input, bool roman_numerals);
 
 bool numex_table_write(FILE *file);
 bool numex_table_save(char *filename);
