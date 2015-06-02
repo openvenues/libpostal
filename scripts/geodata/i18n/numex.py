@@ -56,6 +56,8 @@ rule_type_map = {
 
 numex_rule_template = u'{{"{key}", (numex_rule_t){{{left_context_type}, {right_context_type}, {rule_type}, {gender}, {radix}, {value}LL}}}}'
 
+stopword_rule_template = u'{{"{key}", NUMEX_STOPWORD_RULE}}'
+
 ordinal_indicator_template = u'{{{number}, {gender}, "{value}"}}'
 
 stopwords_template = u'"{word}"'
@@ -69,10 +71,6 @@ numex_rule_source_t numex_rules[] = {{
 
 ordinal_indicator_t ordinal_indicator_rules[] = {{
     {ordinal_indicator_rules}
-}};
-
-char *numex_stopwords[] = {{
-    {stopwords}
 }};
 
 numex_language_source_t numex_languages[] = {{
@@ -101,7 +99,6 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
 
         rules = data.get('rules', [])
         rule_index = len(all_rules)
-        num_rules = len(rules)
 
         for rule in rules:
             gender = gender_map[rule.get('gender')]
@@ -142,7 +139,9 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
         num_stopwords = len(stopwords)
 
         for stopword in stopwords:
-            all_stopwords.append(unicode(stopwords_template.format(word=stopword)))
+            all_rules.append(unicode(stopword_rule_template.format(key=stopword)))
+
+        num_rules = len(rules) + len(stopwords)
 
         all_languages.append(unicode(language_template.format(
             language=language,

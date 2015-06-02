@@ -15,8 +15,6 @@ typedef struct numex_language_source {
     size_t num_rules;
     size_t ordinal_indicator_index;
     size_t num_ordinal_indicators;
-    size_t stopword_index;
-    size_t num_stopwords;
 } numex_language_source_t;
 
 #endif
