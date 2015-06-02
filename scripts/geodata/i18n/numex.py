@@ -62,7 +62,7 @@ ordinal_indicator_template = u'{{{number}, {gender}, "{value}"}}'
 
 stopwords_template = u'"{word}"'
 
-language_template = u'{{"{language}", {rule_index}, {num_rules}, {ordinal_indicator_index}, {num_ordinal_indicators}, {stopword_index}, {num_stopwords}}}'
+language_template = u'{{"{language}", {rule_index}, {num_rules}, {ordinal_indicator_index}, {num_ordinal_indicators}}}'
 
 numex_rules_data_template = u'''
 numex_rule_source_t numex_rules[] = {{
@@ -148,9 +148,7 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
             rule_index=rule_index,
             num_rules=num_rules,
             ordinal_indicator_index=ordinal_indicator_index,
-            num_ordinal_indicators=num_ordinal_indicators,
-            stopword_index=stopword_index,
-            num_stopwords=num_stopwords
+            num_ordinal_indicators=num_ordinal_indicators
         )))
 
     out.write(safe_encode(numex_rules_data_template.format(
