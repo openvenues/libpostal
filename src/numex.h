@@ -11,9 +11,10 @@ extern "C" {
 #include <stdbool.h>
 #include <string.h>
 
+#include "collections.h"
+#include "constants.h"
 #include "string_utils.h"
 #include "tokens.h"
-#include "collections.h"
 
 #define DEFAULT_NUMEX_PATH LIBPOSTAL_DATA_DIR "/numex/numex.dat"
 

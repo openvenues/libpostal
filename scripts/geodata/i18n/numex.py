@@ -54,7 +54,7 @@ rule_type_map = {
     'ordinal': ORDINAL
 }
 
-numex_rule_template = u'{{"{key}", {rule_type}, {gender}, {left_context_type}, {right_context_type}, {value}LL, {radix}}}'
+numex_rule_template = u'{{"{key}", (numex_rule_t){{{left_context_type}, {right_context_type}, {rule_type}, {gender}, {radix}, {value}LL}}}}'
 
 ordinal_indicator_template = u'{{{number}, {gender}, "{value}"}}'
 
@@ -67,7 +67,7 @@ numex_rule_source_t numex_rules[] = {{
     {numex_rules}
 }};
 
-ordinal_indicator_rule_t ordinal_indicator_rules[] = {{
+ordinal_indicator_t ordinal_indicator_rules[] = {{
     {ordinal_indicator_rules}
 }};
 

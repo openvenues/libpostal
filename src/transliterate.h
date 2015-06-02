@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 #include "collections.h"
+#include "constants.h"
 #include "klib/khash.h"
 #include "string_utils.h"
 #include "trie.h"
@@ -75,9 +76,6 @@ typedef struct transliteration_table {
     cstring_array *replacement_strings;
     cstring_array *revisit_strings;
 } transliteration_table_t;
-
-#define NAMESPACE_SEPARATOR_CHAR "|"
-#define NAMESPACE_SEPARATOR_CHAR_LEN strlen(NAMESPACE_SEPARATOR_CHAR)
 
 // Control characters are special
 #define WORD_BOUNDARY_CHAR "\x01"
