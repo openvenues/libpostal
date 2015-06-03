@@ -188,6 +188,8 @@ static char_set_result_t next_prefix_or_set(trie_t *trie, char *str, size_t len,
             return (char_set_result_t){result, CHAR_SET_REPEAT};
         }
     }
+
+    return NULL_CHAR_SET_RESULT;
 }
 
 
@@ -1192,6 +1194,7 @@ transliteration_step_t *transliteration_step_read(FILE *f) {
 
 exit_step_destroy:
     free(step);
+    return NULL;
 }
 
 bool transliteration_step_write(transliteration_step_t *step, FILE *f) {
