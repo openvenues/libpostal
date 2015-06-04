@@ -154,6 +154,14 @@ inline bool utf8_is_number(int32_t ch) {
     return cat == UTF8PROC_CATEGORY_ND || cat == UTF8PROC_CATEGORY_NL || cat == UTF8PROC_CATEGORY_NO;
 }
 
+inline bool utf8_is_letter_or_number(int32_t ch) {
+    int cat = utf8proc_category(ch);
+    return cat == UTF8PROC_CATEGORY_LL || cat == UTF8PROC_CATEGORY_LU        \
+            || cat == UTF8PROC_CATEGORY_LT || cat == UTF8PROC_CATEGORY_LO    \
+            || cat == UTF8PROC_CATEGORY_LM || cat == UTF8PROC_CATEGORY_ND    \
+            || cat == UTF8PROC_CATEGORY_NL || cat == UTF8PROC_CATEGORY_NO;
+}
+
 inline bool utf8_is_hyphen(int32_t ch) {
     int cat = utf8proc_category(ch);
     return cat == UTF8PROC_CATEGORY_PD || c == 0x2212;

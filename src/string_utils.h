@@ -32,6 +32,7 @@ char *utf8_reversed_string(const char *s); // returns a copy, caller frees
 ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *dst);
 bool utf8_is_letter(int32_t ch);
 bool utf8_is_number(int32_t ch);
+bool utf8_is_letter_or_number(int32_t ch);
 bool utf8_is_hyphen(int32_t ch);
 bool utf8_is_punctuation(int32_t ch);
 bool utf8_is_symbol(int32_t ch);
