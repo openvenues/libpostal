@@ -74,9 +74,51 @@ int main(int argc, char **argv) {
         }
 
         for (j = ordinal_indicator_index; j < ordinal_indicator_index + num_ordinal_indicators; j++) {
+            value = numex_table->ordinal_indicators->n;
             ordinal_indicator_t ordinal_source = ordinal_indicator_rules[j];
-            ordinal_indicator_t *ordinal = ordinal_indicator_new(ordinal_source.number, ordinal_source.gender, ordinal_source.suffix);
+            ordinal_indicator_t *ordinal = ordinal_indicator_new(ordinal_source.key, ordinal_source.gender, ordinal_source.category, ordinal_source.suffix);
             ordinal_indicator_array_push(numex_table->ordinal_indicators, ordinal);            
+
+            char_array_clear(key);
+            char_array_cat(key, lang);
+            char_array_cat(key, NAMESPACE_SEPARATOR_CHAR);
+            char_array_cat(key, ORDINAL_NAMESPACE_CHAR);
+            char_array_cat(key, NAMESPACE_SEPARATOR_CHAR);
+
+            switch (ordinal_source.gender) {
+                case GENDER_MASCULINE:
+                    char_array_cat(key, GENDER_MASCULINE_PREFIX);
+                    break;
+                case GENDER_FEMININE:
+                    char_array_cat(key, GENDER_FEMININE_PREFIX);
+                    break;
+                case GENDER_NEUTER:
+                    char_array_cat(key, GENDER_NEUTER_PREFIX);
+                    break;
+                case GENDER_NONE:
+                default:
+                    char_array_cat(key, GENDER_NONE_PREFIX);
+            }
+
+            switch (ordinal_source.category) {
+                case CATEGORY_PLURAL:
+                    char_array_cat(key, CATEGORY_PLURAL_PREFIX);
+                    break;
+                case CATEGORY_DEFAULT:
+                default:
+                    char_array_cat(key, CATEGORY_DEFAULT_PREFIX);
+
+            }
+
+            char_array_cat(key, NAMESPACE_SEPARATOR_CHAR);
+
+            char *reversed = utf8_reversed_string(ordinal_source.key);
+            char_array_cat(key, reversed);
+            free(reversed);
+
+            char *str_key = char_array_get_string(key);
+
+            trie_add(numex_table->trie, str_key, value);
         }
 
         numex_language_t *language = numex_language_new(lang_source.name, lang_source.rule_index, lang_source.num_rules, lang_source.ordinal_indicator_index, lang_source.num_ordinal_indicators);
