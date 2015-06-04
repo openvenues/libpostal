@@ -142,14 +142,41 @@ error_free_output:
     return NULL;
 }
 
-bool utf8_is_letter(int32_t ch) {
-    const utf8proc_property_t *props = utf8proc_get_property(ch);
-    utf8proc_propval_t cat = props->category;
+inline bool utf8_is_letter(int32_t ch) {
+    int cat = utf8proc_category(ch);
     return cat == UTF8PROC_CATEGORY_LL || cat == UTF8PROC_CATEGORY_LU        \
-            || cat == UTF8PROC_CATEGORY_LT || cat == UTF8PROC_CATEGORY_LO || \
-            cat == UTF8PROC_CATEGORY_LM;
-
+            || cat == UTF8PROC_CATEGORY_LT || cat == UTF8PROC_CATEGORY_LO    \
+            || cat == UTF8PROC_CATEGORY_LM;
 }
+
+inline bool utf8_is_number(int32_t ch) {
+    int cat = utf8proc_category(ch);
+    return cat == UTF8PROC_CATEGORY_ND || cat == UTF8PROC_CATEGORY_NL || cat == UTF8PROC_CATEGORY_NO;
+}
+
+inline bool utf8_is_hyphen(int32_t ch) {
+    int cat = utf8proc_category(ch);
+    return cat == UTF8PROC_CATEGORY_PD || c == 0x2212;
+}
+
+inline bool utf8_is_punctuation(int32_t ch) {
+    int cat = utf8proc_category(ch);
+    return cat == UTF8PROC_CATEGORY_PD || cat == UTF8PROC_CATEGORY_PE        \
+           || cat == UTF8PROC_CATEGORY_PF || cat == UTF8PROC_CATEGORY_PI    \
+           || cat == UTF8PROC_CATEGORY_PO || cat == UTF8PROC_CATEGORY_PS;
+}
+
+inline bool utf8_is_symbol(int32_t ch) {
+    int cat = utf8proc_category(ch);
+    return cat == UTF8PROC_CATEGORY_SK || cat == UTF8PROC_CATEGORY_SC       \
+           || cat == UTF8PROC_CATEGORY_SM || cat == UTF8PROC_CATEGORY_SO;
+}
+
+inline bool utf8_is_separator(int32_t ch) {
+    int cat = utf8proc_category(ch);
+    return cat == UTF8PROC_CATEGORY_ZS || cat == UTF8PROC_CATEGORY_ZL || cat == UTF8PROC_CATEGORY_ZP;
+}
+
 
 size_t string_rtrim(char *str) {
     size_t spaces = 0;
