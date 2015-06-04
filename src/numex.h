@@ -55,9 +55,10 @@ typedef enum {
 typedef enum {
     NUMEX_CARDINAL_RULE,
     NUMEX_ORDINAL_RULE,
+    NUMEX_ORDINAL_INDICATOR_RULE,
     NUMEX_DECIMAL_RULE,
     NUMEX_NEGATION_RULE,
-    NUMEX_STOPWORD
+    NUMEX_STOPWORD,
 } numex_rule_type;
 
 typedef struct numex_rule {
