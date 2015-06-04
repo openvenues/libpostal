@@ -26,6 +26,15 @@ gender_map = {
     None: GENDER_NONE,
 }
 
+
+CATEGORY_PLURAL = 'CATEGORY_PLURAL'
+CATEGORY_DEFAULT = 'CATEGORY_DEFAULT'
+
+category_map = {
+    'plural': CATEGORY_PLURAL,
+    None: CATEGORY_DEFAULT
+}
+
 LEFT_CONTEXT_MULTIPLY = 'NUMEX_LEFT_CONTEXT_MULTIPLY'
 LEFT_CONTEXT_ADD = 'NUMEX_LEFT_CONTEXT_ADD'
 LEFT_CONTEXT_NONE = 'NUMEX_LEFT_CONTEXT_NONE'
@@ -54,11 +63,11 @@ rule_type_map = {
     'ordinal': ORDINAL
 }
 
-numex_rule_template = u'{{"{key}", (numex_rule_t){{{left_context_type}, {right_context_type}, {rule_type}, {gender}, {radix}, {value}LL}}}}'
+numex_rule_template = u'{{"{key}", (numex_rule_t){{{left_context_type}, {right_context_type}, {rule_type}, {gender}, {category}, {radix}, {value}LL}}}}'
 
 stopword_rule_template = u'{{"{key}", NUMEX_STOPWORD_RULE}}'
 
-ordinal_indicator_template = u'{{{number}, {gender}, "{value}"}}'
+ordinal_indicator_template = u'{{"{key}", {gender}, {category}, "{value}"}}'
 
 stopwords_template = u'"{word}"'
 
@@ -106,6 +115,7 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
             key = rule['name']
             value = rule['value']
             radix = rule.get('radix', 10)
+            category = category_map[rule.get('category')]
             left_context_type = left_context_map[rule.get('left')]
             right_context_type = right_context_map[rule.get('right')]
             all_rules.append(unicode(numex_rule_template.format(
@@ -113,6 +123,7 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
                 language=language,
                 rule_type=rule_type,
                 gender=gender,
+                category=category,
                 left_context_type=left_context_type,
                 right_context_type=right_context_type,
                 value=value,
@@ -121,18 +132,23 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
 
         ordinal_indicator_index = len(all_ordinal_indicators)
         ordinal_indicators = data.get('ordinal_indicators', [])
-        num_ordinal_indicators = len(ordinal_indicators) * 10
+        num_ordinal_indicators = 0
 
         for rule in ordinal_indicators:
             gender = gender_map[rule.get('gender')]
+            category = category_map[rule.get('category')]
             if 'suffixes' not in rule:
                 print rule.keys()
-            for number, value in enumerate(rule['suffixes']):
-                all_ordinal_indicators.append(unicode(ordinal_indicator_template.format(
-                    number=number,
-                    value=value,
-                    gender=gender
-                )))
+
+            for key, suffixes in rule['suffixes'].iteritems():
+                for suffix in suffixes:
+                    all_ordinal_indicators.append(unicode(ordinal_indicator_template.format(
+                        key=key,
+                        value=suffix,
+                        gender=gender,
+                        category=category
+                    )))
+                num_ordinal_indicators += len(suffixes)
 
         stopwords = data.get('stopwords', [])
         stopword_index = len(all_stopwords)
