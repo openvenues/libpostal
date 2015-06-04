@@ -57,10 +57,12 @@ right_context_map = {
 
 CARDINAL = 'NUMEX_CARDINAL_RULE'
 ORDINAL = 'NUMEX_ORDINAL_RULE'
+ORDINAL_INDICATOR = 'NUMEX_ORDINAL_INDICATOR_RULE'
 
 rule_type_map = {
     'cardinal': CARDINAL,
-    'ordinal': ORDINAL
+    'ordinal': ORDINAL,
+    'ordinal_indicator': ORDINAL_INDICATOR,
 }
 
 numex_rule_template = u'{{"{key}", (numex_rule_t){{{left_context_type}, {right_context_type}, {rule_type}, {gender}, {category}, {radix}, {value}LL}}}}'
