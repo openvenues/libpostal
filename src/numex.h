@@ -59,6 +59,7 @@ typedef enum {
     NUMEX_DECIMAL_RULE,
     NUMEX_NEGATION_RULE,
     NUMEX_STOPWORD,
+    NUMEX_NULL
 } numex_rule_type;
 
 typedef struct numex_rule {
@@ -71,8 +72,10 @@ typedef struct numex_rule {
     int64_t value;
 } numex_rule_t;
 
-#define NUMEX_STOPWORD_INDEX 0
+#define NUMEX_NULL_RULE_INDEX 0
+#define NUMEX_STOPWORD_INDEX 1
 
+#define NUMEX_NULL_RULE (numex_rule_t) {NUMEX_LEFT_CONTEXT_NONE, NUMEX_RIGHT_CONTEXT_NONE, NUMEX_NULL, GENDER_NONE, CATEGORY_DEFAULT, 0, 0}
 #define NUMEX_STOPWORD_RULE (numex_rule_t) {NUMEX_LEFT_CONTEXT_NONE, NUMEX_RIGHT_CONTEXT_NONE, NUMEX_STOPWORD, GENDER_NONE, CATEGORY_DEFAULT, 0, 0}
 
 VECTOR_INIT(numex_rule_array, numex_rule_t)
