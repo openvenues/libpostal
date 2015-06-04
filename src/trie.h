@@ -97,8 +97,9 @@ void trie_set_tail(trie_t *self, unsigned char *tail, int32_t tail_pos);
 int32_t trie_separate_tail(trie_t *self, uint32_t from_index, unsigned char *tail, uint32_t data);
 void trie_tail_merge(trie_t *self, uint32_t old_node_id, unsigned char *suffix, uint32_t data);
 
-bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, uint32_t data);
+bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, size_t len, uint32_t data);
 bool trie_add(trie_t *self, char *key, uint32_t data);
+bool trie_add_len(trie_t *self, char *key, size_t len, uint32_t data);
 bool trie_add_suffix(trie_t *self, char *key, uint32_t data);
 bool trie_add_suffix_at_index(trie_t *self, char *key, uint32_t start_node_id, uint32_t data);
 

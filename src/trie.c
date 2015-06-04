@@ -616,8 +616,7 @@ void trie_print(trie_t *self) {
 
 }
 
-bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, uint32_t data) {
-    int num_chars = strlen(key);
+bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, size_t len, uint32_t data) {
     unsigned char *ptr = (unsigned char *)key; 
     uint32_t last_node_id = node_id;
     trie_node_t last_node = trie_get_node(self, node_id);
@@ -630,7 +629,7 @@ bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, uint32_t data)
 
     // Walks node until prefix reached, including the trailing \0
 
-    for (int i = 0; i < num_chars + 1; ptr++, i++, last_node_id = node_id, last_node = node) {
+    for (int i = 0; i < len; ptr++, i++, last_node_id = node_id, last_node = node) {
 
         log_debug("--- char=%d\n", *ptr);
         node_id = trie_get_transition_index(self, last_node, *ptr);
@@ -658,13 +657,19 @@ bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, uint32_t data)
 }
 
 
-bool trie_add(trie_t *self, char *key, uint32_t data) {
-    if (strlen(key) == 0) return false;
-    return trie_add_at_index(self, ROOT_NODE_ID, key, data);
+inline bool trie_add(trie_t *self, char *key, uint32_t data) {
+    size_t len = strlen(key);
+    if (len == 0) return false;
+    return trie_add_at_index(self, ROOT_NODE_ID, key, len + 1, data);
+}
+
+inline bool trie_add_len(trie_t *self, char *key, size_t len, uint32_t data) {
+    return trie_add_at_index(self, ROOT_NODE_ID, key, len, data);
 }
 
 bool trie_add_suffix_at_index(trie_t *self, char *key, uint32_t start_node_id, uint32_t data) {
-    if (start_node_id == NULL_NODE_ID || strlen(key) == 0) return false;
+    size_t len = strlen(key);
+    if (start_node_id == NULL_NODE_ID || len == 0) return false;
 
     trie_node_t start_node = trie_get_node(self, start_node_id);
 
@@ -674,8 +679,9 @@ bool trie_add_suffix_at_index(trie_t *self, char *key, uint32_t start_node_id, u
         node_id = trie_add_transition(self, start_node_id, '\0');
     }
 
-    char *suffix = utf8_reversed_string(key); 
-    bool success = trie_add_at_index(self, node_id, suffix, data);
+    char *suffix = utf8_reversed_string(key);
+
+    bool success = trie_add_at_index(self, node_id, suffix, len, data);
 
     free(suffix);
     return success;
