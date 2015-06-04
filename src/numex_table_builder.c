@@ -22,11 +22,13 @@ int main(int argc, char **argv) {
 
     if (f == NULL) {
         log_error("File could not be opened, ensure directory exists: %s\n", filename);
+        numex_module_teardown();
         exit(1);
     }
 
     if (!numex_module_setup(NULL)) {
         log_error("Numex table initialization unsuccessful\n");
+        numex_module_teardown();
         exit(1);
     }
 
@@ -132,6 +134,8 @@ int main(int argc, char **argv) {
         log_error("Error writing numex table\n");
         exit(1);
     }
+
+    numex_module_teardown();
 
     log_info("Done\n");
 }
