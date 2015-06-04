@@ -3,6 +3,8 @@
 
 #define NUMEX_TABLE_SIGNATURE 0xBBBBBBBB
 
+#define LATIN_LANGUAGE_CODE "la"
+
 #define SEPARATOR_TOKENS "-"
 
 numex_table_t *numex_table = NULL;
@@ -218,6 +220,10 @@ bool numex_rule_read(FILE *f, numex_rule_t *rule) {
         return false;
     }
 
+    if (!file_read_uint64(f, (uint64_t *)&rule->category)) {
+        return false;
+    }
+
     if (!file_read_uint32(f, &rule->radix)) {
         return false;
     }
@@ -246,6 +252,10 @@ bool numex_rule_write(numex_rule_t rule, FILE *f) {
         return false;
     }
 
+    if (!file_write_uint64(f, (uint64_t)rule.category)) {
+        return false;
+    }
+
     if (!file_write_uint32(f, (uint32_t)rule.radix)) {
         return false;
     }
@@ -260,6 +270,10 @@ bool numex_rule_write(numex_rule_t rule, FILE *f) {
 void ordinal_indicator_destroy(ordinal_indicator_t *self) {
     if (self == NULL) return;
 
+    if (self->key != NULL) {
+        free(self->key);
+    }
+
     if (self->suffix != NULL) {
         free(self->suffix);
     }
@@ -267,9 +281,15 @@ void ordinal_indicator_destroy(ordinal_indicator_t *self) {
     free(self);
 }
 
-ordinal_indicator_t *ordinal_indicator_new(uint8_t number, gender_t gender, char *suffix) {
+ordinal_indicator_t *ordinal_indicator_new(char *key, gender_t gender, grammatical_category_t category, char *suffix) {
     ordinal_indicator_t *ordinal = malloc(sizeof(ordinal_indicator_t));
     if (ordinal == NULL) {
+        return NULL;
+    }
+
+    ordinal->key = strdup(key);
+    if (ordinal->key == NULL) {
+        ordinal_indicator_destroy(ordinal);
         return NULL;
     }
 
@@ -279,20 +299,31 @@ ordinal_indicator_t *ordinal_indicator_new(uint8_t number, gender_t gender, char
         return NULL;
     }
 
-    ordinal->number = number;
+    ordinal->category = category;
     ordinal->gender = gender;
 
     return ordinal;
 }
 
 ordinal_indicator_t *ordinal_indicator_read(FILE *f) {
-    uint8_t number;
-    if (!file_read_uint8(f, &number)) {
+    size_t key_len;
+    if (!file_read_uint64(f, (uint64_t *)&key_len)) {
+        return NULL;
+    }
+
+    char key[key_len];
+
+    if (!file_read_chars(f, key, key_len)) {
         return NULL;
     }
 
     gender_t gender;
     if (!file_read_uint64(f, (uint64_t *)&gender)) {
+        return NULL;
+    }
+
+    grammatical_category_t category;
+    if (!file_read_uint64(f, (uint64_t *)&category)) {
         return NULL;
     }
 
@@ -307,16 +338,22 @@ ordinal_indicator_t *ordinal_indicator_read(FILE *f) {
         return NULL;
     }
 
-    return ordinal_indicator_new(number, gender, ordinal_suffix);
+    return ordinal_indicator_new(key, gender, category, ordinal_suffix);
 }
 
 
 bool ordinal_indicator_write(ordinal_indicator_t *ordinal, FILE *f) {
-    if (!file_write_uint8(f, ordinal->number)) {
+    size_t key_len = strlen(ordinal->key) + 1;
+    if (!file_write_uint64(f, key_len) ||
+        !file_write_chars(f, ordinal->key, key_len)) {
         return false;
     }
 
     if (!file_write_uint64(f, (uint64_t)ordinal->gender)) {
+        return false;
+    }
+
+    if (!file_write_uint64(f, (uint64_t)ordinal->category)) {
         return false;
     }
 

@@ -21,12 +21,25 @@ extern "C" {
 
 #define DEFAULT_NUMEX_PATH LIBPOSTAL_DATA_DIR "/numex/numex.dat"
 
+#define GENDER_MASCULINE_PREFIX "m"
+#define GENDER_FEMININE_PREFIX "f"
+#define GENDER_NEUTER_PREFIX "n"
+#define GENDER_NONE_PREFIX "d"
+
 typedef enum {
     GENDER_MASCULINE,
     GENDER_FEMININE,
     GENDER_NEUTER,
     GENDER_NONE
 } gender_t;
+
+#define CATEGORY_PLURAL_PREFIX "p"
+#define CATEGORY_DEFAULT_PREFIX "s"
+
+typedef enum {
+    CATEGORY_PLURAL,
+    CATEGORY_DEFAULT
+} grammatical_category_t;
 
 typedef enum {
     NUMEX_LEFT_CONTEXT_NONE,
@@ -52,24 +65,28 @@ typedef struct numex_rule {
     numex_right_context right_context_type;
     numex_rule_type rule_type;
     gender_t gender;
+    grammatical_category_t category;
     uint32_t radix;
     int64_t value;
 } numex_rule_t;
 
 #define NUMEX_STOPWORD_INDEX 0
 
-#define NUMEX_STOPWORD_RULE (numex_rule_t) {NUMEX_LEFT_CONTEXT_NONE, NUMEX_RIGHT_CONTEXT_NONE, NUMEX_STOPWORD, GENDER_NONE, 0, 0}
+#define NUMEX_STOPWORD_RULE (numex_rule_t) {NUMEX_LEFT_CONTEXT_NONE, NUMEX_RIGHT_CONTEXT_NONE, NUMEX_STOPWORD, GENDER_NONE, CATEGORY_DEFAULT, 0, 0}
 
 VECTOR_INIT(numex_rule_array, numex_rule_t)
 
+#define ORDINAL_NAMESPACE_CHAR "o"
+
 typedef struct ordinal_indicator {
-    uint8_t number;
+    char *key;
     gender_t gender;
+    grammatical_category_t category;
     char *suffix;
 } ordinal_indicator_t;
 
 
-ordinal_indicator_t *ordinal_indicator_new(uint8_t number, gender_t gender, char *suffix);
+ordinal_indicator_t *ordinal_indicator_new(char *key, gender_t gender, grammatical_category_t category, char *suffix);
 void ordinal_indicator_destroy(ordinal_indicator_t *self);
 
 VECTOR_INIT_FREE_DATA(ordinal_indicator_array, ordinal_indicator_t *, ordinal_indicator_destroy)
