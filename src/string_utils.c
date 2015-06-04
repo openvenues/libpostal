@@ -164,7 +164,7 @@ inline bool utf8_is_letter_or_number(int32_t ch) {
 
 inline bool utf8_is_hyphen(int32_t ch) {
     int cat = utf8proc_category(ch);
-    return cat == UTF8PROC_CATEGORY_PD || c == 0x2212;
+    return cat == UTF8PROC_CATEGORY_PD || ch == 0x2212;
 }
 
 inline bool utf8_is_punctuation(int32_t ch) {
