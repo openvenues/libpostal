@@ -396,7 +396,7 @@ static trie_prefix_result_t context_match(trie_t *trie, char *str, transliterati
         log_debug("Have pre_context\n");
         state = check_pre_context(trie, str, prev_state);
         
-        if (state.state == TRANS_STATE_MATCH) {
+        if (state.state == TRANS_STATE_MATCH && state.result.node_id != prev_state.result.node_id) {
             return state.result;
         }
 
@@ -409,7 +409,7 @@ static trie_prefix_result_t context_match(trie_t *trie, char *str, transliterati
         prev_state.result = result;
         log_debug("Have post_context\n");
         state = check_post_context(trie, str, prev_state);
-        if (state.state == TRANS_STATE_MATCH) {
+        if (state.state == TRANS_STATE_MATCH && state.result.node_id != prev_state.result.node_id) {
             return state.result;
         }
     }
