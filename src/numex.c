@@ -81,6 +81,8 @@ exit_numex_table_created:
 numex_table_t *numex_table_new(void) {
     numex_table_t *numex_table = numex_table_init();
     if (numex_table != NULL) {
+        numex_rule_t null_rule = NUMEX_NULL_RULE;
+        numex_rule_array_push(numex_table->rules, null_rule);
         numex_rule_t stopword_rule = NUMEX_STOPWORD_RULE;
         numex_rule_array_push(numex_table->rules, stopword_rule);
     }
