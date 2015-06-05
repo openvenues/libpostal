@@ -135,6 +135,8 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
+    fclose(f);
+
     numex_module_teardown();
 
     log_info("Done\n");
