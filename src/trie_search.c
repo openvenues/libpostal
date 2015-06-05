@@ -7,10 +7,10 @@ typedef enum {
     SEARCH_STATE_MATCH
 } trie_search_state_t;
 
-phrase_array *trie_search(trie_t *self, char *text) {
+phrase_array *trie_search_from_index(trie_t *self, char *text, uint32_t start_node_id) {
     if (text == NULL) return NULL;
 
-    phrase_array *phrases = phrase_array_new();
+    phrase_array *phrases = NULL;
 
     ssize_t len, remaining;
     int32_t unich = 0;
@@ -20,7 +20,7 @@ phrase_array *trie_search(trie_t *self, char *text) {
     const uint8_t *fail_ptr = ptr;
     trie_node_t node = trie_get_root(self), last_node = node;
 
-    uint32_t node_id = ROOT_NODE_ID;
+    uint32_t node_id = start_node_id;
     uint32_t next_id;
 
     bool match = false;
@@ -38,7 +38,8 @@ phrase_array *trie_search(trie_t *self, char *text) {
         if (len <= 0) return NULL;
         if (!(utf8proc_codepoint_valid(unich))) return NULL;
 
-        bool is_letter = utf8_is_letter(unich);
+        int cat = utf8proc_category(unich);
+        bool is_letter = utf8_is_letter(cat);
 
         // If we're in the middle of a word and the first letter was not a match, skip the word
         if (is_letter && state == SEARCH_STATE_NO_MATCH) { 
@@ -67,6 +68,9 @@ phrase_array *trie_search(trie_t *self, char *text) {
                 state = is_letter ? SEARCH_STATE_NO_MATCH : SEARCH_STATE_BEGIN;
                 if (match) {
                     log_debug("match is true and state==SEARCH_STATE_NO_MATCH\n", NULL);
+                    if (!phrases) {
+                        phrases = phrase_array_new_size(1);
+                    }
                     phrase_array_push(phrases, (phrase_t){phrase_start, phrase_len, data});
                     index = phrase_start + phrase_len;
                     advance_index = false;
@@ -78,7 +82,7 @@ phrase_array *trie_search(trie_t *self, char *text) {
                 }
                 fail_ptr = ptr;
                 last_node = node = trie_get_root(self);
-                node_id = ROOT_NODE_ID;
+                node_id = start_node_id;
                 phrase_start = phrase_len = 0;
                 last_state = state;
                 match = false;
@@ -117,6 +121,9 @@ phrase_array *trie_search(trie_t *self, char *text) {
                     } else if (match) {
                         log_debug("match is true and longer phrase tail did not match\n", NULL);
                         log_debug("phrase_start=%d, phrase_len=%d\n", phrase_start, phrase_len);
+                        if (!phrases) {
+                            phrases = phrase_array_new_size(1);
+                        }
                         phrase_array_push(phrases, (phrase_t){phrase_start, phrase_len, data});
                         ptr = fail_ptr;
                         match = false;
@@ -161,6 +168,10 @@ phrase_array *trie_search(trie_t *self, char *text) {
     } // while
 
     return phrases;
+}
+
+inline phrase_array *trie_search(trie_t *self, char *text) {
+    return trie_search_from_index(self, text, ROOT_NODE_ID);
 }
 
 int trie_node_search_tail_tokens(trie_t *self, trie_node_t node, char *str, token_array *tokens, int tail_index, int token_index) {
