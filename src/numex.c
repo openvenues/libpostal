@@ -372,6 +372,7 @@ bool ordinal_indicator_write(ordinal_indicator_t *ordinal, FILE *f) {
 
 bool numex_table_read(FILE *f) {
     if (f == NULL) {
+        log_warn("FILE pointer was NULL in numex_table_read\n");
         return false;
     }
 
@@ -393,6 +394,8 @@ bool numex_table_read(FILE *f) {
         goto exit_numex_table_load_error;
     }
 
+    log_debug("read num_languages = %d\n", num_languages);
+
     int i = 0;
 
     numex_language_t *language;
@@ -404,11 +407,16 @@ bool numex_table_read(FILE *f) {
         }
     }
 
+    log_debug("read languages\n");
+
+
     size_t num_rules;
 
     if (!file_read_uint64(f, (uint64_t *)&num_rules)) {
         goto exit_numex_table_load_error;
     }
+
+    log_debug("read num_rules = %zu\n", num_rules);
 
     numex_rule_t rule;
 
@@ -418,6 +426,8 @@ bool numex_table_read(FILE *f) {
         }
         numex_rule_array_push(numex_table->rules, rule);
     }
+
+    log_debug("read rules\n");
 
     size_t num_ordinals;
 
@@ -439,6 +449,8 @@ bool numex_table_read(FILE *f) {
     if (numex_table->trie == NULL) {
         goto exit_numex_table_load_error;
     }
+
+    log_debug("read trie\n");
 
     return true;
 
@@ -541,7 +553,7 @@ bool numex_module_setup(char *filename) {
     } else if (numex_table == NULL) {
         return numex_table_load(filename);
     }
-
+    return false;
 }
 
 /* Teardown method for the module
@@ -550,4 +562,5 @@ the end of a main method)
 */
 void numex_module_teardown(void) {
     numex_table_destroy();
+    numex_table = NULL;
 }
