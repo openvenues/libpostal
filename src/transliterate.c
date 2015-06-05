@@ -54,8 +54,7 @@ transliterator_t *get_transliterator(char *name) {
 typedef enum {
     TRANS_STATE_BEGIN,
     TRANS_STATE_PARTIAL_MATCH,
-    TRANS_STATE_MATCH,
-    TRANS_STATE_REPP
+    TRANS_STATE_MATCH
 } transliteration_state_type_t;
 
 typedef struct {
