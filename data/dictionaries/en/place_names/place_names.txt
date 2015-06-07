@@ -11,7 +11,7 @@ barracks|barrack|baracks
 bhouse|bh|board house|boarding house
 book store|bookstore
 cafe
-caravan park|cara|carvn|cvp|caravn park|c park|c van|car park|caravan resort|van park|caratel|caravan par|carav|carav park|carvn park|cara park|cvan park
+caravan park|carvn|cvp|caravn park|c park|c van|car park|caravan resort|van park|caratel|caravan par|carav park|carvn park|cara park|cvan park
 castle|cst
 church|chr
 circus|crcs|crc
@@ -31,6 +31,7 @@ dentist
 detention|det|detn
 distributor|dstr|distrib|dstrb
 district|dist
+elementary school|primary school|public school|ps|p s
 ex services complex
 farm|frm
 farmhouse
@@ -39,8 +40,6 @@ garage
 gallery
 geriatric unit
 hall
-haus
-heladeria
 home|h|hm|hme|hom
 homes
 home for the aged
@@ -80,7 +79,6 @@ high school|hs|secondary school
 international|intl
 junior high school|jr high school|jhs
 middle school|ms
-national|natl
 national park|np|natl park|natl pk
 national recreation area|nra|natl rec area
 national wildlife refuge area|nwra|natl wildlife refuge
@@ -91,17 +89,16 @@ office tower|ofc twr|office twr|ofc tower
 office towers|ofc twrs|office twrs|ofc towers
 pharmacy
 pre school|preschool
-precinct|pct
+precinct
 pub
 public school|ps
 retreat|rtt
 rotary|rty
 resevoir|res
-restaurant|ristorante
-retirement home|retirement village|ret village|masonic retirement village|retirement|ret vill|retirement home|retirement v|rv|r v|rh|r h
+restaurant
+retirement home|retirement village|ret village|masonic retirement village|retirement|ret vill|retirement home|retirement v|rh|r h
 shopping center|shoppingcenter|shoppingcentre|shopping|shoppingtown|shopping centre|shopping 
 sanctuary|sanct
-school|elementary school|primary school|ps
 shop|shp
 sisters
 spa

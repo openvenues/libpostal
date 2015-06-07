@@ -8,6 +8,7 @@ lakes|lks
 lock|lck
 locks|lcks
 mount|mt|mnt
+national|natl|nat l
 neck|nck
 orchard|orch
 paradise|pde|pdse
