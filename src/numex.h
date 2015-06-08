@@ -120,7 +120,19 @@ void numex_language_destroy(numex_language_t *self);
 bool numex_table_add_language(numex_language_t *language);
 
 numex_language_t *get_numex_language(char *name);
-char *convert_numeric_expressions(char *text, char *lang, token_array *input, bool roman_numerals);
+
+typedef struct numex_phrase {
+    int64_t value;
+    gender_t gender;
+    grammatical_category_t category;
+    bool is_ordinal;
+    size_t start;
+    size_t len;
+} numex_phrase_t;
+
+VECTOR_INIT(numex_phrase_array, numex_phrase_t)
+
+numex_phrase_array *convert_numeric_expressions(char *text, char *lang);
 
 bool numex_table_write(FILE *file);
 bool numex_table_save(char *filename);
