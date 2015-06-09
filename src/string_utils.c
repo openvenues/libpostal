@@ -142,8 +142,7 @@ error_free_output:
     return NULL;
 }
 
-inline bool utf8_is_letter(int32_t ch) {
-    int cat = utf8proc_category(ch);
+inline bool utf8_is_letter(int cat) {
     return cat == UTF8PROC_CATEGORY_LL || cat == UTF8PROC_CATEGORY_LU        \
             || cat == UTF8PROC_CATEGORY_LT || cat == UTF8PROC_CATEGORY_LO    \
             || cat == UTF8PROC_CATEGORY_LM;
@@ -160,7 +159,8 @@ inline bool utf8_is_letter_or_number(int cat) {
             || cat == UTF8PROC_CATEGORY_NL || cat == UTF8PROC_CATEGORY_NO;
 }
 
-inline bool utf8_is_hyphen(int cat) {
+inline bool utf8_is_hyphen(int32_t ch) {
+    int cat = utf8proc_category(ch);
     return cat == UTF8PROC_CATEGORY_PD || ch == 0x2212;
 }
 
