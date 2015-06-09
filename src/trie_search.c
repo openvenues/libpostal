@@ -18,9 +18,9 @@ phrase_array *trie_search_from_index(trie_t *self, char *text, uint32_t start_no
 
     const uint8_t *ptr = (const uint8_t *)text;
     const uint8_t *fail_ptr = ptr;
-    trie_node_t node = trie_get_root(self), last_node = node;
 
     uint32_t node_id = start_node_id;
+    trie_node_t node = trie_get_node(self, node_id), last_node = node;
     uint32_t next_id;
 
     bool match = false;
@@ -81,8 +81,8 @@ phrase_array *trie_search_from_index(trie_t *self, char *text, uint32_t start_no
                     log_debug("done with char, now at %s\n", ptr);
                 }
                 fail_ptr = ptr;
-                last_node = node = trie_get_root(self);
                 node_id = start_node_id;
+                last_node = node = trie_get_node(self, node_id);
                 phrase_start = phrase_len = 0;
                 last_state = state;
                 match = false;
@@ -214,13 +214,14 @@ int trie_node_search_tail_tokens(trie_t *self, trie_node_t node, char *str, toke
 
 }
 
-phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens) {
+
+phrase_array *trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens, uint32_t start_node_id) {
     if (str == NULL || tokens == NULL || tokens->n == 0) return NULL;
 
     phrase_array *phrases = phrase_array_new();
 
-    trie_node_t node = trie_get_root(self), last_node = node;
-    uint32_t node_id = ROOT_NODE_ID, last_node_id = ROOT_NODE_ID;
+    uint32_t node_id = start_node_id, last_node_id = start_node_id;
+    trie_node_t node = trie_get_node(self, node_id), last_node = node;
 
     uint32_t data;
 
@@ -254,8 +255,8 @@ phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens) {
 
             if (node.check != last_node_id && last_node.base >= 0) {
                 log_debug("Fell off trie. last_node_id=%d and node.check=%d\n", last_node_id, node.check);
-                node = trie_get_root(self);
-                node_id = ROOT_NODE_ID;
+                node_id = start_node_id;
+                node = trie_get_node(self, node_id);
                 break;
             } else if (node.base < 0) {
                 log_debug("Searching tail at index %d\n", i);
@@ -278,8 +279,8 @@ phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens) {
                     log_debug("node tail matches first token\n");
                     int tail_search_result = trie_node_search_tail_tokens(self, node, str, tokens, ptr_len, i+1);
                     if (tail_search_result == -1) {
-                        node = trie_get_root(self);
-                        node_id = ROOT_NODE_ID;
+                        node_id = start_node_id;
+                        node = trie_get_node(self, node_id);
                         break;
                     } else {
                         phrase_len = tail_search_result - phrase_start + 1;
@@ -289,8 +290,8 @@ phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens) {
                     }
 
                 } else {
-                    node = trie_get_root(self);
-                    node_id = ROOT_NODE_ID;
+                    node_id = start_node_id;
+                    node = trie_get_node(self, node_id);
                     break;
                 }
             }
@@ -305,8 +306,8 @@ phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens) {
                 i = last_match_index;
                 last_match_index = -1;
                 phrase_start = 0;
-                last_node = trie_get_root(self);
-                last_node_id = ROOT_NODE_ID;
+                last_node_id = start_node_id;
+                last_node = trie_get_node(self, last_node_id);
                 continue;
             } else if (last_state == SEARCH_STATE_PARTIAL_MATCH) {
                 log_debug("last_state == SEARCH_STATE_PARTIAL_MATCH\n");
@@ -317,8 +318,8 @@ phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens) {
                 // this token was not a phrase
                 log_debug("Plain token=%.*s\n", token.len, str + token.offset);
             }
-            last_node = trie_get_root(self);
-            last_node_id = ROOT_NODE_ID;
+            last_node_id = start_node_id;
+            last_node = trie_get_node(self, last_node_id);
         } else {
 
             state = SEARCH_STATE_PARTIAL_MATCH;
@@ -356,8 +357,8 @@ phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens) {
                 log_debug("node->match no continuation\n");
                 phrase_array_push(phrases, (phrase_t){phrase_start, last_match_index - phrase_start + 1, data});
                 last_match_index = -1; 
-                last_node = node = trie_get_root(self);
-                last_node_id = node_id = ROOT_NODE_ID;
+                last_node_id = start_node_id;
+                last_node = trie_get_node(self, last_node_id);
                 state = SEARCH_STATE_BEGIN;
             } else {
                 log_debug("Has continuation, node_id=%d\n", continuation_id);
@@ -375,13 +376,17 @@ phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens) {
     return phrases;
 }
 
-phrase_t trie_search_suffixes(trie_t *self, char *word) {
-    uint32_t node_id = ROOT_NODE_ID, last_node_id = ROOT_NODE_ID;
-    trie_node_t last_node = trie_get_root(self);
-    node_id = trie_get_transition_index(self, last_node, '\0');
+inline phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens) {
+    return trie_search_tokens_from_index(self, str, tokens, ROOT_NODE_ID);
+}
+
+phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, uint32_t start_node_id) {
+    uint32_t last_node_id = start_node_id;
+    trie_node_t last_node = trie_get_node(self, last_node_id);
+    uint32_t node_id = trie_get_transition_index(self, last_node, '\0');
     trie_node_t node = trie_get_node(self, node_id);
 
-    if (node.check != ROOT_NODE_ID) {
+    if (node.check != start_node_id) {
         return (phrase_t){0, 0, 0};
     } else {
         last_node = node;
@@ -479,9 +484,14 @@ phrase_t trie_search_suffixes(trie_t *self, char *word) {
     return (phrase_t) {phrase_start, phrase_len, value};
 }
 
-phrase_t trie_search_prefixes(trie_t *self, char *word) {
-    uint32_t node_id = ROOT_NODE_ID, last_node_id = node_id;
-    trie_node_t node = trie_get_root(self), last_node = node;
+inline phrase_t trie_search_suffixes(trie_t *self, char *word) {
+    return trie_search_suffixes_from_index(self, word, ROOT_NODE_ID);
+}
+
+
+phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t start_node_id) {
+    uint32_t node_id = start_node_id, last_node_id = node_id;
+    trie_node_t node = trie_get_node(self, node_id), last_node = node;
 
     uint32_t value = 0, phrase_start = 0, phrase_len = 0;
 
@@ -527,4 +537,9 @@ phrase_t trie_search_prefixes(trie_t *self, char *word) {
 
     return (phrase_t) {phrase_start, phrase_len, value};
 }
+
+inline phrase_t trie_search_prefixes(trie_t *self, char *word) {
+    return trie_search_prefixes_from_index(self, word, ROOT_NODE_ID);
+}
+
 
