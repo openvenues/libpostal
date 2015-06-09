@@ -185,8 +185,22 @@
             "radix": 20,
             "right": "add"
         },
-       {
+        {
             "name": "quatrevignts",
+            "value": 80,
+            "type": "cardinal",
+            "radix": 20,
+            "right": "add"
+        },
+        {
+            "name": "quatre vignt",
+            "value": 80,
+            "type": "cardinal",
+            "radix": 20,
+            "right": "add"
+        },
+        {
+            "name": "quatrevignt",
             "value": 80,
             "type": "cardinal",
             "radix": 20,
