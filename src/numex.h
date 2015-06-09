@@ -75,8 +75,8 @@ typedef struct numex_rule {
 #define NUMEX_NULL_RULE_INDEX 0
 #define NUMEX_STOPWORD_INDEX 1
 
-#define NUMEX_NULL_RULE (numex_rule_t) {NUMEX_LEFT_CONTEXT_NONE, NUMEX_RIGHT_CONTEXT_NONE, NUMEX_NULL, GENDER_NONE, CATEGORY_DEFAULT, 0, 0}
-#define NUMEX_STOPWORD_RULE (numex_rule_t) {NUMEX_LEFT_CONTEXT_NONE, NUMEX_RIGHT_CONTEXT_NONE, NUMEX_STOPWORD, GENDER_NONE, CATEGORY_DEFAULT, 0, 0}
+#define NUMEX_NULL_RULE (numex_rule_t) {NUMEX_LEFT_CONTEXT_NONE, NUMEX_RIGHT_CONTEXT_NONE, NUMEX_NULL, GENDER_NONE, CATEGORY_DEFAULT, 0, 0LL}
+#define NUMEX_STOPWORD_RULE (numex_rule_t) {NUMEX_LEFT_CONTEXT_NONE, NUMEX_RIGHT_CONTEXT_NONE, NUMEX_STOPWORD, GENDER_NONE, CATEGORY_DEFAULT, 0, 0LL}
 
 VECTOR_INIT(numex_rule_array, numex_rule_t)
 
@@ -132,7 +132,7 @@ typedef struct numex_phrase {
 
 VECTOR_INIT(numex_phrase_array, numex_phrase_t)
 
-numex_phrase_array *convert_numeric_expressions(char *text, char *lang);
+numex_phrase_array *convert_numeric_expressions(char *str, char *lang);
 
 bool numex_table_write(FILE *file);
 bool numex_table_save(char *filename);
