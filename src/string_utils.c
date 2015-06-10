@@ -15,7 +15,7 @@ int string_compare_case_insensitive(const char *str1, const char *str2) {
     return c1 - c2;
 }
 
-int string_compare_n_case_insensitive(const char *str1, const char *str2, size_t len) {
+int string_compare_len_case_insensitive(const char *str1, const char *str2, size_t len) {
     register unsigned char *s1 = (unsigned char *) str1;
     register unsigned char *s2 = (unsigned char *) str2;
 
@@ -142,6 +142,14 @@ error_free_output:
     return NULL;
 }
 
+char *utf8_lower(const char *s) {
+    ssize_t len = (ssize_t)strlen(s);
+    uint8_t *dest;
+
+    ssize_t dest_len = utf8proc_map((const uint8_t *)s, len, &dest, UTF8PROC_OPTIONS_LOWERCASE);
+    return (char *)dest;
+}
+
 inline bool utf8_is_letter(int cat) {
     return cat == UTF8PROC_CATEGORY_LL || cat == UTF8PROC_CATEGORY_LU        \
             || cat == UTF8PROC_CATEGORY_LT || cat == UTF8PROC_CATEGORY_LO    \
@@ -177,6 +185,105 @@ inline bool utf8_is_symbol(int cat) {
 
 inline bool utf8_is_separator(int cat) {
     return cat == UTF8PROC_CATEGORY_ZS || cat == UTF8PROC_CATEGORY_ZL || cat == UTF8PROC_CATEGORY_ZP;
+}
+
+int utf8_compare_len(const char *str1, const char *str2, size_t len) {
+    if (len == 0) return 0;
+
+    int32_t c1, c2;
+    ssize_t len1, len2;
+
+    uint8_t *ptr1 = (uint8_t *)str1;
+    uint8_t *ptr2 = (uint8_t *)str2;
+
+    size_t remaining = len;
+
+    while (1) {
+        len1 = utf8proc_iterate(ptr1, -1, &c1);
+        len2 = utf8proc_iterate(ptr2, -1, &c2);
+
+        if (c1 == 0 || c2 == 0) break;
+
+        if (c1 == c2) {
+            ptr1 += len1;
+            ptr2 += len2;
+            remaining -= len1;
+        } else {
+            break;
+        }
+
+        if (remaining == 0) break;
+
+    }
+
+    return (int) c1 - c2;
+}
+
+
+int utf8_compare_len_ignore_separators(const char *str1, const char *str2, size_t len) {
+    if (len == 0) return 0;
+
+    int32_t c1, c2;
+    ssize_t len1, len2;
+
+    uint8_t *ptr1 = (uint8_t *)str1;
+    uint8_t *ptr2 = (uint8_t *)str2;
+
+    size_t remaining = len;
+
+    while (1) {
+        len1 = utf8proc_iterate(ptr1, -1, &c1);
+        len2 = utf8proc_iterate(ptr2, -1, &c2);
+
+        if (c1 == 0 || c2 == 0) break;
+
+        if (c1 == c2) {
+            ptr1 += len1;
+            ptr2 += len2;
+            remaining -= len1;
+        } else if (utf8_is_hyphen(c1) || utf8_is_separator(utf8proc_category(c1))) {
+            ptr1 += len1;
+            remaining -= len1;
+        } else if (utf8_is_hyphen(c2) || utf8_is_separator(utf8proc_category(c2))) {
+            ptr2 += len2;
+        } else {
+            break;
+        }
+
+        if (remaining == 0) break;
+
+    }
+
+    return (int) c1 - c2;
+}
+
+int utf8_compare_ignore_separators(const char *str1, const char *str2) {
+    int32_t c1, c2;
+    ssize_t len1, len2;
+
+    uint8_t *ptr1 = (uint8_t *)str1;
+    uint8_t *ptr2 = (uint8_t *)str2;
+
+    while (1) {
+        len1 = utf8proc_iterate(ptr1, -1, &c1);
+        len2 = utf8proc_iterate(ptr2, -1, &c2);
+
+        if (c1 == 0 || c2 == 0) break;
+
+        if (c1 == c2) {
+            ptr1 += len1;
+            ptr2 += len2;
+        } else if (utf8_is_hyphen(c1) || utf8_is_separator(utf8proc_category(c1))) {
+            ptr1 += len1;
+        } else if (utf8_is_hyphen(c2) || utf8_is_separator(utf8proc_category(c2))) {
+            ptr2 += len2;
+        } else {
+            break;
+        }
+
+    }
+
+    return (int) c1 - c2;
 }
 
 

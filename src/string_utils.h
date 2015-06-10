@@ -13,11 +13,27 @@ extern "C" {
 #include "utf8proc/utf8proc.h"
 #include "vector.h"
 
-  #define MAX_UTF8_CHAR_SIZE 4
+#define MAX_UTF8_CHAR_SIZE 4
+
+
+#define UTF8PROC_OPTIONS_BASE UTF8PROC_NULLTERM | UTF8PROC_STABLE
+
+// Unicode normalization forms
+#define UTF8PROC_OPTIONS_NFD UTF8PROC_OPTIONS_BASE | UTF8PROC_DECOMPOSE
+#define UTF8PROC_OPTIONS_NFC UTF8PROC_OPTIONS_BASE | UTF8PROC_COMPOSE
+#define UTF8PROC_OPTIONS_NFKD UTF8PROC_OPTIONS_NFD | UTF8PROC_COMPAT
+#define UTF8PROC_OPTIONS_NFKC UTF8PROC_OPTIONS_NFC | UTF8PROC_COMPAT
+
+// Strip accents
+#define UTF8PROC_OPTIONS_STRIP_ACCENTS UTF8PROC_OPTIONS_BASE | UTF8PROC_STRIPMARK
+
+// Lowercase
+#define UTF8PROC_OPTIONS_LOWERCASE UTF8PROC_OPTIONS_BASE | UTF8PROC_CASEFOLD
+
 
 // NOTE: this particular implementation works only for ASCII strings
 int string_compare_case_insensitive(const char *str1, const char *str2);
-int string_compare_n_case_insensitive(const char *str1, const char *str2, size_t len);
+int string_compare_len_case_insensitive(const char *str1, const char *str2, size_t len);
 int string_common_prefix(const char *str1, const char *str2);
 
 void string_lower(char *str);
@@ -30,6 +46,13 @@ uint string_translate(char *str, size_t len, char *word_chars, char *word_repls,
 
 char *utf8_reversed_string(const char *s); // returns a copy, caller frees
 ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *dst);
+
+char *utf8_lower(const char *s); // returns a copy, caller frees
+int utf8_compare(const char *str1, const char *str2);
+int utf8_compare_len(const char *str1, const char *str2, size_t len);
+int utf8_compare_ignore_separators(const char *str1, const char *str2);
+int utf8_compare_len_ignore_separators(const char *str1, const char *str2, size_t len);
+
 bool utf8_is_hyphen(int32_t ch);
 bool utf8_is_letter(int cat);
 bool utf8_is_number(int cat);
