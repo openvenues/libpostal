@@ -495,17 +495,57 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t star
 
     uint32_t value = 0, phrase_start = 0, phrase_len = 0;
 
-    char *ptr = word;
+    uint8_t *ptr = (uint8_t *)word;
 
-    for (; *ptr; ptr++, phrase_len++, last_node = node, last_node_id = node_id) {
+    ssize_t char_len = 0;
+    size_t len = strlen(word);
+
+    size_t idx = 0;
+
+    size_t separator_char_len = 0;
+
+    int32_t codepoint = 0;
+
+    for (; *ptr; last_node = node, last_node_id = node_id) {
+        unsigned char ch = *ptr;
+
         log_debug("Getting transition index for %d, (%d, %d)\n", node_id, node.base, node.check);
         node_id = trie_get_transition_index(self, node, *ptr);
         node = trie_get_node(self, node_id);
         log_debug("Doing %c, got node_id=%d\n", *ptr, node_id);
         if (node.check != last_node_id) { 
             log_debug("node.check = %d and last_node_id = %d\n", node.check, last_node_id);
+
+            char_len = utf8proc_iterate(ptr, len, &codepoint);
+
+            if (char_len <= 0) break;
+            if (!(utf8proc_codepoint_valid(codepoint))) break;
+
+            bool is_hyphen = utf8_is_hyphen(codepoint);
+
+            int cat = utf8proc_category(codepoint);
+            bool is_space = utf8_is_separator(cat);
+
+            if (is_hyphen || (is_space && *ptr != ' ')) {
+                log_debug("Got hyphen or other separator, trying space instead\n");
+                node_id = trie_get_transition_index(self, node, ' ');
+                node = trie_get_node(self, node_id);
+            }
+
+            if ((is_space || is_hyphen) && node.check != last_node_id) {
+                log_debug("No space transition\n");
+                ptr += char_len;
+                idx += char_len;
+                separator_char_len = char_len;
+                node_id = last_node_id;
+                node = trie_get_node(self, node_id);
+                continue;
+            }
+
             break;
-        } else if (node.base < 0) {
+        }
+
+        if (node.base < 0) {
             log_debug("Searching tail\n", NULL);
 
             uint32_t data_index = -1*node.base;
@@ -516,13 +556,37 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t star
 
             log_debug("comparing tail: %s vs %s\n", current_tail, ptr + 1);
             size_t current_tail_len = strlen((char *)current_tail);
-            if (strncmp((char *)current_tail, ptr + 1, current_tail_len) == 0) {
-                phrase_len += current_tail_len + 1;
+            size_t match_len = utf8_common_prefix_len_ignore_separators((char *)ptr + 1, (char *)current_tail, current_tail_len);
+            
+            if (match_len >= current_tail_len) {
+                if (phrase_len == 0) {
+                    phrase_start = idx;
+                }
+
+                phrase_len += match_len + 1;
+
                 log_debug("tail match!\n", NULL);
                 value = data_node.data;
                 break;
+            } else {
+                phrase_len = 0;
+                break;
             }
         }
+
+        if (phrase_len == 0) {
+            phrase_start = idx;
+        }
+
+        if (phrase_len > 0 && separator_char_len > 0) {
+            phrase_len += separator_char_len;
+        }
+
+        separator_char_len = 0;
+
+        phrase_len++;
+        idx++;
+        ptr++;
     }
 
     if (phrase_len > 0) {
