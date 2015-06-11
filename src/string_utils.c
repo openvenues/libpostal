@@ -1,5 +1,4 @@
 #include <stdio.h>
-
 #include "string_utils.h"
 
 #define INVALID_INDEX(i, n) ((i) < 0 || (i) >= (n))
@@ -219,8 +218,12 @@ int utf8_compare_len(const char *str1, const char *str2, size_t len) {
     return (int) c1 - c2;
 }
 
+inline int utf8_compare(const char *str1, const char *str2) {
+    return utf8_compare_len(str1, str2, strlen(str1));
+}
 
-int utf8_compare_len_ignore_separators(const char *str1, const char *str2, size_t len) {
+
+size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *str2, size_t len) {
     if (len == 0) return 0;
 
     int32_t c1, c2;
@@ -231,6 +234,8 @@ int utf8_compare_len_ignore_separators(const char *str1, const char *str2, size_
 
     size_t remaining = len;
 
+    size_t match_len = 0;
+
     while (1) {
         len1 = utf8proc_iterate(ptr1, -1, &c1);
         len2 = utf8proc_iterate(ptr2, -1, &c2);
@@ -241,11 +246,13 @@ int utf8_compare_len_ignore_separators(const char *str1, const char *str2, size_
             ptr1 += len1;
             ptr2 += len2;
             remaining -= len1;
+            match_len += len1;
         } else if (utf8_is_hyphen(c1) || utf8_is_separator(utf8proc_category(c1))) {
             ptr1 += len1;
-            remaining -= len1;
+            match_len += len1;
         } else if (utf8_is_hyphen(c2) || utf8_is_separator(utf8proc_category(c2))) {
             ptr2 += len2;
+            remaining -= len2;
         } else {
             break;
         }
@@ -254,36 +261,11 @@ int utf8_compare_len_ignore_separators(const char *str1, const char *str2, size_
 
     }
 
-    return (int) c1 - c2;
+    return match_len;
 }
 
-int utf8_compare_ignore_separators(const char *str1, const char *str2) {
-    int32_t c1, c2;
-    ssize_t len1, len2;
-
-    uint8_t *ptr1 = (uint8_t *)str1;
-    uint8_t *ptr2 = (uint8_t *)str2;
-
-    while (1) {
-        len1 = utf8proc_iterate(ptr1, -1, &c1);
-        len2 = utf8proc_iterate(ptr2, -1, &c2);
-
-        if (c1 == 0 || c2 == 0) break;
-
-        if (c1 == c2) {
-            ptr1 += len1;
-            ptr2 += len2;
-        } else if (utf8_is_hyphen(c1) || utf8_is_separator(utf8proc_category(c1))) {
-            ptr1 += len1;
-        } else if (utf8_is_hyphen(c2) || utf8_is_separator(utf8proc_category(c2))) {
-            ptr2 += len2;
-        } else {
-            break;
-        }
-
-    }
-
-    return (int) c1 - c2;
+inline size_t utf8_common_prefix_ignore_separators(const char *str1, const char *str2) {
+    return utf8_common_prefix_len_ignore_separators(str1, str2, strlen(str2));
 }
 
 

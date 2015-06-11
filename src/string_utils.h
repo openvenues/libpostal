@@ -50,8 +50,8 @@ ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *ds
 char *utf8_lower(const char *s); // returns a copy, caller frees
 int utf8_compare(const char *str1, const char *str2);
 int utf8_compare_len(const char *str1, const char *str2, size_t len);
-int utf8_compare_ignore_separators(const char *str1, const char *str2);
-int utf8_compare_len_ignore_separators(const char *str1, const char *str2, size_t len);
+size_t utf8_common_prefix_ignore_separators(const char *str1, const char *str2);
+size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *str2, size_t len);
 
 bool utf8_is_hyphen(int32_t ch);
 bool utf8_is_letter(int cat);
