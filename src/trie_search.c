@@ -488,8 +488,8 @@ inline phrase_t trie_search_suffixes(trie_t *self, char *word) {
     return trie_search_suffixes_from_index(self, word, ROOT_NODE_ID);
 }
 
-
 phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t start_node_id) {
+    log_debug("Call to trie_search_prefixes_from_index\n");
     uint32_t node_id = start_node_id, last_node_id = node_id;
     trie_node_t node = trie_get_node(self, node_id), last_node = node;
 
@@ -506,11 +506,16 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t star
 
     int32_t codepoint = 0;
 
+    bool first_char = true;
+
+    trie_data_node_t data_node;
+    trie_node_t terminal_node;
+
     for (; *ptr; last_node = node, last_node_id = node_id) {
         unsigned char ch = *ptr;
 
-        log_debug("Getting transition index for %d, (%d, %d)\n", node_id, node.base, node.check);
-        node_id = trie_get_transition_index(self, node, *ptr);
+        log_debug("Getting transition index for %d, (%d, %d)\n", last_node_id, last_node.base, last_node.check);
+        node_id = trie_get_transition_index(self, last_node, *ptr);
         node = trie_get_node(self, node_id);
         log_debug("Doing %c, got node_id=%d\n", *ptr, node_id);
         if (node.check != last_node_id) { 
@@ -528,11 +533,11 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t star
 
             if (is_hyphen || (is_space && *ptr != ' ')) {
                 log_debug("Got hyphen or other separator, trying space instead\n");
-                node_id = trie_get_transition_index(self, node, ' ');
+                node_id = trie_get_transition_index(self, last_node, ' ');
                 node = trie_get_node(self, node_id);
             }
 
-            if ((is_space || is_hyphen) && node.check != last_node_id) {
+            if (is_hyphen && node.check != last_node_id) {
                 log_debug("No space transition\n");
                 ptr += char_len;
                 idx += char_len;
@@ -540,16 +545,16 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t star
                 node_id = last_node_id;
                 node = trie_get_node(self, node_id);
                 continue;
+            } else if (node.check != last_node_id) {
+                break;
             }
 
-            break;
         }
 
         if (node.base < 0) {
             log_debug("Searching tail\n", NULL);
 
-            uint32_t data_index = -1*node.base;
-            trie_data_node_t data_node = self->data->a[data_index];
+            data_node = trie_get_data_node(self, node);
             uint32_t current_tail_pos = data_node.tail;
 
             unsigned char *current_tail = self->tail->a + current_tail_pos;
@@ -557,47 +562,40 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t star
             log_debug("comparing tail: %s vs %s\n", current_tail, ptr + 1);
             size_t current_tail_len = strlen((char *)current_tail);
             size_t match_len = utf8_common_prefix_len_ignore_separators((char *)ptr + 1, (char *)current_tail, current_tail_len);
-            
-            if (match_len >= current_tail_len) {
-                if (phrase_len == 0) {
-                    phrase_start = idx;
-                }
 
-                phrase_len += match_len + 1;
+            if (match_len >= current_tail_len) {
+                if (first_char) phrase_start = idx;
+                phrase_len = (idx + match_len + 1) - phrase_start;
 
                 log_debug("tail match!\n", NULL);
                 value = data_node.data;
                 break;
             } else {
-                phrase_len = 0;
                 break;
+            }
+        } else {
+            terminal_node = trie_get_transition(self, node, '\0');
+            if (terminal_node.check == node_id) {
+                log_debug("Transition to NUL byte matched\n", NULL);
+                if (terminal_node.base < 0) {
+                    phrase_len = idx + 1 - phrase_start;
+                    data_node = trie_get_data_node(self, terminal_node);
+                    value = data_node.data;
+                }
+                log_debug("Got match with len=%d\n", phrase_len);
             }
         }
 
-        if (phrase_len == 0) {
+        if (first_char) {
             phrase_start = idx;
+            first_char = false;
         }
 
-        if (phrase_len > 0 && separator_char_len > 0) {
-            phrase_len += separator_char_len;
-        }
-
-        separator_char_len = 0;
-
-        phrase_len++;
         idx++;
         ptr++;
     }
 
-    if (phrase_len > 0) {
-        trie_node_t terminal_node = trie_get_transition(self, node, '\0');
-        if (terminal_node.check == node_id) {
-            int32_t data_index = -1*terminal_node.base;
-            trie_data_node_t data_node = self->data->a[data_index];
-            value = data_node.data;
-            log_debug("value = %d\n", value);
-        }
-    }
+    if (phrase_len == 0) return (phrase_t){0, 0, 0};
 
     return (phrase_t) {phrase_start, phrase_len, value};
 }
