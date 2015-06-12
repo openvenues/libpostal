@@ -78,7 +78,7 @@ typedef struct gazetteer {
     uint16_t address_components;
 } gazetteer_t;
 
-typdef struct named_gazetteer {
+typedef struct named_gazetteer {
     char name[64];
     gazetteer_t gazetteer;
 } named_gazetteer_t;
@@ -115,7 +115,7 @@ named_gazetteer_t gazetteer_config[] = {
 
 VECTOR_INIT(gazetteer_array, gazetteer_t)
 
-#define NUM_DICTIONARY_TYPES sizeof(gazetteers) / sizeof(gazetteer_t)
+#define NUM_DICTIONARY_TYPES sizeof(gazetteer_config) / sizeof(named_gazetteer_t)
 
 #ifdef __cplusplus
 }
