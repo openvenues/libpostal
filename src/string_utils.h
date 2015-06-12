@@ -34,7 +34,8 @@ extern "C" {
 // NOTE: this particular implementation works only for ASCII strings
 int string_compare_case_insensitive(const char *str1, const char *str2);
 int string_compare_len_case_insensitive(const char *str1, const char *str2, size_t len);
-int string_common_prefix(const char *str1, const char *str2);
+size_t string_common_prefix(const char *str1, const char *str2);
+size_t string_common_suffix(const char *str1, const char *str2);
 
 void string_lower(char *str);
 void string_upper(char *str);
@@ -50,6 +51,7 @@ ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *ds
 char *utf8_lower(const char *s); // returns a copy, caller frees
 int utf8_compare(const char *str1, const char *str2);
 int utf8_compare_len(const char *str1, const char *str2, size_t len);
+size_t utf8_common_prefix(const char *str1, const char *str2);
 size_t utf8_common_prefix_ignore_separators(const char *str1, const char *str2);
 size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *str2, size_t len);
 

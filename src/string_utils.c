@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "log/log.h"
 #include "string_utils.h"
 
 #define INVALID_INDEX(i, n) ((i) < 0 || (i) >= (n))
@@ -40,15 +41,15 @@ int string_compare_len_case_insensitive(const char *str1, const char *str2, size
 
 }
 
-int string_common_prefix(const char *str1, const char *str2) {
-    int common_prefix;
+size_t string_common_prefix(const char *str1, const char *str2) {
+    size_t common_prefix;
     for (common_prefix = 0; *str1 && *str2 && *str1 == *str2; str1++, str2++)
         common_prefix++;
     return common_prefix;
 }
 
-int string_common_suffix(const char *str1, const char *str2) {
-    int common_suffix = 0;
+size_t string_common_suffix(const char *str1, const char *str2) {
+    size_t common_suffix = 0;
     size_t str1_len = strlen(str1);
     size_t str2_len = strlen(str2);
     size_t min_len = (str1_len < str2_len) ? str1_len : str2_len;
@@ -222,11 +223,41 @@ inline int utf8_compare(const char *str1, const char *str2) {
     return utf8_compare_len(str1, str2, strlen(str1));
 }
 
+size_t utf8_common_prefix(const char *str1, const char *str2) {
+    size_t common_prefix = 0;
+
+    int32_t c1 = 0;
+    int32_t c2 = 0;
+    ssize_t char_len1, char_len2;
+
+    size_t len1 = strlen(str1);
+    size_t len2 = strlen(str2);
+
+    uint8_t *ptr1 = (uint8_t *)str1;
+    uint8_t *ptr2 = (uint8_t *)str2;
+
+    while (1) {
+        len1 = utf8proc_iterate(ptr1, -1, &c1);
+        len2 = utf8proc_iterate(ptr2, -1, &c2);
+
+        if (c1 <= 0 || c2 <= 0) break;
+        if (c1 == c2) {
+            ptr1 += len1;
+            ptr2 += len2;
+            common_prefix += len1;
+        } else {
+            break;
+        }
+    }
+
+    return common_prefix;
+}
+
 
 size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *str2, size_t len) {
     if (len == 0) return 0;
 
-    int32_t c1, c2;
+    int32_t c1 = -1, c2 = -1;
     ssize_t len1, len2;
 
     uint8_t *ptr1 = (uint8_t *)str1;
@@ -241,6 +272,16 @@ size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *st
     while (1) {
         len1 = utf8proc_iterate(ptr1, -1, &c1);
         len2 = utf8proc_iterate(ptr2, -1, &c2);
+
+        if (len1 < 0 && len2 < 0 && *ptr1 == *ptr2) {
+            ptr1++;
+            ptr2++;
+            remaining--;
+            match_len++;
+            one_char_match = true;
+            if (remaining == 0) break;
+            continue;
+        }
 
         if (c1 == 0 || c2 == 0) break;
 
