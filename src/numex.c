@@ -93,11 +93,12 @@ numex_table_t *numex_table_new(void) {
 }
 
 
-numex_language_t *numex_language_new(char *name, size_t rules_index, size_t num_rules, size_t ordinals_index, size_t num_ordinals) {
+numex_language_t *numex_language_new(char *name, bool whole_tokens_only, size_t rules_index, size_t num_rules, size_t ordinals_index, size_t num_ordinals) {
     numex_language_t *language = malloc(sizeof(numex_language_t));
     if (language == NULL) return NULL;
 
     language->name = strdup(name);
+    language->whole_tokens_only = whole_tokens_only;
     language->rules_index = rules_index;
     language->num_rules = num_rules;
     language->ordinals_index = ordinals_index;
@@ -151,6 +152,11 @@ numex_language_t *numex_language_read(FILE *f) {
         return NULL;
     }
 
+    bool whole_tokens_only;
+    if (!file_read_uint8(f, (uint8_t *)&whole_tokens_only)) {
+        return NULL;
+    }
+
     size_t rules_index;
     if (!file_read_uint64(f, (uint64_t *)&rules_index)) {
         return NULL;
@@ -171,7 +177,7 @@ numex_language_t *numex_language_read(FILE *f) {
         return NULL;
     }
 
-    numex_language_t *language = numex_language_new(name, rules_index, num_rules, ordinals_index, num_ordinals);
+    numex_language_t *language = numex_language_new(name, whole_tokens_only, rules_index, num_rules, ordinals_index, num_ordinals);
 
     return language;
 
@@ -185,6 +191,10 @@ bool numex_language_write(numex_language_t *language, FILE *f) {
     }
 
     if (!file_write_chars(f, language->name, lang_name_len)) {
+        return false;
+    }
+
+    if (!file_write_uint8(f, language->whole_tokens_only)) {
         return false;
     }
 
@@ -572,7 +582,7 @@ void numex_module_teardown(void) {
     numex_table = NULL;
 }
 
-#define NULL_NUMEX_PHRASE (numex_phrase_t) {0, GENDER_NONE, CATEGORY_DEFAULT, false, 0, 0}
+#define NULL_NUMEX_RESULT (numex_result_t) {0, GENDER_NONE, CATEGORY_DEFAULT, false, 0, 0}
 
 typedef enum {
     NUMEX_SEARCH_STATE_BEGIN,
@@ -594,28 +604,34 @@ static inline numex_rule_t get_numex_rule(size_t i) {
     return numex_table->rules->a[i];
 }
 
-numex_phrase_array *convert_numeric_expressions(char *str, char *lang) {
+numex_result_array *convert_numeric_expressions(char *str, char *lang) {
     if (numex_table == NULL) return NULL;
 
     trie_t *trie = numex_table->trie;
     if (trie == NULL) return NULL;
 
-    trie_prefix_result_t result = trie_get_prefix(trie, lang);
+    numex_language_t *language = get_numex_language(lang);
 
-    if (result.node_id == NULL_NODE_ID) {
+    if (language == NULL) return NULL;
+
+    bool whole_tokens_only = language->whole_tokens_only;
+
+    trie_prefix_result_t prefix = trie_get_prefix(trie, lang);
+
+    if (prefix.node_id == NULL_NODE_ID) {
         return NULL;
     }
 
-    result = trie_get_prefix_from_index(trie, NAMESPACE_SEPARATOR_CHAR, NAMESPACE_SEPARATOR_CHAR_LEN, result.node_id, result.tail_pos);
+    prefix = trie_get_prefix_from_index(trie, NAMESPACE_SEPARATOR_CHAR, NAMESPACE_SEPARATOR_CHAR_LEN, prefix.node_id, prefix.tail_pos);
 
-    if (result.node_id == NULL_NODE_ID) {
+    if (prefix.node_id == NULL_NODE_ID) {
         return NULL;
     }
 
-    numex_phrase_t prev_phrase = NULL_NUMEX_PHRASE;
-    numex_phrase_t phrase = prev_phrase;
+    numex_result_t prev_result = NULL_NUMEX_RESULT;
+    numex_result_t result = prev_result;
 
-    numex_phrase_array *phrases = NULL;
+    numex_result_array *results = NULL;
 
     numex_rule_t prev_rule = NUMEX_NULL_RULE;
     numex_rule_t rule = prev_rule;
@@ -623,7 +639,8 @@ numex_phrase_array *convert_numeric_expressions(char *str, char *lang) {
     numex_search_state_t state = NULL_NUMEX_SEARCH_STATE;
 
     numex_search_state_t start_state = NULL_NUMEX_SEARCH_STATE;
-    start_state.node_id = result.node_id;
+    uint32_t start_node_id = prefix.node_id;
+    start_state.node_id = start_node_id;
 
     numex_search_state_t prev_state = start_state;
 
@@ -638,65 +655,212 @@ numex_phrase_array *convert_numeric_expressions(char *str, char *lang) {
     bool advance_index = true;
     bool advance_state = true;
 
+    bool number_finished = false;
+
     bool is_space = false;
     bool is_hyphen = false;
 
-    bool number_finished = false;
-
-    uint32_t node_id = result.node_id;
-    uint32_t last_node_id = node_id;
-
-    trie_node_t start_node = trie_get_node(trie, node_id);
-
-    trie_node_t node = start_node;
-    trie_node_t last_node = start_node;
-
     char_array *number_str = NULL;
 
-    bool stopword = false;
+    bool last_was_separator = false;
+    bool possible_complete_token = false;
+    bool complete_token = false;
 
     while (idx < len) {
-        char_len = utf8proc_iterate(ptr, len, &codepoint);
-        if (char_len <= 0) {
-            return NULL;
-        }
+        if (state.state == NUMEX_SEARCH_STATE_SKIP_TOKEN) {
+            char_len = utf8proc_iterate(ptr, len, &codepoint);
+            int cat = utf8proc_category(codepoint);
 
-        int remaining = char_len;
+            if (codepoint == 0) break;
 
-        if (!utf8proc_codepoint_valid(ch)) {
-            log_warn("Invalid codepoint: %d\n", codepoint);
+            is_space = utf8_is_separator(cat);
+            if (is_space) {
+                log_debug("is_space\n");
+                is_hyphen = false;
+            } else {
+                is_hyphen = utf8_is_hyphen(codepoint);
+                if (is_hyphen) {
+                    log_debug("is_hyphen\n");
+                }
+            }
+
             idx += char_len;
             ptr += char_len;
-            state = prev_state = start_state;
-            last_node = start_node;
-            last_node_id = start_state.node_id;
+
+            if (is_space || is_hyphen) {
+                state = start_state;
+                last_was_separator = true;
+                if (possible_complete_token) {
+                    log_debug("Complete token\n");
+                    complete_token = true;
+                    possible_complete_token = false;
+                } else if (prev_state.state == NUMEX_SEARCH_STATE_MATCH) {
+                    log_debug("Complete token\n");
+                    complete_token = true;
+                    prev_state = NULL_NUMEX_SEARCH_STATE;
+                } else {
+                    complete_token = false;
+                }
+            } else if (whole_tokens_only && last_was_separator) {
+                log_debug("last was separator\n");
+                last_was_separator = false;
+                possible_complete_token = true;
+            } else {
+                log_debug("other char\n");
+                if (result.len > 0 && (!whole_tokens_only || complete_token)) {
+                    results = (results != NULL) ? results : numex_result_array_new_size(1);
+                    numex_result_array_push(results, result);
+                    log_debug("Adding phrase from partial token, value=%lld\n", result.value);
+                    prev_rule = rule = NUMEX_NULL_RULE;
+                }
+                result = NULL_NUMEX_RESULT;
+                last_was_separator = false;
+                possible_complete_token = false;
+                complete_token = false;
+            }
             continue;
         }
 
-        int cat = utf8proc_category(codepoint);
+        phrase_t phrase = trie_search_prefixes_from_index(trie, str + idx, start_node_id);
 
-        is_space = utf8_is_separator(cat);
-        if (is_space) {
-            log_info("is_space\n");
-            is_hyphen = false;
-        } else {
-            is_hyphen = utf8_is_hyphen(codepoint);
-            if (is_hyphen) {
-                log_info("is_hyphen\n");
+        state = start_state;
+
+        if (phrase.len == 0) {
+            log_debug("phrase.len == 0, skipping token\n");
+            state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
+            continue;
+        }
+
+        uint32_t rule_index = phrase.data;
+
+        bool set_rule = false;
+        state.state = NUMEX_SEARCH_STATE_MATCH;
+
+        log_debug("phrase.len=%lld, phrase.data=%d\n", phrase.len, phrase.data);
+
+        rule = get_numex_rule((size_t)phrase.data);
+        log_debug("rule.value=%lld\n", rule.value);
+
+        if (rule.rule_type != NUMEX_NULL) {
+            set_rule = true;
+
+            if (rule.gender != GENDER_NONE) {
+                result.gender = rule.gender;
+            }
+
+            if (rule.category != CATEGORY_DEFAULT) {
+                result.category = rule.category;
+            }
+
+            /* e.g. in English, "two hundred", when you get to hundred, multiply by the 
+               left value mod the current value, which also covers things like
+               "one thousand two hundred" although in those cases should be less commmon in addresses
+            */
+
+            if (result.len == 0) {
+                result.start = idx + phrase.start;
+            }
+            result.len = idx + phrase.start + phrase.len - result.start;
+
+            log_debug("ide=%d, phrase.len=%d\n", idx, phrase.len);
+
+            log_debug("prev_rule.radix=%d\n", prev_rule.radix);
+
+            if (rule.left_context_type == NUMEX_LEFT_CONTEXT_MULTIPLY) {
+                int64_t multiplier = result.value % rule.value;
+                if (multiplier != 0) {
+                    result.value -= multiplier;
+                } else {
+                    multiplier = 1;
+                }
+                result.value += rule.value * multiplier;
+                log_debug("LEFT_CONTEXT_MULTIPLY, value = %lld\n", result.value);
+            } else if (rule.left_context_type == NUMEX_LEFT_CONTEXT_ADD) {
+                result.value += rule.value;
+                log_debug("LEFT_CONTEXT_ADD, value = %lld\n", result.value);
+            } else if (prev_rule.right_context_type == NUMEX_RIGHT_CONTEXT_ADD && rule.value > 0 && prev_rule.radix > 0 && FLOOR_LOG_BASE(rule.value, prev_rule.radix) < FLOOR_LOG_BASE(prev_rule.value, prev_rule.radix)) {
+                result.value += rule.value;
+                log_debug("Last token was RIGHT_CONTEXT_ADD, value=%lld\n", result.value);
+            } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD) {
+                log_debug("Had previous token with no context, finishing previous rule before returning\n");
+
+                number_finished = true;
+                advance_index = false;
+                state = start_state;
+                rule = prev_rule = NUMEX_NULL_RULE;
+            } else if (rule.rule_type != NUMEX_STOPWORD) {
+                result.value = rule.value;
+                log_debug("Got number, result.value=%lld\n", result.value);
+            }
+
+            if (rule.rule_type != NUMEX_STOPWORD) {
+                prev_rule = rule;
+            }
+
+            if (rule.rule_type == NUMEX_ORDINAL_RULE) {
+                result.is_ordinal = true;
+                if (rule.right_context_type == NUMEX_RIGHT_CONTEXT_NONE) {
+                    number_finished = true;
+                }
+                log_debug("rule is ordinal\n");
+            } 
+
+            if (idx + phrase.len == len) {
+                number_finished = true;
+            }
+        }
+        if (!set_rule) {
+            rule = prev_rule = NUMEX_NULL_RULE;
+            log_debug("Resetting rules to NUMEX_NULL_RULE\n");
+        }
+
+        set_rule = false;
+
+        if (advance_index) {
+            idx += phrase.len;
+            ptr += phrase.len;
+        }
+
+        advance_index = true;
+
+        if (number_finished) {
+            results = (results != NULL) ? results : numex_result_array_new_size(1);
+            numex_result_array_push(results, result);
+            log_debug("Adding phrase, value=%lld\n", result.value);
+            result = NULL_NUMEX_RESULT;
+            number_finished = false;
+        }
+
+        prev_state = state;
+
+    }
+
+
+
+        /*
+
+
+
+
+
+        } else if (!is_space && !is_hyphen) {
+            log_info("Tail did not match\n");
+            state = start_state;
+            if (number_finished) {
+
             }
         }
 
-        log_debug("Got char '%.*s', len=%zu at idx=%zu\n", (int)char_len, str + idx, char_len, idx);
+        last_node = start_node;
+        last_node_id = start_state.node_id;
 
-        if (prev_state.state == NUMEX_SEARCH_STATE_SKIP_TOKEN && !is_space && !is_hyphen) {
-            log_debug("Skipping\n");
-            idx += char_len;
-            ptr += char_len;
+        check_match = false;
 
-            node = last_node = start_node;
-            node_id = last_node_id = start_state.node_id;
-            continue;
         }
+
+
+
+
 
         state = start_state;
  
@@ -704,8 +868,9 @@ numex_phrase_array *convert_numeric_expressions(char *str, char *lang) {
 
         bool check_match = false;
 
-        for (int i = 0; remaining > 0; remaining--) {
-            ch = (unsigned char) *ptr++;
+        for (int i = 0; remaining > 0; remaining--, ptr++) {
+            log_debug("start loop\n");
+            ch = (unsigned char) *ptr;
             log_debug("char=%c, last_node_id=%d\n", ch, last_node_id);
 
             node_id = trie_get_transition_index(trie, last_node, ch);
@@ -720,13 +885,20 @@ numex_phrase_array *convert_numeric_expressions(char *str, char *lang) {
                     last_node = start_node;
                     last_node_id = start_state.node_id;
 
-                    log_debug("No NUL-byte transition, resetting state, last_node_id=%d\n", last_node_id);
+                    log_debug("No NUL-byte transition, resetting state to start node_id=%d\n", last_node_id);
 
                     if (!is_space && !is_hyphen) {
                         log_debug("Fell off trie inside token. Setting to skip\n");
                         state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
                         ptr += remaining;
+                        rule = prev_rule = NUMEX_NULL_RULE;
+                        if (prev_state.state == NUMEX_SEARCH_STATE_MATCH) {
+                            log_debug("Previous number was match\n");
+                            number_finished = true;
+                        }
                         break;
+                    } else if (prev_state.state == NUMEX_SEARCH_STATE_MATCH) {
+                        state = prev_state;
                     }
 
                 } else {
@@ -737,7 +909,6 @@ numex_phrase_array *convert_numeric_expressions(char *str, char *lang) {
                     node = match_node;
                     last_node = start_node;
                     last_node_id = start_state.node_id;
-                    ptr = back_ptr;
                     remaining = 0;
                     advance_index = false;
                 }
@@ -747,6 +918,7 @@ numex_phrase_array *convert_numeric_expressions(char *str, char *lang) {
                 log_debug("not null\n");
                 state.state = NUMEX_SEARCH_STATE_PARTIAL_MATCH;
                 if (phrase.len == 0) {
+                    log_debug("phrase.start=%d\n", idx);
                     phrase.start = idx;
                     phrase.len = char_len;
                 }
@@ -769,12 +941,12 @@ numex_phrase_array *convert_numeric_expressions(char *str, char *lang) {
                 unsigned char *current_tail = trie->tail->a + data_node.tail;
 
                 size_t tail_len = strlen((char *)current_tail);
-                char *query_tail = (char *)ptr;
+                char *query_tail = (char *)(*ptr ? ptr + 1 : ptr);
                 size_t query_tail_len = strlen((char *)query_tail);
 
-                log_info("query_tail=%s, current_tail=%s, bytes=%zu\n", query_tail, current_tail, query_tail_len);
+                log_info("query_tail=%s, current_tail=%s, bytes=%zu\n", query_tail, current_tail, tail_len);
 
-                if (tail_len <= query_tail_len && strncmp((char *)current_tail, query_tail, tail_len) == 0) {
+                if (tail_len <= query_tail_len && utf8_compare_len_ignore_separators((char *)current_tail, query_tail, tail_len) == 0) {
                     bool set_rule = false;
                     state.state = NUMEX_SEARCH_STATE_MATCH;
 
@@ -782,6 +954,7 @@ numex_phrase_array *convert_numeric_expressions(char *str, char *lang) {
                     log_info("phrase.start=%d\n, idx=%d, phrase.len=%d\n", phrase.start, idx, phrase.len);
 
                     ptr += remaining + tail_len;
+                    log_info("remaining=%d, tail_len=%d\n", remaining, tail_len);
 
                     char_len += remaining + tail_len;
                     remaining = 0;
@@ -801,18 +974,13 @@ numex_phrase_array *convert_numeric_expressions(char *str, char *lang) {
                             phrase.category = rule.category;
                         }
 
-                        /* e.g. in English, "two hundred", when you get to hundred, multiply by the 
-                           left value mod the current value, which also covers things like
-                           "one thousand two hundred" although in those cases should be less commmon in addresses
-                        */
-
                         if (rule.rule_type == NUMEX_ORDINAL_RULE) {
                             phrase.is_ordinal = true;
                             number_finished = true;
                             log_info("rule is ordinal\n");
                         } 
 
-                        log_info("prev_rule.radix=%d\n", prev_rule.radix);
+                        log_debug("prev_rule.radix=%d\n", prev_rule.radix);
 
                         if (rule.left_context_type == NUMEX_LEFT_CONTEXT_MULTIPLY) {
                             int64_t multiplier = phrase.value % rule.value;
@@ -822,52 +990,51 @@ numex_phrase_array *convert_numeric_expressions(char *str, char *lang) {
                                 multiplier = 1;
                             }
                             phrase.value += rule.value * multiplier;
-                            log_info("LEFT_CONTEXT_MULTIPLY, value = %lld\n", phrase.value);
+                            log_debug("LEFT_CONTEXT_MULTIPLY, value = %lld\n", phrase.value);
                         } else if (rule.left_context_type == NUMEX_LEFT_CONTEXT_ADD) {
                             phrase.value += rule.value;
-                            log_info("LEFT_CONTEXT_MULTIPLY, value = %lld\n", phrase.value);
+                            log_debug("LEFT_CONTEXT_ADD, value = %lld\n", phrase.value);
                         } else if (prev_rule.right_context_type == NUMEX_RIGHT_CONTEXT_ADD && rule.value > 0 && prev_rule.radix > 0 && FLOOR_LOG_BASE(rule.value, prev_rule.radix) < FLOOR_LOG_BASE(prev_rule.value, prev_rule.radix)) {
                             phrase.value += rule.value;
-                            log_info("Last token was RIGHT_CONTEXT_ADD, value=%lld\n", phrase.value);
+                            log_debug("Last token was RIGHT_CONTEXT_ADD, value=%lld\n", phrase.value);
                         } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD) {
-                            log_info("Had previous token with no context, finishing previous rule before returning\n");
+                            log_debug("Had previous token with no context, finishing previous rule before returning\n");
 
                             number_finished = true;
                             advance_index = false;
                             state = start_state;
                             last_node = start_node;
                             last_node_id = start_state.node_id;
-                            ptr = back_ptr;
                             rule = prev_rule = NUMEX_NULL_RULE;
                             break;
                         } else if (rule.rule_type != NUMEX_STOPWORD) {
                             phrase.value = rule.value;
-                            log_info("Got number, phrase.value=%lld\n", phrase.value);
+                            log_debug("Got number, phrase.value=%lld\n", phrase.value);
                         }
 
                         if (rule.rule_type != NUMEX_STOPWORD) {
                             prev_rule = rule;
-                        } else {
-                            stopword = true;
                         }
-
                     }
                     if (!set_rule) {
                         rule = prev_rule = NUMEX_NULL_RULE;
                         log_info("Resetting\n");
                     }
-                    set_rule = false;
 
-                } else {
+                    set_rule = false;
+                } else if (!is_space && !is_hyphen) {
                     log_info("Tail did not match\n");
-                    advance_index = false;
+                    state = start_state;
+                    if (number_finished) {
+
+                    }
                 }
 
-                state = start_state;
                 last_node = start_node;
                 last_node_id = start_state.node_id;
 
                 check_match = false;
+
             }
 
 
@@ -875,12 +1042,14 @@ numex_phrase_array *convert_numeric_expressions(char *str, char *lang) {
 
         if (advance_index) {
             idx += char_len;
+        } else {
+            ptr = (uint8_t *)back_ptr;
         }
 
         if (number_finished) {
             phrases = (phrases != NULL) ? phrases : numex_phrase_array_new_size(1);
             numex_phrase_array_push(phrases, phrase);
-            log_info("phrase.value=%lld\n", phrase.value);
+            log_info("Adding phrase, value=%lld\n", phrase.value);
             phrase = NULL_NUMEX_PHRASE;
             number_finished = false;
         }
@@ -890,7 +1059,10 @@ numex_phrase_array *convert_numeric_expressions(char *str, char *lang) {
 
         advance_index = true;
 
-    }
+        log_debug("ptr=%s\n", ptr);
 
-    return phrases;
+    }
+    */
+
+    return results;
 }
