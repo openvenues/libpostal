@@ -73,7 +73,7 @@ ordinal_indicator_template = u'{{"{key}", {gender}, {category}, "{value}"}}'
 
 stopwords_template = u'"{word}"'
 
-language_template = u'{{"{language}", {rule_index}, {num_rules}, {ordinal_indicator_index}, {num_ordinal_indicators}}}'
+language_template = u'{{"{language}", {whole_words_only}, {rule_index}, {num_rules}, {ordinal_indicator_index}, {num_ordinal_indicators}}}'
 
 numex_rules_data_template = u'''
 numex_rule_source_t numex_rules[] = {{
@@ -107,6 +107,8 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
         language = filename.split('.json', 1)[0]
 
         data = json.load(open(path))
+
+        whole_words_only = data.get('whole_words_only', False)
 
         rules = data.get('rules', [])
         rule_index = len(all_rules)
@@ -163,6 +165,7 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
 
         all_languages.append(unicode(language_template.format(
             language=language,
+            whole_words_only=int(whole_words_only),
             rule_index=rule_index,
             num_rules=num_rules,
             ordinal_indicator_index=ordinal_indicator_index,
