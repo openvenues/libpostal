@@ -236,6 +236,8 @@ size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *st
 
     size_t match_len = 0;
 
+    bool one_char_match = false;
+
     while (1) {
         len1 = utf8proc_iterate(ptr1, -1, &c1);
         len2 = utf8proc_iterate(ptr2, -1, &c2);
@@ -247,9 +249,14 @@ size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *st
             ptr2 += len2;
             remaining -= len1;
             match_len += len1;
+            one_char_match = true;
         } else if (utf8_is_hyphen(c1) || utf8_is_separator(utf8proc_category(c1))) {
             ptr1 += len1;
             match_len += len1;
+            if (utf8_is_hyphen(c2) || utf8_is_separator(utf8proc_category(c2))) {
+                ptr2 += len2;
+                remaining -= len2;
+            }
         } else if (utf8_is_hyphen(c2) || utf8_is_separator(utf8proc_category(c2))) {
             ptr2 += len2;
             remaining -= len2;
@@ -261,7 +268,8 @@ size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *st
 
     }
 
-    return match_len;
+    return one_char_match ? match_len : 0;
+
 }
 
 inline size_t utf8_common_prefix_ignore_separators(const char *str1, const char *str2) {
