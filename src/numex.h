@@ -18,6 +18,7 @@ extern "C" {
 #include "string_utils.h"
 #include "tokens.h"
 #include "trie.h"
+#include "trie_search.h"
 
 #define DEFAULT_NUMEX_PATH LIBPOSTAL_DATA_DIR "/numex/numex.dat"
 
@@ -97,6 +98,7 @@ VECTOR_INIT_FREE_DATA(ordinal_indicator_array, ordinal_indicator_t *, ordinal_in
 
 typedef struct numex_language {
     char *name;
+    bool whole_tokens_only;
     size_t rules_index;
     size_t num_rules;
     size_t ordinals_index;
@@ -114,25 +116,25 @@ typedef struct {
 
 numex_table_t *get_numex_table(void);
 
-numex_language_t *numex_language_new(char *name, size_t rules_index, size_t num_rules, size_t ordinals_index, size_t num_ordinals);
+numex_language_t *numex_language_new(char *name, bool whole_tokens_only, size_t rules_index, size_t num_rules, size_t ordinals_index, size_t num_ordinals);
 void numex_language_destroy(numex_language_t *self);
 
 bool numex_table_add_language(numex_language_t *language);
 
 numex_language_t *get_numex_language(char *name);
 
-typedef struct numex_phrase {
+typedef struct numex_result {
     int64_t value;
     gender_t gender;
     grammatical_category_t category;
     bool is_ordinal;
     size_t start;
     size_t len;
-} numex_phrase_t;
+} numex_result_t;
 
-VECTOR_INIT(numex_phrase_array, numex_phrase_t)
+VECTOR_INIT(numex_result_array, numex_result_t)
 
-numex_phrase_array *convert_numeric_expressions(char *str, char *lang);
+numex_result_array *convert_numeric_expressions(char *str, char *lang);
 
 bool numex_table_write(FILE *file);
 bool numex_table_save(char *filename);

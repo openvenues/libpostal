@@ -123,7 +123,7 @@ int main(int argc, char **argv) {
             trie_add(numex_table->trie, str_key, value);
         }
 
-        numex_language_t *language = numex_language_new(lang_source.name, lang_source.rule_index, lang_source.num_rules, lang_source.ordinal_indicator_index, lang_source.num_ordinal_indicators);
+        numex_language_t *language = numex_language_new(lang_source.name, lang_source.whole_tokens_only, lang_source.rule_index, lang_source.num_rules, lang_source.ordinal_indicator_index, lang_source.num_ordinal_indicators);
         numex_table_add_language(language);
 
     }

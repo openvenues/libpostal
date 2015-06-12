@@ -11,6 +11,7 @@ typedef struct numex_rule_source {
 
 typedef struct numex_language_source {
     char *name;
+    bool whole_tokens_only;
     size_t rule_index;
     size_t num_rules;
     size_t ordinal_indicator_index;
