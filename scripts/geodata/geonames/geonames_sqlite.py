@@ -24,7 +24,7 @@ from geodata.log import *
 
 from itertools import islice, chain
 
-log_to_stdout()
+log_to_file(sys.stderr)
 logger = logging.getLogger('geonames.sqlite')
 
 GEONAMES_DB_NAME = 'geonames.db'
