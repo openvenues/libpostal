@@ -18,6 +18,7 @@ this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.encoding import safe_decode
+from geodata.geonames.paths import *
 
 from geodata.file_utils import *
 from geodata.log import *
@@ -26,12 +27,6 @@ from itertools import islice, chain
 
 log_to_file(sys.stderr)
 logger = logging.getLogger('geonames.sqlite')
-
-GEONAMES_DB_NAME = 'geonames.db'
-
-DEFAULT_GEONAMES_DB_PATH = os.path.join(this_dir, os.path.pardir,
-                                        os.path.pardir, os.path.pardir,
-                                        'data', 'geonames', GEONAMES_DB_NAME)
 
 BASE_URL = 'http://download.geonames.org/export/'
 
