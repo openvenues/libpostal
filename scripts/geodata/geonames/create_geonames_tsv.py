@@ -4,12 +4,19 @@ import os
 import sqlite3
 import sys
 
+import requests
+import pycountry
+
+from lxml import etree
+
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.file_utils import *
 from geodata.encoding import safe_encode
 from geodata.geonames.geonames_sqlite import DEFAULT_GEONAMES_DB_PATH
+from geodata.i18n.unicode_paths import CLDR_DIR
+
 
 DEFAULT_DATA_DIR = os.path.join(this_dir, os.path.pardir, os.path.pardir,
                                 os.path.pardir, 'data', 'geonames')
@@ -28,6 +35,9 @@ POPULATED_PLACE_FEATURE_CODES = ('PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4',
                                  'PPLC', 'PPLCH', 'PPLF', 'PPLG', 'PPLL',
                                  'PPLR', 'PPLS', 'STLMT')
 NEIGHBORHOOD_FEATURE_CODES = ('PPLX', )
+
+
+CLDR_ENGLISH_PATH = os.path.join(CLDR_DIR, 'common', 'main', 'en.xml')
 
 
 class boundary_types:
@@ -87,6 +97,16 @@ geonames_fields = [
 
 DUMMY_BOUNDARY_TYPE_INDEX = [i for i, f in enumerate(geonames_fields)
                              if f.is_dummy][0]
+
+CANONICAL_NAME_INDEX = [i for i, f in enumerate(geonames_fields)
+                        if f.c_constant == 'GEONAMES_CANONICAL'][0]
+
+NAME_INDEX = [i for i, f in enumerate(geonames_fields)
+              if f.c_constant == 'GEONAMES_NAME'][0]
+
+COUNTRY_CODE_INDEX = [i for i, f in enumerate(geonames_fields)
+                      if f.c_constant == 'GEONAMES_COUNTRY_CODE'][0]
+
 
 geonames_admin_joins = '''
 left join admin1_codes a1
@@ -185,12 +205,47 @@ group by postal_code, p.country_code
 BATCH_SIZE = 2000
 
 
-def create_geonames_tsv(db_path, out_dir=DEFAULT_DATA_DIR):
+IGNORE_COUNTRIES = set(['ZZ'])
+
+COUNTRY_USE_SHORT_NAME = set(['HK', 'MM', 'MO', 'PS'])
+COUNTRY_USE_VARIANT_NAME = set(['CD', 'CG', 'CI', 'TL'])
+
+
+def cldr_country_names(filename=CLDR_ENGLISH_PATH):
+    xml = etree.parse(open(filename))
+
+    country_names = {}
+
+    for territory in xml.xpath('*//territories/*'):
+        country_code = territory.attrib['type']
+        if country_code in IGNORE_COUNTRIES and not country_code.isdigit():
+            continue
+        elif country_code in COUNTRY_USE_SHORT_NAME and territory.attrib.get('alt') != 'short':
+            continue
+        elif country_code in COUNTRY_USE_VARIANT_NAME and territory.attrib.get('alt') != 'variant':
+            continue
+        elif country_code not in COUNTRY_USE_SHORT_NAME and country_code not in COUNTRY_USE_VARIANT_NAME and territory.attrib.get('alt'):
+            continue
+
+        country_names[country_code] = safe_encode(territory.text)
+
+    return country_names
+
+
+def create_geonames_tsv(db_path, out_dir=None):
     db = sqlite3.connect(db_path)
 
     filename = 'geonames.tsv'
-    f = open(os.path.join(out_dir, filename), 'w')
+    if out_dir:
+        f = open(os.path.join(out_dir, filename), 'w')
+    else:
+        f = sys.stdout
     writer = csv.writer(f, delimiter='\t')
+
+    country_code_alpha3_map = {c.alpha2: c.alpha3 for c in pycountry.countries}
+    country_alpha2 = set([c.alpha2 for c in pycountry.countries])
+
+    country_names = cldr_country_names()
 
     for boundary_type, codes in geonames_admin_dictionaries.iteritems():
         if boundary_type != boundary_types.COUNTRY:
@@ -214,20 +269,42 @@ def create_geonames_tsv(db_path, out_dir=DEFAULT_DATA_DIR):
             for row in batch:
                 row = [safe_encode(val or '') for val in row]
                 row[DUMMY_BOUNDARY_TYPE_INDEX] = boundary_type
+
+                if boundary_type == boundary_types.COUNTRY:
+                    alpha2_code = row[COUNTRY_CODE_INDEX]
+
+                    is_orig_name = row[NAME_INDEX] == row[CANONICAL_NAME_INDEX]
+                    row[CANONICAL_NAME_INDEX] = country_names[row[COUNTRY_CODE_INDEX]]
+
+                    if alpha2_code and is_orig_name:
+                        alpha2_row = row[:]
+                        alpha2_row[NAME_INDEX] = alpha2_code
+                        rows.append(alpha2_row)
+
+                    if alpha2_code in country_code_alpha3_map and is_orig_name:
+                        alpha3_row = row[:]
+                        alpha3_row[NAME_INDEX] = country_code_alpha3_map[alpha2_code]
+                        rows.append(alpha3_row)
+
                 rows.append(row)
 
             writer.writerows(rows)
         cursor.close()
         f.flush()
-    f.close()
+
+    if out_dir:
+        f.close()
     db.close()
 
 
-def create_postal_codes_tsv(db_path, out_dir=DEFAULT_DATA_DIR):
+def create_postal_codes_tsv(db_path, out_dir=None):
     db = sqlite3.connect(db_path)
 
     filename = 'postal_codes.tsv'
-    f = open(os.path.join(out_dir, filename), 'w')
+    if out_dir:
+        f = open(os.path.join(out_dir, filename), 'w')
+    else:
+        f = sys.stdout
     writer = csv.writer(f, delimiter='\t')
 
     cursor = db.execute(postal_codes_query)
@@ -243,7 +320,8 @@ def create_postal_codes_tsv(db_path, out_dir=DEFAULT_DATA_DIR):
         writer.writerows(rows)
 
     cursor.close()
-    f.close()
+    if out_dir:
+        f.close()
     db.close()
 
 # Generates a C header telling us the order of the fields as written
@@ -285,7 +363,7 @@ if __name__ == '__main__':
                         default=DEFAULT_GEONAMES_DB_PATH,
                         help='SQLite db file')
     parser.add_argument('-o', '--out',
-                        default=DEFAULT_DATA_DIR, help='output directory')
+                        default=None, help='output directory')
     args = parser.parse_args()
     create_geonames_tsv(args.db, args.out)
     create_postal_codes_tsv(args.db, args.out)
