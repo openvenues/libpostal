@@ -1,7 +1,9 @@
 import argparse
 import csv
+import logging
 import os
 import sqlite3
+import subprocess
 import sys
 
 import requests
@@ -14,9 +16,12 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.file_utils import *
 from geodata.encoding import safe_encode
-from geodata.geonames.geonames_sqlite import DEFAULT_GEONAMES_DB_PATH
+from geodata.geonames.paths import DEFAULT_GEONAMES_DB_PATH
 from geodata.i18n.unicode_paths import CLDR_DIR
+from geodata.log import log_to_file
 
+
+log_to_file(sys.stderr)
 
 DEFAULT_DATA_DIR = os.path.join(this_dir, os.path.pardir, os.path.pardir,
                                 os.path.pardir, 'data', 'geonames')
@@ -74,10 +79,10 @@ class GeonamesField(object):
 
 geonames_fields = [
     # Field if alternate_names present, default field name if not, C header constant
+    GeonamesField('alternate_name', 'GEONAMES_NAME', default='gn.name'),
     GeonamesField('gn.geonames_id as geonames_id', 'GEONAMES_ID'),
     GeonamesField('gn.name as canonical', 'GEONAMES_CANONICAL'),
     GeonamesField(DUMMY_BOUNDARY_TYPE, 'GEONAMES_BOUNDARY_TYPE', is_dummy=True),
-    GeonamesField('alternate_name', 'GEONAMES_NAME', default='gn.name'),
     GeonamesField('iso_language', 'GEONAMES_ISO_LANGUAGE', default="''"),
     GeonamesField('is_preferred_name', 'GEONAMES_IS_PREFERRED_NAME', default='0'),
     GeonamesField('population', 'GEONAMES_POPULATION'),
@@ -232,15 +237,12 @@ def cldr_country_names(filename=CLDR_ENGLISH_PATH):
     return country_names
 
 
-def create_geonames_tsv(db_path, out_dir=None):
-    db = sqlite3.connect(db_path)
+def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
+    filename = os.path.join(out_dir, 'geonames.tsv')
+    temp_filename = filename + '.tmp'
 
-    filename = 'geonames.tsv'
-    if out_dir:
-        f = open(os.path.join(out_dir, filename), 'w')
-    else:
-        f = sys.stdout
-    writer = csv.writer(f, delimiter='\t')
+    f = open(temp_filename, 'w')
+    writer = csv.writer(f, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
 
     country_code_alpha3_map = {c.alpha2: c.alpha3 for c in pycountry.countries}
     country_alpha2 = set([c.alpha2 for c in pycountry.countries])
@@ -261,6 +263,7 @@ def create_geonames_tsv(db_path, out_dir=None):
         )
 
         cursor = db.execute(query)
+        i = 1
         while True:
             batch = cursor.fetchmany(BATCH_SIZE)
             if not batch:
@@ -289,26 +292,29 @@ def create_geonames_tsv(db_path, out_dir=None):
                 rows.append(row)
 
             writer.writerows(rows)
+            logging.info('Did {} batches'.format(i))
+            i += 1
+
         cursor.close()
         f.flush()
 
-    if out_dir:
-        f.close()
-    db.close()
+    f.close()
+
+    logging.info('Sorting...')
+    subprocess.check_call(['sort', '-t\t', '-k1,1', '-k2,2', '-o', filename, temp_filename])
+    os.unlink(temp_filename)
 
 
-def create_postal_codes_tsv(db_path, out_dir=None):
-    db = sqlite3.connect(db_path)
+def create_postal_codes_tsv(db, out_dir=DEFAULT_DATA_DIR):
+    filename = os.path.join(out_dir, 'postal_codes.tsv')
+    temp_filename = filename + '.tmp'
+    f = open(temp_filename, 'w')
 
-    filename = 'postal_codes.tsv'
-    if out_dir:
-        f = open(os.path.join(out_dir, filename), 'w')
-    else:
-        f = sys.stdout
-    writer = csv.writer(f, delimiter='\t')
+    writer = csv.writer(f, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
 
     cursor = db.execute(postal_codes_query)
 
+    i = 1
     while True:
         batch = cursor.fetchmany(BATCH_SIZE)
         if not batch:
@@ -318,11 +324,15 @@ def create_postal_codes_tsv(db_path, out_dir=None):
             for row in batch
         ]
         writer.writerows(rows)
+        logging.info('Did {} batches'.format(i))
+        i += 1
 
     cursor.close()
-    if out_dir:
-        f.close()
-    db.close()
+    f.close()
+
+    logging.info('Sorting...')
+    subprocess.check_call(['sort', '-t\t', '-k1,1', '-k2,2', '-o', filename, temp_filename])
+    os.unlink(temp_filename)
 
 # Generates a C header telling us the order of the fields as written
 GEONAMES_FIELDS_HEADER = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
@@ -363,9 +373,12 @@ if __name__ == '__main__':
                         default=DEFAULT_GEONAMES_DB_PATH,
                         help='SQLite db file')
     parser.add_argument('-o', '--out',
-                        default=None, help='output directory')
+                        default=DEFAULT_DATA_DIR, help='output directory')
     args = parser.parse_args()
-    create_geonames_tsv(args.db, args.out)
-    create_postal_codes_tsv(args.db, args.out)
+    db = sqlite3.connect(args.db)
+
+    create_geonames_tsv(db, args.out)
+    create_postal_codes_tsv(db, args.out)
     write_geonames_fields_header()
     write_postal_fields_header()
+    db.close()
