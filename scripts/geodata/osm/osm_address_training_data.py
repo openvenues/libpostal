@@ -16,9 +16,11 @@ from itertools import ifilter
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
+sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
+
 from address_normalizer.text.tokenize import *
-from address_normalizer.text.language import *
-from address_normalizer.polygons.language_polys import *
+from geodata.i18n.languages import *
+from geodata.polygons.language_polys import *
 
 from geodata.file_utils import *
 
@@ -419,6 +421,7 @@ if __name__ == '__main__':
     parser.add_argument('-t', '--temp-dir',
                         default=tempfile.gettempdir(),
                         help='Temp directory to use')
+
     parser.add_argument('-u', '--url',
                         default=DEFAULT_PLANET_URL,
                         help='URL of OSM planet dump to use (PBF preferably)')
