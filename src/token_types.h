@@ -13,7 +13,8 @@ extern "C" {
 #define WORD 1                  // Any letter-only word (includes all unicode letters)
 #define ABBREVIATION 2          // Loose abbreviations (ending in ".")
 #define IDEOGRAPHIC_CHAR 3      // For languages that don't separate on whitespace (e.g. Chinese, Japanese, Korean), separate by character
-#define PHRASE 4                // Not part of the first stage tokenizer, but may be used after phrase parsing
+#define HANGUL_SYLLABLE 4       // Hangul syllable sequences which contain more than one codepoint
+#define PHRASE 5                // Not part of the first stage tokenizer, but may be used after phrase parsing
 
 // Special tokens
 #define EMAIL 20                // Make sure emails are tokenized altogether
