@@ -9,6 +9,7 @@ into scanner.re before compliation.
 '''
 
 import requests
+from collections import defaultdict
 import re
 
 # Operate on WordBreakProperty.txt file
@@ -29,6 +30,7 @@ other_number_regex = re.compile('^([^\s]+)[\s]+; ExtendNumLet ')
 script_regex = re.compile('([^\s]+)[\s]+;[\s]*([^\s]+)[\s]*#[\s]*([^\s]+)')
 
 WORD_BREAK_PROPERTIES_URL = 'http://www.unicode.org/Public/UCD/latest/ucd/auxiliary/WordBreakProperty.txt'
+HANGUL_SYLLABLE_TYPES_URL = 'http://www.unicode.org/Public/UCD/latest/ucd/HangulSyllableType.txt'
 SCRIPTS_URL = 'http://unicode.org/Public/UNIDATA/Scripts.txt'
 
 ideographic_scripts = set([
@@ -81,6 +83,18 @@ def get_char_class(text, char_class_regex):
     return char_ranges
 
 
+hangul_syllable_type_regex = re.compile('^([^\s]+)[\s]+; ([A-Z]+)')
+
+
+def get_hangul_syllable_ranges(text):
+    char_ranges = defaultdict(list)
+    for line in text.split('\n'):
+        m = hangul_syllable_type_regex.match(line)
+        if m:
+            char_ranges[m.group(2)].append(regex_char_range(m.group(1)))
+    return dict(char_ranges)
+
+
 name_funcs = [
     ('hebrew_letter_chars', hebrew_letter_regex),
     ('format_chars', format_regex),
@@ -109,6 +123,13 @@ def main():
         for name, reg in name_funcs:
             s = get_letter_range(response.content, reg)
             print '{} = [{}];'.format(name, ''.join(s))
+
+    response = requests.get(HANGUL_SYLLABLE_TYPES_URL)
+
+    if response.ok:
+        syllable_ranges = get_hangul_syllable_ranges(response.content)
+        for name, ranges in syllable_ranges.iteritems():
+            print 'hangul_syllable_class_{} = [{}];'.format(name, u''.join(ranges))
 
     response = requests.get(SCRIPTS_URL)
     if response.ok:
