@@ -80,11 +80,10 @@ BIDIRECTIONAL_TRANSLITERATORS = {
 
 REVERSE_TRANSLITERATORS = {
     'latin-katakana': 'katakana-latin',
+    'latin-conjoiningjamo': 'conjoiningjamo-latin',
 }
 
 EXCLUDE_TRANSLITERATORS = set([
-    'hangul-latin',
-    'jamo-latin',
     # Don't care about spaced Han because our tokenizer does it already
     'han-spacedhan',
 ])
@@ -266,6 +265,9 @@ paren_regex = re.compile(r'\(.*\)', re.UNICODE)
 group_ref_regex_str = '\$[0-9]+'
 group_ref_regex = re.compile(group_ref_regex_str)
 
+comment_regex = re.compile('(?<!\')#(?!=\')')
+
+
 # Limited subset of regular expressions used in transforms
 
 OPEN_SET = 'OPEN_SET'
@@ -292,7 +294,8 @@ SINGLE_QUOTE = 'SINGLE_QUOTE'
 UNICODE_CHARACTER = 'UNICODE_CHARACTER'
 UNICODE_WIDE_CHARACTER = 'UNICODE_WIDE_CHARACTER'
 ESCAPED_CHARACTER = 'ESCAPED_CHARACTER'
-
+END = 'END'
+COMMENT = 'COMMENT'
 
 BEFORE_CONTEXT = 'BEFORE_CONTEXT'
 AFTER_CONTEXT = 'AFTER_CONTEXT'
@@ -302,6 +305,8 @@ STAR = 'STAR'
 
 rule_scanner = Scanner([
     (r'[\\].', ESCAPED_CHARACTER),
+    (r'\'\'', SINGLE_QUOTE),
+    (r'\'.*?\'', QUOTED_STRING),
     ('\[', OPEN_SET),
     ('\]', CLOSE_SET),
     ('\(', OPEN_GROUP),
@@ -309,6 +314,7 @@ rule_scanner = Scanner([
     ('\{', BEFORE_CONTEXT),
     ('\}', AFTER_CONTEXT),
     ('[\s]+', WHITESPACE),
+    (';', END),
     (r'[^\s]', CHARACTER),
 ])
 
@@ -571,6 +577,14 @@ def parse_regex_char_set(s, current_filter=all_chars):
 for name, regex_range in unicode_property_regexes:
     unicode_properties[name] = parse_regex_char_set(regex_range)
 
+init_unicode_categories()
+
+hangul_jamo_latin_filter = set(parse_regex_char_set("[['ᄀ-하-ᅵᆨ-ᇂ가-힣ㄱ-ㄿㅁ-ㅃㅅ-ㅣ㈀-㈜㉠-㉻가-힣＇ﾡ-ﾯﾱ-ﾳﾵ-ﾾￂ-ￇￊ-ￏￒ-ￗￚ-][:Latin:]]"))
+
+custom_filters = {
+    'conjoiningjamo-latin': hangul_jamo_latin_filter,
+}
+
 
 def get_source_and_target(xml):
     return xml.xpath('//transform/@source')[0], xml.xpath('//transform/@target')[0]
@@ -578,6 +592,35 @@ def get_source_and_target(xml):
 
 def is_internal(xml):
     return xml.xpath('//transform/@visibility="internal"')
+
+
+def split_rule(rule):
+    splits = []
+    current_token = []
+
+    in_set = False
+    in_group = False
+    open_brackets = 0
+
+    for token, token_type in rule_scanner.scan(rule):
+        if token_type == ESCAPED_CHARACTER:
+            current_token.append(token)
+        elif token_type == OPEN_SET:
+            in_set = True
+            open_brackets += 1
+            current_token.append(token)
+        elif token_type == CLOSE_SET:
+            open_brackets -= 1
+            current_token.append(token)
+            if open_brackets == 0:
+                in_set = False
+        elif token_type == END and not in_set:
+            current_token.append(token)
+            splits.append(u''.join(current_token).strip())
+            current_token = []
+        else:
+            current_token.append(token)
+    return splits
 
 
 def get_raw_rules_and_variables(xml, reverse=False):
@@ -599,16 +642,23 @@ def get_raw_rules_and_variables(xml, reverse=False):
     if reverse:
         nodes = reversed(nodes)
 
-    for rule in nodes:
-        if not rule.text:
-            continue
+    queue = deque([n.text for n in nodes if n.text])
 
-        rule = safe_decode(rule.text.rsplit(COMMENT_CHAR)[0].strip())
-        if rule not in rule_map:
+    while queue:
+        rule = queue.popleft()
+
+        rule = safe_decode(comment_regex.split(rule)[0].strip())
+
+        splits = split_rule(rule)
+        if len(splits) > 1:
+            for r in splits[1:]:
+                queue.appendleft(r)
+
+        if rule.strip() not in rule_map:
             rule = literal_space_regex.sub(replace_literal_space, rule)
             rule = rule.rstrip(END_CHAR).strip()
         else:
-            rule = rule_map[rule]
+            rule = rule_map[rule.strip()]
 
         if rule.strip().endswith('\\'):
             compound_rule.append(rule.rstrip('\\'))
@@ -654,7 +704,7 @@ CHAR_CLASSES = set([
 ])
 
 
-def char_permutations(s, current_filter=all_chars):
+def char_permutations(s, current_filter=all_chars, reverse=False):
     '''
     char_permutations
 
@@ -664,10 +714,14 @@ def char_permutations(s, current_filter=all_chars):
     '''
 
     if not s:
-        return [EMPTY_TRANSITION_CHAR], [], []
+        return deque([EMPTY_TRANSITION_CHAR]), deque([]), []
 
-    char_types = []
-    revisit_char_types = []
+    char_types = deque()
+
+    add_char_type = deque.append if not reverse else deque.appendleft
+    last_index = -1 if not reverse else 0
+
+    revisit_char_types = deque()
     in_revisit = False
 
     in_group = False
@@ -689,7 +743,7 @@ def char_permutations(s, current_filter=all_chars):
             continue
 
         if token_type == ESCAPED_CHARACTER:
-            current_chars.append([token.strip('\\')])
+            add_char_type(current_chars, [token.strip('\\')])
         elif token_type == OPEN_GROUP:
             in_group = True
             last_token_group_start = True
@@ -706,33 +760,43 @@ def char_permutations(s, current_filter=all_chars):
             if open_brackets == 0:
                 char_set = parse_regex_char_set(u''.join(current_set), current_filter=current_filter)
                 if char_set:
-                    current_chars.append(char_set)
+                    add_char_type(current_chars, char_set)
                 current_set = []
         elif token_type == QUOTED_STRING:
             token = token.strip("'")
             for c in token:
-                current_chars.append([c])
+                add_char_type(current_chars, [c])
         elif token_type == GROUP_REF:
-            current_chars.append([token.replace('$', GROUP_INDICATOR_CHAR)])
+            add_char_type(current_chars, [token.replace('$', GROUP_INDICATOR_CHAR)])
         elif token_type == REVISIT:
             in_revisit = True
             current_chars = revisit_char_types
         elif token_type == REPEAT:
-            current_chars[-1].append(EMPTY_TRANSITION_CHAR)
-            current_chars.append([REPEAT_CHAR])
+            current_chars[last_index].append(EMPTY_TRANSITION_CHAR)
+            if not reverse:
+                add_char_type(current_chars, [REPEAT_CHAR])
+            else:
+                prev = current_chars.popleft()
+                add_char_type(current_chars, [REPEAT_CHAR])
+                add_char_type(current_chars, prev)
         elif token_type == REPEAT_ONE:
-            current_chars.append([REPEAT_CHAR])
+            if not reverse:
+                add_char_type(current_chars, [REPEAT_CHAR])
+            else:
+                prev = current_chars.popleft()
+                add_char_type(current_chars, [REPEAT_CHAR])
+                add_char_type(current_chars, prev)
         elif token_type == OPTIONAL:
-            current_chars[-1].append(EMPTY_TRANSITION_CHAR)
+            current_chars[last_index].append(EMPTY_TRANSITION_CHAR)
         elif token_type == HTML_ENTITY:
-            current_chars.append([replace_html_entity(token)])
+            add_char_type(current_chars, [replace_html_entity(token)])
         elif token_type == CHARACTER:
-            current_chars.append([token])
+            add_char_type(current_chars, [token])
         elif token_type == SINGLE_QUOTE:
-            current_chars.append(["'"])
+            add_char_type(current_chars, ["'"])
         elif token_type == UNICODE_CHARACTER:
             token = token.decode('unicode-escape')
-            current_chars.append([token])
+            add_char_type(current_chars, [token])
         elif token_type in (WIDE_CHARACTER, UNICODE_WIDE_CHARACTER):
             continue
 
@@ -886,7 +950,7 @@ def format_rule(rule):
     return output_rule
 
 
-def parse_transform_rules(xml, reverse=False):
+def parse_transform_rules(name, xml, reverse=False):
     '''
     parse_transform_rules takes a parsed xml document as input
     and generates rules suitable for use in the C code.
@@ -914,7 +978,7 @@ def parse_transform_rules(xml, reverse=False):
     variables[WORD_BOUNDARY_VAR_NAME] = WORD_BOUNDARY_VAR
     variables[START_OF_HAN_VAR_NAME] = START_OF_HAN_VAR
 
-    current_filter = all_chars
+    current_filter = custom_filters.get(name.lower(), all_chars)
 
     for rule_type, rule in rules:
         if not reverse and rule_type in (BIDIRECTIONAL_TRANSFORM, FORWARD_TRANSFORM):
@@ -1023,9 +1087,10 @@ def parse_transform_rules(xml, reverse=False):
                     left_pre_context = None
                     left_pre_context_type = CONTEXT_TYPE_NONE
                 elif left_pre_context.strip():
-                    left_pre_context, _, _ = char_permutations(left_pre_context.strip(), current_filter=current_filter)
+                    left_pre_context, _, _ = char_permutations(left_pre_context.strip(), current_filter=current_filter, reverse=True)
                     if left_pre_context:
                         left_pre_context_max_len = len(left_pre_context or [])
+                        left_pre_context = list(left_pre_context)
                         left_pre_context = char_types_string(left_pre_context)
 
                         if charset_regex.search(left_pre_context):
@@ -1039,11 +1104,13 @@ def parse_transform_rules(xml, reverse=False):
                 left_pre_context = None
                 left_pre_context_type = CONTEXT_TYPE_NONE
 
-            if left:
+            if left is not None:
                 left_chars, _, left_groups = char_permutations(left.strip(), current_filter=current_filter)
                 if not left_chars and (left.strip() or not (left_pre_context and left_post_context)):
                     print 'ignoring', rule
                     continue
+                left_chars = list(left_chars)
+
                 if left_groups:
                     left_groups = format_groups(left_chars, left_groups)
                 else:
@@ -1061,6 +1128,7 @@ def parse_transform_rules(xml, reverse=False):
                     left_post_context, _, _ = char_permutations(left_post_context.strip(), current_filter=current_filter)
                     if left_post_context:
                         left_post_context_max_len = len(left_post_context or [])
+                        left_post_context = list(left_post_context)
                         left_post_context = char_types_string(left_post_context)
                         if charset_regex.search(left_post_context):
                             left_post_context_type = CONTEXT_TYPE_REGEX
@@ -1077,6 +1145,7 @@ def parse_transform_rules(xml, reverse=False):
                 right, revisit, right_groups = char_permutations(right.strip(), current_filter=current_filter)
                 right = char_types_string(right)
                 if revisit:
+                    revisit = list(revisit)
                     revisit = char_types_string(revisit)
                 else:
                     revisit = None
@@ -1123,6 +1192,10 @@ html_escapes = {'&{};'.format(name): escape_string(safe_encode(unichr(value)))
 # [[:Latin] & [:Ll:]]
 latin_lower_set = 'abcdefghijklmnopqrstuvwxyz\\xc2\\xaa\\xc2\\xba\\xc3\\x9f\\xc3\\xa0\\xc3\\xa1\\xc3\\xa2\\xc3\\xa3\\xc3\\xa4\\xc3\\xa5\\xc3\\xa6\\xc3\\xa7\\xc3\\xa8\\xc3\\xa9\\xc3\\xaa\\xc3\\xab\\xc3\\xac\\xc3\\xad\\xc3\\xae\\xc3\\xaf\\xc3\\xb0\\xc3\\xb1\\xc3\\xb2\\xc3\\xb3\\xc3\\xb4\\xc3\\xb5\\xc3\\xb6\\xc3\\xb8\\xc3\\xb9\\xc3\\xba\\xc3\\xbb\\xc3\\xbc\\xc3\\xbd\\xc3\\xbe\\xc3\\xbf\\xc4\\x81\\xc4\\x83\\xc4\\x85\\xc4\\x87\\xc4\\x89\\xc4\\x8b\\xc4\\x8d\\xc4\\x8f\\xc4\\x91\\xc4\\x93\\xc4\\x95\\xc4\\x97\\xc4\\x99\\xc4\\x9b\\xc4\\x9d\\xc4\\x9f\\xc4\\xa1\\xc4\\xa3\\xc4\\xa5\\xc4\\xa7\\xc4\\xa9\\xc4\\xab\\xc4\\xad\\xc4\\xaf\\xc4\\xb1\\xc4\\xb3\\xc4\\xb5\\xc4\\xb7\\xc4\\xb8\\xc4\\xba\\xc4\\xbc\\xc4\\xbe\\xc5\\x80\\xc5\\x82\\xc5\\x84\\xc5\\x86\\xc5\\x88\\xc5\\x89\\xc5\\x8b\\xc5\\x8d\\xc5\\x8f\\xc5\\x91\\xc5\\x93\\xc5\\x95\\xc5\\x97\\xc5\\x99\\xc5\\x9b\\xc5\\x9d\\xc5\\x9f\\xc5\\xa1\\xc5\\xa3\\xc5\\xa5\\xc5\\xa7\\xc5\\xa9\\xc5\\xab\\xc5\\xad\\xc5\\xaf\\xc5\\xb1\\xc5\\xb3\\xc5\\xb5\\xc5\\xb7\\xc5\\xba\\xc5\\xbc\\xc5\\xbe\\xc5\\xbf\\xc6\\x80\\xc6\\x83\\xc6\\x85\\xc6\\x88\\xc6\\x8c\\xc6\\x8d\\xc6\\x92\\xc6\\x95\\xc6\\x99\\xc6\\x9a\\xc6\\x9b\\xc6\\x9e\\xc6\\xa1\\xc6\\xa3\\xc6\\xa5\\xc6\\xa8\\xc6\\xaa\\xc6\\xab\\xc6\\xad\\xc6\\xb0\\xc6\\xb4\\xc6\\xb6\\xc6\\xb9\\xc6\\xba\\xc6\\xbd\\xc6\\xbe\\xc6\\xbf\\xc7\\x86\\xc7\\x89\\xc7\\x8c\\xc7\\x8e\\xc7\\x90\\xc7\\x92\\xc7\\x94\\xc7\\x96\\xc7\\x98\\xc7\\x9a\\xc7\\x9c\\xc7\\x9d\\xc7\\x9f\\xc7\\xa1\\xc7\\xa3\\xc7\\xa5\\xc7\\xa7\\xc7\\xa9\\xc7\\xab\\xc7\\xad\\xc7\\xaf\\xc7\\xb0\\xc7\\xb3\\xc7\\xb5\\xc7\\xb9\\xc7\\xbb\\xc7\\xbd\\xc7\\xbf\\xc8\\x81\\xc8\\x83\\xc8\\x85\\xc8\\x87\\xc8\\x89\\xc8\\x8b\\xc8\\x8d\\xc8\\x8f\\xc8\\x91\\xc8\\x93\\xc8\\x95\\xc8\\x97\\xc8\\x99\\xc8\\x9b\\xc8\\x9d\\xc8\\x9f\\xc8\\xa1\\xc8\\xa3\\xc8\\xa5\\xc8\\xa7\\xc8\\xa9\\xc8\\xab\\xc8\\xad\\xc8\\xaf\\xc8\\xb1\\xc8\\xb3\\xc8\\xb4\\xc8\\xb5\\xc8\\xb6\\xc8\\xb7\\xc8\\xb8\\xc8\\xb9\\xc8\\xbc\\xc8\\xbf\\xc9\\x80\\xc9\\x82\\xc9\\x87\\xc9\\x89\\xc9\\x8b\\xc9\\x8d\\xc9\\x8f\\xc9\\x90\\xc9\\x91\\xc9\\x92\\xc9\\x93\\xc9\\x94\\xc9\\x95\\xc9\\x96\\xc9\\x97\\xc9\\x98\\xc9\\x99\\xc9\\x9a\\xc9\\x9b\\xc9\\x9c\\xc9\\x9d\\xc9\\x9e\\xc9\\x9f\\xc9\\xa0\\xc9\\xa1\\xc9\\xa2\\xc9\\xa3\\xc9\\xa4\\xc9\\xa5\\xc9\\xa6\\xc9\\xa7\\xc9\\xa8\\xc9\\xa9\\xc9\\xaa\\xc9\\xab\\xc9\\xac\\xc9\\xad\\xc9\\xae\\xc9\\xaf\\xc9\\xb0\\xc9\\xb1\\xc9\\xb2\\xc9\\xb3\\xc9\\xb4\\xc9\\xb5\\xc9\\xb6\\xc9\\xb7\\xc9\\xb8\\xc9\\xb9\\xc9\\xba\\xc9\\xbb\\xc9\\xbc\\xc9\\xbd\\xc9\\xbe\\xc9\\xbf\\xca\\x80\\xca\\x81\\xca\\x82\\xca\\x83\\xca\\x84\\xca\\x85\\xca\\x86\\xca\\x87\\xca\\x88\\xca\\x89\\xca\\x8a\\xca\\x8b\\xca\\x8c\\xca\\x8d\\xca\\x8e\\xca\\x8f\\xca\\x90\\xca\\x91\\xca\\x92\\xca\\x93\\xca\\x95\\xca\\x96\\xca\\x97\\xca\\x98\\xca\\x99\\xca\\x9a\\xca\\x9b\\xca\\x9c\\xca\\x9d\\xca\\x9e\\xca\\x9f\\xca\\xa0\\xca\\xa1\\xca\\xa2\\xca\\xa3\\xca\\xa4\\xca\\xa5\\xca\\xa6\\xca\\xa7\\xca\\xa8\\xca\\xa9\\xca\\xaa\\xca\\xab\\xca\\xac\\xca\\xad\\xca\\xae\\xca\\xaf\\xe1\\xb4\\x80\\xe1\\xb4\\x81\\xe1\\xb4\\x82\\xe1\\xb4\\x83\\xe1\\xb4\\x84\\xe1\\xb4\\x85\\xe1\\xb4\\x86\\xe1\\xb4\\x87\\xe1\\xb4\\x88\\xe1\\xb4\\x89\\xe1\\xb4\\x8a\\xe1\\xb4\\x8b\\xe1\\xb4\\x8c\\xe1\\xb4\\x8d\\xe1\\xb4\\x8e\\xe1\\xb4\\x8f\\xe1\\xb4\\x90\\xe1\\xb4\\x91\\xe1\\xb4\\x92\\xe1\\xb4\\x93\\xe1\\xb4\\x94\\xe1\\xb4\\x95\\xe1\\xb4\\x96\\xe1\\xb4\\x97\\xe1\\xb4\\x98\\xe1\\xb4\\x99\\xe1\\xb4\\x9a\\xe1\\xb4\\x9b\\xe1\\xb4\\x9c\\xe1\\xb4\\x9d\\xe1\\xb4\\x9e\\xe1\\xb4\\x9f\\xe1\\xb4\\xa0\\xe1\\xb4\\xa1\\xe1\\xb4\\xa2\\xe1\\xb4\\xa3\\xe1\\xb4\\xa4\\xe1\\xb4\\xa5\\xe1\\xb5\\xa2\\xe1\\xb5\\xa3\\xe1\\xb5\\xa4\\xe1\\xb5\\xa5\\xe1\\xb5\\xab\\xe1\\xb5\\xac\\xe1\\xb5\\xad\\xe1\\xb5\\xae\\xe1\\xb5\\xaf\\xe1\\xb5\\xb0\\xe1\\xb5\\xb1\\xe1\\xb5\\xb2\\xe1\\xb5\\xb3\\xe1\\xb5\\xb4\\xe1\\xb5\\xb5\\xe1\\xb5\\xb6\\xe1\\xb5\\xb7\\xe1\\xb5\\xb9\\xe1\\xb5\\xba\\xe1\\xb5\\xbb\\xe1\\xb5\\xbc\\xe1\\xb5\\xbd\\xe1\\xb5\\xbe\\xe1\\xb5\\xbf\\xe1\\xb6\\x80\\xe1\\xb6\\x81\\xe1\\xb6\\x82\\xe1\\xb6\\x83\\xe1\\xb6\\x84\\xe1\\xb6\\x85\\xe1\\xb6\\x86\\xe1\\xb6\\x87\\xe1\\xb6\\x88\\xe1\\xb6\\x89\\xe1\\xb6\\x8a\\xe1\\xb6\\x8b\\xe1\\xb6\\x8c\\xe1\\xb6\\x8d\\xe1\\xb6\\x8e\\xe1\\xb6\\x8f\\xe1\\xb6\\x90\\xe1\\xb6\\x91\\xe1\\xb6\\x92\\xe1\\xb6\\x93\\xe1\\xb6\\x94\\xe1\\xb6\\x95\\xe1\\xb6\\x96\\xe1\\xb6\\x97\\xe1\\xb6\\x98\\xe1\\xb6\\x99\\xe1\\xb6\\x9a\\xe1\\xb8\\x81\\xe1\\xb8\\x83\\xe1\\xb8\\x85\\xe1\\xb8\\x87\\xe1\\xb8\\x89\\xe1\\xb8\\x8b\\xe1\\xb8\\x8d\\xe1\\xb8\\x8f\\xe1\\xb8\\x91\\xe1\\xb8\\x93\\xe1\\xb8\\x95\\xe1\\xb8\\x97\\xe1\\xb8\\x99\\xe1\\xb8\\x9b\\xe1\\xb8\\x9d\\xe1\\xb8\\x9f\\xe1\\xb8\\xa1\\xe1\\xb8\\xa3\\xe1\\xb8\\xa5\\xe1\\xb8\\xa7\\xe1\\xb8\\xa9\\xe1\\xb8\\xab\\xe1\\xb8\\xad\\xe1\\xb8\\xaf\\xe1\\xb8\\xb1\\xe1\\xb8\\xb3\\xe1\\xb8\\xb5\\xe1\\xb8\\xb7\\xe1\\xb8\\xb9\\xe1\\xb8\\xbb\\xe1\\xb8\\xbd\\xe1\\xb8\\xbf\\xe1\\xb9\\x81\\xe1\\xb9\\x83\\xe1\\xb9\\x85\\xe1\\xb9\\x87\\xe1\\xb9\\x89\\xe1\\xb9\\x8b\\xe1\\xb9\\x8d\\xe1\\xb9\\x8f\\xe1\\xb9\\x91\\xe1\\xb9\\x93\\xe1\\xb9\\x95\\xe1\\xb9\\x97\\xe1\\xb9\\x99\\xe1\\xb9\\x9b\\xe1\\xb9\\x9d\\xe1\\xb9\\x9f\\xe1\\xb9\\xa1\\xe1\\xb9\\xa3\\xe1\\xb9\\xa5\\xe1\\xb9\\xa7\\xe1\\xb9\\xa9\\xe1\\xb9\\xab\\xe1\\xb9\\xad\\xe1\\xb9\\xaf\\xe1\\xb9\\xb1\\xe1\\xb9\\xb3\\xe1\\xb9\\xb5\\xe1\\xb9\\xb7\\xe1\\xb9\\xb9\\xe1\\xb9\\xbb\\xe1\\xb9\\xbd\\xe1\\xb9\\xbf\\xe1\\xba\\x81\\xe1\\xba\\x83\\xe1\\xba\\x85\\xe1\\xba\\x87\\xe1\\xba\\x89\\xe1\\xba\\x8b\\xe1\\xba\\x8d\\xe1\\xba\\x8f\\xe1\\xba\\x91\\xe1\\xba\\x93\\xe1\\xba\\x95\\xe1\\xba\\x96\\xe1\\xba\\x97\\xe1\\xba\\x98\\xe1\\xba\\x99\\xe1\\xba\\x9a\\xe1\\xba\\x9b\\xe1\\xba\\x9c\\xe1\\xba\\x9d\\xe1\\xba\\x9f\\xe1\\xba\\xa1\\xe1\\xba\\xa3\\xe1\\xba\\xa5\\xe1\\xba\\xa7\\xe1\\xba\\xa9\\xe1\\xba\\xab\\xe1\\xba\\xad\\xe1\\xba\\xaf\\xe1\\xba\\xb1\\xe1\\xba\\xb3\\xe1\\xba\\xb5\\xe1\\xba\\xb7\\xe1\\xba\\xb9\\xe1\\xba\\xbb\\xe1\\xba\\xbd\\xe1\\xba\\xbf\\xe1\\xbb\\x81\\xe1\\xbb\\x83\\xe1\\xbb\\x85\\xe1\\xbb\\x87\\xe1\\xbb\\x89\\xe1\\xbb\\x8b\\xe1\\xbb\\x8d\\xe1\\xbb\\x8f\\xe1\\xbb\\x91\\xe1\\xbb\\x93\\xe1\\xbb\\x95\\xe1\\xbb\\x97\\xe1\\xbb\\x99\\xe1\\xbb\\x9b\\xe1\\xbb\\x9d\\xe1\\xbb\\x9f\\xe1\\xbb\\xa1\\xe1\\xbb\\xa3\\xe1\\xbb\\xa5\\xe1\\xbb\\xa7\\xe1\\xbb\\xa9\\xe1\\xbb\\xab\\xe1\\xbb\\xad\\xe1\\xbb\\xaf\\xe1\\xbb\\xb1\\xe1\\xbb\\xb3\\xe1\\xbb\\xb5\\xe1\\xbb\\xb7\\xe1\\xbb\\xb9\\xe1\\xbb\\xbb\\xe1\\xbb\\xbd\\xe1\\xbb\\xbf\\xe2\\x85\\x8e\\xe2\\x86\\x84\\xe2\\xb1\\xa1\\xe2\\xb1\\xa5\\xe2\\xb1\\xa6\\xe2\\xb1\\xa8\\xe2\\xb1\\xaa\\xe2\\xb1\\xac\\xe2\\xb1\\xb1\\xe2\\xb1\\xb3\\xe2\\xb1\\xb4\\xe2\\xb1\\xb6\\xe2\\xb1\\xb7\\xe2\\xb1\\xb8\\xe2\\xb1\\xb9\\xe2\\xb1\\xba\\xe2\\xb1\\xbb\\xe2\\xb1\\xbc\\xea\\x9c\\xa3\\xea\\x9c\\xa5\\xea\\x9c\\xa7\\xea\\x9c\\xa9\\xea\\x9c\\xab\\xea\\x9c\\xad\\xea\\x9c\\xaf\\xea\\x9c\\xb0\\xea\\x9c\\xb1\\xea\\x9c\\xb3\\xea\\x9c\\xb5\\xea\\x9c\\xb7\\xea\\x9c\\xb9\\xea\\x9c\\xbb\\xea\\x9c\\xbd\\xea\\x9c\\xbf\\xea\\x9d\\x81\\xea\\x9d\\x83\\xea\\x9d\\x85\\xea\\x9d\\x87\\xea\\x9d\\x89\\xea\\x9d\\x8b\\xea\\x9d\\x8d\\xea\\x9d\\x8f\\xea\\x9d\\x91\\xea\\x9d\\x93\\xea\\x9d\\x95\\xea\\x9d\\x97\\xea\\x9d\\x99\\xea\\x9d\\x9b\\xea\\x9d\\x9d\\xea\\x9d\\x9f\\xea\\x9d\\xa1\\xea\\x9d\\xa3\\xea\\x9d\\xa5\\xea\\x9d\\xa7\\xea\\x9d\\xa9\\xea\\x9d\\xab\\xea\\x9d\\xad\\xea\\x9d\\xaf\\xea\\x9d\\xb1\\xea\\x9d\\xb2\\xea\\x9d\\xb3\\xea\\x9d\\xb4\\xea\\x9d\\xb5\\xea\\x9d\\xb6\\xea\\x9d\\xb7\\xea\\x9d\\xb8\\xea\\x9d\\xba\\xea\\x9d\\xbc\\xea\\x9d\\xbf\\xea\\x9e\\x81\\xea\\x9e\\x83\\xea\\x9e\\x85\\xea\\x9e\\x87\\xea\\x9e\\x8c\\xef\\xac\\x80\\xef\\xac\\x81\\xef\\xac\\x82\\xef\\xac\\x83\\xef\\xac\\x84\\xef\\xac\\x85\\xef\\xac\\x86\\xef\\xbd\\x81\\xef\\xbd\\x82\\xef\\xbd\\x83\\xef\\xbd\\x84\\xef\\xbd\\x85\\xef\\xbd\\x86\\xef\\xbd\\x87\\xef\\xbd\\x88\\xef\\xbd\\x89\\xef\\xbd\\x8a\\xef\\xbd\\x8b\\xef\\xbd\\x8c\\xef\\xbd\\x8d\\xef\\xbd\\x8e\\xef\\xbd\\x8f\\xef\\xbd\\x90\\xef\\xbd\\x91\\xef\\xbd\\x92\\xef\\xbd\\x93\\xef\\xbd\\x94\\xef\\xbd\\x95\\xef\\xbd\\x96\\xef\\xbd\\x97\\xef\\xbd\\x98\\xef\\xbd\\x99\\xef\\xbd\\x9a'
 
+latin_lower_rule = '[{}]'.format(latin_lower_set)
+latin_lower_rule_len = len(latin_lower_rule.decode('string-escape'))
+latin_lower_rule = quote_string(latin_lower_rule)
+
 # Extra rules defined here
 supplemental_transliterations = {
     'latin-ascii': [
@@ -1132,13 +1205,13 @@ supplemental_transliterations = {
             # ä => ae
             (u'"\\xc3\\xa4"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ae"', '2', 'NULL', '0', 'NULL', '0'),
             # Ä => Ae if followed by lower case Latin letter
-            (u'"\\xc3\\x84"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', '"[{}]"'.format(latin_lower_set), '0', u'"Ae"', '2', 'NULL', '0', 'NULL', '0'),
+            (u'"\\xc3\\x84"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', latin_lower_rule, str(latin_lower_rule_len), u'"Ae"', '2', 'NULL', '0', 'NULL', '0'),
             # Ä => AE otherwise
             (u'"\\xc3\\x84"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"AE"', '2', 'NULL', '0', 'NULL', '0'),
             # ö => oe
             (u'"\\xc3\\xb6"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', 'NULL', '0', 'NULL', '0'),
             # Ö => Oe if followed by lower case Latin letter
-            (u'"\\xc3\\x96"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', '"[{}]"'.format(latin_lower_set), '0', u'"Oe"', '2', 'NULL', '0', 'NULL', '0'),
+            (u'"\\xc3\\x96"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', latin_lower_rule, str(latin_lower_rule_len), u'"Oe"', '2', 'NULL', '0', 'NULL', '0'),
             # Ö => OE otherwise
             (u'"\\xc3\\x96"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"OE"', '2', 'NULL', '0', 'NULL', '0'),
 
@@ -1149,7 +1222,7 @@ supplemental_transliterations = {
             # ü => ue
             (u'"\\xc3\\xbc"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ue"', '2', 'NULL', '0', 'NULL', '0'),
             # Ü => Ue if followed by lower case Latin letter
-            (u'"\\xc3\\x96"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', '"[{}]"'.format(latin_lower_set), '0', u'"Ue"', '2', 'NULL', '0', 'NULL', '0'),
+            (u'"\\xc3\\x96"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', latin_lower_rule, str(latin_lower_rule_len), u'"Ue"', '2', 'NULL', '0', 'NULL', '0'),
             # Ü => UE otherwise
             (u'"\\xc3\\x96"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"UE"', '2', 'NULL', '0', 'NULL', '0'),
 
@@ -1157,14 +1230,14 @@ supplemental_transliterations = {
             (u'"\\xc3\\xa5"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"aa"', '2', 'NULL', '0', 'NULL', '0'),
 
             # Å => Aa if followed by lower case Latin letter
-            (u'"\\xc3\\x85"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', '"[{}]"'.format(latin_lower_set), '0', u'"Aa"', '2', 'NULL', '0', 'NULL', '0'),
+            (u'"\\xc3\\x85"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', latin_lower_rule, str(latin_lower_rule_len), u'"Aa"', '2', 'NULL', '0', 'NULL', '0'),
 
             # Å => AA otherwise
             (u'"\\xc3\\x85"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"AA"', '2', 'NULL', '0', 'NULL', '0'),
 
 
         ]),
-        (PREPEND_STEP, [(quote_string(name), str(len(name)), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', quote_string(value), str(len(value)), 'NULL', '0', 'NULL', '0')
+        (PREPEND_STEP, [(quote_string(name), str(len(name)), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', quote_string(value), '0', 'NULL', '0', 'NULL', '0')
                         for name, value in html_escapes.iteritems()
                         ]
          ),
@@ -1177,8 +1250,6 @@ def get_all_transform_rules():
     to_latin = set()
 
     retain_transforms = set()
-
-    init_unicode_categories()
 
     all_transforms = set([name.split('.xml')[0].lower() for name in get_transforms()])
 
@@ -1205,7 +1276,7 @@ def get_all_transform_rules():
         steps = []
         rule_set = []
 
-        for rule_type, rule in parse_transform_rules(xml, reverse=reverse):
+        for rule_type, rule in parse_transform_rules(name, xml, reverse=reverse):
             if rule_type == RULE:
                 rule = format_rule(rule)
                 rule_set.append(rule)
@@ -1413,7 +1484,7 @@ script_transliterators = {
     'gujarati': {None: ['gujarati-latin']},
     'gurmukhi': {None: ['gurmukhi-latin']},
     'han': {None: ['han-latin']},
-    'hangul': {None: ['korean-latin-bgn']},
+    'hangul': {None: ['hangul-latin', 'korean-latin-bgn']},
     'hanunoo': None,
     'hebrew': {None: ['hebrew-latin', 'hebrew-latin-bgn']},
     'hiragana': {None: ['hiragana-latin']},
@@ -1454,7 +1525,7 @@ script_transliterators = {
     'tai_viet': None,
     'tamil': {None: ['tamil-latin']},
     'telugu': {None: ['telugu-latin']},
-    'thaana': None,
+    'thaana': {None: ['thaana-latin', 'maldivian-latin-bgn']},
     'thai': {None: ['thai-latin']},
     'tibetan': None,
     'tifinagh': None,
