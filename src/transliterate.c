@@ -134,6 +134,7 @@ static char_set_result_t next_prefix_or_set(trie_t *trie, char *str, size_t len,
             if (result.node_id == NULL_NODE_ID) {
                 return NULL_CHAR_SET_RESULT;
             } else {
+                log_debug("empty result node_id=%d\n", result.node_id);
                 return (char_set_result_t){result, SINGLE_EMPTY_TRANSITION};
             }
         }
@@ -223,17 +224,18 @@ static transliteration_state_t state_transition(trie_t *trie, char *str, size_t 
 }
 
 
-static inline void set_match_if_any(trie_t *trie, char *str, size_t index, transliteration_state_t *state, transliteration_state_t *prev_state) {
-    if (state->state == TRANS_STATE_BEGIN && prev_state->state == TRANS_STATE_PARTIAL_MATCH) {
-        trie_prefix_result_t prev_result = prev_state->result;
-        // Complete string
-        trie_prefix_result_t result = trie_get_prefix_from_index(trie, "", 1, prev_result.node_id, prev_result.tail_pos);
-        if (result.node_id != NULL_NODE_ID) {
-            prev_state->result = result;
-            prev_state->state = TRANS_STATE_MATCH;
-            state->advance_index = false;
-            state->advance_state = false;
-        }
+static inline void set_match_if_any(trie_t *trie, transliteration_state_t state, transliteration_state_t *match_state) {
+    if (state.state != TRANS_STATE_PARTIAL_MATCH) return;
+
+    trie_prefix_result_t prev_result = state.result;
+
+    // Complete string
+    trie_prefix_result_t result = trie_get_prefix_from_index(trie, "", 1, prev_result.node_id, prev_result.tail_pos);
+    if (result.node_id != NULL_NODE_ID) {
+        match_state->result = result;
+        match_state->state = TRANS_STATE_MATCH;
+        match_state->phrase_start = state.phrase_start;
+        match_state->phrase_len = state.phrase_len;
     }
 }
 
@@ -253,52 +255,66 @@ static transliteration_state_t check_pre_context(trie_t *trie, char *str, transl
     // Save the end of the repeated state the first time through
     transliteration_state_t repeat_state_end;
 
-    log_debug("start_index=%zu, str=%s\n", start_index, ptr);
+    transliteration_state_t match_state = TRANSLITERATION_DEFAULT_STATE;
+
+    log_debug("start_index=%zu, str=%s\n", start_index, str);
 
     while (idx > 0) {
-        char_len = utf8proc_iterate_reversed(ptr, idx, &ch);
+        char_len = utf8proc_iterate_reversed((uint8_t *)str, idx, &ch);
 
         if (char_len <= 0) {
             break;
         }
 
         if (!utf8proc_codepoint_valid(ch)) {
-            ptr -= char_len;
             idx -= char_len;
             continue;
         }
 
         log_debug("In pre-context, got char %d, \"%.*s\"\n", ch, (int)char_len, str + idx - char_len);
 
-        state = state_transition(trie, str, idx, char_len, prev_state);
-        set_match_if_any(trie, str, idx, &state, &prev_state);
-        
-        if (prev_state.state == TRANS_STATE_MATCH) {
-            state = prev_state;
+        state = state_transition(trie, str, idx - char_len, char_len, prev_state);        
+        set_match_if_any(trie, state, &match_state);
+
+        if (match_state.state == TRANS_STATE_MATCH) {
+            log_debug("pre-context TRANS_STATE_MATCH\n");
+            state = match_state;
             break;
         } else if (state.state == TRANS_STATE_BEGIN && !in_repeat) {
+            log_debug("pre-context TRANS_STATE_BEGIN and not in repeat\n");
             if (prev_state.state == TRANS_STATE_PARTIAL_MATCH) {
                 state = prev_state;
             }
             break;
         } else if (state.repeat) {
+            log_debug("pre-context in repeat\n");
             in_repeat = true;
             repeat_state_end = state;
-            state.advance_index = false;
+            state.advance_state = false;    
         } else if (state.empty_transition) {
+            log_debug("pre-context empty_transition\n");
             state.advance_index = false;
+            if (in_repeat) {
+                log_debug("empty_transition in repeat\n");
+                prev_state = repeat_state_end;
+                state.advance_state = false;
+                in_repeat = false;
+            }
         // If we're repeating e.g. "[abcd]+e", when we hit the "e" or another character, stop repeating and try from the end of the block
-        } else if (state.state == TRANS_STATE_BEGIN && in_repeat && state.result.node_id == repeat_state_end.result.node_id) {
+        } else if (state.state == TRANS_STATE_BEGIN && in_repeat) {
+            log_debug("pre-context stop repeat\n");
             prev_state = repeat_state_end;
+            in_repeat = false;
             state.advance_index = false;
             state.advance_state = false;
         } else if (in_repeat) {
+            log_debug("end repeat\n");
+            log_debug("state.state==%d, state.result.node_id=%d, repeat_state_end.result.node_id=%d\n", state.state, state.result.node_id, repeat_state_end.result.node_id);
             in_repeat = false;
             break;
         }
 
         if (state.advance_index) {
-            ptr -= char_len;
             idx -= char_len;
         }
 
@@ -328,6 +344,8 @@ static transliteration_state_t check_post_context(trie_t *trie, char *str, trans
     // Save the end of the repeated state the first time through
     transliteration_state_t repeat_state_end;
 
+    transliteration_state_t match_state = TRANSLITERATION_DEFAULT_STATE;
+
     log_debug("Checking post_context at %s, index=%d\n", ptr, index);
 
     while (idx < len) {
@@ -338,6 +356,7 @@ static transliteration_state_t check_post_context(trie_t *trie, char *str, trans
         }
 
         if (!utf8proc_codepoint_valid(ch)) {
+            idx += char_len;
             ptr += char_len;
             continue;
         }
@@ -345,32 +364,45 @@ static transliteration_state_t check_post_context(trie_t *trie, char *str, trans
         log_debug("In post-context, got char \"%.*s\"\n", char_len, str + index + idx);
 
         state = state_transition(trie, str, index + idx, char_len, prev_state);
-        set_match_if_any(trie, str, index + idx, &state, &prev_state);
+        set_match_if_any(trie, state, &match_state);
 
-        if (prev_state.state == TRANS_STATE_MATCH) {
-            state = prev_state;
+        if (match_state.state == TRANS_STATE_MATCH) {
+            log_debug("post-context TRANS_STATE_MATCH\n");
+            state = match_state;
             break;
         } else if (state.state == TRANS_STATE_BEGIN && !in_repeat) {
+            log_debug("post-context TRANS_STATE_BEGIN and not in repeat\n");
             break;
         } else if (state.repeat) {
+            log_debug("post-context in repeat\n");
             in_repeat = true;
             repeat_state_end = state;
-            state.advance_index = false;
+            state.advance_state = false;    
         } else if (state.empty_transition) {
+            log_debug("post-context empty_transition\n");
             state.advance_index = false;
+            if (in_repeat) {
+                log_debug("empty_transition in repeat\n");
+                prev_state = repeat_state_end;
+                state.advance_state = false;
+                in_repeat = false;
+            }
         // If we're repeating e.g. "[abcd]+e", when we hit the "e" or another character, stop repeating and try from the end of the block
-        } else if (state.state == TRANS_STATE_BEGIN && in_repeat && state.result.node_id == repeat_state_end.result.node_id) {
+        } else if (state.state == TRANS_STATE_BEGIN && in_repeat) {
+            log_debug("post-context stop repeat\n");
             prev_state = repeat_state_end;
+            in_repeat = false;
             state.advance_index = false;
             state.advance_state = false;
         } else if (in_repeat) {
+            log_debug("end repeat\n");
             in_repeat = false;
             break;
         }
 
         if (state.advance_index) {
-            ptr += char_len;
             idx += char_len;
+            ptr += char_len;
         }
 
         if (state.advance_state) {
@@ -397,6 +429,10 @@ static trie_prefix_result_t context_match(trie_t *trie, char *str, transliterati
         
         if (state.state == TRANS_STATE_MATCH && state.result.node_id != prev_state.result.node_id) {
             return state.result;
+        }
+
+        if (state.state == TRANS_STATE_PARTIAL_MATCH && state.result.node_id != prev_state.result.node_id) {
+            log_debug("Pre-context partial match\n");
         }
 
         prev_result = state.result;
@@ -716,7 +752,13 @@ char *transliterate(char *trans_name, char *str) {
             char_array *revisit = NULL;
             bool in_revisit = false;
 
+            bool checked_empty = false;
+
+            bool match = false;
+
             transliteration_replacement_t *replacement = NULL;
+
+            transliteration_state_t match_state = TRANSLITERATION_DEFAULT_STATE;
 
             while (idx < len) {
                 char_len = utf8proc_iterate(ptr, len, &ch);
@@ -736,31 +778,50 @@ char *transliterate(char *trans_name, char *str) {
                 log_debug("Got char '%.*s' at idx=%zu\n", (int)char_len, str + idx, idx);
 
                 state = state_transition(trie, str, idx, char_len, prev_state);
+                set_match_if_any(trie, state, &match_state);
 
                 replacement = NULL;
 
                 if ((state.state == TRANS_STATE_BEGIN && prev_state.state == TRANS_STATE_PARTIAL_MATCH) ||
                     (state.state == TRANS_STATE_PARTIAL_MATCH && idx + char_len == len)) {
 
-                    log_debug("end of partial or last char, prev start=%d\n", prev_state.phrase_start);
+                    log_debug("end of partial or last char, prev start=%d, prev len=%d\n", prev_state.phrase_start, prev_state.phrase_len);
 
-                    transliteration_state_t match_state = state.state == TRANS_STATE_PARTIAL_MATCH ? state : prev_state;
-                    context_result = context_match(trie, str, match_state);
+                    bool context_no_match = false;
+                    bool empty_context_match = false;
+
+                    
+                    transliteration_state_t match_candidate_state = state.state == TRANS_STATE_PARTIAL_MATCH ? state : prev_state;
+
+                    context_result = context_match(trie, str, match_candidate_state);
+
                     if (context_result.node_id != NULL_NODE_ID) {
                         log_debug("Context match\n");
+                        match_state = match_candidate_state;
                         match_state.state = TRANS_STATE_MATCH;
                         replacement = get_replacement(trie, context_result, str, match_state.phrase_start);
                     } else {
-                        prev_result = match_state.result;
-                        result = trie_get_prefix_from_index(trie, "", 1, prev_result.node_id, prev_result.tail_pos);
-                        if (result.node_id != NULL_NODE_ID) {
-                            log_debug("Match no context\n");
-                            match_state.state = TRANS_STATE_MATCH;
-                            replacement = get_replacement(trie, result, str, match_state.phrase_start);
+                        if (match_state.state == TRANS_STATE_MATCH) { 
+                            log_debug("Context no match and previous match\n");
+                            replacement = get_replacement(trie, match_state.result, str, match_state.phrase_start);
+                            if (state.state != TRANS_STATE_PARTIAL_MATCH) {
+                                state.advance_index = false;
+                            }
                         } else {
-                            log_debug("Tried context for %s at char '%.*s', no match\n", str, (int)char_len, ptr);
+                            log_debug("Checking for no-context match\n");
+                            set_match_if_any(trie, match_candidate_state, &match_state);
+                            if (match_state.state == TRANS_STATE_MATCH) {
+                                log_debug("Match no context\n");
+                                replacement = get_replacement(trie, match_state.result, str, match_state.phrase_start);
+                            } else {
+                                log_debug("Tried context for %s at char '%.*s', no match\n", str, (int)char_len, ptr);
+                                context_no_match = true;
+                            }
                         }
+
                     }
+
+
 
                     if (replacement != NULL) {
                         char *replacement_string = cstring_array_get_token(trans_table->replacement_strings, replacement->string_index);
@@ -813,10 +874,22 @@ char *transliterate(char *trans_name, char *str) {
                         if (free_revisit) {
                             free(revisit_string);
                         }
+
+                        match_state = TRANSLITERATION_DEFAULT_STATE;
+                    }
+
+
+                    if (context_no_match && !prev_state.empty_transition && prev_state.phrase_len > 0) {
+                        log_debug("Previous phrase stays as is %.*s\n", (int)prev_state.phrase_len, str+prev_state.phrase_start);
+                        char_array_cat_len(new_str, str + prev_state.phrase_start, prev_state.phrase_len);
                     }
                     
-                    if (state.state == TRANS_STATE_BEGIN) {
+                    if (state.state == TRANS_STATE_BEGIN && !prev_state.empty_transition) {
+                        log_debug("TRANS_STATE_BEGIN && !prev_state.empty_transition\n");
                         state.advance_index = false;
+                    } else if (prev_state.empty_transition) {
+                        log_debug("No replacement for %.*s\n", (int)char_len, ptr);
+                        char_array_cat_len(new_str, str + idx, char_len);
                     }
 
                     state.advance_state = false;
@@ -832,6 +905,7 @@ char *transliterate(char *trans_name, char *str) {
                     repeat_state_end = state;
                     state.advance_state = false;
                 } else if (state.empty_transition) {
+                    log_debug("state.empty_transition\n");
                     state.advance_index = false;
                 } else if (state.state == TRANS_STATE_BEGIN && in_repeat && state.result.node_id == repeat_state_end.result.node_id) {
                     prev_state = repeat_state_end;
@@ -843,6 +917,7 @@ char *transliterate(char *trans_name, char *str) {
                     state.advance_state = false;
                 }
                 
+                log_debug("state.phrase_start = %d, state.phrase_len=%d\n", state.phrase_start, state.phrase_len);
                 if (state.advance_index) {
                     ptr += char_len;
                     idx += char_len;
