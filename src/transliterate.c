@@ -752,10 +752,6 @@ char *transliterate(char *trans_name, char *str) {
             char_array *revisit = NULL;
             bool in_revisit = false;
 
-            bool checked_empty = false;
-
-            bool match = false;
-
             transliteration_replacement_t *replacement = NULL;
 
             transliteration_state_t match_state = TRANSLITERATION_DEFAULT_STATE;
