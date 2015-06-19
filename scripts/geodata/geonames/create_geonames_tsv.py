@@ -103,6 +103,9 @@ geonames_fields = [
 DUMMY_BOUNDARY_TYPE_INDEX = [i for i, f in enumerate(geonames_fields)
                              if f.is_dummy][0]
 
+GEONAMES_ID_INDEX = [i for i, f in enumerate(geonames_fields)
+                     if f.c_constant == 'GEONAMES_ID'][0]
+
 CANONICAL_NAME_INDEX = [i for i, f in enumerate(geonames_fields)
                         if f.c_constant == 'GEONAMES_CANONICAL'][0]
 
@@ -111,6 +114,9 @@ NAME_INDEX = [i for i, f in enumerate(geonames_fields)
 
 COUNTRY_CODE_INDEX = [i for i, f in enumerate(geonames_fields)
                       if f.c_constant == 'GEONAMES_COUNTRY_CODE'][0]
+
+POPULATION_INDEX = [i for i, f in enumerate(geonames_fields)
+                    if f.c_constant == 'GEONAMES_POPULATION'][0]
 
 
 geonames_admin_joins = '''
@@ -149,6 +155,7 @@ join alternate_names an
     on an.geonames_id = gn.geonames_id
     and iso_language not in ('doi','faac','iata',
                              'icao','link','post','tcid')
+    and an.alternate_name != gn.name
 {admin_joins}
 {{predicate}}
 '''.format(
@@ -301,7 +308,11 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
     f.close()
 
     logging.info('Sorting...')
-    subprocess.check_call(['sort', '-t\t', '-k1,1', '-k2,2', '-o', filename, temp_filename])
+    subprocess.check_call(['sort', '-t\t', '-u',
+                           '-k{0},{0}'.format(NAME_INDEX + 1),
+                           '-k{0},{0}nr'.format(POPULATION_INDEX + 1),
+                           '-k{0},{0}'.format(GEONAMES_ID_INDEX + 1),
+                           '-o', filename, temp_filename])
     os.unlink(temp_filename)
 
 
