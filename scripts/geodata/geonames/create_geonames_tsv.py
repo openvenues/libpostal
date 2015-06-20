@@ -2,6 +2,7 @@ import argparse
 import csv
 import logging
 import os
+import re
 import sqlite3
 import subprocess
 import sys
@@ -20,6 +21,13 @@ from geodata.geonames.paths import DEFAULT_GEONAMES_DB_PATH
 from geodata.i18n.unicode_paths import CLDR_DIR
 from geodata.log import log_to_file
 
+multispace_regex = re.compile('[\s]+')
+
+csv.register_dialect('tsv_no_quote', delimiter='\t', quoting=csv.QUOTE_NONE, quotechar='')
+
+
+def encode_field(value):
+    return multispace_regex.sub(' ', safe_encode((value or '')))
 
 log_to_file(sys.stderr)
 
@@ -249,7 +257,8 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
     temp_filename = filename + '.tmp'
 
     f = open(temp_filename, 'w')
-    writer = csv.writer(f, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
+
+    writer = csv.writer(f, 'tsv_no_quote')
 
     country_code_alpha3_map = {c.alpha2: c.alpha3 for c in pycountry.countries}
     country_alpha2 = set([c.alpha2 for c in pycountry.countries])
@@ -277,7 +286,7 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                 break
             rows = []
             for row in batch:
-                row = [safe_encode(val or '') for val in row]
+                row = map(encode_field, row)
                 row[DUMMY_BOUNDARY_TYPE_INDEX] = boundary_type
 
                 if boundary_type == boundary_types.COUNTRY:
@@ -321,7 +330,7 @@ def create_postal_codes_tsv(db, out_dir=DEFAULT_DATA_DIR):
     temp_filename = filename + '.tmp'
     f = open(temp_filename, 'w')
 
-    writer = csv.writer(f, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
+    writer = csv.writer(f, 'tsv_no_quote')
 
     cursor = db.execute(postal_codes_query)
 
@@ -331,7 +340,7 @@ def create_postal_codes_tsv(db, out_dir=DEFAULT_DATA_DIR):
         if not batch:
             break
         rows = [
-            [safe_encode(val or '') for val in row]
+            map(encode_field, row)
             for row in batch
         ]
         writer.writerows(rows)
