@@ -17,6 +17,9 @@
 #define GEONAMES_POSTAL_ADMIN2_IDS_DEFAULT_LENGTH 20
 #define GEONAMES_POSTAL_ADMIN3_IDS_DEFAULT_LENGTH 20
 
+#define PLACE_NAME_FEATURES_DEFAULT_LENGTH 255
+#define GEO_FEATURES_DEFAULT_LENGTH 243
+
 /* To save on malloc calls, create just one of these and call geoname_clear 
 *  (which does not deallocate) and geoname_deserialize
 */
@@ -53,32 +56,41 @@ void geoname_destroy(geoname_t *self) {
     if (!self)
         return;
 
-    if (self->name)
+    if (self->name) {
         char_array_destroy(self->name);
+    }
 
-    if (self->canonical)
+    if (self->canonical) {
         char_array_destroy(self->canonical);
+    }
 
-    if (self->iso_language)
+    if (self->iso_language) {
         char_array_destroy(self->iso_language);
+    }
 
-    if (self->feature_code)
+    if (self->feature_code) {
         char_array_destroy(self->feature_code);
+    }
 
-    if (self->country_code)
+    if (self->country_code) {
         char_array_destroy(self->country_code);
+    }
 
-    if (self->admin1_code)
+    if (self->admin1_code) {
         char_array_destroy(self->admin1_code);
+    }
 
-    if (self->admin2_code)
+    if (self->admin2_code) {
         char_array_destroy(self->admin2_code);
+    }
 
-    if (self->admin3_code)
+    if (self->admin3_code) {
         char_array_destroy(self->admin3_code);
+    }
 
-    if (self->admin4_code)
+    if (self->admin4_code) {
         char_array_destroy(self->admin4_code);
+    }
 
     free(self);
 }
@@ -92,8 +104,9 @@ static char_array *read_string(char_array *str, size_t len, buffer_t *buffer) {
 
 static bool bytes_reader(cmp_ctx_t *ctx, void *data, size_t size) {
     buffer_t *buffer = ctx->buf;
-    if (buffer->offset + size > char_array_len(buffer->data))
+    if (buffer->offset + size > char_array_len(buffer->data)) {
         return false;
+    }
     memcpy(data, buffer->data->a + buffer->offset, size);
     buffer->offset += size;
     return true;
@@ -109,8 +122,9 @@ static size_t bytes_writer(cmp_ctx_t *ctx, const void *data, size_t count) {
 bool cmp_read_str_size_or_nil(cmp_ctx_t *ctx, char_array **str, uint32_t *size) {
     cmp_object_t obj;
 
-    if (!cmp_read_object(ctx, &obj))
+    if (!cmp_read_object(ctx, &obj)) {
         return false;
+    }
 
     if (cmp_object_is_str(&obj)) {
         *size = obj.as.str_size;
@@ -133,13 +147,98 @@ bool cmp_write_str_or_nil(cmp_ctx_t *ctx, char_array *str) {
 
 bool cmp_write_uint_vector(cmp_ctx_t *ctx, uint32_array *array) {
     size_t n = array->n;
-    if (!cmp_write_array(ctx, n))
+    if (!cmp_write_array(ctx, n)) {
         return false;
+    }
 
     for (size_t i = 0; i < n; i++) {
-        if (!cmp_write_uint(ctx, array->a[i]))
+        if (!cmp_write_uint(ctx, array->a[i])) {
             return false;
+        }
     }
+    return true;
+}
+
+bool geoname_deserialize_ctx(geoname_t *self, cmp_ctx_t *ctx) {
+
+    uint32_t len;
+
+    if (!cmp_read_uint(ctx, &self->geonames_id)) {
+        return false;
+    }
+
+    if (!cmp_read_str_size_or_nil(ctx, &self->name, &len)) {
+        return false;
+    }
+
+    if (!cmp_read_str_size_or_nil(ctx, &self->canonical, &len)) {
+        return false;
+    }
+
+    if (!cmp_read_uint(ctx, &self->type)) {
+        return false;
+    }
+
+    if (!cmp_read_str_size_or_nil(ctx, &self->iso_language, &len)) {
+        return false;
+    }
+
+    if (!cmp_read_bool(ctx, &self->is_preferred_name)) {
+        return false;
+    }
+
+    if (!cmp_read_uint(ctx, &self->population)) {
+        return false;
+    }
+
+    if (!cmp_read_double(ctx, &self->latitude)) {
+        return false;
+    }
+
+    if (!cmp_read_double(ctx, &self->longitude)) {
+        return false;
+    }
+
+    if (!cmp_read_str_size_or_nil(ctx, &self->feature_code, &len)) {
+        return false;
+    }
+
+    if (!cmp_read_str_size_or_nil(ctx, &self->country_code, &len)) {
+        return false;
+    }
+
+    if (!cmp_read_str_size_or_nil(ctx, &self->admin1_code, &len)) {
+        return false;
+    }
+
+    if (!cmp_read_uint(ctx, &self->admin1_geonames_id)) {
+        return false;
+    }
+
+    if (!cmp_read_str_size_or_nil(ctx, &self->admin2_code, &len)) {
+        return false;
+    }
+
+    if (!cmp_read_uint(ctx, &self->admin2_geonames_id)) {
+        return false;
+    }
+
+    if (!cmp_read_str_size_or_nil(ctx, &self->admin3_code, &len)) {
+        return false;
+    }
+
+    if (!cmp_read_uint(ctx, &self->admin3_geonames_id)) {
+        return false;
+    }
+
+    if (!cmp_read_str_size_or_nil(ctx, &self->admin4_code, &len)) {
+        return false;
+    }
+
+    if (!cmp_read_uint(ctx, &self->admin4_geonames_id)) {
+        return false;
+    }
+
     return true;
 }
 
@@ -148,64 +247,31 @@ bool geoname_deserialize(geoname_t *self, char_array *str) {
     buffer_t buffer = (buffer_t){str, 0};
     cmp_init(&ctx, &buffer, bytes_reader, bytes_writer);
 
-    uint32_t len;
+    return geoname_deserialize_ctx(self, &ctx);
+}
 
-    if (!cmp_read_uint(&ctx, &self->geonames_id))
-        return false;
+bool geoname_serialize_ctx(geoname_t *self, cmp_ctx_t *ctx) {
 
-    if (!cmp_read_str_size_or_nil(&ctx, &self->name, &len))
-        return false;
-
-    if (!cmp_read_str_size_or_nil(&ctx, &self->canonical, &len))
-        return false;
-
-    if (!cmp_read_uint(&ctx, &self->type))
-        return false;
-
-    if (!cmp_read_str_size_or_nil(&ctx, &self->iso_language, &len))
-        return false;
-
-    if (!cmp_read_bool(&ctx, &self->is_preferred_name))
-        return false;
-
-    if (!cmp_read_uint(&ctx, &self->population))
-        return false;
-
-    if (!cmp_read_double(&ctx, &self->latitude))
-        return false;
-
-    if (!cmp_read_double(&ctx, &self->longitude))
-        return false;
-
-    if (!cmp_read_str_size_or_nil(&ctx, &self->feature_code, &len))
-        return false;
-
-    if (!cmp_read_str_size_or_nil(&ctx, &self->country_code, &len))
-        return false;
-
-    if (!cmp_read_str_size_or_nil(&ctx, &self->admin1_code, &len))
-        return false;
-
-    if (!cmp_read_uint(&ctx, &self->admin1_geonames_id))
-        return false;
-
-    if (!cmp_read_str_size_or_nil(&ctx, &self->admin2_code, &len))
-        return false;
-
-    if (!cmp_read_uint(&ctx, &self->admin2_geonames_id))
-        return false;
-
-    if (!cmp_read_str_size_or_nil(&ctx, &self->admin3_code, &len))
-        return false;
-
-    if (!cmp_read_uint(&ctx, &self->admin3_geonames_id))
-        return false;
-
-    if (!cmp_read_str_size_or_nil(&ctx, &self->admin4_code, &len))
-        return false;
-
-    if (!cmp_read_uint(&ctx, &self->admin4_geonames_id))
-        return false;
+    if (!cmp_write_uint(ctx, self->geonames_id) ||
+        !cmp_write_str_or_nil(ctx, self->name) ||
+        !cmp_write_str_or_nil(ctx, self->canonical) ||
+        !cmp_write_uint(ctx, self->type) ||
+        !cmp_write_str_or_nil(ctx, self->iso_language) ||
+        !cmp_write_bool(ctx, self->is_preferred_name) ||
+        !cmp_write_uint(ctx, self->population) ||
+        !cmp_write_double(ctx, self->latitude) ||
+        !cmp_write_double(ctx, self->longitude) ||
+        !cmp_write_str_or_nil(ctx, self->feature_code) ||
+        !cmp_write_str_or_nil(ctx, self->country_code) ||
+        !cmp_write_str_or_nil(ctx, self->admin1_code) ||
+        !cmp_write_uint(ctx, self->admin1_geonames_id) ||
+        !cmp_write_str_or_nil(ctx, self->admin2_code) ||
+        !cmp_write_uint(ctx, self->admin2_geonames_id) ||
+        !cmp_write_str_or_nil(ctx, self->admin3_code) ||
+        !cmp_write_uint(ctx, self->admin3_geonames_id) ||
+        !cmp_write_str_or_nil(ctx, self->admin4_code) ||
+        !cmp_write_uint(ctx, self->admin4_geonames_id)
+        ) { return false; }
 
     return true;
 }
@@ -214,29 +280,8 @@ bool geoname_serialize(geoname_t *self, char_array *str) {
     cmp_ctx_t ctx;
     buffer_t buffer = (buffer_t){str, 0};
     cmp_init(&ctx, &buffer, bytes_reader, bytes_writer);
-
-    if (!cmp_write_uint(&ctx, self->geonames_id) ||
-        !cmp_write_str_or_nil(&ctx, self->name) ||
-        !cmp_write_str_or_nil(&ctx, self->canonical) ||
-        !cmp_write_uint(&ctx, self->type) ||
-        !cmp_write_str_or_nil(&ctx, self->iso_language) ||
-        !cmp_write_bool(&ctx, self->is_preferred_name) ||
-        !cmp_write_uint(&ctx, self->population) ||
-        !cmp_write_double(&ctx, self->latitude) ||
-        !cmp_write_double(&ctx, self->longitude) ||
-        !cmp_write_str_or_nil(&ctx, self->feature_code) ||
-        !cmp_write_str_or_nil(&ctx, self->country_code) ||
-        !cmp_write_str_or_nil(&ctx, self->admin1_code) ||
-        !cmp_write_uint(&ctx, self->admin1_geonames_id) ||
-        !cmp_write_str_or_nil(&ctx, self->admin2_code) ||
-        !cmp_write_uint(&ctx, self->admin2_geonames_id) ||
-        !cmp_write_str_or_nil(&ctx, self->admin3_code) ||
-        !cmp_write_uint(&ctx, self->admin3_geonames_id) ||
-        !cmp_write_str_or_nil(&ctx, self->admin4_code) ||
-        !cmp_write_uint(&ctx, self->admin4_geonames_id)
-        ) { return false; }
-
-    return true;
+    
+    return geoname_serialize_ctx(self, &ctx);    
 }
 
 void geoname_print(geoname_t *self) {
@@ -287,25 +332,101 @@ void gn_postal_code_destroy(gn_postal_code_t *self) {
     if (!self)
         return;
 
-    if (self->postal_code)
+    if (self->postal_code) {
         char_array_destroy(self->postal_code);
+    }
 
-    if (self->country_code)
+    if (self->country_code) {
         char_array_destroy(self->country_code);
+    }
 
-    if (self->containing_geoname)
+    if (self->containing_geoname) {
         char_array_destroy(self->containing_geoname);
+    }
 
-    if (self->admin1_ids)
+    if (self->admin1_ids) {
         uint32_array_destroy(self->admin1_ids);
+    }
 
-    if (self->admin2_ids)
+    if (self->admin2_ids) {
         uint32_array_destroy(self->admin2_ids);
+    }
 
-    if (self->admin3_ids)
+    if (self->admin3_ids) {
         uint32_array_destroy(self->admin3_ids);
+    }
 
     free(self);
+}
+
+bool gn_postal_code_deserialize_ctx(gn_postal_code_t *self, cmp_ctx_t *ctx) {
+    uint32_t len;
+
+    if (!cmp_read_str_size_or_nil(ctx, &self->postal_code, &len)) {
+        return false;
+    }
+
+    if (!cmp_read_str_size_or_nil(ctx, &self->country_code, &len)) {
+        return false;
+    }
+
+    if (!cmp_read_bool(ctx, &self->have_containing_geoname)) {
+        return false;
+    }
+
+    if (self->have_containing_geoname) {
+        if (!cmp_read_str_size_or_nil(ctx, &self->containing_geoname, &len))
+            return false;
+
+        if (!cmp_read_uint(ctx, &self->containing_geonames_id))
+            return false;
+    }
+
+    uint32_t array_size;
+
+    if (!cmp_read_array(ctx, &array_size)) {
+        return false;
+    }
+
+    if (array_size > 0) {
+        uint32_t admin1_id;
+        for ( ;array_size; array_size--) {
+            if (!cmp_read_uint(ctx, &admin1_id)) {
+                return false;
+            }
+            uint32_array_push(self->admin1_ids, admin1_id);
+        }
+    }
+
+    if (!cmp_read_array(ctx, &array_size)) {
+        return false;
+    }
+
+    if (array_size > 0) {
+        uint32_t admin2_id;
+        for (; array_size > 0; array_size--) {
+            if (!cmp_read_uint(ctx, &admin2_id)) {
+                return false;
+            }
+            uint32_array_push(self->admin2_ids, admin2_id);
+        }
+    }
+
+    if (!cmp_read_array(ctx, &array_size)) {
+        return false;
+    }
+
+    if (array_size > 0) {
+        uint32_t admin3_id;
+        for (; array_size > 0; array_size--) {
+            if (!cmp_read_uint(ctx, &admin3_id)) {
+                return false;
+            }
+            uint32_array_push(self->admin3_ids, admin3_id);
+        }
+    }
+
+    return true;
 }
 
 bool gn_postal_code_deserialize(gn_postal_code_t *self, char_array *str) {
@@ -313,62 +434,23 @@ bool gn_postal_code_deserialize(gn_postal_code_t *self, char_array *str) {
     buffer_t buffer = (buffer_t){str, 0};
     cmp_init(&ctx, &buffer, bytes_reader, bytes_writer);
 
-    uint32_t len;
+    return gn_postal_code_deserialize_ctx(self, &ctx);
+}
 
-    if (!cmp_read_str_size_or_nil(&ctx, &self->postal_code, &len))
-        return false;
+static bool gn_postal_code_serialize_ctx(gn_postal_code_t *self, cmp_ctx_t *ctx) {
 
-    if (!cmp_read_str_size_or_nil(&ctx, &self->country_code, &len))
-        return false;
-
-    if (!cmp_read_bool(&ctx, &self->have_containing_geoname))
-        return false;
-
-    if (self->have_containing_geoname) {
-        if (!cmp_read_str_size_or_nil(&ctx, &self->containing_geoname, &len))
-            return false;
-
-        if (!cmp_read_uint(&ctx, &self->containing_geonames_id))
-            return false;
-    }
-
-    uint32_t array_size;
-
-    if (!cmp_read_array(&ctx, &array_size))
-        return false;
-
-    if (array_size > 0) {
-        uint32_t admin1_id;
-        for ( ;array_size; array_size--) {
-            if (!cmp_read_uint(&ctx, &admin1_id))
-                return false;
-            uint32_array_push(self->admin1_ids, admin1_id);
-        }
-    }
-
-    if (!cmp_read_array(&ctx, &array_size))
-        return false;
-
-    if (array_size > 0) {
-        uint32_t admin2_id;
-        for (; array_size > 0; array_size--) {
-            if (!cmp_read_uint(&ctx, &admin2_id))
-                return false;
-            uint32_array_push(self->admin2_ids, admin2_id);
-        }
-    }
-
-    if (!cmp_read_array(&ctx, &array_size))
-        return false;
-
-    if (array_size > 0) {
-        uint32_t admin3_id;
-        for (; array_size > 0; array_size--) {
-            if (!cmp_read_uint(&ctx, &admin3_id))
-                return false;
-            uint32_array_push(self->admin3_ids, admin3_id);
-        }
-    }
+    if (!cmp_write_str_or_nil(ctx, self->postal_code) ||
+        !cmp_write_str_or_nil(ctx, self->country_code) ||
+        !cmp_write_bool(ctx, self->have_containing_geoname) ||
+        (self->have_containing_geoname &&
+            (!cmp_write_str_or_nil(ctx, self->containing_geoname) ||
+             !cmp_write_uint(ctx, self->containing_geonames_id)
+            )
+        ) ||
+        !cmp_write_uint_vector(ctx, self->admin1_ids) ||
+        !cmp_write_uint_vector(ctx, self->admin2_ids) ||
+        !cmp_write_uint_vector(ctx, self->admin3_ids)
+        ) { return false; }
 
     return true;
 }
@@ -378,20 +460,8 @@ bool gn_postal_code_serialize(gn_postal_code_t *self, char_array *str) {
     buffer_t buffer = (buffer_t){str, 0};
     cmp_init(&ctx, &buffer, bytes_reader, bytes_writer);
 
-    if (!cmp_write_str_or_nil(&ctx, self->postal_code) ||
-        !cmp_write_str_or_nil(&ctx, self->country_code) ||
-        !cmp_write_bool(&ctx, self->have_containing_geoname) ||
-        (self->have_containing_geoname &&
-            (!cmp_write_str_or_nil(&ctx, self->containing_geoname) ||
-             !cmp_write_uint(&ctx, self->containing_geonames_id)
-            )
-        ) ||
-        !cmp_write_uint_vector(&ctx, self->admin1_ids) ||
-        !cmp_write_uint_vector(&ctx, self->admin2_ids) ||
-        !cmp_write_uint_vector(&ctx, self->admin3_ids)
-        ) { return false; }
+    return gn_postal_code_serialize_ctx(self, &ctx);
 
-    return true;
 }
 
 void gn_postal_code_print(gn_postal_code_t *self) {
@@ -421,10 +491,44 @@ void gn_postal_code_print(gn_postal_code_t *self) {
 }
 
 
-void geonames_generic_serialize(geonames_generic_t gn) {
+bool geonames_generic_serialize(geonames_generic_t *gn, char_array *str) {
+    cmp_ctx_t ctx;
+    buffer_t buffer = (buffer_t){str, 0};
+    cmp_init(&ctx, &buffer, bytes_reader, bytes_writer);
 
+    if (!cmp_write_u8(&ctx, (uint8_t)gn->type)) {
+        return false;
+    }
+
+    if (gn->type == GEONAMES_NAME) {
+        return geoname_serialize_ctx(gn->geoname, &ctx);
+    } else if (gn->type == GEONAMES_POSTAL_CODE) {
+        return gn_postal_code_serialize_ctx(gn->postal_code, &ctx);
+    }
+
+    return false;
 }
 
-geonames_generic_t *geonames_generic_deserialize(geonames_generic_t gn) {
+bool geonames_generic_deserialize(gn_type *type, geoname_t *geoname, gn_postal_code_t *postal_code, char_array *str) {
+    cmp_ctx_t ctx;
+    buffer_t buffer = (buffer_t){str, 0};
+    cmp_init(&ctx, &buffer, bytes_reader, bytes_writer);
+
+    uint8_t geonames_type;
+
+    if (!cmp_read_u8(&ctx, &geonames_type)) {
+        return false;
+    }
+
+    *type = geonames_type;
+
+    if (geonames_type == GEONAMES_NAME) {
+        return geoname_deserialize_ctx(geoname, &ctx);
+    } else if (geonames_type == GEONAMES_POSTAL_CODE) {
+        return gn_postal_code_deserialize_ctx(postal_code, &ctx);
+    }
+
+
+    return false;
 
 }

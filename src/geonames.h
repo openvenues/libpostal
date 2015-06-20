@@ -87,20 +87,23 @@ void gn_postal_code_print(gn_postal_code_t *self);
 void gn_postal_code_clear(gn_postal_code_t *self);
 void gn_postal_code_destroy(gn_postal_code_t *self);
 
-typedef enum { GEONAME, POSTAL_CODE } gn_type;
+typedef enum {
+    GEONAMES_NAME, 
+    GEONAMES_POSTAL_CODE 
+} gn_type;
 
 typedef struct geonames_generic {
     gn_type type;
     union {
-        geoname_t name;
-        gn_postal_code_t postal;
+        geoname_t *geoname;
+        gn_postal_code_t *postal_code;
     };
 } geonames_generic_t;
 
 VECTOR_INIT(gn_generic_array, geonames_generic_t);
 
-void geonames_generic_serialize(geonames_generic_t gn);
-geonames_generic_t *geonames_generic_deserialize(geonames_generic_t gn);
+bool geonames_generic_serialize(geonames_generic_t *gn, char_array *str);
+bool geonames_generic_deserialize(gn_type *type, geoname_t *geoname, gn_postal_code_t *postal_code, char_array *str);
 
 #ifdef __cplusplus
 }
