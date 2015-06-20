@@ -359,7 +359,7 @@ GEONAMES_FIELDS_HEADER = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                       'src', 'geonames_fields.h')
 
 GEONAMES_FIELDS_HEADER_FILE = '''enum geonames_fields {{
-    {fields}
+    {fields},
     NUM_GEONAMES_FIELDS
 }};
 '''.format(fields=''',
@@ -374,7 +374,7 @@ POSTAL_FIELDS_HEADER = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                     'src', 'postal_fields.h')
 
 POSTAL_FIELDS_HEADER_FILE = '''enum gn_postal_fields {{
-    {fields}
+    {fields},
     NUM_POSTAL_FIELDS
 }};
 '''.format(fields=''',
