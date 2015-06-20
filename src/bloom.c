@@ -3,6 +3,8 @@
 #include "bloom.h"
 #include "murmur/murmur.h"
 
+#define BLOOM_FILTER_SIGNATURE 0xBABABABA
+
 #define LOG2_SQUARED 0.4804530139182014
 #define LOG2 0.6931471805599453
 
@@ -56,8 +58,9 @@ int bloom_filter_add(bloom_filter_t *self, const char *key, size_t len) {
 bloom_filter_t *bloom_filter_new(uint64_t capacity, double error) {
     bloom_filter_t *bloom = malloc(sizeof(bloom_filter_t));
 
-    if (bloom == NULL)
+    if (bloom == NULL) {
         return NULL;
+    }
 
     bloom->ready = false;
 
@@ -90,9 +93,131 @@ exit_free_bloom:
     return NULL;
 }
 
+bool bloom_filter_write(bloom_filter_t *self, FILE *f) {
+    if (!file_write_uint64(f, BLOOM_FILTER_SIGNATURE)) {
+        return false;
+    }
 
+    if (!file_write_uint64(f, self->capacity)) {
+        return false;
+    }
+
+    if (!file_write_double(f, self->error)) {
+        return false;
+    }
+
+    if (!file_write_uint64(f, self->num_bits)) {
+        return false;
+    }
+
+    if (!file_write_uint64(f, self->num_bytes)) {
+        return false;
+    }
+
+    if (!file_write_uint32(f, self->num_hashes)) {
+        return false;
+    }
+
+    if (!file_write_double(f, self->bits_per_entry)) {
+        return false;
+    }
+
+    if (!file_write_chars(f, (char *)self->filter, self->num_bytes)) {
+        return false;
+    }
+
+    return true;
+}
+
+
+
+bool bloom_filter_save(bloom_filter_t *self, char *path) {
+    FILE *f;
+    if ((f = fopen(path, "wb")) == NULL) {
+        return false;
+    }
+    bool status = bloom_filter_write(self, f);
+    fclose(f);
+    return status;
+}
+
+bloom_filter_t *bloom_filter_read(FILE *f) {
+    bloom_filter_t *bloom = malloc(sizeof(bloom_filter_t));
+
+    if (bloom == NULL) {
+        return NULL;
+    }
+
+    bloom->ready = false;
+
+    uint64_t signature = 0;
+
+    if (!file_read_uint64(f, &signature) || signature != BLOOM_FILTER_SIGNATURE) {
+        goto exit_bloom_filter_created;
+    }
+
+    if (!file_read_uint64(f, &bloom->capacity)) {
+        goto exit_bloom_filter_created;
+    }
+
+    if (!file_read_double(f, &bloom->error)) {
+        goto exit_bloom_filter_created;
+    }
+
+    if (!file_read_uint64(f, &bloom->num_bits)) {
+        goto exit_bloom_filter_created;
+    }
+
+    if (!file_read_uint64(f, &bloom->num_bytes)) {
+        goto exit_bloom_filter_created;
+    }
+
+    if (!file_read_uint32(f, &bloom->num_hashes)) {
+        goto exit_bloom_filter_created;
+    }
+
+    if (!file_read_double(f, &bloom->bits_per_entry)) {
+        goto exit_bloom_filter_created;
+    }
+
+    bloom->filter = calloc(bloom->num_bytes, sizeof(char));
+    if (bloom->filter == NULL) {
+        goto exit_bloom_filter_created;
+    }
+
+    if (!file_read_chars(f, (char *)bloom->filter, bloom->num_bytes)) {
+        goto exit_bloom_filter_created;
+    }
+
+    bloom->ready = true;
+
+    return bloom;
+
+exit_bloom_filter_created:
+    bloom_filter_destroy(bloom);
+    bloom = NULL;
+    return bloom;
+}
+
+
+bloom_filter_t *bloom_filter_load(char *path) {
+    FILE *f;
+
+    if ((f = fopen(path, "rb")) == NULL) {
+        return NULL;
+    }
+
+    bloom_filter_t *bloom = bloom_filter_read(f);
+    fclose(f);
+    return bloom;
+}
 
 void bloom_filter_destroy(bloom_filter_t *self) {
-    free(self->filter);
+    if (self == NULL) return;
+
+    if (self->filter != NULL) {
+        free(self->filter);
+    }
+
     free(self);
 }
