@@ -1,13 +1,7 @@
-
-#ifndef TRANSLITERATION_SCRIPTS_H
-#define TRANSLITERATION_SCRIPTS_H
-
-#include <stdlib.h>
 #include "unicode_scripts.h"
-#include "transliterate.h"
 
 typedef struct script_transliteration_rule {
-    script_type_t script;
+    script_t script;
     char *language;
     uint32_t index;
     uint32_t len;
@@ -97,6 +91,4 @@ char *script_transliterators[] = {
     "katakana-latin",
     "katakana-latin-bgn",
     "latin-ascii"
-}
-
-#endif
+};
