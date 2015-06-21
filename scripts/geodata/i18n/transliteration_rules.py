@@ -1417,12 +1417,7 @@ transliterator_source_t transliterators_source[] = {{
 
 
 transliterator_script_data_template = u'''
-#ifndef TRANSLITERATION_SCRIPTS_H
-#define TRANSLITERATION_SCRIPTS_H
-
-#include <stdlib.h>
 #include "unicode_scripts.h"
-#include "transliterate.h"
 
 typedef struct script_transliteration_rule {{
     script_type_t script;
@@ -1439,11 +1434,7 @@ char *script_transliterators[] = {{
     {transliterators}
 }}
 
-#endif
 '''
-
-
-
 
 script_transliterators = {
     'arabic': {None: ['arabic-latin', 'arabic-latin-bgn'],
@@ -1593,7 +1584,7 @@ def write_transliteration_data_file(filename):
 
 
 TRANSLITERATION_DATA_FILENAME = 'transliteration_data.c'
-TRANSLITERATION_SCRIPTS_FILENAME = 'transliteration_scripts.h'
+TRANSLITERATION_SCRIPTS_FILENAME = 'transliteration_scripts_data.c'
 
 
 def main(out_dir):
