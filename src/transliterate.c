@@ -1,5 +1,6 @@
 #include <math.h>
 #include "transliterate.h"
+#include "transliteration_scripts_data.c"
 #include "file_utils.h"
 
 #define TRANSLITERATION_TABLE_SIGNATURE 0xAAAAAAAA
@@ -641,7 +642,7 @@ static inline phrase_array *phrase_array_create_if_null(phrase_array *phrases) {
 }
 
 
-char *transliterate(char *trans_name, char *str) {
+char *transliterate(char *trans_name, char *str, size_t len) {
     if (trans_name == NULL || str == NULL || trans_table == NULL) return NULL;
 
     trie_t *trie = trans_table->trie;
@@ -651,7 +652,6 @@ char *transliterate(char *trans_name, char *str) {
         return NULL;
     }
 
-    size_t len = strlen(str);
     log_debug("len = %zu\n", len);
 
     str = strdup(str);
@@ -727,8 +727,6 @@ char *transliterate(char *trans_name, char *str) {
             trie_prefix_result_t context_result = NULL_PREFIX_RESULT;
             trie_prefix_result_t prev_result;
             trie_node_t node;
-
-            len = strlen(str);
 
             new_str = char_array_new_size(len);
 
@@ -957,6 +955,7 @@ char *transliterate(char *trans_name, char *str) {
             if (utf8proc_normalized != NULL) {
                 char *old_str = str;
                 str = (char *)utf8proc_normalized;
+                len = strlen(str);
                 free(old_str);
             }
             log_debug("Got unicode normalization step, new str=%s, len=%lu\n", str, strlen(str));
@@ -964,8 +963,9 @@ char *transliterate(char *trans_name, char *str) {
             // Recursive call here shouldn't hurt too much, happens in only a few languages and only 2-3 calls deep
             log_debug("Got STEP_TYPE_TRANSFORM, step=%s\n", step_name);
             char *old_str = str;
-            str = transliterate(step_name, str);
+            str = transliterate(step_name, str, len);
             log_debug("Transform result = %s\n", str);
+            len = strlen(str);
             free(old_str);
         }
 

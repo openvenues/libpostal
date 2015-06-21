@@ -129,7 +129,7 @@ void transliterator_destroy(transliterator_t *self);
 bool transliteration_table_add_transliterator(transliterator_t *trans);
 
 transliterator_t *get_transliterator(char *name);
-char *transliterate(char *trans_name, char *str);
+char *transliterate(char *trans_name, char *str, size_t len);
 
 bool transliteration_table_write(FILE *file);
 bool transliteration_table_save(char *filename);
