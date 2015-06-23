@@ -1,6 +1,5 @@
 #include <math.h>
 #include "transliterate.h"
-#include "transliteration_scripts_data.c"
 #include "file_utils.h"
 
 #define TRANSLITERATION_TABLE_SIGNATURE 0xAAAAAAAA
@@ -991,6 +990,14 @@ void transliteration_table_destroy(void) {
         kh_destroy(str_transliterator, trans_table->transliterators);
     }
 
+    if (trans_table->script_languages) {
+        kh_destroy(script_language_index, trans_table->script_languages);
+    }
+
+    if (trans_table->transliterator_names) {
+        cstring_array_destroy(trans_table->transliterator_names);
+    }
+
     if (trans_table->steps) {
         step_array_destroy(trans_table->steps);
     }
@@ -1010,6 +1017,7 @@ void transliteration_table_destroy(void) {
     free(trans_table);
 }
 
+
 transliteration_table_t *transliteration_table_init(void) {
     transliteration_table_t *trans_table = get_transliteration_table();
 
@@ -1023,6 +1031,16 @@ transliteration_table_t *transliteration_table_init(void) {
 
         trans_table->transliterators = kh_init(str_transliterator);
         if (trans_table->transliterators == NULL) {
+            goto exit_trans_table_created;
+        }
+
+        trans_table->script_languages = kh_init(script_language_index);
+        if (trans_table->script_languages == NULL) {
+            goto exit_trans_table_created;
+        }
+
+        trans_table->transliterator_names = cstring_array_new();
+        if (trans_table->transliterator_names == NULL) {
             goto exit_trans_table_created;
         }
 
@@ -1131,6 +1149,33 @@ bool transliteration_table_add_transliterator(transliterator_t *trans) {
 
     return true;
 }
+
+bool transliteration_table_add_script_language(script_language_t script_language, transliterator_index_t index) {
+    if (trans_table == NULL) {
+        return false;
+    }
+
+    int ret;
+    khiter_t k = kh_put(script_language_index, trans_table->script_languages, script_language, &ret);
+    kh_value(trans_table->script_languages, k) = index;
+
+    return true;
+}
+
+transliterator_index_t get_transliterator_index_for_script_language(script_t script, char *language) {
+    if (trans_table == NULL || language == NULL || strlen(language) >= MAX_LANGUAGE_LEN) {
+        return NULL_TRANSLITERATOR_INDEX;
+    }
+
+    script_language_t script_lang;
+    script_lang.script = script;
+    strcpy(script_lang.language, language);
+
+    khiter_t k;
+    k = kh_get(script_language_index, trans_table->script_languages, script_lang);
+    return (k != kh_end(trans_table->script_languages)) ? kh_value(trans_table->script_languages, k) : NULL_TRANSLITERATOR_INDEX;
+}
+
 
 char *transliterator_replace_strings(trie_t *trie, cstring_array *replacements, char *input) {
     phrase_array *phrases;
@@ -1413,6 +1458,86 @@ bool transliteration_table_read(FILE *f) {
 
     log_debug("Read transliterators\n");
 
+    size_t num_script_languages;
+    if (!file_read_uint64(f, (uint64_t *)&num_script_languages)) {
+        goto exit_trans_table_load_error;
+    }
+
+    log_debug("num_script_languages = %zu\n", num_script_languages);
+
+    script_language_t script_language;
+    transliterator_index_t index;
+
+    size_t language_len = 0;
+    char language[MAX_LANGUAGE_LEN] = "";
+
+    for (i = 0; i < num_script_languages; i++) {
+        if (!file_read_uint32(f, (uint32_t *)&script_language.script)) {
+            goto exit_trans_table_load_error;
+        }
+
+        if (!file_read_uint64(f, (uint64_t *)&language_len) || language_len >= MAX_LANGUAGE_LEN) {
+            goto exit_trans_table_load_error;
+        }
+
+        if (language_len == 0) {
+            script_language.language[0] = '\0';
+        } else if (!file_read_chars(f, (char *)language, language_len)) {
+            goto exit_trans_table_load_error;
+        } else {
+            strcpy(script_language.language, language);
+        }
+
+        
+        if (!file_read_uint64(f, (uint64_t *)&index.transliterator_index)) {
+            goto exit_trans_table_load_error;
+        }        
+
+        if (!file_read_uint64(f, (uint64_t *)&index.num_transliterators)) {
+            goto exit_trans_table_load_error;
+        }
+
+        log_debug("Adding script language key={%d, %s}, value={%d, %d}\n", script_language.script, script_language.language, index.transliterator_index, index.num_transliterators);
+
+        transliteration_table_add_script_language(script_language, index);
+    }
+
+    size_t trans_table_num_strings;
+
+    if (!file_read_uint64(f, (uint64_t *)&trans_table_num_strings)) {
+        goto exit_trans_table_load_error;
+    }
+
+    log_debug("trans_table_num_strings=%zu\n", trans_table_num_strings);
+
+    size_t trans_name_str_len;
+
+    if (!file_read_uint64(f, (uint64_t *)&trans_name_str_len)) {
+        goto exit_trans_table_load_error;
+    }
+
+    log_debug("Creating char_array with size=%zu\n", trans_name_str_len);
+
+    char_array *array = char_array_new_size(trans_name_str_len);
+
+    if (!file_read_chars(f, array->a, trans_name_str_len)) {
+        goto exit_trans_table_load_error;
+    }
+
+    array->n = trans_name_str_len;
+
+    cstring_array_destroy(trans_table->transliterator_names);
+    log_debug("Destroyed current cstring_array\n");
+
+    log_debug("char_array len=%zu\n", array->n);
+
+    trans_table->transliterator_names = cstring_array_from_char_array(array);
+    log_debug("Set trans_table->transliterator_names\n");
+
+    if (cstring_array_num_strings(trans_table->transliterator_names) != trans_table_num_strings) {
+        goto exit_trans_table_load_error;
+    }
+
     size_t num_steps;
 
     if (!file_read_uint64(f, (uint64_t *)&num_steps)) {
@@ -1586,9 +1711,59 @@ bool transliteration_table_write(FILE *f) {
         }
     })
 
+    int i;
+
+    size_t num_script_languages = kh_size(trans_table->script_languages);
+
+    if (!file_write_uint64(f, (uint64_t)num_script_languages)) {
+        return false;
+    }
+
+    script_language_t script_language;
+    transliterator_index_t index;
+
+    kh_foreach(trans_table->script_languages, script_language, index, {
+        if (!file_write_uint32(f, (uint32_t)script_language.script)) {
+            return false;
+        }
+
+        size_t language_len = strlen(script_language.language);
+
+        if (!file_write_uint64(f, (uint64_t)language_len)) {
+            return false;
+        }
+
+        if (language_len > 0 && !file_write_chars(f, script_language.language, language_len)) {
+            return false;
+        }
+
+        if (!file_write_uint64(f, (uint64_t)index.transliterator_index)) {
+            return false;
+        }
+
+        if (!file_write_uint64(f, (uint64_t)index.num_transliterators)) {
+            return false;
+        }
+    })
+
+    size_t num_trans_names = trans_table->transliterator_names->indices->n;
+
+    if (!file_write_uint64(f, (uint64_t)num_trans_names)) {
+        return false;
+    }
+
+    size_t trans_names_str_len = trans_table->transliterator_names->str->n;
+
+    if (!file_write_uint64(f, (uint64_t)trans_names_str_len)) {
+        return false;
+    }
+
+    if (!file_write_chars(f, trans_table->transliterator_names->str->a, trans_names_str_len)) {
+        return false;
+    }
+
     transliteration_step_t *step;
 
-    int i;
 
     size_t num_steps = trans_table->steps->n;
 
