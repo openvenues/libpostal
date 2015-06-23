@@ -500,7 +500,7 @@ bool geonames_generic_serialize(geonames_generic_t *gn, char_array *str) {
         return false;
     }
 
-    if (gn->type == GEONAMES_NAME) {
+    if (gn->type == GEONAMES_PLACE) {
         return geoname_serialize_ctx(gn->geoname, &ctx);
     } else if (gn->type == GEONAMES_POSTAL_CODE) {
         return gn_postal_code_serialize_ctx(gn->postal_code, &ctx);
@@ -522,7 +522,7 @@ bool geonames_generic_deserialize(gn_type *type, geoname_t *geoname, gn_postal_c
 
     *type = geonames_type;
 
-    if (geonames_type == GEONAMES_NAME) {
+    if (geonames_type == GEONAMES_PLACE) {
         return geoname_deserialize_ctx(geoname, &ctx);
     } else if (geonames_type == GEONAMES_POSTAL_CODE) {
         return gn_postal_code_deserialize_ctx(postal_code, &ctx);

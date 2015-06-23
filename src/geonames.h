@@ -88,7 +88,7 @@ void gn_postal_code_clear(gn_postal_code_t *self);
 void gn_postal_code_destroy(gn_postal_code_t *self);
 
 typedef enum {
-    GEONAMES_NAME, 
+    GEONAMES_PLACE, 
     GEONAMES_POSTAL_CODE 
 } gn_type;
 
