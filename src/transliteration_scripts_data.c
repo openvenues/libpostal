@@ -7,12 +7,12 @@ typedef struct script_transliteration_rule {
 } script_transliteration_rule_t;
 
 script_transliteration_rule_t script_transliteration_rules[] = {
-    {{SCRIPT_THAANA, NULL}, {0, 2}},
-    {{SCRIPT_GURMUKHI, NULL}, {2, 1}},
-    {{SCRIPT_TELUGU, NULL}, {3, 1}},
+    {{SCRIPT_THAANA, ""}, {0, 2}},
+    {{SCRIPT_GURMUKHI, ""}, {2, 1}},
+    {{SCRIPT_TELUGU, ""}, {3, 1}},
     {{SCRIPT_CYRILLIC, "be"}, {4, 1}},
     {{SCRIPT_CYRILLIC, "bg"}, {5, 1}},
-    {{SCRIPT_CYRILLIC, NULL}, {6, 1}},
+    {{SCRIPT_CYRILLIC, ""}, {6, 1}},
     {{SCRIPT_CYRILLIC, "ru"}, {7, 1}},
     {{SCRIPT_CYRILLIC, "uz"}, {8, 1}},
     {{SCRIPT_CYRILLIC, "kk"}, {9, 1}},
@@ -21,28 +21,28 @@ script_transliteration_rule_t script_transliteration_rules[] = {
     {{SCRIPT_CYRILLIC, "mk"}, {12, 1}},
     {{SCRIPT_CYRILLIC, "uk"}, {13, 1}},
     {{SCRIPT_CYRILLIC, "ky"}, {14, 1}},
-    {{SCRIPT_ORIYA, NULL}, {15, 1}},
-    {{SCRIPT_HANGUL, NULL}, {16, 2}},
-    {{SCRIPT_GUJARATI, NULL}, {18, 1}},
-    {{SCRIPT_HAN, NULL}, {19, 1}},
-    {{SCRIPT_ARMENIAN, NULL}, {20, 1}},
-    {{SCRIPT_TAMIL, NULL}, {21, 1}},
-    {{SCRIPT_BENGALI, NULL}, {22, 1}},
-    {{SCRIPT_MALAYALAM, NULL}, {23, 1}},
-    {{SCRIPT_HIRAGANA, NULL}, {24, 1}},
-    {{SCRIPT_KANNADA, NULL}, {25, 1}},
-    {{SCRIPT_LATIN, NULL}, {26, 1}},
-    {{SCRIPT_GEORGIAN, NULL}, {27, 2}},
-    {{SCRIPT_DEVANAGARI, NULL}, {29, 1}},
-    {{SCRIPT_THAI, NULL}, {30, 1}},
-    {{SCRIPT_GREEK, NULL}, {31, 3}},
-    {{SCRIPT_CANADIAN_ABORIGINAL, NULL}, {34, 1}},
+    {{SCRIPT_ORIYA, ""}, {15, 1}},
+    {{SCRIPT_HANGUL, ""}, {16, 2}},
+    {{SCRIPT_GUJARATI, ""}, {18, 1}},
+    {{SCRIPT_HAN, ""}, {19, 1}},
+    {{SCRIPT_ARMENIAN, ""}, {20, 1}},
+    {{SCRIPT_TAMIL, ""}, {21, 1}},
+    {{SCRIPT_BENGALI, ""}, {22, 1}},
+    {{SCRIPT_MALAYALAM, ""}, {23, 1}},
+    {{SCRIPT_HIRAGANA, ""}, {24, 1}},
+    {{SCRIPT_KANNADA, ""}, {25, 1}},
+    {{SCRIPT_LATIN, ""}, {26, 1}},
+    {{SCRIPT_GEORGIAN, ""}, {27, 2}},
+    {{SCRIPT_DEVANAGARI, ""}, {29, 1}},
+    {{SCRIPT_THAI, ""}, {30, 1}},
+    {{SCRIPT_GREEK, ""}, {31, 3}},
+    {{SCRIPT_CANADIAN_ABORIGINAL, ""}, {34, 1}},
     {{SCRIPT_ARABIC, "fa"}, {35, 1}},
-    {{SCRIPT_ARABIC, NULL}, {36, 2}},
+    {{SCRIPT_ARABIC, ""}, {36, 2}},
     {{SCRIPT_ARABIC, "ps"}, {38, 1}},
-    {{SCRIPT_HEBREW, NULL}, {39, 2}},
-    {{SCRIPT_KATAKANA, NULL}, {41, 2}},
-    {{SCRIPT_COMMON, NULL}, {43, 1}}
+    {{SCRIPT_HEBREW, ""}, {39, 2}},
+    {{SCRIPT_KATAKANA, ""}, {41, 2}},
+    {{SCRIPT_COMMON, ""}, {43, 1}}
 };
 
 char *script_transliterators[] = {
@@ -90,5 +90,5 @@ char *script_transliterators[] = {
     "katakana-latin",
     "katakana-latin-bgn",
     "latin-ascii"
-}
+};
 

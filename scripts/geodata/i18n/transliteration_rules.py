@@ -1430,7 +1430,7 @@ script_transliteration_rule_t script_transliteration_rules[] = {{
 
 char *script_transliterators[] = {{
     {transliterators}
-}}
+}};
 
 '''
 
@@ -1535,7 +1535,7 @@ def write_transliterator_scripts_file(filename):
             continue
         script_type = 'SCRIPT_{}'.format(script.upper())
         for lang, transliterators in spec.iteritems():
-            lang = 'NULL' if not lang else quote_string(lang)
+            lang = '""' if not lang else quote_string(lang)
             num_transliterators = len(transliterators)
             rules.append(transliterator_rule_template.format(script_type=script_type,
                          lang=lang, start=index, length=num_transliterators))
