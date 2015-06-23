@@ -65599,7 +65599,7 @@ script_code_t script_codes[] = {
     {SCRIPT_KANNADA, "Knda"}
 };
 
-script_language_t script_languages[] = {
+script_languages_t script_languages[] = {
     {0, NULL},
     {0, NULL},
     {122, {"gv", "gd", "ga", "gn", "gl", "tr", "ts", "to", "tk", "tg", "mg", "rm", "za", "zu", "tet", "ms", "ty", "quc", "ve", "tn", "mi", "mh", "mt", "csb", "fr", "fy", "fi", "fj", "fo", "ss", "sr", "sq", "sw", "sv", "st", "sk", "so", "sn", "sm", "sg", "se", "lb", "lt", "fil", "ceb", "yo", "qu", "en", "ee", "eu", "et", "es", "rn", "ro", "ast", "xh", "udm", "mdh", "sat", "sl", "kg", "kl", "ky", "tkl", "de", "da", "hif", "hil", "bal", "lua", "ikt", "wo", "ilo", "ln", "tsg", "ch", "ca", "cy", "cs", "lv", "pt", "pl", "gaa", "vi", "is", "iu", "it", "tzm", "id", "pap", "pag", "niu", "gsw", "nd", "haw", "tvl", "bi", "bs", "nso", "gil", "war", "hr", "ht", "hu", "ho", "uz", "ug", "af", "ak", "inh", "tpi", "ay", "kha", "az", "nl", "nn", "na", "nb", "ny", "nr", "pau", "rw"}},
