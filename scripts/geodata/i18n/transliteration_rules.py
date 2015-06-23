@@ -1420,10 +1420,8 @@ transliterator_script_data_template = u'''
 #include "unicode_scripts.h"
 
 typedef struct script_transliteration_rule {{
-    script_type_t script;
-    char *language;
-    uint32_t index;
-    uint32_t len;
+    script_language_t script_language;
+    transliterator_index_t index;
 }} script_transliteration_rule_t;
 
 script_transliteration_rule_t script_transliteration_rules[] = {{
@@ -1527,7 +1525,7 @@ script_transliterators = {
 
 
 def write_transliterator_scripts_file(filename):
-    transliterator_rule_template = '''{{{script_type}, {lang}, {start}, {length}}}'''
+    transliterator_rule_template = '''{{{{{script_type}, {lang}}}, {{{start}, {length}}}}}'''
     rules = []
     all_transliterators = []
     index = 0
