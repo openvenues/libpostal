@@ -646,7 +646,10 @@ cstring_array *cstring_array_split(char *str, const char *separator, size_t sepa
     }
     char_array_push(array, '\0');
 
-    return cstring_array_from_char_array(array);
+    cstring_array *string_array = cstring_array_from_char_array(array);
+    *count = cstring_array_num_strings(string_array);
+
+    return string_array;
 }
 
 
