@@ -10,6 +10,7 @@
 #include "string_utils.h"
 #include "trie.h"
 #include "trie_search.h"
+#include "unicode_scripts.h"
 
 #define DEFAULT_TRANSLITERATION_PATH "../data/transliteration/transliteration.dat"
 
@@ -66,10 +67,32 @@ VECTOR_INIT_FREE_DATA(transliteration_replacement_array, transliteration_replace
 
 KHASH_MAP_INIT_STR(str_transliterator, transliterator_t *)
 
-typedef struct transliteration_table {
-    khash_t(str_transliterator) *transliterators;    
-    step_array *steps;
+#define kh_script_lang_hash(key)  ((uint64_t)(key).script ^ (((key).language == NULL) ? 0 : kh_str_hash_func((key).language)))
+#define kh_script_lang_equal(a, b)  (((a).script == (b).script) && strcmp((a).language, (b).language) == 0)
 
+#define MAX_LANGUAGE_LEN 4
+
+typedef struct script_language {
+    script_t script;
+    char language[MAX_LANGUAGE_LEN];
+} script_language_t;
+
+typedef struct transliterator_index {
+    size_t transliterator_index;
+    size_t num_transliterators;
+} transliterator_index_t;
+
+#define NULL_TRANSLITERATOR_INDEX (transliterator_index_t) {0, 0}
+
+KHASH_INIT(script_language_index, script_language_t, transliterator_index_t, 1, kh_script_lang_hash, kh_script_lang_equal)
+
+typedef struct transliteration_table {
+    khash_t(str_transliterator) *transliterators;
+
+    khash_t(script_language_index) *script_languages;
+    cstring_array *transliterator_names;
+
+    step_array *steps;
     trie_t *trie;
 
     transliteration_replacement_array *replacements;
@@ -130,6 +153,18 @@ bool transliteration_table_add_transliterator(transliterator_t *trans);
 
 transliterator_t *get_transliterator(char *name);
 char *transliterate(char *trans_name, char *str, size_t len);
+
+bool transliteration_table_add_script_language(script_language_t script_language, transliterator_index_t index);
+transliterator_index_t get_transliterator_index_for_script_language(script_t script, char *language);
+
+#define foreach_transliterator(script, language, transliterator_var, code) do {                                                 \
+        transliterator_index_t __index = get_transliterator_index_for_script_language(script, language);                        \
+        for (int __i = __index.transliterator_index; __i < __index.transliterator_index + __index.num_transliterators; __i++) { \
+            transliterator_var = cstring_array_get_token(trans_table->transliterator_names, __i);                               \
+            if (transliterator_var == NULL) break;                                                                              \
+            code;                                                                                                              \
+        }                                                                                                                       \
+    } while (0);
 
 bool transliteration_table_write(FILE *file);
 bool transliteration_table_save(char *filename);
