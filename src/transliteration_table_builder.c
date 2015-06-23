@@ -8,12 +8,12 @@ Only used once at setup/make time, not overly concerned with optimization
 
 #include "collections.h"
 #include "log/log.h"
-#include "klib/ksort.h"
 #include "string_utils.h"
 #include "trie.h"
 #include "transliterate.h"
 #include "transliteration_rule.h"
 #include "transliteration_data.c"
+#include "transliteration_scripts_data.c"
 
 #include "utf8proc/utf8proc.h"
 
@@ -409,8 +409,10 @@ int main(int argc, char **argv) {
                         char_array_clear(post_context_perm);
                         for (c = 0; c < post_context_iter->num_tokens; c++) {
                             token = string_tree_iterator_get_string(post_context_iter, c);
-                            if (token == NULL || strlen(token) == 0) {
-                                log_error("post_token_context is NULL or 0 length\n");
+                            if (token == NULL) {
+                                log_error ("post_token_context is NULL\n");
+                            } else if (strlen(token) == 0) {
+                                log_error("post_token_context is 0 length\n");
                             }
                             char_array_cat(post_context_perm, token);
                         }
@@ -584,6 +586,27 @@ int main(int argc, char **argv) {
 
         if (!transliteration_table_add_transliterator(trans)) {
             goto exit_teardown;
+        }
+
+    }
+
+    size_t num_source_scripts = sizeof(script_transliteration_rules) / sizeof(script_transliteration_rule_t);
+
+    for (int i = 0; i < num_source_scripts; i++) {
+        script_transliteration_rule_t rule = script_transliteration_rules[i];
+
+        if (!transliteration_table_add_script_language(rule.script_language, rule.index)) {
+            goto exit_teardown;
+        }
+
+        transliterator_index_t index = rule.index;
+
+        for (int j = index.transliterator_index; j < index.transliterator_index + index.num_transliterators; j++) {
+            char *trans_name = script_transliterators[j];
+            if (trans_name == NULL) {
+                goto exit_teardown;
+            }
+            cstring_array_add_string(trans_table->transliterator_names, trans_name);
         }
 
     }
