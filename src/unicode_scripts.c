@@ -11,16 +11,17 @@ inline script_languages_t get_script_languages(script_t script) {
     return script_languages[script];
 }
 
-script_t string_script(char *str, size_t *len) {
+script_t string_script(char *str, size_t len, size_t *script_len) {
     int32_t ch;
     script_t last_script = SCRIPT_UNKNOWN;
     script_t script = SCRIPT_UNKNOWN;
 
     uint8_t *ptr = (uint8_t *)str;
 
-    *len = 0;
+    *script_len = 0;
+    size_t idx = 0;
 
-    while (1) {
+    while (idx < len) {
         ssize_t char_len = utf8proc_iterate(ptr, -1, &ch);
 
         if (ch == 0) break;
@@ -36,7 +37,8 @@ script_t string_script(char *str, size_t *len) {
         }
 
         ptr += char_len;
-        *len += char_len;
+        idx += char_len;
+        *script_len += char_len;
 
         if (script != SCRIPT_UNKNOWN || script != SCRIPT_COMMON) {
             last_script = script;
