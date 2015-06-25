@@ -12,6 +12,8 @@
 #include "trie_search.h"
 #include "unicode_scripts.h"
 
+#define LATIN_ASCII "latin-ascii"
+
 #define DEFAULT_TRANSLITERATION_PATH "../data/transliteration/transliteration.dat"
 
 #define MAX_TRANS_NAME_LEN 100
@@ -160,7 +162,7 @@ transliterator_index_t get_transliterator_index_for_script_language(script_t scr
 #define foreach_transliterator(script, language, transliterator_var, code) do {                                                 \
         transliterator_index_t __index = get_transliterator_index_for_script_language(script, language);                        \
         for (int __i = __index.transliterator_index; __i < __index.transliterator_index + __index.num_transliterators; __i++) { \
-            transliterator_var = cstring_array_get_token(trans_table->transliterator_names, __i);                               \
+            transliterator_var = cstring_array_get_string(trans_table->transliterator_names, __i);                               \
             if (transliterator_var == NULL) break;                                                                              \
             code;                                                                                                              \
         }                                                                                                                       \

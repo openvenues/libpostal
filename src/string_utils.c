@@ -614,7 +614,7 @@ inline int32_t cstring_array_get_offset(cstring_array *self, uint32_t i) {
     return (int32_t)self->indices->a[i];
 }
 
-inline char *cstring_array_get_token(cstring_array *self, uint32_t i) {
+inline char *cstring_array_get_string(cstring_array *self, uint32_t i) {
     int32_t data_index = cstring_array_get_offset(self, i);
     if (data_index < 0) return NULL;
     return self->str->a + data_index;
@@ -822,7 +822,7 @@ char *string_tree_iterator_get_string(string_tree_iterator_t *self, uint32_t i) 
     uint32_t base_index = self->tree->token_indices->a[i];
     uint32_t offset = self->path[i];
 
-    return cstring_array_get_token(self->tree->strings, base_index + offset);
+    return cstring_array_get_string(self->tree->strings, base_index + offset);
 }
 
 bool string_tree_iterator_done(string_tree_iterator_t *self) {

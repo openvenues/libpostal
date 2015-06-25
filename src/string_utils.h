@@ -145,7 +145,7 @@ uint32_t cstring_array_add_string_len(cstring_array *self, char *str, size_t len
 void cstring_array_append_string(cstring_array *self, char *str);
 void cstring_array_append_string_len(cstring_array *self, char *str, size_t len);
 int32_t cstring_array_get_offset(cstring_array *self, uint32_t i);
-char *cstring_array_get_token(cstring_array *self, uint32_t i);
+char *cstring_array_get_string(cstring_array *self, uint32_t i);
 int64_t cstring_array_token_length(cstring_array *self, uint32_t i); 
 
 void cstring_array_destroy(cstring_array *self);

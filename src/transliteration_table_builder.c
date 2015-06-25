@@ -457,7 +457,7 @@ int main(int argc, char **argv) {
                     for (ante = 0; ante < num_pre_context_strings; ante++) {
                         char_array_clear(context);
 
-                        token = cstring_array_get_token(pre_context_strings, ante);
+                        token = cstring_array_get_string(pre_context_strings, ante);
                         if (token == NULL || strlen(token) == 0) {
                             log_error("pre_context token was NULL or 0 length\n");
                             goto exit_teardown;
@@ -469,7 +469,7 @@ int main(int argc, char **argv) {
                         for (post = 0; post < num_post_context_strings; post++) {
                             context->n = context_len;
                             char_array_cat(context, POST_CONTEXT_CHAR);
-                            token = cstring_array_get_token(post_context_strings, post);
+                            token = cstring_array_get_string(post_context_strings, post);
                             char_array_cat(context, token);
                             if (token == NULL || strlen(token) == 0) {
                                 log_error("post_context token was NULL or 0 length\n");
@@ -542,7 +542,7 @@ int main(int argc, char **argv) {
 
                         for (c = 0; c < num_context_strings; c++) {
                             rule_key->n = context_key_len;
-                            token = cstring_array_get_token(context_strings, c);
+                            token = cstring_array_get_string(context_strings, c);
                             if (token == NULL) {
                                 log_error("token was NULL for c=%d\n", c);
                             }

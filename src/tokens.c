@@ -37,7 +37,7 @@ tokenized_string_t *tokenized_string_from_tokens(char *src, token_array *tokens)
 
 char *tokenized_string_get_token(tokenized_string_t *self, uint32_t index) {
     if (index < self->tokens->n) {
-        return cstring_array_get_token(self->str, index);
+        return cstring_array_get_string(self->str, index);
     } else {
         return NULL;
     }

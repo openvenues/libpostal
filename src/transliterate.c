@@ -611,7 +611,7 @@ static char *replace_groups(trie_t *trie, char *str, char *replacement, group_ca
             log_debug("in group ref\n");
             sscanf((char *)replacement_ptr, "%d", &group_ref);
             log_debug("Got group_ref=%d\n", group_ref);
-            char *group = cstring_array_get_token(group_strings, group_ref-1);
+            char *group = cstring_array_get_string(group_strings, group_ref-1);
             log_debug("Got group=%s\n", group);
             if (group != NULL) {
                 char_array_cat(ret, group);
@@ -817,11 +817,11 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
 
                     if (replacement != NULL) {
-                        char *replacement_string = cstring_array_get_token(trans_table->replacement_strings, replacement->string_index);
+                        char *replacement_string = cstring_array_get_string(trans_table->replacement_strings, replacement->string_index);
                         char *revisit_string = NULL;
                         if (replacement->revisit_index != 0) {
                             log_debug("revisit_index = %d\n", replacement->revisit_index);
-                            revisit_string = cstring_array_get_token(trans_table->revisit_strings, replacement->revisit_index);
+                            revisit_string = cstring_array_get_string(trans_table->revisit_strings, replacement->revisit_index);
                         }
 
                         bool free_revisit = false;
@@ -936,17 +936,17 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
         } else if (step->type == STEP_UNICODE_NORMALIZATION) {
             log_debug("unicode normalization\n");
-            int utf8proc_options = UTF8PROC_NULLTERM | UTF8PROC_STABLE;
+            int utf8proc_options = UTF8PROC_OPTIONS_BASE;
             if (strcmp(step->name, NFD) == 0) {
-                utf8proc_options = utf8proc_options | UTF8PROC_DECOMPOSE;
+                utf8proc_options = UTF8PROC_OPTIONS_NFD;
             } else if (strcmp(step->name, NFC) == 0) {
-                utf8proc_options = utf8proc_options | UTF8PROC_COMPOSE;
+                utf8proc_options = UTF8PROC_OPTIONS_NFC;
             } else if (strcmp(step->name, NFKD) == 0) {
-                utf8proc_options = utf8proc_options | UTF8PROC_DECOMPOSE | UTF8PROC_COMPAT;
+                utf8proc_options = UTF8PROC_OPTIONS_NFKD;
             } else if (strcmp(step->name, NFKC) == 0) {
-                utf8proc_options = utf8proc_options | UTF8PROC_COMPOSE | UTF8PROC_COMPAT;
+                utf8proc_options = UTF8PROC_OPTIONS_NKFC;
             } else if (strcmp(step->name, STRIP_MARK) == 0) {
-                utf8proc_options = utf8proc_options | UTF8PROC_STRIPMARK;
+                utf8proc_options = UTF8PROC_OPTIONS_STRIP_ACCENTS;
             }
 
             uint8_t *utf8proc_normalized = NULL;
@@ -1199,7 +1199,7 @@ char *transliterator_replace_strings(trie_t *trie, cstring_array *replacements, 
                 phrase = phrases->a[i];
                 end = phrase.start;
                 char_array_append_len(str, input + start, end - start);
-                char_array_append(str, cstring_array_get_token(replacements, phrase.data));
+                char_array_append(str, cstring_array_get_string(replacements, phrase.data));
                 start = phrase.start + phrase.len;
             }
 
