@@ -206,25 +206,23 @@ email = ([a-zA-Z0-9\._%+\-]+"@"([a-zA-Z0-9]+[\.])+[a-zA-Z0-9]{2,3});
 
 }
 
-scanner_t scanner_from_string(const char *input) {
+inline scanner_t scanner_from_string(const char *input, size_t len) {
     unsigned char *s = (unsigned char *)input;
 
     scanner_t scanner;
     scanner.src = s;
     scanner.cursor = s;
     scanner.start = s;
-    scanner.end = s + strlen(input);
+    scanner.end = s + len;
 
     return scanner;
 }
 
-token_array *tokenize(const char *input) {
+void tokenize_add_tokens(token_array *tokens, const char *input, size_t len) {
+    scanner_t scanner = scanner_from_string(input, len);
+
     size_t token_start, token_length;
     uint16_t token_type;
-
-    scanner_t scanner = scanner_from_string(input);
-
-    token_array *tokens = token_array_new();
 
     while ( ( token_type = scan_token(&scanner)) != END ) {
         token_start = scanner.start - scanner.src;
@@ -241,6 +239,13 @@ token_array *tokenize(const char *input) {
         }
     }
 
-    return tokens;
+}
 
+token_array *tokenize(const char *input) {
+
+    token_array *tokens = token_array_new();
+
+    tokenize_add_tokens(tokens, input, strlen(input));
+
+    return tokens;
 }

@@ -14,8 +14,9 @@ typedef struct scanner {
 
 uint16_t scan_token(scanner_t *s);
 
-inline scanner_t scanner_from_string(const char *input);
+scanner_t scanner_from_string(const char *input, size_t len);
 
+void tokenize_add_tokens(token_array *tokens, const char *input, size_t len);
 token_array *tokenize(const char *input);
 
 
