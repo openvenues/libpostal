@@ -107,7 +107,11 @@ ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *ds
         ptr--; len++;
     } while ((*ptr & 0xC0) == 0x80);
 
-    return utf8proc_iterate(ptr, len, dst);
+    int32_t ch = 0;
+
+    ssize_t ret_len = utf8proc_iterate(ptr, len, &ch);
+    *dst = ch;
+    return ret_len;
 }
 
 char *utf8_reversed_string(const char *s) {
