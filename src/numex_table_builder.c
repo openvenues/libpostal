@@ -83,9 +83,7 @@ int main(int argc, char **argv) {
 
             char_array_clear(key);
             char_array_cat(key, lang);
-            char_array_cat(key, NAMESPACE_SEPARATOR_CHAR);
-            char_array_cat(key, ORDINAL_NAMESPACE_CHAR);
-            char_array_cat(key, NAMESPACE_SEPARATOR_CHAR);
+            char_array_cat(key, ORDINAL_NAMESPACE_PREFIX);
 
             switch (ordinal_source.gender) {
                 case GENDER_MASCULINE:
@@ -120,7 +118,11 @@ int main(int argc, char **argv) {
 
             char *str_key = char_array_get_string(key);
 
-            trie_add(numex_table->trie, str_key, value);
+            if (trie_get(numex_table->trie, str_key) == NULL_NODE_ID) {
+                trie_add(numex_table->trie, str_key, value);
+            } else {
+                log_warn("Key exists: %s, skipping\n", str_key);                            
+            }
         }
 
         numex_language_t *language = numex_language_new(lang_source.name, lang_source.whole_tokens_only, lang_source.rule_index, lang_source.num_rules, lang_source.ordinal_indicator_index, lang_source.num_ordinal_indicators);

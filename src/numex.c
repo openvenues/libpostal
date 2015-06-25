@@ -8,6 +8,8 @@
 
 #define SEPARATOR_TOKENS "-"
 
+#define INT64_MAX_STRING_SIZE 21
+
 #define FLOOR_LOG_BASE(num, base) floor((log((float)num) / log((float)base)) + 0.00001)
 
 numex_table_t *numex_table = NULL;
@@ -835,234 +837,97 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
 
     }
 
-
-
-        /*
-
-
-
-
-
-        } else if (!is_space && !is_hyphen) {
-            log_info("Tail did not match\n");
-            state = start_state;
-            if (number_finished) {
-
-            }
-        }
-
-        last_node = start_node;
-        last_node_id = start_state.node_id;
-
-        check_match = false;
-
-        }
-
-
-
-
-
-        state = start_state;
- 
-        uint8_t *back_ptr = ptr;
-
-        bool check_match = false;
-
-        for (int i = 0; remaining > 0; remaining--, ptr++) {
-            log_debug("start loop\n");
-            ch = (unsigned char) *ptr;
-            log_debug("char=%c, last_node_id=%d\n", ch, last_node_id);
-
-            node_id = trie_get_transition_index(trie, last_node, ch);
-            node = trie_get_node(trie, node_id);
-
-            if (node.check != last_node_id) {
-                log_debug("node.check != last_node_id\n");
-                uint32_t match_id = trie_get_transition_index(trie, last_node, '\0');
-                trie_node_t match_node = trie_get_node(trie, match_id);
-                if (match_node.check != last_node_id) {
-                    state = start_state;
-                    last_node = start_node;
-                    last_node_id = start_state.node_id;
-
-                    log_debug("No NUL-byte transition, resetting state to start node_id=%d\n", last_node_id);
-
-                    if (!is_space && !is_hyphen) {
-                        log_debug("Fell off trie inside token. Setting to skip\n");
-                        state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
-                        ptr += remaining;
-                        rule = prev_rule = NUMEX_NULL_RULE;
-                        if (prev_state.state == NUMEX_SEARCH_STATE_MATCH) {
-                            log_debug("Previous number was match\n");
-                            number_finished = true;
-                        }
-                        break;
-                    } else if (prev_state.state == NUMEX_SEARCH_STATE_MATCH) {
-                        state = prev_state;
-                    }
-
-                } else {
-                    log_debug("Have NUL-byte transition\n");
-
-                    check_match = true;
-                    node_id = match_id;
-                    node = match_node;
-                    last_node = start_node;
-                    last_node_id = start_state.node_id;
-                    remaining = 0;
-                    advance_index = false;
-                }
-
-            } else {
-
-                log_debug("not null\n");
-                state.state = NUMEX_SEARCH_STATE_PARTIAL_MATCH;
-                if (phrase.len == 0) {
-                    log_debug("phrase.start=%d\n", idx);
-                    phrase.start = idx;
-                    phrase.len = char_len;
-                }
-
-                if (node.base >= 0) {
-                    last_node = node;
-                    last_node_id = node_id;
-                } else if (node.base < 0) {
-                    log_debug("node.base < 0\n");
-                    remaining--;
-                    check_match = true;
-                }
-            }
-
-
-            if (check_match) {
-
-                trie_data_node_t data_node = trie_get_data_node(trie, node);
-
-                unsigned char *current_tail = trie->tail->a + data_node.tail;
-
-                size_t tail_len = strlen((char *)current_tail);
-                char *query_tail = (char *)(*ptr ? ptr + 1 : ptr);
-                size_t query_tail_len = strlen((char *)query_tail);
-
-                log_info("query_tail=%s, current_tail=%s, bytes=%zu\n", query_tail, current_tail, tail_len);
-
-                if (tail_len <= query_tail_len && utf8_compare_len_ignore_separators((char *)current_tail, query_tail, tail_len) == 0) {
-                    bool set_rule = false;
-                    state.state = NUMEX_SEARCH_STATE_MATCH;
-
-                    phrase.len = idx - phrase.start + tail_len;
-                    log_info("phrase.start=%d\n, idx=%d, phrase.len=%d\n", phrase.start, idx, phrase.len);
-
-                    ptr += remaining + tail_len;
-                    log_info("remaining=%d, tail_len=%d\n", remaining, tail_len);
-
-                    char_len += remaining + tail_len;
-                    remaining = 0;
-
-                    rule = get_numex_rule((size_t)data_node.data);
-
-                    log_info("rule.value=%lld\n", rule.value);
-
-                    if (rule.rule_type != NUMEX_NULL) {
-                        set_rule = true;
-
-                        if (rule.gender != GENDER_NONE) {
-                            phrase.gender = rule.gender;
-                        }
-
-                        if (rule.category != CATEGORY_DEFAULT) {
-                            phrase.category = rule.category;
-                        }
-
-                        if (rule.rule_type == NUMEX_ORDINAL_RULE) {
-                            phrase.is_ordinal = true;
-                            number_finished = true;
-                            log_info("rule is ordinal\n");
-                        } 
-
-                        log_debug("prev_rule.radix=%d\n", prev_rule.radix);
-
-                        if (rule.left_context_type == NUMEX_LEFT_CONTEXT_MULTIPLY) {
-                            int64_t multiplier = phrase.value % rule.value;
-                            if (multiplier != 0) {
-                                phrase.value -= multiplier;
-                            } else {
-                                multiplier = 1;
-                            }
-                            phrase.value += rule.value * multiplier;
-                            log_debug("LEFT_CONTEXT_MULTIPLY, value = %lld\n", phrase.value);
-                        } else if (rule.left_context_type == NUMEX_LEFT_CONTEXT_ADD) {
-                            phrase.value += rule.value;
-                            log_debug("LEFT_CONTEXT_ADD, value = %lld\n", phrase.value);
-                        } else if (prev_rule.right_context_type == NUMEX_RIGHT_CONTEXT_ADD && rule.value > 0 && prev_rule.radix > 0 && FLOOR_LOG_BASE(rule.value, prev_rule.radix) < FLOOR_LOG_BASE(prev_rule.value, prev_rule.radix)) {
-                            phrase.value += rule.value;
-                            log_debug("Last token was RIGHT_CONTEXT_ADD, value=%lld\n", phrase.value);
-                        } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD) {
-                            log_debug("Had previous token with no context, finishing previous rule before returning\n");
-
-                            number_finished = true;
-                            advance_index = false;
-                            state = start_state;
-                            last_node = start_node;
-                            last_node_id = start_state.node_id;
-                            rule = prev_rule = NUMEX_NULL_RULE;
-                            break;
-                        } else if (rule.rule_type != NUMEX_STOPWORD) {
-                            phrase.value = rule.value;
-                            log_debug("Got number, phrase.value=%lld\n", phrase.value);
-                        }
-
-                        if (rule.rule_type != NUMEX_STOPWORD) {
-                            prev_rule = rule;
-                        }
-                    }
-                    if (!set_rule) {
-                        rule = prev_rule = NUMEX_NULL_RULE;
-                        log_info("Resetting\n");
-                    }
-
-                    set_rule = false;
-                } else if (!is_space && !is_hyphen) {
-                    log_info("Tail did not match\n");
-                    state = start_state;
-                    if (number_finished) {
-
-                    }
-                }
-
-                last_node = start_node;
-                last_node_id = start_state.node_id;
-
-                check_match = false;
-
-            }
-
-
-        }
-
-        if (advance_index) {
-            idx += char_len;
-        } else {
-            ptr = (uint8_t *)back_ptr;
-        }
-
-        if (number_finished) {
-            phrases = (phrases != NULL) ? phrases : numex_phrase_array_new_size(1);
-            numex_phrase_array_push(phrases, phrase);
-            log_info("Adding phrase, value=%lld\n", phrase.value);
-            phrase = NULL_NUMEX_PHRASE;
-            number_finished = false;
-        }
-
-        
-        prev_state = state;
-
-        advance_index = true;
-
-        log_debug("ptr=%s\n", ptr);
-
-    }
-    */
-
     return results;
 }
+
+char *get_ordinal_suffix(char *numeric_string, char *lang, numex_result_t result) {
+    if (numex_table == NULL) {
+        return NULL;
+    }
+
+    trie_t *trie = numex_table->trie;
+    if (trie == NULL) {
+        return NULL;
+    }
+
+    numex_language_t *language = get_numex_language(lang);
+
+    if (language == NULL) {
+        return NULL;
+    }
+
+    bool whole_tokens_only = language->whole_tokens_only;
+
+    trie_prefix_result_t prefix = trie_get_prefix(trie, lang);
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        return NULL;
+    }
+
+    prefix = trie_get_prefix_from_index(trie, ORDINAL_NAMESPACE_PREFIX, ORDINAL_NAMESPACE_PREFIX_LEN, prefix.node_id, prefix.tail_pos);
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        return NULL;
+    }
+
+
+    trie_prefix_result_t ordinal_prefix = prefix;
+
+    char *gender = GENDER_NONE_PREFIX;
+    if (result.gender == GENDER_FEMININE) {
+        gender = GENDER_FEMININE_PREFIX;
+    } else if (result.gender == GENDER_MASCULINE) {
+        gender = GENDER_MASCULINE_PREFIX;
+    } else if (result.gender == GENDER_NEUTER) {
+        gender = GENDER_NEUTER_PREFIX;
+    }
+
+    prefix = trie_get_prefix_from_index(trie, gender, strlen(gender), ordinal_prefix.node_id, ordinal_prefix.tail_pos);
+
+    if (prefix.node_id == NULL_NODE_ID && result.gender != GENDER_NONE) {
+        prefix = trie_get_prefix_from_index(trie, GENDER_NONE_PREFIX, strlen(GENDER_NONE_PREFIX), ordinal_prefix.node_id, ordinal_prefix.tail_pos);
+    }
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        return NULL;
+    }
+
+    trie_prefix_result_t gender_prefix = prefix;
+
+    char *category = CATEGORY_DEFAULT_PREFIX;
+
+    if (result.category == CATEGORY_PLURAL) {
+        category = CATEGORY_PLURAL_PREFIX;
+    }
+
+    prefix = trie_get_prefix_from_index(trie, category, strlen(category), gender_prefix.node_id, gender_prefix.tail_pos);
+
+    if (prefix.node_id == NULL_NODE_ID && result.category != CATEGORY_DEFAULT) {
+        prefix = trie_get_prefix_from_index(trie, CATEGORY_DEFAULT_PREFIX, strlen(CATEGORY_DEFAULT_PREFIX), gender_prefix.node_id, gender_prefix.tail_pos);
+    }
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        return NULL;
+    }
+
+    prefix = trie_get_prefix_from_index(trie, NAMESPACE_SEPARATOR_CHAR, NAMESPACE_SEPARATOR_CHAR_LEN, prefix.node_id, prefix.tail_pos);
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        return NULL;
+    }
+
+    phrase_t phrase = trie_search_suffixes_from_index(trie, numeric_string, prefix.node_id);
+
+    if (phrase.len == 0) {
+        return NULL;
+    }
+
+    if (phrase.data >= numex_table->ordinal_indicators->n) {
+        return NULL;
+    }
+
+    ordinal_indicator_t *ordinal = numex_table->ordinal_indicators->a[phrase.data];
+    return ordinal->suffix;
+
+}
+

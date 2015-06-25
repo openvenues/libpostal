@@ -10,6 +10,7 @@ extern "C" {
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <inttypes.h>
 
 #include "collections.h"
 #include "config.h"
@@ -83,6 +84,9 @@ VECTOR_INIT(numex_rule_array, numex_rule_t)
 
 #define ORDINAL_NAMESPACE_CHAR "o"
 
+#define ORDINAL_NAMESPACE_PREFIX NAMESPACE_SEPARATOR_CHAR ORDINAL_NAMESPACE_CHAR NAMESPACE_SEPARATOR_CHAR            
+#define ORDINAL_NAMESPACE_PREFIX_LEN strlen(ORDINAL_NAMESPACE_PREFIX)
+
 typedef struct ordinal_indicator {
     char *key;
     gender_t gender;
@@ -135,6 +139,7 @@ typedef struct numex_result {
 VECTOR_INIT(numex_result_array, numex_result_t)
 
 numex_result_array *convert_numeric_expressions(char *str, char *lang);
+char *get_ordinal_suffix(char *numeric_string, char *lang, numex_result_t result);
 
 bool numex_table_write(FILE *file);
 bool numex_table_save(char *filename);
