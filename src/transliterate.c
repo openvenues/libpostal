@@ -944,7 +944,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
             } else if (strcmp(step->name, NFKD) == 0) {
                 utf8proc_options = UTF8PROC_OPTIONS_NFKD;
             } else if (strcmp(step->name, NFKC) == 0) {
-                utf8proc_options = UTF8PROC_OPTIONS_NKFC;
+                utf8proc_options = UTF8PROC_OPTIONS_NFKC;
             } else if (strcmp(step->name, STRIP_MARK) == 0) {
                 utf8proc_options = UTF8PROC_OPTIONS_STRIP_ACCENTS;
             }
