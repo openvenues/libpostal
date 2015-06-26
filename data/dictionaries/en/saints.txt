@@ -1,0 +1,341 @@
+brother
+father
+holy
+sister
+mother
+saint
+saints|ss
+saint adalbert|st adelbert|st. adelbert
+saint adalberts|st adalberts|st. adalberts
+saint adelaide|st adelaide|st. adelaide
+saint adelaides|st adelaides|st. adelaides
+saint adeodatus|st adeodatus|saint adeodatuss|st adeodatuss|st. adeodatus|st. adeodatuss
+saint adrian|st adrian|st. adrian
+saint adrians|st adrians|st. adrians
+saint agapitus|st agapitus|saint agapituss|st agapituss|st. agapitus|st. agapituss
+saint agatho|st agatho|st. agatho
+saint agathos|st agathos|st. agathos
+saint agnes|st agnes|saint agness|st agness|st. agnes|st. agness
+saint aidan|st aidan|st. aidan
+saint aidans|st aidans|st. aidans
+saint alban|st alban|st. alban
+saint albans|st albans|st. albans
+saint albert|st albert|st. albert
+saint alberts|st alberts|st. alberts
+saint alexander|st alexander|st. alexander
+saint alexanders|st alexanders|st. alexanders
+saint aloysius|st aloysius|saint aloysiuss|st aloysiuss|st. aloysius|st. aloysiuss
+saint alphege|st alphege|st. alphege
+saint alpheges|st alpheges|st. alpheges
+saint ambrose|st ambrose|st. ambrose
+saint ambroses|st ambroses|st. ambroses
+saint anacletus|st anacletus|saint anacletuss|st anacletuss|st. anacletus|st. anacletuss
+saint anastasius|st anastasius|saint anastasiuss|st anastasiuss|st. anast.asius|st. anast.asiuss
+saint andre|st andre|st. andre
+saint andres|st andres|st. andres
+saint andrew|st andrew|saint andrw|st andrw|st. andrew|st. andrw
+saint andrews|st andrews|saint andrws|st andrws|st. andrews|st. andrws
+saint anicetus|st anicetus|saint anicetuss|st anicetuss|st. anicetus|st. anicetuss
+saint anne|st anne|saint ann|st ann|st. anne|st. ann
+saint annes|st annes|saint anns|st anns|st. annes|st. anns
+saint anselm|st anselm|st. anselm
+saint anselms|st anselms|st. anselms
+saint antheros|st antheros|saint antheross|st antheross|st. antheros|st. antheross
+saint anthony|st anthony|saint antonio|st antonio|st. anthony|st. antonio
+saint anthonys|st anthonys|saint antonios|st antonios|st. anthonys|st. antonios
+saint arnaud|st arnaud|st. arnaud
+saint arnauds|st arnauds|st. arnauds
+saint athanasius|st athanasius|saint athanasiuss|st athanasiuss|st. athanasius|st. athanasiuss
+saint aubin|st aubin|st. aubin
+saint aubins|st aubins|st. aubins
+saint aubyn|st aubyn|st. aubyn
+saint aubyns|st aubyns|st. aubyns
+saint augustine|st augustine|st. august.ine
+saint augustines|st augustines|st. august.ines
+saint barnabas|st barnabas|saint barnabass|st barnabass|st. barnabas|st. barnabass
+saint bartholomew|st bartholomew|st. bartholomew
+saint bartholomews|st bartholomews|st. bartholomews
+saint basil|st basil|saint bazil|st bazil|st. basil|st. bazil
+saint basils|st basils|saint bazils|st bazils|st. basils|st. bazils
+saint bede|st bede|st. bede
+saint bedes|st bedes|st. bedes
+saint bees|st bees|saint beess|st beess|st. bees|st. beess
+saint benedict|st benedict|st. benedict
+saint benedicts|st benedicts|st. benedicts
+saint bernard|st bernard|st. bernard
+saint bernards|st bernards|st. bernards
+saint boniface|st boniface|st. boniface
+saint bonifaces|st bonifaces|st. bonifaces
+saint brigid|st brigid|saint brigit|st brigit|st. brigid|st. brigit
+saint brigids|st brigids|saint brigits|st brigits|st. brigids|st. brigits
+saint bruno|st bruno|st. bruno
+saint brunos|st brunos|st. brunos
+saint caius|st caius|saint caiuss|st caiuss|st. caius|st. caiuss
+saint callistus|st callistus|saint callistuss|st callistuss|st. callist.us|st. callist.uss
+saint casimir|st casimir|st. casimir
+saint casimirs|st casimirs|st. casimirs
+saint catherine|st catherine|saint cathereine|st cathereine|st. catherine|st. cathereine
+saint catherines|st catherines|saint cathereines|st cathereines|st. catherines|st. cathereines
+saint celestine|st celestine|st. celest.ine
+saint celestines|st celestines|st. celest.ines
+saint charles|st charles|saint charless|st charless|st. charles|st. charless
+saint clair|st clair|st. clair
+saint clairs|st clairs|st. clairs
+saint claire|st claire|st. claire
+saint claires|st claires|st. claires
+saint clare|st clare|st clara|saint clara|st. clare|st. clara
+saint clares|st clares|st. clares
+saint clement|st clement|st. clement
+saint clements|st clements|st. clements
+saint columba|st columba|st. columba
+saint columbas|st columbas|st. columbas
+saint columban|st columban|st. columban
+saint columbans|st columbans|st. columbans
+saint columbanus|st columbanus|saint columbanuss|st columbanuss|st. columbanus|st. columbanuss
+saint cornelius|st cornelius|saint corneliuss|st corneliuss|st. cornelius|st. corneliuss
+saint cunigunde|st cunigunde|st. cunigunde
+saint cunigundes|st cunigundes|st. cunigundes
+saint cyril|st cyril|st. cyril
+saint cyrils|st cyrils|st. cyrils
+saint damasus|st damasus|saint damasuss|st damasuss|st. damasus|st. damasuss
+saint david|st david|st. david
+saint davids|st davids|st. davids
+saint denis|st denis|saint deniss|st deniss|st. denis|st. deniss
+saint dionysius|st dionysius|saint dionysiuss|st dionysiuss|st. dionysius|st. dionysiuss
+saint dominic|st dominic|st. dominic
+saint dominics|st dominics|st. dominics
+saint dorothea|st dorothea|saint dorothy|st dorothy|st. dorothea|st. dorothy
+saint dorotheas|st dorotheas|saint dorothys|st dorothys|st. dorotheas|st. dorothys
+saint dunstan|st dunstan|st. dunst.an
+saint dunstans|st dunstans|st. dunst.ans
+saint edith|st edith|st. edith
+saint ediths|st ediths|st. ediths
+saint edward|st edward|st. edward
+saint edwards|st edwards|st. edwards
+saint eleutherius|st eleutherius|saint eleutheriuss|st eleutheriuss|st. eleutherius|st. eleutheriuss
+saint elizabeth|st elizabeth|saint elisabeth|st elisabeth|st. elizabeth|st. elisabeth
+saint elizabeths|st elizabeths|saint elisabeths|st elisabeths|st. elizabeths|st. elisabeths
+saint elmo|st elmo|st. elmo
+saint elmos|st elmos|st. elmos
+saint emelia|st emelia|st. emelia
+saint emelias|st emelias|st. emelias
+saint ephraim|st ephraim|st. ephraim
+saint ephraims|st ephraims|st. ephraims
+saint ethel|st ethel|st. ethel
+saint ethels|st ethels|st. ethels
+saint ethelbert|st ethelbert|st. ethelbert
+saint ethelberts|st ethelberts|st. ethelberts
+saint eugene|st eugene|st. eugene
+saint eugenes|st eugenes|st. eugenes
+saint eusebius|st eusebius|saint eusebiuss|st eusebiuss|st. eusebius|st. eusebiuss
+saint eutychian|st eutychian|st. eutychian
+saint eutychians|st eutychians|st. eutychians
+saint evaristus|st evaristus|saint evaristuss|st evaristuss|st. evarist.us|st. evarist.uss
+saint ezekiel|st ezekiel|saint ezekial|st ezekial|st. ezekiel|st. ezekial
+saint ezekiels|st ezekiels|saint ezekials|st ezekials|st. ezekiels|st. ezekials
+saint fabian|st fabian|st. fabian
+saint fabians|st fabians|st. fabians
+saint felix|st felix|st. felix
+saint felixs|st felixs|st. felixs
+saint fergius|st fergius|saint fergiuss|st fergiuss|st. fergius|st. fergiuss
+saint fillan|st fillan|st. fillan
+saint fillans|st fillans|st. fillans
+saint francis|st francis|saint franciss|st franciss|st. francis|st. franciss
+saint gall|st gall|st. gall
+saint galls|st galls|st. galls
+saint gelasius|st gelasius|saint gelasiuss|st gelasiuss|st. gelasius|st. gelasiuss
+saint george|st george|st. george
+saint georges|st georges|st. georges
+saint germain|st germain|st. germain
+saint germains|st germains|st. germains
+saint gregory|st gregory|st. gregory
+saint gregorys|st gregorys|st. gregorys
+saint gresford|st gresford|st. gresford
+saint gresfords|st gresfords|st. gresfords
+saint hedwig|st hedwig|saint wedwig|st wedwig|saint hedweg|st. hedwig|st. wedwig
+saint hedwigs|st hedwigs|saint wedwigs|st wedwigs|saint hedwegs|st. hedwigs|st. wedwigs
+saint helen|st helen|st. helen
+saint helens|st helens|st. helens
+saint helena|st helena|st. helena
+saint helenas|st helenas|st. helenas
+saint helier|st helier|st. helier
+saint heliers|st heliers|st. heliers
+saint henry|st henry|st. henry
+saint henrys|st henrys|st. henrys
+saint herbert|st herbert|st. herbert
+saint herberts|st herberts|st. herberts
+saint herman|st herman|st. herman
+saint hermans|st hermans|st. hermans
+saint hilaire|st hilaire|st. hilaire
+saint hilaires|st hilaires|st. hilaires
+saint hilarius|st hilarius|saint hilariuss|st hilariuss|st. hilarius|st. hilariuss
+saint hildebrand|st hildebrand|st. hildebrand
+saint hildebrands|st hildebrands|st. hildebrands
+saint hillier|st hillier|st. hillier
+saint hilliers|st hilliers|st. hilliers
+saint hobert|st hobert|st. hobert
+saint hoberts|st hoberts|st. hoberts
+saint hormisdas|st hormisdas|saint hormisdass|st hormisdass|st. hormisdas|st. hormisdass
+saint hubert|st hubert|st. hubert
+saint huberts|st huberts|st. huberts
+saint hyginus|st hyginus|saint hyginuss|st hyginuss|st. hyginus|st. hyginuss
+saint ignatius|st ignatius|saint ignatiuss|st ignatiuss|st. ignatius|st. ignatiuss
+saint irenaeus|st irenaeus|saint irenaeuss|st irenaeuss|st. irenaeus|st. irenaeuss
+saint isidore|st isidore|st. isidore
+saint isidores|st isidores|st. isidores
+saint ives|st ives|st yves|saint yves|saint ivess|st ivess|st. ives|st. yves|st. ivess
+saint jadwiga|st jadwiga|st. jadwiga
+saint jadwigas|st jadwigas|st. jadwigas
+saint james|st james|saint jamess|st jamess|st. james|st. jamess
+saint jerome|st jerome|st. jerome
+saint jeromes|st jeromes|st. jeromes
+saint joachim|st joachim|saint joathim|st joathim|st. joachim|st. joathim
+saint joachims|st joachims|saint joathims|st joathims|st. joachims|st. joathims
+saint joan|st joan|st. joan
+saint joans|st joans|st. joans
+saint john|st john|st. john
+saint johns|st johns|st. johns
+saint josaphat|st josaphat|st. josaphat
+saint josaphats|st josaphats|st. josaphats
+saint joseph|st joseph|st. joseph
+saint josephs|st josephs|st. josephs
+saint jude|st jude|st. jude
+saint judes|st judes|st. judes
+saint julius|st julius|saint juliuss|st juliuss|st. julius|st. juliuss
+saint kilda|st kilda|st. kilda
+saint kildas|st kildas|st. kildas
+saint kitts|st kitts|saint kittss|st kittss|st. kitts|st. kittss
+saint laurieton|st laurieton|st. laurieton
+saint lawrence|st lawrence|saint laurence|st laurence|st. lawrence|st. laurence
+saint lawrences|st lawrences|saint laurences|st laurences|st. lawrences|st. laurences
+saint leo|st leo|st. leo
+saint leos|st leos|st. leos
+saint leonard|st leonard|st. leonard
+saint leonards|st leonards|st. leonards
+saint linus|st linus|saint linuss|st linuss|st. linus|st. linuss
+saint lloyd|st lloyd|st lloyds|saint lloyds|st. lloyd|st. lloyds
+saint louis|st louis|saint louiss|st louiss|st. louis|st. louiss
+saint lucia|st lucia|st. lucia
+saint lucias|st lucias|st. lucias
+saint lucius|st lucius|saint luciuss|st luciuss|st. lucius|st. luciuss
+saint luke|st luke|st. luke
+saint lukes|st lukes|st. lukes
+saint macrina|st macrina|st. macrina
+saint macrinas|st macrinas|st. macrinas
+saint marcellinus|st marcellinus|saint marcellinuss|st marcellinuss|st. marcellinus|st. marcellinuss
+saint marcellus|st marcellus|saint marcelluss|st marcelluss|st. marcellus|st. marcelluss
+saint marcus|st marcus|saint marcuss|st marcuss|st. marcus|st. marcuss
+saint margaret|st margaret|st. margaret
+saint margarets|st margarets|st. margarets
+saint margarita|st margarita|st. margarita
+saint margaritas|st margaritas|st. margaritas
+saint mark|st mark|st. mark
+saint marks|st marks|st. marks
+saint martin|st martin|st. martin
+saint martins|st martins|st. martins
+saint maria|st maria|st. maria
+saint marias|st marias|st. marias
+saint martha|st martha|st. martha
+saint marthas|st marthas|st. marthas
+saint mary|st mary|st. mary
+saint marys|st marys|st. marys
+saint matthew|st matthew|st. matthew
+saint matthews|st matthews|st. matthews
+saint matthias|st matthias|saint matthiass|st matthiass|st. matthias|st. matthiass
+saint maurice|st maurice|st. maurice
+saint maurices|st maurices|st. maurices
+saint maximillian|st maximillian|st. maximillian
+saint maximillians|st maximillians|st. maximillians
+saint meot|st meot|st. meot
+saint meots|st meots|st. meots
+saint michael|st michael|st. michael
+saint michaels|st michaels|st. michaels
+saint miltiades|st miltiades|saint miltiadess|st miltiadess|st. miltiades|st. miltiadess
+saint morris|st morris|saint morriss|st morriss|st. morris|st. morriss
+saint nicholas|st nicholas|saint nicholass|st nicholass|st. nicholas|st. nicholass
+saint ninian|st ninian|st. ninian
+saint ninians|st ninians|st. ninians
+saint paschal|st paschal|st. paschal
+saint paschals|st paschals|st. paschals
+saint patrick|st patrick|st. patrick
+saint patricks|st patricks|st. patricks
+saint paul|st paul|st. paul
+saint pauls|st pauls|st. pauls
+saint paule|st paule|st. paule
+saint paules|st paules|st. paules
+saint paulinus|st paulinus|saint paulinuss|st paulinuss|st. paulinus|st. paulinuss
+saint perpetua|st perpetua|st. perpetua
+saint perpetuas|st perpetuas|st. perpetuas
+saint peter|st peter|st. peter
+saint peters|st peters|st. peters
+saint petrox|st petrox|st. petrox
+saint philip|st philip|st. philip
+saint philips|st philips|st. philips
+saint philomena|st philomena|st. philomena
+saint philomenas|st philomenas|st. philomenas
+saint piran|st piran|st. piran
+saint pirans|st pirans|st. pirans
+saint pius|st pius|saint piuss|st piuss|st. pius|st. piuss
+saint polycarp|st polycarp|st. polycarp
+saint polycarps|st polycarps|st. polycarps
+saint pontain|st pontain|st. pontain
+saint pontains|st pontains|st. pontains
+saint raphael|st raphael|st. raphael
+saint raphaels|st raphaels|st. raphaels
+saint romuald|st romuald|st. romuald
+saint romualds|st romualds|st. romualds
+saint rosalia|st rosalia|st. rosalia
+saint rosalias|st rosalias|st. rosalias
+saint sebastian|st sebastian|saint sebastiaan|st sebastiaan|st. sebast.ian|st. sebast.iaan
+saint sebastians|st sebastians|saint sebastiaans|st sebastiaans|st. sebast.ians|st. sebast.iaans
+saint scholastica|st scholastica|st. scholast.ica
+saint scholasticas|st scholasticas|st. scholast.icas
+saint sergius|st sergius|saint sergiuss|st sergiuss|st. sergius|st. sergiuss
+saint silverius|st silverius|saint silveriuss|st silveriuss|st. silverius|st. silveriuss
+saint simeon|st simeon|st. simeon
+saint simeons|st simeons|st. simeons
+saint simon|st simon|st. simon
+saint simons|st simons|st. simons
+saint simplicius|st simplicius|saint simpliciuss|st simpliciuss|st. simplicius|st. simpliciuss
+saint siricius|st siricius|saint siriciuss|st siriciuss|st. siricius|st. siriciuss
+saint sixtus|st sixtus|saint sixtuss|st sixtuss|st. sixtus|st. sixtuss
+saint soter|st soter|st. soter
+saint soters|st soters|st. soters
+saint stephen|st stephen|saint steven|st steven|st. st.ephen|st. st.even
+saint stephens|st stephens|saint stevens|st stevens|st. st.ephens|st. st.evens
+saint sturgess|st sturgess|saint sturgesss|st sturgesss|st. st.urgess|st. st.urgesss
+saint sylvester|st sylvester|st. sylvest.er
+saint sylvesters|st sylvesters|st. sylvest.ers
+saint symmachus|st symmachus|saint symmachuss|st symmachuss|st. symmachus|st. symmachuss
+saint telesphorus|st telesphorus|saint telesphoruss|st telesphoruss|st. telesphorus|st. telesphoruss
+saint teralba|st teralba|st. teralba
+saint teresa|st teresa|st. teresa
+saint teresas|st teresas|st. teresas
+saint theodore|st theodore|st. theodore
+saint theodores|st theodores|st. theodores
+saint theophan|st theophan|st. theophan
+saint theophans|st theophans|st. theophans
+saint therese|st therese|st. therese
+saint thereses|st thereses|st. thereses
+saint thomas|st thomas|saint thomass|st thomass|st. thomas|st. thomass
+saint tikhon|st tikhon|st. tikhon
+saint tikhons|st tikhons|st. tikhons
+saint timothy|st timothy|st. timothy
+saint timothys|st timothys|st. timothys
+saint ulrich|st ulrich|st. ulrich
+saint ulrichs|st ulrichs|st. ulrichs
+saint urban|st urban|st. urban
+saint urbans|st urbans|st. urbans
+saint veronica|st veronica|st. veronica
+saint veronicas|st veronicas|st. veronicas
+saint vicent|st vicent|st. vicent
+saint vicents|st vicents|st. vicents
+saint victor|st victor|st. victor
+saint victors|st victors|st. victors
+saint vitalian|st vitalian|st. vitalian
+saint vitalians|st vitalians|st. vitalians
+saint vladimir|st vladimir|st. vladimir
+saint vladimirs|st vladimirs|st. vladimirs
+saint zacharias|st zacharias|saint zachariass|st zachariass|st. zacharias|st. zachariass
+saint zephyrinus|st zephyrinus|saint zephyrinuss|st zephyrinuss|st. zephyrinus|st. zephyrinuss
+saint zosimus|st zosimus|st. zosimus
