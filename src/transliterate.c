@@ -62,6 +62,7 @@ typedef struct {
     transliteration_state_type_t state;
     ssize_t phrase_start;
     size_t phrase_len;
+    size_t char_len;
     uint8_t advance_index:1;
     uint8_t advance_state:1;
     uint8_t in_set:1;
@@ -71,7 +72,7 @@ typedef struct {
 } transliteration_state_t;
 
 
-#define TRANSLITERATION_DEFAULT_STATE (transliteration_state_t){NULL_PREFIX_RESULT, TRANS_STATE_BEGIN, 0, 0, 1, 1, 0, 0, 0, 0}
+#define TRANSLITERATION_DEFAULT_STATE (transliteration_state_t){NULL_PREFIX_RESULT, TRANS_STATE_BEGIN, 0, 0, 0, 1, 1, 0, 0, 0, 0}
 
 
 static transliteration_replacement_t *get_replacement(trie_t *trie, trie_prefix_result_t result, char *str, size_t start_index) {
@@ -111,13 +112,13 @@ typedef struct char_set_result {
 
 #define NULL_CHAR_SET_RESULT (char_set_result_t){NULL_PREFIX_RESULT, NO_CHAR_RESULT};
 
-
-static char_set_result_t next_prefix_or_set(trie_t *trie, char *str, size_t len, trie_prefix_result_t last_result, bool in_set) {
+static char_set_result_t next_prefix_or_set(trie_t *trie, char *str, size_t len, trie_prefix_result_t last_result, bool in_set, bool check_set_only) {
     trie_prefix_result_t result = trie_get_prefix_from_index(trie, str, len, last_result.node_id, last_result.tail_pos);
 
     bool has_empty_transition = false;
 
-    if (result.node_id != NULL_NODE_ID) {
+
+    if (!check_set_only && result.node_id != NULL_NODE_ID) {
         last_result = result;
         result = trie_get_prefix_from_index(trie, REPEAT_CHAR, REPEAT_CHAR_LEN, last_result.node_id, last_result.tail_pos);
         if (result.node_id == NULL_NODE_ID) {
@@ -159,7 +160,7 @@ static char_set_result_t next_prefix_or_set(trie_t *trie, char *str, size_t len,
         }
 
         in_set = true;
-        last_result = result;
+        last_result = result; 
     }
 
     if (in_set) {
@@ -188,26 +189,18 @@ static char_set_result_t next_prefix_or_set(trie_t *trie, char *str, size_t len,
             return (char_set_result_t){result, CHAR_SET_REPEAT};
         }
     }
-
     return NULL_CHAR_SET_RESULT;
+
 }
 
-
-static transliteration_state_t state_transition(trie_t *trie, char *str, size_t index, size_t len, transliteration_state_t prev_state) {
+static transliteration_state_t state_from_char_result(char_set_result_t char_result, size_t index, size_t len, transliteration_state_t prev_state) {
     transliteration_state_t state = TRANSLITERATION_DEFAULT_STATE;
-
-    log_debug("str = %s, index = %zu, char_len=%zu\n", str, index, len);
-
-    log_debug("prev_state.result.node_id=%d, prev_state.in_set=%d\n", prev_state.result.node_id, prev_state.in_set);
-
-    char_set_result_t char_result = next_prefix_or_set(trie, str + index, len, prev_state.result, prev_state.in_set);
-
-    log_debug("char_result.type = %d\n", char_result.type);
 
     trie_prefix_result_t result = char_result.result;
     trie_prefix_result_t prev_result = prev_state.result;
 
     state.result = result;
+    state.char_len = len;
     state.in_set = (char_result.type == OPEN_CHAR_SET || (prev_state.in_set && char_result.type == SINGLE_CHAR_ONLY));
     state.repeat = (char_result.type == SINGLE_CHAR_REPEAT || char_result.type == CHAR_SET_REPEAT);
     state.empty_transition = (char_result.type == SINGLE_EMPTY_TRANSITION || char_result.type == CHAR_SET_EMPTY_TRANSITION);
@@ -221,6 +214,20 @@ static transliteration_state_t state_transition(trie_t *trie, char *str, size_t 
     }
 
     return state;
+
+}
+
+static transliteration_state_t state_transition(trie_t *trie, char *str, size_t index, size_t len, transliteration_state_t prev_state) {
+
+    log_debug("str = %s, index = %zu, char_len=%zu\n", str, index, len);
+
+    log_debug("prev_state.result.node_id=%d, prev_state.in_set=%d\n", prev_state.result.node_id, prev_state.in_set);
+
+    char_set_result_t char_result = next_prefix_or_set(trie, str + index, len, prev_state.result, prev_state.in_set, false);
+
+    log_debug("char_result.type = %d\n", char_result.type);
+
+    return state_from_char_result(char_result, index, len, prev_state);
 }
 
 
@@ -735,13 +742,14 @@ char *transliterate(char *trans_name, char *str, size_t len) {
             start_state.result = step_result;
 
             transliteration_state_t prev_state = start_state;
+            transliteration_state_t prev2_state = start_state;
 
             transliteration_state_t repeat_state_end;
 
             bool in_repeat = false;
 
             int32_t ch = 0;
-            ssize_t char_len;
+            ssize_t char_len = 0;
             uint8_t *ptr = (uint8_t *)str;
             uint64_t idx = 0;
 
@@ -783,8 +791,12 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                     bool context_no_match = false;
                     bool empty_context_match = false;
 
+                    bool is_last_char = idx + char_len == len;
                     
                     transliteration_state_t match_candidate_state = state.state == TRANS_STATE_PARTIAL_MATCH ? state : prev_state;
+                    if (state.state == TRANS_STATE_PARTIAL_MATCH) {
+                        log_debug("state.state == TRANS_STATE_PARTIAL_MATCH\n");
+                    }
 
                     context_result = context_match(trie, str, match_candidate_state);
 
@@ -803,18 +815,34 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                         } else {
                             log_debug("Checking for no-context match\n");
                             set_match_if_any(trie, match_candidate_state, &match_state);
+                            if (match_state.state != TRANS_STATE_MATCH && !match_candidate_state.in_set) {
+                                log_debug("Trying set for match candidate\n");
+
+                                transliteration_state_t match_prev_state = !is_last_char ? prev2_state : prev_state;
+
+                                char_set_result_t char_result = next_prefix_or_set(trie, str + idx - match_candidate_state.char_len, match_candidate_state.char_len, match_prev_state.result, false, true);
+                                match_candidate_state = state_from_char_result(char_result, idx - match_candidate_state.char_len, match_candidate_state.char_len, match_prev_state);
+                                if (match_candidate_state.state == TRANS_STATE_PARTIAL_MATCH) {
+                                    log_debug("Got partial match for set check\n");
+                                    set_match_if_any(trie, match_candidate_state, &match_state);
+                                    if (match_state.state != TRANS_STATE_MATCH) {
+                                        prev_state = match_candidate_state;
+                                        continue;
+                                    }
+                                }
+                            }
+
                             if (match_state.state == TRANS_STATE_MATCH) {
                                 log_debug("Match no context\n");
                                 replacement = get_replacement(trie, match_state.result, str, match_state.phrase_start);
                             } else {
+
                                 log_debug("Tried context for %s at char '%.*s', no match\n", str, (int)char_len, ptr);
                                 context_no_match = true;
                             }
                         }
 
                     }
-
-
 
                     if (replacement != NULL) {
                         char *replacement_string = cstring_array_get_string(trans_table->replacement_strings, replacement->string_index);
@@ -917,6 +945,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                 }
 
                 if (state.advance_state) {
+                    prev2_state = prev_state;
                     prev_state = state;
                 }
 
