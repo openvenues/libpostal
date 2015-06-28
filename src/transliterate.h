@@ -160,11 +160,12 @@ bool transliteration_table_add_script_language(script_language_t script_language
 transliterator_index_t get_transliterator_index_for_script_language(script_t script, char *language);
 
 #define foreach_transliterator(script, language, transliterator_var, code) do {                                                 \
+        transliteration_table_t *__trans_table = get_transliteration_table();                                                   \
         transliterator_index_t __index = get_transliterator_index_for_script_language(script, language);                        \
         for (int __i = __index.transliterator_index; __i < __index.transliterator_index + __index.num_transliterators; __i++) { \
-            transliterator_var = cstring_array_get_string(trans_table->transliterator_names, __i);                               \
+            transliterator_var = cstring_array_get_string(__trans_table->transliterator_names, __i);                            \
             if (transliterator_var == NULL) break;                                                                              \
-            code;                                                                                                              \
+            code;                                                                                                               \
         }                                                                                                                       \
     } while (0);
 
