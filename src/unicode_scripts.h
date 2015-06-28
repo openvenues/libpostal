@@ -18,6 +18,7 @@ typedef struct script_languages {
 typedef struct string_script {
     script_t script;
     size_t len;
+    bool ascii;
 } string_script_t;
 
 script_t get_char_script(uint32_t ch);
