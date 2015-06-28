@@ -687,6 +687,14 @@ string_tree_t *string_tree_new(void) {
     return string_tree_new_size((size_t)DEFAULT_STRING_TREE_SIZE);
 }
 
+inline char *string_tree_get_alternative(string_tree_t *self, size_t token_index, size_t alternative) {
+    if (token_index >= self->token_indices->n) return NULL;
+
+    uint32_t token_start = self->token_indices->a[token_index];
+
+    return cstring_array_get_string(self->strings, token_start + alternative);
+}
+
 inline void string_tree_finalize_token(string_tree_t *self) {
     uint32_array_push(self->token_indices, cstring_array_num_strings(self->strings));
 }

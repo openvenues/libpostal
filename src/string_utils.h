@@ -179,6 +179,9 @@ typedef struct string_tree {
 string_tree_t *string_tree_new(void);
 string_tree_t *string_tree_new_size(size_t size);
 
+// get
+char *string_tree_get_alternative(string_tree_t *self, size_t token_index, size_t alternative);
+
 // finalize
 void string_tree_finalize_token(string_tree_t *self);
 // terminated
