@@ -825,7 +825,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                                 if (match_candidate_state.state == TRANS_STATE_PARTIAL_MATCH) {
                                     log_debug("Got partial match for set check\n");
                                     set_match_if_any(trie, match_candidate_state, &match_state);
-                                    if (match_state.state != TRANS_STATE_MATCH) {
+                                    if (match_state.state != TRANS_STATE_MATCH && !match_candidate_state.empty_transition) {
                                         prev_state = match_candidate_state;
                                         continue;
                                     }
