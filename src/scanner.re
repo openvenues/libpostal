@@ -163,7 +163,7 @@ email = ([a-zA-Z0-9\._%+\-]+"@"([a-zA-Z0-9]+[\.])+[a-zA-Z0-9]{2,3});
 {us_phone_number}               { return US_PHONE; }
 {international_phone_number}    { return INTL_PHONE; }
 
-{multi_punct_abbreviation}      { return ABBREVIATION; }
+{multi_punct_abbreviation}      { return ACRONYM; }
 {hyphen_plus_abbreviation}      { return ABBREVIATION; }
 {abbreviation}                  { return ABBREVIATION; }
 
