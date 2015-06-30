@@ -7,4 +7,7 @@
 #define NAMESPACE_SEPARATOR_CHAR "|"
 #define NAMESPACE_SEPARATOR_CHAR_LEN strlen(NAMESPACE_SEPARATOR_CHAR)
 
+// Supports ISO 639 alpha 2 and alpha 3 codes
+#define MAX_LANGUAGE_LEN 4
+
 #endif

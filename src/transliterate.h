@@ -72,13 +72,6 @@ KHASH_MAP_INIT_STR(str_transliterator, transliterator_t *)
 #define kh_script_lang_hash(key)  ((uint64_t)(key).script ^ (((key).language == NULL) ? 0 : kh_str_hash_func((key).language)))
 #define kh_script_lang_equal(a, b)  (((a).script == (b).script) && strcmp((a).language, (b).language) == 0)
 
-#define MAX_LANGUAGE_LEN 4
-
-typedef struct script_language {
-    script_t script;
-    char language[MAX_LANGUAGE_LEN];
-} script_language_t;
-
 typedef struct transliterator_index {
     size_t transliterator_index;
     size_t num_transliterators;

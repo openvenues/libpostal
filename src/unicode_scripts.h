@@ -2,6 +2,7 @@
 #define UNICODE_SCRIPTS_H
 
 #include <stdlib.h>
+#include "constants.h"
 #include "utf8proc/utf8proc.h"
 #include "unicode_script_types.h"
 
@@ -9,6 +10,11 @@ typedef struct script_code {
     script_t script;
     char *code;
 } script_code_t;
+
+typedef struct script_language {
+    script_t script;
+    char language[MAX_LANGUAGE_LEN];
+} script_language_t;
 
 typedef struct script_languages {
     size_t num_languages;
