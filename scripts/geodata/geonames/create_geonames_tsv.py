@@ -1,6 +1,7 @@
 import argparse
 import csv
 import logging
+import operator
 import os
 import re
 import sqlite3
@@ -10,13 +11,17 @@ import sys
 import requests
 import pycountry
 
+import urllib
+import urlparse
+
+from collections import defaultdict
 from lxml import etree
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.file_utils import *
-from geodata.encoding import safe_encode
+from geodata.encoding import safe_encode, safe_decode
 from geodata.geonames.paths import DEFAULT_GEONAMES_DB_PATH
 from geodata.i18n.unicode_paths import CLDR_DIR
 from geodata.log import log_to_file
@@ -27,7 +32,7 @@ csv.register_dialect('tsv_no_quote', delimiter='\t', quoting=csv.QUOTE_NONE, quo
 
 
 def encode_field(value):
-    return multispace_regex.sub(' ', safe_encode((value or '')))
+    return multispace_regex.sub(' ', safe_encode((value if value is not None else '')))
 
 log_to_file(sys.stderr)
 
@@ -76,6 +81,7 @@ geonames_admin_dictionaries = {
 
 # Inserted post-query
 DUMMY_BOUNDARY_TYPE = '-1 as type'
+DUMMY_HAS_WIKIPEDIA_ENTRY = '0 as has_wikipedia_entry'
 
 
 class GeonamesField(object):
@@ -91,8 +97,12 @@ geonames_fields = [
     GeonamesField('gn.geonames_id as geonames_id', 'GEONAMES_ID'),
     GeonamesField('gn.name as canonical', 'GEONAMES_CANONICAL'),
     GeonamesField(DUMMY_BOUNDARY_TYPE, 'GEONAMES_BOUNDARY_TYPE', is_dummy=True),
+    GeonamesField(DUMMY_HAS_WIKIPEDIA_ENTRY, 'GEONAMES_HAS_WIKIPEDIA_ENTRY', is_dummy=True),
     GeonamesField('iso_language', 'GEONAMES_ISO_LANGUAGE', default="''"),
     GeonamesField('is_preferred_name', 'GEONAMES_IS_PREFERRED_NAME', default='0'),
+    GeonamesField('is_short_name', 'GEONAMES_IS_SHORT_NAME', default='0'),
+    GeonamesField('is_colloquial', 'GEONAMES_IS_COLLOQUIAL', default='0'),
+    GeonamesField('is_historical', 'GEONAMES_IS_HISTORICAL', default='0'),
     GeonamesField('population', 'GEONAMES_POPULATION'),
     GeonamesField('latitude', 'GEONAMES_LATITUDE'),
     GeonamesField('longitude', 'GEONAMES_LONGITUDE'),
@@ -109,10 +119,16 @@ geonames_fields = [
 ]
 
 DUMMY_BOUNDARY_TYPE_INDEX = [i for i, f in enumerate(geonames_fields)
-                             if f.is_dummy][0]
+                             if f.c_constant == 'GEONAMES_BOUNDARY_TYPE'][0]
+
+DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX = [i for i, f in enumerate(geonames_fields)
+                                   if f.c_constant == 'GEONAMES_HAS_WIKIPEDIA_ENTRY'][0]
 
 GEONAMES_ID_INDEX = [i for i, f in enumerate(geonames_fields)
                      if f.c_constant == 'GEONAMES_ID'][0]
+
+LANGUAGE_INDEX = [i for i, f in enumerate(geonames_fields)
+                  if f.c_constant == 'GEONAMES_ISO_LANGUAGE'][0]
 
 CANONICAL_NAME_INDEX = [i for i, f in enumerate(geonames_fields)
                         if f.c_constant == 'GEONAMES_CANONICAL'][0]
@@ -125,6 +141,12 @@ COUNTRY_CODE_INDEX = [i for i, f in enumerate(geonames_fields)
 
 POPULATION_INDEX = [i for i, f in enumerate(geonames_fields)
                     if f.c_constant == 'GEONAMES_POPULATION'][0]
+
+PREFERRED_INDEX = [i for i, f in enumerate(geonames_fields)
+                   if f.c_constant == 'GEONAMES_IS_PREFERRED_NAME'][0]
+
+HISTORICAL_INDEX = [i for i, f in enumerate(geonames_fields)
+                    if f.c_constant == 'GEONAMES_IS_HISTORICAL'][0]
 
 
 geonames_admin_joins = '''
@@ -222,6 +244,15 @@ group by postal_code, p.country_code
     fields=','.join([f.name for f in postal_code_fields]),
     exclude_country_codes=','.join("'{}'".format(code) for code in IGNORE_COUNTRY_POSTAL_CODES))
 
+
+wikipedia_query = '''
+select alternate_name, geonames_id, is_preferred_name
+from alternate_names
+where iso_language = 'link'
+and alternate_name like '%%en.wikipedia%%'
+order by alternate_name, is_preferred_name
+'''
+
 BATCH_SIZE = 2000
 
 
@@ -252,6 +283,72 @@ def cldr_country_names(filename=CLDR_ENGLISH_PATH):
     return country_names
 
 
+wiki_paren_regex = re.compile('(.*)[\s]*\(.*?\)[\s]*')
+
+
+def normalize_wikipedia_title(title):
+    return safe_decode(title).replace(u'_', u' ')
+
+
+def normalize_wikipedia_url(url):
+    url = urllib.unquote_plus(url)
+
+    parsed = urlparse.urlsplit(url)
+    if parsed.query:
+        params = urlparse.parse_qs(parsed.query)
+        if 'title' in params:
+            return normalize_wikipedia_title(params['title'][0])
+
+    title = parsed.path.rsplit('/', 1)[-1]
+    if title not in ('index.php', 'index.html'):
+        return normalize_wikipedia_title(title)
+
+    return None
+
+
+def normalize_name(name):
+    name = name.replace('&', 'and')
+    name = name.replace('-', ' ')
+    name = name.replace(', ', ' ')
+    name = name.replace(',', ' ')
+    return name
+
+
+saint_replacements = [
+    ('st.', 'saint'),
+    ('st.', 'st'),
+    ('st', 'saint')
+]
+
+
+abbreviated_saint_regex = re.compile(r'\bSt(\.|\b)')
+
+
+def normalize_display_name(name):
+    return abbreviated_saint_regex.sub('Saint', name).replace('&', 'and')
+
+
+def get_wikipedia_titles(db):
+    d = defaultdict(list)
+
+    cursor = db.execute(wikipedia_query)
+
+    i = 1
+    while True:
+        batch = cursor.fetchmany(BATCH_SIZE)
+        if not batch:
+            break
+
+        for (url, geonames_id, is_preferred) in batch:
+            title = normalize_wikipedia_url(safe_encode(url))
+            if title is not None and title.strip():
+                title = normalize_name(title)
+                d[title.lower()].append((geonames_id, int(is_preferred or 0)))
+
+    return {title: sorted(values, key=operator.itemgetter(1), reverse=True)
+            for title, values in d.iteritems()}
+
+
 def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
     filename = os.path.join(out_dir, 'geonames.tsv')
     temp_filename = filename + '.tmp'
@@ -264,6 +361,9 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
     country_alpha2 = set([c.alpha2 for c in pycountry.countries])
 
     country_names = cldr_country_names()
+
+    wiki_titles = get_wikipedia_titles(db)
+    logging.info('Fetched Wikipedia titles')
 
     for boundary_type, codes in geonames_admin_dictionaries.iteritems():
         if boundary_type != boundary_types.COUNTRY:
@@ -286,26 +386,102 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                 break
             rows = []
             for row in batch:
-                row = map(encode_field, row)
+                row = list(row)
                 row[DUMMY_BOUNDARY_TYPE_INDEX] = boundary_type
+
+                alpha2_code = None
+                is_orig_name = False
 
                 if boundary_type == boundary_types.COUNTRY:
                     alpha2_code = row[COUNTRY_CODE_INDEX]
 
-                    is_orig_name = row[NAME_INDEX] == row[CANONICAL_NAME_INDEX]
+                    is_orig_name = row[NAME_INDEX] == row[CANONICAL_NAME_INDEX] and row[LANGUAGE_INDEX] == ''
                     row[CANONICAL_NAME_INDEX] = country_names[row[COUNTRY_CODE_INDEX]]
+
+                geonames_id = row[GEONAMES_ID_INDEX]
+
+                name = safe_decode(row[NAME_INDEX])
+                canonical = safe_decode(row[CANONICAL_NAME_INDEX])
+                row[POPULATION_INDEX] = int(row[POPULATION_INDEX] or 0)
+
+                have_wikipedia = False
+
+                wikipedia_entries = wiki_titles.get(name.lower(), wiki_titles.get(normalize_name(name.lower()), []))
+
+                if boundary_type == boundary_types.COUNTRY:
+                    norm_name = normalize_name(name.lower())
+                    for s, repl in saint_replacements:
+                        if not wikipedia_entries:
+                            wikipedia_entries = wiki_titles.get(norm_name.replace(s, repl), [])
+
+                wiki_row = []
+
+                for gid, is_preferred in wikipedia_entries:
+                    if gid == geonames_id:
+                        wiki_row = row[:]
+                        wiki_row[DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX] = is_preferred + 1
+                        rows.append(map(encode_field, wiki_row))
+                        have_wikipedia = True
+                        break
+
+                have_normalized = False
+
+                if is_orig_name:
+                    canonical_row = wiki_row[:] if have_wikipedia else row[:]
+
+                    canonical_row_name = normalize_display_name(name)
+                    if canonical_row_name != name:
+                        canonical_row[NAME_INDEX] = safe_encode(canonical_row_name)
+                        have_normalized = True
+                        rows.append(map(encode_field, canonical_row))
+
+                if not have_wikipedia:
+                    rows.append(map(encode_field, row))
+
+                if boundary_type == boundary_types.COUNTRY:
+                    wikipedia_entries = wiki_titles.get(canonical.lower(), [])
+
+                    canonical_row_name = normalize_display_name(canonical)
+
+                    canonical_row = row[:]
+
+                    if is_orig_name:
+                        canonical = safe_decode(canonical)
+                        canonical_row[NAME_INDEX] = safe_encode(canonical)
+
+                        norm_name = normalize_name(canonical.lower())
+                        for s, repl in saint_replacements:
+                            if not wikipedia_entries:
+                                wikipedia_entries = wiki_titles.get(norm_name.replace(s, repl), [])
+
+                        if not wikipedia_entries:
+                            norm_name = normalize_name(canonical_row_name.lower())
+                            for s, repl in saint_replacements:
+                                if not wikipedia_entries:
+                                    wikipedia_entries = wiki_titles.get(norm_name.replace(s, repl), [])
+
+                        for gid, is_preferred in wikipedia_entries:
+                            if gid == geonames_id:
+                                have_wikipedia = True
+                                canonical_row[DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX] = is_preferred + 1
+                                break
+
+                        if (name != canonical):
+                            rows.append(map(encode_field, canonical_row))
+
+                    if canonical_row_name != canonical and canonical_row_name != name:
+                        canonical_row[NAME_INDEX] = safe_encode(canonical_row_name)
+                        rows.append(map(encode_field, canonical_row))
 
                     if alpha2_code and is_orig_name:
                         alpha2_row = row[:]
                         alpha2_row[NAME_INDEX] = alpha2_code
-                        rows.append(alpha2_row)
+                        rows.append(map(encode_field, alpha2_row))
 
                     if alpha2_code in country_code_alpha3_map and is_orig_name:
                         alpha3_row = row[:]
                         alpha3_row[NAME_INDEX] = country_code_alpha3_map[alpha2_code]
-                        rows.append(alpha3_row)
-
-                rows.append(row)
+                        rows.append(map(encode_field, alpha3_row))
 
             writer.writerows(rows)
             logging.info('Did {} batches'.format(i))
@@ -319,8 +495,18 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
     logging.info('Sorting...')
     subprocess.check_call(['sort', '-t\t', '-u',
                            '-k{0},{0}'.format(NAME_INDEX + 1),
+                           # If there's a Wikipedia link to this name for the given id, sort first
+                           '-k{0},{0}nr'.format(DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX + 1),
+                           # Historical entries should be sorted last
+                           '-k{0},{0}n'.format(HISTORICAL_INDEX + 1),
+                           # Sort descending by population (basic proxy for relevance)
                            '-k{0},{0}nr'.format(POPULATION_INDEX + 1),
+                           # group rows for the same geonames ID together
                            '-k{0},{0}'.format(GEONAMES_ID_INDEX + 1),
+                           # preferred names come first within that grouping
+                           '-k{0},{0}nr'.format(PREFERRED_INDEX + 1),
+                           # since uniquing is done on the sort key, add language
+                           '-k{0},{0}'.format(LANGUAGE_INDEX + 1),
                            '-o', filename, temp_filename])
     os.unlink(temp_filename)
 
