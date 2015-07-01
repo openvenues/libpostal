@@ -1,6 +1,11 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define LIBPOSTAL_DATA_DIR "../data"
+#include "file_utils.h"
+
+#define LIBPOSTAL_DATA_DIR ".." PATH_SEPARATOR "data"
+
+#define LIBPOSTAL_DICTIONARIES_DIR LIBPOSTAL_DATA_DIR PATH_SEPARATOR "dictionaries"
+#define LIBPOSTAL_GEONAMES_DIR LIBPOSTAL_DATA_DIR PATH_SEPARATOR "geonames"
 
 #endif
