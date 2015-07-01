@@ -37,8 +37,10 @@ int string_compare_len_case_insensitive(const char *str1, const char *str2, size
 size_t string_common_prefix(const char *str1, const char *str2);
 size_t string_common_suffix(const char *str1, const char *str2);
 
-void string_lower(char *str);
-void string_upper(char *str);
+bool string_is_lower(char *s);
+void string_lower(char *s);
+bool string_is_upper(char *s);
+void string_upper(char *s);
 
 bool string_starts_with(const char *str, const char *start);
 bool string_ends_with(const char *str, const char *ending);

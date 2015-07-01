@@ -76,8 +76,22 @@ void string_upper(char *s) {
     for (; *s; ++s) *s = toupper(*s);
 }
 
+bool string_is_upper(char *s) {
+    for (; *s; ++s) {
+        if (*s != toupper(*s)) return false;
+    }
+    return true;
+}
+
 void string_lower(char *s) {
     for (; *s; ++s) *s = tolower(*s);
+}
+
+bool string_is_lower(char *s) {
+    for (; *s; ++s) {
+        if (*s != tolower(*s)) return false;
+    }
+    return true;
 }
 
 uint string_translate(char *str, size_t len, char *word_chars, char *word_repls, size_t trans_len) {
