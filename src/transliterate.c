@@ -661,17 +661,23 @@ char *transliterate(char *trans_name, char *str, size_t len) {
     log_debug("len = %zu\n", len);
 
     str = strdup(str);
-    trans_name = strdup(trans_name);
 
-    // Transliterator names are ASCII strings, so this is fine
-    string_lower(trans_name);
+    bool allocated_trans_name = false;
+
+    if (!string_is_lower(trans_name)) {
+        trans_name = strdup(trans_name);
+
+        // Transliterator names are ASCII strings, so this is fine
+        string_lower(trans_name);
+        allocated_trans_name = true;
+    }
 
     log_debug("lower = %s\n", trans_name);
 
     transliterator_t *transliterator = get_transliterator(trans_name);
     if (transliterator == NULL) {
         log_warn("transliterator \"%s\" does not exist\n", trans_name);
-        free(trans_name);
+        if (allocated_trans_name) free(trans_name);
         free(str);
         return NULL;
     }
@@ -684,7 +690,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
     uint32_t trans_node_id = result.node_id;
 
-    free(trans_name);
+    if (allocated_trans_name) free(trans_name);
 
     result = trie_get_prefix_from_index(trans_table->trie, NAMESPACE_SEPARATOR_CHAR, NAMESPACE_SEPARATOR_CHAR_LEN, result.node_id, result.tail_pos);
 
@@ -752,7 +758,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
             ssize_t char_len = 0;
             uint8_t *ptr = (uint8_t *)str;
             uint64_t idx = 0;
-
+            
             char *original_str = str;
             char_array *revisit = NULL;
             bool in_revisit = false;
@@ -775,6 +781,8 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                     ptr += char_len;
                     continue;
                 }
+
+                if (ch == 0) break;
 
                 log_debug("Got char '%.*s' at idx=%zu\n", (int)char_len, str + idx, idx);
 
