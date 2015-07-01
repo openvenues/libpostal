@@ -183,7 +183,23 @@ bool geoname_deserialize_ctx(geoname_t *self, cmp_ctx_t *ctx) {
         return false;
     }
 
+    if (!cmp_read_bool(ctx, &self->has_wikipedia_entry)) {
+        return false;
+    }
+
     if (!cmp_read_bool(ctx, &self->is_preferred_name)) {
+        return false;
+    }
+
+    if (!cmp_read_bool(ctx, &self->is_short_name)) {
+        return false;
+    }
+
+    if (!cmp_read_bool(ctx, &self->is_colloquial)) {
+        return false;
+    }
+
+    if (!cmp_read_bool(ctx, &self->is_historical)) {
         return false;
     }
 
@@ -257,7 +273,11 @@ bool geoname_serialize_ctx(geoname_t *self, cmp_ctx_t *ctx) {
         !cmp_write_str_or_nil(ctx, self->canonical) ||
         !cmp_write_uint(ctx, self->type) ||
         !cmp_write_str_or_nil(ctx, self->iso_language) ||
+        !cmp_write_bool(ctx, self->has_wikipedia_entry) ||
         !cmp_write_bool(ctx, self->is_preferred_name) ||
+        !cmp_write_bool(ctx, self->is_short_name) ||
+        !cmp_write_bool(ctx, self->is_colloquial) ||
+        !cmp_write_bool(ctx, self->is_historical) ||
         !cmp_write_uint(ctx, self->population) ||
         !cmp_write_double(ctx, self->latitude) ||
         !cmp_write_double(ctx, self->longitude) ||
@@ -290,7 +310,11 @@ void geoname_print(geoname_t *self) {
     printf("canonical: %s\n", char_array_get_string(self->canonical));
     printf("type: %d\n", self->type);
     printf("iso_language: %s\n", char_array_get_string(self->iso_language));
+    printf("has_wikipedia_entry: %d\n", self->has_wikipedia_entry);
     printf("is_preferred: %d\n", self->is_preferred_name);
+    printf("is_short_name: %d\n", self->is_short_name);
+    printf("is_colloquial: %d\n", self->is_colloquial);
+    printf("is_historical: %d\n", self->is_historical);
     printf("population: %d\n", self->population);
     printf("latitude: %f\n", self->latitude);
     printf("longitude: %f\n", self->longitude);

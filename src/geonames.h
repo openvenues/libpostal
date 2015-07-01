@@ -37,7 +37,11 @@ typedef struct geoname {
     char_array *canonical;
     boundary_type_t type;
     char_array *iso_language;
+    bool has_wikipedia_entry;
     bool is_preferred_name;
+    bool is_short_name;
+    bool is_colloquial;
+    bool is_historical;
     uint32_t population;
     double latitude;
     double longitude;
