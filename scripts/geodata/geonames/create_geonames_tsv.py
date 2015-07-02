@@ -102,7 +102,7 @@ geonames_fields = [
     GeonamesField('is_preferred_name', 'GEONAMES_IS_PREFERRED_NAME', default='0'),
     GeonamesField('is_short_name', 'GEONAMES_IS_SHORT_NAME', default='0'),
     GeonamesField('is_colloquial', 'GEONAMES_IS_COLLOQUIAL', default='0'),
-    GeonamesField('is_historical', 'GEONAMES_IS_HISTORICAL', default='0'),
+    GeonamesField('is_historic', 'GEONAMES_IS_HISTORICAL', default='0'),
     GeonamesField('population', 'GEONAMES_POPULATION'),
     GeonamesField('latitude', 'GEONAMES_LATITUDE'),
     GeonamesField('longitude', 'GEONAMES_LONGITUDE'),
