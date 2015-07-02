@@ -17,12 +17,12 @@ extern "C" {
 #endif
 
 #ifdef _WIN32
-#define PATH_SEPERATOR   "\\"
+#define PATH_SEPARATOR   "\\"
 #else
-#define PATH_SEPERATOR   "/"
+#define PATH_SEPARATOR   "/"
 #endif
 
-#define PATH_SEPERATOR_LEN strlen(PATH_SEPERATOR)
+#define PATH_SEPARATOR_LEN strlen(PATH_SEPARATOR)
 
 #define TAB_SEPARATOR "\t"
 #define TAB_SEPARATOR_LEN strlen(TAB_SEPARATOR)
