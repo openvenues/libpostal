@@ -8,8 +8,6 @@
 
 #define SEPARATOR_TOKENS "-"
 
-#define INT64_MAX_STRING_SIZE 21
-
 #define FLOOR_LOG_BASE(num, base) floor((log((float)num) / log((float)base)) + 0.00001)
 
 numex_table_t *numex_table = NULL;
