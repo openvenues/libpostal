@@ -57,7 +57,7 @@ def download_file(url, dest):
 
 
 def admin_ddl(admin_level):
-    columns = ['country_code'] + \
+    columns = ['country_code TEXT'] + \
               ['admin{}_code TEXT'.format(i)
                for i in xrange(1, admin_level)]
 
@@ -260,11 +260,12 @@ def batch_iter(iterable, batch_size):
 def populate_admin_table(conn, admin_level):
     logging.info('Doing admin level {}'.format(admin_level))
 
-    columns = ['admin{}_code'.format(admin_level),
-               'name', 'country_code']
+    columns = ['geonames_id',
+               'admin{}_code'.format(admin_level),
+               'name',
+               'country_code']
     columns.extend(['admin{}_code'.format(i)
                     for i in xrange(1, admin_level)])
-    columns.append('geonames_id')
 
     admin_insert_statement = '''
     insert into "admin{}_codes"
