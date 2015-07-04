@@ -17,9 +17,6 @@
 #define GEONAMES_POSTAL_ADMIN2_IDS_DEFAULT_LENGTH 20
 #define GEONAMES_POSTAL_ADMIN3_IDS_DEFAULT_LENGTH 20
 
-#define PLACE_NAME_FEATURES_DEFAULT_LENGTH 255
-#define GEO_FEATURES_DEFAULT_LENGTH 243
-
 /* To save on malloc calls, create just one of these and call geoname_clear 
 *  (which does not deallocate) and geoname_deserialize
 */
