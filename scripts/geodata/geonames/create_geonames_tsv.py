@@ -11,6 +11,8 @@ import sys
 import requests
 import pycountry
 
+import unicodedata
+
 import urllib
 import urlparse
 
@@ -328,12 +330,15 @@ def normalize_display_name(name):
     return abbreviated_saint_regex.sub('Saint', name).replace('&', 'and')
 
 
+def utf8_normalize(s, form='NFD'):
+    return unicodedata.normalize(form, s)
+
+
 def get_wikipedia_titles(db):
     d = defaultdict(list)
 
     cursor = db.execute(wikipedia_query)
 
-    i = 1
     while True:
         batch = cursor.fetchmany(BATCH_SIZE)
         if not batch:
@@ -342,7 +347,7 @@ def get_wikipedia_titles(db):
         for (url, geonames_id, is_preferred) in batch:
             title = normalize_wikipedia_url(safe_encode(url))
             if title is not None and title.strip():
-                title = normalize_name(title)
+                title = utf8_normalize(normalize_name(title))
                 d[title.lower()].append((geonames_id, int(is_preferred or 0)))
 
     return {title: sorted(values, key=operator.itemgetter(1), reverse=True)
@@ -400,13 +405,15 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
 
                 geonames_id = row[GEONAMES_ID_INDEX]
 
-                name = safe_decode(row[NAME_INDEX])
-                canonical = safe_decode(row[CANONICAL_NAME_INDEX])
+                name = utf8_normalize(safe_decode(row[NAME_INDEX]))
+                canonical = utf8_normalize(safe_decode(row[CANONICAL_NAME_INDEX]))
                 row[POPULATION_INDEX] = int(row[POPULATION_INDEX] or 0)
 
                 have_wikipedia = False
 
                 wikipedia_entries = wiki_titles.get(name.lower(), wiki_titles.get(normalize_name(name.lower()), []))
+
+                row[NAME_INDEX] = name
 
                 if boundary_type == boundary_types.COUNTRY:
                     norm_name = normalize_name(name.lower())
@@ -493,7 +500,7 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
     f.close()
 
     logging.info('Sorting...')
-    subprocess.check_call(['sort', '-t\t', '-u',
+    subprocess.check_call(['sort', '-t\t', '-u', '--ignore-case',
                            '-k{0},{0}'.format(NAME_INDEX + 1),
                            # If there's a Wikipedia link to this name for the given id, sort first
                            '-k{0},{0}nr'.format(DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX + 1),
