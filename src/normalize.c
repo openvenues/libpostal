@@ -13,7 +13,7 @@ char *utf8_normalize_string(char *str, uint64_t options) {
 
     if (options & NORMALIZE_STRING_DECOMPOSE) {
         have_utf8proc_options = true;
-        utf8proc_options |= UTF8PROC_OPTIONS_NFKD;
+        utf8proc_options |= UTF8PROC_OPTIONS_NFD;
     }
 
     if (options & NORMALIZE_STRING_STRIP_ACCENTS) {
