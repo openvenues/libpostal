@@ -135,6 +135,7 @@ size_t cstring_array_capacity(cstring_array *self);
 size_t cstring_array_used(cstring_array *self);
 size_t cstring_array_num_strings(cstring_array *self);
 void cstring_array_resize(cstring_array *self, size_t size);
+void cstring_array_clear(cstring_array *self);
 
 cstring_array *cstring_array_from_char_array(char_array *str);
 

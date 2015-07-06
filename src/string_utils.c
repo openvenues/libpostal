@@ -544,7 +544,6 @@ cstring_array *cstring_array_new(void) {
     return array;
 }
 
-
 void cstring_array_destroy(cstring_array *self) {
     if (self == NULL) return;
     if (self->indices) {
@@ -595,6 +594,18 @@ inline size_t cstring_array_num_strings(cstring_array *self) {
 inline void cstring_array_resize(cstring_array *self, size_t size) {
     if (size < cstring_array_capacity(self)) return;
     char_array_resize(self->str, size);
+}
+
+void cstring_array_clear(cstring_array *self) {
+    if (self == NULL) return;
+
+    if (self->indices != NULL) {
+        uint32_array_clear(self->indices);
+    }
+
+    if (self->str != NULL) {
+        char_array_clear(self->str);
+    }
 }
 
 inline uint32_t cstring_array_start_token(cstring_array *self) {
