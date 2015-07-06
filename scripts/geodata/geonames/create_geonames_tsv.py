@@ -500,21 +500,32 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
     f.close()
 
     logging.info('Sorting...')
-    subprocess.check_call(['sort', '-t\t', '-u', '--ignore-case',
-                           '-k{0},{0}'.format(NAME_INDEX + 1),
-                           # If there's a Wikipedia link to this name for the given id, sort first
-                           '-k{0},{0}nr'.format(DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX + 1),
-                           # Historical entries should be sorted last
-                           '-k{0},{0}n'.format(HISTORICAL_INDEX + 1),
-                           # Sort descending by population (basic proxy for relevance)
-                           '-k{0},{0}nr'.format(POPULATION_INDEX + 1),
-                           # group rows for the same geonames ID together
-                           '-k{0},{0}'.format(GEONAMES_ID_INDEX + 1),
-                           # preferred names come first within that grouping
-                           '-k{0},{0}nr'.format(PREFERRED_INDEX + 1),
-                           # since uniquing is done on the sort key, add language
-                           '-k{0},{0}'.format(LANGUAGE_INDEX + 1),
-                           '-o', filename, temp_filename])
+
+    env = os.environ.copy()
+    env['LC_ALL'] = 'C'
+
+    command = ['sort', '-t\t', '-u', '--ignore-case',
+               '-k{0},{0}'.format(NAME_INDEX + 1),
+               # If there's a Wikipedia link to this name for the given id, sort first
+               '-k{0},{0}nr'.format(DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX + 1),
+               # Historical entries should be sorted last
+               '-k{0},{0}n'.format(HISTORICAL_INDEX + 1),
+               # Sort descending by population (basic proxy for relevance)
+               '-k{0},{0}nr'.format(POPULATION_INDEX + 1),
+               # group rows for the same geonames ID together
+               '-k{0},{0}'.format(GEONAMES_ID_INDEX + 1),
+               # preferred names come first within that grouping
+               '-k{0},{0}nr'.format(PREFERRED_INDEX + 1),
+               # since uniquing is done on the sort key, add language
+               '-k{0},{0}'.format(LANGUAGE_INDEX + 1),
+               '-o', filename, temp_filename]
+
+    p = subprocess.Popen(command, env=env)
+
+    return_code = p.wait()
+    if return_code != 0:
+        raise subprocess.CalledProcessError(return_code, command)
+
     os.unlink(temp_filename)
 
 
