@@ -100,3 +100,22 @@ bool geodisambig_add_geo_features(cstring_array *features, char *name, double la
     return true;
 
 }
+
+
+bool geodisambig_add_geoname_features(cstring_array *features, geoname_t *geoname) {
+    return (geoname != NULL
+            && geodisambig_add_name_feature(features, geoname->name)
+            && geodisambig_add_country_feature(features, geoname->name, geoname->country_code)
+            && (geoname->admin1_geonames_id == 0 || geodisambig_add_admin1_feature(features, geoname->name, geoname->admin1_geonames_id))
+            && (geoname->admin2_geonames_id == 0 || geodisambig_add_admin2_feature(features, geoname->name, geoname->admin2_geonames_id))
+            && (geodisambig_add_geo_features(features, geoname->name, geoname->latitude, geoname->longitude))
+            );
+}
+
+bool geodisambig_add_postal_code_features(cstring_array *features, gn_postal_code_t *postal_code) {
+    return (postal_code != NULL
+            && geodisambig_add_name_feature(features, postal_code->code)
+            && geodisambig_add_country_feature(features, postal_code->country_code)
+            );
+}
+
