@@ -1,4 +1,4 @@
-#include "geonames_disambiguation.h"
+#include "geo_disambiguation.h"
 
 #define GEONAME_GENERIC_KEY_NAME "n"
 #define GEONAME_KEY_NAME_ADMIN1_ID "na1"
