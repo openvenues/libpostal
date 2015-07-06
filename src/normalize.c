@@ -4,7 +4,7 @@
 #define APOSTROPHE_CODEPOINT 0x0027
 
 
-char *utf8_normalize_string(char *str, uint64_t options) {    
+char *normalize_string_utf8(char *str, uint64_t options) {    
     int utf8proc_options = UTF8PROC_OPTIONS_BASE | UTF8PROC_IGNORE | UTF8PROC_NLF2LF | UTF8PROC_STRIPCC;
     uint8_t *utf8proc_normalized = NULL;
     ssize_t normalized_len = 0;
@@ -34,6 +34,20 @@ char *utf8_normalize_string(char *str, uint64_t options) {
     return NULL;
 }
 
+
+char *normalize_string_latin(char *str, size_t len, uint64_t options) {
+    char *transliterated = transliterate(LATIN_ASCII, str, len);
+    
+    if (transliterated != NULL) {
+        char *utf8_normalized = normalize_string_utf8(transliterated, options);
+        free(transliterated);
+        transliterated = NULL;
+        return utf8_normalized;
+    }
+
+    return NULL;
+}
+
 void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t options) {
     
     char *transliterated = NULL;
@@ -43,7 +57,7 @@ void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t
     if (options & NORMALIZE_STRING_LATIN_ASCII) {
         transliterated = transliterate(LATIN_ASCII, str, len);
         if (transliterated != NULL) {
-            utf8_normalized = utf8_normalize_string(transliterated, options);
+            utf8_normalized = normalize_string_utf8(transliterated, options);
             free(transliterated);
             transliterated = NULL;
         }
@@ -55,7 +69,7 @@ void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t
         }
     }
 
-    utf8_normalized = utf8_normalize_string(str, options);
+    utf8_normalized = normalize_string_utf8(str, options);
 
     if (options & NORMALIZE_STRING_LATIN_ASCII && utf8_normalized != NULL) {
         transliterated = transliterate(LATIN_ASCII, utf8_normalized, strlen(utf8_normalized));
@@ -96,7 +110,7 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
         char *ascii = NULL;
 
         if (options & NORMALIZE_STRING_LOWERCASE && is_ascii) {
-            utf8_normalized = utf8_normalize_string(str, NORMALIZE_STRING_LOWERCASE);
+            utf8_normalized = normalize_string_utf8(str, NORMALIZE_STRING_LOWERCASE);
             if (utf8_normalized != NULL) {
                 string_tree_add_string(tree, utf8_normalized);
                 free(utf8_normalized);

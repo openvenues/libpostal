@@ -34,7 +34,9 @@ extern "C" {
 #define NORMALIZE_TOKEN_DROP_ENGLISH_POSSESSIVES 1 << 4
 #define NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE 1 << 5
 
-char *utf8_normalize_string(char *str, uint64_t options);
+char *normalize_string_utf8(char *str, uint64_t options);
+
+char *normalize_string_latin(char *str, size_t len, uint64_t options);
 
 // Takes NORMALIZE_TOKEN_* options
 bool add_token_alternatives(cstring_array *array, char *str, token_t token, uint64_t options);
