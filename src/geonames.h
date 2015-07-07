@@ -16,14 +16,14 @@ extern "C" {
 #include "string_utils.h"
 
 typedef enum {
-    COUNTRY = 0,
-    ADMIN1 = 1,
-    ADMIN2 = 2,
-    ADMIN3 = 3,
-    ADMIN4 = 4,
-    ADMIN_OTHER = 5,
-    LOCALITY = 6,
-    NEIGHBORHOOD = 7
+    GEONAMES_COUNTRY = 0,
+    GEONAMES_ADMIN1 = 1,
+    GEONAMES_ADMIN2 = 2,
+    GEONAMES_ADMIN3 = 3,
+    GEONAMES_ADMIN4 = 4,
+    GEONAMES_ADMIN_OTHER = 5,
+    GEONAMES_LOCALITY = 6,
+    GEONAMES_NEIGHBORHOOD = 7
 } boundary_type_t;
 
 typedef struct buffer {
