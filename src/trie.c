@@ -708,6 +708,11 @@ inline trie_data_node_t trie_get_data_node(trie_t *self, trie_node_t node) {
     return data_node;
 }
 
+inline bool trie_set_data_node(trie_t *self, uint32_t index, trie_data_node_t data_node) {
+    if (self == NULL || self->data == NULL || index >= self->data->n) return false;
+    self->data->a[index] = data_node;
+}
+
 trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t start_index, size_t tail_pos) {
     if (key == NULL) {
         return NULL_PREFIX_RESULT;
