@@ -42,13 +42,13 @@ bool geodisambig_add_country_id_feature(cstring_array *features, char *name, uin
 bool geodisambig_add_boundary_type_feature(cstring_array *features, char *name, uint8_t boundary_type) {
     char numeric_string[INT8_MAX_STRING_SIZE];
 
-    if (country_id != 0 && name != NULL) {
+    if (boundary_type != 0 && name != NULL) {
         size_t n = sprintf(numeric_string, "%d", boundary_type);
     } else {
         return false;
     }
 
-    feature_array_add(features, 3, GEONAMES_KEY_NAME_LAN, name, numeric_string);
+    feature_array_add(features, 3, GEONAME_KEY_NAME_BOUNDARY_TYPE, name, numeric_string);
     return true;
 }
 
@@ -142,21 +142,22 @@ bool geodisambig_add_geoname_features(cstring_array *features, geoname_t *geonam
 
     return (geoname != NULL
             && geodisambig_add_name_feature(features, name)
-            && geodisambig_add_country_feature(features, name, char_array_get_string(geoname->country_code))
+            && geodisambig_add_country_code_feature(features, name, char_array_get_string(geoname->country_code))
             && geodisambig_add_country_id_feature(features, name, geoname->country_geonames_id)
             && (geoname->admin1_geonames_id == 0 || geodisambig_add_admin1_feature(features, name, geoname->admin1_geonames_id))
             && (geoname->admin2_geonames_id == 0 || geodisambig_add_admin2_feature(features, name, geoname->admin2_geonames_id))
-            && (geodisambig_add_boundary_type_feature(features, name, geoname->boundary_type))
+            && (geodisambig_add_boundary_type_feature(features, name, geoname->type))
             && (!add_language || geodisambig_add_language_feature(features, name, lang))
             && (geodisambig_add_geo_features(features, name, geoname->latitude, geoname->longitude))
             );
 }
 
 bool geodisambig_add_postal_code_features(cstring_array *features, gn_postal_code_t *postal_code) {
+    char *code = char_array_get_string(postal_code->postal_code);
     return (postal_code != NULL
-            && geodisambig_add_name_feature(features, postal_code->code)
-            && geodisambig_add_country_feature(features, postal_code->country_code)
-            && geodisambig_add_country_id_feature(features, postal_code->country_geonames_id)
+            && geodisambig_add_name_feature(features, code)
+            && geodisambig_add_country_code_feature(features, code, char_array_get_string(postal_code->country_code))
+            && geodisambig_add_country_id_feature(features, code, postal_code->country_geonames_id)
             );
 }
 
