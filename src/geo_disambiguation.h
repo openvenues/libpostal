@@ -1,5 +1,5 @@
-#ifndef GEONAMES_DISAMBIGUATION_H
-#define GEONAMES_DISAMBIGUATION_H
+#ifndef GEO_DISAMBIGUATION_H
+#define GEO_DISAMBIGUATION_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,9 +16,11 @@
 
 // Both place names and postal codes
 bool geodisambig_add_name_feature(cstring_array *features, char *name);
-bool geodisambig_add_country_feature(cstring_array *features, char *name, char *country);
+bool geodisambig_add_country_code_feature(cstring_array *features, char *name, char *country);
 
 // Only place names
+bool geodisambig_add_boundary_type_feature(cstring_array *features, char *name, uint8_t boundary_type);
+bool geodisambig_add_language_feature(cstring_array *features, char *name, char *lang);
 bool geodisambig_add_admin1_feature(cstring_array *features, char *name, uint32_t admin1_id);
 bool geodisambig_add_admin2_feature(cstring_array *features, char *name, uint32_t admin2_id);
 bool geodisambig_add_geo_features(cstring_array *features, char *name, double latitude, double longitude);
