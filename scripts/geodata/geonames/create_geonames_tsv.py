@@ -25,6 +25,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 from geodata.file_utils import *
 from geodata.encoding import safe_encode, safe_decode
 from geodata.geonames.paths import DEFAULT_GEONAMES_DB_PATH
+from geodata.i18n.languages import *
 from geodata.i18n.unicode_paths import CLDR_DIR
 from geodata.log import log_to_file
 
@@ -84,6 +85,7 @@ geonames_admin_dictionaries = {
 # Inserted post-query
 DUMMY_BOUNDARY_TYPE = '-1 as type'
 DUMMY_HAS_WIKIPEDIA_ENTRY = '0 as has_wikipedia_entry'
+DUMMY_LANGUAGE_PRIORITY = '0 as language_priority'
 
 
 class GeonamesField(object):
@@ -101,6 +103,7 @@ geonames_fields = [
     GeonamesField(DUMMY_BOUNDARY_TYPE, 'GEONAMES_BOUNDARY_TYPE', is_dummy=True),
     GeonamesField(DUMMY_HAS_WIKIPEDIA_ENTRY, 'GEONAMES_HAS_WIKIPEDIA_ENTRY', is_dummy=True),
     GeonamesField('iso_language', 'GEONAMES_ISO_LANGUAGE', default="''"),
+    GeonamesField(DUMMY_LANGUAGE_PRIORITY, 'GEONAMES_LANGUAGE_PRIORITY', is_dummy=True),
     GeonamesField('is_preferred_name', 'GEONAMES_IS_PREFERRED_NAME', default='0'),
     GeonamesField('is_short_name', 'GEONAMES_IS_SHORT_NAME', default='0'),
     GeonamesField('is_colloquial', 'GEONAMES_IS_COLLOQUIAL', default='0'),
@@ -132,6 +135,9 @@ GEONAMES_ID_INDEX = [i for i, f in enumerate(geonames_fields)
 
 LANGUAGE_INDEX = [i for i, f in enumerate(geonames_fields)
                   if f.c_constant == 'GEONAMES_ISO_LANGUAGE'][0]
+
+DUMMY_LANGUAGE_PRIORITY_INDEX = [i for i, f in enumerate(geonames_fields)
+                                 if f.c_constant == 'GEONAMES_LANGUAGE_PRIORITY'][0]
 
 CANONICAL_NAME_INDEX = [i for i, f in enumerate(geonames_fields)
                         if f.c_constant == 'GEONAMES_CANONICAL'][0]
@@ -377,6 +383,8 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
 
     writer = csv.writer(f, 'tsv_no_quote')
 
+    init_languages()
+
     country_code_alpha3_map = {c.alpha2: c.alpha3 for c in pycountry.countries}
     country_alpha2 = set([c.alpha2 for c in pycountry.countries])
 
@@ -408,6 +416,39 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
             for row in batch:
                 row = list(row)
                 row[DUMMY_BOUNDARY_TYPE_INDEX] = boundary_type
+
+                language = row[LANGUAGE_INDEX]
+
+                country_code = row[COUNTRY_CODE_INDEX]
+
+                is_preferred = int(row[PREFERRED_INDEX] or 0)
+                is_historical = int(row[HISTORICAL_INDEX] or 0)
+
+                lang_official = official_languages[country_code.lower()].get(language, None)
+                null_language = not language.strip()
+
+                is_canonical = row[NAME_INDEX] == row[CANONICAL_NAME_INDEX]
+
+                if is_historical:
+                    language_priority = 0
+                elif not null_language and language != 'abbr' and lang_official is None:
+                    language_priority = 1
+                elif null_language and not is_preferred and not is_canonical:
+                    language_priority = 2
+                elif language == 'abbr' and not is_preferred:
+                    language_priority = 3
+                elif language == 'abbr' and is_preferred:
+                    language_priority = 4
+                elif lang_official == 0:
+                    language_priority = 5
+                elif lang_official == 1:
+                    language_priority = 6
+                elif null_language and not is_preferred and is_canonical:
+                    language_priority = 7
+                elif is_preferred:
+                    language_priority = 8
+
+                row[DUMMY_LANGUAGE_PRIORITY_INDEX] = language_priority
 
                 alpha2_code = None
                 is_orig_name = False
@@ -498,11 +539,13 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                     if alpha2_code and is_orig_name:
                         alpha2_row = row[:]
                         alpha2_row[NAME_INDEX] = alpha2_code
+                        alpha2_row[DUMMY_LANGUAGE_PRIORITY_INDEX] = 10
                         rows.append(map(encode_field, alpha2_row))
 
                     if alpha2_code in country_code_alpha3_map and is_orig_name:
                         alpha3_row = row[:]
                         alpha3_row[NAME_INDEX] = country_code_alpha3_map[alpha2_code]
+                        alpha3_row[DUMMY_LANGUAGE_PRIORITY_INDEX] = 10
                         rows.append(map(encode_field, alpha3_row))
 
             writer.writerows(rows)
@@ -523,8 +566,8 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                '-k{0},{0}'.format(NAME_INDEX + 1),
                # If there's a Wikipedia link to this name for the given id, sort first
                '-k{0},{0}nr'.format(DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX + 1),
-               # Historical entries should be sorted last
-               '-k{0},{0}n'.format(HISTORICAL_INDEX + 1),
+               # Language priority rules as above
+               '-k{0},{0}nr'.format(DUMMY_LANGUAGE_PRIORITY_INDEX + 1),
                # Sort descending by population (basic proxy for relevance)
                '-k{0},{0}nr'.format(POPULATION_INDEX + 1),
                # group rows for the same geonames ID together
