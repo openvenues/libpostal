@@ -220,7 +220,7 @@ bool geoname_deserialize_ctx(geoname_t *self, cmp_ctx_t *ctx) {
         return false;
     }
 
-    if (!cmp_read_uint(ctx, &self->country_geonames_id, &len)) {
+    if (!cmp_read_uint(ctx, &self->country_geonames_id)) {
         return false;
     }
 
@@ -397,7 +397,7 @@ bool gn_postal_code_deserialize_ctx(gn_postal_code_t *self, cmp_ctx_t *ctx) {
         return false;
     }
 
-    if (!cmp_read_uint(ctx, &self->country_geonames_id, &len)) {
+    if (!cmp_read_uint(ctx, &self->country_geonames_id)) {
         return false;
     }
 
