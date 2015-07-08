@@ -120,42 +120,42 @@ in	osm	relation:107001	fr	0
 nl	name	Friesland	fy	0
 nl	gn_id	2755812	fy	0
 nl	osm	relation:47381	fy	0
-es  qs_a1r  Cataluña/Catalunya  ca  1
-es  gn_id   3336901 ca  1
-es  osm   relation:349053 ca  1
-es  qs_a1r  Comunidad Foral de Navarra  eu  0
-es  gn_id   3115609 eu  0
-es  osm   relation:349027 eu  0
-es  qs_a1r  Comunitat Valenciana    ca  1
-es  gn_id   2593113 ca  1
-es  osm   relation:349043 ca  1
-es  qs_a1r  Galicia gl  1
-es  gn_id   3336902 gl  1
-es  osm   relation:349036 gl  1
-es  qs_a1r  Illes Balears   ca  1
-es  gn_id   relation:348981 ca  1
-es  osm   2521383 ca  1
-es  qs_a1r  País Vasco/Euskadi  eu  1
-es  gn_id   3336903 eu  1
-es  osm   relation:349042 eu  1
-fr  qs_a1r  Bretagne    br  0
-fr  gn_id   3030293 br  0
-fr  osm   relation:102740 br  0
-gb  qs_a1r  Northern Ireland    ga  0
-gb  gn_id   2641364 ga  0
-gb  osm   relation:156393 ga  0
-gb  qs_a1r  Scotland    gd  0
-gb  gn_id   2638360 gd  0
-gb  osm   relation:58446 gd  0
-gb  qs_a1r  Wales   cy  0
-gb  gn_id   2634895 cy  0
-gb  osm   relation:58437 cy  0
-it  qs_a1r  VALLE D'AOSTA/VALLÉE D'AOSTE    fr  1
-it  gn_id   3164857 fr  1
-it  osm   relation:45155 fr  1
-it  qs_a1r  TRENTINO-ALTO ADIGE/SUDTIROL    de  1
-it  gn_id   3165244 de  1
-it  osm   relation:47046 de  1
-it  qs_a1r  FRIULI VENEZIA GIULIA   sl  0
-it  gn_id   3176525 sl  0
-it  osm relation:179296 sl  0
+es	qs_a1r	Cataluña/Catalunya	ca	1
+es	gn_id	3336901	ca	1
+es	osm	relation:349053	ca	1
+es	qs_a1r	Comunidad Foral de Navarra	eu	0
+es	gn_id	3115609	eu	0
+es	osm	relation:349027	eu	0
+es	qs_a1r	Comunitat Valenciana	ca	1
+es	gn_id	2593113	ca	1
+es	osm	relation:349043	ca	1
+es	qs_a1r	Galicia	gl	1
+es	gn_id	3336902	gl	1
+es	osm	relation:349036	gl	1
+es	qs_a1r	Illes Balears	ca	1
+es	gn_id	relation:348981	ca	1
+es	osm	2521383	ca	1
+es	qs_a1r	País Vasco/Euskadi	eu	1
+es	gn_id	3336903	eu	1
+es	osm	relation:349042	eu	1
+fr	qs_a1r	Bretagne	br	0
+fr	gn_id	3030293	br	0
+fr	osm	relation:102740	br	0
+gb	qs_a1r	Northern Ireland	ga	0
+gb	gn_id	2641364	ga	0
+gb	osm	relation:156393	ga	0
+gb	qs_a1r	Scotland	gd	0
+gb	gn_id	2638360	gd	0
+gb	osm	relation:58446	gd	0
+gb	qs_a1r	Wales	cy	0
+gb	gn_id	2634895	cy	0
+gb	osm	relation:58437	cy	0
+it	qs_a1r	VALLE D'AOSTA/VALLÉE D'AOSTE	fr	1
+it	gn_id	3164857	fr	1
+it	osm	relation:45155	fr	1
+it	qs_a1r	TRENTINO-ALTO ADIGE/SUDTIROL	de	1
+it	gn_id	3165244	de	1
+it	osm	relation:47046	de	1
+it	qs_a1r	FRIULI VENEZIA GIULIA	sl	0
+it	gn_id	3176525	sl	0
+it	osm	relation:179296	sl	0
