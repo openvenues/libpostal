@@ -105,11 +105,12 @@ geonames_fields = [
     GeonamesField('is_short_name', 'GEONAMES_IS_SHORT_NAME', default='0'),
     GeonamesField('is_colloquial', 'GEONAMES_IS_COLLOQUIAL', default='0'),
     GeonamesField('is_historic', 'GEONAMES_IS_HISTORICAL', default='0'),
-    GeonamesField('population', 'GEONAMES_POPULATION'),
-    GeonamesField('latitude', 'GEONAMES_LATITUDE'),
-    GeonamesField('longitude', 'GEONAMES_LONGITUDE'),
-    GeonamesField('feature_code', 'GEONAMES_FEATURE_CODE'),
+    GeonamesField('gn.population', 'GEONAMES_POPULATION'),
+    GeonamesField('gn.latitude', 'GEONAMES_LATITUDE'),
+    GeonamesField('gn.longitude', 'GEONAMES_LONGITUDE'),
+    GeonamesField('gn.feature_code', 'GEONAMES_FEATURE_CODE'),
     GeonamesField('gn.country_code as country_code', 'GEONAMES_COUNTRY_CODE'),
+    GeonamesField('c.geonames_id as country_gn_id', 'GEONAMES_COUNTRY_ID'),
     GeonamesField('gn.admin1_code as admin1_code', 'GEONAMES_ADMIN1_CODE'),
     GeonamesField('a1.geonames_id as a1_gn_id', 'GEONAMES_ADMIN1_ID'),
     GeonamesField('gn.admin2_code as admin2_code', 'GEONAMES_ADMIN2_CODE'),
@@ -178,11 +179,15 @@ left join admin4_codes a4
 base_geonames_query = '''
 select {geonames_fields}
 from geonames gn
+join countries c
+    on gn.country_code = c.country_code
 {admin_joins}
 {{predicate}}
 union all
 select {alt_name_fields}
 from geonames gn
+join countries c
+    on gn.country_code = c.country_code
 join alternate_names an
     on an.geonames_id = gn.geonames_id
     and iso_language not in ('doi','faac','iata',
@@ -205,16 +210,26 @@ IGNORE_COUNTRY_POSTAL_CODES = set([
 postal_code_fields = [
     GeonamesField('postal_code', 'GN_POSTAL_CODE'),
     GeonamesField('p.country_code as country_code', 'GN_POSTAL_COUNTRY_CODE'),
+    GeonamesField('c.geonames_id as country_geonames_id', 'GN_POSTAL_COUNTRY_GEONAMES_ID'),
+    GeonamesField('c.population as country_population', 'GN_POSTAL_COUNTRY_POPULATION'),
     GeonamesField('n.geonames_id as containing_geoname_id', 'GN_POSTAL_CONTAINING_GEONAME_ID'),
     GeonamesField('group_concat(distinct a1.geonames_id) admin1_ids', 'GN_POSTAL_ADMIN1_IDS'),
     GeonamesField('group_concat(distinct a2.geonames_id) admin2_ids', 'GN_POSTAL_ADMIN2_IDS'),
     GeonamesField('group_concat(distinct a3.geonames_id) admin3_ids', 'GN_POSTAL_ADMIN3_IDS'),
 ]
 
+POSTAL_CODE_INDEX = [i for i, f in enumerate(postal_code_fields)
+                     if f.c_constant == 'GN_POSTAL_CODE'][0]
+
+POSTAL_CODE_POP_INDEX = [i for i, f in enumerate(postal_code_fields)
+                         if f.c_constant == 'GN_POSTAL_COUNTRY_POPULATION'][0]
+
 postal_codes_query = '''
 select
 {fields}
 from postal_codes p
+join countries c
+    on p.country_code = c.country_code
 left join (
     select
     gn.geonames_id,
@@ -555,7 +570,14 @@ def create_postal_codes_tsv(db, out_dir=DEFAULT_DATA_DIR):
     f.close()
 
     logging.info('Sorting...')
-    subprocess.check_call(['sort', '-t\t', '-k1,1', '-k2,2', '-o', filename, temp_filename])
+
+    subprocess.check_call([
+        'sort', '-t\t', '--ignore-case',
+        '-k{0},{0}'.format(POSTAL_CODE_INDEX + 1),
+        '-k{0},{0}nr'.format(POSTAL_CODE_POP_INDEX + 1),
+        '-o', filename,
+        temp_filename
+    ])
     os.unlink(temp_filename)
 
 # Generates a C header telling us the order of the fields as written
