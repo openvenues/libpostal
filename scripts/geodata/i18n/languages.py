@@ -1,12 +1,13 @@
 import os
 import csv
+import sys
 
 from collections import defaultdict, OrderedDict
 
-from address_normalizer.utils.unicode_csv import unicode_csv_reader
-
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
+
+from geodata.unicode_csv import unicode_csv_reader
 
 LANGUAGES_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                              'data', 'language')
@@ -47,5 +48,7 @@ def init_languages(languages_dir=LANGUAGES_DIR):
 
     for country, key, value, lang, default in unicode_csv_reader(open(path), delimiter='\t'):
         regional_languages[(country, key, value)] = (lang, int(default))
+        if lang not in country_languages[country]:
+            country_languages[country][lang] = 0
 
     initialized = True
