@@ -441,12 +441,10 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                     language_priority = 4
                 elif lang_official == 0:
                     language_priority = 5
-                elif lang_official == 1:
+                elif lang_official == 1 or (null_language and not is_preferred and is_canonical):
                     language_priority = 6
-                elif null_language and not is_preferred and is_canonical:
-                    language_priority = 7
                 elif is_preferred:
-                    language_priority = 8
+                    language_priority = 7
 
                 row[DUMMY_LANGUAGE_PRIORITY_INDEX] = language_priority
 
