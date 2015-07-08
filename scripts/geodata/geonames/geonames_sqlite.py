@@ -97,11 +97,11 @@ geonames_ddl = {
         admin2_code TEXT,
         admin3_code TEXT,
         admin4_code TEXT,
-        population LONG,
+        population LONG DEFAULT 0,
         elevation INT,
         dem INT,
         timezone TEXT,
-        modification_date TEXT);''',
+        modification_date TEXT)''',
         '''CREATE INDEX feature_code ON
         geonames (feature_code)''',
         '''CREATE INDEX country_code ON
@@ -122,10 +122,10 @@ geonames_ddl = {
         geonames_id INT,
         iso_language TEXT,
         alternate_name TEXT,
-        is_preferred_name BOOLEAN,
-        is_short_name BOOLEAN,
-        is_colloquial BOOLEAN,
-        is_historic BOOLEAN)''',
+        is_preferred_name BOOLEAN DEFAULT 0,
+        is_short_name BOOLEAN DEFAULT 0,
+        is_colloquial BOOLEAN DEFAULT 0,
+        is_historic BOOLEAN DEFAULT 0)''',
         '''CREATE INDEX geonames_id_index ON
         alternate_names (geonames_id)''',
     ),
@@ -212,6 +212,7 @@ countries_create_table = (
     select * from territories;
     ''',
     'create index country_geonames_id on countries (geonames_id)',
+    'create index conntry_country_code on countries (country_code)',
 )
 
 country_alises_create_table = (
