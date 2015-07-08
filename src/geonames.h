@@ -23,7 +23,8 @@ typedef enum {
     GEONAMES_ADMIN4 = 4,
     GEONAMES_ADMIN_OTHER = 5,
     GEONAMES_LOCALITY = 6,
-    GEONAMES_NEIGHBORHOOD = 7
+    GEONAMES_NEIGHBORHOOD = 7,
+    NUM_BOUNDARY_TYPES
 } boundary_type_t;
 
 typedef struct buffer {
