@@ -48,6 +48,7 @@ typedef struct geoname {
     double longitude;
     char_array *feature_code;
     char_array *country_code;
+    uint32_t country_geonames_id;
     char_array *admin1_code;
     uint32_t admin1_geonames_id;
     char_array *admin2_code;
@@ -73,6 +74,7 @@ void geoname_destroy(geoname_t *self);
 typedef struct gn_postal_code {
     char_array *postal_code;
     char_array *country_code;
+    uint32_t country_geonames_id;
     bool have_lat_lon;
     double latitude;
     double longitude;

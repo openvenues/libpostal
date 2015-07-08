@@ -220,6 +220,10 @@ bool geoname_deserialize_ctx(geoname_t *self, cmp_ctx_t *ctx) {
         return false;
     }
 
+    if (!cmp_read_uint(ctx, &self->country_geonames_id, &len)) {
+        return false;
+    }
+
     if (!cmp_read_str_size_or_nil(ctx, &self->admin1_code, &len)) {
         return false;
     }
@@ -280,6 +284,7 @@ bool geoname_serialize_ctx(geoname_t *self, cmp_ctx_t *ctx) {
         !cmp_write_double(ctx, self->longitude) ||
         !cmp_write_str_or_nil(ctx, self->feature_code) ||
         !cmp_write_str_or_nil(ctx, self->country_code) ||
+        !cmp_write_uint(ctx, self->country_geonames_id) ||
         !cmp_write_str_or_nil(ctx, self->admin1_code) ||
         !cmp_write_uint(ctx, self->admin1_geonames_id) ||
         !cmp_write_str_or_nil(ctx, self->admin2_code) ||
@@ -317,6 +322,7 @@ void geoname_print(geoname_t *self) {
     printf("longitude: %f\n", self->longitude);
     printf("feature_code: %s\n", char_array_get_string(self->feature_code));
     printf("country_code: %s\n", char_array_get_string(self->country_code));
+    printf("country_geonames_id: %d\n", self->country_geonames_id);
     printf("admin1_code: %s\n", char_array_get_string(self->admin1_code));
     printf("admin1_geonames_id: %d\n", self->admin1_geonames_id);
     printf("admin2_code: %s\n", char_array_get_string(self->admin2_code));
@@ -391,6 +397,10 @@ bool gn_postal_code_deserialize_ctx(gn_postal_code_t *self, cmp_ctx_t *ctx) {
         return false;
     }
 
+    if (!cmp_read_uint(ctx, &self->country_geonames_id, &len)) {
+        return false;
+    }
+
     if (!cmp_read_bool(ctx, &self->have_containing_geoname)) {
         return false;
     }
@@ -462,6 +472,7 @@ static bool gn_postal_code_serialize_ctx(gn_postal_code_t *self, cmp_ctx_t *ctx)
 
     if (!cmp_write_str_or_nil(ctx, self->postal_code) ||
         !cmp_write_str_or_nil(ctx, self->country_code) ||
+        !cmp_write_uint(ctx, self->country_geonames_id) ||
         !cmp_write_bool(ctx, self->have_containing_geoname) ||
         (self->have_containing_geoname &&
             (!cmp_write_str_or_nil(ctx, self->containing_geoname) ||
