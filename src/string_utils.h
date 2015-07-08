@@ -15,6 +15,8 @@ extern "C" {
 
 #define MAX_UTF8_CHAR_SIZE 4
 
+#define INT8_MAX_STRING_SIZE 5
+#define INT16_MAX_STRING_SIZE 7
 #define INT32_MAX_STRING_SIZE 11
 #define INT64_MAX_STRING_SIZE 21
 
