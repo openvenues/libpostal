@@ -42,10 +42,10 @@ bool geodisambig_add_country_id_feature(cstring_array *features, char *name, uin
 bool geodisambig_add_boundary_type_feature(cstring_array *features, char *name, uint8_t boundary_type) {
     char numeric_string[INT8_MAX_STRING_SIZE];
 
-    if (boundary_type != 0 && name != NULL) {
+    if (boundary_type <= NUM_BOUNDARY_TYPES && name != NULL) {
         size_t n = sprintf(numeric_string, "%d", boundary_type);
     } else {
-        return false;
+        return name != NULL;
     }
 
     feature_array_add(features, 3, GEONAME_KEY_NAME_BOUNDARY_TYPE, name, numeric_string);
@@ -53,8 +53,12 @@ bool geodisambig_add_boundary_type_feature(cstring_array *features, char *name, 
 }
 
 bool geodisambig_add_language_feature(cstring_array *features, char *name, char *lang) {
-    if (name == NULL || lang == NULL || strlen(lang) == 0) return false;
-    feature_array_add(features, 3, GEONAME_KEY_NAME_LANGUAGE, name, lang);
+    if (name == NULL || lang == NULL) {
+        return false;
+    }
+    if (strlen(lang) > 0) {
+        feature_array_add(features, 3, GEONAME_KEY_NAME_LANGUAGE, name, lang);
+    }
     return true;
 }
 
@@ -64,7 +68,7 @@ bool geodisambig_add_admin1_feature(cstring_array *features, char *name, uint32_
     if (admin1_id != 0 && name != NULL) {
         size_t n = sprintf(numeric_string, "%d", admin1_id);
     } else {
-        return false;
+        return name != NULL;
     }
 
     feature_array_add(features, 3, GEONAME_KEY_NAME_ADMIN1_ID, name, numeric_string);
@@ -78,7 +82,7 @@ bool geodisambig_add_admin2_feature(cstring_array *features, char *name, uint32_
     if (admin2_id != 0 && name != NULL) {
         size_t n = sprintf(numeric_string, "%d", admin2_id);
     } else {
-        return false;
+        return name != NULL;
     }
 
     feature_array_add(features, 3, GEONAME_KEY_NAME_ADMIN2_ID, name, numeric_string);
@@ -107,7 +111,8 @@ bool geodisambig_add_geo_features(cstring_array *features, char *name, double la
     size_t geohash_size = 8;
     char geohash[geohash_size];
 
-    if ((geohash_encode(latitude, longitude, geohash, geohash_size)) == GEOHASH_OK) {
+    int ret = geohash_encode(latitude, longitude, geohash, geohash_size);
+    if (ret == GEOHASH_OK) {
         feature_array_add(features, 3, GEONAME_KEY_NAME_GEOHASH7, name, geohash);
 
         int num_strings = 0;
