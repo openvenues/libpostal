@@ -1,5 +1,5 @@
 andar
-apartamento|apt|apto
+apartamento|apt|apto|apt.o
 batalhao|btl
 cave|cv
 condominio

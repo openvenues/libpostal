@@ -3,5 +3,5 @@ distrito|dtto|dist
 divisao|div
 quadra|q|qd
 secao|sec
-superquadra|super quadra|sq|s q
+superquadra|super quadra|sq|s.q.|s.q|s q
 zona|zn

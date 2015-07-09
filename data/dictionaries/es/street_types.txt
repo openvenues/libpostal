@@ -25,9 +25,9 @@ callejuela|cjla
 callizo|cllzo
 calzada|czada|calz
 camino|cno|cmo|cmno|cm
-camino hondo|ch|c h
-camino nuevo|cn|c n
-camino viejo|cv|c v
+camino hondo|ch|c.h.|c.h|c h
+camino nuevo|cn|c.n.|c.n|c n
+camino viejo|cv|c.v.|c.v|c v
 caminito|cmt
 camping|campg
 cantera|cantr
@@ -74,7 +74,7 @@ paso
 pasillo|psllo
 peatonal|peat
 periferico|perif
-plaza|pl|plza|pza|p za
+plaza|pl|plza|pza|p.za
 plazoleta|pzta|plzta|plta
 plazuela|plzla
 poblado|pbdo

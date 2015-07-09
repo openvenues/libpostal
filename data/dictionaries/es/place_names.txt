@@ -5,7 +5,7 @@ arboleda|arb
 arrabal|arral
 arroyo|arry
 asuntos exteriores|aa ee
-atletico|atl o|atlo
+atletico|atlo
 ayuntamiento
 balneario|balnr
 banco
@@ -41,7 +41,7 @@ estacion|estcn
 estacionamiento|estto
 fabrica|fca|fbrca
 farmacia
-ferrocarril|fc|f c
+ferrocarril|fc|f.c.|f.c|f c
 ferrocarriles|ff cc|ffcc
 granja|granj
 hacienda|hda

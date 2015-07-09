@@ -1,141 +1,141 @@
-abbazia|abbadia|badia|abb.a|abb a|b.ia|b ia
-abbazie|abbadie|abb.e|abb e
-accademia|accad.a|accad a
-accademie|accad.e|accad e
-acquario|acq.rio|acq rio|acqrio
-acquari|acq.ri|acq ri|acqri
-acquedotti|acq.ti|acq ti|acqti
-acquedotto|acq.to|acq to|acqto
-aeroporto|aerop.to|aeropto|aerop to
+abbazia|abbadia|badia|abb.a|abba|b.ia|bia
+abbazie|abbadie|abb.e|abbe
+accademia|accad.a|accada
+accademie|accad.e|accade
+acquario|acq.rio|acqrio|acqrio
+acquari|acq.ri|acqri|acqri
+acquedotti|acq.ti|acqti
+acquedotto|acq.to|acqto
+aeroporto|aerop.to|aeropto
 agenzia
 agenzia immobiliare
-alberghi|alb.i|alb i
-albergo|alb.o|alb o
+alberghi|alb.i|albi
+albergo|alb.o|albo
 alimentari
-anfiteatri|anfit.i|anfit i
-anfiteatro|anfit.o|anfit o
-bagno|bgno|b.gno|b gno
-bagni|bgni|b.gni|b gni
+anfiteatri|anfit.i|anfiti
+anfiteatro|anfit.o|anfito
+bagno|bgno|b.gno
+bagni|bgni|b.gni
 banca
 bar
-baraccamento|bmento|b.mento|b mento
-baraccamenti|bmenti|b.menti|b menti
-baracche|bar.che|bar che
+baraccamento|bmento|b.mento
+baraccamenti|bmenti|b.menti
+baracche|bar.che|barche
 barbiere
-basilica|basca|bas.ca|bas ca
-basiliche|basche|bas.che|bas che
-bettola|bet.a|bet a
-bettole|bet.e|bet e
+basilica|basca|bas.ca
+basiliche|basche|bas.che
+bettola|bet.a|beta
+bettole|bet.e|bete
 biblioteca
-birreria|birr.a|birr a
-birrerie|birr.e|birr e
+birreria|birr.a|birra
+birrerie|birr.e|birre
 bottega
 boutique
 caffeteria
-calzaturificio|calzat.cio|calzat cio
+calzaturificio|calzat.cio|calzatcio
 calzolaio
-campeggio|camp.gio|camp gio|campgio
-campeggi|camp.gi|camp gi|campgi
-cappella|cap.la|cap la|capla
+campeggio|camp.gio|campgio
+campeggi|camp.gi|campgi
+cappella|cap.la|capla
 cappelleria
-cappelletta|cap.ta|cap ta|capta
-carabinieri|carab.ri|carabri|carb ri
-carcere|carc.e|carc e
-carenaggio|car.ggio|car ggio|carggio
+cappelletta|cap.ta|capta
+carabinieri|carab.ri|carabri
+carcere|carc.e|carce
+carenaggio|car.ggio|carggio
 cartiera
 cartoleria
 casa
-casale|c.ale|c ale
-casaletto|c.letto|c letto
-caserma|cas.ma|cas ma|casma
-casetta|c.ta|c ta
-casette|c.te|c te
+casale|c.ale|cale
+casaletto|c.letto|cletto
+caserma|cas.ma|casma
+casetta|c.ta|cta
+casette|c.te|cte
 casino
-casolare|c.lare|c lare
-casone|c.one|c one
-casotto|cas.to|cas to
-cassina|cass.a|cass a
-castello|cast.o|cast o
-catacomba|cat.ba|cat ba|catba
-catacombe|cat.be|cat be|catbe
-cattedrale|catt.le|catt le
-chalet|ch.t|ch t
-chiesa|ch.sa|ch sa
-chiesetta|ch.etta|ch etta
-cittadella|c.della
+casolare|c.lare|clare
+casone|c.one|cone
+casotto|cas.to|casto
+cassina|cass.a|cassa
+castello|cast.o|casto
+catacomba|cat.ba|cat ba
+catacombe|cat.be|cat be
+cattedrale|catt.le|cattle
+chalet|ch.t|cht
+chiesa|ch.sa|chsa
+chiesetta|ch.etta|chetta
+cittadella|c.della|cdella
 club
-collegio|coll.io|coll io
-conservatorio|cons.rio|cons rio|consrio
-convento|conv.to|conv to|convto
+collegio|coll.io|collio
+conservatorio|cons.rio|consrio
+convento|conv.to|convto
 diga
-dissalazione|dissal.ne|dissal ne
-distilleria|distill.a|distill a
+dissalazione|dissal.ne|dissalne
+distilleria|distill.a|distilla
 drogheria
 enoteca
-ergastolo|erg.lo|erg lo
-fabbrica|fabbr.a|fabbr a
-faro|f.ro|f ro
+ergastolo|erg.lo|erglo
+fabbrica|fabbr.a|fabbra
+faro|f.ro|fro
 farmacia
-fattoria|fatt.a|fatt a
+fattoria|fatt.a|fatta
 ferramenta
-ferriera|ferr.ra|ferr ra
-ferrovia|ferr.a|ferr a|fv|f v
-ferroviaria|ferr.ria|ferr ria
-ferroviario|ferr.rio|ferr rio
+ferriera|ferr.ra|ferrra
+ferrovia|ferr.a|fv|f.v.|f.v|f v
+ferroviaria|ferr.ria|ferrria
+ferroviario|ferr.rio|ferrrio
 fiera
 fioraio
-fonderia|fond.a|fond a
-fontana|font.na|font na
-forni|f.ni|f ni
-forno|f.no|f no
+fonderia|fond.a
+fontana|font.na|fontna
+forni|f.ni|fni
+forno|f.no|fno
 foro
 forte
-fortezza|fort.za|fort za
+fortezza|fort.za|fortza
 forti
-fortificazione|fort.one|fort one
-fortilizio|fort.zio|fort zio
+fortificazione|fort.one|fortone
+fortilizio|fort.zio|fortzio
 fratelli
 galleria
 gelateria
-gendarmeria|gend.ria|gend ria
+gendarmeria|gend.ria|gendria
 giolleria
 giornalaio
 hotel
-impianto|imp.to|imp to
-ippodromo|ip.dromo|ip dromo
+impianto|imp.to|impto
+ippodromo|ip.dromo|ipdromo
 istituto|ist
 kebab
-laboratorio|lab.o|lab o
+laboratorio|lab.o|labo
 latteria
-lavanderia|lavand.a|lavand a
+lavanderia|lavand.a|lavanda
 lavanderia a gettone
 libreria
 locanda|loc.a
-lunetta|l.etta|l etta
+lunetta|l.etta
 macelleria
-madonnella|mad.la|mad la
-madonnetta|mad.ta|mad ta
-magazzini|magaz.i|magaz i
-magazzino|magaz.o|magaz o
+madonnella|mad.la|madla
+madonnetta|mad.ta|madta
+magazzini|magaz.i|magazi
+magazzino|magaz.o|magazo
 masseria|mass.a
-ministero|min.ro|min ro
+ministero|min.ro|minro
 molino
-monastero|monast.o|monast o
-monumento|monum.o|monum o
+monastero|monast.o|monasto
+monumento|monum.o|monumo
 mulino
 museo
 negozio
-obelisco|ob.sco|ob sco|obsco
+obelisco|ob.sco|obsco
 orologiaio
-ospedale|osp.le|osp le|osple
+ospedale|osp.le|osple
 ostello
-osteria|ost.a|ost a
+osteria|ost.a|osta
 ottica
-padiglinoe|pad.ne|pad ne|padne
+padiglinoe|pad.ne|padne
 panetteria
 panificio
 parcheggio|pach.o
-parco|p.rco|p rco|prco
+parco|p.rco|prco
 parrucchiere
 pasticceria
 pelletteria

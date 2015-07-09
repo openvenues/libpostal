@@ -28,16 +28,16 @@ monsieur|m|mr
 pere
 professeur|prof|pr
 professeurs|profs|prs
-reverende pere|rp|r p
-reverende pere jesuit|rpj|r p j
-sa saintete|ss|s s
+reverende pere|rp|r.p.|r.p|r p
+reverende pere jesuit|rpj|r.p.j.|r.p.j|r p j
+sa saintete|ss|s.s.|s.s|s s
 saint|st
 sainte|ste
-son altesse|sa|s a
-son altesse imperiale|sai|s a i
-son altesse royale|sar|s a r
+son altesse|sa|s.a.|s.a|s a
+son altesse imperiale|sai|s.a.i.|s.a.i|s a i
+son altesse royale|sar|s.a.r.|s.a.r|s a r
 son eminence|s em
-son excellence|se|s e|s exc
+son excellence|se|s.e.|s.e|s e|s exc
 sous lieutenant|souslieutenant|slt|s lt
 veuve|vve
 vice amiral|viceamiral|vam|v am

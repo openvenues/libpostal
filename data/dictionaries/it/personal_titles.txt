@@ -1,8 +1,8 @@
 architetto|arch
 arciprete
 avvocato|avv
-barone|bne|b ne
-baronessa|bnssa|bn ssa
+barone|bne|b.ne
+baronessa|bnssa|bn.ssa
 capitano|cap
 caporale
 caporale maggiore
@@ -14,20 +14,20 @@ commendatore|comm
 console|cons
 conte
 contessa
-corpo d'armata|corpo darmata|cda|c d a
+corpo d'armata|corpo darmata|cda|c.d.a.|c.d.a|c d a
 curato
 don
 donna
 dottore|dott|dr
-dottoressa|dottssa|dott ssa|drssa|dr ssa
+dottoressa|dottssa|dott.ssa|drssa|dr.ssa
 duca
 duchessa
 egregio|egr
-emissario|emiss.o|emiss o
+emissario|emiss.o
 gentile
 gentili
 generale|gen
-generali|gen.li|gen li
+generali|gen.li
 grande ufficiale|gr uff
 giudice
 imperatore
@@ -47,23 +47,23 @@ presidente emerito|pres emerito
 prete
 prevosto
 professore|prof
-professoressa|profssa|prof ssa
+professoressa|profssa|prof.ssa
 re
 regina
 reverendo|rev
-reverendo madre|rm|r m
-reverendo padre|rp|r p
+reverendo madre|rm|r.m.|r.m|r m
+reverendo padre|rp|r.p.|r.p|r p
 san|s
 santa|s
 santo|s
-santo padre|sp|s p
+santo padre|sp|s.p.|s.p|s p
 senatore|sen
 sergente|serg
-signora|sigra|sig ra
+signora|sigra|sig.ra
 signore|sig
 signori|sigg
-signorina|signa|sig na
-sottotenente|sten|s ten
+signorina|signa|sig.na
+sottotenente|sten|s.ten
 tenente|ten
 tenente colonnello|ten col
 visconte

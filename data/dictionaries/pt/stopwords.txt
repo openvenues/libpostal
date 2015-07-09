@@ -22,7 +22,7 @@ na
 nas
 no
 nos
-nossa|n|na
+nossa|n|na|n.a
 nosso|n
 o
 os

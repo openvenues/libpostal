@@ -1,48 +1,48 @@
 asociacion en participacion|a en p
 asociacion civil|ac|a c
-banco|bco
+banco|bco|b.co
 club atletico
-club de futbol|cf|c f|futbol club|fc|f c
-compania|cia|c ia|ca|c a|comp
+club de futbol|cf|c f|c.f.|c.f|futbol club|fc|f.c.|f.c|f c
+compania|cia|c.ia|ca|c.a|comp
 compania anonima|ca|c a
 compania por acciones|c por a|cxa|c x a
 empresa|empr|emp
 empresa individual de responsabilidad limitada|eirl|e i r l
-empresa publica|ep|e p
-empresa unipersonal|e u
-sociedad|sdad|soc
-sociedad anonima|sa|s a|sdad anon
-sociedad anonima abierta|saa|s a a
-sociedad anonima bursatil|sab|s a b
-sociedad anonima deportiva|sad|s a d
+empresa publica|ep|e.p.|e.p|e p
+empresa unipersonal|e.u.|e.u|e u
+sociedad|sdad|s.dad|soc
+sociedad anonima|sa|s.a.|s.a|s a|sdad anon
+sociedad anonima abierta|saa|s.a.a.|s.a.a|s a a
+sociedad anonima bursatil|sab|s.a.b.|s.a.b|s a b
+sociedad anonima deportiva|sad|s.a.d.|s.a.d|s a d
 sociedad anonima de capital variable|sa de cv|s a de c v
-sociedad anonima cooperativa catalana limitada|sccl|s c c l
-sociedad anonima espanola|sae
-sociedad anonima financiera de inversion|safi|s a f i
-sociedad anonima inscrita de capital abierto|saica|s a i c a
-sociedad anonima laboral|sal
-sociedad anonima promotora de inversion|sapi|s a p i
-sociedad anonima simplificada|sas|s a s
-sociedad civil|sc|s c
+sociedad anonima cooperativa catalana limitada|sccl|s.c.c.l.|s.c.c.l|s c c l
+sociedad anonima espanola|sae|s.a.e.|s.a.e|s a e
+sociedad anonima financiera de inversion|safi|s.a.f.i.|s.a.f.i|s a f i
+sociedad anonima inscrita de capital abierto|saica|s.a.i.c.a.|s.a.i.c.a|s a i c a
+sociedad anonima laboral|sal|s.a.l.|s.a.l|s a l
+sociedad anonima promotora de inversion|sapi|s.a.p.i.|s.a.p.i|s a p i
+sociedad anonima simplificada|sas|s.a.s.|s.a.s|s a s
+sociedad civil|sc|s.c.|s.c|s c
 sociedad colectiva|snc|s n c|soc cal|y cia sc|y cia s c|& cia sc|& cia s c
 sociedad comanditaria|scra|s cra
 sociedad cooperativa|scoop|s coop
-sociedad cooperativa limitada|scl|s c l
-sociedad de capital e industria|scel|s c e l
-sociedad de garantia reciproca|sgr|s g r
-sociedad de responsabilidad limitada|srl|s r l|s de rl|s de r l
-sociedad del estado|se|s e
+sociedad cooperativa limitada|scl|s.c.l.|s.c.l|s c l
+sociedad de capital e industria|scel|s.c.e.l.|s.c.e.l|s c e l
+sociedad de garantia reciproca|sgr|s.g.r.|s.g.r|s g r
+sociedad de responsabilidad limitada|srl|s.r.l.|s.r.l|s r l|s de rl|s de r l
+sociedad del estado|se|s.e.|s.e|s e
 sociedad en comandita|s en c|sc|y cia s en c|& cia s en c
 sociedad en comandita por acciones|s en c por a|sca|s c a|cia sca|cia s c a
 sociedad en nombre colectivo|cia|s en nc|s en n c
 sociedad en nombre colectivo de responsabilidad limitada|cia ltda|ltda
 sociedad gestora de instituciones de inversion colectiva|sgiic|s g i i c
-sociedad limitada|sl|s l|sdad ltda
-sociedad limitada laboral|sll|s l l
-sociedad limitada nueva empresa|slne|s l n e
-sociedad limitada unipersonal|slu|s l u
-sociedad por acciones|spa|s p a
-union deportiva|ud
+sociedad limitada|sl|s l|s.l.|s.l|sdad ltda
+sociedad limitada laboral|sll|s.l.l.|s.l.l|s l l
+sociedad limitada nueva empresa|slne|s.l.n.e.|s.l.n.e|s l n e
+sociedad limitada unipersonal|slu|s.l.u.|s.l.u|s l u
+sociedad por acciones|spa|s.p.a.|s.p.a|s p a
+union deportiva|ud|u.d.|u.d|u d
 union
 y compania|& compania|y cia|& cia
 y sucesores|& sucesores

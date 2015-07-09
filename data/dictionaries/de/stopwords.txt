@@ -1,8 +1,8 @@
 am
 an
-an der|a.d.|a d
+an der|a.d.|a.d|a d
 auf
-auf der|a.d.|a d
+auf der|a.d.|a.d|a d
 bei|b
 beim
 bis
@@ -18,7 +18,7 @@ fur
 gegenuber
 im|i
 in|i
-in der|i d
+in der|i.d.|i.d|i d
 mit
 nach
 nachst
@@ -30,7 +30,7 @@ und|&
 unter
 vor|v
 von|v
-von der|v d
+von der|v.d.|v.d|v d
 zu
 zu der
 zur

@@ -11,8 +11,8 @@ estado|edo
 isla|isl|is
 islas|isls|iss
 poligono|polig
-poligono residencial|polig res|pgres|pg res|pr|p r
-poligono industrial|polig ind|pgind|pg ind|pi|p i
+poligono residencial|polig res|pgres|pg res|pr|p.r.|p.r|p r
+poligono industrial|polig ind|pgind|pg ind|pi|p.i.|p.i|p i
 seccion|secc|sccn|scn|sec
 sector|sect
 urbanizacion|urb

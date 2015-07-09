@@ -1,8 +1,8 @@
 este|e
 norte|n
-noredeste|ne|n e
-noroeste|no|n o
+noredeste|ne|n.e.|n.e|n e
+noroeste|no|n.o.|n.o|n o
 oeste|o
-sudeste|se|s e
-sudoeste|so|s o
+sudeste|se|s.e.|s.e|s e
+sudoeste|so|s.o.|s.o|s o
 sul|s

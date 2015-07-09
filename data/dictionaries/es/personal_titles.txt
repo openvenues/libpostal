@@ -1,8 +1,8 @@
 abad|abd
-abogada|abga|abgda|abg da
-abogado|abg|abgdo|abg do
-administrador|admor|adm or|admr
-administradora|admora|adm ora|admra
+abogada|abga|abgda|abg.da
+abogado|abg|abgdo|abg.do
+administrador|admor|adm.or|admr
+administradora|admora|adm.ora|admra
 agrimensor|agrim
 alcalde|alcde
 alferez|alf|alfz
@@ -17,9 +17,9 @@ baronesa
 brigadier|brg|bg|brig
 brigadier general|brg general|brg gral|brg genl|brg gnal|brg gn|bg general|bg gral|bg genl|bg gnal|bg gn|brig general|brig gral|brig genl|brig gnal|brig gn
 caballero|cab
-cabo primero|cp|c p
-cabo segundo|cs|c s
-cabo tercero|ct|c t
+cabo primero|cp|c.p.|c.p|c p
+cabo segundo|cs|c.s.|c.s|c s
+cabo tercero|ct|c.t.|c.t|c t
 cacique|cque
 capitan|cap|capt|ctn|cptn
 cardenal|card|cnal
@@ -36,11 +36,11 @@ diacono|diac
 diacona|diaca
 diputado|dip
 director|dir
-directora|dira|dir a
+directora|dira|dir.a
 doctor|dr
 doctora|dra
 don|d
-dona|da|dna|d a
+dona|da|dna|d.a
 dragoneante|dg
 duque|dq
 duquesa|dqsa|dqa
@@ -48,7 +48,7 @@ embajador|emb
 enfermera|enf|enfa
 escritor
 escritora
-excelencia|exca|exc a
+excelencia|exca|exc.a
 excelentisima|excma
 excelentisimo|excmo
 fray|fr
@@ -68,10 +68,10 @@ inspector|insp
 intendente|int
 jefe|jf
 juez|jz
-licenciada|lda|lica|lic a
-licenciado|ldo|lic|lico|lic o
+licenciada|lda|lica|lic.a
+licenciado|ldo|lic|lico|lic.o
 locutor|loc
-madre|me|m e
+madre|me|m.e
 maestro|mstro|mtro
 majestad
 mariscal|mscal
@@ -79,16 +79,16 @@ marques|mq|marqs
 marquesa|mqa|marqsa
 mayor|my|may
 mayor de brigada|may brig|my brig
-mayor general|mg|m g|my gen|my gral
+mayor general|mg|m.g.|m.g|m g|my gen|my gral
 ministerio|min
 ministro|mtro
 monsenor|mons|msnr
 notario|not
 nuestra senora|ns|n s|ntra sra
 obispo|ob
-padre|pe|p e|pdre|p dre
+padre|pe|p.e|pdre|p.dre
 piloto fluvial|plto flvial
-presidenta|pdta|presa|pres a|presida|presid a|pta
+presidenta|pdta|presa|pres.a|presida|presid.a|pta
 presidente|pdte|pres|presid|pte
 principe
 principal|pral
@@ -108,19 +108,19 @@ sant|st
 santo|sto
 sargento|sarg|sgto|sargto
 sargento ayudante|sarg ay|sgto ay|sargto ay
-sargento mayor|sm|s m|sarg my|sgto my|sargto my
-sargento primero|sp|s p
-sargento segundo|sg|s g
-sargento viceprimero|sargento vice primero|sv|s v
-secretario|secreto|secto
-secretaria|secreta|secta
+sargento mayor|sm|s.m.|s.m|s m|sarg my|sgto my|sargto my
+sargento primero|sp|s.p.|s.p|s p
+sargento segundo|sg|s.g.|s.g|s g
+sargento viceprimero|sargento vice primero|sv|s.v.|s.v|s v
+secretario|secreto|secto|sect.o
+secretaria|secreta|secta|sect.a
 senador|sen
 senor|sr
-senora|sra
-senores|srs|sres
-senorita|srta
-serenisima|serma|ser ma
-serenisimo|sermo|ser mo
+senora|sra|s.ra
+senores|srs|sres|s.res
+senorita|srta|s.rta
+serenisima|serma|ser.ma
+serenisimo|sermo|ser.mo
 soldado|sold
 subteniente|subte|stn
 teniente|tn|tte

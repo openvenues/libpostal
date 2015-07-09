@@ -1,5 +1,5 @@
 castel|cst
-centre commercial|cc|c c
+centre commercial|cc|c.c.|c.c|c c
 chateau
 cottage|cott
 cottages|cott|cotts
@@ -13,9 +13,10 @@ parc industriel
 pont
 ponts
 station|sta
-zone artisanale|za|z a
-zone d'activites|zone dactivites|s a c
-zone d'amenagement concerte|zone damenagement concerte|zac|z a c
-zone d'amenagement differe|zone damenagement differe|zad|z a d
-zone industrielle|zi|z i
-zone a urbaniser en priorite|zup|z u p
+zone artisanale|za|z.a.|z.a|z a
+zone d'activites|zone dactivites|za|z.a.|z.a|z a
+zone artisanale commerciale|zac|z.a.c.|z.a.c|z a c
+zone d'amenagement concerte|zone damenagement concerte|zac|z.a.c.|z.a.c|z a c
+zone d'amenagement differe|zone damenagement differe|zad|z.a.d.|z.a.d|z a d
+zone industrielle|zi|z.i.|z.i|z i
+zone a urbaniser en priorite|zup|z.u.p.|z.u.p|z u p

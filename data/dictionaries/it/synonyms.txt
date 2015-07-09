@@ -1,115 +1,115 @@
 agosto|ago
-altezza|alt.za|alt za|altza
-altezze|alt.ze|alt ze|altze
-antica|ant.a|ant a
-antiche|ant.e|ant e
-antichi|ant.i|ant i
-antico|ant.o|ant o
+altezza|alt.za|altza
+altezze|alt.ze|altze
+antica|ant.a|anta
+antiche|ant.e|ante
+antichi|ant.i|anti
+antico|ant.o|anto
 aprile|apr
-arcipelaghi|arcip.ghi|arcip ghi|arcipghi
-arcipelagho|arcip.gho|arcip gho|arcipgho
-badde|b.de|b de
-bassa|b.sa|b sa|bsa
-bassi|b.si|b si|bsi
-basso|b.so|b so|bso
-basse|b.se|b se|bse
-bealera|b.ra|b ra|bra
-bealere|b.re|b re|bre
-calvario|calv.o|calv o
-canale|can.le|can le
-canali|can.li|can li
-caverna|cav.na|cav na
-caverne|cav.ne|cav ne
-centrale|centr.e|centr e
-colla|c.la
-colle|c.le
-colletta|c.tta|c tta
-collina|cll.a|cll a
-colline|cll.e|cll e
-collo|c.llo
-cozzi|c.zi|c zi|czi
-cozzo|c.zo|c zo|czo
-commerciale|comm.le
-comunale|com.le
-comunita|com.ta|com ta
+arcipelaghi|arcip.ghi|arcipghi
+arcipelagho|arcip.gho|arcipgho
+badde|b.de|bde
+bassa|b.sa|bsa
+bassi|b.si|bsi
+basso|b.so|bso
+basse|b.se|bse
+bealera|b.ra|bra
+bealere|b.re|bre
+calvario|calv.o|calvo
+canale|can.le|canle
+canali|can.li|canli
+caverna|cav.na|cavna
+caverne|cav.ne|cavne
+centrale|centr.e|ctrle
+colla|c.la|cla
+colle|c.le|cle
+colletta|c.tta|ctta
+collina|cll.a|clla
+colline|cll.e|clle
+collo|c.llo|cllo
+cozzi|c.zi|czi
+cozzo|c.zo|czo
+commerciale|comm.le|commle
+comunale|com.le|comle
+comunita|com.ta|comta
 decembre|dec
 dicembre|dic
-distretto|distr.o|distr o
-diversivo|div.vo|div vo
-fanteria|fant.a|fant a
+distretto|distr.o|distro
+diversivo|div.vo|divvo
+fanteria|fant.a|fanta
 febbraio|feb|fev
-fontanile|font.ile|font ile
-fonte|f.te|f te
-fosso|f.so|f so|fso
-fossa|f.sa|f sa|fsa
-fratelli|flli|f lli
+fontanile|font.ile|fontile
+fonte|f.te|fte
+fosso|f.so|fso
+fossa|f.sa|fsa
+fratelli|f.lli|flli
 gennaio|gen
-ghiacciai|gh.i|gh i
-ghiacciaio|gh.io|gh io
-giardino|g.no|g no
-giardini|g.ni|g ni
+ghiacciai|gh.i|ghi
+ghiacciaio|gh.io|ghio
+giardino|g.no|gno
+giardini|g.ni|gni
 giugno|giug
 giulio|giul
 gran|gr
-grande|gr.de|gr de
-grandi|gr.di|gr di
-grossa|gr.sa|gr sa
-grosse|gr.se|gr se
-grossi|gr.si|gr si
-grosso|gr.so|gr so
-grotta|gr.ta|gr ta
-gortte|gr.te|gr te
-gruppi|gr.pi|gr pi
-gruppo|gr.po|gr po
+grande|gr.de|grde
+grandi|gr.di|grdi
+grossa|gr.sa|grsa
+grosse|gr.se|grse
+grossi|gr.si|grsi
+grosso|gr.so|grso
+grotta|gr.ta|grta
+gortte|gr.te|grte
+gruppi|gr.pi|grpi
+gruppo|gr.po|grpo
 incoronata|incor.ta
-industria|ind.ia|ind ia
-industriale|ind.ale|ind ale
-industriali|ind.ali|ind ali
-inferiore|inf.e|inf e
-inferiori|inf.i|inf i
-internazionale|intern.le|intern le
-internazionali|intern.li|intern li
-interne|int.ne|int ne
-interni|int.ni|int ni
-interno|int.no|int no
-laghetto|lag.to|lag to
+industria|ind.ia
+industriale|ind.ale|indale
+industriali|ind.ali|indali
+inferiore|inf.e|infe
+inferiori|inf.i|infi
+internazionale|intern.le
+internazionali|intern.li
+interne|int.ne|intne
+interni|int.ni|intni
+interno|int.no|intno
+laghetto|lag.to|lagto
 lago|l
-laguna|lag.a|lag a
-lunghi|l.ghi|l ghi
-lungo|l.go|l go
+laguna|lag.a
+lunghi|l.ghi|lghi
+lungo|l.go|lgo
 maggio|mag
-maddalena|madd.na|madd na
-madonna|mad.na|mad na
-madonne|mad.ne|mad ne
-maggiore|magg.re|magg re
-maggiori|magg.ri|magg ri
-mandamento|mand.to|mand to
-mannu|m.nu|m nu
-marinella|marin.la|marin la
-marino|m.ino|m ino
-marittimo|maritt.o|maritt o
+maddalena|madd.na|maddna
+madonna|mad.na|madna
+madonne|mad.ne|madne
+maggiore|magg.re|maggre
+maggiori|magg.ri|maggri
+mandamento|mand.to|mandto
+mannu|m.nu|mnu
+marinella|marin.la|marinla
+marino|m.ino|mrno
+marittimo|maritt.o
 marzo|mar
 media|med.a
-mediterraneo|medit.eo|medit eo
-metropolitana|metr.na|metr na|metro
-militare|mil.re|mil re
-muri|m.ri|m ri
-muro|m.ro|m ro
-navigli|nav.i|nav i
-naviglio|nav.o|nav o
-nazionale|naz.le|naz le
-nazionali|naz.li|naz li
-nostra|n.ra|n ra
-nostro|n.ro|n ro
+mediterraneo|medit.eo
+metropolitana|metr.na|metrna|metro
+militare|mil.re|milre
+muri|m.ri|mri
+muro|m.ro|mro
+navigli|nav.i
+naviglio|nav.o
+nazionale|naz.le|nazle
+nazionali|naz.li|nazli
+nostra|n.ra|nra
+nostro|n.ro|nro
 novembre|nov
-nuova|n.va|n va
-nuove|n.ve|n ve
-nuovi|n.vi|n vi
-nuovo|n.vo|n vo
+nuova|n.va|nva
+nuove|n.ve|nve
+nuovi|n.vi|nvi
+nuovo|n.vo|nvo
 ottobre|ott
 penisola|penis.a
-piccola|p.cola|p cola
-piccole|p.cole|p cole
-piccoli|p.coli|p coli
-piccolo|p.colo|p colo
+piccola|p.cola|pcola
+piccole|p.cole|pcole
+piccoli|p.coli|pcoli
+piccolo|p.colo|pcolo
 settembre|set

@@ -1,16 +1,16 @@
-borgata|borg.a|borga|borg a
-borgate|borg.e|borge|borg e
-borghi|b.ghi|bghi|b ghi
-borgo|b.go|bgo|b go
-blocchi|bl.i|bl i
-blocco|bl.o|bl o
-colonia|col.a|col a
+borgata|borg.a|borga
+borgate|borg.e|borge
+borghi|b.ghi|bghi
+borgo|b.go|bgo
+blocchi|bl.i|bli
+blocco|bl.o|blo
+colonia|col.a|cola
 fermata
-fortino|fort.no|fort no
+fortino|fort.no|fortno
 isola
 isole
 isoletta
 isolette
 isoletto
 isoletti
-palazzi|pal.zi
+palazzi|pal.zi|palzi

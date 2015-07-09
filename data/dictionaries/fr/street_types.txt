@@ -126,7 +126,7 @@ lieu-dit|lieu dit|lieudit|ld|ldit|l dit|l-dit
 lotissement|lot
 lotissements|lots
 mail
-maison forestiere|mf|m f
+maison forestiere|mf|m.f.|m.f|m f
 manoir|man
 marche|mar
 marches|mars
@@ -143,7 +143,7 @@ parcs|prcs
 parking|pkg
 parvis|prv
 passage|pas|psg
-passage a niveau|pn|p n
+passage a niveau|pn|p.n.|p.n|p n
 passe|pass
 passerelle|ple
 passerelles|ples
@@ -194,7 +194,7 @@ roquet|roqt
 rotonde|rtd|rtnd|rtde|rtnde
 route|rt|rte
 routes|rts|rtes
-route nationale|rn|r n
+route nationale|rn|r.n.|r.n|r n
 rue|r
 ruelle|rle
 ruelles|rles

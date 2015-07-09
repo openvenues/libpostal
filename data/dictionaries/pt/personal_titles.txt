@@ -1,10 +1,10 @@
-advogado|advo|adv o
+advogado|advo|adv.o
 alferes|alf
 almirante|alm
-arcebispo|arco|arc o
+arcebispo|arco|arc.o
 barao|bar
 baronesa
-bispo|bpo|b po
+bispo|bpo|b.po
 brigadeiro|brg|brig
 cacique|cac
 capitao|cap|capt
@@ -14,7 +14,7 @@ capitao de mar e guerra|cap m g|cap mg
 capitao tenente|cap ten|cap tte
 cardeal|card
 comandante|cmdt
-comendador|comend|cmdr|comor|com or
+comendador|comend|cmdr|comor|com.or
 conde|cde
 condessa|cdessa
 conselheiro|cons
@@ -22,30 +22,30 @@ coronel|cor|cel
 contra almirante|c alm
 deputado|dep
 desembargador|des
-desembargadora|desa|des a
+desembargadora|desa|des.a
 diacono|diac
 diacona|diaca
 dom|d
-dona|da
+dona|da|d.a
 doutor|dr
-doutora|dra
+doutora|dra|d.ra
 duque|dq
 duquesa|dqsa|dqa
 embaixador|emb
-eminencia|ema|em a
-eminentissimo|emmo|em mo
-enfermeira|enfa|enf a
+eminencia|ema|em.a
+eminentissimo|emmo|em.mo
+enfermeira|enfa|enf.a
 enfermeiro|enfo|enf
 engenheira|enga
 engenheiro|eng|engo
-excelencia|exa|ex a
-excelentissima|exma|ex ma
-excelentissimo|exmo|ex mo
+excelencia|exa|ex.a
+excelentissima|exma|ex.ma
+excelentissimo|exmo|ex.mo
 frei|fr
-general|gen|gal|g al
-governador|gov|govdor|govd or|gov dor
-ilustrissima|ilma|il ma
-ilustrissimo|ilmo|il mo
+general|gen|gal|g.al
+governador|gov|govdor|govd.or|gov.dor
+ilustrissima|ilma|il.ma
+ilustrissimo|ilmo|il.mo
 infante|inf
 irma|ima|im
 irmao|imo|im
@@ -54,18 +54,18 @@ maestra|mta|mtra|mstra
 maestro|mto|mtro|mstro
 major|maj
 major brigadeiro|maj brig
-marechal|mar|mal|m al
+marechal|mar|mal|m.al
 marques|mq|marq
 marquesa|mqsa|marqa
 madre|me
 medico|med
-mestra|ma|m a
-mestre|me|m e
+mestra|ma|m.a
+mestre|me|m.e
 ministerio|min
 monsenhor|mons
-nossa senhora|nsa|ns a|n sa|n s a
-nosso senhor|ns|n s
-padre|pe|p e
+nossa senhora|nsa|ns a|n sa|n.s.a.|n.s.a
+nosso senhor|ns|n.s.|n.s|n s
+padre|pe|p.e
 pastor|pr
 prefeito|pref
 presidente|presid|pres
@@ -73,29 +73,29 @@ professor|prof
 professora|profa
 professoras|profas
 professores|profs
-reverenda|revda|rev da
-reverendo|revdo|rev do
-reverendissima|revma|rev ma
-reverendissimo|revmo|rev mo
+reverenda|revda|rev.da
+reverendo|revdo|rev.do
+reverendissima|revma|rev.ma
+reverendissimo|revmo|rev.mo
 santa|sta
 santo|st|sto
 sao|s
 sargento|sarg|sgto|sargto
-sargento ajudante|sarg ajte|sarg aj te
-secretaria|sec a|secr a|secra
+sargento ajudante|sarg ajte|sarg aj.te
+secretaria|sec.a|secr.a|secra
 secretario|sec|secr
 senador|sen
-senhor|s|sr|s r
-senhores|srs|s rs
-senhora|sa|sra|sr a|s ra
-senhoras|sras|s ras
-senhorita|srta|sr ta
-senhoritas|srtas|sr tas
-tenente|ten|tte|t te
-tenente coronel|ten c el|ten cel|tte cel|t te c el
+senhor|s|sr|s.r
+senhores|srs|s.rs
+senhora|sa|sra|sr.a|s.ra
+senhoras|sras|s.ras
+senhorita|srta|sr.ta
+senhoritas|srtas|sr.tas
+tenente|ten|tte|t.te
+tenente coronel|ten c.el|ten cel|tte cel|t.te c.el
 tesoureiro|tes
 vereador|ver
 vice almirante|v alm
-vigario|vig|vigo|vig o
-visconde|visc|vde|v de
-viscondesa|vdessa|v dessa
+vigario|vig|vigo|vig.o
+visconde|visc|vde|v.de
+viscondesa|vdessa|v.dessa
