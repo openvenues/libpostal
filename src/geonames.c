@@ -42,6 +42,7 @@ void geoname_clear(geoname_t *self) {
     char_array_clear(self->name);
     char_array_clear(self->canonical);
     char_array_clear(self->iso_language);
+    char_array_clear(self->feature_code);
     char_array_clear(self->country_code);
     char_array_clear(self->admin1_code);
     char_array_clear(self->admin2_code);
