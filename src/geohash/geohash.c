@@ -216,6 +216,9 @@ int geohash_encode(double latitude, double longitude, char *r, size_t capacity) 
     char lr[capacity];
     memset(interleaved, 0, sizeof(interleaved));
 
+    while (longitude < -180.0) longitude += 360.0;
+    while (longitude >= 180.0) longitude -= 360.0;
+
     if (!double_to_i64(latitude/90.0, &lat64) || !double_to_i64(longitude/180.0, &lon64)) {
         return GEOHASH_INVALIDARGUMENT;
     }
