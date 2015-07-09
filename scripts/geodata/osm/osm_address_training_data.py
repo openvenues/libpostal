@@ -26,7 +26,7 @@ from geodata.file_utils import *
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
-FORMATTER_GIT_REPO = 'https://github.com/lokku/address-formatting'
+FORMATTER_GIT_REPO = 'https://github.com/OpenCageData/address-formatting'
 
 WAY_OFFSET = 10 ** 15
 RELATION_OFFSET = 10 ** 15
