@@ -1,0 +1,4 @@
+gamla|g:la
+lång|laang
+lilla|l
+stora|st
