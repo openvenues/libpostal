@@ -1,0 +1,12 @@
+nordre|ndr
+nord|n
+nordøst|nø
+nordvest|nv
+øst|ø|ost|o
+østre|ostre
+søndre|sondre|sdr
+syd|s
+sydøst|sø
+sydvest|sv
+vest|v
+vestre
