@@ -1,0 +1,9 @@
+ано|ano|автономная некоммерческая организация
+kooperativ
+кооператив
+nko|nekommercheskaya organizatsiya
+нко|некоммерческая организация
+оао|открытое акционерное общество
+oao|otkrytoye aktsionernoye obshchestvo
+ооо|общество с ограниченной ответственностью
+ooo|obshchestvo s ogranichennoy otvetstvennostyu
