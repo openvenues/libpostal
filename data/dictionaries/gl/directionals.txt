@@ -1,0 +1,4 @@
+leste|este|e
+norte|n
+oeste|o
+sur|s
