@@ -1,0 +1,9 @@
+banen
+dammen
+gade
+grænsen
+plads
+stræde|straede
+torv
+vej
+vænge|vaenge

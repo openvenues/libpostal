@@ -1,0 +1,3 @@
+departement|dep
+lejlighed|lejl
+nummer|numero|no|#
