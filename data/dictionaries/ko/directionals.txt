@@ -1,0 +1,20 @@
+북
+book
+남
+nahm
+동
+dohng
+서
+seo
+북 동
+book dohng
+bookdohng
+북 서
+book seo
+bookseo
+남 동
+nahm dohng
+nahndohng
+남 서
+nahm seo
+nahmseo
