@@ -1,0 +1,54 @@
+adjunkt|adj
+admirał|admiral|adm
+ambasador|amb
+architekt|arch
+arcybiskup|abp
+asystent|as
+bosman|bosm
+bosman sztabowy|bosm sztab
+biskupa|bpa
+doktora|dr
+dowódca|dowodca|dca|d-ca
+dyrektor|dyr
+dziekan|dziek
+generała|generala|gen
+generał broni|gen broni
+generał brygady|gen bryg
+generał dywizji|gen dyw
+honorowy|hon
+hrabia|hr
+inżynier|inż
+kapral|kpr
+kapitan|kpt
+kapitan marynarki|kpt mar
+kardynała|kardynala|kard
+kierownik|kier
+kontradmirał|kontradmiral|kadm|kontradm
+komandor|kmdr
+komandor porucznik|kmdr por
+komandor podporucznik|kmdr ppor
+komendant|kmdt|kom
+ksiądz|ks
+lekarz|lek
+magister|mgr
+major|mjr
+marynarz|mar
+marszałka|marszalka|marsz
+minister|min
+ojciec|o
+pułkownik|płk
+podoficer|podofic
+podsekretarz|podsekr
+profesor|prof
+sekretarz|sekt
+senator|sen
+sierżant|sierz
+starszy bosman|st bosm
+strzelec|strz
+starszy sierżant|st sierz
+starszy sierżant sztabowy|st sierz sztab
+starszy strzelec|st strz
+święty|swiety|św|sw
+wielebny|w
+wiceadmirał|wiceadmiral|wiceadm
+wiceminister|wicemin

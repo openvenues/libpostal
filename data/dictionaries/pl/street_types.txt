@@ -1,0 +1,12 @@
+aleja|al
+autostrada
+boczna
+bulwar
+droga
+obwodnica
+plac|pl
+rondo
+rynek
+szosa
+ulica|ul
+zaulek
