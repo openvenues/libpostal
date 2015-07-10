@@ -34,5 +34,5 @@ toften
 torv
 vangen
 varden
-vej
+vej|v
 vænge|vaenge

@@ -5,5 +5,5 @@ grænsen
 plads
 stræde|straede
 torv
-vej
+vej|v.
 vænge|vaenge
