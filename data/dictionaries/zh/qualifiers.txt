@@ -1,0 +1,21 @@
+省
+sheng
+縣
+xian
+市
+shi
+區
+区
+qu
+鎮
+zhen
+鄉
+xiang
+里
+li
+村
+cun
+鄰
+lin
+邮 编
+youbian

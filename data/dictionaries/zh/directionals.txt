@@ -1,0 +1,20 @@
+北
+bei
+东
+dong
+南
+nan
+西
+xi
+西 北
+xibei
+xi bei
+西 南
+xinan
+xi nan
+东 北
+dongbei
+dong bei
+东 南
+dongnan
+dong nan

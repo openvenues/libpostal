@@ -1,0 +1,30 @@
+村 道
+cundao
+大 道
+dadao
+大 街
+dajie
+道
+dao
+大 院
+dayuan
+国 道
+guodao
+胡 同
+hutong
+街
+jie
+路
+lu
+省 道
+shengdao
+县 道
+xiandao
+巷
+xiang
+乡 道
+xiangdao
+段
+duan
+弄
+long
