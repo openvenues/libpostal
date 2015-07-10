@@ -1,10 +1,4 @@
-berg|bg
-burg|bg
-dorf|df
-kogel|kg
-kreuz|kz
-platz|pl
-siedlung|sdlg
-stiege|stg
-strasse|str
-wiese|ws
+berg|bg.
+burg|bg.
+dorf|df.
+kogel|kg.
