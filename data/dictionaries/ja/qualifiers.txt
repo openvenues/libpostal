@@ -1,0 +1,34 @@
+県
+ken
+都
+to
+道
+do
+府
+fu
+市
+shi
+区
+ku
+特 別 区
+tokubetsu ku
+tokubetsuku
+郡
+gun
+町
+cho
+machi
+村
+mura
+son
+字
+aza
+丁 目
+chome
+大 字
+oaza
+小 字
+koaza
+街 区
+gaiku
+〒
