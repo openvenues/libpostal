@@ -1,0 +1,14 @@
+amiral
+căpitan|capitan|capt
+colonel|col
+comandor
+contra amiral
+doctor|dr
+general|gen
+major|maj
+locotenent
+locotenent colonel
+profesor|prof
+sergent
+sublocotenent
+vice amiral

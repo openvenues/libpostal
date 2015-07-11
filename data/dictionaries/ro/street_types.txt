@@ -1,0 +1,13 @@
+aleea|ale|alea|al
+bulevardul|bd|bul|bdul|blv|blvd|b-dul|b.dul|bulev|bulevardu|bulevard
+calea|cal
+drumul
+fundătura|fundatura|fnd
+fundacul|fdc
+intrarea|int|intr
+piaţa|piata|piață|pta|pţa|p-ta|p-ţa
+strada|str
+stradela|str-la|sdla
+șoseaua|soseaua|sos|șos
+splaiul|sp|spl
+vârful|varful|virful||vîrful|varf|vf|

@@ -1,0 +1,2 @@
+apartament|ap
+scara|sc
