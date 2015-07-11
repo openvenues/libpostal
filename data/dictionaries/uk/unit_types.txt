@@ -1,0 +1,4 @@
+квартира|кв
+kvartyra|kv
+кімната|км
+kimnata|km
