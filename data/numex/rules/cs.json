@@ -13,12 +13,14 @@
         {
             "name": "jedno",
             "value": 1,
-            "type": "cardinal"
+            "type": "cardinal",
+            "gender": "n"
         },       
         {
             "name": "jedna",
             "value": 1,
-            "type": "cardinal"
+            "type": "cardinal",
+            "gender": "f"
         },
         {
             "name": "dva",
@@ -28,12 +30,14 @@
         {
             "name": "dvě",
             "value": 2,
-            "type": "cardinal"
+            "type": "cardinal",
+            "gender": "f"
         },
         {
             "name": "dve",
             "value": 2,
-            "type": "cardinal"
+            "type": "cardinal",
+            "gender": "f"
         },
         {
             "name": "tři",
