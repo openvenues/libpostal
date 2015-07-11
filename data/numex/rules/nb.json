@@ -18,7 +18,8 @@
         {
             "name": "et",
             "value": 1,
-            "type": "cardinal"
+            "type": "cardinal",
+            "gender": "n"
         },
         {
             "name": "to",
