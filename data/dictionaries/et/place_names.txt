@@ -1,0 +1,12 @@
+akadeemia
+farmaatsia|farm
+instituut|inst
+keskkool|kk
+kooli
+ministeerium|min
+observatoorium|obs
+organisatsioon|org
+pargi
+raamatukogu|rmtk
+raamatukauplus|rmtkpl
+teatriala|teatr

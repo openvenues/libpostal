@@ -1,0 +1,13 @@
+doktor|dr
+härra|harra|hr
+kapteen|kpt
+kolonel|kol
+kolonelleitnant|kol.-ltn|kol-ltn|kol ltn
+major|mjr
+noorem leitnant|n.-ltn|n-ltn|n ltn
+proua|pr
+preili|prl
+professor|prof
+pühak|puhak
+seltsimees|sm
+vanem leitnant|v.-ltn|v-ltn|v ltn

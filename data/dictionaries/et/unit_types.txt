@@ -1,0 +1,4 @@
+jaoskond|fsk
+korteer|k
+number|nr|no|#
+osakond|osk
