@@ -4,6 +4,8 @@ blok
 derevnya|der
 гмина|гм
 gmina|gm
+микрорайон
+mikrorayon
 област|обл
 oblast|obl
 посблок|пос

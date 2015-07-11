@@ -1,0 +1,14 @@
+север
+sever
+северо-востоку|северо востоку
+severo-vostoku|severo vostoku
+северо-Запад|северо Запад
+severo-zapad|severo zapad
+восток
+vostok
+Южная
+yuzhnaya
+юго-востоку|юго востоку
+yugo-vostoku|yugo vostoku
+юго-западу|юго западу
+yugo-zapadu|yugo zapadu

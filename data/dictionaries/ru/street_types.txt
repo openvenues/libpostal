@@ -2,6 +2,8 @@
 alleya|al
 бульвар|бул
 bulvar|bul
+дорога|дор
+doroga|dor
 набережная|наб
 naberezhnaya|nab
 переулок|пер
@@ -16,6 +18,8 @@ prospekt|pr
 linya|lin
 шоссе|ш
 shosse|sh
+шоссейная
+shosseynaya
 тупик|туп
 tupik|tup
 улица|ул
