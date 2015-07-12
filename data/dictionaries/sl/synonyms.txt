@@ -1,0 +1,13 @@
+spodnja|sp
+spodnje|sp
+spodnji|sp
+srednja|sr
+srednje|sr
+srednji|sr
+velika|v
+velike|v
+veliki|v
+veliko|v
+zgornja|zg
+zgornje|zg
+zgornji|zg

@@ -1,0 +1,4 @@
+cesta|c
+pot
+trg
+ulica|ul
