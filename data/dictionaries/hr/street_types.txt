@@ -1,0 +1,8 @@
+avenija|av
+cesta|c
+klanac
+prilaz
+put
+šetalište|setaliste
+trg
+ulica|ul
