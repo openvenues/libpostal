@@ -1,0 +1,16 @@
+armádneho generála|arm gen|armadneho generala
+doktora|dr
+generála|gen|generala
+inžiniera|ing|inziniera
+kapitána|kpt|kapitana
+kráľa|krala|kral'a
+majora|mjr
+profesora|prof
+plukovníka|plk|plukovnika
+podplukovníka|pplk|podplukovnika
+poručíka|por|porucika
+podporučíka|ppor|podporucika
+svätá|sv|svata
+sväty|sv|svaty
+svätého|sv|svateho
+svätej|sv|svatej
