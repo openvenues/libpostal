@@ -90,20 +90,6 @@ def read_osm_json(filename):
         yield key, json.loads(attrs)
 
 
-def fetch_osm(temp_dir, url=DEFAULT_PLANET_URL):
-    with cd(temp_dir):
-        print 'Downloading OSM'
-        subprocess.check_call('wget', url)
-
-        input_filename = url.rsplit('/', 1)
-
-        return input_filename
-
-
-def convert_osm(input_filename, osm_dir):
-    subprocess.check_call([os.path.join(this_dir, 'fetch_osm_address_data.sh'), osm_dir])
-
-
 class AddressFormatter(object):
     ''' Approximate Python port of lokku's Geo::Address::Formatter '''
     MINIMAL_COMPONENT_KEYS = ('road', 'postcode')
@@ -399,10 +385,6 @@ def build_venue_training_data(language_rtree, infile, out_dir):
 if __name__ == '__main__':
     # Handle argument parsing here
     parser = argparse.ArgumentParser()
-    parser.add_argument('--no-fetch',
-                        dest='fetch',
-                        action='store_false',
-                        default=True)
 
     parser.add_argument('-s', '--streets-file',
                         help='Path to planet-ways.osm')
@@ -430,33 +412,11 @@ if __name__ == '__main__':
                         required=True,
                         help='Language RTree directory')
 
-    parser.add_argument('-p', '--osm-file',
-                        help='Local OSM planet file (optional)')
-
-    parser.add_argument('--no-convert',
-                        dest='convert',
-                        action='store_false',
-                        default=True)
-
     parser.add_argument('-o', '--out-dir',
                         default=os.getcwd(),
                         help='Output directory')
 
     args = parser.parse_args()
-
-    if args.fetch:
-        fetch_osm(args.temp_dir, args.url)
-        input_filename = os.path.join(args.temp_dir,
-                                      args.url.rstrip('/', 1)[-1])
-    elif args.osm_file:
-        input_filename = args.osm_file
-    else:
-        input_filename = None
-
-    if args.convert:
-        if not input_filename:
-            raise argparse.ArgumentTypeError('--osm-file or --no-convert required')
-        convert_osm(input_filename)
 
     init_languages()
 
