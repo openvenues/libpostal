@@ -42,6 +42,8 @@ rm $PLANET_ADDRESSES_O5M
 PLANET_ADDRESSES="planet-addresses.osm"
 osmfilter $PLANET_ADDRESSES_LATLONS --keep="addr:street= and ( ( name= and amenity= ) or addr:housename= or addr:housenumber= )" -o=$PLANET_ADDRESSES
 rm $PLANET_ADDRESSES_LATLONS
+PLANET_BORDERS_OSM="planet-borders.osm"
+osmfilter $PLANET_O5M --keep="boundary=administrative" --drop-author --drop-version -o=$PLANET_BORDERS_OSM
 
 
 echo "Filtering for venue records: `date`"
