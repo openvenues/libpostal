@@ -56,14 +56,21 @@ class LanguagePolygonIndex(RTreePolygonIndex):
 
                 admin_level = properties['qs_level']
 
+                level_num = None
                 if admin_level == 'adm1':
                     name_key = 'qs_a1'
                     code_key = 'qs_a1_lc'
+                    level_num = 1
                 elif admin_level == 'adm1_region':
                     name_key = 'qs_a1r'
                     code_key = 'qs_a1r_lc'
-                elif admin_level != 'adm0':
+                    level_num = 1
+                elif admin_level == 'adm0':
+                    level_num = 0
+                else:
                     continue
+
+                assert level_num is not None
 
                 if admin_level != 'adm0':
                     admin1 = properties.get(name_key)
@@ -91,6 +98,7 @@ class LanguagePolygonIndex(RTreePolygonIndex):
 
                 properties['languages'] = [{'lang': lang, 'default': default}
                                            for lang, default in languages]
+                properties['admin_level'] = level_num
 
                 poly_type = rec['geometry']['type']
                 if poly_type == 'Polygon':
@@ -110,3 +118,11 @@ class LanguagePolygonIndex(RTreePolygonIndex):
 
                 i += 1
         return index
+
+    def admin_level(self, i):
+        props, p = self.polygons[i]
+        return props['admin_level']
+
+    def get_candidate_polygons(self, lat, lon):
+        candidates = OrderedDict.fromkeys(self.index.intersection((lon, lat, lon, lat))).keys()
+        return sorted(candidates, key=self.admin_level, reverse=True)
