@@ -68,6 +68,7 @@ osmconvert $PLANET_WAYS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_W
 PLANET_WAYS_LATLONS="planet-ways.osm"
 osmfilter $PLANET_WAYS_NODES_LATLON --keep="name= and ( highway=motorway or highway=motorway_link or highway=trunk or highway=trunk_link or highway=primary or highway=primary_link or highway=secondary or highway=secondary_link or highway=tertiary or highway=tertiary_link or highway=unclassified or highway=unclassified_link or highway=residential or highway=residential_link or highway=service or highway=service_link or highway=living_street or highway=pedestrian or highway=track or highway=road or ( highway=path and ( motorvehicle=yes or motorcar=yes ) ) )" -o=$PLANET_WAYS_LATLONS
 rm $PLANET_WAYS_NODES_LATLON
+rm $PLANET_WAYS_O5M
 
 echo "Completed : `date`"
 
