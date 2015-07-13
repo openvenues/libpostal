@@ -22,6 +22,7 @@ class LanguagePolygonIndex(RTreePolygonIndex):
         'qs_a1r_lc',
         'qs_level',
         'languages',
+        'admin_level'
     ])
 
     @classmethod
