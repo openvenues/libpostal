@@ -49,17 +49,17 @@
             "type": "cardinal"
         },
         {
-            "name": "peti",
+            "name": "pet",
             "value": 5,
             "type": "cardinal"
         },
         {
-            "name": "šesti",
+            "name": "šest",
             "value": 6,
             "type": "cardinal"
         },
         {
-            "name": "sesti",
+            "name": "sest",
             "value": 6,
             "type": "cardinal"
         },
@@ -74,126 +74,126 @@
             "type": "cardinal"
         },
         {
-            "name": "deveti",
+            "name": "devet",
             "value": 9,
             "type": "cardinal"
         },
         {
-            "name": "deseti",
+            "name": "deset",
             "value": 10,
             "type": "cardinal"
         },
         {
-            "name": "jedanaesti",
+            "name": "jedanaest",
             "value": 11,
             "type": "cardinal"
         },
         {
-            "name": "dvanaesti",
+            "name": "dvanaest",
             "value": 12,
             "type": "cardinal"
         },
         {
-            "name": "trinaesti",
+            "name": "trinaest",
             "value": 13,
             "type": "cardinal"
         },
         {
-            "name": "četrnaesti",
+            "name": "četrnaest",
             "value": 14,
             "type": "cardinal"
         },
         {
-            "name": "cetrnaesti",
+            "name": "cetrnaest",
             "value": 14,
             "type": "cardinal"
         },
         {
-            "name": "petnaesti",
+            "name": "petnaest",
             "value": 15,
             "type": "cardinal"
         },
         {
-            "name": "šesnaesti",
+            "name": "šesnaest",
             "value": 16,
             "type": "cardinal"
         },
         {
-            "name": "sesnaesti",
+            "name": "sesnaest",
             "value": 16,
             "type": "cardinal"
         },
         {
-            "name": "sedamnaesti",
+            "name": "sedamnaest",
             "value": 17,
             "type": "cardinal"
         },
         {
-            "name": "osamnaesti",
+            "name": "osamnaest",
             "value": 18,
             "type": "cardinal"
         },
         {
-            "name": "devetnaesti",
+            "name": "devetnaest",
             "value": 19,
             "type": "cardinal"
         },
         {
-            "name": "dvadeseti",
+            "name": "dvadeset",
             "value": 20,
             "type": "cardinal",
             "right": "add"
         },
         {
-            "name": "trideseti",
+            "name": "trideset",
             "value": 30,
             "type": "cardinal",
             "right": "add"
         },
         {
-            "name": "četrdeseti",
+            "name": "četrdeset",
             "value": 40,
             "type": "cardinal",
             "right": "add"
         },
         {
-            "name": "cetrdeseti",
+            "name": "cetrdeset",
             "value": 40,
             "type": "cardinal",
             "right": "add"
         },
         {
-            "name": "pedeseti",
+            "name": "pedeset",
             "value": 50,
             "type": "cardinal",
             "right": "add"
         },
         {
-            "name": "šezdeseti",
+            "name": "šezdeset",
             "value": 60,
             "type": "cardinal",
             "right": "add"
         },
         {
-            "name": "sezdeseti",
+            "name": "sezdeset",
             "value": 60,
             "type": "cardinal",
             "right": "add"
         },
         {
-            "name": "sedamdeseti",
+            "name": "sedamdeset",
             "value": 70,
             "type": "cardinal",
             "right": "add"
         },
         {
-            "name": "osamdeseti",
+            "name": "osamdeset",
             "value": 80,
             "type": "cardinal",
             "right": "add"
         },
         {
-            "name": "devedeseti",
+            "name": "devedeset",
             "value": 90,
             "type": "cardinal",
             "right": "add"

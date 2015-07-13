@@ -12,6 +12,11 @@
             "type": "cardinal"
         },
         {
+            "name": "ett",
+            "value": 1,
+            "type": "cardinal"
+        },
+        {
             "name": "två",
             "value": 2,
             "type": "cardinal"

@@ -403,6 +403,20 @@
             "right": "add"
         },
         {
+            "name": "mhíle",
+            "value": 1000,
+            "type": "cardinal",
+            "left": "multiply",
+            "right": "add"
+        },
+        {
+            "name": "mhile",
+            "value": 1000,
+            "type": "cardinal",
+            "left": "multiply",
+            "right": "add"
+        },
+        {
             "name": "milliún",
             "value": 1000000,
             "type": "cardinal",
