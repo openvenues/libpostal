@@ -404,10 +404,6 @@ if __name__ == '__main__':
                         default=tempfile.gettempdir(),
                         help='Temp directory to use')
 
-    parser.add_argument('-u', '--url',
-                        default=DEFAULT_PLANET_URL,
-                        help='URL of OSM planet dump to use (PBF preferably)')
-
     parser.add_argument('-r', '--rtree-dir',
                         required=True,
                         help='Language RTree directory')
