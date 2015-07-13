@@ -3,18 +3,18 @@ autovia|autov
 avinguda|av|avd|avda
 cami
 carrer|carr
-carrero|cro|carro|carr
+carreró|cró|carrero|cro|carro|carr
 carretera|ctra
-cinturo|cint
+cinturó|cint|cinturo
 drecera|drec
 eix
 eix diagonal
 entrada|entr
 gran via|gv|g v
-passadis|pdis
+passadís|pdís|passadis|pdis
 passatge|ptge
 passeig|pg
-placa|pl|pca
+plaça|pl|placa|pca|pça
 portal|ptal
 rambla|rbla
 ronda|rda

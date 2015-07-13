@@ -4,4 +4,4 @@ cantonada|cant
 districte|distr
 poligon|pol
 poligon industrial|pi|pol ind
-urbanitzacio|urb
+urbanització|urb|urbanitzacio

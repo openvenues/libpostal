@@ -1,5 +1,5 @@
 mestre
-mossen|mn
+mossèn|mn|mossen
 pintor
 poeta
 sant|st

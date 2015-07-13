@@ -7,7 +7,7 @@ municipal|mpal
 nacional|nac
 nombre|nre
 parada|par
-població|pobl
+població|pobl|poblacio
 principal|pral
 pujada|pda
 sagrada|sgda
