@@ -34,7 +34,7 @@ RELATION_OFFSET = 10 ** 15
 PLANET_ADDRESSES_INPUT_FILE = 'planet-addresses.osm'
 PLANET_ADDRESSES_OUTPUT_FILE = 'planet-addresses.tsv'
 
-PLANET_WAYS_INPUT_FILE = 'planet-ways-latlons.osm'
+PLANET_WAYS_INPUT_FILE = 'planet-ways.osm'
 PLANET_WAYS_OUTPUT_FILE = 'planet-ways.tsv'
 
 PLANET_VENUES_INPUT_FILE = 'planet-venues.osm'
