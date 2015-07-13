@@ -1,11 +1,11 @@
-import csv
 import os
+import sys
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.polygons.index import *
-from geodara.text.languages import *
+from geodata.i18n.languages import *
 
 country_language_dir = os.path.join(LANGUAGES_DIR, 'countries')
 regional_language_dir = os.path.join(LANGUAGES_DIR, 'regional')
