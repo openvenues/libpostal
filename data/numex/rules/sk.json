@@ -281,14 +281,14 @@
         },
         {
             "name": "tisíc",
-            "vaue": 1000,
+            "value": 1000,
             "type": "cardinal",
             "left": "multiply",
             "right": "add"
         },
         {
             "name": "tisic",
-            "vaue": 1000,
+            "value": 1000,
             "type": "cardinal",
             "left": "multiply",
             "right": "add"

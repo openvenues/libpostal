@@ -499,7 +499,7 @@
         {
             "name": "devetnaesti",
             "value": 19,
-            "type": "orrdinal"
+            "type": "ordinal"
         },
         {
             "name": "dvadeseti",
@@ -798,7 +798,7 @@
         {
             "name": "devetnaesta",
             "value": 19,
-            "type": "orrdinal"
+            "type": "ordinal"
         },
         {
             "name": "dvadeseta",
@@ -1014,7 +1014,7 @@
         {
             "name": "devetnaesto",
             "value": 19,
-            "type": "orrdinal"
+            "type": "ordinal"
         },
         {
             "name": "dvadeseto",
