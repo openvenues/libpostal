@@ -114,8 +114,8 @@ hebrew_word_single_quote = ({hebrew_letter_chars}+{single_quote})+;
 hebrew_word_double_quote = ({hebrew_letter_chars}+{double_quote})+{hebrew_letter_chars}*;
 
 // WB11 and WB12 (modified slightly)
-// N.B. this does not capture German-style ordinals such as 2. as that is too ambiguous and can be accounted for in parsing
-possible_numeric_chars = ({numeric_chars}|{letter}|{non_breaking_dash}|{mid_number_chars}|{mid_num_letter_chars}|{single_quote});
+possible_numeric_chars = ({numeric_chars}|{letter}|{non_breaking_dash}|{hyphen}|{mid_num_letter_chars}|{single_quote});
+number = ({non_breaking_dash}?(({numeric_chars}+({mid_number_chars}|{mid_num_letter_chars})*)*){numeric_chars}+);
 numeric = (({non_breaking_dash}?|((({numeric_chars}|{letter})+{possible_numeric_chars}*)*)){numeric_chars}+({possible_numeric_chars}*({numeric_chars}|{letter})+)*);
 
 // WB13
@@ -167,6 +167,7 @@ email = ([a-zA-Z0-9\._%+\-]+"@"([a-zA-Z0-9]+[\.])+[a-zA-Z0-9]{2,3});
 {hyphen_plus_abbreviation}      { return ABBREVIATION; }
 {abbreviation}                  { return ABBREVIATION; }
 
+{number}                        { return NUMERIC; }
 {numeric}                       { return NUMERIC; }
 {apos_word}                     { return WORD; }
 {hangul_syllable}               { return HANGUL_SYLLABLE; }
