@@ -40,8 +40,6 @@ PLANET_WAYS_OUTPUT_FILE = 'planet-ways.tsv'
 PLANET_VENUES_INPUT_FILE = 'planet-venues.osm'
 PLANET_VENUES_OUTPUT_FILE = 'planet-venues.tsv'
 
-DEFAULT_PLANET_URL = 'http://ftp5.gwdg.de/pub/misc/openstreetmap/planet.openstreetmap.org/pbf/planet-latest.osm.pbf'
-
 ALL_OSM_TAGS = set(['node', 'way', 'relation'])
 ONLY_WAYS = set(['way'])
 
@@ -240,6 +238,60 @@ def normalize_osm_name_tag(tag, script=False):
 WAYS_LANGUAGE_DATA_FILENAME = 'streets_by_language.tsv'
 
 
+latitude_dms_regex = re.compile(ur'^(-?[0-9]{1,2})[ ]*[ :°ºd][ ]*([0-5]?[0-9])?[ ]*[:\'\u2032m]?[ ]*([0-5]?[0-9](?:\.\d+)?)?[ ]*[:\?\"\u2033s]?[ ]*(N|n|S|s)?$', re.I | re.UNICODE)
+longitude_dms_regex = re.compile(ur'^(-?1[0-8][0-9]|0?[0-9]{1,2})[ ]*[ :°ºd][ ]*([0-5]?[0-9])?[ ]*[:\'\u2032m]?[ ]*([0-5]?[0-9](?:\.\d+)?)?[ ]*[:\?\"\u2033s]?[ ]*(E|e|W|w)?$', re.I | re.UNICODE)
+
+latitude_decimal_with_direction_regex = re.compile('^(-?[0-9][0-9](?:\.[0-9]+))[ ]*[ :°ºd]?[ ]*(N|n|S|s)$', re.I)
+longitude_decimal_with_direction_regex = re.compile('^(-?1[0-8][0-9]|0?[0-9][0-9](?:\.[0-9]+))[ ]*[ :°ºd]?[ ]*(E|e|W|w)$', re.I)
+
+
+def latlon_to_floats(latitude, longitude):
+    have_lat = False
+    have_lon = False
+
+    latitude = safe_decode(latitude).strip(u' ,;|')
+    longitude = safe_decode(longitude).strip(u' ,;|')
+
+    latitude = latitude.replace(u',', u'.')
+    longitude = longitude.replace(u',', u'.')
+
+    lat_dms = latitude_dms_regex.match(latitude)
+    lat_dir = latitude_decimal_with_direction_regex.match(latitude)
+
+    if lat_dms:
+        d, m, s, c = lat_dms.groups()
+        sign = direction_sign(c)
+        latitude = degrees_to_decimal(d or 0, m or 0, s or 0)
+        have_lat = True
+    elif lat_dir:
+        d, c = lat_dir.groups()
+        sign = direction_sign(c)
+        latitude = float(d) * sign
+        have_lat = True
+    else:
+        latitude = re.sub(beginning_re, u'', latitude)
+        latitude = re.sub(end_re, u'', latitude)
+
+    lon_dms = longitude_dms_regex.match(longitude)
+    lon_dir = longitude_decimal_with_direction_regex.match(longitude)
+
+    if lon_dms:
+        d, m, s, c = lon_dms.groups()
+        sign = direction_sign(c)
+        longitude = degrees_to_decimal(d or 0, m or 0, s or 0)
+        have_lon = True
+    elif lon_dir:
+        d, c = lon_dir.groups()
+        sign = direction_sign(c)
+        longitude = float(d) * sign
+        have_lon = True
+    else:
+        longitude = re.sub(beginning_re, u'', longitude)
+        longitude = re.sub(end_re, u'', longitude)
+
+    return float(latitude), float(longitude)
+
+
 def country_and_languages(language_rtree, latitude, longitude):
     props = language_rtree.point_in_poly(latitude, longitude)
     if not props or not props.get('languages'):
@@ -258,7 +310,12 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
     tag_first_component = tag_prefix.split(':')[0]
     tag_last_component = tag_prefix.split(':')[-1]
 
-    country, default_languages = country_and_languages(language_rtree, float(value['lat']), float(value['lon']))
+    try:
+        latitude, longitude = latlon_to_floats(value['lat'], value['lon'])
+    except Exception:
+        return None, None
+
+    country, default_languages = country_and_languages(language_rtree, latitude, longitude)
     if not (country and default_languages):
         return None, None
 
