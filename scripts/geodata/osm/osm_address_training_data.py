@@ -373,7 +373,12 @@ def build_address_format_training_data(language_rtree, infile, out_dir):
     formatted_tagged_writer = csv.writer(formatted_tagged_file, delimiter='\t')
 
     for key, value in parse_osm(infile):
-        country, default_languages = country_and_languages(language_rtree, float(value['lat']), float(value['lon']))
+        try:
+            latitude, longitude = latlon_to_floats(value['lat'], value['lon'])
+        except Exception:
+            continue
+
+        country, default_languages = country_and_languages(language_rtree, latitude, longitude)
         if not (country and default_languages):
             continue
 
