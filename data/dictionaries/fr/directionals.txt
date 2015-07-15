@@ -1,7 +1,9 @@
 est|e
+levant
 nord|n
 nord est|ne|n.e.|n.e|n e
 nord ouest|no|n.o.|n.o|n o
+orient
 ouest|o
 sud|s
 sud est|se|s.e.|s.e|s e

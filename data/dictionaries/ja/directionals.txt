@@ -7,10 +7,10 @@ higashi
 西
 nishi
 北 東
-hokutou
+hokutō|hokuto|hokutou
 北 西
 hokusei
 南 東
-nantou
+nantō|nanto|nantou
 南 西
 nansei

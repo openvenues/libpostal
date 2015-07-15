@@ -4,10 +4,11 @@ autoestrada|auto estrada|auto estr|autoestr
 avenida|av|ava|ave
 avenida marginal|ave marg|av marg|ava marg 
 azinhaga|az
-bairro|b|bo|br
+bairro|b|bº|bo|brº|bro
 beco|bc|bco
-calcada|cc
-caclcadinha|ccnh
+calçada|calcada|cc
+calçadinha|caclcadinha|ccnh
+câmara municipal|camara municipal|cm|c.m.|c. m.
 caminho|cam|camno
 direito|dto
 esquerdo|esq
@@ -18,15 +19,15 @@ estrada nacional|en|e n|estr n
 estrada regional|er|e r|estr r
 frei|fr
 frente|ft
-itinerario complementar|ic|i c
-itinerario principal|ip|i p
+itinerário complementar|itinerario complementar|ic|i c
+itinerário principal|itinerario principal|ip|i p
 largo|lg|l
 lugar|lg|lug
 parada|pda
 particular|part
 ponto|pto|pnto
-praca|pc|pr|pca
-praceta|pct|pcta
+praça|praca|pç|pc|pr|pça|pca
+praceta|pct|pctª|pcta
 projectada|proj
 prolongamento|prolng
 quinta|qu|qta

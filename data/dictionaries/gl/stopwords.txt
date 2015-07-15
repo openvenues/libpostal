@@ -1,4 +1,5 @@
 a
+á
 al
 al lado
 as
@@ -13,7 +14,7 @@ dela
 deles
 delas
 detras
-e
+é
 en
 encima
 enfronte
@@ -28,6 +29,7 @@ nela
 neles
 nelas
 o
+ó
 os
 para
 y

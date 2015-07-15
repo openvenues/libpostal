@@ -54,6 +54,7 @@ reverendo|rev
 reverendo madre|rm|r.m.|r.m|r m
 reverendo padre|rp|r.p.|r.p|r p
 san|s
+sant'
 santa|s
 santo|s
 santo padre|sp|s.p.|s.p|s p

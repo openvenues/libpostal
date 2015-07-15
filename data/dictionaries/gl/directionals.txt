@@ -1,4 +1,8 @@
 leste|este|e
 norte|n
+nordeste|ne
+noroeste|no
 oeste|o
 sur|s
+sueste|se
+suroeste|so

@@ -24,7 +24,7 @@ gallerie|gall.e|galle
 genna|g.na|gna
 genne|g.ne|gne
 largo|l.go|lgo
-localita|loc|loc.ta|locta
+località|localita|loc|loc.ta|locta
 piazza|p.za|p.zza|pza|pzza
 piazzale|p.le|ple
 piazzetta|p.ta|pta
@@ -50,6 +50,6 @@ via|v
 via comunale|vc|v.c.|v.c|v c
 via provincale|vp|v.p.|v.p|v p|v provinciale
 via statale|vs|v.s.|v.s|v s
-viale|v.le|vle
+viale|v.le|vle|vl
 vicolo|v.lo|vlo
 vico

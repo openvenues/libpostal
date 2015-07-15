@@ -154,4 +154,4 @@ tintoria
 torre
 trattoria
 ufficio
-universita|univ|uni|univers
+università|universita|univ|uni|univers

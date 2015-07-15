@@ -1,7 +1,7 @@
 association
 association sans but lucratif|asbl|a.s.b.l.|a.s.b.l|a s b l
 enterprise individuelle|ei|e.i.|e.i|e i
-enterprise unipersonnelle a responsabilite limitee|eurl|e.u.r.l.|e.u.r.l|e u r l
+enterprise unipersonnelle a responsabilité limitée|enterprise unipersonnelle a responsabilite limitee|eurl|e.u.r.l.|e.u.r.l|e u r l
 fondation
 fondation privee
 fondation d'utilite publique
@@ -12,29 +12,29 @@ groupe|gpe
 groupement|gpt
 groups|gps
 groupes|gpes
-groupement d'interet economique|groupement dinteret economique|gie|g.i.e.|g.i.e|g i e
+groupement d'intérêt économique|groupement dintérêt économique|groupement d'interet economique|groupement dinteret economique|gie|g.i.e.|g.i.e|g i e
 raison individuelle|ri|r.i.|r.i|r i
-societe anonyme|sa|s.a.|s.a|s a
-societe anonyme libanaise|sal|s.a.l.|s.a.l|s a l
-societe anonyme omanaise generale|saog|s.a.o.g.|s.a.o.g|s a o g
-societe anonyme omanaise close|saoc|s.a.o.c.|s.a.o.c|s a o c
-societe cooperative|scoop|s coop
-societe cooperative a responsabilite limitee|scrl|s.c.r.l.|s.c.r.l|s c r l
-societe cooperative a responsabilite illimitee|scri|s.c.r.i.|s.c.r.i|s c r i
-societe cooperative de production|scop|s.c.o.p.|s.c.o.p|s c o p
-societe d'economie mixte|societe d' economie mixte|societe deconomie mixte|sem|s.e.m.|s.e.m|s e m
-societe d'investissement a capital fixe|societe dinvestissement a capital fixe|societe d' investissement a capital fixe|sicaf|s.i.c.a.f.|s.i.c.a.f|s i c a f
-societe d'investissement a capital variable|societe dinvestissement a capital variable|societe d' investissement a capital variable|sicav|s.i.c.a.v.|s.i.c.a.v|s i c a v
-societe interne
-societe momentanee
-societe a responsabilite limitee|sarl|s.a.r.l.|s.a.r.l|s a r l
-societe en participation|sep|s.e.p.|s.e.p|s e p
-societe de fait
-societe en nom colletif|snc|s.n.c.|s.n.c|s n c
-societe en commandite|sc|s.c.|s.c|s c
-societe en commandite simple|scs|s.c.s.|s.c.s|s c s
-societe en commandite par actions|sca|s.c.a.|s.c.a|s c a
-societe par actions simplifiee|sas|s.a.s.|s.a.s|s a s
-societe privee a responsabilite limitee|sprl|s.p.r.l.|s.p.r.l|s p r l
-societe privee a responsabilite limitee unipersonnelle|sprlu|s.p.r.l.u.|s.p.r.l.u|s p r l u
-societe simple|ss|s.s.|s.s|s s
+sociéte anonyme|societe anonyme|sa|s.a.|s.a|s a
+sociéte anonyme libanaise|societe anonyme libanaise|sal|s.a.l.|s.a.l|s a l
+sociéte anonyme omanaise generale|societe anonyme omanaise generale|saog|s.a.o.g.|s.a.o.g|s a o g
+sociéte anonyme omanaise close|societe anonyme omanaise close|saoc|s.a.o.c.|s.a.o.c|s a o c
+sociéte coopérative|societe cooperative|scoop|s coop
+sociéte coopérative a responsabilité limitée|societe cooperative a responsabilite limitee|scrl|s.c.r.l.|s.c.r.l|s c r l
+sociéte coopérative a responsabilité illimitée|societe cooperative a responsabilite illimitee|scri|s.c.r.i.|s.c.r.i|s c r i
+sociéte coopérative de production|societe cooperative de production|scop|s.c.o.p.|s.c.o.p|s c o p
+sociéte d'économie mixte|societe d'economie mixte|sociéte d' économie mixte|societe d' economie mixte|sociéte déconomie mixte|societe deconomie mixte|sem|s.e.m.|s.e.m|s e m
+sociéte d'investissement a capital fixé|societe d'investissement a capital fixe|sociéte dinvestissement a capital fixé|societe dinvestissement a capital fixe|sociéte d' investissement a capital fixé|societe d' investissement a capital fixe|sicaf|s.i.c.a.f.|s.i.c.a.f|s i c a f
+sociéte d'investissement a capital variable|societe d'investissement a capital variable|sociéte dinvestissement a capital variable|societe dinvestissement a capital variable|sociéte d' investissement a capital variable|societe d' investissement a capital variable|sicav|s.i.c.a.v.|s.i.c.a.v|s i c a v
+sociéte interne|societe interne
+sociéte momentanée|societe momentanee
+sociéte a responsabilité limitée|societe a responsabilite limitee|sarl|s.a.r.l.|s.a.r.l|s a r l
+sociéte en participation|societe en participation|sep|s.e.p.|s.e.p|s e p
+sociéte de fait|societe de fait
+sociéte en nom collectif|societe en nom collectif|snc|s.n.c.|s.n.c|s n c
+sociéte en commandite|societe en commandite|sc|s.c.|s.c|s c
+sociéte en commandite simple|societe en commandite simple|scs|s.c.s.|s.c.s|s c s
+sociéte en commandite par actions|societe en commandite par actions|sca|s.c.a.|s.c.a|s c a
+sociéte par actions simplifiée|societe par actions simplifiee|sas|s.a.s.|s.a.s|s a s
+sociéte privée a responsabilité limitée|societe privee a responsabilite limitee|sprl|s.p.r.l.|s.p.r.l|s p r l
+sociéte privée a responsabilité limitée unipersonnelle|societe privee a responsabilite limitee unipersonnelle|sprlu|s.p.r.l.u.|s.p.r.l.u|s p r l u
+sociéte simple|societe simple|ss|s.s.|s.s|s s

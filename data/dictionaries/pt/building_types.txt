@@ -1,4 +1,4 @@
 bloco|bl
-edificio|edf|edif
+edifício|edificio|edf|edif
 torre|tr
 vivenda|vv

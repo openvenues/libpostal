@@ -2,4 +2,4 @@ fleuve|fl
 grand|gd|gr|g
 mont|mt
 petite|p|pt
-riviere|riv
+rivière|riviere|riv

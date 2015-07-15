@@ -1,46 +1,101 @@
+academy
 aged care center|aged care centre|aged care|centre for aged care|center for aged care|center for the aged|centre for the aged|aged care facilities
+amphitheatre|amphitheater
+animal hospital|animal hosp
 air force base|afb
 air national guard base|angb
 airport|aerodome|aprt
 apartments|apts|appartments
+aquarium
 arms
+art gallery|arts gallery
+arts center
+arts centre
+auditorium
 bakery
 bank
+bar
 barn
+barbecue|barbeque|bar be que|bar be cue|bbq
 barracks|barrack|baracks
-bhouse|bh|board house|boarding house
+bazaar
+boarding house|bhouse|bh|board house
+bistro
 book store|bookstore
-cafe
-caravan park|carvn|cvp|caravn park|c park|c van|car park|caravan resort|van park|caratel|caravan par|carav park|carvn park|cara park|cvan park
+brewery
+cafe|café
+campus
+caravan park|carvn|cvp|caravn park|c van park|cvan park|caravan resort|van park|caratel|caravan par|carav park|carvn park|cara park
+car park|carpark
+car wash|carwash
+casino
 castle|cst
+cemetery
+center for the arts|centre for the arts
+child care|childcare
+chiropractic
 church|chr
+cinema
+cinemas
+cineplex
 circus|crcs|crc
+city hall
 clinic
 club|clb
+clubhouse|club house
+coffee
 college
 committee
 community center|communitycentre|communitycenter|community centre
 community|cmnty|cmty
-convalescent|convalescent center|convalescent centre|convalescent home|convalescent hospital
+concert hall
+conservatory
+convalescent center|convalescent|convalescent centre|convalescent home|convalescent hospital
+correctional facility
 cottage|cott|cottg
 cottages|cotts|cottgs
 country club|country clb|cty clb
+courthouse|court house
+creamery
+credit union
+culture center|culture centre
+cultural center|cultural centre
 dam|dm
+dance studio
+day care
+deli|delicatessen
 dental
 dentist
+dentistry
 detention|det|detn
+diner
+distillery
 distributor|dstr|distrib|dstrb
 district|dist
+doctors
 elementary school|primary school|public school|ps|p s
+embassy
 ex services complex
+factory|fty
+family practice
+farmer's market|farmers market
 farm|frm
 farmhouse
+fire department|fd|f d
+fire station
 forge
+fountain
+gaol
 garage
 gallery
+gas station
 geriatric unit
+graveyard|grave yard
+grill
+gym|gymnasium
 hall
-home|h|hm|hme|hom
+headquarters
+home|hm|hme|hom
 homes
 home for the aged
 hospital|hos|hosp|hospice|hosptl|hsp|hsptl
@@ -49,68 +104,137 @@ hostel|host|hostl|hstel|hstl
 hotel|hot|hotl|htel
 hostel
 house
+ice cream|icecream
 industrial|ind
 inn
 institute|inst
-jail|gaol|prison|penitentiary
+jail
+jcc|jewish community center|jewish community centre
 jetty|jtty|jty
+kennel
 kindergarten
+kitchen
 league
 library
 lodge|ldge|lodg
+lounge
 mall|mll
 maison
 manor|mnr
 market|mkt
+marketplace|mktpl|mktplc
 mansion
 mansions
 masonic home
 masonic homes
 medical|med
+memorial
 military|mil
 mission|msn
 monastery|monastry
 motel|mot|motl|mtel
+municipal building|municipal bldg
 museum|mus
+music hall
+night club|nightclub
 nursing
 nursing center|nursing centre
 nursing home|nh|nhome|nrs|nrsg|nsg|nurs|nrsng hm|n h|nrs home|n home|nursing hom|nursing ho|nursing h
 high school|hs|secondary school
 international|intl
 junior high school|jr high school|jhs
+laboratory
+lab
+labs
+market|mkt
 middle school|ms
+movie theater
+movie theatre
 national park|np|natl park|natl pk
 national recreation area|nra|natl rec area
 national wildlife refuge area|nwra|natl wildlife refuge
 nurses home|nurses home|nurse home
+nursery
 office|ofc
 offices|ofcs
 office tower|ofc twr|office twr|ofc tower
 office towers|ofc twrs|office twrs|ofc towers
+opera house
+parish
+parking lot
+pavilion
 pharmacy
-pre school|preschool
+pediatric
+penitentiary
+performing arts centre
+performing arts center
+pharmacy
+playhouse
+police department|pd|p d
+police station
+polytechnic
+post office
 precinct
+pre school|preschool|pre-school
+pre-kindergarten|prekindergarten|pre-k|prek|pre k
+primary school
+primary care
+prison
 pub
+public pool
 public school|ps
+recycling
 retreat|rtt
 rotary|rty
 resevoir|res
 restaurant
 retirement home|retirement village|ret village|masonic retirement village|retirement|ret vill|retirement home|retirement v|rh|r h
-shopping center|shoppingcenter|shoppingcentre|shopping|shoppingtown|shopping centre|shopping 
+roadhouse
+roller rink
+saloon
+salon
 sanctuary|sanct
+sauna
+secondary school
+shelter
+sheriff's department|sherrifs department|sheriff's dept|sherrifs dept
+sherrif's office|sherffis office|sheriff's ofc|sheriffs ofc
+shopping center|shoppingcenter|shoppingcentre|shopping|shoppingtown|shopping centre|shopping 
 shop|shp
 sisters
+social club
 spa
-square
+stables
+stadium
 station|sta|stn
+steakhouse
 store|stor
+studio
+studios
+swimming pool
+tavern
+tea
 terminal|term
+theater
+theatre
+theatres
+theaters
 tower|twr
-town
+town hall
+townhouse|town house
 townhouses|town houses
 university|uni|univ|univers|unvrsty
 units
+urgent care
+vet
+veterinary
+veterinarian
+veterinarians
+vets
 villa|vll
 villas|vlls
 village|vil|vge|vill|villag|villg|vlg|vlge|vllg|villages|vlgs
+wine bar|winebar
+winery
+yoga
+youth center|youth centre

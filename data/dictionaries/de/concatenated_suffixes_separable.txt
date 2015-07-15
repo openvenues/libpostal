@@ -1,5 +1,5 @@
 allee
-brucke|br.
+brücke|br.|brucke|bruecke
 burgermeister|bgm.
 damm
 gasse
@@ -10,6 +10,6 @@ quelle|qu|q.
 rundwanderweg|rww.
 siedlung|sdlg.
 stiege|stg.
-strasse|str.
+straße|str.|strasse
 weg|w.
 wiese|ws.

@@ -2,14 +2,14 @@ academia|acad
 associacao|ass
 arquitecto|arq|arqo|arq.o
 bairro|b|bo|br|b.o
-bombeiros voluntarios|bv|b v
+bombeiros voluntários|bombeiros voluntarios|bv|b v
 camara municipal|cm|c.m.|c.m|c m
 casal|csl
 castelo|cast
 centro comercial|cc|c.c.|c.c|c c
-ciclo do ensino basico|ceb|c.e.b.|c.e.b|c e b
-escola basica|eb|e.b.|e.b|e b
-estacao de tratamento de aguas residuais|etar|e.t.a.r.|e.t.a.r|e t a r
+ciclo do ensino básico|ciclo do ensino basico|ceb|c.e.b.|c.e.b|c e b
+escola básica|escola basica|eb|e.b.|e.b|e b
+estação de tratamento de águas residuais|estacao de tratamento de aguas residuais|etar|e.t.a.r.|e.t.a.r|e t a r
 fonte|f.te|fte
 galeria|gal
 guarda nacional republicana|gnr|g.n.r.|g.n.r|g n r
@@ -17,9 +17,9 @@ instituto|inst
 loja
 lojas
 parque|pq|prq|parq
-pavilhao|pav
-policia de seguranca publica|psp|p.s.p.|p.s.p|p s p
-policia judiciaria|pj|p.j.|p.j|p j
+pavilhão|pailhao|pav
+polícia de segurança pública|policia de seguranca publica|psp|p.s.p.|p.s.p|p s p
+polícia judiciária|policia judiciaria|pj|p.j.|p.j|p j
 ponte|pont|pte|p.te|pnte
 porto|pto|p.to
 rodoviaria|rdv

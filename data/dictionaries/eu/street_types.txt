@@ -4,8 +4,9 @@ bide
 bidea
 bidexka
 enparantza
-etorbidea|etorb
 errepidea|err
+etorbidea|etorb
+hiribidea
 ibilbidea
 kalea|k
 kale

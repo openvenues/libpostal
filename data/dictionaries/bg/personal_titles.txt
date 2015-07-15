@@ -1,7 +1,14 @@
 доктор|д-р|др
+doktor|d-r|dr
 доцент|доц
+dotsent|dots
 генерал|ген
+general|gen
 капитан|кап
+kapitan|kap
 митрополит|мит
+mitropolit|mit
 професор|проф
+profesor|prof
 свети|св
+sveti|sv

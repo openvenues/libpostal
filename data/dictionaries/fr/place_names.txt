@@ -1,22 +1,23 @@
 castel|cst
 centre commercial|cc|c.c.|c.c|c c
-chateau
+château|chateau
 cottage|cott
 cottages|cott|cotts
-eglise|egl
+église|eglise|egl|égl
 gare
 mont|mt|mnt|montagne
-musee|mus
+musée|musee|mus
 palais|pal
 parc|prc
 parc industriel
+péristyle|peristyle|psty
 pont
 ponts
 station|sta
 zone artisanale|za|z.a.|z.a|z a
 zone d'activites|zone dactivites|za|z.a.|z.a|z a
 zone artisanale commerciale|zac|z.a.c.|z.a.c|z a c
-zone d'amenagement concerte|zone damenagement concerte|zac|z.a.c.|z.a.c|z a c
-zone d'amenagement differe|zone damenagement differe|zad|z.a.d.|z.a.d|z a d
+zone d'aménagement concerté|zone d'amenagement concerte|zone daménagement concerté|zone damenagement concerte|zac|z.a.c.|z.a.c|z a c
+zone d'aménagement différé|zone d'amenagement differe|zone daménagement différé|zone damenagement differe|zad|z.a.d.|z.a.d|z a d
 zone industrielle|zi|z.i.|z.i|z i
-zone a urbaniser en priorite|zup|z.u.p.|z.u.p|z u p
+zone a urbaniser en priorité|zone a urbaniser en priorite|zup|z.u.p.|z.u.p|z u p

@@ -1,9 +1,10 @@
+á
 a
 ao
 aos
-as
-ate
-atras
+ás|as
+até|ate
+atrás|atras
 com
 da
 das
@@ -22,7 +23,7 @@ na
 nas
 no
 nos
-nossa|n|na|n.a
+nossa|nª|na|n.ª|n.a
 nosso|n
 o
 os

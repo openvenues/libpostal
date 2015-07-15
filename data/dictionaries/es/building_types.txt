@@ -1,4 +1,4 @@
-caserio|csrio
+caserío|caserio|csrio
 casa
 chalet|chlet
 complejo|compj|compl|complj

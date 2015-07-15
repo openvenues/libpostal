@@ -6,34 +6,34 @@ corral|crral
 corralillo|crrlo
 cortijo|crtjo
 cuadra|cuadr
-demarcacion|demar
+demarcación|demarcacion|demar
 departamento|dept|depto
-derecha|dcha
+derecha|dcha|d
 diseminado|disem
 entrada|entd|entr
 escalera|esca
 escaleras|escas
 escalinata|escal|escalin
 estancias|estanc|est
-extension|ext
+extensión|extension|ext
 extramuros|extrm
 extrarradio|extrr
 interior|int
 izquierda|izq|izda|izqa|izqda
-jardin|jdin|jard
+jardín|jardin|jdin|jard
 jardines|jdins|jards
 mansion|mans
 mansiones|manses
-nucleo|ncleo
-numero|#|num|no|numr|numro|nro|n.ro
-officina|off
+núcleo|nucleo|ncleo
+número|numero|#|num|núm|no|númr|numr|númro|numro|núm.ro|num.ro|nro|n.ro
+oficina|of
 partida|ptda
 poblado|pbdo|pob|pobl
-poligono|polig
-poligono residencial|polig res|pgres|pg res|pr|p.r.|p.r|p r
-poligono industrial|polig ind|pgind|pg ind|pi|p.i.|p.i|p i
+polígono|poligono|políg|polig
+polígono residencial|poligono residencial|políg res|polig res|pgres|pg res|pr|p.r.|p.r|p r
+polígono industrial|poligono industrial|políg ind|polig ind|pgind|pg ind|pi|p.i.|p.i|p i
 portal|prtal|prtl
-portcio|prtco
+pórtico|portcio|prtco
 portillo|ptilo|ptllo
 puerta|pta
 quebrada|qbda

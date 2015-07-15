@@ -1,4 +1,4 @@
-batiment|bat
+bâtiment|batiment|bat
 immeuble|imm
 maison
 villa|vla

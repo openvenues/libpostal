@@ -1,6 +1,10 @@
+doctor|dr
+doctora|dra
+don|d
+dona|dª|dna|d.a|d.ª
 mestre
 mossèn|mn|mossen
 pintor
 poeta
 sant|st
-santa|sta
+santa|stª|st.ª|sta|st.a

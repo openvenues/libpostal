@@ -1,20 +1,31 @@
 북
 book
+bug
 남
 nahm
+nam
 동
 dohng
+dong
 서
 seo
 북 동
 book dohng
 bookdohng
+bug dong
+bugdong
 북 서
 book seo
 bookseo
+bug seo
+bugseo
 남 동
 nahm dohng
 nahndohng
+nam dong
+namdong
 남 서
 nahm seo
 nahmseo
+nam seo
+namseo

@@ -2,6 +2,7 @@ barri|b
 bloc|bl
 cantonada|cant
 districte|distr
-poligon|pol
-poligon industrial|pi|pol ind
+polígon|pol|poligon
+polígon industrial|pi|poligon industrial|pol ind
+punt quilomètric|punt quilometric|pk
 urbanització|urb|urbanitzacio

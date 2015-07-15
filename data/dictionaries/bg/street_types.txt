@@ -1,3 +1,6 @@
 Булевард|бул
+bulevard|bul
 площад|пл
+ploshtad|pl
 улица|ул
+ulitsa|ul

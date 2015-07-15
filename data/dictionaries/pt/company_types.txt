@@ -1,23 +1,23 @@
 agrupamento complementar de empresas|ace|a.c.e.|a.c.e|a c e
-associacao desportiva|ad|a.d.|a.d|a d
-associacao em sentido estrito
+associação desportiva|associacao desportiva|ad|a.d.|a.d|a d
+associação em sentido estrito|associacao em sentido estrito
 clube desportivo|cd|c.d.|c.d|c d
 companhia|cia|comp
 companhia anonima|ca|c.a.|c.a|c a
 companhia de responsabilidao limitada|crl|c.r.l.|c.r.l|c r l
 empresa individual|ei|e i|e.i.|e.i|firma individual
 empresa individual de responsabilidade limitada|eireli|e.i.r.e.l.i.|e.i.r.e.l.i|e i r e l i
-empresa publica|ep|e.p.|e.p|e p
-fundacao privada
-fundacao publica
+empresa pública|empresa publica|ep|e.p.|e.p|e p
+fundação privada|fundacao privada
+fundação pública|fundacao publica
 futebol clube|fc|f.c.|f.c|f c
 limitada|ltda|lt.da|lda|l.da|
-organizacao nao governamental|ong|o.n.g.|o.n.g|o n g
-organizacao da sociedade civil de interesse publico|oscip|o.s.c.i.p.|o.s.c.i.p|o s c i p
+organização nao governamental|organizacao nao governamental|ong|o.n.g.|o.n.g|o n g
+organização da sociedade civil de interesse público|organizacao da sociedade civil de interesse publico|oscip|o.s.c.i.p.|o.s.c.i.p|o s c i p
 sociedade aberta|sa|s.a.|s.a|s a
-sociedade anonima|sa|s.a.|s.a|s a|s / a
-sociedade anonima de responsabilidade limitada|sarl|s.a.r.l.|s.a.r.l|s a r l
-sociedade anonima desportiva|sad|s.a.d.|s.a.d|s a d
+sociedade anónima|sociedade anonima|sa|s.a.|s.a|s a|s / a
+sociedade anónima de responsabilidade limitada|sociedade anonima de responsabilidade limitada|sarl|s.a.r.l.|s.a.r.l|s a r l
+sociedade anónima desportiva|sociedade anonima desportiva|sad|s.a.d.|s.a.d|s a d
 sociedade em nome coletivo|snc|s.n.c.|s.n.c|s n c
 sociedade em conta de participacao|scp|s.c.p.|s.c.p|s c p
 sociedade em comandita simples|scs|s.c.s.|s.c.s|s c s

@@ -7,11 +7,11 @@ baronesa
 bispo|bpo|b.po
 brigadeiro|brg|brig
 cacique|cac
-capitao|cap|capt
-capitao de corveta|cap corv
-capitao de fragata|cap frag
-capitao de mar e guerra|cap m g|cap mg
-capitao tenente|cap ten|cap tte
+capitão|capitao|cap|capt
+capitão de corveta|capitao de corveta|cap corv
+capitão de fragata|capitao de fragata|cap frag
+capitão de mar e guerra|capitao de mar e guerra|cap m g|cap mg
+capitão tenente|capitao tenente|cap ten|cap tte
 cardeal|card
 comandante|cmdt
 comendador|comend|cmdr|comor|com.or
@@ -26,60 +26,60 @@ desembargadora|desa|des.a
 diacono|diac
 diacona|diaca
 dom|d
-dona|da|d.a
+dona|dª|da|d.ª|d.a
 doutor|dr
-doutora|dra|d.ra
+doutora|drª|dra|d.rª|d.ra
 duque|dq
 duquesa|dqsa|dqa
 embaixador|emb
 eminencia|ema|em.a
 eminentissimo|emmo|em.mo
-enfermeira|enfa|enf.a
-enfermeiro|enfo|enf
-engenheira|enga
-engenheiro|eng|engo
-excelencia|exa|ex.a
-excelentissima|exma|ex.ma
-excelentissimo|exmo|ex.mo
+enfermeira|enfª|enfa|enf.ª|enf.a
+enfermeiro|enfº|enfo|enf|enf.º|enf.o
+engenheira|engª|enga|eng.ª|eng.a
+engenheiro|engº|eng.º|eng|engo|eng.o
+excelencia|exª|exa|ex.ª|ex.a
+excelentissima|exmª|exma|ex.mª|ex.ma
+excelentissimo|exmº|exmo|ex.mº|ex.mo
 frei|fr
 general|gen|gal|g.al
 governador|gov|govdor|govd.or|gov.dor
-ilustrissima|ilma|il.ma
-ilustrissimo|ilmo|il.mo
+ilustrissima|ilmª|ilma|il.mª|il.ma
+ilustrissimo|ilmº|ilmo|il.mº|il.mo
 infante|inf
-irma|ima|im
-irmao|imo|im
+irmã|irma|imª|ima|im
+irmão|irmao|imº|imo|im
 juiz|jz
 maestra|mta|mtra|mstra
 maestro|mto|mtro|mstro
 major|maj
 major brigadeiro|maj brig
 marechal|mar|mal|m.al
-marques|mq|marq
+marquês|marques|mq|marq
 marquesa|mqsa|marqa
-madre|me
+madre|me|m.e
 medico|med
-mestra|ma|m.a
+mestra|mª|ma|m.ª|m.a
 mestre|me|m.e
-ministerio|min
+ministério|ministerio|min
 monsenhor|mons
-nossa senhora|nsa|ns a|n sa|n.s.a.|n.s.a
+nossa senhora|nsa|nª sª|nªsª|n srª|nª srª|n sa|n sra|n.s.a.|n.s.a
 nosso senhor|ns|n.s.|n.s|n s
 padre|pe|p.e
 pastor|pr
 prefeito|pref
 presidente|presid|pres
-professor|prof
-professora|profa
+professor|prof|profº
+professora|profa|prof.a|profª|prof.ª
 professoras|profas
 professores|profs
 reverenda|revda|rev.da
 reverendo|revdo|rev.do
 reverendissima|revma|rev.ma
 reverendissimo|revmo|rev.mo
-santa|sta
-santo|st|sto
-sao|s
+santa|stª|sta|st.ª|st.a
+santo|stº|sto|st|st.º|st.o
+são|sao|s
 sargento|sarg|sgto|sargto
 sargento ajudante|sarg ajte|sarg aj.te
 secretaria|sec.a|secr.a|secra
@@ -87,7 +87,7 @@ secretario|sec|secr
 senador|sen
 senhor|s|sr|s.r
 senhores|srs|s.rs
-senhora|sa|sra|sr.a|s.ra
+senhora|sª|sa|srª|sra|sr.ª|sr.a|s.ra|s.rª
 senhoras|sras|s.ras
 senhorita|srta|sr.ta
 senhoritas|srtas|sr.tas

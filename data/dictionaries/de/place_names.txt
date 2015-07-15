@@ -15,21 +15,25 @@ fachhochschule|fh
 freiwillige feuerwehr|ff
 gasthaus|gh
 gasthof|ghf
+grundschule
 hafen
 haus
 handelsakademie|hak
 handelsschule|hasch
 hauptbahnhof|hbf
-hohle
-hohere technische lehranstalt|htl|h t l
+höhle|hohle
+höhere technische lehranstalt|htl|hohere technische lehranstalt|hoehere technische lehranstalt|h t l
 hotel
-hutte|htt
+hütte|hutte|huette|htt
+imbiss
 jagdhaus
 jagdhutte|jhtt
 jungenherberge|jh|j h
 kaffee
+kantine
 kapelle|kap|kpl
-klaranlage|ka
+kirche
+kläranlage|ka|klaranlage|klaeranlage
 konzentrationslager|kz|kl
 magistratsabteilung|ma
 markt|mkt
@@ -42,12 +46,13 @@ sportplatz|sport platz|sport pl|sportpl
 resevoir|res
 restaurant
 ruine
+ruinen
 schloss|schl
 steinbruch|stb
-technische universitat|tu|t u
-truppenubungsplatz|tupl
-universitat|uni
-universitatsbibliothek|ub|u b
+technische universität|tu|t u|technische universitat|technische universitaet
+truppenubüngsplatz|tüpl|tupl|truppenubungsplatz|truppenubuengsplatz
+universität|uni|universitat|universitaet
+universitätsbibliothek|ub|u b|universitatsbibliothek|universitaetsbibliothek
 volksschule|vs
 wald
 wasserfall|wsf|wssf

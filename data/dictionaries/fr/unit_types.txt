@@ -1,3 +1,4 @@
 appartement|app
-departement|dept
-residence|res
+département|departement|dept
+résidence|residence|rés|res
+résidences|residences

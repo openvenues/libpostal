@@ -5,12 +5,12 @@ cooperativo|coop.vo|coopvo
 gruppo di interesse economico|gruppo d'interesse economico|gruppo d' interesse economico|gie|g.i.e.|g.i.e|g i e
 ditta individuale
 football club|fc|f.c.|f.c|f c
-societa|sta
-societa cooperativa a responabilita limitata|scrl|s.c.r.l.|s.c.r.l|s c r l
-societa semplice|ss|s.s.|s.s|s s
-societa in accomandita semplice|sas|s.a.s.|s.a.s|s a s
-societa in nome collettivo|snc|s.n.c.|s.n.c|s n c
-societa per azioni|spa|s.p.a.|s.p.a|s p a
-societa in accomandita per azioni|sapa|s.a.p.a.|s.a.p.a|s a p a
-societa a garanzia limitata|sagl|s.a.g.l.|s.a.g.l|s a g l
-societa a responsabilita limitata|srl|s.r.l.|s.r.l|s r l
+società|societa|sta
+società cooperativa a responsabilità limitata|societa cooperativa a responsabilita limitata|scrl|s.c.r.l.|s.c.r.l|s c r l
+società semplice|societa semplice|ss|s.s.|s.s|s s
+società in accomandità semplice|societa in accomandita semplice|sas|s.a.s.|s.a.s|s a s
+società in nome collettivo|societa in nome collettivo|snc|s.n.c.|s.n.c|s n c
+società per azioni|societa per azioni|spa|s.p.a.|s.p.a|s p a
+società in accomandità per azioni|societa in accomandita per azioni|sapa|s.a.p.a.|s.a.p.a|s a p a
+società a garanzia limitata|societa a garanzia limitata|sagl|s.a.g.l.|s.a.g.l|s a g l
+società a responsabilità limitata|societa a responsabilita limitata|srl|s.r.l.|s.r.l|s r l

@@ -5,14 +5,14 @@ administrador|admor|adm.or|admr
 administradora|admora|adm.ora|admra
 agrimensor|agrim
 alcalde|alcde
-alferez|alf|alfz
+alférez|alf|alferez|alfz
 almirante|alm|almte|alte
 alteza
 arquitecto|arq
 arquitecta|arqa
 arquitectors|arqs|arqos
 arzobispo|arz
-baron|bar
+barón|barbaron
 baronesa
 brigadier|brg|bg|brig
 brigadier general|brg general|brg gral|brg genl|brg gnal|brg gn|bg general|bg gral|bg genl|bg gnal|bg gn|brig general|brig gral|brig genl|brig gnal|brig gn
@@ -21,9 +21,9 @@ cabo primero|cp|c.p.|c.p|c p
 cabo segundo|cs|c.s.|c.s|c s
 cabo tercero|ct|c.t.|c.t|c t
 cacique|cque
-capitan|cap|capt|ctn|cptn
+capitán|cap|capt|ctn|cptn|capitan
 cardenal|card|cnal
-clerigo|clg
+clérigo|clg|clerigo
 comandante|cmdt|cmte|comte|cte
 comisario|cmro
 conde|cde
@@ -40,7 +40,7 @@ directora|dira|dir.a
 doctor|dr
 doctora|dra
 don|d
-dona|da|dna|d.a
+doña|dona|dª|dna|d.a|d.ª
 dragoneante|dg
 duque|dq
 duquesa|dqsa|dqa
@@ -82,19 +82,19 @@ mayor de brigada|may brig|my brig
 mayor general|mg|m.g.|m.g|m g|my gen|my gral
 ministerio|min
 ministro|mtro
-monsenor|mons|msnr
+monseñor|monsenor|mons|msnr
 notario|not
-nuestra senora|ns|n s|ntra sra
+nuestra señora|nuestra senora|ns|n s|ntra sra
 obispo|ob
 padre|pe|p.e|pdre|p.dre
 piloto fluvial|plto flvial
 presidenta|pdta|presa|pres.a|presida|presid.a|pta
 presidente|pdte|pres|presid|pte
-principe
+príncipe|principe
 principal|pral
 procurador|proc
 profesor|prof|profr
-profesora|profa|profra
+profesora|prof.ª|prof.a|profª|profa|profrª|profra
 reina|ra
 reverendo|rvdo|rdo|rvd|rev
 reverendo|rvdo|rdo|rvd|rev
@@ -103,9 +103,9 @@ reverendisimo|rmo|rvdmo
 rey
 reyes
 san|s
-santa|sta
+santa|stª|st.ª|sta|st.a
 sant|st
-santo|sto
+santo|stº|sto|st.o|st.º
 sargento|sarg|sgto|sargto
 sargento ayudante|sarg ay|sgto ay|sargto ay
 sargento mayor|sm|s.m.|s.m|s m|sarg my|sgto my|sargto my
@@ -115,10 +115,10 @@ sargento viceprimero|sargento vice primero|sv|s.v.|s.v|s v
 secretario|secreto|secto|sect.o
 secretaria|secreta|secta|sect.a
 senador|sen
-senor|sr
-senora|sra|s.ra
-senores|srs|sres|s.res
-senorita|srta|s.rta
+señor|sr|senor
+señora||sª|s.ª|srª|sra|sr.ª|s.ra|senora
+señores|srs|sres|s.res|senores
+señorita|srta|s.rta|senorita
 serenisima|serma|ser.ma
 serenisimo|sermo|ser.mo
 soldado|sold

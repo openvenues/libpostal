@@ -1,5 +1,10 @@
 Блок|Бл
+blok|bl
 село|с
+selo|s
 град|гр
+grad|gr
 квартал|кв
+kvartal|kv
 жилищен комплекс|ж.к.|жк|ж к
+zhilishten kompleks|z.k.|zk|z k

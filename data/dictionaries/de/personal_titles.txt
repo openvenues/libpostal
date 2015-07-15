@@ -1,5 +1,5 @@
 doktor|dr
-burgermeister|bgm
+bürgermeister|buergermeister|burgermeister|bgm
 direktor|dir
 frau|fr
 fraulein|fri

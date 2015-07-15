@@ -10,17 +10,17 @@ escadas|esc
 escadinhas|escnh
 esquerdo|esq
 frente|ft
-habitacao|hab
+habitação|habitacao|hab
 jardim|jrd|jard|jd
 loja|lj
 lojas|ljs
 lote|lt
-numero|no|n|nro|nmro|nro
+número|numero|no|nº|n|nrº|nro|nmro|nmrº
 loteamento|loteam
-patio|pto
+pátio|patio|pto
 quarta
 quarto|qt|qto
-res do chao|resdochao|r / c|rc|r c
+rés-do-chão|rés do chão|res-do-chao|res do chao|résdochão|resdochao|r / c|rc|r c
 residencia|res
 sala
 sobre loja|slj

@@ -5,27 +5,29 @@ arboleda|arb
 arrabal|arral
 arroyo|arry
 asuntos exteriores|aa ee
-atletico|atlo
+atlético|atlo|atletico
 ayuntamiento
 balneario|balnr
+baños|banos
 banco
 bar
 biblioteca|bibl
 borda
-cafeteria
+café|cafe
+cafetería|cafeteria
 campo|cpo
 cantera|cantr
 cantina|canti
-caserio|csrio
+caserío|caserio|csrío|csrio
 casa
 casas
 castillo|cast
 cementerio
-charcuteria
+charcutería|charcuteria
 clinica
 club|clb
 colegio
-comisario de policia
+comisario de policía|comisario de policia
 correos
 corretaje
 convento|cnvto
@@ -37,16 +39,16 @@ diseminado|disem
 embajada
 escuela
 escuelas
-estacion|estcn
+estación|estacion|estcn
 estacionamiento|estto
-fabrica|fca|fbrca
+fábrica|fabrica|fca|fbrca
 farmacia
 ferrocarril|fc|f.c.|f.c|f c
 ferrocarriles|ff cc|ffcc
 granja|granj
 hacienda|hda
-heladeria
-hipodromo|hipod
+heladería|heladeria
+hipódromo|hipodromo|hipod
 horno
 hospital|hosp
 hostal
@@ -54,19 +56,19 @@ hotel
 iglesia|igl|igla
 iglesias|iglas
 instituto|inst
-libreria
+librería|libreria
 mercado|merc
 mirador|mrdor
 monasterio|mtrio
 muebles
 muelle|meull
-pabellon
+pabellón|pabellon
 palacio|palac
 palacios|palacs
-panaderia
+panadería|panaderia
 parque|pque|parq|pq|pqe
-pasteleria
-pescaderia
+pastelería|pasteleria
+pescadería|pescaderia
 pilar
 playa
 puebla|pbla
@@ -82,6 +84,7 @@ sociedad|soc
 taberna
 taller
 talleres
+templo
 tienda
 torre
 transito|trans

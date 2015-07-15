@@ -1,7 +1,8 @@
-bairro|b|bo|br
+bairro|b|bº|bo|brº|bro
 distrito|dtto|dist
 divisao|div
 quadra|q|qd
 secao|sec
 superquadra|super quadra|sq|s.q.|s.q|s q
+urbanização|urbanizacao|urb
 zona|zn

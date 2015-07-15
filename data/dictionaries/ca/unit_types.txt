@@ -5,8 +5,9 @@ apartat|apt
 dreta|dta
 entrada|entr
 escala|esc
+esquerra
 habitació|hab|habitacio
 número|núm|numero|num|n|#
-parcella|parcel·la|parc
+parcel·la|parc|parcella
 porta|pta
 sobreàtic|s / àt|s / at|sobreatic|s àt|s at

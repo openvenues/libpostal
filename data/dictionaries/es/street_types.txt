@@ -1,11 +1,11 @@
 acceso|acces
 alameda|alam
-alqueria|alque
+alquería|alqueria|alque
 andador|andad
 angosta|angta
 apeadero|apdro
 autopista|auto
-autovia|autov
+autovía|autovia|autov
 avenida|av|avd|avda
 bajada|bjada
 banda|bda
@@ -19,7 +19,7 @@ brazal|brzal
 bulevar|bulev|blev|blv|bv
 calle|c|cl|cll|c /|ca
 calleja|cllja
-callejon|callej|cjon|cllon|cj
+callejón|callejon|callej|cjon|cllon|cj
 calle privada|calle priv|c priv|cl priv|cll priv|c / priv
 callejuela|cjla
 callizo|cllzo
@@ -31,16 +31,16 @@ camino viejo|cv|c.v.|c.v|c v
 caminito|cmt
 camping|campg
 cantera|cantr
-canton|cant
+cantón|canton|cant
 carrera|cra|carra|carr
 carretera|ctra|cr
-carreterin|ctrin
+carreterín|carreterin|ctrin
 carretil|crtil
 carril|crril
 cerrada|cda|cer
-cinturon|cint
+cinturón|cinturon|cint
 circuito|cto
-circunvalacion|ccvcn
+circunvalación|circunvalacion|ccvcn
 corredor|crrdo
 costanilla|cstan
 costera
@@ -51,14 +51,14 @@ espalda|eslda
 estrada|estda
 explanada|expla
 extramuros|extrm
-galeria|gale
+galería|galeria|gale
 glorieta|gta|g
-gran via|gv|g v
+gran vía|gran via|gv|g v
 hacienda|hda
 ladera|ldera
 laderas|lderas
 llanura|llnra
-malecon|malec
+malecón|malecon|malec
 mirador|mrdor
 muelle|meull
 pantano|pant
@@ -68,7 +68,7 @@ particular|parti
 partida|ptda
 pasadizo|pzo
 pasaje|psaje|psj
-paseo|po|pso|pseo|ps|p|p.o
+paseo|pº|po|pso|pseo|ps|p|p.o|p.º
 paseo maritimo|psmar|ps mar
 paso
 pasillo|psllo
@@ -79,28 +79,27 @@ plazoleta|pzta|plzta|plta
 plazuela|plzla
 poblado|pbdo
 prazuela|przla
-prolongacion|prol
+prolongación|prolongacion|prol
 puebla|pbla
 pueblo|pblo
 puente|pnte
 rambla|rbla
-rampla|rampa
+rampla|rampa|rpla
 retorno|ret|rt
 ribera|bra
-rincon|rcon|rin|rncn|rncon
+rincón|rincon|rcon|rin|rncn|rncon
 rinconada|rcda|rcnda
 ronda|rda
 rotonda|rtda
-rua
 ruta|rta
 sector|sect
 sendera|sedra
 sendero|send|sedro
 subida|sbida
-transito|trans
+tránsito|transito|trans
 transversal|trval|trvsal
 trasera|tras
-travesia|trva|trvsia
+travesía|travesia|trva|trvsía|trvsia
 vereda|vreda|ver
 viaducto|vcto|vd
 via|v

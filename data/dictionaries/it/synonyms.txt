@@ -31,7 +31,7 @@ cozzi|c.zi|czi
 cozzo|c.zo|czo
 commerciale|comm.le|commle
 comunale|com.le|comle
-comunita|com.ta|comta
+comunità|comunita|com.ta|comta
 decembre|dec
 dicembre|dic
 distretto|distr.o|distro

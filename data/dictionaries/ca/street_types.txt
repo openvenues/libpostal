@@ -1,7 +1,7 @@
 autopista|auto|autop
 autovia|autov
 avinguda|av|avd|avda
-cami
+camí|cami
 carrer|carr
 carreró|cró|carrero|cro|carro|carr
 carretera|ctra
@@ -14,7 +14,7 @@ gran via|gv|g v
 passadís|pdís|passadis|pdis
 passatge|ptge
 passeig|pg
-plaça|pl|placa|pca|pça
+plaça|pl|placa|pça|pca|plç|plc
 portal|ptal
 rambla|rbla
 ronda|rda

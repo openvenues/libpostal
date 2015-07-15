@@ -8,33 +8,35 @@ comte|cte
 comtesse|ctesse
 docteur|dr
 docteurs|drs
-frere
-general|gal
+frère|frere
+général|general|gal
 lieutenant colonel|lt col
 lieutenant|lt
 madame|mme
 mesdames|mmes
 mademoiselle|mlle|mle
 mademoiselles|mlles|mles
-maitre|me
-maitres
+maître|maitre|me
+maîtres|maitres
+maîtresse|maitresse
 major|maj
-marechal|mal
+maréchal|marechal|mal
 marquis|mis
 marquise|mise
-messiuers|mm|mrs
+messieurs|mm|mrs
 monseigneur|mgr
 monsieur|m|mr
-pere
+père|pere
 professeur|prof|pr
 professeurs|profs|prs
-reverende pere|rp|r.p.|r.p|r p
-reverende pere jesuit|rpj|r.p.j.|r.p.j|r p j
+révérend
+révérend père|rp|r.p.|r.p|r p
+révérend père jésuit|reverende pere jesuit|rpj|r.p.j.|r.p.j|r p j
 sa saintete|ss|s.s.|s.s|s s
 saint|st
 sainte|ste
 son altesse|sa|s.a.|s.a|s a
-son altesse imperiale|sai|s.a.i.|s.a.i|s a i
+son altesse impériale|son altesse imperiale|sai|s.a.i.|s.a.i|s a i
 son altesse royale|sar|s.a.r.|s.a.r|s a r
 son eminence|s em
 son excellence|se|s.e.|s.e|s e|s exc

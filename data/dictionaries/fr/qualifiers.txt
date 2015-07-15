@@ -1,6 +1,6 @@
 canton|con
 faubourg|faub|fg
-ile
-iles
+île|ile
+îles|iles
 quartier|qua|qrt|qu
 zone|z

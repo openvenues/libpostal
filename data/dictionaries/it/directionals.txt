@@ -1,3 +1,4 @@
+levante
 nord|n
 nord est|nordest|ne|n e
 nord ovest|nordovest|no|n o

@@ -1,2 +1,2 @@
-barcelona|barna
-madd|madrid
+barcelona|barna|bar.na
+madrid|madd

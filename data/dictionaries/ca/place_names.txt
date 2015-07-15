@@ -1,7 +1,7 @@
 biblioteca|bibl
 cementiri|cem
-collegi|col·legi|col·l|coll
-collegi públic|cp|col·legi públic|collegi public|col·legi public
+col·legi|col·l|collegi|coll
+col·legi públic|cp|collegi públic|collegi public|col·legi public
 comissaria|com
 convent|convt
 correus|corr
