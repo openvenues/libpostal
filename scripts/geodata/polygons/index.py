@@ -128,11 +128,17 @@ class RTreePolygonIndex(object):
     def get_candidate_polygons(self, lat, lon):
         return OrderedDict.fromkeys(self.index.intersection((lon, lat, lon, lat))).keys()
 
-    def point_in_poly(self, lat, lon):
+    def point_in_poly(self, lat, lon, return_all=False):
         polys = self.get_candidate_polygons(lat, lon)
         pt = Point(lon, lat)
+        containing = None
+        if return_all:
+            containing = []
         for i in polys:
             props, poly = self.polygons[i]
-            if poly.contains(pt):
+            contains = poly.contains(pt)
+            if contains and not return_all:
                 return props
-        return None
+            elif contains:
+                containing.append(props)
+        return containing
