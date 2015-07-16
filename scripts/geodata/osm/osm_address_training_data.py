@@ -12,7 +12,7 @@ import yaml
 
 from collections import defaultdict
 from lxml import etree
-from itertools import ifilter
+from itertools import ifilter, chain
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
@@ -30,7 +30,7 @@ this_dir = os.path.realpath(os.path.dirname(__file__))
 FORMATTER_GIT_REPO = 'https://github.com/OpenCageData/address-formatting'
 
 WAY_OFFSET = 10 ** 15
-RELATION_OFFSET = 10 ** 15
+RELATION_OFFSET = 2 * 10 ** 15
 
 PLANET_ADDRESSES_INPUT_FILE = 'planet-addresses.osm'
 PLANET_ADDRESSES_OUTPUT_FILE = 'planet-addresses.tsv'
@@ -42,7 +42,7 @@ PLANET_VENUES_INPUT_FILE = 'planet-venues.osm'
 PLANET_VENUES_OUTPUT_FILE = 'planet-venues.tsv'
 
 ALL_OSM_TAGS = set(['node', 'way', 'relation'])
-ONLY_WAYS = set(['way'])
+WAYS_RELATIONS = set(['way', 'relation'])
 
 
 # Currently, all our data sets are converted to nodes with osmconvert before parsing
@@ -55,7 +55,7 @@ def parse_osm(filename, allowed_types=ALL_OSM_TAGS):
     for (_, elem) in parser:
         elem_id = long(elem.attrib.pop('id', 0))
         item_type = elem.tag
-        if elem_id >= WAY_OFFSET:
+        if elem_id >= WAY_OFFSET and elem_id < RELATION_OFFSET:
             elem_id -= WAY_OFFSET
             item_type = 'way'
         elif elem_id >= RELATION_OFFSET:
@@ -296,12 +296,13 @@ def latlon_to_floats(latitude, longitude):
 
 
 def country_and_languages(language_rtree, latitude, longitude):
-    props = language_rtree.point_in_poly(latitude, longitude)
-    if not props or not props.get('languages'):
+    props = language_rtree.point_in_poly(latitude, longitude, return_all=True)
+    if not props:
         return None, None
 
-    country = props['qs_iso_cc'].lower()
-    default_languages = props['languages']
+    country = props[0]['qs_iso_cc'].lower()
+    languages = list(chain(*(p['languages'] for p in props)))
+    default_languages = sorted(languages, key=operator.itemgetter('default'), reverse=True)
     return country, default_languages
 
 
@@ -343,7 +344,7 @@ def build_ways_training_data(language_rtree, infile, out_dir):
     f = open(os.path.join(out_dir, WAYS_LANGUAGE_DATA_FILENAME), 'w')
     writer = csv.writer(f, delimiter='\t')
 
-    for key, value in parse_osm(infile, allowed_types=ONLY_WAYS):
+    for key, value in parse_osm(infile, allowed_types=WAYS_RELATIONS):
         country, name_language = get_language_names(language_rtree, key, value, tag_prefix='name')
         if not name_language:
             continue
