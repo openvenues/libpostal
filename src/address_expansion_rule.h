@@ -4,7 +4,7 @@
 
 typedef struct address_expansion_rule {
     char *phrase;
-    uint64_t dictionary;
+    dictionary_type_t dictionary;
     int32_t canonical_index;
 } address_expansion_rule_t;
 
