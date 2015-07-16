@@ -384,6 +384,9 @@ char_array *char_array_from_string(char *str) {
 }
 
 inline char *char_array_get_string(char_array *array) {
+    if (array->n == 0 || array->a[array->n - 1] != '\0') {
+        char_array_terminate(array);
+    }
     return array->a;
 }
 
@@ -458,14 +461,25 @@ void char_array_add_len(char_array *array, char *str, size_t len) {
 }
 
 
-static void vchar_array_append_joined(char_array *array, char *separator, int count, va_list args) {
+static void vchar_array_append_joined(char_array *array, char *separator, bool strip_separator, int count, va_list args) {
     if (count <= 0) {
         return;        
     }
 
+    size_t separator_len = strlen(separator);
+
     for (size_t i = 0; i < count - 1; i++) {
         char *arg = va_arg(args, char *);
-        char_array_append(array, arg);
+        size_t len = strlen(arg);
+        if (len == 0) continue;
+
+        if (strip_separator && 
+            ((separator_len == 1 && arg[len-1] == separator[0]) || 
+            (len > separator_len && strncmp(arg + len - separator_len, separator, separator_len) == 0))) {
+            len -= separator_len;
+        }
+
+        char_array_append_len(array, arg, len);
         char_array_append(array, separator);
     }
 
@@ -475,18 +489,18 @@ static void vchar_array_append_joined(char_array *array, char *separator, int co
 
 }
 
-void char_array_add_joined(char_array *array, char *separator, int count, ...) {
+void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...) {
     va_list args;
     va_start(args, count);
-    vchar_array_append_joined(array, separator, count, args);
+    vchar_array_append_joined(array, separator, strip_separator, count, args);
     va_end(args);
 }
 
-void char_array_cat_joined(char_array *array, char *separator, int count, ...) {
+void char_array_cat_joined(char_array *array, char *separator, bool strip_separator, int count, ...) {
     char_array_strip_nul_byte(array);
     va_list args;
     va_start(args, count);
-    vchar_array_append_joined(array, separator, count, args);
+    vchar_array_append_joined(array, separator, strip_separator, count, args);
     va_end(args);
 }
 

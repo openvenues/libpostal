@@ -104,8 +104,8 @@ void char_array_cat_unterminated_len(char_array *array, char *str, size_t len);
 // Cat with printf args
 void char_array_cat_printf(char_array *array, char *format, ...);
 
-void char_array_add_joined(char_array *array, char *separator, int count, ...);
-void char_array_cat_joined(char_array *array, char *separator, int count, ...);
+void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...);
+void char_array_cat_joined(char_array *array, char *separator, bool strip_separator, int count, ...);
 
 
 /*
