@@ -43,6 +43,8 @@ def init_languages(languages_dir=LANGUAGES_DIR):
     path = os.path.join(languages_dir, 'countries', 'road_sign_languages.tsv')
     for country, lang, default in csv.reader(open(path), delimiter='\t'):
         road_language_overrides[country][lang] = int(default)
+        if lang not in languages:
+            languages.add(lang)
 
     path = os.path.join(languages_dir, 'regional', 'adm1.tsv')
 
@@ -50,5 +52,7 @@ def init_languages(languages_dir=LANGUAGES_DIR):
         regional_languages[(country, key, value)] = (lang, int(default))
         if lang not in country_languages[country]:
             country_languages[country][lang] = 0
+        if lang not in languages:
+            languages.add(lang)
 
     initialized = True
