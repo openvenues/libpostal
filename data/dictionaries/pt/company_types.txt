@@ -11,7 +11,7 @@ empresa pública|empresa publica|ep|e.p.|e.p|e p
 fundação privada|fundacao privada
 fundação pública|fundacao publica
 futebol clube|fc|f.c.|f.c|f c
-limitada|ltda|lt.da|lda|l.da|
+limitada|ltda|lt.da|lda|l.da
 organização nao governamental|organizacao nao governamental|ong|o.n.g.|o.n.g|o n g
 organização da sociedade civil de interesse público|organizacao da sociedade civil de interesse publico|oscip|o.s.c.i.p.|o.s.c.i.p|o s c i p
 sociedade aberta|sa|s.a.|s.a|s a

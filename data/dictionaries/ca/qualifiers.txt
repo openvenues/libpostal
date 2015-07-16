@@ -4,5 +4,5 @@ cantonada|cant
 districte|distr
 polígon|pol|poligon
 polígon industrial|pi|poligon industrial|pol ind
-punt quilomètric|punt quilometric|pk
+punt quilomètric|punt quilometric|pk|p.k.|p k
 urbanització|urb|urbanitzacio

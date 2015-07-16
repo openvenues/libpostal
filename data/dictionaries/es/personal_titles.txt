@@ -116,7 +116,7 @@ secretario|secreto|secto|sect.o
 secretaria|secreta|secta|sect.a
 senador|sen
 señor|sr|senor
-señora||sª|s.ª|srª|sra|sr.ª|s.ra|senora
+señora|sª|s.ª|srª|sra|sr.ª|s.ra|senora
 señores|srs|sres|s.res|senores
 señorita|srta|s.rta|senorita
 serenisima|serma|ser.ma

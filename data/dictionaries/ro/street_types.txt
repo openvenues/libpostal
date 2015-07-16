@@ -10,4 +10,4 @@ strada|str
 stradela|str-la|sdla
 șoseaua|soseaua|sos|șos
 splaiul|sp|spl
-vârful|varful|virful||vîrful|varf|vf|
+vârful|varful|virful|vîrful|varf|vf

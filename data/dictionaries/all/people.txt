@@ -1,5 +1,5 @@
 franklin d roosevelt|franklin delano roosevelt|fdr|f d r
 john f kennedy|john fitzgerald kennedy|jfk|j f k
 lyndon b johnson|lyndon baines johnson|lbj|l b j
-martin luther king|martin luther king , jr|martin luther king jr||mlk|m l k
+martin luther king|martin luther king , jr|martin luther king jr|mlk|m l k
 robert f kennedy|robert francis kennedy|rfk|r f k
