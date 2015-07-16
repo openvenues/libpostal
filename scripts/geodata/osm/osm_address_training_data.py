@@ -2,6 +2,7 @@
 import argparse
 import csv
 import os
+import operator
 import pystache
 import re
 import subprocess
