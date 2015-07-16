@@ -123,6 +123,9 @@ nl	osm	relation:47381	fy	0
 es	qs_a1r	Cataluña/Catalunya	ca	1
 es	gn_id	3336901	ca	1
 es	osm	relation:349053	ca	1
+es	qs_a1r	Cataluña/Catalunya	oc	0
+es	gn_id	3336901	oc	0
+es	osm	relation:349053	oc	0
 es	qs_a1r	Comunidad Foral de Navarra	eu	0
 es	gn_id	3115609	eu	0
 es	osm	relation:349027	eu	0
@@ -141,6 +144,33 @@ es	osm	relation:349042	eu	1
 fr	qs_a1r	Bretagne	br	0
 fr	gn_id	3030293	br	0
 fr	osm	relation:102740	br	0
+fr	qs_a1r	Aquitaine	oc	0
+fr	gn_id	3037350	oc	0
+fr	osm	relation:8637	oc	0
+fr	qs_a1r	Auvergne	oc	0
+fr	gn_id	3035876	oc	0
+fr	osm	relation:8638	oc	0
+fr	qs_a1r	Centre	oc	0
+fr	gn_id	3027939	oc	0
+fr	osm	relation:8640	oc	0
+fr	qs_a1r	Languedoc-Roussillon	oc	0
+fr	gn_id	3007670	oc	0
+fr	osm	relation:8643	oc	0
+fr	qs_a1r	Limousin	oc	0
+fr	gn_id	2998268	oc	0
+fr	osm	relation:8644	oc	0
+fr	qs_a1r	Midi-Pyrenees	oc	0
+fr	gn_id	2993955	oc	0
+fr	osm	relation:8647	oc	0
+fr	qs_a1r	Poitou-Charentes	oc	0
+fr	gn_id	2986492	oc	0
+fr	osm	relation:8652	oc	0
+fr	qs_a1r	Provence-Alpes-Cote d'Azur	oc	0
+fr	gn_id	2985244	oc	0
+fr	osm	relation:8654	oc	0
+fr	qs_a1r	Rhone-Alpes	oc	0
+fr	gn_id	2983751	oc	0
+fr	osm	relation:8655	oc	0
 gb	qs_a1r	Northern Ireland	ga	0
 gb	gn_id	2641364	ga	0
 gb	osm	relation:156393	ga	0
@@ -150,6 +180,12 @@ gb	osm	relation:58446	gd	0
 gb	qs_a1r	Wales	cy	0
 gb	gn_id	2634895	cy	0
 gb	osm	relation:58437	cy	0
+it	qs_a1r	PIEMONTE	oc	0
+it	gn_id	3170831	oc	0
+it	osm	relation:44874	oc	0
+it	qs_a1r	LIGURIA	oc	0
+it	gn_id	3174725	oc	0
+it	osm	relation:301482	oc	0
 it	qs_a1r	VALLE D'AOSTA/VALLÉE D'AOSTE	fr	1
 it	gn_id	3164857	fr	1
 it	osm	relation:45155	fr	1
