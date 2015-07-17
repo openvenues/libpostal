@@ -1,19 +1,19 @@
-be	name	Liège	fr	1
+be	qs_a1	Liège	fr	1
 be	gn_id	2792411	fr	1
 be	osm	relation:1407192	de	1
-be	name	Liège	de	1
+be	qs_a1	Liège	de	1
 be	gn_id	2792411	de	1
 be	osm	relation:1407192	de	1
-be	name	Brabant wallon	fr	1
+be	qs_a1	Brabant wallon	fr	1
 be	gn_id	3333251	fr	1
 be	osm	relation:78748	fr	1
-be	name	Namur	fr	1
+be	qs_a1	Namur	fr	1
 be	gn_id	2790469	fr	1
 be	osm	relation:1311816	fr	1
-be	name	Limburg	nl	1
+be	qs_a1	Limburg	nl	1
 be	gn_id	2792347	nl	1
 be	osm	relation:53142	nl	1
-be	name	West-Vlanderen	nl	1
+be	qs_a1	West-Vlanderen	nl	1
 be	gn_id	2783770	nl	1
 be	osm	relation:416271	nl	1
 be	qs_a1r	Brussels Hoofstedelijk Gewest#R\xe9gion de Bruxelles-Capitale	fr	1
@@ -22,22 +22,22 @@ be	osm	relation:54094	fr	1
 be	qs_a1r	Brussels Hoofstedelijk Gewest#R\xe9gion de Bruxelles-Capitale	nl	1
 be	gn_id	2800867	nl	1
 be	osm	relation:54094	nl	1
-be	name	Antwerpen	nl	1
+be	qs_a1	Antwerpen	nl	1
 be	gn_id	2803136	nl	1
 be	osm	relation:53114	nl	1
-be	name	Hainaut	fr	1
+be	qs_a1	Hainaut	fr	1
 be	gn_id	2796741	fr	1
 be	osm	relation:157559	fr	1
-be	name	Luxembourg	fr	1
+be	qs_a1	Luxembourg	fr	1
 be	gn_id	2791993	fr	1
 be	osm	relation:1412581	fr	1
-be	name	Vlaams Brabant	nl	1
+be	qs_a1	Vlaams Brabant	nl	1
 be	gn_id	3333250	nl	1
 be	osm	relation:58004	nl	1
-be	name	Oost-Vlanderen	nl	1
+be	qs_a1	Oost-Vlanderen	nl	1
 be	gn_id	2789733	nl	1
 be	osm	relation:53135	nl	1
-ca	name	Quebec	fr	1
+ca	qs_a1	Quebec	fr	1
 ca	gn_id	6115047	fr	1
 ca	osm	relation:61549	fr	1
 ch	qs_a1_lc	1	de	1
@@ -144,19 +144,19 @@ ch	qs_a1_lc	26	fr	1
 ch	name	Jura	fr	1
 ch	gn_id	2660207	fr	1
 ch	osm	relation:1697347	fr	1
-cy	name	Αμμόχωστος	tr	1
+cy	qs_a1	Αμμόχωστος	tr	1
 cy	gn_id	146615	tr	1
 cy	osm	relation:3264447	tr	1
-cy	name	Κερύνεια	tr	1
+cy	qs_a1	Κερύνεια	tr	1
 cy	gn_id	146411	tr	1
 cy	osm	relation:3264494	tr	1
-in	name	Goa	pt	0
+in	qs_a1	Goa	pt	0
 in	gn_id	1271157	pt	0
 in	osm	relation:1997192	pt	0
-in	name	Puducherry	fr	0
+in	qs_a1	Puducherry	fr	0
 in	gn_id	1259424	fr	0
 in	osm	relation:107001	fr	0
-nl	name	Friesland	fy	0
+nl	qs_a1	Friesland	fy	0
 nl	gn_id	2755812	fy	0
 nl	osm	relation:47381	fy	0
 es	qs_a1r	Cataluña/Catalunya	ca	1
