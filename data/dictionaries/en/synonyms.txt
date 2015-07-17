@@ -1,10 +1,15 @@
 brothers|bros
 cape|cpe|cp
 county|co
+downs|downes|dwns
 flats|flts
 forest|frst|fst
+great|grt|gt
+greater|grtr|gtr
+heights|hghts|hgts|hieghts|ht|hts|hgths
 lake|lk
 lakes|lks
+little|ltl|lttl|littl|litl
 lock|lck
 locks|lcks
 mount|mt|mnt

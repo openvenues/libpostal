@@ -83,6 +83,7 @@ farm|frm
 farmhouse
 fire department|fd|f d
 fire station
+flats|flts
 forge
 fountain
 gaol
@@ -104,8 +105,9 @@ hostel|host|hostl|hstel|hstl
 hotel|hot|hotl|htel
 hostel
 house
+houses|hses
 ice cream|icecream
-industrial|ind
+industrial park|ind park
 inn
 institute|inst
 jail

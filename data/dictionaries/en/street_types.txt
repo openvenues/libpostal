@@ -345,6 +345,7 @@ union|un
 upper|up|upr|uppr
 vale|va|vl
 valley|vlly|vy
+vennel
 via
 viaduct|via|viad|vdct|viadct
 view|vw

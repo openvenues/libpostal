@@ -1,9 +1,4 @@
 block|blk|bl|blck
-downs|downes|dwns
-great|grt|gt
-greater|grtr|gtr
-heights|hghts|hgts|hieghts|ht|hts|hgths
-little|ltl|lttl|littl|litl
 quadrant|qd|quad
 section|sec|sect|sxn
 township|twp|tshp
