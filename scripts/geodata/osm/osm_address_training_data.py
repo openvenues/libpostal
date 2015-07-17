@@ -320,11 +320,11 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
     except Exception:
         return None, None
 
-    country, default_languages = country_and_languages(language_rtree, latitude, longitude)
+    country, candidate_languages = country_and_languages(language_rtree, latitude, longitude)
     if not (country and default_languages):
         return None, None
 
-    one_default = len(default_languages) == 1
+    num_defaults = sum((1 for l in candidate_languages if l.get('default')))
     name_language = defaultdict(list)
     has_alternate_names = any((k.startswith(tag_prefix + ':') and normalize_osm_name_tag(k, script=True)
                                in languages for k, v in value.iteritems()))
@@ -334,8 +334,8 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
             norm_sans_script = normalize_osm_name_tag(k, script=True)
             if norm in languages or norm_sans_script in languages:
                 name_language[norm].append(v)
-        elif not has_alternate_names and k.startswith(tag_first_component) and (has_colon or ':' not in k) and normalize_osm_name_tag(k, script=True) == tag_last_component:
-            name_language[default_languages[0]['lang']].append(v)
+        elif not has_alternate_names and num_defaults == 1 and k.startswith(tag_first_component) and (has_colon or ':' not in k) and normalize_osm_name_tag(k, script=True) == tag_last_component:
+            name_language[candidate_languages[0]['lang']].append(v)
 
     return country, name_language
 
