@@ -1,9 +1,6 @@
-be	qs_a1	Liège	fr	1
-be	gn_id	2792411	fr	1
-be	osm	relation:1407192	de	1
-be	qs_a1	Liège	de	1
-be	gn_id	2792411	de	1
-be	osm	relation:1407192	de	1
+be	qs_a1	Liège	fr,de	1
+be	gn_id	2792411	fr,de	1
+be	osm	relation:1407192	fr,de	1
 be	qs_a1	Brabant wallon	fr	1
 be	gn_id	3333251	fr	1
 be	osm	relation:78748	fr	1
@@ -16,12 +13,9 @@ be	osm	relation:53142	nl	1
 be	qs_a1	West-Vlanderen	nl	1
 be	gn_id	2783770	nl	1
 be	osm	relation:416271	nl	1
-be	qs_a1r	Brussels Hoofstedelijk Gewest#R\xe9gion de Bruxelles-Capitale	fr	1
-be	gn_id	2800867	fr	1
-be	osm	relation:54094	fr	1
-be	qs_a1r	Brussels Hoofstedelijk Gewest#R\xe9gion de Bruxelles-Capitale	nl	1
-be	gn_id	2800867	nl	1
-be	osm	relation:54094	nl	1
+be	qs_a1r	Brussels Hoofstedelijk Gewest#R\xe9gion de Bruxelles-Capitale	fr,nl	1
+be	gn_id	2800867	fr,nl	1
+be	osm	relation:54094	fr,nl	1
 be	qs_a1	Antwerpen	nl	1
 be	gn_id	2803136	nl	1
 be	osm	relation:53114	nl	1
