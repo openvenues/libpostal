@@ -1,3 +1,42 @@
+be	name	Liège	fr	1
+be	gn_id	2792411	fr	1
+be	osm	relation:1407192	de	1
+be	name	Liège	de	1
+be	gn_id	2792411	de	1
+be	osm	relation:1407192	de	1
+be	name	Brabant wallon	fr	1
+be	gn_id	3333251	fr	1
+be	osm	relation:78748	fr	1
+be	name	Namur	fr	1
+be	gn_id	2790469	fr	1
+be	osm	relation:1311816	fr	1
+be	name	Limburg	nl	1
+be	gn_id	2792347	nl	1
+be	osm	relation:53142	nl	1
+be	name	West-Vlanderen	nl	1
+be	gn_id	2783770	nl	1
+be	osm	relation:416271	nl	1
+be	qs_a1r	Brussels Hoofstedelijk Gewest#R\xe9gion de Bruxelles-Capitale	fr	1
+be	gn_id	2800867	fr	1
+be	osm	relation:54094	fr	1
+be	qs_a1r	Brussels Hoofstedelijk Gewest#R\xe9gion de Bruxelles-Capitale	nl	1
+be	gn_id	2800867	nl	1
+be	osm	relation:54094	nl	1
+be	name	Antwerpen	nl	1
+be	gn_id	2803136	nl	1
+be	osm	relation:53114	nl	1
+be	name	Hainaut	fr	1
+be	gn_id	2796741	fr	1
+be	osm	relation:157559	fr	1
+be	name	Luxembourg	fr	1
+be	gn_id	2791993	fr	1
+be	osm	relation:1412581	fr	1
+be	name	Vlaams Brabant	nl	1
+be	gn_id	3333250	nl	1
+be	osm	relation:58004	nl	1
+be	name	Oost-Vlanderen	nl	1
+be	gn_id	2789733	nl	1
+be	osm	relation:53135	nl	1
 ca	name	Quebec	fr	1
 ca	gn_id	6115047	fr	1
 ca	osm	relation:61549	fr	1
