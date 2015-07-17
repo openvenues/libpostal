@@ -321,7 +321,7 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
         return None, None
 
     country, candidate_languages = country_and_languages(language_rtree, latitude, longitude)
-    if not (country and default_languages):
+    if not (country and candidate_languages):
         return None, None
 
     num_defaults = sum((1 for l in candidate_languages if l.get('default')))
