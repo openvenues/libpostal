@@ -16,5 +16,5 @@ ostrov|o
 gorod|g
 раион|р-н
 raion|r-n
-Посёлок|Поселок|Пос
+посёлок|поселок|пос
 poselok|pos

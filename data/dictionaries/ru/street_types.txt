@@ -4,6 +4,8 @@ alleya|al
 bulvar|bul
 дорога|дор
 doroga|dor
+кольцевая
+kol'tsevaya|koltsevaya
 набережная|наб
 naberezhnaya|nab
 переулок|пер
