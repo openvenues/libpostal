@@ -1,0 +1,10 @@
+bulvar
+bulvarı|bulvari|bl|blv
+cadde|cd|cad
+caddesi|cd|cad
+çevre yolu|çevreyolu|cevre yolu|cevreyolu
+köprüsü|koprusu
+otoyolu
+sokak|sk|sok
+sokağı|sokagi|sk|sok
+yolu|yol

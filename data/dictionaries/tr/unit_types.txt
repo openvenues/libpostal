@@ -1,0 +1,5 @@
+apartman|apt
+daire|d
+kat|k
+numara|no
+numarala|nolu
