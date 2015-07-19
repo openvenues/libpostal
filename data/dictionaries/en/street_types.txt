@@ -220,7 +220,6 @@ outlook|out|otlk
 oval
 overbridge|ovrb|over bridge
 paddock|padk
-paku
 palms|plms
 parade|pde|prd|prde
 park|pk|prk|parc
