@@ -715,9 +715,9 @@ inline bool trie_set_data_node(trie_t *self, uint32_t index, trie_data_node_t da
 }
 
 inline bool trie_get_data_at_index(trie_t *self, uint32_t index,  uint32_t *data) {
-     if (node_id == NULL_NODE_ID) return false;
+     if (index == NULL_NODE_ID) return false;
 
-     trie_node_t node = trie_get_node(self, node_id);
+     trie_node_t node = trie_get_node(self, index);
      trie_data_node_t data_node = trie_get_data_node(self, node);
      *data = data_node.data;
 
@@ -730,18 +730,19 @@ inline bool trie_get_data(trie_t *self, char *key, uint32_t *data) {
 }
 
 inline bool trie_set_data_at_index(trie_t *self, uint32_t index, uint32_t data) {
-     if (node_id == NULL_NODE_ID) {
-        return trie_add(self, key, data);
-     }
-
-     trie_node_t node = trie_get_node(self, node_id);
+    if (index == NULL_NODE_ID) return false;
+     trie_node_t node = trie_get_node(self, index);
      trie_data_node_t data_node = trie_get_data_node(self, node);
      data_node.data = data;
-     return trie_set_data_node(self, node_id, data_node);
+     return trie_set_data_node(self, index, data_node);
 
 }
 
 inline bool trie_set_data(trie_t *self, char *key, uint32_t data) {
+     if (index == NULL_NODE_ID) {
+        return trie_add(self, key, data);
+     }
+
      uint32_t node_id = trie_get(self, key);
      return trie_set_data_at_index(self, node_id, data);
 }
