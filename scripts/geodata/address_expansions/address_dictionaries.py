@@ -25,7 +25,7 @@ address_expansion_rule_t expansion_rules[] = {{
     {expansion_rules}
 }};
 
-address_language_index_t languages[] = {{
+address_language_index_t expansion_languages[] = {{
     {address_languages}
 }};
 '''
