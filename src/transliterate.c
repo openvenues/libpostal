@@ -79,14 +79,15 @@ static transliteration_replacement_t *get_replacement(trie_t *trie, trie_prefix_
     uint32_t node_id = result.node_id;
     if (node_id == NULL_NODE_ID) return NULL;
 
-    trie_node_t node = trie_get_node(trie, node_id);
-    trie_data_node_t data_node = trie_get_data_node(trie, node);
+    uint32_t replacement_index = 0;
 
-    if (data_node.tail != 0 && data_node.data < trans_table->replacements->n) {
+    if (!trie_get_data_at_index(trie, node_id, &replacement_index)) {
+        return NULL;
+    }
+
+    if (replacement_index < trans_table->replacements->n) {
         log_debug("Got data node\n");
-        transliteration_replacement_t *replacement = trans_table->replacements->a[data_node.data];
-
-        return replacement;
+        return trans_table->replacements->a[replacement_index];
     }
 
     return NULL;
