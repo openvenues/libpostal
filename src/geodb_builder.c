@@ -384,34 +384,19 @@ bool geodb_builder_add_to_trie(geodb_builder_t *self, char *key, uint16_t addres
 
 }
 
-void join_path(char_array *path, char *dir, char *filename) {
-    char_array_clear(path);
-    bool strip_separator = strncmp(dir + strlen(dir) - 1, PATH_SEPARATOR, PATH_SEPARATOR_LEN) == 0;
-
-    char_array_cat(path, dir);
-    if (!strip_separator) {
-        char_array_cat(path, PATH_SEPARATOR);
-    }
-    char_array_cat(path, filename);
-
-}
-
-
 bool geodb_finalize(geodb_builder_t *self, char *output_dir) {
-    bool strip_output_separator = strncmp(output_dir + strlen(output_dir) - 1, PATH_SEPARATOR, PATH_SEPARATOR_LEN) == 0;
     char_array *path = char_array_new_size(strlen(output_dir));
 
-    join_path(path, output_dir, GEODB_TRIE_FILENAME);
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output, GEODB_TRIE_FILENAME);
     char *trie_path = char_array_get_string(path);
 
     trie_save(self->trie, trie_path);
 
-    char *trie_filename = char_array_get_string(path);
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_HASH_FILENAME);
 
-    join_path(path, output_dir, GEODB_HASH_FILENAME);
     char *hash_filename = strdup(char_array_get_string(path));
 
-    join_path(path, output_dir, GEODB_LOG_FILENAME);
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output, GEODB_LOG_FILENAME);
     char *log_filename = char_array_get_string(path);
 
     if (self->log_writer != NULL) {
