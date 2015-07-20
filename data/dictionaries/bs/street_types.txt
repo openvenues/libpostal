@@ -2,6 +2,7 @@ aleja|al
 avenija|av
 bulevar|bul
 cesta|c
+drvored
 klanac
 most
 prilaz
