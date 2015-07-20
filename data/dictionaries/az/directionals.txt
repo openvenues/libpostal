@@ -1,0 +1,8 @@
+cənub|cenub
+cənub-şərq|cənub şərq|cənubşərq|cenub serq|cenub-serq|cenubserq
+cənub-qərb|cənub qərb|cənubqərb|cenub qerb|cenub-qerb|cenubqerb
+qərb|qerb
+şərq|serq
+şimal|simal
+şimal-şərq|şimal şərq|şimalşərq|simal serq|simal-serq|simalserq
+şimal-qərb|şimal qərb|şimalqərb|simal qerb|simal-qerb|simalqerb
