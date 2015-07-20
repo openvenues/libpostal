@@ -711,6 +711,30 @@ inline trie_data_node_t trie_get_data_node(trie_t *self, trie_node_t node) {
 inline bool trie_set_data_node(trie_t *self, uint32_t index, trie_data_node_t data_node) {
     if (self == NULL || self->data == NULL || index >= self->data->n) return false;
     self->data->a[index] = data_node;
+    return true;
+}
+
+inline bool trie_get_data(trie_t *self, char *key, uint32_t *data) {
+     uint32_t node_id = trie_get(self, key);
+     if (node_id == NULL_NODE_ID) return false;
+
+     trie_node_t node = trie_get_node(self, node_id);
+     trie_data_node_t data_node = trie_get_data_node(self, node);
+     *data = data_node.data;
+
+     return true;
+}
+
+inline bool trie_set_data(trie_t *self, char *key, uint32_t data) {
+     uint32_t node_id = trie_get(self, key);
+     if (node_id == NULL_NODE_ID) {
+        return trie_add(self, key, data);
+     }
+
+     trie_node_t node = trie_get_node(self, node_id);
+     trie_data_node_t data_node = trie_get_data_node(self, node);
+     data_node.data = data;
+     return trie_set_data_node(self, node_id, data_node);
 }
 
 trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t len, uint32_t start_index, size_t tail_pos) {
