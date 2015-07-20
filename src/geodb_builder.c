@@ -359,7 +359,7 @@ uint16_t get_address_component(uint32_t boundary_type) {
     }
 }
 
-bool geodb_builder_add_to_trie(geodb_builder_t *self, char *key, uint16_t address_component) {
+bool geodb_builder_add_to_trie(geodb_builder_t *self, char *key, uint16_t address_components) {
     if (self == NULL || self->trie == NULL) return false;
     uint32_t node_id = trie_get(self->trie, key);
 
@@ -367,19 +367,20 @@ bool geodb_builder_add_to_trie(geodb_builder_t *self, char *key, uint16_t addres
     value.value = 0;
 
     if (node_id == NULL_NODE_ID) {
-        value.components |= address_component;
+        value.components |= address_components;
         value.count = 1;
-        trie_add(self->trie, key, value.value);
+        return trie_add(self->trie, key, value.value);
 
     } else {
-        trie_node_t node = trie_get_node(self->trie, node_id);
-        trie_data_node_t data_node = trie_get_data_node(self->trie, node);
-        value.value = data_node.data;
-        value.components |= address_component;
+        if (!trie_get_data_at_index(self->trie, node_id, &value.value)) {
+            return false;
+        }
+
+        value.components |= address_components;
         value.count++;
 
-        data_node.data = value.value;
-        trie_set_data_node(self->trie, -1 * node.base, data_node);
+        return trie_set_data_at_index(self->trie, node_id, value.value);
+
     }
 
 }
