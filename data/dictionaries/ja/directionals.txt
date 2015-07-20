@@ -6,11 +6,11 @@ minami
 higashi
 西
 nishi
-北 東
+北東
 hokutō|hokuto|hokutou
-北 西
+北西
 hokusei
-南 東
+南東
 nantō|nanto|nantou
-南 西
+南西
 nansei

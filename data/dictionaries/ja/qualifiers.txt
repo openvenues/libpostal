@@ -10,7 +10,7 @@ fu
 shi
 区
 ku
-特 別 区
+特別区
 tokubetsu ku
 tokubetsuku
 郡
@@ -23,12 +23,11 @@ mura
 son
 字
 aza
-丁 目
+丁目
 chome
-大 字
+大字
 oaza
-小 字
+小字
 koaza
-街 区
+街区
 gaiku
-〒

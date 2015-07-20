@@ -9,22 +9,22 @@ dohng
 dong
 서
 seo
-북 동
+북동
 book dohng
 bookdohng
 bug dong
 bugdong
-북 서
+북서
 book seo
 bookseo
 bug seo
 bugseo
-남 동
+남동
 nahm dohng
 nahndohng
 nam dong
 namdong
-남 서
+남서
 nahm seo
 nahmseo
 nam seo
