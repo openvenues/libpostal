@@ -1262,31 +1262,31 @@ transliterator_t *transliterator_read(FILE *f) {
 
 
     if (!file_read_uint64(f, (uint64_t *)&trans_name_len)) {
-        return false;
+        return NULL;
     }
 
     char name[trans_name_len];
 
     if (!file_read_chars(f, name, trans_name_len)) {
-        return false;
+        return NULL;
     }
 
     bool internal;
     if (!file_read_uint8(f, (uint8_t *)&internal)) {
-        return false;
+        return NULL;
     }
 
     uint32_t steps_index;
 
     if (!file_read_uint32(f, &steps_index)) {
-        return false;
+        return NULL;
     }
 
 
     uint32_t steps_length;
 
     if (!file_read_uint32(f, &steps_length)) {
-        return false;
+        return NULL;
     }
 
     transliterator_t *trans =  transliterator_new(name, internal, steps_index, steps_length);
