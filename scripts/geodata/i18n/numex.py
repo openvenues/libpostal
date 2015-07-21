@@ -10,7 +10,7 @@ from geodata.encoding import safe_encode
 from unicode_paths import DATA_DIR
 
 
-NUMEX_DATA_DIR = os.path.join(DATA_DIR, 'numex', 'rules')
+NUMEX_DATA_DIR = os.path.join(DATA_DIR, 'numex')
 
 NUMEX_RULES_FILE = os.path.join(os.pardir, os.pardir, os.pardir, 'src', 'numex_data.c')
 

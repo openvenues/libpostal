@@ -7,7 +7,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 from geodata.encoding import safe_encode, safe_decode
 
 ADDRESS_EXPANSIONS_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                                      'data', 'dictionaries')
+                                      'resources', 'dictionaries')
 
 ADDRESS_DATA_FILE = os.path.join(os.pardir, os.pardir, os.pardir, 'src', 'address_expansion_data.c')
 

@@ -12,7 +12,7 @@ from unicode_paths import CLDR_DIR
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 DEFAULT_LANGUAGES_DIR = os.path.join(os.pardir, os.pardir, os.pardir,
-                                     'data', 'language', 'countries')
+                                     'resources', 'language', 'countries')
 
 CLDR_SUPPLEMENTAL_DATA = os.path.join(CLDR_DIR, 'common', 'supplemental',
                                       'supplementalData.xml')
