@@ -144,7 +144,7 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
 }
 
 
-void add_normalized_token(string_tree_t *tree, char *str, token_t token, uint64_t options) {
+void add_token_alternatives(string_tree_t *tree, char *str, token_t token, uint64_t options) {
     size_t idx = 0;
 
     uint8_t *ptr = (uint8_t *)str + token.offset;
