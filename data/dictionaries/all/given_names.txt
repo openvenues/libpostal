@@ -7556,7 +7556,9 @@ Raghavan
 Ragheb
 Raghnailt
 Raghunatha
-Ragnall, Raghnall, and Raonull
+Ragnall
+Raghnall
+Raonull
 Ragnar
 Ragıp
 Ravi
@@ -11525,8 +11527,6 @@ Vahap
 Vahe
 Vahid
 Vahur
-Van Deren
-Van de Merwe
 Vance
 Vanessa
 Vanita
@@ -12469,7 +12469,9 @@ Wélton
 Ágúst
 Ádi
 Ádika
-Áed Rúad, Díthorba and Cimbáeth
+Áed Rúad
+Díthorba
+Cimbáeth
 Áedammair
 Árdal
 Árpád
