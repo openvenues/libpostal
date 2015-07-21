@@ -1,6 +1,10 @@
+#ifndef ADDRESS_EXPANSION_RULE_H
+#define ADDRESS_EXPANSION_RULE_H
+
 #include <stdlib.h>
 
 #include "constants.h"
+#include "gazetteers.h"
 
 typedef struct address_expansion_rule {
     char *phrase;
@@ -13,3 +17,6 @@ typedef struct address_language_index {
     uint32_t index;
     size_t len;
 } address_language_index_t;
+
+
+#endif
