@@ -219,7 +219,7 @@ inline scanner_t scanner_from_string(const char *input, size_t len) {
     return scanner;
 }
 
-void tokenize_add_tokens(token_array *tokens, const char *input, size_t len) {
+void tokenize_add_tokens(token_array *tokens, const char *input, size_t len, bool keep_whitespace) {
     scanner_t scanner = scanner_from_string(input, len);
 
     size_t token_start, token_length;
@@ -229,24 +229,31 @@ void tokenize_add_tokens(token_array *tokens, const char *input, size_t len) {
         token_start = scanner.start - scanner.src;
         token_length = scanner.cursor - scanner.start;
 
-        if (token_type != WHITESPACE) { 
-            // Caller frees
-            token_t token;
-            token.offset = token_start;
-            token.len = token_length;
-            token.type = token_type;
-
-            token_array_push(tokens, token);
+        if (token_type == WHITESPACE && !keep_whitespace) {
+            continue;
         }
+
+        token_t token;
+        token.offset = token_start;
+        token.len = token_length;
+        token.type = token_type;
+
+        token_array_push(tokens, token);
     }
 
+}
+
+token_array *tokenize_keep_whitespace(const char *input) {
+    token_array *tokens = token_array_new();
+    tokenize_add_tokens(tokens, input, strlen(input), true);
+    return tokens;
 }
 
 token_array *tokenize(const char *input) {
 
     token_array *tokens = token_array_new();
 
-    tokenize_add_tokens(tokens, input, strlen(input));
+    tokenize_add_tokens(tokens, input, strlen(input), false);
 
     return tokens;
 }
