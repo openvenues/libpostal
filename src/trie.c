@@ -719,6 +719,7 @@ inline bool trie_get_data_at_index(trie_t *self, uint32_t index,  uint32_t *data
 
      trie_node_t node = trie_get_node(self, index);
      trie_data_node_t data_node = trie_get_data_node(self, node);
+     if (data_node.tail == 0) return false;
      *data = data_node.data;
 
      return true;    
@@ -734,7 +735,7 @@ inline bool trie_set_data_at_index(trie_t *self, uint32_t index, uint32_t data) 
      trie_node_t node = trie_get_node(self, index);
      trie_data_node_t data_node = trie_get_data_node(self, node);
      data_node.data = data;
-     return trie_set_data_node(self, index, data_node);
+     return trie_set_data_node(self, -1*node.base, data_node);
 
 }
 
