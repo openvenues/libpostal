@@ -19,6 +19,8 @@ extern "C" {
 #include "trie.h"
 #include "trie_search.h"
 
+#define ALL_LANGUAGES "all"
+
 #define DEFAULT_ADDRESS_EXPANSION_PATH LIBPOSTAL_DATA_DIR PATH_SEPARATOR "address_expansions" PATH_SEPARATOR "address_dictionary.dat"
 
 typedef union expansion_value {
