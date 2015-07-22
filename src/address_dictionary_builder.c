@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
             char_array_cat(key, expansion_rule.phrase);
             char *token = char_array_get_string(key);
 
-            if (!address_dictionary_add_expansion(address_dict, token, canonical, language, dictionary_id, address_components)) {
+            if (!address_dictionary_add_expansion(token, canonical, language, dictionary_id, address_components)) {
                 log_error("Could not add expansion {%s, %s}\n", language, expansion_rule.phrase);
                 exit(EXIT_FAILURE);
             }

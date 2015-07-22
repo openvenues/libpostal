@@ -12,17 +12,22 @@ address_dictionary_t *get_address_dictionary(void) {
     return address_dict;
 }
 
-address_expansion_array *address_dictionary_get_expansions(address_dictionary_t *self, char *key) {
-    if (self == NULL || self->expansions == NULL) return NULL;
-    khiter_t k = kh_get(str_expansions, self->expansions, key);
-    return k != kh_end(self->expansions) ? kh_value(self->expansions, k) : NULL;
+address_expansion_array *address_dictionary_get_expansions(char *key) {
+    if (address_dict == NULL || address_dict->expansions == NULL) return NULL;
+    khiter_t k = kh_get(str_expansions, address_dict->expansions, key);
+    return k != kh_end(address_dict->expansions) ? kh_value(address_dict->expansions, k) : NULL;
 }
 
-bool address_dictionary_add_expansion(address_dictionary_t *self, char *key, char *canonical, char *language, uint16_t dictionary_id, uint16_t address_components) {
+char *address_dictionary_get_canonical(uint32_t index) {
+    if (address_dict == NULL || address_dict->canonical == NULL || index > cstring_array_num_strings(address_dict->canonical)) return NULL;
+    return cstring_array_get_string(address_dict->canonical, index);    
+}
+
+bool address_dictionary_add_expansion(char *key, char *canonical, char *language, uint16_t dictionary_id, uint16_t address_components) {
     int ret;
 
     log_debug("key=%s\n", key);
-    address_expansion_array *expansions = address_dictionary_get_expansions(self, key);
+    address_expansion_array *expansions = address_dictionary_get_expansions(key);
 
     int32_t canonical_index;
 
@@ -33,8 +38,8 @@ bool address_dictionary_add_expansion(address_dictionary_t *self, char *key, cha
         canonical_index = -1;
         value.canonical = 1;
     } else {
-        canonical_index = (int32_t) cstring_array_num_strings(self->canonical);
-        cstring_array_add_string(self->canonical, canonical);
+        canonical_index = (int32_t) cstring_array_num_strings(address_dict->canonical);
+        cstring_array_add_string(address_dict->canonical, canonical);
         value.canonical = 0;
     }
 
@@ -48,21 +53,21 @@ bool address_dictionary_add_expansion(address_dictionary_t *self, char *key, cha
     if (expansions == NULL) {
         expansions = address_expansion_array_new_size(1);
         address_expansion_array_push(expansions, expansion);
-        khiter_t k = kh_put(str_expansions, self->expansions, strdup(key), &ret);
-        kh_value(self->expansions, k) = expansions;
+        khiter_t k = kh_put(str_expansions, address_dict->expansions, strdup(key), &ret);
+        kh_value(address_dict->expansions, k) = expansions;
 
         value.count = 1;
         value.components = address_components;
         log_debug("value.count=%d, value.components=%d\n", value.count, value.components);
 
-        trie_add(self->trie, key, value.value);
+        trie_add(address_dict->trie, key, value.value);
     } else {
 
-        uint32_t node_id = trie_get(self->trie, key);
+        uint32_t node_id = trie_get(address_dict->trie, key);
         log_debug("node_id=%d\n", node_id);
         if (node_id != NULL_NODE_ID) {
 
-            if (!trie_get_data_at_index(self->trie, node_id, &value.value)) {
+            if (!trie_get_data_at_index(address_dict->trie, node_id, &value.value)) {
                 log_warn("get_data_at_index returned false\n");
                 return false;
             }
@@ -76,7 +81,7 @@ bool address_dictionary_add_expansion(address_dictionary_t *self, char *key, cha
             value.count++;
             value.components |= address_components;
 
-            if (!trie_set_data_at_index(self->trie, node_id, value.value)) {
+            if (!trie_set_data_at_index(address_dict->trie, node_id, value.value)) {
                 log_warn("set_data_at_index returned false for node_id=%d and value=%d\n", node_id, value.value);
                 return false;
             }
@@ -87,6 +92,24 @@ bool address_dictionary_add_expansion(address_dictionary_t *self, char *key, cha
 
     return true;
 
+}
+
+phrase_array *search_address_dictionaries(char *str, char *lang) {
+    if (str == NULL || lang == NULL) return NULL;
+
+    trie_prefix_result_t prefix = trie_get_prefix(address_dict->trie, lang);
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        return NULL;
+    }
+
+    prefix = trie_get_prefix_from_index(address_dict->trie, NAMESPACE_SEPARATOR_CHAR, NAMESPACE_SEPARATOR_CHAR_LEN, prefix.node_id, prefix.tail_pos);
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        return NULL;
+    }
+
+    return trie_search_from_index(address_dict->trie, str, prefix.node_id);
 }
 
 

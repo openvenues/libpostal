@@ -17,6 +17,7 @@ extern "C" {
 #include "file_utils.h"
 #include "gazetteers.h"
 #include "trie.h"
+#include "trie_search.h"
 
 #define DEFAULT_ADDRESS_EXPANSION_PATH LIBPOSTAL_DATA_DIR PATH_SEPARATOR "address_expansions" PATH_SEPARATOR "address_dictionary.dat"
 
@@ -50,8 +51,10 @@ address_dictionary_t *get_address_dictionary(void);
 
 bool address_dictionary_init(void);
 
-address_expansion_array *address_dictionary_get_expansions(address_dictionary_t *self, char *key);
-bool address_dictionary_add_expansion(address_dictionary_t *self, char *key, char *canonical, char *language, uint16_t dictionary_id, uint16_t address_components);
+phrase_array *search_address_dictionaries(char *str, char *lang);
+address_expansion_array *address_dictionary_get_expansions(char *key);
+char *address_dictionary_get_canonical(uint32_t index);
+bool address_dictionary_add_expansion(char *key, char *canonical, char *language, uint16_t dictionary_id, uint16_t address_components);
 
 void address_dictionary_destroy(address_dictionary_t *self);
 
