@@ -12,7 +12,8 @@ address_dictionary_t *get_address_dictionary(void) {
     return address_dict;
 }
 
-address_expansion_array *address_normalizer_get_expansions(address_dictionary_t *self, char *key) {
+address_expansion_array *address_dictionary_get_expansions(address_dictionary_t *self, char *key) {
+    if (self == NULL || self->expansions == NULL) return NULL;
     khiter_t k = kh_get(str_expansions, self->expansions, key);
     return k != kh_end(self->expansions) ? kh_value(self->expansions, k) : NULL;
 }
@@ -21,7 +22,7 @@ bool address_dictionary_add_expansion(address_dictionary_t *self, char *key, cha
     int ret;
 
     log_debug("key=%s\n", key);
-    address_expansion_array *expansions = address_normalizer_get_expansions(self, key);
+    address_expansion_array *expansions = address_dictionary_get_expansions(self, key);
 
     int32_t canonical_index;
 
@@ -178,7 +179,7 @@ static bool address_expansion_read(FILE *f, address_expansion_t *expansion) {
 static bool address_expansion_write(FILE *f, address_expansion_t expansion) {
     if (f == NULL) return false;
 
-    uint32_t language_len = (uint32_t)strlen(expansion.language);
+    uint32_t language_len = (uint32_t)strlen(expansion.language) + 1;
 
     if (!file_write_uint32(f, (uint32_t)expansion.canonical_index) ||
         !file_write_uint32(f, language_len) ||
@@ -218,7 +219,7 @@ bool address_dictionary_write(FILE *f) {
     address_expansion_array *expansions;
 
     kh_foreach(address_dict->expansions, key, expansions, {
-        uint32_t key_len = (uint32_t) strlen(key);
+        uint32_t key_len = (uint32_t) strlen(key) + 1;
         if (!file_write_uint32(f, key_len)) {
             return false;
         }
@@ -358,7 +359,9 @@ bool address_dictionary_load(char *path) {
         return false;
     }
 
-    return address_dictionary_read(f);
+    bool ret_val = address_dictionary_read(f);
+    fclose(f);
+    return ret_val;
 }
 
 bool address_dictionary_save(char *path) {
@@ -366,7 +369,9 @@ bool address_dictionary_save(char *path) {
 
     FILE *f = fopen(path, "wb");
 
-    return address_dictionary_write(f);
+    bool ret_val = address_dictionary_write(f);
+    fclose(f);
+    return ret_val;
 }
 
 inline bool address_dictionary_module_setup(void) {
