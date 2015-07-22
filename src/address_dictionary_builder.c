@@ -58,6 +58,15 @@ int main(int argc, char **argv) {
                 canonical = canonical_strings[expansion_rule.canonical_index];
             }
 
+            // Add the phrase itself to the base namespace for existence checks
+
+            if (!address_dictionary_add_expansion(expansion_rule.phrase, canonical, language, dictionary_id, address_components)) {
+                log_error("Could not add expansion {%s}\n", expansion_rule.phrase);
+                exit(EXIT_FAILURE);
+            }
+
+            // Add phrase namespaced by language for language-specific matching
+
             char_array_clear(key);
             char_array_cat(key, language);
             char_array_cat(key, NAMESPACE_SEPARATOR_CHAR);
@@ -65,10 +74,9 @@ int main(int argc, char **argv) {
             char *token = char_array_get_string(key);
 
             if (!address_dictionary_add_expansion(token, canonical, language, dictionary_id, address_components)) {
-                log_error("Could not add expansion {%s, %s}\n", language, expansion_rule.phrase);
+                log_error("Could not add language expansion {%s, %s}\n", language, expansion_rule.phrase);
                 exit(EXIT_FAILURE);
             }
-
         }
     }
 
