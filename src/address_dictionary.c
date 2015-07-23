@@ -18,12 +18,24 @@ address_expansion_array *address_dictionary_get_expansions(char *key) {
     return k != kh_end(address_dict->expansions) ? kh_value(address_dict->expansions, k) : NULL;
 }
 
+int32_t address_dictionary_next_canonical_index(void) {
+    if (address_dict == NULL || address_dict->canonical == NULL) return -1;
+    return (int32_t)cstring_array_num_strings(address_dict->canonical);
+
+}
+
+bool address_dictionary_add_canonical(char *canonical) {
+    if (address_dict == NULL || address_dict->canonical == NULL) return false;
+    cstring_array_add_string(address_dict->canonical, canonical);
+    return true;
+}
+
 char *address_dictionary_get_canonical(uint32_t index) {
     if (address_dict == NULL || address_dict->canonical == NULL || index > cstring_array_num_strings(address_dict->canonical)) return NULL;
     return cstring_array_get_string(address_dict->canonical, index);    
 }
 
-bool address_dictionary_add_expansion(char *key, char *canonical, char *language, uint16_t dictionary_id, uint16_t address_components) {
+bool address_dictionary_add_expansion(char *key, address_expansion_t expansion) {
     int ret;
 
     log_debug("key=%s\n", key);
@@ -33,22 +45,7 @@ bool address_dictionary_add_expansion(char *key, char *canonical, char *language
 
     expansion_value_t value;
     value.value = 0;
-
-    if (canonical == NULL) {
-        canonical_index = -1;
-        value.canonical = 1;
-    } else {
-        canonical_index = (int32_t) cstring_array_num_strings(address_dict->canonical);
-        cstring_array_add_string(address_dict->canonical, canonical);
-        value.canonical = 0;
-    }
-
-    address_expansion_t expansion;
-
-    expansion.canonical_index = canonical_index;
-    strcpy(expansion.language, language);
-    expansion.dictionary_id = dictionary_id;
-    expansion.address_components = address_components;
+    value.canonical = expansion.canonical_index == -1;
 
     if (expansions == NULL) {
         expansions = address_expansion_array_new_size(1);
@@ -57,16 +54,14 @@ bool address_dictionary_add_expansion(char *key, char *canonical, char *language
         kh_value(address_dict->expansions, k) = expansions;
 
         value.count = 1;
-        value.components = address_components;
+        value.components = expansion.address_components;
         log_debug("value.count=%d, value.components=%d\n", value.count, value.components);
 
         trie_add(address_dict->trie, key, value.value);
     } else {
-
         uint32_t node_id = trie_get(address_dict->trie, key);
         log_debug("node_id=%d\n", node_id);
         if (node_id != NULL_NODE_ID) {
-
             if (!trie_get_data_at_index(address_dict->trie, node_id, &value.value)) {
                 log_warn("get_data_at_index returned false\n");
                 return false;
@@ -79,7 +74,7 @@ bool address_dictionary_add_expansion(char *key, char *canonical, char *language
             }
 
             value.count++;
-            value.components |= address_components;
+            value.components |= expansion.address_components;
 
             if (!trie_set_data_at_index(address_dict->trie, node_id, value.value)) {
                 log_warn("set_data_at_index returned false for node_id=%d and value=%d\n", node_id, value.value);
@@ -187,8 +182,14 @@ static bool address_expansion_read(FILE *f, address_expansion_t *expansion) {
         return false;
     }
 
-    if (!file_read_uint16(f, &expansion->dictionary_id)) {
+    if (!file_read_uint32(f, (uint32_t *)&expansion->num_dictionaries)) {
         return false;
+    }
+
+    for (int i = 0; i < expansion->num_dictionaries; i++) {
+        if (!file_read_uint16(f, (uint16_t *)expansion->dictionary_ids + i)) {
+            return false;
+        }
     }
 
     if (!file_read_uint16(f, &expansion->address_components)) {
@@ -207,9 +208,18 @@ static bool address_expansion_write(FILE *f, address_expansion_t expansion) {
     if (!file_write_uint32(f, (uint32_t)expansion.canonical_index) ||
         !file_write_uint32(f, language_len) ||
         !file_write_chars(f, expansion.language, language_len) ||
-        !file_write_uint16(f, expansion.dictionary_id) ||
-        !file_write_uint16(f, expansion.address_components)
+        !file_write_uint32(f, expansion.num_dictionaries)
        ) {
+        return false;
+    }
+
+    for (int i = 0; i < expansion.num_dictionaries; i++) {
+        if (!file_write_uint16(f, expansion.dictionary_ids[i])) {
+            return false;
+        }
+    }
+
+    if (!file_write_uint16(f, expansion.address_components)) {
         return false;
     }
 

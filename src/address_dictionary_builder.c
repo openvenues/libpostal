@@ -26,6 +26,8 @@ int main(int argc, char **argv) {
 
     khash_t(int_int) *dictionary_components = kh_init(int_int);
 
+    khash_t(str_int) *canonical_indices = kh_init(str_int);
+
     khiter_t k;
 
     for (int g = 0; g < NUM_DICTIONARY_TYPES; g++) {
@@ -41,26 +43,57 @@ int main(int argc, char **argv) {
         address_language_index_t lang_index = expansion_languages[i];
         char *language = lang_index.language;
 
+        log_info("Doing language: %s\n", language);
+
         for (int j = lang_index.index; j < lang_index.index + lang_index.len; j++) {
             address_expansion_rule_t expansion_rule = expansion_rules[j];
-            uint16_t dictionary_id = (uint16_t) expansion_rule.dictionary;
 
-            k = kh_get(int_int, dictionary_components, (uint32_t)dictionary_id);
-            if (k == kh_end(dictionary_components)) {
-                log_error("Invalid dictionary_type: %d\n", dictionary_id);
-                exit(EXIT_FAILURE);
+            uint16_t address_components = 0;
+
+            address_expansion_t expansion;
+
+            strcpy(expansion.language, language);
+            expansion.num_dictionaries = expansion_rule.num_dictionaries;
+
+            for (int d = 0; d < expansion_rule.num_dictionaries; d++) {
+                uint16_t dictionary_id = (uint16_t) expansion_rule.dictionaries[d];
+
+                expansion.dictionary_ids[d] = dictionary_id;
+
+                k = kh_get(int_int, dictionary_components, (uint32_t)dictionary_id);
+                if (k == kh_end(dictionary_components)) {
+                    log_error("Invalid dictionary_type: %d\n", dictionary_id);
+                    exit(EXIT_FAILURE);
+                }
+                address_components |= (uint16_t) kh_value(dictionary_components, k);
             }
 
-            uint16_t address_components = (uint16_t) kh_value(dictionary_components, k);
+            expansion.address_components = address_components;
 
             char *canonical = NULL;
             if (expansion_rule.canonical_index != -1) {
                 canonical = canonical_strings[expansion_rule.canonical_index];
             }
 
+            if (canonical == NULL) {
+                expansion.canonical_index = -1;
+            } else {
+                k = kh_get(str_int, canonical_indices, canonical);
+                if (k != kh_end(canonical_indices)) {
+                    expansion.canonical_index = kh_value(canonical_indices, k);
+                } else {
+                    expansion.canonical_index = address_dictionary_next_canonical_index();
+                    if (!address_dictionary_add_canonical(canonical)) {
+                        log_error("Error adding canonical string: %s\n", canonical);
+                        exit(EXIT_FAILURE);
+                    }
+                }
+
+            }
+
             // Add the phrase itself to the base namespace for existence checks
 
-            if (!address_dictionary_add_expansion(expansion_rule.phrase, canonical, language, dictionary_id, address_components)) {
+            if (!address_dictionary_add_expansion(expansion_rule.phrase, expansion)) {
                 log_error("Could not add expansion {%s}\n", expansion_rule.phrase);
                 exit(EXIT_FAILURE);
             }
@@ -73,7 +106,7 @@ int main(int argc, char **argv) {
             char_array_cat(key, expansion_rule.phrase);
             char *token = char_array_get_string(key);
 
-            if (!address_dictionary_add_expansion(token, canonical, language, dictionary_id, address_components)) {
+            if (!address_dictionary_add_expansion(token, expansion)) {
                 log_error("Could not add language expansion {%s, %s}\n", language, expansion_rule.phrase);
                 exit(EXIT_FAILURE);
             }
@@ -85,6 +118,8 @@ int main(int argc, char **argv) {
     char_array_destroy(key);
 
     kh_destroy(int_int, dictionary_components);
+
+    kh_destroy(str_int, canonical_indices);
 
     address_dictionary_module_teardown();
 }

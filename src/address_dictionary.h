@@ -35,7 +35,8 @@ typedef union expansion_value {
 typedef struct address_expansion {
     int32_t canonical_index;
     char language[MAX_LANGUAGE_LEN];
-    uint16_t dictionary_id;
+    uint32_t num_dictionaries;
+    uint16_t dictionary_ids[MAX_DICTIONARY_TYPES];
     uint16_t address_components;
 } address_expansion_t;
 
@@ -56,7 +57,9 @@ bool address_dictionary_init(void);
 phrase_array *search_address_dictionaries(char *str, char *lang);
 address_expansion_array *address_dictionary_get_expansions(char *key);
 char *address_dictionary_get_canonical(uint32_t index);
-bool address_dictionary_add_expansion(char *key, char *canonical, char *language, uint16_t dictionary_id, uint16_t address_components);
+int32_t address_dictionary_next_canonical_index(void);
+bool address_dictionary_add_canonical(char *canonical);
+bool address_dictionary_add_expansion(char *key, address_expansion_t expansion);
 
 void address_dictionary_destroy(address_dictionary_t *self);
 
