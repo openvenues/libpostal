@@ -1,6 +1,8 @@
 import os
 import sys
 
+from collections import defaultdict
+
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
@@ -9,12 +11,40 @@ from geodata.encoding import safe_encode, safe_decode
 ADDRESS_EXPANSIONS_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                       'resources', 'dictionaries')
 
+ADDRESS_HEADER_FILE = os.path.join(os.pardir, os.pardir, os.pardir, 'src', 'address_expansion_rule.h')
 ADDRESS_DATA_FILE = os.path.join(os.pardir, os.pardir, os.pardir, 'src', 'address_expansion_data.c')
 
-
 address_language_index_template = u'{{{language}, {index}, {length}}}'
-address_expansion_rule_template = u'{{{phrase}, {dictionary}, {canonical_index}}}'
+address_expansion_rule_template = u'{{{phrase}, {num_dictionaries}, {{{dictionaries}}}, {canonical_index}}}'
 
+
+address_expansion_rule_header_template = u'''
+#ifndef ADDRESS_EXPANSION_RULE_H
+#define ADDRESS_EXPANSION_RULE_H
+
+#include <stdlib.h>
+
+#include "constants.h"
+#include "gazetteers.h"
+
+#define MAX_DICTIONARY_TYPES {max_dictionary_types}
+
+typedef struct address_expansion_rule {{
+    char *phrase;
+    uint32_t num_dictionaries;
+    dictionary_type_t dictionaries[MAX_DICTIONARY_TYPES];
+    int32_t canonical_index;
+}} address_expansion_rule_t;
+
+typedef struct address_language_index {{
+    char language[MAX_LANGUAGE_LEN];
+    uint32_t index;
+    size_t len;
+}} address_language_index_t;
+
+
+#endif
+'''
 
 address_expansion_data_file_template = u'''
 char *canonical_strings[] = {{
@@ -70,16 +100,21 @@ def quote_string(s):
     return u'"{}"'.format(safe_decode(s).replace('"', '\\"'))
 
 
-def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_file=ADDRESS_DATA_FILE):
+def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_file=ADDRESS_DATA_FILE, header_file=ADDRESS_HEADER_FILE):
     address_languages = []
     expansion_rules = []
     canonical_strings = []
+
+    max_dictionary_types = 0
 
     for language in os.listdir(base_dir):
         language_dir = os.path.join(base_dir, language)
 
         num_language_rules = 0
         language_index = len(expansion_rules)
+
+        language_canonical_dictionaries = defaultdict(list)
+        canonical_indices = {}
 
         for filename in os.listdir(language_dir):
             dictionary_name = filename.rstrip('.txt').lower()
@@ -105,21 +140,37 @@ def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_
 
                 canonical = phrases[0]
                 if len(phrases) > 1:
-                    canonical_index = len(canonical_strings)
-                    canonical_strings.append(quote_string(canonical))
+                    canonical_index = canonical_indices.get(canonical, None)
+                    if canonical_index is None:
+                        canonical_index = len(canonical_strings)
+                        canonical_strings.append(quote_string(canonical))
+                        canonical_indices[canonical] = canonical_index
                 else:
                     canonical_index = -1
 
                 for p in phrases:
-                    rule_template = address_expansion_rule_template.format(phrase=quote_string(p),
-                                                                           dictionary=dictionary_type,
-                                                                           canonical_index=canonical_index)
-                    expansion_rules.append(rule_template)
-                    num_language_rules += 1
+                    language_canonical_dictionaries[(p, canonical_index)].append(dictionary_type)
+
+        for (phrase, canonical_index), dictionary_types in language_canonical_dictionaries.iteritems():
+            max_dictionary_types = max(max_dictionary_types, len(dictionary_types))
+            rule_template = address_expansion_rule_template.format(phrase=quote_string(phrase),
+                                                                   num_dictionaries=str(len(dictionary_types)),
+                                                                   dictionaries=', '.join(dictionary_types),
+                                                                   canonical_index=canonical_index)
+            expansion_rules.append(rule_template)
+            num_language_rules += 1
+
 
         address_languages.append(address_language_index_template.format(language=quote_string(language),
                                                                         index=language_index,
                                                                         length=num_language_rules))
+
+    header = address_expansion_rule_header_template.format(
+        max_dictionary_types=str(max_dictionary_types)
+    )
+    out = open(header_file, 'w')
+    out.write(safe_encode(header))
+    out.close()
 
     data_file = address_expansion_data_file_template.format(
         canonical_strings=u''',
@@ -133,6 +184,7 @@ def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_
     out = open(output_file, 'w')
     out.write(safe_encode(data_file))
     out.close()
+
 
 
 if __name__ == '__main__':
