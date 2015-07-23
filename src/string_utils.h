@@ -157,6 +157,13 @@ int64_t cstring_array_token_length(cstring_array *self, uint32_t i);
 
 void cstring_array_destroy(cstring_array *self);
 
+#define cstring_array_foreach(array, s, code) {                                         \
+    for (int __si = 0; __si < array->indices->n; __si++) {                              \
+        (s) = array->str->a + array->indices->a[__si];                                  \
+        code;                                                                           \
+    }                                                                                   \
+}
+
 /*
 String trees are a way of storing alternative representations of a tokenized string concisely
 
