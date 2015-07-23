@@ -1,3 +1,4 @@
+
 #ifndef ADDRESS_EXPANSION_RULE_H
 #define ADDRESS_EXPANSION_RULE_H
 
@@ -6,9 +7,12 @@
 #include "constants.h"
 #include "gazetteers.h"
 
+#define MAX_DICTIONARY_TYPES 4
+
 typedef struct address_expansion_rule {
     char *phrase;
-    dictionary_type_t dictionary;
+    uint32_t num_dictionaries;
+    dictionary_type_t dictionaries[MAX_DICTIONARY_TYPES];
     int32_t canonical_index;
 } address_expansion_rule_t;
 
