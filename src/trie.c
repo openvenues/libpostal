@@ -667,16 +667,37 @@ inline bool trie_add_len(trie_t *self, char *key, size_t len, uint32_t data) {
     return trie_add_at_index(self, ROOT_NODE_ID, key, len, data);
 }
 
+bool trie_add_prefix_at_index(trie_t *self, char *key, uint32_t start_node_id, uint32_t data) {
+    size_t len = strlen(key);
+    if (start_node_id == NULL_NODE_ID || len == 0) return false;
+
+    trie_node_t start_node = trie_get_node(self, start_node_id);
+
+    uint32_t node_id = trie_get_transition_index(self, start_node, TRIE_PREFIX_CHAR);
+    trie_node_t node = trie_get_node(self, node_id);
+    if (node.check != start_node_id) {
+        node_id = trie_add_transition(self, start_node_id, TRIE_PREFIX_CHAR);
+    }
+
+    bool success = trie_add_at_index(self, node_id, key, len, data);
+
+    return success;
+}
+
+inline bool trie_add_prefix(trie_t *self, char *key, uint32_t data) {
+    return trie_add_prefix_at_index(self, key, ROOT_NODE_ID, data);
+}
+
 bool trie_add_suffix_at_index(trie_t *self, char *key, uint32_t start_node_id, uint32_t data) {
     size_t len = strlen(key);
     if (start_node_id == NULL_NODE_ID || len == 0) return false;
 
     trie_node_t start_node = trie_get_node(self, start_node_id);
 
-    uint32_t node_id = trie_get_transition_index(self, start_node, '\0');
+    uint32_t node_id = trie_get_transition_index(self, start_node, TRIE_SUFFIX_CHAR);
     trie_node_t node = trie_get_node(self, node_id);
     if (node.check != start_node_id) {
-        node_id = trie_add_transition(self, start_node_id, '\0');
+        node_id = trie_add_transition(self, start_node_id, TRIE_SUFFIX_CHAR);
     }
 
     char *suffix = utf8_reversed_string(key);

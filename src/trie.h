@@ -40,6 +40,9 @@ extern "C" {
 #define TRIE_INDEX_ERROR  0
 #define TRIE_MAX_INDEX 0x7fffffff
 
+#define TRIE_PREFIX_CHAR '\xff'
+#define TRIE_SUFFIX_CHAR '\x00'
+
 // Using 256 characters can fit all UTF-8 encoded strings
 #define NUM_CHARS 256
 
@@ -109,6 +112,8 @@ bool trie_add(trie_t *self, char *key, uint32_t data);
 bool trie_add_len(trie_t *self, char *key, size_t len, uint32_t data);
 bool trie_add_suffix(trie_t *self, char *key, uint32_t data);
 bool trie_add_suffix_at_index(trie_t *self, char *key, uint32_t start_node_id, uint32_t data);
+bool trie_add_prefix(trie_t *self, char *key, uint32_t data);
+bool trie_add_prefix_at_index(trie_t *self, char *key, uint32_t start_node_id, uint32_t data);
 
 uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i);
 uint32_t trie_get_len(trie_t *self, char *word, size_t len);
