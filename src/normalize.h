@@ -1,3 +1,23 @@
+/* normalize.h
+
+The normalize module provides several options for preprocessing full strings:
+
+- Unicode normalization (NFD/decomposition)
+- Transliteration (including Latin-ASCII)
+- Accent mark removal
+- UTF-8 lowercasing with utf8proc
+
+As well as normalizations for individual string tokens:
+
+- Replace hyphens with space e.g. "quatre-vignt" => "quatre vignt"
+- Delete hyphens e.g. "auto-estrada" => "autoestrada"
+- Delete final period "R." => "R"
+- Delete acronym periods: "U.S.A." => "USA"
+- Drop English possessive "Janelle's" => "Janelle"
+- Delete other apostrophes "O'Malley" => "OMalley" (not appropriate for Latin languages, use elision separation)
+
+*/
+
 #ifndef NORMALIZE_H
 #define NORMALIZE_H
 
