@@ -484,7 +484,7 @@ phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, uint32_t star
 
 inline phrase_t trie_search_suffixes(trie_t *self, char *word) {
     trie_node_t root_node = trie_get_root(self);
-    uint32_t node_id = trie_get_transition_index(self, root_node, '\0');
+    uint32_t node_id = trie_get_transition_index(self, root_node, TRIE_SUFFIX_CHAR);
     trie_node_t node = trie_get_node(self, node_id);
 
     if (node.check != ROOT_NODE_ID) {
@@ -609,7 +609,15 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t star
 }
 
 inline phrase_t trie_search_prefixes(trie_t *self, char *word) {
-    return trie_search_prefixes_from_index(self, word, ROOT_NODE_ID);
+    trie_node_t root_node = trie_get_root(self);
+    uint32_t node_id = trie_get_transition_index(self, root_node, TRIE_PREFIX_CHAR);
+    trie_node_t node = trie_get_node(self, node_id);
+
+    if (node.check != ROOT_NODE_ID) {
+        return (phrase_t){0, 0, 0};
+    }
+
+    return trie_search_prefixes_from_index(self, word, node_id);
 }
 
 
