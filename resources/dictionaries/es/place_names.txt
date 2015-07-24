@@ -23,6 +23,7 @@ casa
 casas
 castillo|cast
 cementerio
+centro commercial|centro cial|centro.cial|centro comm|centro.comm|ctro commercial|ctro.cial|ctro cial|ctro comm|ctro.comm|ctr commercial|ctr.cial|ctr cial|ctr.comm|ctr comm|cto commercial|cto.cial|cto cial|cto.comm|cto comm|cc|c.c.|c.c|c c
 charcutería|charcuteria
 clinica
 club|clb

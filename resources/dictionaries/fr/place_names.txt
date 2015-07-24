@@ -1,5 +1,5 @@
 castel|cst
-centre commercial|cc|c.c.|c.c|c c
+centre commercial|cc|c.c.|c.c|c c|centre cial|centre comm|c cial|c comm|ctr cial|ctr comm
 château|chateau
 cottage|cott
 cottages|cott|cotts

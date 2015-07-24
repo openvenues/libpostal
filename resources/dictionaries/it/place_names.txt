@@ -59,6 +59,7 @@ castello|cast.o|casto
 catacomba|cat.ba|cat ba
 catacombe|cat.be|cat be
 cattedrale|catt.le|cattle
+centro commerciale|centro comm.le|centro comm|centro comm le|cc|c.c.|c.c|c c
 chalet|ch.t|cht
 chiesa|ch.sa|chsa
 chiesetta|ch.etta|chetta

@@ -1,3 +1,4 @@
+centre|c|ctr
 est|e
 levant
 nord|n

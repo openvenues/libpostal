@@ -10,9 +10,9 @@ distrito|dtto
 estado|edo
 isla|isl|is
 islas|isls|iss
-polígono|poligono|políg|polig
-polígono residencial|poligono residencial|políg res|polig res|pgres|pg res|pr|p.r.|p.r|p r
-polígono industrial|poligono industrial|políg ind|polig ind|pgind|pg ind|pi|p.i.|p.i|p i
+polígono|poligono|políg|polig|pol
+polígono residencial|poligono residencial|políg res|polig res|pol.res|pol res|pgres|pg res|pr|p.r.|p.r|p r
+polígono industrial|poligono industrial|políg ind|polig ind|pol.ind|pol ind|pgind|pg ind|pi|p.i.|p.i|p i
 punto kilométrico|punto kilometrico|pk|p.k.|p k
 sección|seccion|secc|sccn|scn|sec
 sector|sect

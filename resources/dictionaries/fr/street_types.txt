@@ -75,8 +75,9 @@ digue|dig
 digues|digs
 domaine|dom
 domaines|doms
-écluse|ecluse|ecl
-écluses|ecluses|ecls
+échangeur|éch
+écluse|ecluse|ecl|écl
+écluses|ecluses|ecls|écls
 enceinte|en
 enclave|env
 enclos|enc
