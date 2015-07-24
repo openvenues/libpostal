@@ -10,6 +10,9 @@ from geodata.encoding import safe_encode
 from unicode_paths import DATA_DIR
 
 
+class InvalidNumexRuleException(Exception):
+    pass
+
 NUMEX_DATA_DIR = os.path.join(DATA_DIR, 'numex')
 
 NUMEX_RULES_FILE = os.path.join(os.pardir, os.pardir, os.pardir, 'src', 'numex_data.c')
@@ -29,6 +32,11 @@ gender_map = {
 
 CATEGORY_PLURAL = 'CATEGORY_PLURAL'
 CATEGORY_DEFAULT = 'CATEGORY_DEFAULT'
+
+valid_numex_keys = set(['name', 'value', 'type', 'left', 'right', 'gender', 'category', 'radix'])
+
+valid_ordinal_keys = set(['suffixes', 'gender', 'category'])
+
 
 category_map = {
     'plural': CATEGORY_PLURAL,
@@ -114,6 +122,9 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
         rule_index = len(all_rules)
 
         for rule in rules:
+            invalid_keys = set(rule.keys()) - valid_numex_keys
+            if invalid_keys:
+                raise InvalidNumexRuleException(u'Invalid keys: ({}) for language {}, rule: {}'.format(u','.join(invalid_keys), language, rule))
             gender = gender_map[rule.get('gender')]
             rule_type = rule_type_map[rule['type']]
             key = rule['name']
@@ -141,8 +152,9 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
         for rule in ordinal_indicators:
             gender = gender_map[rule.get('gender')]
             category = category_map[rule.get('category')]
-            if 'suffixes' not in rule:
-                print rule.keys()
+            invalid_ordinal_keys = set(rule.keys()) - valid_ordinal_keys
+            if invalid_ordinal_keys:
+                raise InvalidNumexRuleException(u'Invalid keys ({}) in ordinal rule for language {}, rule: {}'.format(u','.join(invalid_ordinal_keys), language, rule))
 
             for key, suffixes in rule['suffixes'].iteritems():
                 for suffix in suffixes:
