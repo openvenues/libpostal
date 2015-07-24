@@ -47,6 +47,23 @@ bool address_dictionary_add_expansion(char *key, address_expansion_t expansion) 
     value.value = 0;
     value.canonical = expansion.canonical_index == -1;
 
+    bool is_prefix = false;
+    bool is_suffix = false;
+    bool is_phrase = false;
+
+    for (int i = 0; i < expansion.num_dictionaries; i++) {
+        dictionary_type_t dict = expansion.dictionary_ids[i];
+        if (dict == DICTIONARY_CONCATENATED_SUFFIX_SEPARABLE || 
+            dict == DICTIONARY_CONCATENATED_SUFFIX_INSEPARABLE) {
+            is_suffix = true;
+        } else if (dict == DICTIONARY_CONCATENATED_PREFIX_SEPARABLE ||
+                   dict == DICTIONARY_ELISION) {
+            is_prefix = true;
+        } else {
+            is_phrase = true;
+        }
+    }
+
     if (expansions == NULL) {
         expansions = address_expansion_array_new_size(1);
         address_expansion_array_push(expansions, expansion);
@@ -57,7 +74,18 @@ bool address_dictionary_add_expansion(char *key, address_expansion_t expansion) 
         value.components = expansion.address_components;
         log_debug("value.count=%d, value.components=%d\n", value.count, value.components);
 
-        trie_add(address_dict->trie, key, value.value);
+        if (is_phrase) {
+            trie_add(address_dict->trie, key, value.value);
+        }
+
+        if (is_suffix) {
+            trie_add_suffix(address_dict->trie, key, value.value);
+        }
+
+        if (is_prefix) {
+            trie_add_prefix(address_dict->trie, key, value.value);
+        }
+
     } else {
         uint32_t node_id = trie_get(address_dict->trie, key);
         log_debug("node_id=%d\n", node_id);
