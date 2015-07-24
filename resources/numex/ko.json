@@ -69,7 +69,7 @@
             "value": 1000,
             "type": "cardinal",
             "left": "multiply",
-            "rigth": "add"
+            "right": "add"
         },
         {
             "name": "만",

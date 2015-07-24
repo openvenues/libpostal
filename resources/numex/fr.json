@@ -70,8 +70,7 @@
         {
             "name": "onze",
             "value": 11,
-            "type": "cardinal",
-            "smaller": "right"
+            "type": "cardinal"
         },
         {
             "name": "douze",
