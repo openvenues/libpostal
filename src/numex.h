@@ -138,6 +138,7 @@ typedef struct numex_result {
 
 VECTOR_INIT(numex_result_array, numex_result_t)
 
+char *replace_numeric_expressions(char *str, char *lang);
 numex_result_array *convert_numeric_expressions(char *str, char *lang);
 char *get_ordinal_suffix(char *numeric_string, char *lang, numex_result_t result);
 

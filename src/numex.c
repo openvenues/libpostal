@@ -1,4 +1,5 @@
 #include <math.h>
+#include <float.h>
 #include "numex.h"
 #include "file_utils.h"
 
@@ -8,7 +9,7 @@
 
 #define SEPARATOR_TOKENS "-"
 
-#define FLOOR_LOG_BASE(num, base) floor((log((float)num) / log((float)base)) + 0.00001)
+#define FLOOR_LOG_BASE(num, base) floor((log((float)num) / log((float)base)) + FLT_EPSILON)
 
 numex_table_t *numex_table = NULL;
 
@@ -631,6 +632,8 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
     numex_result_t prev_result = NULL_NUMEX_RESULT;
     numex_result_t result = prev_result;
 
+    size_t prev_result_len = 0;
+
     numex_result_array *results = NULL;
 
     numex_rule_t prev_rule = NUMEX_NULL_RULE;
@@ -665,6 +668,8 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
     bool last_was_separator = false;
     bool possible_complete_token = false;
     bool complete_token = false;
+
+    log_debug("Converting numex for str=%s, lang=%s\n", str, lang);
 
     while (idx < len) {
         if (state.state == NUMEX_SEARCH_STATE_SKIP_TOKEN) {
@@ -762,7 +767,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
             }
             result.len = idx + phrase.start + phrase.len - result.start;
 
-            log_debug("ide=%d, phrase.len=%d\n", idx, phrase.len);
+            log_debug("idx=%d, phrase.len=%d\n", idx, phrase.len);
 
             log_debug("prev_rule.radix=%d\n", prev_rule.radix);
 
@@ -778,16 +783,19 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
             } else if (rule.left_context_type == NUMEX_LEFT_CONTEXT_ADD) {
                 result.value += rule.value;
                 log_debug("LEFT_CONTEXT_ADD, value = %lld\n", result.value);
-            } else if (prev_rule.right_context_type == NUMEX_RIGHT_CONTEXT_ADD && rule.value > 0 && prev_rule.radix > 0 && FLOOR_LOG_BASE(rule.value, prev_rule.radix) < FLOOR_LOG_BASE(prev_rule.value, prev_rule.radix)) {
+            } else if (prev_rule.right_context_type == NUMEX_RIGHT_CONTEXT_ADD && rule.value > 0 && prev_rule.radix > 0 &&
+                       FLOOR_LOG_BASE(rule.value, prev_rule.radix) < FLOOR_LOG_BASE(prev_rule.value, prev_rule.radix)) {
                 result.value += rule.value;
                 log_debug("Last token was RIGHT_CONTEXT_ADD, value=%lld\n", result.value);
             } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD) {
                 log_debug("Had previous token with no context, finishing previous rule before returning\n");
 
+                result.len = prev_result_len;
                 number_finished = true;
                 advance_index = false;
                 state = start_state;
                 rule = prev_rule = NUMEX_NULL_RULE;
+                prev_result_len = 0;
             } else if (rule.rule_type != NUMEX_STOPWORD) {
                 result.value = rule.value;
                 log_debug("Got number, result.value=%lld\n", result.value);
@@ -795,6 +803,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
 
             if (rule.rule_type != NUMEX_STOPWORD) {
                 prev_rule = rule;
+                prev_result_len = result.len;
             }
 
             if (rule.rule_type == NUMEX_ORDINAL_RULE) {
@@ -927,5 +936,41 @@ char *get_ordinal_suffix(char *numeric_string, char *lang, numex_result_t result
     ordinal_indicator_t *ordinal = numex_table->ordinal_indicators->a[phrase.data];
     return ordinal->suffix;
 
+}
+
+char *replace_numeric_expressions(char *str, char *lang) {
+    numex_result_array *results = convert_numeric_expressions(str, lang);
+    if (results == NULL) return NULL;
+
+    size_t len = strlen(str);
+
+    char_array *replacement = char_array_new_size(len);
+    int start = 0;
+    int end = 0;
+
+    for (int i = 0; i < results->n; i++) {
+        numex_result_t result = results->a[i];
+
+        end = result.start;
+        
+        char numeric_string[INT64_MAX_STRING_SIZE] = {0};
+        sprintf(numeric_string, "%" PRId64, result.value);
+
+        char_array_append_len(replacement, str + start, end - start);
+        char_array_append(replacement, numeric_string);
+
+        if (result.is_ordinal) {
+            char *ordinal_suffix = get_ordinal_suffix(numeric_string, lang, result);
+            char_array_append(replacement, ordinal_suffix);
+        }
+     
+        start = result.start + result.len;
+    }
+
+    end = start;
+    char_array_append_len(replacement, str + end, len - end);
+    char_array_terminate(replacement);
+
+    return char_array_to_string(replacement);
 }
 
