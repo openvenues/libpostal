@@ -26,7 +26,7 @@ string_script_t get_string_script(char *str, size_t len) {
     bool is_ascii = true;
 
     while (idx < len) {
-        ssize_t char_len = utf8proc_iterate(ptr, -1, &ch);
+        ssize_t char_len = utf8proc_iterate(ptr, len, &ch);
 
         if (ch == 0) break;
 

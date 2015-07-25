@@ -31,8 +31,6 @@ extern "C" {
 
 #include "constants.h"
 #include "klib/khash.h"
-#include "numex.h"
-#include "scanner.h"
 #include "string_utils.h"
 #include "utf8proc/utf8proc.h"
 #include "unicode_scripts.h"
