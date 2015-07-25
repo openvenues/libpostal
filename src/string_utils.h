@@ -141,6 +141,8 @@ void cstring_array_clear(cstring_array *self);
 
 cstring_array *cstring_array_from_char_array(char_array *str);
 
+char **cstring_array_to_strings(cstring_array *self);
+
 cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, int *count);
 
 void cstring_array_join_strings(cstring_array *self, char *separator, int count, ...);

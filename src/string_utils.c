@@ -695,6 +695,18 @@ cstring_array *cstring_array_split(char *str, const char *separator, size_t sepa
     return string_array;
 }
 
+char **cstring_array_to_strings(cstring_array *self) {
+    char **strings = malloc(self->indices->n * sizeof(char *));
+
+    for (int i = 0; i < cstring_array_num_strings(self); i++) {
+        char *str = cstring_array_get_string(self, i);
+        strings[i] = strdup(str);
+    }
+
+    cstring_array_destroy(self);
+    return strings;
+}
+
 
 string_tree_t *string_tree_new_size(size_t size) {
     string_tree_t *self = malloc(sizeof(string_tree_t));
