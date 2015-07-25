@@ -661,7 +661,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
     log_debug("len = %zu\n", len);
 
-    str = strdup(str);
+    str = strndup(str, len);
 
     bool allocated_trans_name = false;
 
