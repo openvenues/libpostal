@@ -69,7 +69,7 @@ corner|cnr|crn|cor
 corners|cnrs|crns|cors
 corseo|cseo
 corso|cso
-country road|cr
+county road|cr|c.r.|c.r|c r
 course|crse
 court|ct|crt
 courts|crts|cts
