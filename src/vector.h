@@ -23,6 +23,11 @@ extern "C" {
     static inline void name##_push(name *array, type value) {           \
         kv_push(type, *array, value);                                   \
     }                                                                   \
+    static inline void name##_extend(name *array, name *other) {        \
+        for (int i = 0; i < other->n; i++) {                            \
+            kv_push(type, *array, *(other->a + i));                     \
+        }                                                               \
+    }                                                                   \
     static inline type name##_pop(name *array) {                        \
         return kv_pop(*array);                                          \
     }                                                                   \
