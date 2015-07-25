@@ -13,6 +13,7 @@
 #include "geonames.h"
 #include "geodb.h"
 #include "geo_disambiguation.h"
+#include "msgpack_utils.h"
 #include "normalize.h"
 #include "string_utils.h"
 
@@ -388,7 +389,7 @@ bool geodb_builder_add_to_trie(geodb_builder_t *self, char *key, uint16_t addres
 bool geodb_finalize(geodb_builder_t *self, char *output_dir) {
     char_array *path = char_array_new_size(strlen(output_dir));
 
-    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output, GEODB_TRIE_FILENAME);
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_TRIE_FILENAME);
     char *trie_path = char_array_get_string(path);
 
     trie_save(self->trie, trie_path);
@@ -397,7 +398,7 @@ bool geodb_finalize(geodb_builder_t *self, char *output_dir) {
 
     char *hash_filename = strdup(char_array_get_string(path));
 
-    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output, GEODB_LOG_FILENAME);
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_LOG_FILENAME);
     char *log_filename = char_array_get_string(path);
 
     if (self->log_writer != NULL) {
@@ -413,7 +414,7 @@ bool geodb_finalize(geodb_builder_t *self, char *output_dir) {
 
     free(hash_filename);
 
-    join_path(path, output_dir, GEODB_BLOOM_FILTER_FILENAME);
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_BLOOM_FILTER_FILENAME);
     char *bloom_filter_path = char_array_get_string(path);
     if (!bloom_filter_save(self->bloom_filter, bloom_filter_path)) {
         log_error("Could not save bloom filter\n");
@@ -458,6 +459,14 @@ void import_geonames(geodb_builder_t *self, char *filename) {
     int normalize_utf8_options = NORMALIZE_STRING_DECOMPOSE | NORMALIZE_STRING_LOWERCASE;
     int normalize_latin_options = normalize_utf8_options | NORMALIZE_STRING_LATIN_ASCII;
 
+    uint32_array *ordered_ids = uint32_array_new();
+    char_array *ordered_ids_str = char_array_new();
+
+    cmp_ctx_t ctx;
+    msgpack_buffer_t buffer = (msgpack_buffer_t){ordered_ids_str, 0};
+    
+    cmp_init(&ctx, &buffer, msgpack_bytes_reader, msgpack_bytes_writer);
+
     int i = 0;
 
     while ((line = file_getline(f)) != NULL) {
@@ -465,7 +474,6 @@ void import_geonames(geodb_builder_t *self, char *filename) {
         char *name = char_array_get_string(g->name);
 
         char *utf8_normalized = NULL;
-        char *normalized = NULL;
 
         size_t id_len = sprintf(id_string, "%d", g->geonames_id);
 
@@ -480,6 +488,14 @@ void import_geonames(geodb_builder_t *self, char *filename) {
 
             geodb_builder_add_to_trie(self, utf8_normalized, get_address_component(g->type));
 
+            cmp_write_uint_vector(&ctx, ordered_ids);
+
+            if ((sparkey_logwriter_put(self->log_writer, strlen(utf8_normalized), (uint8_t *)utf8_normalized, ordered_ids_str->n - 1, (uint8_t *)char_array_get_string(ordered_ids_str))) != SPARKEY_SUCCESS) {
+                log_error("Error writing ids string to Sparkey\n");
+                exit(EXIT_FAILURE);
+            }
+
+            uint32_array_clear(ordered_ids);
             kh_clear(int_set, distinct_ids);
             kh_clear(str_set, distinct_features);
 
@@ -509,6 +525,12 @@ void import_geonames(geodb_builder_t *self, char *filename) {
             }
 
             key = kh_put(int_set, all_ids, g->geonames_id, &ret);
+        }
+
+        key = kh_get(int_set, distinct_ids, g->geonames_id);
+
+        if (key == kh_end(distinct_ids)) {
+            uint32_array_push(ordered_ids, g->geonames_id);
         }
 
         key = kh_put(int_set, distinct_ids, g->geonames_id, &ret);
@@ -683,10 +705,10 @@ int main(int argc, char **argv) {
 
     char_array *path = char_array_new_size(strlen(input_dir));
 
-    join_path(path, input_dir, geonames_filename);
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, input_dir, geonames_filename);
     char *geonames_path = strdup(char_array_get_string(path));
 
-    join_path(path, output_dir, GEODB_LOG_FILENAME);
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_LOG_FILENAME);
     char *log_filename = char_array_get_string(path);
 
     geodb_builder_t *builder = geodb_builder_new(log_filename);
@@ -698,8 +720,8 @@ int main(int argc, char **argv) {
     printf("\n\n");
 
     char *postal_codes_filename = "postal_codes.tsv";
-    
-    join_path(path, input_dir, postal_codes_filename);
+
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, input_dir, postal_codes_filename);
     char *postal_codes_path = char_array_get_string(path);
 
     log_info("Doing postal_codes\n");
