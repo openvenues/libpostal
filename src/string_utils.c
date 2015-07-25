@@ -628,6 +628,10 @@ inline uint32_t cstring_array_start_token(cstring_array *self) {
     return index;
 }
 
+inline void cstring_array_terminate(cstring_array *self) {
+    char_array_terminate(self->str);
+}
+
 inline uint32_t cstring_array_add_string(cstring_array *self, char *str) {
     uint32_t index = cstring_array_start_token(self);
     char_array_append(self->str, str);

@@ -1,4 +1,5 @@
 #include "geonames.h"
+#include "msgpack_utils.h"
 
 #define DEFAULT_BUFFER_SIZE 4096
 
@@ -91,70 +92,6 @@ void geoname_destroy(geoname_t *self) {
     }
 
     free(self);
-}
-
-static char_array *read_string(char_array *str, size_t len, buffer_t *buffer) {
-    char_array_clear(str);
-    char_array_cat_len(str, buffer->data->a + buffer->offset, len);
-    buffer->offset += len;
-    return str;
-}
-
-static bool bytes_reader(cmp_ctx_t *ctx, void *data, size_t size) {
-    buffer_t *buffer = ctx->buf;
-    if (buffer->offset + size > char_array_len(buffer->data)) {
-        return false;
-    }
-    memcpy(data, buffer->data->a + buffer->offset, size);
-    buffer->offset += size;
-    return true;
-}
-
-static size_t bytes_writer(cmp_ctx_t *ctx, const void *data, size_t count) {
-    buffer_t *buffer = (buffer_t *)ctx->buf;
-    char_array_cat_len(buffer->data, (char *)data, count);
-    buffer->offset += count;
-    return count;
-}
-
-bool cmp_read_str_size_or_nil(cmp_ctx_t *ctx, char_array **str, uint32_t *size) {
-    cmp_object_t obj;
-
-    if (!cmp_read_object(ctx, &obj)) {
-        return false;
-    }
-
-    if (cmp_object_is_str(&obj)) {
-        *size = obj.as.str_size;
-        *str = read_string(*str, *size, ctx->buf);
-    } else if (cmp_object_is_nil(&obj)) {
-        *size = 0;
-        char_array_clear(*str);
-    }
-
-    return true;
-}
-
-bool cmp_write_str_or_nil(cmp_ctx_t *ctx, char_array *str) {
-    if (str != NULL && char_array_len(str) > 0) {
-        return cmp_write_str(ctx, str->a, char_array_len(str));
-    } else {
-        return cmp_write_nil(ctx);
-    }
-}
-
-bool cmp_write_uint_vector(cmp_ctx_t *ctx, uint32_array *array) {
-    size_t n = array->n;
-    if (!cmp_write_array(ctx, n)) {
-        return false;
-    }
-
-    for (size_t i = 0; i < n; i++) {
-        if (!cmp_write_uint(ctx, array->a[i])) {
-            return false;
-        }
-    }
-    return true;
 }
 
 bool geoname_deserialize_ctx(geoname_t *self, cmp_ctx_t *ctx) {
@@ -262,8 +199,8 @@ bool geoname_deserialize_ctx(geoname_t *self, cmp_ctx_t *ctx) {
 
 bool geoname_deserialize(geoname_t *self, char_array *str) {
     cmp_ctx_t ctx;
-    buffer_t buffer = (buffer_t){str, 0};
-    cmp_init(&ctx, &buffer, bytes_reader, bytes_writer);
+    msgpack_buffer_t buffer = (msgpack_buffer_t){str, 0};
+    cmp_init(&ctx, &buffer, msgpack_bytes_reader, msgpack_bytes_writer);
 
     return geoname_deserialize_ctx(self, &ctx);
 }
@@ -301,8 +238,8 @@ bool geoname_serialize_ctx(geoname_t *self, cmp_ctx_t *ctx) {
 
 bool geoname_serialize(geoname_t *self, char_array *str) {
     cmp_ctx_t ctx;
-    buffer_t buffer = (buffer_t){str, 0};
-    cmp_init(&ctx, &buffer, bytes_reader, bytes_writer);
+    msgpack_buffer_t buffer = (msgpack_buffer_t){str, 0};
+    cmp_init(&ctx, &buffer, msgpack_bytes_reader, msgpack_bytes_writer);
     
     return geoname_serialize_ctx(self, &ctx);    
 }
@@ -463,8 +400,8 @@ bool gn_postal_code_deserialize_ctx(gn_postal_code_t *self, cmp_ctx_t *ctx) {
 
 bool gn_postal_code_deserialize(gn_postal_code_t *self, char_array *str) {
     cmp_ctx_t ctx;
-    buffer_t buffer = (buffer_t){str, 0};
-    cmp_init(&ctx, &buffer, bytes_reader, bytes_writer);
+    msgpack_buffer_t buffer = (msgpack_buffer_t){str, 0};
+    cmp_init(&ctx, &buffer, msgpack_bytes_reader, msgpack_bytes_writer);
 
     return gn_postal_code_deserialize_ctx(self, &ctx);
 }
@@ -490,8 +427,8 @@ static bool gn_postal_code_serialize_ctx(gn_postal_code_t *self, cmp_ctx_t *ctx)
 
 bool gn_postal_code_serialize(gn_postal_code_t *self, char_array *str) {
     cmp_ctx_t ctx;
-    buffer_t buffer = (buffer_t){str, 0};
-    cmp_init(&ctx, &buffer, bytes_reader, bytes_writer);
+    msgpack_buffer_t buffer = (msgpack_buffer_t){str, 0};
+    cmp_init(&ctx, &buffer, msgpack_bytes_reader, msgpack_bytes_writer);
 
     return gn_postal_code_serialize_ctx(self, &ctx);
 
@@ -526,8 +463,8 @@ void gn_postal_code_print(gn_postal_code_t *self) {
 
 bool geonames_generic_serialize(geonames_generic_t *gn, char_array *str) {
     cmp_ctx_t ctx;
-    buffer_t buffer = (buffer_t){str, 0};
-    cmp_init(&ctx, &buffer, bytes_reader, bytes_writer);
+    msgpack_buffer_t buffer = (msgpack_buffer_t){str, 0};
+    cmp_init(&ctx, &buffer, msgpack_bytes_reader, msgpack_bytes_writer);
 
     if (!cmp_write_u8(&ctx, (uint8_t)gn->type)) {
         return false;
@@ -544,8 +481,8 @@ bool geonames_generic_serialize(geonames_generic_t *gn, char_array *str) {
 
 bool geonames_generic_deserialize(gn_type *type, geoname_t *geoname, gn_postal_code_t *postal_code, char_array *str) {
     cmp_ctx_t ctx;
-    buffer_t buffer = (buffer_t){str, 0};
-    cmp_init(&ctx, &buffer, bytes_reader, bytes_writer);
+    msgpack_buffer_t buffer = (msgpack_buffer_t){str, 0};
+    cmp_init(&ctx, &buffer, msgpack_bytes_reader, msgpack_bytes_writer);
 
     uint8_t geonames_type;
 

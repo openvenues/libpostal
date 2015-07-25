@@ -11,7 +11,6 @@ extern "C" {
 #include <string.h>
 
 #include "collections.h"
-#include "cmp/cmp.h"
 #include "features.h"
 #include "string_utils.h"
 
@@ -26,11 +25,6 @@ typedef enum {
     GEONAMES_NEIGHBORHOOD = 7,
     NUM_BOUNDARY_TYPES
 } boundary_type_t;
-
-typedef struct buffer {
-    char_array *data;
-    int offset;
-} buffer_t;
 
 typedef struct geoname {
     uint32_t geonames_id;
