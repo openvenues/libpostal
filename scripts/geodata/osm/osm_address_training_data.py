@@ -414,6 +414,9 @@ def build_address_training_data(langauge_rtree, infile, out_dir, format=False):
 
         for k, v in street_language.iteritems():
             for s in v:
+                s = s.strip()
+                if not s:
+                    continue
                 if k in languages:
                     writer.writerow((k, country, safe_encode(s)))
             if i % 1000 == 0 and i > 0:
