@@ -228,6 +228,16 @@ char *string_tree_iterator_get_string(string_tree_iterator_t *self, uint32_t i);
 bool string_tree_iterator_done(string_tree_iterator_t *self);
 void string_tree_iterator_destroy(string_tree_iterator_t *self);
 
+
+#define string_tree_iterator_foreach_token(iter, s, code) {                             \
+    string_tree_t *tree = iter->tree;                                                   \
+    for (int __pi = 0; __pi < iter->num_tokens; __pi++) {                               \
+        (s) = string_tree_get_alternative(tree, __pi, iter->path[__pi]);                \
+        code;                                                                           \
+    }                                                                                   \
+}
+
+
 #ifdef __cplusplus
 }
 #endif
