@@ -55,6 +55,8 @@ address_dictionary_t *get_address_dictionary(void);
 bool address_dictionary_init(void);
 
 phrase_array *search_address_dictionaries(char *str, char *lang);
+phrase_array *search_address_dictionaries_tokens(char *str, token_array *tokens, char *lang);
+
 address_expansion_array *address_dictionary_get_expansions(char *key);
 char *address_dictionary_get_canonical(uint32_t index);
 int32_t address_dictionary_next_canonical_index(void);

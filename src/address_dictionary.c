@@ -21,7 +21,6 @@ address_expansion_array *address_dictionary_get_expansions(char *key) {
 int32_t address_dictionary_next_canonical_index(void) {
     if (address_dict == NULL || address_dict->canonical == NULL) return -1;
     return (int32_t)cstring_array_num_strings(address_dict->canonical);
-
 }
 
 bool address_dictionary_add_canonical(char *canonical) {
@@ -117,16 +116,26 @@ bool address_dictionary_add_expansion(char *key, address_expansion_t expansion) 
 
 }
 
-phrase_array *search_address_dictionaries(char *str, char *lang) {
-    if (str == NULL || lang == NULL) return NULL;
-
+static trie_prefix_result_t get_language_prefix(char *lang) {
     trie_prefix_result_t prefix = trie_get_prefix(address_dict->trie, lang);
 
     if (prefix.node_id == NULL_NODE_ID) {
-        return NULL;
+        return NULL_PREFIX_RESULT;
     }
 
     prefix = trie_get_prefix_from_index(address_dict->trie, NAMESPACE_SEPARATOR_CHAR, NAMESPACE_SEPARATOR_CHAR_LEN, prefix.node_id, prefix.tail_pos);
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        return NULL_PREFIX_RESULT;
+    }
+
+    return prefix;
+}
+
+phrase_array *search_address_dictionaries(char *str, char *lang) {
+    if (str == NULL || lang == NULL) return NULL;
+
+    trie_prefix_result_t prefix = get_language_prefix(lang);
 
     if (prefix.node_id == NULL_NODE_ID) {
         return NULL;
@@ -135,6 +144,15 @@ phrase_array *search_address_dictionaries(char *str, char *lang) {
     return trie_search_from_index(address_dict->trie, str, prefix.node_id);
 }
 
+phrase_array *search_address_dictionaries_tokens(char *str, token_array *tokens, char *lang) {
+    trie_prefix_result_t prefix = get_language_prefix(lang);
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        return NULL;
+    }
+
+    return trie_search_tokens_from_index(address_dict->trie, str, tokens, prefix.node_id);
+}
 
 bool address_dictionary_init(void) {
     if (address_dict != NULL) return false;
