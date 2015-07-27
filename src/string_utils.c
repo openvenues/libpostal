@@ -797,6 +797,10 @@ inline void string_tree_append_string_len(string_tree_t *self, char *str, size_t
     cstring_array_append_string_len(self->strings, str, len);
 }
 
+inline uint32_t string_tree_num_tokens(string_tree_t *self) {
+    return self->token_indices->n - 1;
+}
+
 inline uint32_t string_tree_num_alternatives(string_tree_t *self, uint32_t i) {
     if (i >= self->token_indices->n) return 0;
     return self->token_indices->a[i + 1] - self->token_indices->a[i];
@@ -824,7 +828,7 @@ string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
     string_tree_iterator_t *self = malloc(sizeof(string_tree_iterator_t));
     self->tree = tree;
 
-    uint32_t num_tokens = tree->token_indices->n - 1;
+    uint32_t num_tokens = string_tree_num_tokens(tree);
     self->num_tokens = num_tokens;
 
     // calloc since the first path through the tree is all zeros
