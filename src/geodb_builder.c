@@ -394,9 +394,13 @@ bool geodb_finalize(geodb_builder_t *self, char *output_dir) {
 
     trie_save(self->trie, trie_path);
 
+    char_array_clear(path);
+
     char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_HASH_FILENAME);
 
     char *hash_filename = strdup(char_array_get_string(path));
+
+    char_array_clear(path);
 
     char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_LOG_FILENAME);
     char *log_filename = char_array_get_string(path);
@@ -413,6 +417,8 @@ bool geodb_finalize(geodb_builder_t *self, char *output_dir) {
     }
 
     free(hash_filename);
+
+    char_array_clear(path);
 
     char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_BLOOM_FILTER_FILENAME);
     char *bloom_filter_path = char_array_get_string(path);
@@ -496,6 +502,7 @@ void import_geonames(geodb_builder_t *self, char *filename) {
             }
 
             uint32_array_clear(ordered_ids);
+            char_array_clear(ordered_ids_str);
             kh_clear(int_set, distinct_ids);
             kh_clear(str_set, distinct_features);
 
@@ -698,15 +705,14 @@ int main(int argc, char **argv) {
         output_dir = LIBPOSTAL_GEODB_DIR;
     }
 
-    bool strip_input_separator = strncmp(input_dir + strlen(input_dir) - 1, PATH_SEPARATOR, PATH_SEPARATOR_LEN) == 0;
-    bool strip_output_separator = strncmp(output_dir + strlen(output_dir) - 1, PATH_SEPARATOR, PATH_SEPARATOR_LEN) == 0;
-
     char *geonames_filename = "geonames.tsv";
 
     char_array *path = char_array_new_size(strlen(input_dir));
 
     char_array_add_joined(path, PATH_SEPARATOR, true, 2, input_dir, geonames_filename);
     char *geonames_path = strdup(char_array_get_string(path));
+
+    char_array_clear(path);
 
     char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_LOG_FILENAME);
     char *log_filename = char_array_get_string(path);
@@ -720,6 +726,8 @@ int main(int argc, char **argv) {
     printf("\n\n");
 
     char *postal_codes_filename = "postal_codes.tsv";
+
+    char_array_clear(path);
 
     char_array_add_joined(path, PATH_SEPARATOR, true, 2, input_dir, postal_codes_filename);
     char *postal_codes_path = char_array_get_string(path);
