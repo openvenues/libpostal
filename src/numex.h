@@ -21,7 +21,7 @@ extern "C" {
 #include "trie.h"
 #include "trie_search.h"
 
-#define DEFAULT_NUMEX_PATH LIBPOSTAL_DATA_DIR "/numex/numex.dat"
+#define DEFAULT_NUMEX_PATH LIBPOSTAL_DATA_DIR PATH_SEPARATOR "numex" PATH_SEPARATOR "numex.dat"
 
 #define GENDER_MASCULINE_PREFIX "m"
 #define GENDER_FEMININE_PREFIX "f"
