@@ -2,3 +2,4 @@ block|blk|bl|blck
 quadrant|qd|quad
 section|sec|sect|sxn
 township|twp|tshp
+village|vil|vge|vill|villag|villg|vlg|vlge|vllg|vl

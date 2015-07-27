@@ -1,10 +1,11 @@
 academy
+aerodome
 aged care center|aged care centre|aged care|centre for aged care|center for aged care|center for the aged|centre for the aged|aged care facilities
 amphitheatre|amphitheater
 animal hospital|animal hosp
 air force base|afb
 air national guard base|angb
-airport|aerodome|aprt
+airport|aprt
 apartments|apts|appartments
 aquarium
 arms
@@ -23,6 +24,7 @@ boarding house|bhouse|bh|board house
 bistro
 book store|bookstore
 brewery
+business park|bus pk|biz pk|bus prk|biz prk
 cafe|café
 campus
 caravan park|carvn|cvp|caravn park|c van park|cvan park|caravan resort|van park|caratel|caravan par|carav park|carvn park|cara park
@@ -76,7 +78,7 @@ doctors
 elementary school|primary school|public school|ps|p s
 embassy
 ex services complex
-factory|fty
+factory|fcty|fty|fy
 family practice
 farmer's market|farmers market
 farm|frm
@@ -85,6 +87,7 @@ fire department|fd|f d
 fire station
 flats|flts
 forge
+fort|ft
 fountain
 gaol
 garage
@@ -118,43 +121,42 @@ kindergarten
 kitchen
 league
 library
-lodge|ldge|lodg
+lodge|ldge|lodg|ldg
 lounge
 mall|mll
 maison
 manor|mnr
-market|mkt
+market|mkt|mrkt
 marketplace|mktpl|mktplc
 mansion
 mansions
 masonic home
 masonic homes
 medical|med
-memorial
-military|mil
+memorial|mem
 mission|msn
 monastery|monastry
 motel|mot|motl|mtel
-municipal building|municipal bldg
+municipal building|municipal bldg|mun building|mun bldg|mpal building|mpal bldg
 museum|mus
 music hall
 night club|nightclub
 nursing
 nursing center|nursing centre
 nursing home|nh|nhome|nrs|nrsg|nsg|nurs|nrsng hm|n h|nrs home|n home|nursing hom|nursing ho|nursing h
-high school|hs|secondary school
-international|intl
-junior high school|jr high school|jhs
+high school|hs|h s
+secondary school
+junior high school|jr high school|jhs|j h s|jr hs|jr h s
 laboratory
 lab
 labs
 market|mkt
-middle school|ms
+middle school|ms|m s
 movie theater
 movie theatre
-national park|np|natl park|natl pk
-national recreation area|nra|natl rec area
-national wildlife refuge area|nwra|natl wildlife refuge
+national park|np|natl park|natl pk|nat'l park|nat'l pk
+national recreation area|nra|natl rec area|nat'l rec area
+national wildlife refuge area|nwra|natl wildlife refuge area|nat'l wildlife refuge area
 nurses home|nurses home|nurse home
 nursery
 office|ofc
@@ -175,8 +177,9 @@ playhouse
 police department|pd|p d
 police station
 polytechnic
+port|pt|prt
 post office
-precinct
+precinct|pct
 pre school|preschool|pre-school
 pre-kindergarten|prekindergarten|pre-k|prek|pre k
 primary school
@@ -188,7 +191,9 @@ public school|ps
 recycling
 retreat|rtt
 rotary|rty
-resevoir|res
+reservation|res|resrv|resv|rsrv|rserv
+reserve|res|resrv|resv|rsrv|rserv|rserve|rsrve
+reservoir|res
 restaurant
 retirement home|retirement village|ret village|masonic retirement village|retirement|ret vill|retirement home|retirement v|rh|r h
 roadhouse

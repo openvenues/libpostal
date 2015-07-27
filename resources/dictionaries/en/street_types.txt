@@ -44,7 +44,7 @@ camp|cp
 canyon|cyn|cnyn
 caravan|cvan|cvn|c van
 causeway|csway|cswy|causewy|caus|cause|cway
-center|centre|cetr|cntr|ctr|c
+center|centre|cetr|cntr|ctr|c|cen
 centreway|cnwy
 chase|ch
 circle|cir|circel
@@ -69,7 +69,9 @@ corner|cnr|crn|cor
 corners|cnrs|crns|cors
 corseo|cseo
 corso|cso
-county road|cr|c.r.|c.r|c r
+county highway|ch|c.h.|c.h|c h|c.hw|c hw|co.hw|co hw|cty.hw|cty hw|c.hgwy|c hgwy|co.hgwy|co hgwy|cty.hgwy|cty hgwy|c.hway|c hway|co.hway|co hway|cty.hway|cty hway|c.hwy|c hwy|co.hwy|co hwy|cty.hwy|cty hwy|c.hi|c hi|co.hi|co hi|cty.hi|cty hi
+county road|cr|c.r.|c.r|c r|co.r|co r|c.rd|c rd|co.rd|co rd|cty.r|cty r|cty.rd|cty rd
+county route|cr|c.r.|c.r|c r|co.r|co r|c.rt|c rt|co.rt|co rt|cty.r|cty r|cty.rt|cty rt|c.rte|c rte|co.rte|co rte|cty.rte|cty rte
 course|crse
 court|ct|crt
 courts|crts|cts
@@ -81,8 +83,8 @@ crief|crf
 croft|cft
 cross|cs|crss
 crossing|crsg|xing|csg
-crossroad|crd|cross road|xroad|xrd
-crossway|cowy|crwy|xway|xwy
+crossroad|crd|cross road|xroad|x-road|x road|xrd|x-rd|x rd
+crossway|cowy|crwy|xway|xwy|x-way|x way|x-wy|xwy
 cruiseway|cuwy|crwy
 cul
 cul de sac|cul-de-sac|culdesac|cds|cusac|csac
@@ -96,7 +98,7 @@ distributor|dstr
 divide|div
 diversion|divers
 down|dn
-downs|dn|dns|dwns
+downs|dns|dwns
 drive|dr|drv|dv|dve
 driveway|drwy|dvwy|dwy|dway|drvwy
 drove|drov
@@ -105,25 +107,25 @@ edge|edg
 elbow|elb
 elm
 end
-entrance|ent
-esplanade|esp
+entrance|ent|entr
+esplanade|esp|espl
 estate|est
 estates|ests
-expressway|exp|expwy|expy
+expressway|exp|expwy|expway|expy
 extension|ex|ext|extn|exten
-fairway|fawy
+fairway|fawy|fy
 fall|fl
 falls|fls
 fare
 farm|frm
 farms|frms
 fern
-ferry|fry
-field|fld
-fields|flds
+ferry|fry|fy
+field|fld|fd
+fields|flds|fds
 fireline|fline|fire line|flne
 firetrack|ftrk|fire track
-firetrail|fitr|fire trail
+firetrail|fit|fitr|fire trail
 flat|fl|flt
 flats|flts
 ferry|fy
@@ -133,7 +135,6 @@ footway|ftwy|foot way
 ford|frd
 foreshore|fshr|fore shore
 formation|form|fmtn
-fort|ft
 freeway|frwy|fw|fwy|fway
 front|frnt
 frontage|frtg|fr
@@ -142,8 +143,8 @@ garden|gdn|grd|grdn
 gardens|gdns|grds|grdns
 gate|ga|gte
 gates|gtes
-gateway|gwy|gway
-glade|gld|glde
+gateway|gwy|gway|gtwy|gtway
+glade|gl|gld|glde
 glen|gln
 grange|gra
 green|grn|gn
@@ -159,8 +160,8 @@ heads|hds
 heath|hth
 heights|hghts|hgts|hieghts|ht|hts|hgths
 highlands|hghlds|hlds|hglds
-highroad|hrd|high road|hird
-highway|hgwy|hw|hway|hwy|hi|hwye|hwyw
+highroad|hrd|high road|hird|hi.rd|hi rd
+highway|hgwy|hw|hway|hwy|hi|hwye|hywy
 hill|hl
 hills|hls
 hollow|hllw
@@ -170,8 +171,8 @@ inlet|inlt
 interchange|intg|intchg|inter change
 intersection|intn|inter section|intsctn
 interstate|inter state|i
-island|is|id|i
-islands|iss|ids
+island|is|id|i|isld
+islands|iss|ids|islds
 junction|jct|jnc|jnct|jctn|jtn|junct|j
 key|ky
 keys|kys
@@ -185,13 +186,12 @@ lane|ln|la
 laneway|lnwy
 light|lgt|lt
 limits|lmts
-line
+line|ln
 link|lnk|lk
 little|lit|ltl|lt
 lookout|lkt|look out
 loop|lp
 loops|lps
-lower|low|lwr|lr
 lynne|lynn
 mall|ml
 manor|mnr
@@ -205,13 +205,8 @@ mews|mws
 mile|mi
 mill|ml
 mills|mls
-middle|mid
 moor
 motorway|mway|mwy|mtwy
-motu
-mount|mt
-mountain|mtn
-mountains|mtns
 neaves|nvs
 nook|nk
 oaks
@@ -222,7 +217,7 @@ overbridge|ovrb|over bridge
 paddock|padk
 palms|plms
 parade|pde|prd|prde
-park|pk|prk|parc
+park|pk|prk
 parklands|pkld|pklds|parkland|park lands|park land
 parkway|pkwy|parkwy|pky|pkway|prkwy|prkway|pkw|pwy
 part|prt
@@ -231,12 +226,11 @@ passage|psge|pass
 path|pth
 pathway|phwy|pway|pthway|pthwy|ptway|ptwy
 peninsula|psla
-ph pors
 piazza|piaz|pzza
 pike|pk
 pine|pne|pn
 pines|pns|pnes
-place|pl|pla
+place|pl|pla|plc
 plain|pln|pl
 plains|plns|pls
 plateau|plat|plt
@@ -244,7 +238,6 @@ plaza|plz|plza|pz
 pocket|pkt|pokt|pckt
 point|piont|pnt|pt
 pointe|pte|pnte
-port|pt|prt
 prairie|pr
 priors|prrs
 private|pvt
@@ -271,16 +264,15 @@ return|rtn
 ride
 ridge|rdge|rdg
 ridgeway|rgwy|rdgwy|ridge way
-right of way|rowy|rightofway|rofw|row|r o w
+right of way|rowy|rightofway|rofw|row|r o w|r of w
 ring
 rise|ri
-river|r|riv|rvr
 riverway|rvwy
 riviera|rvra
 road|raod|rd
 roads|raods|rds
 roadside|rdsd|road side
-roadway|rdwy|rdw
+roadway|rdwy|rdw|rdy
 rocks|rks
 rosebowl|rsbl|rose bowl
 rotary|rty
@@ -302,9 +294,10 @@ spring|spg|sprng
 springs|spgs|sprngs
 spur|spr
 square|sq|sqr
-stairway|stwy|strwy|stair way|st wy|str way
-state highway|shwy|sh|s hwy|s h|statehighway
-state route|sr|stateroute|s r|s route|statert|s rt|state rt|st rt
+stairway|stwy|strwy|stair way|st.wy|st wy|str.way|str way
+state highway|s.highway|s highway|st.highway|st highway|sh|s.h.|s.h|s h|st.h|st h|s.hw|s hw|st.hw|st hw|s.hwy|s hwy|shwy|s.hgwy|s hgwy|st.hgwy|st hgwy|s.hway|s hway|st.hway|st hway|s.hwy|s hwy|st.hwy|st hwy|s.hi|s hi|st.hi|st hi|statehighway
+state road|sr|stateroad|s.r.|s.r|s r|s.road|s road|st.road|st road|staterd|srd|s.rd|s rd|state rd|strd|st.rd|st rd
+state route|sr|stateroute|s.r.|s.r|s r|s.route|s route|st.route|st route|statert|srt|s.rt|s rt|srte|s.rte|s rte|state rt|state rte|strt|strte|st.rt|st rt|st.rte|st rte
 strand|stra|strnd|strd
 strands|strnds|strds
 stravenue|stra|strav
@@ -314,19 +307,22 @@ subdivision|subdiv
 subway|sbwy
 summit|smt|sumt
 tarn|tn
-terrace|tce|ter|terr|terace|terrac|terrasse|tsse
+terrace|tce|ter|tr|terr|terace|terrac|terrasse|tsse
 thicket|thick
 thoroughfare|thor|throughfare|thorough fare|thfr
 thoroughway|thwy
 throughway|thru
 tollway|tlwy|twy
+township highway|th|t.h.|t.h|t h|twp.h|twp h|tshp.h|tshp h|t.hw|t hw|twp.hw|twp hw|tshp.hw|tshp hw|t.hgwy|t hgwy|twp.hgwy|twp hgwy|tshp.hgwy|tshp hgwy|t.hway|t hway|twp.hway|twp hway|tshp.hway|tshp hway|t.hwy|t hwy|twp.hwy|twp hwy|tshp.hwy|tshp hwy|t.hi|t hi|twp.hi|twp hi|tshp.hi|tshp hi
+township road|tr|t.r.|t.r|t r|t rd|t.rd|trd|twpr|twp.r|twp r|twp.rd|twp rd|tshp.r|tshp r|tshp.rd|tshp rd
+township route|tr|t.r.|t.r|t r|t rt|t.rt|trt|t.rte|t rte|twpr|twp.r|twp r|twp.rt|twp rt|twp.rte|twp rte|tshp.r|tshp r|tshp.rt|tshp rt|tshp.rte|tshp rte
 top
 tor
 tower|twr
 towers|twrs
 townline|tline
 trace|trce
-track|trk|trak
+track|tr|trk|trak
 trafficway|trfy
 trail|tr|trl
 trailer|trlr
@@ -339,32 +335,26 @@ tunnel|tun|tunl
 turnabout|trnabt
 turn|tn|trn
 turnpike|tpk|tpke
-underpass|upas|ups|under pass
+underpass|upas|upass|ups|under pass
 union|un
-upper|up|upr|uppr
 vale|va|vl
-valley|vlly|vy
+valley|vlly|vly|vy
 vennel
 via
 viaduct|via|viad|vdct|viadct
 view|vw
 views|vws
-villa|vll
-villas|vlls
-village|vil|vge|vill|villag|villg|vlg|vlge|vllg|vl
-villages|vlgs
 vista|vst|vsta|vis
 vue
 wade
 walk|wlk|wk
-walkway|wkwy|wky
+walkway|wkwy|wky|wlkwy
 waters|wtrs
 way|wy
 ways|wys
 well|wl
 wells|wls
 wharf|whrf
-whenua|whna
 wood|wd
 woods|wds
 wynd|wyn

@@ -2,7 +2,7 @@ basement|bsm|bsmt|bsmnt|basement|bsment
 floor|fl
 ground|g
 ground floor|gd|gdfl|gd fl
-level|lev|levl|lvel|lvl
+level|lev|levl|lvel|lvl|l
 lobby
 lower ground floor|lg|lgf|lgfl
 mezzanine|mezz
