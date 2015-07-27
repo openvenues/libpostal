@@ -759,7 +759,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
 
             /* e.g. in English, "two hundred", when you get to hundred, multiply by the 
                left value mod the current value, which also covers things like
-               "one thousand two hundred" although in those cases should be less commmon in addresses
+               "one thousand two hundred" although those cases should be less commmon in addresses
             */
 
             if (result.len == 0) {
@@ -808,7 +808,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
 
             if (rule.rule_type == NUMEX_ORDINAL_RULE) {
                 result.is_ordinal = true;
-                if (rule.right_context_type == NUMEX_RIGHT_CONTEXT_NONE) {
+                if (rule.right_context_type == NUMEX_RIGHT_CONTEXT_NONE && !whole_tokens_only) {
                     number_finished = true;
                 }
                 log_debug("rule is ordinal\n");
@@ -826,8 +826,8 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
         set_rule = false;
 
         if (advance_index) {
-            idx += phrase.len;
-            ptr += phrase.len;
+            idx += phrase.start + phrase.len;
+            ptr += phrase.start + phrase.len;
         }
 
         advance_index = true;
