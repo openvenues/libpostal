@@ -145,6 +145,8 @@ phrase_array *search_address_dictionaries(char *str, char *lang) {
 }
 
 phrase_array *search_address_dictionaries_tokens(char *str, token_array *tokens, char *lang) {
+    if (str == NULL || lang == NULL) return NULL;
+
     trie_prefix_result_t prefix = get_language_prefix(lang);
 
     if (prefix.node_id == NULL_NODE_ID) {
