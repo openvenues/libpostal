@@ -164,7 +164,7 @@ char *utf8_lower(const char *s) {
     ssize_t len = (ssize_t)strlen(s);
     uint8_t *dest;
 
-    ssize_t dest_len = utf8proc_map((const uint8_t *)s, len, &dest, UTF8PROC_OPTIONS_LOWERCASE);
+    utf8proc_map((const uint8_t *)s, len, &dest, UTF8PROC_OPTIONS_LOWERCASE);
     return (char *)dest;
 }
 
@@ -246,7 +246,6 @@ size_t utf8_common_prefix(const char *str1, const char *str2) {
 
     int32_t c1 = 0;
     int32_t c2 = 0;
-    ssize_t char_len1, char_len2;
 
     size_t len1 = strlen(str1);
     size_t len2 = strlen(str2);
@@ -351,8 +350,6 @@ size_t string_rtrim(char *str) {
 }
 
 size_t string_ltrim(char *str) {
-    char *end;
-
     size_t spaces = 0;
 
     size_t len = strlen(str) - 1;
