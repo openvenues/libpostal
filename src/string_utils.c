@@ -338,13 +338,29 @@ inline size_t utf8_common_prefix_ignore_separators(const char *str1, const char 
 size_t string_rtrim(char *str) {
     size_t spaces = 0;
 
-    char *end = str + strlen(str) - 1;
-    while (end > str && isspace(*end)) {
+    uint8_t *ptr = (uint8_t *)str;
+    ssize_t len = strlen(str);
+    int32_t ch = 0;
+    ssize_t index = len;
+
+    while (1) {
+        ssize_t char_len = utf8proc_iterate_reversed(ptr, len, &ch);
+
+        if (ch <= 0) break;
+
+        int cat = utf8proc_category(ch);
+        if (!utf8_is_separator(cat)) {
+            break;
+        }
+
+        index -= char_len;
+        ptr -= char_len;
         spaces++;
-        end--;
     }
 
-    *(end+1) = '\0';
+    if (spaces > 0) {
+        *(str + index) = '\0';
+    }
 
     return spaces;
 }
@@ -352,21 +368,33 @@ size_t string_rtrim(char *str) {
 size_t string_ltrim(char *str) {
     size_t spaces = 0;
 
-    size_t len = strlen(str) - 1;
-    char *ptr = str;
+    uint8_t *ptr = (uint8_t *)str;
+    size_t len = strlen(str);
+    int32_t ch = 0;
+    ssize_t index = 0;
 
-    while (isspace(*ptr++)) {
+    while (1) {
+        ssize_t char_len = utf8proc_iterate(ptr, len, &ch);
+
+        if (ch <= 0) break;
+
+        int cat = utf8proc_category(ch);
+        if (!utf8_is_separator(cat)) {
+            break;
+        }
+        index += char_len;
+        ptr += char_len;
         spaces++;
     }
 
     if (spaces > 0) {
-        memmove(str, str + spaces, len + 1 - spaces);
+        memmove(str, str + index, len + 1 - index);
     }
 
     return spaces;
 }
 
-size_t string_trim(char *str) {
+inline size_t string_trim(char *str) {
     size_t spaces = string_ltrim(str);
     spaces += string_rtrim(str);
     return spaces;
