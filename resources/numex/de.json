@@ -1,4 +1,5 @@
 {
+    "whole_words_only": true,
     "rules": [
         {
             "name": "null",
@@ -370,17 +371,17 @@
             "type": "ordinal"
         }, 
         {
-            "name": "f\u00fcnfte", 
+            "name": "fünfte", 
             "value": 5, 
             "type": "ordinal"
         }, 
         {
-            "name": "f\u00fcnfter", 
+            "name": "fünfter", 
             "value": 5, 
             "type": "ordinal"
         }, 
         {
-            "name": "f\u00fcnftes", 
+            "name": "fünftes", 
             "value": 5, 
             "type": "ordinal"
         }, 
@@ -505,17 +506,17 @@
             "type": "ordinal"
         }, 
         {
-            "name": "zw\u00f6lfte", 
+            "name": "zwölfte", 
             "value": 12, 
             "type": "ordinal"
         }, 
         {
-            "name": "zw\u00f6lfter", 
+            "name": "zwölfter", 
             "value": 12, 
             "type": "ordinal"
         }, 
         {
-            "name": "zw\u00f6lftes", 
+            "name": "zwölftes", 
             "value": 12, 
             "type": "ordinal"
         }, 
@@ -580,17 +581,17 @@
             "type": "ordinal"
         }, 
         {
-            "name": "f\u00fcnfzehnte", 
+            "name": "fünfzehnte", 
             "value": 15, 
             "type": "ordinal"
         }, 
         {
-            "name": "f\u00fcnfzehnter", 
+            "name": "fünfzehnter", 
             "value": 15, 
             "type": "ordinal"
         }, 
         {
-            "name": "f\u00fcnfzehntes", 
+            "name": "fünfzehntes", 
             "value": 15, 
             "type": "ordinal"
         }, 
@@ -703,19 +704,19 @@
             "left": "add"
         }, 
         {
-            "name": "drei\u00dfigste", 
+            "name": "dreißigste", 
             "value": 30, 
             "type": "ordinal", 
             "left": "add"
         }, 
         {
-            "name": "drei\u00dfigster", 
+            "name": "dreißigster", 
             "value": 30, 
             "type": "ordinal", 
             "left": "add"
         }, 
         {
-            "name": "drei\u00dfigstes", 
+            "name": "dreißigstes", 
             "value": 30, 
             "type": "ordinal", 
             "left": "add"
@@ -757,19 +758,19 @@
             "left": "add"
         }, 
         {
-            "name": "f\u00fcnfzigste", 
+            "name": "fünfzigste", 
             "value": 50, 
             "type": "ordinal", 
             "left": "add"
         }, 
         {
-            "name": "f\u00fcnfzigster", 
+            "name": "fünfzigster", 
             "value": 50, 
             "type": "ordinal", 
             "left": "add"
         }, 
         {
-            "name": "f\u00fcnfzigstes", 
+            "name": "fünfzigstes", 
             "value": 50, 
             "type": "ordinal", 
             "left": "add"

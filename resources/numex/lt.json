@@ -1,4 +1,5 @@
 {
+    "whole_words_only": true,
     "rules": [
         {
             "name": "nulis",
