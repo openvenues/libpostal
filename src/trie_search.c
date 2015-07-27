@@ -310,7 +310,7 @@ phrase_array *trie_search_tokens_from_index(trie_t *self, char *str, token_array
         }
 
 
-        if (node.check <= 0) {
+        if (node.check <= 0 || node_id == start_node_id) {
             state = SEARCH_STATE_NO_MATCH;
             // check
             if (last_match_index != -1) {
@@ -351,6 +351,7 @@ phrase_array *trie_search_tokens_from_index(trie_t *self, char *str, token_array
                 log_debug("data = %d\n", data);
 
                 last_match_index = i;
+                log_debug("last_match_index = %d\n", i);
             }
 
             if (i == tokens->n - 1) {
