@@ -462,7 +462,7 @@ void import_geonames(geodb_builder_t *self, char *filename) {
 
     char id_string[INT32_MAX_STRING_SIZE];
 
-    int normalize_utf8_options = NORMALIZE_STRING_DECOMPOSE | NORMALIZE_STRING_LOWERCASE;
+    int normalize_utf8_options = NORMALIZE_STRING_DECOMPOSE | NORMALIZE_STRING_LOWERCASE | NORMALIZE_STRING_TRIM;
     int normalize_latin_options = normalize_utf8_options | NORMALIZE_STRING_LATIN_ASCII;
 
     uint32_array *ordered_ids = uint32_array_new();
