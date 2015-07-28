@@ -5,8 +5,6 @@
 
 #define NUMEX_TABLE_SIGNATURE 0xBBBBBBBB
 
-#define LATIN_LANGUAGE_CODE "la"
-
 #define SEPARATOR_TOKENS "-"
 
 #define FLOOR_LOG_BASE(num, base) floor((log((float)num) / log((float)base)) + FLT_EPSILON)
@@ -650,6 +648,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
     size_t len = strlen(str);
     size_t idx = 0;
 
+    int cat;
     int32_t codepoint = 0;
     ssize_t char_len = 0;
     uint8_t *ptr = (uint8_t *)str;
@@ -674,7 +673,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
     while (idx < len) {
         if (state.state == NUMEX_SEARCH_STATE_SKIP_TOKEN) {
             char_len = utf8proc_iterate(ptr, len, &codepoint);
-            int cat = utf8proc_category(codepoint);
+            cat = utf8proc_category(codepoint);
 
             if (codepoint == 0) break;
 
@@ -712,13 +711,14 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 possible_complete_token = true;
             } else {
                 log_debug("other char\n");
-                if (result.len > 0 && (!whole_tokens_only || complete_token)) {
+                if (result.len > 0 && (!whole_tokens_only || (prev_state.state != NUMEX_SEARCH_STATE_MATCH && complete_token))) {
                     results = (results != NULL) ? results : numex_result_array_new_size(1);
                     numex_result_array_push(results, result);
                     log_debug("Adding phrase from partial token, value=%lld\n", result.value);
                     prev_rule = rule = NUMEX_NULL_RULE;
                 }
                 result = NULL_NUMEX_RESULT;
+                rule = prev_rule = NUMEX_NULL_RULE;
                 last_was_separator = false;
                 possible_complete_token = false;
                 complete_token = false;
@@ -732,6 +732,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
 
         if (phrase.len == 0) {
             log_debug("phrase.len == 0, skipping token\n");
+            last_was_separator = false;
             state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
             continue;
         }
@@ -799,6 +800,9 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
             } else if (rule.rule_type != NUMEX_STOPWORD) {
                 result.value = rule.value;
                 log_debug("Got number, result.value=%lld\n", result.value);
+            } else if (rule.rule_type == NUMEX_STOPWORD && prev_rule.rule_type == NUMEX_NULL) {
+                log_debug("numex stopword\n");
+                rule = NUMEX_NULL_RULE;
             }
 
             if (rule.rule_type != NUMEX_STOPWORD) {
@@ -814,7 +818,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 log_debug("rule is ordinal\n");
             } 
 
-            if (idx + phrase.start + phrase.len == len) {
+            if (rule.rule_type != NUMEX_NULL && idx + phrase.start + phrase.len == len) {
                 number_finished = true;
             }
         }
@@ -970,6 +974,7 @@ char *replace_numeric_expressions(char *str, char *lang) {
     end = start;
     char_array_append_len(replacement, str + end, len - end);
     char_array_terminate(replacement);
+    numex_result_array_destroy(results);
 
     return char_array_to_string(replacement);
 }
