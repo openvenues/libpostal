@@ -40,8 +40,6 @@ bool address_dictionary_add_expansion(char *key, address_expansion_t expansion) 
     log_debug("key=%s\n", key);
     address_expansion_array *expansions = address_dictionary_get_expansions(key);
 
-    int32_t canonical_index;
-
     expansion_value_t value;
     value.value = 0;
     value.canonical = expansion.canonical_index == -1;

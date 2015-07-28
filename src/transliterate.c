@@ -141,8 +141,6 @@ static char_set_result_t next_prefix_or_set(trie_t *trie, char *str, size_t len,
             }
         }
 
-        uint32_t begin_set_node_id = result.node_id;
-
         log_debug("Got begin set, node_id = %d\n", result.node_id);
 
         last_result = result;
@@ -198,7 +196,6 @@ static transliteration_state_t state_from_char_result(char_set_result_t char_res
     transliteration_state_t state = TRANSLITERATION_DEFAULT_STATE;
 
     trie_prefix_result_t result = char_result.result;
-    trie_prefix_result_t prev_result = prev_state.result;
 
     state.result = result;
     state.char_len = len;
@@ -250,7 +247,6 @@ static inline void set_match_if_any(trie_t *trie, transliteration_state_t state,
 
 static transliteration_state_t check_pre_context(trie_t *trie, char *str, transliteration_state_t original_state) {
     size_t start_index = original_state.phrase_start;
-    uint8_t *ptr = (uint8_t *)str;
     int32_t ch = 0;
     size_t idx = start_index;
     ssize_t char_len = 0;
@@ -644,11 +640,6 @@ static char *replace_groups(trie_t *trie, char *str, char *replacement, group_ca
     return char_array_to_string(ret);
 }
 
-static inline phrase_array *phrase_array_create_if_null(phrase_array *phrases) {
-    return phrases != NULL ? phrases : phrase_array_new();
-}
-
-
 char *transliterate(char *trans_name, char *str, size_t len) {
     if (trans_name == NULL || str == NULL || trans_table == NULL) return NULL;
 
@@ -704,8 +695,6 @@ char *transliterate(char *trans_name, char *str, size_t len) {
     transliteration_step_t *step;
     char *step_name;
 
-    phrase_array *phrases = NULL;
-
     char_array *new_str = NULL;
 
     for (uint32_t i = transliterator->steps_index; i < transliterator->steps_index + transliterator->steps_length; i++) {
@@ -733,13 +722,8 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
             log_debug("step_node_id = %d\n", step_node_id);
 
-            uint32_t prev_node_id = step_node_id;
-            uint32_t node_id;
-
             trie_prefix_result_t step_result = result;
             trie_prefix_result_t context_result = NULL_PREFIX_RESULT;
-            trie_prefix_result_t prev_result;
-            trie_node_t node;
 
             new_str = char_array_new_size(len);
 
@@ -762,7 +746,6 @@ char *transliterate(char *trans_name, char *str, size_t len) {
             
             char *original_str = str;
             char_array *revisit = NULL;
-            bool in_revisit = false;
 
             transliteration_replacement_t *replacement = NULL;
 
@@ -1730,7 +1713,6 @@ bool transliteration_table_write(FILE *f) {
         return false;
     }
 
-    char *trans_name;
     transliterator_t *trans;
 
     if (!file_write_uint32(f, TRANSLITERATION_TABLE_SIGNATURE)) {
