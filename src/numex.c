@@ -814,7 +814,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 log_debug("rule is ordinal\n");
             } 
 
-            if (idx + phrase.len == len) {
+            if (idx + phrase.start + phrase.len == len) {
                 number_finished = true;
             }
         }
