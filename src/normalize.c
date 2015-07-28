@@ -148,11 +148,12 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
 }
 
 
-void add_token_alternatives(string_tree_t *tree, char *str, token_t token, uint64_t options) {
+void normalize_token(cstring_array *array, char *str, token_t token, uint64_t options) {
     size_t idx = 0;
 
     uint8_t *ptr = (uint8_t *)str + token.offset;
     size_t len = token.len;
+    if (token.len == 0) return;
 
     int32_t ch;
     ssize_t char_len;
@@ -160,9 +161,7 @@ void add_token_alternatives(string_tree_t *tree, char *str, token_t token, uint6
     bool last_was_letter = false;
     bool append_char = true;
 
-    cstring_array *array = tree->strings;
-
-    size_t initial_n = array->str->n;
+    cstring_array_start_token(array);
 
     while (idx < len) {
         char_len = utf8proc_iterate(ptr, len, &ch);
@@ -203,7 +202,7 @@ void add_token_alternatives(string_tree_t *tree, char *str, token_t token, uint6
             }
         }
 
-        if (ch == APOSTROPHE_CODEPOINT && options & NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE) {
+        if (ch == APOSTROPHE_CODEPOINT && token.type == WORD && options & NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE) {
             append_char = false;
         }
 
@@ -219,7 +218,6 @@ void add_token_alternatives(string_tree_t *tree, char *str, token_t token, uint6
 
     }
 
-    if (array->str->n > initial_n) {
-        string_tree_finalize_token(tree);
-    }
+    cstring_array_terminate(array);
+
 }
