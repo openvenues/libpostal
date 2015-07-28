@@ -30,7 +30,8 @@ extern "C" {
 typedef union geodb_value {
     uint32_t value;
     struct {
-        uint32_t components:16;
+        uint32_t is_canonical:1;
+        uint32_t components:15;
         uint32_t count:16;
     };
 } geodb_value_t;

@@ -360,7 +360,7 @@ uint16_t get_address_component(uint32_t boundary_type) {
     }
 }
 
-bool geodb_builder_add_to_trie(geodb_builder_t *self, char *key, uint16_t address_components) {
+bool geodb_builder_add_to_trie(geodb_builder_t *self, char *key, bool is_canonical, uint16_t address_components) {
     if (self == NULL || self->trie == NULL) return false;
     uint32_t node_id = trie_get(self->trie, key);
 
@@ -369,6 +369,7 @@ bool geodb_builder_add_to_trie(geodb_builder_t *self, char *key, uint16_t addres
 
     if (node_id == NULL_NODE_ID) {
         value.components |= address_components;
+        value.is_canonical = is_canonical;
         value.count = 1;
         return trie_add(self->trie, key, value.value);
 
@@ -378,6 +379,7 @@ bool geodb_builder_add_to_trie(geodb_builder_t *self, char *key, uint16_t addres
         }
 
         value.components |= address_components;
+        value.is_canonical = is_canonical;
         value.count++;
 
         return trie_set_data_at_index(self->trie, node_id, value.value);
@@ -463,7 +465,7 @@ void import_geonames(geodb_builder_t *self, char *filename) {
     char id_string[INT32_MAX_STRING_SIZE];
 
     int normalize_utf8_options = NORMALIZE_STRING_DECOMPOSE | NORMALIZE_STRING_LOWERCASE | NORMALIZE_STRING_TRIM;
-    int normalize_latin_options = normalize_utf8_options | NORMALIZE_STRING_LATIN_ASCII;
+    //int normalize_latin_options = normalize_utf8_options | NORMALIZE_STRING_LATIN_ASCII;
 
     uint32_array *ordered_ids = uint32_array_new();
     char_array *ordered_ids_str = char_array_new();
@@ -479,6 +481,10 @@ void import_geonames(geodb_builder_t *self, char *filename) {
         read_geoname_from_line(g, line);
         char *name = char_array_get_string(g->name);
 
+        char *canonical = char_array_get_string(g->canonical);
+
+        bool is_canonical = strcmp(name, canonical) == 0;
+
         char *utf8_normalized = NULL;
 
         size_t id_len = sprintf(id_string, "%d", g->geonames_id);
@@ -492,7 +498,7 @@ void import_geonames(geodb_builder_t *self, char *filename) {
         if (utf8_normalized != NULL && (prev_name == NULL || strcmp(utf8_normalized, prev_name) != 0)) {
             // New name
 
-            geodb_builder_add_to_trie(self, utf8_normalized, get_address_component(g->type));
+            geodb_builder_add_to_trie(self, utf8_normalized, is_canonical, get_address_component(g->type));
 
             cmp_write_uint_vector(&ctx, ordered_ids);
 
@@ -509,7 +515,7 @@ void import_geonames(geodb_builder_t *self, char *filename) {
         } else if (utf8_normalized != NULL) {
             key = kh_get(int_set, distinct_ids, g->geonames_id);
             if (key == kh_end(distinct_ids)) {
-                geodb_builder_add_to_trie(self, utf8_normalized, get_address_component(g->type));
+                geodb_builder_add_to_trie(self, utf8_normalized, is_canonical, get_address_component(g->type));
             }
         } else {
             log_error("normalization failed for name %s\n", name);
@@ -561,7 +567,7 @@ void import_geonames(geodb_builder_t *self, char *filename) {
                     log_error("Error writing key %s to Sparkey\n", token);
                 }
 
-                int in_bloom_filter = bloom_filter_add(self->bloom_filter, token, strlen(token));
+                bloom_filter_add(self->bloom_filter, token, strlen(token));
 
                 key = kh_put(str_set, distinct_features, token, &ret);
             }
@@ -618,6 +624,9 @@ void import_geonames_postal_codes(geodb_builder_t *self, char *filename) {
 
     int i = 0;
 
+    // Always true for postal codes
+    bool is_canonical = true;
+
     while ((line = file_getline(f)) != NULL) {
         if (!read_gn_postal_code_from_line(pc, line)) {
             log_error("Error reading line: %s\n", line);
@@ -636,7 +645,7 @@ void import_geonames_postal_codes(geodb_builder_t *self, char *filename) {
             kh_clear(str_set, distinct_features);
         }
 
-        geodb_builder_add_to_trie(self, utf8_normalized, ADDRESS_POSTAL_CODE);
+        geodb_builder_add_to_trie(self, utf8_normalized, is_canonical, ADDRESS_POSTAL_CODE);
 
         char_array_clear(serialized);
         if (!gn_postal_code_serialize(pc, serialized)) {
@@ -663,7 +672,7 @@ void import_geonames_postal_codes(geodb_builder_t *self, char *filename) {
                     log_error("Error writing key %s to Sparkey\n", token);
                 }
 
-                int in_bloom_filter = bloom_filter_add(self->bloom_filter, token, strlen(token));
+                bloom_filter_add(self->bloom_filter, token, strlen(token));
 
                 key = kh_put(str_set, distinct_features, token, &ret);
             }
