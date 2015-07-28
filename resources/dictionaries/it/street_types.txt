@@ -33,12 +33,12 @@ porta|p.ta|pta
 provinciale
 salizada|s.da|sda
 stazione|staz
-strada|s|str.a|stra
+strada|s|str.a|stra|str
 strada comunale|sc|s.c.|s.c|s c
-strada provinciale|sp|s.p.|s.p|s p|str provinciale|s provinciale
-strada regionale|sr|s.r.|s.r|s r
-strada statale|ss|s.s.|s.s|s s
-strada vicinale|sv|s.v.|s.v|s v
+strada provinciale|sp|s.p.|s.p|s p|str provinciale|s provinciale|str.prov|str prov|s.prov|s prov
+strada regionale|sr|s.r.|s.r|s r|str.reg|str reg|str r|str.r|str reginale|s reginale
+strada statale|ss|s.s.|s.s|s s|str.s|str s|str.st|str st|str statale|s statale
+strada vicinale|sv|s.v.|s.v|s v|str.vic|str vic|str vicinale|s vicinale
 stretta|str.ta|strta
 strette|str.te|strte
 stretti|str.ti|strti
