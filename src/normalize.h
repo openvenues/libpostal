@@ -52,6 +52,7 @@ extern "C" {
 #define NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS 1 << 3
 #define NORMALIZE_TOKEN_DROP_ENGLISH_POSSESSIVES 1 << 4
 #define NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE 1 << 5
+#define NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC 1 << 6
 
 char *normalize_string_utf8(char *str, uint64_t options);
 

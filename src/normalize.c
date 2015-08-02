@@ -155,6 +155,9 @@ void normalize_token(cstring_array *array, char *str, token_t token, uint64_t op
     size_t len = token.len;
     if (token.len == 0) return;
 
+    bool alpha_numeric_split = false;
+    char *append_if_not_numeric = NULL;
+
     int32_t ch;
     ssize_t char_len;
 
@@ -172,6 +175,9 @@ void normalize_token(cstring_array *array, char *str, token_t token, uint64_t op
         int cat = utf8proc_category(ch);
 
         bool is_letter = utf8_is_letter(cat);
+        bool is_number = utf8_is_number(cat);
+
+        bool is_full_stop = ch == FULL_STOP_CODEPOINT;
 
         if (is_hyphen && last_was_letter && options & NORMALIZE_TOKEN_REPLACE_HYPHENS) {
             cstring_array_append_string(array, " ");
@@ -180,7 +186,25 @@ void normalize_token(cstring_array *array, char *str, token_t token, uint64_t op
             append_char = false;
         }
 
-        if (ch == FULL_STOP_CODEPOINT) {
+        if ((is_hyphen || is_full_stop) && options & NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC && last_was_letter) {
+            ptr += char_len;
+            idx += char_len;
+            append_if_not_numeric = is_hyphen ? "-" : ".";
+            append_char = true;
+            continue;
+        }
+
+        if (!is_number && append_if_not_numeric != NULL) {
+            cstring_array_append_string(array, append_if_not_numeric);
+            append_if_not_numeric = NULL;
+        }
+
+        if (options & NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC && token.type == NUMERIC && last_was_letter && is_number && !alpha_numeric_split) {
+            cstring_array_append_string(array, " ");
+            alpha_numeric_split = true;
+        }
+
+        if (is_full_stop) {
             if (options & NORMALIZE_TOKEN_DELETE_FINAL_PERIOD && idx == len - 1) {
                 break;
             }
