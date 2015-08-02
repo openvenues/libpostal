@@ -23,6 +23,8 @@ extern "C" {
 
 #define DEFAULT_ADDRESS_EXPANSION_PATH LIBPOSTAL_DATA_DIR PATH_SEPARATOR "address_expansions" PATH_SEPARATOR "address_dictionary.dat"
 
+#define NULL_CANONICAL_INDEX -1
+
 typedef union expansion_value {
     uint32_t value;
     struct {
