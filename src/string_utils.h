@@ -69,6 +69,9 @@ bool utf8_is_punctuation(int cat);
 bool utf8_is_symbol(int cat);
 bool utf8_is_separator(int cat);
 
+bool string_contains_hyphen(char *str);
+bool string_contains_hyphen_len(char *str, size_t len);
+
 size_t string_ltrim(char *str);
 size_t string_rtrim(char *str);
 size_t string_trim(char *str);

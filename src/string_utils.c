@@ -335,6 +335,27 @@ inline size_t utf8_common_prefix_ignore_separators(const char *str1, const char 
 }
 
 
+bool string_contains_hyphen_len(char *str, size_t len) {
+    uint8_t *ptr = (uint8_t *)str;
+    int32_t codepoint;
+    ssize_t idx = 0;
+
+    while (idx < len) {
+        ssize_t char_len = utf8proc_iterate(ptr, len, &codepoint);
+        
+        if (char_len <= 0) break;
+
+        if (utf8_is_hyphen(codepoint)) return true;
+        ptr += char_len;
+        idx += char_len;
+    }
+    return false;
+}
+
+inline bool string_contains_hyphen(char *str) {
+    return string_contains_hyphen_len(str, strlen(str));
+}
+
 size_t string_rtrim(char *str) {
     size_t spaces = 0;
 
