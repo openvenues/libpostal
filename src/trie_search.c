@@ -319,8 +319,8 @@ phrase_array *trie_search_tokens_from_index(trie_t *self, char *str, token_array
                 i = last_match_index;
                 last_match_index = -1;
                 phrase_start = 0;
-                last_node_id = start_node_id;
-                last_node = trie_get_node(self, last_node_id);
+                node_id = last_node_id = start_node_id;
+                node = last_node = trie_get_node(self, start_node_id);
                 continue;
             } else if (last_state == SEARCH_STATE_PARTIAL_MATCH) {
                 log_debug("last_state == SEARCH_STATE_PARTIAL_MATCH\n");
@@ -331,8 +331,8 @@ phrase_array *trie_search_tokens_from_index(trie_t *self, char *str, token_array
                 // this token was not a phrase
                 log_debug("Plain token=%.*s\n", (int)token.len, str + token.offset);
             }
-            last_node_id = start_node_id;
-            last_node = trie_get_node(self, last_node_id);
+            node_id = last_node_id = start_node_id;
+            node = last_node = trie_get_node(self, start_node_id);
         } else {
 
             state = SEARCH_STATE_PARTIAL_MATCH;
@@ -378,8 +378,8 @@ phrase_array *trie_search_tokens_from_index(trie_t *self, char *str, token_array
                     log_debug("node->match no continuation\n");
                     phrase_array_push(phrases, (phrase_t){phrase_start, last_match_index - phrase_start + 1, data});
                     last_match_index = -1; 
-                    last_node_id = start_node_id;
-                    last_node = trie_get_node(self, last_node_id);
+                    node_id = last_node_id = start_node_id;
+                    node = last_node = trie_get_node(self, start_node_id);
                     state = SEARCH_STATE_BEGIN;
                 } else {
                     log_debug("Has continuation, node_id=%d\n", continuation_id);
