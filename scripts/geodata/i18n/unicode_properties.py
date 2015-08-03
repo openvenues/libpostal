@@ -90,7 +90,7 @@ script_code_t script_codes[] = {{
     {script_codes}
 }};
 
-script_language_t script_languages[] = {{
+script_languages_t script_languages[] = {{
     {script_languages}
 }};
 '''
@@ -391,7 +391,7 @@ def main(out_dir):
 
     script_language_data = u''',
     '''.join([script_language_template.format(num_langs=len(langs),
-              languages='{{{}}}'.format(', '.join(['"{}"'.format(l) for l in langs])) if langs else 'NULL')
+              languages='{{{}}}'.format(', '.join(['"{}"'.format(l) for l in langs]) if langs else 'NULL'))
               for langs in sorted_lang_scripts])
 
     out_file.write(scripts_c_data_template.format(header_name=SCRIPTS_HEADER,
