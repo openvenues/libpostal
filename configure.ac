@@ -48,7 +48,7 @@ AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/sparkey/Makefile])
 
-AM_CONDITIONAL([USE_DATE_STAT], [date -r . >/dev/null 2>&1])
-AM_CONDITIONAL([USE_STAT], [stat -f %Sm . >/dev/null 2>&1])
+AM_CONDITIONAL([HAVE_DATE_STAT], [date -r . >/dev/null 2>&1])
+AM_CONDITIONAL([HAVE_STAT], [stat -f %Sm . >/dev/null 2>&1])
 
 AC_OUTPUT
