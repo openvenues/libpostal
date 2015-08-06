@@ -5,10 +5,12 @@
 
 #include "address_dictionary.h"
 #include "collections.h"
+#include "constants.h"
 #include "geodb.h"
 #include "numex.h"
 #include "normalize.h"
 #include "scanner.h"
+#include "string_utils.h"
 #include "transliterate.h"
 
 typedef struct phrase_language {
@@ -441,7 +443,7 @@ void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_strings
 
 
 
-cstring_array *expand_address(char *input, normalize_options_t options) {
+char **expand_address(char *input, normalize_options_t options, uint64_t *n) {
     options.address_components |= ADDRESS_ANY;
 
     uint64_t normalize_string_options = 0;
@@ -456,7 +458,7 @@ cstring_array *expand_address(char *input, normalize_options_t options) {
 
     string_tree_t *tree = normalize_string(input, normalize_string_options);
 
-    cstring_array *strings = cstring_array_new_size(len);
+    cstring_array *strings = cstring_array_new_size(len * 2);
     char_array *temp_string = char_array_new_size(len);
 
     khash_t(str_set) *unique_strings = kh_init(str_set);
@@ -512,7 +514,9 @@ cstring_array *expand_address(char *input, normalize_options_t options) {
     char_array_destroy(temp_string);
     string_tree_destroy(tree);
 
-    return strings;
+    *n = cstring_array_num_strings(strings);
+
+    return cstring_array_to_strings(strings);
 
 }
 

@@ -10,24 +10,8 @@ extern "C" {
 #include <stdlib.h>
 
 #include "klib/kvec.h"
+#include "libpostal.h"
 #include "vector.h"
-
-// Bit set, should be able to keep it at a short (uint16_t)
-#define ADDRESS_ANY 1 << 0
-#define ADDRESS_NAME 1 << 1
-#define ADDRESS_HOUSE_NUMBER 1 << 2
-#define ADDRESS_STREET 1 << 3
-#define ADDRESS_UNIT 1 << 4
-
-#define ADDRESS_LOCALITY 1 << 7
-#define ADDRESS_ADMIN1 1 << 8
-#define ADDRESS_ADMIN2 1 << 9
-#define ADDRESS_ADMIN3 1 << 10
-#define ADDRESS_ADMIN4 1 << 11
-#define ADDRESS_ADMIN_OTHER 1 << 12
-#define ADDRESS_COUNTRY 1 << 13
-#define ADDRESS_POSTAL_CODE 1 << 14
-#define ADDRESS_NEIGHBORHOOD 1 << 15
 
 typedef enum dictionary_type {
     DICTIONARY_ANY = 1,

@@ -3,14 +3,31 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-#include "constants.h"
-#include "string_utils.h"
+#define MAX_LANGUAGE_LEN 4
+
+// Bit set, should be able to keep it at a short (uint16_t)
+#define ADDRESS_ANY 1 << 0
+#define ADDRESS_NAME 1 << 1
+#define ADDRESS_HOUSE_NUMBER 1 << 2
+#define ADDRESS_STREET 1 << 3
+#define ADDRESS_UNIT 1 << 4
+
+#define ADDRESS_LOCALITY 1 << 7
+#define ADDRESS_ADMIN1 1 << 8
+#define ADDRESS_ADMIN2 1 << 9
+#define ADDRESS_ADMIN3 1 << 10
+#define ADDRESS_ADMIN4 1 << 11
+#define ADDRESS_ADMIN_OTHER 1 << 12
+#define ADDRESS_COUNTRY 1 << 13
+#define ADDRESS_POSTAL_CODE 1 << 14
+#define ADDRESS_NEIGHBORHOOD 1 << 15
 
 typedef struct normalize_options {
     // List of language codes
     int num_languages;
-    char *languages[MAX_LANGUAGE_LEN];  
+    char **languages;  
     uint16_t address_components;
 
     // String options
@@ -35,7 +52,7 @@ typedef struct normalize_options {
 
 } normalize_options_t;
 
-cstring_array *expand_address(char *input, normalize_options_t options);
+char **expand_address(char *input, normalize_options_t options, uint64_t *n);
 
 bool libpostal_setup(void);
 void libpostal_teardown(void);
