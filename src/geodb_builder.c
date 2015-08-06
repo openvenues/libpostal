@@ -7,7 +7,7 @@
 #include "sparkey/sparkey.h"
 
 #include "collections.h"
-#include "config.h"
+#include "libpostal_config.h"
 #include "file_utils.h"
 #include "gazetteers.h"
 #include "geonames.h"

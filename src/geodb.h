@@ -9,7 +9,7 @@ extern "C" {
 #include <stdlib.h>
 
 #include "bloom.h"
-#include "config.h"
+#include "libpostal_config.h"
 #include "geonames.h"
 #include "sparkey/sparkey.h"
 #include "sparkey/sparkey-internal.h"

@@ -13,7 +13,7 @@ extern "C" {
 #include <inttypes.h>
 
 #include "collections.h"
-#include "config.h"
+#include "libpostal_config.h"
 #include "constants.h"
 #include "klib/khash.h"
 #include "string_utils.h"

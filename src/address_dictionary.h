@@ -11,7 +11,7 @@ extern "C" {
 #include <string.h>
 
 #include "address_expansion_rule.h"
-#include "config.h"
+#include "libpostal_config.h"
 #include "constants.h"
 #include "collections.h"
 #include "file_utils.h"
