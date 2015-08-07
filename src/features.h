@@ -2,9 +2,7 @@
 #define FEATURES_H
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdlib.h>
 #include <stdarg.h>
@@ -15,8 +13,6 @@ extern "C" {
 void feature_array_add(cstring_array *features, size_t count, ...);
 
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif

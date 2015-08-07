@@ -1,9 +1,7 @@
 #ifndef ADDRESS_DICTIONARY_H
 #define ADDRESS_DICTIONARY_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -76,8 +74,6 @@ bool address_dictionary_module_setup(void);
 void address_dictionary_module_teardown(void);
 
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif

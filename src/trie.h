@@ -15,9 +15,7 @@
 #ifndef TRIE_H
 #define TRIE_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -142,7 +140,5 @@ trie_t *trie_load(char *path);
 void trie_destroy(trie_t *self);
 
 
-#ifdef __cplusplus
-}
-#endif
+ 
 #endif

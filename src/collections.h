@@ -1,9 +1,7 @@
 #ifndef COLLECTIONS_H
 #define COLLECTIONS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -45,8 +43,6 @@ VECTOR_INIT_NUMERIC(double_array, double)
 VECTOR_INIT(char_array, char)
 VECTOR_INIT(uchar_array, unsigned char)
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif

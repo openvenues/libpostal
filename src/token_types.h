@@ -1,9 +1,7 @@
 #ifndef TOKEN_TYPES_H
 #define TOKEN_TYPES_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 // Doing these as #defines so we can duplicate the values exactly in Python
 
@@ -62,8 +60,6 @@ extern "C" {
 #define WHITESPACE 300
 #define NEWLINE 301
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif

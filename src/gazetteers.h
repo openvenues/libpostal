@@ -2,9 +2,7 @@
 #define GAZETTEERS_H
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -65,9 +63,7 @@ typedef struct gazetteer {
 } gazetteer_t;
 
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif
 

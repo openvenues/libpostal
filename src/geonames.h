@@ -1,9 +1,7 @@
 #ifndef GEONAMES_H
 #define GEONAMES_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -107,8 +105,6 @@ VECTOR_INIT(gn_generic_array, geonames_generic_t);
 bool geonames_generic_serialize(geonames_generic_t *gn, char_array *str);
 bool geonames_generic_deserialize(gn_type *type, geoname_t *geoname, gn_postal_code_t *postal_code, char_array *str);
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif

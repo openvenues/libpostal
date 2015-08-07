@@ -2,9 +2,7 @@
 #define FILE_UTILS_H
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,8 +52,6 @@ bool file_read_chars(FILE *file, char *buf, size_t len);
 bool file_write_chars(FILE *file, const char *buf, size_t len);
 
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif

@@ -1,9 +1,7 @@
 #ifndef TOKENS_H
 #define TOKENS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -34,8 +32,6 @@ char *tokenized_string_get_token(tokenized_string_t *self, uint32_t index);
 void tokenized_string_destroy(tokenized_string_t *self);
 
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif

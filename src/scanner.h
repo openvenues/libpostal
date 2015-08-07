@@ -1,9 +1,7 @@
 #ifndef SCANNER_H
 #define SCANNER_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -24,8 +22,6 @@ token_array *tokenize_keep_whitespace(const char *input);
 token_array *tokenize(const char *input);
 
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif

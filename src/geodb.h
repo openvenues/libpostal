@@ -1,9 +1,7 @@
 #ifndef GEONAMES_DICTIONARY_H
 #define GEONAMES_DICTIONARY_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,8 +62,6 @@ void geodb_destroy(geodb_t *self);
 geonames_generic_t *geodb_get_len(char *key, size_t len);
 geonames_generic_t *geodb_get(char *key);
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif

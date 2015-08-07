@@ -1,6 +1,10 @@
 #ifndef LIBPOSTAL_H
 #define LIBPOSTAL_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -57,5 +61,9 @@ char **expand_address(char *input, normalize_options_t options, uint64_t *n);
 
 bool libpostal_setup(void);
 void libpostal_teardown(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

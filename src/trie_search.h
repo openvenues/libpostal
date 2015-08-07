@@ -1,9 +1,7 @@
 #ifndef TRIE_SEARCH_H
 #define TRIE_SEARCH_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,8 +34,6 @@ phrase_t trie_search_suffixes(trie_t *self, char *word);
 phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t start_node_id);
 phrase_t trie_search_prefixes(trie_t *self, char *word);
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif

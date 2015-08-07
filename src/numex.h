@@ -2,9 +2,7 @@
 #define NUMEX_H
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -151,8 +149,6 @@ bool numex_table_save(char *filename);
 bool numex_module_setup(char *filename);
 void numex_module_teardown(void);
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif

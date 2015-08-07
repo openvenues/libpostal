@@ -1,9 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdlib.h>
 
@@ -67,8 +65,6 @@ extern "C" {
     __VECTOR_DESTROY_FREE_DATA(name, type, free_func)                 
 
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif

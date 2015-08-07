@@ -94,8 +94,8 @@ bool string_is_lower(char *s) {
     return true;
 }
 
-uint string_translate(char *str, size_t len, char *word_chars, char *word_repls, size_t trans_len) {
-    uint num_replacements = 0;
+uint32_t string_translate(char *str, size_t len, char *word_chars, char *word_repls, size_t trans_len) {
+    uint32_t num_replacements = 0;
     
     for (int i = 0; i < len; i++) {
         for (int j = 0; j < trans_len; j++) {

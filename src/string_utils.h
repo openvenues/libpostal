@@ -1,9 +1,7 @@
 #ifndef STRING_UTILS_H
 #define STRING_UTILS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -51,7 +49,7 @@ void string_upper(char *s);
 bool string_starts_with(const char *str, const char *start);
 bool string_ends_with(const char *str, const char *ending);
 
-uint string_translate(char *str, size_t len, char *word_chars, char *word_repls, size_t trans_len);
+uint32_t string_translate(char *str, size_t len, char *word_chars, char *word_repls, size_t trans_len);
 
 char *utf8_reversed_string(const char *s); // returns a copy, caller frees
 ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *dst);
@@ -245,8 +243,6 @@ void string_tree_iterator_destroy(string_tree_iterator_t *self);
 }
 
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif

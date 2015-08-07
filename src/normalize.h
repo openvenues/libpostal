@@ -21,9 +21,7 @@ As well as normalizations for individual string tokens:
 #ifndef NORMALIZE_H
 #define NORMALIZE_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+ 
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -65,8 +63,6 @@ void normalize_token(cstring_array *array, char *str, token_t token, uint64_t op
 // Takes NORMALIZE_STRING_* options
 string_tree_t *normalize_string(char *str, uint64_t options);
 
-#ifdef __cplusplus
-}
-#endif
+ 
 
 #endif
