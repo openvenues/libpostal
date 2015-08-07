@@ -1,7 +1,5 @@
-#ifndef LIBPOSTAL_PATHS_H
-#define LIBPOSTAL_PATHS_H
-
-#include "file_utils.h"
+#ifndef LIBPOSTAL_CONFIG_H
+#define LIBPOSTAL_CONFIG_H
 
 #ifndef LIBPOSTAL_DATA_DIR
 #error LIBPOSTAL_DATA_DIR not defined!

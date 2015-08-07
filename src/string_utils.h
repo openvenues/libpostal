@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include <ctype.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdarg.h>

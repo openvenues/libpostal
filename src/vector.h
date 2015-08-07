@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include <stdlib.h>
+
 #include "klib/kvec.h"
 
 // Wrapper around kvec.h to provide dynamically allocated vectors

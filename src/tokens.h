@@ -7,6 +7,8 @@
 extern "C" {
 #endif
 
+#include <stdlib.h>
+
 #include "klib/khash.h"
 #include "collections.h"
 #include "string_utils.h"

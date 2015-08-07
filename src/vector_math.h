@@ -1,6 +1,7 @@
 #ifndef VECTOR_MATH_H
 #define VECTOR_MATH_H
 
+#include <stdlib.h>
 #include <math.h>
 #include "vector.h"
 
