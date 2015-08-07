@@ -1,12 +1,11 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.69])
 AC_INIT([libpostal], [0.1])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
-LT_PREREQ([2.2])
-LT_INIT([shared])
 AC_CONFIG_SRCDIR([src])
+LT_INIT([shared])
+
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
