@@ -1,5 +1,8 @@
+#include <stdlib.h>
+
 #include "libpostal.h"
 
+#include "klib/khash.h"
 #include "klib/ksort.h"
 #include "log/log.h"
 
