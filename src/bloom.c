@@ -64,7 +64,7 @@ bloom_filter_t *bloom_filter_new(uint64_t capacity, double error) {
 
     bloom->ready = false;
 
-    if (capacity < 1 || error == 0.0) {
+    if (capacity < 1 || error < 0.0) {
         goto exit_free_bloom;
     }
 
