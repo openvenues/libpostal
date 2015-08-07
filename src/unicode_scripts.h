@@ -2,6 +2,8 @@
 #define UNICODE_SCRIPTS_H
 
 #include <stdlib.h>
+#include <stdint.h>
+
 #include "constants.h"
 #include "utf8proc/utf8proc.h"
 #include "unicode_script_types.h"

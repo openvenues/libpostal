@@ -2,6 +2,7 @@
 #define MSGPACK_UTILS_H
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdbool.h>
 
 #include "cmp/cmp.h"

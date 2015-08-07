@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "klib/khash.h"
 #include "vector.h"

@@ -1,5 +1,3 @@
-
-
 #ifndef TOKENS_H
 #define TOKENS_H
 
@@ -8,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "klib/khash.h"
 #include "collections.h"

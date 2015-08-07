@@ -2,6 +2,7 @@
 #define VECTOR_MATH_H
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <math.h>
 #include "vector.h"
 

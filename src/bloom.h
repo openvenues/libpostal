@@ -2,6 +2,7 @@
 #define BLOOM_H
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdbool.h>
 
 #include "file_utils.h"

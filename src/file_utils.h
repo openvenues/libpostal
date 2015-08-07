@@ -6,9 +6,10 @@
 extern "C" {
 #endif
 
-#include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include <dirent.h>
 #include <string.h>
 #include <stdbool.h>
 

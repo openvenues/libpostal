@@ -7,6 +7,7 @@ extern "C" {
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "bloom.h"
 #include "libpostal_config.h"
