@@ -25,7 +25,7 @@ LIBPOSTAL_S3_BUCKET_NAME = libpostal
 LIBPOSTAL_S3_BUCKET_URL = http://$(LIBPOSTAL_S3_BUCKET_NAME).s3.amazonaws.com
 LIBPOSTAL_DATA_FILE = libpostal_data.tar.gz
 
-EPOCH_DATE = "Jan  1 00:00:00 1970"
+EPOCH_DATE = Jan  1 00:00:00 1970
 
 LIBPOSTAL_DATA_DIR = $(datadir)/libpostal/
 LIBPOSTAL_DATA_LAST_UPDATED = $(LIBPOSTAL_DATA_DIR)libpostal_data_last_updated
@@ -44,8 +44,8 @@ if HAVE_STAT
 
 USE_STAT = 1
 
-define next_ts
-$(shell date -r $(shell stat -f %m $1) -v+1S +%s)
+define set_last_modified
+$(eval LAST_MODIFIED := $(shell date -r "$(shell cat $1)"))
 endef
 
 else
@@ -74,7 +74,7 @@ libpostal_data.tar.gz: libpostal_data_mkdir libpostal_data_last_updated
 		elif [ "x$(USE_STAT)" != "x" ]; then																																						\
 			echo $$(date -r $$(stat -f %m $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE)) -v+1S +%s) > $(LIBPOSTAL_DATA_LAST_UPDATED);																	\
 		fi;																																															\
-		tar -xvzf $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE) -C $(LIBPOSTAL_DATA_LAST_UPDATED); 																									\
+		tar -xvzf $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE) -C $(LIBPOSTAL_DATA_DIR); 																									\
 	fi;
 
 address_dictionary_builder: address_dictionary_builder.c
