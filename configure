@@ -592,6 +592,7 @@ PACKAGE_STRING='libpostal 0.1'
 PACKAGE_BUGREPORT=''
 PACKAGE_URL=''
 
+ac_unique_file="src"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
@@ -632,6 +633,7 @@ ac_header_list=
 ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
+LIBPOSTAL_DATA_UPDATED_PATH
 HAVE_STAT_FALSE
 HAVE_STAT_TRUE
 HAVE_DATE_STAT_FALSE
@@ -2993,6 +2995,7 @@ END
     as_fn_error $? "Your 'rm' program is bad, sorry." "$LINENO" 5
   fi
 fi
+
 case `pwd` in
   *\ * | *\	*)
     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Libtool does not cope well with whitespace in \`pwd\`" >&5
@@ -11609,6 +11612,7 @@ CC="$lt_save_CC"
 # Only expand once:
 
 
+
 ac_config_headers="$ac_config_headers config.h"
 
 
@@ -12619,6 +12623,10 @@ else
   HAVE_STAT_TRUE='#'
   HAVE_STAT_FALSE=
 fi
+
+
+LAST_UPDATED_PATH=$srcdir/libpostal_data_last_updated
+LIBPOSTAL_DATA_UPDATED_PATH=$LAST_UPDATED_PATH
 
 
 cat >confcache <<\_ACEOF

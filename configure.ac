@@ -50,4 +50,7 @@ AC_CONFIG_FILES([Makefile
 AM_CONDITIONAL([HAVE_DATE_STAT], [date -r . >/dev/null 2>&1])
 AM_CONDITIONAL([HAVE_STAT], [stat -f %Sm . >/dev/null 2>&1])
 
+LAST_UPDATED_PATH=$srcdir/libpostal_data_last_updated
+AC_SUBST([LIBPOSTAL_DATA_UPDATED_PATH], $LAST_UPDATED_PATH)
+
 AC_OUTPUT

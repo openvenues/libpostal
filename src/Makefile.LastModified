@@ -1,5 +1,0 @@
-ifeq ("$(wildcard $(LIBPOSTAL_DATA_LAST_UPDATED))", "")
-    LAST_MODIFIED_DATE = $(EPOCH_DATE)
-else
-    LAST_MODIFIED_DATE = $(call get_last_modified,$(LIBPOSTAL_DATA_LAST_UPDATED))
-endif

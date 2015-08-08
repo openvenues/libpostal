@@ -26,25 +26,19 @@ LIBPOSTAL_S3_BUCKET_NAME = libpostal
 LIBPOSTAL_S3_BUCKET_URL = http://$(LIBPOSTAL_S3_BUCKET_NAME).s3.amazonaws.com
 LIBPOSTAL_DATA_FILE = libpostal_data.tar.gz
 
+LIBPOSTAL_DATA_DIR = $(datadir)/libpostal/
+
 EPOCH_DATE = Jan  1 00:00:00 1970
 
-LIBPOSTAL_DATA_DIR = $(datadir)/libpostal/
-LIBPOSTAL_DATA_LAST_UPDATED = $(LIBPOSTAL_DATA_DIR)libpostal_data_last_updated
+LAST_MODIFIED_DATE = $(EPOCH_DATE)
+
 
 if HAVE_DATE_STAT
 USE_DATE_STAT = 1
 
-define get_last_modified
-$(shell date -d "@$$(shell cat $1)")
-endef
-
 else
 if HAVE_STAT
 USE_STAT = 1
-
-define get_last_modified
-$(shell date -r "$(shell cat $1)")
-endef
 
 else
     $(error Cannot get file modification date on this platform);
@@ -52,19 +46,23 @@ endif
 
 endif
 
-$(eval include $(srcdir)/Makefile.LastModified)
 
 libpostal_data_mkdir:
 	mkdir -p $(LIBPOSTAL_DATA_DIR)
 
-libpostal_data.tar.gz: libpostal_data_mkdir
-	if [ `curl $(LIBPOSTAL_S3_BUCKET_URL)/$(LIBPOSTAL_DATA_FILE) -z "$(LAST_MODIFIED_DATE)" --silent --remote-time -o $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE) -w %{http_code}` = "200" ]; then	\
-		if [ "x$(USE_DATE_STAT)" != "x" ]; then																																						\
-			echo $$(date -d"$$(date -d "@$$(date -r $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE)) +%s") + 1 second" +%s) > $(LIBPOSTAL_DATA_LAST_UPDATED);											\
-		elif [ "x$(USE_STAT)" != "x" ]; then																																						\
-			echo $$(date -r $$(stat -f %m $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE)) -v+1S +%s) > $(LIBPOSTAL_DATA_LAST_UPDATED);																	\
-		fi;																																															\
-		tar -xvzf $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE) -C $(LIBPOSTAL_DATA_DIR); 																											\
+libpostal_data_updated:
+	if [ ! -e @LIBPOSTAL_DATA_UPDATED_PATH@ ]; then						\
+		echo "$(EPOCH_DATE)" > @LIBPOSTAL_DATA_UPDATED_PATH@;			\
+	fi;
+
+libpostal_data.tar.gz: libpostal_data_mkdir libpostal_data_updated
+	if [ $$(curl $(LIBPOSTAL_S3_BUCKET_URL)/$(LIBPOSTAL_DATA_FILE) -z "$$(cat @LIBPOSTAL_DATA_UPDATED_PATH@)" --silent --remote-time -o $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE) -w %{http_code}) = "200" ]; then		\
+		if [ "x$(USE_DATE_STAT)" != "x" ]; then																																												\
+			echo $$(date -d "$$(date -d "@$$(date -r $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE) +%s)") + 1 second") > @LIBPOSTAL_DATA_UPDATED_PATH@;																		\
+		elif [ "x$(USE_STAT)" != "x" ]; then																																												\
+			echo $$(date -r $$(stat -f %m $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE)) -v+1S) > @LIBPOSTAL_DATA_UPDATED_PATH@;																								\
+		fi;																																																					\
+		tar -xvzf $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE) -C $(LIBPOSTAL_DATA_DIR); 																																	\
 	fi;
 
 address_dictionary_builder: address_dictionary_builder.c
