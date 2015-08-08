@@ -19,8 +19,13 @@ noinst_LTLIBRARIES = libscanner.la
 libscanner_la_SOURCES = scanner.c
 libscanner_la_CFLAGS =  $(CFLAGS_O0)
 
+noinst_PROGRAMS = libpostal bench
+libpostal_SOURCES = main.c
+libpostal_LDADD = libpostal.la
+bench_SOURCES = bench.c
+bench_LDADD = libpostal.la libscanner.la
+
 pkginclude_HEADERS = libpostal.h
-pkgdata_DATA = libpostal_data.tar.gz
 
 LIBPOSTAL_S3_BUCKET_NAME = libpostal
 LIBPOSTAL_S3_BUCKET_URL = http://$(LIBPOSTAL_S3_BUCKET_NAME).s3.amazonaws.com
