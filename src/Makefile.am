@@ -26,7 +26,7 @@ LIBPOSTAL_S3_BUCKET_NAME = libpostal
 LIBPOSTAL_S3_BUCKET_URL = http://$(LIBPOSTAL_S3_BUCKET_NAME).s3.amazonaws.com
 LIBPOSTAL_DATA_FILE = libpostal_data.tar.gz
 
-LIBPOSTAL_DATA_DIR = $(datadir)/libpostal/
+LIBPOSTAL_DATA_DIR = $(datadir)/libpostal
 
 EPOCH_DATE = Jan  1 00:00:00 1970
 
@@ -56,13 +56,13 @@ libpostal_data_updated:
 	fi;
 
 libpostal_data.tar.gz: libpostal_data_mkdir libpostal_data_updated
-	if [ $$(curl $(LIBPOSTAL_S3_BUCKET_URL)/$(LIBPOSTAL_DATA_FILE) -z "$$(cat @LIBPOSTAL_DATA_UPDATED_PATH@)" --silent --remote-time -o $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE) -w %{http_code}) = "200" ]; then		\
+	if [ $$(curl $(LIBPOSTAL_S3_BUCKET_URL)/$(LIBPOSTAL_DATA_FILE) -z "$$(cat @LIBPOSTAL_DATA_UPDATED_PATH@)" --silent --remote-time -o $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) -w %{http_code}) = "200" ]; then		\
 		if [ "x$(USE_DATE_STAT)" != "x" ]; then																																												\
-			echo $$(date -d "$$(date -d "@$$(date -r $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE) +%s)") + 1 second") > @LIBPOSTAL_DATA_UPDATED_PATH@;																		\
+			echo $$(date -d "$$(date -d "@$$(date -r $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) +%s)") + 1 second") > @LIBPOSTAL_DATA_UPDATED_PATH@;																		\
 		elif [ "x$(USE_STAT)" != "x" ]; then																																												\
-			echo $$(date -r $$(stat -f %m $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE)) -v+1S) > @LIBPOSTAL_DATA_UPDATED_PATH@;																								\
+			echo $$(date -r $$(stat -f %m $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE)) -v+1S) > @LIBPOSTAL_DATA_UPDATED_PATH@;																								\
 		fi;																																																					\
-		tar -xvzf $(LIBPOSTAL_DATA_DIR)$(LIBPOSTAL_DATA_FILE) -C $(LIBPOSTAL_DATA_DIR); 																																	\
+		tar -xvzf $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) -C $(LIBPOSTAL_DATA_DIR); 																																	\
 	fi;
 
 address_dictionary_builder: address_dictionary_builder.c
