@@ -23,6 +23,7 @@ address_expansion_rule_header_template = u'''
 #define ADDRESS_EXPANSION_RULE_H
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "constants.h"
 #include "gazetteers.h"
