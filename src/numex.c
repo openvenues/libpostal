@@ -788,7 +788,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                        FLOOR_LOG_BASE(rule.value, prev_rule.radix) < FLOOR_LOG_BASE(prev_rule.value, prev_rule.radix)) {
                 result.value += rule.value;
                 log_debug("Last token was RIGHT_CONTEXT_ADD, value=%lld\n", result.value);
-            } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD) {
+            } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD && (!whole_tokens_only || complete_token)) {
                 log_debug("Had previous token with no context, finishing previous rule before returning\n");
 
                 result.len = prev_result_len;
