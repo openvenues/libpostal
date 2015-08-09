@@ -19,11 +19,16 @@ noinst_LTLIBRARIES = libscanner.la
 libscanner_la_SOURCES = scanner.c
 libscanner_la_CFLAGS =  $(CFLAGS_O0)
 
-noinst_PROGRAMS = libpostal bench
+noinst_PROGRAMS = libpostal bench build_address_dictionary build_geodb build_numex_table build_trans_table
 libpostal_SOURCES = main.c
 libpostal_LDADD = libpostal.la
 bench_SOURCES = bench.c
 bench_LDADD = libpostal.la libscanner.la
+build_address_dictionary_SOURCES = address_dictionary_builder.c address_dictionary.c file_utils.c string_utils.c trie.c trie_search.c utf8proc/utf8proc.c
+build_geodb_SOURCES = geodb_builder.c geodb.c geo_disambiguation.c normalize.c bloom.c features.c geonames.c geohash/geohash.c unicode_scripts.c transliterate.c trie.c trie_search.c string_utils.c msgpack_utils.c file_utils.c utf8proc/utf8proc.c cmp/cmp.c
+build_geodb_LDADD = sparkey/libsparkey.la
+build_numex_table_SOURCES = numex_table_builder.c numex.c file_utils.c string_utils.c tokens.c trie.c trie_search.c utf8proc/utf8proc.c
+build_trans_table_SOURCES = transliteration_table_builder.c transliterate.c trie.c trie_search.c file_utils.c string_utils.c utf8proc/utf8proc.c
 
 pkginclude_HEADERS = libpostal.h
 
@@ -34,9 +39,6 @@ LIBPOSTAL_DATA_FILE = libpostal_data.tar.gz
 LIBPOSTAL_DATA_DIR = $(datadir)/libpostal
 
 EPOCH_DATE = Jan  1 00:00:00 1970
-
-LAST_MODIFIED_DATE = $(EPOCH_DATE)
-
 
 if HAVE_DATE_STAT
 USE_DATE_STAT = 1
@@ -70,19 +72,11 @@ libpostal_data.tar.gz: libpostal_data_mkdir libpostal_data_updated
 		tar -xvzf $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) -C $(LIBPOSTAL_DATA_DIR); 																																	\
 	fi;
 
-address_dictionary_builder: address_dictionary_builder.c
-	$(CC) $(CFLAGS_O2) $(LDFLAGS) address_dictionary_builder.c address_dictionary.c file_utils.c string_utils.c trie.c trie_search.c utf8proc/utf8proc.c -o build_address_dictionary
-
-geodb_builder: geodb_builder.c
-	$(CC) $(CFLAGS_O2) $(LDFLAGS) geodb_builder.c geodb.c geo_disambiguation.c normalize.c bloom.c features.c geonames.c geohash/geohash.c sparkey/*.c unicode_scripts.c transliterate.c trie.c trie_search.c string_utils.c msgpack_utils.c file_utils.c utf8proc/utf8proc.c cmp/cmp.c -o build_geodb $(LIBS)
-
-transliteration_table_builder: transliteration_table_builder.c
-	$(CC) $(CFLAGS_O2) $(LDFLAGS) transliteration_table_builder.c transliterate.c trie.c trie_search.c file_utils.c string_utils.c utf8proc/utf8proc.c -o build_trans_table
-
-numex_table_builder: numex_table_builder.c numex_data.c
-	$(CC) $(CFLAGS_O2) $(LDFLAGS) numex_table_builder.c numex.c file_utils.c string_utils.c tokens.c trie.c trie_search.c utf8proc/utf8proc.c -o build_numex_table
+upload_data_s3:
+	tar -cvzf $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) $(LIBPOSTAL_DATA_DIR)/address_expansions $(LIBPOSTAL_DATA_DIR)/numex $(LIBPOSTAL_DATA_DIR)/transliteration
+	aws s3 cp $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) s3://$(LIBPOSTAL_S3_BUCKET_NAME)
 
 lexer: scanner.re
 	re2c -F -s -b -8 -o scanner.c scanner.re
 
-.PHONY: address_dictionary_builder geodb_builder transliteration_table_builder numex_table_builder lexer
+.PHONY: lexer upload_data_s3
