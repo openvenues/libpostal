@@ -16,6 +16,8 @@ AC_PROG_INSTALL
 AC_SEARCH_LIBS([snappy_compress],
   [snappy],,[AC_MSG_ERROR([Could not find snappy])
 ])
+AC_SEARCH_LIBS([log],
+  [m],,[AC_MSG_ERROR([Could not find math library])])
 
 # Checks for header files.
 AC_HEADER_STDC
