@@ -1,6 +1,13 @@
 #ifndef LIBPOSTAL_CONFIG_H
 #define LIBPOSTAL_CONFIG_H
 
+#ifdef HAVE_CONFIG_H
+  #ifndef CONFIG_H
+    #define CONFIG_H
+    #include <config.h>
+  #endif
+#endif
+
 #ifndef LIBPOSTAL_DATA_DIR
 #error LIBPOSTAL_DATA_DIR not defined!
 #endif
