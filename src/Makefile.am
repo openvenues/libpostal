@@ -74,7 +74,7 @@ libpostal_data.tar.gz: libpostal_data_mkdir libpostal_data_updated
 
 upload_data_s3:
 	tar -cvzf $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) $(LIBPOSTAL_DATA_DIR)/address_expansions $(LIBPOSTAL_DATA_DIR)/numex $(LIBPOSTAL_DATA_DIR)/transliteration
-	aws s3 cp $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) s3://$(LIBPOSTAL_S3_BUCKET_NAME)
+	aws s3 cp --acl=public-read $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) s3://$(LIBPOSTAL_S3_BUCKET_NAME)
 
 lexer: scanner.re
 	re2c -F -s -b -8 -o scanner.c scanner.re
