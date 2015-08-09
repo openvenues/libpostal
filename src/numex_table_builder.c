@@ -36,7 +36,15 @@ int main(int argc, char **argv) {
 
     size_t num_languages = sizeof(numex_languages) / sizeof(numex_language_source_t);
 
-    size_t num_source_rules = sizeof(numex_rules) / sizeof(numex_rule_source_t);
+    size_t num_source_keys = sizeof(numex_keys) / sizeof(char *);
+    size_t num_source_rules = sizeof(numex_rules) / sizeof(numex_rule_t);
+
+    if (num_source_keys != num_source_rules) {
+        log_error("num_sourcE_keys != num_source_rules, aborting\n");
+        numex_module_teardown();
+        exit(1);
+    }
+
     size_t num_ordinal_indicator_rules = sizeof(ordinal_indicator_rules) / sizeof(ordinal_indicator_t);
 
     char_array *key = char_array_new();
@@ -60,15 +68,16 @@ int main(int argc, char **argv) {
         log_info("Doing language=%s\n", lang);
 
         for (j = rule_index; j < rule_index + num_rules; j++) {
-            numex_rule_source_t rule_source = numex_rules[j];
+            char *numex_key = numex_keys[j];
+            numex_rule_t rule = numex_rules[j];
 
-            value = rule_source.rule.rule_type != NUMEX_STOPWORD ? numex_table->rules->n : NUMEX_STOPWORD_INDEX;
-            numex_rule_array_push(numex_table->rules, rule_source.rule);
+            value = rule.rule_type != NUMEX_STOPWORD ? numex_table->rules->n : NUMEX_STOPWORD_INDEX;
+            numex_rule_array_push(numex_table->rules, rule);
 
             char_array_clear(key);
             char_array_cat(key, lang);
             char_array_cat(key, NAMESPACE_SEPARATOR_CHAR);
-            char_array_cat(key, rule_source.key);
+            char_array_cat(key, numex_key);
 
             char *str_key = char_array_get_string(key);
 

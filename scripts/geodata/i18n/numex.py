@@ -73,9 +73,10 @@ rule_type_map = {
     'ordinal_indicator': ORDINAL_INDICATOR,
 }
 
-numex_rule_template = u'{{"{key}", (numex_rule_t){{{left_context_type}, {right_context_type}, {rule_type}, {gender}, {category}, {radix}, {value}LL}}}}'
+numex_key_template = u'"{key}"'
+numex_rule_template = u'{{{left_context_type}, {right_context_type}, {rule_type}, {gender}, {category}, {radix}, {value}LL}}'
 
-stopword_rule_template = u'{{"{key}", NUMEX_STOPWORD_RULE}}'
+stopword_rule = u'NUMEX_STOPWORD_RULE'
 
 ordinal_indicator_template = u'{{"{key}", {gender}, {category}, "{value}"}}'
 
@@ -84,7 +85,11 @@ stopwords_template = u'"{word}"'
 language_template = u'{{"{language}", {whole_words_only}, {rule_index}, {num_rules}, {ordinal_indicator_index}, {num_ordinal_indicators}}}'
 
 numex_rules_data_template = u'''
-numex_rule_source_t numex_rules[] = {{
+char *numex_keys[] = {{
+    {numex_keys}
+}};
+
+numex_rule_t numex_rules[] = {{
     {numex_rules}
 }};
 
@@ -99,7 +104,9 @@ numex_language_source_t numex_languages[] = {{
 
 
 def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
+    all_keys = []
     all_rules = []
+
     all_ordinal_indicators = []
     all_stopwords = []
 
@@ -133,8 +140,8 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
             category = category_map[rule.get('category')]
             left_context_type = left_context_map[rule.get('left')]
             right_context_type = right_context_map[rule.get('right')]
+            all_keys.append(unicode(numex_key_template.format(key=key)))
             all_rules.append(unicode(numex_rule_template.format(
-                key=key,
                 language=language,
                 rule_type=rule_type,
                 gender=gender,
@@ -171,7 +178,8 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
         num_stopwords = len(stopwords)
 
         for stopword in stopwords:
-            all_rules.append(unicode(stopword_rule_template.format(key=stopword)))
+            all_keys.append(numex_key_template.format(key=unicode(stopword)))
+            all_rules.append(stopword_rule)
 
         num_rules = len(rules) + len(stopwords)
 
@@ -185,6 +193,8 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
         )))
 
     out.write(safe_encode(numex_rules_data_template.format(
+        numex_keys=u''',
+    '''.join(all_keys),
         numex_rules=u''',
     '''.join(all_rules),
         ordinal_indicator_rules=u''',

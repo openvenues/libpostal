@@ -4,11 +4,6 @@
 #include <stdlib.h>
 #include "numex.h"
 
-typedef struct numex_rule_source {
-    char *key;
-    numex_rule_t rule;
-} numex_rule_source_t;
-
 typedef struct numex_language_source {
     char *name;
     bool whole_tokens_only;
