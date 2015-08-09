@@ -1,6 +1,6 @@
 SUBDIRS = sparkey
 
-CFLAGS_BASE = -Wfloat-equal -Wpointer-arith -Werror
+CFLAGS_BASE = -Wfloat-equal -Wpointer-arith
 CFLAGS_O0 = $(CFLAGS_BASE) -O0
 CFLAGS_O1 = $(CFLAGS_BASE) -O1
 CFLAGS_O2 = $(CFLAGS_BASE) -O2
