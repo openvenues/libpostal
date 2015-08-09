@@ -726,7 +726,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
             continue;
         }
 
-        phrase_t phrase = trie_search_prefixes_from_index(trie, str + idx, start_node_id);
+        phrase_t phrase = trie_search_prefixes_from_index(trie, str + idx, len - idx, start_node_id);
 
         state = start_state;
 
@@ -927,7 +927,7 @@ char *get_ordinal_suffix(char *numeric_string, char *lang, numex_result_t result
         return NULL;
     }
 
-    phrase_t phrase = trie_search_suffixes_from_index(trie, numeric_string, prefix.node_id);
+    phrase_t phrase = trie_search_suffixes_from_index(trie, numeric_string, strlen(numeric_string), prefix.node_id);
 
     if (phrase.len == 0) {
         return NULL;

@@ -29,10 +29,10 @@ phrase_array *trie_search(trie_t *self, char *text);
 phrase_array *trie_search_from_index(trie_t *self, char *text, uint32_t start_node_id);
 phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens);
 phrase_array *trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens, uint32_t start_node_id);
-phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, uint32_t start_node_id);
-phrase_t trie_search_suffixes(trie_t *self, char *word);
-phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t start_node_id);
-phrase_t trie_search_prefixes(trie_t *self, char *word);
+phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, size_t len, uint32_t start_node_id);
+phrase_t trie_search_suffixes(trie_t *self, char *word, size_t len);
+phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, size_t len, uint32_t start_node_id);
+phrase_t trie_search_prefixes(trie_t *self, char *word, size_t len);
 
  
 

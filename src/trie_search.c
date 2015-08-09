@@ -404,7 +404,7 @@ inline phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *to
     return trie_search_tokens_from_index(self, str, tokens, ROOT_NODE_ID);
 }
 
-phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, uint32_t start_node_id) {
+phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, size_t len, uint32_t start_node_id) {
     uint32_t last_node_id = start_node_id;
     trie_node_t last_node = trie_get_node(self, last_node_id);
     uint32_t node_id = last_node_id;
@@ -413,7 +413,6 @@ phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, uint32_t star
     uint32_t value = 0, phrase_start = 0, phrase_len = 0;
 
     ssize_t char_len;
-    size_t len = strlen(word);
 
     int32_t unich = 0;
 
@@ -506,7 +505,7 @@ phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, uint32_t star
     return (phrase_t) {phrase_start, phrase_len, value};
 }
 
-inline phrase_t trie_search_suffixes(trie_t *self, char *word) {
+inline phrase_t trie_search_suffixes(trie_t *self, char *word, size_t len) {
     trie_node_t root_node = trie_get_root(self);
     uint32_t node_id = trie_get_transition_index(self, root_node, TRIE_SUFFIX_CHAR);
     trie_node_t node = trie_get_node(self, node_id);
@@ -515,10 +514,10 @@ inline phrase_t trie_search_suffixes(trie_t *self, char *word) {
         return (phrase_t){0, 0, 0};
     }
 
-    return trie_search_suffixes_from_index(self, word, node_id);
+    return trie_search_suffixes_from_index(self, word, len, node_id);
 }
 
-phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t start_node_id) {
+phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, size_t len, uint32_t start_node_id) {
     log_debug("Call to trie_search_prefixes_from_index\n");
     uint32_t node_id = start_node_id, last_node_id = node_id;
     trie_node_t node = trie_get_node(self, node_id), last_node = node;
@@ -528,7 +527,6 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t star
     uint8_t *ptr = (uint8_t *)word;
 
     ssize_t char_len = 0;
-    size_t len = strlen(word);
 
     size_t idx = 0;
 
@@ -541,7 +539,7 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t star
     trie_data_node_t data_node;
     trie_node_t terminal_node;
 
-    for (; *ptr; last_node = node, last_node_id = node_id) {
+    for (; idx < len; last_node = node, last_node_id = node_id) {
         unsigned char ch = *ptr;
 
         log_debug("Getting transition index for %d, (%d, %d)\n", last_node_id, last_node.base, last_node.check);
@@ -632,7 +630,7 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, uint32_t star
     return (phrase_t) {phrase_start, phrase_len, value};
 }
 
-inline phrase_t trie_search_prefixes(trie_t *self, char *word) {
+inline phrase_t trie_search_prefixes(trie_t *self, char *word, size_t len) {
     trie_node_t root_node = trie_get_root(self);
     uint32_t node_id = trie_get_transition_index(self, root_node, TRIE_PREFIX_CHAR);
     trie_node_t node = trie_get_node(self, node_id);
@@ -641,7 +639,7 @@ inline phrase_t trie_search_prefixes(trie_t *self, char *word) {
         return (phrase_t){0, 0, 0};
     }
 
-    return trie_search_prefixes_from_index(self, word, node_id);
+    return trie_search_prefixes_from_index(self, word, len, node_id);
 }
 
 
