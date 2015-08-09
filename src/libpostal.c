@@ -110,38 +110,6 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
         return NULL;
     }
 
-    /*
-
-    uint64_t normalize_token_options = 0;
-
-    uint64_t replace_numeric_hyphens:1;
-    uint64_t delete_numeric_hyphens:1;
-    uint64_t replace_word_hyphens:1;
-    uint64_t delete_word_hyphens:1;
-    uint64_t delete_final_periods:1;
-    uint64_t delete_acronym_periods:1;
-    uint64_t drop_english_possessives:1;
-    uint64_t delete_apostrophes:1;
-    uint64_t expand_numex:1;
-
-
-    normalize_token_options |= options.replace_numeric_hyphens ? NORMALIZE_TOKEN_REPLACE_NUMERIC_HYPHENS : 0;
-
-    #define NORMALIZE_TOKEN_REPLACE_HYPHENS 1 << 0
-    #define NORMALIZE_TOKEN_DELETE_HYPHENS 1 << 1
-    #define NORMALIZE_TOKEN_DELETE_FINAL_PERIOD 1 << 2
-    #define NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS 1 << 3
-    #define NORMALIZE_TOKEN_DROP_ENGLISH_POSSESSIVES 1 << 4
-    #define NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE 1 << 5
-
-    char_array *tokens_normalized = normalize_tokens(str, tokens);
-
-    token_array_destroy(tokens);
-    free(str);
-
-    str = char_array_to_string(tokens_normalized);
-    */
-
     size_t len = strlen(str);
 
     log_debug("tokenized, num tokens=%d\n", tokens->n);
