@@ -15,7 +15,7 @@
 
 #define LATIN_ASCII "latin-ascii"
 
-#define DEFAULT_TRANSLITERATION_PATH "../data/transliteration/transliteration.dat"
+#define DEFAULT_TRANSLITERATION_PATH LIBPOSTAL_TRANSLITERATION_DIR PATH_SEPARATOR "transliteration.dat"
 
 #define MAX_TRANS_NAME_LEN 100
 
