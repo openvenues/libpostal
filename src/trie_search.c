@@ -374,6 +374,8 @@ phrase_array *trie_search_tokens_from_index(trie_t *self, char *str, token_array
                     log_debug("No continuation for phrase with start=%d, yielding tokens\n", phrase_start);
                     state = SEARCH_STATE_NO_MATCH;
                     phrase_start = 0;
+                    node_id = last_node_id = start_node_id;
+                    node = last_node = trie_get_node(self, start_node_id);
                 } else if (continuation.check != node_id && last_match_index == i) {
                     log_debug("node->match no continuation\n");
                     phrase_array_push(phrases, (phrase_t){phrase_start, last_match_index - phrase_start + 1, data});
