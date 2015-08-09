@@ -51,7 +51,7 @@ static bool read_geoname_from_line(geoname_t *g, char *line) {
 
     token = cstring_array_get_string(tokens, GEONAMES_BOUNDARY_TYPE);
 
-    sscanf(token, "%d", &g->type);
+    sscanf(token, "%d", (int *)&g->type);
     token = cstring_array_get_string(tokens, GEONAMES_NAME);
     char_array_cat(g->name, token);
 
