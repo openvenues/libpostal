@@ -92,6 +92,8 @@ size_t char_array_len(char_array *array);
 
 void char_array_append(char_array *array, char *str);
 void char_array_append_len(char_array *array, char *str, size_t len);
+void char_array_append_reversed(char_array *array, char *str);
+void char_array_append_reversed_len(char_array *array, char *str, size_t len);
 void char_array_terminate(char_array *array);
 
 char_array *char_array_copy(char_array *array);
@@ -99,10 +101,8 @@ char_array *char_array_copy(char_array *array);
 // Similar to strcat, strips NUL-byte and guarantees 0-terminated
 void char_array_cat(char_array *array, char *str);
 void char_array_cat_len(char_array *array, char *str, size_t len);
-
-// Strips NUL-byte but does not NUL-terminate
-void char_array_cat_unterminated(char_array *array, char *str);
-void char_array_cat_unterminated_len(char_array *array, char *str, size_t len);
+void char_array_cat_reversed(char_array *array, char *str);
+void char_array_cat_reversed_len(char_array *array, char *str, size_t len);
 
 // Cat with printf args
 void char_array_cat_printf(char_array *array, char *format, ...);

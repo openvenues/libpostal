@@ -365,7 +365,7 @@ size_t string_rtrim(char *str) {
     ssize_t index = len;
 
     while (1) {
-        ssize_t char_len = utf8proc_iterate_reversed(ptr, len, &ch);
+        ssize_t char_len = utf8proc_iterate_reversed(ptr, index, &ch);
 
         if (ch <= 0) break;
 
@@ -375,7 +375,6 @@ size_t string_rtrim(char *str) {
         }
 
         index -= char_len;
-        ptr -= char_len;
         spaces++;
     }
 
@@ -453,7 +452,7 @@ static inline void char_array_strip_nul_byte(char_array *array) {
     }
 }
 
-size_t char_array_len(char_array *array) {
+inline size_t char_array_len(char_array *array) {
     if (array->n > 0 && array->a[array->n - 1] == '\0') {
         return array->n - 1;
     } else {
@@ -461,47 +460,83 @@ size_t char_array_len(char_array *array) {
     }
 }
 
-void char_array_append(char_array *array, char *str) {
+inline void char_array_append(char_array *array, char *str) {
     while(*str) {
         char_array_push(array, *str++);
     }    
 }
 
-void char_array_append_len(char_array *array, char *str, size_t len) {
+inline void char_array_append_len(char_array *array, char *str, size_t len) {
     for (size_t i = 0; i < len; i++) {
         char_array_push(array, *str++);
     }
 }
 
-void char_array_terminate(char_array *array) {
+inline void char_array_append_reversed_len(char_array *array, char *str, size_t len) {
+    int32_t unich;
+    ssize_t char_len;
+
+    size_t idx = len;
+    uint8_t *ptr = (uint8_t *)str;
+
+    while(idx > 0) {
+        char_len = utf8proc_iterate_reversed(ptr, idx, &unich);
+        if (char_len <= 0 || unich == 0) break;
+        if (!(utf8proc_codepoint_valid(unich))) break;
+
+        idx -= char_len;
+        char_array_append_len(array, str + idx, char_len);
+    }
+}
+
+inline void char_array_append_reversed(char_array *array, char *str) {
+    size_t len = strlen(str);
+    char_array_append_reversed_len(array, str, len);
+}
+
+inline void char_array_terminate(char_array *array) {
     char_array_push(array, '\0');
 }
 
-char_array *char_array_copy(char_array *array) {
+inline char_array *char_array_copy(char_array *array) {
     char_array *copy = char_array_new_size(array->m);
     memcpy(copy->a, array->a, array->n);
     copy->n = array->n;
     return copy;
 }
 
-void char_array_cat(char_array *array, char *str) {
+inline void char_array_cat(char_array *array, char *str) {
     char_array_strip_nul_byte(array);
     char_array_append(array, str);
     char_array_terminate(array);
 }
 
-void char_array_cat_len(char_array *array, char *str, size_t len) {
+inline void char_array_cat_len(char_array *array, char *str, size_t len) {
     char_array_strip_nul_byte(array);
     char_array_append_len(array, str, len);
     char_array_terminate(array);
 }
 
-void char_array_add(char_array *array, char *str) {
+
+inline void char_array_cat_reversed(char_array *array, char *str) {
+    char_array_strip_nul_byte(array);
+    char_array_append_reversed(array, str);
+    char_array_terminate(array);
+}
+
+
+inline void char_array_cat_reversed_len(char_array *array, char *str, size_t len) {
+    char_array_strip_nul_byte(array);
+    char_array_append_reversed_len(array, str, len);
+    char_array_terminate(array);
+}
+
+inline void char_array_add(char_array *array, char *str) {
     char_array_append(array, str);
     char_array_terminate(array);
 }
 
-void char_array_add_len(char_array *array, char *str, size_t len) {
+inline void char_array_add_len(char_array *array, char *str, size_t len) {
     char_array_append_len(array, str, len);
     char_array_terminate(array);
 }
@@ -535,14 +570,14 @@ static void vchar_array_append_joined(char_array *array, char *separator, bool s
 
 }
 
-void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...) {
+inline void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...) {
     va_list args;
     va_start(args, count);
     vchar_array_append_joined(array, separator, strip_separator, count, args);
     va_end(args);
 }
 
-void char_array_cat_joined(char_array *array, char *separator, bool strip_separator, int count, ...) {
+inline void char_array_cat_joined(char_array *array, char *separator, bool strip_separator, int count, ...) {
     char_array_strip_nul_byte(array);
     va_list args;
     va_start(args, count);
