@@ -31,6 +31,7 @@ build_numex_table_SOURCES = numex_table_builder.c numex.c file_utils.c string_ut
 build_trans_table_SOURCES = transliteration_table_builder.c transliterate.c trie.c trie_search.c file_utils.c string_utils.c utf8proc/utf8proc.c
 
 pkginclude_HEADERS = libpostal.h
+pkgdata_DATA = libpostal_data.tar.gz
 
 LIBPOSTAL_S3_BUCKET_NAME = libpostal
 LIBPOSTAL_S3_BUCKET_URL = http://$(LIBPOSTAL_S3_BUCKET_NAME).s3.amazonaws.com
@@ -62,7 +63,7 @@ libpostal_data_updated:
 		echo "$(EPOCH_DATE)" > @LIBPOSTAL_DATA_UPDATED_PATH@;			\
 	fi;
 
-libpostal_data.tar.gz: libpostal_data_mkdir libpostal_data_updated
+libpostal_data.tar.gz:
 	if [ $$(curl $(LIBPOSTAL_S3_BUCKET_URL)/$(LIBPOSTAL_DATA_FILE) -z "$$(cat @LIBPOSTAL_DATA_UPDATED_PATH@)" --silent --remote-time -o $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) -w %{http_code}) = "200" ]; then		\
 		if [ "x$(USE_DATE_STAT)" != "x" ]; then																																												\
 			echo $$(date -d "$$(date -d "@$$(date -r $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) +%s)") + 1 second") > @LIBPOSTAL_DATA_UPDATED_PATH@;																		\
@@ -73,10 +74,10 @@ libpostal_data.tar.gz: libpostal_data_mkdir libpostal_data_updated
 	fi;
 
 upload_data_s3:
-	tar -cvzf $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) $(LIBPOSTAL_DATA_DIR)/address_expansions $(LIBPOSTAL_DATA_DIR)/numex $(LIBPOSTAL_DATA_DIR)/transliteration
+	tar -C $(LIBPOSTAL_DATA_DIR) -cvzf $(LIBPOSTAL_DATA_FILE) address_expansions numex transliteration
 	aws s3 cp --acl=public-read $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) s3://$(LIBPOSTAL_S3_BUCKET_NAME)
 
 lexer: scanner.re
 	re2c -F -s -b -8 -o scanner.c scanner.re
 
-.PHONY: lexer upload_data_s3
+.PHONY: lexer upload_data_s3 libpostal_data_mkdir libpostal_data_updated libpostal_data.tar.gz
