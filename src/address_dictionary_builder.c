@@ -51,6 +51,7 @@ int main(int argc, char **argv) {
             uint16_t address_components = 0;
 
             address_expansion_t expansion;
+            expansion.separable = 0;
 
             strcpy(expansion.language, language);
             expansion.num_dictionaries = expansion_rule.num_dictionaries;
@@ -59,6 +60,12 @@ int main(int argc, char **argv) {
                 uint16_t dictionary_id = (uint16_t) expansion_rule.dictionaries[d];
 
                 expansion.dictionary_ids[d] = dictionary_id;
+
+                if (dictionary_id == DICTIONARY_CONCATENATED_PREFIX_SEPARABLE ||
+                    dictionary_id == DICTIONARY_CONCATENATED_SUFFIX_SEPARABLE ||
+                    dictionary_id == DICTIONARY_ELISION) {
+                    expansion.separable = 1;
+                }
 
                 k = kh_get(int_int, dictionary_components, (uint32_t)dictionary_id);
                 if (k == kh_end(dictionary_components)) {
@@ -93,20 +100,14 @@ int main(int argc, char **argv) {
 
             // Add the phrase itself to the base namespace for existence checks
 
-            if (!address_dictionary_add_expansion(expansion_rule.phrase, expansion)) {
+            if (!address_dictionary_add_expansion(expansion_rule.phrase, NULL, expansion)) {
                 log_error("Could not add expansion {%s}\n", expansion_rule.phrase);
                 exit(EXIT_FAILURE);
             }
 
             // Add phrase namespaced by language for language-specific matching
 
-            char_array_clear(key);
-            char_array_cat(key, language);
-            char_array_cat(key, NAMESPACE_SEPARATOR_CHAR);
-            char_array_cat(key, expansion_rule.phrase);
-            char *token = char_array_get_string(key);
-
-            if (!address_dictionary_add_expansion(token, expansion)) {
+            if (!address_dictionary_add_expansion(expansion_rule.phrase, language, expansion)) {
                 log_error("Could not add language expansion {%s, %s}\n", language, expansion_rule.phrase);
                 exit(EXIT_FAILURE);
             }
