@@ -690,7 +690,7 @@ char **expand_address(char *input, normalize_options_t options, uint64_t *n) {
 
     log_debug("string_tree_num_tokens(tree) = %d\n", string_tree_num_tokens(tree));
 
-    if (string_tree_num_tokens(tree) == 1) {
+    if (string_tree_num_strings(tree) == 1) {
         char *normalized = string_tree_get_alternative(tree, 0, 0);
         expand_alternative(strings, unique_strings, normalized, options);
 
@@ -700,26 +700,20 @@ char **expand_address(char *input, normalize_options_t options, uint64_t *n) {
 
         for (; string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
             char *segment;
+            char_array_clear(temp_string);
+            bool is_first = true;
+
             string_tree_iterator_foreach_token(iter, segment, {
-                string_tree_t *subtree = add_string_alternatives(segment, options);
-                string_tree_iterator_t *subiter = string_tree_iterator_new(subtree);
-                for (; string_tree_iterator_done(subiter); string_tree_iterator_next(subiter)) {
-                    char_array_clear(temp_string);
-
-                    string_tree_iterator_foreach_token(subiter, token, {
-                        log_debug("token=%s\n", token);
-                        char_array_append(temp_string, token);
-                    })
-                    char_array_terminate(temp_string);
-
-                    token = char_array_get_string(temp_string);
-                    expand_alternative(strings, unique_strings, token, options);
-
+                if (!is_first) {
+                    char_array_append(temp_string, " ");
                 }
-
-                string_tree_iterator_destroy(subiter);
-                string_tree_destroy(subtree);
+                char_array_append(temp_string, segment);
+                is_first = false;
             })
+            char_array_terminate(temp_string);
+            token = char_array_get_string(temp_string);
+            log_debug("current permutation = %s\n", token);
+            expand_alternative(strings, unique_strings, token, options);
         }
 
         string_tree_iterator_destroy(iter);
