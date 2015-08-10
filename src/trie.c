@@ -617,7 +617,7 @@ void trie_print(trie_t *self) {
 }
 
 bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, size_t len, uint32_t data) {
-    if (key[0] == TRIE_SUFFIX_CHAR[0] || key[0] == TRIE_PREFIX_CHAR[0]) {
+    if (len == 2 && (key[0] == TRIE_SUFFIX_CHAR[0] || key[0] == TRIE_PREFIX_CHAR[0]) && key[1] == '\0') {
         return false;
     }
 
