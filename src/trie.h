@@ -5,11 +5,16 @@
 * so given an index into that array, we can treat the array as a C string
 * starting at that index. It also makes serialization dead simple. We
 * implement a novel scheme for storing reversed strings (suffixes, etc.) A suffix
-* is defined as the reversed UTF-8 suffix string prefixed by the NUL-byte. 
-* Since we do not allow zero-length strings, the transition from the root node
-* to a NUL-byte always denotes a suffix (i.e. we should be iterating 
-* backward through the query string/token). For more information on double-array
-* tries generally, see: http://linux.thai.net/~thep/datrie/datrie.html
+* is defined as the reversed UTF-8 suffix string prefixed by TRIE_SUFFIX_CHAR.
+* Similarly, a prefix is defined as being prefixed by TRIE_PREFIX_CHAR. 
+* trie_search defines several methods for searching strings, tokenized strings,
+* prefixes and suffixes. Note that the single characters TRIE_SUFFIX_CHAR 
+* and TRIE_PREFIX_CHAR are not allowed as keys (both are defined as control 
+* characters, so are unlikely to affect natural language applications).
+* This trie implementation also has several *_from_index methods which allow 
+* for effective namespacing e.g. adding the keys "en|blvd" and "fr|blvd"
+* and searching by language. For more information on double-array tries
+* generally, see: http://linux.thai.net/~thep/datrie/datrie.html
 ******************************************************************************/
 
 #ifndef TRIE_H
@@ -39,8 +44,8 @@
 #define TRIE_INDEX_ERROR  0
 #define TRIE_MAX_INDEX 0x7fffffff
 
-#define TRIE_PREFIX_CHAR '\xff'
-#define TRIE_SUFFIX_CHAR '\x00'
+#define TRIE_PREFIX_CHAR "\x02"
+#define TRIE_SUFFIX_CHAR "\x03"
 
 // Using 256 characters can fit all UTF-8 encoded strings
 #define NUM_CHARS 256

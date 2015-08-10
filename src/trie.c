@@ -617,6 +617,10 @@ void trie_print(trie_t *self) {
 }
 
 bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, size_t len, uint32_t data) {
+    if (key[0] == TRIE_SUFFIX_CHAR[0] || key[0] == TRIE_PREFIX_CHAR[0]) {
+        return false;
+    }
+
     unsigned char *ptr = (unsigned char *)key; 
     uint32_t last_node_id = node_id;
     trie_node_t last_node = trie_get_node(self, node_id);
@@ -673,10 +677,12 @@ bool trie_add_prefix_at_index(trie_t *self, char *key, uint32_t start_node_id, u
 
     trie_node_t start_node = trie_get_node(self, start_node_id);
 
-    uint32_t node_id = trie_get_transition_index(self, start_node, TRIE_PREFIX_CHAR);
+    unsigned char prefix_char = TRIE_PREFIX_CHAR[0];
+
+    uint32_t node_id = trie_get_transition_index(self, start_node, prefix_char);
     trie_node_t node = trie_get_node(self, node_id);
     if (node.check != start_node_id) {
-        node_id = trie_add_transition(self, start_node_id, TRIE_PREFIX_CHAR);
+        node_id = trie_add_transition(self, start_node_id, prefix_char);
     }
 
     bool success = trie_add_at_index(self, node_id, key, len, data);
@@ -694,10 +700,12 @@ bool trie_add_suffix_at_index(trie_t *self, char *key, uint32_t start_node_id, u
 
     trie_node_t start_node = trie_get_node(self, start_node_id);
 
-    uint32_t node_id = trie_get_transition_index(self, start_node, TRIE_SUFFIX_CHAR);
+    unsigned char suffix_char = TRIE_SUFFIX_CHAR[0];
+
+    uint32_t node_id = trie_get_transition_index(self, start_node, suffix_char);
     trie_node_t node = trie_get_node(self, node_id);
     if (node.check != start_node_id) {
-        node_id = trie_add_transition(self, start_node_id, TRIE_SUFFIX_CHAR);
+        node_id = trie_add_transition(self, start_node_id, suffix_char);
     }
 
     char *suffix = utf8_reversed_string(key);
