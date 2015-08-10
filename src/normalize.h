@@ -58,6 +58,7 @@ char *normalize_string_utf8(char *str, uint64_t options);
 char *normalize_string_latin(char *str, size_t len, uint64_t options);
 
 // Takes NORMALIZE_TOKEN_* options
+void append_normalized_token(char_array *array, char *str, token_t token, uint64_t options);
 void normalize_token(cstring_array *array, char *str, token_t token, uint64_t options);
 
 // Takes NORMALIZE_STRING_* options
