@@ -120,12 +120,17 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
                 free(utf8_normalized);
                 utf8_normalized = NULL;
             }
-            string_tree_finalize_token(tree);
+
         } else if (options & NORMALIZE_STRING_LATIN_ASCII && script == SCRIPT_LATIN && script_len > 0) {
             add_latin_alternatives(tree, str, script_len, options);
-            string_tree_finalize_token(tree);
         } else if (options & NORMALIZE_STRING_TRANSLITERATE && script != SCRIPT_UNKNOWN && script_len > 0) {
             char *trans_name;
+            char *original = strndup(str, script_len);
+            if (original != NULL) {
+                add_latin_alternatives(tree, original, script_len, options);
+                free(original);
+            }
+
             foreach_transliterator(script, "", trans_name, {
                 transliterated = transliterate(trans_name, str, script_len);
 
@@ -135,13 +140,15 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
                 }
             })
 
-            string_tree_finalize_token(tree);
         } else {
             string_tree_add_string_len(tree, str, script_len);
         }
+        string_tree_finalize_token(tree);
+
         consumed += script_len;
         str += script_len;
     }
+
 
     return tree;
 
