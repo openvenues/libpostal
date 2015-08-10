@@ -211,6 +211,7 @@ void string_tree_append_string(string_tree_t *self, char *str);
 void string_tree_append_string_len(string_tree_t *self, char *str, size_t len);
 
 uint32_t string_tree_num_tokens(string_tree_t *self);
+uint32_t string_tree_num_strings(string_tree_t *self);
 
 uint32_t string_tree_num_alternatives(string_tree_t *self, uint32_t i);
 

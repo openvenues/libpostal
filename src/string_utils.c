@@ -857,6 +857,10 @@ inline uint32_t string_tree_num_tokens(string_tree_t *self) {
     return self->token_indices->n - 1;
 }
 
+inline uint32_t string_tree_num_strings(string_tree_t *self) {
+    return cstring_array_num_strings(self->strings);
+}
+
 inline uint32_t string_tree_num_alternatives(string_tree_t *self, uint32_t i) {
     if (i >= self->token_indices->n) return 0;
     return self->token_indices->a[i + 1] - self->token_indices->a[i];
