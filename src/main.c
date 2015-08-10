@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
         .lowercase = 1,
         .trim_string = 1,
         .replace_word_hyphens = 1,
-        .delete_word_hyphens = 0,
+        .delete_word_hyphens = 1,
         .replace_numeric_hyphens = 0,
         .delete_numeric_hyphens = 0,
         .split_alpha_from_numeric = 1,
