@@ -63,7 +63,7 @@ libpostal_data_updated:
 		echo "$(EPOCH_DATE)" > @LIBPOSTAL_DATA_UPDATED_PATH@;			\
 	fi;
 
-libpostal_data.tar.gz:
+libpostal_data.tar.gz: | libpostal_data_mkdir libpostal_data_updated
 	if [ $$(curl $(LIBPOSTAL_S3_BUCKET_URL)/$(LIBPOSTAL_DATA_FILE) -z "$$(cat @LIBPOSTAL_DATA_UPDATED_PATH@)" --silent --remote-time -o $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) -w %{http_code}) = "200" ]; then		\
 		if [ "x$(USE_DATE_STAT)" != "x" ]; then																																												\
 			echo $$(date -d "$$(date -d "@$$(date -r $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) +%s)") + 1 second") > @LIBPOSTAL_DATA_UPDATED_PATH@;																		\
@@ -71,6 +71,7 @@ libpostal_data.tar.gz:
 			echo $$(date -r $$(stat -f %m $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE)) -v+1S) > @LIBPOSTAL_DATA_UPDATED_PATH@;																								\
 		fi;																																																					\
 		tar -xvzf $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE) -C $(LIBPOSTAL_DATA_DIR); 																																	\
+		rm $(LIBPOSTAL_DATA_DIR)/$(LIBPOSTAL_DATA_FILE);																																									\
 	fi;
 
 upload_data_s3:
