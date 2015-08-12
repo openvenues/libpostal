@@ -32,6 +32,7 @@ from geodata.encoding import safe_encode, safe_decode
 from geodata.file_utils import ensure_dir, download_file
 
 from cldr_languages import *
+from download_cldr import download_cldr
 from unicode_paths import UNICODE_DATA_DIR
 from word_breaks import script_regex, regex_char_range
 
@@ -352,6 +353,9 @@ def main(out_dir):
     download_file(PROP_VALUE_ALIASES_URL, LOCAL_PROP_VALUE_ALIASES_FILE)
     download_file(DERIVED_CORE_PROPS_URL, LOCAL_DERIVED_CORE_PROPS_FILE)
     download_file(WORD_BREAKS_URL, LOCAL_WORD_BREAKS_FILE)
+
+    if not os.path.exists(CLDR_SUPPLEMENTAL_DATA):
+        download_cldr()
 
     chars = get_chars_by_script()
     all_scripts = build_master_scripts_list(chars)
