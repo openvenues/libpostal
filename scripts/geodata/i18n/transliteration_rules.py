@@ -1185,11 +1185,11 @@ EXISTING_STEP = 'EXISTING_STEP'
 PREPEND_STEP = 'PREPEND_STEP'
 
 
-html_escapes = {'&{};'.format(name): escape_string(safe_encode(unichr(value)))
+html_escapes = {'&{};'.format(name): safe_encode(unichr(value))
                 for name, value in htmlentitydefs.name2codepoint.iteritems()
                 }
 
-html_escapes.update({'&#{};'.format(i): escape_string(safe_encode(unichr(i)))
+html_escapes.update({'&#{};'.format(i): safe_encode(unichr(i))
                      for i in xrange(NUM_CHARS)
                      })
 
@@ -1204,6 +1204,10 @@ latin_lower_rule = quote_string(latin_lower_rule)
 supplemental_transliterations = {
     'latin-ascii': [
         # Prepend transformations get applied in the reverse order of their appearance here
+        (PREPEND_STEP, [(quote_string(name), str(len(name)), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', quote_string(escape_string(value)), str(len(value)), 'NULL', '0', 'NULL', '0')
+                        for name, value in html_escapes.iteritems()
+                        ]
+         ),
         (PREPEND_STEP, [
             # German transliterations not handled by standard NFD normalization
             # ä => ae
@@ -1241,10 +1245,7 @@ supplemental_transliterations = {
 
 
         ]),
-        (PREPEND_STEP, [(quote_string(name), str(len(name)), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', quote_string(value), '0', 'NULL', '0', 'NULL', '0')
-                        for name, value in html_escapes.iteritems()
-                        ]
-         ),
+
     ],
 }
 
