@@ -116,11 +116,21 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
         if (options & NORMALIZE_STRING_LOWERCASE && is_ascii) {
             utf8_normalized = normalize_string_utf8(str, NORMALIZE_STRING_LOWERCASE);
             if (utf8_normalized != NULL) {
-                string_tree_add_string(tree, utf8_normalized);
+
+                if (options & NORMALIZE_STRING_LATIN_ASCII) {
+                    transliterated = transliterate(LATIN_ASCII, utf8_normalized, len);
+                    if (transliterated != NULL) {
+                        string_tree_add_string(tree, transliterated);
+                        free(transliterated);
+                        transliterated = NULL;
+                    }
+                } else {
+                    string_tree_add_string(tree, utf8_normalized);
+                }
                 free(utf8_normalized);
                 utf8_normalized = NULL;
-            }
 
+            }
         } else if (options & NORMALIZE_STRING_LATIN_ASCII && script == SCRIPT_LATIN && script_len > 0) {
             add_latin_alternatives(tree, str, script_len, options);
         } else if (options & NORMALIZE_STRING_TRANSLITERATE && script != SCRIPT_UNKNOWN && script_len > 0) {
