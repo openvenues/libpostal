@@ -820,7 +820,7 @@ trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t 
         size_t query_len = (*ptr && original_node_no_tail) ? len - i - 1 : len - i;
 
         if (data_node.tail != 0 && trie_compare_tail(self, query_tail, query_len, data_node.tail + tail_pos)) {
-            return (trie_prefix_result_t){next_id, query_len};
+            return (trie_prefix_result_t){next_id, tail_pos + query_len};
         } else {
             return NULL_PREFIX_RESULT;
 
