@@ -207,6 +207,8 @@ static transliteration_state_t state_from_char_result(char_set_result_t char_res
         state.state = TRANS_STATE_PARTIAL_MATCH;
         if (prev_state.state == TRANS_STATE_BEGIN) {
             state.phrase_start = index;
+        } else {
+            state.phrase_start = prev_state.phrase_start;
         }
         state.phrase_len = prev_state.phrase_len + len;
     }
@@ -953,7 +955,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
             str = char_array_to_string(new_str);
 
-            log_debug("new_str = %s\n", new_str);
+            log_debug("new_str = %s\n", str);
 
         } else if (step->type == STEP_UNICODE_NORMALIZATION) {
             log_debug("unicode normalization\n");
