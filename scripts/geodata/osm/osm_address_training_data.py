@@ -24,6 +24,7 @@ from address_normalizer.text.tokenize import *
 from geodata.i18n.languages import *
 from geodata.polygons.language_polys import *
 
+from geodata.csv_utils import *
 from geodata.file_utils import *
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
@@ -78,7 +79,7 @@ def parse_osm(filename, allowed_types=ALL_OSM_TAGS):
 
 def write_osm_json(filename, out_filename):
     out = open(out_filename, 'w')
-    writer = csv.writer(out, delimiter='\t')
+    writer = csv.writer(out, 'tsv_no_quote')
     for key, attrs in parse_osm(filename):
         writer.writerow((key, json.dumps(attrs)))
     out.close()
@@ -343,7 +344,7 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
 def build_ways_training_data(language_rtree, infile, out_dir):
     i = 0
     f = open(os.path.join(out_dir, WAYS_LANGUAGE_DATA_FILENAME), 'w')
-    writer = csv.writer(f, delimiter='\t')
+    writer = csv.writer(f, 'tsv_no_quote')
 
     for key, value in parse_osm(infile, allowed_types=WAYS_RELATIONS):
         country, name_language = get_language_names(language_rtree, key, value, tag_prefix='name')
@@ -371,10 +372,10 @@ def build_address_format_training_data(language_rtree, infile, out_dir):
     formatter = AddressFormatter(splitter='\n')
 
     formatted_file = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_FILENAME), 'w')
-    formatted_writer = csv.writer(formatted_file, delimiter='\t')
+    formatted_writer = csv.writer(formatted_file, 'tsv_no_quote')
 
     formatted_tagged_file = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_TAGGED_FILENAME), 'w')
-    formatted_tagged_writer = csv.writer(formatted_tagged_file, delimiter='\t')
+    formatted_tagged_writer = csv.writer(formatted_tagged_file, 'tsv_no_quote')
 
     for key, value in parse_osm(infile):
         try:
@@ -390,11 +391,11 @@ def build_address_format_training_data(language_rtree, infile, out_dir):
         formatted_address_untagged = formatter.format_address(country, value, tag_components=False)
         if formatted_address_tagged is not None:
             formatted_address_tagged = safe_encode(formatted_address_tagged.replace('\n', '\\n'))
-            formatted_tagged_writer.writerow((country, default_languages[0]['lang'], formatted_address_tagged))
+            formatted_tagged_writer.writerow((default_languages[0]['lang'], country, formatted_address_tagged))
 
         if formatted_address_untagged is not None:
             formatted_address_untagged = safe_encode(formatted_address_untagged.replace('\n', '\\n'))
-            formatted_writer.writerow((country, default_languages[0]['lang'], formatted_address_untagged))
+            formatted_writer.writerow((default_languages[0]['lang'], country, formatted_address_untagged))
 
         if formatted_address_tagged is not None or formatted_address_untagged is not None:
             i += 1
@@ -405,7 +406,7 @@ def build_address_format_training_data(language_rtree, infile, out_dir):
 def build_address_training_data(langauge_rtree, infile, out_dir, format=False):
     i = 0
     f = open(os.path.join(out_dir, ADDRESS_LANGUAGE_DATA_FILENAME), 'w')
-    writer = csv.writer(f, delimiter='\t')
+    writer = csv.writer(f, 'tsv_no_quote')
 
     for key, value in parse_osm(infile):
         country, street_language = get_language_names(language_rtree, key, value, tag_prefix='addr:street')
@@ -432,7 +433,7 @@ def build_venue_training_data(language_rtree, infile, out_dir):
     i = 0
 
     f = open(os.path.join(out_dir, VENUE_LANGUAGE_DATA_FILENAME), 'w')
-    writer = csv.writer(f, delimiter='\t')
+    writer = csv.writer(f, 'tsv_no_quote')
 
     for key, value in parse_osm(infile):
         country, name_language = get_language_names(language_rtree, key, value, tag_prefix='name')
@@ -444,8 +445,9 @@ def build_venue_training_data(language_rtree, infile, out_dir):
             continue
         for k, v in name_language.iteritems():
             for s in v:
+                s = s.strip()
                 if k in languages:
-                    writer.writerow((k, country, safe_encode(venue_type), safe_encode(s)))
+                    writer.writerow((k, country, safe_encode(venue_type), safe_encode(s.replace('\t', ' '))))
             if i % 1000 == 0 and i > 0:
                 print 'did', i, 'venues'
             i += 1
