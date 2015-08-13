@@ -22,6 +22,7 @@ from lxml import etree
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
+from geodata.csv_utils import *
 from geodata.file_utils import *
 from geodata.encoding import safe_encode, safe_decode
 from geodata.geonames.paths import DEFAULT_GEONAMES_DB_PATH
@@ -30,8 +31,6 @@ from geodata.i18n.unicode_paths import CLDR_DIR
 from geodata.log import log_to_file
 
 multispace_regex = re.compile('[\s]+')
-
-csv.register_dialect('tsv_no_quote', delimiter='\t', quoting=csv.QUOTE_NONE, quotechar='')
 
 
 def encode_field(value):
