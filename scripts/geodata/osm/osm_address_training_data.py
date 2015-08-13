@@ -354,7 +354,7 @@ def build_ways_training_data(language_rtree, infile, out_dir):
         for k, v in name_language.iteritems():
             for s in v:
                 if k in languages:
-                    writer.writerow((k, country, s.encode('utf-8')))
+                    writer.writerow((k, country, safe_encode(s).replace('\t', ' ').replace('\n', ', ')))
             if i % 1000 == 0 and i > 0:
                 print 'did', i, 'ways'
             i += 1
@@ -390,11 +390,11 @@ def build_address_format_training_data(language_rtree, infile, out_dir):
         formatted_address_tagged = formatter.format_address(country, value)
         formatted_address_untagged = formatter.format_address(country, value, tag_components=False)
         if formatted_address_tagged is not None:
-            formatted_address_tagged = safe_encode(formatted_address_tagged.replace('\n', '\\n'))
+            formatted_address_tagged = safe_encode(formatted_address_tagged.replace('\t', ' ').replace('\n', ', '))
             formatted_tagged_writer.writerow((default_languages[0]['lang'], country, formatted_address_tagged))
 
         if formatted_address_untagged is not None:
-            formatted_address_untagged = safe_encode(formatted_address_untagged.replace('\n', '\\n'))
+            formatted_address_untagged = safe_encode(formatted_address_untagged.replace('\t', ' ').replace('\n', ', '))
             formatted_writer.writerow((default_languages[0]['lang'], country, formatted_address_untagged))
 
         if formatted_address_tagged is not None or formatted_address_untagged is not None:
@@ -419,7 +419,7 @@ def build_address_training_data(langauge_rtree, infile, out_dir, format=False):
                 if not s:
                     continue
                 if k in languages:
-                    writer.writerow((k, country, safe_encode(s)))
+                    writer.writerow((k, country, safe_encode(s).replace('\t', ' ').replace('\n', ', ')))
             if i % 1000 == 0 and i > 0:
                 print 'did', i, 'streets'
             i += 1
@@ -440,14 +440,21 @@ def build_venue_training_data(language_rtree, infile, out_dir):
         if not name_language:
             continue
 
-        venue_type = value.get('amenity', u'').strip()
-        if not venue_type.strip():
+        venue_type = None
+        for key in (u'building', u'amenity'):
+            amenity = value.get(key, u'').strip()
+            if amenity:
+                venue_type = u':'.join([key, amenity])
+                break
+
+        if venue_type is None:
             continue
+
         for k, v in name_language.iteritems():
             for s in v:
                 s = s.strip()
                 if k in languages:
-                    writer.writerow((k, country, safe_encode(venue_type), safe_encode(s.replace('\t', ' '))))
+                    writer.writerow((k, country, safe_encode(venue_type), safe_encode(s).replace('\t', ' ').replace('\n', ', ')))
             if i % 1000 == 0 and i > 0:
                 print 'did', i, 'venues'
             i += 1
