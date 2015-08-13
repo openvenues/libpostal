@@ -248,6 +248,7 @@ def get_word_break_properties():
 
     return dict(props)
 
+
 def build_master_scripts_list(chars):
     all_scripts = OrderedDict.fromkeys(filter(bool, chars))
 
@@ -258,6 +259,12 @@ def build_master_scripts_list(chars):
     all_scripts[UNKNOWN_SCRIPT] = 0
 
     return all_scripts
+
+
+SCRIPT_ALIASES_SUPPLEMENTAL = {
+    'Hant': 'Han',
+    'Hans': 'Han'
+}
 
 
 def get_script_codes(all_scripts):
@@ -289,7 +296,22 @@ def get_script_codes(all_scripts):
                 script_codes[code] = normalized_name
                 seen_scripts.add(normalized_name)
 
+    value_aliases = get_property_value_aliases()
+    script_aliases = value_aliases['sc']
+
+    for code, script in script_aliases.iteritems():
+        if code not in script_codes and script in all_scripts:
+            script_codes[code] = script
+
+    script_codes.update(SCRIPT_ALIASES_SUPPLEMENTAL)
+
     return script_codes
+
+
+SCRIPT_CODE_ALIASES = {
+    'Jpan': ['Hani', 'Hira', 'Kana'],
+    'Kore': ['Hang', 'Han']
+}
 
 
 def extract_language_scripts(xml):
@@ -301,7 +323,11 @@ def extract_language_scripts(xml):
         if not scripts:
             continue
         for script in scripts.split():
-            language_scripts[language_code].append(script)
+            script_aliases = SCRIPT_CODE_ALIASES.get(script)
+            if not script_aliases:
+                language_scripts[language_code].append(script)
+            else:
+                language_scripts[language_code].extend(script_aliases)
 
     return language_scripts
 
@@ -332,11 +358,11 @@ def get_script_languages(script_codes):
         for script in scripts:
             script_code_languages[script].append(language)
 
-    script_languages = {}
+    script_languages = defaultdict(list)
 
     for script_code, script_name in script_codes.iteritems():
         langs = script_code_languages.get(script_code, [])
-        script_languages[script_name] = langs
+        script_languages[script_name].extend(langs)
 
     return script_languages
 
