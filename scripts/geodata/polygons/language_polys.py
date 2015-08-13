@@ -105,6 +105,7 @@ class LanguagePolygonIndex(RTreePolygonIndex):
                 if poly_type == 'Polygon':
                     poly = Polygon(rec['geometry']['coordinates'][0])
                     index.index_polygon(i, poly)
+                    poly = self.simplify_polygon(poly)
                     index.add_polygon(poly, dict(rec['properties']))
                 elif poly_type == 'MultiPolygon':
                     polys = []
@@ -113,7 +114,8 @@ class LanguagePolygonIndex(RTreePolygonIndex):
                         polys.append(poly)
                         index.index_polygon(i, poly)
 
-                    index.add_polygon(MultiPolygon(polys), dict(rec['properties']))
+                    multi_poly = self.simplify_polygon(MultiPolygon(polys))
+                    index.add_polygon(multi_poly, dict(rec['properties']))
                 else:
                     continue
 
@@ -127,3 +129,4 @@ class LanguagePolygonIndex(RTreePolygonIndex):
     def get_candidate_polygons(self, lat, lon):
         candidates = OrderedDict.fromkeys(self.index.intersection((lon, lat, lon, lat))).keys()
         return sorted(candidates, key=self.admin_level, reverse=True)
+
