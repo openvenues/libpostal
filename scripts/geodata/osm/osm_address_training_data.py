@@ -447,8 +447,11 @@ def build_venue_training_data(language_rtree, infile, out_dir):
             continue
 
         venue_type = None
-        for key in (u'building', u'amenity'):
+        for key in (u'amenity', u'building'):
             amenity = value.get(key, u'').strip()
+            if amenity in ('yes', 'y'):
+                continue
+
             if amenity:
                 venue_type = u':'.join([key, amenity])
                 break
