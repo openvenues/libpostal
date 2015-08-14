@@ -127,8 +127,9 @@ class AddressFormatter(object):
         ('country_name', 'country'),
     ])
 
-    def __init__(self, scratch_dir='/tmp', splitter=', '):
-        self.splitter = splitter
+    def __init__(self, scratch_dir='/tmp', splitter=None):
+        if self.splitter is not None:
+            self.splitter = splitter
 
         self.formatter_repo_path = os.path.join(scratch_dir, 'address-formatting')
         self.clone_repo()
