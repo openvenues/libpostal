@@ -95,7 +95,7 @@ class AddressFormatter(object):
     ''' Approximate Python port of lokku's Geo::Address::Formatter '''
     MINIMAL_COMPONENT_KEYS = ('road', 'postcode')
 
-    splitter = ', '
+    splitter = ' | '
 
     aliases = OrderedDict([
         ('name', 'house'),
