@@ -119,7 +119,7 @@ def read_osm_json(filename):
 
 class AddressFormatter(object):
     ''' Approximate Python port of lokku's Geo::Address::Formatter '''
-    MINIMAL_COMPONENT_KEYS = ('road', 'postcode')
+    MINIMAL_COMPONENT_KEYS = ('road', 'house_number')
 
     splitter = ' | '
 
