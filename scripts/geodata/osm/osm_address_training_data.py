@@ -376,7 +376,7 @@ ADDRESS_FORMAT_DATA_FILENAME = 'formatted_addresses.tsv'
 def build_address_format_training_data(language_rtree, infile, out_dir):
     i = 0
 
-    formatter = AddressFormatter(splitter='\n')
+    formatter = AddressFormatter()
 
     formatted_file = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_FILENAME), 'w')
     formatted_writer = csv.writer(formatted_file, 'tsv_no_quote')
