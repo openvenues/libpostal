@@ -119,7 +119,11 @@ def read_osm_json(filename):
 
 class AddressFormatter(object):
     ''' Approximate Python port of lokku's Geo::Address::Formatter '''
-    MINIMAL_COMPONENT_KEYS = ('road', 'house_number')
+    MINIMAL_COMPONENT_KEYS = [
+        ('road', 'house_number'),
+        ('road', 'house'),
+        ('road', 'postcode')
+    ]
 
     splitter = ' | '
 
@@ -201,7 +205,10 @@ class AddressFormatter(object):
         return output
 
     def minimal_components(self, components):
-        return all((c in components for c in self.MINIMAL_COMPONENT_KEYS))
+        for component_list in self.MINIMAL_COMPONENT_KEYS:
+            if all((c in components for c in component_list)):
+                return True
+        return False
 
     def apply_replacements(self, template, components):
         if not template.get('replace'):
@@ -227,7 +234,7 @@ class AddressFormatter(object):
                 text = re.sub(regex, replacement, text)
         return text
 
-    def format_address(self, country, components, minimal_only=False, tag_components=True):
+    def format_address(self, country, components, minimal_only=True, tag_components=True):
         template = self.config.get(country.upper())
         if not template:
             return None
