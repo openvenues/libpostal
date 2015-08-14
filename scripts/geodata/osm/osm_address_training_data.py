@@ -47,6 +47,32 @@ ALL_OSM_TAGS = set(['node', 'way', 'relation'])
 WAYS_RELATIONS = set(['way', 'relation'])
 
 
+class OSMField(object):
+    def __init__(self, name, c_constant, alternates=None):
+        self.name = name
+        self.c_constant = c_constant
+        self.alternates = alternates
+
+osm_fields = [
+    # Field if alternate_names present, default field name if not, C header constant
+    OSMField('addr:housename', 'OSM_HOUSE_NAME'),
+    OSMField('addr:housenumber', 'OSM_HOUSE_NUMBER'),
+    OSMField('addr:block', 'OSM_BLOCK'),
+    OSMField('addr:street', 'OSM_STREET_ADDRESS'),
+    OSMField('addr:place', 'OSM_PLACE'),
+    OSMField('addr:city', 'OSM_CITY', alternates=['addr:locality', 'addr:municipality', 'addr:hamlet']),
+    OSMField('addr:suburb', 'OSM_SUBURB'),
+    OSMField('addr:neighborhood', 'OSM_NEIGHBORHOOD', alternates=['addr:neighbourhood']),
+    OSMField('addr:district', 'OSM_DISTRICT'),
+    OSMField('addr:subdistrict', 'OSM_SUBDISTRICT'),
+    OSMField('addr:ward', 'OSM_WARD'),
+    OSMField('addr:state', 'OSM_STATE'),
+    OSMField('addr:province', 'OSM_PROVINCE'),
+    OSMField('addr:postcode', 'OSM_POSTAL_CODE', alternates=['addr:postal_code']),
+    OSMField('addr:country', 'OSM_COUNTRY'),
+]
+
+
 # Currently, all our data sets are converted to nodes with osmconvert before parsing
 def parse_osm(filename, allowed_types=ALL_OSM_TAGS):
     f = open(filename)
@@ -128,7 +154,7 @@ class AddressFormatter(object):
     ])
 
     def __init__(self, scratch_dir='/tmp', splitter=None):
-        if self.splitter is not None:
+        if splitter is not None:
             self.splitter = splitter
 
         self.formatter_repo_path = os.path.join(scratch_dir, 'address-formatting')
