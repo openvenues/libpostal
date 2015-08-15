@@ -129,4 +129,3 @@ class LanguagePolygonIndex(RTreePolygonIndex):
     def get_candidate_polygons(self, lat, lon):
         candidates = OrderedDict.fromkeys(self.index.intersection((lon, lat, lon, lat))).keys()
         return sorted(candidates, key=self.admin_level, reverse=True)
-
