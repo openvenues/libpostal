@@ -443,6 +443,47 @@ def build_address_format_training_data(language_rtree, infile, out_dir):
                 print 'did', i, 'formatted addresses'
 
 
+ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME = 'formatted_addresses_by_language.tsv'
+NAME_KEYS = (
+    'name',
+    'addr:housename',
+)
+
+
+def build_address_format_training_data_sans_names(language_rtree, infile, out_dir):
+    i = 0
+
+    formatter = AddressFormatter()
+
+    formatted_file = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME), 'w')
+    formatted_writer = csv.writer(formatted_file, 'tsv_no_quote')
+
+    for key, value in parse_osm(infile):
+        try:
+            latitude, longitude = latlon_to_floats(value['lat'], value['lon'])
+        except Exception:
+            continue
+
+        country, default_languages = country_and_languages(language_rtree, latitude, longitude)
+        if not (country and default_languages):
+            continue
+
+        for key in name_keys:
+            _ = value.pop(key, None)
+
+        if not value:
+            continue
+
+        formatted_address_untagged = formatter.format_address(country, value, tag_components=False)
+        if formatted_address_untagged is not None:
+            formatted_address_untagged = tsv_string(formatted_address_untagged)
+            formatted_writer.writerow((default_languages[0]['lang'], country, formatted_address_untagged))
+
+            i += 1
+            if i % 1000 == 0 and i > 0:
+                print 'did', i, 'formatted addresses'
+
+
 def build_address_training_data(langauge_rtree, infile, out_dir, format=False):
     i = 0
     f = open(os.path.join(out_dir, ADDRESS_LANGUAGE_DATA_FILENAME), 'w')
@@ -522,6 +563,11 @@ if __name__ == '__main__':
                         default=False,
                         help='Save formatted addresses (slow)')
 
+    parser.add_argument('-n', '--no-house-names',
+                        action='store_true',
+                        default=False,
+                        help='Save formatted addresses without house names (slow)')
+
     parser.add_argument('-t', '--temp-dir',
                         default=tempfile.gettempdir(),
                         help='Temp directory to use')
@@ -547,5 +593,7 @@ if __name__ == '__main__':
         build_address_training_data(language_rtree, args.address_file, args.out_dir)
     if args.address_file and args.format_only:
         build_address_format_training_data(language_rtree, args.address_file, args.out_dir)
+    if args.address_file and args.no_house_names:
+        build_address_format_training_data_sans_names(language_rtree, args.address_file, args.out_dir)
     if args.venues_file:
         build_venue_training_data(language_rtree, args.venues_file, args.out_dir)
