@@ -468,7 +468,7 @@ def build_address_format_training_data_sans_names(language_rtree, infile, out_di
         if not (country and default_languages):
             continue
 
-        for key in name_keys:
+        for key in NAME_KEYS:
             _ = value.pop(key, None)
 
         if not value:
