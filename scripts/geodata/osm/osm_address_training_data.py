@@ -448,9 +448,14 @@ NAME_KEYS = (
     'name',
     'addr:housename',
 )
+COUNTRY_KEYS = (
+    'country',
+    'country_name',
+    'addr:country',
+)
 
 
-def build_address_format_training_data_sans_names(language_rtree, infile, out_dir):
+def build_address_format_training_data_limited(language_rtree, infile, out_dir):
     i = 0
 
     formatter = AddressFormatter()
@@ -468,7 +473,7 @@ def build_address_format_training_data_sans_names(language_rtree, infile, out_di
         if not (country and default_languages):
             continue
 
-        for key in NAME_KEYS:
+        for key in NAME_KEYS + COUNTRY_KEYS:
             _ = value.pop(key, None)
 
         if not value:
@@ -563,10 +568,10 @@ if __name__ == '__main__':
                         default=False,
                         help='Save formatted addresses (slow)')
 
-    parser.add_argument('-n', '--no-house-names',
+    parser.add_argument('-l', '--limited-addresses',
                         action='store_true',
                         default=False,
-                        help='Save formatted addresses without house names (slow)')
+                        help='Save formatted addresses without house names or country (slow)')
 
     parser.add_argument('-t', '--temp-dir',
                         default=tempfile.gettempdir(),
@@ -589,11 +594,11 @@ if __name__ == '__main__':
     # Can parallelize
     if args.streets_file:
         build_ways_training_data(language_rtree, args.streets_file, args.out_dir)
-    if args.address_file and not args.format_only and not args.no_house_names:
+    if args.address_file and not args.format_only and not args.limited_addresses:
         build_address_training_data(language_rtree, args.address_file, args.out_dir)
     if args.address_file and args.format_only:
         build_address_format_training_data(language_rtree, args.address_file, args.out_dir)
-    if args.address_file and args.no_house_names:
-        build_address_format_training_data_sans_names(language_rtree, args.address_file, args.out_dir)
+    if args.address_file and args.limited_addresses:
+        build_address_format_training_data_limited(language_rtree, args.address_file, args.out_dir)
     if args.venues_file:
         build_venue_training_data(language_rtree, args.venues_file, args.out_dir)
