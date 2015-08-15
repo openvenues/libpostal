@@ -48,12 +48,12 @@ osmfilter $PLANET_O5M --keep="boundary=administrative" --drop-author --drop-vers
 
 echo "Filtering for venue records: `date`"
 PLANET_VENUES_O5M="planet-venues.o5m"
-osmfilter $PLANET_O5M --keep="name= and amenity=" --drop-author --drop-version -o=$PLANET_VENUES_O5M
+osmfilter $PLANET_O5M --keep="name= and ( amenity= or building= )" --drop-author --drop-version -o=$PLANET_VENUES_O5M
 PLANET_VENUES_LATLONS="planet-venues-latlons.o5m"
 osmconvert $PLANET_VENUES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_VENUES_LATLONS
 rm $PLANET_VENUES_O5M
 PLANET_VENUES="planet-venues.osm"
-osmfilter $PLANET_VENUES_LATLONS --keep="name= and amenity=" -o=$PLANET_VENUES
+osmfilter $PLANET_VENUES_LATLONS --keep="name= and ( amenity= or building= )" -o=$PLANET_VENUES
 rm $PLANET_VENUES_LATLONS
 
 echo "Filtering ways: `date`"
