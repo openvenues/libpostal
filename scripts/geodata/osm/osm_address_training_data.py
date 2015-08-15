@@ -589,7 +589,7 @@ if __name__ == '__main__':
     # Can parallelize
     if args.streets_file:
         build_ways_training_data(language_rtree, args.streets_file, args.out_dir)
-    if args.address_file and not args.format_only:
+    if args.address_file and not args.format_only and not args.no_house_names:
         build_address_training_data(language_rtree, args.address_file, args.out_dir)
     if args.address_file and args.format_only:
         build_address_format_training_data(language_rtree, args.address_file, args.out_dir)
