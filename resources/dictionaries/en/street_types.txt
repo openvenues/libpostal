@@ -340,7 +340,6 @@ union|un
 vale|va|vl
 valley|vlly|vly|vy
 vennel
-via
 viaduct|via|viad|vdct|viadct
 view|vw
 views|vws
