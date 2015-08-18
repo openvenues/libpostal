@@ -11,7 +11,7 @@ import tempfile
 import ujson as json
 import yaml
 
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 from lxml import etree
 from itertools import ifilter, chain
 
@@ -21,8 +21,12 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
 
 from address_normalizer.text.tokenize import *
+from address_normalizer.text.normalize import PhraseFilter
 from geodata.i18n.languages import *
 from geodata.polygons.language_polys import *
+from geodata.i18n.unicode_paths import DATA_DIR
+
+from marisa_trie import BytesTrie
 
 from geodata.csv_utils import *
 from geodata.file_utils import *
@@ -42,6 +46,8 @@ PLANET_WAYS_OUTPUT_FILE = 'planet-ways.tsv'
 
 PLANET_VENUES_INPUT_FILE = 'planet-venues.osm'
 PLANET_VENUES_OUTPUT_FILE = 'planet-venues.tsv'
+
+DICTIONARIES_DIR = os.path.join(DATA_DIR, 'dictionaries')
 
 ALL_OSM_TAGS = set(['node', 'way', 'relation'])
 WAYS_RELATIONS = set(['way', 'relation'])
@@ -71,6 +77,91 @@ osm_fields = [
     OSMField('addr:postcode', 'OSM_POSTAL_CODE', alternates=['addr:postal_code']),
     OSMField('addr:country', 'OSM_COUNTRY'),
 ]
+
+
+PREFIX_KEY = u'\x02'
+SUFFIX_KEY = u'\x03'
+
+POSSIBLE_ROMAN_NUMERALS = set(['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix',
+                               'x', 'xi', 'xii', 'xiii', 'xiv', 'xv', 'xvi', 'xvii', 'xviii', 'xix',
+                               'xx', 'xxx', 'xl', 'l', 'lx', 'lxx', 'lxxx', 'xc',
+                               'c', 'cc', 'ccc', 'cd', 'd', 'dc', 'dcc', 'dccc', 'cm',
+                               'm', 'mm', 'mmm', 'mmmm'])
+
+
+class StreetTypesGazetteer(PhraseFilter):
+    def serialize(self, s):
+        return s
+
+    def deserialize(self, s):
+        return s
+
+    def configure(self, base_dir=DICTIONARIES_DIR):
+        kvs = defaultdict(OrderedDict)
+        for lang in os.listdir(DICTIONARIES_DIR):
+            for filename in ('street_types.txt', 'directionals.txt'):
+                path = os.path.join(DICTIONARIES_DIR, lang, filename)
+                if not os.path.exists(path):
+                    continue
+
+                for line in open(path):
+                    line = line.strip()
+                    if not line:
+                        continue
+                    canonical = safe_decode(line.split('|')[0])
+                    if canonical in POSSIBLE_ROMAN_NUMERALS:
+                        continue
+                    kvs[canonical][lang] = None
+            for filename in ('concatenated_suffixes_separable.txt', 'concatenated_suffixes_inseparable.txt', 'concatenated_prefixes_separable.txt'):
+                path = os.path.join(DICTIONARIES_DIR, lang, filename)
+                if not os.path.exists(path):
+                    continue
+
+                for line in open(path):
+                    line = line.strip()
+                    if not line:
+                        continue
+
+                    canonical = safe_decode(line.split('|')[0])
+                    if 'suffixes' in filename:
+                        canonical = SUFFIX_KEY + canonical[::-1]
+                    else:
+                        canonical = PREFIX_KEY + canonical
+
+                    kvs[canonical][lang] = None
+
+        kvs = [(k, v) for k, vals in kvs.iteritems() for v in vals.keys()]
+
+        self.trie = BytesTrie(kvs)
+        self.configured = True
+
+    def search_substring(self, s):
+        if len(s) == 0:
+            return None
+
+        for i in xrange(len(s) + 1):
+            if not self.trie.has_keys_with_prefix(s[:i]):
+                i -= 1
+                break
+        if i > 0:
+            return self.trie.get(s[:i])
+        else:
+            return None
+
+    def filter(self, *args, **kw):
+        for c, t, data in super(StreetTypesGazetteer, self).filter(*args):
+            if c != token_types.PHRASE:
+                suffix_search = self.search_substring(SUFFIX_KEY + t[1][::-1])
+                if suffix_search:
+                    yield (token_types.PHRASE, [(c, t)], suffix_search)
+                    continue
+                prefix_search = self.search_substring(PREFIX_KEY + t[1])
+                if prefix_search:
+                    yield (token_types.PHRASE, [(c, t)], prefix_search)
+                    continue
+            yield c, t, data
+
+street_types_gazetteer = StreetTypesGazetteer()
 
 
 # Currently, all our data sets are converted to nodes with osmconvert before parsing
@@ -331,15 +422,51 @@ def latlon_to_floats(latitude, longitude):
     return float(latitude), float(longitude)
 
 
+UNKNOWN_LANGUAGE = 'unk'
+AMBIGUOUS_LANGUAGE = 'xxx'
+
+
+def disambiguate_language(text, languages):
+    valid_languages = OrderedDict([(l['lang'], l['default']) for l in languages])
+    tokens = tokenize(safe_decode(text).replace(u'-', u' ').lower())
+
+    current_language = None
+
+    for c, t, data in street_types_gazetteer.filter(tokens):
+        if c == token_types.PHRASE:
+            valid = [lang for lang in data if lang in valid_languages]
+            if len(valid) != 1:
+                continue
+
+            phrase_lang = valid[0]
+            if phrase_lang != current_language and current_language is not None:
+                return AMBIGUOUS_LANGUAGE
+            current_language = phrase_lang
+
+    if current_language is not None:
+        return current_language
+    return UNKNOWN_LANGUAGE
+
+
 def country_and_languages(language_rtree, latitude, longitude):
     props = language_rtree.point_in_poly(latitude, longitude, return_all=True)
     if not props:
-        return None, None
+        return None, None, None
 
     country = props[0]['qs_iso_cc'].lower()
-    languages = list(chain(*(p['languages'] for p in props)))
+    languages = []
+
+    for p in props:
+        languages.extend(p['languages'])
+
+    # Python's builtin sort is stable, so if there are two defaults, the first remains first
+    # Since polygons are returned from the index ordered from smallest admin level to largest,
+    # it means the default language of the region overrides the country default
     default_languages = sorted(languages, key=operator.itemgetter('default'), reverse=True)
-    return country, default_languages
+    return country, default_languages, props
+
+
+WELL_REPRESENTED_LANGUAGES = set(['en', 'fr', 'it', 'de', 'nl', 'es'])
 
 
 def get_language_names(language_rtree, key, value, tag_prefix='name'):
@@ -355,22 +482,53 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
     except Exception:
         return None, None
 
-    country, candidate_languages = country_and_languages(language_rtree, latitude, longitude)
+    country, candidate_languages, language_props = country_and_languages(language_rtree, latitude, longitude)
     if not (country and candidate_languages):
         return None, None
 
-    num_defaults = sum((1 for l in candidate_languages if l.get('default')))
+    num_langs = len(candidate_languages)
+    default_langs = set([l['lang'] for l in candidate_languages if l.get('default')])
+    num_defaults = len(default_langs)
     name_language = defaultdict(list)
     has_alternate_names = any((k.startswith(tag_prefix + ':') and normalize_osm_name_tag(k, script=True)
                                in languages for k, v in value.iteritems()))
+
+    regional_defaults = 0
+    country_defaults = 0
+    regional_langs = set()
+    country_langs = set()
+    for p in language_props:
+        if p['admin_level'] > 0:
+            regional_defaults += sum((1 for lang in p['languages'] if lang.get('default')))
+            regional_langs |= set([l['lang'] for l in p['languages']])
+        else:
+            country_defaults += sum((1 for lang in p['languages'] if lang.get('default')))
+            country_langs |= set([l['lang'] for l in p['languages']])
+
     for k, v in value.iteritems():
         if k.startswith(tag_prefix + ':'):
             norm = normalize_osm_name_tag(k)
             norm_sans_script = normalize_osm_name_tag(k, script=True)
             if norm in languages or norm_sans_script in languages:
                 name_language[norm].append(v)
-        elif not has_alternate_names and num_defaults == 1 and k.startswith(tag_first_component) and (has_colon or ':' not in k) and normalize_osm_name_tag(k, script=True) == tag_last_component:
-            name_language[candidate_languages[0]['lang']].append(v)
+        elif not has_alternate_names and k.startswith(tag_first_component) and (has_colon or ':' not in k) and normalize_osm_name_tag(k, script=True) == tag_last_component:
+            if num_langs == 1:
+                name_language[candidate_languages[0]['lang']].append(v)
+            else:
+                lang = disambiguate_language(v, candidate_languages)
+                default_lang = candidate_languages[0]['lang']
+
+                if lang == AMBIGUOUS_LANGUAGE:
+                    print u'Ambiguous language. country={}, default={}, str={}'.format(country, default_lang, v)
+                    return None, None
+                elif lang == UNKNOWN_LANGUAGE and num_defaults == 1:
+                    name_language[default_lang].append(v)
+                elif lang != UNKNOWN_LANGUAGE:
+                    if lang != default_lang and lang in country_langs and country_defaults > 1 and regional_defaults > 0 and lang in WELL_REPRESENTED_LANGUAGES:
+                        return None, None
+                    name_language[lang].append(v)
+                else:
+                    return None, None
 
     return country, name_language
 
@@ -423,7 +581,7 @@ def build_address_format_training_data(language_rtree, infile, out_dir):
         except Exception:
             continue
 
-        country, default_languages = country_and_languages(language_rtree, latitude, longitude)
+        country, default_languages, language_props = country_and_languages(language_rtree, latitude, longitude)
         if not (country and default_languages):
             continue
 
@@ -469,7 +627,7 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
         except Exception:
             continue
 
-        country, default_languages = country_and_languages(language_rtree, latitude, longitude)
+        country, default_languages, language_props = country_and_languages(language_rtree, latitude, longitude)
         if not (country and default_languages):
             continue
 
@@ -590,6 +748,8 @@ if __name__ == '__main__':
     init_languages()
 
     language_rtree = LanguagePolygonIndex.load(args.rtree_dir)
+
+    street_types_gazetteer.configure()
 
     # Can parallelize
     if args.streets_file:
