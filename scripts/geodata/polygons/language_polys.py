@@ -88,7 +88,7 @@ class LanguagePolygonIndex(RTreePolygonIndex):
                     if not regional:
                         continue
 
-                    languages = regional.keys()
+                    languages = regional.items()
                 else:
                     languages = official_languages[country].items()
                     overrides = road_language_overrides.get(country)
