@@ -355,7 +355,5 @@ ways|wys
 well|wl
 wells|wls
 wharf|whrf
-wood|wd
-woods|wds
 wynd|wyn
 yard|yd|yrd

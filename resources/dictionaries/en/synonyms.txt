@@ -37,3 +37,5 @@ stream|strm|stm
 triangle|tri
 upper|up|upr|uppr
 villages|vlgs
+wood|wd
+woods|wds
