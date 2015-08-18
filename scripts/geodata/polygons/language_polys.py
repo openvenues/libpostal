@@ -41,7 +41,7 @@ class LanguagePolygonIndex(RTreePolygonIndex):
 
         '''
         Ordering of the files is important here as we want to match
-        the most granular admin polygon first for regional languages. Currently 
+        the most granular admin polygon first for regional languages. Currently
         most regional languages as they would apply to street signage are regional in
         terms of an admin 1 level (states, provinces, regions)
         '''
@@ -80,10 +80,10 @@ class LanguagePolygonIndex(RTreePolygonIndex):
                     regional = None
 
                     if name_key:
-                        regional = regional_languages.get((country, name_key, admin1), (None, None))
+                        regional = regional_languages.get((country, name_key, admin1), None)
 
                     if code_key and not regional:
-                        regional = regional_languages.get((country, code_key, admin1_code), (None, None))
+                        regional = regional_languages.get((country, code_key, admin1_code), None)
 
                     if not regional:
                         continue
