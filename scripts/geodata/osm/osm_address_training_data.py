@@ -638,18 +638,31 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
         if not name_language:
             continue
 
-        formatted_address_untagged = formatter.format_address(country, value, tag_components=False)
-        if formatted_address_untagged is not None:
-            formatted_address_untagged = tsv_string(formatted_address_untagged)
+        single_language = len(name_language) == 1
+        for lang, val in name_language.iteritems():
+            if lang not in languages:
+                continue
 
-            for k, v in name_language.iteritems():
-                for s in v:
-                    if k in languages:
-                        writer.writerow((k, country, formatted_address_untagged))
+            address_dict = value.copy()
+            for k in address_dict.keys():
+                namespaced_val = u'{}:{}'.format(k, lang)
+                if namespaced_val in address_dict:
+                    address_dict[k] = d[namespaced_val]
+                elif not single_language:
+                    address_dict.pop(k)
 
-            i += 1
-            if i % 1000 == 0 and i > 0:
-                print 'did', i, 'formatted addresses'
+            if not address_dict:
+                continue
+
+            formatted_address_untagged = formatter.format_address(country, address_dict, tag_components=False)
+            if formatted_address_untagged is not None:
+                formatted_address_untagged = tsv_string(formatted_address_untagged)
+
+                writer.writerow((lang, country, formatted_address_untagged))
+
+        i += 1
+        if i % 1000 == 0 and i > 0:
+            print 'did', i, 'formatted addresses'
 
 
 def build_address_training_data(langauge_rtree, infile, out_dir, format=False):
