@@ -77,6 +77,8 @@ class LanguagePolygonIndex(RTreePolygonIndex):
                     admin1 = properties.get(name_key)
                     admin1_code = properties.get(code_key)
 
+                    regional_languages = None
+
                     if name_key:
                         regional_languages = regional_languages.get((country, name_key, admin1), (None, None))
 
