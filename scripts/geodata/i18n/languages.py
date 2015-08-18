@@ -16,7 +16,7 @@ country_languages = defaultdict(OrderedDict)
 # Only official and de facto official, no official_regional
 official_languages = defaultdict(OrderedDict)
 
-regional_languages = {}
+regional_languages = defaultdict(OrderedDict)
 road_language_overrides = defaultdict(OrderedDict)
 
 languages = set()
@@ -48,11 +48,12 @@ def init_languages(languages_dir=LANGUAGES_DIR):
 
     path = os.path.join(languages_dir, 'regional', 'adm1.tsv')
 
-    for country, key, value, lang, default in unicode_csv_reader(open(path), delimiter='\t'):
-        regional_languages[(country, key, value)] = (lang, int(default))
-        if lang not in country_languages[country]:
-            country_languages[country][lang] = 0
-        if lang not in languages:
-            languages.add(lang)
+    for country, key, value, langs, default in unicode_csv_reader(open(path), delimiter='\t'):
+        for lang in langs.split(','):
+            regional_languages[(country, key, value)][lang] = int(default)
+            if lang not in country_languages[country]:
+                country_languages[country][lang] = 0
+            if lang not in languages:
+                languages.add(lang)
 
     initialized = True
