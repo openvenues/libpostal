@@ -1,4 +1,5 @@
 autovía|autovia
+autopista|auto|autop
 avenida|av|avd|avda
 alameda
 baixada
@@ -10,8 +11,10 @@ glorieta
 paseo
 praza|pr|pza
 praciña|pracina
+prazuela|przla
 rambla|rbla
-rotunda
+ronda|rda
+rotonda|rtda
 rúa|rua|r
 rúas|ruas|rs
 ruela

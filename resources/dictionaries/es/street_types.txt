@@ -4,7 +4,7 @@ alquería|alqueria|alque
 andador|andad
 angosta|angta
 apeadero|apdro
-autopista|auto
+autopista|auto|autop
 autovía|autovia|autov
 avenida|av|avd|avda
 bajada|bjada
@@ -78,7 +78,6 @@ plaza|pl|plza|pza|p.za
 plazoleta|pzta|plzta|plta
 plazuela|plzla
 poblado|pbdo
-prazuela|przla
 prolongación|prolongacion|prol
 puebla|pbla
 pueblo|pblo

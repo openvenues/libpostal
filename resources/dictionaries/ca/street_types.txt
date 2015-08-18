@@ -19,6 +19,7 @@ plaça|pl|placa|pça|pca|plç|plc
 portal|ptal
 rambla|rbla
 ronda|rda
+rotonda|rtda
 sortida|sort
 transversal|trval|trvsal
 travessera|trav
