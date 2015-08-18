@@ -521,7 +521,6 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
                 default_lang = candidate_languages[0]['lang']
 
                 if lang == AMBIGUOUS_LANGUAGE:
-                    print u'Ambiguous language. country={}, default={}, str={}'.format(country, default_lang, v)
                     return None, None
                 elif lang == UNKNOWN_LANGUAGE and num_defaults == 1:
                     name_language[default_lang].append(v)
