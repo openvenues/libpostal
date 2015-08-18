@@ -3,6 +3,7 @@ autovia|autov
 avinguda|av|avd|avda
 camí|cami
 carrer|carr
+carrera|cra|carra
 carreró|cró|carrero|cro|carro|carr
 carretera|ctra
 cinturó|cint|cinturo
@@ -19,6 +20,7 @@ portal|ptal
 rambla|rbla
 ronda|rda
 sortida|sort
+transversal|trval|trvsal
 travessera|trav
 travessia|trv|trav
 via|v
