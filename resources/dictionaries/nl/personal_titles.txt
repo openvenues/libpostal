@@ -1,3 +1,4 @@
+baron
 broeder|br
 burgermeester|burg|bgm
 commandant|cmdt
@@ -21,6 +22,7 @@ minister|min
 monseigneur|mgr
 onze lieve vrouwe|onzelievevrouwe|olv|o l v
 pastoor|past
+pater
 president|pres
 prins|pr
 prinses|prs

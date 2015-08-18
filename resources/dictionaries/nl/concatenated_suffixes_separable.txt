@@ -3,6 +3,7 @@ hof|h.
 laan|ln.
 lange|l.
 lang|l.
+markt|mkt.
 plain|pln.
 singel|sngl.
 straat|str.
