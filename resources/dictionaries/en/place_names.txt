@@ -154,7 +154,7 @@ market|mkt
 middle school|ms|m s
 movie theater
 movie theatre
-national park|np|natl park|natl pk|nat'l park|nat'l pk
+national park|np|natl park|natl pk|natl prk|nat'l park|nat'l pk|nat'l prk
 national recreation area|nra|natl rec area|nat'l rec area
 national wildlife refuge area|nwra|natl wildlife refuge area|nat'l wildlife refuge area
 nurses home|nurses home|nurse home
@@ -165,6 +165,8 @@ office tower|ofc twr|office twr|ofc tower
 office towers|ofc twrs|office twrs|ofc towers
 opera house
 parish
+park|pk|prk
+parking
 parking lot
 pavilion
 pharmacy
@@ -238,8 +240,8 @@ veterinary
 veterinarian
 veterinarians
 vets
-villa|vll
-villas|vlls
+villa|vll|vla
+villas|vlls|vlas
 village|vil|vge|vill|villag|villg|vlg|vlge|vllg|villages|vlgs
 wine bar|winebar
 winery

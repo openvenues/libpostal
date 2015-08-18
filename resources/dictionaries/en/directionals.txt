@@ -1,4 +1,6 @@
-central|cn|ctrl
+center|c|ctr
+central|c|cn|ctrl|cntrl
+centre|c|ctr
 east|e
 eastern|eastrn|estrn|estn
 lower|lowr|lwr

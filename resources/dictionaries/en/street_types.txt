@@ -277,6 +277,7 @@ rocks|rks
 rosebowl|rsbl|rose bowl
 rotary|rty
 round|rnd
+roundabout
 route|rt|rte
 row|rw
 run
