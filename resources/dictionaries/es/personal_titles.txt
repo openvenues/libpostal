@@ -12,7 +12,7 @@ arquitecto|arq
 arquitecta|arqa
 arquitectors|arqs|arqos
 arzobispo|arz
-barón|barbaron
+barón|baron|bar
 baronesa
 brigadier|brg|bg|brig
 brigadier general|brg general|brg gral|brg genl|brg gnal|brg gn|bg general|bg gral|bg genl|bg gnal|bg gn|brig general|brig gral|brig genl|brig gnal|brig gn

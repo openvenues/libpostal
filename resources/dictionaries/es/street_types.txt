@@ -86,7 +86,6 @@ puente|pnte
 rambla|rbla
 rampla|rampa|rpla
 retorno|ret|rt
-ribera|bra
 rincón|rincon|rcon|rin|rncn|rncon
 rinconada|rcda|rcnda
 ronda|rda

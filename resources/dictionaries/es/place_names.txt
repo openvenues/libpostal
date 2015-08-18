@@ -57,6 +57,8 @@ hotel
 iglesia|igl|igla
 iglesias|iglas
 instituto|inst
+jardín|jardin|jdin|jard
+jardines|jdins|jards
 librería|libreria
 mercado|merc
 mirador|mrdor
@@ -90,4 +92,5 @@ tienda
 torre
 transito|trans
 universidad|univ|uni|univers
-villa
+villa|vla
+villas|vlas
