@@ -5,6 +5,7 @@ damm
 gasse
 hof
 kreuz|kz.
+markt|mkt.
 platz|pl.
 quelle|qu|q.
 rundwanderweg|rww.

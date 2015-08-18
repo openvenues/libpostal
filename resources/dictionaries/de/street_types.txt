@@ -17,9 +17,6 @@ großes|grosses
 heiligen
 hof|h
 kamp|k
-kleine|kl
-kleiner
-kleines
 obere|ob
 oberer|ob
 oberes
