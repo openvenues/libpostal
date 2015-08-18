@@ -1,5 +1,13 @@
+baston|bast
+bourg|brg
+charmille|chi
+colline|coli
+collines|colis
+enceinte|en
 fleuve|fl
 grand|gd|gr|g
-mont|mt
+mont|mt|mnt
 petite|p|pt
 rivière|riviere|riv
+village|vge
+villages|vges

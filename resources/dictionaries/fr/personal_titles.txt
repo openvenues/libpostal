@@ -2,6 +2,7 @@ amiral|am
 baron
 baronne
 capitaine|capte
+chez|chz
 colonel|col|cel
 commandant|cdt
 comte|cte

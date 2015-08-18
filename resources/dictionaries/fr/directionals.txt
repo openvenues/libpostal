@@ -1,4 +1,5 @@
-centre|c|ctr
+central|ctrl
+centre|c|ctre|cntre
 est|e
 levant
 nord|n

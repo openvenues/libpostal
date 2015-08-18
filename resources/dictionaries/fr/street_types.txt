@@ -1,7 +1,3 @@
-abbaye|abe
-agglomeratión|agglomeration|agl|agglom
-aire
-aires
 allée|allee|all
 allées|alls|allees
 ancien chemin|ach|a ch
@@ -15,38 +11,26 @@ avenues|avs|aves|avens|avenus|avns|avnus|avnues
 barriêre|barriere|bre
 barriêres|barrieres|bres
 bas chemin|bch|b ch
-bastide|bstd
-baston|bast
-béguinage|beguinage|begi
-béguinages|beguinages|begis
 berge|ber
 berges|bers
 bois
 boucle|bcle
 boulevard|bd|bde|blv|blvd|blvde|blvrd|boulavard|boul|boulv|bvd|boulevarde|bld
-bourg|brg
 butte|but
-cité|cite
-cités|cites
 côte|cote
 côteau|coteau
 cale
 camp
 campagne|cgne
-camping|cpg
 carreau|cau|carru
 carrefour|carf|carref
 carrière|carriere|care
 carrières|carrieres|cares
 carré|carre|carr|car
 cavée|cavee|cav
-central|ctrl
-centre|c|ctre|cntre
 cercle|cercl
 chalet|chl
 champ
-chapelle|chp
-charmille|chi
 chaussée|chaussee|chs|chee
 chaussées|chaussees|chss|chees
 chemin|ch|che
@@ -54,45 +38,29 @@ chemin vicinal|chv|chev|ch v|che v
 cheminement|chem
 chemins|ches
 chemins vicinaux|chsv|chs v
-chez|chz
 château|chateau|cht
 cloître|cloitre|cloi
 clos
 col
-colline|coli
-collines|colis
 contour|ctr
 corniche|cor
 corniches|cors
 cour
 cours|crs
-darse|dars
 degré|degre|deg
 degrés|degres|degs
 descente|dsg
 descentes|dsgs
 digue|dig
 digues|digs
-domaine|dom
-domaines|doms
 échangeur|éch
 écluse|ecluse|ecl|écl
 écluses|ecluses|ecls|écls
-enceinte|en
 enclave|env
 enclos|enc
-escalier|esc
-escaliers|escs
 espace|espa
 esplanade|esp
 esplanades|esps
-étang|etang
-faubourg|fg|fbg
-ferme|frm
-fermes|frms
-fontaine|fon
-fort|ft
-forum|form
 fosse|fos
 fosses|fos|foss
 foyer|foyr
@@ -107,39 +75,20 @@ grand rues|grs|g rs|gr rs|grd rs|gd rs|g rues|gr rues|grd rues|gd rues
 grands ensembles|gdsen|gds ens|gs ens|grs ens|grds ens|gdsens
 grille|gri
 grimpette|grim
-halle|hle
-halles|hles|hls
 hameau|ham
 haut chemin|hch|h ch
 hauts chemins|hchs|h chs|hschs|hs chs
-hippodrome|hip
-hlm
 impasse|imp
 impasses|imps
-jardin|jard|jrd
-jardins|jards|jrds
 jetée|jetee|jte
 jetées|jetees|jtes
 levée|levee|leve|lve
-lieu-dit|lieu dit|lieudit|ld|ldit|l dit|l-dit
-lotissement|lot
-lotissements|lots
-mail
-maison forestière|maison forestiere|mf|m.f.|m.f|m f
-manoir|man
-marché|marche|mar
-marchés|marches|mars
-mas
-mont|mt|mnt|montagne
 montée|montee|mte
 montées|montees|mtes
-moulin|mln
-moulins|mlns
 métro|metro|mét|met
 nouvelle route|nte
 parc|prc
 parcs|prcs
-parking|pkg
 parvis|prv
 passage|pas|psg
 passage à niveau|passage a niveau|pn|p.n.|p.n|p n
@@ -148,8 +97,6 @@ passerelle|ple
 passerelles|ples
 passes
 patio|pat
-pavillon|pav
-pavillons|pavs
 périphérique|peripherique|peri|péri
 petit chemin|p ch|p chemin|pt ch|pt chemin
 petite allée|petite allee|pta|pt a|pt allee|p a|p allee
@@ -169,24 +116,17 @@ plateaux|pltx|platx
 pointe|pte|pnte
 pont
 ponts
-porche|pch|prch
-port
-porte|pte
 portique|porq|portq
 portiques|porqs|portqs
-poterne|pot|potrn
 pourtour|pour
 presqu’île|presquîle|presqu'ile|presquile|prq|prql
 promenade|prom
-pré|pre
 peripherique|peri
-peristyle|psty
 quai|au
 raccourci|rac|racc
 raidillon|raid
 rampe|rpe|rmpe|rmp
 rempart|rem|remp
-roc
 rocade|rocd
 ronde|rnde
 rond point|rondpoint|rdpt|rd pt|rpt
@@ -206,14 +146,12 @@ sentes|sens
 sentier|sent
 sentiers|sents
 square|sq
-stade|stde
 terrain|terr|trn
 terrasse|tsse
 terrasses|tsses
 terre plein|tpl|t pl|trpl|tr pl
 terte|trt
 tertes|trts
-tour
 traverse|tra|trvs|trvrs
 vallon|val
 valée|vallee|val
@@ -222,9 +160,5 @@ venelles|vens
 via
 vieille route|vte|v rt|vrt|v rte|vrte|v route|vroute
 vieux chemin|vche|v che|vch|v ch|v chemin
-village|vge
-villages|vges
-villas|vlas
 voie|voi
 voies|vois
-zone

@@ -1,19 +1,57 @@
+abbaye|abe
+bastide|bstd
+béguinage|beguinage|begi
+béguinages|beguinages|begis
+camping|cpg
 castel|cst
 centre commercial|cc|c.c.|c.c|c c|centre cial|centre comm|c cial|c comm|ctr cial|ctr comm
+chapelle|chp
 château|chateau
 cottage|cott
 cottages|cott|cotts
+darse|dars
 église|eglise|egl|égl
+étang|etang
+ferme|frm
+fermes|frms
+fontaine|fon
+fort|ft
+forum|form
 gare
+habitation à loyer modéré|hlm|h.l.m|h l m
+halle|hle
+halles|hles|hls
+hippodrome|hip
+jardin|jard|jrd
+jardins|jards|jrds
+manoir|man
+marché|marche|mar
+marchés|marches|mars
+maison
+mas
+maison forestière|maison forestiere|mf|m.f.|m.f|m f
 mont|mt|mnt|montagne
+moulin|mln
+moulins|mlns
 musée|musee|mus
 palais|pal
 parc|prc
+parcs
 parc industriel
+parking|pkg
+pavillon|pav
+pavillons|pavs
 péristyle|peristyle|psty
 pont
 ponts
+port
+poterne|pot|potrn
+porte|pte
+stade|stde
 station|sta
+tour
+villa|vla
+villas|vlas
 zone artisanale|za|z.a.|z.a|z a
 zone d'activites|zone dactivites|za|z.a.|z.a|z a
 zone artisanale commerciale|zac|z.a.c.|z.a.c|z a c
