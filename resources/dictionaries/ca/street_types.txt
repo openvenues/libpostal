@@ -11,7 +11,7 @@ drecera|drec
 eix
 eix diagonal
 entrada|entr
-gran via|gv|g v
+gran vía|gran via|gv|g v
 passadís|pdís|passadis|pdis
 passatge|ptge
 passeig|pg
