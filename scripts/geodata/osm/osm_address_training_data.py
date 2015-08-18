@@ -647,7 +647,7 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
             for k in address_dict.keys():
                 namespaced_val = u'{}:{}'.format(k, lang)
                 if namespaced_val in address_dict:
-                    address_dict[k] = d[namespaced_val]
+                    address_dict[k] = address_dict[namespaced_val]
                 elif not single_language:
                     address_dict.pop(k)
 
