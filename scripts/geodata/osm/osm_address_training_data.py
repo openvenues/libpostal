@@ -137,26 +137,28 @@ class StreetTypesGazetteer(PhraseFilter):
 
     def search_substring(self, s):
         if len(s) == 0:
-            return None
+            return None, 0
 
         for i in xrange(len(s) + 1):
             if not self.trie.has_keys_with_prefix(s[:i]):
                 i -= 1
                 break
         if i > 0:
-            return self.trie.get(s[:i])
+            return (self.trie.get(s[:i]), i)
         else:
-            return None
+            return None, 0
 
     def filter(self, *args, **kw):
         for c, t, data in super(StreetTypesGazetteer, self).filter(*args):
             if c != token_types.PHRASE:
-                suffix_search = self.search_substring(SUFFIX_KEY + t[1][::-1])
-                if suffix_search:
+                token = t[1]
+                suffix_search, suffix_len = self.search_substring(SUFFIX_KEY + token[::-1])
+
+                if suffix_search and self.trie.get(token[len(token) - (suffix_len - len(SUFFIX_KEY)):]):
                     yield (token_types.PHRASE, [(c, t)], suffix_search)
                     continue
-                prefix_search = self.search_substring(PREFIX_KEY + t[1])
-                if prefix_search:
+                prefix_search, prefix_len = self.search_substring(PREFIX_KEY + token)
+                if prefix_search and self.trie.get(token[:prefix_len - len(PREFIX_KEY)]):
                     yield (token_types.PHRASE, [(c, t)], prefix_search)
                     continue
             yield c, t, data
@@ -430,7 +432,7 @@ def disambiguate_language(text, languages):
     valid_languages = OrderedDict([(l['lang'], l['default']) for l in languages])
     tokens = tokenize(safe_decode(text).replace(u'-', u' ').lower())
 
-    current_language = None
+    current_lang = None
 
     for c, t, data in street_types_gazetteer.filter(tokens):
         if c == token_types.PHRASE:
@@ -439,12 +441,12 @@ def disambiguate_language(text, languages):
                 continue
 
             phrase_lang = valid[0]
-            if phrase_lang != current_language and current_language is not None:
+            if phrase_lang != current_lang and current_lang is not None:
                 return AMBIGUOUS_LANGUAGE
-            current_language = phrase_lang
+            current_lang = phrase_lang
 
-    if current_language is not None:
-        return current_language
+    if current_lang is not None:
+        return current_lang
     return UNKNOWN_LANGUAGE
 
 
