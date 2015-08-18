@@ -619,8 +619,8 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
 
     formatter = AddressFormatter()
 
-    formatted_file = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME), 'w')
-    formatted_writer = csv.writer(formatted_file, 'tsv_no_quote')
+    f = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME), 'w')
+    writer = csv.writer(f, 'tsv_no_quote')
 
     for key, value in parse_osm(infile):
         try:
@@ -628,20 +628,24 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
         except Exception:
             continue
 
-        country, default_languages, language_props = country_and_languages(language_rtree, latitude, longitude)
-        if not (country and default_languages):
-            continue
-
-        for key in NAME_KEYS + COUNTRY_KEYS:
-            _ = value.pop(key, None)
+        for k in NAME_KEYS + COUNTRY_KEYS:
+            _ = value.pop(k, None)
 
         if not value:
+            continue
+
+        country, name_language = get_language_names(language_rtree, key, value, tag_prefix='addr:street')
+        if not name_language:
             continue
 
         formatted_address_untagged = formatter.format_address(country, value, tag_components=False)
         if formatted_address_untagged is not None:
             formatted_address_untagged = tsv_string(formatted_address_untagged)
-            formatted_writer.writerow((default_languages[0]['lang'], country, formatted_address_untagged))
+
+            for k, v in name_language.iteritems():
+                for s in v:
+                    if k in languages:
+                        writer.writerow((k, country, formatted_address_untagged))
 
             i += 1
             if i % 1000 == 0 and i > 0:
