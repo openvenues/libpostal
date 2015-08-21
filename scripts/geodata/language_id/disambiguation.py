@@ -1,7 +1,7 @@
 import os
 import sys
 
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 from marisa_trie import BytesTrie
 
@@ -15,6 +15,7 @@ from geodata.i18n.unicode_paths import DATA_DIR
 from address_normalizer.text.normalize import PhraseFilter
 from address_normalizer.text.tokenize import *
 
+WELL_REPRESENTED_LANGUAGES = set(['en', 'fr', 'it', 'de', 'nl', 'es'])
 
 DICTIONARIES_DIR = os.path.join(DATA_DIR, 'dictionaries')
 
