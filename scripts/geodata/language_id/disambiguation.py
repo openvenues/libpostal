@@ -29,7 +29,10 @@ POSSIBLE_ROMAN_NUMERALS = set(['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii',
                                'm', 'mm', 'mmm', 'mmmm'])
 
 
-class StreetTypesGazetteer(PhraseFilter):
+class DictionaryPhraseFilter(PhraseFilter):
+    def __init__(self, *dictionaries):
+        self.dictionaries = dictionaries
+
     def serialize(self, s):
         return s
 
@@ -39,7 +42,10 @@ class StreetTypesGazetteer(PhraseFilter):
     def configure(self, base_dir=DICTIONARIES_DIR):
         kvs = defaultdict(OrderedDict)
         for lang in os.listdir(DICTIONARIES_DIR):
-            for filename in ('street_types.txt', 'directionals.txt'):
+            for filename in self.dictionaries:
+                is_suffix_dictionary = 'suffixes' in filename
+                is_prefix_dictionary = 'prefixes' in filename
+
                 path = os.path.join(DICTIONARIES_DIR, lang, filename)
                 if not os.path.exists(path):
                     continue
@@ -51,21 +57,9 @@ class StreetTypesGazetteer(PhraseFilter):
                     for phrase in safe_decode(line).split(u'|'):
                         if phrase in POSSIBLE_ROMAN_NUMERALS:
                             continue
-                        kvs[phrase][lang] = None
-            for filename in ('concatenated_suffixes_separable.txt', 'concatenated_suffixes_inseparable.txt', 'concatenated_prefixes_separable.txt'):
-                path = os.path.join(DICTIONARIES_DIR, lang, filename)
-                if not os.path.exists(path):
-                    continue
-
-                for line in open(path):
-                    line = line.strip()
-                    if not line:
-                        continue
-
-                    for phrase in safe_decode(line).split(u'|'):
-                        if 'suffixes' in filename:
+                        if is_suffix_dictionary:
                             phrase = SUFFIX_KEY + phrase[::-1]
-                        else:
+                        elif is_prefix_dictionary:
                             phrase = PREFIX_KEY + phrase
 
                         kvs[phrase][lang] = None
@@ -89,7 +83,7 @@ class StreetTypesGazetteer(PhraseFilter):
             return None, 0
 
     def basic_filter(self, tokens):
-        return super(StreetTypesGazetteer, self).filter(tokens)
+        return super(DictionaryPhraseFilter, self).filter(tokens)
 
     def filter(self, tokens):
         for c, t, data in self.basic_filter(tokens):
@@ -102,13 +96,16 @@ class StreetTypesGazetteer(PhraseFilter):
                     yield (token_types.PHRASE, [(c,) + t], suffix_search)
                     continue
                 prefix_search, prefix_len = self.search_substring(PREFIX_KEY + token)
-                print 'prefix = ', prefix_search, token[:(prefix_len - len(PREFIX_KEY))]
                 if prefix_search and self.trie.get(token[:(prefix_len - len(PREFIX_KEY))]):
                     yield (token_types.PHRASE, [(c,) + t], prefix_search)
                     continue
             yield c, t, data
 
-street_types_gazetteer = StreetTypesGazetteer()
+street_types_gazetteer = DictionaryPhraseFilter('street_types.txt',
+                                                'directionals.txt',
+                                                'concatenated_suffixes_separable.txt',
+                                                'concatenated_suffixes_inseparable.txt',
+                                                'concatenated_prefixes_separable.txt')
 
 
 UNKNOWN_LANGUAGE = 'unk'
