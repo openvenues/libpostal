@@ -21,7 +21,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
 
 from address_normalizer.text.tokenize import *
-from geodata.language_id.disambituation import street_types_gazetteer, disambiguate_languages, WELL_REPRESENTED_LANGUAGES
+from geodata.language_id.disambiguation import street_types_gazetteer, disambiguate_languages, WELL_REPRESENTED_LANGUAGES
 from geodata.language_id.polygon_lookup import country_and_languages
 from geodata.i18n.languages import *
 from geodata.polygons.language_polys import *
