@@ -21,12 +21,11 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
 
 from address_normalizer.text.tokenize import *
-from address_normalizer.text.normalize import PhraseFilter
+from geodata.language_id.disambituation import street_types_gazetteer, disambiguate_languages, WELL_REPRESENTED_LANGUAGES
+from geodata.language_id.polygon_lookup import country_and_languages
 from geodata.i18n.languages import *
 from geodata.polygons.language_polys import *
 from geodata.i18n.unicode_paths import DATA_DIR
-
-from marisa_trie import BytesTrie
 
 from geodata.csv_utils import *
 from geodata.file_utils import *
@@ -39,15 +38,10 @@ WAY_OFFSET = 10 ** 15
 RELATION_OFFSET = 2 * 10 ** 15
 
 PLANET_ADDRESSES_INPUT_FILE = 'planet-addresses.osm'
-PLANET_ADDRESSES_OUTPUT_FILE = 'planet-addresses.tsv'
 
 PLANET_WAYS_INPUT_FILE = 'planet-ways.osm'
-PLANET_WAYS_OUTPUT_FILE = 'planet-ways.tsv'
 
 PLANET_VENUES_INPUT_FILE = 'planet-venues.osm'
-PLANET_VENUES_OUTPUT_FILE = 'planet-venues.tsv'
-
-DICTIONARIES_DIR = os.path.join(DATA_DIR, 'dictionaries')
 
 ALL_OSM_TAGS = set(['node', 'way', 'relation'])
 WAYS_RELATIONS = set(['way', 'relation'])
@@ -77,93 +71,6 @@ osm_fields = [
     OSMField('addr:postcode', 'OSM_POSTAL_CODE', alternates=['addr:postal_code']),
     OSMField('addr:country', 'OSM_COUNTRY'),
 ]
-
-
-PREFIX_KEY = u'\x02'
-SUFFIX_KEY = u'\x03'
-
-POSSIBLE_ROMAN_NUMERALS = set(['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix',
-                               'x', 'xi', 'xii', 'xiii', 'xiv', 'xv', 'xvi', 'xvii', 'xviii', 'xix',
-                               'xx', 'xxx', 'xl', 'l', 'lx', 'lxx', 'lxxx', 'xc',
-                               'c', 'cc', 'ccc', 'cd', 'd', 'dc', 'dcc', 'dccc', 'cm',
-                               'm', 'mm', 'mmm', 'mmmm'])
-
-
-class StreetTypesGazetteer(PhraseFilter):
-    def serialize(self, s):
-        return s
-
-    def deserialize(self, s):
-        return s
-
-    def configure(self, base_dir=DICTIONARIES_DIR):
-        kvs = defaultdict(OrderedDict)
-        for lang in os.listdir(DICTIONARIES_DIR):
-            for filename in ('street_types.txt', 'directionals.txt'):
-                path = os.path.join(DICTIONARIES_DIR, lang, filename)
-                if not os.path.exists(path):
-                    continue
-
-                for line in open(path):
-                    line = line.strip()
-                    if not line:
-                        continue
-                    canonical = safe_decode(line.split('|')[0])
-                    if canonical in POSSIBLE_ROMAN_NUMERALS:
-                        continue
-                    kvs[canonical][lang] = None
-            for filename in ('concatenated_suffixes_separable.txt', 'concatenated_suffixes_inseparable.txt', 'concatenated_prefixes_separable.txt'):
-                path = os.path.join(DICTIONARIES_DIR, lang, filename)
-                if not os.path.exists(path):
-                    continue
-
-                for line in open(path):
-                    line = line.strip()
-                    if not line:
-                        continue
-
-                    canonical = safe_decode(line.split('|')[0])
-                    if 'suffixes' in filename:
-                        canonical = SUFFIX_KEY + canonical[::-1]
-                    else:
-                        canonical = PREFIX_KEY + canonical
-
-                    kvs[canonical][lang] = None
-
-        kvs = [(k, v) for k, vals in kvs.iteritems() for v in vals.keys()]
-
-        self.trie = BytesTrie(kvs)
-        self.configured = True
-
-    def search_substring(self, s):
-        if len(s) == 0:
-            return None, 0
-
-        for i in xrange(len(s) + 1):
-            if not self.trie.has_keys_with_prefix(s[:i]):
-                i -= 1
-                break
-        if i > 0:
-            return (self.trie.get(s[:i]), i)
-        else:
-            return None, 0
-
-    def filter(self, *args, **kw):
-        for c, t, data in super(StreetTypesGazetteer, self).filter(*args):
-            if c != token_types.PHRASE:
-                token = t[1]
-                suffix_search, suffix_len = self.search_substring(SUFFIX_KEY + token[::-1])
-
-                if suffix_search and self.trie.get(token[len(token) - (suffix_len - len(SUFFIX_KEY)):]):
-                    yield (token_types.PHRASE, [(c, t)], suffix_search)
-                    continue
-                prefix_search, prefix_len = self.search_substring(PREFIX_KEY + token)
-                if prefix_search and self.trie.get(token[:prefix_len - len(PREFIX_KEY)]):
-                    yield (token_types.PHRASE, [(c, t)], prefix_search)
-                    continue
-            yield c, t, data
-
-street_types_gazetteer = StreetTypesGazetteer()
 
 
 # Currently, all our data sets are converted to nodes with osmconvert before parsing
@@ -424,51 +331,7 @@ def latlon_to_floats(latitude, longitude):
     return float(latitude), float(longitude)
 
 
-UNKNOWN_LANGUAGE = 'unk'
-AMBIGUOUS_LANGUAGE = 'xxx'
-
-
-def disambiguate_language(text, languages):
-    valid_languages = OrderedDict([(l['lang'], l['default']) for l in languages])
-    tokens = tokenize(safe_decode(text).replace(u'-', u' ').lower())
-
-    current_lang = None
-
-    for c, t, data in street_types_gazetteer.filter(tokens):
-        if c == token_types.PHRASE:
-            valid = [lang for lang in data if lang in valid_languages]
-            if len(valid) != 1:
-                continue
-
-            phrase_lang = valid[0]
-            if phrase_lang != current_lang and current_lang is not None:
-                return AMBIGUOUS_LANGUAGE
-            current_lang = phrase_lang
-
-    if current_lang is not None:
-        return current_lang
-    return UNKNOWN_LANGUAGE
-
-
-def country_and_languages(language_rtree, latitude, longitude):
-    props = language_rtree.point_in_poly(latitude, longitude, return_all=True)
-    if not props:
-        return None, None, None
-
-    country = props[0]['qs_iso_cc'].lower()
-    languages = []
-
-    for p in props:
-        languages.extend(p['languages'])
-
-    # Python's builtin sort is stable, so if there are two defaults, the first remains first
-    # Since polygons are returned from the index ordered from smallest admin level to largest,
-    # it means the default language of the region overrides the country default
-    default_languages = sorted(languages, key=operator.itemgetter('default'), reverse=True)
-    return country, default_languages, props
-
-
-WELL_REPRESENTED_LANGUAGES = set(['en', 'fr', 'it', 'de', 'nl', 'es'])
+newline_regex = re.compile('\r\n|\r|\n')
 
 
 def get_language_names(language_rtree, key, value, tag_prefix='name'):
@@ -532,8 +395,6 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
                     return None, None
 
     return country, name_language
-
-newline_regex = re.compile('\r\n|\r|\n')
 
 
 def tsv_string(s):
