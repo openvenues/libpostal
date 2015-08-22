@@ -113,7 +113,7 @@ AMBIGUOUS_LANGUAGE = 'xxx'
 
 
 def disambiguate_language(text, languages):
-    valid_languages = OrderedDict([(l['lang'], l['default']) for l in languages])
+    valid_languages = OrderedDict(languages)
     tokens = tokenize(safe_decode(text).replace(u'-', u' ').lower())
 
     current_lang = None

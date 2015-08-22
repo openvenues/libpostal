@@ -331,9 +331,6 @@ def latlon_to_floats(latitude, longitude):
     return float(latitude), float(longitude)
 
 
-newline_regex = re.compile('\r\n|\r|\n')
-
-
 def get_language_names(language_rtree, key, value, tag_prefix='name'):
     if not ('lat' in value and 'lon' in value):
         return None, None
@@ -355,8 +352,22 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
     default_langs = set([l['lang'] for l in candidate_languages if l.get('default')])
     num_defaults = len(default_langs)
     name_language = defaultdict(list)
-    has_alternate_names = any((k.startswith(tag_prefix + ':') and normalize_osm_name_tag(k, script=True)
-                               in languages for k, v in value.iteritems()))
+
+    alternate_langs = []
+    has_alternate_names = len(alternate_langs) > 0
+
+    alternate_langs = []
+
+    equivalent_alternatives = defaultdict(list)
+    for k, v in value.iteritems():
+        if k.startswith(tag_prefix + ':') and normalize_osm_name_tag(k, script=True) in languages:
+            lang = k.rsplit(':', 1)[-1]
+            alternate_langs.append((lang, v))
+            equivalent_alternatives[v].append(lang)
+
+    has_alternate_names = len(alternate_langs)
+    # Some countries like Lebanon 
+    ambiguous_alternatives = set([k for k, v in equivalent_alternatives.iteritems() if len(v) > 1])
 
     regional_defaults = 0
     country_defaults = 0
@@ -370,17 +381,26 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
             country_defaults += sum((1 for lang in p['languages'] if lang.get('default')))
             country_langs |= set([l['lang'] for l in p['languages']])
 
+    ambiguous_already_seen = set()
+
     for k, v in value.iteritems():
-        if k.startswith(tag_prefix + ':'):
+        if k.startswith(tag_prefix + ':') and v not in ambiguous_alternatives:
             norm = normalize_osm_name_tag(k)
             norm_sans_script = normalize_osm_name_tag(k, script=True)
             if norm in languages or norm_sans_script in languages:
                 name_language[norm].append(v)
+        elif v in ambiguous_alternatives and v not in ambiguous_already_seen:
+            lang = disambiguate_language(v, [(lang, lang in default_langs) for lang in equivalent_alternatives[v]])
+
+            if lang != AMBIGUOUS_LANGUAGE and lang != UNKNOWN_LANGUAGE:
+                name_language[lang].append(v)
+
+            ambiguous_already_seen.add(v)
         elif not has_alternate_names and k.startswith(tag_first_component) and (has_colon or ':' not in k) and normalize_osm_name_tag(k, script=True) == tag_last_component:
             if num_langs == 1:
                 name_language[candidate_languages[0]['lang']].append(v)
             else:
-                lang = disambiguate_language(v, candidate_languages)
+                lang = disambiguate_language(v, [(l['lang'], l['default']) for l in candidate_languages])
                 default_lang = candidate_languages[0]['lang']
 
                 if lang == AMBIGUOUS_LANGUAGE:
@@ -395,10 +415,6 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
                     return None, None
 
     return country, name_language
-
-
-def tsv_string(s):
-    return safe_encode(newline_regex.sub(u', ', safe_decode(s).strip()).replace(u'\t', u' '))
 
 
 def build_ways_training_data(language_rtree, infile, out_dir):
