@@ -128,6 +128,8 @@ geonames_ddl = {
         is_historic BOOLEAN DEFAULT 0)''',
         '''CREATE INDEX geonames_id_index ON
         alternate_names (geonames_id)''',
+        '''CREATE INDEX geonames_id_alt_name_index ON
+        alternate_names(geonames_id, alternate_name)''',
     ),
 
     'hierarchy': (

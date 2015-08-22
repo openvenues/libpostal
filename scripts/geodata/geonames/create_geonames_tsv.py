@@ -8,7 +8,6 @@ import sqlite3
 import subprocess
 import sys
 
-import requests
 import pycountry
 
 import unicodedata
