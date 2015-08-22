@@ -21,7 +21,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
 
 from address_normalizer.text.tokenize import *
-from geodata.language_id.disambiguation import street_types_gazetteer, disambiguate_language, WELL_REPRESENTED_LANGUAGES
+from geodata.language_id.disambiguation import street_types_gazetteer, disambiguate_language, WELL_REPRESENTED_LANGUAGES, UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE
 from geodata.language_id.polygon_lookup import country_and_languages
 from geodata.i18n.languages import *
 from geodata.polygons.language_polys import *
@@ -366,7 +366,8 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
             equivalent_alternatives[v].append(lang)
 
     has_alternate_names = len(alternate_langs)
-    # Some countries like Lebanon 
+    # Some countries like Lebanon list things like name:en == name:fr == "Rue Abdel Hamid Karame"
+    # Those addresses should be disambiguated rather than taken for granted
     ambiguous_alternatives = set([k for k, v in equivalent_alternatives.iteritems() if len(v) > 1])
 
     regional_defaults = 0
@@ -390,7 +391,8 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
             if norm in languages or norm_sans_script in languages:
                 name_language[norm].append(v)
         elif v in ambiguous_alternatives and v not in ambiguous_already_seen:
-            lang = disambiguate_language(v, [(lang, lang in default_langs) for lang in equivalent_alternatives[v]])
+            langs = [(lang, lang in default_langs) for lang in equivalent_alternatives[v]]
+            lang = disambiguate_language(v, langs)
 
             if lang != AMBIGUOUS_LANGUAGE and lang != UNKNOWN_LANGUAGE:
                 name_language[lang].append(v)
