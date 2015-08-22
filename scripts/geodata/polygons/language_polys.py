@@ -1,3 +1,4 @@
+import argparse
 import os
 import sys
 
@@ -122,6 +123,19 @@ class LanguagePolygonIndex(RTreePolygonIndex):
                 i += 1
         return index
 
+    @classmethod
+    def create_with_quattroshapes(cls, quattroshapes_dir,
+                                  output_dir,
+                                  index_filename=DEFAULT_INDEX_FILENAME,
+                                  polys_filename=DEFAULT_POLYS_FILENAME):
+        admin0_filename = os.path.join(quattroshapes_dir, 'qs_adm0.shp')
+        admin1_filename = os.path.join(quattroshapes_dir, 'qs_adm1.shp')
+        admin1r_filename = os.path.join(quattroshapes_dir, 'qs_adm1_region.shp')
+
+        return cls.create_from_shapefiles(admin0_filename, admin1_filename, admin1r_filename,
+                                          output_dir, index_filename=index_filename,
+                                          polys_filename=polys_filename)
+
     def admin_level(self, i):
         props, p = self.polygons[i]
         return props['admin_level']
@@ -129,3 +143,19 @@ class LanguagePolygonIndex(RTreePolygonIndex):
     def get_candidate_polygons(self, lat, lon):
         candidates = OrderedDict.fromkeys(self.index.intersection((lon, lat, lon, lat))).keys()
         return sorted(candidates, key=self.admin_level, reverse=True)
+
+
+if __name__ == '__main__':
+    # Handle argument parsing here
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-q', '--quattroshapes-dir',
+                        help='Path to quattroshapes dir')
+
+    parser.add_argument('-o', '--out-dir',
+                        default=os.getcwd(),
+                        help='Output directory')
+
+    args = parser.parse_args()
+    index = LanguagePolygonIndex.create_with_quattroshapes(args.quattroshapes_dir, args.out_dir)
+    index.save()
