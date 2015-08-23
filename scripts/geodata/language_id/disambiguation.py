@@ -48,6 +48,7 @@ class DictionaryPhraseFilter(PhraseFilter):
                 is_suffix_dictionary = 'suffixes' in filename
                 is_prefix_dictionary = 'prefixes' in filename
                 is_street_types_dictionary = 'street_types' in filename
+                is_stopword_dictionary = 'stopwords' in filename
 
                 path = os.path.join(DICTIONARIES_DIR, lang, filename)
                 if not os.path.exists(path):
@@ -76,9 +77,9 @@ class DictionaryPhraseFilter(PhraseFilter):
                             phrase = PREFIX_KEY + phrase
 
                         if is_canonical or is_street_types_dictionary or is_prefix_dictionary or is_suffix_dictionary:
-                            kvs[phrase][lang] = is_canonical
+                            kvs[phrase][lang] = (is_canonical, is_stopword_dictionary)
 
-        kvs = [(k, '|'.join([v, str(int(c))])) for k, vals in kvs.iteritems() for v, c in vals.iteritems()]
+        kvs = [(k, '|'.join([v, str(int(c)), str(int(s))])) for k, vals in kvs.iteritems() for v, (c, s) in vals.iteritems()]
 
         self.trie = BytesTrie(kvs)
         self.configured = True
@@ -165,15 +166,17 @@ def disambiguate_language(text, languages):
     for c, t, data in street_types_gazetteer.filter(tokens):
         if c == token_types.PHRASE:
             valid = []
+            data = [d.split('|') for d in data]
+            potentials = [l for l, c, s in data if l in valid_languages]
 
-            for d in data:
-                lang, canonical = d.split('|')
+            for lang, canonical, stopword in data:
                 canonical = int(canonical)
-                if lang not in valid_languages:
+                stopword = int(stopword)
+                if lang not in valid_languages or stopword:
                     continue
                 is_default = valid_languages[lang]
 
-                if canonical or (is_default and not current_lang):
+                if canonical or (is_default and len(potentials) == 1):
                     valid.append(lang)
                 elif is_default and num_defaults > 1 and current_lang != lang:
                     return AMBIGUOUS_LANGUAGE
