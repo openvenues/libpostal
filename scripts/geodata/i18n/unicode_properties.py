@@ -332,10 +332,14 @@ def extract_language_scripts(xml):
     return language_scripts
 
 
-def get_script_languages(script_codes):
+def get_script_languages():
     # For some languages (Greek, Thai, etc.), use of an unambiguous script is sufficient
     # to identify the language. We keep track of those single language scripts to inform
     # the language classifier
+
+    chars = get_chars_by_script()
+    all_scripts = build_master_scripts_list(chars)
+    script_codes = get_script_codes(all_scripts)
 
     cldr_supplemental_data = open(CLDR_SUPPLEMENTAL_DATA)
     cldr_xml = etree.parse(cldr_supplemental_data)
@@ -364,6 +368,9 @@ def get_script_languages(script_codes):
         langs = script_code_languages.get(script_code, [])
         script_languages[script_name].extend(langs)
 
+    for name in all_scripts.iterkeys():
+        script_languages.setdefault(name, [])
+
     return script_languages
 
 
@@ -383,11 +390,7 @@ def main(out_dir):
     if not os.path.exists(CLDR_SUPPLEMENTAL_DATA):
         download_cldr()
 
-    chars = get_chars_by_script()
-    all_scripts = build_master_scripts_list(chars)
-    script_codes = get_script_codes(all_scripts)
-
-    script_languages = get_script_languages(script_codes)
+    script_languages = get_script_languages()
 
     max_langs = 0
 
@@ -395,9 +398,6 @@ def main(out_dir):
         num_langs = len(langs)
         if num_langs > max_langs:
             max_langs = num_langs
-
-    for name in all_scripts.iterkeys():
-        script_languages.setdefault(name, [])
 
     # Generate C header and constants
 

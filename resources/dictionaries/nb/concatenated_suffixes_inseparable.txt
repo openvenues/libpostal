@@ -9,7 +9,5 @@ gaten
 lia
 park
 plassen|pl.
-vegen
-veinen
 stredet
 svingen

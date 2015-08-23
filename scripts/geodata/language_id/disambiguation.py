@@ -13,6 +13,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, '
 from geodata.encoding import safe_decode
 from geodata.i18n.unicode_paths import DATA_DIR
 from geodata.i18n.normalize import strip_accents
+from geodata.i18n.unicode_properties import get_chars_by_script, get_script_languages
 from address_normalizer.text.normalize import PhraseFilter
 from address_normalizer.text.tokenize import *
 
@@ -103,7 +104,7 @@ class DictionaryPhraseFilter(PhraseFilter):
                 token_len = len(token)
                 suffix_search, suffix_len = self.search_substring(SUFFIX_KEY + token[::-1])
 
-                if suffix_search and self.trie.get(token[token_len - (suffix_len - len(SUFFIX_KEY)):]):
+                if suffix_search and self.trie.get(token[token_len - (suffix_len - len(SUFFIX_KEY)):].rstrip('.')):
                     yield (token_types.PHRASE, [(c,) + t], suffix_search)
                     continue
                 prefix_search, prefix_len = self.search_substring(PREFIX_KEY + token)
@@ -119,31 +120,62 @@ street_types_gazetteer = DictionaryPhraseFilter('street_types.txt',
                                                 'concatenated_prefixes_separable.txt',
                                                 'stopwords.txt',)
 
+char_scripts = get_chars_by_script()
+script_languages = get_script_languages()
+
+UNKNOWN_SCRIPT = 'Unknown'
+COMMON_SCRIPT = 'Common'
+MAX_ASCII = 127
+
+
+def get_string_script(s):
+    s = safe_decode(s)
+    script = last_script = UNKNOWN_SCRIPT
+    is_ascii = True
+    script_len = 0
+    for c in s:
+        script = char_scripts[ord(c)]
+        if script == COMMON_SCRIPT and last_script != UNKNOWN_SCRIPT:
+            script = last_script
+        if last_script != script and last_script != UNKNOWN_SCRIPT and last_script != COMMON_SCRIPT:
+            break
+        is_ascii = is_ascii and ord(c) <= MAX_ASCII
+        script_len += 1
+        if script != UNKNOWN_SCRIPT:
+            last_script = script
+    return (last_script, script_len, is_ascii)
+
 
 UNKNOWN_LANGUAGE = 'unk'
 AMBIGUOUS_LANGUAGE = 'xxx'
 
 
 def disambiguate_language(text, languages):
+    num_defaults = sum((1 for lang, default in languages if default))
     valid_languages = OrderedDict(languages)
     tokens = tokenize(safe_decode(text).replace(u'-', u' ').lower())
 
     current_lang = None
+    possible_lang = None
 
     seen_languages = set()
 
     for c, t, data in street_types_gazetteer.filter(tokens):
-
         if c == token_types.PHRASE:
             valid = []
+
             for d in data:
                 lang, canonical = d.split('|')
                 canonical = int(canonical)
                 if lang not in valid_languages:
                     continue
+                is_default = valid_languages[lang]
 
-                if canonical or not seen_languages:
+                if canonical or is_default:
                     valid.append(lang)
+                elif not seen_languages and len(t[0][1]) > 1:
+                    possible_lang = lang if possible_lang is None or possible_lang == lang else None
+
             if seen_languages and valid and not any((l in seen_languages for l in valid)):
                 return AMBIGUOUS_LANGUAGE
 
@@ -160,4 +192,6 @@ def disambiguate_language(text, languages):
 
     if current_lang is not None:
         return current_lang
+    elif possible_lang is not None:
+        return possible_lang
     return UNKNOWN_LANGUAGE
