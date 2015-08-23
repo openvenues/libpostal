@@ -54,7 +54,7 @@ class DictionaryPhraseFilter(PhraseFilter):
                     line = line.strip()
                     if not line:
                         continue
-                    for phrase in safe_decode(line).split(u'|'):
+                    for i, phrase in enumerate(safe_decode(line).split(u'|')):
                         if phrase in POSSIBLE_ROMAN_NUMERALS:
                             continue
                         if is_suffix_dictionary:
@@ -62,9 +62,11 @@ class DictionaryPhraseFilter(PhraseFilter):
                         elif is_prefix_dictionary:
                             phrase = PREFIX_KEY + phrase
 
-                        kvs[phrase][lang] = None
+                        is_canonical = i == 0
 
-        kvs = [(k, v) for k, vals in kvs.iteritems() for v in vals.keys()]
+                        kvs[phrase][lang] = is_canonical
+
+        kvs = [(k, '|'.join([v, str(int(c))])) for k, vals in kvs.iteritems() for v, c in vals.iteritems()]
 
         self.trie = BytesTrie(kvs)
         self.configured = True
@@ -118,16 +120,33 @@ def disambiguate_language(text, languages):
 
     current_lang = None
 
-    for c, t, data in street_types_gazetteer.filter(tokens):
-        if c == token_types.PHRASE:
-            valid = [lang for lang in data if lang in valid_languages]
-            if len(valid) != 1:
-                continue
+    seen_languages = set()
 
-            phrase_lang = valid[0]
-            if phrase_lang != current_lang and current_lang is not None:
+    for c, t, data in street_types_gazetteer.filter(tokens):
+
+        if c == token_types.PHRASE:
+            valid = []
+            for d in data:
+                lang, canonical = d.split('|')
+                canonical = int(canonical)
+                is_default = valid_languages.get(lang, None)
+                if is_default is None:
+                    continue
+                if is_default or canonical:
+                    valid.append(lang)
+
+            if seen_languages and not (set(valid) & seen_languages):
                 return AMBIGUOUS_LANGUAGE
-            current_lang = phrase_lang
+
+            if len(valid) == 1:
+                current_lang = valid[0]
+            else:
+                valid_default = [lang for lang in valid if valid_languages.get(lang)]
+
+                if len(valid_default) == 1:
+                    current_lang = valid[0]
+
+            seen_languages.update(valid)
 
     if current_lang is not None:
         return current_lang
