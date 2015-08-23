@@ -69,11 +69,10 @@ class DictionaryPhraseFilter(PhraseFilter):
                         elif is_prefix_dictionary:
                             phrase = PREFIX_KEY + phrase
 
-                        is_canonical = strip_accents(phrase) == canonical
+                        if strip_accents(phrase) == canonical:
+                            kvs[phrase][lang] = None
 
-                        kvs[phrase][lang] = is_canonical
-
-        kvs = [(k, '|'.join([v, str(int(c))])) for k, vals in kvs.iteritems() for v, c in vals.iteritems()]
+        kvs = [(k, v) for k, vals in kvs.iteritems() for v in vals.iterkeys()]
 
         self.trie = BytesTrie(kvs)
         self.configured = True
@@ -132,15 +131,7 @@ def disambiguate_language(text, languages):
     for c, t, data in street_types_gazetteer.filter(tokens):
 
         if c == token_types.PHRASE:
-            valid = []
-            for d in data:
-                lang, canonical = d.split('|')
-                canonical = int(canonical)
-                is_default = valid_languages.get(lang, None)
-                if is_default is None:
-                    continue
-                if is_default or canonical:
-                    valid.append(lang)
+            valid = [l for l in data if l in valid_languages]
 
             if seen_languages and valid and not any((l in seen_languages for l in valid)):
                 return AMBIGUOUS_LANGUAGE
