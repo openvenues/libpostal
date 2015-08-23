@@ -47,6 +47,7 @@ class DictionaryPhraseFilter(PhraseFilter):
             for filename in self.dictionaries:
                 is_suffix_dictionary = 'suffixes' in filename
                 is_prefix_dictionary = 'prefixes' in filename
+                is_street_types_dictionary = 'street_types' in filename
 
                 path = os.path.join(DICTIONARIES_DIR, lang, filename)
                 if not os.path.exists(path):
@@ -74,7 +75,8 @@ class DictionaryPhraseFilter(PhraseFilter):
                         elif is_prefix_dictionary:
                             phrase = PREFIX_KEY + phrase
 
-                        kvs[phrase][lang] = is_canonical
+                        if is_canonical or is_street_types_dictionary or is_prefix_dictionary or is_suffix_dictionary:
+                            kvs[phrase][lang] = is_canonical
 
         kvs = [(k, '|'.join([v, str(int(c))])) for k, vals in kvs.iteritems() for v, c in vals.iteritems()]
 
@@ -171,8 +173,10 @@ def disambiguate_language(text, languages):
                     continue
                 is_default = valid_languages[lang]
 
-                if canonical or is_default:
+                if canonical or (is_default and not current_lang):
                     valid.append(lang)
+                elif is_default and num_defaults > 1 and current_lang != lang:
+                    return AMBIGUOUS_LANGUAGE
                 elif not seen_languages and len(t[0][1]) > 1:
                     possible_lang = lang if possible_lang is None or possible_lang == lang else None
 
