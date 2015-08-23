@@ -124,7 +124,7 @@ street_types_gazetteer = DictionaryPhraseFilter('street_types.txt',
                                                 'stopwords.txt',)
 
 char_scripts = get_chars_by_script()
-script_languages = get_script_languages()
+script_languages = {script: set(langs) for script, langs in get_script_languages().iteritems()}
 
 UNKNOWN_SCRIPT = 'Unknown'
 COMMON_SCRIPT = 'Common'
@@ -148,15 +148,23 @@ def get_string_script(s):
             last_script = script
     return (last_script, script_len, is_ascii)
 
-
+LATIN_SCRIPT = 'Latin'
 UNKNOWN_LANGUAGE = 'unk'
 AMBIGUOUS_LANGUAGE = 'xxx'
 
 
 def disambiguate_language(text, languages):
-    num_defaults = sum((1 for lang, default in languages if default))
     valid_languages = OrderedDict(languages)
-    tokens = tokenize(safe_decode(text).replace(u'-', u' ').lower())
+    script_langs = {}
+    read_len = 0
+    while read_len < len(text):
+        script, script_len, is_ascii = get_string_script(text[read_len:])
+        if script != LATIN_SCRIPT:
+            script_langs[script] = set([l for l, d in languages if l in script_languages[script]])
+        read_len += script_len
+
+    num_defaults = sum((1 for lang, default in valid_languages.iteritems() if default))
+    tokens = [(c, t.rstrip('.')) for c, t in tokenize(safe_decode(text).replace(u'-', u' ').lower())]
 
     current_lang = None
     possible_lang = None
@@ -172,7 +180,7 @@ def disambiguate_language(text, languages):
             for lang, canonical, stopword in data:
                 canonical = int(canonical)
                 stopword = int(stopword)
-                if lang not in valid_languages or stopword:
+                if lang not in valid_languages or (stopword and len(potentials) > 1):
                     continue
                 is_default = valid_languages[lang]
 
@@ -180,7 +188,7 @@ def disambiguate_language(text, languages):
                     valid.append(lang)
                 elif is_default and num_defaults > 1 and current_lang != lang:
                     return AMBIGUOUS_LANGUAGE
-                elif not seen_languages and len(t[0][1]) > 1:
+                elif not seen_languages and len(potentials) == 1 and len(t[0][1]) > 1:
                     possible_lang = lang if possible_lang is None or possible_lang == lang else None
 
             if seen_languages and valid and not any((l in seen_languages for l in valid)):
@@ -189,16 +197,20 @@ def disambiguate_language(text, languages):
             if len(valid) == 1:
                 current_lang = valid[0]
             else:
-                valid = [l for l in valid if valid_languages.get(l)]
-                if len(valid) == 1 and current_lang is not None and valid[0] != current_lang:
+                valid_default = [l for l in valid if valid_languages.get(l)]
+                if len(valid_default) == 1 and current_lang is not None and valid_default[0] != current_lang:
                     return AMBIGUOUS_LANGUAGE
-                elif len(valid) == 1:
-                    current_lang = valid[0]
-
-            seen_languages.update(valid)
+                elif len(valid_default) == 1:
+                    current_lang = valid_default[0]
 
     if current_lang is not None:
-        return current_lang
+        if not any((current_lang not in langs for script, langs in script_langs.iteritems())):
+            return current_lang
+        else:
+            return AMBIGUOUS_LANGUAGE
     elif possible_lang is not None:
-        return possible_lang
+        if not any((possible_lang not in langs for script, langs in script_langs.iteritems())):
+            return possible_lang
+        else:
+            return AMBIGUOUS_LANGUAGE
     return UNKNOWN_LANGUAGE
