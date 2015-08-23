@@ -57,3 +57,17 @@ def init_languages(languages_dir=LANGUAGES_DIR):
                 languages.add(lang)
 
     initialized = True
+
+
+def get_country_languages(country):
+    languages = official_languages[country]
+    overrides = road_language_overrides.get(country)
+    if overrides and overrides.values()[0]:
+        languages = overrides
+    elif overrides:
+        languages.update(overrides)
+    return languages
+
+
+def get_regional_languages(country, key, value):
+    return regional_languages.get((country, key, value), OrderedDict())
