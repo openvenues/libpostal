@@ -12,6 +12,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, '
 
 from geodata.encoding import safe_decode
 from geodata.i18n.unicode_paths import DATA_DIR
+from geodata.i18n.normalize import strip_accents
 from address_normalizer.text.normalize import PhraseFilter
 from address_normalizer.text.tokenize import *
 
@@ -54,7 +55,13 @@ class DictionaryPhraseFilter(PhraseFilter):
                     line = line.strip()
                     if not line:
                         continue
-                    for i, phrase in enumerate(safe_decode(line).split(u'|')):
+
+                    phrases = safe_decode(line).split(u'|')
+                    if not phrases:
+                        continue
+                    canonical = strip_accents(phrases[0])
+
+                    for phrase in phrases:
                         if phrase in POSSIBLE_ROMAN_NUMERALS:
                             continue
                         if is_suffix_dictionary:
@@ -62,7 +69,7 @@ class DictionaryPhraseFilter(PhraseFilter):
                         elif is_prefix_dictionary:
                             phrase = PREFIX_KEY + phrase
 
-                        is_canonical = i == 0
+                        is_canonical = strip_accents(phrase) == canonical
 
                         kvs[phrase][lang] = is_canonical
 
@@ -135,15 +142,16 @@ def disambiguate_language(text, languages):
                 if is_default or canonical:
                     valid.append(lang)
 
-            if seen_languages and not (set(valid) & seen_languages):
+            if seen_languages and valid and not any((l in seen_languages for l in valid)):
                 return AMBIGUOUS_LANGUAGE
 
             if len(valid) == 1:
                 current_lang = valid[0]
             else:
-                valid_default = [lang for lang in valid if valid_languages.get(lang)]
-
-                if len(valid_default) == 1:
+                valid = [l for l in valid if valid_languages.get(l)]
+                if len(valid) == 1:
+                    if current_lang is not None and valid[0] != current_lang:
+                        return AMBIGUOUS_LANGUAGE
                     current_lang = valid[0]
 
             seen_languages.update(valid)
