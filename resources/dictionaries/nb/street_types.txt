@@ -14,3 +14,7 @@ plassen|pl
 stortorget
 stredet
 svingen
+veg|v
+vegen|v|vn
+vei|v
+veien|v|vn
