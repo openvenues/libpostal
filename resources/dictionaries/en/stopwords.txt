@@ -1,5 +1,8 @@
 and
 between|betw|btwn|btw|btween|b/t
 by
+of
 near
+the
+to
 via

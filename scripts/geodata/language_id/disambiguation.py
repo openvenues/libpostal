@@ -62,17 +62,20 @@ class DictionaryPhraseFilter(PhraseFilter):
                     canonical = strip_accents(phrases[0])
 
                     for phrase in phrases:
+
                         if phrase in POSSIBLE_ROMAN_NUMERALS:
                             continue
+
+                        is_canonical = strip_accents(phrase) == canonical
+
                         if is_suffix_dictionary:
                             phrase = SUFFIX_KEY + phrase[::-1]
                         elif is_prefix_dictionary:
                             phrase = PREFIX_KEY + phrase
 
-                        if strip_accents(phrase) == canonical:
-                            kvs[phrase][lang] = None
+                        kvs[phrase][lang] = is_canonical
 
-        kvs = [(k, v) for k, vals in kvs.iteritems() for v in vals.iterkeys()]
+        kvs = [(k, '|'.join([v, str(int(c))])) for k, vals in kvs.iteritems() for v, c in vals.iteritems()]
 
         self.trie = BytesTrie(kvs)
         self.configured = True
@@ -113,7 +116,8 @@ street_types_gazetteer = DictionaryPhraseFilter('street_types.txt',
                                                 'directionals.txt',
                                                 'concatenated_suffixes_separable.txt',
                                                 'concatenated_suffixes_inseparable.txt',
-                                                'concatenated_prefixes_separable.txt')
+                                                'concatenated_prefixes_separable.txt',
+                                                'stopwords.txt',)
 
 
 UNKNOWN_LANGUAGE = 'unk'
@@ -131,8 +135,15 @@ def disambiguate_language(text, languages):
     for c, t, data in street_types_gazetteer.filter(tokens):
 
         if c == token_types.PHRASE:
-            valid = [l for l in data if l in valid_languages]
+            valid = []
+            for d in data:
+                lang, canonical = d.split('|')
+                canonical = int(canonical)
+                if lang not in valid_languages:
+                    continue
 
+                if canonical or not seen_languages:
+                    valid.append(lang)
             if seen_languages and valid and not any((l in seen_languages for l in valid)):
                 return AMBIGUOUS_LANGUAGE
 
@@ -140,9 +151,9 @@ def disambiguate_language(text, languages):
                 current_lang = valid[0]
             else:
                 valid = [l for l in valid if valid_languages.get(l)]
-                if len(valid) == 1:
-                    if current_lang is not None and valid[0] != current_lang:
-                        return AMBIGUOUS_LANGUAGE
+                if len(valid) == 1 and current_lang is not None and valid[0] != current_lang:
+                    return AMBIGUOUS_LANGUAGE
+                elif len(valid) == 1:
                     current_lang = valid[0]
 
             seen_languages.update(valid)
