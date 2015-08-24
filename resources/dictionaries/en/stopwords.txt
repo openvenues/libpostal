@@ -1,3 +1,4 @@
+all
 and
 between|betw|btwn|btw|btween|b/t
 by

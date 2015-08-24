@@ -16,10 +16,14 @@ from geodata.language_id.disambiguation import disambiguate_language, street_typ
 
 country_test_cases = [
     # String, country, expected language
+    ('Division Street', 'us', 'en'),
+    ('Kalfarveien', 'no', 'nb'),
+    ('Upper Glenburn Road', 'gb', 'en'),
+    ('Zafer Caddesi', 'cy', 'tr'),
 
     # US has some Spanish and French street names
     ('Avenue P', 'us', 'en'),
-    ('Avenue du', 'us', 'fr'),
+    ('Avenue du Champs', 'us', 'fr'),
     ('Avenida de la Plata', 'us', 'es'),
     ('Pl', 'us', UNKNOWN_LANGUAGE),
     ('No 2 School House', 'us', UNKNOWN_LANGUAGE),
@@ -28,6 +32,10 @@ country_test_cases = [
     ('Rue Louis Phillippe', 'us', 'fr'),
     ('Calle Street', 'us', AMBIGUOUS_LANGUAGE),
     ('Del Rio Avenue', 'us', 'en'),
+    ('South Signal Butte Road', 'us', 'en'),
+    ('Chief All Over', 'us', UNKNOWN_LANGUAGE),
+    ('South Alameda Street', 'us', 'en'),
+    ('The Alameda', 'us', 'en'),
 
     # Avenue + stopword
     ('Avenue du Bourget-du-Lac', 'je', 'fr'),
@@ -38,7 +46,6 @@ country_test_cases = [
 
     # English / Arabic street address
     ('Omar Street ﺵﺍﺮﻋ ﻊﻣﺭ', 'iq', AMBIGUOUS_LANGUAGE),
-
 
     # Random script
     ('Bayard Street - 擺也街', 'us', AMBIGUOUS_LANGUAGE),
@@ -63,6 +70,8 @@ country_test_cases = [
 regional_test_cases = [
     # Spain
     ('Carrer de la Morella', 'es', 'qs_a1r', 'Cataluña/Catalunya', 'ca'),
+    ('Avinguda Diagonal', 'es', 'qs_a1r', 'Cataluña/Catalunya', 'ca'),
+    ('Avinguda de Filipines  -  Avenida de Filipinas', 'es', 'qs_a1r', 'Cataluña/Catalunya', AMBIGUOUS_LANGUAGE),
     ('Calle de la Morella', 'es', 'qs_a1r', 'Cataluña/Catalunya', 'es'),
     ('autobidea', 'es', 'qs_a1r', 'Comunidad Foral de Navarra', 'eu'),
     ('Calle', 'es', 'qs_a1r', 'Comunidad Foral de Navarra', 'es'),
@@ -71,7 +80,6 @@ regional_test_cases = [
     # Belgium
     ('Lutticherstrasse', 'be', 'qs_a1', 'Liège', 'de'),
     ('Chaussée de Charleroi', 'be', 'qs_a1', 'Namur', 'fr'),
-
 
     # France / Occitan
     ('Carriera de Brasinvert', 'fr', 'qs_a1r', 'Rhône-Alpes', 'oc'),

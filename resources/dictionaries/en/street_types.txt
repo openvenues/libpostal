@@ -38,6 +38,7 @@ broadway|bdwy|bway|bwy|brdway
 brook|brk
 brow|brw
 burg|bg
+butte|btte|bte
 bypass|bypa|byps|bps|byp
 byway|bywy
 camp|cp
@@ -77,6 +78,7 @@ court|ct|crt
 courts|crts|cts
 courtyard|cyd|ctyd
 cove|cov|ce|cv
+creek|cr|crk
 crescent|cr|cres|crs|crecent
 crest|crst|cst
 crief|crf
@@ -147,6 +149,7 @@ gates|gtes
 gateway|gwy|gway|gtwy|gtway
 glade|gl|gld|glde
 glen|gln
+grand boulevard|gbd|grbd|grdbd|gdbd|g bd|gr bd|grd bd|gd bd|g blvd|gr blvd|grd blvd|gd blvd|g bde|gr bde|grd bde|gd bde|g blvrd|gr blvrd|grd blvrd|gd blvrd|g boul|gr boul|grd boul|gd boul|g bvd|gr bvd|grd bvd|gd bvd|g bld|gr bld|grd bld|gd bld
 grange|gra
 green|grn|gn
 ground|grnd
