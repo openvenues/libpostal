@@ -20,11 +20,13 @@ ca	iu	0
 ca	ikt	0
 cf	fr	1
 cm	fr	1
+cn	en	0
 cw	nl	1
 cw	pap	0
 cw	en	0
 cy	el	1
 cy	tr	0
+cy	en	0
 dj	fr	1
 dz	fr	1
 ec	es	1
@@ -38,6 +40,7 @@ ge	ru	0
 gg	en	1
 gg	fr	1
 gq	es	1
+gr	en	0
 gu	en	1
 ht	fr	1
 ie	en	1
@@ -52,7 +55,9 @@ je	fr	1
 in	en	1
 in	hi	0
 iq	en	0
+ir	en	0
 jo	en	0
+jp	en	0
 ke	en	1
 kg	ky	1
 kg	ru	0
@@ -86,6 +91,7 @@ ng	en	1
 no	nb	1
 no	nn	0
 nr	en	1
+np	en	0
 nu	en	1
 nz	en	1
 nz	mi	0
@@ -126,6 +132,7 @@ tl	pt	1
 td	ar	1
 td	fr	0
 td	en	0
+th	en	0
 tn	fr	1
 tn	ar	0
 to	to	1
