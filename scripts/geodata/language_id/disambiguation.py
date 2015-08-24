@@ -208,13 +208,13 @@ def disambiguate_language(text, languages):
                 elif len(valid_default) == 1:
                     current_lang = valid_default[0]
 
+            if any((current_lang not in langs for script, langs in script_langs.iteritems())):
+                return AMBIGUOUS_LANGUAGE
+
             seen_languages.update(valid)
 
     if current_lang is not None:
-        if not any((current_lang not in langs for script, langs in script_langs.iteritems())):
-            return current_lang
-        else:
-            return AMBIGUOUS_LANGUAGE
+        return current_lang
     elif possible_lang is not None:
         if not any((possible_lang not in langs for script, langs in script_langs.iteritems())):
             return possible_lang

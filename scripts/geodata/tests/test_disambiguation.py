@@ -52,7 +52,7 @@ country_test_cases = [
     ('128 A St.', 'ae', 'en'),
 
     # English / Arabic street address
-    ('Omar Street ﺵﺍﺮﻋ ﻊﻣﺭ', 'iq', AMBIGUOUS_LANGUAGE),
+    ('Omar Street شارع عمر', 'iq', AMBIGUOUS_LANGUAGE),
 
     # Random script
     ('Bayard Street - 擺也街', 'us', AMBIGUOUS_LANGUAGE),
