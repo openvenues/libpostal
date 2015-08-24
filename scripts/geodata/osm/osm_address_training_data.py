@@ -491,6 +491,12 @@ COUNTRY_KEYS = (
     'country_name',
     'addr:country',
 )
+POSTAL_KEYS = (
+    'postcode',
+    'postal_code',
+    'addr:postcode',
+    'addr:postal_code',
+)
 
 
 def build_address_format_training_data_limited(language_rtree, infile, out_dir):
@@ -501,13 +507,15 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
     f = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME), 'w')
     writer = csv.writer(f, 'tsv_no_quote')
 
+    remove_keys = NAME_KEYS + COUNTRY_KEYS + POSTAL_KEYS
+
     for key, value in parse_osm(infile):
         try:
             latitude, longitude = latlon_to_floats(value['lat'], value['lon'])
         except Exception:
             continue
 
-        for k in NAME_KEYS + COUNTRY_KEYS:
+        for k in remove_keys:
             _ = value.pop(k, None)
 
         if not value:
