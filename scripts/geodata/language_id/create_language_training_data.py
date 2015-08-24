@@ -43,17 +43,17 @@ def create_language_training_data(osm_dir, split_data=True, train_split=0.8, cv_
         train_lines = int(train_split * num_lines)
 
         test_lines = num_lines - train_lines
-        cv_lines = test_lines * (cv_split / (1.0 - train_split)) + 1
+        cv_lines = int(test_lines * (cv_split / (1.0 - train_split))) + 1
 
-        subprocess.check_call(['split -l', str(train_lines), languages_random_path])
-        subprocess.check_call(['mv xaa', languages_train_path])
-        subprocess.check_call(['mv xab', languages_test_path])
+        subprocess.check_call(['split', '-l', str(train_lines), languages_random_path, os.path.join(osm_dir, 'language-split-')])
+        subprocess.check_call(['mv', os.path.join(osm_dir, 'language-split-aa'), languages_train_path])
+        subprocess.check_call(['mv', os.path.join(osm_dir, 'language-split-ab'), languages_test_path])
 
         languages_cv_path = os.path.join(osm_dir, LANGUAGES_CV_FILE)
 
-        subprocess.check_call(['split', '-l', str(cv_lines), languages_test_path])
-        subprocess.check_call(['mv', 'xaa', languages_cv_path])
-        subprocess.check_call(['mv', 'xab', languages_test_path])
+        subprocess.check_call(['split', '-l', str(cv_lines), languages_test_path, os.path.join(osm_dir, 'language-split-')])
+        subprocess.check_call(['mv', os.path.join(osm_dir, 'language-split-aa'), languages_cv_path])
+        subprocess.check_call(['mv', os.path.join(osm_dir, 'language-split-ab'), languages_test_path])
     else:
         subprocess.check_call(['mv', languages_random_path, languages_train_path])
 
