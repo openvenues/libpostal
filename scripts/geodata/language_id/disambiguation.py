@@ -97,6 +97,18 @@ class DictionaryPhraseFilter(PhraseFilter):
         else:
             return None, 0
 
+    def search_suffix(self, token):
+        suffix_search, suffix_len = self.search_substring(SUFFIX_KEY + token[::-1])
+        if suffix_len > 0:
+            suffix_len -= len(SUFFIX_KEY)
+        return suffix_search, suffix_len
+
+    def search_prefix(self, token):
+        prefix_search, prefix_len = self.search_substring(PREFIX_KEY + token)
+        if prefix_len > 0:
+            prefix_len -= len(PREFIX_KEY)
+        return prefix_search, prefix_len
+
     def basic_filter(self, tokens):
         return super(DictionaryPhraseFilter, self).filter(tokens)
 
@@ -105,13 +117,13 @@ class DictionaryPhraseFilter(PhraseFilter):
             if c != token_types.PHRASE:
                 token = t[1]
                 token_len = len(token)
-                suffix_search, suffix_len = self.search_substring(SUFFIX_KEY + token[::-1])
 
-                if suffix_search and self.trie.get(token[token_len - (suffix_len - len(SUFFIX_KEY)):].rstrip('.')):
+                suffix_search, suffix_len = self.search_suffix(token)
+                if suffix_search and self.trie.get(token[(token_len - suffix_len):].rstrip('.')):
                     yield (token_types.PHRASE, [(c,) + t], suffix_search)
                     continue
-                prefix_search, prefix_len = self.search_substring(PREFIX_KEY + token)
-                if prefix_search and self.trie.get(token[:(prefix_len - len(PREFIX_KEY))]):
+                prefix_search, prefix_len = self.search_prefix(token)
+                if prefix_search and self.trie.get(token[:prefix_len]):
                     yield (token_types.PHRASE, [(c,) + t], prefix_search)
                     continue
             yield c, t, data
