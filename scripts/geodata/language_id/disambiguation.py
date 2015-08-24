@@ -184,10 +184,12 @@ def disambiguate_language(text, languages):
                     continue
                 is_default = valid_languages[lang]
 
-                if canonical or (is_default and len(potentials) == 1):
+                if (canonical and not stopword) or (is_default and len(potentials) == 1):
                     valid.append(lang)
                 elif is_default and num_defaults > 1 and current_lang != lang:
                     return AMBIGUOUS_LANGUAGE
+                elif stopword and canonical and not is_default and lang in seen_languages:
+                    valid.append(lang)
                 elif not seen_languages and len(potentials) == 1 and len(t[0][1]) > 1:
                     possible_lang = lang if possible_lang is None or possible_lang == lang else None
 

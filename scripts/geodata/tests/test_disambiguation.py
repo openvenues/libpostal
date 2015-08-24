@@ -27,6 +27,7 @@ country_test_cases = [
     ('El Camino', 'us', 'es'),
     ('Rue Louis Phillippe', 'us', 'fr'),
     ('Calle Street', 'us', AMBIGUOUS_LANGUAGE),
+    ('Del Rio Avenue', 'us', 'en'),
 
     # Avenue + stopword
     ('Avenue du Bourget-du-Lac', 'je', 'fr'),
