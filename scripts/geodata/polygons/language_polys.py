@@ -91,7 +91,7 @@ class LanguagePolygonIndex(RTreePolygonIndex):
 
                     languages = regional.items()
                 else:
-                    languages = get_country_languages(country)
+                    languages = get_country_languages(country).items()
 
                 properties['languages'] = [{'lang': lang, 'default': default}
                                            for lang, default in languages]
