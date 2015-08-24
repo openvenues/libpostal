@@ -39,14 +39,14 @@ def create_language_training_data(osm_dir, split_data=True, train_split=0.8, cv_
     if split_data:
         languages_test_path = os.path.join(osm_dir, LANGUAGES_TEST_FILE)
 
-        subprocess.check_call(['split -l $[ $(wc -l', languages_random_path, '| cut -d" " -f1) *', int(train_split * 100), '/ 100 + 1 ]', languages_random_path])
+        subprocess.check_call(['split -l $[ $(wc -l', languages_random_path, '| cut -d" " -f1) *', str(int(train_split * 100)), '/ 100 + 1 ]', languages_random_path])
         subprocess.check_call(['mv xaa', languages_train_path])
         subprocess.check_call(['mv xab', languages_test_path])
 
         cv_split = cv_split / (1 - (cv_split + train_split))
         languages_cv_path = os.path.join(osm_dir, LANGUAGES_CV_FILE)
 
-        subprocess.check_call(['split -l $[ $(wc -l', languages_test_path, '| cut -d" " -f1) *', int(cv_split * 100), '/ 100 + 1 ]', languages_test_path])
+        subprocess.check_call(['split -l $[ $(wc -l', languages_test_path, '| cut -d" " -f1) *', str(int(cv_split * 100)), '/ 100 + 1 ]', languages_test_path])
         subprocess.check_call(['mv', 'xaa', languages_cv_path])
         subprocess.check_call(['mv', 'xab', languages_test_path])
     else:
