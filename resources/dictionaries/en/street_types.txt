@@ -111,6 +111,7 @@ entrance|ent|entr
 esplanade|esp|espl
 estate|est
 estates|ests
+exit
 expressway|exp|expwy|expway|expy
 extension|ex|ext|extn|exten
 fairway|fawy|fy
