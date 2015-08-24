@@ -195,7 +195,8 @@ def disambiguate_language(text, languages):
                 elif not seen_languages and len(potentials) == 1 and len(t[0][1]) > 1:
                     possible_lang = lang if possible_lang is None or possible_lang == lang else None
 
-            if seen_languages and valid and not any((l in seen_languages for l in valid)):
+            if seen_languages and valid and not any((l in seen_languages for l in valid)) and \
+               (not any((valid_languages.get(l) for l in valid)) or any((valid_languages.get(l) for l in seen_languages))):
                 return AMBIGUOUS_LANGUAGE
 
             if len(valid) == 1:
