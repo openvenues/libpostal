@@ -113,18 +113,6 @@
         }                                                                      \
     }                                                                          \
                                                                                \
-    static inline void name##_log(name *vector, type c, size_t n) {            \
-        for (int i = 0; i < n; i++) {                                          \
-            vector->a[i] += log(vector->a[i]);                                 \
-        }                                                                      \
-    }                                                                          \
-                                                                               \
-    static inline void name##_exp(name *vector, type c, size_t n) {            \
-        for (int i = 0; i < n; i++) {                                          \
-            vector->a[i] += exp(vector->a[i]);                                 \
-        }                                                                      \
-    }                                                                          \
-                                                                               \
     static inline type name##_sum(name *vector, size_t n) {                    \
         type result = 0;                                                       \
         for (int i = 0; i < n; i++) {                                          \
@@ -139,23 +127,6 @@
             result *= vector->a[i];                                            \
         }                                                                      \
         return result;                                                         \
-    }                                                                          \
-                                                                               \
-    static inline type name##_log_sum(name *vector, size_t n) {                \
-        type result = 0;                                                       \
-        for (int i = 0; i < n; i++) {                                          \
-            result += log(vector->a[i]);                                       \
-        }                                                                      \
-        return result;                                                         \
-    }                                                                          \
-                                                                               \
-    static inline type name##_log_sum_exp(name *vector, size_t n) {            \
-        type max = name##_max(vector, n);                                      \
-        type result = 0;                                                       \
-        for (int i = 0; i < n; i++) {                                          \
-            result += exp(vector->a[i] - max);                                 \
-        }                                                                      \
-        return max + log(result);                                              \
     }                                                                          \
                                                                                \
     static inline void name##_add_vector(name *v1, name *v2, size_t n) {       \
@@ -188,6 +159,40 @@
             result += v1->a[i] * v2->a[i];                                     \
         }                                                                      \
         return result;                                                         \
+    }
+
+
+
+#define VECTOR_INIT_NUMERIC_FLOAT(name, type)                                  \
+    VECTOR_INIT_NUMERIC(name, type)                                            \
+                                                                               \
+    static inline void name##_log(name *vector, type c, size_t n) {            \
+        for (int i = 0; i < n; i++) {                                          \
+            vector->a[i] += log(vector->a[i]);                                 \
+        }                                                                      \
+    }                                                                          \
+                                                                               \
+    static inline void name##_exp(name *vector, type c, size_t n) {            \
+        for (int i = 0; i < n; i++) {                                          \
+            vector->a[i] += exp(vector->a[i]);                                 \
+        }                                                                      \
+    }                                                                          \
+                                                                               \                                                                               \
+    static inline type name##_log_sum(name *vector, size_t n) {                \
+        type result = 0;                                                       \
+        for (int i = 0; i < n; i++) {                                          \
+            result += log(vector->a[i]);                                       \
+        }                                                                      \
+        return result;                                                         \
+    }                                                                          \
+                                                                               \
+    static inline type name##_log_sum_exp(name *vector, size_t n) {            \
+        type max = name##_max(vector, n);                                      \
+        type result = 0;                                                       \
+        for (int i = 0; i < n; i++) {                                          \
+            result += exp(vector->a[i] - max);                                 \
+        }                                                                      \
+        return max + log(result);                                              \
     }
 
 
