@@ -26,11 +26,6 @@
         return name##_new_value(n, (type)0);                                   \
     }                                                                          \
                                                                                \
-    static inline void name##_set(name *vector, type value) {                  \
-        size_t n = vector->n;                                                  \
-        memset(vector->a, (type)value, n * sizeof(type));                      \
-    }                                                                          \
-                                                                               \
     static inline name *name##_copy(name *vector, size_t n) {                  \
         name *cpy = name##_new_size(n);                                        \
         memcpy(vector->a, cpy->a, n * sizeof(type));                           \
@@ -38,34 +33,39 @@
         return cpy;                                                            \
     }                                                                          \
                                                                                \
-    static inline type name##_max(name *vector, size_t n) {                    \
-        type max_val = 0;                                                      \
-        type val;                                                              \
-        for (int i = 0; i < n; i++) {                                          \
-            val = vector->a[i];                                                \
+    static inline void type##_array_set(type *array, size_t n, type value) {   \
+        memset(array, (type)value, n * sizeof(type));                          \
+    }                                                                          \
+                                                                               \
+    static inline type type##_array_max(type *array, size_t n) {               \
+        if (n < 1) return (type) 0;                                            \
+        type val = array[0];                                                   \
+        type max_val = val;                                                    \
+        for (int i = 1; i < n; i++) {                                          \
+            val = array[i];                                                    \
             if (val > max_val) max_val = val;                                  \
         }                                                                      \
         return max_val;                                                        \
     }                                                                          \
                                                                                \
-    static inline type name##_min(name *vector, size_t n) {                    \
+    static inline type type##_array_min(type *array, size_t n) {               \
         if (n < 1) return (type) 0;                                            \
-        type val = vector->a[0];                                               \
+        type val = array[0];                                                   \
         type min_val = val;                                                    \
         for (int i = 1; i < n; i++) {                                          \
-            val = vector->a[i];                                                \
+            val = array[i];                                                    \
             if (val < min_val) min_val = val;                                  \
         }                                                                      \
         return min_val;                                                        \
     }                                                                          \
                                                                                \
-    static inline int64_t name##_argmax(name *vector, size_t n) {              \
+    static inline int64_t type##_array_argmax(type *array, size_t n) {         \
         if (n < 1) return -1;                                                  \
-        type max_val = 0;                                                      \
+        type val = array[0];                                                   \
+        type max_val = val;                                                    \
         int64_t argmax = 0;                                                    \
-        type val;                                                              \
         for (int i = 0; i < n; i++) {                                          \
-            val = vector->a[i];                                                \
+            val = array[i];                                                    \
             if (val > max_val) {                                               \
                 max_val = val;                                                 \
                 argmax = i;                                                    \
@@ -74,13 +74,13 @@
         return argmax;                                                         \
     }                                                                          \
                                                                                \
-    static inline int64_t name##_argmin(name *vector, size_t n) {              \
+    static inline int64_t type##_array_argmin(type *array, size_t n) {         \
         if (n < 1) return (type) -1;                                           \
-        type val = vector->a[0];                                               \
+        type val = array[0];                                                   \
         type min_val = val;                                                    \
         int64_t argmin = 0;                                                    \
         for (int i = 1; i < n; i++) {                                          \
-            val = vector->a[i];                                                \
+            val = array[i];                                                    \
             if (val < min_val) {                                               \
                 min_val = val;                                                 \
                 argmin = i;                                                    \
@@ -89,74 +89,90 @@
         return argmin;                                                         \
     }                                                                          \
                                                                                \
-    static inline void name##_add(name *vector, type c, size_t n) {            \
+    static inline void type##_array_add(type *array, type c, size_t n) {       \
         for (int i = 0; i < n; i++) {                                          \
-            vector->a[i] += c;                                                 \
+            array[i] += c;                                                     \
         }                                                                      \
     }                                                                          \
                                                                                \
-    static inline void name##_sub(name *vector, type c, size_t n) {            \
+    static inline void type##_array_sub(type *array, type c, size_t n) {       \
         for (int i = 0; i < n; i++) {                                          \
-            vector->a[i] -= c;                                                 \
+            array[i] -= c;                                                     \
         }                                                                      \
     }                                                                          \
                                                                                \
-    static inline void name##_mul(name *vector, type c, size_t n) {            \
+    static inline void type##_array_mul(type *array, type c, size_t n) {       \
         for (int i = 0; i < n; i++) {                                          \
-            vector->a[i] *= c;                                                 \
+            array[i] *= c;                                                     \
         }                                                                      \
     }                                                                          \
                                                                                \
-    static inline void name##_div(name *vector, type c, size_t n) {            \
+    static inline void type##_array_div(type *array, type c, size_t n) {       \
         for (int i = 0; i < n; i++) {                                          \
-            vector->a[i] /= c;                                                 \
+            array[i] /= c;                                                     \
         }                                                                      \
     }                                                                          \
                                                                                \
-    static inline type name##_sum(name *vector, size_t n) {                    \
+    static inline type type##_array_sum(type *array, size_t n) {               \
         type result = 0;                                                       \
         for (int i = 0; i < n; i++) {                                          \
-            result += vector->a[i];                                            \
+            result += array[i];                                                \
         }                                                                      \
         return result;                                                         \
     }                                                                          \
                                                                                \
-    static inline type name##_product(name *vector, size_t n) {                \
+    static inline type type##_array_l1_norm(type *array, size_t n) {           \
         type result = 0;                                                       \
         for (int i = 0; i < n; i++) {                                          \
-            result *= vector->a[i];                                            \
+            result += abs(array[i]);                                           \
         }                                                                      \
         return result;                                                         \
     }                                                                          \
                                                                                \
-    static inline void name##_add_vector(name *v1, name *v2, size_t n) {       \
-        for (int i = 0; i < n; i++) {                                          \
-            v1->a[i] += v2->a[i];                                              \
-        }                                                                      \
-    }                                                                          \
-                                                                               \
-    static inline void name##_sub_vector(name *v1, name *v2, size_t n) {       \
-        for (int i = 0; i < n; i++) {                                          \
-            v1->a[i] -= v2->a[i];                                              \
-        }                                                                      \
-    }                                                                          \
-                                                                               \
-    static inline void name##_mul_vector(name *v1, name *v2, size_t n) {       \
-        for (int i = 0; i < n; i++) {                                          \
-            v1->a[i] *= v2->a[i];                                              \
-        }                                                                      \
-    }                                                                          \
-                                                                               \
-    static inline void name##_div_vector(name *v1, name *v2, size_t n) {       \
-        for (int i = 0; i < n; i++) {                                          \
-            v1->a[i] /= v2->a[i];                                              \
-        }                                                                      \
-    }                                                                          \
-                                                                               \
-    static inline type name##_dot(name *v1, name *v2, size_t n) {              \
+    static inline type type##_array_l2_norm(type *array, size_t n) {           \
         type result = 0;                                                       \
         for (int i = 0; i < n; i++) {                                          \
-            result += v1->a[i] * v2->a[i];                                     \
+            result += array[i] * array[i];                                     \
+        }                                                                      \
+        return result;                                                         \
+    }                                                                          \
+                                                                               \
+    static inline type type##_array_product(type *array, size_t n) {           \
+        type result = 0;                                                       \
+        for (int i = 0; i < n; i++) {                                          \
+            result *= array[i];                                                \
+        }                                                                      \
+        return result;                                                         \
+    }                                                                          \
+                                                                               \
+    static inline void type##_array_add_array(type *a1, type *a2, size_t n) {  \
+        for (int i = 0; i < n; i++) {                                          \
+            a1[i] += a2[i];                                                    \
+        }                                                                      \
+    }                                                                          \
+                                                                               \
+    static inline void type##_array_sub_array(type *a1, type *a2, size_t n) {  \
+        for (int i = 0; i < n; i++) {                                          \
+            a1[i] -= a2[i];                                                    \
+        }                                                                      \
+    }                                                                          \
+                                                                               \
+    static inline void type##_array_mul_array(type *a1, type *a2, size_t n) {  \
+        for (int i = 0; i < n; i++) {                                          \
+            a1[i] *= a2[i];                                                    \
+        }                                                                      \
+    }                                                                          \
+                                                                               \
+    static inline void type##_array_div_array(type *a1, type *a2, size_t n) {  \
+        for (int i = 0; i < n; i++) {                                          \
+            a1[i] /= a2[i];                                                    \
+        }                                                                      \
+    }                                                                          \
+                                                                               \
+    static inline type type##_array_dot(type *a1, type *a2, size_t n) {        \
+        type result = 0;                                                       \
+        for (int i = 0; i < n; i++) {                                          \
+            result += a1[i] * a2[i];                                           \
         }                                                                      \
         return result;                                                         \
     }
@@ -166,31 +182,31 @@
 #define VECTOR_INIT_NUMERIC_FLOAT(name, type)                                  \
     VECTOR_INIT_NUMERIC(name, type)                                            \
                                                                                \
-    static inline void name##_log(name *vector, type c, size_t n) {            \
+    static inline void type##_array_log(type *array, type c, size_t n) {       \
         for (int i = 0; i < n; i++) {                                          \
-            vector->a[i] += log(vector->a[i]);                                 \
+            array[i] = log(array[i]);                                          \
         }                                                                      \
     }                                                                          \
                                                                                \
-    static inline void name##_exp(name *vector, type c, size_t n) {            \
+    static inline void type##_array_exp(type *array, type c, size_t n) {       \
         for (int i = 0; i < n; i++) {                                          \
-            vector->a[i] += exp(vector->a[i]);                                 \
+            array[i] = exp(array[i]);                                          \
         }                                                                      \
     }                                                                          \
-                                                                               \                                                                               \
-    static inline type name##_log_sum(name *vector, size_t n) {                \
+                                                                               \
+    static inline type type##_array_log_sum(type *array, size_t n) {           \
         type result = 0;                                                       \
         for (int i = 0; i < n; i++) {                                          \
-            result += log(vector->a[i]);                                       \
+            result += log(array[i]);                                           \
         }                                                                      \
         return result;                                                         \
     }                                                                          \
                                                                                \
-    static inline type name##_log_sum_exp(name *vector, size_t n) {            \
-        type max = name##_max(vector, n);                                      \
+    static inline type type##_array_log_sum_exp(type *array, size_t n) {       \
+        type max = type##_array_max(array, n);                                 \
         type result = 0;                                                       \
         for (int i = 0; i < n; i++) {                                          \
-            result += exp(vector->a[i] - max);                                 \
+            result += exp(array[i] - max);                                     \
         }                                                                      \
         return max + log(result);                                              \
     }
