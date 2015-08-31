@@ -10,10 +10,23 @@
     __VECTOR_BASE(name, type)                                                  \
     __VECTOR_DESTROY(name, type)                                               \
                                                                                \
+    static inline name *name##_copy(name *vector, size_t n) {                  \
+        name *cpy = name##_new_size(n);                                        \
+        memcpy(vector->a, cpy->a, n * sizeof(type));                           \
+        cpy->n = n;                                                            \
+        return cpy;                                                            \
+    }                                                                          \
+                                                                               \
+    static inline void type##_array_set(type *array, size_t n, type value) {   \
+        for (int i = 0; i < n; i++) {                                          \
+            array[i] = value;                                                  \
+        }                                                                      \
+    }                                                                          \
+                                                                               \
     static inline name *name##_new_value(size_t n, type value) {               \
         name *vector = name##_new_size(n);                                     \
         if (vector == NULL) return NULL;                                       \
-        memset(vector->a, (type)value, n * sizeof(type));                      \
+        type##_array_set(vector->a, n, (type)value);                           \
         vector->n = n;                                                         \
         return vector;                                                         \
     }                                                                          \
@@ -23,18 +36,9 @@
     }                                                                          \
                                                                                \
     static inline name *name##_new_zeros(size_t n) {                           \
+        name *vector = name##_new_size(n);                                     \
+        memset(vector->a, 0, n * sizeof(type));                                \
         return name##_new_value(n, (type)0);                                   \
-    }                                                                          \
-                                                                               \
-    static inline name *name##_copy(name *vector, size_t n) {                  \
-        name *cpy = name##_new_size(n);                                        \
-        memcpy(vector->a, cpy->a, n * sizeof(type));                           \
-        cpy->n = n;                                                            \
-        return cpy;                                                            \
-    }                                                                          \
-                                                                               \
-    static inline void type##_array_set(type *array, size_t n, type value) {   \
-        memset(array, (type)value, n * sizeof(type));                          \
     }                                                                          \
                                                                                \
     static inline type type##_array_max(type *array, size_t n) {               \
