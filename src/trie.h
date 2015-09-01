@@ -75,6 +75,7 @@ typedef struct trie {
     char *alphabet;
     uint8_t alpha_map[NUM_CHARS];
     int alphabet_size;
+    uint32_t num_keys;
 } trie_t;
 
 trie_t *trie_new_alphabet(uint8_t *alphabet, uint32_t alphabet_size);

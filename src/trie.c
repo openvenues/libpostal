@@ -56,6 +56,8 @@ static trie_t *trie_new_empty(uint8_t *alphabet, uint32_t alphabet_size) {
 
     self->alphabet_size = alphabet_size;
 
+    self->num_keys = 0;
+
     for (int i = 0; i < self->alphabet_size; i++) {
         self->alpha_map[alphabet[i]] = i;
         log_debug("setting alpha_map[%d] = %d\n", alphabet[i], i);
@@ -657,6 +659,7 @@ bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, size_t len, ui
         }
     }
 
+    self->num_keys++;
     return true;
 }
 
@@ -915,15 +918,14 @@ I/O methods
 */
 
 bool trie_write(trie_t *self, FILE *file) {
-    if (!file_write_uint32(file, TRIE_SIGNATURE)) 
+    if (!file_write_uint32(file, TRIE_SIGNATURE) ||
+        !file_write_uint32(file, (uint32_t)self->alphabet_size)|| 
+        !file_write_chars(file, (char *)self->alphabet, self->alphabet_size) ||
+        !file_write_uint32(file, self->num_keys) ||
+        !file_write_uint32(file, (uint32_t)self->nodes->n)) {
         return false;
-    if (!file_write_uint32(file, (uint32_t)self->alphabet_size))
-        return false;
-    if (!file_write_chars(file, (char *)self->alphabet, self->alphabet_size)) 
-        return false;
-    if (!file_write_uint32(file, (uint32_t)self->nodes->n))
-        return false;
-
+    }
+        
     int i;
     trie_node_t node;
 
@@ -1001,6 +1003,12 @@ trie_t *trie_read(FILE *file) {
     trie_t *trie = trie_new_empty(alphabet, alphabet_size);
     if (!trie)
         goto exit_file_read;
+
+    uint32_t num_keys;
+    if (!file_read_uint32(file, &num_keys))
+        goto exit_file_read;
+
+    trie->num_keys = num_keys;
 
     uint32_t num_nodes;
 
