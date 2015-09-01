@@ -8,23 +8,23 @@ sparse_matrix_t *sparse_matrix_new(void) {
     matrix->n = 0;
     matrix->indptr = uint32_array_new_size(1);
     if (matrix->indptr == NULL) {
-        goto exit_matrix_created;
+        goto exit_sparse_matrix_created;
     }
     uint32_array_push(matrix->indptr, 0);
 
     matrix->indices = uint32_array_new();
     if (matrix->indices == NULL) {
-        goto exit_matrix_created;
+        goto exit_sparse_matrix_created;
     }
 
     matrix->data = double_array_new();
     if (matrix->data == NULL) {
-        goto exit_matrix_created;
+        goto exit_sparse_matrix_created;
     }
 
     return matrix;
 
-exit_matrix_created:
+exit_sparse_matrix_created:
     sparse_matrix_destroy(matrix);
     return NULL;
 }
@@ -59,7 +59,6 @@ inline void sparse_matrix_finalize_row(sparse_matrix_t *self) {
     uint32_array_push(self->indptr, (uint32_t)self->indices->n);
     self->m++;
 }
-
 
 inline void sparse_matrix_append(sparse_matrix_t *self, uint32_t col, double val) {
     uint32_array_push(self->indices, col);
@@ -174,4 +173,139 @@ int sparse_matrix_dot_dense(sparse_matrix_t *self, matrix_t *matrix, matrix_t *r
     })
 
     return 0;
+}
+
+sparse_matrix_t *sparse_matrix_read(FILE *f) {
+    sparse_matrix_t *sp = malloc(sizeof(sparse_matrix_t));
+    if (sp == NULL) return NULL;
+
+    sp->indptr = NULL;
+    sp->indices = NULL;
+    sp->data = NULL;
+
+    if (!file_read_uint32(f, &sp->m) ||
+        !file_read_uint32(f, &sp->n)) {
+        goto exit_sparse_matrix_allocated;
+    }
+
+    uint64_t len_indptr;
+
+    if (!file_read_uint64(f, &len_indptr)) {
+        printf("len_indptr\n");
+        goto exit_sparse_matrix_allocated;
+    }
+
+    uint32_array *indptr = uint32_array_new_size(len_indptr);
+    if (indptr == NULL) {
+        printf("indptr alloc\n");
+        goto exit_sparse_matrix_allocated;
+    }
+
+    sp->indptr = indptr;
+
+    for (int i = 0; i < len_indptr; i++) {
+        if (!file_read_uint32(f, indptr->a + i)) {
+            printf("indptr\n");
+            goto exit_sparse_matrix_allocated;
+        }
+    }
+
+    uint64_t len_indices;
+
+    if (!file_read_uint64(f, &len_indices)) {
+        printf("len_indices\n");
+        goto exit_sparse_matrix_allocated;
+    }
+
+    uint32_array *indices = uint32_array_new_size(len_indices);
+    if (indices == NULL) {
+        printf("indices alloc\n");
+        goto exit_sparse_matrix_allocated;
+    }
+
+    sp->indices = indices;
+
+    for (int i = 0; i < len_indices; i++) {
+        if (!file_read_uint32(f, indices->a + i)) {
+            printf("indices\n");
+            goto exit_sparse_matrix_allocated;
+        }
+    }
+
+    uint64_t len_data;
+
+    if (!file_read_uint64(f, &len_data)) {
+        printf("len_data\n");
+        goto exit_sparse_matrix_allocated;
+    }
+
+    double_array *data = double_array_new_size(len_data);
+    if (data == NULL) {
+        printf("data alloc\n");
+        goto exit_sparse_matrix_allocated;
+    }
+
+    sp->data = data;
+
+    for (int i = 0; i < len_data; i++) {
+        if (!file_read_double(f, data->a + i)) {
+            printf("data\n");
+            goto exit_sparse_matrix_allocated;
+        }
+    }
+
+    return sp;
+
+exit_sparse_matrix_allocated:
+    sparse_matrix_destroy(sp);
+    return NULL;
+}
+
+bool sparse_matrix_write(sparse_matrix_t *self, FILE *f) {
+    if (self == NULL || self->indptr == NULL || self->indices == NULL || self->data == NULL) {
+        return false;
+    }
+
+    if (!file_write_uint32(f, self->m) ||
+        !file_write_uint32(f, self->n)) {
+        return false;
+    }
+
+    uint64_t len_indptr = self->indptr->n;
+
+    if (!file_write_uint64(f, len_indptr)) {
+        return false;
+    }
+
+    for (int i = 0; i < len_indptr; i++) {
+        if (!file_write_uint32(f, self->indptr->a[i])) {
+            return false;
+        }
+    }
+
+    uint64_t len_indices = (uint64_t)self->indices->n;
+
+    if (!file_write_uint64(f, len_indices)) {
+        return false;
+    }
+
+    for (int i = 0; i < len_indices; i++) {
+        if (!file_write_uint32(f, self->indices->a[i])) {
+            return false;
+        }
+    }
+
+    uint64_t len_data = (uint64_t)self->data->n;
+
+    if (!file_write_uint64(f, len_data)) {
+        return false;
+    }
+
+    for (int i = 0; i < len_data; i++) {
+        if (!file_write_double(f, self->data->a[i])) {
+            return false;
+        }
+    }
+
+    return true;
 }

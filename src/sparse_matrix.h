@@ -2,9 +2,11 @@
 #define SPARSE_MATRIX_H
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <stdint.h>
 
 #include "collections.h"
+#include "file_utils.h"
 #include "matrix.h"
 #include "vector.h"
 
@@ -38,6 +40,9 @@ int sparse_matrix_dot_vector(sparse_matrix_t *self, double *vec, size_t n, doubl
 int sparse_matrix_rows_dot_vector(sparse_matrix_t *self, uint32_t *rows, size_t m, double *vec, size_t n, double *result);
 
 int sparse_matrix_dot_dense(sparse_matrix_t *self, matrix_t *matrix, matrix_t *result);
+
+bool sparse_matrix_write(sparse_matrix_t *self, FILE *f);
+sparse_matrix_t *sparse_matrix_read(FILE *f);
 
 #define sparse_matrix_foreach_row(sp, row_var, index_var, length_var, code) {   \
     uint32_t _row_start = 0, _row_end = 0;                                      \
