@@ -10,6 +10,7 @@ import sys
 import tempfile
 import ujson as json
 import yaml
+import HTMLParser
 
 from collections import defaultdict, OrderedDict
 from lxml import etree
@@ -388,19 +389,20 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
     ambiguous_already_seen = set()
 
     for k, v in value.iteritems():
-        if k.startswith(tag_prefix + ':') and v not in ambiguous_alternatives:
-            norm = normalize_osm_name_tag(k)
-            norm_sans_script = normalize_osm_name_tag(k, script=True)
-            if norm in languages or norm_sans_script in languages:
-                name_language[norm].append(v)
-        elif v in ambiguous_alternatives and v not in ambiguous_already_seen:
-            langs = [(lang, lang in default_langs) for lang in equivalent_alternatives[v]]
-            lang = disambiguate_language(v, langs)
+        if k.startswith(tag_prefix + ':'):
+            if v not in ambiguous_alternatives:
+                norm = normalize_osm_name_tag(k)
+                norm_sans_script = normalize_osm_name_tag(k, script=True)
+                if norm in languages or norm_sans_script in languages:
+                    name_language[norm].append(v)
+            elif v not in ambiguous_already_seen:
+                langs = [(lang, lang in default_langs) for lang in equivalent_alternatives[v]]
+                lang = disambiguate_language(v, langs)
 
-            if lang != AMBIGUOUS_LANGUAGE and lang != UNKNOWN_LANGUAGE:
-                name_language[lang].append(v)
+                if lang != AMBIGUOUS_LANGUAGE and lang != UNKNOWN_LANGUAGE:
+                    name_language[lang].append(v)
 
-            ambiguous_already_seen.add(v)
+                ambiguous_already_seen.add(v)
         elif not has_alternate_names and k.startswith(tag_first_component) and (has_colon or ':' not in k) and normalize_osm_name_tag(k, script=True) == tag_last_component:
             if num_langs == 1:
                 name_language[candidate_languages[0]['lang']].append(v)
@@ -549,23 +551,93 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
             print 'did', i, 'formatted addresses'
 
 
-def build_toponym_data(language_rtree, infile, out_dir):
+apposition_regex = re.compile('(.*[^\s])[\s]*\([\s]*(.*[^\s])[\s]*\)$', re.I)
+
+html_parser = HTMLParser.HTMLParser()
+
+
+def normalize_wikipedia_title(title):
+    match = apposition_regex.match(title)
+    if match:
+        title = match.group(1)
+
+    title = safe_decode(title)
+    title = html_parser.unescape(title)
+    title = urllib.unquote_plus(title)
+
+    return title.replace(u'_', u' ').strip()
+
+
+def build_toponym_training_data(language_rtree, infile, out_dir):
     i = 0
     f = open(os.path.join(out_dir, TOPONYM_LANGUAGE_DATA_FILENAME), 'w')
     writer = csv.writer(f, 'tsv_no_quote')
 
     for key, value in parse_osm(infile):
-        country, name_language = get_language_names(language_rtree, key, value, tag_prefix='name')
-        if not name_language:
+        try:
+            latitude, longitude = latlon_to_floats(value['lat'], value['lon'])
+        except Exception:
             continue
+
+        country, candidate_languages, language_props = country_and_languages(language_rtree, latitude, longitude)
+        if not (country and candidate_languages):
+            continue
+
+        name_language = defaultdict(list)
+
+        num_langs = len(candidate_languages)
+        default_langs = set([l['lang'] for l in candidate_languages if l.get('default')])
+        num_defaults = len(default_langs)
+
+        valid_languages = set([l['lang'] for l in candidate_languages])
+
+        have_alternate_names = False
+
+        for k, v in value.iteritems():
+            if k.startswith('wikipedia'):
+                lang = k.rsplit(':', 1)[-1].lower()
+
+                splits = v.split(':', 1)
+                value_lang = splits[0].lower()
+                if len(splits) > 1 and value_lang in languages:
+                    lang = value_lang
+                    title = splits[1]
+
+                if lang not in languages:
+                    lang = None
+                    continue
+
+                have_alternate_names = True
+                title = normalize_wikipedia_title(title)
+                name_language[lang].append(title)
+                continue
+
+            if not k.startswith('name:'):
+                continue
+
+            norm = normalize_osm_name_tag(k)
+            norm_sans_script = normalize_osm_name_tag(k, script=True)
+
+            if norm in languages:
+                lang = norm
+            elif norm_sans_script in languages:
+                lang = norm_sans_script
+            else:
+                continue
+
+            if lang in valid_languages:
+                have_alternate_names = True
+                name_language[lang].append(v)
+
+        if not have_alternate_names and num_langs == 1 and normalize_osm_name_tag(k, script=True) == 'name':
+            name_language[candidate_languages[0]['lang']].append(v)
 
         for k, v in name_language.iteritems():
             for s in v:
                 s = s.strip()
                 if not s:
                     continue
-                if k in languages:
-                    writer.writerow((k, country, tsv_string(s)))
+                writer.writerow((k, country, tsv_string(s)))
             if i % 1000 == 0 and i > 0:
                 print 'did', i, 'toponyms'
             i += 1
@@ -684,7 +756,7 @@ if __name__ == '__main__':
     if args.streets_file:
         build_ways_training_data(language_rtree, args.streets_file, args.out_dir)
     if args.borders_file:
-        build_toponym_data(language_rtree, args.borders_file, args.out_dir)
+        build_toponym_training_data(language_rtree, args.borders_file, args.out_dir)
     if args.address_file and not args.format_only and not args.limited_addresses:
         build_address_training_data(language_rtree, args.address_file, args.out_dir)
     if args.address_file and args.format_only:
