@@ -135,6 +135,8 @@ class AddressFormatter(object):
         ('road', 'postcode')
     ]
 
+    whitespace_component_regex = re.compile('[\r\n]+[\s\r\n]*')
+
     splitter = ' | '
 
     aliases = OrderedDict([
@@ -210,7 +212,11 @@ class AddressFormatter(object):
             return selected
         output = pystache.render(template, first=render_first,
                                  **components).strip()
-        output = re.sub('[\r\n]+[\s\r\n]*', self.splitter, output)
+
+        output = self.splitter.join([
+            self.strip_component(val)
+            for val in self.whitespace_component_regex.split(output)
+        ])
 
         return output
 
@@ -244,11 +250,20 @@ class AddressFormatter(object):
                 text = re.sub(regex, replacement, text)
         return text
 
-    def tokenize_component(self, value):
+    def strip_component(self, value):
         tokens = tokenize(value)
-        if sum((1 for c, t in tokens if c.value < token_types.PERIOD.value)) > 0:
-            return [t for c, t in tokens]
-        return []
+        for i, (c, t) in enumerate(tokens):
+            if c.value < token_types.PERIOD.value:
+                break
+
+        for j, (c, t) in enumerate(reversed(tokens)):
+            if c.value < token_types.PERIOD.value:
+                break
+        if j == 0:
+            j = None
+        else:
+            j = -j
+        return u' '.join([t for c, t in tokens[i:j]])
 
     def format_address(self, country, components, minimal_only=True, tag_components=True):
         template = self.config.get(country.upper())
@@ -269,10 +284,10 @@ class AddressFormatter(object):
 
         if tag_components:
             components = {k: u' '.join([u'{}/{}'.format(t, k.replace(' ', '_'))
-                                        for t in self.tokenize_component(v)])
+                                        for c, t in tokenize(v)])
                           for k, v in components.iteritems()}
         else:
-            components = {k: u' '.join(self.tokenize_component(v))
+            components = {k: u' '.join([t for c, t in tokenize(v)])
                           for k, v in components.iteritems()}
 
         text = self.render_template(template_text, **components)
