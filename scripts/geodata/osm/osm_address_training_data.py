@@ -720,7 +720,7 @@ if __name__ == '__main__':
                         help='Path to planet-venues.osm')
 
     parser.add_argument('-b', '--borders-file',
-                        helpf='Path to planet-borders.osm')
+                        help='Path to planet-borders.osm')
 
     parser.add_argument('-f', '--format-only',
                         action='store_true',
