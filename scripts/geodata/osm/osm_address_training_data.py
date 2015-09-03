@@ -587,32 +587,21 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
         name_language = defaultdict(list)
 
         num_langs = len(candidate_languages)
-        default_langs = set([l['lang'] for l in candidate_languages if l.get('default')])
+        default_langs = set([l for l, default in official_languages[country].iteritems() if default])
         num_defaults = len(default_langs)
 
-        valid_languages = set([l['lang'] for l in candidate_languages])
+        top_lang = official_languages[country].iterkeys().next()
+        if top_lang not in WELL_REPRESENTED_LANGUAGES and len(default_langs) > 1:
+            default_langs -= WELL_REPRESENTED_LANGUAGES
+        elif len(default_langs & WELL_REPRESENTED_LANGUAGES) > 1:
+            continue
 
-        have_alternate_names = False
+        valid_languages = (set([l['lang'] for l in candidate_languages]) - WELL_REPRESENTED_LANGUAGES) | default_langs
+
+        if not valid_languages:
+            continue
 
         for k, v in value.iteritems():
-            if k.startswith('wikipedia'):
-                lang = k.rsplit(':', 1)[-1].lower()
-
-                splits = v.split(':', 1)
-                value_lang = splits[0].lower()
-                if len(splits) > 1 and value_lang in languages:
-                    lang = value_lang
-                    title = splits[1]
-
-                if lang not in languages:
-                    lang = None
-                    continue
-
-                have_alternate_names = True
-                title = normalize_wikipedia_title(title)
-                name_language[lang].append(title)
-                continue
-
             if not k.startswith('name:'):
                 continue
 
@@ -629,9 +618,6 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
             if lang in valid_languages:
                 have_alternate_names = True
                 name_language[lang].append(v)
-
-        if not have_alternate_names and num_langs == 1 and normalize_osm_name_tag(k, script=True) == 'name':
-            name_language[candidate_languages[0]['lang']].append(v)
 
         for k, v in name_language.iteritems():
             for s in v:
