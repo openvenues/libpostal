@@ -37,14 +37,22 @@ FORMATTER_GIT_REPO = 'https://github.com/openvenues/address-formatting'
 WAY_OFFSET = 10 ** 15
 RELATION_OFFSET = 2 * 10 ** 15
 
+# Input files
 PLANET_ADDRESSES_INPUT_FILE = 'planet-addresses.osm'
-
 PLANET_WAYS_INPUT_FILE = 'planet-ways.osm'
-
 PLANET_VENUES_INPUT_FILE = 'planet-venues.osm'
+PLANET_BORDERS_INPUT_FILE = 'planet-borders.osm'
 
 ALL_OSM_TAGS = set(['node', 'way', 'relation'])
 WAYS_RELATIONS = set(['way', 'relation'])
+
+# Output files
+WAYS_LANGUAGE_DATA_FILENAME = 'streets_by_language.tsv'
+ADDRESS_LANGUAGE_DATA_FILENAME = 'address_streets_by_language.tsv'
+ADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'formatted_addresses_tagged.tsv'
+ADDRESS_FORMAT_DATA_FILENAME = 'formatted_addresses.tsv'
+ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME = 'formatted_addresses_by_language.tsv'
+TOPONYM_LANGUAGE_DATA_FILENAME = 'toponyms_by_language.tsv'
 
 
 class OSMField(object):
@@ -272,8 +280,6 @@ def normalize_osm_name_tag(tag, script=False):
     return norm.split('_', 1)[0]
 
 
-WAYS_LANGUAGE_DATA_FILENAME = 'streets_by_language.tsv'
-
 beginning_re = re.compile('^[^0-9\-]+', re.UNICODE)
 end_re = re.compile('[^0-9]+$', re.UNICODE)
 
@@ -439,11 +445,6 @@ def build_ways_training_data(language_rtree, infile, out_dir):
     f.close()
 
 
-ADDRESS_LANGUAGE_DATA_FILENAME = 'address_streets_by_language.tsv'
-ADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'formatted_addresses_tagged.tsv'
-ADDRESS_FORMAT_DATA_FILENAME = 'formatted_addresses.tsv'
-
-
 def build_address_format_training_data(language_rtree, infile, out_dir):
     i = 0
 
@@ -481,7 +482,6 @@ def build_address_format_training_data(language_rtree, infile, out_dir):
                 print 'did', i, 'formatted addresses'
 
 
-ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME = 'formatted_addresses_by_language.tsv'
 NAME_KEYS = (
     'name',
     'addr:housename',
@@ -550,6 +550,30 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
         i += 1
         if i % 1000 == 0 and i > 0:
             print 'did', i, 'formatted addresses'
+
+
+def build_toponym_data(language_rtree, infile, out_dir):
+    i = 0
+    f = open(os.path.join(out_dir, TOPONYM_LANGUAGE_DATA_FILENAME), 'w')
+    writer = csv.writer(f, 'tsv_no_quote')
+
+    for key, value in parse_osm(infile):
+        country, name_language = get_language_names(language_rtree, key, value, tag_prefix='name')
+        if not name_language:
+            continue
+
+        for k, v in name_language.iteritems():
+            for s in v:
+                s = s.strip()
+                if not s:
+                    continue
+                if k in languages:
+                    writer.writerow((k, country, tsv_string(s)))
+            if i % 1000 == 0 and i > 0:
+                print 'did', i, 'toponyms'
+            i += 1
+
+    f.close()
 
 
 def build_address_training_data(langauge_rtree, infile, out_dir, format=False):
@@ -626,6 +650,9 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--venues-file',
                         help='Path to planet-venues.osm')
 
+    parser.add_argument('-b', '--borders-file',
+                        helpf='Path to planet-borders.osm')
+
     parser.add_argument('-f', '--format-only',
                         action='store_true',
                         default=False,
@@ -659,6 +686,8 @@ if __name__ == '__main__':
     # Can parallelize
     if args.streets_file:
         build_ways_training_data(language_rtree, args.streets_file, args.out_dir)
+    if args.borders_file:
+        build_toponym_data(language_rtree, args.borders_file, args.out_dir)
     if args.address_file and not args.format_only and not args.limited_addresses:
         build_address_training_data(language_rtree, args.address_file, args.out_dir)
     if args.address_file and args.format_only:
