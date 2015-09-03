@@ -244,6 +244,12 @@ class AddressFormatter(object):
                 text = re.sub(regex, replacement, text)
         return text
 
+    def tokenize_component(self, v):
+        tokens = tokenize(value)
+        if sum((1 for c, t in tokens if c.value < token_types.PERIOD.value)) > 0:
+            return [t for c, t in tokenize(v)]
+        return []
+
     def format_address(self, country, components, minimal_only=True, tag_components=True):
         template = self.config.get(country.upper())
         if not template:
@@ -263,10 +269,10 @@ class AddressFormatter(object):
 
         if tag_components:
             components = {k: u' '.join([u'{}/{}'.format(t, k.replace(' ', '_'))
-                                        for c, t in tokenize(v)])
+                                        for t in self.tokenize_component(v)])
                           for k, v in components.iteritems()}
         else:
-            components = {k: u' '.join([t for c, t in tokenize(v)])
+            components = {k: u' '.join(self.tokenize_component(v))
                           for k, v in components.iteritems()}
 
         text = self.render_template(template_text, **components)
