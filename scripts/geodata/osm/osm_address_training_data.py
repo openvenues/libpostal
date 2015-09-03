@@ -99,9 +99,9 @@ def parse_osm(filename, allowed_types=ALL_OSM_TAGS):
             item_type = 'relation'
 
         if item_type in allowed_types:
-            attrs = dict(elem.attrib)
-            attrs.update({e.attrib['k']: e.attrib['v']
-                         for e in elem.getchildren() if e.tag == 'tag'})
+            attrs = OrderedDict(elem.attrib)
+            attrs.update(OrderedDict([(e.attrib['k'], e.attrib['v'])
+                         for e in elem.getchildren() if e.tag == 'tag']))
             key = elem_id if single_type else '{}:{}'.format(item_type, elem_id)
             yield key, attrs
 
@@ -358,9 +358,6 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
     default_langs = set([l['lang'] for l in candidate_languages if l.get('default')])
     num_defaults = len(default_langs)
     name_language = defaultdict(list)
-
-    alternate_langs = []
-    has_alternate_names = len(alternate_langs) > 0
 
     alternate_langs = []
 
