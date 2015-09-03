@@ -204,18 +204,21 @@ class AddressFormatter(object):
     def country_template(self, c):
         return self.config.get(c, self.config['default'])
 
-    def render_template(self, template, **components):
+    def render_template(self, template, components, tagged=False):
         def render_first(text):
             text = pystache.render(text, **components)
             splits = (e.strip() for e in text.split('||'))
             selected = next(ifilter(bool, splits), '')
             return selected
+
         output = pystache.render(template, first=render_first,
                                  **components).strip()
 
+        values = self.whitespace_component_regex.split(output)
+
         output = self.splitter.join([
-            self.strip_component(val)
-            for val in self.whitespace_component_regex.split(output)
+            self.strip_component(val, tagged=tagged)
+            for val in values
         ])
 
         return output
@@ -250,20 +253,31 @@ class AddressFormatter(object):
                 text = re.sub(regex, replacement, text)
         return text
 
-    def strip_component(self, value):
-        tokens = tokenize(value)
-        for i, (c, t) in enumerate(tokens):
-            if c.value < token_types.PERIOD.value:
-                break
+    def strip_component(self, value, tagged=False):
+        if not tagged:
+            tokens = tokenize(value)
+            for i, (c, t) in enumerate(tokens):
+                if c.value < token_types.PERIOD.value:
+                    break
 
-        for j, (c, t) in enumerate(reversed(tokens)):
-            if c.value < token_types.PERIOD.value:
-                break
+            for j, (c, t) in enumerate(reversed(tokens)):
+                if c.value < token_types.PERIOD.value:
+                    break
+            tokens = [t for c, t in tokens]
+        else:
+            tokens = value.split()
+            for i, t in enumerate(tokens):
+                if '/' in t:
+                    break
+
+            for j, t in enumerate(reversed(tokens)):
+                if '/' in t:
+                    break
         if j == 0:
             j = None
         else:
             j = -j
-        return u' '.join([t for c, t in tokens[i:j]])
+        return u' '.join(tokens[i:j])
 
     def format_address(self, country, components, minimal_only=True, tag_components=True):
         template = self.config.get(country.upper())
@@ -290,7 +304,7 @@ class AddressFormatter(object):
             components = {k: u' '.join([t for c, t in tokenize(v)])
                           for k, v in components.iteritems()}
 
-        text = self.render_template(template_text, **components)
+        text = self.render_template(template_text, components, tagged=tag_components)
 
         text = self.post_replacements(template, text)
         return text
