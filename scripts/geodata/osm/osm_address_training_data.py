@@ -624,11 +624,14 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
 
         name_language = defaultdict(list)
 
+        all_langs = country_languages[country]
         official = official_languages[country]
 
         num_langs = len(candidate_languages)
         default_langs = set([l for l, default in official.iteritems() if default])
         num_defaults = len(default_langs)
+
+        defaults_well_represented = all((d in WELL_REPRESENTED_LANGUAGES for d in defaults))
 
         regional_langs = list(chain(*(p['languages'] for p in language_props if p.get('admin_level', 0) > 0)))
 
@@ -666,7 +669,7 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
                 have_qualified_names = True
                 name_language[lang].append(v)
 
-        if not have_qualified_names and len(regional_langs) <= 1 and num_langs == 1 and 'name' in value:
+        if not have_qualified_names and len(regional_langs) <= 1 and 'name' in value and (len(all_langs) == 1 or (num_langs == 1 and not defaults_well_represented)):
             name_language[candidate_languages[0]['lang']].append(value['name'])
 
         for k, v in name_language.iteritems():
