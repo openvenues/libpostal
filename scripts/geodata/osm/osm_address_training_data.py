@@ -141,8 +141,6 @@ class AddressFormatter(object):
 
     aliases = OrderedDict([
         ('name', 'house'),
-        # in OSM this is the type of house, not a real tag
-        ('house', 'house_type'),
         ('addr:housename', 'house'),
         ('addr:housenumber', 'house_number'),
         ('addr:street', 'road'),
@@ -482,6 +480,15 @@ def build_ways_training_data(language_rtree, infile, out_dir):
             i += 1
     f.close()
 
+OSM_IGNORE_KEYS = (
+    'house',
+)
+
+
+def strip_keys(value, ignore_keys):
+    for key in ignore_keys:
+        value.pop(key, None)
+
 
 def build_address_format_training_data(language_rtree, infile, out_dir):
     i = 0
@@ -494,6 +501,8 @@ def build_address_format_training_data(language_rtree, infile, out_dir):
     formatted_tagged_file = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_TAGGED_FILENAME), 'w')
     formatted_tagged_writer = csv.writer(formatted_tagged_file, 'tsv_no_quote')
 
+    remove_keys = OSM_IGNORE_KEYS
+
     for key, value in parse_osm(infile):
         try:
             latitude, longitude = latlon_to_floats(value['lat'], value['lon'])
@@ -503,6 +512,9 @@ def build_address_format_training_data(language_rtree, infile, out_dir):
         country, default_languages, language_props = country_and_languages(language_rtree, latitude, longitude)
         if not (country and default_languages):
             continue
+
+        for key in remove_keys:
+            _ = value.pop(key, None)
 
         formatted_address_tagged = formatter.format_address(country, value)
         formatted_address_untagged = formatter.format_address(country, value, tag_components=False)
@@ -545,7 +557,7 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
     f = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME), 'w')
     writer = csv.writer(f, 'tsv_no_quote')
 
-    remove_keys = NAME_KEYS + COUNTRY_KEYS + POSTAL_KEYS
+    remove_keys = NAME_KEYS + COUNTRY_KEYS + POSTAL_KEYS + OSM_IGNORE_KEYS
 
     for key, value in parse_osm(infile):
         try:
