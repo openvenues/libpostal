@@ -42,8 +42,14 @@ rm $PLANET_ADDRESSES_O5M
 PLANET_ADDRESSES="planet-addresses.osm"
 osmfilter $PLANET_ADDRESSES_LATLONS --keep="addr:street= and ( ( name= and amenity= ) or addr:housename= or addr:housenumber= )" -o=$PLANET_ADDRESSES
 rm $PLANET_ADDRESSES_LATLONS
-PLANET_BORDERS_OSM="planet-borders.osm"
-osmfilter $PLANET_O5M --keep="boundary=administrative or place=city or place=town or place=neighbourhood or place=suburb" --drop-author --drop-version --ignore-dependencies -o=$PLANET_BORDERS_OSM
+
+echo " Filtering for borders: `date`"
+PLANET_BORDERS_O5M="planet-borders.o5m"
+osmfilter $PLANET_O5M --keep="boundary=administrative or place=city or place=town or place=neighbourhood or place=suburb" --drop-author --drop-version -o=$PLANET_BORDERS_O5M
+PLANET_BORDERS="planet-borders.osm"
+osmconvert $PLANET_BORDERS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_BORDERS
+rm $PLANET_BORDERS_O5M
+
 
 echo "Filtering for venue records: `date`"
 PLANET_VENUES_O5M="planet-venues.o5m"
