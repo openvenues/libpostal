@@ -7,7 +7,7 @@ import sys
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
-from geodata.osm.osm_address_training_data import WAYS_LANGUAGE_DATA_FILENAME, ADDRESS_LANGUAGE_DATA_FILENAME
+from geodata.osm.osm_address_training_data import WAYS_LANGUAGE_DATA_FILENAME, ADDRESS_LANGUAGE_DATA_FILENAME, ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME, TOPONYM_LANGUAGE_DATA_FILENAME
 
 LANGUAGES_ALL_FILE = 'languages.all'
 LANGAUGES_RANDOM_FILE = 'languages.random'
@@ -21,13 +21,23 @@ def create_language_training_data(osm_dir, split_data=True, train_split=0.8, cv_
 
     ways_path = os.path.join(osm_dir, WAYS_LANGUAGE_DATA_FILENAME)
 
-    addresses_path = os.path.join(osm_dir, ADDRESS_LANGUAGE_DATA_FILENAME)
-
     if os.system(' '.join(['cat', ways_path, '>', language_all_path])) != 0:
         raise SystemError('Could not find {}'.format(ways_path))
 
+    addresses_path = os.path.join(osm_dir, ADDRESS_LANGUAGE_DATA_FILENAME)
+
     if os.system(' '.join(['cat', addresses_path, '>>', language_all_path])) != 0:
         raise SystemError('Could not find {}'.format(addresses_path))
+
+    formatted_path = os.path.join(osm_dir, ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME)
+
+    if os.system(' '.join(['cat', formatted_path, '>>', language_all_path])) != 0:
+        raise SystemError('Could not find {}'.format(formatted_path))
+
+    toponyms_path = os.path.join(osm_dir, TOPONYM_LANGUAGE_DATA_FILENAME)
+
+    if os.system(' '.join(['cat', toponyms_path, '>>', language_all_path])) != 0:
+        raise SystemError('Could not find {}'.format(toponyms_path))
 
     languages_random_path = os.path.join(osm_dir, LANGAUGES_RANDOM_FILE)
 
