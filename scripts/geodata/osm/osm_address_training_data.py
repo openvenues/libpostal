@@ -256,6 +256,7 @@ class AddressFormatter(object):
         return text
 
     def strip_component(self, value, tagged=False):
+        i = j = 0
         if not tagged:
             tokens = tokenize(value)
             for i, (c, t) in enumerate(tokens):
