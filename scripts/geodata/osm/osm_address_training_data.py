@@ -626,7 +626,7 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
 
         official = official_languages[country]
 
-        num_langs = len(candidate_languages)
+        num_langs = len(official)
         default_langs = set([l for l, default in official.iteritems() if default])
         num_defaults = len(default_langs)
 
@@ -665,7 +665,7 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
                 name_language[lang].append(v)
 
         if not have_qualified_names and num_langs == 1 and 'name' in value:
-            name_language[candidate_languages[0]['lang']].append(value['name'])
+            name_language[top_lang].append(value['name'])
 
         for k, v in name_language.iteritems():
             for s in v:
