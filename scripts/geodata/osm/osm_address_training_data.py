@@ -23,7 +23,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
 
 from address_normalizer.text.tokenize import *
-from geodata.language_id.disambiguation import street_types_gazetteer, disambiguate_language, WELL_REPRESENTED_LANGUAGES, UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE
+from geodata.language_id.disambiguation import *
 from geodata.language_id.polygon_lookup import country_and_languages
 from geodata.i18n.languages import *
 from geodata.polygons.language_polys import *
@@ -644,9 +644,6 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
 
         num_langs = len(candidate_languages)
         default_langs = set([l for l, default in official.iteritems() if default])
-        num_defaults = len(default_langs)
-
-        defaults_well_represented = all((d in WELL_REPRESENTED_LANGUAGES for d in default_langs))
 
         regional_langs = list(chain(*(p['languages'] for p in language_props if p.get('admin_level', 0) > 0)))
 
@@ -654,12 +651,14 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
         if len(official) > 0:
             top_lang = official.iterkeys().next()
 
+        # E.g. Hindi in India, Urdu in Pakistan
         if top_lang is not None and top_lang not in WELL_REPRESENTED_LANGUAGES and len(default_langs) > 1:
             default_langs -= WELL_REPRESENTED_LANGUAGES
-        elif len(default_langs & WELL_REPRESENTED_LANGUAGES) > 1:
-            continue
 
-        valid_languages = (set([l['lang'] for l in candidate_languages]) - WELL_REPRESENTED_LANGUAGES) | default_langs
+        valid_languages = set([l['lang'] for l in candidate_languages])
+        valid_languages -= set([lang for lang in valid_languages if lang in WELL_REPRESENTED_LANGUAGES and country not in WELL_REPRESENTED_LANGUAGE_COUNTRIES[lang]])
+
+        valid_languages |= default_langs
 
         if not valid_languages:
             continue
@@ -684,7 +683,7 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
                 have_qualified_names = True
                 name_language[lang].append(v)
 
-        if not have_qualified_names and len(regional_langs) <= 1 and 'name' in value and (len(all_langs) == 1 or (num_langs == 1 and not defaults_well_represented)):
+        if not have_qualified_names and len(regional_langs) <= 1 and 'name' in value and num_langs == 1:
             name_language[candidate_languages[0]['lang']].append(value['name'])
 
         for k, v in name_language.iteritems():

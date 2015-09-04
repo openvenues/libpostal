@@ -17,7 +17,21 @@ from geodata.i18n.unicode_properties import get_chars_by_script, get_script_lang
 from address_normalizer.text.normalize import PhraseFilter
 from address_normalizer.text.tokenize import *
 
-WELL_REPRESENTED_LANGUAGES = set(['en', 'fr', 'it', 'de', 'nl', 'es'])
+WELL_REPRESENTED_LANGUAGES = set(['en', 'fr', 'it', 'de', 'nl', 'es', 'pt'])
+
+# For toponyms, we want to limit the countries we consider to those where
+# we the place names can themselves be considered training examples of the language
+WELL_REPRESENTED_LANGUAGE_COUNTRIES = {
+    'en': set(['gb', 'us', 'ca', 'au', 'nz', 'ie']),
+    'fr': set(['fr']),
+    'it': set(['it']),
+    'de': set(['de', 'at']),
+    'nl': set(['nl']),
+    'es': set(['es', 'ar', 'mx', 'cl', 'co', 'pe', 'ec', 'pr', 'uy',
+               've', 'cu', 'do', 'bo', 'gt', 'cr', 'py', 'sv', 'pa',
+               'ni', 'hn']),
+    'pt': set(['pt', 'br']),
+}
 
 DICTIONARIES_DIR = os.path.join(DATA_DIR, 'dictionaries')
 
