@@ -624,12 +624,17 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
 
         name_language = defaultdict(list)
 
+        official = official_languages[country]
+
         num_langs = len(candidate_languages)
-        default_langs = set([l for l, default in official_languages[country].iteritems() if default])
+        default_langs = set([l for l, default in official.iteritems() if default])
         num_defaults = len(default_langs)
 
-        top_lang = official_languages[country].iterkeys().next()
-        if top_lang not in WELL_REPRESENTED_LANGUAGES and len(default_langs) > 1:
+        top_lang = None
+        if len(official) > 0:
+            top_lang = official.iterkeys().next()
+
+        if top_lang is not None and top_lang not in WELL_REPRESENTED_LANGUAGES and len(default_langs) > 1:
             default_langs -= WELL_REPRESENTED_LANGUAGES
         elif len(default_langs & WELL_REPRESENTED_LANGUAGES) > 1:
             continue
