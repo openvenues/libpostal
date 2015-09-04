@@ -631,7 +631,7 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
         default_langs = set([l for l, default in official.iteritems() if default])
         num_defaults = len(default_langs)
 
-        defaults_well_represented = all((d in WELL_REPRESENTED_LANGUAGES for d in defaults))
+        defaults_well_represented = all((d in WELL_REPRESENTED_LANGUAGES for d in default_langs))
 
         regional_langs = list(chain(*(p['languages'] for p in language_props if p.get('admin_level', 0) > 0)))
 
