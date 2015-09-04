@@ -141,6 +141,8 @@ class AddressFormatter(object):
 
     aliases = OrderedDict([
         ('name', 'house'),
+        # in OSM this is the type of house, not a real tag
+        ('house', 'house_type'),
         ('addr:housename', 'house'),
         ('addr:housenumber', 'house_number'),
         ('addr:street', 'road'),
