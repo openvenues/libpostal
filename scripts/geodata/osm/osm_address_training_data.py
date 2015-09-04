@@ -664,8 +664,8 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
                 have_qualified_names = True
                 name_language[lang].append(v)
 
-        if not have_qualified_names and num_langs == 1:
-            name_language[candidate_languages[0]['lang']].append(v)
+        if not have_qualified_names and num_langs == 1 and 'name' in value:
+            name_language[candidate_languages[0]['lang']].append(value['name'])
 
         for k, v in name_language.iteritems():
             for s in v:
