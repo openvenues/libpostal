@@ -25,6 +25,8 @@ void matrix_set(matrix_t *self, double value);
 void matrix_set_row(matrix_t *self, size_t index, double *row);
 void matrix_set_scalar(matrix_t *self, size_t row_index, size_t col_index, double value);
 
+double matrix_get(matrix_t *self, size_t row_index, size_t col_index);
+
 void matrix_scale(matrix_t *self, double value);
 void matrix_dot_vector(matrix_t *self, double *vec, double *result);
 int matrix_dot_matrix(matrix_t *m1, matrix_t *m2, matrix_t *result);

@@ -1,6 +1,5 @@
 #include "matrix.h"
 
-
 matrix_t *matrix_new(size_t m, size_t n) {
     matrix_t *matrix = malloc(sizeof(matrix_t));
 
@@ -48,6 +47,11 @@ inline void matrix_set_scalar(matrix_t *self, size_t row_index, size_t col_index
     size_t offset = row_index * self->m + col_index;
     double *values = self->values;
     values[offset] = value;
+}
+
+inline double matrix_get(matrix_t *self, size_t row_index, size_t col_index) {
+    size_t index = row_index * self->n + col_index;
+    return self->values->a[index];
 }
 
 inline matrix_t *matrix_new_value(size_t m, size_t n, double value) {
