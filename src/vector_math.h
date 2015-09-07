@@ -10,13 +10,6 @@
     __VECTOR_BASE(name, type)                                                  \
     __VECTOR_DESTROY(name, type)                                               \
                                                                                \
-    static inline name *name##_copy(name *vector, size_t n) {                  \
-        name *cpy = name##_new_size(n);                                        \
-        memcpy(vector->a, cpy->a, n * sizeof(type));                           \
-        cpy->n = n;                                                            \
-        return cpy;                                                            \
-    }                                                                          \
-                                                                               \
     static inline void type##_array_set(type *array, size_t n, type value) {   \
         for (int i = 0; i < n; i++) {                                          \
             array[i] = value;                                                  \

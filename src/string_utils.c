@@ -498,13 +498,6 @@ inline void char_array_terminate(char_array *array) {
     char_array_push(array, '\0');
 }
 
-inline char_array *char_array_copy(char_array *array) {
-    char_array *copy = char_array_new_size(array->m);
-    memcpy(copy->a, array->a, array->n);
-    copy->n = array->n;
-    return copy;
-}
-
 inline void char_array_cat(char_array *array, char *str) {
     char_array_strip_nul_byte(array);
     char_array_append(array, str);
