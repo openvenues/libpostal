@@ -625,7 +625,7 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
     writer = csv.writer(f, 'tsv_no_quote')
 
     for key, value in parse_osm(infile):
-        if not sum((1 for k, v in value.iteritems() if k.startswith('name:'))) > 0:
+        if not sum((1 for k, v in value.iteritems() if k.startswith('name'))) > 0:
             continue
 
         try:
