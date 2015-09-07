@@ -106,6 +106,8 @@ void sparse_matrix_sort_indices(sparse_matrix_t *self) {
 
 
 inline int sparse_matrix_dot_vector(sparse_matrix_t *self, double *vec, size_t n, double *result) {
+    if (n != self->m) return -1;
+
     uint32_t row, row_start, row_len;
     double val;
     double *data = self->data->a;
@@ -121,6 +123,8 @@ inline int sparse_matrix_dot_vector(sparse_matrix_t *self, double *vec, size_t n
 }
 
 int sparse_matrix_rows_dot_vector(sparse_matrix_t *self, uint32_t *rows, size_t m, double *vec, size_t n, double *result) {
+    if (m != n) return -1;
+
     uint32_t *indptr = self->indptr->a;
     uint32_t *indices = self->indices->a;
     double *data = self->data->a;
@@ -140,6 +144,85 @@ int sparse_matrix_rows_dot_vector(sparse_matrix_t *self, uint32_t *rows, size_t 
     }
     return 0;
 }
+
+int sparse_matrix_sum_cols(sparse_matrix_t *self, double *result, size_t n) {
+    if (n != self->m) return -1;
+
+    uint32_t row, row_start, row_len;
+    double val;
+    double *data = self->data->a;
+
+    sparse_matrix_foreach_row(self, row, row_start, row_len, {
+        double sum = result[row];
+        for (uint32_t col = row_start; col < row_start + row_len; col++) {
+            sum += data[col];
+        }
+        result[row] = sum;
+    })
+    return 0;
+
+}
+
+// No need to allocate actual vector for values, sum rather than a dot product
+int sparse_matrix_rows_sum_cols(sparse_matrix_t *self, uint32_t *rows, size_t m, double *result, size_t n) {
+    if (m != n) return -1;
+
+    uint32_t *indptr = self->indptr->a;
+    uint32_t *indices = self->indices->a;
+    double *data = self->data->a;
+
+    for (int i = 0; i < m; i++) {
+        uint32_t row = rows[i];
+
+        double sum = result[i];
+        if (row >= self->m) return -1;
+
+        for (int j = indptr[row]; j < indptr[row+1]; j++) {
+            sum += data[j];
+        }
+
+        result[i] = sum;
+    }
+    return 0;
+}
+
+
+int sparse_matrix_sum_all_rows(sparse_matrix_t *self, double *result, size_t n) {
+    if (n != self->n) return -1;
+
+    uint32_t row, row_start, row_len;
+    double val;
+    double *data = self->data->a;
+
+    sparse_matrix_foreach_row(self, row, row_start, row_len, {
+        for (uint32_t col = row_start; col < row_start + row_len; col++) {
+            result[col] += data[col];
+        }
+    })
+    return 0;
+
+}
+
+int sparse_matrix_sum_rows(sparse_matrix_t *self, uint32_t *rows, size_t m, double *result, size_t n);
+    if (n != self->n) return -1;
+
+    uint32_t *indptr = self->indptr->a;
+    uint32_t *indices = self->indices->a;
+    double *data = self->data->a;
+
+    for (int i = 0; i < m; i++) {
+        uint32_t row = rows[i];
+
+        if (row >= self->m) return -1;
+
+        for (int j = indptr[row]; j < indptr[row+1]; j++) {
+            result[j] += data[j];
+        }
+    }
+    return 0;
+}
+
+
 
 int sparse_matrix_dot_dense(sparse_matrix_t *self, matrix_t *matrix, matrix_t *result) {
     if (self->n != matrix->m || self->m != result->m || matrix->n != result->n) {

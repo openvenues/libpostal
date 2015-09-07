@@ -1,3 +1,39 @@
+/*
+sparse_matrix.h
+---------------
+
+Double-valued dynamic compressed sparse row (CSR) sparse matrix.
+
+A sparse matrix is a matrix where an overwhelming number of the
+entries are 0. Thus we get significant space/time advantages
+from only storing the non-zero values.
+
+These types of matrices arise often when representing graphs
+and term-document matrices in text collections.
+
+The compressed sparse row format stores the following 3x4
+dense matrix:
+
+{   1.0, 0.0, 0.0, 0.0,
+    0.0, 1.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 2.0  }
+
+with the following 3 arrays:
+
+indptr = { 0, 1, 2, 3 }
+indices = { 0, 1, 3 }
+data = { 1.0, 1.0, 2.0 }
+
+For a given row i, the indices indptr[i] through indptr[i+1]
+denotes the number of nonzero columns in row i. The column
+indices can be found at that contiguous location in indices
+and the data values can be found at the same location in the
+data array.
+
+Sparse matrix row iteration, row indexing, scalar arithmetic
+and dot products with vectors and dense matrices are efficient.
+*/
+
 #ifndef SPARSE_MATRIX_H
 #define SPARSE_MATRIX_H
 
@@ -9,11 +45,6 @@
 #include "file_utils.h"
 #include "matrix.h"
 #include "vector.h"
-
-// Simple, partial sparse matrix implementation
-
-
-// Double-valued dynamic compressed sparse row (CSR) sparse matrix
 
 typedef struct {
     uint32_t m;
@@ -38,6 +69,13 @@ void sparse_matrix_sort_indices(sparse_matrix_t *self);
 
 int sparse_matrix_dot_vector(sparse_matrix_t *self, double *vec, size_t n, double *result);
 int sparse_matrix_rows_dot_vector(sparse_matrix_t *self, uint32_t *rows, size_t m, double *vec, size_t n, double *result);
+
+// No need to allocate vector. Equivalent to doing a dot product with a vector of all ones
+int sparse_matrix_sum_cols(sparse_matrix_t *self, double *result, size_t n);
+int sparse_matrix_rows_sum_cols(sparse_matrix_t *self, uint32_t *rows, size_t m, double *result, size_t n);
+
+int sparse_matrix_sum_all_rows(sparse_matrix_t *self, double *result, size_t n);
+int sparse_matrix_sum_rows(sparse_matrix_t *self, uint32_t *rows, size_t m, double *result, size_t n);
 
 int sparse_matrix_dot_dense(sparse_matrix_t *self, matrix_t *matrix, matrix_t *result);
 
