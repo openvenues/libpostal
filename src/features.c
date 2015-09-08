@@ -23,3 +23,20 @@ void feature_array_add(cstring_array *features, size_t count, ...) {
 
     va_end(args);
 }
+
+
+bool feature_counts_update(khash_t(str_uint32) *features, char *feature, int count) {
+    khiter_t k;
+
+    k = kh_get(str_uint32, features, feature);
+    if (k == kh_end(features)) {
+        int ret;
+        k = kh_put(str_uint32, features, feature, &ret);
+        if (ret < 0) return false;
+
+        kh_value(features, k) = count;
+    } else {
+        kh_value(features, k) += count;
+    }
+    return true;
+}
