@@ -651,11 +651,11 @@ bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, size_t len, ui
         if (node.check < 0 || (node.check != last_node_id)) {
             log_debug("last_node_id=%d, ptr=%s, tail_pos=%zu\n", last_node_id,  ptr, self->tail->n);
             trie_separate_tail(self, last_node_id, ptr, data);
-            return true;
+            break;
         } else if (node.base < 0 && node.check == last_node_id) {
             log_debug("Case 3 insertion\n");
             trie_tail_merge(self, node_id, ptr + 1, data);
-            return true;
+            break;
         }
     }
 
