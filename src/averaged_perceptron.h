@@ -9,16 +9,17 @@ The averaged perceptron is a linear model, meaning the score for a given class
 is the dot product of weights and the feature values.
 
 This implementation of the averaged perceptron uses a trie data structure to
-store the mapping from features to ids, which can be quite memory efficient
-as opposed to a hash table and allows us to store 
+store the mapping from features to indices, which can be quite memory efficient
+as opposed to a hash table and allows us to store millions of features with
+very little memory.
 
 The weights are stored as a sparse matrix in compressed sparse row format
 (see sparse_matrix.h)
 
-See [Collins, 2002] Discriminative Training Methods for Hidden Markov Models: 
-                    Theory and Experiments with Perceptron Algorithms
+Paper: [Collins, 2002] Discriminative Training Methods for Hidden Markov Models: 
+                       Theory and Experiments with Perceptron Algorithms
 
-Paper: http://www.cs.columbia.edu/~mcollins/papers/tagperc.pdf
+Link: http://www.cs.columbia.edu/~mcollins/papers/tagperc.pdf
 */
 #ifndef AVERAGED_PERCEPTRON_H
 #define AVERAGED_PERCEPTRON_H
