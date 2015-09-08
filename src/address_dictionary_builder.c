@@ -24,16 +24,16 @@ int main(int argc, char **argv) {
 
     address_dictionary_t *address_dict = get_address_dictionary();
 
-    khash_t(int_int) *dictionary_components = kh_init(int_int);
+    khash_t(int_uint32) *dictionary_components = kh_init(int_uint32);
 
-    khash_t(str_int) *canonical_indices = kh_init(str_int);
+    khash_t(str_uint32) *canonical_indices = kh_init(str_uint32);
 
     khiter_t k;
 
     for (int g = 0; g < NUM_DICTIONARY_TYPES; g++) {
         gazetteer_t gazetteer = gazetteer_config[g];
         int ret;
-        k = kh_put(int_int, dictionary_components, (uint32_t)gazetteer.type, &ret);
+        k = kh_put(int_uint32, dictionary_components, (uint32_t)gazetteer.type, &ret);
         kh_value(dictionary_components, k) = (uint32_t) gazetteer.address_components;
     }
 
@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
                     expansion.separable = 1;
                 }
 
-                k = kh_get(int_int, dictionary_components, (uint32_t)dictionary_id);
+                k = kh_get(int_uint32, dictionary_components, (uint32_t)dictionary_id);
                 if (k == kh_end(dictionary_components)) {
                     log_error("Invalid dictionary_type: %d\n", dictionary_id);
                     exit(EXIT_FAILURE);
@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
             if (canonical == NULL) {
                 expansion.canonical_index = -1;
             } else {
-                k = kh_get(str_int, canonical_indices, canonical);
+                k = kh_get(str_uint32, canonical_indices, canonical);
                 if (k != kh_end(canonical_indices)) {
                     expansion.canonical_index = kh_value(canonical_indices, k);
                 } else {
@@ -118,9 +118,9 @@ int main(int argc, char **argv) {
 
     char_array_destroy(key);
 
-    kh_destroy(int_int, dictionary_components);
+    kh_destroy(int_uint32, dictionary_components);
 
-    kh_destroy(str_int, canonical_indices);
+    kh_destroy(str_uint32, canonical_indices);
 
     address_dictionary_module_teardown();
 }

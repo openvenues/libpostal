@@ -14,15 +14,15 @@
 
 // Maps
 
-KHASH_MAP_INIT_INT(int_int, uint32_t)
+KHASH_MAP_INIT_INT(int_uint32, uint32_t)
 
 #define kh_char_hash_func(key) (uint32_t)(key)
 #define kh_char_hash_equal(a, b) ((a) == (b))
 
-KHASH_INIT(char_int, char, uint32_t, 1, kh_char_hash_func, kh_char_hash_equal)
-KHASH_INIT(uchar_int, unsigned char, uint32_t, 1, kh_char_hash_func, kh_char_hash_equal)
+KHASH_INIT(char_uint32, char, uint32_t, 1, kh_char_hash_func, kh_char_hash_equal)
+KHASH_INIT(uchar_uint32, unsigned char, uint32_t, 1, kh_char_hash_func, kh_char_hash_equal)
 
-KHASH_MAP_INIT_STR(str_int, uint32_t)
+KHASH_MAP_INIT_STR(str_uint32, uint32_t)
 KHASH_MAP_INIT_INT(int_str, char *)
 KHASH_MAP_INIT_STR(str_str, char *)
 
