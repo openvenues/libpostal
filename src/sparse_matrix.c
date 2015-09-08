@@ -203,7 +203,7 @@ int sparse_matrix_sum_all_rows(sparse_matrix_t *self, double *result, size_t n) 
 
 }
 
-int sparse_matrix_sum_rows(sparse_matrix_t *self, uint32_t *rows, size_t m, double *result, size_t n);
+int sparse_matrix_sum_rows(sparse_matrix_t *self, uint32_t *rows, size_t m, double *result, size_t n) {
     if (n != self->n) return -1;
 
     uint32_t *indptr = self->indptr->a;
