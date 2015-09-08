@@ -31,6 +31,7 @@
     static inline name *name##_new_zeros(size_t n) {                           \
         name *vector = name##_new_size(n);                                     \
         memset(vector->a, 0, n * sizeof(type));                                \
+        vector->n = n;                                                         \
         return name##_new_value(n, (type)0);                                   \
     }                                                                          \
                                                                                \
