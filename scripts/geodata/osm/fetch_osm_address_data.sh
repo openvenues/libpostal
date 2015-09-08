@@ -46,9 +46,11 @@ rm $PLANET_ADDRESSES_LATLONS
 echo " Filtering for borders: `date`"
 PLANET_BORDERS_O5M="planet-borders.o5m"
 osmfilter $PLANET_O5M --keep="boundary=administrative or place=city or place=town or place=neighbourhood or place=suburb" --drop-author --drop-version -o=$PLANET_BORDERS_O5M
-PLANET_BORDERS="planet-borders.osm"
-osmconvert $PLANET_BORDERS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_BORDERS
+PLANET_BORDERS_LATLONS="planet-borders-latlons.o5m"
+osmconvert $PLANET_BORDERS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_BORDERS_LATLONS
 rm $PLANET_BORDERS_O5M
+osmfilter $PLANET_BORDERS_LATLONS --keep="boundary=administrative or place=city or place=town or place=neighbourhood or place=suburb" -o=$PLANET_BORDERS
+rm $PLANET_BORDERS_LATLONS
 
 
 echo "Filtering for venue records: `date`"
