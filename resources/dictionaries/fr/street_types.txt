@@ -126,6 +126,7 @@ quai|au
 raccourci|rac|racc
 raidillon|raid
 rampe|rpe|rmpe|rmp
+rang
 rempart|rem|remp
 rocade|rocd
 ronde|rnde
