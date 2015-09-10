@@ -14,6 +14,8 @@ DEFAULT_POLYS_FILENAME = 'polygons.geojson'
 
 class RTreePolygonIndex(object):
     include_only_properties = None
+    simplify_tolerance = 0.0001
+    preserve_topology = True
 
     def __init__(self, index=None, polygons=None, save_dir=None,
                  index_filename=None,
@@ -46,7 +48,11 @@ class RTreePolygonIndex(object):
     def index_polygon(self, id, polygon):
         self.index.insert(id, polygon.bounds)
 
-    def simplify_polygon(self, poly, simplify_tolerance=0.0001, preserve_topology=True):
+    def simplify_polygon(self, poly, simplify_tolerance=None, preserve_topology=None):
+        if simplify_tolerance is None:
+            simplify_tolerance = self.simplify_tolerance
+        if preserve_topology is None:
+            preserve_topology = self.preserve_topology
         return poly.simplify(simplify_tolerance, preserve_topology=preserve_topology)
 
     def add_polygon(self, poly, properties):

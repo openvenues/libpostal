@@ -26,6 +26,8 @@ class LanguagePolygonIndex(RTreePolygonIndex):
         'admin_level'
     ])
 
+    simplify_tolerance = 0.00001
+
     @classmethod
     def create_from_shapefiles(cls,
                                admin0_shapefile,
