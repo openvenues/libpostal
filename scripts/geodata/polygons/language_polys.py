@@ -91,7 +91,12 @@ class LanguagePolygonIndex(RTreePolygonIndex):
                     if not regional:
                         continue
 
-                    languages = regional.items()
+                    if all((not default for lang, default in regional.iteritems())):
+                        languages = get_country_languages(country)
+                        languages.update(regional)
+                        languages = languages.items()
+                    else:
+                        languages = regional.items()
                 else:
                     languages = get_country_languages(country).items()
 

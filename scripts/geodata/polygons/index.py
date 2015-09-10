@@ -31,7 +31,7 @@ class RTreePolygonIndex(object):
             self.index_path = None
 
         if not index and self.index_path:
-            self.index = rtree.index.Index(self.index_path)
+            self.index = rtree.index.Index(self.index_path, overwrite=True)
         elif not index:
             self.index = rtree.index.Index()
         else:
@@ -44,6 +44,11 @@ class RTreePolygonIndex(object):
             self.polygons = []
         else:
             self.polygons = polygons
+
+        self.post_init()
+
+    def post_init(self):
+        pass
 
     def index_polygon(self, id, polygon):
         self.index.insert(id, polygon.bounds)
