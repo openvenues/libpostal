@@ -219,12 +219,12 @@ it	osm	relation:44874	oc	0
 it	qs_a1r	LIGURIA	oc	0
 it	gn_id	3174725	oc	0
 it	osm	relation:301482	oc	0
-it	qs_a1r	VALLE D'AOSTA/VALLÉE D'AOSTE	fr	1
-it	gn_id	3164857	fr	1
-it	osm	relation:45155	fr	1
-it	qs_a1r	TRENTINO-ALTO ADIGE/SUDTIROL	de	1
-it	gn_id	3165244	de	1
-it	osm	relation:47046	de	1
+it	qs_a1r	VALLE D'AOSTA/VALLÉE D'AOSTE	fr,it	1
+it	gn_id	3164857	fr,it	1
+it	osm	relation:45155	fr,it	1
+it	qs_a1r	TRENTINO-ALTO ADIGE/SUDTIROL	de,it	1
+it	gn_id	3165244	de,it	1
+it	osm	relation:47046	de,it	1
 it	qs_a1r	FRIULI VENEZIA GIULIA	sl	0
 it	gn_id	3176525	sl	0
 it	osm	relation:179296	sl	0
