@@ -40,14 +40,14 @@ int string_compare_len_case_insensitive(const char *str1, const char *str2, size
 
 }
 
-size_t string_common_prefix(const char *str1, const char *str2) {
+inline size_t string_common_prefix(const char *str1, const char *str2) {
     size_t common_prefix;
     for (common_prefix = 0; *str1 && *str2 && *str1 == *str2; str1++, str2++)
         common_prefix++;
     return common_prefix;
 }
 
-size_t string_common_suffix(const char *str1, const char *str2) {
+inline size_t string_common_suffix(const char *str1, const char *str2) {
     size_t common_suffix = 0;
     size_t str1_len = strlen(str1);
     size_t str2_len = strlen(str2);
@@ -57,36 +57,36 @@ size_t string_common_suffix(const char *str1, const char *str2) {
     return common_suffix;
 }
 
-bool string_starts_with(const char *str, const char *start) {
+inline bool string_starts_with(const char *str, const char *start) {
     for (; *start; str++, start++)
         if (*str != *start)
             return false;
     return true;
 }
 
-bool string_ends_with(const char *str, const char *ending) {
+inline bool string_ends_with(const char *str, const char *ending) {
     int end_len = strlen(ending);
     int str_len = strlen(str);
 
     return str_len < end_len ? false : !strcmp(str + str_len - end_len, ending);
 }
 
-void string_upper(char *s) {
+inline void string_upper(char *s) {
     for (; *s; ++s) *s = toupper(*s);
 }
 
-bool string_is_upper(char *s) {
+inline bool string_is_upper(char *s) {
     for (; *s; ++s) {
         if (*s != toupper(*s)) return false;
     }
     return true;
 }
 
-void string_lower(char *s) {
+inline void string_lower(char *s) {
     for (; *s; ++s) *s = tolower(*s);
 }
 
-bool string_is_lower(char *s) {
+inline bool string_is_lower(char *s) {
     for (; *s; ++s) {
         if (*s != tolower(*s)) return false;
     }
