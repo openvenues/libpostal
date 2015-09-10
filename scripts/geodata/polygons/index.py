@@ -45,11 +45,6 @@ class RTreePolygonIndex(object):
         else:
             self.polygons = polygons
 
-        self.post_init()
-
-    def post_init(self):
-        pass
-
     def index_polygon(self, id, polygon):
         self.index.insert(id, polygon.bounds)
 
