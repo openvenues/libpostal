@@ -42,7 +42,7 @@ VECTOR_INIT_NUMERIC_FLOAT(double_array, double)
 
 VECTOR_INIT(char_array, char)
 VECTOR_INIT(uchar_array, unsigned char)
-
+VECTOR_INIT(string_array, char *)
  
 
 #endif
