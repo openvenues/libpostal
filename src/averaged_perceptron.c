@@ -26,7 +26,7 @@ inline double_array *averaged_perceptron_predict_scores(averaged_perceptron_t *s
             continue;
         }
 
-        for (int col = indptr[feature_id]; col < indptr[feature_id+1]; col++) {
+        for (int col = indptr[feature_id]; col < indptr[feature_id + 1]; col++) {
             uint32_t class_id = indices[col];
             scores[class_id] += data[col];
         }

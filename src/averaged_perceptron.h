@@ -15,11 +15,6 @@ very little memory.
 
 The weights are stored as a sparse matrix in compressed sparse row format
 (see sparse_matrix.h)
-
-Paper: [Collins, 2002] Discriminative Training Methods for Hidden Markov Models: 
-                       Theory and Experiments with Perceptron Algorithms
-
-Link: http://www.cs.columbia.edu/~mcollins/papers/tagperc.pdf
 */
 #ifndef AVERAGED_PERCEPTRON_H
 #define AVERAGED_PERCEPTRON_H
