@@ -21,8 +21,7 @@ int string_compare_len_case_insensitive(const char *str1, const char *str2, size
 
     unsigned char c1, c2;
 
-    if (!len)
-        return 0;
+    if (len == 0) return 0;
 
     do {
         c1 = *s1++;
@@ -424,7 +423,15 @@ char_array *char_array_from_string(char *str) {
     size_t len = strlen(str);
     char_array *array = char_array_new_size(len+1);
     strcpy(array->a, str);
-    array->n = strlen(str);
+    array->n = len;
+    return array;
+}
+
+char_array *char_array_from_string_no_copy(char *str, size_t n) {
+    char_array *array = malloc(sizeof(char_array));
+    array->a = str;
+    array->m = n;
+    array->n = n;
     return array;
 }
 
@@ -772,6 +779,27 @@ cstring_array *cstring_array_split(char *str, const char *separator, size_t sepa
 
     return string_array;
 }
+
+cstring_array *cstring_array_split_no_copy(char *str, char separator, int *count) {
+    *count = 0;
+    char *ptr = str;
+    size_t len = strlen(str);
+
+    size_t skip_len = 1;
+
+    for (int i = 0; i < len; i++, ptr++) {
+        if (*ptr == separator) {
+            *ptr = '\0';
+        }
+    }
+
+    char_array *array = char_array_from_string_no_copy(str, len);
+    cstring_array *string_array = cstring_array_from_char_array(array);
+    *count = cstring_array_num_strings(string_array);
+
+    return string_array;
+}
+
 
 char **cstring_array_to_strings(cstring_array *self) {
     char **strings = malloc(self->indices->n * sizeof(char *));

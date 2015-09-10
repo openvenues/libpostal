@@ -1,7 +1,11 @@
+/*
+string_utils.h
+--------------
+
+Utilities for manipulating strings in C.
+*/
 #ifndef STRING_UTILS_H
 #define STRING_UTILS_H
-
- 
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -35,7 +39,7 @@
 #define UTF8PROC_OPTIONS_LOWERCASE UTF8PROC_OPTIONS_BASE | UTF8PROC_CASEFOLD
 
 
-// NOTE: this particular implementation works only for ASCII strings
+// ASCII string methods
 int string_compare_case_insensitive(const char *str1, const char *str2);
 int string_compare_len_case_insensitive(const char *str1, const char *str2, size_t len);
 size_t string_common_prefix(const char *str1, const char *str2);
@@ -51,6 +55,7 @@ bool string_ends_with(const char *str, const char *ending);
 
 uint32_t string_translate(char *str, size_t len, char *word_chars, char *word_repls, size_t trans_len);
 
+// UTF-8 string methods
 char *utf8_reversed_string(const char *s); // returns a copy, caller frees
 ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *dst);
 
@@ -76,41 +81,49 @@ size_t string_ltrim(char *str);
 size_t string_rtrim(char *str);
 size_t string_trim(char *str);
 
-/* Caller has to free the original string,
-   also keep in mind that after operating on a char array,
-   the pointer to the original string may get realloc'd and change
-   so need to set the char pointer to array.a when done.
-   Consider a macro which does this consistently
+/* char_array is a dynamic character array defined in collections.h
+but has a few additional methods related to string manipulation.
+
+The array pointer can be treated as a plain old C string for methods
+expecting NUL-terminated char pointers, but operations like 
+concatenation are cheap and safe.
 */
 char_array *char_array_from_string(char *str);
+char_array *char_array_from_string_no_copy(char *str, size_t n);
+
+// Gets the underlying C string for a char_array
 char *char_array_get_string(char_array *array);
 
 // Frees the char_array and returns a standard NUL-terminated string
 char *char_array_to_string(char_array *array);
 
+// Can use strlen(array->a) but this is faster
 size_t char_array_len(char_array *array);
 
+// append_* methods do not NUL-terminate
 void char_array_append(char_array *array, char *str);
 void char_array_append_len(char_array *array, char *str, size_t len);
 void char_array_append_reversed(char_array *array, char *str);
 void char_array_append_reversed_len(char_array *array, char *str, size_t len);
+// add NUL terminator to a char_array
 void char_array_terminate(char_array *array);
 
-// Similar to strcat, strips NUL-byte and guarantees 0-terminated
+// Similar to strcat but with dynamic resizing, guaranteed NUL-terminated
 void char_array_cat(char_array *array, char *str);
 void char_array_cat_len(char_array *array, char *str, size_t len);
 void char_array_cat_reversed(char_array *array, char *str);
 void char_array_cat_reversed_len(char_array *array, char *str, size_t len);
 
-// Cat with printf args
+// Similar to cat methods but with printf args
 void char_array_cat_printf(char_array *array, char *format, ...);
 
+// Mainly for paths or delimited strings
 void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...);
 void char_array_cat_joined(char_array *array, char *separator, bool strip_separator, int count, ...);
 
 
 /*
-cstring_arrays represent n strings stored contiguously, delimited by NUL-byte.
+cstring_arrays represent n strings stored contiguously, delimited by the NUL byte.
 
 Instead of storing an array of char pointers (char **), cstring_arrays use this format:
 
@@ -142,11 +155,15 @@ void cstring_array_clear(cstring_array *self);
 
 cstring_array *cstring_array_from_char_array(char_array *str);
 
+// Convert cstring_array to an array of n C strings and destroy the cstring_array
 char **cstring_array_to_strings(cstring_array *self);
 
+// Split on delimiter
 cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, int *count);
 
-void cstring_array_join_strings(cstring_array *self, char *separator, int count, ...);
+// Split on delimiter by replacing (single character) separator with the NUL byte in the original string
+cstring_array *cstring_array_split_no_copy(char *str, char separator, int *count);
+
 uint32_t cstring_array_start_token(cstring_array *self);
 uint32_t cstring_array_add_string(cstring_array *self, char *str);
 uint32_t cstring_array_add_string_len(cstring_array *self, char *str, size_t len);
