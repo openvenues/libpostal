@@ -542,7 +542,7 @@ inline void char_array_add_len(char_array *array, char *str, size_t len) {
 }
 
 
-static void vchar_array_append_joined(char_array *array, char *separator, bool strip_separator, int count, va_list args) {
+void char_array_append_vjoined(char_array *array, char *separator, bool strip_separator, int count, va_list args) {
     if (count <= 0) {
         return;        
     }
@@ -552,7 +552,6 @@ static void vchar_array_append_joined(char_array *array, char *separator, bool s
     for (size_t i = 0; i < count - 1; i++) {
         char *arg = va_arg(args, char *);
         size_t len = strlen(arg);
-        if (len == 0) continue;
 
         if (strip_separator && 
             ((separator_len == 1 && arg[len-1] == separator[0]) || 
@@ -573,7 +572,7 @@ static void vchar_array_append_joined(char_array *array, char *separator, bool s
 inline void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...) {
     va_list args;
     va_start(args, count);
-    vchar_array_append_joined(array, separator, strip_separator, count, args);
+    char_array_append_vjoined(array, separator, strip_separator, count, args);
     va_end(args);
 }
 
@@ -581,15 +580,11 @@ inline void char_array_cat_joined(char_array *array, char *separator, bool strip
     char_array_strip_nul_byte(array);
     va_list args;
     va_start(args, count);
-    vchar_array_append_joined(array, separator, strip_separator, count, args);
+    char_array_append_vjoined(array, separator, strip_separator, count, args);
     va_end(args);
 }
 
-// Based on antirez's sdscatvprintf implementation
-void char_array_cat_printf(char_array *array, char *format, ...) {
-    va_list args;
-    va_start(args, format);
-
+void char_array_cat_vprintf(char_array *array, char *format, va_list args) {
     char_array_strip_nul_byte(array);
 
     va_list cpy;
@@ -605,10 +600,10 @@ void char_array_cat_printf(char_array *array, char *format, ...) {
         buf = array->a + last_n;
         buflen = size - last_n;
         if (buf == NULL) return;
-        array->a[size-2] = '\0';
+        array->a[size - 2] = '\0';
         va_copy(cpy, args);
         vsnprintf(buf, buflen, format, cpy);
-        if (array->a[size-2] != '\0') {
+        if (array->a[size - 2] != '\0') {
             size *= 2;
             continue;
         } else {
@@ -616,7 +611,12 @@ void char_array_cat_printf(char_array *array, char *format, ...) {
         }
         break;
     }
+}
 
+void char_array_cat_printf(char_array *array, char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    char_array_cat_vprintf(array, format, args);
     va_end(args);
 }
 

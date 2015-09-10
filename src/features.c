@@ -11,16 +11,17 @@ void feature_array_add(cstring_array *features, size_t count, ...) {
 
     cstring_array_start_token(features);
 
-    for (size_t i = 0; i < count - 1; i++) {
-        char *arg = va_arg(args, char *);
-        char_array_append(features->str, arg);
-        char_array_append(features->str, FEATURE_SEPARATOR_CHAR);
-    }
+    bool strip_separator = true;
+    char_array_append_vjoined(features->str, FEATURE_SEPARATOR_CHAR, strip_separator, count, args);
+    va_end(args);
+}
 
-    char *arg = va_arg(args, char *);
-    char_array_append(features->str, arg);
-    char_array_terminate(features->str);
 
+void feature_array_add_printf(cstring_array *features, char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    cstring_array_start_token(features);
+    char_array_cat_vprintf(features->str, format, args);
     va_end(args);
 }
 
