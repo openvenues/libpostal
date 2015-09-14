@@ -24,7 +24,7 @@ tokenized_string_t *tokenized_string_from_tokens(char *src, token_array *tokens,
     tokenized_string_t *self = malloc(sizeof(tokenized_string_t));
     self->str = cstring_array_new_size(strlen(src) + tokens->n);
     if (copy_tokens) {
-        self->tokens = token_array_new_copy(tokens);;
+        self->tokens = token_array_new_copy(tokens, tokens->n);
     } else {
         self->tokens = tokens;
     }
