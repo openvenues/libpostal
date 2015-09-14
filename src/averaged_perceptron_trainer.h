@@ -36,6 +36,7 @@ Link: http://www.cs.columbia.edu/~mcollins/papers/tagperc.pdf
 #include "averaged_perceptron.h"
 #include "collections.h"
 #include "string_utils.h"
+#include "tokens.h"
 #include "trie.h"
 
 typedef struct class_weight {
@@ -50,12 +51,14 @@ KHASH_MAP_INIT_INT(class_weights, class_weight_t)
 
 KHASH_MAP_INIT_INT(feature_class_weights, khash_t(class_weights) *) 
 
+typedef bool (*ap_tagger_feature_function)(void *, cstring_array *, tokenized_string_t *, uint32_t, char *, char *);
+
 typedef struct averaged_perceptron_trainer {
     uint32_t num_features;
     uint32_t num_classes;
     uint64_t num_updates;
     uint64_t num_errors;
-    trie_t *features;
+    khash_t(str_uint32) *features;
     khash_t(str_uint32) *classes;
     cstring_array *class_strings;
     // {feature_id => {class_id => class_weight_t}}
@@ -66,9 +69,18 @@ typedef struct averaged_perceptron_trainer {
 averaged_perceptron_trainer_t *averaged_perceptron_trainer_new(void);
 
 uint32_t averaged_perceptron_trainer_predict(averaged_perceptron_trainer_t *self, cstring_array *features);
-bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *trainer, cstring_array *features, char *label);
+
+bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *self, 
+                                               void *tagger,
+                                               cstring_array *features,
+                                               ap_tagger_feature_function feature_function,
+                                               tokenized_string_t *tokenized,
+                                               cstring_array *labels
+                                               );
 
 averaged_perceptron_t *averaged_perceptron_trainer_finalize(averaged_perceptron_trainer_t *self);
+
+
 
 void averaged_perceptron_trainer_destroy(averaged_perceptron_trainer_t *self);
 
