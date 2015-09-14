@@ -32,7 +32,7 @@
         name *vector = name##_new_size(n);                                     \
         memset(vector->a, 0, n * sizeof(type));                                \
         vector->n = n;                                                         \
-        return name##_new_value(n, (type)0);                                   \
+        return vector;                                                         \
     }                                                                          \
                                                                                \
     static inline type type##_array_max(type *array, size_t n) {               \
