@@ -738,17 +738,17 @@ char **expand_address(char *input, normalize_options_t options, uint64_t *n) {
 }
 
 bool libpostal_setup(void) {
-    if (!transliteration_module_setup(DEFAULT_TRANSLITERATION_PATH)) {
-        log_error("Error loading transliteration module at %s\n", DEFAULT_TRANSLITERATION_PATH);
+    if (!transliteration_module_setup(NULL)) {
+        log_error("Error loading transliteration module\n");
         return false;
     }
 
-    if (!numex_module_setup(DEFAULT_NUMEX_PATH)) {
+    if (!numex_module_setup(NULL)) {
         log_error("Error loading numex module\n");
         return false;
     }
 
-    if (!address_dictionary_module_setup()) {
+    if (!address_dictionary_module_setup(NULL)) {
         log_error("Error loading dictionary module\n");
         return false;
     }
