@@ -75,7 +75,7 @@ void address_dictionary_destroy(address_dictionary_t *self);
 bool address_dictionary_load(char *path);
 bool address_dictionary_save(char *path);
 
-bool address_dictionary_module_setup(void);
+bool address_dictionary_module_setup(char *filename);
 void address_dictionary_module_teardown(void);
 
 

@@ -140,6 +140,10 @@ exit_key_created:
 }
 
 static trie_prefix_result_t get_language_prefix(char *lang) {
+    if (lang == NULL) {
+        return ROOT_PREFIX_RESULT;
+    }
+
     trie_prefix_result_t prefix = trie_get_prefix(address_dict->trie, lang);
 
     if (prefix.node_id == NULL_NODE_ID) {
@@ -156,7 +160,7 @@ static trie_prefix_result_t get_language_prefix(char *lang) {
 }
 
 phrase_array *search_address_dictionaries(char *str, char *lang) {
-    if (str == NULL || lang == NULL) return NULL;
+    if (str == NULL) return NULL;
 
     trie_prefix_result_t prefix = get_language_prefix(lang);
 
@@ -168,7 +172,7 @@ phrase_array *search_address_dictionaries(char *str, char *lang) {
 }
 
 phrase_array *search_address_dictionaries_tokens(char *str, token_array *tokens, char *lang) {
-    if (str == NULL || lang == NULL) return NULL;
+    if (str == NULL) return NULL;
 
     trie_prefix_result_t prefix = get_language_prefix(lang);
 
@@ -180,7 +184,7 @@ phrase_array *search_address_dictionaries_tokens(char *str, token_array *tokens,
 }
 
 phrase_t search_address_dictionaries_prefix(char *str, size_t len, char *lang) {
-    if (str == NULL || lang == NULL) return NULL_PHRASE;
+    if (str == NULL) return NULL_PHRASE;
 
     trie_prefix_result_t prefix = get_language_prefix(lang);
 
@@ -193,7 +197,7 @@ phrase_t search_address_dictionaries_prefix(char *str, size_t len, char *lang) {
 }
 
 phrase_t search_address_dictionaries_suffix(char *str, size_t len, char *lang) {
-    if (str == NULL || lang == NULL) return NULL_PHRASE;
+    if (str == NULL) return NULL_PHRASE;
 
     trie_prefix_result_t prefix = get_language_prefix(lang);
 
@@ -512,8 +516,8 @@ bool address_dictionary_save(char *path) {
     return ret_val;
 }
 
-inline bool address_dictionary_module_setup(void) {
-    return address_dictionary_load(DEFAULT_ADDRESS_EXPANSION_PATH);
+inline bool address_dictionary_module_setup(char *filename) {
+    return address_dictionary_load(filename == NULL ? DEFAULT_ADDRESS_EXPANSION_PATH: filename);
 }
 
 void address_dictionary_module_teardown(void) {

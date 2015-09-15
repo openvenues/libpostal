@@ -1909,7 +1909,7 @@ bool transliteration_module_setup(char *filename) {
         trans_table = transliteration_table_new();
         return true;
     } else if (trans_table == NULL) {
-        return transliteration_table_load(filename);
+        return transliteration_table_load(filename == NULL ? DEFAULT_TRANSLITERATION_PATH : filename);
     }
 
     return false;

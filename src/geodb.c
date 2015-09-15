@@ -163,8 +163,8 @@ inline geonames_generic_t *geodb_get(char *key) {
 }
 
 bool geodb_module_setup(char *dir) {
-    if (db == NULL && dir != NULL) {
-        return geodb_load(dir);
+    if (db == NULL) {
+        return geodb_load(dir == NULL ? LIBPOSTAL_GEODB_DIR : dir);
     }
 
     return false;
