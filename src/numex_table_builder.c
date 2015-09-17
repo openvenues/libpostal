@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    if (!numex_module_setup(NULL)) {
+    if (!numex_module_init()) {
         log_error("Numex table initialization unsuccessful\n");
         numex_module_teardown();
         exit(1);

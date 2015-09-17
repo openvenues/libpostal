@@ -146,6 +146,7 @@ char *get_ordinal_suffix(char *numeric_string, char *lang, numex_result_t result
 bool numex_table_write(FILE *file);
 bool numex_table_save(char *filename);
 
+bool numex_module_init(void);
 bool numex_module_setup(char *filename);
 void numex_module_teardown(void);
 

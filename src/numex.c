@@ -559,14 +559,17 @@ bool numex_table_save(char *filename) {
     }
 }
 
+bool numex_module_init(void) {
+    numex_table = numex_table_new();
+    return numex_table != NULL;
+}
+
 /* Initializes numex trie/module
 Must be called only once before the module can be used
 */
+
 bool numex_module_setup(char *filename) {
-    if (filename == NULL && numex_table == NULL) {
-        numex_table = numex_table_new();
-        return numex_table != NULL;
-    } else if (numex_table == NULL) {
+    if (numex_table == NULL) {
         return numex_table_load(filename == NULL ? DEFAULT_NUMEX_PATH : filename);
     }
     return false;
