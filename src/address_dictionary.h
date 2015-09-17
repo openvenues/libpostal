@@ -59,7 +59,9 @@ address_dictionary_t *get_address_dictionary(void);
 bool address_dictionary_init(void);
 
 phrase_array *search_address_dictionaries(char *str, char *lang);
+bool search_address_dictionaries_with_phrases(char *str, char *lang, phrase_array **phrases);
 phrase_array *search_address_dictionaries_tokens(char *str, token_array *tokens, char *lang);
+bool search_address_dictionaries_tokens_with_phrases(char *str, token_array *tokens, char *lang, phrase_array **phrases);
 
 phrase_t search_address_dictionaries_prefix(char *str, size_t len, char *lang);
 phrase_t search_address_dictionaries_suffix(char *str, size_t len, char *lang);

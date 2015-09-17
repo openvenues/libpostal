@@ -159,28 +159,50 @@ static trie_prefix_result_t get_language_prefix(char *lang) {
     return prefix;
 }
 
-phrase_array *search_address_dictionaries(char *str, char *lang) {
-    if (str == NULL) return NULL;
+bool search_address_dictionaries_with_phrases(char *str, char *lang, phrase_array **phrases) {
+    if (str == NULL) return false;
 
     trie_prefix_result_t prefix = get_language_prefix(lang);
 
     if (prefix.node_id == NULL_NODE_ID) {
-        return NULL;
+        return false;
     }
 
-    return trie_search_from_index(address_dict->trie, str, prefix.node_id);
+    return trie_search_from_index(address_dict->trie, str, prefix.node_id, phrases);
 }
 
-phrase_array *search_address_dictionaries_tokens(char *str, token_array *tokens, char *lang) {
-    if (str == NULL) return NULL;
+phrase_array *search_address_dictionaries(char *str, char *lang) {
+    phrase_array *phrases = NULL;
+
+    if (!search_address_dictionaries_with_phrases(str, lang, &phrases)) {
+        return NULL;
+    }   
+
+    return phrases;
+}
+
+
+bool search_address_dictionaries_tokens_with_phrases(char *str, token_array *tokens, char *lang, phrase_array **phrases) {
+    if (str == NULL) return false;
 
     trie_prefix_result_t prefix = get_language_prefix(lang);
 
     if (prefix.node_id == NULL_NODE_ID) {
+        return false;
+    }
+
+    return trie_search_tokens_from_index(address_dict->trie, str, tokens, prefix.node_id, phrases);
+}
+
+
+phrase_array *search_address_dictionaries_tokens(char *str, token_array *tokens, char *lang) {
+    phrase_array *phrases = NULL;
+
+    if (!search_address_dictionaries_tokens_with_phrases(str, tokens, lang, &phrases)) {
         return NULL;
     }
 
-    return trie_search_tokens_from_index(address_dict->trie, str, tokens, prefix.node_id);
+    return phrases;
 }
 
 phrase_t search_address_dictionaries_prefix(char *str, size_t len, char *lang) {
