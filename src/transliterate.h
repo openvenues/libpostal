@@ -167,6 +167,7 @@ bool transliteration_table_write(FILE *file);
 bool transliteration_table_save(char *filename);
 
 // Module setup/teardown
+bool transliteration_module_init(void);
 bool transliteration_module_setup(char *filename);
 void transliteration_module_teardown(void);
 

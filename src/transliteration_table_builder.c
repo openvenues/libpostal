@@ -244,7 +244,7 @@ int main(int argc, char **argv) {
     char *group_regex_str;
     size_t group_regex_len;
 
-    transliteration_module_setup(NULL);
+    transliteration_module_init();
 
     transliteration_table_t *trans_table = get_transliteration_table();
 

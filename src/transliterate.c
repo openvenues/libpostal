@@ -1903,12 +1903,13 @@ bool transliteration_table_save(char *filename) {
 
 }
 
+bool transliteration_module_init(void) {
+    trans_table = transliteration_table_new();
+    return trans_table != NULL;
+}
+
 bool transliteration_module_setup(char *filename) {
-    if (filename == NULL && trans_table == NULL) {
-        // Just init the table
-        trans_table = transliteration_table_new();
-        return true;
-    } else if (trans_table == NULL) {
+    if (trans_table == NULL) {
         return transliteration_table_load(filename == NULL ? DEFAULT_TRANSLITERATION_PATH : filename);
     }
 
