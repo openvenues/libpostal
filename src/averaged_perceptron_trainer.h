@@ -34,6 +34,7 @@ Link: http://www.cs.columbia.edu/~mcollins/papers/tagperc.pdf
 #include <stdlib.h>
 
 #include "averaged_perceptron.h"
+#include "averaged_perceptron_tagger.h"
 #include "collections.h"
 #include "string_utils.h"
 #include "tokens.h"
@@ -50,8 +51,6 @@ typedef struct class_weight {
 KHASH_MAP_INIT_INT(class_weights, class_weight_t)
 
 KHASH_MAP_INIT_INT(feature_class_weights, khash_t(class_weights) *) 
-
-typedef bool (*ap_tagger_feature_function)(void *, cstring_array *, tokenized_string_t *, uint32_t, char *, char *);
 
 typedef struct averaged_perceptron_trainer {
     uint32_t num_features;
@@ -72,6 +71,7 @@ uint32_t averaged_perceptron_trainer_predict(averaged_perceptron_trainer_t *self
 
 bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *self, 
                                                void *tagger,
+                                               void *context,
                                                cstring_array *features,
                                                ap_tagger_feature_function feature_function,
                                                tokenized_string_t *tokenized,

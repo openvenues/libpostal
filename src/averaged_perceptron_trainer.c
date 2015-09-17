@@ -1,9 +1,6 @@
 #include "averaged_perceptron_trainer.h"
 #include "klib/ksort.h"
 
-#define START "START"
-#define START2 "START2"
-
 KSORT_INIT_STR
 
 void averaged_perceptron_trainer_destroy(averaged_perceptron_trainer_t *self) {
@@ -356,7 +353,7 @@ bool averaged_perceptron_trainer_update_counts(averaged_perceptron_trainer_t *se
     return true;
 }
 
-bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *self, void *tagger, cstring_array *features, ap_tagger_feature_function feature_function, tokenized_string_t *tokenized, cstring_array *labels) {
+bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *self, void *tagger, void *context, cstring_array *features, ap_tagger_feature_function feature_function, tokenized_string_t *tokenized, cstring_array *labels) {
     // Keep two tags of history in training
     char *prev = START;
     char *prev2 = START2;
@@ -387,7 +384,7 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
             prev2 = cstring_array_get_string(labels, prev2_id);            
         }
 
-        if (!feature_function(tagger, features, tokenized, i, prev, prev2)) {
+        if (!feature_function(tagger, context, tokenized, i, prev, prev2)) {
             log_error("Could not add address parser features\n");
             return false;
         }
