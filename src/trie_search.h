@@ -28,9 +28,11 @@ VECTOR_INIT(phrase_array, phrase_t)
 #define NULL_PHRASE (phrase_t){0, 0, 0};
 
 phrase_array *trie_search(trie_t *self, char *text);
-phrase_array *trie_search_from_index(trie_t *self, char *text, uint32_t start_node_id);
+bool trie_search_from_index(trie_t *self, char *text, uint32_t start_node_id, phrase_array **phrases);
+bool trie_search_with_phrases(trie_t *self, char *text, phrase_array **phrases);
 phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens);
-phrase_array *trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens, uint32_t start_node_id);
+bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens, uint32_t start_node_id, phrase_array **phrases);
+bool trie_search_tokens_with_phrases(trie_t *self, char *text, token_array *tokens, phrase_array **phrases);
 phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, size_t len, uint32_t start_node_id);
 phrase_t trie_search_suffixes_from_index_get_suffix_char(trie_t *self, char *word, size_t len, uint32_t start_node_id);
 phrase_t trie_search_suffixes(trie_t *self, char *word, size_t len);
