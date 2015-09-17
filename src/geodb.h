@@ -1,8 +1,6 @@
 #ifndef GEONAMES_DICTIONARY_H
 #define GEONAMES_DICTIONARY_H
 
- 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -59,9 +57,14 @@ void geodb_module_teardown(void);
 
 void geodb_destroy(geodb_t *self);
 
+
+// Trie search
+bool search_geodb_with_phrases(char *str, phrase_array **phrases);
+phrase_array *search_geodb(char *str);
+bool search_geodb_tokens_with_phrases(char *str, token_array *tokens, phrase_array **phrases);
+phrase_array *search_geodb_tokens(char *str, token_array *tokens);
+
 geonames_generic_t *geodb_get_len(char *key, size_t len);
 geonames_generic_t *geodb_get(char *key);
-
- 
 
 #endif

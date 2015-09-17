@@ -61,9 +61,7 @@ geodb_t *geodb_init(char *dir) {
 
     char_array_clear(path);
 
-    char_array_cat(path, dir);
-    char_array_cat(path, PATH_SEPARATOR);
-    char_array_cat(path, GEODB_BLOOM_FILTER_FILENAME);
+    char_array_cat_joined(path, PATH_SEPARATOR, PATH_SEPARATOR_LEN, true, 2, dir, GEODB_BLOOM_FILTER_FILENAME);
 
     char *bloom_path = char_array_get_string(path);
 
@@ -74,17 +72,13 @@ geodb_t *geodb_init(char *dir) {
 
     char_array_clear(path);
 
-    char_array_cat(path, dir);
-    char_array_cat(path, PATH_SEPARATOR);
-    char_array_cat(path, GEODB_HASH_FILENAME);
+    char_array_cat_joined(path, PATH_SEPARATOR, PATH_SEPARATOR_LEN, true, 2, dir, GEODB_HASH_FILENAME);
 
     char *hash_file_path = strdup(char_array_get_string(path));
 
     char_array_clear(path);
 
-    char_array_cat(path, dir);
-    char_array_cat(path, PATH_SEPARATOR);
-    char_array_cat(path, GEODB_LOG_FILENAME);
+    char_array_cat_joined(path, PATH_SEPARATOR, PATH_SEPARATOR_LEN, true, 2, dir, GEODB_LOG_FILENAME);
 
     char *log_path = char_array_get_string(path);
 
@@ -133,6 +127,41 @@ bool geodb_load(char *dir) {
 }
 
 
+bool search_geodb_with_phrases(char *str, phrase_array **phrases) {
+    if (str == NULL) return false;
+
+    return trie_search_with_phrases(address_dict->trie, str, phrases);
+}
+
+phrase_array *search_geodb(char *str) {
+    phrase_array *phrases = NULL;
+
+    if (!search_geodb_with_phrases(str, &phrases)) {
+        return NULL;
+    }   
+
+    return phrases;
+}
+
+
+bool search_geodb_tokens_with_phrases(char *str, token_array *tokens, phrase_array **phrases) {
+    if (str == NULL) return false;
+
+    return trie_search_tokens_with_phrases(address_dict->trie, str, tokens, phrases);
+}
+
+
+phrase_array *search_geodb_tokens(char *str, token_array *tokens) {
+    phrase_array *phrases = NULL;
+
+    if (!search_address_dictionaries_tokens_with_phrases(str, tokens, &phrases)) {
+        return NULL;
+    }
+
+    return phrases;
+}
+
+
 geonames_generic_t *geodb_get_len(char *key, size_t len) {
     if (db == NULL || db->hash_reader == NULL || db->log_iter == NULL) return NULL;
     sparkey_returncode ret = sparkey_hash_get(db->hash_reader, (uint8_t *)key, len, db->log_iter);
@@ -161,6 +190,8 @@ geonames_generic_t *geodb_get_len(char *key, size_t len) {
 inline geonames_generic_t *geodb_get(char *key) {
     return geodb_get_len(key, strlen(key));
 }
+
+
 
 bool geodb_module_setup(char *dir) {
     if (db == NULL) {
