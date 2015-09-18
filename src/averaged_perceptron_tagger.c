@@ -1,5 +1,5 @@
 #include "averaged_perceptron_tagger.h"
-
+#include "log/log.h"
 
 
 bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagger, void *context, cstring_array *features, cstring_array *labels, ap_tagger_feature_function feature_function, tokenized_string_t *tokenized) {
