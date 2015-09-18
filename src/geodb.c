@@ -130,7 +130,7 @@ bool geodb_load(char *dir) {
 bool search_geodb_with_phrases(char *str, phrase_array **phrases) {
     if (str == NULL) return false;
 
-    return trie_search_with_phrases(address_dict->trie, str, phrases);
+    return trie_search_with_phrases(db->trie, str, phrases);
 }
 
 phrase_array *search_geodb(char *str) {
@@ -147,14 +147,14 @@ phrase_array *search_geodb(char *str) {
 bool search_geodb_tokens_with_phrases(char *str, token_array *tokens, phrase_array **phrases) {
     if (str == NULL) return false;
 
-    return trie_search_tokens_with_phrases(address_dict->trie, str, tokens, phrases);
+    return trie_search_tokens_with_phrases(db->trie, str, tokens, phrases);
 }
 
 
 phrase_array *search_geodb_tokens(char *str, token_array *tokens) {
     phrase_array *phrases = NULL;
 
-    if (!search_address_dictionaries_tokens_with_phrases(str, tokens, &phrases)) {
+    if (!search_geodb_tokens_with_phrases(str, tokens, &phrases)) {
         return NULL;
     }
 
