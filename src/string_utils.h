@@ -108,6 +108,10 @@ void char_array_append_reversed_len(char_array *array, char *str, size_t len);
 // add NUL terminator to a char_array
 void char_array_terminate(char_array *array);
 
+// add_* methods NUL-terminate without stripping NUL-byte
+void char_array_add(char_array *array, char *str);
+void char_array_add_len(char_array *array, char *str, size_t len);
+
 // Similar to strcat but with dynamic resizing, guaranteed NUL-terminated
 void char_array_cat(char_array *array, char *str);
 void char_array_cat_len(char_array *array, char *str, size_t len);
