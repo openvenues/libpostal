@@ -173,7 +173,7 @@ bool trie_search_from_index(trie_t *self, char *text, uint32_t start_node_id, ph
 }
 
 inline bool trie_search_with_phrases(trie_t *self, char *str, phrase_array **phrases) {
-    return trie_search_from_index(self, str, ROOT_NODE_ID, &phrases);
+    return trie_search_from_index(self, str, ROOT_NODE_ID, phrases);
 }
 
 inline phrase_array *trie_search(trie_t *self, char *text) {
@@ -417,7 +417,7 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
 }
 
 inline bool trie_search_tokens_with_phrases(trie_t *self, char *str, token_array *tokens, phrase_array **phrases) {
-    return trie_search_tokens_from_index(self, str, tokens, ROOT_NODE_ID, &phrases);
+    return trie_search_tokens_from_index(self, str, tokens, ROOT_NODE_ID, phrases);
 }
 
 inline phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens) {
