@@ -61,7 +61,7 @@ geodb_t *geodb_init(char *dir) {
 
     char_array_clear(path);
 
-    char_array_cat_joined(path, PATH_SEPARATOR, PATH_SEPARATOR_LEN, true, 2, dir, GEODB_BLOOM_FILTER_FILENAME);
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, dir, GEODB_BLOOM_FILTER_FILENAME);
 
     char *bloom_path = char_array_get_string(path);
 
@@ -72,13 +72,13 @@ geodb_t *geodb_init(char *dir) {
 
     char_array_clear(path);
 
-    char_array_cat_joined(path, PATH_SEPARATOR, PATH_SEPARATOR_LEN, true, 2, dir, GEODB_HASH_FILENAME);
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, dir, GEODB_HASH_FILENAME);
 
     char *hash_file_path = strdup(char_array_get_string(path));
 
     char_array_clear(path);
 
-    char_array_cat_joined(path, PATH_SEPARATOR, PATH_SEPARATOR_LEN, true, 2, dir, GEODB_LOG_FILENAME);
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, dir, GEODB_LOG_FILENAME);
 
     char *log_path = char_array_get_string(path);
 
