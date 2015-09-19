@@ -59,11 +59,19 @@ char *tokenized_string_get_token(tokenized_string_t *self, uint32_t index) {
 }
 
 void tokenized_string_destroy(tokenized_string_t *self) {
-    if (!self)
-        return;
-    if (self->strings)
+    if (self == NULL) return;
+
+    if (self->str != NULL) {
+        free(self->str);
+    }
+
+    if (self->strings != NULL) {
         cstring_array_destroy(self->strings);
-    if (self->tokens)
+    }
+
+    if (self->tokens != NULL) {
         token_array_destroy(self->tokens);
+    }
+
     free(self);
 }
