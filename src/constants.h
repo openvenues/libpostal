@@ -10,6 +10,9 @@
 #define LANGUAGE_SEPARATOR_CHAR "|"
 #define LANGUAGE_SEPARATOR_CHAR_LEN strlen(LANGUAGE_SEPARATOR_CHAR)
 
+// Supports ISO 3166 alpha 2 and alpha 3 codes
+#define MAX_COUNTRY_CODE_LEN 4
+
 // Supports ISO 639 alpha 2 and alpha 3 codes
 #define MAX_LANGUAGE_LEN 4
 
