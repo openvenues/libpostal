@@ -6,7 +6,7 @@
 #include <math.h>
 #include "vector.h"
 
-#define VECTOR_INIT_NUMERIC(name, type)                                        \
+#define VECTOR_INIT_NUMERIC(name, type, unsigned_type, type_abs)               \
     __VECTOR_BASE(name, type)                                                  \
     __VECTOR_DESTROY(name, type)                                               \
                                                                                \
@@ -119,16 +119,16 @@
         return result;                                                         \
     }                                                                          \
                                                                                \
-    static inline type type##_array_l1_norm(type *array, size_t n) {           \
-        type result = 0;                                                       \
+    static inline unsigned_type type##_array_l1_norm(type *array, size_t n) {  \
+        unsigned_type result = 0;                                              \
         for (int i = 0; i < n; i++) {                                          \
-            result += abs(array[i]);                                           \
+            result += type_abs(array[i]);                                      \
         }                                                                      \
         return result;                                                         \
     }                                                                          \
                                                                                \
-    static inline type type##_array_l2_norm(type *array, size_t n) {           \
-        type result = 0;                                                       \
+    static inline unsigned_type type##_array_l2_norm(type *array, size_t n) {  \
+        unsigned_type result = 0;                                              \
         for (int i = 0; i < n; i++) {                                          \
             result += array[i] * array[i];                                     \
         }                                                                      \
@@ -177,8 +177,8 @@
 
 
 
-#define VECTOR_INIT_NUMERIC_FLOAT(name, type)                                  \
-    VECTOR_INIT_NUMERIC(name, type)                                            \
+#define VECTOR_INIT_NUMERIC_FLOAT(name, type, type_abs)                        \
+    VECTOR_INIT_NUMERIC(name, type, type, type_abs)                            \
                                                                                \
     static inline void type##_array_log(type *array, type c, size_t n) {       \
         for (int i = 0; i < n; i++) {                                          \

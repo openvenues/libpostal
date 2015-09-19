@@ -165,10 +165,10 @@ cstring_array *cstring_array_from_char_array(char_array *str);
 char **cstring_array_to_strings(cstring_array *self);
 
 // Split on delimiter
-cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, int *count);
+cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, size_t *count);
 
 // Split on delimiter by replacing (single character) separator with the NUL byte in the original string
-cstring_array *cstring_array_split_no_copy(char *str, char separator, int *count);
+cstring_array *cstring_array_split_no_copy(char *str, char separator, size_t *count);
 
 uint32_t cstring_array_start_token(cstring_array *self);
 uint32_t cstring_array_add_string(cstring_array *self, char *str);
@@ -221,7 +221,7 @@ string_tree_t *string_tree_new(void);
 string_tree_t *string_tree_new_size(size_t size);
 
 // get
-char *string_tree_get_alternative(string_tree_t *self, size_t token_index, size_t alternative);
+char *string_tree_get_alternative(string_tree_t *self, size_t token_index, uint32_t alternative);
 
 // finalize
 void string_tree_finalize_token(string_tree_t *self);

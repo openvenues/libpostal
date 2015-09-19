@@ -24,7 +24,7 @@
 #define DEFAULT_GEONAMES_TSV LIBPOSTAL_GEONAMES_DIR PATH_SEPARATOR "geonames.tsv";
 
 static bool read_geoname_from_line(geoname_t *g, char *line) {
-    int token_count;
+    size_t token_count;
 
     char *token;
 
@@ -185,7 +185,8 @@ exit_geoname_free_tokens:
 }
 
 static bool read_gn_postal_code_from_line(gn_postal_code_t *postal, char *line) {
-    int token_count, i;
+    size_t token_count;
+    int i;
 
     gn_postal_code_clear(postal);
 
@@ -225,7 +226,7 @@ static bool read_gn_postal_code_from_line(gn_postal_code_t *postal, char *line) 
     size_t admin1_field_len = strlen(admin1_field);
 
     if (admin1_field_len > 0) {
-        int admin1_token_count;
+        size_t admin1_token_count;
         cstring_array *admin1_tokens = cstring_array_split(admin1_field, COMMA_SEPARATOR, COMMA_SEPARATOR_LEN, &admin1_token_count);
         uint32_t admin1_id;
         if (admin1_token_count > 0) {
@@ -244,7 +245,7 @@ static bool read_gn_postal_code_from_line(gn_postal_code_t *postal, char *line) 
     size_t admin2_field_len = strlen(admin2_field);
 
     if (admin2_field_len > 0) {
-        int admin2_token_count;
+        size_t admin2_token_count;
         cstring_array *admin2_tokens = cstring_array_split(admin2_field, COMMA_SEPARATOR, COMMA_SEPARATOR_LEN, &admin2_token_count);
         uint32_t admin2_id;
         if (admin2_token_count > 0) {
@@ -263,7 +264,7 @@ static bool read_gn_postal_code_from_line(gn_postal_code_t *postal, char *line) 
     size_t admin3_field_len = strlen(admin3_field);
 
     if (admin3_field_len > 0) {
-        int admin3_token_count;
+        size_t admin3_token_count;
         cstring_array *admin3_tokens = cstring_array_split(admin3_field, COMMA_SEPARATOR, COMMA_SEPARATOR_LEN, &admin3_token_count);
         uint32_t admin3_id;
         if (admin3_token_count > 0) {
