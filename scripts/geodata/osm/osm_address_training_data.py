@@ -490,16 +490,39 @@ def strip_keys(value, ignore_keys):
         value.pop(key, None)
 
 
-def build_address_format_training_data(language_rtree, infile, out_dir):
+def build_address_format_training_data(language_rtree, infile, out_dir, tag_components=True):
+    '''
+    Creates formatted address training data for supervised sequence labeling (or potentially 
+    for unsupervised learning e.g. for word vectors) using addr:* tags in OSM. The tagged
+    version produces a TSV file that looks like:
+
+    cs  cz  Gorkého/road ev.2459/house_number | 40004/postcode Trmice/city | CZ/country
+
+    The field structure is similar to other training data created by this script i.e.
+    {language, country, data}. The data field here is a sequence of labeled tokens similar
+    to what we might see in part-of-speech tagging.
+
+    This format uses a special character "|" to denote possible breaks in the input (comma, newline).
+    This information can potentially be used downstream by the sequence model as these
+    breaks may be present at prediction time.
+
+    For the untagged version, lines simply look like:
+
+    The Dignity | 363 Regents Park Road | London N3 1DH
+
+    This may be useful in learning word representations, statistical phrases, morphology
+    or other models requiring only the sequence of words.
+    '''
     i = 0
 
     formatter = AddressFormatter()
 
-    formatted_file = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_FILENAME), 'w')
-    formatted_writer = csv.writer(formatted_file, 'tsv_no_quote')
-
-    formatted_tagged_file = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_TAGGED_FILENAME), 'w')
-    formatted_tagged_writer = csv.writer(formatted_tagged_file, 'tsv_no_quote')
+    if tag_components:
+        formatted_tagged_file = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_TAGGED_FILENAME), 'w')
+        writer = csv.writer(formatted_tagged_file, 'tsv_no_quote')
+    else:
+        formatted_file = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_FILENAME), 'w')
+        writer = csv.writer(formatted_file, 'tsv_no_quote')
 
     remove_keys = OSM_IGNORE_KEYS
 
@@ -509,24 +532,29 @@ def build_address_format_training_data(language_rtree, infile, out_dir):
         except Exception:
             continue
 
-        country, default_languages, language_props = country_and_languages(language_rtree, latitude, longitude)
-        if not (country and default_languages):
+        country, candidate_languages, language_props = country_and_languages(language_rtree, latitude, longitude)
+        if not (country and candidate_languages):
             continue
 
         for key in remove_keys:
             _ = value.pop(key, None)
 
-        formatted_address_tagged = formatter.format_address(country, value)
-        formatted_address_untagged = formatter.format_address(country, value, tag_components=False)
-        if formatted_address_tagged is not None:
-            formatted_address_tagged = tsv_string(formatted_address_tagged)
-            formatted_tagged_writer.writerow((default_languages[0]['lang'], country, formatted_address_tagged))
+        if len(candidate_languages) == 1:
+            language = candidate_languages[0]['lang']
+        else:
+            language = disambiguate_language(v, [(l['lang'], l['default']) for l in candidate_languages])
 
-        if formatted_address_untagged is not None:
-            formatted_address_untagged = tsv_string(formatted_address_untagged)
-            formatted_writer.writerow((default_languages[0]['lang'], country, formatted_address_untagged))
+        formatted_address = formatter.format_address(country, value, tag_components=tag_components)
+        if formatted_address is not None:
+            formatted_address = tsv_string(formatted_address)
+            if tag_components:
+                row = (language, country, formatted_address)
+            else:
+                row = (formatted_address,)
 
-        if formatted_address_tagged is not None or formatted_address_untagged is not None:
+            writer.writerow(row)
+
+        if formatted_address is not None:
             i += 1
             if i % 1000 == 0 and i > 0:
                 print 'did', i, 'formatted addresses'
