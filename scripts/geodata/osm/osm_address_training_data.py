@@ -1,16 +1,47 @@
 # -*- coding: utf-8 -*-
+'''
+osm_address_training_data.py
+----------------------------
+
+This script generates several training sets from OpenStreetMap addresses,
+streets, venues and toponyms.
+
+Note: the combined size of all the files created by this script exceeds 100GB
+so if training these models, it is wise to use a server-grade machine with
+plenty of disk space. The following commands can be used in parallel to create 
+all the training sets:
+
+Ways:
+python osm_address_training_data.py -s $(OSM_DIR)/planet-ways.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+
+Venues:
+python osm_address_training_data.py -v $(OSM_DIR)/planet-venues.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+
+Address streets:
+python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+
+Limited formatted addresses:
+python osm_address_training_data.py -a -l $(OSM_DIR)/planet-addresses.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+
+Formatted addresses (tagged):
+python osm_address_training_data.py -a -f $(OSM_DIR)/planet-addresses.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+
+Formatted addresses (untagged):
+python osm_address_training_data.py -a -f -u $(OSM_DIR)/planet-addresses.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+
+Toponyms:
+python osm_address_training_data.py -b $(OSM_DIR)/planet-borders.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+'''
+
 import argparse
 import csv
 import os
 import operator
-import pystache
 import re
-import subprocess
 import sys
 import tempfile
 import urllib
 import ujson as json
-import yaml
 import HTMLParser
 
 from collections import defaultdict, OrderedDict
@@ -22,10 +53,10 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
 
-from address_normalizer.text.tokenize import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.polygon_lookup import country_and_languages
 from geodata.i18n.languages import *
+from geodata.address_formatting.formatter import AddressFormatter
 from geodata.polygons.language_polys import *
 from geodata.i18n.unicode_paths import DATA_DIR
 
@@ -33,8 +64,6 @@ from geodata.csv_utils import *
 from geodata.file_utils import *
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
-
-FORMATTER_GIT_REPO = 'https://github.com/openvenues/address-formatting'
 
 WAY_OFFSET = 10 ** 15
 RELATION_OFFSET = 2 * 10 ** 15
@@ -126,189 +155,6 @@ def read_osm_json(filename):
     for key, attrs in reader:
         yield key, json.loads(attrs)
 
-
-class AddressFormatter(object):
-    ''' Approximate Python port of lokku's Geo::Address::Formatter '''
-    MINIMAL_COMPONENT_KEYS = [
-        ('road', 'house_number'),
-        ('road', 'house'),
-        ('road', 'postcode')
-    ]
-
-    whitespace_component_regex = re.compile('[\r\n]+[\s\r\n]*')
-
-    splitter = ' | '
-
-    aliases = OrderedDict([
-        ('name', 'house'),
-        ('addr:housename', 'house'),
-        ('addr:housenumber', 'house_number'),
-        ('addr:street', 'road'),
-        ('addr:city', 'city'),
-        ('addr:locality', 'city'),
-        ('addr:municipality', 'city'),
-        ('addr:hamlet', 'village'),
-        ('addr:suburb', 'suburb'),
-        ('addr:neighbourhood', 'suburb'),
-        ('addr:neighborhood', 'suburb'),
-        ('addr:district', 'suburb'),
-        ('addr:state', 'state'),
-        ('addr:province', 'state'),
-        ('addr:region', 'state'),
-        ('addr:postal_code', 'postcode'),
-        ('addr:postcode', 'postcode'),
-        ('addr:country', 'country'),
-        ('street', 'road'),
-        ('street_name', 'road'),
-        ('residential', 'road'),
-        ('hamlet', 'village'),
-        ('neighborhood', 'suburb'),
-        ('neighbourhood', 'suburb'),
-        ('city_district', 'suburb'),
-        ('state_code', 'state'),
-        ('country_name', 'country'),
-    ])
-
-    def __init__(self, scratch_dir='/tmp', splitter=None):
-        if splitter is not None:
-            self.splitter = splitter
-
-        self.formatter_repo_path = os.path.join(scratch_dir, 'address-formatting')
-        self.clone_repo()
-        self.load_config()
-
-    def clone_repo(self):
-        subprocess.check_call(['rm', '-rf', self.formatter_repo_path])
-        subprocess.check_call(['git', 'clone', FORMATTER_GIT_REPO, self.formatter_repo_path])
-
-    def load_config(self):
-        self.config = yaml.load(open(os.path.join(self.formatter_repo_path,
-                                'conf/countries/worldwide.yaml')))
-
-    def component_aliases(self):
-        self.aliases = OrderedDict()
-        self.aliases.update(self.osm_aliases)
-        components = yaml.load_all(open(os.path.join(self.formatter_repo_path,
-                                   'conf', 'components.yaml')))
-        for c in components:
-            name = c['name']
-            for a in c.get('aliases', []):
-                self.aliases[a] = name
-
-    def replace_aliases(self, components):
-        for k in components.keys():
-            new_key = self.aliases.get(k)
-            if new_key and new_key not in components:
-                components[new_key] = components.pop(k)
-
-    def country_template(self, c):
-        return self.config.get(c, self.config['default'])
-
-    def render_template(self, template, components, tagged=False):
-        def render_first(text):
-            text = pystache.render(text, **components)
-            splits = (e.strip() for e in text.split('||'))
-            selected = next(ifilter(bool, splits), '')
-            return selected
-
-        output = pystache.render(template, first=render_first,
-                                 **components).strip()
-
-        values = self.whitespace_component_regex.split(output)
-
-        output = self.splitter.join([
-            self.strip_component(val, tagged=tagged)
-            for val in values
-        ])
-
-        return output
-
-    def minimal_components(self, components):
-        for component_list in self.MINIMAL_COMPONENT_KEYS:
-            if all((c in components for c in component_list)):
-                return True
-        return False
-
-    def apply_replacements(self, template, components):
-        if not template.get('replace'):
-            return
-        for key in components.keys():
-            value = components[key]
-            for regex, replacement in template['replace']:
-                value = re.sub(regex, replacement, value)
-                components[key] = value
-
-    def post_replacements(self, template, text):
-        components = []
-        seen = set()
-        for component in text.split(self.splitter):
-            component = component.strip()
-            if component not in seen:
-                components.append(component)
-                seen.add(component)
-        text = self.splitter.join(components)
-        post_format_replacements = template.get('postformat_replace')
-        if post_format_replacements:
-            for regex, replacement in post_format_replacements:
-                text = re.sub(regex, replacement, text)
-        return text
-
-    def strip_component(self, value, tagged=False):
-        i = j = 0
-        if not tagged:
-            tokens = tokenize(value)
-            for i, (c, t) in enumerate(tokens):
-                if c.value < token_types.PERIOD.value:
-                    break
-
-            for j, (c, t) in enumerate(reversed(tokens)):
-                if c.value < token_types.PERIOD.value:
-                    break
-            tokens = [t for c, t in tokens]
-        else:
-            tokens = value.split()
-            for i, t in enumerate(tokens):
-                if '/' in t:
-                    break
-
-            for j, t in enumerate(reversed(tokens)):
-                if '/' in t:
-                    break
-        if j == 0:
-            j = None
-        else:
-            j = -j
-        return u' '.join(tokens[i:j])
-
-    def format_address(self, country, components, minimal_only=True, tag_components=True):
-        template = self.config.get(country.upper())
-        if not template:
-            return None
-        template_text = template['address_template']
-        self.replace_aliases(components)
-
-        if not self.minimal_components(components):
-            if minimal_only:
-                return None
-            if 'fallback_template' in template:
-                template_text = template['fallback_template']
-            else:
-                template_text = self.config['default']['fallback_template']
-
-        self.apply_replacements(template, components)
-
-        if tag_components:
-            components = {k: u' '.join([u'{}/{}'.format(t, k.replace(' ', '_'))
-                                        for c, t in tokenize(v)])
-                          for k, v in components.iteritems()}
-        else:
-            components = {k: u' '.join([t for c, t in tokenize(v)])
-                          for k, v in components.iteritems()}
-
-        text = self.render_template(template_text, components, tagged=tag_components)
-
-        text = self.post_replacements(template, text)
-        return text
 
 
 def normalize_osm_name_tag(tag, script=False):
@@ -462,6 +308,16 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
 
 
 def build_ways_training_data(language_rtree, infile, out_dir):
+    '''
+    Creates a training set for language classification using most OSM ways
+    (streets) under a fairly lengthy osmfilter definition which attempts to
+    identify all roads/ways designated for motor vehicle traffic, which
+    is more-or-less what we'd expect to see in addresses.
+
+    The fields are {language, country, street name}. Example:
+
+    ar      ma      ﺵﺍﺮﻋ ﻑﺎﻟ ﻮﻟﺩ ﻊﻤﻳﺭ
+    '''
     i = 0
     f = open(os.path.join(out_dir, WAYS_LANGUAGE_DATA_FILENAME), 'w')
     writer = csv.writer(f, 'tsv_no_quote')
@@ -493,8 +349,9 @@ def strip_keys(value, ignore_keys):
 def build_address_format_training_data(language_rtree, infile, out_dir, tag_components=True):
     '''
     Creates formatted address training data for supervised sequence labeling (or potentially 
-    for unsupervised learning e.g. for word vectors) using addr:* tags in OSM. The tagged
-    version produces a TSV file that looks like:
+    for unsupervised learning e.g. for word vectors) using addr:* tags in OSM.
+
+    Example:
 
     cs  cz  Gorkého/road ev.2459/house_number | 40004/postcode Trmice/city | CZ/country
 
@@ -506,9 +363,9 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
     This information can potentially be used downstream by the sequence model as these
     breaks may be present at prediction time.
 
-    For the untagged version, lines simply look like:
+    Example:
 
-    The Dignity | 363 Regents Park Road | London N3 1DH
+    sr      rs      Crkva Svetog Arhangela Mihaila | Vukov put BB | 15303 Trsic
 
     This may be useful in learning word representations, statistical phrases, morphology
     or other models requiring only the sequence of words.
@@ -578,6 +435,18 @@ POSTAL_KEYS = (
 
 
 def build_address_format_training_data_limited(language_rtree, infile, out_dir):
+    '''
+    Creates a special kind of formatted address training data from OSM's addr:* tags
+    but are designed for use in language classification. These records are similar 
+    to the untagged formatted records but include the language and country
+    (suitable for concatenation with the rest of the language training data),
+    and remove several fields like country which usually do not contain helpful
+    information for classifying the language.
+
+    Example:
+
+    nb      no      Olaf Ryes Plass 8 | Oslo
+    '''
     i = 0
 
     formatter = AddressFormatter()
@@ -648,6 +517,18 @@ def normalize_wikipedia_title(title):
 
 
 def build_toponym_training_data(language_rtree, infile, out_dir):
+    '''
+    Data set of toponyms by language and country which should assist
+    in language classification. OSM tends to use the native language
+    by default (e.g. Москва instead of Moscow). Toponyms get messy
+    due to factors like colonialism, historical names, name borrowing
+    and the shortness of the names generally. In these cases
+    we're more strict as to what constitutes a valid language for a
+    given country.
+
+    Example:
+    ja      jp      東京都
+    '''
     i = 0
     f = open(os.path.join(out_dir, TOPONYM_LANGUAGE_DATA_FILENAME), 'w')
     writer = csv.writer(f, 'tsv_no_quote')
@@ -667,10 +548,8 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
 
         name_language = defaultdict(list)
 
-        all_langs = country_languages[country]
         official = official_languages[country]
 
-        num_langs = len(candidate_languages)
         default_langs = set([l for l, default in official.iteritems() if default])
 
         regional_langs = list(chain(*(p['languages'] for p in language_props if p.get('admin_level', 0) > 0)))
@@ -684,6 +563,14 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
             default_langs -= WELL_REPRESENTED_LANGUAGES
 
         valid_languages = set([l['lang'] for l in candidate_languages])
+
+        '''
+        WELL_REPRESENTED_LANGUAGES are languages like English, French, etc. for which we have a lot of data
+        WELL_REPRESENTED_LANGUAGE_COUNTRIES are more-or-less the "origin" countries for said languages where
+        we can take the place names as examples of the language itself (e.g. place names in France are examples
+        of French, whereas place names in much of Francophone Africa tend to get their names from languages
+        other than French, even though French is the official language.
+        '''
         valid_languages -= set([lang for lang in valid_languages if lang in WELL_REPRESENTED_LANGUAGES and country not in WELL_REPRESENTED_LANGUAGE_COUNTRIES[lang]])
 
         valid_languages |= default_langs
@@ -728,6 +615,14 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
 
 
 def build_address_training_data(langauge_rtree, infile, out_dir, format=False):
+    '''
+    Creates training set similar to the ways data but using addr:street tags instead.
+    These may be slightly closer to what we'd see in real live addresses, containing
+    variations, some abbreviations (although this is discouraged in OSM), etc.
+
+    Example record:
+    eu      es      Errebal kalea
+    '''
     i = 0
     f = open(os.path.join(out_dir, ADDRESS_LANGUAGE_DATA_FILENAME), 'w')
     writer = csv.writer(f, 'tsv_no_quote')
@@ -809,6 +704,11 @@ if __name__ == '__main__':
                         default=False,
                         help='Save formatted addresses (slow)')
 
+    parser.add_argument('-u', '--untagged',
+                        action='store_true',
+                        default=False,
+                        help='Save untagged formatted addresses (slow)')
+
     parser.add_argument('-l', '--limited-addresses',
                         action='store_true',
                         default=False,
@@ -842,7 +742,7 @@ if __name__ == '__main__':
     if args.address_file and not args.format_only and not args.limited_addresses:
         build_address_training_data(language_rtree, args.address_file, args.out_dir)
     if args.address_file and args.format_only:
-        build_address_format_training_data(language_rtree, args.address_file, args.out_dir)
+        build_address_format_training_data(language_rtree, args.address_file, args.out_dir, tag_components=not args.untagged)
     if args.address_file and args.limited_addresses:
         build_address_format_training_data_limited(language_rtree, args.address_file, args.out_dir)
     if args.venues_file:
