@@ -26,7 +26,8 @@ def main():
                       ),
 
         ],
-        packages=find_packages('python/*'),
+        packages=find_packages('python'),
+        package_dir={'': 'python'},
         include_package_data=True,
         zip_safe=False,
         url='http://mapzen.com',
