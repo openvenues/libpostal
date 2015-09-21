@@ -1,6 +1,6 @@
 #include <Python.h>
 
-#include "scanner.h"
+#include "src/scanner.h"
 
 #if PY_MAJOR_VERSION >= 3
 #define IS_PY3K

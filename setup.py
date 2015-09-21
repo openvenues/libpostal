@@ -21,7 +21,7 @@ def main():
                           os.path.join(SRC_DIR, 'utf8proc/utf8proc.c'),
                           'python/postal/text/pytokenize.c',
                       ],
-                      include_dirs=[SRC_DIR],
+                      include_dirs=['.'],
                       extra_compile_args=['-O0'],
                       ),
 
