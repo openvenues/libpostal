@@ -186,7 +186,7 @@ def disambiguate_language(text, languages):
     while read_len < len(text):
         script, script_len, is_ascii = get_string_script(text[read_len:])
         if script != LATIN_SCRIPT:
-            script_langs[script] = set([l for l, d in languages if l in script_languages[script]])
+            script_langs[script] = set([l for l, d in languages if l in script_languages.get(script, [])])
         read_len += script_len
 
     num_defaults = sum((1 for lang, default in valid_languages.iteritems() if default))
