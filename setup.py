@@ -22,7 +22,7 @@ def main():
                           'python/postal/text/pytokenize.c',
                       ],
                       include_dirs=['.'],
-                      extra_compile_args=['-O0'],
+                      extra_compile_args=['-O0', '-std=c99'],
                       ),
 
         ],
