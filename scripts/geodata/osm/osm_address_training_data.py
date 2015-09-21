@@ -396,10 +396,15 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
         for key in remove_keys:
             _ = value.pop(key, None)
 
-        if len(candidate_languages) == 1:
-            language = candidate_languages[0]['lang']
-        else:
-            language = disambiguate_language(v, [(l['lang'], l['default']) for l in candidate_languages])
+        language = None
+        if tag_components:
+            if len(candidate_languages) == 1:
+                language = candidate_languages[0]['lang']
+            else:
+                street = value.get('addr:street', None)
+                if street is None:
+                    continue
+                language = disambiguate_language(street, [(l['lang'], l['default']) for l in candidate_languages])
 
         formatted_address = formatter.format_address(country, value, tag_components=tag_components)
         if formatted_address is not None:
