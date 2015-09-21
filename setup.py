@@ -7,7 +7,7 @@ SRC_DIR = 'src'
 
 def main():
     setup(
-        name='postal',
+        name='pypostal',
         version='0.1',
         install_requires=[
             'six',
@@ -26,7 +26,7 @@ def main():
                       ),
 
         ],
-        packages=find_packages(),
+        packages=find_packages('python/*'),
         include_package_data=True,
         zip_safe=False,
         url='http://mapzen.com',
