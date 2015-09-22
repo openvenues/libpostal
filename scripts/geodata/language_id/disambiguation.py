@@ -163,6 +163,8 @@ def get_string_script(s):
     is_ascii = True
     script_len = 0
     for c in s:
+        if (ord(c)) >= len(char_scripts):
+            continue
         script = char_scripts[ord(c)]
         if script == COMMON_SCRIPT and last_script != UNKNOWN_SCRIPT:
             script = last_script
