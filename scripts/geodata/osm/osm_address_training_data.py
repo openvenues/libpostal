@@ -409,6 +409,8 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
         formatted_address = formatter.format_address(country, value, tag_components=tag_components)
         if formatted_address is not None:
             formatted_address = tsv_string(formatted_address)
+            if not formatted_address or not formatted_address.strip():
+                continue
             if tag_components:
                 row = (language, country, formatted_address)
             else:
