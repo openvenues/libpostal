@@ -30,6 +30,7 @@ from scanner import Scanner
 from unicode_properties import *
 from unicode_paths import CLDR_DIR
 from geodata.encoding import safe_decode, safe_encode
+from geodata.string_utils import NUM_CODEPOINTS, wide_unichr
 
 CLDR_TRANSFORMS_DIR = os.path.join(CLDR_DIR, 'common', 'transforms')
 
@@ -150,9 +151,10 @@ def init_unicode_categories():
     global unicode_blocks, unicode_combining_classes, unicode_properties, unicode_property_aliases
     global unicode_property_value_aliases, unicode_scripts, unicode_script_ids, unicode_word_breaks
 
-    for i in xrange(NUM_CHARS):
-        unicode_categories[unicodedata.category(unichr(i))].append(unichr(i))
-        unicode_combining_classes[str(unicodedata.combining(unichr(i)))].append(unichr(i))
+    for i in xrange(NUM_CODEPOINTS):
+        c = wide_unichr(i)
+        unicode_categories[unicodedata.category(c)].append(c)
+        unicode_combining_classes[str(unicodedata.combining(c))].append(c)
 
     unicode_categories = dict(unicode_categories)
     unicode_combining_classes = dict(unicode_combining_classes)
@@ -165,7 +167,7 @@ def init_unicode_categories():
     script_chars = get_chars_by_script()
     for i, script in enumerate(script_chars):
         if script:
-            unicode_scripts[script.lower()].append(unichr(i))
+            unicode_scripts[script.lower()].append(wide_unichr(i))
 
     unicode_scripts = dict(unicode_scripts)
 
@@ -379,9 +381,7 @@ char_set_scanner = Scanner([
     (r'[^\s]', CHARACTER),
 ])
 
-NUM_CHARS = 65536
-
-all_chars = set([unichr(i) for i in xrange(NUM_CHARS)])
+all_chars = set([wide_unichr(i) for i in xrange(NUM_CODEPOINTS)])
 
 control_chars = set([c for c in all_chars if unicodedata.category(c) in ('Cc', 'Cn', 'Cs')])
 
@@ -392,20 +392,22 @@ def get_transforms():
 
 def replace_html_entity(ent):
     name = ent.strip('&;')
-    return unichr(htmlentitydefs.name2codepoint[name])
+    return wide_unichr(htmlentitydefs.name2codepoint[name])
 
 
 def parse_regex_char_range(regex):
     prev_char = None
     ranges = range_regex.findall(regex)
     regex = range_regex.sub('', regex)
-    chars = [ord(c) for c in regex]
+    chars = [wide_ord(c) for c in regex]
 
     for start, end in ranges:
+        start_ord = wide_ord(start)
+        end_ord = wide_ord(end)
 
-        if ord(end) > ord(start):
+        if end_ord > start_ord:
             # Ranges are inclusive
-            chars.extend([unichr(c) for c in range(ord(start), ord(end) + 1)])
+            chars.extend([wide_unichr(c) for c in range(start_ord, end_ord + 1)])
 
     return chars
 
@@ -554,13 +556,15 @@ def parse_regex_char_set(s, current_filter=all_chars):
         elif token_class == CHARACTER and token not in control_chars:
             this_group.add(token)
             real_chars.add(token)
-        elif token_class == UNICODE_CHARACTER:
+        elif token_class in (UNICODE_CHARACTER, UNICODE_WIDE_CHARACTER):
             token = token.decode('unicode-escape')
             if token not in control_chars:
                 this_group.add(token)
                 real_chars.add(token)
-        elif token_class in (WIDE_CHARACTER, UNICODE_WIDE_CHARACTER):
-            continue
+        elif token_class == WIDE_CHARACTER:
+            if token not in control_chars:
+                this_group.add(token)
+                real_chars.add(token)
         elif token_class == BRACKETED_CHARACTER:
             if token.strip('{{}}') not in control_chars:
                 this_group.add(token)
@@ -794,11 +798,11 @@ def char_permutations(s, current_filter=all_chars, reverse=False):
             add_char_type(current_chars, [token])
         elif token_type == SINGLE_QUOTE:
             add_char_type(current_chars, ["'"])
-        elif token_type == UNICODE_CHARACTER:
+        elif token_type in (UNICODE_CHARACTER, UNICODE_WIDE_CHARACTER):
             token = token.decode('unicode-escape')
             add_char_type(current_chars, [token])
-        elif token_type in (WIDE_CHARACTER, UNICODE_WIDE_CHARACTER):
-            continue
+        elif token_type == WIDE_CHARACTER:
+            add_char_type(current_chars, [token])
 
         if in_group and last_token_group_start:
             start_group = len(current_chars)
@@ -1185,12 +1189,12 @@ EXISTING_STEP = 'EXISTING_STEP'
 PREPEND_STEP = 'PREPEND_STEP'
 
 
-html_escapes = {'&{};'.format(name): safe_encode(unichr(value))
+html_escapes = {'&{};'.format(name): safe_encode(wide_unichr(value))
                 for name, value in htmlentitydefs.name2codepoint.iteritems()
                 }
 
-html_escapes.update({'&#{};'.format(i): safe_encode(unichr(i))
-                     for i in xrange(NUM_CHARS)
+html_escapes.update({'&#{};'.format(i): safe_encode(wide_unichr(i))
+                     for i in xrange(NUM_CODEPOINTS)
                      })
 
 # [[:Latin] & [:Ll:]]
