@@ -34,7 +34,7 @@ static bool read_geoname_from_line(geoname_t *g, char *line) {
     if (tokens == NULL) return false;
 
     if (token_count != NUM_GEONAMES_FIELDS) {
-        log_error("Number of fields (%d) != expected (%d)\n", token_count, NUM_GEONAMES_FIELDS);
+        log_error("Number of fields (%zu) != expected (%d)\n", token_count, NUM_GEONAMES_FIELDS);
         goto exit_geoname_free_tokens;
     }
 
@@ -197,7 +197,7 @@ static bool read_gn_postal_code_from_line(gn_postal_code_t *postal, char *line) 
     if (tokens == NULL) return false;
 
     if (token_count != NUM_POSTAL_FIELDS) {
-        log_error("Number of fields (%d) != expected (%d)\n", token_count, NUM_POSTAL_FIELDS);
+        log_error("Number of fields (%zu) != expected (%d)\n", token_count, NUM_POSTAL_FIELDS);
         goto exit_postal_tokens_created;
     }
 
