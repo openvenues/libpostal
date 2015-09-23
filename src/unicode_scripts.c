@@ -37,6 +37,22 @@ string_script_t get_string_script(char *str, size_t len) {
         }
 
         if (last_script != script && last_script != SCRIPT_UNKNOWN && last_script != SCRIPT_COMMON) {
+            if (script_len < len) {
+                while (true) {
+                    char_len = utf8proc_iterate_reversed((const uint8_t *)str, idx, &ch);
+                    if (ch == 0) break;
+
+                    script = get_char_script((uint32_t)ch);
+                    if (script != SCRIPT_COMMON) {
+                        break;
+                    }
+
+                    script_len -= char_len;
+                    ptr -= char_len;
+                    idx -= char_len;
+                }
+            }
+
             break;
         }
 
