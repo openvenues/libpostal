@@ -3,7 +3,9 @@ averaged_perceptron_tagger.h
 ----------------------------
 
 An averaged perceptron tagger is a greedy sequence labeling
-algorithm which uses two tags of history.
+algorithm which uses features of the current token, surrounding
+tokens and n (typically n=2) previous predictions to predict
+the current value.
 
 */
 
