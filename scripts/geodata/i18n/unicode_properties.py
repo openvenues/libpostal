@@ -18,6 +18,7 @@ import subprocess
 from cStringIO import StringIO
 
 from collections import OrderedDict, defaultdict
+from itertools import islice
 
 from lxml import etree
 
@@ -30,6 +31,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.encoding import safe_encode, safe_decode
 from geodata.file_utils import ensure_dir, download_file
+from geodata.string_utils import NUM_CODEPOINTS, wide_unichr
 
 from cldr_languages import *
 from download_cldr import download_cldr
@@ -64,8 +66,6 @@ DERIVED_CORE_PROPS_URL = 'http://unicode.org/Public/UNIDATA/DerivedCorePropertie
 WORD_BREAKS_URL = 'http://unicode.org/Public/UNIDATA/auxiliary/WordBreakProperty.txt'
 
 ISO_15924_URL = 'http://unicode.org/iso15924/iso15924.txt.zip'
-
-NUM_CODEPOINTS = 65536
 
 scripts_header_template = u'''#ifndef UNICODE_SCRIPT_TYPES_H
 #define UNICODE_SCRIPT_TYPES_H
@@ -114,7 +114,7 @@ UNKNOWN_SCRIPT = 'Unknown'
 
 
 def parse_char_range(r):
-    return [unicode_to_integer(u) for u in r.split('..') if len(u) < 5]
+    return [unicode_to_integer(u) for u in r.split('..')]
 
 
 def get_chars_by_script():
@@ -194,9 +194,9 @@ def get_unicode_blocks():
 
         if len(char_range) == 2:
             for i in xrange(char_range[0], char_range[1] + 1):
-                blocks[block.lower()].append(unichr(i))
+                blocks[block.lower()].append(wide_unichr(i))
         elif char_range:
-            blocks[block.lower()].append(unichr(char_range[0]))
+            blocks[block.lower()].append(wide_unichr(char_range[0]))
 
     return dict(blocks)
 
@@ -213,9 +213,9 @@ def get_unicode_properties():
 
         if len(char_range) == 2:
             for i in xrange(char_range[0], char_range[1] + 1):
-                props[prop.lower()].append(unichr(i))
+                props[prop.lower()].append(wide_unichr(i))
         elif char_range:
-            props[prop.lower()].append(unichr(char_range[0]))
+            props[prop.lower()].append(wide_unichr(char_range[0]))
 
     derived_props_file = open(LOCAL_DERIVED_CORE_PROPS_FILE)
     for line in parse_file(derived_props_file):
@@ -224,9 +224,9 @@ def get_unicode_properties():
 
         if len(char_range) == 2:
             for i in xrange(char_range[0], char_range[1] + 1):
-                props[prop.lower()].append(unichr(i))
+                props[prop.lower()].append(wide_unichr(i))
         elif char_range:
-            props[prop.lower()].append(unichr(char_range[0]))
+            props[prop.lower()].append(wide_unichr(char_range[0]))
 
     return dict(props)
 
@@ -243,9 +243,9 @@ def get_word_break_properties():
 
         if len(char_range) == 2:
             for i in xrange(char_range[0], char_range[1] + 1):
-                props[prop].append(unichr(i))
+                props[prop].append(wide_unichr(i))
         elif char_range:
-            props[prop].append(unichr(char_range[0]))
+            props[prop].append(wide_unichr(char_range[0]))
 
     return dict(props)
 
@@ -340,6 +340,16 @@ def extract_language_scripts(xml):
     return language_scripts
 
 
+def batch_iter(iterable, batch_size):
+    source_iter = iter(iterable)
+    while True:
+        batch = list(islice(source_iter, batch_size))
+        if len(batch) > 0:
+            yield batch
+        else:
+            return
+
+
 def get_script_languages():
     # For some languages (Greek, Thai, etc.), use of an unambiguous script is sufficient
     # to identify the language. We keep track of those single language scripts to inform
@@ -398,6 +408,10 @@ def main(out_dir):
     if not os.path.exists(CLDR_SUPPLEMENTAL_DATA):
         download_cldr()
 
+    chars = get_chars_by_script()
+    all_scripts = build_master_scripts_list(chars)
+    script_codes = get_script_codes(all_scripts)
+
     script_languages = get_script_languages()
 
     max_langs = 0
@@ -420,7 +434,7 @@ def main(out_dir):
     # Generate C data file
 
     char_scripts_data = u''',
-    '''.join(['SCRIPT_{}'.format((script or UNKNOWN_SCRIPT).upper()) for script in chars])
+    '''.join([', '.join([str(all_scripts[sc or UNKNOWN_SCRIPT]) for sc in batch]) for batch in batch_iter(chars, 25)])
 
     script_codes_data = u''',
     '''.join([script_code_template.format(name=name.upper(), code=code) for code, name in script_codes.iteritems()])
