@@ -30,7 +30,7 @@ from scanner import Scanner
 from unicode_properties import *
 from unicode_paths import CLDR_DIR
 from geodata.encoding import safe_decode, safe_encode
-from geodata.string_utils import NUM_CODEPOINTS, wide_unichr
+from geodata.string_utils import NUM_CODEPOINTS, wide_unichr, wide_ord
 
 CLDR_TRANSFORMS_DIR = os.path.join(CLDR_DIR, 'common', 'transforms')
 
@@ -381,13 +381,23 @@ char_set_scanner = Scanner([
     (r'[^\s]', CHARACTER),
 ])
 
-all_chars = set([wide_unichr(i) for i in xrange(NUM_CODEPOINTS)])
+NUM_CODEPOINTS_16 = 65536
+
+all_chars = set([unichr(i) for i in xrange(NUM_CODEPOINTS_16)])
 
 control_chars = set([c for c in all_chars if unicodedata.category(c) in ('Cc', 'Cn', 'Cs')])
 
 
-def get_transforms():
-    return [f for f in os.listdir(CLDR_TRANSFORMS_DIR) if f.endswith('.xml')]
+def get_transforms(d=CLDR_TRANSFORMS_DIR):
+    return [f for f in os.listdir(d) if f.endswith('.xml')]
+
+
+def parse_transforms(d=CLDR_TRANSFORMS_DIR):
+    for filename in get_transforms(d=d):
+        name = filename.split('.xml')[0].lower()
+        f = open(os.path.join(d, filename))
+        xml = etree.parse(f)
+        yield filename, name, xml
 
 
 def replace_html_entity(ent):
@@ -954,7 +964,7 @@ def format_rule(rule):
     return output_rule
 
 
-def parse_transform_rules(name, xml, reverse=False):
+def parse_transform_rules(name, xml, reverse=False, transforms_only=False):
     '''
     parse_transform_rules takes a parsed xml document as input
     and generates rules suitable for use in the C code.
@@ -963,6 +973,7 @@ def parse_transform_rules(name, xml, reverse=False):
     we don't care about backward transforms or two-way contexts.
     Only the lvalue's context needs to be used.
     '''
+
     rules, variables = get_raw_rules_and_variables(xml, reverse=reverse)
 
     def get_var(m):
@@ -985,6 +996,9 @@ def parse_transform_rules(name, xml, reverse=False):
     current_filter = custom_filters.get(name.lower(), all_chars)
 
     for rule_type, rule in rules:
+        if transforms_only and rule_type != PRE_TRANSFORM:
+            continue
+
         if not reverse and rule_type in (BIDIRECTIONAL_TRANSFORM, FORWARD_TRANSFORM):
             left, right = rule
         elif reverse and rule_type in (BIDIRECTIONAL_TRANSFORM, FORWARD_TRANSFORM, BACKWARD_TRANSFORM):
@@ -1194,7 +1208,7 @@ html_escapes = {'&{};'.format(name): safe_encode(wide_unichr(value))
                 }
 
 html_escapes.update({'&#{};'.format(i): safe_encode(wide_unichr(i))
-                     for i in xrange(NUM_CODEPOINTS)
+                     for i in xrange(NUM_CODEPOINTS_16)
                      })
 
 # [[:Latin] & [:Ll:]]
@@ -1264,22 +1278,47 @@ def get_all_transform_rules():
 
     name_aliases = {}
 
+    dependencies = defaultdict(list)
+
     for filename in get_transforms():
         name = filename.split('.xml')[0].lower()
-
-        f = open(os.path.join(CLDR_TRANSFORMS_DIR, filename))
-        xml = etree.parse(f)
-        source, target = get_source_and_target(xml)
-        name_alias = '-'.join([source.lower(), target.lower()])
-        if name_alias not in name_aliases:
-            name_aliases[name_alias] = name
 
         if name in REVERSE_TRANSLITERATORS:
             all_transforms.add(REVERSE_TRANSLITERATORS[name])
         elif name in BIDIRECTIONAL_TRANSLITERATORS:
             all_transforms.add(BIDIRECTIONAL_TRANSLITERATORS[name])
 
-    dependencies = defaultdict(list)
+    for filename, name, xml in parse_transforms():
+        source, target = get_source_and_target(xml)
+        name_alias = '-'.join([source.lower(), target.lower()])
+        if name_alias not in name_aliases and name_alias != name:
+            name_aliases[name_alias] = name
+
+    def add_dependencies(name, xml, reverse=False):
+        for rule_type, rule in parse_transform_rules(name, xml, reverse=reverse, transforms_only=True):
+            rule = rule.lower()
+            if rule in all_transforms and rule not in EXCLUDE_TRANSLITERATORS:
+                dependencies[name].append(rule)
+            elif rule in name_aliases and rule not in EXCLUDE_TRANSLITERATORS:
+                dependencies[name].append(name_aliases[rule])
+            elif rule.split('-')[0] in all_transforms and rule.split('-')[0] not in EXCLUDE_TRANSLITERATORS:
+                dependencies[name].append(rule.split('-')[0])
+
+    for filename, name, xml in parse_transforms():
+        reverse = name in REVERSE_TRANSLITERATORS
+
+        bidirectional = name in BIDIRECTIONAL_TRANSLITERATORS
+
+        deps = []
+        if not reverse and not bidirectional:
+            add_dependencies(name, xml, reverse=False)
+        elif reverse:
+            name = REVERSE_TRANSLITERATORS[name]
+            add_dependencies(name, xml, reverse=True)
+        elif bidirectional:
+            add_dependencies(name, xml, reverse=False)
+            name = BIDIRECTIONAL_TRANSLITERATORS[name]
+            add_dependencies(name, xml, reverse=True)
 
     def parse_steps(name, xml, reverse=False):
         steps = []
@@ -1295,14 +1334,11 @@ def get_all_transform_rules():
                     rule_set = []
 
                 if rule.lower() in all_transforms and rule.lower() not in EXCLUDE_TRANSLITERATORS:
-                    dependencies[name].append(rule.lower())
                     steps.append((STEP_TRANSFORM, rule.lower()))
                 elif rule.lower() in name_aliases and rule.lower() not in EXCLUDE_TRANSLITERATORS:
                     dep = name_aliases[rule.lower()]
-                    dependencies[name].append(dep)
                     steps.append((STEP_TRANSFORM, dep))
                 elif rule.split('-')[0].lower() in all_transforms and rule.split('-')[0].lower() not in EXCLUDE_TRANSLITERATORS:
-                    dependencies[name].append(rule.split('-')[0].lower())
                     steps.append((STEP_TRANSFORM, rule.split('-')[0].lower()))
 
                 rule = UTF8PROC_TRANSFORMS.get(rule, rule)
@@ -1314,11 +1350,7 @@ def get_all_transform_rules():
 
         return steps
 
-    for filename in get_transforms():
-        name = filename.split('.xml')[0].lower()
-
-        f = open(os.path.join(CLDR_TRANSFORMS_DIR, filename))
-        xml = etree.parse(f)
+    for filename, name, xml in parse_transforms():
         source, target = get_source_and_target(xml)
         internal = is_internal(xml)
 
@@ -1337,24 +1369,8 @@ def get_all_transform_rules():
             retain_transforms.add(REVERSE_TRANSLITERATORS[name])
         elif (bidirectional and source.lower() == 'latin') and not internal:
             to_latin.add(BIDIRECTIONAL_TRANSLITERATORS[name])
+            retain_transforms.add(name)
             retain_transforms.add(BIDIRECTIONAL_TRANSLITERATORS[name])
-
-        print 'doing', filename
-
-        if not reverse and not bidirectional:
-            steps = parse_steps(name, xml, reverse=False)
-            transforms[name] = steps
-        elif reverse:
-            name = REVERSE_TRANSLITERATORS[name]
-            steps = parse_steps(name, xml, reverse=True)
-            transforms[name] = steps
-        elif bidirectional:
-            steps = parse_steps(name, xml, reverse=False)
-            transforms[name] = steps
-            name = BIDIRECTIONAL_TRANSLITERATORS[name]
-            all_transforms.add(name)
-            steps = parse_steps(name, xml, reverse=True)
-            transforms[name] = steps
 
     dependency_queue = deque(to_latin)
     retain_transforms |= to_latin
@@ -1369,9 +1385,47 @@ def get_all_transform_rules():
                 dependency_queue.append(dep)
                 seen.add(dep)
 
-    all_rules = []
-    all_steps = []
-    all_transforms = []
+    rules_data = []
+    steps_data = []
+    transforms_data = []
+
+    for filename, name, xml in parse_transforms():
+        if name in EXCLUDE_TRANSLITERATORS:
+            continue
+
+        reverse = name in REVERSE_TRANSLITERATORS
+
+        bidirectional = name in BIDIRECTIONAL_TRANSLITERATORS
+
+        normalized_name = None
+
+        if reverse:
+            normalized_name = REVERSE_TRANSLITERATORS[name]
+
+        if bidirectional:
+            normalized_name = BIDIRECTIONAL_TRANSLITERATORS[name]
+
+        # Only care if it's a transform to Latin/ASCII or a dependency
+        # for a transform to Latin/ASCII
+        if name not in retain_transforms and normalized_name not in retain_transforms:
+            print 'skipping', filename
+            continue
+
+        print 'doing', filename
+
+        if not reverse and not bidirectional:
+            steps = parse_steps(name, xml, reverse=False)
+            transforms[name] = steps
+        elif reverse:
+            name = REVERSE_TRANSLITERATORS[name]
+            steps = parse_steps(name, xml, reverse=True)
+            transforms[name] = steps
+        elif bidirectional:
+            steps = parse_steps(name, xml, reverse=False)
+            transforms[name] = steps
+            name = BIDIRECTIONAL_TRANSLITERATORS[name]
+            steps = parse_steps(name, xml, reverse=True)
+            transforms[name] = steps
 
     for name, steps in transforms.iteritems():
         if name in supplemental_transliterations:
@@ -1382,30 +1436,26 @@ def get_all_transform_rules():
                     steps = [(STEP_RULESET, rules)] + steps
                 else:
                     steps.append((STEP_RULESET, rules))
-        # Only care if it's a transform to Latin/ASCII or a dependency
-        # for a transform to Latin/ASCII
-        elif name not in retain_transforms:
-            continue
-        step_index = len(all_steps)
+        step_index = len(steps_data)
         num_steps = len(steps)
         for i, (step_type, data) in enumerate(steps):
             if step_type == STEP_RULESET:
-                rule_index = len(all_rules)
+                rule_index = len(rules_data)
                 num_rules = len(data)
                 step = (STEP_RULESET, str(rule_index), str(num_rules), quote_string(str(i)))
-                all_rules.extend(data)
+                rules_data.extend(data)
             elif step_type == STEP_TRANSFORM:
                 step = (STEP_TRANSFORM, '-1', '-1', quote_string(data))
             elif step_type == STEP_UNICODE_NORMALIZATION:
                 step = (STEP_UNICODE_NORMALIZATION, '-1', '-1', quote_string(data))
-            all_steps.append(step)
+            steps_data.append(step)
 
         internal = int(name not in to_latin)
 
         transliterator = (quote_string(name.replace('_', '-')), str(internal), str(step_index), str(num_steps))
-        all_transforms.append(transliterator)
+        transforms_data.append(transliterator)
 
-    return all_transforms, all_steps, all_rules
+    return transforms_data, steps_data, rules_data
 
 
 transliteration_data_template = u'''#include <stdlib.h>
