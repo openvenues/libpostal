@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 #include "constants.h"
+#include "string_utils.h"
 #include "utf8proc/utf8proc.h"
 #include "unicode_script_types.h"
 
