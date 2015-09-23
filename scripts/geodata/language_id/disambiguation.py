@@ -159,17 +159,20 @@ MAX_ASCII = 127
 
 def get_string_script(s):
     s = safe_decode(s)
+    str_len = len(s)
     script = last_script = UNKNOWN_SCRIPT
     is_ascii = True
     script_len = 0
-    for c in s:
-        if (ord(c)) < len(char_scripts):
-            script = char_scripts[ord(c)]
-        else:
-            script = UNKNOWN_SCRIPT
+    for c in wide_iter(s):
+        script = char_scripts[wide_ord(c)]
+
         if script == COMMON_SCRIPT and last_script != UNKNOWN_SCRIPT:
             script = last_script
         if last_script != script and last_script != UNKNOWN_SCRIPT and last_script != COMMON_SCRIPT:
+            if (script_len < str_len):
+                for c in reversed(list(wide_iter(s[:script_len]))):
+                    if char_scripts[wide_ord(c)] == COMMON_SCRIPT:
+                        script_len -= 1
             break
         is_ascii = is_ascii and ord(c) <= MAX_ASCII
         script_len += 1
