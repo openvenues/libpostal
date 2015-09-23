@@ -42,14 +42,16 @@ char *normalize_string_utf8(char *str, uint64_t options) {
 char *normalize_string_latin(char *str, size_t len, uint64_t options) {
     char *transliterated = transliterate(LATIN_ASCII, str, len);
     
-    if (transliterated != NULL) {
-        char *utf8_normalized = normalize_string_utf8(transliterated, options);
+    char *utf8_normalized;
+    if (transliterated == NULL) {
+        utf8_normalized = normalize_string_utf8(str, options);
+    } else {
+        utf8_normalized = normalize_string_utf8(transliterated, options);
         free(transliterated);
         transliterated = NULL;
-        return utf8_normalized;
     }
 
-    return NULL;
+    return utf8_normalized;
 }
 
 void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t options) {
@@ -164,7 +166,7 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
 
 }
 
-void append_normalized_token(char_array *array, char *str, token_t token, uint64_t options) {
+void add_normalized_token(char_array *array, char *str, token_t token, uint64_t options) {
     size_t idx = 0;
 
     uint8_t *ptr = (uint8_t *)str + token.offset;
@@ -213,6 +215,11 @@ void append_normalized_token(char_array *array, char *str, token_t token, uint64
             append_if_not_numeric = NULL;
         }
 
+        if (is_number && options & NORMALIZE_TOKEN_REPLACE_DIGITS) {
+            char_array_append(array, DIGIT_CHAR);
+            append_char = false;
+        }
+
         if (options & NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC && token.type == NUMERIC && last_was_letter && is_number && !alpha_numeric_split) {
             char_array_append(array, " ");
             alpha_numeric_split = true;
@@ -232,9 +239,7 @@ void append_normalized_token(char_array *array, char *str, token_t token, uint64
             char this_char = *ptr;
             char next_char = *(ptr + 1);
 
-            if (this_char == '\'' && next_char == 's') {
-                break;
-            } else if (this_char == 's' && next_char == '\'') {
+            if ((this_char == '\'' && next_char == 's') || (this_char == 's' && next_char == '\'')) {
                 char_array_append(array, "s");
                 break;
             }
@@ -256,14 +261,11 @@ void append_normalized_token(char_array *array, char *str, token_t token, uint64
 
     }
 
+    char_array_terminate(array);
+
 }
 
-void normalize_token(cstring_array *array, char *str, token_t token, uint64_t options) {
-
+inline void normalize_token(cstring_array *array, char *str, token_t token, uint64_t options) {
     cstring_array_start_token(array);
-
-    append_normalized_token(array->str, str, token, options);
-
-    cstring_array_terminate(array);
-
+    add_normalized_token(array->str, str, token, options);
 }

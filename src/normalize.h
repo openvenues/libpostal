@@ -52,13 +52,17 @@ As well as normalizations for individual string tokens:
 #define NORMALIZE_TOKEN_DROP_ENGLISH_POSSESSIVES 1 << 4
 #define NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE 1 << 5
 #define NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC 1 << 6
+#define NORMALIZE_TOKEN_REPLACE_DIGITS 1 << 7
+
+// Replace digits with capital D e.g. 10013 => DDDDD, intended for use with lowercased strings
+#define DIGIT_CHAR "D"
 
 char *normalize_string_utf8(char *str, uint64_t options);
 
 char *normalize_string_latin(char *str, size_t len, uint64_t options);
 
 // Takes NORMALIZE_TOKEN_* options
-void append_normalized_token(char_array *array, char *str, token_t token, uint64_t options);
+void add_normalized_token(char_array *array, char *str, token_t token, uint64_t options);
 void normalize_token(cstring_array *array, char *str, token_t token, uint64_t options);
 
 // Takes NORMALIZE_STRING_* options
