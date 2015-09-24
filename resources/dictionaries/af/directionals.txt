@@ -1,0 +1,12 @@
+noord|n
+noordoos|noord oos|no|n.o.|n.o|n o
+noordooste|noord ooste|no|n.o.|n.o|n o
+noordwes|noord wes|nw|n.w.|n.w|n w
+noordweste|noord weste|nw|n.w.|n.w|n w
+oos|o
+suidoos|zuid oost|so|s.o.|s.o|s o
+suidooste|suid ooste|so|s.o.|s.o|s o
+suidwest|sw|s.w.|s.w|s w
+suidwesten|sw|s.w.|s.w|s w
+suid|s
+west|w
