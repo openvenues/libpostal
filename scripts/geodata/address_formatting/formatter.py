@@ -38,6 +38,9 @@ class AddressFormatter(object):
 
     splitter = ' | '
 
+    separator_tag = 'SEP'
+    field_separator_tag = 'FSEP'
+
     aliases = OrderedDict([
         ('name', 'house'),
         ('addr:housename', 'house'),
@@ -116,7 +119,9 @@ class AddressFormatter(object):
 
         values = self.whitespace_component_regex.split(output)
 
-        output = self.splitter.join([
+        splitter = self.splitter if not tagged else ' {}/{} '.format(self.splitter.strip(), self.field_separator_tag)
+
+        output = splitter.join([
             self.strip_component(val, tagged=tagged)
             for val in values
         ])
@@ -152,6 +157,12 @@ class AddressFormatter(object):
             for regex, replacement in post_format_replacements:
                 text = re.sub(regex, replacement, text)
         return text
+
+    def tag_template_separators(self, template):
+        template = re.sub(r'},', '}} ,/{} '.format(self.separator_tag), template)
+        template = re.sub(r'}-', '}} -/{} '.format(self.separator_tag), template)
+        template = re.sub(r' - ', ' -/{} '.format(self.separator_tag), template)
+        return template
 
     def strip_component(self, value, tagged=False):
         if not tagged:
@@ -203,6 +214,7 @@ class AddressFormatter(object):
         self.apply_replacements(template, components)
 
         if tag_components:
+            template_text = self.tag_template_separators(template_text)
             components = {k: u' '.join([u'{}/{}'.format(t, k.replace(' ', '_'))
                                         for t, c in tokenize(v)])
                           for k, v in components.iteritems()}
