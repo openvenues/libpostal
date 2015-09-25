@@ -31,8 +31,8 @@ libpostal is not itself a full geocoder, but should be a ubiquitous
 preprocessing step before indexing/searching with free text geographic strings.
 It is written in C for maximum portability and performance.
 
-libpostal's raison d'être
--------------------------
+Raison d'être
+-------------
 
 libpostal was created as part of the [OpenVenues](https://github.com/openvenues/openvenues) project to solve 
 the problem of venue deduping. In OpenVenues, we have a data set of millions of
