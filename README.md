@@ -263,6 +263,8 @@ be written either concatenated or as separate tokens
 where the suffix cannot be separated from the main token, but either has an
 abbreviated equivalent or simply can help identify the token in parsing as,
 say, part of a street name
+- **concatenated_suffixes_separable.txt**: Things like "...straße" where the
+suffix can be either concatenated to the main token or separated
 - **directionals.txt**: strings indicating directions (cardinal and
 lower/central/upper, etc.)
 - **level_types.txt**: strings indicating a particular floor
