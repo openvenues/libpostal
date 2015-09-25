@@ -57,6 +57,30 @@ typedef struct normalize_options {
 
 } normalize_options_t;
 
+static normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
+        .num_languages = 1,
+        .languages = NULL,
+        .address_components = ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_UNIT,
+        .latin_ascii = 1,
+        .transliterate = 1,
+        .strip_accents = 1,
+        .decompose = 1,
+        .lowercase = 1,
+        .trim_string = 1,
+        .replace_word_hyphens = 1,
+        .delete_word_hyphens = 1,
+        .replace_numeric_hyphens = 0,
+        .delete_numeric_hyphens = 0,
+        .split_alpha_from_numeric = 1,
+        .delete_final_periods = 1,
+        .delete_acronym_periods = 1,
+        .drop_english_possessives = 1,
+        .delete_apostrophes = 1,
+        .expand_numex = 1,
+        .roman_numerals = 1
+};
+
+
 char **expand_address(char *input, normalize_options_t options, uint64_t *n);
 
 bool libpostal_setup(void);
