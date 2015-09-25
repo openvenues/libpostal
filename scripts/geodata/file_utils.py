@@ -2,12 +2,14 @@ import os
 import subprocess
 
 
-def download_file(url, dest_dir):
-    return subprocess.call(['wget', url, '-O', dest_dir, '--quiet']) == 0
+def download_file(url, dest):
+    ensure_dir(os.path.dirname(dest))
+    return subprocess.call(['wget', url, '-O', dest, '--quiet']) == 0
 
 
-def unzip_file(filename, dest_dir):
-    subprocess.call(['unzip', '-o', filename, '-d', dest_dir])
+def unzip_file(filename, dest):
+    ensure_dir(dest)
+    subprocess.call(['unzip', '-o', filename, '-d', dest])
 
 
 def remove_file(filename):
