@@ -54,10 +54,6 @@ in terms of n-gram set overlap. In non-Latin scripts, say a Russian address and
 its transliterated equivalent, it's conceivable that two addresses referring to
 the same place may not match even a single character.
 
-libpostal aims to create normalized geographic strings, parsed into components,
-such that we can more effectively reason about how well two addresses
-actually match.
-
 As a motivating example, consider the following two equivalent ways to write a
 particular Manhattan street address with varying conventions and degrees
 of verbosity:
@@ -68,6 +64,10 @@ of verbosity:
 Obviously '30 W 26th St Fl #7 != '30 West Twenty-sixth Street Floor Number 7'
 in a string comparison sense, but a human can grok that these two addresses
 refer to the same physical location.
+
+libpostal aims to create normalized geographic strings, parsed into components,
+such that we can more effectively reason about how well two addresses
+actually match and make automated server-side decisions about dupes.
 
 Isn't that geocoding?
 ---------------------
