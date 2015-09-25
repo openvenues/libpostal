@@ -1,3 +1,4 @@
+<pre>
      ___        __                               __             ___      
     /\_ \    __/\ \                             /\ \__         /\_ \     
     \//\ \  /\_\ \ \____  _____     ___     ____\ \ ,_\    __  \//\ \    
@@ -8,6 +9,7 @@
                             \ \_\                                        
                              \/_/                                        
     ---------------------------------------------------------------------
+</pre>
 
 **N.B.**: libpostal is not publicly released yet and the APIs may change. We
 encourage folks to hold off on including it as a dependency for now.
@@ -33,9 +35,9 @@ libpostal's raison d'être
 -------------------------
 
 libpostal was created as part of the [OpenVenues](https://github.com/openvenues/openvenues) project to solve 
-the problem of place deduping. In OpenVenues, we have a data set of millions of
+the problem of venue deduping. In OpenVenues, we have a data set of millions of
 places derived from terabytes of web pages from the [Common Crawl](http://commoncrawl.org/).
-The Common Crawl is published every month, and so even merging the results of
+The Common Crawl is published monthly, and so even merging the results of
 two crawls produces significant duplicates.
 
 Deduping is a relatively well-studied field, and for text documents like web
@@ -75,8 +77,8 @@ only in the OpenVenues case, we do it without a UI or a user to select the
 correct address in an autocomplete. It's server-side batch geocoding
 (and you can too!)
 
-Now, instead of giant Elasticsearch synonyms files, etc.
-geocoding can look like this:
+Now, instead of fiddling with giant Elasticsearch synonyms files, scripting,
+analyzers, tokenizers, and the like, geocoding can look like this:
 
 1. Run the addresses in your index through libpostal
 2. Store the canonical strings
@@ -183,8 +185,8 @@ challenges libpostal can handle:
 For further reading and some less intuitive examples of addresses, see
 "[Falsehoods Programmers Believe About Addresses](https://www.mjt.me.uk/posts/falsehoods-programmers-believe-about-addresses/)".
 
-Why C (you crazy person)?
--------------------------
+Why C (i.e. are you crazy)?
+---------------------------
 
 libpostal is written in C for three reasons (in order of importance):
 
@@ -230,7 +232,7 @@ libpostal is written in modern, legible, C99.
 - Throughly test for memory leaks before pushing
 - Keep it reasonably cross-platform compatible, particularly for *nix
 
-Language dictinonaries
+Language dictionaries
 ----------------------
 
 It's easy to add new languages/synonyms to libpostal by modifying a few text
@@ -287,12 +289,12 @@ In most cases better to leave these alone
 
 Most of the dictionaries have been derived with the following process:
 
-1. Tokenize all the streets in OSM for a particular language
-2. Count the words
+1. Tokenize all the streets in OSM for language x
+2. Count the most common N tokens
 3. Optionally use frequent item set mining to get frequent phrases
 4. Run the most frequent words/phrases through Google Translate
 5. Add the ones that mean "street" to dictionaries
-6. Research thoroughfare types in a given country
+6. Augment by researching addresses in countries speaking language x
 
 In the future it might be beneficial to move the dictionaries to a wiki
 so they can be crowdsourced by native speakers regardless of whether or not
@@ -321,6 +323,8 @@ To install via Python, just use:
 pip install https://github.com/openvenues/libpostal.git
 ```
 
+**Note**: The Python bindings don't implement libpostal's full API currently.
+
 Command-line usage
 ------------------
 
@@ -331,7 +335,6 @@ cd src/
 
 ./libpostal "12 Three-hundred and forty-fifth ave, ste. no 678" en
 #12 345th avenue, suite number 678
-
 ```
 
 Currently libpostal requires two input strings, the address text and a language
