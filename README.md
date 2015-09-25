@@ -41,7 +41,7 @@ The Common Crawl is published monthly, and so even merging the results of
 two crawls produces significant duplicates.
 
 Deduping is a relatively well-studied field, and for text documents like web
-pages, academic papers, etc. we've arrived at pretty decent approximate
+pages, academic papers, etc. there exist pretty decent approximate
 similarity methods such as [MinHash](https://en.wikipedia.org/wiki/MinHash). 
 
 However, for physical addresses, the frequent use of conventional abbreviations
@@ -72,9 +72,9 @@ actually match and make automated server-side decisions about dupes.
 Isn't that geocoding?
 ---------------------
 
-If the above sounds a lot like geocoding, that's because it's very similar,
+If the above sounds a lot like geocoding, that's because it is in a way,
 only in the OpenVenues case, we do it without a UI or a user to select the
-correct address in an autocomplete. It's server-side batch geocoding
+correct address in an autocomplete. libpostal does server-side batch geocoding
 (and you can too!)
 
 Now, instead of fiddling with giant Elasticsearch synonyms files, scripting,
@@ -142,12 +142,12 @@ implements the TR-29 spec for UTF8 word segmentation, tokenizes East Asian
 languages chracter by character instead of on whitespace.
 
 - **UTF8 normalization**: optionally decompose UTF8 to NFD normalization form,
-strips accent marks e.g. à => a and/or apply Latin-ASCII transliteration.
+strips accent marks e.g. à => a and/or applies Latin-ASCII transliteration.
 
 - **Transliteration**: e.g. улица => ulica or ulitsa. Uses all
-[CLDR transforms][http://www.unicode.org/repos/cldr/trunk/common/transforms/], which is what ICU uses,
-but libpostal doesn't require pulling in all of ICU (possibly conflicting with
-your system's version). Note: some languages, particularly Hebrew, Arabic
+[CLDR transforms](http://www.unicode.org/repos/cldr/trunk/common/transforms/), the exact same as used by ICU,
+though libpostal doesn't require pulling in all of ICU (might conflict 
+with your system's version). Note: some languages, particularly Hebrew, Arabic
 and Thai may not include vowels andthus will not often match a transliteration 
 done by a human. It may be possible to implement statistical transliterators
 for some of these languages.
@@ -223,7 +223,7 @@ Design philosophy
 
 libpostal is written in modern, legible, C99. 
 
-- Keep it object-oriented(-ish)
+- Keep it roughly object-oriented, as allowed by C
 - Confine almost all mallocs to *name*_new and all frees to *name*_destroy
 - Don't write custom hashtables, sorting algorithms, other undergrad CS stuff
 - Use generic containers from klib where possible
