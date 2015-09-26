@@ -27,6 +27,7 @@ from collections import defaultdict, deque
 from lxml import etree
 
 from scanner import Scanner
+from unicode_data import *
 from unicode_properties import *
 from unicode_paths import CLDR_DIR
 from geodata.encoding import safe_decode, safe_encode
@@ -107,89 +108,9 @@ UNICODE_NORMALIZATION_TRANSFORMS = set([
     STRIP_MARK,
 ])
 
-unicode_category_aliases = {
-    'letter': 'L',
-    'lower': 'Ll',
-    'lowercase': 'Ll',
-    'lowercaseletter': 'Ll',
-    'upper': 'Lu',
-    'uppercase': 'Lu',
-    'uppercaseletter': 'Lu',
-    'title': 'Lt',
-    'nonspacing mark': 'Mn',
-    'mark': 'M',
-}
-
-unicode_categories = defaultdict(list)
-unicode_blocks = defaultdict(list)
-unicode_combining_classes = defaultdict(list)
-unicode_general_categories = defaultdict(list)
-unicode_scripts = defaultdict(list)
-unicode_properties = {}
-
-unicode_script_ids = {}
-
-unicode_blocks = {}
-unicode_category_aliases = {}
-unicode_property_aliases = {}
-unicode_property_value_aliases = {}
-unicode_word_breaks = {}
-
-COMBINING_CLASS_PROP = 'canonical_combining_class'
-BLOCK_PROP = 'block'
-GENERAL_CATEGORY_PROP = 'general_category'
-SCRIPT_PROP = 'script'
-WORD_BREAK_PROP = 'word_break'
-
 
 class TransliterationParseError(Exception):
     pass
-
-
-def init_unicode_categories():
-    global unicode_categories, unicode_general_categories, unicode_scripts, unicode_category_aliases
-    global unicode_blocks, unicode_combining_classes, unicode_properties, unicode_property_aliases
-    global unicode_property_value_aliases, unicode_scripts, unicode_script_ids, unicode_word_breaks
-
-    for i in xrange(NUM_CODEPOINTS):
-        c = wide_unichr(i)
-        unicode_categories[unicodedata.category(c)].append(c)
-        unicode_combining_classes[str(unicodedata.combining(c))].append(c)
-
-    unicode_categories = dict(unicode_categories)
-    unicode_combining_classes = dict(unicode_combining_classes)
-
-    for key in unicode_categories.keys():
-        unicode_general_categories[key[0]].extend(unicode_categories[key])
-
-    unicode_general_categories = dict(unicode_general_categories)
-
-    script_chars = get_chars_by_script()
-    for i, script in enumerate(script_chars):
-        if script:
-            unicode_scripts[script.lower()].append(wide_unichr(i))
-
-    unicode_scripts = dict(unicode_scripts)
-
-    unicode_script_ids.update(build_master_scripts_list(script_chars))
-
-    unicode_blocks.update(get_unicode_blocks())
-    unicode_properties.update(get_unicode_properties())
-    unicode_property_aliases.update(get_property_aliases())
-
-    unicode_word_breaks.update(get_word_break_properties())
-
-    for key, value in get_property_value_aliases().iteritems():
-        key = unicode_property_aliases.get(key, key)
-        if key == GENERAL_CATEGORY_PROP:
-            for k, v in value.iteritems():
-                k = k.lower()
-                unicode_category_aliases[k] = v
-                if '_' in k:
-                    unicode_category_aliases[k.replace('_', '')] = v
-
-        unicode_property_value_aliases[key] = value
-
 
 RULE = 'RULE'
 TRANSFORM = 'TRANSFORM'
