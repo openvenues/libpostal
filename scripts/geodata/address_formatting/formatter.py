@@ -9,7 +9,7 @@ from postal.text.tokenize import tokenize, tokenize_raw, token_types
 from collections import OrderedDict
 from itertools import ifilter
 
-FORMATTER_GIT_REPO = 'https://github.com/openvenues/address-formatting'
+FORMATTER_GIT_REPO = 'https://github.com/OpenCageData/address-formatting'
 
 
 class AddressFormatter(object):
@@ -182,12 +182,17 @@ class AddressFormatter(object):
         else:
             i = j = 0
             tokens = value.split()
+
+            separator_tag = self.separator_tag
+
             for i, t in enumerate(tokens):
-                if '/' in t:
+                t, c = t.split('/')
+                if c != separator_tag:
                     break
 
             for j, t in enumerate(reversed(tokens)):
-                if '/' in t:
+                t, c = t.split('/')
+                if c != separator_tag:
                     break
 
             if j == 0:
