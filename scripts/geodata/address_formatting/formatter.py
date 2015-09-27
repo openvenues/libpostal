@@ -186,12 +186,12 @@ class AddressFormatter(object):
             separator_tag = self.separator_tag
 
             for i, t in enumerate(tokens):
-                t, c = t.split('/')
+                t, c = t.rsplit('/', 1)
                 if c != separator_tag:
                     break
 
             for j, t in enumerate(reversed(tokens)):
-                t, c = t.split('/')
+                t, c = t.rsplit('/', 1)
                 if c != separator_tag:
                     break
 
