@@ -224,7 +224,7 @@ class AddressFormatter(object):
 
         if tag_components:
             template_text = self.tag_template_separators(template_text)
-            components = {k: u' '.join([u'{}/{}'.format(t, k.replace(' ', '_'))
+            components = {k: u' '.join([u'{}/{}'.format(t.replace(' ', ''), k.replace(' ', '_'))
                                         for t, c in tokenize(v)])
                           for k, v in components.iteritems()}
 
