@@ -167,18 +167,21 @@ class AddressFormatter(object):
 
     def strip_component(self, value, tagged=False):
         if not tagged:
+            comma = token_types.COMMA.value
+            hyphen = token_types.HYPHEN.value
+
             start = end = 0
             tokens = tokenize_raw(value.strip())
             for token_start, token_length, token_type in tokens:
                 start = token_start
-                if token_type < token_types.PERIOD.value:
+                if token_type in (comma, hyphen):
                     break
                 else:
                     start = token_start + token_length
 
             for token_start, token_length, token_type in reversed(tokens):
                 end = token_start + token_length
-                if token_type < token_types.PERIOD.value:
+                if token_type in (comma, hyphen):
                     break
                 else:
                     end = token_start
