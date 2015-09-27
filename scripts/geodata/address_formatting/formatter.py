@@ -121,9 +121,10 @@ class AddressFormatter(object):
 
         splitter = self.splitter if not tagged else ' {}/{} '.format(self.splitter.strip(), self.field_separator_tag)
 
+        values = [self.strip_component(val, tagged=tagged) for val in values]
+
         output = splitter.join([
-            self.strip_component(val, tagged=tagged)
-            for val in values
+            val for val in values if val.strip()
         ])
 
         return output
@@ -184,26 +185,30 @@ class AddressFormatter(object):
 
             return value[start:end]
         else:
-            i = j = 0
+            start = end = 0
             tokens = value.split()
 
             separator_tag = self.separator_tag
 
             for i, t in enumerate(tokens):
                 t, c = t.rsplit('/', 1)
+                start = i
                 if c != separator_tag:
                     break
+                else:
+                    start = i + 1
+
+            num_tokens = len(tokens)
 
             for j, t in enumerate(reversed(tokens)):
                 t, c = t.rsplit('/', 1)
+                end = num_tokens - j
                 if c != separator_tag:
                     break
+                else:
+                    end = num_tokens - j - 1
 
-            if j == 0:
-                j = None
-            else:
-                j = -j
-            return u' '.join(tokens[i:j])
+            return u' '.join(tokens[start:end])
 
     def format_address(self, country, components, minimal_only=True, tag_components=True):
         template = self.config.get(country.upper())
