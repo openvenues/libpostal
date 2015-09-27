@@ -185,8 +185,8 @@ challenges libpostal can handle:
 For further reading and some less intuitive examples of addresses, see
 "[Falsehoods Programmers Believe About Addresses](https://www.mjt.me.uk/posts/falsehoods-programmers-believe-about-addresses/)".
 
-Why C (i.e. are you crazy)?
----------------------------
+Why C?
+------
 
 libpostal is written in C for three reasons (in order of importance):
 
@@ -218,22 +218,35 @@ isn't as important because everything's being done in parallel, but there are
 some streaming ingestion applications at Mapzen where this needs to
 run in-process.
 
-Design philosophy
------------------
+C codebase
+----------
 
-libpostal is written in modern, legible, C99. 
+libpostal is written in modern, legible, C99 and uses the following conventions:
 
-- Keep it roughly object-oriented, as allowed by C
-- Confine almost all mallocs to *name*_new and all frees to *name*_destroy
-- Don't write custom hashtables, sorting algorithms, other undergrad CS stuff
-- Use generic containers from klib where possible
-- Take advantage of sparsity in all data structures
-- Use char_array (inspired by [sds](https://github.com/antirez/sds)) when possible instead of C strings.
-- Throughly test for memory leaks before pushing
-- Keep it reasonably cross-platform compatible, particularly for *nix
+- Roughly object-oriented, as much as allowed by C
+- Almost no pointer-based data structures, arrays all the way down
+- Uses dynamic character arrays (inspired by [sds](https://github.com/antirez/sds)) for safer string handling
+- Confines almost all mallocs to *name*_new and all frees to *name*_destroy
+- Efficient existing implementations for simple things like hashtables
+- Generic containers (via [klib](https://github.com/attractivechaos/klib)) whenever possible
+- Data structrues take advantage of sparsity as much as possible
+- Efficient double-array trie implementation for most string dictionaries
+- Tries to stay cross-platform as much as possible, particularly for *nix
+
+Python codebase
+---------------
+
+There are actually two Python packages in libpostal.
+
+1. **geodata**: generates C files and data sets used in the C build
+2. **pypostal**: Python bindings for libpostal
+
+geodata is simply a confederation of scripts which share some common code.
+Said scripts shouldn't be needed for most users unless you're rebuilding data
+files for the C lib.
 
 Language dictionaries
-----------------------
+---------------------
 
 It's easy to add new languages/synonyms to libpostal by modifying a few text
 files. The format of each dictionary file roughly resembles a
@@ -291,9 +304,9 @@ In most cases better to leave these alone
 
 Most of the dictionaries have been derived with the following process:
 
-1. Tokenize all the streets in OSM for language x
+1. Tokenize every street name in OSM for language x
 2. Count the most common N tokens
-3. Optionally use frequent item set mining to get frequent phrases
+3. Optionally use frequent item set techniques to exctract phrases
 4. Run the most frequent words/phrases through Google Translate
 5. Add the ones that mean "street" to dictionaries
 6. Augment by researching addresses in countries speaking language x
@@ -305,7 +318,7 @@ they use git.
 Installation
 ------------
 
-For C users or those writing bindings (if you've written a languag
+For C users or those writing bindings (if you've written a language
 binding, please let us know!):
 
 ```
