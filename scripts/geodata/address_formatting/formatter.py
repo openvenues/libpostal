@@ -167,16 +167,20 @@ class AddressFormatter(object):
     def strip_component(self, value, tagged=False):
         if not tagged:
             start = end = 0
-            tokens = tokenize_raw(value)
+            tokens = tokenize_raw(value.strip())
             for token_start, token_length, token_type in tokens:
                 start = token_start
                 if token_type < token_types.PERIOD.value:
                     break
+                else:
+                    start = token_start + token_length
 
             for token_start, token_length, token_type in reversed(tokens):
                 end = token_start + token_length
                 if token_type < token_types.PERIOD.value:
                     break
+                else:
+                    end = token_start
 
             return value[start:end]
         else:
