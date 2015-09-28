@@ -1919,5 +1919,6 @@ bool transliteration_module_setup(char *filename) {
 
 void transliteration_module_teardown(void) {
     transliteration_table_destroy();
+    trans_table = NULL;
 }
 

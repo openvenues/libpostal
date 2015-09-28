@@ -546,4 +546,5 @@ void address_dictionary_module_teardown(void) {
     if (address_dict != NULL) {
         address_dictionary_destroy(address_dict);
     }
+    address_dict = NULL;
 }
