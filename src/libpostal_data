@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+if [ "$#" -ne 2 ]; then
+    echo "Usage: ./libpostal_data [upload|download] data_dir"
+fi
+
+LIBPOSTAL_S3_BUCKET_NAME="libpostal"
+LIBPOSTAL_S3_KEY="s3://$LIBPOSTAL_S3_BUCKET_NAME"
+LIBPOSTAL_S3_BUCKET_URL="http://$LIBPOSTAL_S3_BUCKET_NAME.s3.amazonaws.com"
+LIBPOSTAL_DATA_FILE="libpostal_data.tar.gz"
+
+
+COMMAND=$1
+LIBPOSTAL_DATA_DIR=$2
+
+LIBPOSTAL_DATA_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated
+
+BASIC_MODULE_DIRS=(address_expansins numex transliteration)
+
+EPOCH_DATE="Jan  1 00:00:00 1970"
+
+download_file() {
+    updated_path=$1
+    data_dir=$2
+    filename=$3
+    name=$4
+
+    local_path=$data_dir/$filename
+
+    if [ ! -e $updated_path ]; then
+        echo "$EPOCH_DATE" > $updated_path;
+    fi;
+
+    echo "Checking for new libpostal $name..."
+
+    if [ $(curl $LIBPOSTAL_S3_BUCKET_URL/$filename -z "$(cat $updated_path)" --silent --remote-time -o $local_path -w %{http_code}) = "200" ]; then        
+        echo "New libpostal $name available"
+        if date -r . >/dev/null 2>&1; then
+            echo $(date -d "$(date -d "@$(date -r $local_path +%s)") + 1 second") > $updated_path;
+        elif stat -f %Sm . >/dev/null 2>&1; then
+            echo $(date -r $(stat -f %m $local_path) -v+1S) > $updated_path;
+        fi;
+        tar -xvzf $local_path -C $data_dir;
+        rm $local_path;
+    else
+        echo "libpostal $name up to date"
+    fi
+}
+
+if [ $COMMAND = "download" ]; then
+    mkdir -p $LIBPOSTAL_DATA_DIR
+
+    download_file $LIBPOSTAL_DATA_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_DATA_FILE "data file"
+
+elif [ $COMMAND = "upload" ]; then
+    tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE ${BASIC_MODULE_DIRS[*]}
+    aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $LIBPOSTAL_S3_KEY
+else
+    echo "Invalid command: $COMMAND"
+    exit 1
+fi
