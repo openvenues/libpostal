@@ -174,14 +174,14 @@ class AddressFormatter(object):
             tokens = tokenize_raw(value.strip())
             for token_start, token_length, token_type in tokens:
                 start = token_start
-                if token_type in (comma, hyphen):
+                if token_type not in (comma, hyphen):
                     break
                 else:
                     start = token_start + token_length
 
             for token_start, token_length, token_type in reversed(tokens):
                 end = token_start + token_length
-                if token_type in (comma, hyphen):
+                if token_type not in (comma, hyphen):
                     break
                 else:
                     end = token_start
