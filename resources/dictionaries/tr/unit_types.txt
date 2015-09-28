@@ -1,5 +1,5 @@
 apartman|apt
 daire|d
 kat|k
-numara|no
+numara|no|no:|no :
 numarala|nolu
