@@ -458,6 +458,11 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                 geonames_id = row[GEONAMES_ID_INDEX]
 
                 name = utf8_normalize(safe_decode(row[NAME_INDEX]))
+
+                # For non-postal codes, don't count
+                if name.isdigit():
+                    continue
+
                 canonical = utf8_normalize(safe_decode(row[CANONICAL_NAME_INDEX]))
                 row[POPULATION_INDEX] = int(row[POPULATION_INDEX] or 0)
 
