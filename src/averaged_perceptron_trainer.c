@@ -377,11 +377,13 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
         }
 
         if (i > 0) {
-            prev = cstring_array_get_string(labels, prev_id);
+            prev = cstring_array_get_string(self->class_strings, prev_id);
         }
 
         if (i > 1) {
-            prev2 = cstring_array_get_string(labels, prev2_id);            
+            prev2 = cstring_array_get_string(self->class_strings, prev2_id);            
+        } else if (i == 1) {
+            prev2 = START;
         }
 
         if (!feature_function(tagger, context, tokenized, i, prev, prev2)) {
@@ -426,6 +428,7 @@ averaged_perceptron_trainer_t *averaged_perceptron_trainer_new(void) {
     self->num_classes = 0;
     self->num_updates = 0;
     self->num_errors = 0;
+    self->iterations = 0;
 
     self->features = kh_init(str_uint32);
     if (self->features == NULL) {
