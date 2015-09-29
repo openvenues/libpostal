@@ -17,12 +17,16 @@ bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagg
         cstring_array_clear(features);
 
         if (i > 0) {
-            prev = cstring_array_get_string(labels, prev_id);
+            prev = cstring_array_get_string(model->classes, prev_id);
         }
 
         if (i > 1) {
-            prev2 = cstring_array_get_string(labels, prev2_id);            
+            prev2 = cstring_array_get_string(model->classes, prev2_id);            
+        } else if (i == 1) {
+            prev2 = START;
         }
+
+        log_debug("prev=%s, prev2=%s\n", prev, prev2);
 
         if (!feature_function(tagger, context, tokenized, i, prev, prev2)) {
             log_error("Could not add address parser features\n");
