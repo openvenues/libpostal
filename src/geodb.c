@@ -1,9 +1,9 @@
 #include "geodb.h"
 
-static geodb_t *db = NULL;
+static geodb_t *geodb = NULL;
 
 geodb_t *get_geodb(void) {
-    return db;
+    return geodb;
 }
 
 void geodb_destroy(geodb_t *self) {
@@ -122,15 +122,15 @@ exit_geodb_created:
 }
 
 bool geodb_load(char *dir) {
-    db = geodb_init(dir);
-    return (db != NULL);
+    geodb = geodb_init(dir);
+    return (geodb != NULL);
 }
 
 
 bool search_geodb_with_phrases(char *str, phrase_array **phrases) {
     if (str == NULL) return false;
 
-    return trie_search_with_phrases(db->trie, str, phrases);
+    return trie_search_with_phrases(geodb->trie, str, phrases);
 }
 
 phrase_array *search_geodb(char *str) {
@@ -147,7 +147,7 @@ phrase_array *search_geodb(char *str) {
 bool search_geodb_tokens_with_phrases(char *str, token_array *tokens, phrase_array **phrases) {
     if (str == NULL) return false;
 
-    return trie_search_tokens_with_phrases(db->trie, str, tokens, phrases);
+    return trie_search_tokens_with_phrases(geodb->trie, str, tokens, phrases);
 }
 
 
@@ -163,19 +163,19 @@ phrase_array *search_geodb_tokens(char *str, token_array *tokens) {
 
 
 geonames_generic_t *geodb_get_len(char *key, size_t len) {
-    if (db == NULL || db->hash_reader == NULL || db->log_iter == NULL) return NULL;
-    sparkey_returncode ret = sparkey_hash_get(db->hash_reader, (uint8_t *)key, len, db->log_iter);
-    if (sparkey_logiter_state(db->log_iter) == SPARKEY_ITER_ACTIVE) {
-        uint64_t expected_value_len = sparkey_logiter_valuelen(db->log_iter);
+    if (geodb == NULL || geodb->hash_reader == NULL || geodb->log_iter == NULL) return NULL;
+    sparkey_returncode ret = sparkey_hash_get(geodb->hash_reader, (uint8_t *)key, len, geodb->log_iter);
+    if (sparkey_logiter_state(geodb->log_iter) == SPARKEY_ITER_ACTIVE) {
+        uint64_t expected_value_len = sparkey_logiter_valuelen(geodb->log_iter);
         uint64_t actual_value_len;
-        ret = sparkey_logiter_fill_value(db->log_iter, sparkey_hash_getreader(db->hash_reader), expected_value_len, (uint8_t *)db->value_buf->a, &actual_value_len);
+        ret = sparkey_logiter_fill_value(geodb->log_iter, sparkey_hash_getreader(geodb->hash_reader), expected_value_len, (uint8_t *)geodb->value_buf->a, &actual_value_len);
         if (ret == SPARKEY_SUCCESS) {
             geonames_generic_t *generic = malloc(sizeof(geonames_generic_t));
-            if (geonames_generic_deserialize(&generic->type, db->geoname, db->postal_code, db->value_buf)) {
+            if (geonames_generic_deserialize(&generic->type, geodb->geoname, geodb->postal_code, geodb->value_buf)) {
                 if (generic->type == GEONAMES_PLACE) {
-                    generic->geoname = db->geoname;
+                    generic->geoname = geodb->geoname;
                 } else if (generic->type == GEONAMES_POSTAL_CODE) {
-                    generic->postal_code = db->postal_code;
+                    generic->postal_code = geodb->postal_code;
                 } else {
                     free(generic);
                     return NULL;
@@ -194,7 +194,7 @@ inline geonames_generic_t *geodb_get(char *key) {
 
 
 bool geodb_module_setup(char *dir) {
-    if (db == NULL) {
+    if (geodb == NULL) {
         return geodb_load(dir == NULL ? LIBPOSTAL_GEODB_DIR : dir);
     }
 
@@ -203,8 +203,9 @@ bool geodb_module_setup(char *dir) {
 
 
 void geodb_module_teardown(void) {
-    if (db != NULL) {
-        geodb_destroy(db);
+    if (geodb != NULL) {
+        geodb_destroy(geodb);
     }
+    geodb = NULL;
 }
 
