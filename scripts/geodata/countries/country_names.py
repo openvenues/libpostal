@@ -31,7 +31,7 @@ LANGUAGE_COUNTRY_OVERRIDES = {
         'CG': 'Republic of the Congo',
     },
 
-    # Countries that don't have their language in CLDR
+    # Countries where the local language is absent from CLDR
 
     # Tajik / Tajikistan
     'tg': {
@@ -48,6 +48,18 @@ LANGUAGE_COUNTRY_OVERRIDES = {
 
 
 def cldr_country_names(language, base_dir=CLDR_MAIN_PATH):
+    '''
+    Country names are tricky as there can be several versions
+    and levels of verbosity e.g. United States of America
+    vs. the more commonly used United States. Most countries
+    have a similarly verbose form.
+
+    The CLDR repo (http://cldr.unicode.org/) has the most
+    comprehensive localized database of country names
+    (among other things), organized by language. This function
+    parses CLDR XML for a given language and returns a dictionary
+    of {country_code: name} for that language.
+    '''
     filename = os.path.join(base_dir, '{}.xml'.format(language))
     xml = etree.parse(open(filename))
 
@@ -79,6 +91,7 @@ def cldr_country_names(language, base_dir=CLDR_MAIN_PATH):
 
     return display_names
 
+
 country_alpha2_codes = set([c.alpha2.lower() for c in pycountry.countries])
 country_alpha3_codes = set([c.alpha3.lower() for c in pycountry.countries])
 
@@ -91,6 +104,9 @@ country_local_names = defaultdict(OrderedDict)
 
 
 def init_country_names(base_dir=CLDR_MAIN_PATH):
+    '''
+    Call init_country_names to initialized the module. Sets up the above dictionaries.
+    '''
     global language_country_names
     init_languages()
 
@@ -137,8 +153,28 @@ def init_country_names(base_dir=CLDR_MAIN_PATH):
             country_local_names[country][lang] = name
 
 
-def country_official_name(country_code):
+def country_localized_display_name(country_code):
+    '''
+    Get the display name for a country code in the local language
+    e.g. Россия for Russia, España for Spain, etc.
+
+    For most countries there is a single official name. For countries
+    with more than one official language, this will return a concatenated
+    version separated by a slash e.g. Maroc / المغرب for Morocco.
+
+    Note that all of the exceptions in road_sign_languages.tsv are also
+    taken into account here so India for example uses the English name
+    rather than concatenating all 27 toponyms.
+
+    This method should be roughly consistent with OSM's display names.
+
+    Usage:
+        >>> country_official_name('jp')     # returns '日本'
+        >>> country_official_name('be')     # returns 'België / Belgique / Belgien'
+    '''
+
+    country_code = country_code.lower()
     if not country_official_names:
         init_country_names()
     return ' / '.join(OrderedDict.fromkeys(n.replace('-', ' ')
-                      for n in country_official_names[c].values()).keys())
+                      for n in country_official_names[country_code].values()).keys())
