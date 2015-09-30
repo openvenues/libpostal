@@ -25,7 +25,7 @@ cw	nl	1
 cw	pap	0
 cw	en	0
 cy	el	1
-cy	tr	0
+cy	tr	1
 cy	en	0
 dj	fr	1
 dz	fr	1
@@ -76,7 +76,7 @@ lk	en	0
 ls	en	1
 ly	en	0
 ma	fr	1
-ma	ar	0
+ma	ar	1
 mg	mg	1
 mg	fr	0
 mg	en	0
@@ -116,7 +116,7 @@ qa	en	0
 rw	en	1
 sa	en	0
 sd	en	1
-sd	ar	0
+sd	ar	1
 sg	en	1
 sg	ms	0
 sg	zh	0
@@ -135,7 +135,7 @@ td	fr	0
 td	en	0
 th	en	0
 tn	fr	1
-tn	ar	0
+tn	ar	1
 to	to	1
 to	en	0
 tv	tvl	1
@@ -148,8 +148,7 @@ uk	uk	1
 uk	ru	0
 us	es	0
 us	fr	0
-vi	da	1
-vi	en	0
+vi	da	0
 ws	en	1
 ye	en	0
 zw	en	1
