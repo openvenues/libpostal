@@ -136,6 +136,7 @@ apos_word = ("'"?({latinish_letter}+"'")+{latinish_letter}+"'"?);
 
 ellipsis = ("\."{2,}|"\u2026");
 
+acronym = ({letter}"\.")+{letter}?;
 multi_punct_abbreviation = ({letter}+"\.")+{letter}?;
 
 abbrev_word = (({letter}|{possible_word_char})+"\.")+({letter}|{possible_word_char}*);
@@ -165,7 +166,8 @@ email = ([a-zA-Z0-9\._%+\-]+"@"([a-zA-Z0-9]+[\.])+[a-zA-Z0-9]{2,3});
 {us_phone_number}               { return US_PHONE; }
 {international_phone_number}    { return INTL_PHONE; }
 
-{multi_punct_abbreviation}      { return ACRONYM; }
+{acronym}                       { return ACRONYM; }
+{multi_punct_abbreviation}      { return ABBREVIATION; }
 {hyphen_plus_abbreviation}      { return ABBREVIATION; }
 {abbreviation}                  { return ABBREVIATION; }
 
