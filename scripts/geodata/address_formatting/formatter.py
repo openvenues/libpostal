@@ -28,12 +28,6 @@ class AddressFormatter(object):
         address_formatter.format_address('es', components)
     '''
 
-    MINIMAL_COMPONENT_KEYS = [
-        ('road', 'house_number'),
-        ('road', 'house'),
-        ('road', 'postcode')
-    ]
-
     whitespace_component_regex = re.compile('[\r\n]+[\s\r\n]*')
 
     splitter = ' | '
@@ -41,36 +35,53 @@ class AddressFormatter(object):
     separator_tag = 'SEP'
     field_separator_tag = 'FSEP'
 
+    HOUSE = 'house'
+    HOUSE_NUMBER = 'house_number'
+    ROAD = 'road'
+    SUBURB = 'suburb'
+    CITY = 'city'
+    STATE = 'state'
+    POSTCODE = 'postcode'
+    COUNTRY = 'country'
+
     aliases = OrderedDict([
-        ('name', 'house'),
-        ('addr:housename', 'house'),
-        ('addr:housenumber', 'house_number'),
-        ('addr:house_number', 'house_number'),
-        ('addr:street', 'road'),
-        ('addr:city', 'city'),
-        ('addr:locality', 'city'),
-        ('addr:municipality', 'city'),
-        ('addr:hamlet', 'village'),
-        ('addr:suburb', 'suburb'),
-        ('addr:neighbourhood', 'suburb'),
-        ('addr:neighborhood', 'suburb'),
-        ('addr:district', 'suburb'),
-        ('addr:state', 'state'),
-        ('addr:province', 'state'),
-        ('addr:region', 'state'),
-        ('addr:postal_code', 'postcode'),
-        ('addr:postcode', 'postcode'),
-        ('addr:country', 'country'),
-        ('street', 'road'),
-        ('street_name', 'road'),
-        ('residential', 'road'),
-        ('hamlet', 'village'),
-        ('neighborhood', 'suburb'),
-        ('neighbourhood', 'suburb'),
-        ('city_district', 'suburb'),
-        ('state_code', 'state'),
-        ('country_name', 'country'),
+        ('name', HOUSE),
+        ('addr:housename', HOUSE),
+        ('addr:housenumber', HOUSE_NUMBER),
+        ('addr:house_number', HOUSE_NUMBER),
+        ('addr:street', ROAD),
+        ('addr:city', CITY),
+        ('addr:locality', CITY),
+        ('addr:municipality', CITY),
+        ('addr:hamlet', CITY),
+        ('addr:suburb', SUBURB),
+        ('addr:neighbourhood', SUBURB),
+        ('addr:neighborhood', SUBURB),
+        ('addr:district', SUBURB),
+        ('addr:state', STATE),
+        ('addr:province', STATE),
+        ('addr:region', STATE),
+        ('addr:postal_code', POSTCODE),
+        ('addr:postcode', POSTCODE),
+        ('addr:country', COUNTRY),
+        ('street', ROAD),
+        ('street_name', ROAD),
+        ('residential', ROAD),
+        ('hamlet', CITY),
+        ('neighborhood', SUBURB),
+        ('neighbourhood', SUBURB),
+        ('city_district', SUBURB),
+        ('state_code', STATE),
+        ('country_name', COUNTRY),
+        ('postal_code', POSTCODE),
+        ('post_code', POSTCODE),
     ])
+
+    MINIMAL_COMPONENT_KEYS = [
+        (ROAD, HOUSE_NUMBER),
+        (ROAD, HOUSE),
+        (ROAD, POSTCODE)
+    ]
 
     def __init__(self, scratch_dir='/tmp', splitter=None):
         if splitter is not None:
@@ -213,20 +224,16 @@ class AddressFormatter(object):
 
             return u' '.join(tokens[start:end])
 
-    def format_address(self, country, components, minimal_only=True, tag_components=True):
+    def format_address(self, country, components, minimal_only=True, tag_components=True, replace_aliases=True):
         template = self.config.get(country.upper())
         if not template:
             return None
         template_text = template['address_template']
-        self.replace_aliases(components)
+        if replace_aliases:
+            self.replace_aliases(components)
 
-        if not self.minimal_components(components):
-            if minimal_only:
-                return None
-            if 'fallback_template' in template:
-                template_text = template['fallback_template']
-            else:
-                template_text = self.config['default']['fallback_template']
+        if minimal_only and not self.minimal_components(components):
+            return None
 
         self.apply_replacements(template, components)
 
