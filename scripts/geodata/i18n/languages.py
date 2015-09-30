@@ -59,13 +59,18 @@ def init_languages(languages_dir=LANGUAGES_DIR):
     initialized = True
 
 
-def get_country_languages(country):
-    languages = official_languages[country]
-    overrides = road_language_overrides.get(country)
-    if overrides and overrides.values()[0]:
-        languages = overrides
-    elif overrides:
-        languages.update(overrides)
+def get_country_languages(country, official=True, overrides=True):
+    if official:
+        languages = official_languages[country]
+    else:
+        languages = country_languages[country]
+
+    if overrides:
+        road_overrides = road_language_overrides.get(country)
+        if road_overrides and road_overrides.values()[0]:
+            languages = road_overrides
+        elif road_overrides:
+            languages.update(road_overrides)
     return languages
 
 
