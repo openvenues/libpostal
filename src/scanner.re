@@ -132,11 +132,11 @@ any_word = (({possible_word_char}*{letter}+{possible_word_char}*{non_breaking_da
 // GB6, GB7 & GB8
 hangul_syllable = (({hangul_syllable_class_L}(hangul_syllable_class_L|hangul_syllable_class_V|hangul_syllable_class_LV|hangul_syllable_class_LVT))|(({hangul_syllable_class_L}|{hangul_syllable_class_V})({hangul_syllable_class_V}{hangul_syllable_class_T}))|(({hangul_syllable_class_LVT}|{hangul_syllable_class_T}){hangul_syllable_class_T}));
 
-apos_word = ("'"?({latinish_letter}+"'")+{latinish_letter}+"'"?);
+apos_word = ("'"?({latinish_letter}+"'"){latinish_letter}+"'"?);
 
 ellipsis = ("\."{2,}|"\u2026");
 
-acronym = ({letter}"\.")+{letter}?;
+acronym = ({letter}"\."){2,}{letter}?;
 multi_punct_abbreviation = ({letter}+"\.")+{letter}?;
 
 abbrev_word = (({letter}|{possible_word_char})+"\.")+({letter}|{possible_word_char}*);
