@@ -1,3 +1,24 @@
+'''
+create_geonames_tsv.py
+----------------------
+
+This script formats the open GeoNames database (as well as
+its accompanying postal codes data set) into a schema'd
+tab-separated value file.
+
+It generates a C header which uses an enum for the field names.
+This way if new fields are added or there's a typo, etc. the
+error will show up at compile-time.
+
+The relevant C modules which operate on this data are:
+    geodb_builder.c
+    geonames.c
+
+As well as the generated headers:
+    geonames_fields.h
+    postal_fields.h
+'''
+
 import argparse
 import csv
 import logging
@@ -15,7 +36,7 @@ import unicodedata
 import urllib
 import urlparse
 
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 from lxml import etree
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
@@ -23,6 +44,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.csv_utils import *
 from geodata.file_utils import *
+from geodata.countries.country_names import *
 from geodata.encoding import safe_encode, safe_decode
 from geodata.geonames.paths import DEFAULT_GEONAMES_DB_PATH
 from geodata.i18n.languages import *
@@ -56,9 +78,6 @@ POPULATED_PLACE_FEATURE_CODES = ('PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4',
 NEIGHBORHOOD_FEATURE_CODES = ('PPLX', )
 
 
-CLDR_ENGLISH_PATH = os.path.join(CLDR_DIR, 'common', 'main', 'en.xml')
-
-
 class boundary_types:
     COUNTRY = 0
     ADMIN1 = 1
@@ -69,16 +88,16 @@ class boundary_types:
     LOCALITY = 6
     NEIGHBORHOOD = 7
 
-geonames_admin_dictionaries = {
-    boundary_types.COUNTRY: COUNTRY_FEATURE_CODES,
-    boundary_types.ADMIN1: ADMIN_1_FEATURE_CODES,
-    boundary_types.ADMIN2: ADMIN_2_FEATURE_CODES,
-    boundary_types.ADMIN3: ADMIN_3_FEATURE_CODES,
-    boundary_types.ADMIN4: ADMIN_4_FEATURE_CODES,
-    boundary_types.ADMIN_OTHER: ADMIN_OTHER_FEATURE_CODES,
-    boundary_types.LOCALITY: POPULATED_PLACE_FEATURE_CODES,
-    boundary_types.NEIGHBORHOOD: NEIGHBORHOOD_FEATURE_CODES,
-}
+geonames_admin_dictionaries = OrderedDict([
+    (boundary_types.COUNTRY, COUNTRY_FEATURE_CODES),
+    (boundary_types.ADMIN1, ADMIN_1_FEATURE_CODES),
+    (boundary_types.ADMIN2, ADMIN_2_FEATURE_CODES),
+    (boundary_types.ADMIN3, ADMIN_3_FEATURE_CODES),
+    (boundary_types.ADMIN4, ADMIN_4_FEATURE_CODES),
+    (boundary_types.ADMIN_OTHER, ADMIN_OTHER_FEATURE_CODES),
+    (boundary_types.LOCALITY, POPULATED_PLACE_FEATURE_CODES),
+    (boundary_types.NEIGHBORHOOD, NEIGHBORHOOD_FEATURE_CODES),
+])
 
 # Inserted post-query
 DUMMY_BOUNDARY_TYPE = '-1 as type'
@@ -277,33 +296,6 @@ order by alternate_name, is_preferred_name
 BATCH_SIZE = 2000
 
 
-IGNORE_COUNTRIES = set(['ZZ'])
-
-COUNTRY_USE_SHORT_NAME = set(['HK', 'MM', 'MO', 'PS'])
-COUNTRY_USE_VARIANT_NAME = set(['CD', 'CG', 'CI', 'TL'])
-
-
-def cldr_country_names(filename=CLDR_ENGLISH_PATH):
-    xml = etree.parse(open(filename))
-
-    country_names = {}
-
-    for territory in xml.xpath('*//territories/*'):
-        country_code = territory.attrib['type']
-        if country_code in IGNORE_COUNTRIES and not country_code.isdigit():
-            continue
-        elif country_code in COUNTRY_USE_SHORT_NAME and territory.attrib.get('alt') != 'short':
-            continue
-        elif country_code in COUNTRY_USE_VARIANT_NAME and territory.attrib.get('alt') != 'variant':
-            continue
-        elif country_code not in COUNTRY_USE_SHORT_NAME and country_code not in COUNTRY_USE_VARIANT_NAME and territory.attrib.get('alt'):
-            continue
-
-        country_names[country_code] = safe_encode(territory.text)
-
-    return country_names
-
-
 wiki_paren_regex = re.compile('(.*)[\s]*\(.*?\)[\s]*')
 
 
@@ -354,7 +346,7 @@ def utf8_normalize(s, form='NFD'):
 
 
 def get_wikipedia_titles(db):
-    d = defaultdict(list)
+    d = defaultdict(dict)
 
     cursor = db.execute(wikipedia_query)
 
@@ -367,13 +359,15 @@ def get_wikipedia_titles(db):
             title = normalize_wikipedia_url(safe_encode(url))
             if title is not None and title.strip():
                 title = utf8_normalize(normalize_name(title))
-                d[title.lower()].append((geonames_id, int(is_preferred or 0)))
+                d[title.lower()][geonames_id] = int(is_preferred or 0)
 
-    return {title: sorted(values, key=operator.itemgetter(1), reverse=True)
-            for title, values in d.iteritems()}
+    return d
 
 
 def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
+    '''
+    Writes geonames.tsv using the specified db to the specified data directory
+    '''
     filename = os.path.join(out_dir, 'geonames.tsv')
     temp_filename = filename + '.tmp'
 
@@ -383,14 +377,12 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
 
     init_languages()
 
-    country_code_alpha3_map = {c.alpha2: c.alpha3 for c in pycountry.countries}
-    country_alpha2 = set([c.alpha2 for c in pycountry.countries])
-
-    country_names = cldr_country_names()
+    init_country_names()
 
     wiki_titles = get_wikipedia_titles(db)
     logging.info('Fetched Wikipedia titles')
 
+    # Iterate over GeoNames boundary types from largest (country) to smallest (neighborhood)
     for boundary_type, codes in geonames_admin_dictionaries.iteritems():
         if boundary_type != boundary_types.COUNTRY:
             predicate = 'where gn.feature_code in ({codes})'.format(
@@ -407,6 +399,7 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
         cursor = db.execute(query)
         i = 1
         while True:
+            # Fetch rows in batches to save memory
             batch = cursor.fetchmany(BATCH_SIZE)
             if not batch:
                 break
@@ -422,29 +415,11 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                 is_preferred = int(row[PREFERRED_INDEX] or 0)
                 is_historical = int(row[HISTORICAL_INDEX] or 0)
 
-                lang_official = official_languages[country_code.lower()].get(language, None)
+                lang_spoken = get_country_languages(country_code.lower(), official=False).get(language, None)
+                lang_official = get_country_languages(country_code.lower()).get(language, None) == 1
                 null_language = not language.strip()
 
                 is_canonical = row[NAME_INDEX] == row[CANONICAL_NAME_INDEX]
-
-                if is_historical:
-                    language_priority = 0
-                elif not null_language and language != 'abbr' and lang_official is None:
-                    language_priority = 1
-                elif null_language and not is_preferred and not is_canonical:
-                    language_priority = 2
-                elif language == 'abbr' and not is_preferred:
-                    language_priority = 3
-                elif language == 'abbr' and is_preferred:
-                    language_priority = 4
-                elif lang_official == 0:
-                    language_priority = 5
-                elif lang_official == 1 or (null_language and not is_preferred and is_canonical):
-                    language_priority = 6
-                elif is_preferred:
-                    language_priority = 7
-
-                row[DUMMY_LANGUAGE_PRIORITY_INDEX] = language_priority
 
                 alpha2_code = None
                 is_orig_name = False
@@ -453,7 +428,8 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                     alpha2_code = row[COUNTRY_CODE_INDEX]
 
                     is_orig_name = row[NAME_INDEX] == row[CANONICAL_NAME_INDEX] and row[LANGUAGE_INDEX] == ''
-                    row[CANONICAL_NAME_INDEX] = country_names[row[COUNTRY_CODE_INDEX]]
+                    # Set the canonical for countries to the local name, see country_official_name in country_names.py
+                    row[CANONICAL_NAME_INDEX] = country_localized_display_name(alpha2_code.lower())
 
                 geonames_id = row[GEONAMES_ID_INDEX]
 
@@ -463,12 +439,7 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                 if name.isdigit():
                     continue
 
-                canonical = utf8_normalize(safe_decode(row[CANONICAL_NAME_INDEX]))
-                row[POPULATION_INDEX] = int(row[POPULATION_INDEX] or 0)
-
-                have_wikipedia = False
-
-                wikipedia_entries = wiki_titles.get(name.lower(), wiki_titles.get(normalize_name(name.lower()), []))
+                wikipedia_entries = wiki_titles.get(name.lower(), wiki_titles.get(normalize_name(name.lower()), {}))
 
                 row[NAME_INDEX] = name
 
@@ -476,17 +447,59 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                     norm_name = normalize_name(name.lower())
                     for s, repl in saint_replacements:
                         if not wikipedia_entries:
-                            wikipedia_entries = wiki_titles.get(norm_name.replace(s, repl), [])
+                            wikipedia_entries = wiki_titles.get(norm_name.replace(s, repl), {})
 
                 wiki_row = []
 
-                for gid, is_preferred in wikipedia_entries:
-                    if gid == geonames_id:
-                        wiki_row = row[:]
-                        wiki_row[DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX] = is_preferred + 1
-                        rows.append(map(encode_field, wiki_row))
-                        have_wikipedia = True
-                        break
+                have_wikipedia = geonames_id in wikipedia_entries
+                wiki_preferred = wikipedia_entries.get(geonames_id, 0)
+
+                '''
+                The following set of heuristics assigns a numerical value to a given name
+                alternative, such that in the case of ambiguous names, this value can be
+                used as part of the ranking function (as indeed it will be during sort).
+                The higher the value, the more likely the given entity resolution.
+                '''
+                if is_historical:
+                    # Historical names, unlikely to be used
+                    language_priority = 0
+                elif not null_language and language != 'abbr' and lang_spoken is None:
+                    # Name of a place in language not widely spoken e.g. Japanese name for a US toponym
+                    language_priority = 1
+                elif null_language and not is_preferred and not is_canonical:
+                    # Null-language alternate names not marked as preferred, dubious
+                    language_priority = 2
+                elif language == 'abbr' and not is_preferred:
+                    # Abbreviation, not preferred
+                    language_priority = 3
+                elif language == 'abbr' and is_preferred:
+                    # Abbreviation, preferred e.g. NYC, UAE
+                    language_priority = 4
+                elif lang_spoken == 0 and not is_preferred:
+                    # Non-preferred name but in a spoken (non-official) language
+                    language_priority = 5
+                elif lang_official == 1 and not is_preferred:
+                    # Name in an official language, not preferred
+                    language_priority = 6
+                elif null_language and not is_preferred and is_canonical:
+                    # Canonical name, may be overly official e.g. Islamic Republic of Pakistan
+                    language_priority = 7
+                elif is_preferred and not lang_official:
+                    # Preferred names, not an official language
+                    language_priority = 8
+                elif is_preferred and lang_official:
+                    # Official language preferred
+                    language_priority = 9
+
+                row[DUMMY_LANGUAGE_PRIORITY_INDEX] = language_priority
+
+                if have_wikipedia:
+                    wiki_row = row[:]
+                    wiki_row[DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX] = wiki_preferred + 1
+                    rows.append(map(encode_field, wiki_row))
+
+                canonical = utf8_normalize(safe_decode(row[CANONICAL_NAME_INDEX]))
+                row[POPULATION_INDEX] = int(row[POPULATION_INDEX] or 0)
 
                 have_normalized = False
 
@@ -502,8 +515,9 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                 if not have_wikipedia:
                     rows.append(map(encode_field, row))
 
+                # Country names have more specialized logic
                 if boundary_type == boundary_types.COUNTRY:
-                    wikipedia_entries = wiki_titles.get(canonical.lower(), [])
+                    wikipedia_entries = wiki_titles.get(canonical.lower(), {})
 
                     canonical_row_name = normalize_display_name(canonical)
 
@@ -516,19 +530,19 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                         norm_name = normalize_name(canonical.lower())
                         for s, repl in saint_replacements:
                             if not wikipedia_entries:
-                                wikipedia_entries = wiki_titles.get(norm_name.replace(s, repl), [])
+                                wikipedia_entries = wiki_titles.get(norm_name.replace(s, repl), {})
 
                         if not wikipedia_entries:
                             norm_name = normalize_name(canonical_row_name.lower())
                             for s, repl in saint_replacements:
                                 if not wikipedia_entries:
-                                    wikipedia_entries = wiki_titles.get(norm_name.replace(s, repl), [])
+                                    wikipedia_entries = wiki_titles.get(norm_name.replace(s, repl), {})
 
-                        for gid, is_preferred in wikipedia_entries:
-                            if gid == geonames_id:
-                                have_wikipedia = True
-                                canonical_row[DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX] = is_preferred + 1
-                                break
+                        have_wikipedia = geonames_id in wikipedia_entries
+                        wiki_preferred = wikipedia_entries.get(geonames_id, 0)
+
+                        if have_wikipedia:
+                            canonical_row[DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX] = wiki_preferred + 1
 
                         if (name != canonical):
                             rows.append(map(encode_field, canonical_row))
@@ -543,9 +557,9 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                         alpha2_row[DUMMY_LANGUAGE_PRIORITY_INDEX] = 10
                         rows.append(map(encode_field, alpha2_row))
 
-                    if alpha2_code in country_code_alpha3_map and is_orig_name:
+                    if alpha2_code.lower() in country_alpha3_map and is_orig_name:
                         alpha3_row = row[:]
-                        alpha3_row[NAME_INDEX] = country_code_alpha3_map[alpha2_code]
+                        alpha3_row[NAME_INDEX] = country_code_alpha3_map[alpha2_code.lower()]
                         alpha3_row[DUMMY_LANGUAGE_PRIORITY_INDEX] = 10
                         rows.append(map(encode_field, alpha3_row))
 
