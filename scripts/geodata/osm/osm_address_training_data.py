@@ -46,7 +46,7 @@ import HTMLParser
 
 from collections import defaultdict, OrderedDict
 from lxml import etree
-from itertools import ifilter, chain
+from itertools import ifilter, chain, combinations
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
@@ -84,6 +84,78 @@ ADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'formatted_addresses_tagged.tsv'
 ADDRESS_FORMAT_DATA_FILENAME = 'formatted_addresses.tsv'
 ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME = 'formatted_addresses_by_language.tsv'
 TOPONYM_LANGUAGE_DATA_FILENAME = 'toponyms_by_language.tsv'
+
+
+class AddressComponent(object):
+    '''
+    Declare an address component and its dependencies e.g.
+    a house_numer cannot be used in the absence of a road name.
+    '''
+    ANY = 'any'
+
+    def __init__(self, name, dependencies=tuple(), method=ANY):
+        self.name = name
+        self.dependencies = dependencies
+
+    def __hash__(self):
+        return hash(self.name)
+
+    def __cmp__(self, other):
+        return cmp(self.name, other.name)
+
+
+OSM_ADDRESS_COMPONENTS = OrderedDict.fromkeys([
+    AddressComponent(AddressFormatter.HOUSE),
+    AddressComponent(AddressFormatter.ROAD),
+    AddressComponent(AddressFormatter.HOUSE_NUMBER, dependencies=(AddressFormatter.ROAD,)),
+    AddressComponent(AddressFormatter.SUBURB, dependencies=(AddressFormatter.CITY, AddressFormatter.STATE,
+                                                            AddressFormatter.POSTCODE)),
+    AddressComponent(AddressFormatter.CITY),
+    AddressComponent(AddressFormatter.STATE, dependencies=(AddressFormatter.SUBURB, AddressFormatter.CITY,
+                                                           AddressFormatter.POSTCODE, AddressFormatter.COUNTRY)),
+    AddressComponent(AddressFormatter.POSTCODE),
+    AddressComponent(AddressFormatter.COUNTRY),
+])
+
+
+def num_deps(c):
+    return len(c.dependencies)
+
+
+OSM_ADDRESS_COMPONENTS_SORTED = sorted(OSM_ADDRESS_COMPONENTS, key=num_deps)
+
+OSM_ADDRESS_COMPONENT_COMBINATIONS = []
+
+'''
+The following statements create a bitset of address components
+for quickly checking testing whether or not a candidate set of
+address components can be considered a full geographic string
+suitable for formatting (i.e. would be a valid geocoder query).
+For instance, a house number by itself is not sufficient
+to be considered a valid address for this purpose unless it
+has a road name as well. Using bitsets we can easily answer
+questions like "Is house/house_number/road/city valid?"
+'''
+OSM_ADDRESS_COMPONENT_VALUES = {
+    c.name: 1 << i
+    for i, c in enumerate(OSM_ADDRESS_COMPONENTS.keys())
+}
+
+OSM_ADDRESS_COMPONENTS_VALID = set()
+
+
+def component_bitset(components):
+    return reduce(operator.or_, [OSM_ADDRESS_COMPONENT_VALUES[c] for c in components])
+
+
+for i in xrange(1, len(OSM_ADDRESS_COMPONENTS.keys())):
+    for perm in combinations(OSM_ADDRESS_COMPONENTS.keys(), i):
+        perm_set = set([p.name for p in perm])
+        valid = all((not p.dependencies or any(d in perm_set for d in p.dependencies) for p in perm))
+        if valid:
+            components = [c.name for c in perm]
+            OSM_ADDRESS_COMPONENT_COMBINATIONS.append(tuple(components))
+            OSM_ADDRESS_COMPONENTS_VALID.add(component_bitset(components))
 
 
 class OSMField(object):
@@ -154,7 +226,6 @@ def read_osm_json(filename):
     reader = csv.reader(open(filename), delimiter='\t')
     for key, attrs in reader:
         yield key, json.loads(attrs)
-
 
 
 def normalize_osm_name_tag(tag, script=False):
@@ -346,6 +417,20 @@ def strip_keys(value, ignore_keys):
         value.pop(key, None)
 
 
+def write_formatted_address(writer, formatter, country, components, tag_components=True, minimal_only=-True):
+    formatted_address = formatter.format_address(country, components, tag_components=tag_components, minimal_only=minimal_only)
+    if formatted_address is not None:
+        formatted_address = tsv_string(formatted_address)
+        if not formatted_address or not formatted_address.strip():
+            return
+        if tag_components:
+            row = (language, country, formatted_address)
+        else:
+            row = (formatted_address,)
+
+        writer.writerow(row)
+
+
 def build_address_format_training_data(language_rtree, infile, out_dir, tag_components=True):
     '''
     Creates formatted address training data for supervised sequence labeling (or potentially 
@@ -359,7 +444,12 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
     {language, country, data}. The data field here is a sequence of labeled tokens similar
     to what we might see in part-of-speech tagging.
 
+
     This format uses a special character "|" to denote possible breaks in the input (comma, newline).
+
+    Note that for the address parser, we'd like it to be robust to many different types
+    of input, so we may selectively eleminate components
+
     This information can potentially be used downstream by the sequence model as these
     breaks may be present at prediction time.
 
@@ -406,23 +496,25 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
                     continue
                 language = disambiguate_language(street, [(l['lang'], l['default']) for l in candidate_languages])
 
-        formatted_address = formatter.format_address(country, value, tag_components=tag_components)
-        if formatted_address is not None:
-            formatted_address = tsv_string(formatted_address)
-            if not formatted_address or not formatted_address.strip():
-                continue
-            if tag_components:
-                row = (language, country, formatted_address)
-            else:
-                row = (formatted_address,)
+        address_components = {k: v for k, v in value.iteritems() if k.startswith('addr:')}
+        formatter.replace_aliases(address_components)
 
-            writer.writerow(row)
+        # Version with all components
+        write_formatted_address(writer, formatter, country, address_components, tag_components=tag_components, minimal_only=not tag_components)
 
-        if formatted_address is not None:
-            i += 1
-            if i % 1000 == 0 and i > 0:
-                print 'did', i, 'formatted addresses'
+        current_components = component_bitset(address_components.keys())
 
+        if tag_components:
+            for component in address_components.keys():
+                if component in OSM_ADDRESS_COMPONENTS_VALID and current_components ^ OSM_ADDRESS_COMPONENTS_VALID[component] and random.random() > 0.5:
+                    address_components.pop(component)
+                    if not address_components:
+                        break
+                    write_formatted_address(writer, formatter, country, address_components, tag_components=tag_components, minimal_only=False)
+
+        i += 1
+        if i % 1000 == 0 and i > 0:
+            print 'did', i, 'formatted addresses'
 
 NAME_KEYS = (
     'name',
