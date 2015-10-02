@@ -475,7 +475,7 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                 elif language == 'abbr' and is_preferred:
                     # Abbreviation, preferred e.g. NYC, UAE
                     language_priority = 4
-                elif lang_spoken == 0 and not is_preferred:
+                elif lang_spoken and not lang_official and not is_preferred:
                     # Non-preferred name but in a spoken (non-official) language
                     language_priority = 5
                 elif lang_official == 1 and not is_preferred:
