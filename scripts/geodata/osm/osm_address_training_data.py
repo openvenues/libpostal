@@ -516,7 +516,7 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
         '''
 
         # 1. use the country name in the current language or the country's local language
-        if address_country and random.random() < 0.7:
+        if address_country and random.random() < 0.8:
             localized = None
             if language and language not in (AMBIGUOUS_LANGUAGE, UNKNOWN_LANGUAGE):
                 localized = language_country_names.get(language, {}).get(address_country.upper())
@@ -527,7 +527,7 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
             if localized:
                 address_components[AddressFormatter.COUNTRY] = localized
         # 2. country's name in a language samples from the distribution of languages on the Internet
-        elif address_country and random.random() < 0.7:
+        elif address_country and random.random() < 0.5:
             lang = sample_random_language()
             lang_country = language_country_names.get(lang, {}).get(address_country.upper())
             if lang_country:
