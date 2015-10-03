@@ -56,7 +56,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, '
 
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
-from geodata.states.state_abbreviatins import STATE_ABBREVIATIONS
+from geodata.states.state_abbreviations import STATE_ABBREVIATIONS
 from geodata.language_id.polygon_lookup import country_and_languages
 from geodata.i18n.languages import *
 from geodata.address_formatting.formatter import AddressFormatter
