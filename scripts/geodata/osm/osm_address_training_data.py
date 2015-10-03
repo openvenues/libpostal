@@ -500,7 +500,7 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
             current_components = component_bitset(address_components.keys())
 
             for component in address_components.keys():
-                if current_components ^ OSM_ADDRESS_COMPONENT_VALUES[component] and random.random() >= 0.5:
+                if current_components ^ OSM_ADDRESS_COMPONENT_VALUES[component] in OSM_ADDRESS_COMPONENTS_VALID and random.random() >= 0.5:
                     address_components.pop(component)
                     current_components ^= OSM_ADDRESS_COMPONENT_VALUES[component]
                     if not address_components:
