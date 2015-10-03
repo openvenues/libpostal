@@ -55,6 +55,8 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
 
 from geodata.language_id.disambiguation import *
+from geodata.language_id.sample import sample_random_language
+from geodata.states.state_abbreviatins import STATE_ABBREVIATIONS
 from geodata.language_id.polygon_lookup import country_and_languages
 from geodata.i18n.languages import *
 from geodata.address_formatting.formatter import AddressFormatter
@@ -489,6 +491,67 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
         # Version with all components
         formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=not tag_components)
 
+        address_country = address_components.get(AddressFormatter.COUNTRY)
+
+        '''
+        Country names
+        -------------
+
+        In OSM, addr:country is almost always an ISO-3166 alpha-2 country code.
+        However, we'd like to expand these to include natural language forms
+        of the country names we might be likely to encounter in a geocoder or
+        handwritten address.
+
+        These splits are somewhat arbitrary but could potentially be fit to data
+        from OpenVenues or other sources on the usage of country name forms.
+
+        If the address includes a country, the selection procedure proceeds as follows:
+
+        1. With probability a, select the country name in the language of the address
+           (determined above), or with the localized country name if the language is
+           undtermined or ambiguous.
+
+        2. With probability b(1-a), sample a language from the distribution of
+           languages on the Internet and use the country's name in that language.
+
+        3. This is implicit, but with probability (1-b)(1-a), keep the country code
+        '''
+
+        # 1. use the country name in the current language or the country's local language
+        if address_country and random.random() < 0.7:
+            localized = None
+            if language and language not in (AMBIGUOUS_LANGUAGE, UNKNOWN_LANGUAGE):
+                localized = language_country_names.get(language, {}).get(address_country.upper())
+
+            if not localized:
+                localized = country_localized_display_name(address_country.lower())
+
+            if localized:
+                address_components[AddressFormatter.COUNTRY] = localized
+        # 2. country's name in a language samples from the distribution of languages on the Internet
+        elif address_country and random.random() < 0.7:
+            lang = sample_random_language()
+            lang_country = language_country_names.get(lang, {}).get(address_country.upper())
+            if lang_country:
+                address_components[AddressFormatter.COUNTRY] = lang_country
+        # 3. Implicit: the rest of the time keep the country code
+
+        '''
+        States
+        ------
+
+        Primarily for the US, Canada and Australia, OSM tends to use the abbreviated state name
+        whereas we'd like to include both forms, so wtih some probability, replace the abbreviated
+        name with the unabbreviated one e.g. CA => California
+        '''
+        address_state = address_components.get(AddressFormatter.STATE)
+
+        if address_state:
+            state_full_name = STATE_ABBREVIATIONS.get(country.upper(), {}).get(address_state.upper(), {}).get(language)
+
+            if state_full_name and random.random() < 0.3:
+                address_components[AddressFormatter.STATE] = state_full_name
+
         if tag_components:
             formatted_addresses = []
             formatted_addresses.append(formatted_address)
@@ -500,7 +563,7 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
             current_components = component_bitset(address_components.keys())
 
             for component in address_components.keys():
-                if current_components ^ OSM_ADDRESS_COMPONENT_VALUES[component] in OSM_ADDRESS_COMPONENTS_VALID and random.random() >= 0.5:
+                if current_components ^ OSM_ADDRESS_COMPONENT_VALUES[component] in OSM_ADDRESS_COMPONENTS_VALID and random.random() < 0.5:
                     address_components.pop(component)
                     current_components ^= OSM_ADDRESS_COMPONENT_VALUES[component]
                     if not address_components:
