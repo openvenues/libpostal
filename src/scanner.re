@@ -137,9 +137,9 @@ apos_word = ("'"?({latinish_letter}+"'"){latinish_letter}+"'"?);
 ellipsis = ("\."{2,}|"\u2026");
 
 acronym = ({letter}"\."){2,}{letter}?;
-multi_punct_abbreviation = ({letter}+"\.")+{letter}?;
+multi_punct_abbreviation = ({letter}+"\.")+{letter}*;
 
-abbrev_word = (({letter}|{possible_word_char})+"\.")+({letter}|{possible_word_char}*);
+abbrev_word = (({letter}|{possible_word_char})+"\.")+({letter}|{possible_word_char})*;
 
 hyphen_plus_abbreviation = ((({abbrev_word}|{any_word}){hyphen})+({abbrev_word}))|(({abbrev_word}|{any_word}){hyphen})*({abbrev_word}{hyphen})+(({abbrev_word}|{any_word}){hyphen})*({abbrev_word}|{any_word});
 
