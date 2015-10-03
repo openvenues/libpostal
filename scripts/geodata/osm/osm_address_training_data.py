@@ -417,20 +417,6 @@ def strip_keys(value, ignore_keys):
         value.pop(key, None)
 
 
-def write_formatted_address(writer, formatter, country, components, tag_components=True, minimal_only=-True):
-    formatted_address = formatter.format_address(country, components, tag_components=tag_components, minimal_only=minimal_only)
-    if formatted_address is not None:
-        formatted_address = tsv_string(formatted_address)
-        if not formatted_address or not formatted_address.strip():
-            return
-        if tag_components:
-            row = (language, country, formatted_address)
-        else:
-            row = (formatted_address,)
-
-        writer.writerow(row)
-
-
 def build_address_format_training_data(language_rtree, infile, out_dir, tag_components=True):
     '''
     Creates formatted address training data for supervised sequence labeling (or potentially 
@@ -499,18 +485,37 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
         address_components = {k: v for k, v in value.iteritems() if k.startswith('addr:')}
         formatter.replace_aliases(address_components)
 
-        # Version with all components
-        write_formatted_address(writer, formatter, country, address_components, tag_components=tag_components, minimal_only=not tag_components)
 
-        current_components = component_bitset(address_components.keys())
+        # Version with all components
+        formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=not tag_components)
 
         if tag_components:
+            formatted_addresses = []
+            formatted_addresses.append(formatted_address)
+
+            current_components = component_bitset(address_components.keys())
+
             for component in address_components.keys():
-                if component in OSM_ADDRESS_COMPONENTS_VALID and current_components ^ OSM_ADDRESS_COMPONENTS_VALID[component] and random.random() > 0.5:
+                if component in OSM_ADDRESS_COMPONENTS_VALID and current_components ^ OSM_ADDRESS_COMPONENTS_VALID[component] and random.random() >= 0.5:
                     address_components.pop(component)
                     if not address_components:
                         break
-                    write_formatted_address(writer, formatter, country, address_components, tag_components=tag_components, minimal_only=False)
+
+                    formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=False)
+                    formatted_addresses.append(formatted_address)
+
+            for formatted_address in formatted_addresses:
+                if formatted_address is not None:
+                    formatted_address = tsv_string(formatted_address)
+                    if not formatted_address or not formatted_address.strip():
+                        continue
+                    row = (language, country, formatted_address)
+
+                    writer.writerow(row)
+        else:
+            if formatted_address is not None:
+                formatted_address = tsv_string(formatted_address)
+                writer.writerow([formatted_address])
 
         i += 1
         if i % 1000 == 0 and i > 0:
