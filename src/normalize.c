@@ -202,7 +202,7 @@ void add_normalized_token(char_array *array, char *str, token_t token, uint64_t 
             append_char = false;
         }
 
-        if ((is_hyphen || is_full_stop) && options & NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC && last_was_letter) {
+        if ((is_hyphen || is_full_stop) && token.type == NUMERIC && options & NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC && last_was_letter) {
             ptr += char_len;
             idx += char_len;
             append_if_not_numeric = is_hyphen ? "-" : ".";
