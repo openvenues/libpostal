@@ -735,6 +735,14 @@ inline void cstring_array_append_string_len(cstring_array *self, char *str, size
     char_array_append_len(self->str, str, len);
 }
 
+inline void cstring_array_cat_string(cstring_array *self, char *str) {
+    char_array_cat(self->str, str);
+}
+
+inline void cstring_array_cat_string_len(cstring_array *self, char *str, size_t len) {
+    char_array_cat_len(self->str, str, len);
+}
+
 inline int32_t cstring_array_get_offset(cstring_array *self, uint32_t i) {
     if (INVALID_INDEX(i, self->indices->n)) {
         return -1;
