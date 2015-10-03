@@ -485,7 +485,6 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
         address_components = {k: v for k, v in value.iteritems() if k.startswith('addr:')}
         formatter.replace_aliases(address_components)
 
-
         # Version with all components
         formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=not tag_components)
 
@@ -493,11 +492,14 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
             formatted_addresses = []
             formatted_addresses.append(formatted_address)
 
+            address_components = {k: v for k, v in address_components.iteritems() if k in OSM_ADDRESS_COMPONENTS_VALID}
+
             current_components = component_bitset(address_components.keys())
 
             for component in address_components.keys():
-                if component in OSM_ADDRESS_COMPONENTS_VALID and current_components ^ OSM_ADDRESS_COMPONENTS_VALID[component] and random.random() >= 0.5:
+                if current_components ^ OSM_ADDRESS_COMPONENTS_VALID[component] and random.random() >= 0.5:
                     address_components.pop(component)
+                    current_components ^= OSM_ADDRESS_COMPONENTS_VALID[component]
                     if not address_components:
                         break
 
