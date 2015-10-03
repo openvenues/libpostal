@@ -110,7 +110,11 @@ class AddressComponent(object):
 
 OSM_ADDRESS_COMPONENTS = OrderedDict.fromkeys([
     AddressComponent(AddressFormatter.HOUSE),
-    AddressComponent(AddressFormatter.ROAD),
+    AddressComponent(AddressFormatter.ROAD, dependencies=(AddressFormatter.HOUSE,
+                                                          AddressFormatter.HOUSE_NUMBER,
+                                                          AddressFormatter.SUBURB,
+                                                          AddressFormatter.CITY,
+                                                          AddressFormatter.POSTCODE)),
     AddressComponent(AddressFormatter.HOUSE_NUMBER, dependencies=(AddressFormatter.ROAD,)),
     AddressComponent(AddressFormatter.SUBURB, dependencies=(AddressFormatter.CITY, AddressFormatter.STATE,
                                                             AddressFormatter.POSTCODE)),
