@@ -492,14 +492,16 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
             formatted_addresses = []
             formatted_addresses.append(formatted_address)
 
-            address_components = {k: v for k, v in address_components.iteritems() if k in OSM_ADDRESS_COMPONENTS_VALID}
+            address_components = {k: v for k, v in address_components.iteritems() if k in OSM_ADDRESS_COMPONENT_VALUES}
+            if not address_components:
+                continue
 
             current_components = component_bitset(address_components.keys())
 
             for component in address_components.keys():
-                if current_components ^ OSM_ADDRESS_COMPONENTS_VALID[component] and random.random() >= 0.5:
+                if current_components ^ OSM_ADDRESS_COMPONENT_VALUES[component] and random.random() >= 0.5:
                     address_components.pop(component)
-                    current_components ^= OSM_ADDRESS_COMPONENTS_VALID[component]
+                    current_components ^= OSM_ADDRESS_COMPONENT_VALUES[component]
                     if not address_components:
                         break
 
