@@ -54,6 +54,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
 
+from geodata.countries.country_names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
 from geodata.states.state_abbreviations import STATE_ABBREVIATIONS
@@ -900,6 +901,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    init_country_names()
     init_languages()
 
     language_rtree = LanguagePolygonIndex.load(args.rtree_dir)
