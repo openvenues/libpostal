@@ -489,9 +489,6 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
         address_components = {k: v for k, v in value.iteritems() if k.startswith('addr:')}
         formatter.replace_aliases(address_components)
 
-        # Version with all components
-        formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=not tag_components)
-
         address_country = address_components.get(AddressFormatter.COUNTRY)
 
         '''
@@ -552,6 +549,9 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
 
             if state_full_name and random.random() < 0.3:
                 address_components[AddressFormatter.STATE] = state_full_name
+
+        # Version with all components
+        formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=not tag_components)
 
         if tag_components:
             formatted_addresses = []
