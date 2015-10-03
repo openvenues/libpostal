@@ -486,7 +486,7 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
                     continue
                 language = disambiguate_language(street, [(l['lang'], l['default']) for l in candidate_languages])
 
-        address_components = {k: v for k, v in value.iteritems() if k.startswith('addr:')}
+        address_components = {k: v for k, v in value.iteritems() if k.startswith('addr:') or k == 'name'}
         formatter.replace_aliases(address_components)
 
         address_country = address_components.get(AddressFormatter.COUNTRY)
