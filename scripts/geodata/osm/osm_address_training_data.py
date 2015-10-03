@@ -37,6 +37,7 @@ import argparse
 import csv
 import os
 import operator
+import random
 import re
 import sys
 import tempfile
