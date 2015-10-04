@@ -60,6 +60,6 @@
 #define WHITESPACE 300
 #define NEWLINE 301
 
- 
+#define INVALID_CHAR 500 
 
 #endif

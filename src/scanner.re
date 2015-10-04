@@ -154,8 +154,10 @@ url = ('http''s'?":"("/"{1,3}|[A-Za-z0-9%]))([^\u0000 \t\u00A0\u2000-\u200A\u300
 
 email = ([a-zA-Z0-9\._%+\-]+"@"([a-zA-Z0-9]+[\.])+[a-zA-Z0-9]{2,3});
 
+invalid_chars = ({control_chars}|{other_format_chars}|{other_private_use_chars});
 
 "\u0000"                        { return END; }
+{invalid_chars}                 { return INVALID_CHAR; }
 {space}+                        { return WHITESPACE; }
 
 {email}                         { return EMAIL; }
@@ -205,6 +207,7 @@ email = ([a-zA-Z0-9\._%+\-]+"@"([a-zA-Z0-9]+[\.])+[a-zA-Z0-9]{2,3});
 "#"                             { return POUND; }
 {other_non_breaking_dash}       { return DASH; }
 {breaking_dash}                 { return BREAKING_DASH; }
+{other_surrogate_chars}         { return INVALID_CHAR; }
 {any}                           { return OTHER; }
 
 */
@@ -233,7 +236,7 @@ void tokenize_add_tokens(token_array *tokens, const char *input, size_t len, boo
         token_start = scanner.start - scanner.src;
         token_length = scanner.cursor - scanner.start;
 
-        if (token_type == WHITESPACE && !keep_whitespace) {
+        if ((token_type == WHITESPACE && !keep_whitespace) || (token_type == INVALID_CHAR)) {
             continue;
         }
 
