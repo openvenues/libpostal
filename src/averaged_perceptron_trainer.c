@@ -1,7 +1,4 @@
 #include "averaged_perceptron_trainer.h"
-#include "klib/ksort.h"
-
-KSORT_INIT_STR
 
 void averaged_perceptron_trainer_destroy(averaged_perceptron_trainer_t *self) {
     if (self == NULL) return;
@@ -152,39 +149,11 @@ averaged_perceptron_t *averaged_perceptron_trainer_finalize(averaged_perceptron_
 
     perceptron->weights = averaged_weights;
 
-    trie_t *features = trie_new();
-    const char *key;
-    uint32_t feature_id;
-
-    string_array *feature_keys = string_array_new_size(kh_size(self->features));
-    kh_foreach(self->features, key, feature_id, {
-        string_array_push(feature_keys, (char *)key);
-    })
-
-    ks_introsort(str, feature_keys->n, (const char **)feature_keys->a);
-
-    khiter_t k;
-
-    for (int i = 0; i < feature_keys->n; i++) {
-        char *str = feature_keys->a[i];
-        k = kh_get(str_uint32, self->features, str);
-        if (k == kh_end(self->features)) {
-            log_error("Key not found\n");
-            trie_destroy(features);
-            averaged_perceptron_destroy(perceptron);
-        }
-
-        feature_id = kh_value(self->features, k);
-
-        if (!trie_add(features, str, feature_id)) {
-            log_error("Error adding to trie\n");
-            trie_destroy(features);
-            averaged_perceptron_destroy(perceptron);
-            return NULL;
-        }
+    trie_t *features = trie_new_from_hash(self->features);
+    if (features == NULL) {
+        averaged_perceptron_trainer_destroy(self);
+        return NULL;
     }
-
-    string_array_destroy(feature_keys);
 
     perceptron->features = features;
 
