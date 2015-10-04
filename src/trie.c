@@ -1,7 +1,6 @@
 #include "trie.h"
 #include <math.h>
 
-
 /* 
 * Maps the 256 characters (suitable for UTF-8 strings) to array indices
 * ordered by frequency of usage in Wikipedia titles.
@@ -101,6 +100,52 @@ trie_t *trie_new_alphabet(uint8_t *alphabet, uint32_t alphabet_size) {
 
 trie_t *trie_new(void) {
     return trie_new_alphabet(DEFAULT_ALPHABET, sizeof(DEFAULT_ALPHABET));
+}
+
+
+/*
+Build a trie from the sorted keys of a hashtable. Adding
+keys in sorted order to a double-array trie is faster than
+adding them in random order.
+*/
+trie_t *trie_new_from_hash(khash_t(str_uint32) *hash) {
+    trie_t *trie = trie_new();
+    const char *key;
+    uint32_t value;
+
+    string_array *hash_keys = string_array_new_size(kh_size(hash));
+    kh_foreach(hash, key, value, {
+        if (strlen(key) == 0) continue;
+        string_array_push(hash_keys, (char *)key);
+    })
+
+    ks_introsort(str, hash_keys->n, (const char **)hash_keys->a);
+
+    khiter_t k;
+
+    for (int i = 0; i < hash_keys->n; i++) {
+        char *str = hash_keys->a[i];
+        k = kh_get(str_uint32, hash, str);
+        if (k == kh_end(hash)) {
+            log_error("Key not found\n");
+            string_array_destroy(hash_keys);
+            trie_destroy(trie);
+            return NULL;
+        }
+
+        value = kh_value(hash, k);
+
+        if (!trie_add(trie, str, value)) {
+            log_error("Error adding to trie\n");
+            string_array_destroy(hash_keys);
+            trie_destroy(trie);
+            return NULL;
+        }
+    }
+
+    string_array_destroy(hash_keys);
+
+    return trie;
 }
 
 inline bool trie_node_is_free(trie_node_t node) {
