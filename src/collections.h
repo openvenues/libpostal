@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 #include "klib/khash.h"
+#include "klib/ksort.h"
 #include "vector.h"
 #include "vector_math.h"
 
@@ -43,6 +44,7 @@ VECTOR_INIT_NUMERIC_FLOAT(double_array, double, fabs)
 VECTOR_INIT(char_array, char)
 VECTOR_INIT(uchar_array, unsigned char)
 VECTOR_INIT(string_array, char *)
- 
+
+KSORT_INIT_STR
 
 #endif
