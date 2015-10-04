@@ -578,17 +578,16 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
                     formatted_addresses.append(formatted_address)
 
             for formatted_address in formatted_addresses:
-                if formatted_address is not None:
+                if formatted_address and formatted_address.strip():
                     formatted_address = tsv_string(formatted_address)
                     if not formatted_address or not formatted_address.strip():
                         continue
                     row = (language, country, formatted_address)
 
                     writer.writerow(row)
-        else:
-            if formatted_address is not None:
-                formatted_address = tsv_string(formatted_address)
-                writer.writerow([formatted_address])
+        elif formatted_address and formatted_address.strip():
+            formatted_address = tsv_string(formatted_address)
+            writer.writerow([formatted_address])
 
         i += 1
         if i % 1000 == 0 and i > 0:
