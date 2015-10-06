@@ -52,7 +52,7 @@ european cooperative society|societa cooperativa europaea|sce
 european company|societa europaea|se|s e
 european private company|societa privata europaea|spe|s p e
 single member company|sme pvt|sme ltd
-society
+society|soc
 trust
 undertakings for collective onvestment in transferable securities|ucits|u c i t s
 unlimited|ultd|unltd
