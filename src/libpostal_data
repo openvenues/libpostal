@@ -15,7 +15,7 @@ LIBPOSTAL_DATA_DIR=$2
 
 LIBPOSTAL_DATA_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated
 
-BASIC_MODULE_DIRS=(address_expansins numex transliteration)
+BASIC_MODULE_DIRS=(address_expansions numex transliteration)
 
 EPOCH_DATE="Jan  1 00:00:00 1970"
 
