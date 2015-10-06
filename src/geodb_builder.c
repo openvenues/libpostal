@@ -348,6 +348,8 @@ uint16_t get_address_component(uint32_t boundary_type) {
         return ADDRESS_NEIGHBORHOOD;
     } else if (boundary_type == GEONAMES_ADMIN1) {
         return ADDRESS_ADMIN1;
+    } else if (boundary_type == COUNTRY) {
+        return ADDRESS_COUNTRY;
     } else if (boundary_type == GEONAMES_ADMIN2) {
         return ADDRESS_ADMIN2;
     } else if (boundary_type == GEONAMES_ADMIN3) {
