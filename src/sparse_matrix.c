@@ -284,14 +284,15 @@ sparse_matrix_t *sparse_matrix_read(FILE *f) {
         goto exit_sparse_matrix_allocated;
     }
 
-    sp->indptr = indptr;
-
     for (int i = 0; i < len_indptr; i++) {
         if (!file_read_uint32(f, indptr->a + i)) {
             printf("indptr\n");
             goto exit_sparse_matrix_allocated;
         }
     }
+
+    indptr->n = (size_t)len_indptr;
+    sp->indptr = indptr;
 
     uint64_t len_indices;
 
@@ -306,14 +307,15 @@ sparse_matrix_t *sparse_matrix_read(FILE *f) {
         goto exit_sparse_matrix_allocated;
     }
 
-    sp->indices = indices;
-
     for (int i = 0; i < len_indices; i++) {
         if (!file_read_uint32(f, indices->a + i)) {
             printf("indices\n");
             goto exit_sparse_matrix_allocated;
         }
     }
+
+    indices->n = (size_t)len_indices;
+    sp->indices = indices;
 
     uint64_t len_data;
 
@@ -328,14 +330,15 @@ sparse_matrix_t *sparse_matrix_read(FILE *f) {
         goto exit_sparse_matrix_allocated;
     }
 
-    sp->data = data;
-
     for (int i = 0; i < len_data; i++) {
         if (!file_read_double(f, data->a + i)) {
             printf("data\n");
             goto exit_sparse_matrix_allocated;
         }
     }
+
+    data->n = (size_t)len_data;
+    sp->data = data;
 
     return sp;
 

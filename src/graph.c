@@ -110,13 +110,14 @@ graph_t *graph_read(FILE *f) {
         goto exit_graph_allocated;
     }
 
-    g->indptr = indptr;
-
     for (int i = 0; i < len_indptr; i++) {
         if (!file_read_uint32(f, indptr->a + i)) {
             goto exit_graph_allocated;
         }
     }
+    indptr->n = (size_t)len_indptr;
+
+    g->indptr = indptr;
 
     uint64_t len_indices;
 
@@ -129,13 +130,15 @@ graph_t *graph_read(FILE *f) {
         goto exit_graph_allocated;
     }
 
-    g->indices = indices;
-
     for (int i = 0; i < len_indices; i++) {
         if (!file_read_uint32(f, indices->a + i)) {
             goto exit_graph_allocated;
         }
     }
+
+    indices->n = (size_t)len_indices;
+
+    g->indices = indices;
     
     return g;
 
@@ -155,7 +158,7 @@ bool graph_write(graph_t *self, FILE *f) {
         return false;
     }
 
-    uint64_t len_indptr = self->indptr->n;
+    uint64_t len_indptr = (uint64_t)self->indptr->n;
 
     if (!file_write_uint64(f, len_indptr)) {
         return false;
