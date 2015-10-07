@@ -110,9 +110,7 @@ def init_country_names(base_dir=CLDR_MAIN_PATH):
     global language_country_names
     init_languages()
 
-    local_languages = {country: get_country_languages(country, official=False)
-                       or OrderedDict([('en', 1)])
-                       for country in country_alpha2_codes}
+    local_languages = {}
 
     country_language_names = defaultdict(dict)
 
@@ -127,6 +125,9 @@ def init_country_names(base_dir=CLDR_MAIN_PATH):
 
         for country, name in names.iteritems():
             country = country.lower()
+
+            languages = get_country_languages(country, official=False) or OrderedDict([('en', 1)])
+            local_languages[country] = languages
 
             if lang in local_languages.get(country, {}):
                 country_language_names[country][lang] = name
