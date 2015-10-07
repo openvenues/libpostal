@@ -429,7 +429,10 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
 
                     is_orig_name = row[NAME_INDEX] == row[CANONICAL_NAME_INDEX] and row[LANGUAGE_INDEX] == ''
                     # Set the canonical for countries to the local name, see country_official_name in country_names.py
-                    row[CANONICAL_NAME_INDEX] = country_localized_display_name(alpha2_code.lower())
+                    country_canonical = country_localized_display_name(alpha2_code.lower())
+                    if not country_canonical or not country_canonical.strip():
+                        raise ValueError('Could not get local canonical name for country code={}'.format(alpha2_code))
+                    row[CANONICAL_NAME_INDEX] = country_canonical
 
                 geonames_id = row[GEONAMES_ID_INDEX]
 
