@@ -277,6 +277,9 @@ gn_postal_code_t *gn_postal_code_new(void) {
     self->country_code = char_array_new_size(GEONAMES_COUNTRY_CODE_DEFAULT_LENGTH);
     self->containing_geoname = char_array_new_size(GEONAMES_NAME_DEFAULT_LENGTH);
 
+    self->have_lat_lon = false;
+    self->have_containing_geoname = false;
+
     self->admin1_ids = uint32_array_new_size(GEONAMES_POSTAL_ADMIN1_IDS_DEFAULT_LENGTH);
     self->admin2_ids = uint32_array_new_size(GEONAMES_POSTAL_ADMIN2_IDS_DEFAULT_LENGTH);
     self->admin3_ids = uint32_array_new_size(GEONAMES_POSTAL_ADMIN3_IDS_DEFAULT_LENGTH);
