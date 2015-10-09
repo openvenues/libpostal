@@ -9,12 +9,16 @@ geodb_t *get_geodb(void) {
 void geodb_destroy(geodb_t *self) {
     if (self == NULL) return;
 
-    if (self->trie != NULL) {
-        trie_destroy(self->trie);
+    if (self->names != NULL) {
+        trie_destroy(self->names);
     }
 
-    if (self->bloom_filter != NULL) {
-        bloom_filter_destroy(self->bloom_filter);
+    if (self->features != NULL) {
+        trie_destroy(self->features);
+    }
+
+    if (self->postal_codes != NULL) {
+        cstring_array_destroy(self->postal_codes);
     }
 
     if (self->hash_reader != NULL) {
@@ -48,25 +52,55 @@ geodb_t *geodb_init(char *dir) {
     if (gdb == NULL) return NULL;
 
     char_array *path = char_array_new_size(strlen(dir));
-    char_array_cat(path, dir);
-    char_array_cat(path, PATH_SEPARATOR);
-    char_array_cat(path, GEODB_TRIE_FILENAME);
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, dir, GEODB_NAMES_TRIE_FILENAME);
 
-    char *trie_path = char_array_get_string(path);
+    char *names_path = char_array_get_string(path);
 
-    gdb->trie = trie_load(trie_path);
-    if (gdb->trie == NULL) {
+    gdb->names = trie_load(names_path);
+    if (gdb->names == NULL) {
         goto exit_geodb_created;
     }
 
     char_array_clear(path);
 
-    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, dir, GEODB_BLOOM_FILTER_FILENAME);
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, dir, GEODB_FEATURES_TRIE_FILENAME);
 
-    char *bloom_path = char_array_get_string(path);
+    char *features_path = char_array_get_string(path);
 
-    gdb->bloom_filter = bloom_filter_load(bloom_path);
-    if(gdb->bloom_filter == NULL) {
+    gdb->features = trie_load(features_path);
+    if(gdb->features == NULL) {
+        goto exit_geodb_created;
+    }
+
+    char_array_clear(path);
+
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, dir, GEODB_POSTAL_CODES_FILENAME);
+    char *postal_codes_path = char_array_get_string(path);
+
+    FILE *f = fopen(postal_codes_path, "rb");
+
+    uint64_t num_postal_strings = 0;
+    if (!file_read_uint64(f, (uint64_t *)&num_postal_strings)) {
+        goto exit_geodb_created;
+    }
+
+    size_t postal_codes_str_len;
+
+    if (!file_read_uint64(f, (uint64_t *)&postal_codes_str_len)) {
+        goto exit_geodb_created;
+    }
+
+    char_array *array = char_array_new_size(postal_codes_str_len);
+
+    if (!file_read_chars(f, array->a, postal_codes_str_len)) {
+        goto exit_geodb_created;
+    }
+
+    array->n = postal_codes_str_len;
+
+    gdb->postal_codes = cstring_array_from_char_array(array);
+
+    if (cstring_array_num_strings(gdb->postal_codes) != num_postal_strings) {
         goto exit_geodb_created;
     }
 
@@ -130,7 +164,7 @@ bool geodb_load(char *dir) {
 bool search_geodb_with_phrases(char *str, phrase_array **phrases) {
     if (str == NULL) return false;
 
-    return trie_search_with_phrases(geodb->trie, str, phrases);
+    return trie_search_with_phrases(geodb->names, str, phrases);
 }
 
 phrase_array *search_geodb(char *str) {
@@ -147,7 +181,7 @@ phrase_array *search_geodb(char *str) {
 bool search_geodb_tokens_with_phrases(char *str, token_array *tokens, phrase_array **phrases) {
     if (str == NULL) return false;
 
-    return trie_search_tokens_with_phrases(geodb->trie, str, tokens, phrases);
+    return trie_search_tokens_with_phrases(geodb->names, str, tokens, phrases);
 }
 
 
