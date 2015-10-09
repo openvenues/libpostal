@@ -524,6 +524,20 @@ static kh_inline khint_t __ac_Wang_hash(khint_t key)
     } }
 
 /*! @function
+  @abstract     Iterate over the keys in the hash table
+  @param  h     Pointer to the hash table [khash_t(name)*]
+  @param  vvar  Variable to which key will be assigned
+  @param  code  Block of code to execute
+ */
+#define kh_foreach_key(h, kvar, code) { khint_t __i;        \
+    for (__i = kh_begin(h); __i != kh_end(h); ++__i) {      \
+        if (!kh_exist(h,__i)) continue;                     \
+        (kvar) = kh_key(h,__i);                             \
+        code;                                               \
+    } }
+
+
+/*! @function
   @abstract     Iterate over the values in the hash table
   @param  h     Pointer to the hash table [khash_t(name)*]
   @param  vvar  Variable to which value will be assigned
