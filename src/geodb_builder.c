@@ -7,12 +7,15 @@
 #include "sparkey/sparkey.h"
 
 #include "collections.h"
+#include "constants.h"
 #include "libpostal_config.h"
 #include "file_utils.h"
 #include "gazetteers.h"
 #include "geonames.h"
 #include "geodb.h"
 #include "geo_disambiguation.h"
+#include "graph.h"
+#include "graph_builder.h"
 #include "msgpack_utils.h"
 #include "normalize.h"
 #include "string_utils.h"
@@ -23,6 +26,9 @@
 
 #define DEFAULT_GEONAMES_TSV LIBPOSTAL_GEONAMES_DIR PATH_SEPARATOR "geonames.tsv";
 
+/*
+Read line from generated geonames.tsv into a geoname struct
+*/
 static bool read_geoname_from_line(geoname_t *g, char *line) {
     size_t token_count;
 
@@ -184,6 +190,9 @@ exit_geoname_free_tokens:
     return false;
 }
 
+/*
+Read line from generated postal_codes.tsv into a gn_postal_code struct
+*/
 static bool read_gn_postal_code_from_line(gn_postal_code_t *postal, char *line) {
     size_t token_count;
     int i;
@@ -206,10 +215,9 @@ static bool read_gn_postal_code_from_line(gn_postal_code_t *postal, char *line) 
         log_error("postal_code field required\n");
         goto exit_postal_tokens_created;
     }
-
-    token = cstring_array_get_string(tokens, GN_POSTAL_CODE);
     char_array_cat(postal->postal_code, token);
     token = cstring_array_get_string(tokens, GN_POSTAL_COUNTRY_CODE);
+    char_array_cat(postal->country_code, token);
 
     token = cstring_array_get_string(tokens, GN_POSTAL_COUNTRY_GEONAMES_ID);
     if (strlen(token) > 0) {
@@ -218,7 +226,6 @@ static bool read_gn_postal_code_from_line(gn_postal_code_t *postal, char *line) 
         postal->country_geonames_id = 0;
     }
 
-    char_array_cat(postal->country_code, token);
     token = cstring_array_get_string(tokens, GN_POSTAL_CONTAINING_GEONAME_ID);
     char_array_cat(postal->containing_geoname, token);
 
@@ -288,21 +295,38 @@ exit_postal_tokens_created:
 }
 
 
+/*
+geodb_builder
+
+Creates the sparkey on-disk db for quick lookups by geonames_id or postal code.
+Builds the data structures needed for finalized geodb.
+*/
+
 typedef struct geodb_builder {
-    trie_t *trie;
+    trie_t *names;
+    cstring_array *postal_codes;
+    trie_t *features;
+    graph_builder_t *feature_graph_builder;
     sparkey_logwriter *log_writer;
-    bloom_filter_t *bloom_filter;
 } geodb_builder_t;
 
 void geodb_builder_destroy(geodb_builder_t *self) {
     if (self == NULL) return;
 
-    if (self->trie != NULL) {
-        trie_destroy(self->trie);
+    if (self->names != NULL) {
+        trie_destroy(self->names);
     }
 
-    if (self->bloom_filter != NULL) {
-        bloom_filter_destroy(self->bloom_filter);
+    if (self->postal_codes != NULL) {
+        cstring_array_destroy(self->postal_codes);
+    }
+
+    if (self->features != NULL) {
+        trie_destroy(self->features);
+    }
+
+    if (self->feature_graph_builder != NULL) {
+        graph_builder_destroy(self->feature_graph_builder);
     }
 
     if (self->log_writer != NULL) {
@@ -318,14 +342,25 @@ geodb_builder_t *geodb_builder_new(char *log_filename) {
 
     if (builder == NULL) return NULL;
 
-    builder->trie = trie_new();
-
-    if (builder->trie == NULL) {
+    builder->names = trie_new();
+    if (builder->names == NULL) {
         goto exit_destroy_builder;
     }
 
-    builder->bloom_filter = bloom_filter_new(GEODB_BLOOM_FILTER_SIZE, GEODB_BLOOM_FILTER_ERROR);
-    if (builder->bloom_filter == NULL) {
+    builder->features = trie_new();
+
+    if (builder->features == NULL) {
+        goto exit_destroy_builder;
+    }
+
+    builder->postal_codes = cstring_array_new();
+    if (builder->postal_codes == NULL) {
+        goto exit_destroy_builder;
+    }
+
+    bool fixed_rows = false;
+    builder->feature_graph_builder = graph_builder_new(GRAPH_BIPARTITE, fixed_rows);
+    if (builder->feature_graph_builder == NULL) {
         goto exit_destroy_builder;
     }
 
@@ -341,6 +376,9 @@ exit_destroy_builder:
     return NULL;
 }
 
+/*
+Map of geonames boundary types to address components
+*/
 uint16_t get_address_component(uint32_t boundary_type) {
     if (boundary_type == GEONAMES_LOCALITY) {
         return ADDRESS_LOCALITY;
@@ -348,7 +386,7 @@ uint16_t get_address_component(uint32_t boundary_type) {
         return ADDRESS_NEIGHBORHOOD;
     } else if (boundary_type == GEONAMES_ADMIN1) {
         return ADDRESS_ADMIN1;
-    } else if (boundary_type == COUNTRY) {
+    } else if (boundary_type == GEONAMES_COUNTRY) {
         return ADDRESS_COUNTRY;
     } else if (boundary_type == GEONAMES_ADMIN2) {
         return ADDRESS_ADMIN2;
@@ -363,9 +401,12 @@ uint16_t get_address_component(uint32_t boundary_type) {
     }
 }
 
-bool geodb_builder_add_to_trie(geodb_builder_t *self, char *key, bool is_canonical, uint16_t address_components) {
-    if (self == NULL || self->trie == NULL) return false;
-    uint32_t node_id = trie_get(self->trie, key);
+/*
+Add raw/unqualified name to the geodb trie
+*/
+bool geodb_builder_add_name(geodb_builder_t *self, char *key, bool is_canonical, uint16_t address_components) {
+    if (self == NULL || self->names == NULL) return false;
+    uint32_t node_id = trie_get(self->names, key);
 
     geodb_value_t value;
     value.value = 0;
@@ -374,10 +415,9 @@ bool geodb_builder_add_to_trie(geodb_builder_t *self, char *key, bool is_canonic
         value.components |= address_components;
         value.is_canonical = is_canonical;
         value.count = 1;
-        return trie_add(self->trie, key, value.value);
-
+        return trie_add(self->names, key, value.value);
     } else {
-        if (!trie_get_data_at_index(self->trie, node_id, &value.value)) {
+        if (!trie_get_data_at_index(self->names, node_id, &value.value)) {
             return false;
         }
 
@@ -385,29 +425,102 @@ bool geodb_builder_add_to_trie(geodb_builder_t *self, char *key, bool is_canonic
         value.is_canonical = is_canonical;
         value.count++;
 
-        return trie_set_data_at_index(self->trie, node_id, value.value);
+        return trie_set_data_at_index(self->names, node_id, value.value);
 
     }
 
 }
 
-bool geodb_finalize(geodb_builder_t *self, char *output_dir) {
+/*
+Get a feature string's id from the trie or add it and return the next id
+*/
+inline uint32_t geodb_builder_get_feature_id(geodb_builder_t *self, char *key) {
+    uint32_t feature_id;
+
+    if (!trie_get_data(self->features, key, &feature_id)) {
+        feature_id = self->features->num_keys;
+        if (!trie_add(self->features, key, feature_id)) {
+            log_error("Could not add key to trie, aborting\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    return feature_id;
+}
+
+
+/*
+Destroy builder and create geodb files in the designated directory
+*/
+bool geodb_builder_finalize(geodb_builder_t *self, char *output_dir) {
     char_array *path = char_array_new_size(strlen(output_dir));
 
-    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_TRIE_FILENAME);
-    char *trie_path = char_array_get_string(path);
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_NAMES_TRIE_FILENAME);
+    char *names_path = char_array_get_string(path);
 
-    trie_save(self->trie, trie_path);
+    trie_save(self->names, names_path);
 
     char_array_clear(path);
 
-    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_HASH_FILENAME);
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_FEATURES_TRIE_FILENAME);
+    char *features_path = char_array_get_string(path);
+
+    trie_save(self->features, features_path);
+
+    char_array_clear(path);
+
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_POSTAL_CODES_FILENAME);
+
+    char *postal_codes_path = char_array_get_string(path);
+
+    FILE *f = fopen(postal_codes_path, "wb");
+    uint64_t num_postal_strings = 0;
+    if (!file_write_uint64(f, (uint64_t)cstring_array_num_strings(self->postal_codes))) {
+        log_error("Could not write number of postal code strings\n");
+        return false;
+    }
+
+    size_t postal_codes_str_len = self->postal_codes->str->n;
+
+    if (!file_write_uint64(f, (uint64_t)postal_codes_str_len)) {
+        log_error("Could not write postal codes strings length\n");
+        return false;
+    }
+
+    if (!file_write_chars(f, self->postal_codes->str->a, postal_codes_str_len)) {
+        log_error("Could not write postal codes strings\n");
+        return false;
+    }
+
+    fclose(f);
+
+    char_array_clear(path);
+
+
+    bool sort_edges = false;
+    bool remove_duplicates = false;
+
+    graph_t *graph = graph_builder_finalize(self->feature_graph_builder, sort_edges, remove_duplicates);
+    self->feature_graph_builder = NULL;
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_FEATURE_GRAPH_FILENAME);
+
+    char *feature_graph_path = char_array_get_string(path);
+    if (!graph_save(graph, feature_graph_path)) {
+        log_error("Error saving graph\n");
+        return false;
+    }
+
+    graph_destroy(graph);
+
+    char_array_clear(path);
+
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_HASH_FILENAME);
 
     char *hash_filename = strdup(char_array_get_string(path));
 
     char_array_clear(path);
 
-    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_LOG_FILENAME);
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_LOG_FILENAME);
     char *log_filename = char_array_get_string(path);
 
     if (self->log_writer != NULL) {
@@ -418,29 +531,21 @@ bool geodb_finalize(geodb_builder_t *self, char *output_dir) {
     if ((sparkey_hash_write(hash_filename, log_filename, 0)) != SPARKEY_SUCCESS) {
         log_error("Could not write Sparkey hash file\n");
         free(hash_filename);
+        char_array_destroy(path);
         return false;
     }
 
     free(hash_filename);
 
-    char_array_clear(path);
-
-    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_BLOOM_FILTER_FILENAME);
-    char *bloom_filter_path = char_array_get_string(path);
-    if (!bloom_filter_save(self->bloom_filter, bloom_filter_path)) {
-        log_error("Could not save bloom filter\n");
-        return false;
-    }
+    char_array_destroy(path);
 
     return true;
 
 }
 
-bool name_is_iso_code(char *name) {
-    size_t len = strlen(name);
-    return (len == 2 || len == 3) && string_is_upper(name);
-}
-
+/*
+Read generated geonames.tsv and add to the geodb builder
+*/
 void import_geonames(geodb_builder_t *self, char *filename) {
     FILE *f = fopen(filename, "r");
     if (f == NULL) {
@@ -454,29 +559,23 @@ void import_geonames(geodb_builder_t *self, char *filename) {
 
     char_array *serialized = char_array_new();
 
+    graph_builder_t *features = self->feature_graph_builder;
+
     // Just a set of all ids in GeoNames so we only add keys once, takes up < 50MB
     khash_t(int_set) *all_ids = kh_init(int_set);
 
     khash_t(int_set) *distinct_ids = kh_init(int_set);
-    khash_t(str_set) *distinct_features = kh_init(str_set);
 
     khiter_t key;
     int ret;
 
     cstring_array *geo_features = cstring_array_new();
+    uint32_array *feature_lengths = uint32_array_new();
 
-    char id_string[INT32_MAX_STRING_SIZE];
+    char id_string[INT32_MAX_STRING_SIZE + 1];
 
     int normalize_utf8_options = NORMALIZE_STRING_DECOMPOSE | NORMALIZE_STRING_LOWERCASE | NORMALIZE_STRING_TRIM;
     //int normalize_latin_options = normalize_utf8_options | NORMALIZE_STRING_LATIN_ASCII;
-
-    uint32_array *ordered_ids = uint32_array_new();
-    char_array *ordered_ids_str = char_array_new();
-
-    cmp_ctx_t ctx;
-    msgpack_buffer_t buffer = (msgpack_buffer_t){ordered_ids_str, 0};
-    
-    cmp_init(&ctx, &buffer, msgpack_bytes_reader, msgpack_bytes_writer);
 
     int i = 0;
 
@@ -492,33 +591,51 @@ void import_geonames(geodb_builder_t *self, char *filename) {
 
         size_t id_len = sprintf(id_string, "%d", g->geonames_id);
 
-        if (g->type == GEONAMES_COUNTRY && name_is_iso_code(name)) {
-            utf8_normalized = strdup(name);
-        } else if (name != NULL) {
+        if (name != NULL) {
             utf8_normalized = normalize_string_utf8(name, normalize_utf8_options);
         }
 
         if (utf8_normalized != NULL && (prev_name == NULL || strcmp(utf8_normalized, prev_name) != 0)) {
             // New name
-
-            geodb_builder_add_to_trie(self, utf8_normalized, is_canonical, get_address_component(g->type));
-
-            cmp_write_uint_vector(&ctx, ordered_ids);
-
-            if ((sparkey_logwriter_put(self->log_writer, strlen(utf8_normalized), (uint8_t *)utf8_normalized, ordered_ids_str->n - 1, (uint8_t *)char_array_get_string(ordered_ids_str))) != SPARKEY_SUCCESS) {
-                log_error("Error writing ids string to Sparkey\n");
+            if (!geodb_builder_add_name(self, utf8_normalized, is_canonical, get_address_component(g->type))) {
+                log_error("Error adding geoname %s\n", utf8_normalized);
                 exit(EXIT_FAILURE);
             }
 
-            uint32_array_clear(ordered_ids);
-            char_array_clear(ordered_ids_str);
+            // Only add disambiguation features if there's > 1 id for this name
+            if (kh_size(distinct_ids) > 1) {
+
+                uint32_t string_index = 0;
+                uint32_t lengths_index = 0;
+
+                uint32_t geonames_id;
+
+                kh_foreach_key(distinct_ids, key, {
+                    uint32_t length = feature_lengths->a[lengths_index];
+                    for (int i = 0; i < length; i++) {
+                        char *token = cstring_array_get_string(geo_features, string_index);
+                        uint32_t feature_id = geodb_builder_get_feature_id(self, token);
+
+                        graph_builder_add_edge(self->feature_graph_builder, feature_id, geonames_id);
+
+                        string_index++;
+                    }
+
+                    lengths_index++;
+                })
+            }
+
+            uint32_array_clear(feature_lengths);
+            cstring_array_clear(geo_features);
             kh_clear(int_set, distinct_ids);
-            kh_clear(str_set, distinct_features);
 
         } else if (utf8_normalized != NULL) {
             key = kh_get(int_set, distinct_ids, g->geonames_id);
             if (key == kh_end(distinct_ids)) {
-                geodb_builder_add_to_trie(self, utf8_normalized, is_canonical, get_address_component(g->type));
+                if (!geodb_builder_add_name(self, utf8_normalized, is_canonical, get_address_component(g->type))) {
+                    log_error("Error adding geoname %s\n", utf8_normalized);
+                    exit(EXIT_FAILURE);
+                }
             }
         } else {
             log_error("normalization failed for name %s\n", name);
@@ -546,38 +663,27 @@ void import_geonames(geodb_builder_t *self, char *filename) {
         key = kh_get(int_set, distinct_ids, g->geonames_id);
 
         if (key == kh_end(distinct_ids)) {
-            uint32_array_push(ordered_ids, g->geonames_id);
-        }
-
-        key = kh_put(int_set, distinct_ids, g->geonames_id, &ret);
-
-        char_array_clear(g->name);
-        char_array_cat(g->name, utf8_normalized);
-
-        cstring_array_clear(geo_features);
-
-        if (!geodisambig_add_geoname_features(geo_features, g)) {
-            log_error("Could not add geonames features for id=%d\n", g->geonames_id);
-            exit(EXIT_FAILURE);
-        }
-
-        for (int i = 0; i < cstring_array_num_strings(geo_features); i++) {
-            char *token = cstring_array_get_string(geo_features, i);
-            key = kh_get(str_set, distinct_features, token);
-            if (key == kh_end(distinct_features)) {
-                // Not in set, this GeoName takes priority
-                if (sparkey_logwriter_put(self->log_writer, strlen(token), (uint8_t *)token, strlen(id_string), (uint8_t *)id_string) != SPARKEY_SUCCESS) {
-                    log_error("Error writing key %s to Sparkey\n", token);
-                }
-
-                bloom_filter_add(self->bloom_filter, token, strlen(token));
-
-                key = kh_put(str_set, distinct_features, token, &ret);
+            key = kh_put(int_set, distinct_ids, g->geonames_id, &ret);
+            if (ret < 0) {
+                log_error("ret < 0\n");
             }
+
+            char_array_clear(g->name);
+            char_array_cat(g->name, utf8_normalized);
+
+            size_t num_geo_features = cstring_array_num_strings(geo_features);
+
+            if (!geodisambig_add_geoname_features(geo_features, g)) {
+                log_error("Could not add geonames features for id=%d\n", g->geonames_id);
+                exit(EXIT_FAILURE);
+            }
+            uint32_t feature_length = (uint32_t)(cstring_array_num_strings(geo_features) - num_geo_features);
+            uint32_array_push(feature_lengths, feature_length);
         }
 
         if (prev_name != NULL) {
             free(prev_name);
+            prev_name = NULL;
         }
 
         if (utf8_normalized != NULL) {
@@ -592,18 +698,26 @@ void import_geonames(geodb_builder_t *self, char *filename) {
         }
     }
 
-    kh_destroy(int_set, all_ids);
+    if (prev_name != NULL) {
+        free(prev_name);
+    }
+
+    uint32_array_destroy(feature_lengths);
+    cstring_array_destroy(geo_features);
+
     kh_destroy(int_set, distinct_ids);
-    kh_destroy(str_set, distinct_features);    
+    kh_destroy(int_set, all_ids);
 
     char_array_destroy(serialized);
-
-    cstring_array_destroy(geo_features);
 
     geoname_destroy(g);
     fclose(f);
 }
 
+
+/*
+Read generated postal_codes.tsv and add to the geodb builder
+*/
 void import_geonames_postal_codes(geodb_builder_t *self, char *filename) {
     FILE *f = fopen(filename, "r");
     if (f == NULL) {
@@ -616,11 +730,10 @@ void import_geonames_postal_codes(geodb_builder_t *self, char *filename) {
     char *prev_code = NULL;
     gn_postal_code_t *pc = gn_postal_code_new();
 
+    char_array *postal_code = char_array_new();
     char_array *serialized = char_array_new();
 
     cstring_array *postal_code_features = cstring_array_new();
-
-    khash_t(str_set) *distinct_features = kh_init(str_set);
 
     khiter_t key;
     int ret;
@@ -638,17 +751,13 @@ void import_geonames_postal_codes(geodb_builder_t *self, char *filename) {
 
         char *code = char_array_get_string(pc->postal_code);
         char *utf8_normalized = normalize_string_utf8(code, NORMALIZE_STRING_LOWERCASE);
-
+        
         if (utf8_normalized == NULL) {
             log_error("normalization failed for postal code %s\n", code);
             exit(EXIT_FAILURE);
         }
 
-        if (prev_code == NULL || strcmp(utf8_normalized, prev_code) != 0) {
-            kh_clear(str_set, distinct_features);
-        }
-
-        geodb_builder_add_to_trie(self, utf8_normalized, is_canonical, ADDRESS_POSTAL_CODE);
+        geodb_builder_add_name(self, utf8_normalized, is_canonical, ADDRESS_POSTAL_CODE);
 
         char_array_clear(serialized);
         if (!gn_postal_code_serialize(pc, serialized)) {
@@ -656,33 +765,46 @@ void import_geonames_postal_codes(geodb_builder_t *self, char *filename) {
             exit(EXIT_FAILURE);
         }
 
+        char *country_code = char_array_get_string(pc->country_code);
+
+        char_array_clear(postal_code);
+        char_array_cat_joined(postal_code, NAMESPACE_SEPARATOR_CHAR, false, 2, country_code, utf8_normalized);
+
+        char *key = char_array_get_string(postal_code);
+        cstring_array_add_string(self->postal_codes, key);
+
+        uint32_t postal_code_index = (uint32_t)cstring_array_num_strings(self->postal_codes);
         cstring_array_clear(postal_code_features);
 
         char_array_clear(pc->postal_code);
         char_array_cat(pc->postal_code, utf8_normalized);
+
+        if (sparkey_logwriter_put(self->log_writer, strlen(key), (uint8_t *)key, serialized->n, (uint8_t *)char_array_get_string(serialized)) != SPARKEY_SUCCESS) {
+            log_error("Error writing key %s to Sparkey\n", key);
+        }
 
         if (!geodisambig_add_postal_code_features(postal_code_features, pc)) {
             log_error("Could not add geonames features for postal code=%s\n", code);
             exit(EXIT_FAILURE);
         }
 
+        /*
+        In the Geonames case, the column indices in the graph refer to GeoNames ids.
+        Since postal codes do not have ids, only names, the indices in the postal code
+        feature graph refer to offsets in a cstring_array containing all the names.
+
+        Since postal code features are namespaced differently, we can do this without
+        offsets, etc.
+        */
         for (int i = 0; i < cstring_array_num_strings(postal_code_features); i++) {
             char *token = cstring_array_get_string(postal_code_features, i);
-            key = kh_get(str_set, distinct_features, token);
-            if (key == kh_end(distinct_features)) {
-                // Not in set, this GeoName takes priority
-                if (sparkey_logwriter_put(self->log_writer, strlen(token), (uint8_t *)token, serialized->n, (uint8_t *)char_array_get_string(serialized)) != SPARKEY_SUCCESS) {
-                    log_error("Error writing key %s to Sparkey\n", token);
-                }
-
-                bloom_filter_add(self->bloom_filter, token, strlen(token));
-
-                key = kh_put(str_set, distinct_features, token, &ret);
-            }
+            uint32_t feature_id = geodb_builder_get_feature_id(self, token);
+            graph_builder_add_edge(self->feature_graph_builder, feature_id, postal_code_index);
         }
 
         if (prev_code != NULL) {
             free(prev_code);
+            prev_code = NULL;
         }
 
         if (utf8_normalized != NULL) {
@@ -697,7 +819,11 @@ void import_geonames_postal_codes(geodb_builder_t *self, char *filename) {
         }
     }
 
-    kh_destroy(str_set, distinct_features);    
+    if (prev_code != NULL) {
+        free(prev_code);
+    }
+
+    char_array_destroy(postal_code);
     char_array_destroy(serialized);
     cstring_array_destroy(postal_code_features);
 
@@ -706,6 +832,13 @@ void import_geonames_postal_codes(geodb_builder_t *self, char *filename) {
     fclose(f);
 }
 
+/*
+Usage with no parameters:
+./build_geodb
+
+Usage with parameters:
+./build_geodb input_dir output_dir
+*/
 int main(int argc, char **argv) {
     char *input_dir;
     char *output_dir;
@@ -721,12 +854,13 @@ int main(int argc, char **argv) {
 
     char_array *path = char_array_new_size(strlen(input_dir));
 
-    char_array_add_joined(path, PATH_SEPARATOR, true, 2, input_dir, geonames_filename);
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, input_dir, geonames_filename);
+    
     char *geonames_path = strdup(char_array_get_string(path));
 
     char_array_clear(path);
 
-    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_LOG_FILENAME);
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, output_dir, GEODB_LOG_FILENAME);
     char *log_filename = char_array_get_string(path);
 
     geodb_builder_t *builder = geodb_builder_new(log_filename);
@@ -734,14 +868,13 @@ int main(int argc, char **argv) {
     import_geonames(builder, geonames_path);
 
     free(geonames_path);
-
     printf("\n\n");
 
     char *postal_codes_filename = "postal_codes.tsv";
 
     char_array_clear(path);
 
-    char_array_add_joined(path, PATH_SEPARATOR, true, 2, input_dir, postal_codes_filename);
+    char_array_cat_joined(path, PATH_SEPARATOR, true, 2, input_dir, postal_codes_filename);
     char *postal_codes_path = char_array_get_string(path);
 
     log_info("Doing postal_codes\n");
@@ -750,7 +883,7 @@ int main(int argc, char **argv) {
 
     char_array_destroy(path);
 
-    if (!geodb_finalize(builder, output_dir)) {
+    if (!geodb_builder_finalize(builder, output_dir)) {
         exit(EXIT_FAILURE);
     }
     geodb_builder_destroy(builder);
