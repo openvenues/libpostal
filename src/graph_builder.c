@@ -8,7 +8,7 @@ KSORT_INIT(graph_edge_array, graph_edge_t, ks_lt_graph_edge)
 KSORT_INIT(graph_edge_array_sort_vertices, graph_edge_t, ks_lt_graph_edge_sort_vertices)
 
 
-static void graph_builder_destroy(graph_builder_t *self) {
+void graph_builder_destroy(graph_builder_t *self) {
     if (self == NULL) return;
 
     if (self->edges != NULL) {

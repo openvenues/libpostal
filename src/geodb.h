@@ -5,19 +5,23 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "bloom.h"
 #include "libpostal_config.h"
 #include "geonames.h"
+#include "graph.h"
 #include "sparkey/sparkey.h"
 #include "sparkey/sparkey-internal.h"
 #include "string_utils.h"
 #include "trie.h"
 #include "trie_search.h"
 
-#define GEODB_TRIE_FILENAME "geodb.trie"
-#define GEODB_TRIE_FILENAME_LEN strlen(GEODB_TRIE_FILENAME)
-#define GEODB_BLOOM_FILTER_FILENAME "geodb.bloom"
-#define GEODB_BLOOM_FILTER_FILENAME_LEN strlen(GEODB_BLOOM_FILTER_FILENAME)
+#define GEODB_NAMES_TRIE_FILENAME "geodb_names.trie"
+#define GEODB_TRIE_FILENAME_LEN strlen(GEODB_NAMES_TRIE_FILENAME)
+#define GEODB_FEATURES_TRIE_FILENAME "geodb_features.trie"
+#define GEODB_FEATURES_TRIE_FILENAME_LEN strlen(GEODB_FEATURES_TRIE_FILENAME)
+#define GEODB_FEATURE_GRAPH_FILENAME "geodb_feature_graph.dat"
+#define GEODB_FEATURE_GRAPH_FILENAME_LEN strlen(GEODB_FEATURE_GRAPH_FILENAME)
+#define GEODB_POSTAL_CODES_FILENAME "geodb_postal_codes.dat"
+#define GEODB_POSTAL_CODES_FILENAME_LEN strlen(GEODB_POSTAL_CODES_FILENAME)
 #define GEODB_HASH_FILENAME "geodb.spi"
 #define GEODB_HASH_FILENAME_LEN strlen(GEODB_HASH_FILENAME)
 #define GEODB_LOG_FILENAME "geodb.spl"
@@ -34,8 +38,10 @@ typedef union geodb_value {
 } geodb_value_t;
 
 typedef struct geodb {
-    trie_t *trie;
-    bloom_filter_t *bloom_filter;
+    trie_t *names;
+    trie_t *features;
+    cstring_array *postal_codes;
+    graph_t *feature_graph;
     sparkey_hashreader *hash_reader;
     sparkey_logiter *log_iter;
     char_array *value_buf;

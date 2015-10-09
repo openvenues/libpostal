@@ -35,6 +35,8 @@ typedef struct graph_builder {
 } graph_builder_t;
 
 graph_builder_t *graph_builder_new(graph_type_t type, bool fixed_rows);
+void graph_builder_destroy(graph_builder_t *self);
+
 /*
 Destroy the builder and return a graph.
 
