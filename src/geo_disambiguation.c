@@ -1,6 +1,5 @@
 #include "geo_disambiguation.h"
 
-#define GEONAME_GENERIC_KEY_NAME "n"
 #define GEONAME_KEY_NAME_ADMIN1_ID "na1"
 #define GEONAME_KEY_NAME_ADMIN2_ID "na2"
 #define GEONAME_GENERIC_KEY_NAME_COUNTRY_CODE "ncc"
@@ -13,7 +12,8 @@
 
 bool geodisambig_add_name_feature(cstring_array *features, char *name) {
     if (name == NULL || strlen(name) == 0) return false;
-    feature_array_add(features, 2, GEONAME_GENERIC_KEY_NAME, name);
+    feature_array_add(features, 1, name);
+
     return true;
 }
 
@@ -21,7 +21,7 @@ bool geodisambig_add_name_feature(cstring_array *features, char *name) {
 bool geodisambig_add_country_code_feature(cstring_array *features, char *name, char *country) {
     if (name == NULL || strlen(name) == 0 || country == NULL || strlen(country) == 0) return false;
 
-    feature_array_add(features, 3, GEONAME_GENERIC_KEY_NAME_COUNTRY_CODE, name, country);
+    feature_array_add(features, 3, name, GEONAME_GENERIC_KEY_NAME_COUNTRY_CODE, country);
     
     return true;
 }
@@ -35,7 +35,8 @@ bool geodisambig_add_country_id_feature(cstring_array *features, char *name, uin
         return false;
     }
 
-    feature_array_add(features, 3, GEONAME_GENERIC_KEY_NAME_COUNTRY_ID, name, numeric_string);
+    feature_array_add(features, 3, name, GEONAME_GENERIC_KEY_NAME_COUNTRY_ID, numeric_string);
+
     return true;
 }
 
@@ -48,7 +49,8 @@ bool geodisambig_add_boundary_type_feature(cstring_array *features, char *name, 
         return name != NULL;
     }
 
-    feature_array_add(features, 3, GEONAME_KEY_NAME_BOUNDARY_TYPE, name, numeric_string);
+    feature_array_add(features, 3, name, GEONAME_KEY_NAME_BOUNDARY_TYPE, numeric_string);
+
     return true;
 }
 
@@ -57,8 +59,9 @@ bool geodisambig_add_language_feature(cstring_array *features, char *name, char 
         return false;
     }
     if (strlen(lang) > 0) {
-        feature_array_add(features, 3, GEONAME_KEY_NAME_LANGUAGE, name, lang);
+        feature_array_add(features, 3, name, GEONAME_KEY_NAME_LANGUAGE, lang);
     }
+
     return true;
 }
 
@@ -71,7 +74,8 @@ bool geodisambig_add_admin1_feature(cstring_array *features, char *name, uint32_
         return name != NULL;
     }
 
-    feature_array_add(features, 3, GEONAME_KEY_NAME_ADMIN1_ID, name, numeric_string);
+    feature_array_add(features, 3, name, GEONAME_KEY_NAME_ADMIN1_ID, numeric_string);
+
     return true;
 
 }
@@ -85,7 +89,8 @@ bool geodisambig_add_admin2_feature(cstring_array *features, char *name, uint32_
         return name != NULL;
     }
 
-    feature_array_add(features, 3, GEONAME_KEY_NAME_ADMIN2_ID, name, numeric_string);
+    feature_array_add(features, 3, name, GEONAME_KEY_NAME_ADMIN2_ID, numeric_string);
+
     return true;
 
 }
@@ -99,7 +104,7 @@ static void geodisambig_add_geo_neighbors(cstring_array *features, char *geohash
     if (geohash_neighbors(geohash, neighbors, neighbors_size, &num_strings) == GEOHASH_OK && num_strings == 8) {
         for (int i = 0; i < num_strings; i++) {
             char *neighbor = neighbors + geohash_size * i;
-            feature_array_add(features, 3, feature_name, name, neighbor);
+            feature_array_add(features, 3, name, feature_name, neighbor);
         }
     }
 
@@ -108,30 +113,15 @@ static void geodisambig_add_geo_neighbors(cstring_array *features, char *geohash
 bool geodisambig_add_geo_features(cstring_array *features, char *name, double latitude, double longitude) {
     if (name == NULL || strlen(name) == 0) return false;
 
-    size_t geohash_size = 8;
+    size_t geohash_size = 6;
     char geohash[geohash_size];
 
     int ret = geohash_encode(latitude, longitude, geohash, geohash_size);
     if (ret == GEOHASH_OK) {
-        feature_array_add(features, 3, GEONAME_KEY_NAME_GEOHASH7, name, geohash);
-
-        int num_strings = 0;
-
-        geodisambig_add_geo_neighbors(features, geohash, geohash_size, GEONAME_KEY_NAME_GEOHASH7, name);
-
-        geohash_size--;
-        geohash[geohash_size - 1] = '\0';
-        feature_array_add(features, 3, GEONAME_KEY_NAME_GEOHASH6, name, geohash);
-
-        geodisambig_add_geo_neighbors(features, geohash, geohash_size, GEONAME_KEY_NAME_GEOHASH6, name);
-
-        geohash_size--;
-        geohash[geohash_size - 1] = '\0';
-
-        feature_array_add(features, 3, GEONAME_KEY_NAME_GEOHASH5, name, geohash);
+        feature_array_add(features, 3, name, GEONAME_KEY_NAME_GEOHASH5, geohash);
 
         geodisambig_add_geo_neighbors(features, geohash, geohash_size, GEONAME_KEY_NAME_GEOHASH5, name);
-           
+
     } else {
         return false;
     }
@@ -141,12 +131,13 @@ bool geodisambig_add_geo_features(cstring_array *features, char *name, double la
 }
 
 bool geodisambig_add_geoname_features(cstring_array *features, geoname_t *geoname) {
+    if (geoname == NULL) return false;
+
     char *name = char_array_get_string(geoname->name);
     char *lang = char_array_get_string(geoname->iso_language);
     bool add_language = strlen(lang) == 0 || strcmp(lang, "abbr");
 
-    return (geoname != NULL
-            && geodisambig_add_name_feature(features, name)
+    return (geodisambig_add_name_feature(features, name)
             && geodisambig_add_country_code_feature(features, name, char_array_get_string(geoname->country_code))
             && geodisambig_add_country_id_feature(features, name, geoname->country_geonames_id)
             && (geoname->admin1_geonames_id == 0 || geodisambig_add_admin1_feature(features, name, geoname->admin1_geonames_id))
@@ -158,9 +149,10 @@ bool geodisambig_add_geoname_features(cstring_array *features, geoname_t *geonam
 }
 
 bool geodisambig_add_postal_code_features(cstring_array *features, gn_postal_code_t *postal_code) {
+    if (postal_code == NULL) return false;
+
     char *code = char_array_get_string(postal_code->postal_code);
-    return (postal_code != NULL
-            && geodisambig_add_name_feature(features, code)
+    return (geodisambig_add_name_feature(features, code)
             && geodisambig_add_country_code_feature(features, code, char_array_get_string(postal_code->country_code))
             && geodisambig_add_country_id_feature(features, code, postal_code->country_geonames_id)
             );
