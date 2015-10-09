@@ -58,7 +58,9 @@ void graph_append_edges(graph_t *self, uint32_t *col, size_t n);
 void graph_finalize_vertex(graph_t *self);
 
 bool graph_write(graph_t *self, FILE *f);
+bool graph_save(graph_t *self, char *path);
 graph_t *graph_read(FILE *f);
+graph_t *graph_load(char *path);
 
 #define graph_foreach_row(g, row_var, index_var, length_var, code) {            \
     uint32_t _row_start = 0, _row_end = 0;                                      \

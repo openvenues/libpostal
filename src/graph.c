@@ -147,6 +147,19 @@ exit_graph_allocated:
     return NULL;
 }
 
+
+graph_t *graph_load(char *path) {
+    FILE *f;
+
+    if ((f = fopen(path, "rb")) == NULL) {
+        return NULL;
+    }
+
+    graph_t *graph = graph_read(f);
+    fclose(f);
+    return graph;
+}
+
 bool graph_write(graph_t *self, FILE *f) {
     if (self == NULL || self->indptr == NULL || self->indices == NULL) {
         return false;
@@ -184,3 +197,16 @@ bool graph_write(graph_t *self, FILE *f) {
 
     return true;
 }
+
+
+bool graph_save(graph_t *self, char *path) {
+    FILE *f;
+    if ((f = fopen(path, "wb")) == NULL) {
+        return false;
+    }
+    bool status = graph_write(self, f);
+    fclose(f);
+    return status;
+}
+
+
