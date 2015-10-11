@@ -578,6 +578,8 @@ void import_geonames(geodb_builder_t *self, char *filename) {
     //int normalize_latin_options = normalize_utf8_options | NORMALIZE_STRING_LATIN_ASCII;
 
     int i = 0;
+    int ambiguous = 0;
+    int disambiguations = 0;
 
     while ((line = file_getline(f)) != NULL) {
         read_geoname_from_line(g, line);
@@ -604,6 +606,7 @@ void import_geonames(geodb_builder_t *self, char *filename) {
 
             // Only add disambiguation features if there's > 1 id for this name
             if (kh_size(distinct_ids) > 1) {
+                ambiguous++;
 
                 uint32_t string_index = 0;
                 uint32_t lengths_index = 0;
@@ -611,6 +614,7 @@ void import_geonames(geodb_builder_t *self, char *filename) {
                 uint32_t geonames_id;
 
                 kh_foreach_key(distinct_ids, key, {
+                    disambiguations++;
                     uint32_t length = feature_lengths->a[lengths_index];
                     for (int i = 0; i < length; i++) {
                         char *token = cstring_array_get_string(geo_features, string_index);
@@ -665,19 +669,22 @@ void import_geonames(geodb_builder_t *self, char *filename) {
         if (key == kh_end(distinct_ids)) {
             key = kh_put(int_set, distinct_ids, g->geonames_id, &ret);
             if (ret < 0) {
-                log_error("ret < 0\n");
+                log_error("Error adding id %d to set\n", g->geonames_id);
+                exit(EXIT_FAILURE);
             }
 
             char_array_clear(g->name);
             char_array_cat(g->name, utf8_normalized);
 
-            size_t num_geo_features = cstring_array_num_strings(geo_features);
+            size_t prev_num_geo_features = cstring_array_num_strings(geo_features);
 
             if (!geodisambig_add_geoname_features(geo_features, g)) {
                 log_error("Could not add geonames features for id=%d\n", g->geonames_id);
                 exit(EXIT_FAILURE);
             }
-            uint32_t feature_length = (uint32_t)(cstring_array_num_strings(geo_features) - num_geo_features);
+
+            uint32_t num_geo_features = cstring_array_num_strings(geo_features);
+            uint32_t feature_length = (uint32_t)(num_geo_features - prev_num_geo_features);
             uint32_array_push(feature_lengths, feature_length);
         }
 
@@ -694,7 +701,7 @@ void import_geonames(geodb_builder_t *self, char *filename) {
         i++;
 
         if (i % 1000 == 0) {
-            log_info("Did %d geonames\n", i);
+            log_info("Did %d geonames, %d ambiguous, %d disambiguations, names=%d, features=%d\n", i, ambiguous, disambiguations, self->names->num_keys, self->features->num_keys);
         }
     }
 
