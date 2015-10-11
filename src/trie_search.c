@@ -74,6 +74,8 @@ bool trie_search_from_index(trie_t *self, char *text, uint32_t start_node_id, ph
                     advance_index = false;
                     // Set the text back to the end of the last phrase
                     ptr = (const uint8_t *)text + index;
+                    len = utf8proc_iterate(ptr, -1, &unich);
+                    log_debug("ptr=%s\n", ptr);
                 } else {
                     ptr += remaining;
                     log_debug("done with char, now at %s\n", ptr);
@@ -365,8 +367,22 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
             }
 
             if (i == tokens->n - 1) {
-                log_debug("At last token\n");
-                break;
+                if (last_match_index == -1) {
+                    log_debug("At last token\n");
+                    break;
+                } else {
+                    if (*phrases == NULL) {
+                        *phrases = phrase_array_new_size(1);
+                    }
+                    phrase_array_push(*phrases, (phrase_t){phrase_start, last_match_index - phrase_start + 1, data});
+                    i = last_match_index;
+                    last_match_index = -1;
+                    phrase_start = 0;
+                    node_id = last_node_id = start_node_id;
+                    node = last_node = trie_get_node(self, start_node_id);
+                    state = SEARCH_STATE_NO_MATCH;
+                    continue;
+                }
             }
 
             if (check_continuation) {
