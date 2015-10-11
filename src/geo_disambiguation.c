@@ -6,9 +6,7 @@
 #define GEONAME_GENERIC_KEY_NAME_COUNTRY_ID "nci"
 #define GEONAME_KEY_NAME_BOUNDARY_TYPE "nb"
 #define GEONAME_KEY_NAME_LANGUAGE "nl"
-#define GEONAME_KEY_NAME_GEOHASH5 "nh5"
-#define GEONAME_KEY_NAME_GEOHASH6 "nh6"
-#define GEONAME_KEY_NAME_GEOHASH7 "nh7"
+#define GEONAME_KEY_NAME_GEOHASH4 "nh4"
 
 bool geodisambig_add_name_feature(cstring_array *features, char *name) {
     if (name == NULL || strlen(name) == 0) return false;
@@ -110,7 +108,7 @@ static void geodisambig_add_geo_neighbors(cstring_array *features, char *geohash
 
 }
 
-bool geodisambig_add_geo_features(cstring_array *features, char *name, double latitude, double longitude) {
+bool geodisambig_add_geo_features(cstring_array *features, char *name, double latitude, double longitude, bool add_neighbors) {
     if (name == NULL || strlen(name) == 0) return false;
 
     size_t geohash_size = 6;
@@ -118,10 +116,11 @@ bool geodisambig_add_geo_features(cstring_array *features, char *name, double la
 
     int ret = geohash_encode(latitude, longitude, geohash, geohash_size);
     if (ret == GEOHASH_OK) {
-        feature_array_add(features, 3, name, GEONAME_KEY_NAME_GEOHASH5, geohash);
+        feature_array_add(features, 3, name, GEONAME_KEY_NAME_GEOHASH4, geohash);
 
-        geodisambig_add_geo_neighbors(features, geohash, geohash_size, GEONAME_KEY_NAME_GEOHASH5, name);
-
+        if (add_neighbors) {
+            geodisambig_add_geo_neighbors(features, geohash, geohash_size, GEONAME_KEY_NAME_GEOHASH4, name);
+        }
     } else {
         return false;
     }
@@ -135,16 +134,29 @@ bool geodisambig_add_geoname_features(cstring_array *features, geoname_t *geonam
 
     char *name = char_array_get_string(geoname->name);
     char *lang = char_array_get_string(geoname->iso_language);
-    bool add_language = strlen(lang) == 0 || strcmp(lang, "abbr");
+    bool add_language = strlen(lang) != 0 && strcmp(lang, "abbr") != 0;
+
+    char country_code_normalized[3];
+    char *country_code = char_array_get_string(geoname->country_code);
+    size_t country_code_len = strlen(country_code);
+    bool add_country = country_code_len == 2;
+
+    if (add_country) {
+        strcpy(country_code_normalized, country_code);
+        string_lower(country_code_normalized);
+    }
+
+    // Don't add neighbors at index time, only for queries
+    bool add_neighbors = false;
 
     return (geodisambig_add_name_feature(features, name)
-            && geodisambig_add_country_code_feature(features, name, char_array_get_string(geoname->country_code))
+            && (!add_country || geodisambig_add_country_code_feature(features, name, country_code_normalized))
             && geodisambig_add_country_id_feature(features, name, geoname->country_geonames_id)
             && (geoname->admin1_geonames_id == 0 || geodisambig_add_admin1_feature(features, name, geoname->admin1_geonames_id))
             && (geoname->admin2_geonames_id == 0 || geodisambig_add_admin2_feature(features, name, geoname->admin2_geonames_id))
             && (geodisambig_add_boundary_type_feature(features, name, geoname->type))
             && (!add_language || geodisambig_add_language_feature(features, name, lang))
-            && (geodisambig_add_geo_features(features, name, geoname->latitude, geoname->longitude))
+            && (geodisambig_add_geo_features(features, name, geoname->latitude, geoname->longitude, add_neighbors))
             );
 }
 
