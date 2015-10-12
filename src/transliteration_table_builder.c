@@ -75,7 +75,7 @@ string_tree_t *regex_string_tree(char *regex, size_t len) {
 
             for (j = 0; j < char_set->n; j++) {
                 temp_char_len = utf8proc_encode_char(char_set->a[j], (uint8_t *)temp_char);
-                log_debug("Adding string %.*s\n", temp_char_len, temp_char);
+                log_debug("Adding string %.*s\n", (int)temp_char_len, temp_char);
                 string_tree_add_string_len(tree, temp_char, temp_char_len);
             }
             string_tree_finalize_token(tree);
@@ -90,7 +90,7 @@ string_tree_t *regex_string_tree(char *regex, size_t len) {
             bracket_len = 0;
             add_to_index = false;
         } else if (codepoint == RCURLY_CODEPOINT && last_codepoint != BACKSLASH_CODEPOINT && in_brackets) {
-            log_debug("Adding bracketed string: %.*s\n", regex + bracket_start, bracket_len);
+            log_debug("Adding bracketed string: %.*s\n", (int) bracket_len, regex + bracket_start);
             string_tree_add_string_len(tree, regex + bracket_start, bracket_len);
             in_brackets = false;
         } else if ((codepoint == LPAREN_CODEPOINT || codepoint == RPAREN_CODEPOINT) && last_codepoint != BACKSLASH_CODEPOINT) {
@@ -112,7 +112,7 @@ string_tree_t *regex_string_tree(char *regex, size_t len) {
 
         if (add_to_index) {
             temp_char_len = utf8proc_encode_char(codepoint, (uint8_t *)temp_char);
-            log_debug("char = %.*s\n", temp_char_len, temp_char);
+            log_debug("char = %.*s\n", (int)temp_char_len, temp_char);
             string_tree_add_string_len(tree, temp_char, temp_char_len);
             string_tree_finalize_token(tree);
         }

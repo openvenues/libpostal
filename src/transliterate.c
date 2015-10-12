@@ -352,7 +352,7 @@ static transliteration_state_t check_post_context(trie_t *trie, char *str, trans
 
     transliteration_state_t match_state = TRANSLITERATION_DEFAULT_STATE;
 
-    log_debug("Checking post_context at %s, index=%d\n", ptr, index);
+    log_debug("Checking post_context at %s, index=%zu\n", ptr, index);
 
     while (idx < len) {
         char_len = utf8proc_iterate(ptr, len, &ch);
@@ -367,7 +367,7 @@ static transliteration_state_t check_post_context(trie_t *trie, char *str, trans
             continue;
         }
 
-        log_debug("In post-context, got char \"%.*s\"\n", char_len, str + index + idx);
+        log_debug("In post-context, got char \"%.*s\"\n", (int)char_len, str + index + idx);
 
         state = state_transition(trie, str, index + idx, char_len, prev_state);
         set_match_if_any(trie, state, &match_state);
@@ -426,7 +426,7 @@ static trie_prefix_result_t context_match(trie_t *trie, char *str, transliterati
     transliteration_state_t prev_state = original_state;
     trie_prefix_result_t result = trie_get_prefix_from_index(trie, PRE_CONTEXT_CHAR, PRE_CONTEXT_CHAR_LEN, prev_result.node_id, prev_result.tail_pos);
 
-    log_debug("phrase_start=%d, phrase_len=%d\n", original_state.phrase_start, original_state.phrase_len);
+    log_debug("phrase_start=%zd, phrase_len=%zu\n", original_state.phrase_start, original_state.phrase_len);
 
     if (result.node_id != NULL_NODE_ID) {
         prev_state.result = result;
@@ -466,11 +466,11 @@ static char *replace_groups(trie_t *trie, char *str, char *replacement, group_ca
     ssize_t char_len = 0;
     uint8_t *ptr = (uint8_t *)str + original_state.phrase_start;
 
-    log_debug("str=%s\n", str, (char *)ptr);
+    log_debug("str=%s\n", (char *)ptr);
 
     size_t len = original_state.phrase_len;
 
-    log_debug("phrase_start = %d, phrase_len = %d\n", original_state.phrase_start, original_state.phrase_len);
+    log_debug("phrase_start = %zd, phrase_len = %zu\n", original_state.phrase_start, original_state.phrase_len);
 
     size_t num_groups = groups->n;
 
@@ -507,7 +507,7 @@ static char *replace_groups(trie_t *trie, char *str, char *replacement, group_ca
     while (idx < len) {
         char_len = utf8proc_iterate(ptr, len, &ch);
 
-        log_debug("Got char '%.*s' at idx=%zu, len=%d\n", char_len, ptr, idx, char_len);
+        log_debug("Got char '%.*s' at idx=%zu, len=%zu\n", (int)char_len, ptr, idx, char_len);
 
         if (char_len <= 0) { 
             break;
@@ -563,7 +563,7 @@ static char *replace_groups(trie_t *trie, char *str, char *replacement, group_ca
             log_debug("group.start + group.len = %zu\n", group.start + group.len);
             if (num_chars >= group.start + group.len) {
                 in_group = false;
-                log_debug("adding group str %.*s\n", group_len, str + group_start);
+                log_debug("adding group str %.*s\n", (int)group_len, str + group_start);
                 cstring_array_add_string_len(group_strings, str + group_start, group_len);
                 if (group_num < num_groups - 1) {
                     group_num++;
@@ -625,13 +625,13 @@ static char *replace_groups(trie_t *trie, char *str, char *replacement, group_ca
             log_debug("Did cat\n");
             if (group_ref > 0) {
                 size_t group_ref_len = (int)(log10(group_ref) + 1);
-                log_debug("group_ref_len=%d\n", group_ref_len);
+                log_debug("group_ref_len=%zu\n", group_ref_len);
                 idx += group_ref_len;
                 replacement_ptr += group_ref_len;
             }
             in_group_ref = false;
         } else {
-            log_debug("ptr=%.*s\n", char_len, replacement_ptr);
+            log_debug("ptr=%.*s\n", (int)char_len, replacement_ptr);
             char_array_cat_len(ret, (char *)replacement_ptr, char_len);
             idx += char_len;
             replacement_ptr += char_len;
@@ -770,7 +770,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
                 if (ch == 0) break;
 
-                log_debug("Got char '%.*s' at idx=%zu\n", (int)char_len, str + idx, idx);
+                log_debug("Got char '%.*s' at idx=%llu\n", (int)char_len, str + idx, idx);
 
                 state = state_transition(trie, str, idx, char_len, prev_state);
                 set_match_if_any(trie, state, &match_state);
@@ -780,7 +780,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                 if ((state.state == TRANS_STATE_BEGIN && prev_state.state == TRANS_STATE_PARTIAL_MATCH) ||
                     (state.state == TRANS_STATE_PARTIAL_MATCH && idx + char_len == len)) {
 
-                    log_debug("end of partial or last char, prev start=%d, prev len=%d\n", prev_state.phrase_start, prev_state.phrase_len);
+                    log_debug("end of partial or last char, prev start=%zd, prev len=%zu\n", prev_state.phrase_start, prev_state.phrase_len);
 
                     bool context_no_match = false;
                     bool empty_context_match = false;
@@ -932,7 +932,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                     state.advance_state = false;
                 }
                 
-                log_debug("state.phrase_start = %d, state.phrase_len=%d\n", state.phrase_start, state.phrase_len);
+                log_debug("state.phrase_start = %zd, state.phrase_len=%zu\n", state.phrase_start, state.phrase_len);
                 if (state.advance_index) {
                     ptr += char_len;
                     idx += char_len;
@@ -1520,7 +1520,7 @@ bool transliteration_table_read(FILE *f) {
             goto exit_trans_table_load_error;
         }
 
-        log_debug("Adding script language key={%d, %s}, value={%d, %d}\n", script_language.script, script_language.language, index.transliterator_index, index.num_transliterators);
+        log_debug("Adding script language key={%d, %s}, value={%zu, %zu}\n", script_language.script, script_language.language, index.transliterator_index, index.num_transliterators);
 
         transliteration_table_add_script_language(script_language, index);
     }
@@ -1839,7 +1839,7 @@ bool transliteration_table_write(FILE *f) {
 
     size_t revisit_tokens_len = trans_table->revisit_strings->indices->n;
 
-    log_debug("revisit_tokens_len=%d\n", revisit_tokens_len);
+    log_debug("revisit_tokens_len=%zu\n", revisit_tokens_len);
 
     if (!file_write_uint64(f, revisit_tokens_len)) {
         return false;
