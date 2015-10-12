@@ -96,17 +96,10 @@ class ReverseGeocoder(RTreePolygonIndex):
                                polys_filename=DEFAULT_POLYS_FILENAME,
                                include_only_properties=None):
 
-        init_languages()
         index = cls(save_dir=output_dir, index_filename=index_filename)
 
         i = 0
 
-        '''
-        Ordering of the files is important here as we want to match
-        the most granular admin polygon first for regional languages. Currently
-        most regional languages as they would apply to street signage are regional in
-        terms of an admin 1 level (states, provinces, regions)
-        '''
         for input_file in input_files:
             f = fiona.open(input_file)
 
