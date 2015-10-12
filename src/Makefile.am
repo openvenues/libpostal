@@ -43,10 +43,12 @@ pkginclude_HEADERS = libpostal.h
 LIBPOSTAL_DATA_DIR = $(datadir)/libpostal
 
 all-local:
-	./libpostal_data download $(LIBPOSTAL_DATA_DIR)
+	./libpostal_data download base $(LIBPOSTAL_DATA_DIR)
 
+download_geodb:
+	./libpostal_data download geodb $(LIBPOSTAL_DATA_DIR)
 
 lexer: scanner.re
 	re2c -F -s -b -8 -o scanner.c scanner.re
 
-.PHONY: lexer
+.PHONY: lexer download_geodb
