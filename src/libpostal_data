@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ "$#" -ne 2 ]; then
+if [ "$#" -lt 2 ]; then
     echo "Usage: ./libpostal_data [upload|download] data_dir"
 fi
 
@@ -8,14 +8,19 @@ LIBPOSTAL_S3_BUCKET_NAME="libpostal"
 LIBPOSTAL_S3_KEY="s3://$LIBPOSTAL_S3_BUCKET_NAME"
 LIBPOSTAL_S3_BUCKET_URL="http://$LIBPOSTAL_S3_BUCKET_NAME.s3.amazonaws.com"
 LIBPOSTAL_DATA_FILE="libpostal_data.tar.gz"
+LIBPOSTAL_GEODB_FILE="geodb.tar.gz"
 
 
 COMMAND=$1
-LIBPOSTAL_DATA_DIR=$2
+FILE=$2
+LIBPOSTAL_DATA_DIR=$3
 
 LIBPOSTAL_DATA_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated
+LIBPOSTAL_GEO_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated_geo
+
 
 BASIC_MODULE_DIRS=(address_expansions numex transliteration)
+GEODB_MODULE_DIR=geodb
 
 EPOCH_DATE="Jan  1 00:00:00 1970"
 
@@ -33,7 +38,7 @@ download_file() {
 
     echo "Checking for new libpostal $name..."
 
-    if [ $(curl $LIBPOSTAL_S3_BUCKET_URL/$filename -z "$(cat $updated_path)" --silent --remote-time -o $local_path -w %{http_code}) = "200" ]; then        
+    if [ $(curl $LIBPOSTAL_S3_BUCKET_URL/$filename -z "$(cat $updated_path)" --remote-time -o $local_path -w %{http_code}) = "200" ]; then        
         echo "New libpostal $name available"
         if date -r . >/dev/null 2>&1; then
             echo $(date -d "$(date -d "@$(date -r $local_path +%s)") + 1 second") > $updated_path;
@@ -50,11 +55,25 @@ download_file() {
 if [ $COMMAND = "download" ]; then
     mkdir -p $LIBPOSTAL_DATA_DIR
 
-    download_file $LIBPOSTAL_DATA_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_DATA_FILE "data file"
+    if [ $FILE = "base" ]; then
+        download_file $LIBPOSTAL_DATA_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_DATA_FILE "data file"
+    elif [ $FILE = "geodb" ]; then 
+        download_file $LIBPOSTAL_GEO_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_GEODB_FILE "geodb data file"
+    fi
+
+
 
 elif [ $COMMAND = "upload" ]; then
-    tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE ${BASIC_MODULE_DIRS[*]}
-    aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $LIBPOSTAL_S3_KEY
+
+    if [ $FILE = "base" ]; then
+        tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE ${BASIC_MODULE_DIRS[*]}
+        aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $LIBPOSTAL_S3_KEY
+    elif [ $FILE = "geodb" ]; then
+        tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_GEODB_FILE $GEODB_MODULE_DIR
+        aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_GEODB_FILE $LIBPOSTAL_S3_KEY
+    fi
+
+
 else
     echo "Invalid command: $COMMAND"
     exit 1
