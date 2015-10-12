@@ -55,17 +55,23 @@ class RTreePolygonIndex(object):
             preserve_topology = self.preserve_topology
         return poly.simplify(simplify_tolerance, preserve_topology=preserve_topology)
 
-    def add_polygon(self, poly, properties):
-        if self.include_only_properties:
-            properties = {k: v for k, v in properties.iteritems() if k in self.include_only_properties}
+    def add_polygon(self, poly, properties, include_only_properties=None):
+        if include_only_properties is not None:
+            properties = {k: v for k, v in properties.iteritems() if k in include_only_properties}
         self.polygons.append((properties, prep(poly)))
 
     @classmethod
     def create_from_shapefiles(cls, inputs, output_dir,
                                index_filename=DEFAULT_INDEX_FILENAME,
-                               polys_filename=DEFAULT_POLYS_FILENAME):
+                               polys_filename=DEFAULT_POLYS_FILENAME,
+                               include_only_properties=None):
         index = cls(save_dir=output_dir, index_filename=index_filename)
         for input_file in inputs:
+            if include_only_properties is not None:
+                include_props = include_only_properties.get(input_file, cls.include_only_properties)
+            else:
+                include_props = cls.include_only_properties
+
             f = fiona.open(input_file)
 
             i = 0
@@ -85,7 +91,7 @@ class RTreePolygonIndex(object):
                         polys.append(poly)
                         index.index_polygon(i, poly)
 
-                    index.add_polygon(MultiPolygon(polys), rec['properties'])
+                    index.add_polygon(MultiPolygon(polys), rec['properties'], include_only_properties=include_props)
                 i += 1
         return index
 
