@@ -83,7 +83,7 @@ class RTreePolygonIndex(object):
                 if poly_type == 'Polygon':
                     poly = Polygon(rec['geometry']['coordinates'][0])
                     index.index_polygon(i, poly)
-                    index.add_polygon(poly, rec['properties'])
+                    index.add_polygon(poly, rec['properties'], include_only_properties=include_props)
                 elif poly_type == 'MultiPolygon':
                     polys = []
                     for coords in rec['geometry']['coordinates']:

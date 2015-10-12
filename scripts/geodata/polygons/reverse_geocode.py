@@ -93,7 +93,8 @@ class ReverseGeocoder(RTreePolygonIndex):
                                input_files,
                                output_dir,
                                index_filename=DEFAULT_INDEX_FILENAME,
-                               polys_filename=DEFAULT_POLYS_FILENAME):
+                               polys_filename=DEFAULT_POLYS_FILENAME,
+                               include_only_properties=None):
 
         init_languages()
         index = cls(save_dir=output_dir, index_filename=index_filename)
@@ -109,6 +110,11 @@ class ReverseGeocoder(RTreePolygonIndex):
         for input_file in input_files:
             f = fiona.open(input_file)
 
+            if include_only_properties is not None:
+                include_props = include_only_properties.get(input_file, cls.include_only_properties)
+            else:
+                include_props = cls.include_only_properties
+
             filename = os.path.split(input_file)[-1]
 
             for rec in f:
@@ -121,7 +127,7 @@ class ReverseGeocoder(RTreePolygonIndex):
                     poly = Polygon(rec['geometry']['coordinates'][0])
                     index.index_polygon(i, poly)
                     poly = index.simplify_polygon(poly)
-                    index.add_polygon(poly, dict(rec['properties']))
+                    index.add_polygon(poly, dict(rec['properties']), include_only_properties=include_props)
                 elif poly_type == 'MultiPolygon':
                     polys = []
                     for coords in rec['geometry']['coordinates']:
@@ -130,7 +136,7 @@ class ReverseGeocoder(RTreePolygonIndex):
                         index.index_polygon(i, poly)
 
                     multi_poly = index.simplify_polygon(MultiPolygon(polys))
-                    index.add_polygon(multi_poly, dict(rec['properties']))
+                    index.add_polygon(multi_poly, dict(rec['properties']), include_only_properties=include_props)
                 else:
                     continue
 
