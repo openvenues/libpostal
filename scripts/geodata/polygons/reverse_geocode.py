@@ -122,8 +122,6 @@ class ReverseGeocoder(RTreePolygonIndex):
                         if v is not None:
                             properties[k] = func(v)
 
-                    include_props = set(include_props.keys())
-
                 poly_type = rec['geometry']['type']
                 if poly_type == 'Polygon':
                     poly = Polygon(rec['geometry']['coordinates'][0])
