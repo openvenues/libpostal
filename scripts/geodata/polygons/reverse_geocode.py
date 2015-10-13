@@ -111,6 +111,9 @@ class ReverseGeocoder(RTreePolygonIndex):
             filename = os.path.split(input_file)[-1]
 
             for rec in f:
+                if not rec or not rec.get('geometry') or 'type' not in rec['geometry']:
+                    continue
+
                 if filename == cls.NEIGHBORHOODS_FILENAME:
                     rec['properties']['qs_level'] = 'neighborhood'
 
