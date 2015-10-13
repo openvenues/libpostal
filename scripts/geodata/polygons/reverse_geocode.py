@@ -8,6 +8,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 from geodata.polygons.index import *
 from geodata.encoding import safe_decode
 
+
 class ReverseGeocoder(RTreePolygonIndex):
     COUNTRIES_FILENAME = 'qs_adm0.shp'
     ADMIN1_FILENAME = 'qs_adm1.shp'
@@ -94,8 +95,7 @@ class ReverseGeocoder(RTreePolygonIndex):
                                input_files,
                                output_dir,
                                index_filename=DEFAULT_INDEX_FILENAME,
-                               polys_filename=DEFAULT_POLYS_FILENAME,
-                               include_only_properties=None):
+                               polys_filename=DEFAULT_POLYS_FILENAME):
 
         index = cls(save_dir=output_dir, index_filename=index_filename)
 
@@ -104,7 +104,7 @@ class ReverseGeocoder(RTreePolygonIndex):
         for input_file in input_files:
             f = fiona.open(input_file)
 
-            include_props = polygon_properties.get(input_file)
+            include_props = cls.polygon_properties.get(input_file)
 
             filename = os.path.split(input_file)[-1]
 
@@ -161,17 +161,11 @@ class ReverseGeocoder(RTreePolygonIndex):
         localities_filename = os.path.join(quattroshapes_dir, cls.LOCALITIES_FILENAME)
         neighborhoods_filename = os.path.join(quattroshapes_dir, cls.NEIGHBORHOODS_FILENAME)
 
-        include_properties = {
-            os.path.join(quattroshapes_dir, filename): value
-            for filename, value in cls.include_properties_by_file.iteritems()
-        }
-
         return cls.create_from_shapefiles([admin0_filename, admin1_filename, admin1r_filename,
                                           admin2_filename, admin2r_filename, local_admin_filename,
                                           localities_filename, neighborhoods_filename],
                                           output_dir, index_filename=index_filename,
-                                          polys_filename=polys_filename,
-                                          include_only_properties=include_properties)
+                                          polys_filename=polys_filename)
 
     def sort_level(self, i):
         props, p = self.polygons[i]
