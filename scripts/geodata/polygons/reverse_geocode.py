@@ -2,11 +2,23 @@ import argparse
 import os
 import sys
 
+from functools import partial
+
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.polygons.index import *
 from geodata.encoding import safe_decode
+
+
+decode_latin1 = partial(safe_decode, encoding='latin1')
+
+
+def str_id(v):
+    v = int(v)
+    if v <= 0:
+        return None
+    return str(v)
 
 
 class ReverseGeocoder(RTreePolygonIndex):
@@ -36,57 +48,57 @@ class ReverseGeocoder(RTreePolygonIndex):
             'qs_a0': safe_decode,
             'qs_iso_cc': safe_decode,
             'qs_level': safe_decode,
-            'qs_gn_id': int,
-            'qs_woe_id': int,
+            'qs_gn_id': str_id,
+            'qs_woe_id': str_id,
         },
         ADMIN1_FILENAME: {
             'qs_a1': safe_decode,
             'qs_a1_lc': safe_decode,
             'qs_level': safe_decode,
-            'qs_gn_id': int,
-            'qs_woe_id': int,
+            'qs_gn_id': str_id,
+            'qs_woe_id': str_id,
         },
         ADMIN1_REGION_FILENAME: {
             'qs_a1r': safe_decode,
             'qs_a1r_lc': safe_decode,
             'qs_level': safe_decode,
-            'qs_gn_id': int,
-            'qs_woe_id': int,
+            'qs_gn_id': str_id,
+            'qs_woe_id': str_id,
         },
         ADMIN2_FILENAME: {
-            'qs_a2': safe_decode,
+            'qs_a2': decode_latin1,
             'qs_a2_lc': safe_decode,
             'qs_level': safe_decode,
-            'qs_gn_id': int,
-            'qs_woe_id': int,
+            'qs_gn_id': str_id,
+            'qs_woe_id': str_id,
         },
         ADMIN2_REGION_FILENAME: {
             'qs_a2r': safe_decode,
             'qs_a2r_lc': safe_decode,
             'qs_level': safe_decode,
-            'qs_gn_id': int,
-            'qs_woe_id': int,
+            'qs_gn_id': str_id,
+            'qs_woe_id': str_id,
         },
         LOCAL_ADMIN_FILENAME: {
             'qs_la': safe_decode,
             'qs_la_lc': safe_decode,
             'qs_level': safe_decode,
-            'qs_gn_id': int,
-            'qs_woe_id': int,
+            'qs_gn_id': str_id,
+            'qs_woe_id': str_id,
         },
         LOCALITIES_FILENAME: {
             'qs_loc': safe_decode,
             'qs_loc_alt': safe_decode,
             'qs_level': safe_decode,
-            'qs_gn_id': int,
-            'qs_woe_id': int,
+            'qs_gn_id': str,
+            'qs_woe_id': str,
         },
         NEIGHBORHOODS_FILENAME: {
             'name': safe_decode,
             'name_en': safe_decode,
             'qs_level': safe_decode,
-            'woe_id': int,
-            'gn_id': int,
+            'woe_id': str_id,
+            'gn_id': str_id,
         }
     }
 
