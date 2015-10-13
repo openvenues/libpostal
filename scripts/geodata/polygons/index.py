@@ -115,7 +115,7 @@ class RTreePolygonIndex(object):
         f = open(filename)
         polygons = []
         for line in f:
-            feature = json.load(line.rstrip())
+            feature = json.loads(line.rstrip())
             poly_type = feature['geometry']['type']
 
             if poly_type == 'Polygon':
