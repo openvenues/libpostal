@@ -117,10 +117,20 @@ class ReverseGeocoder(RTreePolygonIndex):
                     properties['qs_level'] = 'neighborhood'
 
                 if include_props:
+                    have_all_props = False
                     for k, func in include_props.iteritems():
                         v = properties.get(k, None)
                         if v is not None:
-                            properties[k] = func(v)
+                            try:
+                                properties[k] = func(v)
+                            except Exception:
+                                print properties
+                                break
+
+                    else:
+                        have_all_props = True
+                    if not have_all_props:
+                        continue
 
                 poly_type = rec['geometry']['type']
                 if poly_type == 'Polygon':
