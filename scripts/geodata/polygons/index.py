@@ -97,16 +97,13 @@ class RTreePolygonIndex(object):
 
     def save_polygons(self, out_filename):
         out = open(out_filename, 'w')
-        features = []
         for props, poly in self.polygons:
-            features.append({
+            feature = {
                 'type': 'Feature',
                 'geometry': mapping(poly.context),
                 'properties': props
-            })
-        json.dump({'type': 'FeatureCollection',
-                   'features': features},
-                  out)
+            }
+            out.write(json.dumps(feature) + u'\n')
 
     def save(self, polys_filename=DEFAULT_POLYS_FILENAME):
         self.save_polygons(os.path.join(self.save_dir, polys_filename))
@@ -115,9 +112,10 @@ class RTreePolygonIndex(object):
 
     @classmethod
     def load_polygons(cls, filename):
-        feature_collection = json.load(open(filename))
+        f = open(filename)
         polygons = []
-        for feature in feature_collection['features']:
+        for line in f:
+            feature = json.load(line.rstrip())
             poly_type = feature['geometry']['type']
 
             if poly_type == 'Polygon':
