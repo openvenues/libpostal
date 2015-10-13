@@ -104,9 +104,8 @@ class ReverseGeocoder(RTreePolygonIndex):
         for input_file in input_files:
             f = fiona.open(input_file)
 
-            include_props = cls.polygon_properties.get(input_file)
-
             filename = os.path.split(input_file)[-1]
+            include_props = cls.polygon_properties.get(filename)
 
             for rec in f:
                 if not rec or not rec.get('geometry') or 'type' not in rec['geometry']:
@@ -123,7 +122,7 @@ class ReverseGeocoder(RTreePolygonIndex):
                         if v is not None:
                             properties[k] = func(v)
 
-                include_props = set(include_props.keys())
+                    include_props = set(include_props.keys())
 
                 poly_type = rec['geometry']['type']
                 if poly_type == 'Polygon':
