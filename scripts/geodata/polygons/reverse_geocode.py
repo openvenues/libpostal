@@ -30,62 +30,63 @@ class ReverseGeocoder(RTreePolygonIndex):
 
     sort_levels = {k: i for i, k in enumerate(sorted_levels)}
 
-    include_properties_by_file = {
-        COUNTRIES_FILENAME: set([
-            'qs_a0',
-            'qs_iso_cc',
-            'qs_level',
-            'qs_gn_id',
-            'qs_woe_id',
-        ]),
-        ADMIN1_FILENAME: set([
-            'qs_a1',
-            'qs_a1_lc',
-            'qs_level',
-            'qs_gn_id',
-            'qs_woe_id',
-        ]),
-        ADMIN1_REGION_FILENAME: set([
-            'qs_a1r',
-            'qs_a1r_lc',
-            'qs_level',
-            'qs_gn_id',
-            'qs_woe_id',
-        ]),
-        ADMIN2_FILENAME: set([
-            'qs_a2',
-            'qs_a2_lc',
-            'qs_level',
-            'qs_gn_id',
-            'qs_woe_id'
-        ]),
-        ADMIN2_REGION_FILENAME: set([
-            'qs_a2r',
-            'qs_a2r_lc',
-            'qs_level',
-            'qs_gn_id',
-            'qs_woe_id',
-        ]),
-        LOCAL_ADMIN_FILENAME: set([
-            'qs_la',
-            'qs_la_lc',
-            'qs_level',
-            'qs_gn_id',
-            'qs_woe_id',
-        ]),
-        LOCALITIES_FILENAME: set([
-            'qs_loc',
-            'qs_loc_alt',
-            'qs_level',
-            'qs_gn_id',
-            'qs_woe_id',
-        ]),
-        NEIGHBORHOODS_FILENAME: set([
-            'name',
-            'name_en',
-            'woe_id',
-            'gn_id'
-        ])
+    polygon_properties = {
+        COUNTRIES_FILENAME: {
+            'qs_a0': safe_decode,
+            'qs_iso_cc': safe_decode,
+            'qs_level': safe_decode,
+            'qs_gn_id': int,
+            'qs_woe_id': int,
+        },
+        ADMIN1_FILENAME: {
+            'qs_a1': safe_decode,
+            'qs_a1_lc': safe_decode,
+            'qs_level': safe_decode,
+            'qs_gn_id': int,
+            'qs_woe_id': int,
+        },
+        ADMIN1_REGION_FILENAME: {
+            'qs_a1r': safe_decode,
+            'qs_a1r_lc': safe_decode,
+            'qs_level': safe_decode,
+            'qs_gn_id': int,
+            'qs_woe_id': int,
+        },
+        ADMIN2_FILENAME: {
+            'qs_a2': safe_decode,
+            'qs_a2_lc': safe_decode,
+            'qs_level': safe_decode,
+            'qs_gn_id': int,
+            'qs_woe_id': int,
+        },
+        ADMIN2_REGION_FILENAME: {
+            'qs_a2r': safe_decode,
+            'qs_a2r_lc': safe_decode,
+            'qs_level': safe_decode,
+            'qs_gn_id': int,
+            'qs_woe_id': int,
+        },
+        LOCAL_ADMIN_FILENAME: {
+            'qs_la': safe_decode,
+            'qs_la_lc': safe_decode,
+            'qs_level': safe_decode,
+            'qs_gn_id': int,
+            'qs_woe_id': int,
+        },
+        LOCALITIES_FILENAME: {
+            'qs_loc': safe_decode,
+            'qs_loc_alt': safe_decode,
+            'qs_level': safe_decode,
+            'qs_gn_id': int,
+            'qs_woe_id': int,
+        },
+        NEIGHBORHOODS_FILENAME: {
+            'name': safe_decode,
+            'name_en': safe_decode,
+            'qs_level': safe_decode,
+            'woe_id': int,
+            'gn_id': int,
+        }
     }
 
     @classmethod
@@ -103,10 +104,7 @@ class ReverseGeocoder(RTreePolygonIndex):
         for input_file in input_files:
             f = fiona.open(input_file)
 
-            if include_only_properties is not None:
-                include_props = include_only_properties.get(input_file, cls.include_only_properties)
-            else:
-                include_props = cls.include_only_properties
+            include_props = polygon_properties.get(input_file)
 
             filename = os.path.split(input_file)[-1]
 
@@ -114,8 +112,18 @@ class ReverseGeocoder(RTreePolygonIndex):
                 if not rec or not rec.get('geometry') or 'type' not in rec['geometry']:
                     continue
 
+                properties = rec['properties']
+
                 if filename == cls.NEIGHBORHOODS_FILENAME:
-                    rec['properties']['qs_level'] = 'neighborhood'
+                    properties['qs_level'] = 'neighborhood'
+
+                if include_props:
+                    for k, func in include_props.iteritems():
+                        v = properties.get(k, None)
+                        if v is not None:
+                            properties[k] = func(v)
+
+                include_props = set(include_props.keys())
 
                 poly_type = rec['geometry']['type']
                 if poly_type == 'Polygon':
