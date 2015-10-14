@@ -43,62 +43,68 @@ class ReverseGeocoder(RTreePolygonIndex):
 
     sort_levels = {k: i for i, k in enumerate(sorted_levels)}
 
+    NAME = 'name'
+    CODE = CODE
+    LEVEL = 'level'
+    GEONAMES_ID = 'geonames_id'
+    WOE_ID = 'woe_id'
+
     polygon_properties = {
         COUNTRIES_FILENAME: {
-            'qs_a0': safe_decode,
-            'qs_iso_cc': safe_decode,
-            'qs_level': safe_decode,
-            'qs_gn_id': str_id,
-            'qs_woe_id': str_id,
+            NAME: ('qs_a0', safe_decode),
+            CODE: ('qs_iso_cc', safe_decode),
+            LEVEL: ('qs_level', safe_decode),
+            GEONAMES_ID: ('qs_gn_id', str_id),
+            WOE_ID: ('qs_woe_id', str_id),
         },
         ADMIN1_FILENAME: {
-            'qs_a1': safe_decode,
-            'qs_a1_lc': safe_decode,
-            'qs_level': safe_decode,
-            'qs_gn_id': str_id,
-            'qs_woe_id': str_id,
+            NAME: ('qs_a1', safe_decode),
+            CODE: ('qs_a1_lc', safe_decode),
+            LEVEL: ('qs_level', safe_decode),
+            GEONAMES_ID: ('qs_gn_id', str_id),
+            WOE_ID: ('qs_woe_id', str_id),
         },
         ADMIN1_REGION_FILENAME: {
-            'qs_a1r': safe_decode,
-            'qs_a1r_lc': safe_decode,
-            'qs_level': safe_decode,
-            'qs_gn_id': str_id,
-            'qs_woe_id': str_id,
+            NAME: ('qs_a1r', safe_decode),
+            CODE: ('qs_a1r_lc', safe_decode),
+            LEVEL: ('qs_level', safe_decode),
+            GEONAMES_ID: ('qs_gn_id', str_id),
+            WOE_ID: ('qs_woe_id', str_id),
         },
         ADMIN2_FILENAME: {
-            'qs_a2': decode_latin1,
-            'qs_a2_lc': safe_decode,
-            'qs_level': safe_decode,
-            'qs_gn_id': str_id,
-            'qs_woe_id': str_id,
+            NAME: ('qs_a2', decode_latin1),
+            CODE: ('qs_a2_lc', safe_decode),
+            LEVEL: ('qs_level', safe_decode),
+            GEONAMES_ID: ('qs_gn_id', str_id),
+            WOE_ID: ('qs_woe_id', str_id),
         },
         ADMIN2_REGION_FILENAME: {
-            'qs_a2r': safe_decode,
-            'qs_a2r_lc': safe_decode,
-            'qs_level': safe_decode,
-            'qs_gn_id': str_id,
-            'qs_woe_id': str_id,
+            NAME: ('qs_a2r', safe_decode),
+            CODE: ('qs_a2r_lc', safe_decode),
+            LEVEL: ('qs_level', safe_decode),
+            GEONAMES_ID: ('qs_gn_id', str_id),
+            WOE_ID: ('qs_woe_id', str_id),
         },
         LOCAL_ADMIN_FILENAME: {
-            'qs_la': safe_decode,
-            'qs_la_lc': safe_decode,
-            'qs_level': safe_decode,
-            'qs_gn_id': str_id,
-            'qs_woe_id': str_id,
+            NAME: ('qs_la', safe_decode),
+            CODE: ('qs_la_lc', safe_decode),
+            LEVEL: ('qs_level', safe_decode),
+            GEONAMES_ID: ('qs_gn_id', str_id),
+            WOE_ID: ('qs_woe_id', str_id),
         },
         LOCALITIES_FILENAME: {
-            'qs_loc': safe_decode,
-            'qs_loc_alt': safe_decode,
-            'qs_level': safe_decode,
-            'qs_gn_id': str,
-            'qs_woe_id': str,
+            NAME: ('qs_loc', safe_decode),
+            CODE: ('qs_loc_alt', safe_decode),
+            LEVEL: ('qs_level', safe_decode),
+            GEONAMES_ID: ('qs_gn_id', str),
+            WOE_ID: ('qs_woe_id', str),
         },
         NEIGHBORHOODS_FILENAME: {
-            'name': safe_decode,
-            'name_en': safe_decode,
-            'qs_level': safe_decode,
-            'woe_id': str_id,
-            'gn_id': str_id,
+            NAME: (NAME, safe_decode),
+            CODE: ('name_en', safe_decode),
+            LEVEL: ('qs_level', safe_decode),
+            GEONAMES_ID: (WOE_ID, str_id),
+            WOE_ID: ('gn_id', str_id),
         }
     }
 
@@ -130,18 +136,17 @@ class ReverseGeocoder(RTreePolygonIndex):
 
                 if include_props:
                     have_all_props = False
-                    for k, func in include_props.iteritems():
-                        v = properties.get(k, None)
+                    for k, (prop, func) in include_props.iteritems():
+                        v = properties.get(prop, None)
                         if v is not None:
                             try:
                                 properties[k] = func(v)
                             except Exception:
-                                print properties
                                 break
 
                     else:
                         have_all_props = True
-                    if not have_all_props:
+                    if not have_all_props or not properties.get(NAME):
                         continue
 
                 poly_type = rec['geometry']['type']
