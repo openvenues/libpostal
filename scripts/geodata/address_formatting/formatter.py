@@ -41,6 +41,7 @@ class AddressFormatter(object):
     SUBURB = 'suburb'
     CITY = 'city'
     STATE = 'state'
+    STATE_DISTRICT = 'state_district'
     POSTCODE = 'postcode'
     COUNTRY = 'country'
 
