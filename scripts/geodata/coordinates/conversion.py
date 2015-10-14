@@ -39,7 +39,18 @@ def direction_sign(d):
         raise ValueError('Invalid direction: {}'.format(d))
 
 
+def int_or_float(d):
+    try:
+        return int(d)
+    except ValueError:
+        return float(d)
+
+
 def degrees_to_decimal(degrees, minutes, seconds):
+    degrees = int_or_float(degrees)
+    minutes = int_or_float(minutes)
+    seconds = int_or_float(seconds)
+
     return degrees + (minutes / 60.0) + (seconds / 3600.0)
 
 
@@ -59,7 +70,7 @@ def latlon_to_decimal(latitude, longitude):
     if lat_dms:
         d, m, s, c = lat_dms.groups()
         sign = direction_sign(c)
-        latitude = degrees_to_decimal(int(d or 0), int(m or 0), int(s or 0))
+        latitude = degrees_to_decimal(d or 0, m or 0, s or 0)
         have_lat = True
     elif lat_dir:
         d, c = lat_dir.groups()
@@ -76,7 +87,7 @@ def latlon_to_decimal(latitude, longitude):
     if lon_dms:
         d, m, s, c = lon_dms.groups()
         sign = direction_sign(c)
-        longitude = degrees_to_decimal(int(d or 0), int(m or 0), int(s or 0))
+        longitude = degrees_to_decimal(d or 0, m or 0, s or 0)
         have_lon = True
     elif lon_dir:
         d, c = lon_dir.groups()
