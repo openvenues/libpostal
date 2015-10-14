@@ -41,10 +41,10 @@ class ReverseGeocoder(RTreePolygonIndex):
     NEIGHBORHOOD = 'neighborhood'
 
     sorted_levels = (COUNTRY,
-                     ADMIN1,
                      ADMIN1_REGION,
-                     ADMIN2,
+                     ADMIN1,
                      ADMIN2_REGION,
+                     ADMIN2,
                      LOCAL_ADMIN,
                      LOCALITY,
                      NEIGHBORHOOD,
@@ -103,20 +103,18 @@ class ReverseGeocoder(RTreePolygonIndex):
         },
         LOCALITIES_FILENAME: {
             NAME: ('qs_loc', safe_decode),
-            CODE: ('qs_loc_alt', safe_decode),
             LEVEL: ('qs_level', safe_decode),
             GEONAMES_ID: ('qs_gn_id', str),
             WOE_ID: ('qs_woe_id', str),
         },
         NEIGHBORHOODS_FILENAME: {
-            NAME: (NAME, safe_decode),
+            NAME: ('name', safe_decode),
             CODE: ('name_en', safe_decode),
             LEVEL: ('qs_level', safe_decode),
-            GEONAMES_ID: (WOE_ID, str_id),
-            WOE_ID: ('gn_id', str_id),
+            GEONAMES_ID: ('gn_id', str_id),
+            WOE_ID: ('woe_id', str_id),
         }
     }
-
 
     @classmethod
     def create_from_shapefiles(cls,
