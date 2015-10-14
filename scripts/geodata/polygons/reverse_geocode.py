@@ -44,7 +44,7 @@ class ReverseGeocoder(RTreePolygonIndex):
     sort_levels = {k: i for i, k in enumerate(sorted_levels)}
 
     NAME = 'name'
-    CODE = CODE
+    CODE = 'code'
     LEVEL = 'level'
     GEONAMES_ID = 'geonames_id'
     WOE_ID = 'woe_id'
