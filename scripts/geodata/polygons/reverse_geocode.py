@@ -146,7 +146,7 @@ class ReverseGeocoder(RTreePolygonIndex):
 
                     else:
                         have_all_props = True
-                    if not have_all_props or not properties.get(NAME):
+                    if not have_all_props or not properties.get(cls.NAME):
                         continue
 
                 poly_type = rec['geometry']['type']
