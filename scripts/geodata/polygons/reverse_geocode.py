@@ -31,14 +31,23 @@ class ReverseGeocoder(RTreePolygonIndex):
     LOCALITIES_FILENAME = 'qs_localities.shp'
     NEIGHBORHOODS_FILENAME = 'qs_neighborhoods.shp'
 
-    sorted_levels = ('adm0',
-                     'adm1',
-                     'adm1_region',
-                     'adm2',
-                     'adm2_region',
-                     'localadmin',
-                     'locality',
-                     'neighborhood',
+    COUNTRY = 'adm0'
+    ADMIN1 = 'adm1'
+    ADMIN1_REGION = 'adm1_region'
+    ADMIN2 = 'adm2'
+    ADMIN2_REGION = 'adm2_region'
+    LOCAL_ADMIN = 'localadmin'
+    LOCALITY = 'locality'
+    NEIGHBORHOOD = 'neighborhood'
+
+    sorted_levels = (COUNTRY,
+                     ADMIN1,
+                     ADMIN1_REGION,
+                     ADMIN2,
+                     ADMIN2_REGION,
+                     LOCAL_ADMIN,
+                     LOCALITY,
+                     NEIGHBORHOOD,
                      )
 
     sort_levels = {k: i for i, k in enumerate(sorted_levels)}
@@ -107,6 +116,7 @@ class ReverseGeocoder(RTreePolygonIndex):
             WOE_ID: ('gn_id', str_id),
         }
     }
+
 
     @classmethod
     def create_from_shapefiles(cls,
@@ -193,7 +203,7 @@ class ReverseGeocoder(RTreePolygonIndex):
 
     def sort_level(self, i):
         props, p = self.polygons[i]
-        return self.sort_levels.get(props['qs_level'], 0)
+        return self.sort_levels.get(props[self.LEVEL], 0)
 
     def get_candidate_polygons(self, lat, lon):
         candidates = OrderedDict.fromkeys(self.index.intersection((lon, lat, lon, lat))).keys()
