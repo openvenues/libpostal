@@ -45,6 +45,7 @@ rm $PLANET_ADDRESSES_LATLONS
 
 echo " Filtering for borders: `date`"
 PLANET_BORDERS_O5M="planet-borders.o5m"
+PLANET_BORDERS="planet-borders.osm"
 PLANET_ADMIN_BORDERS_OSM="planet-admin-borders.osm"
 osmfilter $PLANET_O5M --keep="boundary=administrative" --drop-author --drop-version -o=$PLANET_ADMIN_BORDERS_OSM
 osmfilter $PLANET_O5M --keep="boundary=administrative or place=city or place=town or place=neighbourhood or place=suburb" --drop-author --drop-version -o=$PLANET_BORDERS_O5M
