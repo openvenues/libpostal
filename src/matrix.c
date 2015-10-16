@@ -74,9 +74,26 @@ matrix_t *matrix_new_values(size_t m, size_t n, double *values) {
     return matrix;
 }
 
-inline void matrix_scale(matrix_t *self, double value) {
-    double_array_mul(self->values, self->m * self->n, value);
+
+inline void matrix_div(matrix_t *self, double value) {
+    double_array_div(self->values, value, self->m * self->n);
 }
+
+
+inline void matrix_mul(matrix_t *self, double value) {
+    double_array_mul(self->values, value, self->m * self->n);
+}
+
+
+inline void matrix_add(matrix_t *self, double value) {
+    double_array_add(self->values, self->m * self->n, value);
+}
+
+
+inline void matrix_sub(matrix_t *self, double value) {
+    double_array_sub(self->values, value, self->m * self->n);
+}
+
 
 void matrix_dot_vector(matrix_t *self, double *vec, double *result) {
     double *values = self->values;

@@ -27,7 +27,10 @@ void matrix_set_scalar(matrix_t *self, size_t row_index, size_t col_index, doubl
 
 double matrix_get(matrix_t *self, size_t row_index, size_t col_index);
 
-void matrix_scale(matrix_t *self, double value);
+void matrix_add(matrix_t *self, double value);
+void matrix_sub(matrix_t *self, double value);
+void matrix_mul(matrix_t *self, double value);
+void matrix_div(matrix_t *self, double value);
 void matrix_dot_vector(matrix_t *self, double *vec, double *result);
 int matrix_dot_matrix(matrix_t *m1, matrix_t *m2, matrix_t *result);
 
