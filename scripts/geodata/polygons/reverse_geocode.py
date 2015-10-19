@@ -11,6 +11,7 @@ Usage:
     python reverse_geocode.py -o /data/quattroshapes/rtree/reverse -a /data/osm/planet-admin-borders.osm
 '''
 import argparse
+import logging
 import os
 import sys
 
@@ -269,6 +270,10 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         admin borders commands if using other geometries.
         '''
         index = cls(save_dir=output_dir, index_filename=index_filename)
+
+        handler = logging.StreamHandler(sys.stderr)
+        index.logger.addHandler(handler)
+        index.logger.setLevel(logging.INFO)
 
         reader = OSMAdminPolygonReader(filename)
         polygons = reader.polygons()
