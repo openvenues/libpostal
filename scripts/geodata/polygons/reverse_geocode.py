@@ -271,12 +271,12 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         '''
         index = cls(save_dir=output_dir, index_filename=index_filename)
 
-        handler = logging.StreamHandler(sys.stderr)
-        index.logger.addHandler(handler)
-        index.logger.setLevel(logging.INFO)
-
         reader = OSMAdminPolygonReader(filename)
         polygons = reader.polygons()
+
+        handler = logging.StreamHandler(sys.stderr)
+        reader.logger.addHandler(handler)
+        reader.logger.setLevel(logging.INFO)
 
         polygon_index = 0
 
