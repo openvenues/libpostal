@@ -284,6 +284,8 @@ class OSMReverseGeocoder(RTreePolygonIndex):
             props = {k: v for k, v in props.iteritems() if k in cls.include_property_patterns
                      or (':' in k and '{}:*'.format(k.split(':', 1)[0]) in cls.include_property_patterns)}
 
+            props['id'] = relation_id
+
             if inner_polys and not outer_polys:
                 self.logger.warn('inner polygons with no outer')
                 continue
