@@ -166,9 +166,10 @@ class OSMAdminPolygonReader(object):
                 if lat is None or lon is None:
                     continue
                 # Nodes are stored in a sorted array, coordinate indices are simply
-                # [lat, lon, lat, lon, ...] so the index can be calculated as 2 * i
-                self.coords.append(lat)
+                # [lon, lat, lon, lat ...] so the index can be calculated as 2 * i
+                # Note that the pairs are lon, lat instead of lat, lon for geometry purposes
                 self.coords.append(lon)
+                self.coords.append(lat)
                 self.node_ids.append(node_id)
             elif element_id.startswith('way'):
                 way_id = long(element_id.split(':')[-1])
