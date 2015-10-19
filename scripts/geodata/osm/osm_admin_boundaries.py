@@ -81,8 +81,9 @@ class OSMAdminPolygonReader(object):
         https://en.wikipedia.org/wiki/Strongly_connected_component
 
         Note that even though there may be hundreds of thousands of
-        points in a complex polygon like a country boundary, the
-        graph is only 
+        points in a complex polygon like a country boundary, we only
+        need to build a graph of connected ways, which will be many
+        times smaller and take much less time to traverse.
         '''
         end_nodes = defaultdict(list)
         polys = []
@@ -213,5 +214,5 @@ class OSMAdminPolygonReader(object):
 
                 yield relation_id, props, outer_polys, inner_polys
             if i % 1000 == 0 and i > 0:
-                self.logger.info('on {}s, did {}'.format(element_id.split(':')[0], i))
+                self.logger.info('doing {}s, at {}'.format(element_id.split(':')[0], i))
             i += 1

@@ -1,3 +1,15 @@
+'''
+reverse_geocoder.py
+-------------------
+
+In-memory reverse geocoder using polygons from Quattroshapes or OSM.
+This should be useful for filling in the blanks both in constructing
+training data from OSM addresses and for OpenVenues.
+
+Usage:
+    python reverse_geocode.py -o /data/quattroshapes/rtree/reverse -q /data/quattroshapes/
+    python reverse_geocode.py -o /data/quattroshapes/rtree/reverse -a /data/osm/planet-admin-borders.osm
+'''
 import argparse
 import os
 import sys
@@ -7,8 +19,9 @@ from functools import partial
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
-from geodata.polygons.index import *
 from geodata.encoding import safe_decode
+from geodata.osm.osm_admin_boundaries import OSMAdminPolygonReader
+from geodata.polygons.index import *
 
 
 decode_latin1 = partial(safe_decode, encoding='latin1')
@@ -21,7 +34,7 @@ def str_id(v):
     return str(v)
 
 
-class ReverseGeocoder(RTreePolygonIndex):
+class QuattroshapesReverseGeocoder(RTreePolygonIndex):
     COUNTRIES_FILENAME = 'qs_adm0.shp'
     ADMIN1_FILENAME = 'qs_adm1.shp'
     ADMIN1_REGION_FILENAME = 'qs_adm1_region.shp'
@@ -151,7 +164,6 @@ class ReverseGeocoder(RTreePolygonIndex):
                                 properties[k] = func(v)
                             except Exception:
                                 break
-
                     else:
                         have_all_props = True
                     if not have_all_props or not properties.get(cls.NAME):
@@ -208,6 +220,126 @@ class ReverseGeocoder(RTreePolygonIndex):
         return sorted(candidates, key=self.sort_level, reverse=True)
 
 
+class OSMReverseGeocoder(RTreePolygonIndex):
+    include_property_patterns = set([
+        'name',
+        'name:*',
+        'int_name',
+        'official_name',
+        'official_name:*',
+        'short_name',
+        'short_name:*',
+        'admin_level',
+        'wikipedia',
+        'wikipedia:*',
+    ])
+
+    @classmethod
+    def fix_polygon(cls, poly):
+        '''
+        Coerce to valid polygon
+        '''
+        if not poly.is_valid:
+            poly = poly.buffer(0)
+            if not poly.is_valid:
+                return None
+        return poly
+
+    @classmethod
+    def to_polygon(cls, coords):
+        '''
+        Create shapely polygon from list of coordinate tuples if valid
+        '''
+        if not coords or len(coords) < 3:
+            return None
+        poly = Polygon(coords)
+        return cls.fix_polygon(poly)
+
+    @classmethod
+    def create_from_osm_file(cls, filename, output_dir,
+                             index_filename=DEFAULT_INDEX_FILENAME,
+                             polys_filename=DEFAULT_POLYS_FILENAME):
+        '''
+        Given an OSM file (planet or some other bounds) containing relations
+        and their dependencies, create an R-tree index for coarse-grained
+        reverse geocoding.
+
+        Note: the input file is expected to have been created using
+        osmfilter. Use fetch_osm_address_data.sh for planet or copy the
+        admin borders commands if using other geometries.
+        '''
+        index = cls(save_dir=output_dir, index_filename=index_filename)
+
+        reader = OSMAdminPolygonReader(filename)
+        polygons = reader.polygons()
+
+        polygon_index = 0
+
+        for relation_id, props, outer_polys, inner_polys in polygons:
+            props = {k: v for k, v in props.iteritems() if k in cls.include_property_patterns
+                     or (':' in k and '{}:*'.format(k.split(':', 1)[0]) in cls.include_property_patterns)}
+
+            if inner_polys and not outer_polys:
+                self.logger.warn('inner polygons with no outer')
+                continue
+            if len(outer_polys) == 1 and not inner_polys:
+                poly = cls.to_polygon(outer_polys[0])
+                if poly is None or not poly.bounds or len(poly.bounds) != 4:
+                    continue
+                if poly.type != 'MultiPolygon':
+                    index.index_polygon(polygon_index, poly)
+                else:
+                    for p in poly:
+                        index.index_polygon(polygon_index, p)
+            else:
+                multi = []
+                inner = []
+                # Validate inner polygons (holes)
+                for p in inner_polys:
+                    poly = cls.to_polygon(p)
+                    if poly is None or not poly.bounds or len(poly.bounds) != 4:
+                        continue
+                    if poly.type != 'MultiPolygon':
+                        inner.append(poly)
+                    else:
+                        inner.extend(poly)
+
+                # Validate outer polygons
+                for p in outer_polys:
+                    poly = cls.to_polygon(p)
+                    if poly is None or not poly.bounds or len(poly.bounds) != 4:
+                        continue
+                    # Figure out which outer polygon contains each inner polygon
+                    interior = [p2 for p2 in inner if poly.contains(p2)]
+
+                    if interior:
+                        # Polygon with holes constructor
+                        poly = Polygon(p, [zip(*p2.exterior.coords.xy) for p2 in interior])
+                        poly = cls.fix_polygon(poly)
+                        if poly is None or not poly.bounds or len(poly.bounds) != 4:
+                            continue
+                    # R-tree only stores the bounding box, so add the whole polygon
+                    if poly.type != 'MultiPolygon':
+                        index.index_polygon(polygon_index, poly)
+                        multi.append(poly)
+                    else:
+                        for p in poly:
+                            index.index_polygon(polygon_index, p)
+                        multi.extend(poly)
+
+                if len(multi) > 1:
+                    poly = MultiPolygon(multi)
+                elif multi:
+                    poly = multi[0]
+                else:
+                    continue
+            poly = index.simplify_polygon(poly)
+            index.add_polygon(poly, props)
+            # Even if this is a MultiPolygon, only increment the id once per relation
+            polygon_index += 1
+
+        return index
+
 if __name__ == '__main__':
     # Handle argument parsing here
     parser = argparse.ArgumentParser()
@@ -215,10 +347,19 @@ if __name__ == '__main__':
     parser.add_argument('-q', '--quattroshapes-dir',
                         help='Path to quattroshapes dir')
 
+    parser.add_argument('-a', '--osm-admin-file',
+                        help='Path to OSM borders file (with dependencies, .osm format)')
+
     parser.add_argument('-o', '--out-dir',
                         default=os.getcwd(),
                         help='Output directory')
 
     args = parser.parse_args()
-    index = ReverseGeocoder.create_with_quattroshapes(args.quattroshapes_dir, args.out_dir)
+    if args.quattroshapes_dir:
+        index = QuattroshapesReverseGeocoder.create_with_quattroshapes(args.quattroshapes_dir, args.out_dir)
+    elif args.osm_admin_file:
+        index = OSMReverseGeocoder.create_from_osm_file(args.osm_admin_file, args.out_dir)
+    else:
+        parser.error('Must specify quattroshapes dir or osm admin borders file')
+
     index.save()
