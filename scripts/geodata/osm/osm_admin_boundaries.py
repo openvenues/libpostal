@@ -9,11 +9,11 @@ import array
 import logging
 
 from bisect import bisect_left
+from collections import defaultdict, OrderedDict
 from itertools import izip, combinations
 
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.osm.extract import *
-
 
 class OSMAdminPolygonReader(object):
     '''
