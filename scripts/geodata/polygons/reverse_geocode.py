@@ -228,6 +228,8 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         'int_name',
         'official_name',
         'official_name:*',
+        'alt_name',
+        'alt_name:*',
         'short_name',
         'short_name:*',
         'admin_level',
