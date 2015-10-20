@@ -278,6 +278,8 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         reader.logger.addHandler(handler)
         reader.logger.setLevel(logging.INFO)
 
+        logger = logging.getLogger('osm.reverse_geocode')
+
         polygon_index = 0
 
         for relation_id, props, outer_polys, inner_polys in polygons:
@@ -287,7 +289,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
             props['id'] = relation_id
 
             if inner_polys and not outer_polys:
-                self.logger.warn('inner polygons with no outer')
+                logger.warn('inner polygons with no outer')
                 continue
             if len(outer_polys) == 1 and not inner_polys:
                 poly = cls.to_polygon(outer_polys[0])
