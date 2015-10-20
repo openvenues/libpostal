@@ -13,7 +13,9 @@ from collections import defaultdict, OrderedDict
 from itertools import izip, combinations
 
 from geodata.coordinates.conversion import latlon_to_decimal
+from geodata.graph.scc import strongly_connected_components
 from geodata.osm.extract import *
+
 
 class OSMAdminPolygonReader(object):
     '''
