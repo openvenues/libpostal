@@ -10,13 +10,13 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
 
+from address_normalizer.text.normalize import PhraseFilter
 from geodata.encoding import safe_decode
 from geodata.string_utils import wide_iter, wide_ord
 from geodata.i18n.unicode_paths import DATA_DIR
 from geodata.i18n.normalize import strip_accents
 from geodata.i18n.unicode_properties import get_chars_by_script, get_script_languages
-from address_normalizer.text.normalize import PhraseFilter
-from address_normalizer.text.tokenize import *
+from postal.text.tokenize import *
 
 WELL_REPRESENTED_LANGUAGES = set(['en', 'fr', 'it', 'de', 'nl', 'es', 'pt'])
 
