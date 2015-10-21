@@ -9,7 +9,7 @@ from postal.text.tokenize import tokenize, tokenize_raw, token_types
 from collections import OrderedDict
 from itertools import ifilter
 
-FORMATTER_GIT_REPO = 'https://github.com/openvenues/address-formatting'
+FORMATTER_GIT_REPO = 'https://github.com/OpenCageData/address-formatting'
 
 
 class AddressFormatter(object):
