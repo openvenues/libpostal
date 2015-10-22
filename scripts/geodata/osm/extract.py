@@ -6,9 +6,14 @@ Extracts nodes/ways/relations, their metadata and dependencies
 from .osm XML files.
 '''
 
+import re
+import urllib
+import HTMLParser
+
 from collections import OrderedDict
 from lxml import etree
 
+from geodata.encoding import safe_decode
 
 WAY_OFFSET = 10 ** 15
 RELATION_OFFSET = 2 * 10 ** 15
@@ -62,3 +67,33 @@ def parse_osm(filename, allowed_types=ALL_OSM_TAGS, dependencies=False):
             elem.clear()
             while elem.getprevious() is not None:
                 del elem.getparent()[0]
+
+apposition_regex = re.compile('(.*[^\s])[\s]*\([\s]*(.*[^\s])[\s]*\)$', re.I)
+
+html_parser = HTMLParser.HTMLParser()
+
+
+def normalize_wikipedia_title(title):
+    match = apposition_regex.match(title)
+    if match:
+        title = match.group(1)
+
+    title = safe_decode(title)
+    title = html_parser.unescape(title)
+    title = urllib.unquote_plus(title)
+
+    return title.replace(u'_', u' ').strip()
+
+
+def osm_wikipedia_title_and_language(key, value):
+    language = None
+    if u':' in key:
+        key, language = key.rsplit(u':', 1)
+
+    if u':' in value:
+        possible_language = value.split(u':', 1)[0]
+        if len(possible_language) == 2 and language is None:
+            language = possible_language
+            value = value.rsplit(u':', 1)[-1]
+
+    return normalize_wikipedia_title(value), language
