@@ -9,7 +9,7 @@ for language detection and address parser training set
 construction.
 '
 
-if [ "$#" -eq 1 ]; then
+if [ "$#" -gte 1 ]; then
     OUT_DIR=$1
 else
     OUT_DIR=`pwd`
@@ -59,17 +59,21 @@ osmfilter $PLANET_ADDRESSES_LATLONS --keep="addr:street= and ( ( name= and ameni
 rm $PLANET_ADDRESSES_LATLONS
 
 # Border data set for use in R-tree index/reverse geocoding, parsing, language detection
-echo " Filtering for borders: `date`"
+echo "Filtering for borders: `date`"
 PLANET_BORDERS_O5M="planet-borders.o5m"
 PLANET_BORDERS="planet-borders.osm"
 PLANET_ADMIN_BORDERS_OSM="planet-admin-borders.osm"
 osmfilter $PLANET_O5M --keep="boundary=administrative" --drop-author --drop-version -o=$PLANET_ADMIN_BORDERS_OSM
-osmfilter $PLANET_O5M --keep="boundary=administrative or place=city or place=town or place=neighbourhood or place=suburb" --drop-author --drop-version -o=$PLANET_BORDERS_O5M
+osmfilter $PLANET_O5M --keep="boundary=administrative or place=city or place=town or place=village or place=hamlet or place=neighbourhood or place=suburb or place=quarter or place=borough" --drop-author --drop-version -o=$PLANET_BORDERS_O5M
 PLANET_BORDERS_LATLONS="planet-borders-latlons.o5m"
 osmconvert $PLANET_BORDERS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_BORDERS_LATLONS
 rm $PLANET_BORDERS_O5M
-osmfilter $PLANET_BORDERS_LATLONS --keep="boundary=administrative or place=city or place=town or place=neighbourhood or place=suburb" -o=$PLANET_BORDERS
+osmfilter $PLANET_BORDERS_LATLONS --keep="boundary=administrative or place=city or place=town or place=village or place=hamlet or place=neighbourhood or place=suburb or place=quarter or place=borough" -o=$PLANET_BORDERS
 rm $PLANET_BORDERS_LATLONS
+
+echo "Filtering for neighborhoods"
+PLANET_NEIGHBORHOODS="planet-neighborhoods.osm"
+osmfilter $PLANET_O5M --keep="name= and ( place=neighbourhood or place=suburb or place=quarter or place=borough )" --drop-relations --drop-ways --ignore-dependencies --drop-author --drop-version -o=$PLANET_NEIGHBORHOODS
 
 # Venue data set for use in venue classification
 echo "Filtering for venue records: `date`"
