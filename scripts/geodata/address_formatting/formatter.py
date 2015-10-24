@@ -97,8 +97,21 @@ class AddressFormatter(object):
         subprocess.check_call(['git', 'clone', FORMATTER_GIT_REPO, self.formatter_repo_path])
 
     def load_config(self):
-        self.config = yaml.load(open(os.path.join(self.formatter_repo_path,
+        config = yaml.load(open(os.path.join(self.formatter_repo_path,
                                 'conf/countries/worldwide.yaml')))
+        for key, value in config.items():
+            if hasattr(value, 'items'):
+                address_template = value.get('address_template')
+                if address_template:
+                    value['address_template'] = self.add_suburb_tags(address_template)
+
+                post_format_replacements = value.get('postformat_replace')
+                if post_format_replacements:
+                    value['postformat_replace'] = [[pattern, replacement.replace('$', '\\')] for pattern, replacement in post_format_replacements]
+            else:
+                address_template = value
+                config[key] = self.add_suburb_tags(value)
+        self.config = config
 
     def component_aliases(self):
         self.aliases = OrderedDict()
@@ -118,6 +131,18 @@ class AddressFormatter(object):
 
     def country_template(self, c):
         return self.config.get(c, self.config['default'])
+
+    post_suburb_keys = re.compile('|'.join((CITY, STATE, STATE_DISTRICT, POSTCODE, COUNTRY)), re.I)
+
+    def add_suburb_tags(self, template):
+        suburb_included = 'suburb' in template
+        new_components = []
+        for line in template.split('\n'):
+            post_suburb = self.post_suburb_keys.search(line)
+            new_components.append(line.rstrip('\n'))
+            if u'road' in line and not suburb_included and not post_suburb:
+                new_components.append(u'{{{suburb}}}')
+        return u'\n'.join(new_components)
 
     def render_template(self, template, components, tagged=False):
         def render_first(text):
