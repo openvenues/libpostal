@@ -45,6 +45,8 @@ class RTreePolygonIndex(object):
         else:
             self.polygons = polygons
 
+        self.i = 0
+
     def index_polygon(self, id, polygon):
         self.index.insert(id, polygon.bounds)
 
@@ -74,25 +76,81 @@ class RTreePolygonIndex(object):
 
             f = fiona.open(input_file)
 
-            i = 0
+            index.add_geojson_like_file(f)
 
-            for rec in f:
-                if not rec or not rec.get('geometry') or 'type' not in rec['geometry']:
+        return index
+
+    @classmethod
+    def fix_polygon(cls, poly):
+        '''
+        Coerce to valid polygon
+        '''
+        if not poly.is_valid:
+            poly = poly.buffer(0)
+            if not poly.is_valid:
+                return None
+        return poly
+
+    @classmethod
+    def to_polygon(cls, coords):
+        '''
+        Create shapely polygon from list of coordinate tuples if valid
+        '''
+        if not coords or len(coords) < 3:
+            return None
+        poly = Polygon(coords)
+        return cls.fix_polygon(poly)
+
+    def add_geojson_like_record(self, rec, include_only_properties=None):
+        if not rec or not rec.get('geometry') or 'type' not in rec['geometry']:
+            return
+        poly_type = rec['geometry']['type']
+        if poly_type == 'Polygon':
+            coords = rec['geometry']['coordinates'][0]
+            poly = self.to_polygon(coords)
+            if poly is None or not poly.bounds or len(poly.bounds) != 4:
+                return
+            self.index_polygon(self.i, poly)
+            self.add_polygon(poly, rec['properties'], include_only_properties=include_only_properties)
+        elif poly_type == 'MultiPolygon':
+            polys = []
+            poly_coords = rec['geometry']['coordinates']
+            for coords in poly_coords:
+                poly = self.to_polygon(coords[0])
+                if poly is None or not poly.bounds or len(poly.bounds) != 4:
                     continue
-                poly_type = rec['geometry']['type']
-                if poly_type == 'Polygon':
-                    poly = Polygon(rec['geometry']['coordinates'][0])
-                    index.index_polygon(i, poly)
-                    index.add_polygon(poly, rec['properties'], include_only_properties=include_props)
-                elif poly_type == 'MultiPolygon':
-                    polys = []
-                    for coords in rec['geometry']['coordinates']:
-                        poly = Polygon(coords[0])
-                        polys.append(poly)
-                        index.index_polygon(i, poly)
+                polys.append(poly)
+                self.index_polygon(self.i, poly)
 
-                    index.add_polygon(MultiPolygon(polys), rec['properties'], include_only_properties=include_props)
-                i += 1
+            self.add_polygon(MultiPolygon(polys), rec['properties'], include_only_properties=include_only_properties)
+        else:
+            return
+        self.i += 1
+
+    def add_geojson_like_file(self, f, include_only_properties=None):
+        '''
+        Add either GeoJSON or a shapefile record to the index
+        '''
+
+        for rec in f:
+            self.add_geojson_like_record(rec, include_only_properties=include_only_properties)
+
+    @classmethod
+    def create_from_geojson_files(cls, inputs, output_dir,
+                                  index_filename=DEFAULT_INDEX_FILENAME,
+                                  polys_filename=DEFAULT_POLYS_FILENAME,
+                                  include_only_properties=None):
+        index = cls(save_dir=output_dir, index_filename=index_filename)
+        for input_file in inputs:
+            if include_only_properties is not None:
+                include_props = include_only_properties.get(input_file, cls.include_only_properties)
+            else:
+                include_props = cls.include_only_properties
+
+            f = json.load(open(input_file))
+
+            index.add_geojson_like_file(f['features'], include_only_properties=include_props)
+
         return index
 
     def save_polygons(self, out_filename):
