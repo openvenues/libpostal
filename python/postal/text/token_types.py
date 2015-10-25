@@ -51,3 +51,12 @@ class token_types(Enum):
     OTHER = EnumValue(200)
     WHITESPACE = EnumValue(300)
     NEWLINE = EnumValue(301)
+
+
+word_token_types = set([
+    token_types.WORD,
+    token_types.ABBREVIATION,
+    token_types.IDEOGRAPHIC_CHAR,
+    token_types.HANGUL_SYLLABLE,
+    token_types.ACRONYM
+])
