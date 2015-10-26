@@ -7,7 +7,7 @@ CFLAGS_O2 = $(CFLAGS_BASE) -O2
 CFLAGS_O3 = $(CFLAGS_BASE) -O3
 DEFAULT_INCLUDES=-I..
 
-CFLAGS = $(CFLAGS_BASE)
+AM_CFLAGS = $(CFLAGS_BASE)
 
 lib_LTLIBRARIES = libpostal.la
 libpostal_la_SOURCES = libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c string_utils.c file_utils.c numex.c utf8proc/utf8proc.c cmp/cmp.c geodb.c geo_disambiguation.c normalize.c bloom.c features.c geonames.c geohash/geohash.c unicode_scripts.c msgpack_utils.c
@@ -41,10 +41,10 @@ build_trans_table_CFLAGS = $(CFLAGS_O3)
 pkginclude_HEADERS = libpostal.h
 
 all-local:
-	./libpostal_data download base $(LIBPOSTAL_DATA_DIR)
+	./libpostal_data download base @LIBPOSTAL_DATA_DIR@
 
 download_geodb:
-	./libpostal_data download geodb $(LIBPOSTAL_DATA_DIR)
+	./libpostal_data download geodb @LIBPOSTAL_DATA_DIR@
 
 lexer: scanner.re
 	re2c -F -s -b -8 -o scanner.c scanner.re

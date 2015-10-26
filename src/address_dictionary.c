@@ -539,7 +539,11 @@ bool address_dictionary_save(char *path) {
 }
 
 inline bool address_dictionary_module_setup(char *filename) {
-    return address_dictionary_load(filename == NULL ? DEFAULT_ADDRESS_EXPANSION_PATH: filename);
+    if (address_dict == NULL) {
+        return address_dictionary_load(filename == NULL ? DEFAULT_ADDRESS_EXPANSION_PATH: filename);
+    }
+
+    return true;
 }
 
 void address_dictionary_module_teardown(void) {
