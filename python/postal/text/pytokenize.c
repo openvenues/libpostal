@@ -45,7 +45,7 @@ static PyObject *py_tokenize(PyObject *self, PyObject *args)
         if (str == NULL) {
             PyErr_SetString(PyExc_TypeError,
                             "Parameter could not be utf-8 encoded");
-            return 0;
+            goto error_decref_unistr;
         }
 
         char *input = PyBytes_AsString(str);
@@ -62,24 +62,28 @@ static PyObject *py_tokenize(PyObject *self, PyObject *args)
         goto error_decref_str;
     }
 
-    PyObject *result = PyList_New(0);
+    PyObject *result = PyTuple_New(tokens->n);
     if (!result) {
         token_array_destroy(tokens);
-        goto error_decref_unistr;
+        goto error_decref_str;
         return 0;
     }
 
     PyObject *tuple;
 
     token_t token;
-    for (int i = 0; i < tokens->n; i++) {
+    for (size_t i = 0; i < tokens->n; i++) {
         token = tokens->a[i];
-        tuple = Py_BuildValue("iii", token.offset, token.len, token.type);
-        PyList_Append(result, tuple);
-        Py_XDECREF(tuple);
+        tuple = Py_BuildValue("III", token.offset, token.len, token.type);
+        if (!PyTuple_SetItem(result, i, tuple) < 0) {
+            token_array_destroy(tokens);
+            goto error_decref_str;
+        }
     }
 
+    #ifndef IS_PY3K
     Py_XDECREF(str);
+    #endif
     Py_XDECREF(unistr);
 
     token_array_destroy(tokens);
@@ -87,7 +91,9 @@ static PyObject *py_tokenize(PyObject *self, PyObject *args)
     return result;
 
 error_decref_str:
+#ifndef IS_PY3K
     Py_XDECREF(str);
+#endif
 error_decref_unistr:
     Py_XDECREF(unistr);
     return 0;
