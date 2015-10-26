@@ -1,8 +1,6 @@
 #ifndef COLLECTIONS_H
 #define COLLECTIONS_H
 
- 
-
 #include <stdlib.h>
 #include <stdint.h>
 
@@ -10,6 +8,8 @@
 #include "klib/ksort.h"
 #include "vector.h"
 #include "vector_math.h"
+
+#define nop(x) (x)
 
 // Init collections used in multiple places
 
@@ -35,9 +35,9 @@ KHASH_SET_INIT_STR(str_set)
 // Vectors
 
 VECTOR_INIT_NUMERIC(int32_array, int32_t, uint32_t, abs)
-VECTOR_INIT_NUMERIC(uint32_array, uint32_t, uint32_t, abs)
+VECTOR_INIT_NUMERIC(uint32_array, uint32_t, uint32_t, nop)
 VECTOR_INIT_NUMERIC(int64_array, int64_t, uint64_t, llabs)
-VECTOR_INIT_NUMERIC(uint64_array, uint64_t, uint64_t, llabs)
+VECTOR_INIT_NUMERIC(uint64_array, uint64_t, uint64_t, nop)
 VECTOR_INIT_NUMERIC_FLOAT(float_array, float, fabsf)
 VECTOR_INIT_NUMERIC_FLOAT(double_array, double, fabs)
 
