@@ -7,7 +7,7 @@ CFLAGS_O2 = $(CFLAGS_BASE) -O2
 CFLAGS_O3 = $(CFLAGS_BASE) -O3
 DEFAULT_INCLUDES=-I..
 
-CFLAGS = $(CFLAGS_BASE) -DLIBPOSTAL_DATA_DIR='"$(LIBPOSTAL_DATA_DIR)"'
+CFLAGS = $(CFLAGS_BASE)
 
 lib_LTLIBRARIES = libpostal.la
 libpostal_la_SOURCES = libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c string_utils.c file_utils.c numex.c utf8proc/utf8proc.c cmp/cmp.c geodb.c geo_disambiguation.c normalize.c bloom.c features.c geonames.c geohash/geohash.c unicode_scripts.c msgpack_utils.c
@@ -39,8 +39,6 @@ build_trans_table_SOURCES = transliteration_table_builder.c transliterate.c trie
 build_trans_table_CFLAGS = $(CFLAGS_O3)
 
 pkginclude_HEADERS = libpostal.h
-
-LIBPOSTAL_DATA_DIR = $(datadir)/libpostal
 
 all-local:
 	./libpostal_data download base $(LIBPOSTAL_DATA_DIR)

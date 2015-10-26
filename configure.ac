@@ -57,4 +57,6 @@ AC_CHECK_PROG([FOUND_GSHUF], [gshuf], [yes])
 AS_IF([test "x$FOUND_SHUF" = xyes],  [AC_DEFINE([HAVE_SHUF], [1], [shuf available])])
 AS_IF([test "x$FOUND_GSHUF" = xyes],  [AC_DEFINE([HAVE_GSHUF], [1], [gshuf available])])
 
+AC_DEFINE_UNQUOTED([LIBPOSTAL_DATA_DIR], ["$datadir/libpostal"], [Data directory for libpostsal])
+
 AC_OUTPUT
