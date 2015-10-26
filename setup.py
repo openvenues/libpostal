@@ -14,17 +14,33 @@ def main():
         ],
         ext_modules=[
             Extension('postal.text._tokenize',
-                      sources=[
-                          os.path.join(SRC_DIR, 'scanner.c'),
-                          os.path.join(SRC_DIR, 'string_utils.c'),
-                          os.path.join(SRC_DIR, 'tokens.c'),
-                          os.path.join(SRC_DIR, 'utf8proc/utf8proc.c'),
-                          'python/postal/text/pytokenize.c',
-                      ],
+                      sources=[os.path.join(SRC_DIR, f)
+                               for f in ('scanner.c',
+                                         'string_utils.c',
+                                         'tokens.c',
+                                         'utf8proc/utf8proc.c',
+                                         )
+                               ] + ['python/postal/text/pytokenize.c'],
                       include_dirs=['.'],
-                      extra_compile_args=['-O0', '-std=c99'],
+                      extra_compile_args=['-O0', '-std=c99',
+                                          '-Wno-unused-function'],
                       ),
-
+            Extension('postal.text._normalize',
+                      sources=[os.path.join(SRC_DIR, f)
+                               for f in ('normalize.c',
+                                         'string_utils.c',
+                                         'utf8proc/utf8proc.c',
+                                         'tokens.c',
+                                         'unicode_scripts.c',
+                                         'transliterate.c',
+                                         'file_utils.c',
+                                         'trie.c',
+                                         'trie_search.c',)
+                               ] + ['python/postal/text/pynormalize.c'],
+                      include_dirs=['.'],
+                      extra_compile_args=['-O0', '-std=c99', '-DHAVE_CONFIG_H',
+                                          '-Wno-unused-function'],
+                      ),
         ],
         packages=find_packages('python'),
         package_dir={'': 'python'},
