@@ -192,7 +192,7 @@ static bool trie_extend(trie_t *self, uint32_t to_index) {
     if (to_index < self->nodes->n)
         return true;
 
-    new_begin = self->nodes->n;
+    new_begin = (uint32_t)self->nodes->n;
 
     for (i = new_begin; i < to_index + 1; i++) {
         trie_node_array_push(self->nodes, (trie_node_t){-(i-1), -(i+1)});
@@ -346,7 +346,7 @@ static uint32_t trie_find_new_base(trie_t *self, unsigned char *transitions, int
     while (!trie_can_fit_transitions(self, index - first_char_index, transitions, num_transitions)) {
         trie_node_t node = trie_get_node(self, index);
         if (-node.check == FREE_LIST_ID) {
-            if (!trie_extend(self, self->nodes->n+self->alphabet_size)) {
+            if (!trie_extend(self, (uint32_t) self->nodes->n + self->alphabet_size)) {
                 log_error("Trie index error extending to %d\n", index);
                 return TRIE_INDEX_ERROR;
             }
@@ -456,8 +456,8 @@ void trie_add_tail(trie_t *self, unsigned char *tail) {
 
 void trie_set_tail(trie_t *self, unsigned char *tail, int32_t tail_pos) {
     log_debug("Setting tail: %s at pos %d\n", tail, tail_pos);
-    int tail_len = strlen((char *)tail);
-    int num_appends = (tail_pos + tail_len) - self->tail->n;
+    size_t tail_len = strlen((char *)tail);
+    size_t num_appends = ((size_t)tail_pos + tail_len) - self->tail->n;
     int i = 0;
 
     // Pad with 0s if we're short
@@ -536,9 +536,9 @@ int32_t trie_separate_tail(trie_t *self, uint32_t from_index, unsigned char *tai
     if (*tail != '\0') tail++;
 
     log_debug("Separating node at index %d into char %c with tail %s\n", from_index, c, tail);
-    trie_set_base(self, index, -1 * self->data->n);
+    trie_set_base(self, index, -1 * (int32_t)self->data->n);
 
-    trie_data_array_push(self->data, (trie_data_node_t){self->tail->n, data});
+    trie_data_array_push(self->data, (trie_data_node_t){(uint32_t)self->tail->n, data});
     trie_add_tail(self, tail);
 
     return index;
@@ -557,9 +557,9 @@ void trie_tail_merge(trie_t *self, uint32_t old_node_id, unsigned char *suffix, 
     unsigned char *old_tail = original_tail;
     log_debug("Merging existing tail %s with new tail %s, node_id=%d\n", original_tail, suffix, old_node_id);
 
-    int common_prefix = string_common_prefix((char *)old_tail, (char *)suffix);
-    int old_tail_len = strlen((char *)old_tail);
-    int suffix_len = strlen((char *)suffix);
+    size_t common_prefix = string_common_prefix((char *)old_tail, (char *)suffix);
+    size_t old_tail_len = strlen((char *)old_tail);
+    size_t suffix_len = strlen((char *)suffix);
     if (common_prefix == old_tail_len && old_tail_len == suffix_len) {
         log_debug("Key already exists, setting value to %d\n", data);
         self->data->a[old_data_index] = (trie_data_node_t) {old_tail_pos, data};
@@ -567,7 +567,7 @@ void trie_tail_merge(trie_t *self, uint32_t old_node_id, unsigned char *suffix, 
     }
 
     uint32_t node_id = old_node_id;
-    log_debug("common_prefix=%d\n", common_prefix);
+    log_debug("common_prefix=%zu\n", common_prefix);
 
     for (int i=0; i < common_prefix; i++) {
         c = old_tail[i];
@@ -817,11 +817,11 @@ inline bool trie_set_data_at_index(trie_t *self, uint32_t index, uint32_t data) 
 }
 
 inline bool trie_set_data(trie_t *self, char *key, uint32_t data) {
-     if (index == NULL_NODE_ID) {
+     uint32_t node_id = trie_get(self, key);
+     if (node_id == NULL_NODE_ID) {
         return trie_add(self, key, data);
      }
 
-     uint32_t node_id = trie_get(self, key);
      return trie_set_data_at_index(self, node_id, data);
 }
 

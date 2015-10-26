@@ -744,7 +744,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
             int32_t ch = 0;
             ssize_t char_len = 0;
             uint8_t *ptr = (uint8_t *)str;
-            uint64_t idx = 0;
+            size_t idx = 0;
             
             char *original_str = str;
             char_array *revisit = NULL;
@@ -770,7 +770,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
                 if (ch == 0) break;
 
-                log_debug("Got char '%.*s' at idx=%llu\n", (int)char_len, str + idx, idx);
+                log_debug("Got char '%.*s' at idx=%zu\n", (int)char_len, str + idx, idx);
 
                 state = state_transition(trie, str, idx, char_len, prev_state);
                 set_match_if_any(trie, state, &match_state);
@@ -783,7 +783,6 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                     log_debug("end of partial or last char, prev start=%zd, prev len=%zu\n", prev_state.phrase_start, prev_state.phrase_len);
 
                     bool context_no_match = false;
-                    bool empty_context_match = false;
 
                     bool is_last_char = idx + char_len == len;
                     
@@ -1293,7 +1292,7 @@ bool transliterator_write(transliterator_t *trans, FILE *f) {
         return false;
     }
 
-    if (!file_write_uint32(f, trans->steps_length)) {
+    if (!file_write_uint32(f, (uint32_t)trans->steps_length)) {
         return false;
     }
 
@@ -1913,7 +1912,7 @@ bool transliteration_module_setup(char *filename) {
         return transliteration_table_load(filename == NULL ? DEFAULT_TRANSLITERATION_PATH : filename);
     }
 
-    return false;
+    return true;
 }
 
 

@@ -406,7 +406,7 @@ bool numex_table_read(FILE *f) {
         goto exit_numex_table_load_error;
     }
 
-    log_debug("read num_languages = %d\n", num_languages);
+    log_debug("read num_languages = %zu\n", num_languages);
 
     int i = 0;
 
@@ -745,7 +745,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
         bool set_rule = false;
         state.state = NUMEX_SEARCH_STATE_MATCH;
 
-        log_debug("phrase.len=%lld, phrase.data=%d\n", phrase.len, phrase.data);
+        log_debug("phrase.len=%u, phrase.data=%d\n", phrase.len, phrase.data);
 
         rule = get_numex_rule((size_t)phrase.data);
         log_debug("rule.value=%lld\n", rule.value);
@@ -771,7 +771,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
             }
             result.len = idx + phrase.start + phrase.len - result.start;
 
-            log_debug("idx=%d, phrase.len=%d\n", idx, phrase.len);
+            log_debug("idx=%zu, phrase.len=%d\n", idx, phrase.len);
 
             log_debug("prev_rule.radix=%d\n", prev_rule.radix);
 

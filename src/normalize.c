@@ -7,7 +7,6 @@
 char *normalize_string_utf8(char *str, uint64_t options) {    
     int utf8proc_options = UTF8PROC_OPTIONS_BASE | UTF8PROC_IGNORE | UTF8PROC_NLF2LF | UTF8PROC_STRIPCC;
     uint8_t *utf8proc_normalized = NULL;
-    ssize_t normalized_len = 0;
 
     bool have_utf8proc_options = false;
 
@@ -31,7 +30,7 @@ char *normalize_string_utf8(char *str, uint64_t options) {
     }
 
     if (have_utf8proc_options) {
-        ssize_t normalized_len = utf8proc_map((uint8_t *)str, 0, &utf8proc_normalized, utf8proc_options);
+        utf8proc_map((uint8_t *)str, 0, &utf8proc_normalized, utf8proc_options);
         return (char *)utf8proc_normalized;
     }
 
@@ -113,7 +112,6 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
 
         char *utf8_normalized = NULL;
         char *transliterated = NULL;
-        char *ascii = NULL;
 
         if (options & NORMALIZE_STRING_LOWERCASE && is_ascii) {
             utf8_normalized = normalize_string_utf8(str, NORMALIZE_STRING_LOWERCASE);

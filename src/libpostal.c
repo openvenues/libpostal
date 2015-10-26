@@ -113,7 +113,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
     size_t len = strlen(str);
 
-    log_debug("tokenized, num tokens=%d\n", tokens->n);
+    log_debug("tokenized, num tokens=%zu\n", tokens->n);
 
     phrase_language_array *phrases = NULL;
     phrase_array *lang_phrases = NULL;
@@ -155,7 +155,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
     string_tree_t *tree = string_tree_new_size(len);
 
     if (phrases != NULL) {
-        log_debug("phrases not NULL, n=%d\n", phrases->n);
+        log_debug("phrases not NULL, n=%zu\n", phrases->n);
         ks_introsort(phrase_language_array, phrases->n, phrases->a);
 
         phrase_language_t phrase_lang;
@@ -181,7 +181,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
             for (int j = start; j < end; j++) {
                 token_t token = tokens->a[j]; 
                 if (token.type != WHITESPACE) {
-                    log_debug("Adding previous token, %.*s\n", token.len, str + token.offset);
+                    log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
 
                     string_tree_add_string_len(tree, str + token.offset, token.len);
                 } else {
@@ -250,7 +250,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
                 for (int j = phrase.start; j < phrase.start + phrase.len; j++) {
                     token = tokens->a[j];
                     if (token.type != WHITESPACE) {
-                        log_debug("Adding previous token, %.*s\n", token.len, str + token.offset);
+                        log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
                         string_tree_add_string_len(tree, str + token.offset, token.len);
                     } else {
                         string_tree_add_string(tree, " ");
@@ -271,7 +271,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
         for (int j = start; j < end; j++) {
             token_t token = tokens->a[j]; 
             if (token.type != WHITESPACE) {
-                log_debug("Adding previous token, %.*s\n", token.len, str + token.offset);
+                log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
 
                 string_tree_add_string_len(tree, str + token.offset, token.len);
             } else {
