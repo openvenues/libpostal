@@ -32,6 +32,10 @@ inline void matrix_init_values(matrix_t *self, double *values) {
     memcpy(self->values, values, num_values * sizeof(double));
 }
 
+inline void matrix_zero(matrix_t *self) {
+    memset(self->values, 0, self->m * self->n * sizeof(double));
+}
+
 inline void matrix_set(matrix_t *self, double value) {
     double_array_set(self->values, self->m * self->n, value);
 }

@@ -22,6 +22,7 @@ matrix_t *matrix_copy(matrix_t *self);
 
 void matrix_init_values(matrix_t *self, double *values);
 void matrix_set(matrix_t *self, double value);
+void matrix_zero(matrix_t *self);
 void matrix_set_row(matrix_t *self, size_t index, double *row);
 void matrix_set_scalar(matrix_t *self, size_t row_index, size_t col_index, double value);
 
