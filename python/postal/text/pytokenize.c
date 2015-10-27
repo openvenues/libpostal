@@ -75,7 +75,7 @@ static PyObject *py_tokenize(PyObject *self, PyObject *args)
     for (size_t i = 0; i < tokens->n; i++) {
         token = tokens->a[i];
         tuple = Py_BuildValue("III", token.offset, token.len, token.type);
-        if (!PyTuple_SetItem(result, i, tuple) < 0) {
+        if (PyTuple_SetItem(result, i, tuple) < 0) {
             token_array_destroy(tokens);
             goto error_decref_str;
         }
