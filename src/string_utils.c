@@ -75,6 +75,12 @@ inline void string_upper(char *s) {
     for (; *s; ++s) *s = toupper(*s);
 }
 
+inline void string_replace(char *s, char c1, char c2) {
+    for (; *s; ++s) {
+        if (*s == c1) *s = c2;
+    }
+}
+
 inline bool string_is_upper(char *s) {
     for (; *s; ++s) {
         if (*s != toupper(*s)) return false;
@@ -92,6 +98,7 @@ inline bool string_is_lower(char *s) {
     }
     return true;
 }
+
 
 uint32_t string_translate(char *str, size_t len, char *word_chars, char *word_repls, size_t trans_len) {
     uint32_t num_replacements = 0;

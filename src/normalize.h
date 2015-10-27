@@ -44,6 +44,7 @@ As well as normalizations for individual string tokens:
 #define NORMALIZE_STRING_DECOMPOSE 1 << 3
 #define NORMALIZE_STRING_LOWERCASE 1 << 4
 #define NORMALIZE_STRING_TRIM 1 << 5
+#define NORMALIZE_STRING_REPLACE_HYPHENS 1 << 6
 
 #define NORMALIZE_TOKEN_REPLACE_HYPHENS 1 << 0
 #define NORMALIZE_TOKEN_DELETE_HYPHENS 1 << 1

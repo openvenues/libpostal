@@ -29,12 +29,21 @@ char *normalize_string_utf8(char *str, uint64_t options) {
         utf8proc_options |= UTF8PROC_OPTIONS_LOWERCASE;
     }
 
+    char *normalized = NULL;
+
     if (have_utf8proc_options) {
         utf8proc_map((uint8_t *)str, 0, &utf8proc_normalized, utf8proc_options);
-        return (char *)utf8proc_normalized;
+
+        normalized = (char *)utf8proc_normalized;
+        str = normalized;
     }
 
-    return NULL;
+    if (options & NORMALIZE_STRING_REPLACE_HYPHENS) {
+        string_replace(str, '-', ' ');
+        normalized = str;
+    }
+
+    return normalized;
 }
 
 
