@@ -770,7 +770,7 @@ def quote_string(s):
     return u'"{}"'.format(replace_long_escape_sequence(safe_decode(s).replace('"', '\\"')))
 
 
-def char_types_string(char_types):
+def char_types_string(char_types, escape=True):
     '''
     Transforms the char_permutations output into a string
     suitable for simple parsing in C (characters and character sets only,
@@ -782,7 +782,8 @@ def char_types_string(char_types):
         template = u'{}' if len(chars) == 1 else u'[{}]'
         norm = []
         for c in chars:
-            c = string_replacements.get(c, c)
+            if escape:
+                c = string_replacements.get(c, c)
             norm.append(c)
 
         ret.append(template.format(u''.join(norm)))
@@ -1082,7 +1083,7 @@ def parse_transform_rules(name, xml, reverse=False, transforms_only=False):
 
             if right:
                 right, revisit, right_groups = char_permutations(right.strip(), current_filter=current_filter)
-                right = char_types_string(right)
+                right = char_types_string(right, escape=False)
                 if revisit:
                     revisit = list(revisit)
                     revisit = char_types_string(revisit)
