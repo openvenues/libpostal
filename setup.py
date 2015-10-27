@@ -38,7 +38,7 @@ def main():
                                          'trie_search.c',)
                                ] + ['python/postal/text/pynormalize.c'],
                       include_dirs=['.'],
-                      extra_compile_args=['-O0', '-std=c99', '-DHAVE_CONFIG_H',
+                      extra_compile_args=['-std=c99', '-DHAVE_CONFIG_H',
                                           '-Wno-unused-function'],
                       ),
         ],
