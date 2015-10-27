@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-if [ "$#" -lt 2 ]; then
-    echo "Usage: ./libpostal_data [upload|download] data_dir"
+if [ "$#" -lt 3 ]; then
+    echo "Usage: ./libpostal_data [upload|download] [base|geodb] data_dir"
+    exit 1
 fi
 
 LIBPOSTAL_S3_BUCKET_NAME="libpostal"
