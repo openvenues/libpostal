@@ -454,10 +454,10 @@ void trie_add_tail(trie_t *self, unsigned char *tail) {
     uchar_array_push(self->tail, '\0');
 }
 
-void trie_set_tail(trie_t *self, unsigned char *tail, int32_t tail_pos) {
+void trie_set_tail(trie_t *self, unsigned char *tail, uint32_t tail_pos) {
     log_debug("Setting tail: %s at pos %d\n", tail, tail_pos);
     size_t tail_len = strlen((char *)tail);
-    size_t num_appends = ((size_t)tail_pos + tail_len) - self->tail->n;
+    ssize_t num_appends = (ssize_t)(tail_pos + tail_len) - self->tail->n;
     int i = 0;
 
     // Pad with 0s if we're short

@@ -109,7 +109,7 @@ uint32_t trie_add_transition(trie_t *self, uint32_t node_id, unsigned char c);
 void trie_make_room_for(trie_t *self, uint32_t next_id);
 
 void trie_add_tail(trie_t *self, unsigned char *tail);
-void trie_set_tail(trie_t *self, unsigned char *tail, int32_t tail_pos);
+void trie_set_tail(trie_t *self, unsigned char *tail, uint32_t tail_pos);
 int32_t trie_separate_tail(trie_t *self, uint32_t from_index, unsigned char *tail, uint32_t data);
 void trie_tail_merge(trie_t *self, uint32_t old_node_id, unsigned char *suffix, uint32_t data);
 
