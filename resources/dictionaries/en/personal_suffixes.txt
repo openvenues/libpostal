@@ -1,2 +1,2 @@
-junior|jr
-senior|sr
+junior|jr|jnr
+senior|sr|snr
