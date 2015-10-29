@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from postal.text import _normalize
-from postal.text import _tokenize
+from postal.text.tokenize import tokenize_raw
 from postal.text.token_types import token_types
 
 from postal.text.encoding import safe_decode
@@ -40,5 +40,5 @@ def normalized_tokens(s, string_options=DEFAULT_STRING_OPTIONS,
         normalized = _normalize.normalize_string_utf8(s, string_options)
 
     # Tuples of (offset, len, type)
-    tokens = _tokenize.tokenize(normalized)
+    tokens = tokenize_raw(normalized)
     return [(_normalize.normalize_token(normalized, t, token_options), token_types.from_id(t[-1])) for t in tokens]
