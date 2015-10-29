@@ -8,14 +8,15 @@ from shapely.geometry import Point, Polygon, MultiPolygon
 from shapely.prepared import prep
 from shapely.geometry.geo import mapping
 
-DEFAULT_INDEX_FILENAME = 'rtree'
 DEFAULT_POLYS_FILENAME = 'polygons.geojson'
 
 
-class RTreePolygonIndex(object):
+class PolygonIndex(object):
     include_only_properties = None
     simplify_tolerance = 0.0001
     preserve_topology = True
+
+    INDEX_FILENAME = None
 
     def __init__(self, index=None, polygons=None, save_dir=None,
                  index_filename=None,
@@ -31,9 +32,9 @@ class RTreePolygonIndex(object):
             self.index_path = None
 
         if not index and self.index_path:
-            self.index = rtree.index.Index(self.index_path, overwrite=True)
+            self.create_index(self.index_path, overwrite=True)
         elif not index:
-            self.index = rtree.index.Index()
+            self.create_index()
         else:
             self.index = index
 
@@ -47,8 +48,11 @@ class RTreePolygonIndex(object):
 
         self.i = 0
 
-    def index_polygon(self, id, polygon):
-        self.index.insert(id, polygon.bounds)
+    def create_index(self, index_path=None, overwrite=False):
+        raise NotImplementedError('Children must implement')
+
+    def index_polygon(self, polygon):
+        raise NotImplementedError('Children must implement')
 
     def simplify_polygon(self, poly, simplify_tolerance=None, preserve_topology=None):
         if simplify_tolerance is None:
@@ -61,13 +65,14 @@ class RTreePolygonIndex(object):
         if include_only_properties is not None:
             properties = {k: v for k, v in properties.iteritems() if k in include_only_properties}
         self.polygons.append((properties, prep(poly)))
+        self.i += 1
 
     @classmethod
     def create_from_shapefiles(cls, inputs, output_dir,
-                               index_filename=DEFAULT_INDEX_FILENAME,
+                               index_filename=None,
                                polys_filename=DEFAULT_POLYS_FILENAME,
                                include_only_properties=None):
-        index = cls(save_dir=output_dir, index_filename=index_filename)
+        index = cls(save_dir=output_dir, index_filename=index_filename or cls.INDEX_FILENAME)
         for input_file in inputs:
             if include_only_properties is not None:
                 include_props = include_only_properties.get(input_file, cls.include_only_properties)
@@ -110,7 +115,7 @@ class RTreePolygonIndex(object):
             poly = self.to_polygon(coords)
             if poly is None or not poly.bounds or len(poly.bounds) != 4:
                 return
-            self.index_polygon(self.i, poly)
+            self.index_polygon(poly)
             self.add_polygon(poly, rec['properties'], include_only_properties=include_only_properties)
         elif poly_type == 'MultiPolygon':
             polys = []
@@ -120,12 +125,11 @@ class RTreePolygonIndex(object):
                 if poly is None or not poly.bounds or len(poly.bounds) != 4:
                     continue
                 polys.append(poly)
-                self.index_polygon(self.i, poly)
+                self.index_polygon(poly)
 
             self.add_polygon(MultiPolygon(polys), rec['properties'], include_only_properties=include_only_properties)
         else:
             return
-        self.i += 1
 
     def add_geojson_like_file(self, f, include_only_properties=None):
         '''
@@ -137,10 +141,10 @@ class RTreePolygonIndex(object):
 
     @classmethod
     def create_from_geojson_files(cls, inputs, output_dir,
-                                  index_filename=DEFAULT_INDEX_FILENAME,
+                                  index_filename=None,
                                   polys_filename=DEFAULT_POLYS_FILENAME,
                                   include_only_properties=None):
-        index = cls(save_dir=output_dir, index_filename=index_filename)
+        index = cls(save_dir=output_dir, index_filename=index_filename or cls.INDEX_FILENAME)
         for input_file in inputs:
             if include_only_properties is not None:
                 include_props = include_only_properties.get(input_file, cls.include_only_properties)
@@ -153,6 +157,10 @@ class RTreePolygonIndex(object):
 
         return index
 
+    def save(self, polys_filename=DEFAULT_POLYS_FILENAME):
+        self.save_polygons(os.path.join(self.save_dir, polys_filename))
+        self.save_index(index_filename=self.index_path)
+
     def save_polygons(self, out_filename):
         out = open(out_filename, 'w')
         for props, poly in self.polygons:
@@ -163,10 +171,8 @@ class RTreePolygonIndex(object):
             }
             out.write(json.dumps(feature) + u'\n')
 
-    def save(self, polys_filename=DEFAULT_POLYS_FILENAME):
-        self.save_polygons(os.path.join(self.save_dir, polys_filename))
-        # need to close index before loading it
-        self.index.close()
+    def save_index(self):
+        raise NotImplementedError('Children must implement')
 
     @classmethod
     def load_polygons(cls, filename):
@@ -188,14 +194,21 @@ class RTreePolygonIndex(object):
                 polygons.append((feature['properties'], prep(MultiPolygon(polys))))
         return polygons
 
+
     @classmethod
-    def load(cls, d, index_name=DEFAULT_INDEX_FILENAME, polys_filename=DEFAULT_POLYS_FILENAME):
-        index = rtree.index.Index(os.path.join(d, index_name))
+    def load_index(cls, d, index_name=None):
+        raise NotImplementedError('Children must implement')
+
+
+    @classmethod
+    def load(cls, d, index_name=None, polys_filename=DEFAULT_POLYS_FILENAME):
+        index = cls.load_index(d, index_name=index_name or cls.INDEX_FILENAME)
         polys = cls.load_polygons(os.path.join(d, polys_filename))
         return cls(index=index, polygons=polys, save_dir=d)
 
+
     def get_candidate_polygons(self, lat, lon):
-        return OrderedDict.fromkeys(self.index.intersection((lon, lat, lon, lat))).keys()
+        raise NotImplementedError('Children must implement')
 
     def point_in_poly(self, lat, lon, return_all=False):
         polys = self.get_candidate_polygons(lat, lon)
@@ -211,3 +224,79 @@ class RTreePolygonIndex(object):
             elif contains:
                 containing.append(props)
         return containing
+
+
+class RTreePolygonIndex(PolygonIndex):
+    INDEX_FILENAME = 'index.rtree'
+
+    def create_index(self, index_path=None, overwrite=False):
+        if index_path:
+            self.index = rtree.index.Index(index_path, overwrite=overwrite)
+        else:
+            self.index = rtree.index.Index()
+
+    def index_polygon(self, polygon):
+        self.index.insert(self.i, polygon.bounds)
+
+    def get_candidate_polygons(self, lat, lon):
+        return OrderedDict.fromkeys(self.index.intersection((lon, lat, lon, lat))).keys()
+
+    def save_index(self):
+        # need to close index before loading it
+        self.index.close()
+
+    @classmethod
+    def load_index(cls, d, index_name=None):
+        return rtree.index.Index(os.path.join(d, index_name or cls.INDEX_FILENAME))
+
+
+class GeohashPolygonIndex(PolygonIndex):
+    # Reference: https://www.elastic.co/guide/en/elasticsearch/guide/current/geohashes.html
+    GEOHASH_PRECISIONS = [
+        (7, 152.8 ** 2),
+        (6, 1200.0 * 610.0),
+        (5, 4900.0 * 4900.0),
+        (4, 39000.0 * 19500.0),
+        (3, 156000.0 * 156000.0),
+        (2, 1251000.0 * 625000.0),
+    ]
+
+    INDEX_FILENAME = 'index.json'
+
+    def create_index(self, index_path=None, overwrite=False):
+        self.index = defaultdict(list)
+
+    def index_point(self, lat, lon, geohash_level):
+        code = geohash.encode(lat, lon)[:geohash_level]
+
+        for key in [code] + geohash.neighbors(code):
+            self.index[key].append(self.i)
+
+    def index_polygon(self, polygon):
+        poly_area = polygon_bounding_box_area(polygon)
+        for geohash_level, area in self.GEOHASH_PRECISIONS:
+            if area * 9.0 >= poly_area:
+                break
+
+        bbox = polygon.bounds
+        lat, lon = (bbox[1] + bbox[3]) / 2.0, (bbox[0] + bbox[2]) / 2.0
+        self.index_point(lat, lon, geohash_level)
+
+    def get_candidate_polygons(self, lat, lon, all_levels=False):
+        candidates = []
+        code = geohash.encode(lat, lon)
+        for level, area in self.GEOHASH_PRECISIONS:
+            indices = self.index.get(code[:level])
+            if not indices:
+                continue
+            candidates.extend(indices)
+            if not all_levels:
+                break
+        return candidates
+
+    def save_index(self):
+        json.dump(self.index, open(self.index_path, 'w'))
+
+    @classmethod
+    def load_index(cls, d, index_name=None):
+        return json.load(open(os.path.join(d, index_name or cls.INDEX_FILENAME)))
