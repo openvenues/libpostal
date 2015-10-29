@@ -1,12 +1,15 @@
 import fiona
+import geohash
 import os
 import rtree
 import ujson as json
 
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from shapely.geometry import Point, Polygon, MultiPolygon
 from shapely.prepared import prep
 from shapely.geometry.geo import mapping
+
+from geodata.polygons.area import polygon_bounding_box_area
 
 DEFAULT_POLYS_FILENAME = 'polygons.geojson'
 
