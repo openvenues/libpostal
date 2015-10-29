@@ -197,18 +197,15 @@ class PolygonIndex(object):
                 polygons.append((feature['properties'], prep(MultiPolygon(polys))))
         return polygons
 
-
     @classmethod
     def load_index(cls, d, index_name=None):
         raise NotImplementedError('Children must implement')
-
 
     @classmethod
     def load(cls, d, index_name=None, polys_filename=DEFAULT_POLYS_FILENAME):
         index = cls.load_index(d, index_name=index_name or cls.INDEX_FILENAME)
         polys = cls.load_polygons(os.path.join(d, polys_filename))
         return cls(index=index, polygons=polys, save_dir=d)
-
 
     def get_candidate_polygons(self, lat, lon):
         raise NotImplementedError('Children must implement')
