@@ -21,6 +21,20 @@ RELATION_OFFSET = 2 * 10 ** 15
 ALL_OSM_TAGS = set(['node', 'way', 'relation'])
 WAYS_RELATIONS = set(['way', 'relation'])
 
+OSM_NAME_TAGS = (
+    'name',
+    'alt_name',
+    'int_name',
+    'nat_name',
+    'reg_name',
+    'loc_name',
+    'official_name',
+    'commonname',
+    'common_name',
+    'place_name',
+    'short_name',
+)
+
 
 def parse_osm(filename, allowed_types=ALL_OSM_TAGS, dependencies=False):
     '''
