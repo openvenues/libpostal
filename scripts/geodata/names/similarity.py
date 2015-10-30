@@ -2,8 +2,15 @@ import Levenshtein
 from collections import OrderedDict
 
 
+def ordered_word_count(tokens):
+    counts = OrderedDict()
+    for k in tokens:
+        counts[k] = counts.get(k, 0) + 1
+    return counts
+
+
 def soft_tfidf_similarity(tokens1, tokens2, idf,
-                          sim_func=Levenshtein.jaro_winkler, theta=0.9,
+                          sim_func=Levenshtein.jaro_winkler, theta=0.95,
                           common_word_threshold=100):
     '''
     Soft TFIDF is a hybrid distance function using both global statistics
@@ -35,13 +42,8 @@ def soft_tfidf_similarity(tokens1, tokens2, idf,
     https://www.cs.cmu.edu/~pradeepr/papers/ijcai03.pdf
     '''
 
-    token1_counts = OrderedDict()
-    for k in tokens1:
-        token1_counts[k] = token1_counts.get(k, 0) + 1
-
-    token2_counts = OrderedDict()
-    for k in tokens2:
-        token2_counts[k] = token2_counts.get(k, 0) + 1
+    token1_counts = ordered_word_count(tokens1)
+    token2_counts = ordered_word_count(tokens2)
 
     tfidf1 = idf.tfidf_vector(token1_counts)
     tfidf2 = idf.tfidf_vector(token2_counts)
@@ -61,3 +63,22 @@ def soft_tfidf_similarity(tokens1, tokens2, idf,
             total_sim += sim * tfidf1[i] * tfidf2[j]
 
     return total_sim
+
+
+def jaccard_similarity(tokens1, tokens2):
+    '''
+    Traditionally Jaccard similarity is defined for two sets:
+
+    Jaccard(A, B) = (A ∩ B) / (A ∪ B)
+
+    Using this for tokens, the similarity of ['a', 'a', 'b'] and ['a', 'b']
+    would be 1.0, which is not ideal for entity name matching.
+
+    In this implementation the cardinality of the set intersections/unions
+    are weighted by term frequencies so Jaccard(['a', 'a', 'b'], ['a', 'b']) = 0.67
+    '''
+    token1_counts = ordered_word_count(tokens1)
+    token2_counts = ordered_word_count(tokens2)
+
+    intersection = sum((min(v, token2_counts[k]) for k, v in token1_counts.iteritems() if k in token2_counts))
+    return float(intersection) / (sum(token1_counts.values()) + sum(token2_counts.values()) - intersection)
