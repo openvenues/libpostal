@@ -33,7 +33,7 @@ class IDFIndex(object):
             return 0.0
         return (math.log(count + 1.0) * (math.log(float(self.N) / idf_count)))
 
-    def tfidf_vector(self, tokens):
-        tf_idf = [self.tfidf_score(t) for t in tokens]
+    def tfidf_vector(self, token_counts):
+        tf_idf = [self.tfidf_score(t, count=c) for t, c in token_counts.iteritems()]
         norm = math.sqrt(sum((t ** 2 for t in tf_idf)))
         return [t / norm for t in tf_idf]
