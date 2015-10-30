@@ -20,8 +20,23 @@ DEFAULT_TOKEN_OPTIONS = _normalize.NORMALIZE_TOKEN_REPLACE_HYPHENS | \
     _normalize.NORMALIZE_TOKEN_REPLACE_DIGITS
 
 
+def remove_parens(tokens):
+    new_tokens = []
+    open_parens = 0
+    for t, c in tokens:
+        if c == token_types.PUNCT_OPEN:
+            open_parens += 1
+        elif c == token_types.PUNCT_CLOSE:
+            if open_parens > 0:
+                open_parens -= 1
+        elif open_parens <= 0:
+            new_tokens.append((t, c))
+    return new_tokens
+
+
 def normalized_tokens(s, string_options=DEFAULT_STRING_OPTIONS,
-                      token_options=DEFAULT_TOKEN_OPTIONS):
+                      token_options=DEFAULT_TOKEN_OPTIONS,
+                      strip_parentheticals=True):
     '''
     Normalizes a string, tokenizes, and normalizes each token
     with string and token-level options.
@@ -40,5 +55,11 @@ def normalized_tokens(s, string_options=DEFAULT_STRING_OPTIONS,
         normalized = _normalize.normalize_string_utf8(s, string_options)
 
     # Tuples of (offset, len, type)
-    tokens = tokenize_raw(normalized)
-    return [(_normalize.normalize_token(normalized, t, token_options), token_types.from_id(t[-1])) for t in tokens]
+    raw_tokens = tokenize_raw(normalized)
+    tokens = [(_normalize.normalize_token(normalized, t, token_options),
+               token_types.from_id(t[-1])) for t in raw_tokens]
+
+    if strip_parentheticals:
+        return remove_parens(tokens)
+    else:
+        return tokens
