@@ -1,5 +1,5 @@
 from postal.text.normalize import *
-from geodata.names.similarity import soft_tfidf_similarity, jaccard_similarity, ordered_word_count
+from geodata.names.similarity import soft_tfidf_similarity, jaccard_similarity
 
 from collections import Counter
 

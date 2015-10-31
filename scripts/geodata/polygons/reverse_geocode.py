@@ -32,7 +32,7 @@ from geodata.encoding import safe_decode
 from geodata.file_utils import ensure_dir
 from geodata.i18n.unicode_properties import get_chars_by_script
 from geodata.i18n.word_breaks import ideographic_scripts
-from geodata.names.similarity import soft_tfidf
+from geodata.names.deduping import NameDeduper
 from geodata.osm.extract import parse_osm, OSM_NAME_TAGS
 from geodata.osm.osm_admin_boundaries import OSMAdminPolygonReader
 from geodata.polygons.index import *
