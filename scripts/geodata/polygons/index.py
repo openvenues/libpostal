@@ -34,10 +34,8 @@ class PolygonIndex(object):
         else:
             self.index_path = None
 
-        if not index and self.index_path:
-            self.create_index(self.index_path, overwrite=True)
-        elif not index:
-            self.create_index()
+        if not index:
+            self.create_index(overwrite=True)
         else:
             self.index = index
 
@@ -51,7 +49,7 @@ class PolygonIndex(object):
 
         self.i = 0
 
-    def create_index(self, index_path=None, overwrite=False):
+    def create_index(self, overwrite=False):
         raise NotImplementedError('Children must implement')
 
     def index_polygon(self, polygon):
@@ -229,11 +227,8 @@ class PolygonIndex(object):
 class RTreePolygonIndex(PolygonIndex):
     INDEX_FILENAME = 'index.rtree'
 
-    def create_index(self, index_path=None, overwrite=False):
-        if index_path:
-            self.index = rtree.index.Index(index_path, overwrite=overwrite)
-        else:
-            self.index = rtree.index.Index()
+    def create_index(self, overwrite=False):
+        self.index = rtree.index.Index(self.index_path, overwrite=overwrite)
 
     def index_polygon(self, polygon):
         self.index.insert(self.i, polygon.bounds)
@@ -263,7 +258,7 @@ class GeohashPolygonIndex(PolygonIndex):
 
     INDEX_FILENAME = 'index.json'
 
-    def create_index(self, index_path=None, overwrite=False):
+    def create_index(self, overwrite=False):
         self.index = defaultdict(list)
 
     def index_point(self, lat, lon, geohash_level):
