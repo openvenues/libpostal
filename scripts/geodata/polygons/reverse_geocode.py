@@ -621,7 +621,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
     @classmethod
     def create_from_osm_file(cls, filename, output_dir,
-                             index_filename=DEFAULT_INDEX_FILENAME,
+                             index_filename=None,
                              polys_filename=DEFAULT_POLYS_FILENAME):
         '''
         Given an OSM file (planet or some other bounds) containing relations
