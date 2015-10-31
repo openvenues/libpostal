@@ -70,7 +70,7 @@ class NameDeduper(object):
         tokens2 = cls.content_tokens(s2)
 
         if not cls.possible_match(tokens1, tokens2):
-            return max(cls.dupe_threshold - 0.1, 0.0)
+            return 0.0
 
         tokens1_only = [t for t, c in tokens1]
         tokens2_only = [t for t, c in tokens2]
@@ -87,7 +87,7 @@ class NameDeduper(object):
         tokens2 = cls.content_tokens(s2)
 
         if not cls.possible_match(tokens1, tokens2):
-            return max(cls.dupe_threshold - 0.1, 0.0)
+            return 0.0
 
         tokens1_only = [t for t, c in tokens1]
         tokens2_only = [t for t, c in tokens2]

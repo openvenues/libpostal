@@ -2,6 +2,13 @@ VISIT, VISIT_EDGE, POST_VISIT = range(3)
 
 
 def strongly_connected_components(graph):
+    '''
+    Find strongly connected components in a graph using iterative
+    depth-first search.
+
+    Based on:
+    http://code.activestate.com/recipes/578507-strongly-connected-components-of-a-directed-graph/
+    '''
     identified = set()
     stack = []
     index = {}
