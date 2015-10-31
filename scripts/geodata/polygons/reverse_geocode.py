@@ -722,8 +722,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     if args.osm_admin_file:
-        index = OSMReverseGeocoder.create_from_osm_file(args.osm_admin_file, args.out_dir,
-                                                        quattroshapes_dir=args.quattroshapes_dir)
+        index = OSMReverseGeocoder.create_from_osm_file(args.osm_admin_file, args.out_dir)
     elif args.osm_neighborhoods_file and args.quattroshapes_dir:
         index = NeighborhoodReverseGeocoder.create_from_osm_and_quattroshapes(
             args.osm_neighborhoods_file,
