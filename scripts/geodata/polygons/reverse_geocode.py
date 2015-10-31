@@ -734,7 +734,7 @@ if __name__ == '__main__':
                                                         quattroshapes_dir=args.quattroshapes_dir)
     elif args.osm_neighborhoods_file and args.quattroshapes_dir:
         index = NeighborhoodReverseGeocoder.create_from_osm_and_quattroshapes(
-            args.osm_neighorhoods_file,
+            args.osm_neighborhoods_file,
             args.quattroshapes_dir,
             args.out_dir
         )
