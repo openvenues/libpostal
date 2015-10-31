@@ -241,6 +241,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         ensure_dir(scratch_dir)
 
         logger = logging.getLogger('neighborhoods')
+        logger.setLevel(logging.INFO)
 
         qs_scratch_dir = os.path.join(scratch_dir, 'qs_neighborhoods')
         ensure_dir(qs_scratch_dir)
@@ -335,7 +336,6 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             ranks.sort(key=operator.itemgetter(0), reverse=True)
             if ranks and ranks[0][0] >= cls.DUPE_THRESHOLD:
                 score, props, poly, idx, i = ranks[0]
-                matches.append((score, [safe_decode(attrs[k]) for k in OSM_NAME_TAGS if k in attrs], safe_decode(props['name'])))
 
                 if idx is zs:
                     attrs['polygon_type'] = 'neighborhood'
@@ -350,12 +350,6 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                 index.index_polygon(poly)
                 index.add_polygon(poly, attrs)
                 idx.matched[i] = True
-            else:
-                if ranks:
-                    score, props, poly, idx, i = ranks[0]
-                    top_matches.append((ranks[0][0], [safe_decode(attrs[k]) for k in OSM_NAME_TAGS if k in attrs], safe_decode(props['name'])))
-
-                non_match.append((node_id, attrs))
 
             num_polys += 1
             if num_polys % 1000 == 0 and num_polys > 0:
@@ -705,8 +699,6 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                     continue
             poly = index.simplify_polygon(poly)
             index.add_polygon(poly, props)
-            # Even if this is a MultiPolygon, only increment the id once per relation
-            polygon_index += 1
 
         return index
 
