@@ -32,7 +32,7 @@ class PolygonIndex(object):
         if index_filename:
             self.index_path = os.path.join(save_dir or '.', index_filename)
         else:
-            self.index_path = None
+            self.index_path = os.path.join(save_dir or '.', self.INDEX_FILENAME)
 
         if not index:
             self.create_index(overwrite=True)
