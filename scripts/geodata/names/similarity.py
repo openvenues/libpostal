@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import Levenshtein
 from collections import OrderedDict
 
