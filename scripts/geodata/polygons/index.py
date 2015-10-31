@@ -162,7 +162,7 @@ class PolygonIndex(object):
 
     def save(self, polys_filename=DEFAULT_POLYS_FILENAME):
         self.save_polygons(os.path.join(self.save_dir, polys_filename))
-        self.save_index(index_filename=self.index_path)
+        self.save_index()
 
     def save_polygons(self, out_filename):
         out = open(out_filename, 'w')
@@ -295,6 +295,8 @@ class GeohashPolygonIndex(PolygonIndex):
         return candidates
 
     def save_index(self):
+        if not self.index_path:
+            self.index_path = os.path.join(self.save_dir or '.', self.INDEX_FILENAME)
         json.dump(self.index, open(self.index_path, 'w'))
 
     @classmethod
