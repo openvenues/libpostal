@@ -173,6 +173,11 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         'local_admin': 1,
     }
 
+    regex_replacements = [
+        # Paris arrondissements, listed like "PARIS-1ER-ARRONDISSEMENT" in Quqttroshapes
+        (re.compile('^paris-(?=[\d])', re.I), ''),
+    ]
+
     @classmethod
     def clone_repo(cls, path):
         subprocess.check_call(['rm', '-rf', path])
@@ -305,6 +310,8 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                     max_sim = 0.0
                     arg_max = None
 
+                    normalized_qs_names = {}
+
                     for osm_name in osm_names:
 
                         contains_ideographs = any(((char_scripts[ord(c)] or '').lower() in ideographic_scripts
@@ -312,9 +319,14 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
                         for i in candidates:
                             props, poly = idx.polygons[i]
-                            name = props.get('name')
+                            name = normalized_names.get(i)
                             if not name:
-                                continue
+                                name = props.get('name')
+                                if not name:
+                                    continue
+                                for pattern, repl in cls.regex_replacements:
+                                    name = pattern.sub(repl, name)
+                                normalized_names[i] = name
 
                             level = props.get(QuattroshapesReverseGeocoder.LEVEL)
                             if is_neighborhood and level != 'neighborhood':
@@ -363,7 +375,8 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                 if idx is zs or props.get(QuattroshapesReverseGeocoder.LEVEL, None) == 'neighborhood':
                     props['polygon_type'] = 'neighborhood'
                 else:
-                    props['polygon_type'] = 'local_admin'
+                    # We don't actually care about local admin polygons unless they match OSM
+                    continue
                 index.index_polygon(poly.context)
                 index.add_polygon(poly.context, props)
 
