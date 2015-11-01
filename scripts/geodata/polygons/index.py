@@ -104,7 +104,8 @@ class PolygonIndex(object):
         '''
         if not coords or len(coords) < 3:
             return None
-        return Polygon(coords)
+        poly = Polygon(coords)
+        return cls.fix_polygon(poly)
 
     def add_geojson_like_record(self, rec, include_only_properties=None):
         if not rec or not rec.get('geometry') or 'type' not in rec['geometry']:

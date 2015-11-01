@@ -23,7 +23,6 @@ import sys
 import tempfile
 
 from functools import partial
-from shapely.geos import TopologicalError
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
@@ -688,19 +687,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                     if poly is None or not poly.bounds or len(poly.bounds) != 4:
                         continue
                     # Figure out which outer polygon contains each inner polygon
-                    try:
-                        interior = [p2 for p2 in inner if poly.contains(p2)]
-                    except TopologicalError:
-                        poly = cls.fix_polygon(poly)
-                        fixed_inner = []
-                        for p in inner:
-                            p = cls.fix_polygon(p)
-                            if p.type != 'MultiPolygon':
-                                fixed_inner.append(p)
-                            else:
-                                fixed_inner.extend(p)
-                        inner = fixed_inner
-                        interior = [p2 for p2 in inner if poly.contains(p2)]
+                    interior = [p2 for p2 in inner if poly.contains(p2)]
 
                     if interior:
                         # Polygon with holes constructor
