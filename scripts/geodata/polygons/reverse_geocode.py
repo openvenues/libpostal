@@ -319,14 +319,14 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
                         for i in candidates:
                             props, poly = idx.polygons[i]
-                            name = normalized_names.get(i)
+                            name = normalized_qs_names.get(i)
                             if not name:
                                 name = props.get('name')
                                 if not name:
                                     continue
                                 for pattern, repl in cls.regex_replacements:
                                     name = pattern.sub(repl, name)
-                                normalized_names[i] = name
+                                normalized_qs_names[i] = name
 
                             level = props.get(QuattroshapesReverseGeocoder.LEVEL)
                             if is_neighborhood and level != 'neighborhood':
