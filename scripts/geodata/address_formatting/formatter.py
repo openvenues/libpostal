@@ -39,11 +39,25 @@ class AddressFormatter(object):
     HOUSE_NUMBER = 'house_number'
     ROAD = 'road'
     SUBURB = 'suburb'
+    CITY_DISTRICT = 'city_district'
     CITY = 'city'
     STATE = 'state'
     STATE_DISTRICT = 'state_district'
     POSTCODE = 'postcode'
     COUNTRY = 'country'
+
+    address_formatter_fields = set([
+        HOUSE,
+        HOUSE_NUMBER,
+        ROAD,
+        SUBURB,
+        CITY,
+        CITY_DISTRICT,
+        STATE,
+        STATE_DISTRICT,
+        POSTCODE,
+        COUNTRY,
+    ])
 
     aliases = OrderedDict([
         ('name', HOUSE),
@@ -86,12 +100,14 @@ class AddressFormatter(object):
         ('hamlet', CITY),
         ('neighborhood', SUBURB),
         ('neighbourhood', SUBURB),
-        ('city_district', SUBURB),
+        ('city_district', CITY_DISTRICT),
         ('state_code', STATE),
         ('country_name', COUNTRY),
         ('postal_code', POSTCODE),
         ('post_code', POSTCODE),
     ])
+
+    prioritized_aliases = {k: i for i, k in enumerate(aliases)}
 
     MINIMAL_COMPONENT_KEYS = [
         (ROAD, HOUSE_NUMBER),
