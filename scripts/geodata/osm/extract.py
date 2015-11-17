@@ -6,12 +6,25 @@ Extracts nodes/ways/relations, their metadata and dependencies
 from .osm XML files.
 '''
 
+import os
 import re
+import sys
 import urllib
+import ujson as json
 import HTMLParser
 
 from collections import OrderedDict
 from lxml import etree
+
+this_dir = os.path.realpath(os.path.dirname(__file__))
+sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
+
+from geodata.address_formatting.formatter import AddressFormatter
+from geodata.csv_utils import unicode_csv_reader
+
+
+OSM_BOUNDARIES_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
+                                  'resources', 'boundaries', 'osm')
 
 from geodata.encoding import safe_decode
 
@@ -111,3 +124,37 @@ def osm_wikipedia_title_and_language(key, value):
             value = value.rsplit(u':', 1)[-1]
 
     return normalize_wikipedia_title(value), language
+
+
+class OSMAddressComponents(object):
+    ADMIN_LEVEL = 'admin_level'
+
+    global_keys = {
+        'place': {
+            'city': AddressFormatter.CITY,
+            'suburb': AddressFormatter.SUBURB
+        }
+    }
+
+    def __init__(self):
+        self.config = {}
+
+    def configure(self, d=OSM_BOUNDARIES_DIR):
+        for filename in os.listdir(d):
+            if not filename.endswith('.json'):
+                continue
+
+            country_code = filename.rsplit('.json', 1)[0]
+            data = json.load(open(os.path.join(d, filename)))
+            for prop, values in data.iteritems():
+                for k, v in values.iteritems():
+                    if v not in AddressFormatter.address_formatter_fields:
+                        raise ValueError(u'Invalid value in {} for prop={}, key={}: {}'.format(filename, prop, k, v))
+            self.config[country_code] = data
+
+        self.config[None] = self.global_keys
+
+    def get_component(self, country, prop, value):
+        return self.config.get(country, {}).get(prop, {}).get(value, None)
+
+osm_address_components = OSMAddressComponents()
