@@ -9,7 +9,7 @@ from postal.text.tokenize import tokenize, tokenize_raw, token_types
 from collections import OrderedDict
 from itertools import ifilter
 
-FORMATTER_GIT_REPO = 'https://github.com/OpenCageData/address-formatting'
+FORMATTER_GIT_REPO = 'https://github.com/openvenues/address-formatting'
 
 
 class AddressFormatter(object):
@@ -101,6 +101,7 @@ class AddressFormatter(object):
         ('neighborhood', SUBURB),
         ('neighbourhood', SUBURB),
         ('city_district', CITY_DISTRICT),
+        ('county', STATE_DISTRICT),
         ('state_code', STATE),
         ('country_name', COUNTRY),
         ('postal_code', POSTCODE),
@@ -134,14 +135,14 @@ class AddressFormatter(object):
             if hasattr(value, 'items'):
                 address_template = value.get('address_template')
                 if address_template:
-                    value['address_template'] = self.add_suburb_tags(address_template)
+                    value['address_template'] = self.add_postprocessing_tags(address_template)
 
                 post_format_replacements = value.get('postformat_replace')
                 if post_format_replacements:
                     value['postformat_replace'] = [[pattern, replacement.replace('$', '\\')] for pattern, replacement in post_format_replacements]
             else:
                 address_template = value
-                config[key] = self.add_suburb_tags(value)
+                config[key] = self.add_postprocessing_tags(value)
         self.config = config
 
     def component_aliases(self):
@@ -163,17 +164,44 @@ class AddressFormatter(object):
     def country_template(self, c):
         return self.config.get(c, self.config['default'])
 
-    post_suburb_keys = re.compile('|'.join((CITY, STATE, STATE_DISTRICT, POSTCODE, COUNTRY)), re.I)
+    postprocessing_tags = [
+        (SUBURB, (ROAD,), (CITY_DISTRICT, CITY, STATE_DISTRICT, STATE, POSTCODE, COUNTRY)),
+        (CITY_DISTRICT, (ROAD, SUBURB), (CITY, STATE_DISTRICT, STATE)),
+        (STATE_DISTRICT, (SUBURB, CITY_DISTRICT, CITY), (STATE,))
+    ]
 
-    def add_suburb_tags(self, template):
-        suburb_included = 'suburb' in template
-        new_components = []
-        for line in template.split('\n'):
-            post_suburb = self.post_suburb_keys.search(line)
-            new_components.append(line.rstrip('\n'))
-            if u'road' in line and not suburb_included and not post_suburb:
-                new_components.append(u'{{{suburb}}}')
-        return u'\n'.join(new_components)
+    template_tag_replacements = [
+        ('county', STATE_DISTRICT),
+    ]
+
+    def add_postprocessing_tags(self, template):
+        is_reverse = False
+        if self.COUNTRY in template and self.ROAD in template:
+            is_reverse = template.index(self.COUNTRY) < template.index(self.ROAD)
+        elif self.STATE in template and self.ROAD in template:
+            is_reverse = template.index(self.STATE) < template.index(self.ROAD)
+        else:
+            raise ValueError('Template did not contain road and {state, country}')
+
+        for key, pre_keys, post_keys in self.postprocessing_tags:
+            key_included = key in template
+            new_components = []
+            if key_included:
+                continue
+
+            for line in template.split('\n'):
+                pre_key = re.compile('|'.join(pre_keys)).search(line)
+                post_key = re.compile('|'.join(post_keys)).search(line)
+                if post_key and not pre_key and not key_included:
+                    if not is_reverse:
+                        new_components.append(u'{{{{{{{key}}}}}}}'.format(key=key))
+                        key_included = True
+                new_components.append(line.rstrip('\n'))
+                if post_key and not pre_key and not key_included and is_reverse:
+                    new_components.append(u'{{{{{{{key}}}}}}}'.format(key=key))
+                    key_included = True
+            template = u'\n'.join(new_components)
+        return template
 
     def render_template(self, template, components, tagged=False):
         def render_first(text):
