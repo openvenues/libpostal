@@ -611,6 +611,9 @@ class OSMReverseGeocoder(RTreePolygonIndex):
     for the dependency lookups and Tarjan's algorithm for finding strongly connected
     components to stitch together the polygons.
     '''
+
+    ADMIN_LEVEL = 'admin_level'
+
     include_property_patterns = set([
         'name',
         'name:*',
@@ -622,6 +625,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         'short_name',
         'short_name:*',
         'admin_level',
+        'place',
         'wikipedia',
         'wikipedia:*',
     ])
@@ -715,6 +719,13 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
         return index
 
+    def sort_level(self, i):
+        props, p = self.polygons[i]
+        return self.sort_levels.get(props[self.ADMIN_LEVEL], 0)
+
+    def get_candidate_polygons(self, lat, lon, all_levels=False):
+        candidates = super(OSMReverseGeocoder, self).get_candidate_polygons(lat, lon, all_levels=all_levels)
+        return sorted(candidates, key=self.sort_level, reverse=True)
 
 if __name__ == '__main__':
     # Handle argument parsing here
