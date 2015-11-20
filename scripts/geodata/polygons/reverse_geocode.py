@@ -721,10 +721,10 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
     def sort_level(self, i):
         props, p = self.polygons[i]
-        return self.sort_levels.get(props[self.ADMIN_LEVEL], 0)
+        return int(props.get(self.ADMIN_LEVEL, 0))
 
-    def get_candidate_polygons(self, lat, lon, all_levels=False):
-        candidates = super(OSMReverseGeocoder, self).get_candidate_polygons(lat, lon, all_levels=all_levels)
+    def get_candidate_polygons(self, lat, lon):
+        candidates = super(OSMReverseGeocoder, self).get_candidate_polygons(lat, lon)
         return sorted(candidates, key=self.sort_level, reverse=True)
 
 if __name__ == '__main__':
