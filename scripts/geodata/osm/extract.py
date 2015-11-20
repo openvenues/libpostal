@@ -127,34 +127,56 @@ def osm_wikipedia_title_and_language(key, value):
 
 
 class OSMAddressComponents(object):
+    '''
+    Keeps a map of OSM keys and values to the standard components
+    of an address like city, state, etc. used for address formatting.
+    When we reverse geocode a point, it will fall into a number of
+    polygons, and we simply need to assign the names of said polygons
+    to an address field.
+    '''
+
     ADMIN_LEVEL = 'admin_level'
 
+    # These keys are country-independent
     global_keys = {
         'place': {
+            'country': AddressFormatter.COUNTRY,
+            'state': AddressFormatter.STATE,
+            'region': AddressFormatter.STATE,
+            'province': AddressFormatter.STATE,
+            'county': AddressFormatter.STATE_DISTRICT,
+            'municipality': AddressFormatter.CITY,
             'city': AddressFormatter.CITY,
-            'suburb': AddressFormatter.SUBURB
+            'town': AddressFormatter.CITY,
+            'village': AddressFormatter.CITY,
+            'hamlet': AddressFormatter.CITY,
+            'borough': AddressFormatter.CITY_DISTRICT,
+            'suburb': AddressFormatter.SUBURB,
+            'quarter': AddressFormatter.SUBURB,
+            'neighbourhood': AddressFormatter.SUBURB
         }
     }
 
     def __init__(self):
         self.config = {}
 
-    def configure(self, d=OSM_BOUNDARIES_DIR):
-        for filename in os.listdir(d):
+    def configure(self, boundaries_dir=OSM_BOUNDARIES_DIR):
+        for filename in os.listdir(boundaries_dir):
             if not filename.endswith('.json'):
                 continue
 
             country_code = filename.rsplit('.json', 1)[0]
-            data = json.load(open(os.path.join(d, filename)))
+            data = json.load(open(os.path.join(boundaries_dir, filename)))
             for prop, values in data.iteritems():
                 for k, v in values.iteritems():
                     if v not in AddressFormatter.address_formatter_fields:
                         raise ValueError(u'Invalid value in {} for prop={}, key={}: {}'.format(filename, prop, k, v))
             self.config[country_code] = data
 
-        self.config[None] = self.global_keys
-
     def get_component(self, country, prop, value):
-        return self.config.get(country, {}).get(prop, {}).get(value, None)
+        props = self.config.get(country, {}).get(prop, {})
+        if not props and prop in self.global_keys:
+            props = self.global_keys[prop]
+        return props.get(value, None)
 
 osm_address_components = OSMAddressComponents()
