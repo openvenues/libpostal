@@ -12,25 +12,25 @@ plenty of disk space. The following commands can be used in parallel to create
 all the training sets:
 
 Ways:
-python osm_address_training_data.py -s $(OSM_DIR)/planet-ways.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+python osm_address_training_data.py -s $(OSM_DIR)/planet-ways.osm --language-rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
 
 Venues:
-python osm_address_training_data.py -v $(OSM_DIR)/planet-venues.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+python osm_address_training_data.py -v $(OSM_DIR)/planet-venues.osm --language-rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
 
 Address streets:
-python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm --language-rtree-dir=$(LANG_RTREE_DIR) -o $(OUT_DIR)
 
 Limited formatted addresses:
-python osm_address_training_data.py -a -l $(OSM_DIR)/planet-addresses.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+python osm_address_training_data.py -a -l $(OSM_DIR)/planet-addresses.osm --language-rtree-dir=$(LANG_RTREE_DIR) --rtree-dir=$(RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR)  -o $(OUT_DIR)
 
 Formatted addresses (tagged):
-python osm_address_training_data.py -a -f $(OSM_DIR)/planet-addresses.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+python osm_address_training_data.py -a -f $(OSM_DIR)/planet-addresses.osm --language-rtree-dir=$(LANG_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR) --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
 
 Formatted addresses (untagged):
-python osm_address_training_data.py -a -f -u $(OSM_DIR)/planet-addresses.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+python osm_address_training_data.py -a -f -u $(OSM_DIR)/planet-addresses.osm --language-rtree-dir=$(LANG_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR)  --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
 
 Toponyms:
-python osm_address_training_data.py -b $(OSM_DIR)/planet-borders.osm --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+python osm_address_training_data.py -b $(OSM_DIR)/planet-borders.osm --language-rtree-dir=$(LANG_RTREE_DIR) -o $(OUT_DIR)
 '''
 
 import argparse
@@ -61,7 +61,9 @@ from geodata.states.state_abbreviations import STATE_ABBREVIATIONS
 from geodata.language_id.polygon_lookup import country_and_languages
 from geodata.i18n.languages import *
 from geodata.address_formatting.formatter import AddressFormatter
+from geodata.osm.extract import *
 from geodata.polygons.language_polys import *
+from geodata.polygons.reverse_geocoder import ReverseGeocoder
 from geodata.i18n.unicode_paths import DATA_DIR
 
 from geodata.csv_utils import *
@@ -69,17 +71,11 @@ from geodata.file_utils import *
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
-WAY_OFFSET = 10 ** 15
-RELATION_OFFSET = 2 * 10 ** 15
-
 # Input files
 PLANET_ADDRESSES_INPUT_FILE = 'planet-addresses.osm'
 PLANET_WAYS_INPUT_FILE = 'planet-ways.osm'
 PLANET_VENUES_INPUT_FILE = 'planet-venues.osm'
 PLANET_BORDERS_INPUT_FILE = 'planet-borders.osm'
-
-ALL_OSM_TAGS = set(['node', 'way', 'relation'])
-WAYS_RELATIONS = set(['way', 'relation'])
 
 # Output files
 WAYS_LANGUAGE_DATA_FILENAME = 'streets_by_language.tsv'
@@ -192,40 +188,10 @@ osm_fields = [
 ]
 
 
-# Currently, all our data sets are converted to nodes with osmconvert before parsing
-def parse_osm(filename, allowed_types=ALL_OSM_TAGS):
-    f = open(filename)
-    parser = etree.iterparse(f)
-
-    single_type = len(allowed_types) == 1
-
-    for (_, elem) in parser:
-        elem_id = long(elem.attrib.pop('id', 0))
-        item_type = elem.tag
-        if elem_id >= WAY_OFFSET and elem_id < RELATION_OFFSET:
-            elem_id -= WAY_OFFSET
-            item_type = 'way'
-        elif elem_id >= RELATION_OFFSET:
-            elem_id -= RELATION_OFFSET
-            item_type = 'relation'
-
-        if item_type in allowed_types:
-            attrs = OrderedDict(elem.attrib)
-            attrs.update(OrderedDict([(e.attrib['k'], e.attrib['v'])
-                         for e in elem.getchildren() if e.tag == 'tag']))
-            key = elem_id if single_type else '{}:{}'.format(item_type, elem_id)
-            yield key, attrs
-
-        if elem.tag != 'tag':
-            elem.clear()
-            while elem.getprevious() is not None:
-                del elem.getparent()[0]
-
-
 def write_osm_json(filename, out_filename):
     out = open(out_filename, 'w')
     writer = csv.writer(out, 'tsv_no_quote')
-    for key, attrs in parse_osm(filename):
+    for key, attrs, deps in parse_osm(filename):
         writer.writerow((key, json.dumps(attrs)))
     out.close()
 
@@ -243,63 +209,6 @@ def normalize_osm_name_tag(tag, script=False):
     return norm.split('_', 1)[0]
 
 
-beginning_re = re.compile('^[^0-9\-]+', re.UNICODE)
-end_re = re.compile('[^0-9]+$', re.UNICODE)
-
-latitude_dms_regex = re.compile(ur'^(-?[0-9]{1,2})[ ]*[ :°ºd][ ]*([0-5]?[0-9])?[ ]*[:\'\u2032m]?[ ]*([0-5]?[0-9](?:\.\d+)?)?[ ]*[:\?\"\u2033s]?[ ]*(N|n|S|s)?$', re.I | re.UNICODE)
-longitude_dms_regex = re.compile(ur'^(-?1[0-8][0-9]|0?[0-9]{1,2})[ ]*[ :°ºd][ ]*([0-5]?[0-9])?[ ]*[:\'\u2032m]?[ ]*([0-5]?[0-9](?:\.\d+)?)?[ ]*[:\?\"\u2033s]?[ ]*(E|e|W|w)?$', re.I | re.UNICODE)
-
-latitude_decimal_with_direction_regex = re.compile('^(-?[0-9][0-9](?:\.[0-9]+))[ ]*[ :°ºd]?[ ]*(N|n|S|s)$', re.I)
-longitude_decimal_with_direction_regex = re.compile('^(-?1[0-8][0-9]|0?[0-9][0-9](?:\.[0-9]+))[ ]*[ :°ºd]?[ ]*(E|e|W|w)$', re.I)
-
-
-def latlon_to_floats(latitude, longitude):
-    have_lat = False
-    have_lon = False
-
-    latitude = safe_decode(latitude).strip(u' ,;|')
-    longitude = safe_decode(longitude).strip(u' ,;|')
-
-    latitude = latitude.replace(u',', u'.')
-    longitude = longitude.replace(u',', u'.')
-
-    lat_dms = latitude_dms_regex.match(latitude)
-    lat_dir = latitude_decimal_with_direction_regex.match(latitude)
-
-    if lat_dms:
-        d, m, s, c = lat_dms.groups()
-        sign = direction_sign(c)
-        latitude = degrees_to_decimal(d or 0, m or 0, s or 0)
-        have_lat = True
-    elif lat_dir:
-        d, c = lat_dir.groups()
-        sign = direction_sign(c)
-        latitude = float(d) * sign
-        have_lat = True
-    else:
-        latitude = re.sub(beginning_re, u'', latitude)
-        latitude = re.sub(end_re, u'', latitude)
-
-    lon_dms = longitude_dms_regex.match(longitude)
-    lon_dir = longitude_decimal_with_direction_regex.match(longitude)
-
-    if lon_dms:
-        d, m, s, c = lon_dms.groups()
-        sign = direction_sign(c)
-        longitude = degrees_to_decimal(d or 0, m or 0, s or 0)
-        have_lon = True
-    elif lon_dir:
-        d, c = lon_dir.groups()
-        sign = direction_sign(c)
-        longitude = float(d) * sign
-        have_lon = True
-    else:
-        longitude = re.sub(beginning_re, u'', longitude)
-        longitude = re.sub(end_re, u'', longitude)
-
-    return float(latitude), float(longitude)
-
-
 def get_language_names(language_rtree, key, value, tag_prefix='name'):
     if not ('lat' in value and 'lon' in value):
         return None, None
@@ -309,7 +218,7 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
     tag_last_component = tag_prefix.split(':')[-1]
 
     try:
-        latitude, longitude = latlon_to_floats(value['lat'], value['lon'])
+        latitude, longitude = latlon_to_decimal(value['lat'], value['lon'])
     except Exception:
         return None, None
 
@@ -401,7 +310,7 @@ def build_ways_training_data(language_rtree, infile, out_dir):
     f = open(os.path.join(out_dir, WAYS_LANGUAGE_DATA_FILENAME), 'w')
     writer = csv.writer(f, 'tsv_no_quote')
 
-    for key, value in parse_osm(infile, allowed_types=WAYS_RELATIONS):
+    for key, value, deps in parse_osm(infile, allowed_types=WAYS_RELATIONS):
         country, name_language = get_language_names(language_rtree, key, value, tag_prefix='name')
         if not name_language:
             continue
@@ -425,7 +334,21 @@ def strip_keys(value, ignore_keys):
         value.pop(key, None)
 
 
-def build_address_format_training_data(language_rtree, infile, out_dir, tag_components=True):
+def osm_reverse_geocoded_components(address_components, admin_rtree, country, latitude, longitude):
+    ret = defaultdict(list)
+    for props in admin_rtree.point_in_poly(latitude, longitude, return_all=True):
+        name = props.get('name')
+        if not name:
+            continue
+
+        for k, v in props.iteritems():
+            normalized_key = osm_address_components.get_component(country, k, v)
+            if normalized_key:
+                ret[normalized_key].append(props)
+    return ret
+
+
+def build_address_format_training_data(admin_rtree, language_rtree, neighborhoods_rtree, infile, out_dir, tag_components=True):
     '''
     Creates formatted address training data for supervised sequence labeling (or potentially 
     for unsupervised learning e.g. for word vectors) using addr:* tags in OSM.
@@ -457,6 +380,7 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
     i = 0
 
     formatter = AddressFormatter()
+    osm_address_components.configure()
 
     if tag_components:
         formatted_tagged_file = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_TAGGED_FILENAME), 'w')
@@ -467,9 +391,9 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
 
     remove_keys = OSM_IGNORE_KEYS
 
-    for key, value in parse_osm(infile):
+    for key, value, deps in parse_osm(infile):
         try:
-            latitude, longitude = latlon_to_floats(value['lat'], value['lon'])
+            latitude, longitude = latlon_to_decimal(value['lat'], value['lon'])
         except Exception:
             continue
 
@@ -519,6 +443,8 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
         3. This is implicit, but with probability (1-b)(1-a), keep the country code
         '''
 
+        non_local_language = None
+
         # 1. use the country name in the current language or the country's local language
         if address_country and random.random() < 0.8:
             localized = None
@@ -532,8 +458,8 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
                 address_components[AddressFormatter.COUNTRY] = localized
         # 2. country's name in a language samples from the distribution of languages on the Internet
         elif address_country and random.random() < 0.5:
-            lang = sample_random_language()
-            lang_country = language_country_names.get(lang, {}).get(address_country.upper())
+            non_local_language = sample_random_language()
+            lang_country = language_country_names.get(non_local_language, {}).get(address_country.upper())
             if lang_country:
                 address_components[AddressFormatter.COUNTRY] = lang_country
         # 3. Implicit: the rest of the time keep the country code
@@ -553,6 +479,95 @@ def build_address_format_training_data(language_rtree, infile, out_dir, tag_comp
 
             if state_full_name and random.random() < 0.3:
                 address_components[AddressFormatter.STATE] = state_full_name
+
+        '''
+        OSM boundaries
+        --------------
+
+        For many addresses, the city, district, region, etc. are all implicitly
+        generated by the reverse geocoder e.g. we do not need an addr:city tag
+        to identify that 40.74, -74.00 is in New York City as well as its parent
+        geographies (New York county, New York state, etc.)
+
+        Where possible we augment the addr:* tags with some of the reverse-geocoded
+        relations from OSM.
+
+        Since addresses found on the web may have the same properties, we
+        include these qualifiers in the training data.
+        '''
+
+        osm_components = osm_reverse_geocoded_components(address_components, admin_rtree, country, latitude, longitude)
+        if osm_components:
+            if non_local_language is not None:
+                suffix = ':{}'.format(non_local_language)
+            else:
+                suffix = ''
+
+            name_key = ''.join(('name', suffix))
+            raw_name_key = 'name'
+            short_name_key = ''.join(('short_name', suffix))
+            raw_short_name_key = 'short_name'
+            alt_name_key = ''.join('alt_name', suffix)
+            raw_alt_name_key = 'alt_name'
+            official_name_key = ''.join('official_name', suffix)
+            raw_official_name_key = 'official_name'
+
+            poly_components = defaultdict(list)
+
+            for component, values in osm_components.iteritems():
+                seen = set()
+
+                # Choose which name to use with given probabilities
+                r = random.random()
+                if r < 0.1:
+                    # 10% of the time use the short name
+                    key = short_name_key
+                    raw_key = raw_short_name_key
+                elif r < 0.2:
+                    # 10% of the time use the official name
+                    key = official_name_key
+                    raw_key = raw_official_name_key
+                elif r < 0.3:
+                    # 10% of the time use the official name
+                    key = alt_name_key
+                    raw_key = raw_alt_name_key
+                else:
+                    # 70% of the time use the name tag
+                    key = name_key
+                    raw_key = raw_name_key
+
+                for value in values:
+                    name = value.get(key, value.get(raw_key))
+
+                    if not name:
+                        name = value.get(name_key, value.get(raw_name_key))
+
+                    if not name:
+                        continue
+
+                    if (component, name) not in seen:
+                        poly_components[component].append(name)
+                        seen.add((component, name))
+
+            for component, vals in poly_components.iteritems():
+                if component not in address_components:
+                    address_components[component] = u', '.join(vals)
+
+        '''
+        Neighborhoods
+        -------------
+
+        In some cities, neighborhoods may be included in a free-text address.
+
+        OSM includes many neighborhoods but only as points, rather than the polygons
+        needed to perform reverse-geocoding. We use a hybrid index containing
+        Quattroshapes/Zetashapes polygons matched fuzzily with OSM names (which are
+        on the whole of better quality).
+        '''
+
+        neighborhood = neighborhoods_rtree.point_in_poly(latitude, longitude)
+        if neighborhood and AddressFormatter.SUBURB not in address_components:
+            address_components[AddressFormatter.SUBURB] = neighborhood['name']
 
         # Version with all components
         formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=not tag_components)
@@ -601,7 +616,12 @@ COUNTRY_KEYS = (
     'country',
     'country_name',
     'addr:country',
+    'is_in:country',
+    'addr:country_code',
+    'country_code',
+    'is_in:country_code'
 )
+
 POSTAL_KEYS = (
     'postcode',
     'postal_code',
@@ -610,7 +630,7 @@ POSTAL_KEYS = (
 )
 
 
-def build_address_format_training_data_limited(language_rtree, infile, out_dir):
+def build_address_format_training_data_limited(rtree, language_rtree, infile, out_dir):
     '''
     Creates a special kind of formatted address training data from OSM's addr:* tags
     but are designed for use in language classification. These records are similar 
@@ -632,9 +652,9 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
 
     remove_keys = NAME_KEYS + COUNTRY_KEYS + POSTAL_KEYS + OSM_IGNORE_KEYS
 
-    for key, value in parse_osm(infile):
+    for key, value, deps in parse_osm(infile):
         try:
-            latitude, longitude = latlon_to_floats(value['lat'], value['lon'])
+            latitude, longitude = latlon_to_decimal(value['lat'], value['lon'])
         except Exception:
             continue
 
@@ -675,23 +695,6 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
             print 'did', i, 'formatted addresses'
 
 
-apposition_regex = re.compile('(.*[^\s])[\s]*\([\s]*(.*[^\s])[\s]*\)$', re.I)
-
-html_parser = HTMLParser.HTMLParser()
-
-
-def normalize_wikipedia_title(title):
-    match = apposition_regex.match(title)
-    if match:
-        title = match.group(1)
-
-    title = safe_decode(title)
-    title = html_parser.unescape(title)
-    title = urllib.unquote_plus(title)
-
-    return title.replace(u'_', u' ').strip()
-
-
 def build_toponym_training_data(language_rtree, infile, out_dir):
     '''
     Data set of toponyms by language and country which should assist
@@ -709,12 +712,12 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
     f = open(os.path.join(out_dir, TOPONYM_LANGUAGE_DATA_FILENAME), 'w')
     writer = csv.writer(f, 'tsv_no_quote')
 
-    for key, value in parse_osm(infile):
+    for key, value, deps in parse_osm(infile):
         if not sum((1 for k, v in value.iteritems() if k.startswith('name'))) > 0:
             continue
 
         try:
-            latitude, longitude = latlon_to_floats(value['lat'], value['lon'])
+            latitude, longitude = latlon_to_decimal(value['lat'], value['lon'])
         except Exception:
             continue
 
@@ -803,7 +806,7 @@ def build_address_training_data(langauge_rtree, infile, out_dir, format=False):
     f = open(os.path.join(out_dir, ADDRESS_LANGUAGE_DATA_FILENAME), 'w')
     writer = csv.writer(f, 'tsv_no_quote')
 
-    for key, value in parse_osm(infile):
+    for key, value, deps in parse_osm(infile):
         country, street_language = get_language_names(language_rtree, key, value, tag_prefix='addr:street')
         if not street_language:
             continue
@@ -830,7 +833,7 @@ def build_venue_training_data(language_rtree, infile, out_dir):
     f = open(os.path.join(out_dir, VENUE_LANGUAGE_DATA_FILENAME), 'w')
     writer = csv.writer(f, 'tsv_no_quote')
 
-    for key, value in parse_osm(infile):
+    for key, value, deps in parse_osm(infile):
         country, name_language = get_language_names(language_rtree, key, value, tag_prefix='name')
         if not name_language:
             continue
@@ -894,9 +897,21 @@ if __name__ == '__main__':
                         default=tempfile.gettempdir(),
                         help='Temp directory to use')
 
-    parser.add_argument('-r', '--rtree-dir',
+    parser.add_argument('-g', '--language-rtree-dir',
                         required=True,
                         help='Language RTree directory')
+
+    parser.add_argument('-r', '--osm-rtree-dir',
+                        default=None,
+                        help='OSM reverse geocoder RTree directory')
+
+    parser.add_argument('-q', '--quattroshapes-rtree-dir',
+                        default=None,
+                        help='Quattroshapes reverse geocoder RTree directory')
+
+    parser.add_argument('-n', '--neighborhoods-rtree-dir',
+                        default=None,
+                        help='Neighborhoods reverse geocoder RTree directory')
 
     parser.add_argument('-o', '--out-dir',
                         default=os.getcwd(),
@@ -907,7 +922,13 @@ if __name__ == '__main__':
     init_country_names()
     init_languages()
 
-    language_rtree = LanguagePolygonIndex.load(args.rtree_dir)
+    language_rtree = LanguagePolygonIndex.load(args.language_rtree_dir)
+    rtree = None
+    if args.osm_rtree_dir:
+        osm_rtree = OSMReverseGeocoder.load(args.osm_rtree_dir)
+
+    if args.quattroshapes_rtree_dir:
+        quattroshapes_rtree = QuattroshapesReverseGeocoder.load(args.quattroshapes_rtree_dir)
 
     street_types_gazetteer.configure()
 
@@ -916,11 +937,15 @@ if __name__ == '__main__':
         build_ways_training_data(language_rtree, args.streets_file, args.out_dir)
     if args.borders_file:
         build_toponym_training_data(language_rtree, args.borders_file, args.out_dir)
+
     if args.address_file and not args.format_only and not args.limited_addresses:
         build_address_training_data(language_rtree, args.address_file, args.out_dir)
+    elif args.address_file and rtree is None:
+        parser.error('--rtree-dir required for formatted addresses')
+
     if args.address_file and args.format_only:
-        build_address_format_training_data(language_rtree, args.address_file, args.out_dir, tag_components=not args.untagged)
+        build_address_format_training_data(rtree, language_rtree, args.address_file, args.out_dir, tag_components=not args.untagged)
     if args.address_file and args.limited_addresses:
-        build_address_format_training_data_limited(language_rtree, args.address_file, args.out_dir)
+        build_address_format_training_data_limited(rtree, language_rtree, args.address_file, args.out_dir)
     if args.venues_file:
-        build_venue_training_data(language_rtree, args.venues_file, args.out_dir)
+        build_venue_training_data(rtree, language_rtree, args.venues_file, args.out_dir)
