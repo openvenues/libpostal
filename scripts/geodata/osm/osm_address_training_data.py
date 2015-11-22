@@ -901,7 +901,7 @@ if __name__ == '__main__':
                         required=True,
                         help='Language RTree directory')
 
-    parser.add_argument('-r', '--osm-rtree-dir',
+    parser.add_argument('-r', '--rtree-dir',
                         default=None,
                         help='OSM reverse geocoder RTree directory')
 
