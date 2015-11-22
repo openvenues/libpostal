@@ -32,7 +32,7 @@ class LanguagePolygonIndex(RTreePolygonIndex):
                                admin1_shapefile,
                                admin1_region_file,
                                output_dir,
-                               index_filename=DEFAULT_INDEX_FILENAME,
+                               index_filename=None,
                                polys_filename=DEFAULT_POLYS_FILENAME):
 
         init_languages()
