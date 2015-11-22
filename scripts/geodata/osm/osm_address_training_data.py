@@ -923,7 +923,7 @@ if __name__ == '__main__':
     init_languages()
 
     language_rtree = LanguagePolygonIndex.load(args.language_rtree_dir)
-    rtree = None
+    osm_rtree = None
     if args.rtree_dir:
         osm_rtree = OSMReverseGeocoder.load(args.rtree_dir)
 
@@ -940,7 +940,7 @@ if __name__ == '__main__':
 
     if args.address_file and not args.format_only and not args.limited_addresses:
         build_address_training_data(language_rtree, args.address_file, args.out_dir)
-    elif args.address_file and rtree is None:
+    elif args.address_file and osm_rtree is None:
         parser.error('--rtree-dir required for formatted addresses')
 
     if args.address_file and args.format_only:
