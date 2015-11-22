@@ -130,7 +130,7 @@ class DictionaryPhraseFilter(PhraseFilter):
 
     def filter(self, tokens):
         for c, t, data in self.basic_filter(tokens):
-            if c != token_types.PHRASE:
+            if c is not token_types.PHRASE:
                 token = t[1]
                 token_len = len(token)
 
@@ -206,7 +206,7 @@ def disambiguate_language(text, languages):
     seen_languages = set()
 
     for c, t, data in street_types_gazetteer.filter(tokens):
-        if c == token_types.PHRASE:
+        if c is token_types.PHRASE:
             valid = []
             data = [d.split('|') for d in data]
             potentials = [l for l, c, s in data if l in valid_languages]
