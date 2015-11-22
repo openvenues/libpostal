@@ -508,9 +508,9 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
             raw_name_key = 'name'
             short_name_key = ''.join(('short_name', suffix))
             raw_short_name_key = 'short_name'
-            alt_name_key = ''.join('alt_name', suffix)
+            alt_name_key = ''.join(('alt_name', suffix))
             raw_alt_name_key = 'alt_name'
-            official_name_key = ''.join('official_name', suffix)
+            official_name_key = ''.join(('official_name', suffix))
             raw_official_name_key = 'official_name'
 
             poly_components = defaultdict(list)
