@@ -927,8 +927,9 @@ if __name__ == '__main__':
     if args.rtree_dir:
         osm_rtree = OSMReverseGeocoder.load(args.rtree_dir)
 
-    if args.quattroshapes_rtree_dir:
-        quattroshapes_rtree = QuattroshapesReverseGeocoder.load(args.quattroshapes_rtree_dir)
+    neighborhoods_rtree = None
+    if args.neighborhoods_rtree_dir:
+        neighborhoods_rtree = NeighborhoodReverseGeocoder.load(args.neighborhoods_rtree_dir)
 
     street_types_gazetteer.configure()
 
@@ -944,8 +945,8 @@ if __name__ == '__main__':
         parser.error('--rtree-dir required for formatted addresses')
 
     if args.address_file and args.format_only:
-        build_address_format_training_data(rtree, language_rtree, args.address_file, args.out_dir, tag_components=not args.untagged)
+        build_address_format_training_data(osm_rtree, language_rtree, neighborhoods_rtree, args.address_file, args.out_dir, tag_components=not args.untagged)
     if args.address_file and args.limited_addresses:
-        build_address_format_training_data_limited(rtree, language_rtree, args.address_file, args.out_dir)
+        build_address_format_training_data_limited(osm_rtree, language_rtree, neighborhoods_rtree, args.address_file, args.out_dir)
     if args.venues_file:
-        build_venue_training_data(rtree, language_rtree, args.venues_file, args.out_dir)
+        build_venue_training_data(language_rtree, args.venues_file, args.out_dir)
