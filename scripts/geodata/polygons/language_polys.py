@@ -126,7 +126,7 @@ class LanguagePolygonIndex(RTreePolygonIndex):
     @classmethod
     def create_with_quattroshapes(cls, quattroshapes_dir,
                                   output_dir,
-                                  index_filename=DEFAULT_INDEX_FILENAME,
+                                  index_filename=None,
                                   polys_filename=DEFAULT_POLYS_FILENAME):
         admin0_filename = os.path.join(quattroshapes_dir, 'qs_adm0.shp')
         admin1_filename = os.path.join(quattroshapes_dir, 'qs_adm1.shp')
