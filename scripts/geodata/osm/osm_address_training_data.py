@@ -335,7 +335,7 @@ def strip_keys(value, ignore_keys):
         value.pop(key, None)
 
 
-def osm_reverse_geocoded_components(address_components, admin_rtree, country, latitude, longitude):
+def osm_reverse_geocoded_components(admin_rtree, country, latitude, longitude):
     ret = defaultdict(list)
     for props in admin_rtree.point_in_poly(latitude, longitude, return_all=True):
         name = props.get('name')
@@ -446,8 +446,10 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
 
         non_local_language = None
 
-        # 1. use the country name in the current language or the country's local language
-        if address_country and random.random() < 0.8:
+        r = random.random()
+
+        # 1. 60% of the time: use the country name in the current language or the country's local language
+        if address_country and r < 0.6:
             localized = None
             if language and language not in (AMBIGUOUS_LANGUAGE, UNKNOWN_LANGUAGE):
                 localized = language_country_names.get(language, {}).get(address_country.upper())
@@ -457,8 +459,8 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
 
             if localized:
                 address_components[AddressFormatter.COUNTRY] = localized
-        # 2. country's name in a language samples from the distribution of languages on the Internet
-        elif address_country and random.random() < 0.5:
+        # 2. 10% of the time: country's name in a language samples from the distribution of languages on the Internet
+        elif address_country and r < 0.7:
             non_local_language = sample_random_language()
             lang_country = language_country_names.get(non_local_language, {}).get(address_country.upper())
             if lang_country:
@@ -497,7 +499,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
         include these qualifiers in the training data.
         '''
 
-        osm_components = osm_reverse_geocoded_components(address_components, admin_rtree, country, latitude, longitude)
+        osm_components = osm_reverse_geocoded_components(admin_rtree, country, latitude, longitude)
         if osm_components:
             if non_local_language is not None:
                 suffix = ':{}'.format(non_local_language)
