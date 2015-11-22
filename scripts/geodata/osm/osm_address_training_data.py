@@ -63,7 +63,7 @@ from geodata.i18n.languages import *
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.osm.extract import *
 from geodata.polygons.language_polys import *
-from geodata.polygons.reverse_geocoder import ReverseGeocoder
+from geodata.polygons.reverse_geocode import OSMReverseGeocoder
 from geodata.i18n.unicode_paths import DATA_DIR
 
 from geodata.csv_utils import *
