@@ -924,8 +924,8 @@ if __name__ == '__main__':
 
     language_rtree = LanguagePolygonIndex.load(args.language_rtree_dir)
     rtree = None
-    if args.osm_rtree_dir:
-        osm_rtree = OSMReverseGeocoder.load(args.osm_rtree_dir)
+    if args.rtree_dir:
+        osm_rtree = OSMReverseGeocoder.load(args.rtree_dir)
 
     if args.quattroshapes_rtree_dir:
         quattroshapes_rtree = QuattroshapesReverseGeocoder.load(args.quattroshapes_rtree_dir)
