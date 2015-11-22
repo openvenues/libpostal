@@ -225,7 +225,7 @@ class PolygonIndex(object):
 
 
 class RTreePolygonIndex(PolygonIndex):
-    INDEX_FILENAME = 'index.rtree'
+    INDEX_FILENAME = 'rtree'
 
     def create_index(self, overwrite=False):
         self.index = rtree.index.Index(self.index_path, overwrite=overwrite)
