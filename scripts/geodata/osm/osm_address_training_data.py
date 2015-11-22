@@ -54,6 +54,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
 
+from geodata.coordinates.conversion import *
 from geodata.countries.country_names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
