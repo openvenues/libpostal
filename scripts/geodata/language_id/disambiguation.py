@@ -197,7 +197,7 @@ def disambiguate_language(text, languages):
         read_len += script_len
 
     num_defaults = sum((1 for lang, default in valid_languages.iteritems() if default))
-    tokens = [(c, t.rstrip('.')) for c, t in tokenize(safe_decode(text).replace(u'-', u' ').lower())]
+    tokens = [(c, t.rstrip('.')) for t, c in tokenize(safe_decode(text).replace(u'-', u' ').lower())]
 
     current_lang = None
     possible_lang = None
