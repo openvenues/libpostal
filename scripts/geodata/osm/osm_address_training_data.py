@@ -447,10 +447,11 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
 
         non_local_language = None
 
-        r = random.random()
-        if r < 0.2:
-            # 20% of the time: add Quattroshapes country
+        if random.random() < 0.3:
+            # 30% of the time: add Quattroshapes country
             address_country = country.upper()
+
+        r = random.random()
 
         # 1. 60% of the time: use the country name in the current language or the country's local language
         if address_country and r < 0.6:
