@@ -6,7 +6,7 @@ import subprocess
 import yaml
 
 from postal.text.tokenize import tokenize, tokenize_raw, token_types
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from itertools import ifilter
 
 FORMATTER_GIT_REPO = 'https://github.com/openvenues/address-formatting'
@@ -155,11 +155,22 @@ class AddressFormatter(object):
             for a in c.get('aliases', []):
                 self.aliases[a] = name
 
+    def key_priority(self, key):
+        return self.prioritized_aliases.get(key, len(self.prioritized_aliases))
+
     def replace_aliases(self, components):
+        replacements = defaultdict(list)
+        values = {}
         for k in components.keys():
             new_key = self.aliases.get(k)
             if new_key and new_key not in components:
-                components[new_key] = components.pop(k)
+                value = components.pop(k)
+                values[k] = value
+                replacements[new_key].append(k)
+        for key, source_keys in replacements.iteritems():
+            source_keys.sort(key=self.key_priority)
+            value = values[source_keys[0]]
+            components[key] = value
 
     def country_template(self, c):
         return self.config.get(c, self.config['default'])
