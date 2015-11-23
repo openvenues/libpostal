@@ -411,11 +411,12 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                 language = candidate_languages[0]['lang']
             else:
                 street = value.get('addr:street', None)
-                if street is None:
-                    continue
-                language = disambiguate_language(street, [(l['lang'], l['default']) for l in candidate_languages])
+                if street is not None:
+                    language = disambiguate_language(street, [(l['lang'], l['default']) for l in candidate_languages])
+                else:
+                    language = UNKNOWN_LANGUAGE
 
-        address_components = {k: v for k, v in value.iteritems() if k.startswith('addr:') or k == 'name'}
+        address_components = {k: v for k, v in value.iteritems() if k in formatter.aliases}
         formatter.replace_aliases(address_components)
 
         address_country = address_components.get(AddressFormatter.COUNTRY)
@@ -447,6 +448,9 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
         non_local_language = None
 
         r = random.random()
+        if r < 0.2:
+            # 20% of the time: add Quattroshapes country
+            address_country = country.upper()
 
         # 1. 60% of the time: use the country name in the current language or the country's local language
         if address_country and r < 0.6:
@@ -510,10 +514,14 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
             raw_name_key = 'name'
             short_name_key = ''.join(('short_name', suffix))
             raw_short_name_key = 'short_name'
+            simple_name_key = 'name:simple'
+            international_name_key = 'int_name'
             alt_name_key = ''.join(('alt_name', suffix))
             raw_alt_name_key = 'alt_name'
             official_name_key = ''.join(('official_name', suffix))
             raw_official_name_key = 'official_name'
+            iso_code_key = 'ISO3166-1:alpha2'
+            iso_code3_key = 'ISO3166-1:alpha3'
 
             poly_components = defaultdict(list)
 
@@ -522,7 +530,23 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
 
                 # Choose which name to use with given probabilities
                 r = random.random()
-                if r < 0.1:
+                if iso_code_key in value and r < 0.3:
+                    if r < 0.1 and iso_code3_key in value:
+                        key = iso_code3_key
+                    else:
+                        key = iso_code_key
+                elif langauge == 'en' and r < 0.7:
+                    # Particularly to address the US (prefer United States,
+                    # not United States of America) but may capture variations
+                    # in other English-speaking countries as well.
+                    if simple_name_key in value:
+                        key = raw_key = simple_name_key
+                    elif international_name_key in value:
+                        key = raw_key = international_name_key
+                    else:
+                        key = name_key
+                        raw_key = raw_name_key
+                elif r < 0.1:
                     # 10% of the time use the short name
                     key = short_name_key
                     raw_key = raw_short_name_key
@@ -554,10 +578,10 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
 
             for component, vals in poly_components.iteritems():
                 if component not in address_components:
-                    value = u', '.join(vals)
+                    val = u', '.join(vals)
                     if component == AddressFormatter.STATE and random.random() < 0.7:
-                        value = STATE_EXPANSIONS.get(address_country, {}).get(value, value)
-                    address_components[component] = value
+                        val = STATE_EXPANSIONS.get(address_country, {}).get(val, val)
+                    address_components[component] = val
 
         '''
         Neighborhoods
