@@ -579,7 +579,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                         seen.add((component, name))
 
             for component, vals in poly_components.iteritems():
-                if component not in address_components:
+                if component not in address_components or non_local_language:
                     val = u', '.join(vals)
                     if component == AddressFormatter.STATE and random.random() < 0.7:
                         val = STATE_EXPANSIONS.get(address_country, {}).get(val, val)
