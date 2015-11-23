@@ -392,7 +392,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
 
     remove_keys = OSM_IGNORE_KEYS
 
-    for key, value, deps in parse_osm(infile):
+    for node_id, value, deps in parse_osm(infile):
         try:
             latitude, longitude = latlon_to_decimal(value['lat'], value['lon'])
         except Exception:
@@ -526,49 +526,50 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
 
             poly_components = defaultdict(list)
 
-            for component, values in osm_components.iteritems():
+            for component, components_values in osm_components.iteritems():
                 seen = set()
 
                 # Choose which name to use with given probabilities
                 r = random.random()
-                if iso_code_key in value and r < 0.3:
-                    if r < 0.1 and iso_code3_key in value:
-                        key = iso_code3_key
-                    else:
-                        key = iso_code_key
-                elif language == 'en' and not non_local_language and r < 0.7:
-                    # Particularly to address the US (prefer United States,
-                    # not United States of America) but may capture variations
-                    # in other English-speaking countries as well.
-                    if simple_name_key in value:
-                        key = raw_key = simple_name_key
-                    elif international_name_key in value:
-                        key = raw_key = international_name_key
-                    else:
-                        key = name_key
-                        raw_key = raw_name_key
-                elif r < 0.1:
-                    # 10% of the time use the short name
-                    key = short_name_key
-                    raw_key = raw_short_name_key
-                elif r < 0.2:
-                    # 10% of the time use the official name
-                    key = official_name_key
-                    raw_key = raw_official_name_key
-                elif r < 0.3:
-                    # 10% of the time use the official name
-                    key = alt_name_key
-                    raw_key = raw_alt_name_key
-                else:
+                if r < 0.7:
                     # 70% of the time use the name tag
                     key = name_key
                     raw_key = raw_name_key
+                elif r < 0.8:
+                    # 10% of the time use the short name
+                    key = short_name_key
+                    raw_key = raw_short_name_key
+                elif r < 0.9:
+                    # 10% of the time use the official name
+                    key = official_name_key
+                    raw_key = raw_official_name_key
+                else:
+                    # 10% of the time use the official name
+                    key = alt_name_key
+                    raw_key = raw_alt_name_key
 
-                for value in values:
-                    name = value.get(key, value.get(raw_key))
+                for component_value in components_values:
+                    r = random.random()
+                    name = None
+
+                    if iso_code3_key in component_value and r < 0.1:
+                        name = component_value[iso_code3_key]
+                    elif iso_code_key in component_value and r < 0.3:
+                        name = component_value[iso_code_key]
+                    elif language == 'en' and not non_local_language and r < 0.7:
+                        # Particularly to address the US (prefer United States,
+                        # not United States of America) but may capture variations
+                        # in other English-speaking countries as well.
+                        if simple_name_key in component_value:
+                            name = component_value[simple_name_key]
+                        elif international_name_key in component_value:
+                            name = component_value[international_name_key]
 
                     if not name:
-                        name = value.get(name_key, value.get(raw_name_key))
+                        name = component_value.get(key, component_value.get(raw_key))
+
+                    if not name:
+                        name = component_value.get(name_key, component_value.get(raw_name_key))
 
                     if not name:
                         continue
