@@ -535,7 +535,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                         key = iso_code3_key
                     else:
                         key = iso_code_key
-                elif langauge == 'en' and r < 0.7:
+                elif language == 'en' and not non_local_language and r < 0.7:
                     # Particularly to address the US (prefer United States,
                     # not United States of America) but may capture variations
                     # in other English-speaking countries as well.
