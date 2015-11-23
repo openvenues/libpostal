@@ -58,7 +58,7 @@ from geodata.coordinates.conversion import *
 from geodata.countries.country_names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
-from geodata.states.state_abbreviations import STATE_ABBREVIATIONS
+from geodata.states.state_abbreviations import STATE_ABBREVIATIONS, STATE_EXPANSIONS
 from geodata.language_id.polygon_lookup import country_and_languages
 from geodata.i18n.languages import *
 from geodata.address_formatting.formatter import AddressFormatter
@@ -554,7 +554,10 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
 
             for component, vals in poly_components.iteritems():
                 if component not in address_components:
-                    address_components[component] = u', '.join(vals)
+                    value = u', '.join(vals)
+                    if component == AddressFormatter.STATE and random.random() < 0.7:
+                        value = STATE_EXPANSIONS.get(address_country, {}).get(value, value)
+                    address_components[component] = value
 
         '''
         Neighborhoods

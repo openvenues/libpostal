@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from collections import defaultdict
 
 STATE_ABBREVIATIONS = {
     'US': {
@@ -83,3 +84,10 @@ STATE_ABBREVIATIONS = {
         'WA': {'en': 'Western Australia'},
     },
 }
+
+STATE_EXPANSIONS = defaultdict(dict)
+
+for country, values in STATE_ABBREVIATIONS.iteritems():
+    for abbrev, expansions in values.iteritems():
+        for lang, expansion in expansions.iteritems():
+            STATE_EXPANSIONS[country][expansion] = abbrev
