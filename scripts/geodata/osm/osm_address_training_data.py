@@ -662,7 +662,7 @@ POSTAL_KEYS = (
 )
 
 
-def build_address_format_training_data_limited(rtree, language_rtree, infile, out_dir):
+def build_address_format_training_data_limited(language_rtree, infile, out_dir):
     '''
     Creates a special kind of formatted address training data from OSM's addr:* tags
     but are designed for use in language classification. These records are similar 
