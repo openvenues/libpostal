@@ -703,7 +703,7 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
         have_country = False
 
         for k in remove_keys:
-            if k in country_keys_set:
+            if k in country_keys_set and k in value:
                 have_country = True
             _ = value.pop(k, None)
 
