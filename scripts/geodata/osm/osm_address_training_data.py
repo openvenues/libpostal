@@ -692,13 +692,19 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
 
     remove_keys = NAME_KEYS + HOUSE_NUMBER_KEYS + COUNTRY_KEYS + POSTAL_KEYS + OSM_IGNORE_KEYS
 
+    country_keys_set = set(COUNTRY_KEYS)
+
     for key, value, deps in parse_osm(infile):
         try:
             latitude, longitude = latlon_to_decimal(value['lat'], value['lon'])
         except Exception:
             continue
 
+        have_country = False
+
         for k in remove_keys:
+            if k in country_keys_set:
+                have_country = True
             _ = value.pop(k, None)
 
         if not value:
@@ -709,9 +715,16 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
             continue
 
         single_language = len(name_language) == 1
+
         for lang, val in name_language.iteritems():
             if lang not in languages:
                 continue
+
+            if have_country:
+                localized = language_country_names.get(lang, {}).get(country.upper())
+
+                if localized:
+                    value['addr:country:{}'.format(lang)] = localized
 
             address_dict = value.copy()
             for k in address_dict.keys():
