@@ -63,8 +63,8 @@ class OSMAdminPolygonReader(object):
     def node_coordinates(self, coords, indptr, idx):
         start_index = indptr[idx] * 2
         end_index = indptr[idx + 1] * 2
-        return zip(coords[start_index:end_index:2],
-                   coords[start_index + 1:end_index:2])
+        return zip(coords[start_index:end_index - 2:2],
+                   coords[start_index + 1:end_index - 1:2])
 
     def sparse_deps(self, data, indptr, idx):
         return [data[i] for i in xrange(indptr[idx], indptr[idx + 1])]
@@ -134,7 +134,7 @@ class OSMAdminPolygonReader(object):
 
             for way_id in component:
                 way_index = way_indices[way_id]
-                poly_nodes.extend(self.node_coordinates(self.way_coords, self.way_indptr, way_index))
+                poly_nodes.extend(self.node_coordinates(self.way_coords, self.way_indptr, way_index)[:-1])
 
             polys.append(poly_nodes)
 
