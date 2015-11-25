@@ -709,6 +709,8 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
 
         if have_country and random.random() < 0.4:
             have_country = False
+        elif not have_country and random.random() < 0.2:
+            have_country = True
 
         if not value:
             continue
