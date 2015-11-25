@@ -644,6 +644,13 @@ NAME_KEYS = (
     'name',
     'addr:housename',
 )
+
+HOUSE_NUMBER_KEYS = (
+    'addr:house_number',
+    'addr:housenumber',
+    'house_number'
+)
+
 COUNTRY_KEYS = (
     'country',
     'country_name',
@@ -673,16 +680,17 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
 
     Example:
 
-    nb      no      Olaf Ryes Plass 8 | Oslo
+    nb      no      Olaf Ryes Plass Oslo
     '''
     i = 0
 
-    formatter = AddressFormatter()
+    # Simple whitespace splitter is all that's necessary
+    formatter = AddressFormatter(splitter=' ')
 
     f = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME), 'w')
     writer = csv.writer(f, 'tsv_no_quote')
 
-    remove_keys = NAME_KEYS + COUNTRY_KEYS + POSTAL_KEYS + OSM_IGNORE_KEYS
+    remove_keys = NAME_KEYS + HOUSE_NUMBER_KEYS + COUNTRY_KEYS + POSTAL_KEYS + OSM_IGNORE_KEYS
 
     for key, value, deps in parse_osm(infile):
         try:
