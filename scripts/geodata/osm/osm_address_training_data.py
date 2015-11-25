@@ -685,7 +685,7 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
     i = 0
 
     # Simple whitespace splitter is all that's necessary
-    formatter = AddressFormatter(splitter=' ')
+    formatter = AddressFormatter(splitter=u' ')
 
     f = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME), 'w')
     writer = csv.writer(f, 'tsv_no_quote')
@@ -713,6 +713,9 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
         country, name_language = get_language_names(language_rtree, key, value, tag_prefix='addr:street')
         if not name_language:
             continue
+
+        if have_country:
+            value['addr:country'] = u''
 
         single_language = len(name_language) == 1
 
