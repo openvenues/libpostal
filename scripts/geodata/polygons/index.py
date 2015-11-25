@@ -92,7 +92,7 @@ class PolygonIndex(object):
         Coerce to valid polygon
         '''
         if not poly.is_valid:
-            poly = poly.buffer(cls.simplify_tolerance)
+            poly = poly.buffer(0)
             if not poly.is_valid:
                 return None
         return poly
