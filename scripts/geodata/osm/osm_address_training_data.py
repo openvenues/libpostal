@@ -740,7 +740,7 @@ def build_address_format_training_data_limited(language_rtree, infile, out_dir):
             if not address_dict:
                 continue
 
-            formatted_address_untagged = formatter.format_address(country, address_dict, tag_components=False)
+            formatted_address_untagged = formatter.format_address(country, address_dict, minimal_only=False, tag_components=False)
             if formatted_address_untagged is not None:
                 formatted_address_untagged = tsv_string(formatted_address_untagged)
 
