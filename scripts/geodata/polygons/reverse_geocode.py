@@ -566,13 +566,11 @@ class QuattroshapesReverseGeocoder(GeohashPolygonIndex):
         admin1r_filename = os.path.join(quattroshapes_dir, cls.ADMIN1_REGION_FILENAME)
         admin2_filename = os.path.join(quattroshapes_dir, cls.ADMIN2_FILENAME)
         admin2r_filename = os.path.join(quattroshapes_dir, cls.ADMIN2_REGION_FILENAME)
-        local_admin_filename = os.path.join(quattroshapes_dir, cls.LOCAL_ADMIN_FILENAME)
         localities_filename = os.path.join(quattroshapes_dir, cls.LOCALITIES_FILENAME)
-        neighborhoods_filename = os.path.join(quattroshapes_dir, cls.NEIGHBORHOODS_FILENAME)
 
         return cls.create_from_shapefiles([admin0_filename, admin1_filename, admin1r_filename,
                                           admin2_filename, admin2r_filename, local_admin_filename,
-                                          localities_filename, neighborhoods_filename],
+                                          localities_filename],
                                           output_dir, index_filename=index_filename,
                                           polys_filename=polys_filename)
 
