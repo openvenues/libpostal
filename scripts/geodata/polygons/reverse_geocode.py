@@ -569,7 +569,7 @@ class QuattroshapesReverseGeocoder(GeohashPolygonIndex):
         localities_filename = os.path.join(quattroshapes_dir, cls.LOCALITIES_FILENAME)
 
         return cls.create_from_shapefiles([admin0_filename, admin1_filename, admin1r_filename,
-                                          admin2_filename, admin2r_filename, local_admin_filename,
+                                          admin2_filename, admin2r_filename,
                                           localities_filename],
                                           output_dir, index_filename=index_filename,
                                           polys_filename=polys_filename)
