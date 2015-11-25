@@ -17,8 +17,6 @@ import re
 
 from geodata.encoding import safe_decode
 
-from decimal import Decimal
-
 beginning_re = re.compile('^[^0-9\-]+', re.UNICODE)
 end_re = re.compile('[^0-9]+$', re.UNICODE)
 
@@ -56,7 +54,7 @@ def degrees_to_decimal(degrees, minutes, seconds):
     return degrees + (minutes / 60.0) + (seconds / 3600.0)
 
 
-def latlon_to_decimal(latitude, longitude, return_type=Decimal):
+def latlon_to_decimal(latitude, longitude, return_type=float):
     have_lat = False
     have_lon = False
 
