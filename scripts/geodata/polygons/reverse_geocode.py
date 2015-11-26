@@ -252,7 +252,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         ensure_dir(qs_scratch_dir)
         logger.info('Creating Quattroshapes neighborhoods')
 
-        qs = QuattroshapesReverseGeocoder.create_neighborhoods_index(quattroshapes_dir, qs_scratch_dir)
+        qs = QuattroshapesNeighborhoodsReverseGeocoder.create_neighborhoods_index(quattroshapes_dir, qs_scratch_dir)
         logger.info('Creating Zetashapes neighborhoods')
         zs = cls.create_zetashapes_neighborhoods_index()
 
@@ -574,6 +574,16 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
                                           output_dir, index_filename=index_filename,
                                           polys_filename=polys_filename)
 
+    def sort_level(self, i):
+        props, p = self.polygons[i]
+        return self.sort_levels.get(props[self.LEVEL], 0)
+
+    def get_candidate_polygons(self, lat, lon):
+        candidates = super(QuattroshapesReverseGeocoder, self).get_candidate_polygons(lat, lon)
+        return sorted(candidates, key=self.sort_level, reverse=True)
+
+
+class QuattroshapesNeighborhoodsReverseGeocoder(GeohashPolygonIndex, QuattroshapesReverseGeocoder):
     @classmethod
     def create_neighborhoods_index(cls, quattroshapes_dir,
                                    output_dir,
@@ -584,14 +594,6 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
         return cls.create_from_shapefiles([local_admin_filename, neighborhoods_filename],
                                           output_dir, index_filename=index_filename,
                                           polys_filename=polys_filename)
-
-    def sort_level(self, i):
-        props, p = self.polygons[i]
-        return self.sort_levels.get(props[self.LEVEL], 0)
-
-    def get_candidate_polygons(self, lat, lon, return_all=False):
-        candidates = super(QuattroshapesReverseGeocoder, self).get_candidate_polygons(lat, lon, return_all=return_all)
-        return sorted(candidates, key=self.sort_level, reverse=True)
 
 
 class OSMReverseGeocoder(RTreePolygonIndex):
