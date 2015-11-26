@@ -277,7 +277,7 @@ class GeohashPolygonIndex(PolygonIndex):
         lat, lon = (bbox[1] + bbox[3]) / 2.0, (bbox[0] + bbox[2]) / 2.0
         self.index_point(lat, lon, geohash_level)
 
-    def get_candidate_polygons(self, lat, lon, all_levels=False):
+    def get_candidate_polygons(self, lat, lon, return_all=False):
         candidates = []
         code = geohash.encode(lat, lon)
         for level, area in self.GEOHASH_PRECISIONS:
@@ -285,7 +285,7 @@ class GeohashPolygonIndex(PolygonIndex):
             if not indices:
                 continue
             candidates.extend(indices)
-            if not all_levels:
+            if not return_all:
                 break
         return candidates
 
