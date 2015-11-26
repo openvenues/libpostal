@@ -391,7 +391,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         return sorted(candidates, key=self.priority)
 
 
-class QuattroshapesReverseGeocoder(GeohashPolygonIndex):
+class QuattroshapesReverseGeocoder(RTreePolygonIndex):
     '''
     Quattroshapes polygons, for levels up to localities, are relatively
     accurate and provide concordance with GeoPlanet and in some cases
@@ -589,8 +589,8 @@ class QuattroshapesReverseGeocoder(GeohashPolygonIndex):
         props, p = self.polygons[i]
         return self.sort_levels.get(props[self.LEVEL], 0)
 
-    def get_candidate_polygons(self, lat, lon, all_levels=False):
-        candidates = super(QuattroshapesReverseGeocoder, self).get_candidate_polygons(lat, lon, all_levels=all_levels)
+    def get_candidate_polygons(self, lat, lon, return_all=False):
+        candidates = super(QuattroshapesReverseGeocoder, self).get_candidate_polygons(lat, lon, return_all=return_all)
         return sorted(candidates, key=self.sort_level, reverse=True)
 
 
