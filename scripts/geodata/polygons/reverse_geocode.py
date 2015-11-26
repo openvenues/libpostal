@@ -304,7 +304,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                 osm_names.extend([v for k, v in attrs.iteritems() if k.startswith('{}:'.format(name_key))])
 
             for idx in (zs, qs):
-                candidates = idx.get_candidate_polygons(lat, lon, all_levels=True)
+                candidates = idx.get_candidate_polygons(lat, lon, return_all=True)
 
                 if candidates:
                     max_sim = 0.0
