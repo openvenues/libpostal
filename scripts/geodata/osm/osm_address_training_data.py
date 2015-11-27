@@ -597,15 +597,17 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
         '''
 
         if non_local_language or (AddressFormatter.CITY not in address_components and random.random() < 0.2):
+            lang = non_local_language or language
             quattroshapes_cities = quattroshapes_rtree.point_in_poly(latitude, longitude, return_all=True)
             for result in quattroshapes_cities:
                 if result.get(quattroshapes_rtree.LEVEL) == quattroshapes_rtree.LOCALITY and quattroshapes_rtree.GEONAMES_ID in result:
                     geonames_id = int(result[quattroshapes_rtree.GEONAMES_ID].split(',')[0])
                     names = geonames.get_alternate_names(geonames_id)
-                    if not names or language not in names:
+                    
+                    if not names or lang not in names:
                         continue
 
-                    city = names[non_local_language or language][0][0]
+                    city = names[lang][0][0]
                     if not city or not city.strip():
                         continue
                     address_components[AddressFormatter.CITY] = city
