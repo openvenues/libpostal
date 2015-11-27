@@ -328,8 +328,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                                     name = pattern.sub(repl, name)
                                 normalized_qs_names[i] = name
 
-                            level = props.get(QuattroshapesReverseGeocoder.LEVEL)
-                            if is_neighborhood and level != 'neighborhood':
+                            if is_neighborhood and idx is qs and props.get(QuattroshapesReverseGeocoder.LEVEL) != 'neighborhood':
                                 continue
 
                             if not contains_ideographs:
