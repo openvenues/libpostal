@@ -605,7 +605,9 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                     if not names or language not in names:
                         continue
 
-                    city = names[language][0]
+                    city = names[language][0][0]
+                    if not city or not city.strip():
+                        continue
                     address_components[AddressFormatter.CITY] = city
                     break
             else:
