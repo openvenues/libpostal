@@ -601,7 +601,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
             for result in quattroshapes_cities:
                 if result.get(quattroshapes_rtree.LEVEL) == quattroshapes_rtree.LOCALITY and quattroshapes_rtree.GEONAMES_ID in result:
                     geonames_id = int(result[quattroshapes_rtree.GEONAMES_ID].split(',')[0])
-                    names = geonames_db.get_alternate_names(geonames_id)
+                    names = geonames.get_alternate_names(geonames_id)
                     if not names or language not in names:
                         continue
 
@@ -609,7 +609,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                     address_components[AddressFormatter.CITY] = city
                     break
             else:
-                if AddressFormatter.CITY in address_components:
+                if non_local_language and AddressFormatter.CITY in address_components:
                     _ = address_components.pop(AddressFormatter.CITY)
 
         '''
