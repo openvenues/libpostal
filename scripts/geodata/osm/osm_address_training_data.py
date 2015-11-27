@@ -349,7 +349,7 @@ def osm_reverse_geocoded_components(admin_rtree, country, latitude, longitude):
     return ret
 
 
-def build_address_format_training_data(admin_rtree, language_rtree, neighborhoods_rtree, infile, out_dir, tag_components=True):
+def build_address_format_training_data(infile, out_dir, admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames, tag_components=True):
     '''
     Creates formatted address training data for supervised sequence labeling (or potentially 
     for unsupervised learning e.g. for word vectors) using addr:* tags in OSM.
@@ -584,6 +584,28 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                     if component == AddressFormatter.STATE and random.random() < 0.7:
                         val = STATE_EXPANSIONS.get(address_country, {}).get(val, val)
                     address_components[component] = val
+
+        '''
+        Quattroshapes/GeoNames cities
+        -----------------------------
+
+        Quattroshapes isn't great for everything, but it has decent city boundaries
+        in places where OSM sometimes does not (or at least in places where we aren't
+        currently able to create valid polygons). While Quattroshapes itself doesn't
+        reliably use local names, which we'll want for consistency
+        '''
+
+        if non_local_language or (AddressFormatter.CITY not in address_components and random.random() < 0.2):
+            quattroshapes_cities = quattroshapes_rtree.point_in_poly(latitude, longitude, return_all=True)
+            for result in quattroshapes_cities:
+                if result.get(quattroshapes.LEVEL) == AddressFormatter.CITY and quattroshapes.GEONAMES_ID in result:
+                    geonames_id = int(result[quattroshapes.GEONAMES_ID])
+                    names = geonames_db.get_alternate_names(geonames_id)
+                    if not names or language not in names:
+                        continue
+
+                    city = names[language][0]
+                    address_components[AddressFormatter.CITY] = city
 
         '''
         Neighborhoods
@@ -970,6 +992,10 @@ if __name__ == '__main__':
                         default=None,
                         help='Quattroshapes reverse geocoder RTree directory')
 
+    parser.add_argument('-d', '--geonames-db',
+                        required=True,
+                        help='GeoNames db file')
+
     parser.add_argument('-n', '--neighborhoods-rtree-dir',
                         default=None,
                         help='Neighborhoods reverse geocoder RTree directory')
@@ -992,6 +1018,15 @@ if __name__ == '__main__':
     if args.neighborhoods_rtree_dir:
         neighborhoods_rtree = NeighborhoodReverseGeocoder.load(args.neighborhoods_rtree_dir)
 
+    quattroshapes_rtree = None
+    if args.quattroshapes_rtree_dir:
+        quattroshapes_rtree = QuattroshapesReverseGeocoder.load(args.quattroshapes_rtree_dir)
+
+    geonames = None
+
+    if args.geonames_db:
+        geonames = GeoNamesDB(args.geonames_db)
+
     street_types_gazetteer.configure()
 
     # Can parallelize
@@ -1002,11 +1037,18 @@ if __name__ == '__main__':
 
     if args.address_file and not args.format_only and not args.limited_addresses:
         build_address_training_data(language_rtree, args.address_file, args.out_dir)
-    elif args.address_file and not args.limited_addresses and osm_rtree is None:
-        parser.error('--rtree-dir required for formatted addresses')
+    elif args.address_file and not args.limited_addresses:
+        if osm_rtree is None:
+            parser.error('--rtree-dir required for formatted addresses')
+        elif neighborhoods_rtree is None:
+            parser.error('--neighborhoods-rtree-dir required for formatted addresses')
+        elif quattroshapes_rtree is None:
+            parser.error('--quattroshapes-rtree-dir required for formatted addresses')
+        elif geonames is None:
+            parser.error('--geonames-db required for formatted addresses')
 
     if args.address_file and args.format_only:
-        build_address_format_training_data(osm_rtree, language_rtree, neighborhoods_rtree, args.address_file, args.out_dir, tag_components=not args.untagged)
+        build_address_format_training_data(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames, args.address_file, args.out_dir, tag_components=not args.untagged)
     if args.address_file and args.limited_addresses:
         build_address_format_training_data_limited(language_rtree, args.address_file, args.out_dir)
     if args.venues_file:
