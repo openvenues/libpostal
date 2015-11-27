@@ -350,7 +350,7 @@ def osm_reverse_geocoded_components(admin_rtree, country, latitude, longitude):
     return ret
 
 
-def build_address_format_training_data(infile, out_dir, admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames, tag_components=True):
+def build_address_format_training_data(admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames, infile, out_dir, tag_components=True):
     '''
     Creates formatted address training data for supervised sequence labeling (or potentially 
     for unsupervised learning e.g. for word vectors) using addr:* tags in OSM.
