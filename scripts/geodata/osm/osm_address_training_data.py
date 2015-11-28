@@ -24,10 +24,10 @@ Limited formatted addresses:
 python osm_address_training_data.py -a -l $(OSM_DIR)/planet-addresses.osm --language-rtree-dir=$(LANG_RTREE_DIR) --rtree-dir=$(RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR)  -o $(OUT_DIR)
 
 Formatted addresses (tagged):
-python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm -f --language-rtree-dir=$(LANG_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR) --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm -f --language-rtree-dir=$(LANG_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR) --rtree-dir=$(RTREE_DIR) --quattroshapes-rtree-dir=$(QS_TREE_DIR) --geonames-db=$(GEONAMES_DB_PATH) -o $(OUT_DIR)
 
 Formatted addresses (untagged):
-python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm  -f -u --language-rtree-dir=$(LANG_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR)  --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
+python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm  -f -u --language-rtree-dir=$(LANG_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR)  --rtree-dir=$(RTREE_DIR) --quattroshapes-rtree-dir=$(QS_TREE_DIR) --geonames-db=$(GEONAMES_DB_PATH) -o $(OUT_DIR)
 
 Toponyms:
 python osm_address_training_data.py -b $(OSM_DIR)/planet-borders.osm --language-rtree-dir=$(LANG_RTREE_DIR) -o $(OUT_DIR)
@@ -603,7 +603,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                 if result.get(quattroshapes_rtree.LEVEL) == quattroshapes_rtree.LOCALITY and quattroshapes_rtree.GEONAMES_ID in result:
                     geonames_id = int(result[quattroshapes_rtree.GEONAMES_ID].split(',')[0])
                     names = geonames.get_alternate_names(geonames_id)
-                    
+
                     if not names or lang not in names:
                         continue
 
