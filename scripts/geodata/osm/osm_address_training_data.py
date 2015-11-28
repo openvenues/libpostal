@@ -483,11 +483,13 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
         '''
         address_state = address_components.get(AddressFormatter.STATE)
 
-        if address_state:
+        if address_state and not non_local_language:
             state_full_name = STATE_ABBREVIATIONS.get(country.upper(), {}).get(address_state.upper(), {}).get(language)
 
             if state_full_name and random.random() < 0.3:
                 address_components[AddressFormatter.STATE] = state_full_name
+        elif address_state and non_local_language:
+            _ = address_components.pop(AddressFormatter.STATE, None)
 
         '''
         OSM boundaries
