@@ -393,6 +393,8 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
 
     remove_keys = OSM_IGNORE_KEYS
 
+    alpha3_codes = {c.alpha2: c.alpha3 for c in pycountry.countries}
+
     for node_id, value, deps in parse_osm(infile):
         try:
             latitude, longitude = latlon_to_decimal(value['lat'], value['lon'])
@@ -471,7 +473,12 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
             lang_country = language_country_names.get(non_local_language, {}).get(address_country.upper())
             if lang_country:
                 address_components[AddressFormatter.COUNTRY] = lang_country
-        # 3. Implicit: the rest of the time keep the country code
+        # 3. 10% of the time: use the country's alpha-3 ISO code
+        elif address_country and r < 0.8:
+            iso_code_alpha3 = alpha3_codes.get(address_country)
+            if iso_code_alpha3:
+                address_components[AddressFormatter.COUNTRY] = iso_code_alpha3
+        # 4. Implicit: the rest of the time keep the alpha-2 country code
 
         '''
         States
