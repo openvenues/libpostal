@@ -48,9 +48,6 @@ typedef struct class_weight {
 
 #define NULL_WEIGHT (class_weight_t){0.0, 0.0, 0}
 
-#define SEPARATOR_LABEL "sep"
-#define FIELD_SEPARATOR_LABEL "fsep"
-
 KHASH_MAP_INIT_INT(class_weights, class_weight_t)
 
 KHASH_MAP_INIT_INT(feature_class_weights, khash_t(class_weights) *) 
