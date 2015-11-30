@@ -104,6 +104,7 @@ geodb_t *geodb_init(char *dir) {
         goto exit_geodb_created;
     }
 
+    fclose(f);
     char_array_clear(path);
 
     char_array_cat_joined(path, PATH_SEPARATOR, true, 2, dir, GEODB_HASH_FILENAME);
