@@ -164,8 +164,9 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
     source_priorities = {
         'zetashapes': 0,     # Best names/polygons
-        'osm': 1,            # OSM names with Quattroshapes/Zetashapes polygon
-        'quattroshapes': 2,  # Good results in some countries/areas
+        'osm_zeta': 1,       # OSM names matched with Zetashapes polygon
+        'osm_quattro': 2,    # OSM names matched with Quattroshapes polygon
+        'quattroshapes': 3,  # Good results in some countries/areas
     }
 
     level_priorities = {
@@ -350,14 +351,16 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
                 if idx is zs:
                     attrs['polygon_type'] = 'neighborhood'
+                    source = 'osm_zeta'
                 else:
                     level = props.get(QuattroshapesReverseGeocoder.LEVEL, None)
+                    source = 'osm_quattro'
                     if level == 'neighborhood':
                         attrs['polygon_type'] = 'neighborhood'
                     else:
                         attrs['polygon_type'] = 'local_admin'
 
-                attrs['source'] = 'osm'
+                attrs['source'] = source
                 index.index_polygon(poly)
                 index.add_polygon(poly, attrs)
                 idx.matched[i] = True
