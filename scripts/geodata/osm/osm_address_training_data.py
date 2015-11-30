@@ -116,7 +116,9 @@ OSM_ADDRESS_COMPONENTS = OrderedDict.fromkeys([
     AddressComponent(AddressFormatter.HOUSE_NUMBER, dependencies=(AddressFormatter.ROAD,)),
     AddressComponent(AddressFormatter.SUBURB, dependencies=(AddressFormatter.CITY, AddressFormatter.STATE,
                                                             AddressFormatter.POSTCODE)),
+    AddressComponent(AddressFormatter.CITY_DISTRICT, dependencies=(AddressFormatter.CITY,)),
     AddressComponent(AddressFormatter.CITY),
+    AddressComponent(AddressFormatter.STATE_DISTRICT, dependencies=(AddressFormatter.STATE, AddressFormatter.POSTCODE)),
     AddressComponent(AddressFormatter.STATE, dependencies=(AddressFormatter.SUBURB, AddressFormatter.CITY,
                                                            AddressFormatter.POSTCODE, AddressFormatter.COUNTRY)),
     AddressComponent(AddressFormatter.POSTCODE),
@@ -358,7 +360,7 @@ DROP_PROBABILITIES = {
     AddressFormatter.CITY_DISTRICT: 0.8,
     AddressFormatter.CITY: 0.6,
     AddressFormatter.STATE_DISTRICT: 0.8,
-    AddressFormatter.STATE: 0.8,
+    AddressFormatter.STATE: 0.7,
     AddressFormatter.POSTCODE: 0.7,
     AddressFormatter.COUNTRY: 0.8
 }
@@ -666,12 +668,15 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
             if not address_components:
                 continue
 
-            current_components = component_bitset(address_components.keys())
+            current_components = address_components.keys()
+            random.shuffle(current_components)
 
-            for component in address_components.keys():
-                if current_components ^ OSM_ADDRESS_COMPONENT_VALUES[component] in OSM_ADDRESS_COMPONENTS_VALID and random.random() < DROP_PROBABILITIES[component]:
+            component_set = component_bitset(address_components.keys())
+
+            for component in current_components:
+                if component_set ^ OSM_ADDRESS_COMPONENT_VALUES[component] in OSM_ADDRESS_COMPONENTS_VALID and random.random() < DROP_PROBABILITIES[component]:
                     address_components.pop(component)
-                    current_components ^= OSM_ADDRESS_COMPONENT_VALUES[component]
+                    component_set ^= OSM_ADDRESS_COMPONENT_VALUES[component]
                     if not address_components:
                         break
 
