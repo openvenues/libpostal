@@ -351,13 +351,13 @@ def osm_reverse_geocoded_components(admin_rtree, country, latitude, longitude):
 
 
 DROP_PROBABILITIES = {
-    AddressFormatter.HOUSE: 0.8,
+    AddressFormatter.HOUSE: 0.6,
     AddressFormatter.HOUSE_NUMBER: 0.5,
     AddressFormatter.ROAD: 0.5,
-    AddressFormatter.SUBURB: 1.0,
-    AddressFormatter.CITY_DISTRICT: 1.0,
+    AddressFormatter.SUBURB: 0.8,
+    AddressFormatter.CITY_DISTRICT: 0.8,
     AddressFormatter.CITY: 0.6,
-    AddressFormatter.STATE_DISTRICT: 1.0,
+    AddressFormatter.STATE_DISTRICT: 0.8,
     AddressFormatter.STATE: 0.8,
     AddressFormatter.POSTCODE: 0.7,
     AddressFormatter.COUNTRY: 0.8
