@@ -352,18 +352,36 @@ def osm_reverse_geocoded_components(admin_rtree, country, latitude, longitude):
     return ret
 
 
-DROP_PROBABILITIES = {
-    AddressFormatter.HOUSE: 0.6,
-    AddressFormatter.HOUSE_NUMBER: 0.5,
-    AddressFormatter.ROAD: 0.5,
-    AddressFormatter.SUBURB: 0.8,
-    AddressFormatter.CITY_DISTRICT: 0.8,
-    AddressFormatter.CITY: 0.6,
-    AddressFormatter.STATE_DISTRICT: 0.8,
-    AddressFormatter.STATE: 0.7,
-    AddressFormatter.POSTCODE: 0.7,
-    AddressFormatter.COUNTRY: 0.8
-}
+def osm_pick_random_name_key(suffix=''):
+    name_key = ''.join(('name', suffix))
+    raw_name_key = 'name'
+    short_name_key = ''.join(('short_name', suffix))
+    raw_short_name_key = 'short_name'
+    alt_name_key = ''.join(('alt_name', suffix))
+    raw_alt_name_key = 'alt_name'
+    official_name_key = ''.join(('official_name', suffix))
+    raw_official_name_key = 'official_name'
+
+    # Choose which name to use with given probabilities
+    r = random.random()
+    if r < 0.7:
+        # 70% of the time use the name tag
+        key = name_key
+        raw_key = raw_name_key
+    elif r < 0.8:
+        # 10% of the time use the short name
+        key = short_name_key
+        raw_key = raw_short_name_key
+    elif r < 0.9:
+        # 10% of the time use the official name
+        key = official_name_key
+        raw_key = raw_official_name_key
+    else:
+        # 10% of the time use the official name
+        key = alt_name_key
+        raw_key = raw_alt_name_key
+
+    return key, raw_key
 
 
 def build_address_format_training_data(admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames, infile, out_dir, tag_components=True):
@@ -497,6 +515,19 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
         # 4. Implicit: the rest of the time keep the alpha-2 country code
 
         '''
+        Venue names
+        -----------
+
+        Some venues have multiple names listed in OSM, grab them all
+        '''
+
+        venue_names = []
+        for key in ('name', 'alt_name', 'loc_name', 'int_name', 'old_name'):
+            venue_name = value.get(key)
+            if venue_name:
+                venue_names.append(venue_name)
+
+        '''
         States
         ------
 
@@ -531,48 +562,25 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
         '''
 
         osm_components = osm_reverse_geocoded_components(admin_rtree, country, latitude, longitude)
+
+        if non_local_language is not None:
+            osm_suffix = ':{}'.format(non_local_language)
+        else:
+            osm_suffix = ''
+
+        name_key = ''.join(('name', osm_suffix))
+        raw_name_key = 'name'
+        simple_name_key = 'name:simple'
+        international_name_key = 'int_name'
+
+        iso_code_key = 'ISO3166-1:alpha2'
+        iso_code3_key = 'ISO3166-1:alpha3'
+
         if osm_components:
-            if non_local_language is not None:
-                suffix = ':{}'.format(non_local_language)
-            else:
-                suffix = ''
-
-            name_key = ''.join(('name', suffix))
-            raw_name_key = 'name'
-            short_name_key = ''.join(('short_name', suffix))
-            raw_short_name_key = 'short_name'
-            simple_name_key = 'name:simple'
-            international_name_key = 'int_name'
-            alt_name_key = ''.join(('alt_name', suffix))
-            raw_alt_name_key = 'alt_name'
-            official_name_key = ''.join(('official_name', suffix))
-            raw_official_name_key = 'official_name'
-            iso_code_key = 'ISO3166-1:alpha2'
-            iso_code3_key = 'ISO3166-1:alpha3'
-
-            poly_components = defaultdict(list)
-
             for component, components_values in osm_components.iteritems():
                 seen = set()
 
-                # Choose which name to use with given probabilities
-                r = random.random()
-                if r < 0.7:
-                    # 70% of the time use the name tag
-                    key = name_key
-                    raw_key = raw_name_key
-                elif r < 0.8:
-                    # 10% of the time use the short name
-                    key = short_name_key
-                    raw_key = raw_short_name_key
-                elif r < 0.9:
-                    # 10% of the time use the official name
-                    key = official_name_key
-                    raw_key = raw_official_name_key
-                else:
-                    # 10% of the time use the official name
-                    key = alt_name_key
-                    raw_key = raw_alt_name_key
+                key, raw_key = osm_pick_random_name_key(suffix=osm_suffix)
 
                 for component_value in components_values:
                     r = random.random()
@@ -653,9 +661,36 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
         on the whole of better quality).
         '''
 
-        neighborhood = neighborhoods_rtree.point_in_poly(latitude, longitude)
-        if neighborhood and AddressFormatter.SUBURB not in address_components:
-            address_components[AddressFormatter.SUBURB] = neighborhood['name']
+        neighborhoods = neighborhoods_rtree.point_in_poly(latitude, longitude, return_all=True)
+        neighborhood_levels = defaultdict(list)
+        for neighborhood in neighborhoods:
+            place_type = neighborhood.get('place')
+            polygon_type = neighborhood.get('polygon_type')
+
+            key, raw_key = osm_pick_random_name_key(suffix=osm_suffix)
+            name = neighborhood.get(key, neighborhood.get(raw_key))
+
+            if not name:
+                name = neighborhood.get(name_key, neighborhood.get(raw_name_key))
+
+                name_prefix = neighborhood.get('name:prefix')
+
+                if name_prefix and random.random() < 0.5:
+                    name = u' '.join([name_prefix, name])
+
+            if not name:
+                continue
+
+            neighborhood_level = AddressFormatter.SUBURB
+
+            if place_type == 'borough' or polygon_type == 'local_admin':
+                neighborhood_level = AddressFormatter.CITY_DISTRICT
+
+            neighborhood_levels[neighborhood_level].append(name)
+
+        for component, neighborhoods in neighborhood_levels.iteritems():
+            if component not in address_components:
+                address_components[component] = neighborhoods[0]
 
         # Version with all components
         formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=not tag_components)
@@ -674,14 +709,18 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
             component_set = component_bitset(address_components.keys())
 
             for component in current_components:
-                if component_set ^ OSM_ADDRESS_COMPONENT_VALUES[component] in OSM_ADDRESS_COMPONENTS_VALID and random.random() < DROP_PROBABILITIES[component]:
+                if component_set ^ OSM_ADDRESS_COMPONENT_VALUES[component] in OSM_ADDRESS_COMPONENTS_VALID and random.random() < 0.5:
                     address_components.pop(component)
                     component_set ^= OSM_ADDRESS_COMPONENT_VALUES[component]
                     if not address_components:
                         break
 
-                    formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=False)
-                    formatted_addresses.append(formatted_address)
+                    # Since venue names are 1-per-record, we must use them all
+                    for venue_name in (venue_names or [None]):
+                        if venue_name:
+                            address_components[AddressFormatter.HOUSE] = venue_name
+                        formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=False)
+                        formatted_addresses.append(formatted_address)
 
             for formatted_address in formatted_addresses:
                 if formatted_address and formatted_address.strip():
