@@ -136,6 +136,64 @@ int matrix_dot_matrix(matrix_t *m1, matrix_t *m2, matrix_t *result) {
     return 0;
 }
 
+matrix_t *matrix_read(FILE *f) {
+    matrix_t *mat = malloc(sizeof(matrix_t));
+    if (mat == NULL) return NULL;
+
+    mat->data = NULL;
+
+    if (!file_read_uint32(f, &mat->m) ||
+        !file_read_uint32(f, &mat->n)) {
+        goto exit_sparse_matrix_allocated;
+    }
+
+    size_t len_data = (size_t)mat->m * (size_t)mat->n;
+
+    double_array *data = double_array_new_size(len_data);
+    if (data == NULL) {
+        printf("data alloc\n");
+        goto exit_matrix_allocated;
+    }
+
+    for (size_t i = 0; i < len_data; i++) {
+        if (!file_read_double(f, data->a + i)) {
+            printf("data\n");
+            goto exit_sparse_matrix_allocated;
+        }
+    }
+
+    data->n = (size_t)len_data;
+    mat->data = data;
+
+    return mat;
+
+exit_matrix_allocated:
+    matrix_destroy(mat);
+    return NULL;
+}
+
+bool matrix_write(matrix_t *self, FILE *f) {
+    if (self == NULL || self->data == NULL) {
+        return false;
+    }
+
+    if (!file_write_uint32(f, self->m) ||
+        !file_write_uint32(f, self->n)) {
+        return false;
+    }
+
+    uint64_t len_data = (uint64_t)self->m * (uint64_t)self->n;
+
+    for (int i = 0; i < len_data; i++) {
+        if (!file_write_double(f, self->data->a[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 void matrix_destroy(matrix_t *self) {
     if (self == NULL) return;
 

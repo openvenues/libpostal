@@ -35,6 +35,9 @@ void matrix_div(matrix_t *self, double value);
 void matrix_dot_vector(matrix_t *self, double *vec, double *result);
 int matrix_dot_matrix(matrix_t *m1, matrix_t *m2, matrix_t *result);
 
+matrix_t *matrix_read(FILE *f);
+bool matrix_write(matrix_t *self, FILE *f);
+
 void matrix_destroy(matrix_t *self);
 
 #endif
