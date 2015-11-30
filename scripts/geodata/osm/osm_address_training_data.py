@@ -577,6 +577,8 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
         iso_code3_key = 'ISO3166-1:alpha3'
 
         if osm_components:
+            poly_components = defaultdict(list)
+
             for component, components_values in osm_components.iteritems():
                 seen = set()
 
