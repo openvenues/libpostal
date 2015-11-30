@@ -729,11 +729,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                             seen.add(formatted_address)
 
             for formatted_address in formatted_addresses:
-                if not formatted_address:
-                    continue
-
-                formatted_address = formatted_address.strip()
-                if formatted_address and formatted_add not in seen:
+                if formatted_address and formatted_address.strip():
                     formatted_address = tsv_string(formatted_address)
                     if not formatted_address or not formatted_address.strip():
                         continue
