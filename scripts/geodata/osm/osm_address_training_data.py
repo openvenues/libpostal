@@ -615,7 +615,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                         seen.add((component, name))
 
             for component, vals in poly_components.iteritems():
-                if component not in address_components or non_local_language:
+                if component not in address_components or non_local_language and random.random() < 0.4:
                     val = u', '.join(vals)
                     if component == AddressFormatter.STATE and random.random() < 0.7:
                         val = STATE_EXPANSIONS.get(address_country, {}).get(val, val)
@@ -691,7 +691,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
             neighborhood_levels[neighborhood_level].append(name)
 
         for component, neighborhoods in neighborhood_levels.iteritems():
-            if component not in address_components:
+            if component not in address_components and random.random() < 0.4:
                 address_components[component] = neighborhoods[0]
 
         # Version with all components
@@ -700,6 +700,8 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
         if tag_components:
             formatted_addresses = []
             formatted_addresses.append(formatted_address)
+
+            seen = set([formatted_address])
 
             address_components = {k: v for k, v in address_components.iteritems() if k in OSM_ADDRESS_COMPONENT_VALUES}
             if not address_components:
@@ -722,10 +724,16 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                         if venue_name:
                             address_components[AddressFormatter.HOUSE] = venue_name
                         formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=False)
-                        formatted_addresses.append(formatted_address)
+                        if formatted_address not in seen:
+                            formatted_addresses.append(formatted_address)
+                            seen.add(formatted_address)
 
             for formatted_address in formatted_addresses:
-                if formatted_address and formatted_address.strip():
+                if not formatted_address:
+                    continue
+
+                formatted_address = formatted_address.strip()
+                if formatted_address and formatted_add not in seen:
                     formatted_address = tsv_string(formatted_address)
                     if not formatted_address or not formatted_address.strip():
                         continue
