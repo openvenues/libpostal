@@ -320,7 +320,9 @@ class AddressFormatter(object):
 
             return u' '.join(tokens[start:end])
 
-    def format_address(self, country, components, minimal_only=True, tag_components=True, replace_aliases=True):
+    def format_address(self, country, components, 
+                       minimal_only=True, tag_components=True, replace_aliases=True,
+                       template_replacements=False):
         template = self.config.get(country.upper())
         if not template:
             return None
@@ -331,7 +333,8 @@ class AddressFormatter(object):
         if minimal_only and not self.minimal_components(components):
             return None
 
-        self.apply_replacements(template, components)
+        if template_replacements:
+            self.apply_replacements(template, components)
 
         if tag_components:
             template_text = self.tag_template_separators(template_text)
