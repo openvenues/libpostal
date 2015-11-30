@@ -350,6 +350,20 @@ def osm_reverse_geocoded_components(admin_rtree, country, latitude, longitude):
     return ret
 
 
+DROP_PROBABILITIES = {
+    AddressFormatter.HOUSE: 0.8,
+    AddressFormatter.HOUSE_NUMBER: 0.5,
+    AddressFormatter.ROAD: 0.5,
+    AddressFormatter.SUBURB: 1.0,
+    AddressFormatter.CITY_DISTRICT: 1.0,
+    AddressFormatter.CITY: 0.6,
+    AddressFormatter.STATE_DISTRICT: 1.0,
+    AddressFormatter.STATE: 0.8,
+    AddressFormatter.POSTCODE: 0.7,
+    AddressFormatter.COUNTRY: 0.8
+}
+
+
 def build_address_format_training_data(admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames, infile, out_dir, tag_components=True):
     '''
     Creates formatted address training data for supervised sequence labeling (or potentially 
@@ -655,7 +669,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
             current_components = component_bitset(address_components.keys())
 
             for component in address_components.keys():
-                if current_components ^ OSM_ADDRESS_COMPONENT_VALUES[component] in OSM_ADDRESS_COMPONENTS_VALID and random.random() < 0.5:
+                if current_components ^ OSM_ADDRESS_COMPONENT_VALUES[component] in OSM_ADDRESS_COMPONENTS_VALID and random.random() < DROP_PROBABILITIES[component]:
                     address_components.pop(component)
                     current_components ^= OSM_ADDRESS_COMPONENT_VALUES[component]
                     if not address_components:
