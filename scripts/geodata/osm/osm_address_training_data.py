@@ -691,7 +691,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
             neighborhood_levels[neighborhood_level].append(name)
 
         for component, neighborhoods in neighborhood_levels.iteritems():
-            if component not in address_components and random.random() < 0.4:
+            if component not in address_components and random.random() < 0.5:
                 address_components[component] = neighborhoods[0]
 
         # Version with all components
@@ -721,7 +721,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
 
                     # Since venue names are 1-per-record, we must use them all
                     for venue_name in (venue_names or [None]):
-                        if venue_name:
+                        if venue_name and AddressFormatter.HOUSE in address_components:
                             address_components[AddressFormatter.HOUSE] = venue_name
                         formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=False)
                         if formatted_address not in seen:
