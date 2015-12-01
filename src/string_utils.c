@@ -71,6 +71,11 @@ inline bool string_ends_with(const char *str, const char *ending) {
     return str_len < end_len ? false : !strcmp(str + str_len - end_len, ending);
 }
 
+inline bool string_equals(const char *s1, const char *s2) {
+    if (s1 == NULL || s2  == NULL) return false;
+    return strcmp(s1, s2) == 0;
+}
+
 inline void string_upper(char *s) {
     for (; *s; ++s) *s = toupper(*s);
 }

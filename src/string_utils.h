@@ -60,6 +60,8 @@ void string_replace(char *s, char c1, char c2);
 bool string_starts_with(const char *str, const char *start);
 bool string_ends_with(const char *str, const char *ending);
 
+bool string_equals(const char *s1, const char *s2);
+
 uint32_t string_translate(char *str, size_t len, char *word_chars, char *word_repls, size_t trans_len);
 
 // UTF-8 string methods
