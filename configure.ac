@@ -52,10 +52,8 @@ AC_CONFIG_FILES([Makefile
                  src/sparkey/Makefile])
 
 AC_CHECK_PROG([FOUND_SHUF], [shuf], [yes])
-AC_CHECK_PROG([FOUND_GSHUF], [gshuf], [yes])
 
 AS_IF([test "x$FOUND_SHUF" = xyes],  [AC_DEFINE([HAVE_SHUF], [1], [shuf available])])
-AS_IF([test "x$FOUND_GSHUF" = xyes],  [AC_DEFINE([HAVE_GSHUF], [1], [gshuf available])])
 
 LIBPOSTAL_DATA_DIR=$datadir/libpostal
 AC_DEFINE_UNQUOTED([LIBPOSTAL_DATA_DIR], ["$LIBPOSTAL_DATA_DIR"], [Data directory for libpostsal])

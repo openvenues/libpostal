@@ -216,17 +216,18 @@ bool address_parser_train(address_parser_t *self, char *filename, uint32_t num_i
 
         trainer->iterations = iter;
 
-        log_debug("Shuffling\n");
+        #if defined(HAVE_SHUF)
+        log_info("Shuffling\n");
 
-        /*
         if (!shuffle_file(filename)) {
             log_error("Error in shuffle\n");
             averaged_perceptron_trainer_destroy(trainer);
             return false;
         }
 
-        log_debug("Shuffle complete\n");
-        */
+        log_info("Shuffle complete\n");
+        #endif
+        
         if (!address_parser_train_epoch(self, trainer, filename)) {
             log_error("Error in epoch\n");
             averaged_perceptron_trainer_destroy(trainer);
@@ -249,9 +250,8 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    #if !defined(HAVE_SHUF) && !defined(HAVE_GSHUF)
-    log_error("shuf or gshuf must be installed to train address parser. Please install and reconfigure libpostal\n");
-    exit(EXIT_FAILURE);
+    #if !defined(HAVE_SHUF)
+    log_warn("shuf must be installed to train address parser effectively. If this is a production machine, please install shuf. No shuffling will be performed.\n");
     #endif
 
     char *filename = argv[1];
