@@ -332,10 +332,10 @@ libpostal needs to download some data files from S3. This is done automatically
 when you run make. Mapzen maintains an S3 bucket containing said data files
 but they can also be built manually.
 
-To install via Python, just use:
+To install via Python, you should first install the C library and then run:
 
 ```
-pip install git+https://github.com/openvenues/libpostal.git
+python setup.py install
 ```
 
 **Note**: The Python bindings don't implement libpostal's full API currently.

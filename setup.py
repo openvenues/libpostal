@@ -1,8 +1,10 @@
 import os
+import subprocess
 
 from setuptools import setup, Extension, find_packages
 
 SRC_DIR = 'src'
+this_dir = os.path.realpath(os.path.dirname(__file__))
 
 
 def main():
@@ -21,7 +23,7 @@ def main():
                                          'utf8proc/utf8proc.c',
                                          )
                                ] + ['python/postal/text/pytokenize.c'],
-                      include_dirs=['.'],
+                      include_dirs=[this_dir],
                       extra_compile_args=['-O0', '-std=c99',
                                           '-Wno-unused-function'],
                       ),
@@ -37,7 +39,7 @@ def main():
                                          'trie.c',
                                          'trie_search.c',)
                                ] + ['python/postal/text/pynormalize.c'],
-                      include_dirs=['.'],
+                      include_dirs=[this_dir],
                       extra_compile_args=['-std=c99', '-DHAVE_CONFIG_H',
                                           '-Wno-unused-function'],
                       ),
