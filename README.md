@@ -335,7 +335,7 @@ but they can also be built manually.
 To install via Python, just use:
 
 ```
-pip install https://github.com/openvenues/libpostal.git
+pip install git+https://github.com/openvenues/libpostal.git
 ```
 
 **Note**: The Python bindings don't implement libpostal's full API currently.
