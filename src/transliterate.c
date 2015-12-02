@@ -959,15 +959,15 @@ char *transliterate(char *trans_name, char *str, size_t len) {
         } else if (step->type == STEP_UNICODE_NORMALIZATION) {
             log_debug("unicode normalization\n");
             int utf8proc_options = UTF8PROC_OPTIONS_BASE;
-            if (strcmp(step->name, NFD) == 0) {
+            if (string_equals(step->name, NFD)) {
                 utf8proc_options = UTF8PROC_OPTIONS_NFD;
-            } else if (strcmp(step->name, NFC) == 0) {
+            } else if (string_equals(step->name, NFC)) {
                 utf8proc_options = UTF8PROC_OPTIONS_NFC;
-            } else if (strcmp(step->name, NFKD) == 0) {
+            } else if (string_equals(step->name, NFKD)) {
                 utf8proc_options = UTF8PROC_OPTIONS_NFKD;
-            } else if (strcmp(step->name, NFKC) == 0) {
+            } else if (string_equals(step->name, NFKC)) {
                 utf8proc_options = UTF8PROC_OPTIONS_NFKC;
-            } else if (strcmp(step->name, STRIP_MARK) == 0) {
+            } else if (string_equals(step->name, STRIP_MARK)) {
                 utf8proc_options = UTF8PROC_OPTIONS_STRIP_ACCENTS;
             }
 
