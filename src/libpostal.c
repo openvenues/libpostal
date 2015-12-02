@@ -489,11 +489,28 @@ void add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t to
             }
         }
     } else if (have_prefix) {
-        root_len = token.len - prefix.len;
-        root_token = (token_t){token.offset + prefix.len, root_len, token.type};
-        root_strings = cstring_array_new_size(root_len);
-        add_normalized_strings_token(root_strings, str, root_token, options);
-        num_strings = cstring_array_num_strings(root_strings);
+        if (prefix.len <= token.len) {
+            root_len = token.len - prefix.len;
+            root_token = (token_t){token.offset + prefix.len, root_len, token.type};
+            root_strings = cstring_array_new_size(root_len);
+            add_normalized_strings_token(root_strings, str, root_token, options);
+            num_strings = cstring_array_num_strings(root_strings);
+
+        } else {
+            root_strings = cstring_array_new_size(token.len);
+            add_normalized_strings_token(root_strings, str, token, options);
+            num_strings = cstring_array_num_strings(root_strings);
+
+            for (int k = 0; k < num_strings; k++) {
+                root_word = cstring_array_get_string(root_strings, k);
+                cstring_array_add_string(tree->strings, root_word);
+            }
+
+            char_array_destroy(key);
+            cstring_array_destroy(root_strings);
+            return;
+
+        }
 
         for (int j = 0; j < prefix_expansions->n; j++) {
             char_array_clear(key);
