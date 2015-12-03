@@ -200,7 +200,7 @@ class OSMAdminPolygonReader(object):
                     self.coords = None
 
                 relation_id = long(element_id.split(':')[-1])
-                if len(deps) == 0 or not props.get('boundary'):
+                if len(deps) == 0 or not props.get('boundary') or props.get('type', '').lower() == 'multilinestring':
                     continue
 
                 outer_ways = []
