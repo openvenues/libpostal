@@ -642,7 +642,13 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                     if not names or lang not in names:
                         continue
 
-                    city = names[lang][0][0]
+                    if 'abbr' not in names or non_local_language:
+                        # Use the common city name in the target language
+                        city = names[lang][0][0]
+                    elif random.random() < 0.1:
+                        # Use an abbreviation: NYC, BK, SF, etc.
+                        city = random.choice(names['abbr'])[0]
+
                     if not city or not city.strip():
                         continue
                     address_components[AddressFormatter.CITY] = city
