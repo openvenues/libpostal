@@ -199,7 +199,7 @@ int trie_node_search_tail_tokens(trie_t *self, trie_node_t node, char *str, toke
         return token_index-1;
     }
 
-    log_debug("Searching tail: %s\n", tail_ptr + tail_index);
+    log_debug("Searching tail: %s\n", tail_ptr);
     for (int i = token_index; i < tokens->n; i++) {
         token_t token = tokens->a[i];
 
@@ -258,6 +258,7 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
         if (token.type != WHITESPACE) {
             for (int j = 0; j < token_length; j++, ptr++, last_node = node, last_node_id = node_id) {
                 log_debug("Getting transition index for %d, (%d, %d)\n", node_id, node.base, node.check);
+                size_t offset = j + 1;
                 if (j > 0 || last_node.base >= 0) {
                     node_id = trie_get_transition_index(self, node, *ptr);
                     node = trie_get_node(self, node_id);
@@ -265,6 +266,8 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
                 } else {
                     log_debug("Tail stored on space node, rolling back one character\n");
                     ptr--;
+                    offset = j;
+                    log_debug("ptr=%s\n", ptr);
                 }
 
                 if (node.check != last_node_id && last_node.base >= 0) {
@@ -284,7 +287,7 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
 
                     log_debug("token_length = %zu, j=%d\n", token_length, j);
 
-                    size_t ptr_len = token_length - j - 1;
+                    size_t ptr_len = token_length - offset;
                     log_debug("next node tail: %s vs %.*s\n", current_tail, (int)ptr_len, ptr + 1);
 
                     if (last_state == SEARCH_STATE_NO_MATCH || last_state == SEARCH_STATE_BEGIN) {
