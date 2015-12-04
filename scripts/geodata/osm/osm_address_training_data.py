@@ -655,8 +655,8 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                     break
             else:
                 if non_local_language and AddressFormatter.CITY in address_components and (
-                        AddressFormatter.CITY_DISTRICT in osm_address_components or
-                        AddressFormatter.SUBURB in address_components):
+                        AddressFormatter.CITY_DISTRICT in osm_components or
+                        AddressFormatter.SUBURB in osm_components):
                     address_components.pop(AddressFormatter.CITY)
 
         '''
