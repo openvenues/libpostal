@@ -6,6 +6,7 @@ from geodata.encoding import safe_decode
 name_prefixes = ['{} '.format(s) for s in (
     'city of',
     'township of',
+    'regional municipality of',
     'municipality of',
     'borough of',
     'london borough of',
@@ -17,8 +18,8 @@ name_suffixes = [' {}'.format(s) for s in (
     'municipality',
 )]
 
-name_prefix_regex = re.compile('^{}'.format('|'.join(name_prefixes)), re.I | re.UNICODE)
-name_suffix_regex = re.compile('{}$'.format('|'.join(name_suffixes)), re.I | re.UNICODE)
+name_prefix_regex = re.compile('^(?:{})'.format('|'.join(name_prefixes)), re.I | re.UNICODE)
+name_suffix_regex = re.compile('(?:{})$'.format('|'.join(name_suffixes)), re.I | re.UNICODE)
 
 
 def replace_name_prefixes(name):
