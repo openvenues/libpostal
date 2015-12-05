@@ -727,7 +727,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
         '''
         for component in REPLACE_COMPONENTS:
             name = address_components[component]
-            replacement = replace_name_prefixes(replace_name_suffixes())
+            replacement = replace_name_prefixes(replace_name_suffixes(name))
             if replacement != name and random.random() < 0.6:
                 address_components[component] = replacement
 
