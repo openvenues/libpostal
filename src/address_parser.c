@@ -8,8 +8,10 @@
 
 #define ADDRESS_PARSER_MODEL_FILENAME "address_parser.dat"
 #define ADDRESS_PARSER_VOCAB_FILENAME "address_parser_vocab.trie"
+#define ADDRESS_PARSER_PHRASE_FILENAME "address_parser_phrases.trie"
 
 #define UNKNOWN_WORD "UNKNOWN"
+#define UNKNOWN_NUMERIC "UNKNOWN_NUMERIC"
 
 static address_parser_t *parser = NULL;
 
@@ -44,6 +46,15 @@ bool address_parser_save(address_parser_t *self, char *output_dir) {
     char *vocab_path = char_array_get_string(path);
 
     if (!trie_save(self->vocab, vocab_path)) {
+        return false;
+    }
+
+    char_array_clear(path);
+
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, ADDRESS_PARSER_PHRASE_FILENAME);
+    char *phrases_path = char_array_get_string(path);
+
+    if (!trie_save(self->phrase_types, phrases_path)) {
         return false;
     }
 
@@ -90,6 +101,22 @@ bool address_parser_load(char *dir) {
 
     parser->vocab = vocab;
 
+    char_array_clear(path);
+
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, dir, ADDRESS_PARSER_PHRASE_FILENAME);
+
+    char *phrases_path = char_array_get_string(path);
+
+    trie_t *phrase_types = trie_load(phrases_path);
+
+    if (phrase_types == NULL) {
+        address_parser_destroy(parser);
+        char_array_destroy(path);
+        return false;
+    }
+
+    parser->phrase_types = phrase_types;
+
     char_array_destroy(path);
     return true;
 }
@@ -103,6 +130,10 @@ void address_parser_destroy(address_parser_t *self) {
 
     if (self->vocab != NULL) {
         trie_destroy(self->vocab);
+    }
+
+    if (self->phrase_types != NULL) {
+        trie_destroy(self->phrase_types);
     }
 
     free(self);
@@ -162,6 +193,14 @@ void address_parser_context_destroy(address_parser_context_t *self) {
         int64_array_destroy(self->geodb_phrase_memberships);
     }
 
+    if (self->component_phrases != NULL) {
+        phrase_array_destroy(self->component_phrases);
+    }
+
+    if (self->component_phrase_memberships != NULL) {
+        int64_array_destroy(self->component_phrase_memberships);
+    }
+
     free(self);
 }
 
@@ -218,6 +257,16 @@ address_parser_context_t *address_parser_context_new(void) {
         goto exit_address_parser_context_allocated;
     }
 
+    context->component_phrases = phrase_array_new();
+    if (context->component_phrases == NULL) {
+        goto exit_address_parser_context_allocated;
+    }
+
+    context->component_phrase_memberships = int64_array_new();
+    if (context->component_phrase_memberships == NULL) {
+        goto exit_address_parser_context_allocated;
+    }
+
     return context;
 
 exit_address_parser_context_allocated:
@@ -225,7 +274,7 @@ exit_address_parser_context_allocated:
     return NULL;
 }
 
-void address_parser_context_fill(address_parser_context_t *context, tokenized_string_t *tokenized_str, char *language, char *country) {
+void address_parser_context_fill(address_parser_context_t *context, address_parser_t *parser, tokenized_string_t *tokenized_str, char *language, char *country) {
     int64_t i, j;
 
     uint32_t token_index;
@@ -300,6 +349,34 @@ void address_parser_context_fill(address_parser_context_t *context, tokenized_st
         log_debug("token i=%lld, null geo phrase membership\n", i);
         int64_array_push(geodb_phrase_memberships, NULL_PHRASE_MEMBERSHIP);
     }
+
+    phrase_array_clear(context->component_phrases);
+    int64_array_clear(context->component_phrase_memberships);
+    i = 0;
+
+    phrase_array *component_phrases = context->component_phrases;
+    int64_array *component_phrase_memberships = context->component_phrase_memberships;
+
+    if (trie_search_tokens_with_phrases(parser->phrase_types, str, tokens, &component_phrases)) {
+        for (j = 0; j < component_phrases->n; j++) {
+            phrase = component_phrases->a[j];
+
+            for (; i < phrase.start; i++) {
+                log_debug("token i=%lld, null component phrase membership\n", i);
+                int64_array_push(component_phrase_memberships, NULL_PHRASE_MEMBERSHIP);
+            }
+
+            for (i = phrase.start; i < phrase.start + phrase.len; i++) {
+                log_debug("token i=%lld, component phrase membership=%lld\n", i, j);
+                int64_array_push(component_phrase_memberships, j);
+            }
+        }
+    }
+    for (; i < tokens->n; i++) {
+        log_debug("token i=%lld, null component phrase membership\n", i);
+        int64_array_push(component_phrase_memberships, NULL_PHRASE_MEMBERSHIP);
+    }
+
 
 
 }
@@ -384,7 +461,6 @@ static inline void add_phrase_features(cstring_array *features, uint32_t phrase_
     }
 }
 
-
 /*
 address_parser_features
 -----------------------
@@ -426,14 +502,13 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     int64_array *address_phrase_memberships = context->address_phrase_memberships;
     phrase_array *geodb_phrases = context->geodb_phrases;
     int64_array *geodb_phrase_memberships = context->geodb_phrase_memberships;
+    phrase_array *component_phrases = context->component_phrases;
+    int64_array *component_phrase_memberships = context->component_phrase_memberships;
     cstring_array *normalized = context->normalized;
 
     uint32_array *separators = context->separators;
 
     cstring_array_clear(features);
-
-    // Bias unit, acts as an intercept
-    feature_array_add(features, 1, "bias");
 
     char *original_word = tokenized_string_get_token(tokenized, i);
 
@@ -449,7 +524,6 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     }
 
     size_t word_len = strlen(word);
-    char *current_word = word;
 
     log_debug("word=%s\n", word);
 
@@ -459,6 +533,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
     char *phrase_string = NULL;
     char *geo_phrase_string = NULL;
+    char *component_phrase_string = NULL;
 
     int64_t address_phrase_index = address_phrase_memberships->a[i];
 
@@ -519,40 +594,96 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         }
     }
 
+    bool add_word_feature = true;
+
+    int64_t component_phrase_index = component_phrase_memberships->a[i];
+    phrase = NULL_PHRASE;
+
+    address_parser_types_t types;
+
+    // Component phrases
+    if (component_phrase_index != NULL_PHRASE_MEMBERSHIP) {
+        phrase = component_phrases->a[component_phrase_index];
+
+        component_phrase_string = get_phrase_string(tokenized, phrase_tokens, phrase);
+        
+        types.value = phrase.data;
+        uint32_t component_phrase_types = types.components;
+        uint32_t most_common = types.most_common;
+
+        if (last_index >= (ssize_t)phrase.start - 1 || next_index <= (ssize_t)phrase.start + phrase.len - 1) {
+            last_index = (ssize_t)phrase.start - 1;
+            next_index = (ssize_t)phrase.start + phrase.len;
+
+        }
+
+        if (component_phrase_string != NULL && component_phrase_types ^ ADDRESS_COMPONENT_POSTAL_CODE) {
+            feature_array_add(features, 2, "phrase", component_phrase_string);
+            add_word_feature = false;
+        }
+
+        if (component_phrase_types > 0) {
+            add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_SUBURB, "suburb", component_phrase_string, prev2, prev);
+            add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_CITY, "city", component_phrase_string, prev2, prev);
+            add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_CITY_DISTRICT, "city_district", component_phrase_string, prev2, prev);
+            add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_STATE_DISTRICT, "state_district", component_phrase_string, prev2, prev);
+            add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_STATE, "state", component_phrase_string, prev2, prev);
+            add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_POSTAL_CODE, "postal_code", component_phrase_string, prev2, prev);
+            add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_COUNTRY, "country", component_phrase_string, prev2, prev);
+        }
+
+        if (most_common == ADDRESS_PARSER_CITY) {
+            feature_array_add(features, 2, "commonly city", component_phrase_string);
+        } else if (most_common == ADDRESS_PARSER_STATE) {
+            feature_array_add(features, 2, "commonly state", component_phrase_string);
+        } else if (most_common == ADDRESS_PARSER_COUNTRY) {
+            feature_array_add(features, 2, "commonly country", component_phrase_string);
+        } else if (most_common == ADDRESS_PARSER_STATE_DISTRICT) {
+            feature_array_add(features, 2, "commonly state_district", component_phrase_string);
+        } else if (most_common == ADDRESS_PARSER_SUBURB) {
+            feature_array_add(features, 2, "commonly suburb", component_phrase_string);
+        } else if (most_common == ADDRESS_PARSER_CITY_DISTRICT) {
+            feature_array_add(features, 2, "commonly city_district", component_phrase_string);
+        } else if (most_common == ADDRESS_PARSER_POSTAL_CODE) {
+            feature_array_add(features, 2, "commonly postal_code", component_phrase_string);
+        }
+
+    }
+
     int64_t geodb_phrase_index = geodb_phrase_memberships->a[i];
 
     phrase = NULL_PHRASE;
     geodb_value_t geo;
 
     // GeoDB phrases
-    if (geodb_phrase_index != NULL_PHRASE_MEMBERSHIP) {
+    if (component_phrase_index == NULL_PHRASE_MEMBERSHIP && geodb_phrase_index != NULL_PHRASE_MEMBERSHIP) {
         phrase = geodb_phrases->a[geodb_phrase_index];
 
         geo_phrase_string = get_phrase_string(tokenized, phrase_tokens, phrase);
         geo.value = phrase.data;
         uint32_t geodb_phrase_types = geo.components;
 
-        if (last_index <= (ssize_t)phrase.start - 1 && next_index >= (ssize_t)phrase.start + phrase.len - 1) {
+        if (last_index >= (ssize_t)phrase.start - 1 || next_index <= (ssize_t)phrase.start + phrase.len) {
             last_index = (ssize_t)phrase.start - 1;
             next_index = (ssize_t)phrase.start + phrase.len;
-            if (geo_phrase_string != NULL && geodb_phrase_types ^ ADDRESS_POSTAL_CODE) {
-                word = geo_phrase_string;
-            }
+        }
 
+        if (geo_phrase_string != NULL && geodb_phrase_types ^ ADDRESS_POSTAL_CODE) {
+            feature_array_add(features, 2, "phrase", geo_phrase_string);
+            add_word_feature = false;
         }
 
         if (geodb_phrase_types ^ ADDRESS_ANY) {
+            add_phrase_features(features, geodb_phrase_types, ADDRESS_LOCALITY, "gn city", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN1, "gn admin1", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN2, "gn admin2", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN3, "gn admin3", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN4, "gn admin4", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN_OTHER, "gn admin other", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, ADDRESS_NEIGHBORHOOD, "gn neighborhood", geo_phrase_string, prev2, prev);
 
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_LOCALITY, "city", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN1, "admin1", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN2, "admin2", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN3, "admin3", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN4, "admin4", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN_OTHER, "admin other", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_NEIGHBORHOOD, "neighborhood", geo_phrase_string, prev2, prev);
-
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_COUNTRY, "country", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_POSTAL_CODE, "postal code", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, ADDRESS_COUNTRY, "gn country", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, ADDRESS_POSTAL_CODE, "gn postal code", geo_phrase_string, prev2, prev);
 
         }
 
@@ -560,24 +691,27 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
     uint32_t word_freq = word_vocab_frequency(parser, word);
 
-    if (phrase_string == NULL && geo_phrase_string == NULL) {
+    if (add_word_feature) {
+        // Bias unit, acts as an intercept
+        feature_array_add(features, 1, "bias");
+
         if (word_freq > 0) {
             // The individual word
             feature_array_add(features, 2, "word", word);
         } else {
             log_debug("word not in vocab: %s\n", original_word);
-            word = UNKNOWN_WORD;
+            word = (token.type != NUMERIC && token.type != IDEOGRAPHIC_NUMBER) ? UNKNOWN_WORD : UNKNOWN_NUMERIC;
         }
     }
-    
-    if (prev != NULL) {
+
+    if (prev != NULL && last_index == i - 1) {
         // Previous tag and current word
-        feature_array_add(features, 3, "i-1 tag+word", prev, current_word);
+        feature_array_add(features, 3, "i-1 tag+word", prev, word);
         feature_array_add(features, 2, "i-1 tag", prev);
 
         if (prev2 != NULL) {
             // Previous two tags and current word
-            feature_array_add(features, 4, "i-2 tag+i-1 tag+word", prev2, prev, current_word);
+            feature_array_add(features, 4, "i-2 tag+i-1 tag+word", prev2, prev, word);
             feature_array_add(features, 3, "i-2 tag+i-1 tag", prev2, prev);
         }
     }
@@ -587,15 +721,14 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
         uint32_t prev_word_freq = word_vocab_frequency(parser, prev_word);
         if (prev_word_freq == 0) {
-            prev_word = UNKNOWN_WORD;
+            token_t prev_token = tokenized->tokens->a[last_index];
+            prev_word = (prev_token.type != NUMERIC && prev_token.type != IDEOGRAPHIC_NUMBER) ? UNKNOWN_WORD : UNKNOWN_NUMERIC;
         }
 
         // Previous word
         feature_array_add(features, 2, "i-1 word", prev_word);
-        // Previous tag + previous word
-        if (last_index == i - 1) {
-            feature_array_add(features, 3, "i-1 tag+i-1 word", prev, prev_word);
-        }
+        feature_array_add(features, 3, "i-1 tag+i-1 word", prev, prev_word);
+
         // Previous word and current word
         feature_array_add(features, 3, "i-1 word+word", prev_word, word);
     }
@@ -607,14 +740,33 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
         uint32_t next_word_freq = word_vocab_frequency(parser, next_word);
         if (next_word_freq == 0) {
-            next_word = UNKNOWN_WORD;
+            token_t next_token = tokenized->tokens->a[next_index];
+            next_word = (next_token.type != NUMERIC && next_token.type != IDEOGRAPHIC_NUMBER) ? UNKNOWN_WORD : UNKNOWN_NUMERIC;
         }
 
         // Next word e.g. if the current word is unknown and the next word is "street"
         feature_array_add(features, 2, "i+1 word", next_word);
+
         // Current word and next word
         feature_array_add(features, 3, "word+i+1 word", word, next_word);
     }
+
+    #ifndef PRINT_FEATURES
+    if (0) {
+    #endif
+
+    uint32_t idx;
+    char *feature;
+
+    printf("{");
+    cstring_array_foreach(features, idx, feature, {
+        printf("  %s, ", feature);
+    })
+    printf("}\n");
+
+    #ifndef PRINT_FEATURES
+    }
+    #endif
 
     return true;
 
@@ -681,7 +833,7 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
         uint32_array_push(context->separators, ADDRESS_SEPARATOR_NONE);
     }
 
-    address_parser_context_fill(context, tokenized_str, language, country);
+    address_parser_context_fill(context, parser, tokenized_str, language, country);
 
     cstring_array *token_labels = cstring_array_new_size(tokens->n);
 

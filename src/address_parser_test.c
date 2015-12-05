@@ -10,7 +10,6 @@
 
 #include "log/log.h"
 
-
 typedef struct address_parser_test_results {
     size_t num_errors;
     size_t num_predictions;
@@ -67,7 +66,7 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
         }
         char *country = char_array_get_string(data_set->country);
 
-        address_parser_context_fill(context, data_set->tokenized_str, language, country);
+        address_parser_context_fill(context, parser, data_set->tokenized_str, language, country);
 
         cstring_array *token_labels = cstring_array_new_size(data_set->tokenized_str->strings->str->n);
 
@@ -90,6 +89,7 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
                     uint32_t truth_index = get_class_index(parser, truth);
 
                     result->confusion[predicted_index * num_classes + truth_index]++;
+
                 }
                 result->num_predictions++;
 
