@@ -63,6 +63,7 @@ from geodata.states.state_abbreviations import STATE_ABBREVIATIONS, STATE_EXPANS
 from geodata.language_id.polygon_lookup import country_and_languages
 from geodata.i18n.languages import *
 from geodata.address_formatting.formatter import AddressFormatter
+from geodata.names.normalization import replace_name_prefixes, replace_name_suffixes
 from geodata.osm.extract import *
 from geodata.polygons.language_polys import *
 from geodata.polygons.reverse_geocode import *
@@ -190,6 +191,15 @@ osm_fields = [
     OSMField('addr:postcode', 'OSM_POSTAL_CODE', alternates=['addr:postal_code']),
     OSMField('addr:country', 'OSM_COUNTRY'),
 ]
+
+
+REPLACE_COMPONENTS = (
+    AddressFormatter.SUBURB,
+    AddressFormatter.CITY_DISTRICT,
+    AddressFormatter.CITY,
+    AddressFormatter.STATE_DISTRICT,
+    AddressFormatter.STATE
+)
 
 
 def write_osm_json(filename, out_filename):
@@ -708,6 +718,18 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
         for component, neighborhoods in neighborhood_levels.iteritems():
             if component not in address_components and random.random() < 0.5:
                 address_components[component] = neighborhoods[0]
+
+        '''
+        Name normalization
+        ------------------
+
+        Probabilistically strip standard prefixes/suffixes e.g. "London Borough of"
+        '''
+        for component in REPLACE_COMPONENTS:
+            name = address_components[component]
+            replacement = replace_name_prefixes(replace_name_suffixes())
+            if replacement != name and random.random() < 0.6:
+                address_components[component] = replacement
 
         # Version with all components
         formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=not tag_components)
