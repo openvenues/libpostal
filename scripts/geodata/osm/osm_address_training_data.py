@@ -726,7 +726,9 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
         Probabilistically strip standard prefixes/suffixes e.g. "London Borough of"
         '''
         for component in REPLACE_COMPONENTS:
-            name = address_components[component]
+            name = address_components.get(component)
+            if not name:
+                continue
             replacement = replace_name_prefixes(replace_name_suffixes(name))
             if replacement != name and random.random() < 0.6:
                 address_components[component] = replacement
