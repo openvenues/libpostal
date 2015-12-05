@@ -192,6 +192,8 @@ int trie_node_search_tail_tokens(trie_t *self, trie_node_t node, char *str, toke
     trie_data_node_t old_data_node = self->data->a[data_index];
     uint32_t current_tail_pos = old_data_node.tail;
 
+    log_debug("tail_index = %zu\n", tail_index);
+
     unsigned char *tail_ptr = self->tail->a + current_tail_pos + tail_index;
     
     if (!(*tail_ptr)) {
@@ -213,14 +215,19 @@ int trie_node_search_tail_tokens(trie_t *self, trie_node_t node, char *str, toke
 
         if (token.type == WHITESPACE) continue;
 
-        if (i < tokens->n - 1 && *tail_ptr == ' ') {
+        if (*tail_ptr == ' ') {
             tail_ptr++;
+            log_debug("Got space, advancing pointer, tail_ptr=%s\n", tail_ptr);
         }
 
         log_debug("Tail string compare: %s with %.*s\n", tail_ptr, (int)token_length, ptr);
 
         if (strncmp((char *)tail_ptr, ptr, token_length) == 0) {
             tail_ptr += token_length;
+            log_debug("tail comparison successful\n");
+            if (i == tokens->n - 1) {
+                return i;
+            }
         } else {
             return -1;
         }
