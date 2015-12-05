@@ -71,6 +71,41 @@ with the general error-driven averaged perceptron.
 #define SEPARATOR_LABEL "sep"
 #define FIELD_SEPARATOR_LABEL "fsep"
 
+
+#define ADDRESS_COMPONENT_HOUSE 1 << 0
+#define ADDRESS_COMPONENT_HOUSE_NUMBER 1 << 1
+#define ADDRESS_COMPONENT_ROAD 1 << 4
+#define ADDRESS_COMPONENT_SUBURB 1 << 7
+#define ADDRESS_COMPONENT_CITY_DISTRICT 1 << 8
+#define ADDRESS_COMPONENT_CITY 1 << 9
+#define ADDRESS_COMPONENT_STATE_DISTRICT 1 << 10
+#define ADDRESS_COMPONENT_STATE 1 << 11
+#define ADDRESS_COMPONENT_POSTAL_CODE 1 << 12
+#define ADDRESS_COMPONENT_COUNTRY 1 << 13
+
+enum {
+    ADDRESS_PARSER_HOUSE,
+    ADDRESS_PARSER_HOUSE_NUMBER,
+    ADDRESS_PARSER_ROAD,
+    ADDRESS_PARSER_SUBURB,
+    ADDRESS_PARSER_CITY_DISTRICT,
+    ADDRESS_PARSER_CITY,
+    ADDRESS_PARSER_STATE_DISTRICT,
+    ADDRESS_PARSER_STATE,
+    ADDRESS_PARSER_POSTAL_CODE,
+    ADDRESS_PARSER_COUNTRY,
+    NUM_ADDRESS_PARSER_TYPES
+} address_parser_types;
+
+typedef union address_parser_types {
+    uint32_t value;
+    struct {
+        uint32_t components:16;     // Bitset of components
+        uint32_t most_common:16;    // Most common component as short integer enum value 
+    };
+} address_parser_types_t;
+
+
 typedef struct address_parser_context {
     char *language;
     char *country;
@@ -84,6 +119,9 @@ typedef struct address_parser_context {
     phrase_array *geodb_phrases;
     // Index in gedob_phrases or -1
     int64_array *geodb_phrase_memberships;
+    phrase_array *component_phrases;
+    // Index in component_phrases or -1
+    int64_array *component_phrase_memberships;
     tokenized_string_t *tokenized_str;
 } address_parser_context_t;
 
@@ -97,6 +135,7 @@ typedef struct address_parser_response {
 typedef struct address_parser {
     averaged_perceptron_t *model;
     trie_t *vocab;
+    trie_t *phrase_types;
 } address_parser_t;
 
 // General usage
@@ -115,7 +154,7 @@ void address_parser_normalize_token(cstring_array *array, char *str, token_t tok
 address_parser_context_t *address_parser_context_new(void);
 void address_parser_context_destroy(address_parser_context_t *self);
 
-void address_parser_context_fill(address_parser_context_t *context, tokenized_string_t *tokenized_str, char *language, char *country);
+void address_parser_context_fill(address_parser_context_t *context, address_parser_t *parser, tokenized_string_t *tokenized_str, char *language, char *country);
 
 // Feature function
 bool address_parser_features(void *self, void *ctx, tokenized_string_t *str, uint32_t i, char *prev, char *prev2);

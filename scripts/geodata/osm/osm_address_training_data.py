@@ -696,6 +696,13 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
             if place_type == 'borough' or polygon_type == 'local_admin':
                 neighborhood_level = AddressFormatter.CITY_DISTRICT
 
+                # Optimization so we don't use Brooklyn for Kings County
+                city_name = address_components.get(AddressFormatter.CITY)
+                if name == city_name:
+                    name = neighbrohood.get(name_key, neighborhood.get(raw_name_key))
+                    if not name or name == city_name:
+                        continue
+
             neighborhood_levels[neighborhood_level].append(name)
 
         for component, neighborhoods in neighborhood_levels.iteritems():
