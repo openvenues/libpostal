@@ -1,0 +1,74 @@
+alabama|al
+alberta|ab
+alaska|ak
+arizona|az
+arkansas|ar
+australian antarctic territory|aat
+australian capital territory|act
+british columbia|bc
+california|ca
+colorado|co
+connecticut|ct
+delaware|de
+district of columbia|dc
+florida|fl
+georgia|ga
+hawaii|hi
+idaho|id
+illinois|il
+indiana|in
+iowa|ia
+jervis bay territory|jbt
+kansas|ks
+kentucky|ky
+louisiana|la
+maine|me
+manitoba|mb
+maryland|md
+massachusetts|ma
+michigan|mi
+minnesota|mn
+mississippi|ms
+missouri|mo
+montana|mt
+nebraska|ne
+nevada|nv
+new brunswick|nb
+new hampshire|nh
+new jersey|nj
+new mexico|nm
+new south wales|nsw
+new york|ny
+newfoundland|nl
+north carolina|nc
+north dakota|nd
+northern territory|nt
+nova scotia|ns
+northwest territories|nt|nwt
+nunavut|nu
+ohio|oh
+oklahoma|ok
+ontario|on
+oregon|or
+pennsylvania|pa
+prince edward island|pe|pei
+quebec|qc
+queensland|qld
+rhode island|ri
+saskatchewan|sk
+south carolina|sc
+south dakota|sd
+southern australia|sa
+tasmania|tas
+tennessee|tn
+texas|tx
+utah|ut
+vermont|vt
+victoria|vic
+virginia|va
+washington|wa
+west virginia|wv
+western australia|wa
+wisconsin|wi
+wyoming|wy
+yukon|yt|the yukon|yukon territory
