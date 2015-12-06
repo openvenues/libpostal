@@ -18,6 +18,8 @@ matrix_t *matrix_new_values(size_t m, size_t n, double *values);
 matrix_t *matrix_new_zeros(size_t m, size_t n);
 matrix_t *matrix_new_ones(size_t m, size_t n);
 
+bool matrix_resize(matrix_t *self, size_t m, size_t n);
+
 matrix_t *matrix_copy(matrix_t *self);
 
 void matrix_init_values(matrix_t *self, double *values);

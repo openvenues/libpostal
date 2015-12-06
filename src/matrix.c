@@ -20,6 +20,23 @@ matrix_t *matrix_new(size_t m, size_t n) {
 
 }
 
+bool matrix_resize(matrix_t *self, size_t m, size_t n) {
+    if (self == NULL) return false;
+
+    matrix->values = realloc(sizeof(double) * m * n);
+    if (matrix->values == NULL) {
+        return false;
+    }
+
+    self->m = m;
+    self->n = n;
+
+    // Set all values to 0
+    matrix_zero(self);
+
+    return true;
+}
+
 matrix_t *matrix_copy(matrix_t *self) {
     matrix_t *cpy = matrix_new(self->m, self->n);
     size_t num_values = self->m * self->n;
