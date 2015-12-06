@@ -193,7 +193,7 @@ osm_fields = [
 ]
 
 
-REPLACE_COMPONENTS = (
+BOUNDARY_COMPONENTS = (
     AddressFormatter.SUBURB,
     AddressFormatter.CITY_DISTRICT,
     AddressFormatter.CITY,
@@ -614,10 +614,12 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                     if not name:
                         name = component_value.get(key, component_value.get(raw_key))
 
-                    if not name:
+                    existing_city_name = address_components.get(AddressFormatter.CITY)
+
+                    if not name or (component != AddressFormatter.CITY and name == existing_city_name):
                         name = component_value.get(name_key, component_value.get(raw_name_key))
 
-                    if not name:
+                    if not name or (component != AddressFormatter.CITY and name == existing_city_name):
                         continue
 
                     if (component, name) not in seen:
@@ -706,7 +708,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
             if place_type == 'borough' or polygon_type == 'local_admin':
                 neighborhood_level = AddressFormatter.CITY_DISTRICT
 
-                # Optimization so we don't use Brooklyn for Kings County
+                # Optimization so we don't use e.g. Brooklyn multiple times
                 city_name = address_components.get(AddressFormatter.CITY)
                 if name == city_name:
                     name = neighborhood.get(name_key, neighborhood.get(raw_name_key))
@@ -725,13 +727,33 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
 
         Probabilistically strip standard prefixes/suffixes e.g. "London Borough of"
         '''
-        for component in REPLACE_COMPONENTS:
+        for component in BOUNDARY_COMPONENTS:
             name = address_components.get(component)
             if not name:
                 continue
             replacement = replace_name_prefixes(replace_name_suffixes(name))
             if replacement != name and random.random() < 0.6:
                 address_components[component] = replacement
+
+        '''
+        Name deduping
+        -------------
+
+        For some cases like "Antwerpen, Antwerpen, Antwerpen"
+        that are very unlikely to occur in real life.
+        '''
+
+        name_components = defaultdict(list)
+
+        for component in (AddressFormatter.STATE_DISTRICT, AddressFormatter.CITY, AddressFormatter.CITY_DISTRICT, AddressFormatter.SUBURB):
+            name = address_components.get(component)
+            if name:
+                name_components[name].append(component)
+
+        for name, components in name_components.iteritems():
+            if len(components) > 1:
+                for component in components[1:]:
+                    address_components.pop(component, None)
 
         # Version with all components
         formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=not tag_components)
