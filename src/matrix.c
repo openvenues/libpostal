@@ -23,9 +23,12 @@ matrix_t *matrix_new(size_t m, size_t n) {
 bool matrix_resize(matrix_t *self, size_t m, size_t n) {
     if (self == NULL) return false;
 
-    matrix->values = realloc(sizeof(double) * m * n);
-    if (matrix->values == NULL) {
-        return false;
+    // If the new size is smaller, don't reallocate, just ignore the extra values
+    if (m * n > (self->m * self->n)) {
+        matrix->values = realloc(sizeof(double) * m * n);
+        if (matrix->values == NULL) {
+            return false;
+        }        
     }
 
     self->m = m;
