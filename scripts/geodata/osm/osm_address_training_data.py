@@ -589,6 +589,8 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
         if osm_components:
             poly_components = defaultdict(list)
 
+            existing_city_name = address_components.get(AddressFormatter.CITY)
+
             for component, components_values in osm_components.iteritems():
                 seen = set()
 
@@ -610,11 +612,8 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                             name = component_value[simple_name_key]
                         elif international_name_key in component_value:
                             name = component_value[international_name_key]
-
                     if not name:
                         name = component_value.get(key, component_value.get(raw_key))
-
-                    existing_city_name = address_components.get(AddressFormatter.CITY)
 
                     if not name or (component != AddressFormatter.CITY and name == existing_city_name):
                         name = component_value.get(name_key, component_value.get(raw_name_key))
@@ -654,6 +653,7 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                     if not names or lang not in names:
                         continue
 
+                    city = None
                     if 'abbr' not in names or non_local_language:
                         # Use the common city name in the target language
                         city = names[lang][0][0]
