@@ -23,7 +23,7 @@ typedef struct phrase_language {
 
 VECTOR_INIT(phrase_language_array, phrase_language_t)
 
-#define ks_lt_phrase_language(a, b) ((a).phrase.start < (b).phrase.start)
+#define ks_lt_phrase_language(a, b) ((a).phrase.start < (b).phrase.start || ((a).phrase.start == (b).phrase.start && (a).phrase.len > (b).phrase.len))
 
 KSORT_INIT(phrase_language_array, phrase_language_t, ks_lt_phrase_language)
 
@@ -167,14 +167,18 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
         for (int i = 0; i < phrases->n; i++) {
             phrase_lang = phrases->a[i];
+
+            phrase_t phrase = phrase_lang.phrase;
+            if (phrase.start < start) {
+                continue;
+            }
+
             char_array_clear(key);
 
             char_array_cat(key, phrase_lang.language);
             char_array_cat(key, NAMESPACE_SEPARATOR_CHAR);
 
             size_t namespace_len = key->n;
-
-            phrase_t phrase = phrase_lang.phrase;
 
             end = phrase.start;
 
@@ -196,7 +200,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
             token_t token;
 
-            if (value.components & options.address_components) {
+            if ((value.components & options.address_components) > 0) {
                 key->n = namespace_len;
                 for (int j = phrase.start; j < phrase.start + phrase.len; j++) {
                     token = tokens->a[j];
