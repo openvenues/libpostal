@@ -10,6 +10,10 @@
     __VECTOR_BASE(name, type)                                                  \
     __VECTOR_DESTROY(name, type)                                               \
                                                                                \
+    static inline void type##_array_zero(type *array, size_t n) {              \
+        memset(array, 0, n * sizeof(type));                                    \
+    }                                                                          \
+                                                                               \
     static inline void type##_array_set(type *array, size_t n, type value) {   \
         for (int i = 0; i < n; i++) {                                          \
             array[i] = value;                                                  \
@@ -180,13 +184,13 @@
 #define VECTOR_INIT_NUMERIC_FLOAT(name, type, type_abs)                        \
     VECTOR_INIT_NUMERIC(name, type, type, type_abs)                            \
                                                                                \
-    static inline void type##_array_log(type *array, type c, size_t n) {       \
+    static inline void type##_array_log(type *array, size_t n) {               \
         for (int i = 0; i < n; i++) {                                          \
             array[i] = log(array[i]);                                          \
         }                                                                      \
     }                                                                          \
                                                                                \
-    static inline void type##_array_exp(type *array, type c, size_t n) {       \
+    static inline void type##_array_exp(type *array, size_t n) {               \
         for (int i = 0; i < n; i++) {                                          \
             array[i] = exp(array[i]);                                          \
         }                                                                      \
