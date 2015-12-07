@@ -702,7 +702,13 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             log_debug("word not in vocab: %s\n", original_word);
             word = (token.type != NUMERIC && token.type != IDEOGRAPHIC_NUMBER) ? UNKNOWN_WORD : UNKNOWN_NUMERIC;
         }
+    } else if (component_phrase_string != NULL) {
+        word = component_phrase_string;
+    } else if (geo_phrase_string != NULL) {
+        word = geo_phrase_string;
     }
+
+
 
     if (prev != NULL && last_index == i - 1) {
         // Previous tag and current word
@@ -727,7 +733,10 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
         // Previous word
         feature_array_add(features, 2, "i-1 word", prev_word);
-        feature_array_add(features, 3, "i-1 tag+i-1 word", prev, prev_word);
+
+        if (last_index == i - 1) {
+            feature_array_add(features, 3, "i-1 tag+i-1 word", prev, prev_word);
+        }
 
         // Previous word and current word
         feature_array_add(features, 3, "i-1 word+word", prev_word, word);
