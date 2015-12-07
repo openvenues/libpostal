@@ -297,20 +297,17 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 }
 
 void add_postprocessed_string(cstring_array *strings, char *str, normalize_options_t options) {
-    bool add_string = true;
+    cstring_array_add_string(strings, str);
 
     if (options.roman_numerals) {
         char *numex_replaced = replace_numeric_expressions(str, LATIN_LANGUAGE_CODE);
         if (numex_replaced != NULL) {
             cstring_array_add_string(strings, numex_replaced);
             free(numex_replaced);
-            add_string = false;
         }
+
     }
 
-    if (add_string) {
-        cstring_array_add_string(strings, str);
-    }
 }
 
 
