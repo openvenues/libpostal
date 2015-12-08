@@ -33,6 +33,10 @@ inline bool is_word_token(uint16_t type) {
     return type == WORD || type == ABBREVIATION || type == ACRONYM || type == IDEOGRAPHIC_CHAR || type == HANGUL_SYLLABLE;
 }
 
+inline bool is_ideographic(uint16_t type) {
+    return type == IDEOGRAPHIC_CHAR || type == HANGUL_SYLLABLE || type == IDEOGRAPHIC_NUMBER;
+}
+
 inline bool is_numeric_token(uint16_t type) {
     return type == NUMERIC;
 }
@@ -163,12 +167,14 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
         int start = 0;
         int end = 0;
 
+        phrase_t phrase = NULL_PHRASE;
+
         key = key != NULL ? key : char_array_new_size(DEFAULT_KEY_LEN);
 
         for (int i = 0; i < phrases->n; i++) {
             phrase_lang = phrases->a[i];
 
-            phrase_t phrase = phrase_lang.phrase;
+            phrase = phrase_lang.phrase;
             if (phrase.start < start) {
                 continue;
             }
@@ -193,6 +199,14 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
                     string_tree_add_string(tree, " ");
                 }
                 string_tree_finalize_token(tree);       
+            }
+
+            if (phrase.start > 0) {
+                token_t prev_token = tokens->a[phrase.start - 1];
+                if (!(prev_token.type == WHITESPACE && !is_ideographic(prev_token.type))) {
+                    string_tree_add_string(tree, " ");
+                    string_tree_finalize_token(tree);
+                }
             }
 
             expansion_value_t value;
@@ -262,6 +276,15 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
                     string_tree_finalize_token(tree);
 
                 }
+
+                if (phrase.start + phrase.len < tokens->n - 1) {
+                    token_t next_token = tokens->a[phrase.start + phrase.len + 1];
+                    if (!(next_token.type == WHITESPACE && !is_ideographic(next_token.type))) {
+                        string_tree_add_string(tree, " ");
+                        string_tree_finalize_token(tree);
+                    }
+                }
+
             }
 
             start = phrase.start + phrase.len;
@@ -271,6 +294,15 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
         char_array_destroy(key);
 
         end = (int)tokens->n;
+
+        if (phrase.start + phrase.len > 0 && phrase.start + phrase.len <= end - 1) {
+            token_t next_token = tokens->a[phrase.start + phrase.len];
+            if (!(next_token.type == WHITESPACE && !is_ideographic(next_token.type))) {
+                string_tree_add_string(tree, " ");
+                string_tree_finalize_token(tree);
+            }
+        }    
+
 
         for (int j = start; j < end; j++) {
             token_t token = tokens->a[j]; 
@@ -282,7 +314,8 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
                 log_debug("Adding space\n");
                 string_tree_add_string(tree, " ");
             }
-            string_tree_finalize_token(tree);       
+            string_tree_finalize_token(tree);
+
         }
 
 
