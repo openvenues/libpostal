@@ -203,7 +203,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
             if (phrase.start > 0) {
                 token_t prev_token = tokens->a[phrase.start - 1];
-                if (!(prev_token.type == WHITESPACE && !is_ideographic(prev_token.type))) {
+                if (prev_token.type != WHITESPACE && !is_ideographic(prev_token.type)) {
                     string_tree_add_string(tree, " ");
                     string_tree_finalize_token(tree);
                 }
@@ -249,14 +249,16 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
                             }
                         } else {
+                            uint32_t start_index = cstring_array_start_token(tree->strings);
                             for (int k = phrase.start; k < phrase.start + phrase.len; k++) {
                                 token = tokens->a[k];
                                 if (token.type != WHITESPACE) {
-                                    string_tree_add_string_len(tree, str + token.offset, token.len);
+                                    cstring_array_append_string_len(tree->strings, str + token.offset, token.len);
                                 } else {
-                                    string_tree_add_string(tree, " ");
+                                    cstring_array_append_string(tree->strings, " ");
                                 }
                             }
+                            cstring_array_terminate(tree->strings);
 
                         }
                     }
@@ -267,6 +269,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
             } else {
                 for (int j = phrase.start; j < phrase.start + phrase.len; j++) {
                     token = tokens->a[j];
+                    
                     if (token.type != WHITESPACE) {
                         log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
                         string_tree_add_string_len(tree, str + token.offset, token.len);
@@ -279,7 +282,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
                 if (phrase.start + phrase.len < tokens->n - 1) {
                     token_t next_token = tokens->a[phrase.start + phrase.len + 1];
-                    if (!(next_token.type == WHITESPACE && !is_ideographic(next_token.type))) {
+                    if (next_token.type != WHITESPACE && !is_ideographic(next_token.type)) {
                         string_tree_add_string(tree, " ");
                         string_tree_finalize_token(tree);
                     }
@@ -297,11 +300,11 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
         if (phrase.start + phrase.len > 0 && phrase.start + phrase.len <= end - 1) {
             token_t next_token = tokens->a[phrase.start + phrase.len];
-            if (!(next_token.type == WHITESPACE && !is_ideographic(next_token.type))) {
+            if (next_token.type != WHITESPACE && !is_ideographic(next_token.type)) {
                 string_tree_add_string(tree, " ");
                 string_tree_finalize_token(tree);
             }
-        }    
+        }
 
 
         for (int j = start; j < end; j++) {
@@ -681,6 +684,7 @@ void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_strings
             }
             continue;
         }
+
 
         if (last_numex_str != NULL) {
             free(last_numex_str);
