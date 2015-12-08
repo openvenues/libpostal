@@ -38,28 +38,10 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    normalize_options_t options = {
-        .num_languages = 1,
-        .languages = languages,
-        .address_components = ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_UNIT,
-        .latin_ascii = 1,
-        .transliterate = 1,
-        .strip_accents = 1,
-        .decompose = 1,
-        .lowercase = 1,
-        .trim_string = 1,
-        .replace_word_hyphens = 1,
-        .delete_word_hyphens = 0,
-        .replace_numeric_hyphens = 0,
-        .delete_numeric_hyphens = 0,
-        .split_alpha_from_numeric = 1,
-        .delete_final_periods = 1,
-        .delete_acronym_periods = 1,
-        .drop_english_possessives = 1,
-        .delete_apostrophes = 1,
-        .expand_numex = 1,
-        .roman_numerals = 1
-    };
+    normalize_options_t options = LIBPOSTAL_DEFAULT_OPTIONS;
+
+    options.num_languages = 1;
+    options.languages = languages;
 
     uint64_t num_expansions;
 
