@@ -149,8 +149,8 @@ def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_
                 else:
                     canonical_index = -1
 
-                for p in phrases:
-                    language_canonical_dictionaries[(p, canonical_index)].append(dictionary_type)
+                for i, p in enumerate(phrases):
+                    language_canonical_dictionaries[p, canonical_index if i > 0 else -1].append(dictionary_type)
 
         for (phrase, canonical_index), dictionary_types in language_canonical_dictionaries.iteritems():
             max_dictionary_types = max(max_dictionary_types, len(dictionary_types))
@@ -160,7 +160,6 @@ def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_
                                                                    canonical_index=canonical_index)
             expansion_rules.append(rule_template)
             num_language_rules += 1
-
 
         address_languages.append(address_language_index_template.format(language=quote_string(language),
                                                                         index=language_index,
