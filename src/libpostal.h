@@ -13,21 +13,23 @@ extern "C" {
 #define MAX_LANGUAGE_LEN 4
 
 // Bit set, should be able to keep it at a short (uint16_t)
-#define ADDRESS_ANY 1 << 0
-#define ADDRESS_NAME 1 << 1
-#define ADDRESS_HOUSE_NUMBER 1 << 2
-#define ADDRESS_STREET 1 << 3
-#define ADDRESS_UNIT 1 << 4
+#define ADDRESS_NONE 0
+#define ADDRESS_ANY (1 << 0)
+#define ADDRESS_NAME (1 << 1)
+#define ADDRESS_HOUSE_NUMBER (1 << 2)
+#define ADDRESS_STREET (1 << 3)
+#define ADDRESS_UNIT (1 << 4)
 
-#define ADDRESS_LOCALITY 1 << 7
-#define ADDRESS_ADMIN1 1 << 8
-#define ADDRESS_ADMIN2 1 << 9
-#define ADDRESS_ADMIN3 1 << 10
-#define ADDRESS_ADMIN4 1 << 11
-#define ADDRESS_ADMIN_OTHER 1 << 12
-#define ADDRESS_COUNTRY 1 << 13
-#define ADDRESS_POSTAL_CODE 1 << 14
-#define ADDRESS_NEIGHBORHOOD 1 << 15
+#define ADDRESS_LOCALITY (1 << 7)
+#define ADDRESS_ADMIN1 (1 << 8)
+#define ADDRESS_ADMIN2 (1 << 9)
+#define ADDRESS_ADMIN3 (1 << 10)
+#define ADDRESS_ADMIN4 (1 << 11)
+#define ADDRESS_ADMIN_OTHER (1 << 12)
+#define ADDRESS_COUNTRY (1 << 13)
+#define ADDRESS_POSTAL_CODE (1 << 14)
+#define ADDRESS_NEIGHBORHOOD (1 << 15)
+#define ADDRESS_ALL ((1 << 16) - 1)
 
 typedef struct normalize_options {
     // List of language codes
@@ -60,7 +62,7 @@ typedef struct normalize_options {
 static normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
         .num_languages = 1,
         .languages = NULL,
-        .address_components = ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_UNIT,
+        .address_components = ADDRESS_NAME | ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_UNIT,
         .latin_ascii = 1,
         .transliterate = 1,
         .strip_accents = 1,
@@ -79,7 +81,6 @@ static normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
         .expand_numex = 1,
         .roman_numerals = 1
 };
-
 
 char **expand_address(char *input, normalize_options_t options, uint64_t *n);
 
