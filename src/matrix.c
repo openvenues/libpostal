@@ -1,4 +1,5 @@
 #include "matrix.h"
+#include "file_utils.h"
 
 matrix_t *matrix_new(size_t m, size_t n) {
     matrix_t *matrix = malloc(sizeof(matrix_t));
@@ -25,8 +26,8 @@ bool matrix_resize(matrix_t *self, size_t m, size_t n) {
 
     // If the new size is smaller, don't reallocate, just ignore the extra values
     if (m * n > (self->m * self->n)) {
-        matrix->values = realloc(sizeof(double) * m * n);
-        if (matrix->values == NULL) {
+        self->values = realloc(self->values, sizeof(double) * m * n);
+        if (self->values == NULL) {
             return false;
         }        
     }
@@ -43,7 +44,7 @@ bool matrix_resize(matrix_t *self, size_t m, size_t n) {
 matrix_t *matrix_new_copy(matrix_t *self) {
     matrix_t *cpy = matrix_new(self->m, self->n);
     size_t num_values = self->m * self->n;
-    double_array_copy(cpy->values, self->values, num_values);
+    memcpy(cpy->values, self->values, num_values);
 
     return cpy;
 }
@@ -54,7 +55,7 @@ bool matrix_copy(matrix_t *self, matrix_t *other) {
     }
     size_t num_values = self->n * self->n;
 
-    double_array_copy(other->values, self->values, num_values);
+    memcpy(other->values, self->values, num_values * sizeof(double));
     return true;
 }
 
@@ -86,12 +87,12 @@ inline void matrix_set_scalar(matrix_t *self, size_t row_index, size_t col_index
 
 inline double matrix_get(matrix_t *self, size_t row_index, size_t col_index) {
     size_t index = row_index * self->n + col_index;
-    return self->values->a[index];
+    return self->values[index];
 }
 
 inline double *matrix_get_row(matrix_t *self, size_t row_index) {
     size_t index = row_index * self->n;
-    return self->values->a + index;
+    return self->values + index;
 }
 
 
@@ -185,30 +186,29 @@ matrix_t *matrix_read(FILE *f) {
     matrix_t *mat = malloc(sizeof(matrix_t));
     if (mat == NULL) return NULL;
 
-    mat->data = NULL;
+    mat->values = NULL;
 
-    if (!file_read_uint32(f, &mat->m) ||
-        !file_read_uint32(f, &mat->n)) {
-        goto exit_sparse_matrix_allocated;
+    if (!file_read_uint64(f, (uint64_t *)&mat->m) ||
+        !file_read_uint64(f, (uint64_t *)&mat->n)) {
+        goto exit_matrix_allocated;
     }
 
     size_t len_data = (size_t)mat->m * (size_t)mat->n;
 
-    double_array *data = double_array_new_size(len_data);
+    double *data = malloc(len_data * sizeof(double));
     if (data == NULL) {
         printf("data alloc\n");
         goto exit_matrix_allocated;
     }
 
     for (size_t i = 0; i < len_data; i++) {
-        if (!file_read_double(f, data->a + i)) {
+        if (!file_read_double(f, data + i)) {
             printf("data\n");
-            goto exit_sparse_matrix_allocated;
+            goto exit_matrix_allocated;
         }
     }
 
-    data->n = (size_t)len_data;
-    mat->data = data;
+    mat->values = data;
 
     return mat;
 
@@ -218,7 +218,7 @@ exit_matrix_allocated:
 }
 
 bool matrix_write(matrix_t *self, FILE *f) {
-    if (self == NULL || self->data == NULL) {
+    if (self == NULL || self->values == NULL) {
         return false;
     }
 
@@ -230,7 +230,7 @@ bool matrix_write(matrix_t *self, FILE *f) {
     uint64_t len_data = (uint64_t)self->m * (uint64_t)self->n;
 
     for (int i = 0; i < len_data; i++) {
-        if (!file_write_double(f, self->data->a[i])) {
+        if (!file_write_double(f, self->values[i])) {
             return false;
         }
     }
