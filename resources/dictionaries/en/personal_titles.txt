@@ -63,6 +63,7 @@ reverend|rev
 right honorable|right honorable|right honourable|right hon|rt honorable|rt honorable|rt honourable|rt hon|rh|r h|r hon|right and honorable|right and honourable
 saint|st
 saints|ss
+sainte|ste
 san|s
 santa|sta
 sargeant|sgt
