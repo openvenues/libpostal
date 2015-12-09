@@ -453,6 +453,9 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
             _ = value.pop(key, None)
 
         language = None
+
+        more_than_one_official_language = len(candidate_languages) > 1
+
         if tag_components:
             if len(candidate_languages) == 1:
                 language = candidate_languages[0]['lang']
@@ -584,6 +587,8 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
 
         if non_local_language is not None:
             osm_suffix = ':{}'.format(non_local_language)
+        elif more_than_one_official_language and language not in (AMBIGUOUS_LANGUAGE, UNKNOWN_LANGUAGE):
+            osm_suffix = ':{}'.format(language)
         else:
             osm_suffix = ''
 
