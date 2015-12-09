@@ -458,8 +458,17 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                 language = candidate_languages[0]['lang']
             else:
                 street = value.get('addr:street', None)
-                if street is not None:
+
+                namespaced = [l['lang'] for l in candidate_languages if 'addr:street:{}'.format(l['lang']) in value]
+
+                if street is not None and not namespaced:
                     language = disambiguate_language(street, [(l['lang'], l['default']) for l in candidate_languages])
+                elif namespaced and random.random() < 0.6:
+                    language = random.choice(namespaced)
+                    lang_suffix = ':{}'.format(language)
+                    for k in value:
+                        if k.startswith('addr:') and k.endswith(lang_suffix):
+                            value[k.rstrip(lang_suffix)] = value[k]
                 else:
                     language = UNKNOWN_LANGUAGE
 
