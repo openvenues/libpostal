@@ -774,6 +774,28 @@ def build_address_format_training_data(admin_rtree, language_rtree, neighborhood
                 for component in components[1:]:
                     address_components.pop(component, None)
 
+
+        '''
+        House number cleanup
+        --------------------
+
+        For some OSM nodes, particularly in Uruguay, we get house numbers
+        that are actually a comma-separated list.
+
+        If there's one comma in the house number, allow it as it might
+        be legitimate, but if there are 2 or more, just take the first one.
+        '''
+
+        house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
+        if house_number and house_number.count(',') >= 2:
+            for num in house_number.split(','):
+                num = num.strip()
+                if num:
+                    address_components[AddressFormatter.HOUSE_NUMBER] = num
+                    break
+            else:
+                address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
+
         # Version with all components
         formatted_address = formatter.format_address(country, address_components, tag_components=tag_components, minimal_only=not tag_components)
 
