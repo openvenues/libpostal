@@ -7,17 +7,22 @@
 
 #include "klib/kvec.h"
 
+#define DEFAULT_VECTOR_SIZE 8
+
 // Wrapper around kvec.h to provide dynamically allocated vectors
 #define __VECTOR_BASE(name, type)  typedef kvec_t(type) name;           \
     static inline name *name##_new(void) {                              \
         name *array = malloc(sizeof(name));                             \
         if (array == NULL) return NULL;                                 \
         kv_init(*array);                                                \
+        kv_resize(type, *array, DEFAULT_VECTOR_SIZE);                   \
         return array;                                                   \
     }                                                                   \
     static inline name *name##_new_size(size_t size) {                  \
         name *array = name##_new();                                     \
-        kv_resize(type, *array, size);                                  \
+        if (size > DEFAULT_VECTOR_SIZE) {                               \
+            kv_resize(type, *array, size);                              \
+        }                                                               \
         return array;                                                   \
     }                                                                   \
     static inline void name##_push(name *array, type value) {           \
