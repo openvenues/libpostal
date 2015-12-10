@@ -65,8 +65,8 @@ with the general error-driven averaged perceptron.
 #define ADDRESS_SEPARATOR_FIELD_INTERNAL 1 << 0
 #define ADDRESS_SEPARATOR_FIELD 1 << 1
 
-#define ADDRESS_PARSER_IS_SEPARATOR(token_type) ((token_type) == COMMA || (token_type) == NEWLINE || (token_type) == HYPHEN || (token_type) == DASH || (token_type) == BREAKING_DASH )
-#define ADDRESS_PARSER_IS_IGNORABLE(token_type) ((token.type) == INVALID_CHAR || (token.type) == PERIOD)
+#define ADDRESS_PARSER_IS_SEPARATOR(token_type) ((token_type) == COMMA || (token_type) == NEWLINE || (token_type) == HYPHEN || (token_type) == DASH || (token_type) == BREAKING_DASH|| (token_type) == SEMICOLON || (token_type) == PUNCT_OPEN || (token_type) == PUNCT_CLOSE || (token_type) == AT_SIGN )
+#define ADDRESS_PARSER_IS_IGNORABLE(token_type) ((token.type) == INVALID_CHAR || (token.type) == PERIOD || (token_type) == COLON )
 
 #define SEPARATOR_LABEL "sep"
 #define FIELD_SEPARATOR_LABEL "fsep"
