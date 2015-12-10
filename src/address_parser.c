@@ -510,8 +510,6 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
     cstring_array_clear(features);
 
-    char *original_word = tokenized_string_get_token(tokenized, i);
-
     token_t token = tokenized->tokens->a[i];
 
     ssize_t last_index = (ssize_t)i - 1;
@@ -539,6 +537,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
     char_array *phrase_tokens = context->phrase;
 
+    bool add_word_feature = true;
+
     // Address dictionary phrases
     if (address_phrase_index != NULL_PHRASE_MEMBERSHIP) {
         phrase = address_dictionary_phrases->a[address_phrase_index];
@@ -555,26 +555,22 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         if (address_phrase_types & (ADDRESS_STREET | ADDRESS_NAME)) {
             phrase_string = get_phrase_string(tokenized, phrase_tokens, phrase);
 
-            if (phrase_string != NULL) {
-                word = phrase_string;
-            }
-
+            add_word_feature = false;
             log_debug("phrase_string=%s\n", phrase_string);
 
             add_phrase_features(features, address_phrase_types, ADDRESS_STREET, "street", phrase_string, prev2, prev);
             add_phrase_features(features, address_phrase_types, ADDRESS_NAME, "name", phrase_string, prev2, prev);
-
         }
     }
 
     // Prefixes like hinter, etc.
-    phrase_t prefix_phrase = search_address_dictionaries_prefix(original_word, token.len, language);
+    phrase_t prefix_phrase = search_address_dictionaries_prefix(word, token.len, language);
     if (prefix_phrase.len > 0) {
         expansion.value = prefix_phrase.data;
         // Don't include elisions like l', d', etc. which are in the ADDRESS_ANY category
         if (expansion.components ^ ADDRESS_ANY) {
             char_array_clear(phrase_tokens);
-            char_array_add_len(phrase_tokens, original_word, prefix_phrase.len);
+            char_array_add_len(phrase_tokens, word, prefix_phrase.len);
             char *prefix = char_array_get_string(phrase_tokens);
             log_debug("got prefix: %s\n", prefix);
             feature_array_add(features, 2, "prefix", prefix);
@@ -582,19 +578,17 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     }
 
     // Suffixes like straße, etc.
-    phrase_t suffix_phrase = search_address_dictionaries_suffix(original_word, token.len, language);
+    phrase_t suffix_phrase = search_address_dictionaries_suffix(word, token.len, language);
     if (suffix_phrase.len > 0) {
         expansion.value = suffix_phrase.data;
         if (expansion.components & ADDRESS_STREET) {
             char_array_clear(phrase_tokens);
-            char_array_add_len(phrase_tokens, original_word + (token.len - suffix_phrase.len), suffix_phrase.len);
+            char_array_add_len(phrase_tokens, word + (token.len - suffix_phrase.len), suffix_phrase.len);
             char *suffix = char_array_get_string(phrase_tokens);
             log_debug("got suffix: %s\n", suffix);
             feature_array_add(features, 2, "suffix", suffix);
         }
     }
-
-    bool add_word_feature = true;
 
     int64_t component_phrase_index = component_phrase_memberships->a[i];
     phrase = NULL_PHRASE;
@@ -688,7 +682,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         }
 
     }
-
+    printf("word=%s, len=%zu\n", word, strlen(word));
     uint32_t word_freq = word_vocab_frequency(parser, word);
 
     if (add_word_feature) {
@@ -699,16 +693,16 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             // The individual word
             feature_array_add(features, 2, "word", word);
         } else {
-            log_debug("word not in vocab: %s\n", original_word);
+            log_debug("word not in vocab: %s\n", word);
             word = (token.type != NUMERIC && token.type != IDEOGRAPHIC_NUMBER) ? UNKNOWN_WORD : UNKNOWN_NUMERIC;
         }
     } else if (component_phrase_string != NULL) {
         word = component_phrase_string;
     } else if (geo_phrase_string != NULL) {
         word = geo_phrase_string;
+    } else if (phrase_string != NULL) {
+        word = phrase_string;
     }
-
-
 
     if (prev != NULL && last_index == i - 1) {
         // Previous tag and current word
@@ -825,7 +819,6 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
     averaged_perceptron_t *model = parser->model;
 
     token_array *tokens = tokenize(normalized);
-    char_array *token_array = char_array_new();
 
     tokenized_string_t *tokenized_str = tokenized_string_new_from_str_size(normalized, strlen(normalized), tokens->n);
 
