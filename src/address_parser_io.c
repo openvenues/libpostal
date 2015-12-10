@@ -19,7 +19,11 @@ address_parser_data_set_t *address_parser_data_set_init(char *filename) {
 }
 
 
-bool address_parser_data_set_tokenize_line(char *input, token_array *tokens, uint32_array *separators, cstring_array *labels) {
+bool address_parser_data_set_tokenize_line(address_parser_data_set_t *data_set, char *input) {
+    token_array *tokens = data_set->tokens;
+    uint32_array *separators = data_set->separators;
+    cstring_array *labels = data_set->labels;
+
     size_t count = 0;
 
     token_t token;
@@ -47,7 +51,7 @@ bool address_parser_data_set_tokenize_line(char *input, token_array *tokens, uin
 
         label = str + last_separator_index + 1;
 
-        uint32_t last_separator_type;
+        uint32_t last_separator_type = ADDRESS_SEPARATOR_NONE;
         if (strcmp(label, FIELD_SEPARATOR_LABEL) == 0) {
             last_separator_type = uint32_array_pop(separators);
             uint32_array_push(separators, ADDRESS_SEPARATOR_FIELD | ADDRESS_SEPARATOR_FIELD_INTERNAL);
@@ -135,10 +139,10 @@ bool address_parser_data_set_next(address_parser_data_set_t *data_set) {
 
     tokenized_string_t *tokenized_str = NULL;
 
-    if (address_parser_data_set_tokenize_line(normalized, tokens, separators, labels)) {
+    if (address_parser_data_set_tokenize_line(data_set, normalized)) {
         // Add tokens as discrete strings for easier use in feature functions
         bool copy_tokens = true;
-        tokenized_str = tokenized_string_from_tokens(normalized, tokens, copy_tokens);        
+        tokenized_str = tokenized_string_from_tokens(normalized, data_set->tokens, copy_tokens);        
     }
 
     data_set->tokenized_str = tokenized_str;

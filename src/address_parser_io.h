@@ -33,7 +33,7 @@ typedef struct address_parser_data_set {
 
 
 address_parser_data_set_t *address_parser_data_set_init(char *filename);
-bool address_parser_data_set_tokenize_line(char *input, token_array *tokens, uint32_array *separators, cstring_array *labels);
+bool address_parser_data_set_tokenize_line(address_parser_data_set_t *data_ser, char *input);
 bool address_parser_data_set_next(address_parser_data_set_t *data_set);
 void address_parser_data_set_destroy(address_parser_data_set_t *self);
 
