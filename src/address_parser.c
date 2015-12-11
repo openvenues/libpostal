@@ -682,7 +682,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         }
 
     }
-    printf("word=%s, len=%zu\n", word, strlen(word));
+
     uint32_t word_freq = word_vocab_frequency(parser, word);
 
     if (add_word_feature) {
