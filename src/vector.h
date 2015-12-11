@@ -11,7 +11,6 @@
         name *array = malloc(sizeof(name));                                         \
         if (array == NULL) return NULL;                                             \
         array->n = array->m = 0;                                                    \
-        array->a = NULL;                                                            \
         array->a = malloc(size * sizeof(type));                                     \
         if (array->a == NULL) return NULL;                                          \
         array->m = size;                                                            \
@@ -39,12 +38,12 @@
     }                                                                               \
     static inline void name##_extend(name *array, name *other) {                    \
         size_t new_size = array->n + other->n;                                      \
-        if (new_size >= array->m) name##_resize(array, new_size);                   \
+        if (new_size > array->m) name##_resize(array, new_size);                    \
         memcpy(array->a + array->n, other->a, other->n * sizeof(type));             \
         array->n = new_size;                                                        \
     }                                                                               \
-    static inline type name##_pop(name *array) {                                    \
-        return array->a[--array->n];                                                \
+    static inline void name##_pop(name *array) {                                    \
+        if (array->n > 0) array->n--;                                               \
     }                                                                               \
     static inline void name##_clear(name *array) {                                  \
         array->n = 0;                                                               \

@@ -51,13 +51,12 @@ bool address_parser_data_set_tokenize_line(address_parser_data_set_t *data_set, 
 
         label = str + last_separator_index + 1;
 
-        uint32_t last_separator_type = ADDRESS_SEPARATOR_NONE;
         if (strcmp(label, FIELD_SEPARATOR_LABEL) == 0) {
-            last_separator_type = uint32_array_pop(separators);
+            uint32_array_pop(separators);
             uint32_array_push(separators, ADDRESS_SEPARATOR_FIELD | ADDRESS_SEPARATOR_FIELD_INTERNAL);
             continue;
         } else if (strcmp(label, SEPARATOR_LABEL) == 0) {
-            last_separator_type = uint32_array_pop(separators);
+            uint32_array_pop(separators);
             uint32_array_push(separators, ADDRESS_SEPARATOR_FIELD_INTERNAL);
             continue;
         }
