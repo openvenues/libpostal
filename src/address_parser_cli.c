@@ -37,7 +37,7 @@ bool load_address_parser_dependencies(void) {
 }
 
 int main(int argc, char **argv) {
-    char *address_parser_dir = "./ap_test";
+    char *address_parser_dir = LIBPOSTAL_ADDRESS_PARSER_DIR;
     char *history_file = "address_parser.history";
 
     if (argc > 1) {
