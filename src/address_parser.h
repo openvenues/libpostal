@@ -82,7 +82,7 @@ with the general error-driven averaged perceptron.
 #define ADDRESS_COMPONENT_POSTAL_CODE 1 << 12
 #define ADDRESS_COMPONENT_COUNTRY 1 << 13
 
-enum {
+typedef enum {
     ADDRESS_PARSER_HOUSE,
     ADDRESS_PARSER_HOUSE_NUMBER,
     ADDRESS_PARSER_ROAD,
