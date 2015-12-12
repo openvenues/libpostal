@@ -161,6 +161,14 @@ void address_parser_context_destroy(address_parser_context_t *self) {
         char_array_destroy(self->phrase);
     }
 
+    if (self->component_phrase != NULL) {
+        char_array_destroy(self->component_phrase);
+    }
+
+    if (self->geodb_phrase != NULL) {
+        char_array_destroy(self->geodb_phrase);
+    }
+
     if (self->separators != NULL) {
         uint32_array_destroy(self->separators);
     }
@@ -214,6 +222,16 @@ address_parser_context_t *address_parser_context_new(void) {
 
     context->phrase = char_array_new();
     if (context->phrase == NULL) {
+        goto exit_address_parser_context_allocated;
+    }
+
+    context->component_phrase = char_array_new();
+    if (context->component_phrase == NULL) {
+        goto exit_address_parser_context_allocated;
+    }
+
+    context->geodb_phrase = char_array_new();
+    if (context->geodb_phrase == NULL) {
         goto exit_address_parser_context_allocated;
     }
 
@@ -536,6 +554,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     int64_t address_phrase_index = address_phrase_memberships->a[i];
 
     char_array *phrase_tokens = context->phrase;
+    char_array *component_phrase_tokens = context->component_phrase;
+    char_array *geodb_phrase_tokens = context->geodb_phrase;
 
     bool add_word_feature = true;
 
@@ -599,7 +619,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     if (component_phrase_index != NULL_PHRASE_MEMBERSHIP) {
         phrase = component_phrases->a[component_phrase_index];
 
-        component_phrase_string = get_phrase_string(tokenized, phrase_tokens, phrase);
+        component_phrase_string = get_phrase_string(tokenized, component_phrase_tokens, phrase);
         
         types.value = phrase.data;
         uint32_t component_phrase_types = types.components;
@@ -653,7 +673,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     if (component_phrase_index == NULL_PHRASE_MEMBERSHIP && geodb_phrase_index != NULL_PHRASE_MEMBERSHIP) {
         phrase = geodb_phrases->a[geodb_phrase_index];
 
-        geo_phrase_string = get_phrase_string(tokenized, phrase_tokens, phrase);
+        geo_phrase_string = get_phrase_string(tokenized, geodb_phrase_tokens, phrase);
         geo.value = phrase.data;
         uint32_t geodb_phrase_types = geo.components;
 
