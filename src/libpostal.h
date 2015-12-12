@@ -12,6 +12,9 @@ extern "C" {
 
 #define MAX_LANGUAGE_LEN 4
 
+/* 
+Address dictionaries
+*/
 // Bit set, should be able to keep it at a short (uint16_t)
 #define ADDRESS_NONE 0
 #define ADDRESS_ANY (1 << 0)
@@ -83,6 +86,31 @@ static normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
 };
 
 char **expand_address(char *input, normalize_options_t options, uint64_t *n);
+
+/*
+Address parser
+*/
+
+typedef struct address_parser_response {
+    size_t num_components;
+    char **components;
+    char **labels;
+} address_parser_response_t;
+
+typedef struct address_parser_options {
+    char *language;
+    char *country;
+} address_parser_options_t;
+
+static address_parser_options_t LIBPOSTAL_ADDRESS_PARSER_DEFAULT_OPTIONS =  {
+    .language = NULL,
+    .country = NULL
+};
+
+address_parser_response_t *parse_address(char *address, address_parser_options_t options);
+
+// Setup/teardown methods
+
 
 bool libpostal_setup(void);
 void libpostal_teardown(void);

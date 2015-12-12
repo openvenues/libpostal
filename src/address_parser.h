@@ -48,7 +48,7 @@ with the general error-driven averaged perceptron.
 
 #include "averaged_perceptron.h"
 #include "averaged_perceptron_tagger.h"
-#include "bloom.h"
+#include "libpostal.h"
 #include "libpostal_config.h"
 #include "collections.h"
 #include "normalize.h"
@@ -70,7 +70,6 @@ with the general error-driven averaged perceptron.
 
 #define SEPARATOR_LABEL "sep"
 #define FIELD_SEPARATOR_LABEL "fsep"
-
 
 #define ADDRESS_COMPONENT_HOUSE 1 << 0
 #define ADDRESS_COMPONENT_HOUSE_NUMBER 1 << 1
@@ -95,7 +94,7 @@ enum {
     ADDRESS_PARSER_POSTAL_CODE,
     ADDRESS_PARSER_COUNTRY,
     NUM_ADDRESS_PARSER_TYPES
-} address_parser_types;
+} address_parser_components;
 
 typedef union address_parser_types {
     uint32_t value;
@@ -111,6 +110,8 @@ typedef struct address_parser_context {
     char *country;
     cstring_array *features;
     char_array *phrase;
+    char_array *component_phrase;
+    char_array *geodb_phrase;
     uint32_array *separators;
     cstring_array *normalized;
     phrase_array *address_dictionary_phrases;
@@ -124,12 +125,6 @@ typedef struct address_parser_context {
     int64_array *component_phrase_memberships;
     tokenized_string_t *tokenized_str;
 } address_parser_context_t;
-
-typedef struct address_parser_response {
-    size_t num_components;
-    char **components;
-    char **labels;
-} address_parser_response_t;
 
 // Can add other gazetteers as well
 typedef struct address_parser {
