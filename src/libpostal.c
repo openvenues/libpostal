@@ -7,6 +7,7 @@
 #include "log/log.h"
 
 #include "address_dictionary.h"
+#include "address_parser.h"
 #include "collections.h"
 #include "constants.h"
 #include "geodb.h"
@@ -39,6 +40,10 @@ inline bool is_ideographic(uint16_t type) {
 
 inline bool is_numeric_token(uint16_t type) {
     return type == NUMERIC;
+}
+
+inline bool is_punctuation(uint16_t type) {
+    return type >= PERIOD && type < OTHER;
 }
 
 
@@ -119,6 +124,8 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
     log_debug("tokenized, num tokens=%zu\n", tokens->n);
 
+    bool last_was_punctuation = false;
+
     phrase_language_array *phrases = NULL;
     phrase_array *lang_phrases = NULL;
 
@@ -154,6 +161,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
             phrase_language_array_push(phrases, (phrase_language_t){ALL_LANGUAGES, p});
         }
         phrase_array_destroy(lang_phrases);
+
     }
 
     string_tree_t *tree = string_tree_new_size(len);
@@ -189,8 +197,17 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
             end = phrase.start;
 
             for (int j = start; j < end; j++) {
-                token_t token = tokens->a[j]; 
+                token_t token = tokens->a[j];
+                if (is_punctuation(token.type)) {
+                    last_was_punctuation = true;
+                    continue;
+                }
+
                 if (token.type != WHITESPACE) {
+                    if (last_was_punctuation) {
+                        string_tree_add_string(tree, " ");
+                        string_tree_finalize_token(tree);
+                    }
                     log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
 
                     string_tree_add_string_len(tree, str + token.offset, token.len);
@@ -198,6 +215,8 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
                     log_debug("Adding space\n");
                     string_tree_add_string(tree, " ");
                 }
+
+                last_was_punctuation = false;
                 string_tree_finalize_token(tree);       
             }
 
@@ -269,7 +288,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
             } else {
                 for (int j = phrase.start; j < phrase.start + phrase.len; j++) {
                     token = tokens->a[j];
-                    
+
                     if (token.type != WHITESPACE) {
                         log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
                         string_tree_add_string_len(tree, str + token.offset, token.len);
@@ -308,8 +327,17 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
 
         for (int j = start; j < end; j++) {
-            token_t token = tokens->a[j]; 
+            token_t token = tokens->a[j];
+            if (is_punctuation(token.type)) {
+                last_was_punctuation = true;
+                continue;
+            }
+
             if (token.type != WHITESPACE) {
+                if (last_was_punctuation) {
+                    string_tree_add_string(tree, " ");
+                    string_tree_finalize_token(tree);
+                }
                 log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
 
                 string_tree_add_string_len(tree, str + token.offset, token.len);
@@ -317,6 +345,8 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
                 log_debug("Adding space\n");
                 string_tree_add_string(tree, " ");
             }
+
+            last_was_punctuation = false;
             string_tree_finalize_token(tree);
 
         }
@@ -792,6 +822,22 @@ char **expand_address(char *input, normalize_options_t options, uint64_t *n) {
 
 }
 
+address_parser_response_t *parse_address(char *address, address_parser_options_t options) {
+    address_parser_context_t *context = address_parser_context_new();
+    address_parser_response_t *parsed = address_parser_parse(address, options.language, options.country, context);
+
+    if (parsed == NULL) {
+        log_error("Parser returned NULL\n");
+        address_parser_context_destroy(context);
+        address_parser_response_destroy(parsed);
+        return NULL;
+    }
+
+    address_parser_context_destroy(context);
+
+    return parsed;
+}
+
 bool libpostal_setup(void) {
     if (!transliteration_module_setup(NULL)) {
         log_error("Error loading transliteration module\n");
@@ -808,6 +854,16 @@ bool libpostal_setup(void) {
         return false;
     }
 
+    if (!geodb_module_setup(NULL)) {
+        log_error("Error loading geodb module\n");
+        return false;
+    }
+
+    if (!address_parser_module_setup(NULL)) {
+        log_error("Error loading address parser module\n");
+        return false;
+    }
+
     return true;
 }
 
@@ -818,4 +874,8 @@ void libpostal_teardown(void) {
     numex_module_teardown();
 
     address_dictionary_module_teardown();
+
+    geodb_module_teardown();
+
+    address_parser_module_teardown();
 }

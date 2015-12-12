@@ -8,6 +8,7 @@
 #include "constants.h"
 #include "file_utils.h"
 #include "geodb.h"
+#include "libpostal.h"
 #include "normalize.h"
 #include "scanner.h"
 #include "shuffle.h"
@@ -15,6 +16,7 @@
 
 #include "linenoise/linenoise.h"
 #include "log/log.h"
+
 
 bool load_address_parser_dependencies(void) {
     if (!address_dictionary_module_setup(NULL)) {
@@ -34,22 +36,6 @@ bool load_address_parser_dependencies(void) {
     return true;
 }
 
-address_parser_response_t *parse_address(char *address, char *country, char *language) {
-    address_parser_context_t *context = address_parser_context_new();
-    address_parser_response_t *parsed = address_parser_parse(address, language, country, context);
-
-    if (parsed == NULL) {
-        log_error("Parser returned NULL\n");
-        address_parser_context_destroy(context);
-        address_parser_response_destroy(parsed);
-        return NULL;
-    }
-
-    address_parser_context_destroy(context);
-
-    return parsed;
-}
-
 int main(int argc, char **argv) {
     char *address_parser_dir = "./ap_test";
     char *history_file = "address_parser.history";
@@ -58,12 +44,7 @@ int main(int argc, char **argv) {
         address_parser_dir = argv[1];
     }
 
-    if (!load_address_parser_dependencies()) {
-        exit(EXIT_FAILURE);
-    }
-
-    if (!address_parser_load(address_parser_dir)) {
-        log_error("Error loading address parser\n");
+    if (!libpostal_setup()) {
         exit(EXIT_FAILURE);
     }
 
@@ -123,8 +104,9 @@ int main(int argc, char **argv) {
         }
 
         address_parser_response_t *parsed;
+        address_parser_options_t options = LIBPOSTAL_ADDRESS_PARSER_DEFAULT_OPTIONS;
 
-        if ((parsed = parse_address(input, country, language))) {
+        if ((parsed = parse_address(input, options))) {
             printf("\n");
             printf("Result:\n\n");
             printf("{\n");
