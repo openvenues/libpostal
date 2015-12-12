@@ -10,7 +10,7 @@ DEFAULT_INCLUDES=-I..
 CFLAGS = $(CFLAGS_BASE)
 
 lib_LTLIBRARIES = libpostal.la
-libpostal_la_SOURCES = libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c string_utils.c file_utils.c numex.c utf8proc/utf8proc.c cmp/cmp.c geodb.c geo_disambiguation.c normalize.c bloom.c features.c geonames.c geohash/geohash.c unicode_scripts.c msgpack_utils.c
+libpostal_la_SOURCES = libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c string_utils.c file_utils.c numex.c utf8proc/utf8proc.c cmp/cmp.c geodb.c geo_disambiguation.c normalize.c bloom.c features.c geonames.c geohash/geohash.c unicode_scripts.c msgpack_utils.c address_parser.c address_parser_io.c averaged_perceptron.c sparse_matrix.c averaged_perceptron_trainer.c averaged_perceptron_tagger.c graph.c graph_builder.c
 libpostal_la_LIBADD = libscanner.la sparkey/libsparkey.la
 libpostal_la_CFLAGS = $(CFLAGS_O2)
 
@@ -43,17 +43,14 @@ address_parser_train_CFLAGS = $(CFLAGS_O3)
 address_parser_test_SOURCES = address_parser_test.c address_parser.c address_parser_io.c averaged_perceptron.c sparse_matrix.c averaged_perceptron_trainer.c averaged_perceptron_tagger.c address_dictionary.c geodb.c geo_disambiguation.c graph.c graph_builder.c normalize.c features.c geonames.c geohash/geohash.c unicode_scripts.c transliterate.c trie.c trie_search.c string_utils.c tokens.c msgpack_utils.c file_utils.c utf8proc/utf8proc.c cmp/cmp.c
 address_parser_test_LDADD = sparkey/libsparkey.la libscanner.la
 address_parser_test_CFLAGS = $(CFLAGS_O3)
-address_parser_SOURCES = address_parser_cli.c address_parser.c address_parser_io.c averaged_perceptron.c sparse_matrix.c averaged_perceptron_trainer.c averaged_perceptron_tagger.c address_dictionary.c geodb.c geo_disambiguation.c graph.c graph_builder.c normalize.c features.c geonames.c geohash/geohash.c unicode_scripts.c transliterate.c trie.c trie_search.c string_utils.c tokens.c msgpack_utils.c file_utils.c utf8proc/utf8proc.c cmp/cmp.c linenoise/linenoise.c
-address_parser_LDADD = sparkey/libsparkey.la libscanner.la
+address_parser_SOURCES = address_parser_cli.c linenoise/linenoise.c
+address_parser_LDADD = sparkey/libsparkey.la libscanner.la libpostal.la
 address_parser_CFLAGS = $(CFLAGS_O3)
 
 pkginclude_HEADERS = libpostal.h
 
 all-local:
-	./libpostal_data download base @LIBPOSTAL_DATA_DIR@
-
-download_geodb:
-	./libpostal_data download geodb @LIBPOSTAL_DATA_DIR@
+	./libpostal_data download all @LIBPOSTAL_DATA_DIR@
 
 lexer: scanner.re
 	re2c -F -s -b -8 -o scanner.c scanner.re

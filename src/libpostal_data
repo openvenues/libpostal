@@ -10,7 +10,7 @@ LIBPOSTAL_S3_KEY="s3://$LIBPOSTAL_S3_BUCKET_NAME"
 LIBPOSTAL_S3_BUCKET_URL="http://$LIBPOSTAL_S3_BUCKET_NAME.s3.amazonaws.com"
 LIBPOSTAL_DATA_FILE="libpostal_data.tar.gz"
 LIBPOSTAL_GEODB_FILE="geodb.tar.gz"
-
+LIBPOSTAL_PARSER_FILE="parser.tar.gz"
 
 COMMAND=$1
 FILE=$2
@@ -18,10 +18,11 @@ LIBPOSTAL_DATA_DIR=$3
 
 LIBPOSTAL_DATA_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated
 LIBPOSTAL_GEO_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated_geo
-
+LIBPOSTAL_PARSER_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated_parser
 
 BASIC_MODULE_DIRS=(address_expansions numex transliteration)
 GEODB_MODULE_DIR=geodb
+PARSER_MODULE_DIR=address_parser
 
 EPOCH_DATE="Jan  1 00:00:00 1970"
 
@@ -56,24 +57,33 @@ download_file() {
 if [ $COMMAND = "download" ]; then
     mkdir -p $LIBPOSTAL_DATA_DIR
 
-    if [ $FILE = "base" ]; then
+    if [ $FILE = "base" ] || [ $FILE = "all" ]; then
         download_file $LIBPOSTAL_DATA_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_DATA_FILE "data file"
-    elif [ $FILE = "geodb" ]; then 
+    fi
+    if [ $FILE = "geodb" ] || [ $FILE = "all" ]; then 
         download_file $LIBPOSTAL_GEO_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_GEODB_FILE "geodb data file"
     fi
-
+    if [ $FILE = "parser" ] || [ $FILE = "all" ]; then 
+        download_file $LIBPOSTAL_PARSER_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_PARSER_FILE "parser data file"
+    fi
 
 
 elif [ $COMMAND = "upload" ]; then
 
-    if [ $FILE = "base" ]; then
+    if [ $FILE = "base" ] || [ $FILE = "all" ]; then
         tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE ${BASIC_MODULE_DIRS[*]}
         aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $LIBPOSTAL_S3_KEY
-    elif [ $FILE = "geodb" ]; then
+    fi
+    
+    if [ $FILE = "geodb" ] || [ $FILE = "all" ]; then
         tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_GEODB_FILE $GEODB_MODULE_DIR
         aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_GEODB_FILE $LIBPOSTAL_S3_KEY
     fi
 
+    if [ $FILE = "parser" ] || [ $FILE = "all" ]; then
+        tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_PARSER_FILE $PARSER_MODULE_DIR
+        aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_PARSER_FILE $LIBPOSTAL_S3_KEY
+    fi
 
 else
     echo "Invalid command: $COMMAND"
