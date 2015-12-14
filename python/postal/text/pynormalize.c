@@ -48,7 +48,7 @@ static PyObject *py_normalize_string_utf8(PyObject *self, PyObject *args)
         if (str == NULL) {
             PyErr_SetString(PyExc_TypeError,
                             "Parameter could not be utf-8 encoded");
-            goto error_decref_unistr;
+            goto exit_decref_unistr;
         }
 
         char *input = PyBytes_AsString(str);
@@ -56,17 +56,21 @@ static PyObject *py_normalize_string_utf8(PyObject *self, PyObject *args)
     #endif
 
     if (input == NULL) {
-        goto error_decref_str;
+        goto exit_decref_str;
     }
 
     char *normalized = normalize_string_utf8(input, options);
+
+    if (normalized == NULL) {
+        goto exit_decref_str;
+    }
 
     PyObject *result = PyUnicode_DecodeUTF8((const char *)normalized, strlen(normalized), "strict");
     free(normalized);
     if (result == NULL) {
             PyErr_SetString(PyExc_ValueError,
                             "Result could not be utf-8 decoded");
-            goto error_decref_str;
+            goto exit_decref_str;
     }
 
     #ifndef IS_PY3K
@@ -76,11 +80,11 @@ static PyObject *py_normalize_string_utf8(PyObject *self, PyObject *args)
 
     return result;
 
-error_decref_str:
+exit_decref_str:
 #ifndef IS_PY3K
     Py_XDECREF(str);
 #endif
-error_decref_unistr:
+exit_decref_unistr:
     Py_XDECREF(unistr);
     return 0;
 }
@@ -113,7 +117,7 @@ static PyObject *py_normalize_string_latin(PyObject *self, PyObject *args)
         if (str == NULL) {
             PyErr_SetString(PyExc_TypeError,
                             "Parameter could not be utf-8 encoded");
-            goto error_decref_unistr;
+            goto exit_decref_unistr;
         }
 
         char *input = PyBytes_AsString(str);
@@ -121,7 +125,7 @@ static PyObject *py_normalize_string_latin(PyObject *self, PyObject *args)
     #endif
 
     if (input == NULL) {
-        goto error_decref_str;
+        goto exit_decref_str;
     }
 
     char *normalized = normalize_string_latin(input, strlen(input), options);
@@ -131,7 +135,7 @@ static PyObject *py_normalize_string_latin(PyObject *self, PyObject *args)
     if (result == NULL) {
         PyErr_SetString(PyExc_ValueError,
                         "Result could not be utf-8 decoded");
-        goto error_decref_str;
+        goto exit_decref_str;
     }
 
     #ifndef IS_PY3K
@@ -141,11 +145,11 @@ static PyObject *py_normalize_string_latin(PyObject *self, PyObject *args)
 
     return result;
 
-error_decref_str:
+exit_decref_str:
 #ifndef IS_PY3K
     Py_XDECREF(str);
 #endif
-error_decref_unistr:
+exit_decref_unistr:
     Py_XDECREF(unistr);
     return 0;
 }
@@ -188,7 +192,7 @@ static PyObject *py_normalize_token(PyObject *self, PyObject *args)
         if (str == NULL) {
             PyErr_SetString(PyExc_ValueError,
                             "Parameter could not be utf-8 encoded");
-            goto error_decref_unistr;
+            goto exit_decref_unistr;
         }
 
         char *input = PyBytes_AsString(str);
@@ -196,7 +200,7 @@ static PyObject *py_normalize_token(PyObject *self, PyObject *args)
     #endif
 
     if (input == NULL) {
-        goto error_decref_str;
+        goto exit_decref_str;
     }
 
     char_array *token_buffer = char_array_new_size(token.len);
@@ -209,7 +213,7 @@ static PyObject *py_normalize_token(PyObject *self, PyObject *args)
         PyErr_SetString(PyExc_ValueError,
                         "Error decoding token");
         char_array_destroy(token_buffer);
-        goto error_decref_str;
+        goto exit_decref_str;
     }
 
     char_array_destroy(token_buffer);
@@ -221,11 +225,11 @@ static PyObject *py_normalize_token(PyObject *self, PyObject *args)
 
     return result;
 
-error_decref_str:
+exit_decref_str:
 #ifndef IS_PY3K
     Py_XDECREF(str);
 #endif
-error_decref_unistr:
+exit_decref_unistr:
     Py_XDECREF(unistr);
     return 0;
 }
