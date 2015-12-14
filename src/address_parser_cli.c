@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
         address_parser_dir = argv[1];
     }
 
-    if (!libpostal_setup()) {
+    if (!libpostal_setup() || !libpostal_setup_parser()) {
         exit(EXIT_FAILURE);
     }
 
@@ -125,7 +125,6 @@ next_input:
         free(input);
     }
 
-    geodb_module_teardown();
-    address_dictionary_module_teardown();
-    address_parser_module_teardown();
+    libpostal_teardown();
+    libpostal_teardown_parser();
 }

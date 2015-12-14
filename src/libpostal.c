@@ -854,6 +854,10 @@ bool libpostal_setup(void) {
         return false;
     }
 
+    return true;
+}
+
+bool libpostal_setup_parser(void) {
     if (!geodb_module_setup(NULL)) {
         log_error("Error loading geodb module\n");
         return false;
@@ -868,14 +872,14 @@ bool libpostal_setup(void) {
 }
 
 void libpostal_teardown(void) {
-
     transliteration_module_teardown();
 
     numex_module_teardown();
 
     address_dictionary_module_teardown();
+}
 
+void libpostal_teardown_parser(void) {
     geodb_module_teardown();
-
     address_parser_module_teardown();
 }

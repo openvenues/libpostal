@@ -115,6 +115,9 @@ address_parser_response_t *parse_address(char *address, address_parser_options_t
 bool libpostal_setup(void);
 void libpostal_teardown(void);
 
+bool libpostal_setup_parser(void);
+void libpostal_teardown_parser(void);
+
 #ifdef __cplusplus
 }
 #endif
