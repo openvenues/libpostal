@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
     options.num_languages = 1;
     options.languages = languages;
 
-    uint64_t num_expansions;
+    size_t num_expansions;
 
     char **strings;
     char *normalized;
