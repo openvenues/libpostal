@@ -429,7 +429,7 @@ void add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t to
     char_array *key = char_array_new_size(token.len);
     char *expansion;
 
-    uint64_t num_strings = 0;
+    size_t num_strings = 0;
     char *root_word = NULL;
     size_t root_len;
     token_t root_token;
@@ -751,7 +751,7 @@ void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_strings
 
 
 
-char **expand_address(char *input, normalize_options_t options, uint64_t *n) {
+char **expand_address(char *input, normalize_options_t options, size_t *n) {
     options.address_components |= ADDRESS_ANY;
 
     uint64_t normalize_string_options = 0;

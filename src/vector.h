@@ -5,6 +5,31 @@
 
 #define DEFAULT_VECTOR_SIZE 8
 
+#if defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__)
+#include <malloc.h>
+#else
+#include <stdlib.h>
+static inline void *_aligned_malloc(size_t size, size_t alignment)
+{
+    void *p;
+    int ret = posix_memalign(&p, alignment, size);
+    return (ret == 0) ? p : 0;
+}
+static inline void _aligned_free(void *p)
+{
+    free(p);
+}
+#endif
+
+#ifdef _MSC_VER
+#define MIE_ALIGN(x) __declspec(align(x))
+#else
+#define MIE_ALIGN(x) __attribute__((aligned(x)))
+#endif
+
+#define CONST_128D(var, val) \
+    MIE_ALIGN(16) static const double var[2] = {(val), (val)}
+
 // Based kvec.h, dynamic vectors of any type
 #define __VECTOR_BASE(name, type) typedef struct { size_t n, m; type *a; } name;    \
     static inline name *name##_new_size(size_t size) {                              \
@@ -18,6 +43,15 @@
     }                                                                               \
     static inline name *name##_new(void) {                                          \
         return name##_new_size(DEFAULT_VECTOR_SIZE);                                \
+    }                                                                               \
+    static inline name *name##_new_aligned(size_t size, size_t alignment) {         \
+        name *array = malloc(sizeof(name));                                         \
+        if (array == NULL) return NULL;                                             \
+        array->n = array->m = 0;                                                    \
+        array->a = _aligned_malloc(size * sizeof(type), alignment);                 \
+        if (array->a == NULL) return NULL;                                          \
+        array->m = size;                                                            \
+        return array;                                                               \
     }                                                                               \
     static inline void name##_resize(name *array, size_t size) {                    \
         if (size <= array->m) return;                                               \
@@ -58,7 +92,6 @@
         name##_copy(cpy, vector, n);                                                \
         return cpy;                                                                 \
     }
-
 
 #define __VECTOR_DESTROY(name, type)                                    \
     static inline void name##_destroy(name *array) {                    \

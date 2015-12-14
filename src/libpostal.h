@@ -85,7 +85,7 @@ static normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
         .roman_numerals = 1
 };
 
-char **expand_address(char *input, normalize_options_t options, uint64_t *n);
+char **expand_address(char *input, normalize_options_t options, size_t *n);
 
 /*
 Address parser
