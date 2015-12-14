@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
     normalize_options_t options = LIBPOSTAL_DEFAULT_OPTIONS;
     options.languages = languages;
 
-    uint64_t num_expansions;
+    size_t num_expansions;
 
     char **strings = expand_address(str, options, &num_expansions);
 
