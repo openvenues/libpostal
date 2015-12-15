@@ -69,7 +69,7 @@ class InstallWithDependencies(install):
 def main():
     setup(
         name='pypostal',
-        version='0.1',
+        version='0.2',
         install_requires=[
             'six',
         ],
