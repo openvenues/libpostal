@@ -37,7 +37,7 @@ def get_prefix_path(prefix=None):
         prefix = virtualenv_path
 
     if prefix is not None:
-        prefix = normalized_path(self.prefix)
+        prefix = normalized_path(prefix)
 
     return prefix
 
@@ -94,7 +94,6 @@ def main():
         ],
         cmdclass={
             'install': InstallWithDependencies,
-            'build_ext': BuildExtensionWithDependencies,
         },
         ext_modules=[
             Extension('postal.text._tokenize',
