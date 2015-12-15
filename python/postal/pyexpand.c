@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include <Python.h>
 #include <libpostal.h>
 
