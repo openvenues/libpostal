@@ -107,7 +107,11 @@ static address_parser_options_t LIBPOSTAL_ADDRESS_PARSER_DEFAULT_OPTIONS =  {
     .country = NULL
 };
 
+void address_parser_response_destroy(address_parser_response_t *self);
+
 address_parser_response_t *parse_address(char *address, address_parser_options_t options);
+
+
 
 // Setup/teardown methods
 

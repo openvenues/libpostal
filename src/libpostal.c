@@ -822,6 +822,32 @@ char **expand_address(char *input, normalize_options_t options, size_t *n) {
 
 }
 
+void address_parser_response_destroy(address_parser_response_t *self) {
+    if (self == NULL) return;
+
+    for (int i = 0; i < self->num_components; i++) {
+        if (self->components != NULL) {
+            free(self->components[i]);
+        }
+
+        if (self->labels != NULL) {
+            free(self->labels[i]);
+        }
+    }
+
+    if (self->components != NULL) {
+        free(self->components);
+    }
+
+    if (self->labels != NULL) {
+        free(self->labels);
+    }
+
+    free(self);
+}
+
+
+
 address_parser_response_t *parse_address(char *address, address_parser_options_t options) {
     address_parser_context_t *context = address_parser_context_new();
     address_parser_response_t *parsed = address_parser_parse(address, options.language, options.country, context);

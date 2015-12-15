@@ -801,31 +801,6 @@ address_parser_response_t *address_parser_response_new(void) {
     return response;
 }
 
-void address_parser_response_destroy(address_parser_response_t *self) {
-    if (self == NULL) return;
-
-    for (int i = 0; i < self->num_components; i++) {
-        if (self->components != NULL) {
-            free(self->components[i]);
-        }
-
-        if (self->labels != NULL) {
-            free(self->labels[i]);
-        }
-    }
-
-    if (self->components != NULL) {
-        free(self->components);
-    }
-
-    if (self->labels != NULL) {
-        free(self->labels);
-    }
-
-    free(self);
-}
-
-
 address_parser_response_t *address_parser_parse(char *address, char *language, char *country, address_parser_context_t *context) {
     if (address == NULL || context == NULL) return NULL;
 

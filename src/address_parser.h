@@ -139,7 +139,6 @@ address_parser_t *address_parser_new(void);
 address_parser_t *get_address_parser(void);
 bool address_parser_load(char *dir);
 
-void address_parser_response_destroy(address_parser_response_t *self);
 address_parser_response_t *address_parser_parse(char *address, char *language, char *country, address_parser_context_t *context);
 void address_parser_destroy(address_parser_t *self);
 
