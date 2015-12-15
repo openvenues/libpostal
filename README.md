@@ -73,8 +73,8 @@ with libpostal on make.
 
 Result:
 {
-  "house_number": "593"
-  "road": "st marks ave"
+  "house_number": "781"
+  "road": "franklin ave"
   "suburb": "crown heights"
   "city_district": "brooklyn"
   "city": "nyc"
