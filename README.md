@@ -15,6 +15,10 @@
 encourage folks to hold off on including it as a dependency for now.
 Stay tuned...
 
+---------------------------------------------------------------------------
+
+:jp: :us: :gb: :ru: :fr: :kr: :it: :es: :cn: :de:
+
 libpostal is a fast, multilingual, all-i18n-everything NLP library for 
 normalizing and parsing physical addresses.
 
@@ -31,58 +35,218 @@ libpostal is not itself a full geocoder, but should be a ubiquitous
 preprocessing step before indexing/searching with free text geographic strings.
 It is written in C for maximum portability and performance.
 
-Raison d'être
--------------
+Examples of normalization
+-------------------------
 
-libpostal was created as part of the [OpenVenues](https://github.com/openvenues/openvenues) project to solve 
-the problem of venue deduping. In OpenVenues, we have a data set of millions of
-places derived from terabytes of web pages from the [Common Crawl](http://commoncrawl.org/).
-The Common Crawl is published monthly, and so even merging the results of
-two crawls produces significant duplicates.
+Like many problems in information extraction and NLP, address normalization
+may sound trivial initially, but in fact can be quite complicated in real
+natural language texts. Here are some examples of the kinds of address-specific
+challenges libpostal can handle:
 
-Deduping is a relatively well-studied field, and for text documents like web
-pages, academic papers, etc. there exist pretty decent approximate
-similarity methods such as [MinHash](https://en.wikipedia.org/wiki/MinHash). 
+| Input                               | Output (may be multiple in libpostal) |
+| ----------------------------------- |---------------------------------------|
+| One-hundred twenty E 96th St        | 120 east 96th street                  |
+| C/ Ocho, P.I. 4                     | calle 8, polígono industrial 4        |
+| V XX Settembre, 20                  | via 20 settembre, 20                  |
+| Quatre vignt douze R. de l'Église   | 92 rue de l' église                   |
+| ул Каретный Ряд, д 4, строение 7    | улица каретныи ряд, дом 4, строение 7 |
+| ул Каретный Ряд, д 4, строение 7    | ulica karetnyj rad, dom 4, stroenie 7 |
+| Marktstrasse 14                     | markt straße 14                       |
 
-However, for physical addresses, the frequent use of conventional abbreviations
-such as Road == Rd, California == CA, or New York City == NYC complicates
-matters a bit. Even using a technique like MinHash, which is well suited for
-approximate matches and is equivalent to the Jaccard similarity of two sets, we
-have to work with very short texts and it's often the case that two equivalent
-addresses, one abbreviated and one fully specified, will not match very closely
-in terms of n-gram set overlap. In non-Latin scripts, say a Russian address and
-its transliterated equivalent, it's conceivable that two addresses referring to
-the same place may not match even a single character.
+For further reading and some less intuitive examples of addresses, see
+"[Falsehoods Programmers Believe About Addresses](https://www.mjt.me.uk/posts/falsehoods-programmers-believe-about-addresses/)".
 
-As a motivating example, consider the following two equivalent ways to write a
-particular Manhattan street address with varying conventions and degrees
-of verbosity:
 
-- 30 W 26th St Fl #7
-- 30 West Twenty-sixth Street Floor Number 7
+Examples of parsing
+-------------------
 
-Obviously '30 W 26th St Fl #7 != '30 West Twenty-sixth Street Floor Number 7'
-in a string comparison sense, but a human can grok that these two addresses
-refer to the same physical location.
+libpostal's address parser is trained on ~50M addresses (everything in OSM),
+using the formats in 
 
-libpostal aims to create normalized geographic strings, parsed into components,
-such that we can more effectively reason about how well two addresses
-actually match and make automated server-side decisions about dupes.
 
-Isn't that geocoding?
----------------------
+These examples are taken from the interactive address_parser program that builds
+with libpostal on make.
 
-If the above sounds a lot like geocoding, that's because it is in a way,
-only in the OpenVenues case, we do it without a UI or a user to select the
-correct address in an autocomplete. libpostal does server-side batch geocoding
-(and you can too!)
+```
+> 781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA 
 
-Now, instead of fiddling with giant Elasticsearch synonyms files, scripting,
-analyzers, tokenizers, and the like, geocoding can look like this:
+Result:
+{
+  "house_number": "593"
+  "road": "st marks ave"
+  "suburb": "crown heights"
+  "city_district": "brooklyn"
+  "city": "nyc"
+  "state": "ny"
+  "postcode": "11216"
+  "country": "usa",
+} 
 
-1. Run the addresses in your index through libpostal
-2. Store the canonical strings
-3. Run your user queries through libpostal and search with those strings
+> The Book Club 100-106 Leonard St, Shoreditch, London, Greater London, England, EC2A 4RH, United Kingdom
+ 
+Result: 
+ 
+{
+  "house": "the book club"
+  "house_number": "100-106"
+  "road": "leonard st"
+  "suburb": "shoreditch"
+  "city": "london"
+  "state_district": "greater london"
+  "state": "england"
+  "postcode": "ec2a 4rh"
+  "country": "united kingdom",
+}
+ 
+> Eschenbräu Bräurei Triftstraße 67, 13353 Berlin, Deutschland
+ 
+Result:
+
+{
+  "house": "eschenbräu bräurei"
+  "road": "triftstrasse"
+  "house_number": "67"
+  "postcode": "13353"
+  "city": "berlin"
+  "country": "deutschland",
+}
+ 
+ > Double Shot Tea & Coffee 15 Melle St. Braamfontein Johannesburg, 2000, South Africa
+ 
+Result:
+
+{
+  "house": "double shot tea & coffee"
+  "house_number": "15"
+  "road": "melle st."
+  "suburb": "braamfontein"
+  "city": "johannesburg"
+  "postcode": "2000"
+  "country": "south africa",
+}
+ 
+> Le Polikarpov 24 cours Honoré d'Estienne d'Orves, 13001 Marseille, France  
+ 
+Result:
+
+{
+  "house": "le polikarpov"
+  "house_number": "24"
+  "road": "cours honoré d'estienne d'orves"
+  "postcode": "13001"
+  "city": "marseille"
+  "country": "france",
+}
+ 
+> Государственный Эрмитаж Дворцовая наб., 34 191186, Saint Petersburg, Russia 
+
+Result:
+
+{
+  "house": "государственный эрмитаж"
+  "road": "дворцовая наб."
+  "house_number": "34"
+  "postcode": "191186"
+  "city": "saint petersburg"
+  "country": "russia",
+}
+```
+
+Installation
+------------
+
+Before you install, make sure you have the following prerequisites:
+
+**On Linux (Debian)**
+```
+sudo apt-get install libsnappy-dev autoconf automake libtool
+```
+
+**On Mac OSX**
+```
+sudo brew install snappy autoconf automake libtool
+```
+
+For C/C++ users or those writing bindings (if you've written a
+language binding, please let us know!):
+
+```
+git clone https://github.com/openvenues/libpostal
+cd libpostal
+./bootstrap.sh
+./configure --datadir=[...some dir with a few GB of space...]
+make
+sudo make install
+```
+
+To install via Python, you should first install the C library and then run:
+
+```
+python setup.py install
+```
+
+Python usage
+------------
+
+After installing:
+
+```
+from postal.expand import expand_address
+expand_address('Quatre vignt douze Ave des Champs-Élysées', languages=['fr'])
+
+from postal.parser import parse_address
+parse_address('The Book Club 100-106 Leonard St, Shoreditch, London, Greater London, EC2A 4RH, United Kingdom')
+```
+
+**Note**: for expand_address, we currently default to English if no languages parameter is passed. When the language classifier is complete we'll remove this requirement and libpostal will predict the language automatically if none is specified.
+
+
+Command-line usage (expand)
+---------------------------
+
+After building libpostal:
+
+```
+cd src/
+
+./libpostal "12 Three-hundred and forty-fifth ave, ste. no 678" en
+```
+
+Currently libpostal requires two input strings, the address text and a language
+code (ISO 639-1).
+
+Command-line usage (parser)
+---------------------------
+
+After building libpostal:
+
+```
+cd src/
+
+./address_parser
+
+```
+
+address_parser is an interactive shell, just type addresses and libpostal will
+parse them and print the result.
+
+Data files
+----------
+
+libpostal needs to download some data files from S3. The basic files are on-disk
+representations of the data structures necessary to perform expansion. For address
+parsing, since model training takes about a day, we publish the fully trained model 
+to S3 and will update it automatically as new addresses get added to OSM.
+
+
+Data files are automatically downloaded when you run make. To check for and download
+any new data files, run:
+
+```
+libpostal_data download all $YOUR_DATA_DIR/libpostal
+```
+
+And replace $YOUR_DATA_DIR with whatever you passed to configure during install.
 
 Features
 --------
@@ -94,11 +258,11 @@ whitespace e.g. Chinese) are supported, as are Germanic languages where
 thoroughfare types are concatenated onto the end of the string, and may
 optionally be separated so Rosenstraße and Rosen Straße are equivalent.
 
-- **International address parsing (coming soon)**: sequence model which parses
+- **International address parsing**: sequence model which parses
 "123 Main Street New York New York" into {"house_number": 123, "road":
-"Main Street", "city": "New York", "region": "New York"}. Unlike the majority
+"Main Street", "city": "New York", "state": "New York"}. Unlike the majority
 of parsers out there, it works for a wide variety of countries and languages,
-not just US/English. The model is trained on > 40M OSM addresses, using the
+not just US/English. The model is trained on > 50M OSM addresses, using the
 templates in the [OpenCage address formatting repo](https://github.com/OpenCageData/address-formatting) to construct formatted,
 tagged traning examples for most countries around the world.
 
@@ -164,26 +328,58 @@ Non-goals
 - Verifying that a location is a valid address
 - Street-level geocoding
 
-Examples of expansion
----------------------
+Raison d'être
+-------------
 
-Like many problems in information extraction and NLP, address normalization
-may sound trivial initially, but in fact can be quite complicated in real
-natural language texts. Here are some examples of the kinds of address-specific
-challenges libpostal can handle:
+libpostal was created as part of the [OpenVenues](https://github.com/openvenues/openvenues) project to solve 
+the problem of venue deduping. In OpenVenues, we have a data set of millions of
+places derived from terabytes of web pages from the [Common Crawl](http://commoncrawl.org/).
+The Common Crawl is published monthly, and so even merging the results of
+two crawls produces significant duplicates.
 
-| Input                               | Output                                |
-| ----------------------------------- |---------------------------------------|
-| One-hundred twenty E 96th St        | 120 east 96th street                  |
-| C/ Ocho, P.I. 4                     | calle 8, polígono industrial 4        |
-| V XX Settembre, 20                  | via 20 settembre, 20                  |
-| Quatre vignt douze Rue de l'Église  | 92 rue de l' église                   |
-| ул Каретный Ряд, д 4, строение 7    | улица каретныи ряд, дом 4, строение 7 |
-| ул Каретный Ряд, д 4, строение 7    | ulica karetnyj rad, dom 4, stroenie 7 |
-| Marktstrasse 14                     | markt straße 14                       |
+Deduping is a relatively well-studied field, and for text documents like web
+pages, academic papers, etc. there exist pretty decent approximate
+similarity methods such as [MinHash](https://en.wikipedia.org/wiki/MinHash). 
 
-For further reading and some less intuitive examples of addresses, see
-"[Falsehoods Programmers Believe About Addresses](https://www.mjt.me.uk/posts/falsehoods-programmers-believe-about-addresses/)".
+However, for physical addresses, the frequent use of conventional abbreviations
+such as Road == Rd, California == CA, or New York City == NYC complicates
+matters a bit. Even using a technique like MinHash, which is well suited for
+approximate matches and is equivalent to the Jaccard similarity of two sets, we
+have to work with very short texts and it's often the case that two equivalent
+addresses, one abbreviated and one fully specified, will not match very closely
+in terms of n-gram set overlap. In non-Latin scripts, say a Russian address and
+its transliterated equivalent, it's conceivable that two addresses referring to
+the same place may not match even a single character.
+
+As a motivating example, consider the following two equivalent ways to write a
+particular Manhattan street address with varying conventions and degrees
+of verbosity:
+
+- 30 W 26th St Fl #7
+- 30 West Twenty-sixth Street Floor Number 7
+
+Obviously '30 W 26th St Fl #7 != '30 West Twenty-sixth Street Floor Number 7'
+in a string comparison sense, but a human can grok that these two addresses
+refer to the same physical location.
+
+libpostal aims to create normalized geographic strings, parsed into components,
+such that we can more effectively reason about how well two addresses
+actually match and make automated server-side decisions about dupes.
+
+So it's not a geocoder?
+-----------------------
+
+If the above sounds a lot like geocoding, that's because it is in a way,
+only in the OpenVenues case, we do it without a UI or a user to select the
+correct address in an autocomplete. libpostal does server-side batch geocoding
+(and you can too!)
+
+Now, instead of fiddling with giant Elasticsearch synonyms files, scripting,
+analyzers, tokenizers, and the like, geocoding can look like this:
+
+1. Run the addresses in your index through libpostal
+2. Store the canonical strings
+3. Run your user queries through libpostal and search with those strings
 
 Why C?
 ------
@@ -241,8 +437,9 @@ There are actually two Python packages in libpostal.
 1. **geodata**: generates C files and data sets used in the C build
 2. **pypostal**: Python bindings for libpostal
 
-geodata is simply a confederation of scripts which share some common code.
-Said scripts shouldn't be needed for most users unless you're rebuilding data
+geodata is simply a confederation of scripts for preprocessing the various geo
+data sets and building input files for the C lib to use during model training.
+Said scripts shouldn't be needed  for most users unless you're rebuilding data
 files for the C lib.
 
 Language dictionaries
@@ -315,51 +512,46 @@ In the future it might be beneficial to move the dictionaries to a wiki
 so they can be crowdsourced by native speakers regardless of whether or not
 they use git.
 
-Installation
-------------
+Address parser accuracy
+-----------------------
 
-For C users or those writing bindings (if you've written a language
-binding, please let us know!):
+On held-out test data (meaning labeled parses that the model has _not_ seen
+before), the address parser achieves 98.9% full parse accuracy.
 
-```
-./bootstrap.sh
-./configure --datadir=[...some dir with a few GB of space...]
-make
-sudo make install
-```
+For some tasks like named entity recognition it's preferable to use something
+like an F1 score or variants, mostly because there's a class bias problem (most
+tokens are non-entities, and a system that simply predicted non-entity for
+every token would actually do fairly well in terms of accuracy). That is not
+the case for address parsing. Every token has a label and there are millions
+of examples of each class in the training data, so accuracy 
 
-libpostal needs to download some data files from S3. This is done automatically
-when you run make. Mapzen maintains an S3 bucket containing said data files
-but they can also be built manually.
+We prefer to evaluate on full parses (at the sentence level in NER nomenclature),
+so that means that 98.9% of the time, the address parser gets every single token
+in the address correct, which is quite good performance.
 
-To install via Python, you should first install the C library and then run:
+Improving the address parser
+----------------------------
 
-```
-python setup.py install
-```
+There are four primary ways the address parser can be improved even further
+(in order of difficulty):
 
-**Note**: The Python bindings don't implement libpostal's full API currently.
-
-Command-line usage
-------------------
-
-After building libpostal:
-
-```
-cd src/
-
-./libpostal "12 Three-hundred and forty-fifth ave, ste. no 678" en
-#12 345th avenue, suite number 678
-```
-
-Currently libpostal requires two input strings, the address text and a language
-code (ISO 639-1).
+1. Contribute addresses to OSM. Anything with an addr:housenumber tag will be
+   incorporated automatically into the parser next time it's trained.
+2. If the address parser isn't working well for a particular country, language
+   or style of address, chances are that the template can be added at:
+   https://github.com/OpenCageData/address-formatting. This repo helps us
+   format OSM addresses and create the training data used by the address parser.
+3. We currently don't have training data for things like flat numbers.
+   The tags are fairly uncommon in OSM and the address-formatting templates
+   don't use floor, level, apartment/flat number, etc. This would be a slightly
+   more involved effort, but would be happy to discuss.
+4. Moving to a CRF may improve parser performance on certain kinds of input
+   since the score is the argmax over the entire sequence not just the token.
+   This may slow down training significantly. 
 
 Todos
 -----
 
-1. Finish debugging/fully train address parser and publish model
-2. Port language classification from Python, train and publish model
-3. Python bindings and documentation
-4. Publish tests (currently not on Github) and set up continuous integration
-5. Hosted documentation
+1. Port language classification from Python, train and publish model
+2. Publish tests (currently not on Github) and set up continuous integration
+3. Hosted documentation
