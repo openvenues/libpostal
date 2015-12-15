@@ -104,14 +104,14 @@ Result:
 Result:
 
 {
-  "house": "eschenbräu bräurei"
+  "house": "eschenbraeu braeurei"
   "road": "triftstrasse"
   "house_number": "67"
   "postcode": "13353"
   "city": "berlin"
   "country": "deutschland",
 }
- 
+
  > Double Shot Tea & Coffee 15 Melle St. Braamfontein Johannesburg, 2000, South Africa
  
 Result:
