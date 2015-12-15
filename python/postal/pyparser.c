@@ -1,9 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-
 #include <Python.h>
-#include <libpostal.h>
+#include <libpostal/libpostal.h>
 
 #if PY_MAJOR_VERSION >= 3
 #define IS_PY3K
