@@ -52,6 +52,9 @@ class InstallWithDependencies(install):
             if not os.path.exists(self.prefix):
                 os.mkdir(self.prefix)
 
+            self.include_dirs = (self.include_dirs or []) + [os.path.join(self.prefix, 'include')]
+            self.library_dirs = (self.library_dirs or []) + [os.path.join(self.prefix, 'lib')]
+
         if self.datadir is None and self.prefix:
             self.datadir = os.path.join(self.prefix, 'data')
 
@@ -107,9 +110,7 @@ def main():
                       ),
             Extension('postal._expand',
                       sources=['python/postal/pyexpand.c'],
-                      include_dirs=[this_dir, os.path.join(this_dir, SRC_DIR)],
-                      library_dirs=[os.path.join(this_dir, SRC_DIR, '.libs'),
-                                    os.path.join(this_dir, SRC_DIR)],
+                      include_dirs=[this_dir],
                       libraries=['postal'],
                       extra_compile_args=['-std=c99',
                                           '-DHAVE_CONFIG_H',
@@ -117,9 +118,7 @@ def main():
                       ),
             Extension('postal._parser',
                       sources=['python/postal/pyparser.c'],
-                      include_dirs=[this_dir, os.path.join(this_dir, SRC_DIR)],
-                      library_dirs=[os.path.join(this_dir, SRC_DIR, '.libs'),
-                                    os.path.join(this_dir, SRC_DIR)],
+                      include_dirs=[this_dir],
                       libraries=['postal'],
                       extra_compile_args=['-std=c99',
                                           '-DHAVE_CONFIG_H',
