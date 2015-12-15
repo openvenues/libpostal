@@ -61,8 +61,9 @@ Examples of parsing
 -------------------
 
 libpostal's address parser is trained on ~50M addresses (everything in OSM),
-using the formats in 
-
+using the address format templates in https://github.com/OpenCageData/address-formatting
+and perturbing the inputs in a number of ways to make the parser as robust
+as possible to messy real-world input.
 
 These examples are taken from the interactive address_parser program that builds
 with libpostal on make.
