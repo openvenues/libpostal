@@ -52,9 +52,6 @@ class InstallWithDependencies(install):
             if not os.path.exists(self.prefix):
                 os.mkdir(self.prefix)
 
-            self.include_dirs = (self.include_dirs or []) + [os.path.join(self.prefix, 'include')]
-            self.library_dirs = (self.library_dirs or []) + [os.path.join(self.prefix, 'lib')]
-
         if self.datadir is None and self.prefix:
             self.datadir = os.path.join(self.prefix, 'data')
 
@@ -69,6 +66,30 @@ class InstallWithDependencies(install):
         install.run(self)
 
 
+class BuildExtensionWithDependencies(build_ext):
+    user_options = build_ext.user_options + [
+        ('prefix=', None, 'Install prefix for libpostal'),
+    ]
+
+    def initialize_options(self):
+        self.prefix = None
+        build_ext.initialize_options(self)
+
+    def finalize_options(self):
+        if self.prefix is None and virtualenv_path:
+            self.prefix = virtualenv_path
+
+        if self.prefix is not None:
+            self.prefix = normalized_path(self.prefix)
+            if not os.path.exists(self.prefix):
+                os.mkdir(self.prefix)
+
+            self.include_dirs = (self.include_dirs or []) + [os.path.join(self.prefix, 'include')]
+            self.library_dirs = (self.library_dirs or []) + [os.path.join(self.prefix, 'lib')]
+
+        build_ext.finalize_options(self)
+
+
 def main():
     setup(
         name='pypostal',
@@ -78,6 +99,7 @@ def main():
         ],
         cmdclass={
             'install': InstallWithDependencies,
+            'build_ext': BuildExtensionWithDependencies,
         },
         ext_modules=[
             Extension('postal.text._tokenize',
