@@ -572,7 +572,7 @@ bool numex_module_setup(char *filename) {
     if (numex_table == NULL) {
         return numex_table_load(filename == NULL ? DEFAULT_NUMEX_PATH : filename);
     }
-    return false;
+    return true;
 }
 
 /* Teardown method for the module
