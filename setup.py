@@ -32,6 +32,16 @@ def normalized_path(path):
     return os.path.abspath(os.path.expanduser(os.path.expandvars(path)))
 
 
+def get_prefix_path(prefix=None):
+    if prefix is None and virtualenv_path:
+        prefix = virtualenv_path
+
+    if prefix is not None:
+        prefix = normalized_path(self.prefix)
+
+    return prefix
+
+
 class InstallWithDependencies(install):
     user_options = install.user_options + [
         ('datadir=', None, 'Data directory for libpostal models'),
@@ -44,12 +54,9 @@ class InstallWithDependencies(install):
         install.initialize_options(self)
 
     def finalize_options(self):
-        if self.prefix is None and virtualenv_path:
-            self.prefix = virtualenv_path
+        self.prefix = get_prefix_path(self.prefix)
 
-        if self.prefix is not None:
-            self.prefix = normalized_path(self.prefix)
-            if not os.path.exists(self.prefix):
+        if self.prefix is not None and not os.path.exists(self.prefix):
                 os.mkdir(self.prefix)
 
         if self.datadir is None and self.prefix:
@@ -66,31 +73,19 @@ class InstallWithDependencies(install):
         install.run(self)
 
 
-class BuildExtensionWithDependencies(build_ext):
-    user_options = build_ext.user_options + [
-        ('prefix=', None, 'Install prefix for libpostal'),
-    ]
-
-    def initialize_options(self):
-        self.prefix = None
-        build_ext.initialize_options(self)
-
-    def finalize_options(self):
-        if self.prefix is None and virtualenv_path:
-            self.prefix = virtualenv_path
-
-        if self.prefix is not None:
-            self.prefix = normalized_path(self.prefix)
-            if not os.path.exists(self.prefix):
-                os.mkdir(self.prefix)
-
-            self.include_dirs = (self.include_dirs or []) + [os.path.join(self.prefix, 'include')]
-            self.library_dirs = (self.library_dirs or []) + [os.path.join(self.prefix, 'lib')]
-
-        build_ext.finalize_options(self)
-
-
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--prefix')
+    args, _ = parser.parse_known_args()
+
+    prefix_path = get_prefix_path(args.prefix)
+    include_dirs = []
+    library_dirs = []
+
+    if prefix_path is not None:
+        include_dirs.append(os.path.join(prefix_path, 'include'))
+        library_dirs.append(os.path.join(prefix_path, 'lib'))
+
     setup(
         name='pypostal',
         version='0.2',
@@ -132,16 +127,18 @@ def main():
                       ),
             Extension('postal._expand',
                       sources=['python/postal/pyexpand.c'],
-                      include_dirs=[this_dir],
+                      include_dirs=[this_dir] + include_dirs,
                       libraries=['postal'],
+                      library_dirs=library_dirs,
                       extra_compile_args=['-std=c99',
                                           '-DHAVE_CONFIG_H',
                                           '-Wno-unused-function'],
                       ),
             Extension('postal._parser',
                       sources=['python/postal/pyparser.c'],
-                      include_dirs=[this_dir],
+                      include_dirs=[this_dir] + include_dirs,
                       libraries=['postal'],
+                      library_dirs=library_dirs,
                       extra_compile_args=['-std=c99',
                                           '-DHAVE_CONFIG_H',
                                           '-Wno-unused-function'],
