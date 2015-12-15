@@ -52,12 +52,13 @@ class InstallWithDependencies(install):
     user_options = install.user_options + [
         ('datadir=', None, 'Data directory for libpostal models'),
         ('prefix=', None, 'Install prefix for libpostal'),
-        ('libdir=', None, 'lib directory for libpostal')
+        ('libdir=', None, 'lib directory for libpostal'),
     ]
 
     def initialize_options(self):
         self.datadir = None
         self.prefix = None
+        self.libdir = None
         install.initialize_options(self)
 
     def finalize_options(self):
