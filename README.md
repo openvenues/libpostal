@@ -38,35 +38,57 @@ It is written in C for maximum portability and performance.
 Examples of normalization
 -------------------------
 
-Like many problems in information extraction and NLP, address normalization
-may sound trivial initially, but in fact can be quite complicated in real
-natural language texts. Here are some examples of the kinds of address-specific
-challenges libpostal can handle:
+Address normalization may sound trivial initially, especially when thinking
+only about the US (if that's where you happen to reside), but it only takes
+a few examples to realize how complicated natural language addresses are
+internationally. Here's a short list of some less straightforward normalizations
+in various languages. The left/right columns in this table are equivalent
+strings under libpostal, the left column being user input and the right column
+being the indexed (normalized) string.
 
 | Input                               | Output (may be multiple in libpostal) |
 | ----------------------------------- |---------------------------------------|
 | One-hundred twenty E 96th St        | 120 east 96th street                  |
-| C/ Ocho, P.I. 4                     | calle 8, polígono industrial 4        |
-| V XX Settembre, 20                  | via 20 settembre, 20                  |
+| C/ Ocho, P.I. 4                     | calle 8 polígono industrial 4         |
+| V XX Settembre, 20                  | via 20 settembre 20                   |
 | Quatre vignt douze R. de l'Église   | 92 rue de l' église                   |
-| ул Каретный Ряд, д 4, строение 7    | улица каретныи ряд, дом 4, строение 7 |
-| ул Каретный Ряд, д 4, строение 7    | ulica karetnyj rad, dom 4, stroenie 7 |
+| ул Каретный Ряд, д 4, строение 7    | улица каретныи ряд дом 4 строение 7   |
+| ул Каретный Ряд, д 4, строение 7    | ulica karetnyj rad dom 4 stroenie 7   |
 | Marktstrasse 14                     | markt straße 14                       |
 
-For further reading and some less intuitive examples of addresses, see
-"[Falsehoods Programmers Believe About Addresses](https://www.mjt.me.uk/posts/falsehoods-programmers-believe-about-addresses/)".
+libpostal currently supports these types of normalization in *over 60 languages*,
+and you can add more (without having to write any C!)
 
+Now, instead of trying to bake address-specific conventions into traditional
+document search engines like Elasticsearch using giant synonyms files, scripting,
+custom analyzers, tokenizers, and the like, geocoding can be as simple as:
+
+1. Run the addresses in your index through libpostal's expand_address
+2. Store the normalized string(s) in your favorite search engine, DB, 
+   hashtable, etc.
+3. Run your user queries or fresh imports through libpostal and search
+   the existing database using those strings
+
+In this way, libpostal can perform fuzzy address matching in constant time.
+
+For further reading and some bizarre address edge-cases, see:
+[Falsehoods Programmers Believe About Addresses](https://www.mjt.me.uk/posts/falsehoods-programmers-believe-about-addresses/).
 
 Examples of parsing
 -------------------
 
-libpostal's address parser is trained on ~50M addresses (everything in OSM),
-using the address format templates in https://github.com/OpenCageData/address-formatting
-and perturbing the inputs in a number of ways to make the parser as robust
-as possible to messy real-world input.
+libpostal implements the first truly international statistical address parser,
+trained on ~50 million addresses in over 100 countries speaking over 60
+languages. We use OpenStreetMap (anything with an addr:* tag) and the OpenCage
+address format templates at: https://github.com/OpenCageData/address-formatting
+to construct the training data, supplementing with containing polygons and
+perturbing the inputs in a number of ways to make the parser as robust as possible
+to messy real-world input.
 
-These examples are taken from the interactive address_parser program that builds
-with libpostal on make.
+These example parses are taken from the interactive address_parser program 
+that builds with libpostal on make. Note that the parser doesn't care about commas
+vs. no commas, casing, or different permutations of components (if components are
+left out e.g. just city or just city/postcode).
 
 ```
 > 781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA 
@@ -153,6 +175,10 @@ Result:
 }
 ```
 
+The parser achieves very high accuracy on held-out data, currently 98.9%
+correct full parses (meaning a 1 in the numerator for getting *every* token
+in the address correct).
+
 Installation
 ------------
 
@@ -228,10 +254,9 @@ After building libpostal:
 cd src/
 
 ./address_parser
-
 ```
 
-address_parser is an interactive shell, just type addresses and libpostal will
+address_parser is an interactive shell. Just type addresses and libpostal will
 parse them and print the result.
 
 Data files
@@ -241,7 +266,6 @@ libpostal needs to download some data files from S3. The basic files are on-disk
 representations of the data structures necessary to perform expansion. For address
 parsing, since model training takes about a day, we publish the fully trained model 
 to S3 and will update it automatically as new addresses get added to OSM.
-
 
 Data files are automatically downloaded when you run make. To check for and download
 any new data files, run:
@@ -375,15 +399,10 @@ So it's not a geocoder?
 
 If the above sounds a lot like geocoding, that's because it is in a way,
 only in the OpenVenues case, we do it without a UI or a user to select the
-correct address in an autocomplete. libpostal does server-side batch geocoding
-(and you can too!)
-
-Now, instead of fiddling with giant Elasticsearch synonyms files, scripting,
-analyzers, tokenizers, and the like, geocoding can look like this:
-
-1. Run the addresses in your index through libpostal
-2. Store the canonical strings
-3. Run your user queries through libpostal and search with those strings
+correct address in an autocomplete. Given a database of source addresses
+such as OpenAddresses or OpenStreetMap (or all of the above), libpostal
+can be used to implement things like address deduping and server-side
+batch geocoding in settings like MapReduce.
 
 Why C?
 ------
@@ -542,20 +561,26 @@ There are four primary ways the address parser can be improved even further
 1. Contribute addresses to OSM. Anything with an addr:housenumber tag will be
    incorporated automatically into the parser next time it's trained.
 2. If the address parser isn't working well for a particular country, language
-   or style of address, chances are that the template can be added at:
-   https://github.com/OpenCageData/address-formatting. This repo helps us
-   format OSM addresses and create the training data used by the address parser.
+   or style of address, chances are that some name variations or places being
+   missed/mislabeled during training data creation. Sometimes the fix is to
+   add more countries at: https://github.com/OpenCageData/address-formatting,
+   and in many other cases there are relatively simple tweaks we can make
+   when creating the training data that will ensure the model is trained to
+   handle your use case without you having to do any manual data entry.
+   If you see a pattern of obviously bad address parses, post an issue to
+   Github and we'll tr
 3. We currently don't have training data for things like flat numbers.
    The tags are fairly uncommon in OSM and the address-formatting templates
    don't use floor, level, apartment/flat number, etc. This would be a slightly
-   more involved effort, but would be happy to discuss.
-4. Moving to a CRF may improve parser performance on certain kinds of input
-   since the score is the argmax over the entire sequence not just the token.
-   This may slow down training significantly. 
+   more involved effort, but would be like to begin a discussion around it.
+4. We use a greedy averaged perceptron for the parser model. Viterbi inference
+   using a linear-chain CRF may improve parser performance on certain classes
+   of input since the score is the argmax over the entire label sequence not
+   just the token. This may slow down training significantly.
 
 Todos
 -----
 
-1. Port language classification from Python, train and publish model
-2. Publish tests (currently not on Github) and set up continuous integration
-3. Hosted documentation
+[ ] Port language classification from Python, train and publish model
+[ ] Publish tests (currently not on Github) and set up continuous integration
+[ ] Hosted documentation
