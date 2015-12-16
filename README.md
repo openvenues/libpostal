@@ -133,7 +133,7 @@ Result:
 {
   "house": "le polikarpov"
   "house_number": "24"
-  "road": "cours honoré d'estienne d'orves"
+  "road": "cours honoré d'estienne d'orves"
   "postcode": "13001"
   "city": "marseille"
   "country": "france",
@@ -316,7 +316,7 @@ strips accent marks e.g. à => a and/or applies Latin-ASCII transliteration.
 [CLDR transforms](http://www.unicode.org/repos/cldr/trunk/common/transforms/), the exact same as used by ICU,
 though libpostal doesn't require pulling in all of ICU (might conflict 
 with your system's version). Note: some languages, particularly Hebrew, Arabic
-and Thai may not include vowels andthus will not often match a transliteration 
+and Thai may not include vowels and thus will not often match a transliteration 
 done by a human. It may be possible to implement statistical transliterators
 for some of these languages.
 
