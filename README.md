@@ -220,7 +220,7 @@ Python usage
 
 After installing:
 
-```
+```python
 from postal.expand import expand_address
 expand_address('Quatre vignt douze Ave des Champs-Élysées', languages=['fr'])
 
