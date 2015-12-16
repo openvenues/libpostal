@@ -178,6 +178,9 @@ cd libpostal
 ./configure --datadir=[...some dir with a few GB of space...]
 make
 sudo make install
+
+# On Linux it's probably a good idea to run
+sudo ldconfig
 ```
 
 To install via Python, you should first install the C library and then run:
