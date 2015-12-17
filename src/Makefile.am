@@ -22,7 +22,7 @@ libscanner_la_SOURCES = scanner.c
 libscanner_la_CFLAGS =  $(CFLAGS_O0)
 
 noinst_PROGRAMS = libpostal bench build_address_dictionary build_geodb build_numex_table build_trans_table address_parser_train address_parser_test address_parser
-libpostal_SOURCES = main.c
+libpostal_SOURCES = main.c json_encode.c
 libpostal_LDADD = libpostal.la
 libpostal_CFLAGS = $(CFLAGS_O3)
 bench_SOURCES = bench.c
