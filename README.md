@@ -33,7 +33,9 @@ comparison and full-text indexing.
 
 libpostal is not itself a full geocoder, but should be a ubiquitous
 preprocessing step before indexing/searching with free text geographic strings.
-It is written in C for maximum portability and performance.
+It is written in C for maximum portability and performance. Python
+bindings are included in this repo and it's easy to write bindings to
+other languages.
 
 Examples of normalization
 -------------------------
