@@ -581,6 +581,6 @@ There are four primary ways the address parser can be improved even further
 Todos
 -----
 
-[ ] Port language classification from Python, train and publish model
-[ ] Publish tests (currently not on Github) and set up continuous integration
-[ ] Hosted documentation
+- [ ] Port language classification from Python, train and publish model
+- [ ] Publish tests (currently not on Github) and set up continuous integration
+- [ ] Hosted documentation
