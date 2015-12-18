@@ -493,12 +493,21 @@ phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, size_t len, u
                 tail_remaining--;
                 current_tail++;
                 if (i == char_len - 1) {
-                    phrase_len += char_len;
                     phrase_start = (uint32_t)index;
+                    if (index == 0 && tail_remaining == 0) {
+                        log_debug("tail match! ..tail_value=%u\n",tail_value);
+                        phrase_len = (uint32_t)(len - index);   
+                        value = tail_value;
+                        index = 0;
+                        break;
+                    } else {
+                        phrase_len += char_len;
+                    }
+
                 }
                 continue;
             } else if (in_tail && tail_remaining == 0 && i == char_len - 1) {
-                log_debug("tail match!\n");
+                log_debug("tail match! tail_value=%u\n", tail_value);
                 phrase_start = (uint32_t)(index + char_len);
                 phrase_len = (uint32_t)(len - index - char_len);
                 value = tail_value;
