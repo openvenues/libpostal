@@ -516,6 +516,7 @@ phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, size_t len, u
             } else if (in_tail) {
                 log_debug("Done with tail\n");
                 index = 0;
+                phrase_len = 0;
                 break;
             }
 
@@ -562,6 +563,8 @@ phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, size_t len, u
             trie_data_node_t data_node = self->data->a[data_index];
             value = data_node.data;
             log_debug("value = %d\n", value);
+        } else {
+            return NULL_PHRASE;
         }
     }
 
