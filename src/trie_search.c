@@ -480,50 +480,39 @@ phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, size_t len, u
     while(index > 0) {
         char_len = utf8proc_iterate_reversed(ptr, index, &unich);
 
-        if (char_len <= 0) break;
-        if (!(utf8proc_codepoint_valid(unich))) break;
+        if (char_len <= 0) return NULL_PHRASE;
+        if (!(utf8proc_codepoint_valid(unich))) return NULL_PHRASE;
 
         index -= char_len;
         char_ptr = ptr + index;
 
-        for (int i=0; i < char_len; i++, char_ptr++, last_node = node, last_node_id = node_id) {
-            log_debug("char=%c\n", (unsigned char)*char_ptr);
+        if (in_tail && tail_remaining >= char_len && strncmp((char *)current_tail, (char *)char_ptr, char_len) == 0) {
+            tail_remaining -= char_len;
+            current_tail += char_len;
+            phrase_start = (uint32_t)index;
 
-            if (in_tail && *current_tail && *current_tail == *char_ptr) {
-                tail_remaining--;
-                current_tail++;
-                if (i == char_len - 1) {
-                    phrase_start = (uint32_t)index;
-                    if (index == 0 && tail_remaining == 0) {
-                        log_debug("tail match! ..tail_value=%u\n",tail_value);
-                        phrase_len = (uint32_t)(len - index);   
-                        value = tail_value;
-                        index = 0;
-                        break;
-                    } else {
-                        phrase_len += char_len;
-                    }
+            log_debug("tail matched at char %.*s (len=%zd)\n", (int)char_len, char_ptr, char_len);
+            log_debug("tail_remaining = %zu\n", tail_remaining);
 
-                }
-                continue;
-            } else if (in_tail && tail_remaining == 0 && i == char_len - 1) {
-                log_debug("tail match! tail_value=%u\n", tail_value);
-                phrase_start = (uint32_t)(index + char_len);
-                phrase_len = (uint32_t)(len - index - char_len);
+            if (tail_remaining == 0) {
+                log_debug("tail match! tail_value=%u\n",tail_value);
+                phrase_len = (uint32_t)(len - index);
                 value = tail_value;
                 index = 0;
                 break;
-            } else if (in_tail) {
-                log_debug("Done with tail\n");
-                index = 0;
-                phrase_len = 0;
-                break;
             }
+            continue;
+        } else if (in_tail) {
+            break;
+        }
+
+        for (int i=0; i < char_len; i++, char_ptr++, last_node = node, last_node_id = node_id) {
+            log_debug("char=%c\n", (unsigned char)*char_ptr);
 
             node_id = trie_get_transition_index(self, node, *char_ptr);
             node = trie_get_node(self, node_id);
     
-            if (node.check != last_node_id) { 
+            if (node.check != last_node_id) {
                 log_debug("node.check = %d and last_node_id = %d\n", node.check, last_node_id);
                 index = 0;
                 break;
@@ -542,30 +531,39 @@ phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, size_t len, u
                 log_debug("tail_remaining=%zu\n", tail_remaining);
                 in_tail = true;
 
+                size_t remaining_char_len = char_len - i - 1;
+                log_debug("remaining_char_len = %zu\n", remaining_char_len);
+
+                if (remaining_char_len > 0 && strncmp((char *)char_ptr, (char *)current_tail, remaining_char_len) == 0) {
+                    log_debug("tail string comparison successful\n");
+                    tail_remaining -= remaining_char_len;
+                } else if (remaining_char_len > 0) {
+                    log_debug("tail comparison unsuccessful, \n");
+                    index = 0;
+                    break;
+                }
+
                 if (tail_remaining == 0) {
                     phrase_start = (uint32_t)index;
                     phrase_len = (uint32_t)(len - index);
+                    log_debug("phrase_start = %d, phrase_len=%d\n", phrase_start, phrase_len);
                     value = tail_value;
                     index = 0;
                     break;
                 }
+            } else if (i == char_len - 1) {
+                trie_node_t terminal_node = trie_get_transition(self, node, '\0');
+                if (terminal_node.check == node_id) {
+                    int32_t data_index = -1 * terminal_node.base;
+                    trie_data_node_t data_node = self->data->a[data_index];
+                    value = data_node.data;
+                    phrase_start = (uint32_t)index;
+                    phrase_len = (uint32_t)(len - index);
+                }
             }
 
-
         }
 
-    }
-
-    if (phrase_len > 0) {
-        trie_node_t terminal_node = trie_get_transition(self, node, '\0');
-        if (terminal_node.check == node_id) {
-            int32_t data_index = -1*terminal_node.base;
-            trie_data_node_t data_node = self->data->a[data_index];
-            value = data_node.data;
-            log_debug("value = %d\n", value);
-        } else {
-            return NULL_PHRASE;
-        }
     }
 
     return (phrase_t) {phrase_start, phrase_len, value};

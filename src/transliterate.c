@@ -948,9 +948,9 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                 char_array_destroy(revisit);
             }
 
-            free(original_str);
-
             log_debug("original_str=%s\n", original_str);
+
+            free(original_str);
 
             str = char_array_to_string(new_str);
 

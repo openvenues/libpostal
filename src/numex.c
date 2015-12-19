@@ -968,7 +968,9 @@ char *replace_numeric_expressions(char *str, char *lang) {
 
         if (result.is_ordinal) {
             char *ordinal_suffix = get_ordinal_suffix(numeric_string, lang, result);
-            char_array_append(replacement, ordinal_suffix);
+            if (ordinal_suffix != NULL) {
+                char_array_append(replacement, ordinal_suffix);
+            }
         }
      
         start = result.start + result.len;
