@@ -414,7 +414,7 @@ inline void cat_affix_expansion(char_array *key, char *str, address_expansion_t 
     }
 }
 
-void add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t token, phrase_t prefix, phrase_t suffix, normalize_options_t options) {
+bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t token, phrase_t prefix, phrase_t suffix, normalize_options_t options) {
     cstring_array *strings = tree->strings;
 
     bool have_suffix = suffix.len > 0;
@@ -447,6 +447,10 @@ void add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t to
     if (have_suffix) {
         suffix_expansions = get_affix_expansions(key, str, lang, token, suffix, true, options);
         if (suffix_expansions == NULL) have_suffix = false;
+    }
+
+    if (!have_suffix && !have_prefix) {
+        return false;
     }
     
     if (have_prefix && have_suffix) {
@@ -575,7 +579,7 @@ void add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t to
 
             char_array_destroy(key);
             cstring_array_destroy(root_strings);
-            return;
+            return false;
 
         }
 
@@ -610,6 +614,8 @@ void add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t to
         cstring_array_destroy(root_strings);
     }
 
+    return true;
+
 }
 
 inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, token_t token, normalize_options_t options) {
@@ -619,9 +625,7 @@ inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, token_t t
 
     if ((suffix.len == 0 && prefix.len == 0)) return false;
 
-    add_affix_expansions(tree, str, lang, token, prefix, suffix, options);
-
-    return true;
+    return add_affix_expansions(tree, str, lang, token, prefix, suffix, options);
 }
 
 inline void add_normalized_strings_tokenized(string_tree_t *tree, char *str, token_array *tokens, normalize_options_t options) {
