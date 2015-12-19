@@ -36,8 +36,8 @@ Address dictionaries
 
 typedef struct normalize_options {
     // List of language codes
-    int num_languages;
     char **languages;  
+    int num_languages;
     uint16_t address_components;
 
     // String options
@@ -63,26 +63,26 @@ typedef struct normalize_options {
 } normalize_options_t;
 
 static normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
-        .num_languages = 1,
-        .languages = NULL,
-        .address_components = ADDRESS_NAME | ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_UNIT,
-        .latin_ascii = 1,
-        .transliterate = 1,
-        .strip_accents = 1,
-        .decompose = 1,
-        .lowercase = 1,
-        .trim_string = 1,
-        .replace_word_hyphens = 1,
-        .delete_word_hyphens = 1,
-        .replace_numeric_hyphens = 0,
-        .delete_numeric_hyphens = 0,
-        .split_alpha_from_numeric = 1,
-        .delete_final_periods = 1,
-        .delete_acronym_periods = 1,
-        .drop_english_possessives = 1,
-        .delete_apostrophes = 1,
-        .expand_numex = 1,
-        .roman_numerals = 1
+        NULL,                                                                   // languages
+        0,                                                                      // num_languages
+        ADDRESS_NAME | ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_UNIT,    // address_components
+        1,                                                                      // latin_ascii
+        1,                                                                      // transliterate
+        1,                                                                      // strip_accents
+        1,                                                                      // decompose
+        1,                                                                      // lowercase
+        1,                                                                      // trim_string
+        1,                                                                      // replace_word_hyphens
+        1,                                                                      // delete_word_hyphens
+        0,                                                                      // replace_numeric_hyphens
+        0,                                                                      // delete_numeric_hyphens
+        1,                                                                      // split_alpha_from_numeric
+        1,                                                                      // delete_final_periods
+        1,                                                                      // delete_acronym_periods
+        1,                                                                      // drop_english_possessives
+        1,                                                                      // delete_apostrophes
+        1,                                                                      // expand_numex
+        1                                                                       // roman_numerals
 };
 
 char **expand_address(char *input, normalize_options_t options, size_t *n);
@@ -103,8 +103,8 @@ typedef struct address_parser_options {
 } address_parser_options_t;
 
 static address_parser_options_t LIBPOSTAL_ADDRESS_PARSER_DEFAULT_OPTIONS =  {
-    .language = NULL,
-    .country = NULL
+    NULL,       // language
+    NULL        // country
 };
 
 void address_parser_response_destroy(address_parser_response_t *self);
