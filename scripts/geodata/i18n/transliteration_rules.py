@@ -139,6 +139,8 @@ pre_transform_regex = re.compile('[\s]*([^\s\(\)]*)[\s]*(?:\((.*)\)[\s]*)?', re.
 assignment_regex = re.compile(u"(?:[\s]*(\$[^\s\=]+)[\s]*\=[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)", re.UNICODE)
 transform_regex = re.compile(u"(?:[\s]*(?!=[\s])(.*?)(?<![\s])[\s]*)((?:<>)|[←<→>↔])(?:[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)", re.UNICODE)
 
+newline_regex = re.compile('[\n]+')
+
 quoted_string_regex = re.compile(r'\'.*?\'', re.UNICODE)
 
 COMMENT_CHAR = '#'
@@ -577,7 +579,7 @@ def get_raw_rules_and_variables(xml, reverse=False):
     if reverse:
         nodes = reversed(nodes)
 
-    queue = deque([n.text for n in nodes if n.text])
+    queue = deque([l for n in nodes for l in (newline_regex.split(n.text) if n.text else [])])
 
     while queue:
         rule = queue.popleft()
