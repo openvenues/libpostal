@@ -539,7 +539,7 @@ void add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t to
                 key->n = root_end;
                 suffix_expansion = suffix_expansions->a[k];
 
-                add_space = suffix_expansion.separable;
+                add_space = suffix_expansion.separable && suffix.len < token.len;
                 suffix_start = key->n;
 
                 for (int spaces = 0; spaces <= add_space; spaces++) {
@@ -586,7 +586,7 @@ void add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t to
             cat_affix_expansion(key, str, prefix_expansion, token, prefix);
             prefix_end = key->n - 1;
 
-            add_space = prefix_expansion.separable;
+            add_space = prefix_expansion.separable && prefix.len < token.len;
             for (int spaces = 0; spaces <= add_space; spaces++) {
                 key->n = prefix_end;
                 if (spaces) {
@@ -617,7 +617,7 @@ inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, token_t t
 
     phrase_t prefix = search_address_dictionaries_prefix(str + token.offset, token.len, lang);
 
-    if ((suffix.len == 0 && prefix.len == 0) || suffix.len == token.len || prefix.len == token.len) return false;
+    if ((suffix.len == 0 && prefix.len == 0)) return false;
 
     add_affix_expansions(tree, str, lang, token, prefix, suffix, options);
 
