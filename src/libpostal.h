@@ -72,11 +72,12 @@ static normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
         1,                                                                      // decompose
         1,                                                                      // lowercase
         1,                                                                      // trim_string
-        1,                                                                      // replace_word_hyphens
-        1,                                                                      // delete_word_hyphens
+        1,                                                                      // drop_parentheticals
         0,                                                                      // replace_numeric_hyphens
         0,                                                                      // delete_numeric_hyphens
         1,                                                                      // split_alpha_from_numeric
+        1,                                                                      // replace_word_hyphens
+        1,                                                                      // delete_word_hyphens
         1,                                                                      // delete_final_periods
         1,                                                                      // delete_acronym_periods
         1,                                                                      // drop_english_possessives
