@@ -353,8 +353,28 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
 
     } else {
-        string_tree_add_string(tree, str);
-        string_tree_finalize_token(tree);
+
+        for (int j = 0; j < tokens->n; j++) {
+            token_t token = tokens->a[j];
+            if (is_punctuation(token.type)) {
+                last_was_punctuation = true;
+                continue;
+            }
+
+            if (token.type != WHITESPACE) {
+                if (last_was_punctuation) {
+                    string_tree_add_string(tree, " ");
+                    string_tree_finalize_token(tree);
+                }
+
+                string_tree_add_string_len(tree, str + token.offset, token.len);
+            } else {
+                string_tree_add_string(tree, " ");
+            }
+
+            last_was_punctuation = false;
+            string_tree_finalize_token(tree);
+        }
     }
 
     if (phrases != NULL) {
