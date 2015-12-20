@@ -46,6 +46,9 @@ inline bool is_punctuation(uint16_t type) {
     return type >= PERIOD && type < OTHER;
 }
 
+inline bool is_special_token(uint16_t type) {
+    return type == EMAIL || type == URL || type == US_PHONE || type == INTL_PHONE;
+}
 
 inline uint64_t get_normalize_token_options(normalize_options_t options) {
     uint64_t normalize_token_options = 0;
@@ -659,6 +662,13 @@ inline void add_normalized_strings_tokenized(string_tree_t *tree, char *str, tok
     for (int i = 0; i < tokens->n; i++) {
         token_t token = tokens->a[i];
         bool have_phrase = false;
+
+        if (is_special_token(token.type)) {
+            string_tree_add_string_len(tree, str + token.offset, token.len);
+            string_tree_finalize_token(tree);
+            continue;
+        }
+
         for (int j = 0; j < options.num_languages; j++) {
             char *lang = options.languages[j];
             if (expand_affixes(tree, str, lang, token, options)) {
@@ -699,6 +709,9 @@ void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_strings
         char_array_clear(temp_string);
 
         string_tree_iterator_foreach_token(tokenized_iter, token, {
+            if (token == NULL) {
+                continue;
+            }
             char_array_append(temp_string, token);
         })
         char_array_terminate(temp_string);
