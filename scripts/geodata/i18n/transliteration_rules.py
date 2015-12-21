@@ -1456,7 +1456,7 @@ script_transliterators = {
     'gujarati': {None: ['gujarati-latin']},
     'gurmukhi': {None: ['gurmukhi-latin']},
     'han': {None: ['han-latin']},
-    'hangul': {None: ['hangul-latin', 'korean-latin-bgn']},
+    'hangul': {None: ['hangul-latin']},
     'hanunoo': None,
     'hebrew': {None: ['hebrew-latin', 'hebrew-latin-bgn']},
     'hiragana': {None: ['hiragana-latin']},
