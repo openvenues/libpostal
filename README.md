@@ -93,87 +93,89 @@ vs. no commas, casing, or different permutations of components (if components ar
 left out e.g. just city or just city/postcode).
 
 ```
-> 781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA 
+> 781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA
 
 Result:
+
 {
-  "house_number": "781"
-  "road": "franklin ave"
-  "suburb": "crown heights"
-  "city_district": "brooklyn"
-  "city": "nyc"
-  "state": "ny"
-  "postcode": "11216"
-  "country": "usa",
-} 
+  "house_number": "781",
+  "road": "franklin ave",
+  "suburb": "crown heights",
+  "city_district": "brooklyn",
+  "city": "nyc",
+  "state": "ny",
+  "postcode": "11216",
+  "country": "usa"
+}
 
 > The Book Club 100-106 Leonard St, Shoreditch, London, Greater London, England, EC2A 4RH, United Kingdom
- 
-Result: 
- 
+
+Result:
+
 {
-  "house": "the book club"
-  "house_number": "100-106"
-  "road": "leonard st"
-  "suburb": "shoreditch"
-  "city": "london"
-  "state_district": "greater london"
-  "state": "england"
-  "postcode": "ec2a 4rh"
-  "country": "united kingdom",
+  "house": "the book club",
+  "house_number": "100-106",
+  "road": "leonard st",
+  "suburb": "shoreditch",
+  "city": "london",
+  "state_district": "greater london",
+  "state": "england",
+  "postcode": "ec2a 4rh",
+  "country": "united kingdom"
 }
- 
+
 > Eschenbräu Bräurei Triftstraße 67, 13353 Berlin, Deutschland
- 
+
 Result:
 
 {
-  "house": "eschenbraeu braeurei"
-  "road": "triftstrasse"
-  "house_number": "67"
-  "postcode": "13353"
-  "city": "berlin"
-  "country": "deutschland",
+  "house": "eschenbraeu braeurei",
+  "road": "triftstrasse",
+  "house_number": "67",
+  "postcode": "13353",
+  "city": "berlin",
+  "country": "deutschland"
 }
 
- > Double Shot Tea & Coffee 15 Melle St. Braamfontein Johannesburg, 2000, South Africa
- 
+> Double Shot Tea & Coffee 15 Melle St. Braamfontein Johannesburg, 2000, South Africa
+
 Result:
 
 {
-  "house": "double shot tea & coffee"
-  "house_number": "15"
-  "road": "melle st."
-  "suburb": "braamfontein"
-  "city": "johannesburg"
-  "postcode": "2000"
-  "country": "south africa",
+  "house": "double shot tea & coffee",
+  "house_number": "15",
+  "road": "melle st.",
+  "suburb": "braamfontein",
+  "city": "johannesburg",
+  "postcode": "2000",
+  "country": "south africa"
 }
- 
-> Le Polikarpov 24 cours Honoré d'Estienne d'Orves, 13001 Marseille, France  
- 
+
+> Le Polikarpov 24 cours Honoré d'Estienne d'Orves, 13001 Marseille, France
+
 Result:
 
 {
-  "house": "le polikarpov"
-  "house_number": "24"
-  "road": "cours honoré d'estienne d'orves"
-  "postcode": "13001"
-  "city": "marseille"
-  "country": "france",
+  "house": "le polikarpov",
+  "house_number": "24",
+  "road": "cours honoré d'estienne d'orves",
+  "postcode": "13001",
+  "city": "marseille",
+  "country": "france"
 }
- 
-> Государственный Эрмитаж Дворцовая наб., 34 191186, Saint Petersburg, Russia 
+
+> Государственный Эрмитаж Дворцовая наб., 34 191186, Saint Petersburg, Russia
 
 Result:
 
 {
-  "house": "государственный эрмитаж"
-  "road": "дворцовая наб."
-  "house_number": "34"
-  "postcode": "191186"
-  "city": "saint petersburg"
-  "country": "russia",
+  "house": "государственный эрмитаж",
+  "road": "дворцовая наб.",
+  "house_number": "34",
+  "postcode": "191186",
+  "state_district": "saint",
+  "state": "petersburg",
+  "country": "russia"
 }
 ```
 
