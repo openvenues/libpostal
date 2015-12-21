@@ -8,6 +8,7 @@
 #include "constants.h"
 #include "file_utils.h"
 #include "geodb.h"
+#include "json_encode.h"
 #include "libpostal.h"
 #include "normalize.h"
 #include "scanner.h"
@@ -111,7 +112,8 @@ int main(int argc, char **argv) {
             printf("Result:\n\n");
             printf("{\n");
             for (int i = 0; i < parsed->num_components; i++) {
-                printf("  \"%s\": \"%s\"%s\n", parsed->labels[i], parsed->components[i], i == parsed->num_components - 1 ? "," : "");
+                char *json_string = json_encode_string(parsed->components[i]);
+                printf("  \"%s\": %s%s\n", parsed->labels[i], json_string, i < parsed->num_components - 1 ? "," : "");
             }
             printf("}\n");
             printf("\n");
