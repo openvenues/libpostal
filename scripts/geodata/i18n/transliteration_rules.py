@@ -88,6 +88,8 @@ REVERSE_TRANSLITERATORS = {
 EXCLUDE_TRANSLITERATORS = set([
     # Don't care about spaced Han because our tokenizer does it already
     'han-spacedhan',
+    # Doesn't appear to be used in ICU
+    'korean-latin-bgn',
 ])
 
 NFD = 'NFD'
