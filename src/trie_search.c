@@ -660,7 +660,14 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, size_t len, u
 
             log_debug("comparing tail: %s vs %s\n", current_tail, ptr + 1);
             size_t current_tail_len = strlen((char *)current_tail);
-            size_t match_len = utf8_common_prefix_len_ignore_separators((char *)ptr + 1, (char *)current_tail, current_tail_len);
+            size_t match_len = 0;
+            size_t offset = 1;
+            if (char_len > 1) {
+                match_len = strncmp((char *)ptr + 1, (char *)current_tail, char_len - 1);
+                offset = char_len;
+            }
+
+            match_len += utf8_common_prefix_len_ignore_separators((char *)ptr + offset, (char *)current_tail, current_tail_len);
 
             log_debug("match_len=%zu\n", match_len);
 
