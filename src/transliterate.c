@@ -579,8 +579,8 @@ static char *replace_groups(trie_t *trie, char *str, char *replacement, group_ca
                 log_debug("group.start + group.len = %zu\n", group.start + group.len);
                 if (num_chars == group.start + group.len - 1) {
                     in_group = false;
-                    log_debug("adding group str %.*s\n", (int)group_len, str + group_start);
-                    cstring_array_add_string_len(group_strings, str + group_start, group_len);
+                    log_debug("adding group str %.*s\n", (int)group_len, str + original_state.phrase_start + group_start);
+                    cstring_array_add_string_len(group_strings, str + original_state.phrase_start + group_start, group_len);
                     if (group_num < num_groups - 1) {
                         group_num++;
                         log_debug("group_num=%zu\n", group_num);
@@ -779,7 +779,12 @@ char *transliterate(char *trans_name, char *str, size_t len) {
             while (idx < len) {
                 log_debug("idx=%zu, ptr=%s\n", idx, ptr);
                 char_len = utf8proc_iterate(ptr, len, &ch);
-                if (char_len <= 0) {
+                if (char_len == UTF8PROC_ERROR_INVALIDUTF8) {
+                    log_warn("invalid UTF-8\n");
+                    char_len = 1;
+                    ch = (int32_t)*ptr;
+                } else if (char_len <= 0) {
+                    log_warn("char_len=%zd at idx=%zu\n", char_len, idx);
                     free(trans_name);
                     free(str);
                     return NULL;
@@ -837,11 +842,13 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
                                 transliteration_state_t match_prev_state = !is_last_char ? prev2_state : prev_state;
 
-                                char_set_result_t char_result = next_prefix_or_set(trie, str + idx - match_candidate_state.char_len, match_candidate_state.char_len, match_prev_state.result, false, true);
+                                log_debug("idx = %zu, match_candidate_state.char_len = %zu\n", idx, match_candidate_state.char_len);
+
+                                char_set_result_t char_result = next_prefix_or_set(trie, str + idx, match_candidate_state.char_len, match_prev_state.result, false, true);
                                 log_debug("char_result.type = %d\n", char_result.type);
                                 bool is_context = false;
 
-                                match_candidate_state = state_from_char_result(char_result, idx - match_candidate_state.char_len, match_candidate_state.char_len, match_prev_state, is_context);
+                                match_candidate_state = state_from_char_result(char_result, idx, match_candidate_state.char_len, match_prev_state, is_context);
                                 if (match_candidate_state.state == TRANS_STATE_PARTIAL_MATCH) {
                                     log_debug("Got partial match for set check\n");
                                     set_match_if_any(trie, match_candidate_state, &match_state);
@@ -1003,6 +1010,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
             if (utf8proc_normalized != NULL) {
                 char *old_str = str;
                 str = (char *)utf8proc_normalized;
+                log_debug("utf8proc_normalized=%s\n", utf8proc_normalized);
                 len = strlen(str);
                 free(old_str);
             }
@@ -1013,6 +1021,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
             char *old_str = str;
             str = transliterate(step_name, str, strlen(str));
             log_debug("Transform result = %s\n", str);
+            log_debug("str = %s\n", str);
             len = strlen(str);
             free(old_str);
         }
