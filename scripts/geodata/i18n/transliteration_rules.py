@@ -183,7 +183,7 @@ char_class_regex_str = '\[(?:[^\[\]]*\[[^\[\]]*\][^\[\]]*)*[^\[\]]*\]'
 nested_char_class_regex = re.compile('\[(?:[^\[\]]*\[[^\[\]]*\][^\[\]]*)+[^\[\]]*\]', re.UNICODE)
 
 range_regex = re.compile(r'[\\]?([^\\])\-[\\]?([^\\])', re.UNICODE)
-var_regex = re.compile('[\s]*\$([A-Za-z_\-]+)[\s]*')
+var_regex = re.compile('[\s]*\$([A-Za-z_\-]+[A-Za-z_0-9\-]*)[\s]*')
 
 context_regex = re.compile(u'(?:[\s]*(?!=[\s])(.*?)(?<![\s])[\s]*{)?(?:[\s]*([^}{]*)[\s]*)(?:}[\s]*(?!=[\s])(.*)(?<![\s])[\s]*)?', re.UNICODE)
 
