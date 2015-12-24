@@ -706,7 +706,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                     complete_token = true;
                     prev_state = NULL_NUMEX_SEARCH_STATE;
 
-                    if (idx == len) {
+                    if (idx == len && result.len > 0) {
                         results = (results != NULL) ? results : numex_result_array_new_size(1);
                         numex_result_array_push(results, result);
                         break;
@@ -964,7 +964,13 @@ char *replace_numeric_expressions(char *str, char *lang) {
     for (int i = 0; i < results->n; i++) {
         numex_result_t result = results->a[i];
 
+        if (result.len == 0) {
+            continue;
+        }
+
         end = result.start;
+
+        log_debug("lang=%s, start = %zu, len = %zu, value=%lld\n", lang, result.start, result.len, result.value);
         
         char numeric_string[INT64_MAX_STRING_SIZE] = {0};
         sprintf(numeric_string, "%" PRId64, result.value);
