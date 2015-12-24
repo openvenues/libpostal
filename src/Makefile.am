@@ -43,7 +43,7 @@ address_parser_train_CFLAGS = $(CFLAGS_O3)
 address_parser_test_SOURCES = address_parser_test.c address_parser.c address_parser_io.c averaged_perceptron.c sparse_matrix.c averaged_perceptron_trainer.c averaged_perceptron_tagger.c address_dictionary.c geodb.c geo_disambiguation.c graph.c graph_builder.c normalize.c features.c geonames.c geohash/geohash.c unicode_scripts.c transliterate.c trie.c trie_search.c string_utils.c tokens.c msgpack_utils.c file_utils.c utf8proc/utf8proc.c cmp/cmp.c
 address_parser_test_LDADD = sparkey/libsparkey.la libscanner.la
 address_parser_test_CFLAGS = $(CFLAGS_O3)
-address_parser_SOURCES = address_parser_cli.c linenoise/linenoise.c
+address_parser_SOURCES = address_parser_cli.c json_encode.c linenoise/linenoise.c
 address_parser_LDADD = sparkey/libsparkey.la libscanner.la libpostal.la
 address_parser_CFLAGS = $(CFLAGS_O3)
 
