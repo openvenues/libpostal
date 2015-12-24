@@ -114,7 +114,7 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
 
     size_t consumed = 0;
 
-    char *copy;
+    char_array *array = char_array_new_size(len);
 
     while (consumed < len)  {
         string_script_t script_span = get_string_script(str, len - consumed);
@@ -122,15 +122,22 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
         size_t script_len = script_span.len;
         bool is_ascii = script_span.ascii;
 
+        log_debug("script_len=%zu\n", script_len);
+
         char *utf8_normalized = NULL;
         char *transliterated = NULL;
 
-        if (options & NORMALIZE_STRING_LOWERCASE && is_ascii) {
-            utf8_normalized = normalize_string_utf8(str, NORMALIZE_STRING_LOWERCASE);
-            if (utf8_normalized != NULL) {
+        char_array_clear(array);
+        char_array_cat_len(array, str, script_len);
+        char *str_script = char_array_get_string(array);
 
+        if (options & NORMALIZE_STRING_LOWERCASE && is_ascii) {
+            utf8_normalized = normalize_string_utf8(str_script, NORMALIZE_STRING_LOWERCASE);
+            if (utf8_normalized != NULL) {
                 if (options & NORMALIZE_STRING_LATIN_ASCII) {
+                    log_debug("LATIN_ASCII\n");
                     transliterated = transliterate(LATIN_ASCII, utf8_normalized, strlen(utf8_normalized));
+                    log_debug("done\n");
                     if (transliterated != NULL) {
                         string_tree_add_string(tree, transliterated);
                         free(transliterated);
@@ -141,27 +148,21 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
                 }
                 free(utf8_normalized);
                 utf8_normalized = NULL;
-
             }
         } else if (options & NORMALIZE_STRING_LATIN_ASCII && script == SCRIPT_LATIN && script_len > 0) {
-            copy = strndup(str, script_len);
-            if (copy != NULL) {
-                add_latin_alternatives(tree, str, script_len, options);
-                free(copy);
-                copy = NULL;
-            }
-       } else if (options & NORMALIZE_STRING_TRANSLITERATE && script != SCRIPT_UNKNOWN && script_len > 0) {
+            add_latin_alternatives(tree, str_script, script_len, options);
+        } else if (options & NORMALIZE_STRING_TRANSLITERATE && script != SCRIPT_UNKNOWN && script_len > 0) {
             char *trans_name;
-            copy = strndup(str, script_len);
-            if (copy != NULL) {
-                add_latin_alternatives(tree, copy, script_len, options);
-                free(copy);
-                copy = NULL;
-            }
+            
+            add_latin_alternatives(tree, str_script, script_len, options);
 
             foreach_transliterator(script, "", trans_name, {
-                transliterated = transliterate(trans_name, str, script_len);
+                log_debug("doing %s\n", trans_name);
+                log_debug("str=%s\n", str);
+                log_debug("script_len=%zu\n", script_len);
+                transliterated = transliterate(trans_name, str_script, script_len);
 
+                log_debug("transliterated=%s\n", transliterated);
                 if (transliterated != NULL) {
                     add_latin_alternatives(tree, transliterated, strlen(transliterated), options);
                     free(transliterated);
@@ -169,14 +170,16 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
             })
 
         } else {
+            log_debug("Adding str: %s\n", str);
             string_tree_add_string_len(tree, str, script_len);
         }
         string_tree_finalize_token(tree);
 
         consumed += script_len;
         str += script_len;
-        }
+    }
 
+    char_array_destroy(array);
 
     return tree;
 
