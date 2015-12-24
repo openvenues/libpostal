@@ -705,6 +705,12 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                     log_debug("Complete token\n");
                     complete_token = true;
                     prev_state = NULL_NUMEX_SEARCH_STATE;
+
+                    if (idx == len) {
+                        results = (results != NULL) ? results : numex_result_array_new_size(1);
+                        numex_result_array_push(results, result);
+                        break;
+                    }
                 } else {
                     complete_token = false;
                 }
