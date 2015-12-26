@@ -539,6 +539,9 @@ bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t to
                         }
                     }
 
+                    cstring_array_destroy(root_strings);
+                    root_strings = NULL;
+
                 } else {
                     for (int j = 0; j < suffix_expansions->n; j++) {
                         key->n = prefix_end;
