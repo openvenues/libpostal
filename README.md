@@ -164,7 +164,7 @@ Result:
   "country": "france"
 }
 
-> Государственный Эрмитаж Дворцовая наб., 34 191186, Saint Petersburg, Russia
+> Государственный Эрмитаж Дворцовая наб., 34 191186, St. Petersburg, Russia
 
 Result:
 
@@ -173,8 +173,7 @@ Result:
   "road": "дворцовая наб.",
   "house_number": "34",
   "postcode": "191186",
-  "state_district": "saint",
-  "state": "petersburg",
+  "city": "st. petersburg",
   "country": "russia"
 }
 ```
@@ -550,17 +549,20 @@ like an F1 score or variants, mostly because there's a class bias problem (most
 tokens are non-entities, and a system that simply predicted non-entity for
 every token would actually do fairly well in terms of accuracy). That is not
 the case for address parsing. Every token has a label and there are millions
-of examples of each class in the training data, so accuracy 
+of examples of each class in the training data, so accuracy is preferable as it's
+a clean, simple and intuitive measure of performance.
 
-We prefer to evaluate on full parses (at the sentence level in NER nomenclature),
-so that means that 98.9% of the time, the address parser gets every single token
-in the address correct, which is quite good performance.
+Here we use full parse accuracy, meaning we only give the parser a "point" in
+the numerator if it gets every single token in the address correct. That should
+be a better measure than simply looking at whether each token was correct.
 
 Improving the address parser
 ----------------------------
 
-There are four primary ways the address parser can be improved even further
-(in order of difficulty):
+Though the current parser is quite good for most standard addresses, there
+is still room for improvement, particularly in making sure the training data
+we use is as close as possible to addresses in the wild. There are four primary
+ways the address parser can be improved even further (in order of difficulty):
 
 1. Contribute addresses to OSM. Anything with an addr:housenumber tag will be
    incorporated automatically into the parser next time it's trained.
@@ -571,16 +573,18 @@ There are four primary ways the address parser can be improved even further
    and in many other cases there are relatively simple tweaks we can make
    when creating the training data that will ensure the model is trained to
    handle your use case without you having to do any manual data entry.
-   If you see a pattern of obviously bad address parses, post an issue to
-   Github and we'll tr
-3. We currently don't have training data for things like flat numbers.
+   If you see a pattern of obviously bad address parses, the best thing to
+   do is post an issue to Github.
+3. We currently don't have training data for things like apartment/flat numbers.
    The tags are fairly uncommon in OSM and the address-formatting templates
    don't use floor, level, apartment/flat number, etc. This would be a slightly
-   more involved effort, but would be like to begin a discussion around it.
-4. We use a greedy averaged perceptron for the parser model. Viterbi inference
-   using a linear-chain CRF may improve parser performance on certain classes
-   of input since the score is the argmax over the entire label sequence not
-   just the token. This may slow down training significantly.
+   more involved effort, but would be worth starting a discussion.
+4. We use a greedy averaged perceptron for the parser model primarily for its
+   speed and relatively good performance compared to slower, fancier models.
+   Viterbi inference using a linear-chain CRF may improve parser performance
+   on certain classes of input since the score is the argmax over the entire
+   label sequence not just the token. This may slow down training significantly
+   although runtime performance would be relatively unaffected.
 
 Todos
 -----
