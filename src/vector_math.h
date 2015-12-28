@@ -34,7 +34,7 @@
                                                                                \
     static inline name *name##_new_zeros(size_t n) {                           \
         name *vector = name##_new_size(n);                                     \
-        memset(vector->a, 0, n * sizeof(type));                                \
+        type##_array_zero(vector->a, n);                                       \
         vector->n = n;                                                         \
         return vector;                                                         \
     }                                                                          \
@@ -212,6 +212,5 @@
         }                                                                      \
         return max + log(result);                                              \
     }
-
 
 #endif
