@@ -17,6 +17,9 @@ void feature_array_add_printf(cstring_array *features, char *format, ...);
 
 // Add feature count to dictionary
 
-bool feature_counts_update(khash_t(str_uint32) *features, char *feature, int count); 
+bool feature_counts_add(khash_t(str_double) *features, char *feature, double count); 
+bool feature_counts_update(khash_t(str_double) *features, char *feature, double count); 
+
+VECTOR_INIT(feature_count_array, khash_t(str_double) *)
 
 #endif

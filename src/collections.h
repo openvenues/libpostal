@@ -24,6 +24,7 @@ KHASH_INIT(char_uint32, char, uint32_t, 1, kh_char_hash_func, kh_char_hash_equal
 KHASH_INIT(uchar_uint32, unsigned char, uint32_t, 1, kh_char_hash_func, kh_char_hash_equal)
 
 KHASH_MAP_INIT_STR(str_uint32, uint32_t)
+KHASH_MAP_INIT_STR(str_double, double)
 KHASH_MAP_INIT_INT(int_str, char *)
 KHASH_MAP_INIT_STR(str_str, char *)
 
