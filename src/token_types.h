@@ -71,3 +71,4 @@
 
 #define is_special_token(type) ((type) == EMAIL || (type) == URL || (type) == US_PHONE || (type) == INTL_PHONE)
 
+#endif
