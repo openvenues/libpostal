@@ -15,6 +15,7 @@
 #include "normalize.h"
 #include "scanner.h"
 #include "string_utils.h"
+#include "token_types.h"
 #include "transliterate.h"
 
 typedef struct phrase_language {
@@ -29,26 +30,6 @@ VECTOR_INIT(phrase_language_array, phrase_language_t)
 KSORT_INIT(phrase_language_array, phrase_language_t, ks_lt_phrase_language)
 
 #define DEFAULT_KEY_LEN 32
-
-inline bool is_word_token(uint16_t type) {
-    return type == WORD || type == ABBREVIATION || type == ACRONYM || type == IDEOGRAPHIC_CHAR || type == HANGUL_SYLLABLE;
-}
-
-inline bool is_ideographic(uint16_t type) {
-    return type == IDEOGRAPHIC_CHAR || type == HANGUL_SYLLABLE || type == IDEOGRAPHIC_NUMBER;
-}
-
-inline bool is_numeric_token(uint16_t type) {
-    return type == NUMERIC;
-}
-
-inline bool is_punctuation(uint16_t type) {
-    return type >= PERIOD && type < OTHER;
-}
-
-inline bool is_special_token(uint16_t type) {
-    return type == EMAIL || type == URL || type == US_PHONE || type == INTL_PHONE;
-}
 
 inline uint64_t get_normalize_token_options(normalize_options_t options) {
     uint64_t normalize_token_options = 0;

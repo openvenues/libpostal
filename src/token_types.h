@@ -1,8 +1,6 @@
 #ifndef TOKEN_TYPES_H
 #define TOKEN_TYPES_H
 
- 
-
 // Doing these as #defines so we can duplicate the values exactly in Python
 
 #define END 0                   // Null byte
@@ -60,6 +58,16 @@
 #define WHITESPACE 300
 #define NEWLINE 301
 
-#define INVALID_CHAR 500 
+#define INVALID_CHAR 500
 
-#endif
+
+#define is_word_token(type) ((type) == WORD || (type) == ABBREVIATION || (type) == ACRONYM || (type) == IDEOGRAPHIC_CHAR || (type) == HANGUL_SYLLABLE)
+
+#define is_ideographic(type) ((type) == IDEOGRAPHIC_CHAR || (type) == HANGUL_SYLLABLE || (type) == IDEOGRAPHIC_NUMBER)
+
+#define is_numeric_token(type) ((type) == NUMERIC)
+
+#define is_punctuation(type) ((type) >= PERIOD && (type) < OTHER)
+
+#define is_special_token(type) ((type) == EMAIL || (type) == URL || (type) == US_PHONE || (type) == INTL_PHONE)
+
