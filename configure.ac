@@ -12,6 +12,8 @@ AC_CONFIG_HEADERS([config.h])
 AC_PROG_CC_C99
 AC_PROG_INSTALL
 
+LDFLAGS="$LDFLAGS -L/usr/local/lib"
+
 # Checks for libraries.
 AC_SEARCH_LIBS([snappy_compress],
   [snappy],,[AC_MSG_ERROR([Could not find snappy])
