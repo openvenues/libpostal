@@ -1,11 +1,10 @@
 SUBDIRS = sparkey
 
-CFLAGS_BASE = -Wfloat-equal -Wpointer-arith
+CFLAGS_BASE = -I.. -I/usr/local/include -Wfloat-equal -Wpointer-arith
 CFLAGS_O0 = $(CFLAGS_BASE) -O0
 CFLAGS_O1 = $(CFLAGS_BASE) -O1
 CFLAGS_O2 = $(CFLAGS_BASE) -O2
 CFLAGS_O3 = $(CFLAGS_BASE) -O3
-DEFAULT_INCLUDES=-I..
 
 CFLAGS = $(CFLAGS_BASE)
 
@@ -19,7 +18,7 @@ dist_bin_SCRIPTS = libpostal_data
 # Scanner can take a very long time to compile with higher optimization levels, so always use -O0, scanner is fast enough
 noinst_LTLIBRARIES = libscanner.la
 libscanner_la_SOURCES = scanner.c
-libscanner_la_CFLAGS =  $(CFLAGS_O0)
+libscanner_la_CFLAGS = $(CFLAGS_O0)
 
 noinst_PROGRAMS = libpostal bench build_address_dictionary build_geodb build_numex_table build_trans_table address_parser_train address_parser_test address_parser
 libpostal_SOURCES = main.c json_encode.c
