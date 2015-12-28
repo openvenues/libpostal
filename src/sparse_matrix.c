@@ -1,12 +1,12 @@
 #include "sparse_matrix.h"
 #include "klib/ksort.h"
 
-sparse_matrix_t *sparse_matrix_new(void) {
+sparse_matrix_t *sparse_matrix_new_shape(size_t m, size_t n) {
     sparse_matrix_t *matrix = malloc(sizeof(sparse_matrix_t));
     if (matrix == NULL) return NULL;
-    matrix->m = 0;
-    matrix->n = 0;
-    matrix->indptr = uint32_array_new_size(1);
+    matrix->m = m;
+    matrix->n = n;
+    matrix->indptr = uint32_array_new_size(m + 1);
     if (matrix->indptr == NULL) {
         goto exit_sparse_matrix_created;
     }
@@ -27,6 +27,10 @@ sparse_matrix_t *sparse_matrix_new(void) {
 exit_sparse_matrix_created:
     sparse_matrix_destroy(matrix);
     return NULL;
+}
+
+sparse_matrix_t *sparse_matrix_new(void) {
+    return sparse_matrix_new_shape(0, 0);
 }
 
 void sparse_matrix_destroy(sparse_matrix_t *self) {

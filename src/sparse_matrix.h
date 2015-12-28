@@ -56,6 +56,7 @@ typedef struct {
 
 
 sparse_matrix_t *sparse_matrix_new(void);
+sparse_matrix_t *sparse_matrix_new_shape(size_t m, size_t n);
 void sparse_matrix_destroy(sparse_matrix_t *self);
 
 void sparse_matrix_clear(sparse_matrix_t *self);
