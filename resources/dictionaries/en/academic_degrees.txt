@@ -22,6 +22,6 @@ lld|ll d|doctor of laws|legum doctor
 m phil|mphil|ph m|phm|master of philosophy
 th d|d th|doctor of theology
 m eng|master of engineering
-registered nurse|rn
+rn|registered nurse
 d o|doctor of osteopathic medicine
 pharm d|pharmd|doctor of pharmacy
