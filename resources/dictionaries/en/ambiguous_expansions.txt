@@ -42,6 +42,7 @@ nh
 nj
 nl
 nm
+no
 ns
 nsw
 nu
