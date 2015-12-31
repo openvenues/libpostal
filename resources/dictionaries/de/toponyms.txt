@@ -1,5 +1,12 @@
+bayerisch|bayer
+bayerische|bayer
+bayerischer|bayer
+bayerisches|bayer
 burgenländ|burgenlaend|burgenland|bgld
 burgenländische|burgenlaendische|burgenlandische
+deutsche|dt
+deutscher|dt
+deutsches|dt
 niederösterreich|nö|niederoesterreich|niederosterreich
 niederösterreichisch|niederosterreichisch|niederoesterreichisch
 niederösterreichische|niederosterreichische|niederoesterreichische
