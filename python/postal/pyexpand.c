@@ -138,12 +138,12 @@ static PyObject *py_expand(PyObject *self, PyObject *args, PyObject *keywords) {
     }
 
     char **languages = NULL;
+    size_t num_languages = 0;
 
     if (PySequence_Check(arg_languages)) {
         PyObject *seq = PySequence_Fast(arg_languages, "Expected a sequence");
         Py_ssize_t len_languages = PySequence_Length(arg_languages);
-        size_t num_languages = 0;
-
+        
         if (len_languages > 0) {
             languages = malloc(len_languages * sizeof(char *));
             if (languages == NULL) {
@@ -186,10 +186,13 @@ static PyObject *py_expand(PyObject *self, PyObject *args, PyObject *keywords) {
 
             if (num_languages > 0) {
                 options.languages = languages;
+                options.num_languages = (int)num_languages;
+            } else {
+                free(languages);
+                languages = NULL;
             }
 
         }
-        options.num_languages = num_languages;
 
         Py_DECREF(seq);
     }
@@ -204,6 +207,9 @@ static PyObject *py_expand(PyObject *self, PyObject *args, PyObject *keywords) {
     char **expansions = expand_address(input, options, &num_expansions);
 
     if (languages != NULL) {
+        for (int i = 0; i < num_languages; i++) {
+            free(languages[i]);
+        }
         free(languages);
     }
 
