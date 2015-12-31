@@ -10,6 +10,12 @@ dōro|doro
 gairo
 ハイ・ストリート
 hai·sutorīto|hai sutorīto|haisutorīto|hai·sutorito|hai sutorito|haisutorito
+一般道道|（一）|(一)
+一般府道|（一）|(一)
+一般県道|（一）|(一)
+一般社団法人|（一社）|(一社)
+一般都道|（一）|(一)
+一般財団法人|（一財）|(一財)
 自動車道
 jidōshadō|jidoshado
 街道
@@ -46,6 +52,7 @@ rōma kaidō|roma kaido|rōmakaidō|romakaido
 shidō|shido
 州間高速道路
 shūkankōsokudōro|shukankosokudoro
+主要地方道|（主）|(主)
 ストリート
 sutorīto|sutorito
 通り
