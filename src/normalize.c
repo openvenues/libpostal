@@ -108,7 +108,7 @@ void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t
 
 }
 
-string_tree_t *normalize_string(char *str, uint64_t options) {
+string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t num_languages, char **languages) {
     size_t len = strlen(str);
     string_tree_t *tree = string_tree_new_size(len);
 
@@ -156,6 +156,22 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
             
             add_latin_alternatives(tree, str_script, script_len, options);
 
+            for (size_t i = 0; i < num_languages; i++) {
+                char *lang = languages[i];
+                foreach_transliterator(script, lang, trans_name, {
+                    log_debug("doing %s\n", trans_name);
+                    log_debug("str=%s\n", str);
+                    log_debug("script_len=%zu\n", script_len);
+                    transliterated = transliterate(trans_name, str_script, script_len);
+                    log_debug("transliterated=%s\n", transliterated);
+                    if (transliterated != NULL) {
+                        add_latin_alternatives(tree, transliterated, strlen(transliterated), options);
+                        free(transliterated);
+                    }
+
+                })
+            }
+
             foreach_transliterator(script, "", trans_name, {
                 log_debug("doing %s\n", trans_name);
                 log_debug("str=%s\n", str);
@@ -183,6 +199,10 @@ string_tree_t *normalize_string(char *str, uint64_t options) {
 
     return tree;
 
+}
+
+inline string_tree_t *normalize_string(char *str, uint64_t options) {
+    return normalize_string_languages(str, options, 0, NULL);
 }
 
 void add_normalized_token(char_array *array, char *str, token_t token, uint64_t options) {

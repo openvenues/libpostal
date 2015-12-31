@@ -68,7 +68,7 @@ void normalize_token(cstring_array *array, char *str, token_t token, uint64_t op
 
 // Takes NORMALIZE_STRING_* options
 string_tree_t *normalize_string(char *str, uint64_t options);
-
+string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t num_languages, char **languages);
  
 
 #endif
