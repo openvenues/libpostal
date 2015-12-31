@@ -56,6 +56,7 @@ reverendo padre|rp|r.p.|r.p|r p
 san|s
 sant'
 santa|s
+santi|ss|s.s|s.s.|s s
 santo|s
 santo padre|sp|s.p.|s.p|s p
 senatore|sen
