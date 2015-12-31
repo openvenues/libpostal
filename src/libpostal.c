@@ -113,9 +113,11 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
     phrase_language_array *phrases = NULL;
     phrase_array *lang_phrases = NULL;
 
+
     for (int i = 0; i < options.num_languages; i++)  {
         char *lang = options.languages[i];
         log_debug("lang=%s\n", lang);
+
         lang_phrases = search_address_dictionaries_tokens(str, tokens, lang);
         
         if (lang_phrases == NULL) { 
@@ -149,6 +151,9 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
     }
 
     string_tree_t *tree = string_tree_new_size(len);
+
+    bool last_added_was_whitespace = false;
+
 
     if (phrases != NULL) {
         log_debug("phrases not NULL, n=%zu\n", phrases->n);
@@ -188,7 +193,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
                 }
 
                 if (token.type != WHITESPACE) {
-                    if (last_was_punctuation) {
+                    if (last_was_punctuation && !last_added_was_whitespace) {
                         string_tree_add_string(tree, " ");
                         string_tree_finalize_token(tree);
                     }
@@ -197,6 +202,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
                     string_tree_add_string_len(tree, str + token.offset, token.len);
                 } else {
                     log_debug("Adding space\n");
+                    last_added_was_whitespace = true;
                     string_tree_add_string(tree, " ");
                 }
 
@@ -206,8 +212,9 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
             if (phrase.start > 0) {
                 token_t prev_token = tokens->a[phrase.start - 1];
-                if (prev_token.type != WHITESPACE && !is_ideographic(prev_token.type)) {
+                if (!is_ideographic(prev_token.type) && (!last_added_was_whitespace || last_was_punctuation))  {
                     string_tree_add_string(tree, " ");
+                    last_added_was_whitespace = true;
                     string_tree_finalize_token(tree);
                 }
             }
@@ -223,8 +230,10 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
                     token = tokens->a[j];
                     if (token.type != WHITESPACE) {
                         char_array_cat_len(key, str + token.offset, token.len);
+                        last_added_was_whitespace = false;
                     } else {
                         char_array_cat(key, " ");
+                        last_added_was_whitespace = true;
                     }
                 }
 
@@ -241,14 +250,17 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
                                 token_t next_token = tokens->a[phrase.start + phrase.len];
                                 if (!is_numeric_token(next_token.type)) {
                                     string_tree_add_string(tree, canonical);
+                                    last_added_was_whitespace = false;
                                 } else {
                                     uint32_t start_index = cstring_array_start_token(tree->strings);
                                     cstring_array_append_string(tree->strings, canonical);
                                     cstring_array_append_string(tree->strings, " ");
+                                    last_added_was_whitespace = true;
                                     cstring_array_terminate(tree->strings);
                                 }
                             } else {
                                 string_tree_add_string(tree, canonical);
+                                last_added_was_whitespace = false;
 
                             }
                         } else {
@@ -257,15 +269,16 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
                                 token = tokens->a[k];
                                 if (token.type != WHITESPACE) {
                                     cstring_array_append_string_len(tree->strings, str + token.offset, token.len);
+                                    last_added_was_whitespace = false;
                                 } else {
                                     cstring_array_append_string(tree->strings, " ");
+                                    last_added_was_whitespace = true;
                                 }
                             }
                             cstring_array_terminate(tree->strings);
 
                         }
                     }
-
                     string_tree_finalize_token(tree);
 
                 }
@@ -276,8 +289,10 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
                     if (token.type != WHITESPACE) {
                         log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
                         string_tree_add_string_len(tree, str + token.offset, token.len);
-                    } else {
+                        last_added_was_whitespace = false;
+                    } else if (!last_added_was_whitespace) {
                         string_tree_add_string(tree, " ");
+                        last_added_was_whitespace = true;
                     }
                     string_tree_finalize_token(tree);
 
@@ -285,8 +300,9 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
                 if (phrase.start + phrase.len < tokens->n - 1) {
                     token_t next_token = tokens->a[phrase.start + phrase.len + 1];
-                    if (next_token.type != WHITESPACE && !is_ideographic(next_token.type)) {
+                    if (next_token.type != WHITESPACE && !last_added_was_whitespace && !is_ideographic(next_token.type)) {
                         string_tree_add_string(tree, " ");
+                        last_added_was_whitespace = true;
                         string_tree_finalize_token(tree);
                     }
                 }
@@ -303,8 +319,9 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
         if (phrase.start + phrase.len > 0 && phrase.start + phrase.len <= end - 1) {
             token_t next_token = tokens->a[phrase.start + phrase.len];
-            if (next_token.type != WHITESPACE && !is_ideographic(next_token.type)) {
+            if (next_token.type != WHITESPACE && !last_added_was_whitespace && !is_ideographic(next_token.type)) {
                 string_tree_add_string(tree, " ");
+                last_added_was_whitespace = true;
                 string_tree_finalize_token(tree);
             }
         }
@@ -318,16 +335,18 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
             }
 
             if (token.type != WHITESPACE) {
-                if (last_was_punctuation) {
+                if (j > 0 && last_was_punctuation && !last_added_was_whitespace) {
                     string_tree_add_string(tree, " ");
                     string_tree_finalize_token(tree);
                 }
                 log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
 
                 string_tree_add_string_len(tree, str + token.offset, token.len);
+                last_added_was_whitespace = false;
             } else {
                 log_debug("Adding space\n");
                 string_tree_add_string(tree, " ");
+                last_added_was_whitespace = true;
             }
 
             last_was_punctuation = false;
@@ -346,14 +365,16 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
             }
 
             if (token.type != WHITESPACE) {
-                if (last_was_punctuation) {
+                if (last_was_punctuation && !last_added_was_whitespace) {
                     string_tree_add_string(tree, " ");
                     string_tree_finalize_token(tree);
                 }
 
                 string_tree_add_string_len(tree, str + token.offset, token.len);
+                last_added_was_whitespace = false;
             } else {
                 string_tree_add_string(tree, " ");
+                last_added_was_whitespace = true;
             }
 
             last_was_punctuation = false;
@@ -712,12 +733,12 @@ void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_strings
                 numex_replaced = replace_numeric_expressions(new_str, lang);
                 if (numex_replaced != NULL) {
                     new_str = numex_replaced;
+                
+                    if (last_numex_str != NULL) {
+                        free(last_numex_str);
+                    }            
+                    last_numex_str = numex_replaced;
                 }
-
-                if (last_numex_str != NULL) {
-                    free(last_numex_str);
-                }            
-                last_numex_str = numex_replaced;
             }
 
         }
