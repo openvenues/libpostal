@@ -193,7 +193,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
                 }
 
                 if (token.type != WHITESPACE) {
-                    if (last_was_punctuation && !last_added_was_whitespace) {
+                    if (phrase.start > 0 && last_was_punctuation && !last_added_was_whitespace) {
                         string_tree_add_string(tree, " ");
                         string_tree_finalize_token(tree);
                     }
@@ -212,7 +212,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
 
             if (phrase.start > 0) {
                 token_t prev_token = tokens->a[phrase.start - 1];
-                if (!is_ideographic(prev_token.type) && (!last_added_was_whitespace || last_was_punctuation))  {
+                if (!last_added_was_whitespace && phrase.start - 1 > 0 && (!is_ideographic(prev_token.type) || last_was_punctuation))  {
                     string_tree_add_string(tree, " ");
                     last_added_was_whitespace = true;
                     string_tree_finalize_token(tree);
@@ -811,7 +811,7 @@ char **expand_address(char *input, normalize_options_t options, size_t *n) {
 
     size_t len = strlen(input);
 
-    string_tree_t *tree = normalize_string(input, normalize_string_options);
+    string_tree_t *tree = normalize_string_languages(input, normalize_string_options, options.num_languages, options.languages);
 
     cstring_array *strings = cstring_array_new_size(len * 2);
     char_array *temp_string = char_array_new_size(len);
