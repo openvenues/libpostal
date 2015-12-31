@@ -25,4 +25,4 @@ shosseynaya
 тупик|туп
 tupik|tup
 улица|ул
-ulica|ulitsa|ul
+ulitsa|ulica|ul
