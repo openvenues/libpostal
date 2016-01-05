@@ -146,6 +146,7 @@ bool address_parser_data_set_next(address_parser_data_set_t *data_set) {
 
     data_set->tokenized_str = tokenized_str;
 
+    free(normalized);
     cstring_array_destroy(fields);
 
     return tokenized_str != NULL;
