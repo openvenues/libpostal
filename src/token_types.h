@@ -71,4 +71,6 @@
 
 #define is_special_token(type) ((type) == EMAIL || (type) == URL || (type) == US_PHONE || (type) == INTL_PHONE)
 
+#define is_whitespace(type) ((type) == WHITESPACE)
+
 #endif
