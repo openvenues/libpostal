@@ -26,13 +26,20 @@ void feature_array_add_printf(cstring_array *features, char *format, ...) {
 }
 
 
-bool feature_counts_update_or_add(khash_t(str_double) *features, char *feature, double count, bool add) {
+bool feature_counts_update_or_add(khash_t(str_double) *features, char *feature, double count, bool copy, bool add) {
     khiter_t k;
 
-    k = kh_get(str_double, features, feature);
+    char *str;
+    if (copy) {
+        str = strdup(feature);
+    } else {
+        str = feature;
+    }
+
+    k = kh_get(str_double, features, str);
     if (k == kh_end(features)) {
         int ret;
-        k = kh_put(str_double, features, feature, &ret);
+        k = kh_put(str_double, features, str, &ret);
         if (ret < 0) return false;
 
         kh_value(features, k) = count;
@@ -46,9 +53,17 @@ bool feature_counts_update_or_add(khash_t(str_double) *features, char *feature, 
 
 
 inline bool feature_counts_add(khash_t(str_double) *features, char *feature, double count) {
-    return feature_counts_update_or_add(features, feature, count, true);
+    return feature_counts_update_or_add(features, feature, count, true, true);
+}
+
+inline bool feature_counts_add_no_copy(khash_t(str_double) *features, char *feature, double count) {
+    return feature_counts_update_or_add(features, feature, count, false, true);
 }
 
 inline bool feature_counts_update(khash_t(str_double) *features, char *feature, double count) {
-    return feature_counts_update_or_add(features, feature, count, false);
+    return feature_counts_update_or_add(features, feature, count, true, false);
+}
+
+inline bool feature_counts_update_no_copy(khash_t(str_double) *features, char *feature, double count) {
+    return feature_counts_update_or_add(features, feature, count, false, false);
 }
