@@ -1,8 +1,6 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include <stdlib.h>
-
 #define DEFAULT_VECTOR_SIZE 8
 
 #if defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__)
