@@ -61,7 +61,7 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
 
     while (address_parser_data_set_next(data_set)) {
         char *language = char_array_get_string(data_set->language);
-        if (strcmp(language, UNKNOWN_LANGUAGE) == 0 || strcmp(language, AMBIGUOUS_LANGUAGE) == 0) {
+        if (string_equals(language, UNKNOWN_LANGUAGE) || string_equals(language, AMBIGUOUS_LANGUAGE)) {
             language = NULL;
         }
         char *country = char_array_get_string(data_set->country);
