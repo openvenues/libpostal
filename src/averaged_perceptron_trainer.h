@@ -39,6 +39,7 @@ Link: http://www.cs.columbia.edu/~mcollins/papers/tagperc.pdf
 #include "string_utils.h"
 #include "tokens.h"
 #include "trie.h"
+#include "trie_utils.h"
 
 typedef struct class_weight {
     double value;
