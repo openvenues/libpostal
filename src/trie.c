@@ -892,6 +892,12 @@ uint32_t trie_get(trie_t *self, char *word) {
     return trie_get_from_index(self, word, word_len, ROOT_NODE_ID);
 }
 
+
+inline uint32_t trie_num_keys(trie_t *self) {
+    if (self == NULL) return 0;
+    return self->num_keys;
+}
+
 /*
 Destructor
 */

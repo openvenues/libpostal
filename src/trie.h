@@ -124,6 +124,8 @@ uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i);
 uint32_t trie_get_len(trie_t *self, char *word, size_t len);
 uint32_t trie_get(trie_t *self, char *word);
 
+uint32_t trie_num_keys(trie_t *self);
+
 typedef struct trie_prefix_result {
     uint32_t node_id;
     size_t tail_pos;
