@@ -464,7 +464,7 @@ inline char *char_array_to_string(char_array *array) {
 }
 
 
-static inline void char_array_strip_nul_byte(char_array *array) {
+inline void char_array_strip_nul_byte(char_array *array) {
     if (array->n > 0 && array->a[array->n - 1] == '\0') {
         array->a[array->n - 1] = '\0';
         array->n--;
@@ -605,7 +605,7 @@ void char_array_cat_vprintf(char_array *array, char *format, va_list args) {
     size_t buflen;
 
     size_t last_n = array->n;
-    size_t size = array->m < 8 ? 16 : array->m * 2;
+    size_t size = array->m - array->n <= 2 ? array->m * 2 : array->m;
 
     while(1) {
         char_array_resize(array, size);
@@ -681,6 +681,15 @@ cstring_array *cstring_array_from_char_array(char_array *str) {
         if (*ptr == '\0') {
             uint32_array_push(array->indices, i + 1);
         }
+    }
+    return array;
+}
+
+cstring_array *cstring_array_from_strings(char **strings, size_t n) {
+    cstring_array *array = cstring_array_new();
+    for (size_t i = 0; i < n; i++) {
+        cstring_array_start_token(array);
+        cstring_array_add_string(array, strings[i]);
     }
     return array;
 }
