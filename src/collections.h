@@ -53,37 +53,37 @@ KSORT_INIT_STR
 
 // Sort by value (must be defined after the vectors)
 
-#define KHASH_SORT_BY_VALUE(name, key_type, val_type, val_array_name)               \
-    key_type *name##_hash_sort_keys_by_value(khash_t(name) *h, bool reversed) {     \
-        size_t n = kh_size(h);                                                      \
-        key_type *keys = malloc(sizeof(key_type) * n);                              \
-        val_type *values = malloc(sizeof(val_type) * n);                            \
-                                                                                    \
-        size_t i = 0;                                                               \
-        const key_type key;                                                         \
-        val_type value;                                                             \
-        kh_foreach(h, key, value, {                                                 \
-            values[i] = value;                                                      \
-            i++;                                                                    \
-        })                                                                          \
-                                                                                    \
-        size_t *sorted_indices = val_array_name##_argsort(values, n);               \
-        key_type *sorted_keys = malloc(sizeof(key_type) * n);                       \
-                                                                                    \
-        if (!reversed) {                                                            \
-            for (i = 0; i < n; i++) {                                               \
-                sorted_keys[i] = keys[sorted_indices[i]];                           \
-            }                                                                       \
-        } else {                                                                    \
-            for (i = n; i >= 0; i--) {                                              \
-                sorted_keys[i] = keys[sorted_indices[i]];                           \
-            }                                                                       \
-        }                                                                           \
-                                                                                    \
-        free(keys);                                                                 \
-        free(values);                                                               \
-        free(sorted_indices);                                                       \
-        return sorted_keys;                                                         \
+#define KHASH_SORT_BY_VALUE(name, key_type, val_type, val_array_name)                       \
+    static key_type *name##_hash_sort_keys_by_value(khash_t(name) *h, bool reversed) {      \
+        size_t n = kh_size(h);                                                              \
+        key_type *keys = malloc(sizeof(key_type) * n);                                      \
+        val_type *values = malloc(sizeof(val_type) * n);                                    \
+                                                                                            \
+        size_t i = 0;                                                                       \
+        const key_type key;                                                                 \
+        val_type value;                                                                     \
+        kh_foreach(h, key, value, {                                                         \
+            values[i] = value;                                                              \
+            i++;                                                                            \
+        })                                                                                  \
+                                                                                            \
+        size_t *sorted_indices = val_array_name##_argsort(values, n);                       \
+        key_type *sorted_keys = malloc(sizeof(key_type) * n);                               \
+                                                                                            \
+        if (!reversed) {                                                                    \
+            for (i = 0; i < n; i++) {                                                       \
+                sorted_keys[i] = keys[sorted_indices[i]];                                   \
+            }                                                                               \
+        } else {                                                                            \
+            for (i = n; i >= 0; i--) {                                                      \
+                sorted_keys[i] = keys[sorted_indices[i]];                                   \
+            }                                                                               \
+        }                                                                                   \
+                                                                                            \
+        free(keys);                                                                         \
+        free(values);                                                                       \
+        free(sorted_indices);                                                               \
+        return sorted_keys;                                                                 \
     }
 
 KHASH_SORT_BY_VALUE(str_uint32, char *, uint32_t, uint32_array)
