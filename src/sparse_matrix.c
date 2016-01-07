@@ -33,6 +33,7 @@ sparse_matrix_t *sparse_matrix_new(void) {
     return sparse_matrix_new_shape(0, 0);
 }
 
+
 void sparse_matrix_destroy(sparse_matrix_t *self) {
     if (self == NULL) return;
 
@@ -61,7 +62,9 @@ inline void sparse_matrix_clear(sparse_matrix_t *self) {
 
 inline void sparse_matrix_finalize_row(sparse_matrix_t *self) {
     uint32_array_push(self->indptr, (uint32_t)self->indices->n);
-    self->m++;
+    if (self->indptr->n > self->m + 1) {
+        self->m++;
+    }
 }
 
 inline void sparse_matrix_append(sparse_matrix_t *self, uint32_t col, double val) {
