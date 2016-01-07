@@ -115,6 +115,7 @@ void char_array_append_len(char_array *array, char *str, size_t len);
 void char_array_append_reversed(char_array *array, char *str);
 void char_array_append_reversed_len(char_array *array, char *str, size_t len);
 // add NUL terminator to a char_array
+void char_array_strip_nul_byte(char_array *array);
 void char_array_terminate(char_array *array);
 
 // add_* methods NUL-terminate without stripping NUL-byte
@@ -169,6 +170,7 @@ void cstring_array_resize(cstring_array *self, size_t size);
 void cstring_array_clear(cstring_array *self);
 
 cstring_array *cstring_array_from_char_array(char_array *str);
+cstring_array *cstring_array_from_strings(char **strings, size_t n);
 
 // Convert cstring_array to an array of n C strings and destroy the cstring_array
 char **cstring_array_to_strings(cstring_array *self);
