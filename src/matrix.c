@@ -241,8 +241,8 @@ bool matrix_write(matrix_t *self, FILE *f) {
         return false;
     }
 
-    if (!file_write_uint32(f, self->m) ||
-        !file_write_uint32(f, self->n)) {
+    if (!file_write_uint64(f, self->m) ||
+        !file_write_uint64(f, self->n)) {
         return false;
     }
 
