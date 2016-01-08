@@ -29,16 +29,16 @@ void feature_array_add_printf(cstring_array *features, char *format, ...) {
 bool feature_counts_update_or_add(khash_t(str_double) *features, char *feature, double count, bool copy, bool add) {
     khiter_t k;
 
-    char *str;
-    if (copy) {
-        str = strdup(feature);
-    } else {
-        str = feature;
-    }
-
-    k = kh_get(str_double, features, str);
+    k = kh_get(str_double, features, feature);
     if (k == kh_end(features)) {
         int ret;
+        char *str;
+        if (copy) {
+            str = strdup(feature);
+        } else {
+            str = feature;
+        }
+
         k = kh_put(str_double, features, str, &ret);
         if (ret < 0) return false;
 
