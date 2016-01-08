@@ -30,6 +30,10 @@ void matrix_set(matrix_t *self, double value);
 void matrix_zero(matrix_t *self);
 void matrix_set_row(matrix_t *self, size_t index, double *row);
 void matrix_set_scalar(matrix_t *self, size_t row_index, size_t col_index, double value);
+void matrix_add_scalar(matrix_t *self, size_t row_index, size_t col_index, double value);
+void matrix_sub_scalar(matrix_t *self, size_t row_index, size_t col_index, double value);
+void matrix_mul_scalar(matrix_t *self, size_t row_index, size_t col_index, double value);
+void matrix_div_scalar(matrix_t *self, size_t row_index, size_t col_index, double value);
 
 double matrix_get(matrix_t *self, size_t row_index, size_t col_index);
 double *matrix_get_row(matrix_t *self, size_t row_index);

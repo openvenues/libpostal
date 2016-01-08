@@ -73,16 +73,35 @@ inline void matrix_set(matrix_t *self, double value) {
 }
 
 inline void matrix_set_row(matrix_t *self, size_t index, double *row) {
-    size_t offset = index * self->m;
+    size_t offset = index * self->n;
     double *values = self->values;
     size_t n = self->n;
     memcpy(values + offset, row, n * sizeof(double));
 }
 
 inline void matrix_set_scalar(matrix_t *self, size_t row_index, size_t col_index, double value) {
-    size_t offset = row_index * self->m + col_index;
-    double *values = self->values;
-    values[offset] = value;
+    size_t offset = row_index * self->n + col_index;
+    self->values[offset] = value;
+}
+
+inline void matrix_add_scalar(matrix_t *self, size_t row_index, size_t col_index, double value) {
+    size_t offset = row_index * self->n + col_index;
+    self->values[offset] += value;
+}
+
+inline void matrix_sub_scalar(matrix_t *self, size_t row_index, size_t col_index, double value) {
+    size_t offset = row_index * self->n + col_index;
+    self->values[offset] -= value;
+}
+
+inline void matrix_mul_scalar(matrix_t *self, size_t row_index, size_t col_index, double value) {
+    size_t offset = row_index * self->n + col_index;
+    self->values[offset] *= value;
+}
+
+inline void matrix_div_scalar(matrix_t *self, size_t row_index, size_t col_index, double value) {
+    size_t offset = row_index * self->n + col_index;
+    self->values[offset] /= value;
 }
 
 inline double matrix_get(matrix_t *self, size_t row_index, size_t col_index) {
@@ -155,7 +174,7 @@ void matrix_dot_vector(matrix_t *self, double *vec, double *result) {
     }
 }
 
-bool matrix_dot_matrix(matrix_t *m1, matrix_t *m2, matrix_t *result) {
+inline bool matrix_dot_matrix(matrix_t *m1, matrix_t *m2, matrix_t *result) {
     if (m1->n != m2->m || m1->m != result->m || m2->n != result->n) {
         return false;
     }
