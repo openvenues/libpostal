@@ -35,8 +35,6 @@ double logistic_regression_cost_function(matrix_t *theta, sparse_matrix_t *x, ui
     double *expected_values = p_y->values;
     double cost = 0.0;
 
-    // - \frac{1}{m} \left[ \sum_{i=1}^{m} \sum_{j=1}^{k}  1\left\{y^{(i)} = j\right\} \log \frac{e^{\theta_j^T x^{(i)}}}{\sum_{l=1}^k e^{ \theta_l^T x^{(i)} }}\right]
-
     for (size_t i = 0; i < p_y->m; i++) {
         uint32_t y_i = y->a[i];
         double value = matrix_get(p_y, i, y_i);
@@ -64,7 +62,8 @@ double logistic_regression_cost_function(matrix_t *theta, sparse_matrix_t *x, ui
 
 }
 
-bool logistic_regression_gradient(matrix_t *theta, matrix_t *gradient, sparse_matrix_t *x, uint32_array *y, matrix_t *p_y, double lambda) {
+static bool logistic_regression_gradient_params(matrix_t *theta, matrix_t *gradient, sparse_matrix_t *x, uint32_array *y, matrix_t *p_y, 
+                                                uint32_array *x_cols, double lambda) {
     size_t m = x->m;
     size_t n = x->n;
     if (m != y->n) return false;
@@ -73,13 +72,13 @@ bool logistic_regression_gradient(matrix_t *theta, matrix_t *gradient, sparse_ma
         return false;
     }
 
-    matrix_zero(gradient);
-
     if (!logistic_regression_model_expectation(theta, x, p_y)) {
         return false;
     }
 
+    size_t num_features = n;
     size_t num_classes = p_y->n;
+    uint32_t i, j;
 
     double residual;
   
@@ -87,33 +86,92 @@ bool logistic_regression_gradient(matrix_t *theta, matrix_t *gradient, sparse_ma
     uint32_t col;
     double data;
 
-    uint32_t i, j;
 
     bool regularize = lambda > 0.0;
+
+    double *theta_values = theta->values;
+    double *predicted_values = p_y->values;
+    double *gradient_values = gradient->values;
+
+    // Zero the relevant rows of the gradient
+    if (x_cols != NULL) {
+        double *gradient_i;
+
+        size_t batch_rows = x_cols->n;
+        uint32_t *cols = x_cols->a;
+        for (i = 0; i < batch_rows; i++) {
+            col = cols[i];
+            gradient_i = matrix_get_row(gradient, col);
+            double_array_zero(gradient_i, num_classes);
+        }
+    } else {
+        matrix_zero(gradient);
+    }
 
     // gradient = -(1. / m) * x.T.dot(y - p_y) + lambda * theta
 
     sparse_matrix_foreach(x, row, col, data, {
         uint32_t y_i = y->a[row];
         for (j = 0; j < num_classes; j++) {
-            residual = (y_i == j ? 1.0 : 0.0) - matrix_get(p_y, row, j);
-            double value = data * residual;
-            matrix_add_scalar(gradient, col, j, value);
+
+            double class_prob = predicted_values[row * num_classes + j];
+            double residual = (y_i == j ? 1.0 : 0.0) - class_prob;
+            gradient_values[col * num_classes + j] += data * residual;
         }
     })
 
-    matrix_mul(gradient, -1.0 / m);
+    double scale = -1.0 / m;
 
-    if (regularize) {
-        for (i = 1; i < m; i++) {
-            for (j = 0; j < n; j++) {
-                double theta_ij = matrix_get(theta, i, j);
-                double reg_value = theta_ij * lambda;
-                matrix_add_scalar(gradient, i, j, reg_value);
+    // Scale the vector by -1 / m using only the unique columns in X 
+    // Useful for stochastic and minibatch gradients
+    if (x_cols != NULL) {
+        size_t batch_rows = x_cols->n;
+        uint32_t *cols = x_cols->a;
+        for (i = 0; i < batch_rows; i++) {
+            col = cols[i];
+            for (j = 0; j < num_classes; j++) {
+                gradient_values[col * num_classes + j] *= scale;
             }
         }
+    } else {
+        matrix_mul(gradient, scale);
+    }
 
+
+    // If the vector last_updated was provided, update the only the relevant columns in x
+    if (regularize && x_cols != NULL) {
+        size_t batch_rows = x_cols->n;
+        uint32_t *cols = x_cols->a;
+        for (i = 0; i < batch_rows; i++) {
+            col = cols[i];
+
+            for (j = 0; j < num_classes; j++) {
+                size_t idx = i * num_classes + j;
+                double theta_ij = theta_values[idx];
+                double reg_value = theta_ij * lambda;
+                gradient_values[idx] += reg_value;
+            }
+        }
+    } else if (regularize) {
+        for (i = 1; i < num_features; i++) {
+            for (j = 0; j < num_classes; j++) {
+                size_t idx = i * num_classes + j;
+                double theta_ij = theta_values[idx];
+                double reg_value = theta_ij * lambda;
+                gradient_values[idx] += reg_value;
+            }
+        }        
     }
 
     return true;
+}
+
+inline bool logistic_regression_gradient_sparse(matrix_t *theta, matrix_t *gradient, sparse_matrix_t *x, uint32_array *y, matrix_t *p_y, 
+                                                uint32_array *x_cols, double lambda) {
+    return logistic_regression_gradient_params(theta, gradient, x, y, p_y, x_cols, lambda);
+}
+
+
+inline bool logistic_regression_gradient(matrix_t *theta, matrix_t *gradient, sparse_matrix_t *x, uint32_array *y, matrix_t *p_y, double lambda) {
+    return logistic_regression_gradient_params(theta, gradient, x, y, p_y, NULL, lambda);
 }

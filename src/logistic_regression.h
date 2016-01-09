@@ -29,5 +29,7 @@ may be called softmax regression.
 bool logistic_regression_model_expectation(matrix_t *theta, sparse_matrix_t *x, matrix_t *p_y);
 double logistic_regression_cost_function(matrix_t *theta, sparse_matrix_t *x, uint32_array *y, matrix_t *p_y, double lambda);
 bool logistic_regression_gradient(matrix_t *theta, matrix_t *gradient, sparse_matrix_t *x, uint32_array *y, matrix_t *p_y, double lambda);
+bool logistic_regression_gradient_sparse(matrix_t *theta, matrix_t *gradient, sparse_matrix_t *x, uint32_array *y, matrix_t *p_y, 
+                                         uint32_array *x_cols, double lambda);
 
 #endif
