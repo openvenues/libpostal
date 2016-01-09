@@ -96,7 +96,7 @@ static inline void _aligned_free(void *p)
         if (array == NULL) return;                                      \
         if (array->a != NULL) free(array->a);                           \
         free(array);                                                    \
-    }                                                                   
+    }
 
 
 #define __VECTOR_DESTROY_FREE_DATA(name, type, free_func)               \
@@ -109,7 +109,7 @@ static inline void _aligned_free(void *p)
         }                                                               \
         free(array->a);                                                 \
         free(array);                                                    \
-    }                                                                   
+    }
 
 #define VECTOR_INIT(name, type)                                         \
     __VECTOR_BASE(name, type)                                           \
