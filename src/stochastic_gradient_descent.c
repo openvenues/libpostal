@@ -117,7 +117,7 @@ inline bool stochastic_gradient_descent_sparse_finalize_weights(matrix_t *theta,
             double *theta_i = matrix_get_row(theta, i);
             uint32_t last_updated = updates[i];
             regularize_row(theta_i, n, lambda, last_updated, t);
-            updates[row] = t;
+            updates[i] = t;
         }
     }
     return true;
