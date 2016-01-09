@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "averaged_perceptron_tagger.h"
 #include "collections.h"
@@ -34,6 +35,9 @@ typedef struct logistic_regression_trainer {
     khash_t(str_uint32) *label_ids;     // Hashtable mapping labels to array indices
     size_t num_labels;                  // Number of labels
     matrix_t *weights;                  // Matrix of logistic regression weights
+    matrix_t *gradient;                 // Gradient matrix to be reused
+    khash_t(int_set) *unique_columns;   // Unique columns set
+    uint32_array *batch_columns;        // Unique columns as array
     uint32_array *last_updated;         // Array of length N indicating the last time each feature was updated
     double lambda;                      // Regularization weight
     uint32_t iters;                     // Number of iterations, used to decay learning rate
@@ -47,6 +51,7 @@ logistic_regression_trainer_t *logistic_regression_trainer_init(trie_t *feature_
 
 bool logistic_regression_trainer_train_batch(logistic_regression_trainer_t *self, feature_count_array *features, cstring_array *labels);
 double logistic_regression_trainer_batch_cost(logistic_regression_trainer_t *self, feature_count_array *features, cstring_array *labels);
+bool logistic_regression_trainer_finalize(logistic_regression_trainer_t *self);
 
 void logistic_regression_trainer_destroy(logistic_regression_trainer_t *self);
 
