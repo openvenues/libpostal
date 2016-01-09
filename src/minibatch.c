@@ -136,11 +136,11 @@ exit_destroy_label_ids:
     free(sorted_keys);
     kh_destroy(str_uint32, label_ids);
     return NULL;
-
 }
 
-
 sparse_matrix_t *feature_matrix(trie_t *feature_ids, feature_count_array *feature_counts) {
+    if (feature_ids == NULL || feature_counts == NULL) return NULL;
+
     const char *feature;
     uint32_t feature_id;
     double count;
