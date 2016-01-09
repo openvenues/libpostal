@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "log/log.h"
 #include "klib/khash.h"
 #include "klib/ksort.h"
 #include "vector.h"
@@ -63,23 +64,17 @@ KSORT_INIT_STR
         const key_type key;                                                                 \
         val_type value;                                                                     \
         kh_foreach(h, key, value, {                                                         \
+            keys[i] = (key_type)key;                                                        \
             values[i] = value;                                                              \
             i++;                                                                            \
         })                                                                                  \
-                                                                                            \
         size_t *sorted_indices = val_array_name##_argsort(values, n);                       \
         key_type *sorted_keys = malloc(sizeof(key_type) * n);                               \
                                                                                             \
-        if (!reversed) {                                                                    \
-            for (i = 0; i < n; i++) {                                                       \
-                sorted_keys[i] = keys[sorted_indices[i]];                                   \
-            }                                                                               \
-        } else {                                                                            \
-            for (i = n; i >= 0; i--) {                                                      \
-                sorted_keys[i] = keys[sorted_indices[i]];                                   \
-            }                                                                               \
+        for (i = 0; i < n; i++) {                                                           \
+            size_t idx = !reversed ? sorted_indices[i] : sorted_indices[n - i - 1];         \
+            sorted_keys[i] = keys[idx];                                                     \
         }                                                                                   \
-                                                                                            \
         free(keys);                                                                         \
         free(values);                                                                       \
         free(sorted_indices);                                                               \
