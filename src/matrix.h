@@ -39,9 +39,17 @@ double matrix_get(matrix_t *self, size_t row_index, size_t col_index);
 double *matrix_get_row(matrix_t *self, size_t row_index);
 
 void matrix_add(matrix_t *self, double value);
+bool matrix_add_matrix(matrix_t *self, matrix_t *other);
+bool matrix_add_matrix_times_scalar(matrix_t *self, matrix_t *other, double v);
 void matrix_sub(matrix_t *self, double value);
+bool matrix_sub_matrix(matrix_t *self, matrix_t *other);
+bool matrix_sub_matrix_times_scalar(matrix_t *self, matrix_t *other, double v);
 void matrix_mul(matrix_t *self, double value);
+bool matrix_mul_matrix(matrix_t *self, matrix_t *other);
+bool matrix_mul_matrix_times_scalar(matrix_t *self, matrix_t *other, double v);
 void matrix_div(matrix_t *self, double value);
+bool matrix_div_matrix(matrix_t *self, matrix_t *other);
+bool matrix_div_matrix_times_scalar(matrix_t *self, matrix_t *other, double v);
 
 void matrix_log(matrix_t *self);
 void matrix_exp(matrix_t *self);

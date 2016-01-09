@@ -140,19 +140,66 @@ inline void matrix_div(matrix_t *self, double value) {
     double_array_div(self->values, value, self->m * self->n);
 }
 
+inline bool matrix_div_matrix(matrix_t *self, matrix_t *other) {
+    if (self->m != other->m || self->n != other->n) return false;
+    double_array_div_array(self->values, other->values, self->m * self->n);
+    return true;
+}
+
+inline bool matrix_div_matrix_times_scalar(matrix_t *self, matrix_t *other, double v) {
+    if (self->m != other->m || self->n != other->n) return false;
+    double_array_div_array_times_scalar(self->values, other->values, v, self->m * self->n);
+    return true;
+}
+
 
 inline void matrix_mul(matrix_t *self, double value) {
     double_array_mul(self->values, value, self->m * self->n);
 }
 
+inline bool matrix_mul_matrix(matrix_t *self, matrix_t *other) {
+    if (self->m != other->m || self->n != other->n) return false;
+    double_array_mul_array(self->values, other->values, self->m * self->n);
+    return true;
+}
+
+inline bool matrix_mul_matrix_times_scalar(matrix_t *self, matrix_t *other, double v) {
+    if (self->m != other->m || self->n != other->n) return false;
+    double_array_mul_array_times_scalar(self->values, other->values, v, self->m * self->n);
+    return true;
+}
 
 inline void matrix_add(matrix_t *self, double value) {
     double_array_add(self->values, self->m * self->n, value);
 }
 
 
+inline bool matrix_add_matrix(matrix_t *self, matrix_t *other) {
+    if (self->m != other->m || self->n != other->n) return false;
+    double_array_add_array(self->values, other->values, self->m * self->n);
+    return true;
+}
+
+inline bool matrix_add_matrix_times_scalar(matrix_t *self, matrix_t *other, double v) {
+    if (self->m != other->m || self->n != other->n) return false;
+    double_array_add_array_times_scalar(self->values, other->values, v, self->m * self->n);
+    return true;
+}
+
 inline void matrix_sub(matrix_t *self, double value) {
     double_array_sub(self->values, value, self->m * self->n);
+}
+
+inline bool matrix_sub_matrix(matrix_t *self, matrix_t *other) {
+    if (self->m != other->m || self->n != other->n) return false;
+    double_array_sub_array(self->values, other->values, self->m * self->n);
+    return true;
+}
+
+inline bool matrix_sub_matrix_times_scalar(matrix_t *self, matrix_t *other, double v) {
+    if (self->m != other->m || self->n != other->n) return false;
+    double_array_sub_array_times_scalar(self->values, other->values, v, self->m * self->n);
+    return true;
 }
 
 
