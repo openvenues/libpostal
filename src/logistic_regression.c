@@ -138,7 +138,7 @@ static bool logistic_regression_gradient_params(matrix_t *theta, matrix_t *gradi
     }
 
 
-    // If the vector last_updated was provided, update the only the relevant columns in x
+    // Update the only the relevant columns in x
     if (regularize && x_cols != NULL) {
         size_t batch_rows = x_cols->n;
         uint32_t *cols = x_cols->a;
