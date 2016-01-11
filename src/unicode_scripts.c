@@ -13,6 +13,10 @@ inline script_languages_t get_script_languages(script_t script) {
     return script_languages[script];
 }
 
+inline bool is_common_script(script_t script) {
+    return script == SCRIPT_COMMON || script == SCRIPT_INHERITED;
+}
+
 string_script_t get_string_script(char *str, size_t len) {
     int32_t ch;
     script_t last_script = SCRIPT_UNKNOWN;
@@ -32,18 +36,18 @@ string_script_t get_string_script(char *str, size_t len) {
 
         script = get_char_script((uint32_t)ch);
 
-        if (script == SCRIPT_COMMON && last_script != SCRIPT_UNKNOWN) {
+        if (is_common_script(script) && last_script != SCRIPT_UNKNOWN) {
             script = last_script;
         }
 
-        if (last_script != script && last_script != SCRIPT_UNKNOWN && last_script != SCRIPT_COMMON) {
+        if (last_script != script && last_script != SCRIPT_UNKNOWN && !is_common_script(last_script)) {
             if (script_len < len) {
                 while (true) {
                     char_len = utf8proc_iterate_reversed((const uint8_t *)str, idx, &ch);
                     if (ch == 0) break;
 
                     script = get_char_script((uint32_t)ch);
-                    if (script != SCRIPT_COMMON) {
+                    if (!is_common_script(script)) {
                         break;
                     }
 
