@@ -123,12 +123,7 @@ inline bool stochastic_gradient_descent_sparse_finalize_weights(matrix_t *theta,
     return true;
 }
 
-inline double gamma_t(double gamma_0, double lambda, uint32_t t) {
+
+inline double stochastic_gradient_descent_gamma_t(double gamma_0, double lambda, uint32_t t) {
     return gamma_0 / (1.0 + lambda * gamma_0 * (double)t);
-}
-
-inline bool stochastic_gradient_descent_scheduled(matrix_t *theta, matrix_t *gradient, double lambda, uint32_t t, double gamma_0) {
-    double gamma = gamma_t(gamma_0, lambda, t);
-
-    return stochastic_gradient_descent(theta, gradient, gamma);
 }
