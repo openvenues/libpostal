@@ -79,6 +79,7 @@ int sparse_matrix_sum_all_rows(sparse_matrix_t *self, double *result, size_t n);
 int sparse_matrix_sum_rows(sparse_matrix_t *self, uint32_t *rows, size_t m, double *result, size_t n);
 
 int sparse_matrix_dot_dense(sparse_matrix_t *self, matrix_t *matrix, matrix_t *result);
+int sparse_matrix_dot_sparse(sparse_matrix_t *self, sparse_matrix_t *other, matrix_t *result);
 
 bool sparse_matrix_write(sparse_matrix_t *self, FILE *f);
 sparse_matrix_t *sparse_matrix_read(FILE *f);
