@@ -79,13 +79,18 @@ twice (three times counting the finalization step), while still getting roughly 
 results as though we had done the per-iteration weight updates.
 */
 
-static inline void regularize_row(double *theta_i, size_t n, double lambda, uint32_t last_updated, uint32_t t) {
+
+inline double stochastic_gradient_descent_gamma_t(double gamma_0, double lambda, uint32_t t) {
+    return gamma_0 / (1.0 + lambda * gamma_0 * (double)t);
+}
+
+static inline void regularize_row(double *theta_i, size_t n, double lambda, uint32_t last_updated, uint32_t t, double gamma) {
     uint32_t timesteps = t - last_updated;
-    double update = exp(-lambda * timesteps);
+    double update = exp(gamma * -lambda * timesteps);
     double_array_mul(theta_i, update, n);
 }
 
-bool stochastic_gradient_descent_sparse_regularize_weights(matrix_t *theta, uint32_array *update_indices, uint32_array *last_updated, uint32_t t, double lambda) {
+bool stochastic_gradient_descent_regularize_weights(matrix_t *theta, uint32_array *update_indices, uint32_array *last_updated, uint32_t t, double lambda, double gamma_0) {
     if (lambda > 0.0) {        
         uint32_t *updates = last_updated->a;
 
@@ -98,7 +103,7 @@ bool stochastic_gradient_descent_sparse_regularize_weights(matrix_t *theta, uint
             uint32_t row = rows[i];
             double *theta_i = matrix_get_row(theta, row);
             uint32_t last_updated = updates[row];
-            regularize_row(theta_i, n, lambda, last_updated, t);
+            regularize_row(theta_i, n, lambda, last_updated, t, gamma_0);
             updates[row] = t;
         }
 
@@ -107,7 +112,7 @@ bool stochastic_gradient_descent_sparse_regularize_weights(matrix_t *theta, uint
     return true;
 }
 
-inline bool stochastic_gradient_descent_sparse_finalize_weights(matrix_t *theta, uint32_array *last_updated, uint32_t t, double lambda) {
+inline bool stochastic_gradient_descent_finalize_weights(matrix_t *theta, uint32_array *last_updated, uint32_t t, double lambda, double gamma_0) {
     if (lambda > 0.0) {
         uint32_t *updates = last_updated->a;
         size_t m = theta->m;
@@ -116,14 +121,10 @@ inline bool stochastic_gradient_descent_sparse_finalize_weights(matrix_t *theta,
         for (size_t i = 0; i < m; i++) {
             double *theta_i = matrix_get_row(theta, i);
             uint32_t last_updated = updates[i];
-            regularize_row(theta_i, n, lambda, last_updated, t);
+            regularize_row(theta_i, n, lambda, last_updated, t, gamma_0);
+
             updates[i] = t;
         }
     }
     return true;
-}
-
-
-inline double stochastic_gradient_descent_gamma_t(double gamma_0, double lambda, uint32_t t) {
-    return gamma_0 / (1.0 + lambda * gamma_0 * (double)t);
 }

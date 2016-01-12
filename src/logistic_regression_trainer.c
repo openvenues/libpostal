@@ -118,7 +118,7 @@ bool logistic_regression_trainer_train_batch(logistic_regression_trainer_t *self
         goto exit_matrices_created;
     }
 
-    if (self->lambda > 0.0 && !stochastic_gradient_descent_sparse_regularize_weights(self->weights, self->batch_columns, self->last_updated, self->iters, self->lambda)) {
+    if (self->lambda > 0.0 && !stochastic_gradient_descent_sparse_regularize_weights(self->weights, self->batch_columns, self->last_updated, self->iters, self->lambda, self->gamma_0)) {
         log_error("Error regularizing weights\n");
         goto exit_matrices_created;
     }
@@ -145,7 +145,7 @@ bool logistic_regression_trainer_finalize(logistic_regression_trainer_t *self) {
     if (self == NULL) return false;
 
     if (self->lambda > 0.0) {
-        return stochastic_gradient_descent_sparse_finalize_weights(self->weights, self->last_updated, self->iters, self->lambda);
+        return stochastic_gradient_descent_sparse_finalize_weights(self->weights, self->last_updated, self->iters, self->lambda, self->gamma_0);
     }
 
     return true;
