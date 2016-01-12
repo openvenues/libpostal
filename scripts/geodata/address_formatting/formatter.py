@@ -5,7 +5,7 @@ import re
 import subprocess
 import yaml
 
-from postal.text.tokenize import tokenize, tokenize_raw, token_types
+from geodata.text.tokenize import tokenize, tokenize_raw, token_types
 from collections import OrderedDict, defaultdict
 from itertools import ifilter
 

@@ -38,8 +38,8 @@ from geodata.osm.osm_admin_boundaries import OSMAdminPolygonReader
 from geodata.polygons.index import *
 from geodata.statistics.tf_idf import IDFIndex
 
-from postal.text.tokenize import tokenize, token_types
-from postal.text.normalize import *
+from geodata.text.tokenize import tokenize, token_types
+from geodata.text.normalize import *
 
 decode_latin1 = partial(safe_decode, encoding='latin1')
 
