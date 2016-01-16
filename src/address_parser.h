@@ -96,6 +96,17 @@ typedef enum {
     NUM_ADDRESS_PARSER_TYPES
 } address_parser_components;
 
+#define ADDRESS_PARSER_LABEL_HOUSE "house"
+#define ADDRESS_PARSER_LABEL_HOUSE_NUMBER "house_number"
+#define ADDRESS_PARSER_LABEL_ROAD "road"
+#define ADDRESS_PARSER_LABEL_SUBURB "suburb"
+#define ADDRESS_PARSER_LABEL_CITY_DISTRICT "city_district"
+#define ADDRESS_PARSER_LABEL_CITY "city"
+#define ADDRESS_PARSER_LABEL_STATE_DISTRICT  "state_district"
+#define ADDRESS_PARSER_LABEL_STATE  "state"
+#define ADDRESS_PARSER_LABEL_POSTAL_CODE  "postal_code"
+#define ADDRESS_PARSER_LABEL_COUNTRY  "country"
+
 typedef union address_parser_types {
     uint32_t value;
     struct {

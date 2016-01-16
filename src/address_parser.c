@@ -795,7 +795,6 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
 }
 
-
 address_parser_response_t *address_parser_response_new(void) {
     address_parser_response_t *response = malloc(sizeof(address_parser_response_t));
     return response;
@@ -832,11 +831,56 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
 
     address_parser_context_fill(context, parser, tokenized_str, language, country);
 
+    address_parser_response_t *response = NULL;
+
+    // If the whole input string is a single known phrase at the SUBURB level or higher, bypass sequence prediction altogether
+
+    if (context->component_phrases->n == 1) {
+        phrase_t only_phrase = context->component_phrases->a[0];
+        if (only_phrase.start == 0 && only_phrase.len == tokenized_str->tokens->n) {
+            address_parser_types_t types;
+
+            types.value = only_phrase.data;
+            uint32_t most_common = types.most_common;
+
+            char *label;
+
+            response = address_parser_response_new();
+
+            if (most_common == ADDRESS_PARSER_CITY) {
+                label = strdup(ADDRESS_PARSER_LABEL_CITY);
+            } else if (most_common == ADDRESS_PARSER_STATE) {
+                label = strdup(ADDRESS_PARSER_LABEL_STATE);
+            } else if (most_common == ADDRESS_PARSER_COUNTRY) {
+                label = strdup(ADDRESS_PARSER_LABEL_COUNTRY);
+            } else if (most_common == ADDRESS_PARSER_STATE_DISTRICT) {
+                label = strdup(ADDRESS_PARSER_LABEL_STATE_DISTRICT);
+            } else if (most_common == ADDRESS_PARSER_SUBURB) {
+                label = strdup(ADDRESS_PARSER_LABEL_SUBURB);
+            } else if (most_common == ADDRESS_PARSER_CITY_DISTRICT) {
+                label = strdup(ADDRESS_PARSER_LABEL_CITY_DISTRICT);
+            } else if (most_common == ADDRESS_PARSER_POSTAL_CODE) {
+                label = strdup(ADDRESS_PARSER_LABEL_POSTAL_CODE);
+            }
+
+            char **single_label = malloc(sizeof(char *));
+            single_label[0] = label;
+            char **single_component = malloc(sizeof(char *));
+            single_component[0] = strdup(normalized);
+
+            response->num_components = 1;
+            response->labels = single_label;
+            response->components = single_component;
+
+            token_array_destroy(tokens);
+            tokenized_string_destroy(tokenized_str);
+            return response;
+        }
+    }
+
     cstring_array *token_labels = cstring_array_new_size(tokens->n);
 
     char *prev_label = NULL;
-
-    address_parser_response_t *response = NULL;
 
     if (averaged_perceptron_tagger_predict(model, parser, context, context->features, token_labels, &address_parser_features, tokenized_str)) {
         response = address_parser_response_new();
