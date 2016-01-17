@@ -10,14 +10,14 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
 
-from address_normalizer.text.normalize import PhraseFilter
 from geodata.encoding import safe_decode
 from geodata.string_utils import wide_iter, wide_ord
 from geodata.i18n.unicode_paths import DATA_DIR
 from geodata.i18n.normalize import strip_accents
 from geodata.i18n.unicode_properties import get_chars_by_script, get_script_languages
-from geodata.text.tokenize import tokenize
-from geodata.text.tokenize import token_types
+from geodata.text.normalize import normalized_tokens
+from geodata.text.tokenize import tokenize, token_types
+from geodata.text.phrases import PhraseFilter
 
 WELL_REPRESENTED_LANGUAGES = set(['en', 'fr', 'it', 'de', 'nl', 'es', 'pt'])
 
@@ -46,8 +46,11 @@ POSSIBLE_ROMAN_NUMERALS = set(['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii',
                                'c', 'cc', 'ccc', 'cd', 'd', 'dc', 'dcc', 'dccc', 'cm',
                                'm', 'mm', 'mmm', 'mmmm'])
 
+PHRASE = 'PHRASE'
+
 
 class DictionaryPhraseFilter(PhraseFilter):
+
     def __init__(self, *dictionaries):
         self.dictionaries = dictionaries
 
@@ -129,9 +132,10 @@ class DictionaryPhraseFilter(PhraseFilter):
         return super(DictionaryPhraseFilter, self).filter(tokens)
 
     def filter(self, tokens):
-        for c, t, data in self.basic_filter(tokens):
-            if c is not token_types.PHRASE:
-                token = t[1]
+        for p, t, data in self.basic_filter(tokens):
+            if not p:
+                t, c = t
+                token = t
                 token_len = len(token)
 
                 suffix_search, suffix_len = self.search_suffix(token)
@@ -142,17 +146,54 @@ class DictionaryPhraseFilter(PhraseFilter):
                 if prefix_search and self.trie.get(token[:prefix_len]):
                     yield (token_types.PHRASE, [(c,) + t], prefix_search)
                     continue
-            yield c, t, data
+            else:
+                c = PHRASE
+            yield t, c, data
 
-street_types_gazetteer = DictionaryPhraseFilter('street_types.txt',
-                                                'directionals.txt',
-                                                'concatenated_suffixes_separable.txt',
-                                                'concatenated_suffixes_inseparable.txt',
-                                                'concatenated_prefixes_separable.txt',
-                                                'stopwords.txt',)
+STREET_TYPES_DICTIONARIES = ('street_types.txt',
+                             'directionals.txt',
+                             'concatenated_suffixes_separable.txt',
+                             'concatenated_suffixes_inseparable.txt',
+                             'concatenated_prefixes_separable.txt',
+                             'stopwords.txt',)
 
-char_scripts = get_chars_by_script()
-script_languages = {script: set(langs) for script, langs in get_script_languages().iteritems()}
+GIVEN_NAME_DICTIONARY = 'given_names.txt'
+SURNAME_DICTIONARY = 'surnames.txt'
+
+NAME_DICTIONARIES = (GIVEN_NAME_DICTIONARY,
+                     SURNAME_DICTIONARY,)
+
+ALL_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + ('academic_degrees.txt',
+                                                             'building_types.txt',
+                                                             'company_types.txt',
+                                                             'directionals.txt',
+                                                             'level_types.txt',
+                                                             'no_number.txt',
+                                                             'nulls.txt',
+                                                             'organizations.txt',
+                                                             'people.txt',
+                                                             'personal_suffixes.txt',
+                                                             'personal_titles.txt',
+                                                             'place_names.txt',
+                                                             'post_office.txt',
+                                                             'qualifiers.txt',
+                                                             'synonyms.txt',
+                                                             'toponyms.txt',
+                                                             'unit_types.txt',
+                                                             )
+
+street_types_gazetteer = DictionaryPhraseFilter(*STREET_TYPES_DICTIONARIES)
+abbreviations_gazetteer = DictionaryPhraseFilter(*ALL_ABBREVIATION_DICTIONARIES)
+given_name_gazetteer = DictionaryPhraseFilter(GIVEN_NAME_DICTIONARY)
+
+char_scripts = []
+script_languages = {}
+
+
+def init_disambiguation():
+    global char_scripts, script_languages
+    char_scripts.extend(get_chars_by_script())
+    script_languages.update({script: set(langs) for script, langs in get_script_languages().iteritems()})
 
 UNKNOWN_SCRIPT = 'Unknown'
 COMMON_SCRIPT = 'Common'
@@ -194,19 +235,25 @@ def disambiguate_language(text, languages):
     while read_len < len(text):
         script, script_len, is_ascii = get_string_script(text[read_len:])
         if script != LATIN_SCRIPT:
-            script_langs[script] = set([l for l, d in languages if l in script_languages.get(script, [])])
+            script_valid = [l for l, d in languages if l in script_languages.get(script, [])]
+            script_langs[script] = set(script_valid)
+
+            if script_len == len(text) and len(script_valid) == 1:
+                return script_valid[0]
+
         read_len += script_len
 
     num_defaults = sum((1 for lang, default in valid_languages.iteritems() if default))
-    tokens = [(c, t.rstrip('.')) for t, c in tokenize(safe_decode(text).replace(u'-', u' ').lower())]
+
+    tokens = normalized_tokens((safe_decode(text)))
 
     current_lang = None
     possible_lang = None
 
     seen_languages = set()
 
-    for c, t, data in street_types_gazetteer.filter(tokens):
-        if c is token_types.PHRASE:
+    for t, c, data in street_types_gazetteer.filter(tokens):
+        if c is PHRASE:
             valid = []
             data = [d.split('|') for d in data]
             potentials = [l for l, c, s in data if l in valid_languages]
