@@ -41,6 +41,8 @@ from geodata.statistics.tf_idf import IDFIndex
 from geodata.text.tokenize import tokenize, token_types
 from geodata.text.normalize import *
 
+from shapely.topology import TopologicalError
+
 decode_latin1 = partial(safe_decode, encoding='latin1')
 
 
@@ -682,6 +684,11 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                     poly = cls.to_polygon(p)
                     if poly is None or not poly.bounds or len(poly.bounds) != 4:
                         continue
+                    if not poly.is_valid:
+                        poly = cls.fix_polygon(poly)
+                        if poly is None or not poly.bounds or len(poly.bounds) != 4:
+                            continue
+
                     if poly.type != 'MultiPolygon':
                         inner.append(poly)
                     else:
@@ -692,8 +699,17 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                     poly = cls.to_polygon(p)
                     if poly is None or not poly.bounds or len(poly.bounds) != 4:
                         continue
-                    # Figure out which outer polygon contains each inner polygon
-                    interior = [p2 for p2 in inner if poly.contains(p2)]
+
+                    interior = []
+                    try:
+                        # Figure out which outer polygon contains each inner polygon
+                        interior = [p2 for p2 in inner if poly.contains(p2)]
+                    except TopologicalError:
+                        poly = cls.fix_polygon(poly)
+                        if poly is None or not poly.bounds or len(poly.bounds) != 4:
+                            continue
+                        if poly.is_valid:
+                            interior = [p2 for p2 in inner if poly.contains(p2)]
 
                     if interior:
                         # Polygon with holes constructor
