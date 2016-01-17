@@ -132,9 +132,16 @@ class OSMAdminPolygonReader(object):
         for component in strongly_connected_components(way_graph):
             poly_nodes = []
 
-            for way_id in component:
+            seen = set()
+
+            q = component[:1]
+            while q:
+                way_id = q.pop()
                 way_index = way_indices[way_id]
                 poly_nodes.extend(self.node_coordinates(self.way_coords, self.way_indptr, way_index)[:-1])
+                neighbors = way_graph[way_id]
+                q.extend([w for w in neighbors if w not in seen])
+                seen.add(way_id)
 
             polys.append(poly_nodes)
 
