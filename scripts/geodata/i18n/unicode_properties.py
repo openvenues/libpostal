@@ -35,6 +35,7 @@ from geodata.string_utils import NUM_CODEPOINTS, wide_unichr
 
 from cldr_languages import *
 from download_cldr import download_cldr
+from languages import init_languages, get_country_languages
 from unicode_paths import UNICODE_DATA_DIR
 from word_breaks import script_regex, regex_char_range
 
@@ -370,8 +371,10 @@ def get_script_languages():
     country_language_file = open(country_languages_path)
     country_language_reader = csv.reader(country_language_file, delimiter='\t')
 
-    spoken_languages = set([lang for country, lang, script, pct, is_official
-                            in country_language_reader])
+    countries = set([country for country, lang, script, pct, is_official
+                     in country_language_reader])
+
+    spoken_languages = set.union(*(set(get_country_languages(country)) for country in countries))
 
     script_code_languages = defaultdict(list)
     for language, scripts in language_scripts.iteritems():
@@ -396,6 +399,8 @@ def main(out_dir):
     # Output is a C header and data file, see templates
     out_file = open(os.path.join(out_dir, SCRIPTS_DATA_FILENAME), 'w')
     out_header = open(os.path.join(out_dir, SCRIPTS_HEADER), 'w')
+
+    init_languages()
 
     download_file(SCRIPTS_URL, LOCAL_SCRIPTS_FILE)
     download_file(BLOCKS_URL, LOCAL_BLOCKS_FILE)
