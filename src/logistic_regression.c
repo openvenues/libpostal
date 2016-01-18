@@ -18,7 +18,6 @@ bool logistic_regression_model_expectation(matrix_t *theta, sparse_matrix_t *x, 
     return true;
 }
 
-
 double logistic_regression_cost_function(matrix_t *theta, sparse_matrix_t *x, uint32_array *y, matrix_t *p_y, double lambda) {
     size_t m = x->m;
     size_t n = x->n;
@@ -139,28 +138,29 @@ static bool logistic_regression_gradient_params(matrix_t *theta, matrix_t *gradi
 
 
     // Update the only the relevant columns in x
-    if (regularize && x_cols != NULL) {
-        size_t batch_rows = x_cols->n;
-        uint32_t *cols = x_cols->a;
-        for (i = 0; i < batch_rows; i++) {
-            col = cols[i];
+    if (regularize) {
+        size_t num_rows = num_features;
+        uint32_t *cols = NULL;
+
+        if (x_cols != NULL) {
+            cols = x_cols->a;
+            num_rows = x_cols->n;
+        }
+
+        for (i = 0; i < num_rows; i++) {
+            col = x_cols != NULL ? cols[i] : i;
 
             for (j = 0; j < num_classes; j++) {
-                size_t idx = i * num_classes + j;
+                size_t idx = col * num_classes + j;
                 double theta_ij = theta_values[idx];
-                double reg_value = theta_ij * lambda;
-                gradient_values[idx] += reg_value;
+                double reg_update = theta_ij * lambda;
+                double current_value = gradient_values[idx];
+                double updated_value = current_value + reg_update;
+                if (fabs(updated_value) == fabs(current_value)) {
+                    gradient_values[idx] = updated_value;
+                }
             }
         }
-    } else if (regularize) {
-        for (i = 1; i < num_features; i++) {
-            for (j = 0; j < num_classes; j++) {
-                size_t idx = i * num_classes + j;
-                double theta_ij = theta_values[idx];
-                double reg_value = theta_ij * lambda;
-                gradient_values[idx] += reg_value;
-            }
-        }        
     }
 
     return true;

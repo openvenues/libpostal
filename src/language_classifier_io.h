@@ -42,8 +42,8 @@ language_classifier_data_set_t *language_classifier_data_set_init(char *filename
 bool language_classifier_data_set_next(language_classifier_data_set_t *self);
 void language_classifier_data_set_destroy(language_classifier_data_set_t *self);
 
-language_classifier_minibatch_t *language_classifier_data_set_get_minibatch_with_size(language_classifier_data_set_t *self, size_t batch_size, bool with_country);
-language_classifier_minibatch_t *language_classifier_data_set_get_minibatch(language_classifier_data_set_t *self, bool with_country);
+language_classifier_minibatch_t *language_classifier_data_set_get_minibatch_with_size(language_classifier_data_set_t *self, khash_t(str_uint32) *labels, size_t batch_size);
+language_classifier_minibatch_t *language_classifier_data_set_get_minibatch(language_classifier_data_set_t *self, khash_t(str_uint32) *labels);
 void language_classifier_minibatch_destroy(language_classifier_minibatch_t *self);
 
 #endif

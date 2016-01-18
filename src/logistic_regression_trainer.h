@@ -17,14 +17,6 @@
 #include "tokens.h"
 #include "trie.h"
 
-#define DEFAULT_GAMMA_SCHEDULE {0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0}
-#define DEFAUlT_LAMBDA_SCHEDULE {0.0, 1e-5, 1e-4, 0.001, 0.01, 0.1, \
-                                 0.2, 0.5, 1.0, 2.0, 5.0, 10.0}
-
-#define DEFAULT_GAMMA_0 1.0
-#define DEFAULT_LAMBDA 0.0
-#define DEFAULT_GAMMA 0.1
-
 /**
  * Helper struct for training logistic regression model
  */
@@ -43,11 +35,10 @@ typedef struct logistic_regression_trainer {
     uint32_t iters;                     // Number of iterations, used to decay learning rate
     uint32_t epochs;                    // Number of epochs
     double gamma_0;                     // Initial learning rate
-    double gamma;                       // Simple scalar learning rate
 } logistic_regression_trainer_t;
 
 
-logistic_regression_trainer_t *logistic_regression_trainer_init(trie_t *feature_ids, khash_t(str_uint32) *label_ids);
+logistic_regression_trainer_t *logistic_regression_trainer_init(trie_t *feature_ids, khash_t(str_uint32) *label_ids, double gamma_0, double lambda);
 
 bool logistic_regression_trainer_train_batch(logistic_regression_trainer_t *self, feature_count_array *features, cstring_array *labels);
 double logistic_regression_trainer_batch_cost(logistic_regression_trainer_t *self, feature_count_array *features, cstring_array *labels);

@@ -35,7 +35,7 @@ void logistic_regression_trainer_destroy(logistic_regression_trainer_t *self) {
     free(self);
 }
 
-logistic_regression_trainer_t *logistic_regression_trainer_init(trie_t *feature_ids, khash_t(str_uint32) *label_ids) {
+logistic_regression_trainer_t *logistic_regression_trainer_init(trie_t *feature_ids, khash_t(str_uint32) *label_ids, double gamma_0, double lambda) {
     if (feature_ids == NULL || label_ids == NULL) return NULL;
 
     logistic_regression_trainer_t *trainer = malloc(sizeof(logistic_regression_trainer_t));
@@ -57,11 +57,10 @@ logistic_regression_trainer_t *logistic_regression_trainer_init(trie_t *feature_
 
     trainer->last_updated = uint32_array_new_zeros(trainer->num_features);
 
-    trainer->lambda = DEFAULT_LAMBDA;
+    trainer->lambda = lambda;
     trainer->iters = 0;
     trainer->epochs = 0;
-    trainer->gamma_0 = DEFAULT_GAMMA_0;
-    trainer->gamma = DEFAULT_GAMMA;
+    trainer->gamma_0 = gamma_0;
 
     return trainer;
 
@@ -118,7 +117,7 @@ bool logistic_regression_trainer_train_batch(logistic_regression_trainer_t *self
         goto exit_matrices_created;
     }
 
-    if (self->lambda > 0.0 && !stochastic_gradient_descent_sparse_regularize_weights(self->weights, self->batch_columns, self->last_updated, self->iters, self->lambda, self->gamma_0)) {
+    if (self->lambda > 0.0 && !stochastic_gradient_descent_regularize_weights(self->weights, self->batch_columns, self->last_updated, self->iters, self->lambda, self->gamma_0)) {
         log_error("Error regularizing weights\n");
         goto exit_matrices_created;
     }
@@ -130,7 +129,8 @@ bool logistic_regression_trainer_train_batch(logistic_regression_trainer_t *self
 
     size_t data_len = m * n;
 
-    ret = stochastic_gradient_descent_sparse(self->weights, gradient, self->batch_columns, self->gamma);
+    double gamma = stochastic_gradient_descent_gamma_t(self->gamma_0, self->lambda, self->iters);
+    ret = stochastic_gradient_descent_sparse(self->weights, gradient, self->batch_columns, gamma);
 
     self->iters++;
 
@@ -145,7 +145,7 @@ bool logistic_regression_trainer_finalize(logistic_regression_trainer_t *self) {
     if (self == NULL) return false;
 
     if (self->lambda > 0.0) {
-        return stochastic_gradient_descent_sparse_finalize_weights(self->weights, self->last_updated, self->iters, self->lambda, self->gamma_0);
+        return stochastic_gradient_descent_finalize_weights(self->weights, self->last_updated, self->iters, self->lambda, self->gamma_0);
     }
 
     return true;
