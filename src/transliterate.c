@@ -561,8 +561,6 @@ static char *replace_groups(trie_t *trie, char *str, char *replacement, group_ca
             state.advance_state = false;
         }
 
-        bool last_char = idx + char_len == len;
-
         if (state.advance_index) {
             if (num_chars == group.start) {
                 log_debug("Starting group\n");
