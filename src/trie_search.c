@@ -696,10 +696,11 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, size_t len, u
                     }
                 }
 
-                match_len += utf8_common_prefix_len_ignore_separators((char *)ptr + char_len, (char *)current_tail + tail_pos, current_tail_len - tail_pos);
+                size_t tail_match_len = utf8_common_prefix_len((char *)ptr + char_len, (char *)current_tail + tail_pos, current_tail_len - tail_pos);
+                match_len += tail_match_len;
                 log_debug("match_len=%zu\n", match_len);
                 
-                if (match_len >= current_tail_len) {
+                if (tail_match_len == current_tail_len - tail_pos) {
                     if (first_char) phrase_start = idx;
                     phrase_len = (uint32_t)(idx + match_len) - phrase_start;
 
@@ -717,7 +718,7 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, size_t len, u
                 if (terminal_node.check == node_id) {
                     log_debug("Transition to NUL byte matched\n");
                     if (terminal_node.base < 0) {
-                        phrase_len = idx + char_len - phrase_start;
+                        phrase_len = (uint32_t)(idx + char_len) - phrase_start;
                         data_node = trie_get_data_node(self, terminal_node);
                         value = data_node.data;
                     }

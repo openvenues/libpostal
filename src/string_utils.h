@@ -72,6 +72,7 @@ char *utf8_lower(const char *s); // returns a copy, caller frees
 int utf8_compare(const char *str1, const char *str2);
 int utf8_compare_len(const char *str1, const char *str2, size_t len);
 size_t utf8_common_prefix(const char *str1, const char *str2);
+size_t utf8_common_prefix_len(const char *str1, const char *str2, size_t len);
 size_t utf8_common_prefix_ignore_separators(const char *str1, const char *str2);
 size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *str2, size_t len);
 

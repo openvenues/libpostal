@@ -252,14 +252,18 @@ inline int utf8_compare(const char *str1, const char *str2) {
     return utf8_compare_len(str1, str2, strlen(str1));
 }
 
-size_t utf8_common_prefix(const char *str1, const char *str2) {
+
+size_t utf8_common_prefix_len(const char *str1, const char *str2, size_t len) {
     size_t common_prefix = 0;
+
+    if (len == 0) return common_prefix;
 
     int32_t c1 = 0;
     int32_t c2 = 0;
 
-    size_t len1 = strlen(str1);
-    size_t len2 = strlen(str2);
+    size_t remaining = len;
+
+    ssize_t len1, len2;
 
     uint8_t *ptr1 = (uint8_t *)str1;
     uint8_t *ptr2 = (uint8_t *)str2;
@@ -273,12 +277,24 @@ size_t utf8_common_prefix(const char *str1, const char *str2) {
             ptr1 += len1;
             ptr2 += len2;
             common_prefix += len1;
+            if (common_prefix >= len) {
+                return common_prefix;
+            }
         } else {
             break;
         }
     }
 
     return common_prefix;
+}
+
+size_t utf8_common_prefix(const char *str1, const char *str2) {
+    size_t len1 = strlen(str1);
+    size_t len2 = strlen(str2);
+
+    size_t len = len1 <= len2 ? len1 : len2;
+
+    return utf8_common_prefix_len(str1, str2, len);
 }
 
 
