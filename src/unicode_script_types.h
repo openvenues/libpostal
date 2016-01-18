@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #define NUM_CODEPOINTS 1114112
-#define MAX_LANGS 122
+#define MAX_LANGS 57
 
 typedef enum {
     SCRIPT_UNKNOWN = 0,
