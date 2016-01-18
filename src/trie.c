@@ -987,38 +987,45 @@ trie_t *trie_read(FILE *file) {
 
     uint32_t signature;
 
-    if (!file_read_uint32(file, &signature)) 
+    if (!file_read_uint32(file, &signature)) {
         goto exit_file_read;
+    }
 
-    if (signature != TRIE_SIGNATURE)
+    if (signature != TRIE_SIGNATURE) {
         goto exit_file_read;
+    }
 
     uint32_t alphabet_size;
 
-    if (!file_read_uint32(file, &alphabet_size))
+    if (!file_read_uint32(file, &alphabet_size)) {
         goto exit_file_read;
+    }
 
     log_debug("alphabet_size=%d\n", alphabet_size);
     if (alphabet_size > NUM_CHARS)
         goto exit_file_read;
 
-    if (!file_read_chars(file, (char *)alphabet, alphabet_size))
+    if (!file_read_chars(file, (char *)alphabet, alphabet_size)) {
         goto exit_file_read;
+    }
 
     trie_t *trie = trie_new_empty(alphabet, alphabet_size);
-    if (!trie)
+    if (!trie) {
         goto exit_file_read;
+    }
 
     uint32_t num_keys;
-    if (!file_read_uint32(file, &num_keys))
+    if (!file_read_uint32(file, &num_keys)) {
         goto exit_file_read;
+    }
 
     trie->num_keys = num_keys;
 
     uint32_t num_nodes;
 
-    if (!file_read_uint32(file, &num_nodes))
+    if (!file_read_uint32(file, &num_nodes)) {
         goto exit_trie_created;
+    }
 
     log_debug("num_nodes=%d\n", num_nodes);
     trie_node_array_resize(trie->nodes, num_nodes);
@@ -1026,45 +1033,69 @@ trie_t *trie_read(FILE *file) {
     int32_t base;
     int32_t check;
     trie_node_t node;
-    for (i = 0; i < num_nodes; i++) {
-        if (!file_read_uint32(file, (uint32_t *)&base) ||
-            !file_read_uint32(file, (uint32_t *)&check))
-            goto exit_trie_created;
 
-        node.base = base;
-        node.check = check;
-        trie_node_array_push(trie->nodes, node);
+    unsigned char *buf;
+    size_t buf_size = num_nodes * sizeof(uint32_t) * 2;
+    buf = malloc(buf_size);
+
+    unsigned char *buf_ptr;
+
+    if (file_read_chars(file, (char *)buf, buf_size)) {
+        buf_ptr = buf;
+        for (i = 0; i < num_nodes; i++) {
+            node.base = (int32_t)file_deserialize_uint32(buf_ptr);
+            buf_ptr += sizeof(uint32_t);
+            node.check = (int32_t)file_deserialize_uint32(buf_ptr);
+            buf_ptr += sizeof(uint32_t);
+
+            trie_node_array_push(trie->nodes, node);
+        }
     }
 
+    free(buf);
+    buf = NULL;
+
     uint32_t num_data_nodes;
-    if (!file_read_uint32(file, &num_data_nodes))
+    if (!file_read_uint32(file, &num_data_nodes)) {
         goto exit_trie_created;
+    }
 
     trie_data_array_resize(trie->data, num_data_nodes);
     log_debug("num_data_nodes=%d\n", num_data_nodes);
 
-    uint32_t tail_ptr;
-    uint32_t data;
     trie_data_node_t data_node;
 
-    for (i = 0; i < num_data_nodes; i++) {
-        if (!file_read_uint32(file, &tail_ptr) ||
-            !file_read_uint32(file, &data))
-            goto exit_trie_created;
-        data_node.tail = tail_ptr;
-        data_node.data = data;
-        trie_data_array_push(trie->data, data_node);
+    buf_size = num_data_nodes * sizeof(uint32_t) * 2;
+    buf = malloc(buf_size);
+    if (buf == NULL) {
+        goto exit_trie_created;
     }
 
+    if (file_read_chars(file, (char *)buf, buf_size)) {
+        buf_ptr = buf;
+        for (i = 0; i < num_data_nodes; i++) {
+            data_node.tail = (int32_t)file_deserialize_uint32(buf_ptr);
+            buf_ptr += sizeof(uint32_t);
+            data_node.data = (int32_t)file_deserialize_uint32(buf_ptr);
+            buf_ptr += sizeof(uint32_t);
+
+            trie_data_array_push(trie->data, data_node);
+        }
+    }
+
+    free(buf);
+
     uint32_t tail_len;
-    if (!file_read_uint32(file, &tail_len))
+    if (!file_read_uint32(file, &tail_len)) {
         goto exit_trie_created;
+    }
 
     uchar_array_resize(trie->tail, tail_len);
     trie->tail->n = tail_len;
 
-    if (!file_read_chars(file, (char *)trie->tail->a, tail_len))
+    if (!file_read_chars(file, (char *)trie->tail->a, tail_len)) {
         goto exit_trie_created;
+    }
 
     return trie;
 
