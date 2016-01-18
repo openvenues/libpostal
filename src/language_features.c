@@ -213,6 +213,14 @@ static void add_token_features(khash_t(str_double) *features, char *prefix, char
     }
 }
 
+static void add_script_feature(khash_t(str_double) *features, char *prefix, char_array *feature_array, script_t script) {
+    char_array_clear(feature_array);
+    char_array_append(feature_array, "sc=");
+    char_array_cat_printf(feature_array, "%d", script);
+    char *feature = char_array_get_string(feature_array);
+    feature_counts_add(features, feature, 1.0);
+}
+
 
 khash_t(str_double) *extract_language_features(char *str, char *country, token_array *tokens, char_array *feature_array) {
     if (str == NULL || tokens == NULL || feature_array == NULL) return NULL;
@@ -264,55 +272,37 @@ khash_t(str_double) *extract_language_features(char *str, char *country, token_a
             tokenize_add_tokens(tokens, (const char *)normalized_str, strlen(normalized_str), keep_whitespace);
 
             token_t prev_token;
-            bool prev_was_phrase = false;
             char *phrase = NULL;
 
             // Search address dictionaries for any language
             phrase_array *phrases = search_address_dictionaries_tokens(normalized_str, tokens, NULL);
             log_debug("normalized_str=%s\n", normalized_str);
 
-            size_t start = 0;
-            size_t end = 0;
             size_t i, j;
 
             if (phrases != NULL) {
                 for (i = 0; i < phrases->n; i++) {
                     phrase_t phrase = phrases->a[i];
                     log_debug("phrase (%d, %d)\n", phrase.start, phrase.len);
-
-                    end = phrase.start;
-                    for (j = start; j < end; j++) {
-                        token = tokens->a[j];
-                        log_debug("j=%zu, token.offset=%zu, token.len=%zu\n", j, token.offset, token.len);
-                        add_token_features(features, prefix, feature_array, normalized_str, token);
-                    }
-
-                    log_debug("done with start tokens\n");
                     add_phrase_feature(features, prefix, feature_array, normalized_str, phrase, tokens);
-                    start = phrase.start + phrase.len;
                 }
 
                 phrase_array_destroy(phrases);
-
             }
 
-            for (j = start; j < tokens->n; j++) {
-                log_debug("end token: %zu\n", j);
+            for (j = 0; j < tokens->n; j++) {
                 token = tokens->a[j];
                 
                 add_token_features(features, prefix, feature_array, normalized_str, token);
             }
 
-        } else if (str_script.script != SCRIPT_UNKNOWN && str_script.script != SCRIPT_COMMON && script_langs.num_languages > 0) {
-            char_array_clear(feature_array);
-            char_array_append(feature_array, "sc=");
-            char_array_cat_printf(feature_array, "%d", str_script.script);
-            feature = char_array_get_string(feature_array);
-            log_debug("script feature=%s\n", feature);
-
-            if (feature != NULL) {
-                feature_counts_add(features, feature, 1.0);
+            if (str_script.script != SCRIPT_LATIN) {
+                add_script_feature(features, prefix, feature_array, str_script.script);
+                log_debug("script feature=%s\n", feature);                
             }
+
+        } else if (str_script.script != SCRIPT_UNKNOWN && str_script.script != SCRIPT_COMMON && script_langs.num_languages > 0) {
+            add_script_feature(features, prefix, feature_array, str_script.script);
         }
 
         consumed += str_script.len;
