@@ -232,7 +232,9 @@ void tokenize_add_tokens(token_array *tokens, const char *input, size_t len, boo
     size_t token_start, token_length;
     uint16_t token_type;
 
-    while ( ( token_type = scan_token(&scanner)) != END ) {
+    size_t consumed = 0;
+
+    while (consumed < len && (token_type = scan_token(&scanner)) != END) {
         token_start = scanner.start - scanner.src;
         token_length = scanner.cursor - scanner.start;
 
@@ -246,6 +248,8 @@ void tokenize_add_tokens(token_array *tokens, const char *input, size_t len, boo
         token.type = token_type;
 
         token_array_push(tokens, token);
+
+        consumed += token_length;
     }
 
 }
