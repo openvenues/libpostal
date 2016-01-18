@@ -64,7 +64,7 @@ char *script_transliterators[] = {
     "han-latin",
     "armenian-latin-bgn",
     "tamil-latin",
-    "malayam-latin",
+    "malayalam-latin",
     "gujarati-latin",
     "latin-ascii",
     "georgian-latin",
