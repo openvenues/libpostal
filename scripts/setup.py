@@ -2,8 +2,8 @@ import os
 
 from setuptools import setup, Extension, find_packages
 
-this_dir = os.path.realpath(os.path.dirname(__file__))
-PROJECT_DIR = os.path.realpath(os.path.join(this_dir, os.pardir))
+this_dir = os.path.dirname(__file__)
+PROJECT_DIR = os.path.join(this_dir, os.pardir)
 SRC_DIR = os.path.join(PROJECT_DIR, 'src')
 
 
@@ -34,7 +34,7 @@ def main():
                                          'utf8proc/utf8proc.c',
                                          )
                                ] + ['geodata/text/pytokenize.c'],
-                      include_dirs=[os.path.join(this_dir, os.pardir)],
+                      include_dirs=[PROJECT_DIR],
                       extra_compile_args=['-O0', '-std=c99',
                                           '-Wno-unused-function'],
                       ),
@@ -50,7 +50,7 @@ def main():
                                          'trie.c',
                                          'trie_search.c',)
                                ] + ['geodata/text/pynormalize.c'],
-                      include_dirs=[os.path.join(this_dir, os.pardir)],
+                      include_dirs=[PROJECT_DIR],
                       extra_compile_args=['-std=c99', '-DHAVE_CONFIG_H',
                                           '-Wno-unused-function'],
                       ),
