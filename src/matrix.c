@@ -267,11 +267,9 @@ matrix_t *matrix_read(FILE *f) {
         goto exit_matrix_allocated;
     }
 
-    for (size_t i = 0; i < len_data; i++) {
-        if (!file_read_double(f, data + i)) {
-            printf("data\n");
-            goto exit_matrix_allocated;
-        }
+    if (!file_read_double_array(f, data, len_data)) {
+        free(data);
+        goto exit_matrix_allocated;
     }
 
     mat->values = data;
