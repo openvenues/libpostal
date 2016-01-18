@@ -36,22 +36,46 @@ bool is_relative_path(struct dirent *ent) {
     return strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0;
 }
 
+inline uint64_t file_deserialize_uint64(unsigned char *buf) {
+    return ((uint64_t)buf[0] << 56) | 
+           ((uint64_t)buf[1] << 48) |
+           ((uint64_t)buf[2] << 40) |
+           ((uint64_t)buf[3] << 32) |
+           ((uint64_t)buf[4] << 24) |
+           ((uint64_t)buf[5] << 16) |
+           ((uint64_t)buf[6] << 8) |
+            (uint64_t)buf[7];
+}
+
 bool file_read_uint64(FILE *file, uint64_t *value) {
     unsigned char buf[8];
 
     if (fread(buf, 8, 1, file) == 1) {
-        *value = ((uint64_t)buf[0] << 56) | 
-                 ((uint64_t)buf[1] << 48) |
-                 ((uint64_t)buf[2] << 40) |
-                 ((uint64_t)buf[3] << 32) |
-                 ((uint64_t)buf[4] << 24) |
-                 ((uint64_t)buf[5] << 16) |
-                 ((uint64_t)buf[6] << 8) |
-                  (uint64_t)buf[7];
+        *value = file_deserialize_uint64(buf);
         return true;
     }
     return false;
 }
+
+bool file_read_uint64_array(FILE *file, uint64_t *value, size_t n) {
+    unsigned char *buf = malloc(n * sizeof(uint64_t));
+
+    if (buf == NULL) return false;
+
+    bool ret = false;
+
+    if (fread(buf, sizeof(uint64_t), n, file) == n) {
+
+        for (size_t i = 0, byte_offset = 0; i < n; i++, byte_offset += sizeof(uint64_t)) {
+            unsigned char *ptr = buf + byte_offset;
+            value[i] = file_deserialize_uint64(ptr);
+        }
+        ret = true;
+    }
+    free(buf);
+    return ret;
+}
+
 
 bool file_write_uint64(FILE *file, uint64_t value) {
     unsigned char buf[8];
@@ -67,31 +91,81 @@ bool file_write_uint64(FILE *file, uint64_t value) {
     return (fwrite(buf, 8, 1, file) == 1);
 }
 
+typedef union {
+    uint64_t u;
+    double d;
+} uint64_double_t;
 
 bool file_read_double(FILE *file, double *value) {
-    uint64_t int_val;
-    if (!file_read_uint64(file, &int_val)) {
+    uint64_double_t ud;
+    if (!file_read_uint64(file, &ud.u)) {
         return false;
     }
-    memcpy(value, &int_val, sizeof(*value));
+    *value = ud.d;
     return true;
 }
 
+bool file_read_double_array(FILE *file, double *value, size_t n) {
+    unsigned char *buf = malloc(n * sizeof(uint64_t));
+
+    if (buf == NULL) return false;
+
+    bool ret = false;
+
+    if (fread(buf, sizeof(uint64_t), n, file) == n) {
+        uint64_double_t ud;
+
+        for (size_t i = 0, byte_offset = 0; i < n; i++, byte_offset += sizeof(uint64_t)) {
+            unsigned char *ptr = buf + byte_offset;
+            ud.u = file_deserialize_uint64(ptr);
+            value[i] = ud.d;
+        }
+        ret = true;
+    }
+    free(buf);
+    return ret;
+}
+
 bool file_write_double(FILE *file, double value) {
-    uint64_t int_val;
-    memcpy(&int_val, &value, sizeof(value));
-    return file_write_uint64(file, int_val);
+    uint64_double_t ud;
+    ud.d = value;
+    return file_write_uint64(file, ud.u);
+}
+
+
+inline uint32_t file_deserialize_uint32(unsigned char *buf) {
+    return (buf[0] << 24) | (buf[1] << 16) | (buf[2] << 8) | buf[3];
 }
 
 bool file_read_uint32(FILE *file, uint32_t *value) {
     unsigned char buf[4];
 
     if (fread(buf, 4, 1, file) == 1) {
-        *value = (buf[0] << 24) | (buf[1] << 16) | (buf[2] << 8) | buf[3];
+        *value = file_deserialize_uint32(buf);
         return true;
     }
     return false;
 }
+
+bool file_read_uint32_array(FILE *file, uint32_t *value, size_t n) {
+    unsigned char *buf = malloc(n * sizeof(uint32_t));
+
+    if (buf == NULL) return false;
+
+    bool ret = false;
+
+    if (fread(buf, sizeof(uint32_t), n, file) == n) {
+
+        for (size_t i = 0, byte_offset = 0; i < n; i++, byte_offset += sizeof(uint32_t)) {
+            unsigned char *ptr = buf + byte_offset;
+            value[i] = file_deserialize_uint32(ptr);
+        }
+        ret = true;
+    }
+    free(buf);
+    return ret;
+}
+
 
 bool file_write_uint32(FILE *file, uint32_t value) {
     unsigned char buf[4];
@@ -103,11 +177,17 @@ bool file_write_uint32(FILE *file, uint32_t value) {
     return (fwrite(buf, 4, 1, file) == 1);
 }
 
+
+inline uint16_t file_deserialize_uint16(unsigned char *buf) {
+    return (buf[0] << 8) | buf[1];
+}
+
+
 bool file_read_uint16(FILE *file, uint16_t *value) {
     unsigned char buf[2];
 
     if (fread(buf, 2, 1, file) == 1) {
-        *value = (buf[0] << 8) | buf[1];
+        *value = file_deserialize_uint16(buf);
         return true;
     }
     return false;

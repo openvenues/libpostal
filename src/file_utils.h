@@ -55,15 +55,24 @@ char *file_getline(FILE * f);
 
 bool is_relative_path(struct dirent *ent);
 
+uint64_t file_deserialize_uint64(unsigned char *buf);
 bool file_read_uint64(FILE *file, uint64_t *value);
 bool file_write_uint64(FILE *file, uint64_t value);
+
+bool file_read_uint64_array(FILE *file, uint64_t *value, size_t n);
 
 bool file_read_double(FILE *file, double *value);
 bool file_write_double(FILE *file, double value);
 
+bool file_read_double_array(FILE *file, double *value, size_t n);
+
+uint32_t file_deserialize_uint32(unsigned char *buf);
 bool file_read_uint32(FILE *file, uint32_t *value);
 bool file_write_uint32(FILE *file, uint32_t value);
 
+bool file_read_uint32_array(FILE *file, uint32_t *value, size_t n);
+
+uint16_t file_deserialize_uint16(unsigned char *buf);
 bool file_read_uint16(FILE *file, uint16_t *value);
 bool file_write_uint16(FILE *file, uint16_t value);
 
@@ -74,3 +83,4 @@ bool file_read_chars(FILE *file, char *buf, size_t len);
 bool file_write_chars(FILE *file, const char *buf, size_t len);
 
 #endif
+
