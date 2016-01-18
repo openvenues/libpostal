@@ -1473,7 +1473,7 @@ script_transliterators = {
     'lepcha': None,
     'limbu': None,
     'lisu': None,
-    'malayalam': {None: ['malayam-latin']},
+    'malayalam': {None: ['malayalam-latin']},
     'mandaic': None,
     'meetei_mayek': None,
     'mongolian': None,
