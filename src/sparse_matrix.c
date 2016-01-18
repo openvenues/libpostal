@@ -113,7 +113,7 @@ void sparse_matrix_sort_indices(sparse_matrix_t *self) {
 
 
 inline int sparse_matrix_dot_vector(sparse_matrix_t *self, double *vec, size_t n, double *result) {
-    if (n != self->n) {printf("self->n=%zu, n=%zu\n", self->n, n); return -1; }
+    if (n != self->n) return -1;
 
     uint32_t row, row_start, row_len;
     double val;
@@ -331,21 +331,17 @@ sparse_matrix_t *sparse_matrix_read(FILE *f) {
     uint64_t len_indptr;
 
     if (!file_read_uint64(f, &len_indptr)) {
-        printf("len_indptr\n");
         goto exit_sparse_matrix_allocated;
     }
 
     uint32_array *indptr = uint32_array_new_size(len_indptr);
     if (indptr == NULL) {
-        printf("indptr alloc\n");
         goto exit_sparse_matrix_allocated;
     }
 
-    for (int i = 0; i < len_indptr; i++) {
-        if (!file_read_uint32(f, indptr->a + i)) {
-            printf("indptr\n");
-            goto exit_sparse_matrix_allocated;
-        }
+    if (!file_read_uint32_array(f, indptr->a, len_indptr)) {
+        uint32_array_destroy(indptr);
+        goto exit_sparse_matrix_allocated;
     }
 
     indptr->n = (size_t)len_indptr;
@@ -354,21 +350,17 @@ sparse_matrix_t *sparse_matrix_read(FILE *f) {
     uint64_t len_indices;
 
     if (!file_read_uint64(f, &len_indices)) {
-        printf("len_indices\n");
         goto exit_sparse_matrix_allocated;
     }
 
     uint32_array *indices = uint32_array_new_size(len_indices);
     if (indices == NULL) {
-        printf("indices alloc\n");
         goto exit_sparse_matrix_allocated;
     }
 
-    for (int i = 0; i < len_indices; i++) {
-        if (!file_read_uint32(f, indices->a + i)) {
-            printf("indices\n");
-            goto exit_sparse_matrix_allocated;
-        }
+    if (!file_read_uint32_array(f, indices->a, len_indices)) {
+        uint32_array_destroy(indices);
+        goto exit_sparse_matrix_allocated;
     }
 
     indices->n = (size_t)len_indices;
@@ -377,21 +369,17 @@ sparse_matrix_t *sparse_matrix_read(FILE *f) {
     uint64_t len_data;
 
     if (!file_read_uint64(f, &len_data)) {
-        printf("len_data\n");
         goto exit_sparse_matrix_allocated;
     }
 
     double_array *data = double_array_new_size(len_data);
     if (data == NULL) {
-        printf("data alloc\n");
         goto exit_sparse_matrix_allocated;
     }
 
-    for (int i = 0; i < len_data; i++) {
-        if (!file_read_double(f, data->a + i)) {
-            printf("data\n");
-            goto exit_sparse_matrix_allocated;
-        }
+    if (!file_read_double_array(f, data->a, len_data)) {
+        double_array_destroy(data);
+        goto exit_sparse_matrix_allocated;
     }
 
     data->n = (size_t)len_data;
