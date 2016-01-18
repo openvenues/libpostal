@@ -13,7 +13,6 @@
 #define MIN_PROB (0.05 - DBL_EPSILON)
 
 static language_classifier_t *language_classifier = NULL;
-static language_classifier_t *language_classifier_country = NULL;
 
 void language_classifier_destroy(language_classifier_t *self) {
     if (self == NULL) return;
@@ -42,19 +41,22 @@ language_classifier_t *get_language_classifier(void) {
     return language_classifier;
 }
 
-language_classifier_t *get_language_classifier_country(void) {
-    return language_classifier_country;
-}
-
-language_classifier_response_t *classify_languages(char *address, char *country) {
-    language_classifier_t *classifier = NULL;
-
-    if (country == NULL) {
-        classifier = get_language_classifier();
-    } else {
-        classifier = get_language_classifier_country();
+void language_classifier_response_destroy(language_classifier_response_t *self) {
+    if (self == NULL) return;
+    if (self->languages != NULL) {
+        free(self->languages);
     }
 
+    if (self->probs) {
+        free(self->probs);
+    }
+
+    free(self);
+}
+
+language_classifier_response_t *classify_languages(char *address) {
+    language_classifier_t *classifier = get_language_classifier();
+    
     if (classifier == NULL) {
         log_error("classifier NULL\n");
         return NULL;
@@ -65,7 +67,23 @@ language_classifier_response_t *classify_languages(char *address, char *country)
     token_array *tokens = token_array_new();
     char_array *feature_array = char_array_new();
 
-    khash_t(str_double) *feature_counts = extract_language_features(normalized, country, tokens, feature_array);
+    khash_t(str_double) *feature_counts = extract_language_features(normalized, NULL, tokens, feature_array);
+    if (feature_counts == NULL || kh_size(feature_counts) == 0) {
+        token_array_destroy(tokens);
+        char_array_destroy(feature_array);
+        if (feature_counts != NULL) {
+            kh_destroy(str_double, feature_counts);
+        }
+        free(normalized);
+        return NULL;
+    }
+
+    const char *f;
+    double c;
+    kh_foreach(feature_counts, f, c, {
+        printf("%s (%f)\n", f, c);
+    })
+    printf("\n");
 
     sparse_matrix_t *x = feature_vector(classifier->features, feature_counts);
 
@@ -112,7 +130,8 @@ language_classifier_response_t *classify_languages(char *address, char *country)
         response->probs = probs;
     }
 
-exit_tokens_created:
+    sparse_matrix_destroy(x);
+    matrix_destroy(p_y);
     token_array_destroy(tokens);
     char_array_destroy(feature_array);
     const char *key;
@@ -120,6 +139,7 @@ exit_tokens_created:
         free((char *)key);
     })
     kh_destroy(str_double, feature_counts);
+    free(normalized);
     return response;
 
 }
@@ -235,7 +255,7 @@ bool language_classifier_save(language_classifier_t *self, char *path) {
 // Module setup/teardown
 
 bool language_classifier_module_setup(char *dir) {
-    if (language_classifier != NULL && language_classifier_country != NULL) {
+    if (language_classifier != NULL) {
         return true;
     }
 
@@ -245,21 +265,12 @@ bool language_classifier_module_setup(char *dir) {
 
     char *classifier_path;
 
-    char_array *path = char_array_new_size(strlen(dir) + PATH_SEPARATOR_LEN + strlen(LANGUAGE_CLASSIFIER_COUNTRY_FILENAME));
+    char_array *path = char_array_new_size(strlen(dir) + PATH_SEPARATOR_LEN + strlen(LANGUAGE_CLASSIFIER_FILENAME));
     if (language_classifier == NULL) {
         char_array_cat_joined(path, PATH_SEPARATOR, true, 2, dir, LANGUAGE_CLASSIFIER_FILENAME);
         classifier_path = char_array_get_string(path);
 
         language_classifier = language_classifier_load(classifier_path);
-
-    }
-
-    if (language_classifier_country == NULL) {
-        char_array_clear(path);
-        char_array_cat_joined(path, PATH_SEPARATOR, true, 2, dir, LANGUAGE_CLASSIFIER_COUNTRY_FILENAME);
-        classifier_path = char_array_get_string(path);
-
-        language_classifier_country = language_classifier_load(classifier_path);
 
     }
 
@@ -270,10 +281,6 @@ bool language_classifier_module_setup(char *dir) {
 void language_classifier_module_teardown(void) {
     if (language_classifier != NULL) {
         language_classifier_destroy(language_classifier);
-    }
-
-    if (language_classifier_country != NULL) {
-        language_classifier_destroy(language_classifier_country);
     }
 }
 

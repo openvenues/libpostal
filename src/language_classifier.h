@@ -37,7 +37,8 @@ language_classifier_t *language_classifier_new(void);
 language_classifier_t *get_language_classifier(void);
 language_classifier_t *get_language_classifier_country(void);
 
-language_classifier_response_t *classify_languages(char *address, char *country);
+language_classifier_response_t *classify_languages(char *address);
+void language_classifier_response_destroy(language_classifier_response_t *self);
 
 void language_classifier_destroy(language_classifier_t *self);
 
