@@ -35,7 +35,7 @@ def main():
                                          )
                                ] + ['geodata/text/pytokenize.c'],
                       include_dirs=[PROJECT_DIR],
-                      extra_compile_args=['-O0', '-std=c99',
+                      extra_compile_args=['-O0', '-std=gnu99',
                                           '-Wno-unused-function'],
                       ),
             Extension('geodata.text._normalize',
@@ -51,7 +51,7 @@ def main():
                                          'trie_search.c',)
                                ] + ['geodata/text/pynormalize.c'],
                       include_dirs=[PROJECT_DIR],
-                      extra_compile_args=['-std=c99', '-DHAVE_CONFIG_H',
+                      extra_compile_args=['-std=gnu99', '-DHAVE_CONFIG_H',
                                           '-Wno-unused-function'],
                       ),
         ],
