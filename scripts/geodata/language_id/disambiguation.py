@@ -140,11 +140,11 @@ class DictionaryPhraseFilter(PhraseFilter):
 
                 suffix_search, suffix_len = self.search_suffix(token)
                 if suffix_search and self.trie.get(token[(token_len - suffix_len):].rstrip('.')):
-                    yield (token_types.PHRASE, [(c,) + t], suffix_search)
+                    yield (t, PHRASE, suffix_search)
                     continue
                 prefix_search, prefix_len = self.search_prefix(token)
                 if prefix_search and self.trie.get(token[:prefix_len]):
-                    yield (token_types.PHRASE, [(c,) + t], prefix_search)
+                    yield (t, PHRASE, prefix_search)
                     continue
             else:
                 c = PHRASE
