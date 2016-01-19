@@ -9,7 +9,7 @@ for language detection and address parser training set
 construction.
 '
 
-if [ "$#" -gte 1 ]; then
+if [ "$#" -ge 1 ]; then
     OUT_DIR=$1
 else
     OUT_DIR=`pwd`
