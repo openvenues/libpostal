@@ -53,6 +53,16 @@ def remove_parens(tokens):
     return new_tokens
 
 
+def normalize_string(s, string_options=DEFAULT_STRING_OPTIONS):
+    s = safe_decode(s)
+    if string_options & _normalize.NORMALIZE_STRING_LATIN_ASCII:
+        normalized = _normalize.normalize_string_latin(s, string_options)
+    else:
+        normalized = _normalize.normalize_string_utf8(s, string_options)
+
+    return normalized
+
+
 def normalized_tokens(s, string_options=DEFAULT_STRING_OPTIONS,
                       token_options=DEFAULT_TOKEN_OPTIONS,
                       strip_parentheticals=True):
@@ -67,11 +77,7 @@ def normalized_tokens(s, string_options=DEFAULT_STRING_OPTIONS,
     Usage:
         normalized_tokens(u'St.-Barthélemy')
     '''
-    s = safe_decode(s)
-    if string_options & _normalize.NORMALIZE_STRING_LATIN_ASCII:
-        normalized = _normalize.normalize_string_latin(s, string_options)
-    else:
-        normalized = _normalize.normalize_string_utf8(s, string_options)
+    normalized = normalize_string(s, string_options=string_options)
 
     # Tuples of (offset, len, type)
     raw_tokens = tokenize_raw(normalized)
