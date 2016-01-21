@@ -1,4 +1,4 @@
-agosto|ago
+agosto|ag|ago
 altezza|alt.za|altza
 altezze|alt.ze|altze
 antica|ant.a|anta
@@ -33,11 +33,11 @@ commerciale|comm.le|commle
 comunale|com.le|comle
 comunità|comunita|com.ta|comta
 decembre|dec
-dicembre|dic
+dicembre|dic|10.bre|10bre|10 bre|x.bre|xbre|x bre
 distretto|distr.o|distro
 diversivo|div.vo|divvo
 fanteria|fant.a|fanta
-febbraio|feb|fev
+febbraio|febbr|feb|fev
 fontanile|font.ile|fontile
 fonte|f.te|fte
 fosso|f.so|fso
@@ -77,7 +77,7 @@ lago|l
 laguna|lag.a
 lunghi|l.ghi|lghi
 lungo|l.go|lgo
-maggio|mag
+maggio|magg|mag
 maddalena|madd.na|maddna
 madonna|mad.na|madna
 madonne|mad.ne|madne
@@ -101,15 +101,15 @@ nazionale|naz.le|nazle
 nazionali|naz.li|nazli
 nostra|n.ra|nra
 nostro|n.ro|nro
-novembre|nov
+novembre|nov|9.bre|9bre|9 bre|9.mbre|9mbre|9 mbre
 nuova|n.va|nva
 nuove|n.ve|nve
 nuovi|n.vi|nvi
 nuovo|n.vo|nvo
-ottobre|ott
+ottobre|ott|8.bre|8bre|8 bre
 penisola|penis.a
 piccola|p.cola|pcola
 piccole|p.cole|pcole
 piccoli|p.coli|pcoli
 piccolo|p.colo|pcolo
-settembre|set
+settembre|sett|set|7.bre|7bre|7 bre
