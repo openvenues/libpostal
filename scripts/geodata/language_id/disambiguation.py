@@ -100,9 +100,9 @@ class DictionaryPhraseFilter(PhraseFilter):
                         elif is_prefix_dictionary:
                             phrase = PREFIX_KEY + phrase
 
-                        kvs[phrase][(lang, dictionary_name)] = (is_canonical, canonical)
+                        kvs[phrase][(lang, dictionary_name, canonical)] = is_canonical
 
-        kvs = [(k, '|'.join([l, d, str(int(i)), safe_encode(c)])) for k, vals in kvs.iteritems() for (l, d), (i, c) in vals.iteritems()]
+        kvs = [(k, '|'.join([l, d, str(int(i)), safe_encode(c)])) for k, vals in kvs.iteritems() for (l, d, c), i in vals.iteritems()]
 
         self.trie = BytesTrie(kvs)
         self.configured = True
@@ -144,15 +144,15 @@ class DictionaryPhraseFilter(PhraseFilter):
 
                 suffix_search, suffix_len = self.search_suffix(token)
                 if suffix_search and self.trie.get(token[(token_len - suffix_len):].rstrip('.')):
-                    yield (t, PHRASE, map(safe_decode, suffix_search))
+                    yield (t, PHRASE, suffix_len, map(safe_decode, suffix_search))
                     continue
                 prefix_search, prefix_len = self.search_prefix(token)
                 if prefix_search and self.trie.get(token[:prefix_len]):
-                    yield (t, PHRASE, map(safe_decode, prefix_search))
+                    yield (t, PHRASE, prefix_len, map(safe_decode, prefix_search))
                     continue
             else:
                 c = PHRASE
-            yield t, c, map(safe_decode, data)
+            yield t, c, len(t), map(safe_decode, data)
 
 STREET_TYPES_DICTIONARIES = ('street_types.txt',
                              'directionals.txt',
@@ -258,7 +258,7 @@ def disambiguate_language(text, languages):
 
     seen_languages = set()
 
-    for t, c, data in street_types_gazetteer.filter(tokens):
+    for t, c, l, data in street_types_gazetteer.filter(tokens):
         if c is PHRASE:
             valid = []
             data = [d.split('|') for d in data]
