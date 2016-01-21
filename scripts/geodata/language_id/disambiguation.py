@@ -15,7 +15,7 @@ from geodata.string_utils import wide_iter, wide_ord
 from geodata.i18n.unicode_paths import DATA_DIR
 from geodata.i18n.normalize import strip_accents
 from geodata.i18n.unicode_properties import get_chars_by_script, get_script_languages
-from geodata.text.normalize import normalized_tokens
+from geodata.text.normalize import normalized_tokens, normalize_string
 from geodata.text.tokenize import tokenize, token_types
 from geodata.text.phrases import PhraseFilter
 
@@ -53,6 +53,7 @@ class DictionaryPhraseFilter(PhraseFilter):
 
     def __init__(self, *dictionaries):
         self.dictionaries = dictionaries
+        self.canonicals = {}
 
     def serialize(self, s):
         return s
@@ -66,8 +67,8 @@ class DictionaryPhraseFilter(PhraseFilter):
             for filename in self.dictionaries:
                 is_suffix_dictionary = 'suffixes' in filename
                 is_prefix_dictionary = 'prefixes' in filename
-                is_street_types_dictionary = 'street_types' in filename
-                is_stopword_dictionary = 'stopwords' in filename
+
+                dictionary_name = filename.split('.', 1)[0]
 
                 path = os.path.join(DICTIONARIES_DIR, lang, filename)
                 if not os.path.exists(path):
@@ -81,24 +82,27 @@ class DictionaryPhraseFilter(PhraseFilter):
                     phrases = safe_decode(line).split(u'|')
                     if not phrases:
                         continue
-                    canonical = strip_accents(phrases[0])
 
-                    for phrase in phrases:
+                    canonical = phrases[0]
+                    canonical_normalized = normalize_string(canonical)
+
+                    self.canonicals[(canonical, lang, dictionary_name)] = phrases[1:]
+
+                    for i, phrase in enumerate(phrases):
 
                         if phrase in POSSIBLE_ROMAN_NUMERALS:
                             continue
 
-                        is_canonical = strip_accents(phrase) == canonical
+                        is_canonical = normalize_string(phrase) == canonical_normalized
 
                         if is_suffix_dictionary:
                             phrase = SUFFIX_KEY + phrase[::-1]
                         elif is_prefix_dictionary:
                             phrase = PREFIX_KEY + phrase
 
-                        if is_canonical or is_street_types_dictionary or is_prefix_dictionary or is_suffix_dictionary:
-                            kvs[phrase][lang] = (is_canonical, is_stopword_dictionary)
+                        kvs[phrase][(lang, dictionary_name)] = (is_canonical, canonical)
 
-        kvs = [(k, '|'.join([v, str(int(c)), str(int(s))])) for k, vals in kvs.iteritems() for v, (c, s) in vals.iteritems()]
+        kvs = [(k, '|'.join([l, d, str(int(i)), safe_encode(c)])) for k, vals in kvs.iteritems() for (l, d), (i, c) in vals.iteritems()]
 
         self.trie = BytesTrie(kvs)
         self.configured = True
@@ -140,15 +144,15 @@ class DictionaryPhraseFilter(PhraseFilter):
 
                 suffix_search, suffix_len = self.search_suffix(token)
                 if suffix_search and self.trie.get(token[(token_len - suffix_len):].rstrip('.')):
-                    yield (t, PHRASE, suffix_search)
+                    yield (t, PHRASE, map(safe_decode, suffix_search))
                     continue
                 prefix_search, prefix_len = self.search_prefix(token)
                 if prefix_search and self.trie.get(token[:prefix_len]):
-                    yield (t, PHRASE, prefix_search)
+                    yield (t, PHRASE, map(safe_decode, prefix_search))
                     continue
             else:
                 c = PHRASE
-            yield t, c, data
+            yield t, c, map(safe_decode, data)
 
 STREET_TYPES_DICTIONARIES = ('street_types.txt',
                              'directionals.txt',
@@ -192,8 +196,9 @@ script_languages = {}
 
 def init_disambiguation():
     global char_scripts, script_languages
-    char_scripts = get_chars_by_script()
-    script_languages = {script: set(langs) for script, langs in get_script_languages().iteritems()}
+    char_scripts[:] = []
+    char_scripts.extend(get_chars_by_script())
+    script_languages.update({script: set(langs) for script, langs in get_script_languages().iteritems()})
 
 UNKNOWN_SCRIPT = 'Unknown'
 COMMON_SCRIPT = 'Common'
@@ -257,24 +262,24 @@ def disambiguate_language(text, languages):
         if c is PHRASE:
             valid = []
             data = [d.split('|') for d in data]
-            potentials = [l for l, c, s in data if l in valid_languages]
+            potentials = [l for l, d, i, c in data if l in valid_languages]
 
-            for lang, canonical, stopword in data:
-                canonical = int(canonical)
-                stopword = int(stopword)
-                if lang not in valid_languages or (stopword and len(potentials) > 1):
+            for lang, dictionary, is_canonical, canonical in data:
+                is_canonical = int(is_canonical)
+                is_stopword = dictionary == 'stopword'
+                if lang not in valid_languages or (is_stopword and len(potentials) > 1):
                     continue
                 is_default = valid_languages[lang]
 
                 lang_valid = is_default or not seen_languages or lang in seen_languages
 
-                if lang_valid and ((canonical and not stopword) or (is_default and len(potentials) == 1)):
+                if lang_valid and ((is_canonical and not is_stopword) or (is_default and len(potentials) == 1)):
                     valid.append(lang)
                 elif is_default and num_defaults > 1 and current_lang is not None and current_lang != lang:
                     return AMBIGUOUS_LANGUAGE
-                elif stopword and canonical and not is_default and lang in seen_languages:
+                elif is_stopword and is_canonical and not is_default and lang in seen_languages:
                     valid.append(lang)
-                elif not seen_languages and len(potentials) == 1 and len(t[0][1]) > 1:
+                elif not seen_languages and len(potentials) == 1 and len(t[0][0]) > 1:
                     possible_lang = lang if possible_lang is None or possible_lang == lang else None
 
             if seen_languages and valid and not any((l in seen_languages for l in valid)) and \
