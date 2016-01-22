@@ -382,6 +382,14 @@ def osm_abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.
 
             added = False
 
+            if random.random() > abbreviate_prob:
+                for j, (t_i, c_i) in enumerate(t):
+                    abbreviated.append(tokens[i + j][0])
+                    if c_i != token_types.IDEOGRAPHIC_CHAR:
+                        abbreviated.append(u' ')
+                i += len(t)
+                continue
+
             for lang, dictionary, is_canonical, canonical in data:
                 if lang not in (language, 'all'):
                     continue
@@ -395,7 +403,7 @@ def osm_abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.
                 suffix = None
                 prefix = None
 
-                if not is_canonical or random.random() > abbreviate_prob:
+                if not is_canonical:
                     continue
 
                 if not is_prefix and not is_suffix:
@@ -405,7 +413,7 @@ def osm_abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.
                     abbreviated.append(token)
                     if t[-1][1] != token_types.IDEOGRAPHIC_CHAR:
                         abbreviated.append(u' ')
-                    added = True
+                    break
                 elif is_prefix:
                     token = tokens[i][0]
                     prefix, token = token[:length], token[length:]
@@ -417,7 +425,7 @@ def osm_abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.
                     else:
                         abbreviated.append(token)
                     abbreviated.append(u' ')
-                    added = True
+                    break
                 elif is_suffix:
                     token = tokens[i][0]
 
@@ -451,9 +459,8 @@ def osm_abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.
                     else:
                         abbreviated.append(abbreviation)
                     abbreviated.append(u' ')
-                    added = True
-
-            if not added:
+                    break
+            else:
                 for j, (t_i, c_i) in enumerate(t):
                     abbreviated.append(tokens[i + j][0])
                     if c_i != token_types.IDEOGRAPHIC_CHAR:
@@ -1392,7 +1399,7 @@ def build_toponym_training_data(language_rtree, infile, out_dir):
     writer = csv.writer(f, 'tsv_no_quote')
 
     for key, value, deps in parse_osm(infile):
-        if not sum((1 for k, v in value.iteritems() if k.startswith('name'))) > 0:
+        if not any((k.startswith('name') for k, v in value.iteritems())):
             continue
 
         try:
