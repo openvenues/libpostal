@@ -1324,7 +1324,7 @@ class OSMAddressFormatter(object):
 
         for node_id, value, deps in parse_osm(infile):
             formatted_address, country, language = self.formatted_address_limited(value)
-            if not formatted_addresses:
+            if not formatted_address:
                 continue
 
             if formatted_address.strip():
