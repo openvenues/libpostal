@@ -41,9 +41,6 @@ def init_disambiguation():
     char_scripts.extend(get_chars_by_script())
     script_languages.update({script: set(langs) for script, langs in get_script_languages().iteritems()})
 
-    for g in gazetteers:
-        g.configure()
-
 UNKNOWN_SCRIPT = 'Unknown'
 COMMON_SCRIPT = 'Common'
 MAX_ASCII = 127
