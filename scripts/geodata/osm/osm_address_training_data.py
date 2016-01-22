@@ -537,7 +537,11 @@ class OSMAddressFormatter(object):
         AddressFormatter.CITY_DISTRICT,
         AddressFormatter.STATE_DISTRICT,
         AddressFormatter.STATE,
-        AddressFormatter.COUNTRY,
+    }
+
+    state_important = {
+        'US',
+        'CA',
     }
 
     def __init__(self, admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames, splitter=None):
@@ -1141,7 +1145,7 @@ class OSMAddressFormatter(object):
 
         return address_components, country, language
 
-    def formatted_addresses(self, value, dropout_prob=0.5, rare_component_dropout_prob=0.7, tag_components=True):
+    def formatted_addresses(self, value, dropout_prob=0.5, rare_component_dropout_prob=0.6, tag_components=True):
         '''
         Formatted addresses
         -------------------
@@ -1187,6 +1191,11 @@ class OSMAddressFormatter(object):
             if not address_components:
                 return []
 
+            current_components = []
+            current_components_rare = []
+
+            state_important = country.upper() in self.state_important
+
             current_components = [k for k in address_components.keys() if k not in self.rare_components]
             current_components_rare = [k for k in address_components.keys() if k in self.rare_components]
             random.shuffle(current_components)
@@ -1197,6 +1206,11 @@ class OSMAddressFormatter(object):
 
             for component in current_components:
                 prob = rare_component_dropout_prob if component in self.rare_components else dropout_prob
+
+                if component not in self.rare_components or (component == AddressFormatter.STATE and state_important):
+                    prob = dropout_prob
+                else:
+                    prob = rare_component_dropout_prob
 
                 if component_set ^ OSM_ADDRESS_COMPONENT_VALUES[component] in OSM_ADDRESS_COMPONENTS_VALID and random.random() < prob:
                     address_components.pop(component)
