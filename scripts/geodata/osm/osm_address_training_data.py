@@ -54,6 +54,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
 
+from geodata.address_expansions.gazetteers import *
 from geodata.coordinates.conversion import *
 from geodata.countries.country_names import *
 from geodata.geonames.db import GeoNamesDB
@@ -1591,6 +1592,7 @@ if __name__ == '__main__':
     init_country_names()
     init_languages()
     init_disambiguation()
+    init_gazetteers()
 
     language_rtree = LanguagePolygonIndex.load(args.language_rtree_dir)
     osm_rtree = None
@@ -1609,8 +1611,6 @@ if __name__ == '__main__':
 
     if args.geonames_db:
         geonames = GeoNamesDB(args.geonames_db)
-
-    street_types_gazetteer.configure()
 
     # Can parallelize
     if args.streets_file:
