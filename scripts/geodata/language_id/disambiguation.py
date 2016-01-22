@@ -144,11 +144,11 @@ class DictionaryPhraseFilter(PhraseFilter):
 
                 suffix_search, suffix_len = self.search_suffix(token)
                 if suffix_search and self.trie.get(token[(token_len - suffix_len):].rstrip('.')):
-                    yield (t, PHRASE, suffix_len, map(safe_decode, suffix_search))
+                    yield ([(t, c)], PHRASE, suffix_len, map(safe_decode, suffix_search))
                     continue
                 prefix_search, prefix_len = self.search_prefix(token)
                 if prefix_search and self.trie.get(token[:prefix_len]):
-                    yield (t, PHRASE, prefix_len, map(safe_decode, prefix_search))
+                    yield ([(t, c)], PHRASE, prefix_len, map(safe_decode, prefix_search))
                     continue
             else:
                 c = PHRASE
@@ -159,6 +159,11 @@ STREET_TYPES_DICTIONARIES = ('street_types.txt',
                              'concatenated_suffixes_separable.txt',
                              'concatenated_suffixes_inseparable.txt',
                              'concatenated_prefixes_separable.txt',
+                             'organizations.txt',
+                             'people.txt',
+                             'personal_suffixes.txt',
+                             'personal_titles.txt',
+                             'qualifiers.txt',
                              'stopwords.txt',)
 
 GIVEN_NAME_DICTIONARY = 'given_names.txt'
@@ -167,28 +172,46 @@ SURNAME_DICTIONARY = 'surnames.txt'
 NAME_DICTIONARIES = (GIVEN_NAME_DICTIONARY,
                      SURNAME_DICTIONARY,)
 
-ALL_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + ('academic_degrees.txt',
-                                                             'building_types.txt',
-                                                             'company_types.txt',
-                                                             'directionals.txt',
-                                                             'level_types.txt',
-                                                             'no_number.txt',
-                                                             'nulls.txt',
-                                                             'organizations.txt',
-                                                             'people.txt',
-                                                             'personal_suffixes.txt',
-                                                             'personal_titles.txt',
-                                                             'place_names.txt',
-                                                             'post_office.txt',
-                                                             'qualifiers.txt',
-                                                             'synonyms.txt',
-                                                             'toponyms.txt',
-                                                             'unit_types.txt',
-                                                             )
 
-street_types_gazetteer = DictionaryPhraseFilter(*STREET_TYPES_DICTIONARIES)
-abbreviations_gazetteer = DictionaryPhraseFilter(*ALL_ABBREVIATION_DICTIONARIES)
-given_name_gazetteer = DictionaryPhraseFilter(GIVEN_NAME_DICTIONARY)
+
+NAME_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + ('academic_degrees.txt',
+                                                              'building_types.txt',
+                                                              'company_types.txt',
+                                                              'place_names.txt',
+                                                              'qualifiers.txt',
+                                                              'synonyms.txt',
+                                                              'toponyms.txt',
+                                                              )
+
+
+UNIT_ABBREVIATION_DICTIONARIES = ('level_types.txt',
+                                  'post_office.txt',
+                                  'unit_types.txt',
+                                  )
+
+
+ALL_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + \
+    NAME_ABBREVIATION_DICTIONARIES + \
+    UNIT_ABBREVIATION_DICTIONARIES + \
+    ('no_number.txt', 'nulls.txt',)
+
+
+gazetteers = []
+
+
+def create_gazetteer(*dictionaries):
+    g = DictionaryPhraseFilter(*dictionaries)
+    gazetteers.append(g)
+    return g
+
+
+street_types_gazetteer = create_gazetteer(*STREET_TYPES_DICTIONARIES)
+names_gazetteer = create_gazetteer(*NAME_ABBREVIATION_DICTIONARIES)
+unit_types_gazetteer = create_gazetteer(*UNIT_ABBREVIATION_DICTIONARIES)
+street_and_unit_types_gazetteer = create_gazetteer(*(STREET_TYPES_DICTIONARIES + UNIT_ABBREVIATION_DICTIONARIES))
+abbreviations_gazetteer = create_gazetteer(*ALL_ABBREVIATION_DICTIONARIES)
+given_name_gazetteer = create_gazetteer(GIVEN_NAME_DICTIONARY)
+
 
 char_scripts = []
 script_languages = {}
@@ -199,6 +222,9 @@ def init_disambiguation():
     char_scripts[:] = []
     char_scripts.extend(get_chars_by_script())
     script_languages.update({script: set(langs) for script, langs in get_script_languages().iteritems()})
+
+    for g in gazetteers:
+        g.configure()
 
 UNKNOWN_SCRIPT = 'Unknown'
 COMMON_SCRIPT = 'Common'
