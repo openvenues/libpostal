@@ -529,6 +529,8 @@ class OSMAddressFormatter(object):
         AddressFormatter.SUBURB,
         AddressFormatter.CITY_DISTRICT,
         AddressFormatter.STATE_DISTRICT,
+        AddressFormatter.STATE,
+        AddressFormatter.COUNTRY,
     }
 
     def __init__(self, admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames, splitter=None):
@@ -1178,9 +1180,12 @@ class OSMAddressFormatter(object):
             if not address_components:
                 return []
 
-            current_components = address_components.keys()
+            current_components = [k for k in address_components.keys() if k not in self.rare_components]
+            current_components_rare = [k for k in address_components.keys() if k in self.rare_components]
             random.shuffle(current_components)
+            random.shuffle(current_components_rare)
 
+            current_components = current_components_rare + current_components
             component_set = component_bitset(address_components.keys())
 
             for component in current_components:
