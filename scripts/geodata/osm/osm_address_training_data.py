@@ -710,7 +710,7 @@ class OSMAddressFormatter(object):
                 venue_names.append(venue_name)
         return venue_names
 
-    def state_name(self, address_components, country, language, non_local_language=None, state_full_name_prob=0.3):
+    def state_name(self, address_components, country, language, non_local_language=None, state_full_name_prob=0.4):
         '''
         States
         ------
@@ -1038,7 +1038,7 @@ class OSMAddressFormatter(object):
         if address_country:
             address_components[AddressFormatter.COUNTRY] = address_country
 
-        address_state = self.state_name(address_components, country, language, non_local_language=non_local_language, state_full_name_prob=1.0)
+        address_state = self.state_name(address_components, country, language, non_local_language=non_local_language)
         if address_state:
             address_components[AddressFormatter.STATE] = address_state
 
@@ -1100,7 +1100,7 @@ class OSMAddressFormatter(object):
         if address_country:
             address_components[AddressFormatter.COUNTRY] = address_country
 
-        address_state = self.state_name(address_components, non_local_language)
+        address_state = self.state_name(address_components, country, language, non_local_language=non_local_language, state_full_name_prob=1.0)
         if address_state:
             address_components[AddressFormatter.STATE] = address_state
 
