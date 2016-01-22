@@ -529,8 +529,6 @@ class OSMAddressFormatter(object):
         AddressFormatter.SUBURB,
         AddressFormatter.CITY_DISTRICT,
         AddressFormatter.STATE_DISTRICT,
-        AddressFormatter.STATE,
-        AddressFormatter.COUNTRY
     }
 
     def __init__(self, admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames, splitter=None):
