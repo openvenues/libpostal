@@ -1647,7 +1647,7 @@ if __name__ == '__main__':
         osm_formatter = OSMAddressFormatter(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames)
         osm_formatter.build_training_data(args.address_file, args.out_dir, tag_components=not args.untagged)
     if args.address_file and args.limited_addresses:
-        osm_formatter = OSMAddressFormatter(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames)
+        osm_formatter = OSMAddressFormatter(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames, splitter=u' ')
         osm_formatter.build_limited_training_data(args.address_file, args.out_dir)
     if args.venues_file:
         build_venue_training_data(language_rtree, args.venues_file, args.out_dir)
