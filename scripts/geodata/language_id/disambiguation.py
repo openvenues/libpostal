@@ -10,7 +10,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir, os.pardir, 'python')))
 
-from geodata.encoding import safe_decode
+from geodata.encoding import safe_decode, safe_encode
 from geodata.string_utils import wide_iter, wide_ord
 from geodata.i18n.unicode_paths import DATA_DIR
 from geodata.i18n.normalize import strip_accents
