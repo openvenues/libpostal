@@ -529,6 +529,7 @@ class OSMAddressFormatter(object):
         AddressFormatter.SUBURB,
         AddressFormatter.CITY_DISTRICT,
         AddressFormatter.STATE_DISTRICT,
+        AddressFormatter.STATE,
         AddressFormatter.COUNTRY
     }
 
