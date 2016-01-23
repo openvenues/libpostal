@@ -497,7 +497,7 @@ def build_ways_training_data(language_rtree, infile, out_dir):
             for s in val:
                 if lang in languages:
                     s = osm_abbreviate(street_types_gazetteer, s, lang)
-                    writer.writerow((k, country, tsv_string(s)))
+                    writer.writerow((lang, country, tsv_string(s)))
             if i % 1000 == 0 and i > 0:
                 print('did {} ways'.format(i))
             i += 1
