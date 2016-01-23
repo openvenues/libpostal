@@ -17,9 +17,6 @@ python osm_address_training_data.py -s $(OSM_DIR)/planet-ways.osm --language-rtr
 Venues:
 python osm_address_training_data.py -v $(OSM_DIR)/planet-venues.osm --language-rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
 
-Address streets:
-python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm --language-rtree-dir=$(LANG_RTREE_DIR) -o $(OUT_DIR)
-
 Limited formatted addresses:
 python osm_address_training_data.py -a -l $(OSM_DIR)/planet-addresses.osm --language-rtree-dir=$(LANG_RTREE_DIR) --rtree-dir=$(RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR)  -o $(OUT_DIR)
 
@@ -1611,7 +1608,7 @@ if __name__ == '__main__':
                         help='Quattroshapes reverse geocoder RTree directory')
 
     parser.add_argument('-d', '--geonames-db',
-                        required=True,
+                        default=None,
                         help='GeoNames db file')
 
     parser.add_argument('-n', '--neighborhoods-rtree-dir',
