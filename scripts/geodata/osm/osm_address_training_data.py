@@ -496,9 +496,10 @@ def build_ways_training_data(language_rtree, infile, out_dir):
         if not name_language:
             continue
 
-        for k, v in name_language.iteritems():
-            for s in v:
-                if k in languages:
+        for lang, val in name_language.iteritems():
+            for s in val:
+                if lang in languages:
+                    s = osm_abbreviate(street_types_gazetteer, s, lang)
                     writer.writerow((k, country, tsv_string(s)))
             if i % 1000 == 0 and i > 0:
                 print('did {} ways'.format(i))
@@ -1652,9 +1653,7 @@ if __name__ == '__main__':
     if args.borders_file:
         build_toponym_training_data(language_rtree, args.borders_file, args.out_dir)
 
-    if args.address_file and not args.format_only and not args.limited_addresses:
-        build_address_training_data(language_rtree, args.address_file, args.out_dir)
-    elif args.address_file:
+    if args.address_file:
         if osm_rtree is None:
             parser.error('--rtree-dir required for formatted addresses')
         elif neighborhoods_rtree is None:
