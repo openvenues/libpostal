@@ -502,7 +502,7 @@ def build_ways_training_data(language_rtree, infile, out_dir):
                 for s in v.split(';'):
                     if lang in languages:
                         writer.writerow((lang, country, tsv_string(s)))
-                        abbrev = osm_abbreviate(street_types_gazetteer, s, lang, abbreviate_prob=1.0, separate_prob=0.5)
+                        abbrev = osm_abbreviate(street_types_gazetteer, s, lang)
                         if abbrev != s:
                             writer.writerow((lang, country, tsv_string(abbrev)))
             if i % 1000 == 0 and i > 0:
