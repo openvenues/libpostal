@@ -8,9 +8,14 @@ def country_and_languages(language_rtree, latitude, longitude):
 
     country = props[0]['qs_iso_cc'].lower()
     languages = []
+    language_set = set()
 
     for p in props:
-        languages.extend(p['languages'])
+        for l in p['languages']:
+            lang = l['lang']
+            if lang not in language_set:
+                language_set.add(lang)
+                languages.append(l)
 
     # Python's builtin sort is stable, so if there are two defaults, the first remains first
     # Since polygons are returned from the index ordered from smallest admin level to largest,
