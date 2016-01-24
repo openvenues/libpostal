@@ -10,11 +10,17 @@ def country_and_languages(language_rtree, latitude, longitude):
     languages = []
     language_set = set()
 
+    have_regional = False
+
     for p in props:
         for l in p['languages']:
             lang = l['lang']
             if lang not in language_set:
                 language_set.add(lang)
+                if p['admin_level'] > 0:
+                    have_regional = True
+                elif have_regional:
+                    l = {'lang': l['lang'], 'default': 0}
                 languages.append(l)
 
     # Python's builtin sort is stable, so if there are two defaults, the first remains first

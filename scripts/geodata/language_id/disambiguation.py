@@ -18,7 +18,7 @@ from geodata.text.tokenize import tokenize
 WELL_REPRESENTED_LANGUAGES = set(['en', 'fr', 'it', 'de', 'nl', 'es', 'pt'])
 
 # For toponyms, we want to limit the countries we consider to those where
-# we the place names can themselves be considered training examples of the language
+# the place names can themselves be considered training examples of the language
 WELL_REPRESENTED_LANGUAGE_COUNTRIES = {
     'en': set(['gb', 'us', 'ca', 'au', 'nz', 'ie']),
     'fr': set(['fr']),
