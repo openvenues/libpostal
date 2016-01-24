@@ -412,7 +412,7 @@ def osm_abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.
                     token = random.choice(abbreviations) if abbreviations else canonical
                     token = recase_abbreviation(token, tokens[i:i + len(t)])
                     abbreviated.append(token)
-                    if i < n - 1 and raw_tokens[i + len(t)][0] > sum(raw_tokens[i + len(t) - 1][:2]):
+                    if i + len(t) < n - 1 and raw_tokens[i + len(t)][0] > sum(raw_tokens[i + len(t) - 1][:2]):
                         abbreviated.append(u' ')
                     break
                 elif is_prefix:
