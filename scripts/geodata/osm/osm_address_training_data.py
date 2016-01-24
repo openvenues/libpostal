@@ -386,7 +386,7 @@ def osm_abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.
             if random.random() > abbreviate_prob:
                 for j, (t_i, c_i) in enumerate(t):
                     abbreviated.append(tokens[i + j][0])
-                    if i + j < n - 1 and raw_tokens[i + j + 1][1] > raw_tokens[i + j][1]  + 1:
+                    if i + j < n - 1 and raw_tokens[i + j + 1][0] > sum(raw_tokens[i + j][:2]):
                         abbreviated.append(u' ')
                 i += len(t)
                 continue
@@ -412,7 +412,7 @@ def osm_abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.
                     token = random.choice(abbreviations) if abbreviations else canonical
                     token = recase_abbreviation(token, tokens[i:i + len(t)])
                     abbreviated.append(token)
-                    if t[-1][1] != token_types.IDEOGRAPHIC_CHAR:
+                    if i < n - 1 and raw_tokens[i + len(t)][0] > sum(raw_tokens[i + len(t) - 1][:2]):
                         abbreviated.append(u' ')
                     break
                 elif is_prefix:
@@ -464,13 +464,13 @@ def osm_abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.
             else:
                 for j, (t_i, c_i) in enumerate(t):
                     abbreviated.append(tokens[i + j][0])
-                    if i + j < n - 1 and raw_tokens[i + j + 1][1] > raw_tokens[i + j][1]  + 1:
+                    if i + j < n - 1 and raw_tokens[i + j + 1][0] > sum(raw_tokens[i + j][:2]):
                         abbreviated.append(u' ')
             i += len(t)
 
         else:
             abbreviated.append(tokens[i][0])
-            if i < n - 1 and raw_tokens[i + 1][1] > raw_tokens[i][1]  + 1:
+            if i < n - 1 and raw_tokens[i + 1][0] > sum(raw_tokens[i][:2]):
                 abbreviated.append(u' ')
             i += 1
 
