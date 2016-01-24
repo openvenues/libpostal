@@ -17,7 +17,7 @@ def country_and_languages(language_rtree, latitude, longitude):
             lang = l['lang']
             if lang not in language_set:
                 language_set.add(lang)
-                if p['admin_level'] > 0:
+                if p['admin_level'] > 0 and l['default']:
                     have_regional = True
                 elif have_regional:
                     l = {'lang': l['lang'], 'default': 0}
