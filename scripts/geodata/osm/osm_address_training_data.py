@@ -365,8 +365,12 @@ def osm_abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.
     to real-world input, we can safely replace the canonical phrase with an
     abbreviated version and retain the meaning of the words
     '''
-    tokens = tokenize(s)
+    raw_tokens = tokenize_raw(s)
+    s_utf8 = safe_encode(s)
+    tokens = [(s_utf8[o:o+l], token_types.from_id(c)) for o, l, c in raw_tokens]
     norm_tokens = [(t.lower() if c in token_types.WORD_TOKEN_TYPES else t, c) for t, c in tokens]
+
+    n = len(tokens)
 
     abbreviated = []
 
@@ -382,7 +386,7 @@ def osm_abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.
             if random.random() > abbreviate_prob:
                 for j, (t_i, c_i) in enumerate(t):
                     abbreviated.append(tokens[i + j][0])
-                    if c_i != token_types.IDEOGRAPHIC_CHAR:
+                    if i + j < n - 1 and raw_tokens[i + j + 1][1] > raw_tokens[i + j][1]  + 1:
                         abbreviated.append(u' ')
                 i += len(t)
                 continue
@@ -460,13 +464,13 @@ def osm_abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.
             else:
                 for j, (t_i, c_i) in enumerate(t):
                     abbreviated.append(tokens[i + j][0])
-                    if c_i != token_types.IDEOGRAPHIC_CHAR:
+                    if i + j < n - 1 and raw_tokens[i + j + 1][1] > raw_tokens[i + j][1]  + 1:
                         abbreviated.append(u' ')
             i += len(t)
 
         else:
             abbreviated.append(tokens[i][0])
-            if (c != token_types.IDEOGRAPHIC_CHAR):
+            if i < n - 1 and raw_tokens[i + 1][1] > raw_tokens[i][1]  + 1:
                 abbreviated.append(u' ')
             i += 1
 
