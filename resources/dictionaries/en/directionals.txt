@@ -5,7 +5,7 @@ east|e
 eastern|eastrn|estrn|estn
 lower|lowr|lwr
 middle|mdl|midle|mddl
-north|n|n.|nrt|nrth|nth|norh|nort
+north|n|n.|nrt|nrth|nth|norh|nort|no
 northeast|north east|northe|north e|neast|n east|ne|n e|nrteast|nrt east|nrte|nrt e|nrtheast|nrth east|nrthe|nrth e|ntheast|nth east|nthe|nth e|norheast|norh east|norhe|norh e|norteast|nort east|norte|nort e
 northeastern|north eastern|northeastrn|north eastrn|northestrn|north estrn|northestn|north estn|neastern|n eastern|neastrn|n eastrn|nestrn|n estrn|nestn|n estn|nrteastern|nrt eastern|nrteastrn|nrt eastrn|nrtestrn|nrt estrn|nrtestn|nrt estn|nrtheastern|nrth eastern|nrtheastrn|nrth eastrn|nrthestrn|nrth estrn|nrthestn|nrth estn|ntheastern|nth eastern|ntheastrn|nth eastrn|nthestrn|nth estrn|nthestn|nth estn|norheastern|norh eastern|norheastrn|norh eastrn|norhestrn|norh estrn|norhestn|norh estn|norteastern|nort eastern|norteastrn|nort eastrn|nortestrn|nort estrn|nortestn|nort estn
 northwest|north west|northw|north w|northwst|north wst|nwest|n west|nw|n w|nwst|n wst|nrtwest|nrt west|nrtw|nrt w|nrtwst|nrt wst|nrthwest|nrth west|nrthw|nrth w|nrthwst|nrth wst|nthwest|nth west|nthw|nth w|nthwst|nth wst|norhwest|norh west|norhw|norh w|norhwst|norh wst|nortwest|nort west|nortw|nort w|nortwst|nort wst

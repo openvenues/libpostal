@@ -122,6 +122,7 @@ kitchen
 league
 library
 lodge|ldge|lodg|ldg
+lot
 lounge
 mall|mll
 maison
@@ -193,7 +194,7 @@ public school|ps
 recycling
 retreat|rtt
 rotary|rty
-reservation|res|resrv|resv|rsrv|rserv
+reservation|res|resrv|resv|rsrv|rserv|rs
 reserve|res|resrv|resv|rsrv|rserv|rserve|rsrve
 reservoir|res
 restaurant

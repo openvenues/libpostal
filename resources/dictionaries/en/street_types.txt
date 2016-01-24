@@ -196,6 +196,7 @@ little|lit|ltl|lt
 lookout|lkt|look out
 loop|lp
 loops|lps
+lot
 lynne|lynn
 mall|ml
 manor|mnr
@@ -213,6 +214,7 @@ moor
 motorway|mway|mwy|mtwy
 neaves|nvs
 nook|nk
+number|#|nbr|num|no|nmbr|nr
 oaks
 outlet|otlt
 outlook|out|otlk
@@ -284,7 +286,7 @@ round|rnd
 roundabout
 route|rt|rte
 row|rw
-run
+run|rn
 service road|svc rd|svc road|service rd
 serviceway|swy|svwy|svcwy
 shoal|shl
