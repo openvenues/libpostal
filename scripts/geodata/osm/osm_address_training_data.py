@@ -1018,8 +1018,13 @@ class OSMAddressFormatter(object):
         '''
 
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
+        if ';' in house_number:
+            house_number = house_number.replace(';', ',')
+            address_components[AddressFormatter.HOUSE_NUMBER] = house_number
         if house_number and house_number.count(',') >= 2:
-            for num in house_number.split(','):
+            house_numbers = house_number.split(',')
+            random.shuffle(house_numbers)
+            for num in house_numbers:
                 num = num.strip()
                 if num:
                     address_components[AddressFormatter.HOUSE_NUMBER] = num
