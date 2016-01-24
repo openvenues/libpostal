@@ -104,7 +104,9 @@ def disambiguate_language(text, languages):
             valid = OrderedDict()
             data = [safe_decode(d).split(u'|') for d in data]
             potentials = [l for l, d, i, c in data if l in valid_languages]
+            potential_defaults = [l for l in potentials if valid_languages[l]]
 
+            phrase_len = sum((len(t_i[0]) for t_i in t))
             for lang, dictionary, is_canonical, canonical in data:
                 is_canonical = int(is_canonical)
                 is_stopword = dictionary == 'stopword'
@@ -114,13 +116,13 @@ def disambiguate_language(text, languages):
 
                 lang_valid = is_default or not seen_languages or lang in seen_languages
 
-                if lang_valid and len(t[0][0]) > 1 and ((is_canonical and not is_stopword) or (is_default and num_defaults == 1)):
+                if lang_valid and phrase_len > 1 and ((is_canonical and not is_stopword) or (is_default and (len(potentials) == 1 or len(potential_defaults) == 1))):
                     valid[lang] = 1
                 elif is_default and num_defaults > 1 and current_lang is not None and current_lang != lang:
                     return AMBIGUOUS_LANGUAGE
                 elif is_stopword and is_canonical and not is_default and lang in seen_languages:
                     valid[lang] = 1
-                elif not seen_languages and len(potentials) == 1 and len(t[0][0]) > 1:
+                elif not seen_languages and len(potentials) == 1 and phrase_len > 1:
                     possible_lang = lang if possible_lang is None or possible_lang == lang else None
 
             if seen_languages and valid and not any((l in seen_languages for l in valid)) and \
