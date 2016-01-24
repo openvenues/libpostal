@@ -153,27 +153,27 @@ in	osm	relation:107001	fr	0
 nl	qs_a1	Friesland	fy	0
 nl	gn_id	2755812	fy	0
 nl	osm	relation:47381	fy	0
-es	qs_a1r	Cataluña/Catalunya	ca	1
-es	gn_id	3336901	ca	1
-es	osm	relation:349053	ca	1
+es	qs_a1r	Cataluña/Catalunya	ca,es	1
+es	gn_id	3336901	ca,es	1
+es	osm	relation:349053	ca,es	1
 es	qs_a1r	Cataluña/Catalunya	oc	0
 es	gn_id	3336901	oc	0
 es	osm	relation:349053	oc	0
 es	qs_a1r	Comunidad Foral de Navarra	eu	0
 es	gn_id	3115609	eu	0
 es	osm	relation:349027	eu	0
-es	qs_a1r	Comunitat Valenciana	ca	1
-es	gn_id	2593113	ca	1
-es	osm	relation:349043	ca	1
-es	qs_a1r	Galicia	gl	1
-es	gn_id	3336902	gl	1
-es	osm	relation:349036	gl	1
-es	qs_a1r	Illes Balears	ca	1
-es	gn_id	relation:348981	ca	1
-es	osm	relation:2521383	ca	1
-es	qs_a1r	País Vasco/Euskadi	eu	1
-es	gn_id	3336903	eu	1
-es	osm	relation:349042	eu	1
+es	qs_a1r	Comunitat Valenciana	ca,es	1
+es	gn_id	2593113	ca,es	1
+es	osm	relation:349043	ca,es	1
+es	qs_a1r	Galicia	gl,es	1
+es	gn_id	3336902	gl,es	1
+es	osm	relation:349036	gl,es	1
+es	qs_a1r	Illes Balears	ca,es	1
+es	gn_id	relation:348981	ca,es	1
+es	osm	relation:2521383	ca,es	1
+es	qs_a1r	País Vasco/Euskadi	eu,es	1
+es	gn_id	3336903	eu,es	1
+es	osm	relation:349042	eu,es	1
 fr	qs_a1r	Bretagne	br	0
 fr	gn_id	3030293	br	0
 fr	osm	relation:102740	br	0
