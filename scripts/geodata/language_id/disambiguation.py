@@ -103,8 +103,8 @@ def disambiguate_language(text, languages):
         if c is PHRASE:
             valid = OrderedDict()
             data = [safe_decode(d).split(u'|') for d in data]
-            potentials = [l for l, d, i, c in data if l in valid_languages]
-            potential_defaults = [l for l in potentials if valid_languages[l]]
+            potentials = set([l for l, d, i, c in data if l in valid_languages])
+            potential_defaults = set([l for l in potentials if valid_languages[l]])
 
             phrase_len = sum((len(t_i[0]) for t_i in t))
             for lang, dictionary, is_canonical, canonical in data:
