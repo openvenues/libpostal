@@ -367,7 +367,7 @@ def osm_abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.
     '''
     raw_tokens = tokenize_raw(s)
     s_utf8 = safe_encode(s)
-    tokens = [(s_utf8[o:o+l], token_types.from_id(c)) for o, l, c in raw_tokens]
+    tokens = [(safe_decode(s_utf8[o:o + l]), token_types.from_id(c)) for o, l, c in raw_tokens]
     norm_tokens = [(t.lower() if c in token_types.WORD_TOKEN_TYPES else t, c) for t, c in tokens]
 
     n = len(tokens)
