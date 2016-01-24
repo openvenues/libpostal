@@ -102,7 +102,7 @@ def disambiguate_language(text, languages):
     for t, c, l, data in street_types_gazetteer.filter(tokens):
         if c is PHRASE:
             valid = []
-            data = [d.split('|') for d in data]
+            data = [safe_decode(d).split(u'|') for d in data]
             potentials = [l for l, d, i, c in data if l in valid_languages]
 
             for lang, dictionary, is_canonical, canonical in data:
@@ -114,7 +114,7 @@ def disambiguate_language(text, languages):
 
                 lang_valid = is_default or not seen_languages or lang in seen_languages
 
-                if lang_valid and ((is_canonical and not is_stopword) or (is_default and len(potentials) == 1)):
+                if lang_valid and len(t[0][0]) > 1 and ((is_canonical and not is_stopword) or (is_default and len(potentials) == 1)):
                     valid.append(lang)
                 elif is_default and num_defaults > 1 and current_lang is not None and current_lang != lang:
                     return AMBIGUOUS_LANGUAGE
