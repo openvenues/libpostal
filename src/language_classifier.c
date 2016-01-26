@@ -78,13 +78,6 @@ language_classifier_response_t *classify_languages(char *address) {
         return NULL;
     }
 
-    const char *f;
-    double c;
-    kh_foreach(feature_counts, f, c, {
-        printf("%s (%f)\n", f, c);
-    })
-    printf("\n");
-
     sparse_matrix_t *x = feature_vector(classifier->features, feature_counts);
 
     size_t n = classifier->num_labels;
