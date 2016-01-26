@@ -420,7 +420,7 @@ language_classifier_t *language_classifier_train(char *filename, char *subset_fi
 }
 
 
-#define LANGUAGE_CLASSIFIER_TRAIN_USAGE "Usage: ./address_parser_train [train|cv] filename [cv_filename] [test_filename] [output_dir]\n"
+#define LANGUAGE_CLASSIFIER_TRAIN_USAGE "Usage: ./language_classifier_train [train|cv] filename [cv_filename] [test_filename] [output_dir]\n"
 
 int main(int argc, char **argv) {
     if (argc < 3) {
@@ -467,7 +467,7 @@ int main(int argc, char **argv) {
     }
 
     char_array *temp_file = char_array_new();
-    char_array_cat_printf(temp_file, ".%s.tmp", filename);
+    char_array_cat_printf(temp_file, "%s.tmp", filename);
 
     char *temp_filename = char_array_get_string(temp_file);
 
@@ -487,7 +487,7 @@ int main(int argc, char **argv) {
         char_array_clear(head_command);
 
         temp_cv_file = char_array_new();
-        char_array_cat_printf(temp_cv_file, ".%s.cv.tmp", filename);
+        char_array_cat_printf(temp_cv_file, "%s.cv.tmp", filename);
 
         char *temp_cv_filename = char_array_get_string(temp_cv_file);
 
