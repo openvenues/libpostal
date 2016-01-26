@@ -156,7 +156,7 @@ static bool logistic_regression_gradient_params(matrix_t *theta, matrix_t *gradi
                 double reg_update = theta_ij * lambda;
                 double current_value = gradient_values[idx];
                 double updated_value = current_value + reg_update;
-                if (fabs(updated_value) == fabs(current_value)) {
+                if ((updated_value > 0) == (current_value > 0)) {
                     gradient_values[idx] = updated_value;
                 }
             }
