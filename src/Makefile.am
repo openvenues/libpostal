@@ -21,7 +21,7 @@ noinst_LTLIBRARIES = libscanner.la
 libscanner_la_SOURCES = scanner.c
 libscanner_la_CFLAGS = $(CFLAGS_O0)
 
-noinst_PROGRAMS = libpostal bench build_address_dictionary build_geodb build_numex_table build_trans_table address_parser_train address_parser_test address_parser
+noinst_PROGRAMS = libpostal bench build_address_dictionary build_geodb build_numex_table build_trans_table address_parser_train address_parser_test address_parser language_classifier_train language_classifier language_classifier_test
 libpostal_SOURCES = main.c json_encode.c
 libpostal_LDADD = libpostal.la
 libpostal_CFLAGS = $(CFLAGS_O3)
@@ -46,6 +46,16 @@ address_parser_test_CFLAGS = $(CFLAGS_O3)
 address_parser_SOURCES = address_parser_cli.c json_encode.c linenoise/linenoise.c
 address_parser_LDADD = sparkey/libsparkey.la libscanner.la libpostal.la
 address_parser_CFLAGS = $(CFLAGS_O3)
+language_classifier_train_SOURCES = language_classifier_train.c language_classifier.c language_features.c language_classifier_io.c logistic_regression_trainer.c logistic_regression.c logistic.c matrix.c sparse_matrix.c sparse_matrix_utils.c features.c minibatch.c float_utils.c stochastic_gradient_descent.c normalize.c transliterate.c trie.c trie_search.c trie_utils.c address_dictionary.c string_utils.c file_utils.c utf8proc/utf8proc.c unicode_scripts.c
+language_classifier_train_LDADD = libscanner.la
+language_classifier_train_CFLAGS = $(CFLAGS_O3)
+language_classifier_SOURCES = language_classifier_cli.c language_classifier.c language_features.c logistic_regression.c logistic.c matrix.c sparse_matrix.c features.c minibatch.c float_utils.c normalize.c transliterate.c trie.c trie_search.c trie_utils.c address_dictionary.c string_utils.c file_utils.c utf8proc/utf8proc.c unicode_scripts.c
+language_classifier_LDADD = libscanner.la
+language_classifier_CFLAGS = $(CFLAGS_O3)
+language_classifier_test_SOURCES = language_classifier_test.c language_classifier.c language_classifier_io.c language_features.c logistic_regression.c logistic.c matrix.c sparse_matrix.c features.c minibatch.c float_utils.c normalize.c transliterate.c trie.c trie_search.c trie_utils.c address_dictionary.c string_utils.c file_utils.c utf8proc/utf8proc.c unicode_scripts.c
+language_classifier_test_LDADD = libscanner.la
+language_classifier_test_CFLAGS = $(CFLAGS_O3)
+
 
 pkginclude_HEADERS = libpostal.h
 
