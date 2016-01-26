@@ -33,9 +33,9 @@ comparison and full-text indexing.
 
 libpostal is not itself a full geocoder, but should be a ubiquitous
 preprocessing step before indexing/searching with free text geographic strings.
-It is written in C for maximum portability and performance. Python
-bindings are included in this repo and it's easy to write bindings to
-other languages.
+It is written in C for maximum portability and performance.
+
+Bindings for [Python](https://github.com/openvenues/pypostal) and [NodeJS](https://github.com/openvenues/node-postal) are officially supported, and it's easy to write bindings in other languages.
 
 Examples of normalization
 -------------------------
@@ -197,8 +197,7 @@ sudo apt-get install libsnappy-dev autoconf automake libtool
 sudo brew install snappy autoconf automake libtool
 ```
 
-For C/C++ users or those writing bindings (if you've written a
-language binding, please let us know!):
+Then to install the C library:
 
 ```
 git clone https://github.com/openvenues/libpostal
@@ -212,27 +211,15 @@ sudo make install
 sudo ldconfig
 ```
 
-To install via Python, you should first install the C library and then run:
+Bindings
+--------
 
-```
-python setup.py install
-```
+Libpostal is designed to be used by higher-level languages. Here are the officially-supported language bindings:
 
-Python usage
-------------
+- Python: [pypostal](https://github.com/openvenues/pypostal)
+- NodeJS: [node-postal](https://github.com/openvenues/node-postal)
 
-After installing:
-
-```python
-from postal.expand import expand_address
-expand_address('Quatre vignt douze Ave des Champs-Élysées', languages=['fr'])
-
-from postal.parser import parse_address
-parse_address('The Book Club 100-106 Leonard St, Shoreditch, London, Greater London, EC2A 4RH, United Kingdom')
-```
-
-**Note**: for expand_address, we currently default to English if no languages parameter is passed. When the language classifier is complete we'll remove this requirement and libpostal will predict the language automatically if none is specified.
-
+If you don't see your language of choice, or if you're writing a language binding, please let us know!
 
 Command-line usage (expand)
 ---------------------------
