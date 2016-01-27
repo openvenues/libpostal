@@ -11,6 +11,7 @@
 #include "collections.h"
 #include "constants.h"
 #include "geodb.h"
+#include "language_classifier.h"
 #include "numex.h"
 #include "normalize.h"
 #include "scanner.h"
@@ -811,6 +812,16 @@ char **expand_address(char *input, normalize_options_t options, size_t *n) {
 
     size_t len = strlen(input);
 
+    language_classifier_response_t *lang_response = NULL;
+
+    if (options.num_languages == 0) {
+         lang_response = classify_languages(input);
+         if (lang_response != NULL) {
+            options.num_languages = lang_response->num_languages;
+            options.languages = lang_response->languages;
+         }
+    }
+
     string_tree_t *tree = normalize_string_languages(input, normalize_string_options, options.num_languages, options.languages);
 
     cstring_array *strings = cstring_array_new_size(len * 2);
@@ -859,6 +870,10 @@ char **expand_address(char *input, normalize_options_t options, size_t *n) {
     }
 
     kh_destroy(str_set, unique_strings);
+
+    if (lang_response != NULL) {
+        language_classifier_response_destroy(lang_response);
+    }
 
     char_array_destroy(temp_string);
     string_tree_destroy(tree);
@@ -930,6 +945,14 @@ bool libpostal_setup(void) {
     return true;
 }
 
+bool libpostal_setup_language_classifier(void) {
+    if (!language_classifier_module_setup(NULL)) {
+        log_error("Error loading language classifier\n");
+        return false;
+    }
+    return true;
+}
+
 bool libpostal_setup_parser(void) {
     if (!geodb_module_setup(NULL)) {
         log_error("Error loading geodb module\n");
@@ -950,6 +973,10 @@ void libpostal_teardown(void) {
     numex_module_teardown();
 
     address_dictionary_module_teardown();
+}
+
+void libpostal_teardown_language_classifier(void) {
+    language_classifier_module_teardown();
 }
 
 void libpostal_teardown_parser(void) {

@@ -123,6 +123,9 @@ void libpostal_teardown(void);
 bool libpostal_setup_parser(void);
 void libpostal_teardown_parser(void);
 
+bool libpostal_setup_language_classifier(void);
+void libpostal_teardown_language_classifier(void);
+
 #ifdef __cplusplus
 }
 #endif
