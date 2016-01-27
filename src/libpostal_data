@@ -11,6 +11,7 @@ LIBPOSTAL_S3_BUCKET_URL="http://$LIBPOSTAL_S3_BUCKET_NAME.s3.amazonaws.com"
 LIBPOSTAL_DATA_FILE="libpostal_data.tar.gz"
 LIBPOSTAL_GEODB_FILE="geodb.tar.gz"
 LIBPOSTAL_PARSER_FILE="parser.tar.gz"
+LIBPOSTAL_LANG_CLASS_FILE="language_classifier.tar.gz"
 
 COMMAND=$1
 FILE=$2
@@ -19,14 +20,60 @@ LIBPOSTAL_DATA_DIR=$3
 LIBPOSTAL_DATA_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated
 LIBPOSTAL_GEO_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated_geo
 LIBPOSTAL_PARSER_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated_parser
+LIBPOSTAL_LANG_CLASS_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated_language_classifier
 
 BASIC_MODULE_DIRS=(address_expansions numex transliteration)
 GEODB_MODULE_DIR=geodb
 PARSER_MODULE_DIR=address_parser
+LANGUAGE_CLASSIFIER_MODULE_DIR=language_classifier
 
 EPOCH_DATE="Jan  1 00:00:00 1970"
 
-download_file() {
+MB=$((1024*1024))
+LARGE_FILE_SIZE=$((100*$MB))
+
+NUM_WORKERS=5
+
+function kill_background_processes { 
+    jobs -p | xargs kill;
+    exit
+}
+
+trap kill_background_processes SIGINT
+
+function download_multipart() {
+    url=$1
+    filename=$2
+    size=$3
+    num_workers=$4
+
+    echo "Downloading multipart: $url, size=$size"
+    chunk_size=$((size/num_workers))
+
+    offset=0
+    for i in `seq 1 $((num_workers-1))`; do
+        part_filename="$filename.$i"
+        echo "Downloading part $i: filename=$part_filename, offset=$offset, max=$((offset+chunk_size-1))"
+        curl $url --silent -H"Range:bytes=$offset-$((offset+chunk_size-1))" -o $part_filename &
+        offset=$((offset+chunk_size))
+    done;
+
+    echo "Downloading part $num_workers: filename=$filename.$num_workers, offset=$offset, max=$((size))"
+    curl --silent -H"Range:bytes=$offset-$size" $url -o "$filename.$num_workers" &
+    wait
+
+    > $local_path
+
+    for i in `seq 1 $((num_workers))`; do
+        part_filename="$filename.$i"
+        cat $part_filename >> $local_path
+        rm $part_filename
+    done;
+
+}
+
+
+function download_file() {
     updated_path=$1
     data_dir=$2
     filename=$3
@@ -40,8 +87,18 @@ download_file() {
 
     echo "Checking for new libpostal $name..."
 
-    if [ $(curl $LIBPOSTAL_S3_BUCKET_URL/$filename -z "$(cat $updated_path)" --remote-time -o $local_path -w %{http_code}) = "200" ]; then        
+    url=$LIBPOSTAL_S3_BUCKET_URL/$filename
+
+    if [ $(curl -I $url -z "$(cat $updated_path)" --remote-time -w %{http_code} | grep "^200$") ]; then
         echo "New libpostal $name available"
+        content_length=$(curl -I $url 2> /dev/null | awk '/^Content-Length:/ { print $2 }' | tr -d '[[:space:]]')
+
+        if [ $content_length -ge $LARGE_FILE_SIZE ]; then
+            download_multipart $url $local_path $content_length $NUM_WORKERS
+        else
+            curl $url -o $local_path
+        fi
+        
         if date -r . >/dev/null 2>&1; then
             echo $(date -d "$(date -d "@$(date -r $local_path +%s)") + 1 second") > $updated_path;
         elif stat -f %Sm . >/dev/null 2>&1; then
@@ -66,7 +123,9 @@ if [ $COMMAND = "download" ]; then
     if [ $FILE = "parser" ] || [ $FILE = "all" ]; then 
         download_file $LIBPOSTAL_PARSER_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_PARSER_FILE "parser data file"
     fi
-
+    if [ $FILE = "language_classifier" ] || [ $FILE = "all" ]; then 
+        download_file $LIBPOSTAL_LANG_CLASS_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_LANG_CLASS_FILE "language classifier data file"
+    fi
 
 elif [ $COMMAND = "upload" ]; then
 
@@ -83,6 +142,11 @@ elif [ $COMMAND = "upload" ]; then
     if [ $FILE = "parser" ] || [ $FILE = "all" ]; then
         tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_PARSER_FILE $PARSER_MODULE_DIR
         aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_PARSER_FILE $LIBPOSTAL_S3_KEY
+    fi
+
+    if [ $FILE = "language_classifier" ] || [ $FILE = "all" ]; then
+        tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_LANG_CLASS_FILE $LANGUAGE_CLASSIFIER_MODULE_DIR
+        aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_LANG_CLASS_FILE $LIBPOSTAL_S3_KEY
     fi
 
 else
