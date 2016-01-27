@@ -64,15 +64,25 @@ double test_accuracy(char *filename) {
 
 
 int main(int argc, char **argv) {
-    if (argc < 3) {
-        log_error("Usage: language_classifier_test dir filename\n");
+    if (argc < 2) {
+        log_error("Usage: language_classifier_test [dir] filename\n");
         exit(EXIT_FAILURE);
+    }
+
+    char *dir = LIBPOSTAL_LANGUAGE_CLASSIFIER_DIR;
+    char *filename = NULL;
+
+    if (argc >= 3) {
+        dir = argv[1];
+        filename = argv[2];
+    } else {
+        filename = argv[1];
     }
 
     if (!language_classifier_module_setup(argv[1]) || !address_dictionary_module_setup(NULL)) {
         log_error("Error setting up classifier\n");
     }
 
-    double accuracy = test_accuracy(argv[2]);
+    double accuracy = test_accuracy(filename);
     log_info("Done. Accuracy: %f\n", accuracy);
 }

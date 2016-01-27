@@ -7,14 +7,20 @@
 
 
 int main(int argc, char **argv) {
-    if (argc < 3) {
-        printf("Usage: ./language_classifier dir address\n");
+    if (argc < 2) {
+        printf("Usage: ./language_classifier [dir] address\n");
         exit(EXIT_FAILURE);
     }
 
-    char *dir = argv[1];
-    char *address = strdup(argv[2]);
-    printf("address=%s\n", address);
+    char *dir = LIBPOSTAL_LANGUAGE_CLASSIFIER_DIR;
+    char *address = NULL;
+
+    if (argc >= 3) {
+        dir = argv[1];
+        address = strdup(argv[2]);
+    } else {
+        address = strdup(argv[1]);
+    }
 
     if (!address_dictionary_module_setup(NULL) || !language_classifier_module_setup(dir)) {
         log_error("Could not load language classifiers\n");
