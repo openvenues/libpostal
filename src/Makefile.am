@@ -10,7 +10,7 @@ DEFAULT_INCLUDES = -I.. -I/usr/local/include
 CFLAGS = $(CFLAGS_BASE)
 
 lib_LTLIBRARIES = libpostal.la
-libpostal_la_SOURCES = libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c string_utils.c file_utils.c numex.c utf8proc/utf8proc.c cmp/cmp.c geodb.c geo_disambiguation.c normalize.c bloom.c features.c geonames.c geohash/geohash.c unicode_scripts.c msgpack_utils.c address_parser.c address_parser_io.c averaged_perceptron.c sparse_matrix.c averaged_perceptron_tagger.c graph.c graph_builder.c
+libpostal_la_SOURCES = libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c trie_utils.c string_utils.c file_utils.c numex.c utf8proc/utf8proc.c cmp/cmp.c geodb.c geo_disambiguation.c normalize.c bloom.c features.c geonames.c geohash/geohash.c unicode_scripts.c msgpack_utils.c address_parser.c address_parser_io.c averaged_perceptron.c sparse_matrix.c averaged_perceptron_tagger.c graph.c graph_builder.c language_classifier.c language_features.c logistic_regression.c logistic.c matrix.c minibatch.c float_utils.c
 libpostal_la_LIBADD = libscanner.la sparkey/libsparkey.la
 libpostal_la_CFLAGS = $(CFLAGS_O2)
 
