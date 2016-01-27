@@ -9,7 +9,7 @@
 #include "json_encode.h"
 #include "string_utils.h"
 
-#define LIBPOSTAL_USAGE "Usage: ./libpostal address language [--json]\n"
+#define LIBPOSTAL_USAGE "Usage: ./libpostal address [...languages] [--json]\n"
 
 int main(int argc, char **argv) {
     uint64_t i;
@@ -39,18 +39,21 @@ int main(int argc, char **argv) {
         }
     }
 
-    if (address == NULL || languages == NULL) {
+    if (address == NULL) {
         log_error(LIBPOSTAL_USAGE);
         exit(EXIT_FAILURE);
     }
 
-    if (!libpostal_setup()) {
+    if (!libpostal_setup() || (languages == NULL && !libpostal_setup_language_classifier())) {
         exit(EXIT_FAILURE);
     }
 
     normalize_options_t options = LIBPOSTAL_DEFAULT_OPTIONS;
-    options.languages = languages->a;
-    options.num_languages = languages->n;
+
+    if (languages != NULL) {
+        options.languages = languages->a;
+        options.num_languages = languages->n;
+    }
 
     size_t num_expansions;
 
