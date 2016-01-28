@@ -151,19 +151,13 @@
             "name": "soixante",
             "value": 60,
             "type": "cardinal",
+            "radix": 20,
             "right": "add"
         },
         {
             "name": "septante",
             "value": 70,
             "type": "cardinal",
-            "right": "add"
-        },
-        {
-            "name": "soixante",
-            "value": 70,
-            "type": "cardinal",
-            "radix": 20,
             "right": "add"
         },
         {
