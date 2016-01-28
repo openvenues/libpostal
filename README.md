@@ -253,6 +253,19 @@ cd src/
 address_parser is an interactive shell. Just type addresses and libpostal will
 parse them and print the result.
 
+Tests
+-----
+
+libpostal uses [greatest](https://github.com/silentbicycle/greatest) for automated testing. To run the tests, run:
+
+```
+make check
+```
+
+Adding [test cases](https://github.com/openvenues/libpostal/tree/master/test) is easy, even if your C is rusty/non-existent, and we'd love contributions. We use mostly functional tests checking string input against string output.
+
+libpostal also gets periodically battle-tested on tens of millions of addresses in OSM using valgrind to check for memory leaks and other errors.
+
 Data files
 ----------
 
