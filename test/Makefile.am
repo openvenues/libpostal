@@ -1,9 +1,9 @@
-CFLAGS_BASE = -Wfloat-equal -Wpointer-arith
+CFLAGS_BASE = -Wfloat-equal -Wpointer-arith -std=gnu99
 CFLAGS_O0 = $(CFLAGS_BASE) -O0
 CFLAGS_O1 = $(CFLAGS_BASE) -O1
 CFLAGS_O2 = $(CFLAGS_BASE) -O2
 CFLAGS_O3 = $(CFLAGS_BASE) -O3
-DEFAULT_INCLUDES = -I.. -I../src
+DEFAULT_INCLUDES = -I..
 
 CFLAGS = $(CFLAGS_BASE)
 

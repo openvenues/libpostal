@@ -4,7 +4,7 @@
 #include <stdarg.h>
 
 #include "greatest.h"
-#include "libpostal.h"
+#include "../src/libpostal.h"
 
 SUITE(libpostal_expansion_tests);
 

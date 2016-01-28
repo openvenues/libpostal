@@ -4,7 +4,7 @@
 #include <stdarg.h>
 
 #include "greatest.h"
-#include "numex.h"
+#include "../src/numex.h"
 
 SUITE(libpostal_numex_tests);
 

@@ -4,7 +4,7 @@
 #include <stdarg.h>
 
 #include "greatest.h"
-#include "transliterate.h"
+#include "../src/transliterate.h"
 
 SUITE(libpostal_transliteration_tests);
 
