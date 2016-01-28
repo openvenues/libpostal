@@ -1,7 +1,8 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([libpostal], [0.1])
+AC_INIT([libpostal], [0.2])
+
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 AC_CONFIG_SRCDIR([src])
 LT_INIT([shared])
@@ -51,7 +52,8 @@ AC_CHECK_FUNCS([getcwd gettimeofday memmove memset munmap regcomp setlocale sqrt
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile
-                 src/sparkey/Makefile])
+                 src/sparkey/Makefile
+                 test/Makefile])
 
 AC_CHECK_PROG([FOUND_SHUF], [shuf], [yes])
 
@@ -60,6 +62,5 @@ AS_IF([test "x$FOUND_SHUF" = xyes],  [AC_DEFINE([HAVE_SHUF], [1], [shuf availabl
 LIBPOSTAL_DATA_DIR=$datadir/libpostal
 AC_DEFINE_UNQUOTED([LIBPOSTAL_DATA_DIR], ["$LIBPOSTAL_DATA_DIR"], [Data directory for libpostsal])
 AC_SUBST(LIBPOSTAL_DATA_DIR)
-
 
 AC_OUTPUT
