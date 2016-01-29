@@ -26,10 +26,10 @@ AC_SEARCH_LIBS([log],
 AC_HEADER_STDC
 AC_HEADER_TIME
 AC_HEADER_DIRENT
+AC_HEADER_STDBOOL
 AC_CHECK_HEADERS([fcntl.h float.h inttypes.h limits.h locale.h malloc.h memory.h stddef.h stdint.h stdlib.h string.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
-AC_CHECK_HEADER_STDBOOL
 AC_C_INLINE
 AC_TYPE_INT16_T
 AC_TYPE_INT32_T
