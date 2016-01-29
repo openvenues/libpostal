@@ -6,6 +6,7 @@ addons:
     apt:
         packages:
         - libsnappy-dev
+        - pkg-config
 script:
     - ./bootstrap.sh
     - ./configure
