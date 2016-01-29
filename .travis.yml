@@ -7,12 +7,10 @@ addons:
         packages:
         - libsnappy-dev
         - pkg-config
-        - autoconf
-        - automake
-        - libtool
         - autoconf-archive
-script:
+before_script:
     - ./bootstrap.sh
+script:
     - ./configure
     - make
     - make check
