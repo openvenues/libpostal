@@ -32,7 +32,7 @@ KSORT_INIT(phrase_language_array, phrase_language_t, ks_lt_phrase_language)
 
 #define DEFAULT_KEY_LEN 32
 
-inline uint64_t get_normalize_token_options(normalize_options_t options) {
+static inline uint64_t get_normalize_token_options(normalize_options_t options) {
     uint64_t normalize_token_options = 0;
 
     normalize_token_options |= options.delete_final_periods ? NORMALIZE_TOKEN_DELETE_FINAL_PERIOD : 0;
@@ -43,7 +43,7 @@ inline uint64_t get_normalize_token_options(normalize_options_t options) {
     return normalize_token_options;
 }
 
-void add_normalized_strings_token(cstring_array *strings, char *str, token_t token, normalize_options_t options) {
+static void add_normalized_strings_token(cstring_array *strings, char *str, token_t token, normalize_options_t options) {
 
     uint64_t normalize_token_options = get_normalize_token_options(options);
 
@@ -95,7 +95,7 @@ void add_normalized_strings_token(cstring_array *strings, char *str, token_t tok
     }
 }
 
-string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
+static string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
     char_array *key = NULL;
 
     log_debug("input=%s\n", str);
@@ -392,7 +392,7 @@ string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
     return tree;
 }
 
-void add_postprocessed_string(cstring_array *strings, char *str, normalize_options_t options) {
+static void add_postprocessed_string(cstring_array *strings, char *str, normalize_options_t options) {
     cstring_array_add_string(strings, str);
 
     if (options.roman_numerals) {
@@ -408,7 +408,7 @@ void add_postprocessed_string(cstring_array *strings, char *str, normalize_optio
 
 
 
-address_expansion_array *get_affix_expansions(char_array *key, char *str, char *lang, token_t token, phrase_t phrase, bool reverse, normalize_options_t options) {
+static address_expansion_array *get_affix_expansions(char_array *key, char *str, char *lang, token_t token, phrase_t phrase, bool reverse, normalize_options_t options) {
     expansion_value_t value;
     value.value = phrase.data;
     address_expansion_array *expansions = NULL;
@@ -431,7 +431,7 @@ address_expansion_array *get_affix_expansions(char_array *key, char *str, char *
     return expansions;
 }
 
-inline void cat_affix_expansion(char_array *key, char *str, address_expansion_t expansion, token_t token, phrase_t phrase) {
+static inline void cat_affix_expansion(char_array *key, char *str, address_expansion_t expansion, token_t token, phrase_t phrase) {
     if (expansion.canonical_index != NULL_CANONICAL_INDEX) {
         char *canonical = address_dictionary_get_canonical(expansion.canonical_index);
         char_array_cat(key, canonical);
@@ -440,7 +440,7 @@ inline void cat_affix_expansion(char_array *key, char *str, address_expansion_t 
     }
 }
 
-bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t token, phrase_t prefix, phrase_t suffix, normalize_options_t options) {
+static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t token, phrase_t prefix, phrase_t suffix, normalize_options_t options) {
     cstring_array *strings = tree->strings;
 
     bool have_suffix = suffix.len > 0 && suffix.len < token.len;
@@ -651,7 +651,7 @@ bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t to
 
 }
 
-inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, token_t token, normalize_options_t options) {
+static inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, token_t token, normalize_options_t options) {
     phrase_t suffix = search_address_dictionaries_suffix(str + token.offset, token.len, lang);
 
     phrase_t prefix = search_address_dictionaries_prefix(str + token.offset, token.len, lang);
@@ -662,7 +662,7 @@ inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, token_t t
     return add_affix_expansions(tree, str, lang, token, prefix, suffix, options);
 }
 
-inline void add_normalized_strings_tokenized(string_tree_t *tree, char *str, token_array *tokens, normalize_options_t options) {
+static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *str, token_array *tokens, normalize_options_t options) {
     cstring_array *strings = tree->strings;
 
     for (int i = 0; i < tokens->n; i++) {
@@ -693,7 +693,7 @@ inline void add_normalized_strings_tokenized(string_tree_t *tree, char *str, tok
 }
 
 
-void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_strings, char *str, normalize_options_t options) {
+static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_strings, char *str, normalize_options_t options) {
     size_t len = strlen(str);
     token_array *tokens = tokenize_keep_whitespace(str);
     string_tree_t *token_tree = string_tree_new_size(len);
