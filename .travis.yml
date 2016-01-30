@@ -12,7 +12,7 @@ addons:
 before_script:
     - ./bootstrap.sh
 install:
-    - if [ "$CC" = "gcc ]; then export CC="gcc-4.8"; fi
+    - if [ "$CC" = "gcc" ]; then export CC="gcc-4.8"; fi
 script:
     - ./configure --datadir=$(pwd)/data
     - make
