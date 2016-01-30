@@ -4,13 +4,16 @@ compiler:
     - clang
 addons:
     apt:
+        sources:
+        - ubuntu-toolchain-r-test
         packages:
+        - gcc-4.8
         - libsnappy-dev
-        - pkg-config
-        - autoconf-archive
 before_script:
     - ./bootstrap.sh
+install:
+    - if [ "$CC" = "gcc ]; then export CC="gcc-4.8"; fi
 script:
     - ./configure --datadir=$(pwd)/data
-    - travis_wait make
+    - make
     - make check
