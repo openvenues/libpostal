@@ -1,26 +1,11 @@
-<pre>
-     ___        __                               __             ___      
-    /\_ \    __/\ \                             /\ \__         /\_ \     
-    \//\ \  /\_\ \ \____  _____     ___     ____\ \ ,_\    __  \//\ \    
-      \ \ \ \/\ \ \ '__`\/\ '__`\  / __`\  /',__\\ \ \/  /'__`\  \ \ \   
-       \_\ \_\ \ \ \ \L\ \ \ \L\ \/\ \L\ \/\__, `\\ \ \_/\ \L\.\_ \_\ \_ 
-       /\____\\ \_\ \_,__/\ \ ,__/\ \____/\/\____/ \ \__\ \__/.\_\/\____\
-       \/____/ \/_/\/___/  \ \ \/  \/___/  \/___/   \/__/\/__/\/_/\/____/
-                            \ \_\                                        
-                             \/_/                                        
-    ---------------------------------------------------------------------
-</pre>
+# libpostal
 
-**N.B.**: libpostal is not publicly released yet and the APIs may change. We
-encourage folks to hold off on including it as a dependency for now.
-Stay tuned...
-
----------------------------------------------------------------------------
-
-:jp: :us: :gb: :ru: :fr: :kr: :it: :es: :cn: :de:
+[![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal)
 
 libpostal is a fast NLP library for parsing and normalizing street addresses 
 anywhere in the world.
+
+:jp: :us: :gb: :ru: :fr: :kr: :it: :es: :cn: :de:
 
 Addresses and the geographic coordinates they represent are essential for any
 location-based application (map search, transportation, on-demand/delivery
@@ -591,5 +576,4 @@ ways the address parser can be improved even further (in order of difficulty):
 Todos
 -----
 
-- [ ] Publish tests (currently not on Github) and set up continuous integration
 - [ ] Hosted documentation
