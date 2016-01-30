@@ -11,6 +11,6 @@ addons:
 before_script:
     - ./bootstrap.sh
 script:
-    - ./configure
+    - ./configure --datadir=data
     - travis_wait make
     - make check
