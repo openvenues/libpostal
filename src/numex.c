@@ -145,7 +145,7 @@ static numex_language_t *numex_language_read(FILE *f) {
         return NULL;
     }
 
-    char name = malloc(lang_name_len);
+    char *name = malloc(lang_name_len);
 
     if (!file_read_chars(f, name, lang_name_len)) {
         return NULL;
