@@ -96,7 +96,7 @@ numex_language_t *numex_language_new(char *name, bool whole_tokens_only, size_t 
     numex_language_t *language = malloc(sizeof(numex_language_t));
     if (language == NULL) return NULL;
 
-    language->name = strdup(name);
+    language->name = name;
     language->whole_tokens_only = whole_tokens_only;
     language->rules_index = rules_index;
     language->num_rules = num_rules;
@@ -138,14 +138,14 @@ numex_language_t *get_numex_language(char *name) {
     return k != kh_end(numex_table->languages) ? kh_value(numex_table->languages, k) : NULL;
 }
 
-numex_language_t *numex_language_read(FILE *f) {
+static numex_language_t *numex_language_read(FILE *f) {
     size_t lang_name_len;
 
     if (!file_read_uint64(f, (uint64_t *)&lang_name_len)) {
         return NULL;
     }
 
-    char name[lang_name_len];
+    char name = malloc(lang_name_len);
 
     if (!file_read_chars(f, name, lang_name_len)) {
         return NULL;
@@ -182,7 +182,7 @@ numex_language_t *numex_language_read(FILE *f) {
 
 }
 
-bool numex_language_write(numex_language_t *language, FILE *f) {
+static bool numex_language_write(numex_language_t *language, FILE *f) {
     size_t lang_name_len = strlen(language->name) + 1;
 
     if (!file_write_uint64(f, (uint64_t)lang_name_len)) {
@@ -217,7 +217,7 @@ bool numex_language_write(numex_language_t *language, FILE *f) {
 
 }
 
-bool numex_rule_read(FILE *f, numex_rule_t *rule) {
+static bool numex_rule_read(FILE *f, numex_rule_t *rule) {
     if (!file_read_uint64(f, (uint64_t *)&rule->left_context_type)) {
         return false;
     }
@@ -301,13 +301,13 @@ ordinal_indicator_t *ordinal_indicator_new(char *key, gender_t gender, grammatic
         return NULL;
     }
 
-    ordinal->key = strdup(key);
+    ordinal->key = key;
     if (ordinal->key == NULL) {
         ordinal_indicator_destroy(ordinal);
         return NULL;
     }
 
-    ordinal->suffix = strdup(suffix);
+    ordinal->suffix = suffix;
     if (ordinal->suffix == NULL) {
         ordinal_indicator_destroy(ordinal);
         return NULL;
@@ -319,13 +319,13 @@ ordinal_indicator_t *ordinal_indicator_new(char *key, gender_t gender, grammatic
     return ordinal;
 }
 
-ordinal_indicator_t *ordinal_indicator_read(FILE *f) {
+static ordinal_indicator_t *ordinal_indicator_read(FILE *f) {
     size_t key_len;
     if (!file_read_uint64(f, (uint64_t *)&key_len)) {
         return NULL;
     }
 
-    char key[key_len];
+    char *key = malloc(key_len);
 
     if (!file_read_chars(f, key, key_len)) {
         return NULL;
@@ -346,7 +346,7 @@ ordinal_indicator_t *ordinal_indicator_read(FILE *f) {
         return NULL;
     }
 
-    char ordinal_suffix[ordinal_suffix_len];
+    char *ordinal_suffix = malloc(ordinal_suffix_len);
 
     if (!file_read_chars(f, ordinal_suffix, ordinal_suffix_len)) {
         return NULL;
