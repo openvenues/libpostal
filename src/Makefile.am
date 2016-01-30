@@ -1,6 +1,6 @@
 SUBDIRS = sparkey
 
-CFLAGS_BASE = -Wfloat-equal -Wpointer-arith
+CFLAGS_BASE = -Wfloat-equal -Wpointer-arith -DLIBPOSTAL_DATA_DIR='"$(datadir)/libpostal"'
 CFLAGS_O0 = $(CFLAGS_BASE) -O0
 CFLAGS_O1 = $(CFLAGS_BASE) -O1
 CFLAGS_O2 = $(CFLAGS_BASE) -O2
@@ -60,9 +60,9 @@ language_classifier_test_CFLAGS = $(CFLAGS_O3)
 pkginclude_HEADERS = libpostal.h
 
 all-local:
-	./libpostal_data download all @LIBPOSTAL_DATA_DIR@
+	./libpostal_data download all $(datadir)/libpostal
 
 lexer: scanner.re
 	re2c -F -s -b -8 -o scanner.c scanner.re
 
-.PHONY: lexer download_geodb
+.PHONY: lexer

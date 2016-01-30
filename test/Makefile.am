@@ -1,4 +1,4 @@
-CFLAGS_BASE = -Wfloat-equal -Wpointer-arith -std=gnu99
+CFLAGS_BASE = -Wfloat-equal -Wpointer-arith -std=gnu99 -DLIBPOSTAL_DATA_DIR='"$(datadir)/libpostal"'
 CFLAGS_O0 = $(CFLAGS_BASE) -O0
 CFLAGS_O1 = $(CFLAGS_BASE) -O1
 CFLAGS_O2 = $(CFLAGS_BASE) -O2
