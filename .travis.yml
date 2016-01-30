@@ -12,5 +12,5 @@ before_script:
     - ./bootstrap.sh
 script:
     - ./configure
-    - make
+    - travis_wait make
     - make check
