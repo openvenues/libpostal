@@ -1,9 +1,8 @@
-# libpostal
+# libpostal: international address parsing and normalization
 
 [![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal)
 
-libpostal is a fast NLP library for parsing and normalizing street addresses 
-anywhere in the world.
+libpostal is a fast statistical parser/normalizer for international street addresses.
 
 :jp: :us: :gb: :ru: :fr: :kr: :it: :es: :cn: :de:
 
@@ -16,24 +15,28 @@ designed for document indexing. This library helps convert the free-form
 addresses that humans use into clean normalized forms suitable for machine
 comparison and full-text indexing.
 
-libpostal is not itself a full geocoder, but should be a ubiquitous
-preprocessing step before indexing/searching with free text geographic strings.
-It is written in C for maximum portability and performance.
+While not itself a full geocoder, libpostal can be used as a preprocessing step to make any geocoding application simpler and more consistent internationally.
 
-Bindings for [Python](https://github.com/openvenues/pypostal) and [NodeJS](https://github.com/openvenues/node-postal) are officially supported, and it's easy to write bindings in other languages.
+The core library is written in pure C. Language bindings for [Python](https://github.com/openvenues/pypostal) and [NodeJS](https://github.com/openvenues/node-postal) are officially supported and it's easy to write bindings in other languages.
 
 Examples of normalization
 -------------------------
 
-Address normalization may sound trivial initially, especially when thinking
-only about the US (if that's where you happen to reside), but it only takes
-a few examples to realize how complex natural language addresses can get
-internationally. Here's a short list of some less straightforward normalizations
-in various languages. The left/right columns in this table are equivalent
-strings under libpostal, the left column being user input and the right column
-being the indexed (normalized) string.  Note that libpostal automatically 
-detects the language(s) used in an address and applies the appropriate expansions.
-The only input needed is the raw address string:
+The expand_address API converts messy real-world addresses into normalized
+equivalents suitable for search indexing, hashing, etc. Here's a code example
+using the Python API for succinctness:
+
+```python
+
+from postal.expand import expand_address
+expansions = expand_address('Quatre vignt douze Ave des Champs-Élysées')
+
+assert '92 avenue des champs-elysees' in set(expansions)
+```
+
+libpostal contains an OSM-trained language classifier to detect which language(s) are used in a given
+address so it cna apply the appropriate normalizations. The only input needed is the raw address string. 
+Here's a short list of some less straightforward normalizations in various languages.
 
 | Input                               | Output (may be multiple in libpostal)   |
 | ----------------------------------- |-----------------------------------------|
@@ -46,8 +49,8 @@ The only input needed is the raw address string:
 | Marktstrasse 14                     | markt straße 14                         |
 
 libpostal currently supports these types of normalization in *60+ languages*,
-and you can add more (without having to write any C).
-
+and you can [add more](https://github.com/openvenues/libpostal/tree/master/resources/dictionaries) 
+(without having to write any C).
 
 Now, instead of trying to bake address-specific conventions into traditional
 document search engines like Elasticsearch using giant synonyms files, scripting,
@@ -74,12 +77,18 @@ languages. We use OpenStreetMap (anything with an addr:* tag) and the OpenCage
 address format templates at: https://github.com/OpenCageData/address-formatting
 to construct the training data, supplementing with containing polygons and
 perturbing the inputs in a number of ways to make the parser as robust as possible
-to messy real-world input.
+to messy real-world input. Here's a code example, again using the Python API:
 
-These example parses are taken from the interactive address_parser program 
-that builds with libpostal on make. Note that the parser doesn't care about commas
-vs. no commas, casing, or different permutations of components (if components are
-left out e.g. just city or just city/postcode).
+```python
+
+from postal.parser import parse_address
+parse_address('The Book Club 100-106 Leonard St, Shoreditch, London, Greater London, EC2A 4RH, United Kingdom')
+```
+
+These example parse results are taken from the interactive address_parser program 
+that builds with libpostal when you run make. Note that the parser doesn't care about commas
+vs. no commas, casing, or different permutations of components (if the input is e.g. just
+a city or just city/postcode).
 
 ```
 > 781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA
@@ -113,20 +122,21 @@ Result:
   "country": "united kingdom"
 }
 
-> Eschenbräu Bräurei Triftstraße 67, 13353 Berlin, Deutschland
+> Museo del Prado C. de Ruiz de Alarcón, 23 28014 Madrid Madrid, Spain
 
 Result:
 
 {
-  "house": "eschenbraeu braeurei",
-  "road": "triftstrasse",
-  "house_number": "67",
-  "postcode": "13353",
-  "city": "berlin",
-  "country": "deutschland"
+  "house": "museo del prado",
+  "road": "c. de ruiz de alarcón",
+  "house_number": "23",
+  "postcode": "28014",
+  "state": "madrid",
+  "city": "madrid",
+  "country": "spain"
 }
 
-> Double Shot Tea & Coffee 15 Melle St. Braamfontein Johannesburg, 2000, South Africa
+> Double Shot Tea &amp; Coffee 15 Melle St. Braamfontein Johannesburg, 2000, South Africa
 
 Result:
 
@@ -140,18 +150,19 @@ Result:
   "country": "south africa"
 }
 
-> Le Polikarpov 24 cours Honoré d'Estienne d'Orves, 13001 Marseille, France
+> Szimpla Kert Kazinczy utca 14 Budapest 1075, Magyarország
 
 Result:
 
 {
-  "house": "le polikarpov",
-  "house_number": "24",
-  "road": "cours honoré d'estienne d'orves",
-  "postcode": "13001",
-  "city": "marseille",
-  "country": "france"
+  "house": "szimpla kert",
+  "road": "kazinczy utca",
+  "house_number": "14",
+  "city": "budapest",
+  "postcode": "1075",
+  "country": "magyarország"
 }
+
 
 > Государственный Эрмитаж Дворцовая наб., 34 191186, St. Petersburg, Russia
 
@@ -218,7 +229,7 @@ After building libpostal:
 ```
 cd src/
 
-./libpostal "12 Three-hundred and forty-fifth ave, ste. no 678" en
+./libpostal "Quatre vignt douze Ave des Champs-Élysées"
 ```
 
 Currently libpostal requires two input strings, the address text and a language
@@ -241,7 +252,7 @@ parse them and print the result.
 Tests
 -----
 
-libpostal uses [greatest](https://github.com/silentbicycle/greatest) for automated testing. To run the tests, run:
+libpostal uses [greatest](https://github.com/silentbicycle/greatest) for automated testing. To run the tests, use:
 
 ```
 make check
@@ -305,26 +316,6 @@ languages. Handles languages with concatenated expressions e.g.
 milleottocento => 1800. Optionally normalizes Roman numerals regardless of the
 language (IX => 9) which occur in the names of many monarchs, popes, etc.
 
-- **Geographic name aliasing (coming soon)**: New York, NYC and Nueva York alias
-to New York City. Uses the crowd-sourced GeoNames (geonames.org) database, so alternate
-names added by contributors can automatically improve libpostal.
-
-- **Geographic disambiguation (coming soon)**: There are several equally
-likely Springfields in the US (formally known as The Simpsons problem), and
-some context like a state is required to disambiguate. There are also > 1200
-distinct San Franciscos in the world but the term "San Francisco" almost always
-refers to the one in California. Williamsburg can refer to a neighborhood in
-Brooklyn or a city in Virginia. Geo disambiguation is a subset of Word Sense
-Disambiguation, and attempts to resolve place names in a string to GeoNames
-entities. This can be useful for city-level geocoding suitable for polygon/area
-lookup. By default, if there is no other context, as in the San Francisco case,
-the most populous entity will be selected.
-
-- **Ambiguous token classification (coming soon)**: e.g. "dr" => "doctor" or
-"drive" for an English address depending on the context. Multiclass logistic
-regression trained on OSM addresses, where abbreviations are discouraged,
-giving us many examples of fully qualified addresses on which to train.
-
 - **Fast, accurate tokenization/lexing**: clocked at > 1M tokens / sec,
 implements the TR-29 spec for UTF8 word segmentation, tokenizes East Asian
 languages chracter by character instead of on whitespace.
@@ -346,6 +337,29 @@ Latin scripts in the same address). In transliteration we can use all
 applicable transliterators for a given Unicode script (Greek can for instance
 be transliterated with Greek-Latin, Greek-Latin-BGN and Greek-Latin-UNGEGN).
 
+Roadmap
+-------
+
+- **Geographic name aliasing (coming soon)**: New York, NYC and Nueva York alias
+to New York City. Uses the crowd-sourced GeoNames (geonames.org) database, so alternate
+names added by contributors can automatically improve libpostal.
+
+- **Geographic disambiguation (coming soon)**: There are several equally
+likely Springfields in the US (formally known as The Simpsons problem), and
+some context like a state is required to disambiguate. There are also > 1200
+distinct San Franciscos in the world but the term "San Francisco" almost always
+refers to the one in California. Williamsburg can refer to a neighborhood in
+Brooklyn or a city in Virginia. Geo disambiguation is a subset of Word Sense
+Disambiguation, and attempts to resolve place names in a string to GeoNames
+entities. This can be useful for city-level geocoding suitable for polygon/area
+lookup. By default, if there is no other context, as in the San Francisco case,
+the most populous entity will be selected.
+
+- **Ambiguous token classification (coming soon)**: e.g. "dr" => "doctor" or
+"drive" for an English address depending on the context. Multiclass logistic
+regression trained on OSM addresses, where abbreviations are discouraged,
+giving us many examples of fully qualified addresses on which to train.
+
 Non-goals
 ---------
 
@@ -355,7 +369,7 @@ Non-goals
 Raison d'être
 -------------
 
-libpostal was created as part of the [OpenVenues](https://github.com/openvenues/openvenues) project to solve the problem of venue deduping. In OpenVenues, we have a data set of millions of
+libpostal was originally created as part of the [OpenVenues](https://github.com/openvenues/openvenues) project to solve the problem of venue deduping. In OpenVenues, we have a data set of millions of
 places derived from terabytes of web pages from the [Common Crawl](http://commoncrawl.org/).
 The Common Crawl is published monthly, and so even merging the results of
 two crawls produces significant duplicates.
