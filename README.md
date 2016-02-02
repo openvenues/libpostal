@@ -1,4 +1,4 @@
-# libpostal: i18n address parsing/normalization
+# libpostal: international street address NLP
 
 [![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal)
 
