@@ -82,7 +82,7 @@ to messy real-world input. Here's a code example, again using the Python API:
 ```python
 
 from postal.parser import parse_address
-parse_address('The Book Club 100-106 Leonard St, Shoreditch, London, Greater London, EC2A 4RH, United Kingdom')
+parse_address('The Book Club 100-106 Leonard St Shoreditch London EC2A 4RH, United Kingdom')
 ```
 
 These example parse results are taken from the interactive address_parser program 
