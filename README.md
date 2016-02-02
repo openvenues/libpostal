@@ -1,8 +1,8 @@
-# libpostal: international address parsing and normalization
+# libpostal: parse and normalize international addresses
 
 [![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal)
 
-libpostal is a fast statistical parser/normalizer for international street addresses.
+libpostal is a fast statistical parser/normalizer for street addresses around the world.
 
 :jp: :us: :gb: :ru: :fr: :kr: :it: :es: :cn: :de:
 
@@ -15,7 +15,7 @@ designed for document indexing. This library helps convert the free-form
 addresses that humans use into clean normalized forms suitable for machine
 comparison and full-text indexing.
 
-While not itself a full geocoder, libpostal can be used as a preprocessing step to make any geocoding application simpler and more consistent internationally.
+While libpostal is not itself a full geocoder, it can be used as a preprocessing step to make any geocoding application smarter, simpler, and more consistent internationally.
 
 The core library is written in pure C. Language bindings for [Python](https://github.com/openvenues/pypostal) and [NodeJS](https://github.com/openvenues/node-postal) are officially supported and it's easy to write bindings in other languages.
 
@@ -35,7 +35,7 @@ assert '92 avenue des champs-elysees' in set(expansions)
 ```
 
 libpostal contains an OSM-trained language classifier to detect which language(s) are used in a given
-address so it cna apply the appropriate normalizations. The only input needed is the raw address string. 
+address so it can apply the appropriate normalizations. The only input needed is the raw address string. 
 Here's a short list of some less straightforward normalizations in various languages.
 
 | Input                               | Output (may be multiple in libpostal)   |
@@ -48,7 +48,7 @@ Here's a short list of some less straightforward normalizations in various langu
 | ул Каретный Ряд, д 4, строение 7    | ulitsa karetnyy ryad dom 4 stroyeniye 7 |
 | Marktstrasse 14                     | markt straße 14                         |
 
-libpostal currently supports these types of normalization in *60+ languages*,
+libpostal currently supports these types of normalizations in *60+ languages*,
 and you can [add more](https://github.com/openvenues/libpostal/tree/master/resources/dictionaries) 
 (without having to write any C).
 
@@ -71,8 +71,8 @@ For further reading and some bizarre address edge-cases, see:
 Examples of parsing
 -------------------
 
-libpostal implements the first truly international statistical address parser,
-trained on ~50 million addresses in over 100 countries speaking over 60
+libpostal implements the first statistical address parser that works well internationally,
+trained on ~50 million addresses in over 100 countries and as many
 languages. We use OpenStreetMap (anything with an addr:* tag) and the OpenCage
 address format templates at: https://github.com/OpenCageData/address-formatting
 to construct the training data, supplementing with containing polygons and
