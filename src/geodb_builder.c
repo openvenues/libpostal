@@ -434,7 +434,7 @@ bool geodb_builder_add_name(geodb_builder_t *self, char *key, bool is_canonical,
 /*
 Get a feature string's id from the trie or add it and return the next id
 */
-inline uint32_t geodb_builder_get_feature_id(geodb_builder_t *self, char *key) {
+static inline uint32_t geodb_builder_get_feature_id(geodb_builder_t *self, char *key) {
     uint32_t feature_id;
 
     if (!trie_get_data(self->features, key, &feature_id)) {
