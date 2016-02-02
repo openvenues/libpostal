@@ -1,4 +1,4 @@
-# libpostal: I18N address parsing/normalization
+# libpostal: i18n address parsing/normalization
 
 [![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal)
 
