@@ -150,6 +150,19 @@ Result:
   "country": "south africa"
 }
 
+> Eschenbräu Bräurei Triftstraße 67, 13353 Berlin, Deutschland
+        
+Result:
+        
+{
+  "house": "eschenbraeu braeurei",
+  "road": "triftstrasse",
+  "house_number": "67",
+  "postcode": "13353",
+  "city": "berlin",
+  "country": "deutschland"
+}
+
 > Szimpla Kert Kazinczy utca 14 Budapest 1075, Magyarország
 
 Result:
@@ -162,7 +175,6 @@ Result:
   "postcode": "1075",
   "country": "magyarország"
 }
-
 
 > Государственный Эрмитаж Дворцовая наб., 34 191186, St. Petersburg, Russia
 
