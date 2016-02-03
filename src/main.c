@@ -3,16 +3,47 @@
 #include <stdbool.h>
 #include <string.h>
 #include <sys/time.h>
+#include <unistd.h>
 
 #include "libpostal.h"
+#include "file_utils.h"
 #include "log/log.h"
 #include "json_encode.h"
 #include "string_utils.h"
 
 #define LIBPOSTAL_USAGE "Usage: ./libpostal address [...languages] [--json]\n"
 
+static inline void print_output(char *address, normalize_options_t options, bool use_json) {
+    size_t num_expansions;
+
+    char **strings = expand_address(address, options, &num_expansions);
+
+    char *normalized;
+
+    if (!use_json) {
+        for (size_t i = 0; i < num_expansions; i++) {
+            normalized = strings[i];
+            printf("%s\n", normalized);        
+            free(normalized);
+        }
+    } else {
+        printf("{\"expansions\": [");
+        for (size_t i = 0; i < num_expansions; i++) {
+            normalized = strings[i];
+            char *json_string = json_encode_string(normalized);
+            printf("%s%s", json_string, i < num_expansions - 1 ? ", ": "");
+            free(normalized);
+            free(json_string);
+        }
+        printf("]}\n");
+
+    }
+
+    free(strings);
+
+}
+
 int main(int argc, char **argv) {
-    uint64_t i;
     char *arg;
 
     char *address = NULL;
@@ -39,7 +70,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    if (address == NULL) {
+    if (address == NULL && (!use_json || isatty(fileno(stdin)))) {
         log_error(LIBPOSTAL_USAGE);
         exit(EXIT_FAILURE);
     }
@@ -55,34 +86,20 @@ int main(int argc, char **argv) {
         options.num_languages = languages->n;
     }
 
-    size_t num_expansions;
-
-    char **strings = expand_address(address, options, &num_expansions);
-
-    string_array_destroy(languages);
-
-    char *normalized;
-
-    if (!use_json) {
-        for (i = 0; i < num_expansions; i++) {
-            normalized = strings[i];
-            printf("%s\n", normalized);        
-            free(normalized);
+    if (address == NULL) {
+        char *line;
+        while ((line = file_getline(stdin)) != NULL) {
+            print_output(line, options, use_json);
+            free(line);
         }
     } else {
-        printf("{\"expansions\": [");
-        for (i = 0; i < num_expansions; i++) {
-            normalized = strings[i];
-            char *json_string = json_encode_string(normalized);
-            printf("%s%s", json_string, i < num_expansions - 1 ? ", ": "");
-            free(normalized);
-            free(json_string);
-        }
-        printf("]}\n");
-
+        print_output(address, options, use_json);
     }
 
-    free(strings);
+    if (languages != NULL) {
+        string_array_destroy(languages);
+    }
 
     libpostal_teardown();
+    libpostal_teardown_language_classifier();
 }
