@@ -213,7 +213,7 @@ int trie_node_search_tail_tokens(trie_t *self, trie_node_t node, char *str, toke
             return i-1;
         }
 
-        if (token.type == WHITESPACE) continue;
+        if (token.type == WHITESPACE && *tail_ptr == ' ') continue;
 
         if (*tail_ptr == ' ') {
             tail_ptr++;
