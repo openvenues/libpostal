@@ -43,6 +43,18 @@ static inline uint64_t get_normalize_token_options(normalize_options_t options) 
     return normalize_token_options;
 }
 
+static inline uint64_t get_normalize_string_options(normalize_options_t options) {
+    uint64_t normalize_string_options = 0;
+    normalize_string_options |= options.transliterate ? NORMALIZE_STRING_TRANSLITERATE : 0;
+    normalize_string_options |= options.latin_ascii ? NORMALIZE_STRING_LATIN_ASCII : 0;
+    normalize_string_options |= options.decompose ? NORMALIZE_STRING_DECOMPOSE : 0;
+    normalize_string_options |= options.strip_accents ? NORMALIZE_STRING_STRIP_ACCENTS : 0;
+    normalize_string_options |= options.lowercase ? NORMALIZE_STRING_LOWERCASE : 0;
+    normalize_string_options |= options.trim_string ? NORMALIZE_STRING_TRIM : 0;
+
+    return normalize_string_options;
+}
+
 static void add_normalized_strings_token(cstring_array *strings, char *str, token_t token, normalize_options_t options) {
 
     uint64_t normalize_token_options = get_normalize_token_options(options);
@@ -132,6 +144,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
         for (int j = 0; j < lang_phrases->n; j++) {
             phrase_t p = lang_phrases->a[j];
+            log_debug("lang=%s, (%d, %d)\n", lang, p.start, p.len);
             phrase_language_array_push(phrases, (phrase_language_t){lang, p});
         }
 
@@ -155,6 +168,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
     bool last_added_was_whitespace = false;
 
+    uint64_t normalize_string_options = get_normalize_string_options(options);
 
     if (phrases != NULL) {
         log_debug("phrases not NULL, n=%zu\n", phrases->n);
@@ -166,6 +180,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
         int end = 0;
 
         phrase_t phrase = NULL_PHRASE;
+        phrase_t prev_phrase = NULL_PHRASE;
 
         key = key != NULL ? key : char_array_new_size(DEFAULT_KEY_LEN);
 
@@ -173,7 +188,11 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
             phrase_lang = phrases->a[i];
 
             phrase = phrase_lang.phrase;
-            if (phrase.start < start) {
+
+            log_debug("phrase.start=%d, phrase.len=%d, lang=%s, prev_phrase.start=%d, prev_phrase.len=%d\n", phrase.start, phrase.len, phrase_lang.language, prev_phrase.start, prev_phrase.len);
+
+            if ((phrase.start > prev_phrase.start && phrase.start < prev_phrase.start + prev_phrase.len) || (phrase.start == prev_phrase.start && i > 0 && phrase.len < prev_phrase.len)) {
+                log_debug("continuing\n");
                 continue;
             }
 
@@ -186,7 +205,9 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
             end = phrase.start;
 
+            log_debug("start=%d, end=%d\n", start, end);
             for (int j = start; j < end; j++) {
+                log_debug("Adding token %d\n", j);
                 token_t token = tokens->a[j];
                 if (is_punctuation(token.type)) {
                     last_was_punctuation = true;
@@ -201,19 +222,24 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
                     log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
 
                     string_tree_add_string_len(tree, str + token.offset, token.len);
-                } else {
-                    log_debug("Adding space\n");
+                    last_added_was_whitespace = false;
+                } else if (!last_added_was_whitespace) {
+                    log_debug("Adding pre-phrase whitespace\n");
                     last_added_was_whitespace = true;
                     string_tree_add_string(tree, " ");
+                } else {
+                    continue;
                 }
 
                 last_was_punctuation = false;
                 string_tree_finalize_token(tree);       
             }
 
-            if (phrase.start > 0) {
+            if (phrase.start > 0 && start < end) {
                 token_t prev_token = tokens->a[phrase.start - 1];
+                log_debug("last_added_was_whitespace=%d\n", last_added_was_whitespace);
                 if (!last_added_was_whitespace && phrase.start - 1 > 0 && (!is_ideographic(prev_token.type) || last_was_punctuation))  {
+                    log_debug("Adding space III\n");
                     string_tree_add_string(tree, " ");
                     last_added_was_whitespace = true;
                     string_tree_finalize_token(tree);
@@ -247,12 +273,19 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
                         address_expansion_t expansion = expansions->a[j];
                         if (expansion.canonical_index != NULL_CANONICAL_INDEX) {
                             char *canonical = address_dictionary_get_canonical(expansion.canonical_index);
+                            char *canonical_normalized = normalize_string_utf8(canonical, normalize_string_options);
+
+                            canonical = canonical_normalized != NULL ? canonical_normalized : canonical;
+
+
                             if (phrase.start + phrase.len < tokens->n - 1) {
                                 token_t next_token = tokens->a[phrase.start + phrase.len];
                                 if (!is_numeric_token(next_token.type)) {
+                                    log_debug("non-canonical phrase, adding canonical string\n");
                                     string_tree_add_string(tree, canonical);
                                     last_added_was_whitespace = false;
                                 } else {
+                                    log_debug("adding canonical with cstring_array methods\n");
                                     uint32_t start_index = cstring_array_start_token(tree->strings);
                                     cstring_array_append_string(tree->strings, canonical);
                                     cstring_array_append_string(tree->strings, " ");
@@ -264,7 +297,13 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
                                 last_added_was_whitespace = false;
 
                             }
+
+                            if (canonical_normalized != NULL) {
+                                free(canonical_normalized);
+                            }
                         } else {
+                            log_debug("canonical phrase, adding canonical string\n");
+
                             uint32_t start_index = cstring_array_start_token(tree->strings);
                             for (int k = phrase.start; k < phrase.start + phrase.len; k++) {
                                 token = tokens->a[k];
@@ -272,45 +311,62 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
                                     cstring_array_append_string_len(tree->strings, str + token.offset, token.len);
                                     last_added_was_whitespace = false;
                                 } else {
+                                    log_debug("space\n");
                                     cstring_array_append_string(tree->strings, " ");
                                     last_added_was_whitespace = true;
                                 }
                             }
                             cstring_array_terminate(tree->strings);
-
                         }
                     }
-                    string_tree_finalize_token(tree);
 
                 }
             } else {
+                uint32_t start_index = cstring_array_start_token(tree->strings);
                 for (int j = phrase.start; j < phrase.start + phrase.len; j++) {
                     token = tokens->a[j];
 
                     if (token.type != WHITESPACE) {
-                        log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
-                        string_tree_add_string_len(tree, str + token.offset, token.len);
+                        log_debug("Adding canonical token, %.*s\n", (int)token.len, str + token.offset);
+                        cstring_array_append_string_len(tree->strings, str + token.offset, token.len);
                         last_added_was_whitespace = false;
                     } else if (!last_added_was_whitespace) {
-                        string_tree_add_string(tree, " ");
+                        log_debug("Adding space\n");
+                        cstring_array_append_string(tree->strings, " ");
                         last_added_was_whitespace = true;
                     }
-                    string_tree_finalize_token(tree);
 
                 }
 
                 if (phrase.start + phrase.len < tokens->n - 1) {
                     token_t next_token = tokens->a[phrase.start + phrase.len + 1];
                     if (next_token.type != WHITESPACE && !last_added_was_whitespace && !is_ideographic(next_token.type)) {
-                        string_tree_add_string(tree, " ");
+                        cstring_array_append_string(tree->strings, " ");
                         last_added_was_whitespace = true;
-                        string_tree_finalize_token(tree);
                     }
                 }
 
+                cstring_array_terminate(tree->strings);
+
+            }
+
+            log_debug("i=%d\n", i);
+            bool end_of_phrase = false;
+            if (i < phrases->n - 1) {
+                phrase_t next_phrase = phrases->a[i + 1].phrase;
+                end_of_phrase = (next_phrase.start != phrase.start || next_phrase.len != phrase.len);
+            } else {
+                end_of_phrase = true;
+            }
+
+            log_debug("end_of_phrase=%d\n", end_of_phrase);
+            if (end_of_phrase) {                
+                log_debug("finalize at i=%d\n", i);
+                string_tree_finalize_token(tree);
             }
 
             start = phrase.start + phrase.len;
+            prev_phrase = phrase;
 
         }
 
@@ -321,6 +377,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
         if (phrase.start + phrase.len > 0 && phrase.start + phrase.len <= end - 1) {
             token_t next_token = tokens->a[phrase.start + phrase.len];
             if (next_token.type != WHITESPACE && !last_added_was_whitespace && !is_ideographic(next_token.type)) {
+                log_debug("space after phrase\n");
                 string_tree_add_string(tree, " ");
                 last_added_was_whitespace = true;
                 string_tree_finalize_token(tree);
@@ -329,14 +386,17 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
 
         for (int j = start; j < end; j++) {
+            log_debug("On token %d\n", j);
             token_t token = tokens->a[j];
             if (is_punctuation(token.type)) {
+                log_debug("last_was_punctuation\n");
                 last_was_punctuation = true;
                 continue;
             }
 
             if (token.type != WHITESPACE) {
                 if (j > 0 && last_was_punctuation && !last_added_was_whitespace) {
+                    log_debug("Adding another space\n");
                     string_tree_add_string(tree, " ");
                     string_tree_finalize_token(tree);
                 }
@@ -344,10 +404,13 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
                 string_tree_add_string_len(tree, str + token.offset, token.len);
                 last_added_was_whitespace = false;
-            } else {
-                log_debug("Adding space\n");
+            } else if (!last_added_was_whitespace) {
+                log_debug("Adding space IV\n");
                 string_tree_add_string(tree, " ");
                 last_added_was_whitespace = true;
+            } else {
+                log_debug("Skipping token %d\n", j);
+                continue;
             }
 
             last_was_punctuation = false;
@@ -359,23 +422,29 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
     } else {
 
         for (int j = 0; j < tokens->n; j++) {
+            log_debug("On token %d\n", j);
             token_t token = tokens->a[j];
             if (is_punctuation(token.type)) {
+                log_debug("punctuation, skipping\n");
                 last_was_punctuation = true;
                 continue;
             }
 
             if (token.type != WHITESPACE) {
                 if (last_was_punctuation && !last_added_was_whitespace) {
+                    log_debug("Adding space V\n");
                     string_tree_add_string(tree, " ");
                     string_tree_finalize_token(tree);
                 }
 
                 string_tree_add_string_len(tree, str + token.offset, token.len);
                 last_added_was_whitespace = false;
-            } else {
+            } else if (!last_added_was_whitespace) {
+                log_debug("Adding space VI\n");
                 string_tree_add_string(tree, " ");
                 last_added_was_whitespace = true;
+            } else {
+                continue;
             }
 
             last_was_punctuation = false;
@@ -431,10 +500,17 @@ static address_expansion_array *get_affix_expansions(char_array *key, char *str,
     return expansions;
 }
 
-static inline void cat_affix_expansion(char_array *key, char *str, address_expansion_t expansion, token_t token, phrase_t phrase) {
+static inline void cat_affix_expansion(char_array *key, char *str, address_expansion_t expansion, token_t token, phrase_t phrase, normalize_options_t options) {
     if (expansion.canonical_index != NULL_CANONICAL_INDEX) {
         char *canonical = address_dictionary_get_canonical(expansion.canonical_index);
+        uint64_t normalize_string_options = get_normalize_string_options(options);
+        char *canonical_normalized = normalize_string_utf8(canonical, normalize_string_options);
+        canonical = canonical_normalized != NULL ? canonical_normalized : canonical;
+
         char_array_cat(key, canonical);
+        if (canonical_normalized != NULL) {
+            free(canonical_normalized);
+        }
     } else {
         char_array_cat_len(key, str + token.offset + phrase.start, phrase.len);
     }
@@ -489,7 +565,7 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
             prefix_expansion = prefix_expansions->a[i];
             char_array_clear(key);
 
-            cat_affix_expansion(key, str, prefix_expansion, token, prefix);
+            cat_affix_expansion(key, str, prefix_expansion, token, prefix, options);
             prefix_start = key->n - 1;
 
             add_space = (int)prefix_expansion.separable;
@@ -531,7 +607,7 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
                                     char_array_cat(key, " ");
                                 }
 
-                                cat_affix_expansion(key, str, suffix_expansion, token, suffix);
+                                cat_affix_expansion(key, str, suffix_expansion, token, suffix, options);
 
                                 expansion = char_array_get_string(key);
                                 cstring_array_add_string(strings, expansion);
@@ -550,7 +626,7 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
                         key->n = prefix_end;
                         suffix_expansion = suffix_expansions->a[j];
 
-                        cat_affix_expansion(key, str, suffix_expansion, token, suffix);
+                        cat_affix_expansion(key, str, suffix_expansion, token, suffix, options);
 
                         expansion = char_array_get_string(key);
                         cstring_array_add_string(tree->strings, expansion);
@@ -585,7 +661,7 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
                         char_array_cat(key, " ");
                     }
 
-                    cat_affix_expansion(key, str, suffix_expansion, token, suffix);
+                    cat_affix_expansion(key, str, suffix_expansion, token, suffix, options);
 
                     expansion = char_array_get_string(key);
                     cstring_array_add_string(tree->strings, expansion);
@@ -620,7 +696,7 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
             char_array_clear(key);
             prefix_expansion = prefix_expansions->a[j];
 
-            cat_affix_expansion(key, str, prefix_expansion, token, prefix);
+            cat_affix_expansion(key, str, prefix_expansion, token, prefix, options);
             prefix_end = key->n - 1;
 
             add_space = prefix_expansion.separable && prefix.len < token.len;
@@ -747,30 +823,24 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
         
         string_tree_t *alternatives;
 
-        khiter_t k = kh_get(str_set, unique_strings, new_str);
+        int ret;
+        log_debug("new_str=%s\n", new_str);
 
-        if (k == kh_end(unique_strings)) {
-            log_debug("Adding alternatives for single normalization\n");
-            alternatives = add_string_alternatives(new_str, options);
-            int ret;
-            k = kh_put(str_set, unique_strings, strdup(new_str), &ret);           
-            if (alternatives == NULL) {
-                log_debug("alternatives = NULL\n");
-            }
-        } else {
-            if (last_numex_str != NULL) {
-                free(last_numex_str);
-            }
-            continue;
-        }
-
+        log_debug("Adding alternatives for single normalization\n");
+        alternatives = add_string_alternatives(new_str, options);
 
         if (last_numex_str != NULL) {
             free(last_numex_str);
         }
 
+        if (alternatives == NULL) {
+            log_debug("alternatives = NULL\n");
+            continue;
+        }
+
+
         iter = string_tree_iterator_new(alternatives);
-        log_debug("iter->num_tokens=%d", iter->num_tokens);
+        log_debug("iter->num_tokens=%d\n", iter->num_tokens);
 
         for (; string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
             char_array_clear(temp_string);
@@ -781,7 +851,15 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
             char_array_terminate(temp_string);
 
             token = char_array_get_string(temp_string);
-            add_postprocessed_string(strings, token, options);
+            log_debug("full string=%s\n", token);
+            khiter_t k = kh_get(str_set, unique_strings, token);
+
+            if (k == kh_end(unique_strings)) {
+                log_debug("doing postprocessing\n");
+                add_postprocessed_string(strings, token, options);
+                k = kh_put(str_set, unique_strings, strdup(token), &ret);
+            }
+
 
         }
 
@@ -800,13 +878,7 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
 char **expand_address(char *input, normalize_options_t options, size_t *n) {
     options.address_components |= ADDRESS_ANY;
 
-    uint64_t normalize_string_options = 0;
-    normalize_string_options |= options.transliterate ? NORMALIZE_STRING_TRANSLITERATE : 0;
-    normalize_string_options |= options.latin_ascii ? NORMALIZE_STRING_LATIN_ASCII : 0;
-    normalize_string_options |= options.decompose ? NORMALIZE_STRING_DECOMPOSE : 0;
-    normalize_string_options |= options.strip_accents ? NORMALIZE_STRING_STRIP_ACCENTS : 0;
-    normalize_string_options |= options.lowercase ? NORMALIZE_STRING_LOWERCASE : 0;
-    normalize_string_options |= options.trim_string ? NORMALIZE_STRING_TRIM : 0;
+    uint64_t normalize_string_options = get_normalize_string_options(options);
 
     size_t len = strlen(input);
 
