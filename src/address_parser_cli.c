@@ -45,9 +45,13 @@ int main(int argc, char **argv) {
         address_parser_dir = argv[1];
     }
 
+    printf("Loading models...\n");
+
     if (!libpostal_setup() || !libpostal_setup_parser()) {
         exit(EXIT_FAILURE);
     }
+
+    printf("\n");
 
     printf("Welcome to libpostal's address parser.\n\n");
     printf("Type in any address to parse and print the result.\n\n");
