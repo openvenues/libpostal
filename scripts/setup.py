@@ -52,6 +52,7 @@ def main():
                                ] + ['geodata/text/pynormalize.c'],
                       include_dirs=[PROJECT_DIR],
                       extra_compile_args=['-std=gnu99', '-DHAVE_CONFIG_H',
+                                          '-DLIBPOSTAL_DATA_DIR="{}"'.format(os.getenv('LIBPOSTAL_DATA_DIR', os.path.realpath(os.path.join(PROJECT_DIR, 'data')))),
                                           '-Wno-unused-function'],
                       ),
         ],
