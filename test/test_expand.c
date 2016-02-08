@@ -67,7 +67,7 @@ static greatest_test_res test_expansion_contains_with_languages(char *input, cha
 
 TEST test_expansions(void) {
     CHECK_CALL(test_expansion_contains_with_languages("123 Main St. #2f", "123 main street number 2f", LIBPOSTAL_DEFAULT_OPTIONS, 1, "en"));
-    CHECK_CALL(test_expansion_contains_with_languages("Marktstrasse", "markt straße", LIBPOSTAL_DEFAULT_OPTIONS, 1, "de"));
+    CHECK_CALL(test_expansion_contains_with_languages("Marktstrasse", "markt strasse", LIBPOSTAL_DEFAULT_OPTIONS, 1, "de"));
     PASS();
 }
 
