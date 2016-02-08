@@ -3,6 +3,7 @@
 SUITE_EXTERN(libpostal_expansion_tests);
 SUITE_EXTERN(libpostal_transliteration_tests);
 SUITE_EXTERN(libpostal_numex_tests);
+SUITE_EXTERN(libpostal_trie_tests);
 
 GREATEST_MAIN_DEFS();
 
@@ -13,5 +14,6 @@ int main(int argc, char **argv) {
     RUN_SUITE(libpostal_expansion_tests);
     RUN_SUITE(libpostal_transliteration_tests);
     RUN_SUITE(libpostal_numex_tests);
+    RUN_SUITE(libpostal_trie_tests);
     GREATEST_MAIN_END();
 }

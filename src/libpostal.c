@@ -84,7 +84,7 @@ static void add_normalized_strings_token(cstring_array *strings, char *str, toke
             }
         }
         
-        if (is_numeric_token(token.type) && options.split_alpha_from_numeric) {
+        if (is_numeric_token(token.type) && options.split_alpha_from_numeric && numeric_starts_with_alpha(str, token)) {
             normalize_token_options |= NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC;
             normalize_token(strings, str, token, normalize_token_options);
             normalize_token_options ^= NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC;
@@ -699,6 +699,7 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
     string_tree_t *token_tree = string_tree_new_size(len);
 
     add_normalized_strings_tokenized(token_tree, str, tokens, options);
+
     string_tree_iterator_t *tokenized_iter = string_tree_iterator_new(token_tree);
 
     string_tree_iterator_t *iter;
@@ -795,9 +796,6 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
 
     char_array_destroy(temp_string);
 }
-
-
-
 
 char **expand_address(char *input, normalize_options_t options, size_t *n) {
     options.address_components |= ADDRESS_ANY;

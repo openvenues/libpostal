@@ -304,6 +304,7 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
                     if (strncmp((char *)current_tail, ptr + 1, ptr_len) == 0) {
                         log_debug("node tail matches first token\n");
                         int tail_search_result = trie_node_search_tail_tokens(self, node, str, tokens, ptr_len, i + 1);
+                        log_debug("tail_search_result=%d\n", tail_search_result);
                         node_id = start_node_id;
                         node = trie_get_node(self, node_id);
                         check_continuation = false;
@@ -331,17 +332,18 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
 
 
         if (node.check <= 0 || node_id == start_node_id) {
+            log_debug("state = SEARCH_STATE_NO_MATCH\n");
             state = SEARCH_STATE_NO_MATCH;
             // check
             if (last_match_index != -1) {
-                log_debug("last_match not NULL and state==SEARCH_STATE_NO_MATCH, data=%d", data);
+                log_debug("last_match not NULL and state==SEARCH_STATE_NO_MATCH, data=%d\n", data);
                 if (*phrases == NULL) {
                     *phrases = phrase_array_new_size(1);
                 }
                 phrase_array_push(*phrases, (phrase_t){phrase_start, last_match_index - phrase_start + 1, data});
                 i = last_match_index;
                 last_match_index = -1;
-                phrase_start = 0;
+                phrase_start = phrase_len = 0;
                 node_id = last_node_id = start_node_id;
                 node = last_node = trie_get_node(self, start_node_id);
                 continue;
@@ -360,7 +362,7 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
 
             state = SEARCH_STATE_PARTIAL_MATCH;
             if (!(node.base < 0) && (last_state == SEARCH_STATE_NO_MATCH || last_state == SEARCH_STATE_BEGIN)) {
-                log_debug("phrase_start=%d\n", i);
+                log_debug("phrase_start=%d, node.base = %d, last_state=%d\n", i, node.base, last_state);
                 phrase_start = i;
             }
 
@@ -372,6 +374,8 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
                 trie_data_node_t data_node = self->data->a[data_index];
                 data = data_node.data;
                 log_debug("data = %d\n", data);
+
+                log_debug("phrase_start = %d\n", phrase_start);
 
                 last_match_index = i;
                 log_debug("last_match_index = %d\n", i);
@@ -388,7 +392,7 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
                     phrase_array_push(*phrases, (phrase_t){phrase_start, last_match_index - phrase_start + 1, data});
                     i = last_match_index;
                     last_match_index = -1;
-                    phrase_start = 0;
+                    phrase_start = phrase_len = 0;
                     node_id = last_node_id = start_node_id;
                     node = last_node = trie_get_node(self, start_node_id);
                     state = SEARCH_STATE_NO_MATCH;
@@ -407,22 +411,24 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
                     log_debug("Ideographic character\n");
                     last_node_id = node_id;
                     last_node = node;
-                } else if (continuation.check != node_id && last_match_index != i) {
-                    log_debug("No continuation for phrase with start=%d, yielding tokens\n", phrase_start);
-                    state = SEARCH_STATE_NO_MATCH;
-                    phrase_start = 0;
-                    node_id = last_node_id = start_node_id;
-                    node = last_node = trie_get_node(self, start_node_id);
-                } else if (continuation.check != node_id && last_match_index == i) {
+                } else if (continuation.check != node_id && last_match_index != -1) {
                     log_debug("node->match no continuation\n");
                     if (*phrases == NULL) {
                         *phrases = phrase_array_new_size(1);
                     }
                     phrase_array_push(*phrases, (phrase_t){phrase_start, last_match_index - phrase_start + 1, data});
-                    last_match_index = -1; 
+                    i = last_match_index;
+                    last_match_index = -1;
+                    phrase_start = phrase_len = 0;
                     node_id = last_node_id = start_node_id;
                     node = last_node = trie_get_node(self, start_node_id);
                     state = SEARCH_STATE_BEGIN;
+                } else if (continuation.check != node_id) {
+                    log_debug("No continuation for phrase with start=%d, yielding tokens\n", phrase_start);
+                    state = SEARCH_STATE_NO_MATCH;
+                    phrase_start = phrase_len = 0;
+                    node_id = last_node_id = start_node_id;
+                    node = last_node = trie_get_node(self, start_node_id);
                 } else {
                     log_debug("Has continuation, node_id=%d\n", continuation_id);
                     last_node = node = continuation;
