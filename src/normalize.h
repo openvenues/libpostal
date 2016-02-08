@@ -66,6 +66,8 @@ char *normalize_string_latin(char *str, size_t len, uint64_t options);
 void add_normalized_token(char_array *array, char *str, token_t token, uint64_t options);
 void normalize_token(cstring_array *array, char *str, token_t token, uint64_t options);
 
+bool numeric_starts_with_alpha(char *str, token_t token);
+
 // Takes NORMALIZE_STRING_* options
 string_tree_t *normalize_string(char *str, uint64_t options);
 string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t num_languages, char **languages);
