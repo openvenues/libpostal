@@ -114,10 +114,7 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
 
     size_t consumed = 0;
 
-    char_array *array = char_array_new_size(len);
-
     khash_t(int_set) *scripts = kh_init(int_set);
-
     char *utf8_normalized = NULL;
 
     char *ptr = str;
@@ -140,6 +137,7 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
                 utf8_normalized = NULL;
             }
 
+            kh_destroy(int_set, scripts);
             return tree;
         }
 
@@ -151,7 +149,7 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
             if (ret < 0) {
                 log_error("Error in kh_put\n");
                 string_tree_destroy(tree);
-                char_array_destroy(array);
+                kh_destroy(int_set, scripts);
                 return NULL;
             }
         }
@@ -216,6 +214,8 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
         string_tree_destroy(transliterators);
 
     }
+
+    kh_destroy(int_set, scripts);
     
     string_tree_finalize_token(tree);
 
