@@ -224,10 +224,6 @@ int trie_node_search_tail_tokens(trie_t *self, trie_node_t node, char *str, toke
 
         if (strncmp((char *)tail_ptr, ptr, token_length) == 0) {
             tail_ptr += token_length;
-            log_debug("tail comparison successful\n");
-            if (i == tokens->n - 1) {
-                return i;
-            }
         } else {
             return -1;
         }
