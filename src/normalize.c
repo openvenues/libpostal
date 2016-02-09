@@ -211,6 +211,7 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
             }
         }
 
+        string_tree_iterator_destroy(trans_iter);
         string_tree_destroy(transliterators);
 
     }
