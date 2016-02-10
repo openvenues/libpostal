@@ -361,6 +361,31 @@ inline size_t utf8_common_prefix_ignore_separators(const char *str1, const char 
     return utf8_common_prefix_len_ignore_separators(str1, str2, strlen(str2));
 }
 
+bool string_is_ignorable(char *str, size_t len) {
+    uint8_t *ptr = (uint8_t *)str;
+    size_t idx = 0;
+
+    bool ignorable = true;
+
+    while (idx < len) {
+        int32_t ch;
+        ssize_t char_len = utf8proc_iterate(ptr, len, &ch);
+
+        if (char_len <= 0) break;
+        if (ch == 0) break;
+        if (!(utf8proc_codepoint_valid(ch))) return false;
+
+        int cat = utf8proc_category(ch);
+        if (!utf8_is_separator(cat) && !utf8_is_hyphen(ch)) {
+            return false;
+        }
+
+        ptr += char_len;
+        idx += char_len;
+    }
+
+    return true;
+}
 
 bool string_contains_hyphen_len(char *str, size_t len) {
     uint8_t *ptr = (uint8_t *)str;

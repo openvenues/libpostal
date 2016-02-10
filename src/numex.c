@@ -984,8 +984,8 @@ char *replace_numeric_expressions(char *str, char *lang) {
     size_t len = strlen(str);
 
     char_array *replacement = char_array_new_size(len);
-    int start = 0;
-    int end = 0;
+    size_t start = 0;
+    size_t end = 0;
 
     for (int i = 0; i < results->n; i++) {
         numex_result_t result = results->a[i];
@@ -1001,7 +1001,10 @@ char *replace_numeric_expressions(char *str, char *lang) {
         char numeric_string[INT64_MAX_STRING_SIZE] = {0};
         sprintf(numeric_string, "%" PRId64, result.value);
 
-        char_array_append_len(replacement, str + start, end - start);
+        if (!string_is_ignorable(str + start, end - start)) {
+            char_array_append_len(replacement, str + start, end - start);
+        }
+        
         char_array_append(replacement, numeric_string);
 
         if (result.is_ordinal) {
