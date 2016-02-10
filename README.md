@@ -244,8 +244,11 @@ cd src/
 ./libpostal "Quatre vignt douze Ave des Champs-Élysées"
 ```
 
-Currently libpostal requires two input strings, the address text and a language
-code (ISO 639-1).
+If you have a text file or stream with one address per line, the command-line interface also accepts input from stdin:
+
+```
+cat some_file | ./libpostal --json
+```
 
 Command-line usage (parser)
 ---------------------------
@@ -272,7 +275,7 @@ make check
 
 Adding [test cases](https://github.com/openvenues/libpostal/tree/master/test) is easy, even if your C is rusty/non-existent, and we'd love contributions. We use mostly functional tests checking string input against string output.
 
-libpostal also gets periodically battle-tested on tens of millions of addresses in OSM using valgrind to check for memory leaks and other errors.
+libpostal also gets periodically battle-tested on tens of millions of addresses from OSM (clean) as well as anonymized queries from a production geocoder (not so clean). During this process we use valgrind to check for memory leaks and other errors.
 
 Data files
 ----------
