@@ -1,6 +1,6 @@
-# libpostal: international street address NLP
-
 [![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal)
+
+# libpostal: international street address NLP
 
 libpostal is a fast statistical parser/normalizer for street addresses around the world.
 
