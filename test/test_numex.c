@@ -25,6 +25,8 @@ TEST test_numeric_expressions(void) {
     // English numbers
     CHECK_CALL(test_numex("five hundred ninety-three", "593", "en"));
     CHECK_CALL(test_numex("five hundred and ninety-three", "593", "en"));
+    CHECK_CALL(test_numex("fourth and a", "4th and a", "en"));
+    CHECK_CALL(test_numex("foo and bar", "foo and bar", "en"));
     CHECK_CALL(test_numex("thirty west twenty-sixth street", "30 west 26th street", "en"));
     CHECK_CALL(test_numex("five and sixth", "5 and 6th", "en"));
     CHECK_CALL(test_numex("three hundred thousand nineteenhundred and forty-fifth", "301945th", "en"));
