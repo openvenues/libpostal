@@ -648,6 +648,8 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
 
     numex_search_state_t prev_state = start_state;
 
+    phrase_t stopword_phrase;
+
     size_t len = strlen(str);
     size_t idx = 0;
 
@@ -668,6 +670,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
     char_array *number_str = NULL;
 
     bool last_was_separator = false;
+    bool last_was_stopword = false;
     bool possible_complete_token = false;
     bool complete_token = false;
 
@@ -775,7 +778,10 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
             if (result.len == 0) {
                 result.start = idx + phrase.start;
             }
-            result.len = idx + phrase.start + phrase.len - result.start;
+
+            if (rule.rule_type != NUMEX_STOPWORD) {
+                result.len = idx + phrase.start + phrase.len - result.start;
+            }
 
             log_debug("idx=%zu, phrase.len=%d\n", idx, phrase.len);
 
@@ -812,12 +818,20 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
             } else if (rule.rule_type == NUMEX_STOPWORD && prev_rule.rule_type == NUMEX_NULL) {
                 log_debug("numex stopword\n");
                 rule = NUMEX_NULL_RULE;
+                last_was_separator = false;
+                state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
+                continue;
             }
 
             if (rule.rule_type != NUMEX_STOPWORD) {
                 prev_rule = rule;
                 prev_result_len = result.len;
+                stopword_phrase = NULL_PHRASE;
+            } else {
+                stopword_phrase = phrase;
             }
+
+            last_was_stopword = rule.rule_type == NUMEX_STOPWORD;
 
             if (rule.rule_type == NUMEX_ORDINAL_RULE) {
                 result.is_ordinal = true;
@@ -830,7 +844,19 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
             if (rule.rule_type != NUMEX_NULL && idx + phrase.start + phrase.len == len) {
                 number_finished = true;
             }
+        } else if (last_was_stopword) {
+            log_debug("last was stopword\n");
+            last_was_separator = false;
+            advance_index = false;
+            idx = stopword_phrase.start;
+            ptr = (uint8_t *)str + stopword_phrase.start;
+            state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
+            if (prev_rule.rule_type != NUMEX_NULL) {
+                number_finished = true;
+            }
+
         }
+
         if (!set_rule) {
             rule = prev_rule = NUMEX_NULL_RULE;
             log_debug("Resetting rules to NUMEX_NULL_RULE\n");
