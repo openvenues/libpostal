@@ -30,6 +30,9 @@ TEST test_numeric_expressions(void) {
     CHECK_CALL(test_numex("thirty west twenty-sixth street", "30 west 26th street", "en"));
     CHECK_CALL(test_numex("five and sixth", "5 and 6th", "en"));
     CHECK_CALL(test_numex("three hundred thousand nineteenhundred and forty-fifth", "301945th", "en"));
+    CHECK_CALL(test_numex("seventeen eighty", "1780", "en"));
+    CHECK_CALL(test_numex("ten oh four", "1004", "en"));
+    CHECK_CALL(test_numex("ten and four", "10 and 4", "en"));
 
     // French (Celtic-style) numbers
     CHECK_CALL(test_numex("quatre-vignt-douze", "92", "fr"));
