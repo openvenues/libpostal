@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
         }
 
         address_parser_response_t *parsed;
-        address_parser_options_t options = LIBPOSTAL_ADDRESS_PARSER_DEFAULT_OPTIONS;
+        address_parser_options_t options = get_libpostal_address_parser_default_options();
 
         if ((parsed = parse_address(input, options))) {
             printf("\n");

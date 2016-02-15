@@ -66,16 +66,20 @@ static greatest_test_res test_expansion_contains_with_languages(char *input, cha
 
 
 TEST test_expansions(void) {
-    CHECK_CALL(test_expansion_contains_with_languages("123 Main St. #2f", "123 main street number 2f", LIBPOSTAL_DEFAULT_OPTIONS, 1, "en"));
-    CHECK_CALL(test_expansion_contains_with_languages("Marktstrasse", "markt strasse", LIBPOSTAL_DEFAULT_OPTIONS, 1, "de"));
-    CHECK_CALL(test_expansion_contains_with_languages("Hoofdstraat", "hoofdstraat", LIBPOSTAL_DEFAULT_OPTIONS, 1, "nl"));
-    CHECK_CALL(test_expansion_contains_with_languages("มงแตร", "มงแตร", LIBPOSTAL_DEFAULT_OPTIONS, 1, "th"));
+    normalize_options_t options = get_libpostal_default_options();
+
+    CHECK_CALL(test_expansion_contains_with_languages("123 Main St. #2f", "123 main street number 2f", options, 1, "en"));
+    CHECK_CALL(test_expansion_contains_with_languages("Marktstrasse", "markt strasse", options, 1, "de"));
+    CHECK_CALL(test_expansion_contains_with_languages("Hoofdstraat", "hoofdstraat", options, 1, "nl"));
+    CHECK_CALL(test_expansion_contains_with_languages("มงแตร", "มงแตร", options, 1, "th"));
     PASS();
 }
 
 TEST test_expansions_language_classifier(void) {
-    CHECK_CALL(test_expansion_contains_with_languages("V XX Sett", "via 20 settembre", LIBPOSTAL_DEFAULT_OPTIONS, 0, NULL));
-    CHECK_CALL(test_expansion_contains_with_languages("C/ Ocho", "calle 8", LIBPOSTAL_DEFAULT_OPTIONS, 0, NULL));
+    normalize_options_t options = get_libpostal_default_options();
+
+    CHECK_CALL(test_expansion_contains_with_languages("V XX Sett", "via 20 settembre", options, 0, NULL));
+    CHECK_CALL(test_expansion_contains_with_languages("C/ Ocho", "calle 8", options, 0, NULL));
     PASS();
 }
 

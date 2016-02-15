@@ -32,6 +32,35 @@ KSORT_INIT(phrase_language_array, phrase_language_t, ks_lt_phrase_language)
 
 #define DEFAULT_KEY_LEN 32
 
+
+static normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
+        .languages = NULL,
+        .num_languages = 0,
+        .address_components = ADDRESS_NAME | ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_UNIT,
+        .latin_ascii = 1,
+        .transliterate = 1,
+        .strip_accents = 1,
+        .decompose = 1,
+        .lowercase = 1,
+        .trim_string = 1,
+        .drop_parentheticals = 1,
+        .replace_numeric_hyphens = 0,
+        .delete_numeric_hyphens = 0,
+        .split_alpha_from_numeric = 1,
+        .replace_word_hyphens = 1,
+        .delete_word_hyphens = 1,
+        .delete_final_periods = 1,
+        .delete_acronym_periods = 1,
+        .drop_english_possessives = 1,
+        .delete_apostrophes = 1,
+        .expand_numex = 1,
+        .roman_numerals = 1
+};
+
+inline normalize_options_t get_libpostal_default_options(void) {
+    return LIBPOSTAL_DEFAULT_OPTIONS;
+}
+
 static inline uint64_t get_normalize_token_options(normalize_options_t options) {
     uint64_t normalize_token_options = 0;
 
@@ -978,7 +1007,14 @@ void address_parser_response_destroy(address_parser_response_t *self) {
     free(self);
 }
 
+static address_parser_options_t LIBPOSTAL_ADDRESS_PARSER_DEFAULT_OPTIONS =  {
+    .language = NULL,
+    .country = NULL
+};
 
+inline address_parser_options_t get_libpostal_address_parser_default_options(void) {
+    return LIBPOSTAL_ADDRESS_PARSER_DEFAULT_OPTIONS;
+}
 
 address_parser_response_t *parse_address(char *address, address_parser_options_t options) {
     address_parser_context_t *context = address_parser_context_new();

@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    normalize_options_t options = LIBPOSTAL_DEFAULT_OPTIONS;
+    normalize_options_t options = get_libpostal_default_options();
 
     if (languages != NULL) {
         options.languages = languages->a;
