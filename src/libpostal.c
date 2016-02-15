@@ -37,27 +37,27 @@ static normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
         .languages = NULL,
         .num_languages = 0,
         .address_components = ADDRESS_NAME | ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_UNIT,
-        .latin_ascii = 1,
-        .transliterate = 1,
-        .strip_accents = 1,
-        .decompose = 1,
-        .lowercase = 1,
-        .trim_string = 1,
-        .drop_parentheticals = 1,
-        .replace_numeric_hyphens = 0,
-        .delete_numeric_hyphens = 0,
-        .split_alpha_from_numeric = 1,
-        .replace_word_hyphens = 1,
-        .delete_word_hyphens = 1,
-        .delete_final_periods = 1,
-        .delete_acronym_periods = 1,
-        .drop_english_possessives = 1,
-        .delete_apostrophes = 1,
-        .expand_numex = 1,
-        .roman_numerals = 1
+        .latin_ascii = true,
+        .transliterate = true,
+        .strip_accents = true,
+        .decompose = true,
+        .lowercase = true,
+        .trim_string = true,
+        .drop_parentheticals = true,
+        .replace_numeric_hyphens = false,
+        .delete_numeric_hyphens = false,
+        .split_alpha_from_numeric = true,
+        .replace_word_hyphens = true,
+        .delete_word_hyphens = true,
+        .delete_final_periods = true,
+        .delete_acronym_periods = true,
+        .drop_english_possessives = true,
+        .delete_apostrophes = true,
+        .expand_numex = true,
+        .roman_numerals = true
 };
 
-inline normalize_options_t get_libpostal_default_options(void) {
+normalize_options_t get_libpostal_default_options(void) {
     return LIBPOSTAL_DEFAULT_OPTIONS;
 }
 

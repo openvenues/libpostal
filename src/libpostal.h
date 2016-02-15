@@ -41,24 +41,24 @@ typedef struct normalize_options {
     uint16_t address_components;
 
     // String options
-    uint64_t latin_ascii:1;
-    uint64_t transliterate:1;
-    uint64_t strip_accents:1;
-    uint64_t decompose:1;
-    uint64_t lowercase:1;
-    uint64_t trim_string:1;
-    uint64_t drop_parentheticals:1;
-    uint64_t replace_numeric_hyphens:1;
-    uint64_t delete_numeric_hyphens:1;
-    uint64_t split_alpha_from_numeric:1;
-    uint64_t replace_word_hyphens:1;
-    uint64_t delete_word_hyphens:1;
-    uint64_t delete_final_periods:1;
-    uint64_t delete_acronym_periods:1;
-    uint64_t drop_english_possessives:1;
-    uint64_t delete_apostrophes:1;
-    uint64_t expand_numex:1;
-    uint64_t roman_numerals:1;
+    bool latin_ascii;
+    bool transliterate;
+    bool strip_accents;
+    bool decompose;
+    bool lowercase;
+    bool trim_string;
+    bool drop_parentheticals;
+    bool replace_numeric_hyphens;
+    bool delete_numeric_hyphens;
+    bool split_alpha_from_numeric;
+    bool replace_word_hyphens;
+    bool delete_word_hyphens;
+    bool delete_final_periods;
+    bool delete_acronym_periods;
+    bool drop_english_possessives;
+    bool delete_apostrophes;
+    bool expand_numex;
+    bool roman_numerals;
 
 } normalize_options_t;
 
