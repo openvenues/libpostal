@@ -66,6 +66,8 @@ normalize_options_t get_libpostal_default_options(void);
 
 char **expand_address(char *input, normalize_options_t options, size_t *n);
 
+void expansion_array_destroy(char **expansions, size_t n);
+
 /*
 Address parser
 */
@@ -88,7 +90,6 @@ address_parser_options_t get_libpostal_address_parser_default_options(void);
 address_parser_response_t *parse_address(char *address, address_parser_options_t options);
 
 // Setup/teardown methods
-
 
 bool libpostal_setup(void);
 void libpostal_teardown(void);

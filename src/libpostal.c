@@ -983,6 +983,13 @@ char **expand_address(char *input, normalize_options_t options, size_t *n) {
 
 }
 
+void expansion_array_destroy(char **expansions, size_t n) {
+    for (size_t i = 0; i < n; i++) {
+        free(expansions[i]);
+    }
+    free(expansions);
+}
+
 void address_parser_response_destroy(address_parser_response_t *self) {
     if (self == NULL) return;
 
