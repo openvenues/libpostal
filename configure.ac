@@ -51,6 +51,7 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([getcwd gettimeofday memmove memset munmap regcomp setlocale sqrt strdup strndup])
 
 AC_CONFIG_FILES([Makefile
+                 libpostal.pc
                  src/Makefile
                  src/sparkey/Makefile
                  test/Makefile])

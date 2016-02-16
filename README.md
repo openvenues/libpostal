@@ -201,12 +201,12 @@ Before you install, make sure you have the following prerequisites:
 
 **On Linux (Debian)**
 ```
-sudo apt-get install libsnappy-dev autoconf automake libtool
+sudo apt-get install libsnappy-dev autoconf automake libtool pkg-config
 ```
 
 **On Mac OSX**
 ```
-sudo brew install snappy autoconf automake libtool
+sudo brew install snappy autoconf automake libtool pkg-config
 ```
 
 Then to install the C library:
@@ -221,6 +221,20 @@ sudo make install
 
 # On Linux it's probably a good idea to run
 sudo ldconfig
+```
+
+libpostal has support for pkg-config, so you can use the pkg-config to print the flags needed to link your program against it:
+
+```
+pkg-config --cflags libpostal         # print compiler flags
+pkg-config --libs libpostal           # print linker flags
+pkg-config --cflags --libs libpostal  # print both
+```
+
+For example:
+
+```
+gcc app.c `pkg-config --cflags --libs libpostal`
 ```
 
 Bindings

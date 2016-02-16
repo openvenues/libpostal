@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libpostal
+Description: Fast international street address parsing and normalization using statistical NLP.
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lpostal
+Libs.private: @LIBS@
+Cflags: -I${includedir}
