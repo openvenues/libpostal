@@ -17,7 +17,7 @@ comparison and full-text indexing.
 
 While libpostal is not itself a full geocoder, it can be used as a preprocessing step to make any geocoding application smarter, simpler, and more consistent internationally.
 
-The core library is written in pure C. Language bindings for [Python](https://github.com/openvenues/pypostal), [Ruby](https://github.com/openvenues/ruby_postal) and [NodeJS](https://github.com/openvenues/node-postal) are officially supported and it's easy to write bindings in other languages.
+The core library is written in pure C. Language bindings for [Python](https://github.com/openvenues/pypostal), [Ruby](https://github.com/openvenues/ruby_postal), [Go](https://github.com/openvenues/gopostal), and [NodeJS](https://github.com/openvenues/node-postal) are officially supported and it's easy to write bindings in other languages.
 
 Examples of normalization
 -------------------------
@@ -244,6 +244,7 @@ Libpostal is designed to be used by higher-level languages. Here are the officia
 
 - Python: [pypostal](https://github.com/openvenues/pypostal)
 - Ruby: [ruby_postal](https://github.com/openvenues/ruby_postal)
+- Go: [gopostal](https://github.com/openvenues/gopostal)
 - NodeJS: [node-postal](https://github.com/openvenues/node-postal)
 
 If you don't see your language of choice, or if you're writing a language binding, please let us know!
