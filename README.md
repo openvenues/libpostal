@@ -23,9 +23,7 @@ Examples of normalization
 -------------------------
 
 The expand_address API converts messy real-world addresses into normalized
-equivalents suitable for search indexing, hashing, etc. Here's a code example
-using the Python API for succinctness:
-
+equivalents suitable for search indexing, hashing, etc. The C API is simple:
 
 ```c
 #include <stdio.h>
@@ -102,7 +100,7 @@ languages. We use OpenStreetMap (anything with an addr:* tag) and the OpenCage
 address format templates at: https://github.com/OpenCageData/address-formatting
 to construct the training data, supplementing with containing polygons and
 perturbing the inputs in a number of ways to make the parser as robust as possible
-to messy real-world input. Here's a code example, again using the Python API:
+to messy real-world input. Here's a C example:
 
 ```c
 #include <stdio.h>
