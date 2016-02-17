@@ -26,8 +26,33 @@ The expand_address API converts messy real-world addresses into normalized
 equivalents suitable for search indexing, hashing, etc. Here's a code example
 using the Python API for succinctness:
 
-```python
 
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <libpostal/libpostal.h>
+
+int main(int argc, char **argv) {
+    if (!libpostal_setup() || !libpostal_setup_language_classifier()) {
+        exit(EXIT_FAILURE);
+    }
+
+    size_t num_expansions;
+    normalize_options_t options = get_libpostal_default_options();
+    char **expansions = expand_address("Quatre vignt douze Ave des Champs-Élysées", options, &num_expansions);
+
+    for (size_t i = 0; i < num_expansions; i++) {
+        printf("%s\n", expansions[i]);
+    }
+
+    // Free expansions
+    expansion_array_destroy(expansions, num_expansions);
+}
+```
+
+Here's a more succinct example using the Python API:
+
+```
 from postal.expand import expand_address
 expansions = expand_address('Quatre vignt douze Ave des Champs-Élysées')
 
@@ -78,6 +103,31 @@ address format templates at: https://github.com/OpenCageData/address-formatting
 to construct the training data, supplementing with containing polygons and
 perturbing the inputs in a number of ways to make the parser as robust as possible
 to messy real-world input. Here's a code example, again using the Python API:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <libpostal/libpostal.h>
+
+int main(int argc, char **argv) {
+    // Setup
+    if (!libpostal_setup() || !libpostal_setup_parser()) {
+        exit(EXIT_FAILURE);
+    }
+
+    address_parser_options_t options = get_libpostal_address_parser_default_options();
+    address_parser_response_t *parsed = parse_address("781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", options);
+
+    for (size_t i = 0; i < parsed->num_components; i++) {
+        printf("%s: %s\n", parsed->labels[i], parsed->components[i]);
+    }
+
+    // Free parse result
+    address_parser_response_destroy(parsed);
+}
+```
+
+And the Python API version:
 
 ```python
 
