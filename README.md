@@ -31,6 +31,7 @@ equivalents suitable for search indexing, hashing, etc. The C API is simple:
 #include <libpostal/libpostal.h>
 
 int main(int argc, char **argv) {
+    // Setup (only called once at the beginning of your program)
     if (!libpostal_setup() || !libpostal_setup_language_classifier()) {
         exit(EXIT_FAILURE);
     }
@@ -45,12 +46,16 @@ int main(int argc, char **argv) {
 
     // Free expansions
     expansion_array_destroy(expansions, num_expansions);
+
+    // Teardown (only called once at the end of your program)
+    libpostal_teardown();
+    libpostal_teardown_language_classifier();
 }
 ```
 
 Here's a more succinct example using the Python API:
 
-```
+```python
 from postal.expand import expand_address
 expansions = expand_address('Quatre vignt douze Ave des Champs-Élysées')
 
@@ -108,7 +113,7 @@ to messy real-world input. Here's a C example:
 #include <libpostal/libpostal.h>
 
 int main(int argc, char **argv) {
-    // Setup
+    // Setup (only called once at the beginning of your program)
     if (!libpostal_setup() || !libpostal_setup_parser()) {
         exit(EXIT_FAILURE);
     }
@@ -122,6 +127,10 @@ int main(int argc, char **argv) {
 
     // Free parse result
     address_parser_response_destroy(parsed);
+
+    // Teardown (only called once at the end of your program)
+    libpostal_teardown();
+    libpostal_teardown_parser();
 }
 ```
 
