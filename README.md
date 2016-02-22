@@ -23,44 +23,11 @@ Examples of normalization
 -------------------------
 
 The expand_address API converts messy real-world addresses into normalized
-equivalents suitable for search indexing, hashing, etc. The C API is simple:
+equivalents suitable for search indexing, hashing, etc. 
 
-```c
-#include <stdio.h>
-#include <stdlib.h>
-#include <libpostal/libpostal.h>
+Here's an interactive example using the Python binding:
 
-int main(int argc, char **argv) {
-    // Setup (only called once at the beginning of your program)
-    if (!libpostal_setup() || !libpostal_setup_language_classifier()) {
-        exit(EXIT_FAILURE);
-    }
-
-    size_t num_expansions;
-    normalize_options_t options = get_libpostal_default_options();
-    char **expansions = expand_address("Quatre vignt douze Ave des Champs-Élysées", options, &num_expansions);
-
-    for (size_t i = 0; i < num_expansions; i++) {
-        printf("%s\n", expansions[i]);
-    }
-
-    // Free expansions
-    expansion_array_destroy(expansions, num_expansions);
-
-    // Teardown (only called once at the end of your program)
-    libpostal_teardown();
-    libpostal_teardown_language_classifier();
-}
-```
-
-Here's a more succinct example using the Python API:
-
-```python
-from postal.expand import expand_address
-expansions = expand_address('Quatre vignt douze Ave des Champs-Élysées')
-
-assert '92 avenue des champs-elysees' in set(expansions)
-```
+![expand](https://cloud.githubusercontent.com/assets/238455/13209432/c6335478-d8f1-11e5-9fcf-a414e2993ed4.gif)
 
 libpostal contains an OSM-trained language classifier to detect which language(s) are used in a given
 address so it can apply the appropriate normalizations. The only input needed is the raw address string. 
@@ -80,21 +47,50 @@ libpostal currently supports these types of normalizations in *60+ languages*,
 and you can [add more](https://github.com/openvenues/libpostal/tree/master/resources/dictionaries) 
 (without having to write any C).
 
-Now, instead of trying to bake address-specific conventions into traditional
-document search engines like Elasticsearch using giant synonyms files, scripting,
-custom analyzers, tokenizers, and the like, geocoding can look like this:
-
-1. Run the addresses in your database through libpostal's expand_address
-2. Store the normalized string(s) in your favorite search engine, DB, 
-   hashtable, etc.
-3. Run your user queries or fresh imports through libpostal and search
-   the existing database using those strings
-
-In this way, libpostal can perform fuzzy address matching in constant time
-relative to the size of the data set.
-
 For further reading and some bizarre address edge-cases, see:
 [Falsehoods Programmers Believe About Addresses](https://www.mjt.me.uk/posts/falsehoods-programmers-believe-about-addresses/).
+
+Usage (normalization)
+---------------------
+
+Here's an example using the Python bindings for succinctness (most of the higher-level language bindings are similar):
+
+```python
+from postal.expand import expand_address
+expansions = expand_address('Quatre-vignt-douze Ave des Champs-Élysées')
+
+assert '92 avenue des champs-elysees' in set(expansions)
+```
+
+The C API equivalent is a few more lines, but still fairly simple:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <libpostal/libpostal.h>
+
+int main(int argc, char **argv) {
+    // Setup (only called once at the beginning of your program)
+    if (!libpostal_setup() || !libpostal_setup_language_classifier()) {
+        exit(EXIT_FAILURE);
+    }
+
+    size_t num_expansions;
+    normalize_options_t options = get_libpostal_default_options();
+    char **expansions = expand_address("Quatre-vignt-douze Ave des Champs-Élysées", options, &num_expansions);
+
+    for (size_t i = 0; i < num_expansions; i++) {
+        printf("%s\n", expansions[i]);
+    }
+
+    // Free expansions
+    expansion_array_destroy(expansions, num_expansions);
+
+    // Teardown (only called once at the end of your program)
+    libpostal_teardown();
+    libpostal_teardown_language_classifier();
+}
+```
 
 Examples of parsing
 -------------------
@@ -105,7 +101,23 @@ languages. We use OpenStreetMap (anything with an addr:* tag) and the OpenCage
 address format templates at: https://github.com/OpenCageData/address-formatting
 to construct the training data, supplementing with containing polygons and
 perturbing the inputs in a number of ways to make the parser as robust as possible
-to messy real-world input. Here's a C example:
+to messy real-world input. 
+
+These example parse results are taken from the interactive address_parser program 
+that builds with libpostal when you run ```make```. Note that the parser is robust to 
+commas vs. no commas, casing, different permutations of components (if the input
+is e.g. just city or just city/postcode).
+
+![parser](https://cloud.githubusercontent.com/assets/238455/13209628/2c465b50-d8f4-11e5-8e70-915c6b6d207b.gif)
+
+The parser achieves very high accuracy on held-out data, currently 98.9%
+correct full parses (meaning a 1 in the numerator for getting *every* token
+in the address correct).
+
+Usage (parse_address)
+---------------------
+
+Here's a C example of the parser API:
 
 ```c
 #include <stdio.h>
@@ -134,122 +146,13 @@ int main(int argc, char **argv) {
 }
 ```
 
-And the Python API version:
+And the equivalent using the Python bindings:
 
 ```python
 
 from postal.parser import parse_address
 parse_address('The Book Club 100-106 Leonard St Shoreditch London EC2A 4RH, United Kingdom')
 ```
-
-These example parse results are taken from the interactive address_parser program 
-that builds with libpostal when you run make. Note that the parser doesn't care about commas
-vs. no commas, casing, or different permutations of components (if the input is e.g. just
-a city or just city/postcode).
-
-```
-> 781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA
-
-Result:
-
-{
-  "house_number": "781",
-  "road": "franklin ave",
-  "suburb": "crown heights",
-  "city_district": "brooklyn",
-  "city": "nyc",
-  "state": "ny",
-  "postcode": "11216",
-  "country": "usa"
-}
-
-> The Book Club 100-106 Leonard St, Shoreditch, London, Greater London, England, EC2A 4RH, United Kingdom
-
-Result:
-
-{
-  "house": "the book club",
-  "house_number": "100-106",
-  "road": "leonard st",
-  "suburb": "shoreditch",
-  "city": "london",
-  "state_district": "greater london",
-  "state": "england",
-  "postcode": "ec2a 4rh",
-  "country": "united kingdom"
-}
-
-> Museo del Prado C. de Ruiz de Alarcón, 23 28014 Madrid Madrid, Spain
-
-Result:
-
-{
-  "house": "museo del prado",
-  "road": "c. de ruiz de alarcón",
-  "house_number": "23",
-  "postcode": "28014",
-  "state": "madrid",
-  "city": "madrid",
-  "country": "spain"
-}
-
-> Double Shot Tea &amp; Coffee 15 Melle St. Braamfontein Johannesburg, 2000, South Africa
-
-Result:
-
-{
-  "house": "double shot tea & coffee",
-  "house_number": "15",
-  "road": "melle st.",
-  "suburb": "braamfontein",
-  "city": "johannesburg",
-  "postcode": "2000",
-  "country": "south africa"
-}
-
-> Eschenbräu Bräurei Triftstraße 67, 13353 Berlin, Deutschland
-        
-Result:
-        
-{
-  "house": "eschenbraeu braeurei",
-  "road": "triftstrasse",
-  "house_number": "67",
-  "postcode": "13353",
-  "city": "berlin",
-  "country": "deutschland"
-}
-
-> Szimpla Kert Kazinczy utca 14 Budapest 1075, Magyarország
-
-Result:
-
-{
-  "house": "szimpla kert",
-  "road": "kazinczy utca",
-  "house_number": "14",
-  "city": "budapest",
-  "postcode": "1075",
-  "country": "magyarország"
-}
-
-> Государственный Эрмитаж Дворцовая наб., 34 191186, St. Petersburg, Russia
-
-Result:
-
-{
-  "house": "государственный эрмитаж",
-  "road": "дворцовая наб.",
-  "house_number": "34",
-  "postcode": "191186",
-  "city": "st. petersburg",
-  "country": "russia"
-}
-```
-
-The parser achieves very high accuracy on held-out data, currently 98.9%
-correct full parses (meaning a 1 in the numerator for getting *every* token
-in the address correct).
 
 Installation
 ------------
@@ -502,6 +405,19 @@ of source addresses such as OpenAddresses or OpenStreetMap (or all of the above)
 libpostal can be used to implement things like address deduping and server-side
 batch geocoding in settings like MapReduce or stream processing.
 
+Now, instead of trying to bake address-specific conventions into traditional
+document search engines like Elasticsearch using giant synonyms files, scripting,
+custom analyzers, tokenizers, and the like, geocoding can look like this:
+
+1. Run the addresses in your database through libpostal's expand_address
+2. Store the normalized string(s) in your favorite search engine, DB, 
+   hashtable, etc.
+3. Run your user queries or fresh imports through libpostal and search
+   the existing database using those strings
+
+In this way, libpostal can perform fuzzy address matching in constant time
+relative to the size of the data set.
+
 Why C?
 ------
 
@@ -649,7 +565,7 @@ be a better measure than simply looking at whether each token was correct.
 Improving the address parser
 ----------------------------
 
-Though the current parser is quite good for most standard addresses, there
+Though the current parser works quite well for most standard addresses, there
 is still room for improvement, particularly in making sure the training data
 we use is as close as possible to addresses in the wild. There are four primary
 ways the address parser can be improved even further (in order of difficulty):
@@ -676,7 +592,12 @@ ways the address parser can be improved even further (in order of difficulty):
    label sequence not just the token. This may slow down training significantly
    although runtime performance would be relatively unaffected.
 
-Todos
------
+Contributing
+------------
 
-- [ ] Hosted documentation
+Bug reports and pull requests are welcome on GitHub at https://github.com/openvenues/libpostal.
+
+License
+-------
+
+The software is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
