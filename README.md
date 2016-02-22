@@ -114,8 +114,8 @@ The parser achieves very high accuracy on held-out data, currently 98.9%
 correct full parses (meaning a 1 in the numerator for getting *every* token
 in the address correct).
 
-Usage (parse_address)
----------------------
+Usage (parser)
+--------------
 
 Here's a C example of the parser API:
 
