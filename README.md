@@ -117,7 +117,15 @@ in the address correct).
 Usage (parser)
 --------------
 
-Here's a C example of the parser API:
+Here's an example of the parser API using the Python bindings:
+
+```python
+
+from postal.parser import parse_address
+parse_address('The Book Club 100-106 Leonard St Shoreditch London EC2A 4RH, United Kingdom')
+```
+
+And an example with the C API:
 
 ```c
 #include <stdio.h>
@@ -144,14 +152,6 @@ int main(int argc, char **argv) {
     libpostal_teardown();
     libpostal_teardown_parser();
 }
-```
-
-And the equivalent using the Python bindings:
-
-```python
-
-from postal.parser import parse_address
-parse_address('The Book Club 100-106 Leonard St Shoreditch London EC2A 4RH, United Kingdom')
 ```
 
 Installation
