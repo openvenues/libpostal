@@ -159,7 +159,7 @@ Installation
 
 Before you install, make sure you have the following prerequisites:
 
-**On Linux (Debian)**
+**On Linux (Ubuntu)**
 ```
 sudo apt-get install libsnappy-dev autoconf automake libtool pkg-config
 ```
@@ -191,7 +191,7 @@ pkg-config --libs libpostal           # print linker flags
 pkg-config --cflags --libs libpostal  # print both
 ```
 
-For example:
+For example, if you write a program called app.c, you can compile it like this:
 
 ```
 gcc app.c `pkg-config --cflags --libs libpostal`
