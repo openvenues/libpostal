@@ -61,7 +61,6 @@ claim|clm
 cliff|clf
 cliffs|clfs
 close|cl|cls|clse
-club|clb
 cluster|clr|clstr
 colonnade|clde|clnde
 common|cmmn|comm|cmn
@@ -143,15 +142,8 @@ field|fd
 follow|folw
 footway|ftwy|foot way
 ford|frd
-fords|frds
-fork|frk
-forks|frks
 foreshore|fshr|fore shore
-forest|frst
-forge|frg
-forges|frgs
 formation|form|fmtn
-fort|ft
 freeway|frwy|fw|fwy|fway
 front|frnt
 frontage|frtg|fr
@@ -163,15 +155,12 @@ gates|gtes
 gateway|gwy|gway|gtwy|gtway
 glade|gl|gld|glde
 glen|gln
-glens|glns
 grand boulevard|gbd|grbd|grdbd|gdbd|g bd|gr bd|grd bd|gd bd|g blvd|gr blvd|grd blvd|gd blvd|g bde|gr bde|grd bde|gd bde|g blvrd|gr blvrd|grd blvrd|gd blvrd|g boul|gr boul|grd boul|gd boul|g bvd|gr bvd|grd bvd|gd bvd|g bld|gr bld|grd bld|gd bld
 grange|gra
 green|grn|gn
-greens|grns
 ground|grnd
 grounds|grnds
 grove|gr|grv|grve|gro
-groves|grvs
 gulch
 gully|gly
 hanger|hngr
@@ -215,9 +204,6 @@ limits|lmts
 line|ln
 link|lnk|lk
 little|lit|ltl|lt
-lock|lck
-locks|lcks
-lodge|ldg
 loaf|lf
 lookout|lkt|look out
 loop|lp
@@ -226,7 +212,6 @@ lot
 lynne|lynn
 mall|ml
 manor|mnr
-manors|mnrs
 maze
 meadow|mdw
 meadows|mdws
@@ -237,17 +222,12 @@ mews|mws
 mile|mi
 mill|ml
 mills|mls
-mission|msn
 moor
-mountain|mt|mtn
-mountains|mts|mtns
 motorway|mway|mwy|mtwy
 neaves|nvs
-neck|nck
 nook|nk
 number|#|nbr|num|no|nmbr|nr
 oaks
-orchard|orch
 outlet|otlt
 outlook|out|otlk
 oval
@@ -314,7 +294,6 @@ ridgeway|rgwy|rdgwy|ridge way
 right of way|rowy|rightofway|rofw|row|r o w|r of w
 ring
 rise|ri
-river|riv
 riverway|rvwy
 riviera|rvra
 road|raod|rd
@@ -328,13 +307,11 @@ round|rnd
 roundabout
 route|rt|rte
 row|rw
-rue
 run|rn
 service road|svc rd|svc road|service rd
 serviceway|swy|svwy|svcwy
 shoal|shl
 shoals|shls
-shopping center|shctr
 shore|shor|shr
 shores|shors|shrs
 shunt|shun|shnt
@@ -353,11 +330,9 @@ stairway|stwy|strwy|stair way|st.wy|st wy|str.way|str way
 state highway|s.highway|s highway|st.highway|st highway|sh|s.h.|s.h|s h|st.h|st h|s.hw|s hw|st.hw|st hw|s.hwy|s hwy|shwy|s.hgwy|s hgwy|st.hgwy|st hgwy|s.hway|s hway|st.hway|st hway|s.hwy|s hwy|st.hwy|st hwy|s.hi|s hi|st.hi|st hi|statehighway
 state road|sr|stateroad|s.r.|s.r|s r|s.road|s road|st.road|st road|staterd|srd|s.rd|s rd|state rd|strd|st.rd|st rd
 state route|sr|stateroute|s.r.|s.r|s r|s.route|s route|st.route|st route|statert|srt|s.rt|s rt|srte|s.rte|s rte|state rt|state rte|strt|strte|st.rt|st rt|st.rte|st rte
-station|sta
 strand|stra|strnd|strd
 strands|strnds|strds
 stravenue|stra|strav
-stream|strm
 street|st|str
 streets|sts
 strip|strp
@@ -369,8 +344,7 @@ terrace|tce|ter|tr|terr|terace|terrac|terrasse|tsse
 thicket|thick
 thoroughfare|thor|throughfare|thorough fare|thfr
 thoroughway|thwy
-throughway|thru
-thruway|trwy
+throughway|thru|thruway|trwy
 tollway|tlwy|twy
 township highway|th|t.h.|t.h|t h|twp.h|twp h|tshp.h|tshp h|t.hw|t hw|twp.hw|twp hw|tshp.hw|tshp hw|t.hgwy|t hgwy|twp.hgwy|twp hgwy|tshp.hgwy|tshp hgwy|t.hway|t hway|twp.hway|twp hway|tshp.hway|tshp hway|t.hwy|t hwy|twp.hwy|twp hwy|tshp.hwy|tshp hwy|t.hi|t hi|twp.hi|twp hi|tshp.hi|tshp hi
 township road|tr|t.r.|t.r|t r|t rd|t.rd|trd|twpr|twp.r|twp r|twp.rd|twp rd|tshp.r|tshp r|tshp.rd|tshp rd
@@ -384,7 +358,6 @@ track|tr|trk|trak
 trafficway|trfy
 trail|tr|trl
 trailer|trlr
-trailer park|tlpk
 tram
 tramway|tmwy
 trees|trs
@@ -407,9 +380,6 @@ vennel
 viaduct|via|viad|vdct|viadct
 view|vw
 views|vws
-village|vlg
-villages|vlgs
-ville|vl
 vista|vst|vsta|vis
 vue
 wade
@@ -421,6 +391,5 @@ ways|wys
 well|wl
 wells|wls
 wharf|whrf|whf
-woods|wds
 wynd|wyn
 yard|yd|yrd

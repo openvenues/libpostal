@@ -127,6 +127,7 @@ lounge
 mall|mll
 maison
 manor|mnr
+manors|mnrs
 market|mkt|mrkt
 marketplace|mktpl|mktplc
 mansion
@@ -176,6 +177,7 @@ penitentiary
 performing arts centre
 performing arts center
 pharmacy
+pier
 playhouse
 police department|pd|p d
 police station
@@ -209,7 +211,7 @@ secondary school
 shelter
 sheriff's department|sherrifs department|sheriff's dept|sherrifs dept
 sherrif's office|sherffis office|sheriff's ofc|sheriffs ofc
-shopping center|shoppingcenter|shoppingcentre|shopping|shoppingtown|shopping centre|shopping 
+shopping center|shoppingcenter|shoppingcentre|shopping|shoppingtown|shopping town|shopping centre|shctr|sh ctr
 shop|shp
 sisters
 social club
@@ -233,6 +235,7 @@ tower|twr
 town hall
 townhouse|town house
 townhouses|town houses
+trailer park|tlpk
 university|uni|univ|univers|unvrsty
 units
 urgent care
@@ -243,7 +246,8 @@ veterinarians
 vets
 villa|vll|vla
 villas|vlls|vlas
-village|vil|vge|vill|villag|villg|vlg|vlge|vllg|villages|vlgs
+village|vil|vge|vill|villag|villg|vlg|vlge|vllg
+villages|vlgs
 wine bar|winebar
 winery
 yoga

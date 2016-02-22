@@ -7,8 +7,16 @@ downs|downes|dwns
 flats|flts
 forest|frst|fst
 fort|ft
+fords|frds
+fork|frk
+forks|frks
+forge|frg
+forges|frgs
+glens|glns
 great|grt|gt
 greater|grtr|gtr
+greens|grns
+groves|grvs
 heights|hghts|hgts|hieghts|ht|hts|hgths
 international|intl|int'l
 lake|lk
@@ -36,6 +44,8 @@ slope|slpe|slp
 stream|strm|stm
 triangle|tri
 upper|up|upr|uppr
+village|vlg
+ville|vl
 villages|vlgs
 wood|wd
 woods|wds
