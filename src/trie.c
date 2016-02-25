@@ -26,8 +26,6 @@ uint8_t DEFAULT_ALPHABET[] = {
 13, 17, 21, 25, 29, 210, 214, 93, 222, 234, 238, 242, 246, 250, 125, 255
 };
 
-#define DEFAULT_ALPHABET_SIZE sizeof(DEFAULT_ALPHABET)
-
 
 /*
 Constructors
