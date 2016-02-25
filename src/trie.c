@@ -1016,7 +1016,7 @@ trie_t *trie_read(FILE *file) {
 
     uint32_t num_keys;
     if (!file_read_uint32(file, &num_keys)) {
-        goto exit_file_read;
+        goto exit_trie_created;
     }
 
     trie->num_keys = num_keys;
