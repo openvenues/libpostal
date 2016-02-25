@@ -146,6 +146,9 @@ static numex_language_t *numex_language_read(FILE *f) {
     }
 
     char *name = malloc(lang_name_len);
+    if (name == NULL) {
+        return NULL;
+    }
 
     if (!file_read_chars(f, name, lang_name_len)) {
         return NULL;
@@ -326,6 +329,9 @@ static ordinal_indicator_t *ordinal_indicator_read(FILE *f) {
     }
 
     char *key = malloc(key_len);
+    if (key == NULL) {
+        return NULL;
+    }
 
     if (!file_read_chars(f, key, key_len)) {
         return NULL;
@@ -347,6 +353,9 @@ static ordinal_indicator_t *ordinal_indicator_read(FILE *f) {
     }
 
     char *ordinal_suffix = malloc(ordinal_suffix_len);
+    if (ordinal_suffix == NULL) {
+        return NULL;
+    }
 
     if (!file_read_chars(f, ordinal_suffix, ordinal_suffix_len)) {
         return NULL;
