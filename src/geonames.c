@@ -23,6 +23,10 @@
 */
 geoname_t *geoname_new(void) {
     geoname_t *self = malloc(sizeof(geoname_t));
+    if (self == NULL) {
+        return NULL;
+    }
+
     self->name = char_array_new_size(GEONAMES_NAME_DEFAULT_LENGTH);
     self->canonical = char_array_new_size(GEONAMES_NAME_DEFAULT_LENGTH);
 
@@ -35,6 +39,14 @@ geoname_t *geoname_new(void) {
     self->admin2_code = char_array_new_size(GEONAMES_ADMIN2_CODE_DEFAULT_LENGTH);
     self->admin3_code = char_array_new_size(GEONAMES_ADMIN3_CODE_DEFAULT_LENGTH);
     self->admin4_code = char_array_new_size(GEONAMES_ADMIN4_CODE_DEFAULT_LENGTH);
+
+    if (!(self->name && self->canonical && self->iso_language
+          && self->feature_code && self->country_code
+          && self->admin1_code && self->admin2_code
+          && self->admin3_code && self->admin4_code)) {
+        geoname_destroy(self);
+        return NULL;
+    }
 
     return self;
 }
@@ -273,6 +285,10 @@ void geoname_print(geoname_t *self) {
 
 gn_postal_code_t *gn_postal_code_new(void) {
     gn_postal_code_t *self = malloc(sizeof(gn_postal_code_t));
+    if (self == NULL) {
+        return NULL;
+    }
+
     self->postal_code = char_array_new_size(GEONAMES_POSTAL_CODE_DEFAULT_LENGTH);
     self->country_code = char_array_new_size(GEONAMES_COUNTRY_CODE_DEFAULT_LENGTH);
     self->containing_geoname = char_array_new_size(GEONAMES_NAME_DEFAULT_LENGTH);
@@ -283,6 +299,12 @@ gn_postal_code_t *gn_postal_code_new(void) {
     self->admin1_ids = uint32_array_new_size(GEONAMES_POSTAL_ADMIN1_IDS_DEFAULT_LENGTH);
     self->admin2_ids = uint32_array_new_size(GEONAMES_POSTAL_ADMIN2_IDS_DEFAULT_LENGTH);
     self->admin3_ids = uint32_array_new_size(GEONAMES_POSTAL_ADMIN3_IDS_DEFAULT_LENGTH);
+
+    if (!(self->postal_code && self->country_code && self->containing_geoname
+          && self->admin1_ids && self->admin2_ids && self->admin3_ids)) {
+        gn_postal_code_destroy(self);
+        return NULL;
+    }
 
     return self;
 }
