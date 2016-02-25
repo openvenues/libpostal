@@ -1037,6 +1037,9 @@ trie_t *trie_read(FILE *file) {
     unsigned char *buf;
     size_t buf_size = num_nodes * sizeof(uint32_t) * 2;
     buf = malloc(buf_size);
+    if (buf == NULL) {
+        goto exit_trie_created;
+    }
 
     unsigned char *buf_ptr;
 
