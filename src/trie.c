@@ -26,8 +26,6 @@ uint8_t DEFAULT_ALPHABET[] = {
 13, 17, 21, 25, 29, 210, 214, 93, 222, 234, 238, 242, 246, 250, 125, 255
 };
 
-#define DEFAULT_ALPHABET_SIZE sizeof(DEFAULT_ALPHABET)
-
 
 /*
 Constructors
@@ -1016,7 +1014,7 @@ trie_t *trie_read(FILE *file) {
 
     uint32_t num_keys;
     if (!file_read_uint32(file, &num_keys)) {
-        goto exit_file_read;
+        goto exit_trie_created;
     }
 
     trie->num_keys = num_keys;
@@ -1037,6 +1035,9 @@ trie_t *trie_read(FILE *file) {
     unsigned char *buf;
     size_t buf_size = num_nodes * sizeof(uint32_t) * 2;
     buf = malloc(buf_size);
+    if (buf == NULL) {
+        goto exit_trie_created;
+    }
 
     unsigned char *buf_ptr;
 
