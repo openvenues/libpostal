@@ -4,9 +4,10 @@ acres|acrs
 alley|aly|ally|alee
 alleyway|alwy|allyway|allwy
 amble|ambl
+anchorage|ancg
 annex|anx
 apartments|apts|appartments
-approach|app|apch
+approach|app|apch|appr
 arcade|arc
 arterial|artl
 artery|art|arty
@@ -100,6 +101,7 @@ curve|cve|crv|crve|curv
 cutting|cttg|ctg|cutt
 dale|dle
 dell
+dene
 deviation|devn
 dip
 distributor|dstr
@@ -183,7 +185,7 @@ inlet|inlt
 interchange|intg|intchg|inter change
 intersection|intn|inter section|intsctn
 interstate|inter state|i
-island|is|id|i|isld
+island|is|id|i|isl|isld
 islands|iss|ids|islds
 isle
 junction|jct|jnc|jnct|jctn|jtn|junct|j
@@ -197,8 +199,9 @@ ladder|ladr
 lagoon|lagn|lgn|lagon
 land
 landing|ldg|lndg|landng
-lane|ln|la
+lane|l|ln|la
 laneway|lnwy
+lees
 light|lgt|lt
 limits|lmts
 line|ln
@@ -209,6 +212,7 @@ lookout|lkt|look out
 loop|lp
 loops|lps
 lot
+lower|lwr
 lynne|lynn
 mall|ml
 manor|mnr
@@ -268,6 +272,7 @@ prairie|pr
 priors|prrs
 private|pvt
 promenade|prom|prm
+pursuit|pur
 quad|qd
 quadrangle|qdgl
 quadrant|qdrt|qd
@@ -301,6 +306,7 @@ roads|raods|rds
 roadside|rdsd|road side
 roadway|rdwy|rdw|rdy
 rocks|rks
+ronde|rnde
 rosebowl|rsbl|rose bowl
 rotary|rty
 round|rnd
@@ -326,16 +332,19 @@ springs|spgs|sprngs
 spur|spr
 square|sq|sqr
 squares|sqs
+stairs|strs
 stairway|stwy|strwy|stair way|st.wy|st wy|str.way|str way
 state highway|s.highway|s highway|st.highway|st highway|sh|s.h.|s.h|s h|st.h|st h|s.hw|s hw|st.hw|st hw|s.hwy|s hwy|shwy|s.hgwy|s hgwy|st.hgwy|st hgwy|s.hway|s hway|st.hway|st hway|s.hwy|s hwy|st.hwy|st hwy|s.hi|s hi|st.hi|st hi|statehighway
 state road|sr|stateroad|s.r.|s.r|s r|s.road|s road|st.road|st road|staterd|srd|s.rd|s rd|state rd|strd|st.rd|st rd
 state route|sr|stateroute|s.r.|s.r|s r|s.route|s route|st.route|st route|statert|srt|s.rt|s rt|srte|s.rte|s rte|state rt|state rte|strt|strte|st.rt|st rt|st.rte|st rte
+steps|stps
 strand|stra|strnd|strd
 strands|strnds|strds
 stravenue|stra|strav
 street|st|str
 streets|sts
 strip|strp
+square|sq
 subdivision|subdiv
 subway|sbwy
 summit|smt|sumt
@@ -344,8 +353,10 @@ terrace|tce|ter|tr|terr|terace|terrac|terrasse|tsse
 thicket|thick
 thoroughfare|thor|throughfare|thorough fare|thfr
 thoroughway|thwy
-throughway|thru|thruway|trwy
+throughway|thru|thro|thruway|trwy
 tollway|tlwy|twy
+top
+tor
 township highway|th|t.h.|t.h|t h|twp.h|twp h|tshp.h|tshp h|t.hw|t hw|twp.hw|twp hw|tshp.hw|tshp hw|t.hgwy|t hgwy|twp.hgwy|twp hgwy|tshp.hgwy|tshp hgwy|t.hway|t hway|twp.hway|twp hway|tshp.hway|tshp hway|t.hwy|t hwy|twp.hwy|twp hwy|tshp.hwy|tshp hwy|t.hi|t hi|twp.hi|twp hi|tshp.hi|tshp hi
 township road|tr|t.r.|t.r|t r|t rd|t.rd|trd|twpr|twp.r|twp r|twp.rd|twp rd|tshp.r|tshp r|tshp.rd|tshp rd
 township route|tr|t.r.|t.r|t r|t rt|t.rt|trt|t.rte|t rte|twpr|twp.r|twp r|twp.rt|twp rt|twp.rte|twp rte|tshp.r|tshp r|tshp.rt|tshp rt|tshp.rte|tshp rte
@@ -380,6 +391,7 @@ vennel
 viaduct|via|viad|vdct|viadct
 view|vw
 views|vws
+villas|vlls
 vista|vst|vsta|vis
 vue
 wade
