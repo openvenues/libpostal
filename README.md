@@ -161,7 +161,7 @@ Before you install, make sure you have the following prerequisites:
 
 **On Linux (Ubuntu)**
 ```
-sudo apt-get install libsnappy-dev autoconf automake libtool pkg-config
+sudo apt-get install curl libsnappy-dev autoconf automake libtool pkg-config
 ```
 
 **On Mac OSX**
