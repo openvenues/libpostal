@@ -151,7 +151,6 @@ maison
 manor|mnr
 manors|mnrs
 marina
-market|mkt|mrkt
 marketplace|mktpl|mktplc
 mansion
 mansions
@@ -170,12 +169,11 @@ nursing
 nursing center|nursing centre
 nursing home|nh|nhome|nrs|nrsg|nsg|nurs|nrsng hm|n h|nrs home|n home|nursing hom|nursing ho|nursing h
 high school|hs|h s
-secondary school
 junior high school|jr high school|jhs|j h s|jr hs|jr h s
 laboratory
 lab
 labs
-market|mkt
+market|mkt|mrkt
 middle school|ms|m s
 movie theater
 movie theatre
@@ -195,7 +193,6 @@ park|pk|prk
 parking
 parking lot
 pavilion
-pharmacy
 pediatric
 penitentiary
 performing arts centre

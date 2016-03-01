@@ -140,7 +140,6 @@ firetrack|ftrk|fire track
 firetrail|fit|fitr|fire trail
 flat|fl|flt
 flats|flts
-field|fd
 follow|folw
 footway|ftwy|foot way
 ford|frd

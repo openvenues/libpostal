@@ -23,7 +23,6 @@ emperor
 brother|br
 father|fr
 sister|sr
-honorable|hon|hounourable
 his royal highness|hrh|h r h
 her royal highness|hrh|h r h
 general|gen
