@@ -1,6 +1,6 @@
 # libpostal: international street address NLP
 
-[![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal) [![License](https://img.shields.io/github/license/openvenues/libpostal.svg)]
+[![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal) [![License](https://img.shields.io/github/license/openvenues/libpostal.svg)](https://github.com/openvenues/libpostal/LICENSE.txt)
 
 :jp: :us: :gb: :ru: :fr: :kr: :it: :es: :cn: :de:
 
