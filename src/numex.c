@@ -139,9 +139,9 @@ numex_language_t *get_numex_language(char *name) {
 }
 
 static numex_language_t *numex_language_read(FILE *f) {
-    size_t lang_name_len;
+    uint64_t lang_name_len;
 
-    if (!file_read_uint64(f, (uint64_t *)&lang_name_len)) {
+    if (!file_read_uint64(f, &lang_name_len)) {
         return NULL;
     }
 
@@ -159,27 +159,27 @@ static numex_language_t *numex_language_read(FILE *f) {
         return NULL;
     }
 
-    size_t rules_index;
-    if (!file_read_uint64(f, (uint64_t *)&rules_index)) {
+    uint64_t rules_index;
+    if (!file_read_uint64(f, &rules_index)) {
         return NULL;
     }
 
-    size_t num_rules;
-    if (!file_read_uint64(f, (uint64_t *)&num_rules)) {
+    uint64_t num_rules;
+    if (!file_read_uint64(f, &num_rules)) {
         return NULL;
     }
 
-    size_t ordinals_index;
-    if (!file_read_uint64(f, (uint64_t *)&ordinals_index)) {
+    uint64_t ordinals_index;
+    if (!file_read_uint64(f, &ordinals_index)) {
         return NULL;
     }
 
-    size_t num_ordinals;
-    if (!file_read_uint64(f, (uint64_t *)&num_ordinals)) {
+    uint64_t num_ordinals;
+    if (!file_read_uint64(f, &num_ordinals)) {
         return NULL;
     }
 
-    numex_language_t *language = numex_language_new(name, whole_tokens_only, rules_index, num_rules, ordinals_index, num_ordinals);
+    numex_language_t *language = numex_language_new(name, whole_tokens_only, (size_t)rules_index, (size_t)num_rules, (size_t)ordinals_index, (size_t)num_ordinals);
 
     return language;
 
@@ -323,8 +323,8 @@ ordinal_indicator_t *ordinal_indicator_new(char *key, gender_t gender, grammatic
 }
 
 static ordinal_indicator_t *ordinal_indicator_read(FILE *f) {
-    size_t key_len;
-    if (!file_read_uint64(f, (uint64_t *)&key_len)) {
+    uint64_t key_len;
+    if (!file_read_uint64(f, &key_len)) {
         return NULL;
     }
 
@@ -347,12 +347,12 @@ static ordinal_indicator_t *ordinal_indicator_read(FILE *f) {
         return NULL;
     }
 
-    size_t ordinal_suffix_len;
-    if (!file_read_uint64(f, (uint64_t *)&ordinal_suffix_len)) {
+    uint64_t ordinal_suffix_len;
+    if (!file_read_uint64(f, &ordinal_suffix_len)) {
         return NULL;
     }
 
-    char *ordinal_suffix = malloc(ordinal_suffix_len);
+    char *ordinal_suffix = malloc((size_t)ordinal_suffix_len);
     if (ordinal_suffix == NULL) {
         return NULL;
     }
@@ -367,7 +367,7 @@ static ordinal_indicator_t *ordinal_indicator_read(FILE *f) {
 
 bool ordinal_indicator_write(ordinal_indicator_t *ordinal, FILE *f) {
     size_t key_len = strlen(ordinal->key) + 1;
-    if (!file_write_uint64(f, key_len) ||
+    if (!file_write_uint64(f, (uint64_t)key_len) ||
         !file_write_chars(f, ordinal->key, key_len)) {
         return false;
     }
@@ -381,7 +381,7 @@ bool ordinal_indicator_write(ordinal_indicator_t *ordinal, FILE *f) {
     }
 
     size_t name_len = strlen(ordinal->suffix) + 1;
-    if (!file_write_uint64(f, name_len) ||
+    if (!file_write_uint64(f, (uint64_t)name_len) ||
         !file_write_chars(f, ordinal->suffix, name_len)) {
         return false;
     }
@@ -409,13 +409,13 @@ bool numex_table_read(FILE *f) {
 
     log_debug("Numex table initialized\n");
 
-    size_t num_languages;
+    uint64_t num_languages;
 
-    if (!file_read_uint64(f, (uint64_t *)&num_languages)) {
+    if (!file_read_uint64(f, &num_languages)) {
         goto exit_numex_table_load_error;
     }
 
-    log_debug("read num_languages = %zu\n", num_languages);
+    log_debug("read num_languages = %llu\n", num_languages);
 
     int i = 0;
 
@@ -431,13 +431,13 @@ bool numex_table_read(FILE *f) {
     log_debug("read languages\n");
 
 
-    size_t num_rules;
+    uint64_t num_rules;
 
-    if (!file_read_uint64(f, (uint64_t *)&num_rules)) {
+    if (!file_read_uint64(f, &num_rules)) {
         goto exit_numex_table_load_error;
     }
 
-    log_debug("read num_rules = %zu\n", num_rules);
+    log_debug("read num_rules = %llu\n", num_rules);
 
     numex_rule_t rule;
 
@@ -450,9 +450,9 @@ bool numex_table_read(FILE *f) {
 
     log_debug("read rules\n");
 
-    size_t num_ordinals;
+    uint64_t num_ordinals;
 
-    if (!file_read_uint64(f, (uint64_t *)&num_ordinals)) {
+    if (!file_read_uint64(f, &num_ordinals)) {
         goto exit_numex_table_load_error;
     }
 

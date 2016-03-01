@@ -334,7 +334,7 @@ sparse_matrix_t *sparse_matrix_read(FILE *f) {
         goto exit_sparse_matrix_allocated;
     }
 
-    uint32_array *indptr = uint32_array_new_size(len_indptr);
+    uint32_array *indptr = uint32_array_new_size((size_t)len_indptr);
     if (indptr == NULL) {
         goto exit_sparse_matrix_allocated;
     }

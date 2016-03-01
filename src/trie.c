@@ -215,7 +215,7 @@ static bool trie_node_has_children(trie_t *self, uint32_t node_id) {
     for (int i = 0; i < self->alphabet_size; i++) {
         unsigned char c = self->alphabet[i];
         index = trie_get_transition_index(self, node, c);
-        if (index < self->nodes->n && trie_get_node(self, index).check == node_id)
+        if (index < self->nodes->n && (uint32_t)trie_get_node(self, index).check == node_id)
             return true;
     }
     return false;
@@ -252,8 +252,8 @@ static void trie_get_transition_chars(trie_t *self, uint32_t node_id, unsigned c
 }
 
 
-static bool trie_can_fit_transitions(trie_t *self, uint32_t node_id, unsigned char *transitions, int num_transitions) {
-    int i;
+static bool trie_can_fit_transitions(trie_t *self, uint32_t node_id, unsigned char *transitions, uint32_t num_transitions) {
+    uint32_t i;
     uint32_t char_index, index;
 
     for (i = 0; i < num_transitions; i++) {
@@ -270,7 +270,7 @@ static bool trie_can_fit_transitions(trie_t *self, uint32_t node_id, unsigned ch
 
 }
 
-static uint32_t trie_find_new_base(trie_t *self, unsigned char *transitions, int num_transitions) {
+static uint32_t trie_find_new_base(trie_t *self, unsigned char *transitions, uint32_t num_transitions) {
     uint32_t first_char_index = trie_get_char_index(self, transitions[0]);
 
     trie_node_t node = trie_get_free_list(self);
@@ -324,7 +324,7 @@ static size_t trie_required_size(trie_t *self, uint32_t index) {
 
 static void trie_relocate_base(trie_t *self, uint32_t current_index, int32_t new_base) {
     log_debug("Relocating base at %d\n", current_index);
-    int i;
+    uint32_t i;
 
     trie_make_room_for(self, new_base);
 
@@ -353,7 +353,7 @@ static void trie_relocate_base(trie_t *self, uint32_t current_index, int32_t new
         *  set check values appropriately
         */
         if (old_transition.base > 0) {  // do nothing in the case of a tail pointer
-            for (int i = 0; i < self->alphabet_size; i++) {
+            for (i = 0; i < self->alphabet_size; i++) {
                 unsigned char c = self->alphabet[i];
                 uint32_t index = trie_get_transition_index(self, old_transition, c);
                 if (index < self->nodes->n && trie_get_node(self, index).check == old_index) {
@@ -521,7 +521,7 @@ void trie_tail_merge(trie_t *self, uint32_t old_node_id, unsigned char *suffix, 
     uint32_t node_id = old_node_id;
     log_debug("common_prefix=%zu\n", common_prefix);
 
-    for (int i=0; i < common_prefix; i++) {
+    for (size_t i = 0; i < common_prefix; i++) {
         c = old_tail[i];
         log_debug("merge tail, c=%c, node_id=%d\n", c, node_id);
         next_id = trie_add_transition(self, node_id, c);
@@ -559,7 +559,7 @@ exit_prune:
 void trie_print(trie_t *self) {
     printf("Trie\n");
     printf("num_nodes=%zu, alphabet_size=%d\n\n", self->nodes->n, self->alphabet_size);
-    for (int i = 0; i < self->nodes->n; i++) {
+    for (size_t i = 0; i < self->nodes->n; i++) {
         int32_t base = self->nodes->a[i].base;
         int32_t check = self->nodes->a[i].check;
 
@@ -572,23 +572,23 @@ void trie_print(trie_t *self) {
     }
     printf("\n");
 
-    for (int i = 0; i < self->nodes->n; i++) {
+    for (size_t i = 0; i < self->nodes->n; i++) {
         int32_t base = self->nodes->a[i].base;
         int32_t check = self->nodes->a[i].check;
 
-        int check_width = abs(check) > 9 ? (int) log10(abs(check))+1 : 1;
-        int base_width = abs(base) > 9 ? (int) log10(abs(base))+1 : 1;
+        int check_width = abs(check) > 9 ? (int) log10(abs(check)) + 1 : 1;
+        int base_width = abs(base) > 9 ? (int) log10(abs(base)) + 1 : 1;
         if (base < 0) base_width++;
         if (check < 0) check_width++;
         int width = base_width > check_width ? base_width : check_width;
         printf("%*d ", width, check);
     }
     printf("\n");
-    for (int i = 0; i < self->tail->n; i++) {
+    for (size_t i = 0; i < self->tail->n; i++) {
         printf("%c ", self->tail->a[i]);
     }
     printf("\n");
-    for (int i = 0; i < self->data->n; i++) {
+    for (size_t i = 0; i < self->data->n; i++) {
         uint32_t tail = self->data->a[i].tail;
         uint32_t data = self->data->a[i].data;
 
@@ -600,7 +600,7 @@ void trie_print(trie_t *self) {
 
     }
     printf("\n");
-    for (int i = 0; i < self->data->n; i++) {
+    for (size_t i = 0; i < self->data->n; i++) {
         uint32_t tail = self->data->a[i].tail;
         uint32_t data = self->data->a[i].data;
 
@@ -632,7 +632,7 @@ bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, size_t len, ui
 
     // Walks node until prefix reached, including the trailing \0
 
-    for (int i = 0; i < len; ptr++, i++, last_node_id = node_id, last_node = node) {
+    for (size_t i = 0; i < len; ptr++, i++, last_node_id = node_id, last_node = node) {
 
         log_debug("--- char=%d\n", *ptr);
         node_id = trie_get_transition_index(self, last_node, *ptr);
@@ -794,7 +794,7 @@ trie_prefix_result_t trie_get_prefix_from_index(trie_t *self, char *key, size_t 
 
     bool original_node_no_tail = node.base >= 0;
 
-    int i = 0;
+    size_t i = 0;
 
     if (node.base >= 0) {
         // Include NUL-byte. It may be stored if this phrase is a prefix of a longer one
@@ -854,7 +854,7 @@ uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i) {
 
     // Include NUL-byte. It may be stored if this phrase is a prefix of a longer one
 
-    for (int i = 0; i < len + 1; i++, ptr++, node_id = next_id) {
+    for (size_t i = 0; i < len + 1; i++, ptr++, node_id = next_id) {
         next_id = trie_get_transition_index(self, node, *ptr);
         node = trie_get_node(self, next_id);
 
@@ -922,14 +922,14 @@ I/O methods
 
 bool trie_write(trie_t *self, FILE *file) {
     if (!file_write_uint32(file, TRIE_SIGNATURE) ||
-        !file_write_uint32(file, (uint32_t)self->alphabet_size)|| 
-        !file_write_chars(file, (char *)self->alphabet, self->alphabet_size) ||
+        !file_write_uint32(file, self->alphabet_size)|| 
+        !file_write_chars(file, (char *)self->alphabet, (size_t)self->alphabet_size) ||
         !file_write_uint32(file, self->num_keys) ||
         !file_write_uint32(file, (uint32_t)self->nodes->n)) {
         return false;
     }
-        
-    int i;
+
+    size_t i;
     trie_node_t node;
 
     for (i = 0; i < self->nodes->n; i++) {
@@ -977,7 +977,7 @@ bool trie_save(trie_t *self, char *path) {
 }
 
 trie_t *trie_read(FILE *file) {
-    int i;
+    uint32_t i;
 
     long save_pos = ftell(file);
 

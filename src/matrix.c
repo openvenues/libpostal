@@ -254,12 +254,18 @@ matrix_t *matrix_read(FILE *f) {
 
     mat->values = NULL;
 
-    if (!file_read_uint64(f, (uint64_t *)&mat->m) ||
-        !file_read_uint64(f, (uint64_t *)&mat->n)) {
+    uint64_t m = 0;
+    uint64_t n = 0;
+
+    if (!file_read_uint64(f, &m) ||
+        !file_read_uint64(f, &n)) {
         goto exit_matrix_allocated;
     }
 
-    size_t len_data = (size_t)mat->m * (size_t)mat->n;
+    mat->m = (size_t)m;
+    mat->n = (size_t)n;
+
+    size_t len_data = mat->m * mat->n;
 
     double *data = malloc(len_data * sizeof(double));
     if (data == NULL) {
@@ -286,14 +292,14 @@ bool matrix_write(matrix_t *self, FILE *f) {
         return false;
     }
 
-    if (!file_write_uint64(f, self->m) ||
-        !file_write_uint64(f, self->n)) {
+    if (!file_write_uint64(f, (uint64_t)self->m) ||
+        !file_write_uint64(f, (uint64_t)self->n)) {
         return false;
     }
 
     uint64_t len_data = (uint64_t)self->m * (uint64_t)self->n;
 
-    for (int i = 0; i < len_data; i++) {
+    for (uint64_t i = 0; i < len_data; i++) {
         if (!file_write_double(f, self->values[i])) {
             return false;
         }

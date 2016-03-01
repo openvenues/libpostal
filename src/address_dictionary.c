@@ -49,7 +49,7 @@ bool address_dictionary_add_expansion(char *name, char *language, address_expans
     bool is_suffix = false;
     bool is_phrase = false;
 
-    for (int i = 0; i < expansion.num_dictionaries; i++) {
+    for (size_t i = 0; i < expansion.num_dictionaries; i++) {
         dictionary_type_t dict = expansion.dictionary_ids[i];
         if (dict == DICTIONARY_CONCATENATED_SUFFIX_SEPARABLE || 
             dict == DICTIONARY_CONCATENATED_SUFFIX_INSEPARABLE) {
@@ -93,6 +93,7 @@ bool address_dictionary_add_expansion(char *name, char *language, address_expans
         expansions = address_expansion_array_new_size(1);
         address_expansion_array_push(expansions, expansion);
         khiter_t k = kh_put(str_expansions, address_dict->expansions, strdup(key), &ret);
+        if (ret < 0) goto exit_key_created;
         kh_value(address_dict->expansions, k) = expansions;
 
         value.count = 1;
@@ -309,7 +310,7 @@ static bool address_expansion_read(FILE *f, address_expansion_t *expansion) {
         return false;
     }
 
-    for (int i = 0; i < expansion->num_dictionaries; i++) {
+    for (size_t i = 0; i < expansion->num_dictionaries; i++) {
         if (!file_read_uint16(f, (uint16_t *)expansion->dictionary_ids + i)) {
             return false;
         }
@@ -340,7 +341,7 @@ static bool address_expansion_write(FILE *f, address_expansion_t expansion) {
         return false;
     }
 
-    for (int i = 0; i < expansion.num_dictionaries; i++) {
+    for (size_t i = 0; i < expansion.num_dictionaries; i++) {
         if (!file_write_uint16(f, expansion.dictionary_ids[i])) {
             return false;
         }
@@ -399,7 +400,7 @@ bool address_dictionary_write(FILE *f) {
         }
 
 
-        for (int i = 0; i < num_expansions; i++) {
+        for (size_t i = 0; i < num_expansions; i++) {
             address_expansion_t expansion = expansions->a[i];
             if (!address_expansion_write(f, expansion)) {
                 return false;
@@ -500,6 +501,7 @@ bool address_dictionary_read(FILE *f) {
         int ret;
 
         khiter_t k = kh_put(str_expansions, address_dict->expansions, key, &ret);
+        if (ret < 0) goto exit_address_dict_created;
         kh_value(address_dict->expansions, k) = expansions;
     }
 

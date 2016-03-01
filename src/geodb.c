@@ -80,23 +80,23 @@ geodb_t *geodb_init(char *dir) {
     FILE *f = fopen(postal_codes_path, "rb");
 
     uint64_t num_postal_strings = 0;
-    if (!file_read_uint64(f, (uint64_t *)&num_postal_strings)) {
+    if (!file_read_uint64(f, &num_postal_strings)) {
         goto exit_geodb_created;
     }
 
-    size_t postal_codes_str_len;
+    uint64_t postal_codes_str_len;
 
-    if (!file_read_uint64(f, (uint64_t *)&postal_codes_str_len)) {
+    if (!file_read_uint64(f, &postal_codes_str_len)) {
         goto exit_geodb_created;
     }
 
-    char_array *array = char_array_new_size(postal_codes_str_len);
+    char_array *array = char_array_new_size((size_t)postal_codes_str_len);
 
-    if (!file_read_chars(f, array->a, postal_codes_str_len)) {
+    if (!file_read_chars(f, array->a, (size_t)postal_codes_str_len)) {
         goto exit_geodb_created;
     }
 
-    array->n = postal_codes_str_len;
+    array->n = (size_t)postal_codes_str_len;
 
     gdb->postal_codes = cstring_array_from_char_array(array);
 
