@@ -1,19 +1,12 @@
 # libpostal: international street address NLP
 
-[![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal)
-
-libpostal is a fast statistical parser/normalizer for street addresses around the world.
+[![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal) [![License](https://img.shields.io/github/license/openvenues/libpostal.svg)]
 
 :jp: :us: :gb: :ru: :fr: :kr: :it: :es: :cn: :de:
 
-Addresses and the geographic coordinates they represent are essential for any
-location-based application (map search, transportation, on-demand/delivery
-services, check-ins, reviews). Yet even the simplest addresses are packed with
-local conventions, abbreviations and context, making them difficult to
-index/query effectively with traditional full-text search engines, which are
-designed for document indexing. This library helps convert the free-form
-addresses that humans use into clean normalized forms suitable for machine
-comparison and full-text indexing.
+libpostal is a C library for parsing/normalizing street addresses around the world. This [introductory blog post](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86) is a good overview of the research and thought process behind libpostal.
+
+Addresses and the geographic coordinates they represent are essential for any location-based application (map search, transportation, on-demand/delivery services, check-ins, reviews). Yet even the simplest addresses are packed with local conventions, abbreviations and context, making them difficult to index/query effectively with traditional full-text search engines, which are designed for document indexing. This library helps convert the free-form addresses that humans use into clean normalized forms suitable for machine comparison and full-text indexing.
 
 While libpostal is not itself a full geocoder, it can be used as a preprocessing step to make any geocoding application smarter, simpler, and more consistent internationally.
 
