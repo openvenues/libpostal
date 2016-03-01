@@ -1,8 +1,14 @@
 bag|lb|lmb|mailbag|lockedbag|mail bag|locked bag|locked mail bag
+community mail bag|cmb
+gpo box|gpo
 p.o. box|pobox|postbox|post box|po box|post office box|post box|p o box|p office box|pb
 post mail box|post mail box|pmb
+locked bag
 mail|m|ml
 mailservice|ms|m s|mail service
 mailcenter|mail center|mail centre|mc|m c
-rmb|road mail box|r m b|roadside mail box|roadside mailbox|rms box
+rmb|road mail box|r m b|roadside mail box|roadside mailbox|rms box|road mailbox
+roadside delivery|rsd
+roadside mail service|rmd
 post office|po|postoffice|pst
+private bag

@@ -3,25 +3,30 @@ aerodome
 aged care center|aged care centre|aged care|centre for aged care|center for aged care|center for the aged|centre for the aged|aged care facilities
 amphitheatre|amphitheater
 animal hospital|animal hosp
+annexe
 air force base|afb
 air national guard base|angb
 airport|aprt
 apartments|apts|appartments
 aquarium
+arcade
 arms
 art gallery|arts gallery
 arts center
 arts centre
 auditorium
 bakery
+ballroom
 bank
 bar
 barn
 barbecue|barbeque|bar be que|bar be cue|bbq
 barracks|barrack|baracks
 bazaar
+beach
 boarding house|bhouse|bh|board house
 bistro
+boathouse
 book store|bookstore
 brewery
 business park|bus pk|biz pk|bus prk|biz prk
@@ -34,6 +39,9 @@ casino
 castle|cst
 cemetery
 center for the arts|centre for the arts
+chalet
+chambers
+chase
 child care|childcare
 chiropractic
 church|chr
@@ -45,11 +53,13 @@ city hall
 clinic
 club|clb
 clubhouse|club house
+clubrooms
 coffee
 college
 committee
 community center|communitycentre|communitycenter|community centre
 community|cmnty|cmty
+complex
 concert hall
 conservatory
 convalescent center|convalescent|convalescent centre|convalescent home|convalescent hospital
@@ -70,6 +80,7 @@ dental
 dentist
 dentistry
 detention|det|detn
+development
 diner
 distillery
 distributor|dstr|distrib|dstrb
@@ -77,6 +88,7 @@ district|dist
 doctors
 elementary school|primary school|public school|ps|p s
 embassy
+estate
 ex services complex
 factory|fcty|fty|fy
 family practice
@@ -86,18 +98,25 @@ farmhouse
 fire department|fd|f d
 fire station
 flats|flts
+foreshore
 forge
 fort|ft
 fountain
 gaol
 garage
+garden
 gallery
 gas station
+gate
 geriatric unit
+golf course
+golf club
 graveyard|grave yard
 grill
+ground
 gym|gymnasium
 hall
+harbour
 headquarters
 home|hm|hme|hom
 homes
@@ -109,6 +128,7 @@ hotel|hot|hotl|htel
 hostel
 house
 houses|hses
+hub
 ice cream|icecream
 industrial park|ind park
 inn
@@ -128,6 +148,7 @@ mall|mll
 maison
 manor|mnr
 manors|mnrs
+marina
 market|mkt|mrkt
 marketplace|mktpl|mktplc
 mansion
@@ -166,6 +187,7 @@ offices|ofcs
 office tower|ofc twr|office twr|ofc tower
 office towers|ofc twrs|office twrs|ofc towers
 opera house
+oval
 parish
 park|pk|prk
 parking
@@ -179,6 +201,7 @@ performing arts center
 pharmacy
 pier
 playhouse
+plaza
 police department|pd|p d
 police station
 polytechnic
@@ -193,16 +216,21 @@ prison
 pub
 public pool
 public school|ps
+raceway
+racing track
+racecourse
 recycling
 retreat|rtt
 rotary|rty
 reservation|res|resrv|resv|rsrv|rserv|rs
 reserve|res|resrv|resv|rsrv|rserv|rserve|rsrve
 reservoir|res
+resort
 restaurant
 retirement home|retirement village|ret village|masonic retirement village|retirement|ret vill|retirement home|retirement v|rh|r h
 roadhouse
 roller rink
+room
 saloon
 salon
 sanctuary|sanct
@@ -211,11 +239,13 @@ secondary school
 shelter
 sheriff's department|sherrifs department|sheriff's dept|sherrifs dept
 sherrif's office|sherffis office|sheriff's ofc|sheriffs ofc
-shopping center|shoppingcenter|shoppingcentre|shopping|shoppingtown|shopping town|shopping centre|shctr|sh ctr
+shopping center|shoppingcenter|shoppingcentre|shopping|shoppingtown|shopping town|shopping centre|shctr|sh ctr|s/centre|shp/centre
 shop|shp
+showground
 sisters
 social club
 spa
+sportsground
 stables
 stadium
 station|sta|stn
@@ -223,10 +253,13 @@ steakhouse
 store|stor
 studio
 studios
+subdivision
+supermarket
 swimming pool
 tavern
 tea
 terminal|term
+terrace
 theater
 theatre
 theatres
@@ -239,6 +272,8 @@ trailer park|tlpk
 university|uni|univ|univers|unvrsty
 units
 urgent care
+vault
+velodrome
 vet
 veterinary
 veterinarian
@@ -248,7 +283,9 @@ villa|vll|vla
 villas|vlls|vlas
 village|vil|vge|vill|villag|villg|vlg|vlge|vllg
 villages|vlgs
+vineyard
 wine bar|winebar
 winery
 yoga
 youth center|youth centre
+zoo
