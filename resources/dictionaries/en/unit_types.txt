@@ -4,8 +4,8 @@ apartment|apartement|apt|aprt|apparement|appartment
 bathing box|bbox
 barbeque|bbq|barbecue
 berth|brth
-building|bldg
-bungalow|bngw
+building|bdg|bldg|blg
+bungalow|bongalow|bunglow|bungalo|bngw|bnglw
 cage
 caravan|cvan
 carpark|carp

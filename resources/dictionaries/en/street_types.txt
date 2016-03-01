@@ -212,7 +212,6 @@ lookout|lkt|look out
 loop|lp
 loops|lps
 lot
-lower|lwr
 lynne|lynn
 mall|ml
 manor|mnr
@@ -344,7 +343,6 @@ stravenue|stra|strav
 street|st|str
 streets|sts
 strip|strp
-square|sq
 subdivision|subdiv
 subway|sbwy
 summit|smt|sumt
@@ -360,7 +358,6 @@ tor
 township highway|th|t.h.|t.h|t h|twp.h|twp h|tshp.h|tshp h|t.hw|t hw|twp.hw|twp hw|tshp.hw|tshp hw|t.hgwy|t hgwy|twp.hgwy|twp hgwy|tshp.hgwy|tshp hgwy|t.hway|t hway|twp.hway|twp hway|tshp.hway|tshp hway|t.hwy|t hwy|twp.hwy|twp hwy|tshp.hwy|tshp hwy|t.hi|t hi|twp.hi|twp hi|tshp.hi|tshp hi
 township road|tr|t.r.|t.r|t r|t rd|t.rd|trd|twpr|twp.r|twp r|twp.rd|twp rd|tshp.r|tshp r|tshp.rd|tshp rd
 township route|tr|t.r.|t.r|t r|t rt|t.rt|trt|t.rte|t rte|twpr|twp.r|twp r|twp.rt|twp rt|twp.rte|twp rte|tshp.r|tshp r|tshp.rt|tshp rt|tshp.rte|tshp rte
-tor
 tower|twr
 towers|twrs
 townline|tline
@@ -391,7 +388,6 @@ vennel
 viaduct|via|viad|vdct|viadct
 view|vw
 views|vws
-villas|vlls
 vista|vst|vsta|vis
 vue
 wade

@@ -3,6 +3,7 @@ aerodome
 aged care center|aged care centre|aged care|centre for aged care|center for aged care|center for the aged|centre for the aged|aged care facilities
 amphitheatre|amphitheater
 animal hospital|animal hosp
+annex|anex|annx|anx
 annexe
 air force base|afb
 air national guard base|angb
@@ -116,6 +117,7 @@ grill
 ground
 gym|gymnasium
 hall
+harbor
 harbour
 headquarters
 home|hm|hme|hom
@@ -239,7 +241,7 @@ secondary school
 shelter
 sheriff's department|sherrifs department|sheriff's dept|sherrifs dept
 sherrif's office|sherffis office|sheriff's ofc|sheriffs ofc
-shopping center|shoppingcenter|shoppingcentre|shopping|shoppingtown|shopping town|shopping centre|shctr|sh ctr|s/centre|shp/centre
+shopping center|shoppingcenter|shoppingcentre|shopping|shoppingtown|shopping town|shopping centre|shctr|sh ctr|s / centre|shp / centre
 shop|shp
 showground
 sisters
