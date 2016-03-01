@@ -1,4 +1,5 @@
-annex|anex|annx|anx|annexe
+annex|anex|annx|anx
+annexe
 building|bdg|bldg|blg
 bungalow|bongalow|bunglow|bungalo|bngw|bnglw
 cabin|cabn

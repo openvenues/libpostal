@@ -1,7 +1,11 @@
+allotment
 antenna|ant
 apartment|apartement|apt|aprt|apparement|appartment
+bathing box|bbox
 barbeque|bbq|barbecue
 berth|brth
+building|bdg|bldg|blg
+bungalow|bongalow|bunglow|bungalo|bngw|bnglw
 cage
 caravan|cvan
 carpark|carp
@@ -24,7 +28,7 @@ location|loc
 lot
 lower|lwr
 maisonette|msnt
-marine berth|mb
+marine berth|mb|mbth
 number|#|nbr|num|no|nmbr|nr
 office|ofc|off|offc
 penthouse|pths|ph|pent house
