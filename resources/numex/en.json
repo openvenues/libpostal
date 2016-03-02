@@ -132,7 +132,7 @@
         },
         {
             "name": "fifty",
-            "value": 30,
+            "value": 50,
             "type": "cardinal",
             "right": "add"
         },
