@@ -14,7 +14,9 @@ ct
 de
 dc
 e
+f
 fl
+g
 ga
 hi
 i
@@ -22,6 +24,7 @@ id
 il
 in
 ia
+j
 jbt
 ks
 ky
