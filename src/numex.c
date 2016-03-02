@@ -735,7 +735,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 if (result.len > 0 && (!whole_tokens_only || (prev_state.state != NUMEX_SEARCH_STATE_MATCH && complete_token))) {
                     results = (results != NULL) ? results : numex_result_array_new_size(1);
                     numex_result_array_push(results, result);
-                    log_debug("Adding phrase from partial token, value=%lld\n", result.value);
+                    log_debug("Adding phrase from partial token, value=%" PRId64 "\n", result.value);
                     prev_rule = rule = NUMEX_NULL_RULE;
                 }
                 result = NULL_NUMEX_RESULT;
@@ -766,7 +766,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
         log_debug("phrase.len=%u, phrase.data=%d\n", phrase.len, phrase.data);
 
         rule = get_numex_rule((size_t)phrase.data);
-        log_debug("rule.value=%lld\n", rule.value);
+        log_debug("rule.value=%" PRId64 "\n", rule.value);
 
         if (rule.rule_type != NUMEX_NULL) {
             set_rule = true;
@@ -804,14 +804,14 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                     multiplier = 1;
                 }
                 result.value += rule.value * multiplier;
-                log_debug("LEFT_CONTEXT_MULTIPLY, value = %lld\n", result.value);
+                log_debug("LEFT_CONTEXT_MULTIPLY, value = %" PRId64 "\n", result.value);
             } else if (rule.left_context_type == NUMEX_LEFT_CONTEXT_ADD) {
                 result.value += rule.value;
-                log_debug("LEFT_CONTEXT_ADD, value = %lld\n", result.value);
+                log_debug("LEFT_CONTEXT_ADD, value = %" PRId64 "\n", result.value);
             } else if (prev_rule.right_context_type == NUMEX_RIGHT_CONTEXT_ADD && rule.value > 0 && prev_rule.radix > 0 &&
                        FLOOR_LOG_BASE(rule.value, prev_rule.radix) < FLOOR_LOG_BASE(prev_rule.value, prev_rule.radix)) {
                 result.value += rule.value;
-                log_debug("Last token was RIGHT_CONTEXT_ADD, value=%lld\n", result.value);
+                log_debug("Last token was RIGHT_CONTEXT_ADD, value=%" PRId64 "\n", result.value);
             } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD && (!whole_tokens_only || complete_token)) {
                 log_debug("Had previous token with no context, finishing previous rule before returning\n");
 
@@ -823,7 +823,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 prev_result_len = 0;
             } else if (rule.rule_type != NUMEX_STOPWORD) {
                 result.value = rule.value;
-                log_debug("Got number, result.value=%lld\n", result.value);
+                log_debug("Got number, result.value=%" PRId64 "\n", result.value);
             } else if (rule.rule_type == NUMEX_STOPWORD && prev_rule.rule_type == NUMEX_NULL) {
                 log_debug("numex stopword\n");
                 rule = NUMEX_NULL_RULE;
@@ -883,7 +883,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
         if (number_finished) {
             results = (results != NULL) ? results : numex_result_array_new_size(1);
             numex_result_array_push(results, result);
-            log_debug("Adding phrase, value=%lld\n", result.value);
+            log_debug("Adding phrase, value=%" PRId64 "\n", result.value);
             result = NULL_NUMEX_RESULT;
             number_finished = false;
         }
@@ -1005,7 +1005,7 @@ char *replace_numeric_expressions(char *str, char *lang) {
 
         end = result.start;
 
-        log_debug("lang=%s, start = %zu, len = %zu, value=%lld\n", lang, result.start, result.len, result.value);
+        log_debug("lang=%s, start = %zu, len = %zu, value=%" PRId64 "\n", lang, result.start, result.len, result.value);
         
         char numeric_string[INT64_MAX_STRING_SIZE] = {0};
         sprintf(numeric_string, "%" PRId64, result.value);
