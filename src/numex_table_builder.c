@@ -87,7 +87,27 @@ int main(int argc, char **argv) {
         for (j = ordinal_indicator_index; j < ordinal_indicator_index + num_ordinal_indicators; j++) {
             value = numex_table->ordinal_indicators->n;
             ordinal_indicator_t ordinal_source = ordinal_indicator_rules[j];
-            ordinal_indicator_t *ordinal = ordinal_indicator_new(ordinal_source.key, ordinal_source.gender, ordinal_source.category, ordinal_source.suffix);
+
+            if (ordinal_source.key == NULL) {
+                log_error("ordinal source key was NULL at index %d\n", j);
+                exit(EXIT_FAILURE);
+            }
+
+            char *ordinal_indicator_key = strdup(ordinal_source.key);
+            if (ordinal_indicator_key == NULL) {
+                log_error("Error in strdup\n");
+                exit(EXIT_FAILURE);
+            }
+
+            char *suffix = NULL;
+            if (ordinal_source.suffix != NULL) {
+                suffix = strdup(ordinal_source.suffix);
+                if (suffix == NULL) {
+                    log_error("Error in strdup\n");
+                    exit(EXIT_FAILURE);
+                }
+            }
+            ordinal_indicator_t *ordinal = ordinal_indicator_new(ordinal_indicator_key, ordinal_source.gender, ordinal_source.category, suffix);
             ordinal_indicator_array_push(numex_table->ordinal_indicators, ordinal);            
 
             char_array_clear(key);
@@ -134,7 +154,13 @@ int main(int argc, char **argv) {
             }
         }
 
-        numex_language_t *language = numex_language_new(lang_source.name, lang_source.whole_tokens_only, lang_source.rule_index, lang_source.num_rules, lang_source.ordinal_indicator_index, lang_source.num_ordinal_indicators);
+        char *name = strdup(lang_source.name);
+        if (name == NULL) {
+            log_error("Error in strdup\n");
+            exit(EXIT_FAILURE);
+        }
+
+        numex_language_t *language = numex_language_new(name, lang_source.whole_tokens_only, lang_source.rule_index, lang_source.num_rules, lang_source.ordinal_indicator_index, lang_source.num_ordinal_indicators);
         numex_table_add_language(language);
 
     }
