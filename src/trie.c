@@ -353,8 +353,8 @@ static void trie_relocate_base(trie_t *self, uint32_t current_index, int32_t new
         *  set check values appropriately
         */
         if (old_transition.base > 0) {  // do nothing in the case of a tail pointer
-            for (i = 0; i < self->alphabet_size; i++) {
-                unsigned char c = self->alphabet[i];
+            for (uint32_t j = 0; j < self->alphabet_size; j++) {
+                unsigned char c = self->alphabet[j];
                 uint32_t index = trie_get_transition_index(self, old_transition, c);
                 if (index < self->nodes->n && trie_get_node(self, index).check == old_index) {
                     trie_set_check(self, index, new_index);
