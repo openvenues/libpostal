@@ -6,6 +6,7 @@ allgemeiner deutscher automobil club|adac|a d a c
 auswartiges amt|aa|a a
 bank
 bar
+botschaft
 bustenhalter|bh
 café|cafe
 casino
@@ -14,8 +15,10 @@ deutsche bahn|db|d b
 deutscher alpenverein|dav|d a v
 fabrik|fb
 fachhochschule|fh
+fahrschule
 flughafen
 freiwillige feuerwehr|ff
+feuerwehr
 gasthaus|gh
 gasthof|ghf
 gemeinschaftszentrum
@@ -58,7 +61,10 @@ restaurant
 ruine
 ruinen
 schloss|schl
+schnellimbiss
+springbrunnen
 steinbruch|stb
+studentenwohnheim
 technische universität|tu|t u|technische universitat|technische universitaet
 truppenubüngsplatz|tüpl|tupl|truppenubungsplatz|truppenubuengsplatz
 universität|uni|universitat|universitaet
