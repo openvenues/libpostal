@@ -1,51 +1,117 @@
 aeropuerto
+agencia de viajes
 albergue
+almacén|almacen
+almacén general|almacen general
+alquileres de bicicletas
+alquileres de vehículos|alquileres de vehiculos
+aparcamiento
+aparcamiento de bicicletas
 apartamentos|aptos
+apostadero de caza
+área de juegos|area de juegos
+área de picnic|area de picnic
+área recreacional|area recreacional
+área recreativa|area recreativa
 arboleda|arb
 arrabal|arral
 arroyo|arry
+aseos
 asuntos exteriores|aa ee
 atlético|atlo|atletico
+auditorio
+autoescuela
+autolavado
 ayuntamiento
 balneario|balnr
 baños|banos
 banco
 bar
+bazar
 biblioteca|bibl
+bodega
 borda
+burdel
+cabaña|cabana
 café|cafe
 cafetería|cafeteria
 campo|cpo
+campo de golf|cpo de folf
+cama y desayuno
+campamento
 cantera|cantr
 cantina|canti
+capilla
+carnicería|carniceria
 caserío|caserio|csrío|csrio
 casa
+casa de cambio
+casa señorial|casa senorial
 casas
+casino
 castillo|cast
 cementerio
-centro commercial|centro cial|centro.cial|centro comm|centro.comm|ctro commercial|ctro.cial|ctro cial|ctro comm|ctro.comm|ctr commercial|ctr.cial|ctr cial|ctr.comm|ctr comm|cto commercial|cto.cial|cto cial|cto.comm|cto comm|cc|c.c.|c.c|c c
+centro comercial|centro cial|centro.cial|centro com|centro.com|ctro comercial|ctro.cial|ctro cial|ctro com|ctro.com|ctr comercial|ctr.cial|ctr cial|ctr.com|ctr comm|cto comercial|cto.cial|cto cial|cto.com|cto com|cc|c.c.|c.c|c c
+centro comunitario|cto comun|cto comunitario|ctro comun|ctro comunitaro
+centro de arte|cto de arte|ctro de arte
+centro de salud|cto de salud|ctro de salud
+centro deportivo|cto deportivo|ctro deportivo
+centro juvenil|cto juvenil|ctro juvenil
+centro médico|centro medico|cto médico|cto medico|ctro médico|ctro medico
 charcutería|charcuteria
-clinica
+cine
+clínica|clinica
+clínica veterinaria|clinica veterinaria
 club|clb
+club social|clb social
 colegio
+colegio mayor
+comida rápida|comida rapida
 comisario de policía|comisario de policia
+complejo en la playa
+compras
+concesionario
+concesionario de automóviles|concesionario de automoviles
+consultorio médico|consultorio medico
+copistería|copisteria
 correos
 corretaje
 convento|cnvto
 cooperativa|coop
 cortijo|crtjo
+crematorio
 dehesa|dhsa
 de capital variable|de cv|de c v
+dentista
 diseminado|disem
+discoteca|disco
+droguería|drogueria
+dulcería|dulceria
 embajada
+enfermería|enfermeria
 escuela
 escuelas
 estación|estacion|estcn
+estación de autobuses|estacion de autobuses|estcn de autobuses
+estación de tren|estacion de tren|estcn de tren
 estacionamiento|estto
+estadio
+estudio
 fábrica|fabrica|fca|fbrca
 farmacia
+ferretería|ferreteria
 ferrocarril|fc|f.c.|f.c|f c
 ferrocarriles|ff cc|ffcc
+finca
+floristería|floristeria
+frutería|fruteria
+fuente
+funeraria
+galería|galeria
+gasolinera
+gimnasio
+golfito
+grandes almacenes
 granja|granj
 hacienda|hda
 heladería|heladeria
@@ -56,41 +122,98 @@ hostal
 hotel
 iglesia|igl|igla
 iglesias|iglas
+inmobiliaria
 instituto|inst
 jardín|jardin|jdin|jard
 jardines|jdins|jards
+jardines de infancia
+joyería|joyeria
+juguetería|jugueteria
+juzgado
+kiosko
+kiosko de prensa
+lavandería|lavanderia
 librería|libreria
+licorería|licoreria
+mansión|mansion
 mercado|merc
+mercado público|mercado publico|merc público|merc publico
+minigolf
 mirador|mrdor
 monasterio|mtrio
+monumento
+motel
 muebles
 muelle|meull
+museo
+óptica|optica
 pabellón|pabellon
 palacio|palac
 palacios|palacs
 panadería|panaderia
+papelería|papeleria
+parafarmacia
 parque|pque|parq|pq|pqe
+parque acuático|parque acuatico
+parque de bomberos
+parque infantil
+parque municipal
+parque temático|parque tematico
+parvulario
 pastelería|pasteleria
 pescadería|pescaderia
+peluquería|peluqueria
+pequeño supermercado|pequeno supermercado
 pilar
+piscina
 playa
+policía|policia
+polideportivo
+prisión|prision
+pub
 puebla|pbla
 pueblo|pblo
 puente|pnte
 puerta|pta
 puerto|pto
+puerto deportivo|pto deportivo
+punto de reciclaje
 rancho|rch|rcho
+refugio
+repuestos automotrices
+rescate de montaña|rescate de montana
+residencia de estudiantes
+residencia de jubilados
+residencia de la tercera edad
 restaurante
+ruinas
+salón de acto|salon de acto
+salón de belleza|salon de belleza
+salón municipal|salon municipal
 sanatorio|sanat
 santuario|santu
+sauna
 sociedad|soc
+supermercado
 taberna
 taller
+taller mecánico|taller mecanico
 talleres
+teatro
 templo
+terminal de ferry
 tienda
+tintorería|tintoreria
 torre
 transito|trans
 universidad|univ|uni|univers
 villa|vla
 villas|vlas
+videotienda
+vivero
+viñedo|vinedo
+zapatería|zapateria
+zona comercial
+zona industrial
+zona militar
+zoológico|zoologico
