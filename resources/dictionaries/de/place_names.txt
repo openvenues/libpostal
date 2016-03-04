@@ -5,8 +5,9 @@ bundesrealgymnasium|brg|b r g
 allgemeiner deutscher automobil club|adac|a d a c
 auswartiges amt|aa|a a
 bank
+bar
 bustenhalter|bh
-cafe
+café|cafe
 denkmal|dkm
 deutsche bahn|db|d b
 deutscher alpenverein|dav|d a v
@@ -59,4 +60,5 @@ universitätsbibliothek|ub|u b|universitatsbibliothek|universitaetsbibliothek
 volksschule|vs
 wald
 wasserfall|wsf|wssf
+wechselstube
 wirtshaus|wh
