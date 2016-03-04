@@ -3,6 +3,7 @@ aerodome
 aged care center|aged care centre|aged care|centre for aged care|center for aged care|center for the aged|centre for the aged|aged care facilities
 amphitheatre|amphitheater
 animal hospital|animal hosp
+animal shelter
 annex|anex|annx|anx
 annexe
 air force base|afb
@@ -25,6 +26,7 @@ barbecue|barbeque|bar be que|bar be cue|bbq
 barracks|barrack|baracks
 bazaar
 beach
+beauty salon
 boarding house|bhouse|bh|board house
 bistro
 boathouse
@@ -42,6 +44,7 @@ cemetery
 center for the arts|centre for the arts
 chalet
 chambers
+chapel
 chase
 child care|childcare
 chiropractic
@@ -70,6 +73,7 @@ cottages|cotts|cottgs
 country club|country clb|cty clb
 courthouse|court house
 creamery
+crematorium
 credit union
 culture center|culture centre
 cultural center|cultural centre
@@ -87,6 +91,9 @@ distillery
 distributor|dstr|distrib|dstrb
 district|dist
 doctors
+dojo
+dormitory|dorm
+dormitories|dorms
 elementary school|primary school|public school|ps|p s
 embassy
 estate
@@ -98,6 +105,7 @@ farm|frm
 farmhouse
 fire department|fd|f d
 fire station
+fitness center|fitness centre
 flats|flts
 foreshore
 forge
@@ -120,6 +128,7 @@ hall
 harbor
 harbour
 headquarters
+health center|health centre
 home|hm|hme|hom
 homes
 home for the aged
@@ -160,6 +169,7 @@ medical|med
 memorial|mem
 mission|msn
 monastery|monastry
+monument
 motel|mot|motl|mtel
 municipal building|municipal bldg|mun building|mun bldg|mpal building|mpal bldg
 museum|mus
@@ -180,8 +190,9 @@ movie theatre
 national park|np|natl park|natl pk|natl prk|nat'l park|nat'l pk|nat'l prk
 national recreation area|nra|natl rec area|nat'l rec area
 national wildlife refuge area|nwra|natl wildlife refuge area|nat'l wildlife refuge area
-nurses home|nurses home|nurse home
 nursery
+nurses home|nurses home|nurse home
+nursing home
 office|ofc
 offices|ofcs
 office tower|ofc twr|office twr|ofc tower
@@ -197,7 +208,7 @@ pediatric
 penitentiary
 performing arts centre
 performing arts center
-pharmacy
+pharmacy|pharm
 pier
 playhouse
 plaza
@@ -213,6 +224,7 @@ primary school
 primary care
 prison
 pub
+public market
 public pool
 public school|ps
 raceway
@@ -230,6 +242,7 @@ retirement home|retirement village|ret village|masonic retirement village|retire
 roadhouse
 roller rink
 room
+ruins
 saloon
 salon
 sanctuary|sanct
@@ -253,7 +266,7 @@ store|stor
 studio
 studios
 subdivision
-supermarket
+supermarket|super market
 swimming pool
 tavern
 tea
