@@ -24,6 +24,7 @@ handelsschule|hasch
 hauptbahnhof|hbf
 höhle|hohle
 höhere technische lehranstalt|htl|hohere technische lehranstalt|hoehere technische lehranstalt|h t l
+hörsäle|horsale|hoersaele
 hotel
 hütte|hutte|huette|htt
 imbiss
