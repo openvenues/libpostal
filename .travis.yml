@@ -18,9 +18,9 @@ before_script:
     - export DICTIONARIES_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "resources/dictionaries" | wc -l)
     - export NUMEX_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "resources/numex" | wc -l)
     - export TRANSLIT_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "src/transliteration_data.c" | wc -l)
-    - if [[ $DICTIONARIES_CHANGED -ne 0 || $NUMEX_CHANGED -ne 0 ]]; then virtualenv env; source env/bin/activate; pip install -r scripts/requirements-simple.txt; fi;
-    - if [ $NUMEX_CHANGED -ne 0 ]; then python scripts/geodata/i18n/numex.py; fi;
-    - if [ $DICTIONARIES_CHANGED -ne 0 ]; then python scripts/geodata/address_expansions/address_dictionaries.py; fi;
+    - if [[ $DICTIONARIES_CHANGED -ne 0 || $NUMEX_CHANGED -ne 0 ]]; then virtualenv env; env/bin/pip install -r scripts/requirements-simple.txt; fi;
+    - if [ $NUMEX_CHANGED -ne 0 ]; then env/bin/python scripts/geodata/i18n/numex.py; fi;
+    - if [ $DICTIONARIES_CHANGED -ne 0 ]; then env/bin/python scripts/geodata/address_expansions/address_dictionaries.py; fi;
 install:
     - if [ "$CC" = "gcc" ]; then export CC="gcc-4.8"; fi
 script:
