@@ -7,6 +7,7 @@ apartaments
 arbreda
 atlètic|atletic
 auditori
+autoescola
 balneari
 banc
 banys
@@ -18,14 +19,21 @@ cafeteria
 cafè|cafe
 camp
 cantina
+capella
 casa
 casas
 caseriu
 cases
+casino
 castell
 cementiri|cem
 centre commercial
+centre de salut
+centre juvenil
+cinema
 club
+club nocturn
+club social
 clínica
 col·legi públic|cp|collegi públic|collegi public|col·legi public
 col·legi|col·l|collegi|coll
@@ -35,17 +43,21 @@ convent|convt
 cooperativa
 corretatge
 correus|corr
+crematori
+dentista
 devesa
 disseminat
 escola universitària|eu|e u|escola universitaria
 escola|esc
+escola propera|esc propera
 escoles
 església|esglesia
 església|esgl|esglesia
 esglésies|esglesies
 estacionament|estac
 estació|est|estacio
-farmàcia
+estadi
+farmàcia|farmacia
 ferrocarril
 ferrocarrils
 fleca
@@ -53,6 +65,7 @@ font
 forn
 fàbrica
 gelateria
+gelat
 granja
 hipòdrom
 hisenda
@@ -61,16 +74,24 @@ hostal
 hotel|h
 institut
 llibreria
+jardí d'infància|jardí dinfància|jardi d'infancia|jardi dinfancia
+jutjat
+magatzem
+memorial
 mercat
+metge
+metges
 mirador
 mobles
 moll
 monestir|mtir
 monument|mon
 museu|mus
+oficina de canvi
 palau
 palaus
 parc
+parc de bombers
 pastisseria
 pavelló|pav|pavello
 pedrera
@@ -80,22 +101,32 @@ planta|pl
 platja
 pobla
 poble
+policia
 pont
 port
 porta
+pre escola|preescola|pre-escola
+presó|preso
+pub
+punt de reciclatge
 ranxo
 raval
+refugi
 restaurant
 rierol
+ruïnes|ruines
 sanatori
 santuari
+sauna
 societat
+supermercat|super mercat
 taller
 tallers
 taverna
+teatre
 temple
 torre
 trànsit
-universitat
+universitat|uni|univ
 vila
 xarcuteria
