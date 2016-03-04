@@ -1,0 +1,3 @@
+requests==2.9.1
+six==1.10.0
+ujson==1.33
