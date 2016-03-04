@@ -12,6 +12,7 @@ deutsche bahn|db|d b
 deutscher alpenverein|dav|d a v
 fabrik|fb
 fachhochschule|fh
+flughafen
 freiwillige feuerwehr|ff
 gasthaus|gh
 gasthof|ghf
@@ -35,6 +36,7 @@ kapelle|kap|kpl
 kirche
 kläranlage|ka|klaranlage|klaeranlage
 konzentrationslager|kz|kl
+kulturzentrum
 magistratsabteilung|ma
 markt|mkt
 marktplatz|markt platz|markt pl|mkt pl|marktpl
