@@ -8,6 +8,7 @@ bank
 bar
 bustenhalter|bh
 café|cafe
+casino
 denkmal|dkm
 deutsche bahn|db|d b
 deutscher alpenverein|dav|d a v
@@ -17,12 +18,15 @@ flughafen
 freiwillige feuerwehr|ff
 gasthaus|gh
 gasthof|ghf
+gemeinschaftszentrum
+gericht
 grundschule
 hafen
 haus
 handelsakademie|hak
 handelsschule|hasch
 hauptbahnhof|hbf
+hochschule
 höhle|hohle
 höhere technische lehranstalt|htl|hohere technische lehranstalt|hoehere technische lehranstalt|h t l
 hörsäle|horsale|hoersaele
@@ -35,9 +39,11 @@ jungenherberge|jh|j h
 kaffee
 kantine
 kapelle|kap|kpl
+kino
 kirche
 kläranlage|ka|klaranlage|klaeranlage
 konzentrationslager|kz|kl
+krankenhaus
 kulturzentrum
 magistratsabteilung|ma
 markt|mkt
@@ -57,6 +63,7 @@ technische universität|tu|t u|technische universitat|technische universitaet
 truppenubüngsplatz|tüpl|tupl|truppenubungsplatz|truppenubuengsplatz
 universität|uni|universitat|universitaet
 universitätsbibliothek|ub|u b|universitatsbibliothek|universitaetsbibliothek
+verein
 volksschule|vs
 wald
 wasserfall|wsf|wssf
