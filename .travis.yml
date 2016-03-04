@@ -3,6 +3,9 @@ env:
     global:
         - secure: "bHrAu46oecEj3gjamT+XWXtf2J0ZJCFa8tUdgM4evscaJiiwv1TtsGXyhIj/ai7DlRIPVJUtBUy6uoGGjr6GT43zTrzSxYAOMdVXZYsnTDcdL1/0dbwcIK6/u0EI377s1buGIxG1fHveWKXuXwJWDAw4KS+5HU88a42+zMbhKe4="
         - secure: "SkvNYucKVns9qDjOEW2WIhDlOMKBOwhzVcwY++HWTRtn04ErrqR4k01Mmho0jGBQD9JrPLhDgnX1BNy5s+Kmq/bxn9OZm7K1z24qBKb0mBBiNEnf2jvT0AvF5xxM+cJf4KKNL+CC0MwNf5y7HVPq1xibOV4/CNIrc1ZZc9aqdkE="
+        - DICTIONARIES_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "resources/dictionaries" | wc -l)
+        - NUMEX_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "resources/numex" | wc -l)
+        - TRANSLIT_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "src/transliteration_data.c" | wc -l)
 compiler:
     - clang
     - gcc
@@ -15,9 +18,6 @@ addons:
         - libsnappy-dev
 before_script:
     - ./bootstrap.sh
-    - export DICTIONARIES_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "resources/dictionaries" | wc -l)
-    - export NUMEX_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "resources/numex" | wc -l)
-    - export TRANSLIT_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "src/transliteration_data.c" | wc -l)
     - if [[ $DICTIONARIES_CHANGED -ne 0 || $NUMEX_CHANGED -ne 0 ]]; then git clone https://github.com/pypa/virtualenv; cd virtualenv; git checkout master; python virtualenv.py ../env; cd ..; env/bin/pip install -r scripts/requirements-simple.txt; fi;
     - if [ $NUMEX_CHANGED -ne 0 ]; then env/bin/python scripts/geodata/i18n/numex.py; fi;
     - if [ $DICTIONARIES_CHANGED -ne 0 ]; then env/bin/python scripts/geodata/address_expansions/address_dictionaries.py; fi;
