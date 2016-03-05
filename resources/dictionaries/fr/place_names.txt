@@ -1,19 +1,60 @@
 abbaye|abe
+aéroport|aeroport
+ambassade
+appartements
+auditorium
+auto-école|auto-ecole|autoécole|autoecole|auto école|auto ecole
+banque
+bar
 bastide|bstd
+bâtiment de ferme|batiment de ferme
 béguinage|beguinage|begi
 béguinages|beguinages|begis
+bibliothèque|bibliotheque
+boîte de nuit|boite de nuit
+bordel
+bulle
+bulle à verre|bulle a verre
+bunker
+bureau
+bureau de change
+bureau de poste
+bureaux
+café|cafe
 camping|cpg
+casino
 castel|cst
+caserne de pompiers
+centre artistique
 centre commercial|cc|c.c.|c.c|c c|centre cial|centre comm|c cial|c comm|ctr cial|ctr comm
+centre pour la jeunesse
+centre de santé|centre de sante
 chapelle|chp
 château|chateau
+cimetière|cimetiere
+cinéma|cinema
+clinique
+club
+club social
+commerce
 cottage|cott
 cottages|cott|cotts
+covoiturage
+crème glacée|creme glacee
+crématorium|crematorium
 darse|dars
+dentiste
+docteurs
+dortoir
+dortoirs
+école
+école de conduite
 église|eglise|egl|égl
+établissement d'enseignement supérieur|etablissement d'enseignement superieur|établissement denseignement supérieur|etablissement denseignement superieur
 étang|etang
 ferme|frm
 fermes|frms
+fitness
 fontaine|fon
 fort|ft
 forum|form
@@ -22,19 +63,33 @@ habitation à loyer modéré|hlm|h.l.m|h l m
 halle|hle
 halles|hles|hls
 hippodrome|hip
+hôpital|hopital
+hôtel|hotel
+hôtel de ville|hotel de ville
 jardin|jard|jrd
+jardin d'enfants|jardin denfants
 jardins|jards|jrds
-manoir|man
-marché|marche|mar
-marchés|marches|mars
-maison
-mas
+lavage de voitures
+location de voitures
+magasin
+maison de santé|maison de sante
+maison de retraite
 maison forestière|maison forestiere|mf|m.f.|m.f|m f
+manoir|man
+mairie
+maison
+marché|marche|mar
+marché public|marche public|mar public
+marchés|marches|mars
+mas
+médecin|medecin
 mont|mt|mnt|montagne
 moulin|mln
 moulins|mlns
 musée|musee|mus
+nurserie
 palais|pal
+palais de justice|pal de justice
 parc|prc
 parcs
 parc industriel
@@ -42,14 +97,34 @@ parking|pkg
 pavillon|pav
 pavillons|pavs
 péristyle|peristyle|psty
+pharmacie
+place de marché|place de marche
+point de recyclage
+police
 pont
 ponts
 port
 poterne|pot|potrn
 porte|pte
+préscolaire|prescolaire
+prison
+refuge
+restaurant
+restauration rapide
+salle
+salle communale
+salle de gymnastique
+salle polyvalente
+sauna
 stade|stde
 station|sta
+studio
+supermarché|supermarche|super marché|super marche
+terminal de ferry
+théâtre|theatre
 tour
+université|universite|univ|uni
+vétérinaire|veterinaire
 villa|vla
 villas|vlas
 zone artisanale|za|z.a.|z.a|z a
