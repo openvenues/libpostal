@@ -1,27 +1,46 @@
 academia|acad
+aeroporto
+agência bancária|agencia bancaria
 associacao|ass
 arquitecto|arq|arqo|arq.o
 bairro|b|bo|br|b.o
+banco
+bar
 bombeiros voluntários|bombeiros voluntarios|bv|b v
-camara municipal|cm|c.m.|c.m|c m
+câmara municipal|camara municipal|cm|c.m.|c.m|c m
+câmbio|cambio
+cambista
 casal|csl
 castelo|cast
 centro comercial|cc|c.c.|c.c|c c
 ciclo do ensino básico|ciclo do ensino basico|ceb|c.e.b.|c.e.b|c e b
+escola
 escola básica|escola basica|eb|e.b.|e.b|e b
+estação|estacao
 estação de tratamento de águas residuais|estacao de tratamento de aguas residuais|etar|e.t.a.r.|e.t.a.r|e t a r
+estação de autocarros|estacao de autocarros
+estação de camionagem|estacao de camionagem
+estação de comboios|estacao de comboios
+estação ferroviária|estacao ferroviaria
+estação de ônibus|estacao de onibus
+estação de trem|estacao de trem
+estação rodoviária|estacao rodoviaria
 fonte|f.te|fte
 galeria|gal
 guarda nacional republicana|gnr|g.n.r.|g.n.r|g n r
 instituto|inst
 loja
 lojas
+museu|mus
 parque|pq|prq|parq
 pavilhão|pailhao|pav
 polícia de segurança pública|policia de seguranca publica|psp|p.s.p.|p.s.p|p s p
 polícia judiciária|policia judiciaria|pj|p.j.|p.j|p j
 ponte|pont|pte|p.te|pnte
 porto|pto|p.to
+praia
 rodoviaria|rdv
+ruínas|ruinas
+terminal rodoviário|terminal rodoviario
 seminario|sem|semin
-universidade|univ|univers
+universidade|uni|univ|univers
