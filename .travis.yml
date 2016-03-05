@@ -26,9 +26,9 @@ install:
 script:
     - ./configure --datadir=$(pwd)/data
     - make
-    - if [[ "$CC" == "gcc*" && $DICTIONARIES_CHANGED -ne 0 ]]; then ./src/build_address_dictionary; fi;
-    - if [[ "$CC" == "gcc*" && $NUMEX_CHANGED -ne 0 ]]; then ./src/build_numex_table; fi;
-    - if [[ "$CC" == "gcc*" && $TRANSLIT_CHANGED -ne 0 ]]; then ./src/build_trans_table; fi;
+    - if [[ "$CC" == gcc* && $DICTIONARIES_CHANGED -ne 0 ]]; then ./src/build_address_dictionary; fi;
+    - if [[ "$CC" == gcc* && $NUMEX_CHANGED -ne 0 ]]; then ./src/build_numex_table; fi;
+    - if [[ "$CC" == gcc* && $TRANSLIT_CHANGED -ne 0 ]]; then ./src/build_trans_table; fi;
     - make check
 after_success:
-    - if [[ "$CC" == "gcc*" && "$TRAVIS_PULL_REQUEST" = "false" && ( $DICTIONARIES_CHANGED -ne 0 || $NUMEX_CHANGED -ne 0 || $TRANSLIT_CHANGED -ne 0 ) ]]; then ./src/libpostal_data upload base $(pwd)/data/libpostal; git commit -a -m "[auto][build] Adding data files"; git push; fi;
+    - if [[ "$CC" == gcc* && "$TRAVIS_PULL_REQUEST" = "false" && ( $DICTIONARIES_CHANGED -ne 0 || $NUMEX_CHANGED -ne 0 || $TRANSLIT_CHANGED -ne 0 ) ]]; then ./src/libpostal_data upload base $(pwd)/data/libpostal; git commit -a -m "[auto][build] Adding data files"; git push; fi;
