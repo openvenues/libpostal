@@ -12,8 +12,16 @@ agenzia immobiliare
 alberghi|alb.i|albi
 albergo|alb.o|albo
 alimentari
+ambasciata
 anfiteatri|anfit.i|anfiti
 anfiteatro|anfit.o|anfito
+area cani
+area comune
+area di svago
+asilo infantile
+asilo nido
+autonoleggio
+autolavaggio
 bagno|bgno|b.gno
 bagni|bgni|b.gni
 banca
@@ -29,13 +37,19 @@ bettole|bet.e|bete
 biblioteca
 birreria|birr.a|birra
 birrerie|birr.e|birre
+bordello
 bottega
 boutique
+caffè|caffe
 caffeteria
 calzaturificio|calzat.cio|calzatcio
 calzolaio
+cambiavalute
+cambia valute
 campeggio|camp.gio|campgio
 campeggi|camp.gi|campgi
+campo da golf
+campo sportivo
 cappella|cap.la|capla
 cappelleria
 cappelletta|cap.ta|capta
@@ -50,7 +64,7 @@ casaletto|c.letto|cletto
 caserma|cas.ma|casma
 casetta|c.ta|cta
 casette|c.te|cte
-casino
+casinò|casino
 casolare|c.lare|clare
 casone|c.one|cone
 casotto|cas.to|casto
@@ -60,17 +74,24 @@ catacomba|cat.ba|cat ba
 catacombe|cat.be|cat be
 cattedrale|catt.le|cattle
 centro commerciale|centro comm.le|centro comm|centro comm le|cc|c.c.|c.c|c c
+centro sportivo
 chalet|ch.t|cht
 chiesa|ch.sa|chsa
 chiesetta|ch.etta|chetta
+cimitero
+cinema
 cittadella|c.della|cdella
 club
 collegio|coll.io|collio
 conservatorio|cons.rio|consrio
 convento|conv.to|convto
+crematorio
+dentista
 diga
 dissalazione|dissal.ne|dissalne
 distilleria|distill.a|distilla
+dormitorio
+dormitori
 drogheria
 enoteca
 ergastolo|erg.lo|erglo
@@ -119,9 +140,11 @@ madonnetta|mad.ta|madta
 magazzini|magaz.i|magazi
 magazzino|magaz.o|magazo
 masseria|mass.a
+mercato
 ministero|min.ro|minro
 molino
 monastero|monast.o|monasto
+municipio
 monumento|monum.o|monumo
 mulino
 museo
@@ -137,22 +160,43 @@ panetteria
 panificio
 parcheggio|pach.o
 parco|p.rco|prco
+parco giochi|p.rco giochi|prco giochi
+parco acquatico|p.rco acquatico|prco acquatico
 parrucchiere
 pasticceria
 pelletteria
+pensilina
 pescheria
+piscina
+pista di ghiaccio
 pizzeria
+polizia
+pompieri
+porto
+porto turistico
+prigione
 profumeria
 pub
+rifugio per animali
 ristorante
 salone di bellezza
 sarto
+sauna
 scuola
+scuola guida
+scuola superiore
+stadio
+supermercato|super mercato
 tabaccheria
 tabacchi
 teatro
+terminal traghetto
 tintoria
 torre
 trattoria
+tribunale
 ufficio
+ufficio postale
 università|universita|univ|uni|univers
+veterinario
+vigili del fuoco
