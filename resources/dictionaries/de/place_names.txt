@@ -1,30 +1,48 @@
+altersheim
 altstoffsammelzentrum|asz|a s z
 apotheke
-bundesgymnasium|bg|b g
-bundesrealgymnasium|brg|b r g
+arzt
 allgemeiner deutscher automobil club|adac|a d a c
 auswartiges amt|aa|a a
+bahnhof
 bank
 bar
+bauernhof
 botschaft
+bücherei|bucherei|buecherei
+bundesgymnasium|bg|b g
+bundesrealgymnasium|brg|b r g
+bunker
+büro|buro|buero
 bustenhalter|bh
+busbahnhof
 café|cafe
 casino
 denkmal|dkm
 deutsche bahn|db|d b
 deutscher alpenverein|dav|d a v
+einkaufszentrum
+eisdiele
 fabrik|fb
 fachhochschule|fh
+fähranlegestelle|fahranlegestelle|faehranlegestelle
 fahrschule
 flughafen
 freiwillige feuerwehr|ff
 feuerwehr
 gasthaus|gh
+gaststätte|gaststatte|gaststaette
 gasthof|ghf
+gefängnis|gefangnis|gefaengnis
 gemeinschaftszentrum
+gemeindezentrum
+geschäft|geschaft|geschaeft
+geselligkeitsverein
+gesundheitszentrum
 gericht
 grundschule
 hafen
+halle
 haus
 handelsakademie|hak
 handelsschule|hasch
@@ -38,40 +56,67 @@ hütte|hutte|huette|htt
 imbiss
 jagdhaus
 jagdhutte|jhtt
+jugendzentrum
 jungenherberge|jh|j h
 kaffee
+kampfsport
 kantine
 kapelle|kap|kpl
+kindergarten
+kinderkrippe
 kino
 kirche
 kläranlage|ka|klaranlage|klaeranlage
+kneipe
 konzentrationslager|kz|kl
 krankenhaus
 kulturzentrum
 magistratsabteilung|ma
 markt|mkt
 marktplatz|markt platz|markt pl|mkt pl|marktpl
+nachtklub
 nationalpark|np|national park
 naturschutzgebiet|nsg
 neue mittelschule|nms
+öffentlicher markt|öffentlicher mkt|offentlicher markt|offentlicher mkt|oeffentlicher markt|oeffentlicher mkt
 padagogische hochschule|ph
-sportplatz|sport platz|sport pl|sportpl
+park
+parkplatz
+pflegeheim
+polizei
+postamt
+rathaus
+recyclingeinrichtung
 resevoir|res
 restaurant
 ruine
 ruinen
+sauna
 schloss|schl
 schnellimbiss
+schule
+schutzhütte|schutzhutte|schutzhuette
+spital
+sportplatz|sport platz|sport pl|sportpl
 springbrunnen
+stadion
 steinbruch|stb
 studentenwohnheim
+studio
+supermarkt|super markt|supermkt|super mkt
 technische universität|tu|t u|technische universitat|technische universitaet
+theater
+tierarzt
 truppenubüngsplatz|tüpl|tupl|truppenubungsplatz|truppenubuengsplatz
+turnhalle
 universität|uni|universitat|universitaet
 universitätsbibliothek|ub|u b|universitatsbibliothek|universitaetsbibliothek
 verein
 volksschule|vs
+vorschule
 wald
+warenhäuser|warenhauser|warenhaeuser
 wasserfall|wsf|wssf
 wechselstube
 wirtshaus|wh
+zahnarzt
