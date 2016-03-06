@@ -45,6 +45,6 @@ after_success:
             cd _travis
             git config user.name "$GIT_COMMITTER_NAME";
             git config user.email "$GIT_COMMITTER_EMAIL";
-            git commit -a -m "[auto][build] Adding data files from Travis build #$TRAVIS_BUILD_NUMBER";
+            git commit -a -m "[auto][ci skip] Adding data files from Travis build #$TRAVIS_BUILD_NUMBER";
             git push --quiet origin master;
        fi;
