@@ -1,0 +1,62 @@
+aireportu
+antzokia
+aparkaleku
+arte zentroa
+autobus-geltoki|autobus geltoki
+auto garbiketa
+banku
+birziklatze gune
+bulego
+denda
+dentista
+diru-truke bulegoa|diru truke bulegoa|dirutruke bulegoa
+diskoteka|disko
+dorre
+eliza
+enbaxada
+entzunareto
+epaitegia
+erosketak
+errauste labe
+eskolaurre
+espetxe
+estadio
+estudio
+farmazia
+gau-klub|gau klub|gauklub
+gaztelekua
+gimnasioa
+haurtzaindegi
+herri azoka
+hilerri
+hotel
+ibilgailu-alokairu|ibilgailu alokairu
+ikastetxe
+iturri
+izozkiak
+janari azkarra
+jatetxe
+kafetegi
+kapera
+kasino
+klinika
+komunitate zentroa
+liburutegia
+medikuak
+merkatu
+merkatua
+osasun zentroa
+ospitalea
+parke
+polizia
+postetxe
+putetxe
+sauna
+suhiltzaileak
+supermerkatu|super merkatu
+taberna
+tren geltokia
+txirrindu alokairua
+udaletxe
+unibertsitate
+zinema
