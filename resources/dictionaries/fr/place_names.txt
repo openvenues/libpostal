@@ -59,6 +59,7 @@ fontaine|fon
 fort|ft
 forum|form
 gare
+gare ferroviaire
 habitation à loyer modéré|hlm|h.l.m|h l m
 halle|hle
 halles|hles|hls
@@ -83,9 +84,11 @@ marché public|marche public|mar public
 marchés|marches|mars
 mas
 médecin|medecin
+mémorial|memorial
 mont|mt|mnt|montagne
 moulin|mln
 moulins|mlns
+monument
 musée|musee|mus
 nurserie
 palais|pal
@@ -111,6 +114,7 @@ prison
 refuge
 restaurant
 restauration rapide
+ruines
 salle
 salle communale
 salle de gymnastique
