@@ -3,10 +3,10 @@ env:
     global:
         - secure: "bHrAu46oecEj3gjamT+XWXtf2J0ZJCFa8tUdgM4evscaJiiwv1TtsGXyhIj/ai7DlRIPVJUtBUy6uoGGjr6GT43zTrzSxYAOMdVXZYsnTDcdL1/0dbwcIK6/u0EI377s1buGIxG1fHveWKXuXwJWDAw4KS+5HU88a42+zMbhKe4="
         - secure: "SkvNYucKVns9qDjOEW2WIhDlOMKBOwhzVcwY++HWTRtn04ErrqR4k01Mmho0jGBQD9JrPLhDgnX1BNy5s+Kmq/bxn9OZm7K1z24qBKb0mBBiNEnf2jvT0AvF5xxM+cJf4KKNL+CC0MwNf5y7HVPq1xibOV4/CNIrc1ZZc9aqdkE="
-        - secure: "VxCgF/1q3oKNWFg3HDkz/gjDPpD4A8EyS5K2Yj4dcngu0a56MTXJaQi8V1979uYxTyzeHjga+b55H/YWZ9cFNPQbqq8yuDR19wq86cy3uxjYQDWwUDWX1vkySNx5V7Xpcia65O6O6Be6y7DnnVGblwsfMemjTURp5FE4nFgMz6A="
-        - secure: "MuFvbtpUyDbmb5HIFUnxLzGzIB6YYxG3UCiagit7F6YmTlDt1m4BuDXlQR8zza0DfS4X2ZXatCI4cpE0SAZSTQLPIo2JStA7c8EJ9U2VsW+362et9p8pIlN1Z+YU5Pna7oHWs57RyI0eM6nNizoVtSTwln3CY+VeLuxU3z5rTLQ="
+        - secure: "am/rRca5akv7gSSMeNQfHnWiTHhk8fQhOZvZ0Ut+PezkQlLgKp7bzmMFkkuQ4L5hpJU40kFzuWmIPgO33dacgq69Vx/Xct1bEnxGBGjriI5qOhMizmzLYPs5uWiRjtJnBqb4JOUh5K7JBlwrgvD72fY5ZK2lwtzTksfWo8N+ahU="
+        - secure: "mh/WDQapGJb6MAFvgCjiMAAv1aa8gUaIs2Ohtx7yPrDBwsD8UqlyEM7ktGLZGQ1q/7OJ/Z6QfDMfJQwDKzxyUSY1yHZTNkP3QzkTt2D1Qyvi++O6EkGqSdSS6Lb3aID3IsEaye/yasJ+rxiRSp05O9+OYvhJlqRZnzaimiAv5KI="
         - secure: "OGNJ6Cj3trq4nASgm4BK331aij+FZ11St7/YF9rfxeQBwg4MCPH2+D0jvAULBHvJR7K2RmepX/FG5d4S+rtwKNGngg3ovPdd1MbwFltHpn5/KM+hxe7kCZx2+V9/FN+4YSyO0zSUDra6AXHOs72mfyrZoB3a36SS4lg2sAp33gU="
-        - AWS_DEFAULT_REGION=us-east-1
+        - GH_REF=github.com/openvenues/libpostal
         - DICTIONARIES_CHANGED=1; #$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "resources/dictionaries" | wc -l)
         - NUMEX_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "resources/numex" | wc -l)
         - TRANSLIT_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "src/transliteration_data.c" | wc -l)
@@ -35,10 +35,16 @@ script:
     - if [[ "$CC" == gcc* && $TRANSLIT_CHANGED -ne 0 ]]; then ./src/build_trans_table; fi;
     - make check
 after_success:
-    - env/bin/pip install awscli
-    - export PATH=$PATH:env/bin/
-    - git config user.name "$GIT_AUTHOR_NAME"
-    - git config user.email "$GIT_AUTHOR_EMAIL"
-    - git config credential.helper "store --file=.git/credentials"
-    - echo "https://$GH_TOKEN:@github.com" > .git/credentials
-    - if [[ "$CC" == gcc* && "$TRAVIS_PULL_REQUEST" = "false" && ( $DICTIONARIES_CHANGED -ne 0 || $NUMEX_CHANGED -ne 0 || $TRANSLIT_CHANGED -ne 0 ) ]]; then ./src/libpostal_data upload base $(pwd)/data/libpostal; git commit -a -m "[auto][build] Adding data files"; git push; fi;
+    - |
+       if [[ "$CC" == gcc* && "$TRAVIS_PULL_REQUEST" = "false" && "$TRAVIS_BRANCH" = "master" && ( $DICTIONARIES_CHANGED -ne 0 || $NUMEX_CHANGED -ne 0 || $TRANSLIT_CHANGED -ne 0 ) ]]; then
+            env/bin/pip install awscli;
+            export PATH=$PATH:env/bin/;
+            ./src/libpostal_data upload base $(pwd)/data/libpostal;
+            git clone -b master "https://${GH_TOKEN}@${GH_REF}" _travis > /dev/null 2>&1 || exit 1
+            cp src/*_data.c _travis/src
+            cd _travis
+            git config user.name "$GIT_COMMITTER_NAME";
+            git config user.email "$GIT_COMMITTER_EMAIL";
+            git commit -a -m "[auto][build] Adding data files from Travis build #$TRAVIS_BUILD_NUMBER";
+            git push --quiet origin master;
+       fi;
