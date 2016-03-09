@@ -269,7 +269,7 @@ And replace $YOUR_DATA_DIR with whatever you passed to configure during install.
 Language dictionaries
 ---------------------
 
-See [resources/dictionaries](https://github.com/openvenues/libpostal/tree/master/resources/dictionaries)
+libpostal contains a number of per-language dictionaries that influence expansion, the language classifier, and the parser. To explore the dictionaries or contribute abbreviations/phrases in your language, see [resources/dictionaries](https://github.com/openvenues/libpostal/tree/master/resources/dictionaries).
 
 Features
 --------

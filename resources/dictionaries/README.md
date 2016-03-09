@@ -1,6 +1,5 @@
-
 Language dictionaries
----------------------
+=====================
 
 It's easy to add new languages/synonyms to libpostal by modifying a few text
 files. The format of each dictionary file roughly resembles a
@@ -66,7 +65,7 @@ Most of the dictionaries have been derived using the following process:
 6. Augment by researching addresses in countries speaking language x
 
 Contributing
-============
+------------
 
 If you're a native speaker of one or more languages in libpostal, we'd love your contribution! It's as simple as editing the text files under this directory and submitting a pull request. Dictionaries are organized by [language code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes), so feel free to find any language you speak and start editing! If you don't see your language, just add a directory - there's no additional configuration needed.
 
