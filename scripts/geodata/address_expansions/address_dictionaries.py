@@ -109,6 +109,8 @@ def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_
     max_dictionary_types = 0
 
     for language in os.listdir(base_dir):
+        if not os.path.isdir(language):
+            continue
         language_dir = os.path.join(base_dir, language)
 
         num_language_rules = 0
