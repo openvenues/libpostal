@@ -264,12 +264,12 @@ any new data files, run:
 libpostal_data download all $YOUR_DATA_DIR/libpostal
 ```
 
+And replace $YOUR_DATA_DIR with whatever you passed to configure during install.
+
 Language dictionaries
 ---------------------
 
 See [resources/dictionaries](https://github.com/openvenues/libpostal/tree/master/resources/dictionaries)
-
-And replace $YOUR_DATA_DIR with whatever you passed to configure during install.
 
 Features
 --------
