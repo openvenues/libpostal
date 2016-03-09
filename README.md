@@ -1,6 +1,6 @@
 # libpostal: international street address NLP
 
-[![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal) [![License](https://img.shields.io/github/license/openvenues/libpostal.svg)](https://github.com/openvenues/libpostal/LICENSE)
+[![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal) [![License](https://img.shields.io/github/license/openvenues/libpostal.svg)](https://github.com/openvenues/libpostal/blob/master/LICENSE)
 
 :jp: :us: :gb: :ru: :fr: :kr: :it: :es: :cn: :de:
 
@@ -264,6 +264,11 @@ any new data files, run:
 libpostal_data download all $YOUR_DATA_DIR/libpostal
 ```
 
+Language dictionaries
+---------------------
+
+See [resources/dictionaries](https://github.com/openvenues/libpostal/tree/master/resources/dictionaries)
+
 And replace $YOUR_DATA_DIR with whatever you passed to configure during install.
 
 Features
@@ -467,76 +472,6 @@ The [geodata](https://github.com/openvenues/libpostal/tree/master/scripts/geodat
 data sets and building input files for the C lib to use during model training.
 Said scripts shouldn't be needed  for most users unless you're rebuilding data
 files for the C lib.
-
-Language dictionaries
----------------------
-
-It's easy to add new languages/synonyms to libpostal by modifying a few text
-files. The format of each dictionary file roughly resembles a
-Lucene/Elasticsearch synonyms file:
-
-```
-drive|dr
-street|st|str
-road|rd
-```
-
-The leftmost string is treated as the canonical/normalized version. Synonyms
-if any, are appended to the right, delimited by the pipe character.
-
-The supported languages can be found in the [resources/dictionaries](https://github.com/openvenues/libpostal/tree/master/resources/dictionaries).
-
-Each language can define one or more dictionaries (sometimes called "gazetteers" in NLP) to help with address parsing, and normalizing abbreviations. The dictionary types are:
-
-- **academic_degrees.txt**: for post-nominal strings like "M.D.", "Ph.D.", etc.
-- **ambiguous_expansions.txt**: e.g. "E" could be expanded to "East" or could
-be "E Street", so if the string it encountered, it can either be left alone or expanded
-- **building_types.txt**: strings indicating a building/house
-- **company_types.txt**: company suffixes like "Inc" or "GmbH"
-- **concatenated_prefixes_separable.txt**: things like "Hinter..." which can
-be written either concatenated or as separate tokens
-- **concatenated_suffixes_inseparable.txt**: Things like "...bg." => "...burg"
-where the suffix cannot be separated from the main token, but either has an
-abbreviated equivalent or simply can help identify the token in parsing as,
-say, part of a street name
-- **concatenated_suffixes_separable.txt**: Things like "...straße" where the
-suffix can be either concatenated to the main token or separated
-- **directionals.txt**: strings indicating directions (cardinal and
-lower/central/upper, etc.)
-- **level_types.txt**: strings indicating a particular floor
-- **no_number.txt**: strings like "no fixed address"
-- **nulls.txt**: strings meaning "not applicable"
-- **personal_suffixes.txt**: post-nominal suffixes, usually generational
-like Jr/Sr
-- **personal_titles.txt**: civilian, royal and military titles
-- **place_names.txt**: strings found in names of places e.g. "theatre",
-"aquarium", "restaurant". See [Nominatim Special Phrases](http://wiki.openstreetmap.org/wiki/Nominatim/Special_Phrases)
-- **post_office.txt**: strings like "p.o. box"
-- **qualifiers.txt**: strings like "township"
-- **stopwords.txt**: prepositions and articles mostly, very common words
-which may be ignored in some contexts
-- **street_types.txt**: words like "street", "road", "drive" which indicate
-a thoroughfare and their respective abbreviations.
-- **synonyms.txt**: any miscellaneous synonyms/abbreviations e.g. "bros"
-expands to "brothers", etc. These have no special meaning and will essentially
-just be treated as string replacement.
-- **toponyms.txt**: abbreviations for certain abbreviations relating to
-toponyms like regions, places, etc. Note: GeoNames covers most of these.
-In most cases better to leave these alone
-- **unit_types.txt**: strings indicating an apartment or unit number
-
-Most of the dictionaries have been derived with the following process:
-
-1. Tokenize every street name in OSM for language x
-2. Count the most common N tokens
-3. Optionally use frequent item set techniques to extract phrases
-4. Run the most frequent words/phrases through Google Translate
-5. Add the ones that mean "street" to dictionaries
-6. Augment by researching addresses in countries speaking language x
-
-In the future it might be beneficial to move the dictionaries to a wiki
-so they can be crowdsourced by native speakers regardless of whether or not
-they use git.
 
 Address parser accuracy
 -----------------------
