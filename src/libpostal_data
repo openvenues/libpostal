@@ -91,7 +91,7 @@ function download_file() {
 
     url=$LIBPOSTAL_S3_BUCKET_URL/$filename
 
-    if [ $(curl -I $url -z "$(cat $updated_path)" --remote-time -w %{http_code} | grep "^200$") ]; then
+    if [ $(curl -sI $url -z "$(cat $updated_path)" --remote-time -w %{http_code} -o /dev/null | grep "^200$") ]; then
         echo "New libpostal $name available"
         content_length=$(curl -I $url 2> /dev/null | awk '/^Content-Length:/ { print $2 }' | tr -d '[[:space:]]')
 
@@ -101,8 +101,8 @@ function download_file() {
             curl $url -o $local_path
         fi
         
-        if date -r . >/dev/null 2>&1; then
-            echo $(date -d "$(date -d "@$(date -r $local_path +%s)") + 1 second") > $updated_path;
+        if date -ur . >/dev/null 2>&1; then
+            echo $(date -d "$(date -d "@$(date -ur $local_path +%s)") + 1 second") > $updated_path;
         elif stat -f %Sm . >/dev/null 2>&1; then
             echo $(date -r $(stat -f %m $local_path) -v+1S) > $updated_path;
         fi;
