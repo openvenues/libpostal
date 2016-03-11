@@ -82,7 +82,7 @@ def is_valid_longitude(longitude):
 
 def to_valid_longitude(longitude):
     '''Convert longitude into the -180 to 180 scale'''
-    if not longitude_is_valid(longitude):
+    if not is_valid_longitude(longitude):
         raise ValueError('Invalid longitude {}'.format(longitude))
 
     while longitude <= -180.0:
