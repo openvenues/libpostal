@@ -11,8 +11,11 @@ lat/lons found on the web.
 Usage:
     >>> latlon_to_decimal('40°42′46″N', '74°00′21″W') # returns (40.71277777777778, 74.00583333333333)
     >>> latlon_to_decimal('40,74 N', '74,001 W') # returns (40.74, -74.001)
+    >>> to_valid_longitude(360.0)
+    >>> latitude_is_valid(90.0)
 '''
 
+import math
 import re
 
 from geodata.encoding import safe_decode
@@ -99,3 +102,38 @@ def latlon_to_decimal(latitude, longitude, return_type=float):
         longitude = re.sub(end_re, u'', longitude)
 
     return return_type(latitude), return_type(longitude)
+
+
+def is_valid_latitude(latitude):
+    '''Latitude must be real number between -90.0 and 90.0'''
+    try:
+        latitude = float(latitude)
+    except (ValueError, TypeError):
+        return False
+
+    if latitude >= 90.0 or latitude < -90.0 or math.isinf(latitude) or math.isnan(latitude):
+        return False
+    return True
+
+
+def is_valid_longitude(longitude):
+    '''Allow any valid real number to be a longitude'''
+    try:
+        longitude = float(longitude)
+    except (ValueError, TypeError):
+        return False
+    return not math.isinf(longitude) and not math.isnan(longitude)
+
+
+def to_valid_longitude(longitude):
+    '''Convert longitude into the -180 to 180 scale'''
+    if not longitude_is_valid(longitude):
+        raise ValueError('Invalid longitude {}'.format(longitude))
+
+    while longitude <= -180.0:
+        longitude += 360.0
+
+    while longitude > 180.0:
+        longitude -= 360.0
+
+    return longitude
