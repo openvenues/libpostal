@@ -57,7 +57,44 @@ def degrees_to_decimal(degrees, minutes, seconds):
     return degrees + (minutes / 60.0) + (seconds / 3600.0)
 
 
-def latlon_to_decimal(latitude, longitude, return_type=float):
+
+
+def is_valid_latitude(latitude):
+    '''Latitude must be real number between -90.0 and 90.0'''
+    try:
+        latitude = float(latitude)
+    except (ValueError, TypeError):
+        return False
+
+    if latitude >= 90.0 or latitude < -90.0 or math.isinf(latitude) or math.isnan(latitude):
+        return False
+    return True
+
+
+def is_valid_longitude(longitude):
+    '''Allow any valid real number to be a longitude'''
+    try:
+        longitude = float(longitude)
+    except (ValueError, TypeError):
+        return False
+    return not math.isinf(longitude) and not math.isnan(longitude)
+
+
+def to_valid_longitude(longitude):
+    '''Convert longitude into the -180 to 180 scale'''
+    if not longitude_is_valid(longitude):
+        raise ValueError('Invalid longitude {}'.format(longitude))
+
+    while longitude <= -180.0:
+        longitude += 360.0
+
+    while longitude > 180.0:
+        longitude -= 360.0
+
+    return longitude
+
+
+def latlon_to_decimal(latitude, longitude):
     have_lat = False
     have_lon = False
 
@@ -101,39 +138,15 @@ def latlon_to_decimal(latitude, longitude, return_type=float):
         longitude = re.sub(beginning_re, u'', longitude)
         longitude = re.sub(end_re, u'', longitude)
 
-    return return_type(latitude), return_type(longitude)
+    latitude = float(latitude)
+    longitude = float(longitude)
 
+    if not is_valid_latitude(latitude):
+        raise ValueError('Invalid latitude: {}'.format(latitude))
 
-def is_valid_latitude(latitude):
-    '''Latitude must be real number between -90.0 and 90.0'''
-    try:
-        latitude = float(latitude)
-    except (ValueError, TypeError):
-        return False
+    if not is_valid_longitude(longitude):
+        raise ValueError('Invalid longitude: {}'.format(longitude))
 
-    if latitude >= 90.0 or latitude < -90.0 or math.isinf(latitude) or math.isnan(latitude):
-        return False
-    return True
+    longitude = to_valid_longitude(longitude)
 
-
-def is_valid_longitude(longitude):
-    '''Allow any valid real number to be a longitude'''
-    try:
-        longitude = float(longitude)
-    except (ValueError, TypeError):
-        return False
-    return not math.isinf(longitude) and not math.isnan(longitude)
-
-
-def to_valid_longitude(longitude):
-    '''Convert longitude into the -180 to 180 scale'''
-    if not longitude_is_valid(longitude):
-        raise ValueError('Invalid longitude {}'.format(longitude))
-
-    while longitude <= -180.0:
-        longitude += 360.0
-
-    while longitude > 180.0:
-        longitude -= 360.0
-
-    return longitude
+    return latitude, longitude
