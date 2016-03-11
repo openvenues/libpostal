@@ -7,6 +7,8 @@ fetch_osm_address_data.sh
 Shell script to download OSM planet and derive inputs
 for language detection and address parser training set
 construction.
+
+Usage: ./fetch_osm_address_data.sh out_dir
 '
 
 if [ "$#" -ge 1 ]; then
@@ -43,6 +45,8 @@ echo "Converting to o5m: `date`"
 PLANET_PBF="planet-latest.osm.pbf"
 PLANET_O5M="planet-latest.o5m"
 
+TOURISM_KEYS="tourism=hotel or tourism=attraction or tourism=guest_house or tourism=museum or tourism=chalet or tourism=motel or tourism=hostel or tourism=alpine_hut or tourism=theme_park or tourism=zoo or tourism=apartment or tourism=wilderness_hut or tourism=gallery or tourism=bed_and_breakfast or tourism=hanami or tourism=wine_cellar or tourism=resort or tourism=aquarium or tourism=apartments or tourism=cabin or tourism=winery or tourism=hut"
+
 # Needs to be in O5M for some of the subsequent steps to work whereas PBF is smaller for download
 osmconvert $PLANET_PBF -o=$PLANET_O5M
 rm $PLANET_PBF
@@ -50,12 +54,12 @@ rm $PLANET_PBF
 # Address data set for use in parser, language detection
 echo "Filtering for records with address tags: `date`"
 PLANET_ADDRESSES_O5M="planet-addresses.o5m"
-osmfilter $PLANET_O5M --keep="addr:street= and ( ( name= and amenity= ) or addr:housename= or addr:housenumber= )" --drop-author --drop-version -o=$PLANET_ADDRESSES_O5M
+osmfilter $PLANET_O5M --keep="( ( name= and ( amenity= or leisure= or $TOURISM_KEYS ) ) or ( addr:street= and ( addr:housename= or addr:housenumber= ) ) )" --drop-author --drop-version -o=$PLANET_ADDRESSES_O5M
 PLANET_ADDRESSES_LATLONS="planet-addresses-latlons.o5m"
 osmconvert $PLANET_ADDRESSES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_ADDRESSES_LATLONS
 rm $PLANET_ADDRESSES_O5M
 PLANET_ADDRESSES="planet-addresses.osm"
-osmfilter $PLANET_ADDRESSES_LATLONS --keep="addr:street= and ( ( name= and amenity= ) or addr:housename= or addr:housenumber= )" -o=$PLANET_ADDRESSES
+osmfilter $PLANET_ADDRESSES_LATLONS --keep="( ( name= and ( amenity= or leisure= or $TOURISM_KEYS ) ) or ( addr:street= and ( addr:housename= or addr:housenumber= ) ) )" -o=$PLANET_ADDRESSES
 rm $PLANET_ADDRESSES_LATLONS
 
 # Border data set for use in R-tree index/reverse geocoding, parsing, language detection
@@ -73,17 +77,17 @@ rm $PLANET_BORDERS_LATLONS
 
 echo "Filtering for neighborhoods"
 PLANET_NEIGHBORHOODS="planet-neighborhoods.osm"
-osmfilter $PLANET_O5M --keep="name= and ( place=neighbourhood or place=suburb or place=quarter or place=borough )" --drop-relations --drop-ways --ignore-dependencies --drop-author --drop-version -o=$PLANET_NEIGHBORHOODS
+osmfilter $PLANET_O5M --keep="name= and ( place=neighbourhood or place=suburb or place=quarter or place=borough or place=locality )" --drop-relations --drop-ways --ignore-dependencies --drop-author --drop-version -o=$PLANET_NEIGHBORHOODS
 
 # Venue data set for use in venue classification
 echo "Filtering for venue records: `date`"
 PLANET_VENUES_O5M="planet-venues.o5m"
-osmfilter $PLANET_O5M --keep="name= and ( amenity= or building= )" --drop-author --drop-version -o=$PLANET_VENUES_O5M
+osmfilter $PLANET_O5M --keep="name= and ( amenity= or building= or leisure= or $TOURISM_KEYS )" --drop-author --drop-version -o=$PLANET_VENUES_O5M
 PLANET_VENUES_LATLONS="planet-venues-latlons.o5m"
 osmconvert $PLANET_VENUES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_VENUES_LATLONS
 rm $PLANET_VENUES_O5M
 PLANET_VENUES="planet-venues.osm"
-osmfilter $PLANET_VENUES_LATLONS --keep="name= and ( amenity= or building= )" -o=$PLANET_VENUES
+osmfilter $PLANET_VENUES_LATLONS --keep="name= and ( amenity= or building= or leisure= or $TOURISM_KEYS )" -o=$PLANET_VENUES
 rm $PLANET_VENUES_LATLONS
 
 # Streets data set for use in language classification 
