@@ -73,6 +73,7 @@ sc
 sd
 se
 sk
+st
 sw
 tas
 tn
