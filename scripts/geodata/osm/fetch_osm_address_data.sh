@@ -45,7 +45,12 @@ echo "Converting to o5m: `date`"
 PLANET_PBF="planet-latest.osm.pbf"
 PLANET_O5M="planet-latest.o5m"
 
-TOURISM_KEYS="tourism=hotel or tourism=attraction or tourism=guest_house or tourism=museum or tourism=chalet or tourism=motel or tourism=hostel or tourism=alpine_hut or tourism=theme_park or tourism=zoo or tourism=apartment or tourism=wilderness_hut or tourism=gallery or tourism=bed_and_breakfast or tourism=hanami or tourism=wine_cellar or tourism=resort or tourism=aquarium or tourism=apartments or tourism=cabin or tourism=winery or tourism=hut"
+IS_AIRPORT="aeroway=aerodrome"
+VALID_AMENITIES="amenity="
+VALID_TOURISM_KEYS="tourism=hotel or tourism=attraction or tourism=guest_house or tourism=museum or tourism=chalet or tourism=motel or tourism=hostel or tourism=alpine_hut or tourism=theme_park or tourism=zoo or tourism=apartment or tourism=wilderness_hut or tourism=gallery or tourism=bed_and_breakfast or tourism=hanami or tourism=wine_cellar or tourism=resort or tourism=aquarium or tourism=apartments or tourism=cabin or tourism=winery or tourism=hut"
+VALID_LEISURE_KEYS="leisure=adult_gaming_centre or leisure=amusement_arcade or leisure=arena or leisure=bandstand or leisure=beach_resort or leisure=bbq or leisure=bird_hide or leisure=bowling_alley or leisure=casino or leisure=common or leisure=club or leisure=dance or leisure=dancing or leisure=disc_golf_course or leisure=dog_park or leisure=fishing or leisure=fitness_centre or leisure=gambling or leisure=garden or leisure=golf_course or leisure=hackerspace or leisure=horse_riding or leisure=hospital or leisure=hot_spring or leisure=ice_rink leisure=landscape_reserve or leisure=marina or leisure=maze or leisure=miniature_golf or leisure=nature_reserve or leisure=padding_pool or leisure=park or leisure=pitch or leisure=playground or leisure=recreation_ground or leisure=resort or leisure=sailing_club or leisure=sauna or leisure=social_club or leisure=sports_centre or leisure=stadium or leisure=summer_camp or leisure=swimming_pool or leisure=tanning_salon or leisure=track or leisure=trampoline_park or leisure=turkish_bath or leisure=video_arcade or leisure=water_park or leisure=wildlife_hide"
+
+VALID_VENUES="( ( $IS_AIRPORT ) or ( $VALID_AMENITIES ) or ( $VALID_TOURISM_KEYS ) or ( $VALID_LEISURE_KEYS ) )"
 
 # Needs to be in O5M for some of the subsequent steps to work whereas PBF is smaller for download
 osmconvert $PLANET_PBF -o=$PLANET_O5M
@@ -54,12 +59,12 @@ rm $PLANET_PBF
 # Address data set for use in parser, language detection
 echo "Filtering for records with address tags: `date`"
 PLANET_ADDRESSES_O5M="planet-addresses.o5m"
-osmfilter $PLANET_O5M --keep="( ( name= and ( amenity= or leisure= or $TOURISM_KEYS ) ) or ( addr:street= and ( addr:housename= or addr:housenumber= ) ) )" --drop-author --drop-version -o=$PLANET_ADDRESSES_O5M
+osmfilter $PLANET_O5M --keep="( ( name= and $VALID_VENUES ) ) or ( addr:street= and ( name= or building= or building:levels= or addr:housename= or addr:housenumber= ) )" --drop-author --drop-version -o=$PLANET_ADDRESSES_O5M
 PLANET_ADDRESSES_LATLONS="planet-addresses-latlons.o5m"
 osmconvert $PLANET_ADDRESSES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_ADDRESSES_LATLONS
 rm $PLANET_ADDRESSES_O5M
 PLANET_ADDRESSES="planet-addresses.osm"
-osmfilter $PLANET_ADDRESSES_LATLONS --keep="( ( name= and ( amenity= or leisure= or $TOURISM_KEYS ) ) or ( addr:street= and ( addr:housename= or addr:housenumber= ) ) )" -o=$PLANET_ADDRESSES
+osmfilter $PLANET_ADDRESSES_LATLONS --keep="( ( name= and $VALID_VENUES ) ) or ( addr:street= and ( name= or building= or building:levels= or addr:housename= or addr:housenumber= ) )" -o=$PLANET_ADDRESSES
 rm $PLANET_ADDRESSES_LATLONS
 
 # Border data set for use in R-tree index/reverse geocoding, parsing, language detection
@@ -82,12 +87,12 @@ osmfilter $PLANET_O5M --keep="name= and ( place=neighbourhood or place=suburb or
 # Venue data set for use in venue classification
 echo "Filtering for venue records: `date`"
 PLANET_VENUES_O5M="planet-venues.o5m"
-osmfilter $PLANET_O5M --keep="name= and ( amenity= or building= or leisure= or $TOURISM_KEYS )" --drop-author --drop-version -o=$PLANET_VENUES_O5M
+osmfilter $PLANET_O5M --keep="name= and ( building= or ( $VALID_VENUES ) )" --drop-author --drop-version -o=$PLANET_VENUES_O5M
 PLANET_VENUES_LATLONS="planet-venues-latlons.o5m"
 osmconvert $PLANET_VENUES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_VENUES_LATLONS
 rm $PLANET_VENUES_O5M
 PLANET_VENUES="planet-venues.osm"
-osmfilter $PLANET_VENUES_LATLONS --keep="name= and ( amenity= or building= or leisure= or $TOURISM_KEYS )" -o=$PLANET_VENUES
+osmfilter $PLANET_VENUES_LATLONS --keep="name= and ( building= or ( $VALID_VENUES ) )" -o=$PLANET_VENUES
 rm $PLANET_VENUES_LATLONS
 
 # Streets data set for use in language classification 
