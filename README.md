@@ -193,7 +193,9 @@ gcc app.c `pkg-config --cflags --libs libpostal`
 Bindings
 --------
 
-Libpostal is designed to be used by higher-level languages. Here are the officially-supported language bindings:
+Libpostal is designed to be used by higher-level languages.  If you don't see your language of choice, or if you're writing a language binding, please let us know!
+
+**Officially supported language bindings**
 
 - Python: [pypostal](https://github.com/openvenues/pypostal)
 - Ruby: [ruby_postal](https://github.com/openvenues/ruby_postal)
@@ -202,7 +204,11 @@ Libpostal is designed to be used by higher-level languages. Here are the officia
 - PHP: [php-postal](https://github.com/openvenues/php-postal)
 - NodeJS: [node-postal](https://github.com/openvenues/node-postal)
 
-If you don't see your language of choice, or if you're writing a language binding, please let us know!
+**Unofficial language bindings**
+
+- PostgreSQL: [pgsql-postal](https://github.com/pramsey/pgsql-postal)
+
+
 
 Command-line usage (expand)
 ---------------------------
