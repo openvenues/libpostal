@@ -206,9 +206,11 @@ Libpostal is designed to be used by higher-level languages.  If you don't see yo
 
 **Unofficial language bindings**
 
+- LuaJIT: [lua-resty-postal](https://github.com/bungle/lua-resty-postal)
+
+**Database extensions**
+
 - PostgreSQL: [pgsql-postal](https://github.com/pramsey/pgsql-postal)
-
-
 
 Command-line usage (expand)
 ---------------------------
