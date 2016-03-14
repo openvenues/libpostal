@@ -24,7 +24,9 @@ pfad
 platz|pl
 quelle|qu
 rundwanderweg|rww
+steg
 straße|str|strasse
+ufer
 untere|u
 unterer
 unteres
