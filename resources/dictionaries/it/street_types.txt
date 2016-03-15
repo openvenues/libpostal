@@ -9,7 +9,7 @@ campo|c.po|cpo
 cavalcavia|cavalc.a|cavalca
 chiusa|c.usa|cusa
 circonvallazione|circonv.e|circonve
-contrada|contr.a|contra
+contrada|contr.a|contra|c.da|cda
 corso|c.so|cso
 corte|c.te|cte
 cortile|c.ile|ctile
