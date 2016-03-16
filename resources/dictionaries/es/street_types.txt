@@ -6,7 +6,7 @@ angosta|angta
 apeadero|apdro
 autopista|auto|autop
 autovía|autovia|autov
-avenida|av|avd|avda
+avenida|av|avd|avda|av /
 bajada|bjada
 banda|bda
 barranco|branc
