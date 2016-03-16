@@ -6,10 +6,11 @@ bretella|br.lla|brlla
 bretelle|br.lle|brlle
 calle|c.le|cle
 campo|c.po|cpo
+cascina|cna
 cavalcavia|cavalc.a|cavalca
 chiusa|c.usa|cusa
 circonvallazione|circonv.e|circonve
-contrada|contr.a|contra|c.da|cda
+contrada|contr.a|contra|c.da|cda|cnt
 corso|c.so|cso
 corte|c.te|cte
 cortile|c.ile|ctile
@@ -24,6 +25,7 @@ gallerie|gall.e|galle
 genna|g.na|gna
 genne|g.ne|gne
 largo|l.go|lgo
+lungomare|lre
 località|localita|loc|loc.ta|locta
 piazza|p.za|p.zza|pza|pzza
 piazzale|p.le|ple
