@@ -312,6 +312,7 @@ roundabout
 route|rt|rte
 row|rw
 run|rn
+rural route|rr|r.r|r r
 service road|svc rd|svc road|service rd
 serviceway|swy|svwy|svcwy
 shoal|shl
