@@ -19,7 +19,7 @@ extensión|extension|ext
 extramuros|extrm
 extrarradio|extrr
 interior|int
-izquierda|izq|izda|izqa|izqda
+izquierda|izq|izda|izqa|izqda|i
 jardín|jardin|jdin|jard
 jardines|jdins|jards
 mansion|mans
