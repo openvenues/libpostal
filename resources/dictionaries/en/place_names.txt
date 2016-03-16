@@ -84,6 +84,7 @@ deli|delicatessen
 dental
 dentist
 dentistry
+department|dept
 detention|det|detn
 development
 diner
@@ -180,6 +181,7 @@ nursing center|nursing centre
 nursing home|nh|nhome|nrs|nrsg|nsg|nurs|nrsng hm|n h|nrs home|n home|nursing hom|nursing ho|nursing h
 high school|hs|h s
 junior high school|jr high school|jhs|j h s|jr hs|jr h s
+kiosk
 laboratory
 lab
 labs
