@@ -1,4 +1,7 @@
 language: c
+brances:
+    only:
+        - master
 env:
     global:
         - secure: "bHrAu46oecEj3gjamT+XWXtf2J0ZJCFa8tUdgM4evscaJiiwv1TtsGXyhIj/ai7DlRIPVJUtBUy6uoGGjr6GT43zTrzSxYAOMdVXZYsnTDcdL1/0dbwcIK6/u0EI377s1buGIxG1fHveWKXuXwJWDAw4KS+5HU88a42+zMbhKe4="
