@@ -1,0 +1,12 @@
+ground|g|gd
+ground floor|g|gd|gdfl|gd fl|gd/fl|gd / fl|gf|g / f
+lobby
+lower ground floor|lg|lgf|lgfl|l / g|l / gf|l / g / f|l / g / fl
+lower level|lwr level|lower lvl|lwr lvl
+lower left|lower l|lwr l
+lower right|lower r|lwr r
+rooftop|rt|rf|r / t
+upper ground floor|ug|ugf|ugfl|ug / f|ug / fl
+upper|uppr|upr
+upper left|upper l|upr left|uppr left|upr l|uppr l
+upper right|upper r|upr right|uppr right|upr r|uppr r
