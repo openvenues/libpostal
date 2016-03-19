@@ -1,64 +1,70 @@
 allotment
 antenna|ant
-apartment|apartement|apt|aprt|apparement|appartment
-bathing box|bbox
-barbeque|bbq|barbecue
+apartment|apartement|ap|apt|aprt|apparement|appartment|aptmnt
+barbecue|bbq|barbeque
 berth|brth
+boatshed|btsd
 building|bdg|bldg|blg
+block|blk|bl|blck
 bungalow|bongalow|bunglow|bungalo|bngw|bnglw
 cage
 caravan|cvan
 carpark|carp
 carspace|cars
 club
+coolroom
+cottage|cott|cottg
 department|dept
-duplex|dup
+door
+duplex|dup|dupl
 extension|ext|extn
 factory|fcty|fty|fy
 farm|frm
 flat|ft|fl|flt|f
-front|frnt
 garage|grge
 hall
 hangar|hngr
+house|hse|hous|hs|ho
 kiosk|ksk
 lease|lse
 lobby|lby|lbby
-location|loc
+location|loc|locn|loctn
 lot
-lower|lwr
 maisonette|msnt
 marine berth|mb|mbth
 number|#|nbr|num|no|nmbr|nr
-office|ofc|off|offc
+office|ofc|off|o|offc
 penthouse|pths|ph|pent house
 pier
 portion|por
 rear
-rear of|r / o|r o
-reserve|rsve|rsrv|rsv
+reserve|rsve|rsrv|rsv|resv
 room|rm
 section|sec
 shed|shd
+shop|shp
 showroom|shrm
 sign
 site
+slip
 space|spc
 stall|stl|stll|sl
 station
 stop
-strata unit|su
+store|stor
+strata unit|su|str
 studio|stu
 substation|subs
-suite|ste
+suite|ste|se
 tenancy|tncy
 tower|twr
-townhouse|tnhs
+townhouse|tnhs|twnhs|tnhse|twnhse
 trailer|trlr
-unit|un|unt
+trailer park lot|trlr park lot|trlr pk lot
+unit|un|unt|u
 van
 vault|vlt
 villa|vlla|vl
 ward|wrd|wd
-warehouse|we|whs
+warehouse|we|whs|wrhs
 workshop|wshp|wkshp|wksp

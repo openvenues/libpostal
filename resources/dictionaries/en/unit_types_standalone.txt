@@ -1,0 +1,9 @@
+front|frnt
+garage|grge
+lobby|lby|lbby
+lower|lwr
+maisonette|msnt
+penthouse|pths|ph|pent house
+rear
+rear lower|rear lwr
+side|sd
