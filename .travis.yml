@@ -23,7 +23,7 @@ addons:
 before_script:
     - ./bootstrap.sh
     - if [[ $DICTIONARIES_CHANGED -ne 0 || $NUMEX_CHANGED -ne 0 ]]; then git clone https://github.com/pypa/virtualenv; cd virtualenv; git checkout master; python virtualenv.py ../env; cd ..; env/bin/pip install -r scripts/requirements-simple.txt; fi;
-    - if [ $NUMEX_CHANGED -ne 0 ]; then env/bin/python scripts/geodata/i18n/numex.py; fi;
+    - if [ $NUMEX_CHANGED -ne 0 ]; then env/bin/python scripts/geodata/numbers/numex.py; fi;
     - if [ $DICTIONARIES_CHANGED -ne 0 ]; then env/bin/python scripts/geodata/address_expansions/address_dictionaries.py; fi;
 install:
     - if [ "$CC" = "gcc" ]; then export CC="gcc-4.8"; fi
