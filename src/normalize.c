@@ -216,6 +216,8 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
 
     }
 
+    char_array_destroy(normalized);
+
     kh_destroy(int_set, scripts);
     
     string_tree_finalize_token(tree);
