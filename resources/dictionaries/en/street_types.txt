@@ -183,7 +183,7 @@ impasse|imp
 inlet|inlt
 interchange|intg|intchg|inter change
 intersection|intn|inter section|intsctn
-interstate|inter state|i
+interstate|inter state|i|ih|i h
 island|is|id|i|isl|isld
 islands|iss|ids|islds
 isle
