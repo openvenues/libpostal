@@ -803,13 +803,18 @@ address_parser_response_t *address_parser_response_new(void) {
 address_parser_response_t *address_parser_parse(char *address, char *language, char *country, address_parser_context_t *context) {
     if (address == NULL || context == NULL) return NULL;
 
+    address_parser_t *parser = get_address_parser();
+    if (parser == NULL) {
+        log_error("parser is not setup, call libpostal_setup_address_parser()\n");
+        return NULL;
+    }
+
     char *normalized = address_parser_normalize_string(address);
     bool is_normalized = normalized != NULL;
     if (!is_normalized) {
         normalized = address;
     }
 
-    address_parser_t *parser = get_address_parser();
     averaged_perceptron_t *model = parser->model;
 
     token_array *tokens = tokenize(normalized);
