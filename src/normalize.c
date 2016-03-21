@@ -158,8 +158,6 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
         ptr += script_len;
     }
 
-    char_array *normalized = char_array_new_size(len);
-
     add_latin_alternatives(tree, str, len, options);
 
     size_t non_latin_scripts = kh_size(scripts);
@@ -215,8 +213,6 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
         string_tree_destroy(transliterators);
 
     }
-
-    char_array_destroy(normalized);
 
     kh_destroy(int_set, scripts);
     
