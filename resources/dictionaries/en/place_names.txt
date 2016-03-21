@@ -142,6 +142,7 @@ house
 houses|hses
 hub
 ice cream|icecream
+industrial estate|ind est|ind.est
 industrial park|ind park
 inn
 institute|inst
