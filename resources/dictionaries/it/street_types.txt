@@ -18,7 +18,7 @@ ferrata|f.rata|frata
 fondamenta|f.ta|fta
 forca|f.ca|fca
 forcella|forc.la|forcla
-frazione|fraz.e|fraze
+frazione|fraz.e|fraze|frz
 frazioni|fraz.i|frazi
 galleria|gall.a|galla
 gallerie|gall.e|galle
