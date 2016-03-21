@@ -11,3 +11,4 @@ numero|nº|no|n.º|n.o|n|#
 officina|off.a|off
 palazzo|pal.zo|palzo
 piano|pº|p.º|p.o|p.nº|p.no|pnº|pno
+senza numero civico|snc|s.n.c.
