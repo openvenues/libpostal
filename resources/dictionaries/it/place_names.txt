@@ -117,7 +117,7 @@ forti
 fortificazione|fort.one|fortone
 fortilizio|fort.zio|fortzio
 fratelli
-galleria
+galleria|gal
 gelateria
 gendarmeria|gend.ria|gendria
 giolleria
@@ -139,8 +139,8 @@ madonnella|mad.la|madla
 madonnetta|mad.ta|madta
 magazzini|magaz.i|magazi
 magazzino|magaz.o|magazo
-masseria|mass.a
-mercato
+masseria|mass.a|mas
+mercato|mec
 ministero|min.ro|minro
 molino
 monastero|monast.o|monasto
@@ -159,7 +159,7 @@ padiglinoe|pad.ne|padne
 panetteria
 panificio
 parcheggio|pach.o
-parco|p.rco|prco
+parco|p.rco|prco|pco
 parco giochi|p.rco giochi|prco giochi
 parco acquatico|p.rco acquatico|prco acquatico
 parrucchiere
@@ -167,12 +167,12 @@ pasticceria
 pelletteria
 pensilina
 pescheria
-piscina
+piscina|psi
 pista di ghiaccio
 pizzeria
 polizia
 pompieri
-porto
+porto|pto
 porto turistico
 prigione
 profumeria
