@@ -1,0 +1,4 @@
+derecha|dcha|d
+frente|fren
+izquierda|izq|izda|izqa|izqda|i
+trasera|trs|tras
