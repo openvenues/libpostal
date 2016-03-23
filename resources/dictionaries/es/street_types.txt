@@ -50,6 +50,7 @@ diseminado|disem
 espalda|eslda
 estrada|estda
 explanada|expla
+extensión|ext|extension
 extramuros|extrm
 galería|galeria|gale
 glorieta|gta|g
