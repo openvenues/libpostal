@@ -3,5 +3,12 @@ casa
 chalet|chlet
 complejo|compj|compl|complj
 condominio|cond
+conjunto|cjto|conj|cto
+cooperativa|coop
+cortijo|crtjo
 edificio|edifc|edfc|edif
+estancia|estanc|est
+local|loc
+residencial|resid|res
+torre
 viviendas|vvdas
