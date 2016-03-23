@@ -1,0 +1,2 @@
+piso|pi
+planta|pl
