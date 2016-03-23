@@ -10,6 +10,8 @@
 
 #define LANGUAGE_CLASSIFIER_SIGNATURE 0xCCCCCCCC
 
+#define LANGUAGE_CLASSIFIER_SETUP_ERROR "language_classifier not loaded, run libpostal_setup_language_classifier()\n"
+
 #define MIN_PROB (0.05 - DBL_EPSILON)
 
 static language_classifier_t *language_classifier = NULL;
@@ -58,7 +60,7 @@ language_classifier_response_t *classify_languages(char *address) {
     language_classifier_t *classifier = get_language_classifier();
     
     if (classifier == NULL) {
-        log_error("classifier NULL\n");
+        log_error(LANGUAGE_CLASSIFIER_SETUP_ERROR);
         return NULL;
     }
 

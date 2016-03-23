@@ -2,6 +2,8 @@
 #include "transliterate.h"
 #include "file_utils.h"
 
+#include "log/log.h"
+
 #define TRANSLITERATION_TABLE_SIGNATURE 0xAAAAAAAA
 
 #define NFD "NFD"
@@ -664,7 +666,14 @@ static char *replace_groups(trie_t *trie, char *str, char *replacement, group_ca
 }
 
 char *transliterate(char *trans_name, char *str, size_t len) {
-    if (trans_name == NULL || str == NULL || trans_table == NULL) return NULL;
+    if (trans_name == NULL || str == NULL) return NULL;
+
+    transliteration_table_t *trans_table = get_transliteration_table();
+
+    if (trans_table == NULL) {
+        log_error("transliteration table is NULL. Call libpostal_setup() or transliteration_module_setup()\n");
+        return NULL;
+    }
 
     trie_t *trie = trans_table->trie;
 

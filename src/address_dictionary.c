@@ -5,6 +5,8 @@
 
 #define ADDRESS_DICTIONARY_SIGNATURE 0xBABABABA
 
+#define ADDRESS_DICTIONARY_SETUP_ERROR "address_dictionary module not setup, call libpostal_setup() or address_dictionary_module_setup()\n"
+
 address_dictionary_t *address_dict = NULL;
 
 address_dictionary_t *get_address_dictionary(void) {
@@ -12,28 +14,47 @@ address_dictionary_t *get_address_dictionary(void) {
 }
 
 address_expansion_array *address_dictionary_get_expansions(char *key) {
-    if (address_dict == NULL || address_dict->expansions == NULL) return NULL;
+    if (address_dict == NULL || address_dict->expansions == NULL) {
+        log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
+        return NULL;
+    }
     khiter_t k = kh_get(str_expansions, address_dict->expansions, key);
     return k != kh_end(address_dict->expansions) ? kh_value(address_dict->expansions, k) : NULL;
 }
 
 int32_t address_dictionary_next_canonical_index(void) {
-    if (address_dict == NULL || address_dict->canonical == NULL) return -1;
+    if (address_dict == NULL || address_dict->canonical == NULL) {
+        log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
+        return -1;
+    }
     return (int32_t)cstring_array_num_strings(address_dict->canonical);
 }
 
 bool address_dictionary_add_canonical(char *canonical) {
-    if (address_dict == NULL || address_dict->canonical == NULL) return false;
+    if (address_dict == NULL || address_dict->canonical == NULL) {
+        log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
+        return false;
+    }
     cstring_array_add_string(address_dict->canonical, canonical);
     return true;
 }
 
 char *address_dictionary_get_canonical(uint32_t index) {
-    if (address_dict == NULL || address_dict->canonical == NULL || index > cstring_array_num_strings(address_dict->canonical)) return NULL;
+    if (address_dict == NULL || address_dict->canonical == NULL) {
+        log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
+        return NULL;
+    } else if (index > cstring_array_num_strings(address_dict->canonical)) {
+        return NULL;
+    } 
     return cstring_array_get_string(address_dict->canonical, index);    
 }
 
 bool address_dictionary_add_expansion(char *name, char *language, address_expansion_t expansion) {
+    if (address_dict == NULL || address_dict->expansions == NULL) {
+        log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
+        return false;
+    }
+
     if (name == NULL) return false;
 
     int ret;
@@ -162,6 +183,10 @@ static trie_prefix_result_t get_language_prefix(char *lang) {
 
 bool search_address_dictionaries_with_phrases(char *str, char *lang, phrase_array **phrases) {
     if (str == NULL) return false;
+    if (address_dict == NULL) {
+        log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
+        return false;
+    }
 
     trie_prefix_result_t prefix = get_language_prefix(lang);
 
@@ -185,6 +210,10 @@ phrase_array *search_address_dictionaries(char *str, char *lang) {
 
 bool search_address_dictionaries_tokens_with_phrases(char *str, token_array *tokens, char *lang, phrase_array **phrases) {
     if (str == NULL) return false;
+    if (address_dict == NULL) {
+        log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
+        return false;
+    }
 
     trie_prefix_result_t prefix = get_language_prefix(lang);
 
@@ -208,6 +237,10 @@ phrase_array *search_address_dictionaries_tokens(char *str, token_array *tokens,
 
 phrase_t search_address_dictionaries_prefix(char *str, size_t len, char *lang) {
     if (str == NULL) return NULL_PHRASE;
+    if (address_dict == NULL) {
+        log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
+        return NULL_PHRASE;
+    }
 
     trie_prefix_result_t prefix = get_language_prefix(lang);
 
@@ -221,6 +254,10 @@ phrase_t search_address_dictionaries_prefix(char *str, size_t len, char *lang) {
 
 phrase_t search_address_dictionaries_suffix(char *str, size_t len, char *lang) {
     if (str == NULL) return NULL_PHRASE;
+    if (address_dict == NULL) {
+        log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
+        return NULL_PHRASE;
+    }
 
     trie_prefix_result_t prefix = get_language_prefix(lang);
 

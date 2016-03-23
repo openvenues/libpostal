@@ -3,7 +3,11 @@
 #include "numex.h"
 #include "file_utils.h"
 
+#include "log/log.h"
+
 #define NUMEX_TABLE_SIGNATURE 0xBBBBBBBB
+
+#define NUMEX_SETUP_ERROR "numex module not setup, call libpostal_setup() or numex_module_setup()\n"
 
 #define SEPARATOR_TOKENS "-"
 
@@ -118,6 +122,7 @@ void numex_language_destroy(numex_language_t *self) {
 
 bool numex_table_add_language(numex_language_t *language) {
     if (numex_table == NULL) {
+        log_error(NUMEX_SETUP_ERROR);
         return false;
     }
 
@@ -130,6 +135,7 @@ bool numex_table_add_language(numex_language_t *language) {
 
 numex_language_t *get_numex_language(char *name) {
     if (numex_table == NULL) {
+        log_error(NUMEX_SETUP_ERROR);
         return NULL;
     }
 
@@ -616,7 +622,10 @@ static inline numex_rule_t get_numex_rule(size_t i) {
 }
 
 numex_result_array *convert_numeric_expressions(char *str, char *lang) {
-    if (numex_table == NULL) return NULL;
+    if (numex_table == NULL) {
+        log_error(NUMEX_SETUP_ERROR);
+        return NULL;
+    }
 
     trie_t *trie = numex_table->trie;
     if (trie == NULL) return NULL;
@@ -897,6 +906,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
 
 char *get_ordinal_suffix(char *numeric_string, char *lang, numex_result_t result) {
     if (numex_table == NULL) {
+        log_error(NUMEX_SETUP_ERROR);
         return NULL;
     }
 
