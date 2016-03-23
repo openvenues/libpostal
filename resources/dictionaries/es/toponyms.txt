@@ -1,2 +1,3 @@
 barcelona|barna|bar.na
+buenos aires|bs as|bs.as
 madrid|madd
