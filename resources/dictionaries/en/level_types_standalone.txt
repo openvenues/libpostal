@@ -5,7 +5,10 @@ lower ground floor|lg|lgf|lgfl|l / g|l / gf|l / g / f|l / g / fl
 lower level|lwr level|lower lvl|lwr lvl
 lower left|lower l|lwr l
 lower right|lower r|lwr r
+podium|pd
+podium level|podium lev|podium levl|podium lvel|podium lvl|podium l|pd level|pd lev|pd levl|pd lvel|pd lvl|pd l
 rooftop|rt|rf|r / t
+top floor|top fl|top / f
 upper ground floor|ug|ugf|ugfl|ug / f|ug / fl
 upper|uppr|upr
 upper left|upper l|upr left|uppr left|upr l|uppr l
