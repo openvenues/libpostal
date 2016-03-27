@@ -1,9 +1,11 @@
 all
 and
+at
 between|betw|btwn|btw|btween|b / t
 by
 of
 near
+nearby
 the
 to
 via
