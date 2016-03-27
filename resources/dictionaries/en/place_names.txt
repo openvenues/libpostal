@@ -219,7 +219,7 @@ police department|pd|p d
 police station
 polytechnic
 port|pt|prt
-post office
+post office|po|postoffice
 precinct|pct
 pre school|preschool|pre-school
 pre-kindergarten|prekindergarten|pre-k|prek|pre k
