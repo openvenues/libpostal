@@ -7,6 +7,7 @@ Generates polygons from OpenStreetMap relations
 
 import array
 import logging
+import six
 
 from bisect import bisect_left
 from collections import defaultdict, OrderedDict
@@ -17,7 +18,7 @@ from geodata.graph.scc import strongly_connected_components
 from geodata.osm.extract import *
 
 
-class OSMAdminPolygonReader(object):
+class OSMPolygonReader(object):
     '''
     OSM relations are stored with pointers to their bounding ways,
     which in turn store pointers to their constituent nodes and the
@@ -147,6 +148,9 @@ class OSMAdminPolygonReader(object):
 
         return polys
 
+    def include_closed_way(self, props):
+        raise NotImplementedError('Children must implement')
+
     def polygons(self):
         '''
         Generator which yields tuples like:
@@ -165,6 +169,7 @@ class OSMAdminPolygonReader(object):
         i = 0
 
         for element_id, props, deps in parse_osm(self.filename, dependencies=True):
+            props = {safe_decode(k): safe_decode(v) for k, v in six.iteritems(props)}
             if element_id.startswith('node'):
                 node_id = long(element_id.split(':')[-1])
                 lat = props.get('lat')
@@ -200,6 +205,12 @@ class OSMAdminPolygonReader(object):
                     self.way_coords.append(self.coords[node_index * 2 + 1])
 
                 self.way_indptr.append(len(self.way_deps))
+
+                if deps[0] == deps[-1] and self.include_closed_way(props):
+                    outer_polys = self.create_polygons([way_id])
+                    inner_polys = []
+                    yield WAY_OFFSET + way_id, props, outer_polys, inner_polys
+
             elif element_id.startswith('relation'):
                 if self.node_ids is not None:
                     self.node_ids = None
@@ -222,7 +233,17 @@ class OSMAdminPolygonReader(object):
                 outer_polys = self.create_polygons(outer_ways)
                 inner_polys = self.create_polygons(inner_ways)
 
-                yield relation_id, props, outer_polys, inner_polys
+                yield RELATION_OFFSET + relation_id, props, outer_polys, inner_polys
             if i % 1000 == 0 and i > 0:
                 self.logger.info('doing {}s, at {}'.format(element_id.split(':')[0], i))
             i += 1
+
+
+class OSMAdminPolygonReader(OSMPolygonReader):
+    def include_closed_way(self, props):
+        return False
+
+
+class OSMZonePolygonReader(OSMPolygonReader):
+    def include_closed_way(self, props):
+        return 'landuse' in props
