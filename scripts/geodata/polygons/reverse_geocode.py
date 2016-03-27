@@ -18,6 +18,7 @@ import os
 import re
 import requests
 import shutil
+import six
 import subprocess
 import sys
 import tempfile
@@ -34,7 +35,7 @@ from geodata.i18n.unicode_properties import get_chars_by_script
 from geodata.i18n.word_breaks import ideographic_scripts
 from geodata.names.deduping import NameDeduper
 from geodata.osm.extract import parse_osm, OSM_NAME_TAGS
-from geodata.osm.osm_admin_boundaries import OSMAdminPolygonReader
+from geodata.osm.osm_admin_boundaries import OSMAdminPolygonReader, OSMZonePolygonReader
 from geodata.polygons.index import *
 from geodata.statistics.tf_idf import IDFIndex
 
@@ -249,7 +250,6 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         ensure_dir(scratch_dir)
 
         logger = logging.getLogger('neighborhoods')
-        logger.setLevel(logging.INFO)
 
         qs_scratch_dir = os.path.join(scratch_dir, 'qs_neighborhoods')
         ensure_dir(qs_scratch_dir)
@@ -272,7 +272,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                     idf.update(doc)
 
         for key, attrs, deps in parse_osm(filename):
-            for k, v in attrs.iteritems():
+            for k, v in six.iteritems(attrs):
                 if any((k.startswith(name_key) for name_key in OSM_NAME_TAGS)):
                     doc = cls.count_words(v)
                     idf.update(doc)
@@ -304,7 +304,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                     osm_names.append(name)
 
             for name_key in OSM_NAME_TAGS:
-                osm_names.extend([v for k, v in attrs.iteritems() if k.startswith('{}:'.format(name_key))])
+                osm_names.extend([v for k, v in six.iteritems(attrs) if k.startswith('{}:'.format(name_key))])
 
             for idx in (zs, qs):
                 candidates = idx.get_candidate_polygons(lat, lon, return_all=True)
@@ -618,6 +618,8 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
     ADMIN_LEVEL = 'admin_level'
 
+    polygon_reader = OSMAdminPolygonReader
+
     include_property_patterns = set([
         'name',
         'name:*',
@@ -649,20 +651,26 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         '''
         index = cls(save_dir=output_dir, index_filename=index_filename)
 
-        reader = OSMAdminPolygonReader(filename)
+        reader = cls.polygon_reader(filename)
         polygons = reader.polygons()
-
-        handler = logging.StreamHandler(sys.stderr)
-        reader.logger.addHandler(handler)
-        reader.logger.setLevel(logging.INFO)
 
         logger = logging.getLogger('osm.reverse_geocode')
 
-        for relation_id, props, outer_polys, inner_polys in polygons:
-            props = {k: v for k, v in props.iteritems() if k in cls.include_property_patterns
-                     or (':' in k and '{}:*'.format(k.split(':', 1)[0]) in cls.include_property_patterns)}
+        for element_id, props, outer_polys, inner_polys in polygons:
+            props = {k: v for k, v in six.iteritems(props)
+                     if k in cls.include_property_patterns or (six.u(':') in k and
+                     six.u('{}:*').format(k.split(six.u(':'), 1)[0]) in cls.include_property_patterns)}
 
-            props['id'] = relation_id
+            if element_id >= RELATION_OFFSET:
+                props['type'] = 'relation'
+                element_id -= RELATION_OFFSET
+            elif element_id >= WAY_OFFSET:
+                props['type'] = 'way'
+                element_id -= WAY_OFFSET
+            else:
+                props['type'] = 'node'
+
+            props['id'] = element_id
 
             if inner_polys and not outer_polys:
                 logger.warn('inner polygons with no outer')
@@ -749,6 +757,11 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         candidates = super(OSMReverseGeocoder, self).get_candidate_polygons(lat, lon)
         return sorted(candidates, key=self.sort_level, reverse=True)
 
+
+class OSMZoneReverseGeocoder(OSMReverseGeocoder):
+    polygon_reader = OSMZonePolygonReader
+    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['landuse'])
+
 if __name__ == '__main__':
     # Handle argument parsing here
     parser = argparse.ArgumentParser()
@@ -759,6 +772,9 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--osm-admin-file',
                         help='Path to OSM borders file (with dependencies, .osm format)')
 
+    parser.add_argument('-l', '--osm-landuse-file',
+                        help='Path to OSM landuse file (with dependencies, .osm format)')
+
     parser.add_argument('-n', '--osm-neighborhoods-file',
                         help='Path to OSM neighborhoods file (no dependencies, .osm format)')
 
@@ -766,9 +782,13 @@ if __name__ == '__main__':
                         default=os.getcwd(),
                         help='Output directory')
 
+    logging.basicConfig(level=logging.INFO)
+
     args = parser.parse_args()
     if args.osm_admin_file:
         index = OSMReverseGeocoder.create_from_osm_file(args.osm_admin_file, args.out_dir)
+    elif args.osm_landuse_file:
+        index = OSMZoneReverseGeocoder.create_from_osm_file(args.osm_landuse_file, args.out_dir)
     elif args.osm_neighborhoods_file and args.quattroshapes_dir:
         index = NeighborhoodReverseGeocoder.create_from_osm_and_quattroshapes(
             args.osm_neighborhoods_file,
