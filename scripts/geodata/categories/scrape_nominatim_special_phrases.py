@@ -1,3 +1,21 @@
+'''
+scrape_nominatim_special_phrases.py
+-----------------------------------
+
+Simple script to scrape https://wiki.openstreetmap.org/wiki/Nominatim/Special_Phrases
+for category-related phrases sometimes found in geocoder input.
+
+Populates a per-language CSV with (phrase, OSM key, OSM value, plural):
+
+OSM keys/values are like:
+
+amenity=restaurant
+tourism=museum
+shop=books
+
+Using these phrases, it is possible to construct queries like "restaurants in Brooklyn"
+'''
+
 import csv
 import os
 import re
