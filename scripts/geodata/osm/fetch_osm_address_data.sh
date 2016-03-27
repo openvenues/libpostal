@@ -110,16 +110,51 @@ osmfilter $PLANET_VENUES_LATLONS --keep="name= and ( building= or ( $VALID_VENUE
 rm $PLANET_VENUES_LATLONS
 
 # Categories for building generic queries like "restaurants in Brooklyn"
-echo "Filtering for categories: `date`"
-PLANET_CATEGORIES_O5M="planet-categories.o5m"
-VALID_CATEGORIES="aeroway= or amenity= or building= or emergency= or highway= or historic= or internet_access= or landuse= or leisure= or man_made= or mountain_pass= or natural= or office= or place= or railway= or shop= or tourism= or waterway="
-osmfilter $PLANET_O5M --keep="$VALID_CATEGORIES" --drop-author --drop-version -o=$PLANET_CATEGORIES_O5M
-PLANET_CATEGORIES_LATLONS="planet-categories-latlons.o5m"
-osmconvert $PLANET_CATEGORIES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_CATEGORIES_LATLONS
-rm $PLANET_CATEGORIES_O5M
-PLANET_CATEGORIES="planet-categories.osm"
-osmfilter $PLANET_CATEGORIES_LATLONS --keep="$VALID_CATEGORIES" -o=$PLANET_CATEGORIES
-rm $PLANET_CATEGORIES_LATLONS
+echo "Filtering for buildings: `date`"
+PLANET_BUILDINGS_O5M="planet-buildings.o5m"
+VALID_BUILDINGS="( building= and building!=yes )"
+osmfilter $PLANET_O5M --keep="$VALID_BUILDINGS" --drop-author --drop-version -o=$PLANET_CATEGORIES_O5M
+PLANET_BUILDINGS_LATLONS="planet-buildings-latlons.o5m"
+osmconvert $PLANET_BUILDINGS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_BUILDINGS_LATLONS
+rm $PLANET_BUILDINGS_O5M
+PLANET_BUILDINGS="planet-buildings.osm"
+osmfilter $PLANET_BUILDINGS_LATLONS --keep="$VALID_BUILDINGS" -o=$PLANET_BUILDINGS
+rm $PLANET_BUILDINGS_LATLONS
+
+
+echo "Filtering for amenities: `date`"
+PLANET_AMENITIES_O5M="planet-amenities.o5m"
+ALL_AMENITIES="aeroway= or amenity= or or emergency= or historic= or internet_access= or landuse= or leisure= or man_made= or mountain_pass= or office= or place= or railway= or shop= or tourism="
+osmfilter $PLANET_O5M --keep="$ALL_AMENITIES" --drop-author --drop-version -o=$PLANET_CATEGORIES_O5M
+PLANET_AMENITIES_LATLONS="planet-amenities-latlons.o5m"
+osmconvert $PLANET_AMENITIES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_AMENITIES_LATLONS
+rm $PLANET_AMENITIES_O5M
+PLANET_AMENITIES="planet-amenities.osm"
+osmfilter $PLANET_AMENITIES_LATLONS --keep="$ALL_AMENITIES" -o=$PLANET_AMENITIES
+rm $PLANET_AMENITIES_LATLONS
+
+echo "Filtering for natural: `date`"
+PLANET_NATURAL_O5M="planet-natural.o5m"
+VALID_NATURAL="natural="
+osmfilter $PLANET_O5M --keep="$VALID_NATURAL" --drop-author --drop-version -o=$PLANET_CATEGORIES_O5M
+PLANET_NATURAL_LATLONS="planet-natural-latlons.o5m"
+osmconvert $PLANET_NATURAL_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_NATURAL_LATLONS
+rm $PLANET_NATURAL_O5M
+PLANET_NATURAL="planet-natural.osm"
+osmfilter $PLANET_NATURAL_LATLONS --keep="$VALID_NATURAL" -o=$PLANET_NATURAL
+rm $PLANET_NATURAL_LATLONS
+
+echo "Filtering for waterways: `date`"
+PLANET_WATERWAYS_O5M="planet-waterways.o5m"
+VALID_WATERWAYS="waterway="
+osmfilter $PLANET_O5M --keep="$VALID_WATERWAYS" --drop-author --drop-version -o=$PLANET_CATEGORIES_O5M
+PLANET_WATERWAYS_LATLONS="planet-waterways-latlons.o5m"
+osmconvert $PLANET_WATERWAYS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_WATERWAYS_LATLONS
+rm $PLANET_WATERWAYS_O5M
+PLANET_WATERWAYS="planet-waterways.osm"
+osmfilter $PLANET_WATERWAYS_LATLONS --keep="$VALID_WATERWAYS" -o=$PLANET_WATERWAYS
+rm $PLANET_WATERWAYS_LATLONS
+
 
 # Streets data set for use in language classification 
 echo "Filtering ways: `date`"
