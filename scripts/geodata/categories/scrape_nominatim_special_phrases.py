@@ -16,7 +16,6 @@ shop=books
 Using these phrases, it is possible to construct queries like "restaurants in Brooklyn"
 '''
 
-import csv
 import os
 import re
 import requests
@@ -103,7 +102,7 @@ def scrape_all_nominatim_category_pages(url=NOMINATIM_SPECIAL_PHRASES_URL):
 def main(url=NOMINATIM_SPECIAL_PHRASES_URL, output_dir=DEFAULT_CATEGORIES_DIR):
     languages = scrape_all_nominatim_category_pages(url=url)
     for lang, phrases in six.iteritems(languages):
-        filename = os.path.join(output_dir, '{}.yml'.format(lang.lower()))
+        filename = os.path.join(output_dir, '{}.yaml'.format(lang.lower()))
         with open(filename, 'w') as f:
             phrase_data = [
                 {
