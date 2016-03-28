@@ -1,7 +1,11 @@
-departamento|dept|depto
+apartamento|apto|apt
+apartamiento
+ático|át|atico|at
+departamento|dpto|dept|depto
 interior|int
 número interior|no int|# int|nº int|n.º int|núm int|númr int|numr int|númro int|numro int|núm.ro int|nr int|num.ro int|nro int|n.ro int
 número|numero|#|num|núm|no|nº|n.º|númr|numr|númro|numro|núm.ro|nr|num.ro|nro|n.ro
 oficina|of|ofc
 piso|p
 puerta|pta
+sala
