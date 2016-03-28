@@ -1,0 +1,343 @@
+# en.yaml
+# -------
+# Supplement to the per-country address formats for English around the world.
+# Note: by default, we use the UK conventions as they cover more countries
+# US/Canada-specific conventions and any others (e.g. Hong Kong, Australia)
+# go in country overrides
+#
+# Remember, these rules only get applied sometimes with random probabilities
+# unless specified using "frequency: always" (which should almost never be used)
+
+# Number
+# ======
+# Number, No., #, etc. can be used in both floor and apartment numbers,
+# so we'll define it separately
+
+number:
+    canonical: number # canonical word in libpostal dictionary
+    abbreviated: "no" # abbreviated form. no is a boolean in YAML, needs to be quoted
+    prefer_abbreviated: true # Use abbreviated form more often than the canonical form
+    sample: true # Randomly sample other variations (e.g. num, nr)
+numeric_abbreviated:
+    affix: "#" # e.g. #3, #2F, etc.
+    direction: left # affix goes on the number's left
+
+# Floor/level
+# ===========
+# OSM doesn't usually concern itself with the address beyond the front door
+# yet many real-world addresses will have qualifying strings like "6th floor"
+# and we'd like the parser to handle those.
+#
+# When we do get floor numbers in OSM addresses, it's usually in the form of the
+# addr:floor or level tag, where the value is typically an integer or a half-floor
+# (to indicate mezzanines). Those tags are relatively scarce in OSM, but many OSM
+# addresses do have a building:levels tag. If we know there are 20 floors in the
+# building, we can randomly sample numbers <= the # of floors and come up with plausible
+# sounding addresses (i.e. a Floor 20 address is not as likely outside major cities).
+#
+# We're not done yet, because the integer value by itself isn't what people use when
+# writing addresses. This part of the config helps us rewrite the raw integer floor
+# numers as the sort of natural language text used in addresses like "Fl #1". The config
+# is designed to be cross-lingual, so we can use the same structure with different words
+# and do this for addresses in pretty much any language.
+
+level:
+    # Numbered floors
+    floor:
+        canonical: floor
+        abbreviated: fl
+        sample: true
+        # e.g. Floor 1
+        numeric:
+            direction: left # Floor/Fl goes to the left of the number
+            use_number_phrase: true # Occasionally add variation of "number", e.g. Floor #1, Floor No. 1
+        # e.g. 2/F, 3/F
+        numeric_abbreviated:
+            affix: /f
+            direction: right # affix goes to number's right
+         # e.g. 1st Floor
+        ordinal:
+            direction: right
+    # Special instructions for ground floor
+    ground_floor:
+        number: 0 # the 0th floor is typically the ground level in the UK/Commonwealth
+        canonical: ground floor
+        abbreviated: g/f
+        sample: true
+    # Special instructions for lower ground floor (added randomly, not an alias for a floor number)
+    lower_ground_floor:
+        canonical: lower ground floor
+        abbreviated: lg
+        sample: true
+    # Special instructions for upper ground floor (added randomly, not an alias for a floor number)
+    upper_ground_floor:
+        canonical: upper ground floor
+        abbreviated: ug
+        sample: true
+    # Special instructions for podium level (added randomly)
+    podium_level:
+        canonical: podium level
+        abbreviated: pd lvl
+        sample: true
+        alternates:
+            - canonical: podium
+              abbreviated: pd
+              sample: true
+    # Used when floor number is < 0 (starts at -1 in all countries)
+    basement:
+        canonical: basement
+        abbreviated: bsmt
+        sample: true
+        # e.g. Basement 1
+        numeric:
+            direction: left
+        # e.g. B1
+        numeric_abbreviated:
+            affix: b
+            direction: left
+        # e.g. 2nd Basement
+        ordinal:
+            direction: right
+    # Floor number of <= -2 can be basement 2, sub-basement, sub-basement 1, etc.
+    sub_basement:
+        canonical: sub basement
+        abbreviated: sb
+        sample: true
+        # e.g. Sub-basement 1
+        numeric:
+            direction: left
+        # e.g. SB1
+        numeric_abbreviated:
+            affix: sb
+            direction: left
+        # e.g. 2nd Sub-basement
+        ordinal:
+            direction: right
+    # Mezzanine level (floor number {0.5, 1.5, ...}, also be added at random)
+    mezzanine:
+        # Floor 0.5 is just plain mezzanine, no number
+        canonical: mezzanine
+        abbreviated: mezz
+        half_floors: true
+        sample: true
+        # Mezzanine/Mezz 2
+        numeric:
+            direction: left
+        # M2
+        numeric_abbreviated:
+            affix: m
+            direction: left
+        # 2nd Mezzanine
+        ordinal:
+            direction: right
+
+# Intersections
+# =============
+# For constructing intersections like 5th Avenue & Broadway
+# In OSM, a node that's part of two ways is an intersection.
+#
+# These simple rules make it possible to create training examples
+# like: 26th/road Street/road and/intersection 6th/road Avenue/road
+
+intersections:
+    # 26th & 6th Avenue
+    and:
+        canonical: and
+        abbreviated: "&"
+        sample: true
+    # 26th @ Broadway
+    at:
+        canonical: at
+        abbreviated: "@"
+        sample: true
+    # 26th betw 5th Ave and 6th Ave
+    between:
+        canonical: between
+        abbreviated: betw
+        sample: true
+
+# PO Box addresses
+# ================
+# For PO box addresses, there's almost no data in OSM, so we'll need to
+# generate them somewhat randomly.
+#
+# The strategy is: for every amenity=post_office, generate a number of PO box
+# addresses using random numbers (and some alpha-numerics so we capture patterns
+# like PO Box 1Q, etc.) It doesn't matter if the post boxes themselves actually
+# exist, as long as they cover the patterns of digits we expect in real addresses.
+# The parser cares more about how many digits a number has and the surrounding 
+# words/phrases than the specific number i.e. numbers in the range 1000-9999
+# can simply be normalized to DDDD.
+
+po_box:
+    numeric:
+        # Don't sample all the forms in post_office.txt as many of the PO box
+        # phrases appear only in Australia
+        sample: false
+        default:
+            canonical: post office box
+            abbreviated: po box
+            sample: true
+            prefer_abbreviated: true
+        # Alternative phrases to use
+        alternates:
+            - canonical: box
+              sample: true
+            - canonical: private mail box
+              abbreviated: pmb
+              prefer_abbreviated: true
+              sample: true
+
+# Directions
+# ==========
+# Unit types, stairways, etc. may have a direction associated
+# with them whether it's right/left or a cardinal direction
+# like "East Entrance".
+
+directions:
+    right:
+        canonical: right
+        numeric_abbreviated:
+            affix: r
+            direction: right
+    left:
+        canonical: left
+        numeric_abbreviated:
+            affix: l
+            direction: right
+    rear:
+        canonical: rear
+        numeric_abbreviated:
+            affix: r
+            direction: right
+    front:
+        canonical: front
+        numeric_abbreviated:
+            affix: f
+            direction: right
+    east:
+        canonical: east
+        numeric_abbreviated:
+            affix: e
+            direction: right
+    west:
+        canonical: west
+        numeric_abbreviated:
+            affix: w
+            direction: right
+    north:
+        canonical: north
+        numeric_abbreviated:
+            affix: n
+            direction: right
+    south:
+        canonical: south
+        numeric_abbreviated:
+            affix: s
+            direction: right
+
+# Unit types
+# ==========
+# Unit information is common in residential addresses, offices, business parks, etc.
+# Just like thoroughfare types (Street, Avenue, etc.), there are many common ways to
+# refer to the 
+
+unit_types:
+    # Units are not part of the global address formats (and are not always standard)
+    # This is a list of places in the address where the unit line might go
+    order:
+        # e.g. Flat 18, Da Vinci House, 44 Saffron Hill, London
+        - before: house
+        # e.g. Da Vinci House, Flat 18, 44 Saffron Hill, London
+        - before: road
+        # e.g. 123 East 45th St, Apt 6, NYC
+        - after: road
+    # Special terms
+    suite: &suite
+        canonical: suite
+        abbreviated: ste
+        sample: true
+    penthouse: &penthouse
+        canonical: penthouse
+        abbreviated: ph
+        sample: true
+    office: &office
+        canonical: office
+        abbreviated: ofc
+        sample: true
+    door: &door
+        canonical: door
+        sample: true
+    room: &room
+        canonical: room
+        abbreviated: rm
+        sample: true
+    apartment: &apartment
+        canonical: apartment
+        abbreviated: apt
+        prefer_abbreviated: true
+        sample: true
+    flat: &flat
+        canonical: flat
+        abbreviated: fl
+        sample: true
+    lot: &lot
+        canonical: lot
+        sample: true
+    unit: &unit
+        canonical: unit
+        abbreviated: u
+        use_number_phrase: true
+        sample: true
+    numeric:
+        # Many unit types that apply only in Australia
+        # For most English-speaking countries, only use the terms defined above
+        sample: false
+        use_number_phrase: true
+        use_direction_phrase: true
+        default: *flat
+        alternates:
+            - *apartment
+            - *unit
+            - *door
+            - *room
+            - *office
+            - *penthouse
+            - *lot
+
+# Country-specific overrides
+# ==========================
+# For each country, we allow a copy of the structures listed above
+# in order to override the default values
+countries:
+    # United States
+    us:
+        level:
+            ground_floor:
+                number: 1
+        unit_types:
+            numeric:
+                default: *apartment
+                country_alternates:
+                    - *flat
+    # Canada
+    # Note: this is Canadian English only. If the address is in French it will use the French config
+    ca:
+        level:
+            ground_floor:
+                number: 1
+        unit_types:
+            numeric:
+                default: *apartment
+                country_alternates:
+                    - *flat
+    # Australia
+    au:
+        po_box:
+            numeric:
+                # Australia has many strings for this e.g. Roadside Mail Bag
+                sample: true
+        unit_types:
+            numeric:
+                # Australia has all kinds of unit types (e.g. Marine Berth) not used elsewhere
+                sample: true
