@@ -1,5 +1,6 @@
 caserío|caserio|csrio
 casa
+casita
 chalet|chlet
 complejo|compj|compl|complj
 condominio|cond
