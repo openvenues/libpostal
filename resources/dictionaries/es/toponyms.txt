@@ -1,3 +1,5 @@
 barcelona|barna|bar.na
 buenos aires|bs as|bs.as
+distrito federal|df|d.f|d f
+distrito capital|dc|d.c|d c
 madrid|madd
