@@ -6,6 +6,7 @@ barrio|bo|brio|brrio|bº|b.º
 barrios|bos|brios|brrios
 bloque|blque|bloq|blq
 colonia|col
+comuna
 conjunto|cjto|conj|cto
 ciudad|cdad|cd
 cuadra|cuadr
