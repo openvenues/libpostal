@@ -224,6 +224,7 @@ villas|vlas
 videotienda
 vivero
 viñedo|vinedo
+viviendas|vvdas
 zapatería|zapateria
 zona comercial
 zona industrial
