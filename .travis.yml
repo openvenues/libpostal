@@ -1,5 +1,5 @@
 language: c
-brances:
+branches:
     only:
         - master
 env:
