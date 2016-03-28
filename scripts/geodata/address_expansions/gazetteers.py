@@ -179,6 +179,7 @@ _gazetteers = []
 def create_gazetteer(*dictionaries):
     g = DictionaryPhraseFilter(*dictionaries)
     _gazetteers.append(g)
+    g.configure()
     return g
 
 
@@ -188,8 +189,3 @@ unit_types_gazetteer = create_gazetteer(*UNIT_ABBREVIATION_DICTIONARIES)
 street_and_unit_types_gazetteer = create_gazetteer(*(STREET_TYPES_DICTIONARIES + UNIT_ABBREVIATION_DICTIONARIES))
 abbreviations_gazetteer = create_gazetteer(*ALL_ABBREVIATION_DICTIONARIES)
 given_name_gazetteer = create_gazetteer(GIVEN_NAME_DICTIONARY)
-
-
-def init_gazetteers():
-    for g in _gazetteers:
-        g.configure()
