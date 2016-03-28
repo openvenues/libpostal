@@ -1,0 +1,2424 @@
+- phrase: sân bay
+  key: aeroway
+  value: aerodrome
+  is_plural: false
+- phrase: các sân bay
+  key: aeroway
+  value: aerodrome
+  is_plural: true
+- phrase: phi trường
+  key: aeroway
+  value: aerodrome
+  is_plural: false
+- phrase: các phi trường
+  key: aeroway
+  value: aerodrome
+  is_plural: true
+- phrase: trung tâm nghệ thuật
+  key: aeroway
+  value: aerodrome
+  is_plural: false
+- phrase: các trung tâm nghệ thuật
+  key: amenity
+  value: arts_centre
+  is_plural: true
+- phrase: máy rút tiền tự động
+  key: amenity
+  value: atm
+  is_plural: false
+- phrase: các máy rút tiền tự động
+  key: amenity
+  value: atm
+  is_plural: true
+- phrase: ngân hàng
+  key: amenity
+  value: bank
+  is_plural: false
+- phrase: các ngân hàng
+  key: amenity
+  value: bank
+  is_plural: true
+- phrase: quán rượu
+  key: amenity
+  value: bar
+  is_plural: false
+- phrase: các quán rượu
+  key: amenity
+  value: bar
+  is_plural: true
+- phrase: ghế
+  key: amenity
+  value: bench
+  is_plural: false
+- phrase: các ghế
+  key: amenity
+  value: bench
+  is_plural: true
+- phrase: chỗ đậu xe đạp
+  key: amenity
+  value: bicycle_parking
+  is_plural: false
+- phrase: các chỗ đậu xe đạp
+  key: amenity
+  value: bicycle_parking
+  is_plural: true
+- phrase: chỗ mướn xe đạp
+  key: amenity
+  value: bicycle_rental
+  is_plural: false
+- phrase: các chỗ mướn xe đạp
+  key: amenity
+  value: bicycle_rental
+  is_plural: true
+- phrase: các trạm xe buýt
+  key: amenity
+  value: bus_station
+  is_plural: false
+- phrase: các trạm xe bus
+  key: amenity
+  value: bus_station
+  is_plural: true
+- phrase: quán cà phê
+  key: amenity
+  value: cafe
+  is_plural: false
+- phrase: các quán cà phê
+  key: amenity
+  value: cafe
+  is_plural: true
+- phrase: chỗ mướn xe
+  key: amenity
+  value: car_rental
+  is_plural: false
+- phrase: các chỗ mướn xe
+  key: amenity
+  value: car_rental
+  is_plural: true
+- phrase: chia sẻ xe cộ
+  key: amenity
+  value: car_sharing
+  is_plural: false
+- phrase: các chia sẻ xe cộ
+  key: amenity
+  value: car_sharing
+  is_plural: true
+- phrase: tiệm rửa xe
+  key: amenity
+  value: car_wash
+  is_plural: false
+- phrase: các tiệm rửa xe
+  key: amenity
+  value: car_wash
+  is_plural: true
+- phrase: sòng bạc
+  key: amenity
+  value: casino
+  is_plural: false
+- phrase: các sòng bạc
+  key: amenity
+  value: casino
+  is_plural: true
+- phrase: rạp phim
+  key: amenity
+  value: cinema
+  is_plural: false
+- phrase: các rạp phim
+  key: amenity
+  value: cinema
+  is_plural: true
+- phrase: câu lạc bộ
+  key: amenity
+  value: club
+  is_plural: false
+- phrase: các câu lạc bộ
+  key: amenity
+  value: club
+  is_plural: true
+- phrase: trường cao đẳng
+  key: amenity
+  value: college
+  is_plural: false
+- phrase: các trường cao đẳng
+  key: amenity
+  value: college
+  is_plural: true
+- phrase: trung tâm cộng đồng
+  key: amenity
+  value: community_centre
+  is_plural: false
+- phrase: các trung tâm cộng đồng
+  key: amenity
+  value: community_centre
+  is_plural: true
+- phrase: tòa
+  key: amenity
+  value: courthouse
+  is_plural: false
+- phrase: các tòa
+  key: amenity
+  value: courthouse
+  is_plural: true
+- phrase: nha sĩ
+  key: amenity
+  value: dentist
+  is_plural: false
+- phrase: các nha sĩ
+  key: amenity
+  value: dentist
+  is_plural: true
+- phrase: bác sĩ
+  key: amenity
+  value: doctors
+  is_plural: false
+- phrase: các bác sĩ
+  key: amenity
+  value: doctors
+  is_plural: true
+- phrase: ký túc xá
+  key: amenity
+  value: dormitory
+  is_plural: false
+- phrase: các ký túc xá
+  key: amenity
+  value: dormitory
+  is_plural: true
+- phrase: vòi nước uống
+  key: amenity
+  value: drinking_water
+  is_plural: false
+- phrase: các vòi nước uống
+  key: amenity
+  value: drinking_water
+  is_plural: true
+- phrase: trường lái xe
+  key: amenity
+  value: driving_school
+  is_plural: false
+- phrase: các trường lái xe
+  key: amenity
+  value: driving_school
+  is_plural: true
+- phrase: tòa đại sứ
+  key: amenity
+  value: embassy
+  is_plural: false
+- phrase: các tòa đại sứ
+  key: amenity
+  value: embassy
+  is_plural: true
+- phrase: điện thoại khẩn cấp
+  key: amenity
+  value: emergency_phone
+  is_plural: false
+- phrase: các điện thoại khẩn cấp
+  key: amenity
+  value: emergency_phone
+  is_plural: true
+- phrase: nhà hàng ăn nhanh
+  key: amenity
+  value: fast_food
+  is_plural: false
+- phrase: các nhà hàng ăn nhanh
+  key: amenity
+  value: fast_food
+  is_plural: true
+- phrase: trạm phà
+  key: amenity
+  value: ferry_terminal
+  is_plural: false
+- phrase: các trạm phà
+  key: amenity
+  value: ferry_terminal
+  is_plural: true
+- phrase: vòi nước máy
+  key: amenity
+  value: fire_hydrant
+  is_plural: false
+- phrase: các vòi nước máy
+  key: amenity
+  value: fire_hydrant
+  is_plural: true
+- phrase: trạm cứu hỏa
+  key: amenity
+  value: fire_station
+  is_plural: false
+- phrase: các trạm cứu hỏa
+  key: amenity
+  value: fire_station
+  is_plural: true
+- phrase: vòi nước
+  key: amenity
+  value: fountain
+  is_plural: false
+- phrase: các vòi nước
+  key: amenity
+  value: fountain
+  is_plural: true
+- phrase: cây xăng
+  key: amenity
+  value: fuel
+  is_plural: false
+- phrase: các cây xăng
+  key: amenity
+  value: fuel
+  is_plural: true
+- phrase: nghĩa địa
+  key: amenity
+  value: grave_yard
+  is_plural: false
+- phrase: các nghĩa địa
+  key: amenity
+  value: grave_yard
+  is_plural: true
+- phrase: nhà thể dục
+  key: amenity
+  value: gym
+  is_plural: false
+- phrase: các nhà thể dục
+  key: amenity
+  value: gym
+  is_plural: true
+- phrase: trung tâm y tế
+  key: amenity
+  value: health_centre
+  is_plural: false
+- phrase: các trung tâm y tế
+  key: amenity
+  value: health_centre
+  is_plural: true
+- phrase: bệnh viện
+  key: amenity
+  value: hospital
+  is_plural: false
+- phrase: các bệnh viện
+  key: amenity
+  value: hospital
+  is_plural: true
+- phrase: khách sạn
+  key: amenity
+  value: hotel
+  is_plural: false
+- phrase: các khách sạn
+  key: amenity
+  value: hotel
+  is_plural: true
+- phrase: tiệm kem
+  key: amenity
+  value: ice_cream
+  is_plural: false
+- phrase: các tiệm kem
+  key: amenity
+  value: ice_cream
+  is_plural: true
+- phrase: tiểu học
+  key: amenity
+  value: kindergarten
+  is_plural: false
+- phrase: các tiểu học
+  key: amenity
+  value: kindergarten
+  is_plural: true
+- phrase: thư viện
+  key: amenity
+  value: library
+  is_plural: false
+- phrase: các thư viện
+  key: amenity
+  value: library
+  is_plural: true
+- phrase: chợ
+  key: amenity
+  value: market
+  is_plural: false
+- phrase: các chợ
+  key: amenity
+  value: market
+  is_plural: true
+- phrase: chợ phiên
+  key: amenity
+  value: marketplace
+  is_plural: false
+- phrase: các chợ phiên
+  key: amenity
+  value: marketplace
+  is_plural: true
+- phrase: nhà trẻ
+  key: amenity
+  value: nursery
+  is_plural: false
+- phrase: các nhà trẻ
+  key: amenity
+  value: nursery
+  is_plural: true
+- phrase: văn phòng
+  key: amenity
+  value: office
+  is_plural: false
+- phrase: các văn phòng
+  key: amenity
+  value: office
+  is_plural: true
+- phrase: công viên
+  key: amenity
+  value: park
+  is_plural: false
+- phrase: các công viên
+  key: amenity
+  value: park
+  is_plural: true
+- phrase: chỗ đậu xe
+  key: amenity
+  value: parking
+  is_plural: false
+- phrase: các chỗ đậu xe
+  key: amenity
+  value: parking
+  is_plural: true
+- phrase: nhà thuốc
+  key: amenity
+  value: pharmacy
+  is_plural: false
+- phrase: các nhà thuốc
+  key: amenity
+  value: pharmacy
+  is_plural: true
+- phrase: nơi thờ phụng
+  key: amenity
+  value: place_of_worship
+  is_plural: false
+- phrase: các nơi thờ phụng
+  key: amenity
+  value: place_of_worship
+  is_plural: true
+- phrase: cảnh sát
+  key: amenity
+  value: police
+  is_plural: false
+- phrase: các cảnh sát
+  key: amenity
+  value: police
+  is_plural: true
+- phrase: hòm thư
+  key: amenity
+  value: post_box
+  is_plural: false
+- phrase: các hòm thư
+  key: amenity
+  value: post_box
+  is_plural: true
+- phrase: bưu điện
+  key: amenity
+  value: post_office
+  is_plural: false
+- phrase: các bưu điện
+  key: amenity
+  value: post_office
+  is_plural: true
+- phrase: trường mầm non
+  key: amenity
+  value: preschool
+  is_plural: false
+- phrase: các trường mầm non
+  key: amenity
+  value: preschool
+  is_plural: true
+- phrase: nhà tù
+  key: amenity
+  value: prison
+  is_plural: false
+- phrase: các nhà tù
+  key: amenity
+  value: prison
+  is_plural: true
+- phrase: quán rượu
+  key: amenity
+  value: pub
+  is_plural: false
+- phrase: các quán rượu
+  key: amenity
+  value: pub
+  is_plural: true
+- phrase: chợ phiên
+  key: amenity
+  value: public_market
+  is_plural: false
+- phrase: các chợ phiên
+  key: amenity
+  value: public_market
+  is_plural: true
+- phrase: nhà hàng
+  key: amenity
+  value: restaurant
+  is_plural: false
+- phrase: các nhà hàng
+  key: amenity
+  value: restaurant
+  is_plural: true
+- phrase: nhà tắm hơi
+  key: amenity
+  value: sauna
+  is_plural: false
+- phrase: các nhà tắm hơi
+  key: amenity
+  value: sauna
+  is_plural: true
+- phrase: trường học
+  key: amenity
+  value: school
+  is_plural: false
+- phrase: các trường học
+  key: amenity
+  value: school
+  is_plural: true
+- phrase: tiệm
+  key: amenity
+  value: shop
+  is_plural: false
+- phrase: các tiệm
+  key: amenity
+  value: shop
+  is_plural: true
+- phrase: tiệm
+  key: amenity
+  value: shopping
+  is_plural: false
+- phrase: các tiệm
+  key: amenity
+  value: shopping
+  is_plural: true
+- phrase: siêu thị
+  key: amenity
+  value: supermarket
+  is_plural: false
+- phrase: các siêu thị
+  key: amenity
+  value: supermarket
+  is_plural: true
+- phrase: taxi
+  key: amenity
+  value: taxi
+  is_plural: false
+- phrase: các taxi
+  key: amenity
+  value: taxi
+  is_plural: true
+- phrase: điện thoại công cộng
+  key: amenity
+  value: telephone
+  is_plural: false
+- phrase: các điện thoại công cộng
+  key: amenity
+  value: telephone
+  is_plural: true
+- phrase: nhà hát
+  key: amenity
+  value: theatre
+  is_plural: false
+- phrase: các nhà hát
+  key: amenity
+  value: theatre
+  is_plural: true
+- phrase: vệ sinh
+  key: amenity
+  value: toilets
+  is_plural: false
+- phrase: các vệ sinh
+  key: amenity
+  value: toilets
+  is_plural: true
+- phrase: thị sảnh
+  key: amenity
+  value: townhall
+  is_plural: false
+- phrase: các thị sảnh
+  key: amenity
+  value: townhall
+  is_plural: true
+- phrase: trường đại học
+  key: amenity
+  value: university
+  is_plural: false
+- phrase: các trường đại học
+  key: amenity
+  value: university
+  is_plural: true
+- phrase: máy bán hàng
+  key: amenity
+  value: vending_machine
+  is_plural: false
+- phrase: các máy bán hàng
+  key: amenity
+  value: vending_machine
+  is_plural: true
+- phrase: thùng rác
+  key: amenity
+  value: waste_basket
+  is_plural: false
+- phrase: các thùng rác
+  key: amenity
+  value: waste_basket
+  is_plural: true
+- phrase: điểm truy cập không dây
+  key: amenity
+  value: wifi
+  is_plural: false
+- phrase: các điểm truy cập không dây
+  key: amenity
+  value: wifi
+  is_plural: true
+- phrase: trung tâm thanh niên
+  key: amenity
+  value: youth_centre
+  is_plural: false
+- phrase: các trung tâm thanh niên
+  key: amenity
+  value: youth_centre
+  is_plural: true
+- phrase: biên giới hành chính
+  key: boundary
+  value: administrative
+  is_plural: false
+- phrase: các biên giới hành chính
+  key: boundary
+  value: administrative
+  is_plural: true
+- phrase: boong ke
+  key: building
+  value: bunker
+  is_plural: false
+- phrase: các boong ke
+  key: building
+  value: bunker
+  is_plural: true
+- phrase: nhà thờ
+  key: building
+  value: church
+  is_plural: false
+- phrase: các nhà thờ
+  key: building
+  value: church
+  is_plural: true
+- phrase: trụ sở thành phố
+  key: building
+  value: city_hall
+  is_plural: false
+- phrase: các trụ sở thành phố
+  key: building
+  value: city_hall
+  is_plural: true
+- phrase: tòa nhà thương mại
+  key: building
+  value: commercial
+  is_plural: false
+- phrase: các tòa nhà thương mại
+  key: building
+  value: commercial
+  is_plural: true
+- phrase: ký túc xá
+  key: building
+  value: dormitory
+  is_plural: false
+- phrase: các ký túc xá
+  key: building
+  value: dormitory
+  is_plural: true
+- phrase: cửa vào
+  key: building
+  value: entrance
+  is_plural: false
+- phrase: các cửa vào
+  key: building
+  value: entrance
+  is_plural: true
+- phrase: ga ra
+  key: building
+  value: garage
+  is_plural: false
+- phrase: các ga ra
+  key: building
+  value: garage
+  is_plural: true
+- phrase: tòa nhà bệnh viện
+  key: building
+  value: hospital
+  is_plural: false
+- phrase: các tòa nhà bệnh viện
+  key: building
+  value: hospital
+  is_plural: true
+- phrase: khách sạn
+  key: building
+  value: hotel
+  is_plural: false
+- phrase: các khách sạn
+  key: building
+  value: hotel
+  is_plural: true
+- phrase: nhà ở
+  key: building
+  value: house
+  is_plural: false
+- phrase: các nhà ở
+  key: building
+  value: house
+  is_plural: true
+- phrase: tòa nhà công nghiệp
+  key: building
+  value: industrial
+  is_plural: false
+- phrase: các tòa nhà công nghiệp
+  key: building
+  value: industrial
+  is_plural: true
+- phrase: tòa nhà văn phòng
+  key: building
+  value: office
+  is_plural: false
+- phrase: các tòa nhà văn phòng
+  key: building
+  value: office
+  is_plural: true
+- phrase: nhà ở
+  key: building
+  value: residential
+  is_plural: false
+- phrase: các nhà ở
+  key: building
+  value: residential
+  is_plural: true
+- phrase: nhà trường
+  key: building
+  value: school
+  is_plural: false
+- phrase: các nhà trường
+  key: building
+  value: school
+  is_plural: true
+- phrase: tiệm
+  key: building
+  value: shop
+  is_plural: false
+- phrase: các tiệm
+  key: building
+  value: shop
+  is_plural: true
+- phrase: sân vận động
+  key: building
+  value: stadium
+  is_plural: false
+- phrase: các sân vận động
+  key: building
+  value: stadium
+  is_plural: true
+- phrase: tiệm
+  key: building
+  value: store
+  is_plural: false
+- phrase: các tiệm
+  key: building
+  value: store
+  is_plural: true
+- phrase: tháp
+  key: building
+  value: tower
+  is_plural: false
+- phrase: các tháp
+  key: building
+  value: tower
+  is_plural: true
+- phrase: nhà ga
+  key: building
+  value: train_station
+  is_plural: false
+- phrase: các nhà ga
+  key: building
+  value: train_station
+  is_plural: true
+- phrase: tòa nhà đại học
+  key: building
+  value: university
+  is_plural: false
+- phrase: các tòa nhà đại học
+  key: building
+  value: university
+  is_plural: true
+- phrase: tòa nhà
+  key: building
+  value: '&quot;yes&quot;'
+  is_plural: false
+- phrase: các tòa nhà
+  key: building
+  value: '&quot;yes&quot;'
+  is_plural: true
+- phrase: đường cưỡi ngựa
+  key: highway
+  value: bridleway
+  is_plural: false
+- phrase: các đường cưỡi ngựa
+  key: highway
+  value: bridleway
+  is_plural: true
+- phrase: chỗ đậu xe buýt
+  key: highway
+  value: bus_stop
+  is_plural: false
+- phrase: các chỗ đậu xe buýt
+  key: highway
+  value: bus_stop
+  is_plural: true
+- phrase: đường đang xây
+  key: highway
+  value: construction
+  is_plural: false
+- phrase: các đường đang xây
+  key: highway
+  value: construction
+  is_plural: true
+- phrase: đường xe đạp
+  key: highway
+  value: cycleway
+  is_plural: false
+- phrase: các đường xe đạp
+  key: highway
+  value: cycleway
+  is_plural: true
+- phrase: cây số
+  key: highway
+  value: distance_marker
+  is_plural: false
+- phrase: các cây số
+  key: highway
+  value: distance_marker
+  is_plural: true
+- phrase: đường bộ
+  key: highway
+  value: footway
+  is_plural: false
+- phrase: các đường bộ
+  key: highway
+  value: footway
+  is_plural: true
+- phrase: cổng
+  key: highway
+  value: gate
+  is_plural: false
+- phrase: các cổng
+  key: highway
+  value: gate
+  is_plural: true
+- phrase: đường hàng xóm
+  key: highway
+  value: living_street
+  is_plural: false
+- phrase: các đường hàng xóm
+  key: highway
+  value: living_street
+  is_plural: true
+- phrase: đường nhỏ
+  key: highway
+  value: minor
+  is_plural: false
+- phrase: các đường nhỏ
+  key: highway
+  value: minor
+  is_plural: true
+- phrase: đường cao tốc
+  key: highway
+  value: motorway
+  is_plural: false
+- phrase: các đường cao tốc
+  key: highway
+  value: motorway
+  is_plural: true
+- phrase: ngã tư đường cao tốc
+  key: highway
+  value: motorway_junction
+  is_plural: false
+- phrase: các ngã tư đường cao tốc
+  key: highway
+  value: motorway_junction
+  is_plural: true
+- phrase: đường cao tốc
+  key: highway
+  value: motorway_link
+  is_plural: false
+- phrase: các đường cao tốc
+  key: highway
+  value: motorway_link
+  is_plural: true
+- phrase: lối
+  key: highway
+  value: path
+  is_plural: false
+- phrase: các lối
+  key: highway
+  value: path
+  is_plural: true
+- phrase: đường bộ lớn
+  key: highway
+  value: pedestrian
+  is_plural: false
+- phrase: các đường bộ lớn
+  key: highway
+  value: pedestrian
+  is_plural: true
+- phrase: đường chính
+  key: highway
+  value: primary
+  is_plural: false
+- phrase: các đường chính
+  key: highway
+  value: primary
+  is_plural: true
+- phrase: đường chính
+  key: highway
+  value: primary_link
+  is_plural: false
+- phrase: các đường chính
+  key: highway
+  value: primary_link
+  is_plural: true
+- phrase: đường đua
+  key: highway
+  value: raceway
+  is_plural: false
+- phrase: các đường đua
+  key: highway
+  value: raceway
+  is_plural: true
+- phrase: đường nhà ở
+  key: highway
+  value: residential
+  is_plural: false
+- phrase: các đường nhà ở
+  key: highway
+  value: residential
+  is_plural: true
+- phrase: đường
+  key: highway
+  value: road
+  is_plural: false
+- phrase: các đường
+  key: highway
+  value: road
+  is_plural: true
+- phrase: đường lớn
+  key: highway
+  value: secondary
+  is_plural: false
+- phrase: các đường lớn
+  key: highway
+  value: secondary
+  is_plural: true
+- phrase: đường lớn
+  key: highway
+  value: secondary_link
+  is_plural: false
+- phrase: các đường lớn
+  key: highway
+  value: secondary_link
+  is_plural: true
+- phrase: đường phụ
+  key: highway
+  value: service
+  is_plural: false
+- phrase: các đường phụ
+  key: highway
+  value: service
+  is_plural: true
+- phrase: dịch vụ dọc đường cao tốc
+  key: highway
+  value: services
+  is_plural: false
+- phrase: các dịch vụ dọc đường cao tốc
+  key: highway
+  value: services
+  is_plural: true
+- phrase: cầu thang
+  key: highway
+  value: steps
+  is_plural: false
+- phrase: các cầu thang
+  key: highway
+  value: steps
+  is_plural: true
+- phrase: đường lớn
+  key: highway
+  value: tertiary
+  is_plural: false
+- phrase: các đường lớn
+  key: highway
+  value: tertiary
+  is_plural: true
+- phrase: đường mòn
+  key: highway
+  value: track
+  is_plural: false
+- phrase: các đường mòn
+  key: highway
+  value: track
+  is_plural: true
+- phrase: đường mòn
+  key: highway
+  value: trail
+  is_plural: false
+- phrase: các đường mòn
+  key: highway
+  value: trail
+  is_plural: true
+- phrase: xa lộ
+  key: highway
+  value: trunk
+  is_plural: false
+- phrase: các xa lộ
+  key: highway
+  value: trunk
+  is_plural: true
+- phrase: xa lộ
+  key: highway
+  value: trunk_link
+  is_plural: false
+- phrase: các xa lộ
+  key: highway
+  value: trunk_link
+  is_plural: true
+- phrase: đường không phân loại
+  key: highway
+  value: unclassified
+  is_plural: false
+- phrase: các đường không phân loại
+  key: highway
+  value: unclassified
+  is_plural: true
+- phrase: đường không lát
+  key: highway
+  value: unsurfaced
+  is_plural: false
+- phrase: các đường không lát
+  key: highway
+  value: unsurfaced
+  is_plural: true
+- phrase: khu vực khảo cổ
+  key: historic
+  value: archaeological_site
+  is_plural: false
+- phrase: các khu vực khảo cổ
+  key: historic
+  value: archaeological_site
+  is_plural: true
+- phrase: chiến trường
+  key: historic
+  value: battlefield
+  is_plural: false
+- phrase: các chiến trường
+  key: historic
+  value: battlefield
+  is_plural: true
+- phrase: mốc biên giới
+  key: historic
+  value: boundary_stone
+  is_plural: false
+- phrase: các mốc biên giới
+  key: historic
+  value: boundary_stone
+  is_plural: true
+- phrase: tòa nhà
+  key: historic
+  value: building
+  is_plural: false
+- phrase: các tòa nhà
+  key: historic
+  value: building
+  is_plural: true
+- phrase: lâu đài
+  key: historic
+  value: castle
+  is_plural: false
+- phrase: các lâu đài
+  key: historic
+  value: castle
+  is_plural: true
+- phrase: nhà thờ
+  key: historic
+  value: church
+  is_plural: false
+- phrase: các nhà thờ
+  key: historic
+  value: church
+  is_plural: true
+- phrase: nhà ở
+  key: historic
+  value: house
+  is_plural: false
+- phrase: các nhà ở
+  key: historic
+  value: house
+  is_plural: true
+- phrase: thánh tượng
+  key: historic
+  value: icon
+  is_plural: false
+- phrase: các thánh tượng
+  key: historic
+  value: icon
+  is_plural: true
+- phrase: trang viên
+  key: historic
+  value: manor
+  is_plural: false
+- phrase: các trang viên
+  key: historic
+  value: manor
+  is_plural: true
+- phrase: đài tưởng niệm
+  key: historic
+  value: memorial
+  is_plural: false
+- phrase: các đài tưởng niệm
+  key: historic
+  value: memorial
+  is_plural: true
+- phrase: mỏ
+  key: historic
+  value: mine
+  is_plural: false
+- phrase: các mỏ
+  key: historic
+  value: mine
+  is_plural: true
+- phrase: đài kỷ niệm
+  key: historic
+  value: monument
+  is_plural: false
+- phrase: các đài kỷ niệm
+  key: historic
+  value: monument
+  is_plural: true
+- phrase: bảo tàng
+  key: historic
+  value: museum
+  is_plural: false
+- phrase: các bảo tàng
+  key: historic
+  value: museum
+  is_plural: true
+- phrase: tàn tích
+  key: historic
+  value: ruins
+  is_plural: false
+- phrase: các tàn tích
+  key: historic
+  value: ruins
+  is_plural: true
+- phrase: tháp
+  key: historic
+  value: tower
+  is_plural: false
+- phrase: các tháp
+  key: historic
+  value: tower
+  is_plural: true
+- phrase: thánh giá dọc đường
+  key: historic
+  value: wayside_cross
+  is_plural: false
+- phrase: các thánh giá dọc đường
+  key: historic
+  value: wayside_cross
+  is_plural: true
+- phrase: đền thánh dọc đường
+  key: historic
+  value: wayside_shrine
+  is_plural: false
+- phrase: các đền thánh dọc đường
+  key: historic
+  value: wayside_shrine
+  is_plural: true
+- phrase: khu vườn gia đình
+  key: landuse
+  value: allotments
+  is_plural: false
+- phrase: các khu vườn gia đình
+  key: landuse
+  value: allotments
+  is_plural: true
+- phrase: lưu vực
+  key: landuse
+  value: basin
+  is_plural: false
+- phrase: các lưu vực
+  key: landuse
+  value: basin
+  is_plural: true
+- phrase: nghĩa địa
+  key: landuse
+  value: cemetery
+  is_plural: false
+- phrase: các nghĩa địa
+  key: landuse
+  value: cemetery
+  is_plural: true
+- phrase: khu vực thương mại
+  key: landuse
+  value: commercial
+  is_plural: false
+- phrase: các khu vực thương mại
+  key: landuse
+  value: commercial
+  is_plural: true
+- phrase: bảo tồn
+  key: landuse
+  value: conservation
+  is_plural: false
+- phrase: các bảo tồn
+  key: landuse
+  value: conservation
+  is_plural: true
+- phrase: công trường xây dựng
+  key: landuse
+  value: construction
+  is_plural: false
+- phrase: các công trường xây dựng
+  key: landuse
+  value: construction
+  is_plural: true
+- phrase: trại
+  key: landuse
+  value: farm
+  is_plural: false
+- phrase: các trại
+  key: landuse
+  value: farm
+  is_plural: true
+- phrase: trại
+  key: landuse
+  value: farmland
+  is_plural: false
+- phrase: các trại
+  key: landuse
+  value: farmland
+  is_plural: true
+- phrase: sân trại
+  key: landuse
+  value: farmyard
+  is_plural: false
+- phrase: các sân trại
+  key: landuse
+  value: farmyard
+  is_plural: true
+- phrase: rừng trồng cây
+  key: landuse
+  value: forest
+  is_plural: false
+- phrase: các rừng trồng cây
+  key: landuse
+  value: forest
+  is_plural: true
+- phrase: cỏ
+  key: landuse
+  value: grass
+  is_plural: false
+- phrase: các cỏ
+  key: landuse
+  value: grass
+  is_plural: true
+- phrase: khu vực công nghiệp
+  key: landuse
+  value: industrial
+  is_plural: false
+- phrase: các khu vực công nghiệp
+  key: landuse
+  value: industrial
+  is_plural: true
+- phrase: nơi đổ rác
+  key: landuse
+  value: landfill
+  is_plural: false
+- phrase: các nơi đổ rác
+  key: landuse
+  value: landfill
+  is_plural: true
+- phrase: đồng cỏ
+  key: landuse
+  value: meadow
+  is_plural: false
+- phrase: các đồng cỏ
+  key: landuse
+  value: meadow
+  is_plural: true
+- phrase: khu vực quân sự
+  key: landuse
+  value: military
+  is_plural: false
+- phrase: các khu vực quân sự
+  key: landuse
+  value: military
+  is_plural: true
+- phrase: mỏ
+  key: landuse
+  value: mine
+  is_plural: false
+- phrase: các mỏ
+  key: landuse
+  value: mine
+  is_plural: true
+- phrase: núi
+  key: landuse
+  value: mountain
+  is_plural: false
+- phrase: các núi
+  key: landuse
+  value: mountain
+  is_plural: true
+- phrase: khu bảo tồn thiên niên
+  key: landuse
+  value: nature_reserve
+  is_plural: false
+- phrase: các khu bảo tồn thiên niên
+  key: landuse
+  value: nature_reserve
+  is_plural: true
+- phrase: công viên
+  key: landuse
+  value: park
+  is_plural: false
+- phrase: các công viên
+  key: landuse
+  value: park
+  is_plural: true
+- phrase: đường trượt tuyết
+  key: landuse
+  value: piste
+  is_plural: false
+- phrase: các đường trượt tuyết
+  key: landuse
+  value: piste
+  is_plural: true
+- phrase: quảng trường
+  key: landuse
+  value: plaza
+  is_plural: false
+- phrase: các quảng trường
+  key: landuse
+  value: plaza
+  is_plural: true
+- phrase: mỏ đá
+  key: landuse
+  value: quarry
+  is_plural: false
+- phrase: các mỏ đá
+  key: landuse
+  value: quarry
+  is_plural: true
+- phrase: đường sắt
+  key: landuse
+  value: railway
+  is_plural: false
+- phrase: các đường sắt
+  key: landuse
+  value: railway
+  is_plural: true
+- phrase: sân chơi
+  key: landuse
+  value: recreation_ground
+  is_plural: false
+- phrase: các sân chơi
+  key: landuse
+  value: recreation_ground
+  is_plural: true
+- phrase: bể nước
+  key: landuse
+  value: reservoir
+  is_plural: false
+- phrase: các bể nước
+  key: landuse
+  value: reservoir
+  is_plural: true
+- phrase: khu vực nhà ở
+  key: landuse
+  value: residential
+  is_plural: false
+- phrase: các khu vực nhà ở
+  key: landuse
+  value: residential
+  is_plural: true
+- phrase: khu vực buôn bán
+  key: landuse
+  value: retail
+  is_plural: false
+- phrase: các khu vực buôn bán
+  key: landuse
+  value: retail
+  is_plural: true
+- phrase: vườn nho
+  key: landuse
+  value: vineyard
+  is_plural: false
+- phrase: các vườn nho
+  key: landuse
+  value: vineyard
+  is_plural: true
+- phrase: đầm lầy
+  key: landuse
+  value: wetland
+  is_plural: false
+- phrase: các đầm lầy
+  key: landuse
+  value: wetland
+  is_plural: true
+- phrase: rừng
+  key: landuse
+  value: wood
+  is_plural: false
+- phrase: các rừng
+  key: landuse
+  value: wood
+  is_plural: true
+- phrase: hồ đánh cá
+  key: leisure
+  value: fishing
+  is_plural: false
+- phrase: các hồ đánh cá
+  key: leisure
+  value: fishing
+  is_plural: true
+- phrase: vườn
+  key: leisure
+  value: garden
+  is_plural: false
+- phrase: các vườn
+  key: leisure
+  value: garden
+  is_plural: true
+- phrase: sân golf
+  key: leisure
+  value: golf_course
+  is_plural: false
+- phrase: các sân golf
+  key: leisure
+  value: golf_course
+  is_plural: true
+- phrase: sân băng
+  key: leisure
+  value: ice_rink
+  is_plural: false
+- phrase: các sân băng
+  key: leisure
+  value: ice_rink
+  is_plural: true
+- phrase: khu bảo tồn thiên niên
+  key: leisure
+  value: nature_reserve
+  is_plural: false
+- phrase: các khu bảo tồn thiên niên
+  key: leisure
+  value: nature_reserve
+  is_plural: true
+- phrase: công viên
+  key: leisure
+  value: park
+  is_plural: false
+- phrase: các công viên
+  key: leisure
+  value: park
+  is_plural: true
+- phrase: bãi thể thao
+  key: leisure
+  value: pitch
+  is_plural: false
+- phrase: các bãi thể thao
+  key: leisure
+  value: pitch
+  is_plural: true
+- phrase: sân chơi
+  key: leisure
+  value: playground
+  is_plural: false
+- phrase: các sân chơi
+  key: leisure
+  value: playground
+  is_plural: true
+- phrase: sân giải trí
+  key: leisure
+  value: recreation_ground
+  is_plural: false
+- phrase: các sân giải trí
+  key: leisure
+  value: recreation_ground
+  is_plural: true
+- phrase: trung tâm thể thao
+  key: leisure
+  value: sports_centre
+  is_plural: false
+- phrase: các trung tâm thể thao
+  key: leisure
+  value: sports_centre
+  is_plural: true
+- phrase: sân vận động
+  key: leisure
+  value: stadium
+  is_plural: false
+- phrase: các sân vận động
+  key: leisure
+  value: stadium
+  is_plural: true
+- phrase: hồ bơi
+  key: leisure
+  value: swimming_pool
+  is_plural: false
+- phrase: các hồ bơi
+  key: leisure
+  value: swimming_pool
+  is_plural: true
+- phrase: công viên nước
+  key: leisure
+  value: water_park
+  is_plural: false
+- phrase: các công viên nước
+  key: leisure
+  value: water_park
+  is_plural: true
+- phrase: vịnh
+  key: natural
+  value: bay
+  is_plural: false
+- phrase: các vịnh
+  key: natural
+  value: bay
+  is_plural: true
+- phrase: bãi biển
+  key: natural
+  value: beach
+  is_plural: false
+- phrase: các bãi biển
+  key: natural
+  value: beach
+  is_plural: true
+- phrase: mũi đất
+  key: natural
+  value: cape
+  is_plural: false
+- phrase: các mũi đất
+  key: natural
+  value: cape
+  is_plural: true
+- phrase: cửa vào hang
+  key: natural
+  value: cave_entrance
+  is_plural: false
+- phrase: các cửa vào hang
+  key: natural
+  value: cave_entrance
+  is_plural: true
+- phrase: eo biển
+  key: natural
+  value: channel
+  is_plural: false
+- phrase: các eo biển
+  key: natural
+  value: channel
+  is_plural: true
+- phrase: vách đá
+  key: natural
+  value: cliff
+  is_plural: false
+- phrase: các vách đá
+  key: natural
+  value: cliff
+  is_plural: true
+- phrase: bờ biển
+  key: natural
+  value: coastline
+  is_plural: false
+- phrase: các bờ biển
+  key: natural
+  value: coastline
+  is_plural: true
+- phrase: mạch nước phun
+  key: natural
+  value: geyser
+  is_plural: false
+- phrase: các mạch nước phun
+  key: natural
+  value: geyser
+  is_plural: true
+- phrase: sông băng
+  key: natural
+  value: glacier
+  is_plural: false
+- phrase: các sông băng
+  key: natural
+  value: glacier
+  is_plural: true
+- phrase: bãi hoang
+  key: natural
+  value: heath
+  is_plural: false
+- phrase: các bãi hoang
+  key: natural
+  value: heath
+  is_plural: true
+- phrase: đồi
+  key: natural
+  value: hill
+  is_plural: false
+- phrase: các đồi
+  key: natural
+  value: hill
+  is_plural: true
+- phrase: đảo
+  key: natural
+  value: island
+  is_plural: false
+- phrase: các đảo
+  key: natural
+  value: island
+  is_plural: true
+- phrase: đất
+  key: natural
+  value: land
+  is_plural: false
+- phrase: các đất
+  key: natural
+  value: land
+  is_plural: true
+- phrase: truông
+  key: natural
+  value: moor
+  is_plural: false
+- phrase: các truông
+  key: natural
+  value: moor
+  is_plural: true
+- phrase: đỉnh
+  key: natural
+  value: peak
+  is_plural: false
+- phrase: các đỉnh
+  key: natural
+  value: peak
+  is_plural: true
+- phrase: rạn san hô
+  key: natural
+  value: reef
+  is_plural: false
+- phrase: các rạn san hô
+  key: natural
+  value: reef
+  is_plural: true
+- phrase: sông
+  key: natural
+  value: river
+  is_plural: false
+- phrase: các sông
+  key: natural
+  value: river
+  is_plural: true
+- phrase: đá
+  key: natural
+  value: rock
+  is_plural: false
+- phrase: các đá
+  key: natural
+  value: rock
+  is_plural: true
+- phrase: suối
+  key: natural
+  value: spring
+  is_plural: false
+- phrase: các suối
+  key: natural
+  value: spring
+  is_plural: true
+- phrase: eo biển
+  key: natural
+  value: strait
+  is_plural: false
+- phrase: các eo biển
+  key: natural
+  value: strait
+  is_plural: true
+- phrase: cây
+  key: natural
+  value: tree
+  is_plural: false
+- phrase: các cây
+  key: natural
+  value: tree
+  is_plural: true
+- phrase: thung lũng
+  key: natural
+  value: valley
+  is_plural: false
+- phrase: các thung lũng
+  key: natural
+  value: valley
+  is_plural: true
+- phrase: núi lửa
+  key: natural
+  value: volcano
+  is_plural: false
+- phrase: các núi lửa
+  key: natural
+  value: volcano
+  is_plural: true
+- phrase: nước
+  key: natural
+  value: water
+  is_plural: false
+- phrase: các nước
+  key: natural
+  value: water
+  is_plural: true
+- phrase: đầm lầy
+  key: natural
+  value: wetlands
+  is_plural: false
+- phrase: các đầm lầy
+  key: natural
+  value: wetlands
+  is_plural: true
+- phrase: rừng
+  key: natural
+  value: wood
+  is_plural: false
+- phrase: các rừng
+  key: natural
+  value: wood
+  is_plural: true
+- phrase: thành phố
+  key: place
+  value: city
+  is_plural: false
+- phrase: các thành phố
+  key: place
+  value: city
+  is_plural: true
+- phrase: quốc gia
+  key: place
+  value: country
+  is_plural: false
+- phrase: các quốc gia
+  key: place
+  value: country
+  is_plural: true
+- phrase: quận hạt
+  key: place
+  value: county
+  is_plural: false
+- phrase: các quận hạt
+  key: place
+  value: county
+  is_plural: true
+- phrase: trại
+  key: place
+  value: farm
+  is_plural: false
+- phrase: các trại
+  key: place
+  value: farm
+  is_plural: true
+- phrase: nhà ở
+  key: place
+  value: house
+  is_plural: false
+- phrase: các nhà ở
+  key: place
+  value: house
+  is_plural: true
+- phrase: dãy nhà
+  key: place
+  value: houses
+  is_plural: false
+- phrase: các dãy nhà
+  key: place
+  value: houses
+  is_plural: true
+- phrase: đảo
+  key: place
+  value: island
+  is_plural: false
+- phrase: các đảo
+  key: place
+  value: island
+  is_plural: true
+- phrase: địa phương
+  key: place
+  value: locality
+  is_plural: false
+- phrase: các địa phương
+  key: place
+  value: locality
+  is_plural: true
+- phrase: mã bưu điện
+  key: place
+  value: postcode
+  is_plural: false
+- phrase: các mã bưu điện
+  key: place
+  value: postcode
+  is_plural: true
+- phrase: miền
+  key: place
+  value: region
+  is_plural: false
+- phrase: các miền
+  key: place
+  value: region
+  is_plural: true
+- phrase: biển
+  key: place
+  value: sea
+  is_plural: false
+- phrase: các biển
+  key: place
+  value: sea
+  is_plural: true
+- phrase: tỉnh bang
+  key: place
+  value: state
+  is_plural: false
+- phrase: các tỉnh bang
+  key: place
+  value: state
+  is_plural: true
+- phrase: hàng xóm
+  key: place
+  value: subdivision
+  is_plural: false
+- phrase: các hàng xóm
+  key: place
+  value: subdivision
+  is_plural: true
+- phrase: ngoại ô
+  key: place
+  value: suburb
+  is_plural: false
+- phrase: các ngoại ô
+  key: place
+  value: suburb
+  is_plural: true
+- phrase: thị xã/trấn
+  key: place
+  value: town
+  is_plural: false
+- phrase: các thị xã/trấn
+  key: place
+  value: town
+  is_plural: true
+- phrase: khu chưa hợp nhất
+  key: place
+  value: unincorporated_area
+  is_plural: false
+- phrase: các khu chưa hợp nhất
+  key: place
+  value: unincorporated_area
+  is_plural: true
+- phrase: làng
+  key: place
+  value: village
+  is_plural: false
+- phrase: các làng
+  key: place
+  value: village
+  is_plural: true
+- phrase: đường sắt đang xây
+  key: railway
+  value: construction
+  is_plural: false
+- phrase: các đường sắt đang xây
+  key: railway
+  value: construction
+  is_plural: true
+- phrase: nhà ga đóng cửa
+  key: railway
+  value: disused_station
+  is_plural: false
+- phrase: các nhà ga đóng cửa
+  key: railway
+  value: disused_station
+  is_plural: true
+- phrase: đường sắt leo núi
+  key: railway
+  value: funicular
+  is_plural: false
+- phrase: các đường sắt leo núi
+  key: railway
+  value: funicular
+  is_plural: true
+- phrase: nhà ga lịch sử
+  key: railway
+  value: historic_station
+  is_plural: false
+- phrase: các nhà ga lịch sử
+  key: railway
+  value: historic_station
+  is_plural: true
+- phrase: ga đầu mối
+  key: railway
+  value: junction
+  is_plural: false
+- phrase: các ga đầu mối
+  key: railway
+  value: junction
+  is_plural: true
+- phrase: đường một ray
+  key: railway
+  value: monorail
+  is_plural: false
+- phrase: các đường một ray
+  key: railway
+  value: monorail
+  is_plural: true
+- phrase: nhà ga
+  key: railway
+  value: station
+  is_plural: false
+- phrase: các nhà ga
+  key: railway
+  value: station
+  is_plural: true
+- phrase: trạm xe điện ngầm
+  key: railway
+  value: subway
+  is_plural: false
+- phrase: các trạm xe điện ngầm
+  key: railway
+  value: subway
+  is_plural: true
+- phrase: cửa vào nhà ga xe điện ngầm
+  key: railway
+  value: subway_entrance
+  is_plural: false
+- phrase: các cửa vào nhà ga xe điện ngầm
+  key: railway
+  value: subway_entrance
+  is_plural: true
+- phrase: đường xe điện
+  key: railway
+  value: tram
+  is_plural: false
+- phrase: các đường xe điện
+  key: railway
+  value: tram
+  is_plural: true
+- phrase: tiệm bánh
+  key: shop
+  value: bakery
+  is_plural: false
+- phrase: các tiệm bánh
+  key: shop
+  value: bakery
+  is_plural: true
+- phrase: tiệm xe đạp
+  key: shop
+  value: bicycle
+  is_plural: false
+- phrase: các tiệm xe đạp
+  key: shop
+  value: bicycle
+  is_plural: true
+- phrase: tiệm sách
+  key: shop
+  value: books
+  is_plural: false
+- phrase: các tiệm sách
+  key: shop
+  value: books
+  is_plural: true
+- phrase: tiệm xe hơi
+  key: shop
+  value: car
+  is_plural: false
+- phrase: các tiệm xe hơi
+  key: shop
+  value: car
+  is_plural: true
+- phrase: cửa hàng xe hơi
+  key: shop
+  value: car_dealer
+  is_plural: false
+- phrase: các cửa hàng xe hơi
+  key: shop
+  value: car_dealer
+  is_plural: true
+- phrase: tiệm sửa xe
+  key: shop
+  value: car_repair
+  is_plural: false
+- phrase: các tiệm sửa xe
+  key: shop
+  value: car_repair
+  is_plural: true
+- phrase: tiệm thảm
+  key: shop
+  value: carpet
+  is_plural: false
+- phrase: các tiệm thảm
+  key: shop
+  value: carpet
+  is_plural: true
+- phrase: nhà thuốc
+  key: shop
+  value: chemist
+  is_plural: false
+- phrase: các nhà thuốc
+  key: shop
+  value: chemist
+  is_plural: true
+- phrase: tiệm quần áo
+  key: shop
+  value: clothes
+  is_plural: false
+- phrase: các tiệm quần áo
+  key: shop
+  value: clothes
+  is_plural: true
+- phrase: tiệm máy tính
+  key: shop
+  value: computer
+  is_plural: false
+- phrase: các tiệm máy tính
+  key: shop
+  value: computer
+  is_plural: true
+- phrase: tiệm kẹo
+  key: shop
+  value: confectionery
+  is_plural: false
+- phrase: các tiệm kẹo
+  key: shop
+  value: confectionery
+  is_plural: true
+- phrase: tiệm tập hóa
+  key: shop
+  value: convenience
+  is_plural: false
+- phrase: các tiệm tập hóa
+  key: shop
+  value: convenience
+  is_plural: true
+- phrase: tiệm mỹ phẩm
+  key: shop
+  value: cosmetics
+  is_plural: false
+- phrase: các tiệm mỹ phẩm
+  key: shop
+  value: cosmetics
+  is_plural: true
+- phrase: nhà thuốc
+  key: shop
+  value: drugstore
+  is_plural: false
+- phrase: các nhà thuốc
+  key: shop
+  value: drugstore
+  is_plural: true
+- phrase: tiệm thời trang
+  key: shop
+  value: fashion
+  is_plural: false
+- phrase: các tiệm thời trang
+  key: shop
+  value: fashion
+  is_plural: true
+- phrase: tiệm cá
+  key: shop
+  value: fish
+  is_plural: false
+- phrase: các tiệm cá
+  key: shop
+  value: fish
+  is_plural: true
+- phrase: tiệm hoa
+  key: shop
+  value: florist
+  is_plural: false
+- phrase: các tiệm hoa
+  key: shop
+  value: florist
+  is_plural: true
+- phrase: tiệm thực phẩm
+  key: shop
+  value: food
+  is_plural: false
+- phrase: các tiệm thực phẩm
+  key: shop
+  value: food
+  is_plural: true
+- phrase: tiệm tạp phẩm
+  key: shop
+  value: grocery
+  is_plural: false
+- phrase: các tiệm tạp phẩm
+  key: shop
+  value: grocery
+  is_plural: true
+- phrase: tiệm làm tóc
+  key: shop
+  value: hairdresser
+  is_plural: false
+- phrase: các tiệm làm tóc
+  key: shop
+  value: hairdresser
+  is_plural: true
+- phrase: bảo hiểm
+  key: shop
+  value: insurance
+  is_plural: false
+- phrase: các bảo hiểm
+  key: shop
+  value: insurance
+  is_plural: true
+- phrase: tiệm kim hoàn
+  key: shop
+  value: jewelry
+  is_plural: false
+- phrase: các tiệm kim hoàn
+  key: shop
+  value: jewelry
+  is_plural: true
+- phrase: tiệm giặt quần áo
+  key: shop
+  value: laundry
+  is_plural: false
+- phrase: các tiệm giặt quần áo
+  key: shop
+  value: laundry
+  is_plural: true
+- phrase: trung tâm mua sắm
+  key: shop
+  value: mall
+  is_plural: false
+- phrase: các trung tâm mua sắm
+  key: shop
+  value: mall
+  is_plural: true
+- phrase: chợ
+  key: shop
+  value: market
+  is_plural: false
+- phrase: các chợ
+  key: shop
+  value: market
+  is_plural: true
+- phrase: tiệm điện thoại di động
+  key: shop
+  value: mobile_phone
+  is_plural: false
+- phrase: các tiệm điện thoại di động
+  key: shop
+  value: mobile_phone
+  is_plural: true
+- phrase: cửa hàng xe mô tô
+  key: shop
+  value: motorcycle
+  is_plural: false
+- phrase: các cửa hàng xe mô tô
+  key: shop
+  value: motorcycle
+  is_plural: true
+- phrase: tiệm nhạc
+  key: shop
+  value: music
+  is_plural: false
+- phrase: các tiệm nhạc
+  key: shop
+  value: music
+  is_plural: true
+- phrase: tiệm báo
+  key: shop
+  value: newsagent
+  is_plural: false
+- phrase: các tiệm báo
+  key: shop
+  value: newsagent
+  is_plural: true
+- phrase: tiệm kính mắt
+  key: shop
+  value: optician
+  is_plural: false
+- phrase: các tiệm kính mắt
+  key: shop
+  value: optician
+  is_plural: true
+- phrase: tiệm thực phẩm hữu cơ
+  key: shop
+  value: organic
+  is_plural: false
+- phrase: các tiệm thực phẩm hữu cơ
+  key: shop
+  value: organic
+  is_plural: true
+- phrase: tiệm rửa hình
+  key: shop
+  value: photo
+  is_plural: false
+- phrase: các tiệm rửa hình
+  key: shop
+  value: photo
+  is_plural: true
+- phrase: tiệm làm tóc
+  key: shop
+  value: salon
+  is_plural: false
+- phrase: các tiệm làm tóc
+  key: shop
+  value: salon
+  is_plural: true
+- phrase: tiệm giày
+  key: shop
+  value: shoes
+  is_plural: false
+- phrase: các tiệm giày
+  key: shop
+  value: shoes
+  is_plural: true
+- phrase: trung tâm mua sắm
+  key: shop
+  value: shopping_centre
+  is_plural: false
+- phrase: các trung tâm mua sắm
+  key: shop
+  value: shopping_centre
+  is_plural: true
+- phrase: tiệm thể thao
+  key: shop
+  value: sports
+  is_plural: false
+- phrase: các tiệm thể thao
+  key: shop
+  value: sports
+  is_plural: true
+- phrase: siêu thị
+  key: shop
+  value: supermarket
+  is_plural: false
+- phrase: các siêu thị
+  key: shop
+  value: supermarket
+  is_plural: true
+- phrase: tiệm đồ chơi
+  key: shop
+  value: toys
+  is_plural: false
+- phrase: các tiệm đồ chơi
+  key: shop
+  value: toys
+  is_plural: true
+- phrase: văn phòng du lịch
+  key: shop
+  value: travel_agency
+  is_plural: false
+- phrase: các văn phòng du lịch
+  key: shop
+  value: travel_agency
+  is_plural: true
+- phrase: tiệm phim
+  key: shop
+  value: video
+  is_plural: false
+- phrase: các tiệm phim
+  key: shop
+  value: video
+  is_plural: true
+- phrase: túp lều trên núi
+  key: tourism
+  value: alpine_hut
+  is_plural: false
+- phrase: các túp lều trên núi
+  key: tourism
+  value: alpine_hut
+  is_plural: true
+- phrase: tác phẩm nghệ thuật
+  key: tourism
+  value: artwork
+  is_plural: false
+- phrase: các tác phẩm nghệ thuật
+  key: tourism
+  value: artwork
+  is_plural: true
+- phrase: nơi du lịch
+  key: tourism
+  value: attraction
+  is_plural: false
+- phrase: các nơi du lịch
+  key: tourism
+  value: attraction
+  is_plural: true
+- phrase: nhà trọ
+  key: tourism
+  value: bed_and_breakfast
+  is_plural: false
+- phrase: các nhà trọ
+  key: tourism
+  value: bed_and_breakfast
+  is_plural: true
+- phrase: túp lều
+  key: tourism
+  value: cabin
+  is_plural: false
+- phrase: các túp lều
+  key: tourism
+  value: cabin
+  is_plural: true
+- phrase: nơi cắm trại
+  key: tourism
+  value: camp_site
+  is_plural: false
+- phrase: các nơi cắm trại
+  key: tourism
+  value: camp_site
+  is_plural: true
+- phrase: nhà ván
+  key: tourism
+  value: chalet
+  is_plural: false
+- phrase: các nhà ván
+  key: tourism
+  value: chalet
+  is_plural: true
+- phrase: nhà trọ
+  key: tourism
+  value: hostel
+  is_plural: false
+- phrase: các nhà trọ
+  key: tourism
+  value: hostel
+  is_plural: true
+- phrase: khách sạn
+  key: tourism
+  value: hotel
+  is_plural: false
+- phrase: các khách sạn
+  key: tourism
+  value: hotel
+  is_plural: true
+- phrase: thông tin
+  key: tourism
+  value: information
+  is_plural: false
+- phrase: các thông tin
+  key: tourism
+  value: information
+  is_plural: true
+- phrase: nhà chái
+  key: tourism
+  value: lean_to
+  is_plural: false
+- phrase: các nhà chái
+  key: tourism
+  value: lean_to
+  is_plural: true
+- phrase: khách sạn dọc đường
+  key: tourism
+  value: motel
+  is_plural: false
+- phrase: các khách sạn dọc đường
+  key: tourism
+  value: motel
+  is_plural: true
+- phrase: bảo tàng
+  key: tourism
+  value: museum
+  is_plural: false
+- phrase: các bảo tàng
+  key: tourism
+  value: museum
+  is_plural: true
+- phrase: bàn ăn ngoài trời
+  key: tourism
+  value: picnic_site
+  is_plural: false
+- phrase: các bàn ăn ngoài trời
+  key: tourism
+  value: picnic_site
+  is_plural: true
+- phrase: công viên giải trí
+  key: tourism
+  value: theme_park
+  is_plural: false
+- phrase: các công viên giải trí
+  key: tourism
+  value: theme_park
+  is_plural: true
+- phrase: thung lũng
+  key: tourism
+  value: valley
+  is_plural: false
+- phrase: các thung lũng
+  key: tourism
+  value: valley
+  is_plural: true
+- phrase: thắng cảnh
+  key: tourism
+  value: viewpoint
+  is_plural: false
+- phrase: các thắng cảnh
+  key: tourism
+  value: viewpoint
+  is_plural: true
+- phrase: vườn thú
+  key: tourism
+  value: zoo
+  is_plural: false
+- phrase: các vườn thú
+  key: tourism
+  value: zoo
+  is_plural: true
+- phrase: kênh
+  key: waterway
+  value: canal
+  is_plural: false
+- phrase: các kênh
+  key: waterway
+  value: canal
+  is_plural: true
+- phrase: đập
+  key: waterway
+  value: dam
+  is_plural: false
+- phrase: các đập
+  key: waterway
+  value: dam
+  is_plural: true
+- phrase: thác ghềnh
+  key: waterway
+  value: rapids
+  is_plural: false
+- phrase: các thác ghềnh
+  key: waterway
+  value: rapids
+  is_plural: true
+- phrase: sông
+  key: waterway
+  value: river
+  is_plural: false
+- phrase: các sông
+  key: waterway
+  value: river
+  is_plural: true
+- phrase: bờ sông
+  key: waterway
+  value: riverbank
+  is_plural: false
+- phrase: các bờ sông
+  key: waterway
+  value: riverbank
+  is_plural: true
+- phrase: dòng suối
+  key: waterway
+  value: stream
+  is_plural: false
+- phrase: các dòng suối
+  key: waterway
+  value: stream
+  is_plural: true
+- phrase: thác
+  key: waterway
+  value: waterfall
+  is_plural: false
+- phrase: các thác
+  key: waterway
+  value: waterfall
+  is_plural: true

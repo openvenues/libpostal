@@ -1,0 +1,1992 @@
+- phrase: aeroporto
+  key: aeroway
+  value: aerodrome
+  is_plural: false
+- phrase: aeroportos
+  key: aeroway
+  value: aerodrome
+  is_plural: true
+- phrase: centro artístico
+  key: amenity
+  value: arts_centre
+  is_plural: false
+- phrase: centro artísticos
+  key: amenity
+  value: arts_centre
+  is_plural: true
+- phrase: caixeiro automático
+  key: amenity
+  value: atm
+  is_plural: false
+- phrase: caixeiro automáticos
+  key: amenity
+  value: atm
+  is_plural: true
+- phrase: auditorio
+  key: amenity
+  value: auditorium
+  is_plural: false
+- phrase: auditorios
+  key: amenity
+  value: auditorium
+  is_plural: true
+- phrase: banco
+  key: amenity
+  value: bank
+  is_plural: false
+- phrase: bancos
+  key: amenity
+  value: bank
+  is_plural: true
+- phrase: bar
+  key: amenity
+  value: bar
+  is_plural: false
+- phrase: bars
+  key: amenity
+  value: bar
+  is_plural: true
+- phrase: banco
+  key: amenity
+  value: bench
+  is_plural: false
+- phrase: bancos
+  key: amenity
+  value: bench
+  is_plural: true
+- phrase: aparcadoiro de bicicletas
+  key: amenity
+  value: bicycle_parking
+  is_plural: false
+- phrase: aparcadoiro de bicicletass
+  key: amenity
+  value: bicycle_parking
+  is_plural: true
+- phrase: aluguer de bicicletas
+  key: amenity
+  value: bicycle_rental
+  is_plural: false
+- phrase: aluguer de bicicletass
+  key: amenity
+  value: bicycle_rental
+  is_plural: true
+- phrase: prostíbulo
+  key: amenity
+  value: brothel
+  is_plural: false
+- phrase: prostíbulos
+  key: amenity
+  value: brothel
+  is_plural: true
+- phrase: estación de autobuses
+  key: amenity
+  value: bus_station
+  is_plural: false
+- phrase: estación de autobusess
+  key: amenity
+  value: bus_station
+  is_plural: true
+- phrase: cafetaría
+  key: amenity
+  value: cafe
+  is_plural: false
+- phrase: cafetarías
+  key: amenity
+  value: cafe
+  is_plural: true
+- phrase: aluguer de automóbiles
+  key: amenity
+  value: car_rental
+  is_plural: false
+- phrase: aluguer de automóbiless
+  key: amenity
+  value: car_rental
+  is_plural: true
+- phrase: aluguer de automóbiles
+  key: amenity
+  value: car_sharing
+  is_plural: false
+- phrase: aluguer de automóbiless
+  key: amenity
+  value: car_sharing
+  is_plural: true
+- phrase: casino
+  key: amenity
+  value: casino
+  is_plural: false
+- phrase: casinos
+  key: amenity
+  value: casino
+  is_plural: true
+- phrase: cine
+  key: amenity
+  value: cinema
+  is_plural: false
+- phrase: cines
+  key: amenity
+  value: cinema
+  is_plural: true
+- phrase: clínica
+  key: amenity
+  value: clinic
+  is_plural: false
+- phrase: clínicas
+  key: amenity
+  value: clinic
+  is_plural: true
+- phrase: club
+  key: amenity
+  value: club
+  is_plural: false
+- phrase: clubs
+  key: amenity
+  value: club
+  is_plural: true
+- phrase: instituto
+  key: amenity
+  value: college
+  is_plural: false
+- phrase: institutos
+  key: amenity
+  value: college
+  is_plural: true
+- phrase: centro comunitario
+  key: amenity
+  value: community_centre
+  is_plural: false
+- phrase: centro comunitarios
+  key: amenity
+  value: community_centre
+  is_plural: true
+- phrase: xulgado
+  key: amenity
+  value: courthouse
+  is_plural: false
+- phrase: xulgados
+  key: amenity
+  value: courthouse
+  is_plural: true
+- phrase: crematorio
+  key: amenity
+  value: crematorium
+  is_plural: false
+- phrase: crematorios
+  key: amenity
+  value: crematorium
+  is_plural: true
+- phrase: dentista
+  key: amenity
+  value: dentist
+  is_plural: false
+- phrase: dentistas
+  key: amenity
+  value: dentist
+  is_plural: true
+- phrase: residencia universitaria
+  key: amenity
+  value: dormitory
+  is_plural: false
+- phrase: residencia universitarias
+  key: amenity
+  value: dormitory
+  is_plural: true
+- phrase: auga potable
+  key: amenity
+  value: drinking_water
+  is_plural: false
+- phrase: auga potables
+  key: amenity
+  value: drinking_water
+  is_plural: true
+- phrase: escola de condución
+  key: amenity
+  value: driving_school
+  is_plural: false
+- phrase: escola de conducións
+  key: amenity
+  value: driving_school
+  is_plural: true
+- phrase: teléfono de emerxencia
+  key: amenity
+  value: emergency_phone
+  is_plural: false
+- phrase: teléfono de emerxencias
+  key: amenity
+  value: emergency_phone
+  is_plural: true
+- phrase: comida rápida
+  key: amenity
+  value: fast_food
+  is_plural: false
+- phrase: comida rápidas
+  key: amenity
+  value: fast_food
+  is_plural: true
+- phrase: parque de bombeiros
+  key: amenity
+  value: fire_station
+  is_plural: false
+- phrase: parque de bombeiross
+  key: amenity
+  value: fire_station
+  is_plural: true
+- phrase: fonte
+  key: amenity
+  value: fountain
+  is_plural: false
+- phrase: fontes
+  key: amenity
+  value: fountain
+  is_plural: true
+- phrase: combustible
+  key: amenity
+  value: fuel
+  is_plural: false
+- phrase: combustibles
+  key: amenity
+  value: fuel
+  is_plural: true
+- phrase: cemiterio
+  key: amenity
+  value: grave_yard
+  is_plural: false
+- phrase: cemiterios
+  key: amenity
+  value: grave_yard
+  is_plural: true
+- phrase: ximnasio
+  key: amenity
+  value: gym
+  is_plural: false
+- phrase: ximnasios
+  key: amenity
+  value: gym
+  is_plural: true
+- phrase: centro de saúde
+  key: amenity
+  value: health_centre
+  is_plural: false
+- phrase: centro de saúdes
+  key: amenity
+  value: health_centre
+  is_plural: true
+- phrase: hospital
+  key: amenity
+  value: hospital
+  is_plural: false
+- phrase: hospitals
+  key: amenity
+  value: hospital
+  is_plural: true
+- phrase: hotel
+  key: amenity
+  value: hotel
+  is_plural: false
+- phrase: hotels
+  key: amenity
+  value: hotel
+  is_plural: true
+- phrase: xeadaría
+  key: amenity
+  value: ice_cream
+  is_plural: false
+- phrase: xeadarías
+  key: amenity
+  value: ice_cream
+  is_plural: true
+- phrase: xardín de infancia
+  key: amenity
+  value: kindergarten
+  is_plural: false
+- phrase: xardín de infancias
+  key: amenity
+  value: kindergarten
+  is_plural: true
+- phrase: biblioteca
+  key: amenity
+  value: library
+  is_plural: false
+- phrase: bibliotecas
+  key: amenity
+  value: library
+  is_plural: true
+- phrase: mercado
+  key: amenity
+  value: market
+  is_plural: false
+- phrase: mercados
+  key: amenity
+  value: market
+  is_plural: true
+- phrase: praza de mercado
+  key: amenity
+  value: marketplace
+  is_plural: false
+- phrase: praza de mercados
+  key: amenity
+  value: marketplace
+  is_plural: true
+- phrase: club nocturno
+  key: amenity
+  value: nightclub
+  is_plural: false
+- phrase: club nocturnos
+  key: amenity
+  value: nightclub
+  is_plural: true
+- phrase: oficina
+  key: amenity
+  value: office
+  is_plural: false
+- phrase: oficinas
+  key: amenity
+  value: office
+  is_plural: true
+- phrase: parque
+  key: amenity
+  value: park
+  is_plural: false
+- phrase: parques
+  key: amenity
+  value: park
+  is_plural: true
+- phrase: aparcadoiro
+  key: amenity
+  value: parking
+  is_plural: false
+- phrase: aparcadoiros
+  key: amenity
+  value: parking
+  is_plural: true
+- phrase: farmacia
+  key: amenity
+  value: pharmacy
+  is_plural: false
+- phrase: farmacias
+  key: amenity
+  value: pharmacy
+  is_plural: true
+- phrase: lugar de culto
+  key: amenity
+  value: place_of_worship
+  is_plural: false
+- phrase: lugar de cultos
+  key: amenity
+  value: place_of_worship
+  is_plural: true
+- phrase: policía
+  key: amenity
+  value: police
+  is_plural: false
+- phrase: policías
+  key: amenity
+  value: police
+  is_plural: true
+- phrase: caixa de correos
+  key: amenity
+  value: post_box
+  is_plural: false
+- phrase: caixa de correoss
+  key: amenity
+  value: post_box
+  is_plural: true
+- phrase: oficina de correos
+  key: amenity
+  value: post_office
+  is_plural: false
+- phrase: oficina de correoss
+  key: amenity
+  value: post_office
+  is_plural: true
+- phrase: preescolar
+  key: amenity
+  value: preschool
+  is_plural: false
+- phrase: preescolars
+  key: amenity
+  value: preschool
+  is_plural: true
+- phrase: prisión
+  key: amenity
+  value: prison
+  is_plural: false
+- phrase: prisións
+  key: amenity
+  value: prison
+  is_plural: true
+- phrase: pub
+  key: amenity
+  value: pub
+  is_plural: false
+- phrase: pubs
+  key: amenity
+  value: pub
+  is_plural: true
+- phrase: edificio público
+  key: amenity
+  value: public_building
+  is_plural: false
+- phrase: edificio públicos
+  key: amenity
+  value: public_building
+  is_plural: true
+- phrase: mercado público
+  key: amenity
+  value: public_market
+  is_plural: false
+- phrase: mercado públicos
+  key: amenity
+  value: public_market
+  is_plural: true
+- phrase: punto de reciclaxe
+  key: amenity
+  value: recycling
+  is_plural: false
+- phrase: punto de reciclaxes
+  key: amenity
+  value: recycling
+  is_plural: true
+- phrase: restaurante
+  key: amenity
+  value: restaurant
+  is_plural: false
+- phrase: restaurantes
+  key: amenity
+  value: restaurant
+  is_plural: true
+- phrase: residencia de xubilados
+  key: amenity
+  value: retirement_home
+  is_plural: false
+- phrase: residencia de xubiladoss
+  key: amenity
+  value: retirement_home
+  is_plural: true
+- phrase: sauna
+  key: amenity
+  value: sauna
+  is_plural: false
+- phrase: saunas
+  key: amenity
+  value: sauna
+  is_plural: true
+- phrase: escola
+  key: amenity
+  value: school
+  is_plural: false
+- phrase: escolas
+  key: amenity
+  value: school
+  is_plural: true
+- phrase: abeiro
+  key: amenity
+  value: shelter
+  is_plural: false
+- phrase: abeiros
+  key: amenity
+  value: shelter
+  is_plural: true
+- phrase: tenda
+  key: amenity
+  value: shop
+  is_plural: false
+- phrase: tendas
+  key: amenity
+  value: shop
+  is_plural: true
+- phrase: comercio
+  key: amenity
+  value: shopping
+  is_plural: false
+- phrase: comercios
+  key: amenity
+  value: shopping
+  is_plural: true
+- phrase: club social
+  key: amenity
+  value: social_club
+  is_plural: false
+- phrase: club socials
+  key: amenity
+  value: social_club
+  is_plural: true
+- phrase: estudio
+  key: amenity
+  value: studio
+  is_plural: false
+- phrase: estudios
+  key: amenity
+  value: studio
+  is_plural: true
+- phrase: supermercado
+  key: amenity
+  value: supermarket
+  is_plural: false
+- phrase: supermercados
+  key: amenity
+  value: supermarket
+  is_plural: true
+- phrase: teléfono público
+  key: amenity
+  value: telephone
+  is_plural: false
+- phrase: teléfono públicos
+  key: amenity
+  value: telephone
+  is_plural: true
+- phrase: teatro
+  key: amenity
+  value: theatre
+  is_plural: false
+- phrase: teatros
+  key: amenity
+  value: theatre
+  is_plural: true
+- phrase: aseos
+  key: amenity
+  value: toilets
+  is_plural: false
+- phrase: aseoss
+  key: amenity
+  value: toilets
+  is_plural: true
+- phrase: concello
+  key: amenity
+  value: townhall
+  is_plural: false
+- phrase: concellos
+  key: amenity
+  value: townhall
+  is_plural: true
+- phrase: universidade
+  key: amenity
+  value: university
+  is_plural: false
+- phrase: universidades
+  key: amenity
+  value: university
+  is_plural: true
+- phrase: máquina expendedora
+  key: amenity
+  value: vending_machine
+  is_plural: false
+- phrase: máquina expendedoras
+  key: amenity
+  value: vending_machine
+  is_plural: true
+- phrase: clínica veterinaria
+  key: amenity
+  value: veterinary
+  is_plural: false
+- phrase: clínica veterinarias
+  key: amenity
+  value: veterinary
+  is_plural: true
+- phrase: acceso wifi
+  key: amenity
+  value: wifi
+  is_plural: false
+- phrase: acceso wifis
+  key: amenity
+  value: wifi
+  is_plural: true
+- phrase: casa da xuventude
+  key: amenity
+  value: youth_centre
+  is_plural: false
+- phrase: casa da xuventudes
+  key: amenity
+  value: youth_centre
+  is_plural: true
+- phrase: pista de cabalos
+  key: highway
+  value: bridleway
+  is_plural: false
+- phrase: pista de cabaloss
+  key: highway
+  value: bridleway
+  is_plural: true
+- phrase: parada de autobús
+  key: highway
+  value: bus_stop
+  is_plural: false
+- phrase: parada de autobúss
+  key: highway
+  value: bus_stop
+  is_plural: true
+- phrase: camiño secundario
+  key: highway
+  value: byway
+  is_plural: false
+- phrase: camiño secundarios
+  key: highway
+  value: byway
+  is_plural: true
+- phrase: autoestrada en construción
+  key: highway
+  value: construction
+  is_plural: false
+- phrase: autoestrada en construcións
+  key: highway
+  value: construction
+  is_plural: true
+- phrase: pista de bicicletas
+  key: highway
+  value: cycleway
+  is_plural: false
+- phrase: pista de bicicletass
+  key: highway
+  value: cycleway
+  is_plural: true
+- phrase: indicador quilométrico
+  key: highway
+  value: distance_marker
+  is_plural: false
+- phrase: indicador quilométricos
+  key: highway
+  value: distance_marker
+  is_plural: true
+- phrase: punto de acceso de emerxencia
+  key: highway
+  value: emergency_access_point
+  is_plural: false
+- phrase: punto de acceso de emerxencias
+  key: highway
+  value: emergency_access_point
+  is_plural: true
+- phrase: carreiro
+  key: highway
+  value: footway
+  is_plural: false
+- phrase: carreiros
+  key: highway
+  value: footway
+  is_plural: true
+- phrase: vao
+  key: highway
+  value: ford
+  is_plural: false
+- phrase: vaos
+  key: highway
+  value: ford
+  is_plural: true
+- phrase: porta
+  key: highway
+  value: gate
+  is_plural: false
+- phrase: portas
+  key: highway
+  value: gate
+  is_plural: true
+- phrase: rúa residencial
+  key: highway
+  value: living_street
+  is_plural: false
+- phrase: rúa residencials
+  key: highway
+  value: living_street
+  is_plural: true
+- phrase: estrada lateral
+  key: highway
+  value: minor
+  is_plural: false
+- phrase: estrada laterals
+  key: highway
+  value: minor
+  is_plural: true
+- phrase: autoestrada
+  key: highway
+  value: motorway
+  is_plural: false
+- phrase: autoestradas
+  key: highway
+  value: motorway
+  is_plural: true
+- phrase: cruce de autovías
+  key: highway
+  value: motorway_junction
+  is_plural: false
+- phrase: cruce de autovíass
+  key: highway
+  value: motorway_junction
+  is_plural: true
+- phrase: enlace de autoestrada
+  key: highway
+  value: motorway_link
+  is_plural: false
+- phrase: enlace de autoestradas
+  key: highway
+  value: motorway_link
+  is_plural: true
+- phrase: camiño
+  key: highway
+  value: path
+  is_plural: false
+- phrase: camiños
+  key: highway
+  value: path
+  is_plural: true
+- phrase: camiño peonil
+  key: highway
+  value: pedestrian
+  is_plural: false
+- phrase: camiño peonils
+  key: highway
+  value: pedestrian
+  is_plural: true
+- phrase: plataforma
+  key: highway
+  value: platform
+  is_plural: false
+- phrase: plataformas
+  key: highway
+  value: platform
+  is_plural: true
+- phrase: estrada primaria
+  key: highway
+  value: primary
+  is_plural: false
+- phrase: estrada primarias
+  key: highway
+  value: primary
+  is_plural: true
+- phrase: estrada principal
+  key: highway
+  value: primary_link
+  is_plural: false
+- phrase: estrada principals
+  key: highway
+  value: primary_link
+  is_plural: true
+- phrase: circuíto
+  key: highway
+  value: raceway
+  is_plural: false
+- phrase: circuítos
+  key: highway
+  value: raceway
+  is_plural: true
+- phrase: residencial
+  key: highway
+  value: residential
+  is_plural: false
+- phrase: residencials
+  key: highway
+  value: residential
+  is_plural: true
+- phrase: estrada
+  key: highway
+  value: road
+  is_plural: false
+- phrase: estradas
+  key: highway
+  value: road
+  is_plural: true
+- phrase: estrada secundaria
+  key: highway
+  value: secondary
+  is_plural: false
+- phrase: estrada secundarias
+  key: highway
+  value: secondary
+  is_plural: true
+- phrase: estrada secundaria
+  key: highway
+  value: secondary_link
+  is_plural: false
+- phrase: estrada secundarias
+  key: highway
+  value: secondary_link
+  is_plural: true
+- phrase: estrada de servizo
+  key: highway
+  value: service
+  is_plural: false
+- phrase: estrada de servizos
+  key: highway
+  value: service
+  is_plural: true
+- phrase: área de servizo
+  key: highway
+  value: services
+  is_plural: false
+- phrase: área de servizos
+  key: highway
+  value: services
+  is_plural: true
+- phrase: chanzos
+  key: highway
+  value: steps
+  is_plural: false
+- phrase: chanzoss
+  key: highway
+  value: steps
+  is_plural: true
+- phrase: escada
+  key: highway
+  value: stile
+  is_plural: false
+- phrase: escadas
+  key: highway
+  value: stile
+  is_plural: true
+- phrase: estrada terciaria
+  key: highway
+  value: tertiary
+  is_plural: false
+- phrase: estrada terciarias
+  key: highway
+  value: tertiary
+  is_plural: true
+- phrase: pista
+  key: highway
+  value: track
+  is_plural: false
+- phrase: pistas
+  key: highway
+  value: track
+  is_plural: true
+- phrase: pista
+  key: highway
+  value: trail
+  is_plural: false
+- phrase: pistas
+  key: highway
+  value: trail
+  is_plural: true
+- phrase: estrada nacional
+  key: highway
+  value: trunk
+  is_plural: false
+- phrase: estrada nacionals
+  key: highway
+  value: trunk
+  is_plural: true
+- phrase: estrada nacional
+  key: highway
+  value: trunk_link
+  is_plural: false
+- phrase: estrada nacionals
+  key: highway
+  value: trunk_link
+  is_plural: true
+- phrase: estrada sen clasificar
+  key: highway
+  value: unclassified
+  is_plural: false
+- phrase: estrada sen clasificars
+  key: highway
+  value: unclassified
+  is_plural: true
+- phrase: estrada non pavimentada
+  key: highway
+  value: unsurfaced
+  is_plural: false
+- phrase: estrada non pavimentadas
+  key: highway
+  value: unsurfaced
+  is_plural: true
+- phrase: balneario
+  key: leisure
+  value: beach_resort
+  is_plural: false
+- phrase: balnearios
+  key: leisure
+  value: beach_resort
+  is_plural: true
+- phrase: terreo común
+  key: leisure
+  value: common
+  is_plural: false
+- phrase: terreo comúns
+  key: leisure
+  value: common
+  is_plural: true
+- phrase: área de pesca
+  key: leisure
+  value: fishing
+  is_plural: false
+- phrase: área de pescas
+  key: leisure
+  value: fishing
+  is_plural: true
+- phrase: xardín
+  key: leisure
+  value: garden
+  is_plural: false
+- phrase: xardíns
+  key: leisure
+  value: garden
+  is_plural: true
+- phrase: campo de golf
+  key: leisure
+  value: golf_course
+  is_plural: false
+- phrase: campo de golfs
+  key: leisure
+  value: golf_course
+  is_plural: true
+- phrase: pista de patinaxe sobre xeo
+  key: leisure
+  value: ice_rink
+  is_plural: false
+- phrase: pista de patinaxe sobre xeos
+  key: leisure
+  value: ice_rink
+  is_plural: true
+- phrase: porto deportivo
+  key: leisure
+  value: marina
+  is_plural: false
+- phrase: porto deportivos
+  key: leisure
+  value: marina
+  is_plural: true
+- phrase: minigolf
+  key: leisure
+  value: miniature_golf
+  is_plural: false
+- phrase: minigolfs
+  key: leisure
+  value: miniature_golf
+  is_plural: true
+- phrase: reserva natural
+  key: leisure
+  value: nature_reserve
+  is_plural: false
+- phrase: reserva naturals
+  key: leisure
+  value: nature_reserve
+  is_plural: true
+- phrase: parque
+  key: leisure
+  value: park
+  is_plural: false
+- phrase: parques
+  key: leisure
+  value: park
+  is_plural: true
+- phrase: cancha deportiva
+  key: leisure
+  value: pitch
+  is_plural: false
+- phrase: cancha deportivas
+  key: leisure
+  value: pitch
+  is_plural: true
+- phrase: patio de recreo
+  key: leisure
+  value: playground
+  is_plural: false
+- phrase: patio de recreos
+  key: leisure
+  value: playground
+  is_plural: true
+- phrase: área recreativa
+  key: leisure
+  value: recreation_ground
+  is_plural: false
+- phrase: área recreativas
+  key: leisure
+  value: recreation_ground
+  is_plural: true
+- phrase: varadoiro
+  key: leisure
+  value: slipway
+  is_plural: false
+- phrase: varadoiros
+  key: leisure
+  value: slipway
+  is_plural: true
+- phrase: centro deportivo
+  key: leisure
+  value: sports_centre
+  is_plural: false
+- phrase: centro deportivos
+  key: leisure
+  value: sports_centre
+  is_plural: true
+- phrase: estadio
+  key: leisure
+  value: stadium
+  is_plural: false
+- phrase: estadios
+  key: leisure
+  value: stadium
+  is_plural: true
+- phrase: piscina
+  key: leisure
+  value: swimming_pool
+  is_plural: false
+- phrase: piscinas
+  key: leisure
+  value: swimming_pool
+  is_plural: true
+- phrase: pista de carreiras
+  key: leisure
+  value: track
+  is_plural: false
+- phrase: pista de carreirass
+  key: leisure
+  value: track
+  is_plural: true
+- phrase: parque acuático
+  key: leisure
+  value: water_park
+  is_plural: false
+- phrase: parque acuáticos
+  key: leisure
+  value: water_park
+  is_plural: true
+- phrase: baía
+  key: natural
+  value: bay
+  is_plural: false
+- phrase: baías
+  key: natural
+  value: bay
+  is_plural: true
+- phrase: praia
+  key: natural
+  value: beach
+  is_plural: false
+- phrase: praias
+  key: natural
+  value: beach
+  is_plural: true
+- phrase: cabo
+  key: natural
+  value: cape
+  is_plural: false
+- phrase: cabos
+  key: natural
+  value: cape
+  is_plural: true
+- phrase: entrada de cova
+  key: natural
+  value: cave_entrance
+  is_plural: false
+- phrase: entrada de covas
+  key: natural
+  value: cave_entrance
+  is_plural: true
+- phrase: canal
+  key: natural
+  value: channel
+  is_plural: false
+- phrase: canals
+  key: natural
+  value: channel
+  is_plural: true
+- phrase: cantil
+  key: natural
+  value: cliff
+  is_plural: false
+- phrase: cantils
+  key: natural
+  value: cliff
+  is_plural: true
+- phrase: litoral
+  key: natural
+  value: coastline
+  is_plural: false
+- phrase: litorals
+  key: natural
+  value: coastline
+  is_plural: true
+- phrase: cráter
+  key: natural
+  value: crater
+  is_plural: false
+- phrase: cráters
+  key: natural
+  value: crater
+  is_plural: true
+- phrase: elemento
+  key: natural
+  value: feature
+  is_plural: false
+- phrase: elementos
+  key: natural
+  value: feature
+  is_plural: true
+- phrase: brañal
+  key: natural
+  value: fell
+  is_plural: false
+- phrase: brañals
+  key: natural
+  value: fell
+  is_plural: true
+- phrase: fiorde
+  key: natural
+  value: fjord
+  is_plural: false
+- phrase: fiordes
+  key: natural
+  value: fjord
+  is_plural: true
+- phrase: géiser
+  key: natural
+  value: geyser
+  is_plural: false
+- phrase: géisers
+  key: natural
+  value: geyser
+  is_plural: true
+- phrase: glaciar
+  key: natural
+  value: glacier
+  is_plural: false
+- phrase: glaciars
+  key: natural
+  value: glacier
+  is_plural: true
+- phrase: outeiro
+  key: natural
+  value: hill
+  is_plural: false
+- phrase: outeiros
+  key: natural
+  value: hill
+  is_plural: true
+- phrase: illa
+  key: natural
+  value: island
+  is_plural: false
+- phrase: illas
+  key: natural
+  value: island
+  is_plural: true
+- phrase: terra
+  key: natural
+  value: land
+  is_plural: false
+- phrase: terras
+  key: natural
+  value: land
+  is_plural: true
+- phrase: marisma
+  key: natural
+  value: marsh
+  is_plural: false
+- phrase: marismas
+  key: natural
+  value: marsh
+  is_plural: true
+- phrase: páramo
+  key: natural
+  value: moor
+  is_plural: false
+- phrase: páramos
+  key: natural
+  value: moor
+  is_plural: true
+- phrase: lama
+  key: natural
+  value: mud
+  is_plural: false
+- phrase: lamas
+  key: natural
+  value: mud
+  is_plural: true
+- phrase: pico
+  key: natural
+  value: peak
+  is_plural: false
+- phrase: picos
+  key: natural
+  value: peak
+  is_plural: true
+- phrase: punto
+  key: natural
+  value: point
+  is_plural: false
+- phrase: puntos
+  key: natural
+  value: point
+  is_plural: true
+- phrase: arrecife
+  key: natural
+  value: reef
+  is_plural: false
+- phrase: arrecifes
+  key: natural
+  value: reef
+  is_plural: true
+- phrase: crista
+  key: natural
+  value: ridge
+  is_plural: false
+- phrase: cristas
+  key: natural
+  value: ridge
+  is_plural: true
+- phrase: río
+  key: natural
+  value: river
+  is_plural: false
+- phrase: ríos
+  key: natural
+  value: river
+  is_plural: true
+- phrase: rocha
+  key: natural
+  value: rock
+  is_plural: false
+- phrase: rochas
+  key: natural
+  value: rock
+  is_plural: true
+- phrase: pedregal
+  key: natural
+  value: scree
+  is_plural: false
+- phrase: pedregals
+  key: natural
+  value: scree
+  is_plural: true
+- phrase: matogueira
+  key: natural
+  value: scrub
+  is_plural: false
+- phrase: matogueiras
+  key: natural
+  value: scrub
+  is_plural: true
+- phrase: cardume
+  key: natural
+  value: shoal
+  is_plural: false
+- phrase: cardumes
+  key: natural
+  value: shoal
+  is_plural: true
+- phrase: primavera
+  key: natural
+  value: spring
+  is_plural: false
+- phrase: primaveras
+  key: natural
+  value: spring
+  is_plural: true
+- phrase: estreito
+  key: natural
+  value: strait
+  is_plural: false
+- phrase: estreitos
+  key: natural
+  value: strait
+  is_plural: true
+- phrase: árbore
+  key: natural
+  value: tree
+  is_plural: false
+- phrase: árbores
+  key: natural
+  value: tree
+  is_plural: true
+- phrase: val
+  key: natural
+  value: valley
+  is_plural: false
+- phrase: vals
+  key: natural
+  value: valley
+  is_plural: true
+- phrase: volcán
+  key: natural
+  value: volcano
+  is_plural: false
+- phrase: volcáns
+  key: natural
+  value: volcano
+  is_plural: true
+- phrase: auga
+  key: natural
+  value: water
+  is_plural: false
+- phrase: augas
+  key: natural
+  value: water
+  is_plural: true
+- phrase: pantano
+  key: natural
+  value: wetland
+  is_plural: false
+- phrase: pantanos
+  key: natural
+  value: wetland
+  is_plural: true
+- phrase: pantano
+  key: natural
+  value: wetlands
+  is_plural: false
+- phrase: pantanos
+  key: natural
+  value: wetlands
+  is_plural: true
+- phrase: bosque
+  key: natural
+  value: wood
+  is_plural: false
+- phrase: bosques
+  key: natural
+  value: wood
+  is_plural: true
+- phrase: cidade
+  key: place
+  value: city
+  is_plural: false
+- phrase: cidades
+  key: place
+  value: city
+  is_plural: true
+- phrase: país
+  key: place
+  value: country
+  is_plural: false
+- phrase: paíss
+  key: place
+  value: country
+  is_plural: true
+- phrase: condado
+  key: place
+  value: county
+  is_plural: false
+- phrase: condados
+  key: place
+  value: county
+  is_plural: true
+- phrase: granxa
+  key: place
+  value: farm
+  is_plural: false
+- phrase: granxas
+  key: place
+  value: farm
+  is_plural: true
+- phrase: aldea
+  key: place
+  value: hamlet
+  is_plural: false
+- phrase: aldeas
+  key: place
+  value: hamlet
+  is_plural: true
+- phrase: casa
+  key: place
+  value: house
+  is_plural: false
+- phrase: casas
+  key: place
+  value: house
+  is_plural: true
+- phrase: casas
+  key: place
+  value: houses
+  is_plural: false
+- phrase: casass
+  key: place
+  value: houses
+  is_plural: true
+- phrase: illa
+  key: place
+  value: island
+  is_plural: false
+- phrase: illas
+  key: place
+  value: island
+  is_plural: true
+- phrase: illote
+  key: place
+  value: islet
+  is_plural: false
+- phrase: illotes
+  key: place
+  value: islet
+  is_plural: true
+- phrase: localidade
+  key: place
+  value: locality
+  is_plural: false
+- phrase: localidades
+  key: place
+  value: locality
+  is_plural: true
+- phrase: páramo
+  key: place
+  value: moor
+  is_plural: false
+- phrase: páramos
+  key: place
+  value: moor
+  is_plural: true
+- phrase: municipio
+  key: place
+  value: municipality
+  is_plural: false
+- phrase: municipios
+  key: place
+  value: municipality
+  is_plural: true
+- phrase: código postal
+  key: place
+  value: postcode
+  is_plural: false
+- phrase: código postals
+  key: place
+  value: postcode
+  is_plural: true
+- phrase: rexión
+  key: place
+  value: region
+  is_plural: false
+- phrase: rexións
+  key: place
+  value: region
+  is_plural: true
+- phrase: mar
+  key: place
+  value: sea
+  is_plural: false
+- phrase: mars
+  key: place
+  value: sea
+  is_plural: true
+- phrase: estado/provincia
+  key: place
+  value: state
+  is_plural: false
+- phrase: estado/provincias
+  key: place
+  value: state
+  is_plural: true
+- phrase: subdivisión
+  key: place
+  value: subdivision
+  is_plural: false
+- phrase: subdivisións
+  key: place
+  value: subdivision
+  is_plural: true
+- phrase: barrio
+  key: place
+  value: suburb
+  is_plural: false
+- phrase: barrios
+  key: place
+  value: suburb
+  is_plural: true
+- phrase: cidade
+  key: place
+  value: town
+  is_plural: false
+- phrase: cidades
+  key: place
+  value: town
+  is_plural: true
+- phrase: área non incorporada
+  key: place
+  value: unincorporated_area
+  is_plural: false
+- phrase: área non incorporadas
+  key: place
+  value: unincorporated_area
+  is_plural: true
+- phrase: vila
+  key: place
+  value: village
+  is_plural: false
+- phrase: vilas
+  key: place
+  value: village
+  is_plural: true
+- phrase: tenda de roupa
+  key: shop
+  value: apparel
+  is_plural: false
+- phrase: tenda de roupas
+  key: shop
+  value: apparel
+  is_plural: true
+- phrase: tenda de arte
+  key: shop
+  value: art
+  is_plural: false
+- phrase: tenda de artes
+  key: shop
+  value: art
+  is_plural: true
+- phrase: panadaría
+  key: shop
+  value: bakery
+  is_plural: false
+- phrase: panadarías
+  key: shop
+  value: bakery
+  is_plural: true
+- phrase: tenda de bicicletas
+  key: shop
+  value: bicycle
+  is_plural: false
+- phrase: tenda de bicicletass
+  key: shop
+  value: bicycle
+  is_plural: true
+- phrase: libraría
+  key: shop
+  value: books
+  is_plural: false
+- phrase: librarías
+  key: shop
+  value: books
+  is_plural: true
+- phrase: carnizaría
+  key: shop
+  value: butcher
+  is_plural: false
+- phrase: carnizarías
+  key: shop
+  value: butcher
+  is_plural: true
+- phrase: taller mecánico
+  key: shop
+  value: car_repair
+  is_plural: false
+- phrase: taller mecánicos
+  key: shop
+  value: car_repair
+  is_plural: true
+- phrase: tenda de alfombras
+  key: shop
+  value: carpet
+  is_plural: false
+- phrase: tenda de alfombrass
+  key: shop
+  value: carpet
+  is_plural: true
+- phrase: tenda benéfica
+  key: shop
+  value: charity
+  is_plural: false
+- phrase: tenda benéficas
+  key: shop
+  value: charity
+  is_plural: true
+- phrase: farmacia
+  key: shop
+  value: chemist
+  is_plural: false
+- phrase: farmacias
+  key: shop
+  value: chemist
+  is_plural: true
+- phrase: tenda de roupa
+  key: shop
+  value: clothes
+  is_plural: false
+- phrase: tenda de roupas
+  key: shop
+  value: clothes
+  is_plural: true
+- phrase: tenda informática
+  key: shop
+  value: computer
+  is_plural: false
+- phrase: tenda informáticas
+  key: shop
+  value: computer
+  is_plural: true
+- phrase: gran almacén
+  key: shop
+  value: department_store
+  is_plural: false
+- phrase: gran almacéns
+  key: shop
+  value: department_store
+  is_plural: true
+- phrase: tenda de bricolaxe
+  key: shop
+  value: doityourself
+  is_plural: false
+- phrase: tenda de bricolaxes
+  key: shop
+  value: doityourself
+  is_plural: true
+- phrase: axencia inmobiliaria
+  key: shop
+  value: estate_agent
+  is_plural: false
+- phrase: axencia inmobiliarias
+  key: shop
+  value: estate_agent
+  is_plural: true
+- phrase: tenda de moda
+  key: shop
+  value: fashion
+  is_plural: false
+- phrase: tenda de modas
+  key: shop
+  value: fashion
+  is_plural: true
+- phrase: peixaría
+  key: shop
+  value: fish
+  is_plural: false
+- phrase: peixarías
+  key: shop
+  value: fish
+  is_plural: true
+- phrase: floraría
+  key: shop
+  value: florist
+  is_plural: false
+- phrase: florarías
+  key: shop
+  value: florist
+  is_plural: true
+- phrase: tenda de alimentación
+  key: shop
+  value: food
+  is_plural: false
+- phrase: tenda de alimentacións
+  key: shop
+  value: food
+  is_plural: true
+- phrase: galería
+  key: shop
+  value: gallery
+  is_plural: false
+- phrase: galerías
+  key: shop
+  value: gallery
+  is_plural: true
+- phrase: tenda de ultramarinos
+  key: shop
+  value: general
+  is_plural: false
+- phrase: tenda de ultramarinoss
+  key: shop
+  value: general
+  is_plural: true
+- phrase: perrucaría
+  key: shop
+  value: hairdresser
+  is_plural: false
+- phrase: perrucarías
+  key: shop
+  value: hairdresser
+  is_plural: true
+- phrase: ferraxaría
+  key: shop
+  value: hardware
+  is_plural: false
+- phrase: ferraxarías
+  key: shop
+  value: hardware
+  is_plural: true
+- phrase: hi-fi
+  key: shop
+  value: hifi
+  is_plural: false
+- phrase: hi-fis
+  key: shop
+  value: hifi
+  is_plural: true
+- phrase: xoiaría
+  key: shop
+  value: jewelry
+  is_plural: false
+- phrase: xoiarías
+  key: shop
+  value: jewelry
+  is_plural: true
+- phrase: centro comercial
+  key: shop
+  value: mall
+  is_plural: false
+- phrase: centro comercials
+  key: shop
+  value: mall
+  is_plural: true
+- phrase: mercado
+  key: shop
+  value: market
+  is_plural: false
+- phrase: mercados
+  key: shop
+  value: market
+  is_plural: true
+- phrase: tenda de telefonía móbil
+  key: shop
+  value: mobile_phone
+  is_plural: false
+- phrase: tenda de telefonía móbils
+  key: shop
+  value: mobile_phone
+  is_plural: true
+- phrase: tenda de motocicletas
+  key: shop
+  value: motorcycle
+  is_plural: false
+- phrase: tenda de motocicletass
+  key: shop
+  value: motorcycle
+  is_plural: true
+- phrase: tenda de música
+  key: shop
+  value: music
+  is_plural: false
+- phrase: tenda de músicas
+  key: shop
+  value: music
+  is_plural: true
+- phrase: oftalmólogo
+  key: shop
+  value: optician
+  is_plural: false
+- phrase: oftalmólogos
+  key: shop
+  value: optician
+  is_plural: true
+- phrase: tenda de alimentos orgánicos
+  key: shop
+  value: organic
+  is_plural: false
+- phrase: tenda de alimentos orgánicoss
+  key: shop
+  value: organic
+  is_plural: true
+- phrase: tenda de deportes ao aire libre
+  key: shop
+  value: outdoor
+  is_plural: false
+- phrase: tenda de deportes ao aire libres
+  key: shop
+  value: outdoor
+  is_plural: true
+- phrase: tenda de fotografía
+  key: shop
+  value: photo
+  is_plural: false
+- phrase: tenda de fotografías
+  key: shop
+  value: photo
+  is_plural: true
+- phrase: zapataría
+  key: shop
+  value: shoes
+  is_plural: false
+- phrase: zapatarías
+  key: shop
+  value: shoes
+  is_plural: true
+- phrase: centro comercial
+  key: shop
+  value: shopping_centre
+  is_plural: false
+- phrase: centro comercials
+  key: shop
+  value: shopping_centre
+  is_plural: true
+- phrase: tenda de deportes
+  key: shop
+  value: sports
+  is_plural: false
+- phrase: tenda de deportess
+  key: shop
+  value: sports
+  is_plural: true
+- phrase: papelaría
+  key: shop
+  value: stationery
+  is_plural: false
+- phrase: papelarías
+  key: shop
+  value: stationery
+  is_plural: true
+- phrase: supermercado
+  key: shop
+  value: supermarket
+  is_plural: false
+- phrase: supermercados
+  key: shop
+  value: supermarket
+  is_plural: true
+- phrase: xoguetaría
+  key: shop
+  value: toys
+  is_plural: false
+- phrase: xoguetarías
+  key: shop
+  value: toys
+  is_plural: true
+- phrase: axencia de viaxes
+  key: shop
+  value: travel_agency
+  is_plural: false
+- phrase: axencia de viaxess
+  key: shop
+  value: travel_agency
+  is_plural: true
+- phrase: cabana alpina
+  key: tourism
+  value: alpine_hut
+  is_plural: false
+- phrase: cabana alpinas
+  key: tourism
+  value: alpine_hut
+  is_plural: true
+- phrase: obra de arte
+  key: tourism
+  value: artwork
+  is_plural: false
+- phrase: obra de artes
+  key: tourism
+  value: artwork
+  is_plural: true
+- phrase: atracción
+  key: tourism
+  value: attraction
+  is_plural: false
+- phrase: atraccións
+  key: tourism
+  value: attraction
+  is_plural: true
+- phrase: cama e almorzo
+  key: tourism
+  value: bed_and_breakfast
+  is_plural: false
+- phrase: cama e almorzos
+  key: tourism
+  value: bed_and_breakfast
+  is_plural: true
+- phrase: cabana
+  key: tourism
+  value: cabin
+  is_plural: false
+- phrase: cabanas
+  key: tourism
+  value: cabin
+  is_plural: true
+- phrase: campamento
+  key: tourism
+  value: camp_site
+  is_plural: false
+- phrase: campamentos
+  key: tourism
+  value: camp_site
+  is_plural: true
+- phrase: sitio de caravanas
+  key: tourism
+  value: caravan_site
+  is_plural: false
+- phrase: sitio de caravanass
+  key: tourism
+  value: caravan_site
+  is_plural: true
+- phrase: chalé
+  key: tourism
+  value: chalet
+  is_plural: false
+- phrase: chalés
+  key: tourism
+  value: chalet
+  is_plural: true
+- phrase: albergue
+  key: tourism
+  value: guest_house
+  is_plural: false
+- phrase: albergues
+  key: tourism
+  value: guest_house
+  is_plural: true
+- phrase: hostal
+  key: tourism
+  value: hostel
+  is_plural: false
+- phrase: hostals
+  key: tourism
+  value: hostel
+  is_plural: true
+- phrase: hotel
+  key: tourism
+  value: hotel
+  is_plural: false
+- phrase: hotels
+  key: tourism
+  value: hotel
+  is_plural: true
+- phrase: información
+  key: tourism
+  value: information
+  is_plural: false
+- phrase: informacións
+  key: tourism
+  value: information
+  is_plural: true
+- phrase: caseta
+  key: tourism
+  value: lean_to
+  is_plural: false
+- phrase: casetas
+  key: tourism
+  value: lean_to
+  is_plural: true
+- phrase: motel
+  key: tourism
+  value: motel
+  is_plural: false
+- phrase: motels
+  key: tourism
+  value: motel
+  is_plural: true
+- phrase: museo
+  key: tourism
+  value: museum
+  is_plural: false
+- phrase: museos
+  key: tourism
+  value: museum
+  is_plural: true
+- phrase: sitio de pícnic
+  key: tourism
+  value: picnic_site
+  is_plural: false
+- phrase: sitio de pícnics
+  key: tourism
+  value: picnic_site
+  is_plural: true
+- phrase: parque temático
+  key: tourism
+  value: theme_park
+  is_plural: false
+- phrase: parque temáticos
+  key: tourism
+  value: theme_park
+  is_plural: true
+- phrase: val
+  key: tourism
+  value: valley
+  is_plural: false
+- phrase: vals
+  key: tourism
+  value: valley
+  is_plural: true
+- phrase: miradoiro
+  key: tourism
+  value: viewpoint
+  is_plural: false
+- phrase: miradoiros
+  key: tourism
+  value: viewpoint
+  is_plural: true
+- phrase: zoolóxico
+  key: tourism
+  value: zoo
+  is_plural: false
+- phrase: zoolóxicos
+  key: tourism
+  value: zoo
+  is_plural: true
