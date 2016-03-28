@@ -41,6 +41,12 @@ NOMINATIM_SPECIAL_PHRASES_URL = WIKI_BASE_URL + NOMINATIM_SPECIAL_PHRASES_PREFIX
 phrase_table_re = re.compile('\| ([^|]+) \|\| ([^|]+) \|\| ([^|]+) \|\| ([^|]+) \|\| ([\-YN])', re.I)
 wiki_link_re = re.compile('(?:\[\[([^\|\]]+(?<=\S))[\s]*(?:\|[\s]*)?(?:([^\]]+))?\]\])')
 
+IGNORE_LANGUAGES = {
+    # Interlingua
+    'ia'
+}
+
+
 IGNORE_PLURAL_LANGUAGES = {
     # For Japanese, seems to just put an s on the end, which doesn't seem right
     # Need input from a native speaker on that one
@@ -82,6 +88,8 @@ def scrape_all_nominatim_category_pages(url=NOMINATIM_SPECIAL_PHRASES_URL):
             continue
 
         lang = entity.rstrip('/').rsplit('/')[-1].lower()
+        if lang in IGNORE_LANGUAGES:
+            continue
 
         link = WIKI_BASE_URL + entity.replace(' ', '_')
 
@@ -106,15 +114,20 @@ def main(url=NOMINATIM_SPECIAL_PHRASES_URL, output_dir=DEFAULT_CATEGORIES_DIR):
         with open(filename, 'w') as f:
             phrase_data = [
                 {
-                    'phrase': phrase,
-                    'key': key,
-                    'value': value,
-                    'is_plural': is_plural
+                    # For sorting purposes, we'll remove later
+                    '0phrase': safe_decode(phrase),
+                    '1key': safe_decode(key),
+                    '2value': safe_decode(value),
+                    '3is_plural': is_plural
                 }
                 for phrase, key, value, is_plural in phrases
             ]
 
-            yaml.dump(phrase_data, f, allow_unicode=True, default_flow_style=False)
+            yaml_data = yaml.safe_dump(phrase_data, allow_unicode=True, default_flow_style=False)
+
+            yaml_data = yaml_data.replace('0phrase:', 'phrase:').replace('1key:', 'key:').replace('2value:', 'value:').replace('3is_plural:', 'is_plural:')
+
+            f.write(yaml_data)
 
     print('Done')
 
