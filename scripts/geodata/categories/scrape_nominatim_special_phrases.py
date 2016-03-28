@@ -23,6 +23,7 @@ import requests
 import six
 import sys
 import time
+import yaml
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
@@ -102,11 +103,19 @@ def scrape_all_nominatim_category_pages(url=NOMINATIM_SPECIAL_PHRASES_URL):
 def main(url=NOMINATIM_SPECIAL_PHRASES_URL, output_dir=DEFAULT_CATEGORIES_DIR):
     languages = scrape_all_nominatim_category_pages(url=url)
     for lang, phrases in six.iteritems(languages):
-        filename = os.path.join(output_dir, '{}.csv'.format(lang.lower()))
+        filename = os.path.join(output_dir, '{}.yml'.format(lang.lower()))
         with open(filename, 'w') as f:
-            writer = csv.writer(f)
-            for phrase, key, value, is_plural in phrases:
-                writer.writerow((safe_encode(phrase), key, value, str(int(is_plural))))
+            phrase_data = [
+                {
+                    'phrase': phrase,
+                    'key': key,
+                    'value': value,
+                    'is_plural': is_plural
+                }
+                for phrase, key, value, is_plural in phrases
+            ]
+
+            yaml.dump(phrase_data, f, allow_unicode=True, default_flow_style=False)
 
     print('Done')
 
