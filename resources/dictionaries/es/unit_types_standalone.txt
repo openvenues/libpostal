@@ -1,2 +1,4 @@
-cobertizo|cbtiz
-trasera|tras
+ático|át|atico|at
+ático de lujo|át de lujo|atico de lujo|at de lujo|ático lujo|át lujo|atico lujo|at lujo
+cobertizo|cbtizfrente|fren
+trasera|trs|tras
