@@ -1,0 +1,2612 @@
+- phrase: lotnisko
+  key: aeroway
+  value: aerodrome
+  is_plural: false
+- phrase: lotniska
+  key: aeroway
+  value: aerodrome
+  is_plural: true
+- phrase: bankomat
+  key: amenity
+  value: atm
+  is_plural: false
+- phrase: bankomaty
+  key: amenity
+  value: atm
+  is_plural: true
+- phrase: bank
+  key: amenity
+  value: bank
+  is_plural: false
+- phrase: banki
+  key: amenity
+  value: bank
+  is_plural: true
+- phrase: bar
+  key: amenity
+  value: fast_food
+  is_plural: false
+- phrase: bary
+  key: amenity
+  value: fast_food
+  is_plural: true
+- phrase: parking rowerowy
+  key: amenity
+  value: bicycle_parking
+  is_plural: false
+- phrase: parkingi rowerowe
+  key: amenity
+  value: bicycle_parking
+  is_plural: true
+- phrase: wypożyczalnia rowerów
+  key: amenity
+  value: bicycle_rental
+  is_plural: false
+- phrase: wypożyczalnie rowerów
+  key: amenity
+  value: bicycle_rental
+  is_plural: true
+- phrase: burdel
+  key: amenity
+  value: brothel
+  is_plural: false
+- phrase: burdele
+  key: amenity
+  value: brothel
+  is_plural: true
+- phrase: kantor
+  key: amenity
+  value: bureau_de_change
+  is_plural: false
+- phrase: kantory
+  key: amenity
+  value: bureau_de_change
+  is_plural: true
+- phrase: dworzec autobusowy
+  key: amenity
+  value: bus_station
+  is_plural: false
+- phrase: dworce autobusowe
+  key: amenity
+  value: bus_station
+  is_plural: true
+- phrase: kawiarnia
+  key: amenity
+  value: cafe
+  is_plural: false
+- phrase: kawiarnie
+  key: amenity
+  value: cafe
+  is_plural: true
+- phrase: wypożyczalnia samochodów
+  key: amenity
+  value: car_rental
+  is_plural: false
+- phrase: wypożyczalnie samochodów
+  key: amenity
+  value: car_rental
+  is_plural: true
+- phrase: myjnia samochodowa
+  key: amenity
+  value: car_wash
+  is_plural: false
+- phrase: myjnie samochodowe
+  key: amenity
+  value: car_wash
+  is_plural: true
+- phrase: kasyno
+  key: amenity
+  value: casino
+  is_plural: false
+- phrase: kasyna
+  key: amenity
+  value: casino
+  is_plural: true
+- phrase: kino
+  key: amenity
+  value: cinema
+  is_plural: false
+- phrase: kina
+  key: amenity
+  value: cinema
+  is_plural: true
+- phrase: przychodnia
+  key: amenity
+  value: doctors
+  is_plural: false
+- phrase: przychodnie
+  key: amenity
+  value: doctors
+  is_plural: true
+- phrase: klub
+  key: amenity
+  value: club
+  is_plural: false
+- phrase: klubs
+  key: amenity
+  value: club
+  is_plural: true
+- phrase: uczelnia
+  key: amenity
+  value: college
+  is_plural: false
+- phrase: uczelnias
+  key: amenity
+  value: college
+  is_plural: true
+- phrase: sąd
+  key: amenity
+  value: courthouse
+  is_plural: false
+- phrase: sąds
+  key: amenity
+  value: courthouse
+  is_plural: true
+- phrase: krematorium
+  key: amenity
+  value: crematorium
+  is_plural: false
+- phrase: krematoriums
+  key: amenity
+  value: crematorium
+  is_plural: true
+- phrase: gabinet dentystyczny
+  key: amenity
+  value: dentist
+  is_plural: false
+- phrase: gabinet dentystycznys
+  key: amenity
+  value: dentist
+  is_plural: true
+- phrase: bursa
+  key: amenity
+  value: dormitory
+  is_plural: false
+- phrase: bursas
+  key: amenity
+  value: dormitory
+  is_plural: true
+- phrase: źródło wody pitnej
+  key: amenity
+  value: drinking_water
+  is_plural: false
+- phrase: źródło wody pitnejs
+  key: amenity
+  value: drinking_water
+  is_plural: true
+- phrase: nauka jazdy
+  key: amenity
+  value: driving_school
+  is_plural: false
+- phrase: nauka jazdys
+  key: amenity
+  value: driving_school
+  is_plural: true
+- phrase: ambasada
+  key: amenity
+  value: embassy
+  is_plural: false
+- phrase: ambasadas
+  key: amenity
+  value: embassy
+  is_plural: true
+- phrase: telefon alarmowy
+  key: emergency
+  value: phone
+  is_plural: false
+- phrase: telefon alarmowys
+  key: amenity
+  value: emergency_phone
+  is_plural: true
+- phrase: fast food
+  key: amenity
+  value: fast_food
+  is_plural: false
+- phrase: fast foods
+  key: amenity
+  value: fast_food
+  is_plural: true
+- phrase: terminal promowy
+  key: amenity
+  value: ferry_terminal
+  is_plural: false
+- phrase: terminal promowys
+  key: amenity
+  value: ferry_terminal
+  is_plural: true
+- phrase: hydrant
+  key: amenity
+  value: fire_hydrant
+  is_plural: false
+- phrase: hydrants
+  key: amenity
+  value: fire_hydrant
+  is_plural: true
+- phrase: remiza strażacka
+  key: amenity
+  value: fire_station
+  is_plural: false
+- phrase: remiza strażackas
+  key: amenity
+  value: fire_station
+  is_plural: true
+- phrase: fontanna
+  key: amenity
+  value: fountain
+  is_plural: false
+- phrase: fontannas
+  key: amenity
+  value: fountain
+  is_plural: true
+- phrase: stacja benzynowa
+  key: amenity
+  value: fuel
+  is_plural: false
+- phrase: stacja benzynowas
+  key: amenity
+  value: fuel
+  is_plural: true
+- phrase: centrum fitness / sala gimnastyczna
+  key: amenity
+  value: gym
+  is_plural: false
+- phrase: centrum fitness / sala gimnastycznas
+  key: amenity
+  value: gym
+  is_plural: true
+- phrase: szpital
+  key: amenity
+  value: hospital
+  is_plural: false
+- phrase: szpitale
+  key: amenity
+  value: hospital
+  is_plural: true
+- phrase: hotel
+  key: amenity
+  value: hotel
+  is_plural: false
+- phrase: hotele
+  key: amenity
+  value: hotel
+  is_plural: true
+- phrase: lodziarnia
+  key: amenity
+  value: ice_cream
+  is_plural: false
+- phrase: lodziarnias
+  key: amenity
+  value: ice_cream
+  is_plural: true
+- phrase: przedszkole
+  key: amenity
+  value: kindergarten
+  is_plural: false
+- phrase: przedszkola
+  key: amenity
+  value: kindergarten
+  is_plural: true
+- phrase: biblioteka
+  key: amenity
+  value: library
+  is_plural: false
+- phrase: bibliotekas
+  key: amenity
+  value: library
+  is_plural: true
+- phrase: targowisko
+  key: amenity
+  value: marketplace
+  is_plural: false
+- phrase: targowiska
+  key: amenity
+  value: marketplace
+  is_plural: true
+- phrase: klub nocny
+  key: amenity
+  value: nightclub
+  is_plural: false
+- phrase: klub nocnys
+  key: amenity
+  value: nightclub
+  is_plural: true
+- phrase: żłobek
+  key: amenity
+  value: nursery
+  is_plural: false
+- phrase: żłobeks
+  key: amenity
+  value: nursery
+  is_plural: true
+- phrase: dom opieki
+  key: amenity
+  value: nursing_home
+  is_plural: false
+- phrase: dom opiekis
+  key: amenity
+  value: nursing_home
+  is_plural: true
+- phrase: biuro
+  key: amenity
+  value: office
+  is_plural: false
+- phrase: biuros
+  key: amenity
+  value: office
+  is_plural: true
+- phrase: park
+  key: amenity
+  value: park
+  is_plural: false
+- phrase: parks
+  key: amenity
+  value: park
+  is_plural: true
+- phrase: parking
+  key: amenity
+  value: parking
+  is_plural: false
+- phrase: parkings
+  key: amenity
+  value: parking
+  is_plural: true
+- phrase: apteka
+  key: amenity
+  value: pharmacy
+  is_plural: false
+- phrase: aptekas
+  key: amenity
+  value: pharmacy
+  is_plural: true
+- phrase: miejsce kultu
+  key: amenity
+  value: place_of_worship
+  is_plural: false
+- phrase: miejsce kultus
+  key: amenity
+  value: place_of_worship
+  is_plural: true
+- phrase: posterunek policji
+  key: amenity
+  value: police
+  is_plural: false
+- phrase: posterunek policjis
+  key: amenity
+  value: police
+  is_plural: true
+- phrase: skrzynka pocztowa
+  key: amenity
+  value: post_box
+  is_plural: false
+- phrase: skrzynka pocztowas
+  key: amenity
+  value: post_box
+  is_plural: true
+- phrase: poczta
+  key: amenity
+  value: post_office
+  is_plural: false
+- phrase: pocztas
+  key: amenity
+  value: post_office
+  is_plural: true
+- phrase: więzienie
+  key: amenity
+  value: prison
+  is_plural: false
+- phrase: więzienies
+  key: amenity
+  value: prison
+  is_plural: true
+- phrase: pub
+  key: amenity
+  value: pub
+  is_plural: false
+- phrase: pubs
+  key: amenity
+  value: pub
+  is_plural: true
+- phrase: miejsce recyklingu
+  key: amenity
+  value: recycling
+  is_plural: false
+- phrase: miejsce recyklingus
+  key: amenity
+  value: recycling
+  is_plural: true
+- phrase: restauracja
+  key: amenity
+  value: restaurant
+  is_plural: false
+- phrase: restauracje
+  key: amenity
+  value: restaurant
+  is_plural: true
+- phrase: dom starców
+  key: amenity
+  value: retirement_home
+  is_plural: false
+- phrase: dom starcóws
+  key: amenity
+  value: retirement_home
+  is_plural: true
+- phrase: sauna
+  key: amenity
+  value: sauna
+  is_plural: false
+- phrase: saunas
+  key: amenity
+  value: sauna
+  is_plural: true
+- phrase: szkoła
+  key: amenity
+  value: school
+  is_plural: false
+- phrase: szkołas
+  key: amenity
+  value: school
+  is_plural: true
+- phrase: schron
+  key: amenity
+  value: shelter
+  is_plural: false
+- phrase: schrons
+  key: amenity
+  value: shelter
+  is_plural: true
+- phrase: supermarket
+  key: amenity
+  value: supermarket
+  is_plural: false
+- phrase: supermarkety
+  key: amenity
+  value: supermarket
+  is_plural: true
+- phrase: postój taksówek
+  key: amenity
+  value: taxi
+  is_plural: false
+- phrase: postój taksóweks
+  key: amenity
+  value: taxi
+  is_plural: true
+- phrase: budka telefoniczna
+  key: amenity
+  value: telephone
+  is_plural: false
+- phrase: budka telefonicznas
+  key: amenity
+  value: telephone
+  is_plural: true
+- phrase: teatr
+  key: amenity
+  value: theatre
+  is_plural: false
+- phrase: teatrs
+  key: amenity
+  value: theatre
+  is_plural: true
+- phrase: toaleta publiczna
+  key: amenity
+  value: toilets
+  is_plural: false
+- phrase: toaleta publicznas
+  key: amenity
+  value: toilets
+  is_plural: true
+- phrase: urząd miejski
+  key: amenity
+  value: townhall
+  is_plural: false
+- phrase: urząd miejskis
+  key: amenity
+  value: townhall
+  is_plural: true
+- phrase: uniwersytet
+  key: amenity
+  value: university
+  is_plural: false
+- phrase: uniwersytets
+  key: amenity
+  value: university
+  is_plural: true
+- phrase: weterynarz
+  key: amenity
+  value: veterinary
+  is_plural: false
+- phrase: weterynarze
+  key: amenity
+  value: veterinary
+  is_plural: true
+- phrase: urząd gminy
+  key: amenity
+  value: townhall
+  is_plural: false
+- phrase: urząd gminys
+  key: amenity
+  value: village_hall
+  is_plural: true
+- phrase: wifi
+  key: internet_access
+  value: wlan
+  is_plural: false
+- phrase: wifi
+  key: internet_access
+  value: wlan
+  is_plural: true
+- phrase: blok mieszkalny
+  key: building
+  value: apartments
+  is_plural: false
+- phrase: blok mieszkalnys
+  key: building
+  value: apartments
+  is_plural: true
+- phrase: budynek bloku
+  key: building
+  value: block
+  is_plural: false
+- phrase: budynek blokus
+  key: building
+  value: block
+  is_plural: true
+- phrase: bunkier
+  key: building
+  value: bunker
+  is_plural: false
+- phrase: bunkiers
+  key: building
+  value: bunker
+  is_plural: true
+- phrase: kaplica
+  key: building
+  value: chapel
+  is_plural: false
+- phrase: kaplicas
+  key: building
+  value: chapel
+  is_plural: true
+- phrase: kościół
+  key: building
+  value: church
+  is_plural: false
+- phrase: kościoły
+  key: building
+  value: church
+  is_plural: true
+- phrase: ratusz
+  key: building
+  value: city_hall
+  is_plural: false
+- phrase: ratusze
+  key: building
+  value: city_hall
+  is_plural: true
+- phrase: budynek handlowy
+  key: building
+  value: commercial
+  is_plural: false
+- phrase: budynki handlowe
+  key: building
+  value: commercial
+  is_plural: true
+- phrase: bursa
+  key: building
+  value: dormitory
+  is_plural: false
+- phrase: bursas
+  key: building
+  value: dormitory
+  is_plural: true
+- phrase: wejście do budynku
+  key: building
+  value: entrance
+  is_plural: false
+- phrase: wejście do budynkus
+  key: building
+  value: entrance
+  is_plural: true
+- phrase: budynek prawny
+  key: building
+  value: faculty
+  is_plural: false
+- phrase: budynek prawnys
+  key: building
+  value: faculty
+  is_plural: true
+- phrase: budynek gospodarczy
+  key: building
+  value: farm
+  is_plural: false
+- phrase: budynek gospodarczys
+  key: building
+  value: farm
+  is_plural: true
+- phrase: mieszkania
+  key: building
+  value: flats
+  is_plural: false
+- phrase: mieszkanias
+  key: building
+  value: flats
+  is_plural: true
+- phrase: garaż
+  key: building
+  value: garage
+  is_plural: false
+- phrase: garaże
+  key: building
+  value: garage
+  is_plural: true
+- phrase: hala
+  key: building
+  value: hall
+  is_plural: false
+- phrase: halas
+  key: building
+  value: hall
+  is_plural: true
+- phrase: budynek szpitala
+  key: building
+  value: hospital
+  is_plural: false
+- phrase: budynek szpitalas
+  key: building
+  value: hospital
+  is_plural: true
+- phrase: hotel
+  key: building
+  value: hotel
+  is_plural: false
+- phrase: hotels
+  key: building
+  value: hotel
+  is_plural: true
+- phrase: dom
+  key: building
+  value: house
+  is_plural: false
+- phrase: doms
+  key: building
+  value: house
+  is_plural: true
+- phrase: budynek przemysłowy
+  key: building
+  value: industrial
+  is_plural: false
+- phrase: budynek przemysłowys
+  key: building
+  value: industrial
+  is_plural: true
+- phrase: budynek biurowy
+  key: building
+  value: office
+  is_plural: false
+- phrase: budynek biurowys
+  key: building
+  value: office
+  is_plural: true
+- phrase: budynek publiczny
+  key: building
+  value: public
+  is_plural: false
+- phrase: budynek publicznys
+  key: building
+  value: public
+  is_plural: true
+- phrase: budynek mieszkalny
+  key: building
+  value: residential
+  is_plural: false
+- phrase: budynek mieszkalnys
+  key: building
+  value: residential
+  is_plural: true
+- phrase: budynek detaliczny
+  key: building
+  value: retail
+  is_plural: false
+- phrase: budynek detalicznys
+  key: building
+  value: retail
+  is_plural: true
+- phrase: budynek szkoły
+  key: building
+  value: school
+  is_plural: false
+- phrase: budynek szkołys
+  key: building
+  value: school
+  is_plural: true
+- phrase: stadion
+  key: building
+  value: stadium
+  is_plural: false
+- phrase: stadions
+  key: building
+  value: stadium
+  is_plural: true
+- phrase: wieża
+  key: building
+  value: tower
+  is_plural: false
+- phrase: wieżas
+  key: building
+  value: tower
+  is_plural: true
+- phrase: stacja kolejowa
+  key: building
+  value: train_station
+  is_plural: false
+- phrase: stacja kolejowas
+  key: building
+  value: train_station
+  is_plural: true
+- phrase: budynek uniwersytetu
+  key: building
+  value: university
+  is_plural: false
+- phrase: budynek uniwersytetus
+  key: building
+  value: university
+  is_plural: true
+- phrase: przystanek autobusowy
+  key: highway
+  value: bus_stop
+  is_plural: false
+- phrase: przystanek autobusowys
+  key: highway
+  value: bus_stop
+  is_plural: true
+- phrase: droga w budowie
+  key: highway
+  value: construction
+  is_plural: false
+- phrase: drogi w budowie
+  key: highway
+  value: construction
+  is_plural: true
+- phrase: droga rowerowa
+  key: highway
+  value: cycleway
+  is_plural: false
+- phrase: drogi rowerowe
+  key: highway
+  value: cycleway
+  is_plural: true
+- phrase: bród
+  key: highway
+  value: ford
+  is_plural: false
+- phrase: bróds
+  key: highway
+  value: ford
+  is_plural: true
+- phrase: strefa zamieszkania
+  key: highway
+  value: living_street
+  is_plural: false
+- phrase: strefa zamieszkanias
+  key: highway
+  value: living_street
+  is_plural: true
+- phrase: autostrada
+  key: highway
+  value: motorway
+  is_plural: false
+- phrase: autostrady
+  key: highway
+  value: motorway
+  is_plural: true
+- phrase: skrzyżowanie autostrad
+  key: highway
+  value: motorway_junction
+  is_plural: false
+- phrase: skrzyżowanie autostrads
+  key: highway
+  value: motorway_junction
+  is_plural: true
+- phrase: ścieżka
+  key: highway
+  value: path
+  is_plural: false
+- phrase: ścieżki
+  key: highway
+  value: path
+  is_plural: true
+- phrase: deptak
+  key: highway
+  value: pedestrian
+  is_plural: false
+- phrase: deptaki
+  key: highway
+  value: pedestrian
+  is_plural: true
+- phrase: droga krajowa
+  key: highway
+  value: primary
+  is_plural: false
+- phrase: droga krajowas
+  key: highway
+  value: primary
+  is_plural: true
+- phrase: tor wyścigowy
+  key: highway
+  value: raceway
+  is_plural: false
+- phrase: tor wyścigowys
+  key: highway
+  value: raceway
+  is_plural: true
+- phrase: droga wojewódzka
+  key: highway
+  value: secondary
+  is_plural: false
+- phrase: droga wojewódzkas
+  key: highway
+  value: secondary
+  is_plural: true
+- phrase: droga powiatowa
+  key: highway
+  value: tertiary
+  is_plural: false
+- phrase: droga powiatowas
+  key: highway
+  value: tertiary
+  is_plural: true
+- phrase: droga ekspresowa
+  key: highway
+  value: trunk
+  is_plural: false
+- phrase: droga ekspresowas
+  key: highway
+  value: trunk
+  is_plural: true
+- phrase: droga ekspresowa - dojazd
+  key: highway
+  value: trunk_link
+  is_plural: false
+- phrase: droga ekspresowa - dojazds
+  key: highway
+  value: trunk_link
+  is_plural: true
+- phrase: kamień graniczny
+  key: historic
+  value: boundary_stone
+  is_plural: false
+- phrase: kamienie graniczne
+  key: historic
+  value: boundary_stone
+  is_plural: true
+- phrase: zamek
+  key: historic
+  value: castle
+  is_plural: false
+- phrase: zameki
+  key: historic
+  value: castle
+  is_plural: true
+- phrase: dwór
+  key: historic
+  value: manor
+  is_plural: false
+- phrase: dwory
+  key: historic
+  value: manor
+  is_plural: true
+- phrase: pomnik
+  key: historic
+  value: memorial
+  is_plural: false
+- phrase: pomniki
+  key: historic
+  value: memorial
+  is_plural: true
+- phrase: kopalnia
+  key: historic
+  value: mine
+  is_plural: false
+- phrase: kopalnias
+  key: historic
+  value: mine
+  is_plural: true
+- phrase: pomnik
+  key: historic
+  value: monument
+  is_plural: false
+- phrase: pomniki
+  key: historic
+  value: monument
+  is_plural: true
+- phrase: muzeum
+  key: historic
+  value: museum
+  is_plural: false
+- phrase: muzeums
+  key: historic
+  value: museum
+  is_plural: true
+- phrase: ruiny
+  key: historic
+  value: ruins
+  is_plural: false
+- phrase: ruinys
+  key: historic
+  value: ruins
+  is_plural: true
+- phrase: wieża
+  key: historic
+  value: tower
+  is_plural: false
+- phrase: wieżas
+  key: historic
+  value: tower
+  is_plural: true
+- phrase: wrak
+  key: historic
+  value: wreck
+  is_plural: false
+- phrase: wraks
+  key: historic
+  value: wreck
+  is_plural: true
+- phrase: ogródki działkowe
+  key: landuse
+  value: allotments
+  is_plural: false
+- phrase: ogródki działkowe
+  key: landuse
+  value: allotments
+  is_plural: true
+- phrase: cmentarz
+  key: landuse
+  value: cemetery
+  is_plural: false
+- phrase: cmentarzs
+  key: landuse
+  value: cemetery
+  is_plural: true
+- phrase: teren budowy
+  key: landuse
+  value: construction
+  is_plural: false
+- phrase: tereny budów
+  key: landuse
+  value: construction
+  is_plural: true
+- phrase: farma
+  key: landuse
+  value: farm
+  is_plural: false
+- phrase: farmas
+  key: landuse
+  value: farm
+  is_plural: true
+- phrase: podwórze gospodarskie
+  key: landuse
+  value: farmyard
+  is_plural: false
+- phrase: podwórze gospodarskies
+  key: landuse
+  value: farmyard
+  is_plural: true
+- phrase: las
+  key: landuse
+  value: forest
+  is_plural: false
+- phrase: lass
+  key: landuse
+  value: forest
+  is_plural: true
+- phrase: tereny niezagospodarowane
+  key: landuse
+  value: greenfield
+  is_plural: false
+- phrase: tereny niezagospodarowanes
+  key: landuse
+  value: greenfield
+  is_plural: true
+- phrase: teren przemysłowy
+  key: landuse
+  value: industrial
+  is_plural: false
+- phrase: teren przemysłowys
+  key: landuse
+  value: industrial
+  is_plural: true
+- phrase: wysypisko śmieci
+  key: landuse
+  value: landfill
+  is_plural: false
+- phrase: wysypisko śmiecis
+  key: landuse
+  value: landfill
+  is_plural: true
+- phrase: łąka
+  key: landuse
+  value: meadow
+  is_plural: false
+- phrase: łąkas
+  key: landuse
+  value: meadow
+  is_plural: true
+- phrase: teren wojskowy
+  key: landuse
+  value: military
+  is_plural: false
+- phrase: teren wojskowys
+  key: landuse
+  value: military
+  is_plural: true
+- phrase: kopalnia
+  key: landuse
+  value: mine
+  is_plural: false
+- phrase: kopalnias
+  key: landuse
+  value: mine
+  is_plural: true
+- phrase: rezerwat przyrody
+  key: landuse
+  value: nature_reserve
+  is_plural: false
+- phrase: rezerwat przyrodys
+  key: landuse
+  value: nature_reserve
+  is_plural: true
+- phrase: park
+  key: landuse
+  value: park
+  is_plural: false
+- phrase: parki
+  key: landuse
+  value: park
+  is_plural: true
+- phrase: kamieniołom
+  key: landuse
+  value: quarry
+  is_plural: false
+- phrase: kamieniołomy
+  key: landuse
+  value: quarry
+  is_plural: true
+- phrase: winnica
+  key: landuse
+  value: vineyard
+  is_plural: false
+- phrase: winnice
+  key: landuse
+  value: vineyard
+  is_plural: true
+- phrase: tereny podmokłe
+  key: landuse
+  value: wetland
+  is_plural: false
+- phrase: tereny podmokłe
+  key: landuse
+  value: wetland
+  is_plural: true
+- phrase: łowisko
+  key: leisure
+  value: fishing
+  is_plural: false
+- phrase: łowiska
+  key: leisure
+  value: fishing
+  is_plural: true
+- phrase: ogród
+  key: leisure
+  value: garden
+  is_plural: false
+- phrase: ogróds
+  key: leisure
+  value: garden
+  is_plural: true
+- phrase: pole golfowe
+  key: leisure
+  value: golf_course
+  is_plural: false
+- phrase: pole golfowes
+  key: leisure
+  value: golf_course
+  is_plural: true
+- phrase: lodowisko
+  key: leisure
+  value: ice_rink
+  is_plural: false
+- phrase: lodowiskos
+  key: leisure
+  value: ice_rink
+  is_plural: true
+- phrase: marina
+  key: leisure
+  value: marina
+  is_plural: false
+- phrase: marinas
+  key: leisure
+  value: marina
+  is_plural: true
+- phrase: park
+  key: leisure
+  value: park
+  is_plural: false
+- phrase: parks
+  key: leisure
+  value: park
+  is_plural: true
+- phrase: boisko sportowe
+  key: leisure
+  value: pitch
+  is_plural: false
+- phrase: boisko sportowes
+  key: leisure
+  value: pitch
+  is_plural: true
+- phrase: plac zabaw
+  key: leisure
+  value: playground
+  is_plural: false
+- phrase: plac zabaws
+  key: leisure
+  value: playground
+  is_plural: true
+- phrase: pochylnia
+  key: leisure
+  value: slipway
+  is_plural: false
+- phrase: pochylnias
+  key: leisure
+  value: slipway
+  is_plural: true
+- phrase: stadion
+  key: leisure
+  value: stadium
+  is_plural: false
+- phrase: stadions
+  key: leisure
+  value: stadium
+  is_plural: true
+- phrase: basen
+  key: leisure
+  value: swimming_pool
+  is_plural: false
+- phrase: basens
+  key: leisure
+  value: swimming_pool
+  is_plural: true
+- phrase: bieżnia
+  key: leisure
+  value: track
+  is_plural: false
+- phrase: bieżnias
+  key: leisure
+  value: track
+  is_plural: true
+- phrase: park wodny
+  key: leisure
+  value: water_park
+  is_plural: false
+- phrase: park wodnys
+  key: leisure
+  value: water_park
+  is_plural: true
+- phrase: zatoka
+  key: natural
+  value: bay
+  is_plural: false
+- phrase: zatokas
+  key: natural
+  value: bay
+  is_plural: true
+- phrase: plaża
+  key: natural
+  value: beach
+  is_plural: false
+- phrase: plażas
+  key: natural
+  value: beach
+  is_plural: true
+- phrase: przylądek
+  key: natural
+  value: cape
+  is_plural: false
+- phrase: przylądeks
+  key: natural
+  value: cape
+  is_plural: true
+- phrase: wejście do jaskini
+  key: natural
+  value: cave_entrance
+  is_plural: false
+- phrase: wejście do jaskinis
+  key: natural
+  value: cave_entrance
+  is_plural: true
+- phrase: urwisko
+  key: natural
+  value: cliff
+  is_plural: false
+- phrase: urwiskos
+  key: natural
+  value: cliff
+  is_plural: true
+- phrase: krater
+  key: natural
+  value: crater
+  is_plural: false
+- phrase: kraters
+  key: natural
+  value: crater
+  is_plural: true
+- phrase: hale górskie
+  key: natural
+  value: fell
+  is_plural: false
+- phrase: hale górskies
+  key: natural
+  value: fell
+  is_plural: true
+- phrase: fiord
+  key: natural
+  value: fjord
+  is_plural: false
+- phrase: fiords
+  key: natural
+  value: fjord
+  is_plural: true
+- phrase: gejzer
+  key: natural
+  value: geyser
+  is_plural: false
+- phrase: gejzers
+  key: natural
+  value: geyser
+  is_plural: true
+- phrase: lodowiec
+  key: natural
+  value: glacier
+  is_plural: false
+- phrase: lodowiecs
+  key: natural
+  value: glacier
+  is_plural: true
+- phrase: wrzosowisko
+  key: natural
+  value: heath
+  is_plural: false
+- phrase: wrzosowiskos
+  key: natural
+  value: heath
+  is_plural: true
+- phrase: wyspa
+  key: natural
+  value: island
+  is_plural: false
+- phrase: wyspas
+  key: natural
+  value: island
+  is_plural: true
+- phrase: bagno
+  key: natural
+  value: marsh
+  is_plural: false
+- phrase: bagnos
+  key: natural
+  value: marsh
+  is_plural: true
+- phrase: torfowisko
+  key: natural
+  value: moor
+  is_plural: false
+- phrase: torfowiskos
+  key: natural
+  value: moor
+  is_plural: true
+- phrase: szczyt
+  key: natural
+  value: peak
+  is_plural: false
+- phrase: szczyts
+  key: natural
+  value: peak
+  is_plural: true
+- phrase: rafa
+  key: natural
+  value: reef
+  is_plural: false
+- phrase: rafas
+  key: natural
+  value: reef
+  is_plural: true
+- phrase: grzbiet
+  key: natural
+  value: ridge
+  is_plural: false
+- phrase: grzbiets
+  key: natural
+  value: ridge
+  is_plural: true
+- phrase: rzeka
+  key: natural
+  value: river
+  is_plural: false
+- phrase: rzekas
+  key: natural
+  value: river
+  is_plural: true
+- phrase: skała
+  key: natural
+  value: rock
+  is_plural: false
+- phrase: skałas
+  key: natural
+  value: rock
+  is_plural: true
+- phrase: zsypisko
+  key: natural
+  value: scree
+  is_plural: false
+- phrase: zsypiskos
+  key: natural
+  value: scree
+  is_plural: true
+- phrase: mielizna
+  key: natural
+  value: shoal
+  is_plural: false
+- phrase: mieliznas
+  key: natural
+  value: shoal
+  is_plural: true
+- phrase: źródło
+  key: natural
+  value: spring
+  is_plural: false
+- phrase: źródłos
+  key: natural
+  value: spring
+  is_plural: true
+- phrase: cieśnina
+  key: natural
+  value: strait
+  is_plural: false
+- phrase: cieśninas
+  key: natural
+  value: strait
+  is_plural: true
+- phrase: drzewo
+  key: natural
+  value: tree
+  is_plural: false
+- phrase: drzewos
+  key: natural
+  value: tree
+  is_plural: true
+- phrase: dolina
+  key: natural
+  value: valley
+  is_plural: false
+- phrase: dolinas
+  key: natural
+  value: valley
+  is_plural: true
+- phrase: wulkan
+  key: natural
+  value: volcano
+  is_plural: false
+- phrase: wulkans
+  key: natural
+  value: volcano
+  is_plural: true
+- phrase: puszcza
+  key: natural
+  value: wood
+  is_plural: false
+- phrase: puszczas
+  key: natural
+  value: wood
+  is_plural: true
+- phrase: miasto
+  key: place
+  value: city
+  is_plural: false
+- phrase: miastos
+  key: place
+  value: city
+  is_plural: true
+- phrase: kraj
+  key: place
+  value: country
+  is_plural: false
+- phrase: krajs
+  key: place
+  value: country
+  is_plural: true
+- phrase: powiat
+  key: place
+  value: county
+  is_plural: false
+- phrase: powiats
+  key: place
+  value: county
+  is_plural: true
+- phrase: farma
+  key: place
+  value: farm
+  is_plural: false
+- phrase: farmas
+  key: place
+  value: farm
+  is_plural: true
+- phrase: osada
+  key: place
+  value: hamlet
+  is_plural: false
+- phrase: osadas
+  key: place
+  value: hamlet
+  is_plural: true
+- phrase: dom
+  key: place
+  value: house
+  is_plural: false
+- phrase: doms
+  key: place
+  value: house
+  is_plural: true
+- phrase: zabudowanie
+  key: place
+  value: houses
+  is_plural: false
+- phrase: zabudowanies
+  key: place
+  value: houses
+  is_plural: true
+- phrase: wyspa
+  key: place
+  value: island
+  is_plural: false
+- phrase: wyspas
+  key: place
+  value: island
+  is_plural: true
+- phrase: wysepka
+  key: place
+  value: islet
+  is_plural: false
+- phrase: wysepkas
+  key: place
+  value: islet
+  is_plural: true
+- phrase: rejon
+  key: place
+  value: locality
+  is_plural: false
+- phrase: rejons
+  key: place
+  value: locality
+  is_plural: true
+- phrase: torfowisko
+  key: place
+  value: moor
+  is_plural: false
+- phrase: torfowiskos
+  key: place
+  value: moor
+  is_plural: true
+- phrase: gmina
+  key: place
+  value: municipality
+  is_plural: false
+- phrase: gminas
+  key: place
+  value: municipality
+  is_plural: true
+- phrase: kod pocztowy
+  key: place
+  value: postcode
+  is_plural: false
+- phrase: kod pocztowys
+  key: place
+  value: postcode
+  is_plural: true
+- phrase: rejon
+  key: place
+  value: region
+  is_plural: false
+- phrase: rejons
+  key: place
+  value: region
+  is_plural: true
+- phrase: morze
+  key: place
+  value: sea
+  is_plural: false
+- phrase: morzes
+  key: place
+  value: sea
+  is_plural: true
+- phrase: stan
+  key: place
+  value: state
+  is_plural: false
+- phrase: stans
+  key: place
+  value: state
+  is_plural: true
+- phrase: dzielnica
+  key: place
+  value: subdivision
+  is_plural: false
+- phrase: dzielnicas
+  key: place
+  value: subdivision
+  is_plural: true
+- phrase: osiedle
+  key: place
+  value: suburb
+  is_plural: false
+- phrase: osiedles
+  key: place
+  value: suburb
+  is_plural: true
+- phrase: miasteczko
+  key: place
+  value: town
+  is_plural: false
+- phrase: miasteczkos
+  key: place
+  value: town
+  is_plural: true
+- phrase: obszar bez osobowości prawnej
+  key: place
+  value: unincorporated_area
+  is_plural: false
+- phrase: obszar bez osobowości prawnejs
+  key: place
+  value: unincorporated_area
+  is_plural: true
+- phrase: wieś
+  key: place
+  value: village
+  is_plural: false
+- phrase: wieśs
+  key: place
+  value: village
+  is_plural: true
+- phrase: dawna linia kolejowa
+  key: railway
+  value: abandoned
+  is_plural: false
+- phrase: dawna linia kolejowas
+  key: railway
+  value: abandoned
+  is_plural: true
+- phrase: budowana linia kolejowa
+  key: railway
+  value: construction
+  is_plural: false
+- phrase: budowana linia kolejowas
+  key: railway
+  value: construction
+  is_plural: true
+- phrase: nieczynna trasa kolejowa
+  key: railway
+  value: disused
+  is_plural: false
+- phrase: nieczynna trasa kolejowas
+  key: railway
+  value: disused
+  is_plural: true
+- phrase: nieużywana stacja kolejowa
+  key: railway
+  value: disused_station
+  is_plural: false
+- phrase: nieużywana stacja kolejowas
+  key: railway
+  value: disused_station
+  is_plural: true
+- phrase: kolejka linowa
+  key: railway
+  value: funicular
+  is_plural: false
+- phrase: kolejka linowas
+  key: railway
+  value: funicular
+  is_plural: true
+- phrase: przystanek kolejowy
+  key: railway
+  value: halt
+  is_plural: false
+- phrase: przystanek kolejowys
+  key: railway
+  value: halt
+  is_plural: true
+- phrase: historyczna stacja kolejowa
+  key: railway
+  value: historic_station
+  is_plural: false
+- phrase: historyczna stacja kolejowas
+  key: railway
+  value: historic_station
+  is_plural: true
+- phrase: węzeł kolejowy
+  key: railway
+  value: junction
+  is_plural: false
+- phrase: węzeł kolejowys
+  key: railway
+  value: junction
+  is_plural: true
+- phrase: przejazd kolejowy
+  key: railway
+  value: level_crossing
+  is_plural: false
+- phrase: przejazd kolejowys
+  key: railway
+  value: level_crossing
+  is_plural: true
+- phrase: lekka kolej
+  key: railway
+  value: light_rail
+  is_plural: false
+- phrase: lekka kolejs
+  key: railway
+  value: light_rail
+  is_plural: true
+- phrase: kolej jednoszynowa
+  key: railway
+  value: monorail
+  is_plural: false
+- phrase: kolej jednoszynowas
+  key: railway
+  value: monorail
+  is_plural: true
+- phrase: kolej wąskotorowa
+  key: railway
+  value: narrow_gauge
+  is_plural: false
+- phrase: kolej wąskotorowas
+  key: railway
+  value: narrow_gauge
+  is_plural: true
+- phrase: peron
+  key: railway
+  value: platform
+  is_plural: false
+- phrase: perons
+  key: railway
+  value: platform
+  is_plural: true
+- phrase: kolej zabytkowa
+  key: railway
+  value: preserved
+  is_plural: false
+- phrase: kolej zabytkowas
+  key: railway
+  value: preserved
+  is_plural: true
+- phrase: bocznica kolejowa
+  key: railway
+  value: spur
+  is_plural: false
+- phrase: bocznica kolejowas
+  key: railway
+  value: spur
+  is_plural: true
+- phrase: stacja kolejowa
+  key: railway
+  value: station
+  is_plural: false
+- phrase: stacja kolejowas
+  key: railway
+  value: station
+  is_plural: true
+- phrase: stacja metra
+  key: railway
+  value: subway
+  is_plural: false
+- phrase: stacja metras
+  key: railway
+  value: subway
+  is_plural: true
+- phrase: wejście na stację metra
+  key: railway
+  value: subway_entrance
+  is_plural: false
+- phrase: wejście na stację metras
+  key: railway
+  value: subway_entrance
+  is_plural: true
+- phrase: zwrotnica
+  key: railway
+  value: switch
+  is_plural: false
+- phrase: zwrotnicas
+  key: railway
+  value: switch
+  is_plural: true
+- phrase: linia tramwajowa
+  key: railway
+  value: tram
+  is_plural: false
+- phrase: linia tramwajowas
+  key: railway
+  value: tram
+  is_plural: true
+- phrase: przystanek tramwajowy
+  key: railway
+  value: tram_stop
+  is_plural: false
+- phrase: przystanek tramwajowys
+  key: railway
+  value: tram_stop
+  is_plural: true
+- phrase: jard kolejowy
+  key: railway
+  value: yard
+  is_plural: false
+- phrase: jard kolejowys
+  key: railway
+  value: yard
+  is_plural: true
+- phrase: sklep monopolowy
+  key: shop
+  value: alcohol
+  is_plural: false
+- phrase: sklep monopolowys
+  key: shop
+  value: alcohol
+  is_plural: true
+- phrase: sklep odzieżowy
+  key: shop
+  value: apparel
+  is_plural: false
+- phrase: sklep odzieżowys
+  key: shop
+  value: apparel
+  is_plural: true
+- phrase: sklep z dziełami sztuki
+  key: shop
+  value: art
+  is_plural: false
+- phrase: sklep z dziełami sztukis
+  key: shop
+  value: art
+  is_plural: true
+- phrase: piekarnia
+  key: shop
+  value: bakery
+  is_plural: false
+- phrase: piekarnias
+  key: shop
+  value: bakery
+  is_plural: true
+- phrase: salon kosmetyczny
+  key: shop
+  value: beauty
+  is_plural: false
+- phrase: salon kosmetycznys
+  key: shop
+  value: beauty
+  is_plural: true
+- phrase: sklep z napojami
+  key: shop
+  value: beverages
+  is_plural: false
+- phrase: sklep z napojamis
+  key: shop
+  value: beverages
+  is_plural: true
+- phrase: sklep rowerowy
+  key: shop
+  value: bicycle
+  is_plural: false
+- phrase: sklep rowerowys
+  key: shop
+  value: bicycle
+  is_plural: true
+- phrase: księgarnia
+  key: shop
+  value: books
+  is_plural: false
+- phrase: księgarnias
+  key: shop
+  value: books
+  is_plural: true
+- phrase: rzeźnik
+  key: shop
+  value: butcher
+  is_plural: false
+- phrase: rzeźniks
+  key: shop
+  value: butcher
+  is_plural: true
+- phrase: sklep samochodowy
+  key: shop
+  value: car
+  is_plural: false
+- phrase: sklep samochodowys
+  key: shop
+  value: car
+  is_plural: true
+- phrase: salon samochodowy
+  key: shop
+  value: car_dealer
+  is_plural: false
+- phrase: salon samochodowys
+  key: shop
+  value: car_dealer
+  is_plural: true
+- phrase: sklep z częściami samochodowymi
+  key: shop
+  value: car_parts
+  is_plural: false
+- phrase: sklep z częściami samochodowymis
+  key: shop
+  value: car_parts
+  is_plural: true
+- phrase: naprawa samochodów
+  key: shop
+  value: car_repair
+  is_plural: false
+- phrase: naprawa samochodóws
+  key: shop
+  value: car_repair
+  is_plural: true
+- phrase: sklep z dywanami
+  key: shop
+  value: carpet
+  is_plural: false
+- phrase: sklep z dywanamis
+  key: shop
+  value: carpet
+  is_plural: true
+- phrase: sklep miłosny
+  key: shop
+  value: charity
+  is_plural: false
+- phrase: sklep miłosnys
+  key: shop
+  value: charity
+  is_plural: true
+- phrase: drogeria
+  key: shop
+  value: chemist
+  is_plural: false
+- phrase: drogerias
+  key: shop
+  value: chemist
+  is_plural: true
+- phrase: sklep odzieżowy
+  key: shop
+  value: clothes
+  is_plural: false
+- phrase: sklep odzieżowys
+  key: shop
+  value: clothes
+  is_plural: true
+- phrase: sklep komputerowy
+  key: shop
+  value: computer
+  is_plural: false
+- phrase: sklep komputerowys
+  key: shop
+  value: computer
+  is_plural: true
+- phrase: cukiernia
+  key: shop
+  value: confectionery
+  is_plural: false
+- phrase: cukiernias
+  key: shop
+  value: confectionery
+  is_plural: true
+- phrase: spożywczy
+  key: shop
+  value: convenience
+  is_plural: false
+- phrase: spożywcze
+  key: shop
+  value: convenience
+  is_plural: true
+- phrase: ksero
+  key: shop
+  value: copyshop
+  is_plural: false
+- phrase: ksera
+  key: shop
+  value: copyshop
+  is_plural: true
+- phrase: sklep kosmetyczny
+  key: shop
+  value: cosmetics
+  is_plural: false
+- phrase: sklep kosmetycznys
+  key: shop
+  value: cosmetics
+  is_plural: true
+- phrase: dom towarowy
+  key: shop
+  value: department_store
+  is_plural: false
+- phrase: dom towarowys
+  key: shop
+  value: department_store
+  is_plural: true
+- phrase: sklep z produktami po obniżce
+  key: shop
+  value: discount
+  is_plural: false
+- phrase: sklep z produktami po obniżces
+  key: shop
+  value: discount
+  is_plural: true
+- phrase: sklep budowlany
+  key: shop
+  value: doityourself
+  is_plural: false
+- phrase: sklep budowlanys
+  key: shop
+  value: doityourself
+  is_plural: true
+- phrase: drogeria
+  key: shop
+  value: drugstore
+  is_plural: false
+- phrase: drogerias
+  key: shop
+  value: drugstore
+  is_plural: true
+- phrase: pralnia chemiczna
+  key: shop
+  value: dry_cleaning
+  is_plural: false
+- phrase: pralnia chemicznas
+  key: shop
+  value: dry_cleaning
+  is_plural: true
+- phrase: sklep elektroniczny
+  key: shop
+  value: electronics
+  is_plural: false
+- phrase: sklep elektronicznys
+  key: shop
+  value: electronics
+  is_plural: true
+- phrase: biuro nieruchomości
+  key: shop
+  value: estate_agent
+  is_plural: false
+- phrase: biuro nieruchomościs
+  key: shop
+  value: estate_agent
+  is_plural: true
+- phrase: sklep gospodarski
+  key: shop
+  value: farm
+  is_plural: false
+- phrase: sklep gospodarskis
+  key: shop
+  value: farm
+  is_plural: true
+- phrase: sklep modelarski
+  key: shop
+  value: fashion
+  is_plural: false
+- phrase: sklep modelarskis
+  key: shop
+  value: fashion
+  is_plural: true
+- phrase: sklep rybny
+  key: shop
+  value: fish
+  is_plural: false
+- phrase: sklep rybnys
+  key: shop
+  value: fish
+  is_plural: true
+- phrase: kwiaciarnia
+  key: shop
+  value: florist
+  is_plural: false
+- phrase: kwiaciarnie
+  key: shop
+  value: florist
+  is_plural: true
+- phrase: zakład pogrzebowy
+  key: shop
+  value: funeral_directors
+  is_plural: false
+- phrase: zakłady pogrzebowe
+  key: shop
+  value: funeral_directors
+  is_plural: true
+- phrase: sklep meblowy
+  key: shop
+  value: furniture
+  is_plural: false
+- phrase: sklep meblowys
+  key: shop
+  value: furniture
+  is_plural: true
+- phrase: galeria
+  key: shop
+  value: gallery
+  is_plural: false
+- phrase: galerias
+  key: shop
+  value: gallery
+  is_plural: true
+- phrase: centrum ogrodnicze
+  key: shop
+  value: garden_centre
+  is_plural: false
+- phrase: centrum ogrodniczes
+  key: shop
+  value: garden_centre
+  is_plural: true
+- phrase: sklep ogólny
+  key: shop
+  value: general
+  is_plural: false
+- phrase: sklep ogólnys
+  key: shop
+  value: general
+  is_plural: true
+- phrase: sklep z pamiątkami
+  key: shop
+  value: gift
+  is_plural: false
+- phrase: sklep z pamiątkamis
+  key: shop
+  value: gift
+  is_plural: true
+- phrase: warzywniak
+  key: shop
+  value: greengrocer
+  is_plural: false
+- phrase: warzywniaki
+  key: shop
+  value: greengrocer
+  is_plural: true
+- phrase: fryzjer
+  key: shop
+  value: hairdresser
+  is_plural: false
+- phrase: fryzjerzy
+  key: shop
+  value: hairdresser
+  is_plural: true
+- phrase: sklep ze sprzętem
+  key: shop
+  value: hardware
+  is_plural: false
+- phrase: sklepy ze sprzętem
+  key: shop
+  value: hardware
+  is_plural: true
+- phrase: hi-fi
+  key: shop
+  value: hifi
+  is_plural: false
+- phrase: hi-fis
+  key: shop
+  value: hifi
+  is_plural: true
+- phrase: ubezpieczenie
+  key: office
+  value: insurance
+  is_plural: false
+- phrase: ubezpieczenia
+  key: office
+  value: insurance
+  is_plural: true
+- phrase: sklep z biżuterią
+  key: shop
+  value: jewelry
+  is_plural: false
+- phrase: sklep z biżuteriąs
+  key: shop
+  value: jewelry
+  is_plural: true
+- phrase: kiosk
+  key: shop
+  value: kiosk
+  is_plural: false
+- phrase: kiosks
+  key: shop
+  value: kiosk
+  is_plural: true
+- phrase: pralnia
+  key: shop
+  value: laundry
+  is_plural: false
+- phrase: pralnias
+  key: shop
+  value: laundry
+  is_plural: true
+- phrase: centrum handlowe
+  key: shop
+  value: mall
+  is_plural: false
+- phrase: centrum handlowes
+  key: shop
+  value: mall
+  is_plural: true
+- phrase: targowisko
+  key: amenity
+  value: marketplace
+  is_plural: false
+- phrase: targowiska
+  key: amenity
+  value: marketplace
+  is_plural: true
+- phrase: sklep z telefonami komórkowymi
+  key: shop
+  value: mobile_phone
+  is_plural: false
+- phrase: sklep z telefonami komórkowymis
+  key: shop
+  value: mobile_phone
+  is_plural: true
+- phrase: sklep z motocyklami
+  key: shop
+  value: motorcycle
+  is_plural: false
+- phrase: sklep z motocyklamis
+  key: shop
+  value: motorcycle
+  is_plural: true
+- phrase: sklep muzyczny
+  key: shop
+  value: music
+  is_plural: false
+- phrase: sklep muzycznys
+  key: shop
+  value: music
+  is_plural: true
+- phrase: kiosk
+  key: shop
+  value: newsagent
+  is_plural: false
+- phrase: kiosks
+  key: shop
+  value: newsagent
+  is_plural: true
+- phrase: optyk
+  key: shop
+  value: optician
+  is_plural: false
+- phrase: optyks
+  key: shop
+  value: optician
+  is_plural: true
+- phrase: sklep z produktami organicznymi
+  key: shop
+  value: organic
+  is_plural: false
+- phrase: sklep z produktami organicznymis
+  key: shop
+  value: organic
+  is_plural: true
+- phrase: sklep na wolnym powietrzu
+  key: shop
+  value: outdoor
+  is_plural: false
+- phrase: sklep na wolnym powietrzus
+  key: shop
+  value: outdoor
+  is_plural: true
+- phrase: sklep ze zwierzątkami
+  key: shop
+  value: pet
+  is_plural: false
+- phrase: sklep ze zwierzątkamis
+  key: shop
+  value: pet
+  is_plural: true
+- phrase: sklep fotograficzny
+  key: shop
+  value: photo
+  is_plural: false
+- phrase: sklep fotograficznys
+  key: shop
+  value: photo
+  is_plural: true
+- phrase: salon
+  key: shop
+  value: salon
+  is_plural: false
+- phrase: salons
+  key: shop
+  value: salon
+  is_plural: true
+- phrase: sklep obuwniczy
+  key: shop
+  value: shoes
+  is_plural: false
+- phrase: sklep obuwniczys
+  key: shop
+  value: shoes
+  is_plural: true
+- phrase: centrum handlowe
+  key: shop
+  value: shopping_centre
+  is_plural: false
+- phrase: centrum handlowes
+  key: shop
+  value: shopping_centre
+  is_plural: true
+- phrase: sklep sportowy
+  key: shop
+  value: sports
+  is_plural: false
+- phrase: sklep sportowys
+  key: shop
+  value: sports
+  is_plural: true
+- phrase: sklep papierniczy
+  key: shop
+  value: stationery
+  is_plural: false
+- phrase: sklep papierniczys
+  key: shop
+  value: stationery
+  is_plural: true
+- phrase: supermarket
+  key: shop
+  value: supermarket
+  is_plural: false
+- phrase: supermarkets
+  key: shop
+  value: supermarket
+  is_plural: true
+- phrase: sklep zabawkowy
+  key: shop
+  value: toys
+  is_plural: false
+- phrase: sklep zabawkowys
+  key: shop
+  value: toys
+  is_plural: true
+- phrase: biuro podróży
+  key: shop
+  value: travel_agency
+  is_plural: false
+- phrase: biuro podróżys
+  key: shop
+  value: travel_agency
+  is_plural: true
+- phrase: sklep filmowy
+  key: shop
+  value: video
+  is_plural: false
+- phrase: sklep filmowys
+  key: shop
+  value: video
+  is_plural: true
+- phrase: winiarnia
+  key: shop
+  value: wine
+  is_plural: false
+- phrase: winiarnias
+  key: shop
+  value: wine
+  is_plural: true
+- phrase: chata alpejska
+  key: tourism
+  value: alpine_hut
+  is_plural: false
+- phrase: chata alpejskas
+  key: tourism
+  value: alpine_hut
+  is_plural: true
+- phrase: sztuka
+  key: tourism
+  value: artwork
+  is_plural: false
+- phrase: sztukas
+  key: tourism
+  value: artwork
+  is_plural: true
+- phrase: atrakcja turystyczna
+  key: tourism
+  value: attraction
+  is_plural: false
+- phrase: atrakcja turystycznas
+  key: tourism
+  value: attraction
+  is_plural: true
+- phrase: łóżko i śniadanie
+  key: tourism
+  value: bed_and_breakfast
+  is_plural: false
+- phrase: łóżko i śniadanies
+  key: tourism
+  value: bed_and_breakfast
+  is_plural: true
+- phrase: kabina
+  key: tourism
+  value: cabin
+  is_plural: false
+- phrase: kabinas
+  key: tourism
+  value: cabin
+  is_plural: true
+- phrase: miejsce na kamping
+  key: tourism
+  value: camp_site
+  is_plural: false
+- phrase: miejsce na kampings
+  key: tourism
+  value: camp_site
+  is_plural: true
+- phrase: miejsce na przyczepę campingową
+  key: tourism
+  value: caravan_site
+  is_plural: false
+- phrase: miejsce na przyczepę campingowąs
+  key: tourism
+  value: caravan_site
+  is_plural: true
+- phrase: schronisko
+  key: tourism
+  value: chalet
+  is_plural: false
+- phrase: schroniskos
+  key: tourism
+  value: chalet
+  is_plural: true
+- phrase: pensjonat
+  key: tourism
+  value: guest_house
+  is_plural: false
+- phrase: pensjonats
+  key: tourism
+  value: guest_house
+  is_plural: true
+- phrase: hostel
+  key: tourism
+  value: hostel
+  is_plural: false
+- phrase: hostels
+  key: tourism
+  value: hostel
+  is_plural: true
+- phrase: hotel
+  key: tourism
+  value: hotel
+  is_plural: false
+- phrase: hotels
+  key: tourism
+  value: hotel
+  is_plural: true
+- phrase: informacja turystyczna
+  key: tourism
+  value: information
+  is_plural: false
+- phrase: informacja turystycznas
+  key: tourism
+  value: information
+  is_plural: true
+- phrase: nachylenie
+  key: tourism
+  value: lean_to
+  is_plural: false
+- phrase: nachylenies
+  key: tourism
+  value: lean_to
+  is_plural: true
+- phrase: motel
+  key: tourism
+  value: motel
+  is_plural: false
+- phrase: motels
+  key: tourism
+  value: motel
+  is_plural: true
+- phrase: muzeum
+  key: tourism
+  value: museum
+  is_plural: false
+- phrase: muzeums
+  key: tourism
+  value: museum
+  is_plural: true
+- phrase: miejsce na piknik
+  key: tourism
+  value: picnic_site
+  is_plural: false
+- phrase: miejsce na pikniks
+  key: tourism
+  value: picnic_site
+  is_plural: true
+- phrase: park tematyczny
+  key: tourism
+  value: theme_park
+  is_plural: false
+- phrase: park tematycznys
+  key: tourism
+  value: theme_park
+  is_plural: true
+- phrase: dolina
+  key: tourism
+  value: valley
+  is_plural: false
+- phrase: dolinas
+  key: tourism
+  value: valley
+  is_plural: true
+- phrase: punkt widokowy
+  key: tourism
+  value: viewpoint
+  is_plural: false
+- phrase: punkt widokowys
+  key: tourism
+  value: viewpoint
+  is_plural: true
+- phrase: zoo
+  key: tourism
+  value: zoo
+  is_plural: false
+- phrase: stocznia
+  key: waterway
+  value: boatyard
+  is_plural: false
+- phrase: stocznias
+  key: waterway
+  value: boatyard
+  is_plural: true
+- phrase: kanał
+  key: waterway
+  value: canal
+  is_plural: false
+- phrase: kanałs
+  key: waterway
+  value: canal
+  is_plural: true
+- phrase: złącze dróg wodnych
+  key: waterway
+  value: connector
+  is_plural: false
+- phrase: złącze dróg wodnychs
+  key: waterway
+  value: connector
+  is_plural: true
+- phrase: tama
+  key: waterway
+  value: dam
+  is_plural: false
+- phrase: tamas
+  key: waterway
+  value: dam
+  is_plural: true
+- phrase: opuszczony kanał
+  key: waterway
+  value: derelict_canal
+  is_plural: false
+- phrase: opuszczony kanałs
+  key: waterway
+  value: derelict_canal
+  is_plural: true
+- phrase: rów
+  key: waterway
+  value: ditch
+  is_plural: false
+- phrase: róws
+  key: waterway
+  value: ditch
+  is_plural: true
+- phrase: basen portowy
+  key: waterway
+  value: dock
+  is_plural: false
+- phrase: basen portowys
+  key: waterway
+  value: dock
+  is_plural: true
+- phrase: rów odpływowy
+  key: waterway
+  value: drain
+  is_plural: false
+- phrase: rów odpływowys
+  key: waterway
+  value: drain
+  is_plural: true
+- phrase: zastawka
+  key: waterway
+  value: lock
+  is_plural: false
+- phrase: zastawkas
+  key: waterway
+  value: lock
+  is_plural: true
+- phrase: śluza
+  key: waterway
+  value: lock_gate
+  is_plural: false
+- phrase: śluzas
+  key: waterway
+  value: lock_gate
+  is_plural: true
+- phrase: źródło mineralne
+  key: waterway
+  value: mineral_spring
+  is_plural: false
+- phrase: źródło mineralnes
+  key: waterway
+  value: mineral_spring
+  is_plural: true
+- phrase: kotwicowisko
+  key: waterway
+  value: mooring
+  is_plural: false
+- phrase: kotwicowiskos
+  key: waterway
+  value: mooring
+  is_plural: true
+- phrase: katarakty
+  key: waterway
+  value: rapids
+  is_plural: false
+- phrase: kataraktys
+  key: waterway
+  value: rapids
+  is_plural: true
+- phrase: rzeka
+  key: waterway
+  value: river
+  is_plural: false
+- phrase: rzekas
+  key: waterway
+  value: river
+  is_plural: true
+- phrase: brzeg rzeki
+  key: waterway
+  value: riverbank
+  is_plural: false
+- phrase: brzeg rzekis
+  key: waterway
+  value: riverbank
+  is_plural: true
+- phrase: strumień
+  key: waterway
+  value: stream
+  is_plural: false
+- phrase: strumieńs
+  key: waterway
+  value: stream
+  is_plural: true
+- phrase: starorzecze
+  key: waterway
+  value: wadi
+  is_plural: false
+- phrase: starorzeczes
+  key: waterway
+  value: wadi
+  is_plural: true
+- phrase: punkt wodny
+  key: waterway
+  value: water_point
+  is_plural: false
+- phrase: punkt wodnys
+  key: waterway
+  value: water_point
+  is_plural: true
+- phrase: wodospad
+  key: waterway
+  value: waterfall
+  is_plural: false
+- phrase: wodospads
+  key: waterway
+  value: waterfall
+  is_plural: true
+- phrase: jaz
+  key: waterway
+  value: weir
+  is_plural: false
+- phrase: jazs
+  key: waterway
+  value: weir
+  is_plural: true

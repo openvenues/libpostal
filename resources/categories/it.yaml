@@ -1,0 +1,1760 @@
+- phrase: aeroporto
+  key: aeroway
+  value: aerodrome
+  is_plural: false
+- phrase: aeroporti
+  key: aeroway
+  value: aerodrome
+  is_plural: true
+- phrase: pensione per animali
+  key: amenity
+  value: animal_boarding
+  is_plural: false
+- phrase: pensioni per animali
+  key: amenity
+  value: animal_boarding
+  is_plural: true
+- phrase: rifugio per animali
+  key: amenity
+  value: animal_shelter
+  is_plural: false
+- phrase: rifugio per animali
+  key: amenity
+  value: animal_shelter
+  is_plural: true
+- phrase: bancomat
+  key: amenity
+  value: atm
+  is_plural: false
+- phrase: bancomat
+  key: amenity
+  value: atm
+  is_plural: true
+- phrase: banca
+  key: amenity
+  value: bank
+  is_plural: false
+- phrase: banche
+  key: amenity
+  value: bank
+  is_plural: true
+- phrase: bar
+  key: amenity
+  value: bar
+  is_plural: false
+- phrase: bar
+  key: amenity
+  value: bar
+  is_plural: true
+- phrase: panchina
+  key: amenity
+  value: bench
+  is_plural: false
+- phrase: panchine
+  key: amenity
+  value: bench
+  is_plural: true
+- phrase: parcheggio per biciclette
+  key: amenity
+  value: bicycle_parking
+  is_plural: false
+- phrase: parcheggi per biciclette
+  key: amenity
+  value: bicycle_parking
+  is_plural: true
+- phrase: stazione del bikesharing
+  key: amenity
+  value: bicycle_rental
+  is_plural: false
+- phrase: stazioni del bikesharing
+  key: amenity
+  value: bicycle_rental
+  is_plural: true
+- phrase: bordello
+  key: amenity
+  value: brothel
+  is_plural: false
+- phrase: bordelli
+  key: amenity
+  value: brothel
+  is_plural: true
+- phrase: cambiavalute
+  key: amenity
+  value: bureau_de_change
+  is_plural: false
+- phrase: cambiavalute
+  key: amenity
+  value: bureau_de_change
+  is_plural: true
+- phrase: cambia valute
+  key: amenity
+  value: bureau_de_change
+  is_plural: false
+- phrase: cambia valute
+  key: amenity
+  value: bureau_de_change
+  is_plural: true
+- phrase: caffè
+  key: amenity
+  value: cafe
+  is_plural: false
+- phrase: caffè
+  key: amenity
+  value: cafe
+  is_plural: true
+- phrase: autonoleggio
+  key: amenity
+  value: car_rental
+  is_plural: false
+- phrase: autonoleggi
+  key: amenity
+  value: car_rental
+  is_plural: true
+- phrase: stazione del carsharing
+  key: amenity
+  value: car_sharing
+  is_plural: false
+- phrase: stazioni del carsharing
+  key: amenity
+  value: car_sharing
+  is_plural: true
+- phrase: autolavaggio
+  key: amenity
+  value: car_wash
+  is_plural: false
+- phrase: autolavaggi
+  key: amenity
+  value: car_wash
+  is_plural: true
+- phrase: casinò
+  key: amenity
+  value: casino
+  is_plural: false
+- phrase: casinò
+  key: amenity
+  value: casino
+  is_plural: true
+- phrase: stazione di ricarica elettrica
+  key: amenity
+  value: charging_station
+  is_plural: false
+- phrase: stazioni di ricarica elettrica
+  key: amenity
+  value: charging_station
+  is_plural: true
+- phrase: stazione di ricarica
+  key: amenity
+  value: charging_station
+  is_plural: false
+- phrase: stazioni di ricarica
+  key: amenity
+  value: charging_station
+  is_plural: true
+- phrase: colonnina di ricarica
+  key: amenity
+  value: charging_station
+  is_plural: false
+- phrase: colonnine di ricarica
+  key: amenity
+  value: charging_station
+  is_plural: true
+- phrase: cinema
+  key: amenity
+  value: cinema
+  is_plural: false
+- phrase: cinema
+  key: amenity
+  value: cinema
+  is_plural: true
+- phrase: scuola superiore
+  key: amenity
+  value: college
+  is_plural: false
+- phrase: scuole superiori
+  key: amenity
+  value: college
+  is_plural: true
+- phrase: tribunale
+  key: amenity
+  value: courthouse
+  is_plural: false
+- phrase: tribunali
+  key: amenity
+  value: courthouse
+  is_plural: true
+- phrase: crematorio
+  key: amenity
+  value: crematorium
+  is_plural: false
+- phrase: crematori
+  key: amenity
+  value: crematorium
+  is_plural: true
+- phrase: dentista
+  key: amenity
+  value: dentist
+  is_plural: false
+- phrase: dentisti
+  key: amenity
+  value: dentist
+  is_plural: true
+- phrase: dormitorio
+  key: amenity
+  value: dormitory
+  is_plural: false
+- phrase: dormitori
+  key: amenity
+  value: dormitory
+  is_plural: true
+- phrase: acqua
+  key: amenity
+  value: drinking_water
+  is_plural: false
+- phrase: acqua potabile
+  key: amenity
+  value: drinking_water
+  is_plural: false
+- phrase: fontanelle
+  key: amenity
+  value: drinking_water
+  is_plural: true
+- phrase: fontanella
+  key: amenity
+  value: drinking_water
+  is_plural: false
+- phrase: scuola guida
+  key: amenity
+  value: driving_school
+  is_plural: false
+- phrase: scuole guida
+  key: amenity
+  value: driving_school
+  is_plural: true
+- phrase: ambasciata
+  key: amenity
+  value: embassy
+  is_plural: false
+- phrase: ambasciate
+  key: amenity
+  value: embassy
+  is_plural: true
+- phrase: colonnina sos
+  key: amenity
+  value: emergency_phone
+  is_plural: false
+- phrase: colonnine sos
+  key: amenity
+  value: emergency_phone
+  is_plural: true
+- phrase: fast food
+  key: amenity
+  value: fast_food
+  is_plural: false
+- phrase: fast food
+  key: amenity
+  value: fast_food
+  is_plural: true
+- phrase: terminal traghetto
+  key: amenity
+  value: ferry_terminal
+  is_plural: false
+- phrase: terminal traghetti
+  key: amenity
+  value: ferry_terminal
+  is_plural: true
+- phrase: pompa antincendio
+  key: amenity
+  value: fire_hydrant
+  is_plural: false
+- phrase: pompe antincendio
+  key: amenity
+  value: fire_hydrant
+  is_plural: true
+- phrase: vigili del fuoco
+  key: amenity
+  value: fire_station
+  is_plural: false
+- phrase: vigili del fuoco
+  key: amenity
+  value: fire_station
+  is_plural: true
+- phrase: pompieri
+  key: amenity
+  value: fire_station
+  is_plural: false
+- phrase: pompieri
+  key: amenity
+  value: fire_station
+  is_plural: true
+- phrase: stazione di rifornimento
+  key: amenity
+  value: fuel
+  is_plural: false
+- phrase: stazioni di rifornimento
+  key: amenity
+  value: fuel
+  is_plural: true
+- phrase: cimitero
+  key: amenity
+  value: grave_yard
+  is_plural: false
+- phrase: cimiteri
+  key: amenity
+  value: grave_yard
+  is_plural: true
+- phrase: ospedale
+  key: amenity
+  value: hospital
+  is_plural: false
+- phrase: ospedali
+  key: amenity
+  value: hospital
+  is_plural: true
+- phrase: hotel
+  key: amenity
+  value: hotel
+  is_plural: false
+- phrase: hotel
+  key: amenity
+  value: hotel
+  is_plural: true
+- phrase: albergo
+  key: amenity
+  value: hotel
+  is_plural: false
+- phrase: alberghi
+  key: amenity
+  value: hotel
+  is_plural: true
+- phrase: postazione di caccia
+  key: amenity
+  value: hunting_stand
+  is_plural: false
+- phrase: postazioni di caccia
+  key: amenity
+  value: hunting_stand
+  is_plural: true
+- phrase: gelateria
+  key: amenity
+  value: ice_cream
+  is_plural: false
+- phrase: gelaterie
+  key: amenity
+  value: ice_cream
+  is_plural: true
+- phrase: asilo infantile
+  key: amenity
+  value: kindergarten
+  is_plural: false
+- phrase: asili infantili
+  key: amenity
+  value: kindergarten
+  is_plural: true
+- phrase: biblioteca
+  key: amenity
+  value: library
+  is_plural: false
+- phrase: biblioteche
+  key: amenity
+  value: library
+  is_plural: true
+- phrase: soccorso alpino
+  key: amenity
+  value: mountain_rescue
+  is_plural: false
+- phrase: soccorsi alpini
+  key: amenity
+  value: mountain_rescue
+  is_plural: true
+- phrase: asilo nido
+  key: amenity
+  value: nursery
+  is_plural: false
+- phrase: asili nido
+  key: amenity
+  value: nursery
+  is_plural: true
+- phrase: parcheggio
+  key: amenity
+  value: parking
+  is_plural: false
+- phrase: parcheggi
+  key: amenity
+  value: parking
+  is_plural: true
+- phrase: farmacia
+  key: amenity
+  value: pharmacy
+  is_plural: false
+- phrase: farmacie
+  key: amenity
+  value: pharmacy
+  is_plural: true
+- phrase: luogo di culto
+  key: amenity
+  value: place_of_worship
+  is_plural: false
+- phrase: luoghi di culto
+  key: amenity
+  value: place_of_worship
+  is_plural: true
+- phrase: forze dell'ordine
+  key: amenity
+  value: police
+  is_plural: true
+- phrase: polizia
+  key: amenity
+  value: police
+  is_plural: false
+- phrase: carabinieri
+  key: amenity
+  value: police
+  is_plural: true
+- phrase: cassetta postale
+  key: amenity
+  value: post_box
+  is_plural: false
+- phrase: cassette postali
+  key: amenity
+  value: post_box
+  is_plural: true
+- phrase: cassetta delle lettere
+  key: amenity
+  value: post_box
+  is_plural: false
+- phrase: cassette delle lettere
+  key: amenity
+  value: post_box
+  is_plural: true
+- phrase: ufficio postale
+  key: amenity
+  value: post_office
+  is_plural: false
+- phrase: uffici postali
+  key: amenity
+  value: post_office
+  is_plural: true
+- phrase: prigione
+  key: amenity
+  value: prison
+  is_plural: false
+- phrase: prigioni
+  key: amenity
+  value: prison
+  is_plural: true
+- phrase: pub
+  key: amenity
+  value: pub
+  is_plural: false
+- phrase: pub
+  key: amenity
+  value: pub
+  is_plural: true
+- phrase: edificio pubblico
+  key: amenity
+  value: public_building
+  is_plural: false
+- phrase: edifici pubblici
+  key: amenity
+  value: public_building
+  is_plural: true
+- phrase: ristorante
+  key: amenity
+  value: restaurant
+  is_plural: false
+- phrase: ristoranti
+  key: amenity
+  value: restaurant
+  is_plural: true
+- phrase: sauna
+  key: amenity
+  value: sauna
+  is_plural: false
+- phrase: saune
+  key: amenity
+  value: sauna
+  is_plural: true
+- phrase: scuola
+  key: amenity
+  value: school
+  is_plural: false
+- phrase: scuole
+  key: amenity
+  value: school
+  is_plural: true
+- phrase: pensilina/ricovero
+  key: amenity
+  value: shelter
+  is_plural: false
+- phrase: pensiline/ricoveri
+  key: amenity
+  value: shelter
+  is_plural: true
+- phrase: supermercato
+  key: amenity
+  value: supermarket
+  is_plural: false
+- phrase: supermercati
+  key: amenity
+  value: supermarket
+  is_plural: true
+- phrase: taxi
+  key: amenity
+  value: taxi
+  is_plural: false
+- phrase: taxi
+  key: amenity
+  value: taxi
+  is_plural: true
+- phrase: telefono pubblico
+  key: amenity
+  value: telephone
+  is_plural: false
+- phrase: telefoni pubblici
+  key: amenity
+  value: telephone
+  is_plural: true
+- phrase: teatro
+  key: amenity
+  value: theatre
+  is_plural: false
+- phrase: teatri
+  key: amenity
+  value: theatre
+  is_plural: true
+- phrase: gabinetto pubblico
+  key: amenity
+  value: toilets
+  is_plural: false
+- phrase: gabinetti pubblici
+  key: amenity
+  value: toilets
+  is_plural: true
+- phrase: municipio
+  key: amenity
+  value: townhall
+  is_plural: false
+- phrase: municipi
+  key: amenity
+  value: townhall
+  is_plural: true
+- phrase: università
+  key: amenity
+  value: university
+  is_plural: false
+- phrase: università
+  key: amenity
+  value: university
+  is_plural: true
+- phrase: distributore automatico
+  key: amenity
+  value: vending_machine
+  is_plural: false
+- phrase: distributori automatici
+  key: amenity
+  value: vending_machine
+  is_plural: true
+- phrase: veterinario
+  key: amenity
+  value: veterinary
+  is_plural: false
+- phrase: veterinari
+  key: amenity
+  value: veterinary
+  is_plural: true
+- phrase: punto di accesso wifi
+  key: amenity
+  value: wifi
+  is_plural: false
+- phrase: punti di accesso wifi
+  key: amenity
+  value: wifi
+  is_plural: true
+- phrase: chiesa
+  key: building
+  value: church
+  is_plural: false
+- phrase: chiese
+  key: building
+  value: church
+  is_plural: true
+- phrase: dormitorio
+  key: building
+  value: dormitory
+  is_plural: false
+- phrase: dormitori
+  key: building
+  value: dormitory
+  is_plural: true
+- phrase: percorso per equitazione
+  key: highway
+  value: bridleway
+  is_plural: false
+- phrase: percorsi per equitazione
+  key: highway
+  value: bridleway
+  is_plural: true
+- phrase: autobus guidato
+  key: highway
+  value: bus_guideway
+  is_plural: false
+- phrase: autobus guidati
+  key: highway
+  value: bus_guideway
+  is_plural: true
+- phrase: fermata autobus
+  key: highway
+  value: bus_stop
+  is_plural: false
+- phrase: fermate autobus
+  key: highway
+  value: bus_stop
+  is_plural: true
+- phrase: byway (uk)
+  key: highway
+  value: byway
+  is_plural: false
+- phrase: byway (uk)
+  key: highway
+  value: byway
+  is_plural: true
+- phrase: strada in costruzione
+  key: highway
+  value: construction
+  is_plural: false
+- phrase: strade in costruzione
+  key: highway
+  value: construction
+  is_plural: true
+- phrase: percorso ciclabile
+  key: highway
+  value: cycleway
+  is_plural: false
+- phrase: percorsi ciclabili
+  key: highway
+  value: cycleway
+  is_plural: true
+- phrase: colonnina sos
+  key: highway
+  value: emergency_access_point
+  is_plural: false
+- phrase: colonnine sos
+  key: highway
+  value: emergency_access_point
+  is_plural: true
+- phrase: percorso pedonale
+  key: highway
+  value: footway
+  is_plural: false
+- phrase: percorsi pedonali
+  key: highway
+  value: footway
+  is_plural: true
+- phrase: guado
+  key: highway
+  value: ford
+  is_plural: false
+- phrase: guadi
+  key: highway
+  value: ford
+  is_plural: true
+- phrase: cancello
+  key: highway
+  value: gate
+  is_plural: false
+- phrase: cancelli
+  key: highway
+  value: gate
+  is_plural: true
+- phrase: autostrada/tangenziale
+  key: highway
+  value: motorway
+  is_plural: false
+- phrase: autostrade/tangenziali
+  key: highway
+  value: motorway
+  is_plural: true
+- phrase: svincolo
+  key: highway
+  value: motorway_junction
+  is_plural: false
+- phrase: svincoli
+  key: highway
+  value: motorway_junction
+  is_plural: true
+- phrase: percorso pedonale
+  key: highway
+  value: pedestrian
+  is_plural: false
+- phrase: percorsi pedonali
+  key: highway
+  value: pedestrian
+  is_plural: true
+- phrase: strada primaria
+  key: highway
+  value: primary
+  is_plural: false
+- phrase: strade primarie
+  key: highway
+  value: primary
+  is_plural: true
+- phrase: strada primaria
+  key: highway
+  value: primary_link
+  is_plural: false
+- phrase: strade primarie
+  key: highway
+  value: primary_link
+  is_plural: true
+- phrase: strada residenziale
+  key: highway
+  value: residential
+  is_plural: false
+- phrase: strade residenziali
+  key: highway
+  value: residential
+  is_plural: true
+- phrase: strada secondaria
+  key: highway
+  value: secondary
+  is_plural: false
+- phrase: strade secondarie
+  key: highway
+  value: secondary
+  is_plural: true
+- phrase: strada secondaria
+  key: highway
+  value: secondary_link
+  is_plural: false
+- phrase: strade secondarie
+  key: highway
+  value: secondary_link
+  is_plural: true
+- phrase: strada di servizio
+  key: highway
+  value: service
+  is_plural: false
+- phrase: strade di servizio
+  key: highway
+  value: service
+  is_plural: true
+- phrase: stazione di servizio
+  key: highway
+  value: services
+  is_plural: false
+- phrase: stazioni di servizio
+  key: highway
+  value: services
+  is_plural: true
+- phrase: scala
+  key: highway
+  value: steps
+  is_plural: false
+- phrase: scale
+  key: highway
+  value: steps
+  is_plural: true
+- phrase: scaletta
+  key: highway
+  value: stile
+  is_plural: false
+- phrase: scalette
+  key: highway
+  value: stile
+  is_plural: true
+- phrase: strada terziaria
+  key: highway
+  value: tertiary
+  is_plural: false
+- phrase: strade terziarie
+  key: highway
+  value: tertiary
+  is_plural: true
+- phrase: percorso escursionistico
+  key: highway
+  value: trail
+  is_plural: false
+- phrase: percorsi escursionistici
+  key: highway
+  value: trail
+  is_plural: true
+- phrase: strada non classificata
+  key: highway
+  value: unclassified
+  is_plural: false
+- phrase: strade non classificate
+  key: highway
+  value: unclassified
+  is_plural: true
+- phrase: sito archeologico
+  key: historic
+  value: archaeological_site
+  is_plural: false
+- phrase: siti archeologici
+  key: historic
+  value: archaeological_site
+  is_plural: true
+- phrase: edificio
+  key: historic
+  value: building
+  is_plural: false
+- phrase: edifici
+  key: historic
+  value: building
+  is_plural: true
+- phrase: castello
+  key: historic
+  value: castle
+  is_plural: false
+- phrase: castelli
+  key: historic
+  value: castle
+  is_plural: true
+- phrase: chiesa
+  key: historic
+  value: church
+  is_plural: false
+- phrase: chiese
+  key: historic
+  value: church
+  is_plural: true
+- phrase: miniera
+  key: historic
+  value: mine
+  is_plural: false
+- phrase: miniere
+  key: historic
+  value: mine
+  is_plural: true
+- phrase: monumento
+  key: historic
+  value: monument
+  is_plural: false
+- phrase: monumenti
+  key: historic
+  value: monument
+  is_plural: true
+- phrase: museo
+  key: historic
+  value: museum
+  is_plural: false
+- phrase: musei
+  key: historic
+  value: museum
+  is_plural: true
+- phrase: rovine
+  key: historic
+  value: ruins
+  is_plural: false
+- phrase: rovine
+  key: historic
+  value: ruins
+  is_plural: true
+- phrase: torre
+  key: historic
+  value: tower
+  is_plural: false
+- phrase: torri
+  key: historic
+  value: tower
+  is_plural: true
+- phrase: cimitero
+  key: landuse
+  value: cemetery
+  is_plural: false
+- phrase: cimiteri
+  key: landuse
+  value: cemetery
+  is_plural: true
+- phrase: prato
+  key: landuse
+  value: grass
+  is_plural: false
+- phrase: prati
+  key: landuse
+  value: grass
+  is_plural: true
+- phrase: zona industriale
+  key: landuse
+  value: industrial
+  is_plural: false
+- phrase: zone industriali
+  key: landuse
+  value: industrial
+  is_plural: true
+- phrase: area residenziale
+  key: landuse
+  value: residential
+  is_plural: false
+- phrase: aree residenziali
+  key: landuse
+  value: residential
+  is_plural: true
+- phrase: area comune (uk)
+  key: leisure
+  value: common
+  is_plural: false
+- phrase: aree comuni (uk)
+  key: leisure
+  value: common
+  is_plural: true
+- phrase: area cani
+  key: leisure
+  value: dog_park
+  is_plural: false
+- phrase: aree cani
+  key: leisure
+  value: dog_park
+  is_plural: true
+- phrase: riserva di pesca
+  key: leisure
+  value: fishing
+  is_plural: false
+- phrase: riserve di pesca
+  key: leisure
+  value: fishing
+  is_plural: true
+- phrase: giardino
+  key: leisure
+  value: garden
+  is_plural: false
+- phrase: giardini
+  key: leisure
+  value: garden
+  is_plural: true
+- phrase: campo da golf
+  key: leisure
+  value: golf_course
+  is_plural: false
+- phrase: campi da golf
+  key: leisure
+  value: golf_course
+  is_plural: true
+- phrase: pista di ghiaccio
+  key: leisure
+  value: ice_rink
+  is_plural: false
+- phrase: piste di ghiaccio
+  key: leisure
+  value: ice_rink
+  is_plural: true
+- phrase: porto turistico
+  key: leisure
+  value: marina
+  is_plural: false
+- phrase: porti turistici
+  key: leisure
+  value: marina
+  is_plural: true
+- phrase: minigolf
+  key: leisure
+  value: miniature_golf
+  is_plural: false
+- phrase: minigolf
+  key: leisure
+  value: miniature_golf
+  is_plural: true
+- phrase: riserva naturale
+  key: leisure
+  value: nature_reserve
+  is_plural: false
+- phrase: riserve naturali
+  key: leisure
+  value: nature_reserve
+  is_plural: true
+- phrase: parco
+  key: leisure
+  value: park
+  is_plural: false
+- phrase: parchi
+  key: leisure
+  value: park
+  is_plural: true
+- phrase: campo sportivo
+  key: leisure
+  value: pitch
+  is_plural: false
+- phrase: campi sportivi
+  key: leisure
+  value: pitch
+  is_plural: true
+- phrase: parco giochi
+  key: leisure
+  value: playground
+  is_plural: false
+- phrase: parchi giochi
+  key: leisure
+  value: playground
+  is_plural: true
+- phrase: area di svago
+  key: leisure
+  value: recreation_ground
+  is_plural: false
+- phrase: aree di svago
+  key: leisure
+  value: recreation_ground
+  is_plural: true
+- phrase: rampa di alaggio
+  key: leisure
+  value: slipway
+  is_plural: false
+- phrase: rampe di alaggio
+  key: leisure
+  value: slipway
+  is_plural: true
+- phrase: centro sportivo
+  key: leisure
+  value: sports_centre
+  is_plural: false
+- phrase: centri sportivi
+  key: leisure
+  value: sports_centre
+  is_plural: true
+- phrase: stadio
+  key: leisure
+  value: stadium
+  is_plural: false
+- phrase: stadi
+  key: leisure
+  value: stadium
+  is_plural: true
+- phrase: piscina
+  key: leisure
+  value: swimming_pool
+  is_plural: false
+- phrase: piscine
+  key: leisure
+  value: swimming_pool
+  is_plural: true
+- phrase: pista da corsa
+  key: leisure
+  value: track
+  is_plural: false
+- phrase: piste da corsa
+  key: leisure
+  value: track
+  is_plural: true
+- phrase: parco acquatico
+  key: leisure
+  value: water_park
+  is_plural: false
+- phrase: parchi acquatici
+  key: leisure
+  value: water_park
+  is_plural: true
+- phrase: baia
+  key: natural
+  value: bay
+  is_plural: false
+- phrase: baie
+  key: natural
+  value: bay
+  is_plural: true
+- phrase: spiaggia
+  key: natural
+  value: beach
+  is_plural: false
+- phrase: spiagge
+  key: natural
+  value: beach
+  is_plural: true
+- phrase: capo
+  key: natural
+  value: cape
+  is_plural: false
+- phrase: capi
+  key: natural
+  value: cape
+  is_plural: true
+- phrase: entrata di grotta/caverna
+  key: natural
+  value: cave_entrance
+  is_plural: false
+- phrase: entrate di grotte/caverne
+  key: natural
+  value: cave_entrance
+  is_plural: true
+- phrase: canale
+  key: natural
+  value: channel
+  is_plural: false
+- phrase: canali
+  key: natural
+  value: channel
+  is_plural: true
+- phrase: rupe
+  key: natural
+  value: cliff
+  is_plural: false
+- phrase: rupi
+  key: natural
+  value: cliff
+  is_plural: true
+- phrase: linea di costa
+  key: natural
+  value: coastline
+  is_plural: false
+- phrase: linee di costa
+  key: natural
+  value: coastline
+  is_plural: true
+- phrase: cratere
+  key: natural
+  value: crater
+  is_plural: false
+- phrase: crateri
+  key: natural
+  value: crater
+  is_plural: true
+- phrase: caratteristica
+  key: natural
+  value: feature
+  is_plural: false
+- phrase: caratteristiche
+  key: natural
+  value: feature
+  is_plural: true
+- phrase: prato alpino
+  key: natural
+  value: fell
+  is_plural: false
+- phrase: prati alpini
+  key: natural
+  value: fell
+  is_plural: true
+- phrase: fiordo
+  key: natural
+  value: fjord
+  is_plural: false
+- phrase: fiordi
+  key: natural
+  value: fjord
+  is_plural: true
+- phrase: geyser
+  key: natural
+  value: geyser
+  is_plural: false
+- phrase: geyser
+  key: natural
+  value: geyser
+  is_plural: true
+- phrase: ghiacciaio
+  key: natural
+  value: glacier
+  is_plural: false
+- phrase: ghiacciai
+  key: natural
+  value: glacier
+  is_plural: true
+- phrase: brughiera
+  key: natural
+  value: heath
+  is_plural: false
+- phrase: brughiere
+  key: natural
+  value: heath
+  is_plural: true
+- phrase: collina
+  key: natural
+  value: hill
+  is_plural: false
+- phrase: colline
+  key: natural
+  value: hill
+  is_plural: true
+- phrase: isola
+  key: natural
+  value: island
+  is_plural: false
+- phrase: isole
+  key: natural
+  value: island
+  is_plural: true
+- phrase: palude alluvionale
+  key: natural
+  value: marsh
+  is_plural: false
+- phrase: paludi alluvionali
+  key: natural
+  value: marsh
+  is_plural: true
+- phrase: zona fangosa (sabbie mobili)
+  key: natural
+  value: mud
+  is_plural: false
+- phrase: zone fangose (sabbie mobili)
+  key: natural
+  value: mud
+  is_plural: true
+- phrase: picco montuoso
+  key: natural
+  value: peak
+  is_plural: false
+- phrase: picchi montuosi
+  key: natural
+  value: peak
+  is_plural: true
+- phrase: scogliera
+  key: natural
+  value: reef
+  is_plural: false
+- phrase: scogliere
+  key: natural
+  value: reef
+  is_plural: true
+- phrase: cresta montuosa
+  key: natural
+  value: ridge
+  is_plural: false
+- phrase: creste montuose
+  key: natural
+  value: ridge
+  is_plural: true
+- phrase: fiume
+  key: natural
+  value: river
+  is_plural: false
+- phrase: fiumi
+  key: natural
+  value: river
+  is_plural: true
+- phrase: roccia
+  key: natural
+  value: rock
+  is_plural: false
+- phrase: rocce
+  key: natural
+  value: rock
+  is_plural: true
+- phrase: ghiaione
+  key: natural
+  value: scree
+  is_plural: false
+- phrase: ghiaioni
+  key: natural
+  value: scree
+  is_plural: true
+- phrase: boscaglia
+  key: natural
+  value: scrub
+  is_plural: false
+- phrase: boscaglie
+  key: natural
+  value: scrub
+  is_plural: true
+- phrase: secca
+  key: natural
+  value: shoal
+  is_plural: false
+- phrase: secche
+  key: natural
+  value: shoal
+  is_plural: true
+- phrase: sorgente
+  key: natural
+  value: spring
+  is_plural: false
+- phrase: sorgenti
+  key: natural
+  value: spring
+  is_plural: true
+- phrase: albero
+  key: natural
+  value: tree
+  is_plural: false
+- phrase: alberi
+  key: natural
+  value: tree
+  is_plural: true
+- phrase: valle
+  key: natural
+  value: valley
+  is_plural: false
+- phrase: valli
+  key: natural
+  value: valley
+  is_plural: true
+- phrase: vulcano
+  key: natural
+  value: volcano
+  is_plural: false
+- phrase: vulcani
+  key: natural
+  value: volcano
+  is_plural: true
+- phrase: zona umida
+  key: natural
+  value: wetland
+  is_plural: false
+- phrase: zone umide
+  key: natural
+  value: wetland
+  is_plural: true
+- phrase: zona umida
+  key: natural
+  value: wetlands
+  is_plural: false
+- phrase: zone umide
+  key: natural
+  value: wetlands
+  is_plural: true
+- phrase: bosco
+  key: natural
+  value: wood
+  is_plural: false
+- phrase: boschi
+  key: natural
+  value: wood
+  is_plural: true
+- phrase: città
+  key: place
+  value: city
+  is_plural: false
+- phrase: città
+  key: place
+  value: city
+  is_plural: true
+- phrase: nazione
+  key: place
+  value: country
+  is_plural: false
+- phrase: nazioni
+  key: place
+  value: country
+  is_plural: true
+- phrase: contea
+  key: place
+  value: county
+  is_plural: false
+- phrase: contee
+  key: place
+  value: county
+  is_plural: true
+- phrase: area agricola
+  key: place
+  value: farm
+  is_plural: false
+- phrase: aree agricole
+  key: place
+  value: farm
+  is_plural: true
+- phrase: borgo
+  key: place
+  value: hamlet
+  is_plural: false
+- phrase: borghi
+  key: place
+  value: hamlet
+  is_plural: true
+- phrase: casa
+  key: place
+  value: house
+  is_plural: false
+- phrase: case
+  key: place
+  value: house
+  is_plural: true
+- phrase: gruppo di case
+  key: place
+  value: houses
+  is_plural: false
+- phrase: gruppi di case
+  key: place
+  value: houses
+  is_plural: true
+- phrase: isola
+  key: place
+  value: island
+  is_plural: false
+- phrase: isole
+  key: place
+  value: island
+  is_plural: true
+- phrase: isoletta
+  key: place
+  value: islet
+  is_plural: false
+- phrase: isolette
+  key: place
+  value: islet
+  is_plural: true
+- phrase: località
+  key: place
+  value: locality
+  is_plural: false
+- phrase: località
+  key: place
+  value: locality
+  is_plural: true
+- phrase: comune
+  key: place
+  value: municipality
+  is_plural: false
+- phrase: comuni
+  key: place
+  value: municipality
+  is_plural: true
+- phrase: cap
+  key: place
+  value: postcode
+  is_plural: false
+- phrase: cap
+  key: place
+  value: postcode
+  is_plural: true
+- phrase: provincia
+  key: place
+  value: region
+  is_plural: false
+- phrase: province
+  key: place
+  value: region
+  is_plural: true
+- phrase: mare
+  key: place
+  value: sea
+  is_plural: false
+- phrase: mari
+  key: place
+  value: sea
+  is_plural: true
+- phrase: regione
+  key: place
+  value: state
+  is_plural: false
+- phrase: regioni
+  key: place
+  value: state
+  is_plural: true
+- phrase: suddivisione
+  key: place
+  value: subdivision
+  is_plural: false
+- phrase: suddivisioni
+  key: place
+  value: subdivision
+  is_plural: true
+- phrase: quartiere
+  key: place
+  value: suburb
+  is_plural: false
+- phrase: quartieri
+  key: place
+  value: suburb
+  is_plural: true
+- phrase: paese
+  key: place
+  value: town
+  is_plural: false
+- phrase: paesi
+  key: place
+  value: town
+  is_plural: true
+- phrase: frazione
+  key: place
+  value: village
+  is_plural: false
+- phrase: frazioni
+  key: place
+  value: village
+  is_plural: true
+- phrase: panetteria
+  key: shop
+  value: bakery
+  is_plural: false
+- phrase: panetterie
+  key: shop
+  value: bakery
+  is_plural: true
+- phrase: negozio di biciclette
+  key: shop
+  value: bicycle
+  is_plural: false
+- phrase: negozi di biciclette
+  key: shop
+  value: bicycle
+  is_plural: true
+- phrase: libreria
+  key: shop
+  value: books
+  is_plural: false
+- phrase: librerie
+  key: shop
+  value: books
+  is_plural: true
+- phrase: macellaio
+  key: shop
+  value: butcher
+  is_plural: false
+- phrase: macellai
+  key: shop
+  value: butcher
+  is_plural: true
+- phrase: concessionaria
+  key: shop
+  value: car
+  is_plural: false
+- phrase: concessionarie
+  key: shop
+  value: car
+  is_plural: true
+- phrase: lavasecco
+  key: shop
+  value: dry_cleaning
+  is_plural: false
+- phrase: lavasecchi
+  key: shop
+  value: dry_cleaning
+  is_plural: true
+- phrase: agenzia immobiliare
+  key: shop
+  value: estate_agent
+  is_plural: false
+- phrase: agenzie immobiliari
+  key: shop
+  value: estate_agent
+  is_plural: true
+- phrase: fioraio
+  key: shop
+  value: florist
+  is_plural: false
+- phrase: fiorai
+  key: shop
+  value: florist
+  is_plural: true
+- phrase: alimentari
+  key: shop
+  value: food
+  is_plural: false
+- phrase: alimentari
+  key: shop
+  value: food
+  is_plural: true
+- phrase: fruttivendolo
+  key: shop
+  value: greengrocer
+  is_plural: false
+- phrase: fruttivendoli
+  key: shop
+  value: greengrocer
+  is_plural: true
+- phrase: fruttivendolo
+  key: shop
+  value: grocery
+  is_plural: false
+- phrase: fruttivendoli
+  key: shop
+  value: grocery
+  is_plural: true
+- phrase: assicurazioni
+  key: shop
+  value: insurance
+  is_plural: false
+- phrase: assicurazioni
+  key: shop
+  value: insurance
+  is_plural: true
+- phrase: gioielleria
+  key: shop
+  value: jewelry
+  is_plural: false
+- phrase: gioiellerie
+  key: shop
+  value: jewelry
+  is_plural: true
+- phrase: lavanderia
+  key: shop
+  value: laundry
+  is_plural: false
+- phrase: lavanderie
+  key: shop
+  value: laundry
+  is_plural: true
+- phrase: edicola
+  key: shop
+  value: newsagent
+  is_plural: false
+- phrase: ottico
+  key: shop
+  value: optician
+  is_plural: false
+- phrase: ottici
+  key: shop
+  value: optician
+  is_plural: true
+- phrase: supermercato
+  key: shop
+  value: supermarket
+  is_plural: false
+- phrase: supermercati
+  key: shop
+  value: supermarket
+  is_plural: true
+- phrase: agenzia di viaggi
+  key: shop
+  value: travel_agency
+  is_plural: false
+- phrase: agenzie di viaggi
+  key: shop
+  value: travel_agency
+  is_plural: true
+- phrase: agenzia viaggi
+  key: shop
+  value: travel_agency
+  is_plural: false
+- phrase: agenzie viaggi
+  key: shop
+  value: travel_agency
+  is_plural: true
+- phrase: agenzia viaggio
+  key: shop
+  value: travel_agency
+  is_plural: false
+- phrase: agenzie viaggio
+  key: shop
+  value: travel_agency
+  is_plural: true
+- phrase: rifugio alpino
+  key: tourism
+  value: alpine_hut
+  is_plural: false
+- phrase: rifugi alpini
+  key: tourism
+  value: alpine_hut
+  is_plural: true
+- phrase: opera d'arte
+  key: tourism
+  value: artwork
+  is_plural: false
+- phrase: opere d'arte
+  key: tourism
+  value: artwork
+  is_plural: true
+- phrase: attrazione turistica
+  key: tourism
+  value: attraction
+  is_plural: false
+- phrase: attrazioni turistiche
+  key: tourism
+  value: attraction
+  is_plural: true
+- phrase: bed and breakfast
+  key: tourism
+  value: bed_and_breakfast
+  is_plural: false
+- phrase: bed and breakfast
+  key: tourism
+  value: bed_and_breakfast
+  is_plural: true
+- phrase: campeggio
+  key: tourism
+  value: camp_site
+  is_plural: false
+- phrase: campeggi
+  key: tourism
+  value: camp_site
+  is_plural: true
+- phrase: area caravan e camper
+  key: tourism
+  value: caravan_site
+  is_plural: false
+- phrase: aree caravan e camper
+  key: tourism
+  value: caravan_site
+  is_plural: true
+- phrase: casetta (chalet)
+  key: tourism
+  value: chalet
+  is_plural: false
+- phrase: casette (chalet)
+  key: tourism
+  value: chalet
+  is_plural: true
+- phrase: guest house
+  key: tourism
+  value: guest_house
+  is_plural: false
+- phrase: guest house
+  key: tourism
+  value: guest_house
+  is_plural: true
+- phrase: ostello
+  key: tourism
+  value: hostel
+  is_plural: false
+- phrase: ostelli
+  key: tourism
+  value: hostel
+  is_plural: true
+- phrase: hotel
+  key: tourism
+  value: hotel
+  is_plural: false
+- phrase: alberghi
+  key: tourism
+  value: hotel
+  is_plural: true
+- phrase: informazioni
+  key: tourism
+  value: information
+  is_plural: false
+- phrase: informazioni
+  key: tourism
+  value: information
+  is_plural: true
+- phrase: motel
+  key: tourism
+  value: motel
+  is_plural: false
+- phrase: motel
+  key: tourism
+  value: motel
+  is_plural: true
+- phrase: museo
+  key: tourism
+  value: museum
+  is_plural: false
+- phrase: musei
+  key: tourism
+  value: museum
+  is_plural: true
+- phrase: area picnic
+  key: tourism
+  value: picnic_site
+  is_plural: false
+- phrase: aree picnic
+  key: tourism
+  value: picnic_site
+  is_plural: true
+- phrase: parco divertimenti
+  key: tourism
+  value: theme_park
+  is_plural: false
+- phrase: parchi divertimenti
+  key: tourism
+  value: theme_park
+  is_plural: true
+- phrase: punto panoramico
+  key: tourism
+  value: viewpoint
+  is_plural: false
+- phrase: punti panoramici
+  key: tourism
+  value: viewpoint
+  is_plural: true
+- phrase: zoo
+  key: tourism
+  value: zoo
+  is_plural: false
+- phrase: zoo
+  key: tourism
+  value: zoo
+  is_plural: true
+- phrase: benzinaio
+  key: amenity
+  value: fuel
+  is_plural: false
+- phrase: benzinai
+  key: amenity
+  value: fuel
+  is_plural: true

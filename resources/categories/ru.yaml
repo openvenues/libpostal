@@ -1,0 +1,3360 @@
+- phrase: аэропорт
+  key: aeroway
+  value: aerodrome
+  is_plural: false
+- phrase: аэропорты
+  key: aeroway
+  value: aerodrome
+  is_plural: true
+- phrase: дом искусств
+  key: amenity
+  value: arts_centre
+  is_plural: false
+- phrase: дома искусств
+  key: amenity
+  value: arts_centre
+  is_plural: true
+- phrase: банкомат
+  key: amenity
+  value: atm
+  is_plural: false
+- phrase: банкоматы
+  key: amenity
+  value: atm
+  is_plural: true
+- phrase: аудитория
+  key: amenity
+  value: auditorium
+  is_plural: false
+- phrase: аудитории
+  key: amenity
+  value: auditorium
+  is_plural: true
+- phrase: банк
+  key: amenity
+  value: bank
+  is_plural: false
+- phrase: банки
+  key: amenity
+  value: bank
+  is_plural: true
+- phrase: бар
+  key: amenity
+  value: bar
+  is_plural: false
+- phrase: бары
+  key: amenity
+  value: bar
+  is_plural: true
+- phrase: скамья
+  key: amenity
+  value: bench
+  is_plural: false
+- phrase: скамьи
+  key: amenity
+  value: bench
+  is_plural: true
+- phrase: велопарковка
+  key: amenity
+  value: bicycle_parking
+  is_plural: false
+- phrase: велопарковки
+  key: amenity
+  value: bicycle_parking
+  is_plural: true
+- phrase: прокат велосипедов
+  key: amenity
+  value: bicycle_rental
+  is_plural: false
+- phrase: прокат велосипедов
+  key: amenity
+  value: bicycle_rental
+  is_plural: true
+- phrase: бордель
+  key: amenity
+  value: brothel
+  is_plural: false
+- phrase: бордели
+  key: amenity
+  value: brothel
+  is_plural: true
+- phrase: обмен валют
+  key: amenity
+  value: bureau_de_change
+  is_plural: false
+- phrase: обмен валют
+  key: amenity
+  value: bureau_de_change
+  is_plural: true
+- phrase: автобусная станция
+  key: amenity
+  value: bus_station
+  is_plural: false
+- phrase: автобусные станции
+  key: amenity
+  value: bus_station
+  is_plural: true
+- phrase: кафе
+  key: amenity
+  value: cafe
+  is_plural: false
+- phrase: кафе
+  key: amenity
+  value: cafe
+  is_plural: true
+- phrase: аренда автомобилей
+  key: amenity
+  value: car_rental
+  is_plural: false
+- phrase: аренда автомобилей
+  key: amenity
+  value: car_rental
+  is_plural: true
+- phrase: прокат автомобилей
+  key: amenity
+  value: car_sharing
+  is_plural: false
+- phrase: прокат автомобилей
+  key: amenity
+  value: car_sharing
+  is_plural: true
+- phrase: автомойка
+  key: amenity
+  value: car_wash
+  is_plural: false
+- phrase: автомойки
+  key: amenity
+  value: car_wash
+  is_plural: true
+- phrase: казино
+  key: amenity
+  value: casino
+  is_plural: false
+- phrase: казино
+  key: amenity
+  value: casino
+  is_plural: true
+- phrase: кинотеатр
+  key: amenity
+  value: cinema
+  is_plural: false
+- phrase: кинотеатры
+  key: amenity
+  value: cinema
+  is_plural: true
+- phrase: поликлиника
+  key: amenity
+  value: clinic
+  is_plural: false
+- phrase: поликлиники
+  key: amenity
+  value: clinic
+  is_plural: true
+- phrase: клуб
+  key: amenity
+  value: club
+  is_plural: false
+- phrase: клубы
+  key: amenity
+  value: club
+  is_plural: true
+- phrase: колледж
+  key: amenity
+  value: college
+  is_plural: false
+- phrase: колледжи
+  key: amenity
+  value: college
+  is_plural: true
+- phrase: общественный центр
+  key: amenity
+  value: community_centre
+  is_plural: false
+- phrase: общественные центры
+  key: amenity
+  value: community_centre
+  is_plural: true
+- phrase: помещение суда
+  key: amenity
+  value: courthouse
+  is_plural: false
+- phrase: помещения судов
+  key: amenity
+  value: courthouse
+  is_plural: true
+- phrase: крематорий
+  key: amenity
+  value: crematorium
+  is_plural: false
+- phrase: крематории
+  key: amenity
+  value: crematorium
+  is_plural: true
+- phrase: стоматология
+  key: amenity
+  value: dentist
+  is_plural: false
+- phrase: стоматологии
+  key: amenity
+  value: dentist
+  is_plural: true
+- phrase: врач
+  key: amenity
+  value: doctors
+  is_plural: false
+- phrase: врачи
+  key: amenity
+  value: doctors
+  is_plural: true
+- phrase: общежитие
+  key: amenity
+  value: dormitory
+  is_plural: false
+- phrase: общежития
+  key: amenity
+  value: dormitory
+  is_plural: true
+- phrase: питьевая вода
+  key: amenity
+  value: drinking_water
+  is_plural: false
+- phrase: питьевая вода
+  key: amenity
+  value: drinking_water
+  is_plural: true
+- phrase: автошкола
+  key: amenity
+  value: driving_school
+  is_plural: false
+- phrase: автошколы
+  key: amenity
+  value: driving_school
+  is_plural: true
+- phrase: посольство
+  key: amenity
+  value: embassy
+  is_plural: false
+- phrase: посольства
+  key: amenity
+  value: embassy
+  is_plural: true
+- phrase: телефон экстренных служб
+  key: amenity
+  value: emergency_phone
+  is_plural: false
+- phrase: телефоны экстренных служб
+  key: amenity
+  value: emergency_phone
+  is_plural: true
+- phrase: палатка с едой
+  key: amenity
+  value: fast_food
+  is_plural: false
+- phrase: палатки с едой
+  key: amenity
+  value: fast_food
+  is_plural: true
+- phrase: паромная станция
+  key: amenity
+  value: ferry_terminal
+  is_plural: false
+- phrase: паромные станции
+  key: amenity
+  value: ferry_terminal
+  is_plural: true
+- phrase: пожарный гидрант
+  key: amenity
+  value: fire_hydrant
+  is_plural: false
+- phrase: пожарные гидранты
+  key: amenity
+  value: fire_hydrant
+  is_plural: true
+- phrase: пожарная охрана
+  key: amenity
+  value: fire_station
+  is_plural: false
+- phrase: пожарная охрана
+  key: amenity
+  value: fire_station
+  is_plural: true
+- phrase: фонтан
+  key: amenity
+  value: fountain
+  is_plural: false
+- phrase: фонтаны
+  key: amenity
+  value: fountain
+  is_plural: true
+- phrase: заправка
+  key: amenity
+  value: fuel
+  is_plural: false
+- phrase: заправки
+  key: amenity
+  value: fuel
+  is_plural: true
+- phrase: место захоронения
+  key: amenity
+  value: grave_yard
+  is_plural: false
+- phrase: места захоронения
+  key: amenity
+  value: grave_yard
+  is_plural: true
+- phrase: тренажерный зал
+  key: amenity
+  value: gym
+  is_plural: false
+- phrase: тренажерные залы
+  key: amenity
+  value: gym
+  is_plural: true
+- phrase: холл
+  key: amenity
+  value: hall
+  is_plural: false
+- phrase: холлы
+  key: amenity
+  value: hall
+  is_plural: true
+- phrase: оздоровительный центр
+  key: amenity
+  value: health_centre
+  is_plural: false
+- phrase: оздоровительные центры
+  key: amenity
+  value: health_centre
+  is_plural: true
+- phrase: госпиталь
+  key: amenity
+  value: hospital
+  is_plural: false
+- phrase: госпитали
+  key: amenity
+  value: hospital
+  is_plural: true
+- phrase: гостиница
+  key: amenity
+  value: hotel
+  is_plural: false
+- phrase: гостиницы
+  key: amenity
+  value: hotel
+  is_plural: true
+- phrase: охотничья вышка
+  key: amenity
+  value: hunting_stand
+  is_plural: false
+- phrase: охотничьи вышки
+  key: amenity
+  value: hunting_stand
+  is_plural: true
+- phrase: мороженное
+  key: amenity
+  value: ice_cream
+  is_plural: false
+- phrase: мороженное
+  key: amenity
+  value: ice_cream
+  is_plural: true
+- phrase: детский сад
+  key: amenity
+  value: kindergarten
+  is_plural: false
+- phrase: детские сады
+  key: amenity
+  value: kindergarten
+  is_plural: true
+- phrase: библиотека
+  key: amenity
+  value: library
+  is_plural: false
+- phrase: библиотеки
+  key: amenity
+  value: library
+  is_plural: true
+- phrase: магазин
+  key: amenity
+  value: market
+  is_plural: false
+- phrase: магазины
+  key: amenity
+  value: market
+  is_plural: true
+- phrase: рыночная площадь
+  key: amenity
+  value: marketplace
+  is_plural: false
+- phrase: рыночные площади
+  key: amenity
+  value: marketplace
+  is_plural: true
+- phrase: горная спасательная служба
+  key: amenity
+  value: mountain_rescue
+  is_plural: false
+- phrase: горные спасательные службы
+  key: amenity
+  value: mountain_rescue
+  is_plural: true
+- phrase: ночной клуб
+  key: amenity
+  value: nightclub
+  is_plural: false
+- phrase: ночные клубы
+  key: amenity
+  value: nightclub
+  is_plural: true
+- phrase: пансионат
+  key: amenity
+  value: nursery
+  is_plural: false
+- phrase: пансионаты
+  key: amenity
+  value: nursery
+  is_plural: true
+- phrase: дом престарелых
+  key: amenity
+  value: nursing_home
+  is_plural: false
+- phrase: дома престарелых
+  key: amenity
+  value: nursing_home
+  is_plural: true
+- phrase: офис
+  key: amenity
+  value: office
+  is_plural: false
+- phrase: офисы
+  key: amenity
+  value: office
+  is_plural: true
+- phrase: парк
+  key: amenity
+  value: park
+  is_plural: false
+- phrase: парки
+  key: amenity
+  value: park
+  is_plural: true
+- phrase: стоянка
+  key: amenity
+  value: parking
+  is_plural: false
+- phrase: стоянки
+  key: amenity
+  value: parking
+  is_plural: true
+- phrase: аптека
+  key: amenity
+  value: pharmacy
+  is_plural: false
+- phrase: аптеки
+  key: amenity
+  value: pharmacy
+  is_plural: true
+- phrase: место поклонения
+  key: amenity
+  value: place_of_worship
+  is_plural: false
+- phrase: места поклонений
+  key: amenity
+  value: place_of_worship
+  is_plural: true
+- phrase: полиция
+  key: amenity
+  value: police
+  is_plural: false
+- phrase: полиция
+  key: amenity
+  value: police
+  is_plural: true
+- phrase: почтовый ящик
+  key: amenity
+  value: post_box
+  is_plural: false
+- phrase: почтовые ящики
+  key: amenity
+  value: post_box
+  is_plural: true
+- phrase: почтовое отделение
+  key: amenity
+  value: post_office
+  is_plural: false
+- phrase: почтовые отделения
+  key: amenity
+  value: post_office
+  is_plural: true
+- phrase: дошкольное учреждение
+  key: amenity
+  value: preschool
+  is_plural: false
+- phrase: дошкольные учреждения
+  key: amenity
+  value: preschool
+  is_plural: true
+- phrase: тюрьма
+  key: amenity
+  value: prison
+  is_plural: false
+- phrase: тюрьмы
+  key: amenity
+  value: prison
+  is_plural: true
+- phrase: паб
+  key: amenity
+  value: pub
+  is_plural: false
+- phrase: пабы
+  key: amenity
+  value: pub
+  is_plural: true
+- phrase: общественное здание
+  key: amenity
+  value: public_building
+  is_plural: false
+- phrase: общественные здания
+  key: amenity
+  value: public_building
+  is_plural: true
+- phrase: городской рынок
+  key: amenity
+  value: public_market
+  is_plural: false
+- phrase: городские рынки
+  key: amenity
+  value: public_market
+  is_plural: true
+- phrase: приёмная
+  key: amenity
+  value: reception_area
+  is_plural: false
+- phrase: приёмные
+  key: amenity
+  value: reception_area
+  is_plural: true
+- phrase: место утилизации
+  key: amenity
+  value: recycling
+  is_plural: false
+- phrase: места утилизации
+  key: amenity
+  value: recycling
+  is_plural: true
+- phrase: ресторан
+  key: amenity
+  value: restaurant
+  is_plural: false
+- phrase: рестораны
+  key: amenity
+  value: restaurant
+  is_plural: true
+- phrase: дом престарелых
+  key: amenity
+  value: retirement_home
+  is_plural: false
+- phrase: дома престарелых
+  key: amenity
+  value: retirement_home
+  is_plural: true
+- phrase: сауна
+  key: amenity
+  value: sauna
+  is_plural: false
+- phrase: сауны
+  key: amenity
+  value: sauna
+  is_plural: true
+- phrase: школа
+  key: amenity
+  value: school
+  is_plural: false
+- phrase: школы
+  key: amenity
+  value: school
+  is_plural: true
+- phrase: укрытие
+  key: amenity
+  value: shelter
+  is_plural: false
+- phrase: укрытия
+  key: amenity
+  value: shelter
+  is_plural: true
+- phrase: магазин
+  key: amenity
+  value: shop
+  is_plural: false
+- phrase: магазины
+  key: amenity
+  value: shop
+  is_plural: true
+- phrase: торговый центр
+  key: amenity
+  value: shopping
+  is_plural: false
+- phrase: торговые центры
+  key: amenity
+  value: shopping
+  is_plural: true
+- phrase: сообщество
+  key: amenity
+  value: social_club
+  is_plural: false
+- phrase: сообщества
+  key: amenity
+  value: social_club
+  is_plural: true
+- phrase: студия
+  key: amenity
+  value: studio
+  is_plural: false
+- phrase: студии
+  key: amenity
+  value: studio
+  is_plural: true
+- phrase: супермаркет
+  key: amenity
+  value: supermarket
+  is_plural: false
+- phrase: супермаркеты
+  key: amenity
+  value: supermarket
+  is_plural: true
+- phrase: такси
+  key: amenity
+  value: taxi
+  is_plural: false
+- phrase: такси
+  key: amenity
+  value: taxi
+  is_plural: true
+- phrase: телефон
+  key: amenity
+  value: telephone
+  is_plural: false
+- phrase: телефоны
+  key: amenity
+  value: telephone
+  is_plural: true
+- phrase: театр
+  key: amenity
+  value: theatre
+  is_plural: false
+- phrase: театры
+  key: amenity
+  value: theatre
+  is_plural: true
+- phrase: туалет
+  key: amenity
+  value: toilets
+  is_plural: false
+- phrase: туалеты
+  key: amenity
+  value: toilets
+  is_plural: true
+- phrase: городская администрация
+  key: amenity
+  value: townhall
+  is_plural: false
+- phrase: городская администрация
+  key: amenity
+  value: townhall
+  is_plural: true
+- phrase: университет
+  key: amenity
+  value: university
+  is_plural: false
+- phrase: университеты
+  key: amenity
+  value: university
+  is_plural: true
+- phrase: торговый автомат
+  key: amenity
+  value: vending_machine
+  is_plural: false
+- phrase: торговые автоматы
+  key: amenity
+  value: vending_machine
+  is_plural: true
+- phrase: ветеринарная клиника
+  key: amenity
+  value: veterinary
+  is_plural: false
+- phrase: ветеринарные клиники
+  key: amenity
+  value: veterinary
+  is_plural: true
+- phrase: усадьба
+  key: amenity
+  value: village_hall
+  is_plural: false
+- phrase: усадьбы
+  key: amenity
+  value: village_hall
+  is_plural: true
+- phrase: мусорный бак
+  key: amenity
+  value: waste_basket
+  is_plural: false
+- phrase: мусорные баки
+  key: amenity
+  value: waste_basket
+  is_plural: true
+- phrase: вай-фай
+  key: amenity
+  value: wifi
+  is_plural: false
+- phrase: вай-фай
+  key: amenity
+  value: wifi
+  is_plural: true
+- phrase: молодёжный центр
+  key: amenity
+  value: youth_centre
+  is_plural: false
+- phrase: молодёжные центры
+  key: amenity
+  value: youth_centre
+  is_plural: true
+- phrase: административная граница
+  key: boundary
+  value: administrative
+  is_plural: false
+- phrase: административные границы
+  key: boundary
+  value: administrative
+  is_plural: true
+- phrase: многоквартирный дом
+  key: building
+  value: apartments
+  is_plural: false
+- phrase: многоквартирные дома
+  key: building
+  value: apartments
+  is_plural: true
+- phrase: ряд зданий
+  key: building
+  value: block
+  is_plural: false
+- phrase: ряды зданий
+  key: building
+  value: block
+  is_plural: true
+- phrase: бункер
+  key: building
+  value: bunker
+  is_plural: false
+- phrase: бункеры
+  key: building
+  value: bunker
+  is_plural: true
+- phrase: церковь
+  key: building
+  value: chapel
+  is_plural: false
+- phrase: церкви
+  key: building
+  value: chapel
+  is_plural: true
+- phrase: церковь
+  key: building
+  value: church
+  is_plural: false
+- phrase: церкви
+  key: building
+  value: church
+  is_plural: true
+- phrase: мэрия
+  key: building
+  value: city_hall
+  is_plural: false
+- phrase: мэрии
+  key: building
+  value: city_hall
+  is_plural: true
+- phrase: офисное здание
+  key: building
+  value: commercial
+  is_plural: false
+- phrase: офисные здания
+  key: building
+  value: commercial
+  is_plural: true
+- phrase: общежитие
+  key: building
+  value: dormitory
+  is_plural: false
+- phrase: общежития
+  key: building
+  value: dormitory
+  is_plural: true
+- phrase: вход в здание
+  key: building
+  value: entrance
+  is_plural: false
+- phrase: входы в здание
+  key: building
+  value: entrance
+  is_plural: true
+- phrase: факультетское здание
+  key: building
+  value: faculty
+  is_plural: false
+- phrase: факультетские здания
+  key: building
+  value: faculty
+  is_plural: true
+- phrase: ферма
+  key: building
+  value: farm
+  is_plural: false
+- phrase: фермы
+  key: building
+  value: farm
+  is_plural: true
+- phrase: квартиры
+  key: building
+  value: flats
+  is_plural: false
+- phrase: квартиры
+  key: building
+  value: flats
+  is_plural: true
+- phrase: гараж
+  key: building
+  value: garage
+  is_plural: false
+- phrase: гаражи
+  key: building
+  value: garage
+  is_plural: true
+- phrase: холл
+  key: building
+  value: hall
+  is_plural: false
+- phrase: холлы
+  key: building
+  value: hall
+  is_plural: true
+- phrase: здание больницы
+  key: building
+  value: hospital
+  is_plural: false
+- phrase: здания больницы
+  key: building
+  value: hospital
+  is_plural: true
+- phrase: гостиница
+  key: building
+  value: hotel
+  is_plural: false
+- phrase: гостиницы
+  key: building
+  value: hotel
+  is_plural: true
+- phrase: дом
+  key: building
+  value: house
+  is_plural: false
+- phrase: дома
+  key: building
+  value: house
+  is_plural: true
+- phrase: промышленное здание
+  key: building
+  value: industrial
+  is_plural: false
+- phrase: промышленные здания
+  key: building
+  value: industrial
+  is_plural: true
+- phrase: офисное здание
+  key: building
+  value: office
+  is_plural: false
+- phrase: офисные здания
+  key: building
+  value: office
+  is_plural: true
+- phrase: общественное здание
+  key: building
+  value: public
+  is_plural: false
+- phrase: общественные здания
+  key: building
+  value: public
+  is_plural: true
+- phrase: жилой дом
+  key: building
+  value: residential
+  is_plural: false
+- phrase: жилые дома
+  key: building
+  value: residential
+  is_plural: true
+- phrase: здание на продажу
+  key: building
+  value: retail
+  is_plural: false
+- phrase: здания на продажу
+  key: building
+  value: retail
+  is_plural: true
+- phrase: школа
+  key: building
+  value: school
+  is_plural: false
+- phrase: школы
+  key: building
+  value: school
+  is_plural: true
+- phrase: магазин
+  key: building
+  value: shop
+  is_plural: false
+- phrase: магазины
+  key: building
+  value: shop
+  is_plural: true
+- phrase: стадион
+  key: building
+  value: stadium
+  is_plural: false
+- phrase: стадионы
+  key: building
+  value: stadium
+  is_plural: true
+- phrase: магазин
+  key: building
+  value: store
+  is_plural: false
+- phrase: магазины
+  key: building
+  value: store
+  is_plural: true
+- phrase: ряд жилых домов
+  key: building
+  value: terrace
+  is_plural: false
+- phrase: ряды жилых домов
+  key: building
+  value: terrace
+  is_plural: true
+- phrase: башня
+  key: building
+  value: tower
+  is_plural: false
+- phrase: башни
+  key: building
+  value: tower
+  is_plural: true
+- phrase: трамвайная остановка
+  key: building
+  value: train_station
+  is_plural: false
+- phrase: трамвайные остановки
+  key: building
+  value: train_station
+  is_plural: true
+- phrase: университет
+  key: building
+  value: university
+  is_plural: false
+- phrase: университеты
+  key: building
+  value: university
+  is_plural: true
+- phrase: здание
+  key: building
+  value: '&quot;yes&quot;'
+  is_plural: false
+- phrase: здания
+  key: building
+  value: '&quot;yes&quot;'
+  is_plural: true
+- phrase: конный путь
+  key: highway
+  value: bridleway
+  is_plural: false
+- phrase: конные пути
+  key: highway
+  value: bridleway
+  is_plural: true
+- phrase: автобусная полоса-рельс
+  key: highway
+  value: bus_guideway
+  is_plural: false
+- phrase: автобусные полосы-рельсы
+  key: highway
+  value: bus_guideway
+  is_plural: true
+- phrase: автобусная остановка
+  key: highway
+  value: bus_stop
+  is_plural: false
+- phrase: автобусные остановки
+  key: highway
+  value: bus_stop
+  is_plural: true
+- phrase: закоулок
+  key: highway
+  value: byway
+  is_plural: false
+- phrase: закоулки
+  key: highway
+  value: byway
+  is_plural: true
+- phrase: ремонт дороги
+  key: highway
+  value: construction
+  is_plural: false
+- phrase: ремонт дорог
+  key: highway
+  value: construction
+  is_plural: true
+- phrase: велодорожка
+  key: highway
+  value: cycleway
+  is_plural: false
+- phrase: велодорожки
+  key: highway
+  value: cycleway
+  is_plural: true
+- phrase: километровый столб
+  key: highway
+  value: distance_marker
+  is_plural: false
+- phrase: километровые столбы
+  key: highway
+  value: distance_marker
+  is_plural: true
+- phrase: пункт первой помощи
+  key: highway
+  value: emergency_access_point
+  is_plural: false
+- phrase: пункты первой помощи
+  key: highway
+  value: emergency_access_point
+  is_plural: true
+- phrase: тротуар
+  key: highway
+  value: footway
+  is_plural: false
+- phrase: тротуары
+  key: highway
+  value: footway
+  is_plural: true
+- phrase: брод
+  key: highway
+  value: ford
+  is_plural: false
+- phrase: броды
+  key: highway
+  value: ford
+  is_plural: true
+- phrase: ворота
+  key: highway
+  value: gate
+  is_plural: false
+- phrase: ворота
+  key: highway
+  value: gate
+  is_plural: true
+- phrase: жилая улица
+  key: highway
+  value: living_street
+  is_plural: false
+- phrase: жилые улицы
+  key: highway
+  value: living_street
+  is_plural: true
+- phrase: второстепенная дорога
+  key: highway
+  value: minor
+  is_plural: false
+- phrase: второстепенные дороги
+  key: highway
+  value: minor
+  is_plural: true
+- phrase: автомагистраль
+  key: highway
+  value: motorway
+  is_plural: false
+- phrase: автомагистрали
+  key: highway
+  value: motorway
+  is_plural: true
+- phrase: перекрёсток
+  key: highway
+  value: motorway_junction
+  is_plural: false
+- phrase: перекрёстки
+  key: highway
+  value: motorway_junction
+  is_plural: true
+- phrase: развязка на автомагистрали
+  key: highway
+  value: motorway_link
+  is_plural: false
+- phrase: развязки на автомагистрали
+  key: highway
+  value: motorway_link
+  is_plural: true
+- phrase: тропа
+  key: highway
+  value: path
+  is_plural: false
+- phrase: тропы
+  key: highway
+  value: path
+  is_plural: true
+- phrase: дорога для пешеходов
+  key: highway
+  value: pedestrian
+  is_plural: false
+- phrase: дороги для пешеходов
+  key: highway
+  value: pedestrian
+  is_plural: true
+- phrase: платформа
+  key: highway
+  value: platform
+  is_plural: false
+- phrase: платформы
+  key: highway
+  value: platform
+  is_plural: true
+- phrase: главная дорога
+  key: highway
+  value: primary
+  is_plural: false
+- phrase: главные дороги
+  key: highway
+  value: primary
+  is_plural: true
+- phrase: главная дорога
+  key: highway
+  value: primary_link
+  is_plural: false
+- phrase: главные дороги
+  key: highway
+  value: primary_link
+  is_plural: true
+- phrase: гоночная трасса
+  key: highway
+  value: raceway
+  is_plural: false
+- phrase: гоночные трассы
+  key: highway
+  value: raceway
+  is_plural: true
+- phrase: улица
+  key: highway
+  value: residential
+  is_plural: false
+- phrase: улицы
+  key: highway
+  value: residential
+  is_plural: true
+- phrase: дорога
+  key: highway
+  value: road
+  is_plural: false
+- phrase: дороги
+  key: highway
+  value: road
+  is_plural: true
+- phrase: второстепенная дорога
+  key: highway
+  value: secondary
+  is_plural: false
+- phrase: второстепенные дороги
+  key: highway
+  value: secondary
+  is_plural: true
+- phrase: примыкающая дорога
+  key: highway
+  value: secondary_link
+  is_plural: false
+- phrase: примыкающие дороги
+  key: highway
+  value: secondary_link
+  is_plural: true
+- phrase: подъездная дорога
+  key: highway
+  value: service
+  is_plural: false
+- phrase: подъездные дороги
+  key: highway
+  value: service
+  is_plural: true
+- phrase: придорожный сервис
+  key: highway
+  value: services
+  is_plural: false
+- phrase: придорожный сервис
+  key: highway
+  value: services
+  is_plural: true
+- phrase: ступеньки
+  key: highway
+  value: steps
+  is_plural: false
+- phrase: ступеньки
+  key: highway
+  value: steps
+  is_plural: true
+- phrase: турникет
+  key: highway
+  value: stile
+  is_plural: false
+- phrase: турникеты
+  key: highway
+  value: stile
+  is_plural: true
+- phrase: дорога третьего класса
+  key: highway
+  value: tertiary
+  is_plural: false
+- phrase: дороги третьего класса
+  key: highway
+  value: tertiary
+  is_plural: true
+- phrase: грунтовка
+  key: highway
+  value: track
+  is_plural: false
+- phrase: грунтовки
+  key: highway
+  value: track
+  is_plural: true
+- phrase: тропа
+  key: highway
+  value: trail
+  is_plural: false
+- phrase: тропы
+  key: highway
+  value: trail
+  is_plural: true
+- phrase: трасса
+  key: highway
+  value: trunk
+  is_plural: false
+- phrase: трассы
+  key: highway
+  value: trunk
+  is_plural: true
+- phrase: развязка
+  key: highway
+  value: trunk_link
+  is_plural: false
+- phrase: развязки
+  key: highway
+  value: trunk_link
+  is_plural: true
+- phrase: дорога
+  key: highway
+  value: unclassified
+  is_plural: false
+- phrase: дороги
+  key: highway
+  value: unclassified
+  is_plural: true
+- phrase: дорога без покрытия
+  key: highway
+  value: unsurfaced
+  is_plural: false
+- phrase: дороги без покрытия
+  key: highway
+  value: unsurfaced
+  is_plural: true
+- phrase: раскопки
+  key: historic
+  value: archaeological_site
+  is_plural: false
+- phrase: раскопки
+  key: historic
+  value: archaeological_site
+  is_plural: true
+- phrase: поле боя
+  key: historic
+  value: battlefield
+  is_plural: false
+- phrase: поля боёв
+  key: historic
+  value: battlefield
+  is_plural: true
+- phrase: пограничный камень
+  key: historic
+  value: boundary_stone
+  is_plural: false
+- phrase: пограничные камни
+  key: historic
+  value: boundary_stone
+  is_plural: true
+- phrase: здание
+  key: historic
+  value: building
+  is_plural: false
+- phrase: здания
+  key: historic
+  value: building
+  is_plural: true
+- phrase: крепость
+  key: historic
+  value: castle
+  is_plural: false
+- phrase: крепости
+  key: historic
+  value: castle
+  is_plural: true
+- phrase: церковь
+  key: historic
+  value: church
+  is_plural: false
+- phrase: церкви
+  key: historic
+  value: church
+  is_plural: true
+- phrase: дом
+  key: historic
+  value: house
+  is_plural: false
+- phrase: дома
+  key: historic
+  value: house
+  is_plural: true
+- phrase: икона
+  key: historic
+  value: icon
+  is_plural: false
+- phrase: иконы
+  key: historic
+  value: icon
+  is_plural: true
+- phrase: поместье
+  key: historic
+  value: manor
+  is_plural: false
+- phrase: поместья
+  key: historic
+  value: manor
+  is_plural: true
+- phrase: памятник
+  key: historic
+  value: memorial
+  is_plural: false
+- phrase: памятники
+  key: historic
+  value: memorial
+  is_plural: true
+- phrase: рудник
+  key: historic
+  value: mine
+  is_plural: false
+- phrase: рудники
+  key: historic
+  value: mine
+  is_plural: true
+- phrase: монумент
+  key: historic
+  value: monument
+  is_plural: false
+- phrase: монументы
+  key: historic
+  value: monument
+  is_plural: true
+- phrase: музей
+  key: historic
+  value: museum
+  is_plural: false
+- phrase: музеи
+  key: historic
+  value: museum
+  is_plural: true
+- phrase: развалины
+  key: historic
+  value: ruins
+  is_plural: false
+- phrase: развалины
+  key: historic
+  value: ruins
+  is_plural: true
+- phrase: башня
+  key: historic
+  value: tower
+  is_plural: false
+- phrase: башни
+  key: historic
+  value: tower
+  is_plural: true
+- phrase: придорожный крест
+  key: historic
+  value: wayside_cross
+  is_plural: false
+- phrase: придорожные кресты
+  key: historic
+  value: wayside_cross
+  is_plural: true
+- phrase: придорожная святыня
+  key: historic
+  value: wayside_shrine
+  is_plural: false
+- phrase: придорожные святыни
+  key: historic
+  value: wayside_shrine
+  is_plural: true
+- phrase: остов судна
+  key: historic
+  value: wreck
+  is_plural: false
+- phrase: остовы судов
+  key: historic
+  value: wreck
+  is_plural: true
+- phrase: сады-огороды
+  key: landuse
+  value: allotments
+  is_plural: false
+- phrase: сады-огороды
+  key: landuse
+  value: allotments
+  is_plural: true
+- phrase: бассейн
+  key: landuse
+  value: basin
+  is_plural: false
+- phrase: бассейны
+  key: landuse
+  value: basin
+  is_plural: true
+- phrase: заброшенная зона
+  key: landuse
+  value: brownfield
+  is_plural: false
+- phrase: заброшенные зоны
+  key: landuse
+  value: brownfield
+  is_plural: true
+- phrase: кладбище
+  key: landuse
+  value: cemetery
+  is_plural: false
+- phrase: кладбища
+  key: landuse
+  value: cemetery
+  is_plural: true
+- phrase: офисная территория
+  key: landuse
+  value: commercial
+  is_plural: false
+- phrase: офисные территории
+  key: landuse
+  value: commercial
+  is_plural: true
+- phrase: законсервированная зона
+  key: landuse
+  value: conservation
+  is_plural: false
+- phrase: законсервированные зоны
+  key: landuse
+  value: conservation
+  is_plural: true
+- phrase: стройка
+  key: landuse
+  value: construction
+  is_plural: false
+- phrase: стройки
+  key: landuse
+  value: construction
+  is_plural: true
+- phrase: ферма
+  key: landuse
+  value: farm
+  is_plural: false
+- phrase: фермы
+  key: landuse
+  value: farm
+  is_plural: true
+- phrase: сельхозугодья
+  key: landuse
+  value: farmland
+  is_plural: false
+- phrase: сельхозугодья
+  key: landuse
+  value: farmland
+  is_plural: true
+- phrase: сельхоздвор
+  key: landuse
+  value: farmyard
+  is_plural: false
+- phrase: сельхоздворы
+  key: landuse
+  value: farmyard
+  is_plural: true
+- phrase: дикий лес
+  key: landuse
+  value: forest
+  is_plural: false
+- phrase: дикие леса
+  key: landuse
+  value: forest
+  is_plural: true
+- phrase: трава
+  key: landuse
+  value: grass
+  is_plural: false
+- phrase: травы
+  key: landuse
+  value: grass
+  is_plural: true
+- phrase: неосвоенная территория
+  key: landuse
+  value: greenfield
+  is_plural: false
+- phrase: неосвоенные территории
+  key: landuse
+  value: greenfield
+  is_plural: true
+- phrase: промзона
+  key: landuse
+  value: industrial
+  is_plural: false
+- phrase: промзоны
+  key: landuse
+  value: industrial
+  is_plural: true
+- phrase: свалка
+  key: landuse
+  value: landfill
+  is_plural: false
+- phrase: свалки
+  key: landuse
+  value: landfill
+  is_plural: true
+- phrase: луг
+  key: landuse
+  value: meadow
+  is_plural: false
+- phrase: луга
+  key: landuse
+  value: meadow
+  is_plural: true
+- phrase: военная зона
+  key: landuse
+  value: military
+  is_plural: false
+- phrase: военные зоны
+  key: landuse
+  value: military
+  is_plural: true
+- phrase: шахта
+  key: landuse
+  value: mine
+  is_plural: false
+- phrase: шахты
+  key: landuse
+  value: mine
+  is_plural: true
+- phrase: гора
+  key: landuse
+  value: mountain
+  is_plural: false
+- phrase: горы
+  key: landuse
+  value: mountain
+  is_plural: true
+- phrase: заповедник
+  key: landuse
+  value: nature_reserve
+  is_plural: false
+- phrase: заповедники
+  key: landuse
+  value: nature_reserve
+  is_plural: true
+- phrase: парк
+  key: landuse
+  value: park
+  is_plural: false
+- phrase: парки
+  key: landuse
+  value: park
+  is_plural: true
+- phrase: лыжня
+  key: landuse
+  value: piste
+  is_plural: false
+- phrase: лыжни
+  key: landuse
+  value: piste
+  is_plural: true
+- phrase: открытая площадка
+  key: landuse
+  value: plaza
+  is_plural: false
+- phrase: открытые площадки
+  key: landuse
+  value: plaza
+  is_plural: true
+- phrase: карьер
+  key: landuse
+  value: quarry
+  is_plural: false
+- phrase: карьеры
+  key: landuse
+  value: quarry
+  is_plural: true
+- phrase: железная дорога
+  key: landuse
+  value: railway
+  is_plural: false
+- phrase: железные дороги
+  key: landuse
+  value: railway
+  is_plural: true
+- phrase: зона отдыха
+  key: landuse
+  value: recreation_ground
+  is_plural: false
+- phrase: зоны отдыха
+  key: landuse
+  value: recreation_ground
+  is_plural: true
+- phrase: водохранилище
+  key: landuse
+  value: reservoir
+  is_plural: false
+- phrase: водохранилища
+  key: landuse
+  value: reservoir
+  is_plural: true
+- phrase: жилой район
+  key: landuse
+  value: residential
+  is_plural: false
+- phrase: жилые районы
+  key: landuse
+  value: residential
+  is_plural: true
+- phrase: торговая территория
+  key: landuse
+  value: retail
+  is_plural: false
+- phrase: торговые территории
+  key: landuse
+  value: retail
+  is_plural: true
+- phrase: деревенское поле
+  key: landuse
+  value: village_green
+  is_plural: false
+- phrase: деревенские поля
+  key: landuse
+  value: village_green
+  is_plural: true
+- phrase: виноградник
+  key: landuse
+  value: vineyard
+  is_plural: false
+- phrase: виноградники
+  key: landuse
+  value: vineyard
+  is_plural: true
+- phrase: заболоченность
+  key: landuse
+  value: wetland
+  is_plural: false
+- phrase: заболоченности
+  key: landuse
+  value: wetland
+  is_plural: true
+- phrase: обслуживаемый лес
+  key: landuse
+  value: wood
+  is_plural: false
+- phrase: обслуживаемые леса
+  key: landuse
+  value: wood
+  is_plural: true
+- phrase: пляж с насаждениями
+  key: leisure
+  value: beach_resort
+  is_plural: false
+- phrase: пляжи с насаждениями
+  key: leisure
+  value: beach_resort
+  is_plural: true
+- phrase: общественная земля
+  key: leisure
+  value: common
+  is_plural: false
+- phrase: общественные земли
+  key: leisure
+  value: common
+  is_plural: true
+- phrase: рыбалка
+  key: leisure
+  value: fishing
+  is_plural: false
+- phrase: рыбалка
+  key: leisure
+  value: fishing
+  is_plural: true
+- phrase: сад
+  key: leisure
+  value: garden
+  is_plural: false
+- phrase: сады
+  key: leisure
+  value: garden
+  is_plural: true
+- phrase: поле для гольфа
+  key: leisure
+  value: golf_course
+  is_plural: false
+- phrase: поля для гольфа
+  key: leisure
+  value: golf_course
+  is_plural: true
+- phrase: каток
+  key: leisure
+  value: ice_rink
+  is_plural: false
+- phrase: катки
+  key: leisure
+  value: ice_rink
+  is_plural: true
+- phrase: пристань для яхт
+  key: leisure
+  value: marina
+  is_plural: false
+- phrase: пристани для яхт
+  key: leisure
+  value: marina
+  is_plural: true
+- phrase: минигольф
+  key: leisure
+  value: miniature_golf
+  is_plural: false
+- phrase: минигольфы
+  key: leisure
+  value: miniature_golf
+  is_plural: true
+- phrase: заповедник
+  key: leisure
+  value: nature_reserve
+  is_plural: false
+- phrase: заповедники
+  key: leisure
+  value: nature_reserve
+  is_plural: true
+- phrase: парк
+  key: leisure
+  value: park
+  is_plural: false
+- phrase: парки
+  key: leisure
+  value: park
+  is_plural: true
+- phrase: спортивный газон
+  key: leisure
+  value: pitch
+  is_plural: false
+- phrase: спортивные газоны
+  key: leisure
+  value: pitch
+  is_plural: true
+- phrase: детская игровая площадка
+  key: leisure
+  value: playground
+  is_plural: false
+- phrase: детские игровые площадки
+  key: leisure
+  value: playground
+  is_plural: true
+- phrase: зона отдыха
+  key: leisure
+  value: recreation_ground
+  is_plural: false
+- phrase: зоны отдыха
+  key: leisure
+  value: recreation_ground
+  is_plural: true
+- phrase: эллинг
+  key: leisure
+  value: slipway
+  is_plural: false
+- phrase: эллинги
+  key: leisure
+  value: slipway
+  is_plural: true
+- phrase: спортивный центр
+  key: leisure
+  value: sports_centre
+  is_plural: false
+- phrase: спортивные центры
+  key: leisure
+  value: sports_centre
+  is_plural: true
+- phrase: стадион
+  key: leisure
+  value: stadium
+  is_plural: false
+- phrase: стадионы
+  key: leisure
+  value: stadium
+  is_plural: true
+- phrase: бассейн
+  key: leisure
+  value: swimming_pool
+  is_plural: false
+- phrase: бассейны
+  key: leisure
+  value: swimming_pool
+  is_plural: true
+- phrase: спортивная дорожка
+  key: leisure
+  value: track
+  is_plural: false
+- phrase: спортивные дорожки
+  key: leisure
+  value: track
+  is_plural: true
+- phrase: аквапарк
+  key: leisure
+  value: water_park
+  is_plural: false
+- phrase: аквапарки
+  key: leisure
+  value: water_park
+  is_plural: true
+- phrase: залив
+  key: natural
+  value: bay
+  is_plural: false
+- phrase: заливы
+  key: natural
+  value: bay
+  is_plural: true
+- phrase: пляж
+  key: natural
+  value: beach
+  is_plural: false
+- phrase: пляжи
+  key: natural
+  value: beach
+  is_plural: true
+- phrase: мыс
+  key: natural
+  value: cape
+  is_plural: false
+- phrase: мысы
+  key: natural
+  value: cape
+  is_plural: true
+- phrase: вход в пещеру
+  key: natural
+  value: cave_entrance
+  is_plural: false
+- phrase: входы в пещеру
+  key: natural
+  value: cave_entrance
+  is_plural: true
+- phrase: канал
+  key: natural
+  value: channel
+  is_plural: false
+- phrase: каналы
+  key: natural
+  value: channel
+  is_plural: true
+- phrase: обрыв
+  key: natural
+  value: cliff
+  is_plural: false
+- phrase: обрывы
+  key: natural
+  value: cliff
+  is_plural: true
+- phrase: береговая линия
+  key: natural
+  value: coastline
+  is_plural: false
+- phrase: береговые линии
+  key: natural
+  value: coastline
+  is_plural: true
+- phrase: кратер
+  key: natural
+  value: crater
+  is_plural: false
+- phrase: кратеры
+  key: natural
+  value: crater
+  is_plural: true
+- phrase: природный объект
+  key: natural
+  value: feature
+  is_plural: false
+- phrase: природные объекты
+  key: natural
+  value: feature
+  is_plural: true
+- phrase: холм
+  key: natural
+  value: fell
+  is_plural: false
+- phrase: холмы
+  key: natural
+  value: fell
+  is_plural: true
+- phrase: фьорд
+  key: natural
+  value: fjord
+  is_plural: false
+- phrase: фьорды
+  key: natural
+  value: fjord
+  is_plural: true
+- phrase: гейзер
+  key: natural
+  value: geyser
+  is_plural: false
+- phrase: гейзеры
+  key: natural
+  value: geyser
+  is_plural: true
+- phrase: ледник
+  key: natural
+  value: glacier
+  is_plural: false
+- phrase: ледники
+  key: natural
+  value: glacier
+  is_plural: true
+- phrase: пустошь
+  key: natural
+  value: heath
+  is_plural: false
+- phrase: пустоши
+  key: natural
+  value: heath
+  is_plural: true
+- phrase: холм
+  key: natural
+  value: hill
+  is_plural: false
+- phrase: холмы
+  key: natural
+  value: hill
+  is_plural: true
+- phrase: остров
+  key: natural
+  value: island
+  is_plural: false
+- phrase: острова
+  key: natural
+  value: island
+  is_plural: true
+- phrase: земля
+  key: natural
+  value: land
+  is_plural: false
+- phrase: земли
+  key: natural
+  value: land
+  is_plural: true
+- phrase: болото
+  key: natural
+  value: marsh
+  is_plural: false
+- phrase: болота
+  key: natural
+  value: marsh
+  is_plural: true
+- phrase: торфяник
+  key: natural
+  value: moor
+  is_plural: false
+- phrase: торфяники
+  key: natural
+  value: moor
+  is_plural: true
+- phrase: грязь
+  key: natural
+  value: mud
+  is_plural: false
+- phrase: грязи
+  key: natural
+  value: mud
+  is_plural: true
+- phrase: вершина горы
+  key: natural
+  value: peak
+  is_plural: false
+- phrase: вершины гор
+  key: natural
+  value: peak
+  is_plural: true
+- phrase: полуостров
+  key: natural
+  value: point
+  is_plural: false
+- phrase: полуострова
+  key: natural
+  value: point
+  is_plural: true
+- phrase: риф
+  key: natural
+  value: reef
+  is_plural: false
+- phrase: рифы
+  key: natural
+  value: reef
+  is_plural: true
+- phrase: хребет
+  key: natural
+  value: ridge
+  is_plural: false
+- phrase: хребты
+  key: natural
+  value: ridge
+  is_plural: true
+- phrase: река
+  key: natural
+  value: river
+  is_plural: false
+- phrase: реки
+  key: natural
+  value: river
+  is_plural: true
+- phrase: скала
+  key: natural
+  value: rock
+  is_plural: false
+- phrase: скалы
+  key: natural
+  value: rock
+  is_plural: true
+- phrase: осыпь камней
+  key: natural
+  value: scree
+  is_plural: false
+- phrase: осыпи камней
+  key: natural
+  value: scree
+  is_plural: true
+- phrase: кустарник
+  key: natural
+  value: scrub
+  is_plural: false
+- phrase: кустарники
+  key: natural
+  value: scrub
+  is_plural: true
+- phrase: мелководье
+  key: natural
+  value: shoal
+  is_plural: false
+- phrase: мелководья
+  key: natural
+  value: shoal
+  is_plural: true
+- phrase: родник
+  key: natural
+  value: spring
+  is_plural: false
+- phrase: родники
+  key: natural
+  value: spring
+  is_plural: true
+- phrase: пролив
+  key: natural
+  value: strait
+  is_plural: false
+- phrase: проливы
+  key: natural
+  value: strait
+  is_plural: true
+- phrase: дерево
+  key: natural
+  value: tree
+  is_plural: false
+- phrase: деревья
+  key: natural
+  value: tree
+  is_plural: true
+- phrase: долина
+  key: natural
+  value: valley
+  is_plural: false
+- phrase: долины
+  key: natural
+  value: valley
+  is_plural: true
+- phrase: вулкан
+  key: natural
+  value: volcano
+  is_plural: false
+- phrase: вулканы
+  key: natural
+  value: volcano
+  is_plural: true
+- phrase: водоём
+  key: natural
+  value: water
+  is_plural: false
+- phrase: водоёмы
+  key: natural
+  value: water
+  is_plural: true
+- phrase: заболоченная территория
+  key: natural
+  value: wetland
+  is_plural: false
+- phrase: заболоченные территории
+  key: natural
+  value: wetland
+  is_plural: true
+- phrase: заболоченные земли
+  key: natural
+  value: wetlands
+  is_plural: false
+- phrase: заболоченные земли
+  key: natural
+  value: wetlands
+  is_plural: true
+- phrase: естественный лес
+  key: natural
+  value: wood
+  is_plural: false
+- phrase: естественные леса
+  key: natural
+  value: wood
+  is_plural: true
+- phrase: город
+  key: place
+  value: city
+  is_plural: false
+- phrase: города
+  key: place
+  value: city
+  is_plural: true
+- phrase: страна
+  key: place
+  value: country
+  is_plural: false
+- phrase: страны
+  key: place
+  value: country
+  is_plural: true
+- phrase: уезд
+  key: place
+  value: county
+  is_plural: false
+- phrase: уезды
+  key: place
+  value: county
+  is_plural: true
+- phrase: ферма
+  key: place
+  value: farm
+  is_plural: false
+- phrase: фермы
+  key: place
+  value: farm
+  is_plural: true
+- phrase: посёлок
+  key: place
+  value: hamlet
+  is_plural: false
+- phrase: посёлки
+  key: place
+  value: hamlet
+  is_plural: true
+- phrase: дом
+  key: place
+  value: house
+  is_plural: false
+- phrase: дома
+  key: place
+  value: house
+  is_plural: true
+- phrase: дома
+  key: place
+  value: houses
+  is_plural: false
+- phrase: дома
+  key: place
+  value: houses
+  is_plural: true
+- phrase: остров
+  key: place
+  value: island
+  is_plural: false
+- phrase: острова
+  key: place
+  value: island
+  is_plural: true
+- phrase: островок
+  key: place
+  value: islet
+  is_plural: false
+- phrase: островки
+  key: place
+  value: islet
+  is_plural: true
+- phrase: населённый пункт
+  key: place
+  value: locality
+  is_plural: false
+- phrase: населённые пункты
+  key: place
+  value: locality
+  is_plural: true
+- phrase: торфяник
+  key: place
+  value: moor
+  is_plural: false
+- phrase: торфяники
+  key: place
+  value: moor
+  is_plural: true
+- phrase: муниципалитет
+  key: place
+  value: municipality
+  is_plural: false
+- phrase: муниципалитеты
+  key: place
+  value: municipality
+  is_plural: true
+- phrase: индекс
+  key: place
+  value: postcode
+  is_plural: false
+- phrase: индексы
+  key: place
+  value: postcode
+  is_plural: true
+- phrase: регион
+  key: place
+  value: region
+  is_plural: false
+- phrase: регионы
+  key: place
+  value: region
+  is_plural: true
+- phrase: море
+  key: place
+  value: sea
+  is_plural: false
+- phrase: моря
+  key: place
+  value: sea
+  is_plural: true
+- phrase: область/штат
+  key: place
+  value: state
+  is_plural: false
+- phrase: области/штаты
+  key: place
+  value: state
+  is_plural: true
+- phrase: участок
+  key: place
+  value: subdivision
+  is_plural: false
+- phrase: участки
+  key: place
+  value: subdivision
+  is_plural: true
+- phrase: пригород
+  key: place
+  value: suburb
+  is_plural: false
+- phrase: пригороды
+  key: place
+  value: suburb
+  is_plural: true
+- phrase: город
+  key: place
+  value: town
+  is_plural: false
+- phrase: города
+  key: place
+  value: town
+  is_plural: true
+- phrase: загородная зона
+  key: place
+  value: unincorporated_area
+  is_plural: false
+- phrase: загородные зоны
+  key: place
+  value: unincorporated_area
+  is_plural: true
+- phrase: деревня
+  key: place
+  value: village
+  is_plural: false
+- phrase: деревни
+  key: place
+  value: village
+  is_plural: true
+- phrase: разобранные железнодорожные пути
+  key: railway
+  value: abandoned
+  is_plural: false
+- phrase: разобранные железнодорожные пути
+  key: railway
+  value: abandoned
+  is_plural: true
+- phrase: ремонт ж.д. путей
+  key: railway
+  value: construction
+  is_plural: false
+- phrase: ремонт ж.д. путей
+  key: railway
+  value: construction
+  is_plural: true
+- phrase: заброшенная ж.д. ветка
+  key: railway
+  value: disused
+  is_plural: false
+- phrase: заброшенные ж.д. ветки
+  key: railway
+  value: disused
+  is_plural: true
+- phrase: заброшенная ж.д. станция
+  key: railway
+  value: disused_station
+  is_plural: false
+- phrase: заброшенная ж.д. станцияs
+  key: railway
+  value: disused_station
+  is_plural: true
+- phrase: фуникулер
+  key: railway
+  value: funicular
+  is_plural: false
+- phrase: фуникулеры
+  key: railway
+  value: funicular
+  is_plural: true
+- phrase: станция ж.д.
+  key: railway
+  value: halt
+  is_plural: false
+- phrase: станции ж.д.
+  key: railway
+  value: halt
+  is_plural: true
+- phrase: историческая ж.д. станция
+  key: railway
+  value: historic_station
+  is_plural: false
+- phrase: исторические ж.д. станции
+  key: railway
+  value: historic_station
+  is_plural: true
+- phrase: узел ж.д.
+  key: railway
+  value: junction
+  is_plural: false
+- phrase: узлы ж.д.
+  key: railway
+  value: junction
+  is_plural: true
+- phrase: железнодорожный переезд
+  key: railway
+  value: level_crossing
+  is_plural: false
+- phrase: железнодорожные переезды
+  key: railway
+  value: level_crossing
+  is_plural: true
+- phrase: легкорельсовый ж.д. транспорт
+  key: railway
+  value: light_rail
+  is_plural: false
+- phrase: легкорельсовый ж.д. транспорт
+  key: railway
+  value: light_rail
+  is_plural: true
+- phrase: монорельс
+  key: railway
+  value: monorail
+  is_plural: false
+- phrase: монорельс
+  key: railway
+  value: monorail
+  is_plural: true
+- phrase: узкоколейка
+  key: railway
+  value: narrow_gauge
+  is_plural: false
+- phrase: узкоколейка
+  key: railway
+  value: narrow_gauge
+  is_plural: true
+- phrase: железнодорожная платформа
+  key: railway
+  value: platform
+  is_plural: false
+- phrase: железнодорожные платформы
+  key: railway
+  value: platform
+  is_plural: true
+- phrase: историческая ж.д.
+  key: railway
+  value: preserved
+  is_plural: false
+- phrase: исторические ж.д.
+  key: railway
+  value: preserved
+  is_plural: true
+- phrase: ответвление ж.д. пути
+  key: railway
+  value: spur
+  is_plural: false
+- phrase: ответвления ж.д. путей
+  key: railway
+  value: spur
+  is_plural: true
+- phrase: железнодорожная станция
+  key: railway
+  value: station
+  is_plural: false
+- phrase: железнодорожные станции
+  key: railway
+  value: station
+  is_plural: true
+- phrase: станция метро
+  key: railway
+  value: subway
+  is_plural: false
+- phrase: станции метро
+  key: railway
+  value: subway
+  is_plural: true
+- phrase: вход в метро
+  key: railway
+  value: subway_entrance
+  is_plural: false
+- phrase: входы в метро
+  key: railway
+  value: subway_entrance
+  is_plural: true
+- phrase: железнодорожная стрелка
+  key: railway
+  value: switch
+  is_plural: false
+- phrase: железнодорожные стрелки
+  key: railway
+  value: switch
+  is_plural: true
+- phrase: трамвай
+  key: railway
+  value: tram
+  is_plural: false
+- phrase: трамваи
+  key: railway
+  value: tram
+  is_plural: true
+- phrase: трамвайная остановка
+  key: railway
+  value: tram_stop
+  is_plural: false
+- phrase: трамвайные остановки
+  key: railway
+  value: tram_stop
+  is_plural: true
+- phrase: депо
+  key: railway
+  value: yard
+  is_plural: false
+- phrase: депо
+  key: railway
+  value: yard
+  is_plural: true
+- phrase: винный магазин
+  key: shop
+  value: alcohol
+  is_plural: false
+- phrase: винные магазины
+  key: shop
+  value: alcohol
+  is_plural: true
+- phrase: магазин одежды
+  key: shop
+  value: apparel
+  is_plural: false
+- phrase: магазины одежды
+  key: shop
+  value: apparel
+  is_plural: true
+- phrase: художественный салон
+  key: shop
+  value: art
+  is_plural: false
+- phrase: художественные салоны
+  key: shop
+  value: art
+  is_plural: true
+- phrase: булочная
+  key: shop
+  value: bakery
+  is_plural: false
+- phrase: булочные
+  key: shop
+  value: bakery
+  is_plural: true
+- phrase: салон красоты
+  key: shop
+  value: beauty
+  is_plural: false
+- phrase: салоны красоты
+  key: shop
+  value: beauty
+  is_plural: true
+- phrase: магазин напитков
+  key: shop
+  value: beverages
+  is_plural: false
+- phrase: магазины напитков
+  key: shop
+  value: beverages
+  is_plural: true
+- phrase: веломагазин
+  key: shop
+  value: bicycle
+  is_plural: false
+- phrase: веломагазины
+  key: shop
+  value: bicycle
+  is_plural: true
+- phrase: книжный магазин
+  key: shop
+  value: books
+  is_plural: false
+- phrase: книжные магазины
+  key: shop
+  value: books
+  is_plural: true
+- phrase: мясная лавка
+  key: shop
+  value: butcher
+  is_plural: false
+- phrase: мясные лавки
+  key: shop
+  value: butcher
+  is_plural: true
+- phrase: автомагазин
+  key: shop
+  value: car
+  is_plural: false
+- phrase: автомагазины
+  key: shop
+  value: car
+  is_plural: true
+- phrase: автосалон
+  key: shop
+  value: car_dealer
+  is_plural: false
+- phrase: автосалоны
+  key: shop
+  value: car_dealer
+  is_plural: true
+- phrase: автозапчасти
+  key: shop
+  value: car_parts
+  is_plural: false
+- phrase: автозапчасти
+  key: shop
+  value: car_parts
+  is_plural: true
+- phrase: автомастерская
+  key: shop
+  value: car_repair
+  is_plural: false
+- phrase: автомастерские
+  key: shop
+  value: car_repair
+  is_plural: true
+- phrase: ковры
+  key: shop
+  value: carpet
+  is_plural: false
+- phrase: ковры
+  key: shop
+  value: carpet
+  is_plural: true
+- phrase: секонд-хэнд
+  key: shop
+  value: charity
+  is_plural: false
+- phrase: секонд-хэнды
+  key: shop
+  value: charity
+  is_plural: true
+- phrase: магазин бытовой химии
+  key: shop
+  value: chemist
+  is_plural: false
+- phrase: магазины бытовой химии
+  key: shop
+  value: chemist
+  is_plural: true
+- phrase: магазин одежды
+  key: shop
+  value: clothes
+  is_plural: false
+- phrase: магазины одежды
+  key: shop
+  value: clothes
+  is_plural: true
+- phrase: компьютерный магазин
+  key: shop
+  value: computer
+  is_plural: false
+- phrase: компьютерные магазины
+  key: shop
+  value: computer
+  is_plural: true
+- phrase: кондитерская
+  key: shop
+  value: confectionery
+  is_plural: false
+- phrase: кондитерские
+  key: shop
+  value: confectionery
+  is_plural: true
+- phrase: ларёк
+  key: shop
+  value: convenience
+  is_plural: false
+- phrase: ларьки
+  key: shop
+  value: convenience
+  is_plural: true
+- phrase: услуги копирования
+  key: shop
+  value: copyshop
+  is_plural: false
+- phrase: услуги копирования
+  key: shop
+  value: copyshop
+  is_plural: true
+- phrase: косметика
+  key: shop
+  value: cosmetics
+  is_plural: false
+- phrase: косметика
+  key: shop
+  value: cosmetics
+  is_plural: true
+- phrase: универсам
+  key: shop
+  value: department_store
+  is_plural: false
+- phrase: универсамы
+  key: shop
+  value: department_store
+  is_plural: true
+- phrase: магазин распродаж
+  key: shop
+  value: discount
+  is_plural: false
+- phrase: магазины распродаж
+  key: shop
+  value: discount
+  is_plural: true
+- phrase: сделай-сам
+  key: shop
+  value: doityourself
+  is_plural: false
+- phrase: сделай-сам
+  key: shop
+  value: doityourself
+  is_plural: true
+- phrase: аптека
+  key: shop
+  value: drugstore
+  is_plural: false
+- phrase: аптеки
+  key: shop
+  value: drugstore
+  is_plural: true
+- phrase: химчистка
+  key: shop
+  value: dry_cleaning
+  is_plural: false
+- phrase: химчистки
+  key: shop
+  value: dry_cleaning
+  is_plural: true
+- phrase: магазин электротоваров
+  key: shop
+  value: electronics
+  is_plural: false
+- phrase: магазины электротоваров
+  key: shop
+  value: electronics
+  is_plural: true
+- phrase: риелтор
+  key: shop
+  value: estate_agent
+  is_plural: false
+- phrase: риелторы
+  key: shop
+  value: estate_agent
+  is_plural: true
+- phrase: фермерский магазин
+  key: shop
+  value: farm
+  is_plural: false
+- phrase: фермерские магазины
+  key: shop
+  value: farm
+  is_plural: true
+- phrase: магазин модной одежды
+  key: shop
+  value: fashion
+  is_plural: false
+- phrase: магазины модной одежды
+  key: shop
+  value: fashion
+  is_plural: true
+- phrase: рыбный магазин
+  key: shop
+  value: fish
+  is_plural: false
+- phrase: рыбные магазины
+  key: shop
+  value: fish
+  is_plural: true
+- phrase: цветочный магазин
+  key: shop
+  value: florist
+  is_plural: false
+- phrase: цветочные магазины
+  key: shop
+  value: florist
+  is_plural: true
+- phrase: продуктовый магазин
+  key: shop
+  value: food
+  is_plural: false
+- phrase: продуктовые магазины
+  key: shop
+  value: food
+  is_plural: true
+- phrase: похоронное бюро
+  key: shop
+  value: funeral_directors
+  is_plural: false
+- phrase: похоронные бюро
+  key: shop
+  value: funeral_directors
+  is_plural: true
+- phrase: мебельный магазин
+  key: shop
+  value: furniture
+  is_plural: false
+- phrase: мебельные магазины
+  key: shop
+  value: furniture
+  is_plural: true
+- phrase: галерея
+  key: shop
+  value: gallery
+  is_plural: false
+- phrase: галереи
+  key: shop
+  value: gallery
+  is_plural: true
+- phrase: садоводческий магазин
+  key: shop
+  value: garden_centre
+  is_plural: false
+- phrase: садоводческие магазины
+  key: shop
+  value: garden_centre
+  is_plural: true
+- phrase: магазин
+  key: shop
+  value: general
+  is_plural: false
+- phrase: магазины
+  key: shop
+  value: general
+  is_plural: true
+- phrase: магазин подарков
+  key: shop
+  value: gift
+  is_plural: false
+- phrase: магазины подарков
+  key: shop
+  value: gift
+  is_plural: true
+- phrase: овощной магазин
+  key: shop
+  value: greengrocer
+  is_plural: false
+- phrase: овощные магазины
+  key: shop
+  value: greengrocer
+  is_plural: true
+- phrase: бакалейный магазин
+  key: shop
+  value: grocery
+  is_plural: false
+- phrase: бакалейные магазины
+  key: shop
+  value: grocery
+  is_plural: true
+- phrase: парикмахерская
+  key: shop
+  value: hairdresser
+  is_plural: false
+- phrase: парикмахерские
+  key: shop
+  value: hairdresser
+  is_plural: true
+- phrase: хозяйственный магазин
+  key: shop
+  value: hardware
+  is_plural: false
+- phrase: хозяйственные магазины
+  key: shop
+  value: hardware
+  is_plural: true
+- phrase: магазин аудио/видео аппаратуры
+  key: shop
+  value: hifi
+  is_plural: false
+- phrase: магазины аудио/видео аппаратуры
+  key: shop
+  value: hifi
+  is_plural: true
+- phrase: страховая компания
+  key: shop
+  value: insurance
+  is_plural: false
+- phrase: страховые компании
+  key: shop
+  value: insurance
+  is_plural: true
+- phrase: ювелирный магазин
+  key: shop
+  value: jewelry
+  is_plural: false
+- phrase: ювелирные магазины
+  key: shop
+  value: jewelry
+  is_plural: true
+- phrase: киоск
+  key: shop
+  value: kiosk
+  is_plural: false
+- phrase: киоски
+  key: shop
+  value: kiosk
+  is_plural: true
+- phrase: прачечная
+  key: shop
+  value: laundry
+  is_plural: false
+- phrase: прачечные
+  key: shop
+  value: laundry
+  is_plural: true
+- phrase: молл
+  key: shop
+  value: mall
+  is_plural: false
+- phrase: моллы
+  key: shop
+  value: mall
+  is_plural: true
+- phrase: рынок
+  key: shop
+  value: market
+  is_plural: false
+- phrase: рынки
+  key: shop
+  value: market
+  is_plural: true
+- phrase: магазин мобильных телефонов
+  key: shop
+  value: mobile_phone
+  is_plural: false
+- phrase: магазины мобильных телефонов
+  key: shop
+  value: mobile_phone
+  is_plural: true
+- phrase: магазин по продаже мотоциклов
+  key: shop
+  value: motorcycle
+  is_plural: false
+- phrase: магазины по продаже мотоциклов
+  key: shop
+  value: motorcycle
+  is_plural: true
+- phrase: музыкальный магазин
+  key: shop
+  value: music
+  is_plural: false
+- phrase: музыкальные магазины
+  key: shop
+  value: music
+  is_plural: true
+- phrase: газетный киоск
+  key: shop
+  value: newsagent
+  is_plural: false
+- phrase: газетные киоски
+  key: shop
+  value: newsagent
+  is_plural: true
+- phrase: магазин оптики
+  key: shop
+  value: optician
+  is_plural: false
+- phrase: магазины оптики
+  key: shop
+  value: optician
+  is_plural: true
+- phrase: магазин экологических продуктов
+  key: shop
+  value: organic
+  is_plural: false
+- phrase: магазины экологических продуктов
+  key: shop
+  value: organic
+  is_plural: true
+- phrase: место уличной торговли
+  key: shop
+  value: outdoor
+  is_plural: false
+- phrase: места уличной торговли
+  key: shop
+  value: outdoor
+  is_plural: true
+- phrase: зоомагазин
+  key: shop
+  value: pet
+  is_plural: false
+- phrase: зоомагазины
+  key: shop
+  value: pet
+  is_plural: true
+- phrase: фотомагазин
+  key: shop
+  value: photo
+  is_plural: false
+- phrase: фотомагазины
+  key: shop
+  value: photo
+  is_plural: true
+- phrase: салон
+  key: shop
+  value: salon
+  is_plural: false
+- phrase: салоны
+  key: shop
+  value: salon
+  is_plural: true
+- phrase: обувной магазин
+  key: shop
+  value: shoes
+  is_plural: false
+- phrase: обувные магазины
+  key: shop
+  value: shoes
+  is_plural: true
+- phrase: торговый центр
+  key: shop
+  value: shopping_centre
+  is_plural: false
+- phrase: торговые центры
+  key: shop
+  value: shopping_centre
+  is_plural: true
+- phrase: спортивный магазин
+  key: shop
+  value: sports
+  is_plural: false
+- phrase: спортивные магазины
+  key: shop
+  value: sports
+  is_plural: true
+- phrase: магазин канцелярских товаров
+  key: shop
+  value: stationery
+  is_plural: false
+- phrase: магазины канцелярских товаров
+  key: shop
+  value: stationery
+  is_plural: true
+- phrase: супермаркет
+  key: shop
+  value: supermarket
+  is_plural: false
+- phrase: супермаркеты
+  key: shop
+  value: supermarket
+  is_plural: true
+- phrase: магазин игрушек
+  key: shop
+  value: toys
+  is_plural: false
+- phrase: магазины игрушек
+  key: shop
+  value: toys
+  is_plural: true
+- phrase: туристической агентство
+  key: shop
+  value: travel_agency
+  is_plural: false
+- phrase: туристические агентства
+  key: shop
+  value: travel_agency
+  is_plural: true
+- phrase: магазин видеозаписей
+  key: shop
+  value: video
+  is_plural: false
+- phrase: магазины видеозаписей
+  key: shop
+  value: video
+  is_plural: true
+- phrase: винный магазин
+  key: shop
+  value: wine
+  is_plural: false
+- phrase: винные магазины
+  key: shop
+  value: wine
+  is_plural: true
+- phrase: горный приют
+  key: tourism
+  value: alpine_hut
+  is_plural: false
+- phrase: горные приюты
+  key: tourism
+  value: alpine_hut
+  is_plural: true
+- phrase: произведения искусства
+  key: tourism
+  value: artwork
+  is_plural: false
+- phrase: произведения искусства
+  key: tourism
+  value: artwork
+  is_plural: true
+- phrase: достопримечательность
+  key: tourism
+  value: attraction
+  is_plural: false
+- phrase: достопримечательности
+  key: tourism
+  value: attraction
+  is_plural: true
+- phrase: полупансион
+  key: tourism
+  value: bed_and_breakfast
+  is_plural: false
+- phrase: полупансионы
+  key: tourism
+  value: bed_and_breakfast
+  is_plural: true
+- phrase: кабинка
+  key: tourism
+  value: cabin
+  is_plural: false
+- phrase: кабинки
+  key: tourism
+  value: cabin
+  is_plural: true
+- phrase: лагерь
+  key: tourism
+  value: camp_site
+  is_plural: false
+- phrase: лагеря
+  key: tourism
+  value: camp_site
+  is_plural: true
+- phrase: караван-сарай
+  key: tourism
+  value: caravan_site
+  is_plural: false
+- phrase: караван-сараи
+  key: tourism
+  value: caravan_site
+  is_plural: true
+- phrase: шале
+  key: tourism
+  value: chalet
+  is_plural: false
+- phrase: шале
+  key: tourism
+  value: chalet
+  is_plural: true
+- phrase: домик для гостей
+  key: tourism
+  value: guest_house
+  is_plural: false
+- phrase: домики для гостей
+  key: tourism
+  value: guest_house
+  is_plural: true
+- phrase: хостел
+  key: tourism
+  value: hostel
+  is_plural: false
+- phrase: хостелы
+  key: tourism
+  value: hostel
+  is_plural: true
+- phrase: гостиница
+  key: tourism
+  value: hotel
+  is_plural: false
+- phrase: гостиницы
+  key: tourism
+  value: hotel
+  is_plural: true
+- phrase: информация
+  key: tourism
+  value: information
+  is_plural: false
+- phrase: информация
+  key: tourism
+  value: information
+  is_plural: true
+- phrase: навес
+  key: tourism
+  value: lean_to
+  is_plural: false
+- phrase: навесы
+  key: tourism
+  value: lean_to
+  is_plural: true
+- phrase: мотель
+  key: tourism
+  value: motel
+  is_plural: false
+- phrase: мотели
+  key: tourism
+  value: motel
+  is_plural: true
+- phrase: музей
+  key: tourism
+  value: museum
+  is_plural: false
+- phrase: музеи
+  key: tourism
+  value: museum
+  is_plural: true
+- phrase: место для пикника
+  key: tourism
+  value: picnic_site
+  is_plural: false
+- phrase: места для пикников
+  key: tourism
+  value: picnic_site
+  is_plural: true
+- phrase: аттракционы
+  key: tourism
+  value: theme_park
+  is_plural: false
+- phrase: аттракционы
+  key: tourism
+  value: theme_park
+  is_plural: true
+- phrase: долина
+  key: tourism
+  value: valley
+  is_plural: false
+- phrase: долины
+  key: tourism
+  value: valley
+  is_plural: true
+- phrase: смотровая площадка
+  key: tourism
+  value: viewpoint
+  is_plural: false
+- phrase: смотровые площадки
+  key: tourism
+  value: viewpoint
+  is_plural: true
+- phrase: зоопарк
+  key: tourism
+  value: zoo
+  is_plural: false
+- phrase: зоопарки
+  key: tourism
+  value: zoo
+  is_plural: true
+- phrase: верфь
+  key: waterway
+  value: boatyard
+  is_plural: false
+- phrase: верфи
+  key: waterway
+  value: boatyard
+  is_plural: true
+- phrase: канал
+  key: waterway
+  value: canal
+  is_plural: false
+- phrase: каналы
+  key: waterway
+  value: canal
+  is_plural: true
+- phrase: слияние рек
+  key: waterway
+  value: connector
+  is_plural: false
+- phrase: слияния рек
+  key: waterway
+  value: connector
+  is_plural: true
+- phrase: дамба
+  key: waterway
+  value: dam
+  is_plural: false
+- phrase: дамбы
+  key: waterway
+  value: dam
+  is_plural: true
+- phrase: пересохший канал
+  key: waterway
+  value: derelict_canal
+  is_plural: false
+- phrase: пересохшие каналы
+  key: waterway
+  value: derelict_canal
+  is_plural: true
+- phrase: водоотлив
+  key: waterway
+  value: ditch
+  is_plural: false
+- phrase: водоотливы
+  key: waterway
+  value: ditch
+  is_plural: true
+- phrase: док
+  key: waterway
+  value: dock
+  is_plural: false
+- phrase: доки
+  key: waterway
+  value: dock
+  is_plural: true
+- phrase: сточная канава
+  key: waterway
+  value: drain
+  is_plural: false
+- phrase: сточные канавы
+  key: waterway
+  value: drain
+  is_plural: true
+- phrase: шлюз
+  key: waterway
+  value: lock
+  is_plural: false
+- phrase: шлюзы
+  key: waterway
+  value: lock
+  is_plural: true
+- phrase: шлюз
+  key: waterway
+  value: lock_gate
+  is_plural: false
+- phrase: шлюзы
+  key: waterway
+  value: lock_gate
+  is_plural: true
+- phrase: минеральный родник
+  key: waterway
+  value: mineral_spring
+  is_plural: false
+- phrase: минеральные родники
+  key: waterway
+  value: mineral_spring
+  is_plural: true
+- phrase: место швартовки
+  key: waterway
+  value: mooring
+  is_plural: false
+- phrase: места швартовки
+  key: waterway
+  value: mooring
+  is_plural: true
+- phrase: речной порог
+  key: waterway
+  value: rapids
+  is_plural: false
+- phrase: речные пороги
+  key: waterway
+  value: rapids
+  is_plural: true
+- phrase: река
+  key: waterway
+  value: river
+  is_plural: false
+- phrase: реки
+  key: waterway
+  value: river
+  is_plural: true
+- phrase: берег реки
+  key: waterway
+  value: riverbank
+  is_plural: false
+- phrase: берега реки
+  key: waterway
+  value: riverbank
+  is_plural: true
+- phrase: ручей
+  key: waterway
+  value: stream
+  is_plural: false
+- phrase: ручьи
+  key: waterway
+  value: stream
+  is_plural: true
+- phrase: высохшее русло
+  key: waterway
+  value: wadi
+  is_plural: false
+- phrase: высохшие русла
+  key: waterway
+  value: wadi
+  is_plural: true
+- phrase: пункт водоснабжения
+  key: waterway
+  value: water_point
+  is_plural: false
+- phrase: пункты водоснабжения
+  key: waterway
+  value: water_point
+  is_plural: true
+- phrase: водопад
+  key: waterway
+  value: waterfall
+  is_plural: false
+- phrase: водопады
+  key: waterway
+  value: waterfall
+  is_plural: true
+- phrase: плотина
+  key: waterway
+  value: weir
+  is_plural: false
+- phrase: плотины
+  key: waterway
+  value: weir
+  is_plural: true

@@ -1,0 +1,3772 @@
+- phrase: airport
+  key: aeroway
+  value: aerodrome
+  is_plural: false
+- phrase: airports
+  key: aeroway
+  value: aerodrome
+  is_plural: true
+- phrase: animal boarding facility
+  key: amenity
+  value: animal_boarding
+  is_plural: false
+- phrase: animal boarding facilities
+  key: amenity
+  value: animal_boarding
+  is_plural: true
+- phrase: animal shelter
+  key: amenity
+  value: animal_shelter
+  is_plural: false
+- phrase: animal shelters
+  key: amenity
+  value: animal_shelter
+  is_plural: true
+- phrase: arts centre
+  key: amenity
+  value: arts_centre
+  is_plural: false
+- phrase: arts centres
+  key: amenity
+  value: arts_centre
+  is_plural: true
+- phrase: arts center
+  key: amenity
+  value: arts_centre
+  is_plural: false
+- phrase: arts centers
+  key: amenity
+  value: arts_centre
+  is_plural: true
+- phrase: atm
+  key: amenity
+  value: atm
+  is_plural: false
+- phrase: atms
+  key: amenity
+  value: atm
+  is_plural: true
+- phrase: cash
+  key: amenity
+  value: atm
+  is_plural: false
+- phrase: cash
+  key: amenity
+  value: atm
+  is_plural: true
+- phrase: cash machine
+  key: amenity
+  value: atm
+  is_plural: false
+- phrase: cash machines
+  key: amenity
+  value: atm
+  is_plural: true
+- phrase: auditorium
+  key: amenity
+  value: auditorium
+  is_plural: false
+- phrase: auditoriums
+  key: amenity
+  value: auditorium
+  is_plural: true
+- phrase: bank
+  key: amenity
+  value: bank
+  is_plural: false
+- phrase: banks
+  key: amenity
+  value: bank
+  is_plural: true
+- phrase: bar
+  key: amenity
+  value: bar
+  is_plural: false
+- phrase: bars
+  key: amenity
+  value: bar
+  is_plural: true
+- phrase: bar
+  key: amenity
+  value: pub
+  is_plural: false
+- phrase: bars
+  key: amenity
+  value: pub
+  is_plural: true
+- phrase: bench
+  key: amenity
+  value: bench
+  is_plural: false
+- phrase: benches
+  key: amenity
+  value: bench
+  is_plural: true
+- phrase: cycle parking
+  key: amenity
+  value: bicycle_parking
+  is_plural: false
+- phrase: cycle parkings
+  key: amenity
+  value: bicycle_parking
+  is_plural: true
+- phrase: cycle rental
+  key: amenity
+  value: bicycle_rental
+  is_plural: false
+- phrase: cycle rentals
+  key: amenity
+  value: bicycle_rental
+  is_plural: true
+- phrase: bicycle parking
+  key: amenity
+  value: bicycle_parking
+  is_plural: false
+- phrase: bicycle parkings
+  key: amenity
+  value: bicycle_parking
+  is_plural: true
+- phrase: bicycle rental
+  key: amenity
+  value: bicycle_rental
+  is_plural: false
+- phrase: bicycle rentals
+  key: amenity
+  value: bicycle_rental
+  is_plural: true
+- phrase: brothel
+  key: amenity
+  value: brothel
+  is_plural: false
+- phrase: brothels
+  key: amenity
+  value: brothel
+  is_plural: true
+- phrase: bureau de change
+  key: amenity
+  value: bureau_de_change
+  is_plural: false
+- phrase: bureau de changes
+  key: amenity
+  value: bureau_de_change
+  is_plural: true
+- phrase: bureaus de change
+  key: amenity
+  value: bureau_de_change
+  is_plural: true
+- phrase: bus station
+  key: amenity
+  value: bus_station
+  is_plural: false
+- phrase: bus stations
+  key: amenity
+  value: bus_station
+  is_plural: true
+- phrase: cafe
+  key: amenity
+  value: cafe
+  is_plural: false
+- phrase: cafes
+  key: amenity
+  value: cafe
+  is_plural: true
+- phrase: car rental
+  key: amenity
+  value: car_rental
+  is_plural: false
+- phrase: car rentals
+  key: amenity
+  value: car_rental
+  is_plural: true
+- phrase: car share
+  key: amenity
+  value: car_sharing
+  is_plural: false
+- phrase: car sharing
+  key: amenity
+  value: car_sharing
+  is_plural: false
+- phrase: car sharings
+  key: amenity
+  value: car_sharing
+  is_plural: true
+- phrase: car wash
+  key: amenity
+  value: car_wash
+  is_plural: false
+- phrase: car washes
+  key: amenity
+  value: car_wash
+  is_plural: true
+- phrase: casino
+  key: amenity
+  value: casino
+  is_plural: false
+- phrase: casinos
+  key: amenity
+  value: casino
+  is_plural: true
+- phrase: cinema
+  key: amenity
+  value: cinema
+  is_plural: false
+- phrase: cinemas
+  key: amenity
+  value: cinema
+  is_plural: true
+- phrase: clinic
+  key: amenity
+  value: clinic
+  is_plural: false
+- phrase: clinics
+  key: amenity
+  value: clinic
+  is_plural: true
+- phrase: club
+  key: amenity
+  value: club
+  is_plural: false
+- phrase: clubs
+  key: amenity
+  value: club
+  is_plural: true
+- phrase: college
+  key: amenity
+  value: college
+  is_plural: false
+- phrase: colleges
+  key: amenity
+  value: college
+  is_plural: true
+- phrase: community centre
+  key: amenity
+  value: community_centre
+  is_plural: false
+- phrase: community centres
+  key: amenity
+  value: community_centre
+  is_plural: true
+- phrase: community center
+  key: amenity
+  value: community_centre
+  is_plural: false
+- phrase: community centers
+  key: amenity
+  value: community_centre
+  is_plural: true
+- phrase: courthouse
+  key: amenity
+  value: courthouse
+  is_plural: false
+- phrase: courthouses
+  key: amenity
+  value: courthouse
+  is_plural: true
+- phrase: crematorium
+  key: amenity
+  value: crematorium
+  is_plural: false
+- phrase: crematoriums
+  key: amenity
+  value: crematorium
+  is_plural: true
+- phrase: dentist
+  key: amenity
+  value: dentist
+  is_plural: false
+- phrase: dentists
+  key: amenity
+  value: dentist
+  is_plural: true
+- phrase: doctor
+  key: amenity
+  value: doctors
+  is_plural: false
+- phrase: doctors
+  key: amenity
+  value: doctors
+  is_plural: true
+- phrase: martial arts
+  key: amenity
+  value: dojo
+  is_plural: false
+- phrase: martial arts
+  key: amenity
+  value: dojo
+  is_plural: true
+- phrase: dojo
+  key: amenity
+  value: dojo
+  is_plural: false
+- phrase: dojos
+  key: amenity
+  value: dojo
+  is_plural: true
+- phrase: dojang
+  key: amenity
+  value: dojo
+  is_plural: false
+- phrase: dojang
+  key: amenity
+  value: dojo
+  is_plural: true
+- phrase: dormitory
+  key: amenity
+  value: dormitory
+  is_plural: false
+- phrase: dormitorys
+  key: amenity
+  value: dormitory
+  is_plural: true
+- phrase: dormitories
+  key: amenity
+  value: dormitory
+  is_plural: true
+- phrase: drinking water
+  key: amenity
+  value: drinking_water
+  is_plural: false
+- phrase: water
+  key: amenity
+  value: drinking_water
+  is_plural: false
+- phrase: driving school
+  key: amenity
+  value: driving_school
+  is_plural: false
+- phrase: driving schools
+  key: amenity
+  value: driving_school
+  is_plural: true
+- phrase: embassy
+  key: amenity
+  value: embassy
+  is_plural: false
+- phrase: embassys
+  key: amenity
+  value: embassy
+  is_plural: true
+- phrase: embassies
+  key: amenity
+  value: embassy
+  is_plural: true
+- phrase: emergency phone
+  key: amenity
+  value: emergency_phone
+  is_plural: false
+- phrase: emergency phones
+  key: amenity
+  value: emergency_phone
+  is_plural: true
+- phrase: fast food
+  key: amenity
+  value: fast_food
+  is_plural: false
+- phrase: food
+  key: amenity
+  value: restaurant
+  is_plural: false
+- phrase: food
+  key: amenity
+  value: fast_food
+  is_plural: false
+- phrase: food
+  key: amenity
+  value: restaurant
+  is_plural: true
+- phrase: food
+  key: amenity
+  value: fast_food
+  is_plural: true
+- phrase: ferry terminal
+  key: amenity
+  value: ferry_terminal
+  is_plural: false
+- phrase: ferry terminals
+  key: amenity
+  value: ferry_terminal
+  is_plural: true
+- phrase: fire hydrant
+  key: amenity
+  value: fire_hydrant
+  is_plural: false
+- phrase: fire hydrants
+  key: amenity
+  value: fire_hydrant
+  is_plural: true
+- phrase: fire station
+  key: amenity
+  value: fire_station
+  is_plural: false
+- phrase: fire stations
+  key: amenity
+  value: fire_station
+  is_plural: true
+- phrase: fountain
+  key: amenity
+  value: fountain
+  is_plural: false
+- phrase: fountains
+  key: amenity
+  value: fountain
+  is_plural: true
+- phrase: fuel
+  key: amenity
+  value: fuel
+  is_plural: false
+- phrase: fuels
+  key: amenity
+  value: fuel
+  is_plural: true
+- phrase: fuel station
+  key: amenity
+  value: fuel
+  is_plural: false
+- phrase: fuel stations
+  key: amenity
+  value: fuel
+  is_plural: true
+- phrase: gas
+  key: amenity
+  value: fuel
+  is_plural: false
+- phrase: gas
+  key: amenity
+  value: fuel
+  is_plural: true
+- phrase: gas station
+  key: amenity
+  value: fuel
+  is_plural: false
+- phrase: gas stations
+  key: amenity
+  value: fuel
+  is_plural: true
+- phrase: petrol
+  key: amenity
+  value: fuel
+  is_plural: false
+- phrase: petrol station
+  key: amenity
+  value: fuel
+  is_plural: false
+- phrase: petrol stations
+  key: amenity
+  value: fuel
+  is_plural: true
+- phrase: grave yard
+  key: amenity
+  value: grave_yard
+  is_plural: false
+- phrase: grave yards
+  key: amenity
+  value: grave_yard
+  is_plural: true
+- phrase: fitness centre
+  key: amenity
+  value: gym
+  is_plural: false
+- phrase: fitness centres
+  key: amenity
+  value: gym
+  is_plural: true
+- phrase: fitness center
+  key: amenity
+  value: gym
+  is_plural: false
+- phrase: fitness centers
+  key: amenity
+  value: gym
+  is_plural: true
+- phrase: gym
+  key: amenity
+  value: gym
+  is_plural: false
+- phrase: gyms
+  key: amenity
+  value: gym
+  is_plural: true
+- phrase: hall
+  key: amenity
+  value: hall
+  is_plural: false
+- phrase: halls
+  key: amenity
+  value: hall
+  is_plural: true
+- phrase: health centre
+  key: amenity
+  value: health_centre
+  is_plural: false
+- phrase: health centres
+  key: amenity
+  value: health_centre
+  is_plural: true
+- phrase: health center
+  key: amenity
+  value: health_centre
+  is_plural: false
+- phrase: health centers
+  key: amenity
+  value: health_centre
+  is_plural: true
+- phrase: hospital
+  key: amenity
+  value: hospital
+  is_plural: false
+- phrase: hospitals
+  key: amenity
+  value: hospital
+  is_plural: true
+- phrase: hotel
+  key: amenity
+  value: hotel
+  is_plural: false
+- phrase: hotels
+  key: amenity
+  value: hotel
+  is_plural: true
+- phrase: hunting stand
+  key: amenity
+  value: hunting_stand
+  is_plural: false
+- phrase: hunting stands
+  key: amenity
+  value: hunting_stand
+  is_plural: true
+- phrase: ice cream
+  key: amenity
+  value: ice_cream
+  is_plural: false
+- phrase: kindergarten
+  key: amenity
+  value: kindergarten
+  is_plural: false
+- phrase: kindergartens
+  key: amenity
+  value: kindergarten
+  is_plural: true
+- phrase: library
+  key: amenity
+  value: library
+  is_plural: false
+- phrase: librarys
+  key: amenity
+  value: library
+  is_plural: true
+- phrase: libraries
+  key: amenity
+  value: library
+  is_plural: true
+- phrase: market
+  key: amenity
+  value: market
+  is_plural: false
+- phrase: markets
+  key: amenity
+  value: market
+  is_plural: true
+- phrase: marketplace
+  key: amenity
+  value: marketplace
+  is_plural: false
+- phrase: marketplaces
+  key: amenity
+  value: marketplace
+  is_plural: true
+- phrase: mountain rescue
+  key: amenity
+  value: mountain_rescue
+  is_plural: false
+- phrase: mountain rescues
+  key: amenity
+  value: mountain_rescue
+  is_plural: true
+- phrase: night club
+  key: amenity
+  value: nightclub
+  is_plural: false
+- phrase: night clubs
+  key: amenity
+  value: nightclub
+  is_plural: true
+- phrase: nursery
+  key: amenity
+  value: nursery
+  is_plural: false
+- phrase: nurserys
+  key: amenity
+  value: nursery
+  is_plural: true
+- phrase: nurseries
+  key: amenity
+  value: nursery
+  is_plural: true
+- phrase: nursing home
+  key: amenity
+  value: nursing_home
+  is_plural: false
+- phrase: nursing homes
+  key: amenity
+  value: nursing_home
+  is_plural: true
+- phrase: office
+  key: amenity
+  value: office
+  is_plural: false
+- phrase: offices
+  key: amenity
+  value: office
+  is_plural: true
+- phrase: park
+  key: amenity
+  value: park
+  is_plural: false
+- phrase: parks
+  key: amenity
+  value: park
+  is_plural: true
+- phrase: parking
+  key: amenity
+  value: parking
+  is_plural: false
+- phrase: pharmacy
+  key: amenity
+  value: pharmacy
+  is_plural: false
+- phrase: pharmacys
+  key: amenity
+  value: pharmacy
+  is_plural: true
+- phrase: pharmacies
+  key: amenity
+  value: pharmacy
+  is_plural: true
+- phrase: church
+  key: amenity
+  value: place_of_worship
+  is_plural: false
+- phrase: churches
+  key: amenity
+  value: place_of_worship
+  is_plural: true
+- phrase: place of worship
+  key: amenity
+  value: place_of_worship
+  is_plural: false
+- phrase: place of worships
+  key: amenity
+  value: place_of_worship
+  is_plural: true
+- phrase: places of worship
+  key: amenity
+  value: place_of_worship
+  is_plural: true
+- phrase: police
+  key: amenity
+  value: police
+  is_plural: false
+- phrase: post box
+  key: amenity
+  value: post_box
+  is_plural: false
+- phrase: post boxes
+  key: amenity
+  value: post_box
+  is_plural: true
+- phrase: post office
+  key: amenity
+  value: post_office
+  is_plural: false
+- phrase: post offices
+  key: amenity
+  value: post_office
+  is_plural: true
+- phrase: pre-school
+  key: amenity
+  value: preschool
+  is_plural: false
+- phrase: pre-schools
+  key: amenity
+  value: preschool
+  is_plural: true
+- phrase: prison
+  key: amenity
+  value: prison
+  is_plural: false
+- phrase: prisons
+  key: amenity
+  value: prison
+  is_plural: true
+- phrase: pub
+  key: amenity
+  value: bar
+  is_plural: false
+- phrase: pubs
+  key: amenity
+  value: bar
+  is_plural: true
+- phrase: pub
+  key: amenity
+  value: pub
+  is_plural: false
+- phrase: pubs
+  key: amenity
+  value: pub
+  is_plural: true
+- phrase: public building
+  key: amenity
+  value: public_building
+  is_plural: false
+- phrase: public buildings
+  key: amenity
+  value: public_building
+  is_plural: true
+- phrase: public market
+  key: amenity
+  value: public_market
+  is_plural: false
+- phrase: public markets
+  key: amenity
+  value: public_market
+  is_plural: true
+- phrase: reception area
+  key: amenity
+  value: reception_area
+  is_plural: false
+- phrase: reception areas
+  key: amenity
+  value: reception_area
+  is_plural: true
+- phrase: recycling point
+  key: amenity
+  value: recycling
+  is_plural: false
+- phrase: recycling points
+  key: amenity
+  value: recycling
+  is_plural: true
+- phrase: restaurant
+  key: amenity
+  value: restaurant
+  is_plural: false
+- phrase: restaurants
+  key: amenity
+  value: restaurant
+  is_plural: true
+- phrase: retirement home
+  key: amenity
+  value: retirement_home
+  is_plural: false
+- phrase: retirement homes
+  key: amenity
+  value: retirement_home
+  is_plural: true
+- phrase: sauna
+  key: amenity
+  value: sauna
+  is_plural: false
+- phrase: saunas
+  key: amenity
+  value: sauna
+  is_plural: true
+- phrase: school
+  key: amenity
+  value: school
+  is_plural: false
+- phrase: schools
+  key: amenity
+  value: school
+  is_plural: true
+- phrase: shelter
+  key: amenity
+  value: shelter
+  is_plural: false
+- phrase: shelters
+  key: amenity
+  value: shelter
+  is_plural: true
+- phrase: shop
+  key: amenity
+  value: shop
+  is_plural: false
+- phrase: shops
+  key: amenity
+  value: shop
+  is_plural: true
+- phrase: shopping
+  key: amenity
+  value: shopping
+  is_plural: false
+- phrase: social club
+  key: amenity
+  value: social_club
+  is_plural: false
+- phrase: social clubs
+  key: amenity
+  value: social_club
+  is_plural: true
+- phrase: studio
+  key: amenity
+  value: studio
+  is_plural: false
+- phrase: studios
+  key: amenity
+  value: studio
+  is_plural: true
+- phrase: supermarket
+  key: amenity
+  value: supermarket
+  is_plural: false
+- phrase: supermarkets
+  key: amenity
+  value: supermarket
+  is_plural: true
+- phrase: swinger club
+  key: amenity
+  value: swingerclub
+  is_plural: false
+- phrase: swinger clubs
+  key: amenity
+  value: swingerclub
+  is_plural: true
+- phrase: taxi
+  key: amenity
+  value: taxi
+  is_plural: false
+- phrase: taxis
+  key: amenity
+  value: taxi
+  is_plural: true
+- phrase: taxi rank
+  key: amenity
+  value: taxi
+  is_plural: false
+- phrase: taxi ranks
+  key: amenity
+  value: taxi
+  is_plural: true
+- phrase: telephone
+  key: amenity
+  value: telephone
+  is_plural: false
+- phrase: telephones
+  key: amenity
+  value: telephone
+  is_plural: true
+- phrase: public telephone
+  key: amenity
+  value: telephone
+  is_plural: false
+- phrase: public telephones
+  key: amenity
+  value: telephone
+  is_plural: true
+- phrase: phone booth
+  key: amenity
+  value: telephone
+  is_plural: false
+- phrase: phone booths
+  key: amenity
+  value: telephone
+  is_plural: true
+- phrase: theatre
+  key: amenity
+  value: theatre
+  is_plural: false
+- phrase: theatres
+  key: amenity
+  value: theatre
+  is_plural: true
+- phrase: toilet
+  key: amenity
+  value: toilets
+  is_plural: false
+- phrase: toilets
+  key: amenity
+  value: toilets
+  is_plural: true
+- phrase: town hall
+  key: amenity
+  value: townhall
+  is_plural: false
+- phrase: town halls
+  key: amenity
+  value: townhall
+  is_plural: true
+- phrase: university
+  key: amenity
+  value: university
+  is_plural: false
+- phrase: universitys
+  key: amenity
+  value: university
+  is_plural: true
+- phrase: universities
+  key: amenity
+  value: university
+  is_plural: true
+- phrase: vending machine
+  key: amenity
+  value: vending_machine
+  is_plural: false
+- phrase: vending machines
+  key: amenity
+  value: vending_machine
+  is_plural: true
+- phrase: veterinary surgery
+  key: amenity
+  value: veterinary
+  is_plural: false
+- phrase: veterinary surgeries
+  key: amenity
+  value: veterinary
+  is_plural: true
+- phrase: village hall
+  key: amenity
+  value: village_hall
+  is_plural: false
+- phrase: village halls
+  key: amenity
+  value: village_hall
+  is_plural: true
+- phrase: waste basket
+  key: amenity
+  value: waste_basket
+  is_plural: false
+- phrase: waste baskets
+  key: amenity
+  value: waste_basket
+  is_plural: true
+- phrase: rubbish bin
+  key: amenity
+  value: waste_basket
+  is_plural: false
+- phrase: rubbish bins
+  key: amenity
+  value: waste_basket
+  is_plural: true
+- phrase: bin
+  key: amenity
+  value: waste_basket
+  is_plural: false
+- phrase: bins
+  key: amenity
+  value: waste_basket
+  is_plural: true
+- phrase: wifi access
+  key: amenity
+  value: wifi
+  is_plural: false
+- phrase: wifi
+  key: amenity
+  value: wifi
+  is_plural: false
+- phrase: wifi point
+  key: amenity
+  value: wifi
+  is_plural: false
+- phrase: wifi points
+  key: amenity
+  value: wifi
+  is_plural: true
+- phrase: youth centre
+  key: amenity
+  value: youth_centre
+  is_plural: false
+- phrase: youth centres
+  key: amenity
+  value: youth_centre
+  is_plural: true
+- phrase: youth center
+  key: amenity
+  value: youth_centre
+  is_plural: false
+- phrase: youth centers
+  key: amenity
+  value: youth_centre
+  is_plural: true
+- phrase: apartment block
+  key: building
+  value: apartments
+  is_plural: false
+- phrase: apartment blocks
+  key: building
+  value: apartments
+  is_plural: true
+- phrase: building block
+  key: building
+  value: block
+  is_plural: false
+- phrase: building blocks
+  key: building
+  value: block
+  is_plural: true
+- phrase: bunker
+  key: building
+  value: bunker
+  is_plural: false
+- phrase: bunkers
+  key: building
+  value: bunker
+  is_plural: true
+- phrase: chapel
+  key: building
+  value: chapel
+  is_plural: false
+- phrase: chapels
+  key: building
+  value: chapel
+  is_plural: true
+- phrase: church
+  key: building
+  value: church
+  is_plural: false
+- phrase: churchs
+  key: building
+  value: church
+  is_plural: true
+- phrase: churches
+  key: building
+  value: church
+  is_plural: true
+- phrase: city hall
+  key: building
+  value: city_hall
+  is_plural: false
+- phrase: city halls
+  key: building
+  value: city_hall
+  is_plural: true
+- phrase: commercial building
+  key: building
+  value: commercial
+  is_plural: false
+- phrase: commercial buildings
+  key: building
+  value: commercial
+  is_plural: true
+- phrase: dormitory
+  key: building
+  value: dormitory
+  is_plural: false
+- phrase: dormitorys
+  key: building
+  value: dormitory
+  is_plural: true
+- phrase: building entrance
+  key: building
+  value: entrance
+  is_plural: false
+- phrase: building entrances
+  key: building
+  value: entrance
+  is_plural: true
+- phrase: faculty building
+  key: building
+  value: faculty
+  is_plural: false
+- phrase: faculty buildings
+  key: building
+  value: faculty
+  is_plural: true
+- phrase: farm building
+  key: building
+  value: farm
+  is_plural: false
+- phrase: farm buildings
+  key: building
+  value: farm
+  is_plural: true
+- phrase: flats
+  key: building
+  value: flats
+  is_plural: false
+- phrase: flats
+  key: building
+  value: flats
+  is_plural: true
+- phrase: garage
+  key: building
+  value: garage
+  is_plural: false
+- phrase: garages
+  key: building
+  value: garage
+  is_plural: true
+- phrase: hall
+  key: building
+  value: hall
+  is_plural: false
+- phrase: halls
+  key: building
+  value: hall
+  is_plural: true
+- phrase: hospital building
+  key: building
+  value: hospital
+  is_plural: false
+- phrase: hospital buildings
+  key: building
+  value: hospital
+  is_plural: true
+- phrase: hotel
+  key: building
+  value: hotel
+  is_plural: false
+- phrase: hotels
+  key: building
+  value: hotel
+  is_plural: true
+- phrase: house
+  key: building
+  value: house
+  is_plural: false
+- phrase: houses
+  key: building
+  value: house
+  is_plural: true
+- phrase: industrial building
+  key: building
+  value: industrial
+  is_plural: false
+- phrase: industrial buildings
+  key: building
+  value: industrial
+  is_plural: true
+- phrase: office building
+  key: building
+  value: office
+  is_plural: false
+- phrase: office buildings
+  key: building
+  value: office
+  is_plural: true
+- phrase: public building
+  key: building
+  value: public
+  is_plural: false
+- phrase: public buildings
+  key: building
+  value: public
+  is_plural: true
+- phrase: residential building
+  key: building
+  value: residential
+  is_plural: false
+- phrase: residential buildings
+  key: building
+  value: residential
+  is_plural: true
+- phrase: retail building
+  key: building
+  value: retail
+  is_plural: false
+- phrase: retail buildings
+  key: building
+  value: retail
+  is_plural: true
+- phrase: school building
+  key: building
+  value: school
+  is_plural: false
+- phrase: school buildings
+  key: building
+  value: school
+  is_plural: true
+- phrase: shop
+  key: building
+  value: shop
+  is_plural: false
+- phrase: shops
+  key: building
+  value: shop
+  is_plural: true
+- phrase: stadium
+  key: building
+  value: stadium
+  is_plural: false
+- phrase: stadiums
+  key: building
+  value: stadium
+  is_plural: true
+- phrase: store
+  key: building
+  value: store
+  is_plural: false
+- phrase: stores
+  key: building
+  value: store
+  is_plural: true
+- phrase: terrace
+  key: building
+  value: terrace
+  is_plural: false
+- phrase: terraces
+  key: building
+  value: terrace
+  is_plural: true
+- phrase: tower
+  key: building
+  value: tower
+  is_plural: false
+- phrase: towers
+  key: building
+  value: tower
+  is_plural: true
+- phrase: railway station
+  key: building
+  value: train_station
+  is_plural: false
+- phrase: railway stations
+  key: building
+  value: train_station
+  is_plural: true
+- phrase: station
+  key: building
+  value: train_station
+  is_plural: false
+- phrase: stations
+  key: building
+  value: train_station
+  is_plural: true
+- phrase: university building
+  key: building
+  value: university
+  is_plural: false
+- phrase: university buildings
+  key: building
+  value: university
+  is_plural: true
+- phrase: building
+  key: building
+  value: 'yes'
+  is_plural: false
+- phrase: buildings
+  key: building
+  value: 'yes'
+  is_plural: true
+- phrase: bridleway
+  key: highway
+  value: bridleway
+  is_plural: false
+- phrase: bridleways
+  key: highway
+  value: bridleway
+  is_plural: true
+- phrase: guided bus lane
+  key: highway
+  value: bus_guideway
+  is_plural: false
+- phrase: guided bus lanes
+  key: highway
+  value: bus_guideway
+  is_plural: true
+- phrase: bus stop
+  key: highway
+  value: bus_stop
+  is_plural: false
+- phrase: bus stops
+  key: highway
+  value: bus_stop
+  is_plural: true
+- phrase: byway
+  key: highway
+  value: byway
+  is_plural: false
+- phrase: byways
+  key: highway
+  value: byway
+  is_plural: true
+- phrase: highway under construction
+  key: highway
+  value: construction
+  is_plural: false
+- phrase: highways under construction
+  key: highway
+  value: construction
+  is_plural: true
+- phrase: cycle path
+  key: highway
+  value: cycleway
+  is_plural: false
+- phrase: cycle paths
+  key: highway
+  value: cycleway
+  is_plural: true
+- phrase: distance marker
+  key: highway
+  value: distance_marker
+  is_plural: false
+- phrase: distance markers
+  key: highway
+  value: distance_marker
+  is_plural: true
+- phrase: emergency access point
+  key: highway
+  value: emergency_access_point
+  is_plural: false
+- phrase: emergency access points
+  key: highway
+  value: emergency_access_point
+  is_plural: true
+- phrase: footpath
+  key: highway
+  value: footway
+  is_plural: false
+- phrase: footpaths
+  key: highway
+  value: footway
+  is_plural: true
+- phrase: ford
+  key: highway
+  value: ford
+  is_plural: false
+- phrase: fords
+  key: highway
+  value: ford
+  is_plural: true
+- phrase: gate
+  key: highway
+  value: gate
+  is_plural: false
+- phrase: gates
+  key: highway
+  value: gate
+  is_plural: true
+- phrase: living street
+  key: highway
+  value: living_street
+  is_plural: false
+- phrase: living streets
+  key: highway
+  value: living_street
+  is_plural: true
+- phrase: minor road
+  key: highway
+  value: minor
+  is_plural: false
+- phrase: minor roads
+  key: highway
+  value: minor
+  is_plural: true
+- phrase: motorway
+  key: highway
+  value: motorway
+  is_plural: false
+- phrase: motorways
+  key: highway
+  value: motorway
+  is_plural: true
+- phrase: motorway junction
+  key: highway
+  value: motorway_junction
+  is_plural: false
+- phrase: motorway junctions
+  key: highway
+  value: motorway_junction
+  is_plural: true
+- phrase: motorway road
+  key: highway
+  value: motorway_link
+  is_plural: false
+- phrase: motorway roads
+  key: highway
+  value: motorway_link
+  is_plural: true
+- phrase: path
+  key: highway
+  value: path
+  is_plural: false
+- phrase: paths
+  key: highway
+  value: path
+  is_plural: true
+- phrase: pedestrian way
+  key: highway
+  value: pedestrian
+  is_plural: false
+- phrase: pedestrian ways
+  key: highway
+  value: pedestrian
+  is_plural: true
+- phrase: platform
+  key: highway
+  value: platform
+  is_plural: false
+- phrase: platforms
+  key: highway
+  value: platform
+  is_plural: true
+- phrase: primary road
+  key: highway
+  value: primary
+  is_plural: false
+- phrase: primary roads
+  key: highway
+  value: primary
+  is_plural: true
+- phrase: primary road
+  key: highway
+  value: primary_link
+  is_plural: false
+- phrase: primary roads
+  key: highway
+  value: primary_link
+  is_plural: true
+- phrase: raceway
+  key: highway
+  value: raceway
+  is_plural: false
+- phrase: raceways
+  key: highway
+  value: raceway
+  is_plural: true
+- phrase: residential
+  key: highway
+  value: residential
+  is_plural: false
+- phrase: residentials
+  key: highway
+  value: residential
+  is_plural: true
+- phrase: residential road
+  key: highway
+  value: residential
+  is_plural: false
+- phrase: residential roads
+  key: highway
+  value: residential
+  is_plural: true
+- phrase: rest area
+  key: highway
+  value: rest_area
+  is_plural: false
+- phrase: rest stop
+  key: highway
+  value: rest_area
+  is_plural: false
+- phrase: road
+  key: highway
+  value: road
+  is_plural: false
+- phrase: roads
+  key: highway
+  value: road
+  is_plural: true
+- phrase: secondary road
+  key: highway
+  value: secondary
+  is_plural: false
+- phrase: secondary roads
+  key: highway
+  value: secondary
+  is_plural: true
+- phrase: secondary road
+  key: highway
+  value: secondary_link
+  is_plural: false
+- phrase: secondary roads
+  key: highway
+  value: secondary_link
+  is_plural: true
+- phrase: service road
+  key: highway
+  value: service
+  is_plural: false
+- phrase: service roads
+  key: highway
+  value: service
+  is_plural: true
+- phrase: service area
+  key: highway
+  value: services
+  is_plural: false
+- phrase: motorway services
+  key: highway
+  value: services
+  is_plural: false
+- phrase: motorway services
+  key: highway
+  value: services
+  is_plural: true
+- phrase: steps
+  key: highway
+  value: steps
+  is_plural: false
+- phrase: steps
+  key: highway
+  value: steps
+  is_plural: true
+- phrase: stile
+  key: highway
+  value: stile
+  is_plural: false
+- phrase: stiles
+  key: highway
+  value: stile
+  is_plural: true
+- phrase: tertiary road
+  key: highway
+  value: tertiary
+  is_plural: false
+- phrase: tertiary roads
+  key: highway
+  value: tertiary
+  is_plural: true
+- phrase: track
+  key: highway
+  value: track
+  is_plural: false
+- phrase: tracks
+  key: highway
+  value: track
+  is_plural: true
+- phrase: trail
+  key: highway
+  value: trail
+  is_plural: false
+- phrase: trails
+  key: highway
+  value: trail
+  is_plural: true
+- phrase: trunk road
+  key: highway
+  value: trunk
+  is_plural: false
+- phrase: trunk roads
+  key: highway
+  value: trunk
+  is_plural: true
+- phrase: trunk road
+  key: highway
+  value: trunk_link
+  is_plural: false
+- phrase: trunk roads
+  key: highway
+  value: trunk_link
+  is_plural: true
+- phrase: unclassified road
+  key: highway
+  value: unclassified
+  is_plural: false
+- phrase: unclassified roads
+  key: highway
+  value: unclassified
+  is_plural: true
+- phrase: unsurfaced road
+  key: highway
+  value: unsurfaced
+  is_plural: false
+- phrase: unsurfaced roads
+  key: highway
+  value: unsurfaced
+  is_plural: true
+- phrase: archaeological site
+  key: historic
+  value: archaeological_site
+  is_plural: false
+- phrase: archaeological sites
+  key: historic
+  value: archaeological_site
+  is_plural: true
+- phrase: battlefield
+  key: historic
+  value: battlefield
+  is_plural: false
+- phrase: battlefields
+  key: historic
+  value: battlefield
+  is_plural: true
+- phrase: boundary stone
+  key: historic
+  value: boundary_stone
+  is_plural: false
+- phrase: boundary stones
+  key: historic
+  value: boundary_stone
+  is_plural: true
+- phrase: building
+  key: historic
+  value: building
+  is_plural: false
+- phrase: buildings
+  key: historic
+  value: building
+  is_plural: true
+- phrase: castle
+  key: historic
+  value: castle
+  is_plural: false
+- phrase: castles
+  key: historic
+  value: castle
+  is_plural: true
+- phrase: church
+  key: historic
+  value: church
+  is_plural: false
+- phrase: churchs
+  key: historic
+  value: church
+  is_plural: true
+- phrase: churches
+  key: historic
+  value: church
+  is_plural: true
+- phrase: house
+  key: historic
+  value: house
+  is_plural: false
+- phrase: houses
+  key: historic
+  value: house
+  is_plural: true
+- phrase: icon
+  key: historic
+  value: icon
+  is_plural: false
+- phrase: icons
+  key: historic
+  value: icon
+  is_plural: true
+- phrase: manor
+  key: historic
+  value: manor
+  is_plural: false
+- phrase: manors
+  key: historic
+  value: manor
+  is_plural: true
+- phrase: memorial
+  key: historic
+  value: memorial
+  is_plural: false
+- phrase: memorials
+  key: historic
+  value: memorial
+  is_plural: true
+- phrase: mine
+  key: historic
+  value: mine
+  is_plural: false
+- phrase: mines
+  key: historic
+  value: mine
+  is_plural: true
+- phrase: monument
+  key: historic
+  value: monument
+  is_plural: false
+- phrase: monuments
+  key: historic
+  value: monument
+  is_plural: true
+- phrase: museum
+  key: historic
+  value: museum
+  is_plural: false
+- phrase: museums
+  key: historic
+  value: museum
+  is_plural: true
+- phrase: ruin
+  key: historic
+  value: ruins
+  is_plural: false
+- phrase: ruins
+  key: historic
+  value: ruins
+  is_plural: true
+- phrase: tower
+  key: historic
+  value: tower
+  is_plural: false
+- phrase: towers
+  key: historic
+  value: tower
+  is_plural: true
+- phrase: wayside cross
+  key: historic
+  value: wayside_cross
+  is_plural: false
+- phrase: wayside crosses
+  key: historic
+  value: wayside_cross
+  is_plural: true
+- phrase: wayside shrine
+  key: historic
+  value: wayside_shrine
+  is_plural: false
+- phrase: wayside shrines
+  key: historic
+  value: wayside_shrine
+  is_plural: true
+- phrase: wreck
+  key: historic
+  value: wreck
+  is_plural: false
+- phrase: wrecks
+  key: historic
+  value: wreck
+  is_plural: true
+- phrase: allotment
+  key: landuse
+  value: allotments
+  is_plural: false
+- phrase: allotments
+  key: landuse
+  value: allotments
+  is_plural: true
+- phrase: basin
+  key: landuse
+  value: basin
+  is_plural: false
+- phrase: basins
+  key: landuse
+  value: basin
+  is_plural: true
+- phrase: brownfield land
+  key: landuse
+  value: brownfield
+  is_plural: false
+- phrase: brownfield lands
+  key: landuse
+  value: brownfield
+  is_plural: true
+- phrase: cemetery
+  key: landuse
+  value: cemetery
+  is_plural: false
+- phrase: cemeterys
+  key: landuse
+  value: cemetery
+  is_plural: true
+- phrase: cemeteries
+  key: landuse
+  value: cemetery
+  is_plural: true
+- phrase: commercial area
+  key: landuse
+  value: commercial
+  is_plural: false
+- phrase: commercial areas
+  key: landuse
+  value: commercial
+  is_plural: true
+- phrase: conservation
+  key: landuse
+  value: conservation
+  is_plural: false
+- phrase: conservations
+  key: landuse
+  value: conservation
+  is_plural: true
+- phrase: construction
+  key: landuse
+  value: construction
+  is_plural: false
+- phrase: constructions
+  key: landuse
+  value: construction
+  is_plural: true
+- phrase: farm
+  key: landuse
+  value: farm
+  is_plural: false
+- phrase: farms
+  key: landuse
+  value: farm
+  is_plural: true
+- phrase: farmland
+  key: landuse
+  value: farmland
+  is_plural: false
+- phrase: farmlands
+  key: landuse
+  value: farmland
+  is_plural: true
+- phrase: farmyard
+  key: landuse
+  value: farmyard
+  is_plural: false
+- phrase: farmyards
+  key: landuse
+  value: farmyard
+  is_plural: true
+- phrase: forest
+  key: landuse
+  value: forest
+  is_plural: false
+- phrase: forests
+  key: landuse
+  value: forest
+  is_plural: true
+- phrase: grass
+  key: landuse
+  value: grass
+  is_plural: false
+- phrase: grasses
+  key: landuse
+  value: grass
+  is_plural: true
+- phrase: greenfield land
+  key: landuse
+  value: greenfield
+  is_plural: false
+- phrase: greenfield lands
+  key: landuse
+  value: greenfield
+  is_plural: true
+- phrase: industrial area
+  key: landuse
+  value: industrial
+  is_plural: false
+- phrase: industrial areas
+  key: landuse
+  value: industrial
+  is_plural: true
+- phrase: landfill
+  key: landuse
+  value: landfill
+  is_plural: false
+- phrase: landfills
+  key: landuse
+  value: landfill
+  is_plural: true
+- phrase: meadow
+  key: landuse
+  value: meadow
+  is_plural: false
+- phrase: meadows
+  key: landuse
+  value: meadow
+  is_plural: true
+- phrase: military area
+  key: landuse
+  value: military
+  is_plural: false
+- phrase: military areas
+  key: landuse
+  value: military
+  is_plural: true
+- phrase: mine
+  key: landuse
+  value: mine
+  is_plural: false
+- phrase: mines
+  key: landuse
+  value: mine
+  is_plural: true
+- phrase: mountain
+  key: landuse
+  value: mountain
+  is_plural: false
+- phrase: mountains
+  key: landuse
+  value: mountain
+  is_plural: true
+- phrase: nature reserve
+  key: landuse
+  value: nature_reserve
+  is_plural: false
+- phrase: nature reserves
+  key: landuse
+  value: nature_reserve
+  is_plural: true
+- phrase: park
+  key: landuse
+  value: park
+  is_plural: false
+- phrase: parks
+  key: landuse
+  value: park
+  is_plural: true
+- phrase: piste
+  key: landuse
+  value: piste
+  is_plural: false
+- phrase: pistes
+  key: landuse
+  value: piste
+  is_plural: true
+- phrase: plaza
+  key: landuse
+  value: plaza
+  is_plural: false
+- phrase: plazas
+  key: landuse
+  value: plaza
+  is_plural: true
+- phrase: quarry
+  key: landuse
+  value: quarry
+  is_plural: false
+- phrase: quarrys
+  key: landuse
+  value: quarry
+  is_plural: true
+- phrase: quarries
+  key: landuse
+  value: quarry
+  is_plural: true
+- phrase: railway
+  key: landuse
+  value: railway
+  is_plural: false
+- phrase: railways
+  key: landuse
+  value: railway
+  is_plural: true
+- phrase: recreation ground
+  key: landuse
+  value: recreation_ground
+  is_plural: false
+- phrase: recreation grounds
+  key: landuse
+  value: recreation_ground
+  is_plural: true
+- phrase: reservoir
+  key: landuse
+  value: reservoir
+  is_plural: false
+- phrase: reservoirs
+  key: landuse
+  value: reservoir
+  is_plural: true
+- phrase: residential area
+  key: landuse
+  value: residential
+  is_plural: false
+- phrase: residential areas
+  key: landuse
+  value: residential
+  is_plural: true
+- phrase: retail
+  key: landuse
+  value: retail
+  is_plural: false
+- phrase: retails
+  key: landuse
+  value: retail
+  is_plural: true
+- phrase: village green
+  key: landuse
+  value: village_green
+  is_plural: false
+- phrase: village greens
+  key: landuse
+  value: village_green
+  is_plural: true
+- phrase: vineyard
+  key: landuse
+  value: vineyard
+  is_plural: false
+- phrase: vineyards
+  key: landuse
+  value: vineyard
+  is_plural: true
+- phrase: wetland
+  key: landuse
+  value: wetland
+  is_plural: false
+- phrase: wetlands
+  key: landuse
+  value: wetland
+  is_plural: true
+- phrase: wood
+  key: landuse
+  value: wood
+  is_plural: false
+- phrase: woods
+  key: landuse
+  value: wood
+  is_plural: true
+- phrase: beach resort
+  key: leisure
+  value: beach_resort
+  is_plural: false
+- phrase: beach resorts
+  key: leisure
+  value: beach_resort
+  is_plural: true
+- phrase: common land
+  key: leisure
+  value: common
+  is_plural: false
+- phrase: common lands
+  key: leisure
+  value: common
+  is_plural: true
+- phrase: fishing area
+  key: leisure
+  value: fishing
+  is_plural: false
+- phrase: fishing areas
+  key: leisure
+  value: fishing
+  is_plural: true
+- phrase: garden
+  key: leisure
+  value: garden
+  is_plural: false
+- phrase: gardens
+  key: leisure
+  value: garden
+  is_plural: true
+- phrase: golf course
+  key: leisure
+  value: golf_course
+  is_plural: false
+- phrase: golf courses
+  key: leisure
+  value: golf_course
+  is_plural: true
+- phrase: hackerspace
+  key: leisure
+  value: hackerspace
+  is_plural: false
+- phrase: hackerspaces
+  key: leisure
+  value: hackerspace
+  is_plural: true
+- phrase: ice rink
+  key: leisure
+  value: ice_rink
+  is_plural: false
+- phrase: ice rinks
+  key: leisure
+  value: ice_rink
+  is_plural: true
+- phrase: marina
+  key: leisure
+  value: marina
+  is_plural: false
+- phrase: marinas
+  key: leisure
+  value: marina
+  is_plural: true
+- phrase: miniature golf
+  key: leisure
+  value: miniature_golf
+  is_plural: false
+- phrase: miniature golfs
+  key: leisure
+  value: miniature_golf
+  is_plural: true
+- phrase: nature reserve
+  key: leisure
+  value: nature_reserve
+  is_plural: false
+- phrase: nature reserves
+  key: leisure
+  value: nature_reserve
+  is_plural: true
+- phrase: park
+  key: leisure
+  value: park
+  is_plural: false
+- phrase: parks
+  key: leisure
+  value: park
+  is_plural: true
+- phrase: sports pitch
+  key: leisure
+  value: pitch
+  is_plural: false
+- phrase: sports pitches
+  key: leisure
+  value: pitch
+  is_plural: true
+- phrase: playground
+  key: leisure
+  value: playground
+  is_plural: false
+- phrase: playgrounds
+  key: leisure
+  value: playground
+  is_plural: true
+- phrase: recreation ground
+  key: leisure
+  value: recreation_ground
+  is_plural: false
+- phrase: recreation grounds
+  key: leisure
+  value: recreation_ground
+  is_plural: true
+- phrase: slipway
+  key: leisure
+  value: slipway
+  is_plural: false
+- phrase: slipways
+  key: leisure
+  value: slipway
+  is_plural: true
+- phrase: sports centre
+  key: leisure
+  value: sports_centre
+  is_plural: false
+- phrase: sports centres
+  key: leisure
+  value: sports_centre
+  is_plural: true
+- phrase: sports centre
+  key: leisure
+  value: sports_centre
+  is_plural: false
+- phrase: sports centers
+  key: leisure
+  value: sports_centre
+  is_plural: true
+- phrase: stadium
+  key: leisure
+  value: stadium
+  is_plural: false
+- phrase: stadiums
+  key: leisure
+  value: stadium
+  is_plural: true
+- phrase: swimming pool
+  key: leisure
+  value: swimming_pool
+  is_plural: false
+- phrase: swimming pools
+  key: leisure
+  value: swimming_pool
+  is_plural: true
+- phrase: running track
+  key: leisure
+  value: track
+  is_plural: false
+- phrase: running tracks
+  key: leisure
+  value: track
+  is_plural: true
+- phrase: water park
+  key: leisure
+  value: water_park
+  is_plural: false
+- phrase: water parks
+  key: leisure
+  value: water_park
+  is_plural: true
+- phrase: bay
+  key: natural
+  value: bay
+  is_plural: false
+- phrase: bays
+  key: natural
+  value: bay
+  is_plural: true
+- phrase: beach
+  key: natural
+  value: beach
+  is_plural: false
+- phrase: beachs
+  key: natural
+  value: beach
+  is_plural: true
+- phrase: beaches
+  key: natural
+  value: beach
+  is_plural: true
+- phrase: cape
+  key: natural
+  value: cape
+  is_plural: false
+- phrase: capes
+  key: natural
+  value: cape
+  is_plural: true
+- phrase: cave entrance
+  key: natural
+  value: cave_entrance
+  is_plural: false
+- phrase: cave entrances
+  key: natural
+  value: cave_entrance
+  is_plural: true
+- phrase: channel
+  key: natural
+  value: channel
+  is_plural: false
+- phrase: channels
+  key: natural
+  value: channel
+  is_plural: true
+- phrase: cliff
+  key: natural
+  value: cliff
+  is_plural: false
+- phrase: cliffs
+  key: natural
+  value: cliff
+  is_plural: true
+- phrase: coastline
+  key: natural
+  value: coastline
+  is_plural: false
+- phrase: coastlines
+  key: natural
+  value: coastline
+  is_plural: true
+- phrase: crater
+  key: natural
+  value: crater
+  is_plural: false
+- phrase: craters
+  key: natural
+  value: crater
+  is_plural: true
+- phrase: feature
+  key: natural
+  value: feature
+  is_plural: false
+- phrase: features
+  key: natural
+  value: feature
+  is_plural: true
+- phrase: fell
+  key: natural
+  value: fell
+  is_plural: false
+- phrase: fells
+  key: natural
+  value: fell
+  is_plural: true
+- phrase: fjord
+  key: natural
+  value: fjord
+  is_plural: false
+- phrase: fjords
+  key: natural
+  value: fjord
+  is_plural: true
+- phrase: geyser
+  key: natural
+  value: geyser
+  is_plural: false
+- phrase: geysers
+  key: natural
+  value: geyser
+  is_plural: true
+- phrase: glacier
+  key: natural
+  value: glacier
+  is_plural: false
+- phrase: glaciers
+  key: natural
+  value: glacier
+  is_plural: true
+- phrase: heath
+  key: natural
+  value: heath
+  is_plural: false
+- phrase: heaths
+  key: natural
+  value: heath
+  is_plural: true
+- phrase: hill
+  key: natural
+  value: hill
+  is_plural: false
+- phrase: hills
+  key: natural
+  value: hill
+  is_plural: true
+- phrase: island
+  key: natural
+  value: island
+  is_plural: false
+- phrase: islands
+  key: natural
+  value: island
+  is_plural: true
+- phrase: land
+  key: natural
+  value: land
+  is_plural: false
+- phrase: lands
+  key: natural
+  value: land
+  is_plural: true
+- phrase: marsh
+  key: natural
+  value: marsh
+  is_plural: false
+- phrase: marshs
+  key: natural
+  value: marsh
+  is_plural: true
+- phrase: marshes
+  key: natural
+  value: marsh
+  is_plural: true
+- phrase: moor
+  key: natural
+  value: moor
+  is_plural: false
+- phrase: moors
+  key: natural
+  value: moor
+  is_plural: true
+- phrase: mud
+  key: natural
+  value: mud
+  is_plural: false
+- phrase: muds
+  key: natural
+  value: mud
+  is_plural: true
+- phrase: peak
+  key: natural
+  value: peak
+  is_plural: false
+- phrase: peaks
+  key: natural
+  value: peak
+  is_plural: true
+- phrase: point
+  key: natural
+  value: point
+  is_plural: false
+- phrase: points
+  key: natural
+  value: point
+  is_plural: true
+- phrase: reef
+  key: natural
+  value: reef
+  is_plural: false
+- phrase: reefs
+  key: natural
+  value: reef
+  is_plural: true
+- phrase: ridge
+  key: natural
+  value: ridge
+  is_plural: false
+- phrase: ridges
+  key: natural
+  value: ridge
+  is_plural: true
+- phrase: river
+  key: natural
+  value: river
+  is_plural: false
+- phrase: rivers
+  key: natural
+  value: river
+  is_plural: true
+- phrase: rock
+  key: natural
+  value: rock
+  is_plural: false
+- phrase: rocks
+  key: natural
+  value: rock
+  is_plural: true
+- phrase: scree
+  key: natural
+  value: scree
+  is_plural: false
+- phrase: screes
+  key: natural
+  value: scree
+  is_plural: true
+- phrase: scrub
+  key: natural
+  value: scrub
+  is_plural: false
+- phrase: scrubs
+  key: natural
+  value: scrub
+  is_plural: true
+- phrase: shoal
+  key: natural
+  value: shoal
+  is_plural: false
+- phrase: shoals
+  key: natural
+  value: shoal
+  is_plural: true
+- phrase: spring
+  key: natural
+  value: spring
+  is_plural: false
+- phrase: springs
+  key: natural
+  value: spring
+  is_plural: true
+- phrase: strait
+  key: natural
+  value: strait
+  is_plural: false
+- phrase: straits
+  key: natural
+  value: strait
+  is_plural: true
+- phrase: tree
+  key: natural
+  value: tree
+  is_plural: false
+- phrase: trees
+  key: natural
+  value: tree
+  is_plural: true
+- phrase: valley
+  key: natural
+  value: valley
+  is_plural: false
+- phrase: valleys
+  key: natural
+  value: valley
+  is_plural: true
+- phrase: volcano
+  key: natural
+  value: volcano
+  is_plural: false
+- phrase: volcanos
+  key: natural
+  value: volcano
+  is_plural: true
+- phrase: water
+  key: natural
+  value: water
+  is_plural: false
+- phrase: waters
+  key: natural
+  value: water
+  is_plural: true
+- phrase: wetland
+  key: natural
+  value: wetland
+  is_plural: false
+- phrase: wetlands
+  key: natural
+  value: wetland
+  is_plural: true
+- phrase: wetlands
+  key: natural
+  value: wetlands
+  is_plural: false
+- phrase: wetlands
+  key: natural
+  value: wetlands
+  is_plural: true
+- phrase: wood
+  key: natural
+  value: wood
+  is_plural: false
+- phrase: woods
+  key: natural
+  value: wood
+  is_plural: true
+- phrase: city
+  key: place
+  value: city
+  is_plural: false
+- phrase: citys
+  key: place
+  value: city
+  is_plural: true
+- phrase: cities
+  key: place
+  value: city
+  is_plural: true
+- phrase: country
+  key: place
+  value: country
+  is_plural: false
+- phrase: countrys
+  key: place
+  value: country
+  is_plural: true
+- phrase: countries
+  key: place
+  value: country
+  is_plural: true
+- phrase: county
+  key: place
+  value: county
+  is_plural: false
+- phrase: countys
+  key: place
+  value: county
+  is_plural: true
+- phrase: counties
+  key: place
+  value: county
+  is_plural: true
+- phrase: farm
+  key: place
+  value: farm
+  is_plural: false
+- phrase: farms
+  key: place
+  value: farm
+  is_plural: true
+- phrase: hamlet
+  key: place
+  value: hamlet
+  is_plural: false
+- phrase: hamlets
+  key: place
+  value: hamlet
+  is_plural: true
+- phrase: house
+  key: place
+  value: house
+  is_plural: false
+- phrase: houses
+  key: place
+  value: house
+  is_plural: true
+- phrase: houses
+  key: place
+  value: houses
+  is_plural: false
+- phrase: houses
+  key: place
+  value: houses
+  is_plural: true
+- phrase: island
+  key: place
+  value: island
+  is_plural: false
+- phrase: islands
+  key: place
+  value: island
+  is_plural: true
+- phrase: islet
+  key: place
+  value: islet
+  is_plural: false
+- phrase: islets
+  key: place
+  value: islet
+  is_plural: true
+- phrase: locality
+  key: place
+  value: locality
+  is_plural: false
+- phrase: localitys
+  key: place
+  value: locality
+  is_plural: true
+- phrase: localities
+  key: place
+  value: locality
+  is_plural: true
+- phrase: moor
+  key: place
+  value: moor
+  is_plural: false
+- phrase: moors
+  key: place
+  value: moor
+  is_plural: true
+- phrase: municipality
+  key: place
+  value: municipality
+  is_plural: false
+- phrase: municipalitys
+  key: place
+  value: municipality
+  is_plural: true
+- phrase: municipalities
+  key: place
+  value: municipality
+  is_plural: true
+- phrase: postcode
+  key: place
+  value: postcode
+  is_plural: false
+- phrase: postcodes
+  key: place
+  value: postcode
+  is_plural: true
+- phrase: region
+  key: place
+  value: region
+  is_plural: false
+- phrase: regions
+  key: place
+  value: region
+  is_plural: true
+- phrase: sea
+  key: place
+  value: sea
+  is_plural: false
+- phrase: seas
+  key: place
+  value: sea
+  is_plural: true
+- phrase: state
+  key: place
+  value: state
+  is_plural: false
+- phrase: states
+  key: place
+  value: state
+  is_plural: true
+- phrase: subdivision
+  key: place
+  value: subdivision
+  is_plural: false
+- phrase: subdivisions
+  key: place
+  value: subdivision
+  is_plural: true
+- phrase: suburb
+  key: place
+  value: suburb
+  is_plural: false
+- phrase: suburbs
+  key: place
+  value: suburb
+  is_plural: true
+- phrase: town
+  key: place
+  value: town
+  is_plural: false
+- phrase: towns
+  key: place
+  value: town
+  is_plural: true
+- phrase: unincorporated area
+  key: place
+  value: unincorporated_area
+  is_plural: false
+- phrase: unincorporated areas
+  key: place
+  value: unincorporated_area
+  is_plural: true
+- phrase: village
+  key: place
+  value: village
+  is_plural: false
+- phrase: villages
+  key: place
+  value: village
+  is_plural: true
+- phrase: abandoned railway
+  key: railway
+  value: abandoned
+  is_plural: false
+- phrase: abandoned railways
+  key: railway
+  value: abandoned
+  is_plural: true
+- phrase: railway under construction
+  key: railway
+  value: construction
+  is_plural: false
+- phrase: railway under constructions
+  key: railway
+  value: construction
+  is_plural: true
+- phrase: disused railway
+  key: railway
+  value: disused
+  is_plural: false
+- phrase: disused railways
+  key: railway
+  value: disused
+  is_plural: true
+- phrase: disused railway station
+  key: railway
+  value: disused_station
+  is_plural: false
+- phrase: disused railway stations
+  key: railway
+  value: disused_station
+  is_plural: true
+- phrase: funicular railway
+  key: railway
+  value: funicular
+  is_plural: false
+- phrase: funicular railways
+  key: railway
+  value: funicular
+  is_plural: true
+- phrase: train stop
+  key: railway
+  value: halt
+  is_plural: false
+- phrase: train stops
+  key: railway
+  value: halt
+  is_plural: true
+- phrase: historic railway station
+  key: railway
+  value: historic_station
+  is_plural: false
+- phrase: historic railway stations
+  key: railway
+  value: historic_station
+  is_plural: true
+- phrase: railway junction
+  key: railway
+  value: junction
+  is_plural: false
+- phrase: railway junctions
+  key: railway
+  value: junction
+  is_plural: true
+- phrase: level crossing
+  key: railway
+  value: level_crossing
+  is_plural: false
+- phrase: level crossings
+  key: railway
+  value: level_crossing
+  is_plural: true
+- phrase: light rail
+  key: railway
+  value: light_rail
+  is_plural: false
+- phrase: light rails
+  key: railway
+  value: light_rail
+  is_plural: true
+- phrase: monorail
+  key: railway
+  value: monorail
+  is_plural: false
+- phrase: monorails
+  key: railway
+  value: monorail
+  is_plural: true
+- phrase: narrow gauge railway
+  key: railway
+  value: narrow_gauge
+  is_plural: false
+- phrase: narrow gauge railways
+  key: railway
+  value: narrow_gauge
+  is_plural: true
+- phrase: railway platform
+  key: railway
+  value: platform
+  is_plural: false
+- phrase: railway platforms
+  key: railway
+  value: platform
+  is_plural: true
+- phrase: preserved railway
+  key: railway
+  value: preserved
+  is_plural: false
+- phrase: preserved railways
+  key: railway
+  value: preserved
+  is_plural: true
+- phrase: railway spur
+  key: railway
+  value: spur
+  is_plural: false
+- phrase: railway spurs
+  key: railway
+  value: spur
+  is_plural: true
+- phrase: railway station
+  key: railway
+  value: station
+  is_plural: false
+- phrase: railway stations
+  key: railway
+  value: station
+  is_plural: true
+- phrase: station
+  key: railway
+  value: station
+  is_plural: false
+- phrase: stations
+  key: railway
+  value: station
+  is_plural: true
+- phrase: subway station
+  key: railway
+  value: subway
+  is_plural: false
+- phrase: subway stations
+  key: railway
+  value: subway
+  is_plural: true
+- phrase: subway entrance
+  key: railway
+  value: subway_entrance
+  is_plural: false
+- phrase: subway entrances
+  key: railway
+  value: subway_entrance
+  is_plural: true
+- phrase: railway points
+  key: railway
+  value: switch
+  is_plural: false
+- phrase: railway points
+  key: railway
+  value: switch
+  is_plural: true
+- phrase: tramway
+  key: railway
+  value: tram
+  is_plural: false
+- phrase: tramways
+  key: railway
+  value: tram
+  is_plural: true
+- phrase: tram stop
+  key: railway
+  value: tram_stop
+  is_plural: false
+- phrase: tram stops
+  key: railway
+  value: tram_stop
+  is_plural: true
+- phrase: railway yard
+  key: railway
+  value: yard
+  is_plural: false
+- phrase: railway yards
+  key: railway
+  value: yard
+  is_plural: true
+- phrase: off license
+  key: shop
+  value: alcohol
+  is_plural: false
+- phrase: off licenses
+  key: shop
+  value: alcohol
+  is_plural: true
+- phrase: apparel shop
+  key: shop
+  value: apparel
+  is_plural: false
+- phrase: apparel shops
+  key: shop
+  value: apparel
+  is_plural: true
+- phrase: art shop
+  key: shop
+  value: art
+  is_plural: false
+- phrase: art shops
+  key: shop
+  value: art
+  is_plural: true
+- phrase: bakery
+  key: shop
+  value: bakery
+  is_plural: false
+- phrase: bakerys
+  key: shop
+  value: bakery
+  is_plural: true
+- phrase: bakeries
+  key: shop
+  value: bakery
+  is_plural: true
+- phrase: beauty shop
+  key: shop
+  value: beauty
+  is_plural: false
+- phrase: beauty shops
+  key: shop
+  value: beauty
+  is_plural: true
+- phrase: beverages shop
+  key: shop
+  value: beverages
+  is_plural: false
+- phrase: beverages shops
+  key: shop
+  value: beverages
+  is_plural: true
+- phrase: bicycle shop
+  key: shop
+  value: bicycle
+  is_plural: false
+- phrase: bicycle shops
+  key: shop
+  value: bicycle
+  is_plural: true
+- phrase: book shop
+  key: shop
+  value: books
+  is_plural: false
+- phrase: book shops
+  key: shop
+  value: books
+  is_plural: true
+- phrase: butcher
+  key: shop
+  value: butcher
+  is_plural: false
+- phrase: butchers
+  key: shop
+  value: butcher
+  is_plural: true
+- phrase: car shop
+  key: shop
+  value: car
+  is_plural: false
+- phrase: car shops
+  key: shop
+  value: car
+  is_plural: true
+- phrase: car dealer
+  key: shop
+  value: car_dealer
+  is_plural: false
+- phrase: car dealers
+  key: shop
+  value: car_dealer
+  is_plural: true
+- phrase: car parts
+  key: shop
+  value: car_parts
+  is_plural: false
+- phrase: car parts
+  key: shop
+  value: car_parts
+  is_plural: true
+- phrase: carpet shop
+  key: shop
+  value: carpet
+  is_plural: false
+- phrase: carpet shops
+  key: shop
+  value: carpet
+  is_plural: true
+- phrase: car repair
+  key: shop
+  value: car_repair
+  is_plural: false
+- phrase: car repairs
+  key: shop
+  value: car_repair
+  is_plural: true
+- phrase: charity shop
+  key: shop
+  value: charity
+  is_plural: false
+- phrase: charity shops
+  key: shop
+  value: charity
+  is_plural: true
+- phrase: chemist
+  key: shop
+  value: chemist
+  is_plural: false
+- phrase: chemists
+  key: shop
+  value: chemist
+  is_plural: true
+- phrase: clothes shop
+  key: shop
+  value: clothes
+  is_plural: false
+- phrase: clothes shops
+  key: shop
+  value: clothes
+  is_plural: true
+- phrase: computer shop
+  key: shop
+  value: computer
+  is_plural: false
+- phrase: computer shops
+  key: shop
+  value: computer
+  is_plural: true
+- phrase: confectionery shop
+  key: shop
+  value: confectionery
+  is_plural: false
+- phrase: confectionery shops
+  key: shop
+  value: confectionery
+  is_plural: true
+- phrase: convenience store
+  key: shop
+  value: convenience
+  is_plural: false
+- phrase: convenience stores
+  key: shop
+  value: convenience
+  is_plural: true
+- phrase: copy shop
+  key: shop
+  value: copyshop
+  is_plural: false
+- phrase: copy shops
+  key: shop
+  value: copyshop
+  is_plural: true
+- phrase: cosmetics shop
+  key: shop
+  value: cosmetics
+  is_plural: false
+- phrase: cosmetics shops
+  key: shop
+  value: cosmetics
+  is_plural: true
+- phrase: department store
+  key: shop
+  value: department_store
+  is_plural: false
+- phrase: department stores
+  key: shop
+  value: department_store
+  is_plural: true
+- phrase: discount items shop
+  key: shop
+  value: discount
+  is_plural: false
+- phrase: discount items shops
+  key: shop
+  value: discount
+  is_plural: true
+- phrase: do-it-yourself
+  key: shop
+  value: doityourself
+  is_plural: false
+- phrase: do-it-yourselfs
+  key: shop
+  value: doityourself
+  is_plural: true
+- phrase: do-it-yourselves
+  key: shop
+  value: doityourself
+  is_plural: true
+- phrase: drugstore
+  key: shop
+  value: drugstore
+  is_plural: false
+- phrase: drugstores
+  key: shop
+  value: drugstore
+  is_plural: true
+- phrase: dry cleaning
+  key: shop
+  value: dry_cleaning
+  is_plural: false
+- phrase: dry cleanings
+  key: shop
+  value: dry_cleaning
+  is_plural: true
+- phrase: electronics shop
+  key: shop
+  value: electronics
+  is_plural: false
+- phrase: electronics shops
+  key: shop
+  value: electronics
+  is_plural: true
+- phrase: estate agent
+  key: shop
+  value: estate_agent
+  is_plural: false
+- phrase: estate agents
+  key: shop
+  value: estate_agent
+  is_plural: true
+- phrase: farm shop
+  key: shop
+  value: farm
+  is_plural: false
+- phrase: farm shops
+  key: shop
+  value: farm
+  is_plural: true
+- phrase: fashion shop
+  key: shop
+  value: fashion
+  is_plural: false
+- phrase: fashion shops
+  key: shop
+  value: fashion
+  is_plural: true
+- phrase: fish shop
+  key: shop
+  value: fish
+  is_plural: false
+- phrase: fish shops
+  key: shop
+  value: fish
+  is_plural: true
+- phrase: florist
+  key: shop
+  value: florist
+  is_plural: false
+- phrase: florists
+  key: shop
+  value: florist
+  is_plural: true
+- phrase: food shop
+  key: shop
+  value: food
+  is_plural: false
+- phrase: food shops
+  key: shop
+  value: food
+  is_plural: true
+- phrase: funeral director
+  key: shop
+  value: funeral_directors
+  is_plural: false
+- phrase: funeral directors
+  key: shop
+  value: funeral_directors
+  is_plural: true
+- phrase: furniture
+  key: shop
+  value: furniture
+  is_plural: false
+- phrase: furnitures
+  key: shop
+  value: furniture
+  is_plural: true
+- phrase: gallery
+  key: shop
+  value: gallery
+  is_plural: false
+- phrase: gallerys
+  key: shop
+  value: gallery
+  is_plural: true
+- phrase: galleries
+  key: shop
+  value: gallery
+  is_plural: true
+- phrase: garden centre
+  key: shop
+  value: garden_centre
+  is_plural: false
+- phrase: garden centres
+  key: shop
+  value: garden_centre
+  is_plural: true
+- phrase: garden center
+  key: shop
+  value: garden_centre
+  is_plural: false
+- phrase: garden centers
+  key: shop
+  value: garden_centre
+  is_plural: true
+- phrase: general store
+  key: shop
+  value: general
+  is_plural: false
+- phrase: general stores
+  key: shop
+  value: general
+  is_plural: true
+- phrase: gift shop
+  key: shop
+  value: gift
+  is_plural: false
+- phrase: gift shops
+  key: shop
+  value: gift
+  is_plural: true
+- phrase: greengrocer
+  key: shop
+  value: greengrocer
+  is_plural: false
+- phrase: greengrocers
+  key: shop
+  value: greengrocer
+  is_plural: true
+- phrase: grocery shop
+  key: shop
+  value: grocery
+  is_plural: false
+- phrase: grocery shops
+  key: shop
+  value: grocery
+  is_plural: true
+- phrase: hairdresser
+  key: shop
+  value: hairdresser
+  is_plural: false
+- phrase: hairdressers
+  key: shop
+  value: hairdresser
+  is_plural: true
+- phrase: hardware store
+  key: shop
+  value: hardware
+  is_plural: false
+- phrase: hardware stores
+  key: shop
+  value: hardware
+  is_plural: true
+- phrase: hi-fi
+  key: shop
+  value: hifi
+  is_plural: false
+- phrase: hi-fis
+  key: shop
+  value: hifi
+  is_plural: true
+- phrase: insurance
+  key: shop
+  value: insurance
+  is_plural: false
+- phrase: insurances
+  key: shop
+  value: insurance
+  is_plural: true
+- phrase: jewelry shop
+  key: shop
+  value: jewelry
+  is_plural: false
+- phrase: jewelry shops
+  key: shop
+  value: jewelry
+  is_plural: true
+- phrase: kiosk shop
+  key: shop
+  value: kiosk
+  is_plural: false
+- phrase: kiosk shops
+  key: shop
+  value: kiosk
+  is_plural: true
+- phrase: laundry
+  key: shop
+  value: laundry
+  is_plural: false
+- phrase: laundrys
+  key: shop
+  value: laundry
+  is_plural: true
+- phrase: laundries
+  key: shop
+  value: laundry
+  is_plural: true
+- phrase: mall
+  key: shop
+  value: mall
+  is_plural: false
+- phrase: malls
+  key: shop
+  value: mall
+  is_plural: true
+- phrase: market
+  key: shop
+  value: market
+  is_plural: false
+- phrase: markets
+  key: shop
+  value: market
+  is_plural: true
+- phrase: mobile phone shop
+  key: shop
+  value: mobile_phone
+  is_plural: false
+- phrase: mobile phone shops
+  key: shop
+  value: mobile_phone
+  is_plural: true
+- phrase: motorcycle shop
+  key: shop
+  value: motorcycle
+  is_plural: false
+- phrase: motorcycle shops
+  key: shop
+  value: motorcycle
+  is_plural: true
+- phrase: music shop
+  key: shop
+  value: music
+  is_plural: false
+- phrase: music shops
+  key: shop
+  value: music
+  is_plural: true
+- phrase: newsagent
+  key: shop
+  value: newsagent
+  is_plural: false
+- phrase: newsagents
+  key: shop
+  value: newsagent
+  is_plural: true
+- phrase: optician
+  key: shop
+  value: optician
+  is_plural: false
+- phrase: opticians
+  key: shop
+  value: optician
+  is_plural: true
+- phrase: organic food shop
+  key: shop
+  value: organic
+  is_plural: false
+- phrase: organic food shops
+  key: shop
+  value: organic
+  is_plural: true
+- phrase: outdoor shop
+  key: shop
+  value: outdoor
+  is_plural: false
+- phrase: outdoor shops
+  key: shop
+  value: outdoor
+  is_plural: true
+- phrase: pet shop
+  key: shop
+  value: pet
+  is_plural: false
+- phrase: pet shops
+  key: shop
+  value: pet
+  is_plural: true
+- phrase: photo shop
+  key: shop
+  value: photo
+  is_plural: false
+- phrase: photo shops
+  key: shop
+  value: photo
+  is_plural: true
+- phrase: salon
+  key: shop
+  value: salon
+  is_plural: false
+- phrase: salons
+  key: shop
+  value: salon
+  is_plural: true
+- phrase: shoe shop
+  key: shop
+  value: shoes
+  is_plural: false
+- phrase: shoe shops
+  key: shop
+  value: shoes
+  is_plural: true
+- phrase: shopping centre
+  key: shop
+  value: shopping_centre
+  is_plural: false
+- phrase: shopping centres
+  key: shop
+  value: shopping_centre
+  is_plural: true
+- phrase: shopping center
+  key: shop
+  value: shopping_centre
+  is_plural: false
+- phrase: shopping centers
+  key: shop
+  value: shopping_centre
+  is_plural: true
+- phrase: sports shop
+  key: shop
+  value: sports
+  is_plural: false
+- phrase: sports shops
+  key: shop
+  value: sports
+  is_plural: true
+- phrase: stationery shop
+  key: shop
+  value: stationery
+  is_plural: false
+- phrase: stationery shops
+  key: shop
+  value: stationery
+  is_plural: true
+- phrase: supermarket
+  key: shop
+  value: supermarket
+  is_plural: false
+- phrase: supermarkets
+  key: shop
+  value: supermarket
+  is_plural: true
+- phrase: toy shop
+  key: shop
+  value: toys
+  is_plural: false
+- phrase: toy shops
+  key: shop
+  value: toys
+  is_plural: true
+- phrase: travel agency
+  key: shop
+  value: travel_agency
+  is_plural: false
+- phrase: travel agencys
+  key: shop
+  value: travel_agency
+  is_plural: true
+- phrase: travel agencies
+  key: shop
+  value: travel_agency
+  is_plural: true
+- phrase: video shop
+  key: shop
+  value: video
+  is_plural: false
+- phrase: video shops
+  key: shop
+  value: video
+  is_plural: true
+- phrase: off license
+  key: shop
+  value: wine
+  is_plural: false
+- phrase: off licenses
+  key: shop
+  value: wine
+  is_plural: true
+- phrase: alpine hut
+  key: tourism
+  value: alpine_hut
+  is_plural: false
+- phrase: alpine huts
+  key: tourism
+  value: alpine_hut
+  is_plural: true
+- phrase: artwork
+  key: tourism
+  value: artwork
+  is_plural: false
+- phrase: artworks
+  key: tourism
+  value: artwork
+  is_plural: true
+- phrase: attraction
+  key: tourism
+  value: attraction
+  is_plural: false
+- phrase: attractions
+  key: tourism
+  value: attraction
+  is_plural: true
+- phrase: bed and breakfast
+  key: tourism
+  value: bed_and_breakfast
+  is_plural: false
+- phrase: bed and breakfasts
+  key: tourism
+  value: bed_and_breakfast
+  is_plural: true
+- phrase: cabin
+  key: tourism
+  value: cabin
+  is_plural: false
+- phrase: cabins
+  key: tourism
+  value: cabin
+  is_plural: true
+- phrase: camp site
+  key: tourism
+  value: camp_site
+  is_plural: false
+- phrase: camp sites
+  key: tourism
+  value: camp_site
+  is_plural: true
+- phrase: caravan site
+  key: tourism
+  value: caravan_site
+  is_plural: false
+- phrase: caravan sites
+  key: tourism
+  value: caravan_site
+  is_plural: true
+- phrase: chalet
+  key: tourism
+  value: chalet
+  is_plural: false
+- phrase: chalets
+  key: tourism
+  value: chalet
+  is_plural: true
+- phrase: guest house
+  key: tourism
+  value: guest_house
+  is_plural: false
+- phrase: guest houses
+  key: tourism
+  value: guest_house
+  is_plural: true
+- phrase: hostel
+  key: tourism
+  value: hostel
+  is_plural: false
+- phrase: hostels
+  key: tourism
+  value: hostel
+  is_plural: true
+- phrase: hotel
+  key: tourism
+  value: hotel
+  is_plural: false
+- phrase: hotels
+  key: tourism
+  value: hotel
+  is_plural: true
+- phrase: information
+  key: tourism
+  value: information
+  is_plural: false
+- phrase: informations
+  key: tourism
+  value: information
+  is_plural: true
+- phrase: lean to
+  key: tourism
+  value: lean_to
+  is_plural: false
+- phrase: lean tos
+  key: tourism
+  value: lean_to
+  is_plural: true
+- phrase: motel
+  key: tourism
+  value: motel
+  is_plural: false
+- phrase: motels
+  key: tourism
+  value: motel
+  is_plural: true
+- phrase: museum
+  key: tourism
+  value: museum
+  is_plural: false
+- phrase: museums
+  key: tourism
+  value: museum
+  is_plural: true
+- phrase: picnic site
+  key: tourism
+  value: picnic_site
+  is_plural: false
+- phrase: picnic sites
+  key: tourism
+  value: picnic_site
+  is_plural: true
+- phrase: theme park
+  key: tourism
+  value: theme_park
+  is_plural: false
+- phrase: theme parks
+  key: tourism
+  value: theme_park
+  is_plural: true
+- phrase: valley
+  key: tourism
+  value: valley
+  is_plural: false
+- phrase: valleys
+  key: tourism
+  value: valley
+  is_plural: true
+- phrase: viewpoint
+  key: tourism
+  value: viewpoint
+  is_plural: false
+- phrase: viewpoints
+  key: tourism
+  value: viewpoint
+  is_plural: true
+- phrase: zoo
+  key: tourism
+  value: zoo
+  is_plural: false
+- phrase: zoos
+  key: tourism
+  value: zoo
+  is_plural: true
+- phrase: boatyard
+  key: waterway
+  value: boatyard
+  is_plural: false
+- phrase: boatyards
+  key: waterway
+  value: boatyard
+  is_plural: true
+- phrase: boat ramp
+  key: leisure
+  value: slipway
+  is_plural: false
+- phrase: boat ramps
+  key: leisure
+  value: slipway
+  is_plural: true
+- phrase: canal
+  key: waterway
+  value: canal
+  is_plural: false
+- phrase: canals
+  key: waterway
+  value: canal
+  is_plural: true
+- phrase: waterway connector
+  key: waterway
+  value: connector
+  is_plural: false
+- phrase: waterway connectors
+  key: waterway
+  value: connector
+  is_plural: true
+- phrase: dam
+  key: waterway
+  value: dam
+  is_plural: false
+- phrase: dams
+  key: waterway
+  value: dam
+  is_plural: true
+- phrase: derelict canal
+  key: waterway
+  value: derelict_canal
+  is_plural: false
+- phrase: derelict canals
+  key: waterway
+  value: derelict_canal
+  is_plural: true
+- phrase: ditch
+  key: waterway
+  value: ditch
+  is_plural: false
+- phrase: ditchs
+  key: waterway
+  value: ditch
+  is_plural: true
+- phrase: ditches
+  key: waterway
+  value: ditch
+  is_plural: true
+- phrase: dock
+  key: waterway
+  value: dock
+  is_plural: false
+- phrase: docks
+  key: waterway
+  value: dock
+  is_plural: true
+- phrase: drain
+  key: waterway
+  value: drain
+  is_plural: false
+- phrase: drains
+  key: waterway
+  value: drain
+  is_plural: true
+- phrase: lock
+  key: waterway
+  value: lock
+  is_plural: false
+- phrase: locks
+  key: waterway
+  value: lock
+  is_plural: true
+- phrase: lock gate
+  key: waterway
+  value: lock_gate
+  is_plural: false
+- phrase: lock gates
+  key: waterway
+  value: lock_gate
+  is_plural: true
+- phrase: mineral spring
+  key: waterway
+  value: mineral_spring
+  is_plural: false
+- phrase: mineral springs
+  key: waterway
+  value: mineral_spring
+  is_plural: true
+- phrase: mooring
+  key: waterway
+  value: mooring
+  is_plural: false
+- phrase: moorings
+  key: waterway
+  value: mooring
+  is_plural: true
+- phrase: rapids
+  key: waterway
+  value: rapids
+  is_plural: false
+- phrase: rapids
+  key: waterway
+  value: rapids
+  is_plural: true
+- phrase: river
+  key: waterway
+  value: river
+  is_plural: false
+- phrase: rivers
+  key: waterway
+  value: river
+  is_plural: true
+- phrase: riverbank
+  key: waterway
+  value: riverbank
+  is_plural: false
+- phrase: riverbanks
+  key: waterway
+  value: riverbank
+  is_plural: true
+- phrase: stream
+  key: waterway
+  value: stream
+  is_plural: false
+- phrase: streams
+  key: waterway
+  value: stream
+  is_plural: true
+- phrase: wadi
+  key: waterway
+  value: wadi
+  is_plural: false
+- phrase: wadis
+  key: waterway
+  value: wadi
+  is_plural: true
+- phrase: waterfall
+  key: waterway
+  value: waterfall
+  is_plural: false
+- phrase: waterfalls
+  key: waterway
+  value: waterfall
+  is_plural: true
+- phrase: water point
+  key: waterway
+  value: water_point
+  is_plural: false
+- phrase: water points
+  key: waterway
+  value: water_point
+  is_plural: true
+- phrase: weir
+  key: waterway
+  value: weir
+  is_plural: false
+- phrase: weirs
+  key: waterway
+  value: weir
+  is_plural: true
+- phrase: windmill
+  key: man_made
+  value: windmill
+  is_plural: false
+- phrase: windmills
+  key: man_made
+  value: windmill
+  is_plural: true

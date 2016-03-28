@@ -1,0 +1,376 @@
+- phrase: aeroporto
+  key: aeroway
+  value: 'aerodrome '
+  is_plural: false
+- phrase: aeroportos
+  key: aeroway
+  value: aerodrome
+  is_plural: true
+- phrase: caixa eletrônico
+  key: amenity
+  value: atm
+  is_plural: false
+- phrase: caixas eletrônicos
+  key: amenity
+  value: atm
+  is_plural: true
+- phrase: caixa multibanco
+  key: amenity
+  value: atm
+  is_plural: false
+- phrase: caixas multibanco
+  key: amenity
+  value: atm
+  is_plural: true
+- phrase: caixa de multibanco
+  key: amenity
+  value: atm
+  is_plural: false
+- phrase: caixas de multibanco
+  key: amenity
+  value: atm
+  is_plural: true
+- phrase: multibanco
+  key: amenity
+  value: atm
+  is_plural: false
+- phrase: multibancos
+  key: amenity
+  value: atm
+  is_plural: true
+- phrase: multicaixa
+  key: amenity
+  value: atm
+  is_plural: false
+- phrase: multicaixas
+  key: amenity
+  value: atm
+  is_plural: true
+- phrase: agência bancária
+  key: amenity
+  value: bank
+  is_plural: false
+- phrase: agências bancárias
+  key: amenity
+  value: bank
+  is_plural: true
+- phrase: banco
+  key: amenity
+  value: bank
+  is_plural: false
+- phrase: bancos
+  key: amenity
+  value: bank
+  is_plural: true
+- phrase: bar
+  key: amenity
+  value: bar
+  is_plural: false
+- phrase: bares
+  key: amenity
+  value: bar
+  is_plural: true
+- phrase: câmbio
+  key: amenity
+  value: bureau_de_change
+  is_plural: false
+- phrase: câmbios
+  key: amenity
+  value: bureau_de_change
+  is_plural: true
+- phrase: cambista
+  key: amenity
+  value: bureau_de_change
+  is_plural: false
+- phrase: cambistas
+  key: amenity
+  value: bureau_de_change
+  is_plural: true
+- phrase: estação de autocarros
+  key: amenity
+  value: bus_station
+  is_plural: false
+- phrase: 'estações de autocarros '
+  key: amenity
+  value: bus_station
+  is_plural: true
+- phrase: estação de camionagem
+  key: amenity
+  value: bus_station
+  is_plural: false
+- phrase: 'estações de camionagem '
+  key: amenity
+  value: bus_station
+  is_plural: true
+- phrase: estação de ônibus
+  key: amenity
+  value: bus_station
+  is_plural: false
+- phrase: 'estações de ônibus '
+  key: amenity
+  value: bus_station
+  is_plural: true
+- phrase: estação rodoviária
+  key: amenity
+  value: bus_station
+  is_plural: false
+- phrase: 'estações rodoviárias '
+  key: amenity
+  value: bus_station
+  is_plural: true
+- phrase: rodoviária
+  key: amenity
+  value: bus_station
+  is_plural: false
+- phrase: 'rodoviárias '
+  key: amenity
+  value: bus_station
+  is_plural: true
+- phrase: terminal rodoviário
+  key: amenity
+  value: bus_station
+  is_plural: false
+- phrase: 'terminais rodoviários '
+  key: amenity
+  value: bus_station
+  is_plural: true
+- phrase: bar
+  key: amenity
+  value: pub
+  is_plural: false
+- phrase: bares
+  key: amenity
+  value: pub
+  is_plural: true
+- phrase: escola
+  key: amenity
+  value: school
+  is_plural: false
+- phrase: escolas
+  key: amenity
+  value: school
+  is_plural: true
+- phrase: câmara municipal
+  key: amenity
+  value: townhall
+  is_plural: false
+- phrase: câmaras municipais
+  key: amenity
+  value: townhall
+  is_plural: true
+- phrase: município
+  key: amenity
+  value: townhall
+  is_plural: false
+- phrase: municípios
+  key: amenity
+  value: townhall
+  is_plural: true
+- phrase: universidade
+  key: amenity
+  value: university
+  is_plural: false
+- phrase: universidades
+  key: amenity
+  value: university
+  is_plural: true
+- phrase: paragem de autocarro
+  key: highway
+  value: bus_stop
+  is_plural: false
+- phrase: paragem de autocarros
+  key: highway
+  value: bus_stop
+  is_plural: false
+- phrase: paragens de autocarro
+  key: highway
+  value: bus_stop
+  is_plural: true
+- phrase: paragens de autocarros
+  key: highway
+  value: bus_stop
+  is_plural: true
+- phrase: parada de ônibus
+  key: highway
+  value: bus_stop
+  is_plural: false
+- phrase: paradas de ônibus
+  key: highway
+  value: bus_stop
+  is_plural: true
+- phrase: ponto de ônibus
+  key: highway
+  value: bus_stop
+  is_plural: false
+- phrase: pontos de ônibus
+  key: highway
+  value: bus_stop
+  is_plural: true
+- phrase: ponto de parada
+  key: highway
+  value: bus_stop
+  is_plural: false
+- phrase: pontos de parada
+  key: highway
+  value: bus_stop
+  is_plural: true
+- phrase: estrada
+  key: highway
+  value: road
+  is_plural: false
+- phrase: estradas
+  key: highway
+  value: road
+  is_plural: true
+- phrase: castelo
+  key: historic
+  value: castle
+  is_plural: false
+- phrase: castelos
+  key: historic
+  value: castle
+  is_plural: true
+- phrase: ruína
+  key: historic
+  value: ruins
+  is_plural: false
+- phrase: ruínas
+  key: historic
+  value: ruins
+  is_plural: true
+- phrase: praia
+  key: natural
+  value: beach
+  is_plural: false
+- phrase: praias
+  key: natural
+  value: beach
+  is_plural: true
+- phrase: ilha
+  key: natural
+  value: island
+  is_plural: false
+- phrase: ilhas
+  key: natural
+  value: island
+  is_plural: true
+- phrase: ilhéu
+  key: natural
+  value: islet
+  is_plural: false
+- phrase: ilhéus
+  key: natural
+  value: islet
+  is_plural: true
+- phrase: rio
+  key: natural
+  value: river
+  is_plural: false
+- phrase: rios
+  key: natural
+  value: river
+  is_plural: true
+- phrase: código postal
+  key: place
+  value: postcode
+  is_plural: false
+- phrase: códigos postais
+  key: place
+  value: postcode
+  is_plural: true
+- phrase: funicular
+  key: railway
+  value: funicular
+  is_plural: false
+- phrase: funiculares
+  key: railway
+  value: funicular
+  is_plural: true
+- phrase: passagem de nível
+  key: railway
+  value: level_crossing
+  is_plural: false
+- phrase: passagens de nível
+  key: railway
+  value: level_crossing
+  is_plural: true
+- phrase: estação
+  key: railway
+  value: station
+  is_plural: false
+- phrase: estações
+  key: railway
+  value: station
+  is_plural: true
+- phrase: estação de comboio
+  key: railway
+  value: station
+  is_plural: false
+- phrase: 'estações de comboio '
+  key: railway
+  value: station
+  is_plural: true
+- phrase: estação de comboios
+  key: railway
+  value: station
+  is_plural: false
+- phrase: 'estações de comboios '
+  key: railway
+  value: station
+  is_plural: true
+- phrase: estação ferroviária
+  key: railway
+  value: station
+  is_plural: false
+- phrase: 'estações ferroviárias '
+  key: railway
+  value: station
+  is_plural: true
+- phrase: estação de metro
+  key: railway
+  value: station
+  is_plural: false
+- phrase: 'estações de metro '
+  key: railway
+  value: station
+  is_plural: true
+- phrase: estação de metrô
+  key: railway
+  value: station
+  is_plural: false
+- phrase: 'estações de metrô '
+  key: railway
+  value: station
+  is_plural: true
+- phrase: estação de metropolitano
+  key: railway
+  value: station
+  is_plural: false
+- phrase: 'estações de metropolitano '
+  key: railway
+  value: station
+  is_plural: true
+- phrase: estação de trem
+  key: railway
+  value: station
+  is_plural: false
+- phrase: 'estações de trem '
+  key: railway
+  value: station
+  is_plural: true
+- phrase: estação de trens
+  key: railway
+  value: station
+  is_plural: false
+- phrase: 'estações de trens '
+  key: railway
+  value: station
+  is_plural: true
+- phrase: museu
+  key: tourism
+  value: museum
+  is_plural: false
+- phrase: museus
+  key: tourism
+  value: museum
+  is_plural: true
