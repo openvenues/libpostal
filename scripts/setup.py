@@ -11,19 +11,6 @@ def main():
     setup(
         name='geodata',
         version='0.1',
-        install_requires=[
-            'fiona',
-            'lxml',
-            'marisa_trie',
-            'pycountry',
-            'pyproj',
-            'python-Levenshtein',
-            'requests',
-            'rtree',
-            'shapely',
-            'six',
-            'ujson',
-        ],
         packages=find_packages(),
         ext_modules=[
             Extension('geodata.text._tokenize',
