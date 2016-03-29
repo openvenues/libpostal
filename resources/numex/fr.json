@@ -5,7 +5,7 @@
             "name": "zéro",
             "value": 0,
             "type": "cardinal"
-        }, 
+        },
         {
             "name": "zero",
             "value": 0,
@@ -418,671 +418,671 @@
             "category": "plural"
         },
         {
-            "name": "cinquieme", 
-            "value": 5, 
+            "name": "cinquieme",
+            "value": 5,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "cinquième", 
-            "value": 5, 
+            "name": "cinquième",
+            "value": 5,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "cinquiemes", 
-            "value": 5, 
-            "type": "ordinal", 
+            "name": "cinquiemes",
+            "value": 5,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "cinquièmes", 
-            "value": 5, 
-            "type": "ordinal", 
+            "name": "cinquièmes",
+            "value": 5,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "sixieme", 
-            "value": 6, 
+            "name": "sixieme",
+            "value": 6,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "sixième", 
-            "value": 6, 
+            "name": "sixième",
+            "value": 6,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "sixiemes", 
-            "value": 6, 
-            "type": "ordinal", 
+            "name": "sixiemes",
+            "value": 6,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "sixièmes", 
-            "value": 6, 
-            "type": "ordinal", 
+            "name": "sixièmes",
+            "value": 6,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "septieme", 
-            "value": 7, 
+            "name": "septieme",
+            "value": 7,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "septième", 
-            "value": 7, 
+            "name": "septième",
+            "value": 7,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "septiemes", 
-            "value": 7, 
-            "type": "ordinal", 
+            "name": "septiemes",
+            "value": 7,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "septièmes", 
-            "value": 7, 
-            "type": "ordinal", 
+            "name": "septièmes",
+            "value": 7,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "huitieme", 
-            "value": 8, 
+            "name": "huitieme",
+            "value": 8,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "huitième", 
-            "value": 8, 
+            "name": "huitième",
+            "value": 8,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "huitiemes", 
-            "value": 8, 
-            "type": "ordinal", 
+            "name": "huitiemes",
+            "value": 8,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "huitièmes", 
-            "value": 8, 
-            "type": "ordinal", 
+            "name": "huitièmes",
+            "value": 8,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "neuvieme", 
-            "value": 9, 
+            "name": "neuvieme",
+            "value": 9,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "neuvième", 
-            "value": 9, 
+            "name": "neuvième",
+            "value": 9,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "neuviemes", 
-            "value": 9, 
-            "type": "ordinal", 
+            "name": "neuviemes",
+            "value": 9,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "neuvièmes", 
-            "value": 9, 
-            "type": "ordinal", 
+            "name": "neuvièmes",
+            "value": 9,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dixieme", 
-            "value": 10, 
+            "name": "dixieme",
+            "value": 10,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dixième", 
-            "value": 10, 
+            "name": "dixième",
+            "value": 10,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dixiemes", 
-            "value": 10, 
-            "type": "ordinal", 
+            "name": "dixiemes",
+            "value": 10,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dixièmes", 
-            "value": 10, 
-            "type": "ordinal", 
+            "name": "dixièmes",
+            "value": 10,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "onzieme", 
-            "value": 11, 
+            "name": "onzieme",
+            "value": 11,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "onzième", 
-            "value": 11, 
+            "name": "onzième",
+            "value": 11,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "onziemes", 
-            "value": 11, 
-            "type": "ordinal", 
+            "name": "onziemes",
+            "value": 11,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "onzièmes", 
-            "value": 11, 
-            "type": "ordinal", 
+            "name": "onzièmes",
+            "value": 11,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "douzieme", 
-            "value": 12, 
+            "name": "douzieme",
+            "value": 12,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "douzième", 
-            "value": 12, 
+            "name": "douzième",
+            "value": 12,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "douziemes", 
-            "value": 12, 
-            "type": "ordinal", 
+            "name": "douziemes",
+            "value": 12,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "douzièmes", 
-            "value": 12, 
-            "type": "ordinal", 
+            "name": "douzièmes",
+            "value": 12,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "treizieme", 
-            "value": 13, 
+            "name": "treizieme",
+            "value": 13,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "treizième", 
-            "value": 13, 
+            "name": "treizième",
+            "value": 13,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "treiziemes", 
-            "value": 13, 
-            "type": "ordinal", 
+            "name": "treiziemes",
+            "value": 13,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "treizièmes", 
-            "value": 13, 
-            "type": "ordinal", 
+            "name": "treizièmes",
+            "value": 13,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "quatorzieme", 
-            "value": 14, 
+            "name": "quatorzieme",
+            "value": 14,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "quatorzième", 
-            "value": 14, 
+            "name": "quatorzième",
+            "value": 14,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "quatorziemes", 
-            "value": 14, 
-            "type": "ordinal", 
+            "name": "quatorziemes",
+            "value": 14,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "quatorzièmes", 
-            "value": 14, 
-            "type": "ordinal", 
+            "name": "quatorzièmes",
+            "value": 14,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "quinzieme", 
-            "value": 15, 
+            "name": "quinzieme",
+            "value": 15,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "quinzième", 
-            "value": 15, 
+            "name": "quinzième",
+            "value": 15,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "quinziemes", 
-            "value": 15, 
-            "type": "ordinal", 
+            "name": "quinziemes",
+            "value": 15,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "quinzièmes", 
-            "value": 15, 
-            "type": "ordinal", 
+            "name": "quinzièmes",
+            "value": 15,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "seizieme", 
-            "value": 16, 
+            "name": "seizieme",
+            "value": 16,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "seizième", 
-            "value": 16, 
+            "name": "seizième",
+            "value": 16,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "seiziemes", 
-            "value": 16, 
-            "type": "ordinal", 
+            "name": "seiziemes",
+            "value": 16,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "seizièmes", 
-            "value": 16, 
-            "type": "ordinal", 
+            "name": "seizièmes",
+            "value": 16,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dix septieme", 
-            "value": 17, 
+            "name": "dix septieme",
+            "value": 17,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dix septième", 
-            "value": 17, 
+            "name": "dix septième",
+            "value": 17,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dix septiemes", 
-            "value": 17, 
-            "type": "ordinal", 
+            "name": "dix septiemes",
+            "value": 17,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dix septièmes", 
-            "value": 17, 
-            "type": "ordinal", 
+            "name": "dix septièmes",
+            "value": 17,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dixseptieme", 
-            "value": 17, 
+            "name": "dixseptieme",
+            "value": 17,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dixseptième", 
-            "value": 17, 
+            "name": "dixseptième",
+            "value": 17,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dixseptiemes", 
-            "value": 17, 
-            "type": "ordinal", 
+            "name": "dixseptiemes",
+            "value": 17,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dixseptièmes", 
-            "value": 17, 
-            "type": "ordinal", 
+            "name": "dixseptièmes",
+            "value": 17,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dix huitieme", 
-            "value": 18, 
+            "name": "dix huitieme",
+            "value": 18,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dix huitième", 
-            "value": 18, 
+            "name": "dix huitième",
+            "value": 18,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dix huitiemes", 
-            "value": 18, 
-            "type": "ordinal", 
+            "name": "dix huitiemes",
+            "value": 18,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dix huitièmes", 
-            "value": 18, 
-            "type": "ordinal", 
+            "name": "dix huitièmes",
+            "value": 18,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dixhuitieme", 
-            "value": 18, 
+            "name": "dixhuitieme",
+            "value": 18,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dixhuitième", 
-            "value": 18, 
+            "name": "dixhuitième",
+            "value": 18,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dixhuitiemes", 
-            "value": 18, 
-            "type": "ordinal", 
+            "name": "dixhuitiemes",
+            "value": 18,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dixhuitièmes", 
-            "value": 18, 
-            "type": "ordinal", 
+            "name": "dixhuitièmes",
+            "value": 18,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dix neuvieme", 
-            "value": 19, 
+            "name": "dix neuvieme",
+            "value": 19,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dix neuvième", 
-            "value": 19, 
+            "name": "dix neuvième",
+            "value": 19,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dix neuviemes", 
-            "value": 19, 
-            "type": "ordinal", 
+            "name": "dix neuviemes",
+            "value": 19,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dix neuvièmes", 
-            "value": 19, 
-            "type": "ordinal", 
+            "name": "dix neuvièmes",
+            "value": 19,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dixneuvieme", 
-            "value": 19, 
+            "name": "dixneuvieme",
+            "value": 19,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dixneuvième", 
-            "value": 19, 
+            "name": "dixneuvième",
+            "value": 19,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "dixneuviemes", 
-            "value": 19, 
-            "type": "ordinal", 
+            "name": "dixneuviemes",
+            "value": 19,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "dixneuvièmes", 
-            "value": 19, 
-            "type": "ordinal", 
+            "name": "dixneuvièmes",
+            "value": 19,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
             "name": "vingtieme", 
             "value": 20, 
             "type": "ordinal"
-        }, 
+        },
         {
             "name": "vingtième", 
             "value": 20, 
             "type": "ordinal"
-        }, 
+        },
         {
             "name": "vingtiemes", 
             "value": 20, 
             "type": "ordinal", 
             "category": "plural"
-        }, 
+        },
         {
             "name": "vingtièmes", 
             "value": 20, 
             "type": "ordinal", 
             "category": "plural"
-        }, 
+        },
         {
-            "name": "trentieme", 
-            "value": 30, 
+            "name": "trentieme",
+            "value": 30,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "trentième", 
-            "value": 30, 
+            "name": "trentième",
+            "value": 30,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "trentiemes", 
-            "value": 30, 
-            "type": "ordinal", 
+            "name": "trentiemes",
+            "value": 30,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "trentièmes", 
-            "value": 30, 
-            "type": "ordinal", 
+            "name": "trentièmes",
+            "value": 30,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "quarantieme", 
-            "value": 40, 
+            "name": "quarantieme",
+            "value": 40,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "quarantième", 
-            "value": 40, 
+            "name": "quarantième",
+            "value": 40,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "quarantiemes", 
-            "value": 40, 
-            "type": "ordinal", 
+            "name": "quarantiemes",
+            "value": 40,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "quarantièmes", 
-            "value": 40, 
-            "type": "ordinal", 
+            "name": "quarantièmes",
+            "value": 40,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "cinquantieme", 
-            "value": 50, 
+            "name": "cinquantieme",
+            "value": 50,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "cinquantième", 
-            "value": 50, 
+            "name": "cinquantième",
+            "value": 50,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "cinquantiemes", 
-            "value": 50, 
-            "type": "ordinal", 
+            "name": "cinquantiemes",
+            "value": 50,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "cinquantièmes", 
-            "value": 50, 
-            "type": "ordinal", 
+            "name": "cinquantièmes",
+            "value": 50,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "soixantieme", 
-            "value": 60, 
+            "name": "soixantieme",
+            "value": 60,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "soixantième", 
-            "value": 60, 
+            "name": "soixantième",
+            "value": 60,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "soixantiemes", 
-            "value": 60, 
-            "type": "ordinal", 
+            "name": "soixantiemes",
+            "value": 60,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "soixantièmes", 
-            "value": 60, 
-            "type": "ordinal", 
+            "name": "soixantièmes",
+            "value": 60,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "septantieme", 
-            "value": 70, 
+            "name": "septantieme",
+            "value": 70,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "septantième", 
-            "value": 70, 
+            "name": "septantième",
+            "value": 70,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "septantiemes", 
-            "value": 70, 
-            "type": "ordinal", 
+            "name": "septantiemes",
+            "value": 70,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "septantièmes", 
-            "value": 70, 
-            "type": "ordinal", 
+            "name": "septantièmes",
+            "value": 70,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
             "name": "quatre vingtieme", 
             "value": 80, 
             "type": "ordinal"
-        }, 
+        },
         {
             "name": "quatre vingtième", 
             "value": 80, 
             "type": "ordinal"
-        }, 
+        },
         {
             "name": "quatre vingtiemes", 
             "value": 80, 
             "type": "ordinal", 
             "category": "plural"
-        }, 
+        },
         {
             "name": "quatre vingtièmes", 
             "value": 80, 
             "type": "ordinal", 
             "category": "plural"
-        }, 
+        },
         {
             "name": "quatrevingtieme", 
             "value": 80, 
             "type": "ordinal"
-        }, 
+        },
         {
             "name": "quatrevingtième", 
             "value": 80, 
             "type": "ordinal"
-        }, 
+        },
         {
             "name": "quatrevingtiemes", 
             "value": 80, 
             "type": "ordinal", 
             "category": "plural"
-        }, 
+        },
         {
             "name": "quatrevingtièmes", 
             "value": 80, 
             "type": "ordinal", 
             "category": "plural"
-        }, 
+        },
         {
-            "name": "huitantieme", 
-            "value": 80, 
+            "name": "huitantieme",
+            "value": 80,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "huitantième", 
-            "value": 80, 
+            "name": "huitantième",
+            "value": 80,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "huitantiemes", 
-            "value": 80, 
-            "type": "ordinal", 
+            "name": "huitantiemes",
+            "value": 80,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "huitantièmes", 
-            "value": 80, 
-            "type": "ordinal", 
+            "name": "huitantièmes",
+            "value": 80,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "nonantieme", 
-            "value": 90, 
+            "name": "nonantieme",
+            "value": 90,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "nonantième", 
-            "value": 90, 
+            "name": "nonantième",
+            "value": 90,
             "type": "ordinal"
-        }, 
+        },
         {
-            "name": "nonantiemes", 
-            "value": 90, 
-            "type": "ordinal", 
+            "name": "nonantiemes",
+            "value": 90,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "nonantièmes", 
-            "value": 90, 
-            "type": "ordinal", 
+            "name": "nonantièmes",
+            "value": 90,
+            "type": "ordinal",
             "category": "plural"
-        }, 
+        },
         {
-            "name": "centieme", 
-            "value": 100, 
-            "type": "ordinal", 
+            "name": "centieme",
+            "value": 100,
+            "type": "ordinal",
             "left": "multiply"
-        }, 
+        },
         {
-            "name": "centième", 
-            "value": 100, 
-            "type": "ordinal", 
+            "name": "centième",
+            "value": 100,
+            "type": "ordinal",
             "left": "multiply"
-        }, 
+        },
         {
-            "name": "centiemes", 
-            "value": 100, 
-            "type": "ordinal", 
-            "category": "plural", 
+            "name": "centiemes",
+            "value": 100,
+            "type": "ordinal",
+            "category": "plural",
             "left": "multiply"
-        }, 
+        },
         {
-            "name": "centièmes", 
-            "value": 100, 
-            "type": "ordinal", 
-            "category": "plural", 
+            "name": "centièmes",
+            "value": 100,
+            "type": "ordinal",
+            "category": "plural",
             "left": "multiply"
-        }, 
+        },
         {
-            "name": "millieme", 
-            "value": 1000, 
-            "type": "ordinal", 
+            "name": "millieme",
+            "value": 1000,
+            "type": "ordinal",
             "left": "multiply"
-        }, 
+        },
         {
-            "name": "millième", 
-            "value": 1000, 
-            "type": "ordinal", 
+            "name": "millième",
+            "value": 1000,
+            "type": "ordinal",
             "left": "multiply"
-        }, 
+        },
         {
-            "name": "milliemes", 
-            "value": 1000, 
-            "type": "ordinal", 
-            "category": "plural", 
+            "name": "milliemes",
+            "value": 1000,
+            "type": "ordinal",
+            "category": "plural",
             "left": "multiply"
-        }, 
+        },
         {
-            "name": "millièmes", 
-            "value": 1000, 
-            "type": "ordinal", 
-            "category": "plural", 
+            "name": "millièmes",
+            "value": 1000,
+            "type": "ordinal",
+            "category": "plural",
             "left": "multiply"
         }
     ],
