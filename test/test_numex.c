@@ -35,9 +35,9 @@ TEST test_numeric_expressions(void) {
     CHECK_CALL(test_numex("ten and four", "10 and 4", "en"));
 
     // French (Celtic-style) numbers
-    CHECK_CALL(test_numex("quatre-vignt-douze", "92", "fr"));
-    CHECK_CALL(test_numex("quatre vignt douze", "92", "fr"));
-    CHECK_CALL(test_numex("quatre vignts", "80", "fr"));
+    CHECK_CALL(test_numex("quatre-vingt-douze", "92", "fr"));
+    CHECK_CALL(test_numex("quatre vingt douze", "92", "fr"));
+    CHECK_CALL(test_numex("quatre vingts", "80", "fr"));
     CHECK_CALL(test_numex("soixante-et-onze", "71", "fr"));
     CHECK_CALL(test_numex("soixante-cinq", "65", "fr"));
 

@@ -173,28 +173,28 @@
             "right": "add"
         },
         {
-            "name": "quatre vignts",
+            "name": "quatre vingts",
             "value": 80,
             "type": "cardinal",
             "radix": 20,
             "right": "add"
         },
         {
-            "name": "quatrevignts",
+            "name": "quatrevingts",
             "value": 80,
             "type": "cardinal",
             "radix": 20,
             "right": "add"
         },
         {
-            "name": "quatre vignt",
+            "name": "quatre vingt",
             "value": 80,
             "type": "cardinal",
             "radix": 20,
             "right": "add"
         },
         {
-            "name": "quatrevignt",
+            "name": "quatrevingt",
             "value": 80,
             "type": "cardinal",
             "radix": 20,
@@ -814,23 +814,23 @@
             "category": "plural"
         }, 
         {
-            "name": "vigntieme", 
+            "name": "vingtieme", 
             "value": 20, 
             "type": "ordinal"
         }, 
         {
-            "name": "vigntième", 
+            "name": "vingtième", 
             "value": 20, 
             "type": "ordinal"
         }, 
         {
-            "name": "vigntiemes", 
+            "name": "vingtiemes", 
             "value": 20, 
             "type": "ordinal", 
             "category": "plural"
         }, 
         {
-            "name": "vigntièmes", 
+            "name": "vingtièmes", 
             "value": 20, 
             "type": "ordinal", 
             "category": "plural"
@@ -946,45 +946,45 @@
             "category": "plural"
         }, 
         {
-            "name": "quatre vigntieme", 
+            "name": "quatre vingtieme", 
             "value": 80, 
             "type": "ordinal"
         }, 
         {
-            "name": "quatre vigntième", 
+            "name": "quatre vingtième", 
             "value": 80, 
             "type": "ordinal"
         }, 
         {
-            "name": "quatre vigntiemes", 
+            "name": "quatre vingtiemes", 
             "value": 80, 
             "type": "ordinal", 
             "category": "plural"
         }, 
         {
-            "name": "quatre vigntièmes", 
+            "name": "quatre vingtièmes", 
             "value": 80, 
             "type": "ordinal", 
             "category": "plural"
         }, 
         {
-            "name": "quatrevigntieme", 
+            "name": "quatrevingtieme", 
             "value": 80, 
             "type": "ordinal"
         }, 
         {
-            "name": "quatrevigntième", 
+            "name": "quatrevingtième", 
             "value": 80, 
             "type": "ordinal"
         }, 
         {
-            "name": "quatrevigntiemes", 
+            "name": "quatrevingtiemes", 
             "value": 80, 
             "type": "ordinal", 
             "category": "plural"
         }, 
         {
-            "name": "quatrevigntièmes", 
+            "name": "quatrevingtièmes", 
             "value": 80, 
             "type": "ordinal", 
             "category": "plural"
@@ -1181,11 +1181,11 @@
                 "7": ["es"],
                 "8": ["es"],
                 "9": ["es"]
-
             }
         }
     ],
     "stopwords": [
         "et"
     ]
+
 }
