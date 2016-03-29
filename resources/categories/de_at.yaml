@@ -1,8 +1,0 @@
-- phrase: wirtshaus
-  key: amenity
-  value: restaurant
-  is_plural: false
-- phrase: wirtshäuser
-  key: amenity
-  value: restaurant
-  is_plural: true
