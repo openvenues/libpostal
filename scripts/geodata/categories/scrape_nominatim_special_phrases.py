@@ -16,16 +16,16 @@ shop=books
 Using these phrases, it is possible to construct queries like "restaurants in Brooklyn"
 '''
 
+import csv
 import os
 import re
 import requests
 import six
 import sys
 import time
-import yaml
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
-sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
+sys.path.append(os.path.realpath(os.path.join(this_dir, os.pardir, os.pardir)))
 
 from geodata.encoding import safe_decode, safe_encode
 
@@ -110,24 +110,14 @@ def scrape_all_nominatim_category_pages(url=NOMINATIM_SPECIAL_PHRASES_URL):
 def main(url=NOMINATIM_SPECIAL_PHRASES_URL, output_dir=DEFAULT_CATEGORIES_DIR):
     languages = scrape_all_nominatim_category_pages(url=url)
     for lang, phrases in six.iteritems(languages):
-        filename = os.path.join(output_dir, '{}.yaml'.format(lang.lower()))
+        filename = os.path.join(output_dir, '{}.tsv'.format(lang.lower()))
         with open(filename, 'w') as f:
-            phrase_data = [
-                {
-                    # For sorting purposes, we'll remove later
-                    '0phrase': safe_decode(phrase),
-                    '1key': safe_decode(key),
-                    '2value': safe_decode(value),
-                    '3is_plural': is_plural
-                }
-                for phrase, key, value, is_plural in phrases
-            ]
+            writer = csv.writer(f, delimiter='\t')
+            writer.writerow(('key', 'value', 'is_plural', 'phrase'))
 
-            yaml_data = yaml.safe_dump(phrase_data, allow_unicode=True, default_flow_style=False)
-
-            yaml_data = yaml_data.replace('0phrase:', 'phrase:').replace('1key:', 'key:').replace('2value:', 'value:').replace('3is_plural:', 'is_plural:')
-
-            f.write(yaml_data)
+            for phrase, key, value, is_plural in phrases:
+                writer.writerow((safe_encode(key), safe_encode(value),
+                                str(int(is_plural)), safe_encode(phrase)))
 
     print('Done')
 
