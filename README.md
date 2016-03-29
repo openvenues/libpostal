@@ -31,7 +31,7 @@ Here's a short list of some less straightforward normalizations in various langu
 | One-hundred twenty E 96th St        | 120 east 96th street                    |
 | C/ Ocho, P.I. 4                     | calle 8 polígono industrial 4           |
 | V XX Settembre, 20                  | via 20 settembre 20                     |
-| Quatre vignt douze R. de l'Église   | 92 rue de l' église                     |
+| Quatre vingt douze R. de l'Église   | 92 rue de l' église                     |
 | ул Каретный Ряд, д 4, строение 7    | улица каретныи ряд дом 4 строение 7     |
 | ул Каретный Ряд, д 4, строение 7    | ulitsa karetnyy ryad dom 4 stroyeniye 7 |
 | Marktstrasse 14                     | markt straße 14                         |
@@ -50,7 +50,7 @@ Here's an example using the Python bindings for succinctness (most of the higher
 
 ```python
 from postal.expand import expand_address
-expansions = expand_address('Quatre-vignt-douze Ave des Champs-Élysées')
+expansions = expand_address('Quatre-vingt-douze Ave des Champs-Élysées')
 
 assert '92 avenue des champs-elysees' in set(expansions)
 ```
@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
 
     size_t num_expansions;
     normalize_options_t options = get_libpostal_default_options();
-    char **expansions = expand_address("Quatre-vignt-douze Ave des Champs-Élysées", options, &num_expansions);
+    char **expansions = expand_address("Quatre-vingt-douze Ave des Champs-Élysées", options, &num_expansions);
 
     for (size_t i = 0; i < num_expansions; i++) {
         printf("%s\n", expansions[i]);
@@ -220,7 +220,7 @@ After building libpostal:
 ```
 cd src/
 
-./libpostal "Quatre vignt douze Ave des Champs-Élysées"
+./libpostal "Quatre vingt douze Ave des Champs-Élysées"
 ```
 
 If you have a text file or stream with one address per line, the command-line interface also accepts input from stdin:
@@ -310,7 +310,7 @@ The dictionaries are also used to abbreviate canonical phrases like "Calle" => "
 (performed on both the language classifier and the address parser training sets)
 
 - **Numeric expression parsing** ("twenty first" => 21st, 
-"quatre-vignt-douze" => 92, again using data provided in CLDR), supports > 30
+"quatre-vingt-douze" => 92, again using data provided in CLDR), supports > 30
 languages. Handles languages with concatenated expressions e.g.
 milleottocento => 1800. Optionally normalizes Roman numerals regardless of the
 language (IX => 9) which occur in the names of many monarchs, popes, etc.
