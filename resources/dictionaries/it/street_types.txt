@@ -25,11 +25,11 @@ cascina|c.na|cna
 cavalcavia|cavalc.a|cavalca
 chiusa|c.usa|cusa
 circonvallazione|circonv.e|circonve|crv
-contra'|con
+contrà|con|contra'
 contrada|contr.a|contra|c.da|cda|cnt
 corso|c.so|cso
 corte|c.te|cte
-cortile|c.ile|ctile|cle
+cortile|c.ile|ctile|c.le|cle
 cortina|ctn
 costa|cta
 crocevia|cra
@@ -80,7 +80,7 @@ rampa|rpa
 rampe|rpe
 regione|reg
 rio|rii
-rio tera'|rit
+rio terà|rit|rio tera'
 ripa|ri
 riva|rva
 riviera|riv
