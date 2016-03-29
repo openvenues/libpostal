@@ -1,1 +1,2 @@
-casella postale|cp|c.p.|c.p|c p
+casella postale|cp|c.p.|c.p|c p|cpt
+presso|co|c\o
