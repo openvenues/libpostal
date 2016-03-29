@@ -15,7 +15,7 @@ class InvalidNumexRuleException(Exception):
 
 NUMEX_DATA_DIR = os.path.join(DATA_DIR, 'numex')
 
-NUMEX_RULES_FILE = os.path.join(os.pardir, os.pardir, os.pardir, 'src', 'numex_data.c')
+NUMEX_RULES_FILE = os.path.join(this_dir, os.pardir, os.pardir, os.pardir, 'src', 'numex_data.c')
 
 GENDER_MASCULINE = 'GENDER_MASCULINE'
 GENDER_FEMININE = 'GENDER_FEMININE'
