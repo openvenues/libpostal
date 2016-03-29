@@ -4,7 +4,7 @@ import sys
 import ujson as json
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
-sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
+sys.path.append(os.path.realpath(os.path.join(this_dir, os.pardir, os.pardir)))
 
 from geodata.encoding import safe_encode
 from unicode_paths import DATA_DIR
