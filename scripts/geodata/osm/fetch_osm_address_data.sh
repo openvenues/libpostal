@@ -79,7 +79,7 @@ PLANET_BORDERS_O5M="planet-borders.o5m"
 PLANET_BORDERS="planet-borders.osm"
 PLANET_ADMIN_BORDERS_OSM="planet-admin-borders.osm"
 
-VALID_ADMIN_BORDERS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish or boundary=ceremonial or place=island"
+VALID_ADMIN_BORDERS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish boundary=civil or boundary=ceremonial or place=island"
 VALID_NEIGHBORHOODS="place=city or place=town or place=village or place=hamlet or place=neighbourhood or place=suburb or place=quarter or place=borough or place=locality"
 
 osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDERS" --drop-author --drop-version -o=$PLANET_ADMIN_BORDERS_OSM
@@ -113,7 +113,7 @@ rm $PLANET_VENUES_LATLONS
 echo "Filtering for buildings: `date`"
 PLANET_BUILDINGS_O5M="planet-buildings.o5m"
 VALID_BUILDINGS="( building= and building!=yes )"
-osmfilter $PLANET_O5M --keep="$VALID_BUILDINGS" --drop-author --drop-version -o=$PLANET_CATEGORIES_O5M
+osmfilter $PLANET_O5M --keep="$VALID_BUILDINGS" --drop-author --drop-version -o=$PLANET_BUILDINGS_O5M
 PLANET_BUILDINGS_LATLONS="planet-buildings-latlons.o5m"
 osmconvert $PLANET_BUILDINGS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_BUILDINGS_LATLONS
 rm $PLANET_BUILDINGS_O5M
@@ -125,7 +125,7 @@ rm $PLANET_BUILDINGS_LATLONS
 echo "Filtering for amenities: `date`"
 PLANET_AMENITIES_O5M="planet-amenities.o5m"
 ALL_AMENITIES="aeroway= or amenity= or or emergency= or historic= or internet_access= or landuse= or leisure= or man_made= or mountain_pass= or office= or place= or railway= or shop= or tourism="
-osmfilter $PLANET_O5M --keep="$ALL_AMENITIES" --drop-author --drop-version -o=$PLANET_CATEGORIES_O5M
+osmfilter $PLANET_O5M --keep="$ALL_AMENITIES" --drop-author --drop-version -o=$PLANET_AMENITIES_O5M
 PLANET_AMENITIES_LATLONS="planet-amenities-latlons.o5m"
 osmconvert $PLANET_AMENITIES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_AMENITIES_LATLONS
 rm $PLANET_AMENITIES_O5M
@@ -136,7 +136,7 @@ rm $PLANET_AMENITIES_LATLONS
 echo "Filtering for natural: `date`"
 PLANET_NATURAL_O5M="planet-natural.o5m"
 VALID_NATURAL="natural="
-osmfilter $PLANET_O5M --keep="$VALID_NATURAL" --drop-author --drop-version -o=$PLANET_CATEGORIES_O5M
+osmfilter $PLANET_O5M --keep="$VALID_NATURAL" --drop-author --drop-version -o=$PLANET_NATURAL_O5M
 PLANET_NATURAL_LATLONS="planet-natural-latlons.o5m"
 osmconvert $PLANET_NATURAL_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_NATURAL_LATLONS
 rm $PLANET_NATURAL_O5M
@@ -147,7 +147,7 @@ rm $PLANET_NATURAL_LATLONS
 echo "Filtering for waterways: `date`"
 PLANET_WATERWAYS_O5M="planet-waterways.o5m"
 VALID_WATERWAYS="waterway="
-osmfilter $PLANET_O5M --keep="$VALID_WATERWAYS" --drop-author --drop-version -o=$PLANET_CATEGORIES_O5M
+osmfilter $PLANET_O5M --keep="$VALID_WATERWAYS" --drop-author --drop-version -o=$PLANET_WATERWAYS_O5M
 PLANET_WATERWAYS_LATLONS="planet-waterways-latlons.o5m"
 osmconvert $PLANET_WATERWAYS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_WATERWAYS_LATLONS
 rm $PLANET_WATERWAYS_O5M
