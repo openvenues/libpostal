@@ -280,6 +280,8 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
             token_t token;
 
+            size_t added_expansions = 0;
+
             if ((value.components & options.address_components) > 0) {
                 key->n = namespace_len;
                 for (int j = phrase.start; j < phrase.start + phrase.len; j++) {
@@ -298,8 +300,13 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
                 address_expansion_array *expansions = address_dictionary_get_expansions(key_str);
 
                 if (expansions != NULL) {
+                    
                     for (int j = 0; j < expansions->n; j++) {
                         address_expansion_t expansion = expansions->a[j];
+                        if ((expansion.address_components & options.address_components) == 0) {
+                            continue;
+                        }
+
                         if (expansion.canonical_index != NULL_CANONICAL_INDEX) {
                             char *canonical = address_dictionary_get_canonical(expansion.canonical_index);
                             char *canonical_normalized = normalize_string_utf8(canonical, normalize_string_options);
@@ -347,10 +354,15 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
                             }
                             cstring_array_terminate(tree->strings);
                         }
+
+                        added_expansions++;
                     }
 
+
                 }
-            } else {
+            }
+
+            if (added_expansions == 0) {
                 uint32_t start_index = cstring_array_start_token(tree->strings);
                 for (int j = phrase.start; j < phrase.start + phrase.len; j++) {
                     token = tokens->a[j];

@@ -1,19 +1,38 @@
 accesso|acc.so|accso
-autostrada|aut.da|autda
+alto|alt
+alzaia|alz
+androna|and
+arco|arc
+autostrada|aut.da|autda|aut
 audostradale|aut.sle|autsle|aut sle|aut.ale|autale
 autostrade|aut.de|autde
+baluardo|bdo
+banchina|bna
+bivio|biv
+borgata|bga
+borgo|b.go|bgo
 bretella|br.lla|brlla
 bretelle|br.lle|brlle
-calle|c.le|cle
+brigata|bgt
+calata|clt
+calle|cal
+campiello|cpl
 campo|c.po|cpo
-cascina|cna
+canale|cnl
+cantone|cat
+casale|cas
+cascina|c.na|cna
 cavalcavia|cavalc.a|cavalca
 chiusa|c.usa|cusa
 circonvallazione|circonv.e|circonve|crv
+contrà|con|contra'
 contrada|contr.a|contra|c.da|cda|cnt
 corso|c.so|cso
 corte|c.te|cte
-cortile|c.ile|ctile
+cortile|c.ile|ctile|c.le|cle
+cortina|ctn
+costa|cta
+crocevia|cra
 cupa|cup
 discesa|dis
 ferrata|f.rata|frata
@@ -61,7 +80,7 @@ rampa|rpa
 rampe|rpe
 regione|reg
 rio|rii
-rio tera'|rit
+rio terà|rit|rio tera'
 ripa|ri
 riva|rva
 riviera|riv

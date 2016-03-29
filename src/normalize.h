@@ -9,7 +9,7 @@ The normalize module provides several options for preprocessing full strings:
 
 As well as normalizations for individual string tokens:
 
-- Replace hyphens with space e.g. "quatre-vignt" => "quatre vignt"
+- Replace hyphens with space e.g. "quatre-vingt" => "quatre vingt"
 - Delete hyphens e.g. "auto-estrada" => "autoestrada"
 - Delete final period "R." => "R"
 - Delete acronym periods: "U.S.A." => "USA"
