@@ -20,7 +20,7 @@ equivalents suitable for search indexing, hashing, etc.
 
 Here's an interactive example using the Python binding:
 
-![expand](https://cloud.githubusercontent.com/assets/238455/13210468/b1676b72-d8fd-11e5-8557-ded418f6ffda.gif)
+![expand](https://cloud.githubusercontent.com/assets/238455/14115012/52990d14-f5a7-11e5-9797-159dacdf8c5f.gif)
 
 libpostal contains an OSM-trained language classifier to detect which language(s) are used in a given
 address so it can apply the appropriate normalizations. The only input needed is the raw address string. 
