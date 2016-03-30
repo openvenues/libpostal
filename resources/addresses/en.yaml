@@ -256,6 +256,29 @@ directions:
             affix: s
             direction: right
 
+# Entrance
+# ========
+# For deriving strings like "North Entrance"
+
+entrance:
+    canonical: entrance
+    abbreviated: ent
+    sample: true
+
+# Staircase
+# =========
+# For deriving strings like "Staircase A" in apartment buildings
+
+staircase:
+    canonical: stair
+    sample: true
+    alternates:
+        - canonical: stairway
+          sample: true
+        - canonical: staircase
+          sample: true
+
+
 # Unit types
 # ==========
 # Unit information is common in residential addresses, offices, business parks, etc.
