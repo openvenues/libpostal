@@ -188,6 +188,26 @@ po_box:
               prefer_abbreviated: true
               sample: true
 
+# Categories
+# ==========
+# Use the operators "in" and "near" for building category queries
+# such as "restaurants in Hackney, London"
+
+categories:
+    near:
+        canonical: near
+        alternates:
+            - around
+    nearby:
+        canonical: nearby
+        alternates:
+            - near here
+            - around here
+    near_me:
+        canonical: near me
+    in:
+        canonical: in
+
 # Directions
 # ==========
 # Unit types, stairways, etc. may have a direction associated
