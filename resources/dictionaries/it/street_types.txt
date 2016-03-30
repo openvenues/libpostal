@@ -2,6 +2,7 @@ accesso|acc.so|accso
 alto|alt
 alzaia|alz
 androna|and
+angolo|ang.|ang
 arco|arc
 autostrada|aut.da|autda|aut
 audostradale|aut.sle|autsle|aut sle|aut.ale|autale
