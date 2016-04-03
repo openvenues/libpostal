@@ -2,7 +2,7 @@ aldea
 ampliación|amplicacion|ampl|amp
 auzoa
 barriada|barda
-barrio|bo|brio|brrio|bº|b.º
+barrio|bo|brio|brrio|bº|b.º|b /
 barrios|bos|brios|brrios
 bloque|blque|bloq|blq
 colonia|col

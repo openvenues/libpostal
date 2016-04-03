@@ -1,5 +1,6 @@
 bajos|bjos|bjs
 planta baja|pb|pl baja
 planta primera|pl primera
-planta principal|pl pral|pl pr
-principal|pral|pr
+piso principal|ppl|piso ppal|p ppal|piso pral|p pral
+planta principal|ppl|pl ppal|pl pral|pl pr
+principal|pral|ppal|pr

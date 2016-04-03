@@ -1,5 +1,6 @@
 barcelona|barna|bar.na
 buenos aires|bs as|bs.as
+ciudad de méxico|c méx|c mex|ciudad de mexico
 distrito federal|df|d.f|d f
 distrito capital|dc|d.c|d c
 madrid|madd

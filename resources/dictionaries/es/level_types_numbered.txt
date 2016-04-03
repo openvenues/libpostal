@@ -1,2 +1,2 @@
-piso|pi
+piso|pi|p
 planta|pl
