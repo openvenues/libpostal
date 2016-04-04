@@ -2,12 +2,14 @@ Fiona==1.6.3.post1
 PyYAML==3.11
 Rtree==0.8.2
 Shapely==1.5.14
-Unidecode==0.04.19
+Unidecode==0.4.19
 click==6.4
 click-plugins==1.0.3
 cligj==0.4.0
 cssselect==0.9.1
-geodata==0.1
+distribute==0.7.3
+future==0.15.2
+leveldb==0.193
 lxml==3.6.0
 marisa-trie==0.7.2
 pycountry==1.20
