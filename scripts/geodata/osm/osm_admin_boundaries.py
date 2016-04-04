@@ -241,9 +241,14 @@ class OSMPolygonReader(object):
 
 class OSMAdminPolygonReader(OSMPolygonReader):
     def include_closed_way(self, props):
-        return False
+        return 'boundary' in props or 'place' in props
 
 
-class OSMZonePolygonReader(OSMPolygonReader):
+class OSMSubdivisionPolygonReader(OSMPolygonReader):
     def include_closed_way(self, props):
-        return 'landuse' in props
+        return 'landuse' in props or 'place' in props
+
+
+class OSMBuildingPolygonReader(OSMPolygonReader):
+    def include_closed_way(self, props):
+        return 'building' in props
