@@ -434,6 +434,9 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
 
     PRIORITIES_FILENAME = 'priorities.json'
 
+    persistent_polygons = True
+    cache_size = 100000
+
     sorted_levels = (COUNTRY,
                      ADMIN1_REGION,
                      ADMIN1,
@@ -648,6 +651,8 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
     polygon_reader = OSMAdminPolygonReader
 
+    persistent_polygons = True
+    cache_size = 1000000
     simplify_polygons = True
 
     include_property_patterns = set([
@@ -799,7 +804,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 class OSMSubdivisionReverseGeocoder(OSMReverseGeocoder):
     persistent_polygons = True
     cache_size = 10000
-    simplify_polygons = True
+    simplify_polygons = False
     polygon_reader = OSMSubdivisionPolygonReader
     include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['landuse'])
 
@@ -807,7 +812,7 @@ class OSMSubdivisionReverseGeocoder(OSMReverseGeocoder):
 class OSMBuildingReverseGeocoder(OSMReverseGeocoder):
     persistent_polygons = True
     cache_size = 10000
-    simplify_polygons = True
+    simplify_polygon = False
     polygon_reader = OSMBuildingPolygonReader
     include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['building', 'building:levels'])
 
