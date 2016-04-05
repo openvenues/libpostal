@@ -13,6 +13,8 @@ from shapely.geometry.geo import mapping
 
 from geodata.polygons.area import polygon_bounding_box_area
 
+DEFAULT_POLYS_FILENAME = 'polygons.geojson'
+
 
 class PolygonIndex(object):
     include_only_properties = None
@@ -22,7 +24,6 @@ class PolygonIndex(object):
 
     INDEX_FILENAME = None
     POLYGONS_DB_DIR = 'polygons'
-    DEFAULT_POLYS_FILENAME = 'polygons.geojson'
 
     def __init__(self, index=None, polygons=None, polygons_db=None, save_dir=None,
                  index_filename=None,
