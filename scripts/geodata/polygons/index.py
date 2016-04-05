@@ -254,11 +254,11 @@ class PolygonIndex(object):
     def load_polygons(cls, filename):
         f = open(filename)
         polygons = {}
-        self.i = 0
+        cls.i = 0
         for line in f:
             feature = json.loads(line.rstrip())
-            polygons[i] = prep(cls.polygon_from_geojson(feature))
-            self.i += 1
+            polygons[cls.i] = prep(cls.polygon_from_geojson(feature))
+            cls.i += 1
         return polygons
 
     @classmethod
