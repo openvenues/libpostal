@@ -98,7 +98,7 @@ osmfilter $PLANET_O5M --keep="name= and ( $VALID_NEIGHBORHOODS )" --drop-relatio
 
 echo "Filtering for subdivision polygons"
 PLANET_SUBDIVISIONS="planet-subdivisions.osm"
-osmfilter $PLANET_O5M --keep="( name= or addr:housename= ) and ( place=subdivision or place=city_block or place=allotmenets or landuse=residential or landuse=commercial or landuse=industrial or landuse=retail or landuse=military )" --drop="place= or boundary=" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS
+osmfilter $PLANET_O5M --keep="( name= or addr:housename= ) and ( place=allotmenets or place=city_block or place=plot or place=subdivision or landuse=residential or landuse=commercial or landuse=industrial or landuse=retail or landuse=military )" --drop="place= or boundary=" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS
 
 echo "Filtering for postal_code polygons"
 PLANET_POSTAL_CODES="planet-postcodes.osm"
