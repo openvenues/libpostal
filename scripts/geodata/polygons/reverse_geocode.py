@@ -832,7 +832,7 @@ if __name__ == '__main__':
     if args.osm_admin_file:
         index = OSMReverseGeocoder.create_from_osm_file(args.osm_admin_file, args.out_dir)
     elif args.osm_landuse_file:
-        index = OSMSubdivisionReverseGeocoder.create_from_osm_file(args.osm_landuse_file, args.out_dir)
+        index = OSMSubdivisionReverseGeocoder.create_from_osm_file(args.osm_subdivisions_file, args.out_dir)
     elif args.osm_building_polygons_file:
         index = OSMBuildingReverseGeocoder.create_from_osm_file(args.osm_building_polygons_file, args.out_dir)
     elif args.osm_neighborhoods_file and args.quattroshapes_dir:
