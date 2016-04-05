@@ -99,7 +99,6 @@ class PolygonIndex(object):
         return {
             'type': 'Feature',
             'geometry': mapping(poly),
-            'properties': properties
         }
 
     def add_polygon(self, poly, properties, cache=False, include_only_properties=None):
@@ -109,12 +108,10 @@ class PolygonIndex(object):
         if not self.persistent_polygons or cache:
             self.polygons[self.i] = prep(poly)
 
-        if not self.persistent_polygons:
-            value = json.dumps(properties)
-        else:
-            value = json.dumps(self.polygon_geojson(poly, properties))
+        if self.persistent_polygons:
+            self.polygons_db.Put(self.polygon_key(self.i), json.dumps(self.polygon_geojson(poly, properties)))
 
-        self.polygons_db.Put(str(self.i), value)
+        self.polygons_db.Put(self.properties_key(self.i), json.dumps(properties))
         self.index_polygon_properties(properties)
         self.i += 1
 
@@ -288,12 +285,18 @@ class PolygonIndex(object):
             poly = self.polygons[i]
             contains = poly.contains(point)
             if contains:
-                properties = json.loads(self.polygons_db.Get(str(i)))
+                properties = json.loads(self.polygons_db.Get(self.properties_key(i)))
                 if not return_all:
                     return properties
                 else:
                     containing.append(properties)
         return containing
+
+    def polygon_key(self, i):
+        return 'poly:{}'.format(i)
+
+    def properties_key(self, i):
+        return 'props:{}'.format(i)
 
     def polygons_contain_cached(self, candidates, point, return_all=False):
         containing = None
@@ -304,7 +307,7 @@ class PolygonIndex(object):
             poly = self.polygons.get(i, None)
             data = {}
             if poly is None:
-                data = json.loads(self.polygons_db.Get(str(i)))
+                data = json.loads(self.polygons_db.Get(self.polygon_key(i)))
                 poly = prep(self.polygon_from_geojson(data))
                 self.polygons[i] = poly
                 self.cache_misses += 1
@@ -314,7 +317,7 @@ class PolygonIndex(object):
             contains = poly.contains(point)
             if contains:
                 if not data:
-                    data = json.loads(self.polygons_db.Get(str(i)))
+                    data = json.loads(self.polygons_db.Get(self.properties_key(i)))
 
                 properties = data['properties']
                 if not return_all:
