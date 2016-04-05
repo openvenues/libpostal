@@ -763,8 +763,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                     poly = multi[0]
                 else:
                     continue
-            if len(poly.exterior.xy[0]) >= cls.large_polygon_threshold:
-                poly = index.simplify_polygon(poly)
+            poly = index.simplify_polygon(poly)
             index.add_polygon(poly, props)
 
         return index
