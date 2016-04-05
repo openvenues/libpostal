@@ -286,7 +286,7 @@ class PolygonIndex(object):
             containing = []
         for i in candidates:
             poly = self.polygons[i]
-            contains = poly.contains(pt)
+            contains = poly.contains(point)
             if contains:
                 properties = json.loads(self.polygons_db.Get(str(i)))
                 if not return_all:
