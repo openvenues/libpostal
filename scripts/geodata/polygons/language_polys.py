@@ -1,6 +1,7 @@
 import argparse
 import os
 import sys
+import ujson as json
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
@@ -13,6 +14,8 @@ regional_language_dir = os.path.join(LANGUAGES_DIR, 'regional')
 
 
 class LanguagePolygonIndex(RTreePolygonIndex):
+    DEFAULT_POLYS_FILENAME = 'polygons.geojson'
+    ADMIN_LEVELS_FILENAME = 'admin_levels.json'
 
     include_only_properties = set([
         'qs_a0',
@@ -136,9 +139,20 @@ class LanguagePolygonIndex(RTreePolygonIndex):
                                           output_dir, index_filename=index_filename,
                                           polys_filename=polys_filename)
 
+    def setup(self):
+        self.admin_levels = []
+
+    def index_polygon_properties(self, properties):
+        self.admin_levels.append(properties['admin_level'])
+
+    def load_polygon_properties(self, d):
+        self.admin_levels = json.load(open(os.path.join(d, self.ADMIN_LEVELS_FILENAME)))
+
+    def save_polygon_properties(self, d):
+        json.dump(self.admin_levels, open(os.path.join(d, self.ADMIN_LEVELS_FILENAME), 'w'))
+
     def admin_level(self, i):
-        props, p = self.polygons[i]
-        return props['admin_level']
+        return self.admin_levels[i]
 
     def get_candidate_polygons(self, lat, lon):
         candidates = OrderedDict.fromkeys(self.index.intersection((lon, lat, lon, lat))).keys()
