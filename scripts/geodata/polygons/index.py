@@ -59,6 +59,9 @@ class PolygonIndex(object):
                 for key, value in six.iteritems(polygons):
                     self.polygons[key] = value
 
+            self.cache_hits = 0
+            self.cache_misses = 0
+
             self.polygons_contain = self.polygons_contain_cached
 
         if not polygons_db_path:
@@ -304,6 +307,9 @@ class PolygonIndex(object):
                 data = json.loads(self.polygons_db.Get(str(i)))
                 poly = prep(self.polygon_from_geojson(data))
                 self.polygons[i] = poly
+                self.cache_misses += 1
+            else:
+                self.cache_hits += 1
 
             contains = poly.contains(point)
             if contains:
