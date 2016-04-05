@@ -326,7 +326,7 @@ class PolygonIndex(object):
     def point_in_poly(self, lat, lon, return_all=False):
         candidates = self.get_candidate_polygons(lat, lon)
         point = Point(lon, lat)
-        return self.polygons_contain(candidates, point)
+        return self.polygons_contain(candidates, point, return_all=return_all)
 
 
 class RTreePolygonIndex(PolygonIndex):
