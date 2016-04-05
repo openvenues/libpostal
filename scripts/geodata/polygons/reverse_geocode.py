@@ -35,7 +35,7 @@ from geodata.i18n.unicode_properties import get_chars_by_script
 from geodata.i18n.word_breaks import ideographic_scripts
 from geodata.names.deduping import NameDeduper
 from geodata.osm.extract import parse_osm, OSM_NAME_TAGS
-from geodata.osm.osm_admin_boundaries import OSMAdminPolygonReader, OSMZonePolygonReader
+from geodata.osm.osm_admin_boundaries import OSMAdminPolygonReader, OSMSubdivisionPolygonReader
 from geodata.polygons.index import *
 from geodata.statistics.tf_idf import IDFIndex
 
@@ -160,6 +160,8 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
     source has least a "name" key which in practice is what we care about.
     '''
     NEIGHBORHOODS_REPO = 'https://github.com/blackmad/neighborhoods'
+
+    PRIORITIES_FILENAME = 'priorities.json'
 
     SCRATCH_DIR = '/tmp'
 
@@ -386,9 +388,20 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
         return index
 
+    def setup(self):
+        self.priorities = []
+
+    def index_polygon_properties(self, properties):
+        self.priorities.append((props['polygon_type'], self.source_priorities[props['source']]))
+
+    def load_polygon_properties(self, d):
+        self.priorities = json.load(open(os.path.join(d, self.PRIORITIES_FILENAME)))
+
+    def save_polygon_properties(self, d):
+        json.dump(self.priorities, open(os.path.join(d, self.PRIORITIES_FILENAME), 'w'))
+
     def priority(self, i):
-        props, p = self.polygons[i]
-        return (self.level_priorities[props['polygon_type']], self.source_priorities[props['source']])
+        return self.priorities[i]
 
     def get_candidate_polygons(self, lat, lon):
         candidates = super(NeighborhoodReverseGeocoder, self).get_candidate_polygons(lat, lon)
@@ -418,6 +431,8 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
     LOCAL_ADMIN = 'localadmin'
     LOCALITY = 'locality'
     NEIGHBORHOOD = 'neighborhood'
+
+    PRIORITIES_FILENAME = 'priorities.json'
 
     sorted_levels = (COUNTRY,
                      ADMIN1_REGION,
@@ -578,9 +593,20 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
                                           output_dir, index_filename=index_filename,
                                           polys_filename=polys_filename)
 
+    def setup(self):
+        self.priorities = []
+
+    def index_polygon_properties(self, properties):
+        self.priorities.append(self.sort_levels.get(properties[self.LEVEL], 0))
+
+    def load_polygon_properties(self, d):
+        self.priorities = json.load(open(os.path.join(d, self.PRIORITIES_FILENAME)))
+
+    def save_polygon_properties(self, d):
+        json.dump(self.priorities, open(os.path.join(d, self.PRIORITIES_FILENAME), 'w'))
+
     def sort_level(self, i):
-        props, p = self.polygons[i]
-        return self.sort_levels.get(props[self.LEVEL], 0)
+        return self.priorities[i]
 
     def get_candidate_polygons(self, lat, lon):
         candidates = super(QuattroshapesReverseGeocoder, self).get_candidate_polygons(lat, lon)
@@ -617,6 +643,8 @@ class OSMReverseGeocoder(RTreePolygonIndex):
     '''
 
     ADMIN_LEVEL = 'admin_level'
+
+    ADMIN_LEVELS_FILENAME = 'admin_levels.json'
 
     polygon_reader = OSMAdminPolygonReader
 
@@ -713,16 +741,11 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                         # Figure out which outer polygon contains each inner polygon
                         interior = [p2 for p2 in inner if poly.contains(p2)]
                     except TopologicalError:
-                        poly = cls.fix_polygon(poly)
-                        if poly is None or not poly.bounds or len(poly.bounds) != 4:
-                            continue
-                        if poly.is_valid:
-                            interior = [p2 for p2 in inner if poly.contains(p2)]
+                        continue
 
                     if interior:
                         # Polygon with holes constructor
                         poly = Polygon(p, [zip(*p2.exterior.coords.xy) for p2 in interior])
-                        poly = cls.fix_polygon(poly)
                         if poly is None or not poly.bounds or len(poly.bounds) != 4:
                             continue
                     # R-tree only stores the bounding box, so add the whole polygon
@@ -740,27 +763,46 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                     poly = multi[0]
                 else:
                     continue
-            poly = index.simplify_polygon(poly)
+            if len(poly.exterior.xy[0]) >= cls.large_polygon_threshold:
+                poly = index.simplify_polygon(poly)
             index.add_polygon(poly, props)
 
         return index
 
-    def sort_level(self, i):
-        props, p = self.polygons[i]
-        admin_level = props.get(self.ADMIN_LEVEL, 0)
+    def setup(self):
+        self.admin_levels = []
+
+    def index_polygon_properties(self, properties):
+        admin_level = properties.get(self.ADMIN_LEVEL, 0)
         try:
-            return int(admin_level)
+            admin_level = int(admin_level)
         except ValueError:
-            return 0
+            admin_level = 0
+        self.admin_levels.append(admin_level)
+
+    def load_polygon_properties(self, d):
+        self.admin_levels = json.load(open(os.path.join(d, self.ADMIN_LEVELS_FILENAME)))
+
+    def save_polygon_properties(self, d):
+        json.dump(self.admin_levels, open(os.path.join(d, self.ADMIN_LEVELS_FILENAME), 'w'))
+
+    def sort_level(self, i):
+        return self.admin_level[i]
 
     def get_candidate_polygons(self, lat, lon):
         candidates = super(OSMReverseGeocoder, self).get_candidate_polygons(lat, lon)
         return sorted(candidates, key=self.sort_level, reverse=True)
 
 
-class OSMZoneReverseGeocoder(OSMReverseGeocoder):
-    polygon_reader = OSMZonePolygonReader
+class OSMSubdivisionReverseGeocoder(OSMReverseGeocoder):
+    polygon_reader = OSMSubdivisionPolygonReader
     include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['landuse'])
+
+
+class OSMBuildingReverseGeocoder(OSMReverseGeocoder):
+    polygon_reader = OSMBuildingPolygonReader
+    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['building', 'building:levels'])
+
 
 if __name__ == '__main__':
     # Handle argument parsing here
@@ -772,8 +814,11 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--osm-admin-file',
                         help='Path to OSM borders file (with dependencies, .osm format)')
 
-    parser.add_argument('-l', '--osm-landuse-file',
-                        help='Path to OSM landuse file (with dependencies, .osm format)')
+    parser.add_argument('-s', '--osm-subdivisions-file',
+                        help='Path to OSM subdivisions file (with dependencies, .osm format)')
+
+    parser.add_argument('-b', '--osm-building-polygons-file',
+                        help='Path to OSM building polygons file (with dependencies, .osm format)')
 
     parser.add_argument('-n', '--osm-neighborhoods-file',
                         help='Path to OSM neighborhoods file (no dependencies, .osm format)')
@@ -788,7 +833,9 @@ if __name__ == '__main__':
     if args.osm_admin_file:
         index = OSMReverseGeocoder.create_from_osm_file(args.osm_admin_file, args.out_dir)
     elif args.osm_landuse_file:
-        index = OSMZoneReverseGeocoder.create_from_osm_file(args.osm_landuse_file, args.out_dir)
+        index = OSMSubdivisionReverseGeocoder.create_from_osm_file(args.osm_landuse_file, args.out_dir)
+    elif args.osm_building_polygons_file:
+        index = OSMBuildingReverseGeocoder.create_from_osm_file(args.osm_building_polygons_file, args.out_dir)
     elif args.osm_neighborhoods_file and args.quattroshapes_dir:
         index = NeighborhoodReverseGeocoder.create_from_osm_and_quattroshapes(
             args.osm_neighborhoods_file,

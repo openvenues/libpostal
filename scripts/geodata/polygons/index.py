@@ -4,6 +4,8 @@ import os
 import rtree
 import ujson as json
 
+from leveldb import LevelDB
+
 from collections import OrderedDict, defaultdict
 from shapely.geometry import Point, Polygon, MultiPolygon
 from shapely.prepared import prep
@@ -11,28 +13,30 @@ from shapely.geometry.geo import mapping
 
 from geodata.polygons.area import polygon_bounding_box_area
 
-DEFAULT_POLYS_FILENAME = 'polygons.geojson'
-
 
 class PolygonIndex(object):
     include_only_properties = None
-    simplify_tolerance = 0.0001
+    simplify_tolerance = 0.00001
     preserve_topology = True
+    large_polygon_threshold = 10000
 
     INDEX_FILENAME = None
+    POLYGONS_DB_DIR = 'polygons'
+    DEFAULT_POLYS_FILENAME = 'polygons.geojson'
 
-    def __init__(self, index=None, polygons=None, save_dir=None,
+    def __init__(self, index=None, polygons=None, polygons_db=None, save_dir=None,
                  index_filename=None,
+                 polygons_db_path=None,
                  include_only_properties=None):
         if save_dir:
             self.save_dir = save_dir
         else:
             self.save_dir = None
 
-        if index_filename:
-            self.index_path = os.path.join(save_dir or '.', index_filename)
-        else:
-            self.index_path = os.path.join(save_dir or '.', self.INDEX_FILENAME)
+        if not index_filename:
+            index_filename = self.INDEX_FILENAME
+
+        self.index_path = os.path.join(save_dir or '.', index_filename)
 
         if not index:
             self.create_index(overwrite=True)
@@ -47,6 +51,16 @@ class PolygonIndex(object):
         else:
             self.polygons = polygons
 
+        if not polygons_db_path:
+            polygons_db_path = os.path.join(save_dir or '.', self.POLYGONS_DB_DIR)
+
+        if not polygons_db:
+            self.polygons_db = LevelDB(polygons_db_path)
+        else:
+            self.polygons_db = polygons_db
+
+        self.setup()
+
         self.i = 0
 
     def create_index(self, overwrite=False):
@@ -55,6 +69,9 @@ class PolygonIndex(object):
     def index_polygon(self, polygon):
         raise NotImplementedError('Children must implement')
 
+    def setup(self):
+        pass
+
     def simplify_polygon(self, poly, simplify_tolerance=None, preserve_topology=None):
         if simplify_tolerance is None:
             simplify_tolerance = self.simplify_tolerance
@@ -62,16 +79,21 @@ class PolygonIndex(object):
             preserve_topology = self.preserve_topology
         return poly.simplify(simplify_tolerance, preserve_topology=preserve_topology)
 
+    def index_polygon_properties(self, properties):
+        pass
+
     def add_polygon(self, poly, properties, include_only_properties=None):
         if include_only_properties is not None:
             properties = {k: v for k, v in properties.iteritems() if k in include_only_properties}
-        self.polygons.append((properties, prep(poly)))
+
+        self.polygons.append(prep(poly))
+        self.polygons_db.Put(str(self.i), json.dumps(properties))
+        self.index_polygon_properties(properties)
         self.i += 1
 
     @classmethod
     def create_from_shapefiles(cls, inputs, output_dir,
                                index_filename=None,
-                               polys_filename=DEFAULT_POLYS_FILENAME,
                                include_only_properties=None):
         index = cls(save_dir=output_dir, index_filename=index_filename or cls.INDEX_FILENAME)
         for input_file in inputs:
@@ -161,19 +183,26 @@ class PolygonIndex(object):
     def save(self, polys_filename=DEFAULT_POLYS_FILENAME):
         self.save_polygons(os.path.join(self.save_dir, polys_filename))
         self.save_index()
+        self.save_polygon_properties(self.save_dir)
 
     def save_polygons(self, out_filename):
         out = open(out_filename, 'w')
-        for props, poly in self.polygons:
+        for poly in self.polygons:
             feature = {
                 'type': 'Feature',
                 'geometry': mapping(poly.context),
-                'properties': props
             }
             out.write(json.dumps(feature) + u'\n')
+        self.polygons_db.CompactRange('\x00', '\xff')
 
     def save_index(self):
         raise NotImplementedError('Children must implement')
+
+    def load_polygon_properties(self, d):
+        pass
+
+    def save_polygon_properties(self, d):
+        pass
 
     @classmethod
     def load_polygons(cls, filename):
@@ -185,14 +214,14 @@ class PolygonIndex(object):
 
             if poly_type == 'Polygon':
                 poly = Polygon(feature['geometry']['coordinates'][0])
-                polygons.append((feature['properties'], prep(poly)))
+                polygons.append(prep(poly))
             elif poly_type == 'MultiPolygon':
                 polys = []
                 for coords in feature['geometry']['coordinates']:
                     poly = Polygon(coords[0])
                     polys.append(poly)
 
-                polygons.append((feature['properties'], prep(MultiPolygon(polys))))
+                polygons.append(prep(MultiPolygon(polys)))
         return polygons
 
     @classmethod
@@ -200,10 +229,13 @@ class PolygonIndex(object):
         raise NotImplementedError('Children must implement')
 
     @classmethod
-    def load(cls, d, index_name=None, polys_filename=DEFAULT_POLYS_FILENAME):
+    def load(cls, d, index_name=None, polys_filename=DEFAULT_POLYS_FILENAME, polys_db_dir=POLYGONS_DB_DIR):
         index = cls.load_index(d, index_name=index_name or cls.INDEX_FILENAME)
         polys = cls.load_polygons(os.path.join(d, polys_filename))
-        return cls(index=index, polygons=polys, save_dir=d)
+        polygons_db = LevelDB(os.path.join(d, polys_db_dir))
+        polygon_index = cls(index=index, polygons=polys, polygons_db=polygons_db, save_dir=d)
+        polygon_index.load_polygon_properties(d)
+        return polygon_index
 
     def get_candidate_polygons(self, lat, lon):
         raise NotImplementedError('Children must implement')
@@ -215,12 +247,15 @@ class PolygonIndex(object):
         if return_all:
             containing = []
         for i in polys:
-            props, poly = self.polygons[i]
+            poly = self.polygons[i]
             contains = poly.contains(pt)
             if contains and not return_all:
-                return props
+                try:
+                    return json.loads(self.polygons_db.Get(str(i)))
+                except KeyError:
+                    return None
             elif contains:
-                containing.append(props)
+                containing.append(json.loads(self.polygons_db.Get(str(i))))
         return containing
 
 
