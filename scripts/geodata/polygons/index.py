@@ -248,7 +248,7 @@ class PolygonIndex(object):
                 poly = Polygon(coords[0])
                 polys.append(poly)
 
-            return prep(MultiPolygon(polys))
+            return MultiPolygon(polys)
 
     @classmethod
     def load_polygons(cls, filename):
@@ -301,7 +301,7 @@ class PolygonIndex(object):
             containing = []
 
         for i in candidates:
-            poly = self.polygons.get(i)
+            poly = self.polygons.get(i, None)
             data = {}
             if poly is None:
                 data = json.loads(self.polygons_db.Get(str(i)))
