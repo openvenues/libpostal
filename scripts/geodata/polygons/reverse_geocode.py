@@ -831,7 +831,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.osm_admin_file:
         index = OSMReverseGeocoder.create_from_osm_file(args.osm_admin_file, args.out_dir)
-    elif args.osm_landuse_file:
+    elif args.osm_subdivisions_file:
         index = OSMSubdivisionReverseGeocoder.create_from_osm_file(args.osm_subdivisions_file, args.out_dir)
     elif args.osm_building_polygons_file:
         index = OSMBuildingReverseGeocoder.create_from_osm_file(args.osm_building_polygons_file, args.out_dir)
