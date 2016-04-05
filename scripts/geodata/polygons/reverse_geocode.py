@@ -786,7 +786,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         json.dump(self.admin_levels, open(os.path.join(d, self.ADMIN_LEVELS_FILENAME), 'w'))
 
     def sort_level(self, i):
-        return self.admin_level[i]
+        return self.admin_levels[i]
 
     def get_candidate_polygons(self, lat, lon):
         candidates = super(OSMReverseGeocoder, self).get_candidate_polygons(lat, lon)
