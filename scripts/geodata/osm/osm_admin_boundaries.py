@@ -148,7 +148,7 @@ class OSMPolygonReader(object):
 
         return polys
 
-    def include_closed_way(self, props):
+    def include_polygon(self, props):
         raise NotImplementedError('Children must implement')
 
     def polygons(self):
@@ -206,7 +206,7 @@ class OSMPolygonReader(object):
 
                 self.way_indptr.append(len(self.way_deps))
 
-                if deps[0] == deps[-1] and self.include_closed_way(props):
+                if deps[0] == deps[-1] and self.include_polygon(props):
                     outer_polys = self.create_polygons([way_id])
                     inner_polys = []
                     yield WAY_OFFSET + way_id, props, outer_polys, inner_polys
@@ -218,7 +218,7 @@ class OSMPolygonReader(object):
                     self.coords = None
 
                 relation_id = long(element_id.split(':')[-1])
-                if len(deps) == 0 or not props.get('boundary') or props.get('type', '').lower() == 'multilinestring':
+                if len(deps) == 0 or not self.include_polygon(props) or props.get('type', '').lower() == 'multilinestring':
                     continue
 
                 outer_ways = []
@@ -240,15 +240,15 @@ class OSMPolygonReader(object):
 
 
 class OSMAdminPolygonReader(OSMPolygonReader):
-    def include_closed_way(self, props):
+    def include_polygon(self, props):
         return 'boundary' in props or 'place' in props
 
 
 class OSMSubdivisionPolygonReader(OSMPolygonReader):
-    def include_closed_way(self, props):
+    def include_polygon(self, props):
         return 'landuse' in props or 'place' in props
 
 
 class OSMBuildingPolygonReader(OSMPolygonReader):
-    def include_closed_way(self, props):
+    def include_polygon(self, props):
         return 'building' in props
