@@ -316,10 +316,7 @@ class PolygonIndex(object):
 
             contains = poly.contains(point)
             if contains:
-                if not data:
-                    data = json.loads(self.polygons_db.Get(self.properties_key(i)))
-
-                properties = data['properties']
+                properties = json.loads(self.polygons_db.Get(self.properties_key(i)))
                 if not return_all:
                     return properties
                 else:
