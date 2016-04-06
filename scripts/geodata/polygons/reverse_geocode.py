@@ -434,9 +434,6 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
 
     PRIORITIES_FILENAME = 'priorities.json'
 
-    persistent_polygons = True
-    cache_size = 100000
-
     sorted_levels = (COUNTRY,
                      ADMIN1_REGION,
                      ADMIN1,
@@ -651,8 +648,6 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
     polygon_reader = OSMAdminPolygonReader
 
-    persistent_polygons = True
-    cache_size = 1000000
     simplify_polygons = True
 
     include_property_patterns = set([
