@@ -815,7 +815,7 @@ class OSMBuildingReverseGeocoder(OSMReverseGeocoder):
     cache_size = 10000
     simplify_polygons = False
     polygon_reader = OSMBuildingPolygonReader
-    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['building', 'building:levels', 'addr:*'])
+    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['building', 'building:levels', 'building:part', 'addr:*'])
 
 
 if __name__ == '__main__':
