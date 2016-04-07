@@ -1,7 +1,7 @@
 import os
 import sys
 
-import ujson as json
+import yaml
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(this_dir, os.pardir, os.pardir)))
@@ -117,12 +117,12 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
 
     for filename in os.listdir(dirname):
         path = os.path.join(dirname, filename)
-        if not os.path.isfile(path) or not filename.endswith('.json'):
+        if not os.path.isfile(path) or not filename.endswith('.yaml'):
             continue
 
-        language = filename.split('.json', 1)[0]
+        language = filename.split('.yaml', 1)[0]
 
-        data = json.load(open(path))
+        data = yaml.load(open(path))
 
         whole_words_only = data.get('whole_words_only', False)
 
