@@ -19,7 +19,7 @@ DEFAULT_POLYS_FILENAME = 'polygons.geojson'
 
 class PolygonIndex(object):
     include_only_properties = None
-    simplify_tolerance = 0.00001
+    simplify_tolerance = 0.0001
     preserve_topology = True
     persistent_polygons = False
     cache_size = 0
