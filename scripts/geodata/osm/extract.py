@@ -11,6 +11,7 @@ import re
 import sys
 import urllib
 import ujson as json
+import yaml
 import HTMLParser
 
 from collections import OrderedDict
@@ -157,16 +158,15 @@ class OSMAddressComponents(object):
         }
     }
 
-    def __init__(self):
+    def __init__(self, boundaries_dir=OSM_BOUNDARIES_DIR):
         self.config = {}
 
-    def configure(self, boundaries_dir=OSM_BOUNDARIES_DIR):
         for filename in os.listdir(boundaries_dir):
-            if not filename.endswith('.json'):
+            if not filename.endswith('.yaml'):
                 continue
 
-            country_code = filename.rsplit('.json', 1)[0]
-            data = json.load(open(os.path.join(boundaries_dir, filename)))
+            country_code = filename.rsplit('.yaml', 1)[0]
+            data = yaml.load(open(os.path.join(boundaries_dir, filename)))
             for prop, values in data.iteritems():
                 for k, v in values.iteritems():
                     if v not in AddressFormatter.address_formatter_fields:
