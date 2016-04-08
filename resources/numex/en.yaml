@@ -1,6 +1,6 @@
 ---
   whole_words_only: true
-  rules: 
+  rules:
     - 
       name: "zero"
       value: 0
@@ -298,35 +298,35 @@
       value: 1000000000
       type: "ordinal"
       left: "multiply"
-  ordinal_indicators: 
+  ordinal_indicators:
     - 
-      suffixes: 
-        0: 
+      suffixes:
+        "0":
           - "th"
-        1: 
+        "1":
           - "st"
-        2: 
+        "2":
           - "nd"
-        3: 
+        "3":
           - "rd"
-        4: 
+        "4":
           - "th"
-        5: 
+        "5":
           - "th"
-        6: 
+        "6":
           - "th"
-        7: 
+        "7":
           - "th"
-        8: 
+        "8":
           - "th"
-        9: 
+        "9":
           - "th"
-        11: 
+        "11":
           - "th"
-        12: 
+        "12":
           - "th"
-        13: 
+        "13":
           - "th"
-  stopwords: 
+  stopwords:
     - "and"
 

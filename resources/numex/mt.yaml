@@ -1,6 +1,6 @@
 ---
   whole_words_only: true
-  rules: 
+  rules:
     - 
       name: "żero"
       value: 0
@@ -441,6 +441,6 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
-  stopwords: 
+  stopwords:
     - "u"
 
