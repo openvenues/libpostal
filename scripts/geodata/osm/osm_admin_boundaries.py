@@ -251,4 +251,4 @@ class OSMSubdivisionPolygonReader(OSMPolygonReader):
 
 class OSMBuildingPolygonReader(OSMPolygonReader):
     def include_polygon(self, props):
-        return 'building' in props
+        return 'building' in props or 'building:part' in props or props.get('type', None) == 'building'
