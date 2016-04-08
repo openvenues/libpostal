@@ -1,6 +1,6 @@
 ---
   whole_words_only: true
-  rules: 
+  rules:
     - 
       name: "nulla"
       value: 0
@@ -295,7 +295,7 @@
       type: "ordinal"
       left: "multiply"
       right: "add"
-  stopwords: 
+  stopwords:
     - "és"
     - "es"
 

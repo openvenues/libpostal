@@ -1,6 +1,6 @@
 ---
   whole_words_only: true
-  rules: 
+  rules:
     - 
       name: "nula"
       value: 0

@@ -1,6 +1,6 @@
 ---
   whole_words_only: true
-  rules: 
+  rules:
     - 
       name: "a náid"
       value: 0
@@ -402,6 +402,6 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
-  stopwords: 
+  stopwords:
     - "is"
 

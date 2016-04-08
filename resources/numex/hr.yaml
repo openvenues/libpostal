@@ -1,6 +1,6 @@
 ---
   whole_words_only: true
-  rules: 
+  rules:
     - 
       name: "nula"
       value: 0
@@ -894,6 +894,6 @@
       value: 100
       type: "ordinal"
       gender: "n"
-  stopwords: 
+  stopwords:
     - "i"
 

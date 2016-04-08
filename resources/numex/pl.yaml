@@ -1,6 +1,6 @@
 ---
   whole_words_only: true
-  rules: 
+  rules:
     - 
       name: "zero"
       value: 0
@@ -402,27 +402,27 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
-  ordinal_indicators: 
+  ordinal_indicators:
     - 
-      suffixes: 
-        0: 
+      suffixes:
+        "0":
           - "."
-        1: 
+        "1":
           - "."
-        2: 
+        "2":
           - "."
-        3: 
+        "3":
           - "."
-        4: 
+        "4":
           - "."
-        5: 
+        "5":
           - "."
-        6: 
+        "6":
           - "."
-        7: 
+        "7":
           - "."
-        8: 
+        "8":
           - "."
-        9: 
+        "9":
           - "."
 

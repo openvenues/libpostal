@@ -1,6 +1,6 @@
 ---
   whole_words_only: true
-  rules: 
+  rules:
     - 
       name: "нула"
       value: 0
@@ -236,6 +236,6 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
-  stopwords: 
+  stopwords:
     - "и"
 
