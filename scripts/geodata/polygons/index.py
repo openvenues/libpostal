@@ -62,7 +62,7 @@ class PolygonIndex(object):
             self.cache_hits = 0
             self.cache_misses = 0
 
-            self.polygons_contain = self.polygons_contain_cached
+            self.get_polygon = self.get_polygon_cached
 
         if not polygons_db_path:
             polygons_db_path = os.path.join(save_dir or '.', self.POLYGONS_DB_DIR)
@@ -277,15 +277,32 @@ class PolygonIndex(object):
     def get_candidate_polygons(self, lat, lon):
         raise NotImplementedError('Children must implement')
 
+    def get_properties(self, i):
+        return json.loads(self.polygons_db.Get(self.properties_key(i)))
+
+    def get_polygon(self, i):
+        return self.polygons[i]
+
+    def get_polygon_cached(self, i):
+        poly = self.polygons.get(i, None)
+        if poly is None:
+            data = json.loads(self.polygons_db.Get(self.polygon_key(i)))
+            poly = prep(self.polygon_from_geojson(data))
+            self.polygons[i] = poly
+            self.cache_misses += 1
+        else:
+            self.cache_hits += 1
+        return poly
+
     def polygons_contain(self, candidates, point, return_all=False):
         containing = None
         if return_all:
             containing = []
         for i in candidates:
-            poly = self.polygons[i]
+            poly = self.get_polygon(i)
             contains = poly.contains(point)
             if contains:
-                properties = json.loads(self.polygons_db.Get(self.properties_key(i)))
+                properties = self.get_properties(i)
                 if not return_all:
                     return properties
                 else:
@@ -297,31 +314,6 @@ class PolygonIndex(object):
 
     def properties_key(self, i):
         return 'props:{}'.format(i)
-
-    def polygons_contain_cached(self, candidates, point, return_all=False):
-        containing = None
-        if return_all:
-            containing = []
-
-        for i in candidates:
-            poly = self.polygons.get(i, None)
-            data = {}
-            if poly is None:
-                data = json.loads(self.polygons_db.Get(self.polygon_key(i)))
-                poly = prep(self.polygon_from_geojson(data))
-                self.polygons[i] = poly
-                self.cache_misses += 1
-            else:
-                self.cache_hits += 1
-
-            contains = poly.contains(point)
-            if contains:
-                properties = json.loads(self.polygons_db.Get(self.properties_key(i)))
-                if not return_all:
-                    return properties
-                else:
-                    containing.append(properties)
-        return containing
 
     def point_in_poly(self, lat, lon, return_all=False):
         candidates = self.get_candidate_polygons(lat, lon)
