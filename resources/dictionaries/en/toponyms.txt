@@ -14,6 +14,9 @@ district of columbia|dc
 florida|fl
 georgia|ga
 hawaii|hi
+hong kong|hk|h k|h.k
+hong kong island|hk island|h k island|h.k island
+hong kong special administrative region|hksar|hk sar|h k s a r|h.k.s.a.r|h.k s.a.r|hk s.a.r|hk s a r
 idaho|id
 illinois|il
 indiana|in
@@ -21,6 +24,7 @@ iowa|ia
 jervis bay territory|jbt
 kansas|ks
 kentucky|ky
+kowloon|kln
 louisiana|la
 maine|me
 manitoba|mb
@@ -38,6 +42,7 @@ new hampshire|nh
 new jersey|nj
 new mexico|nm
 new south wales|nsw
+new territories|nt
 new york|ny
 newfoundland|nl
 north carolina|nc

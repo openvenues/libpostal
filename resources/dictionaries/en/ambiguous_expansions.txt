@@ -53,6 +53,7 @@ no
 ns
 nsw
 nu
+nt
 nw
 nwt
 nv
