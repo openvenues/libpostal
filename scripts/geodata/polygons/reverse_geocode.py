@@ -617,6 +617,9 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
 
 
 class QuattroshapesNeighborhoodsReverseGeocoder(GeohashPolygonIndex, QuattroshapesReverseGeocoder):
+    persistent_polygons = False
+    cache_size = None
+
     @classmethod
     def create_neighborhoods_index(cls, quattroshapes_dir,
                                    output_dir,
