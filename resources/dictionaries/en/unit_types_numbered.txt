@@ -32,7 +32,7 @@ location|loc|locn|loctn
 lot
 maisonette|msnt
 marine berth|mb|mbth
-number|#|nbr|num|no|nmbr|nr
+number|#|nbr|num|no|№|nmbr|nr
 office|ofc|off|o|offc
 penthouse|pths|ph|pent house
 pier

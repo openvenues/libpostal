@@ -3,7 +3,7 @@ box
 locked mail bag|lb|lmb|mailbag|lockedbag|mail bag|locked bag
 community mail bag|cmb
 general post office box|gpo box|gpo
-po box|pobox|postbox|post box|post office box|post box|p o box|p office box|pb
+po box|pobox|postbox|post box|post office box|post box|p o box|p office box|pb|pob|p o b
 post mail box|post mail box|pmb
 locked bag
 mailservice|ms|m s|mail service
