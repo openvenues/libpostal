@@ -150,7 +150,7 @@ class ZetashapesReverseGeocoder(GeohashPolygonIndex):
 
     SCRATCH_DIR = '/tmp'
 
-    supplemental_neighborhood_urls = [
+    supplemental_geojson_urls = [
         ('http://catalog.civicdashboards.com/dataset/eea7c03e-9917-40b0-bba5-82e8e37d6739/resource/91778048-3c58-449c-a3f9-365ed203e914/download/06463a12c2104adf86335df0170c25e3pediacitiesnycneighborhoods.geojson', 'pediacities_nyc.geojson'),
     ]
 
@@ -162,15 +162,13 @@ class ZetashapesReverseGeocoder(GeohashPolygonIndex):
         subprocess.check_call(['git', 'clone', cls.NEIGHBORHOODS_REPO, path])
 
     @classmethod
-    def create_index(cls):
+    def create_neighborhoods_index(cls):
         scratch_dir = cls.SCRATCH_DIR
         repo_path = os.path.join(scratch_dir, 'neighborhoods')
         cls.clone_repo(repo_path)
 
         neighborhoods_dir = os.path.join(scratch_dir, 'neighborhoods', 'index')
         ensure_dir(neighborhoods_dir)
-
-        download_file(cls.PEDIACITIES_NYC, repo_path)
 
         index = cls(save_dir=neighborhoods_dir)
 
@@ -280,7 +278,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
         qs = QuattroshapesNeighborhoodsReverseGeocoder.create_neighborhoods_index(quattroshapes_dir, qs_scratch_dir)
         logger.info('Creating Zetashapes neighborhoods')
-        zs = ZetashapesReverseGeocoder.create_index()
+        zs = ZetashapesReverseGeocoder.create_neighborhoods_index()
 
         logger.info('Creating IDF index')
         idf = IDFIndex()
@@ -345,7 +343,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                                                    for c in safe_decode(osm_name)))
 
                         for i in candidates:
-                            props = self.get_properties(i)
+                            props = idx.get_properties(i)
                             name = normalized_qs_names.get(i)
                             if not name:
                                 name = props.get('name')
@@ -366,7 +364,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
                             if sim > max_sim:
                                 max_sim = sim
-                                poly = self.get_polygon(i)
+                                poly = idx.get_polygon(i)
                                 arg_max = (max_sim, props, poly.context, idx, i)
 
                     if arg_max:
@@ -397,7 +395,9 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                 logger.info('did {} neighborhoods'.format(num_polys))
 
         for idx, source in ((zs, 'zetashapes'), (qs, 'quattroshapes')):
-            for i, (props, poly) in enumerate(idx.polygons):
+            for i in xrange(idx.i):
+                props = idx.get_properties(i)
+                poly = idx.get_polygon(i)
                 if idx.matched[i]:
                     continue
                 props['source'] = source
