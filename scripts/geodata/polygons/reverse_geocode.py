@@ -30,7 +30,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.encoding import safe_decode
-from geodata.file_utils import ensure_dir
+from geodata.file_utils import ensure_dir, download_file
 from geodata.i18n.unicode_properties import get_chars_by_script
 from geodata.i18n.word_breaks import ideographic_scripts
 from geodata.names.deduping import NameDeduper
@@ -142,55 +142,20 @@ class NeighborhoodDeduper(NameDeduper):
     ])
 
 
-class NeighborhoodReverseGeocoder(RTreePolygonIndex):
-    '''
-    Neighborhoods are very important in cities like NYC, SF, Chicago, London
-    and many others. We want the address parser to be trained with addresses
-    that sufficiently capture variations in address patterns, including
-    neighborhoods. Quattroshapes neighborhood data (in the US at least)
-    is not great in terms of names, mostly becasue GeoPlanet has so many
-    incorrect names. The neighborhoods project, also known as Zetashapes
-    has very accurate polygons with correct names, but only for a handful
-    of cities. OSM usually lists neighborhoods and some other local admin
-    areas like boroughs as points rather than polygons.
-
-    This index merges all of the above data sets in prioritized order
-    (Zetashapes > OSM > Quattroshapes) to provide unified point-in-polygon
-    tests for neighborhoods. The properties vary by source but each has
-    source has least a "name" key which in practice is what we care about.
-    '''
-    NEIGHBORHOODS_REPO = 'https://github.com/blackmad/neighborhoods'
-
-    PRIORITIES_FILENAME = 'priorities.json'
+class ZetashapesReverseGeocoder(GeohashPolygonIndex):
+    simplify_tolerance = 0.00001
+    preserve_topology = True
+    persistent_polygons = False
+    cache_size = 0
 
     SCRATCH_DIR = '/tmp'
 
-    DUPE_THRESHOLD = 0.9
-
-    source_priorities = {
-        'zetashapes': 0,     # Best names/polygons
-        'osm_zeta': 1,       # OSM names matched with Zetashapes polygon
-        'osm_quattro': 2,    # OSM names matched with Quattroshapes polygon
-        'quattroshapes': 3,  # Good results in some countries/areas
-    }
-
-    level_priorities = {
-        'neighborhood': 0,
-        'local_admin': 1,
-    }
-
-    regex_replacements = [
-        # Paris arrondissements, listed like "PARIS-1ER-ARRONDISSEMENT" in Quqttroshapes
-        (re.compile('^paris-(?=[\d])', re.I), ''),
+    supplemental_neighborhood_urls = [
+        ('http://catalog.civicdashboards.com/dataset/eea7c03e-9917-40b0-bba5-82e8e37d6739/resource/91778048-3c58-449c-a3f9-365ed203e914/download/06463a12c2104adf86335df0170c25e3pediacitiesnycneighborhoods.geojson', 'pediacities_nyc.geojson'),
     ]
 
     @classmethod
-    def clone_repo(cls, path):
-        subprocess.check_call(['rm', '-rf', path])
-        subprocess.check_call(['git', 'clone', cls.NEIGHBORHOODS_REPO, path])
-
-    @classmethod
-    def create_zetashapes_neighborhoods_index(cls):
+    def create_index(cls):
         scratch_dir = cls.SCRATCH_DIR
         repo_path = os.path.join(scratch_dir, 'neighborhoods')
         cls.clone_repo(repo_path)
@@ -198,7 +163,9 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         neighborhoods_dir = os.path.join(scratch_dir, 'neighborhoods', 'index')
         ensure_dir(neighborhoods_dir)
 
-        index = GeohashPolygonIndex()
+        download_file(cls.PEDIACITIES_NYC, repo_path)
+
+        index = cls(save_dir=neighborhoods_dir)
 
         have_geonames = set()
         is_neighborhood = set()
@@ -225,7 +192,60 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                 continue
             index.add_geojson_like_file(json.load(f)['features'])
 
+        for url, filename in cls.supplemental_geojson_urls:
+            local_path = os.path.join(scratch_dir, filename)
+            download_file(url, local_path)
+            index.add_geojson_like_file(json.load(open(local_path))['features'])
+
         return index
+
+
+class NeighborhoodReverseGeocoder(RTreePolygonIndex):
+    '''
+    Neighborhoods are very important in cities like NYC, SF, Chicago, London
+    and many others. We want the address parser to be trained with addresses
+    that sufficiently capture variations in address patterns, including
+    neighborhoods. Quattroshapes neighborhood data (in the US at least)
+    is not great in terms of names, mostly becasue GeoPlanet has so many
+    incorrect names. The neighborhoods project, also known as Zetashapes
+    has very accurate polygons with correct names, but only for a handful
+    of cities. OSM usually lists neighborhoods and some other local admin
+    areas like boroughs as points rather than polygons.
+
+    This index merges all of the above data sets in prioritized order
+    (Zetashapes > OSM > Quattroshapes) to provide unified point-in-polygon
+    tests for neighborhoods. The properties vary by source but each has
+    source has least a "name" key which in practice is what we care about.
+    '''
+    NEIGHBORHOODS_REPO = 'https://github.com/blackmad/neighborhoods'
+
+    SCRATCH_DIR = '/tmp'
+
+    PRIORITIES_FILENAME = 'priorities.json'
+
+    DUPE_THRESHOLD = 0.9
+
+    source_priorities = {
+        'zetashapes': 0,     # Best names/polygons
+        'osm_zeta': 1,       # OSM names matched with Zetashapes polygon
+        'osm_quattro': 2,    # OSM names matched with Quattroshapes polygon
+        'quattroshapes': 3,  # Good results in some countries/areas
+    }
+
+    level_priorities = {
+        'neighborhood': 0,
+        'local_admin': 1,
+    }
+
+    regex_replacements = [
+        # Paris arrondissements, listed like "PARIS-1ER-ARRONDISSEMENT" in Quqttroshapes
+        (re.compile('^paris-(?=[\d])', re.I), ''),
+    ]
+
+    @classmethod
+    def clone_repo(cls, path):
+        subprocess.check_call(['rm', '-rf', path])
+        subprocess.check_call(['git', 'clone', cls.NEIGHBORHOODS_REPO, path])
 
     @classmethod
     def count_words(cls, s):
@@ -259,7 +279,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
         qs = QuattroshapesNeighborhoodsReverseGeocoder.create_neighborhoods_index(quattroshapes_dir, qs_scratch_dir)
         logger.info('Creating Zetashapes neighborhoods')
-        zs = cls.create_zetashapes_neighborhoods_index()
+        zs = ZetashapesReverseGeocoder.create_index()
 
         logger.info('Creating IDF index')
         idf = IDFIndex()
@@ -267,7 +287,8 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         char_scripts = get_chars_by_script()
 
         for idx in (zs, qs):
-            for i, (props, poly) in enumerate(idx.polygons):
+            for i in xrange(idx.i):
+                props = idx.get_properties(i)
                 name = props.get('name')
                 if name is not None:
                     doc = cls.count_words(name)
@@ -323,7 +344,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                                                    for c in safe_decode(osm_name)))
 
                         for i in candidates:
-                            props, poly = idx.polygons[i]
+                            props = self.get_properties(i)
                             name = normalized_qs_names.get(i)
                             if not name:
                                 name = props.get('name')
@@ -344,6 +365,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
                             if sim > max_sim:
                                 max_sim = sim
+                                poly = self.get_polygon(i)
                                 arg_max = (max_sim, props, poly.context, idx, i)
 
                     if arg_max:
