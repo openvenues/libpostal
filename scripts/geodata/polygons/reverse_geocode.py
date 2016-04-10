@@ -154,6 +154,13 @@ class ZetashapesReverseGeocoder(GeohashPolygonIndex):
         ('http://catalog.civicdashboards.com/dataset/eea7c03e-9917-40b0-bba5-82e8e37d6739/resource/91778048-3c58-449c-a3f9-365ed203e914/download/06463a12c2104adf86335df0170c25e3pediacitiesnycneighborhoods.geojson', 'pediacities_nyc.geojson'),
     ]
 
+    NEIGHBORHOODS_REPO = 'https://github.com/blackmad/neighborhoods'
+
+    @classmethod
+    def clone_repo(cls, path):
+        subprocess.check_call(['rm', '-rf', path])
+        subprocess.check_call(['git', 'clone', cls.NEIGHBORHOODS_REPO, path])
+
     @classmethod
     def create_index(cls):
         scratch_dir = cls.SCRATCH_DIR
@@ -217,7 +224,6 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
     tests for neighborhoods. The properties vary by source but each has
     source has least a "name" key which in practice is what we care about.
     '''
-    NEIGHBORHOODS_REPO = 'https://github.com/blackmad/neighborhoods'
 
     SCRATCH_DIR = '/tmp'
 
@@ -241,11 +247,6 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         # Paris arrondissements, listed like "PARIS-1ER-ARRONDISSEMENT" in Quqttroshapes
         (re.compile('^paris-(?=[\d])', re.I), ''),
     ]
-
-    @classmethod
-    def clone_repo(cls, path):
-        subprocess.check_call(['rm', '-rf', path])
-        subprocess.check_call(['git', 'clone', cls.NEIGHBORHOODS_REPO, path])
 
     @classmethod
     def count_words(cls, s):
