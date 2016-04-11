@@ -150,10 +150,6 @@ class ZetashapesReverseGeocoder(GeohashPolygonIndex):
 
     SCRATCH_DIR = '/tmp'
 
-    supplemental_geojson_urls = [
-        ('http://catalog.civicdashboards.com/dataset/eea7c03e-9917-40b0-bba5-82e8e37d6739/resource/91778048-3c58-449c-a3f9-365ed203e914/download/06463a12c2104adf86335df0170c25e3pediacitiesnycneighborhoods.geojson', 'pediacities_nyc.geojson'),
-    ]
-
     NEIGHBORHOODS_REPO = 'https://github.com/blackmad/neighborhoods'
 
     @classmethod
@@ -196,11 +192,6 @@ class ZetashapesReverseGeocoder(GeohashPolygonIndex):
             else:
                 continue
             index.add_geojson_like_file(json.load(f)['features'])
-
-        for url, filename in cls.supplemental_geojson_urls:
-            local_path = os.path.join(scratch_dir, filename)
-            download_file(url, local_path)
-            index.add_geojson_like_file(json.load(open(local_path))['features'])
 
         return index
 
