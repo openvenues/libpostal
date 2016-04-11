@@ -150,6 +150,7 @@ class ZetashapesReverseGeocoder(GeohashPolygonIndex):
 
     SCRATCH_DIR = '/tmp'
 
+    # Contains accurate boundaries for neighborhoods sans weird GeoPlanet names like "Adelphi" or "Crown Heights South"
     NEIGHBORHOODS_REPO = 'https://github.com/blackmad/neighborhoods'
 
     @classmethod
@@ -219,6 +220,9 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
     PRIORITIES_FILENAME = 'priorities.json'
 
     DUPE_THRESHOLD = 0.9
+
+    persistent_polygons = True
+    cache_size = 100000
 
     source_priorities = {
         'zetashapes': 0,     # Best names/polygons
