@@ -28,8 +28,8 @@ j
 jbt
 ks
 ky
-la
 l
+la
 ma
 me
 mb

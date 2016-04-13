@@ -1,5 +1,6 @@
 ground|g|gd
-ground floor|g|gd|gdfl|gd fl|gd/fl|gd / fl|gf|g / f
+ground floor|gdfl|gd fl|gd/fl|gd / fl|gf|g / f
+ground level|gd lvl|g lvl|g level|gd level|ground lvl|gd / lvl|gl|g / l
 lobby
 lower ground floor|lg|lgf|lgfl|l / g|l / gf|l / g / f|l / g / fl
 lower level|lwr level|lower lvl|lwr lvl
