@@ -3,6 +3,7 @@ import sys
 
 from collections import defaultdict, OrderedDict
 
+from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
 from geodata.encoding import safe_decode, safe_encode
 from geodata.i18n.unicode_paths import DATA_DIR
 from geodata.text.normalize import normalized_tokens, normalize_string
@@ -32,34 +33,14 @@ class DictionaryPhraseFilter(PhraseFilter):
         self.dictionaries = dictionaries
         self.canonicals = {}
 
-    def serialize(self, s):
-        return s
-
-    def deserialize(self, s):
-        return s
-
-    def configure(self, base_dir=DICTIONARIES_DIR):
         kvs = defaultdict(OrderedDict)
-        for lang in os.listdir(DICTIONARIES_DIR):
-            for filename in self.dictionaries:
+
+        for language in address_phrase_dictionaries.languages:
+            for dictionary_name in self.dictionaries:
                 is_suffix_dictionary = 'suffixes' in filename
                 is_prefix_dictionary = 'prefixes' in filename
 
-                dictionary_name = filename.split('.', 1)[0]
-
-                path = os.path.join(DICTIONARIES_DIR, lang, filename)
-                if not os.path.exists(path):
-                    continue
-
-                for line in open(path):
-                    line = line.strip()
-                    if not line:
-                        continue
-
-                    phrases = safe_decode(line).split(u'|')
-                    if not phrases:
-                        continue
-
+                for phrases in address_phrase_dictionaries.phrases.get((language, dictionary_name), []):
                     canonical = phrases[0]
                     canonical_normalized = normalize_string(canonical)
 
@@ -82,7 +63,12 @@ class DictionaryPhraseFilter(PhraseFilter):
         kvs = [(k, '|'.join([l, d, str(int(i)), safe_encode(c)])) for k, vals in kvs.iteritems() for (l, d, c), i in vals.iteritems()]
 
         self.trie = BytesTrie(kvs)
-        self.configured = True
+
+    def serialize(self, s):
+        return s
+
+    def deserialize(self, s):
+        return s
 
     def search_substring(self, s):
         if len(s) == 0:
@@ -131,46 +117,54 @@ class DictionaryPhraseFilter(PhraseFilter):
                 c = PHRASE
             yield t, c, len(t), map(safe_decode, data)
 
-STREET_TYPES_DICTIONARIES = ('street_types.txt',
-                             'directionals.txt',
-                             'concatenated_suffixes_separable.txt',
-                             'concatenated_suffixes_inseparable.txt',
-                             'concatenated_prefixes_separable.txt',
-                             'organizations.txt',
-                             'people.txt',
-                             'personal_suffixes.txt',
-                             'personal_titles.txt',
-                             'qualifiers.txt',
-                             'stopwords.txt',)
+STREET_TYPES_DICTIONARIES = ('street_types',
+                             'directionals',
+                             'concatenated_suffixes_separable',
+                             'concatenated_suffixes_inseparable',
+                             'concatenated_prefixes_separable',
+                             'organizations',
+                             'people',
+                             'personal_suffixes',
+                             'personal_titles',
+                             'qualifiers',
+                             'stopwords',)
 
-GIVEN_NAME_DICTIONARY = 'given_names.txt'
-SURNAME_DICTIONARY = 'surnames.txt'
+GIVEN_NAME_DICTIONARY = 'given_names'
+SURNAME_DICTIONARY = 'surnames'
 
 NAME_DICTIONARIES = (GIVEN_NAME_DICTIONARY,
                      SURNAME_DICTIONARY,)
 
 
 
-NAME_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + ('academic_degrees.txt',
-                                                              'building_types.txt',
-                                                              'company_types.txt',
-                                                              'place_names.txt',
-                                                              'qualifiers.txt',
-                                                              'synonyms.txt',
-                                                              'toponyms.txt',
+NAME_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + ('academic_degrees',
+                                                              'building_types',
+                                                              'company_types',
+                                                              'place_names',
+                                                              'qualifiers',
+                                                              'synonyms',
+                                                              'toponyms',
                                                               )
 
+HOUSE_NUMBER_DICTIONARIES = ('house_number', 'no_number')
 
-UNIT_ABBREVIATION_DICTIONARIES = ('level_types.txt',
-                                  'post_office.txt',
-                                  'unit_types.txt',
+POSTCODE_DICTIONARIES = ('postcode',)
+
+UNIT_ABBREVIATION_DICTIONARIES = ('level_types_basement',
+                                  'level_types_mezzanine',
+                                  'level_types_numbered',
+                                  'level_types_standalone',
+                                  'level_types_sub_basement',
+                                  'post_office',
+                                  'unit_types_numbered',
+                                  'unit_types_standalone',
                                   )
 
 
 ALL_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + \
     NAME_ABBREVIATION_DICTIONARIES + \
     UNIT_ABBREVIATION_DICTIONARIES + \
-    ('no_number.txt', 'nulls.txt',)
+    ('no_number', 'nulls',)
 
 
 _gazetteers = []
@@ -179,7 +173,6 @@ _gazetteers = []
 def create_gazetteer(*dictionaries):
     g = DictionaryPhraseFilter(*dictionaries)
     _gazetteers.append(g)
-    g.configure()
     return g
 
 
