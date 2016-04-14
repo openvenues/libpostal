@@ -474,6 +474,8 @@ intersections:
         abbreviated_probability: 0.5
         sample: true
         parentheses_probability: 0.5 # Probability of using parentheses e.g. (between 5th and 6th)
+    corner_of:
+        canonical: corner of
 
 # PO Box addresses
 # ================
