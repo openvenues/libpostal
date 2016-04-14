@@ -456,16 +456,28 @@ levels:
 # These simple rules make it possible to create training examples
 # like: 26th/road Street/road and/intersection 6th/road Avenue/road
 
-intersections:
+cross_streets:
     # 26th & 6th Avenue
     and: *and
     # 26th @ Broadway
-    at:
+    at: &at
         canonical: at
         abbreviated: "@"
         canonical_probability: 0.7
         abbreviated_probability: 0.3
         sample: true
+    corner_of:
+        canonical: corner of
+
+    intersection:
+        default: *and
+        probability: 0.7
+        alternatives:
+            - alternative: *at
+              probability: 0.15
+            - alternative: *corner_of
+              probability: 0.15
+
     # 26th betw 5th Ave and 6th Ave
     between:
         canonical: between
@@ -474,8 +486,6 @@ intersections:
         abbreviated_probability: 0.5
         sample: true
         parentheses_probability: 0.5 # Probability of using parentheses e.g. (between 5th and 6th)
-    corner_of:
-        canonical: corner of
 
 # PO Box addresses
 # ================
