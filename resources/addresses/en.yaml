@@ -493,19 +493,46 @@ intersections:
 po_boxes:
     po_box: &po_box
         canonical: post office box
-        abbreviated: po box
+        abbreviated: p.o. box
         sample: true
-        prefer_abbreviated: true
+        canonical_probability: 0.01
+        abbreviated_probability: 0.95
+        sample_probability: 0.04
+
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4 # PO Box #1234
+
+        numeric_probability: 1.0
 
     box: &box
         canonical: box
         sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4 # Box #1234
+
+        numeric_probability: 1.0
 
     private_mail_box: &private_mail_box
         canonical: private mail box
         abbreviated: pmb
         prefer_abbreviated: true
         sample: true
+        canonical_probability: 0.01
+        abbreviated_probability: 0.95
+        sample_probability: 0.04
+
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4 # PMB #1234
+
+        numeric_probability: 1.0
 
     alphanumeric:
         # Don't sample all the forms in post_office.txt as many of the PO box
@@ -517,25 +544,24 @@ po_boxes:
             - alternative: *box
               probability: 0.05
 
-        add_number_phrase: true
-        add_number_phrase_probability: 0.4 # PO Box #1234
-        numeric_probability: 0.9 # 
-        alpha_probability: 0.01 # PO Box A
+        numeric_probability: 0.9 # PO Box 123
+        alpha_probability: 0.05 # PO Box A
         numeric_plus_alpha_probability: 0.04 # PO Box 123G
+        alpha_plus_numeric_probability: 0.01 # PO Box A123
 
-        digits:
-            - length: 1
-              probability: 0.05
-            - length: 2
-              probability: 0.1
-            - length: 3
-              probability: 0.2
-            - length: 4
-              probability: 0.5
-            - length: 5
-              probability: 0.1
-            - length: 6
-              probability: 0.05
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
 
     zones:
         # Overrides for commercial/office areas (landuse=commercial in OSM)
