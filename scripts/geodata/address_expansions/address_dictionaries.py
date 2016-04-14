@@ -92,6 +92,7 @@ gazetteer_types = {
     'personal_titles': 'DICTIONARY_PERSONAL_TITLE',
     'place_names': 'DICTIONARY_PLACE_NAME',
     'post_office': 'DICTIONARY_POST_OFFICE',
+    'postcode': 'DICTIONARY_POSTCODE',
     'qualifiers': 'DICTIONARY_QUALIFIER',
     'staircase': 'DICTIONARY_STAIRCASE',
     'stopwords': 'DICTIONARY_STOPWORD',
@@ -152,7 +153,6 @@ class AddressPhraseDictionaries(object):
 
                 if dictionary_name not in gazetteer_types:
                     raise InvalidAddressFileException(u'Invalid filename for file {}/{}. Must be one of {{{}}}'.format(language_dir, filename, ', '.join(sorted(gazetteer_types))))
-
                 self.language_dictionaries[language].append(dictionary_name)
 
                 for i, line in enumerate(open(os.path.join(language_dir, filename))):
