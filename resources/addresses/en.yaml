@@ -18,25 +18,36 @@
 numbers:
     default:
         canonical: number # canonical word in libpostal dictionary
-        abbreviated: "no" # abbreviated form. no is a boolean in YAML, needs to be quoted
-        direction: left # The phrase "number/no" goes to the left of the number
+        abbreviated: "no" # most common abbreviated form ("no" is a boolean in YAML, needs to be quoted)
         sample: true # Randomly sample other variations (e.g. num, nr)
         # Probabilities
         canonical_probability: 0.3 # With this probability, use the canonical
         abbreviated_probability: 0.5 # With this probability, use the abbreviated form
         sample_probability: 0.2 # With  this probability, sample other variations
         sample_exclude:
-            - "#" # Used in numeric affix
-    numeric:
-        direction: left
-    numeric_affix:
-        affix: "#" # e.g. #3, #2F, etc.
-        direction: left # affix goes on the number's left
+            - "#" # Used in numeric affix. Needs to be quoted, otherwise it's a comment
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: "#" # e.g. #3, #2F, etc.
+            direction: left # affix goes on the number's left
 
-    # Probabilities for numbers
-    numeric_probability: 0.4 # With this probability, use the standard numeric
-    numeric_affix_probability: 0.6 # With this probability, use e.g. #3 instead of No. 3
-    affix_integers_only: false
+        # Probabilities for numbers
+        numeric_probability: 0.4 # With this probability, use the standard numeric
+        numeric_affix_probability: 0.6 # With this probability, use e.g. #3 instead of No. 3
+
+# And
+# ===
+# The word for "and". Used both in intersections and phrases like "Units 1 & 2", etc.
+
+and:
+    default: &and
+        canonical: and
+        abbreviated: "&"
+        canonical_probability: 0.2
+        abbreviated_probability: 0.75
+        sample: true
+        sample_probability: 0.05
 
 
 # Floor/level
@@ -62,6 +73,7 @@ levels:
     # Numbered floors
     floor: &floor
         canonical: floor
+        plural: floors
         abbreviated: fl
         canonical_probability: 0.5 # With this probability, use canonical version
         abbreviated_probability: 0.4 # With this probability, use abbreviated version
@@ -89,6 +101,7 @@ levels:
     # The word "level" is also occasionally used
     level: &level
         canonical: level
+        plural: levels
         abbreviated: lvl
         sample: true
         canonical_probability: 0.5
@@ -112,6 +125,7 @@ levels:
         ordinal_probability: 0.55
     platform: &platform
         canonical: platform
+        plural: platforms
         abbreviated: pf
         canonical_probability: 0.7
         abbreviated_probability: 0.3
@@ -123,12 +137,13 @@ levels:
         ordinal_probability: 0.5 # e.g. 1st Platform
     storey: &storey
         canonical: storey
+        plural: storeys
         numeric:
             direction: left
         ordinal:
             direction: right
-        numeric_probability: 0.1 # e.g. Storey 2, less common
-        ordinal_probability: 0.9 # e.g. 2nd Storey, more common
+        numeric_probability: 0.025 # e.g. Storey 2, less common
+        ordinal_probability: 0.975 # e.g. 2nd Storey, more common
     # Special instructions for ground floor
     ground_floor: &ground_floor
         canonical: ground floor
@@ -137,6 +152,20 @@ levels:
         abbreviated_probability: 0.4
         sample_probability: 0.2
         sample: true
+    ground: &ground
+        canonical: ground
+        abbreviated: g
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.1
+        sample_probability: 0.3
+    ground_level: &ground_level
+        canonical: ground level
+        abbreviated: g/l
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.2
+        sample_probability: 0.4
     # Special instructions for lower ground floor (added randomly, not an alias for a floor number)
     lower_ground_floor: &lower_ground_floor
         canonical: lower ground floor
@@ -155,36 +184,48 @@ levels:
         canonical_probability: 0.6
         abbreviated_probability: 0.2
         sample_probability: 0.2
+    upper: &upper
+        canonical: upper
+        abbreviated: uppr
+        sample: true
+        canonical_probability: 0.8
+        abbreviated_probability: 0.1
+        sample_probability: 0.1
+    lower_level: &lower_level
+        canonical: lower level
+        abbreviated: lwr lvl
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.1
+        sample_probability: 0.2
+    lobby: &lobby
+        canonical: lobby
     upstairs: &upstairs
         canonical: upstairs
     downstairs: &downstairs
         canonical: downstairs
     # Special instructions for podium level (added randomly)
     podium_level: &podium_level
-        default:
-            canonical: podium level
-            abbreviated: pd lvl
-            sample: true
-            canonical_probability: 0.6
-            abbreviated_probability: 0.2
-            sample_probability: 0.2
-        probability: 0.8 # Probability of using the default form
-        alternatives:
-            - alternative:
-                  canonical: podium
-                  abbreviated: pd
-                  sample: true
-                  canonical_probability: 0.6
-                  abbreviated_probability: 0.2
-                  sample_probability: 0.2
-              probability: 0.2 # Probability of using this alternative
+        canonical: podium level
+        abbreviated: pd lvl
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+    podium: &podium
+        canonical: podium
+        abbreviated: pd
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
     # Used when floor number is < 0 (starts at -1 in all countries)
     basement: &basement
         canonical: basement
         abbreviated: bsmt
         sample: true
         # e.g. Basement 1
-        alphanumeric:
+        numeric:
             direction: left
         # e.g. B1
         numeric_affix:
@@ -193,6 +234,12 @@ levels:
         # e.g. 2nd Basement
         ordinal:
             direction: right
+        standalone_probability: 0.985
+        number_abs_value: true
+        number_min_abs_value: 1
+        numeric_probability: 0.005
+        numeric_affix_probability: 0.005
+        ordinal_probability: 0.005
     cellar: &cellar
         canonical: cellar
         sample: true
@@ -204,7 +251,7 @@ levels:
         abbreviated: sb
         sample: true
         # e.g. Sub-basement 1
-        alphanumeric:
+        numeric:
             direction: left
         # e.g. SB1
         numeric_affix:
@@ -213,6 +260,14 @@ levels:
         # e.g. 2nd Sub-basement
         ordinal:
             direction: right
+        number_abs_value: true
+        number_min_abs_value: 2
+        # Basement 2 == Sub-basement 1
+        number_subtract_abs_value: 1
+        standalone_probability: 0.985
+        numeric_probability: 0.005
+        numeric_affix_probability: 0.005
+        ordinal_probability: 0.005
     top_floor: &top_floor
         canonical: top floor
         abbreviated: tf
@@ -222,16 +277,14 @@ levels:
         sample_probability: 0.1
     # Mezzanine level (floor number {0.5, 1.5, ...}, also be added at random)
     mezzanine: &mezzanine
-        # Floor 0.5 is just plain mezzanine, no number
         canonical: mezzanine
         abbreviated: mezz
-        half_floors: true
         sample: true
-        canonical_probability: 0.6
-        abbreviated_probability: 0.3
+        canonical_probability: 0.8
+        abbreviated_probability: 0.1
         sample_probability: 0.1
         # Mezzanine/Mezz 2 or Mezzanine/Mezz A
-        alphanumeric:
+        numeric:
             direction: left
         # M2
         numeric_affix:
@@ -240,51 +293,127 @@ levels:
         # 2nd Mezzanine
         ordinal:
             direction: right
-        alphanumeric_probability: 0.3
-        numeric_affix_probability: 0.2
-        ordinal_probability: 0.5
+        # Floor 0.5 is just plain mezzanine, no number
+        number_abs_value: true
+        number_min_abs_value: 1
+        standalone_probability: 0.5
+        numeric_probability: 0.1
+        numeric_affix_probability: 0.1
+        ordinal_probability: 0.3
+    mezzanine_floor: &mezzanine_floor
+        canonical: mezzanine floor
+        abbreviated: mezz floor
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+    mezzanine_level: &mezzanine_level
+        canonical: mezzanine level
+        abbreviated: mezz level
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+    lower_mezzanine: &lower_mezzanine
+        canonical: lower mezzanine
+        abbreviated: lower mezz
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+    upper_mezzanine: &upper_mezzanine
+        canonical: upper mezzanine
+        abbreviated: upper mezz
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+        # Should be at least level 1.5
+        number_min_abs_value: 1
     aliases:
+        "<-1":
+            default: *basement
+            probability: 0.6
+            alternatives:
+                - alternative: *sub_basement
+                  probability: 0.3995
+                - alternative: *floor
+                  probability: 0.0005
         "-1":
             default: *basement
             probability: 0.7
             alternatives:
                 - alternative: *cellar
-                  probability: 0.125
+                  probability: 0.1
                 - alternative: *lower_ground_floor
                   probability: 0.1
                 - alternative: *downstairs
+                  probability: 0.0495
+                - alternative: *lower_level
                   probability: 0.05
                 - alternative: *floor
-                  probability: 0.025
+                  probability: 0.0005
         # Special token for half-floors
-        "*.5":
+        half_floors:
             default: *mezzanine
-        "0":
-            default: *ground_floor
             probability: 0.8
             alternatives:
-                - alternative: *upper_ground_floor
+                - alternative: *mezzanine_floor
                   probability: 0.1
-                - alternative: *downstairs
-                  probability: 0.05
-                - alternative: *podium_level
+                - alternative: *mezzanine_level
+                  probability: 0.1
+            aliases:
+                "1":
+                    default: *upper_mezzanine
+                    probability: 0.5
+                    alternatives:
+                        - alternative: *mezzanine
+                          probability: 0.5
+        half_floors_negative:
+            default: *lower_mezzanine
+        "0":
+            default: *ground_floor
+            probability: 0.9
+            alternatives:
+                - alternative: *ground
+                  probability: 0.02
+                - alternative: *ground_level
+                  probability: 0.01
+                - alternative: *lower_ground_floor
                   probability: 0.025
+                - alternative: *upper_ground_floor
+                  probability: 0.025
+                - alternative: *lobby
+                  probability: 0.005
                 - alternative: *floor
                   # Floor 0 is uncommon
-                  probability: 0.025
+                  probability: 0.01
+                - alternative: *level
+                  probability: 0.005
         "1":
             # Most of the time just say 1st Floor
             default: *floor
             probability: 0.9
             alternatives:
+                - alternative: *upper_ground_floor
+                  probability: 0.075
+                - alternative: *podium_level
+                  probability: 0.01
+                - alternative: *podium
+                  probability: 0.005
                 - alternative: *upstairs
-                  probability: 0.1
+                  probability: 0.01
         top:
             default: *floor
-            probability: 0.5
+            probability: 0.85
             alternatives:
+                - alternative: *level
+                  probability: 0.1
                 - alternative: *top_floor
-                  probability: 0.3
+                  probability: 0.05
+
+    # Integer for whether floors start at 0 or 1
+    numbering_starts_at: 0
 
     # Associated phrases for alphanumeric floors (Floor 1, Floor A)
     alphanumeric:
@@ -304,8 +433,6 @@ levels:
         numeric_plus_alpha_probability: 0.0001 # e.g. Floor 2A
         alpha_plus_numeric_probability: 0.0001 # e.g. Floor A2
 
-    alphanumeric_probability: 0.5 # Probability of using simple alphanumeric
-    alias_probability: 0.5 # Probability of using aliases
 
     # Floors are not part of the global address formats (and are not always standard)
     # This is a list of places in the address where the floor number might go
@@ -331,12 +458,7 @@ levels:
 
 intersections:
     # 26th & 6th Avenue
-    and:
-        canonical: and
-        abbreviated: "&"
-        canonical_probability: 0.4
-        abbreviated_probability: 0.6
-        sample: true
+    and: *and
     # 26th @ Broadway
     at:
         canonical: at
@@ -395,18 +517,17 @@ po_boxes:
 
         add_number_phrase: true
         add_number_phrase_probability: 0.4 # PO Box #1234
-
         numeric_probability: 0.9 # 
         alpha_probability: 0.01 # PO Box A
         numeric_plus_alpha_probability: 0.04 # PO Box 123G
 
         digits:
             - length: 1
-              probability: 0.1
+              probability: 0.05
             - length: 2
               probability: 0.1
             - length: 3
-              probability: 0.1
+              probability: 0.2
             - length: 4
               probability: 0.5
             - length: 5
@@ -414,15 +535,16 @@ po_boxes:
             - length: 6
               probability: 0.05
 
-    # Overrides for commercial/office areas (landuse=commercial in OSM)
-    commercial:
-        default: *po_box
-        probability: 0.7
-        alternatives:
-            - alternative: *private_mail_box
-              probability: 0.2
-            - alternative: *box
-              probability: 0.1
+    zones:
+        # Overrides for commercial/office areas (landuse=commercial in OSM)
+        commercial:
+            default: *po_box
+            probability: 0.7
+            alternatives:
+                - alternative: *private_mail_box
+                  probability: 0.2
+                - alternative: *box
+                  probability: 0.1
 
 # Categories
 # ==========
@@ -724,6 +846,8 @@ units:
         # Room #1 and Room No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.6
+    hall: &hall
+        canonical: hall
     apartment: &apartment
         canonical: apartment
         plural: apartments
@@ -820,6 +944,10 @@ units:
                   alternatives: 0.05
         university:
             default: *room
+            probability: 0.9
+            alternatives:
+                - alternative: *hall
+                  probability: 0.1
         allotments:
             lot:
                 default: *lot
@@ -885,19 +1013,20 @@ countries:
                     direction: left
                 ordinal:
                     direction: right
-                numeric_probability: 0.1 # e.g. Story 2, less common
-                ordinal_probability: 0.9 # e.g. 2nd Story, more common
+                numeric_probability: 0.025 # e.g. Story 2, less common
+                ordinal_probability: 0.975 # e.g. 2nd Story, more common
             alphanumeric:
                 default: *floor
-                probability: 0.6
+                probability: 0.8
                 alternatives:
                     - alternative: *level
-                      probability: 0.3
+                      probability: 0.15
                     - alternative: *platform
-                      probability: 0.05
+                      probability: 0.025
                     - alternative: *story
-                      alternative: 0.05
-            aliases:
+                      probability: 0.025
+            numbering_starts_at: 1
+            aliases: &us_floor_aliases
                 "1":
                     default: *floor
                     probability: 0.6
@@ -907,9 +1036,9 @@ countries:
                         - alternative: *upper_ground_floor
                           probability: 0.1
                 "2":
-                    # Most of the time just say 1st Floor
+                    # Most of the time just say 2nd Floor
                     default: *floor
-                    probability: 0.8
+                    probability: 0.9
                     alternatives:
                         - alternative: *upstairs
                           probability: 0.1
@@ -961,25 +1090,14 @@ countries:
                     default: *room
 
     # Canada
-    # Note: this is Canadian English only. If the address is in French it will use the French config
+    # Specifically Canadian English. If the address is in French it will use fr.yaml
     ca:
         levels:
-            aliases:
-                "1":
-                    default: *floor
-                    probability: 0.6
-                    alternatives:
-                        - alternative: *ground_floor
-                          probability: 0.3
-                        - alternative: *upper_ground_floor
-                          probability: 0.1
-                "2":
-                    # Most of the time just say 1st Floor
-                    default: *floor
-                    probability: 0.8
-                    alternatives:
-                        - alternative: *upstairs
-                          probability: 0.1
+            # Note: Canadian English uses "storey" keeping with the British convention, so no need to change that
+
+            # In Canada first floor is the ground floor, as in the US
+            numbering_starts_at: 1
+            aliases: *us_floor_aliases
         # For (English-speaking) Canada, use the same unit types as in the US
         units: *us_unit_types
     # Australia
