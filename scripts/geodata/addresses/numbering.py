@@ -106,6 +106,8 @@ class NumberedComponent(object):
 
         # Pick a phrase given the probability distribution from the config
         values, probs = address_config.alternative_probabilities(key, language, dictionaries=dictionaries, country=country)
+        if values is None:
+            return None
         phrase, phrase_props = weighted_choice(values, probs)
 
         values = []
@@ -124,12 +126,15 @@ class NumberedComponent(object):
         4. As an ordinal expression e.g. "2nd Floor"
         '''
         have_standalone = False
-        for num_type in ('standalone', 'numeric', 'numeric_affix', 'ordinal'):
+        have_null = False
+        for num_type in ('standalone', 'null', 'numeric', 'numeric_affix', 'ordinal'):
             key = '{}_probability'.format(num_type)
             prob = phrase_props.get(key)
             if prob is not None:
                 if num_type == 'standalone':
                     have_standalone = True
+                elif num_type == 'null':
+                    have_null = True
                 values.append(num_type)
                 probs.append(prob)
 
@@ -145,12 +150,19 @@ class NumberedComponent(object):
         probs = cdf(probs)
 
         if len(values) < 2:
-            num_type = 'standalone' if have_standalone else 'numeric'
+            if have_standalone:
+                num_type = 'standalone'
+            elif have_null:
+                num_type = 'null'
+            else:
+                num_type = 'numeric'
         else:
             num_type = weighted_choice(values, probs)
 
         if num_type == 'standalone':
             return phrase
+        elif num_type == 'null':
+            return safe_decode(num)
 
         props = phrase_props[num_type]
 
@@ -178,10 +190,17 @@ class NumberedComponent(object):
                 phrase = phrase.upper()
             whitespace_default = False
         elif num_type == 'ordinal':
-            num = ordinal_expressions.suffixed_number(num, language)
+            num = ordinal_expressions.suffixed_number(num, language, gender=props.get('gender', None))
 
         direction = props['direction']
         whitespace = props.get('whitespace', whitespace_default)
+
+        # Occasionally switch up if direction_probability is specified
+        if random.random() < props.get('direction_probability', 0.0):
+            if direction == 'left':
+                direction = 'right'
+            elif direction == 'right':
+                direction = 'left'
 
         whitespace_phrase = six.u(' ') if whitespace else six.u('')
         # Phrase goes to the left of hte number
