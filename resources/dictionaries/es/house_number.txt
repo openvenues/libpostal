@@ -1,2 +1,2 @@
-número|numero|#|num|núm|no|nº|n.º|númr|numr|númro|numro|núm.ro|nr|num.ro|nro|n.ro
-número exterior|no ext|# ext|nº ext|n.º ext|núm ext|númr ext|numr ext|númro ext|numro ext|núm.ro ext|nr ext|num.ro ext|nro ext|n.ro ext
+exterior|ext|ex
+número exterior|no ext|# ext|nº ext|n.º ext|núm ext|númr ext|numr ext|númro ext|numro ext|núm.ro ext|nr ext|num.ro ext|nro ext|n.ro ext|no ex|# ex|nº ex|n.º ex|núm ex|númr ex|numr ex|númro ex|numro ex|núm.ro ex|nr ex|num.ro ex|nro ex|n.ro ex
