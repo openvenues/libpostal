@@ -1,2 +1,2 @@
 piso|pi|p
-planta|pl
+planta|pl|p

@@ -9,6 +9,6 @@ cooperativa|coop
 cortijo|crtjo
 edificio|edifc|edfc|edif
 estancia|estanc|est
-local|loc
+local|loc|lc
 residencial|resid|res
-torre
+torre|to

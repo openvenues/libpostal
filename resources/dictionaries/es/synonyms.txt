@@ -10,15 +10,11 @@ cabo|cbo
 campo|cpo|cmpo
 campos|cpos|cmpos
 canal|cnl
-capital federal|cap fed
 centro|cntro|ctro
 cerro|crro
-codigo postal|cp|c p
 corral|crral
 corralillo|crrlo
 diseminado|disem
-distrito federal|df|d f
-distrito postal|dp|d p
 enero|en|eno|ene|en o
 diciembre|dic|dicbre|dic.bre|dice|dic.e|dbre|d.bre|10bre|10.bre|10 bre|xbre|x.bre|x bre
 febrero|febo|feb.o|febro|feb.ro|febr|feb

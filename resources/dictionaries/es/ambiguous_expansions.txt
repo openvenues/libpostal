@@ -1,4 +1,5 @@
 c
+cr
 d
 e
 g
@@ -7,4 +8,5 @@ n
 p
 s
 v
+un
 w
