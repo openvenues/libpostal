@@ -16,7 +16,7 @@
 # so we'll define it separately
 
 numbers:
-    default:
+    default: &number
         canonical: number # canonical word in libpostal dictionary
         abbreviated: "no" # most common abbreviated form ("no" is a boolean in YAML, needs to be quoted)
         sample: true # Randomly sample other variations (e.g. num, nr)
@@ -466,7 +466,7 @@ cross_streets:
         canonical_probability: 0.7
         abbreviated_probability: 0.3
         sample: true
-    corner_of:
+    corner_of: &corner_of
         canonical: corner of
 
     intersection:
@@ -658,6 +658,8 @@ directions:
         numeric_affix:
             affix: f
             direction: right
+
+cardinal_directions:
     east: &east
         canonical: east
         abbreviated: e
@@ -807,12 +809,16 @@ units:
     # Special terms
     suite: &suite
         canonical: suite
-        plural: suites
         abbreviated: ste
         sample: true        
         canonical_probability: 0.4
         abbreviated_probability: 0.4
         sample_probability: 0.2
+        plural:
+            canonical: suites
+            abbreviated: stes
+            canonical_probability: 0.6
+            abbreviated_probability: 0.4
         # Suite #101 and Suite No. 101 as opposed to Suite 101
         add_number_phrase: true
         add_number_phrase_probability: 0.5
@@ -823,6 +829,8 @@ units:
         canonical_probability: 0.5
         abbreviated_probability: 0.3
         sample_probability: 0.2
+        plural:
+            canonical: penthouses
         # Penthouse #1 and Penthouse No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.2
@@ -856,65 +864,85 @@ units:
         sample_probability: 0.3
     office: &office
         canonical: office
-        plural: offices
         abbreviated: ofc
         sample: true
         canonical_probability: 0.5
         abbreviated_probability: 0.3
         sample_probability: 0.2
+        plural:
+            canonical: offices
+            abbreviated: ofcs
+            canonical_probability: 0.4
+            abbreviated_probability: 0.6
         # Office #1 and Office No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.7
     door: &door
         canonical: door
-        plural: doors
         sample: true
         canonical_probability: 0.8
         sample_probability: 0.2
+        plural:
+            canonical: doors
         # Door #1 and Door No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.2
     room: &room
         canonical: room
-        plural: rooms
         abbreviated: rm
         sample: true
         canonical_probability: 0.5
         abbreviated_probability: 0.5
+        plural:
+            canonical: rooms
+            abbreviated: rms
+            canonical_probability: 0.6
+            abbreviated_probability: 0.4
         # Room #1 and Room No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.6
     hall: &hall
         canonical: hall
+        plural:
+            canonical: halls
     apartment: &apartment
         canonical: apartment
-        plural: apartments
         abbreviated: apt
         prefer_abbreviated: true
         sample: true
         canonical_probability: 0.15
         abbreviated_probability: 0.6
         sample_probability: 0.25
+        plural:
+            canonical: apartments
+            abbreviated: apts
+            canonical_probability: 0.2
+            abbreviated: 0.8
         # Apt #1 and Apt No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.4
     flat: &flat
         canonical: flat
-        plural: flats
-        abbreviated: fl
+        abbreviated: flt
         sample: true
         canonical_probability: 0.8
         abbreviated_probability: 0.1
         sample_probability: 0.1
+        plural:
+            canonical: flats
+            abbreviated: flts
+            canonical_probability: 0.6
+            abbreviated_probability: 0.4
         # Flat #1 and Flat No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.4
     lot: &lot
         canonical: lot
-        plural: lots
         sample: true
         canonical_probability: 0.9
         sample_probability: 0.1
+        plural:
+            canonical: lots
         # Lot #1 and Lot No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.6
@@ -923,29 +951,34 @@ units:
         canonical_probability: 0.9
         sample: true
         sample_probability: 0.1
+        plural:
+            canonical: parcels
         add_number_phrase: true
         add_number_phrase_probability: 0.6
     unit: &unit
         canonical: unit
         abbreviated: u
-        add_number_phrase: true
-        add_number_phrase_probability: 0.3
         sample: true
         canonical_probability: 0.8
         abbreviated_probability: 0.1
         sample_probability: 0.1
+        plural:
+            canonical: units
         # Unit #1 and Unit No. 1
         add_number_phrase: true
-        add_number_phrase_probability: 0.6
+        add_number_phrase_probability: 0.4
     alphanumeric: &unit_alphanumeric
         # Many unit types that apply only in Australia
         # For most English-speaking countries, only use the terms defined above
         sample: false
         default: *flat
-        probability: 0.6
+        probability: 0.4
         alternatives:
             - alternative: *unit
               probability: 0.25
+              # e.g. just plain #3 or No. 4
+            - alternative: *number
+              probability: 0.2
             - alternative: *door
               probability: 0.04
             - alternative: *penthouse
@@ -960,7 +993,9 @@ units:
         # Separate random probability for adding directions like 2L, 2R, etc.
         add_direction: true
         add_direction_probability: 0.1
-        add_direction_numeric_only: true # Only for numbers
+        # Add directions only for plain numbers
+        add_direction_numeric: true
+        add_direction_standalone: true
 
     zone:
         residential: *unit_alphanumeric
@@ -1005,7 +1040,7 @@ units:
     # For unit types like 2/34
     combined:
         component: house_number
-        direction: left
+        direction: left # Apartment number goes to the left of the house number (Canada)
 
     directional:
         modifier:
@@ -1034,8 +1069,8 @@ units:
 
     # If no unit number is specified
     alphanumeric_probability: 0.75
-    standalone_probability: 0.15
-    combined_probability: 0.1
+    standalone_probability: 0.2
+    combined_probability: 0.05
 
 # Country-specific overrides
 # ==========================
@@ -1142,17 +1177,25 @@ countries:
     au:
         po_boxes: &australia_po_boxes
             alphanumeric:
+                default: *po_box
+                probability: 0.94
                 # Australia has many strings for this e.g. Roadside Mail Bag
                 sample: true
-                sample_probability: 0.05
+                sample_probability: 0.01
         units: &australia_unit_types
             alphanumeric:
                 # Australia has all kinds of unit types (e.g. Marine Berth) not used elsewhere
                 sample: true
-                sample_probability: 0.2
+                default: *flat
+                # Reduce the default's probability to make room for sampling
+                probability: 0.59
+                sample_probability: 0.01
             standalone:
+                default: *penthouse
                 sample: true
-                sample_probability: 0.2
+                # Reduce the default's probability to make room for sampling
+                probability: 0.39
+                sample_probability: 0.01
     # New Zealand - same rules as Australia
     nz:
         po_boxes: *australia_po_boxes
