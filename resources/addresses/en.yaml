@@ -1037,11 +1037,6 @@ units:
             lot_plus_parcel_probability: 0.02
             parcel_plus_lot_probability: 0.02
 
-    # For unit types like 2/34
-    combined:
-        component: house_number
-        direction: left # Apartment number goes to the left of the house number (Canada)
-
     directional:
         modifier:
             direction: right # e.g. 1
@@ -1067,10 +1062,22 @@ units:
             - alternative: *top_floor_right
               probability: 0.15
 
+    # For unit types like 2/34 (more common in Canada and Australia)
+    combined:
+        component: house_number
+        direction: right
+        separators:
+            - separator: /
+              probability: 0.8
+            - separator: "-"
+              probability: 0.1
+            - separator: " - "
+              probability: 0.1
+
     # If no unit number is specified
     alphanumeric_probability: 0.75
-    standalone_probability: 0.2
-    combined_probability: 0.05
+    standalone_probability: 0.2495
+    combined_probability: 0.005
 
 # Country-specific overrides
 # ==========================
@@ -1134,7 +1141,7 @@ countries:
                         direction: left # left pad
                         character: "0" # pad with 0s, e.g. for PO Box 52, use -0052
             concatenate_po_box_probability: 0.1
-        units: &us_unit_types
+        units:
             alphanumeric: &us_units_alphanumeric
                 default: *apartment
                 probability: 0.6
@@ -1148,7 +1155,7 @@ countries:
                     - alternative: *flat
                       probability: 0.01 # See this e.g. in Milwaukee with Polish flats
 
-            zone:
+            zone: &us_zones
                 residential: *us_units_alphanumeric
                 commercial:
                     default: *office
@@ -1172,7 +1179,24 @@ countries:
             numbering_starts_at: 1
             aliases: *us_floor_aliases
         # For (English-speaking) Canada, use the same unit types as in the US
-        units: *us_unit_types
+        units: 
+            alphanumeric: *us_units_alphanumeric
+            zone: *us_zones
+
+            # For unit types like 2/34
+            combined:
+                component: house_number
+                direction: left # Apartment number goes to the left of the house number
+                separators:
+                    - separator: /
+                      probability: 0.2
+                    - separator: "-"
+                      probability: 0.4
+                    - separator: " - "
+                      probability: 0.4
+
+            standalone_probability: 0.15
+            combined_probability: 0.1
     # Australia
     au:
         po_boxes: &australia_po_boxes
@@ -1196,6 +1220,22 @@ countries:
                 # Reduce the default's probability to make room for sampling
                 probability: 0.39
                 sample_probability: 0.01
+
+            # For unit types like 2/34
+            combined:
+                component: house_number
+                direction: right # Apartment number goes to the right of the house number
+                separators:
+                    - separator: /
+                      probability: 0.8
+                    - separator: "-"
+                      probability: 0.1
+                    - separator: " - "
+                      probability: 0.1
+
+            standalone_probability: 0.15
+            combined_probability: 0.1
+
     # New Zealand - same rules as Australia
     nz:
         po_boxes: *australia_po_boxes
