@@ -1,7 +1,7 @@
 import six
 from geodata.addresses.config import address_config
-from geodata.addresses.sampling import weighted_choice
 from geodata.encoding import safe_decode
+from geodata.math.sampling import weighted_choice
 
 
 class Conjunction(object):

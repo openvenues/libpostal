@@ -2,8 +2,8 @@ import random
 import six
 
 from geodata.addresses.config import address_config
-from geodata.addresses.sampling import weighted_choice, zipfian_distribution, cdf
 from geodata.encoding import safe_decode
+from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 from geodata.numbers.ordinals import ordinal_expressions
 
 
@@ -201,6 +201,9 @@ class NumberedComponent(object):
             whitespace_default = False
         elif num_type == 'ordinal':
             num = ordinal_expressions.suffixed_number(num, language, gender=props.get('gender', None))
+
+            if random.random() < props.get('null_phrase_probability', 0.0):
+                return num
 
         direction = props['direction']
         whitespace = props.get('whitespace', whitespace_default)
