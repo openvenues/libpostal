@@ -17,9 +17,10 @@ class Floor(NumberedComponent):
     floor_probs = zipfian_distribution(len(numbered_floors), 2.0)
     floor_probs_cdf = cdf(floor_probs)
 
-    # For use with numbers e.g. A0 is probably not as common
-    positive_floors = range(1, max_floors + 1) + [0]
-    positive_floors_cdf = cdf(positive_floors)
+    # For use with letters e.g. A0 is probably not as common
+    floors_letters = range(1, max_floors + 1) + [0]
+    floors_letters_probs = zipfian_distribution(len(floors_letters), 2.0)
+    floors_letters_cdf = cdf(floors_letters_probs)
 
     @classmethod
     def sample_floors(cls, num_floors, num_basements=0):
@@ -27,7 +28,14 @@ class Floor(NumberedComponent):
         return random.randint(-num_basements, num_floors - 1)
 
     @classmethod
-    def random_floor(cls, language, country=None, num_floors=None, num_basements=None):
+    def sample_positive_floors(cls, num_floors, zeroth_floor_prob=0.001):
+        num_floors = int(num_floors)
+        if random.random() < zeroth_floor_prob:
+            return 0
+        return random.randint(1, num_floors - 1)
+
+    @classmethod
+    def random(cls, language, country=None, num_floors=None, num_basements=None):
         level_props = address_config.get_property('levels.alphanumeric', language, country=country)
         numbering_starts_at = int(address_config.get_property('levels.numbering_starts_at', language, country=country, default=0))
 
@@ -60,8 +68,7 @@ class Floor(NumberedComponent):
             if num_type == 'alpha':
                 return letter
             else:
-                if number < numbering_starts_at:
-                    number = random.randint(numbering_starts_at, num_floors or cls.max_floors)
+                number = weighted_choice(cls.floors_letters, cls.floors_letters_cdf)
 
                 if num_type == 'alpha_plus_numeric':
                     return six.u('{}{}').format(letter, number)
