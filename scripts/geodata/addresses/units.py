@@ -114,7 +114,7 @@ class Unit(NumberedComponent):
     @classmethod
     def phrase(cls, unit, language, country=None, zone=None):
         if unit is not None:
-            key = 'units.alphanumeric' if zone is None else 'units.zone.{}'.format(zone)
+            key = 'units.alphanumeric' if zone is None else 'units.zones.{}'.format(zone)
 
             add_direction = address_config.get_property('{}.add_direction'.format(key), language, country=country)
             if add_direction:
