@@ -631,33 +631,58 @@ directions:
         abbreviated: r
         canonical_probability: 0.7
         abbreviated_probability: 0.3
+        numeric:
+            direction: right
         numeric_affix:
             affix: r
             direction: right
+        numeric_probability: 0.2
+        numeric_affix_probability: 0.8
     left: &left
         canonical: left
         abbreviated: l
         canonical_probability: 0.7
         abbreviated_probability: 0.3
+        numeric:
+            direction: right
         numeric_affix:
             affix: l
             direction: right
+        numeric_probability: 0.2
+        numeric_affix_probability: 0.8
     rear: &rear
         canonical: rear
         abbreviated: r
         canonical_probability: 0.8
         abbreviated_probability: 0.2
+        numeric:
+            direction: right
         numeric_affix:
             affix: r
             direction: right
+        numeric_probability: 0.2
+        numeric_affix_probability: 0.8
     front: &front
         canonical: front
         abbreviated: frnt
         canonical_probability: 0.8
         abbreviated_probability: 0.2
+        numeric:
+            direction: right
         numeric_affix:
             affix: f
             direction: right
+        numeric_probability: 0.2
+        numeric_affix_probability: 0.8
+    alternatives:
+        - alternative: *right
+          probability: 0.45
+        - alternative: *left
+          probability: 0.45
+        - alternative: *front
+          probability: 0.05
+        - alternative: *rear
+          probability: 0.05
 
 cardinal_directions:
     east: &east
@@ -667,9 +692,13 @@ cardinal_directions:
         canonical_probability: 0.5
         abbreviated_probability: 0.3
         sample_probability: 0.2
+        numeric:
+            direction: right
         numeric_affix:
             affix: e
             direction: right
+        numeric_probability: 0.6
+        numeric_affix_probability: 0.4
     west: &west
         canonical: west
         abbreviated: w
@@ -677,9 +706,13 @@ cardinal_directions:
         canonical_probability: 0.5
         abbreviated_probability: 0.3
         sample_probability: 0.2
+        numeric:
+            direction: right
         numeric_affix:
             affix: w
             direction: right
+        numeric_probability: 0.6
+        numeric_affix_probability: 0.4
     north: &north
         canonical: north
         abbreviated: n
@@ -687,9 +720,13 @@ cardinal_directions:
         canonical_probability: 0.5
         abbreviated_probability: 0.3
         sample_probability: 0.2
+        numeric:
+            direction: right
         numeric_affix:
             affix: n
             direction: right
+        numeric_probability: 0.6
+        numeric_affix_probability: 0.4
     south: &south
         canonical: south
         abbreviated: s
@@ -697,9 +734,23 @@ cardinal_directions:
         canonical_probability: 0.5
         abbreviated_probability: 0.3
         sample_probability: 0.2
+        numeric:
+            direction: right
         numeric_affix:
             affix: s
             direction: right
+        numeric_probability: 0.6
+        numeric_affix_probability: 0.4
+
+    alternatives:
+        - alternative: *north
+          probability: 0.25
+        - alternative: *east
+          probability: 0.25
+        - alternative: *south
+          probability: 0.25
+        - alternative: *west
+          probability: 0.25
 
 # Entrance
 # ========
@@ -819,6 +870,8 @@ units:
             abbreviated: stes
             canonical_probability: 0.6
             abbreviated_probability: 0.4
+        numeric:
+            direction: left
         # Suite #101 and Suite No. 101 as opposed to Suite 101
         add_number_phrase: true
         add_number_phrase_probability: 0.5
@@ -831,6 +884,10 @@ units:
         sample_probability: 0.2
         plural:
             canonical: penthouses
+        numeric:
+            direction: left
+        numeric_probability: 0.2
+        standalone_probability: 0.8
         # Penthouse #1 and Penthouse No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.2
@@ -874,6 +931,8 @@ units:
             abbreviated: ofcs
             canonical_probability: 0.4
             abbreviated_probability: 0.6
+        numeric:
+            direction: left
         # Office #1 and Office No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.7
@@ -884,6 +943,8 @@ units:
         sample_probability: 0.2
         plural:
             canonical: doors
+        numeric:
+            direction: left
         # Door #1 and Door No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.2
@@ -898,6 +959,8 @@ units:
             abbreviated: rms
             canonical_probability: 0.6
             abbreviated_probability: 0.4
+        numeric:
+            direction: left
         # Room #1 and Room No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.6
@@ -905,6 +968,11 @@ units:
         canonical: hall
         plural:
             canonical: halls
+        numeric:
+            direction: left
+        # Room #1 and Room No. 1
+        add_number_phrase: true
+        add_number_phrase_probability: 0.6
     apartment: &apartment
         canonical: apartment
         abbreviated: apt
@@ -918,6 +986,8 @@ units:
             abbreviated: apts
             canonical_probability: 0.2
             abbreviated: 0.8
+        numeric:
+            direction: left
         # Apt #1 and Apt No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.4
@@ -926,13 +996,15 @@ units:
         abbreviated: flt
         sample: true
         canonical_probability: 0.8
-        abbreviated_probability: 0.1
-        sample_probability: 0.1
+        abbreviated_probability: 0.15
+        sample_probability: 0.05
         plural:
             canonical: flats
             abbreviated: flts
-            canonical_probability: 0.6
-            abbreviated_probability: 0.4
+            canonical_probability: 0.8
+            abbreviated_probability: 0.2
+        numeric:
+            direction: left
         # Flat #1 and Flat No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.4
@@ -943,16 +1015,20 @@ units:
         sample_probability: 0.1
         plural:
             canonical: lots
+        numeric:
+            direction: left
         # Lot #1 and Lot No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.6
     parcel: &parcel
         canonical: parcel
-        canonical_probability: 0.9
         sample: true
+        canonical_probability: 0.9
         sample_probability: 0.1
         plural:
             canonical: parcels
+        numeric:
+            direction: left
         add_number_phrase: true
         add_number_phrase_probability: 0.6
     unit: &unit
@@ -964,6 +1040,8 @@ units:
         sample_probability: 0.1
         plural:
             canonical: units
+        numeric:
+            direction: left
         # Unit #1 and Unit No. 1
         add_number_phrase: true
         add_number_phrase_probability: 0.4
@@ -1007,35 +1085,36 @@ units:
                   probability: 0.2
         industrial:
             default: *lot
-            probability: 0.7
+            probability: 0.5
             alternatives:
                 - alternative: *suite
-                  probability: 0.15
+                  probability: 0.3
                 - alternative: *unit
-                  probability: 0.1
+                  probability: 0.19
                 - alternative: *parcel
-                  alternatives: 0.05
+                  probability: 0.01
         university:
             default: *room
             probability: 0.9
             alternatives:
                 - alternative: *hall
                   probability: 0.1
-        allotments:
-            lot:
-                default: *lot
-                numeric_probability: 0.8
-                alphanumeric_probability: 0.1
-                alpha_probability: 0.1
-            parcel:
-                default: *parcel
-                numeric_probability: 0.3
-                alphanumeric_probability: 0.3
-                alpha_probability: 0.4
-            lot_probability: 0.9
-            parcel_probability: 0.06
-            lot_plus_parcel_probability: 0.02
-            parcel_plus_lot_probability: 0.02
+
+    allotments:
+        lot:
+            default: *lot
+            numeric_probability: 0.8
+            alphanumeric_probability: 0.1
+            alpha_probability: 0.1
+        parcel:
+            default: *parcel
+            numeric_probability: 0.3
+            alphanumeric_probability: 0.3
+            alpha_probability: 0.4
+        lot_probability: 0.9
+        parcel_probability: 0.06
+        lot_plus_parcel_probability: 0.02
+        parcel_plus_lot_probability: 0.02
 
     directional:
         modifier:
@@ -1212,14 +1291,17 @@ countries:
                 sample: true
                 default: *flat
                 # Reduce the default's probability to make room for sampling
-                probability: 0.59
+                probability: 0.39
                 sample_probability: 0.01
+                numeric:
+                    direction: left
             standalone:
                 default: *penthouse
                 sample: true
                 # Reduce the default's probability to make room for sampling
                 probability: 0.39
                 sample_probability: 0.01
+                standalone_probability: 1.0
 
             # For unit types like 2/34
             combined:
@@ -1240,3 +1322,5 @@ countries:
     nz:
         po_boxes: *australia_po_boxes
         units: *australia_unit_types
+
+
