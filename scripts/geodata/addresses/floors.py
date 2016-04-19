@@ -3,8 +3,8 @@ import six
 
 from geodata.addresses.config import address_config
 from geodata.addresses.numbering import NumberedComponent, sample_alphabet, latin_alphabet
-from geodata.addresses.sampling import weighted_choice, zipfian_distribution, cdf
 from geodata.encoding import safe_decode
+from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 
 
 class Floor(NumberedComponent):
@@ -74,11 +74,11 @@ class Floor(NumberedComponent):
         try:
             floor = int(floor)
             integer_floor = True
-        except ValueError:
+        except (ValueError, TypeError):
             try:
                 floor = float(floor)
                 integer_floor = int(floor) == floor
-            except ValueError:
+            except (ValueError, TypeError):
                 return cls.numeric_phrase('levels.alphanumeric', safe_decode(floor), language,
                                           dictionaries=['level_types_numbered'], country=country)
 
@@ -121,4 +121,4 @@ class Floor(NumberedComponent):
                                           country=country)
 
         return cls.numeric_phrase('levels.alphanumeric', safe_decode(floor), language,
-                                  dictionaries=['level_types_numbered'], country=country)
+                              dictionaries=['level_types_numbered'], country=country)

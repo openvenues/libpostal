@@ -6,8 +6,8 @@ import yaml
 
 from collections import Mapping
 
-from geodata.addresses.sampling import cdf, check_probability_distribution
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
+from geodata.math.sampling import cdf, check_probability_distribution
 
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
@@ -54,7 +54,7 @@ class AddressConfig(object):
         self.cache = {}
 
         for filename in os.listdir(config_dir):
-            if filename != 'en.yaml':
+            if filename not in ('en.yaml', 'es.yaml'):
                 continue
 
             config = yaml.load(open(os.path.join(ADDRESS_CONFIG_DIR, filename)))
@@ -100,7 +100,10 @@ class AddressConfig(object):
         '''Get a probability distribution over alternatives'''
         key = self.cache_key(prop, language, dictionaries, country=country)
         if key not in self.cache:
-            properties = self.get_property(prop, language, country=country)
+            properties = self.get_property(prop, language, country=country, default=None)
+
+            if properties is None:
+                return None, None
 
             probs = []
             alternatives = []
@@ -118,10 +121,21 @@ class AddressConfig(object):
                 probs.extend([prob * p for p in phrase_probs])
                 alternatives.extend([(p, props) for p in phrases])
 
+            sample_probability = properties.get('sample_probability')
+            if sample_probability is not None:
+                sample_phrases = []
+                for dictionary in dictionaries:
+                    phrases = self.sample_phrases.get((language, dictionary), [])
+                    for canonical, surface_forms in six.iteritems(phrases):
+                        sample_phrases.append(canonical)
+                        sample_phrases.extend(surface_forms)
+                # Note: use the outer properties dictionary e.g. units.alphanumeric
+                alternatives.extend([(p, properties) for p in sample_phrases])
+                probs.extend([float(sample_probability) / len(sample_phrases)] * len(sample_phrases))
+
             alts = properties.get('alternatives', [])
-            total_before_alts = 0.0
             for alt in alts:
-                prob = alt.get('probability', (1.0 - total_before_alts) / len(alts))
+                prob = alt.get('probability', 1.0 / len(alts))
                 props = alt['alternative']
                 phrases, phrase_probs = self.form_probabilities(props, language, dictionaries=dictionaries)
                 probs.extend([prob * p for p in phrase_probs])
@@ -130,7 +144,7 @@ class AddressConfig(object):
             try:
                 check_probability_distribution(probs)
             except AssertionError:
-                print 'values where: {}'.format(alternatives)
+                print 'values were: {}'.format(alternatives)
                 raise
 
             probs_cdf = cdf(probs)
