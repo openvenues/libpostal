@@ -43,9 +43,9 @@ class NumericPhrase(object):
 
     @classmethod
     def phrase(cls, number, language, country=None):
-        values, probs = address_config.alternative_probabilities(cls.key, language, dictionaries=['number'], country=country)
+        values, probs = address_config.alternative_probabilities(cls.key, language, dictionaries=cls.dictionaries, country=country)
         if not values:
-            return safe_decode(number)
+            return safe_decode(number) if number is not None else None
 
         phrase, phrase_props = weighted_choice(values, probs)
 
@@ -82,6 +82,9 @@ class NumericPhrase(object):
             # Title case unless the config specifies otherwise
             phrase = phrase.title()
 
+        if number is None:
+            return phrase
+
         whitespace_phrase = six.u(' ') if whitespace else six.u('')
         # Phrase goes to the left of hte number
         if direction == 'left':
@@ -96,19 +99,22 @@ class NumericPhrase(object):
 
 class Number(NumericPhrase):
     key = 'numbers'
+    dictionraries = ['number']
 
 
 class NumberedComponent(object):
     @classmethod
     def numeric_phrase(cls, key, num, language, country=None, dictionaries=()):
         is_alpha = False
+        is_none = False
         try:
             num = int(num)
         except ValueError:
             try:
                 num = float(num)
             except ValueError:
-                is_alpha = True
+                is_alpha = num is not None
+                is_none = num is None
 
         # Pick a phrase given the probability distribution from the config
         values, probs = address_config.alternative_probabilities(key, language, dictionaries=dictionaries, country=country)
@@ -148,7 +154,7 @@ class NumberedComponent(object):
                 probs.append(1.0)
                 break
 
-        if not probs:
+        if not probs or is_none:
             return phrase
 
         # If we're using something like "Floor A" or "Unit 2L", remove ordinal/affix items
