@@ -7,6 +7,7 @@ from geodata.encoding import safe_decode
 class Conjunction(object):
     DEFAULT_WHITESPACE_JOIN = ', '
     DEFAULT_NON_WHITESPACE_JOIN = ''
+    key = 'and'
 
     @classmethod
     def join(cls, phrases, language, country=None):
@@ -14,7 +15,7 @@ class Conjunction(object):
         if not hasattr(phrases, '__iter__'):
             raise ValueError('Param phrases must be iterable')
 
-        values, probs = address_config.alternative_probabilities('and', language, country=country)
+        values, probs = address_config.alternative_probabilities(cls.key, language, country=country)
         phrase, props = weighted_choice(values, probs)
 
         whitespace = props.get('whitespace', True)
