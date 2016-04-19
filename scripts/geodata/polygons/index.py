@@ -222,7 +222,7 @@ class PolygonIndex(object):
 
     def save_properties(self, out_filename):
         out = open(out_filename, 'w')
-        json.dump({'num_polygons': str(self.i)})
+        json.dump({'num_polygons': str(self.i)}, out)
 
     def save_polygons(self, out_filename):
         out = open(out_filename, 'w')
