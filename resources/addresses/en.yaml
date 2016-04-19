@@ -558,6 +558,8 @@ po_boxes:
         alpha_probability: 0.05 # PO Box A
         numeric_plus_alpha_probability: 0.04 # PO Box 123G
         alpha_plus_numeric_probability: 0.01 # PO Box A123
+        alpha_plus_numeric_whitespace_probability: 0.1
+        numeric_plus_alpha_whitespace_probability: 0.1
 
     digits:
         - length: 1
@@ -1063,10 +1065,12 @@ units:
               probability: 0.01
             - alternative: *apartment
               probability: 0.1
-        numeric_probability: 0.8 # e.g. Flat 1
-        numeric_plus_alpha_probability: 0.05 # e.g. 1A
-        alpha_plus_numeric_probability: 0.05 # e.g. A1
-        alpha_probability: 0.1 # e.g. Flat A
+        numeric_probability: 0.9 # e.g. Flat 1
+        numeric_plus_alpha_probability: 0.03 # e.g. 1A
+        alpha_plus_numeric_probability: 0.03 # e.g. A1
+        alpha_probability: 0.04 # e.g. Flat A
+        alpha_plus_numeric_whitespace_probability: 0.1
+        numeric_plus_alpha_whitespace_probability: 0.1
 
         # Separate random probability for adding directions like 2L, 2R, etc.
         add_direction: true
@@ -1075,7 +1079,7 @@ units:
         add_direction_numeric: true
         add_direction_standalone: true
 
-    zone:
+    zones:
         residential: *unit_alphanumeric
         commercial:
             default: *suite
@@ -1234,7 +1238,7 @@ countries:
                     - alternative: *flat
                       probability: 0.01 # See this e.g. in Milwaukee with Polish flats
 
-            zone: &us_zones
+            zones: &us_zones
                 residential: *us_units_alphanumeric
                 commercial:
                     default: *office
@@ -1260,7 +1264,7 @@ countries:
         # For (English-speaking) Canada, use the same unit types as in the US
         units: 
             alphanumeric: *us_units_alphanumeric
-            zone: *us_zones
+            zones: *us_zones
 
             # For unit types like 2/34
             combined:
