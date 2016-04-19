@@ -38,10 +38,12 @@ def sample_alphabet(alphabet, b=1.5):
 latin_alphabet = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
 
 
-class NumberPhrases(object):
+class NumericPhrase(object):
+    key = None
+
     @classmethod
     def phrase(cls, number, language, country=None):
-        values, probs = address_config.alternative_probabilities('numbers', language, dictionaries=['number'], country=country)
+        values, probs = address_config.alternative_probabilities(cls.key, language, dictionaries=['number'], country=country)
         if not values:
             return safe_decode(number)
 
@@ -92,6 +94,10 @@ class NumberPhrases(object):
             return safe_decode(number)
 
 
+class Number(NumericPhrase):
+    key = 'numbers'
+
+
 class NumberedComponent(object):
     @classmethod
     def numeric_phrase(cls, key, num, language, country=None, dictionaries=()):
@@ -137,6 +143,10 @@ class NumberedComponent(object):
                     have_null = True
                 values.append(num_type)
                 probs.append(prob)
+            elif num_type in phrase_props:
+                values.append(num_type)
+                probs.append(1.0)
+                break
 
         if not probs:
             return phrase
@@ -180,7 +190,7 @@ class NumberedComponent(object):
         # Do we add the numeric phrase e.g. Floor No 1
         add_number_phrase = props.get('add_number_phrase', False)
         if add_number_phrase and random.random() < props['add_number_phrase_probability']:
-            num = NumberPhrases.phrase(num, language, country=country)
+            num = Number.phrase(num, language, country=country)
 
         whitespace_default = True
 
