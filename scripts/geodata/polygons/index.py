@@ -15,7 +15,7 @@ from shapely.geometry.geo import mapping
 from geodata.polygons.area import polygon_bounding_box_area
 
 DEFAULT_POLYS_FILENAME = 'polygons.geojson'
-DEFAULT_PROPS_FILENAME = 'properites.json'
+DEFAULT_PROPS_FILENAME = 'properties.json'
 
 
 class PolygonIndex(object):
