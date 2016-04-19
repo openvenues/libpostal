@@ -15,6 +15,7 @@ from shapely.geometry.geo import mapping
 from geodata.polygons.area import polygon_bounding_box_area
 
 DEFAULT_POLYS_FILENAME = 'polygons.geojson'
+DEFAULT_PROPS_FILENAME = 'properites.json'
 
 
 class PolygonIndex(object):
@@ -207,12 +208,21 @@ class PolygonIndex(object):
     def compact_polygons_db(self):
         self.polygons_db.CompactRange('\x00', '\xff')
 
-    def save(self, polys_filename=DEFAULT_POLYS_FILENAME):
+    def save(self):
         self.save_index()
+        self.save_properties(os.path.join(self.save_dir, DEFAULT_PROPS_FILENAME))
         if not self.persistent_polygons:
-            self.save_polygons(os.path.join(self.save_dir, polys_filename))
+            self.save_polygons(os.path.join(self.save_dir, DEFAULT_POLYS_FILENAME))
         self.compact_polygons_db()
         self.save_polygon_properties(self.save_dir)
+
+    def load_properties(self, filename):
+        properties = json.load(open(filename))
+        self.i = int(properties.get('num_polygons', self.i))
+
+    def save_properties(self, out_filename):
+        out = open(out_filename, 'w')
+        json.dump({'num_polygons': str(self.i)})
 
     def save_polygons(self, out_filename):
         out = open(out_filename, 'w')
@@ -263,7 +273,9 @@ class PolygonIndex(object):
         raise NotImplementedError('Children must implement')
 
     @classmethod
-    def load(cls, d, index_name=None, polys_filename=DEFAULT_POLYS_FILENAME, polys_db_dir=POLYGONS_DB_DIR):
+    def load(cls, d, index_name=None, polys_filename=DEFAULT_POLYS_FILENAME,
+             properties_filename=DEFAULT_PROPS_FILENAME,
+             polys_db_dir=POLYGONS_DB_DIR):
         index = cls.load_index(d, index_name=index_name or cls.INDEX_FILENAME)
         if not cls.persistent_polygons:
             polys = cls.load_polygons(os.path.join(d, polys_filename))
@@ -271,6 +283,7 @@ class PolygonIndex(object):
             polys = None
         polygons_db = LevelDB(os.path.join(d, polys_db_dir))
         polygon_index = cls(index=index, polygons=polys, polygons_db=polygons_db, save_dir=d)
+        polygon_index.load_properties(os.path.join(d, properties_filename))
         polygon_index.load_polygon_properties(d)
         return polygon_index
 
@@ -293,6 +306,13 @@ class PolygonIndex(object):
         else:
             self.cache_hits += 1
         return poly
+
+    def __iter__(self):
+        for i in xrange(self.i):
+            yield self.get_properties(i), self.get_polygon(i)
+
+    def __len__(self):
+        return self.i
 
     def polygons_contain(self, candidates, point, return_all=False):
         containing = None
