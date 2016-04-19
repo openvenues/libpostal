@@ -1,12 +1,12 @@
 allotment
 antenna|ant
-apartment|apartement|ap|apt|aprt|apparement|appartment|aptmnt
+apartment|apt|ap|aprt|aptmnt
 barbecue|bbq|barbeque
 berth|brth
 boatshed|btsd
 building|bdg|bldg|blg
 block|blk|bl|blck
-bungalow|bongalow|bunglow|bungalo|bngw|bnglw
+bungalow|bnglw|bongalow|bunglow|bungalo|bngw
 cage
 caravan|cvan
 carpark|carp
