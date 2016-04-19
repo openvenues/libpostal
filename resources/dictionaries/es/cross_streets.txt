@@ -2,4 +2,5 @@ y
 en
 con
 esquina|esq
+esquina de|esq de
 entre|e /

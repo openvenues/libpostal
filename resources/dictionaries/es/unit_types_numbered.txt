@@ -1,5 +1,6 @@
 apartamento|apto|apt|apartamiento|ap
 ático|át|atico|at
+casa
 consultorio|cn
 departamento|dpto|dept|dto|depto
 interior|int|in
