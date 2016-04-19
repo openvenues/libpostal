@@ -20,7 +20,7 @@ duplex|dup|dupl
 extension|ext|extn
 factory|fcty|fty|fy
 farm|frm
-flat|ft|fl|flt|f
+flat|flt
 garage|grge
 hall
 hangar|hngr
