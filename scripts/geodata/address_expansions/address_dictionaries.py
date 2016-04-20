@@ -77,7 +77,7 @@ gazetteer_types = {
     'elisions': 'DICTIONARY_ELISION',
     'entrances': 'DICTIONARY_ENTRANCE',
     'given_names': 'DICTIONARY_GIVEN_NAME',
-    'house_number': 'DICTIONARY_HOUSE_NUMBER',
+    'house_numbers': 'DICTIONARY_HOUSE_NUMBER',
     'level_types_basement': 'DICTIONARY_LEVEL_BASEMENT',
     'level_types_mezzanine': 'DICTIONARY_LEVEL_MEZZANINE',
     'level_types_numbered': 'DICTIONARY_LEVEL_NUMBERED',
