@@ -77,6 +77,9 @@ class Floor(NumberedComponent):
 
     @classmethod
     def phrase(cls, floor, language, country=None, is_top=False):
+        if floor is None:
+            return None
+
         floor = safe_decode(floor)
         try:
             floor = int(floor)
@@ -86,7 +89,7 @@ class Floor(NumberedComponent):
                 floor = float(floor)
                 integer_floor = int(floor) == floor
             except (ValueError, TypeError):
-                return cls.numeric_phrase('levels.alphanumeric', safe_decode(floor), language,
+                return cls.numeric_phrase('levels.alphanumeric', floor, language,
                                           dictionaries=['level_types_numbered'], country=country)
 
         alias_prefix = 'levels.aliases'
@@ -119,7 +122,7 @@ class Floor(NumberedComponent):
                     alias = safe_decode(floor)
 
             if alias:
-                return cls.numeric_phrase('{}.{}'.format(alias_prefix, alias), safe_decode(floor), language,
+                return cls.numeric_phrase('{}.{}'.format(alias_prefix, alias), floor, language,
                                           dictionaries=['level_types_basement',
                                                         'level_types_mezzanine',
                                                         'level_types_numbered',
@@ -127,5 +130,5 @@ class Floor(NumberedComponent):
                                                         'level_types_sub_basement'],
                                           country=country)
 
-        return cls.numeric_phrase('levels.alphanumeric', safe_decode(floor), language,
+        return cls.numeric_phrase('levels.alphanumeric', floor, language,
                               dictionaries=['level_types_numbered'], country=country)

@@ -99,7 +99,7 @@ class NumericPhrase(object):
 
 class Number(NumericPhrase):
     key = 'numbers'
-    dictionraries = ['number']
+    dictionaries = ['number']
 
 
 class NumberedComponent(object):
@@ -107,19 +107,22 @@ class NumberedComponent(object):
     def numeric_phrase(cls, key, num, language, country=None, dictionaries=()):
         is_alpha = False
         is_none = False
-        try:
-            num = int(num)
-        except ValueError:
+        if num is not None:
             try:
-                num = float(num)
+                num = int(num)
             except ValueError:
-                is_alpha = num is not None
-                is_none = num is None
+                try:
+                    num = float(num)
+                except ValueError:
+                    is_alpha = True
+        else:
+            is_none = True
 
         # Pick a phrase given the probability distribution from the config
         values, probs = address_config.alternative_probabilities(key, language, dictionaries=dictionaries, country=country)
-        if values is None:
-            return None
+        if not values:
+            return safe_decode(num) if not is_none else None
+
         phrase, phrase_props = weighted_choice(values, probs)
 
         values = []
