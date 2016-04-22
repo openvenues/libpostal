@@ -25,7 +25,7 @@ class VenueNames(object):
             for line in f:
                 line = line.rstrip()
                 phrases = safe_decode(line).split(six.u('|'))
-                self.all_chains |= phrases
+                self.all_chains |= set(phrases)
                 canonical = phrases[0]
                 for p in phrases[1:]:
                     self.chain_canonical[p] = canonical
