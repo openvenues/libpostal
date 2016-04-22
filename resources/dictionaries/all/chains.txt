@@ -223,7 +223,7 @@ hyundai
 iga
 ihop|international house of pancakes
 ikea
-in-n-out burger|in-n-out|in 'n out|in n' out||in and out|in-and-out|in & out|in 'n out burger|in n' out burger||in and out burger|in-and-out burger|in & out burger
+in-n-out burger|in-n-out|in 'n out|in n' out|in and out|in-and-out|in & out|in 'n out burger|in n' out burger|in and out burger|in-and-out burger|in & out burger
 indian oil
 indomaret
 ing
