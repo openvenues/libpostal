@@ -549,10 +549,10 @@ po_boxes:
         # phrases appear only in Australia
         sample: false
         default: *po_box
-        probability: 0.95
+        probability: 0.995
         alternatives:
             - alternative: *box
-              probability: 0.05
+              probability: 0.005
 
         numeric_probability: 0.9 # PO Box 123
         alpha_probability: 0.05 # PO Box A
@@ -585,6 +585,12 @@ po_boxes:
                   probability: 0.2
                 - alternative: *box
                   probability: 0.1
+
+    order:
+        - after: house
+          probability: 0.8
+        - before: house
+          probability: 0.2
 
 # Categories
 # ==========
