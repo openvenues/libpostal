@@ -180,6 +180,8 @@ piscina
 playa
 policía|policia
 polideportivo
+preescolar
+preescolar comunitario
 prisión|prision
 pub
 puebla|pbla
