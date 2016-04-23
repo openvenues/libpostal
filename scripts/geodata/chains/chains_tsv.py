@@ -63,7 +63,7 @@ class VenueNames(object):
             writer.writerow((safe_encode(k),
                              safe_encode(most_common_cap),
                              safe_encode(canonical),
-                             safe_encode(1) if k in all_chains else '',
+                             safe_encode(1) if k in self.all_chains else '',
                              safe_encode(v)))
 
 if __name__ == '__main__':
