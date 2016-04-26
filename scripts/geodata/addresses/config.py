@@ -7,8 +7,8 @@ import yaml
 from collections import Mapping
 
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
+from geodata.configs.utils import nested_get, DoesNotExist, recursive_merge
 from geodata.math.sampling import cdf, check_probability_distribution
-
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
@@ -17,35 +17,6 @@ ADDRESS_CONFIG_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
 
 DICTIONARIES_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                 'resources', 'dictionaries')
-
-
-def recursive_merge(a, b):
-    for k, v in six.iteritems(b):
-        if isinstance(v, Mapping):
-            existing = a.get(k, v)
-            merged = recursive_merge(existing, v)
-            a[k] = merged
-        else:
-            a[k] = b[k]
-    return a
-
-
-class DoesNotExist:
-    pass
-
-
-def nested_get(obj, keys):
-    if len(keys) == 0:
-        return obj
-    try:
-        for key in keys[:-1]:
-            obj = obj.get(key, {})
-            if not hasattr(obj, 'items'):
-                return DoesNotExist
-        key = keys[-1]
-        return obj.get(key, DoesNotExist)
-    except AttributeError:
-        return DoesNotExist
 
 
 class AddressConfig(object):
@@ -58,17 +29,14 @@ class AddressConfig(object):
                 continue
 
             config = yaml.load(open(os.path.join(ADDRESS_CONFIG_DIR, filename)))
+            default = config['default']
             countries = config.pop('countries', {})
 
-            for k in countries.keys():
-                country_config = countries[k]
-                config_copy = copy.deepcopy(config)
-                countries[k] = recursive_merge(config_copy, country_config)
-
-            config['countries'] = countries
+            if countries:
+                default['countries'] = countries
 
             lang = filename.strip('.yaml')
-            self.address_configs[lang] = config
+            self.address_configs[lang] = default
 
         self.sample_phrases = {}
 
@@ -86,6 +54,7 @@ class AddressConfig(object):
             country_config = config.get('countries', {}).get(country, {})
             if country_config:
                 config = country_config
+
 
         value = nested_get(config, keys)
         if value is not DoesNotExist:
