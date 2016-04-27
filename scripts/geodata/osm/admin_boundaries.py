@@ -1,6 +1,6 @@
 '''
-osm_admin_boundaries.py
----------------
+admin_boundaries.py
+-------------------
 
 Generates polygons from OpenStreetMap relations
 '''
