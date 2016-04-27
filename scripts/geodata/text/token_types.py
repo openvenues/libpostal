@@ -52,6 +52,9 @@ class token_types(Enum):
     WHITESPACE = EnumValue(300)
     NEWLINE = EnumValue(301)
 
+    # Phrase, special application-level type not returned by the tokenizer
+    PHRASE = EnumValue(999)
+
     WORD_TOKEN_TYPES = set([
         WORD,
         ABBREVIATION,
