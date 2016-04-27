@@ -10,6 +10,7 @@ from geodata.address_expansions.address_dictionaries import address_phrase_dicti
 from geodata.configs.utils import nested_get, DoesNotExist, recursive_merge
 from geodata.math.sampling import cdf, check_probability_distribution
 
+
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
 ADDRESS_CONFIG_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
@@ -29,14 +30,17 @@ class AddressConfig(object):
                 continue
 
             config = yaml.load(open(os.path.join(ADDRESS_CONFIG_DIR, filename)))
-            default = config['default']
             countries = config.pop('countries', {})
 
-            if countries:
-                default['countries'] = countries
+            for k in countries.keys():
+                country_config = countries[k]
+                config_copy = copy.deepcopy(config)
+                countries[k] = recursive_merge(config_copy, country_config)
+
+            config['countries'] = countries
 
             lang = filename.strip('.yaml')
-            self.address_configs[lang] = default
+            self.address_configs[lang] = config
 
         self.sample_phrases = {}
 
@@ -54,7 +58,6 @@ class AddressConfig(object):
             country_config = config.get('countries', {}).get(country, {})
             if country_config:
                 config = country_config
-
 
         value = nested_get(config, keys)
         if value is not DoesNotExist:
