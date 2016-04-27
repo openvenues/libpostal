@@ -9,6 +9,7 @@ from geodata.i18n.unicode_paths import DATA_DIR
 from geodata.text.normalize import normalized_tokens, normalize_string
 from geodata.text.tokenize import tokenize, token_types
 from geodata.text.phrases import PhraseFilter
+from geodata.enum import EnumValue
 
 from marisa_trie import BytesTrie
 
@@ -24,8 +25,6 @@ POSSIBLE_ROMAN_NUMERALS = set(['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii',
                                'c', 'cc', 'ccc', 'cd', 'd', 'dc', 'dcc', 'dccc', 'cm',
                                'm', 'mm', 'mmm', 'mmmm'])
 
-PHRASE = 'PHRASE'
-
 
 class DictionaryPhraseFilter(PhraseFilter):
 
@@ -37,14 +36,14 @@ class DictionaryPhraseFilter(PhraseFilter):
 
         for language in address_phrase_dictionaries.languages:
             for dictionary_name in self.dictionaries:
-                is_suffix_dictionary = 'suffixes' in filename
-                is_prefix_dictionary = 'prefixes' in filename
+                is_suffix_dictionary = 'suffixes' in dictionary_name
+                is_prefix_dictionary = 'prefixes' in dictionary_name
 
                 for phrases in address_phrase_dictionaries.phrases.get((language, dictionary_name), []):
                     canonical = phrases[0]
                     canonical_normalized = normalize_string(canonical)
 
-                    self.canonicals[(canonical, lang, dictionary_name)] = phrases[1:]
+                    self.canonicals[(canonical, language, dictionary_name)] = phrases[1:]
 
                     for i, phrase in enumerate(phrases):
 
@@ -58,7 +57,7 @@ class DictionaryPhraseFilter(PhraseFilter):
                         elif is_prefix_dictionary:
                             phrase = PREFIX_KEY + phrase
 
-                        kvs[phrase][(lang, dictionary_name, canonical)] = is_canonical
+                        kvs[phrase][(language, dictionary_name, canonical)] = is_canonical
 
         kvs = [(k, '|'.join([l, d, str(int(i)), safe_encode(c)])) for k, vals in kvs.iteritems() for (l, d, c), i in vals.iteritems()]
 
@@ -107,14 +106,14 @@ class DictionaryPhraseFilter(PhraseFilter):
 
                 suffix_search, suffix_len = self.search_suffix(token)
                 if suffix_search and self.trie.get(token[(token_len - suffix_len):].rstrip('.')):
-                    yield ([(t, c)], PHRASE, suffix_len, map(safe_decode, suffix_search))
+                    yield ([(t, c)], token_types.PHRASE, suffix_len, map(safe_decode, suffix_search))
                     continue
                 prefix_search, prefix_len = self.search_prefix(token)
                 if prefix_search and self.trie.get(token[:prefix_len]):
-                    yield ([(t, c)], PHRASE, prefix_len, map(safe_decode, prefix_search))
+                    yield ([(t, c)], token_types.PHRASE, prefix_len, map(safe_decode, prefix_search))
                     continue
             else:
-                c = PHRASE
+                c = token_types.PHRASE
             yield t, c, len(t), map(safe_decode, data)
 
 STREET_TYPES_DICTIONARIES = ('street_types',
@@ -155,6 +154,7 @@ UNIT_ABBREVIATION_DICTIONARIES = ('level_types_basement',
                                   'level_types_numbered',
                                   'level_types_standalone',
                                   'level_types_sub_basement',
+                                  'number',
                                   'post_office',
                                   'unit_types_numbered',
                                   'unit_types_standalone',
