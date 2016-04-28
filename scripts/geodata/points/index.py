@@ -21,10 +21,12 @@ class PointIndex(object):
 
     GEOHASH_PRECISION = 7
     PROPS_FILENAME = 'properties.json'
+    POINTS_FILENAME = 'points.json'
     INDEX_FILENAME = 'index.json'
 
     def __init__(self, index=None, save_dir=None,
                  points=None,
+                 points_path=None,
                  points_db=None,
                  points_db_path=None,
                  index_path=None,
@@ -45,6 +47,9 @@ class PointIndex(object):
             self.index = defaultdict(list)
         else:
             self.index = index
+
+        if not points_path:
+            points_path = os.path.join(save_dir or '.', self.POINTS_FILENAME)
 
         if not points:
             self.points = []
@@ -68,7 +73,7 @@ class PointIndex(object):
 
         for key in [code] + geohash.neighbors(code):
             self.index[key].append(self.i)
-            self.points.append((lat, lon))
+            self.points.extend([lat, lon])
 
     def add_point(self, lat, lon, properties, cache=False, include_only_properties=None):
         if include_only_properties is not None:
@@ -97,6 +102,13 @@ class PointIndex(object):
     def load_index(cls, d, index_name=None):
         return json.load(open(os.path.join(d, index_name or cls.INDEX_FILENAME)))
 
+    def save_points(self):
+        json.dump(self.points, open(self.points_path, 'w'))
+
+    @classmethod
+    def load_points(cls, d):
+        return array.array('d', json.load(open(os.path.join(d, cls.POINTS_FILENAME))))
+
     def properties_key(self, i):
         return 'props:{}'.format(i)
 
@@ -110,8 +122,9 @@ class PointIndex(object):
     @classmethod
     def load(cls, d):
         index = cls.load_index(d)
+        points = cls.load_points(d)
         points_db = LevelDB(os.path.join(d, cls.POINTS_DB_DIR))
-        point_index = cls(index=index, points_db=points_db)
+        point_index = cls(index=index, points=points, points_db=points_db)
         point_index.load_properties(os.path.join(d, cls.PROPS_FILENAME))
         return point_index
 
@@ -129,8 +142,11 @@ class PointIndex(object):
     def point_distances(self, latitude, longitude):
         candidates = self.get_candidate_points(latitude, longitude)
 
-        return [(i, self.points[i][0], self.points[i][1],
-                 haversine_distance(latitude, longitude, *self.points[i])) for i in candidates]
+        return [(i, self.points[i * 2], self.points[i * 2 + 1],
+                 haversine_distance(latitude, longitude,
+                                    self.points[i * 2],
+                                    self.points[i * 2 + 1]))
+                for i in candidates]
 
     def all_nearby_points(self, latitude, longitude):
         distances = self.point_distances(latitude, longitude)
