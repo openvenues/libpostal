@@ -32,15 +32,9 @@ WELL_REPRESENTED_LANGUAGE_COUNTRIES = {
     'pt': set(['pt', 'br']),
 }
 
-char_scripts = []
-script_languages = {}
+char_scripts = get_chars_by_script()
+script_languages = {script: set(langs) for script, langs in get_script_languages().iteritems()}
 
-
-def init_disambiguation():
-    global char_scripts, script_languages
-    char_scripts[:] = []
-    char_scripts.extend(get_chars_by_script())
-    script_languages.update({script: set(langs) for script, langs in get_script_languages().iteritems()})
 
 UNKNOWN_SCRIPT = 'Unknown'
 COMMON_SCRIPT = 'Common'

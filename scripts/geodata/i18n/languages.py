@@ -59,6 +59,9 @@ def init_languages(languages_dir=LANGUAGES_DIR):
     languages_initialized = True
 
 
+init_languages()
+
+
 def get_country_languages(country, official=True, overrides=True):
     if official:
         languages = official_languages[country]
