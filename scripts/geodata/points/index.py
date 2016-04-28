@@ -17,21 +17,18 @@ class PointIndex(object):
     persistent_index = False
     cache_size = 0
 
-    INDEX_FILENAME = None
     POINTS_DB_DIR = 'points'
 
-    DEFAULT_GEOHASH_PRECISION = 7
-    DEFAULT_PROPS_FILENAME = 'properties.json'
-
+    GEOHASH_PRECISION = 7
+    PROPS_FILENAME = 'properties.json'
     INDEX_FILENAME = 'index.json'
 
-    def __init__(self, index=None,
-                 points=None,
-                 points_db=None, save_dir=None,
+    def __init__(self, index=None, save_dir=None,
+                 points_db=None,
                  points_db_path=None,
                  index_path=None,
                  include_only_properties=None,
-                 precision=DEFAULT_GEOHASH_PRECISION):
+                 precision=GEOHASH_PRECISION):
         if save_dir:
             self.save_dir = save_dir
         else:
@@ -101,7 +98,15 @@ class PointIndex(object):
 
     def save(self):
         self.save_index()
-        self.save_properties(os.path.join(self.save_dir, self.DEFAULT_PROPS_FILENAME))
+        self.save_properties(os.path.join(self.save_dir, self.PROPS_FILENAME))
+
+    @classmethod
+    def load(cls, d):
+        index = cls.load_index(d)
+        points_db = LevelDB(os.path.join(d, cls.POINTS_DB_DIR))
+        point_index = cls(index=index, points_db=points_db)
+        point_index.load_properties(os.path.join(d, cls.PROPS_FILENAME))
+        return point_index
 
     def get_candidate_points(self, latitude, longitude):
         code = geohash.encode(latitude, longitude)[:self.precision]
