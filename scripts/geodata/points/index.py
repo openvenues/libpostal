@@ -24,6 +24,7 @@ class PointIndex(object):
     INDEX_FILENAME = 'index.json'
 
     def __init__(self, index=None, save_dir=None,
+                 points=None,
                  points_db=None,
                  points_db_path=None,
                  index_path=None,
@@ -45,6 +46,11 @@ class PointIndex(object):
         else:
             self.index = index
 
+        if not points:
+            self.points = []
+        else:
+            self.points = points
+
         if not points_db_path:
             points_db_path = os.path.join(save_dir or '.', self.POINTS_DB_DIR)
 
@@ -57,14 +63,12 @@ class PointIndex(object):
 
         self.i = 0
 
-    def create_index(self, overwrite=False):
-        self.index = defaultdict(list)
-
     def index_point(self, lat, lon):
         code = geohash.encode(lat, lon)[:self.precision]
 
         for key in [code] + geohash.neighbors(code):
-            self.index[key].append((self.i, lat, lon))
+            self.index[key].append(self.i)
+            self.points.append((lat, lon))
 
     def add_point(self, lat, lon, properties, cache=False, include_only_properties=None):
         if include_only_properties is not None:
@@ -96,6 +100,9 @@ class PointIndex(object):
     def properties_key(self, i):
         return 'props:{}'.format(i)
 
+    def get_properties(self, i):
+        return self.points_db.Get(self.properties_key(i))
+
     def save(self):
         self.save_index()
         self.save_properties(os.path.join(self.save_dir, self.PROPS_FILENAME))
@@ -121,16 +128,21 @@ class PointIndex(object):
 
     def point_distances(self, latitude, longitude):
         candidates = self.get_candidate_points(latitude, longitude)
-        return [(i, lat, lon, haversine_distance(latitude, longitude, lat, lon)) for i, lat, lon in candidates]
 
-    def nearest_n_points(self, latitude, longitude, n=2):
+        return [(i, self.points[i][0], self.points[i][1],
+                 haversine_distance(latitude, longitude, *self.points[i])) for i in candidates]
+
+    def all_nearby_points(self, latitude, longitude):
         distances = self.point_distances(latitude, longitude)
         if not distances:
-            return None
-        return sorted(distances, key=operator.itemgetter(-1))[:n]
+            return []
+        return sorted(distances, key=operator.itemgetter(-1))
+
+    def nearest_n_points(self, latitude, longitude, n=2):
+        return self.all_nearby_points(latitude, longitude)[:n]
 
     def nearest_point(self, latitude, longitude):
-        distances = self.nearest_n_points(latitude, longitude, n=1)
+        distances = self.all_nearby_points(latitude, longitude)
         if not distances:
             return None
         return distances[0]
