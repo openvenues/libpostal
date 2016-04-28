@@ -25,7 +25,7 @@ class POBox(NumberedComponent):
 
     @classmethod
     def random_letter(cls, alphabet=latin_alphabet):
-        return random.choice(alphabet)
+        return sample_alphabet(alphabet)
 
     @classmethod
     def phrase(cls, box_number, language, country=None):
