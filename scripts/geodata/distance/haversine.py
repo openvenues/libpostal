@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import math
 
 EARTH_RADIUS_KM = 6373
