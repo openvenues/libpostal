@@ -1,4 +1,5 @@
 import random
+import six
 
 from geodata.address_expansions.gazetteers import *
 from geodata.encoding import safe_decode, safe_encode
@@ -37,9 +38,9 @@ def recase_abbreviation(expansion, tokens):
                 strings.append(t)
             else:
                 strings.append(e.title())
-        return u' '.join(strings)
+        return six.u(' ').join(strings)
     else:
-        return u' '.join([t.title() for t in expansion_tokens])
+        return six.u(' ').join([t.title() for t in expansion_tokens])
 
 
 def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2):
@@ -65,15 +66,16 @@ def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2):
     for t, c, length, data in gazetteer.filter(norm_tokens):
         if c == token_types.PHRASE:
             valid = []
-            data = [d.split('|') for d in data]
+            data = [d.split(six.b('|')) for d in data]
 
             added = False
 
+            # Append the original tokens with whitespace if there is any
             if random.random() > abbreviate_prob:
                 for j, (t_i, c_i) in enumerate(t):
                     abbreviated.append(tokens[i + j][0])
                     if i + j < n - 1 and raw_tokens[i + j + 1][0] > sum(raw_tokens[i + j][:2]):
-                        abbreviated.append(u' ')
+                        abbreviated.append(six.u(' '))
                 i += len(t)
                 continue
 
@@ -99,19 +101,19 @@ def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2):
                     token = recase_abbreviation(token, tokens[i:i + len(t)])
                     abbreviated.append(token)
                     if i + len(t) < n and raw_tokens[i + len(t)][0] > sum(raw_tokens[i + len(t) - 1][:2]):
-                        abbreviated.append(u' ')
+                        abbreviated.append(six.u(' '))
                     break
                 elif is_prefix:
                     token = tokens[i][0]
                     prefix, token = token[:length], token[length:]
                     abbreviated.append(prefix)
                     if random.random() < separate_prob:
-                        abbreviated.append(u' ')
+                        abbreviated.append(six.u(' '))
                     if token.islower():
                         abbreviated.append(token.title())
                     else:
                         abbreviated.append(token)
-                    abbreviated.append(u' ')
+                    abbreviated.append(six.u(' '))
                     break
                 elif is_suffix:
                     token = tokens[i][0]
@@ -122,7 +124,7 @@ def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2):
 
                     separated_abbreviations = []
                     phrase = gazetteer.trie.get(suffix.rstrip('.'))
-                    suffix_data = [safe_decode(d).split(u'|') for d in (phrase or [])]
+                    suffix_data = [safe_decode(d).split(six.u('|')) for d in (phrase or [])]
                     for l, d, _, c in suffix_data:
                         if l == lang and c == canonical:
                             separated_abbreviations.extend(gazetteer.canonicals.get((canonical, lang, d)))
@@ -138,26 +140,26 @@ def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2):
 
                     abbreviated.append(token)
                     if separate:
-                        abbreviated.append(u' ')
+                        abbreviated.append(six.u(' '))
                     if suffix.isupper():
                         abbreviated.append(abbreviation.upper())
                     elif separate:
                         abbreviated.append(abbreviation.title())
                     else:
                         abbreviated.append(abbreviation)
-                    abbreviated.append(u' ')
+                    abbreviated.append(six.u(' '))
                     break
             else:
                 for j, (t_i, c_i) in enumerate(t):
                     abbreviated.append(tokens[i + j][0])
                     if i + j < n - 1 and raw_tokens[i + j + 1][0] > sum(raw_tokens[i + j][:2]):
-                        abbreviated.append(u' ')
+                        abbreviated.append(six.u(' '))
             i += len(t)
 
         else:
             abbreviated.append(tokens[i][0])
             if i < n - 1 and raw_tokens[i + 1][0] > sum(raw_tokens[i][:2]):
-                abbreviated.append(u' ')
+                abbreviated.append(six.u(' '))
             i += 1
 
-    return u''.join(abbreviated).strip()
+    return six.u('').join(abbreviated).strip()
