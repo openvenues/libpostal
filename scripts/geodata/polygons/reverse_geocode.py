@@ -292,6 +292,8 @@ class OSMReverseGeocoder(RTreePolygonIndex):
     include_property_patterns = set([
         'name',
         'name:*',
+        'ISO3166-1:alpha2',
+        'ISO3166-1:alpha3',
         'int_name',
         'official_name',
         'official_name:*',
