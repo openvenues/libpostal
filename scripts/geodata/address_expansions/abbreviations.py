@@ -63,7 +63,7 @@ def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2):
     i = 0
 
     for t, c, length, data in gazetteer.filter(norm_tokens):
-        if c is PHRASE:
+        if c == token_types.PHRASE:
             valid = []
             data = [d.split('|') for d in data]
 
