@@ -14,6 +14,7 @@ from geodata.string_utils import wide_iter, wide_ord
 from geodata.i18n.unicode_properties import get_chars_by_script, get_script_languages
 from geodata.text.normalize import normalized_tokens, normalize_string
 from geodata.text.tokenize import tokenize
+from geodata.text.token_types import token_types
 
 WELL_REPRESENTED_LANGUAGES = set(['en', 'fr', 'it', 'de', 'nl', 'es', 'pt'])
 
@@ -100,7 +101,7 @@ def disambiguate_language(text, languages):
     seen_languages = set()
 
     for t, c, l, data in street_types_gazetteer.filter(tokens):
-        if c is PHRASE:
+        if c == token_types.PHRASE:
             valid = OrderedDict()
             data = [safe_decode(d).split(u'|') for d in data]
             potentials = set([l for l, d, i, c in data if l in valid_languages])
