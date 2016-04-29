@@ -618,9 +618,11 @@ categories:
                   canonical: around here
               probability: 0.1
     near_me:
-        canonical: near me
+        default:
+            canonical: near me
     in:
-        canonical: in
+        default:
+            canonical: in
     # Probabilities of each phrase
     near_probability: 0.35
     nearby_probability: 0.2
