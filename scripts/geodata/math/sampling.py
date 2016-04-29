@@ -2,7 +2,7 @@ import bisect
 import random
 import sys
 
-FLOAT_EPSILON = 1e-09
+from geodata.math.floats import isclose, FLOAT_EPSILON
 
 
 def weighted_choice(values, cdf):
@@ -14,10 +14,6 @@ def weighted_choice(values, cdf):
     x = random.random()
     i = bisect.bisect(cdf, x)
     return values[i]
-
-
-def isclose(a, b, rel_tol=FLOAT_EPSILON, abs_tol=0.0):
-    return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
 
 
 def check_probability_distribution(probs):
