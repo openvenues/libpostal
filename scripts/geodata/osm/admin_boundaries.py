@@ -15,6 +15,7 @@ from itertools import izip, combinations
 
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.graph.scc import strongly_connected_components
+from geodata.math.floats import isclose
 from geodata.osm.extract import *
 
 
@@ -179,6 +180,10 @@ class OSMPolygonReader(object):
                 lat, lon = latlon_to_decimal(lat, lon)
                 if lat is None or lon is None:
                     continue
+
+                if isclose(lon, 180.0):
+                    lon = 179.999
+
                 # Nodes are stored in a sorted array, coordinate indices are simply
                 # [lon, lat, lon, lat ...] so the index can be calculated as 2 * i
                 # Note that the pairs are lon, lat instead of lat, lon for geometry purposes
