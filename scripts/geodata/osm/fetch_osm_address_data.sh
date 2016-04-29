@@ -66,7 +66,7 @@ VALID_VENUES="( ( $IS_AIRPORT ) or ( $VALID_AMENITIES ) or ( $VALID_HISTORIC_KEY
 # Address data set for use in parser, language detection
 echo "Filtering for records with address tags: `date`"
 PLANET_ADDRESSES_O5M="planet-addresses.o5m"
-VALID_ADDRESSES="( ( ( name= or addr:housename= ) and $VALID_VENUES ) ) or ( addr:street= and ( name= or building= or building:levels= or addr:housename= or addr:housenumber= ) )"
+VALID_ADDRESSES="( ( ( name= or addr:housename= ) and $VALID_VENUES ) ) or ( ( addr:street= or addr:place ) and ( name= or building= or building:levels= or addr:housename= or addr:housenumber= ) )"
 osmfilter $PLANET_O5M --keep="$VALID_ADDRESSES" --drop-author --drop-version -o=$PLANET_ADDRESSES_O5M
 PLANET_ADDRESSES_LATLONS="planet-addresses-latlons.o5m"
 osmconvert $PLANET_ADDRESSES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_ADDRESSES_LATLONS
@@ -81,7 +81,7 @@ PLANET_BORDERS_O5M="planet-borders.o5m"
 PLANET_BORDERS="planet-borders.osm"
 PLANET_ADMIN_BORDERS_OSM="planet-admin-borders.osm"
 
-VALID_ADMIN_BORDERS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish boundary=civil or boundary=ceremonial or place=island"
+VALID_ADMIN_BORDERS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish or boundary=civil or boundary=ceremonial or place=island"
 VALID_NEIGHBORHOODS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=neighbourhood or place=suburb or place=quarter or place=borough or place=locality"
 
 osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDERS" --drop-author --drop-version -o=$PLANET_ADMIN_BORDERS_OSM
@@ -98,7 +98,9 @@ osmfilter $PLANET_O5M --keep="name= and ( $VALID_NEIGHBORHOODS )" --drop-relatio
 
 echo "Filtering for subdivision polygons"
 PLANET_SUBDIVISIONS="planet-subdivisions.osm"
-osmfilter $PLANET_O5M --keep="( name= or addr:housename= ) and ( place=allotmenets or place=city_block or place=plot or place=subdivision or landuse=residential or landuse=commercial or landuse=industrial or landuse=retail or landuse=military )" --drop="place= or boundary=" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS
+SUBDIVISION_LANDUSE_TYPES="landuse=residential or landuse=commercial or landuse=industrial or landuse=retail or landuse=military"
+SUBDIVISION_PLACE_TYPES="place=allotmenets or place=city_block or place=plot or place=subdivision"
+osmfilter $PLANET_O5M --keep="( $SUBDIVISION_PLACE_TYPES or $SUBDIVISION_LANDUSE_TYPES )" --drop="( place= and not ( $SUBDIVISION_PLACE_TYPES ) ) or boundary=" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS
 
 echo "Filtering for postal_code polygons"
 PLANET_POSTAL_CODES="planet-postcodes.osm"
@@ -108,18 +110,18 @@ osmfilter $PLANET_O5M --keep="boundary=postal_code" --drop-author --drop-version
 # Venue data set for use in venue classification
 echo "Filtering for venue records: `date`"
 PLANET_VENUES_O5M="planet-venues.o5m"
-osmfilter $PLANET_O5M --keep="( name= and building= ) or ( $VALID_VENUES )" --drop-author --drop-version -o=$PLANET_VENUES_O5M
+osmfilter $PLANET_O5M --keep="( name=  and ( building!=yes or $VALID_VENUES )" --drop-author --drop-version -o=$PLANET_VENUES_O5M
 PLANET_VENUES_LATLONS="planet-venues-latlons.o5m"
 osmconvert $PLANET_VENUES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_VENUES_LATLONS
 rm $PLANET_VENUES_O5M
 PLANET_VENUES="planet-venues.osm"
-osmfilter $PLANET_VENUES_LATLONS --keep="name= and ( building= or ( $VALID_VENUES ) )" -o=$PLANET_VENUES
+osmfilter $PLANET_VENUES_LATLONS --keep="name= and ( building!=yes or ( $VALID_VENUES ) )" -o=$PLANET_VENUES
 rm $PLANET_VENUES_LATLONS
 
 # Categories for building generic queries like "restaurants in Brooklyn"
 echo "Filtering for buildings: `date`"
 PLANET_BUILDINGS_O5M="planet-buildings.o5m"
-VALID_BUILDINGS="( building= and ( building!=yes or building:levels= or name= ) )"
+VALID_BUILDINGS="( ( building= or building:part= ) and ( building!=yes or name= ) )"
 osmfilter $PLANET_O5M --keep="$VALID_BUILDINGS" --drop-author --drop-version -o=$PLANET_BUILDINGS_O5M
 PLANET_BUILDINGS_LATLONS="planet-buildings-latlons.o5m"
 osmconvert $PLANET_BUILDINGS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_BUILDINGS_LATLONS
@@ -129,8 +131,8 @@ osmfilter $PLANET_BUILDINGS_LATLONS --keep="$VALID_BUILDINGS" -o=$PLANET_BUILDIN
 rm $PLANET_BUILDINGS_LATLONS
 
 echo "Filtering for building polygons: `date`"
-PLANET_BUILDINGS_POLYGONS="planet-building-polygons.osm"
-osmfilter $PLANET_O5M --keep="( building= and ( building:levels= or name= or addr:street= or addr:housename= or addr:housenumber= )" --drop-nodes --drop-author --drop-version -o=$PLANET_BUILDINGS_POLYGONS
+PLANET_BUILDING_POLYGONS="planet-building-polygons.osm"
+osmfilter $PLANET_O5M --keep="( ( building= or building:part= or type=building ) and ( building:levels= or name= or addr:street= or addr:place or addr:housename= or addr:housenumber= ) )" --drop-author --drop-version -o=$PLANET_BUILDING_POLYGONS
 
 
 echo "Filtering for amenities: `date`"
@@ -170,15 +172,16 @@ rm $PLANET_WATERWAYS_LATLONS
 # Streets data set for use in language classification 
 echo "Filtering ways: `date`"
 PLANET_WAYS_O5M="planet-ways.o5m"
-osmfilter planet-latest.o5m --keep="name= and highway=" --drop-relations --drop-author --drop-version -o=$PLANET_WAYS_O5M
+VALID_ROAD_TYPES="( highway=motorway or highway=motorway_link or highway=motorway_junction or highway=trunk or highway=trunk_link or highway=primary or highway=primary_link or highway=secondary or highway=secondary_link or highway=tertiary or highway=tertiary_link or highway=unclassified or highway=unclassified_link or highway=residential or highway=residential_link or highway=service or highway=service_link or highway=living_street or highway=pedestrian or highway=steps or highway=cycleway or highway=bridleway or highway=track or highway=road or ( highway=path and ( motorvehicle=yes or motorcar=yes ) ) )"
+osmfilter planet-latest.o5m --keep="name= and $VALID_ROAD_TYPES" --drop-relations --drop-author --drop-version -o=$PLANET_WAYS_O5M
 rm $PLANET_O5M
 PLANET_WAYS_NODES_LATLON="planet-ways-nodes-latlons.o5m"
 osmconvert $PLANET_WAYS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_WAYS_NODES_LATLON
 # 10^15 is the offset used for ways and relations with --all-to-ndoes, extracts just the ways
-PLANET_WAYS_LATLONS="planet-ways.osm"
+PLANET_WAYS_LATLONS="planet-ways-latlons.osm"
+PLANET_WAYS="planet-ways.osm"
 
-VALID_ROAD_TYPES="( highway=motorway or highway=motorway_link or highway=motorway_junction or highway=trunk or highway=trunk_link or highway=primary or highway=primary_link or highway=secondary or highway=secondary_link or highway=tertiary or highway=tertiary_link or highway=unclassified or highway=unclassified_link or highway=residential or highway=residential_link or highway=service or highway=service_link or highway=living_street or highway=pedestrian or highway=steps or highway=cycleway or highway=bridleway or highway=track or highway=road or ( highway=path and ( motorvehicle=yes or motorcar=yes ) ) )"
-osmfilter $PLANET_WAYS_NODES_LATLON --keep="name= and ( $VALID_ROAD_TYPES )" -o=$PLANET_WAYS_LATLONS
+osmfilter $PLANET_WAYS_NODES_LATLON --keep="name= and ( $VALID_ROAD_TYPES )" -o=$PLANET_WAYS
 osmfilter $PLANET_WAYS_O5M --keep="name= and ( $VALID_ROAD_TYPES )" -o=$PLANET_WAYS_LATLONS
 rm $PLANET_WAYS_NODES_LATLON
 rm $PLANET_WAYS_O5M
