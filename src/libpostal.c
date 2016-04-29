@@ -303,7 +303,8 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
                     
                     for (int j = 0; j < expansions->n; j++) {
                         address_expansion_t expansion = expansions->a[j];
-                        if ((expansion.address_components & options.address_components) == 0) {
+
+                        if ((expansion.address_components & options.address_components) == 0 && !address_expansion_in_dictionary(expansion, DICTIONARY_AMBIGUOUS_EXPANSION)) {
                             continue;
                         }
 
