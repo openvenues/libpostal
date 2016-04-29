@@ -69,6 +69,7 @@ TEST test_expansions(void) {
     normalize_options_t options = get_libpostal_default_options();
 
     CHECK_CALL(test_expansion_contains_with_languages("123 Main St. #2f", "123 main street number 2f", options, 1, "en"));
+    CHECK_CALL(test_expansion_contains_with_languages("S St. NW", "s street northwest", options, 1, "en"));
     CHECK_CALL(test_expansion_contains_with_languages("Marktstrasse", "markt strasse", options, 1, "de"));
     CHECK_CALL(test_expansion_contains_with_languages("Hoofdstraat", "hoofdstraat", options, 1, "nl"));
     CHECK_CALL(test_expansion_contains_with_languages("มงแตร", "มงแตร", options, 1, "th"));
