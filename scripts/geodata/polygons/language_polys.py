@@ -109,14 +109,14 @@ class LanguagePolygonIndex(RTreePolygonIndex):
 
                 poly_type = rec['geometry']['type']
                 if poly_type == 'Polygon':
-                    poly = Polygon(rec['geometry']['coordinates'][0])
+                    poly = cls.to_polygon(rec['geometry']['coordinates'][0])
                     index.index_polygon(poly)
                     poly = index.simplify_polygon(poly)
                     index.add_polygon(poly, dict(rec['properties']))
                 elif poly_type == 'MultiPolygon':
                     polys = []
                     for coords in rec['geometry']['coordinates']:
-                        poly = Polygon(coords[0])
+                        poly = cls.to_polygon(coords[0])
                         polys.append(poly)
                         index.index_polygon(poly)
 

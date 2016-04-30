@@ -145,13 +145,21 @@ class PolygonIndex(object):
         return poly
 
     @classmethod
-    def to_polygon(cls, coords):
+    def to_polygon(cls, coords, holes=None):
         '''
         Create shapely polygon from list of coordinate tuples if valid
         '''
         if not coords or len(coords) < 3:
             return None
-        poly = Polygon(coords)
+
+        # Fix for polygons crossing the 180th meridian
+        lons = [lon for lon, lat in coords]
+        if (max(lons) - min(lons) > 180):
+            coords = [(lon + 360.0 if lon < 0 else lon, lat) for lon, lat in coords]
+            if holes:
+                holes = [(lon + 360.0 if lon < 0 else lon, lat) for lon, lat in holes]
+
+        poly = Polygon(coords, holes)
         return poly
 
     def add_geojson_like_record(self, rec, include_only_properties=None):
@@ -247,12 +255,12 @@ class PolygonIndex(object):
     def polygon_from_geojson(cls, feature):
         poly_type = feature['geometry']['type']
         if poly_type == 'Polygon':
-            poly = Polygon(feature['geometry']['coordinates'][0])
+            poly = cls.to_polygon(feature['geometry']['coordinates'][0])
             return poly
         elif poly_type == 'MultiPolygon':
             polys = []
             for coords in feature['geometry']['coordinates']:
-                poly = Polygon(coords[0])
+                poly = cls.to_polygon(coords[0])
                 polys.append(poly)
 
             return MultiPolygon(polys)
