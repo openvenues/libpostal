@@ -205,14 +205,14 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
 
                 poly_type = rec['geometry']['type']
                 if poly_type == 'Polygon':
-                    poly = Polygon(rec['geometry']['coordinates'][0])
+                    poly = cls.to_polygon(rec['geometry']['coordinates'][0])
                     index.index_polygon(poly)
                     poly = index.simplify_polygon(poly)
                     index.add_polygon(poly, dict(rec['properties']), include_only_properties=include_props)
                 elif poly_type == 'MultiPolygon':
                     polys = []
                     for coords in rec['geometry']['coordinates']:
-                        poly = Polygon(coords[0])
+                        poly = cls.to_polygon(coords[0])
                         polys.append(poly)
                         index.index_polygon(poly)
 
@@ -388,7 +388,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
                     if interior:
                         # Polygon with holes constructor
-                        poly = Polygon(p, [zip(*p2.exterior.coords.xy) for p2 in interior])
+                        poly = cls.to_polygon(p, [zip(*p2.exterior.coords.xy) for p2 in interior])
                         if poly is None or not poly.bounds or len(poly.bounds) != 4:
                             continue
                     # R-tree only stores the bounding box, so add the whole polygon
