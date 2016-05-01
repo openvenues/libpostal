@@ -14,7 +14,6 @@ carspace|cars
 club
 coolroom
 cottage|cott|cottg
-department|dept
 door
 duplex|dup|dupl
 extension|ext|extn
