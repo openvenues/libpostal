@@ -34,6 +34,7 @@ marquise|mise
 messieurs|mm|mrs
 monseigneur|mgr
 monsieur|m|mr
+notre-dame|n.-d|n-d|notre-dame|nd|n d
 père|pere
 professeur|prof|pr
 professeure|profe|pre
