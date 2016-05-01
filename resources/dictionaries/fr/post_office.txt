@@ -1,1 +1,2 @@
-boîte postale|boite postale|bp|b.p.|b.p|b p
+boîte postale|boite postale|bp|b.p.|b.p|b p|bte postale
+cedex
