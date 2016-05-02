@@ -1,4 +1,4 @@
-from postal.text.normalize import *
+from geodata.text.normalize import *
 from geodata.names.similarity import soft_tfidf_similarity, jaccard_similarity
 
 from collections import Counter
