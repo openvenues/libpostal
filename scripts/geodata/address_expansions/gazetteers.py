@@ -1,5 +1,6 @@
 import os
 import sys
+import ujson as json
 
 from collections import defaultdict, OrderedDict
 
@@ -27,6 +28,8 @@ POSSIBLE_ROMAN_NUMERALS = set(['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii',
 
 
 class DictionaryPhraseFilter(PhraseFilter):
+    serialize = safe_encode
+    deserialize = safe_decode
 
     def __init__(self, *dictionaries):
         self.dictionaries = dictionaries
