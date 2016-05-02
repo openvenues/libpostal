@@ -19,7 +19,7 @@ from geodata.i18n.word_breaks import ideographic_scripts
 from geodata.names.deduping import NameDeduper
 from geodata.osm.extract import parse_osm, OSM_NAME_TAGS, WAY_OFFSET, RELATION_OFFSET
 from geodata.polygons.index import *
-from geodata.polygons.reverse_geocoder import QuattroshapesReverseGeocoder
+from geodata.polygons.reverse_geocode import QuattroshapesReverseGeocoder
 from geodata.statistics.tf_idf import IDFIndex
 
 
