@@ -1,3 +1,4 @@
+import six
 import ujson as json
 
 from collections import *
@@ -7,11 +8,8 @@ SENTINEL = None
 
 
 class PhraseFilter(object):
-    def __init__(self):
-        self.configured = False
-
-    def configure(self, *args, **kw):
-        pass
+    def __init__(self, phrases):
+        self.trie = [(key, self.serialize(val)) for key, val in six.iteritems(phrases)]
 
     serialize = json.dumps
     deserialize = json.loads
