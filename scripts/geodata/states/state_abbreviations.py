@@ -50,4 +50,4 @@ class StateAbbreviations(object):
         return value
 
 
-state_abbreivations = StateAbbreviations()
+state_abbreviations = StateAbbreviations()
