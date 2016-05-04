@@ -8,6 +8,7 @@ from .osm XML files.
 
 import os
 import re
+import six
 import sys
 import urllib
 import ujson as json
@@ -22,7 +23,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.csv_utils import unicode_csv_reader
-
+from geodata.text.normalize import normalize_string, NORMALIZE_STRING_DECOMPOSE, NORMALIZE_STRING_LATIN_ASCII
 
 OSM_BOUNDARIES_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                   'resources', 'boundaries', 'osm')
@@ -127,6 +128,58 @@ def osm_wikipedia_title_and_language(key, value):
     return normalize_wikipedia_title(value), language
 
 
+non_breaking_dash = six.u('[-\u058a\u05be\u1400\u1806\u2010-\u2013\u2212\u2e17\u2e1a\ufe32\ufe63\uff0d]')
+simple_number = six.u('(?:{})?[0-9]+(?:\.[0-9]+)?').format(non_breaking_dash)
+simple_number_regex = re.compile(simple_number, re.UNICODE)
+
+non_breaking_dash_regex = re.compile(non_breaking_dash, re.UNICODE)
+number_range_regex = re.compile(six.u('({}){}({})').format(simple_number, non_breaking_dash, simple_number), re.UNICODE)
+letter_range_regex = re.compile(r'([^\W\d_]){}([^\W\d_])'.format(non_breaking_dash.encode('unicode-escape')), re.UNICODE)
+
+
+def parse_osm_number_range(value):
+    value = normalize_string(value, string_options=NORMALIZE_STRING_LATIN_ASCII | NORMALIZE_STRING_DECOMPOSE)
+    numbers = []
+    values = value.split(six.u(';'))
+    for val in values:
+        val = val.strip()
+        match = number_range_regex.match(val)
+        if match:
+            start_num, end_num = match.groups()
+            try:
+                start_num = int(start_num)
+                end_num = int(end_num)
+                if end_num > start_num:
+                    if end_num - start_num > 100:
+                        end_num = start_num + 100
+                    for i in xrange(start_num, end_num + 1):
+                        numbers.append(safe_decode(i))
+                else:
+                    numbers.extend([start_num, end_num])
+                    continue
+            except (TypeError, ValueError):
+                numbers.extend([start_num, end_num])
+                continue
+
+        else:
+            letter_match = letter_range_regex.match(val)
+            if letter_match:
+                start_num, end_num = letter_match.groups()
+                start_num = ord(start_num)
+                end_num = ord(end_num)
+                if end_num > start_num:
+                    if end_num - start_num > 100:
+                        end_num = start_num + 100
+                    for i in xrange(start_num, end_num + 1):
+                        numbers.append(six.unichr(i))
+                else:
+                    numbers.extend([six.unichr(start_num), six.unichr(end_num)])
+                    continue
+            else:
+                numbers.extend(non_breaking_dash_regex.split(safe_decode(val)))
+    return numbers
+
+
 class OSMAddressComponents(object):
     '''
     Keeps a map of OSM keys and values to the standard components
@@ -146,9 +199,12 @@ class OSMAddressComponents(object):
             'region': AddressFormatter.STATE,
             'province': AddressFormatter.STATE,
             'county': AddressFormatter.STATE_DISTRICT,
+            'island': AddressFormatter.ISLAND,
+            'islet': AddressFormatter.ISLAND,
             'municipality': AddressFormatter.CITY,
             'city': AddressFormatter.CITY,
             'town': AddressFormatter.CITY,
+            'township': AddressFormatter.CITY,
             'village': AddressFormatter.CITY,
             'hamlet': AddressFormatter.CITY,
             'borough': AddressFormatter.CITY_DISTRICT,
