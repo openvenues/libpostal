@@ -103,6 +103,32 @@ class Number(NumericPhrase):
 
 
 class NumberedComponent(object):
+    NUMERIC = 'numeric'
+    ALPHA = 'alpha'
+    ALPHA_PLUS_NUMERIC = 'alpha_plus_numeric'
+    NUMERIC_PLUS_ALPHA = 'numeric_plus_alpha'
+    DIRECTIONAL = 'directional'
+
+    @classmethod
+    def choose_alphanumeric_type(cls, key, language, country=None):
+        alphanumeric_props = address_config.get_property(key, language, country=country)
+
+        values = []
+        probs = []
+
+        for num_type in (cls.NUMERIC, cls.ALPHA, cls.ALPHA_PLUS_NUMERIC, cls.NUMERIC_PLUS_ALPHA, cls.DIRECTIONAL):
+            key = '{}_probability'.format(num_type)
+            prob = alphanumeric_props.get(key)
+            if prob is not None:
+                values.append(num_type)
+                probs.append(prob)
+
+        probs = cdf(probs)
+        num_type = weighted_choice(values, probs)
+        num_type_props = alphanumeric_props.get(num_type, {})
+
+        return num_type, num_type_props
+
     @classmethod
     def numeric_phrase(cls, key, num, language, country=None, dictionaries=(), strict_numeric=False):
         is_alpha = False
