@@ -8,6 +8,8 @@ from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 
 
 class Floor(NumberedComponent):
+    config_key = 'levels'
+
     # When we don't know the number of floors, use a Zipfian distribution
     # to choose randomly between 1 and max_floors with 1 being much more
     # likely than 2, etc.
@@ -36,43 +38,31 @@ class Floor(NumberedComponent):
 
     @classmethod
     def random(cls, language, country=None, num_floors=None, num_basements=None):
-        level_props = address_config.get_property('levels.alphanumeric', language, country=country)
-        numbering_starts_at = int(address_config.get_property('levels.numbering_starts_at', language, country=country, default=0))
-
-        values = []
-        probs = []
-
-        for num_type in ('numeric', 'alpha', 'alpha_plus_numeric', 'numeric_plus_alpha'):
-            key = '{}_probability'.format(num_type)
-            prob = level_props.get(key)
-            if prob is not None:
-                values.append(num_type)
-                probs.append(prob)
-
-        probs = cdf(probs)
-        num_type = weighted_choice(values, probs)
+        num_type, num_type_props = cls.choose_alphanumeric_type('levels.alphanumeric', language, country=country)
 
         if num_floors is not None:
             number = cls.sample_floors(num_floors, num_basements or 0)
         else:
             number = weighted_choice(cls.numbered_floors, cls.floor_probs_cdf)
 
+        numbering_starts_at = int(address_config.get_property('levels.numbering_starts_at', language, country=country, default=0))
+
         if number >= 0:
             number += numbering_starts_at
 
-        if num_type == 'numeric':
+        if num_type == cls.NUMERIC:
             return safe_decode(number)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             letter = sample_alphabet(alphabet)
-            if num_type == 'alpha':
+            if num_type == cls.ALPHA:
                 return letter
             else:
                 number = weighted_choice(cls.floors_letters, cls.floors_letters_cdf)
 
-                if num_type == 'alpha_plus_numeric':
+                if num_type == cls.ALPHA_PLUS_NUMERIC:
                     return six.u('{}{}').format(letter, number)
-                elif num_type == 'numeric_plus_alpha':
+                elif num_type == cls.NUMERIC_PLUS_ALPHA:
                     return six.u('{}{}').format(number, letter)
 
     @classmethod
