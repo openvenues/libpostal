@@ -14,7 +14,7 @@ from geodata.countries.country_names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
 from geodata.names.normalization import name_affixes
-from geodata.osm.extract import osm_address_components
+from geodata.osm.components import osm_address_components
 from geodata.states.state_abbreviations import state_abbreviations
 
 
