@@ -2,11 +2,14 @@
 import os
 import pystache
 import re
+import six
 import subprocess
 import yaml
 
+from geodata.address_formatting.aliases import Aliases
 from geodata.text.tokenize import tokenize, tokenize_raw, token_types
-from collections import OrderedDict, defaultdict
+from geodata.encoding import safe_decode
+from collections import OrderedDict
 from itertools import ifilter
 
 FORMATTER_GIT_REPO = 'https://github.com/OpenCageData/address-formatting'
@@ -35,80 +38,72 @@ class AddressFormatter(object):
     separator_tag = 'SEP'
     field_separator_tag = 'FSEP'
 
+    CATEGORY = 'category'
+    NEAR = 'near'
     HOUSE = 'house'
     HOUSE_NUMBER = 'house_number'
+    PO_BOX = 'po_box'
+    CARE_OF = 'care_of'
+    BLOCK = 'block'
+    BUILDING = 'building'
+    LEVEL = 'level'
+    UNIT = 'unit'
+    INTERSECTION = 'intersection'
     ROAD = 'road'
     SUBURB = 'suburb'
     CITY_DISTRICT = 'city_district'
     CITY = 'city'
+    ISLAND = 'island'
     STATE = 'state'
     STATE_DISTRICT = 'state_district'
     POSTCODE = 'postcode'
     COUNTRY = 'country'
 
     address_formatter_fields = set([
+        CATEGORY,
+        NEAR,
         HOUSE,
         HOUSE_NUMBER,
+        PO_BOX,
+        CARE_OF,
+        BLOCK,
+        BUILDING,
+        LEVEL,
+        UNIT,
+        INTERSECTION,
         ROAD,
         SUBURB,
         CITY,
         CITY_DISTRICT,
+        ISLAND,
         STATE,
         STATE_DISTRICT,
         POSTCODE,
         COUNTRY,
     ])
 
-    aliases = OrderedDict([
-        ('name', HOUSE),
-        ('addr:housename', HOUSE),
-        ('addr:housenumber', HOUSE_NUMBER),
-        ('addr:house_number', HOUSE_NUMBER),
-        ('addr:street', ROAD),
-        ('addr:city', CITY),
-        ('is_in:city', CITY),
-        ('addr:locality', CITY),
-        ('is_in:locality', CITY),
-        ('addr:municipality', CITY),
-        ('is_in:municipality', CITY),
-        ('addr:hamlet', CITY),
-        ('is_in:hamlet', CITY),
-        ('addr:suburb', SUBURB),
-        ('is_in:suburb', SUBURB),
-        ('addr:neighbourhood', SUBURB),
-        ('is_in:neighbourhood', SUBURB),
-        ('addr:neighborhood', SUBURB),
-        ('is_in:neighborhood', SUBURB),
-        ('addr:district', STATE_DISTRICT),
-        ('is_in:district', STATE_DISTRICT),
-        ('addr:state', STATE),
-        ('is_in:state', STATE),
-        ('addr:province', STATE),
-        ('is_in:province', STATE),
-        ('addr:region', STATE),
-        ('is_in:region', STATE),
-        ('addr:postal_code', POSTCODE),
-        ('addr:postcode', POSTCODE),
-        ('addr:country', COUNTRY),
-        ('addr:country_code', COUNTRY),
-        ('country_code', COUNTRY),
-        ('is_in:country_code', COUNTRY),
-        ('is_in:country', COUNTRY),
-        ('street', ROAD),
-        ('street_name', ROAD),
-        ('residential', ROAD),
-        ('hamlet', CITY),
-        ('neighborhood', SUBURB),
-        ('neighbourhood', SUBURB),
-        ('city_district', CITY_DISTRICT),
-        ('county', STATE_DISTRICT),
-        ('state_code', STATE),
-        ('country_name', COUNTRY),
-        ('postal_code', POSTCODE),
-        ('post_code', POSTCODE),
-    ])
+    aliases = Aliases(
+        OrderedDict([
+            ('street', ROAD),
+            ('street_name', ROAD),
+            ('hamlet', CITY),
+            ('village', CITY),
+            ('neighborhood', SUBURB),
+            ('neighbourhood', SUBURB),
+            ('city_district', CITY_DISTRICT),
+            ('county', STATE_DISTRICT),
+            ('state_code', STATE),
+            ('country_name', COUNTRY),
+            ('postal_code', POSTCODE),
+            ('post_code', POSTCODE),
+        ])
+    )
 
-    prioritized_aliases = {k: i for i, k in enumerate(aliases)}
+    template_address_parts = [HOUSE, HOUSE_NUMBER, ROAD]
+    template_admin_parts = [CITY, STATE, COUNTRY]
+
+    template_address_parts_re = re.compile('|'.join(['\{{{key}\}}'.format(key=key) for key in template_address_parts]))
+    template_admin_parts_re = re.compile('|'.join(['\{{{key}\}}'.format(key=key) for key in template_admin_parts]))
 
     MINIMAL_COMPONENT_KEYS = [
         (ROAD, HOUSE_NUMBER),
@@ -145,55 +140,116 @@ class AddressFormatter(object):
                 config[key] = self.add_postprocessing_tags(value)
         self.config = config
 
-    def component_aliases(self):
-        self.aliases = OrderedDict()
-        self.aliases.update(self.osm_aliases)
-        components = yaml.load_all(open(os.path.join(self.formatter_repo_path,
-                                   'conf', 'components.yaml')))
-        for c in components:
-            name = c['name']
-            for a in c.get('aliases', []):
-                self.aliases[a] = name
-
-    def key_priority(self, key):
-        return self.prioritized_aliases.get(key, len(self.prioritized_aliases))
-
-    def replace_aliases(self, components):
-        replacements = defaultdict(list)
-        values = {}
-        for k in components.keys():
-            new_key = self.aliases.get(k)
-            if new_key and new_key not in components:
-                value = components.pop(k)
-                values[k] = value
-                replacements[new_key].append(k)
-        for key, source_keys in replacements.iteritems():
-            source_keys.sort(key=self.key_priority)
-            value = values[source_keys[0]]
-            components[key] = value
-
     def country_template(self, c):
         return self.config.get(c, self.config['default'])
 
     postprocessing_tags = [
-        (SUBURB, (ROAD,), (CITY_DISTRICT, CITY, STATE_DISTRICT, STATE, POSTCODE, COUNTRY)),
-        (CITY_DISTRICT, (ROAD, SUBURB), (CITY, STATE_DISTRICT, STATE)),
-        (STATE_DISTRICT, (SUBURB, CITY_DISTRICT, CITY), (STATE,))
+        (SUBURB, (ROAD,), (CITY_DISTRICT, CITY, ISLAND, STATE_DISTRICT, STATE, POSTCODE, COUNTRY)),
+        (CITY_DISTRICT, (ROAD, SUBURB), (CITY, ISLAND, STATE_DISTRICT, STATE)),
+        (STATE_DISTRICT, (SUBURB, CITY_DISTRICT, CITY, ISLAND), (STATE,)),
+        (STATE, (SUBURB, CITY_DISTRICT, CITY, ISLAND, STATE_DISTRICT), (COUNTRY,)),
     ]
 
     template_tag_replacements = [
         ('county', STATE_DISTRICT),
     ]
 
-    def add_postprocessing_tags(self, template):
-        is_reverse = False
-        if self.COUNTRY in template and self.ROAD in template:
-            is_reverse = template.index(self.COUNTRY) < template.index(self.ROAD)
-        elif self.STATE in template and self.ROAD in template:
-            is_reverse = template.index(self.STATE) < template.index(self.ROAD)
-        else:
-            raise ValueError('Template did not contain road and {state, country}')
+    def is_reverse(self, key, template):
+        address_parts_match = self.template_address_parts_re.search(template)
+        admin_parts_match = list(self.template_admin_parts_re.finditer(template))
 
+        if not address_parts_match:
+            raise ValueError('Template for {} does not contain any address parts'.format(key))
+        elif not admin_parts_match:
+            raise ValueError('Template for {} does not contain any admin parts'.format(key))
+
+        # last instance of city/state/country occurs before the first instance of house_number/road
+        return admin_parts_match[-1].start() < address_parts_match.start()
+
+    def build_first_of_template(self, keys):
+        """ For constructing """
+        return '{{{{#first}}}} {keys} {{{{/first}}}}'.format(keys=' || '.join(['{{{{{{{key}}}}}}}'.format(key=key) for key in keys]))
+
+    def insert_component(self, template, tag, before=(), after=(), separate=True, is_reverse=False):
+        if not before and not after:
+            return
+
+        tag_match = re.compile('\{{{key}\}}'.format(key=tag)).search(template)
+
+        if before:
+            before_match = re.compile('|'.join(['\{{{key}\}}'.format(key=key) for key in before])).search(template)
+            if before_match and tag_match and before_match.start() > tag_match.start():
+                return template
+
+        if after:
+            after_match = re.compile('|'.join(['\{{{key}\}}'.format(key=key) for key in after])).search(template)
+            if after_match and tag_match and tag_match.start() > after_match.start():
+                return template
+
+        before = set(before)
+        after = set(after)
+
+        key_added = False
+        skip_next_non_token = False
+        new_components = []
+
+        tag_token = '{{{{{{{key}}}}}}}'.format(key=tag)
+
+        parsed = pystache.parse(safe_decode(template))
+        num_tokens = len(parsed._parse_tree)
+        for i, el in enumerate(parsed._parse_tree):
+
+            if hasattr(el, 'parsed'):
+                keys = [e.key for e in el.parsed._parse_tree if hasattr(e, 'key')]
+                if set(keys) & before and not key_added:
+                    token = new_components[-1] if new_components and '{' not in new_components[-1] else '\n'
+                    new_components.extend([tag_token, token])
+                    key_added = True
+
+                keys = [k for k in keys if self.aliases.get(k, k) != tag]
+                if keys:
+                    new_components.append(self.build_first_of_template(keys))
+                else:
+                    while new_components and '{' not in new_components[-1]:
+                        new_components.pop()
+                    continue
+
+                if set(keys) & after and not key_added:
+                    token = '\n'
+                    if i < num_tokens - 1 and isinstance(parsed._parse_tree[i + 1], six.string_types):
+                        token = parsed._parse_tree[i + 1]
+                    new_components.extend([token, tag_token])
+                    key_added = True
+
+            elif hasattr(el, 'key'):
+                if el.key == tag:
+                    skip_next_non_token = True
+                    continue
+
+                if el.key in before and not key_added:
+                    token = '\n'
+                    if new_components and '{' not in new_components[-1]:
+                        token = new_components[-1]
+                    new_components.extend([tag_token, token])
+                    key_added = True
+
+                new_components.append('{{{{{{{key}}}}}}}'.format(key=el.key))
+
+                if el.key in after and not key_added:
+                    token = '\n'
+                    if i < num_tokens - 1 and isinstance(parsed._parse_tree[i + 1], six.string_types):
+                        token = parsed._parse_tree[i + 1]
+                    new_components.extend([token, tag_token])
+                    key_added = True
+            elif not skip_next_non_token:
+                new_components.append(el)
+
+            skip_next_non_token = False
+
+        return ''.join(new_components)
+
+    def add_postprocessing_tags(self, template):
+        is_reverse = self.is_reverse(template)
         for key, pre_keys, post_keys in self.postprocessing_tags:
             key_included = key in template
             new_components = []
