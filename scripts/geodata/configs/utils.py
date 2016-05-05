@@ -17,15 +17,43 @@ class DoesNotExist:
     pass
 
 
-def nested_get(obj, keys):
+def nested_get(obj, keys, default=DoesNotExist):
     if len(keys) == 0:
         return obj
     try:
         for key in keys[:-1]:
             obj = obj.get(key, {})
             if not hasattr(obj, 'items'):
-                return DoesNotExist
+                return default
         key = keys[-1]
-        return obj.get(key, DoesNotExist)
+        return obj.get(key, default)
     except AttributeError:
-        return DoesNotExist
+        return default
+
+
+def alternative_probabilities(properties):
+    if properties is None:
+        return None
+
+    probs = []
+    alternatives = []
+
+    if 'probability' in properties:
+        prob = properties['probability']
+        props = properties['default']
+        probs.append(prob)
+        alternatives.append(props)
+    elif 'alternatives' not in properties:
+        prob = 1.0
+        props = properties['default']
+        probs.append(prob)
+        alternatives.append(props)
+
+    alts = properties.get('alternatives', [])
+    for alt in alts:
+        prob = alt.get('probability', 1.0 / len(alts))
+        props = alt['alternative']
+        probs.append(prob)
+        alternatives.append(props)
+
+    return alternatives, probs
