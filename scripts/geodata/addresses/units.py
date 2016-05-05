@@ -50,43 +50,29 @@ class Unit(NumberedComponent):
 
     @classmethod
     def random(cls, language, country=None, num_floors=None, num_basements=None):
-        unit_props = address_config.get_property('units.alphanumeric', language, country=country)
-
-        values = []
-        probs = []
-
-        for num_type in ('numeric', 'alpha', 'alpha_plus_numeric', 'numeric_plus_alpha'):
-            key = '{}_probability'.format(num_type)
-            prob = unit_props.get(key)
-            if prob is not None:
-                values.append(num_type)
-                probs.append(prob)
-
-        probs = cdf(probs)
-        num_type = weighted_choice(values, probs)
-        num_type_props = unit_props.get(num_type, {})
+        num_type, num_type_props = cls.choose_alphanumeric_type('units.alphanumeric', language, country=country)
 
         if num_floors is not None:
             number = cls.for_floor(Floor.sample_positive_floors(num_floors))
         else:
             number = weighted_choice(cls.numbered_units, cls.unit_probs_cdf)
 
-        if num_type == 'numeric':
+        if num_type == cls.NUMERIC:
             return safe_decode(number)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             letter = sample_alphabet(alphabet)
-            if num_type == 'alpha':
+            if num_type == cls.ALPHA:
                 return safe_decode(letter)
             else:
                 number = weighted_choice(cls.positive_units_letters, cls.positive_units_letters_cdf)
 
-                whitespace_probability = unit_props.get('{}_whitespace_probability'.format(num_type))
+                whitespace_probability = num_type_props.get('{}_whitespace_probability'.format(num_type))
                 whitespace_phrase = six.u(' ') if whitespace_probability and random.random() < whitespace_probability else six.u('')
 
-                if num_type == 'alpha_plus_numeric':
+                if num_type == cls.ALPHA_PLUS_NUMERIC:
                     return six.u('{}{}{}').format(letter, whitespace_phrase, number)
-                elif num_type == 'numeric_plus_alpha':
+                elif num_type == cls.NUMERIC_PLUS_ALPHA:
                     return six.u('{}{}{}').format(number, whitespace_phrase, letter)
 
     @classmethod
