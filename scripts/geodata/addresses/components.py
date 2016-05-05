@@ -396,7 +396,7 @@ class AddressExpander(object):
                              simple_country_key_prob=0.4,
                              replace_with_non_local_prob=0.4,
                              join_state_district_prob=0.5,
-                             expand_state_prob=0.7
+                             abbreviate_state_prob=0.7
                              ):
         '''
         OSM boundaries
@@ -475,8 +475,8 @@ class AddressExpander(object):
                     else:
                         val = random.choice(vals)
 
-                    if component == AddressFormatter.STATE and random.random() < expand_state_prob:
-                        val = state_abbreviations.get_full_name(country, language,  val, default=val)
+                    if component == AddressFormatter.STATE and random.random() < abbreviate_state_prob:
+                        val = state_abbreviations.get_abbreviation(country, language,  val, default=val)
 
                     address_components[component] = val
 
@@ -783,7 +783,7 @@ class AddressExpander(object):
                                   alpha_3_iso_code_prob=0.0,
                                   alpha_2_iso_code_prob=0.0,
                                   replace_with_non_local_prob=0.0,
-                                  expand_state_prob=1.0)
+                                  abbreviate_state_prob=0.0)
 
         city = self.quattroshapes_city(address_components, latitude, longitude, language, non_local_language=non_local_language)
 
