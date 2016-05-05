@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 if [ "$#" -lt 3 ]; then
     echo "Usage: ./libpostal_data [upload|download] [base|geodb] data_dir"
     exit 1
