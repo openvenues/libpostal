@@ -701,6 +701,8 @@ class AddressExpander(object):
         osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
         neighborhoods = self.neighborhood_components(latitude, longitude)
 
+        all_languages = set([l['lang'] for l in candidate_languages])
+
         all_osm_components = osm_components + neighborhoods
         self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
@@ -712,13 +714,10 @@ class AddressExpander(object):
         if city:
             address_components[AddressFormatter.CITY] = city
 
-
         self.add_neighborhoods(address_components, neighborhoods,
                                osm_suffix=osm_suffix)
 
         street = address_components.get(AddressFormatter.ROAD)
-
-        all_languages = set([l['lang'] for l in candidate_languages])
 
         self.replace_name_affixes(address_components)
 
@@ -771,6 +770,8 @@ class AddressExpander(object):
 
         osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
         neighborhoods = self.neighborhood_components(latitude, longitude)
+
+        all_languages = set([l['lang'] for l in candidate_languages])
 
         all_osm_components = osm_components + neighborhoods
         self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
