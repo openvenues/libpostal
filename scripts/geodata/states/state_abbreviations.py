@@ -40,13 +40,13 @@ class StateAbbreviations(object):
     def get_abbreviation(self, country, language, state, default=None):
         value = nested_get(self.abbreviations, (country.lower(), state.lower(), language.lower()))
         if value is DoesNotExist:
-            return None
+            return default
         return value
 
     def get_full_name(self, country, language, state, default=None):
         value = nested_get(self.full_names, (country.lower(), state.lower(), language.lower()))
         if value is DoesNotExist:
-            return None
+            return default
         return value
 
 
