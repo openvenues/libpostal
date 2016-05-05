@@ -9,6 +9,7 @@ from geodata.address_formatting.aliases import Aliases
 
 from geodata.addresses.floors import Floor
 from geodata.addresses.units import Unit
+from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.countries.country_names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
