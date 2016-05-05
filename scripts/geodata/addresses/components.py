@@ -203,6 +203,7 @@ class AddressExpander(object):
             component_names = self.all_names(props, languages=languages)
             names |= component_names
 
+            is_state = False
             for k, v in six.iteritems(props):
                 normalized_key = osm_address_components.get_component(country, k, v)
                 if not normalized_key:
@@ -210,7 +211,11 @@ class AddressExpander(object):
                 for cn in component_names:
                     components[cn.lower()].add(normalized_key)
 
-                if normalized_key == AddressFormatter.STATE:
+                if normalized_key == AddressFormatter.STATE and not is_state:
+                    is_state = True
+
+            if is_state:
+                for state in component_names:
                     for language in languages:
                         state_code = state_abbreviations.get_abbreviation(country, language, state)
                         if state_code:
