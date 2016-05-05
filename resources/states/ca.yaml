@@ -1,37 +1,37 @@
-ab:
+AB:
     fr: Alberta
     en: Alberta
-bc:
+BC:
     fr: Colombie-Britannique
     en: British Columbia
-mb:
+MB:
     fr: Manitoba
     en: Manitoba
-nb:
+NB:
     fr: Nouveau-Brunswick
     en: New Brunswick
-nl:
+NL:
     fr: Terre-Neuve-et-Labrador
     en: Newfoundland and Labrador
-ns:
+NS:
     fr: Nouvelle-Écosse
     en: Nova Scotia
-nt:
+NT:
     fr: Territoires du Nord-Ouest
     en: Northwest Territories
-nu:
+NU:
     fr: Nunavut
     en: Nunavut
-on:
+ON:
     fr: Ontario
     en: Ontario
-pe:
+PE:
     fr: Île-du-Prince-Édouard
     en: Prince Edward Island
-qc:
+QC:
     fr: Québec
     en: Quebec
-sk:
+SK:
     fr: Saskatchewan
     en: Saskatchewan
 yt:
