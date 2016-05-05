@@ -272,16 +272,16 @@ class AddressExpander(object):
         return name
 
     def normalize_place_names(self, address_components, osm_components, country=None, languages=None):
-        components = {}
-
         for key in list(address_components):
             name = address_components[key]
-            if key in self.BOUNDARY_COMPONENTS:
+            if key in set(self.BOUNDARY_COMPONENTS):
                 name = self.normalized_place_name(name, key, osm_components,
                                                   country=country, languages=languages)
 
-            components[key] = name
-        return components
+                if name is not None:
+                    address_components[key] = name
+                else:
+                    address_components.pop(key)
 
     def normalize_address_components(self, components):
         address_components = {k: v for k, v in components.iteritems()
@@ -699,6 +699,10 @@ class AddressExpander(object):
         osm_suffix = self.tag_suffix(language, non_local_language, more_than_one_official_language)
 
         osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
+        neighborhoods = self.neighborhood_components(latitude, longitude)
+
+        all_osm_components = osm_components + neighborhoods
+        self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
         self.add_admin_boundaries(address_components, osm_components, country, language,
                                   non_local_language=non_local_language,
@@ -708,7 +712,6 @@ class AddressExpander(object):
         if city:
             address_components[AddressFormatter.CITY] = city
 
-        neighborhoods = self.neighborhood_components(latitude, longitude)
 
         self.add_neighborhoods(address_components, neighborhoods,
                                osm_suffix=osm_suffix)
@@ -716,9 +719,6 @@ class AddressExpander(object):
         street = address_components.get(AddressFormatter.ROAD)
 
         all_languages = set([l['lang'] for l in candidate_languages])
-
-        all_osm_components = osm_components + neighborhoods
-        self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
         self.replace_name_affixes(address_components)
 
@@ -770,6 +770,10 @@ class AddressExpander(object):
         osm_suffix = self.tag_suffix(language, non_local_language, more_than_one_official_language)
 
         osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
+        neighborhoods = self.neighborhood_components(latitude, longitude)
+
+        all_osm_components = osm_components + neighborhoods
+        self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
         self.add_admin_boundaries(address_components, osm_components, country, language,
                                   osm_suffix=osm_suffix,
