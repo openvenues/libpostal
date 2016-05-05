@@ -266,14 +266,14 @@ class AddressExpander(object):
 
         return name
 
-    def normalize_place_names(self, address_components, osm_components, country=None, languages=None, whitespace=True):
+    def normalize_place_names(self, address_components, osm_components, country=None, languages=None):
         components = {}
 
         for key in list(address_components):
             name = address_components[key]
             if key in self.BOUNDARY_COMPONENTS:
-                name = self.normalized_place_name(name, key, osm_components, country=country,
-                                                  languages=languages, whitespace=whitespace)                
+                name = self.normalized_place_name(name, key, osm_components,
+                                                  country=country, languages=languages)
 
             components[key] = name
         return components
