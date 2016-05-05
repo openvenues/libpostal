@@ -13,7 +13,7 @@ from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.countries.country_names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
-from geodata.names.normalization import replace_name_prefixes, replace_name_suffixes
+from geodata.names.normalization import name_affixes
 from geodata.osm.extract import osm_address_components
 from geodata.states.state_abbreviations import state_abbreviations
 
@@ -590,18 +590,21 @@ class AddressExpander(object):
             if component not in address_components and random.random() < add_neighborhood_prob:
                 address_components[component] = neighborhoods[0]
 
-    def replace_name_affixes(self, address_components, replacement_prob=0.6):
+    def replace_name_affixes(self, address_components, language, replacement_prob=0.6):
         '''
         Name normalization
         ------------------
 
         Probabilistically strip standard prefixes/suffixes e.g. "London Borough of"
         '''
-        for component in self.BOUNDARY_COMPONENTS:
-            name = address_components.get(component)
+        for component in list(address_components):
+            if component not in self.BOUNDARY_COMPONENTS:
+                continue
+            name = address_components[component]
             if not name:
                 continue
-            replacement = replace_name_prefixes(replace_name_suffixes(name))
+            replacement = name_affixes.replace_name_suffixes(name, language)
+            replacement = name_affixes.replace_name_prefixes(replacement, language)
             if replacement != name and random.random() < replacement_prob:
                 address_components[component] = replacement
 
@@ -719,7 +722,7 @@ class AddressExpander(object):
 
         street = address_components.get(AddressFormatter.ROAD)
 
-        self.replace_name_affixes(address_components)
+        self.replace_name_affixes(address_components, non_local_language or language)
 
         self.replace_names(address_components)
 
@@ -795,7 +798,7 @@ class AddressExpander(object):
         self.add_neighborhoods(address_components, neighborhoods,
                                osm_suffix=osm_suffix)
 
-        self.replace_name_affixes(address_components)
+        self.replace_name_affixes(address_components,  non_local_language or language)
 
         self.replace_names(address_components)
 
