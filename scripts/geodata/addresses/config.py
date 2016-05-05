@@ -7,7 +7,7 @@ import yaml
 from collections import Mapping
 
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
-from geodata.configs.utils import nested_get, DoesNotExist, recursive_merge
+from geodata.configs.utils import nested_get, DoesNotExist, recursive_merge, alternative_probabilities
 from geodata.math.sampling import cdf, check_probability_distribution
 
 
@@ -77,21 +77,15 @@ class AddressConfig(object):
             if properties is None:
                 return None, None
 
-            probs = []
-            alternatives = []
+            alternatives, probs = alternative_probabilities(properties)
 
-            if 'probability' in properties:
-                prob = properties['probability']
-                props = properties['default']
+            forms = []
+            form_probs = []
+
+            for props, prob in zip(alternatives, probs):
                 phrases, phrase_probs = self.form_probabilities(props, language, dictionaries=dictionaries)
-                probs.extend([prob * p for p in phrase_probs])
-                alternatives.extend([(p, props) for p in phrases])
-            elif 'alternatives' not in properties:
-                prob = 1.0
-                props = properties['default']
-                phrases, phrase_probs = self.form_probabilities(props, language, dictionaries=dictionaries)
-                probs.extend([prob * p for p in phrase_probs])
-                alternatives.extend([(p, props) for p in phrases])
+                forms.extend([(p, props) for p in phrases])
+                form_probs.extend([prob * p for p in phrase_probs])
 
             sample_probability = properties.get('sample_probability')
             if sample_probability is not None:
@@ -102,25 +96,17 @@ class AddressConfig(object):
                         sample_phrases.append(canonical)
                         sample_phrases.extend(surface_forms)
                 # Note: use the outer properties dictionary e.g. units.alphanumeric
-                alternatives.extend([(p, properties) for p in sample_phrases])
-                probs.extend([float(sample_probability) / len(sample_phrases)] * len(sample_phrases))
-
-            alts = properties.get('alternatives', [])
-            for alt in alts:
-                prob = alt.get('probability', 1.0 / len(alts))
-                props = alt['alternative']
-                phrases, phrase_probs = self.form_probabilities(props, language, dictionaries=dictionaries)
-                probs.extend([prob * p for p in phrase_probs])
-                alternatives.extend([(p, props) for p in phrases])
+                forms.extend([(p, properties) for p in sample_phrases])
+                form_probs.extend([float(sample_probability) / len(sample_phrases)] * len(sample_phrases))
 
             try:
-                check_probability_distribution(probs)
+                check_probability_distribution(form_probs)
             except AssertionError:
-                print 'values were: {}'.format(alternatives)
+                print 'values were: {}'.format(forms)
                 raise
 
-            probs_cdf = cdf(probs)
-            self.cache[key] = (alternatives, probs_cdf)
+            form_probs_cdf = cdf(form_probs)
+            self.cache[key] = (forms, form_probs_cdf)
         return self.cache[key]
 
     def form_probabilities(self, properties, language, dictionaries=()):
