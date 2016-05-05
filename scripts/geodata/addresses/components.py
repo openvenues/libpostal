@@ -235,7 +235,7 @@ class AddressExpander(object):
 
         for is_phrase, phrase_tokens, value in phrases:
             if is_phrase:
-                whitespace = not any((c in token_types.IDEOGRAPHIC_CHAR, token_types.IDEOGRAPHIC_NUMBER) for t, c in phrase_tokens)
+                whitespace = not any((c in (token_types.IDEOGRAPHIC_CHAR, token_types.IDEOGRAPHIC_NUMBER) for t, c in phrase_tokens))
                 join_phrase = six.u(' ') if whitespace else six.u('')
 
                 if num_phrases > 0:
