@@ -4,6 +4,7 @@ import random
 from collections import defaultdict
 
 from geodata.address_formatting.formatter import AddressFormatter
+from geodata.address_formatting.aliases import Aliases
 
 from geodata.addresses.floors import Floor
 from geodata.addresses.units import Unit
@@ -12,7 +13,7 @@ from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
 from geodata.names.normalization import replace_name_prefixes, replace_name_suffixes
 from geodata.osm.extract import osm_address_components
-from geodata.states.state_abbreviations import STATE_ABBREVIATIONS, STATE_EXPANSIONS
+from geodata.states.state_abbreviations import state_abbreviations
 
 
 class AddressExpander(object):
@@ -24,7 +25,7 @@ class AddressExpander(object):
     directly to AddressFormatter.format_address to produce training examples.
 
     There are several steps in expanding an address including reverse geocoding
-    to polygons, disambiguating which language the address uses, stripping standard 
+    to polygons, disambiguating which language the address uses, stripping standard
     prefixes like "London Borough of", pruning duplicates like "Antwerpen, Antwerpen, Antwerpen".
 
     Usage:
@@ -48,6 +49,7 @@ class AddressExpander(object):
     rare_components = {
         AddressFormatter.SUBURB,
         AddressFormatter.CITY_DISTRICT,
+        AddressFormatter.ISLAND,
         AddressFormatter.STATE_DISTRICT,
         AddressFormatter.STATE,
     }
@@ -56,6 +58,7 @@ class AddressExpander(object):
         AddressFormatter.SUBURB,
         AddressFormatter.CITY_DISTRICT,
         AddressFormatter.CITY,
+        AddressFormatter.ISLAND,
         AddressFormatter.STATE_DISTRICT,
         AddressFormatter.STATE
     )
@@ -74,6 +77,10 @@ class AddressExpander(object):
             'United Kingdom': ('UK', 0.3),
         }
     }
+
+    ALL_OSM_NAME_KEYS = set(['name', 'name:simple',
+                             'ISO3166-1:alpha2', 'ISO3166-1:alpha3',
+                             'short_name', 'alt_name', 'official_name'])
 
     def __init__(self, osm_admin_rtree, language_rtree, neighborhoods_rtree, buildings_rtree, subdivisions_rtree, quattroshapes_rtree, geonames):
         self.osm_admin_rtree = osm_admin_rtree
@@ -130,7 +137,10 @@ class AddressExpander(object):
 
     def pick_random_name_key(self, suffix=''):
         '''
-        
+        Random name
+        -----------
+
+        Pick a name key from OSM
         '''
         name_key = ''.join(('name', suffix))
         raw_name_key = 'name'
@@ -156,17 +166,96 @@ class AddressExpander(object):
             key = official_name_key
             raw_key = raw_official_name_key
         else:
-            # 10% of the time use the official name
+            # 10% of the time use the alt name
             key = alt_name_key
             raw_key = raw_alt_name_key
 
         return key, raw_key
 
-    def contains_multiple_place_names()
+    def all_names(self, props, languages=None):
+        names = set()
+        for k, v in six.iteritems(props):
+            if k in self.ALL_OSM_NAME_KEYS:
+                names.add(v)
+            elif ':' in k:
+                k, qual = k.split(':', 1)
+                if k in self.ALL_OSM_NAME_KEYS and qual.split('_', 1)[0] in languages:
+                    names.add(v)
+        return names
 
-    def normalize_address_components(self, value):
-        address_components = {k: v for k, v in value.iteritems() if k in self.formatter.aliases}
-        self.formatter.replace_aliases(address_components)
+    def normalized_place_name(self, name, tag, osm_components, country=None, state=None, languages=None, whitespace=True):
+        '''
+        Multiple place names
+        --------------------
+
+        This is to help with things like  addr:city="New York NY"
+        '''
+
+        names = set()
+
+        components = defaultdict(set)
+        for props in osm_components:
+            component_names = self.all_names(props, languages=languages)
+            names |= component_names
+
+            for k, v in six.iteritems(props):
+                normalized_key = osm_address_components.get_component(country, k, v)
+                for cn in component_names:
+                    components[cn.lower()].add(normalized_key)
+
+        if country and languages and state:
+            for language in languages:
+                state_code = state_abbreviations.get_abbreviation(country, language, state)
+                if state_code:
+                    names.add(state_code.upper())
+
+        phrase_filter = PhraseFilter([(n.lower(), '') for n in names])
+
+        tokens = tokenize(name)
+        tokens_lower = [(t.lower(), c) for t, c in tokens]
+        phrases = list(phrase_filter.filter(tokens_lower))
+
+        num_phrases = 0
+        total_tokens = 0
+        for is_phrase, phrase_tokens, value in phrases:
+            if is_phrase:
+                join_phrase = six.u(' ') if whitespace else six.u('')
+                if num_phrases > 0:
+                    return join_phrase.join([t for t, c in tokens[:total_tokens]])
+                elif num_phrases == 0 and total_tokens > 0:
+                    phrase = join_phrase.join([t for t, c in phrase_tokens])
+                    if tag not in components.get(phrase, set()):
+                        return None
+
+                current_phrase = tokens[total_tokens:total_tokens + len(phrase_tokens)]
+                total_tokens += len(phrase_tokens)
+                num_phrases += 1
+            else:
+                total_tokens += 1
+
+        # If the name contains a comma, stop and only use the phrase before the comma
+        if ',' in name:
+            return name.split(',')[0].strip()
+
+        return name
+
+    def normalize_place_names(self, address_components, osm_components, country=None, languages=None, whitespace=True):
+        components = {}
+        state = address_components.get(AddressFormatter.STATE, None)
+
+        for key in list(address_components):
+            name = address_components[key]
+            if key in self.BOUNDARY_COMPONENTS:
+                name = self.normalized_place_name(name, key, osm_components, country=country,
+                                                  state=state, languages=languages, whitespace=whitespace)                
+
+            components[key] = name
+        return components
+
+    def normalize_address_components(self, components):
+        address_components = {k: v for k, v in components.iteritems()
+                              if k in self.formatter.aliases}
+        self.formatter.aliases.replace(address_components)
         return address_components
 
     def country_name(self, address_components, country_code, language,
@@ -247,7 +336,7 @@ class AddressExpander(object):
         address_state = address_components.get(AddressFormatter.STATE)
 
         if address_state and country and not non_local_language:
-            state_full_name = STATE_ABBREVIATIONS.get(country.upper(), {}).get(address_state.upper(), {}).get(language)
+            state_full_name = state_abbreviations.get_full_name(country, language, address_state)
 
             if state_full_name and random.random() < state_full_name_prob:
                 address_state = state_full_name
@@ -266,8 +355,8 @@ class AddressExpander(object):
         return osm_suffix
 
     def add_admin_boundaries(self, address_components,
+                             osm_components,
                              country, language,
-                             latitude, longitude,
                              osm_suffix='',
                              non_local_language=None,
                              random_key=True,
@@ -293,8 +382,6 @@ class AddressExpander(object):
         Since addresses found on the web may have the same properties, we
         include these qualifiers in the training data.
         '''
-
-        osm_components = self.osm_reverse_geocoded_components(country, latitude, longitude)
 
         name_key = ''.join(('name', osm_suffix))
         raw_name_key = 'name'
@@ -352,12 +439,13 @@ class AddressExpander(object):
                 if component not in address_components or (non_local_language and random.random() < replace_with_non_local_prob):
                     if component == AddressFormatter.STATE_DISTRICT and random.random() < join_state_district_prob:
                         num = random.randrange(1, len(vals) + 1)
-                        val = u', '.join(vals[:num])
+                        val = six.u(', ').join(vals[:num])
                     else:
                         val = random.choice(vals)
 
                     if component == AddressFormatter.STATE and random.random() < expand_state_prob:
-                        val = STATE_EXPANSIONS.get(country.upper(), {}).get(val, val)
+                        val = state_abbreviations.get_full_name(country, language,  val, default=val)
+
                     address_components[component] = val
 
     def quattroshapes_city(self, address_components,
@@ -409,8 +497,11 @@ class AddressExpander(object):
 
         return city
 
+    def neighborhood_components(self, latitude, longitude):
+        return self.neighborhoods_rtree.point_in_poly(latitude, longitude, return_all=True)
+
     def add_neighborhoods(self, address_components,
-                          latitude, longitude,
+                          neighborhoods,
                           osm_suffix='',
                           add_prefix_prob=0.5,
                           add_neighborhood_prob=0.5):
@@ -426,7 +517,6 @@ class AddressExpander(object):
         on the whole of better quality).
         '''
 
-        neighborhoods = self.neighborhoods_rtree.point_in_poly(latitude, longitude, return_all=True)
         neighborhood_levels = defaultdict(list)
 
         name_key = ''.join(('name', osm_suffix))
@@ -445,7 +535,7 @@ class AddressExpander(object):
                 name_prefix = neighborhood.get('name:prefix')
 
                 if name_prefix and random.random() < add_prefix_prob:
-                    name = u' '.join([name_prefix, name])
+                    name = six.u(' ').join([name_prefix, name])
 
             if not name:
                 continue
@@ -468,7 +558,7 @@ class AddressExpander(object):
             if component not in address_components and random.random() < add_neighborhood_prob:
                 address_components[component] = neighborhoods[0]
 
-    def normalize_names(self, address_components, replacement_prob=0.6):
+    def replace_name_affixes(self, address_components, replacement_prob=0.6):
         '''
         Name normalization
         ------------------
@@ -576,7 +666,9 @@ class AddressExpander(object):
 
         osm_suffix = self.tag_suffix(language, non_local_language, more_than_one_official_language)
 
-        self.add_admin_boundaries(address_components, country, language, latitude, longitude,
+        osm_components = self.osm_reverse_geocoded_components(country, latitude, longitude)
+
+        self.add_admin_boundaries(address_components, osm_components, country, language,
                                   non_local_language=non_local_language,
                                   osm_suffix=osm_suffix)
 
@@ -584,12 +676,17 @@ class AddressExpander(object):
         if city:
             address_components[AddressFormatter.CITY] = city
 
-        self.add_neighborhoods(address_components, latitude, longitude,
+        neighborhoods = self.neighborhood_components(latitude, longitude)
+
+        self.add_neighborhoods(address_components, neighborhoods,
                                osm_suffix=osm_suffix)
 
         street = address_components.get(AddressFormatter.ROAD)
 
-        self.normalize_names(address_components)
+        all_osm_components = osm_components + neighborhoods
+        self.normalize_place_names(address_components, all_osm_components, country=country)
+
+        self.replace_name_affixes(address_components)
 
         self.replace_names(address_components)
 
@@ -638,24 +735,33 @@ class AddressExpander(object):
 
         osm_suffix = self.tag_suffix(language, non_local_language, more_than_one_official_language)
 
-        self.add_osm_boundaries(address_components, country, language, latitude, longitude,
-                                osm_suffix=osm_suffix,
-                                non_local_language=non_local_language,
-                                random_key=False,
-                                alpha_3_iso_code_prob=0.0,
-                                alpha_2_iso_code_prob=0.0,
-                                replace_with_non_local_prob=0.0,
-                                expand_state_prob=1.0)
+        osm_components = self.osm_reverse_geocoded_components(country, latitude, longitude)
+
+        self.add_admin_boundaries(address_components, osm_components, country, language,
+                                  osm_suffix=osm_suffix,
+                                  non_local_language=non_local_language,
+                                  random_key=False,
+                                  alpha_3_iso_code_prob=0.0,
+                                  alpha_2_iso_code_prob=0.0,
+                                  replace_with_non_local_prob=0.0,
+                                  expand_state_prob=1.0)
 
         city = self.quattroshapes_city(address_components, latitude, longitude, language, non_local_language=non_local_language)
 
         if city:
             address_components[AddressFormatter.CITY] = city
 
-        self.add_neighborhoods(address_components, latitude, longitude,
+        neighborhoods = self.neighborhood_components(latitude, longitude)
+
+        self.add_neighborhoods(address_components, neighborhoods,
                                osm_suffix=osm_suffix)
 
-        self.normalize_names(address_components)
+        all_osm_components = osm_components + neighborhoods
+        self.normalize_place_names(address_components, all_osm_components, country=country)
+
+        self.replace_name_affixes(address_components)
+
+        self.replace_names(address_components)
 
         self.prune_duplicate_names(address_components)
 
