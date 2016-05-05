@@ -100,9 +100,9 @@ class AddressExpander(object):
     def osm_reverse_geocoded_components(self, latitude, longitude):
         return self.osm_admin_rtree.point_in_poly(latitude, longitude, return_all=True)
 
-    def normalized_osm_components(self, country, components):
+    def normalized_osm_components(self, country, osm_components):
         components = defaultdict(list)
-        for props in components:
+        for props in osm_components:
             name = props.get('name')
             if not name:
                 continue
@@ -692,10 +692,6 @@ class AddressExpander(object):
         if address_country:
             address_components[AddressFormatter.COUNTRY] = address_country
 
-        address_state = self.state_name(address_components, country, language, non_local_language=non_local_language)
-        if address_state:
-            address_components[AddressFormatter.STATE] = address_state
-
         osm_suffix = self.tag_suffix(language, non_local_language, more_than_one_official_language)
 
         osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
@@ -716,6 +712,10 @@ class AddressExpander(object):
 
         self.add_neighborhoods(address_components, neighborhoods,
                                osm_suffix=osm_suffix)
+
+        address_state = self.state_name(address_components, country, language, non_local_language=non_local_language)
+        if address_state:
+            address_components[AddressFormatter.STATE] = address_state
 
         street = address_components.get(AddressFormatter.ROAD)
 
@@ -795,10 +795,9 @@ class AddressExpander(object):
         self.add_neighborhoods(address_components, neighborhoods,
                                osm_suffix=osm_suffix)
 
-        all_languages = set([l['lang'] for l in candidate_languages])
-
-        all_osm_components = osm_components + neighborhoods
-        self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
+        address_state = self.state_name(address_components, country, language, non_local_language=non_local_language)
+        if address_state:
+            address_components[AddressFormatter.STATE] = address_state
 
         self.replace_name_affixes(address_components)
 
