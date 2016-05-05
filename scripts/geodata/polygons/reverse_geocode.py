@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 '''
-reverse_geocoder.py
+reverse_geocode.py
 -------------------
 
 In-memory reverse geocoder using polygons from Quattroshapes or OSM.
