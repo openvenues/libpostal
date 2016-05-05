@@ -5,7 +5,6 @@ import six
 import ujson as json
 
 from bisect import bisect_left
-from collections import defaultdict, OrderedDict
 from leveldb import LevelDB
 from itertools import izip, groupby
 
