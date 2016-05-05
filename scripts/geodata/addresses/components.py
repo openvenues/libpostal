@@ -200,6 +200,8 @@ class AddressExpander(object):
 
             for k, v in six.iteritems(props):
                 normalized_key = osm_address_components.get_component(country, k, v)
+                if not normalized_key:
+                    continue
                 for cn in component_names:
                     components[cn.lower()].add(normalized_key)
 
@@ -217,17 +219,33 @@ class AddressExpander(object):
 
         num_phrases = 0
         total_tokens = 0
+        current_phrase_start = 0
+        current_phrase_len = 0
+        current_phrase = []
+
         for is_phrase, phrase_tokens, value in phrases:
             if is_phrase:
                 join_phrase = six.u(' ') if whitespace else six.u('')
+
                 if num_phrases > 0:
+                    current_phrase_tokens = tokens_lower[current_phrase_start:current_phrase_start + current_phrase_len]
+
+                    current_phrase = join_phrase.join([t for t, c in current_phrase_tokens])
+                    # Handles cases like addr:city="Harlem" when Harlem is a neighborhood
+                    tags = components.get(current_phrase, set())
+                    if tags and tag not in tags:
+                        return None
+
+                    # Return phrase with original capitalization
                     return join_phrase.join([t for t, c in tokens[:total_tokens]])
                 elif num_phrases == 0 and total_tokens > 0:
                     phrase = join_phrase.join([t for t, c in phrase_tokens])
                     if tag not in components.get(phrase, set()):
                         return None
 
-                current_phrase = tokens[total_tokens:total_tokens + len(phrase_tokens)]
+                current_phrase_start = total_tokens
+                current_phrase_len = len(phrase_tokens)
+
                 total_tokens += len(phrase_tokens)
                 num_phrases += 1
             else:
