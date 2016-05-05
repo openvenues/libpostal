@@ -97,9 +97,12 @@ class AddressExpander(object):
         for key in ignore_keys:
             value.pop(key, None)
 
-    def osm_reverse_geocoded_components(self, country, latitude, longitude):
+    def osm_reverse_geocoded_components(self, latitude, longitude):
+        return self.osm_admin_rtree.point_in_poly(latitude, longitude, return_all=True)
+
+    def normalized_osm_components(self, country, components):
         components = defaultdict(list)
-        for props in self.osm_admin_rtree.point_in_poly(latitude, longitude, return_all=True):
+        for props in components:
             name = props.get('name')
             if not name:
                 continue
@@ -415,6 +418,7 @@ class AddressExpander(object):
         iso_code3_key = 'ISO3166-1:alpha3'
 
         if osm_components:
+            osm_components = self.normalized_osm_components(country, osm_components)
             poly_components = defaultdict(list)
 
             existing_city_name = address_components.get(AddressFormatter.CITY)
@@ -689,7 +693,7 @@ class AddressExpander(object):
 
         osm_suffix = self.tag_suffix(language, non_local_language, more_than_one_official_language)
 
-        osm_components = self.osm_reverse_geocoded_components(country, latitude, longitude)
+        osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
 
         self.add_admin_boundaries(address_components, osm_components, country, language,
                                   non_local_language=non_local_language,
@@ -758,7 +762,7 @@ class AddressExpander(object):
 
         osm_suffix = self.tag_suffix(language, non_local_language, more_than_one_official_language)
 
-        osm_components = self.osm_reverse_geocoded_components(country, latitude, longitude)
+        osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
 
         self.add_admin_boundaries(address_components, osm_components, country, language,
                                   osm_suffix=osm_suffix,
