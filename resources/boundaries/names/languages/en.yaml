@@ -1,0 +1,15 @@
+# Prefixes which can be stripped to normalize a place name
+prefixes:
+    - city of
+    - township of
+    - regional municipality of
+    - rural city of
+    - municipality of
+    - borough of
+    - london borough of
+    - shire of
+
+# Suffixes which can be stripped to normalize a place name
+suffixes:
+    - township
+    - municipality
