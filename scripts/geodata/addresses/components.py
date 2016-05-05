@@ -1,5 +1,6 @@
 import pycountry
 import random
+import six
 
 from collections import defaultdict
 
