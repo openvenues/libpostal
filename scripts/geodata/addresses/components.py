@@ -188,7 +188,7 @@ class AddressExpander(object):
                     names.add(v)
         return names
 
-    def normalized_place_name(self, name, tag, osm_components, country=None, state=None, languages=None, whitespace=True):
+    def normalized_place_name(self, name, tag, osm_components, country=None, languages=None):
         '''
         Multiple place names
         --------------------
@@ -210,11 +210,11 @@ class AddressExpander(object):
                 for cn in component_names:
                     components[cn.lower()].add(normalized_key)
 
-        if country and languages and state:
-            for language in languages:
-                state_code = state_abbreviations.get_abbreviation(country, language, state)
-                if state_code:
-                    names.add(state_code.upper())
+                if normalized_key == AddressFormatter.STATE:
+                    for language in languages:
+                        state_code = state_abbreviations.get_abbreviation(country, language, state)
+                        if state_code:
+                            names.add(state_code.upper())
 
         phrase_filter = PhraseFilter([(n.lower(), '') for n in names])
 
@@ -230,6 +230,7 @@ class AddressExpander(object):
 
         for is_phrase, phrase_tokens, value in phrases:
             if is_phrase:
+                whitespace = not any((c in token_types.IDEOGRAPHIC_CHAR, token_types.IDEOGRAPHIC_NUMBER) for t, c in current_phrase_tokens)
                 join_phrase = six.u(' ') if whitespace else six.u('')
 
                 if num_phrases > 0:
@@ -267,13 +268,12 @@ class AddressExpander(object):
 
     def normalize_place_names(self, address_components, osm_components, country=None, languages=None, whitespace=True):
         components = {}
-        state = address_components.get(AddressFormatter.STATE, None)
 
         for key in list(address_components):
             name = address_components[key]
             if key in self.BOUNDARY_COMPONENTS:
                 name = self.normalized_place_name(name, key, osm_components, country=country,
-                                                  state=state, languages=languages, whitespace=whitespace)                
+                                                  languages=languages, whitespace=whitespace)                
 
             components[key] = name
         return components
@@ -710,8 +710,10 @@ class AddressExpander(object):
 
         street = address_components.get(AddressFormatter.ROAD)
 
+        all_languages = set([l['lang'] for l in candidate_languages])
+
         all_osm_components = osm_components + neighborhoods
-        self.normalize_place_names(address_components, all_osm_components, country=country)
+        self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
         self.replace_name_affixes(address_components)
 
@@ -783,8 +785,10 @@ class AddressExpander(object):
         self.add_neighborhoods(address_components, neighborhoods,
                                osm_suffix=osm_suffix)
 
+        all_languages = set([l['lang'] for l in candidate_languages])
+
         all_osm_components = osm_components + neighborhoods
-        self.normalize_place_names(address_components, all_osm_components, country=country)
+        self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
         self.replace_name_affixes(address_components)
 
