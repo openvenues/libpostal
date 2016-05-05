@@ -9,10 +9,13 @@ SENTINEL = None
 
 class PhraseFilter(object):
     def __init__(self, phrases):
-        self.trie = [(key, self.serialize(val)) for key, val in six.iteritems(phrases)]
+        if hasattr(phrases, 'items'):
+            phrases = six.iteritems(phrases)
+        vals = [(safe_decode(key), self.serialize(val)) for key, val in phrases]
+        self.trie = BytesTrie(vals)
 
-    serialize = safe_encode
-    deserialize = safe_decode
+    serialize = staticmethod(safe_encode)
+    deserialize = staticmethod(safe_decode)
 
     def filter(self, tokens):
         def return_item(item):
