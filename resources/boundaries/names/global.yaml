@@ -1,0 +1,51 @@
+names:
+    keys:
+        default: name
+        probability: 0.75
+        alternatives:
+            - alternative: short_name # e.g. NYC
+              probability: 0.12
+            - alternative: alt_name # e.g. New York (instead of New York City)
+              probability: 0.12
+            - alternative: official_name # e.g. United Kingdom of Great Britain and Northern Ireland
+              probability: 0.01
+
+
+    # This section overrides place names
+    exceptions:
+        # Boroughs of New York City
+        - id: 2552485 # New York County (don't use Manhattan)
+          type: relation
+          default: New York County
+          probability: 1.0
+        - id: 369518 # Kings County (don't use Brooklyn)
+          type: relation
+          default: Kings County
+          probability: 1.0
+        - id: 369519 # Queens County (don't use Queens)
+          type: relation
+          default: Queens County
+          probability: 1.0
+        - id: 2552450 # Bronx County (don't use The Bronx)
+          type: relation
+          default: Bronx County
+          probability: 1.0
+        - id: 962876 # Richmond County (don't use Staten Island)
+          type: relation
+          default: Richmond County
+          probability: 1.0
+
+    omissions:
+        - id: 3954665 # Manhattan Island
+          type: relation
+          omit:
+              conditions:
+                  - id: 175905 # NYC (always true)
+                    type: relation
+        - id: 3955977 # Long Island
+          type: relation
+          include_probability: 0.1
+          omit:
+              conditions:
+                  - id: 175905 # NYC
+                    type: relation
