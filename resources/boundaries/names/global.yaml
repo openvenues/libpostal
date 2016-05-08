@@ -10,6 +10,25 @@ names:
             - alternative: official_name # e.g. United Kingdom of Great Britain and Northern Ireland
               probability: 0.01
 
+    components:
+        country:
+            keys:
+                default: name:simple # e.g. United States vs. United States of America (defaults to name if not found)
+                probability: 0.4
+                alternatives:
+                    - alternative: name
+                      probability: 0.25
+                    - alternative: ISO3166-1:alpha2
+                      probability: 0.15
+                    - alternative: ISO3166-1:alpha3
+                      probability: 0.1
+                    - alternative: short_name
+                      probability: 0.05
+                    - alternative: alt_name
+                      probability: 0.04
+                    - alternative: official_name # e.g. United Kingdom of Great Britain and Northern Ireland
+                      probability: 0.01
+
 
     # This section overrides place names
     exceptions:

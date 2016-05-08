@@ -1,4 +1,5 @@
 import os
+import six
 import yaml
 
 from collections import defaultdict
@@ -27,6 +28,13 @@ class BoundaryNames(object):
 
         self.name_keys = name_keys
         self.name_key_probs = cdf(probs)
+
+        self.component_name_keys = {}
+
+        for component, component_config in six.iteritems(nested_get(config, ('names', 'components'), default={})):
+            component_names = component_config.get('keys')
+            component_name_keys, component_probs = alternative_probabilities(component_names)
+            self.component_name_keys[component] = (component_name_keys, cdf(component_probs))
 
         self.exceptions = {}
 
@@ -58,7 +66,7 @@ class BoundaryNames(object):
                 condition_object_type = condition['type']
                 self.omit_conditions[(object_type, object_id)].add((condition_object_type, condition_object_id))
 
-    def name_key(self, props):
+    def name_key(self, props, component):
         object_type = props.get('type')
         object_id = safe_encode(props.get('id', ''))
 
@@ -66,7 +74,8 @@ class BoundaryNames(object):
             values, probs = self.exceptions[(object_type, object_id)]
             return weighted_choice(values, probs)
 
-        return weighted_choice(self.name_keys, self.name_key_probs)
+        name_keys, probs = self.component_name_keys.get(component, (self.name_keys, self.name_key_probs))
+        return weighted_choice(name_keys, probs)
 
     def remove_excluded_components(self, components):
         all_ids = set()
