@@ -33,7 +33,7 @@ from geodata.file_utils import ensure_dir, download_file
 from geodata.i18n.unicode_properties import get_chars_by_script
 from geodata.i18n.word_breaks import ideographic_scripts
 from geodata.names.deduping import NameDeduper
-from geodata.osm.extract import parse_osm, OSM_NAME_TAGS, WAY_OFFSET, RELATION_OFFSET
+from geodata.osm.extract import parse_osm, osm_type_and_id, NODE, WAY, RELATION, OSM_NAME_TAGS
 from geodata.osm.admin_boundaries import OSMAdminPolygonReader, OSMSubdivisionPolygonReader, OSMBuildingPolygonReader
 from geodata.polygons.index import *
 from geodata.statistics.tf_idf import IDFIndex
@@ -331,15 +331,8 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                      if k in cls.include_property_patterns or (six.u(':') in k and
                      six.u('{}:*').format(k.split(six.u(':'), 1)[0]) in cls.include_property_patterns)}
 
-            if element_id >= RELATION_OFFSET:
-                props['type'] = 'relation'
-                element_id -= RELATION_OFFSET
-            elif element_id >= WAY_OFFSET:
-                props['type'] = 'way'
-                element_id -= WAY_OFFSET
-            else:
-                props['type'] = 'node'
-
+            id_type, element_id = osm_type_and_id(element_id)
+            props['type'] = id_type
             props['id'] = element_id
 
             if inner_polys and not outer_polys:
