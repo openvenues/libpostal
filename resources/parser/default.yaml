@@ -16,18 +16,6 @@ city:
     quattroshapes_geonames_backup_city_probability: 0.2
     quattroshapes_geonames_abbreviated_probability: 0.1
 
-island:
-    include_conditions:
-        - id: 166563 # State of Hawaii
-          type: relation
-        - country: id # Indonesia
-        - country: hk # Hong Kong
-        - country: kn # Saint Kitts and Nevis
-        - country: pn # Pitcairn Islands
-        - country: sc # Seychelles
-        - country: tv # Tuvalu
-        - country: vg # British Virgin Islands
-
 state_district:
     join_probability: 0.5
 
