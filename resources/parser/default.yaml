@@ -1,0 +1,49 @@
+names:
+    replace_affix_probability: 0.6
+
+languages:
+    # sample a language from the distribution of languages found on the Internet
+    non_local_language_probability: 0.05
+    # Replace user-tagged admin components with the non-local language version
+    replace_non_local_probability: 0.4
+
+neighborhood:
+    # Usually in Germany, may have e.g. name:prefix=Ortsteil
+    add_prefix_probability: 0.5
+    add_neighborhood_probability: 0.5
+
+city:
+    quattroshapes_geonames_backup_city_probability: 0.2
+    quattroshapes_geonames_abbreviated_probability: 0.1
+
+island:
+    include_conditions:
+        - id: 166563 # State of Hawaii
+          type: relation
+        - country: id # Indonesia
+        - country: hk # Hong Kong
+        - country: kn # Saint Kitts and Nevis
+        - country: pn # Pitcairn Islands
+        - country: sc # Seychelles
+        - country: tv # Tuvalu
+        - country: vg # British Virgin Islands
+
+state_district:
+    join_probability: 0.5
+
+state:
+    # Probability of using full name e.g. New York vs. NY
+    full_name_probability: 0.4
+    abbreviated_probability: 0.6
+
+country:
+    # If no country is specified, pull the country name from CLDR (authoratative country names translated into different languages)
+    cldr_country_probability: 0.5
+    # When a country is specified and is simply an ISO code (e.g. US, DE), replace with one of the CLDR names
+    replace_with_cldr_country_probability: 0.9
+    # When the user-specified country is an ISO code, remove it from the components with this probability (fall back on geocoded components)
+    remove_iso_code_probability: 0.1
+    cldr:
+        localized_name_probability: 0.7
+        iso_alpha_2_code_probability: 0.2
+        iso_alpha_3_code_probability: 0.1
