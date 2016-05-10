@@ -17,7 +17,7 @@ from geodata.file_utils import ensure_dir, download_file
 from geodata.i18n.unicode_properties import get_chars_by_script
 from geodata.i18n.word_breaks import ideographic_scripts
 from geodata.names.deduping import NameDeduper
-from geodata.osm.extract import parse_osm, OSM_NAME_TAGS, WAY_OFFSET, RELATION_OFFSET
+from geodata.osm.extract import parse_osm, osm_type_and_id, NODE, WAY, RELATION, OSM_NAME_TAGS
 from geodata.polygons.index import *
 from geodata.polygons.reverse_geocode import QuattroshapesReverseGeocoder
 from geodata.statistics.tf_idf import IDFIndex
@@ -269,7 +269,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         logger.info('Matching OSM points to neighborhood polygons')
         # Parse OSM and match neighborhood/suburb points to Quattroshapes/Zetashapes polygons
         num_polys = 0
-        for node_id, attrs, deps in parse_osm(filename):
+        for element_id, attrs, deps in parse_osm(filename):
             try:
                 lat, lon = latlon_to_decimal(attrs['lat'], attrs['lon'])
             except ValueError:
@@ -278,6 +278,11 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             osm_name = attrs.get('name')
             if not osm_name:
                 continue
+
+            id_type, element_id = osm_type_and_id(element_id)
+
+            props['type'] = id_type
+            props['id'] = element_id
 
             is_neighborhood = attrs.get('place') == 'neighbourhood'
 
@@ -348,6 +353,8 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                         attrs['polygon_type'] = 'neighborhood'
                     else:
                         attrs['polygon_type'] = 'local_admin'
+
+
 
                 attrs['source'] = source
                 index.index_polygon(poly)

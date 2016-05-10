@@ -23,8 +23,12 @@ from geodata.encoding import safe_decode
 WAY_OFFSET = 10 ** 15
 RELATION_OFFSET = 2 * 10 ** 15
 
-ALL_OSM_TAGS = set(['node', 'way', 'relation'])
-WAYS_RELATIONS = set(['way', 'relation'])
+NODE = 'node'
+WAY = 'way'
+RELATION = 'relation'
+
+ALL_OSM_TAGS = set([NODE, WAY, RELATION])
+WAYS_RELATIONS = set([WAY, RELATION])
 
 OSM_NAME_TAGS = (
     'name',
@@ -86,6 +90,20 @@ def parse_osm(filename, allowed_types=ALL_OSM_TAGS, dependencies=False):
             elem.clear()
             while elem.getprevious() is not None:
                 del elem.getparent()[0]
+
+
+def osm_type_and_id(element_id):
+    element_id = long(element_id)
+    if element_id >= RELATION_OFFSET:
+        id_type = RELATION
+        element_id -= RELATION_OFFSET
+    elif element_id >= WAY_OFFSET:
+        id_type = WAY
+        element_id -= WAY_OFFSET
+    else:
+        id_type = NODE
+
+    return id_type, element_id
 
 apposition_regex = re.compile('(.*[^\s])[\s]*\([\s]*(.*[^\s])[\s]*\)$', re.I)
 
