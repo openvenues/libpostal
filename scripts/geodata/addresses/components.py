@@ -1,6 +1,8 @@
+import os
 import pycountry
 import random
 import six
+import yaml
 
 from collections import defaultdict
 
@@ -9,13 +11,21 @@ from geodata.address_formatting.aliases import Aliases
 
 from geodata.addresses.floors import Floor
 from geodata.addresses.units import Unit
+from geodata.configs.utils import nested_get
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.countries.country_names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
+from geodata.math.sampling import cdf, weighted_choice
 from geodata.names.normalization import name_affixes
+from geodata.boundaries.names import boundary_names
 from geodata.osm.components import osm_address_components
 from geodata.states.state_abbreviations import state_abbreviations
+
+this_dir = os.path.realpath(os.path.dirname(__file__))
+
+PARSER_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
+                                     'resources', 'parser', 'default.yaml')
 
 
 class AddressExpander(object):
@@ -46,7 +56,8 @@ class AddressExpander(object):
      u'en')
 
     '''
-    alpha3_codes = {c.alpha2: c.alpha3 for c in pycountry.countries}
+    iso_alpha2_codes = set([c.alpha2.lower() for c in pycountry.countries])
+    iso_alpha3_codes = set([c.alpha3.lower() for c in pycountry.countries])
 
     rare_components = {
         AddressFormatter.SUBURB,
@@ -65,26 +76,13 @@ class AddressExpander(object):
         AddressFormatter.STATE
     )
 
-    # List of places where it's much more common to use city, state than city, country
-    state_important = {
-        'US',
-        'CA',
-    }
-
-    RANDOM_VALUE_REPLACEMENTS = {
-        # Key: address component
-        AddressFormatter.COUNTRY: {
-            # value: (replacement, probability)
-            'GB': ('UK', 0.3),
-            'United Kingdom': ('UK', 0.3),
-        }
-    }
-
     ALL_OSM_NAME_KEYS = set(['name', 'name:simple',
                              'ISO3166-1:alpha2', 'ISO3166-1:alpha3',
                              'short_name', 'alt_name', 'official_name'])
 
     def __init__(self, osm_admin_rtree, language_rtree, neighborhoods_rtree, buildings_rtree, subdivisions_rtree, quattroshapes_rtree, geonames):
+        self.config = yaml.load(open(PARSER_DEFAULT_CONFIG))
+
         self.osm_admin_rtree = osm_admin_rtree
         self.language_rtree = language_rtree
         self.neighborhoods_rtree = neighborhoods_rtree
@@ -140,42 +138,15 @@ class AddressExpander(object):
 
         return language
 
-    def pick_random_name_key(self, suffix=''):
+    def pick_random_name_key(self, props, component, suffix=''):
         '''
         Random name
         -----------
 
         Pick a name key from OSM
         '''
-        name_key = ''.join(('name', suffix))
-        raw_name_key = 'name'
-        short_name_key = ''.join(('short_name', suffix))
-        raw_short_name_key = 'short_name'
-        alt_name_key = ''.join(('alt_name', suffix))
-        raw_alt_name_key = 'alt_name'
-        official_name_key = ''.join(('official_name', suffix))
-        raw_official_name_key = 'official_name'
-
-        # Choose which name to use with given probabilities
-        r = random.random()
-        if r < 0.7:
-            # 70% of the time use the name tag
-            key = name_key
-            raw_key = raw_name_key
-        elif r < 0.8:
-            # 10% of the time use the short name
-            key = short_name_key
-            raw_key = raw_short_name_key
-        elif r < 0.9:
-            # 10% of the time use the official name
-            key = official_name_key
-            raw_key = raw_official_name_key
-        else:
-            # 10% of the time use the alt name
-            key = alt_name_key
-            raw_key = raw_alt_name_key
-
-        return key, raw_key
+        name_key = boundary_names.name_key(props, component)
+        return name_key, ''.join((name_key, suffix)) if ':' not in name_key else name_key
 
     def all_names(self, props, languages=None):
         names = set()
@@ -217,7 +188,7 @@ class AddressExpander(object):
             if is_state:
                 for state in component_names:
                     for language in languages:
-                        state_code = state_abbreviations.get_abbreviation(country, language, state)
+                        state_code = state_abbreviations.get_abbreviation(country, language, state, default=None)
                         if state_code:
                             names.add(state_code.upper())
 
@@ -289,12 +260,7 @@ class AddressExpander(object):
         self.formatter.aliases.replace(address_components)
         return address_components
 
-    def country_name(self, address_components, country_code, language,
-                     use_country_code_prob=0.3,
-                     local_language_name_prob=0.6,
-                     random_language_name_prob=0.1,
-                     alpha_3_iso_code_prob=0.1,
-                     ):
+    def cldr_country_name(self, country_code, language):
         '''
         Country names
         -------------
@@ -319,41 +285,53 @@ class AddressExpander(object):
         3. This is implicit, but with probability (1-b)(1-a), keep the country code
         '''
 
-        non_local_language = None
+        cldr_config = nested_get(self.config, ('country', 'cldr'))
 
+        alpha_2_iso_code_prob = float(cldr_config['iso_alpha_2_code_probability'])
+        localized_name_prob = float(cldr_config['localized_name_probability'])
+        alpha_3_iso_code_prob = float(cldr_config['iso_alpha_3_code_probability'])
+
+        values = ('localized', 'alpha3', 'alpha2')
+        probs = cdf([localized_name_prob, alpha_3_iso_code_prob, alpha_2_iso_code_prob])
+        value = weighted_choice(values, probs)
+
+        country_name = country_code.upper()
+
+        if language in (AMBIGUOUS_LANGUAGE, UNKNOWN_LANGUAGE):
+            language = None
+
+        if value == 'localized':
+            country_name = country_names.localized_name(country_code, language) or country_names.localized_name(country_code) or country_name
+        elif value == 'alpha3':
+            country_name = country_names.alpha3_code(country_code) or country_name
+
+        return country_name
+
+    def is_country_iso_code(self, country):
+        country = country.lower()
+        return country in self.iso_alpha2_codes or country in self.iso_alpha3_codes
+
+    def replace_country_name(self, address_components, country, language):
         address_country = address_components.get(AddressFormatter.COUNTRY)
 
-        if random.random() < use_country_code_prob:
-            # 30% of the time: add Quattroshapes country
-            address_country = country_code.upper()
+        cldr_country_prob = float(nested_get(self.config, ('country', 'cldr_country_probability')))
+        replace_with_cldr_country_prob = float(nested_get(self.config, ('country', 'replace_with_cldr_country_probability')))
+        remove_iso_code_prob = float(nested_get(self.config, ('country', 'remove_iso_code_probability')))
 
-        r = random.random()
+        is_iso_code = address_country and self.is_country_iso_code(address_country)
 
-        # 1. 60% of the time: use the country name in the current language or the country's local language
-        if address_country and r < local_language_name_prob:
-            localized = None
-            if language and language not in (AMBIGUOUS_LANGUAGE, UNKNOWN_LANGUAGE):
-                localized = language_country_names.get(language, {}).get(address_country.upper())
+        if (is_iso_code and random.random() < replace_with_cldr_country_prob) or random.random() < cldr_country_prob:
+            address_country = self.cldr_country_name(country, language)
+            if address_country:
+                address_components[AddressFormatter.COUNTRY] = address_country
+        elif is_iso_code and random.random() < remove_iso_code_prob:
+            address_components.pop(AddressFormatter.COUNTRY)
 
-            if not localized:
-                localized = country_localized_display_name(address_country.lower())
-
-            if localized:
-                address_country = localized
-        # 2. 10% of the time: country's name in a language samples from the distribution of languages on the Internet
-        elif address_country and r < local_language_name_prob + random_language_name_prob:
-            non_local_language = sample_random_language()
-            lang_country = language_country_names.get(non_local_language, {}).get(address_country.upper())
-            if lang_country:
-                address_country = lang_country
-        # 3. 10% of the time: use the country's alpha-3 ISO code
-        elif address_country and r < local_language_name_prob + random_language_name_prob + alpha_3_iso_code_prob:
-            iso_code_alpha3 = self.alpha3_codes.get(address_country)
-            if iso_code_alpha3:
-                address_country = iso_code_alpha3
-        # 4. Implicit: the rest of the time keep the alpha-2 country code
-
-        return address_country, non_local_language
+    def non_local_language(self):
+        non_local_language_prob = float(nested_get(self.config, ('languages', 'non_local_language_probability')))
+        if random.random() < non_local_language_prob:
+            return sample_random_language()
+        return None
 
     def state_name(self, address_components, country, language, non_local_language=None, state_full_name_prob=0.4):
         '''
@@ -391,12 +369,6 @@ class AddressExpander(object):
                              osm_suffix='',
                              non_local_language=None,
                              random_key=True,
-                             alpha_3_iso_code_prob=0.1,
-                             alpha_2_iso_code_prob=0.2,
-                             simple_country_key_prob=0.4,
-                             replace_with_non_local_prob=0.4,
-                             join_state_district_prob=0.5,
-                             abbreviate_state_prob=0.7
                              ):
         '''
         OSM boundaries
@@ -414,13 +386,10 @@ class AddressExpander(object):
         include these qualifiers in the training data.
         '''
 
-        name_key = ''.join(('name', osm_suffix))
-        raw_name_key = 'name'
+        name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, osm_suffix))
+        raw_name_key = boundary_names.DEFAULT_NAME_KEY
         simple_name_key = 'name:simple'
         international_name_key = 'int_name'
-
-        iso_code_key = 'ISO3166-1:alpha2'
-        iso_code3_key = 'ISO3166-1:alpha3'
 
         if osm_components:
             osm_components = self.categorized_osm_components(country, osm_components)
@@ -431,31 +400,13 @@ class AddressExpander(object):
             for component, components_values in osm_components.iteritems():
                 seen = set()
 
-                if random_key:
-                    key, raw_key = self.pick_random_name_key(suffix=osm_suffix)
-                else:
-                    key, raw_key = name_key, raw_name_key
-
                 for component_value in components_values:
-                    r = random.random()
-                    name = None
+                    if random_key:
+                        key, raw_key = self.pick_random_name_key(component_value, component, suffix=osm_suffix)
+                    else:
+                        key, raw_key = name_key, raw_name_key
 
-                    if component == AddressFormatter.COUNTRY:
-                        if iso_code3_key in component_value and r < alpha_3_iso_code_prob:
-                            name = component_value[iso_code3_key]
-                        elif iso_code_key in component_value and r < alpha_3_iso_code_prob + alpha_2_iso_code_prob:
-                            name = component_value[iso_code_key]
-                        elif language == 'en' and not non_local_language and r < alpha_3_iso_code_prob + alpha_2_iso_code_prob + simple_country_key_prob:
-                            # Particularly to address the US (prefer United States,
-                            # not United States of America) but may capture variations
-                            # in other English-speaking countries as well.
-                            if simple_name_key in component_value:
-                                name = component_value[simple_name_key]
-                            elif international_name_key in component_value:
-                                name = component_value[international_name_key]
-
-                    if not name:
-                        name = component_value.get(key, component_value.get(raw_key))
+                    name = component_value.get(key, component_value.get(raw_key))
 
                     if not name or (component != AddressFormatter.CITY and name == existing_city_name):
                         name = component_value.get(name_key, component_value.get(raw_name_key))
@@ -466,6 +417,10 @@ class AddressExpander(object):
                     if (component, name) not in seen:
                         poly_components[component].append(name)
                         seen.add((component, name))
+
+            abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
+            join_state_district_prob = float(nested_get(self.config, ('state_district', 'join_probability')))
+            replace_with_non_local_prob = float(nested_get(self.config, ('languages', 'replace_non_local_probability')))
 
             for component, vals in poly_components.iteritems():
                 if component not in address_components or (non_local_language and random.random() < replace_with_non_local_prob):
@@ -483,7 +438,6 @@ class AddressExpander(object):
     def quattroshapes_city(self, address_components,
                            latitude, longitude,
                            language, non_local_language=None,
-                           qs_add_city_prob=0.2,
                            abbreviated_name_prob=0.1):
         '''
         Quattroshapes/GeoNames cities
@@ -497,6 +451,9 @@ class AddressExpander(object):
         '''
 
         city = None
+
+        qs_add_city_prob = float(nested_get(self.config, ('city', 'quattroshapes_geonames_backup_city_probability')))
+        abbreviated_name_prob = float(nested_get(self.config, ('city', 'quattroshapes_geonames_abbreviated_probability')))
 
         if non_local_language or (AddressFormatter.CITY not in address_components and random.random() < qs_add_city_prob):
             lang = non_local_language or language
@@ -534,9 +491,7 @@ class AddressExpander(object):
 
     def add_neighborhoods(self, address_components,
                           neighborhoods,
-                          osm_suffix='',
-                          add_prefix_prob=0.5,
-                          add_neighborhood_prob=0.5):
+                          osm_suffix=''):
         '''
         Neighborhoods
         -------------
@@ -551,26 +506,15 @@ class AddressExpander(object):
 
         neighborhood_levels = defaultdict(list)
 
-        name_key = ''.join(('name', osm_suffix))
-        raw_name_key = 'name'
+        add_prefix_prob = float(nested_get(self.config, ('neighborhood', 'add_prefix_probability')))
+        add_neighborhood_prob = float(nested_get(self.config, ('neighborhood', 'add_neighborhood_probability')))
+
+        name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, osm_suffix))
+        raw_name_key = boundary_names.DEFAULT_NAME_KEY
 
         for neighborhood in neighborhoods:
             place_type = neighborhood.get('place')
             polygon_type = neighborhood.get('polygon_type')
-
-            key, raw_key = self.pick_random_name_key(suffix=osm_suffix)
-            name = neighborhood.get(key, neighborhood.get(raw_key))
-
-            if not name:
-                name = neighborhood.get(name_key, neighborhood.get(raw_name_key))
-
-                name_prefix = neighborhood.get('name:prefix')
-
-                if name_prefix and random.random() < add_prefix_prob:
-                    name = six.u(' ').join([name_prefix, name])
-
-            if not name:
-                continue
 
             neighborhood_level = AddressFormatter.SUBURB
 
@@ -583,6 +527,20 @@ class AddressExpander(object):
                     name = neighborhood.get(name_key, neighborhood.get(raw_name_key))
                     if not name or name == city_name:
                         continue
+
+            key, raw_key = self.pick_random_name_key(neighborhood, neighborhood_level, suffix=osm_suffix)
+            name = neighborhood.get(key, neighborhood.get(raw_key))
+
+            if not name:
+                name = neighborhood.get(name_key, neighborhood.get(raw_name_key))
+
+                name_prefix = neighborhood.get('name:prefix')
+
+                if name and name_prefix and random.random() < add_prefix_prob:
+                    name = six.u(' ').join([name_prefix, name])
+
+            if not name:
+                continue
 
             neighborhood_levels[neighborhood_level].append(name)
 
@@ -597,14 +555,17 @@ class AddressExpander(object):
 
         Probabilistically strip standard prefixes/suffixes e.g. "London Borough of"
         '''
+
+        replacement_prob = float(nested_get(self.config, ('names', 'replace_affix_probability')))
+
         for component in list(address_components):
             if component not in self.BOUNDARY_COMPONENTS:
                 continue
             name = address_components[component]
             if not name:
                 continue
-            replacement = name_affixes.replace_name_suffixes(name, language)
-            replacement = name_affixes.replace_name_prefixes(replacement, language)
+            replacement = name_affixes.replace_suffixes(name, language)
+            replacement = name_affixes.replace_prefixes(replacement, language)
             if replacement != name and random.random() < replacement_prob:
                 address_components[component] = replacement
 
@@ -615,10 +576,14 @@ class AddressExpander(object):
 
         Make a few special replacements (like UK instead of GB)
         '''
+
         for component, value in address_components.iteritems():
-            replacement, prob = self.RANDOM_VALUE_REPLACEMENTS.get(component, {}).get(value, (None, 0.0))
-            if replacement is not None and random.random() < prob:
-                address_components[component] = replacement
+            replacement = nested_get(self.config, ('value_replacements', component, value), default=None)
+            if replacement is not None:
+                new_value = repl['replacement']
+                prob = repl['probability']
+                if random.random() < prob:
+                    address_components[component] = new_value
 
     def prune_duplicate_names(self, address_components):
         '''
@@ -691,9 +656,9 @@ class AddressExpander(object):
 
         language = self.address_language(address_components, candidate_languages)
 
-        address_country, non_local_language = self.country_name(address_components, country, language)
-        if address_country:
-            address_components[AddressFormatter.COUNTRY] = address_country
+        non_local_language = self.non_local_language()
+        # If a country already was specified
+        self.replace_country_name(address_components, country, non_local_language or language)
 
         address_state = self.state_name(address_components, country, language, non_local_language=non_local_language)
         if address_state:
@@ -755,13 +720,8 @@ class AddressExpander(object):
 
         address_components = self.normalize_address_components(value)
 
-        address_country, non_local_language = self.country_name(address_components, country, language,
-                                                                use_country_code_prob=0.0,
-                                                                local_language_name_prob=1.0,
-                                                                random_language_name_prob=0.0,
-                                                                alpha_3_iso_code_prob=0.0)
-        if address_country:
-            address_components[AddressFormatter.COUNTRY] = address_country
+        non_local_language = self.non_local_language()
+        self.replace_country_name(address_components, country, non_local_language or language)
 
         address_state = self.state_name(address_components, country, language, non_local_language=non_local_language, state_full_name_prob=1.0)
         if address_state:
@@ -798,7 +758,7 @@ class AddressExpander(object):
         self.add_neighborhoods(address_components, neighborhoods,
                                osm_suffix=osm_suffix)
 
-        self.replace_name_affixes(address_components,  non_local_language or language)
+        self.replace_name_affixes(address_components, non_local_language or language)
 
         self.replace_names(address_components)
 
