@@ -22,6 +22,18 @@ address_expansion_array *address_dictionary_get_expansions(char *key) {
     return k != kh_end(address_dict->expansions) ? kh_value(address_dict->expansions, k) : NULL;
 }
 
+inline bool address_expansion_in_dictionary(address_expansion_t expansion, uint16_t dictionary_id) {
+    for (uint32_t i = 0; i < expansion.num_dictionaries; i++) {
+        if (expansion.dictionary_ids[i] == dictionary_id) {
+             return true;
+        }
+    }
+
+    return false;
+}
+
+
+
 int32_t address_dictionary_next_canonical_index(void) {
     if (address_dict == NULL || address_dict->canonical == NULL) {
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);

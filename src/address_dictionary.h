@@ -67,6 +67,7 @@ phrase_t search_address_dictionaries_prefix(char *str, size_t len, char *lang);
 phrase_t search_address_dictionaries_suffix(char *str, size_t len, char *lang);
 
 address_expansion_array *address_dictionary_get_expansions(char *key);
+bool address_expansion_in_dictionary(address_expansion_t expansion, uint16_t dictionary_id);
 char *address_dictionary_get_canonical(uint32_t index);
 int32_t address_dictionary_next_canonical_index(void);
 bool address_dictionary_add_canonical(char *canonical);

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 if [ "$#" -lt 3 ]; then
     echo "Usage: ./libpostal_data [upload|download] [base|geodb] data_dir"
     exit 1
@@ -28,6 +30,8 @@ BASIC_MODULE_DIRS=(address_expansions numex transliteration)
 GEODB_MODULE_DIR=geodb
 PARSER_MODULE_DIR=address_parser
 LANGUAGE_CLASSIFIER_MODULE_DIR=language_classifier
+
+export LC_ALL=C
 
 EPOCH_DATE="Jan  1 00:00:00 1970"
 
