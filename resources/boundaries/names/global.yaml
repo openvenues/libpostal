@@ -13,58 +13,42 @@ names:
     components:
         country:
             keys:
-                default: name:simple # e.g. United States vs. United States of America (defaults to name if not found)
-                probability: 0.4
+                default: name
+                probability: 0.65
                 alternatives:
-                    - alternative: name
-                      probability: 0.25
                     - alternative: ISO3166-1:alpha2
                       probability: 0.15
                     - alternative: ISO3166-1:alpha3
                       probability: 0.1
                     - alternative: short_name
-                      probability: 0.05
+                      probability: 0.04
                     - alternative: alt_name
                       probability: 0.04
+                    - alternative: int_name
+                      probability: 0.01
                     - alternative: official_name # e.g. United Kingdom of Great Britain and Northern Ireland
                       probability: 0.01
-
 
     # This section overrides place names
     exceptions:
         # Boroughs of New York City
         - id: 2552485 # New York County (don't use Manhattan)
           type: relation
-          default: New York County
+          default: name # New York County
           probability: 1.0
         - id: 369518 # Kings County (don't use Brooklyn)
           type: relation
-          default: Kings County
+          default: name # Kings County
           probability: 1.0
         - id: 369519 # Queens County (don't use Queens)
           type: relation
-          default: Queens County
+          default: name # Queens County
           probability: 1.0
         - id: 2552450 # Bronx County (don't use The Bronx)
           type: relation
-          default: Bronx County
+          default: name # Bronx County
           probability: 1.0
         - id: 962876 # Richmond County (don't use Staten Island)
           type: relation
-          default: Richmond County
+          default: name # Richmond County
           probability: 1.0
-
-    omissions:
-        - id: 3954665 # Manhattan Island
-          type: relation
-          omit:
-              conditions:
-                  - id: 175905 # NYC (always true)
-                    type: relation
-        - id: 3955977 # Long Island
-          type: relation
-          include_probability: 0.1
-          omit:
-              conditions:
-                  - id: 175905 # NYC
-                    type: relation
