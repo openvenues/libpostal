@@ -1,4 +1,5 @@
 import os
+import six
 import yaml
 
 from geodata.address_formatting.formatter import AddressFormatter
@@ -52,7 +53,7 @@ class OSMAddressComponents(object):
 
             country_code = filename.rsplit('.yaml', 1)[0]
             data = yaml.load(open(os.path.join(boundaries_dir, filename)))
-            for prop, values in data.iteritems():
+            for prop, values in six.iteritems(data):
                 for k, v in values.iteritems():
                     if v not in AddressFormatter.address_formatter_fields:
                         raise ValueError(u'Invalid value in {} for prop={}, key={}: {}'.format(filename, prop, k, v))
