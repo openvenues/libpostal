@@ -10,8 +10,8 @@ class Aliases(object):
     def key_priority(self, key):
         return self.priorities.get(key, len(self.priorities))
 
-    def get(self, key):
-        return self.aliases.get(key)
+    def get(self, key, default=None):
+        return self.aliases.get(key, default)
 
     def replace(self, components):
         replacements = defaultdict(list)
