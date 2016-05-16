@@ -161,7 +161,10 @@ class ZetashapesReverseGeocoder(GeohashPolygonIndex):
                 f = open(os.path.join(repo_path, filename))
             else:
                 continue
-            index.add_geojson_like_file(json.load(f)['features'])
+            try:
+                index.add_geojson_like_file(json.load(f)['features'])
+            except ValueError:
+                continue
 
         return index
 
