@@ -251,7 +251,7 @@ class OSMAdminPolygonReader(OSMPolygonReader):
 
 class OSMSubdivisionPolygonReader(OSMPolygonReader):
     def include_polygon(self, props):
-        return 'landuse' in props or 'place' in props
+        return 'landuse' in props or 'place' in props or 'amenity' in props
 
 
 class OSMBuildingPolygonReader(OSMPolygonReader):
