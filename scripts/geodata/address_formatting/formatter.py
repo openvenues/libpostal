@@ -7,14 +7,15 @@ import six
 import subprocess
 import yaml
 
+from collections import OrderedDict, defaultdict
+from itertools import ifilter
+
 from geodata.address_formatting.aliases import Aliases
 from geodata.configs.utils import nested_get, recursive_merge
 from geodata.math.floats import isclose
 from geodata.math.sampling import weighted_choice, cdf
 from geodata.text.tokenize import tokenize, tokenize_raw, token_types
 from geodata.encoding import safe_decode
-from collections import OrderedDict
-from itertools import ifilter
 
 FORMATTER_GIT_REPO = 'https://github.com/OpenCageData/address-formatting'
 
@@ -52,9 +53,11 @@ class AddressFormatter(object):
     HOUSE = 'house'
     HOUSE_NUMBER = 'house_number'
     PO_BOX = 'po_box'
+    ATTENTION = 'attention'
     CARE_OF = 'care_of'
-    BLOCK = 'block'
     BUILDING = 'building'
+    ENTRANCE = 'entrance'
+    STAIRCASE = 'staircase'
     LEVEL = 'level'
     UNIT = 'unit'
     INTERSECTION = 'intersection'
@@ -69,21 +72,23 @@ class AddressFormatter(object):
     POSTCODE = 'postcode'
     COUNTRY = 'country'
 
-    address_formatter_fields = set([
+    component_order = {k: i for i, k in enumerate([
         CATEGORY,
         NEAR,
-        HOUSE,
-        HOUSE_NUMBER,
-        PO_BOX,
+        ATTENTION,
         CARE_OF,
-        BLOCK,
+        HOUSE,
+        PO_BOX,
+        HOUSE_NUMBER,
         BUILDING,
+        ENTRANCE,
+        STAIRCASE,
         LEVEL,
         UNIT,
-        INTERSECTION,
         ROAD,
-        SUBURB,
+        INTERSECTION,
         SUBDIVISION,
+        SUBURB,
         CITY,
         CITY_DISTRICT,
         ISLAND,
@@ -91,7 +96,9 @@ class AddressFormatter(object):
         STATE_DISTRICT,
         POSTCODE,
         COUNTRY,
-    ])
+    ])}
+
+    address_formatter_fields = set(component_order)
 
     aliases = Aliases(
         OrderedDict([
@@ -204,49 +211,73 @@ class AddressFormatter(object):
         admin_components = self.get_property('admin_components', country, language=language, default={})
         return [(key, value.get('after', ()), value.get('before', ())) for key, value in six.iteritems(admin_components)]
 
+    def insertion_distribution(self, insertions):
+        values = []
+        probs = []
+        for k, v in six.iteritems(insertions):
+            if k == 'conditional':
+                continue
+
+            if 'before' in v:
+                val = (self.BEFORE, v['before'])
+            elif 'after' in v:
+                val = (self.AFTER, v['after'])
+            elif 'last' in v:
+                val = (self.LAST, None)
+            elif 'first' in v:
+                val = (self.FIRST, None)
+            else:
+                raise ValueError('Insertions must contain one of {first, before, after, last}')
+
+            prob = v['probability']
+            values.append(val)
+            probs.append(prob)
+
+        # If the probabilities don't sum to 1, add a "do nothing" action
+        if not isclose(sum(probs), 1.0):
+            probs.append(1.0 - sum(probs))
+            values.append((None, None))
+
+        return values, cdf(probs)
+
     def insertion_probs(self, config):
         component_insertions = {}
         for component, insertions in six.iteritems(config):
-            values = []
-            probs = []
-            for k, v in six.iteritems(insertions):
-                if 'before' in v:
-                    val = (self.BEFORE, v['before'])
-                elif 'after' in v:
-                    val = (self.AFTER, v['after'])
-                elif 'last' in v:
-                    val = (self.LAST, None)
-                elif 'first' in v:
-                    val = (self.FIRST, None)
-                else:
-                    raise ValueError('Insertions must contain one of {first, before, after, last}')
+            component_insertions[component] = self.insertion_distribution(insertions)
 
-                prob = v['probability']
-                values.append(val)
-                probs.append(prob)
-
-            # If the probabilities don't sum to 1, add a "do nothing" action
-            if not isclose(sum(probs), 1.0):
-                probs.append(1.0 - sum(probs))
-                values.append((None, None))
-
-            component_insertions[component] = values, cdf(probs)
         return component_insertions
 
+    def conditional_insertion_probs(self, conditionals):
+        conditional_insertions = defaultdict(OrderedDict)
+        for component, value in six.iteritems(conditionals):
+            if 'conditional' in value:
+                conditionals = value['conditional']
+
+                for c in conditionals:
+                    other = c['component']
+                    conditional_insertions[component][other] = self.insertion_distribution(c['probabilities'])
+        return conditional_insertions
+
     def setup_insertion_probabilities(self):
-        self.global_insertions = self.insertion_probs(self.config['insertions'])
+        config = self.config['insertions']
+        self.global_insertions = self.insertion_probs(config)
+        self.global_conditionals = self.conditional_insertion_probs(config)
 
         self.country_insertions = {}
+        self.country_conditionals = {}
 
         for country, config in six.iteritems(self.country_configs):
             if 'insertions' in config:
                 self.country_insertions[country.lower()] = self.insertion_probs(config['insertions'])
+                self.country_conditionals[country.lower()] = self.conditional_insertion_probs(config['insertions'])
 
         self.language_insertions = {}
+        self.language_conditionals = {}
 
         for language, config in six.iteritems(self.language_configs):
             if 'insertions' in config:
                 self.language_insertions[language.lower()] = self.insertion_probs(config['insertions'])
+                self.language_conditionals[language.lower()] = self.conditional_insertion_probs(config['insertions'])
 
     def country_template(self, c):
         return self.country_formats.get(c, self.country_formats['default'])
@@ -261,6 +292,9 @@ class AddressFormatter(object):
     def build_first_of_template(self, keys):
         """ For constructing """
         return '{{{{#first}}}} {keys} {{{{/first}}}}'.format(keys=' || '.join(['{{{{{{{key}}}}}}}'.format(key=key) for key in keys]))
+
+    def tag_token(self, key):
+        return '{{{{{{{key}}}}}}}'.format(key=key)
 
     def insert_component(self, template, tag, before=None, after=None, first=False, last=False, separate=True, is_reverse=False):
         if not before and not after and not first and not last:
@@ -284,7 +318,7 @@ class AddressFormatter(object):
         skip_next_non_token = False
         new_components = []
 
-        tag_token = '{{{{{{{key}}}}}}}'.format(key=tag)
+        tag_token = self.tag_token(tag)
 
         parsed = pystache.parse(safe_decode(template))
         num_tokens = len(parsed._parse_tree)
@@ -429,26 +463,52 @@ class AddressFormatter(object):
 
         cache_keys = []
 
-        for component in components:
+        for component in sorted(components, key=self.component_order.get):
             scope = country
             insertions = nested_get(self.country_insertions, (country, component), default=None)
+            conditionals = nested_get(self.country_conditionals, (country, component), default=None)
 
             if insertions is None and language:
                 country_language = '{}_{}'.format(country, language)
                 insertions = nested_get(self.country_insertions, (country_language, component), default=None)
                 scope = country_language
 
+            if conditionals is None and language:
+                conditionals = nested_get(self.country_conditionals, (country_language, component), default=None)
+
             if insertions is None and language:
                 insertions = nested_get(self.language_insertions, (language, component), default=None)
                 scope = language
+
+            if conditionals is None and language:
+                conditionals = nested_get(self.language_conditionals, (language, component), default=None)
 
             if insertions is None:
                 insertions = nested_get(self.global_insertions, (component,), default=None)
                 scope = None
 
+            if conditionals is None:
+                conditionals = nested_get(self.global_conditionals, (component,), default=None)
+
             if insertions is not None:
-                values, probs = insertions
-                order, other = weighted_choice(values, probs)
+                conditional_insertions = None
+                if conditionals is not None:
+                    for k, v in six.iteritems(conditionals):
+                        if k in components:
+                            conditional_insertions = v
+                            break
+
+                order, other = None, None
+
+                # Check the conditional probabilities first
+                if conditional_insertions is not None:
+                    values, probs = conditional_insertions
+                    order, other = weighted_choice(values, probs)
+
+                # If there are no conditional probabilites or the "default" value was chosen, sample from the marginals
+                if other is None:
+                    values, probs = insertions
+                    order, other = weighted_choice(values, probs)
 
                 insertion_id = (scope, component, order, other)
                 cache_keys.append(insertion_id)
@@ -459,9 +519,9 @@ class AddressFormatter(object):
                     template = self.template_cache[cache_key]
                     continue
 
-                if order == self.BEFORE and other in components:
+                if order == self.BEFORE and self.tag_token(other) in template:
                     template = self.insert_component(template, component, before=other)
-                elif order == self.AFTER and other in components:
+                elif order == self.AFTER and self.tag_token(other) in template:
                     template = self.insert_component(template, component, after=other)
                 elif order == self.LAST:
                     template = self.insert_component(template, component, last=True)
@@ -548,7 +608,7 @@ class AddressFormatter(object):
 
         return template
 
-    def format_address(self, country, components, language=None,
+    def format_address(self, components, country, language,
                        minimal_only=True, tag_components=True, replace_aliases=True):
         template = self.get_template(country, language=language)
         if not template:
