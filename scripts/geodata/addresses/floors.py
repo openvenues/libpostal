@@ -65,10 +65,11 @@ class Floor(NumberedComponent):
                     return six.u('{}{}').format(number, letter)
 
     @classmethod
-    def phrase(cls, floor, language, country=None, is_top=False):
+    def phrase(cls, floor, language, country=None, num_floors=None):
         if floor is None:
             return None
 
+        integer_floor = False
         floor = safe_decode(floor)
         try:
             floor = int(floor)
@@ -80,6 +81,14 @@ class Floor(NumberedComponent):
             except (ValueError, TypeError):
                 return cls.numeric_phrase('levels.alphanumeric', floor, language,
                                           dictionaries=['level_types_numbered'], country=country)
+
+        numbering_starts_at = int(address_config.get_property('levels.numbering_starts_at', language, country=country, default=0))
+        try:
+            num_floors = int(num_floors)
+            top_floor = num_floors if numbering_starts_at == 1 else num_floors - 1
+            is_top = num_floors and floor == top_floor
+        except (ValueError, TypeError):
+            is_top = False
 
         alias_prefix = 'levels.aliases'
         aliases = address_config.get_property(alias_prefix, language, country=country)
