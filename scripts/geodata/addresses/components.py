@@ -451,14 +451,6 @@ class AddressComponents(object):
             address_state = None
         return address_state
 
-    def use_language(self, language, non_local_language, more_than_one_official_language):
-        if non_local_language is not None:
-            return non_local_language
-        elif language not in (AMBIGUOUS_LANGUAGE, UNKNOWN_LANGUAGE):
-            return language
-        else:
-            return None
-
     def pick_language_suffix(self, osm_components, language, non_local_language, more_than_one_official_language):
         '''
         Language suffix
