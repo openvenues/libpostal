@@ -281,15 +281,16 @@ class AddressExpander(object):
 
         prob_dist = component_config
 
-        conditionals = component_config.get('conditional')
+        conditionals = component_config.get('conditional', [])
 
         if conditionals:
-            for c, vals in six.iteritems(conditionals):
+            for vals in conditionals:
+                c = vals['component']
                 if c in existing_components:
                     prob_dist = vals['probabilities']
                     break
 
-        for num_type in (cls.NULL_PHRASE, cls.ALPHANUMERIC_PHRASE, cls.STANDALONE_PHRASE):
+        for num_type in (self.NULL_PHRASE, self.ALPHANUMERIC_PHRASE, self.STANDALONE_PHRASE):
             key = '{}_probability'.format(num_type)
             prob = alphanumeric_props.get(key)
             if prob is not None:
@@ -299,7 +300,7 @@ class AddressExpander(object):
         probs = cdf(probs)
         num_type = weighted_choice(values, probs)
 
-        if num_type == cls.NULL_PHRASE:
+        if num_type == self.NULL_PHRASE:
             return None
         else:
             return num_type
