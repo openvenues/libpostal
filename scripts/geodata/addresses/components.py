@@ -281,8 +281,10 @@ class AddressExpander(object):
 
         prob_dist = component_config
 
-        if 'conditional' in component_config:
-            for c, vals in six.iteritems(component_config['conditionals']):
+        conditionals = component_config.get('conditional')
+
+        if conditionals:
+            for c, vals in six.iteritems(conditionals):
                 if c in existing_components:
                     prob_dist = vals['probabilities']
                     break
