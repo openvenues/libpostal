@@ -162,7 +162,7 @@ class AddressComponents(object):
         name_key = boundary_names.name_key(props, component)
         return name_key, ''.join((name_key, suffix)) if ':' not in name_key else name_key
 
-    def all_names(self, props, languages=None):
+    def all_names(self, props, languages):
         names = set()
         for k, v in six.iteritems(props):
             if k in self.ALL_OSM_NAME_KEYS:
@@ -185,7 +185,7 @@ class AddressComponents(object):
 
         components = defaultdict(set)
         for props in osm_components:
-            component_names = self.all_names(props, languages=languages)
+            component_names = self.all_names(props, languages or set())
             names |= component_names
 
             is_state = False
@@ -273,6 +273,39 @@ class AddressComponents(object):
                               if k in self.formatter.aliases}
         self.formatter.aliases.replace(address_components)
         return address_components
+
+    def combine_fields(self, address_components, language, country=None):
+        combo_config = address_config.get_property('components.combinations', language, country=country, default={})
+        values = []
+        probs = []
+        for k, v in six.iteritems(combo_config):
+            values.append(v)
+            probs.append(v['probability'])
+
+        if not isclose(sum(probs), 1.0):
+            values.append(None)
+            probs.append(1.0 - sum(probs))
+
+        probs = cdf(probs)
+
+        combo = weighted_choice(values, probs)
+        if combo is not None:
+            components = OrderedDict(combo['components']).keys()
+            if not all((c in address_components for c in components)):
+                return
+
+            values = []
+            probs = []
+            for s in combo['separators']:
+                values.append(s['separator'])
+                probs.append(s['probability'])
+
+            probs = cdf(probs)
+            separator = weighted_choice(values, probs)
+
+            new_label = combo['label']
+            new_value = separator.join([address_components.pop(c) for c in components])
+            address_components[new_label] = new_value
 
     def generated_type(self, component, existing_components, language, country=None):
         component_config = address_config.get_property('components.{}'.format(component), language, country=country)
@@ -418,20 +451,59 @@ class AddressComponents(object):
             address_state = None
         return address_state
 
-    def tag_suffix(self, language, non_local_language, more_than_one_official_language=False):
+    def use_language(self, language, non_local_language, more_than_one_official_language):
         if non_local_language is not None:
-            osm_suffix = ':{}'.format(non_local_language)
-        elif more_than_one_official_language and language not in (AMBIGUOUS_LANGUAGE, UNKNOWN_LANGUAGE):
-            osm_suffix = ':{}'.format(language)
+            return non_local_language
+        elif language not in (AMBIGUOUS_LANGUAGE, UNKNOWN_LANGUAGE):
+            return language
         else:
-            osm_suffix = ''
-        return osm_suffix
+            return None
+
+    def pick_language_suffix(self, osm_components, language, non_local_language, more_than_one_official_language):
+        '''
+        Language suffix
+        ---------------
+
+        This captures some variations in languages written with different scripts
+        e.g. language=ja_rm is for Japanese Romaji.
+
+        Pick a language suffix with probability proportional to how often the name is used
+        in the reverse geocoded components. So if only 2/5 components have name:ja_rm listed
+        but 5/5 have either name:ja or just plain name, we would pick standard Japanese (Kanji) 
+        with probability .7143 (5/7) and Romaji with probability .2857 (2/7).
+        '''
+        # This captures name variations like "ja_rm" for Japanese Romaji, etc.
+        language_scripts = defaultdict(int)
+        use_language = (non_local_language or language)
+
+        for c in osm_components:
+            for k, v in six.iteritems(c):
+                if ':' not in k:
+                    continue
+                splits = k.split(':')
+                if len(splits) > 0 and splits[0] == 'name' and '_' in splits[-1] and splits[-1].split('_', 1)[0] == use_language:
+                    language_scripts[splits[-1]] += 1
+                elif k == 'name' or (splits[0] == 'name' and splits[-1]) == use_language:
+                    language_scripts[None] += 1
+
+        language_script = None
+
+        if len(language_scripts) > 1:
+            cumulative = float(sum(language_scripts.values()))
+            values = list(language_scripts)
+            probs = cdf([float(c) / cumulative for c in language_scripts.values()])
+            language_script = weighted_choice(values, probs)
+
+        if not language_script and not non_local_language and not more_than_one_official_language:
+            return ''
+        else:
+            return ':{}'.format(language_script or non_local_language or language)
 
     def add_admin_boundaries(self, address_components,
                              osm_components,
                              country, language,
-                             osm_suffix='',
                              non_local_language=None,
+                             language_suffix='',
                              random_key=True,
                              always_use_full_names=False,
                              ):
@@ -451,12 +523,13 @@ class AddressComponents(object):
         include these qualifiers in the training data.
         '''
 
-        name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, osm_suffix))
-        raw_name_key = boundary_names.DEFAULT_NAME_KEY
         simple_name_key = 'name:simple'
         international_name_key = 'int_name'
 
         if osm_components:
+            name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, language_suffix))
+            raw_name_key = boundary_names.DEFAULT_NAME_KEY
+
             osm_components = self.categorized_osm_components(country, osm_components)
             poly_components = defaultdict(list)
 
@@ -467,7 +540,7 @@ class AddressComponents(object):
 
                 for component_value in components_values:
                     if random_key:
-                        key, raw_key = self.pick_random_name_key(component_value, component, suffix=osm_suffix)
+                        key, raw_key = self.pick_random_name_key(component_value, component, suffix=language_suffix)
                     else:
                         key, raw_key = name_key, raw_name_key
 
@@ -499,7 +572,7 @@ class AddressComponents(object):
                             val = random.choice(vals)
 
                         if component == AddressFormatter.STATE and random.random() < abbreviate_state_prob:
-                            val = state_abbreviations.get_abbreviation(country, language,  val, default=val)
+                            val = state_abbreviations.get_abbreviation(country, language, val, default=val)
 
                     address_components[component] = val
 
@@ -558,8 +631,7 @@ class AddressComponents(object):
         return self.neighborhoods_rtree.point_in_poly(latitude, longitude, return_all=True)
 
     def add_neighborhoods(self, address_components,
-                          neighborhoods,
-                          osm_suffix=''):
+                          neighborhoods, language_suffix=''):
         '''
         Neighborhoods
         -------------
@@ -577,7 +649,7 @@ class AddressComponents(object):
         add_prefix_prob = float(nested_get(self.config, ('neighborhood', 'add_prefix_probability')))
         add_neighborhood_prob = float(nested_get(self.config, ('neighborhood', 'add_neighborhood_probability')))
 
-        name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, osm_suffix))
+        name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, language_suffix))
         raw_name_key = boundary_names.DEFAULT_NAME_KEY
 
         for neighborhood in neighborhoods:
@@ -596,7 +668,7 @@ class AddressComponents(object):
                     if not name or name == city_name:
                         continue
 
-            key, raw_key = self.pick_random_name_key(neighborhood, neighborhood_level, suffix=osm_suffix)
+            key, raw_key = self.pick_random_name_key(neighborhood, neighborhood_level, suffix=language_suffix)
             name = neighborhood.get(key, neighborhood.get(raw_key))
 
             if not name:
@@ -757,6 +829,18 @@ class AddressComponents(object):
                 address_components[AddressFormatter.POSTCODE] = phrase
 
     def expanded(self, address_components, latitude, longitude, num_floors=None, num_basements=None, zone=None):
+        '''
+        Expanded components
+        -------------------
+
+        Many times in geocoded address data sets, we get only a few components
+        (say street name and house number) plus a lat/lon. There's a lot of information
+        in a lat/lon though, so this method "fills in the blanks" as it were.
+
+        Namely, it calls all the methods above to reverse geocode to a few of the
+        R-tree + point-in-polygon indices passed in at initialization and adds things
+        like admin boundaries, neighborhoods, 
+        '''
         try:
             latitude, longitude = latlon_to_decimal(latitude, longitude)
         except Exception:
@@ -773,14 +857,12 @@ class AddressComponents(object):
         language = self.address_language(address_components, candidate_languages)
 
         non_local_language = self.non_local_language()
-        # If a country already was specified
+        # If a country was already specified
         self.replace_country_name(address_components, country, non_local_language or language)
 
         address_state = self.state_name(address_components, country, language, non_local_language=non_local_language)
         if address_state:
             address_components[AddressFormatter.STATE] = address_state
-
-        osm_suffix = self.tag_suffix(language, non_local_language, more_than_one_official_language)
 
         osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
         neighborhoods = self.neighborhood_components(latitude, longitude)
@@ -788,18 +870,20 @@ class AddressComponents(object):
         all_languages = set([l['lang'] for l in candidate_languages])
 
         all_osm_components = osm_components + neighborhoods
+        language_suffix = self.pick_language_suffix(all_osm_components, language, non_local_language, more_than_one_official_language)
+
         self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
         self.add_admin_boundaries(address_components, osm_components, country, language,
                                   non_local_language=non_local_language,
-                                  osm_suffix=osm_suffix)
+                                  language_suffix=language_suffix)
 
         city = self.quattroshapes_city(address_components, latitude, longitude, language, non_local_language=non_local_language)
         if city:
             address_components[AddressFormatter.CITY] = city
 
-        self.add_neighborhoods(address_components, neighborhoods,
-                               osm_suffix=osm_suffix)
+        self.add_neighborhoods(address_components, neighborhoods, language, non_local_language=non_local_language,
+                               language_suffix=language_suffix)
 
         street = address_components.get(AddressFormatter.ROAD)
 
@@ -815,6 +899,8 @@ class AddressComponents(object):
 
         self.add_sub_building_components(address_components, language, country=country,
                                          num_floors=num_floors, num_basements=num_basements, zone=zone)
+
+        self.combine_fields(address_components, language, country=country)
 
         return address_components, country, language
 
@@ -850,18 +936,18 @@ class AddressComponents(object):
 
         street = address_components.get(AddressFormatter.ROAD)
 
-        osm_suffix = self.tag_suffix(language, non_local_language, more_than_one_official_language)
-
         osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
         neighborhoods = self.neighborhood_components(latitude, longitude)
 
         all_languages = set([l['lang'] for l in candidate_languages])
 
         all_osm_components = osm_components + neighborhoods
+        language_suffix = self.pick_language_suffix(all_osm_components, language, non_local_language, more_than_one_official_language)
+
         self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
         self.add_admin_boundaries(address_components, osm_components, country, language,
-                                  osm_suffix=osm_suffix,
+                                  language_suffix=language_suffix,
                                   non_local_language=non_local_language,
                                   random_key=False,
                                   always_use_full_names=True)
@@ -874,8 +960,8 @@ class AddressComponents(object):
 
         neighborhoods = self.neighborhood_components(latitude, longitude)
 
-        self.add_neighborhoods(address_components, neighborhoods,
-                               osm_suffix=osm_suffix)
+        self.add_neighborhoods(address_components, neighborhoods, language, non_local_language=non_local_language,
+                               language_suffix=language_suffix)
 
         self.replace_name_affixes(address_components, non_local_language or language)
 
