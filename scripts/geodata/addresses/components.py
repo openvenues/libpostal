@@ -8,11 +8,17 @@ from collections import defaultdict
 
 from geodata.address_formatting.formatter import AddressFormatter
 
+from geodata.addresses.config import address_config
 from geodata.addresses.floors import Floor
+from geodata.addresses.entrances import Entrance
+from geodata.addresses.house_numbers import HouseNumber
+from geodata.addresses.po_boxes import POBox
+from geodata.addresses.postcodes import PostCode
+from geodata.addresses.staircases import Staircase
 from geodata.addresses.units import Unit
 from geodata.configs.utils import nested_get
 from geodata.coordinates.conversion import latlon_to_decimal
-from geodata.countries.country_names import *
+from geodata.countries.names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
 from geodata.math.sampling import cdf, weighted_choice
@@ -78,6 +84,17 @@ class AddressExpander(object):
     ALL_OSM_NAME_KEYS = set(['name', 'name:simple',
                              'ISO3166-1:alpha2', 'ISO3166-1:alpha3',
                              'short_name', 'alt_name', 'official_name'])
+
+    NULL_PHRASE = 'null'
+    ALPHANUMERIC_PHRASE = 'alphanumeric'
+    STANDALONE_PHRASE = 'standalone'
+
+    sub_building_component_class_map = {
+        AddressFormatter.ENTRANCE: Entrance,
+        AddressFormatter.STAIRCASE: Staircase,
+        AddressFormatter.LEVEL: Floor,
+        AddressFormatter.UNIT: Unit,
+    }
 
     def __init__(self, osm_admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames):
         self.config = yaml.load(open(PARSER_DEFAULT_CONFIG))
@@ -256,6 +273,49 @@ class AddressExpander(object):
                               if k in self.formatter.aliases}
         self.formatter.aliases.replace(address_components)
         return address_components
+
+    def generated_type(self, component, existing_components, language, country=None):
+        component_config = address_config.get_property('components.{}'.format(component), language, country=country)
+        if not component_config:
+            return None
+
+        prob_dist = component_config
+
+        if 'conditional' in component_config:
+            for c, vals in six.iteritems(component_config['conditionals']):
+                if c in existing_components:
+                    prob_dist = vals['probabilities']
+                    break
+
+        for num_type in (cls.NULL_PHRASE, cls.ALPHANUMERIC_PHRASE, cls.STANDALONE_PHRASE):
+            key = '{}_probability'.format(num_type)
+            prob = alphanumeric_props.get(key)
+            if prob is not None:
+                values.append(num_type)
+                probs.append(prob)
+
+        probs = cdf(probs)
+        num_type = weighted_choice(values, probs)
+
+        if num_type == cls.NULL_PHRASE:
+            return None
+        else:
+            return num_type
+
+    def is_numeric(self, component, language, country=None):
+        tokens = tokenize(component)
+        return sum((1 for t, c in tokens if c == token_types.NUMERIC or c not in token_types.WORD_TOKEN_TYPES)) == len(tokens)
+
+    def get_component_phrase(self, cls, component, language, country=None):
+        component = safe_decode(component)
+        if self.is_numeric(component):
+            phrase = cls.phrase(component, language, country=country)
+            if phrase != component:
+                return phrase
+            else:
+                return None
+        else:
+            return component
 
     def cldr_country_name(self, country_code, language):
         '''
@@ -551,6 +611,41 @@ class AddressExpander(object):
             if component not in address_components and random.random() < add_neighborhood_prob:
                 address_components[component] = neighborhoods[0]
 
+    def add_sub_building_component(self, component, address_components, language, country, random_kwargs=None, phrase_kwargs=None):
+        existing = address_components.get(component, None)
+
+        component_class = self.sub_building_component_class_map[component]
+        if existing is None:
+            generated_type = self.generated_type(component, address_components, language, country=country)
+            if generated_type == self.ALPHANUMERIC_PHRASE:
+                num = component_class.random(language, country=country, **(random_kwargs or {}))
+            elif generated_type == self.STANDALONE_PHRASE:
+                num = None
+            else:
+                return
+
+            phrase = component_class.phrase(num, language, country=countyr, **(phrase_kwargs or {}))
+
+            if phrase:
+                address_components[component] = phrase
+        else:
+            phrase = self.get_component_phrase(existing, language, country=country)
+            if phrase and phrase != existing:
+                address_components[component] = phrase
+
+    def add_sub_building_components(self, address_components, language, country=None, num_floors=None, num_basements=None, zone=None):
+        self.add_sub_building_component(AddressFormatter.ENTRANCE, address_components, language, country=country)
+        self.add_sub_building_component(AddressFormatter.STAIRCASE, address_components, language, country=country)
+
+        self.add_sub_building_component(AddressFormatter.LEVEL, address_components, language, country=country,
+                                        random_kwargs=dict(num_floors=num_floors, num_basements=num_basements),
+                                        phrase_kwargs=dict(num_floors=num_floors))
+
+        self.add_sub_building_component(AddressFormatter.UNIT, address_components, language, country=country,
+                                        random_kwargs=dict(num_floors=num_floors, num_basements=num_basements),
+                                        phrase_kwargs=dict(zone=zone))
+
+
     def replace_name_affixes(self, address_components, language):
         '''
         Name normalization
@@ -643,7 +738,20 @@ class AddressExpander(object):
             else:
                 address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
 
-    def expanded_address_components(self, address_components, latitude, longitude):
+    def add_house_number_phrase(self, address_components, language, country=None):
+        house_number = address_components.get(AddressFormatter.HOUSE_NUMBER, None)
+        phrase = HouseNumber.phrase(house_number, language, country=country)
+        if phrase and phrase != house_number:
+            address_components[AddressFormatter.HOUSE_NUMBER] = phrase
+
+    def add_postcode_phrase(self, address_components, language, country=None):
+        postcode = address_components.get(AddressFormatter.POSTCODE, None)
+        if postcode:
+            phrase = PostCode.phrase(postcode, language, country=country)
+            if phrase and phrase != postcode:
+                address_components[AddressFormatter.POSTCODE] = phrase
+
+    def expanded_address_components(self, address_components, latitude, longitude, num_floors=None, num_basements=None, zone=None):
         try:
             latitude, longitude = latlon_to_decimal(latitude, longitude)
         except Exception:
@@ -697,6 +805,11 @@ class AddressExpander(object):
         self.prune_duplicate_names(address_components)
 
         self.cleanup_house_number(address_components)
+        self.add_house_number_phrase(address_components, language, country=country)
+        self.add_postcode_phrase(address_components, language, country=country)
+
+        self.add_sub_building_components(address_components, language, country=country,
+                                         num_floors=num_floors, num_basements=num_basements, zone=zone)
 
         return address_components, country, language
 
