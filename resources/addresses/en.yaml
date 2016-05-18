@@ -10,6 +10,112 @@
 # country overrides section. Each country can create its own copy of the entire top-level
 # structure and it will be recursively merged with the defaults.
 
+# Components
+# ==========
+# How likely we are to generate a component at random
+
+components:
+    po_box:
+        null_probability: 0.9
+        alphanumeric_probability: 0.1
+        conditional:
+            - component: level
+              probabilities:
+                  null_probability: 0.995
+                  alphanumeric_probability: 0.005
+            - component: unit
+              probabilities:
+                  null_probability: 0.99
+                  alphanumeric_probability: 0.01
+            - component: staircase
+              probabilities:
+                  null_probability: 0.999
+                  alphanumeric_probability: 0.001
+            - component: entrance
+              probabilities:
+                  null_probability: 0.999
+                  alphanumeric_probability: 0.001
+
+    level:
+        # If no floor number is specified
+        null_probability: 0.85
+        alphanumeric_probability: 0.15
+
+        # Conditional probabilities
+        conditional:
+            # e.g. given that we have unit already (natural or generated)
+            - component: unit
+              probabilities:
+                  null_probability: 0.95
+                  alphanumeric_probability: 0.05
+            - component: staircase
+              probabilities:
+                  null_probability: 0.6
+                  alphanumeric_probability: 0.4
+
+    entrance:
+        null_probability: 0.9994
+        alphanumeric_probability: 0.0005
+        directional_probability: 0.0001
+        conditional:
+            - component: staircase
+              probabilities:
+                  null_probability: 0.99995
+                  alphanumeric_probability: 0.00005
+            - component: level
+              probabilities:
+                  null_probability: 0.9995
+                  alphanumeric_probability: 0.0005
+
+    staircase:
+        null_probability: 0.9989
+        alphanumeric_probability: 0.001
+        directional_probability: 0.0001
+
+    unit:
+        # If no unit number is specified
+        null_probability: 0.4
+        alphanumeric_probability: 0.55
+        standalone_probability: 0.05
+        conditional:
+            - component: level
+              probabilities:
+                  null_probability: 0.95
+                  alphanumeric_probability: 0.05
+            - component: staircase
+              probabilities:
+                  null_probability: 0.7
+                  alphanumeric_probability: 0.3
+
+    combinations:
+        # For unit types like 2/34 (more common in Canada and Australia)
+        house_number_unit:
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: /
+                  probability: 0.8
+                - separator: "-"
+                  probability: 0.1
+                - separator: " - "
+                  probability: 0.1
+            probability: 0.005
+        level_unit:
+            components:
+                - level
+                - unit
+            label: unit
+            separators:
+                - separator: /
+                  probability: 0.1
+                - separator: "-"
+                  probability: 0.8
+                - separator: " - "
+                  probability: 0.1
+            probability: 0.001
+
 # Number
 # ======
 # Number, No., #, etc. can be used in both floor and apartment numbers,
@@ -432,20 +538,10 @@ levels:
         alpha_probability: 0.0098 # With this probability, pick a letter e.g. Floor A
         numeric_plus_alpha_probability: 0.0001 # e.g. Floor 2A
         alpha_plus_numeric_probability: 0.0001 # e.g. Floor A2
-
-
-    # Floors are not part of the global address formats (and are not always standard)
-    # This is a list of places in the address where the floor number might go
-    order:
-        # e.g. 123 East 45th St, 6th Floor, NYC
-        - after: road
-          probability: 0.5
-        # e.g. Floor 1, Da Vinci House, 44 Saffron Hill, London
-        - before: house
-          probability: 0.25
-        # e.g. Da Vinci House, 1st Floor, 44 Saffron Hill, London
-        - before: road
-          probability: 0.25
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
 
 
 # Intersections
@@ -514,8 +610,6 @@ po_boxes:
             add_number_phrase: true
             add_number_phrase_probability: 0.4 # PO Box #1234
 
-        numeric_probability: 1.0
-
     box: &box
         canonical: box
         sample: true
@@ -525,8 +619,6 @@ po_boxes:
             direction: left
             add_number_phrase: true
             add_number_phrase_probability: 0.4 # Box #1234
-
-        numeric_probability: 1.0
 
     private_mail_box: &private_mail_box
         canonical: private mail box
@@ -542,8 +634,6 @@ po_boxes:
             add_number_phrase: true
             add_number_phrase_probability: 0.4 # PMB #1234
 
-        numeric_probability: 1.0
-
     alphanumeric:
         # Don't sample all the forms in post_office.txt as many of the PO box
         # phrases appear only in Australia
@@ -558,8 +648,11 @@ po_boxes:
         alpha_probability: 0.05 # PO Box A
         numeric_plus_alpha_probability: 0.04 # PO Box 123G
         alpha_plus_numeric_probability: 0.01 # PO Box A123
-        alpha_plus_numeric_whitespace_probability: 0.1
-        numeric_plus_alpha_whitespace_probability: 0.1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
 
     digits:
         - length: 1
@@ -575,6 +668,8 @@ po_boxes:
         - length: 6
           probability: 0.05
 
+    
+
     zones:
         # Overrides for commercial/office areas (landuse=commercial in OSM)
         commercial:
@@ -585,12 +680,6 @@ po_boxes:
                   probability: 0.2
                 - alternative: *box
                   probability: 0.1
-
-    order:
-        - after: house
-          probability: 0.8
-        - before: house
-          probability: 0.2
 
 # Categories
 # ==========
@@ -703,9 +792,9 @@ cardinal_directions:
         canonical: east
         abbreviated: e
         sample: true
-        canonical_probability: 0.5
-        abbreviated_probability: 0.3
-        sample_probability: 0.2
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
         numeric:
             direction: right
         numeric_affix:
@@ -717,9 +806,9 @@ cardinal_directions:
         canonical: west
         abbreviated: w
         sample: true
-        canonical_probability: 0.5
-        abbreviated_probability: 0.3
-        sample_probability: 0.2
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
         numeric:
             direction: right
         numeric_affix:
@@ -731,9 +820,9 @@ cardinal_directions:
         canonical: north
         abbreviated: n
         sample: true
-        canonical_probability: 0.5
-        abbreviated_probability: 0.3
-        sample_probability: 0.2
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
         numeric:
             direction: right
         numeric_affix:
@@ -745,9 +834,9 @@ cardinal_directions:
         canonical: south
         abbreviated: s
         sample: true
-        canonical_probability: 0.5
-        abbreviated_probability: 0.3
-        sample_probability: 0.2
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
         numeric:
             direction: right
         numeric_affix:
@@ -777,27 +866,38 @@ entrances:
         sample: true
         canonical_probability: 0.8
         abbreviated_probability: 0.2
+        numeric:
+            direction: left
 
     # Entrance 1, Entrance A, etc.
     alphanumeric: &entrance_alphanumeric
         default: *entrance
+        numeric_probability: 0.1 # e.g. Entrance 1
+        alpha_probability: 0.85 # e.g. Entrnace A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
 
-    directional:
-        base: *entrance_alphanumeric
-        modifier:
-            direction: left # e.g. North Entrance
-            direction_probability: 0.9
-            alternatives:
-                - alternative: *north
-                - alternative: *south
-                - alternative: *east
-                - alternative: *west
-                - alternative: *right
-                - alternative: *left
-                - alternative: *rear
-                - alternative: *front
-                - alternative:
-                      canonical: freight
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            modifier:
+                direction: left # e.g. North Entrance
+                direction_probability: 0.9
+                alternatives:
+                    - alternative: *north
+                    - alternative: *south
+                    - alternative: *east
+                    - alternative: *west
+                    - alternative: *right
+                    - alternative: *left
+                    - alternative: *rear
+                    - alternative: *front
+                    - alternative:
+                          canonical: freight
 
 # Staircase
 # =========
@@ -807,18 +907,34 @@ staircases:
     stair: &stair
         canonical: stair
         sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
 
     staircase: &staircase
         canonical: staircase
         sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
 
     stairway: &stairway
         canonical: stairway
         sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
 
     stairwell: &stairwell
         canonical: stairwell
         sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
 
     alphanumeric: &staircase_alphanumeric
         # For alphanumerics, Stair A, Stair 1, etc.
@@ -831,22 +947,30 @@ staircases:
               probability: 0.2
             - alternative: *stairwell
               probability: 0.2
+        numeric_probability: 0.1 # e.g. Staircase 1
+        alpha_probability: 0.85 # e.g. Staircase A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
 
-    directional:
-        base: *staircase_alphanumeric
-        modifier:
-            direction: left # e.g. Left Staircase
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: left # e.g. Left Staircase, North Tower
             direction_probability: 0.7
-            alternatives:
-                - alternative: *north
-                - alternative: *south
-                - alternative: *east
-                - alternative: *west
-                - alternative: *right
-                - alternative: *left
-                - alternative: *rear
-                - alternative: *front
-
+            modifier:
+                alternatives:
+                    - alternative: *north
+                    - alternative: *south
+                    - alternative: *east
+                    - alternative: *west
+                    - alternative: *right
+                    - alternative: *left
+                    - alternative: *rear
+                    - alternative: *front
 
 # Unit types
 # ==========
@@ -855,25 +979,6 @@ staircases:
 # refer to the 
 
 units:
-    # Units are not part of the global address formats (and are not always standard)
-    # This is a list of places in the address where the unit line might go
-    order:
-        # e.g. Flat 18, Da Vinci House, 44 Saffron Hill, London
-        - before: house
-          probability: 0.2
-        # e.g. Da Vinci House, Flat 18, 44 Saffron Hill, London
-        - before: road
-          probability: 0.6
-        # e.g. Da Vinci House, 44 Saffron Hill, Flat 18, London (not as common in UK)
-        - after: road
-          probability: 0.1
-        # e.g. Floor 5, Apt 6
-        - after: level
-          probability: 0.09
-        # e.g. Apt. 6, 5/F (less common)
-        - before: level
-          probability: 0.01
-
     # Special terms
     suite: &suite
         canonical: suite
@@ -889,9 +994,9 @@ units:
             abbreviated_probability: 0.4
         numeric:
             direction: left
-        # Suite #101 and Suite No. 101 as opposed to Suite 101
-        add_number_phrase: true
-        add_number_phrase_probability: 0.5
+            # Suite #101 and Suite No. 101 as opposed to Suite 101
+            add_number_phrase: true
+            add_number_phrase_probability: 0.5
     penthouse: &penthouse
         canonical: penthouse
         abbreviated: ph
@@ -901,13 +1006,16 @@ units:
         sample_probability: 0.2
         plural:
             canonical: penthouses
+        standalone_probability: 1.0
+    penthouse_numeric: &penthouse_numeric
+        <<: *penthouse
         numeric:
             direction: left
-        numeric_probability: 0.2
-        standalone_probability: 0.8
-        # Penthouse #1 and Penthouse No. 1
-        add_number_phrase: true
-        add_number_phrase_probability: 0.2
+            # Penthouse #1 and Penthouse No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+        numeric_probability: 1.0
+        standalone_probability: 0.0
     top_left: &top_left
         canonical: top left
         abbreviated: t/l
@@ -950,9 +1058,9 @@ units:
             abbreviated_probability: 0.6
         numeric:
             direction: left
-        # Office #1 and Office No. 1
-        add_number_phrase: true
-        add_number_phrase_probability: 0.7
+            # Office #1 and Office No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.7
     door: &door
         canonical: door
         sample: true
@@ -962,9 +1070,9 @@ units:
             canonical: doors
         numeric:
             direction: left
-        # Door #1 and Door No. 1
-        add_number_phrase: true
-        add_number_phrase_probability: 0.2
+            # Door #1 and Door No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
     room: &room
         canonical: room
         abbreviated: rm
@@ -978,18 +1086,18 @@ units:
             abbreviated_probability: 0.4
         numeric:
             direction: left
-        # Room #1 and Room No. 1
-        add_number_phrase: true
-        add_number_phrase_probability: 0.6
+            # Room #1 and Room No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.6
     hall: &hall
         canonical: hall
         plural:
             canonical: halls
         numeric:
             direction: left
-        # Room #1 and Room No. 1
-        add_number_phrase: true
-        add_number_phrase_probability: 0.6
+            # Room #1 and Room No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.6
     apartment: &apartment
         canonical: apartment
         abbreviated: apt
@@ -1005,9 +1113,9 @@ units:
             abbreviated: 0.8
         numeric:
             direction: left
-        # Apt #1 and Apt No. 1
-        add_number_phrase: true
-        add_number_phrase_probability: 0.4
+            # Apt #1 and Apt No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4
     flat: &flat
         canonical: flat
         abbreviated: flt
@@ -1022,9 +1130,9 @@ units:
             abbreviated_probability: 0.2
         numeric:
             direction: left
-        # Flat #1 and Flat No. 1
-        add_number_phrase: true
-        add_number_phrase_probability: 0.4
+            # Flat #1 and Flat No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4
     lot: &lot
         canonical: lot
         sample: true
@@ -1034,9 +1142,9 @@ units:
             canonical: lots
         numeric:
             direction: left
-        # Lot #1 and Lot No. 1
-        add_number_phrase: true
-        add_number_phrase_probability: 0.6
+            # Lot #1 and Lot No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.6
     parcel: &parcel
         canonical: parcel
         sample: true
@@ -1046,8 +1154,8 @@ units:
             canonical: parcels
         numeric:
             direction: left
-        add_number_phrase: true
-        add_number_phrase_probability: 0.6
+            add_number_phrase: true
+            add_number_phrase_probability: 0.6
     unit: &unit
         canonical: unit
         abbreviated: u
@@ -1059,9 +1167,9 @@ units:
             canonical: units
         numeric:
             direction: left
-        # Unit #1 and Unit No. 1
-        add_number_phrase: true
-        add_number_phrase_probability: 0.4
+            # Unit #1 and Unit No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4
     alphanumeric: &unit_alphanumeric
         # Many unit types that apply only in Australia
         # For most English-speaking countries, only use the terms defined above
@@ -1076,7 +1184,7 @@ units:
               probability: 0.2
             - alternative: *door
               probability: 0.04
-            - alternative: *penthouse
+            - alternative: *penthouse_numeric
               probability: 0.01
             - alternative: *apartment
               probability: 0.1
@@ -1084,8 +1192,11 @@ units:
         numeric_plus_alpha_probability: 0.03 # e.g. 1A
         alpha_plus_numeric_probability: 0.03 # e.g. A1
         alpha_probability: 0.04 # e.g. Flat A
-        alpha_plus_numeric_whitespace_probability: 0.1
-        numeric_plus_alpha_whitespace_probability: 0.1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
 
         # Separate random probability for adding directions like 2L, 2R, etc.
         add_direction: true
@@ -1160,23 +1271,6 @@ units:
             - alternative: *top_floor_right
               probability: 0.15
 
-    # For unit types like 2/34 (more common in Canada and Australia)
-    combined:
-        component: house_number
-        direction: right
-        separators:
-            - separator: /
-              probability: 0.8
-            - separator: "-"
-              probability: 0.1
-            - separator: " - "
-              probability: 0.1
-
-    # If no unit number is specified
-    alphanumeric_probability: 0.75
-    standalone_probability: 0.2495
-    combined_probability: 0.005
-
 # Country-specific overrides
 # ==========================
 # For each country, we allow a copy of the structures listed above
@@ -1245,10 +1339,12 @@ countries:
                 probability: 0.6
                 alternatives:
                     - alternative: *unit
-                      probability: 0.3
+                      probability: 0.1
+                    - alternative: *number
+                      probability: 0.2
                     - alternative: *door
                       probability: 0.02
-                    - alternative: *penthouse
+                    - alternative: *penthouse_numeric
                       probability: 0.07
                     - alternative: *flat
                       probability: 0.01 # See this e.g. in Milwaukee with Polish flats
@@ -1270,6 +1366,9 @@ countries:
     # Canada
     # Specifically Canadian English. If the address is in French it will use fr.yaml
     ca:
+        combinations:
+            house_number_unit:
+                probability: 0.3
         levels:
             # Note: Canadian English uses "storey" keeping with the British convention, so no need to change that
 
