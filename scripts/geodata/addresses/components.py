@@ -33,7 +33,7 @@ PARSER_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                      'resources', 'parser', 'default.yaml')
 
 
-class AddressExpander(object):
+class AddressComponents(object):
     '''
     This class, while it has a few dependencies, exposes a simple method
     for transforming geocoded input addresses (usually a lat/lon with either
@@ -46,8 +46,8 @@ class AddressExpander(object):
     prefixes like "London Borough of", pruning duplicates like "Antwerpen, Antwerpen, Antwerpen".
 
     Usage:
-    >>> expander = AddressExpander(osm_admin_rtree, language_rtree, neighborhoods_rtree, buildings_rtree, subdivisions_rtree, quattroshapes_rtree, geonames)
-    >>> expander.expanded_address_components({'name': 'Hackney Empire'}, 51.54559, -0.05567)
+    >>> components = AddressComponents(osm_admin_rtree, language_rtree, neighborhoods_rtree, buildings_rtree, subdivisions_rtree, quattroshapes_rtree, geonames)
+    >>> components.expand({'name': 'Hackney Empire'}, 51.54559, -0.05567)
 
     Returns (results vary because of randomness):
 
@@ -290,9 +290,11 @@ class AddressExpander(object):
                     prob_dist = vals['probabilities']
                     break
 
+        values = []
+        probs = []
         for num_type in (self.NULL_PHRASE, self.ALPHANUMERIC_PHRASE, self.STANDALONE_PHRASE):
             key = '{}_probability'.format(num_type)
-            prob = alphanumeric_props.get(key)
+            prob = component_config.get(key)
             if prob is not None:
                 values.append(num_type)
                 probs.append(prob)
@@ -627,7 +629,7 @@ class AddressExpander(object):
             else:
                 return
 
-            phrase = component_class.phrase(num, language, country=countyr, **(phrase_kwargs or {}))
+            phrase = component_class.phrase(num, language, country=country, **(phrase_kwargs or {}))
 
             if phrase:
                 address_components[component] = phrase
@@ -754,7 +756,7 @@ class AddressExpander(object):
             if phrase and phrase != postcode:
                 address_components[AddressFormatter.POSTCODE] = phrase
 
-    def expanded_address_components(self, address_components, latitude, longitude, num_floors=None, num_basements=None, zone=None):
+    def expanded(self, address_components, latitude, longitude, num_floors=None, num_basements=None, zone=None):
         try:
             latitude, longitude = latlon_to_decimal(latitude, longitude)
         except Exception:
@@ -816,7 +818,7 @@ class AddressExpander(object):
 
         return address_components, country, language
 
-    def limited_address_components(self, address_components, latitude, longitude):
+    def limited(self, address_components, latitude, longitude):
         try:
             latitude, longitude = latlon_to_decimal(latitude, longitude)
         except Exception:
@@ -880,5 +882,4 @@ class AddressExpander(object):
         self.replace_names(address_components)
 
         self.prune_duplicate_names(address_components)
-
         return address_components, country, language
