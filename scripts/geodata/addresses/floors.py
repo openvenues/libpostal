@@ -2,14 +2,13 @@ import random
 import six
 
 from geodata.addresses.config import address_config
+
 from geodata.addresses.numbering import NumberedComponent, sample_alphabet, latin_alphabet
 from geodata.encoding import safe_decode
 from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 
 
 class Floor(NumberedComponent):
-    config_key = 'levels'
-
     # When we don't know the number of floors, use a Zipfian distribution
     # to choose randomly between 1 and max_floors with 1 being much more
     # likely than 2, etc.
