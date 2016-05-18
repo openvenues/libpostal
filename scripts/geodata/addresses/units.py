@@ -5,6 +5,7 @@ from geodata.addresses.config import address_config
 from geodata.addresses.directions import RelativeDirection
 from geodata.addresses.floors import Floor
 from geodata.addresses.numbering import NumberedComponent, sample_alphabet, latin_alphabet
+from geodata.configs.utils import nested_get
 from geodata.encoding import safe_decode
 from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 
@@ -67,7 +68,7 @@ class Unit(NumberedComponent):
             else:
                 number = weighted_choice(cls.positive_units_letters, cls.positive_units_letters_cdf)
 
-                whitespace_probability = num_type_props.get('{}_whitespace_probability'.format(num_type))
+                whitespace_probability = nested_get(num_type_props, (num_type, 'whitespace_probability'))
                 whitespace_phrase = six.u(' ') if whitespace_probability and random.random() < whitespace_probability else six.u('')
 
                 if num_type == cls.ALPHA_PLUS_NUMERIC:
