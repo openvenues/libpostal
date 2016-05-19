@@ -46,21 +46,6 @@ components:
         alphanumeric_probability: 0.65
         standalone_probability: 0.05
 
-    combinations:
-        level_unit:
-            components:
-                - level
-                - unit
-            label: unit
-            separators:
-                - separator: /
-                  probability: 0.2
-                - separator: " "
-                  probability: 0.6
-                - separator: " - "
-                  probability: 0.2
-            probability: 0.005
-
 numbers:
     default: &numero
         canonical: número
