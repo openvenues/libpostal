@@ -33,12 +33,14 @@ class AddressFormatter(object):
         address_formatter = AddressFormatter()
         components = {
             'house': u'Anticafé',
-            'addr:housenumber': '2',
-            'addr:street': u'Calle de la Unión',
-            'addr:postcode': '28013',
-            'addr:city': u'Madrid',
+            'house_number': '2',
+            'road': u'Calle de la Unión',
+            'postcode': '28013',
+            'city': u'Madrid',
         }
-        address_formatter.format_address('es', components)
+        country = 'es'
+        language = 'es'
+        address_formatter.format_address(components, country, language)
     '''
 
     whitespace_component_regex = re.compile('[\r\n]+[\s\r\n]*')
