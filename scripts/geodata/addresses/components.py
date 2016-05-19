@@ -488,7 +488,7 @@ class AddressComponents(object):
 
         if len(language_scripts) > 1:
             cumulative = float(sum(language_scripts.values()))
-            values = list(language_scripts)
+            values = list(language_scripts.keys())
             probs = cdf([float(c) / cumulative for c in language_scripts.values()])
             language_script = weighted_choice(values, probs)
 
@@ -594,7 +594,7 @@ class AddressComponents(object):
         qs_add_city_prob = float(nested_get(self.config, ('city', 'quattroshapes_geonames_backup_city_probability')))
         abbreviated_name_prob = float(nested_get(self.config, ('city', 'quattroshapes_geonames_abbreviated_probability')))
 
-        if non_local_language or (AddressFormatter.CITY not in address_components and random.random() < qs_add_city_prob):
+        if AddressFormatter.CITY not in address_components and random.random() < qs_add_city_prob:
             lang = non_local_language or language
             quattroshapes_cities = self.quattroshapes_rtree.point_in_poly(latitude, longitude, return_all=True)
             for result in quattroshapes_cities:
