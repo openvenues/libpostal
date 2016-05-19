@@ -539,12 +539,12 @@ class AddressComponents(object):
                     else:
                         key, raw_key = name_key, raw_name_key
 
-                    name = component_value.get(key, component_value.get(raw_key))
-
-                    if not name or (component != AddressFormatter.CITY and name == existing_city_name):
-                        name = component_value.get(name_key, component_value.get(raw_name_key))
-
-                    if not name or (component != AddressFormatter.CITY and name == existing_city_name):
+                    for k in (key, name_key, raw_key, raw_name_key):
+                        name = component_value.get(k)
+                        if name and not (name == existing_city_name and component != AddressFormatter.CITY):
+                            break
+                    # if we've checked all keys without finding a valid name, leave this component out
+                    else:
                         continue
 
                     if (component, name) not in seen:
