@@ -278,10 +278,12 @@ class AddressComponents(object):
         self.formatter.aliases.replace(address_components)
         return address_components
 
-    def combine_fields(self, address_components, language, country=None):
+    def combine_fields(self, address_components, language, country=None, generated_components=None):
         combo_config = address_config.get_property('components.combinations', language, country=country, default={})
         values = []
         probs = []
+        generated_components = generated_components or set()
+
         for k, v in six.iteritems(combo_config):
             values.append(v)
             probs.append(v['probability'])
@@ -295,7 +297,7 @@ class AddressComponents(object):
         combo = weighted_choice(values, probs)
         if combo is not None:
             components = OrderedDict.fromkeys(combo['components']).keys()
-            if not all((c in address_components for c in components)):
+            if not all((c in address_components and (c in generated_components or self.is_numeric(address_components[c])) for c in components)):
                 return None
 
             values = []
@@ -686,20 +688,29 @@ class AddressComponents(object):
             if component not in address_components and random.random() < add_neighborhood_prob:
                 address_components[component] = neighborhoods[0]
 
-    def add_sub_building_component(self, component, address_components, language, country, random_kwargs=None, phrase_kwargs=None):
+    def generate_sub_building_component(self, component, address_components, language, country=None, **kw):
         existing = address_components.get(component, None)
 
-        component_class = self.sub_building_component_class_map[component]
         if existing is None:
             generated_type = self.generated_type(component, address_components, language, country=country)
             if generated_type == self.ALPHANUMERIC_PHRASE:
-                num = component_class.random(language, country=country, **(random_kwargs or {}))
+                num = component_class.random(language, country=country, **kw)
+                address_components[component] = num
+                return num
             elif generated_type == self.STANDALONE_PHRASE:
-                num = None
-            else:
-                return
+                return None
 
-            phrase = component_class.phrase(num, language, country=country, **(phrase_kwargs or {}))
+        return None
+
+    def add_sub_building_phrase(self, component, address_components, language, country, generated_components=None, **kw):
+        num = address_components.get(component)
+        if not num:
+            return
+        generated_components = generated_components or set()
+
+        component_class = self.sub_building_component_class_map[component]
+        if component in generated_components:
+            phrase = component_class.phrase(num, language, country=country, **kw)
 
             if phrase:
                 address_components[component] = phrase
@@ -709,17 +720,35 @@ class AddressComponents(object):
                 address_components[component] = phrase
 
     def add_sub_building_components(self, address_components, language, country=None, num_floors=None, num_basements=None, zone=None):
-        self.add_sub_building_component(AddressFormatter.ENTRANCE, address_components, language, country=country)
-        self.add_sub_building_component(AddressFormatter.STAIRCASE, address_components, language, country=country)
+        generated_components = set()
 
-        self.add_sub_building_component(AddressFormatter.LEVEL, address_components, language, country=country,
-                                        random_kwargs=dict(num_floors=num_floors, num_basements=num_basements),
-                                        phrase_kwargs=dict(num_floors=num_floors))
+        if self.generate_sub_building_component(Address.ENTRANCE, address_components, language, country=country):
+            generated_components.add(Address.ENTRANCE)
 
-        self.add_sub_building_component(AddressFormatter.UNIT, address_components, language, country=country,
-                                        random_kwargs=dict(num_floors=num_floors, num_basements=num_basements),
-                                        phrase_kwargs=dict(zone=zone))
+        if self.generate_sub_building_component(Address.STAIRCASE, address_components, language, country=country):
+            generated_components.add(Address.STAIRCASE)
 
+        if self.generate_sub_building_component(Address.LEVEL, address_components, language, country=country, num_floors=num_floors, num_basements=num_basements):
+            generated_components.add(Address.LEVEL)
+
+        if self.generate_sub_building_component(Address.UNIT, address_components, language, country=country, num_floors=num_floors, num_basements=num_basements):
+            generated_components.add(Address.UNIT)
+
+        # Combine fields like unit/house_number here
+        combined = self.combine_fields(address_components, language, country=country, generated_components=generated_components)
+        if combined:
+            generated_components -= set([combined])
+
+        self.add_sub_building_phrase(AddressFormatter.ENTRANCE, address_components, language, country=country, generated_components=generated_components)
+        self.add_sub_building_phrase(AddressFormatter.STAIRCASE, address_components, language, country=country, generated_components=generated_components)
+
+        self.add_sub_building_phrase(AddressFormatter.LEVEL, address_components, language, country=country,
+                                     generated_components=generated_components,
+                                     num_floors=num_floors)
+
+        self.add_sub_building_phrase(AddressFormatter.UNIT, address_components, language, country=country,
+                                     generated_components=generated_components,
+                                     zone=zone)
 
     def replace_name_affixes(self, address_components, language):
         '''
@@ -897,8 +926,6 @@ class AddressComponents(object):
 
         self.add_sub_building_components(address_components, language, country=country,
                                          num_floors=num_floors, num_basements=num_basements, zone=zone)
-
-        self.combine_fields(address_components, language, country=country)
 
         return address_components, country, language
 
