@@ -255,12 +255,13 @@ class PolygonIndex(object):
     def polygon_from_geojson(cls, feature):
         poly_type = feature['geometry']['type']
         if poly_type == 'Polygon':
-            poly = cls.to_polygon(feature['geometry']['coordinates'][0])
+            coords = feature['geometry']['coordinates']
+            poly = cls.to_polygon(coords[0], holes=coords[1:] or None)
             return poly
         elif poly_type == 'MultiPolygon':
             polys = []
             for coords in feature['geometry']['coordinates']:
-                poly = cls.to_polygon(coords[0])
+                poly = cls.to_polygon(coords[0], holes=coords[1:] or None)
                 polys.append(poly)
 
             return MultiPolygon(polys)
