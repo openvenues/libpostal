@@ -936,7 +936,7 @@ countries:
                     null_phrase_probability: 0.8
                 # These sum to 1
                 numeric_probability: 0.25
-                ordinal_probability: 0.7
+                ordinal_probability: 0.75
 
             alphanumeric: &unit_alphanumeric_puerta
                 <<: *unit_alphanumeric
