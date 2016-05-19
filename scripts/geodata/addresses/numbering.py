@@ -192,7 +192,7 @@ class NumberedComponent(object):
         # If we're using something like "Floor A" or "Unit 2L", remove ordinal/affix items
         if is_alpha:
             values, probs = zip(*[(v, p) for v, p in zip(values, probs) if v in ('numeric', 'null', 'standalone')])
-            total = sum(probs)
+            total = float(sum(probs))
             probs = [p / total for p in probs]
 
         probs = cdf(probs)
@@ -232,12 +232,14 @@ class NumberedComponent(object):
 
         whitespace_default = True
 
+        num = safe_decode(num)
+
         if num_type == 'numeric_affix':
             phrase = props['affix']
             if props.get('upper_case', True):
                 phrase = phrase.upper()
             whitespace_default = False
-        elif num_type == 'ordinal':
+        elif num_type == 'ordinal' and safe_decode(num).isdigit():
             num = ordinal_expressions.suffixed_number(num, language, gender=props.get('gender', None))
 
             if random.random() < props.get('null_phrase_probability', 0.0):
