@@ -691,6 +691,8 @@ class AddressComponents(object):
     def generate_sub_building_component(self, component, address_components, language, country=None, **kw):
         existing = address_components.get(component, None)
 
+        component_class = self.sub_building_component_class_map[component]
+
         if existing is None:
             generated_type = self.generated_type(component, address_components, language, country=country)
             if generated_type == self.ALPHANUMERIC_PHRASE:
