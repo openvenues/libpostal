@@ -1188,6 +1188,9 @@ units:
         add_direction_numeric: true
         add_direction_standalone: true
 
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.35
+
     zones:
         residential: *unit_alphanumeric
         commercial:
@@ -1327,8 +1330,10 @@ countries:
                       probability: 0.2
                     - alternative: *door
                       probability: 0.02
+                    - alternative: *suite
+                      probability: 0.05
                     - alternative: *penthouse_numeric
-                      probability: 0.07
+                      probability: 0.02
                     - alternative: *flat
                       probability: 0.01 # See this e.g. in Milwaukee with Polish flats
 
