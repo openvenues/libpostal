@@ -7,6 +7,7 @@ import yaml
 from collections import Mapping
 
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
+from geodata.address_formatting.formatter import AddressFormatter
 from geodata.configs.utils import nested_get, DoesNotExist, recursive_merge
 from geodata.math.sampling import cdf, check_probability_distribution
 
@@ -19,6 +20,16 @@ PLACE_CONFIG_FILE = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
 
 
 class PlaceConfig(object):
+    ADMIN_COMPONENTS = {
+        AddressFormatter.SUBURB,
+        AddressFormatter.CITY_DISTRICT,
+        AddressFormatter.CITY,
+        AddressFormatter.ISLAND,
+        AddressFormatter.STATE_DISTRICT,
+        AddressFormatter.STATE,
+        AddressFormatter.COUNTRY,
+    }
+
     def __init__(self, config_file=PLACE_CONFIG_FILE):
         self.cache = {}
         place_config = yaml.load(open(config_file))
@@ -63,8 +74,10 @@ class PlaceConfig(object):
         for boundary in boundaries:
             object_type = boundary.get('type')
             object_id = safe_encode(boundary.get('id', ''))
+            if not (object_type and object_id):
+                continue
             containing_ids.add((object_type, object_id))
 
-        return {c: v for c, v in six.iteritems(components) if self.include_component(c, containing_ids, country=country)}
+        return {c: v for c, v in six.iteritems(components) if c not in self.ADMIN_COMPONENTS or self.include_component(c, containing_ids, country=country)}
 
 place_config = PlaceConfig()
