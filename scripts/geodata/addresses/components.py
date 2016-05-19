@@ -722,17 +722,17 @@ class AddressComponents(object):
     def add_sub_building_components(self, address_components, language, country=None, num_floors=None, num_basements=None, zone=None):
         generated_components = set()
 
-        if self.generate_sub_building_component(Address.ENTRANCE, address_components, language, country=country):
-            generated_components.add(Address.ENTRANCE)
+        if self.generate_sub_building_component(AddressFormatter.ENTRANCE, address_components, language, country=country):
+            generated_components.add(AddressFormatter.ENTRANCE)
 
-        if self.generate_sub_building_component(Address.STAIRCASE, address_components, language, country=country):
-            generated_components.add(Address.STAIRCASE)
+        if self.generate_sub_building_component(AddressFormatter.STAIRCASE, address_components, language, country=country):
+            generated_components.add(AddressFormatter.STAIRCASE)
 
-        if self.generate_sub_building_component(Address.LEVEL, address_components, language, country=country, num_floors=num_floors, num_basements=num_basements):
-            generated_components.add(Address.LEVEL)
+        if self.generate_sub_building_component(AddressFormatter.LEVEL, address_components, language, country=country, num_floors=num_floors, num_basements=num_basements):
+            generated_components.add(AddressFormatter.LEVEL)
 
-        if self.generate_sub_building_component(Address.UNIT, address_components, language, country=country, num_floors=num_floors, num_basements=num_basements):
-            generated_components.add(Address.UNIT)
+        if self.generate_sub_building_component(AddressFormatter.UNIT, address_components, language, country=country, num_floors=num_floors, num_basements=num_basements):
+            generated_components.add(AddressFormatter.UNIT)
 
         # Combine fields like unit/house_number here
         combined = self.combine_fields(address_components, language, country=country, generated_components=generated_components)
