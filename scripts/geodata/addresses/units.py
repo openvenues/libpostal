@@ -53,10 +53,12 @@ class Unit(NumberedComponent):
     def random(cls, language, country=None, num_floors=None, num_basements=None):
         num_type, num_type_props = cls.choose_alphanumeric_type('units.alphanumeric', language, country=country)
 
-        if num_floors is not None:
-            number = cls.for_floor(Floor.sample_positive_floors(num_floors))
-        else:
+        use_floor_prob = address_config.get_property('units.alphanumeric.use_floor_probability', language, country=country, default=0.0)
+
+        if num_floors is None or random.random() >= use_floor_prob:
             number = weighted_choice(cls.numbered_units, cls.unit_probs_cdf)
+        else:
+            number = cls.for_floor(Floor.random(language, country=country, num_floors=num_floors, num_basements=num_basements or 0))
 
         if num_type == cls.NUMERIC:
             return safe_decode(number)
@@ -66,7 +68,8 @@ class Unit(NumberedComponent):
             if num_type == cls.ALPHA:
                 return safe_decode(letter)
             else:
-                number = weighted_choice(cls.positive_units_letters, cls.positive_units_letters_cdf)
+                if num_floors is None:
+                    number = weighted_choice(cls.positive_units_letters, cls.positive_units_letters_cdf)
 
                 whitespace_probability = nested_get(num_type_props, (num_type, 'whitespace_probability'))
                 whitespace_phrase = six.u(' ') if whitespace_probability and random.random() < whitespace_probability else six.u('')
