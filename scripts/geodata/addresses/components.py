@@ -34,6 +34,20 @@ PARSER_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                      'resources', 'parser', 'default.yaml')
 
 
+class ComponentDependencies(object):
+    '''
+    Declare an address component and its dependencies e.g.
+    a house_numer cannot be used in the absence of a road name.
+    '''
+
+    ANY = 'any'
+    ALL = 'all'
+
+    def __init__(self, name, dependencies=tuple()):
+        self.name = name
+        self.dependencies = dependencies
+
+
 class AddressComponents(object):
     '''
     This class, while it has a few dependencies, exposes a simple method
@@ -65,14 +79,6 @@ class AddressComponents(object):
     iso_alpha2_codes = set([c.alpha2.lower() for c in pycountry.countries])
     iso_alpha3_codes = set([c.alpha3.lower() for c in pycountry.countries])
 
-    rare_components = {
-        AddressFormatter.SUBURB,
-        AddressFormatter.CITY_DISTRICT,
-        AddressFormatter.ISLAND,
-        AddressFormatter.STATE_DISTRICT,
-        AddressFormatter.STATE,
-    }
-
     BOUNDARY_COMPONENTS = (
         AddressFormatter.SUBURB,
         AddressFormatter.CITY_DISTRICT,
@@ -100,11 +106,26 @@ class AddressComponents(object):
     def __init__(self, osm_admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames):
         self.config = yaml.load(open(PARSER_DEFAULT_CONFIG))
 
+        self.setup_component_dependencies()
+
         self.osm_admin_rtree = osm_admin_rtree
         self.language_rtree = language_rtree
         self.neighborhoods_rtree = neighborhoods_rtree
         self.quattroshapes_rtree = quattroshapes_rtree
         self.geonames = geonames
+
+    def setup_component_dependencies(self):
+        self.component_dependencies = OrderedDict()
+        deps = self.config.get('component_dependencies', {})
+        for component, conf in six.iteritems(deps):
+            dep_list = []
+            for dep in conf['dependencies']:
+                for k in (ComponentDependencies.ANY, ComponentDependencies.ALL):
+                    if k in dep:
+                        dep_list.append((k, dep[k]))
+                        break
+
+            self.component_dependencies[component] = ComponentDependencies(component, dep_list)
 
     def strip_keys(self, value, ignore_keys):
         for key in ignore_keys:
@@ -857,7 +878,9 @@ class AddressComponents(object):
             if phrase and phrase != postcode:
                 address_components[AddressFormatter.POSTCODE] = phrase
 
-    def expanded(self, address_components, latitude, longitude, num_floors=None, num_basements=None, zone=None):
+    def expanded(self, address_components, latitude, longitude,
+                 dropout_places=True, add_sub_building_components=True,
+                 num_floors=None, num_basements=None, zone=None):
         '''
         Expanded components
         -------------------
@@ -868,7 +891,7 @@ class AddressComponents(object):
 
         Namely, it calls all the methods above to reverse geocode to a few of the
         R-tree + point-in-polygon indices passed in at initialization and adds things
-        like admin boundaries, neighborhoods, 
+        like admin boundaries, neighborhoods,
         '''
         try:
             latitude, longitude = latlon_to_decimal(latitude, longitude)
@@ -926,8 +949,13 @@ class AddressComponents(object):
         self.add_house_number_phrase(address_components, language, country=country)
         self.add_postcode_phrase(address_components, language, country=country)
 
-        self.add_sub_building_components(address_components, language, country=country,
-                                         num_floors=num_floors, num_basements=num_basements, zone=zone)
+        if add_sub_building_components:
+            self.add_sub_building_components(address_components, language, country=country,
+                                             num_floors=num_floors, num_basements=num_basements, zone=zone)
+
+        if dropout_places:
+            # Perform dropout on places
+            address_components = place_config.drop_components(address_components, all_osm_components, country=country)
 
         return address_components, country, language
 
