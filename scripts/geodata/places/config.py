@@ -67,25 +67,4 @@ class PlaceConfig(object):
 
         return {c: v for c, v in six.iteritems(components) if self.include_component(c, containing_ids, country=country)}
 
-        all_ids = set()
-
-        for component in components:
-            object_type = component.get('type')
-            object_id = safe_encode(component.get('id', ''))
-            all_ids.add((object_type, object_id))
-
-        for object_type, object_id in list(all_ids):
-            if (object_type, object_id) in self.omit_conditions:
-                conditions = self.omit_conditions[(object_type, object_id)]
-                if all_ids & conditions:
-                    all_ids.remove((object_type, object_id))
-
-            if (object_type, object_id) in self.include_probabilities and random.random() > self.include_probabilities[(object_type, object_id)]:
-                all_ids.remove((object_type, object_id))
-
-        if len(all_ids) == len(components):
-            return components
-
-        return [c for c in components if (c.get('type'), safe_encode(c.get('id', ''))) in all_ids]
-
 place_config = PlaceConfig()
