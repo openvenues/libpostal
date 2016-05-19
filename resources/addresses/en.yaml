@@ -1349,19 +1349,20 @@ countries:
     # Canada
     # Specifically Canadian English. If the address is in French it will use fr.yaml
     ca:
-        combinations:
-            house_number_unit:
-                components:
-                    - unit
-                    - house_number
-                separators:
-                    - separator: /
-                      probability: 0.1
-                    - separator: "-"
-                      probability: 0.8
-                    - separator: " - "
-                      probability: 0.1
-                probability: 0.1
+        components:
+            combinations:
+                house_number_unit:
+                    components:
+                        - unit
+                        - house_number
+                    separators:
+                        - separator: /
+                          probability: 0.1
+                        - separator: "-"
+                          probability: 0.8
+                        - separator: " - "
+                          probability: 0.1
+                    probability: 0.1
         levels:
             # Note: Canadian English uses "storey" keeping with the British convention, so no need to change that
 
