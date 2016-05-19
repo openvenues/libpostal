@@ -32,13 +32,12 @@ components:
         standalone_probability: 0.05
 
     staircase:
-        null_probability: 0.989
+        null_probability: 0.99
         alphanumeric_probability: 0.01
-        directional_probability: 0.001
 
     entrance:
-        null_probability: 0.9999
-        alphanumeric_probability: 0.0001
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
 
     unit:
         # If no unit number is specified
@@ -824,8 +823,7 @@ countries:
         components:
             staircase:
                 null_probability: 0.97
-                alphanumeric_probability: 0.02
-                directional_probability: 0.01
+                alphanumeric_probability: 0.03
         levels:
             planta: &planta
                 # Everywhere except Spain
