@@ -297,7 +297,7 @@ class AddressComponents(object):
         combo = weighted_choice(values, probs)
         if combo is not None:
             components = OrderedDict.fromkeys(combo['components']).keys()
-            if not all((c in address_components and (c in generated_components or address_components[c].isdigit()) for c in components)):
+            if not all((c in address_components and (c in generated_components or self.is_numeric(address_components[c])) for c in components)):
                 return None
 
             values = []
