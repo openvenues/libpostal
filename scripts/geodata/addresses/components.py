@@ -21,6 +21,7 @@ from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.countries.names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
+from geodata.math.floats import isclose
 from geodata.math.sampling import cdf, weighted_choice
 from geodata.names.normalization import name_affixes
 from geodata.boundaries.names import boundary_names
@@ -290,9 +291,9 @@ class AddressComponents(object):
 
         combo = weighted_choice(values, probs)
         if combo is not None:
-            components = OrderedDict(combo['components']).keys()
+            components = OrderedDict.fromkeys(combo['components']).keys()
             if not all((c in address_components for c in components)):
-                return
+                return None
 
             values = []
             probs = []
@@ -306,6 +307,8 @@ class AddressComponents(object):
             new_label = combo['label']
             new_value = separator.join([address_components.pop(c) for c in components])
             address_components[new_label] = new_value
+            return new_label
+        return None
 
     def generated_type(self, component, existing_components, language, country=None):
         component_config = address_config.get_property('components.{}'.format(component), language, country=country)
@@ -874,7 +877,7 @@ class AddressComponents(object):
         if city:
             address_components[AddressFormatter.CITY] = city
 
-        self.add_neighborhoods(address_components, neighborhoods, language, non_local_language=non_local_language,
+        self.add_neighborhoods(address_components, neighborhoods,
                                language_suffix=language_suffix)
 
         street = address_components.get(AddressFormatter.ROAD)
@@ -952,7 +955,7 @@ class AddressComponents(object):
 
         neighborhoods = self.neighborhood_components(latitude, longitude)
 
-        self.add_neighborhoods(address_components, neighborhoods, language, non_local_language=non_local_language,
+        self.add_neighborhoods(address_components, neighborhoods,
                                language_suffix=language_suffix)
 
         self.replace_name_affixes(address_components, non_local_language or language)
