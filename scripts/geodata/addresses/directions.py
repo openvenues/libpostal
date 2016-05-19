@@ -8,6 +8,14 @@ class RelativeDirection(NumericPhrase):
     dictionaries = ['unit_directions']
 
 
+class AnteroposteriorDirection(RelativeDirection):
+    key = 'directions.anteroposterior'
+
+
+class LateralDirection(RelativeDirection):
+    key = 'directions.lateral'
+
+
 class CardinalDirection(NumericPhrase):
     key = 'cardinal_directions'
     dictionaries = ['cardinal_directions']

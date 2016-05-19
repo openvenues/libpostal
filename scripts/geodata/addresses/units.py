@@ -2,7 +2,7 @@ import random
 import six
 
 from geodata.addresses.config import address_config
-from geodata.addresses.directions import RelativeDirection
+from geodata.addresses.directions import RelativeDirection, LateralDirection, AnteroposteriorDirection
 from geodata.addresses.floors import Floor
 from geodata.addresses.numbering import NumberedComponent, sample_alphabet, latin_alphabet
 from geodata.configs.utils import nested_get
@@ -102,13 +102,62 @@ class Unit(NumberedComponent):
                 return RelativeDirection.phrase(None, language, country=country)
 
     @classmethod
+    def add_quadrant(cls, key, unit, language, country=None):
+        add_quadrant_probability = address_config.get_property('{}.add_quadrant_probability'.format(key),
+                                                               language, country=country, default=0.0)
+        if not random.random() < add_quadrant_probability:
+            return unit
+        add_quadrant_numeric = address_config.get_property('{}.add_quadrant_numeric'.format(key),
+                                                           language, country=country)
+        try:
+            unit = int(unit)
+            integer_unit = True
+        except (ValueError, TypeError):
+            integer_unit = False
+
+        first_direction = address_config.get_property('{}.add_quadrant_first_direction'.format(key),
+                                                      language, country=country)
+
+        if first_direction == 'lateral':
+            ordering = (LateralDirection, AnteroposteriorDirection)
+        elif first_direction == 'anteroposterior':
+            ordering = (AnteroposteriorDirection, LateralDirection)
+        else:
+            return unit
+
+        if not integer_unit:
+            add_quadrant_standalone = address_config.get_property('{}.add_quadrant_standalone'.format(key),
+                                                                  language, country=country)
+            if add_quadrant_standalone:
+                unit = None
+            else:
+                return None
+
+        last_num_type = None
+        for i, c in enumerate(ordering):
+            num_type, phrase, props = c.pick_phrase_and_type(unit, language, country=country)
+            whitespace_default = num_type == c.NUMERIC or last_num_type == c.NUMERIC
+            unit = c.combine_with_number(unit, phrase, num_type, props, whitespace_default=whitespace_default)
+            last_num_type = num_type
+
+        return unit
+
+    @classmethod
     def phrase(cls, unit, language, country=None, zone=None):
         if unit is not None:
             key = 'units.alphanumeric' if zone is None else 'units.zones.{}'.format(zone)
 
+            direction_unit = None
             add_direction = address_config.get_property('{}.add_direction'.format(key), language, country=country)
             if add_direction:
-                unit = cls.add_direction(key, unit, language, country=country)
+                direction_unit = cls.add_direction(key, unit, language, country=country)
+
+            if direction_unit and direction_unit != unit:
+                unit = direction_unit
+            else:
+                add_quadrant = address_config.get_property('{}.add_quadrant'.format(key), language, country=country)
+                if add_quadrant:
+                    unit = cls.add_quadrant(key, unit, language, country=country)
 
             return cls.numeric_phrase(key, safe_decode(unit), language,
                                       dictionaries=['unit_types_numbered'], country=country)
