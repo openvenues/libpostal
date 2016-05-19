@@ -54,9 +54,8 @@ components:
                   alphanumeric_probability: 0.4
 
     entrance:
-        null_probability: 0.9994
+        null_probability: 0.9995
         alphanumeric_probability: 0.0005
-        directional_probability: 0.0001
         conditional:
             - component: staircase
               probabilities:
@@ -68,9 +67,8 @@ components:
                   alphanumeric_probability: 0.0005
 
     staircase:
-        null_probability: 0.9989
+        null_probability: 0.999
         alphanumeric_probability: 0.001
-        directional_probability: 0.0001
 
     unit:
         # If no unit number is specified
@@ -102,19 +100,6 @@ components:
                 - separator: " - "
                   probability: 0.1
             probability: 0.005
-        level_unit:
-            components:
-                - level
-                - unit
-            label: unit
-            separators:
-                - separator: /
-                  probability: 0.1
-                - separator: "-"
-                  probability: 0.8
-                - separator: " - "
-                  probability: 0.1
-            probability: 0.001
 
 # Number
 # ======
@@ -667,8 +652,6 @@ po_boxes:
           probability: 0.1
         - length: 6
           probability: 0.05
-
-    
 
     zones:
         # Overrides for commercial/office areas (landuse=commercial in OSM)
@@ -1368,7 +1351,17 @@ countries:
     ca:
         combinations:
             house_number_unit:
-                probability: 0.3
+                components:
+                    - unit
+                    - house_number
+                separators:
+                    - separator: /
+                      probability: 0.1
+                    - separator: "-"
+                      probability: 0.8
+                    - separator: " - "
+                      probability: 0.1
+                probability: 0.1
         levels:
             # Note: Canadian English uses "storey" keeping with the British convention, so no need to change that
 
