@@ -348,7 +348,7 @@ class AddressComponents(object):
         else:
             return num_type
 
-    def is_numeric(self, component, language, country=None):
+    def is_numeric(self, component):
         tokens = tokenize(component)
         return sum((1 for t, c in tokens if c == token_types.NUMERIC or c not in token_types.WORD_TOKEN_TYPES)) == len(tokens)
 
