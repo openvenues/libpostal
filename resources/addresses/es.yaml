@@ -442,8 +442,8 @@ directions:
             affix: d
             direction: right
             whitespace_probability: 0.1
-        numeric_probability: 0.7
-        numeric_affix_probability: 0.3
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.6
     left: &izquierda
         canonical: izquierda
         abbreviated: izq
@@ -457,8 +457,8 @@ directions:
             affix: i
             direction: right
             whitespace_probability: 0.1
-        numeric_probability: 0.7
-        numeric_affix_probability: 0.3
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.6
     rear: &trasera
         canonical: trasera
         abbreviated: tras
@@ -486,6 +486,20 @@ directions:
           probability: 0.05
         - alternative: *frente
           probability: 0.05
+
+    anteroposterior:
+        alternatives:
+            - alternative: *frente
+              probability: 0.5
+            - alternative: *trasera
+              probability: 0.5
+
+    lateral:
+        alternatives:
+            - alternative: *derecha
+              probability: 0.5
+            - alternative: *izquierda
+              probability: 0.5
 
 cardinal_directions:
     east: &este

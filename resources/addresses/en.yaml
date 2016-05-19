@@ -719,8 +719,8 @@ directions:
             affix: r
             direction: right
             whitespace_probability: 0.05
-        numeric_probability: 0.2
-        numeric_affix_probability: 0.8
+        numeric_probability: 0.05
+        numeric_affix_probability: 0.95
     left: &left
         canonical: left
         abbreviated: l
@@ -732,8 +732,8 @@ directions:
             affix: l
             direction: right
             whitespace_probability: 0.05
-        numeric_probability: 0.2
-        numeric_affix_probability: 0.8
+        numeric_probability: 0.05
+        numeric_affix_probability: 0.95
     rear: &rear
         canonical: rear
         abbreviated: r
@@ -745,8 +745,8 @@ directions:
             affix: r
             direction: right
             whitespace_probability: 0.05
-        numeric_probability: 0.2
-        numeric_affix_probability: 0.8
+        numeric_probability: 0.05
+        numeric_affix_probability: 0.95
     front: &front
         canonical: front
         abbreviated: frnt
@@ -758,8 +758,8 @@ directions:
             affix: f
             direction: right
             whitespace_probability: 0.05
-        numeric_probability: 0.2
-        numeric_affix_probability: 0.8
+        numeric_probability: 0.05
+        numeric_affix_probability: 0.95
     alternatives:
         - alternative: *right
           probability: 0.45
@@ -769,6 +769,22 @@ directions:
           probability: 0.05
         - alternative: *rear
           probability: 0.05
+
+    anteroposterior:
+        alternatives:
+            - alternative: *front
+              probability: 0.5
+            - alternative: *rear
+              probability: 0.5
+
+    lateral:
+        alternatives:
+            - alternative: *left
+              probability: 0.5
+            - alternative: *right
+              probability: 0.5
+
+
 
 cardinal_directions:
     east: &east
@@ -1184,9 +1200,18 @@ units:
         # Separate random probability for adding directions like 2L, 2R, etc.
         add_direction: true
         add_direction_probability: 0.1
-        # Add directions only for plain numbers
+
+        # Add directions for plain numbers
         add_direction_numeric: true
+        # Add direction only e.g. Unit Left
         add_direction_standalone: true
+
+        # Separate random probability for adding quadrant units like 2RF 2RR 2LF 2LR
+        add_quadrant: true
+        add_quadrant_probability: 0.001
+        add_quadrant_first_direction: lateral
+
+        add_quadrant_numeric: true
 
         # If there are 10 floors, create unit numbers like #301 or #1032
         use_floor_probability: 0.35
@@ -1231,17 +1256,6 @@ units:
         parcel_probability: 0.06
         lot_plus_parcel_probability: 0.02
         parcel_plus_lot_probability: 0.02
-
-    directional:
-        modifier:
-            direction: right # e.g. 1
-            numeric_probability: 0.1
-            numeric_affix_probability: 0.9
-            alternatives:
-                - alternative: *right
-                - alternative: *left
-                - alternative: *rear
-                - alternative: *front
 
     standalone:
         sample: false

@@ -41,8 +41,11 @@ latin_alphabet = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
 class NumericPhrase(object):
     key = None
 
+    NUMERIC = 'numeric'
+    NUMERIC_AFFIX = 'numeric_affix'
+
     @classmethod
-    def phrase(cls, number, language, country=None):
+    def pick_phrase_and_type(cls, number, language, country=None):
         values, probs = address_config.alternative_probabilities(cls.key, language, dictionaries=cls.dictionaries, country=country)
         if not values:
             return safe_decode(number) if number is not None else None
@@ -52,7 +55,7 @@ class NumericPhrase(object):
         values = []
         probs = []
 
-        for num_type in ('numeric', 'numeric_affix'):
+        for num_type in (cls.NUMERIC, cls.NUMERIC_AFFIX):
             key = '{}_probability'.format(num_type)
             prob = phrase_props.get(key, None)
             if prob is not None:
@@ -62,19 +65,16 @@ class NumericPhrase(object):
         probs = cdf(probs)
 
         if len(values) < 2:
-            num_type = 'numeric'
+            num_type = cls.NUMERIC
         else:
             num_type = weighted_choice(values, probs)
 
-        props = phrase_props[num_type]
+        return num_type, phrase, phrase_props[num_type]
 
-        if num_type == 'numeric':
-            # Numeric phrase the default is with whitespace e.g. "No 1"
-            whitespace_default = True
-        elif num_type == 'numeric_affix':
+    @classmethod
+    def combine_with_number(cls, number, phrase, num_type, props, whitespace_default=False):
+        if num_type == cls.NUMERIC_AFFIX:
             phrase = props['affix']
-            # Numeric affix default is no whitespace e.g. "#1"
-            whitespace_default = False
 
         direction = props['direction']
         whitespace = props.get('whitespace', whitespace_default)
@@ -95,6 +95,12 @@ class NumericPhrase(object):
         # Need to specify a direction, otherwise return naked number
         else:
             return safe_decode(number)
+
+    @classmethod
+    def phrase(cls, number, language, country=None):
+        num_type, phrase, props = cls.pick_phrase_and_type(number, language, country=country)
+        whitespace_default = num_type == cls.NUMERIC
+        return cls.combine_with_number(number, phrase, num_type, props, whitespace_default=whitespace_default)
 
 
 class Number(NumericPhrase):
