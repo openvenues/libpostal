@@ -124,6 +124,7 @@ class AddressComponents(object):
                 normalized_key = osm_address_components.get_component(country, k, v)
                 if normalized_key:
                     components[normalized_key].append(props)
+                    break
         return components
 
     def address_language(self, components, candidate_languages):
@@ -160,8 +161,10 @@ class AddressComponents(object):
 
         Pick a name key from OSM
         '''
-        name_key = boundary_names.name_key(props, component)
-        return name_key, ''.join((name_key, suffix)) if ':' not in name_key else name_key
+        raw_key = boundary_names.name_key(props, component)
+
+        key = ''.join((raw_key, suffix)) if ':' not in raw_key else raw_key
+        return key, raw_key
 
     def all_names(self, props, languages):
         names = set()
