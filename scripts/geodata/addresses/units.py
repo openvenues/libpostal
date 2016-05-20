@@ -149,6 +149,8 @@ class Unit(NumberedComponent):
         if unit is not None:
             key = 'units.alphanumeric' if zone is None else 'units.zones.{}'.format(zone)
 
+            is_alpha = safe_decode(unit).isalpha()
+
             direction_unit = None
             add_direction = address_config.get_property('{}.add_direction'.format(key), language, country=country)
             if add_direction:
@@ -156,13 +158,15 @@ class Unit(NumberedComponent):
 
             if direction_unit and direction_unit != unit:
                 unit = direction_unit
+                is_alpha = False
             else:
                 add_quadrant = address_config.get_property('{}.add_quadrant'.format(key), language, country=country)
                 if add_quadrant:
                     unit = cls.add_quadrant(key, unit, language, country=country)
+                    is_alpha = False
 
             return cls.numeric_phrase(key, safe_decode(unit), language,
-                                      dictionaries=['unit_types_numbered'], country=country)
+                                      dictionaries=['unit_types_numbered'], country=country, is_alpha=is_alpha)
         else:
             key = 'units.standalone'
             add_direction = address_config.get_property('{}.add_direction'.format(key), language, country=country)
