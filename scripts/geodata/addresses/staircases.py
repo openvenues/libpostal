@@ -23,6 +23,8 @@ class Staircase(NumberedComponent):
     @classmethod
     def random(cls, language, country=None):
         num_type, num_type_props = cls.choose_alphanumeric_type('staircases.alphanumeric', language, country=country)
+        if num_type is None:
+            return None
 
         if num_type == cls.NUMERIC:
             number = weighted_choice(cls.staircase_range, cls.staircase_range_cdf)

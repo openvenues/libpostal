@@ -52,6 +52,8 @@ class Unit(NumberedComponent):
     @classmethod
     def random(cls, language, country=None, num_floors=None, num_basements=None):
         num_type, num_type_props = cls.choose_alphanumeric_type('units.alphanumeric', language, country=country)
+        if num_type is None:
+            return None
 
         use_floor_prob = address_config.get_property('units.alphanumeric.use_floor_probability', language, country=country, default=0.0)
 
