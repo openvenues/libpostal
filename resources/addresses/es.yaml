@@ -4,27 +4,6 @@
 # as well as any other country-specific norms)
 
 components:
-    po_box:
-        null_probability: 0.9
-        alphanumeric_probability: 0.1
-        conditional:
-            - component: level
-              probabilities:
-                  null_probability: 0.995
-                  alphanumeric_probability: 0.005
-            - component: unit
-              probabilities:
-                  null_probability: 0.99
-                  alphanumeric_probability: 0.01
-            - component: staircase
-              probabilities:
-                  null_probability: 0.999
-                  alphanumeric_probability: 0.001
-            - component: entrance
-              probabilities:
-                  null_probability: 0.999
-                  alphanumeric_probability: 0.001
-
     level:
         # If no floor number is specified
         null_probability: 0.6
@@ -672,6 +651,13 @@ units:
             direction_probability: 0.95 # Let it vary occasionally e.g. Puerta 2a
         numeric_probability: 0.45
         ordinal_probability: 0.55
+    letra: &letra
+        canonical: letra
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
     flat: &departamento
         canonical: departamento
         abbreviated: dpto
@@ -747,7 +733,7 @@ units:
             - alternative: *apartamento
               probability: 0.1
             - alternative: *casa
-              probability: 0.05
+              probability: 0.03
             - alternative: *puerta
               probability: 0.05
 
@@ -766,6 +752,18 @@ units:
         numeric_plus_alpha:
             whitespace_probability: 0.1
 
+        alpha:
+            default: *departamento
+            probability: 0.8
+            alternatives:
+                - alternative: *apartamento
+                  probability: 0.1
+                - alternative: *casa
+                  probability: 0.03
+                - alternative: *puerta
+                  probability: 0.05
+                - alternative: *letra
+                  probability: 0.02
 
     alphanumeric_apartamento: &unit_alphanumeric_apartamento
         <<: *unit_alphanumeric
@@ -779,6 +777,19 @@ units:
             - alternative: *puerta
               probability: 0.05
 
+        alpha:
+            default: *apartamento
+            probability: 0.8
+            alternatives:
+                - alternative: *departamento
+                  probability: 0.1
+                - alternative: *casa
+                  probability: 0.03
+                - alternative: *puerta
+                  probability: 0.05
+                - alternative: *letra
+                  probability: 0.02
+
     alphanumeric_apartamento_exclusive: &unit_alphanumeric_apartamento_exclusive
         <<: *unit_alphanumeric
         default: *apartamento
@@ -789,6 +800,18 @@ units:
             - alternative: *puerta
               probability: 0.05
 
+        alpha:
+            default: *apartamento
+            probability: 0.9
+            alternatives:
+                - alternative: *casa
+                  probability: 0.03
+                - alternative: *puerta
+                  probability: 0.05
+                - alternative: *letra
+                  probability: 0.02
+
+
     zones:
         residential: *unit_alphanumeric
         commercial:
@@ -797,6 +820,25 @@ units:
             alternatives:
                 - alternative: *suite
                   probability: 0.2
+
+            numeric_probability: 0.9 # e.g. Oficina 1
+            numeric_plus_alpha_probability: 0.01 # e.g. Oficina 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. Oficina A1
+            alpha_probability: 0.08 # e.g. Oficina A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1
+
+            alpha:
+                default: *oficina
+                probability: 0.8
+                alternatives:
+                    - alternative: *suite
+                      probability: 0.16
+                    - alternative: *letra
+                      probability: 0.05
+
         industrial:
             default: *lote
             probability: 0.5
@@ -807,12 +849,40 @@ units:
                   probability: 0.19
                 - alternative: *parcela
                   probability: 0.01
+
+            numeric_probability: 0.9 # e.g. Lote 1
+            numeric_plus_alpha_probability: 0.01 # e.g. Lote 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. Lote A1
+            alpha_probability: 0.08 # e.g. Lote A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1
+
         university:
             default: *sala
             probability: 0.9
             alternatives:
                 - alternative: *puerta
                   probability: 0.1
+
+            numeric_probability: 0.9 # e.g. Sala 1
+            numeric_plus_alpha_probability: 0.01 # e.g. Sala 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. Sala A1
+            alpha_probability: 0.08 # e.g. Sala A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1
+
+            alpha:
+                default: *sala
+                probability: 0.9
+                alternatives:
+                    - alternative: *puerta
+                      probability: 0.08
+                    - alternative: *letra
+                      probability: 0.02
 
     allotments:
         lot:
@@ -959,6 +1029,22 @@ countries:
                       probability: 0.1
                     - alternative: *casa
                       probability: 0.1
+
+                numeric_probability: 0.7 # e.g. Puerta 1a
+                numeric_plus_alpha_probability: 0.01 # e.g. Puerta 1A
+                alpha_plus_numeric_probability: 0.01 # e.g. Puerta A1
+                alpha_probability: 0.28 # e.g. Puerta A
+
+                alpha:
+                    default: *puerta_espana
+                    probability: 0.8
+                    alternatives:
+                        - alternative: *letra
+                          probability: 0.15
+                        - alternative: *apartamento
+                          probability: 0.04
+                        - alternative: *casa
+                          probability: 0.01
 
             zones:
                 residential: *unit_alphanumeric_puerta
