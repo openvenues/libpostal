@@ -4,7 +4,7 @@ import random
 import six
 import yaml
 
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 from geodata.address_formatting.formatter import AddressFormatter
 
@@ -79,14 +79,28 @@ class AddressComponents(object):
     iso_alpha2_codes = set([c.alpha2.lower() for c in pycountry.countries])
     iso_alpha3_codes = set([c.alpha3.lower() for c in pycountry.countries])
 
-    BOUNDARY_COMPONENTS = (
+    BOUNDARY_COMPONENTS = OrderedDict.fromkeys((
+        AddressFormatter.SUBDIVISION,
         AddressFormatter.SUBURB,
         AddressFormatter.CITY_DISTRICT,
         AddressFormatter.CITY,
         AddressFormatter.ISLAND,
         AddressFormatter.STATE_DISTRICT,
-        AddressFormatter.STATE
-    )
+        AddressFormatter.STATE,
+        AddressFormatter.COUNTRY,
+    ))
+
+    ADDRESS_LEVEL_COMPONENTS = {
+        AddressFormatter.ATTENTION,
+        AddressFormatter.CARE_OF,
+        AddressFormatter.HOUSE,
+        AddressFormatter.HOUSE_NUMBER,
+        AddressFormatter.ROAD,
+        AddressFormatter.ENTRANCE,
+        AddressFormatter.STAIRCASE,
+        AddressFormatter.LEVEL,
+        AddressFormatter.UNIT,
+    }
 
     ALL_OSM_NAME_KEYS = set(['name', 'name:simple',
                              'ISO3166-1:alpha2', 'ISO3166-1:alpha3',
@@ -877,6 +891,62 @@ class AddressComponents(object):
             phrase = PostCode.phrase(postcode, language, country=country)
             if phrase and phrase != postcode:
                 address_components[AddressFormatter.POSTCODE] = phrase
+
+    def drop_address(self, address_components):
+        return {c: v for c, v in six.iteritems(address_components) if c not in self.ADDRESS_LEVEL_COMPONENTS}
+
+    def drop_places(self, address_components):
+        return {c: v for c, v in six.iteritems(address_components) if c not in place_config.ADMIN_COMPONENTS}
+
+    def drop_postcode(self, address_components):
+        if AddressFormatter.POSTCODE not in address_components:
+            return address_components
+        return {c: v for c, v in six.iteritems(address_components) if c != AddressFormatter.POSTCODE}
+
+    def po_box_address(self, address_components, language, country=None):
+        po_box_config = self.config['po_box']
+        po_box_probability = float(po_box_config['probability'])
+        if random.random() < po_box_probability:
+            box_number = POBox.random(language, country=country)
+            if box_number is None:
+                return None
+
+            po_box = POBox.phrase(box_number, language, country=country)
+            address_components[AddressFormatter.PO_BOX] = po_box
+
+            drop_address_probability = po_box_config['drop_address_probability']
+            if random.random() < drop_address_probability:
+                address_components = self.drop_address(address_components)
+
+            drop_places_probability = po_box_config['drop_places_probability']
+            if random.random() < drop_places_probability:
+                address_components = self.drop_places(address_components)
+
+            drop_postcode_probability = po_box_config['drop_postcode_probability']
+            if random.random() < drop_postcode_probability:
+                address_components = self.drop_postcode(address_components)
+
+            return address_components
+        else:
+            return None
+
+    def category_components(self, category_query, address_components, language, country=None):
+        category_config = self.config['category']
+        address_components[AddressFormatter.CATEGORY] = category_query.category
+        if category_query.prep:
+            address_components[AddressFormatter.NEAR] = category_query.prep
+
+        drop_address_probability = category_config['drop_address_probability']
+        if random.random() < drop_address_probability:
+            address_components = self.drop_address(address_components)
+
+        drop_postcode_probability = category_config['drop_postcode_probability']
+        if random.random() < drop_postcode_probability:
+            address_components = self.drop_postcode(address_components)
+
+        if not category_query.add_place_name:
+            address_components = self.drop_places(address_components)
+        return address_components
 
     def expanded(self, address_components, latitude, longitude,
                  dropout_places=True, add_sub_building_components=True,
