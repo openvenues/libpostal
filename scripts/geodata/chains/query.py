@@ -1,10 +1,20 @@
 import random
+import six
+
+from collections import namedtuple
 
 from geodata.addresses.config import address_config
 from geodata.address_expansions.gazetteers import chains_gazetteer
-from geodata.categories.query import *
+from geodata.categories.config import category_config
+from geodata.categories.preposition import CategoryPreposition
+from geodata.math.sampling import weighted_choice, cdf
 from geodata.text.normalize import normalized_tokens
 from geodata.text.tokenize import tokenize, token_types
+from geodata.encoding import safe_decode
+
+ChainQuery = namedtuple('ChainQuery', 'name, prep, add_place_name')
+
+NULL_CHAIN_QUERY = ChainQuery(None, None, False)
 
 
 class Chain(object):
@@ -64,3 +74,26 @@ class Chain(object):
         if not choices:
             return canonical
         return random.choice(choices)
+
+    @classmethod
+    def phrase(cls, chain, language, country=None):
+        if not chain:
+            return NULL_CHAIN_QUERY
+
+        chain_phrase = safe_decode(chain)
+
+        prep_phrase_type = CategoryPreposition.random(language, country=country)
+
+        if prep_phrase_type in (None, CategoryPreposition.NULL):
+            return CategoryQuery(chain_phrase, prep=None, add_place_name=True)
+
+        values, probs = address_config.alternative_probabilities('categories.{}'.format(prep_phrase_type), language, country=country)
+        if not values:
+            return ChainQuery(chain_phrase, prep=None, add_place_name=True)
+
+        prep_phrase, prep_phrase_props = weighted_choice(values, probs)
+        prep_phrase = safe_decode(prep_phrase)
+
+        add_place_name = prep_phrase_type not in (CategoryPreposition.NEARBY, CategoryPreposition.NEAR_ME)
+
+        return ChainQuery(chain_phrase, prep=prep_phrase, add_place_name=add_place_name)

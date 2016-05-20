@@ -20,6 +20,8 @@ class CategoryConfig(object):
         self.language_categories_singular = {}
         self.language_categories_plural = {}
 
+        self.property_names = set()
+
         if not os.path.exists(base_dir):
             raise RuntimeError('{} does not exist'.format(base_dir))
 
@@ -37,6 +39,7 @@ class CategoryConfig(object):
             reader.next()  # headers
 
             for key, value, is_plural, phrase in reader:
+                self.property_names.add(key)
                 is_plural = bool(int(is_plural))
                 if is_plural:
                     plural_rules[(key, value)].append(phrase)
