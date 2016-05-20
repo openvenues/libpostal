@@ -137,8 +137,8 @@ class NumberedComponent(object):
         return num_type, num_type_props
 
     @classmethod
-    def numeric_phrase(cls, key, num, language, country=None, dictionaries=(), strict_numeric=False):
-        is_alpha = False
+    def numeric_phrase(cls, key, num, language, country=None, dictionaries=(), strict_numeric=False, is_alpha=False):
+        has_alpha = False
         is_none = False
         if num is not None:
             try:
@@ -150,13 +150,20 @@ class NumberedComponent(object):
                     if not all((c == token_types.NUMERIC) for t, c in tokenize(safe_decode(num))):
                         if strict_numeric:
                             return safe_decode(num)
-                        is_alpha = True
+                        has_alpha = True
 
         else:
             is_none = True
 
+        values, probs = None, None
+
+        if is_alpha:
+            values, probs = address_config.alternative_probabilities('{}.alpha'.format(key), language, dictionaries=dictionaries, country=country)
+
         # Pick a phrase given the probability distribution from the config
-        values, probs = address_config.alternative_probabilities(key, language, dictionaries=dictionaries, country=country)
+        if values is None:
+            values, probs = address_config.alternative_probabilities(key, language, dictionaries=dictionaries, country=country)
+
         if not values:
             return safe_decode(num) if not is_none else None
 
@@ -198,7 +205,7 @@ class NumberedComponent(object):
             return phrase
 
         # If we're using something like "Floor A" or "Unit 2L", remove ordinal/affix items
-        if is_alpha:
+        if has_alpha:
             values, probs = zip(*[(v, p) for v, p in zip(values, probs) if v in ('numeric', 'null', 'standalone')])
             total = float(sum(probs))
             probs = [p / total for p in probs]
