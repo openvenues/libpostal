@@ -1,6 +1,6 @@
-7-eleven|7 eleven|7-11|seven-eleven|seven eleven|seveneleven|seven-11|seven 11
-a&w|a & w|a and w|a&w restaurants|a & w restaurants|a and w restaurants
-ace hardware
+7-eleven|7 eleven|7-11|seven-eleven|seven eleven|seveneleven|seven-11|seven 11|7-elevens|7 elevens|7-11s|seven-elevens|seven elevens|sevenelevens|seven-11s|seven 11s
+a&w|a & w|a and w|a&ws|a & ws|a and ws|a&w restaurants|a & w restaurants|a and w restaurants
+ace hardware|ace hardwares
 adidas
 advance auto parts
 agip
@@ -20,11 +20,11 @@ arby's|arbys
 arco
 argos
 asda
-at&t|at & t|a t & t|a.t&t|a.t & t|at and t|a.t and t|att|at&t store|at & t store|a t & t store|a.t&t store|a.t & t store|at and t store|a.t and t store|att store
-au bon pain
+at&t|at & t|a t & t|a.t&t|a.t & t|at and t|a.t and t|att|at&t store|at & t store|a t & t store|a.t&t store|a.t & t store|at and t store|a.t and t store|att store|at&t stores|at & t stores|a t & t stores|a.t&t stores|a.t & t stores|at and t stores|a.t and t stores|att stores
+au bon pain|au bon pains
 auchan
-auntie anne's|auntie annes
-autozone
+auntie anne's|auntie annes|auntie anne's pretzels|auntie annes pretzels
+autozone|autozones
 avia
 avis
 axa
@@ -33,13 +33,13 @@ banamex
 banco do brasil
 banco itaú|banco itau
 banco popular
-bank of america|bofa|b of a
+bank of america|bofa|b of a|bank of americas|bofas|b of as
 bank spółdzielczy|bank spoldzielczy
 bankia
 banque populaire
 barclays
-barnes & noble|barnes and noble|barnes n noble
-b&q|b & q|b and q|bandq
+barnes & noble|barnes and noble|barnes n noble|barnes & nobles|barnes and nobles|barnes n nobles
+b&q|b & q|b and q|b-and-q
 baskin-robbins|baskin robbins|baskinrobbins
 bauhof
 bb&t|bb & t|bb and t|b.b&t|b.b & t|b.b and t|b b&t|b b & t|b b and t
@@ -50,11 +50,11 @@ bell
 ben & jerry's|ben & jerrys|ben and jerry's|ben and jerrys|ben & jerry|ben and jerry
 benihana|benihanas|benihana's
 best buy|best buys|bestbuy|bestbuys
-best western
+best western|best westerns
 biedronka
 big smoke burger
 billa
-blimpie
+blimpie|blimpie's|blimpies
 blokker
 bmw
 bnp paribas
@@ -62,26 +62,26 @@ bnp paribas fortis
 the body shop
 bonchon chicken
 boots
-boston market
+boston market|boston markets
 boston pizza
 bp|b p|b.p
 bpi|b.p.i|b p i
 brd
 bradesco
 bricomarché|bricomarche
-buca di beppo
+buca di beppo|buca di beppo's|buca di beppos
 bubba gump shrimp company|bubba gump|bubba gump's|bubba gumps|bubba gump shrimp co.|bubba gump's shrimp co.|bubba gumps shrimp co.|bubba gump shrimp co|bubba gump's shrimp co|bubba gumps shrimp co|bubba gump shrimp company|bubba gump's shrimp company|bubba gumps shrimp company
 buffalo grill
 buffalo wild wings
-burger king
+burger king|burger kings
 c&a|c & a|c and a
 caisse d'épargne|caisse d'epargne|caisse dépargne|caisse depargne
 caixa econômica federal|caixa economica federal
-california pizza kitchen
+california pizza kitchen|california pizza kitchens
 caltex
 campsa
 canadian tire
-carl's jr.|carl's jr|carl's junior|carls jr.|carls jr|carls junior
+carl's jr.|carl's jr|carl's junior|carls jr.|carls jr|carls junior|carl's jr.s|carl's jrs|carl's juniors|carls jr.s|carls jrs|carls juniors
 carphone warehouse
 carrefour city
 carrefour
@@ -92,17 +92,17 @@ cbc banque
 cepsa
 charley's grilled subs|charleys grilled subs
 chase
-chase bank
+chase bank|chase banks
 checkers
 cheeburger cheeburger
 cheesecake factory
 chevys fresh mex
-chick-fil-a|chick fil a|chickfila|chick fillet
+chick-fil-a|chick fil a|chickfila|chick fillet|chick-fil-as|chick fil as|chickfilas|chick fillets
 hyundai
 chili's|chilis
-chipotle|chipotle mexican grill
-cinnabon
-chevron
+chipotle|chipotle mexican grill|chipotles
+cinnabon|cinnabons
+chevron|chevrons
 chowking
 chuck e. cheese's|chuck e cheese's|chuck e. cheeses|chuck e cheeses|chuck e. cheese|chuck e cheese
 church's chicken|churchs chicken
@@ -110,10 +110,10 @@ cibc|canadian imperial bank of commerce
 cici's pizza|ci ci's pizza|cici's|cicis pizza|cicis
 circle k|circle-k
 citgo
-citibank|citi bank
+citibank|citi bank|citibanks|citi banks
 citroën|citroen
 cng
-cold stone|coldstone|cold stone creamery|coldstone creamery
+cold stone|coldstone|cold stone creamery|coldstone creamery|cold stones|coldstones
 coles
 coles express
 coop jednota
@@ -125,33 +125,33 @@ conoco
 copec
 correios
 costa coffee
-costco
+costco|costcos
 costcutter
-cracker barrel|cracker barrel old country store
+cracker barrel|cracker barrel old country store|cracker barrels
 crédit agricole|credit agricole
 crédit mutuel|credit mutuel
 crédit mutuel de bretagne|credit mutuel de bretagne
 crepes & waffles|crepes and waffles
 culver's|culvers
 cvs|cvs caremark|cvs pharmacy
-dairy queen
+dairy queen|dairy queens
 dänisches bettenlager|danisches bettenlager|daenisches bettenlager
 dave & buster's|dave and buster's|dave & busters|dave and busters
-days inn
+days inn|days inns
 decathlon
 deichmann
 délifrance|delifrance
 delikatesy centrum
-del taco
+del taco|del tacos
 denner
 denny's|dennys
-deutsche bank|deutschebank
+deutsche bank|deutschebank|deutsche banks|deutschebanks
 dhl
 dia
 din tai fung
-dollar general
-dollar tree
-dollarama
+dollar general|dollar generals
+dollar tree|dollar trees
+dollarama|dollaramas
 domino's|dominos|domino's pizza|dominos pizza
 dunkin' donuts|dunkin donuts
 e.leclerc|e-leclerc|e. leclerc|e leclerc|eleclerc
@@ -171,9 +171,9 @@ eurospar
 eurospin
 exxon
 fakta
-family dollar
+family dollar|family dollars
 familymart|family mart
-fatburger
+fatburger|fatburgers
 fielmann
 firestone
 five guys|five guys famous burgers and fries
@@ -186,44 +186,44 @@ friendly's|friendlys
 fuddruckers
 gall & gall
 galp
-gamestop
+gamestop|gamestops
 giant
 giant food
 gloria jean's|gloria jean's coffees|gloria jeans|gloria jeans coffees
-gnc
+gnc|gncs
 golden corral
-goodwill
+goodwill|goodwills
 great clips
 greggs|gregg's
 gulf
-h&m|h & m|h and m
-h&r block|h & r block|h and r block
+h&m|h & m|h and m|h&ms|h & ms|h and ms
+h&r block|h & r block|h and r block|h&r blocks|h & r blocks|h and r blocks
 halfords
 halifax
 hallmark
 hamburguesas el corral
 hampton inn
-hard rock cafe
+hard rock cafe|hard rock cafes
 hardee's|hardees
-h-e-b|heb|h e b|h.e.b.
+h-e-b|heb|h e b|h.e.b.|h-e-bs|hebs|h e bs|h.e.b.s
 h-e-b gas|heb gas|h e b gas|h.e.b. gas
 hertz
 hess
 hilton garden inn
-holiday inn
+holiday inn|holiday inns
 holiday inn express
 the home depot|home depot|home depots
 honda
 homebase
 hooters
 hungry jack's|hungry jacks
-hsbc|h.s.b.c|h s b c
+hsbc|h.s.b.c|h s b c|hsbcs|h.s.b.cs|h s b cs
 hypovereinsbank|hvb|h v b|h.v.b
 hyundai
 iga
-ihop|international house of pancakes
-ikea
-in-n-out burger|in-n-out|in 'n out|in n' out|in and out|in-and-out|in & out|in 'n out burger|in n' out burger|in and out burger|in-and-out burger|in & out burger
+ihop|international house of pancakes|ihops
+ikea|ikdeas
+in-n-out burger|in-n-out|in 'n out|in n' out|in and out|in-and-out|in & out|in 'n out burger|in n' out burger|in and out burger|in-and-out burger|in & out burger|in-n-out burgers|in-n-outs|in 'n outs|in n' outs|in and outs|in-and-outs|in & outs|in 'n out burgers|in n' out burgers|in and out burgers|in-and-out burgers|in & out burgers
 indian oil
 indomaret
 ing
@@ -231,14 +231,14 @@ intermarché|intermarche
 intermarché super|intermarche super
 intersport
 itaú|itau
-jack in the box|jack-in-the-box|jackinthebox
+jack in the box|jack-in-the-box|jackinthebox|jack in the boxes|jack-in-the-boxes|jackintheboxes
 jack astor's bar & grill|jack astors bar & grill|jack astor's bar and grill|jack astors bar and grill
-jamba juice
-jcpenney|j. c. penney|jc penney|j.c penney|j c penney
+jamba juice|jamba juices
+jcpenney|j. c. penney|jc penney|j.c penney|j c penney|jcpenneys|j. c. penneys|jc penneys|j.c penneys|j c penneys
 jet
 jiffy lube
 jimmy john's|jimmy johns
-joe's crab shack|joes crab shack
+joe's crab shack|joes crab shack|joe's crab shacks|joes crab shacks
 johnny rockets
 jollibee
 juan valdez cafe
@@ -247,14 +247,14 @@ kaufland
 kbc
 kenny rogers|kenny rogers roasters
 key bank
-kfc|k.f.c|k f c|kentucky fried chicken
+kfc|k.f.c|k f c|kentucky fried chicken|kfcs|k.f.cs|k f cs|kentucky fried chickens
 kiwi
 kiwibank
 kohl's|kohls
 konzum
 kmart|k-mart|k mart|kmarts|k-marts|k marts
 kreissparkasse
-krispy kreme
+krispy kreme|krispy kremes
 kroger
 kruidvat
 kwik trip
@@ -284,7 +284,7 @@ marrybrown
 matratzen concord
 makro
 mcdonald's|mcdonalds
-mccafé|mccafe
+mccafé|mccafe|mccafés|mccafes
 media markt
 mercadona
 mercedes-benz|mercedes benz
@@ -298,7 +298,7 @@ mol
 monoprix
 morrisons|morrison's
 mos burger
-motel 6
+motel 6|motel 6s|motel six|motel sixes
 movistar
 müller|muller
 nando's|nandos
@@ -318,20 +318,20 @@ o'reilly auto parts|oreilly auto parts|o reilly auto parts
 oasis
 o2
 obi
-office depot
-old navy
-olive garden
+office depot|office depots
+old navy|old navys
+olive garden|olive gardens
 omv
 one stop
 opel
 orange
 orlen
 otp bank
-outback steakhouse|outback steak house
+outback steakhouse|outback steak house|outback steakhouses|outback steak houses
 oxfam
 oxxo
 panda express
-panera bread
+panera bread|panera breads
 papa gino's|papa ginos
 papa john's|papa john's pizza|papa johns|papa johns pizza
 paris baguette
@@ -345,16 +345,16 @@ petrobras
 petrom
 petron
 petro-canada|petro canada|petrocanada
-petco
-petsmart
+petco|petcos
+petsmart|petsmarts
 peugeot
 phillips 66
 picard
 pingo doce
 pizzaexpress|pizza express
-pizza hut|pizzahut
+pizza hut|pizzahut|pizza huts|pizzahuts
 pizza pizza|pizzapizza
-planet hollywood
+planet hollywood|planet hollywoods
 pko bp
 pnb
 pnc bank|p.n.c bank|p n c bank
@@ -362,25 +362,25 @@ pollo campero
 ponderosa steakhouse|ponderosa steak house
 popeyes|popeye's|popeyes chicken & biscuits|popeye's chicken & biscuits|popeyes chicken and biscuits|popeye's chicken and biscuits
 postbank
-potbelly sandwich works|potbelly
+potbelly sandwich works|potbelly|potbellys
 premier inn
 proxi
 publix
 puma
 punto enel
 q8
-qdoba mexican grill|qdoba
+qdoba mexican grill|qdoba|qdobas
 quality inn
 quick
 quiktrip
 quiznos|quizno's
 rabobank
-radio shack
+radio shack|radio shacks
 raiffeisenbank|raiffeisen|raiffeisen bank
 rainforest cafe
 rbc
-red lobster
-red robin
+red lobster|red lobsters
+red robin|red robins
 rei|r.e.i|r e i
 relay
 rema 1000
@@ -394,28 +394,28 @@ ruby tuesday|ruby tuesdays|ruby tuesday's
 safeway|safeways|safeway's
 sainsbury's|sainsburys
 sainsbury's local|sainsburys local
-salvation army
-sam's club|sams club
+salvation army|salvation armys|salvation armies
+sam's club|sams club|sam's clubs|sams clubs
 santander
 santander bank
-sbarro
+sbarro|sbarro's|sbarros
 schlotzsky's|schlotzskys|schlotzsky's deli|schlotzskys deli
 scotiabank
 sears
 seattle's best coffee|seattle's best|seattles best coffee|seattles best
 secret recipe
-shake shack
+shake shack|shake shacks
 shakey's pizza|shakeys pizza
 sheetz
 shell
-shoprite|shop-rite|shop rite
+shoprite|shop-rite|shop rite|shoprites|shop-rites|shop rites
 simply market
 sixt
-sizzler
+sizzler|sizzlers
 slovnaft
 smashburger|smash burger
-sonic|sonic drive-in|sonic drive in
-spaghetti warehouse
+sonic|sonic drive-in|sonic drive in|sonics|sonic drive-ins|sonic drive ins
+spaghetti warehouse|spaghetti warehouses
 spar
 sparkasse
 specsavers
@@ -423,40 +423,40 @@ speedway
 sparda-bank|sparda bank|spardabank
 sprint|sprint wireless|sprint store|sprint stores|sprint wireless store|sprint wireless stores
 staples
-starbucks|starbucks coffee
+starbucks|starbucks coffee|starbucks coffees
 state bank of india
 statoil
-steak 'n shake|steak n' shake|steak n shake|steak & shake|steak and shake
+steak 'n shake|steak n' shake|steak n shake|steak & shake|steak and shake|steak 'n shakes|steak n' shakes|steak n shakes|steak & shakes|steak and shakes
 stewart's|stewarts
 sunoco
-subway
+subway|subways
 supercuts
 swedbank
 sweet frog
 swensen's|swensens
 systembolaget
-taco bell
-taco cabana
+taco bell|taco bells
+taco cabana|taco cabanas
 takko
 tamoil
 target|targets
 tchibo
-td bank|t.d bank|t d bank
+td bank|t.d bank|t d bank|td banks|t.d banks|t d banks
 td canada trust|t.d canada trust|t d canada trust
 tedi
 telepizza
 terpel
-tesco
+tesco|tescos
 tesco express
-texaco
+texaco|texacos
 the pizza company
 t.g.i. friday's|t g i friday's|tgi friday's|t.g.i friday's|t.g.i. fridays|t g i fridays|tgi fridays|t.g.i fridays
 the co-operative food|the cooperative food
 thomas cook
-tj maxx
+tj maxx|tj maxxs
 tim hortons
-tcby
-t-mobile|t mobile|tmobile|t-mobile store|t mobile store|tmobile store
+tcby|tcbys
+t-mobile|t mobile|tmobile|t-mobile store|t mobile store|tmobile store|t-mobile stores|t mobile stores|tmobile stores
 tony roma's|tony romas
 total
 toyota
@@ -466,10 +466,10 @@ travelodge
 ultramar
 unicredit bank|unicredit
 uno chicago grill
-ups store|the ups store|u.p.s store|u p s store|the u.p.s store|the u p s store
+ups store|the ups store|u.p.s store|u p s store|the u.p.s store|the u p s store|ups stores|u.p.s stores|u p s stores
 us bank|u.s bank|u s bank
 valero
-verizon wireless|verizon store|verizon
+verizon wireless|verizon store|verizon|verizon wireless store|verizon stores|verizon wireless stores
 vival
 vodafone
 volg
@@ -487,10 +487,10 @@ wells fargo bank|wells-fargo bank|wellsfargo bank
 wendy's|wendys
 western union|western unions
 westpac
-whataburger|what a burger
-white castle
+whataburger|what a burger|whataburgers|what a burgers
+white castle|white castles
 william hill
-whole foods|whole foods market
+whole foods|whole foods market|whole foods markets
 wingstop
 wingstreet
 ymca|y.m.c.a|y m c a
