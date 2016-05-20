@@ -12,47 +12,9 @@
 
 # Components
 # ==========
-# How likely we are to generate a component at random
+# How likely we are to generate a component at random (on its own or conditional on other components)
 
 components:
-    po_box:
-        null_probability: 0.9
-        alphanumeric_probability: 0.1
-        conditional:
-            - component: level
-              probabilities:
-                  null_probability: 0.995
-                  alphanumeric_probability: 0.005
-            - component: unit
-              probabilities:
-                  null_probability: 0.99
-                  alphanumeric_probability: 0.01
-            - component: staircase
-              probabilities:
-                  null_probability: 0.999
-                  alphanumeric_probability: 0.001
-            - component: entrance
-              probabilities:
-                  null_probability: 0.999
-                  alphanumeric_probability: 0.001
-
-    level:
-        # If no floor number is specified
-        null_probability: 0.85
-        alphanumeric_probability: 0.15
-
-        # Conditional probabilities
-        conditional:
-            # e.g. given that we have unit already (natural or generated)
-            - component: unit
-              probabilities:
-                  null_probability: 0.95
-                  alphanumeric_probability: 0.05
-            - component: staircase
-              probabilities:
-                  null_probability: 0.6
-                  alphanumeric_probability: 0.4
-
     entrance:
         null_probability: 0.9995
         alphanumeric_probability: 0.0005
@@ -69,6 +31,22 @@ components:
     staircase:
         null_probability: 0.999
         alphanumeric_probability: 0.001
+
+    level:
+        null_probability: 0.85 # Probability of doing nothing if no floor number is specified
+        alphanumeric_probability: 0.15 # Probability of generating an alphanumeric floor if none was specified
+
+        # Conditional probabilities
+        conditional:
+            # e.g. given that we have unit already (natural or generated)
+            - component: unit
+              probabilities:
+                  null_probability: 0.95
+                  alphanumeric_probability: 0.05
+            - component: staircase
+              probabilities:
+                  null_probability: 0.6
+                  alphanumeric_probability: 0.4
 
     unit:
         # If no unit number is specified
@@ -1212,6 +1190,7 @@ units:
         add_quadrant_first_direction: lateral
 
         add_quadrant_numeric: true
+        add_quadrant_standalone: true
 
         # If there are 10 floors, create unit numbers like #301 or #1032
         use_floor_probability: 0.35
