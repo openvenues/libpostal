@@ -38,6 +38,8 @@ class Floor(NumberedComponent):
     @classmethod
     def random(cls, language, country=None, num_floors=None, num_basements=None):
         num_type, num_type_props = cls.choose_alphanumeric_type('levels.alphanumeric', language, country=country)
+        if num_type is None:
+            return None
 
         if num_floors is not None:
             number = cls.sample_floors(num_floors, num_basements or 0)

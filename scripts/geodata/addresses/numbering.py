@@ -116,7 +116,9 @@ class NumberedComponent(object):
 
     @classmethod
     def choose_alphanumeric_type(cls, key, language, country=None):
-        alphanumeric_props = address_config.get_property(key, language, country=country)
+        alphanumeric_props = address_config.get_property(key, language, country=country, default=None)
+        if alphanumeric_props is None:
+            return None, None
 
         values = []
         probs = []

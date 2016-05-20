@@ -33,6 +33,8 @@ class POBox(NumberedComponent):
     @classmethod
     def random(cls, language, country=None):
         num_type, num_type_props = cls.choose_alphanumeric_type('po_boxes.alphanumeric', language, country=country)
+        if num_type is None:
+            return None
 
         if num_type != cls.ALPHA:
             digit_config = address_config.get_property('po_boxes.digits', language, country=country, default=[])
@@ -66,5 +68,7 @@ class POBox(NumberedComponent):
 
     @classmethod
     def phrase(cls, box_number, language, country=None):
+        if box_number is None:
+            return None
         return cls.numeric_phrase('po_boxes.alphanumeric', safe_decode(box_number), language,
                                   dictionaries=['post_office'], country=country)
