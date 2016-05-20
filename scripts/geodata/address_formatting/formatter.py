@@ -470,8 +470,10 @@ class AddressFormatter(object):
             insertions = nested_get(self.country_insertions, (country, component), default=None)
             conditionals = nested_get(self.country_conditionals, (country, component), default=None)
 
-            if insertions is None and language:
+            if language:
                 country_language = '{}_{}'.format(country, language)
+
+            if insertions is None and language:
                 insertions = nested_get(self.country_insertions, (country_language, component), default=None)
                 scope = country_language
 
