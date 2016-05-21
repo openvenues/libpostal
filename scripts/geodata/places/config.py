@@ -4,7 +4,7 @@ import random
 import six
 import yaml
 
-from collections import Mapping
+from collections import defaultdict
 
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
 from geodata.address_formatting.formatter import AddressFormatter
@@ -69,8 +69,9 @@ class PlaceConfig(object):
 
         return random.random() < probability
 
-    def drop_components(self, components, boundaries=(), country=None):
+    def dropout_components(self, components, boundaries=(), country=None):
         containing_ids = set()
+
         for boundary in boundaries:
             object_type = boundary.get('type')
             object_id = safe_encode(boundary.get('id', ''))
@@ -78,6 +79,30 @@ class PlaceConfig(object):
                 continue
             containing_ids.add((object_type, object_id))
 
-        return {c: v for c, v in six.iteritems(components) if c not in self.ADMIN_COMPONENTS or self.include_component(c, containing_ids, country=country)}
+        names = defaultdict(list)
+        admin_components = [c for c in components if c in self.ADMIN_COMPONENTS]
+        for c in admin_components:
+            names[components[c]].append(c)
+
+        same_name = set.union(*[set(v) for c, v in six.iteritems(names) if len(v) > 1])
+
+        new_components = components.copy()
+
+        for component in admin_components:
+            include = self.include_component(component, containing_ids, country=country)
+
+            if not include:
+                # Note: this check is for cities that have the same name as their admin
+                # areas e.g. Luxembourg, Luxembourg. In cases like this, if we were to drop
+                # city, we don't want to include country on its own. This should help the parser
+                # default to the city in ambiguous cases where only one component is specified.
+                if not (component == AddressFormatter.CITY and component in same_name):
+                    new_components.pop(component, None)
+                else:
+                    value = components[component]
+                    for c in names[value]:
+                        new_components.pop(c, None)
+        return new_components
+
 
 place_config = PlaceConfig()
