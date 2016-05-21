@@ -23,7 +23,7 @@ class OSMIntersectionReader(object):
 
         self.logger = logging.getLogger('osm.intersections')
 
-        # Store these in memory, could be LevelDB if needed
+        # Store these in a LevelDB
         ensure_dir(db_dir)
         ways_dir = os.path.join(db_dir, 'ways')
         ensure_dir(ways_dir)
