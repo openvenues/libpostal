@@ -1,3 +1,4 @@
+import operator
 import os
 import pycountry
 import random
@@ -5,6 +6,7 @@ import six
 import yaml
 
 from collections import defaultdict, OrderedDict
+from itertools import combinations
 
 from geodata.address_formatting.formatter import AddressFormatter
 
@@ -40,8 +42,6 @@ class ComponentDependencies(object):
     a house_numer cannot be used in the absence of a road name.
     '''
 
-    ANY = 'any'
-    ALL = 'all'
 
     def __init__(self, name, dependencies=tuple()):
         self.name = name
@@ -121,6 +121,8 @@ class AddressComponents(object):
         self.config = yaml.load(open(PARSER_DEFAULT_CONFIG))
 
         self.setup_component_dependencies()
+        # Non-admin component dropout
+        self.address_level_dropout_probabilities = {k: v['probability'] for k, v in six.iteritems(self.config['dropout'])}
 
         self.osm_admin_rtree = osm_admin_rtree
         self.language_rtree = language_rtree
@@ -129,17 +131,64 @@ class AddressComponents(object):
         self.geonames = geonames
 
     def setup_component_dependencies(self):
-        self.component_dependencies = OrderedDict()
-        deps = self.config.get('component_dependencies', {})
-        for component, conf in six.iteritems(deps):
-            dep_list = []
-            for dep in conf['dependencies']:
-                for k in (ComponentDependencies.ANY, ComponentDependencies.ALL):
-                    if k in dep:
-                        dep_list.append((k, dep[k]))
-                        break
+        self.component_dependencies = {}
+        self.component_bit_values = {}
+        self.valid_component_bitsets = set()
+        self.component_combinations = set()
 
-            self.component_dependencies[component] = ComponentDependencies(component, dep_list)
+        forward_deps = self.config.get('component_dependencies', {})
+
+        for i, component in enumerate(forward_deps):
+            self.component_bit_values[component] = 1 << i
+
+        all_values = self.component_bitset(forward_deps)
+
+        for component, conf in six.iteritems(forward_deps):
+            deps = conf['dependencies']
+            self.component_dependencies[component] = self.component_bitset(deps) if deps else all_values
+
+    def component_bitset(self, components):
+        return reduce(operator.or_, [self.component_bit_values[c] for c in components])
+
+    def address_level_dropout_order(self, components):
+        '''
+        Address component dropout
+        -------------------------
+
+        To make the parser more robust to different kinds of input (not every address is fully
+        specified, especially in a geocoder, on mobile, with autocomplete, etc.), we want to
+        train the parser with many types of addresses.
+
+        This will help the parser not become too reliant on component order, e.g. it won't think
+        that the first token in a string is always the venue name simply because that was the case
+        in the training data.
+
+        This method returns a dropout ordering ensuring that if the components are dropped in order,
+        each set will be valid. In the parser config (resources/parser/default.yaml), the dependencies
+        for each address component are specified, e.g. "house_number" depends on "road", so it would
+        be invalid to have an address that was simply a house number with no other information. The
+        caller of this method may decide to drop all the components at once or one at a time, creating
+        N training examples from a single address.
+        '''
+        component_bitset = self.component_bitset(components)
+
+        candidates = [c for c in components if c in self.address_level_dropout_probabilities]
+        random.shuffle(candidates)
+        retained = set(candidates)
+
+        dropout_order = []
+
+        for component in candidates[:-1]:
+            if random.random() >= self.address_level_dropout_probabilities.get(component, 0.0):
+                continue
+            bit_value = self.component_bit_values.get(component, 0)
+            candidate_bitset = component_bitset ^ bit_value
+
+            if all((candidate_bitset & self.component_dependencies[c] for c in retained if c != component)):
+                dropout_order.append(component)
+                component_bitset = candidate_bitset
+                retained.remove(component)
+        return dropout_order
 
     def strip_keys(self, value, ignore_keys):
         for key in ignore_keys:
@@ -930,23 +979,12 @@ class AddressComponents(object):
         else:
             return None
 
-    def category_components(self, category_query, address_components, language, country=None):
-        category_config = self.config['category']
-        address_components[AddressFormatter.CATEGORY] = category_query.category
-        if category_query.prep:
-            address_components[AddressFormatter.NEAR] = category_query.prep
-
-        drop_address_probability = category_config['drop_address_probability']
-        if random.random() < drop_address_probability:
-            address_components = self.drop_address(address_components)
-
-        drop_postcode_probability = category_config['drop_postcode_probability']
-        if random.random() < drop_postcode_probability:
-            address_components = self.drop_postcode(address_components)
-
-        if not category_query.add_place_name:
-            address_components = self.drop_places(address_components)
-        return address_components
+    def dropout_address_level_component(self, address_components, component):
+        probability = self.address_level_dropout_probabilities.get(component, None)
+        if probability is not None and random.random() < probability:
+            address_components.pop(component)
+            return True
+        return False
 
     def expanded(self, address_components, latitude, longitude,
                  dropout_places=True, add_sub_building_components=True,
@@ -1025,7 +1063,7 @@ class AddressComponents(object):
 
         if dropout_places:
             # Perform dropout on places
-            address_components = place_config.drop_components(address_components, all_osm_components, country=country)
+            address_components = place_config.dropout_components(address_components, all_osm_components, country=country)
 
         return address_components, country, language
 
