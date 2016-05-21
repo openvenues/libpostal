@@ -155,7 +155,8 @@ class AddressPhraseDictionaries(object):
                     raise InvalidAddressFileException(u'Invalid filename for file {}/{}. Must be one of {{{}}}'.format(language_dir, filename, ', '.join(sorted(gazetteer_types))))'''
                 self.language_dictionaries[language].append(dictionary_name)
 
-                for i, line in enumerate(open(os.path.join(language_dir, filename))):
+                path = os.path.join(language_dir, filename)
+                for i, line in enumerate(open(path)):
                     line = safe_decode(line.rstrip())
                     if not line.strip():
                         continue
