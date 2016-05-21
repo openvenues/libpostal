@@ -100,6 +100,42 @@ class AddressFormatter(object):
         COUNTRY,
     ])}
 
+    BOUNDARY_COMPONENTS_ORDERED = [
+        SUBDIVISION,
+        SUBURB,
+        CITY_DISTRICT,
+        CITY,
+        ISLAND,
+        STATE_DISTRICT,
+        STATE,
+        COUNTRY,
+    ]
+
+    BOUNDARY_COMPONENTS = set(BOUNDARY_COMPONENTS_ORDERED)
+
+    SUB_BUILDING_COMPONENTS = {
+        ENTRANCE,
+        STAIRCASE,
+        LEVEL,
+        UNIT,
+    }
+
+    STREET_COMPONENTS = {
+        HOUSE_NUMBER,
+        ROAD,
+    }
+
+    ADDRESS_LEVEL_COMPONENTS = STREET_COMPONENTS | SUB_BUILDING_COMPONENTS
+
+    NAME_COMPONENTS = {
+        ATTENTION,
+        CARE_OF,
+        HOUSE,
+    }
+
+    PLACE_ONLY = 'place_only'
+    NO_NAME = 'no_name'
+
     address_formatter_fields = set(component_order)
 
     aliases = Aliases(
@@ -118,6 +154,10 @@ class AddressFormatter(object):
             ('post_code', POSTCODE),
         ])
     )
+
+    category_template = '{{{category}}} {{{near}}} {{{place}}}'
+    chain_template = '{{{house}}} {{{near}}} {{{place}}}'
+    intersection_template = '{{{road1}}} {{{intersection}}} {{{road2}}}'
 
     template_address_parts = [HOUSE, HOUSE_NUMBER, ROAD]
     template_admin_parts = [CITY, STATE, COUNTRY]
@@ -141,9 +181,11 @@ class AddressFormatter(object):
         self.clone_repo()
 
         self.load_config()
-        self.load_country_config()
+        self.load_country_formats()
 
         self.setup_insertion_probabilities()
+        self.setup_no_name_templates()
+        self.setup_place_only_templates()
 
         self.template_cache = {}
 
@@ -151,7 +193,7 @@ class AddressFormatter(object):
         subprocess.check_call(['rm', '-rf', self.formatter_repo_path])
         subprocess.check_call(['git', 'clone', FORMATTER_GIT_REPO, self.formatter_repo_path])
 
-    def load_country_config(self):
+    def load_country_formats(self):
         config = yaml.load(open(os.path.join(self.formatter_repo_path,
                                 'conf', 'countries', 'worldwide.yaml')))
         for key in list(config):
@@ -159,7 +201,7 @@ class AddressFormatter(object):
             language = None
             if '_' in key:
                 country, language = country.split('_', 1)
-            value = config[country]
+            value = config[key]
             if hasattr(value, 'items'):
                 address_template = value.get('address_template')
                 if not address_template and 'use_country' in value:
@@ -208,10 +250,6 @@ class AddressFormatter(object):
         if not value:
             value = nested_get(self.config, keys, default=default)
         return value
-
-    def get_admin_components(self, country, language=None):
-        admin_components = self.get_property('admin_components', country, language=language, default={})
-        return [(key, value.get('after', ()), value.get('before', ())) for key, value in six.iteritems(admin_components)]
 
     def insertion_distribution(self, insertions):
         values = []
@@ -281,6 +319,22 @@ class AddressFormatter(object):
                 self.language_insertions[language.lower()] = self.insertion_probs(config['insertions'])
                 self.language_conditionals[language.lower()] = self.conditional_insertion_probs(config['insertions'])
 
+    def setup_no_name_templates(self):
+        self.templates_no_name = {}
+
+        for country, config in six.iteritems(self.country_formats):
+            if hasattr(config, 'items') and 'address_template' in config:
+                address_template = self.remove_components(config['address_template'], self.NAME_COMPONENTS)
+                self.templates_no_name[country] = address_template
+
+    def setup_place_only_templates(self):
+        self.templates_place_only = {}
+
+        for country, config in six.iteritems(self.country_formats):
+            if hasattr(config, 'items') and 'address_template' in config:
+                address_template = self.remove_components(config['address_template'], self.NAME_COMPONENTS | self.ADDRESS_LEVEL_COMPONENTS)
+                self.templates_place_only[country] = address_template
+
     def country_template(self, c):
         return self.country_formats.get(c, self.country_formats['default'])
 
@@ -298,21 +352,52 @@ class AddressFormatter(object):
     def tag_token(self, key):
         return '{{{{{{{key}}}}}}}'.format(key=key)
 
+    def remove_components(self, template, tags):
+        new_components = []
+        tags = set(tags)
+
+        parsed = pystache.parse(safe_decode(template))
+
+        last_removed = False
+        for i, el in enumerate(parsed._parse_tree):
+            if hasattr(el, 'parsed'):
+                keys = [e.key for e in el.parsed._parse_tree if hasattr(e, 'key') and e.key not in tags]
+                if keys:
+                    new_components.append(self.build_first_of_template(keys))
+                    last_removed = False
+                else:
+                    last_removed = True
+            elif hasattr(el, 'key'):
+                if el.key not in tags:
+                    new_components.append('{{{{{{{key}}}}}}}'.format(key=el.key))
+                    last_removed = False
+                else:
+                    last_removed = True
+
+            elif not last_removed:
+                new_components.append(el)
+            else:
+                last_removed = False
+        return ''.join(new_components).strip()
+
     def insert_component(self, template, tag, before=None, after=None, first=False, last=False, separate=True, is_reverse=False):
         if not before and not after and not first and not last:
             return
 
         template = template.rstrip()
 
-        tag_match = re.compile('\{{{key}\}}'.format(key=tag)).search(template)
+        first_template_regex = re.compile(six.u('{{#first}}.*?{{/first}}'), re.UNICODE)
+        sans_firsts = first_template_regex.sub(six.u(''), template)
+
+        tag_match = re.compile(self.tag_token(tag)).search(sans_firsts)
 
         if before:
-            before_match = re.compile('\{{{key}\}}'.format(key=before)).search(template)
+            before_match = re.compile(self.tag_token(after)).search(sans_firsts)
             if before_match and tag_match and before_match.start() > tag_match.start():
                 return template
 
         if after:
-            after_match = re.compile('\{{{key}\}}'.format(key=after)).search(template)
+            after_match = re.compile(self.tag_token(after)).search(sans_firsts)
             if after_match and tag_match and tag_match.start() > after_match.start():
                 return template
 
@@ -381,34 +466,40 @@ class AddressFormatter(object):
 
     def add_postprocessing_tags(self, template, country, language=None):
         is_reverse = self.is_reverse(template)
-        for key, pre_keys, post_keys in self.get_admin_components(country, language=language):
-            key_tag = six.u('{{{{{{{key}}}}}}}').format(key=key)
 
-            key_included = key_tag in template
-            new_components = []
-            if key_included:
-                continue
+        i = None
+        pivot = None
 
-            pre_key_regex = re.compile('|'.join(['{{{}}}'.format(k) for k in pre_keys]))
-            post_key_regex = re.compile('|'.join(['{{{}}}'.format(k) for k in post_keys]))
+        pivot_keys = (AddressFormatter.CITY, AddressFormatter.COUNTRY)
 
-            for line in template.split(six.u('\n')):
-                if not line.strip():
-                    continue
-                pre_key = pre_keys and pre_key_regex.search(line)
-                post_key = post_keys and post_key_regex.search(line)
-                if post_key and not pre_key and not key_included:
-                    if not is_reverse:
-                        new_components.append(key_tag)
-                        key_included = True
+        for component in pivot_keys:
+            token = self.tag_token(component)
+            if token in template:
+                i = self.BOUNDARY_COMPONENTS_ORDERED.index(component)
+                pivot = component
+                break
 
-                new_components.append(line.rstrip('\n'))
-                if post_key and not pre_key and not key_included and is_reverse:
-                    new_components.append(key_tag)
-                    key_included = True
-            if not post_keys and not key_included:
-                new_components.append(key_tag)
-            template = six.u('\n').join(new_components)
+        if i is None:
+            raise ValueError('Template must contain one of {{{}}}'.format(','.join(pivot_keys)))
+
+        prev = pivot
+
+        if i > 1:
+            for component in self.BOUNDARY_COMPONENTS_ORDERED[i - 1:0:-1]:
+                kw = {'before': prev} if not is_reverse else {'after': prev}
+                template = self.insert_component(template, component, **kw)
+
+                prev = component
+
+        prev = pivot
+
+        if i < len(self.BOUNDARY_COMPONENTS_ORDERED) - 1:
+            for component in self.BOUNDARY_COMPONENTS_ORDERED[i + 1:]:
+                kw = {'after': prev} if not is_reverse else {'before': prev}
+                template = self.insert_component(template, component, **kw)
+
+                prev = component
+
         return template
 
     def render_template(self, template, components, tagged=False):
@@ -454,14 +545,11 @@ class AddressFormatter(object):
                 text = re.sub(regex, replacement, text)
         return text
 
-    def revised_template(self, components, country, language=None):
-        template = self.get_template(country, language=language)
-        if not template or 'address_template' not in template:
+    def revised_template(self, template, components, country, language=None):
+        if not template:
             return None
 
         country = country.lower()
-
-        template = template['address_template']
 
         cache_keys = []
 
@@ -538,6 +626,9 @@ class AddressFormatter(object):
 
         return template
 
+    def remove_repeat_template_separators(self, template):
+        return re.sub('(?:[\s]*([,;\-]/{})[\s]*){{2,}}'.format(self.separator_tag), r' \1 ', template)
+
     def tag_template_separators(self, template):
         template = re.sub(r'}\s*([,\-;])\s*', r'}} \1/{} '.format(self.separator_tag), template)
         return template
@@ -590,48 +681,116 @@ class AddressFormatter(object):
 
             return six.u(' ').join(tokens[start:end])
 
-    def get_template(self, country, language=None):
+    def get_template_from_config(self, config, country, language=None):
         template = None
         if language:
             # For countries like China and Japan where the country format varies
             # based on which language is being used
-            template = self.country_formats.get('{}_{}'.format(country.upper(), language.lower()), None)
+            template = config.get('{}_{}'.format(country.upper(), language.lower()), None)
 
         if not template:
-            template = self.country_formats.get(country.upper())
+            template = config.get(country.upper())
 
         if not template:
-            return None
-
-        use_country = template.get('use_country')
-        if use_country and use_country.upper() in self.country_formats:
-            template = self.country_formats[use_country.upper()]
-
-        if 'address_template' not in template:
             return None
 
         return template
 
+    def get_template(self, country, language=None):
+        return self.get_template_from_config(self.country_formats, country, language=language)
+
+    def get_no_name_template(self, country, language=None):
+        return self.get_template_from_config(self.templates_no_name, country, language=language)
+
+    def get_place_template(self, country, language=None):
+        return self.get_template_from_config(self.templates_place_only, country, language=language)
+
+    def tagged_tokens(self, name, label):
+        return six.u(' ').join([six.u('{}/{}').format(t.replace(' ', ''), label) for t, c in tokenize(name)])
+
+    def format_category_query(self, category_query, address_components, country, language, tag_components=True):
+        if tag_components:
+            components = {self.CATEGORY: self.tagged_tokens(category_query.category, self.CATEGORY)}
+            if category_query.prep is not None:
+                components[self.NEAR] = self.tagged_tokens(category_query.prep, self.NEAR)
+        else:
+            components = {self.CATEGORY: category_query.category}
+            if category_query.prep is not None:
+                components[self.NEAR] = category_query.prep
+
+        if category_query.add_place_name or category_query.add_address:
+            template_type = self.PLACE_ONLY if not category_query.add_address else self.NO_NAME
+            place_formatted = self.format_address(address_components, country, language=language,
+                                                  minimal_only=False, tag_components=tag_components,
+                                                  template_type=template_type)
+            if not place_formatted:
+                return None
+            components['place'] = place_formatted
+
+        return self.render_template(self.category_template, components, tagged=tag_components)
+
+    def format_chain_query(self, chain_query, address_components, country, language, tag_components=True):
+        if tag_components:
+            components = {self.HOUSE: self.tagged_tokens(chain_query.name, self.HOUSE)}
+            if chain_query.prep is not None:
+                components[self.NEAR] = self.tagged_tokens(chain_query.prep, self.NEAR)
+        else:
+            components = {self.HOUSE: chain_query.name}
+            if chain_query.prep is not None:
+                components[self.NEAR] = chain_query.prep
+
+        if chain_query.add_place_name or chain_query.add_address:
+            template_type = self.PLACE_ONLY if not chain_query.add_address else self.NO_NAME
+            components['place'] = self.format_address(address_components, country, language=language,
+                                                      minimal_only=False, tag_components=tag_components,
+                                                      template_type=template_type)
+
+        return self.render_template(self.chain_template, components, tagged=tag_components)
+
+    def format_intersection(self, intersection_query, tag_components=True):
+        if tag_components:
+            components = {'road1': self.tagged_tokens(intersection_query.road1, self.ROAD),
+                          'intersection': self.tagged_tokens(intersection_query.intersection_phrase, self.INTERSECTION),
+                          'road2': self.tagged_tokens(intersection_query.road2, self.ROAD),
+                          }
+        else:
+            components = {'road1': intersection_query.road1,
+                          'intersection': intersection_query.intersection_phrase,
+                          'road2': intersection_query.road2}
+        return self.render_template(self.intersection_template, components, tagged=tag_components)
+
     def format_address(self, components, country, language,
-                       minimal_only=True, tag_components=True, replace_aliases=True):
+                       minimal_only=True, tag_components=True, replace_aliases=True,
+                       template_type=None):
+        if minimal_only and not self.minimal_components(components):
+            return None
+
         template = self.get_template(country, language=language)
         if not template:
             return None
 
-        template_text = self.revised_template(components, country, language=language)
+        if template_type is None:
+            if not template or 'address_template' not in template:
+                return None
+            template_text = template['address_template']
+        elif template_type is self.PLACE_ONLY:
+            template_text = self.get_place_template(country, language=language)
+        elif template_type is self.NO_NAME:
+            template_text = self.get_no_name_template(country, language=language)
+
+        template_text = self.revised_template(template_text, components, country, language=language)
+        if template_text is None:
+            return None
         if replace_aliases:
             self.aliases.replace(components)
 
-        if minimal_only and not self.minimal_components(components):
-            return None
-
         if tag_components:
             template_text = self.tag_template_separators(template_text)
-            components = {k: six.u(' ').join([six.u('{}/{}').format(t.replace(' ', ''), k.replace(' ', '_'))
-                                              for t, c in tokenize(v)])
-                          for k, v in components.iteritems()}
+            components = {k: self.tagged_tokens(v, k) for k, v in six.iteritems(components)}
 
         text = self.render_template(template_text, components, tagged=tag_components)
+
+        text = self.remove_repeat_template_separators(text)
 
         text = self.post_replacements(template, text)
         return text
