@@ -18,6 +18,7 @@ from geodata.addresses.po_boxes import POBox
 from geodata.addresses.postcodes import PostCode
 from geodata.addresses.staircases import Staircase
 from geodata.addresses.units import Unit
+from geodata.boundaries.names import boundary_names
 from geodata.configs.utils import nested_get
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.countries.names import *
@@ -26,8 +27,8 @@ from geodata.language_id.sample import sample_random_language
 from geodata.math.floats import isclose
 from geodata.math.sampling import cdf, weighted_choice
 from geodata.names.normalization import name_affixes
-from geodata.boundaries.names import boundary_names
 from geodata.osm.components import osm_address_components
+from geodata.places.config import place_config
 from geodata.states.state_abbreviations import state_abbreviations
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
