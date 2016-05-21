@@ -138,7 +138,7 @@ class AddressComponents(object):
 
         forward_deps = self.config.get('component_dependencies', {})
 
-        for i, component in enumerate(forward_deps):
+        for i, component in enumerate(AddressFormatter.address_formatter_fields):
             self.component_bit_values[component] = 1 << i
 
         all_values = self.component_bitset(forward_deps)
@@ -169,6 +169,9 @@ class AddressComponents(object):
         be invalid to have an address that was simply a house number with no other information. The
         caller of this method may decide to drop all the components at once or one at a time, creating
         N training examples from a single address.
+
+        Some components are also more likely to be dropped than others, so in the same config there are
+        dropout probabilities for each.
         '''
         component_bitset = self.component_bitset(components)
 
