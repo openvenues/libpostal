@@ -84,7 +84,10 @@ class PlaceConfig(object):
         for c in admin_components:
             names[components[c]].append(c)
 
-        same_name = set.union(*[set(v) for c, v in six.iteritems(names) if len(v) > 1])
+        same_name = set()
+        for c, v in six.iteritems(names):
+            if len(v) > 1:
+                same_name |= set(v)
 
         new_components = components.copy()
 
