@@ -7,6 +7,83 @@ languages:
     # Replace user-tagged admin components with the non-local language version
     replace_non_local_probability: 0.4
 
+# Dependencies for including each component in an "address"
+# Two-way dependencies are not an issue
+component_dependencies:
+    house:
+        dependencies: []
+
+    road:
+        dependencies:
+            - house
+            - house_number
+            - suburb
+            - city_district
+            - city
+            - postcode
+
+    house_number:
+        dependencies:
+            - road
+
+    entrance:
+        dependencies:
+            - house_number
+
+    staircase:
+        dependencies:
+            - house_number
+
+    level:
+        dependencies:
+            - house_number
+
+    unit:
+        dependencies:
+            - house_number
+
+    postcode:
+        dependencies: []
+
+
+# Each component is dropped out separately and a new address
+# is added to the training set. These are only the address-level
+# components. Places/boundaries are taken care of elsewhere.
+dropout:
+    attention:
+        probability: 0.8
+    care_of:
+        probability: 0.8
+    house:
+        probability: 0.6
+    house_number:
+        probability: 0.5
+    road:
+        probability: 0.4
+    entrance:
+        probability: 0.8
+    staircase:
+        probability: 0.8
+    level:
+        probability: 0.6
+    unit:
+        probability: 0.5
+    postcode:
+        probability: 0.6
+
+po_box:
+    probability: 0.1 
+    # Note: these probabilities all independent (don't need to sum to 1)
+    drop_address_probability: 0.8 # drop house number, road, etc.
+    drop_places_probability: 0.1 # drop place names
+    drop_postcode_probability: 0.3 # drop postal code
+
+category:
+    # Same thing for category queries
+    drop_address_probability: 0.8 # drop house number, road, etc.
+    drop_places_probability: 0.1 # drop place names
+    drop_postcode_probability: 0.3 # drop postal code
+
 neighborhood:
     # Usually in Germany, may have e.g. name:prefix=Ortsteil
     add_prefix_probability: 0.5
