@@ -12,9 +12,9 @@ from geodata.text.normalize import normalized_tokens
 from geodata.text.tokenize import tokenize, token_types
 from geodata.encoding import safe_decode
 
-ChainQuery = namedtuple('ChainQuery', 'name, prep, add_place_name')
+ChainQuery = namedtuple('ChainQuery', 'name, prep, add_place_name, add_address')
 
-NULL_CHAIN_QUERY = ChainQuery(None, None, False)
+NULL_CHAIN_QUERY = ChainQuery(None, None, False, False)
 
 
 class Chain(object):
@@ -94,6 +94,7 @@ class Chain(object):
         prep_phrase, prep_phrase_props = weighted_choice(values, probs)
         prep_phrase = safe_decode(prep_phrase)
 
+        add_address = prep_phrase_type not in (CategoryPreposition.NEARBY, CategoryPreposition.NEAR_ME, CategoryPreposition.IN)
         add_place_name = prep_phrase_type not in (CategoryPreposition.NEARBY, CategoryPreposition.NEAR_ME)
 
-        return ChainQuery(chain_phrase, prep=prep_phrase, add_place_name=add_place_name)
+        return ChainQuery(chain_phrase, prep=prep_phrase, add_place_name=add_place_name, add_address=add_address)
