@@ -811,6 +811,7 @@ class AddressComponents(object):
             if phrase:
                 address_components[component] = phrase
         else:
+            existing = address_components[component]
             phrase = self.get_component_phrase(existing, language, country=country)
             if phrase and phrase != existing:
                 address_components[component] = phrase
