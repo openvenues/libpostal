@@ -470,7 +470,7 @@ class AddressFormatter(object):
         i = None
         pivot = None
 
-        pivot_keys = (AddressFormatter.CITY, AddressFormatter.COUNTRY)
+        pivot_keys = (AddressFormatter.CITY, AddressFormatter.STATE, AddressFormatter.COUNTRY)
 
         for component in pivot_keys:
             token = self.tag_token(component)
@@ -480,7 +480,7 @@ class AddressFormatter(object):
                 break
 
         if i is None:
-            raise ValueError('Template must contain one of {{{}}}'.format(','.join(pivot_keys)))
+            raise ValueError('Template {} does not contain one of {{{}}}'.format(country, ','.join(pivot_keys)))
 
         prev = pivot
 
