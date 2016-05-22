@@ -475,11 +475,6 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    init_country_names()
-    init_languages()
-    init_disambiguation()
-    init_gazetteers()
-
     language_rtree = LanguagePolygonIndex.load(args.language_rtree_dir)
     osm_rtree = None
     if args.rtree_dir:
