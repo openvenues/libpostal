@@ -1,66 +1,7 @@
 global:
-    # Add these components to templates that don't have them
-    admin_components:
-        suburb:
-            after:
-                - road
-            before:
-                - city_district
-                - city
-                - island
-                - state_district
-                - state
-                - postcode
-                - country
-        city_district:
-            after:
-                - road
-                - suburb
-            before:
-                - city
-                - island
-                - state_district
-                - state
-                - postcode
-                - country
-        # This is added to all the templates but only makes it into island nations, Hawaii, etc.
-        island:
-            after:
-                - road
-                - suburb
-                - city_district
-                - city
-            before:
-                - state_district
-                - state
-                - country
-        state_district:
-            after:
-                - suburb
-                - city_district
-                - city
-                - island
-            before:
-                - state
-                - country
-        state:
-            after:
-                - suburb
-                - city_district
-                - city
-                - island
-                - state_district
-            before:
-                - country
-        country:
-            after:
-                - suburb
-                - city_district
-                - city
-                - island
-                - state_district
-                - state
-                - postcode
+    categories:
+        place_direction: right
+        direction_probability: 0.9
 
     insertions:
         # For each component, insertions are mutually exclusive
