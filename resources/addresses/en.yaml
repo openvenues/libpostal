@@ -1391,10 +1391,13 @@ countries:
         po_boxes: &australia_po_boxes
             alphanumeric:
                 default: *po_box
-                probability: 0.94
+                alternatives: []
+                probability: 0.95
                 # Australia has many strings for this e.g. Roadside Mail Bag
                 sample: true
-                sample_probability: 0.01
+                sample_probability: 0.05
+                numeric:
+                    direction: left
         units: &australia_unit_types
             alphanumeric:
                 # Australia has all kinds of unit types (e.g. Marine Berth) not used elsewhere

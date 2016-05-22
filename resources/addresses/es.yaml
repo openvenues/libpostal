@@ -1065,8 +1065,8 @@ countries:
 
     # Argentina
     ar:
-        po_box:
-            numeric:
+        po_boxes:
+            alphanumeric:
                 sample: false
                 default:
                     canonical: casilla de correos
@@ -1076,8 +1076,8 @@ countries:
 
     # Chile
     cl:
-        po_box:
-            numeric:
+        po_boxes:
+            alphanumeric:
                 sample: false
                 default:
                     canonical: casilla de correos
