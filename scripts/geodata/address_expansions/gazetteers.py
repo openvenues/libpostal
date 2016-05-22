@@ -136,6 +136,8 @@ SURNAME_DICTIONARY = 'surnames'
 
 CHAIN_DICTIONARY = 'chains'
 
+SYNONYM_DICTIONARY = 'synonyms'
+
 NAME_DICTIONARIES = (GIVEN_NAME_DICTIONARY,
                      SURNAME_DICTIONARY,)
 
@@ -185,6 +187,6 @@ street_types_gazetteer = create_gazetteer(*STREET_TYPES_DICTIONARIES)
 names_gazetteer = create_gazetteer(*NAME_ABBREVIATION_DICTIONARIES)
 chains_gazetteer = create_gazetteer(CHAIN_DICTIONARY)
 unit_types_gazetteer = create_gazetteer(*UNIT_ABBREVIATION_DICTIONARIES)
-street_and_unit_types_gazetteer = create_gazetteer(*(STREET_TYPES_DICTIONARIES + UNIT_ABBREVIATION_DICTIONARIES))
+street_and_synonyms_gazetteer = create_gazetteer(*(STREET_TYPES_DICTIONARIES + (SYNONYM_DICTIONARY, )))
 abbreviations_gazetteer = create_gazetteer(*ALL_ABBREVIATION_DICTIONARIES)
 given_name_gazetteer = create_gazetteer(GIVEN_NAME_DICTIONARY)
