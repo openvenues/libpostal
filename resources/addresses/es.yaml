@@ -384,6 +384,20 @@ po_boxes:
         numeric_plus_alpha:
             whitespace_probability: 0.1
 
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
 postcodes:
     alphanumeric:
         default:
