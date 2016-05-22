@@ -746,6 +746,9 @@ class AddressComponents(object):
 
             neighborhood_level = AddressFormatter.SUBURB
 
+            key, raw_key = self.pick_random_name_key(neighborhood, neighborhood_level, suffix=language_suffix)
+            name = neighborhood.get(key, neighborhood.get(raw_key))
+
             if place_type == 'borough' or polygon_type == 'local_admin':
                 neighborhood_level = AddressFormatter.CITY_DISTRICT
 
@@ -755,9 +758,6 @@ class AddressComponents(object):
                     name = neighborhood.get(name_key, neighborhood.get(raw_name_key))
                     if not name or name == city_name:
                         continue
-
-            key, raw_key = self.pick_random_name_key(neighborhood, neighborhood_level, suffix=language_suffix)
-            name = neighborhood.get(key, neighborhood.get(raw_key))
 
             if not name:
                 name = neighborhood.get(name_key, neighborhood.get(raw_name_key))
