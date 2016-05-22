@@ -52,14 +52,10 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 from geodata.address_expansions.abbreviations import abbreviate
 from geodata.address_expansions.gazetteers import *
 from geodata.coordinates.conversion import *
-from geodata.countries.country_names import *
 from geodata.geonames.db import GeoNamesDB
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
-from geodata.states.state_abbreviations import STATE_ABBREVIATIONS, STATE_EXPANSIONS
 from geodata.i18n.languages import *
-from geodata.address_formatting.formatter import AddressFormatter
-from geodata.names.normalization import replace_name_prefixes, replace_name_suffixes
 from geodata.neighborhoods.reverse_geocode import NeighborhoodReverseGeocoder
 from geodata.osm.extract import *
 from geodata.osm.formatter import OSMAddressFormatter
