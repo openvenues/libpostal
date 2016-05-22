@@ -85,11 +85,11 @@ class Chain(object):
         prep_phrase_type = CategoryPreposition.random(language, country=country)
 
         if prep_phrase_type in (None, CategoryPreposition.NULL):
-            return CategoryQuery(chain_phrase, prep=None, add_place_name=True)
+            return ChainQuery(chain_phrase, prep=None, add_place_name=True, add_address=True)
 
         values, probs = address_config.alternative_probabilities('categories.{}'.format(prep_phrase_type), language, country=country)
         if not values:
-            return ChainQuery(chain_phrase, prep=None, add_place_name=True)
+            return ChainQuery(chain_phrase, prep=None, add_place_name=True, add_address=True)
 
         prep_phrase, prep_phrase_props = weighted_choice(values, probs)
         prep_phrase = safe_decode(prep_phrase)
