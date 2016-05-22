@@ -40,7 +40,7 @@ class Chain(object):
         '''
         tokens = cls.tokenize_name(name)
         if not tokens:
-            return False
+            return False, [], []
         matches = chains_gazetteer.filter(tokens)
         other_tokens = []
         phrases = []
