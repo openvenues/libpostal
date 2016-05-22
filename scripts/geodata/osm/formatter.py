@@ -35,6 +35,10 @@ from geodata.file_utils import *
 OSM_PARSER_DATA_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                               'resources', 'parser', 'data_sets', 'osm.yaml')
 
+ADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'formatted_addresses_tagged.tsv'
+ADDRESS_FORMAT_DATA_FILENAME = 'formatted_addresses.tsv'
+ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME = 'formatted_addresses_by_language.tsv'
+
 
 class OSMAddressFormatter(object):
     aliases = Aliases(
@@ -291,7 +295,6 @@ class OSMAddressFormatter(object):
                         if formatted_address:
                             formatted_addresses.append(formatted_address)
         return formatted_addresses
-
 
     def formatted_addresses(self, tags, tag_components=True):
         '''
