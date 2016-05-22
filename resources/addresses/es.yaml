@@ -733,7 +733,7 @@ units:
             - alternative: *apartamento
               probability: 0.1
             - alternative: *casa
-              probability: 0.03
+              probability: 0.05
             - alternative: *puerta
               probability: 0.05
 
