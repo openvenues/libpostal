@@ -1,6 +1,15 @@
 languages:
     pick_namespaced_language_probability: 0.6
 
+categories:
+    plural_probability: 0.6
+
+chains:
+    sample_probability: 0.5
+
+places:
+    drop_postcode_probability: 0.6
+
 streets:
     abbreviate_probability: 0.3
     separate_probability: 0.2
