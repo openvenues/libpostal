@@ -20,7 +20,7 @@ class CategoryConfig(object):
         self.language_categories_singular = {}
         self.language_categories_plural = {}
 
-        self.property_names = set()
+        self.language_property_names = defaultdict(set)
 
         if not os.path.exists(base_dir):
             raise RuntimeError('{} does not exist'.format(base_dir))
@@ -39,7 +39,7 @@ class CategoryConfig(object):
             reader.next()  # headers
 
             for key, value, is_plural, phrase in reader:
-                self.property_names.add(key)
+                self.language_property_names[lang].add(key)
                 is_plural = bool(int(is_plural))
                 if is_plural:
                     plural_rules[(key, value)].append(phrase)
@@ -54,6 +54,10 @@ class CategoryConfig(object):
 
         self.language_categories_plural = {key: dict(value) for key, value
                                            in six.iteritems(self.language_categories_plural)}
+
+    def has_keys(self, language, keys):
+        prop_names = self.language_property_names.get(language, set())
+        return [k for k in keys if k in prop_names]
 
     def get_phrase(self, language, key, value, is_plural=False):
         config = self.language_categories_singular if not is_plural else self.language_categories_plural
