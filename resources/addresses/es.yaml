@@ -1072,7 +1072,11 @@ countries:
                     canonical: casilla de correos
                     abbreviated: c.c.
                     sample: true
-                    prefer_abbreviated: true
+                    canonical_probability: 0.1
+                    abbreviated_probability: 0.8
+                    sample_probability: 0.1
+                    numeric:
+                        direction: left
 
     # Chile
     cl:
@@ -1083,7 +1087,11 @@ countries:
                     canonical: casilla de correos
                     abbreviated: c.c.
                     sample: true
-                    prefer_abbreviated: true
+                    canonical_probability: 0.1
+                    abbreviated_probability: 0.8
+                    sample_probability: 0.1
+                    numeric:
+                        direction: left
 
     # Colombia
     co:
