@@ -133,9 +133,6 @@ class AddressFormatter(object):
         HOUSE,
     }
 
-    PLACE_ONLY = 'place_only'
-    NO_NAME = 'no_name'
-
     address_formatter_fields = set(component_order)
 
     aliases = Aliases(
@@ -719,10 +716,8 @@ class AddressFormatter(object):
                 components[self.NEAR] = category_query.prep
 
         if category_query.add_place_name or category_query.add_address:
-            template_type = self.PLACE_ONLY if not category_query.add_address else self.NO_NAME
             place_formatted = self.format_address(address_components, country, language=language,
-                                                  minimal_only=False, tag_components=tag_components,
-                                                  template_type=template_type)
+                                                  minimal_only=False, tag_components=tag_components)
             if not place_formatted:
                 return None
             components['place'] = place_formatted
@@ -740,10 +735,8 @@ class AddressFormatter(object):
                 components[self.NEAR] = chain_query.prep
 
         if chain_query.add_place_name or chain_query.add_address:
-            template_type = self.PLACE_ONLY if not chain_query.add_address else self.NO_NAME
             components['place'] = self.format_address(address_components, country, language=language,
-                                                      minimal_only=False, tag_components=tag_components,
-                                                      template_type=template_type)
+                                                      minimal_only=False, tag_components=tag_components)
 
         return self.render_template(self.chain_template, components, tagged=tag_components)
 
@@ -760,8 +753,7 @@ class AddressFormatter(object):
         return self.render_template(self.intersection_template, components, tagged=tag_components)
 
     def format_address(self, components, country, language,
-                       minimal_only=True, tag_components=True, replace_aliases=True,
-                       template_type=None):
+                       minimal_only=True, tag_components=True, replace_aliases=True):
         if minimal_only and not self.minimal_components(components):
             return None
 
@@ -769,14 +761,9 @@ class AddressFormatter(object):
         if not template:
             return None
 
-        if template_type is None:
-            if not template or 'address_template' not in template:
-                return None
-            template_text = template['address_template']
-        elif template_type is self.PLACE_ONLY:
-            template_text = self.get_place_template(country, language=language)
-        elif template_type is self.NO_NAME:
-            template_text = self.get_no_name_template(country, language=language)
+        if not template or 'address_template' not in template:
+            return None
+        template_text = template['address_template']
 
         template_text = self.revised_template(template_text, components, country, language=language)
         if template_text is None:
