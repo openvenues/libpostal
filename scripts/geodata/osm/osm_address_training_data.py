@@ -51,6 +51,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.address_expansions.abbreviations import abbreviate
 from geodata.address_expansions.gazetteers import *
+from geodata.addresses.components import AddressComponents
 from geodata.coordinates.conversion import *
 from geodata.geonames.db import GeoNamesDB
 from geodata.language_id.disambiguation import *
