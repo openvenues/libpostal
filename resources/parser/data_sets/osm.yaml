@@ -1,0 +1,11 @@
+languages:
+    pick_namespaced_language_probability: 0.6
+
+streets:
+    abbreviate_probability: 0.3
+    separate_probability: 0.2
+
+venues:
+    abbreviate_probability: 0.3
+    separate_probability: 0.0
+
