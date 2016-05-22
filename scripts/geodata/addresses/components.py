@@ -91,6 +91,12 @@ class AddressComponents(object):
         AddressFormatter.COUNTRY,
     ))
 
+    NAME_COMPONENTS = {
+        AddressFormatter.ATTENTION,
+        AddressFormatter.CARE_OF,
+        AddressFormatter.HOUSE,
+    }
+
     ADDRESS_LEVEL_COMPONENTS = {
         AddressFormatter.ATTENTION,
         AddressFormatter.CARE_OF,
@@ -945,6 +951,9 @@ class AddressComponents(object):
             if phrase and phrase != postcode:
                 address_components[AddressFormatter.POSTCODE] = phrase
 
+    def drop_names(self, address_components):
+        return {c: v for c, v in six.iteritems(address_components) if c not in self.NAME_COMPONENTS}
+
     def drop_address(self, address_components):
         return {c: v for c, v in six.iteritems(address_components) if c not in self.ADDRESS_LEVEL_COMPONENTS}
 
@@ -960,6 +969,7 @@ class AddressComponents(object):
         po_box_config = self.config['po_box']
         po_box_probability = float(po_box_config['probability'])
         if random.random() < po_box_probability:
+            address_components = address_components.copy()
             box_number = POBox.random(language, country=country)
             if box_number is None:
                 return None
