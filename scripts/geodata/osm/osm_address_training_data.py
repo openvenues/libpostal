@@ -509,7 +509,7 @@ if __name__ == '__main__':
         elif geonames is None:
             parser.error('--geonames-db required for formatted addresses')
 
-    if args.address_file and args.format_only:
+    if args.address_file and args.format:
         osm_formatter = OSMAddressFormatter(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames)
         osm_formatter.build_training_data(args.address_file, args.out_dir, tag_components=not args.untagged)
     if args.address_file and args.limited_addresses:
