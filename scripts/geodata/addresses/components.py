@@ -968,7 +968,7 @@ class AddressComponents(object):
     def drop_invalid_components(self, address_components):
         component_bitset = self.component_bitset(address_components)
         for c in list(address_components):
-            if not component_bitset & self.component_dependencies[c]:
+            if c in self.component_dependencies and not component_bitset & self.component_dependencies[c]:
                 address_components.pop(c)
                 component_bitset ^= self.component_bit_values[c]
 
