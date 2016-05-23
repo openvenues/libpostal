@@ -98,10 +98,26 @@ class OSMAddressFormatter(object):
         ])
     )
 
-    def __init__(self, components):
+    zones = {
+        'landuse': {
+            'retail': AddressComponents.zones.COMMERCIAL,
+            'commercial': AddressComponents.zones.COMMERCIAL,
+            'industrial': AddressComponents.zones.INDUSTRIAL,
+            'residential': AddressComponents.zones.RESIDENTIAL,
+        },
+        'amenity': {
+            'university': AddressComponents.zones.UNIVERSITY,
+            'college': AddressComponents.zones.UNIVERSITY,
+        }
+    }
+
+    def __init__(self, components, subdivisions_rtree, buildings_rtree):
         # Instance of AddressComponents, contains structures for reverse geocoding, etc.
         self.components = components
         self.language_rtree = components.language_rtree
+
+        self.subdivisions_rtree = subdivisions_rtree
+        self.buildings_rtree = buildings_rtree
 
         self.config = yaml.load(open(OSM_PARSER_DATA_DEFAULT_CONFIG))
         self.formatter = AddressFormatter()
@@ -136,6 +152,37 @@ class OSMAddressFormatter(object):
         self.aliases.replace(address_components)
         address_components = {k: v for k, v in six.iteritems(address_components) if k in AddressFormatter.address_formatter_fields}
         return address_components
+
+    def subdivision_components(self, latitude, longitude):
+        return self.subdivisions_rtree.point_in_poly(latitude, longitude, return_all=True)
+
+    def zone(self, subdivisions):
+        for subdiv in subdivisions:
+            for k, v in six.iteritems(self.zones):
+                zone = v.get(subdiv.get(k))
+                if zone:
+                    return zone
+        return None
+
+    def building_components(self, latitude, longitude):
+        return self.buildings_rtree.point_in_poly(latitude, longitude, return_all=True)
+
+    def num_floors(self, buildings, key='building:levels'):
+        max_floors = None
+        for b in buildings:
+            num_floors = b.get(key)
+            if num_floors is not None:
+                try:
+                    num_floors = int(num_floors)
+                except (ValueError, TypeError):
+                    try:
+                        num_floors = int(float(num_floors))
+                    except (ValueError, TypeError):
+                        continue
+
+                if max_floors is not None and num_floors > max_floors:
+                    max_floors = num_floors
+        return max_floors
 
     def abbreviated_street(self, street, language):
         '''
@@ -330,7 +377,22 @@ class OSMAddressFormatter(object):
 
         revised_tags = self.normalize_address_components(tags)
 
-        address_components, country, language = self.components.expanded(revised_tags, latitude, longitude)
+        num_floors = None
+        num_basements = None
+        zone = None
+
+        building_components = self.building_components(latitude, longitude)
+        if building_components:
+            num_floors = self.num_floors(building_components)
+            num_basements = self.num_floors(building_components, key='building:levels:underground')
+
+        subdivision_components = self.subdivision_components(latitude, longitude)
+        if subdivision_components:
+            zone = self.zone(subdivision_components)
+
+        address_components, country, language = self.components.expanded(revised_tags, latitude, longitude,
+                                                                         num_floors=num_floors, num_basements=num_basements,
+                                                                         zone=zone)
 
         if not address_components:
             return None, None, None
