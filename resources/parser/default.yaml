@@ -11,7 +11,13 @@ languages:
 # Two-way dependencies are not an issue
 component_dependencies:
     house:
-        dependencies: []
+        dependencies:
+            - house_number
+            - road
+            - suburb
+            - city_district
+            - city
+            - postcode
 
     road:
         dependencies:
