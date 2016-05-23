@@ -499,7 +499,7 @@ if __name__ == '__main__':
         subdivisions_rtree = OSMSubdivisionReverseGeocoder.load(args.subdivisions_rtree_dir)
 
     buildings_rtree = None
-    if args.buildingss_rtree_dir:
+    if args.buildings_rtree_dir:
         buildings_rtree = OSMBuildingReverseGeocoder.load(args.buildings_rtree_dir)
 
     geonames = None
