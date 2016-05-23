@@ -92,7 +92,7 @@ def disambiguate_language_script(text, languages):
 
     return UNKNOWN_LANGUAGE
 
-LATIN_TRANSLITERATED_SCRIPTS = {'Arabic', 'Cyrllic')
+LATIN_TRANSLITERATED_SCRIPTS = {'Arabic', 'Cyrllic'}
 
 
 def has_non_latin_script(languages):
