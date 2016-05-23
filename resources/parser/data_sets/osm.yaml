@@ -17,6 +17,7 @@ streets:
     separate_probability: 0.2
 
 venues:
+    address_probability: 0.4
     abbreviate_probability: 0.3
     separate_probability: 0.0
 
