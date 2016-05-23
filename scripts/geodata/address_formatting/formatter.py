@@ -735,8 +735,11 @@ class AddressFormatter(object):
                 components[self.NEAR] = chain_query.prep
 
         if chain_query.add_place_name or chain_query.add_address:
-            components['place'] = self.format_address(address_components, country, language=language,
-                                                      minimal_only=False, tag_components=tag_components)
+            place_formatted = self.format_address(address_components, country, language=language,
+                                                  minimal_only=False, tag_components=tag_components)
+            if not place_formatted:
+                return None
+            components['place'] = place_formatted
 
         return self.render_template(self.chain_template, components, tagged=tag_components)
 
