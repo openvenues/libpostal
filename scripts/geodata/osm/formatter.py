@@ -180,7 +180,7 @@ class OSMAddressFormatter(object):
                     except (ValueError, TypeError):
                         continue
 
-                if max_floors is not None and num_floors > max_floors:
+                if max_floors is None or num_floors > max_floors:
                     max_floors = num_floors
         return max_floors
 
