@@ -1,4 +1,5 @@
 import os
+import six
 import sys
 
 from collections import defaultdict, OrderedDict
@@ -33,8 +34,14 @@ WELL_REPRESENTED_LANGUAGE_COUNTRIES = {
 }
 
 char_scripts = get_chars_by_script()
-script_languages = {script: set(langs) for script, langs in get_script_languages().iteritems()}
+script_languages = {script: set(langs) for script, langs in six.iteritems(get_script_languages())}
+lang_scripts = defaultdict(set)
 
+for script, langs in six.iteritems(script_languages):
+    for lang in langs:
+        lang_scripts[lang].add(script)
+
+lang_scripts = dict(lang_scripts)
 
 UNKNOWN_SCRIPT = 'Unknown'
 COMMON_SCRIPT = 'Common'
@@ -69,9 +76,7 @@ UNKNOWN_LANGUAGE = 'unk'
 AMBIGUOUS_LANGUAGE = 'xxx'
 
 
-def disambiguate_language(text, languages):
-    text = safe_decode(text)
-    valid_languages = OrderedDict(languages)
+def disambiguate_language_script(text, languages):
     script_langs = {}
     read_len = 0
     while read_len < len(text):
@@ -84,6 +89,27 @@ def disambiguate_language(text, languages):
                 return script_valid[0]
 
         read_len += script_len
+
+    return UNKNOWN_LANGUAGE
+
+LATIN_TRANSLITERATED_SCRIPTS = {'Arabic', 'Cyrllic')
+
+
+def has_non_latin_script(languages):
+    for lang, is_default in languages:
+        scripts = script_languages.get(lang, set())
+        if LATIN_SCRIPT not in scripts or scripts & LATIN_TRANSLITERATED_SCRIPTS:
+            return True
+    return False
+
+
+def disambiguate_language(text, languages, scripts_only=False):
+    text = safe_decode(text)
+    valid_languages = OrderedDict(languages)
+
+    language_script = disambiguate_language_script(text, languages)
+    if language_script is not UNKNOWN_LANGUAGE:
+        return language_script
 
     num_defaults = sum((1 for lang, default in valid_languages.iteritems() if default))
 

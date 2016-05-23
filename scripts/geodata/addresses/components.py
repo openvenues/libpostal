@@ -240,10 +240,20 @@ class AddressComponents(object):
             language = candidate_languages[0]['lang']
         else:
             street = components.get(AddressFormatter.ROAD, None)
+
+            lang_tuples = [(l['lang'], l['default']) for l in candidate_languages]
             if street is not None:
-                language = disambiguate_language(street, [(l['lang'], l['default']) for l in candidate_languages])
+                language = disambiguate_language(street, lang_tuples)
             else:
-                language = UNKNOWN_LANGUAGE
+                if has_non_latin_script(lang_tuples):
+                    for component, value in six.iteritems(components):
+                        language = disambiguate_language_script(value, lang_tuples)
+                        if language is not UNKNOWN_LANGUAGE:
+                            break
+                    else:
+                        language = UNKNOWN_LANGUAGE
+                else:
+                    language = UNKNOWN_LANGUAGE
 
         return language
 
