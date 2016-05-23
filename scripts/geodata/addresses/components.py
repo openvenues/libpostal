@@ -43,7 +43,6 @@ class ComponentDependencies(object):
     a house_numer cannot be used in the absence of a road name.
     '''
 
-
     def __init__(self, name, dependencies=tuple()):
         self.name = name
         self.dependencies = dependencies
@@ -812,7 +811,7 @@ class AddressComponents(object):
                 address_components[component] = phrase
         else:
             existing = address_components[component]
-            phrase = self.get_component_phrase(existing, language, country=country)
+            phrase = self.get_component_phrase(existing, component_class, language, country=country)
             if phrase and phrase != existing:
                 address_components[component] = phrase
 
