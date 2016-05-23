@@ -116,6 +116,12 @@ class AddressComponents(object):
     ALPHANUMERIC_PHRASE = 'alphanumeric'
     STANDALONE_PHRASE = 'standalone'
 
+    class zones:
+        COMMERCIAL = 'commercial'
+        RESIDENTIAL = 'residential'
+        INDUSTRIAL = 'industrial'
+        UNIVERSITY = 'university'
+
     sub_building_component_class_map = {
         AddressFormatter.ENTRANCE: Entrance,
         AddressFormatter.STAIRCASE: Staircase,
