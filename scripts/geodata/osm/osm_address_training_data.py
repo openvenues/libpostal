@@ -447,23 +447,31 @@ if __name__ == '__main__':
                         default=tempfile.gettempdir(),
                         help='Temp directory to use')
 
-    parser.add_argument('-g', '--language-rtree-dir',
+    parser.add_argument('--language-rtree-dir',
                         required=True,
                         help='Language RTree directory')
 
-    parser.add_argument('-r', '--rtree-dir',
+    parser.add_argument('--rtree-dir',
                         default=None,
                         help='OSM reverse geocoder RTree directory')
 
-    parser.add_argument('-q', '--quattroshapes-rtree-dir',
+    parser.add_argument('--quattroshapes-rtree-dir',
                         default=None,
                         help='Quattroshapes reverse geocoder RTree directory')
 
-    parser.add_argument('-d', '--geonames-db',
+    parser.add_argument('--subdivisions-rtree-dir',
+                        default=None,
+                        help='Subdivisions reverse geocoder RTree directory')
+
+    parser.add_argument('--buildings-rtree-dir',
+                        default=None,
+                        help='Buildings reverse geocoder RTree directory')
+
+    parser.add_argument('--geonames-db',
                         default=None,
                         help='GeoNames db file')
 
-    parser.add_argument('-n', '--neighborhoods-rtree-dir',
+    parser.add_argument('--neighborhoods-rtree-dir',
                         default=None,
                         help='Neighborhoods reverse geocoder RTree directory')
 
@@ -485,6 +493,14 @@ if __name__ == '__main__':
     quattroshapes_rtree = None
     if args.quattroshapes_rtree_dir:
         quattroshapes_rtree = QuattroshapesReverseGeocoder.load(args.quattroshapes_rtree_dir)
+
+    subdivisions_rtree = None
+    if args.subdivisions_rtree_dir:
+        subdivisions_rtree = OSMSubdivisionReverseGeocoder.load(args.subdivisions_rtree_dir)
+
+    buildings_rtree = None
+    if args.subdivisions_rtree_dir:
+        buildings_rtree = OSMBuildingReverseGeocoder.load(args.buildings_rtree)
 
     geonames = None
 
@@ -509,11 +525,11 @@ if __name__ == '__main__':
 
     if args.address_file and args.format:
         components = AddressComponents(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames)
-        osm_formatter = OSMAddressFormatter(components)
+        osm_formatter = OSMAddressFormatter(components, subdivisions_rtree, buildings_rtree)
         osm_formatter.build_training_data(args.address_file, args.out_dir, tag_components=not args.untagged)
     if args.address_file and args.limited_addresses:
         components = AddressComponents(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames)
-        osm_formatter = OSMAddressFormatter(components, splitter=u' ')
+        osm_formatter = OSMAddressFormatter(components, subdivisions_rtree, buildings_rtree, splitter=u' ')
         osm_formatter.build_limited_training_data(args.address_file, args.out_dir)
     if args.venues_file:
         build_venue_training_data(language_rtree, args.venues_file, args.out_dir)
