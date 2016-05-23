@@ -23,3 +23,5 @@ suffixes:
     - township
     - municipality
     - city
+    - cp
+    - civil parish
