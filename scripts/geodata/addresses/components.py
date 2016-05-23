@@ -270,15 +270,16 @@ class AddressComponents(object):
         return key, raw_key
 
     def all_names(self, props, languages, keys=ALL_OSM_NAME_KEYS):
-        names = set()
+        # Preserve uniqueness and order
+        names = OrderedDict()
         for k, v in six.iteritems(props):
             if k in keys:
-                names.add(v)
+                names[v] = None
             elif ':' in k:
                 k, qual = k.split(':', 1)
                 if k in self.ALL_OSM_NAME_KEYS and qual.split('_', 1)[0] in languages:
-                    names.add(v)
-        return names
+                    names[v] = None
+        return names.keys()
 
     def normalized_place_name(self, name, tag, osm_components, country=None, languages=None):
         '''
@@ -292,7 +293,7 @@ class AddressComponents(object):
 
         components = defaultdict(set)
         for props in osm_components:
-            component_names = self.all_names(props, languages or set())
+            component_names = set(self.all_names(props, languages or []))
             names |= component_names
 
             is_state = False
