@@ -211,9 +211,17 @@ class OSMAddressFormatter(object):
     def formatted_addresses_with_venue_names(self, address_components, venue_names, country, language=None, tag_components=True, minimal_only=False):
         # Since venue names are only one-per-record, this wrapper will try them all (name, alt_name, etc.)
         formatted_addresses = []
+
         if AddressFormatter.HOUSE not in address_components or not venue_names:
             return [self.formatter.format_address(address_components, country, language=language,
                                                   tag_components=tag_components, minimal_only=minimal_only)]
+
+        address_prob = float(nested_get(self.config, ('venues', 'address_probability'), default=0.0))
+        if random.random() < address_prob:
+            address_components.pop(AddressFormatter.HOUSE)
+            formatted_address = self.formatter.format_address(address_components, country, language=language,
+                                                              tag_components=tag_components, minimal_only=minimal_only)
+            formatted_addresses.append(formatted_address)
 
         for venue_name in venue_names:
             if venue_name:
