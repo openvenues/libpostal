@@ -1198,10 +1198,12 @@ units:
     zones:
         residential: *unit_alphanumeric
         commercial:
-            default: *suite
-            probability: 0.8
+            default: *office
+            probability: 0.6
             alternatives:
-                - alternative: *office
+                - alternative: *number
+                  probability: 0.2
+                - alternative: *suite
                   probability: 0.2
         industrial:
             default: *lot
@@ -1333,14 +1335,14 @@ countries:
             zones: &us_zones
                 residential: *us_units_alphanumeric
                 commercial:
-                    default: *office
+                    # Suite is much more common in the US and Canada
+                    default: *suite
                     probability: 0.5
                     alternatives:
-                        - alternative: *suite # Suite is much more common in the US and Canada
-                          probability: 0.5
-                industrial:
-                    default: *lot
-                    probability: 0.6
+                        - alternative: *number
+                          probability: 0.2
+                        - alternative: *office
+                          probability: 0.3
                 university:
                     default: *room
 
