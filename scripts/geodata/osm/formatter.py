@@ -188,7 +188,7 @@ class OSMAddressFormatter(object):
         street = safe_decode(props['addr:street'])
         parent_street = props.pop('addr:parentstreet', None)
         if parent_street:
-            props['addr:street'] = six.u(', ').join(street, safe_decode(parent_street))
+            props['addr:street'] = six.u(', ').join([street, safe_decode(parent_street)])
             return True
         return False
 
