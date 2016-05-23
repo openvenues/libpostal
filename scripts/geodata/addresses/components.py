@@ -269,10 +269,10 @@ class AddressComponents(object):
         key = ''.join((raw_key, suffix)) if ':' not in raw_key else raw_key
         return key, raw_key
 
-    def all_names(self, props, languages):
+    def all_names(self, props, languages, keys=ALL_OSM_NAME_KEYS):
         names = set()
         for k, v in six.iteritems(props):
-            if k in self.ALL_OSM_NAME_KEYS:
+            if k in keys:
                 names.add(v)
             elif ':' in k:
                 k, qual = k.split(':', 1)

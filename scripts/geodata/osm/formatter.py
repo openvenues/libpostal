@@ -192,7 +192,7 @@ class OSMAddressFormatter(object):
             return True
         return False
 
-    def venue_names(self, props):
+    def venue_names(self, props, languages):
         '''
         Venue names
         -----------
@@ -201,12 +201,7 @@ class OSMAddressFormatter(object):
         With a certain probability, add None to the list so we drop the name
         '''
 
-        venue_names = []
-        for key in ('name', 'alt_name', 'loc_name', 'int_name', 'old_name'):
-            venue_name = props.get(key)
-            if venue_name:
-                venue_names.append(venue_name)
-        return venue_names
+        return self.components.all_names(props, languages, keys=('name', 'alt_name', 'loc_name', 'int_name', 'old_name'))
 
     def formatted_addresses_with_venue_names(self, address_components, venue_names, country, language=None, tag_components=True, minimal_only=False):
         # Since venue names are only one-per-record, this wrapper will try them all (name, alt_name, etc.)
@@ -326,8 +321,6 @@ class OSMAddressFormatter(object):
         returned.
         '''
 
-        venue_names = self.venue_names(tags) or []
-
         try:
             latitude, longitude = latlon_to_decimal(tags['lat'], tags['lon'])
         except Exception:
@@ -341,6 +334,9 @@ class OSMAddressFormatter(object):
 
         if not address_components:
             return None, None, None
+
+        languages = country_languages[country].keys()
+        venue_names = self.venue_names(tags, languages) or []
 
         # Abbreviate the street name with random probability
         street_name = address_components.get(AddressFormatter.ROAD)
