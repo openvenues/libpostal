@@ -19,8 +19,6 @@ suffixes:
     - mura
     - ku
     - tokubetsu-ku
-    - chōme
-    - chome
     - aza
     - oaza
     - koaza
@@ -36,7 +34,6 @@ suffixes_no_whitespace:
     - 村 # mura
     - 区 # ku
     - 特別区 # tokubetsu-ku
-    - 丁目 # chōme
     - 字 # aza
     - 大字 # ōaza
     - 小字 # koaza
