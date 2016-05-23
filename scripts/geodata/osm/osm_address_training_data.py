@@ -76,9 +76,6 @@ PLANET_BORDERS_INPUT_FILE = 'planet-borders.osm'
 # Output files
 WAYS_LANGUAGE_DATA_FILENAME = 'streets_by_language.tsv'
 ADDRESS_LANGUAGE_DATA_FILENAME = 'address_streets_by_language.tsv'
-ADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'formatted_addresses_tagged.tsv'
-ADDRESS_FORMAT_DATA_FILENAME = 'formatted_addresses.tsv'
-ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME = 'formatted_addresses_by_language.tsv'
 TOPONYM_LANGUAGE_DATA_FILENAME = 'toponyms_by_language.tsv'
 
 
