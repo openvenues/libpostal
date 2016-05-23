@@ -965,6 +965,13 @@ class AddressComponents(object):
             return address_components
         return {c: v for c, v in six.iteritems(address_components) if c != AddressFormatter.POSTCODE}
 
+    def drop_invalid_components(self, address_components):
+        component_bitset = self.component_bitset(address_components)
+        for c in list(address_components):
+            if not component_bitset & self.component_dependencies[c]:
+                address_components.pop(c)
+                component_bitset ^= self.component_bit_values[c]
+
     def po_box_address(self, address_components, language, country=None):
         po_box_config = self.config['po_box']
         po_box_probability = float(po_box_config['probability'])
@@ -1078,6 +1085,8 @@ class AddressComponents(object):
         if dropout_places:
             # Perform dropout on places
             address_components = place_config.dropout_components(address_components, all_osm_components, country=country)
+
+        self.drop_invalid_components(address_components)
 
         return address_components, country, language
 
