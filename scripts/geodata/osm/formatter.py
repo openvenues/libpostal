@@ -227,15 +227,15 @@ class OSMAddressFormatter(object):
         formatted_addresses = []
 
         place_components = self.components.drop_address(address_components)
-        formatted_address = self.formatter.format_address(address_components, country, language=language,
+        formatted_address = self.formatter.format_address(place_components, country, language=language,
                                                           tag_components=tag_components, minimal_only=False)
         formatted_addresses.append(formatted_address)
 
         if AddressFormatter.POSTCODE in address_components:
             drop_postcode_prob = float(nested_get(self.config, ('places', 'drop_postcode_probability'), default=0.0))
             if random.random() < drop_postcode_prob:
-                place_components = self.components.drop_postcode(address_components)
-                formatted_address = self.formatter.format_address(address_components, country, language=language,
+                place_components = self.components.drop_postcode(place_components)
+                formatted_address = self.formatter.format_address(place_components, country, language=language,
                                                                   tag_components=tag_components, minimal_only=False)
                 formatted_addresses.append(formatted_address)
         return formatted_addresses
