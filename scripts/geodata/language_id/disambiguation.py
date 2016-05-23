@@ -86,11 +86,11 @@ def disambiguate_language_script(text, languages):
             script_langs[script] = set(script_valid)
 
             if script_len == len(text) and len(script_valid) == 1:
-                return script_valid[0]
+                return script_valid[0], script_langs
 
         read_len += script_len
 
-    return UNKNOWN_LANGUAGE
+    return UNKNOWN_LANGUAGE, script_langs
 
 LATIN_TRANSLITERATED_SCRIPTS = {'Arabic', 'Cyrllic'}
 
@@ -107,7 +107,7 @@ def disambiguate_language(text, languages, scripts_only=False):
     text = safe_decode(text)
     valid_languages = OrderedDict(languages)
 
-    language_script = disambiguate_language_script(text, languages)
+    language_script, script_langs = disambiguate_language_script(text, languages)
     if language_script is not UNKNOWN_LANGUAGE:
         return language_script
 

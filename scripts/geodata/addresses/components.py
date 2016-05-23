@@ -247,7 +247,7 @@ class AddressComponents(object):
             else:
                 if has_non_latin_script(lang_tuples):
                     for component, value in six.iteritems(components):
-                        language = disambiguate_language_script(value, lang_tuples)
+                        language, script_langs = disambiguate_language_script(value, lang_tuples)
                         if language is not UNKNOWN_LANGUAGE:
                             break
                     else:
