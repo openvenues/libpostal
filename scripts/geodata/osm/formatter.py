@@ -133,7 +133,7 @@ class OSMAddressFormatter(object):
     def normalize_address_components(self, tags):
         address_components = {k: v for k, v in six.iteritems(tags) if self.aliases.get(k)}
         self.aliases.replace(address_components)
-        address_components = {k: v for k, v in six.iteritems(address_components) if k in AddressFormatter.address}
+        address_components = {k: v for k, v in six.iteritems(address_components) if k in AddressFormatter.address_formatter_fields}
         return address_components
 
     def abbreviated_street(self, street, language):
