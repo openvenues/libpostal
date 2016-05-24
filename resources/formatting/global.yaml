@@ -3,6 +3,11 @@ global:
         place_direction: right
         direction_probability: 0.9
 
+    language_code_replacements:
+        ja_rm: en
+        ko_rm: en
+        zh_pinyin: en        
+
     insertions:
         # For each component, insertions are mutually exclusive
         # They don't have to sum to 1 (especially for components

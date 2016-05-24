@@ -180,6 +180,8 @@ class AddressFormatter(object):
         self.load_config()
         self.load_country_formats()
 
+        self.language_code_replacements = nested_get(self.config, ('global', 'languages', 'language_code_replacements'))
+
         self.setup_insertion_probabilities()
         self.setup_no_name_templates()
         self.setup_place_only_templates()
@@ -681,6 +683,7 @@ class AddressFormatter(object):
     def get_template_from_config(self, config, country, language=None):
         template = None
         if language:
+            language = self.language_code_replacements.get(language, language)
             # For countries like China and Japan where the country format varies
             # based on which language is being used
             template = config.get('{}_{}'.format(country.upper(), language.lower()), None)
