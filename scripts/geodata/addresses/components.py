@@ -136,6 +136,8 @@ class AddressComponents(object):
         # Non-admin component dropout
         self.address_level_dropout_probabilities = {k: v['probability'] for k, v in six.iteritems(self.config['dropout'])}
 
+        self.language_code_replacements = nested_get(self.config, ('languages', 'language_code_replacements'))
+
         self.osm_admin_rtree = osm_admin_rtree
         self.language_rtree = language_rtree
         self.neighborhoods_rtree = neighborhoods_rtree
@@ -1104,6 +1106,10 @@ class AddressComponents(object):
             address_components = place_config.dropout_components(address_components, all_osm_components, country=country)
 
         self.drop_invalid_components(address_components)
+
+        if language_suffix:
+            suffix_lang = language_suffix.lstrip(':')
+            language = self.language_code_replacements.get(suffix_lang, language)
 
         return address_components, country, language
 
