@@ -683,7 +683,7 @@ class AddressFormatter(object):
     def get_template_from_config(self, config, country, language=None):
         template = None
         if language:
-            language = self.language_code_replacements.get(language, language)
+            language = self.language_code_replacements.get(language, language.split('_')[0])
             # For countries like China and Japan where the country format varies
             # based on which language is being used
             template = config.get('{}_{}'.format(country.upper(), language.lower()), None)
