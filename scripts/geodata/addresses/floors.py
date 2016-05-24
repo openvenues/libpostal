@@ -26,14 +26,14 @@ class Floor(NumberedComponent):
     @classmethod
     def sample_floors(cls, num_floors, num_basements=0):
         num_floors = int(num_floors)
-        return random.randint(-num_basements, num_floors - 1)
+        return random.randint(-num_basements, (num_floors - 1) if num_floors > 0 else 0)
 
     @classmethod
     def sample_positive_floors(cls, num_floors, zeroth_floor_prob=0.001):
         num_floors = int(num_floors)
         if random.random() < zeroth_floor_prob:
             return 0
-        return random.randint(1, num_floors - 1)
+        return random.randint(1, (num_floors - 1) if num_floors > 1 else 1)
 
     @classmethod
     def random(cls, language, country=None, num_floors=None, num_basements=None):
