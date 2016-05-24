@@ -28,6 +28,17 @@ class NeighborhoodDeduper(NameDeduper):
     replacements = {
         u'saint': u'st',
         u'and': u'&',
+        u'〇': u'0',
+        u'一': u'1',
+        u'二': u'2',
+        u'三': u'3',
+        u'四': u'4',
+        u'五': u'5',
+        u'六': u'6',
+        u'七': u'7',
+        u'八': u'8',
+        u'九': u'9',
+        u'十': u'10',
     }
 
     discriminative_words = set([
