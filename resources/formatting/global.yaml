@@ -10,7 +10,7 @@ global:
         postcode:
             postcode_before_city:
                 before: city
-                probability: 0.0001
+                probability: 0.001
 
             postcode_after_city:
                 after: city
