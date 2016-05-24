@@ -293,7 +293,8 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             if not osm_name:
                 continue
 
-            id_type, element_id = osm_type_and_id(element_id)
+            id_type, element_id = element_id.split(':')
+            element_id = long(element_id)
 
             props['type'] = id_type
             props['id'] = element_id
