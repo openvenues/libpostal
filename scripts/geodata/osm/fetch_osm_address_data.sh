@@ -81,7 +81,7 @@ PLANET_BORDERS_O5M="planet-borders.o5m"
 PLANET_BORDERS="planet-borders.osm"
 PLANET_ADMIN_BORDERS_OSM="planet-admin-borders.osm"
 
-VALID_ADMIN_BORDER_KEYS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish or boundary=civil or boundary=ceremonial or place=island or place=city or place=town or place=village or place=hamlet or placement=municipality"
+VALID_ADMIN_BORDER_KEYS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish or boundary=civil or boundary=ceremonial or place=island or place=city or place=town or place=village or place=hamlet or place=municipality"
 VALID_NEIGHBORHOOD_KEYS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=neighbourhood or place=suburb or place=quarter or place=borough or place=locality"
 
 osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDER_KEYS" --drop-author --drop-version -o=$PLANET_ADMIN_BORDERS_OSM
