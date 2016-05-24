@@ -1107,7 +1107,7 @@ class AddressComponents(object):
 
         self.drop_invalid_components(address_components)
 
-        if language_suffix:
+        if language_suffix and not non_local_language:
             suffix_lang = language_suffix.lstrip(':')
             language = self.language_code_replacements.get(suffix_lang, language)
 
