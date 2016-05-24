@@ -7,6 +7,11 @@ languages:
     # Replace user-tagged admin components with the non-local language version
     replace_non_local_probability: 0.4
 
+    language_code_replacements:
+        ja_rm: en
+        ko_rm: en
+        zh_pinyin: en
+
 # Dependencies for including each component in an "address"
 # Two-way dependencies are not an issue
 component_dependencies:
