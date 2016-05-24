@@ -65,8 +65,8 @@ class OSMPolygonReader(object):
     def node_coordinates(self, coords, indptr, idx):
         start_index = indptr[idx] * 2
         end_index = indptr[idx + 1] * 2
-        return zip(coords[start_index:end_index - 2:2],
-                   coords[start_index + 1:end_index - 1:2])
+        node_coords = coords[start_index:end_index]
+        return zip(node_coords[::2], node_coords[1::2])
 
     def sparse_deps(self, data, indptr, idx):
         return [data[i] for i in xrange(indptr[idx], indptr[idx + 1])]
@@ -136,13 +136,32 @@ class OSMPolygonReader(object):
 
             seen = set()
 
-            q = component[:1]
+            if not component:
+                continue
+
+            q = [(c, False) for c in component[:1]]
             while q:
-                way_id = q.pop()
+                way_id, reverse = q.pop()
                 way_index = way_indices[way_id]
-                poly_nodes.extend(self.node_coordinates(self.way_coords, self.way_indptr, way_index)[:-1])
-                neighbors = way_graph[way_id]
-                q.extend([w for w in neighbors if w not in seen])
+
+                node_coords = self.node_coordinates(self.way_coords, self.way_indptr, way_index)
+
+                head, tail = start_end_nodes[way_id]
+
+                if reverse:
+                    node_coords = node_coords[::-1]
+                    head, tail = tail, head
+
+                for neighbor in way_graph[way_id]:
+                    if neighbor in seen:
+                        continue
+                    neighbor_head, neighbor_tail = start_end_nodes[neighbor]
+                    neighbor_reverse = neighbor_head == head or neighbor_tail == tail
+                    q.append((neighbor, neighbor_reverse))
+
+                way_start = 0 if q else 1
+                poly_nodes.extend(node_coords[way_start:-1])
+
                 seen.add(way_id)
 
             polys.append(poly_nodes)
