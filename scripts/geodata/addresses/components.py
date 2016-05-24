@@ -187,6 +187,9 @@ class AddressComponents(object):
         Some components are also more likely to be dropped than others, so in the same config there are
         dropout probabilities for each.
         '''
+        if not components:
+            return []
+
         component_bitset = self.component_bitset(components)
 
         candidates = [c for c in components if c in self.address_level_dropout_probabilities]
@@ -985,6 +988,8 @@ class AddressComponents(object):
         return {c: v for c, v in six.iteritems(address_components) if c != AddressFormatter.POSTCODE}
 
     def drop_invalid_components(self, address_components):
+        if not address_components:
+            return
         component_bitset = self.component_bitset(address_components)
         for c in list(address_components):
             if c in self.component_dependencies and not component_bitset & self.component_dependencies[c]:
