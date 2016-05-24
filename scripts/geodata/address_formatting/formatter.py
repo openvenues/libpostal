@@ -180,7 +180,7 @@ class AddressFormatter(object):
         self.load_config()
         self.load_country_formats()
 
-        self.language_code_replacements = nested_get(self.config, ('global', 'languages', 'language_code_replacements'))
+        self.language_code_replacements = nested_get(self.config, ('global', 'language_code_replacements'))
 
         self.setup_insertion_probabilities()
         self.setup_no_name_templates()
