@@ -82,7 +82,7 @@ bool address_parser_data_set_tokenize_line(address_parser_data_set_t *data_set, 
             cstring_array_add_string(labels, label);
 
             token_array_push(tokens, token);
-        else {
+        } else {
             /* If normalizing the string turned one token into several e.g. ½ => 1/2
                add all the tokens where offset = (token.offset + sub_token.offset)
                with the same label as the parent.
