@@ -180,6 +180,8 @@ char **cstring_array_to_strings(cstring_array *self);
 
 // Split on delimiter
 cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, size_t *count);
+// Split on delimiter, ignore multiple consecutive delimiters
+cstring_array *cstring_array_split_ignore_consecutive(char *str, const char *separator, size_t separator_len, size_t *count);
 
 // Split on delimiter by replacing (single character) separator with the NUL byte in the original string
 cstring_array *cstring_array_split_no_copy(char *str, char separator, size_t *count);
