@@ -20,7 +20,11 @@ tokenized_string_t *tokenized_string_new_size(size_t len, size_t num_tokens) {
 
 inline tokenized_string_t *tokenized_string_new_from_str_size(char *src, size_t len, size_t num_tokens) {
     tokenized_string_t *self = tokenized_string_new_size(len, num_tokens);
-    self->str = strndup(src);
+    self->str = strndup(src, len);
+    if (self->str == NULL) {
+        tokenized_string_destroy(self);
+        return NULL;
+    }
     return self;
 }
 
@@ -37,7 +41,11 @@ void tokenized_string_add_token(tokenized_string_t *self, const char *src, size_
 
 tokenized_string_t *tokenized_string_from_tokens(char *src, token_array *tokens, bool copy_tokens) {
     tokenized_string_t *self = malloc(sizeof(tokenized_string_t));
-    self->str = stdup(src);
+    self->str = strdup(src);
+    if (self->str == NULL) {
+        tokenized_string_destroy(self);
+        return NULL;
+    }
     self->strings = cstring_array_new_size(strlen(src) + tokens->n);
     if (copy_tokens) {
         self->tokens = token_array_new_copy(tokens, tokens->n);
