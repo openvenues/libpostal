@@ -858,12 +858,12 @@ static cstring_array *cstring_array_split_options(char *str, const char *separat
 
 
 cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, size_t *count) {
-    return cstring_array_split_options(str, separator, separator_len, true, count);
+    return cstring_array_split_options(str, separator, separator_len, false, count);
 }
 
 
 cstring_array *cstring_array_split_ignore_consecutive(char *str, const char *separator, size_t separator_len, size_t *count) {
-    return cstring_array_split_options(str, separator, separator_len, false, count);
+    return cstring_array_split_options(str, separator, separator_len, true, count);
 }
 
 
