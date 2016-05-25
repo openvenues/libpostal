@@ -31,7 +31,7 @@ bool address_parser_data_set_tokenize_line(address_parser_data_set_t *data_set, 
     uint32_t i = 0;
     char *str = NULL;
 
-    cstring_array *pairs = cstring_array_split(input, " ", 1, &count);
+    cstring_array *pairs = cstring_array_split_ignore_consecutive(input, " ", 1, &count);
     size_t num_pairs = cstring_array_num_strings(pairs);
 
     char *label = NULL;
@@ -62,23 +62,57 @@ bool address_parser_data_set_tokenize_line(address_parser_data_set_t *data_set, 
         }
 
         token.offset = pairs->indices->a[i];
-        token.len = last_separator_index;
+        size_t expected_len = last_separator_index;
 
-        scanner_t scanner = scanner_from_string(input + token.offset, token.len);
+        scanner_t scanner = scanner_from_string(input + token.offset, expected_len);
         token.type = scan_token(&scanner);
-        if (ADDRESS_PARSER_IS_SEPARATOR(token.type)) {
-            uint32_array_push(separators, ADDRESS_SEPARATOR_FIELD_INTERNAL);
-            continue;
-        } else if (ADDRESS_PARSER_IS_IGNORABLE(token.type)) {
-            // shouldn't happen but just in case
-            continue;
-        } else {
-            uint32_array_push(separators, ADDRESS_SEPARATOR_NONE);
+        token.len = scanner.cursor - scanner.start;
+
+        if (token.len == expected_len) {
+            if (ADDRESS_PARSER_IS_SEPARATOR(token.type)) {
+                uint32_array_push(separators, ADDRESS_SEPARATOR_FIELD_INTERNAL);
+                continue;
+            } else if (ADDRESS_PARSER_IS_IGNORABLE(token.type)) {
+                // shouldn't happen but just in case
+                continue;
+            } else {
+                uint32_array_push(separators, ADDRESS_SEPARATOR_NONE);
+            }
+
+            cstring_array_add_string(labels, label);
+
+            token_array_push(tokens, token);
+        else {
+            /* If normalizing the string turned one token into several e.g. ½ => 1/2
+               add all the tokens where offset = (token.offset + sub_token.offset)
+               with the same label as the parent.
+            */
+            token_array *sub_tokens = token_array_new();
+            if (sub_tokens == NULL) {
+                log_error("Error allocating sub-token array\n");
+                return false;
+            }
+            tokenize_add_tokens(sub_tokens, input + token.offset, expected_len, false);
+            for (size_t j = 0; j < sub_tokens->n; j++) {
+                token_t sub_token = sub_tokens->a[j];
+                // Add the offset of the parent "token"
+                sub_token.offset = token.offset + sub_token.offset;
+
+                if (ADDRESS_PARSER_IS_SEPARATOR(sub_token.type)) {
+                    uint32_array_push(separators, ADDRESS_SEPARATOR_FIELD_INTERNAL);
+                    continue;
+                } else if (ADDRESS_PARSER_IS_IGNORABLE(sub_token.type)) {
+                    continue;
+                } else {
+                    uint32_array_push(separators, ADDRESS_SEPARATOR_NONE);
+                }
+
+                cstring_array_add_string(labels, label);
+                token_array_push(tokens, sub_token);
+            }
+
         }
 
-        cstring_array_add_string(labels, label);
-
-        token_array_push(tokens, token);
     })
 
     cstring_array_destroy(pairs);
