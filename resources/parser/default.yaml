@@ -104,8 +104,8 @@ state_district:
 
 state:
     # Probability of using full name e.g. New York vs. NY
-    full_name_probability: 0.4
-    abbreviated_probability: 0.6
+    full_name_probability: 0.25
+    abbreviated_probability: 0.75
 
 country:
     # If no country is specified, pull the country name from CLDR (authoratative country names translated into different languages)
