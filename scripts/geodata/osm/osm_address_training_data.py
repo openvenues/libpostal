@@ -172,9 +172,6 @@ def get_language_names(language_rtree, key, value, tag_prefix='name'):
     return country, name_language
 
 
-ALL_LANGUAGES = 'all'
-
-
 def build_ways_training_data(language_rtree, infile, out_dir, abbreviate_streets=True):
     '''
     Creates a training set for language classification using most OSM ways

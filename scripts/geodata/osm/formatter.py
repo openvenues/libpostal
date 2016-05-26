@@ -40,6 +40,8 @@ ADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'formatted_addresses_tagged.tsv'
 ADDRESS_FORMAT_DATA_FILENAME = 'formatted_addresses.tsv'
 ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME = 'formatted_addresses_by_language.tsv'
 
+ALL_LANGUAGES = 'all'
+
 
 class OSMAddressFormatter(object):
     aliases = Aliases(
@@ -326,6 +328,8 @@ class OSMAddressFormatter(object):
                     name = canonical
                     if random.random() < sample_probability:
                         names = address_config.sample_phrases.get((language, dictionary), {}).get(canonical, [])
+                        if not names:
+                            names = address_config.sample_phrases.get((ALL_LANGUAGES, dictionary), {}).get(canonical, [])
                         if names:
                             name = random.choice(names)
                     phrase = Chain.phrase(name, language, country)
