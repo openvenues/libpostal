@@ -554,8 +554,8 @@ class AddressComponents(object):
         States
         ------
 
-        Primarily for the US, Canada and Australia, OSM tends to use the abbreviated state name
-        whereas we'd like to include both forms, so wtih some probability, replace the abbreviated
+        Primarily for the US, Canada and Australia, OSM addr:state tags tend to use the abbreviated
+        state name whereas we'd like to include both forms. With some probability, replace the abbreviated
         name with the unabbreviated one e.g. CA => California
         '''
         address_state = address_components.get(AddressFormatter.STATE)
@@ -1029,7 +1029,7 @@ class AddressComponents(object):
             return True
         return False
 
-    def expanded(self, address_components, latitude, longitude,
+    def expanded(self, address_components, latitude, longitude, language=None,
                  dropout_places=True, add_sub_building_components=True,
                  num_floors=None, num_basements=None, zone=None):
         '''
@@ -1053,11 +1053,10 @@ class AddressComponents(object):
         if not (country and candidate_languages):
             return None, None, None
 
-        language = None
-
         more_than_one_official_language = len(candidate_languages) > 1
 
-        language = self.address_language(address_components, candidate_languages)
+        if not language:
+            language = self.address_language(address_components, candidate_languages)
 
         non_local_language = self.non_local_language()
         # If a country was already specified

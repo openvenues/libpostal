@@ -122,28 +122,22 @@ class OSMAddressFormatter(object):
         self.config = yaml.load(open(OSM_PARSER_DATA_DEFAULT_CONFIG))
         self.formatter = AddressFormatter()
 
-    def pick_language(self, osm_tags, candidate_languages):
+    def namespaced_language(self, tags, candidate_languages):
         language = None
 
-        pick_namespaced_language_prob = float(nested_get(self.config, ('languages', 'pick_namespaced_language_probability'), default=0.0))
+        pick_namespaced_language_prob = float(nested_get(self.config, ('languages', 'pick_namespaced_language_probability')))
 
-        if len(candidate_languages) == 1:
-            language = candidate_languages[0]['lang']
-        else:
-            street = osm_tags.get('addr:street', None)
+        if len(candidate_languages) > 1:
+            street = tags.get('addr:street', None)
 
-            namespaced = [l['lang'] for l in candidate_languages if 'addr:street:{}'.format(l['lang']) in osm_tags]
+            namespaced = [l['lang'] for l in candidate_languages if 'addr:street:{}'.format(l['lang']) in tags]
 
-            if street is not None and not namespaced:
-                language = disambiguate_language(street, [(l['lang'], l['default']) for l in candidate_languages])
-            elif namespaced and random.random() < pick_namespaced_language_prob:
+            if namespaced and random.random() < pick_namespaced_language_prob:
                 language = random.choice(namespaced)
                 lang_suffix = ':{}'.format(language)
-                for k in osm_tags:
+                for k in tags:
                     if k.startswith('addr:') and k.endswith(lang_suffix):
-                        osm_tags[k.rstrip(lang_suffix)] = osm_tags[k]
-            else:
-                language = UNKNOWN_LANGUAGE
+                        tags[k.rstrip(lang_suffix)] = tags[k]
 
         return language
 
@@ -195,8 +189,8 @@ class OSMAddressFormatter(object):
         to capturing some non-standard abbreviations/surface forms which may be
         missing or sparse in OSM.
         '''
-        abbreviate_prob = float(nested_get(self.config, ('street', 'abbreviate_probability'), default=0.0))
-        separate_prob = float(nested_get(self.config, ('street', 'separate_probability'), default=0.0))
+        abbreviate_prob = float(nested_get(self.config, ('streets', 'abbreviate_probability'), default=0.0))
+        separate_prob = float(nested_get(self.config, ('streets', 'separate_probability'), default=0.0))
 
         return abbreviate(street_and_synonyms_gazetteer, street, language,
                           abbreviate_prob=abbreviate_prob, separate_prob=separate_prob)
@@ -212,8 +206,8 @@ class OSMAddressFormatter(object):
         to capturing some non-standard abbreviations/surface forms which may be
         missing or sparse in OSM.
         '''
-        abbreviate_prob = float(nested_get(self.config, ('venue', 'abbreviate_probability'), default=0.0))
-        separate_prob = float(nested_get(self.config, ('venue', 'separate_probability'), default=0.0))
+        abbreviate_prob = float(nested_get(self.config, ('venues', 'abbreviate_probability'), default=0.0))
+        separate_prob = float(nested_get(self.config, ('venues', 'separate_probability'), default=0.0))
 
         return abbreviate(names_gazetteer, name, language,
                           abbreviate_prob=abbreviate_prob, separate_prob=separate_prob)
@@ -373,7 +367,17 @@ class OSMAddressFormatter(object):
         except Exception:
             return None, None, None
 
+        country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
+        if not (country and candidate_languages):
+            return None, None, None
+
         combined_street = self.combine_street_name(tags)
+
+        country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
+        if not (country and candidate_languages):
+            return None, None, None
+
+        namespaced_language = self.namespaced_language(tags, candidate_languages)
 
         revised_tags = self.normalize_address_components(tags)
 
@@ -390,7 +394,7 @@ class OSMAddressFormatter(object):
         if subdivision_components:
             zone = self.zone(subdivision_components)
 
-        address_components, country, language = self.components.expanded(revised_tags, latitude, longitude,
+        address_components, country, language = self.components.expanded(revised_tags, latitude, longitude, language=namespaced_language,
                                                                          num_floors=num_floors, num_basements=num_basements,
                                                                          zone=zone)
 
@@ -450,11 +454,17 @@ class OSMAddressFormatter(object):
         except Exception:
             return None, None, None
 
+        country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
+        if not (country and candidate_languages):
+            return None, None, None
+
+        namespaced_language = self.namespaced_language(tags, candidate_languages)
+
         revised_tags = self.normalize_address_components(tags)
 
         admin_dropout_prob = float(nested_get(self.config, ('limited', 'admin_dropout_prob'), default=0.0))
 
-        address_components, country, language = self.components.limited(revised_tags, latitude, longitude)
+        address_components, country, language = self.components.limited(revised_tags, latitude, longitude, language=namespaced_language)
 
         if not address_components:
             return None, None, None
