@@ -1,0 +1,4 @@
+apartament|apmt|apt
+habitació|hab|habitacio
+parcel·la|parc|parcella
+porta|pta

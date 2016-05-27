@@ -1,0 +1,5 @@
+abteilung|abt
+büro|buro|buero
+top
+wohnung|whg|w
+zimmer|zi

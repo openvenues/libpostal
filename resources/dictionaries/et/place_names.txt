@@ -1,11 +1,13 @@
 akadeemia
 farmaatsia|farm
 instituut|inst
+jaoskond|jsk
 keskkool|kk
 kooli
 ministeerium|min
 observatoorium|obs
 organisatsioon|org
+osakond|osk
 pargi
 raamatukogu|rmtk
 raamatukauplus|rmtkpl
