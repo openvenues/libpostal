@@ -257,7 +257,8 @@ class NumberedComponent(object):
         elif num_type == 'ordinal' and safe_decode(num).isdigit():
             num = ordinal_expressions.suffixed_number(num, language, gender=props.get('gender', None))
 
-            if random.random() < props.get('null_phrase_probability', 0.0):
+        if (num_type == 'ordinal' or has_alpha) and 'null_phrase_probability' in props:
+            if random.random() < props['null_phrase_probability']:
                 return num
 
         direction = props['direction']
