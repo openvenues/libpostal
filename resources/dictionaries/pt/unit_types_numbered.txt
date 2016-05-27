@@ -1,0 +1,6 @@
+apartamento|apt|apto|apt.o
+casa
+lote|lt
+parcela
+moradia
+sala

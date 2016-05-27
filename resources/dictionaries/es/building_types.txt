@@ -12,3 +12,4 @@ estancia|estanc|est
 local|loc|lc
 residencial|resid|res
 torre|to
+vivienda|vvda

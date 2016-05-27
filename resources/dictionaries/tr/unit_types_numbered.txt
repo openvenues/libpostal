@@ -1,3 +1,2 @@
 apartman|apt
 daire|d
-kat|k
