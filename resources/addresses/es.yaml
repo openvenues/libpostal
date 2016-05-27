@@ -360,6 +360,7 @@ cross_streets:
         sample: true
         canonical_probability: 0.8
         sample_probability: 0.2
+        parentheses_probabililty: 0.5
 
 po_boxes:
     apartado: &apartado
@@ -728,16 +729,6 @@ units:
             canonical: salas
         numeric:
             direction: left
-    directions:
-        alternatives:
-            - alternative: *derecha
-              probability: 0.45
-            - alternative: *izquierda
-              probability: 0.45
-            - alternative: *trasera
-              probability: 0.05
-            - alternative: *frente
-              probability: 0.05
 
     alphanumeric: &unit_alphanumeric
         default: *departamento
@@ -1023,13 +1014,13 @@ countries:
                 <<: *puerta
                 numeric:
                     direction: left
-                    null_phrase_probability: 0.05
-                # Unrelated to others. If it's just puerta B, most of the time don't include puerta
+                    # If it's just puerta B, many times it's just e.g. 3o B for "tercero piso puerta B"
+                    null_phrase_probability: 0.15
                 ordinal:
                     direction: right
                     gender: f
                     direction_probability: 0.95
-                    null_phrase_probability: 0.8
+                    null_phrase_probability: 0.8 # Let e.g. 5a be the entire unit string
                 # These sum to 1
                 numeric_probability: 0.25
                 ordinal_probability: 0.75
