@@ -3,6 +3,7 @@ afers exteriors
 ajuntament
 alberg
 ambaixada
+aparcament|aparc
 apartaments
 arbreda
 atlètic|atletic

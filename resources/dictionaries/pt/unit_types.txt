@@ -15,7 +15,6 @@ jardim|jrd|jard|jd
 loja|lj
 lojas|ljs
 lote|lt
-número|numero|no|nº|n|nrº|nro|nmro|nmrº
 loteamento|loteam
 pátio|patio|pto
 quarta
