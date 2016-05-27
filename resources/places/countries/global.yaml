@@ -163,7 +163,7 @@ countries:
                 containing:
                     # Island is more common in Hawaiian addresses
                     - <<: *hawaii
-                      probability: 0.8
+                      probability: 0.5
             state:
                 probability: 0.7
                 # Higher probability of Brooklyn/city_district NY/state
