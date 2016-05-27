@@ -1,0 +1,6 @@
+appartamento|app
+casa|c|ca|ca'
+garage|g.ge|gge
+interno|int
+officina|off.a|off
+sala

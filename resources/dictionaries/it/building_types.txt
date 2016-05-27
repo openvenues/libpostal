@@ -1,0 +1,5 @@
+casa|c|ca|ca'
+casetto|c.etto
+edificio|edif.o|edifo
+palazzina
+palazzo|pal.zo|palzo

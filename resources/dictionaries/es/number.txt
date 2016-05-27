@@ -1,1 +1,1 @@
-número|#|num|núm|no|numero|№|nº|n.º|númr|numr|númro|numro|núm.ro|nr|num.ro|nro|n.ro
+número|#|num|núm|no|numero|№|nº|n.º|númr|numr|númro|numro|núm.ro|nr|num.ro|nro|n.ro|nr.º|nmro|nmr.o|nmrº|nmr.º
