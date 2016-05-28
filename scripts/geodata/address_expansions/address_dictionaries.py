@@ -68,6 +68,7 @@ gazetteer_types = {
     'building_types': 'DICTIONARY_BUILDING_TYPE',
     'categories': 'DICTIONARY_CATEGORY',
     'categories_plural': 'DICTIONARY_CATEGORY_PLURAL',
+    'chains': 'DICTIONARY_CHAIN',
     'company_types': 'DICTIONARY_COMPANY_TYPE',
     'concatenated_prefixes_separable': 'DICTIONARY_CONCATENATED_PREFIX_SEPARABLE',
     'concatenated_suffixes_inseparable': 'DICTIONARY_CONCATENATED_SUFFIX_INSEPARABLE',
@@ -92,9 +93,9 @@ gazetteer_types = {
     'personal_titles': 'DICTIONARY_PERSONAL_TITLE',
     'place_names': 'DICTIONARY_PLACE_NAME',
     'post_office': 'DICTIONARY_POST_OFFICE',
-    'postcodes': 'DICTIONARY_POSTCODE',
+    'postcodes': 'DICTIONARY_POSTAL_CODE',
     'qualifiers': 'DICTIONARY_QUALIFIER',
-    'staircase': 'DICTIONARY_STAIRCASE',
+    'staircases': 'DICTIONARY_STAIRCASE',
     'stopwords': 'DICTIONARY_STOPWORD',
     'street_types': 'DICTIONARY_STREET_TYPE',
     'surnames': 'DICTIONARY_SURNAME',
@@ -151,8 +152,8 @@ class AddressPhraseDictionaries(object):
                     raise InvalidAddressFileException(u'Invalid extension for file {}/{}, must be .txt'.format(language_dir, filename))
                 dictionary_name = filename.split('.')[0].lower()
 
-                '''if dictionary_name not in gazetteer_types:
-                    raise InvalidAddressFileException(u'Invalid filename for file {}/{}. Must be one of {{{}}}'.format(language_dir, filename, ', '.join(sorted(gazetteer_types))))'''
+                if dictionary_name not in gazetteer_types:
+                    raise InvalidAddressFileException(u'Invalid filename for file {}/{}. Must be one of {{{}}}'.format(language_dir, filename, ', '.join(sorted(gazetteer_types))))
                 self.language_dictionaries[language].append(dictionary_name)
 
                 path = os.path.join(language_dir, filename)
