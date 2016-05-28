@@ -156,7 +156,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
     phrase_array *lang_phrases = NULL;
 
 
-    for (int i = 0; i < options.num_languages; i++)  {
+    for (size_t i = 0; i < options.num_languages; i++)  {
         char *lang = options.languages[i];
         log_debug("lang=%s\n", lang);
 
@@ -171,7 +171,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
         phrases = phrases != NULL ? phrases : phrase_language_array_new_size(lang_phrases->n);
 
-        for (int j = 0; j < lang_phrases->n; j++) {
+        for (size_t j = 0; j < lang_phrases->n; j++) {
             phrase_t p = lang_phrases->a[j];
             log_debug("lang=%s, (%d, %d)\n", lang, p.start, p.len);
             phrase_language_array_push(phrases, (phrase_language_t){lang, p});
@@ -185,7 +185,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
     if (lang_phrases != NULL) {
         phrases = phrases != NULL ? phrases : phrase_language_array_new_size(lang_phrases->n);
 
-        for (int j = 0; j < lang_phrases->n; j++) {
+        for (size_t j = 0; j < lang_phrases->n; j++) {
             phrase_t p = lang_phrases->a[j];
             phrase_language_array_push(phrases, (phrase_language_t){ALL_LANGUAGES, p});
         }
@@ -205,15 +205,15 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
         phrase_language_t phrase_lang;
 
-        int start = 0;
-        int end = 0;
+        size_t start = 0;
+        size_t end = 0;
 
         phrase_t phrase = NULL_PHRASE;
         phrase_t prev_phrase = NULL_PHRASE;
 
         key = key != NULL ? key : char_array_new_size(DEFAULT_KEY_LEN);
 
-        for (int i = 0; i < phrases->n; i++) {
+        for (size_t i = 0; i < phrases->n; i++) {
             phrase_lang = phrases->a[i];
 
             phrase = phrase_lang.phrase;
@@ -234,9 +234,9 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
             end = phrase.start;
 
-            log_debug("start=%d, end=%d\n", start, end);
-            for (int j = start; j < end; j++) {
-                log_debug("Adding token %d\n", j);
+            log_debug("start=%zu, end=%zu\n", start, end);
+            for (size_t j = start; j < end; j++) {
+                log_debug("Adding token %zu\n", j);
                 token_t token = tokens->a[j];
                 if (is_punctuation(token.type)) {
                     last_was_punctuation = true;
@@ -281,10 +281,9 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
             token_t token;
 
             size_t added_expansions = 0;
-
             if ((value.components & options.address_components) > 0) {
                 key->n = namespace_len;
-                for (int j = phrase.start; j < phrase.start + phrase.len; j++) {
+                for (size_t j = phrase.start; j < phrase.start + phrase.len; j++) {
                     token = tokens->a[j];
                     if (token.type != WHITESPACE) {
                         char_array_cat_len(key, str + token.offset, token.len);
@@ -300,8 +299,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
                 address_expansion_array *expansions = address_dictionary_get_expansions(key_str);
 
                 if (expansions != NULL) {
-                    
-                    for (int j = 0; j < expansions->n; j++) {
+                    for (size_t j = 0; j < expansions->n; j++) {
                         address_expansion_t expansion = expansions->a[j];
 
                         if ((expansion.address_components & options.address_components) == 0 && !address_expansion_in_dictionary(expansion, DICTIONARY_AMBIGUOUS_EXPANSION)) {
@@ -342,7 +340,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
                             log_debug("canonical phrase, adding canonical string\n");
 
                             uint32_t start_index = cstring_array_start_token(tree->strings);
-                            for (int k = phrase.start; k < phrase.start + phrase.len; k++) {
+                            for (size_t k = phrase.start; k < phrase.start + phrase.len; k++) {
                                 token = tokens->a[k];
                                 if (token.type != WHITESPACE) {
                                     cstring_array_append_string_len(tree->strings, str + token.offset, token.len);
@@ -365,7 +363,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
             if (added_expansions == 0) {
                 uint32_t start_index = cstring_array_start_token(tree->strings);
-                for (int j = phrase.start; j < phrase.start + phrase.len; j++) {
+                for (size_t j = phrase.start; j < phrase.start + phrase.len; j++) {
                     token = tokens->a[j];
 
                     if (token.type != WHITESPACE) {
@@ -392,7 +390,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
             }
 
-            log_debug("i=%d\n", i);
+            log_debug("i=%zu\n", i);
             bool end_of_phrase = false;
             if (i < phrases->n - 1) {
                 phrase_t next_phrase = phrases->a[i + 1].phrase;
@@ -403,7 +401,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
             log_debug("end_of_phrase=%d\n", end_of_phrase);
             if (end_of_phrase) {                
-                log_debug("finalize at i=%d\n", i);
+                log_debug("finalize at i=%zu\n", i);
                 string_tree_finalize_token(tree);
             }
 
@@ -427,8 +425,8 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
         }
 
 
-        for (int j = start; j < end; j++) {
-            log_debug("On token %d\n", j);
+        for (size_t j = start; j < end; j++) {
+            log_debug("On token %zu\n", j);
             token_t token = tokens->a[j];
             if (is_punctuation(token.type)) {
                 log_debug("last_was_punctuation\n");
@@ -451,7 +449,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
                 string_tree_add_string(tree, " ");
                 last_added_was_whitespace = true;
             } else {
-                log_debug("Skipping token %d\n", j);
+                log_debug("Skipping token %zu\n", j);
                 continue;
             }
 
@@ -463,8 +461,8 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
     } else {
 
-        for (int j = 0; j < tokens->n; j++) {
-            log_debug("On token %d\n", j);
+        for (size_t j = 0; j < tokens->n; j++) {
+            log_debug("On token %zu\n", j);
             token_t token = tokens->a[j];
             if (is_punctuation(token.type)) {
                 log_debug("punctuation, skipping\n");
@@ -603,7 +601,7 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
     }
     
     if (have_prefix && have_suffix) {
-        for (int i = 0; i < prefix_expansions->n; i++) {
+        for (size_t i = 0; i < prefix_expansions->n; i++) {
             prefix_expansion = prefix_expansions->a[i];
             char_array_clear(key);
 
@@ -630,13 +628,13 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
                     add_normalized_strings_token(root_strings, str, root_token, options);
                     num_strings = cstring_array_num_strings(root_strings);
 
-                    for (int j = 0; j < num_strings; j++) {
+                    for (size_t j = 0; j < num_strings; j++) {
                         key->n = prefix_end;
                         root_word = cstring_array_get_string(root_strings, j);
                         char_array_cat(key, root_word);
                         root_end = key->n - 1;
 
-                        for (int k = 0; k < suffix_expansions->n; k++) {
+                        for (size_t k = 0; k < suffix_expansions->n; k++) {
                             key->n = root_end;
                             suffix_expansion = suffix_expansions->a[k];
 
@@ -664,7 +662,7 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
                     root_strings = NULL;
 
                 } else {
-                    for (int j = 0; j < suffix_expansions->n; j++) {
+                    for (size_t j = 0; j < suffix_expansions->n; j++) {
                         key->n = prefix_end;
                         suffix_expansion = suffix_expansions->a[j];
 
@@ -684,13 +682,13 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
         add_normalized_strings_token(root_strings, str, root_token, options);
         num_strings = cstring_array_num_strings(root_strings);
 
-        for (int j = 0; j < num_strings; j++) {
+        for (size_t j = 0; j < num_strings; j++) {
             char_array_clear(key);
             root_word = cstring_array_get_string(root_strings, j);
             char_array_cat(key, root_word);
             root_end = key->n - 1;
 
-            for (int k = 0; k < suffix_expansions->n; k++) {
+            for (size_t k = 0; k < suffix_expansions->n; k++) {
                 key->n = root_end;
                 suffix_expansion = suffix_expansions->a[k];
 
@@ -723,7 +721,7 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
             add_normalized_strings_token(root_strings, str, token, options);
             num_strings = cstring_array_num_strings(root_strings);
 
-            for (int k = 0; k < num_strings; k++) {
+            for (size_t k = 0; k < num_strings; k++) {
                 root_word = cstring_array_get_string(root_strings, k);
                 cstring_array_add_string(tree->strings, root_word);
             }
@@ -734,7 +732,7 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
 
         }
 
-        for (int j = 0; j < prefix_expansions->n; j++) {
+        for (size_t j = 0; j < prefix_expansions->n; j++) {
             char_array_clear(key);
             prefix_expansion = prefix_expansions->a[j];
 
@@ -747,7 +745,7 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
                 if (spaces) {
                     char_array_cat(key, " ");
                 }
-                for (int k = 0; k < num_strings; k++) {
+                for (size_t k = 0; k < num_strings; k++) {
                     root_word = cstring_array_get_string(root_strings, k);
                     char_array_cat(key, root_word);
 
@@ -783,7 +781,7 @@ static inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, to
 static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *str, token_array *tokens, normalize_options_t options) {
     cstring_array *strings = tree->strings;
 
-    for (int i = 0; i < tokens->n; i++) {
+    for (size_t i = 0; i < tokens->n; i++) {
         token_t token = tokens->a[i];
         bool have_phrase = false;
 
@@ -793,7 +791,7 @@ static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *s
             continue;
         }
 
-        for (int j = 0; j < options.num_languages; j++) {
+        for (size_t j = 0; j < options.num_languages; j++) {
             char *lang = options.languages[j];
             if (expand_affixes(tree, str, lang, token, options)) {
                 have_phrase = true;
@@ -847,7 +845,7 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
         char *last_numex_str = NULL;
         if (options.expand_numex) {
             char *numex_replaced = NULL;
-            for (int i = 0; i < options.num_languages; i++)  {
+            for (size_t i = 0; i < options.num_languages; i++)  {
                 lang = options.languages[i];
 
                 numex_replaced = replace_numeric_expressions(new_str, lang);
@@ -975,7 +973,7 @@ char **expand_address(char *input, normalize_options_t options, size_t *n) {
     }
 
     char *key_str = NULL;
-    for (int i = kh_begin(unique_strings); i != kh_end(unique_strings); ++i) {
+    for (size_t i = kh_begin(unique_strings); i != kh_end(unique_strings); ++i) {
         if (!kh_exist(unique_strings, i)) continue;
         key_str = (char *)kh_key(unique_strings, i);
         free(key_str);
@@ -1006,7 +1004,7 @@ void expansion_array_destroy(char **expansions, size_t n) {
 void address_parser_response_destroy(address_parser_response_t *self) {
     if (self == NULL) return;
 
-    for (int i = 0; i < self->num_components; i++) {
+    for (size_t i = 0; i < self->num_components; i++) {
         if (self->components != NULL) {
             free(self->components[i]);
         }
@@ -1081,7 +1079,7 @@ bool libpostal_setup_language_classifier(void) {
 
 bool libpostal_setup_parser(void) {
     if (!geodb_module_setup(NULL)) {
-        log_error("Error loading geodb module\n");
+        log_error("Error loading geodb module.\n");
         return false;
     }
 
