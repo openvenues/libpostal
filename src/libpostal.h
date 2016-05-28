@@ -22,14 +22,13 @@ Address dictionaries
 #define ADDRESS_HOUSE_NUMBER (1 << 2)
 #define ADDRESS_STREET (1 << 3)
 #define ADDRESS_UNIT (1 << 4)
+#define ADDRESS_LEVEL (1 << 5)
+#define ADDRESS_STAIRCASE (1 << 6)
+#define ADDRESS_ENTRANCE (1 << 7)
 
-#define ADDRESS_LOCALITY (1 << 7)
-#define ADDRESS_ADMIN1 (1 << 8)
-#define ADDRESS_ADMIN2 (1 << 9)
-#define ADDRESS_ADMIN3 (1 << 10)
-#define ADDRESS_ADMIN4 (1 << 11)
-#define ADDRESS_ADMIN_OTHER (1 << 12)
-#define ADDRESS_COUNTRY (1 << 13)
+#define ADDRESS_CATEGORY (1 << 8)
+
+#define ADDRESS_TOPONYM (1 << 13)
 #define ADDRESS_POSTAL_CODE (1 << 14)
 #define ADDRESS_NEIGHBORHOOD (1 << 15)
 #define ADDRESS_ALL ((1 << 16) - 1)
@@ -37,7 +36,7 @@ Address dictionaries
 typedef struct normalize_options {
     // List of language codes
     char **languages;  
-    int num_languages;
+    size_t num_languages;
     uint16_t address_components;
 
     // String options
