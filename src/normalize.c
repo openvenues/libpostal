@@ -19,6 +19,11 @@ char *normalize_string_utf8(char *str, uint64_t options) {
         utf8proc_options |= UTF8PROC_OPTIONS_NFD;
     }
 
+    if (options & NORMALIZE_STRING_COMPOSE) {
+        have_utf8proc_options = true;
+        utf8proc_options |= UTF8PROC_OPTIONS_NFC;
+    }
+
     if (options & NORMALIZE_STRING_STRIP_ACCENTS) {
         have_utf8proc_options = true;
         utf8proc_options |= UTF8PROC_OPTIONS_STRIP_ACCENTS;
