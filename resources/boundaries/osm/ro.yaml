@@ -2,5 +2,6 @@
   admin_level: 
     "2": "country"
     "4": "state"
+    "5": "city_district"
     "6": "city"
 
