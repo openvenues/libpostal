@@ -109,7 +109,7 @@ basic_word = {letter}+;
 // WB6
 word_non_breaking_mid_char = {letter}+(({mid_letter_chars}|{non_breaking_dash}|{mid_num_letter_chars}|{single_quote}){letter}+)+;
 // WB7
-word_end_single_quote = {letter}+(({mid_letter_chars}|{mid_num_letter_chars}){letter}+{single_quote});
+word_end_single_quote = {letter}+(({mid_letter_chars}|{non_breaking_dash}|{mid_num_letter_chars}|{single_quote}){letter}+)*{single_quote};
 // WB7a
 hebrew_word_single_quote = ({hebrew_letter_chars}+{single_quote})+;
 // WB7b and WB7c
@@ -132,7 +132,8 @@ any_word = (({possible_word_char}*{letter}+{possible_word_char}*{non_breaking_da
 // GB6, GB7 & GB8
 hangul_syllable = (({hangul_syllable_class_L}(hangul_syllable_class_L|hangul_syllable_class_V|hangul_syllable_class_LV|hangul_syllable_class_LVT))|(({hangul_syllable_class_L}|{hangul_syllable_class_V})({hangul_syllable_class_V}{hangul_syllable_class_T}))|(({hangul_syllable_class_LVT}|{hangul_syllable_class_T}){hangul_syllable_class_T}));
 
-apos_word = ("'"?({latinish_letter}+"'"){latinish_letter}+"'"?);
+// Words like 't or 's in Dutch, 'na in Gaelic
+word_begin_single_quote = {single_quote}{letter}+(({mid_letter_chars}|{non_breaking_dash}|{mid_num_letter_chars}|{single_quote}){letter}+)*;
 
 ellipsis = ("\."{2,}|"\u2026");
 
@@ -143,7 +144,7 @@ abbrev_word = (({letter}|{possible_word_char})+"\.")+({letter}|{possible_word_ch
 
 hyphen_plus_abbreviation = ((({abbrev_word}|{any_word}){hyphen})+({abbrev_word}))|(({abbrev_word}|{any_word}){hyphen})*({abbrev_word}{hyphen})+(({abbrev_word}|{any_word}){hyphen})*({abbrev_word}|{any_word});
 
-word = ({basic_word})|({word_non_breaking_mid_char})|({word_end_single_quote})|({hebrew_word_single_quote})|({hebrew_word_double_quote})|({word_extend_num_letter});
+word = ({basic_word})|({word_non_breaking_mid_char})|({word_begin_single_quote})|({word_end_single_quote})|({hebrew_word_single_quote})|({hebrew_word_double_quote})|({word_extend_num_letter});
 
 abbreviation = ({word})"\.";
 
@@ -175,7 +176,6 @@ invalid_chars = ({control_chars}|{other_format_chars}|{other_private_use_chars})
 
 {number}                        { return NUMERIC; }
 {numeric}                       { return NUMERIC; }
-{apos_word}                     { return WORD; }
 {hangul_syllable}               { return HANGUL_SYLLABLE; }
 {ideographic_chars}             { return IDEOGRAPHIC_CHAR; }
 {ideographic_numeric_chars}     { return IDEOGRAPHIC_NUMBER; }
