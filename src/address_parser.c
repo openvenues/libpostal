@@ -682,22 +682,22 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             next_index = (ssize_t)phrase.start + phrase.len;
         }
 
-        if (geo_phrase_string != NULL && geodb_phrase_types ^ ADDRESS_POSTAL_CODE) {
+        if (geo_phrase_string != NULL && geodb_phrase_types ^ GEONAMES_ADDRESS_COMPONENT_POSTCODE) {
             feature_array_add(features, 2, "phrase", geo_phrase_string);
             add_word_feature = false;
         }
 
         if (geodb_phrase_types ^ ADDRESS_ANY) {
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_LOCALITY, "gn city", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN1, "gn admin1", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN2, "gn admin2", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN3, "gn admin3", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN4, "gn admin4", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_ADMIN_OTHER, "gn admin other", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_NEIGHBORHOOD, "gn neighborhood", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, GEONAMES_ADDRESS_COMPONENT_LOCALITY, "gn city", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, GEONAMES_ADDRESS_COMPONENT_ADMIN1, "gn admin1", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, GEONAMES_ADDRESS_COMPONENT_ADMIN2, "gn admin2", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, GEONAMES_ADDRESS_COMPONENT_ADMIN3, "gn admin3", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, GEONAMES_ADDRESS_COMPONENT_ADMIN4, "gn admin4", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, GEONAMES_ADDRESS_COMPONENT_ADMIN_OTHER, "gn admin other", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, GEONAMES_ADDRESS_COMPONENT_NEIGHBORHOOD, "gn neighborhood", geo_phrase_string, prev2, prev);
 
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_COUNTRY, "gn country", geo_phrase_string, prev2, prev);
-            add_phrase_features(features, geodb_phrase_types, ADDRESS_POSTAL_CODE, "gn postal code", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, GEONAMES_ADDRESS_COMPONENT_COUNTRY, "gn country", geo_phrase_string, prev2, prev);
+            add_phrase_features(features, geodb_phrase_types, GEONAMES_ADDRESS_COMPONENT_POSTCODE, "gn postal code", geo_phrase_string, prev2, prev);
 
         }
 
@@ -848,7 +848,7 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
             types.value = only_phrase.data;
             uint32_t most_common = types.most_common;
 
-            char *label;
+            char *label = NULL;
 
             response = address_parser_response_new();
 
