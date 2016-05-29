@@ -58,14 +58,14 @@ with the general error-driven averaged perceptron.
 
 #define NULL_PHRASE_MEMBERSHIP -1
 
-#define ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS NORMALIZE_STRING_DECOMPOSE | NORMALIZE_STRING_LOWERCASE | NORMALIZE_STRING_LATIN_ASCII
+#define ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS NORMALIZE_STRING_COMPOSE | NORMALIZE_STRING_LOWERCASE | NORMALIZE_STRING_LATIN_ASCII
 #define ADDRESS_PARSER_NORMALIZE_TOKEN_OPTIONS NORMALIZE_TOKEN_DELETE_HYPHENS | NORMALIZE_TOKEN_DELETE_FINAL_PERIOD | NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS | NORMALIZE_TOKEN_REPLACE_DIGITS
 
 #define ADDRESS_SEPARATOR_NONE 0
 #define ADDRESS_SEPARATOR_FIELD_INTERNAL 1 << 0
 #define ADDRESS_SEPARATOR_FIELD 1 << 1
 
-#define ADDRESS_PARSER_IS_SEPARATOR(token_type) ((token_type) == COMMA || (token_type) == NEWLINE || (token_type) == HYPHEN || (token_type) == DASH || (token_type) == BREAKING_DASH|| (token_type) == SEMICOLON || (token_type) == PUNCT_OPEN || (token_type) == PUNCT_CLOSE || (token_type) == AT_SIGN )
+#define ADDRESS_PARSER_IS_SEPARATOR(token_type) ((token_type) == COMMA || (token_type) == NEWLINE || (token_type) == HYPHEN || (token_type) == DASH || (token_type) == BREAKING_DASH|| (token_type) == SEMICOLON || (token_type) == PUNCT_OPEN || (token_type) == PUNCT_CLOSE )
 #define ADDRESS_PARSER_IS_IGNORABLE(token_type) ((token.type) == INVALID_CHAR || (token.type) == PERIOD || (token_type) == COLON )
 
 #define SEPARATOR_LABEL "sep"
