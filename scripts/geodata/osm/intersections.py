@@ -1,6 +1,7 @@
 import array
 import logging
 import numpy
+import os
 import six
 import ujson as json
 
