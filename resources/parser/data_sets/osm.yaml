@@ -9,6 +9,9 @@ chains:
     sample_probability: 0.5
     place_only_probability: 0.9
 
+intersections:
+    replace_with_base_name_probability: 0.5
+
 places:
     drop_postcode_probability: 0.6
 
