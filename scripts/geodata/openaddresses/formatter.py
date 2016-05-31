@@ -88,8 +88,7 @@ class OpenAddressesFormatter(object):
                 if not (country and candidate_languages):
                     continue
 
-                if not language:
-                    language = AddressComponents.address_language(components, candidate_languages)
+                language = AddressComponents.address_language(components, candidate_languages)
 
                 street = components.get(AddressFormatter.ROAD, None)
                 if street is not None:
