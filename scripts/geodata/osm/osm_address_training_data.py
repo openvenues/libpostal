@@ -32,6 +32,7 @@ python osm_address_training_data.py -b $(OSM_DIR)/planet-borders.osm --language-
 
 import argparse
 import csv
+import logging
 import os
 import operator
 import random
@@ -535,6 +536,7 @@ if __name__ == '__main__':
         build_venue_training_data(language_rtree, args.venues_file, args.out_dir)
 
     if args.intersections_file and args.format:
+        logging.basicConfig(level=logging.INFO)
         components = AddressComponents(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames)
         osm_formatter = OSMAddressFormatter(components, subdivisions_rtree, buildings_rtree)
         osm_formatter.build_intersections_training_data(args.address_file, args.out_dir, tag_components=not args.untagged)
