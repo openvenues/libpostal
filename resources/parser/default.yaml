@@ -20,13 +20,7 @@ component_dependencies:
             - postcode
 
     road:
-        dependencies:
-            - house
-            - house_number
-            - suburb
-            - city_district
-            - city
-            - postcode
+        dependencies: []
 
     house_number:
         dependencies:
