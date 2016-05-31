@@ -99,6 +99,20 @@ levels:
             direction: right
         numeric_probability: 0.75
         ordinal_probability: 0.25
+    niveau: &niveau
+        canonical: niveau
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            direction_probability: 0.8
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+        ordinal:
+            direction: right
+        numeric_probability: 0.75
+        ordinal_probability: 0.25
     bel_etage: &bel_etage
         canonical: bel étage
         sample: true
@@ -198,6 +212,15 @@ levels:
             alternatives:
                 - alternative: *dernier_etage
                   probability: 0.1
+
+    alphanumeric:
+        default: *etage
+        probability: 0.95
+        alternatives:
+            - alternative: *niveau
+              probability: 0.05
+        numeric_probability: 0.99
+        alpha_probability: 0.01
 
     numbering_starts_at: 0
 
