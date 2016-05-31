@@ -22,6 +22,7 @@ from geodata.boundaries.names import boundary_names
 from geodata.configs.utils import nested_get
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.countries.names import *
+from geodata.graph.topsort import topsort
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
 from geodata.math.floats import isclose
@@ -154,6 +155,10 @@ class AddressComponents(object):
             self.component_bit_values[component] = 1 << i
 
         all_values = self.component_bitset(forward_deps)
+
+        graph = {k: c['dependencies'] for k, c in six.iteritems(forward_deps)}
+        graph.update({c: [] for c in AddressFormatter.address_formatter_fields if c not in graph})
+        self.component_dependency_order = [c for c in topsort(graph) if graph[c]]
 
         for component, conf in six.iteritems(forward_deps):
             deps = conf['dependencies']
@@ -990,7 +995,10 @@ class AddressComponents(object):
         if not address_components:
             return
         component_bitset = self.component_bitset(address_components)
-        for c in list(address_components):
+
+        for c in self.component_dependency_order:
+            if c not in address_components:
+                continue
             if c in self.component_dependencies and not component_bitset & self.component_dependencies[c]:
                 address_components.pop(c)
                 component_bitset ^= self.component_bit_values[c]
