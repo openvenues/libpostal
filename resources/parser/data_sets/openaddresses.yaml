@@ -1,7 +1,9 @@
 global:
     reverse_geocode: false
     abbreviate_street_probability: 0.3
+    separate_street_probability: 0.2
     abbreviate_unit_probability: 0.3
+    separate_unit_probability: 0.2
     field_map:
         - field_name: NUMBER
           component: house_number

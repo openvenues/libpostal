@@ -102,6 +102,7 @@ class OpenAddressesFormatter(object):
                     unit = abbreviate(unit_types_gazetteer, unit, language,
                                       abbreviate_prob=abbreviate_unit_prob,
                                       separate_prob=separate_unit_prob)
+                    components[AddressFormatter.UNIT] = unit
 
                 formatted = self.formatter.format_address(components, country,
                                                           language=language, tag_components=tag_components)
