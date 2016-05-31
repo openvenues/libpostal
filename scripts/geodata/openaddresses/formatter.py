@@ -50,6 +50,8 @@ class OpenAddressesFormatter(object):
         abbreviate_unit_prob = self.get_property('abbreviate_unit_probability', *configs)
         separate_unit_prob = self.get_property('separate_unit_probability', *configs) or 0.0
 
+        add_components = self.get_property('add', *configs)
+
         field_map = self.get_property('field_map', *configs)
         if not field_map:
             return
@@ -103,6 +105,11 @@ class OpenAddressesFormatter(object):
                                       abbreviate_prob=abbreviate_unit_prob,
                                       separate_prob=separate_unit_prob)
                     components[AddressFormatter.UNIT] = unit
+
+                if add_components:
+                    for k, v in six.iteritems(add_components):
+                        if k not in components:
+                            components[k] = v
 
                 formatted = self.formatter.format_address(components, country,
                                                           language=language, tag_components=tag_components)
