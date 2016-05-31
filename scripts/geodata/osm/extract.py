@@ -44,6 +44,10 @@ OSM_NAME_TAGS = (
     'short_name',
 )
 
+OSM_BASE_NAME_TAGS = (
+    'tiger:name_base',
+)
+
 
 def parse_osm(filename, allowed_types=ALL_OSM_TAGS, dependencies=False):
     '''
