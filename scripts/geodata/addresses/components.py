@@ -229,7 +229,8 @@ class AddressComponents(object):
                     break
         return components
 
-    def address_language(self, components, candidate_languages):
+    @classmethod
+    def address_language(cls, components, candidate_languages):
         '''
         Language
         --------
