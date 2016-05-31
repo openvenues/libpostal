@@ -370,7 +370,9 @@ po_boxes:
         canonical: apartado
         abbreviated: apdo
         sample: true
-        prefer_abbreviated: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.3
+        sample_probability: 0.2
         numeric:
             direction: left
             add_number_phrase: true
