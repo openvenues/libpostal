@@ -101,7 +101,6 @@ class OSMIntersectionReader(object):
                 for node_id in deps:
                     node_index = self.binary_search(self.node_ids, node_id)
                     if node_index is not None:
-                        way_ids.append(way_id)
                         self.intersection_edges_nodes.append(node_id)
                         self.intersection_edges_ways.append(way_id)
                         self.way_props.Put(safe_encode(way_id), json.dumps(props))
