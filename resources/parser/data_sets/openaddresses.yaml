@@ -1,5 +1,9 @@
 global:
-    reverse_geocode: false
+    cldr_country_probability: 0.5
+    localized_name_probability: 0.7
+    iso_alpha_2_code_probability: 0.2
+    iso_alpha_3_code_probability: 0.1
+
     abbreviate_street_probability: 0.3
     separate_street_probability: 0.2
     abbreviate_unit_probability: 0.3
@@ -40,8 +44,6 @@ countries:
               component: house_number
             - field_name: STREET
               component: road
-            - field_name: CITY
-              component: city
             - field_name: POSTCODE
               component: postcode
         files:
@@ -55,6 +57,7 @@ countries:
                     - filename: brussels-nl.csv
 
     us:
+        cldr_country_probability: 0.05
         subdirs:
             ca:
                 add:

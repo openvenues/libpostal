@@ -1,3 +1,4 @@
+abteilung|abt
 altersheim
 altstoffsammelzentrum|asz|a s z
 apotheke
