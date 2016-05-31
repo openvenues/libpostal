@@ -287,7 +287,7 @@ directions:
         numeric:
             direction: right
         numeric_affix:
-            affix: i
+            affix: g
             direction: right
             whitespace_probability: 0.1
         numeric_probability: 0.4
