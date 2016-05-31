@@ -1,0 +1,91 @@
+global:
+    reverse_geocode: false
+    abbreviate_street_probability: 0.3
+    abbreviate_unit_probability: 0.3
+    field_map:
+        - field_name: NUMBER
+          component: house_number
+        - field_name: STREET
+          component: road
+        - field_name: CITY
+          component: city
+        - field_name: REGION
+          component: state
+        - field_name: POSTCODE
+          component: postcode
+
+countries:
+    au:
+        files:
+            - filename: countrywide.csv
+    nz:
+        files:
+            - filename: countrywide.csv
+
+    nl:
+        subdirs:
+            wa:
+                files:
+                    - filename: brussels-fr.csv
+                    - filename: brussels-nl.csv
+            files:
+                - filename: flanders.csv
+
+    us:
+        subdirs:
+            ca:
+                add:
+                    state: CA
+                files:
+                    - filename: alameda.csv
+                    - filename: amador.csv
+                    - filename: berkeley.csv
+                    - filename: butte.csv
+                    - filename: city_of_anaheim.csv
+                    - filename: city_of_bakersfield.csv
+                    - filename: city_of_carson.csv
+                    - filename: city_of_cupertino.csv
+                    - filename: city_of_hayward.csv
+                    - filename: city_of_mountain_view.csv
+                    - filename: city_of_orange.csv
+                    - filename: city_of_san_jose.csv
+                    - filename: contra_costa.csv
+                    - filename: el_dorado.csv
+                    - filename: fresno.csv
+                    - filename: glenn.csv
+                    - filename: humboldt.csv
+                    - filename: kern.csv
+                    - filename: kings.csv
+                    - filename: lake.csv
+                    - filename: lassen.csv
+                    - filename: los_angeles.csv
+                    - filename: madera.csv
+                    - filename: marin.csv
+                    - filename: merced.csv
+                    - filename: mono.csv
+                    - filename: monterey.csv
+                    - filename: napa.csv
+                    - filename: nevada.csv
+                    - filename: orange.csv
+                    - filename: palo_alto.csv
+                    - filename: placer.csv
+                    - filename: riverside.csv
+                    - filename: sacramento.csv
+                    - filename: san_bernardino.csv
+                    - filename: san_diego.csv
+                    - filename: san_francisco.csv
+                    - filename: san_joaquin.csv
+                    - filename: san_luis_obispo.csv
+                    - filename: san_mateo.csv
+                    - filename: santa_barbara.csv
+                    - filename: santa_clara.csv
+                    - filename: santa_cruz.csv
+                    - filename: shasta.csv
+                    - filename: solano.csv
+                    - filename: sonoma.csv
+                    - filename: stanislaus.csv
+                    - filename: trinity.csv
+                    - filename: tuolumne.csv
+                    - filename: ventura.csv
+                    - filename: yolo.csv
+                    - filename: yuba.csv
