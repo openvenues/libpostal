@@ -556,7 +556,7 @@ class OSMAddressFormatter(object):
             if i % 1000 == 0 and i > 0:
                 print('did {} formatted addresses'.format(i))
 
-    def build_intersections_training_data(self, infile, out_dir, tag_components=True):
+    def build_intersections_training_data(self, infile, out_dir, way_db_dir, tag_components=True):
         '''
         Intersection addresses like "4th & Main Street" are represented in OSM
         by ways that share at least one node.
@@ -582,7 +582,7 @@ class OSMAddressFormatter(object):
 
         replace_with_base_name_prob = float(nested_get(self.config, ('intersections', 'replace_with_base_name_probability'), default=0.0))
 
-        reader = OSMIntersectionReader(infile)
+        reader = OSMIntersectionReader(infile, way_db_dir)
         for node_id, latitude, longitude, ways in reader.intersections():
             if not ways or len(ways) < 2:
                 continue
