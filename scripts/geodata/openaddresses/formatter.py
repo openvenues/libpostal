@@ -1,5 +1,6 @@
 import csv
 import os
+import random
 import six
 import yaml
 
@@ -7,6 +8,8 @@ from geodata.address_expansions.abbreviations import abbreviate
 from geodata.address_expansions.gazetteers import street_types_gazetteer, unit_types_gazetteer
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.components import AddressComponents
+from geodata.countries.names import country_names
+from geodata.math.sampling import cdf, weighted_choice
 
 from geodata.csv_utils import tsv_string, unicode_csv_reader
 
@@ -44,11 +47,34 @@ class OpenAddressesFormatter(object):
                 return value
         return None
 
+    def cldr_country_name(self, country_code, language, configs):
+        cldr_country_prob = float(self.get_property('cldr_country_probability', *configs))
+
+        country_name = None
+
+        if random.random() < cldr_country_prob:
+            localized, alpha2, alpha3 = values = range(3)
+            localized_prob = float(self.get_property('localized_name_probability', *configs))
+            alpha2_prob = float(self.get_property('iso_alpha_2_code_probability', *configs))
+            alpha3_prob = float(self.get_property('iso_alpha_3_code_probability', *configs))
+
+            probs = cdf([localized_prob, alpha2_prob, alpha3_prob])
+
+            country_type = weighted_choice(values, probs)
+
+            country_name = country_code.upper()
+            if country_type == localized:
+                country_name = country_names.localized_name(country_code, language) or country_names.localized_name(country_code) or country_name
+            elif country_type == alpha3:
+                country_name = country_names.alpha3_code(country_code) or country_name
+
+        return country_name
+
     def formatted_addresses(self, path, configs, tag_components=True):
-        abbreviate_street_prob = self.get_property('abbreviate_street_probability', *configs)
-        separate_street_prob = self.get_property('separate_street_probability', *configs) or 0.0
-        abbreviate_unit_prob = self.get_property('abbreviate_unit_probability', *configs)
-        separate_unit_prob = self.get_property('separate_unit_probability', *configs) or 0.0
+        abbreviate_street_prob = float(self.get_property('abbreviate_street_probability', *configs))
+        separate_street_prob = float(self.get_property('separate_street_probability', *configs) or 0.0)
+        abbreviate_unit_prob = float(self.get_property('abbreviate_unit_probability', *configs))
+        separate_unit_prob = float(self.get_property('separate_unit_probability', *configs) or 0.0)
 
         add_components = self.get_property('add', *configs)
 
@@ -105,6 +131,10 @@ class OpenAddressesFormatter(object):
                                       abbreviate_prob=abbreviate_unit_prob,
                                       separate_prob=separate_unit_prob)
                     components[AddressFormatter.UNIT] = unit
+
+                country_name = self.cldr_country_name(country, language, configs)
+                if country_name:
+                    components[AddressFormatter.COUNTRY] = country_name
 
                 if add_components:
                     for k, v in six.iteritems(add_components):
