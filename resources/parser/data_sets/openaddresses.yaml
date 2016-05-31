@@ -9,8 +9,6 @@ global:
           component: house_number
         - field_name: STREET
           component: road
-        - field_name: UNIT
-          component: unit
         - field_name: CITY
           component: city
         - field_name: REGION
@@ -20,6 +18,20 @@ global:
 
 countries:
     au:
+        field_map:
+            - field_name: NUMBER
+              component: house_number
+            - field_name: STREET
+              component: road
+            - field_name: UNIT
+              component: unit
+            - field_name: CITY
+              component: city
+            - field_name: REGION
+              component: state
+            - field_name: POSTCODE
+              component: postcode
+
         files:
             - filename: countrywide.csv
     nz:
