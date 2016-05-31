@@ -599,8 +599,10 @@ class OSMAddressFormatter(object):
                 base_name_tag = base_name_tags[0]
 
             for tag in tags:
-                if tag.rsplit(':', 1)[0] in all_name_tags and all((tag in w for w in ways)):
-                    way_names = [(w[tag], w.get(base_name_tag) if base_name_tag else None) for w in ways]
+                if tag.rsplit(':', 1)[0] in all_name_tags:
+                    way_names = [(w[tag], w.get(base_name_tag) if base_name_tag else None) for w in ways if tag in w]
+                    if len(way_names) < 2:
+                        continue
                     if ':' in tag:
                         namespaced_language = tag.rsplit(':')[-1]
 
