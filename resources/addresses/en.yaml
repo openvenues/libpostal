@@ -528,6 +528,9 @@ cross_streets:
     corner_of: &corner_of
         canonical: corner of
 
+    at_the_corner_of: &at_the_corner_of
+        canonical: at the corner of
+
     intersection:
         default: *and
         probability: 0.7
@@ -535,7 +538,9 @@ cross_streets:
             - alternative: *at
               probability: 0.15
             - alternative: *corner_of
-              probability: 0.15
+              probability: 0.1
+            - alternative: *at_the_corner_of
+              probability: 0.05
 
     # 26th betw 5th Ave and 6th Ave
     between:

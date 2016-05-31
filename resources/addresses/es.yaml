@@ -344,6 +344,9 @@ cross_streets:
     corner_of: &esquina_de
         canonical: esquina de
         abbreviated: esq de
+    at_the_corner_of: &at_the_corner_of
+        canonical: en la esquina de
+        abbreviated: en la esq de
     corner: &esquina
         canonical: esquina
         abbreviated: esq

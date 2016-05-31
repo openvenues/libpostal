@@ -154,7 +154,7 @@ class AddressFormatter(object):
 
     category_template = '{{{category}}} {{{near}}} {{{place}}}'
     chain_template = '{{{house}}} {{{near}}} {{{place}}}'
-    intersection_template = '{{{road1}}} {{{intersection}}} {{{road2}}}'
+    intersection_template = '{{{road1}}} {{{intersection}}} {{{road2}}} {{{place}}}'
 
     template_address_parts = [HOUSE, HOUSE_NUMBER, ROAD]
     template_admin_parts = [CITY, STATE, COUNTRY]
@@ -746,7 +746,8 @@ class AddressFormatter(object):
 
         return self.render_template(self.chain_template, components, tagged=tag_components)
 
-    def format_intersection(self, intersection_query, tag_components=True):
+    def format_intersection(self, intersection_query, place_components, country, language, tag_components=True):
+        components = {}
         if tag_components:
             components = {'road1': self.tagged_tokens(intersection_query.road1, self.ROAD),
                           'intersection': self.tagged_tokens(intersection_query.intersection_phrase, self.INTERSECTION),
@@ -756,6 +757,13 @@ class AddressFormatter(object):
             components = {'road1': intersection_query.road1,
                           'intersection': intersection_query.intersection_phrase,
                           'road2': intersection_query.road2}
+
+        if place_components:
+            place_formatted = self.format_address(place_components, country, language=language,
+                                                  minimal_only=False, tag_components=tag_components)
+
+            if place_formatted:
+                components['place'] = place_formatted
         return self.render_template(self.intersection_template, components, tagged=tag_components)
 
     def format_address(self, components, country, language,
