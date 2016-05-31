@@ -545,4 +545,4 @@ if __name__ == '__main__':
         logging.basicConfig(level=logging.INFO)
         components = AddressComponents(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames)
         osm_formatter = OSMAddressFormatter(components, subdivisions_rtree, buildings_rtree)
-        osm_formatter.build_intersections_training_data(args.address_file, args.out_dir, args.ways_db_dir, tag_components=not args.untagged)
+        osm_formatter.build_intersections_training_data(args.intersections_file, args.out_dir, args.ways_db_dir, tag_components=not args.untagged)
