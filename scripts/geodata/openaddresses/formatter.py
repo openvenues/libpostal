@@ -124,7 +124,7 @@ class OpenAddressesFormatter(object):
 
                 path = os.path.join(base_dir, country, filename)
                 configs = (file_props, config, self.config)
-                for language, country, formatted_address in self.build_training_data_for_file(path, configs, tag_components=tag_components):
+                for language, country, formatted_address in self.formatted_addresses(path, configs, tag_components=tag_components):
                     if formatted_address and formatted_address.strip():
                         continue
 
@@ -149,7 +149,7 @@ class OpenAddressesFormatter(object):
                     path = os.path.join(base_dir, country, subdir, filename)
 
                     configs = (file_props, subdir_config, config, self.config)
-                    for language, country, formatted_address in self.build_training_data_for_file(path, configs, tag_components=tag_components):
+                    for language, country, formatted_address in self.formatted_addresses(path, configs, tag_components=tag_components):
                         if formatted_address and formatted_address.strip():
                             continue
 
