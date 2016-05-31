@@ -7,7 +7,7 @@ from geodata.address_expansions.gazetteers import street_types_gazetteer, unit_t
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.components import AddressComponents
 
-from geodata.csv_utils import tsv_string
+from geodata.csv_utils import tsv_string, unicode_csv_reader
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
