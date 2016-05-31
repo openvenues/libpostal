@@ -3,7 +3,7 @@ import six
 import yaml
 
 from geodata.address_expansions.abbreviations import abbreviate
-from geodata.address_expansions.gazeteers import street_types_gazetteer, unit_types_gazetteer
+from geodata.address_expansions.gazetteers import street_types_gazetteer, unit_types_gazetteer
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.components import AddressComponents
 
