@@ -6,7 +6,7 @@ import sys
 import yaml
 
 from collections import OrderedDict
-from six.itertools import combinations, ifilter
+from six import itertools
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
@@ -615,7 +615,7 @@ class OSMAddressFormatter(object):
 
                     formatted_intersections = []
 
-                    for (w1, w1_base), (w2, w2_base) in combinations(way_names, 2):
+                    for (w1, w1_base), (w2, w2_base) in itertools.combinations(way_names, 2):
                         intersection = IntersectionQuery(road1=w1, intersection_phrase=intersection_phrase, road2=w2)
                         formatted = self.formatter.format_intersection(intersection, address_components, country, language, tag_components=tag_components)
                         formatted_intersections.append(formatted)
