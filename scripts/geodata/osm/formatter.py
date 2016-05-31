@@ -578,7 +578,7 @@ class OSMAddressFormatter(object):
             writer = csv.writer(formatted_file, 'tsv_no_quote')
 
         all_name_tags = set(OSM_NAME_TAGS)
-        base_name_tags = set(OSM_BASE_NAME_TAGS)
+        all_base_name_tags = set(OSM_BASE_NAME_TAGS)
 
         replace_with_base_name_prob = float(nested_get(self.config, ('intersections', 'replace_with_base_name_probability'), default=0.0))
 
