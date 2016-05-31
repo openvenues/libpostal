@@ -19,7 +19,15 @@ OPENADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'openaddresses_formatted_addresses_tag
 OPENADDRESS_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
 
 
+def validate_postcode(postcode):
+    return not all((c == '0' for c in postcode))
+
+
 class OpenAddressesFormatter(object):
+    openaddresses_validators = {
+        AddressFormatter.POSTCODE: validate_postcode
+    }
+
     def __init__(self, language_rtree):
         self.language_rtree = language_rtree
 
@@ -35,14 +43,6 @@ class OpenAddressesFormatter(object):
             if value is not None:
                 return value
         return None
-
-    @staticmethod
-    def validate_postcode(postcode):
-        return not all((c == '0' for c in postcode))
-
-    openaddresses_validators = {
-        AddressFormatter.POSTCODE: validate_postcode
-    }
 
     def formatted_addresses(self, path, configs, tag_components=True):
         abbreviate_street_prob = self.get_property('abbreviate_street_probability', *configs)
