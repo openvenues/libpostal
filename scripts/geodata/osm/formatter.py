@@ -403,9 +403,11 @@ class OSMAddressFormatter(object):
         if subdivision_components:
             zone = self.zone(subdivision_components)
 
+        add_sub_building_components = AddressFormatter.HOUSE_NUMBER in revised_tags
+
         address_components, country, language = self.components.expanded(revised_tags, latitude, longitude, language=namespaced_language,
                                                                          num_floors=num_floors, num_basements=num_basements,
-                                                                         zone=zone)
+                                                                         zone=zone, add_sub_building_components=add_sub_building_components)
 
         if not address_components:
             return None, None, None
