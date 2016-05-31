@@ -35,17 +35,24 @@ countries:
         files:
             - filename: countrywide.csv
     nz:
+        field_map:
+            - field_name: NUMBER
+              component: house_number
+            - field_name: STREET
+              component: road
+            - field_name: CITY
+              component: city
+            - field_name: POSTCODE
+              component: postcode
         files:
             - filename: countrywide.csv
 
-    nl:
+    be:
         subdirs:
             wa:
                 files:
                     - filename: brussels-fr.csv
                     - filename: brussels-nl.csv
-            files:
-                - filename: flanders.csv
 
     us:
         subdirs:
