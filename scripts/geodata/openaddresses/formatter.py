@@ -145,7 +145,7 @@ class OpenAddressesFormatter(object):
                 for file_props in config.get('files', []):
                     filename = file_props['filename']
 
-                    path = os.path.join(base_dir, country_code, filename)
+                    path = os.path.join(base_dir, country, subdir, filename)
 
                     configs = (file_props, subdir_config, config, self.config)
                     for formatted_address in self.build_training_data_for_file(path, configs, tag_components=tag_components):
