@@ -28,7 +28,7 @@ from geodata.i18n.languages import *
 from geodata.intersections.query import Intersection, IntersectionQuery
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.osm.extract import *
-from geodata.osm.intersections import OSMIntersectionsReader
+from geodata.osm.intersections import OSMIntersectionReader
 from geodata.polygons.language_polys import *
 from geodata.polygons.reverse_geocode import *
 from geodata.i18n.unicode_paths import DATA_DIR
@@ -582,7 +582,7 @@ class OSMAddressFormatter(object):
 
         replace_with_base_name_prob = float(nested_get(self.config, ('intersections', 'replace_with_base_name_probability'), default=0.0))
 
-        reader = OSMIntersectionsReader(infile)
+        reader = OSMIntersectionReader(infile)
         for node_id, latitude, longitude, ways in reader.intersections():
             if not ways or len(ways) < 2:
                 continue
