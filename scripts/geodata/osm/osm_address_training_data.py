@@ -448,6 +448,9 @@ if __name__ == '__main__':
     parser.add_argument('-x', '--intersections-file',
                         help='Path to planet-ways-latlons.osm')
 
+    parser.add_argument('--ways-db-dir',
+                        help='Path to temporary ways db')
+
     parser.add_argument('--language-rtree-dir',
                         required=True,
                         help='Language RTree directory')
@@ -536,7 +539,10 @@ if __name__ == '__main__':
         build_venue_training_data(language_rtree, args.venues_file, args.out_dir)
 
     if args.intersections_file and args.format:
+        if args.ways_db_dir is None:
+            parser.error('--ways-db-dir required for intersections')
+
         logging.basicConfig(level=logging.INFO)
         components = AddressComponents(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames)
         osm_formatter = OSMAddressFormatter(components, subdivisions_rtree, buildings_rtree)
-        osm_formatter.build_intersections_training_data(args.address_file, args.out_dir, tag_components=not args.untagged)
+        osm_formatter.build_intersections_training_data(args.address_file, args.out_dir, args.ways_db_dir, tag_components=not args.untagged)
