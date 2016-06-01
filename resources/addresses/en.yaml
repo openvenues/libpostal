@@ -1357,16 +1357,19 @@ countries:
         components:
             combinations:
                 house_number_unit:
+                    probability: 0.0
+                unit_house_number:
                     components:
                         - unit
                         - house_number
+                    label: house_number
                     separators:
                         - separator: /
-                          probability: 0.1
+                          probability: 0.04
                         - separator: "-"
-                          probability: 0.8
+                          probability: 0.95
                         - separator: " - "
-                          probability: 0.1
+                          probability: 0.01
                     probability: 0.1
         levels:
             # Note: Canadian English uses "storey" keeping with the British convention, so no need to change that
