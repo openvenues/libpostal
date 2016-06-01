@@ -78,6 +78,28 @@ and:
         sample: true
         sample_probability: 0.05
 
+cross_streets:
+    and: *und
+    corner_of: &ecke_von
+        canonical: ecke von
+    at_the_corner_of: &an_der_ecke_von
+        canonical: an der ecke von
+    intersection:
+        default: *und
+        probability: 0.7
+        alternatives:
+            - alternative: *ecke_von
+              probability: 0.15
+            - alternative: *an_der_ecke_von
+              probability: 0.15
+
+    between:
+        canonical: zwischen
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probability: 0.5
+
 levels:
     floor: &obergeschoss
         canonical: obergeschoss
@@ -174,6 +196,91 @@ levels:
         alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
         numeric_plus_alpha_probability: 0.0001 # e.g. 2A
         alpha_plus_numeric_probability: 0.0001 # e.g. A2
+
+categories:
+    near:
+        default:
+            canonical: nähe
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.5
+        alternatives:
+            - alternative:
+                canonical: bei
+              probability: 0.3
+            - alternative:
+                canonical: nah
+              probability: 0.15
+            - alternative:
+                canonical: nahe an
+              probability: 0.05
+    nearby:
+        default:
+            canonical: hier in der nähe
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.4
+        alternatives:
+            - alternative:
+                canonical: in der nähe
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.3
+            - alternative:
+                canonical: in der nähe hier
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+            - alternative: 
+                canonical: in der nähe von
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+            - alternative:
+                canonical: nahe gelegen
+              probability: 0.05
+            - alternative:
+                canonical: hier in der gegend
+              probability: 0.05
+
+    near_me:
+        default:
+            canonical: in meiner nähe
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.9
+        alternatives:
+            - alternative:
+                canonical: in der nähe zu mir
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+    # Don't worry about agreement
+    in:
+        default:
+            canonical: in
+        probability: 0.6
+        alternatives:
+            - alternative:
+                canonical: im
+              probability: 0.2
+            - alternative:
+                canonical: um
+              probability: 0.2
+
+
+    # Probabilities of each phrase
+    near_probability: 0.35
+    nearby_probability: 0.2
+    near_me_probability: 0.1
+    in_probability: 0.35
 
 
 directions:
