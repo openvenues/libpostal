@@ -1,5 +1,5 @@
-abteilung|abt
+appartement|apt|app
 büro|buro|buero
 top
-wohnung|whg|w
+wohnung|whg|w|/ w|/ / w
 zimmer|zi

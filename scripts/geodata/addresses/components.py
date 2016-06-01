@@ -399,40 +399,44 @@ class AddressComponents(object):
 
     def combine_fields(self, address_components, language, country=None, generated_components=None):
         combo_config = address_config.get_property('components.combinations', language, country=country, default={})
-        values = []
-        probs = []
+        combos = []
+        probs = {}
         generated_components = generated_components or set()
 
-        for k, v in six.iteritems(combo_config):
-            values.append(v)
-            probs.append(v['probability'])
-
-        if not isclose(sum(probs), 1.0):
-            values.append(None)
-            probs.append(1.0 - sum(probs))
-
-        probs = cdf(probs)
-
-        combo = weighted_choice(values, probs)
-        if combo is not None:
+        for k, combo in six.iteritems(combo_config):
             components = OrderedDict.fromkeys(combo['components']).keys()
             if not all((c in address_components and (c in generated_components or self.is_numeric(address_components[c])) for c in components)):
-                return None
+                continue
 
-            values = []
-            probs = []
-            for s in combo['separators']:
-                values.append(s['separator'])
-                probs.append(s['probability'])
+            combos.append((len(components), combo))
 
-            probs = cdf(probs)
-            separator = weighted_choice(values, probs)
+        if not combos:
+            return None
 
-            new_label = combo['label']
-            new_value = separator.join([address_components.pop(c) for c in components])
-            address_components[new_label] = new_value
-            return new_label
-        return None
+        combos.sort(key=operator.itemgetter(0), reverse=True)
+
+        for num_components, combo in combos:
+            prob = combo['probability']
+            if random.random() < prob:
+                break
+        else:
+            return None
+
+        components = OrderedDict.fromkeys(combo['components']).keys()
+
+        values = []
+        probs = []
+        for s in combo['separators']:
+            values.append(s['separator'])
+            probs.append(s['probability'])
+
+        probs = cdf(probs)
+        separator = weighted_choice(values, probs)
+
+        new_label = combo['label']
+        new_value = separator.join([address_components.pop(c) for c in components])
+        address_components[new_label] = new_value
+        return new_label
 
     def generated_type(self, component, existing_components, language, country=None):
         component_config = address_config.get_property('components.{}'.format(component), language, country=country)
