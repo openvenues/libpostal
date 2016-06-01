@@ -27,6 +27,7 @@ Address dictionaries
 #define ADDRESS_ENTRANCE (1 << 7)
 
 #define ADDRESS_CATEGORY (1 << 8)
+#define ADDRESS_NEAR (1 << 9)
 
 #define ADDRESS_TOPONYM (1 << 13)
 #define ADDRESS_POSTAL_CODE (1 << 14)

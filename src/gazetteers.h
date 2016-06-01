@@ -57,6 +57,7 @@ typedef enum dictionary_type {
 
     DICTIONARY_CATEGORY = 70,
     DICTIONARY_CHAIN = 71,
+    DICTIONARY_NEAR = 72,
 
     DICTIONARY_CROSS_STREET = 80,
 
