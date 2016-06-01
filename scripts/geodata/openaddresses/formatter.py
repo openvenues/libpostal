@@ -180,7 +180,7 @@ class OpenAddressesFormatter(object):
                         print('did {} formatted addresses'.format(i))
 
             for subdir, subdir_config in six.iteritems(config.get('subdirs', {})):
-                for file_props in config.get('files', []):
+                for file_props in subdir_config.get('files', []):
                     filename = file_props['filename']
 
                     path = os.path.join(base_dir, country, subdir, filename)
