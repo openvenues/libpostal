@@ -506,6 +506,13 @@ units:
         # Wohnung nummer 4
         add_number_phrase: true
         add_number_phrase_probability: 0.4
+    haus: &haus
+        canonical: haus
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
     wohnungsnummer: &wohnungsnummer
         canonical: wohnungsnummer
         sample: true
@@ -541,7 +548,9 @@ units:
             - alternative: *wohnungsnummer
               probability: 0.1
             - alternative: *appartement
-              probability: 0.1
+              probability: 0.05
+            - alternative: *haus
+              probability: 0.05
 
         numeric_probability: 0.9 # e.g. Wohnung 1
         numeric_plus_alpha_probability: 0.03 # e.g. 1A
@@ -647,8 +656,10 @@ countries:
                     direction: left
             alphanumeric: &austria_units_alphanumeric
                 default: *top
-                probability: 0.9
+                probability: 0.75
                 alternatives:
+                    - alternative: *haus
+                      probability: 0.15
                     - alternative: *wohnung
                       probability: 0.05
                     - alternative: *wohnungsnummer
