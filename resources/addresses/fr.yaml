@@ -4,9 +4,8 @@
 components:
     level:
         # If no floor number is specified
-        null_probability: 0.6
-        alphanumeric_probability: 0.35
-        standalone_probability: 0.05
+        null_probability: 0.8
+        alphanumeric_probability: 0.2
 
     staircase:
         null_probability: 0.99
@@ -18,12 +17,10 @@ components:
 
     unit:
         # If no unit number is specified
-        null_probability: 0.3
-        alphanumeric_probability: 0.65
-        standalone_probability: 0.05
+        null_probability: 0.8
+        alphanumeric_probability: 0.2
 
     combinations:
-        # For unit types like 2/34 (more common in Canada and Australia)
         house_number_unit:
             components:
                 - house_number
@@ -92,9 +89,8 @@ levels:
         sample_probability: 0.2
         numeric:
             direction: left
-            direction_probability: 0.8
             add_number_phrase: true
-            add_number_phrase_probability: 0.2
+            add_number_phrase_probability: 0.05
         ordinal:
             direction: right
         numeric_probability: 0.75
@@ -106,9 +102,8 @@ levels:
         sample_probability: 0.1
         numeric:
             direction: left
-            direction_probability: 0.8
             add_number_phrase: true
-            add_number_phrase_probability: 0.2
+            add_number_phrase_probability: 0.05
         ordinal:
             direction: right
         numeric_probability: 0.75
@@ -419,7 +414,7 @@ entrances:
         directional:
             modifier:
                 direction: right # e.g. Entrance Nord
-                direction_probability: 0.9
+                direction_probability: 0.95
                 alternatives:
                     - alternative: *nord
                     - alternative: *sud
@@ -456,8 +451,8 @@ staircases:
             whitespace_probability: 0.1
 
         directional:
-            direction: right # e.g. Escalera Izq
-            direction_probability: 0.8
+            direction: right # e.g. Escalier Izq
+            direction_probability: 0.9
             modifier:
                 alternatives:
                     - alternative: *nord
@@ -637,6 +632,27 @@ units:
               probability: 0.095
             - alternative: *chambre
               probability: 0.005
+        numeric_probability: 0.9 # e.g. Appartement 1
+        numeric_plus_alpha_probability: 0.03 # e.g. 1A
+        alpha_plus_numeric_probability: 0.03 # e.g. A1
+        alpha_probability: 0.04 # e.g. Appartement A
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        # Separate random probability for adding directions like 2D, 2G, etc.
+        add_direction: true
+        add_direction_probability: 0.1
+
+        # Add directions for plain numbers
+        add_direction_numeric: true
+        # Add direction only e.g. Unité Gauche
+        add_direction_standalone: true
+
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.1
 
     zones:
         residential: *unit_alphanumeric
@@ -763,37 +779,6 @@ categories:
             - alternative:
                 canonical: a proximite de la
               probability: 0.05
-        alternatives:
-            - alternative:
-                  canonical: próximo
-              probability: 0.05
-            - alternative:
-                  canonical: proximo
-              probability: 0.05
-            - alternative:
-                  canonical: cerca de aquí
-              probability: 0.05
-            - alternative:
-                  canonical: cerca de aqui
-              probability: 0.05
-            - alternative:
-                  canonical: acá
-              probability: 0.05
-            - alternative:
-                  canonical: aca
-              probability: 0.05
-            - alternative:
-                  canonical: cerca de acá
-              probability: 0.05
-            - alternative:
-                  canonical: cerca de aca
-              probability: 0.05
-            - alternative:
-                  canonical: por aquí
-              probability: 0.05
-            - alternative:
-                  canonical: por aqui
-              probability: 0.05
     near_me:
         default:
             canonical: proche de chez moi
@@ -834,11 +819,50 @@ categories:
 
 countries:
     ca:
+        components:
+
+            unit:
+                null_probability: 0.6
+                alphanumeric_probability: 0.4
+            combinations:
+                house_number_unit:
+                    probability: 0.0
+                unit_house_number:
+                    components:
+                        - unit
+                        - house_number
+                    label: house_number
+                    separators:
+                        - separator: /
+                          probability: 0.04
+                        - separator: "-"
+                          probability: 0.95
+                        - separator: " - "
+                          probability: 0.01
+                    probability: 0.1
         levels:
             numbering_starts_at: 1
             aliases:
                 "1":
-                    default: *rez_de_chaussee
+                    # Have to do this because etage is numeric
+                    # and has keys like "numeric_probability" which 
+                    # we don't want to infect rez_de_chausee when doing
+                    # a recursive merge
+                    default: *etage
+                    probability: 0.1
+                    alternatives:
+                        - alternative: *rez_de_chaussee
+                          probability: 0.8
+                        - alternative: *bel_etage
+                          probability: 0.05
+                        - alternative: *etage_noble
+                          probability: 0.05
+
+        units:
+            alphanumeric:
+                # More common to use in in Canada, as in the US
+                use_floor_probability: 0.35
+
     be:
         units:
             alphanumeric:
