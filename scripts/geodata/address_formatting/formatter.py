@@ -195,6 +195,7 @@ class AddressFormatter(object):
     def load_country_formats(self):
         config = yaml.load(open(os.path.join(self.formatter_repo_path,
                                 'conf', 'countries', 'worldwide.yaml')))
+        self.country_aliases = {}
         for key in list(config):
             country = key
             language = None
@@ -207,6 +208,7 @@ class AddressFormatter(object):
                     # Temporary fix for Norway territories (NO unquoted is a boolean) and recursive references
                     if value['use_country'] in (country, False):
                         continue
+                    self.country_aliases[country] = value['use_country']
                     address_template = config[value['use_country']]['address_template']
 
                 if address_template:
@@ -548,7 +550,7 @@ class AddressFormatter(object):
         if not template:
             return None
 
-        country = country.lower()
+        country = self.country_aliases.get(country.upper(), country).lower()
 
         cache_keys = []
 
