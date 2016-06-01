@@ -84,6 +84,7 @@ gazetteer_types = {
     'level_types_numbered': 'DICTIONARY_LEVEL_NUMBERED',
     'level_types_standalone': 'DICTIONARY_LEVEL_STANDALONE',
     'level_types_sub_basement': 'DICTIONARY_LEVEL_SUB_BASEMENT',
+    'near': 'DICTIONARY_NEAR',
     'no_number': 'DICTIONARY_NO_NUMBER',
     'number': 'DICTIONARY_NUMBER',
     'nulls': 'DICTIONARY_NULL',
