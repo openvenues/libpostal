@@ -437,7 +437,7 @@ staircases:
             direction: left
 
     alphanumeric:
-        # For alphanumerics, Stair A, Stair 1, etc.
+        # For alphanumerics, Escalier A, Esc 1, etc.
         default: *escalier
         numeric_probability: 0.6 # e.g. Escalier 1
         alpha_probability: 0.35 # e.g. Escalier A
@@ -478,13 +478,25 @@ po_boxes:
             add_number_phrase: true
             add_number_phrase_probability: 0.2 # BP No 1234
         numeric_probability: 1.0
+    case_postal: &case_postal
+        canonical: case postale
+        abbreviated: cp
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2 # CP No 1234
+        numeric_probability: 1.0
     alphanumeric:
         sample: false
         default: *boite_postal
-        numeric_probability: 0.9 # Apdo 123
-        alpha_probability: 0.05 # Apdo A
-        numeric_plus_alpha_probability: 0.04 # Apdo 123G
-        alpha_plus_numeric_probability: 0.01 # Apdo A123
+        numeric_probability: 0.9 # BP 123
+        alpha_probability: 0.05 # BP A
+        numeric_plus_alpha_probability: 0.04 # BP 123G
+        alpha_plus_numeric_probability: 0.01 # BP A123
         alpha_plus_numeric:
             whitespace_probability: 0.1
         numeric_plus_alpha:
@@ -818,6 +830,23 @@ categories:
     in_probability: 0.35
 
 countries:
+    # Belgium
+    be:
+        units:
+            alphanumeric:
+                default: *boite
+                probability: 0.75
+                alternatives:
+                    - alternative: *appartement
+                      probability: 0.1
+                      # e.g. just plain #3 or No. 4
+                    - alternative: *numero
+                      probability: 0.05
+                    - alternative: *porte
+                      probability: 0.095
+                    - alternative: *chambre
+                      probability: 0.005
+    # Canada
     ca:
         components:
 
@@ -863,18 +892,11 @@ countries:
                 # More common to use in in Canada, as in the US
                 use_floor_probability: 0.35
 
-    be:
-        units:
+        po_boxes:
             alphanumeric:
-                default: *boite
-                probability: 0.75
-                alternatives:
-                    - alternative: *appartement
-                      probability: 0.1
-                      # e.g. just plain #3 or No. 4
-                    - alternative: *numero
-                      probability: 0.05
-                    - alternative: *porte
-                      probability: 0.095
-                    - alternative: *chambre
-                      probability: 0.005
+                default: *case_postal
+    # Switzerland
+    ch:
+        po_boxes:
+            alphanumeric:
+                default: *case_postal
