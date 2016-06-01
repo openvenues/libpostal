@@ -1,2 +1,3 @@
 boîte postale|boite postale|bp|b.p.|b.p|b p|bte postale
+case postale|cp|c.p.|c.p|c p
 cedex
