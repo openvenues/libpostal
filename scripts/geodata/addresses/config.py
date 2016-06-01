@@ -26,7 +26,7 @@ class AddressConfig(object):
         self.cache = {}
 
         for filename in os.listdir(config_dir):
-            if filename not in ('en.yaml', 'es.yaml', 'fr.yaml'):
+            if filename not in ('en.yaml', 'es.yaml', 'fr.yaml', 'de.yaml', 'nl.yaml'):
                 continue
 
             config = yaml.load(open(os.path.join(ADDRESS_CONFIG_DIR, filename)))
@@ -39,7 +39,7 @@ class AddressConfig(object):
 
             config['countries'] = countries
 
-            lang = filename.strip('.yaml')
+            lang = filename.rsplit('.yaml')[0]
             self.address_configs[lang] = config
 
         self.sample_phrases = {}
