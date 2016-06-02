@@ -165,6 +165,31 @@ categories:
     near_me_probability: 0.1
     in_probability: 0.35
 
+
+
+cross_streets:
+    and: *en
+    corner_of: &hoek_van
+        canonical: hoek van
+    at_the_corner_of: &op_de_hoek_van
+        canonical: op de hoek van
+    intersection:
+        default: *en
+        probability: 0.7
+        alternatives:
+            - alternative: *hoek_van
+              probability: 0.15
+            - alternative: *op_de_hoek_van
+              probability: 0.15
+
+    between:
+        canonical: tussen
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probability: 0.5
+
+
 entrances:
     ingang: &ingang
         canonical: ingang
