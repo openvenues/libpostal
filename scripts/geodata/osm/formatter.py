@@ -595,7 +595,7 @@ class OSMAddressFormatter(object):
             language_components = {}
 
             base_name_tags = [t for t in all_base_name_tags if t in tags]
-            if not base_names:
+            if not base_name_tags:
                 base_name_tag = None
             else:
                 base_name_tag = base_name_tags[0]
