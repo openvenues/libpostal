@@ -11,4 +11,5 @@ oficina|of|ofc
 parcela
 puerta|pta
 sala
+suite|ste
 unidad|unid|udad|un
