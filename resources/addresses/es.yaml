@@ -347,18 +347,21 @@ cross_streets:
     corner_of: &esquina_de
         canonical: esquina de
         abbreviated: esq de
+        sample: true
         canonical_probability: 0.5
         abbreviated_probability: 0.2
         sample_probability: 0.3
     at_the_corner_of: &en_la_esquina_de
         canonical: en la esquina de
         abbreviated: en la esq de
+        sample: true
         canonical_probability: 0.5
         abbreviated_probability: 0.2
         sample_probability: 0.3
     corner: &esquina
         canonical: esquina
         abbreviated: esq
+        sample: true
         canonical_probability: 0.5
         abbreviated_probability: 0.2
         sample_probability: 0.3
