@@ -183,6 +183,9 @@ levels:
         canonical: entresuelo
         abbreviated: entlo
         half_floors: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
         sample: true
         # e.g. entresuelo 2
         numeric:
@@ -344,20 +347,34 @@ cross_streets:
     corner_of: &esquina_de
         canonical: esquina de
         abbreviated: esq de
-    at_the_corner_of: &at_the_corner_of
+        canonical_probability: 0.5
+        abbreviated_probability: 0.2
+        sample_probability: 0.3
+    at_the_corner_of: &en_la_esquina_de
         canonical: en la esquina de
         abbreviated: en la esq de
+        canonical_probability: 0.5
+        abbreviated_probability: 0.2
+        sample_probability: 0.3
     corner: &esquina
         canonical: esquina
         abbreviated: esq
+        canonical_probability: 0.5
+        abbreviated_probability: 0.2
+        sample_probability: 0.3
     intersection:
         default: *y
-        probability: 0.7
+        probability: 0.55
         alternatives:
             - alternative: *con
               probability: 0.2
             - alternative: *en
               probability: 0.1
+            - alternative: *esquina_de
+              probability: 0.1
+            - alternative: *en_la_esquina_de
+              probability: 0.05
+
     between:
         canonical: entre
         sample: true
@@ -651,9 +668,8 @@ units:
             direction: left
     suite: &suite
         canonical: suite
-        abbreviated: st
         canonical_probability: 0.7
-        abbreviated_probability: 0.3
+        sample_probability: 0.3
         numeric:
             direction: left
     door: &puerta
