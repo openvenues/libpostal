@@ -123,7 +123,7 @@ class OSMIntersectionReader(object):
             group_len = sum((1 for j in g))
 
             way_indices = self.intersection_edges_ways[idx:idx + group_len]
-            all_ways = [json.loads(reader.way_props.Get(safe_encode(w))) for w in way_indices]
+            all_ways = [json.loads(self.way_props.Get(safe_encode(w))) for w in way_indices]
             way_names = set()
             ways = []
             for way in all_ways:
