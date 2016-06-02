@@ -226,11 +226,21 @@ cross_streets:
     # 26th @ Broadway
     a: &a
         canonical: à
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+
     au: &au
         canonical: au
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
 
     corner_of: &langle_de
         canonical: l'angle de
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
 
     at_the_corner_of: &a_langle_de
         canonical: à l'angle de
