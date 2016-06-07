@@ -66,7 +66,7 @@ house_number:
     alphanumeric:
         default: *nummer
 
-    alphanumeric_phrase_probability: 0.01
+    alphanumeric_phrase_probability: 0.0001
 
 
 and:
@@ -505,7 +505,7 @@ units:
             direction: left
         # Wohnung nummer 4
         add_number_phrase: true
-        add_number_phrase_probability: 0.4
+        add_number_phrase_probability: 0.2
     haus: &haus
         canonical: haus
         sample: true
