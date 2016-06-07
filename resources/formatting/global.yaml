@@ -146,54 +146,51 @@ languages:
                 # e.g. Calle Ruiz de Alarcón 23 piso 3
                 level_after_house_number:
                     after: house_number
-                    probability: 0.8
+                    probability: 0.95
                 # e.g. Piso 3, Museo del Prado, Calle Ruiz de Alarcón 23
                 level_before_house:
                     before: house
-                    probability: 0.1
+                    probability: 0.03
                 # e.g. Museo del Prado, Bajos, Calle Ruiz de Alarcón 23
                 level_before_road:
                     before: road
-                    probability: 0.1
+                    probability: 0.02
 
                 conditional:
                     - component: staircase
                       probabilities:
-                          # default: 0.1
                           level_after_staircase:
                               after: staircase
-                              probability: 0.9
+                              probability: 0.99
                     - component: entrance
                       probabilities:
-                          # default: 0.1
                           level_after_entrance:
                               after: entrance
-                              probability: 0.9
+                              probability: 0.99
                     - component: building
                       probabilities:
-                          # default: 0.1
                           level_after_building:
                               after: building
-                              probability: 0.9
+                              probability: 0.99
 
             unit:
                 unit_before_house:
                     before: house
-                    probability: 0.2
+                    probability: 0.1
                 unit_after_house_number:
                     after: house_number
-                    probability: 0.7
+                    probability: 0.8
                 unit_before_road:
                     before: road
                     probability: 0.1
                 conditional:
                     - component: level
                       probabilities:
-                          # default: 0.1
+                          # default: 0.02
                           # e.g. Piso 3 Dpto 12 (most common)
                           unit_after_level:
                               after: level
-                              probability: 0.85
+                              probability: 0.93
                           # e.g. Apto 6, 2o piso (less common)
                           unit_before_level:
                               before: level
@@ -352,6 +349,9 @@ languages:
         insertions: *continental_european_template_insertions
 
     nl: 
+        insertions: *continental_european_template_insertions
+
+    da:
         insertions: *continental_european_template_insertions
 
 countries:
