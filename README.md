@@ -203,11 +203,11 @@ Libpostal is designed to be used by higher-level languages.  If you don't see yo
 - Java/JVM: [jpostal](https://github.com/openvenues/jpostal)
 - PHP: [php-postal](https://github.com/openvenues/php-postal)
 - NodeJS: [node-postal](https://github.com/openvenues/node-postal)
+- R: [poster](https://github.com/ironholds/poster)
 
 **Unofficial language bindings**
 
 - LuaJIT: [lua-resty-postal](https://github.com/bungle/lua-resty-postal)
-- R: [poster](https://github.com/ironholds/poster)
 
 **Database extensions**
 
