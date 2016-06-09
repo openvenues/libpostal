@@ -67,7 +67,7 @@ VALID_VENUES="( ( $VALID_AEROWAY_KEYS ) or ( $VALID_AMENITY_KEYS ) or ( $VALID_H
 # Address data set for use in parser, language detection
 echo "Filtering for records with address tags: `date`"
 PLANET_ADDRESSES_O5M="planet-addresses.o5m"
-VALID_ADDRESSES="( ( ( name= or addr:housename= ) and $VALID_VENUES ) ) or ( ( addr:street= or addr:place ) and ( name= or building= or building:levels= or addr:housename= or addr:housenumber= ) )"
+VALID_ADDRESSES="( ( ( name= or addr:housename= ) and $VALID_VENUES ) ) or ( ( addr:street= or addr:place= ) and ( name= or building= or building:levels= or addr:housename= or addr:housenumber= ) )"
 osmfilter $PLANET_O5M --keep="$VALID_ADDRESSES" --drop-author --drop-version -o=$PLANET_ADDRESSES_O5M
 PLANET_ADDRESSES_LATLONS="planet-addresses-latlons.o5m"
 osmconvert $PLANET_ADDRESSES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_ADDRESSES_LATLONS
@@ -135,7 +135,7 @@ rm $PLANET_BUILDINGS_LATLONS
 
 echo "Filtering for building polygons: `date`"
 PLANET_BUILDING_POLYGONS="planet-building-polygons.osm"
-osmfilter $PLANET_O5M --keep="( ( building= or building:part= or type=building ) and ( building:levels= or name= or addr:street= or addr:place or addr:housename= or addr:housenumber= ) )" --drop-author --drop-version -o=$PLANET_BUILDING_POLYGONS
+osmfilter $PLANET_O5M --keep="( ( building= or building:part= or type=building ) and ( building:levels= or name= or addr:street= or addr:place= or addr:housename= or addr:housenumber= ) )" --drop-author --drop-version -o=$PLANET_BUILDING_POLYGONS
 
 
 echo "Filtering for amenities: `date`"
