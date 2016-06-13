@@ -95,6 +95,8 @@ class OrdinalExpressions(object):
 
     def suffixed_number(self, num, lang, gender=None, category=None):
         suffixes = self.get_suffixes(num, lang, gender=gender, category=category)
+        if not suffixes:
+            return None
         suffix = random.choice(suffixes)
         return six.u('{}{}').format(safe_decode(num), safe_decode(suffix))
 
