@@ -116,6 +116,11 @@ levels:
         canonical_probability: 0.3
         abbreviated_probability: 0.6
         sample_probability: 0.1
+    stueetage: &stueetage
+        canonical: stueetage
+        sample: true
+        canonical_probability: 0.3
+        sample_probability: 0.7
     kaelderen: &kaelderen
         canonical: kælderen
         abbreviated: kl
@@ -127,9 +132,9 @@ levels:
         numeric:
             direction: right
             direction_probability: 0.8
-        # e.g. 1kl
+        # e.g. k1
         numeric_affix:
-            affix: kl
+            affix: k
             direction: left
         # e.g. 1. kl
         ordinal:
@@ -147,6 +152,10 @@ levels:
             default: *kaelderen
         "0":
             default: *stuen
+            probability: 0.9
+            alternatives:
+                - alternative: *stueetage
+                  probability: 0.1
 
     numbering_starts_at: 0
 
@@ -414,17 +423,20 @@ staircases:
         sample_probability: 0.1
         numeric:
             direction: left
-    trapper: &trapper
-        canonical: trapper
+    trappe: &trappe
+        canonical: trappe
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
         numeric:
             direction: left
 
     alphanumeric: &staircase_alphanumeric
-        default: *stiege
-        probability: 0.6
+        default: *trappe
+        probability: 0.8
         alternatives:
-            - alternative: *trapper
-              probability: 0.4
+            - alternative: *stiege
+              probability: 0.2
         numeric_probability: 0.75
         alpha_probability: 0.2
         numeric_plus_alpha_probability: 0.025
