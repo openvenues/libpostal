@@ -75,6 +75,8 @@ class NumericPhrase(object):
     def combine_with_number(cls, number, phrase, num_type, props, whitespace_default=False):
         if num_type == cls.NUMERIC_AFFIX:
             phrase = props['affix']
+            if 'zero_pad' in props and number.isdigit():
+                number = number.rjust(props['zero_pad'], props.get('zero_char', '0'))
 
         direction = props['direction']
         whitespace = props.get('whitespace', whitespace_default)
@@ -139,6 +141,7 @@ class NumberedComponent(object):
     @classmethod
     def numeric_phrase(cls, key, num, language, country=None, dictionaries=(), strict_numeric=False, is_alpha=False):
         has_alpha = False
+        has_numeric = True
         is_none = False
         if num is not None:
             try:
@@ -147,10 +150,16 @@ class NumberedComponent(object):
                 try:
                     num = float(num)
                 except ValueError:
-                    if not all((c == token_types.NUMERIC) for t, c in tokenize(safe_decode(num))):
-                        if strict_numeric:
-                            return safe_decode(num)
-                        has_alpha = True
+                    tokens = tokenize(safe_decode(num))
+                    has_numeric = False
+                    for t, c in tokens:
+                        if c == token_types.NUMERIC:
+                            has_numeric = True
+                        if t.isalnum():
+                            has_alpha = True
+
+                    if strict_numeric and has_alpha:
+                        return safe_decode(num)
 
         else:
             is_none = True
@@ -253,11 +262,13 @@ class NumberedComponent(object):
             phrase = props['affix']
             if props.get('upper_case', True):
                 phrase = phrase.upper()
+            if 'zero_pad' in props and num.isdigit():
+                num = num.rjust(props['zero_pad'], props.get('zero_char', '0'))
             whitespace_default = False
         elif num_type == 'ordinal' and safe_decode(num).isdigit():
             num = ordinal_expressions.suffixed_number(num, language, gender=props.get('gender', None))
 
-        if (num_type == 'ordinal' or has_alpha) and 'null_phrase_probability' in props:
+        if 'null_phrase_probability' in props and (num_type == 'ordinal' or (has_alpha and (has_numeric or 'null_phrase_alpha_only' in props))):
             if random.random() < props['null_phrase_probability']:
                 return num
 
