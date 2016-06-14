@@ -1,1 +1,5 @@
-etasje
+etasje|et|etg
+hovedetasje|h
+loftsetasje|l
+loft
+underetasje|u

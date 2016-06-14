@@ -4,6 +4,7 @@ nordøst|nø
 nordvest|nv
 øst|ø|ost|o
 østre|ostre
+sentrum|s
 søndre|sondre|sdr
 syd|s
 sydøst|sø
