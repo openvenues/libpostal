@@ -8,6 +8,7 @@ from geodata.addresses.numbering import NumberedComponent, sample_alphabet, lati
 from geodata.configs.utils import nested_get
 from geodata.encoding import safe_decode
 from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
+from geodata.text.utils import is_numeric_strict
 
 
 class Unit(NumberedComponent):
@@ -47,7 +48,7 @@ class Unit(NumberedComponent):
     def for_floor(cls, floor_number, num_digits=None):
         num_digits = num_digits if num_digits is not None else cls.sample_num_digits()
         unit = weighted_choice(cls.positive_units, cls.positive_units_cdf)
-        return '{}{}'.format(floor_number, safe_decode(unit).zfill(num_digits))
+        return six.u('{}{}').format(floor_number, safe_decode(unit).zfill(num_digits))
 
     @classmethod
     def random(cls, language, country=None, num_floors=None, num_basements=None):
@@ -60,7 +61,22 @@ class Unit(NumberedComponent):
         if num_floors is None or random.random() >= use_floor_prob:
             number = weighted_choice(cls.numbered_units, cls.unit_probs_cdf)
         else:
-            number = cls.for_floor(Floor.random(language, country=country, num_floors=num_floors, num_basements=num_basements or 0))
+            floor = Floor.random(language, country=country, num_floors=num_floors, num_basements=num_basements or 0)
+
+            use_floor_affix_prob = address_config.get_property('units.alphanumeric.use_floor_numeric_affix_probability', language, country=country, default=0.0)
+            if use_floor_affix_prob and random.random() < use_floor_affix_prob:
+                floor_phrase = Floor.phrase(floor, language, country=country)
+                # Only works if the floor phrase is strictly numeric e.g. "1" or "H1"
+                if is_numeric_strict(floor_phrase):
+                    unit = weighted_choice(cls.positive_units, cls.positive_units_cdf)
+
+                    unit_num_digits = address_config.get_property('units.alphanumeric.use_floor_unit_num_digits', language, country=country, default=None)
+                    if unit_num_digits is not None:
+                        unit = safe_decode(unit).zfill(unit_num_digits)
+
+                    return six.u('{}{}').format(floor_phrase, unit)
+
+            number = cls.for_floor(floor)
 
         if num_type == cls.NUMERIC:
             return safe_decode(number)
