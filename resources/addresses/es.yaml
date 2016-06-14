@@ -1040,6 +1040,7 @@ countries:
                     direction: left
                     # If it's just puerta B, many times it's just e.g. 3o B for "tercero piso puerta B"
                     null_phrase_probability: 0.15
+                    null_phrase_alpha_only: true
                 ordinal:
                     direction: right
                     gender: f
