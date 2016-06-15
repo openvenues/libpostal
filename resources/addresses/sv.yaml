@@ -8,6 +8,10 @@ components:
         alphanumeric_probability: 0.1
         standalone_probability: 0.05
 
+    staircase:
+        null_probability: 0.99
+        alphanumeric_probability: 0.01
+
     entrance:
         null_probability: 0.999
         alphanumeric_probability: 0.001
