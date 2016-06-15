@@ -291,15 +291,15 @@ directions:
             whitespace_probability: 0.1
         numeric_probability: 0.8
         numeric_affix_probability: 0.2
-    left: &igjen
-        canonical: igjen
+    left: &venstre
+        canonical: venstre
         sample: true
         canonical_probability: 0.1
         sample_probability: 0.9
         numeric:
             direction: right
         numeric_affix:
-            affix: i
+            affix: v
             direction: right
             whitespace_probability: 0.1
         numeric_probability: 0.8
@@ -307,7 +307,7 @@ directions:
     alternatives:
         - alternative: *hoyre
           probability: 0.5
-        - alternative: *igjen
+        - alternative: *venstre
           probability: 0.5
 
 
