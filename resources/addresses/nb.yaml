@@ -507,7 +507,7 @@ units:
         sample_probability: 0.3
         numeric:
             direction: left
-            null_phrase_probability: 0.4
+            null_phrase_probability: 0.3
             # Lejlighed nummer 4
             add_number_phrase: true
             add_number_phrase_probability: 0.05
@@ -541,13 +541,13 @@ units:
         numeric_plus_alpha:
             whitespace_probability: 0.1
 
-        # Separate random probability for adding directions like 2H, 2I, etc.
+        # Separate random probability for adding directions like 2H, 2V, etc.
         add_direction: true
         add_direction_probability: 0.005
 
         # Add directions for plain numbers
         add_direction_numeric: true
-        # Add direction only e.g. Lejlighed Igjen
+        # Add direction only e.g. Lejlighed Venstre
         add_direction_standalone: true
 
         # If there are 10 floors, create unit numbers like #301 or #1032
@@ -555,6 +555,4 @@ units:
 
         # Use the actual floor phrase as long as the whole phrase is numeric
         # Has the effect of creating Bolignummer-style units
-        use_floor_numeric_affix_probability: 0.7
-        use_floor_affix_floor_num_digits: 2
         use_floor_affix_unit_num_digits: 2
