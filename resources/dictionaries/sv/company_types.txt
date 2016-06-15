@@ -1,0 +1,4 @@
+aktiebolag|ab
+publiktaktiebolag|ab ( publ )|ab publ
+handelsbolag|hb
+kommanditbolag|kb
