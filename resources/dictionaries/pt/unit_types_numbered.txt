@@ -1,6 +1,8 @@
-apartamento|apt|apto|apt.o
+apartamento|ap|apt|apto|apt.o
 casa
+letra
 lote|lt
 parcela
+porta|pta
 moradia
 sala
