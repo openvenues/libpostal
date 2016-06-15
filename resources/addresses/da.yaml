@@ -20,6 +20,31 @@ components:
         null_probability: 0.75
         alphanumeric_probability: 0.25
 
+    combinations:
+        level_unit:
+            components:
+                - level
+                - unit
+            label: unit
+            separators:
+                - separator: "-"
+                  probability: 0.9
+                - separator: " - "
+                  probability: 0.1
+            probability: 0.005
+        entrance_unit:
+            components:
+                - entrance
+                - unit
+            label: unit
+            separators:
+                - separator: "-"
+                  probability: 0.9
+                - separator: " - "
+                  probability: 0.1
+            probability: 0.001
+
+
 numbers:
     default: &nummer
         canonical: nummer
