@@ -241,13 +241,16 @@ class NumberedComponent(object):
         if phrase_props.get('number_abs_value', False):
             num = abs(num)
 
-            if 'number_min_abs_value' in phrase_props and num < phrase_props['number_min_abs_value']:
-                return phrase
+        if 'number_min_abs_value' in phrase_props and num < phrase_props['number_min_abs_value']:
+            return None
 
-            if phrase_props.get('number_subtract_abs_value'):
-                num -= phrase_props['number_subtract_abs_value']
+        if 'number_max_abs_value' in phrase_props and num > phrase_props['number_max_abs_value']:
+            return None
 
-            num = safe_decode(num)
+        if phrase_props.get('number_subtract_abs_value'):
+            num -= phrase_props['number_subtract_abs_value']
+
+        num = safe_decode(num)
 
         # Do we add the numeric phrase e.g. Floor No 1
         add_number_phrase = props.get('add_number_phrase', False)
@@ -255,8 +258,6 @@ class NumberedComponent(object):
             num = Number.phrase(num, language, country=country)
 
         whitespace_default = True
-
-        num = safe_decode(num)
 
         if num_type == 'numeric_affix':
             phrase = props['affix']
