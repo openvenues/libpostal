@@ -1,2 +1,2 @@
-apartado
-caixa postal|cp|c.p|c p
+apartado|apdo
+caixa postal|cp|c.p|c p|cxp
