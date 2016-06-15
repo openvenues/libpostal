@@ -21,8 +21,7 @@ components:
         alphanumeric_probability: 0.25
 
     combinations:
-        # e.g. 2/34, more common way to specify a unit number in German
-        # if unit exists in the first place
+        # Bolignummer
         level_unit:
             components:
                 - level
@@ -135,6 +134,8 @@ levels:
             affix: u
             direction: left
             zero_pad: 2
+        number_abs_value: true
+        number_min_abs_value: 1
         numeric_probability: 0.1
         numeric_affix_probability: 0.9
     loftsetasje: &loftsetasje
@@ -166,10 +167,11 @@ levels:
         numeric:
             direction: right
             direction_probability: 0.8
-        # e.g. k1
+        # e.g. k01
         numeric_affix:
             affix: k
             direction: left
+            zero_pad: 2
         # e.g. 1. k
         ordinal:
             direction: right
@@ -177,17 +179,20 @@ levels:
         number_abs_value: true
         number_min_abs_value: 1
         numeric_probability: 0.005
-        numeric_affix_probability: 0.1
+        numeric_affix_probability: 0.09
         ordinal_probability: 0.005
     aliases:
         "<-1":
             default: *kjeller
         "-1":
             default: *kjeller
-            probability: 0.9
+            probability: 0.85
             alternatives:
                 - alternative: *etasje
+                  probability: 0.05
+                - alternative: *underetasje
                   probability: 0.1
+
         "top":
             default: *etasje
             probability: 0.85
@@ -203,41 +208,36 @@ levels:
         default: *etasje
         probability: 0.95
         alternatives:
-            - alternative: *underetasje
+            - alternative: *hovedetasje
               probability: 0.05
         numeric_probability: 0.99 # With this probability, pick an integer
         alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
         numeric_plus_alpha_probability: 0.0001 # e.g. 2A
         alpha_plus_numeric_probability: 0.0001 # e.g. A2
 
+
 categories:
     near:
         default:
-            canonical: i nærheden af
+            canonical: i nærheten av
             sample: true
             canonical_probability: 0.8
             sample_probability: 0.2
-        probability: 0.7
+        probability: 0.9
         alternatives:
             - alternative:
-                canonical: tæt på
-                sample: true
-                canonical_probability: 0.8
-                sample_probability: 0.2
-              probability: 0.2
-            - alternative:
-                canonical: tæt ved
+                canonical: nær
                 sample: true
                 canonical_probability: 0.8
                 sample_probability: 0.2
               probability: 0.1
     nearby:
         default:
-            canonical: i nærheden
+            canonical: i nærheten
             sample: true
             canonical_probability: 0.8
             sample_probability: 0.2
-        probability: 0.4
+        probability: 0.7
         alternatives:
             - alternative:
                 canonical: rundt her
@@ -246,62 +246,29 @@ categories:
                 sample_probability: 0.2
               probability: 0.2
             - alternative:
-                canonical: nær her
-                sample: true
-                canonical_probability: 0.8
-                sample_probability: 0.2
-              probability: 0.1
-            - alternative:
                 canonical: nær
-                sample: true
-                canonical_probability: 0.8
-                sample_probability: 0.2
-              probability: 0.1
-            - alternative: 
-                canonical: omkring her
-                sample: true
-                canonical_probability: 0.8
-                sample_probability: 0.2
-              probability: 0.1
-            - alternative:
-                canonical: tæt på her
                 sample: true
                 canonical_probability: 0.8
                 sample_probability: 0.2
               probability: 0.1
     near_me:
         default:
-            canonical: nær ​​mig
+            canonical: nær meg
             sample: true
             canonical_probability: 0.8
             sample_probability: 0.2
-        probability: 0.8
+        probability: 0.6
         alternatives:
             - alternative:
-                canonical: i nærheden af ​​mig
+                canonical: i nærheten av meg
                 sample: true
                 canonical_probability: 0.8
                 sample_probability: 0.2
-              probability: 0.1
-            - alternative:
-                canonical: tæt på mig
-                sample: true
-                canonical_probability: 0.8
-                sample_probability: 0.2
-              probability: 0.1
+              probability: 0.4
 
-    # Don't worry about agreement
     in:
         default:
             canonical: i
-        probability: 0.8
-        alternatives:
-            - alternative:
-                canonical: om
-              probability: 0.1
-            - alternative:
-                canonical: på
-              probability: 0.1
 
 
     # Probabilities of each phrase
@@ -309,7 +276,6 @@ categories:
     nearby_probability: 0.2
     near_me_probability: 0.1
     in_probability: 0.35
-
 
 directions:
     right: &hoyre
