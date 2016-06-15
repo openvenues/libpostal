@@ -61,7 +61,20 @@ class Unit(NumberedComponent):
         if num_floors is None or random.random() >= use_floor_prob:
             number = weighted_choice(cls.numbered_units, cls.unit_probs_cdf)
         else:
-            floor = Floor.random(language, country=country, num_floors=num_floors, num_basements=num_basements or 0)
+            floor = Floor.random(language, country=country, num_floors=num_floors, num_basements=num_basements)
+
+            floor_numbering_starts_at = address_config.get_property('levels.numbering_starts_at', language, country=country, default=0)
+            ground_floor_starts_at = address_config.get_property('units.alphanumeric.use_floor_ground_starts_at', language, country=country, default=None)
+
+            if ground_floor_starts_at is not None:
+                try:
+                    floor = int(floor)
+                    if floor >= floor_numbering_starts_at:
+                        floor -= floor_numbering_starts_at
+                    floor += ground_floor_starts_at
+                    floor = safe_decode(floor)
+                except (TypeError, ValueError):
+                    pass
 
             use_floor_affix_prob = address_config.get_property('units.alphanumeric.use_floor_numeric_affix_probability', language, country=country, default=0.0)
             if use_floor_affix_prob and random.random() < use_floor_affix_prob:
@@ -75,6 +88,10 @@ class Unit(NumberedComponent):
                         unit = safe_decode(unit).zfill(unit_num_digits)
 
                     return six.u('{}{}').format(floor_phrase, unit)
+
+            floor_num_digits = address_config.get_property('units.alphanumeric.use_floor_floor_num_digits', language, country=country, default=None)
+            if floor_num_digits is not None and floor.isdigit():
+                floor = floor.zfill(floor_num_digits)
 
             number = cls.for_floor(floor)
 
