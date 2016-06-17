@@ -159,7 +159,7 @@ sudo apt-get install curl libsnappy-dev autoconf automake libtool pkg-config
 
 **On Mac OSX**
 ```
-sudo brew install snappy autoconf automake libtool pkg-config
+brew install snappy autoconf automake libtool pkg-config
 ```
 
 Then to install the C library:
