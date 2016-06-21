@@ -275,8 +275,8 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
 
                 if (node.check != last_node_id && last_node.base >= 0) {
                     log_debug("Fell off trie. last_node_id=%d and node.check=%d\n", last_node_id, node.check);
-                    node_id = start_node_id;
-                    node = trie_get_node(self, node_id);
+                    node_id = last_node_id = start_node_id;
+                    node = last_node = trie_get_node(self, node_id);
                     break;
                 } else if (node.base < 0) {
                     log_debug("Searching tail at index %d\n", i);
@@ -439,6 +439,7 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
         if (*phrases == NULL) {
             *phrases = phrase_array_new_size(1);
         }
+        log_debug("adding phrase, last_match_index=%d\n", last_match_index);
         phrase_array_push(*phrases, (phrase_t){phrase_start, last_match_index - phrase_start + 1, data});
    }
 
