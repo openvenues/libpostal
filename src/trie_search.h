@@ -25,7 +25,7 @@ typedef struct phrase {
 
 VECTOR_INIT(phrase_array, phrase_t)
 
-#define NULL_PHRASE (phrase_t){0, 0, 0};
+#define NULL_PHRASE (phrase_t){0, 0, 0}
 
 phrase_array *trie_search(trie_t *self, char *text);
 bool trie_search_from_index(trie_t *self, char *text, uint32_t start_node_id, phrase_array **phrases);
