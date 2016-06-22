@@ -11,12 +11,6 @@
 
 #include "log/log.h"
 
-// Training
-
-#define DEFAULT_ITERATIONS 5
-
-#define MIN_VOCAB_COUNT 5
-#define MIN_PHRASE_COUNT 1
 
 typedef struct phrase_stats {
     khash_t(int_uint32) *class_counts;
@@ -24,6 +18,24 @@ typedef struct phrase_stats {
 } phrase_stats_t;
 
 KHASH_MAP_INIT_STR(phrase_stats, phrase_stats_t)
+
+// Training
+
+#define DEFAULT_ITERATIONS 5
+
+#define MIN_VOCAB_COUNT 5
+#define MIN_PHRASE_COUNT 1
+
+static inline bool is_phrase_component(char *label) {
+    return (string_equals(label, ADDRESS_PARSER_LABEL_SUBURB) ||
+           string_equals(label, ADDRESS_PARSER_LABEL_CITY_DISTRICT) ||
+           string_equals(label, ADDRESS_PARSER_LABEL_CITY) ||
+           string_equals(label, ADDRESS_PARSER_LABEL_STATE_DISTRICT) ||
+           string_equals(label, ADDRESS_PARSER_LABEL_ISLAND) ||
+           string_equals(label, ADDRESS_PARSER_LABEL_STATE) ||
+           string_equals(label, ADDRESS_PARSER_LABEL_POSTAL_CODE) ||
+           string_equals(label, ADDRESS_PARSER_LABEL_COUNTRY));
+}
 
 address_parser_t *address_parser_init(char *filename) {
     if (filename == NULL) {
@@ -102,37 +114,43 @@ address_parser_t *address_parser_init(char *filename) {
         cstring_array_foreach(tokenized_str->strings, i, token, {
             token_t t = tokenized_str->tokens->a[i];
 
+            char *label = cstring_array_get_string(data_set->labels, i);
+            if (label == NULL) {
+                continue;
+            }
+
             char_array_clear(token_builder);
-            add_normalized_token(token_builder, str, t, ADDRESS_PARSER_NORMALIZE_TOKEN_OPTIONS);
+
+            bool is_phrase_label = is_phrase_component(label);
+
+            uint64_t normalize_token_options = is_phrase_label ? ADDRESS_PARSER_NORMALIZE_PHRASE_TOKEN_OPTIONS : ADDRESS_PARSER_NORMALIZE_TOKEN_OPTIONS;
+
+            add_normalized_token(token_builder, str, t, normalize_token_options);
             if (token_builder->n == 0) {
                 continue;
             }
 
             normalized = char_array_get_string(token_builder);
 
-            k = kh_get(str_uint32, vocab, normalized);
-            
-            if (k == kh_end(vocab)) {
-                key = strdup(normalized);
-                k = kh_put(str_uint32, vocab, key, &ret);
-                if (ret < 0) {
-                    log_error("Error in kh_put in vocab\n");
-                    free(key);
-                    goto exit_hashes_allocated;
+            if (!is_phrase_component(label)) {
+                k = kh_get(str_uint32, vocab, normalized);
+                
+                if (k == kh_end(vocab)) {
+                    key = strdup(normalized);
+                    k = kh_put(str_uint32, vocab, key, &ret);
+                    if (ret < 0) {
+                        log_error("Error in kh_put in vocab\n");
+                        free(key);
+                        goto exit_hashes_allocated;
+                    }
+                    kh_value(vocab, k) = 1;
+                    vocab_size++;
+                } else {
+                    kh_value(vocab, k)++;
                 }
-                kh_value(vocab, k) = 1;
-                vocab_size++;
-            } else {
-                kh_value(vocab, k)++;
-            }
 
-            char *label = cstring_array_get_string(data_set->labels, i);
-            if (label == NULL) {
-                continue;
-            }
-
-            if (string_equals(label, "road") || string_equals(label, "house_number") || string_equals(label, "house")) {
                 prev_label = NULL;
+
                 continue;
             }
 
@@ -155,68 +173,103 @@ address_parser_t *address_parser_init(char *filename) {
                     uint32_t component = 0;
 
                     // Too many variations on these
-                   if (string_equals(prev_label, "city")) {
+                   if (string_equals(prev_label, ADDRESS_PARSER_LABEL_CITY)) {
                         class_id = ADDRESS_PARSER_CITY;
                         component = ADDRESS_COMPONENT_CITY;
-                    } else if (string_equals(prev_label, "state")) {
+                    } else if (string_equals(prev_label, ADDRESS_PARSER_LABEL_STATE)) {
                         class_id = ADDRESS_PARSER_STATE;
                         component = ADDRESS_COMPONENT_STATE;
-                    } else if (string_equals(prev_label, "country")) {
+                    } else if (string_equals(prev_label, ADDRESS_PARSER_LABEL_COUNTRY)) {
                         class_id = ADDRESS_PARSER_COUNTRY;
                         component = ADDRESS_COMPONENT_COUNTRY;
-                    } else if (string_equals(prev_label, "state_district")) {
+                    } else if (string_equals(prev_label, ADDRESS_PARSER_LABEL_STATE_DISTRICT)) {
                         class_id = ADDRESS_PARSER_STATE_DISTRICT;
                         component = ADDRESS_COMPONENT_STATE_DISTRICT;
-                    } else if (string_equals(prev_label, "suburb")) {
+                    } else if (string_equals(prev_label, ADDRESS_PARSER_LABEL_SUBURB)) {
                         class_id = ADDRESS_PARSER_SUBURB;
                         component = ADDRESS_COMPONENT_SUBURB;
-                    } else if (string_equals(prev_label, "city_district")) {
+                    } else if (string_equals(prev_label, ADDRESS_PARSER_LABEL_CITY_DISTRICT)) {
                         class_id = ADDRESS_PARSER_CITY_DISTRICT;
                         component = ADDRESS_COMPONENT_CITY_DISTRICT;
-                    } else if (string_equals(prev_label, "postcode")) {
+                    } else if (string_equals(prev_label, ADDRESS_PARSER_LABEL_ISLAND)) {
+                        class_id = ADDRESS_PARSER_ISLAND;
+                        component = ADDRESS_COMPONENT_ISLAND;
+                    } else if (string_equals(prev_label, ADDRESS_PARSER_LABEL_POSTAL_CODE)) {
                         class_id = ADDRESS_PARSER_POSTAL_CODE;
                         component = ADDRESS_COMPONENT_POSTAL_CODE;
+                    } else {
+                        // Shouldn't happen but just in case
+                        prev_label = NULL;
+                        continue;
                     }
 
                     char *phrase = char_array_get_string(phrase_builder);
 
-                    k = kh_get(phrase_stats, phrase_stats, phrase);
+                    char *normalized_phrase = NULL;
 
-                    if (k == kh_end(phrase_stats)) {
-                        key = strdup(phrase);
-                        ret = 0;
-                        k = kh_put(phrase_stats, phrase_stats, key, &ret);
-                        if (ret < 0) {
-                            log_error("Error in kh_put in phrase_stats\n");
-                            free(key);
+                    if (string_contains_hyphen(phrase)) {
+                        char *phrase_copy = strdup(phrase);
+                        if (phrase_copy == NULL) {
                             goto exit_hashes_allocated;
                         }
-                        class_counts = kh_init(int_uint32);
-                    
-                        stats.class_counts = class_counts;
-                        stats.parser_types.components = component;
-                        stats.parser_types.most_common = 0;
-                        
-                        kh_value(phrase_stats, k) = stats;
-                    } else {
-                        stats = kh_value(phrase_stats, k);
-                        class_counts = stats.class_counts;
-                        stats.parser_types.components |= component;
+                        normalized_phrase = normalize_string_utf8(phrase_copy, NORMALIZE_STRING_REPLACE_HYPHENS);
 
                     }
 
-                    k = kh_get(int_uint32, class_counts, (khint_t)class_id);
+                    char *phrases[2];
+                    phrases[0] = phrase;
+                    phrases[1] = normalized_phrase;
 
-                    if (k == kh_end(class_counts)) {
-                        ret = 0;
-                        k = kh_put(int_uint32, class_counts, class_id, &ret);
-                        if (ret < 0) {
-                            log_error("Error in kh_put in class_counts\n");
-                            goto exit_hashes_allocated;
+                    for (int i = 0; i < sizeof(phrases) / sizeof(char *); i++) {
+                        phrase = phrases[i];
+                        if (phrase == NULL) continue;
+
+                        k = kh_get(phrase_stats, phrase_stats, phrase);
+
+                        if (k == kh_end(phrase_stats)) {
+                            key = strdup(phrase);
+                            ret = 0;
+                            k = kh_put(phrase_stats, phrase_stats, key, &ret);
+                            if (ret < 0) {
+                                log_error("Error in kh_put in phrase_stats\n");
+                                free(key);
+                                if (normalized_phrase != NULL) {
+                                    free(normalized_phrase);
+                                }
+                                goto exit_hashes_allocated;
+                            }
+                            class_counts = kh_init(int_uint32);
+                        
+                            stats.class_counts = class_counts;
+                            stats.parser_types.components = component;
+                            stats.parser_types.most_common = 0;
+                            
+                            kh_value(phrase_stats, k) = stats;
+                        } else {
+                            stats = kh_value(phrase_stats, k);
+                            class_counts = stats.class_counts;
+                            stats.parser_types.components |= component;
+
                         }
-                        kh_value(class_counts, k) = 1;
-                    } else {
-                        kh_value(class_counts, k)++;
+
+                        k = kh_get(int_uint32, class_counts, (khint_t)class_id);
+
+                        if (k == kh_end(class_counts)) {
+                            ret = 0;
+                            k = kh_put(int_uint32, class_counts, class_id, &ret);
+                            if (ret < 0) {
+                                log_error("Error in kh_put in class_counts\n");
+                                goto exit_hashes_allocated;
+                            }
+                            kh_value(class_counts, k) = 1;
+                        } else {
+                            kh_value(class_counts, k)++;
+                        }
+
+                    }
+
+                    if (normalized_phrase != NULL) {
+                        free(normalized_phrase);
                     }
 
                 }
@@ -227,7 +280,6 @@ address_parser_t *address_parser_init(char *filename) {
             }
 
             char_array_cat(phrase_builder, normalized);
-
 
             prev_label = label;
 
@@ -430,10 +482,16 @@ bool address_parser_train(address_parser_t *self, char *filename, uint32_t num_i
     return true;
 }
 
+typedef enum {
+    ADDRESS_PARSER_TRAIN_POSITIONAL_ARG,
+    ADDRESS_PARSER_TRAIN_ARG_ITERATIONS
+} address_parser_train_keyword_arg_t;
+
+#define USAGE "Usage: ./address_parser_train filename output_dir [--iterations number]\n"
 
 int main(int argc, char **argv) {
     if (argc < 3) {
-        printf("Usage: ./address_parser_train filename output_dir\n");
+        printf(USAGE);
         exit(EXIT_FAILURE);
     }
 
@@ -441,8 +499,41 @@ int main(int argc, char **argv) {
     log_warn("shuf must be installed to train address parser effectively. If this is a production machine, please install shuf. No shuffling will be performed.\n");
     #endif
 
-    char *filename = argv[1];
-    char *output_dir = argv[2];
+    int pos_args = 1;
+    
+    address_parser_train_keyword_arg_t kwarg = ADDRESS_PARSER_TRAIN_POSITIONAL_ARG;
+
+    size_t num_iterations = DEFAULT_ITERATIONS;
+    size_t position = 0;
+
+    char *filename = NULL;
+    char *output_dir = NULL;
+
+    for (int i = pos_args; i < argc; i++) {
+        char *arg = argv[i];
+
+        if (string_equals(arg, "--iterations")) {
+            kwarg = ADDRESS_PARSER_TRAIN_ARG_ITERATIONS;
+            continue;
+        }
+
+        if (kwarg == ADDRESS_PARSER_TRAIN_ARG_ITERATIONS) {
+            num_iterations = (size_t)atoi(arg);
+        } else if (position == 0) {
+            filename = arg;
+            position++;
+        } else if (position == 1) {
+            output_dir = arg;
+            position++;
+        }
+        kwarg = ADDRESS_PARSER_TRAIN_POSITIONAL_ARG;
+
+    }
+
+    if (filename == NULL || output_dir == NULL) {
+        printf(USAGE);
+        exit(EXIT_FAILURE);
+    }
 
     if (!address_dictionary_module_setup(NULL)) {
         log_error("Could not load address dictionaries\n");
@@ -475,7 +566,7 @@ int main(int argc, char **argv) {
 
     log_info("Finished initialization\n");
 
-    if (!address_parser_train(parser, filename, DEFAULT_ITERATIONS)) {
+    if (!address_parser_train(parser, filename, num_iterations)) {
         log_error("Error in training\n");
         exit(EXIT_FAILURE);
     }
