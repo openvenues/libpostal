@@ -1,6 +1,8 @@
 # libpostal: international street address NLP
 
 [![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal) [![License](https://img.shields.io/github/license/openvenues/libpostal.svg)](https://github.com/openvenues/libpostal/blob/master/LICENSE)
+[![OpenCollective](https://opencollective.com/libpostal/backers/badge.svg)](#backers) 
+[![OpenCollective](https://opencollective.com/libpostal/sponsors/badge.svg)](#sponsors)
 
 :jp: :us: :gb: :ru: :fr: :kr: :it: :es: :cn: :de:
 
@@ -534,6 +536,78 @@ Contributing
 ------------
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/openvenues/libpostal.
+
+Backers
+------------
+
+Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/libpostal#backer)]
+
+<a href="https://opencollective.com/libpostal/backer/0/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/0/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/1/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/1/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/2/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/2/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/3/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/3/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/4/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/4/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/5/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/5/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/6/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/6/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/7/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/7/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/8/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/8/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/9/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/9/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/10/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/10/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/11/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/11/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/12/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/12/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/13/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/13/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/14/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/14/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/15/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/15/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/16/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/16/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/17/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/17/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/18/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/18/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/19/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/19/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/20/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/20/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/21/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/21/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/22/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/22/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/23/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/23/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/24/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/24/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/25/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/25/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/26/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/26/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/27/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/27/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/28/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/28/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/29/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/29/avatar.svg"></a>
+
+Sponsors
+------------
+
+Become a sponsor and get your logo on our website and on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/libpostal#sponsor)]
+
+<a href="https://opencollective.com/libpostal/sponsor/0/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/1/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/2/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/3/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/4/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/5/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/6/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/7/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/8/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/9/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/9/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/10/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/10/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/11/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/11/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/12/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/12/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/13/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/13/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/14/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/14/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/15/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/15/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/16/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/16/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/17/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/17/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/18/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/18/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/19/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/19/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/20/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/20/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/21/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/21/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/22/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/22/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/23/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/23/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/24/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/24/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/25/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/25/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/26/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/26/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/27/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/27/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/28/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/28/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/29/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/29/avatar.svg"></a>
 
 License
 -------
