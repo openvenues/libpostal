@@ -18,7 +18,6 @@
 #include "linenoise/linenoise.h"
 #include "log/log.h"
 
-
 bool load_address_parser_dependencies(void) {
     if (!address_dictionary_module_setup(NULL)) {
         log_error("Could not load address dictionaries\n");
@@ -47,7 +46,7 @@ int main(int argc, char **argv) {
 
     printf("Loading models...\n");
 
-    if (!libpostal_setup() || !libpostal_setup_parser()) {
+    if (!libpostal_setup() || !geodb_module_setup(NULL) || !address_parser_module_setup(address_parser_dir)) {
         exit(EXIT_FAILURE);
     }
 
@@ -116,15 +115,26 @@ int main(int argc, char **argv) {
             printf("Result:\n\n");
             printf("{\n");
             for (int i = 0; i < parsed->num_components; i++) {
-                char *json_string = json_encode_string(parsed->components[i]);
+                char *component = parsed->components[i];
+                utf8proc_uint8_t *normalized = NULL;
+                utf8proc_map((utf8proc_uint8_t *)component, 0, &normalized, UTF8PROC_NULLTERM | UTF8PROC_COMPOSE);
+                if (normalized == NULL) {
+                    log_error("Error parsing address\n");
+                    exit(EXIT_FAILURE);
+                }
+
+                char *json_string = json_encode_string((char *)normalized);
                 printf("  \"%s\": %s%s\n", parsed->labels[i], json_string, i < parsed->num_components - 1 ? "," : "");
+                free(normalized);
+                free(json_string);
             }
             printf("}\n");
             printf("\n");
 
             address_parser_response_destroy(parsed);
         } else {
-            printf("Error parsing address\n");
+            log_error("Error parsing address\n");
+            exit(EXIT_FAILURE);
         }
 
 next_input:
