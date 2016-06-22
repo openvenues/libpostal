@@ -59,7 +59,8 @@ with the general error-driven averaged perceptron.
 #define NULL_PHRASE_MEMBERSHIP -1
 
 #define ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS NORMALIZE_STRING_COMPOSE | NORMALIZE_STRING_LOWERCASE | NORMALIZE_STRING_LATIN_ASCII
-#define ADDRESS_PARSER_NORMALIZE_TOKEN_OPTIONS NORMALIZE_TOKEN_DELETE_HYPHENS | NORMALIZE_TOKEN_DELETE_FINAL_PERIOD | NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS | NORMALIZE_TOKEN_REPLACE_DIGITS
+#define ADDRESS_PARSER_NORMALIZE_TOKEN_OPTIONS NORMALIZE_TOKEN_DELETE_FINAL_PERIOD | NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS | NORMALIZE_TOKEN_REPLACE_DIGITS
+#define ADDRESS_PARSER_NORMALIZE_PHRASE_TOKEN_OPTIONS ADDRESS_PARSER_NORMALIZE_TOKEN_OPTIONS ^ NORMALIZE_TOKEN_REPLACE_DIGITS
 
 #define ADDRESS_SEPARATOR_NONE 0
 #define ADDRESS_SEPARATOR_FIELD_INTERNAL 1 << 0
@@ -77,10 +78,11 @@ with the general error-driven averaged perceptron.
 #define ADDRESS_COMPONENT_SUBURB 1 << 7
 #define ADDRESS_COMPONENT_CITY_DISTRICT 1 << 8
 #define ADDRESS_COMPONENT_CITY 1 << 9
-#define ADDRESS_COMPONENT_STATE_DISTRICT 1 << 10
-#define ADDRESS_COMPONENT_STATE 1 << 11
-#define ADDRESS_COMPONENT_POSTAL_CODE 1 << 12
-#define ADDRESS_COMPONENT_COUNTRY 1 << 13
+#define ADDRESS_COMPONENT_ISLAND 1 << 10
+#define ADDRESS_COMPONENT_STATE_DISTRICT 1 << 11
+#define ADDRESS_COMPONENT_STATE 1 << 12
+#define ADDRESS_COMPONENT_POSTAL_CODE 1 << 13
+#define ADDRESS_COMPONENT_COUNTRY 1 << 14
 
 typedef enum {
     ADDRESS_PARSER_HOUSE,
@@ -90,6 +92,7 @@ typedef enum {
     ADDRESS_PARSER_CITY_DISTRICT,
     ADDRESS_PARSER_CITY,
     ADDRESS_PARSER_STATE_DISTRICT,
+    ADDRESS_PARSER_ISLAND,
     ADDRESS_PARSER_STATE,
     ADDRESS_PARSER_POSTAL_CODE,
     ADDRESS_PARSER_COUNTRY,
@@ -103,8 +106,9 @@ typedef enum {
 #define ADDRESS_PARSER_LABEL_CITY_DISTRICT "city_district"
 #define ADDRESS_PARSER_LABEL_CITY "city"
 #define ADDRESS_PARSER_LABEL_STATE_DISTRICT  "state_district"
+#define ADDRESS_PARSER_LABEL_ISLAND "island"
 #define ADDRESS_PARSER_LABEL_STATE  "state"
-#define ADDRESS_PARSER_LABEL_POSTAL_CODE  "postal_code"
+#define ADDRESS_PARSER_LABEL_POSTAL_CODE  "postcode"
 #define ADDRESS_PARSER_LABEL_COUNTRY  "country"
 
 typedef union address_parser_types {
@@ -120,20 +124,29 @@ typedef struct address_parser_context {
     char *language;
     char *country;
     cstring_array *features;
+    // Temporary strings used at each token during feature extraction
     char_array *phrase;
+    char_array *context_phrase;
+    char_array *long_context_phrase;
     char_array *component_phrase;
+    char_array *context_component_phrase;
+    char_array *long_context_component_phrase;
     char_array *geodb_phrase;
+    char_array *context_geodb_phrase;
+    char_array *long_context_geodb_phrase;
+    // For hyphenated words
+    char_array *sub_token;
+    token_array *sub_tokens;
+    // Strings/arrays relating to the sentence
     uint32_array *separators;
     cstring_array *normalized;
+    // Known phrases
     phrase_array *address_dictionary_phrases;
-    // Index in address_dictionary_phrases or -1
-    int64_array *address_phrase_memberships;
+    int64_array *address_phrase_memberships; // Index in address_dictionary_phrases or -1
     phrase_array *geodb_phrases;
-    // Index in gedob_phrases or -1
-    int64_array *geodb_phrase_memberships;
+    int64_array *geodb_phrase_memberships; // Index in gedob_phrases or -1
     phrase_array *component_phrases;
-    // Index in component_phrases or -1
-    int64_array *component_phrase_memberships;
+    int64_array *component_phrase_memberships; // Index in component_phrases or -1
     tokenized_string_t *tokenized_str;
 } address_parser_context_t;
 
