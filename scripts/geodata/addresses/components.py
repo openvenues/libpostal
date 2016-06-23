@@ -31,6 +31,7 @@ from geodata.names.normalization import name_affixes
 from geodata.osm.components import osm_address_components
 from geodata.places.config import place_config
 from geodata.states.state_abbreviations import state_abbreviations
+from geodata.text.utils import is_numeric
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
@@ -405,7 +406,7 @@ class AddressComponents(object):
 
         for k, combo in six.iteritems(combo_config):
             components = OrderedDict.fromkeys(combo['components']).keys()
-            if not all((c in address_components and (c in generated_components or self.is_numeric(address_components[c])) for c in components)):
+            if not all((c in address_components and (c in generated_components or is_numeric(address_components[c])) for c in components)):
                 continue
 
             combos.append((len(components), combo))
@@ -471,13 +472,9 @@ class AddressComponents(object):
         else:
             return num_type
 
-    def is_numeric(self, component):
-        tokens = tokenize(component)
-        return sum((1 for t, c in tokens if c == token_types.NUMERIC or c not in token_types.WORD_TOKEN_TYPES)) == len(tokens)
-
     def get_component_phrase(self, cls, component, language, country=None):
         component = safe_decode(component)
-        if self.is_numeric(component):
+        if is_numeric(component):
             phrase = cls.phrase(component, language, country=country)
             if phrase != component:
                 return phrase
@@ -937,6 +934,23 @@ class AddressComponents(object):
                 for component in components[1:]:
                     address_components.pop(component, None)
 
+    def cleanup_venue_name(self, address_components):
+        '''
+        Venue name cleanup
+        ------------------
+
+        A venue name that's the same as the house number is not valid.
+        This occurs sometimes in OSM where perhaps "7" could be the name
+        of the building but also its house number.
+        '''
+
+        venue_name = address_components.get(AddressFormatter.HOUSE)
+        house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
+
+        if venue_name and house_number and venue_name.strip() == house_number.strip():
+            address_components.pop(AddressFormatter.HOUSE)
+
+
     def cleanup_house_number(self, address_components):
         '''
         House number cleanup
@@ -1107,6 +1121,8 @@ class AddressComponents(object):
         self.replace_names(address_components)
 
         self.prune_duplicate_names(address_components)
+
+        self.cleanup_venue_name(address_components)
 
         self.cleanup_house_number(address_components)
         self.add_house_number_phrase(address_components, language, country=country)
