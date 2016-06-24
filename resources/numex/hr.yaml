@@ -9,6 +9,7 @@
       name: "jedan"
       value: 1
       type: "cardinal"
+      multiply_gte: 1000000
     - 
       name: "jedna"
       value: 1
@@ -117,51 +118,61 @@
       value: 20
       type: "cardinal"
       right: "add"
+      right_separator: " i "
     - 
       name: "trideset"
       value: 30
       type: "cardinal"
       right: "add"
+      right_separator: " i "
     - 
       name: "četrdeset"
       value: 40
       type: "cardinal"
       right: "add"
+      right_separator: " i "
     - 
       name: "cetrdeset"
       value: 40
       type: "cardinal"
       right: "add"
+      right_separator: " i "
     - 
       name: "pedeset"
       value: 50
       type: "cardinal"
       right: "add"
+      right_separator: " i "
     - 
       name: "šezdeset"
       value: 60
       type: "cardinal"
       right: "add"
+      right_separator: " i "
     - 
       name: "sezdeset"
       value: 60
       type: "cardinal"
       right: "add"
+      right_separator: " i "
     - 
       name: "sedamdeset"
       value: 70
       type: "cardinal"
       right: "add"
+      right_separator: " i "
     - 
       name: "osamdeset"
       value: 80
       type: "cardinal"
       right: "add"
+      right_separator: " i "
     - 
       name: "devedeset"
       value: 90
       type: "cardinal"
       right: "add"
+      right_separator: " i "
     - 
       name: "sto"
       value: 100
@@ -223,12 +234,14 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
     - 
       name: "tisucu"
       value: 1000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
     - 
       name: "tisuće"
       value: 1000
@@ -259,6 +272,7 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
     - 
       name: "milijuna"
       value: 1000000
@@ -271,6 +285,7 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
     - 
       name: "milijarde"
       value: 1000000000
@@ -289,6 +304,7 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
     - 
       name: "bilijuna"
       value: 1000000000000
@@ -301,6 +317,7 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
     - 
       name: "bilijarde"
       value: 1000000000000000

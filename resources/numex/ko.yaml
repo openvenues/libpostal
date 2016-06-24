@@ -1,4 +1,5 @@
 ---
+  default_separator: ""
   rules:
     - 
       name: "영"

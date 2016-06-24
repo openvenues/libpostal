@@ -6,9 +6,10 @@
       value: 0
       type: "cardinal"
     - 
-      name: "et"
+      name: "en"
       value: 1
       type: "cardinal"
+      multiply_gte: 1000000
     - 
       name: "ett"
       value: 1
@@ -18,11 +19,11 @@
       value: 2
       type: "cardinal"
     - 
-      name: "tva"
+      name: "tvaa"
       value: 2
       type: "cardinal"
     - 
-      name: "tvaa"
+      name: "tva"
       value: 2
       type: "cardinal"
     - 
@@ -50,11 +51,11 @@
       value: 8
       type: "cardinal"
     - 
-      name: "atta"
+      name: "aatta"
       value: 8
       type: "cardinal"
     - 
-      name: "aatta"
+      name: "atta"
       value: 8
       type: "cardinal"
     - 
@@ -137,18 +138,23 @@
       type: "cardinal"
       right: "add"
     - 
-      name: "attio"
+      name: "aattio"
       value: 80
       type: "cardinal"
       right: "add"
     - 
-      name: "aattio"
+      name: "attio"
       value: 80
       type: "cardinal"
       right: "add"
     - 
       name: "nittio"
       value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "etthundra"
+      value: 100
       type: "cardinal"
       right: "add"
     - 
@@ -168,50 +174,63 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
-      name: "en miljon"
+      name: "miljon"
       value: 1000000
       type: "cardinal"
       right: "add"
+      exact_multiple_only: true
+      right_separator: " "
     - 
       name: "miljoner"
       value: 1000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
-      name: "en miljard"
+      name: "miljard"
       value: 1000000000
       type: "cardinal"
       right: "add"
+      exact_multiple_only: true
+      right_separator: " "
     - 
       name: "miljarder"
       value: 1000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
-      name: "en biljon"
+      name: "biljon"
       value: 1000000000000
       type: "cardinal"
       right: "add"
+      exact_multiple_only: true
+      right_separator: " "
     - 
       name: "biljoner"
       value: 1000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
-      name: "en biljard"
+      name: "biljard"
       value: 1000000000000000
       type: "cardinal"
       right: "add"
+      exact_multiple_only: true
+      right_separator: " "
     - 
       name: "biljarder"
       value: 1000000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "nollte"
       value: 0
@@ -293,11 +312,11 @@
       value: 8
       type: "ordinal"
     - 
-      name: "attonde"
+      name: "aattonde"
       value: 8
       type: "ordinal"
     - 
-      name: "aattonde"
+      name: "attonde"
       value: 8
       type: "ordinal"
     - 
@@ -319,80 +338,80 @@
     - 
       name: "trettonde"
       value: 13
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "fjortonde"
       value: 14
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "femtonde"
       value: 15
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "sextonde"
       value: 16
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "sjuttonde"
       value: 17
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "artonde"
       value: 18
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "nittonde"
       value: 19
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "tjugonde"
       value: 20
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "trettionde"
       value: 30
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "fyrtionde"
       value: 40
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "femtionde"
       value: 50
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "sextionde"
       value: 60
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "sjuttionde"
       value: 70
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "åttionde"
       value: 80
-      type: "cardinal"
-    - 
-      name: "attionde"
-      value: 80
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "aattionde"
       value: 80
-      type: "cardinal"
+      type: "ordinal"
+    - 
+      name: "attionde"
+      value: 80
+      type: "ordinal"
     - 
       name: "nittionde"
       value: 90
-      type: "cardinal"
+      type: "ordinal"
     - 
       name: "hundrade"
       value: 100
-      type: "cardinal"
+      type: "ordinal"
       left: "multiply"
     - 
       name: "tusende"
       value: 1000
-      type: "cardinal"
+      type: "ordinal"
       left: "multiply"
     - 
       name: "miljonte"

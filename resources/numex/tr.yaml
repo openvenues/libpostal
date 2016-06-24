@@ -13,6 +13,7 @@
       name: "bir"
       value: 1
       type: "cardinal"
+      multiply_gte: 1000000
     - 
       name: "iki"
       value: 2

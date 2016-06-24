@@ -13,6 +13,7 @@
       name: "una"
       value: 1
       type: "cardinal"
+      multiply_gte: 100
     - 
       name: "doi"
       value: 2
@@ -114,56 +115,67 @@
       value: 20
       type: "cardinal"
       right: "add"
+      right_separator: " şi "
     - 
       name: "treizeci"
       value: 30
       type: "cardinal"
       right: "add"
+      right_separator: " si "
     - 
       name: "patruzeci"
       value: 40
       type: "cardinal"
       right: "add"
+      right_separator: " şi "
     - 
       name: "cincizeci"
       value: 50
       type: "cardinal"
       right: "add"
+      right_separator: " şi "
     - 
       name: "şasezeci"
       value: 60
       type: "cardinal"
       right: "add"
+      right_separator: " şi "
     - 
       name: "sasezeci"
       value: 60
       type: "cardinal"
       right: "add"
+      right_separator: " si "
     - 
       name: "şaptezeci"
       value: 70
       type: "cardinal"
       right: "add"
+      right_separator: " şi "
     - 
       name: "saptezeci"
       value: 70
       type: "cardinal"
       right: "add"
+      right_separator: " si "
     - 
       name: "optzeci"
       value: 80
       type: "cardinal"
       right: "add"
+      right_separator: " şi "
     - 
       name: "nouăzeci"
       value: 90
       type: "cardinal"
       right: "add"
+      right_separator: " şi "
     - 
       name: "nouazeci"
       value: 90
       type: "cardinal"
       right: "add"
+      right_separator: " si "
     - 
       name: "sută"
       value: 100

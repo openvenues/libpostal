@@ -22,6 +22,7 @@
       value: 1
       type: "cardinal"
       gender: "n"
+      multiply_gte: 1000000
     - 
       name: "ενα"
       value: 1
@@ -288,11 +289,13 @@
       value: 100
       type: "cardinal"
       right: "add"
+      right_separator: "ν "
     - 
       name: "εκατο"
       value: 100
       type: "cardinal"
       right: "add"
+      right_separator: "ν "
     - 
       name: "διακόσιοι"
       value: 200

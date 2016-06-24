@@ -5,6 +5,7 @@
       name: "nič"
       value: 0
       type: "cardinal"
+      multiply_gte: 1000000
     - 
       name: "nic"
       value: 0

@@ -1,5 +1,6 @@
 ---
   whole_words_only: true
+  default_separator: ""
   rules:
     - 
       name: "null"
@@ -14,11 +15,13 @@
       value: 1
       type: "cardinal"
       gender: "m"
+      multiply_gte: 100
     - 
       name: "eine"
       value: 1
       type: "cardinal"
       gender: "f"
+      multiply_gte: 1000000
     - 
       name: "einen"
       value: 1
@@ -133,116 +136,145 @@
       value: 20
       type: "cardinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "dreißig"
       value: 30
       type: "cardinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "dreissig"
       value: 30
       type: "cardinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "vierzig"
       value: 40
       type: "cardinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "fünfzig"
       value: 50
       type: "cardinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "funfzig"
       value: 50
       type: "cardinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "fuenfzig"
       value: 50
       type: "cardinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "sechzig"
       value: 60
       type: "cardinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "siebzig"
       value: 70
       type: "cardinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "achtzig"
       value: 80
       type: "cardinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "neunzig"
       value: 90
       type: "cardinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "hundert"
       value: 100
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: ""
     - 
       name: "tausend"
       value: 1000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: ""
     - 
       name: "million"
       value: 1000000
       type: "cardinal"
       left: "multiply"
+      left_separator: " "
       right: "add"
+      right_separator: " "
     - 
       name: "millionen"
       value: 1000000
       type: "cardinal"
       left: "multiply"
+      left_separator: " "
       right: "add"
+      right_separator: " "
     - 
       name: "milliarde"
       value: 1000000000
       type: "cardinal"
       left: "multiply"
+      left_separator: " "
       right: "add"
+      right_separator: " "
     - 
       name: "milliarden"
       value: 1000000000
       type: "cardinal"
       left: "multiply"
+      left_separator: " "
       right: "add"
+      right_separator: " "
     - 
       name: "billion"
       value: 1000000000000
       type: "cardinal"
       left: "multiply"
+      left_separator: " "
       right: "add"
+      right_separator: " "
     - 
       name: "billionen"
       value: 1000000000000
       type: "cardinal"
       left: "multiply"
+      left_separator: " "
       right: "add"
+      right_separator: " "
     - 
       name: "billiarde"
       value: 1000000000000000
       type: "cardinal"
       left: "multiply"
+      left_separator: " "
       right: "add"
+      right_separator: " "
     - 
       name: "billiarden"
       value: 1000000000000000
       type: "cardinal"
       left: "multiply"
+      left_separator: " "
       right: "add"
+      right_separator: " "
     - 
       name: "nullte"
       value: 0
@@ -560,166 +592,199 @@
       value: 20
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "zwanzigster"
       value: 20
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "zwanzigstes"
       value: 20
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "dreißigste"
       value: 30
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "dreißigster"
       value: 30
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "dreißigstes"
       value: 30
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "dreissigste"
       value: 30
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "dreissigster"
       value: 30
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "dreissigstes"
       value: 30
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "vierzigste"
       value: 40
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "vierzigster"
       value: 40
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "vierzigstes"
       value: 40
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "fünfzigste"
       value: 50
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "fünfzigster"
       value: 50
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "fünfzigstes"
       value: 50
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "funfzigste"
       value: 50
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "funfzigster"
       value: 50
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "funfzigstes"
       value: 50
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "fuenfzigste"
       value: 50
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "fuenfzigster"
       value: 50
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "fuenfzigstes"
       value: 50
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "sechzigste"
       value: 60
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "sechzigster"
       value: 60
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "sechzigstes"
       value: 60
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "siebzigste"
       value: 70
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "siebzigster"
       value: 70
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "siebzigstes"
       value: 70
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "achtzigste"
       value: 80
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "achtzigster"
       value: 80
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "achtzigstes"
       value: 80
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "neunzigste"
       value: 90
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "neunzigster"
       value: 90
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "neunzigstes"
       value: 90
       type: "ordinal"
       left: "add"
+      left_separator: "und"
     - 
       name: "hundertste"
       value: 100

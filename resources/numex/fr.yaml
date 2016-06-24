@@ -14,6 +14,7 @@
       value: 1
       type: "cardinal"
       gender: "m"
+      multiply_gte: 1000000
     - 
       name: "une"
       value: 1
@@ -80,8 +81,16 @@
       value: 16
       type: "cardinal"
     - 
+      name: "dix-sept"
+      value: 17
+      type: "cardinal"
+    - 
       name: "dix sept"
       value: 17
+      type: "cardinal"
+    - 
+      name: "dix-huit"
+      value: 18
       type: "cardinal"
     - 
       name: "dix huit"
@@ -90,6 +99,10 @@
     - 
       name: "dixhuit"
       value: 18
+      type: "cardinal"
+    - 
+      name: "dix-neuf"
+      value: 19
       type: "cardinal"
     - 
       name: "dix neuf"
@@ -104,48 +117,91 @@
       value: 20
       type: "cardinal"
       right: "add"
+      right_separator: "-"
+    - 
+      name: "vingt-et-un"
+      value: 21
+      type: "cardinal"
     - 
       name: "trente"
       value: 30
       type: "cardinal"
       right: "add"
+      right_separator: "-"
+    - 
+      name: "trente-et-un"
+      value: 31
+      type: "cardinal"
     - 
       name: "quarante"
       value: 40
       type: "cardinal"
       right: "add"
+      right_separator: "-"
+    - 
+      name: "quarante-et-un"
+      value: 41
+      type: "cardinal"
     - 
       name: "cinquante"
       value: 50
       type: "cardinal"
       right: "add"
+      right_separator: "-"
+    - 
+      name: "cinquante-et-un"
+      value: 51
+      type: "cardinal"
     - 
       name: "soixante"
       value: 60
       type: "cardinal"
       radix: 20
       right: "add"
+      right_separator: "-"
     - 
       name: "septante"
       value: 70
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "huitante"
       value: 80
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
-      name: "octante"
+      name: "quatre-vingt"
       value: 80
       type: "cardinal"
+      radix: 20
       right: "add"
+      right_separator: "-"
+    - 
+      name: "quatre-vingt"
+      value: 80
+      type: "cardinal"
+      radix: 20
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "quatrevingt"
+      value: 80
+      type: "cardinal"
+      radix: 20
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "quatre-vingts"
+      value: 80
+      type: "cardinal"
+      radix: 20
     - 
       name: "quatre vingts"
       value: 80
       type: "cardinal"
       radix: 20
-      right: "add"
     - 
       name: "quatrevingts"
       value: 80
@@ -153,28 +209,24 @@
       radix: 20
       right: "add"
     - 
-      name: "quatre vingt"
+      name: "octante"
       value: 80
       type: "cardinal"
-      radix: 20
       right: "add"
-    - 
-      name: "quatrevingt"
-      value: 80
-      type: "cardinal"
-      radix: 20
-      right: "add"
+      right_separator: "-"
     - 
       name: "nonante"
       value: 90
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "cent"
       value: 100
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
     - 
       name: "cents"
       value: 100

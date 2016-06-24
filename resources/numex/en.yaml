@@ -13,6 +13,7 @@
       name: "one"
       value: 1
       type: "cardinal"
+      multiply_gte: 100
     - 
       name: "two"
       value: 2
@@ -90,46 +91,55 @@
       value: 20
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "thirty"
       value: 30
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "forty"
       value: 40
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "fourty"
       value: 40
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "fifty"
       value: 50
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "sixty"
       value: 60
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "seventy"
       value: 70
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "eighty"
       value: 80
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "ninety"
       value: 90
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "hundred"
       value: 100
