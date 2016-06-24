@@ -2,6 +2,7 @@
 and
 @
 at
-at the corner of
-corner of
+at the corner of|at the cnr of
+corner|cnr
+corner of|cnr of
 between|betw|btwn|btw|btween|b / t
