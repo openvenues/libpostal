@@ -1,5 +1,6 @@
 ---
   whole_words_only: true
+  default_separator: ""
   rules:
     - 
       name: "zero"
@@ -10,6 +11,7 @@
       value: 1
       type: "cardinal"
       gender: "m"
+      multiply_gte: 1000000
     - 
       name: "uno"
       value: 1
@@ -229,42 +231,53 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
+      right_separator: " "
     - 
       name: "milioni"
       value: 1000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "miliardo"
       value: 1000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
+      right_separator: " "
     - 
       name: "miliardi"
       value: 1000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "bilione"
       value: 1000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
+      right_separator: " "
     - 
       name: "bilioni"
       value: 1000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "biliarde"
       value: 1000000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
+      right_separator: " "
     - 
       name: "biliardi"
       value: 1000000000000000

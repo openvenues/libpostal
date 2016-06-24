@@ -9,6 +9,7 @@
       name: "адзiн"
       value: 1
       type: "cardinal"
+      multiply_gte: 1000000
     - 
       name: "адно"
       value: 1
@@ -19,6 +20,7 @@
       value: 1
       type: "cardinal"
       gender: "f"
+      multiply_gte: 1000
     - 
       name: "два"
       value: 2

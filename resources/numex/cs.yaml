@@ -19,6 +19,7 @@
       value: 1
       type: "cardinal"
       gender: "f"
+      multiply_gte: 100
     - 
       name: "dva"
       value: 2

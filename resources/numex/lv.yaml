@@ -1,5 +1,6 @@
 ---
   whole_words_only: true
+  default_separator: ""
   rules:
     - 
       name: "nulle"
@@ -9,6 +10,7 @@
       name: "viens"
       value: 1
       type: "cardinal"
+      multiply_gte: 1000000
     - 
       name: "viena"
       value: 1
@@ -269,222 +271,268 @@
       value: 100
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "divsimt"
       value: 200
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "trīssimt"
       value: 300
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "trissimt"
       value: 300
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "četrsimt"
       value: 400
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "cetrsimt"
       value: 400
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "piecsimt"
       value: 500
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "sešsimt"
       value: 600
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "sessimt"
       value: 600
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "septiņsimt"
       value: 700
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "septinsimt"
       value: 700
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "astoņsimt"
       value: 800
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "astonsimt"
       value: 800
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "deviņsimt"
       value: 900
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "devinsimt"
       value: 900
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "tūkstoš"
       value: 1000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "tukstos"
       value: 1000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "tūkstoši"
       value: 1000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "tukstosi"
       value: 1000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "divtūkstoš"
       value: 2000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "divtukstos"
       value: 2000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "trīstūkstoš"
       value: 3000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "tristukstos"
       value: 3000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "četrtūkstoš"
       value: 4000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "cetrtukstos"
       value: 4000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "piectūkstoš"
       value: 5000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "piectukstos"
       value: 5000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "seštūkstoš"
       value: 6000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "sestukstos"
       value: 6000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "septiņtūkstoš"
       value: 7000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "septintukstos"
       value: 7000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "astoņtūkstoš"
       value: 8000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "astontukstos"
       value: 8000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "deviņtūkstoš"
       value: 9000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "devintukstos"
       value: 9000
       type: "cardinal"
       right: "add"
+      right_separator: " "
     - 
       name: "miljons"
       value: 1000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
+      right_separator: " "
     - 
       name: "miljoni"
       value: 1000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "miljards"
       value: 1000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
+      right_separator: " "
     - 
       name: "miljardi"
       value: 1000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "biljons"
       value: 1000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
+      right_separator: " "
     - 
       name: "biljoni"
       value: 1000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "biljards"
       value: 1000000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      exact_multiple_only: true
+      right_separator: " "
     - 
       name: "biljardi"
       value: 1000000000000000

@@ -14,11 +14,13 @@
       value: 1
       type: "cardinal"
       gender: "f"
+      multiply_gte: 1000
     - 
       name: "одной"
       value: 1
       type: "cardinal"
       gender: "f"
+      category: "genitive"
     - 
       name: "одно"
       value: 1

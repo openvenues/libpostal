@@ -14,6 +14,7 @@
       value: 1
       type: "cardinal"
       gender: "n"
+      multiply_gte: 100
     - 
       name: "to"
       value: 2
@@ -90,69 +91,86 @@
       name: "tyve"
       value: 20
       type: "cardinal"
+      left: "add"
+      left_separator: "og"
     - 
       name: "tredive"
       value: 30
       type: "cardinal"
+      left: "add"
+      left_separator: "og"
     - 
       name: "fyrre"
       value: 40
       type: "cardinal"
+      left: "add"
+      left_separator: "og"
     - 
       name: "halvtreds"
       value: 50
       type: "cardinal"
+      left: "add"
+      left_separator: "og"
     - 
       name: "tres"
       value: 60
       type: "cardinal"
+      left: "add"
+      left_separator: "og"
     - 
       name: "halvfjerds"
       value: 70
       type: "cardinal"
+      left: "add"
+      left_separator: "og"
     - 
       name: "firs"
       value: 80
       type: "cardinal"
+      left: "add"
+      left_separator: "og"
     - 
       name: "halvfems"
       value: 90
       type: "cardinal"
+      left: "add"
+      left_separator: "og"
     - 
-      name: "et­hundrede"
-      value: 100
-      type: "cardinal"
-      right: "add"
-    - 
-      name: "hundred"
+      name: "hundrede"
       value: 100
       type: "cardinal"
       left: "multiply"
+      left_separator: ""
       right: "add"
+      right_separator: " og "
     - 
-      name: "et tusinde"
+      name: "tusinde"
       value: 1000
       type: "cardinal"
+      left: "multiply"
       right: "add"
+      right: "add"
+      right_separator: " og "
     - 
       name: "tusind"
       value: 1000
       type: "cardinal"
+      gender: "n"
       left: "multiply"
       right: "add"
+      right_separator: " og "
     - 
-      name: "en million"
+      name: "million"
       value: 1000000
       type: "cardinal"
       right: "add"
-    - 
+    -
       name: "millioner"
       value: 1000000
       type: "cardinal"
-      left: "multiply"
       right: "add"
     - 
-      name: "en milliard"
+      name: "milliard"
       value: 1000000000
       type: "cardinal"
       right: "add"
@@ -163,7 +181,7 @@
       left: "multiply"
       right: "add"
     - 
-      name: "en billion"
+      name: "billion"
       value: 1000000000000
       type: "cardinal"
       right: "add"
@@ -174,7 +192,7 @@
       left: "multiply"
       right: "add"
     - 
-      name: "en billiard"
+      name: "billiard"
       value: 1000000000000000
       type: "cardinal"
       right: "add"
@@ -184,6 +202,174 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
+    -
+      name: "nulte"
+      value: 0
+      type: "ordinal"
+    -
+      name: "første"
+      value: 1
+      type: "ordinal"
+    -
+      name: "foerste"
+      value: 1
+      type: "ordinal"
+    -
+      name: "anden"
+      value: 2
+      type: "ordinal"
+    -
+      name: "tredje"
+      value: 3
+      type: "ordinal"
+    -
+      name: "fjerde"
+      value: 4
+      type: "ordinal"
+    -
+      name: "femte"
+      value: 5
+      type: "ordinal"
+    -
+      name: "sjette"
+      value: 6
+      type: "ordinal"
+    -
+      name: "syvende"
+      value: 7
+      type: "ordinal"
+    -
+      name: "ottende"
+      value: 8
+      type: "ordinal"
+    -
+      name: "niende"
+      value: 9
+      type: "ordinal"
+    -
+      name: "tiende"
+      value: 10
+      type: "ordinal"
+    -
+      name: "ellevte"
+      value: 11
+      type: "ordinal"
+    -
+      name: "tolvte"
+      value: 12
+      type: "ordinal"
+    -
+      name: "trettende"
+      value: 13
+      type: "ordinal"
+    -
+      name: "fjortende"
+      value: 14
+      type: "ordinal"
+    -
+      name: "femtende"
+      value: 15
+      type: "ordinal"
+    -
+      name: "sekstende"
+      value: 16
+      type: "ordinal"
+    -
+      name: "syttende"
+      value: 17
+      type: "ordinal"
+    -
+      name: "attende"
+      value: 18
+      type: "ordinal"
+    -
+      name: "nittende"
+      value: 19
+      type: "ordinal"
+    -
+      name: "tyvende"
+      value: 20
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "tredivte"
+      value: 30
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "fyrrende"
+      value: 40
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "halvtredsindstyvende"
+      value: 50
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "tresindstyvende"
+      value: 60
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "halvfjerdsindstyvende"
+      value: 70
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "firsindstyvende"
+      value: 80
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "halvfemsindstyvende"
+      value: 90
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    - 
+      name: "hundredede"
+      value: 100
+      type: "ordinal"
+      left: "multiply"
+      left_separator: " "
+    - 
+      name: "tusinde"
+      value: 1000
+      type: "ordinal"
+      left: "multiply"
+      left_separator: " "
+    - 
+      name: "millionte"
+      value: 1000000
+      type: "ordinal"
+      left: "multiply"
+      left_separator: " "
+    - 
+      name: "milliardte"
+      value: 1000000000
+      type: "ordinal"
+      left: "multiply"
+      left_separator: " "
+    - 
+      name: "billionte"
+      value: 1000000000000
+      type: "ordinal"
+      left: "multiply"
+      left_separator: " "
+    - 
+      name: "billiardte"
+      value: 1000000000000000
+      type: "ordinal"
+      left: "multiply"
+      left_separator: " "
   ordinal_indicators:
     - 
       suffixes:

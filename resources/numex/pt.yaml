@@ -5,6 +5,7 @@
       name: "um"
       value: 1
       type: "cardinal"
+      multiply_gte: 1000000
     - 
       name: "uma"
       value: 1
@@ -96,193 +97,228 @@
       value: 20
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "trinta"
       value: 30
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "quarenta"
       value: 40
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "cinquenta"
       value: 50
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "sessenta"
       value: 60
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "setenta"
       value: 70
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "oitenta"
       value: 80
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "noventa"
       value: 90
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "cem"
       value: 100
       type: "cardinal"
       right: "add"
+      exact_multiple_only: true
     - 
       name: "cento"
       value: 100
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "duzentos"
       value: 200
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "trezentos"
       value: 300
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "quatrocentos"
       value: 400
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "quinhentos"
       value: 500
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "seiscentos"
       value: 600
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "setecentos"
       value: 700
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "oitocentos"
       value: 800
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "novecentos"
       value: 900
       type: "cardinal"
       right: "add"
+      right_separator: " e "
     - 
       name: "mil"
       value: 1000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "milhão"
       value: 1000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "milhao"
       value: 1000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "milhões"
       value: 1000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "milhoes"
       value: 1000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "bilhão"
       value: 1000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "bilhao"
       value: 1000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "bilhões"
       value: 1000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "bilhoes"
       value: 1000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "trilhão"
       value: 1000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "trilhao"
       value: 1000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "trilhões"
       value: 1000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "trilhoes"
       value: 1000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "quatrilhão"
       value: 1000000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "quatrilhao"
       value: 1000000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "quatrilhões"
       value: 1000000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "quatrilhoes"
       value: 1000000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " e "
     - 
       name: "primeiro"
       value: 1

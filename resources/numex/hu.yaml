@@ -1,5 +1,6 @@
 ---
   whole_words_only: true
+  default_separator: ""
   rules:
     - 
       name: "nulla"
@@ -9,12 +10,17 @@
       name: "egy"
       value: 1
       type: "cardinal"
+      multiply_gte: 1000000
     - 
       name: "kettő"
       value: 2
       type: "cardinal"
     - 
       name: "ketto"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "két"
       value: 2
       type: "cardinal"
     - 
@@ -149,6 +155,7 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "millió"
       value: 1000000

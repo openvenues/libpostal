@@ -9,6 +9,7 @@
       name: "un"
       value: 1
       type: "cardinal"
+      multiply_gte: 1000000
     - 
       name: "una"
       value: 1
@@ -96,46 +97,56 @@
       value: 20
       type: "cardinal"
       right: "add"
+      right_separator: "-i-"
     - 
       name: "trenta"
       value: 30
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "quaranta"
       value: 40
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "cinquanta"
       value: 50
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "seixanta"
       value: 60
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "setanta"
       value: 70
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "vuitanta"
       value: 80
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "noranta"
       value: 90
       type: "cardinal"
       right: "add"
+      right_separator: "-"
     - 
       name: "cent"
       value: 100
       type: "cardinal"
       right: "add"
+      right_separator: "-"
+      exact_multiple_only: true
     - 
       name: "cents"
       value: 100

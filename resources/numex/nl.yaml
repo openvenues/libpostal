@@ -1,5 +1,6 @@
 ---
   whole_words_only: true
+  default_separator: ""
   rules:
     - 
       name: "nul"
@@ -86,44 +87,116 @@
       value: 20
       type: "cardinal"
       left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­twintig"
+      value: 22
+      type: "cardinal"
+    - 
+      name: "drie­ën­twintig"
+      value: 23
+      type: "cardinal"
     - 
       name: "dertig"
       value: 30
       type: "cardinal"
       left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­dertig"
+      value: 32
+      type: "cardinal"
+    - 
+      name: "drie­ën­dertig"
+      value: 33
+      type: "cardinal"
     - 
       name: "veertig"
       value: 40
       type: "cardinal"
       left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­veertig"
+      value: 42
+      type: "cardinal"
+    - 
+      name: "drie­ën­veertig"
+      value: 43
+      type: "cardinal"
     - 
       name: "vijftig"
       value: 50
       type: "cardinal"
       left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­vijftig"
+      value: 52
+      type: "cardinal"
+    - 
+      name: "drie­ën­vijftig"
+      value: 53
+      type: "cardinal"
     - 
       name: "zestig"
       value: 60
       type: "cardinal"
       left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­zestig"
+      value: 62
+      type: "cardinal"
+    - 
+      name: "drie­ën­zestig"
+      value: 60
+      type: "cardinal"
     - 
       name: "zeventig"
       value: 70
       type: "cardinal"
       left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­zeventig"
+      value: 72
+      type: "cardinal"
+    - 
+      name: "drie­ën­zeventig"
+      value: 73
+      type: "cardinal"
     - 
       name: "tachtig"
       value: 80
       type: "cardinal"
       left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­tachtig"
+      value: 82
+      type: "cardinal"
+    - 
+      name: "drie­ën­tachtig"
+      value: 83
+      type: "cardinal"
     - 
       name: "negentig"
       value: 90
       type: "cardinal"
       left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­negentig"
+      value: 92
+      type: "cardinal"
+    - 
+      name: "drie­ën­negentig"
+      value: 93
+      type: "cardinal"
     - 
       name: "honderd"
-      value: 20
+      value: 100
       type: "cardinal"
       left: "multiply"
       right: "add"
@@ -139,24 +212,28 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "miljard"
       value: 1000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "biljoen"
       value: 1000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "biljard"
       value: 1000000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      right_separator: " "
     - 
       name: "nulste"
       value: 0
@@ -238,41 +315,59 @@
       value: 20
       type: "ordinal"
       left: "add"
+      left_separator: "en"
     - 
-      name: "dertigste"
+      name: "twintigste"
       value: 20
       type: "ordinal"
       left: "add"
+    - 
+      name: "twintigste"
+      value: 20
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "dertigste"
+      value: 30
+      type: "ordinal"
+      left: "add"
+      left_separator: "en"
     - 
       name: "veerigste"
       value: 40
       type: "ordinal"
       left: "add"
+      left_separator: "en"
     - 
       name: "vijftigste"
       value: 50
       type: "ordinal"
       left: "add"
+      left_separator: "en"
     - 
       name: "zestigste"
       value: 60
       type: "ordinal"
       left: "add"
+      left_separator: "en"
     - 
       name: "zeventigste"
       value: 70
       type: "ordinal"
       left: "add"
+      left_separator: "en"
     - 
       name: "tachtigste"
       value: 80
       type: "ordinal"
       left: "add"
+      left_separator: "en"
     - 
       name: "negentigste"
       value: 90
       type: "ordinal"
       left: "add"
+      left_separator: "en"
     - 
       name: "honderdste"
       value: 100
@@ -286,22 +381,22 @@
     - 
       name: "miljoenste"
       value: 1000000
-      type: "cardinal"
+      type: "ordinal"
       left: "multiply"
     - 
       name: "miljardste"
       value: 1000000000
-      type: "cardinal"
+      type: "ordinal"
       left: "multiply"
     - 
       name: "biljoenste"
       value: 1000000000000
-      type: "cardinal"
+      type: "ordinal"
       left: "multiply"
     - 
       name: "biljardste"
       value: 1000000000000000
-      type: "cardinal"
+      type: "ordinal"
       left: "multiply"
   ordinal_indicators:
     - 

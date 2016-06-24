@@ -1,5 +1,6 @@
 ---
   whole_words_only: true
+  default_separator: ""
   rules:
     - 
       name: "nolla"
@@ -206,6 +207,7 @@
       value: 100
       type: "cardinal"
       right: "add"
+      exact_multiple_only: true
     - 
       name: "sataa"
       value: 100
@@ -228,34 +230,43 @@
       value: 1000000
       type: "cardinal"
       right: "add"
+      exact_multiple_only: true
+      left_separator: " "
     - 
       name: "miljoonaa"
       value: 1000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      left_separator: " "
     - 
       name: "miljardi"
       value: 1000000000
       type: "cardinal"
       right: "add"
+      exact_multiple_only: true
+      left_separator: " "
     - 
       name: "miljardia"
       value: 1000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      left_separator: " "
     - 
       name: "biljoona"
       value: 1000000000000
       type: "cardinal"
       right: "add"
+      exact_multiple_only: true
+      left_separator: " "
     - 
       name: "biljoonaa"
       value: 1000000000000
       type: "cardinal"
       left: "multiply"
       right: "add"
+      left_separator: " "
     - 
       name: "ensimmäinen"
       value: 1

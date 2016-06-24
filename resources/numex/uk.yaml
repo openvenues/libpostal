@@ -9,11 +9,13 @@
       name: "один"
       value: 1
       type: "cardinal"
+      multiply_gte: 1000000
     - 
       name: "одна"
       value: 1
       type: "cardinal"
       gender: "f"
+      multiply_gte: 1000
     - 
       name: "одне"
       value: 1

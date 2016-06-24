@@ -9,6 +9,7 @@
       name: "un"
       value: 1
       type: "cardinal"
+      multiply_gte: 1000000
     - 
       name: "uno"
       value: 1
@@ -94,45 +95,97 @@
       name: "veintiun"
       value: 21
       type: "cardinal"
+    -
+      name: "veintidós"
+      value: 22
+      type: "cardinal"
+    -
+      name: "veintidos"
+      value: 22
+      type: "cardinal"
+    -
+      name: "veintitrés"
+      value: 23
+      type: "cardinal"
+    -
+      name: "veintitres"
+      value: 23
+      type: "cardinal"
+    -
+      name: "veinticuatro"
+      value: 24
+      type: "cardinal"
+    -
+      name: "veinticinco"
+      value: 25
+      type: "cardinal"
+    -
+      name: "veintiséis"
+      value: 26
+      type: "cardinal"
+    -
+      name: "veintiseis"
+      value: 26
+      type: "cardinal"
+    -
+      name: "veintisiete"
+      value: 27
+      type: "cardinal"
+    -
+      name: "veintiocho"
+      value: 28
+      type: "cardinal"
+    -
+      name: "veintinueve"
+      value: 29
+      type: "cardinal"
     - 
       name: "treinta"
       value: 30
       type: "cardinal"
       right: "add"
+      right_separator: " y "
     - 
       name: "cuarenta"
       value: 40
       type: "cardinal"
       right: "add"
+      right_separator: " y "
     - 
       name: "cincuenta"
       value: 50
       type: "cardinal"
       right: "add"
+      right_separator: " y "
     - 
       name: "sesenta"
       value: 60
       type: "cardinal"
       right: "add"
+      right_separator: " y "
     - 
       name: "setenta"
       value: 70
       type: "cardinal"
       right: "add"
+      right_separator: " y "
     - 
       name: "ochenta"
       value: 80
       type: "cardinal"
       right: "add"
+      right_separator: " y "
     - 
       name: "noventa"
       value: 90
       type: "cardinal"
       right: "add"
+      right_separator: " y "
     - 
       name: "cien"
       value: 100
       type: "cardinal"
+      exact_multiple_only: true
     - 
       name: "ciento"
       value: 100
@@ -148,6 +201,7 @@
       value: 200
       type: "cardinal"
       right: "add"
+      gender: "f"
     - 
       name: "trescientos"
       value: 300
@@ -158,6 +212,7 @@
       value: 300
       type: "cardinal"
       right: "add"
+      gender: "f"
     - 
       name: "cuatrocientos"
       value: 400
@@ -168,6 +223,7 @@
       value: 400
       type: "cardinal"
       right: "add"
+      gender: "f"
     - 
       name: "quinientos"
       value: 500
@@ -178,6 +234,7 @@
       value: 500
       type: "cardinal"
       right: "add"
+      gender: "f"
     - 
       name: "seiscientos"
       value: 600
@@ -188,6 +245,7 @@
       value: 600
       type: "cardinal"
       right: "add"
+      gender: "f"
     - 
       name: "setecientos"
       value: 700
@@ -198,6 +256,7 @@
       value: 700
       type: "cardinal"
       right: "add"
+      gender: "f"
     - 
       name: "ochocientos"
       value: 800
@@ -208,6 +267,7 @@
       value: 800
       type: "cardinal"
       right: "add"
+      gender: "f"
     - 
       name: "novecientos"
       value: 900
@@ -218,6 +278,7 @@
       value: 900
       type: "cardinal"
       right: "add"
+      gender: "f"
     - 
       name: "mil"
       value: 1000

@@ -9,6 +9,7 @@
       name: "üks"
       value: 1
       type: "cardinal"
+      multiply_gte: 100
     - 
       name: "uks"
       value: 1

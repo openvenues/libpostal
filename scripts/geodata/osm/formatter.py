@@ -399,6 +399,12 @@ class OSMAddressFormatter(object):
             num_floors = self.num_floors(building_components)
             num_basements = self.num_floors(building_components, key='building:levels:underground')
 
+            building_tags = self.normalize_address_components(tags)
+
+            for k, v in six.iteritems(building_tags):
+                if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD, AddressFormatter.HOUSE):
+                    revised_tags[k] = v
+
         subdivision_components = self.subdivision_components(latitude, longitude)
         if subdivision_components:
             zone = self.zone(subdivision_components)
