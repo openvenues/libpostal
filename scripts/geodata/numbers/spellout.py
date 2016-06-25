@@ -392,4 +392,58 @@ class NumericExpressions(object):
                 remainder = 0
                 did_left_multiply = False
 
+    def spellout_cardinal_hundreds(self, num, lang, gender=None, category=None, splitter=six.u(' ')):
+        if num % 100 >= 10:
+            first_hundred = self.spellout_cardinal(num % 100, lang, gender=gender, category=category)
+        elif num % 100 == 0:
+            rules = self.cardinal_rules.get(lang)
+            if not rules:
+                return None
+
+            cardinals = rules.get((100, gender, category))
+            if not cardinals:
+                return None
+
+            for rule in cardinals:
+                if rule.get('left') == 'multiply' and not rule.get('exact_multiple_only'):
+                    break
+            else:
+                rule = None
+
+            if not rule:
+                return None
+
+            first_hundred = rule['name']
+        else:
+            rules = self.cardinal_rules.get(lang)
+            if not rules:
+                return None
+
+            tens_place = num % 10
+            zero_rules = rules.get((0, gender, category))
+            if not zero_rules:
+                return None
+
+            tens_place_rules = rules.get((tens_place, gender, category))
+            if not tens_place_rules:
+                return None
+
+            zero_rule = random.choice(zero_rules)
+            tens_rule = random.choice(tens_place_rules)
+
+            first_hundred = splitter.join([zero_rule['name'], tens_rule['name']])
+
+        if not first_hundred:
+            return None
+
+        parts = [first_hundred]
+
+        for i in xrange(1, int(math.ceil(math.log(num, 100)))):
+            part = self.spellout_cardinal(num / 100 ** i, lang, gender=gender, category=category)
+            if not part:
+                return None
+            parts.append(part)
+        return splitter.join(reversed(parts))
+
+
 numeric_expressions = NumericExpressions()
