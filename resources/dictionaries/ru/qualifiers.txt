@@ -4,6 +4,8 @@ blok
 derevnya|der
 гмина|гм
 gmina|gm
+квартал|кварт|кв|кв-л
+kvartal|kvart|kv|kv-l
 микрорайон
 mikrorayon
 област|обл
