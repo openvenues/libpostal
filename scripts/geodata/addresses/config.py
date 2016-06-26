@@ -26,7 +26,7 @@ class AddressConfig(object):
         self.cache = {}
 
         for filename in os.listdir(config_dir):
-            if filename not in ('en.yaml', 'es.yaml', 'ca.yaml', 'fr.yaml', 'de.yaml', 'nl.yaml', 'da.yaml', 'nb.yaml', 'sv.yaml', 'pt.yaml'):
+            if filename not in ('en.yaml', 'es.yaml', 'ca.yaml', 'fr.yaml', 'de.yaml', 'nl.yaml', 'da.yaml', 'nb.yaml', 'sv.yaml', 'pt.yaml', 'pl.yaml'):
                 continue
 
             config = yaml.load(open(os.path.join(ADDRESS_CONFIG_DIR, filename)))
