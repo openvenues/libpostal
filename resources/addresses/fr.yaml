@@ -165,6 +165,20 @@ levels:
         canonical_probability: 0.4
         abbreviated_probability: 0.3
         sample_probability: 0.3
+    rez_de_chaussee_bas: &rez_de_chaussee_bas
+        canonical: rez-de-chaussée bas
+        abbreviated: rcb
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+    rez_de_chaussee_haut: &rez_de_chaussee_haut
+        canonical: rez-de-chaussée haut
+        abbreviated: rch
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
     parterre: &parterre
         canonical: parterre
         sample: true
@@ -194,10 +208,14 @@ levels:
             default: *entresol
         "0":
             default: *rez_de_chaussee
-            probability: 0.94
+            probability: 0.74
             alternatives:
                 - alternative: *rez_de_jardin
                   probability: 0.01
+                - alternative: *rez_de_chaussee_bas
+                  probability: 0.1
+                - alternative: *rez_de_chaussee_haut
+                  probability: 0.1
                 - alternative: *etage
                   probability: 0.05
         "1":
