@@ -542,6 +542,7 @@
       name: "milésimo"
       value: 1000
       type: "ordinal"
+      left: "multiply"
       right: "add"
     - 
       name: "milesimo"
