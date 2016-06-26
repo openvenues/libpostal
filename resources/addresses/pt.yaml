@@ -19,9 +19,55 @@ components:
 
     unit:
         # If no unit number is specified
-        null_probability: 0.3
-        alphanumeric_probability: 0.65
+        null_probability: 0.7
+        alphanumeric_probability: 0.25
         standalone_probability: 0.05
+
+
+    combinations:
+        # For unit types like 2/34 (more common in Canada and Australia)
+        house_number_unit:
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 0.9
+                - separator: " - "
+                  probability: 0.05
+                - separator: /
+                  probability: 0.05
+            probability: 0.005
+        house_number_floor:
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 0.9
+                - separator: " - "
+                  probability: 0.05
+                - separator: /
+                  probability: 0.05
+            probability: 0.005
+
+        house_number_staircase_unit:
+            components:
+                - house_number
+                - staircase
+                - unit
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 0.9
+                - separator: " - "
+                  probability: 0.05
+                - separator: /
+                  probability: 0.05
+            probability: 0.005
+
 
 numbers:
     default: &numero
@@ -144,6 +190,19 @@ levels:
     andar_terreo: &andar_terreo
         canonical: andar terréo
         abbreviated: at
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+    pavimento_terreo: &pavimento_terreo
+        canonical: pavimento terréo
+        abbreviated: pt
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+    terreo: &terreo
+        canonical: terréo
         sample: true
         canonical_probability: 0.3
         abbreviated_probability: 0.4
@@ -663,8 +722,16 @@ units:
         sample_probability: 0.3
         numeric:
             direction: left
+    conjunto: &conjunto
+        canonical: conjunto
+        abbreviated: conj
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.3
+        sample_probability: 0.3
     suite: &suite
         canonical: suite
+        sample: true
         canonical_probability: 0.7
         sample_probability: 0.3
         numeric:
@@ -686,6 +753,13 @@ units:
         canonical: sala
         numeric:
             direction: left
+    unidade: &unidade
+        canonical: unidade
+        abbreviated: un
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.1
+        sample_probability: 0.2
 
     alphanumeric: &unit_alphanumeric
         default: *apartamento
@@ -725,17 +799,19 @@ units:
                 - alternative: *porta
                   probability: 0.05
                 - alternative: *letra
-                  probability: 0.02
+                  probability: 0.015
+                - alternative: *unidade
+                  probability: 0.005
 
     zones:
         residential: *unit_alphanumeric
         commercial:
-            default: *suite
+            default: *sala
             probability: 0.6
             alternatives:
                 - alternative: *escritorio
                   probability: 0.2
-                - alternative: *sala
+                - alternative: *suite
                   probability: 0.2
 
             numeric_probability: 0.9 # e.g. escritório 1
@@ -748,12 +824,12 @@ units:
                 whitespace_probability: 0.1
 
             alpha:
-                default: *suite
+                default: *sala
                 probability: 0.7
                 alternatives:
                     - alternative: *escritorio
                       probability: 0.15
-                    - alternative: *sala
+                    - alternative: *suite
                       probability: 0.1
                     - alternative: *letra
                       probability: 0.05
@@ -830,15 +906,43 @@ countries:
                     default: *andar_terreo
                     probability: 0.4
                     alternatives:
-                        - alternative: *rez_do_chao
-                          probability: 0.34
+                        - alternative: *terreo
+                          probability: 0.2
                         - alternative: *baixos
                           probability: 0.2
+                        - alternative: *rez_do_chao
+                          probability: 0.13
+                        - alternative: *pavimento_terreo
+                          probability: 0.01
                           # Andar / Piso 0 is uncommon
                         - alternative: *andar
                           probability: 0.05
                         - alternative: *piso
                           probability: 0.01
+
+
+        postcodes:
+            alphanumeric:
+                default:
+                    canonical: código de endereçamento postal
+                    abbreviated: cep
+                    sample: true
+                    canonical_probability: 0.001
+                    abbreviated_probability: 0.995
+                    sample_probability: 0.004
+
+                    numeric:
+                        # Postcodes in Brazil are sometimes prefixed by CEP
+                        direction: left
+
+                    numeric_affix:
+                        affix: cep
+                        direction: left
+                    # null_probability means the chance of doing nothing e.g. just the postal code
+                    null_probability: 0.7
+                    numeric_probability: 0.18
+                    numeric_affix_probability: 0.12
+                    strict_numeric: true
 
         po_boxes:
             alphanumeric:
@@ -851,3 +955,29 @@ countries:
                     sample_probability: 0.3
                     numeric:
                         direction: left
+
+        units:
+            zones:
+                commercial:
+                    default: *conjunto
+                    probability: 0.8
+                    alternatives:
+                        - alternative: *sala
+                          probability: 0.1
+                        - alternative: *suite
+                          probability: 0.05
+                        - alternative: *escritorio
+                          probability: 0.05
+
+                    alpha:
+                        default: *conjunto
+                        probability: 0.75
+                        alternatives:
+                            - alternative: *sala
+                              probability: 0.1
+                            - alternative: *suite
+                              probability: 0.05
+                            - alternative: *escritorio
+                              probability: 0.05
+                            - alternative: *letra
+                              probability: 0.05
