@@ -1,1 +1,1 @@
-numero|nº|no|n.º|n.o|n|#
+numero|nº|no|n.º|n.o|n|#|№
