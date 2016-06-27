@@ -5,6 +5,7 @@ from geodata.addresses.config import address_config
 from geodata.encoding import safe_decode
 from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 from geodata.numbers.ordinals import ordinal_expressions
+from geodata.numbers.spellout import numeric_expressions
 from geodata.text.tokenize import tokenize, token_types
 
 alphabets = {}
@@ -259,7 +260,31 @@ class NumberedComponent(object):
 
         whitespace_default = True
 
-        if num_type == 'numeric_affix':
+        if num_type == 'numeric' and safe_decode(num).isdigit():
+            values = []
+            probs = []
+            for cardinal_type in ('roman_numeral', 'spellout'):
+                key = '{}_probability'.format(cardinal_type)
+                if key in props:
+                    values.append(cardinal_type)
+                    probs.append(props[key])
+
+            values.append(None)
+            probs.append(1.0 - sum(probs))
+
+            probs = cdf(probs)
+
+            cardinal_type = weighted_choice(values, probs)
+            cardinal_expression = None
+            if cardinal_type == 'roman_numeral':
+                cardinal_expression = numeric_expressions.roman_numeral(num)
+            elif cardinal_type == 'spellout':
+                cardinal_expression = numeric_expressions.spellout_cardinal(num, language, gender=props.get('gender', None))
+
+            if cardinal_expression is not None:
+                num = cardinal_expression
+
+        elif num_type == 'numeric_affix':
             phrase = props['affix']
             if props.get('upper_case', True):
                 phrase = phrase.upper()
@@ -267,7 +292,33 @@ class NumberedComponent(object):
                 num = num.rjust(props['zero_pad'], props.get('zero_char', '0'))
             whitespace_default = False
         elif num_type == 'ordinal' and safe_decode(num).isdigit():
-            num = ordinal_expressions.suffixed_number(num, language, gender=props.get('gender', None))
+            values = []
+            probs = []
+
+            for ordinal_type in ('roman_numeral', 'spellout'):
+                key = '{}_probability'.format(ordinal_type)
+                if key in props:
+                    values.append(ordinal_type)
+                    probs.append(props[key])
+
+            values.append('digit_suffix')
+            probs.append(1.0 - sum(probs))
+
+            probs = cdf(probs)
+
+            ordinal_type = weighted_choice(values, probs)
+
+            ordinal_expression = None
+            if ordinal_type == 'digit_suffix':
+                ordinal_expression = ordinal_expressions.suffixed_number(num, language, gender=props.get('gender', None))
+
+            elif ordinal_type == 'roman_numeral':
+                ordinal_expression = numeric_expressions.roman_numeral(num)
+            elif ordinal_type == 'spellout':
+                ordinal_expression = numeric_expressions.spellout_ordinal(num, language, gender=props.get('gender', None))
+
+            if ordinal_expression is not None:
+                num = ordinal_expression
 
         if 'null_phrase_probability' in props and (num_type == 'ordinal' or (has_alpha and (has_numeric or 'null_phrase_alpha_only' in props))):
             if random.random() < props['null_phrase_probability']:
