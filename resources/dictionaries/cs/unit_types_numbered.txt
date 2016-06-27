@@ -1,1 +1,3 @@
-apartmá|apartma
+apartmán|apartman|apt
+kancelář|kancelar
+pokoj|pok
