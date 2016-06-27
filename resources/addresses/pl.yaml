@@ -86,6 +86,11 @@ and:
 
 cross_streets:
     and: *i
+    at: &w
+        canonical: w
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2        
     corner_of: &rogu
         canonical: rogu
         sample: true
@@ -100,10 +105,12 @@ cross_streets:
         default: *i
         probability: 0.7
         alternatives:
+            - alternative: *w
+              probability: 0.1
             - alternative: *rogu
-              probability: 0.15
+              probability: 0.1
             - alternative: *na_rogu
-              probability: 0.15
+              probability: 0.1
 
     between:
         canonical: pomiędzy
@@ -121,8 +128,10 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
+            roman_numeral_probability: 0.3
         ordinal:
             direction: right
+            roman_numeral_probability: 0.7
         numeric_probability: 0.4
         ordinal_probability: 0.6
     parter: &parter
@@ -143,6 +152,7 @@ levels:
         # e.g. 1. suterena
         ordinal:
             direction: right
+            roman_numeral_probability: 0.3
         standalone_probability: 0.985
         number_abs_value: true
         number_min_abs_value: 1
