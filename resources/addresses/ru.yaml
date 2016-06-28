@@ -167,8 +167,10 @@ cross_streets:
 levels:
     etazh: &etazh
         canonical: этаж
+        abbreviated: эт
         sample: true
-        canonical_probability: 0.7
+        canonical_probability: 0.4
+        abbreviated_probability: 0.3
         sample_probability: 0.3
         numeric:
             direction: left
@@ -179,6 +181,32 @@ levels:
         ordinal_probability: 0.6
     etazh_latin: &etazh_latin
         canonical: etazh
+        abbreviated: et
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.3
+        sample_probability: 0.3
+        numeric:
+            direction: left
+            direction_probability: 0.9
+        ordinal:
+            direction: right
+        numeric_probability: 0.4
+        ordinal_probability: 0.6
+    uroven: &uroven
+        canonical: уровень
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+        numeric:
+            direction: left
+            direction_probability: 0.9
+        ordinal:
+            direction: right
+        numeric_probability: 0.4
+        ordinal_probability: 0.6
+    uroven_latin: &uroven_latin
+        canonical: uroven'
         sample: true
         canonical_probability: 0.7
         sample_probability: 0.3
@@ -273,10 +301,14 @@ levels:
 
     alphanumeric:
         default: *etazh
-        probability: 0.9
+        probability: 0.8
         alternatives:
             - alternative: *etazh_latin
               probability: 0.1
+            - alternative: *uroven
+              probability: 0.09
+            - alternative: *uroven_latin
+              probability: 0.01
         numeric_probability: 0.99 # With this probability, pick an integer
         alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
         numeric_plus_alpha_probability: 0.0001 # e.g. 2A
