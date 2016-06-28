@@ -6,6 +6,7 @@ from geodata.addresses.config import address_config
 from geodata.addresses.numbering import NumberedComponent, sample_alphabet, latin_alphabet
 from geodata.encoding import safe_decode
 from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
+from geodata.numbers.spellout import numeric_expressions
 
 
 class Floor(NumberedComponent):
@@ -15,7 +16,7 @@ class Floor(NumberedComponent):
     max_floors = 10
     max_basements = 2
     numbered_floors = range(max_floors + 1) + range(-1, -max_basements - 1, -1)
-    floor_probs = zipfian_distribution(len(numbered_floors), 2.0)
+    floor_probs = zipfian_distribution(len(numbered_floors), 0.75)
     floor_probs_cdf = cdf(floor_probs)
 
     # For use with letters e.g. A0 is probably not as common
@@ -53,6 +54,12 @@ class Floor(NumberedComponent):
 
         if num_type == cls.NUMERIC:
             return safe_decode(number)
+        elif num_type == cls.ROMAN_NUMERAL:
+            roman_numeral = numeric_expressions.roman_numeral(number)
+            if roman_numeral is not None:
+                return roman_numeral
+            else:
+                return safe_decode(number)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             letter = sample_alphabet(alphabet)

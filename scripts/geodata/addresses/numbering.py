@@ -117,6 +117,7 @@ class NumberedComponent(object):
     ALPHA = 'alpha'
     ALPHA_PLUS_NUMERIC = 'alpha_plus_numeric'
     NUMERIC_PLUS_ALPHA = 'numeric_plus_alpha'
+    ROMAN_NUMERAL = 'roman_numeral'
 
     @classmethod
     def choose_alphanumeric_type(cls, key, language, country=None):
@@ -127,7 +128,7 @@ class NumberedComponent(object):
         values = []
         probs = []
 
-        for num_type in (cls.NUMERIC, cls.ALPHA, cls.ALPHA_PLUS_NUMERIC, cls.NUMERIC_PLUS_ALPHA):
+        for num_type in (cls.NUMERIC, cls.ALPHA, cls.ALPHA_PLUS_NUMERIC, cls.NUMERIC_PLUS_ALPHA, cls.ROMAN_NUMERAL):
             key = '{}_probability'.format(num_type)
             prob = alphanumeric_props.get(key)
             if prob is not None:
