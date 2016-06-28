@@ -340,7 +340,7 @@ categories:
                 sample: true
                 canonical_probability: 0.8
                 sample_probability: 0.2
-              probability: 0.1
+              probability: 0.2
 
     in:
         default:
@@ -645,6 +645,17 @@ units:
             # Lejlighed nummer 4
             add_number_phrase: true
             add_number_phrase_probability: 0.05
+    bostad: &bostad
+        canonical: bostad
+        abbreviated: bst
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.05
     lagenhetsnummer: &lagenhetsnummer
         canonical: lägenhetsnummer
         abbreviated: lgh nr
@@ -707,3 +718,23 @@ units:
         # For single digit floors, use 09, 08, etc.
         use_floor_floor_num_digits: 2
 
+
+countries:
+    # Swedish addresses in Finland
+    fi:
+        units:
+            alphanumeric:
+                default: *bostad
+                probability: 1.0
+                alternatives: []
+
+                add_direction: false
+                add_direction_numeric: false
+                add_direction_standalone: false
+
+                use_floor_probability: 0.1
+
+                use_floor_affix_unit_num_digits: 0
+
+                use_floor_ground_starts_at: 1
+                use_floor_floor_num_digits: 2
