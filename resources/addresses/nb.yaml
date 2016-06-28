@@ -117,6 +117,8 @@ levels:
         sample: true
         canonical_probability: 0.8
         sample_probability: 0.2
+        numeric:
+            direction: right
         numeric_affix:
             affix: h
             direction: left
