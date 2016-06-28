@@ -207,6 +207,12 @@ levels:
     aliases:
         "<-1":
             default: *kallare
+            probability: 0.95
+            alternatives:
+                - alternative: *vaning
+                  probability: 0.025
+                - alternative: *vaningen
+                  probability: 0.025
         "-1":
             default: *kallare
             probability: 0.9
@@ -254,20 +260,20 @@ levels:
 
     alphanumeric:
         default: *vaningen
-        probability: 0.35
+        probability: 0.25
         alternatives:
             - alternative: *vaning
-              probability: 0.35
+              probability: 0.2
             - alternative: *plan
-              probability: 0.1
+              probability: 0.05
             - alternative: *trappa_upp
-              probability: 0.05
+              probability: 0.125
             - alternative: *trappa
-              probability: 0.05
+              probability: 0.125
             - alternative: *trappor_upp
-              probability: 0.05
+              probability: 0.125
             - alternative: *trappor
-              probability: 0.05
+              probability: 0.125
         numeric_probability: 0.99 # With this probability, pick an integer
         alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
         numeric_plus_alpha_probability: 0.0001 # e.g. 2A
