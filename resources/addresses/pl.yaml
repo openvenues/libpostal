@@ -21,7 +21,7 @@ components:
         alphanumeric_probability: 0.25
 
     combinations:
-        level_unit:
+        house_number_unit:
             components:
                 - house_number
                 - unit
