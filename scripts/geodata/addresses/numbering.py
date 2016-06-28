@@ -4,6 +4,7 @@ import six
 from geodata.addresses.config import address_config
 from geodata.encoding import safe_decode
 from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
+from geodata.math.floats import isclose
 from geodata.numbers.ordinals import ordinal_expressions
 from geodata.numbers.spellout import numeric_expressions
 from geodata.text.tokenize import tokenize, token_types
@@ -143,10 +144,12 @@ class NumberedComponent(object):
     def numeric_phrase(cls, key, num, language, country=None, dictionaries=(), strict_numeric=False, is_alpha=False):
         has_alpha = False
         has_numeric = True
+        is_integer = False
         is_none = False
         if num is not None:
             try:
                 num = int(num)
+                is_integer = True
             except ValueError:
                 try:
                     num = float(num)
@@ -218,6 +221,9 @@ class NumberedComponent(object):
         if has_alpha:
             values, probs = zip(*[(v, p) for v, p in zip(values, probs) if v in ('numeric', 'null', 'standalone')])
             total = float(sum(probs))
+            if isclose(total, 0.0):
+                return None
+
             probs = [p / total for p in probs]
 
         probs = cdf(probs)
@@ -239,17 +245,18 @@ class NumberedComponent(object):
 
         props = phrase_props[num_type]
 
-        if phrase_props.get('number_abs_value', False):
-            num = abs(num)
+        if is_integer:
+            if phrase_props.get('number_abs_value', False):
+                num = abs(num)
 
-        if 'number_min_abs_value' in phrase_props and num < phrase_props['number_min_abs_value']:
-            return None
+            if 'number_min_abs_value' in phrase_props and num < phrase_props['number_min_abs_value']:
+                return None
 
-        if 'number_max_abs_value' in phrase_props and num > phrase_props['number_max_abs_value']:
-            return None
+            if 'number_max_abs_value' in phrase_props and num > phrase_props['number_max_abs_value']:
+                return None
 
-        if phrase_props.get('number_subtract_abs_value'):
-            num -= phrase_props['number_subtract_abs_value']
+            if phrase_props.get('number_subtract_abs_value'):
+                num -= phrase_props['number_subtract_abs_value']
 
         num = safe_decode(num)
 
