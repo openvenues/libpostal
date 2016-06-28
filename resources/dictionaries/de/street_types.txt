@@ -24,10 +24,13 @@ pfad
 platz|pl
 quelle|qu
 rundwanderweg|rww
+siedlung|sdlg
 steg
+stiege|stg
 straße|str|strasse
 ufer
 untere|u
 unterer
 unteres
 weg|w
+wiese|ws
