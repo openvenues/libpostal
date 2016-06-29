@@ -51,17 +51,18 @@ class Unit(NumberedComponent):
         return six.u('{}{}').format(floor_number, safe_decode(unit).zfill(num_digits))
 
     @classmethod
-    def random(cls, language, country=None, num_floors=None, num_basements=None):
+    def random(cls, language, country=None, num_floors=None, num_basements=None, floor=None):
         num_type, num_type_props = cls.choose_alphanumeric_type('units.alphanumeric', language, country=country)
         if num_type is None:
             return None
 
         use_floor_prob = address_config.get_property('units.alphanumeric.use_floor_probability', language, country=country, default=0.0)
 
-        if num_floors is None or random.random() >= use_floor_prob:
+        if (num_floors is None  and floor is None) or random.random() >= use_floor_prob:
             number = weighted_choice(cls.numbered_units, cls.unit_probs_cdf)
         else:
-            floor = Floor.random(language, country=country, num_floors=num_floors, num_basements=num_basements)
+            if floor is None:
+                floor = Floor.random_int(language, country=country, num_floors=num_floors, num_basements=num_basements)
 
             floor_numbering_starts_at = address_config.get_property('levels.numbering_starts_at', language, country=country, default=0)
             ground_floor_starts_at = address_config.get_property('units.alphanumeric.use_floor_ground_starts_at', language, country=country, default=None)

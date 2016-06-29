@@ -37,15 +37,19 @@ class Floor(NumberedComponent):
         return random.randint(1, (num_floors - 1) if num_floors > 1 else 1)
 
     @classmethod
-    def random(cls, language, country=None, num_floors=None, num_basements=None):
-        num_type, num_type_props = cls.choose_alphanumeric_type('levels.alphanumeric', language, country=country)
-        if num_type is None:
-            return None
-
+    def random_int(cls, language, country=None, num_floors=None, num_basements=None):
         if num_floors is not None:
             number = cls.sample_floors(num_floors, num_basements or 0)
         else:
             number = weighted_choice(cls.numbered_floors, cls.floor_probs_cdf)
+
+        return number
+
+    @classmethod
+    def random_from_int(cls, number, language, country=None):
+        num_type, num_type_props = cls.choose_alphanumeric_type('levels.alphanumeric', language, country=country)
+        if num_type is None:
+            return None
 
         numbering_starts_at = int(address_config.get_property('levels.numbering_starts_at', language, country=country, default=0))
 
@@ -72,6 +76,13 @@ class Floor(NumberedComponent):
                     return six.u('{}{}').format(letter, number)
                 elif num_type == cls.NUMERIC_PLUS_ALPHA:
                     return six.u('{}{}').format(number, letter)
+
+        return None
+
+    @classmethod
+    def random(cls, language, country=None, num_floors=None, num_basements=None):
+        number = cls.random_int(language, country=country, num_floors=num_floors, num_basements=num_basements)
+        return cls.random_from_int(number, language, country=country)
 
     @classmethod
     def phrase(cls, floor, language, country=None, num_floors=None):
