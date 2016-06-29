@@ -30,8 +30,8 @@ numbers:
         abbreviated: "nº"
         sample: true
         canonical_probability: 0.1
-        abbreviated_probability: 0.7
-        sample_probability: 0.2
+        abbreviated_probability: 0.4
+        sample_probability: 0.5
         sample_exclude:
             - "#"
         numeric:
@@ -44,8 +44,8 @@ numbers:
             direction: left # affix goes on the number's left
 
         # Probabilities for numbers
-        numeric_probability: 0.7
-        numeric_affix_probability: 0.3
+        numeric_probability: 0.8
+        numeric_affix_probability: 0.2
 
 and:
     default: &y
@@ -84,7 +84,7 @@ house_numbers:
                       direction: left
               probability: 0.01
 
-    alphanumeric_phrase_probability: 0.01
+    alphanumeric_phrase_probability: 0.1
     no_number_probability: 0.1 # With this probability, use sin número if no house_number is specified
 
 levels:
@@ -108,11 +108,9 @@ levels:
             direction: right
             direction_probability: 0.95 # Let it vary occasionally e.g. Piso 2o
             standalone_probability: 0.2 # Let e.g. 5º be the entire floor string
-            # If ordinal is selected, chance of e.g. just using 2o without Piso
-            null_phrase_probability: 0.6
-        numeric_probability: 0.2
+        numeric_probability: 0.6
         numeric_affix_probability: 0.05
-        ordinal_probability: 0.75
+        ordinal_probability: 0.35
     # Ground floor
     bajos: &bajos
         canonical: bajos
@@ -1111,20 +1109,25 @@ countries:
 
     # Colombia
     co:
+        numbers:
+            default:
+                <<: *numero
+                abbreviated: "no"
+
+        house_numbers:
+            alphanumeric_phrase_probability: 0.4
+
         units:
             alphanumeric: *unit_alphanumeric_apartamento_exclusive
-            flat: *apartamento
-            unit: *apartamento        
 
             zones:
                 residential: *unit_alphanumeric_apartamento_exclusive
+
 
     # Dominican Republic
     dr:
         units:
             alphanumeric: *unit_alphanumeric_apartamento_exclusive
-            flat: *apartamento
-            unit: *apartamento        
 
             zones:
                 residential: *unit_alphanumeric_apartamento_exclusive
@@ -1139,8 +1142,6 @@ countries:
     pa:
         units:
             alphanumeric: *unit_alphanumeric_apartamento_exclusive
-            flat: *apartamento
-            unit: *apartamento        
 
             zones:
                 residential: *unit_alphanumeric_apartamento_exclusive        
@@ -1149,8 +1150,6 @@ countries:
     pr:
         units:
             alphanumeric: *unit_alphanumeric_apartamento_exclusive
-            flat: *apartamento
-            unit: *apartamento        
 
             zones:
                 residential: *unit_alphanumeric_apartamento_exclusive
@@ -1159,8 +1158,6 @@ countries:
     us:
         units:
             alphanumeric: *unit_alphanumeric_apartamento_exclusive
-            flat: *apartamento
-            unit: *apartamento        
 
             zones:
                 residential: *unit_alphanumeric_apartamento_exclusive
@@ -1169,8 +1166,6 @@ countries:
     ve:
         units:
             alphanumeric: *unit_alphanumeric_apartamento_exclusive
-            flat: *apartamento
-            unit: *apartamento        
 
             zones:
                 residential: *unit_alphanumeric_apartamento_exclusive
@@ -1179,8 +1174,6 @@ countries:
     uy:
         units:
             alphanumeric: *unit_alphanumeric_apartamento
-            flat: *apartamento
-            unit: *apartamento
 
             zones:
                 residential: *unit_alphanumeric_apartamento
