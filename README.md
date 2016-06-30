@@ -152,9 +152,14 @@ Installation
 
 Before you install, make sure you have the following prerequisites:
 
-**On Linux (Ubuntu)**
+**On Ubuntu/Debian**
 ```
 sudo apt-get install curl libsnappy-dev autoconf automake libtool pkg-config
+```
+
+**On CentOS/RHEL**
+```
+sudo yum install snappy snappy-devel autoconf automake libtool pkgconfig
 ```
 
 **On Mac OSX**
