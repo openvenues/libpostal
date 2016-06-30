@@ -317,15 +317,16 @@ levels:
         alpha_probability: 0.01
 
 blocks:
-    default:
-        canonical: bloco
-        abbreviated: blc
-        sample: true
-        canonical_probability: 0.6
-        abbreviated_probability: 0.2
-        sample_probability: 0.2
-        numeric:
-            direction: left
+    alphanumeric:
+        default:
+            canonical: bloco
+            abbreviated: blc
+            sample: true
+            canonical_probability: 0.6
+            abbreviated_probability: 0.2
+            sample_probability: 0.2
+            numeric:
+                direction: left
 
 categories:
     near:
