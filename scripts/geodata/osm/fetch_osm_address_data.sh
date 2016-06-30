@@ -39,14 +39,24 @@ cd $OUT_DIR
 # Download planet as PBF
 # TODO: currently uses single mirror, randomly choose one instead
 echo "Started OSM download: `date`"
-wget http://ftp5.gwdg.de/pub/misc/openstreetmap/planet.openstreetmap.org/pbf/planet-latest.osm.pbf
+wget http://ftp5.gwdg.de/pub/misc/openstreetmap/planet.openstreetmap.org/pbf/planet-latest.osm.pbf &
+wget http://download.geofabrik.de/asia/japan-latest.osm.pbf &
+
+wait
 
 echo "Converting to o5m: `date`"
 PLANET_PBF="planet-latest.osm.pbf"
 PLANET_O5M="planet-latest.o5m"
 
+JAPAN_PBF="japan-latest.osm.pbf"
+JAPAN_O5M="japan-latest.o5m"
+
 # Needs to be in O5M for some of the subsequent steps to work whereas PBF is smaller for download
-osmconvert $PLANET_PBF -o=$PLANET_O5M
+osmconvert $PLANET_PBF -o=$PLANET_O5M &
+osmconvert $JAPAN_PBF -o=$JAPAN_O5M &
+
+wait
+
 rm $PLANET_PBF
 
 VALID_AEROWAY_KEYS="aeroway=aerodrome"
@@ -67,14 +77,36 @@ VALID_VENUES="( ( $VALID_AEROWAY_KEYS ) or ( $VALID_AMENITY_KEYS ) or ( $VALID_H
 # Address data set for use in parser, language detection
 echo "Filtering for records with address tags: `date`"
 PLANET_ADDRESSES_O5M="planet-addresses.o5m"
+JAPAN_ADDRESSES_O5M="japan-addresses.o5m"
 VALID_ADDRESSES="( ( ( name= or addr:housename= ) and $VALID_VENUES ) ) or ( ( addr:street= or addr:place= ) and ( name= or building= or building:levels= or addr:housename= or addr:housenumber= ) )"
-osmfilter $PLANET_O5M --keep="$VALID_ADDRESSES" --drop-author --drop-version -o=$PLANET_ADDRESSES_O5M
+VALID_ADDRESSES_JAPAN="( addr:housenumber= or addr:street= or name= or name:ja= or addr:housename= )"
+osmfilter $PLANET_O5M --keep="$VALID_ADDRESSES" --drop-author --drop-version -o=$PLANET_ADDRESSES_O5M &
+osmfilter $JAPAN_O5M --keep="$VALID_ADDRESSES_JAPAN" --drop-author --drop-version -o=$JAPAN_ADDRESSES_O5M &
+
+wait
+
 PLANET_ADDRESSES_LATLONS="planet-addresses-latlons.o5m"
-osmconvert $PLANET_ADDRESSES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_ADDRESSES_LATLONS
+JAPAN_ADDRESSES_LATLONS="japan-addresses-latlons.o5m"
+osmconvert $PLANET_ADDRESSES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_ADDRESSES_LATLONS &
+osmconvert $JAPAN_ADDRESSES_O5M --max-objects=1000000000 --all-to-nodes -o=$JAPAN_ADDRESSES_LATLONS &
+
+wait
+
 rm $PLANET_ADDRESSES_O5M
+rm $JAPAN_ADDRESSES_O5M
 PLANET_ADDRESSES="planet-addresses.osm"
-osmfilter $PLANET_ADDRESSES_LATLONS --keep="$VALID_ADDRESSES" -o=$PLANET_ADDRESSES
+osmfilter $PLANET_ADDRESSES_LATLONS --keep="$VALID_ADDRESSES" -o=$PLANET_ADDRESSES_O5M &
+osmfilter $JAPAN_ADDRESSES_LATLONS --keep="$VALID_ADDRESSES_JAPAN" -o=$JAPAN_ADDRESSES_O5M &
+
+wait
+
+osmconvert $PLANET_ADDRESSES_O5M $JAPAN_ADDRESSES_O5M -o=$PLANET_ADDRESSES
+
+rm $PLANET_ADDRESSES_O5M
+rm $JAPAN_ADDRESSES_O5M
+
 rm $PLANET_ADDRESSES_LATLONS
+rm $JAPAN_ADDRESSES_LATLONS
 
 # Border data set for use in R-tree index/reverse geocoding, parsing, language detection
 echo "Filtering for borders: `date`"
