@@ -72,22 +72,26 @@ levels:
     verdieping: &verdieping
         canonical: verdieping
         sample: true
-        canonical_probability: 0.7
-        sample_probability: 0.3
+        canonical_probability: 0.8
+        sample_probability: 0.2
         numeric:
             direction: left
     etage: &etage
         canonical: etage
+        abbreviated: et
         sample: true
-        canonical_probability: 0.8
+        canonical_probability: 0.7
+        abbreviated_probability: 0.1
         sample_probability: 0.2
         numeric:
             direction: left
     begane_grond: &begane_grond
         canonical: begane grond
+        abbreviated: bg
         sample: true
-        canonical_probability: 0.8
+        canonical_probability: 0.5
         sample_probability: 0.2
+        sample_probability: 0.3
     benedenverdieping: &benedenverdieping
         canonical: benedenverdieping
         sample: true
@@ -484,6 +488,16 @@ countries:
                 alphanumeric_probability: 0.35
 
         levels:
+            verdieping: &verdieping_flemish
+                canonical: verdieping
+                abbreviated: verdiep
+                sample: true
+                canonical_probability: 0.3
+                abbreviated_probability: 0.5
+                sample_probability: 0.2
+                numeric:
+                    direction: left
+
             aliases:
                 "0":
                     default: *het_gelijkvloers
@@ -492,7 +506,7 @@ countries:
                         - alternative: *gelijkvloers
                           probability: 0.5
             alphanumeric:
-                default: *verdieping
+                default: *verdieping_flemish
                 probability: 0.9
                 alternatives:
                     - alternative: *etage
