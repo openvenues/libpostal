@@ -1054,17 +1054,17 @@ address_parser_response_t *parse_address(char *address, address_parser_options_t
 
 bool libpostal_setup(void) {
     if (!transliteration_module_setup(NULL)) {
-        log_error("Error loading transliteration module\n");
+        log_error("Error loading transliteration module, LIBPOSTAL_DATA_DIR=%s\n", LIBPOSTAL_DATA_DIR);
         return false;
     }
 
     if (!numex_module_setup(NULL)) {
-        log_error("Error loading numex module\n");
+        log_error("Error loading numex module, LIBPOSTAL_DATA_DIR=%s\n", LIBPOSTAL_DATA_DIR);
         return false;
     }
 
     if (!address_dictionary_module_setup(NULL)) {
-        log_error("Error loading dictionary module\n");
+        log_error("Error loading dictionary module, LIBPOSTAL_DATA_DIR=%s\n", LIBPOSTAL_DATA_DIR);
         return false;
     }
 
@@ -1073,7 +1073,7 @@ bool libpostal_setup(void) {
 
 bool libpostal_setup_language_classifier(void) {
     if (!language_classifier_module_setup(NULL)) {
-        log_error("Error loading language classifier\n");
+        log_error("Error loading language classifier, LIBPOSTAL_DATA_DIR=%s\n", LIBPOSTAL_DATA_DIR);
         return false;
     }
     return true;
@@ -1081,12 +1081,12 @@ bool libpostal_setup_language_classifier(void) {
 
 bool libpostal_setup_parser(void) {
     if (!geodb_module_setup(NULL)) {
-        log_error("Error loading geodb module\n");
+        log_error("Error loading geodb module, LIBPOSTAL_DATA_DIR=%s\n", LIBPOSTAL_DATA_DIR);
         return false;
     }
 
     if (!address_parser_module_setup(NULL)) {
-        log_error("Error loading address parser module\n");
+        log_error("Error loading address parser module, LIBPOSTAL_DATA_DIR=%s\n", LIBPOSTAL_DATA_DIR);
         return false;
     }
 
