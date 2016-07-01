@@ -38,7 +38,9 @@ EPOCH_DATE="Jan  1 00:00:00 1970"
 MB=$((1024*1024))
 LARGE_FILE_SIZE=$((100*$MB))
 
-NUM_WORKERS=5
+CHUNK_SIZE=$((64*$MB))
+
+NUM_WORKERS=10
 
 function kill_background_processes { 
     jobs -p | xargs kill;
@@ -47,30 +49,40 @@ function kill_background_processes {
 
 trap kill_background_processes SIGINT
 
+function download_part() {
+    i=$1
+    offset=$2
+    max=$3
+    url=$4
+    part_filename=$5
+    echo "Downloading part $i: filename=$part_filename, offset=$offset, max=$max"
+    curl $url --silent -H"Range:bytes=$offset-$max" -o $part_filename    
+}
+export -f download_part
+
 function download_multipart() {
     url=$1
     filename=$2
     size=$3
     num_workers=$4
 
-    echo "Downloading multipart: $url, size=$size"
-    chunk_size=$((size/num_workers))
-
+    num_chunks=$((size/CHUNK_SIZE))
+    echo "Downloading multipart: $url, size=$size, num_chunks=$num_chunks"
     offset=0
-    for i in `seq 1 $((num_workers-1))`; do
+    for i in $(seq 1 $((num_chunks))); do
         part_filename="$filename.$i"
-        echo "Downloading part $i: filename=$part_filename, offset=$offset, max=$((offset+chunk_size-1))"
-        curl $url --silent -H"Range:bytes=$offset-$((offset+chunk_size-1))" -o $part_filename &
-        offset=$((offset+chunk_size))
-    done;
-
-    echo "Downloading part $num_workers: filename=$filename.$num_workers, offset=$offset, max=$((size))"
-    curl --silent -H"Range:bytes=$offset-$size" $url -o "$filename.$num_workers" &
-    wait
+        if [ $i -lt $num_chunks ]; then
+            max=$((offset+CHUNK_SIZE-1));
+        else
+            max=$size;
+        fi;
+        printf "%s\0%s\0%s\0%s\0%s\0" "$i" "$offset" "$max" "$url" "$part_filename"
+        offset=$((offset+CHUNK_SIZE))
+    done | xargs -0 -n 5 -P $NUM_WORKERS bash -c 'download_part "$@"' -- 
 
     > $local_path
 
-    for i in `seq 1 $((num_workers))`; do
+    for i in `seq 1 $((num_chunks))`; do
         part_filename="$filename.$i"
         cat $part_filename >> $local_path
         rm $part_filename
