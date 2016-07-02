@@ -8,7 +8,7 @@ from geodata.encoding import safe_decode
 from geodata.configs.utils import nested_get
 from geodata.addresses.directions import RelativeDirection
 from geodata.addresses.floors import Floor
-from geodata.addresses.numbering import NumberedComponent, sample_alphabet, latin_alphabet
+from geodata.addresses.numbering import NumberedComponent, Digits, sample_alphabet, latin_alphabet
 from geodata.encoding import safe_decode
 from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 
@@ -28,7 +28,8 @@ class Entrance(NumberedComponent):
 
         if num_type == cls.NUMERIC:
             number = weighted_choice(cls.entrance_range, cls.entrance_range_cdf)
-            return safe_decode(number)
+            number = safe_decode(number)
+            return Digits.rewrite(number, language, num_type_props)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             letter = sample_alphabet(alphabet, 2.0)
