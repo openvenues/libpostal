@@ -2,7 +2,7 @@ import random
 import six
 
 from geodata.addresses.config import address_config
-from geodata.addresses.numbering import NumberedComponent, sample_alphabet, latin_alphabet
+from geodata.addresses.numbering import NumberedComponent, Digits, sample_alphabet, latin_alphabet
 from geodata.encoding import safe_decode
 from geodata.math.sampling import cdf, weighted_choice
 
@@ -49,7 +49,9 @@ class POBox(NumberedComponent):
 
             num_digits = weighted_choice(values, probs)
 
-            number = cls.random_digits(num_digits)
+            digits = cls.random_digits(num_digits)
+            number = Digits.rewrite(digits, language, num_type_props)
+
 
             if num_type == cls.NUMERIC:
                 return safe_decode(number)
