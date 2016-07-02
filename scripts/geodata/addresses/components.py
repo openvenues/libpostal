@@ -459,7 +459,7 @@ class AddressComponents(object):
         probs = []
         for num_type in (self.NULL_PHRASE, self.ALPHANUMERIC_PHRASE, self.STANDALONE_PHRASE):
             key = '{}_probability'.format(num_type)
-            prob = component_config.get(key)
+            prob = prob_dist.get(key)
             if prob is not None:
                 values.append(num_type)
                 probs.append(prob)
@@ -813,16 +813,13 @@ class AddressComponents(object):
 
         if existing is None:
             generated_type = self.generated_type(component, address_components, language, country=country)
-            if generated_type == self.ALPHANUMERIC_PHRASE:
-                return True
-            elif generated_type == self.STANDALONE_PHRASE:
-                return False
+            return generated_type
 
         return False
 
-    def add_sub_building_phrase(self, component, address_components, language, country, generated_components=None, **kw):
+    def add_sub_building_phrase(self, component, phrase_type, address_components, language, country, generated_components=None, **kw):
         num = address_components.get(component)
-        if not num:
+        if not num and phrase_type != self.STANDALONE_PHRASE:
             return
         generated_components = generated_components or set()
 
@@ -832,9 +829,8 @@ class AddressComponents(object):
 
             if phrase:
                 address_components[component] = phrase
-        else:
-            existing = address_components[component]
-            phrase = self.get_component_phrase(component_class, existing, language, country=country)
+        elif component in address_components:
+            phrase = self.get_component_phrase(component_class, num, language, country=country)
             if phrase and phrase != existing:
                 address_components[component] = phrase
 
@@ -843,21 +839,41 @@ class AddressComponents(object):
 
         floor = None
 
-        if self.generate_sub_building_component(AddressFormatter.ENTRANCE, address_components, language, country=country):
-            address_components[AddressFormatter.ENTRANCE] = Entrance.random(language, country=country)
+        entrance_phrase_type = self.generate_sub_building_component(AddressFormatter.ENTRANCE, address_components, language, country=country)
+        if entrance_phrase_type == self.ALPHANUMERIC_PHRASE:
+            entrance = Entrance.random(language, country=country)
+            if entrance:
+                address_components[AddressFormatter.ENTRANCE] = entrance
+                generated_components.add(AddressFormatter.ENTRANCE)
+        elif entrance_phrase_type == self.STANDALONE_PHRASE:
             generated_components.add(AddressFormatter.ENTRANCE)
 
-        if self.generate_sub_building_component(AddressFormatter.STAIRCASE, address_components, language, country=country):
-            address_components[AddressFormatter.STAIRCASE] = Staircase.random(language, country=country)
+        staircase_phrase_type = self.generate_sub_building_component(AddressFormatter.STAIRCASE, address_components, language, country=country)
+        if staircase_phrase_type == self.ALPHANUMERIC_PHRASE:
+            staircase = Staircase.random(language, country=country)
+            if staircase:
+                address_components[AddressFormatter.STAIRCASE] = staircase
+                generated_components.add(AddressFormatter.STAIRCASE)
+        elif staircase_phrase_type == self.STANDALONE_PHRASE:
             generated_components.add(AddressFormatter.STAIRCASE)
 
-        if self.generate_sub_building_component(AddressFormatter.LEVEL, address_components, language, country=country, num_floors=num_floors, num_basements=num_basements):
+        floor_phrase_type = self.generate_sub_building_component(AddressFormatter.LEVEL, address_components, language, country=country, num_floors=num_floors, num_basements=num_basements)
+        if floor_phrase_type == self.ALPHANUMERIC_PHRASE:
             floor = Floor.random_int(language, country=country, num_floors=num_floors, num_basements=num_basements)
-            address_components[AddressFormatter.LEVEL] = Floor.random_from_int(floor, language, country=country)
+            floor = Floor.random_from_int(floor, language, country=country)
+            if floor:
+                address_components[AddressFormatter.LEVEL] = floor
+                generated_components.add(AddressFormatter.LEVEL)
+        elif floor_phrase_type == self.STANDALONE_PHRASE:
             generated_components.add(AddressFormatter.LEVEL)
 
-        if self.generate_sub_building_component(AddressFormatter.UNIT, address_components, language, country=country, num_floors=num_floors, num_basements=num_basements):
-            address_components[AddressFormatter.UNIT] = Unit.random(language, country=country, num_floors=num_floors, num_basements=num_basements, floor=floor)
+        unit_phrase_type = self.generate_sub_building_component(AddressFormatter.UNIT, address_components, language, country=country, num_floors=num_floors, num_basements=num_basements)
+        if unit_phrase_type == self.ALPHANUMERIC_PHRASE:
+            unit = Unit.random(language, country=country, num_floors=num_floors, num_basements=num_basements, floor=floor)
+            if unit:
+                address_components[AddressFormatter.UNIT] = unit
+                generated_components.add(AddressFormatter.UNIT)
+        elif unit_phrase_type == self.STANDALONE_PHRASE:
             generated_components.add(AddressFormatter.UNIT)
 
         # Combine fields like unit/house_number here
@@ -865,14 +881,14 @@ class AddressComponents(object):
         if combined:
             generated_components -= set([combined])
 
-        self.add_sub_building_phrase(AddressFormatter.ENTRANCE, address_components, language, country=country, generated_components=generated_components)
-        self.add_sub_building_phrase(AddressFormatter.STAIRCASE, address_components, language, country=country, generated_components=generated_components)
+        self.add_sub_building_phrase(AddressFormatter.ENTRANCE, entrance_phrase_type, address_components, language, country=country, generated_components=generated_components)
+        self.add_sub_building_phrase(AddressFormatter.STAIRCASE, staircase_phrase_type, address_components, language, country=country, generated_components=generated_components)
 
-        self.add_sub_building_phrase(AddressFormatter.LEVEL, address_components, language, country=country,
+        self.add_sub_building_phrase(AddressFormatter.LEVEL, floor_phrase_type, address_components, language, country=country,
                                      generated_components=generated_components,
                                      num_floors=num_floors)
 
-        self.add_sub_building_phrase(AddressFormatter.UNIT, address_components, language, country=country,
+        self.add_sub_building_phrase(AddressFormatter.UNIT, unit_phrase_type, address_components, language, country=country,
                                      generated_components=generated_components,
                                      zone=zone)
 
