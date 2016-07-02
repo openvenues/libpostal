@@ -18,7 +18,6 @@ suffixes:
     - cho
     - mura
     - ku
-    - tokubetsu-ku
     - aza
     - oaza
     - koaza
@@ -33,7 +32,6 @@ suffixes_no_whitespace:
     - 町 # machi
     - 村 # mura
     - 区 # ku
-    - 特別区 # tokubetsu-ku
     - 字 # aza
     - 大字 # ōaza
     - 小字 # koaza
