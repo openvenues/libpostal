@@ -4,7 +4,7 @@ import six
 from geodata.addresses.config import address_config
 from geodata.addresses.directions import RelativeDirection, LateralDirection, AnteroposteriorDirection
 from geodata.addresses.floors import Floor
-from geodata.addresses.numbering import NumberedComponent, sample_alphabet, latin_alphabet
+from geodata.addresses.numbering import NumberedComponent, Digits, sample_alphabet, latin_alphabet
 from geodata.configs.utils import nested_get
 from geodata.encoding import safe_decode
 from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
@@ -26,14 +26,19 @@ class Unit(NumberedComponent):
     num_digits_cdf = cdf(num_digits_probs)
 
     # For use with floors e.g. #301 more common than #389
-    positive_units = range(1, 10) + [0] + range(10, max_units + 1)
+    positive_units_floors = range(1, 10) + [0] + range(10, max_units + 1)
+    positive_units_floors_probs = zipfian_distribution(len(positive_units_floors), 0.6)
+    positive_units_floors_cdf = cdf(positive_units_floors_probs)
+
+    # For basic positive units
+    positive_units = range(1, max_units + 1)
     positive_units_probs = zipfian_distribution(len(positive_units), 0.6)
     positive_units_cdf = cdf(positive_units_probs)
 
     # For use with letters e.g. A0 less common
     positive_units_letters = range(1, max_units + 1) + [0]
     positive_units_letters_probs = zipfian_distribution(len(positive_units_letters), 0.6)
-    positive_units_letters_cdf = cdf(positive_units_probs)
+    positive_units_letters_cdf = cdf(positive_units_letters_probs)
 
     RESIDENTIAL = 'residential'
     COMMERCIAL = 'commercial'
@@ -47,7 +52,7 @@ class Unit(NumberedComponent):
     @classmethod
     def for_floor(cls, floor_number, num_digits=None):
         num_digits = num_digits if num_digits is not None else cls.sample_num_digits()
-        unit = weighted_choice(cls.positive_units, cls.positive_units_cdf)
+        unit = weighted_choice(cls.positive_units_floors, cls.positive_units_floors_cdf)
         return six.u('{}{}').format(floor_number, safe_decode(unit).zfill(num_digits))
 
     @classmethod
@@ -58,8 +63,13 @@ class Unit(NumberedComponent):
 
         use_floor_prob = address_config.get_property('units.alphanumeric.use_floor_probability', language, country=country, default=0.0)
 
-        if (num_floors is None  and floor is None) or random.random() >= use_floor_prob:
-            number = weighted_choice(cls.numbered_units, cls.unit_probs_cdf)
+        use_positive_numbers_prob = address_config.get_property('units.alphanumeric.use_positive_numbers_probability', language, country=country, default=0.0)
+
+        if (num_floors is None and floor is None) or random.random() >= use_floor_prob:
+            if random.random() >= use_positive_numbers_prob:
+                number = weighted_choice(cls.numbered_units, cls.unit_probs_cdf)
+            else:
+                number = weighted_choice(cls.positive_units, cls.positive_units_cdf)
         else:
             if floor is None:
                 floor = Floor.random_int(language, country=country, num_floors=num_floors, num_basements=num_basements)
@@ -97,7 +107,8 @@ class Unit(NumberedComponent):
             number = cls.for_floor(floor)
 
         if num_type == cls.NUMERIC:
-            return safe_decode(number)
+            number = safe_decode(number)
+            return Digits.rewrite(number, language, num_type_props)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             letter = sample_alphabet(alphabet)
@@ -203,12 +214,6 @@ class Unit(NumberedComponent):
                                       dictionaries=['unit_types_numbered'], country=country, is_alpha=is_alpha)
         else:
             key = 'units.standalone'
-            add_direction = address_config.get_property('{}.add_direction'.format(key), language, country=country)
-            if add_direction:
-                unit = cls.add_direction(key, unit, language, country=country)
-                if unit is not None:
-                    return unit
-
             values, probs = address_config.alternative_probabilities(key, language,
                                                                      dictionaries=['unit_types_standalone'],
                                                                      country=country)
