@@ -26,7 +26,7 @@ class AddressConfig(object):
         self.cache = {}
 
         for filename in os.listdir(config_dir):
-            if filename not in ('en.yaml', 'es.yaml', 'ca.yaml', 'fr.yaml', 'de.yaml', 'nl.yaml', 'da.yaml', 'nb.yaml', 'sv.yaml', 'pt.yaml', 'pl.yaml', 'ru.yaml', 'cs.yaml', 'sk.yaml', 'it.yaml'):
+            if filename not in ('en.yaml', 'es.yaml', 'ca.yaml', 'fr.yaml', 'de.yaml', 'nl.yaml', 'da.yaml', 'nb.yaml', 'sv.yaml', 'pt.yaml', 'pl.yaml', 'ru.yaml', 'cs.yaml', 'sk.yaml', 'it.yaml', 'et.yaml', 'fi.yaml', 'ro.yaml', 'hu.yaml'):
                 continue
 
             config = yaml.load(open(os.path.join(ADDRESS_CONFIG_DIR, filename)))
@@ -78,6 +78,8 @@ class AddressConfig(object):
                 return None, None
 
             alternatives, probs = alternative_probabilities(properties)
+            if alternatives is None:
+                return None, None
 
             forms = []
             form_probs = []
