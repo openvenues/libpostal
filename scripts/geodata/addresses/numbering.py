@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import random
 import six
 
@@ -40,6 +41,72 @@ def sample_alphabet(alphabet, b=1.5):
 latin_alphabet = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
 
 
+class Digits(object):
+    ASCII = 'ascii'
+    SPELLOUT = 'spellout'
+    UNICODE_FULL_WIDTH = 'unicode_full_width'
+
+    unicode_full_width_map = {
+        '0': safe_decode('０'),
+        '1': safe_decode('１'),
+        '2': safe_decode('２'),
+        '3': safe_decode('３'),
+        '4': safe_decode('４'),
+        '5': safe_decode('５'),
+        '6': safe_decode('６'),
+        '7': safe_decode('７'),
+        '8': safe_decode('８'),
+        '9': safe_decode('９'),
+    }
+
+    @classmethod
+    def rewrite_full_width(cls, s):
+        return six.u('').join([cls.unicode_full_width_map.get(c, c) for c in s])
+
+    @classmethod
+    def rewrite_spellout(cls, s, lang):
+        if s.isdigit():
+            num = int(s)
+            cardinal = numeric_expressions.spellout_cardinal(num, lang)
+            if cardinal:
+                return cardinal
+            return s
+        else:
+            return s
+
+    @classmethod
+    def rewrite(cls, d, lang, props):
+        if not props:
+            return d
+
+        d = safe_decode(d)
+
+        values = []
+        probs = []
+
+        for digit_type in (cls.SPELLOUT, cls.UNICODE_FULL_WIDTH):
+            key = '{}_probability'.format(digit_type)
+            if key in props:
+                values.append(digit_type)
+                probs.append(props[key])
+
+        if not isclose(sum(probs), 1.0):
+            values.append(cls.ASCII)
+            probs.append(1.0 - sum(probs))
+
+        probs = cdf(probs)
+        digit_type = weighted_choice(values, probs)
+
+        if digit_type == cls.ASCII:
+            return d
+        elif digit_type == cls.UNICODE_FULL_WIDTH:
+            return cls.rewrite_full_width(d)
+        elif digit_type == cls.SPELLOUT:
+            return cls.rewrite_spellout(d, lang)
+        else:
+            return d
+
+
 class NumericPhrase(object):
     key = None
 
@@ -50,7 +117,7 @@ class NumericPhrase(object):
     def pick_phrase_and_type(cls, number, language, country=None):
         values, probs = address_config.alternative_probabilities(cls.key, language, dictionaries=cls.dictionaries, country=country)
         if not values:
-            return safe_decode(number) if number is not None else None
+            return None, safe_decode(number) if number is not None else None, None
 
         phrase, phrase_props = weighted_choice(values, probs)
 
@@ -134,6 +201,9 @@ class NumberedComponent(object):
             if prob is not None:
                 values.append(num_type)
                 probs.append(prob)
+
+        if not values:
+            return None, None
 
         probs = cdf(probs)
         num_type = weighted_choice(values, probs)
