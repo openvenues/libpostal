@@ -22,6 +22,8 @@ son
 aza
 丁目
 chōme|chome|choume
+駅
+eki
 大字
 ōaza|oaza
 小字
