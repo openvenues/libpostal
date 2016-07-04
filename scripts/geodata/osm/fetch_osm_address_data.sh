@@ -79,7 +79,7 @@ echo "Filtering for records with address tags: `date`"
 PLANET_ADDRESSES_O5M="planet-addresses.o5m"
 JAPAN_ADDRESSES_O5M="japan-addresses.o5m"
 VALID_ADDRESSES="( ( ( name= or addr:housename= ) and $VALID_VENUES ) ) or ( ( addr:street= or addr:place= ) and ( name= or building= or building:levels= or addr:housename= or addr:housenumber= ) )"
-VALID_ADDRESSES_JAPAN="( addr:housenumber= or addr:street= or name= or name:ja= or addr:housename= )"
+VALID_ADDRESSES_JAPAN="( addr:housenumber= or addr:street= ) or ( ( name= or name:ja= or addr:housename= ) and $VALID_VENUES )"
 osmfilter $PLANET_O5M --keep="$VALID_ADDRESSES" --drop-author --drop-version -o=$PLANET_ADDRESSES_O5M &
 osmfilter $JAPAN_O5M --keep="$VALID_ADDRESSES_JAPAN" --drop-author --drop-version -o=$JAPAN_ADDRESSES_O5M &
 
