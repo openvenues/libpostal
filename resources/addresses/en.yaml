@@ -65,7 +65,7 @@ components:
 
     combinations:
         # For unit types like 2/34 (more common in Canada and Australia)
-        house_number_unit:
+        -
             components:
                 - house_number
                 - unit
@@ -160,9 +160,12 @@ levels:
         numeric_affix:
             affix: /f
             direction: right # affix goes to number's right (always)
-         # e.g. 1st Floor
+        # e.g. 1st Floor
         ordinal:
             direction: right # canonical or abbreviated form goes to the ordinal's right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         # Probabilities
         numeric_probability: 0.75 # Use the simple number e.g. Floor 1 (or Floor No. 1)
         numeric_affix_probability: 0.05 # Use the 2/F (less common)
@@ -1356,9 +1359,7 @@ countries:
     ca:
         components:
             combinations:
-                house_number_unit:
-                    probability: 0.0
-                unit_house_number:
+                -
                     components:
                         - unit
                         - house_number

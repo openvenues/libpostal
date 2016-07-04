@@ -22,7 +22,7 @@ components:
 
     combinations:
         # Bolignummer
-        level_unit:
+        -
             components:
                 - level
                 - unit
@@ -110,6 +110,9 @@ levels:
             direction_probability: 0.9
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         numeric_probability: 0.4
         ordinal_probability: 0.6
     hovedetasje: &hovedetasje

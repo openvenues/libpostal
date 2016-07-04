@@ -21,7 +21,7 @@ components:
         alphanumeric_probability: 0.2
 
     combinations:
-        house_number_unit:
+        -
             components:
                 - house_number
                 - unit
@@ -93,6 +93,9 @@ levels:
             add_number_phrase_probability: 0.05
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         numeric_probability: 0.75
         ordinal_probability: 0.25
     niveau: &niveau
@@ -106,6 +109,9 @@ levels:
             add_number_phrase_probability: 0.05
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         numeric_probability: 0.75
         ordinal_probability: 0.25
     bel_etage: &bel_etage
@@ -889,9 +895,7 @@ countries:
                 null_probability: 0.6
                 alphanumeric_probability: 0.4
             combinations:
-                house_number_unit:
-                    probability: 0.0
-                unit_house_number:
+                -
                     components:
                         - unit
                         - house_number

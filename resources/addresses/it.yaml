@@ -22,7 +22,7 @@ components:
         alphanumeric_probability: 0.2
 
     combinations:
-        house_number_unit:
+        -
             components:
                 - house_number
                 - unit
@@ -87,10 +87,15 @@ levels:
             direction_probability: 0.95
             add_number_phrase: true
             add_number_phrase_probability: 0.05
-            roman_numeral_probability: 0.1
+            digits:
+                ascii_probability: 0.9
+                roman_numeral_probability: 0.1
         ordinal:
             direction: right
-            roman_numeral_probability: 0.3
+            digits:
+                ascii_probability: 0.5
+                spellout_probability: 0.2
+                roman_numeral_probability: 0.3
         numeric_probability: 0.55
         ordinal_probability: 0.45
     livello: &livello
@@ -104,7 +109,9 @@ levels:
             add_number_phrase_probability: 0.05
         ordinal:
             direction: right
-            roman_numeral_probability: 0.3
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
         numeric_probability: 0.75
         ordinal_probability: 0.25
     piano_nobile: &piano_nobile

@@ -108,6 +108,9 @@ levels:
             direction: right
             direction_probability: 0.95 # Let it vary occasionally e.g. Piso 2o
             standalone_probability: 0.2 # Let e.g. 5º be the entire floor string
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         numeric_probability: 0.6
         numeric_affix_probability: 0.05
         ordinal_probability: 0.35
@@ -954,6 +957,9 @@ countries:
                 ordinal:
                     direction: right
                     gender: f
+                    digits:
+                        ascii_probability: 0.8
+                        spellout_probability: 0.2
                 canonical_probability: 0.6
                 abbreviated_probability: 0.2
                 sample_probability: 0.2

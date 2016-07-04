@@ -23,7 +23,7 @@ components:
 
     combinations:
         # Unit is just appended onto the house number
-        house_number_unit:
+        -
             components:
                 - house_number
                 - unit

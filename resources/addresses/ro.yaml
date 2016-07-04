@@ -114,7 +114,9 @@ levels:
             direction: left
             add_number_phrase: true # Occasionally add variation of "number", e.g. et. nr 2
             add_number_phrase_probability: 0.05
-            roman_numeral_probability: 0.2
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.2
     # Ground floor
     parter: &parter
         canonical: parter

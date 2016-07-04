@@ -13,17 +13,19 @@ components:
         alphanumeric_probability: 0.25
 
     combinations:
-        level_unit:
+        -
             components:
                 - level
                 - unit
             label: unit
             separators:
                 - separator: "/"
-                  probability: 0.95
+                  probability: 0.55
+                - separator: " "
+                  probability: 0.4
                 - separator: "-"
                   probability: 0.05
-            probability: 0.5
+            probability: 0.8
 
 
 numbers:
@@ -100,6 +102,9 @@ levels:
             direction_probability: 0.9
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.2
+                roman_numeral_probability: 0.8
         numeric_probability: 0.1
         ordinal_probability: 0.9
     foldszint: &foldszint
@@ -220,8 +225,8 @@ levels:
 
     alphanumeric:
         default: *emelet
-        roman_numeral_probability: 0.8 # With this probability, pick a Roman numeral
-        numeric_probability: 0.19 # With this probability, pick an integer
+        numeric_probability: 0.59 # With this probability, pick an integer
+        roman_numeral_probability: 0.4 # Pick a Roman numeral for the actual value
         alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
         numeric_plus_alpha_probability: 0.0001 # e.g. 2A
         alpha_plus_numeric_probability: 0.0001 # e.g. A2

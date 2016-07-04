@@ -100,12 +100,16 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
-            roman_numeral_probability: 0.3
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
             add_number_phrase: true
             add_number_phrase_probability: 0.1
         ordinal:
             direction: right
-            roman_numeral_probability: 0.7
+            digits:
+                ascii_probability: 0.3
+                roman_numeral_probability: 0.7
             add_number_phrase: true
             add_number_phrase_probability: 0.1
         numeric_probability: 0.4
@@ -120,10 +124,14 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
-            roman_numeral_probability: 0.3
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
         ordinal:
             direction: right
-            roman_numeral_probability: 0.3
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
         numeric_probability: 0.4
         ordinal_probability: 0.6
     etaz: &etaz
@@ -134,10 +142,14 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
-            roman_numeral_probability: 0.3
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
         ordinal:
             direction: right
-            roman_numeral_probability: 0.3
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
         numeric_probability: 0.4
         ordinal_probability: 0.6
     prizemi: &prizemi
@@ -163,7 +175,9 @@ levels:
         # e.g. 1. podzemní podlaží
         ordinal:
             direction: right
-            roman_numeral_probability: 0.3
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
         standalone_probability: 0.985
         number_abs_value: true
         number_min_abs_value: 1

@@ -53,8 +53,8 @@ house_number:
         canonical: дом
         abbreviated: д
         sample: true
-        canonical_probability: 0.8
-        abbreviated_probability: 0.1
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
         sample_probability: 0.1
         numeric:
             direction: left
@@ -62,8 +62,8 @@ house_number:
         canonical: dom
         abbreviated: d
         sample: true
-        canonical_probability: 0.8
-        abbreviated_probability: 0.1
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
         sample_probability: 0.1
         numeric:
             direction: left
@@ -95,8 +95,8 @@ and:
 
 
 cross_streets:
-    and: *i
-    and: *i_latin
+    i: *i
+    i_latin: *i_latin
     corner: &ugol
         canonical: угол
         sample: true
@@ -177,6 +177,9 @@ levels:
             direction_probability: 0.9
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         numeric_probability: 0.4
         ordinal_probability: 0.6
     etazh_latin: &etazh_latin
@@ -217,6 +220,26 @@ levels:
             direction: right
         numeric_probability: 0.4
         ordinal_probability: 0.6
+    pervyy_etazh: &pervyy_etazh
+        canonical: первый этаж
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+    pervyy_etazh_latin: &pervyy_etazh_latin
+        canonical: pervyy etazh
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+    nizhniy_etazh: &nizhniy_etazh
+        canonical: нижний этаж
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+    nizhniy_etazh_latin: &nizhniy_etazh_latin
+        canonical: nizhniy etazh
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
     tsokolnyy_etazh: &tsokolnyy_etazh
         canonical: цокольный этаж
         abbreviated: цок эт
@@ -295,7 +318,20 @@ levels:
                   probability: 0.09
                 - alternative: *etazh_latin
                   probability: 0.01
-        "0": *ground_floor
+        "0":
+            default: *pervyy_etazh
+            probability: 0.6
+            alternatives:
+                - alternative: *pervyy_etazh_latin
+                  probability: 0.05
+                - alternative: *nizhniy_etazh
+                  probability: 0.2
+                - alternative: *nizhniy_etazh_latin
+                  probability: 0.05
+                - alternative: *tsokolnyy_etazh
+                  probability: 0.075
+                - alternative: *tsokolnyy_etazh_latin
+                  probability: 0.025
 
     numbering_starts_at: 0
 
@@ -321,7 +357,7 @@ categories:
             sample: true
             canonical_probability: 0.8
             sample_probability: 0.2
-        probability: 0.74
+        probability: 0.69
         alternatives:
             - alternative:
                 canonical: vblizi
@@ -347,6 +383,18 @@ categories:
                 canonical_probability: 0.8
                 sample_probability: 0.2
               probability: 0.04
+            - alternative:
+                canonical: под
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.04
+            - alternative:
+                canonical: pod
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.01
             - alternative:
                 canonical: okolo
                 sample: true
