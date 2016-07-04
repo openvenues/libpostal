@@ -1,0 +1,122 @@
+# ko.yaml
+# -------
+# Korean language specification
+
+whitespace: false
+
+components:
+    level:
+        null_probability: 0.85 # Probability of doing nothing if no floor number is specified
+        alphanumeric_probability: 0.15
+
+    unit:
+        # If no unit number is specified
+        null_probability: 0.6
+        alphanumeric_probability: 0.4
+
+numbers:
+    combinations:
+        # Unit is just appended onto the house number
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 1.0
+            probability: 1.0
+
+numbers:
+    default: &ho
+        canonical: 호
+        numeric_affix:
+            affix: 호
+            direction: right
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    probability: 0.9
+    alternatives:
+        - alternative: &ho_traditional
+              canonical: 號
+              numeric_affix:
+                  affix: 號
+                  direction: right
+              numeric_probability: 0.0
+              numeric_affix_probability: 1.0
+          probability: 0.1
+
+levels:
+    cheung: &cheung
+        canonical: 층
+        numeric_affix:
+            affix: 층
+            direction: right
+            digits:
+                ascii_probability: 0.3
+                unicode_full_width_probability: 0.5
+                spellout_probability: 0.2
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+    numbering_starts_at: 1
+
+    alphanumeric:
+        default: *cheung
+        numeric_probability: 1.0
+
+po_boxes:
+    saseoham: &saseoham
+        canonical: 사서함
+        numeric_affix:
+            affix: 사서함
+            direction: left
+            digits:
+                ascii_probability: 0.7
+                unicode_full_width_probability: 0.1
+                spellout_probability: 0.2
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+    alphanumeric:
+        default: *saseoham
+        numeric_probability: 1.0
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+
+postcodes:
+    alphanumeric:
+        default: &upyeon_beonho
+            canonical: 우편번호
+            numeric_affix:
+                affix: 우편번호
+                direction: left
+            # null_probability means the chance of doing nothing e.g. just the postal code
+            null_probability: 0.9
+            numeric_probability: 0.0
+            numeric_affix_probability: 0.1
+
+units:
+    alphanumeric:
+        default: *ho
+        probability: 0.9
+        alternatives:
+            - alternative: *ho_traditional
+              probability: 0.1
+        numeric_probability: 1.0
+        use_positive_numbers_probability: 1.0
+        # If we have a floor number (from building:levels), use it
+        use_floor_probability: 0.8
