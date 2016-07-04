@@ -530,11 +530,6 @@ categories:
     near_me_probability: 0.1
     in_probability: 0.35
 
-
-# ru.yaml
-# -------
-# Russian language specification
-
 directions:
     pravo: &pravo
         canonical: право
