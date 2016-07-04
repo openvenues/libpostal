@@ -25,39 +25,38 @@ components:
 
 
     combinations:
-        # For unit types like 2/34 (more common in Canada and Australia)
-        house_number_unit:
-            components:
-                - house_number
-                - unit
-            label: house_number
-            separators:
-                - separator: "-"
-                  probability: 0.9
-                - separator: " - "
-                  probability: 0.05
-                - separator: /
-                  probability: 0.05
-            probability: 0.005
-        house_number_floor:
-            components:
-                - house_number
-                - unit
-            label: house_number
-            separators:
-                - separator: "-"
-                  probability: 0.9
-                - separator: " - "
-                  probability: 0.05
-                - separator: /
-                  probability: 0.05
-            probability: 0.005
-
-        house_number_staircase_unit:
+        -
             components:
                 - house_number
                 - staircase
                 - unit
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 0.9
+                - separator: " - "
+                  probability: 0.05
+                - separator: /
+                  probability: 0.05
+            probability: 0.005
+        # For unit types like 2/34 (more common in Canada and Australia)
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 0.9
+                - separator: " - "
+                  probability: 0.05
+                - separator: /
+                  probability: 0.05
+            probability: 0.005
+        -
+            components:
+                - house_number
+                - level
             label: house_number
             separators:
                 - separator: "-"
@@ -134,6 +133,9 @@ levels:
             standalone_probability: 0.2 # Let e.g. 5º be the entire floor string
             # If ordinal is selected, chance of e.g. just using 2o without Andar
             null_phrase_probability: 0.6
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         numeric_probability: 0.2
         ordinal_probability: 0.8
     nivel: &nivel
@@ -151,6 +153,9 @@ levels:
             direction_probability: 0.95
             standalone_probability: 0.2
             null_phrase_probability: 0.6
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         numeric_probability: 0.2
         ordinal_probability: 0.8
 
@@ -176,6 +181,9 @@ levels:
             standalone_probability: 0.2 # Let e.g. 5º be the entire floor string
             # If ordinal is selected, chance of e.g. just using 2o without Piso
             null_phrase_probability: 0.6
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         numeric_probability: 0.2
         numeric_affix_probability: 0.05
         ordinal_probability: 0.75
@@ -204,8 +212,7 @@ levels:
     terreo: &terreo
         canonical: terréo
         sample: true
-        canonical_probability: 0.3
-        abbreviated_probability: 0.4
+        canonical_probability: 0.7
         sample_probability: 0.3
     baixos: &baixos
         canonical: baixos
@@ -241,6 +248,9 @@ levels:
         canonical: sub cave
         abbreviated: scv
         sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.3
+        sample_probability: 0.3
         # e.g. sub cave 1
         numeric:
             direction: left
@@ -750,6 +760,10 @@ units:
         canonical: casa
         numeric:
             direction: left
+    moradia: &moradia
+        canonical: moradia
+        numeric:
+            direction: left
     room: &sala
         canonical: sala
         numeric:
@@ -769,10 +783,12 @@ units:
         alternatives:
             - alternative: *sala
               probability: 0.1
-            - alternative: *casa
-              probability: 0.05
             - alternative: *porta
               probability: 0.05
+            - alternative: *casa
+              probability: 0.04
+            - alternative: *moradia
+              probability: 0.01
 
         # Separate random probability for adding directions like 2o Izq, 2 Dcha, etc.
         add_direction: true
@@ -796,7 +812,9 @@ units:
                 - alternative: *sala
                   probability: 0.1
                 - alternative: *casa
-                  probability: 0.03
+                  probability: 0.02
+                - alternative: *moradia
+                  probability: 0.01
                 - alternative: *porta
                   probability: 0.05
                 - alternative: *letra
@@ -903,7 +921,7 @@ countries:
         levels:
             numbering_starts_at: 1
             aliases:
-                "0":
+                "0": &ground_floor_brasil
                     default: *andar_terreo
                     probability: 0.4
                     alternatives:
@@ -920,7 +938,7 @@ countries:
                           probability: 0.05
                         - alternative: *piso
                           probability: 0.01
-
+                "1": *ground_floor_brasil
 
         postcodes:
             alphanumeric:
@@ -929,8 +947,8 @@ countries:
                     abbreviated: cep
                     sample: true
                     canonical_probability: 0.001
-                    abbreviated_probability: 0.995
-                    sample_probability: 0.004
+                    abbreviated_probability: 0.949
+                    sample_probability: 0.05
 
                     numeric:
                         # Postcodes in Brazil are sometimes prefixed by CEP
@@ -945,7 +963,7 @@ countries:
                     numeric_affix_probability: 0.12
                     strict_numeric: true
 
-        po_boxes:
+        po_boxes: &po_boxes_caixa_postal
             alphanumeric:
                 default:
                     canonical: caixa postal
@@ -982,3 +1000,55 @@ countries:
                               probability: 0.05
                             - alternative: *letra
                               probability: 0.05
+
+    # Angola
+    ao:
+        postcodes: &postcodes_codigo_postal
+            alphanumeric:
+                default:
+                    canonical: código postal
+                    abbreviated: cp
+                    sample: true
+                    canonical_probability: 0.001
+                    abbreviated_probability: 0.949
+                    sample_probability: 0.05
+
+                    numeric:
+                        direction: left
+
+                    numeric_affix:
+                        affix: cp
+                        direction: left
+                    # null_probability means the chance of doing nothing e.g. just the postal code
+                    null_probability: 0.7
+                    numeric_probability: 0.18
+                    numeric_affix_probability: 0.12
+                    strict_numeric: true
+
+        po_boxes: *po_boxes_caixa_postal
+
+    # Mozambique
+    mz:
+        postcodes: *postcodes_codigo_postal
+        po_boxes: *po_boxes_caixa_postal
+
+    # Cape Verde
+    cv:
+        po_boxes: *po_boxes_caixa_postal
+
+
+    # East Timor
+    tl:
+        po_boxes: *po_boxes_caixa_postal
+
+    # São Tome and Principe
+    st:
+        po_boxes: *po_boxes_caixa_postal
+
+    # Guinea-Bissau
+    gw:
+        po_boxes: *po_boxes_caixa_postal
+
+    # Macau
+    mo:
+        po_boxes: *po_boxes_caixa_postal

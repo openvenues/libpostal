@@ -117,6 +117,7 @@ po_boxes:
             affix: 邮政信箱
             direction: left
             digits:
+                ascii_probability: 0.3
                 unicode_full_width_probability: 0.5
                 spellout_probability: 0.2
             use_number_phrase: true
@@ -129,6 +130,7 @@ po_boxes:
             affix: 郵政信箱
             direction: left
             digits:
+                ascii_probability: 0.3
                 unicode_full_width_probability: 0.5
                 spellout_probability: 0.2
             use_number_phrase: true

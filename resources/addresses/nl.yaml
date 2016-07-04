@@ -22,7 +22,7 @@ components:
         alphanumeric_probability: 0.2
 
     combinations:
-        house_number_unit:
+        -
             components:
                 - house_number
                 - unit
@@ -72,10 +72,17 @@ levels:
     verdieping: &verdieping
         canonical: verdieping
         sample: true
-        canonical_probability: 0.8
-        sample_probability: 0.2
+        canonical_probability: 0.9
+        sample_probability: 0.1
         numeric:
             direction: left
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        numeric_probability: 0.7
+        ordinal_probability: 0.3
     etage: &etage
         canonical: etage
         abbreviated: et
@@ -85,12 +92,19 @@ levels:
         sample_probability: 0.2
         numeric:
             direction: left
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        numeric_probability: 0.7
+        ordinal_probability: 0.3
     begane_grond: &begane_grond
         canonical: begane grond
         abbreviated: bg
         sample: true
         canonical_probability: 0.5
-        sample_probability: 0.2
+        abbreviated_probability: 0.2
         sample_probability: 0.3
     benedenverdieping: &benedenverdieping
         canonical: benedenverdieping
@@ -114,11 +128,11 @@ levels:
         sample_probability: 0.2
     aliases:
         "0":
-            default: *benedenverdieping
-            probability: 0.5
+            default: *begane_grond
+            probability: 0.6
             alternatives:
-                - alternative: *begane_grond
-                  probability: 0.45
+                - alternative: *benedenverdieping
+                  probability: 0.35
                 - alternative: *parterre
                   probability: 0.04
                 - alternative: *het_gelijkvloers
@@ -497,6 +511,13 @@ countries:
                 sample_probability: 0.2
                 numeric:
                     direction: left
+                ordinal:
+                    direction: right
+                    digits:
+                        ascii_probability: 0.8
+                        spellout_probability: 0.2
+                numeric_probability: 0.7
+                ordinal_probability: 0.3
 
             aliases:
                 "0":

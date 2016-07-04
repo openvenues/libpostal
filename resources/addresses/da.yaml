@@ -21,7 +21,7 @@ components:
         alphanumeric_probability: 0.25
 
     combinations:
-        level_unit:
+        -
             components:
                 - level
                 - unit
@@ -32,7 +32,7 @@ components:
                 - separator: " - "
                   probability: 0.1
             probability: 0.005
-        entrance_unit:
+        -
             components:
                 - entrance
                 - unit
@@ -121,6 +121,9 @@ levels:
             direction_probability: 0.9
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         numeric_probability: 0.4
         ordinal_probability: 0.6
     etage: &etage
@@ -132,6 +135,9 @@ levels:
             direction: right
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         numeric_probability: 0.4
         ordinal_probability: 0.6
     stuen: &stuen

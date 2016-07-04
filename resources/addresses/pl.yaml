@@ -21,7 +21,7 @@ components:
         alphanumeric_probability: 0.25
 
     combinations:
-        house_number_unit:
+        -
             components:
                 - house_number
                 - unit
@@ -128,10 +128,14 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
-            roman_numeral_probability: 0.3
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
         ordinal:
             direction: right
-            roman_numeral_probability: 0.7
+            digits:
+                ascii_probability: 0.3
+                roman_numeral_probability: 0.7
         numeric_probability: 0.4
         ordinal_probability: 0.6
     parter: &parter
@@ -152,7 +156,9 @@ levels:
         # e.g. 1. suterena
         ordinal:
             direction: right
-            roman_numeral_probability: 0.3
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
         standalone_probability: 0.985
         number_abs_value: true
         number_min_abs_value: 1

@@ -26,7 +26,7 @@ components:
     combinations:
         # e.g. 2/34, more common way to specify a unit number in German
         # if unit exists in the first place
-        house_number_unit:
+        -
             components:
                 - house_number
                 - unit
@@ -117,6 +117,9 @@ levels:
             direction: right
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         numeric_probability: 0.3
         numeric_affix_probability: 0.5
         ordinal_probability: 0.2
@@ -129,6 +132,9 @@ levels:
             direction: right
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         numeric_probability: 0.4
         ordinal_probability: 0.6
     stock: &stock
@@ -140,6 +146,9 @@ levels:
             direction: right
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         numeric_probability: 0.1
         ordinal_probability: 0.9
     erdgeschoss: &erdgeschoss
@@ -613,29 +622,8 @@ countries:
 
             # Combined apartment numbers are very common      
             combinations:
-                # e.g. Neubaugasse 55/5
-                house_number_unit:
-                    probability: 0.7
-                    separators:
-                        - separator: /
-                          probability: 0.98
-                        - separator: "-"
-                          probability: 0.02
-                # e.g. Neubaugasse 55/1/5
-                house_number_staircase_unit:
-                    components:
-                        - house_number
-                        - staircase
-                        - unit
-                    label: house_number
-                    separators:
-                        - separator: /
-                          probability: 0.98
-                        - separator: "-"
-                          probability: 0.02
-                    probability: 0.8
                 # e.g. Neubaugasse 55/A/1/5
-                house_number_entrance_staircase_unit:
+                -
                     components:
                         - house_number
                         - entrance
@@ -648,6 +636,31 @@ countries:
                         - separator: "-"
                           probability: 0.02
                     probability: 0.9
+                # e.g. Neubaugasse 55/1/5
+                -
+                    components:
+                        - house_number
+                        - staircase
+                        - unit
+                    label: house_number
+                    separators:
+                        - separator: /
+                          probability: 0.98
+                        - separator: "-"
+                          probability: 0.02
+                    probability: 0.8
+                # e.g. Neubaugasse 55/5
+                -
+                    components:
+                        - house_number
+                        - unit
+                    label: house_number
+                    probability: 0.7
+                    separators:
+                        - separator: /
+                          probability: 0.98
+                        - separator: "-"
+                          probability: 0.02
 
         units:
             top: &top
