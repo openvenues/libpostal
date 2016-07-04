@@ -1,0 +1,4 @@
+ziemeļu|ziemelu|z
+dienvidu|d
+austrumu|a
+rietumu|r

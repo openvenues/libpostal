@@ -1,5 +1,5 @@
 bulvāris|bulvaris
 ceļš|cels
-gatve
+gatve|g
 iela
 prospekts
