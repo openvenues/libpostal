@@ -45,6 +45,10 @@ class Digits(object):
     ASCII = 'ascii'
     SPELLOUT = 'spellout'
     UNICODE_FULL_WIDTH = 'unicode_full_width'
+    ROMAN_NUMERAL = 'roman_numeral'
+
+    CARDINAL = 'cardinal'
+    ORDINAL = 'ordinal'
 
     unicode_full_width_map = {
         '0': safe_decode('０'),
@@ -64,18 +68,37 @@ class Digits(object):
         return six.u('').join([cls.unicode_full_width_map.get(c, c) for c in s])
 
     @classmethod
-    def rewrite_spellout(cls, s, lang):
+    def rewrite_roman_numeral(cls, s):
+        roman_numeral = None
+        if s.isdigit():
+            roman_numeral = numeric_expressions.roman_numeral(s)
+
+        if roman_numeral:
+            return roman_numeral
+        else:
+            return s
+
+    @classmethod
+    def rewrite_spellout(cls, s, lang, num_type, props):
         if s.isdigit():
             num = int(s)
-            cardinal = numeric_expressions.spellout_cardinal(num, lang)
-            if cardinal:
-                return cardinal
+            spellout = None
+            gender = props.get('gender')
+            category = props.get('category')
+
+            if num_type == cls.CARDINAL:
+                spellout = numeric_expressions.spellout_cardinal(num, lang, gender=gender, category=category)
+            elif num_type == cls.ORDINAL:
+                spellout = numeric_expressions.spellout_ordinal(num, lang, gender=gender, category=category)
+
+            if spellout:
+                return spellout.title()
             return s
         else:
             return s
 
     @classmethod
-    def rewrite(cls, d, lang, props):
+    def rewrite(cls, d, lang, props, num_type=CARDINAL):
         if not props:
             return d
 
@@ -84,7 +107,7 @@ class Digits(object):
         values = []
         probs = []
 
-        for digit_type in (cls.SPELLOUT, cls.UNICODE_FULL_WIDTH):
+        for digit_type in (cls.SPELLOUT, cls.UNICODE_FULL_WIDTH, cls.ROMAN_NUMERAL):
             key = '{}_probability'.format(digit_type)
             if key in props:
                 values.append(digit_type)
@@ -99,10 +122,12 @@ class Digits(object):
 
         if digit_type == cls.ASCII:
             return d
+        elif digit_type == cls.SPELLOUT:
+            return cls.rewrite_spellout(d, lang, num_type, props)
+        elif digit_type == cls.ROMAN_NUMERAL:
+            return cls.rewrite_roman_numeral(d)
         elif digit_type == cls.UNICODE_FULL_WIDTH:
             return cls.rewrite_full_width(d)
-        elif digit_type == cls.SPELLOUT:
-            return cls.rewrite_spellout(d, lang)
         else:
             return d
 
@@ -142,6 +167,7 @@ class NumericPhrase(object):
 
     @classmethod
     def combine_with_number(cls, number, phrase, num_type, props, whitespace_default=False):
+
         if num_type == cls.NUMERIC_AFFIX:
             phrase = props['affix']
             if 'zero_pad' in props and number.isdigit():
@@ -330,6 +356,13 @@ class NumberedComponent(object):
                 num -= phrase_props['number_subtract_abs_value']
 
         num = safe_decode(num)
+        digits_props = props.get('digits')
+        if digits_props:
+            # Inherit the gender and category e.g. for ordinals
+            for k in ('gender', 'category'):
+                if k in props:
+                    digits_props[k] = props[k]
+            num = Digits.rewrite(num, language, digits_props, num_type=Digits.CARDINAL if num_type != 'ordinal' else Digits.ORDINAL)
 
         # Do we add the numeric phrase e.g. Floor No 1
         add_number_phrase = props.get('add_number_phrase', False)
@@ -338,31 +371,7 @@ class NumberedComponent(object):
 
         whitespace_default = True
 
-        if num_type == 'numeric' and safe_decode(num).isdigit():
-            values = []
-            probs = []
-            for cardinal_type in ('roman_numeral', 'spellout'):
-                key = '{}_probability'.format(cardinal_type)
-                if key in props:
-                    values.append(cardinal_type)
-                    probs.append(props[key])
-
-            values.append(None)
-            probs.append(1.0 - sum(probs))
-
-            probs = cdf(probs)
-
-            cardinal_type = weighted_choice(values, probs)
-            cardinal_expression = None
-            if cardinal_type == 'roman_numeral':
-                cardinal_expression = numeric_expressions.roman_numeral(num)
-            elif cardinal_type == 'spellout':
-                cardinal_expression = numeric_expressions.spellout_cardinal(num, language, gender=props.get('gender', None))
-
-            if cardinal_expression is not None:
-                num = cardinal_expression
-
-        elif num_type == 'numeric_affix':
+        if num_type == 'numeric_affix':
             phrase = props['affix']
             if props.get('upper_case', True):
                 phrase = phrase.upper()
@@ -370,30 +379,7 @@ class NumberedComponent(object):
                 num = num.rjust(props['zero_pad'], props.get('zero_char', '0'))
             whitespace_default = False
         elif num_type == 'ordinal' and safe_decode(num).isdigit():
-            values = []
-            probs = []
-
-            for ordinal_type in ('roman_numeral', 'spellout'):
-                key = '{}_probability'.format(ordinal_type)
-                if key in props:
-                    values.append(ordinal_type)
-                    probs.append(props[key])
-
-            values.append('digit_suffix')
-            probs.append(1.0 - sum(probs))
-
-            probs = cdf(probs)
-
-            ordinal_type = weighted_choice(values, probs)
-
-            ordinal_expression = None
-            if ordinal_type == 'digit_suffix':
-                ordinal_expression = ordinal_expressions.suffixed_number(num, language, gender=props.get('gender', None))
-
-            elif ordinal_type == 'roman_numeral':
-                ordinal_expression = numeric_expressions.roman_numeral(num)
-            elif ordinal_type == 'spellout':
-                ordinal_expression = numeric_expressions.spellout_ordinal(num, language, gender=props.get('gender', None))
+            ordinal_expression = ordinal_expressions.suffixed_number(num, language, gender=props.get('gender', None))
 
             if ordinal_expression is not None:
                 num = ordinal_expression
