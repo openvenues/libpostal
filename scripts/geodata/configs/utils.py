@@ -33,7 +33,7 @@ def nested_get(obj, keys, default=DoesNotExist):
 
 def alternative_probabilities(properties):
     if properties is None:
-        return None
+        return None, None
 
     probs = []
     alternatives = []
@@ -43,11 +43,13 @@ def alternative_probabilities(properties):
         props = properties['default']
         probs.append(prob)
         alternatives.append(props)
-    elif 'alternatives' not in properties:
+    elif 'alternatives' not in properties and 'default' in properties:
         prob = 1.0
         props = properties['default']
         probs.append(prob)
         alternatives.append(props)
+    elif 'alternatives' not in properties and 'default' not in properties:
+        return None, None
 
     alts = properties.get('alternatives', [])
     for alt in alts:
