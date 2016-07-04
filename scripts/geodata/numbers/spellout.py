@@ -218,7 +218,7 @@ class NumericExpressions(object):
         last_rule = {}
         left_multiply_rules = []
 
-        if num == 0:
+        if num == 0 or (num, gender, category) in rules:
             ordinals = rules.get((num, gender, category))
             if ordinals:
                 if not random_choice_ordinals:
