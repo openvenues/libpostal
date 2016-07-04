@@ -404,7 +404,7 @@ class AddressComponents(object):
         probs = {}
         generated_components = generated_components or set()
 
-        for k, combo in six.iteritems(combo_config):
+        for combo in combo_config:
             components = OrderedDict.fromkeys(combo['components']).keys()
             if not all((c in address_components and (c in generated_components or is_numeric(address_components[c])) for c in components)):
                 continue
@@ -413,8 +413,6 @@ class AddressComponents(object):
 
         if not combos:
             return None
-
-        combos.sort(key=operator.itemgetter(0), reverse=True)
 
         for num_components, combo in combos:
             prob = combo['probability']
