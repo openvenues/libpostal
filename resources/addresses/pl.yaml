@@ -136,6 +136,7 @@ levels:
             digits:
                 ascii_probability: 0.3
                 roman_numeral_probability: 0.7
+                ordinal_suffix_probability: 0.6
         numeric_probability: 0.4
         ordinal_probability: 0.6
     parter: &parter
