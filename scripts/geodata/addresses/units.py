@@ -4,7 +4,7 @@ import six
 from geodata.addresses.config import address_config
 from geodata.addresses.directions import RelativeDirection, LateralDirection, AnteroposteriorDirection
 from geodata.addresses.floors import Floor
-from geodata.addresses.numbering import NumberedComponent, Digits, sample_alphabet, latin_alphabet
+from geodata.addresses.numbering import NumberedComponent, sample_alphabet, latin_alphabet
 from geodata.configs.utils import nested_get
 from geodata.encoding import safe_decode
 from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
@@ -71,7 +71,7 @@ class Unit(NumberedComponent):
             else:
                 number = weighted_choice(cls.positive_units, cls.positive_units_cdf)
         else:
-            if floor is None:
+            if floor is None or not floor.isdigit():
                 floor = Floor.random_int(language, country=country, num_floors=num_floors, num_basements=num_basements)
 
             floor_numbering_starts_at = address_config.get_property('levels.numbering_starts_at', language, country=country, default=0)
@@ -107,8 +107,7 @@ class Unit(NumberedComponent):
             number = cls.for_floor(floor)
 
         if num_type == cls.NUMERIC:
-            number = safe_decode(number)
-            return Digits.rewrite(number, language, num_type_props)
+            return safe_decode(number)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             letter = sample_alphabet(alphabet)

@@ -28,8 +28,7 @@ class Staircase(NumberedComponent):
 
         if num_type == cls.NUMERIC:
             number = weighted_choice(cls.staircase_range, cls.staircase_range_cdf)
-            number = safe_decode(number)
-            return Digits.rewrite(number, language, num_type_props)
+            return safe_decode(number)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             letter = sample_alphabet(alphabet, 2.0)
