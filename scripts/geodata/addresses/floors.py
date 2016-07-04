@@ -3,7 +3,7 @@ import six
 
 from geodata.addresses.config import address_config
 
-from geodata.addresses.numbering import NumberedComponent, Digits, sample_alphabet, latin_alphabet
+from geodata.addresses.numbering import NumberedComponent, sample_alphabet, latin_alphabet
 from geodata.encoding import safe_decode
 from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 from geodata.numbers.spellout import numeric_expressions
@@ -30,16 +30,23 @@ class Floor(NumberedComponent):
         return random.randint(-num_basements, (num_floors - 1) if num_floors > 0 else 0)
 
     @classmethod
-    def sample_positive_floors(cls, num_floors, zeroth_floor_prob=0.001):
-        num_floors = int(num_floors)
-        if random.random() < zeroth_floor_prob:
-            return 0
-        return random.randint(1, (num_floors - 1) if num_floors > 1 else 1)
+    def sample_floors_range(cls, min_floor, max_floor):
+        return random.randint(min_floor, (max_floor - 1) if max_floor > min_floor else min_floor)
 
     @classmethod
     def random_int(cls, language, country=None, num_floors=None, num_basements=None):
+        number = None
         if num_floors is not None:
-            number = cls.sample_floors(num_floors, num_basements or 0)
+            try:
+                num_floors = int(num_floors)
+            except (ValueError, TypeError):
+                return weighted_choice(cls.numbered_floors, cls.floor_probs_cdf)
+
+            if num_floors <= cls.max_floors:
+                number = cls.sample_floors(num_floors, num_basements=num_basements or 0)
+            else:
+                number = cls.sample_floors_range(cls.max_floors + 1, num_floors)
+
         else:
             number = weighted_choice(cls.numbered_floors, cls.floor_probs_cdf)
 
@@ -57,8 +64,7 @@ class Floor(NumberedComponent):
             number += numbering_starts_at
 
         if num_type == cls.NUMERIC:
-            number = safe_decode(number)
-            return Digits.rewrite(number, language, num_type_props)
+            return safe_decode(number)
         elif num_type == cls.ROMAN_NUMERAL:
             roman_numeral = numeric_expressions.roman_numeral(number)
             if roman_numeral is not None:
