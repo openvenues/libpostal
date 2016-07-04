@@ -1,1 +1,1 @@
-nummer|nr|#|№
+nummer|nr|#|№|no
