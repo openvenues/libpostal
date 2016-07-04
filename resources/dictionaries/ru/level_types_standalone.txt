@@ -1,2 +1,4 @@
-цокольный этаж|цок эт
-tsokol'nyy etazh|tsokolnyy etazh|tsok et
+первый этаж|перв эт
+pervyy etazh|perv et
+нижний этаж|ниж эт
+nizhniy etazh|nizh et
