@@ -125,7 +125,12 @@ class Digits(object):
         elif digit_type == cls.SPELLOUT:
             return cls.rewrite_spellout(d, lang, num_type, props)
         elif digit_type == cls.ROMAN_NUMERAL:
-            return cls.rewrite_roman_numeral(d)
+            roman_numeral = cls.rewrite_roman_numeral(d)
+            if random.random() < props.get('ordinal_suffix_probability', 0.0):
+                ordinal_suffix = ordinal_expressions.get_suffix(d, lang, gender=props.get('gender', None))
+                if ordinal_suffix:
+                    roman_numeral = six.u('{}{}').format(roman_numeral, ordinal_suffix)
+            return roman_numeral
         elif digit_type == cls.UNICODE_FULL_WIDTH:
             return cls.rewrite_full_width(d)
         else:
@@ -175,6 +180,10 @@ class NumericPhrase(object):
 
         direction = props['direction']
         whitespace = props.get('whitespace', whitespace_default)
+        whitespace_probability = props.get('whitespace_probability')
+        if whitespace_probability is not None:
+            whitespace = random.random() < whitespace_probability
+
         if props.get('title_case', True):
             # Title case unless the config specifies otherwise
             phrase = phrase.title()
@@ -390,6 +399,10 @@ class NumberedComponent(object):
 
         direction = props['direction']
         whitespace = props.get('whitespace', whitespace_default)
+
+        whitespace_probability = props.get('whitespace_probability')
+        if whitespace_probability is not None:
+            whitespace = random.random() < whitespace_probability
 
         # Occasionally switch up if direction_probability is specified
         if random.random() > props.get('direction_probability', 1.0):

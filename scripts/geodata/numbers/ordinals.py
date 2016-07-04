@@ -93,11 +93,16 @@ class OrdinalExpressions(object):
 
         return trie.search_suffix(str(num))
 
-    def suffixed_number(self, num, lang, gender=None, category=None):
+    def get_suffix(self, num, lang, gender=None, category=None):
         suffixes = self.get_suffixes(num, lang, gender=gender, category=category)
         if not suffixes:
             return None
-        suffix = random.choice(suffixes)
+        return random.choice(suffixes)
+
+    def suffixed_number(self, num, lang, gender=None, category=None):
+        suffix = self.get_suffix(num, lang, gender=gender, category=category)
+        if not suffix:
+            return None
         return six.u('{}{}').format(safe_decode(num), safe_decode(suffix))
 
 ordinal_expressions = OrdinalExpressions()
