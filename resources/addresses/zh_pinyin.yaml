@@ -19,6 +19,7 @@ numbers:
         canonical: hao
         numeric_affix:
             affix: -hao
+            upper_case: false
             direction: right
         numeric_probability: 0.0
         numeric_affix_probability: 1.0
@@ -33,6 +34,7 @@ levels:
         canonical: lóu
         numeric_affix:
             affix: -lóu
+            upper_case: false
             direction: right
         numeric_probability: 0.0
         numeric_affix_probability: 1.0
@@ -40,19 +42,15 @@ levels:
         canonical: lou
         numeric_affix:
             affix: -lou
+            upper_case: false
             direction: right
-            add_number_phrase: true
-            add_number_phrase_probability: 0.5
-            digits:
-                ascii_probability: 0.6
-                unicode_full_width_probability: 0.1
-                spellout_probability: 0.3
         numeric_probability: 0.0
         numeric_affix_probability: 1.0
     ceng: &ceng
         canonical: céng
         numeric_affix:
             affix: -céng
+            upper_case: false
             direction: right
         numeric_probability: 0.0
         numeric_affix_probability: 1.0
@@ -60,6 +58,7 @@ levels:
         canonical: ceng
         numeric_affix:
             affix: -ceng
+            upper_case: false
             direction: right
         numeric_probability: 0.0
         numeric_affix_probability: 1.0
@@ -128,6 +127,7 @@ units:
         canonical: shì
         numeric_affix:
             affix: -shì
+            upper_case: false
             direction: right
         numeric_probability: 0.0
         numeric_affix_probability: 1.0
@@ -136,6 +136,7 @@ units:
         canonical: shi
         numeric_affix:
             affix: -shi
+            upper_case: false
             direction: right
         numeric_probability: 0.0
         numeric_affix_probability: 1.0
