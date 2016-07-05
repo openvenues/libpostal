@@ -5,8 +5,12 @@ bulevardi
 magistrala
 обилазница
 obilaznica
+магистрала
+magistrala
 прилаз
 prilaz
+пут
+put
 трг
 trg
 улица|ул
