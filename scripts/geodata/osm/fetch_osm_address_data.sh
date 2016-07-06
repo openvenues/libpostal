@@ -72,14 +72,14 @@ VALID_LEISURE_KEYS="leisure=adult_gaming_centre or leisure=amusement_arcade or l
 VALID_LANDUSE_KEYS="landuse=allotmenets or landuse=basin or landuse=cemetery or landuse=commercial or landuse=construction or landuse=farmland or landuse=forest or landuse=grass or landuse=greenhouse_horticulture or landuse=industrial or landuse=landfill or landuse=meadow or landuse=military or landuse=orchard or landuse=plant_nursery or landuse=port or landuse=quarry or landuse=recreation_ground or landuse=resevoir or landuse=residential or landuse=retail or landuse=village_green or landuse=vineyard"
 VALID_RAILWAY_KEYS="railway=station"
 
-VALID_VENUES="( ( $VALID_AEROWAY_KEYS ) or ( $VALID_AMENITY_KEYS ) or ( $VALID_HISTORIC_KEYS ) or ( $VALID_OFFICE_KEYS ) or ( $VALID_PLACE_KEYS ) or ( $VALID_SHOP_KEYS ) or ( $VALID_TOURISM_KEYS ) or ( $VALID_LEISURE_KEYS ) or ( $VALID_LANDUSE_KEYS ) or ( $VALID_RAILWAY_KEYS ) )"
+VALID_VENUE_KEYS="( ( $VALID_AEROWAY_KEYS ) or ( $VALID_AMENITY_KEYS ) or ( $VALID_HISTORIC_KEYS ) or ( $VALID_OFFICE_KEYS ) or ( $VALID_PLACE_KEYS ) or ( $VALID_SHOP_KEYS ) or ( $VALID_TOURISM_KEYS ) or ( $VALID_LEISURE_KEYS ) or ( $VALID_LANDUSE_KEYS ) or ( $VALID_RAILWAY_KEYS ) )"
 
 # Address data set for use in parser, language detection
 echo "Filtering for records with address tags: `date`"
 PLANET_ADDRESSES_O5M="planet-addresses.o5m"
 JAPAN_ADDRESSES_O5M="japan-addresses.o5m"
-VALID_ADDRESSES="( ( ( name= or addr:housename= ) and $VALID_VENUES ) ) or ( ( addr:street= or addr:place= ) and ( name= or building= or building:levels= or addr:housename= or addr:housenumber= ) )"
-VALID_ADDRESSES_JAPAN="( addr:housenumber= or addr:street= ) or ( ( name= or name:ja= or addr:housename= ) and $VALID_VENUES )"
+VALID_ADDRESSES="( ( ( name= or addr:housename= ) and ( building!=yes  or $VALID_VENUE_KEYS ) ) ) or ( ( addr:street= or addr:place= ) and ( name= or building= or building:levels= or addr:housename= or addr:housenumber= ) )"
+VALID_ADDRESSES_JAPAN="( addr:housenumber= or addr:street= ) or ( ( name= or name:ja= or addr:housename= ) and ( building!=yes or $VALID_VENUE_KEYS ) )"
 osmfilter $PLANET_O5M --keep="$VALID_ADDRESSES" --drop-author --drop-version -o=$PLANET_ADDRESSES_O5M &
 osmfilter $JAPAN_O5M --keep="$VALID_ADDRESSES_JAPAN" --drop-author --drop-version -o=$JAPAN_ADDRESSES_O5M &
 
@@ -114,26 +114,34 @@ PLANET_BORDERS_O5M="planet-borders.o5m"
 PLANET_BORDERS="planet-borders.osm"
 PLANET_ADMIN_BORDERS_OSM="planet-admin-borders.osm"
 
-VALID_ADMIN_BORDER_KEYS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish or boundary=civil or boundary=ceremonial or place=island or place=city or place=town or place=village or place=hamlet or place=municipality"
-VALID_NEIGHBORHOOD_KEYS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=neighbourhood or place=suburb or place=quarter or place=borough or place=locality"
+VALID_ADMIN_BORDER_KEYS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish or boundary=civil or boundary=ceremonial or place=island or place=city or place=town or place=village or place=hamlet or place=municipality or place=settlement"
+
+VALID_POPULATED_PLACE_KEYS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=locality or place=settlement or place=census-designated or place:ph=village"
+VALID_NEIGHBORHOOD_KEYS="place=neighbourhood or place=suburb or place=quarter or place=borough or place:ph=barangay"
+
+VALID_LOCALITY_KEYS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=neighbourhood or place=suburb or place=quarter or place=borough or place=locality or place=settlement or place=census-designated or place:ph=barangay or place:ph=village"
+
+VALID_ADMIN_NODE_KEYS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=neighbourhood or place=suburb or place=quarter or place=borough or place=island or place=islet or place=county or place=region or place=state or place=subdistrict or place=township or place=archipelago or place=department or place=country or place=district or place=census-designated or place=ward or place=subward or place=province or place=peninsula or place=settlement or place=subregion"
 
 osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDER_KEYS" --drop-author --drop-version -o=$PLANET_ADMIN_BORDERS_OSM
-osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDER_KEYS or $VALID_NEIGHBORHOOD_KEYS" --drop-author --drop-version -o=$PLANET_BORDERS_O5M
+osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDER_KEYS or $VALID_LOCALITY_KEYS" --drop-author --drop-version -o=$PLANET_BORDERS_O5M
+PLANET_BORDERS_NODES="planet-borders-nodes.osm"
+osmfilter $PLANET_O5M --keep="$VALID_ADMIN_NODE_KEYS" --drop-ways --drop-relations --ignore-dependencies --drop-author --drop-version -o=$PLANET_BORDERS_NODES
 PLANET_BORDERS_LATLONS="planet-borders-latlons.o5m"
 osmconvert $PLANET_BORDERS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_BORDERS_LATLONS
 rm $PLANET_BORDERS_O5M
-osmfilter $PLANET_BORDERS_LATLONS --keep="$VALID_ADMIN_BORDER_KEYS or $VALID_NEIGHBORHOOD_KEYS" -o=$PLANET_BORDERS
+osmfilter $PLANET_BORDERS_LATLONS --keep="$VALID_ADMIN_BORDER_KEYS or $VALID_LOCALITY_KEYS" -o=$PLANET_BORDERS
 rm $PLANET_BORDERS_LATLONS
 
 echo "Filtering for neighborhoods"
 PLANET_NEIGHBORHOODS="planet-neighborhoods.osm"
-osmfilter $PLANET_O5M --keep="name= and ( $VALID_NEIGHBORHOOD_KEYS )" --drop-relations --drop-ways --ignore-dependencies --drop-author --drop-version -o=$PLANET_NEIGHBORHOODS
+osmfilter $PLANET_O5M --keep="name= and ( $VALID_LOCALITY_KEYS )" --drop-relations --drop-ways --ignore-dependencies --drop-author --drop-version -o=$PLANET_NEIGHBORHOODS
 
 echo "Filtering for subdivision polygons"
 PLANET_SUBDIVISIONS="planet-subdivisions.osm"
 SUBDIVISION_AMENITY_TYPES="amenity=university or amentiy=college or amentiy=school or amentiy=hospital"
 SUBDIVISION_LANDUSE_TYPES="landuse=residential or landuse=commercial or landuse=industrial or landuse=retail or landuse=military"
-SUBDIVISION_PLACE_TYPES="place=allotmenets or place=city_block or place=plot or place=subdivision"
+SUBDIVISION_PLACE_TYPES="place=allotmenets or place=city_block or place=block or place=plot or place=subdivision"
 osmfilter $PLANET_O5M --keep="( $SUBDIVISION_AMENITY_TYPES or $SUBDIVISION_PLACE_TYPES or $SUBDIVISION_LANDUSE_TYPES )" --drop="( place= and not ( $SUBDIVISION_PLACE_TYPES ) ) or boundary=" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS
 
 echo "Filtering for postal_code polygons"
@@ -144,12 +152,12 @@ osmfilter $PLANET_O5M --keep="boundary=postal_code" --drop-author --drop-version
 # Venue data set for use in venue classification
 echo "Filtering for venue records: `date`"
 PLANET_VENUES_O5M="planet-venues.o5m"
-osmfilter $PLANET_O5M --keep="( name=  and ( building!=yes or $VALID_VENUES )" --drop-author --drop-version -o=$PLANET_VENUES_O5M
+osmfilter $PLANET_O5M --keep="( name=  and ( building!=yes or $VALID_VENUE_KEYS )" --drop-author --drop-version -o=$PLANET_VENUES_O5M
 PLANET_VENUES_LATLONS="planet-venues-latlons.o5m"
 osmconvert $PLANET_VENUES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_VENUES_LATLONS
 rm $PLANET_VENUES_O5M
 PLANET_VENUES="planet-venues.osm"
-osmfilter $PLANET_VENUES_LATLONS --keep="name= and ( building!=yes or ( $VALID_VENUES ) )" -o=$PLANET_VENUES
+osmfilter $PLANET_VENUES_LATLONS --keep="name= and ( building!=yes or ( $VALID_VENUE_KEYS ) )" -o=$PLANET_VENUES
 rm $PLANET_VENUES_LATLONS
 
 # Categories for building generic queries like "restaurants in Brooklyn"
