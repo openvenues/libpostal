@@ -7,9 +7,8 @@ alphanumeric_probability: 0.7
 
 components:
     level:
-        null_probability: 0.95
-        alphanumeric_probability: 0.04
-        standalone_probability: 0.01
+        null_probability: 0.8
+        alphanumeric_probability: 0.2
 
     staircase:
         null_probability: 0.99
@@ -23,7 +22,57 @@ components:
         null_probability: 0.7
         alphanumeric_probability: 0.3
 
-    # Note: no combinations because of the house numbering scheme
+
+    combinations:
+        -
+            components:
+                - house_number
+                - staircase
+                - level
+                - unit
+            label: house_number
+            separators:
+                - separator: "/"
+                  probability: 0.95
+                - separator: "-"
+                  probability: 0.05
+            probability: 0.005
+        -
+            components:
+                - house_number
+                - level
+                - unit
+            label: house_number
+            separators:
+                - separator: "/"
+                  probability: 0.95
+                - separator: "-"
+                  probability: 0.05
+            probability: 0.005
+        -
+            components:
+                - house_number
+                - level
+            label: house_number
+            separators:
+                - separator: "/"
+                  probability: 0.95
+                - separator: "-"
+                  probability: 0.05
+            probability: 0.1
+        # For unit types like 2/34
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: "/"
+                  probability: 0.95
+                - separator: "-"
+                  probability: 0.05
+            probability: 0.005
+
 
 
 numbers:
@@ -391,7 +440,8 @@ levels:
               probability: 0.04
             - alternative: *etaza_latin
               probability: 0.01
-        numeric_probability: 0.99 # With this probability, pick an integer
+        numeric_probability: 0.69 # With this probability, pick an integer
+        roman_numeral_probability: 0.3 # Pick a Roman numeral for the actual value
         alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
         numeric_plus_alpha_probability: 0.0001 # e.g. 2A
         alpha_plus_numeric_probability: 0.0001 # e.g. A2
@@ -419,7 +469,7 @@ directions:
         numeric:
             direction: right
     levo_latin: &levo_latin
-        canonical: лево
+        canonical: levo
         sample: true
         canonical_probability: 0.8
         sample_probability: 0.2
