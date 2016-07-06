@@ -21,36 +21,36 @@ class TestAddressConfigs(unittest.TestCase):
     def check_entrance_phrases(self, language, country=None):
         for i in xrange(1000):
             phrase = Entrance.phrase(Entrance.random(language, country=country), language, country=country)
-            self.assertTrue(self.valid_phrase(phrase))
+            self.assertTrue(self.valid_phrase(phrase), six.u('phrase was: {}').format(phrase))
 
     def check_staircase_phrases(self, language, country=None):
         for i in xrange(1000):
             phrase = Entrance.phrase(Entrance.random(language, country=country), language, country=country)
-            self.assertTrue(self.valid_phrase(phrase))
+            self.assertTrue(self.valid_phrase(phrase), six.u('phrase was: {}').format(phrase))
 
     def check_floor_phrases(self, language, country=None):
         for i in xrange(10000):
             phrase = Floor.phrase(Floor.random(language, country=country), language, country=country)
-            self.assertTrue(self.valid_phrase(phrase))
+            self.assertTrue(self.valid_phrase(phrase), six.u('phrase was: {}').format(phrase))
 
     def check_unit_phrases(self, language, country=None):
         for i in xrange(10000):
             phrase = Unit.phrase(Unit.random(language, country=country), language, country=country)
-            self.assertTrue(self.valid_phrase(phrase))
+            self.assertTrue(self.valid_phrase(phrase), six.u('phrase was: {}').format(phrase))
 
     def check_po_boxes(self, language, country=None):
         for i in xrange(1000):
             phrase = POBox.phrase(POBox.random(language, country=country), language, country=country)
             if phrase is None:
                 break
-            self.assertTrue(self.valid_phrase(phrase))
+            self.assertTrue(self.valid_phrase(phrase), six.u('phrase was: {}').format(phrase))
 
     def check_postcodes(self, language, country=None):
         for i in xrange(1000):
             phrase = PostCode.phrase('12345', language, country=country)
             if phrase is None:
                 break
-            self.assertTrue(self.valid_phrase(phrase))
+            self.assertTrue(self.valid_phrase(phrase), six.u('phrase was: {}').format(phrase))
 
     def check_category_phrases(self, language, country=None):
         for i in xrange(1000):
