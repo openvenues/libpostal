@@ -300,7 +300,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             props['type'] = id_type
             props['id'] = element_id
 
-            is_neighborhood = osm_definitions.meets_definition(attrs, osm_defintiions.NEIGHBORHOOD)
+            possible_neighborhood = osm_definitions.meets_definition(attrs, osm_defintiions.LOCALITY)
 
             ranks = []
             osm_names = []
@@ -338,7 +338,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                                     name = pattern.sub(repl, name)
                                 normalized_qs_names[i] = name
 
-                            if is_neighborhood and idx is qs and props.get(QuattroshapesReverseGeocoder.LEVEL) != 'neighborhood':
+                            if possible_neighborhood and idx is qs and props.get(QuattroshapesReverseGeocoder.LEVEL) != 'neighborhood':
                                 continue
 
                             if not contains_ideographs:
