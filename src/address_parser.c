@@ -834,6 +834,22 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
         uint32_array_push(context->separators, ADDRESS_SEPARATOR_NONE);
     }
 
+    // This parser was trained without knowing language/country.
+    // If at some point we build country-specific/language-specific
+    // parsers, these parameters could be used to select a model.
+    // The language parameter does technically control which dictionaries
+    // are searched at the street level. It's possible with e.g. a phrase
+    // like "de", which can be either the German country code or a stopword
+    // in Spanish, that even in the case where it's being used as a country code,
+    // it's possible that both the street-level and admin-level phrase features
+    // may be working together as a kind of intercept. Depriving the model
+    // of the street-level phrase features by passing in a known language
+    // may change the decision threshold so explicitly ignore these
+    // options until there's a use for them (country-specific or language-specific
+    // parser models).
+
+    language = NULL;
+    country = NULL;
     address_parser_context_fill(context, parser, tokenized_str, language, country);
 
     address_parser_response_t *response = NULL;
