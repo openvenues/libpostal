@@ -24,6 +24,57 @@ components:
         alphanumeric_probability: 0.4
 
 
+    combinations:
+        -
+            components:
+                - house_number
+                - staircase
+                - level
+                - unit
+            label: house_number
+            separators:
+                - separator: "/"
+                  probability: 0.95
+                - separator: "-"
+                  probability: 0.05
+            probability: 0.005
+        -
+            components:
+                - house_number
+                - level
+                - unit
+            label: house_number
+            separators:
+                - separator: "/"
+                  probability: 0.95
+                - separator: "-"
+                  probability: 0.05
+            probability: 0.005
+        -
+            components:
+                - house_number
+                - level
+            label: house_number
+            separators:
+                - separator: "/"
+                  probability: 0.95
+                - separator: "-"
+                  probability: 0.05
+            probability: 0.01
+        # For unit types like 2/34
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: "/"
+                  probability: 0.95
+                - separator: "-"
+                  probability: 0.05
+            probability: 0.005
+
+
 numbers:
     default: &nomer
         canonical: номер
@@ -175,10 +226,15 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.1
+                spellout_probability: 0.1
         ordinal:
             direction: right
             digits:
-                ascii_probability: 0.8
+                ascii_probability: 0.5
+                roman_numeral_probability: 0.3
                 spellout_probability: 0.2
         numeric_probability: 0.4
         ordinal_probability: 0.6
@@ -192,8 +248,16 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.1
+                spellout_probability: 0.1
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.5
+                roman_numeral_probability: 0.3
+                spellout_probability: 0.2
         numeric_probability: 0.4
         ordinal_probability: 0.6
     uroven: &uroven
@@ -204,8 +268,16 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.1
+                spellout_probability: 0.1
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.5
+                roman_numeral_probability: 0.3
+                spellout_probability: 0.2
         numeric_probability: 0.4
         ordinal_probability: 0.6
     uroven_latin: &uroven_latin
@@ -216,8 +288,16 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.1
+                spellout_probability: 0.1
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.5
+                roman_numeral_probability: 0.3
+                spellout_probability: 0.2
         numeric_probability: 0.4
         ordinal_probability: 0.6
     pervyy_etazh: &pervyy_etazh
@@ -267,8 +347,6 @@ levels:
             direction: left
         ordinal:
             direction: right
-        ordinal:
-            direction: right
         number_abs_value: true
         number_min_abs_value: 2
         # Basement 2 == Sub-basement 1
@@ -288,8 +366,6 @@ levels:
         numeric_affix:
             affix: p
             direction: left
-        ordinal:
-            direction: right
         ordinal:
             direction: right
         number_abs_value: true
@@ -345,7 +421,8 @@ levels:
               probability: 0.09
             - alternative: *uroven_latin
               probability: 0.01
-        numeric_probability: 0.99 # With this probability, pick an integer
+        numeric_probability: 0.79 # With this probability, pick an integer
+        roman_numeral_probability: 0.2
         alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
         numeric_plus_alpha_probability: 0.0001 # e.g. 2A
         alpha_plus_numeric_probability: 0.0001 # e.g. A2
