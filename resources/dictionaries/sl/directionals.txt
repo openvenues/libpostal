@@ -1,0 +1,4 @@
+jug|j
+severno|s
+vzhod|v
+zahod|z
