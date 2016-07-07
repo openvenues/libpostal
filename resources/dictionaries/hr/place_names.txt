@@ -1,1 +1,18 @@
+ambulanta
+banka
+crkva
+dom
+dječji vrtić|djecji vrtic
+fakultet
+gimnazija
+kapelica
+kavana
+kolodvor
+konoba
+ljekarna
+luka
 most
+osnovna škola|osnovna skola
+restoran
+škola|skola
+tržnica|trznica
