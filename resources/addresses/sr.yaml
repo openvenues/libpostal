@@ -690,9 +690,13 @@ staircases:
             modifier:
                 alternatives:
                     - alternative: *desno
-                      probability: 0.2
+                      probability: 0.19
+                    - alternative: *desno_latin
+                      probability: 0.01
                     - alternative: *levo
-                      probability: 0.2
+                      probability: 0.19
+                    - alternative: *levo_latin
+                      probability: 0.01
                     - alternative: *sever
                       probability: 0.14
                     - alternative: *sever_latin
