@@ -1,4 +1,4 @@
 jug|j
-severno|s
+sever|s
 vzhod|v
 zahod|z

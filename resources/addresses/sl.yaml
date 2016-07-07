@@ -322,8 +322,8 @@ cardinal_directions:
         numeric_probability: 0.5
         numeric_affix_probability: 0.5
 
-    north: &severno
-        canonical: severno
+    north: &sever
+        canonical: sever
         abbreviated: s
         canonical_probability: 0.95
         abbreviated_probability: 0.05
@@ -351,7 +351,7 @@ cardinal_directions:
         numeric_affix_probability: 0.5
 
     alternatives:
-        - alternative: *severno
+        - alternative: *sever
           probability: 0.25
         - alternative: *vzhod
           probability: 0.23
@@ -416,7 +416,7 @@ staircases:
                       probability: 0.2
                     - alternative: *levo
                       probability: 0.2
-                    - alternative: *severno
+                    - alternative: *sever
                       probability: 0.15
                     - alternative: *jug
                       probability: 0.15
