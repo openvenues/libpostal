@@ -6,7 +6,7 @@ severo-vostoku|severo vostoku
 severo-zapad|severo zapad
 восток|в
 vostok|v
-Юг|Ю
+юг|ю
 yug|y
 юго-востоку|юго востоку
 yugo-vostoku|yugo vostoku
