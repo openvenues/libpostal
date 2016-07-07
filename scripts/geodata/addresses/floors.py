@@ -73,6 +73,9 @@ class Floor(NumberedComponent):
                 return safe_decode(number)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
+            alphabet_probability = address_config.get_property('alphabet_probability', language, country=country, default=None)
+            if alphabet_probability is not None and random.random() >= alphabet_probability:
+                alphabet = latin_alphabet
             letter = sample_alphabet(alphabet)
             if num_type == cls.ALPHA:
                 return letter
