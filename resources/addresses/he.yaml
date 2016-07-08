@@ -133,7 +133,7 @@ levels:
             alternatives:
                 - alternative: *martef_latin
                   probability: 0.1
-        "-1": &ground_floor
+        "-1":
             default: *martef
             probability: 0.9
             alternatives:
@@ -195,7 +195,7 @@ po_boxes:
         sample: true
         canonical_probability: 0.4
         abbreviated_probability: 0.4
-        sample_probability: 0.1
+        sample_probability: 0.2
         numeric:
             direction: left
     ta_doar_latin: &ta_doar_latin
