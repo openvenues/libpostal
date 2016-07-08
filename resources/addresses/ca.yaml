@@ -1,7 +1,6 @@
 # ca.yaml
 # -------
-# Note: make Latin-American conventions by default (country overrides for Spain
-# as well as any other country-specific norms)
+# Catalan language specification
 
 components:
     level:
