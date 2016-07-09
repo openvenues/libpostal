@@ -1,2 +1,4 @@
-apartman|apt
+apartman|apt|ap
 daire|d
+oda
+ofis
