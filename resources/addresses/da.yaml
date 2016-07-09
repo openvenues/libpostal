@@ -304,7 +304,7 @@ categories:
 
 directions:
     right: &til_hojre
-        canonical: højre
+        canonical: til højre
         abbreviated: t.h
         sample: true
         canonical_probability: 0.2
