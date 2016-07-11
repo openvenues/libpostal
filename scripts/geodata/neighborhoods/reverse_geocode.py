@@ -123,7 +123,7 @@ class NeighborhoodDeduper(NameDeduper):
     ])
 
 
-class ZetashapesReverseGeocoder(GeohashPolygonIndex):
+class ClickThatHoodReverseGeocoder(GeohashPolygonIndex):
     simplify_tolerance = 0.00001
     preserve_topology = True
     persistent_polygons = False
@@ -188,13 +188,13 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
     that sufficiently capture variations in address patterns, including
     neighborhoods. Quattroshapes neighborhood data (in the US at least)
     is not great in terms of names, mostly becasue GeoPlanet has so many
-    incorrect names. The neighborhoods project, also known as Zetashapes
+    incorrect names. The neighborhoods project, also known as ClickThatHood
     has very accurate polygons with correct names, but only for a handful
     of cities. OSM usually lists neighborhoods and some other local admin
     areas like boroughs as points rather than polygons.
 
     This index merges all of the above data sets in prioritized order
-    (Zetashapes > OSM > Quattroshapes) to provide unified point-in-polygon
+    (ClickThatHood > OSM > Quattroshapes) to provide unified point-in-polygon
     tests for neighborhoods. The properties vary by source but each has
     source has least a "name" key which in practice is what we care about.
     '''
@@ -209,8 +209,8 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
     cache_size = 100000
 
     source_priorities = {
-        'zetashapes': 0,     # Best names/polygons
-        'osm_zeta': 1,       # OSM names matched with Zetashapes polygon
+        'clickthathood': 0,  # Best names/polygons
+        'osm_cth': 1,        # OSM names matched with ClickThatHood polygon
         'osm_quattro': 2,    # OSM names matched with Quattroshapes polygon
         'quattroshapes': 3,  # Good results in some countries/areas
     }
@@ -256,15 +256,15 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         logger.info('Creating Quattroshapes neighborhoods')
 
         qs = QuattroshapesNeighborhoodsReverseGeocoder.create_neighborhoods_index(quattroshapes_dir, qs_scratch_dir)
-        logger.info('Creating Zetashapes neighborhoods')
-        zs = ZetashapesReverseGeocoder.create_neighborhoods_index()
+        logger.info('Creating ClickThatHood neighborhoods')
+        cth = ClickThatHoodReverseGeocoder.create_neighborhoods_index()
 
         logger.info('Creating IDF index')
         idf = IDFIndex()
 
         char_scripts = get_chars_by_script()
 
-        for idx in (zs, qs):
+        for idx in (cth, qs):
             for i in xrange(idx.i):
                 props = idx.get_properties(i)
                 name = props.get('name')
@@ -279,10 +279,10 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                     idf.update(doc)
 
         qs.matched = [False] * qs.i
-        zs.matched = [False] * zs.i
+        cth.matched = [False] * cth.i
 
         logger.info('Matching OSM points to neighborhood polygons')
-        # Parse OSM and match neighborhood/suburb points to Quattroshapes/Zetashapes polygons
+        # Parse OSM and match neighborhood/suburb points to Quattroshapes/ClickThatHood polygons
         num_polys = 0
         for element_id, attrs, deps in parse_osm(filename):
             try:
@@ -313,7 +313,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             for name_key in OSM_NAME_TAGS:
                 osm_names.extend([v for k, v in six.iteritems(attrs) if k.startswith('{}:'.format(name_key))])
 
-            for idx in (zs, qs):
+            for idx in (cth, qs):
                 candidates = idx.get_candidate_polygons(lat, lon, return_all=True)
 
                 if candidates:
@@ -359,9 +359,9 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             if ranks and ranks[0][0] >= cls.DUPE_THRESHOLD:
                 score, props, poly, idx, i = ranks[0]
 
-                if idx is zs:
+                if idx is cth:
                     attrs['polygon_type'] = 'neighborhood'
-                    source = 'osm_zeta'
+                    source = 'osm_cth'
                 else:
                     level = props.get(QuattroshapesReverseGeocoder.LEVEL, None)
                     source = 'osm_quattro'
@@ -369,8 +369,6 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                         attrs['polygon_type'] = 'neighborhood'
                     else:
                         attrs['polygon_type'] = 'local_admin'
-
-
 
                 attrs['source'] = source
                 index.index_polygon(poly)
@@ -381,14 +379,14 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             if num_polys % 1000 == 0 and num_polys > 0:
                 logger.info('did {} neighborhoods'.format(num_polys))
 
-        for idx, source in ((zs, 'zetashapes'), (qs, 'quattroshapes')):
+        for idx, source in ((cth, 'clickthathood'), (qs, 'quattroshapes')):
             for i in xrange(idx.i):
                 props = idx.get_properties(i)
                 poly = idx.get_polygon(i)
                 if idx.matched[i]:
                     continue
                 props['source'] = source
-                if idx is zs or props.get(QuattroshapesReverseGeocoder.LEVEL, None) == 'neighborhood':
+                if idx is cth or props.get(QuattroshapesReverseGeocoder.LEVEL, None) == 'neighborhood':
                     props['polygon_type'] = 'neighborhood'
                 else:
                     # We don't actually care about local admin polygons unless they match OSM
