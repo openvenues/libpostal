@@ -326,7 +326,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
         logger = logging.getLogger('osm.reverse_geocode')
 
-        for element_id, props, outer_polys, inner_polys in polygons:
+        for element_id, props, admin_center, outer_polys, inner_polys in polygons:
             props = {k: v for k, v in six.iteritems(props)
                      if k in cls.include_property_patterns or (six.u(':') in k and
                      six.u('{}:*').format(k.split(six.u(':'), 1)[0]) in cls.include_property_patterns)}
@@ -334,6 +334,11 @@ class OSMReverseGeocoder(RTreePolygonIndex):
             id_type, element_id = osm_type_and_id(element_id)
             props['type'] = id_type
             props['id'] = element_id
+
+            if admin_center:
+                props['admin_center'] = {k: v for k, v in six.iteritems(admin_center)
+                                         if k in cls.include_property_patterns or (six.u(':') in k and
+                                         six.u('{}:*').format(k.split(six.u(':'), 1)[0]) in cls.include_property_patterns)}
 
             if inner_polys and not outer_polys:
                 logger.warn('inner polygons with no outer')

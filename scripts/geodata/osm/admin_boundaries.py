@@ -14,6 +14,7 @@ from collections import defaultdict, OrderedDict
 from itertools import izip, combinations
 
 from geodata.coordinates.conversion import latlon_to_decimal
+from geodata.file_utils import ensure_dir
 from geodata.graph.scc import strongly_connected_components
 from geodata.math.floats import isclose
 from geodata.osm.extract import *
@@ -48,6 +49,8 @@ class OSMPolygonReader(object):
         self.way_ids = array.array('l')
 
         self.coords = array.array('d')
+
+        self.nodes = {}
 
         self.way_deps = array.array('l')
         self.way_coords = array.array('d')
@@ -203,6 +206,9 @@ class OSMPolygonReader(object):
                 if isclose(lon, 180.0):
                     lon = 179.999
 
+                if 'name' in props:
+                    self.nodes[node_id] = props
+
                 # Nodes are stored in a sorted array, coordinate indices are simply
                 # [lon, lat, lon, lat ...] so the index can be calculated as 2 * i
                 # Note that the pairs are lon, lat instead of lat, lon for geometry purposes
@@ -233,7 +239,7 @@ class OSMPolygonReader(object):
                 if deps[0] == deps[-1] and self.include_polygon(props):
                     outer_polys = self.create_polygons([way_id])
                     inner_polys = []
-                    yield WAY_OFFSET + way_id, props, outer_polys, inner_polys
+                    yield WAY_OFFSET + way_id, props, {}, outer_polys, inner_polys
 
             elif element_id.startswith('relation'):
                 if self.node_ids is not None:
@@ -248,16 +254,25 @@ class OSMPolygonReader(object):
                 outer_ways = []
                 inner_ways = []
 
-                for way_id, role in deps:
+                for elem_id, role in deps:
                     if role == 'outer':
-                        outer_ways.append(way_id)
+                        outer_ways.append(elem_id)
                     elif role == 'inner':
-                        inner_ways.append(way_id)
+                        inner_ways.append(elem_id)
+                    elif role == 'admin_centre':
+                        val = self.nodes.get(long(elem_id))
+                        val['id'] = long(elem_id)
+                        if val is not None:
+                            admin_centers.append(val)
 
                 outer_polys = self.create_polygons(outer_ways)
                 inner_polys = self.create_polygons(inner_ways)
 
-                yield RELATION_OFFSET + relation_id, props, outer_polys, inner_polys
+                admin_center = {}
+                if len(admin_centers) == 1:
+                    admin_center = admin_centers[0]
+
+                yield RELATION_OFFSET + relation_id, props, admin_center, outer_polys, inner_polys
             if i % 1000 == 0 and i > 0:
                 self.logger.info('doing {}s, at {}'.format(element_id.split(':')[0], i))
             i += 1
