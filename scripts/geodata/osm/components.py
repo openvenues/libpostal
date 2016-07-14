@@ -66,4 +66,13 @@ class OSMAddressComponents(object):
             props = self.config.get(country, {}).get(prop, {})
         return props.get(value, None)
 
+    def get_first_component(self, country, properties):
+        for k, v in six.iteritems(props):
+            containing_component = self.get_component(country, k, v)
+            break
+        else:
+            containing_component = None
+        return containing_component
+
+
 osm_address_components = OSMAddressComponents()
