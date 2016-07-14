@@ -60,9 +60,10 @@ class OSMAddressComponents(object):
             self.config[country_code] = data
 
     def get_component(self, country, prop, value):
-        props = self.config.get(country, {}).get(prop, {})
-        if not props and prop in self.global_keys:
+        if prop in self.global_keys:
             props = self.global_keys[prop]
+        else:
+            props = self.config.get(country, {}).get(prop, {})
         return props.get(value, None)
 
 osm_address_components = OSMAddressComponents()
