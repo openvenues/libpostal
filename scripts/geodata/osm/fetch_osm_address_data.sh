@@ -125,8 +125,8 @@ VALID_ADMIN_NODE_KEYS="place=city or place=town or place=village or place=hamlet
 
 osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDER_KEYS" --drop-author --drop-version -o=$PLANET_ADMIN_BORDERS_OSM
 osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDER_KEYS or $VALID_LOCALITY_KEYS" --drop-author --drop-version -o=$PLANET_BORDERS_O5M
-PLANET_BORDERS_NODES="planet-borders-nodes.osm"
-osmfilter $PLANET_O5M --keep="$VALID_ADMIN_NODE_KEYS" --drop-ways --drop-relations --ignore-dependencies --drop-author --drop-version -o=$PLANET_BORDERS_NODES
+PLANET_ADMIN_NODES="planet-admin-nodes.osm"
+osmfilter $PLANET_O5M --keep="$VALID_ADMIN_NODE_KEYS" --drop-ways --drop-relations --ignore-dependencies --drop-author --drop-version -o=$PLANET_ADMIN_NODES
 PLANET_BORDERS_LATLONS="planet-borders-latlons.o5m"
 osmconvert $PLANET_BORDERS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_BORDERS_LATLONS
 rm $PLANET_BORDERS_O5M
@@ -134,14 +134,8 @@ osmfilter $PLANET_BORDERS_LATLONS --keep="$VALID_ADMIN_BORDER_KEYS or $VALID_LOC
 rm $PLANET_BORDERS_LATLONS
 
 echo "Filtering for neighborhoods"
-PLANET_NEIGHBORHOODS_O5M="planet-neighborhoods.o5m"
 PLANET_NEIGHBORHOODS="planet-neighborhoods.osm"
-osmfilter $PLANET_O5M --keep="name= and ( $VALID_LOCALITY_KEYS )" --drop-author --drop-version -o=$PLANET_NEIGHBORHOODS_O5M
-PLANET_NEIGHBORHOODS_LATLONS="planet-neighborhoods-latlons.o5m"
-osmconvert $PLANET_NEIGHBORHOODS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_NEIGHBORHOODS_LATLONS
-rm $PLANET_NEIGHBORHOODS_O5M
-osmfilter $PLANET_NEIGHBORHOODS_LATLONS --keep="name= and ( $VALID_LOCALITY_KEYS )" -o=$PLANET_NEIGHBORHOODS
-rm $PLANET_NEIGHBORHOODS_LATLONS
+osmfilter $PLANET_O5M --keep="name= and ( $VALID_LOCALITY_KEYS )" --drop-relations --drop-ways --ignore-dependencies --drop-author --drop-version -o=$PLANET_NEIGHBORHOODS
 
 echo "Filtering for subdivision polygons"
 PLANET_SUBDIVISIONS="planet-subdivisions.osm"
