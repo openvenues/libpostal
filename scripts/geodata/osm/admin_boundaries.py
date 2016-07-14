@@ -257,6 +257,7 @@ class OSMPolygonReader(object):
 
                 outer_ways = []
                 inner_ways = []
+                admin_centers = []
 
                 for elem_id, role in deps:
                     if role in ('outer', ''):
