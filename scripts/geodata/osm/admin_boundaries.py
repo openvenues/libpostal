@@ -174,7 +174,7 @@ class OSMPolygonReader(object):
     def include_polygon(self, props):
         raise NotImplementedError('Children must implement')
 
-    def polygons(self):
+    def polygons(self, properties_only=False):
         '''
         Generator which yields tuples like:
 
@@ -237,9 +237,13 @@ class OSMPolygonReader(object):
                 self.way_indptr.append(len(self.way_deps))
 
                 if deps[0] == deps[-1] and self.include_polygon(props):
-                    outer_polys = self.create_polygons([way_id])
-                    inner_polys = []
-                    yield WAY_OFFSET + way_id, props, {}, outer_polys, inner_polys
+                    way_id_offset = WAY_OFFSET + way_id
+                    if not properties_only:
+                        outer_polys = self.create_polygons([way_id])
+                        inner_polys = []
+                        yield way_id_offset, props, {}, outer_polys, inner_polys
+                    else:
+                        yield way_id_offset, props, {}
 
             elif element_id.startswith('relation'):
                 if self.node_ids is not None:
@@ -255,7 +259,7 @@ class OSMPolygonReader(object):
                 inner_ways = []
 
                 for elem_id, role in deps:
-                    if role == 'outer':
+                    if role in ('outer', ''):
                         outer_ways.append(elem_id)
                     elif role == 'inner':
                         inner_ways.append(elem_id)
@@ -265,14 +269,17 @@ class OSMPolygonReader(object):
                             val['id'] = long(elem_id)
                             admin_centers.append(val)
 
-                outer_polys = self.create_polygons(outer_ways)
-                inner_polys = self.create_polygons(inner_ways)
-
                 admin_center = {}
                 if len(admin_centers) == 1:
                     admin_center = admin_centers[0]
 
-                yield RELATION_OFFSET + relation_id, props, admin_center, outer_polys, inner_polys
+                relation_id_offset = RELATION_OFFSET + relation_id
+                if not properties_only:
+                    outer_polys = self.create_polygons(outer_ways)
+                    inner_polys = self.create_polygons(inner_ways)
+                    yield relation_id_offset, props, admin_center, outer_polys, inner_polys
+                else:
+                    yield relation_id_offset, props, admin_center
             if i % 1000 == 0 and i > 0:
                 self.logger.info('doing {}s, at {}'.format(element_id.split(':')[0], i))
             i += 1
