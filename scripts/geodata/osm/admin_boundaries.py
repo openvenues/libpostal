@@ -206,7 +206,7 @@ class OSMPolygonReader(object):
                 if isclose(lon, 180.0):
                     lon = 179.999
 
-                if 'name' in props:
+                if 'name' in props and 'place' in props:
                     self.nodes[node_id] = props
 
                 # Nodes are stored in a sorted array, coordinate indices are simply
@@ -261,8 +261,8 @@ class OSMPolygonReader(object):
                         inner_ways.append(elem_id)
                     elif role == 'admin_centre':
                         val = self.nodes.get(long(elem_id))
-                        val['id'] = long(elem_id)
                         if val is not None:
+                            val['id'] = long(elem_id)
                             admin_centers.append(val)
 
                 outer_polys = self.create_polygons(outer_ways)
