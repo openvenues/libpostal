@@ -11,6 +11,7 @@ import sys
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
+from geodata.address_formatting.formatter import AddressFormatter
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.encoding import safe_decode
 from geodata.file_utils import ensure_dir, download_file
@@ -20,7 +21,8 @@ from geodata.names.deduping import NameDeduper
 from geodata.osm.definitions import osm_definitions
 from geodata.osm.extract import parse_osm, osm_type_and_id, NODE, WAY, RELATION, OSM_NAME_TAGS
 from geodata.polygons.index import *
-from geodata.polygons.reverse_geocode import QuattroshapesReverseGeocoder
+from geodata.polygons.language_polys import LanguagePolygonIndex
+from geodata.polygons.reverse_geocode import QuattroshapesReverseGeocoder, OSMReverseGeocoder
 from geodata.statistics.tf_idf import IDFIndex
 
 
@@ -233,7 +235,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         return doc
 
     @classmethod
-    def create_from_osm_and_quattroshapes(cls, filename, quattroshapes_dir, output_dir, scratch_dir=SCRATCH_DIR):
+    def create_from_osm_and_quattroshapes(cls, filename, quattroshapes_dir, language_rtree_dir, osm_rtree_dir, output_dir, scratch_dir=SCRATCH_DIR):
         '''
         Given an OSM file (planet or some other bounds) containing neighborhoods
         as points (some suburbs have boundaries)
@@ -258,6 +260,10 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         qs = QuattroshapesNeighborhoodsReverseGeocoder.create_neighborhoods_index(quattroshapes_dir, qs_scratch_dir)
         logger.info('Creating ClickThatHood neighborhoods')
         cth = ClickThatHoodReverseGeocoder.create_neighborhoods_index()
+
+        language_rtree = LanguagePolygonIndex.load(language_rtree_dir)
+
+        osm_admin_rtree = OSMReverseGeocoder.load(osm_rtree_dir)
 
         logger.info('Creating IDF index')
         idf = IDFIndex()
@@ -300,7 +306,16 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             props['type'] = id_type
             props['id'] = element_id
 
-            possible_neighborhood = osm_definitions.meets_definition(attrs, osm_defintiions.LOCALITY)
+            possible_neighborhood = osm_definitions.meets_definition(attrs, osm_defintions.NEIGHBORHOOD)
+
+            country, candidate_languages, language_props = language_rtree.country_and_languages(lat, lon)
+            component_name = None
+            for k, v in six.iteritems(attrs):
+                component_name = osm_address_components.get_component(country, k, v)
+                if component_name:
+                    break
+            else:
+                component_name = None
 
             ranks = []
             osm_names = []
@@ -312,6 +327,26 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
             for name_key in OSM_NAME_TAGS:
                 osm_names.extend([v for k, v in six.iteritems(attrs) if k.startswith('{}:'.format(name_key))])
+
+            if component_name and component_name != AddressFormatter.SUBURB:
+                existing_osm_candidates = osm_admin_rtree.get_candidate_polygons(lat, lon)
+                skip_node = False
+                for i in existing_osm_candidates:
+                    props = osm_admin_rtree.get_properties(i)
+                    containing_component = None
+                    name = props.get('name')
+                    # Only exact name matches here since we're comparins OSM to OSM
+                    if name and name == attrs.get('name'):
+                        continue
+
+                    containing_component = osm_components.get_first_component(country, props)
+
+                    if containing_component != AddressFormatter.SUBURB:
+                        skip_node = True
+                        break
+                # Skip this element
+                if skip_node:
+                    continue
 
             for idx in (cth, qs):
                 candidates = idx.get_candidate_polygons(lat, lon, return_all=True)
@@ -439,6 +474,12 @@ if __name__ == '__main__':
     parser.add_argument('-q', '--quattroshapes-dir',
                         help='Path to quattroshapes dir')
 
+    parser.add_argument('-a', '--osm-admin-rtree-dir',
+                        help='Path to OSM admin rtree dir')
+
+    parser.add_argument('-l', '--language-rtree-dir',
+                        help='Path to language rtree dir')
+
     parser.add_argument('-n', '--osm-neighborhoods-file',
                         help='Path to OSM neighborhoods file (no dependencies, .osm format)')
 
@@ -449,10 +490,12 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
 
     args = parser.parse_args()
-    if args.osm_neighborhoods_file and args.quattroshapes_dir:
+    if args.osm_neighborhoods_file and args.quattroshapes_dir and args.osm_admin_rtree_dir and args.language_rtree_dir:
         index = NeighborhoodReverseGeocoder.create_from_osm_and_quattroshapes(
             args.osm_neighborhoods_file,
             args.quattroshapes_dir,
+            args.language_rtree_dir,
+            args.osm_rtree_dir,
             args.out_dir
         )
     else:
