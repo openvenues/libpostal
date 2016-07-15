@@ -267,6 +267,7 @@ class OSMPolygonReader(object):
                     elif role == 'admin_centre' and elem_type == 'node':
                         val = self.nodes.get(long(elem_id))
                         if val is not None:
+                            val['type'] = 'node'
                             val['id'] = long(elem_id)
                             admin_centers.append(val)
 
