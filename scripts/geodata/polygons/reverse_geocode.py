@@ -337,7 +337,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
             if admin_center:
                 props['admin_center'] = {k: v for k, v in six.iteritems(admin_center)
-                                         if k in cls.include_property_patterns or (six.u(':') in k and
+                                         if k in ('id', 'type') or k in cls.include_property_patterns or (six.u(':') in k and
                                          six.u('{}:*').format(k.split(six.u(':'), 1)[0]) in cls.include_property_patterns)}
 
             if inner_polys and not outer_polys:
