@@ -1,8 +1,18 @@
 ---
-  admin_level: 
-    "2": "country"
-    "4": "state"
-    "6": "state_district"
-    "8": "city_district"
-    "10": "city"
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "6": "state_district"
+        "8": "city_district"
+        "10": "city"
 
+    overrides:
+        id:
+            relation:
+                "92277": "city"
+        contained_by:
+            relation:
+                "92277":
+                    admin_level:
+                        "6": "city_district"
+                        "8": "suburb"
