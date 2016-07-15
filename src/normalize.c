@@ -100,6 +100,8 @@ void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t
         }
         free(transliterated);
         transliterated = NULL;
+    } else {
+        string_tree_add_string(tree, str);
     }
 
     if (prev_string != NULL) {
