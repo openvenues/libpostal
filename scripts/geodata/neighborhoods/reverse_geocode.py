@@ -339,7 +339,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                     if name and name == attrs.get('name'):
                         continue
 
-                    containing_component = osm_components.get_first_component(country, props)
+                    containing_component = osm_components.component_from_properties(country, props)
 
                     if containing_component != AddressFormatter.SUBURB:
                         skip_node = True
