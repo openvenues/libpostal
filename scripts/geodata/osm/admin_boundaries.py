@@ -259,12 +259,12 @@ class OSMPolygonReader(object):
                 inner_ways = []
                 admin_centers = []
 
-                for elem_id, role in deps:
-                    if role in ('outer', ''):
+                for elem_id, elem_type, role in deps:
+                    if role in ('outer', '') and elem_type == 'way':
                         outer_ways.append(elem_id)
-                    elif role == 'inner':
+                    elif role == 'inner' and elem_type == 'way':
                         inner_ways.append(elem_id)
-                    elif role == 'admin_centre':
+                    elif role == 'admin_centre' and elem_type == 'node':
                         val = self.nodes.get(long(elem_id))
                         if val is not None:
                             val['id'] = long(elem_id)

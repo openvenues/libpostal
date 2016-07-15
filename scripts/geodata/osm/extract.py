@@ -82,10 +82,8 @@ def parse_osm(filename, allowed_types=ALL_OSM_TAGS, dependencies=False):
                     attrs[e.attrib['k']] = e.attrib['v']
                 elif dependencies and item_type == 'way' and e.tag == 'nd':
                     deps.append(long(e.attrib['ref']))
-                elif dependencies and item_type == 'relation' and e.tag == 'member' and \
-                        e.attrib.get('type') in ('way', 'relation') and \
-                        'role' in e.attrib:
-                    deps.append((long(e.attrib['ref']), e.attrib['role']))
+                elif dependencies and item_type == 'relation' and e.tag == 'member' and 'role' in e.attrib:
+                    deps.append((long(e.attrib['ref']), e.attrib.get('type'), e.attrib['role']))
 
             key = elem_id if single_type else '{}:{}'.format(item_type, elem_id)
             yield key, attrs, deps
