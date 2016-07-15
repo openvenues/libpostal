@@ -888,6 +888,9 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
             char_array_clear(temp_string);
             string_tree_iterator_foreach_token(iter, token, {
                 log_debug("token=%s\n", token);
+                if (token == NULL) {
+                    continue;
+                }
                 char_array_append(temp_string, token);
             })
             char_array_terminate(temp_string);
@@ -933,9 +936,7 @@ char **expand_address(char *input, normalize_options_t options, size_t *n) {
             options.languages = lang_response->languages;
          }
     }
-
     string_tree_t *tree = normalize_string_languages(input, normalize_string_options, options.num_languages, options.languages);
-
     cstring_array *strings = cstring_array_new_size(len * 2);
     char_array *temp_string = char_array_new_size(len);
 
@@ -959,6 +960,7 @@ char **expand_address(char *input, normalize_options_t options, size_t *n) {
             bool is_first = true;
 
             string_tree_iterator_foreach_token(iter, segment, {
+                if (segment == NULL) continue;
                 if (!is_first) {
                     char_array_append(temp_string, " ");
                 }
