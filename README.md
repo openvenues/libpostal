@@ -219,6 +219,14 @@ Libpostal is designed to be used by higher-level languages.  If you don't see yo
 
 - PostgreSQL: [pgsql-postal](https://github.com/pramsey/pgsql-postal)
 
+**Unofficial REST API**
+
+- Libpostal REST: [libpostal REST](https://github.com/johnlonganecker/libpostal-rest)
+
+**Libpostal REST Docker**
+
+- Libpostal REST Docker [Libpostal REST Docker](https://github.com/johnlonganecker/libpostal-rest-docker)
+
 Command-line usage (expand)
 ---------------------------
 
