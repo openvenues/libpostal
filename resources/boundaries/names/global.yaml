@@ -52,3 +52,8 @@ names:
           type: relation
           default: name # Richmond County
           probability: 1.0
+
+    # OSM relations should inherit properties from their admin_center
+    override_with_admin_center:
+        - id: 92277 # Bangkok
+          type: relation
