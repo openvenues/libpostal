@@ -277,7 +277,7 @@ quadrant|qdrt|qd
 quay|quy|qy
 quays|quys|qys
 radial|radl
-railroad right of way|rr row|rrrow|rr.row|rr r / o / w
+railroad right of way|rr row|rr-row|rrrow|rr.row|rr r / o / w
 ramble|ra|rmbl
 ramp|rmp
 ranae|ran
