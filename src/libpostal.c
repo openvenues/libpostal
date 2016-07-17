@@ -238,13 +238,13 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
             for (int j = start; j < end; j++) {
                 log_debug("Adding token %d\n", j);
                 token_t token = tokens->a[j];
-                if (is_punctuation(token.type)) {
+                if (is_punctuation(token.type) && !is_special_punctuation(token.type)) {
                     last_was_punctuation = true;
                     continue;
                 }
 
                 if (token.type != WHITESPACE) {
-                    if (phrase.start > 0 && last_was_punctuation && !last_added_was_whitespace) {
+                    if ((phrase.start > 0 && last_was_punctuation && !last_added_was_whitespace) || (is_special_punctuation(token.type))) {
                         string_tree_add_string(tree, " ");
                         string_tree_finalize_token(tree);
                     }
@@ -260,7 +260,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
                     continue;
                 }
 
-                last_was_punctuation = false;
+                last_was_punctuation = is_special_punctuation(token.type);
                 string_tree_finalize_token(tree);       
             }
 
@@ -787,7 +787,7 @@ static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *s
         token_t token = tokens->a[i];
         bool have_phrase = false;
 
-        if (is_special_token(token.type)) {
+        if (is_special_token(token.type) || is_special_punctuation(token.type)) {
             string_tree_add_string_len(tree, str + token.offset, token.len);
             string_tree_finalize_token(tree);
             continue;
