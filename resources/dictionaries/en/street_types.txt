@@ -277,6 +277,7 @@ quadrant|qdrt|qd
 quay|quy|qy
 quays|quys|qys
 radial|radl
+railroad right of way|rr row|rrrow|rr.row|rr r / o / w
 ramble|ra|rmbl
 ramp|rmp
 ranae|ran
@@ -294,7 +295,7 @@ ride
 ridge|rdge|rdg
 ridges|rdgs
 ridgeway|rgwy|rdgwy|ridge way
-right of way|rowy|rightofway|rofw|row|r o w|r of w
+right of way|rowy|rightofway|rofw|row|r o w|r of w|r / o / w
 ring
 rise|ri
 riverway|rvwy
