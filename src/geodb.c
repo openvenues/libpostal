@@ -233,7 +233,7 @@ bool geodb_module_setup(char *dir) {
         return geodb_load(dir == NULL ? LIBPOSTAL_GEODB_DIR : dir);
     }
 
-    return false;
+    return true;
 }
 
 
