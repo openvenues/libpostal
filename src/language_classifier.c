@@ -277,5 +277,6 @@ void language_classifier_module_teardown(void) {
     if (language_classifier != NULL) {
         language_classifier_destroy(language_classifier);
     }
+    language_classifier = NULL;
 }
 
