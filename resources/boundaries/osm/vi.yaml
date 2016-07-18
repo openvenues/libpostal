@@ -1,0 +1,20 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "6": "state_district"
+        "8": "city_district"
+        "10": "city_district"
+    overrides:
+        id:
+            relation:
+                # Ho Chi Minh City
+                "1973756": "city"
+                # Cần Thơ
+                "1874283": "city"
+                # Hanoi
+                "1903516": "city"
+                # Hải Phòng
+                "1902682": "city"
+                # Đà Nẵng
+                "1891418": "city"
