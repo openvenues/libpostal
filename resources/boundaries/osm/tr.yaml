@@ -1,7 +1,7 @@
 ---
   admin_level: 
     "2": "country"
-    "3": "state"
+    "3": "country_region"
     "4": "state"
     "6": "state_district"
 
