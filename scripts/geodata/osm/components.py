@@ -21,14 +21,9 @@ class OSMAddressComponents(object):
 
     ADMIN_LEVEL = 'admin_level'
 
-    # These keys override country-level 
-    global_keys = {
+    # These keys override country-level
+    global_keys_override = {
         'place': {
-            'country': AddressFormatter.COUNTRY,
-            'state': AddressFormatter.STATE,
-            'region': AddressFormatter.STATE,
-            'province': AddressFormatter.STATE,
-            'county': AddressFormatter.STATE_DISTRICT,
             'island': AddressFormatter.ISLAND,
             'islet': AddressFormatter.ISLAND,
             'municipality': AddressFormatter.CITY,
@@ -41,6 +36,17 @@ class OSMAddressComponents(object):
             'suburb': AddressFormatter.SUBURB,
             'quarter': AddressFormatter.SUBURB,
             'neighbourhood': AddressFormatter.SUBURB
+        }
+    }
+
+    # These keys are fallback in case we haven't added a country or there is no admin_level=
+    global_keys = {
+        'place': {
+            'country': AddressFormatter.COUNTRY,
+            'state': AddressFormatter.STATE,
+            'region': AddressFormatter.STATE,
+            'province': AddressFormatter.STATE,
+            'county': AddressFormatter.STATE_DISTRICT,
         }
     }
 
@@ -60,10 +66,15 @@ class OSMAddressComponents(object):
             self.config[country_code] = data
 
     def component(self, country, prop, value):
-        props = self.global_keys.get(prop, {})
-        if not props:
-            props = self.config.get(country, {}).get(prop, {})
-        return props.get(value, None)
+        component = self.global_keys_override.get(prop, {}).get(value, None)
+        if component is not None:
+            return component
+
+        component = self.config.get(country, {}).get(prop, {}).get(value, None)
+        if component is not None:
+            return component
+
+        return self.global_keys.get(prop, {}).get(value, None)
 
     def component_from_properties(self, country, properties, containing=()):
         country_config = self.config.get(country, {})
@@ -90,15 +101,22 @@ class OSMAddressComponents(object):
                         config.update(config_updates)
                         break
 
+        # Necessary to do this.
         for k, v in six.iteritems(properties):
-            containing_component = self.global_keys.get(k, {}).get(v, None)
+            override_component = self.global_keys_override.get(k, {}).get(v, None)
 
-            if containing_component is not None:
+            if override_component is not None:
                 return containing_component
 
         for k, v in six.iteritems(properties):
             if containing_component is None:
                 containing_component = config.get(k, {}).get(v, None)
+
+            if containing_component is not None:
+                return containing_component
+
+        for k, v in six.iteritems(properties):
+            containing_component = self.global_keys.get(k, {}).get(v, None)
 
             if containing_component is not None:
                 return containing_component
