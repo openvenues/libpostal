@@ -4,6 +4,7 @@ capital federal|cap fed
 ciudad de méxico|c méx|c mex|c de méx|c de mex|ciudad de mexico
 distrito federal|df|d.f|d f
 distrito capital|dc|d.c|d c
+distrito nacional|dn|d.n|d n
 madrid|madd
 aguascalientes|ag
 baja california|bn
