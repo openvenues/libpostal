@@ -14,13 +14,17 @@
 * the License.
 */
 #if defined(__linux)
-#include <byteswap.h>
+#   include <byteswap.h>
 #elif defined(__APPLE__)
-#include <libkern/OSByteOrder.h>
-#define bswap_32 OSSwapInt32
-#define bswap_64 OSSwapInt64
+#   include <libkern/OSByteOrder.h>
+#   define bswap_32 OSSwapInt32
+#   define bswap_64 OSSwapInt64
+#elif defined(__OpenBSD__)
+#   include <endian.h>
+#   define bswap_32 swap32
+#   define bswap_64 swap64
 #else
-#error "no byteswap.h or libkern/OSByteOrder.h"
+#   error "no byteswap.h or libkern/OSByteOrder.h"
 #endif
 
 #include <stddef.h>
