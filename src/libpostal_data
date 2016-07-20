@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 set -e
 
@@ -26,7 +26,7 @@ LIBPOSTAL_GEO_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated_geo
 LIBPOSTAL_PARSER_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated_parser
 LIBPOSTAL_LANG_CLASS_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated_language_classifier
 
-BASIC_MODULE_DIRS=(address_expansions numex transliteration)
+BASIC_MODULE_DIRS="address_expansions numex transliteration"
 GEODB_MODULE_DIR=geodb
 PARSER_MODULE_DIR=address_parser
 LANGUAGE_CLASSIFIER_MODULE_DIR=language_classifier
@@ -48,9 +48,9 @@ function kill_background_processes {
     exit
 }
 
-trap kill_background_processes SIGINT
+trap kill_background_processes INT
 
-function download_part() {
+function download_part {
     i=$1
     offset=$2
     max=$3
@@ -59,9 +59,8 @@ function download_part() {
     echo "Downloading part $i: filename=$part_filename, offset=$offset, max=$max"
     curl $url --silent -H"Range:bytes=$offset-$max" -o $part_filename
 }
-export -f download_part
 
-function download_multipart() {
+function download_multipart {
     url=$1
     filename=$2
     size=$3
@@ -71,23 +70,27 @@ function download_multipart() {
     echo "Downloading multipart: $url, size=$size, num_chunks=$num_chunks"
     offset=0
     i=0
-    while [ $i -lt $num_chunks ]; do
-        i=$((i+1))
+    while [ $i -le $num_chunks ]; do
+        i=$(( i + 1 ))
         part_filename="$filename.$i"
         if [ $i -lt $num_chunks ]; then
             max=$((offset+CHUNK_SIZE-1));
         else
             max=$size;
         fi;
-        printf "%s\0%s\0%s\0%s\0%s\0" "$i" "$offset" "$max" "$url" "$part_filename"
+        download_part "$i" "$offset" "$max" "$url" "$part_filename" &
         offset=$((offset+CHUNK_SIZE))
-    done | xargs -0 -n 5 -P $NUM_WORKERS bash -c 'download_part "$@"' --
+    done
+
+    echo 'Downloads are in parallel. Waiting on download completion ...'
+    wait
+    echo '... done'
 
     > $local_path
 
     i=0
-    while [ $i -lt $num_chunks ]; do
-        i=$((i+1))
+    while [ $i -le $num_chunks ]; do
+        i=$(( i + 1 ))
         part_filename="$filename.$i"
         cat $part_filename >> $local_path
         rm $part_filename
@@ -96,7 +99,7 @@ function download_multipart() {
 }
 
 
-function download_file() {
+function download_file {
     updated_path=$1
     data_dir=$2
     filename=$3
@@ -153,7 +156,7 @@ if [ $COMMAND = "download" ]; then
 elif [ $COMMAND = "upload" ]; then
 
     if [ $FILE = "base" ] || [ $FILE = "all" ]; then
-        tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE ${BASIC_MODULE_DIRS[*]}
+        tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $BASIC_MODULE_DIRS
         aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $LIBPOSTAL_S3_KEY
     fi
 
