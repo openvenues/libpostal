@@ -60,7 +60,7 @@ language_classifier_test_CFLAGS = $(CFLAGS_O3)
 pkginclude_HEADERS = libpostal.h
 
 all-local:
-	./libpostal_data download all $(datadir)/libpostal
+	${srcdir}/libpostal_data download all $(datadir)/libpostal
 
 lexer: scanner.re
 	re2c -F -s -b -8 -o scanner.c scanner.re
