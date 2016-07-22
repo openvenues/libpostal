@@ -310,6 +310,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
             country, candidate_languages, language_props = language_rtree.country_and_languages(lat, lon)
             component_name = None
+
             for k, v in six.iteritems(attrs):
                 component_name = osm_address_components.get_component(country, k, v)
                 if component_name:
@@ -329,19 +330,20 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                 osm_names.extend([v for k, v in six.iteritems(attrs) if k.startswith('{}:'.format(name_key))])
 
             if component_name and component_name != AddressFormatter.SUBURB:
-                existing_osm_candidates = osm_admin_rtree.get_candidate_polygons(lat, lon)
+                existing_osm_candidates = [osm_admin_rtree.get_properties(i) for i in  osm_admin_rtree.get_candidate_polygons(lat, lon)]
+                containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_candidates]
+
                 skip_node = False
-                for i in existing_osm_candidates:
-                    props = osm_admin_rtree.get_properties(i)
+                for props in existing_osm_candidates:
                     containing_component = None
                     name = props.get('name')
                     # Only exact name matches here since we're comparins OSM to OSM
                     if name and name == attrs.get('name'):
                         continue
 
-                    containing_component = osm_components.component_from_properties(country, props)
+                    containing_component = osm_components.component_from_properties(country, props, containing=containing_ids)
 
-                    if containing_component != AddressFormatter.SUBURB:
+                    if containing_component and containing_component != AddressFormatter.SUBURB:
                         skip_node = True
                         break
                 # Skip this element
