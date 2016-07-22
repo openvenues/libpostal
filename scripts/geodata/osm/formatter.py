@@ -47,6 +47,10 @@ INTERSECTIONS_TAGGED_FILENAME = 'intersections_tagged.tsv'
 
 ALL_LANGUAGES = 'all'
 
+JAPAN = 'jp'
+JAPANESE = 'ja'
+JAPANESE_ROMAJI = 'ja_rm'
+
 
 class OSMAddressFormatter(object):
     aliases = Aliases(
@@ -240,6 +244,54 @@ class OSMAddressFormatter(object):
             return True
         return False
 
+    def combine_japanese_house_number(self, address_components, language):
+        '''
+        Japanese house numbers
+        ----------------------
+
+        Addresses in Japan are pretty unique.
+        There are no street names in most of the country, and so buildings
+        are addressed by the following:
+
+        1. the neighborhood (丁目 or chōme), usually numberic e.g. 4-chōme
+        2. the block number (OSM uses addr:block_number for this)
+        3. the house number
+
+        Sometimes only the block number and house number are abbreviated.
+
+        For libpostal, we want to parse:
+        2丁目3-5 as {'suburb': '2丁目', 'house_number': '3-5'}
+
+        and the abbreviated "2-3-5" as simply house_number and leave
+        it up to the end user to split up that number or not.
+
+        At this stage we're still working with the original OSM tags,
+        so only combine addr_block_number with addr:housenumber
+
+        See: https://en.wikipedia.org/wiki/Japanese_addressing_system
+        '''
+        house_number = address_components.get('addr:housenumber')
+        if not house_number or not house_number.isdigit():
+            return
+
+        block = address_components.get('addr:block_number')
+        if not block or not block.isdigit():
+            return
+
+        separator = six.u('-')
+
+        combine_probability = float(nested_get(self.config, ('countries', 'jp', 'combine_block_house_number_probability'), default=0.0))
+        if random.random() < combine_probability:
+            if random.random() < float(nested_get(self.config, ('countries', 'jp', 'block_phrase_probability'), default=0.0)):
+                block = Block.phrase(language, block_number)
+                house_number = HouseNumber.phrase(house_number, language)
+                if block is None or house_number is None:
+                    return
+                separator = six.u(' ') if language == JAPANESE_ROMAJI else six.u('')
+
+            house_number = separator.join([block, house_number])
+            address_components['addr:housenumber'] = house_number
+
     def venue_names(self, props, languages):
         '''
         Venue names
@@ -382,11 +434,14 @@ class OSMAddressFormatter(object):
 
         combined_street = self.combine_street_name(tags)
 
-        country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
-        if not (country and candidate_languages):
-            return None, None, None
-
         namespaced_language = self.namespaced_language(tags, candidate_languages)
+        language = None
+
+        if country == JAPAN:
+            language = JAPANESE
+            if random.random() < float(nested_get(self.config, ('countries', 'jp', 'romaji_probability'), default=0.0)):
+                language = JAPANESE_ROMAJI
+            self.combine_japanese_house_number(tags, language)
 
         revised_tags = self.normalize_address_components(tags)
 

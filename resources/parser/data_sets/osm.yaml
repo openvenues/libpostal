@@ -24,3 +24,8 @@ venues:
     abbreviate_probability: 0.3
     separate_probability: 0.0
 
+countries:
+    jp:
+        # Always do this as there are plenty of examples of block numbers without house number
+        combine_block_house_number_probability: 1.0
+        block_phrase_probability: 0.4
