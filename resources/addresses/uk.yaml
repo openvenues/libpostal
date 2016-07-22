@@ -48,7 +48,7 @@ numbers:
           probability: 0.05
 
 
-house_number:
+house_numbers:
     budnyok: &budnyok
         canonical: будинок
         abbreviated: буд

@@ -33,7 +33,7 @@ numbers:
             numeric_affix_probability: 1.0
           probability: 0.2
 
-house_number:
+house_numbers:
     alphanumeric:
         default: *hao
         probability: 0.8
@@ -224,7 +224,7 @@ countries:
                 - alternative: *hao
                   probability: 0.3
 
-        house_number: &house_number_prefer_traditional
+        house_numbers: &house_number_prefer_traditional
             alphanumeric:
                 default: *hao_traditional
                 probability: 0.7
@@ -267,7 +267,7 @@ countries:
     # Macau
     mo:
         numbers: *numbers_prefer_traditional
-        house_number: *house_number_prefer_traditional
+        house_numbers: *house_number_prefer_traditional
         levels: *levels_prefer_traditional
         po_boxes: *po_boxes_prefer_traditional
         postcodes: *postcodes_prefer_traditional
@@ -281,7 +281,7 @@ countries:
     # Taiwan
     tw:
         numbers: *numbers_prefer_traditional
-        house_number: *house_number_prefer_traditional
+        house_numbers: *house_number_prefer_traditional
         levels: *levels_prefer_traditional
         po_boxes: *po_boxes_prefer_traditional
         postcodes: *postcodes_prefer_traditional

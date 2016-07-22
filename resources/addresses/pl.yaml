@@ -56,7 +56,7 @@ numbers:
         numeric_affix_probability: 0.6
 
 
-house_number:
+house_numbers:
     dom: &dom
         canonical: dom
         abbreviated: d

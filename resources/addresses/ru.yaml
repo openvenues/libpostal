@@ -99,7 +99,7 @@ numbers:
           probability: 0.05
 
 
-house_number:
+house_numbers:
     dom: &dom
         canonical: дом
         abbreviated: д

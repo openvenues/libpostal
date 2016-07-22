@@ -63,7 +63,7 @@ and:
         sample: true
         sample_probability: 0.05
 
-house_number:
+house_numbers:
     # sans numéro (s/n) addresses
     no_number: 
         canonical: sans numéro
