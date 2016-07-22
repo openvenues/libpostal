@@ -495,7 +495,7 @@ if __name__ == '__main__':
             args.osm_neighborhoods_file,
             args.quattroshapes_dir,
             args.language_rtree_dir,
-            args.osm_rtree_dir,
+            args.osm_admin_rtree_dir,
             args.out_dir
         )
     else:
