@@ -147,7 +147,7 @@ class OSMAddressFormatter(object):
                 language = random.choice(namespaced)
                 lang_suffix = ':{}'.format(language)
                 for k in tags:
-                    if k.startswith('addr:') and k.endswith(lang_suffix):
+                    if k.endswith(lang_suffix):
                         tags[k.rstrip(lang_suffix)] = tags[k]
 
         return language
