@@ -72,6 +72,7 @@ class AddressFormatter(object):
     STATE = 'state'
     STATE_DISTRICT = 'state_district'
     POSTCODE = 'postcode'
+    COUNTRY_REGION = 'country_region'
     COUNTRY = 'country'
 
     component_order = {k: i for i, k in enumerate([
@@ -97,6 +98,7 @@ class AddressFormatter(object):
         STATE,
         STATE_DISTRICT,
         POSTCODE,
+        COUNTRY_REGION,
         COUNTRY,
     ])}
 
@@ -108,6 +110,7 @@ class AddressFormatter(object):
         ISLAND,
         STATE_DISTRICT,
         STATE,
+        COUNTRY_REGION,
         COUNTRY,
     ]
 
