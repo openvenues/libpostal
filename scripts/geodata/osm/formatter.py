@@ -32,9 +32,11 @@ from geodata.osm.intersections import OSMIntersectionReader
 from geodata.polygons.language_polys import *
 from geodata.polygons.reverse_geocode import *
 from geodata.i18n.unicode_paths import DATA_DIR
+from geodata.text.utils import is_numeric
 
 from geodata.csv_utils import *
 from geodata.file_utils import *
+
 
 OSM_PARSER_DATA_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                               'resources', 'parser', 'data_sets', 'osm.yaml')
@@ -61,12 +63,6 @@ class OSMAddressFormatter(object):
             ('addr:house_number', AddressFormatter.HOUSE_NUMBER),
             ('addr:street', AddressFormatter.ROAD),
             ('addr:place', AddressFormatter.ROAD),
-            ('level', AddressFormatter.LEVEL),
-            ('addr:floor', AddressFormatter.LEVEL),
-            ('addr:unit', AddressFormatter.UNIT),
-            ('addr:flats', AddressFormatter.UNIT),
-            ('addr:door', AddressFormatter.UNIT),
-            ('addr:suite', AddressFormatter.UNIT),
             ('addr:suburb', AddressFormatter.SUBURB),
             ('is_in:suburb', AddressFormatter.SUBURB),
             ('addr:neighbourhood', AddressFormatter.SUBURB),
@@ -106,6 +102,17 @@ class OSMAddressFormatter(object):
             ('country_code', AddressFormatter.COUNTRY),
             ('is_in:country_code', AddressFormatter.COUNTRY),
             ('is_in:country', AddressFormatter.COUNTRY),
+        ])
+    )
+
+    sub_building_aliases = Aliases(
+        OrderedDict([
+            ('level', AddressFormatter.LEVEL),
+            ('addr:floor', AddressFormatter.LEVEL),
+            ('addr:unit', AddressFormatter.UNIT),
+            ('addr:flats', AddressFormatter.UNIT),
+            ('addr:door', AddressFormatter.UNIT),
+            ('addr:suite', AddressFormatter.UNIT),
         ])
     )
 
@@ -157,6 +164,12 @@ class OSMAddressFormatter(object):
         self.aliases.replace(address_components)
         address_components = {k: v for k, v in six.iteritems(address_components) if k in AddressFormatter.address_formatter_fields}
         return address_components
+
+    def normalize_sub_building_components(self, tags):
+        sub_building_components = {k: v for k, v in six.iteritems(tags) if self.sub_building_aliases.get(k) and is_numeric(v)}
+        self.aliases.replace(sub_building_components)
+        sub_building_components = {k: v for k, v in six.iteritems(sub_building_components) if k in AddressFormatter.address_formatter_fields}
+        return sub_building_components
 
     def subdivision_components(self, latitude, longitude):
         return self.subdivisions_rtree.point_in_poly(latitude, longitude, return_all=True)
@@ -444,6 +457,8 @@ class OSMAddressFormatter(object):
             self.combine_japanese_house_number(tags, language)
 
         revised_tags = self.normalize_address_components(tags)
+        sub_building_tags = self.normalize_sub_building_components(tags)
+        revised_tags.update(sub_building_tags)
 
         num_floors = None
         num_basements = None
