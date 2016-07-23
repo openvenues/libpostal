@@ -234,7 +234,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         return doc
 
     @classmethod
-    def create_from_osm_and_quattroshapes(cls, filename, quattroshapes_dir, language_rtree_dir, osm_rtree_dir, output_dir, scratch_dir=SCRATCH_DIR):
+    def create_from_osm_and_quattroshapes(cls, filename, quattroshapes_dir, language_rtree_dir, osm_rtree_dir, output_dir):
         '''
         Given an OSM file (planet or some other bounds) containing neighborhoods
         as points (some suburbs have boundaries)
