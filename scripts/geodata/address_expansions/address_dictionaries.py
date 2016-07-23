@@ -97,8 +97,9 @@ class InvalidAddressFileException(Exception):
     pass
 
 
+
 def quote_string(s):
-    return u'"{}"'.format(safe_decode(s).replace('"', '\\"'))
+    return u'"{}"'.format(safe_decode(s).replace('\\', '\\\\').replace('"', '\\"'))
 
 
 def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_file=ADDRESS_DATA_FILE, header_file=ADDRESS_HEADER_FILE):
