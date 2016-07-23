@@ -67,6 +67,11 @@ function download_multipart() {
     num_workers=$4
 
     num_chunks=$((size/CHUNK_SIZE))
+    if [ $num_chunks -gt $num_workers ]; then
+        num_chunks=$num_workers
+    fi
+    chunk_size=$((size/num_chunks))
+
     echo "Downloading multipart: $url, size=$size, num_chunks=$num_chunks"
     offset=0
     i=0
@@ -74,13 +79,16 @@ function download_multipart() {
         i=$((i+1))
         part_filename="$filename.$i"
         if [ $i -lt $num_chunks ]; then
-            max=$((offset+CHUNK_SIZE-1));
+            max=$((offset+chunk_size-1));
         else
             max=$size;
         fi;
-        printf "%s\0%s\0%s\0%s\0%s\0" "$i" "$offset" "$max" "$url" "$part_filename"
-        offset=$((offset+CHUNK_SIZE))
-    done | xargs -0 -n 5 -P $NUM_WORKERS bash -c 'download_part "$@"' --
+        download_part "$i" "$offset" "$max" "$url" "$part_filename" &
+        offset=$((offset+chunk_size))
+    done
+
+    # wait for all download_part background jobs to complete
+    wait
 
     > $local_path
 
