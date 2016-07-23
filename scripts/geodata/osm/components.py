@@ -101,20 +101,22 @@ class OSMAddressComponents(object):
                         config.update(config_updates)
                         break
 
-        # Necessary to do this.
+        # place=city, place=suburb, etc. override per-country boundaries
         for k, v in six.iteritems(properties):
-            override_component = self.global_keys_override.get(k, {}).get(v, None)
-
-            if override_component is not None:
-                return containing_component
-
-        for k, v in six.iteritems(properties):
-            if containing_component is None:
-                containing_component = config.get(k, {}).get(v, None)
+            containing_component = self.global_keys_override.get(k, {}).get(v, None)
 
             if containing_component is not None:
                 return containing_component
 
+        # admin_level tags are mapped per country
+        for k, v in six.iteritems(properties):
+            containing_component = config.get(k, {}).get(v, None)
+
+            if containing_component is not None:
+                return containing_component
+
+        # other place keys like place=state, etc. serve as a backup
+        # when no boundaries are available
         for k, v in six.iteritems(properties):
             containing_component = self.global_keys.get(k, {}).get(v, None)
 
