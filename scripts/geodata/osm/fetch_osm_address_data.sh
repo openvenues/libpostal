@@ -70,16 +70,15 @@ VALID_PLACE_KEYS="place=farm or place=isolated_dwelling or place=square"
 VALID_TOURISM_KEYS="tourism=hotel or tourism=attraction or tourism=guest_house or tourism=museum or tourism=chalet or tourism=motel or tourism=hostel or tourism=alpine_hut or tourism=theme_park or tourism=zoo or tourism=apartment or tourism=wilderness_hut or tourism=gallery or tourism=bed_and_breakfast or tourism=hanami or tourism=wine_cellar or tourism=resort or tourism=aquarium or tourism=apartments or tourism=cabin or tourism=winery or tourism=hut"
 VALID_LEISURE_KEYS="leisure=adult_gaming_centre or leisure=amusement_arcade or leisure=arena or leisure=bandstand or leisure=beach_resort or leisure=bbq or leisure=bird_hide or leisure=bowling_alley or leisure=casino or leisure=common or leisure=club or leisure=dance or leisure=dancing or leisure=disc_golf_course or leisure=dog_park or leisure=fishing or leisure=fitness_centre or leisure=gambling or leisure=garden or leisure=golf_course or leisure=hackerspace or leisure=horse_riding or leisure=hospital or leisure=hot_spring or leisure=ice_rink leisure=landscape_reserve or leisure=marina or leisure=maze or leisure=miniature_golf or leisure=nature_reserve or leisure=padding_pool or leisure=park or leisure=pitch or leisure=playground or leisure=recreation_ground or leisure=resort or leisure=sailing_club or leisure=sauna or leisure=social_club or leisure=sports_centre or leisure=stadium or leisure=summer_camp or leisure=swimming_pool or leisure=tanning_salon or leisure=track or leisure=trampoline_park or leisure=turkish_bath or leisure=video_arcade or leisure=water_park or leisure=wildlife_hide"
 VALID_LANDUSE_KEYS="landuse=allotmenets or landuse=basin or landuse=cemetery or landuse=commercial or landuse=construction or landuse=farmland or landuse=forest or landuse=grass or landuse=greenhouse_horticulture or landuse=industrial or landuse=landfill or landuse=meadow or landuse=military or landuse=orchard or landuse=plant_nursery or landuse=port or landuse=quarry or landuse=recreation_ground or landuse=resevoir or landuse=residential or landuse=retail or landuse=village_green or landuse=vineyard"
-VALID_RAILWAY_KEYS="railway=station"
 
-VALID_VENUE_KEYS="( ( $VALID_AEROWAY_KEYS ) or ( $VALID_AMENITY_KEYS ) or ( $VALID_HISTORIC_KEYS ) or ( $VALID_OFFICE_KEYS ) or ( $VALID_PLACE_KEYS ) or ( $VALID_SHOP_KEYS ) or ( $VALID_TOURISM_KEYS ) or ( $VALID_LEISURE_KEYS ) or ( $VALID_LANDUSE_KEYS ) or ( $VALID_RAILWAY_KEYS ) )"
+VALID_VENUE_KEYS="( ( $VALID_AEROWAY_KEYS ) or ( $VALID_AMENITY_KEYS ) or ( $VALID_HISTORIC_KEYS ) or ( $VALID_OFFICE_KEYS ) or ( $VALID_PLACE_KEYS ) or ( $VALID_SHOP_KEYS ) or ( $VALID_TOURISM_KEYS ) or ( $VALID_LEISURE_KEYS ) or ( $VALID_LANDUSE_KEYS ) )"
 
 # Address data set for use in parser, language detection
 echo "Filtering for records with address tags: `date`"
 PLANET_ADDRESSES_O5M="planet-addresses.o5m"
 JAPAN_ADDRESSES_O5M="japan-addresses.o5m"
-VALID_ADDRESSES="( ( ( name= or addr:housename= ) and ( building!=yes  or $VALID_VENUE_KEYS ) ) ) or ( ( addr:street= or addr:place= ) and ( name= or building= or building:levels= or addr:housename= or addr:housenumber= ) )"
-VALID_ADDRESSES_JAPAN="( addr:housenumber= or addr:street= ) or ( ( name= or name:ja= or addr:housename= ) and ( building!=yes or $VALID_VENUE_KEYS ) )"
+VALID_ADDRESSES="( ( ( name= or addr:housename= ) and ( ( building= and building!=yes )  or $VALID_VENUE_KEYS ) ) ) or ( ( addr:street= or addr:place= ) and ( name= or building= or building:levels= or addr:housename= or addr:housenumber= ) )"
+VALID_ADDRESSES_JAPAN="( addr:housenumber= or addr:street= ) or ( ( name= or name:ja= or addr:housename= ) and ( ( building= and building!=yes ) or $VALID_VENUE_KEYS ) )"
 osmfilter $PLANET_O5M --keep="$VALID_ADDRESSES" --drop-author --drop-version -o=$PLANET_ADDRESSES_O5M &
 osmfilter $JAPAN_O5M --keep="$VALID_ADDRESSES_JAPAN" --drop-author --drop-version -o=$JAPAN_ADDRESSES_O5M &
 
@@ -132,6 +131,17 @@ osmconvert $PLANET_BORDERS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANE
 rm $PLANET_BORDERS_O5M
 osmfilter $PLANET_BORDERS_LATLONS --keep="$VALID_ADMIN_BORDER_KEYS or $VALID_LOCALITY_KEYS" -o=$PLANET_BORDERS
 rm $PLANET_BORDERS_LATLONS
+
+echo "Filtering for rail stations"
+VALID_RAIL_STATION_KEYS="railway=station"
+PLANET_RAILWAYS_O5M="planet-rail-stations.o5m"
+PLANET_RAILWAYS="planet-rail-stations.osm"
+
+osmfilter $PLANET_O5M --keep="$VALID_RAIL_STATION_KEYS" --drop-author --drop-version -o=$PLANET_RAILWAYS_O5M
+PLANET_RAILWAYS_LATLONS="planet-rail-stations-latlons.o5m"
+osmconvert $PLANET_RAILWAYS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_RAILWAYS_LATLONS
+rm $PLANET_RAILWAYS_O5M
+osmfilter $PLANET_RAILWAYS_LATLONS --keep="$VALID_RAIL_STATION_KEYS" -o=$PLANET_RAILWAYS
 
 echo "Filtering for neighborhoods"
 PLANET_NEIGHBORHOODS="planet-neighborhoods.osm"
