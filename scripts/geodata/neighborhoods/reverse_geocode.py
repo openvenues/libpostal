@@ -312,12 +312,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             country, candidate_languages, language_props = language_rtree.country_and_languages(lat, lon)
             component_name = None
 
-            for k, v in six.iteritems(attrs):
-                component_name = osm_address_components.get_component(country, k, v)
-                if component_name:
-                    break
-            else:
-                component_name = None
+            component_name = osm_address_components.component_from_properties(country, attrs)
 
             ranks = []
             osm_names = []
