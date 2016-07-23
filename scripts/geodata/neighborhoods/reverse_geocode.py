@@ -306,7 +306,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             props['type'] = id_type
             props['id'] = element_id
 
-            possible_neighborhood = osm_definitions.meets_definition(attrs, osm_defintions.NEIGHBORHOOD)
+            possible_neighborhood = osm_definitions.meets_definition(attrs, osm_definitions.NEIGHBORHOOD)
 
             country, candidate_languages, language_props = language_rtree.country_and_languages(lat, lon)
             component_name = None
