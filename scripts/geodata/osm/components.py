@@ -1,3 +1,4 @@
+import collections
 import os
 import six
 import yaml
@@ -101,15 +102,17 @@ class OSMAddressComponents(object):
                         config.update(config_updates)
                         break
 
+        values = [(k, v) for k, v in six.iteritems(properties) if isinstance(v, collections.Hashable)]
+
         # place=city, place=suburb, etc. override per-country boundaries
-        for k, v in six.iteritems(properties):
+        for k, v in values:
             containing_component = self.global_keys_override.get(k, {}).get(v, None)
 
             if containing_component is not None:
                 return containing_component
 
         # admin_level tags are mapped per country
-        for k, v in six.iteritems(properties):
+        for k, v in values:
             containing_component = config.get(k, {}).get(v, None)
 
             if containing_component is not None:
@@ -117,7 +120,7 @@ class OSMAddressComponents(object):
 
         # other place keys like place=state, etc. serve as a backup
         # when no boundaries are available
-        for k, v in six.iteritems(properties):
+        for k, v in values:
             containing_component = self.global_keys.get(k, {}).get(v, None)
 
             if containing_component is not None:
