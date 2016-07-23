@@ -202,8 +202,6 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
     source has least a "name" key which in practice is what we care about.
     '''
 
-    SCRATCH_DIR = '/tmp'
-
     PRIORITIES_FILENAME = 'priorities.json'
 
     DUPE_THRESHOLD = 0.9
@@ -250,12 +248,11 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         '''
         index = cls(save_dir=output_dir)
 
-        ensure_dir(scratch_dir)
-
         logger = logging.getLogger('neighborhoods')
 
-        qs_scratch_dir = os.path.join(scratch_dir, 'qs_neighborhoods')
+        qs_scratch_dir = os.path.join(quattroshapes_dir, 'qs_neighborhoods')
         ensure_dir(qs_scratch_dir)
+
         logger.info('Creating Quattroshapes neighborhoods')
 
         qs = QuattroshapesNeighborhoodsReverseGeocoder.create_neighborhoods_index(quattroshapes_dir, qs_scratch_dir)
@@ -308,6 +305,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             props['id'] = element_id
 
             possible_neighborhood = osm_definitions.meets_definition(attrs, osm_definitions.NEIGHBORHOOD)
+            is_neighborhood = attrs.get('place') in ('neighbourhood', 'neighborhood')
 
             country, candidate_languages, language_props = language_rtree.country_and_languages(lat, lon)
             component_name = None
@@ -326,7 +324,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                 osm_names.extend([v for k, v in six.iteritems(attrs) if k.startswith('{}:'.format(name_key))])
 
             if component_name and component_name != AddressFormatter.SUBURB:
-                existing_osm_candidates = [osm_admin_rtree.get_properties(i) for i in  osm_admin_rtree.get_candidate_polygons(lat, lon)]
+                existing_osm_boundaries = osm_admin_rtree.point_in_poly(lat, lon, return_all=True)
                 containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_candidates]
 
                 skip_node = False
@@ -371,7 +369,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                                     name = pattern.sub(repl, name)
                                 normalized_qs_names[i] = name
 
-                            if possible_neighborhood and idx is qs and props.get(QuattroshapesReverseGeocoder.LEVEL) != 'neighborhood':
+                            if is_neighborhood and idx is qs and props.get(QuattroshapesReverseGeocoder.LEVEL) != 'neighborhood':
                                 continue
 
                             if not contains_ideographs:
