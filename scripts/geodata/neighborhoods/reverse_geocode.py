@@ -325,10 +325,10 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
             if component_name and component_name != AddressFormatter.SUBURB:
                 existing_osm_boundaries = osm_admin_rtree.point_in_poly(lat, lon, return_all=True)
-                containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_candidates]
+                containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries]
 
                 skip_node = False
-                for props in existing_osm_candidates:
+                for props in existing_osm_boundaries:
                     containing_component = None
                     name = props.get('name')
                     # Only exact name matches here since we're comparins OSM to OSM
