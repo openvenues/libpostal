@@ -72586,7 +72586,7 @@ address_expansion_rule_t expansion_rules[] = {
     {"s statale", 1, {DICTIONARY_STREET_TYPE}, 2800},
     {"osta", 1, {DICTIONARY_PLACE_NAME}, 2673},
     {"giardini", 1, {DICTIONARY_SYNONYM}, -1},
-    {"c \ o", 1, {DICTIONARY_POST_OFFICE}, 2684},
+    {"c \\ o", 1, {DICTIONARY_POST_OFFICE}, 2684},
     {"sett", 1, {DICTIONARY_SYNONYM}, 2952},
     {"madonnella", 1, {DICTIONARY_PLACE_NAME}, -1},
     {"f.v.", 1, {DICTIONARY_PLACE_NAME}, 2644},
