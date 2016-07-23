@@ -97,7 +97,6 @@ class OSMAddressComponents(object):
                 # Note, containing should be passed in from smallest to largest
                 for containing_type, containing_id in containing:
                     config_updates = contained_by_overrides.get(containing_type, {}).get(six.binary_type(containing_id or ''), None)
-                    print contained_by_overrides
                     if config_updates:
                         config.update(config_updates)
                         break
