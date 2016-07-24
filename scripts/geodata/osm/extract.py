@@ -146,11 +146,13 @@ non_breaking_dash_regex = re.compile(non_breaking_dash, re.UNICODE)
 number_range_regex = re.compile(six.u('({}){}({})').format(simple_number, non_breaking_dash, simple_number), re.UNICODE)
 letter_range_regex = re.compile(r'([^\W\d_]){}([^\W\d_])'.format(non_breaking_dash.encode('unicode-escape')), re.UNICODE)
 
+number_split_regex = re.compile('[,;]')
 
-def parse_osm_number_range(value):
+
+def parse_osm_number_range(value, parse_letter_range=True):
     value = normalize_string(value, string_options=NORMALIZE_STRING_LATIN_ASCII | NORMALIZE_STRING_DECOMPOSE)
     numbers = []
-    values = value.split(six.u(';'))
+    values = number_split_regex.split(value)
     for val in values:
         val = val.strip()
         match = number_range_regex.match(val)
@@ -165,15 +167,15 @@ def parse_osm_number_range(value):
                     for i in xrange(start_num, end_num + 1):
                         numbers.append(safe_decode(i))
                 else:
-                    numbers.extend([start_num, end_num])
+                    numbers.append(val.strip())
                     continue
             except (TypeError, ValueError):
-                numbers.extend([start_num, end_num])
+                numbers.append(safe_decode(val).strip())
                 continue
 
         else:
             letter_match = letter_range_regex.match(val)
-            if letter_match:
+            if letter_match and parse_letter_range:
                 start_num, end_num = letter_match.groups()
                 start_num = ord(start_num)
                 end_num = ord(end_num)
@@ -186,5 +188,5 @@ def parse_osm_number_range(value):
                     numbers.extend([six.unichr(start_num), six.unichr(end_num)])
                     continue
             else:
-                numbers.extend(non_breaking_dash_regex.split(safe_decode(val)))
+                numbers.append(safe_decode(val.strip()))
     return numbers
