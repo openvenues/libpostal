@@ -43,14 +43,14 @@ LARGE_FILE_SIZE=$((CHUNK_SIZE*2))
 
 NUM_WORKERS=10
 
-function kill_background_processes {
+kill_background_processes() {
     jobs -p | xargs kill;
     exit
 }
 
 trap kill_background_processes INT
 
-function download_part {
+download_part() {
     i=$1
     offset=$2
     max=$3
@@ -60,7 +60,7 @@ function download_part {
     curl $url --silent -H"Range:bytes=$offset-$max" -o $part_filename
 }
 
-function download_multipart {
+download_multipart() {
     url=$1
     filename=$2
     size=$3
@@ -70,8 +70,8 @@ function download_multipart {
     echo "Downloading multipart: $url, size=$size, num_chunks=$num_chunks"
     offset=0
     i=0
-    while [ $i -le $num_chunks ]; do
-        i=$(( i + 1 ))
+    while [ $i -lt $num_chunks ]; do
+        i=$((i+1))
         part_filename="$filename.$i"
         if [ $i -lt $num_chunks ]; then
             max=$((offset+CHUNK_SIZE-1));
@@ -79,18 +79,18 @@ function download_multipart {
             max=$size;
         fi;
         download_part "$i" "$offset" "$max" "$url" "$part_filename" &
+        # wait every time we have started $num_workers processes
+        [ $((i%num_workers)) -eq 0 ] && wait
         offset=$((offset+CHUNK_SIZE))
     done
-
-    echo 'Downloads are in parallel. Waiting on download completion ...'
+    # wait if $num_chunks wasn't exactly divisible by $num_workers
     wait
-    echo '... done'
 
     > $local_path
 
     i=0
-    while [ $i -le $num_chunks ]; do
-        i=$(( i + 1 ))
+    while [ $i -lt $num_chunks ]; do
+        i=$((i+1))
         part_filename="$filename.$i"
         cat $part_filename >> $local_path
         rm $part_filename
@@ -99,7 +99,7 @@ function download_multipart {
 }
 
 
-function download_file {
+download_file() {
     updated_path=$1
     data_dir=$2
     filename=$3
