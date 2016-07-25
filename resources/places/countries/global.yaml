@@ -10,7 +10,7 @@ global:
         city_district:
             probability: 0.2
         city:
-            probability: 0.85
+            probability: 0.9
         island:
             # Islands are usually not represented in addresses
             probability: 0.0
@@ -18,6 +18,8 @@ global:
             probability: 0.05
         state:
             probability: 0.1
+        country_region:
+            probability: 0.05
         country:
             probability: 0.6
 
@@ -43,6 +45,8 @@ countries:
     # United Kingdom
     gb:
         components:
+            state_district:
+                probability: 0.15
             suburb:
                 probability: 0.5
 
