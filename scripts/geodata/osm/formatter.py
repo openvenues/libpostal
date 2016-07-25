@@ -24,6 +24,7 @@ from geodata.coordinates.conversion import *
 from geodata.configs.utils import nested_get
 from geodata.countries.country_names import *
 from geodata.language_id.disambiguation import *
+from geodata.language_id.sample import INTERNET_LANGUAGE_DISTRIBUTION
 from geodata.i18n.languages import *
 from geodata.intersections.query import Intersection, IntersectionQuery
 from geodata.address_formatting.formatter import AddressFormatter
@@ -365,11 +366,11 @@ class OSMAddressFormatter(object):
         try:
             latitude, longitude = latlon_to_decimal(tags['lat'], tags['lon'])
         except Exception:
-            return None
+            return None, None, None, None
 
         country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
         if not (country and candidate_languages):
-            return None
+            return None, None, None, None
 
         local_languages = [(l['lang'], int(l['default'])) for l in candidate_languages]
         all_local_languages = set([l['lang'] for l in candidate_languages])
