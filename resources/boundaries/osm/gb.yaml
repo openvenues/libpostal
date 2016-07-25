@@ -16,9 +16,13 @@
             relation:
                 # London
                 "65606": "city"
+                # City of London
+                "51800": "city"
 
         contained_by:
             relation:
-                "65606":
+                # Greater London (includes London and City of London)
+                "175342":
                     admin_level:
+                        "6": "city"
                         "8": "city_district"
