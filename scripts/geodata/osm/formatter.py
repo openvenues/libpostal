@@ -41,9 +41,11 @@ from geodata.file_utils import *
 OSM_PARSER_DATA_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                               'resources', 'parser', 'data_sets', 'osm.yaml')
 
-ADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'formatted_addresses_tagged.tsv'
-ADDRESS_FORMAT_DATA_FILENAME = 'formatted_addresses.tsv'
-ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME = 'formatted_addresses_by_language.tsv'
+FORMATTED_ADDRESS_DATA_TAGGED_FILENAME = 'formatted_addresses_tagged.tsv'
+FORMATTED_ADDRESS_DATA_FILENAME = 'formatted_addresses.tsv'
+FORMATTED_ADDRESS_DATA_LANGUAGE_FILENAME = 'formatted_addresses_by_language.tsv'
+FORMATTED_PLACE_DATA_TAGGED_FILENAME = 'formatted_places_tagged.tsv'
+FORMATTED_PLACE_DATA_FILENAME = 'formatted_places.tsv'
 INTERSECTIONS_FILENAME = 'intersections.tsv'
 INTERSECTIONS_TAGGED_FILENAME = 'intersections_tagged.tsv'
 
@@ -128,6 +130,8 @@ class OSMAddressFormatter(object):
             'college': AddressComponents.zones.UNIVERSITY,
         }
     }
+
+    boundary_component_priorities = {k: i for i, k in enumerate(AddressFormatter.BOUNDARY_COMPONENTS_ORDERED)}
 
     def __init__(self, components, subdivisions_rtree=None, buildings_rtree=None):
         # Instance of AddressComponents, contains structures for reverse geocoding, etc.
@@ -356,6 +360,102 @@ class OSMAddressFormatter(object):
                                                                   tag_components=tag_components, minimal_only=False)
                 formatted_addresses.append(formatted_address)
         return formatted_addresses
+
+    def node_place_tags(self, tags):
+        try:
+            latitude, longitude = latlon_to_decimal(tags['lat'], tags['lon'])
+        except Exception:
+            return None
+
+        country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
+        if not (country and candidate_languages):
+            return None
+
+        local_languages = [(l['lang'], int(l['default'])) for l in candidate_languages]
+        all_local_languages = set([l['lang'] for l in candidate_languages])
+        random_languages = set(INTERNET_LANGUAGE_DISTRIBUTION)
+
+        more_than_one_official_language = len([l for l in candidate_languages if int(l['default'])]) > 1
+
+        osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
+        containing_ids = [(b['type'], b['id']) for b in osm_components]
+
+        component_name = osm_address_components.component_from_properties(country, tags, containing=containing_ids)
+        component_index = self.boundary_component_priorities.get(component_name)
+
+        if component_index:
+            osm_components = [c for i, c in enumerate(osm_components)
+                              if self.boundary_component_priorities.get(osm_address_components.component_from_properties(country, c, containing=containing_ids[i:]), -1) >= component_index and
+                              (c['type'], c['id']) != (tags['type'], tags['id'])]
+
+        # Do addr:postcode, postcode, postal_code, etc.
+        revised_tags = self.normalize_address_components(tags)
+
+        place_tags = []
+
+        postal_code = revised_tags.get(AddressFormatter.POSTCODE, None)
+        if postal_code:
+            postal_codes = parse_osm_number_range(postal_code, parse_letter_range=False)
+
+        try:
+            population = int(tags.get('population', 0))
+        except (ValueError, TypeError):
+            population = 0
+
+        num_references = population / 10000 + 1
+
+        for name_tag in ('name', 'alt_name', 'loc_name', 'short_name'):
+            if more_than_one_official_language:
+                name = tags.get(name_tag)
+                language_suffix = None
+
+                if name and name.strip():
+                    address_components = {component_name: name.strip()}
+                    self.components.add_admin_boundaries(address_components, osm_components, country, language,
+                                                         language_suffix=language_suffix)
+
+                    self.components.normalize_place_names(address_components, osm_components, country=country, languages=all_local_languages)
+
+                    place_tags.append((address_components, None, True))
+
+            for language, is_default in local_languages:
+                if is_default and not more_than_one_official_language:
+                    language_suffix = None
+                    name = tags.get(name_tag)
+                else:
+                    language_suffix = ':{}'.format(language)
+                    name = tags.get('{}{}'.format(name_tag, language_suffix))
+
+                if not name or not name.strip():
+                    continue
+
+                address_components = {component_name: name.strip()}
+                self.components.add_admin_boundaries(address_components, osm_components, country, language,
+                                                     language_suffix=language_suffix)
+
+                self.components.normalize_place_names(address_components, osm_components, country=country, languages=all_local_languages)
+
+                place_tags.append((address_components, language, is_default))
+
+            for language in random_languages - all_local_languages:
+                language_suffix = ':{}'.format(language)
+                name = tags.get('{}{}'.format(name_tag, language_suffix))
+                if not name or not name.strip():
+                    continue
+
+                address_components = {component_name: name.strip()}
+                self.components.add_admin_boundaries(address_components, osm_components, country, language,
+                                                     non_local_language=language,
+                                                     language_suffix=language_suffix)
+
+                self.components.normalize_place_names(address_components, osm_components, country=country, languages=set([language]))
+                place_tags.append((address_components, language, False))
+
+            if postal_codes:
+                for address_components in place_tags:
+                    address_components[AddressFormatter.POSTCODE] = random.choice(postal_codes)
+
+        return place_tags, num_references, country, language
 
     def category_queries(self, tags, address_components, language, country=None, tag_components=True):
         formatted_addresses = []
@@ -607,10 +707,10 @@ class OSMAddressFormatter(object):
         i = 0
 
         if tag_components:
-            formatted_tagged_file = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_TAGGED_FILENAME), 'w')
+            formatted_tagged_file = open(os.path.join(out_dir, FORMATTED_ADDRESS_DATA_TAGGED_FILENAME), 'w')
             writer = csv.writer(formatted_tagged_file, 'tsv_no_quote')
         else:
-            formatted_file = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_FILENAME), 'w')
+            formatted_file = open(os.path.join(out_dir, FORMATTED_ADDRESS_DATA_FILENAME), 'w')
             writer = csv.writer(formatted_file, 'tsv_no_quote')
 
         for node_id, value, deps in parse_osm(infile):
@@ -634,6 +734,40 @@ class OSMAddressFormatter(object):
             i += 1
             if i % 1000 == 0 and i > 0:
                 print('did {} formatted addresses'.format(i))
+
+    def build_place_training_data(self, infile, out_dir, tag_components=True):
+        i = 0
+
+        if tag_components:
+            formatted_tagged_file = open(os.path.join(out_dir, FORMATTED_PLACE_DATA_TAGGED_FILENAME), 'w')
+            writer = csv.writer(formatted_tagged_file, 'tsv_no_quote')
+        else:
+            formatted_tagged_file = open(os.path.join(out_dir, FORMATTED_PLACE_DATA_FILENAME), 'w')
+            writer = csv.writer(formatted_file, 'tsv_no_quote')
+
+        for node_id, tags, deps in parse_osm(infile):
+            place_tags, num_references, country, language = self.node_place_tags(tags)
+            for address_components, language, is_default in place_tags:
+                addresses = self.formatted_places(address_components, country, language)
+                if language is None:
+                    language = UNKNOWN_LANGUAGE
+
+                for address in addresses:
+                    if not address or not address.strip():
+                        continue
+
+                    address = tsv_string(address)
+                    if tag_components:
+                        row = (language, country, address)
+                    else:
+                        row = (address, )
+
+                    for j in xrange(num_references if is_default else 1):
+                        writer.writerow(row)
+
+            i += 1
+            if i % 1000 == 0 and i > 0:
+                print('did {} formatted places'.format(i))
 
     def build_intersections_training_data(self, infile, out_dir, way_db_dir, tag_components=True):
         '''
@@ -750,7 +884,7 @@ class OSMAddressFormatter(object):
         '''
         i = 0
 
-        f = open(os.path.join(out_dir, ADDRESS_FORMAT_DATA_LANGUAGE_FILENAME), 'w')
+        f = open(os.path.join(out_dir, FORMATTED_ADDRESS_DATA_LANGUAGE_FILENAME), 'w')
         writer = csv.writer(f, 'tsv_no_quote')
 
         for node_id, value, deps in parse_osm(infile):
