@@ -441,6 +441,9 @@ if __name__ == '__main__':
                         default=False,
                         help='Save formatted addresses without house names or country (slow)')
 
+    parser.add_argument('-p', '--place-nodes-file',
+                        help='Path to planet-admin-nodes.osm')
+
     parser.add_argument('-t', '--temp-dir',
                         default=tempfile.gettempdir(),
                         help='Temp directory to use')
@@ -516,8 +519,10 @@ if __name__ == '__main__':
         build_ways_training_data(language_rtree, args.streets_file, args.out_dir, abbreviate_streets=not args.unabbreviated)
     if args.borders_file:
         build_toponym_training_data(language_rtree, args.borders_file, args.out_dir)
+    if args.venues_file:
+        build_venue_training_data(language_rtree, args.venues_file, args.out_dir)
 
-    if args.address_file:
+    if args.address_file or args.intersections_file:
         if osm_rtree is None:
             parser.error('--rtree-dir required for formatted addresses')
         elif neighborhoods_rtree is None:
@@ -535,8 +540,11 @@ if __name__ == '__main__':
         components = AddressComponents(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames)
         osm_formatter = OSMAddressFormatter(components, subdivisions_rtree, buildings_rtree, splitter=u' ')
         osm_formatter.build_limited_training_data(args.address_file, args.out_dir)
-    if args.venues_file:
-        build_venue_training_data(language_rtree, args.venues_file, args.out_dir)
+
+    if args.place_nodes_file and args.format:
+        components = AddressComponents(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames)
+        osm_formatter = OSMAddressFormatter(components, subdivisions_rtree, buildings_rtree)
+        osm_formatter.build_place_training_data(args.place_nodes_file, args.out_dir, tag_components=not args.untagged)
 
     if args.intersections_file and args.format:
         if args.ways_db_dir is None:
