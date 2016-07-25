@@ -22,6 +22,7 @@ from geodata.boundaries.names import boundary_names
 from geodata.configs.utils import nested_get
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.countries.names import *
+from geodata.encoding import safe_encode
 from geodata.graph.topsort import topsort
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
@@ -32,6 +33,7 @@ from geodata.osm.components import osm_address_components
 from geodata.places.config import place_config
 from geodata.states.state_abbreviations import state_abbreviations
 from geodata.text.utils import is_numeric
+
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
@@ -133,6 +135,8 @@ class AddressComponents(object):
 
     def __init__(self, osm_admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames):
         self.config = yaml.load(open(PARSER_DEFAULT_CONFIG))
+
+        self.use_admin_center_ids = set([(r['type'], safe_encode(r['id'])) for r in nested_get(self.config, ('boundaries', 'override_with_admin_center'), default=[])])
 
         self.setup_component_dependencies()
         # Non-admin component dropout
@@ -662,6 +666,9 @@ class AddressComponents(object):
                 seen = set()
 
                 for component_value in components_values:
+                    if (component_value.get('type'), safe_encode(component_value.get('id', ''))) in self.use_admin_center_ids:
+                        component_value = component_value.get('admin_center', component_value)
+
                     if random_key:
                         key, raw_key = self.pick_random_name_key(component_value, component, suffix=language_suffix)
                     else:
