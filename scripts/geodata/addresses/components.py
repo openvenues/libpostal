@@ -628,6 +628,7 @@ class AddressComponents(object):
                              language_suffix='',
                              random_key=True,
                              always_use_full_names=False,
+                             drop_duplicate_city_names=True,
                              ):
         '''
         OSM boundaries
@@ -668,7 +669,7 @@ class AddressComponents(object):
 
                     for k in (key, name_key, raw_key, raw_name_key):
                         name = component_value.get(k)
-                        if name and not (name == existing_city_name and component != AddressFormatter.CITY):
+                        if name and not (name == existing_city_name and component != AddressFormatter.CITY and drop_duplicate_city_names):
                             break
                     # if we've checked all keys without finding a valid name, leave this component out
                     else:

@@ -429,7 +429,8 @@ class OSMAddressFormatter(object):
                         address_components = {component_name: name.strip()}
                         self.components.add_admin_boundaries(address_components, osm_components, country, language,
                                                              random_key=num_references > 1,
-                                                             language_suffix=language_suffix)
+                                                             language_suffix=language_suffix,
+                                                             drop_duplicate_city_names=False)
 
                         place_tags.append((address_components, None, True))
 
@@ -448,7 +449,8 @@ class OSMAddressFormatter(object):
                     address_components = {component_name: name.strip()}
                     self.components.add_admin_boundaries(address_components, osm_components, country, language,
                                                          random_key=is_default,
-                                                         language_suffix=language_suffix)
+                                                         language_suffix=language_suffix,
+                                                         drop_duplicate_city_names=False)
 
                     place_tags.append((address_components, language, is_default))
 
@@ -466,7 +468,8 @@ class OSMAddressFormatter(object):
                 self.components.add_admin_boundaries(address_components, osm_components, country, language,
                                                      random_key=False,
                                                      non_local_language=language,
-                                                     language_suffix=language_suffix)
+                                                     language_suffix=language_suffix,
+                                                     drop_duplicate_city_names=False)
 
                 place_tags.append((address_components, language, False))
 
