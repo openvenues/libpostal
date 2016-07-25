@@ -422,13 +422,15 @@ class OSMAddressFormatter(object):
                 language_suffix = ''
 
                 if name and name.strip():
-                    address_components = {component_name: name.strip()}
-                    self.components.add_admin_boundaries(address_components, osm_components, country, language,
-                                                         language_suffix=language_suffix)
+                    for i in xrange(num_references):
+                        address_components = {component_name: name.strip()}
+                        self.components.add_admin_boundaries(address_components, osm_components, country, language,
+                                                             random_key=num_references > 1,
+                                                             language_suffix=language_suffix)
 
-                    self.components.normalize_place_names(address_components, osm_components, country=country, languages=all_local_languages)
+                        self.components.normalize_place_names(address_components, osm_components, country=country, languages=all_local_languages)
 
-                    place_tags.append((address_components, None, True))
+                        place_tags.append((address_components, None, True))
 
             for language, is_default in local_languages:
                 if is_default and not more_than_one_official_language:
@@ -441,13 +443,15 @@ class OSMAddressFormatter(object):
                 if not name or not name.strip():
                     continue
 
-                address_components = {component_name: name.strip()}
-                self.components.add_admin_boundaries(address_components, osm_components, country, language,
-                                                     language_suffix=language_suffix)
+                for i in xrange(num_references if is_default else 1):
+                    address_components = {component_name: name.strip()}
+                    self.components.add_admin_boundaries(address_components, osm_components, country, language,
+                                                         random_key=is_default,
+                                                         language_suffix=language_suffix)
 
-                self.components.normalize_place_names(address_components, osm_components, country=country, languages=all_local_languages)
+                    self.components.normalize_place_names(address_components, osm_components, country=country, languages=all_local_languages)
 
-                place_tags.append((address_components, language, is_default))
+                    place_tags.append((address_components, language, is_default))
 
             for language in random_languages - all_local_languages:
                 language_suffix = ':{}'.format(language)
@@ -467,7 +471,7 @@ class OSMAddressFormatter(object):
                 for address_components in place_tags:
                     address_components[AddressFormatter.POSTCODE] = random.choice(postal_codes)
 
-        return place_tags, num_references, country
+        return place_tags, country
 
     def category_queries(self, tags, address_components, language, country=None, tag_components=True):
         formatted_addresses = []
@@ -758,7 +762,7 @@ class OSMAddressFormatter(object):
             writer = csv.writer(formatted_file, 'tsv_no_quote')
 
         for node_id, tags, deps in parse_osm(infile):
-            place_tags, num_references, country = self.node_place_tags(tags)
+            place_tags, country = self.node_place_tags(tags)
             for address_components, language, is_default in place_tags:
                 addresses = self.formatted_places(address_components, country, language)
                 if language is None:
@@ -774,8 +778,7 @@ class OSMAddressFormatter(object):
                     else:
                         row = (address, )
 
-                    for j in xrange(num_references if is_default else 1):
-                        writer.writerow(row)
+                    writer.writerow(row)
 
             i += 1
             if i % 1000 == 0 and i > 0:
