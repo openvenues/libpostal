@@ -458,8 +458,7 @@ class OSMAddressFormatter(object):
                 address_components = {component_name: name.strip()}
                 self.components.add_admin_boundaries(address_components, osm_components, country, language,
                                                      non_local_language=language,
-                                                     language_suffix=language_suffix,
-                                                     always_use_full_names=True)
+                                                     language_suffix=language_suffix)
 
                 self.components.normalize_place_names(address_components, osm_components, country=country, languages=set([language]))
                 place_tags.append((address_components, language, False))
