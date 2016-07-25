@@ -28,6 +28,7 @@ from geodata.language_id.sample import INTERNET_LANGUAGE_DISTRIBUTION
 from geodata.i18n.languages import *
 from geodata.intersections.query import Intersection, IntersectionQuery
 from geodata.address_formatting.formatter import AddressFormatter
+from geodata.osm.components import osm_address_components
 from geodata.osm.extract import *
 from geodata.osm.intersections import OSMIntersectionReader
 from geodata.polygons.language_polys import *
