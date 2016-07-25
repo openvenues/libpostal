@@ -103,6 +103,7 @@ class OSMAddressFormatter(object):
             ('addr:postal_code', AddressFormatter.POSTCODE),
             ('addr:postcode', AddressFormatter.POSTCODE),
             ('addr:zipcode', AddressFormatter.POSTCODE),
+            ('postal_code', AddressFormatter.POSTCODE),
             ('addr:country', AddressFormatter.COUNTRY),
             ('addr:country_code', AddressFormatter.COUNTRY),
             ('country_code', AddressFormatter.COUNTRY),
