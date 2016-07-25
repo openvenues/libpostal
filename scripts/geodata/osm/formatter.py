@@ -409,7 +409,7 @@ class OSMAddressFormatter(object):
         for name_tag in ('name', 'alt_name', 'loc_name', 'short_name'):
             if more_than_one_official_language:
                 name = tags.get(name_tag)
-                language_suffix = None
+                language_suffix = ''
 
                 if name and name.strip():
                     address_components = {component_name: name.strip()}
@@ -422,7 +422,7 @@ class OSMAddressFormatter(object):
 
             for language, is_default in local_languages:
                 if is_default and not more_than_one_official_language:
-                    language_suffix = None
+                    language_suffix = ''
                     name = tags.get(name_tag)
                 else:
                     language_suffix = ':{}'.format(language)
