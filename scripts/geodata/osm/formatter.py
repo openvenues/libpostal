@@ -387,7 +387,7 @@ class OSMAddressFormatter(object):
         all_local_languages = set([l for l, d in local_languages])
         random_languages = set(INTERNET_LANGUAGE_DISTRIBUTION)
 
-        more_than_one_official_language = len([l for l in candidate_languages if int(l['default'])]) > 1
+        more_than_one_official_language = len([lang for lang, default in local_languages if default]) > 1
 
         containing_ids = [(b['type'], b['id']) for b in osm_components]
 
