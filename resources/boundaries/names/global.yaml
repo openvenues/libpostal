@@ -71,9 +71,3 @@ names:
                 probability: 0.01
               - alternative: official_name
                 probability: 0.01
-
-
-    # OSM relations should inherit properties from their admin_center
-    override_with_admin_center:
-        - id: 92277 # Bangkok
-          type: relation
