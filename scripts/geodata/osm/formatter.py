@@ -369,17 +369,26 @@ class OSMAddressFormatter(object):
         except Exception:
             return None, None, None
 
+        osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
         country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
-        if not (country and candidate_languages):
-            return None, None, None
+        if country and candidate_languages:
+            local_languages = [(l['lang'], bool(int(l['default']))) for l in candidate_languages]
+        else:
+            for c in reversed(osm_components):
+                country = c.get('ISO3166-1')
+                if country:
+                    country = country.lower()
+                    break
+            else:
+                return None, None, None
 
-        local_languages = [(l['lang'], int(l['default'])) for l in candidate_languages]
-        all_local_languages = set([l['lang'] for l in candidate_languages])
+            local_languages = [(lang, bool(default) for lang, default in get_country_languages(country).iteritems()]
+
+        all_local_languages = set([l for l, d in local_languages])
         random_languages = set(INTERNET_LANGUAGE_DISTRIBUTION)
 
         more_than_one_official_language = len([l for l in candidate_languages if int(l['default'])]) > 1
 
-        osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
         containing_ids = [(b['type'], b['id']) for b in osm_components]
 
         component_name = osm_address_components.component_from_properties(country, tags, containing=containing_ids)
