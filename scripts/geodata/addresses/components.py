@@ -322,7 +322,7 @@ class AddressComponents(object):
             component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
             if component is not None:
                 for cn in component_names:
-                    components[cn.lower()].add(normalized_key)
+                    components[cn.lower()].add(component)
 
                 if not is_state:
                     is_state = component == AddressFormatter.STATE
