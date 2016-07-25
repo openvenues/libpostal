@@ -397,7 +397,7 @@ class OSMAddressFormatter(object):
         if component_index:
             osm_components = [c for i, c in enumerate(osm_components)
                               if self.boundary_component_priorities.get(osm_address_components.component_from_properties(country, c, containing=containing_ids[i + 1:]), -1) >= component_index and
-                              (c['type'], c['id']) != (tags['type'], tags['id'])]
+                              (c['type'], c['id']) != (tags.get('type', 'node'), tags.get('id'))]
 
         # Do addr:postcode, postcode, postal_code, etc.
         revised_tags = self.normalize_address_components(tags)
