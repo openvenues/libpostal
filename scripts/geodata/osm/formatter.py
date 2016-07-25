@@ -467,6 +467,7 @@ class OSMAddressFormatter(object):
 
                 address_components = {component_name: name.strip()}
                 self.components.add_admin_boundaries(address_components, osm_components, country, language,
+                                                     random_key=False,
                                                      non_local_language=language,
                                                      language_suffix=language_suffix)
 
