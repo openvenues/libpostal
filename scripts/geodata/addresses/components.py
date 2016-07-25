@@ -223,16 +223,18 @@ class AddressComponents(object):
 
     def categorized_osm_components(self, country, osm_components):
         components = defaultdict(list)
-        for props in osm_components:
+        for i, props in enumerate(osm_components):
             name = props.get('name')
             if not name:
                 continue
 
-            for k, v in props.iteritems():
-                normalized_key = osm_address_components.get_component(country, k, v)
-                if normalized_key:
-                    components[normalized_key].append(props)
-                    break
+            containing_ids = [(c['type'], c['id']) for c in osm_components[i + 1:]]
+
+            component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
+
+            if component is not None:
+                components[component].append(props)
+
         return components
 
     @classmethod
@@ -308,20 +310,22 @@ class AddressComponents(object):
         names = set()
 
         components = defaultdict(set)
-        for props in osm_components:
+
+        for i, props in enumerate(osm_components):
             component_names = set(self.all_names(props, languages or []))
             names |= component_names
 
             is_state = False
-            for k, v in six.iteritems(props):
-                normalized_key = osm_address_components.get_component(country, k, v)
-                if not normalized_key:
-                    continue
+
+            containing_ids = [(c['type'], c['id']) for c in osm_components[i + 1:]]
+
+            component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
+            if component is not None:
                 for cn in component_names:
                     components[cn.lower()].add(normalized_key)
 
-                if normalized_key == AddressFormatter.STATE and not is_state:
-                    is_state = True
+                if not is_state:
+                    is_state = component == AddressFormatter.STATE
 
             if is_state:
                 for state in component_names:
