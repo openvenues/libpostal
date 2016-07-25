@@ -73,7 +73,7 @@ cross_streets:
         sample_probability: 0.2
     intersection:
         default: *a
-        probability: 0.7
+        probability: 0.6
         alternatives:
             - alternative: *na
               probability: 0.1

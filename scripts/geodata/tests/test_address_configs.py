@@ -4,6 +4,7 @@ import unittest
 
 from geodata.addresses.entrances import *
 from geodata.addresses.floors import *
+from geodata.intersections.query import *
 from geodata.addresses.po_boxes import *
 from geodata.addresses.postcodes import *
 from geodata.addresses.staircases import *
@@ -52,6 +53,13 @@ class TestAddressConfigs(unittest.TestCase):
                 break
             self.assertTrue(self.valid_phrase(phrase), six.u('phrase was: {}').format(phrase))
 
+    def check_intersection_phrases(self, language, country=None):
+        for i in xrange(1000):
+            phrase = Intersection.phrase(language, country=country)
+            if phrase is None:
+                break
+            self.assertTrue(self.valid_phrase(phrase), six.u('phrase was: {}').format(phrase))
+
     def check_category_phrases(self, language, country=None):
         for i in xrange(1000):
             phrase = Category.phrase(language, 'amenity', 'restaurant', country=country)
@@ -68,6 +76,8 @@ class TestAddressConfigs(unittest.TestCase):
         self.check_floor_phrases(language, country=country)
         print('Checking units')
         self.check_unit_phrases(language, country=country)
+        print('Checking intersections')
+        self.check_intersection_phrases(language, country=country)
         print('Checking categories')
         self.check_category_phrases(language, country=country)
         print('Checking PO boxes')
