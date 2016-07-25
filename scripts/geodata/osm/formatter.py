@@ -57,6 +57,8 @@ JAPAN = 'jp'
 JAPANESE = 'ja'
 JAPANESE_ROMAJI = 'ja_rm'
 
+ENGLISH = 'en'
+
 
 class OSMAddressFormatter(object):
     aliases = Aliases(
@@ -416,7 +418,7 @@ class OSMAddressFormatter(object):
 
         num_references = population / 10000 + 1
 
-        for name_tag in ('name', 'alt_name', 'loc_name', 'short_name'):
+        for name_tag in ('name', 'alt_name', 'loc_name', 'short_name', 'int_name'):
             if more_than_one_official_language:
                 name = tags.get(name_tag)
                 language_suffix = ''
@@ -455,7 +457,11 @@ class OSMAddressFormatter(object):
 
             for language in random_languages - all_local_languages:
                 language_suffix = ':{}'.format(language)
+
                 name = tags.get('{}{}'.format(name_tag, language_suffix))
+                if not name or not name.strip() and language == ENGLISH:
+                    name = tags.get(name_tag)
+
                 if not name or not name.strip():
                     continue
 
