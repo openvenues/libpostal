@@ -396,6 +396,7 @@ class OSMAddressFormatter(object):
         place_tags = []
 
         postal_code = revised_tags.get(AddressFormatter.POSTCODE, None)
+        postal_codes = []
         if postal_code:
             postal_codes = parse_osm_number_range(postal_code, parse_letter_range=False)
 
