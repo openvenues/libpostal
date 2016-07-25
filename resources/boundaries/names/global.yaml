@@ -52,6 +52,26 @@ names:
           type: relation
           default: name # Richmond County
           probability: 1.0
+        - id: 556706 # New Zealand
+          type: relation
+          default: name:en
+          probability: 0.65
+          alternatives:
+              - alternative: name
+                probability: 0.1
+              - alternative: ISO3166-1:alpha2
+                probability: 0.1
+              - alternative: ISO3166-1:alpha3
+                probability: 0.05
+              - alternative: short_name
+                probability: 0.04
+              - alternative: alt_name
+                probability: 0.04
+              - alternative: int_name
+                probability: 0.01
+              - alternative: official_name
+                probability: 0.01
+
 
     # OSM relations should inherit properties from their admin_center
     override_with_admin_center:
