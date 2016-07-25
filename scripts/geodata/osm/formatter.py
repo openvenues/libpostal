@@ -375,7 +375,7 @@ class OSMAddressFormatter(object):
             local_languages = [(l['lang'], bool(int(l['default']))) for l in candidate_languages]
         else:
             for c in reversed(osm_components):
-                country = c.get('ISO3166-1')
+                country = c.get('ISO3166-1:alpha2')
                 if country:
                     country = country.lower()
                     break
