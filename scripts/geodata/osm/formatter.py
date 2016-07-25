@@ -382,7 +382,7 @@ class OSMAddressFormatter(object):
             else:
                 return None, None, None
 
-            local_languages = [(lang, bool(default) for lang, default in get_country_languages(country).iteritems()]
+            local_languages = [(lang, bool(int(default))) for lang, default in get_country_languages(country).iteritems()]
 
         all_local_languages = set([l for l, d in local_languages])
         random_languages = set(INTERNET_LANGUAGE_DISTRIBUTION)
