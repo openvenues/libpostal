@@ -367,11 +367,11 @@ class OSMAddressFormatter(object):
         try:
             latitude, longitude = latlon_to_decimal(tags['lat'], tags['lon'])
         except Exception:
-            return None, None, None, None
+            return None, None, None
 
         country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
         if not (country and candidate_languages):
-            return None, None, None, None
+            return None, None, None
 
         local_languages = [(l['lang'], int(l['default'])) for l in candidate_languages]
         all_local_languages = set([l['lang'] for l in candidate_languages])
@@ -458,7 +458,7 @@ class OSMAddressFormatter(object):
                 for address_components in place_tags:
                     address_components[AddressFormatter.POSTCODE] = random.choice(postal_codes)
 
-        return place_tags, num_references, country, language
+        return place_tags, num_references, country
 
     def category_queries(self, tags, address_components, language, country=None, tag_components=True):
         formatted_addresses = []
@@ -749,7 +749,7 @@ class OSMAddressFormatter(object):
             writer = csv.writer(formatted_file, 'tsv_no_quote')
 
         for node_id, tags, deps in parse_osm(infile):
-            place_tags, num_references, country, language = self.node_place_tags(tags)
+            place_tags, num_references, country = self.node_place_tags(tags)
             for address_components, language, is_default in place_tags:
                 addresses = self.formatted_places(address_components, country, language)
                 if language is None:
