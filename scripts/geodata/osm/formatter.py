@@ -459,7 +459,7 @@ class OSMAddressFormatter(object):
                 language_suffix = ':{}'.format(language)
 
                 name = tags.get('{}{}'.format(name_tag, language_suffix))
-                if not name or not name.strip() and language == ENGLISH:
+                if (not name or not name.strip()) and language == ENGLISH:
                     name = tags.get(name_tag)
 
                 if not name or not name.strip():
