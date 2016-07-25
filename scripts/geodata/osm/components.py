@@ -3,7 +3,10 @@ import os
 import six
 import yaml
 
+from copy import deepcopy
+
 from geodata.address_formatting.formatter import AddressFormatter
+from geodata.configs.utils import recursive_merge
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
@@ -64,6 +67,25 @@ class OSMAddressComponents(object):
                 for k, v in values.iteritems():
                     if isinstance(v, six.string_types) and v not in AddressFormatter.address_formatter_fields:
                         raise ValueError(u'Invalid value in {} for prop={}, key={}: {}'.format(filename, prop, k, v))
+
+                if prop == 'overrides':
+                    containing_overrides = values.get('contained_by', {})
+
+                    if not containing_overrides:
+                        continue
+
+                    for id_type, vals in six.iteritems(containing_overrides):
+                        for element_id in vals:
+
+                            override_config = vals[element_id]
+
+                            config = deepcopy(data)
+                            config.pop('overrides')
+
+                            recursive_merge(config, override_config)
+
+                            vals[element_id] = config
+
             self.config[country_code] = data
 
     def component(self, country, prop, value):
@@ -96,9 +118,9 @@ class OSMAddressComponents(object):
             if contained_by_overrides and containing:
                 # Note, containing should be passed in from smallest to largest
                 for containing_type, containing_id in containing:
-                    config_updates = contained_by_overrides.get(containing_type, {}).get(six.binary_type(containing_id or ''), None)
-                    if config_updates:
-                        config.update(config_updates)
+                    override_config = contained_by_overrides.get(containing_type, {}).get(six.binary_type(containing_id or ''), None)
+                    if override_config:
+                        config = override_config
                         break
 
         values = [(k, v) for k, v in six.iteritems(properties) if isinstance(v, collections.Hashable)]
