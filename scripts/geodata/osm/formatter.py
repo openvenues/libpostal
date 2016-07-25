@@ -790,6 +790,34 @@ class OSMAddressFormatter(object):
             if i % 1000 == 0 and i > 0:
                 print('did {} formatted places'.format(i))
 
+        for props, poly in iter(self.components.osm_admin_rtree):
+            point = context.representative_point()
+            lat = pt.y
+            lon = pt.x
+            props['lat'] = lat
+            props['lon'] = lon
+            place_tags, country = self.node_place_tags(tags)
+            for address_components, language, is_default in place_tags:
+                addresses = self.formatted_places(address_components, country, language)
+                if language is None:
+                    language = UNKNOWN_LANGUAGE
+
+                for address in addresses:
+                    if not address or not address.strip():
+                        continue
+
+                    address = tsv_string(address)
+                    if tag_components:
+                        row = (language, country, address)
+                    else:
+                        row = (address, )
+
+                    writer.writerow(row)
+
+            i += 1
+            if i % 1000 == 0 and i > 0:
+                print('did {} formatted places'.format(i))
+
     def build_intersections_training_data(self, infile, out_dir, way_db_dir, tag_components=True):
         '''
         Intersection addresses like "4th & Main Street" are represented in OSM
