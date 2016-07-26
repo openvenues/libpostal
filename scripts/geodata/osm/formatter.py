@@ -396,7 +396,7 @@ class OSMAddressFormatter(object):
 
         for tag in tags:
             if ':' in tag:
-                tag, lang = tag.rsplt(':', 1)
+                tag, lang = tag.rsplit(':', 1)
                 if lang.lower() not in all_local_languages and lang.lower().split('_', 1)[0] in all_local_languages:
                     local_languages.append((lang, language_defaults[lang.split('_')[0]]))
                     all_local_languages.add(lang)
