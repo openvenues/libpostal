@@ -27,6 +27,7 @@ class PlaceConfig(object):
         AddressFormatter.ISLAND,
         AddressFormatter.STATE_DISTRICT,
         AddressFormatter.STATE,
+        AddressFormatter.COUNTRY_REGION,
         AddressFormatter.COUNTRY,
     }
 
