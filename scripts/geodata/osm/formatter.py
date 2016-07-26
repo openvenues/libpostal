@@ -474,7 +474,7 @@ class OSMAddressFormatter(object):
                 place_tags.append((address_components, language, False))
 
             if postal_codes:
-                for address_components in place_tags:
+                for address_components, language, is_default in place_tags:
                     address_components[AddressFormatter.POSTCODE] = random.choice(postal_codes)
 
         return place_tags, country
