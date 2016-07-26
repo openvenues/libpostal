@@ -25,6 +25,7 @@ from geodata.configs.utils import nested_get
 from geodata.countries.country_names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import INTERNET_LANGUAGE_DISTRIBUTION
+from geodata.i18n.google import postcode_regexes
 from geodata.i18n.languages import *
 from geodata.intersections.query import Intersection, IntersectionQuery
 from geodata.address_formatting.formatter import AddressFormatter
@@ -411,7 +412,16 @@ class OSMAddressFormatter(object):
         postal_code = revised_tags.get(AddressFormatter.POSTCODE, None)
         postal_codes = []
         if postal_code:
-            postal_codes = parse_osm_number_range(postal_code, parse_letter_range=False)
+            valid_postcode = False
+            postcode_regex = postcode_regexes.get(country)
+            if postcode_regex:
+                match = postcode_regex.match(postal_code)
+                if match and match.end() == len(postal_code):
+                    valid_postcode = True
+                    postal_codes.append(postal_code)
+
+            if not valid_postcode:
+                postal_codes = parse_osm_number_range(postal_code, parse_letter_range=False)
 
         try:
             population = int(tags.get('population', 0))
