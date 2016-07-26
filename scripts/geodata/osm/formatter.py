@@ -428,7 +428,7 @@ class OSMAddressFormatter(object):
                 if name and name.strip():
                     for i in xrange(num_references if name_tag == 'name' else 1):
                         address_components = {component_name: name.strip()}
-                        self.components.add_admin_boundaries(address_components, osm_components, country, language=None,
+                        self.components.add_admin_boundaries(address_components, osm_components, country, UNKNOWN_LANGUAGE,
                                                              random_key=num_references > 1,
                                                              language_suffix=language_suffix,
                                                              drop_duplicate_city_names=False)
