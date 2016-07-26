@@ -31,6 +31,7 @@ from geodata.address_formatting.formatter import AddressFormatter
 from geodata.osm.components import osm_address_components
 from geodata.osm.extract import *
 from geodata.osm.intersections import OSMIntersectionReader
+from geodata.places.config import place_config
 from geodata.polygons.language_polys import *
 from geodata.polygons.reverse_geocode import *
 from geodata.i18n.unicode_paths import DATA_DIR
