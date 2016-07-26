@@ -477,7 +477,15 @@ class OSMAddressFormatter(object):
                 for address_components, language, is_default in place_tags:
                     address_components[AddressFormatter.POSTCODE] = random.choice(postal_codes)
 
-        return place_tags, country
+        revised_place_tags = []
+        for address_components, language, is_default in place_tags:
+            new_address_components = place_config.dropout_components(address_components, osm_components, country=country)
+            new_address_components[component_name] = address_components[component_name]
+            self.components.drop_invalid_components(new_address_components)
+            if new_address_components:
+                revised_place_tags.append((new_address_components, language, is_default))
+
+        return revised_place_tags, country
 
     def category_queries(self, tags, address_components, language, country=None, tag_components=True):
         formatted_addresses = []
