@@ -371,7 +371,7 @@ class OSMAddressFormatter(object):
         try:
             latitude, longitude = latlon_to_decimal(tags['lat'], tags['lon'])
         except Exception:
-            return None, None
+            return (), None
 
         osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
         country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
@@ -384,7 +384,7 @@ class OSMAddressFormatter(object):
                     country = country.lower()
                     break
             else:
-                return None, None
+                return (), None
 
             local_languages = [(lang, bool(int(default))) for lang, default in get_country_languages(country).iteritems()]
 
