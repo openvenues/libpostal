@@ -138,6 +138,9 @@ ch	qs_a1_lc	26	fr	1
 ch	name	Jura	fr	1
 ch	gn_id	2660207	fr	1
 ch	osm	relation:1697347	fr	1
+cn	qs_a1	Xizang	bo,zh	1
+cn	gn_id	1279685	bo,zh	1
+cn	osm	relation:153292	bo,zh	1
 cy	qs_a1	Αμμόχωστος	tr	1
 cy	gn_id	146615	tr	1
 cy	osm	relation:3264447	tr	1
