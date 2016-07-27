@@ -711,7 +711,7 @@ class AddressFormatter(object):
         return self.get_template_from_config(self.templates_place_only, country, language=language)
 
     def tagged_tokens(self, name, label):
-        return six.u(' ').join([six.u('{}/{}').format(t.replace(' ', ''), label) for t, c in tokenize(name)])
+        return six.u(' ').join([six.u('{}/{}').format(t.replace(' ', ''), label if t != ',' else self.separator_tag) for t, c in tokenize(name)])
 
     def format_category_query(self, category_query, address_components, country, language, tag_components=True):
         if tag_components:
