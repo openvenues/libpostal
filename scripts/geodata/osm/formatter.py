@@ -440,6 +440,8 @@ class OSMAddressFormatter(object):
             population = 0
 
         num_references = population / 10000 + 1
+        if num_references > 1000:
+            num_references = 1000
 
         for name_tag in ('name', 'alt_name', 'loc_name', 'short_name', 'int_name'):
             if more_than_one_official_language:
