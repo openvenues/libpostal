@@ -50,6 +50,7 @@ class OSMAddressComponents(object):
             'state': AddressFormatter.STATE,
             'region': AddressFormatter.STATE,
             'province': AddressFormatter.STATE,
+            'district': AddressFormatter.STATE_DISTRICT,
             'county': AddressFormatter.STATE_DISTRICT,
         }
     }
