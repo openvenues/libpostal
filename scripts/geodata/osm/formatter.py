@@ -421,7 +421,7 @@ class OSMAddressFormatter(object):
                     revised_osm_components.append(c)
 
                     if not first_valid:
-                        if (component_index <= self.boundary_component_priorities[AddressesFormatter.CITY] and
+                        if (component_index <= self.boundary_component_priorities[AddressFormatter.CITY] and
                            component_index != c_index and tags.get('type') == 'node' and 'admin_center' in c and
                            tags.get('id') and c['admin_center']['id'] == tags['id'] and c.get('name', '').lower() == tags['name'].lower()):
                             component_name = c_name
