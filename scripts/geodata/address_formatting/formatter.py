@@ -271,7 +271,7 @@ class AddressFormatter(object):
             elif 'first' in v:
                 val = (self.FIRST, None)
             else:
-                raise ValueError('Insertions must contain one of {first, before, after, last}')
+                raise ValueError('Insertions must contain one of {{first, before, after, last}}. Value was: {}'.format(v))
 
             prob = v['probability']
             values.append(val)
