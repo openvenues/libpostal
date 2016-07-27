@@ -398,7 +398,7 @@ class OSMAddressFormatter(object):
             if ':' in tag:
                 tag, lang = tag.rsplit(':', 1)
                 if lang.lower() not in all_local_languages and lang.lower().split('_', 1)[0] in all_local_languages:
-                    local_languages.append((lang, language_defaults[lang.split('_')[0]]))
+                    local_languages.append((lang, language_defaults[lang.lower().split('_', 1)[0]]))
                     all_local_languages.add(lang)
 
         more_than_one_official_language = len([lang for lang, default in local_languages if default]) > 1
@@ -848,6 +848,7 @@ class OSMAddressFormatter(object):
                 addresses = self.formatted_places(address_components, country, language)
                 if language is None:
                     language = UNKNOWN_LANGUAGE
+                language = language.lower()
 
                 for address in addresses:
                     if not address or not address.strip():
