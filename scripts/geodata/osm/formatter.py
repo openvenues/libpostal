@@ -411,9 +411,25 @@ class OSMAddressFormatter(object):
         component_index = self.boundary_component_priorities.get(component_name)
 
         if component_index:
-            osm_components = [c for i, c in enumerate(osm_components)
-                              if self.boundary_component_priorities.get(osm_address_components.component_from_properties(country, c, containing=containing_ids[i + 1:]), -1) >= component_index and
-                              (c['type'], c['id']) != (tags.get('type', 'node'), tags.get('id'))]
+            revised_osm_components = []
+
+            first_valid = False
+            for i, c in enumerate(osm_components):
+                c_name = osm_address_components.component_from_properties(country, c, containing=containing_ids[i + 1:])
+                c_index = self.boundary_component_priorities.get(c_name, -1)
+                if c_index >= component_index  and (c['type'], c['id']) != (tags.get('type', 'node'), tags.get('id')):
+                    revised_osm_components.append(c)
+
+                    if not first_valid:
+                        if (component_index <= self.boundary_component_priorities[AddressesFormatter.CITY] and
+                           component_index != c_index and tags.get('type') == 'node' and 'admin_center' in c and
+                           tags.get('id') and c['admin_center']['id'] == tags['id'] and c.get('name', '').lower() == tags['name'].lower()):
+                            component_name = c_name
+                            component_index = c_index
+                            revised_osm_components.pop()
+                        first_valid = True
+
+            osm_components = revised_osm_components
 
         # Do addr:postcode, postcode, postal_code, etc.
         revised_tags = self.normalize_address_components(tags)
@@ -815,6 +831,7 @@ class OSMAddressFormatter(object):
             writer = csv.writer(formatted_file, 'tsv_no_quote')
 
         for node_id, tags, deps in parse_osm(infile):
+            tags['type'], tags['id'] = node_id.split(':')
             place_tags, country = self.node_place_tags(tags)
             for address_components, language, is_default in place_tags:
                 addresses = self.formatted_places(address_components, country, language)
