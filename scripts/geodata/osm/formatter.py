@@ -406,6 +406,8 @@ class OSMAddressFormatter(object):
         containing_ids = [(b['type'], b['id']) for b in osm_components]
 
         component_name = osm_address_components.component_from_properties(country, tags, containing=containing_ids)
+        if component_name is None:
+            return (), None
         component_index = self.boundary_component_priorities.get(component_name)
 
         if component_index:
