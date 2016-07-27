@@ -50,21 +50,15 @@ kill_background_processes() {
 
 trap kill_background_processes INT
 
-download_part() {
-    i=$1
-    offset=$2
-    max=$3
-    url=$4
-    part_filename=$5
-    echo "Downloading part $i: filename=$part_filename, offset=$offset, max=$max"
-    curl $url --silent -H"Range:bytes=$offset-$max" -o $part_filename
-}
+PART_MSG='echo "Downloading part $1: filename=$5, offset=$2, max=$3"'
+PART_CURL='curl $4 --silent -H"Range:bytes=$2-$3" -o $5'
+DOWNLOAD_PART="$PART_MSG;$PART_CURL"
+
 
 download_multipart() {
     url=$1
     filename=$2
     size=$3
-    num_workers=$4
 
     num_chunks=$((size/CHUNK_SIZE))
     echo "Downloading multipart: $url, size=$size, num_chunks=$num_chunks"
@@ -78,13 +72,9 @@ download_multipart() {
         else
             max=$size;
         fi;
-        download_part "$i" "$offset" "$max" "$url" "$part_filename" &
-        # wait every time we have started $num_workers processes
-        [ $((i%num_workers)) -eq 0 ] && wait
+        printf "%s\0%s\0%s\0%s\0%s\0" "$i" "$offset" "$max" "$url" "$part_filename"
         offset=$((offset+CHUNK_SIZE))
-    done
-    # wait if $num_chunks wasn't exactly divisible by $num_workers
-    wait
+    done | xargs -0 -n 5 -P $NUM_WORKERS sh -c "$DOWNLOAD_PART" --
 
     > $local_path
 
@@ -120,7 +110,7 @@ download_file() {
         content_length=$(curl -I $url 2> /dev/null | awk '/^Content-Length:/ { print $2 }' | tr -d '[[:space:]]')
 
         if [ $content_length -ge $LARGE_FILE_SIZE ]; then
-            download_multipart $url $local_path $content_length $NUM_WORKERS
+            download_multipart $url $local_path $content_length
         else
             curl $url -o $local_path
         fi
