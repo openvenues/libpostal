@@ -449,6 +449,8 @@ class OSMAddressFormatter(object):
                 if name and name.strip():
                     if six.u(';') in name:
                         name = random.choice(name.split(six.u(';')))
+                    elif six.(',') in name:
+                        name = name.split(six.u(','), 1)[0]
 
                     for i in xrange(num_references if name_tag == 'name' else 1):
                         address_components = {component_name: name.strip()}
@@ -472,6 +474,8 @@ class OSMAddressFormatter(object):
 
                 if six.u(';') in name:
                     name = random.choice(name.split(six.u(';')))
+                elif six.(',') in name:
+                    name = name.split(six.u(','), 1)[0]
 
                 for i in xrange(num_references if is_default and name_tag == 'name' else 1):
                     address_components = {component_name: name.strip()}
@@ -494,6 +498,8 @@ class OSMAddressFormatter(object):
 
                 if six.u(';') in name:
                     name = random.choice(name.split(six.u(';')))
+                elif six.(',') in name:
+                    name = name.split(six.u(','), 1)[0]
 
                 address_components = {component_name: name.strip()}
                 self.components.add_admin_boundaries(address_components, osm_components, country, language,
