@@ -449,7 +449,7 @@ class OSMAddressFormatter(object):
                 if name and name.strip():
                     if six.u(';') in name:
                         name = random.choice(name.split(six.u(';')))
-                    elif six.(',') in name:
+                    elif six.u(',') in name:
                         name = name.split(six.u(','), 1)[0]
 
                     for i in xrange(num_references if name_tag == 'name' else 1):
@@ -474,7 +474,7 @@ class OSMAddressFormatter(object):
 
                 if six.u(';') in name:
                     name = random.choice(name.split(six.u(';')))
-                elif six.(',') in name:
+                elif six.u(',') in name:
                     name = name.split(six.u(','), 1)[0]
 
                 for i in xrange(num_references if is_default and name_tag == 'name' else 1):
@@ -498,7 +498,7 @@ class OSMAddressFormatter(object):
 
                 if six.u(';') in name:
                     name = random.choice(name.split(six.u(';')))
-                elif six.(',') in name:
+                elif six.u(',') in name:
                     name = name.split(six.u(','), 1)[0]
 
                 address_components = {component_name: name.strip()}
