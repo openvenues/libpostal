@@ -158,19 +158,27 @@ def parse_osm_number_range(value, parse_letter_range=True):
         match = number_range_regex.match(val)
         if match:
             start_num, end_num = match.groups()
+            start_num_len = len(start_num)
+
+            zfill = 0
+            if start_num.startswith('0'):
+                zfill = start_num_len
+
             try:
                 start_num = int(start_num)
                 end_num = int(end_num)
+
                 if end_num > start_num:
                     if end_num - start_num > 100:
                         end_num = start_num + 100
+
                     for i in xrange(start_num, end_num + 1):
-                        numbers.append(safe_decode(i))
+                        numbers.append(safe_decode(i).zfill(zfill))
                 else:
-                    numbers.append(val.strip())
+                    numbers.append(val.strip().zfill(zfill))
                     continue
             except (TypeError, ValueError):
-                numbers.append(safe_decode(val).strip())
+                numbers.append(safe_decode(val).strip().zfill(zfill))
                 continue
 
         else:
