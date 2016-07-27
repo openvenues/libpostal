@@ -109,8 +109,8 @@ languages:
                 entrance_after_house_number:
                     after: house_number
                     probability: 0.8
-                entrance_before_house:
-                    before: house
+                entrance_after_house:
+                    after: house
                     probability: 0.2
                 conditional:
                     - component: building
@@ -123,11 +123,10 @@ languages:
                 # e.g. 123 East 45th St, Staircase C, NYC
                 staircase_after_house_number:
                     after: house_number
-                    probability: 0.8
-                # e.g. Floor 1, Da Vinci House, 44 Saffron Hill, London
-                staircase_before_house:
-                    before: house
-                    probability: 0.2
+                    probability: 0.9
+                staircase_after_house:
+                    after: house
+                    probability: 0.1
                 conditional:
                     - component: entrance
                       probabilities:
@@ -174,12 +173,9 @@ languages:
                               probability: 0.99
 
             unit:
-                unit_before_house:
-                    before: house
-                    probability: 0.1
                 unit_after_house_number:
                     after: house_number
-                    probability: 0.8
+                    probability: 0.9
                 unit_before_road:
                     before: road
                     probability: 0.1
@@ -342,25 +338,132 @@ languages:
                               before: level
                               probability: 0.01
 
-    es: 
+    # Spanish
+    es:
         insertions: *continental_european_template_insertions
 
-    de: 
+    # French - exceptions for countries (including France itself) below
+    fr:
         insertions: *continental_european_template_insertions
 
-    nl: 
+    # Portuguese
+    pt:
         insertions: *continental_european_template_insertions
 
+    # Italian
+    it:
+        insertions: *continental_european_template_insertions
+
+    # German
+    de:
+        insertions: *continental_european_template_insertions
+
+    # Dutch
+    nl:
+        insertions: *continental_european_template_insertions
+
+    # Danish
     da:
         insertions: *continental_european_template_insertions
 
-countries:
-    # Hungary, e.g. 1075, Budapest Kazinczy utca 14
+    # Swedish
+    sv:
+        insertions: *continental_european_template_insertions
+
+    # Norwegian
+    nb:
+        insertions: *continental_european_template_insertions
+
+    # Polish
+    pl:
+        insertions: *continental_european_template_insertions
+
+    # Russian
+    ru:
+        insertions: *continental_european_template_insertions
+
+    # Czech
+    cs:
+        insertions: *continental_european_template_insertions
+
+    # Slovakian
+    sk:
+        insertions: *continental_european_template_insertions
+
+    # Estonian
+    et:
+        insertions: *continental_european_template_insertions
+
+    # Finnish
+    fi:
+        insertions: *continental_european_template_insertions
+
+    # Romanian
+    ro:
+        insertions: *continental_european_template_insertions
+
+    # Hungarian
     hu:
         insertions:
+            <<: *continental_european_template_insertions
+            # e.g. 1075, Budapest Kazinczy utca 14
             postcode:
                 postcode_before_city:
                     probability: 0.5
+
+    # Ukrainian
+    uk:
+        insertions: *continental_european_template_insertions
+
+    # Lithuanian
+    lt:
+        insertions: *continental_european_template_insertions
+
+    # Latvian
+    lv:
+        insertions: *continental_european_template_insertions
+
+    # Serbian
+    sr:
+        insertions: *continental_european_template_insertions
+
+    # Croatian
+    hr:
+        insertions: *continental_european_template_insertions
+
+    # Slovenian
+    sl:
+        insertions: *continental_european_template_insertions
+
+    # Bosnian
+    bs:
+        insertions: *continental_european_template_insertions
+
+    # Hebrew - Israel basically uses the same format as continental Europe
+    he:
+        insertions: *continental_european_template_insertions
+
+    # Basque
+    eu: 
+        insertions: *continental_european_template_insertions
+
+    # Catalan
+    ca: 
+        insertions: *continental_european_template_insertions
+
+    # Bulgarian
+    bg:
+        insertions: *continental_european_template_insertions
+
+    # Greek
+    el:
+        insertions: *continental_european_template_insertions
+
+    # Icelandic
+    is:
+        insertions: *continental_european_template_insertions
+
+countries:
 
     # Malaysia (islands are bigger than states)
     my:
@@ -376,7 +479,7 @@ countries:
                 before:
                     - country
 
-    us:
+    us: &us_template_insertions
         insertions:
             level:
                 # e.g. 123 East 45th St, 6th Floor, NYC
@@ -417,6 +520,38 @@ countries:
                 unit_before_level:
                     before: level
                     probability: 0.01
+
+    # American Samoa
+    as:
+        insertions: *us_template_insertions
+
+    # Federated States of Micronesia
+    fm:
+        insertions: *us_template_insertions
+
+    # Guam
+    gu:
+        insertions: *us_template_insertions
+
+    # Marshall Islands
+    mh:
+        insertions: *us_template_insertions
+
+    # Northern Mariana Islands
+    mp:
+        insertions: *us_template_insertions
+
+    # Puerto Rico
+    pr:
+        insertions: *us_template_insertions
+
+    # U.S. Minor Outlying Islands
+    um:
+        insertions: *us_template_insertions
+
+    # U.S. Virgin Islands
+    vi:
+        insertions: *us_template_insertions
 
     fr:
         insertions: &france_template_insertions
@@ -484,6 +619,10 @@ countries:
                     before: road
                     probability: 0.001
 
+    # Andorra, uses same template as France
+    ad_ca:
+        insetions: *france_template_insertions
+
     # Algeria
     dz_fr:
         insertions: *france_template_insertions
@@ -503,3 +642,38 @@ countries:
     # Tunisia
     tn_fr:
         insertions: *france_template_insertions
+
+    # China
+    cn:
+        insertions: {}
+
+    cn_en:
+        insertions: *us_template_insertions
+
+    # Hong Kong
+    hk:
+        insertions: {}
+
+    hk_en:
+        insertions: *english_template_insertions
+
+    # Taiwan
+    tw:
+        insertions: {}
+
+    en_tw:
+        insertions: *us_template_insertions
+
+    # Japan
+    jp:
+        insertions: {}
+
+    en_jp:
+        insertions: *us_template_insertions
+
+    # South Korea
+    kr:
+        insertions: {}
+
+    en_kr:
+        insertions: *us_template_insertions
