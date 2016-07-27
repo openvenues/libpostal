@@ -439,7 +439,7 @@ class OSMAddressFormatter(object):
         except (ValueError, TypeError):
             population = 0
 
-        num_references = population / 10000 + 1
+        num_references = population / 10000 + 5
         if num_references > 1000:
             num_references = 1000
 
