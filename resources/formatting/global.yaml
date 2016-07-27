@@ -409,6 +409,7 @@ languages:
             # e.g. 1075, Budapest Kazinczy utca 14
             postcode:
                 postcode_before_city:
+                    before: city
                     probability: 0.5
 
     # Ukrainian
@@ -479,48 +480,89 @@ countries:
                 before:
                     - country
 
-    us: &us_template_insertions
-        insertions:
+    us:
+        insertions: &us_template_insertions
+            <<: *english_template_insertions
+            entrance:
+                entrance_after_road:
+                    after: road
+                    probability: 0.8
+                entrance_before_house_number:
+                    before: house_number
+                    probability: 0.2
+                conditional:
+                    - component: building
+                      probabilities:
+                          # default: 0.8
+                          entrance_after_building:
+                              after: building
+                              probability: 0.2
+
+            staircase:
+                # e.g. 123 East 45th St, Staircase C, NYC
+                staircase_after_road:
+                    after: road
+                    probability: 0.7
+                # e.g. Da Vinci House, 1st Floor, 44 Saffron Hill, London
+                staircase_before_house_number:
+                    before: house_number
+                    probability: 0.3
+                conditional:
+                    - component: entrance
+                      probabilities:
+                          # default: 0.1
+                          staircase_after_entrance:
+                              after: entrance
+                              probability: 0.9
+
+
             level:
                 # e.g. 123 East 45th St, 6th Floor, NYC
                 level_after_road:
                     after: road
-                    probability: 0.875
-                # e.g. Floor 1, Da Vinci House, 44 Saffron Hill, London
-                level_before_house:
-                    before: house
-                    probability: 0.005
+                    probability: 0.9
                 # e.g. Da Vinci House, 1st Floor, 44 Saffron Hill, London
                 level_before_house_number:
                     before: house_number
-                    probability: 0.12
+                    probability: 0.1
+
+                conditional:
+                    - component: staircase
+                      probabilities:
+                          # default: 0.4
+                          level_after_staircase:
+                              after: staircase
+                              probability: 0.6
+                    - component: entrance
+                      probabilities:
+                          # default: 0.4
+                          level_after_entrance:
+                              after: entrance
+                              probability: 0.6
 
             unit:
-                # e.g. Flat 18, Da Vinci House, 44 Saffron Hill, London
-                unit_before_house:
-                    before: house
-                    probability: 0.05
-
                 # e.g. Da Vinci House, Flat 18, 44 Saffron Hill, London
                 unit_before_house_number:
                     before: house_number
-                    probability: 0.05
+                    probability: 0.1
 
                 # e.g. Da Vinci House, 44 Saffron Hill, Flat 18, London (not as common in UK)
                 unit_after_road:
                     after: road
-                    probability: 0.8
+                    probability: 0.9
 
-                # e.g. Floor 5, Apt 6
-                unit_after_level:
-                    after: level
-                    probability: 0.09
-
-                # e.g. Apt. 6, 5/F (less common)
-                unit_before_level:
-                    before: level
-                    probability: 0.01
-
+                conditional:
+                    - component: level
+                      # default: 0.1
+                      probabilities:
+                          # e.g. Floor 5, Apt 6
+                          unit_after_level:
+                              after: level
+                              probability: 0.8
+                          # e.g. Apt. 6, 5/F (less common)
+                          unit_before_level:
+                              before: level
+                              probability: 0.1
     # American Samoa
     as:
         insertions: *us_template_insertions
