@@ -480,7 +480,7 @@ class OSMAddressFormatter(object):
                                                              drop_duplicate_city_names=False)
 
                         if random.random() < cldr_country_prob and AddressFormatter.COUNTRY in address_components:
-                            address_country = self.cldr_country_name(country, language)
+                            address_country = self.components.cldr_country_name(country, language)
                             if address_country:
                                 address_components[AddressFormatter.COUNTRY] = address_country
 
@@ -509,7 +509,7 @@ class OSMAddressFormatter(object):
                                                          language_suffix=language_suffix,
                                                          drop_duplicate_city_names=False)
                     if random.random() < cldr_country_prob and AddressFormatter.COUNTRY in address_components:
-                        address_country = self.cldr_country_name(country, language)
+                        address_country = self.components.cldr_country_name(country, language)
                         if address_country:
                             address_components[AddressFormatter.COUNTRY] = address_country
 
@@ -538,7 +538,7 @@ class OSMAddressFormatter(object):
                                                      drop_duplicate_city_names=False)
 
                 if random.random() < cldr_country_prob and AddressFormatter.COUNTRY in address_components:
-                    address_country = self.cldr_country_name(country, language)
+                    address_country = self.components.cldr_country_name(country, language)
                     if address_country:
                         address_components[AddressFormatter.COUNTRY] = address_country
 
