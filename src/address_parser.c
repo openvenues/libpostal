@@ -814,6 +814,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_STATE_DISTRICT, "state_district", component_phrase_string, prev2, prev);
             add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_STATE, "state", component_phrase_string, prev2, prev);
             add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_POSTAL_CODE, "postal_code", component_phrase_string, prev2, prev);
+            add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_COUNTRY_REGION, "country_region", component_phrase_string, prev2, prev);
             add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_COUNTRY, "country", component_phrase_string, prev2, prev);
         }
 
@@ -823,6 +824,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             feature_array_add(features, 2, "commonly state", component_phrase_string);
         } else if (most_common == ADDRESS_PARSER_COUNTRY) {
             feature_array_add(features, 2, "commonly country", component_phrase_string);
+        } else if (most_common == ADDRESS_PARSER_COUNTRY_REGION) {
+            feature_array_add(features, 2, "commonly country_region", component_phrase_string);
         } else if (most_common == ADDRESS_PARSER_STATE_DISTRICT) {
             feature_array_add(features, 2, "commonly state_district", component_phrase_string);
         } else if (most_common == ADDRESS_PARSER_ISLAND) {
@@ -1045,6 +1048,8 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
                 label = strdup(ADDRESS_PARSER_LABEL_STATE);
             } else if (most_common == ADDRESS_PARSER_COUNTRY) {
                 label = strdup(ADDRESS_PARSER_LABEL_COUNTRY);
+            } else if (most_common == ADDRESS_PARSER_COUNTRY_REGION) {
+                label = strdup(ADDRESS_PARSER_LABEL_COUNTRY_REGION);
             } else if (most_common == ADDRESS_PARSER_STATE_DISTRICT) {
                 label = strdup(ADDRESS_PARSER_LABEL_STATE_DISTRICT);
             } else if (most_common == ADDRESS_PARSER_SUBURB) {

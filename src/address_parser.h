@@ -95,6 +95,7 @@ typedef enum {
     ADDRESS_PARSER_ISLAND,
     ADDRESS_PARSER_STATE,
     ADDRESS_PARSER_POSTAL_CODE,
+    ADDRESS_PARSER_COUNTRY_REGION,
     ADDRESS_PARSER_COUNTRY,
     NUM_ADDRESS_PARSER_TYPES
 } address_parser_components;
@@ -109,6 +110,7 @@ typedef enum {
 #define ADDRESS_PARSER_LABEL_ISLAND "island"
 #define ADDRESS_PARSER_LABEL_STATE  "state"
 #define ADDRESS_PARSER_LABEL_POSTAL_CODE  "postcode"
+#define ADDRESS_PARSER_LABEL_COUNTRY  "country_region"
 #define ADDRESS_PARSER_LABEL_COUNTRY  "country"
 
 typedef union address_parser_types {
