@@ -21,11 +21,19 @@ global:
         country_region:
             probability: 0.05
         country:
-            probability: 0.6
+            probability: 0.8
 
 countries:
     # Australia
     au:
+        components:
+            state:
+                probability: 0.6
+            country:
+                probability: 0.5
+
+    # Brazil
+    br:
         components:
             state:
                 probability: 0.6
@@ -35,6 +43,8 @@ countries:
         components:
             state:
                 probability: 0.7
+            country:
+                probability: 0.2
 
     # France
     fr:
@@ -49,6 +59,8 @@ countries:
                 probability: 0.15
             suburb:
                 probability: 0.5
+            country:
+                probability: 0.6
 
     # Indonesia
     id:
@@ -95,6 +107,11 @@ countries:
             island:
                 probability: 0.8
 
+    # Mexico
+    mx:
+        components:
+            state:
+                probability: 0.5
     # Malaysia
     my:
         components:
@@ -169,7 +186,7 @@ countries:
                     - <<: *hawaii
                       probability: 0.5
             state:
-                probability: 0.7
+                probability: 0.8
                 # Higher probability of Brooklyn/city_district NY/state
                 containing:
                     - <<: *kings_county
