@@ -82,7 +82,8 @@ with the general error-driven averaged perceptron.
 #define ADDRESS_COMPONENT_STATE_DISTRICT 1 << 11
 #define ADDRESS_COMPONENT_STATE 1 << 12
 #define ADDRESS_COMPONENT_POSTAL_CODE 1 << 13
-#define ADDRESS_COMPONENT_COUNTRY 1 << 14
+#define ADDRESS_COMPONENT_COUNTRY_REGION 1 << 14
+#define ADDRESS_COMPONENT_COUNTRY 1 << 15
 
 typedef enum {
     ADDRESS_PARSER_HOUSE,

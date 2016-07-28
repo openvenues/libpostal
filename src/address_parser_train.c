@@ -34,6 +34,7 @@ static inline bool is_phrase_component(char *label) {
            string_equals(label, ADDRESS_PARSER_LABEL_ISLAND) ||
            string_equals(label, ADDRESS_PARSER_LABEL_STATE) ||
            string_equals(label, ADDRESS_PARSER_LABEL_POSTAL_CODE) ||
+           string_equals(label, ADDRESS_PARSER_LABEL_COUNTRY_REGION) ||
            string_equals(label, ADDRESS_PARSER_LABEL_COUNTRY));
 }
 
@@ -181,6 +182,9 @@ address_parser_t *address_parser_init(char *filename) {
                         component = ADDRESS_COMPONENT_STATE;
                     } else if (string_equals(prev_label, ADDRESS_PARSER_LABEL_COUNTRY)) {
                         class_id = ADDRESS_PARSER_COUNTRY;
+                        component = ADDRESS_COMPONENT_COUNTRY;
+                    } else if (string_equals(prev_label, ADDRESS_PARSER_LABEL_COUNTRY_REGION)) {
+                        class_id = ADDRESS_PARSER_COUNTRY_REGION;
                         component = ADDRESS_COMPONENT_COUNTRY;
                     } else if (string_equals(prev_label, ADDRESS_PARSER_LABEL_STATE_DISTRICT)) {
                         class_id = ADDRESS_PARSER_STATE_DISTRICT;
