@@ -536,16 +536,17 @@ class OSMAddressFormatter(object):
 
         revised_place_tags = []
         for address_components, language, is_default in place_tags:
+            if (AddressFormatter.COUNTRY in address_components or place_config.include_component(AddressFormatter.COUNTRY, containing_ids, country=country)) and random.random() < cldr_country_prob:
+                address_country = self.components.cldr_country_name(country, language)
+                if address_country:
+                    address_components[AddressFormatter.COUNTRY] = address_country
+
             new_address_components = place_config.dropout_components(address_components, osm_components, country=country)
             new_address_components[component_name] = address_components[component_name]
 
             self.components.drop_invalid_components(new_address_components)
-            if new_address_components:
-                if (AddressFormatter.COUNTRY in new_address_components or place_config.include_component(AddressFormatter.COUNTRY, containing_ids, country=country)) and random.random() < cldr_country_prob:
-                    address_country = self.components.cldr_country_name(country, language)
-                    if address_country:
-                        new_address_components[AddressFormatter.COUNTRY] = address_country
 
+            if new_address_components:
                 revised_place_tags.append((new_address_components, language, is_default))
 
         return revised_place_tags, country
