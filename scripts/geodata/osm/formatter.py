@@ -459,6 +459,8 @@ class OSMAddressFormatter(object):
         if num_references > 1000:
             num_references = 1000
 
+        cldr_country_prob = float(nested_get(self.config, ('places', 'cldr_country_probability'), default=0.0))
+
         for name_tag in ('name', 'alt_name', 'loc_name', 'short_name', 'int_name'):
             if more_than_one_official_language:
                 name = tags.get(name_tag)
@@ -476,6 +478,11 @@ class OSMAddressFormatter(object):
                                                              random_key=num_references > 1,
                                                              language_suffix=language_suffix,
                                                              drop_duplicate_city_names=False)
+
+                        if random.random() < cldr_country_prob and AddressFormatter.COUNTRY in address_components:
+                            address_country = self.cldr_country_name(country, language)
+                            if address_country:
+                                address_components[AddressFormatter.COUNTRY] = address_country
 
                         place_tags.append((address_components, None, True))
 
@@ -501,6 +508,10 @@ class OSMAddressFormatter(object):
                                                          random_key=is_default,
                                                          language_suffix=language_suffix,
                                                          drop_duplicate_city_names=False)
+                    if random.random() < cldr_country_prob and AddressFormatter.COUNTRY in address_components:
+                        address_country = self.cldr_country_name(country, language)
+                        if address_country:
+                            address_components[AddressFormatter.COUNTRY] = address_country
 
                     place_tags.append((address_components, language, is_default))
 
@@ -525,6 +536,11 @@ class OSMAddressFormatter(object):
                                                      non_local_language=language,
                                                      language_suffix=language_suffix,
                                                      drop_duplicate_city_names=False)
+
+                if random.random() < cldr_country_prob and AddressFormatter.COUNTRY in address_components:
+                    address_country = self.cldr_country_name(country, language)
+                    if address_country:
+                        address_components[AddressFormatter.COUNTRY] = address_country
 
                 place_tags.append((address_components, language, False))
 

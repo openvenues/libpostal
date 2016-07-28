@@ -14,6 +14,7 @@ intersections:
 
 places:
     drop_postcode_probability: 0.6
+    cldr_country_probability: 0.5
 
 streets:
     abbreviate_probability: 0.3
