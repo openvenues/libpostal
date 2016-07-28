@@ -18,11 +18,16 @@ address_parser_data_set_t *address_parser_data_set_init(char *filename) {
     return data_set;
 }
 
+bool address_parser_data_set_rewind(address_parser_data_set_t *self) {
+    if (self == NULL || self->f == NULL) return false;
 
-bool address_parser_data_set_tokenize_line(address_parser_data_set_t *data_set, char *input) {
-    token_array *tokens = data_set->tokens;
-    uint32_array *separators = data_set->separators;
-    cstring_array *labels = data_set->labels;
+    return (fseek(self->f, 0, SEEK_SET) == 0);
+}
+
+bool address_parser_data_set_tokenize_line(address_parser_data_set_t *self, char *input) {
+    token_array *tokens = self->tokens;
+    uint32_array *separators = self->separators;
+    cstring_array *labels = self->labels;
 
     size_t count = 0;
 
@@ -122,10 +127,10 @@ bool address_parser_data_set_tokenize_line(address_parser_data_set_t *data_set, 
 
 
 
-bool address_parser_data_set_next(address_parser_data_set_t *data_set) {
-    if (data_set == NULL) return false;
+bool address_parser_data_set_next(address_parser_data_set_t *self) {
+    if (self == NULL) return false;
 
-    char *line = file_getline(data_set->f);
+    char *line = file_getline(self->f);
     if (line == NULL) {
         return false;
     }
@@ -138,6 +143,7 @@ bool address_parser_data_set_next(address_parser_data_set_t *data_set) {
 
     if (token_count != ADDRESS_PARSER_FILE_NUM_TOKENS) {
         log_error("Token count did not match, ected %d, got %zu\n", ADDRESS_PARSER_FILE_NUM_TOKENS, token_count);
+        return false;
     }
 
     char *language = cstring_array_get_string(fields, ADDRESS_PARSER_FIELD_LANGUAGE);
@@ -155,30 +161,30 @@ bool address_parser_data_set_next(address_parser_data_set_t *data_set) {
 
     log_debug("Normalized: %s\n", normalized);
 
-    token_array *tokens = data_set->tokens;
-    cstring_array *labels = data_set->labels;
-    uint32_array *separators = data_set->separators;
+    token_array *tokens = self->tokens;
+    cstring_array *labels = self->labels;
+    uint32_array *separators = self->separators;
 
     token_array_clear(tokens);
     cstring_array_clear(labels);
     uint32_array_clear(separators);
     size_t len = strlen(normalized);
 
-    char_array_clear(data_set->country);
-    char_array_add(data_set->country, country);
+    char_array_clear(self->country);
+    char_array_add(self->country, country);
 
-    char_array_clear(data_set->language);
-    char_array_add(data_set->language, language);
+    char_array_clear(self->language);
+    char_array_add(self->language, language);
 
     tokenized_string_t *tokenized_str = NULL;
 
-    if (address_parser_data_set_tokenize_line(data_set, normalized)) {
+    if (address_parser_data_set_tokenize_line(self, normalized)) {
         // Add tokens as discrete strings for easier use in feature functions
         bool copy_tokens = true;
-        tokenized_str = tokenized_string_from_tokens(normalized, data_set->tokens, copy_tokens);        
+        tokenized_str = tokenized_string_from_tokens(normalized, self->tokens, copy_tokens);        
     }
 
-    data_set->tokenized_str = tokenized_str;
+    self->tokenized_str = tokenized_str;
 
     free(normalized);
     cstring_array_destroy(fields);
