@@ -284,9 +284,9 @@ class OSMReverseGeocoder(RTreePolygonIndex):
     polygon_reader = OSMAdminPolygonReader
 
     persistent_polygons = True
-    # Cache everything
+    # Cache almost everything
     cache_size = 1000000
-    simplify_polygons = True
+    simplify_polygons = False
 
     include_property_patterns = set([
         'name',
