@@ -864,7 +864,10 @@ class OSMAddressFormatter(object):
                 print('did {} formatted places'.format(i))
 
         for props, poly in iter(self.components.osm_admin_rtree):
-            point = poly.context.representative_point()
+            try:
+                point = poly.context.representative_point()
+            except ValueError:
+                point = poly.context.centroid
             lat = point.y
             lon = point.x
             props['lat'] = lat
