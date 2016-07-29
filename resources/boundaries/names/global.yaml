@@ -55,14 +55,14 @@ names:
         - id: 556706 # New Zealand
           type: relation
           default: name:en
-          probability: 0.65
+          probability: 0.77
           alternatives:
               - alternative: name
                 probability: 0.1
               - alternative: ISO3166-1:alpha2
-                probability: 0.1
+                probability: 0.02
               - alternative: ISO3166-1:alpha3
-                probability: 0.05
+                probability: 0.01
               - alternative: short_name
                 probability: 0.04
               - alternative: alt_name
