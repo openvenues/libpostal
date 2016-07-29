@@ -865,8 +865,8 @@ class OSMAddressFormatter(object):
 
         for props, poly in iter(self.components.osm_admin_rtree):
             point = poly.context.representative_point()
-            lat = pt.y
-            lon = pt.x
+            lat = point.y
+            lon = point.x
             props['lat'] = lat
             props['lon'] = lon
             place_tags, country = self.node_place_tags(tags)
