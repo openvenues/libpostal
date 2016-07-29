@@ -455,9 +455,11 @@ class OSMAddressFormatter(object):
         except (ValueError, TypeError):
             population = 0
 
-        num_references = population / 10000 + 5
-        if num_references > 1000:
-            num_references = 1000
+        # Calculate how many records to produce for this place given its population
+        population_divisor = 10000  # Add one record for every 10k in population
+        min_references = 5  # Every place gets at least 5 reference to account for variations
+        max_references = 1000  # Cap the number of references e.g. for India and China country nodes
+        num_references = min(population / population_divisor + min_references, max_references)
 
         cldr_country_prob = float(nested_get(self.config, ('places', 'cldr_country_probability'), default=0.0))
 
@@ -521,14 +523,16 @@ class OSMAddressFormatter(object):
                 elif six.u(',') in name:
                     name = name.split(six.u(','), 1)[0]
 
-                address_components = {component_name: name.strip()}
-                self.components.add_admin_boundaries(address_components, osm_components, country, language,
-                                                     random_key=False,
-                                                     non_local_language=language,
-                                                     language_suffix=language_suffix,
-                                                     drop_duplicate_city_names=False)
+                # Add half as many English records as the local language, every other language gets min_referenes / 2
+                for i in xrange(num_references / 2 if language == ENGLISH else min_references / 2):
+                    address_components = {component_name: name.strip()}
+                    self.components.add_admin_boundaries(address_components, osm_components, country, language,
+                                                         random_key=False,
+                                                         non_local_language=language,
+                                                         language_suffix=language_suffix,
+                                                         drop_duplicate_city_names=False)
 
-                place_tags.append((address_components, language, False))
+                    place_tags.append((address_components, language, False))
 
             if postal_codes:
                 for address_components, language, is_default in place_tags:
