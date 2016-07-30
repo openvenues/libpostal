@@ -1092,7 +1092,7 @@ class AddressComponents(object):
         return False
 
     def expanded(self, address_components, latitude, longitude, language=None,
-                 dropout_places=True, add_sub_building_components=True,
+                 dropout_places=True, population=None, add_sub_building_components=True,
                  num_floors=None, num_basements=None, zone=None):
         '''
         Expanded components
@@ -1169,7 +1169,7 @@ class AddressComponents(object):
 
         if dropout_places:
             # Perform dropout on places
-            address_components = place_config.dropout_components(address_components, all_osm_components, country=country)
+            address_components = place_config.dropout_components(address_components, all_osm_components, country=country, population=population)
 
         self.drop_invalid_components(address_components)
 

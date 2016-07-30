@@ -552,7 +552,7 @@ class OSMAddressFormatter(object):
                 if address_country:
                     address_components[AddressFormatter.COUNTRY] = address_country
 
-            new_address_components = place_config.dropout_components(address_components, osm_components, country=country)
+            new_address_components = place_config.dropout_components(address_components, osm_components, country=country, population=population)
             new_address_components[component_name] = address_components[component_name]
 
             self.components.drop_invalid_components(new_address_components)
