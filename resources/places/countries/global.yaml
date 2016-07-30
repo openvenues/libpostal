@@ -133,6 +133,10 @@ countries:
     # United States
     us:
         # Definitions
+        new_york_county: &new_york_county
+            id: 2552485 # New York County (Manhattan, NY)
+            type: relation
+
         kings_county: &kings_county
             id: 369518 # Kings County (Brooklyn, NY)
             type: relation
@@ -167,7 +171,10 @@ countries:
                       probability: 0.85
                     - <<: *richmond_county
                       probability: 0.85
+                    - <<: *new_york_county
+                      probability: 0.1
             city:
+                probability: 0.9
                 containing:
                     - <<: *kings_county
                       probability: 0.1
@@ -187,19 +194,27 @@ countries:
                       probability: 0.5
             state:
                 probability: 0.8
-                # Higher probability of Brooklyn/city_district NY/state
-                containing:
-                    - <<: *kings_county
-                      probability: 0.8
-                    - <<: *queens_county
-                      probability: 0.8
-                    - <<: *bronx_county
-                      probability: 0.8
-                    - <<: *richmond_county
-                      probability: 0.8
 
             state_district:
                 probability: 0.1
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.4
+                    - lt: 10000
+                      probability: 0.6
+                containing:
+                    - <<: *new_york_county
+                      probability: 0.1
+                    - <<: *kings_county
+                      probability: 0.1
+                    - <<: *queens_county
+                      probability: 0.1
+                    - <<: *bronx_county
+                      probability: 0.1
+                    - <<: *richmond_county
+                      probability: 0.1
+
             country:
                 probability: 0.1
 
