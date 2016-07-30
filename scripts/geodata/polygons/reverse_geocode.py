@@ -302,6 +302,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         'short_name:*',
         'admin_level',
         'place',
+        'population',
         'designation',
         'wikipedia',
         'wikipedia:*',
