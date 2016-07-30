@@ -1,4 +1,5 @@
 import copy
+import operator
 import os
 import random
 import six
@@ -58,7 +59,7 @@ class PlaceConfig(object):
 
         return nested_get(config, key, default=default)
 
-    def include_component(self, component, containing_ids, country=None):
+    def include_component(self, component, containing_ids, country=None, population=None):
         containing = self.get_property(('components', component, 'containing'), country=country, default=None)
 
         if containing is not None:
@@ -66,11 +67,28 @@ class PlaceConfig(object):
                 if (c['type'], safe_encode(c['id'])) in containing_ids:
                     return random.random() < c['probability']
 
+        if population is not None:
+            population_exceptions = self.get_property(('components', component, 'population'), country=country, default=None)
+            if population_exceptions:
+                try:
+                    population = int(population)
+                except (TypeError, ValueError):
+                    population = 0
+
+                for exc in population_exceptions:
+                    funcs = []
+                    for k, op in (('lte', operator.le), ('gt', operator.gt), ('lt', operator.lt), ('gte', operator.ge)):
+                        if k in exc and not op(exc[k], population):
+                            break
+                else:
+                    probability = exc.get('probability', 0.0)
+                    return random.random() < probability
+
         probability = self.get_property(('components', component, 'probability'), country=country, default=0.0)
 
         return random.random() < probability
 
-    def dropout_components(self, components, boundaries=(), country=None):
+    def dropout_components(self, components, boundaries=(), country=None, population=None):
         containing_ids = set()
 
         for boundary in boundaries:
@@ -93,7 +111,7 @@ class PlaceConfig(object):
         new_components = components.copy()
 
         for component in admin_components:
-            include = self.include_component(component, containing_ids, country=country)
+            include = self.include_component(component, containing_ids, country=country, population=population)
 
             if not include:
                 # Note: this check is for cities that have the same name as their admin
