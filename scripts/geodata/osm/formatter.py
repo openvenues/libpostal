@@ -36,6 +36,7 @@ from geodata.places.config import place_config
 from geodata.polygons.language_polys import *
 from geodata.polygons.reverse_geocode import *
 from geodata.i18n.unicode_paths import DATA_DIR
+from geodata.text.tokenize import tokenize, token_types
 from geodata.text.utils import is_numeric
 
 from geodata.csv_utils import *
@@ -182,6 +183,13 @@ class OSMAddressFormatter(object):
         self.aliases.replace(sub_building_components)
         sub_building_components = {k: v for k, v in six.iteritems(sub_building_components) if k in AddressFormatter.address_formatter_fields}
         return sub_building_components
+
+    def valid_venue_name(self, tags):
+        house = tags.get(AddressFormatter.HOUSE)
+        if not house:
+            return
+        tokens = tokenize(house)
+        return any((c in token_types.WORD_TOKEN_TYPES for t, c in tokens))
 
     def subdivision_components(self, latitude, longitude):
         return self.subdivisions_rtree.point_in_poly(latitude, longitude, return_all=True)
@@ -671,6 +679,8 @@ class OSMAddressFormatter(object):
         num_basements = None
         zone = None
 
+        building_venue_names = []
+
         building_components = self.building_components(latitude, longitude)
         if building_components:
             num_floors = self.num_floors(building_components)
@@ -680,8 +690,10 @@ class OSMAddressFormatter(object):
                 building_tags = self.normalize_address_components(building_tags)
 
                 for k, v in six.iteritems(building_tags):
-                    if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD, AddressFormatter.HOUSE):
+                    if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD):
                         revised_tags[k] = v
+                    elif k == AddressFormatter.HOUSE:
+                        building_venue_names.append(v)
 
         subdivision_components = self.subdivision_components(latitude, longitude)
         if subdivision_components:
@@ -705,10 +717,17 @@ class OSMAddressFormatter(object):
         if street_name:
             address_components[AddressFormatter.ROAD] = self.abbreviated_street(street_name, language)
 
+        venue_names.extend(building_venue_names)
+
+        venue_names = [venue_name for venue_name in venue_names if self.valid_venue_name(venue_name)]
+        all_venue_names = set(venue_names)
+
         # Ditto for venue names
-        for venue_name in venue_names:
+        for venue_name in all_venue_names:
+            if not self.valid_venue_name(venue_name):
+                continue
             abbreviated_venue = self.abbreviated_venue_name(venue_name, language)
-            if abbreviated_venue != venue_name and abbreviated_venue not in set(venue_names):
+            if abbreviated_venue != venue_name and abbreviated_venue not in all_venue_names:
                 venue_names.append(abbreviated_venue)
 
         formatted_addresses = self.formatted_addresses_with_venue_names(address_components, venue_names, country, language=language,
