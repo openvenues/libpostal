@@ -32,6 +32,12 @@ class PlaceConfig(object):
         AddressFormatter.COUNTRY,
     }
 
+    numeric_ops = (('lte', operator.le),
+                   ('gt', operator.gt),
+                   ('lt', operator.lt),
+                   ('gte', operator.ge),
+                   )
+
     def __init__(self, config_file=PLACE_CONFIG_FILE):
         self.cache = {}
         place_config = yaml.load(open(config_file))
@@ -76,13 +82,20 @@ class PlaceConfig(object):
                     population = 0
 
                 for exc in population_exceptions:
-                    funcs = []
-                    for k, op in (('lte', operator.le), ('gt', operator.gt), ('lt', operator.lt), ('gte', operator.ge)):
-                        if k in exc and not op(exc[k], population):
+                    support = 0
+
+                    for k, op in self.numeric_ops:
+                        if k not in exc:
+                            continue
+
+                        res = op(exc[k], population)
+                        if not res:
+                            support = 0
                             break
-                else:
-                    probability = exc.get('probability', 0.0)
-                    return random.random() < probability
+
+                    if support > 0:
+                        probability = exc.get('probability', 0.0)
+                        return random.random() < probability
 
         probability = self.get_property(('components', component, 'probability'), country=country, default=0.0)
 
