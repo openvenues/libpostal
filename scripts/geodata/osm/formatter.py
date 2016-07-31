@@ -328,7 +328,8 @@ class OSMAddressFormatter(object):
 
         return self.components.all_names(props, languages, keys=('name', 'alt_name', 'loc_name', 'int_name', 'old_name'))
 
-    def formatted_addresses_with_venue_names(self, address_components, venue_names, country, language=None, tag_components=True, minimal_only=False):
+    def formatted_addresses_with_venue_names(self, address_components, venue_names, country, language=None,
+                                             tag_components=True, minimal_only=False):
         # Since venue names are only one-per-record, this wrapper will try them all (name, alt_name, etc.)
         formatted_addresses = []
 
@@ -675,11 +676,12 @@ class OSMAddressFormatter(object):
             num_floors = self.num_floors(building_components)
             num_basements = self.num_floors(building_components, key='building:levels:underground')
 
-            building_tags = self.normalize_address_components(building_components)
+            for building_tags in building_components:
+                building_tags = self.normalize_address_components(building_tags)
 
-            for k, v in six.iteritems(building_tags):
-                if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD, AddressFormatter.HOUSE):
-                    revised_tags[k] = v
+                for k, v in six.iteritems(building_tags):
+                    if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD, AddressFormatter.HOUSE):
+                        revised_tags[k] = v
 
         subdivision_components = self.subdivision_components(latitude, longitude)
         if subdivision_components:
@@ -709,7 +711,7 @@ class OSMAddressFormatter(object):
             if abbreviated_venue != venue_name and abbreviated_venue not in set(venue_names):
                 venue_names.append(abbreviated_venue)
 
-        formatted_addresses = self.formatted_addresses_with_venue_names(address_components, venue_names, country, language=language, 
+        formatted_addresses = self.formatted_addresses_with_venue_names(address_components, venue_names, country, language=language,
                                                                         tag_components=tag_components, minimal_only=not tag_components)
 
         formatted_addresses.extend(self.formatted_places(address_components, country, language))
@@ -736,7 +738,7 @@ class OSMAddressFormatter(object):
 
             for component in dropout_order:
                 address_components.pop(component, None)
-                formatted_addresses.extend(self.formatted_addresses_with_venue_names(address_components, venue_names, country, language=language, 
+                formatted_addresses.extend(self.formatted_addresses_with_venue_names(address_components, venue_names, country, language=language,
                                                                                      tag_components=tag_components, minimal_only=False))
 
         return OrderedDict.fromkeys(formatted_addresses).keys(), country, language
