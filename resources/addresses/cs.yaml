@@ -277,7 +277,7 @@ categories:
                 sample_probability: 0.2
               probability: 0.05
             - alternative:
-                canonica: v okolí
+                canonical: v okolí
                 sample: true
                 canonical_probability: 0.8
                 sample_probability: 0.2
