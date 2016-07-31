@@ -88,10 +88,12 @@ class PlaceConfig(object):
                         if k not in exc:
                             continue
 
-                        res = op(exc[k], population)
+                        res = op(population, exc[k])
                         if not res:
                             support = 0
                             break
+
+                        support += 1
 
                     if support > 0:
                         probability = exc.get('probability', 0.0)
