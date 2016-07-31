@@ -673,6 +673,7 @@ units:
             direction: left
     suite: &suite
         canonical: suite
+        sample: true
         canonical_probability: 0.7
         sample_probability: 0.3
         numeric:
