@@ -321,7 +321,7 @@ class AddressComponents(object):
 
             is_state = False
 
-            containing_ids = [(c['type'], c['id']) for c in osm_components[i + 1:]]
+            containing_ids = [(c['type'], c['id']) for c in osm_components[i + 1:] if 'type' in c and 'id' in c]
 
             component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
             if component is not None:
