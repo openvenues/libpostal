@@ -194,15 +194,21 @@ countries:
                       probability: 0.5
             state:
                 probability: 0.8
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.9
+                    - lt: 10000
+                      probability: 1.0
 
             state_district:
                 probability: 0.1
                 population:
                     - lt: 100000
                       gte: 10000
-                      probability: 0.4
+                      probability: 0.2
                     - lt: 10000
-                      probability: 0.6
+                      probability: 0.4
                 containing:
                     - <<: *new_york_county
                       probability: 0.1
