@@ -184,11 +184,10 @@ class OSMAddressFormatter(object):
         sub_building_components = {k: v for k, v in six.iteritems(sub_building_components) if k in AddressFormatter.address_formatter_fields}
         return sub_building_components
 
-    def valid_venue_name(self, tags):
-        house = tags.get(AddressFormatter.HOUSE)
-        if not house:
-            return
-        tokens = tokenize(house)
+    def valid_venue_name(self, name):
+        if not name:
+            return False
+        tokens = tokenize(name)
         return any((c in token_types.WORD_TOKEN_TYPES for t, c in tokens))
 
     def subdivision_components(self, latitude, longitude):
