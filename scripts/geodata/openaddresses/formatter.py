@@ -10,6 +10,7 @@ from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.components import AddressComponents
 from geodata.countries.names import country_names
 from geodata.math.sampling import cdf, weighted_choice
+from geodata.text.utils import is_numeric
 
 from geodata.csv_utils import tsv_string, unicode_csv_reader
 
@@ -124,6 +125,10 @@ class OpenAddressesFormatter(object):
                                         abbreviate_prob=abbreviate_street_prob,
                                         separate_prob=separate_street_prob)
                     components[AddressFormatter.ROAD] = street
+
+                house_number = components.get(AddressFormatter.HOUSE_NUMBER, None)
+                if house_number and not is_numeric(house_number):
+                    components.pop(AddressFormatter.HOUSE_NUMBER)
 
                 unit = components.get(AddressFormatter.UNIT, None)
                 if unit is not None:
