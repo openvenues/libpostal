@@ -316,7 +316,7 @@ class OSMAddressFormatter(object):
         combine_probability = float(nested_get(self.config, ('countries', 'jp', 'combine_block_house_number_probability'), default=0.0))
         if random.random() < combine_probability:
             if random.random() < float(nested_get(self.config, ('countries', 'jp', 'block_phrase_probability'), default=0.0)):
-                block = Block.phrase(language, block_number)
+                block = Block.phrase(language, block)
                 house_number = HouseNumber.phrase(house_number, language)
                 if block is None or house_number is None:
                     return
