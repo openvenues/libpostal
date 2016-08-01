@@ -15,6 +15,7 @@ from geodata.address_expansions.gazetteers import *
 from geodata.address_expansions.abbreviations import abbreviate
 from geodata.address_formatting.aliases import Aliases
 from geodata.address_formatting.formatter import AddressFormatter
+from geodata.addresses.blocks import Block
 from geodata.addresses.config import address_config
 from geodata.addresses.components import AddressComponents
 from geodata.categories.config import category_config
