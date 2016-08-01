@@ -94,7 +94,7 @@ house_numbers:
             - alternative: *budnyok_latin
               probability: 0.05
             - alternative: *dom
-              probability: 0.35
+              probability: 0.25
             - alternative: *dom_latin
               probability: 0.05
 
