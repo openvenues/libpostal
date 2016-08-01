@@ -196,6 +196,9 @@ class Unit(NumberedComponent):
         if unit is not None:
             key = 'units.alphanumeric' if zone is None else 'units.zones.{}'.format(zone)
 
+            if not address_config.get_property(key, language, country=country):
+                return None
+
             is_alpha = safe_decode(unit).isalpha()
 
             direction_unit = None
