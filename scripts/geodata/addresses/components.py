@@ -860,7 +860,7 @@ class AddressComponents(object):
                 address_components[component] = phrase
         elif component in address_components:
             existing = address_components[component]
-            phrase = self.get_component_phrase(component_class, num, language, country=country)
+            phrase = self.get_component_phrase(component_class, existing, language, country=country)
             if phrase and phrase != existing:
                 address_components[component] = phrase
             elif not phrase:
