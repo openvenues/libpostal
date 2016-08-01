@@ -11,7 +11,7 @@ components:
 
     staircase:
         null_probability: 0.95
-        alphanumeric_probability: 0.01
+        alphanumeric_probability: 0.05
 
     entrance:
         null_probability: 0.999
