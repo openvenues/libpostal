@@ -24,6 +24,7 @@ venues:
     address_probability: 0.4
     abbreviate_probability: 0.3
     separate_probability: 0.0
+    sub_building_probability: 0.05
 
 countries:
     jp:

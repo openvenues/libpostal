@@ -689,7 +689,7 @@ class OSMAddressFormatter(object):
                 building_tags = self.normalize_address_components(building_tags)
 
                 for k, v in six.iteritems(building_tags):
-                    if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD):
+                    if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD, AddressFormatter.POSTCODE):
                         revised_tags[k] = v
                     elif k == AddressFormatter.HOUSE:
                         building_venue_names.append(v)
@@ -698,7 +698,8 @@ class OSMAddressFormatter(object):
         if subdivision_components:
             zone = self.zone(subdivision_components)
 
-        add_sub_building_components = AddressFormatter.HOUSE_NUMBER in revised_tags
+        venue_sub_building_prob = float(nested_get(self.config, ('venues', 'sub_building_probability'), default=0.0))
+        add_sub_building_components = AddressFormatter.HOUSE_NUMBER in revised_tags and (AddressFormatter.HOUSE not in revised_tags or random.random() < venue_sub_building_prob)
 
         address_components, country, language = self.components.expanded(revised_tags, latitude, longitude, language=namespaced_language,
                                                                          num_floors=num_floors, num_basements=num_basements,
