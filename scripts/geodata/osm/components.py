@@ -111,9 +111,10 @@ class OSMAddressComponents(object):
             element_type = properties.get('type')
             element_id = properties.get('id')
 
-            override_value = id_overrides.get(element_type, {}).get(six.binary_type(element_id or ''), None)
-            if override_value:
-                return override_value
+            override_value = id_overrides.get(element_type, {})
+            element_id = six.binary_type(element_id or '')
+            if element_id in override_value:
+                return override_value[element_id]
 
             contained_by_overrides = overrides.get('contained_by')
             if contained_by_overrides and containing:
