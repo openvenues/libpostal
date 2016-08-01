@@ -11,6 +11,8 @@ from geodata.addresses.staircases import *
 from geodata.addresses.units import *
 from geodata.categories.query import *
 
+from geodata.math.floats import isclose
+
 
 invalid_phrase_re = re.compile(r'\b(None|False|True)\b')
 
@@ -18,6 +20,18 @@ invalid_phrase_re = re.compile(r'\b(None|False|True)\b')
 class TestAddressConfigs(unittest.TestCase):
     def valid_phrase(self, phrase):
         return phrase is None or not invalid_phrase_re.search(phrase)
+
+    def check_components(self, language, country):
+        conf = address_config.get_property('components', language, country=country)
+        for component, value in six.iteritems(conf):
+            if component == 'combinations':
+                continue
+            total_prob = 0.0
+            for k, v in six.iteritems(value):
+                if k.endswith('probability'):
+                    total_prob += v
+
+            self.assertTrue(isclose(total_prob, 1.0), six.u('language: {}, country: {}, component: {}'.format(language, country, component)))
 
     def check_entrance_phrases(self, language, country=None):
         for i in xrange(1000):
@@ -68,6 +82,8 @@ class TestAddressConfigs(unittest.TestCase):
 
     def check_config(self, language, country=None):
         print('Doing lang={}, country={}'.format(language, country))
+        print('Checking components')
+        self.check_components(language, country=country)
         print('Checking entrances')
         self.check_entrance_phrases(language, country=country)
         print('Checking staircases')
