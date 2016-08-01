@@ -1,13 +1,13 @@
 ---
-  admin_level: 
-    "2": "country"
-    "4": "state"
-    "5": "city"
-    "6": "state_district"
-    "7": "city"
-    "8": "city"
-    "9": "city_district"
-    "10": "suburb"
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "5": "city"
+        "6": "state_district"
+        "7": "city"
+        "8": "city"
+        "9": "city_district"
+        "10": "suburb"
 
     overrides:
         id:
@@ -20,6 +20,8 @@
                 "158863443": "city_district"
                 # Staten Island
                 "158851392": "city_district"
+                # New York county node
+                "316976731": null
             way:
                 # Manhattan
                 "400014249": "city_district"

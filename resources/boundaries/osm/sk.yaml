@@ -1,13 +1,13 @@
 ---
-  admin_level: 
-    "2": "country"
-    "3": "country_region"
-    "4": "state"
-    # Border around Bratislava and Košice
-    "6": "city"
-    "8": "state_district"
-    "9": "city"
-    "10": "city"
+    admin_level: 
+        "2": "country"
+        "3": "country_region"
+        "4": "state"
+        # Border around Bratislava and Košice
+        "6": "city"
+        "8": "state_district"
+        "9": "city"
+        "10": "city"
 
     overrides:
         contained_by:

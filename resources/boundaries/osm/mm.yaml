@@ -1,10 +1,10 @@
 ---
-  admin_level: 
-    "2": "country"
-    "4": "state"
-    "6": "city"
-    "7": "state_district"
-    "8": "city"
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "6": "city"
+        "7": "state_district"
+        "8": "city"
 
     overrides:
         id:

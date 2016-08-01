@@ -1,7 +1,7 @@
 ---
-  admin_level: 
-    "2": "country"
-    "4": "state"
+    admin_level: 
+        "2": "country"
+        "4": "state"
 
     overrides:
         id:
