@@ -463,7 +463,7 @@ class AddressComponents(object):
 
         values = []
         probs = []
-        for num_type in (self.ALPHANUMERIC_PHRASE, self.NULL_PHRASE, self.STANDALONE_PHRASE):
+        for num_type in (self.NULL_PHRASE, self.ALPHANUMERIC_PHRASE, self.STANDALONE_PHRASE):
             key = '{}_probability'.format(num_type)
             prob = prob_dist.get(key)
             if prob is not None:
