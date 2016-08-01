@@ -487,14 +487,14 @@ class AddressComponents(object):
 
     def get_component_phrase(self, cls, component, language, country=None):
         component = safe_decode(component)
-        if is_numeric(component):
-            phrase = cls.phrase(component, language, country=country)
-            if phrase != component:
-                return phrase
-            else:
-                return None
+        if not is_numeric(component):
+            return None
+
+        phrase = cls.phrase(component, language, country=country)
+        if phrase != component:
+            return phrase
         else:
-            return component
+            return None
 
     def cldr_country_name(self, country_code, language):
         '''
@@ -856,6 +856,8 @@ class AddressComponents(object):
             phrase = self.get_component_phrase(component_class, num, language, country=country)
             if phrase and phrase != existing:
                 address_components[component] = phrase
+            elif not phrase:
+                address_components.pop(component)
 
     def add_sub_building_components(self, address_components, language, country=None, num_floors=None, num_basements=None, zone=None):
         generated_components = set()
