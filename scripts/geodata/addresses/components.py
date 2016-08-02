@@ -355,16 +355,18 @@ class AddressComponents(object):
                 whitespace = not any((c in (token_types.IDEOGRAPHIC_CHAR, token_types.IDEOGRAPHIC_NUMBER) for t, c in phrase_tokens))
                 join_phrase = six.u(' ') if whitespace else six.u('')
 
-                if num_phrases > 0:
+                if num_phrases > 0 and total_tokens > 0:
+                    # Remove hanging comma, slash, etc.
+                    last_token, last_class = tokens[total_tokens - 1]
+                    if last_class in token_types.NON_ALPHANUMERIC_TOKEN_TYPES:
+                        total_tokens -= 1
                     # Return phrase with original capitalization
                     return join_phrase.join([t for t, c in tokens[:total_tokens]])
                 elif num_phrases == 0 and total_tokens > 0:
-                    phrase = join_phrase.join([t for t, c in phrase_tokens])
-                    if tag not in components.get(phrase, set()):
-                        return None
-                elif num_phrases == 0:
-                    current_phrase_tokens = tokens_lower[current_phrase_start:current_phrase_start + current_phrase_len]
-                    current_phrase = join_phrase.join([t for t, c in current_phrase_tokens])
+                    # We're only talking about addr:city tags, etc. so default to
+                    # the reverse geocoded components (better names) if we encounter
+                    # an unknown phrase followed by a containing boundary phrase.
+                    return None
 
                 current_phrase_start = total_tokens
                 current_phrase_len = len(phrase_tokens)
@@ -384,7 +386,9 @@ class AddressComponents(object):
 
         # If the name contains a comma, stop and only use the phrase before the comma
         if ',' in name:
-            return name.split(',')[0].strip()
+            return name.split(',', 1)[0].strip()
+        elif '/' in name:
+            return name.split('/', 1)[0].strip()
 
         return name
 
@@ -1171,8 +1175,6 @@ class AddressComponents(object):
             language = self.address_language(address_components, candidate_languages)
 
         non_local_language = self.non_local_language()
-        # If a country was already specified
-        self.replace_country_name(address_components, country, non_local_language or language)
 
         address_state = self.state_name(address_components, country, language, non_local_language=non_local_language)
         if address_state:
@@ -1187,6 +1189,9 @@ class AddressComponents(object):
         language_suffix = self.pick_language_suffix(all_osm_components, language, non_local_language, more_than_one_official_language)
 
         self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
+
+        # If a country was already specified
+        self.replace_country_name(address_components, country, non_local_language or language)
 
         self.add_admin_boundaries(address_components, osm_components, country, language,
                                   non_local_language=non_local_language,
