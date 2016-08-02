@@ -578,7 +578,7 @@ class OSMAddressFormatter(object):
             if revised_address_components:
                 revised_place_tags.append((revised_address_components, language, is_default))
 
-          return revised_place_tags, country
+        return revised_place_tags, country
 
     def category_queries(self, tags, address_components, language, country=None, tag_components=True):
         formatted_addresses = []
