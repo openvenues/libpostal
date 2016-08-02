@@ -69,3 +69,36 @@ class token_types(Enum):
         ROMAN_NUMERAL,
         IDEOGRAPHIC_NUMBER,
     ])
+
+    PUNCTUATION_TOKEN_TYPES = set([
+        PERIOD,
+        EXCLAMATION,
+        QUESTION_MARK,
+        COMMA,
+        COLON,
+        SEMICOLON,
+        PLUS,
+        AMPERSAND,
+        AT_SIGN,
+        POUND,
+        ELLIPSIS,
+        DASH,
+        BREAKING_DASH,
+        HYPHEN,
+        PUNCT_OPEN,
+        PUNCT_CLOSE,
+        DOUBLE_QUOTE,
+        SINGLE_QUOTE,
+        OPEN_QUOTE,
+        CLOSE_QUOTE,
+        SLASH,
+        BACKSLASH,
+        GREATER_THAN,
+        LESS_THAN,
+    ])
+
+    NON_ALPHANUMERIC_TOKEN_TYPES = PUNCTUATION_TOKEN_TYPES | set([
+        OTHER,
+        WHITESPACE,
+        NEWLINE,
+    ])
