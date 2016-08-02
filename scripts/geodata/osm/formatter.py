@@ -571,7 +571,7 @@ class OSMAddressFormatter(object):
             self.components.replace_names(revised_address_components)
 
             self.components.remove_numeric_boundary_names(revised_address_components)
-            self.componetns.cleanup_boundary_names(revised_address_components)
+            self.components.cleanup_boundary_names(revised_address_components)
 
             self.add_postcode_phrase(revised_address_components, language, country=country)
 
