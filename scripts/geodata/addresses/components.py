@@ -944,7 +944,7 @@ class AddressComponents(object):
                 continue
             replacement = name_affixes.replace_suffixes(name, language)
             replacement = name_affixes.replace_prefixes(replacement, language)
-            if replacement != name and random.random() < replacement_prob:
+            if replacement != name and random.random() < replacement_prob and not replacement.isdigit():
                 address_components[component] = replacement
 
     def replace_names(self, address_components):
@@ -962,6 +962,25 @@ class AddressComponents(object):
                 prob = repl['probability']
                 if random.random() < prob:
                     address_components[component] = new_value
+
+    def remove_numeric_boundary_names(self, address_components):
+        '''
+        Numeric boundary name cleanup
+        -----------------------------
+
+        Occasionally boundary components may be mislabeled in OSM or another input data set.
+        Can look for counterexamples but fairly confident that there are no valid boundary names
+        (city, state, etc.) which are all digits. In Japan, neighborhoods are often numbered
+        e.g. 1-chome, etc. This can further be combined with a block number and house number
+        to form something like 1-3-5. While the combined form is common, the neighborhood would
+        not be simply listed as "1" and people expected to understand.
+        '''
+        for component in list(address_components):
+            if component not in self.BOUNDARY_COMPONENTS and component != AddressFormatter.POSTCODE:
+                continue
+            value = address_components[component]
+            if value.isdigit():
+                address_components.pop(component)
 
     def prune_duplicate_names(self, address_components):
         '''
@@ -1178,6 +1197,8 @@ class AddressComponents(object):
         self.cleanup_venue_name(address_components)
 
         self.cleanup_house_number(address_components)
+
+        self.remove_numeric_boundary_names(address_components)
         self.add_house_number_phrase(address_components, language, country=country)
         self.add_postcode_phrase(address_components, language, country=country)
 
