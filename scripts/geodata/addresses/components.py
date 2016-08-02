@@ -982,6 +982,19 @@ class AddressComponents(object):
             if value.isdigit():
                 address_components.pop(component)
 
+    def cleanup_boundary_names(self, address_components):
+        '''
+        Boundary name cleanup
+        ---------------------
+
+        Cleanup things like addr:city=Rockport,
+        '''
+        for component in list(address_components):
+            if component not in self.BOUNDARY_COMPONENTS:
+                continue
+
+            address_components[component] = address_components[component].strip(six.u(', '))
+
     def prune_duplicate_names(self, address_components):
         '''
         Name deduping
@@ -1199,6 +1212,7 @@ class AddressComponents(object):
         self.cleanup_house_number(address_components)
 
         self.remove_numeric_boundary_names(address_components)
+        self.cleanup_boundary_names(address_components)
         self.add_house_number_phrase(address_components, language, country=country)
         self.add_postcode_phrase(address_components, language, country=country)
 
