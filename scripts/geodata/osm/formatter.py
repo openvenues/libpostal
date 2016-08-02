@@ -18,6 +18,7 @@ from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.blocks import Block
 from geodata.addresses.config import address_config
 from geodata.addresses.components import AddressComponents
+from geodata.addresses.house_numbers import HouseNumber
 from geodata.categories.config import category_config
 from geodata.categories.query import Category, NULL_CATEGORY_QUERY
 from geodata.chains.query import Chain, NULL_CHAIN_QUERY
