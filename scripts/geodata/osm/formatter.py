@@ -560,7 +560,6 @@ class OSMAddressFormatter(object):
             revised_address_components = place_config.dropout_components(address_components, osm_components, country=country, population=population)
             revised_address_components[component_name] = address_components[component_name]
             self.components.drop_invalid_components(revised_address_components)
-            self.components.normalize_place_names(revised_address_components, osm_components, country=country, languages=all_local_languages)
 
             self.components.replace_name_affixes(revised_address_components, language)
             self.components.replace_names(revised_address_components)
