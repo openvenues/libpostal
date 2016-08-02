@@ -573,7 +573,7 @@ class OSMAddressFormatter(object):
             self.components.remove_numeric_boundary_names(revised_address_components)
             self.components.cleanup_boundary_names(revised_address_components)
 
-            self.add_postcode_phrase(revised_address_components, language, country=country)
+            self.components.add_postcode_phrase(revised_address_components, language, country=country)
 
             if revised_address_components:
                 revised_place_tags.append((revised_address_components, language, is_default))
