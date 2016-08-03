@@ -247,9 +247,9 @@ levels:
             alternatives:
                 - alternative: *vaning
                   probability: 0.35
-                - alternative: trappor_upp
+                - alternative: *trappor_upp
                   probability: 0.1
-                - alternative: trappor
+                - alternative: *trappor
                   probability: 0.1
                 - alternative: *vindsvaningen
                   probability: 0.05
