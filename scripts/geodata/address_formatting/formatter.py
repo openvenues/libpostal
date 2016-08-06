@@ -65,6 +65,7 @@ class AddressFormatter(object):
     UNIT = 'unit'
     INTERSECTION = 'intersection'
     SUBDIVISION = 'subdivision'
+    METRO_STATION = 'metro_station'
     SUBURB = 'suburb'
     CITY_DISTRICT = 'city_district'
     CITY = 'city'
@@ -91,6 +92,7 @@ class AddressFormatter(object):
         ROAD,
         INTERSECTION,
         SUBDIVISION,
+        METRO_STATION,
         SUBURB,
         CITY,
         CITY_DISTRICT,
@@ -104,6 +106,7 @@ class AddressFormatter(object):
 
     BOUNDARY_COMPONENTS_ORDERED = [
         SUBDIVISION,
+        METRO_STATION,
         SUBURB,
         CITY_DISTRICT,
         CITY,
