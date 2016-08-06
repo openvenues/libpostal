@@ -3,6 +3,8 @@
 
 AC_INIT([libpostal], [0.3])
 
+AC_CONFIG_MACRO_DIRS([m4])
+
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 AC_CONFIG_SRCDIR([src])
 LT_INIT([shared])
@@ -59,5 +61,21 @@ AC_CONFIG_FILES([Makefile
 AC_CHECK_PROG([FOUND_SHUF], [shuf], [yes])
 
 AS_IF([test "x$FOUND_SHUF" = xyes],  [AC_DEFINE([HAVE_SHUF], [1], [shuf available])])
+
+# ------------------------------------------------------------------
+# Checks for SSE2 build
+# ------------------------------------------------------------------
+AC_ARG_ENABLE([sse2],
+    AS_HELP_STRING(
+        [--disable-sse2],
+        [disable SSE2 optimization routines]
+        )
+    )
+
+AS_IF([test "x$enable_sse2" != "xno"], [
+    CFLAGS="-mfpmath=sse -msse2 -DUSE_SSE ${CFLAGS}"
+])
+
+AX_BLAS()
 
 AC_OUTPUT
