@@ -42,7 +42,7 @@ VECTOR_INIT_NUMERIC(uint32_array, uint32_t, uint32_t, nop)
 VECTOR_INIT_NUMERIC(int64_array, int64_t, uint64_t, llabs)
 VECTOR_INIT_NUMERIC(uint64_array, uint64_t, uint64_t, nop)
 VECTOR_INIT_NUMERIC_FLOAT(float_array, float, fabsf)
-VECTOR_INIT_NUMERIC_FLOAT(double_array, double, fabs)
+VECTOR_INIT_NUMERIC_DOUBLE(double_array, double, fabs)
 
 VECTOR_INIT(char_array, char)
 VECTOR_INIT(uchar_array, unsigned char)
