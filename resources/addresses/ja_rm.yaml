@@ -144,6 +144,21 @@ po_boxes:
           probability: 0.05
 
 
+metro_stations:
+    alphanumeric:
+        default: &eki
+            canonical: eki
+            numeric:
+                direction: right
+                title_case: false
+            numeric_affix:
+                affix: -eki
+                title_case: false
+                direction: right
+            numeric_affix_probability: 1.0
+    alphanumeric_phrase_probability: 1.0
+
+
 postcodes:
     alphanumeric:
         # This should still be the default in Romaji
