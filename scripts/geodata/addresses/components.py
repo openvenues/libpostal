@@ -1088,6 +1088,8 @@ class AddressComponents(object):
 
     def add_house_number_phrase(self, address_components, language, country=None):
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER, None)
+        if not is_numeric(house_number):
+            return
         phrase = HouseNumber.phrase(house_number, language, country=country)
         if phrase and phrase != house_number:
             address_components[AddressFormatter.HOUSE_NUMBER] = phrase
