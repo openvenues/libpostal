@@ -317,7 +317,7 @@ class OSMAddressFormatter(object):
         combine_probability = float(nested_get(self.config, ('countries', 'jp', 'combine_block_house_number_probability'), default=0.0))
         if random.random() < combine_probability:
             if random.random() < float(nested_get(self.config, ('countries', 'jp', 'block_phrase_probability'), default=0.0)):
-                block = Block.phrase(language, block)
+                block = Block.phrase(block, language)
                 house_number = HouseNumber.phrase(house_number, language)
                 if block is None or house_number is None:
                     return
@@ -708,7 +708,7 @@ class OSMAddressFormatter(object):
         venue_sub_building_prob = float(nested_get(self.config, ('venues', 'sub_building_probability'), default=0.0))
         add_sub_building_components = AddressFormatter.HOUSE_NUMBER in revised_tags and (AddressFormatter.HOUSE not in revised_tags or random.random() < venue_sub_building_prob)
 
-        address_components, country, language = self.components.expanded(revised_tags, latitude, longitude, language=namespaced_language,
+        address_components, country, language = self.components.expanded(revised_tags, latitude, longitude, language=language or namespaced_language,
                                                                          num_floors=num_floors, num_basements=num_basements,
                                                                          zone=zone, add_sub_building_components=add_sub_building_components)
 
