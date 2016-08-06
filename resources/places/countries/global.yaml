@@ -7,6 +7,8 @@ global:
     components:
         suburb:
             probability: 0.2
+        metro_station:
+            probability: 0.05
         city_district:
             probability: 0.2
         city:
@@ -87,6 +89,8 @@ countries:
         components:
             island:
                 probability: 0.4
+            metro_station:
+                probability: 0.6
             suburb:
                 probability: 0.6
             city_district:
