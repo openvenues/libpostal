@@ -1,3 +1,4 @@
+import array
 import geohash
 import os
 import math
@@ -43,6 +44,8 @@ class PointIndex(object):
         if not index_path:
             index_path = os.path.join(save_dir or '.', self.INDEX_FILENAME)
 
+        self.index_path = index_path
+
         if not index:
             self.index = defaultdict(list)
         else:
@@ -50,9 +53,10 @@ class PointIndex(object):
 
         if not points_path:
             points_path = os.path.join(save_dir or '.', self.POINTS_FILENAME)
+        self.points_path = points_path
 
         if not points:
-            self.points = []
+            self.points = array.array('d')
         else:
             self.points = points
 
@@ -73,9 +77,11 @@ class PointIndex(object):
 
         for key in [code] + geohash.neighbors(code):
             self.index[key].append(self.i)
-            self.points.extend([lat, lon])
+        self.points.extend([lat, lon])
 
     def add_point(self, lat, lon, properties, cache=False, include_only_properties=None):
+        if include_only_properties is None and self.include_only_properties:
+            include_only_properties = self.include_only_properties
         if include_only_properties is not None:
             properties = {k: v for k, v in properties.iteritems() if k in include_only_properties}
 
@@ -85,12 +91,12 @@ class PointIndex(object):
 
     def load_properties(self, filename):
         properties = json.load(open(filename))
-        self.i = int(properties.get('num_polygons', self.i))
+        self.i = int(properties.get('num_points', self.i))
         self.precision = int(properties.get('precision', self.precision))
 
     def save_properties(self, out_filename):
         out = open(out_filename, 'w')
-        json.dump({'num_polygons': str(self.i),
+        json.dump({'num_points': str(self.i),
                   'precision': self.precision}, out)
 
     def save_index(self):
@@ -113,10 +119,15 @@ class PointIndex(object):
         return 'props:{}'.format(i)
 
     def get_properties(self, i):
-        return self.points_db.Get(self.properties_key(i))
+        return json.loads(self.points_db.Get(self.properties_key(i)))
+
+    def compact_points_db(self):
+        self.points_db.CompactRange('\x00', '\xff')
 
     def save(self):
         self.save_index()
+        self.save_points()
+        self.compact_points_db()
         self.save_properties(os.path.join(self.save_dir, self.PROPS_FILENAME))
 
     @classmethod
@@ -154,11 +165,18 @@ class PointIndex(object):
             return []
         return sorted(distances, key=operator.itemgetter(-1))
 
+    def points_with_properties(self, results):
+        return [(self.get_properties(i), lat, lon, distance)
+                for i, lat, lon, distance in results]
+
+    def nearest_points(self, latitude, longitude):
+        return self.points_with_properties(self.all_nearby_points(latitude, longitude))
+
     def nearest_n_points(self, latitude, longitude, n=2):
-        return self.all_nearby_points(latitude, longitude)[:n]
+        return self.points_with_properties(self.all_nearby_points(latitude, longitude)[:n])
 
     def nearest_point(self, latitude, longitude):
         distances = self.all_nearby_points(latitude, longitude)
         if not distances:
             return None
-        return distances[0]
+        return self.points_with_properties(distances[:1])[0]
