@@ -32,3 +32,4 @@ countries:
         combine_block_house_number_probability: 1.0
         block_phrase_probability: 0.4
         romaji_probability: 0.2
+        add_metro_probability: 0.6

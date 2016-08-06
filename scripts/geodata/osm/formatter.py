@@ -143,13 +143,15 @@ class OSMAddressFormatter(object):
 
     boundary_component_priorities = {k: i for i, k in enumerate(AddressFormatter.BOUNDARY_COMPONENTS_ORDERED)}
 
-    def __init__(self, components, subdivisions_rtree=None, buildings_rtree=None):
+    def __init__(self, components, subdivisions_rtree=None, buildings_rtree=None, metro_stations_index=None):
         # Instance of AddressComponents, contains structures for reverse geocoding, etc.
         self.components = components
         self.language_rtree = components.language_rtree
 
         self.subdivisions_rtree = subdivisions_rtree
         self.buildings_rtree = buildings_rtree
+
+        self.metro_stations_index = metro_stations_index
 
         self.config = yaml.load(open(OSM_PARSER_DATA_DEFAULT_CONFIG))
         self.formatter = AddressFormatter()
@@ -325,6 +327,37 @@ class OSMAddressFormatter(object):
 
             house_number = separator.join([block, house_number])
             address_components['addr:housenumber'] = house_number
+
+    def add_metro_station(self, address_components, latitude, longitude, language=None, default_language=None):
+        '''
+        Metro stations
+        --------------
+
+        Particularly in Japan, where there are rarely named streets, metro stations are
+        often used to help locate an address (landmarks may be used as well). Unlike in the
+        rest of the world, metro stations in Japan are a semi-official component and used
+        almost as frequently as street names or house number in other countries, so we would
+        want libpostal's address parser to recognize Japanese train stations in both Kanji and Romaji.
+
+        It's possible at some point to extend this to generate the sorts of natural language
+        directions we sometimes see in NYC and other large cities where a subway stop might be
+        included parenthetically after the address e.g. 61 Wythe Ave (L train to Bedford).
+        The subway stations in OSM are in a variety of formats, so this would need some massaging
+        and a slightly more sophisticated phrase generator than what we employ for numeric components
+        like apartment numbers.
+        '''
+        nearest_metro = self.metro_stations_index.nearest_point(latitude, longitude)
+        if nearest_metro:
+            name = None
+            if language is not None:
+                name = nearest_metro.get('name:{}'.format(language.lower()))
+                if language == default_language:
+                    name = nearest_metro.get('name')
+            else:
+                name = nearest_metro.get('name')
+
+            if name:
+                address_components[AddressFormatter.METRO_STATION] = name
 
     def venue_names(self, props, languages):
         '''
@@ -680,6 +713,11 @@ class OSMAddressFormatter(object):
         revised_tags = self.normalize_address_components(tags)
         sub_building_tags = self.normalize_sub_building_components(tags)
         revised_tags.update(sub_building_tags)
+
+        # Only including nearest metro station in Japan
+        if country == JAPAN:
+            if random.random() < float(nested_get(self.config, ('countries', 'jp', 'add_metro_probability'), default=0.0)):
+                self.add_metro_station(revised_tags, latitude, longitude, language, default_language=JAPANESE)
 
         num_floors = None
         num_basements = None
