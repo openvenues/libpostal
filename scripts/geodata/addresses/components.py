@@ -1105,7 +1105,7 @@ class AddressComponents(object):
 
     def add_metro_station_phrase(self, address_components, language, country=None):
         metro_station = address_components.get(AddressFormatter.METRO_STATION, None)
-        phrase = MetroStation.phrase(house_number, language, country=country)
+        phrase = MetroStation.phrase(station, language, country=country)
         if phrase and phrase != metro_station:
             address_components[AddressFormatter.METRO_STATION] = phrase
 
