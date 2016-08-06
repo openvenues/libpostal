@@ -28,7 +28,7 @@ void language_classifier_destroy(language_classifier_t *self) {
     }
 
     if (self->weights != NULL) {
-        matrix_destroy(self->weights);
+        double_matrix_destroy(self->weights);
     }
 
     free(self);
@@ -83,11 +83,11 @@ language_classifier_response_t *classify_languages(char *address) {
     sparse_matrix_t *x = feature_vector(classifier->features, feature_counts);
 
     size_t n = classifier->num_labels;
-    matrix_t *p_y = matrix_new_zeros(1, n);
+    double_matrix_t *p_y = double_matrix_new_zeros(1, n);
 
     language_classifier_response_t *response = NULL;
     if (logistic_regression_model_expectation(classifier->weights, x, p_y)) {
-        double *predictions = matrix_get_row(p_y, 0);
+        double *predictions = double_matrix_get_row(p_y, 0);
         size_t *indices = double_array_argsort(predictions, n);
         size_t num_languages = 0;
         size_t i;
@@ -126,7 +126,7 @@ language_classifier_response_t *classify_languages(char *address) {
     }
 
     sparse_matrix_destroy(x);
-    matrix_destroy(p_y);
+    double_matrix_destroy(p_y);
     token_array_destroy(tokens);
     char_array_destroy(feature_array);
     const char *key;
@@ -190,7 +190,7 @@ language_classifier_t *language_classifier_read(FILE *f) {
     }
     classifier->num_labels = cstring_array_num_strings(classifier->labels);
 
-    matrix_t *weights = matrix_read(f);
+    double_matrix_t *weights = double_matrix_read(f);
 
     if (weights == NULL) {
         goto exit_classifier_created;
@@ -228,7 +228,7 @@ bool language_classifier_write(language_classifier_t *self, FILE *f) {
         !file_write_uint64(f, self->num_features) ||
         !file_write_uint64(f, self->labels->str->n) ||
         !file_write_chars(f, (const char *)self->labels->str->a, self->labels->str->n) ||
-        !matrix_write(self->weights, f)) {
+        !double_matrix_write(self->weights, f)) {
         return false;
     }
 
@@ -277,5 +277,6 @@ void language_classifier_module_teardown(void) {
     if (language_classifier != NULL) {
         language_classifier_destroy(language_classifier);
     }
+    language_classifier = NULL;
 }
 

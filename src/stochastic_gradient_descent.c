@@ -1,6 +1,6 @@
 #include "stochastic_gradient_descent.h"
 
-bool stochastic_gradient_descent(matrix_t *theta, matrix_t *gradient, double gamma) {
+bool stochastic_gradient_descent(double_matrix_t *theta, double_matrix_t *gradient, double gamma) {
     if (gradient->m != theta->m || gradient->n != theta->n) {
         return false;
     }
@@ -8,10 +8,10 @@ bool stochastic_gradient_descent(matrix_t *theta, matrix_t *gradient, double gam
     size_t m = gradient->m;
     size_t n = gradient->n;
 
-    return matrix_sub_matrix_times_scalar(theta, gradient, gamma);
+    return double_matrix_sub_matrix_times_scalar(theta, gradient, gamma);
 }
 
-bool stochastic_gradient_descent_sparse(matrix_t *theta, matrix_t *gradient, uint32_array *update_indices, double gamma) {
+bool stochastic_gradient_descent_sparse(double_matrix_t *theta, double_matrix_t *gradient, uint32_array *update_indices, double gamma) {
     if (gradient->m != theta->m || gradient->n != theta->n) {
         return false;
     }
@@ -90,7 +90,7 @@ static inline void regularize_row(double *theta_i, size_t n, double lambda, uint
     double_array_mul(theta_i, update, n);
 }
 
-bool stochastic_gradient_descent_regularize_weights(matrix_t *theta, uint32_array *update_indices, uint32_array *last_updated, uint32_t t, double lambda, double gamma_0) {
+bool stochastic_gradient_descent_regularize_weights(double_matrix_t *theta, uint32_array *update_indices, uint32_array *last_updated, uint32_t t, double lambda, double gamma_0) {
     if (lambda > 0.0) {        
         uint32_t *updates = last_updated->a;
 
@@ -101,7 +101,7 @@ bool stochastic_gradient_descent_regularize_weights(matrix_t *theta, uint32_arra
 
         for (size_t i = 0; i < batch_rows; i++) {
             uint32_t row = rows[i];
-            double *theta_i = matrix_get_row(theta, row);
+            double *theta_i = double_matrix_get_row(theta, row);
             uint32_t last_updated = updates[row];
 
             double gamma_t  = stochastic_gradient_descent_gamma_t(gamma_0, lambda, t - last_updated);
@@ -114,14 +114,14 @@ bool stochastic_gradient_descent_regularize_weights(matrix_t *theta, uint32_arra
     return true;
 }
 
-inline bool stochastic_gradient_descent_finalize_weights(matrix_t *theta, uint32_array *last_updated, uint32_t t, double lambda, double gamma_0) {
+inline bool stochastic_gradient_descent_finalize_weights(double_matrix_t *theta, uint32_array *last_updated, uint32_t t, double lambda, double gamma_0) {
     if (lambda > 0.0) {
         uint32_t *updates = last_updated->a;
         size_t m = theta->m;
         size_t n = theta->n;
 
         for (size_t i = 0; i < m; i++) {
-            double *theta_i = matrix_get_row(theta, i);
+            double *theta_i = double_matrix_get_row(theta, i);
             uint32_t last_updated = updates[i];
 
             double gamma_t  = stochastic_gradient_descent_gamma_t(gamma_0, lambda, t - last_updated);

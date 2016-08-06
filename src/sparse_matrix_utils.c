@@ -38,7 +38,9 @@ bool sparse_matrix_add_unique_columns(sparse_matrix_t *matrix, khash_t(int_set) 
     }
 
     uint32_array_clear(array);
-    uint32_array_resize(array, kh_size(unique_columns));
+    if (!uint32_array_resize(array, kh_size(unique_columns))) {
+        return false;
+    }
 
     khint_t k;
 

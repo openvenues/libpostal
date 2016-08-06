@@ -21,7 +21,7 @@ typedef struct language_classifier {
     size_t num_features;
     trie_t *features;
     cstring_array *labels;
-    matrix_t *weights;
+    double_matrix_t *weights;
 } language_classifier_t;
 
 

@@ -13,7 +13,7 @@ void logistic_regression_trainer_destroy(logistic_regression_trainer_t *self) {
     }
 
     if (self->weights != NULL) {
-        matrix_destroy(self->weights);
+        double_matrix_destroy(self->weights);
     }
 
     if (self->last_updated != NULL) {
@@ -29,7 +29,7 @@ void logistic_regression_trainer_destroy(logistic_regression_trainer_t *self) {
     }
 
     if (self->gradient != NULL) {
-        matrix_destroy(self->gradient);
+        double_matrix_destroy(self->gradient);
     }
 
     free(self);
@@ -48,9 +48,9 @@ logistic_regression_trainer_t *logistic_regression_trainer_init(trie_t *feature_
     trainer->label_ids = label_ids;
     trainer->num_labels = kh_size(label_ids);
 
-    trainer->weights = matrix_new_zeros(trainer->num_features, trainer->num_labels);
+    trainer->weights = double_matrix_new_zeros(trainer->num_features, trainer->num_labels);
 
-    trainer->gradient = matrix_new_zeros(trainer->num_features, trainer->num_labels);
+    trainer->gradient = double_matrix_new_zeros(trainer->num_features, trainer->num_labels);
 
     trainer->unique_columns = kh_init(int_set);
     trainer->batch_columns = uint32_array_new_size(trainer->num_features);
@@ -70,14 +70,14 @@ exit_trainer_created:
 }
 
 
-static matrix_t *model_expectation(sparse_matrix_t *x, matrix_t *theta) {
-    matrix_t *p_y = matrix_new_zeros(x->m, theta->n);
+static double_matrix_t *model_expectation(sparse_matrix_t *x, double_matrix_t *theta) {
+    double_matrix_t *p_y = double_matrix_new_zeros(x->m, theta->n);
     if (p_y == NULL) return NULL;
 
     if(logistic_regression_model_expectation(theta, x, p_y)) {
         return p_y;
     } else {
-        matrix_destroy(p_y);
+        double_matrix_destroy(p_y);
         return NULL;
     }
 }
@@ -88,11 +88,11 @@ double logistic_regression_trainer_batch_cost(logistic_regression_trainer_t *sel
 
     sparse_matrix_t *x = feature_matrix(self->feature_ids, features);
     uint32_array *y = label_vector(self->label_ids, labels);
-    matrix_t *p_y = matrix_new_zeros(x->m, n);
+    double_matrix_t *p_y = double_matrix_new_zeros(x->m, n);
 
     double cost = logistic_regression_cost_function(self->weights, x, y, p_y, self->lambda);
 
-    matrix_destroy(p_y);
+    double_matrix_destroy(p_y);
     uint32_array_destroy(y);
     sparse_matrix_destroy(x);
     return cost;    
@@ -103,12 +103,12 @@ bool logistic_regression_trainer_train_batch(logistic_regression_trainer_t *self
     size_t n = self->weights->n;
 
     // Optimize
-    matrix_t *gradient = self->gradient;
+    double_matrix_t *gradient = self->gradient;
 
     sparse_matrix_t *x = feature_matrix(self->feature_ids, features);
     uint32_array *y = label_vector(self->label_ids, labels);
 
-    matrix_t *p_y = matrix_new_zeros(x->m, n);
+    double_matrix_t *p_y = double_matrix_new_zeros(x->m, n);
 
     bool ret = false;
 
@@ -135,7 +135,7 @@ bool logistic_regression_trainer_train_batch(logistic_regression_trainer_t *self
     self->iters++;
 
 exit_matrices_created:
-    matrix_destroy(p_y);
+    double_matrix_destroy(p_y);
     uint32_array_destroy(y);
     sparse_matrix_destroy(x);
     return ret;
