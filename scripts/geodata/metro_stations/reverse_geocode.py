@@ -41,7 +41,7 @@ class MetroStationReverseGeocoder(PointIndex):
             return None
 
     @classmethod
-    def create_from_osm_file(cls, filename, output_dir):
+    def create_from_osm_file(cls, filename, output_dir, precision=PointIndex.GEOHASH_PRECISION):
         '''
         Given an OSM file (planet or some other bounds) containing relations
         and their dependencies, create an R-tree index for coarse-grained
@@ -51,7 +51,7 @@ class MetroStationReverseGeocoder(PointIndex):
         osmfilter. Use fetch_osm_address_data.sh for planet or copy the
         admin borders commands if using other bounds.
         '''
-        index = cls(save_dir=output_dir)
+        index = cls(save_dir=output_dir, precision=precision)
 
         i = 0
         for element_id, props, deps in parse_osm(filename):
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     if args.osm_metro_stations_file:
-        index = MetroStationReverseGeocoder(save_dir=args.out_dir, precision=args.precision)
+        index = MetroStationReverseGeocoder.create_from_osm_file(args.osm_metro_stations_file, save_dir=args.out_dir, precision=args.precision)
     else:
         parser.error('Must specify metro stations file')
 
