@@ -128,6 +128,18 @@ po_boxes:
         - length: 6
           probability: 0.05
 
+metro_stations:
+    alphanumeric:
+        default: &eki
+            canonical: 駅
+            numeric:
+                direction: right
+            numeric_affix:
+                affix: 駅
+                direction: right
+            numeric_affix_probability: 1.0
+
+    alphanumeric_phrase_probability: 1.0
 
 postcodes:
     alphanumeric:
