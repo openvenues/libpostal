@@ -104,7 +104,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     if args.osm_metro_stations_file:
-        index = MetroStationReverseGeocoder.create_from_osm_file(args.osm_metro_stations_file, save_dir=args.out_dir, precision=args.precision)
+        index = MetroStationReverseGeocoder.create_from_osm_file(args.osm_metro_stations_file, args.out_dir, precision=args.precision)
     else:
         parser.error('Must specify metro stations file')
 
