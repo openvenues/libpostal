@@ -22,6 +22,14 @@ component_dependencies:
     road:
         dependencies: []
 
+    po_box:
+        dependencies:
+            - road
+            - suburb
+            - city_district
+            - city
+            - postcode
+
     house_number:
         dependencies:
             - road
@@ -44,6 +52,13 @@ component_dependencies:
 
     postcode:
         dependencies: []
+
+    # Country exceptions
+    exceptions:
+        jp:
+            house_number:
+                dependencies: []
+
 
 
 # Each component is dropped out separately and a new address
@@ -70,7 +85,6 @@ dropout:
         probability: 0.5
     postcode:
         probability: 0.6
-
 po_box:
     probability: 0.1 
     # Note: these probabilities all independent (don't need to sum to 1)
