@@ -57,7 +57,10 @@ component_dependencies:
     exceptions:
         jp:
             house_number:
-                dependencies: []
+                dependencies:
+                    - road
+                    - suburb
+                    - city_district
 
 
 
