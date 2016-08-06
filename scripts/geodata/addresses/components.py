@@ -1,3 +1,4 @@
+import copy
 import operator
 import os
 import pycountry
@@ -19,7 +20,7 @@ from geodata.addresses.postcodes import PostCode
 from geodata.addresses.staircases import Staircase
 from geodata.addresses.units import Unit
 from geodata.boundaries.names import boundary_names
-from geodata.configs.utils import nested_get
+from geodata.configs.utils import nested_get, recursive_merge
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.countries.names import *
 from geodata.encoding import safe_encode
@@ -149,30 +150,42 @@ class AddressComponents(object):
         self.geonames = geonames
 
     def setup_component_dependencies(self):
-        self.component_dependencies = {}
+        self.component_dependencies = defaultdict(dict)
+        self.component_dependency_order = {}
         self.component_bit_values = {}
         self.valid_component_bitsets = set()
         self.component_combinations = set()
 
-        forward_deps = self.config.get('component_dependencies', {})
+        default_deps = self.config.get('component_dependencies', {})
+
+        all_values = 0
 
         for i, component in enumerate(AddressFormatter.address_formatter_fields):
             self.component_bit_values[component] = 1 << i
+            all_values |= 1 << i
 
-        all_values = self.component_bitset(forward_deps)
+        country_components = default_deps.pop('exceptions', {})
+        for c in list(country_components):
+            conf = copy.deepcopy(default_deps)
+            recursive_merge(conf, country_components[c])
+            country_components[c] = conf
+        country_components[None] = default_deps
 
-        graph = {k: c['dependencies'] for k, c in six.iteritems(forward_deps)}
-        graph.update({c: [] for c in AddressFormatter.address_formatter_fields if c not in graph})
-        self.component_dependency_order = [c for c in topsort(graph) if graph[c]]
+        for country, country_deps in six.iteritems(country_components):
+            graph = {k: c['dependencies'] for k, c in six.iteritems(country_deps)}
+            graph.update({c: [] for c in AddressFormatter.address_formatter_fields if c not in graph})
+            self.component_dependency_order[country] = [c for c in topsort(graph) if graph[c]]
 
-        for component, conf in six.iteritems(forward_deps):
-            deps = conf['dependencies']
-            self.component_dependencies[component] = self.component_bitset(deps) if deps else all_values
+            for component, conf in six.iteritems(country_deps):
+                deps = conf['dependencies']
+                self.component_dependencies[country][component] = self.component_bitset(deps) if deps else all_values
+
+        self.component_dependencies = dict(self.component_dependencies)
 
     def component_bitset(self, components):
         return reduce(operator.or_, [self.component_bit_values[c] for c in components])
 
-    def address_level_dropout_order(self, components):
+    def address_level_dropout_order(self, components, country):
         '''
         Address component dropout
         -------------------------
@@ -206,13 +219,15 @@ class AddressComponents(object):
 
         dropout_order = []
 
+        deps = self.component_dependencies.get(country, self.component_dependencies[None])
+
         for component in candidates[:-1]:
             if random.random() >= self.address_level_dropout_probabilities.get(component, 0.0):
                 continue
             bit_value = self.component_bit_values.get(component, 0)
             candidate_bitset = component_bitset ^ bit_value
 
-            if all((candidate_bitset & self.component_dependencies[c] for c in retained if c != component)):
+            if all((candidate_bitset & deps[c] for c in retained if c != component)):
                 dropout_order.append(component)
                 component_bitset = candidate_bitset
                 retained.remove(component)
@@ -1098,15 +1113,18 @@ class AddressComponents(object):
             return address_components
         return {c: v for c, v in six.iteritems(address_components) if c != AddressFormatter.POSTCODE}
 
-    def drop_invalid_components(self, address_components):
+    def drop_invalid_components(self, address_components, country):
         if not address_components:
             return
         component_bitset = self.component_bitset(address_components)
 
-        for c in self.component_dependency_order:
+        dep_order = self.component_dependency_order.get(country, self.component_dependency_order[None])
+        deps = self.component_dependencies.get(country, self.component_dependencies[None])
+
+        for c in dep_order:
             if c not in address_components:
                 continue
-            if c in self.component_dependencies and not component_bitset & self.component_dependencies[c]:
+            if c in deps and not component_bitset & deps[c]:
                 address_components.pop(c)
                 component_bitset ^= self.component_bit_values[c]
 
@@ -1229,7 +1247,7 @@ class AddressComponents(object):
             # Perform dropout on places
             address_components = place_config.dropout_components(address_components, all_osm_components, country=country, population=population)
 
-        self.drop_invalid_components(address_components)
+        self.drop_invalid_components(address_components, country)
 
         if language_suffix and not non_local_language:
             language = language_suffix.lstrip(':')

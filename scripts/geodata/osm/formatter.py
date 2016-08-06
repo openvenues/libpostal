@@ -559,7 +559,7 @@ class OSMAddressFormatter(object):
         for address_components, language, is_default in place_tags:
             revised_address_components = place_config.dropout_components(address_components, osm_components, country=country, population=population)
             revised_address_components[component_name] = address_components[component_name]
-            self.components.drop_invalid_components(revised_address_components)
+            self.components.drop_invalid_components(revised_address_components, country)
 
             self.components.replace_name_affixes(revised_address_components, language)
             self.components.replace_names(revised_address_components)
@@ -760,7 +760,7 @@ class OSMAddressFormatter(object):
                 return []
 
             # Pick a random dropout order
-            dropout_order = self.components.address_level_dropout_order(address_components)
+            dropout_order = self.components.address_level_dropout_order(address_components, country)
 
             for component in dropout_order:
                 address_components.pop(component, None)
