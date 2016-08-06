@@ -15,6 +15,7 @@ from geodata.addresses.config import address_config
 from geodata.addresses.floors import Floor
 from geodata.addresses.entrances import Entrance
 from geodata.addresses.house_numbers import HouseNumber
+from geodata.addresses.metro_stations import MetroStation
 from geodata.addresses.po_boxes import POBox
 from geodata.addresses.postcodes import PostCode
 from geodata.addresses.staircases import Staircase
@@ -84,8 +85,11 @@ class AddressComponents(object):
     iso_alpha2_codes = set([c.alpha2.lower() for c in pycountry.countries])
     iso_alpha3_codes = set([c.alpha3.lower() for c in pycountry.countries])
 
+    latin_alphabet_lower = set([unichr(c) for c in xrange(ord('a'), ord('z') + 1)])
+
     BOUNDARY_COMPONENTS = OrderedDict.fromkeys((
         AddressFormatter.SUBDIVISION,
+        AddressFormatter.METRO_STATION,
         AddressFormatter.SUBURB,
         AddressFormatter.CITY_DISTRICT,
         AddressFormatter.CITY,
@@ -93,6 +97,11 @@ class AddressComponents(object):
         AddressFormatter.STATE_DISTRICT,
         AddressFormatter.STATE,
         AddressFormatter.COUNTRY,
+    ))
+
+    LOCALITY_COMPONENTS = OrderedDict.fromkeys((
+        AddressFormatter.SUBDIVISION,
+        AddressFormatter.METRO_STATION,
     ))
 
     NAME_COMPONENTS = {
@@ -134,7 +143,7 @@ class AddressComponents(object):
         AddressFormatter.UNIT: Unit,
     }
 
-    def __init__(self, osm_admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames):
+    def __init__(self, osm_admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames, metro_stations_index):
         self.config = yaml.load(open(PARSER_DEFAULT_CONFIG))
 
         self.use_admin_center_ids = set([(r['type'], safe_encode(r['id'])) for r in nested_get(self.config, ('boundaries', 'override_with_admin_center'), default=[])])
@@ -148,6 +157,7 @@ class AddressComponents(object):
         self.neighborhoods_rtree = neighborhoods_rtree
         self.quattroshapes_rtree = quattroshapes_rtree
         self.geonames = geonames
+        self.metro_stations_index = metro_stations_index
 
     def setup_component_dependencies(self):
         self.component_dependencies = defaultdict(dict)
@@ -1054,7 +1064,6 @@ class AddressComponents(object):
         if venue_name and house_number and venue_name.strip() == house_number.strip():
             address_components.pop(AddressFormatter.HOUSE)
 
-
     def cleanup_house_number(self, address_components):
         '''
         House number cleanup
@@ -1088,11 +1097,17 @@ class AddressComponents(object):
 
     def add_house_number_phrase(self, address_components, language, country=None):
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER, None)
-        if not is_numeric(house_number):
+        if not is_numeric(house_number) and house_number.lower() not in self.latin_alphabet_lower:
             return
         phrase = HouseNumber.phrase(house_number, language, country=country)
         if phrase and phrase != house_number:
             address_components[AddressFormatter.HOUSE_NUMBER] = phrase
+
+    def add_metro_station_phrase(self, address_components, language, country=None):
+        metro_station = address_components.get(AddressFormatter.METRO_STATION, None)
+        phrase = MetroStation.phrase(house_number, language, country=country)
+        if phrase and phrase != metro_station:
+            address_components[AddressFormatter.METRO_STATION] = phrase
 
     def add_postcode_phrase(self, address_components, language, country=None):
         postcode = address_components.get(AddressFormatter.POSTCODE, None)
@@ -1109,6 +1124,9 @@ class AddressComponents(object):
 
     def drop_places(self, address_components):
         return {c: v for c, v in six.iteritems(address_components) if c not in place_config.ADMIN_COMPONENTS}
+
+    def drop_localities(self, address_components):
+        return {c: v for c, v in six.iteritems(address_components) if c not in self.LOCALITY_COMPONENTS}
 
     def drop_postcode(self, address_components):
         if AddressFormatter.POSTCODE not in address_components:
@@ -1149,6 +1167,7 @@ class AddressComponents(object):
             drop_places_probability = po_box_config['drop_places_probability']
             if random.random() < drop_places_probability:
                 address_components = self.drop_places(address_components)
+                address_components = self.drop_localities(address_components)
 
             drop_postcode_probability = po_box_config['drop_postcode_probability']
             if random.random() < drop_postcode_probability:
@@ -1240,6 +1259,7 @@ class AddressComponents(object):
         self.cleanup_boundary_names(address_components)
         self.add_house_number_phrase(address_components, language, country=country)
         self.add_postcode_phrase(address_components, language, country=country)
+        self.add_metro_station_phrase(address_components, language, country=country)
 
         if add_sub_building_components:
             self.add_sub_building_components(address_components, language, country=country,

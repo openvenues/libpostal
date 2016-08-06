@@ -161,11 +161,10 @@ class NumericPhrase(object):
                 values.append(num_type)
                 probs.append(prob)
 
-        probs = cdf(probs)
-
-        if len(values) < 2:
+        if not probs:
             num_type = cls.NUMERIC
         else:
+            probs = cdf(probs)
             num_type = weighted_choice(values, probs)
 
         return num_type, phrase, phrase_props[num_type]
@@ -265,7 +264,7 @@ class NumberedComponent(object):
                     for t, c in tokens:
                         if c == token_types.NUMERIC:
                             has_numeric = True
-                        if t.isalnum():
+                        if any((ch.isalpha() for ch in t)):
                             has_alpha = True
 
                     if strict_numeric and has_alpha:
