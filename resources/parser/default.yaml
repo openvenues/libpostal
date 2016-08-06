@@ -50,6 +50,11 @@ component_dependencies:
         dependencies:
             - house_number
 
+    metro_station:
+        dependencies:
+            - road
+            - house_number
+
     postcode:
         dependencies: []
 
