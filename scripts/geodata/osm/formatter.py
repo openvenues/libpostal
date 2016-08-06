@@ -348,13 +348,14 @@ class OSMAddressFormatter(object):
         '''
         nearest_metro = self.metro_stations_index.nearest_point(latitude, longitude)
         if nearest_metro:
+            props, lat, lon, distance = nearest_metro
             name = None
             if language is not None:
-                name = nearest_metro.get('name:{}'.format(language.lower()))
+                name = props.get('name:{}'.format(language.lower()))
                 if language == default_language:
-                    name = nearest_metro.get('name')
+                    name = props.get('name')
             else:
-                name = nearest_metro.get('name')
+                name = props.get('name')
 
             if name:
                 address_components[AddressFormatter.METRO_STATION] = name
