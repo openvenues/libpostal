@@ -52,6 +52,7 @@ component_dependencies:
 
     metro_station:
         dependencies:
+            - house
             - road
             - house_number
 
