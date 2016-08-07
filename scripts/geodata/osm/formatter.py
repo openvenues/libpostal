@@ -351,7 +351,7 @@ class OSMAddressFormatter(object):
         like apartment numbers.
         '''
         if self.metro_stations_index is None:
-            return
+            return False
         nearest_metro = self.metro_stations_index.nearest_point(latitude, longitude)
         if nearest_metro:
             props, lat, lon, distance = nearest_metro
@@ -365,6 +365,9 @@ class OSMAddressFormatter(object):
 
             if name:
                 address_components[AddressFormatter.METRO_STATION] = name
+                return True
+
+        return False
 
     def venue_names(self, props, languages):
         '''
@@ -728,7 +731,8 @@ class OSMAddressFormatter(object):
         # Only including nearest metro station in Japan
         if country == JAPAN:
             if random.random() < float(nested_get(self.config, ('countries', 'jp', 'add_metro_probability'), default=0.0)):
-                self.add_metro_station(revised_tags, latitude, longitude, japanese_variant, default_language=JAPANESE)
+                if self.add_metro_station(revised_tags, latitude, longitude, japanese_variant, default_language=JAPANESE):
+                    language = japanese_variant
 
         num_floors = None
         num_basements = None
