@@ -346,6 +346,8 @@ class OSMAddressFormatter(object):
         and a slightly more sophisticated phrase generator than what we employ for numeric components
         like apartment numbers.
         '''
+        if self.metro_stations_index is None:
+            return
         nearest_metro = self.metro_stations_index.nearest_point(latitude, longitude)
         if nearest_metro:
             props, lat, lon, distance = nearest_metro
