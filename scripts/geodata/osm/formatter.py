@@ -308,11 +308,11 @@ class OSMAddressFormatter(object):
         '''
         house_number = address_components.get('addr:housenumber')
         if not house_number or not house_number.isdigit():
-            return
+            return False
 
         block = address_components.get('addr:block_number')
         if not block or not block.isdigit():
-            return
+            return False
 
         separator = six.u('-')
 
@@ -327,6 +327,10 @@ class OSMAddressFormatter(object):
 
             house_number = separator.join([block, house_number])
             address_components['addr:housenumber'] = house_number
+
+            return True
+        return False
+
 
     def add_metro_station(self, address_components, latitude, longitude, language=None, default_language=None):
         '''
@@ -706,12 +710,16 @@ class OSMAddressFormatter(object):
 
         namespaced_language = self.namespaced_language(tags, candidate_languages)
         language = None
+        japanese_variant = None
 
         if country == JAPAN:
-            language = JAPANESE
+            japanese_variant = JAPANESE
             if random.random() < float(nested_get(self.config, ('countries', 'jp', 'romaji_probability'), default=0.0)):
-                language = JAPANESE_ROMAJI
-            self.combine_japanese_house_number(tags, language)
+                japanese_variant = JAPANESE_ROMAJI
+            if self.combine_japanese_house_number(tags, japanese_variant):
+                language = japanese_variant
+            else:
+                language = None
 
         revised_tags = self.normalize_address_components(tags)
         sub_building_tags = self.normalize_sub_building_components(tags)
@@ -720,7 +728,7 @@ class OSMAddressFormatter(object):
         # Only including nearest metro station in Japan
         if country == JAPAN:
             if random.random() < float(nested_get(self.config, ('countries', 'jp', 'add_metro_probability'), default=0.0)):
-                self.add_metro_station(revised_tags, latitude, longitude, language, default_language=JAPANESE)
+                self.add_metro_station(revised_tags, latitude, longitude, japanese_variant, default_language=JAPANESE)
 
         num_floors = None
         num_basements = None
