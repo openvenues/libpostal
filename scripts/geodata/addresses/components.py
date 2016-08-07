@@ -1213,6 +1213,11 @@ class AddressComponents(object):
         non_local_language = None
         language_suffix = ''
 
+        osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
+        neighborhoods = self.neighborhood_components(latitude, longitude)
+
+        all_osm_components = osm_components + neighborhoods
+
         if not language:
             language = self.address_language(address_components, candidate_languages)
             non_local_language = self.non_local_language()
@@ -1224,12 +1229,7 @@ class AddressComponents(object):
         if address_state:
             address_components[AddressFormatter.STATE] = address_state
 
-        osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
-        neighborhoods = self.neighborhood_components(latitude, longitude)
-
         all_languages = set([l['lang'] for l in candidate_languages])
-
-        all_osm_components = osm_components + neighborhoods
 
         self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
