@@ -1097,7 +1097,7 @@ class AddressComponents(object):
 
     def add_house_number_phrase(self, address_components, language, country=None):
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER, None)
-        if not is_numeric(house_number) and house_number.lower() not in self.latin_alphabet_lower:
+        if not is_numeric(house_number) and (not house_number or house_number.lower() not in self.latin_alphabet_lower):
             return
         phrase = HouseNumber.phrase(house_number, language, country=country)
         if phrase and phrase != house_number:
