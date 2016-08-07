@@ -58,6 +58,7 @@ from geodata.geonames.db import GeoNamesDB
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
 from geodata.i18n.languages import *
+from geodata.metro_stations.reverse_geocode import MetroStationReverseGeocoder
 from geodata.neighborhoods.reverse_geocode import NeighborhoodReverseGeocoder
 from geodata.osm.extract import *
 from geodata.osm.formatter import OSMAddressFormatter
