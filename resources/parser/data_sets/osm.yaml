@@ -31,5 +31,5 @@ countries:
         # Always do this as there are plenty of examples of block numbers without house number
         combine_block_house_number_probability: 1.0
         block_phrase_probability: 0.4
-        romaji_probability: 0.2
+        romaji_probability: 0.4
         add_metro_probability: 0.6
