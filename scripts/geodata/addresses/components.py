@@ -1210,10 +1210,15 @@ class AddressComponents(object):
 
         more_than_one_official_language = len(candidate_languages) > 1
 
+        non_local_language = None
+        language_suffix = ''
+
         if not language:
             language = self.address_language(address_components, candidate_languages)
-
-        non_local_language = self.non_local_language()
+            non_local_language = self.non_local_language()
+            language_suffix = self.pick_language_suffix(all_osm_components, language, non_local_language, more_than_one_official_language)
+        else:
+            language_suffix = ':{}'.format(language)
 
         address_state = self.state_name(address_components, country, language, non_local_language=non_local_language)
         if address_state:
@@ -1225,7 +1230,6 @@ class AddressComponents(object):
         all_languages = set([l['lang'] for l in candidate_languages])
 
         all_osm_components = osm_components + neighborhoods
-        language_suffix = self.pick_language_suffix(all_osm_components, language, non_local_language, more_than_one_official_language)
 
         self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
