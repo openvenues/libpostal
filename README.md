@@ -84,6 +84,69 @@ Individual users can also help support open geo NLP research by making a monthly
 <a href="https://opencollective.com/libpostal/backer/28/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/28/avatar.svg"></a>
 <a href="https://opencollective.com/libpostal/backer/29/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/29/avatar.svg"></a>
 
+Examples of parsing
+-------------------
+
+libpostal implements the first statistical address parser that works well internationally,
+trained on ~50 million addresses in over 100 countries and as many
+languages. We use OpenStreetMap (anything with an addr:* tag) and the OpenCage
+address format templates at: https://github.com/OpenCageData/address-formatting
+to construct the training data, supplementing with containing polygons and
+perturbing the inputs in a number of ways to make the parser as robust as possible
+to messy real-world input. 
+
+These example parse results are taken from the interactive address_parser program 
+that builds with libpostal when you run ```make```. Note that the parser is robust to 
+commas vs. no commas, casing, different permutations of components (if the input
+is e.g. just city or just city/postcode).
+
+![parser](https://cloud.githubusercontent.com/assets/238455/13209628/2c465b50-d8f4-11e5-8e70-915c6b6d207b.gif)
+
+The parser achieves very high accuracy on held-out data, currently 98.9%
+correct full parses (meaning a 1 in the numerator for getting *every* token
+in the address correct).
+
+Usage (parser)
+--------------
+
+Here's an example of the parser API using the Python bindings:
+
+```python
+
+from postal.parser import parse_address
+parse_address('The Book Club 100-106 Leonard St Shoreditch London EC2A 4RH, United Kingdom')
+```
+
+And an example with the C API:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <libpostal/libpostal.h>
+
+int main(int argc, char **argv) {
+    // Setup (only called once at the beginning of your program)
+    if (!libpostal_setup() || !libpostal_setup_parser()) {
+        exit(EXIT_FAILURE);
+    }
+
+    address_parser_options_t options = get_libpostal_address_parser_default_options();
+    address_parser_response_t *parsed = parse_address("781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", options);
+
+    for (size_t i = 0; i < parsed->num_components; i++) {
+        printf("%s: %s\n", parsed->labels[i], parsed->components[i]);
+    }
+
+    // Free parse result
+    address_parser_response_destroy(parsed);
+
+    // Teardown (only called once at the end of your program)
+    libpostal_teardown();
+    libpostal_teardown_parser();
+}
+```
+
+
 Examples of normalization
 -------------------------
 
@@ -154,68 +217,6 @@ int main(int argc, char **argv) {
     // Teardown (only called once at the end of your program)
     libpostal_teardown();
     libpostal_teardown_language_classifier();
-}
-```
-
-Examples of parsing
--------------------
-
-libpostal implements the first statistical address parser that works well internationally,
-trained on ~50 million addresses in over 100 countries and as many
-languages. We use OpenStreetMap (anything with an addr:* tag) and the OpenCage
-address format templates at: https://github.com/OpenCageData/address-formatting
-to construct the training data, supplementing with containing polygons and
-perturbing the inputs in a number of ways to make the parser as robust as possible
-to messy real-world input. 
-
-These example parse results are taken from the interactive address_parser program 
-that builds with libpostal when you run ```make```. Note that the parser is robust to 
-commas vs. no commas, casing, different permutations of components (if the input
-is e.g. just city or just city/postcode).
-
-![parser](https://cloud.githubusercontent.com/assets/238455/13209628/2c465b50-d8f4-11e5-8e70-915c6b6d207b.gif)
-
-The parser achieves very high accuracy on held-out data, currently 98.9%
-correct full parses (meaning a 1 in the numerator for getting *every* token
-in the address correct).
-
-Usage (parser)
---------------
-
-Here's an example of the parser API using the Python bindings:
-
-```python
-
-from postal.parser import parse_address
-parse_address('The Book Club 100-106 Leonard St Shoreditch London EC2A 4RH, United Kingdom')
-```
-
-And an example with the C API:
-
-```c
-#include <stdio.h>
-#include <stdlib.h>
-#include <libpostal/libpostal.h>
-
-int main(int argc, char **argv) {
-    // Setup (only called once at the beginning of your program)
-    if (!libpostal_setup() || !libpostal_setup_parser()) {
-        exit(EXIT_FAILURE);
-    }
-
-    address_parser_options_t options = get_libpostal_address_parser_default_options();
-    address_parser_response_t *parsed = parse_address("781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", options);
-
-    for (size_t i = 0; i < parsed->num_components; i++) {
-        printf("%s: %s\n", parsed->labels[i], parsed->components[i]);
-    }
-
-    // Free parse result
-    address_parser_response_destroy(parsed);
-
-    // Teardown (only called once at the end of your program)
-    libpostal_teardown();
-    libpostal_teardown_parser();
 }
 ```
 
