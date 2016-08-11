@@ -29,6 +29,12 @@ names:
                     - alternative: official_name # e.g. United Kingdom of Great Britain and Northern Ireland
                       probability: 0.01
 
+    regex_replacements:
+        - country: fr
+          pattern: "(?:lyon|paris|marseilles) ([\\d]+er? arrondissement)"
+          replace_with_group: 1
+          replace_probability: 0.5
+
     # This section overrides place names
     exceptions:
         # Boroughs of New York City

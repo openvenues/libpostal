@@ -1,4 +1,6 @@
 import os
+import random
+import re
 import six
 import yaml
 
@@ -36,6 +38,20 @@ class BoundaryNames(object):
             component_name_keys, component_probs = alternative_probabilities(component_names)
             self.component_name_keys[component] = (component_name_keys, cdf(component_probs))
 
+        self.country_regex_replacements = defaultdict(list)
+        for props in nested_get(config, ('names', 'regex_replacements',), default=[]):
+            country = props.get('country')
+            re_flags = re.I | re.UNICODE
+            if not props.get('case_insensitive', True):
+                re.flags ^= re.I
+
+            pattern = re.compile(props['pattern'], re_flags)
+            replace_group = props['replace_with_group']
+            replace_probability = props['replace_probability']
+            self.country_regex_replacements[country].append((pattern, replace_group, replace_probability))
+
+        self.country_regex_replacements = dict(self.country_regex_replacements)
+
         self.exceptions = {}
 
         for props in nested_get(config, ('names', 'exceptions'), default=[]):
@@ -60,5 +76,18 @@ class BoundaryNames(object):
 
         name_keys, probs = self.component_name_keys.get(component, (self.name_keys, self.name_key_probs))
         return weighted_choice(name_keys, probs)
+
+    def name(self, country, name):
+        all_replacements = self.country_regex_replacements.get(country, []) + self.country_regex_replacements.get(None, [])
+        if not all_replacements:
+            return name
+
+        for regex, group, prob in all_replacements:
+            match = regex.match(name)
+            if match and random.random() < prob:
+                name = match.group(group)
+        return name
+
+
 
 boundary_names = BoundaryNames()

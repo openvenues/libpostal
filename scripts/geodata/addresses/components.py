@@ -694,9 +694,6 @@ class AddressComponents(object):
         include these qualifiers in the training data.
         '''
 
-        simple_name_key = 'name:simple'
-        international_name_key = 'int_name'
-
         if osm_components:
             name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, language_suffix))
             raw_name_key = boundary_names.DEFAULT_NAME_KEY
@@ -720,6 +717,9 @@ class AddressComponents(object):
 
                     for k in (key, name_key, raw_key, raw_name_key):
                         name = component_value.get(k)
+
+                        if name:
+                            name = boundary_names.name(country, name)
 
                         if name and not (name == existing_city_name and component != AddressFormatter.CITY and drop_duplicate_city_names):
                             if six.u(';') in name:
