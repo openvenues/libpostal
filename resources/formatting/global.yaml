@@ -480,6 +480,10 @@ countries:
                 before:
                     - country
 
+    # United Kingdom, in case language is unknown
+    gb:
+      insertions: *english_template_insertions
+
     us:
         insertions: &us_template_insertions
             <<: *english_template_insertions
