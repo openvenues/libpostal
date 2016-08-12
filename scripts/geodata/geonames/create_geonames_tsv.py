@@ -141,38 +141,32 @@ geonames_fields = [
     GeonamesField('a4.geonames_id as a4_gn_id', 'GEONAMES_ADMIN4_ID'),
 ]
 
-DUMMY_BOUNDARY_TYPE_INDEX = [i for i, f in enumerate(geonames_fields)
-                             if f.c_constant == 'GEONAMES_BOUNDARY_TYPE'][0]
+def geonames_field_index(s):
+    for i, f in enumerate(geonames_fields):
+        if f.c_constant == s:
+            return i
+    return None
 
-DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX = [i for i, f in enumerate(geonames_fields)
-                                   if f.c_constant == 'GEONAMES_HAS_WIKIPEDIA_ENTRY'][0]
 
-GEONAMES_ID_INDEX = [i for i, f in enumerate(geonames_fields)
-                     if f.c_constant == 'GEONAMES_ID'][0]
+DUMMY_BOUNDARY_TYPE_INDEX = geonames_field_index('GEONAMES_BOUNDARY_TYPE')
+DUMMY_HAS_WIKIPEDIA_ENTRY_INDEX = geonames_field_index('GEONAMES_HAS_WIKIPEDIA_ENTRY')
 
-LANGUAGE_INDEX = [i for i, f in enumerate(geonames_fields)
-                  if f.c_constant == 'GEONAMES_ISO_LANGUAGE'][0]
+GEONAMES_ID_INDEX = geonames_field_index('GEONAMES_ID')
+LANGUAGE_INDEX = geonames_field_index('GEONAMES_ISO_LANGUAGE')
 
-DUMMY_LANGUAGE_PRIORITY_INDEX = [i for i, f in enumerate(geonames_fields)
-                                 if f.c_constant == 'GEONAMES_LANGUAGE_PRIORITY'][0]
+DUMMY_LANGUAGE_PRIORITY_INDEX = geonames_field_index('GEONAMES_LANGUAGE_PRIORITY')
 
-CANONICAL_NAME_INDEX = [i for i, f in enumerate(geonames_fields)
-                        if f.c_constant == 'GEONAMES_CANONICAL'][0]
+CANONICAL_NAME_INDEX = geonames_field_index('GEONAMES_CANONICAL')
 
-NAME_INDEX = [i for i, f in enumerate(geonames_fields)
-              if f.c_constant == 'GEONAMES_NAME'][0]
+NAME_INDEX = geonames_field_index('GEONAMES_NAME')
 
-COUNTRY_CODE_INDEX = [i for i, f in enumerate(geonames_fields)
-                      if f.c_constant == 'GEONAMES_COUNTRY_CODE'][0]
+COUNTRY_CODE_INDEX = geonames_field_index('GEONAMES_COUNTRY_CODE')
 
-POPULATION_INDEX = [i for i, f in enumerate(geonames_fields)
-                    if f.c_constant == 'GEONAMES_POPULATION'][0]
+POPULATION_INDEX = geonames_field_index('GEONAMES_POPULATION')
 
-PREFERRED_INDEX = [i for i, f in enumerate(geonames_fields)
-                   if f.c_constant == 'GEONAMES_IS_PREFERRED_NAME'][0]
+PREFERRED_INDEX = geonames_field_index('GEONAMES_IS_PREFERRED_NAME')
 
-HISTORICAL_INDEX = [i for i, f in enumerate(geonames_fields)
-                    if f.c_constant == 'GEONAMES_IS_HISTORICAL'][0]
+HISTORICAL_INDEX = geonames_field_index('GEONAMES_IS_HISTORICAL')
 
 
 geonames_admin_joins = '''
@@ -241,11 +235,14 @@ postal_code_fields = [
     GeonamesField('group_concat(distinct a3.geonames_id) admin3_ids', 'GN_POSTAL_ADMIN3_IDS'),
 ]
 
-POSTAL_CODE_INDEX = [i for i, f in enumerate(postal_code_fields)
-                     if f.c_constant == 'GN_POSTAL_CODE'][0]
+def postal_code_field_index(s):
+    for i, f in enumerate(postal_code_fields):
+        if f.c_constant == s:
+            return i
+    return None
 
-POSTAL_CODE_POP_INDEX = [i for i, f in enumerate(postal_code_fields)
-                         if f.c_constant == 'GN_POSTAL_COUNTRY_POPULATION'][0]
+POSTAL_CODE_INDEX = postal_code_field_index('GN_POSTAL_CODE')
+POSTAL_CODE_POP_INDEX = postal_code_field_index('GN_POSTAL_COUNTRY_POPULATION')
 
 postal_codes_query = '''
 select
