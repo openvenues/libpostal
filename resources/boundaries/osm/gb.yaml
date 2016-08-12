@@ -1,8 +1,8 @@
 ---
     admin_level: 
         "2": "country"
-        "4": "country_region"
-        "5": "state"
+        "4": "state"
+        "5": "state_district"
         "6": "state_district"
         "8": "city"
         "10": "suburb"
