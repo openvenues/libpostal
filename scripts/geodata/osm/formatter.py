@@ -421,6 +421,41 @@ class OSMAddressFormatter(object):
                 formatted_addresses.append(formatted_address)
         return formatted_addresses
 
+    def extract_valid_postal_codes(self, country, postal_code, validate=True):
+        '''
+        "Valid" postal codes
+        --------------------
+
+        This is only really for place formatting at the moment so we don't
+        accidentally inject too many bad postcodes into the training data.
+        Sometimes for a given boundary name the postcode might be a delimited
+        sequence of postcodes like "10013;10014;10015", it might be a range
+        like "10013-10015", or it might be some non-postcode text. The idea
+        here is to validate the text using Google's libaddressinput postcode
+        regexes for the given country. These regexes are a little simplistic
+        and don't account for variations like the common use of shortened
+        postcodes in cities like Berlin or Oslo where the first digit is always
+        known to be the same given the city. Still, at the level of places, that's
+        probably fine.
+        '''
+        postal_codes = []
+        if postal_code:
+            valid_postcode = False
+            if validate:
+                postcode_regex = postcode_regexes.get(country)
+                if postcode_regex:
+                    match = postcode_regex.match(postal_code)
+                    if match and match.end() == len(postal_code):
+                        valid_postcode = True
+                        postal_codes.append(postal_code)
+            else:
+                valid_postcode = True
+
+            if not valid_postcode:
+                postal_codes = parse_osm_number_range(postal_code, parse_letter_range=False)
+
+        return postal_code
+
     def node_place_tags(self, tags):
         try:
             latitude, longitude = latlon_to_decimal(tags['lat'], tags['lon'])
@@ -490,18 +525,10 @@ class OSMAddressFormatter(object):
         place_tags = []
 
         postal_code = revised_tags.get(AddressFormatter.POSTCODE, None)
+
         postal_codes = []
         if postal_code:
-            valid_postcode = False
-            postcode_regex = postcode_regexes.get(country)
-            if postcode_regex:
-                match = postcode_regex.match(postal_code)
-                if match and match.end() == len(postal_code):
-                    valid_postcode = True
-                    postal_codes.append(postal_code)
-
-            if not valid_postcode:
-                postal_codes = parse_osm_number_range(postal_code, parse_letter_range=False)
+            postal_codes = self.extract_valid_postal_codes(country, postal_code)
 
         try:
             population = int(tags.get('population', 0))
