@@ -454,7 +454,7 @@ class OSMAddressFormatter(object):
             if not valid_postcode:
                 postal_codes = parse_osm_number_range(postal_code, parse_letter_range=False, max_range=1000)
 
-        return postal_code
+        return postal_codes
 
     def node_place_tags(self, tags):
         try:
