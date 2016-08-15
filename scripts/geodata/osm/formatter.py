@@ -623,8 +623,9 @@ class OSMAddressFormatter(object):
 
             if postal_codes:
                 extra_place_tags = []
+                num_existing_place_tags = len(place_tags)
                 for postal_code in postal_codes:
-                    for i in xrange(min_references):
+                    for i in xrange(min(min_references, num_existing_place_tags)):
                         if num_references == min_references:
                             # For small places, make sure we get every variation
                             address_components, language, is_default = place_tags[i]
