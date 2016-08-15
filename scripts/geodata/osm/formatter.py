@@ -622,8 +622,19 @@ class OSMAddressFormatter(object):
                     place_tags.append((address_components, language, False))
 
             if postal_codes:
-                for address_components, language, is_default in place_tags:
-                    address_components[AddressFormatter.POSTCODE] = random.choice(postal_codes)
+                extra_place_tags = []
+                for postal_code in postal_codes:
+                    for i in xrange(min_references):
+                        if num_references == min_references:
+                            # For small places, make sure we get every variation
+                            address_components, language, is_default = place_tags[i]
+                        else:
+                            address_components, language, is_default = random.choice(place_tags)
+                        address_components = address_components.copy()
+                        address_components[AddressFormatter.POSTCODE] = random.choice(postal_codes)
+                        extra_place_tags.append((address_components, language, is_default))
+
+                place_tags = place_tags + extra_place_tags
 
         revised_place_tags = []
         for address_components, language, is_default in place_tags:
