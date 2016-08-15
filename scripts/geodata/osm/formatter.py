@@ -982,7 +982,7 @@ class OSMAddressFormatter(object):
             if i % 1000 == 0 and i > 0:
                 print('did {} formatted places'.format(i))
 
-        for props, poly in iter(self.components.osm_admin_rtree):
+        for tags, poly in iter(self.components.osm_admin_rtree):
             try:
                 point = poly.context.representative_point()
             except ValueError:
