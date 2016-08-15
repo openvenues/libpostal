@@ -149,7 +149,7 @@ letter_range_regex = re.compile(r'([^\W\d_]){}([^\W\d_])'.format(non_breaking_da
 number_split_regex = re.compile('[,;]')
 
 
-def parse_osm_number_range(value, parse_letter_range=True):
+def parse_osm_number_range(value, parse_letter_range=True, max_range=100):
     value = normalize_string(value, string_options=NORMALIZE_STRING_LATIN_ASCII | NORMALIZE_STRING_DECOMPOSE)
     numbers = []
     values = number_split_regex.split(value)
@@ -169,8 +169,8 @@ def parse_osm_number_range(value, parse_letter_range=True):
                 end_num = int(end_num)
 
                 if end_num > start_num:
-                    if end_num - start_num > 100:
-                        end_num = start_num + 100
+                    if end_num - start_num > max_range:
+                        end_num = start_num + max_range
 
                     for i in xrange(start_num, end_num + 1):
                         numbers.append(safe_decode(i).zfill(zfill))
@@ -188,8 +188,8 @@ def parse_osm_number_range(value, parse_letter_range=True):
                 start_num = ord(start_num)
                 end_num = ord(end_num)
                 if end_num > start_num:
-                    if end_num - start_num > 100:
-                        end_num = start_num + 100
+                    if end_num - start_num > max_range:
+                        end_num = start_num + max_range
                     for i in xrange(start_num, end_num + 1):
                         numbers.append(six.unichr(i))
                 else:

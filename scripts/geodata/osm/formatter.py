@@ -452,7 +452,7 @@ class OSMAddressFormatter(object):
                 valid_postcode = True
 
             if not valid_postcode:
-                postal_codes = parse_osm_number_range(postal_code, parse_letter_range=False)
+                postal_codes = parse_osm_number_range(postal_code, parse_letter_range=False, max_range=1000)
 
         return postal_code
 
