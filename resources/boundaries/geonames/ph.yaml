@@ -1,0 +1,3 @@
+admin_codes:
+    admin1: country_region
+    # admin2 is a mix of state_district and city, need to list specifically

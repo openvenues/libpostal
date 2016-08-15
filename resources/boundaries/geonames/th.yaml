@@ -1,0 +1,8 @@
+admin_codes:
+    admin1: state
+
+overrides:
+    id:
+        # Bangkok the state is treated as a city
+        # Note: we do this in OSM to get the boundary, so duplicate in GeoNames
+        "1609348": "city"

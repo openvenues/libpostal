@@ -1,0 +1,5 @@
+admin_codes:
+    # The GeoNames admin1 boundaries are admin_level=6 in OSM
+    # However, they do appear to be states, might need to update Finnish OSM config
+    admin1: state_district
+    admin2: state_district
