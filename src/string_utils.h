@@ -86,6 +86,7 @@ bool utf8_is_separator(int cat);
 
 bool string_is_ignorable(char *str, size_t len);
 
+ssize_t string_next_hyphen_index(char *str, size_t len);
 bool string_contains_hyphen(char *str);
 bool string_contains_hyphen_len(char *str, size_t len);
 

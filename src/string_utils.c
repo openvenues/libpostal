@@ -104,7 +104,6 @@ inline bool string_is_lower(char *s) {
     return true;
 }
 
-
 uint32_t string_translate(char *str, size_t len, char *word_chars, char *word_repls, size_t trans_len) {
     uint32_t num_replacements = 0;
     
@@ -387,7 +386,7 @@ bool string_is_ignorable(char *str, size_t len) {
     return true;
 }
 
-bool string_contains_hyphen_len(char *str, size_t len) {
+ssize_t string_next_hyphen_index(char *str, size_t len) {
     uint8_t *ptr = (uint8_t *)str;
     int32_t codepoint;
     ssize_t idx = 0;
@@ -395,17 +394,21 @@ bool string_contains_hyphen_len(char *str, size_t len) {
     while (idx < len) {
         ssize_t char_len = utf8proc_iterate(ptr, len, &codepoint);
         
-        if (char_len <= 0) break;
+        if (char_len <= 0 || codepoint == 0) break;
 
-        if (utf8_is_hyphen(codepoint)) return true;
+        if (utf8_is_hyphen(codepoint)) return idx;
         ptr += char_len;
         idx += char_len;
     }
-    return false;
+    return -1;
+}
+
+inline bool string_contains_hyphen_len(char *str, size_t len) {
+    return string_next_hyphen_index(str, len) >= 0;
 }
 
 inline bool string_contains_hyphen(char *str) {
-    return string_contains_hyphen_len(str, strlen(str));
+    return string_next_hyphen_index(str, strlen(str)) >= 0;
 }
 
 size_t string_rtrim(char *str) {
