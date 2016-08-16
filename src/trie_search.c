@@ -774,7 +774,7 @@ inline phrase_t trie_search_prefixes(trie_t *self, char *word, size_t len) {
 }
 
 
-inline char *cstring_array_get_phrase_with_char_array(cstring_array *str, char_array *phrase_tokens, phrase_t phrase) {
+inline char *cstring_array_get_phrase(cstring_array *str, char_array *phrase_tokens, phrase_t phrase) {
     char_array_clear(phrase_tokens);
 
     size_t phrase_end = phrase.start + phrase.len;
@@ -790,10 +790,4 @@ inline char *cstring_array_get_phrase_with_char_array(cstring_array *str, char_a
 
     return char_array_get_string(phrase_tokens);
 }
-
-
-inline char *cstring_array_get_phrase(tokenized_string_t *str, char_array *phrase_tokens, phrase_t phrase) {
-    return cstring_array_get_phrase_with_char_array(str->strings, phrase_tokens, phrase);
-}
-
 
