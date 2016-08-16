@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import itertools
 import os
 import random
 import six
@@ -1001,8 +1002,8 @@ class OSMAddressFormatter(object):
                 point = poly.context.centroid
             lat = point.y
             lon = point.x
-            props['lat'] = lat
-            props['lon'] = lon
+            tags['lat'] = lat
+            tags['lon'] = lon
             place_tags, country = self.node_place_tags(tags)
             for address_components, language, is_default in place_tags:
                 addresses = self.formatted_places(address_components, country, language)
@@ -1058,7 +1059,6 @@ class OSMAddressFormatter(object):
                 continue
 
             tags = ways[0]
-            namespaced_language = None
 
             language_components = {}
 
@@ -1073,6 +1073,7 @@ class OSMAddressFormatter(object):
                     way_names = [(w[tag], w.get(base_name_tag) if base_name_tag else None) for w in ways if tag in w]
                     if len(way_names) < 2:
                         continue
+                    namespaced_language = None
                     if ':' in tag:
                         namespaced_language = tag.rsplit(':')[-1]
 
@@ -1093,14 +1094,14 @@ class OSMAddressFormatter(object):
                         formatted = self.formatter.format_intersection(intersection, address_components, country, language, tag_components=tag_components)
                         formatted_intersections.append(formatted)
 
-                        if w1_base and random.random() < replace_with_base_name_prob:
+                        if w1_base and not namespaced_language and random.random() < replace_with_base_name_prob:
                             w1 = w1_base
 
                             intersection = IntersectionQuery(road1=w1, intersection_phrase=intersection_phrase, road2=w2)
                             formatted = self.formatter.format_intersection(intersection, address_components, country, language, tag_components=tag_components)
                             formatted_intersections.append(formatted)
 
-                        if w2_base and random.random() < replace_with_base_name_prob:
+                        if w2_base and not namespaced_language and random.random() < replace_with_base_name_prob:
                             w2 = w2_base
 
                             intersection = IntersectionQuery(road1=w1, intersection_phrase=intersection_phrase, road2=w2)
