@@ -1,18 +1,25 @@
+import argparse
 import array
 import logging
 import numpy
 import os
 import six
+import sys
 import ujson as json
 
 from bisect import bisect_left
 from leveldb import LevelDB
 from itertools import izip, groupby
 
+this_dir = os.path.realpath(os.path.dirname(__file__))
+sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
+
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.file_utils import ensure_dir
 from geodata.osm.extract import *
 from geodata.encoding import safe_decode, safe_encode
+
+DEFAULT_INTERSECTIONS_FILENAME = 'intersections.json'
 
 
 class OSMIntersectionReader(object):
@@ -62,14 +69,11 @@ class OSMIntersectionReader(object):
                 deps = set(deps)
 
                 # Get node indices by binary search
-                try:
-                    node_indices = [self.binary_search(node_ids, node_id) for node_id in deps]
-                except ValueError:
-                    continue
-
-                # way_deps is the list of dependent node ids
-                # way_coords is a copy of coords indexed by way ids
-                for node_id, node_index in izip(deps, node_indices):
+                for node_id in deps:
+                    try:
+                        node_index = self.binary_search(node_ids, node_id)
+                    except ValueError:
+                        continue
                     node_counts[node_index] += 1
 
             if i % 1000 == 0 and i > 0:
@@ -142,3 +146,34 @@ class OSMIntersectionReader(object):
                 node_index = self.binary_search(self.node_ids, node_id)
                 lat, lon = self.node_coordinates[node_index * 2], self.node_coordinates[node_index * 2 + 1]
                 yield self.node_ids[node_index], lat, lon, ways
+
+    def create_intersections(self, outfile):
+        out = open(outfile, 'w')
+        for node_id, lat, lon, ways in self.intersections():
+            d = {'id': safe_encode(node_id),
+                 'lat': safe_encode(lat),
+                 'lon': safe_encode(lon),
+                 'ways': ways}
+            out.write(json.dumps(d) + six.u('\n'))
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-i', '--input',
+                        required=True,
+                        help='Path to planet-ways-latlons.osm')
+
+    parser.add_argument('--ways-db-dir',
+                        required=True,
+                        help='Path to temporary ways db')
+
+    parser.add_argument('-o', '--out-dir',
+                        default=os.getcwd(),
+                        required=True,
+                        help='Output directory')
+
+    args = parser.parse_args()
+
+    reader = OSMIntersectionReader(args.input, args.ways_db_dir)
+    reader.create_intersections(os.path.join(args.out_dir, DEFAULT_INTERSECTIONS_FILENAME))
