@@ -26,6 +26,9 @@ python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm -f --lang
 Formatted addresses (untagged):
 python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm  -f -u --language-rtree-dir=$(LANG_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR)  --rtree-dir=$(RTREE_DIR) --quattroshapes-rtree-dir=$(QS_TREE_DIR) --geonames-db=$(GEONAMES_DB_PATH) -o $(OUT_DIR)
 
+Intersections (after running intersections.py to create the JSON file):
+python osm_address_training_data -x $(OSM_DIR)/intersections.json -f --language-rtree-dir=$(LANG_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR)  --rtree-dir=$(RTREE_DIR) --quattroshapes-rtree-dir=$(QS_TREE_DIR) --geonames-db=$(GEONAMES_DB_PATH) -o $(OUT_DIR)
+
 Toponyms:
 python osm_address_training_data.py -b $(OSM_DIR)/planet-borders.osm --language-rtree-dir=$(LANG_RTREE_DIR) -o $(OUT_DIR)
 '''
@@ -452,9 +455,6 @@ if __name__ == '__main__':
     parser.add_argument('-x', '--intersections-file',
                         help='Path to planet-ways-latlons.osm')
 
-    parser.add_argument('--ways-db-dir',
-                        help='Path to temporary ways db')
-
     parser.add_argument('--language-rtree-dir',
                         required=True,
                         help='Language RTree directory')
@@ -556,10 +556,6 @@ if __name__ == '__main__':
         osm_formatter.build_place_training_data(args.place_nodes_file, args.out_dir, tag_components=not args.untagged)
 
     if args.intersections_file and args.format:
-        if args.ways_db_dir is None:
-            parser.error('--ways-db-dir required for intersections')
-
-        logging.basicConfig(level=logging.INFO)
         components = AddressComponents(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames, metro_stations_index)
         osm_formatter = OSMAddressFormatter(components, subdivisions_rtree, buildings_rtree, metro_stations_index)
-        osm_formatter.build_intersections_training_data(args.intersections_file, args.out_dir, args.ways_db_dir, tag_components=not args.untagged)
+        osm_formatter.build_intersections_training_data(args.intersections_file, args.out_dir, tag_components=not args.untagged)
