@@ -722,10 +722,7 @@ class AddressComponents(object):
                             name = boundary_names.name(country, name)
 
                         if name and not (name == existing_city_name and component != AddressFormatter.CITY and drop_duplicate_city_names):
-                            if six.u(';') in name:
-                                name = random.choice(name.split(six.u(';'))).strip()
-                            elif six.u(',') in name:
-                                name = name.split(six.u(','), 1)[0].strip()
+                            name = self.cleaned_name(name, first_comma_delimited_phrase=True)
                             break
                     # if we've checked all keys without finding a valid name, leave this component out
                     else:
@@ -1048,6 +1045,23 @@ class AddressComponents(object):
                 for component in components[1:]:
                     address_components.pop(component, None)
 
+    def cleaned_name(self, name, first_comma_delimited_phrase=False):
+        '''
+        General name cleanup
+        --------------------
+
+        Names in OSM and other tagged data sets may contain more than a single
+        field. If the field is separated by semicolons, split it and pick one
+        of the subfields at random (common in street names). If first_comma_delimited_phrase
+        is True, and the phrase has a comma in it, return only the portion of the string
+        before the comma.
+        '''
+        if six.u(';') in name:
+            name = random.choice(name.split(six.u(';'))).strip()
+        elif first_comma_delimited_phrase and six.u(',') in name:
+            name = name.split(six.u(','), 1)[0].strip()
+        return name
+
     def cleanup_venue_name(self, address_components):
         '''
         Venue name cleanup
@@ -1081,11 +1095,11 @@ class AddressComponents(object):
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
         if not house_number:
             return
-        if ';' in house_number:
-            house_number = house_number.replace(';', ',')
+        if six.u(';') in house_number:
+            house_number = house_number.replace(six.u(';'), six.u(','))
             address_components[AddressFormatter.HOUSE_NUMBER] = house_number
-        if house_number and house_number.count(',') >= 2:
-            house_numbers = house_number.split(',')
+        if house_number and house_number.count(six.u(',')) >= 2:
+            house_numbers = house_number.split(six.u(','))
             random.shuffle(house_numbers)
             for num in house_numbers:
                 num = num.strip()
