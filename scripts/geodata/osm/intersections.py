@@ -156,6 +156,13 @@ class OSMIntersectionReader(object):
                  'ways': ways}
             out.write(json.dumps(d) + six.u('\n'))
 
+    @classmethod
+    def read_intersections(cls, infile):
+        f = open(infile)
+        for line in f:
+            data = json.loads(line.rstrip())
+            yield data['id'], data['lat'], data['lon'], data['ways']
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
