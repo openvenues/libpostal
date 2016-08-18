@@ -20,6 +20,7 @@ regional_languages = defaultdict(OrderedDict)
 road_language_overrides = defaultdict(OrderedDict)
 
 languages = set()
+all_languages = languages
 
 languages_initialized = False
 
