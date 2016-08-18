@@ -1045,7 +1045,8 @@ class AddressComponents(object):
                 for component in components[1:]:
                     address_components.pop(component, None)
 
-    def cleaned_name(self, name, first_comma_delimited_phrase=False):
+    @classmethod
+    def cleaned_name(cls, name, first_comma_delimited_phrase=False):
         '''
         General name cleanup
         --------------------
