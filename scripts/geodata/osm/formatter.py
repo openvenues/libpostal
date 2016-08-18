@@ -1054,63 +1054,81 @@ class OSMAddressFormatter(object):
         replace_with_base_name_prob = float(nested_get(self.config, ('intersections', 'replace_with_base_name_probability'), default=0.0))
 
         for node_id, latitude, longitude, ways in OSMIntersectionReader.read_intersections(infile):
+            distinct_ways = set()
+            valid_ways = []
+            for way in ways:
+                if way['id'] not in distinct_ways:
+                    valid_ways.append(way)
+                    distinct_ways.add(way['id'])
+            ways = valid_ways
+
             if not ways or len(ways) < 2:
                 continue
 
-            tags = ways[0]
+            try:
+                latitude, longitude = latlon_to_decimal(latitude, longitude)
+            except Exception:
+                continue
+
+            name_tag = 'name'
+
+            for t in all_base_name_tags:
+                if any((t in way for way in ways)):
+                    base_name_tag = t
+                    break
+
+            way_names = []
+            languages = set([None])
+
+            for way in ways:
+                names = defaultdict(list)
+                for tag in way:
+                    base_tag = tag.rsplit(':', 1)[0]
+                    if base_tag not in all_name_tags:
+                        continue
+                    lang = tag.rsplit(':')[-1] if ':' in tag else None
+                    languages.add(lang)
+
+                    names[lang].append(way[tag])
+
+                if base_name_tag in way:
+                    names[None].append(way[base_name_tag])
+
+                if not names:
+                    continue
+
+                way_names.append(names)
+
+            if not way_names or len(way_names) < 2:
+                continue
 
             language_components = {}
 
-            base_name_tags = [t for t in all_base_name_tags if t in tags]
-            if not base_name_tags:
-                base_name_tag = None
-            else:
-                base_name_tag = base_name_tags[0]
+            country = None
 
-            for tag in tags:
-                if tag.rsplit(':', 1)[0] in all_name_tags:
-                    way_names = [(w[tag], w.get(base_name_tag) if base_name_tag else None) for w in ways if tag in w]
-                    if len(way_names) < 2:
-                        continue
-                    namespaced_language = None
-                    if ':' in tag:
-                        namespaced_language = tag.rsplit(':')[-1]
+            for namespaced_language in languages:
+                address_components, country, language = self.components.expanded({}, latitude, longitude, language=namespaced_language)
+                language_components[namespaced_language] = address_components
 
-                    if namespaced_language not in language_components:
-                        address_components, country, language = self.components.expanded({}, latitude, longitude, language=namespaced_language)
-                        language_components[namespaced_language] = (address_components, country, language)
-                    else:
-                        address_components, country, language = language_components[namespaced_language]
+            if country is None:
+                continue
 
-                    intersection_phrase = Intersection.phrase(language, country=country)
-                    if not intersection_phrase:
-                        continue
+            for way1, way2 in itertools.combinations(way_names):
+                formatted_intersections = []
+                for language in set(way1.keys()) & set(way2.keys()):
+                    for w1, w2 in itertools.product(way1[language], way2[language]):
+                        intersection_phrase = Intersection.phrase(language, country=country)
+                        if not intersection_phrase:
+                            continue
 
-                    formatted_intersections = []
+                        address_components = language_components[language]
 
-                    for (w1, w1_base), (w2, w2_base) in itertools.combinations(way_names, 2):
                         w1 = self.components.cleaned_name(w1)
                         w2 = self.components.cleaned_name(w2)
 
                         intersection = IntersectionQuery(road1=w1, intersection_phrase=intersection_phrase, road2=w2)
                         formatted = self.formatter.format_intersection(intersection, address_components, country, language, tag_components=tag_components)
-                        formatted_intersections.append(formatted)
 
-                        if w1_base and not namespaced_language and random.random() < replace_with_base_name_prob:
-                            w1 = self.components.cleand_name(w1_base)
-
-                            intersection = IntersectionQuery(road1=w1, intersection_phrase=intersection_phrase, road2=w2)
-                            formatted = self.formatter.format_intersection(intersection, address_components, country, language, tag_components=tag_components)
-                            formatted_intersections.append(formatted)
-
-                        if w2_base and not namespaced_language and random.random() < replace_with_base_name_prob:
-                            w2 = self.components.cleaned_name(w2_base)
-
-                            intersection = IntersectionQuery(road1=w1, intersection_phrase=intersection_phrase, road2=w2)
-                            formatted = self.formatter.format_intersection(intersection, address_components, country, language, tag_components=tag_components)
-                            formatted_intersections.append(formatted)
-
-                    for formatted in formatted_intersections:
                         if not formatted or not formatted.strip():
                             continue
 
