@@ -35,7 +35,11 @@ class OSMIntersectionReader(object):
         ensure_dir(db_dir)
         ways_dir = os.path.join(db_dir, 'ways')
         ensure_dir(ways_dir)
+        nodes_dir = os.path.join(db_dir, 'nodes')
+        ensure_dir(nodes_dir)
         self.way_props = LevelDB(ways_dir)
+        self.node_props = LevelDB(nodes_dir)
+
         # These form a graph and should always have the same length
         self.intersection_edges_nodes = array.array('l')
         self.intersection_edges_ways = array.array('l')
@@ -65,6 +69,7 @@ class OSMIntersectionReader(object):
                 if props.get('junction', '').lower() == 'yes' or props.get('highway', '').lower() in ('traffic_signals', 'crossing'):
                     node_ids.append(node_id)
                     node_counts.append(0)
+                    self.node_props.Put(safe_encode(node_id), json.dumps(props))
             elif element_id.startswith('way'):
                 # Don't care about the ordering of the nodes, and want uniques e.g. for circular roads
                 deps = set(deps)
@@ -129,6 +134,8 @@ class OSMIntersectionReader(object):
         for node_id, g in groupby(self.intersection_edges_nodes):
             group_len = sum((1 for j in g))
 
+            node_props = json.loads(self.node_props.Get(safe_encode(node_id)))
+
             way_indices = self.intersection_edges_ways[idx:idx + group_len]
             all_ways = [json.loads(self.way_props.Get(safe_encode(w))) for w in way_indices]
             way_names = set()
@@ -148,14 +155,15 @@ class OSMIntersectionReader(object):
             if len(ways) > 1:
                 node_index = self.binary_search(self.node_ids, node_id)
                 lat, lon = self.node_coordinates[node_index * 2], self.node_coordinates[node_index * 2 + 1]
-                yield self.node_ids[node_index], lat, lon, ways
+                yield self.node_ids[node_index], node_props, lat, lon, ways
 
     def create_intersections(self, outfile):
         out = open(outfile, 'w')
-        for node_id, lat, lon, ways in self.intersections():
+        for node_id, node_props, lat, lon, ways in self.intersections():
             d = {'id': safe_encode(node_id),
                  'lat': safe_encode(lat),
                  'lon': safe_encode(lon),
+                 'node': node_props,
                  'ways': ways}
             out.write(json.dumps(d) + six.u('\n'))
 
@@ -164,7 +172,7 @@ class OSMIntersectionReader(object):
         f = open(infile)
         for line in f:
             data = json.loads(line.rstrip())
-            yield data['id'], data['lat'], data['lon'], data['ways']
+            yield data['id'], data['node'], data['lat'], data['lon'], data['ways']
 
 
 if __name__ == '__main__':
