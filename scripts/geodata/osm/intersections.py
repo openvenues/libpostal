@@ -62,8 +62,9 @@ class OSMIntersectionReader(object):
             props = {safe_decode(k): safe_decode(v) for k, v in six.iteritems(props)}
             if element_id.startswith('node'):
                 node_id = long(element_id.split(':')[-1])
-                node_ids.append(node_id)
-                node_counts.append(0)
+                if props.get('junction', '').lower() == 'yes' or props.get('highway', '').lower() == 'traffic_signals':
+                    node_ids.append(node_id)
+                    node_counts.append(0)
             elif element_id.startswith('way'):
                 # Don't care about the ordering of the nodes, and want uniques e.g. for circular roads
                 deps = set(deps)
