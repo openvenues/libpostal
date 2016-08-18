@@ -1110,7 +1110,7 @@ class OSMAddressFormatter(object):
             if country is None:
                 continue
 
-            for way1, way2 in itertools.combinations(way_names):
+            for way1, way2 in itertools.combinations(way_names, 2):
                 formatted_intersections = []
                 for language in set(way1.keys()) & set(way2.keys()):
                     for w1, w2 in itertools.product(way1[language], way2[language]):
