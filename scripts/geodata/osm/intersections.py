@@ -182,9 +182,9 @@ if __name__ == '__main__':
                         required=True,
                         help='Path to planet-ways-latlons.osm')
 
-    parser.add_argument('--ways-db-dir',
+    parser.add_argument('--db-dir',
                         required=True,
-                        help='Path to temporary ways db')
+                        help='Path to temporary db')
 
     parser.add_argument('-o', '--out-dir',
                         default=os.getcwd(),
