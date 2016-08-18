@@ -1068,6 +1068,10 @@ class OSMAddressFormatter(object):
             except Exception:
                 continue
 
+            country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
+            if not (country and candidate_languages):
+                continue
+
             base_name_tag = None
             for t in all_base_name_tags:
                 if any((t in way for way in ways)):
@@ -1076,6 +1080,7 @@ class OSMAddressFormatter(object):
 
             way_names = []
             languages = set([None])
+            default_language = None
 
             for way in ways:
                 names = defaultdict(list)
@@ -1085,6 +1090,12 @@ class OSMAddressFormatter(object):
                         continue
                     lang = tag.rsplit(':')[-1] if ':' in tag else None
                     languages.add(lang)
+
+                    name = way[tag]
+                    if default_language is None and tag == 'name':
+                        address_language = self.components.address_language({AddressFormatter.ROAD: name}, candidate_languages)
+                        if address_language and address_language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE):
+                            default_language = address_language
 
                     names[lang].append(way[tag])
 
@@ -1101,24 +1112,19 @@ class OSMAddressFormatter(object):
 
             language_components = {}
 
-            country = None
-
             for namespaced_language in languages:
-                address_components, country, language = self.components.expanded({}, latitude, longitude, language=namespaced_language)
+                address_components, _, _ = self.components.expanded({}, latitude, longitude, language=namespaced_language or default_language)
                 language_components[namespaced_language] = address_components
-
-            if country is None:
-                continue
 
             for way1, way2 in itertools.combinations(way_names, 2):
                 formatted_intersections = []
                 for language in set(way1.keys()) & set(way2.keys()):
                     for w1, w2 in itertools.product(way1[language], way2[language]):
+                        address_components = language_components[language]
+
                         intersection_phrase = Intersection.phrase(language, country=country)
                         if not intersection_phrase:
                             continue
-
-                        address_components = language_components[language]
 
                         w1 = self.components.cleaned_name(w1)
                         w2 = self.components.cleaned_name(w2)
