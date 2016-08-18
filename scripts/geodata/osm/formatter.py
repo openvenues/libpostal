@@ -1051,8 +1051,6 @@ class OSMAddressFormatter(object):
         all_name_tags = set(OSM_NAME_TAGS)
         all_base_name_tags = set(OSM_BASE_NAME_TAGS)
 
-        replace_with_base_name_prob = float(nested_get(self.config, ('intersections', 'replace_with_base_name_probability'), default=0.0))
-
         for node_id, latitude, longitude, ways in OSMIntersectionReader.read_intersections(infile):
             distinct_ways = set()
             valid_ways = []
@@ -1070,8 +1068,7 @@ class OSMAddressFormatter(object):
             except Exception:
                 continue
 
-            name_tag = 'name'
-
+            base_name_tag = None
             for t in all_base_name_tags:
                 if any((t in way for way in ways)):
                     base_name_tag = t
