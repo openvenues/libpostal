@@ -195,5 +195,5 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.INFO)
 
-    reader = OSMIntersectionReader(args.input, args.ways_db_dir)
+    reader = OSMIntersectionReader(args.input, args.db_dir)
     reader.create_intersections(os.path.join(args.out_dir, DEFAULT_INTERSECTIONS_FILENAME))
