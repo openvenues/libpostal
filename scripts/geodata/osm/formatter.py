@@ -1079,17 +1079,23 @@ class OSMAddressFormatter(object):
                     break
 
             way_names = []
-            languages = set([None])
+            namespaced_languages = set([None])
             default_language = None
 
             for way in ways:
                 names = defaultdict(list)
                 for tag in way:
-                    base_tag = tag.rsplit(':', 1)[0]
+                    tag = safe_decode(tag)
+                    base_tag = tag.rsplit(six.u(':'), 1)[0]
                     if base_tag not in all_name_tags:
                         continue
-                    lang = tag.rsplit(':')[-1] if ':' in tag else None
-                    languages.add(lang)
+                    lang = safe_decode(tag.rsplit(six.u(':'))[-1]) if six.u(':') in tag else None
+                    if lang and lang.lower() in all_languages:
+                        lang = lang.lower()
+                    else:
+                        lang = None
+
+                    namespaced_languages.add(lang)
 
                     name = way[tag]
                     if default_language is None and tag == 'name':
@@ -1112,7 +1118,7 @@ class OSMAddressFormatter(object):
 
             language_components = {}
 
-            for namespaced_language in languages:
+            for namespaced_language in namespaced_languages:
                 address_components, _, _ = self.components.expanded({}, latitude, longitude, language=namespaced_language or default_language)
                 language_components[namespaced_language] = address_components
 
