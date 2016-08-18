@@ -75,6 +75,8 @@ class OSMIntersectionReader(object):
                         node_index = self.binary_search(node_ids, node_id)
                     except ValueError:
                         continue
+                    if node_index is None:
+                        continue
                     node_counts[node_index] += 1
 
             if i % 1000 == 0 and i > 0:
