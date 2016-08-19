@@ -27,7 +27,6 @@ class OSMIntersectionReader(object):
         self.filename = filename
 
         self.node_ids = array.array('l')
-        self.node_coordinates = array.array('d')
 
         self.logger = logging.getLogger('osm.intersections')
 
@@ -66,10 +65,9 @@ class OSMIntersectionReader(object):
             props = {safe_decode(k): safe_decode(v) for k, v in six.iteritems(props)}
             if element_id.startswith('node'):
                 node_id = long(element_id.split(':')[-1])
-                if props.get('junction', '').lower() == 'yes' or props.get('highway', '').lower() in ('traffic_signals', 'crossing'):
-                    node_ids.append(node_id)
-                    node_counts.append(0)
-                    self.node_props.Put(safe_encode(node_id), json.dumps(props))
+                node_ids.append(node_id)
+                node_counts.append(0)
+                self.node_props.Put(safe_encode(node_id), json.dumps(props))
             elif element_id.startswith('way'):
                 # Don't care about the ordering of the nodes, and want uniques e.g. for circular roads
                 deps = set(deps)
@@ -101,11 +99,6 @@ class OSMIntersectionReader(object):
             if element_id.startswith('node'):
                 node_id = long(element_id.split(':')[-1])
                 node_index = self.binary_search(self.node_ids, node_id)
-                if node_index is not None:
-                    lat = props.get('lat')
-                    lon = props.get('lon')
-                    lat, lon = latlon_to_decimal(lat, lon)
-                    self.node_coordinates.extend([lat, lon])
             elif element_id.startswith('way'):
                 props = {safe_decode(k): safe_decode(v) for k, v in six.iteritems(props)}
                 way_id = long(element_id.split(':')[-1])
@@ -154,15 +147,12 @@ class OSMIntersectionReader(object):
 
             if len(ways) > 1:
                 node_index = self.binary_search(self.node_ids, node_id)
-                lat, lon = self.node_coordinates[node_index * 2], self.node_coordinates[node_index * 2 + 1]
-                yield self.node_ids[node_index], node_props, lat, lon, ways
+                yield self.node_ids[node_index], node_props, ways
 
     def create_intersections(self, outfile):
         out = open(outfile, 'w')
-        for node_id, node_props, lat, lon, ways in self.intersections():
+        for node_id, node_props, ways in self.intersections():
             d = {'id': safe_encode(node_id),
-                 'lat': safe_encode(lat),
-                 'lon': safe_encode(lon),
                  'node': node_props,
                  'ways': ways}
             out.write(json.dumps(d) + six.u('\n'))
@@ -172,7 +162,7 @@ class OSMIntersectionReader(object):
         f = open(infile)
         for line in f:
             data = json.loads(line.rstrip())
-            yield data['id'], data['node'], data['lat'], data['lon'], data['ways']
+            yield data['id'], data['node'], data['ways']
 
 
 if __name__ == '__main__':
