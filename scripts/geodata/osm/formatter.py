@@ -1051,7 +1051,7 @@ class OSMAddressFormatter(object):
         all_name_tags = set(OSM_NAME_TAGS)
         all_base_name_tags = set(OSM_BASE_NAME_TAGS)
 
-        for node_id, latitude, longitude, ways in OSMIntersectionReader.read_intersections(infile):
+        for node_id, node_props, ways in OSMIntersectionReader.read_intersections(infile):
             distinct_ways = set()
             valid_ways = []
             for way in ways:
@@ -1062,6 +1062,9 @@ class OSMAddressFormatter(object):
 
             if not ways or len(ways) < 2:
                 continue
+
+            latitude = node_props['lat']
+            longitude = node_props['lon']
 
             try:
                 latitude, longitude = latlon_to_decimal(latitude, longitude)
