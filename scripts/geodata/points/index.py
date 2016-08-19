@@ -139,6 +139,14 @@ class PointIndex(object):
         point_index.load_properties(os.path.join(d, cls.PROPS_FILENAME))
         return point_index
 
+    def __iter__(self):
+        for i in xrange(self.i):
+            lat, lon = self.points[i * 2], self.points[i * 2 + 1]
+            yield self.get_properties(i), lat, lon
+
+    def __len__(self):
+        return self.i
+
     def get_candidate_points(self, latitude, longitude):
         code = geohash.encode(latitude, longitude)[:self.precision]
         candidates = OrderedDict()
