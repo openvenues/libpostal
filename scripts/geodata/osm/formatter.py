@@ -1087,6 +1087,8 @@ class OSMAddressFormatter(object):
             if not (country and candidate_languages):
                 continue
 
+            more_than_one_official_language = sum((1 for l in candidate_languages if int(l['default']))) > 1
+
             base_name_tag = None
             for t in all_base_name_tags:
                 if any((t in way for way in ways)):
@@ -1099,6 +1101,18 @@ class OSMAddressFormatter(object):
 
             for way in ways:
                 names = defaultdict(list)
+
+                if len(candidate_languages) == 1:
+                    default_language = candidate_languages[0][0]
+                elif not more_than_one_official_language:
+                    default_language = None
+                    name = way['name']
+                    if not name:
+                        continue
+                    address_language = self.components.address_language({AddressFormatter.ROAD: name}, candidate_languages)
+                    if address_language and address_language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE):
+                        default_language = address_language
+
                 for tag in way:
                     tag = safe_decode(tag)
                     base_tag = tag.rsplit(six.u(':'), 1)[0]
@@ -1111,8 +1125,10 @@ class OSMAddressFormatter(object):
                     lang = safe_decode(tag.rsplit(six.u(':'))[-1]) if six.u(':') in tag else None
                     if lang and lang.lower() in all_languages:
                         lang = lang.lower()
+                    elif default_language:
+                        lang = default_language
                     else:
-                        lang = None
+                        continue
 
                     namespaced_languages.add(lang)
 
@@ -1124,8 +1140,8 @@ class OSMAddressFormatter(object):
 
                     names[lang].append(way[tag])
 
-                if base_name_tag in way:
-                    names[None].append(way[base_name_tag])
+                if base_name_tag in way and default_language:
+                    names[default_language].append(way[base_name_tag])
 
                 if not names:
                     continue
