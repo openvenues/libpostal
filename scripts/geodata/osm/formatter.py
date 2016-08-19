@@ -2,6 +2,7 @@
 import itertools
 import os
 import random
+import re
 import six
 import sys
 import yaml
@@ -64,6 +65,8 @@ JAPANESE = 'ja'
 JAPANESE_ROMAJI = 'ja_rm'
 
 ENGLISH = 'en'
+
+numbered_tag_regex = re.compile('_[\d]+$')
 
 
 class OSMAddressFormatter(object):
@@ -225,6 +228,15 @@ class OSMAddressFormatter(object):
                 if max_floors is None or num_floors > max_floors:
                     max_floors = num_floors
         return max_floors
+
+    def replace_numbered_tag(self, tag):
+        '''
+        If a tag is numbered like name_1, name_2, etc. replace it with name
+        '''
+        match = numbered_tag_regex.search(tag)
+        if not match:
+            return None
+        return tag[:match.start()]
 
     def abbreviated_street(self, street, language):
         '''
@@ -1090,6 +1102,10 @@ class OSMAddressFormatter(object):
                 for tag in way:
                     tag = safe_decode(tag)
                     base_tag = tag.rsplit(six.u(':'), 1)[0]
+
+                    normalized_tag = self.replace_numbered_tag(base_tag)
+                    if normalized_tag:
+                        base_tag = normalized_tag
                     if base_tag not in all_name_tags:
                         continue
                     lang = safe_decode(tag.rsplit(six.u(':'))[-1]) if six.u(':') in tag else None
