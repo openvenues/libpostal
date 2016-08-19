@@ -1103,7 +1103,7 @@ class OSMAddressFormatter(object):
                 names = defaultdict(list)
 
                 if len(candidate_languages) == 1:
-                    default_language = candidate_languages[0][0]
+                    default_language = candidate_languages[0]['lang']
                 elif not more_than_one_official_language:
                     default_language = None
                     name = way['name']
