@@ -17,6 +17,7 @@ import itertools
 import os
 import re
 import requests
+import six
 import sys
 import time
 import urlparse
@@ -91,6 +92,10 @@ EXCLUDE_TRANSLITERATORS = set([
     # Doesn't appear to be used in ICU
     'korean-latin-bgn',
 ])
+
+TRANSLITERATOR_ALIASES = {
+    'greek_latin_ungegn': 'greek-latin-ungegn'
+}
 
 NFD = 'NFD'
 NFKD = 'NFKD'
@@ -308,7 +313,7 @@ char_set_scanner = Scanner([
 
 NUM_CODEPOINTS_16 = 65536
 
-all_chars = set([unichr(i) for i in xrange(NUM_CODEPOINTS_16)])
+all_chars = set([unichr(i) for i in six.moves.xrange(NUM_CODEPOINTS_16)])
 
 control_chars = set([c for c in all_chars if unicodedata.category(c) in ('Cc', 'Cn', 'Cs')])
 
@@ -317,11 +322,16 @@ def get_transforms(d=CLDR_TRANSFORMS_DIR):
     return [f for f in os.listdir(d) if f.endswith('.xml')]
 
 
+def parse_transform_file(filename, d=CLDR_TRANSFORMS_DIR):
+    f = open(os.path.join(d, filename))
+    xml = etree.parse(f)
+    return xml
+
+
 def parse_transforms(d=CLDR_TRANSFORMS_DIR):
     for filename in get_transforms(d=d):
         name = filename.split('.xml')[0].lower()
-        f = open(os.path.join(d, filename))
-        xml = etree.parse(f)
+        xml = parse_transform_file(filename)
         yield filename, name, xml
 
 
@@ -345,6 +355,10 @@ def parse_regex_char_range(regex):
             chars.extend([wide_unichr(c) for c in range(start_ord, end_ord + 1)])
 
     return chars
+
+chars = get_chars_by_script()
+all_scripts = build_master_scripts_list(chars)
+script_codes = {k.lower(): v.lower() for k, v in six.iteritems(get_script_codes(all_scripts))}
 
 
 def parse_regex_char_class(c, current_filter=all_chars):
@@ -372,7 +386,10 @@ def parse_regex_char_class(c, current_filter=all_chars):
         elif prop == BLOCK_PROP:
             chars = unicode_blocks[value.lower()]
         elif prop == SCRIPT_PROP:
-            chars = unicode_scripts[value.lower()]
+            if value.lower() in unicode_scripts:
+                chars = unicode_scripts[value.lower()]
+            elif value.lower() in script_codes:
+                chars = unicode_scripts[script_codes[value.lower()]]
         elif prop == WORD_BREAK_PROP:
             chars = unicode_word_breaks[value]
         else:
@@ -394,6 +411,8 @@ def parse_regex_char_class(c, current_filter=all_chars):
 
         elif c.lower() in unicode_scripts:
             chars = unicode_scripts[c.lower()]
+        elif c.lower() in script_codes:
+            chars = unicode_scripts[script_codes[c.lower()]]
         elif c.lower() in unicode_properties:
             chars = unicode_properties[c.lower()]
         else:
@@ -518,6 +537,7 @@ for name, regex_range in unicode_property_regexes:
 
 init_unicode_categories()
 
+
 hangul_jamo_latin_filter = set(parse_regex_char_set("[['ᄀ-하-ᅵᆨ-ᇂ가-힣ㄱ-ㄿㅁ-ㅃㅅ-ㅣ㈀-㈜㉠-㉻가-힣＇ﾡ-ﾯﾱ-ﾳﾵ-ﾾￂ-ￇￊ-ￏￒ-ￗￚ-][:Latin:]]"))
 
 custom_filters = {
@@ -525,9 +545,12 @@ custom_filters = {
 }
 
 
-def get_source_and_target(xml):
-    return xml.xpath('//transform/@source')[0], xml.xpath('//transform/@target')[0]
-
+def get_source_and_target(name):
+    name = TRANSLITERATOR_ALIASES.get(name.lower(), name.lower())
+    components = name.split('-')[:2]
+    if len(components) < 2:
+        raise Exception(name)
+    return components
 
 def is_internal(xml):
     return xml.xpath('//transform/@visibility="internal"')
@@ -1130,11 +1153,11 @@ PREPEND_STEP = 'PREPEND_STEP'
 
 
 html_escapes = {'&{};'.format(name): safe_encode(wide_unichr(value))
-                for name, value in htmlentitydefs.name2codepoint.iteritems()
+                for name, value in six.iteritems(htmlentitydefs.name2codepoint)
                 }
 
 html_escapes.update({'&#{};'.format(i): safe_encode(wide_unichr(i))
-                     for i in xrange(NUM_CODEPOINTS_16)
+                     for i in six.moves.xrange(NUM_CODEPOINTS_16)
                      })
 
 # [[:Latin] & [:Ll:]]
@@ -1144,15 +1167,16 @@ latin_lower_rule = '[{}]'.format(latin_lower_set)
 latin_lower_rule_len = len(latin_lower_rule.decode('string-escape'))
 latin_lower_rule = quote_string(latin_lower_rule)
 
-# Extra rules defined here
-supplemental_transliterations = {
-    'latin-ascii': [
-        # Prepend transformations get applied in the reverse order of their appearance here
-        (PREPEND_STEP, [(quote_string(name), str(len(name)), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', quote_string(escape_string(value)), str(len(value)), 'NULL', '0', 'NULL', '0')
-                        for name, value in html_escapes.iteritems()
-                        ]
-         ),
-        (PREPEND_STEP, [
+html_escape_step = [(quote_string(name), str(len(name)), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', quote_string(escape_string(value)), str(len(value)), 'NULL', '0', 'NULL', '0')
+                    for name, value in six.iteritems(html_escapes)
+                    ]
+
+extra_transforms = {
+    'html-escape': [
+        (STEP_RULESET, html_escape_step)
+    ],
+    'german-ascii': [
+        (STEP_RULESET, [
             # German transliterations not handled by standard NFD normalization
             # ä => ae
             (u'"\\xc3\\xa4"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ae"', '2', 'NULL', '0', 'NULL', '0'),
@@ -1177,6 +1201,21 @@ supplemental_transliterations = {
             (u'"\\xc3\\x96"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', latin_lower_rule, str(latin_lower_rule_len), u'"Ue"', '2', 'NULL', '0', 'NULL', '0'),
             # Ü => UE otherwise
             (u'"\\xc3\\x96"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"UE"', '2', 'NULL', '0', 'NULL', '0'),
+        ]),
+        (STEP_TRANSFORM, 'latin-ascii'),
+    ],
+
+    'scandinavian-ascii': [
+        (STEP_RULESET, [
+
+            # Swedish transliterations not handled by standard NFD normalization
+            (u'"\\xc3\\xb8"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', 'NULL', '0', 'NULL', '0'),
+
+            # Å => Aa if followed by lower case Latin letter
+            (u'"\\xc3\\x98"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', latin_lower_rule, str(latin_lower_rule_len), u'"Oe"', '2', 'NULL', '0', 'NULL', '0'),
+
+            # Å => AA otherwise
+            (u'"\\xc3\\x98"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"OE"', '2', 'NULL', '0', 'NULL', '0'),
 
             # Swedish transliterations not handled by standard NFD normalization
             (u'"\\xc3\\xa5"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"aa"', '2', 'NULL', '0', 'NULL', '0'),
@@ -1186,12 +1225,53 @@ supplemental_transliterations = {
 
             # Å => AA otherwise
             (u'"\\xc3\\x85"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"AA"', '2', 'NULL', '0', 'NULL', '0'),
-
-
         ]),
+        (STEP_TRANSFORM, 'latin-ascii'),
+    ],
 
+}
+
+
+# Extra rules defined here
+supplemental_transliterations = {
+    'latin-ascii': [
+        # Prepend transformations get applied in the reverse order of their appearance here
+        (PREPEND_STEP, [(STEP_TRANSFORM, 'html-escape')]),
     ],
 }
+
+
+def simple_latin_ruleset():
+    xml = parse_transform_file('Latin-ASCII.xml')
+
+    category_chars = get_unicode_categories()
+    cats = [None] * 0x10ffff
+    for cat, chars in six.iteritems(category_chars):
+        for c in chars:
+            cats[wide_ord(c)] = cat
+
+    ruleset = [(STEP_TRANSFORM, 'html-escape')]
+
+    simple_rules = []
+
+    for rule_type, rule in parse_transform_rules('latin-ascii', xml):
+        if rule_type == RULE:
+            key = safe_decode(rule[0])
+            pre_context_type = rule[1]
+            post_context_type = rule[4]
+            value = safe_decode(rule[8])
+
+            if len(key) == 1 and len(value) == 1 and pre_context_type == CONTEXT_TYPE_NONE and post_context_type == CONTEXT_TYPE_NONE:
+                cat = cats[wide_ord(key)]
+                # Only use punctuation rules, not numeric
+                if not cat.startswith('L') and not cat.startswith('N'):
+                    simple_rules.append(format_rule(rule))
+
+    ruleset.append((STEP_RULESET, simple_rules))
+
+    return ruleset
+
+extra_transforms['latin-ascii-simple'] = simple_latin_ruleset()
 
 
 def get_all_transform_rules():
@@ -1215,7 +1295,7 @@ def get_all_transform_rules():
             all_transforms.add(BIDIRECTIONAL_TRANSLITERATORS[name])
 
     for filename, name, xml in parse_transforms():
-        source, target = get_source_and_target(xml)
+        source, target = get_source_and_target(name)
         name_alias = '-'.join([source.lower(), target.lower()])
         if name_alias not in name_aliases and name_alias != name:
             name_aliases[name_alias] = name
@@ -1277,7 +1357,7 @@ def get_all_transform_rules():
         return steps
 
     for filename, name, xml in parse_transforms():
-        source, target = get_source_and_target(xml)
+        source, target = get_source_and_target(name)
         internal = is_internal(xml)
 
         if name in EXCLUDE_TRANSLITERATORS:
@@ -1300,6 +1380,8 @@ def get_all_transform_rules():
 
     dependency_queue = deque(to_latin)
     retain_transforms |= to_latin
+
+    print retain_transforms
 
     seen = set()
 
@@ -1334,10 +1416,10 @@ def get_all_transform_rules():
         # Only care if it's a transform to Latin/ASCII or a dependency
         # for a transform to Latin/ASCII
         if name not in retain_transforms and normalized_name not in retain_transforms:
-            print 'skipping', filename
+            print('skipping {}'.format(filename))
             continue
 
-        print 'doing', filename
+        print('doing {}'.format(filename))
 
         if not reverse and not bidirectional:
             steps = parse_steps(name, xml, reverse=False)
@@ -1353,13 +1435,15 @@ def get_all_transform_rules():
             steps = parse_steps(name, xml, reverse=True)
             transforms[name] = steps
 
+    transforms.update(extra_transforms)
+
     for name, steps in transforms.iteritems():
         if name in supplemental_transliterations:
             for step_type, rules in supplemental_transliterations[name]:
                 if step_type == EXISTING_STEP:
                     steps[-1][1].extend(rules)
                 elif step_type == PREPEND_STEP:
-                    steps = [(STEP_RULESET, rules)] + steps
+                    steps = rules + steps
                 else:
                     steps.append((STEP_RULESET, rules))
         step_index = len(steps_data)
@@ -1436,7 +1520,12 @@ script_transliterators = {
     'canadian_aboriginal': {None: ['canadianaboriginal-latin']},
     'cham': None,
     'cherokee': None,
-    'common': {None: ['latin-ascii']},
+    'common': {None: ['latin-ascii'],
+               'de': ['german-ascii'],
+               'da': ['scandinavian-ascii', 'latin-ascii'],
+               'nb': ['scandinavian-ascii', 'latin-ascii'],
+               'sv': ['scandinavian-ascii', 'latin-ascii'],
+               },
     'coptic': None,
     'cyrillic': {None: ['cyrillic-latin'],
                  'be': ['belarusian-latin-bgn'],
@@ -1469,7 +1558,12 @@ script_transliterators = {
     'kayah_li': None,
     'khmer': None,
     'lao': None,
-    'latin': {None: ['latin-ascii']},
+    'latin': {None: ['latin-ascii'],
+              'de': ['german-ascii'],
+              'da': ['scandinavian-ascii', 'latin-ascii'],
+              'nb': ['scandinavian-ascii', 'latin-ascii'],
+              'sv': ['scandinavian-ascii', 'latin-ascii'],
+              },
     'lepcha': None,
     'limbu': None,
     'lisu': None,
@@ -1550,8 +1644,8 @@ def write_transliteration_data_file(filename):
         try:
             r = u','.join(r)
         except Exception:
-            print 'Problem with rule'
-            print r
+            print('Exception in rule')
+            print(r)
 
     all_rules = u''',
     '''.join([u'{{{}}}'.format(u','.join(r)) for r in rules])
