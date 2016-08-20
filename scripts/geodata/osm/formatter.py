@@ -1138,10 +1138,10 @@ class OSMAddressFormatter(object):
                         if address_language and address_language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE):
                             default_language = address_language
 
-                    names[lang].append(way[tag])
+                    names[lang].append((way[tag], False))
 
                 if base_name_tag in way and default_language:
-                    names[default_language].append(way[base_name_tag])
+                    names[default_language].append((way[base_name_tag], True))
 
                 if not names:
                     continue
@@ -1158,9 +1158,9 @@ class OSMAddressFormatter(object):
                 language_components[namespaced_language] = address_components
 
             for way1, way2 in itertools.combinations(way_names, 2):
-                formatted_intersections = []
+                intersection_phrases = []
                 for language in set(way1.keys()) & set(way2.keys()):
-                    for w1, w2 in itertools.product(way1[language], way2[language]):
+                    for (w1, w1_is_base), (w2, w2_is_base) in itertools.product(way1[language], way2[language]):
                         address_components = language_components[language]
 
                         intersection_phrase = Intersection.phrase(language, country=country)
@@ -1170,7 +1170,14 @@ class OSMAddressFormatter(object):
                         w1 = self.components.cleaned_name(w1)
                         w2 = self.components.cleaned_name(w2)
 
+                        if not w1_is_base:
+                            w1 = self.abbreviated_street(w1, language)
+
+                        if not w2_is_base:
+                            w2 = self.abbreviated_street(w2, langguage)
+
                         intersection = IntersectionQuery(road1=w1, intersection_phrase=intersection_phrase, road2=w2)
+
                         formatted = self.formatter.format_intersection(intersection, address_components, country, language, tag_components=tag_components)
 
                         if not formatted or not formatted.strip():
