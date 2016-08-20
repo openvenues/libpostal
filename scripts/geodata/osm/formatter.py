@@ -1174,7 +1174,7 @@ class OSMAddressFormatter(object):
                             w1 = self.abbreviated_street(w1, language)
 
                         if not w2_is_base:
-                            w2 = self.abbreviated_street(w2, langguage)
+                            w2 = self.abbreviated_street(w2, language)
 
                         intersection = IntersectionQuery(road1=w1, intersection_phrase=intersection_phrase, road2=w2)
 
