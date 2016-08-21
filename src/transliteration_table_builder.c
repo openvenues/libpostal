@@ -260,7 +260,13 @@ int main(int argc, char **argv) {
         char_array *trans_key = char_array_from_string(trans_source.name);
         char_array_cat(trans_key, NAMESPACE_SEPARATOR_CHAR);
 
-        transliterator_t *trans = transliterator_new(trans_source.name, trans_source.internal, trans_table->steps->n, trans_source.steps_length);
+        char *trans_name = strdup(trans_source.name);
+        if (trans_name == NULL) {
+            log_error("strdup returned NULL on trans_source.name\n");
+            goto exit_teardown;
+        }
+
+        transliterator_t *trans = transliterator_new(trans_name, trans_source.internal, trans_table->steps->n, trans_source.steps_length);
 
         for (int j = 0; j < trans_source.steps_length; j++) {
             transliteration_step_source_t step_source = steps_source[trans_source.steps_start + j];
