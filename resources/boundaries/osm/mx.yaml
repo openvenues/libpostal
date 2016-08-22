@@ -7,3 +7,14 @@
     "9": "city_district"
     "10": "city_district"
 
+
+    overrides:
+        id:
+            relation:
+                "1376330": "city"
+
+        contained_by:
+            relation:
+                "1376330":
+                    admin_level:
+                        "6": "city_district"
