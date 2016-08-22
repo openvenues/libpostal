@@ -143,7 +143,7 @@ class AddressComponents(object):
         AddressFormatter.UNIT: Unit,
     }
 
-    def __init__(self, osm_admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames, metro_stations_index):
+    def __init__(self, osm_admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames):
         self.config = yaml.load(open(PARSER_DEFAULT_CONFIG))
 
         self.use_admin_center_ids = set([(r['type'], safe_encode(r['id'])) for r in nested_get(self.config, ('boundaries', 'override_with_admin_center'), default=[])])
@@ -157,7 +157,6 @@ class AddressComponents(object):
         self.neighborhoods_rtree = neighborhoods_rtree
         self.quattroshapes_rtree = quattroshapes_rtree
         self.geonames = geonames
-        self.metro_stations_index = metro_stations_index
 
     def setup_component_dependencies(self):
         self.component_dependencies = defaultdict(dict)
