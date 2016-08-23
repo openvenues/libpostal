@@ -11,6 +11,7 @@ from itertools import combinations
 
 from geodata.address_formatting.formatter import AddressFormatter
 
+from geodata.address_expansions.abbreviations import abbreviate
 from geodata.addresses.config import address_config
 from geodata.addresses.floors import Floor
 from geodata.addresses.entrances import Entrance
@@ -734,6 +735,7 @@ class AddressComponents(object):
             abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
             join_state_district_prob = float(nested_get(self.config, ('state_district', 'join_probability')))
             replace_with_non_local_prob = float(nested_get(self.config, ('languages', 'replace_non_local_probability')))
+            abbreviate_toponym_prob = float(nested_get(self.config, ('boundaries', 'abbreviate_toponym_probability')))
 
             for component, vals in poly_components.iteritems():
                 if component not in address_components or (non_local_language and random.random() < replace_with_non_local_prob):
@@ -748,6 +750,8 @@ class AddressComponents(object):
 
                         if component == AddressFormatter.STATE and random.random() < abbreviate_state_prob:
                             val = state_abbreviations.get_abbreviation(country, language, val, default=val)
+                        elif random.random() < abbreviate_toponym_prob:
+                            val = abbreviate(qualifiers_gazetteer, val, language, abbreviate_prob=abbreviate_toponym_prob)
 
                     address_components[component] = val
 

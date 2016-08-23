@@ -142,7 +142,6 @@ NAME_DICTIONARIES = (GIVEN_NAME_DICTIONARY,
                      SURNAME_DICTIONARY,)
 
 
-
 NAME_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + ('academic_degrees',
                                                               'building_types',
                                                               'company_types',
@@ -151,6 +150,8 @@ NAME_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + ('academic_degrees'
                                                               'synonyms',
                                                               'toponyms',
                                                               )
+
+QUALIFIERS_DICTIONARY = 'qualifiers'
 
 HOUSE_NUMBER_DICTIONARIES = ('house_number', 'no_number')
 
@@ -184,6 +185,7 @@ def create_gazetteer(*dictionaries):
 
 
 street_types_gazetteer = create_gazetteer(*STREET_TYPES_DICTIONARIES)
+qualifiers_gazetteer = create_gazetteer(QUALIFIERS_DICTIONARY)
 names_gazetteer = create_gazetteer(*NAME_ABBREVIATION_DICTIONARIES)
 chains_gazetteer = create_gazetteer(CHAIN_DICTIONARY)
 unit_types_gazetteer = create_gazetteer(*UNIT_ABBREVIATION_DICTIONARIES)

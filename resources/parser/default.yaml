@@ -108,6 +108,7 @@ category:
     drop_postcode_probability: 0.3 # drop postal code
 
 boundaries:
+    abbreviate_toponym_probability: 0.35
     # OSM relations should inherit properties from their admin_center
     override_with_admin_center:
         - id: 92277 # Bangkok
