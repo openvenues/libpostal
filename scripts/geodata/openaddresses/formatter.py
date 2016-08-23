@@ -4,6 +4,7 @@ import random
 import six
 import yaml
 
+from geodata.addresses.unit import Unit
 from geodata.address_expansions.abbreviations import abbreviate
 from geodata.address_expansions.gazetteers import street_types_gazetteer, unit_types_gazetteer
 from geodata.address_formatting.formatter import AddressFormatter
@@ -11,7 +12,7 @@ from geodata.addresses.components import AddressComponents
 from geodata.countries.names import country_names
 from geodata.encoding import safe_decode
 from geodata.math.sampling import cdf, weighted_choice
-from geodata.text.utils import is_numeric
+from geodata.text.utils import is_numeric, is_numeric_strict
 
 from geodata.csv_utils import tsv_string, unicode_csv_reader
 
@@ -104,6 +105,9 @@ class OpenAddressesFormatter(object):
 
         add_osm_boundaries = bool(self.get_property('add_osm_boundaries', *configs) or False)
         strip_alpha_from_postcode = bool(self.get_property('strip_alpha_from_postcode', *configs) or False)
+        non_numeric_units = bool(self.get_property('non_numeric_units', *configs) or False)
+
+        language = self.get_property('language', *configs)
 
         add_components = self.get_property('add', *configs)
 
@@ -145,7 +149,8 @@ class OpenAddressesFormatter(object):
                 if not (country and candidate_languages):
                     continue
 
-                language = AddressComponents.address_language(components, candidate_languages)
+                if language is None:
+                    language = AddressComponents.address_language(components, candidate_languages)
 
                 street = components.get(AddressFormatter.ROAD, None)
                 if street is not None:
@@ -165,10 +170,19 @@ class OpenAddressesFormatter(object):
 
                 unit = components.get(AddressFormatter.UNIT, None)
                 if unit is not None:
-                    unit = abbreviate(unit_types_gazetteer, unit, language,
-                                      abbreviate_prob=abbreviate_unit_prob,
-                                      separate_prob=separate_unit_prob)
-                    components[AddressFormatter.UNIT] = unit
+                    if is_numeric_strict(unit):
+                        unit = Unit.phrase(unit, language, country=country)
+                    elif non_numeric_units:
+                        unit = abbreviate(unit_types_gazetteer, unit, language,
+                                          abbreviate_prob=abbreviate_unit_prob,
+                                          separate_prob=separate_unit_prob)
+                    else:
+                        unit = None
+
+                    if unit is not None:
+                        components[AddressFormatter.UNIT] = unit
+                    else:
+                        components.pop(AddressFormatter.UNIT)
 
                 postcode = components.get(AddressFormatter.POSTCODE, None)
                 if postcode and postcode.strip() is not None and strip_alpha_from_postcode:
