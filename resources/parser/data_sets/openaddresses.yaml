@@ -8,21 +8,25 @@ global:
     separate_street_probability: 0.2
     abbreviate_unit_probability: 0.3
     separate_unit_probability: 0.2
-    field_map:
+
+    fields:
         - field_name: NUMBER
           component: house_number
         - field_name: STREET
           component: road
+        - field_name: UNIT
+          component: unit
         - field_name: CITY
           component: city
-        - field_name: REGION
-          component: state
         - field_name: POSTCODE
           component: postcode
 
+    # Units have strong restrictions, have to be a number or hyphenated number
+    non_numeric_units: false
+
 countries:
     au:
-        field_map:
+        fields:
             - field_name: NUMBER
               component: house_number
             - field_name: STREET
@@ -38,24 +42,20 @@ countries:
 
         files:
             - filename: countrywide.csv
+              non_numeric_units: true
     nz:
-        field_map:
-            - field_name: NUMBER
-              component: house_number
-            - field_name: STREET
-              component: road
-            - field_name: POSTCODE
-              component: postcode
         files:
             - filename: countrywide.csv
+            - filename: city_of_palmerston_north.csv
 
     be:
         subdirs:
             wa:
                 files:
                     - filename: brussels-fr.csv
+                      language: fr
                     - filename: brussels-nl.csv
-
+                      language: nl
     us:
         cldr_country_probability: 0.05
         subdirs:
@@ -115,3 +115,18 @@ countries:
                     - filename: ventura.csv
                     - filename: yolo.csv
                     - filename: yuba.csv
+
+            nj:
+                add:
+                    state: NJ
+                files:
+                    - filename: statewide.csv
+                      add_osm_boundaries: true
+
+            ny:
+                add:
+                    state: NY
+                files:
+                    - filename: statewide.csv
+                      strip_alpha_from_postcode: true
+

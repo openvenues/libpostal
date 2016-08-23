@@ -111,17 +111,17 @@ class OpenAddressesFormatter(object):
 
         add_components = self.get_property('add', *configs)
 
-        field_map = self.get_property('field_map', *configs)
-        if not field_map:
+        fields = self.get_property('fields', *configs)
+        if not fields:
             return
 
-        field_map = {f['field_name']: f['component'] for f in field_map}
+        fields = {f['field_name']: f['component'] for f in fields}
 
         f = open(path)
         reader = unicode_csv_reader(f)
         headers = reader.next()
 
-        header_indices = {i: field_map[k] for i, k in enumerate(headers) if k in field_map}
+        header_indices = {i: fields[k] for i, k in enumerate(headers) if k in fields}
         latitude_index = headers.index('LAT')
         longitude_index = headers.index('LON')
 
