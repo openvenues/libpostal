@@ -16,6 +16,7 @@ bunker
 büro|buro|buero
 bustenhalter|bh
 busbahnhof
+brunnen
 café|cafe
 casino
 denkmal|dkm
@@ -41,6 +42,7 @@ geselligkeitsverein
 gesundheitszentrum
 gericht
 grundschule
+gymnasium
 hafen
 halle
 haus
