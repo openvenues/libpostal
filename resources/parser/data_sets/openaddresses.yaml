@@ -9,7 +9,7 @@ global:
     abbreviate_unit_probability: 0.3
     separate_unit_probability: 0.2
 
-    fields:
+    fields: &default_fields
         - field_name: NUMBER
           component: house_number
         - field_name: STREET
@@ -21,25 +21,44 @@ global:
         - field_name: POSTCODE
           component: postcode
 
+    fields_no_postcode: &fields_no_postcode
+        - field_name: NUMBER
+          component: house_number
+        - field_name: STREET
+          component: road
+        - field_name: UNIT
+          component: unit
+        - field_name: CITY
+          component: city
+
+    fields_with_unit: &fields_with_unit
+        - field_name: NUMBER
+          component: house_number
+        - field_name: STREET
+          component: road
+        - field_name: UNIT
+          component: unit
+        - field_name: CITY
+          component: city
+        - field_name: REGION
+          component: state
+        - field_name: POSTCODE
+          component: postcode
+
+
+    # Turned off by default to avoid performance penalty for reverse geocoding
+    add_osm_boundaries: false
+    add_osm_neighborhoods: false
+
     # Units have strong restrictions, have to be a number or hyphenated number
     non_numeric_units: false
 
+    # This is fine for many countries
+    numeric_postcodes_only: true
+
 countries:
     au:
-        fields:
-            - field_name: NUMBER
-              component: house_number
-            - field_name: STREET
-              component: road
-            - field_name: UNIT
-              component: unit
-            - field_name: CITY
-              component: city
-            - field_name: REGION
-              component: state
-            - field_name: POSTCODE
-              component: postcode
-
+        fields: *fields_with_unit
         files:
             - filename: countrywide.csv
               non_numeric_units: true
@@ -49,6 +68,9 @@ countries:
             - filename: city_of_palmerston_north.csv
 
     be:
+        files:
+            - filename: flanders.csv
+              language: nl
         subdirs:
             wa:
                 files:
@@ -128,5 +150,11 @@ countries:
                     state: NY
                 files:
                     - filename: statewide.csv
-                      strip_alpha_from_postcode: true
-
+                      fields: *fields_no_postcode
+                    - filename: broome.csv
+                    - filename: city_of_new_york.csv
+                      add_osm_boundaries: true
+                      add_osm_neighborhoods: true
+                    - filename: city_of_rochester.csv
+                    - filename: erie.csv
+                      fields: *fields_no_postcode
