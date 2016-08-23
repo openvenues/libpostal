@@ -9,6 +9,7 @@ from geodata.address_expansions.gazetteers import street_types_gazetteer, unit_t
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.components import AddressComponents
 from geodata.countries.names import country_names
+from geodata.encoding import safe_decode
 from geodata.math.sampling import cdf, weighted_choice
 from geodata.text.utils import is_numeric
 
@@ -23,23 +24,47 @@ OPENADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'openaddresses_formatted_addresses_tag
 OPENADDRESS_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
 
 
-def validate_postcode(postcode):
-    return not all((c == '0' for c in postcode))
-
-
 class OpenAddressesFormatter(object):
-    openaddresses_validators = {
-        AddressFormatter.POSTCODE: validate_postcode
-    }
-
-    def __init__(self, language_rtree):
-        self.language_rtree = language_rtree
+    def __init__(self, components):
+        self.components = components
+        self.language_rtree = components.language_rtree
 
         config = yaml.load(open(OPENADDRESSES_PARSER_DATA_CONFIG))
         self.config = config['global']
         self.country_configs = config['countries']
 
         self.formatter = AddressFormatter()
+
+    class validators:
+        @classmethod
+        def validate_postcode(cls, postcode):
+            '''
+            Postcodes that are all zeros are improperly-formatted NULL values
+            '''
+            return not all((c == '0' for c in postcode))
+
+        @classmethod
+        def validate_house_number(cls, house_number):
+            '''
+            House number doesn't necessarily have to be numeric, but in some of the
+            OpenAddresses data sets the house number field is equal to the capitalized
+            street name, so this at least provides protection against insane values
+            for house number at the cost of maybe missing a few houses numbered "A", etc.
+
+            Also OpenAddresses primarily comes from county GIS servers, etc. which use
+            a variety of database schemas and don't always handle NULLs very well. Again,
+            while a single zero is a valid house number, in OpenAddresses it's more likely
+            an error
+
+            While a single zero is a valid house number, more than one zero is not, or
+            at least not in OpenAddresses
+            '''
+            return house_number.strip() and is_numeric(house_number) and not all((c == '0' for c in house_number))
+
+    component_validators = {
+        AddressFormatter.HOUSE_NUMBER: validators.validate_house_number,
+        AddressFormatter.POSTCODE: validators.validate_postcode,
+    }
 
     def get_property(self, key, *configs):
         for config in configs:
@@ -77,6 +102,9 @@ class OpenAddressesFormatter(object):
         abbreviate_unit_prob = float(self.get_property('abbreviate_unit_probability', *configs))
         separate_unit_prob = float(self.get_property('separate_unit_probability', *configs) or 0.0)
 
+        add_osm_boundaries = bool(self.get_property('add_osm_boundaries', *configs) or False)
+        strip_alpha_from_postcode = bool(self.get_property('strip_alpha_from_postcode', *configs) or False)
+
         add_components = self.get_property('add', *configs)
 
         field_map = self.get_property('field_map', *configs)
@@ -106,7 +134,7 @@ class OpenAddressesFormatter(object):
                 if not value:
                     continue
 
-                validator = self.openaddresses_validators.get(key, None)
+                validator = self.component_validators.get(key, None)
                 if validator is not None and not validator(value):
                     continue
 
@@ -121,14 +149,19 @@ class OpenAddressesFormatter(object):
 
                 street = components.get(AddressFormatter.ROAD, None)
                 if street is not None:
+                    street = street.strip()
+                    street = AddressComponents.cleaned_name(street)
                     street = abbreviate(street_types_gazetteer, street, language,
                                         abbreviate_prob=abbreviate_street_prob,
                                         separate_prob=separate_street_prob)
                     components[AddressFormatter.ROAD] = street
 
                 house_number = components.get(AddressFormatter.HOUSE_NUMBER, None)
-                if house_number and not is_numeric(house_number):
-                    components.pop(AddressFormatter.HOUSE_NUMBER)
+                if house_number:
+                    house_number = house_number.strip()
+
+                if not (street and house_number):
+                    continue
 
                 unit = components.get(AddressFormatter.UNIT, None)
                 if unit is not None:
@@ -136,6 +169,14 @@ class OpenAddressesFormatter(object):
                                       abbreviate_prob=abbreviate_unit_prob,
                                       separate_prob=separate_unit_prob)
                     components[AddressFormatter.UNIT] = unit
+
+                postcode = components.get(AddressFormatter.POSTCODE, None)
+                if postcode and postcode.strip() is not None and strip_alpha_from_postcode:
+                    postcode = six.u('').join((c for c in safe_decode(postcode) if not c.isalpha())).strip()
+                    if postcode:
+                        components[AddressFormatter.POSTCODE] = postcode
+                    else:
+                        components.pop(AddressFormatter.POSTCODE)
 
                 country_name = self.cldr_country_name(country, language, configs)
                 if country_name:
@@ -145,6 +186,14 @@ class OpenAddressesFormatter(object):
                     for k, v in six.iteritems(add_components):
                         if k not in components:
                             components[k] = v
+
+                address_state = self.components.state_name(components, country, language)
+                if address_state:
+                    components[AddressFormatter.STATE] = address_state
+
+                if add_osm_boundaries:
+                    osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
+                    self.components.add_admin_boundaries(components, osm_components, country, language)
 
                 formatted = self.formatter.format_address(components, country,
                                                           language=language, tag_components=tag_components)
@@ -161,11 +210,11 @@ class OpenAddressesFormatter(object):
         i = 0
 
         for country, config in six.iteritems(self.country_configs):
-            for file_props in config.get('files', []):
-                filename = file_props['filename']
+            for file_config in config.get('files', []):
+                filename = file_config['filename']
 
                 path = os.path.join(base_dir, country, filename)
-                configs = (file_props, config, self.config)
+                configs = (file_config, config, self.config)
                 for language, country, formatted_address in self.formatted_addresses(path, configs, tag_components=tag_components):
                     if not formatted_address or not formatted_address.strip():
                         continue
@@ -185,12 +234,12 @@ class OpenAddressesFormatter(object):
                         print('did {} formatted addresses'.format(i))
 
             for subdir, subdir_config in six.iteritems(config.get('subdirs', {})):
-                for file_props in subdir_config.get('files', []):
-                    filename = file_props['filename']
+                for file_config in subdir_config.get('files', []):
+                    filename = file_config['filename']
 
                     path = os.path.join(base_dir, country, subdir, filename)
 
-                    configs = (file_props, subdir_config, config, self.config)
+                    configs = (file_config, subdir_config, config, self.config)
                     for language, country, formatted_address in self.formatted_addresses(path, configs, tag_components=tag_components):
                         if not formatted_address or not formatted_address.strip():
                             continue
