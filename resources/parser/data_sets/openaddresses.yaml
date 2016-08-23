@@ -138,6 +138,55 @@ countries:
                     - filename: yolo.csv
                     - filename: yuba.csv
 
+            ct:
+                add:
+                    state: CT
+                files:
+                    - filename: statewide.csv
+                    - filename: city_of_hartford.csv
+                      add_osm_boundaries: true
+                      add_osm_neighborhoods: true
+                    - filename: city_of_manchester.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_waterbury.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_watertown.csv
+                      add_osm_boundaries: true
+                    - filename: town_of_avon.csv
+                      add_osm_boundaries: true
+                    - filename: town_of_avon.csv
+                      add_osm_boundaries: true
+                    - filename: town_of_easton_monroe.csv
+                    - filename: town_of_fairfield.csv
+                      add_osm_boundaries: true
+                    - filename: town_of_groton.csv
+                      add_osm_boundaries: true
+
+            ma:
+                add:
+                    state: MA
+                files:
+                    - filename: statewide.csv
+                    - filename: city_of_boston.csv
+                      add_osm_boundaries: true
+                      add_osm_neighborhoods: true
+                    - filename: city_of_cambridge.csv
+                      add_osm_boundaries: true
+                      add_osm_neighborhoods: true
+                    - filename: town_of_newton.csv
+
+            me:
+                add:
+                    state: ME
+                files:
+                    - filename: statewide.csv
+
+            nh:
+                add:
+                    state: NH
+                files:
+                    - filename: statewide.csv
+
             nj:
                 add:
                     state: NJ
@@ -158,3 +207,16 @@ countries:
                     - filename: city_of_rochester.csv
                     - filename: erie.csv
                       fields: *fields_no_postcode
+
+            ri:
+                add:
+                    state: RI
+                files:
+                    - filename: statewide.csv
+
+            vt:
+                add:
+                    state: VT
+                files:
+                    - filename: statewide.csv
+
