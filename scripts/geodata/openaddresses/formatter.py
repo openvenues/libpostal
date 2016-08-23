@@ -104,8 +104,9 @@ class OpenAddressesFormatter(object):
         separate_unit_prob = float(self.get_property('separate_unit_probability', *configs) or 0.0)
 
         add_osm_boundaries = bool(self.get_property('add_osm_boundaries', *configs) or False)
-        strip_alpha_from_postcode = bool(self.get_property('strip_alpha_from_postcode', *configs) or False)
+        add_osm_neighborhoods = bool(self.get_property('add_osm_neighborhoods', *configs) or False)
         non_numeric_units = bool(self.get_property('non_numeric_units', *configs) or False)
+        numeric_postcodes_only = bool(self.get_property('numeric_postcodes_only', *configs) or False)
 
         language = self.get_property('language', *configs)
 
@@ -185,12 +186,12 @@ class OpenAddressesFormatter(object):
                         components.pop(AddressFormatter.UNIT)
 
                 postcode = components.get(AddressFormatter.POSTCODE, None)
-                if postcode and postcode.strip() is not None and strip_alpha_from_postcode:
-                    postcode = six.u('').join((c for c in safe_decode(postcode) if not c.isalpha())).strip()
-                    if postcode:
-                        components[AddressFormatter.POSTCODE] = postcode
-                    else:
+                if postcode:
+                    postcode = postcode.strip()
+                    if postcode and not is_numeric(postcode) and numeric_postcodes_only:
                         components.pop(AddressFormatter.POSTCODE)
+                    else:
+                        components[AddressFormatter.POSTCODE] = postcode
 
                 country_name = self.cldr_country_name(country, language, configs)
                 if country_name:
@@ -206,8 +207,12 @@ class OpenAddressesFormatter(object):
                     components[AddressFormatter.STATE] = address_state
 
                 if add_osm_boundaries:
-                    osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
+                    osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
                     self.components.add_admin_boundaries(components, osm_components, country, language)
+
+                if add_osm_neighborhoods:
+                    neighborhood_components = self.components.neighborhood_components(latitude, longitude)
+                    self.components.add_neighborhoods(components, neighborhood_components)
 
                 formatted = self.formatter.format_address(components, country,
                                                           language=language, tag_components=tag_components)
