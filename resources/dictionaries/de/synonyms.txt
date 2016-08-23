@@ -4,9 +4,7 @@ gebruder|gebr
 haltestelle|hst
 hinter|hint|ht
 internationale|int
-kleine|kl
-kleiner|kl
-kleines|kl
+kleine|kleiner|kleines|kl
 kogel|kg
 niedere|nd
 rhein|rh
