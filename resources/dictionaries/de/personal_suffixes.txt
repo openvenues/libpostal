@@ -1,2 +1,12 @@
-der jungere
-der altere
+der jüngere|der jungere|der juengere
+der ältere|der altere|der aeltere
+der erste|1.|I
+der zweite|2.|II
+der dritte|3.|III
+der vierte|4.|IV|IIII
+der fünfte|der funfte|der fuenfte|5.|V
+der sechste|6.|VI
+der siebte|7.|VII
+der achte|8.|VIII
+der neunte|9.|IX|VIIII
+der zehnte|10.|X
