@@ -69,6 +69,7 @@ qc
 qld
 r
 ri
+ro
 s
 sc
 sd

@@ -109,7 +109,7 @@ divide|div
 diversion|divers
 down|dn
 downs|dns|dwns
-drive|dr|drv|dv|dve
+drive|dr|drv|dv|dve|d
 driveway|drwy|dvwy|dwy|dway|drvwy
 drove|drov
 easement|esmt
@@ -255,7 +255,7 @@ pike|pk
 pine|pne|pn
 pines|pns|pnes
 pond
-place|pl|pla|plc
+place|pl|pla|plc|plac
 plain|pln|pl
 plains|plns|pls
 plateau|plat|plt
@@ -299,7 +299,7 @@ ring
 rise|ri
 riverway|rvwy
 riviera|rvra
-road|raod|rd
+road|rd|road|r|ro|roa
 roads|raods|rds
 roadside|rdsd|road side
 roadway|rdwy|rdw|rdy
@@ -340,7 +340,7 @@ steps|stps
 strand|stra|strnd|strd
 strands|strnds|strds
 stravenue|stra|strav
-street|st|str
+street|st|str|stre|stree
 streets|sts
 strip|strp
 subdivision|subdiv
