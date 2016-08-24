@@ -157,6 +157,9 @@ class OpenAddressesFormatter(object):
                 if validator is not None and not validator(value):
                     continue
 
+                if key in AddressFormatter.BOUNDARY_COMPONENTS:
+                    value = self.components.cleaned_name(value, first_comma_delimited_phrase=True)
+
                 components[key] = value.strip(', ')
 
             if components:
