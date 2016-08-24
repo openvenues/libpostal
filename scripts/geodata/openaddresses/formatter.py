@@ -184,6 +184,10 @@ class OpenAddressesFormatter(object):
                     continue
 
                 unit = components.get(AddressFormatter.UNIT, None)
+
+                if unit and street and street.lower() == unit.lower():
+                    continue
+
                 if unit is not None:
                     if is_numeric_strict(unit):
                         unit = Unit.phrase(unit, language, country=country)
