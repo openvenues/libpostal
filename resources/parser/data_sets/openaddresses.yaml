@@ -92,6 +92,7 @@ countries:
                       language: nl
     us:
         cldr_country_probability: 0.05
+        add_osm_neighborhoods: true
         subdirs:
             ca:
                 add:
@@ -157,7 +158,6 @@ countries:
                     - filename: statewide.csv
                     - filename: city_of_hartford.csv
                       add_osm_boundaries: true
-                      add_osm_neighborhoods: true
                     - filename: city_of_manchester.csv
                       add_osm_boundaries: true
                     - filename: city_of_waterbury.csv
@@ -251,10 +251,8 @@ countries:
                     - filename: statewide.csv
                     - filename: city_of_boston.csv
                       add_osm_boundaries: true
-                      add_osm_neighborhoods: true
                     - filename: city_of_cambridge.csv
                       add_osm_boundaries: true
-                      add_osm_neighborhoods: true
                     - filename: town_of_newton.csv
 
             md:
@@ -292,7 +290,6 @@ countries:
                     - filename: broome.csv
                     - filename: city_of_new_york.csv
                       add_osm_boundaries: true
-                      add_osm_neighborhoods: true
                     - filename: city_of_rochester.csv
                     - filename: erie.csv
                       fields: *fields_no_postcode
@@ -342,7 +339,6 @@ countries:
                     - filename: perry.csv
                     - filename: philadelphia.csv
                       add_osm_boundaries: true
-                      add_osm_neighborhoods: true
                     - filename: pike.csv
                     - filename: potter.csv
                     - filename: snyder.csv
