@@ -40,6 +40,18 @@ global:
           component: unit
         - field_name: CITY
           component: city
+        - field_name: POSTCODE
+          component: postcode
+
+    fields_with_state_and_unit: &fields_with_state_and_unit
+        - field_name: NUMBER
+          component: house_number
+        - field_name: STREET
+          component: road
+        - field_name: UNIT
+          component: unit
+        - field_name: CITY
+          component: city
         - field_name: REGION
           component: state
         - field_name: POSTCODE
@@ -58,7 +70,7 @@ global:
 
 countries:
     au:
-        fields: *fields_with_unit
+        fields: *fields_with_state_and_unit
         files:
             - filename: countrywide.csv
               non_numeric_units: true
@@ -168,6 +180,69 @@ countries:
                 files:
                     - filename: kent.csv
                     - filename: new_castle.csv
+
+            ga:
+                add:
+                    state: GA
+                # By default every county in Georgia needs OSM boundary info unless specified
+                add_osm_boundaries: true
+                # Note: files that are left out are deliberate, a lot of merged fields, decal numbers, etc.
+                files:
+                    - filename: appling.csv
+                    - filename: bacon.csv
+                    - filename: berrien.csv
+                    - filename: bibb.csv
+                    - filename: bleckley.csv
+                    - filename: brooks.csv
+                    - filename: burke.csv
+                    - filename: calhoun.csv
+                    - filename: candler.csv
+                    - filename: carroll.csv
+                    - filename: charlton.csv
+                    - filename: chatham.csv
+                      fields: *fields_with_state_and_unit
+                    - filename: city_of_johns_creek.csv
+                      add_osm_boundaries: false
+                      fields: *fields_with_state_and_unit
+                    - filename: coffee.csv
+                    - filename: colquitt.csv
+                    - filename: dooly.csv
+                    - filename: dougherty.csv
+                    - filename: echols.csv
+                    - filename: evans.csv
+                    - filename: fulton.csv
+                      add_osm_boundaries: false
+                      fields: *fields_with_state_and_unit
+                    - filename: gordon.csv
+                    - filename: harris.csv
+                    - filename: heard.csv
+                    - filename: harris.csv
+                    - filename: houston.csv
+                    - filename: irwin.csv
+                    - filename: jefferson.csv
+                    - filename: johnson.csv
+                    - filename: jones.csv
+                    - filename: lanier.csv
+                    - filename: laurens.csv
+                    - filename: long.csv
+                    - filename: mcintosh.csv
+                    - filename: miller.csv
+                    - filename: mitchell.csv
+                    - filename: muscogee.csv
+                    - filename: pierce.csv
+                    - filename: quitman.csv
+                    - filename: randolph.csv
+                    - filename: stewart.csv
+                    - filename: sumter.csv
+                    - filename: tattnall.csv
+                    - filename: thomas.csv
+                    - filename: tift.csv
+                    - filename: toombs.csv
+                    - filename: troup.csv
+                    - filename: turner.csv
+                    - filename: twiggs.csv
+                    - filename: wheeler.csv
+                    - filename: wilkinson.csv
 
             ma:
                 add:
