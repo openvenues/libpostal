@@ -157,6 +157,13 @@ HOUSE_NUMBER_DICTIONARIES = ('house_number', 'no_number')
 
 POSTCODE_DICTIONARIES = ('postcode',)
 
+TOPONYM_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + ('qualifiers',
+                                                                 'personal_titles',
+                                                                 'synonyms',
+                                                                 'toponyms',
+                                                                 )
+
+
 UNIT_ABBREVIATION_DICTIONARIES = ('level_types_basement',
                                   'level_types_mezzanine',
                                   'level_types_numbered',
@@ -191,4 +198,5 @@ chains_gazetteer = create_gazetteer(CHAIN_DICTIONARY)
 unit_types_gazetteer = create_gazetteer(*UNIT_ABBREVIATION_DICTIONARIES)
 street_and_synonyms_gazetteer = create_gazetteer(*(STREET_TYPES_DICTIONARIES + (SYNONYM_DICTIONARY, )))
 abbreviations_gazetteer = create_gazetteer(*ALL_ABBREVIATION_DICTIONARIES)
+toponym_gazetteer = create_gazetteer(*TOPONYM_ABBREVIATION_DICTIONARIES)
 given_name_gazetteer = create_gazetteer(GIVEN_NAME_DICTIONARY)
