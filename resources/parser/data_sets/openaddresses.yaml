@@ -263,6 +263,7 @@ countries:
                 files:
                     - filename: statewide.csv
 
+
             me:
                 add:
                     state: ME
@@ -357,6 +358,36 @@ countries:
                     state: RI
                 files:
                     - filename: statewide.csv
+
+            sc:
+                add:
+                    state: SC
+                files:
+                    - filename: aiken.csv
+                    - filename: anderson.csv
+                    - filename: beaufort.csv
+                      add_osm_boundaries: true
+                    - filename: calhoun.csv
+                    - filename: charleston.csv
+                    - filename: city_of_charleston.csv
+                      add_osm_neighborhoods: true
+                    - filename: colleton.csv
+                    - filename: darlington.csv
+                    - filename: dorchester.csv
+                    - filename: florence.csv
+                    - filename: georgetown.csv
+                      add_osm_boundaries: true
+                    - filename: greenville.csv
+                    - filename: greenwood.csv
+                      add_osm_boundaries: true
+                    - filename: hilton_head_island.csv
+                      add_osm_boundaries: true
+                    - filename: horry.csv
+                    - filename: laurens.csv
+                    - filename: saluda.csv
+                      add_osm_boundaries: true
+                    - filename: sumter.csv
+                    - filename: york.csv
 
             vt:
                 add:
