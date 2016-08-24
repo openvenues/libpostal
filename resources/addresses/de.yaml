@@ -181,7 +181,16 @@ levels:
         numeric_probability: 0.005
         numeric_affix_probability: 0.005
         ordinal_probability: 0.005
-
+    unterste_etage: &unterste_etage
+        canonical: unterste etage
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+    oberste_etage: &oberste_etage
+        canonical: oberste etage
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
 
     aliases:
         "<-1":
@@ -190,6 +199,20 @@ levels:
             default: *untergeschoss
         "0":
             default: *erdgeschoss
+            probability: 0.9
+            alternatives:
+                - alternative: *unterste_etage
+                  probability: 0.1
+        "top":
+            default: *obergeschoss
+            probability: 0.75
+            alternatives:
+                - alternative: *stock
+                  probability: 0.1
+                - alternative: *etage
+                  probability: 0.05
+                - alternative: *oberste_etage
+                  probability: 0.1
 
     numbering_starts_at: 0
 
