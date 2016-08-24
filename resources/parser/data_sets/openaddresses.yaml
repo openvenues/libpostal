@@ -162,6 +162,13 @@ countries:
                     - filename: town_of_groton.csv
                       add_osm_boundaries: true
 
+            de:
+                add:
+                    state: DE
+                files:
+                    - filename: kent.csv
+                    - filename: new_castle.csv
+
             ma:
                 add:
                     state: MA
@@ -207,6 +214,62 @@ countries:
                     - filename: city_of_rochester.csv
                     - filename: erie.csv
                       fields: *fields_no_postcode
+
+
+            pa:
+                add:
+                    state: PA
+                files:
+                    - filename: adams.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                    - filename: allegheny.csv
+                    - filename: armstrong.csv
+                    - filename: bedford.csv
+                    - filename: berks.csv
+                    - filename: butler.csv
+                    - filename: cameron.csv
+                      add_osm_boundaries: true
+                    - filename: centre.csv
+                      add_osm_boundaries: true
+                    - filename: chester.csv
+                      fields: *fields_with_unit
+                      add_osm_boundaries: true
+                      non_numeric_units: true
+                    - filename: clearfield.csv
+                      add_osm_boundaries: true
+                    - filename: clinton.csv
+                    - filename: crawford.csv
+                    - filename: erie.csv
+                    - filename: forest.csv
+                    - filename: franklin.csv
+                    - filename: fulton.csv
+                      add_osm_boundaries: true
+                    - filename: juniata.csv
+                    - filename: lancaster.csv
+                    - filename: lawrence.csv
+                      add_osm_boundaries: true
+                    - filename: lehigh.csv
+                    - filename: lycoming.csv
+                    - filename: mckean.csv
+                    - filename: mercer.csv
+                    - filename: monroe.csv
+                    - filename: northampton.csv
+                      add_osm_boundaries: true
+                    - filename: northumberland.csv
+                    - filename: perry.csv
+                    - filename: philadelphia.csv
+                      add_osm_boundaries: true
+                      add_osm_neighborhoods: true
+                    - filename: pike.csv
+                    - filename: potter.csv
+                    - filename: snyder.csv
+                    - filename: somerset.csv
+                    - filename: sullivan.csv
+                    - filename: tioga.csv
+                    - filename: union.csv
+                    - filename: venango.csv
+                    - filename: wayne.csv
 
             ri:
                 add:
