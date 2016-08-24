@@ -257,6 +257,12 @@ countries:
                       add_osm_neighborhoods: true
                     - filename: town_of_newton.csv
 
+            md:
+                add:
+                    state: MD
+                files:
+                    - filename: statewide.csv
+
             me:
                 add:
                     state: ME
