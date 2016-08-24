@@ -45,6 +45,14 @@ class OpenAddressesFormatter(object):
             return not all((c == '0' for c in postcode))
 
         @classmethod
+        def validate_street(cls, street):
+            '''
+            Streets should not be simple numbers. If they are it's probably a
+            copy/paste error and should be the house number.
+            '''
+            return not is_numeric(street)
+
+        @classmethod
         def validate_house_number(cls, house_number):
             '''
             House number doesn't necessarily have to be numeric, but in some of the
@@ -60,10 +68,16 @@ class OpenAddressesFormatter(object):
             While a single zero is a valid house number, more than one zero is not, or
             at least not in OpenAddresses
             '''
-            return house_number.strip() and is_numeric(house_number) and not all((c == '0' for c in house_number))
+
+            try:
+                house_number = int(house_number.strip())
+                return house_number > 0
+            except (ValueError, TypeError):
+                return house_number.strip() and is_numeric(house_number) and not all((c == '0' for c in house_number if c.isdigit()))
 
     component_validators = {
         AddressFormatter.HOUSE_NUMBER: validators.validate_house_number,
+        AddressFormatter.ROAD: validators.validate_street,
         AddressFormatter.POSTCODE: validators.validate_postcode,
     }
 
@@ -143,7 +157,7 @@ class OpenAddressesFormatter(object):
                 if validator is not None and not validator(value):
                     continue
 
-                components[key] = value
+                components[key] = value.strip(', ')
 
             if components:
                 country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
@@ -166,7 +180,7 @@ class OpenAddressesFormatter(object):
                 if house_number:
                     house_number = house_number.strip()
 
-                if not (street and house_number):
+                if not (street and house_number) or street.lower() == house_number.lower():
                     continue
 
                 unit = components.get(AddressFormatter.UNIT, None)
