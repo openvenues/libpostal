@@ -250,19 +250,24 @@ class AddressComponents(object):
     def osm_reverse_geocoded_components(self, latitude, longitude):
         return self.osm_admin_rtree.point_in_poly(latitude, longitude, return_all=True)
 
+    def categorize_osm_component(self, country, props, containing_components):
+
+        containing_ids = [(c['type'], c['id']) for c in containing_components if 'type' in c and 'id' in c]
+
+        return osm_address_components.component_from_properties(country, props, containing=containing_ids)
+
     def categorized_osm_components(self, country, osm_components):
-        components = defaultdict(list)
+        components = []
         for i, props in enumerate(osm_components):
             name = props.get('name')
             if not name:
                 continue
 
-            containing_ids = [(c['type'], c['id']) for c in osm_components[i + 1:] if 'type' in c and 'id' in c]
-
-            component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
+            containing_components = osm_components[i + 1:]
+            component = self.categorize_osm_component(country, props, containing_components)
 
             if component is not None:
-                components[component].append(props)
+                components.append((props, component))
 
         return components
 
@@ -698,18 +703,32 @@ class AddressComponents(object):
             name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, language_suffix))
             raw_name_key = boundary_names.DEFAULT_NAME_KEY
 
-            osm_components = self.categorized_osm_components(country, osm_components)
+            grouped_osm_components = defaultdict(list)
+
+            for i, props in enumerate(osm_components):
+                containing_components = osm_components[i + 1:]
+
+                component = self.categorize_osm_component(country, props, containing_components)
+
+                if (props.get('type'), safe_encode(props.get('id', ''))) in self.use_admin_center_ids:
+                    props = props.get('admin_center', props)
+                elif 'admin_center' in props:
+                    admin_center = {k: v for k, v in six.iteritems(props['admin_center']) if k != 'admin_level'}
+                    admin_center_component = self.categorize_osm_component(country, admin_center, containing_components)
+                    if admin_center_component == component and admin_center.get('name') and admin_center['name'].lower() == props.get('name', '').lower():
+                        props = props.copy()
+                        props.update({k: v for k, v in six.iteritems(admin_center) if k not in props})
+
+                grouped_osm_components[component].append(props)
+
             poly_components = defaultdict(list)
 
             existing_city_name = address_components.get(AddressFormatter.CITY)
 
-            for component, components_values in osm_components.iteritems():
+            for component, components_values in grouped_osm_components.iteritems():
                 seen = set()
 
                 for component_value in components_values:
-                    if (component_value.get('type'), safe_encode(component_value.get('id', ''))) in self.use_admin_center_ids:
-                        component_value = component_value.get('admin_center', component_value)
-
                     if random_key:
                         key, raw_key = self.pick_random_name_key(component_value, component, suffix=language_suffix)
                     else:
@@ -1176,6 +1195,8 @@ class AddressComponents(object):
                 return None
 
             po_box = POBox.phrase(box_number, language, country=country)
+            if po_box is None:
+                return None
             address_components[AddressFormatter.PO_BOX] = po_box
 
             drop_address_probability = po_box_config['drop_address_probability']
