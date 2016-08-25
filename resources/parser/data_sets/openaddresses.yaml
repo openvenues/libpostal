@@ -286,6 +286,79 @@ countries:
                 files:
                     - filename: statewide.csv
 
+            nc:
+                add:
+                    state: NC
+                files:
+                    - filename: alamance.csv
+                      add_osm_boundaries: true
+                    - filename: alleghany.csv
+                      add_osm_boundaries: true
+                    - filename: anson.csv
+                    - filename: avery.csv
+                      add_osm_boundaries: true
+                    - filename: buncombe.csv
+                      add_osm_boundaries: true
+                    - filename: burke.csv
+                    - filename: cabarrus.csv
+                    - filename: camden.csv
+                    - filename: cary.csv
+                      add_osm_boundaries: true
+                    - filename: caswell.csv
+                      add_osm_boundaries: true
+                    - filename: chatham.csv
+                    - filename: city_of_carolina_beach.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_elizabeth_city.csv
+                    - filename: city_of_king.csv
+                    - filename: city_of_salisbury.csv
+                    - filename: cleveland.csv
+                      add_osm_boundaries: true
+                    - filename: columbus.csv
+                      add_osm_boundaries: true
+                    - filename: craven.csv
+                      add_osm_boundaries: true
+                    - filename: davie.csv
+                      add_osm_boundaries: true
+                    - filename: franklin.csv
+                    - filename: granville.csv
+                    - filename: guilford.csv
+                      add_osm_boundaries: true
+                    - filename: harnett.csv
+                    - filename: haywood.csv
+                    - filename: henderson.csv
+                      add_osm_boundaries: true
+                    - filename: iredell.csv
+                    - filename: lee.csv
+                    - filename: lincoln.csv
+                      add_osm_boundaries: true
+                    - filename: madison.csv
+                      add_osm_boundaries: true
+                    - filename: mecklenburg.csv
+                    - filename: montgomery.csv
+                      add_osm_boundaries: true
+                    - filename: moore.csv
+                      add_osm_boundaries: true
+                    - filename: new_hanover.csv
+                      add_osm_boundaries: true
+                    - filename: onslow.csv
+                      add_osm_boundaries: true
+                    - filename: orange.csv
+                      add_osm_boundaries: true
+                    - filename: rutherford.csv
+                    - filename: stanly.csv
+                      add_osm_boundaries: true
+                    - filename: surry.csv
+                    - filename: town_of_chapel_hill.csv
+                      add_osm_boundaries: true
+                    - filename: union.csv
+                      add_osm_boundaries: true
+                    - filename: wake.csv
+                    - filename: washington.csv
+                    - filename: wayne.csv
+                    - filename: wilson.csv
+                      add_osm_boundaries: true
+
             nh:
                 add:
                     state: NH
