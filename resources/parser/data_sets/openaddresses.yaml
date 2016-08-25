@@ -192,6 +192,12 @@ countries:
                     - filename: town_of_groton.csv
                       add_osm_boundaries: true
 
+            dc:
+                add:
+                    state: DC
+                files:
+                    - filename: statewide.csv
+
             de:
                 add:
                     state: DE
