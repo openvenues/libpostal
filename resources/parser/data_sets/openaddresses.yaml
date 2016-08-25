@@ -268,6 +268,26 @@ countries:
                     - filename: wheeler.csv
                     - filename: wilkinson.csv
 
+            ky:
+              add:
+                state: KY
+              files:
+                  - filename: boone.csv
+                    add_osm_boundaries: true
+                  - filename: city_of_paducah.csv
+                    add_osm_boundaries: true
+                  - filename: clark.csv
+                    add_osm_boundaries: true
+                  - filename: hardin.csv
+                    add_osm_boundaries: true
+                  - filename: jefferson.csv
+                  - filename: lexington-fayette.csv
+                    add_osm_boundaries: true
+                  - filename: mccracken.csv
+                    add_osm_boundaries: true
+                  - filename: oldham.csv
+                    add_osm_boundaries: true
+
             ma:
                 add:
                     state: MA
