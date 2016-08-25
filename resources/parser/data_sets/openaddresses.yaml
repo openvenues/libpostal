@@ -103,41 +103,56 @@ countries:
                     - filename: berkeley.csv
                     - filename: butte.csv
                     - filename: city_of_anaheim.csv
+                      add_osm_boundaries: true
                     - filename: city_of_bakersfield.csv
                     - filename: city_of_carson.csv
                     - filename: city_of_cupertino.csv
                     - filename: city_of_hayward.csv
+                      add_osm_boundaries: true
                     - filename: city_of_mountain_view.csv
                     - filename: city_of_orange.csv
                     - filename: city_of_san_jose.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_temecula.csv
                     - filename: contra_costa.csv
+                      add_osm_boundaries: true
                     - filename: el_dorado.csv
+                      add_osm_boundaries: true
                     - filename: fresno.csv
+                      add_osm_boundaries: true
                     - filename: glenn.csv
+                      add_osm_boundaries: true
                     - filename: humboldt.csv
-                    - filename: kern.csv
                     - filename: kings.csv
+                      add_osm_boundaries: true
                     - filename: lake.csv
+                      add_osm_boundaries: true
                     - filename: lassen.csv
+                      add_osm_boundaries: true
                     - filename: los_angeles.csv
                     - filename: madera.csv
-                    - filename: marin.csv
-                    - filename: merced.csv
+                      add_osm_boundaries: true
                     - filename: mono.csv
                     - filename: monterey.csv
                     - filename: napa.csv
+                      add_osm_boundaries: true
                     - filename: nevada.csv
-                    - filename: orange.csv
                     - filename: palo_alto.csv
+                      add_osm_boundaries: true
                     - filename: placer.csv
+                      add_osm_boundaries: true
                     - filename: riverside.csv
                     - filename: sacramento.csv
+                      add_osm_boundaries: true
                     - filename: san_bernardino.csv
                     - filename: san_diego.csv
                     - filename: san_francisco.csv
+                      add_osm_boundaries: true
                     - filename: san_joaquin.csv
+                      add_osm_boundaries: true
                     - filename: san_luis_obispo.csv
                     - filename: san_mateo.csv
+                      add_osm_boundaries: true
                     - filename: santa_barbara.csv
                     - filename: santa_clara.csv
                     - filename: santa_cruz.csv
@@ -145,10 +160,13 @@ countries:
                     - filename: solano.csv
                     - filename: sonoma.csv
                     - filename: stanislaus.csv
+                      add_osm_boundaries: true
                     - filename: trinity.csv
                     - filename: tuolumne.csv
+                      add_osm_boundaries: true
                     - filename: ventura.csv
                     - filename: yolo.csv
+                      add_osm_boundaries: true
                     - filename: yuba.csv
 
             ct:
