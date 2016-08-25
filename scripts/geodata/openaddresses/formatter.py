@@ -121,6 +121,7 @@ class OpenAddressesFormatter(object):
         add_osm_neighborhoods = bool(self.get_property('add_osm_neighborhoods', *configs) or False)
         non_numeric_units = bool(self.get_property('non_numeric_units', *configs) or False)
         numeric_postcodes_only = bool(self.get_property('numeric_postcodes_only', *configs) or False)
+        postcode_strip_non_digit_chars = bool(self.get_property('postcode_strip_non_digit_chars', *configs) or False)
 
         language = self.get_property('language', *configs)
 
@@ -183,13 +184,29 @@ class OpenAddressesFormatter(object):
                 if house_number:
                     house_number = house_number.strip()
 
-                if not (street and house_number) or street.lower() == house_number.lower():
-                    continue
+                postcode = components.get(AddressFormatter.POSTCODE, None)
+                if postcode:
+                    postcode = postcode.strip()
+                    if postcode_strip_non_digit_chars:
+                        postcode = six.u('').join((c for c in postcode if c.isdigit()))
+
+                    if postcode and not is_numeric(postcode) and numeric_postcodes_only:
+                        components.pop(AddressFormatter.POSTCODE)
+                        postcode = None
+                    else:
+                        components[AddressFormatter.POSTCODE] = postcode
 
                 unit = components.get(AddressFormatter.UNIT, None)
 
-                if unit and street and street.lower() == unit.lower():
-                    continue
+                # If there's a postcode, we can still use just the city/state/postcode, otherwise discard
+                if not (street and house_number) or street.lower() == house_number.lower() or (unit and street and street.lower() == unit.lower()):
+                    components = self.components.drop_address(components)
+
+                    if not postcode:
+                        continue
+
+                # Now that checks, etc. are completed, fetch unit and add phrases, abbreviate, etc.
+                unit = components.get(AddressFormatter.UNIT, None)
 
                 if unit is not None:
                     if is_numeric_strict(unit):
@@ -205,32 +222,31 @@ class OpenAddressesFormatter(object):
                         components[AddressFormatter.UNIT] = unit
                     else:
                         components.pop(AddressFormatter.UNIT)
+                        unit = None
 
-                postcode = components.get(AddressFormatter.POSTCODE, None)
-                if postcode:
-                    postcode = postcode.strip()
-                    if postcode and not is_numeric(postcode) and numeric_postcodes_only:
-                        components.pop(AddressFormatter.POSTCODE)
-                    else:
-                        components[AddressFormatter.POSTCODE] = postcode
-
+                # CLDR country name
                 country_name = self.cldr_country_name(country, language, configs)
                 if country_name:
                     components[AddressFormatter.COUNTRY] = country_name
 
+                # Any components specified to be added by the config (usually state)
                 if add_components:
                     for k, v in six.iteritems(add_components):
                         if k not in components:
                             components[k] = v
 
+                # Get named states occasionally, added component is usually a state code
                 address_state = self.components.state_name(components, country, language)
                 if address_state:
                     components[AddressFormatter.STATE] = address_state
 
+                # This is expensive, so only turn on for files that don't supply their own city names
+                # or for which those names are flawed
                 if add_osm_boundaries or AddressFormatter.CITY not in components:
                     osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
                     self.components.add_admin_boundaries(components, osm_components, country, language)
 
+                # The neighborhood index is cheaper so can turn on for whole countries
                 if add_osm_neighborhoods:
                     neighborhood_components = self.components.neighborhood_components(latitude, longitude)
                     self.components.add_neighborhoods(components, neighborhood_components)
