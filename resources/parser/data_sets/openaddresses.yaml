@@ -303,6 +303,11 @@ countries:
                 add:
                     state: NY
                 files:
+                    # Note: uses New York as the city for all 5 boroughs of NYC, which
+                    # is correct and what the OSM data uses as well. We store boroughs
+                    # in the neighborhoods index and label them "city_district" so boroughs
+                    # can still show up in this data set, but if it were listing city=Brooklyn
+                    # and so forth, we'd have to stick add_osm_boundaries on statewide.csv
                     - filename: statewide.csv
                       fields: *fields_no_postcode
                     - filename: broome.csv
@@ -402,6 +407,14 @@ countries:
                       add_osm_boundaries: true
                     - filename: sumter.csv
                     - filename: york.csv
+
+            va:
+                add:
+                    state: VA
+                files:
+                    - filename: statewide.csv
+                      postcode_strip_non_digit_chars: true
+
 
             vt:
                 add:
