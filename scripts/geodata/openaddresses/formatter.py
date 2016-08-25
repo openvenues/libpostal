@@ -227,7 +227,7 @@ class OpenAddressesFormatter(object):
                 if address_state:
                     components[AddressFormatter.STATE] = address_state
 
-                if add_osm_boundaries:
+                if add_osm_boundaries or AddressFormatter.CITY not in components:
                     osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
                     self.components.add_admin_boundaries(components, osm_components, country, language)
 

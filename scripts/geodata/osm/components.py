@@ -40,6 +40,9 @@ class OSMAddressComponents(object):
             'suburb': AddressFormatter.SUBURB,
             'quarter': AddressFormatter.SUBURB,
             'neighbourhood': AddressFormatter.SUBURB
+        },
+        'border_type': {
+            'city': AddressFormatter.CITY
         }
     }
 
