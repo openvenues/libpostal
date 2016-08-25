@@ -7,3 +7,9 @@
     "8": "city"
     "9": "suburb"
 
+    overrides:
+        contained_by:
+                    relation:
+                        "407489":
+                            admin_level:
+                                "9": "city_district"
