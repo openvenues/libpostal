@@ -507,6 +507,28 @@ countries:
                     - filename: sumter.csv
                     - filename: york.csv
 
+            tn:
+              add:
+                state: TN
+              files:
+                  - filename: blount.csv
+                  - filename: cheatham.csv
+                    add_osm_boundaries: true
+                  - filename: city_of_chattanooga.csv
+                  - filename: city_of_memphis.csv
+                  - filename: city_of_murfreesboro.csv
+                    add_osm_boundaries: true
+                  - filename: city_of_nashville.csv
+                  - filename: city_of_spring_hill.csv
+                  - filename: franklin.csv
+                  - filename: putnam.csv
+                  - filename: sevier.csv
+                  - filename: shelby.csv
+                  - filename: statewide.csv
+                    add_osm_boundaries: true
+                  - filename: williamson.csv
+                    add_osm_boundaries: true
+
             va:
                 add:
                     state: VA
