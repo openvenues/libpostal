@@ -622,6 +622,55 @@ countries:
                     - filename: troy.csv
                     - filename: washtenaw.csv
 
+            mn:
+                add:
+                    state: MN
+                files:
+                    - filename: aitkin.csv
+                    - filename: anoka.csv
+                    - filename: becker.csv
+                    - filename: beltrami.csv
+                    - filename: big_stone.csv
+                    - filename: carver.csv
+                    - filename: cass.csv
+                    - filename: chippewa.csv
+                    - filename: chisago.csv
+                    - filename: clay.csv
+                    - filename: clearwater.csv
+                    - filename: cook.csv
+                      add_osm_boundaries: true
+                    - filename: crow_wing.csv
+                      add_osm_boundaries: true
+                    - filename: dakota.csv
+                    - filename: dodge.csv
+                    - filename: fillmore.csv
+                      add_osm_boundaries: true
+                    - filename: goodhue.csv
+                    - filename: hennepin.csv
+                    - filename: hubbard.csv
+                    - filename: itasca.csv
+                      add_osm_boundaries: true
+                    - filename: kandiyohi.csv
+                    - filename: kittson.csv
+                    - filename: koochiching.csv
+                    - filename: marshall.csv
+                      add_osm_boundaries: true
+                    - filename: norman.csv
+                      add_osm_boundaries: true
+                    - filename: olmsted.csv
+                    - filename: pennington.csv
+                    - filename: pope.csv
+                    - filename: ramsey.csv
+                    - filename: red_lake.csv
+                      add_osm_boundaries: true
+                    - filename: roseau.csv
+                    - filename: scott.csv
+                    - filename: sherburne.csv
+                    - filename: stearns.csv
+                    - filename: waseca.csv
+                    - filename: washington.csv
+                    - filename: yellow_medicine.csv
+                      add_osm_boundaries: true
             mo:
                 add:
                     state: MO
