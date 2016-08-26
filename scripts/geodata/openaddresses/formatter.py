@@ -128,6 +128,9 @@ class OpenAddressesFormatter(object):
         numeric_postcodes_only = bool(self.get_property('numeric_postcodes_only', *configs) or False)
         postcode_strip_non_digit_chars = bool(self.get_property('postcode_strip_non_digit_chars', *configs) or False)
 
+        ignore_fields_containing = {field: re.compile(six.u('|').join([six.u('(?:{})').format(safe_decode(v)) for v in value]), re.I | re.UNICODE)
+                                    for field, value in six.iteritems(dict(self.get_property('ignore_fields_containing', *configs) or {}))}
+
         language = self.get_property('language', *configs)
 
         add_components = self.get_property('add', *configs)
@@ -174,6 +177,10 @@ class OpenAddressesFormatter(object):
                 value = multiple_spaces_regex.sub(six.u(' '), value)
 
                 value = value.strip(', ')
+
+                if key in ignore_fields_containing and ignore_fields_containing[key].search(value):
+                    continue
+
                 if value:
                     components[key] = value
 

@@ -93,6 +93,9 @@ countries:
     us:
         cldr_country_probability: 0.05
         add_osm_neighborhoods: true
+        ignore_fields_containing:
+            city:
+                - "\bcounty\b"
         subdirs:
             al:
                 add:
