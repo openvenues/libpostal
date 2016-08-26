@@ -51,7 +51,7 @@ kill_background_processes() {
 trap kill_background_processes INT
 
 PART_MSG='echo "Downloading part $1: filename=$5, offset=$2, max=$3"'
-PART_CURL='curl $4 --silent -H"Range:bytes=$2-$3" -o $5'
+PART_CURL='curl $4 --silent -H"Range:bytes=$2-$3" --retry 3 --retry-delay 2 -o $5'
 DOWNLOAD_PART="$PART_MSG;$PART_CURL"
 
 
@@ -112,7 +112,7 @@ download_file() {
         if [ $content_length -ge $LARGE_FILE_SIZE ]; then
             download_multipart $url $local_path $content_length
         else
-            curl $url -o $local_path
+            curl $url --retry 3 --retry-delay 2 -o $local_path
         fi
 
         if date -ur . >/dev/null 2>&1; then
