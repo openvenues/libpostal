@@ -268,6 +268,81 @@ countries:
                     - filename: wheeler.csv
                     - filename: wilkinson.csv
 
+            il:
+                add:
+                    state: IL
+                files:
+                    - filename: alexander.csv
+                      add_osm_boundaries: true
+                    - filename: boone.csv
+                    - filename: champaign.csv
+                    - filename: city_of_aurora.csv
+                    - filename: city_of_chicago.csv
+                    - filename: city_of_east_peoria.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_naperville.csv
+                    - filename: city_of_schaumburg.csv
+                    - filename: city_of_west_peoria.csv
+                    - filename: coles.csv
+                      add_osm_boundaries: true
+                    - filename: cook.csv
+                    - filename: cumberland.csv
+                      add_osm_boundaries: true
+                    - filename: douglas.csv
+                      add_osm_boundaries: true
+                    - filename: dupage.csv
+                    - filename: effingham.csv
+                      add_osm_boundaries: true
+                    - filename: jersey.csv
+                      add_osm_boundaries: true
+                    - filename: kane.csv
+                    - filename: kankakee.csv
+                      add_osm_boundaries: true
+                    - filename: kendall.csv
+                    - filename: knox.csv
+                      add_osm_boundaries: true
+                    - filename: lake.csv
+                      add_osm_boundaries: true
+                    - filename: lawrence.csv
+                      add_osm_boundaries: true
+                    - filename: logan.csv
+                      add_osm_boundaries: true
+                    - filename: macon.csv
+                    - filename: macoupin.csv
+                      add_osm_boundaries: true
+                    - filename: marshall.csv
+                      add_osm_boundaries: true
+                    - filename: massac.csv
+                      add_osm_boundaries: true
+                    - filename: mchenry.csv
+                      add_osm_boundaries: true
+                    - filename: menard.csv
+                      add_osm_boundaries: true
+                    - filename: morgan.csv
+                    - filename: moultrie.csv
+                    - filename: piatt.csv
+                    - filename: putnam.csv
+                      add_osm_boundaries: true
+                    - filename: randolph.csv
+                      add_osm_boundaries: true
+                    - filename: schuyler.csv
+                      add_osm_boundaries: true
+                    - filename: shelby.csv
+                    - filename: st_clair.csv
+                    - filename: stephenson.csv
+                      add_osm_boundaries: true
+                    - filename: tazewell.csv
+                      add_osm_boundaries: true
+                    - filename: vermilion.csv
+                      add_osm_boundaries: true
+                    - filename: whiteside.csv
+                      add_osm_boundaries: true
+                    - filename: williamson.csv
+                      add_osm_boundaries: true
+                    - filename: winnebago.csv
+                    - filename: woodford.csv
+                      add_osm_boundaries: true
+
             in:
                 add:
                     state: IN
