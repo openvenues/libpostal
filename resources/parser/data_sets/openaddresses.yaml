@@ -912,6 +912,25 @@ countries:
                   - filename: wood.csv
                   - filename: wyandot.csv
 
+            or:
+                add:
+                    state: OR
+                files:
+                    - filename: benton.csv
+                    - filename: clackamas.csv
+                    - filename: gresham.csv
+                    - filename: jackson.csv
+                    - filename: lane.csv
+                    - filename: oregon_city.csv
+                      add_osm_boundaries: true
+                    - filename: portland.csv
+                    - filename: wallowa.csv
+                    - filename: wasco.csv
+                      add_osm_boundaries: true
+                    - filename: washington.csv
+                    - filename: wheeler.csv
+                    - filename: yarnhill.csv
+
             pa:
                 add:
                     state: PA
