@@ -42,6 +42,7 @@ park|pk|prk
 rear of|r / o|r o
 river|r|riv|rvr
 slope|slpe|slp
+springs|spgs|sprngs
 stream|strm|stm
 triangle|tri
 upper|up|upr|uppr
