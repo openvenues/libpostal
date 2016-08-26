@@ -169,7 +169,9 @@ class OpenAddressesFormatter(object):
                 if not_applicable_regex.match(value):
                     continue
 
-                components[key] = value.strip(', ')
+                value = value.strip(', ')
+                if value:
+                    components[key] = value
 
             if components:
                 country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
