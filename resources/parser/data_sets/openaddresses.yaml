@@ -496,6 +496,24 @@ countries:
                 files:
                     - filename: statewide.csv
 
+            mi:
+                add:
+                    state: MI
+                files:
+                    - filename: city_of_rochester.csv
+                    - filename: detroit.csv
+                      add_osm_boundaries: true
+                    - filename: kent.csv
+                      add_osm_boundaries: true
+                      numeric_postcodes_only: true
+                    - filename: macomb.csv
+                      add_osm_boundaries: true
+                    - filename: muskegon.csv
+                    - filename: ottawa.csv
+                      add_osm_boundaries: true
+                    - filename: troy.csv
+                    - filename: washtenaw.csv
+
             mo:
                 add:
                     state: MO
