@@ -288,6 +288,51 @@ countries:
                   - filename: oldham.csv
                     add_osm_boundaries: true
 
+            la:
+                add:
+                    state: LA
+                files:
+                    - filename: ascension.csv
+                    - filename: assumption.csv
+                      add_osm_boundaries: true
+                    - filename: beauregard.csv
+                      add_osm_boundaries: true
+                    - filename: bienville.csv
+                    - filename: city_of_bossier.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_denham_springs.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_new_iberia.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_new_orleans.csv
+                      add_osm_boundaries: true
+                    - filename: claiborne.csv
+                      add_osm_boundaries: true
+                    - filename: concordia.csv
+                    - filename: desoto.csv
+                    - filename: east_baton_rouge_parish.csv 
+                    - filename: iberia.csv
+                      add_osm_boundaries: true
+                    - filename: jefferson_parish.csv
+                      add_osm_boundaries: true
+                    - filename: lafayette.csv
+                    - filename: natchitoches.csv
+                      add_osm_boundaries: true
+                    - filename: orleans_parish.csv
+                      add_osm_boundaries: true
+                    - filename: pointe_coupee.csv
+                    - filename: red_river_parish.csv
+                    - filename: st_charles_parish.csv
+                    - filename: st_james.csv
+                    - filename: st_john_the_baptist_parish.csv
+                    - filename: st_martin.csv
+                      add_osm_boundaries: true
+                    - filename: terrebonne.csv
+                    - filename: washington.csv
+                      add_osm_boundaries: true
+                    - filename: webster.csv
+                    - filename: west_feliciana.csv
+
             ma:
                 add:
                     state: MA
