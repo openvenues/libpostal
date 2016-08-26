@@ -25,7 +25,8 @@ OPENADDRESSES_PARSER_DATA_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, 
 OPENADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'openaddresses_formatted_addresses_tagged.tsv'
 OPENADDRESS_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
 
-numeric_range_regex = re.compile(six.u('[\s]*\-[\s]*'))
+multiple_spaces_regex = re.compile('[\s]{2,}')
+numeric_range_regex = re.compile('[\s]*\-[\s]*')
 not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 
 
@@ -169,6 +170,8 @@ class OpenAddressesFormatter(object):
 
                 if not_applicable_regex.match(value):
                     continue
+
+                value = multiple_spaces_regex.sub(six.u(' '), value)
 
                 value = value.strip(', ')
                 if value:
