@@ -268,25 +268,66 @@ countries:
                     - filename: wheeler.csv
                     - filename: wilkinson.csv
 
+            in:
+                add:
+                    state: IN
+                files:
+                    - filename: adams.csv
+                    - filename: allen.csv
+                      add_osm_boundaries: true
+                    - filename: bartholomew.csv
+                    - filename: benton.csv
+                    - filename: cass.csv
+                    - filename: city-of-hobart.csv
+                    - filename: clark.csv
+                    - filename: elkhart.csv
+                    - filename: floyd.csv
+                    - filename: grant.csv
+                    - filename: hamilton.csv
+                      add_osm_boundaries: true
+                    - filename: hendricks.csv
+                      add_osm_boundaries: true
+                    - filename: jay.csv
+                    - filename: laporte.csv
+                    - filename: lawrence.csv
+                      add_osm_boundaries: true
+                    - filename: madison.csv
+                      add_osm_boundaries: true
+                    - filename: marion_county.csv
+                    - filename: martin.csv
+                    - filename: miami.csv
+                      add_osm_boundaries: true
+                    - filename: monroe.csv
+                      add_osm_boundaries: true
+                    - filename: morgan.csv
+                      add_osm_boundaries: true
+                    - filename: orange.csv
+                    - filename: owen.csv
+                    - filename: porter.csv
+                    - filename: st_joseph.csv
+                      add_osm_boundaries: true
+                    - filename: white.csv
+                      add_osm_boundaries: true
+
             ky:
-              add:
-                state: KY
-              files:
-                  - filename: boone.csv
-                    add_osm_boundaries: true
-                  - filename: city_of_paducah.csv
-                    add_osm_boundaries: true
-                  - filename: clark.csv
-                    add_osm_boundaries: true
-                  - filename: hardin.csv
-                    add_osm_boundaries: true
-                  - filename: jefferson.csv
-                  - filename: lexington-fayette.csv
-                    add_osm_boundaries: true
-                  - filename: mccracken.csv
-                    add_osm_boundaries: true
-                  - filename: oldham.csv
-                    add_osm_boundaries: true
+                add:
+                    state: KY
+                files:
+                    - filename: boone.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_paducah.csv
+                      add_osm_boundaries: true
+                    - filename: clark.csv
+                      add_osm_boundaries: true
+                    - filename: hardin.csv
+                      add_osm_boundaries: true
+                    - filename: jefferson.csv
+                    - filename: lexington-fayette.csv
+                      add_osm_boundaries: true
+                    - filename: mccracken.csv
+                      add_osm_boundaries: true
+                    - filename: oldham.csv
+                      add_osm_boundaries: true
 
             la:
                 add:
