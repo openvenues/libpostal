@@ -96,6 +96,8 @@ countries:
         ignore_fields_containing:
             city:
                 - "\bcounty\b"
+            road:
+                - "\bp\.?\s*o\.?\s*box"
         subdirs:
             al:
                 add:
@@ -893,26 +895,137 @@ countries:
                     - filename: york.csv
 
             tn:
-              add:
-                state: TN
-              files:
-                  - filename: blount.csv
-                  - filename: cheatham.csv
-                    add_osm_boundaries: true
-                  - filename: city_of_chattanooga.csv
-                  - filename: city_of_memphis.csv
-                  - filename: city_of_murfreesboro.csv
-                    add_osm_boundaries: true
-                  - filename: city_of_nashville.csv
-                  - filename: city_of_spring_hill.csv
-                  - filename: franklin.csv
-                  - filename: putnam.csv
-                  - filename: sevier.csv
-                  - filename: shelby.csv
-                  - filename: statewide.csv
-                    add_osm_boundaries: true
-                  - filename: williamson.csv
-                    add_osm_boundaries: true
+                add:
+                    state: TN
+                files:
+                    - filename: blount.csv
+                    - filename: cheatham.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_chattanooga.csv
+                    - filename: city_of_memphis.csv
+                    - filename: city_of_murfreesboro.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_nashville.csv
+                    - filename: city_of_spring_hill.csv
+                    - filename: franklin.csv
+                    - filename: putnam.csv
+                    - filename: sevier.csv
+                    - filename: shelby.csv
+                    - filename: statewide.csv
+                      add_osm_boundaries: true
+                    - filename: williamson.csv
+                      add_osm_boundaries: true
+
+            tx:
+                add:
+                    state: TX
+                files:
+                    - filename: anderson.csv
+                      add_osm_boundaries: true
+                    - filename: austin.csv
+                    - filename: bastrop.csv
+                    - filename: bexar.csv
+                      add_osm_boundaries: true
+                    - filename: brazos.csv
+                      add_osm_boundaries: true
+                    - filename: burleson.csv
+                      add_osm_boundaries: true
+                    - filename: camp.csv
+                      add_osm_boundaries: true
+                    - filename: capcog.csv
+                    - filename: carson.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_abilene.csv
+                    - filename: city_of_austin.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_carrollton.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_denton.csv
+                    - filename: city_of_killeen.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_pearland.csv
+                    - filename: city_of_pflugerville.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_sherman.csv
+                    - filename: city_of_temple.csv
+                      add_osm_boundaries: true
+                    - filename: colleyville.csv
+                      add_osm_boundaries: true
+                    - filename: colorado.csv
+                    - filename: comal.csv
+                    - filename: comanche.csv
+                    - filename: coryell.csv
+                    - filename: dallam.csv
+                    - filename: dallas.csv
+                    - filename: delta.csv
+                    - filename: denton.csv
+                    - filename: desoto.csv
+                    - filename: dimmit.csv
+                    - filename: duval.csv
+                    - filename: ellis.csv
+                    - filename: fannin.csv
+                    - filename: fayette.csv
+                    - filename: freestone.csv
+                      add_osm_boundaries: true
+                    - filename: gaines.csv
+                      add_osm_boundaries: true
+                    - filename: gray.csv
+                      add_osm_boundaries: true
+                    - filename: houston.csv
+                      add_osm_boundaries: true
+                    - filename: howard.csv
+                      add_osm_boundaries: true
+                    - filename: hunt.csv
+                    - filename: hurst.csv
+                      add_osm_boundaries: true
+                    - filename: johnson.csv
+                      add_osm_boundaries: true
+                    - filename: kaufman.csv
+                    - filename: kendall.csv
+                      add_osm_boundaries: true
+                    - filename: lamar.csv
+                    - filename: lasalle.csv
+                    - filename: lubbock.csv
+                      add_osm_boundaries: true
+                    - filename: madison.csv
+                    - filename: maverick.csv
+                    - filename: mcmullen.csv
+                    - filename: midland.csv
+                      add_osm_boundaries: true
+                    - filename: milam.csv
+                    - filename: new_braunfels.csv
+                      add_osm_boundaries: true
+                    - filename: nolan.csv
+                      add_osm_boundaries: true
+                    - filename: north_richland_hills.csv
+                      add_osm_boundaries: true
+                    - filename: ochiltree.csv
+                    - filename: odessa.csv
+                      add_osm_boundaries: true
+                    - filename: orange.csv
+                    - filename: parmer.csv
+                    - filename: plano.csv
+                    - filename: redriver.csv
+                      add_osm_boundaries: true
+                    - filename: round_rock.csv
+                      add_osm_boundaries: true
+                    - filename: runnels.csv
+                    - filename: san_antonio.csv
+                      add_osm_boundaries: true
+                    - filename: shackelford.csv
+                    - filename: tarrant-county.csv
+                    - filename: texoma-counties.csv
+                      add_osm_boundaries: true
+                    - filename: titus.csv
+                    - filename: uvalde.csv
+                    - filename: vanzandt.csv
+                      add_osm_boundaries: true
+                    - filename: walker.csv
+                    - filename: wharton.csv
+                    - filename: williamson.csv
+                      add_osm_boundaries: true
+                    - filename: wood.csv
+                    - filename: zavala.csv
 
             va:
                 add:
