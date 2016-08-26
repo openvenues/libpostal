@@ -11,7 +11,7 @@ from geodata.address_expansions.gazetteers import street_types_gazetteer, unit_t
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.components import AddressComponents
 from geodata.countries.names import country_names
-from geodata.encoding import safe_decode
+from geodata.encoding import safe_decode, safe_encode
 from geodata.math.sampling import cdf, weighted_choice
 from geodata.text.utils import is_numeric, is_numeric_strict
 
@@ -209,6 +209,15 @@ class OpenAddressesFormatter(object):
                 postcode = components.get(AddressFormatter.POSTCODE, None)
                 if postcode:
                     postcode = postcode.strip()
+                    try:
+                        postcode = int(postcode)
+                    except (ValueError, TypeError):
+                        try:
+                            postcode = float(postcode)
+                            postcode = safe_decode(int(postcode))
+                        except (ValueError, TypeError):
+                            postcode = safe_decode(postcode)
+
                     if postcode_strip_non_digit_chars:
                         postcode = six.u('').join((c for c in postcode if c.isdigit()))
 
