@@ -110,6 +110,13 @@ countries:
                       add_osm_boundaries: true
                     - filename: tuscaloosa.csv
 
+            ar:
+                add:
+                    state: AR
+                files:
+                    - filename: city_of_fayetteville.csv
+                    - filename: statewide.csv
+
             ca:
                 add:
                     state: CA
