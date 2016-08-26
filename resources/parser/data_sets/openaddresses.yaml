@@ -515,6 +515,63 @@ countries:
                     - filename: white.csv
                       add_osm_boundaries: true
 
+            ks:
+                add:
+                    state: KS
+                files:
+                    - filename: allen_county.csv
+                    - filename: anderson_county.csv
+                      add_osm_boundaries: true
+                    - filename: atchison_county.csv
+                      add_osm_boundaries: true
+                    - filename: barber_county.csv
+                    - filename: barton_county.csv
+                    - filename: bourbon_county.csv
+                      add_osm_boundaries: true
+                    - filename: butler.csv
+                    - filename: chautauqua_county.csv
+                    - filename: city_of_lenexa.csv
+                    - filename: city_of_olathe.csv
+                    - filename: cowley_county.csv
+                    - filename: crawford_county.csv
+                    - filename: doniphan_county.csv
+                      add_osm_boundaries: true
+                    - filename: douglas.csv
+                    - filename: edwards_county.csv
+                    - filename: elk_county.csv
+                    - filename: franklin_county.csv
+                    - filename: geary_county.csv
+                    - filename: greenwood_county.csv
+                    - filename: harper_county.csv
+                    - filename: harvey_county.csv
+                    - filename: jackson_county.csv
+                    - filename: jefferson_county.csv
+                    - filename: kearny_county.csv
+                      add_osm_boundaries: true
+                    - filename: kingman_county.csv
+                      add_osm_boundaries: true
+                    - filename: lane_county.csv
+                    - filename: lawrence.csv
+                    - filename: linn_county.csv
+                      add_osm_boundaries: true
+                    - filename: marion_county.csv
+                      add_osm_boundaries: true
+                    - filename: meade_county.csv
+                    - filename: nemaha_county.csv
+                      add_osm_boundaries: true
+                    - filename: osage_county.csv
+                    - filename: pawnee_county.csv
+                    - filename: pottawatomie_county.csv
+                    - filename: riley_county.csv
+                    - filename: rush_county.csv
+                    - filename: scott_county.csv
+                    - filename: shawnee_county.csv
+                      add_osm_boundaries: true
+                    - filename: sumner_county.csv
+                    - filename: thomas_county.csv
+                      add_osm_boundaries: true
+                    - filename: wabaunsee_county.csv
+
             ky:
                 add:
                     state: KY
