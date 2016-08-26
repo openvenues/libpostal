@@ -340,6 +340,65 @@ countries:
                     - filename: wheeler.csv
                     - filename: wilkinson.csv
 
+            ia:
+                add:
+                    state: IA
+                files:
+                    - filename: adair.csv
+                      add_osm_boundaries: true
+                    - filename: benton.csv
+                    - filename: boone.csv
+                    - filename: bremer.csv
+                    - filename: buchanan.csv
+                    - filename: buena_vista.csv
+                    - filename: calhoun.csv
+                    - filename: carroll.csv
+                    - filename: cass.csv
+                    - filename: cherokee.csv
+                    - filename: clarke.csv
+                    - filename: clay.csv
+                    - filename: crawford.csv
+                    - filename: dallas.csv
+                    - filename: decatur.csv
+                    - filename: delaware.csv
+                    - filename: des_moines.csv
+                    - filename: dickinson.csv
+                    - filename: dubuque.csv
+                    - filename: emmet.csv
+                    - filename: franklin.csv
+                    - filename: fremont.csv
+                    - filename: greene.csv
+                    - filename: guthrie.csv
+                    - filename: hamilton.csv
+                    - filename: howard.csv
+                    - filename: humboldt.csv
+                    - filename: ida.csv
+                    - filename: jasper.csv
+                    - filename: johnson.csv
+                    - filename: kossuth.csv
+                    - filename: linn.csv
+                    - filename: lucas.csv
+                    - filename: lyon.csv
+                    - filename: madison.csv
+                    - filename: marion.csv
+                    - filename: marshall.csv
+                    - filename: mills.csv
+                    - filename: monona.csv
+                    - filename: monroe.csv
+                    - filename: montgomery.csv
+                    - filename: palo_alto.csv
+                    - filename: pocahontas.csv
+                    - filename: polk.csv
+                    - filename: pottawattamie.csv
+                    - filename: sac.csv
+                    - filename: shelby.csv
+                    - filename: sioux.csv
+                    - filename: story.csv
+                    - filename: webster.csv
+                    - filename: winnebago.csv
+                    - filename: winneshiek.csv
+                    - filename: wright.csv
+
             il:
                 add:
                     state: IL
