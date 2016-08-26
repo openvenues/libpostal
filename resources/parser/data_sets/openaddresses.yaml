@@ -853,6 +853,21 @@ countries:
                     - filename: statewide.csv
                       add_osm_boundaries: true
 
+            nv:
+                add:
+                    state: NV
+                files:
+                    - filename: carson_city.csv
+                    - filename: clark.csv
+                    - filename: douglas.csv
+                      add_osm_boundaries: true
+                    - filename: henderson.csv
+                      add_osm_boundaries: true
+                    - filename: lyon.csv
+                    - filename: storey.csv
+                      add_osm_boundaries: true
+                    - filename: washoe.csv
+
             ny:
                 add:
                     state: NY
