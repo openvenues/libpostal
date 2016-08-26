@@ -94,6 +94,22 @@ countries:
         cldr_country_probability: 0.05
         add_osm_neighborhoods: true
         subdirs:
+            al:
+                add:
+                    state: AL
+                files:
+                    - filename: baldwin.csv
+                      add_osm_boundaries: true
+                    - filename: calhoun.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_huntsville.csv
+                    - filename: montgomery.csv
+                    - filename: shelby.csv
+                      add_osm_boundaries: true
+                    - filename: st_clair.csv
+                      add_osm_boundaries: true
+                    - filename: tuscaloosa.csv
+
             ca:
                 add:
                     state: CA
