@@ -398,6 +398,30 @@ countries:
                 files:
                     - filename: statewide.csv
 
+            ms:
+                add:
+                    state: MS
+                files:
+                    - filename: city_of_biloxi.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_diamondhead.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_diberville.csv
+                    - filename: city_of_ocean_springs.csv
+                    - filename: city_of_pelahatchie.csv
+                    - filename: city_of_vicksburg.csv
+                      add_osm_boundaries: true
+                    - filename: desoto.csv
+                    - filename: hancock.csv
+                      add_osm_boundaries: true
+                    - filename: harrison.csv
+                      add_osm_boundaries: true
+                    - filename: hinds.csv
+                      add_osm_boundaries: true
+                    - filename: pontotoc.csv
+                      add_osm_boundaries: true
+                    - filename: simpson.csv
+
             nc:
                 add:
                     state: NC
