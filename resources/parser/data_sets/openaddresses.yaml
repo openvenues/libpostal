@@ -231,6 +231,50 @@ countries:
                     - filename: kent.csv
                     - filename: new_castle.csv
 
+            fl:
+                add:
+                    state: FL
+                files:
+                    - filename: alachua.csv
+                    - filename: bay.csv
+                      add_osm_boundaries: true
+                    - filename: brevard.csv
+                    - filename: broward.csv
+                    - filename: charlotte.csv
+                      add_osm_boundaries: true
+                    - filename: citrus.csv
+                    - filename: city_of_lakeland.csv
+                      add_osm_boundaries: true
+                    - filename: clay.csv
+                    - filename: collier.csv
+                    - filename: duval.csv
+                    - filename: gulf.csv
+                      add_osm_boundaries: true
+                    - filename: highlands.csv
+                      add_osm_boundaries: true
+                    - filename: hillsborough.csv
+                      add_osm_boundaries: true
+                    - filename: lake.csv
+                      add_osm_boundaries: true
+                    - filename: lee.csv
+                    - filename: leon.csv
+                      add_osm_boundaries: true
+                    - filename: manatee.csv
+                    - filename: miami.csv
+                      add_osm_boundaries: true
+                    - filename: orange_county.csv
+                    - filename: osceola.csv
+                      add_osm_boundaries: true
+                    - filename: palm_beach_county.csv
+                    - filename: pinellas.csv
+                      add_osm_boundaries: true
+                    - filename: sarasota.csv
+                      add_osm_boundaries: true
+                    - filename: seminole.csv
+                    - filename: statewide.csv
+                    - filename: volusia.csv
+                    - filename: walton.csv
+
             ga:
                 add:
                     state: GA
