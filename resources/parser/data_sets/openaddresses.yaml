@@ -416,6 +416,103 @@ countries:
                     - filename: erie.csv
                       fields: *fields_no_postcode
 
+            oh:
+              add:
+                state: OH
+              files:
+                  - filename: adams.csv
+                  - filename: allen.csv
+                  - filename: ashland.csv
+                  - filename: ashtabula.csv
+                  - filename: athens.csv
+                  - filename: auglaize.csv
+                    add_osm_boundaries: true
+                  - filename: brown.csv
+                  - filename: butler.csv
+                    add_osm_boundaries: true
+                  - filename: carroll.csv
+                  - filename: champaign.csv
+                  - filename: city_of_perrysburg.csv
+                  - filename: clark.csv
+                  - filename: clermont.csv
+                  - filename: clinton.csv
+                  - filename: columbiana.csv
+                  - filename: coshocton.csv
+                  - filename: crawford.csv
+                  - filename: cuyahoga.csv
+                  - filename: darke.csv
+                  - filename: defiance.csv
+                  - filename: delaware.csv
+                    add_osm_boundaries: true
+                  - filename: erie.csv
+                  - filename: fairfield.csv
+                  - filename: fayette.csv
+                  - filename: franklin.csv
+                  - filename: fulton.csv
+                    add_osm_boundaries: true
+                  - filename: gallia.csv
+                  - filename: geauga.csv
+                    add_osm_boundaries: true
+                  - filename: greene.csv
+                  - filename: guernsey.csv
+                  - filename: hancock.csv
+                  - filename: hardin.csv
+                  - filename: harrison.csv
+                  - filename: henry.csv
+                  - filename: highland.csv
+                  - filename: hocking.csv
+                  - filename: holmes.csv
+                  - filename: huron.csv
+                  - filename: jackson.csv
+                  - filename: jefferson.csv
+                  - filename: knox.csv
+                  - filename: lake.csv
+                  - filename: lawrence.csv
+                    add_osm_boundaries: true
+                  - filename: licking.csv
+                  - filename: logan.csv
+                  - filename: lorain.csv
+                  - filename: lucas.csv
+                  - filename: madison.csv
+                  - filename: mahoning.csv
+                  - filename: marion.csv
+                  - filename: medina.csv
+                  - filename: meigs.csv
+                  - filename: mercer.csv
+                  - filename: miami.csv
+                  - filename: monroe.csv
+                  - filename: montgomery.csv
+                  - filename: morgan.csv
+                  - filename: morrow.csv
+                  - filename: muskingum.csv
+                  - filename: noble.csv
+                  - filename: ottawa.csv
+                  - filename: paulding.csv
+                  - filename: perry.csv
+                  - filename: pickaway.csv
+                  - filename: pike.csv
+                  - filename: portage.csv
+                  - filename: preble.csv
+                  - filename: putnam.csv
+                  - filename: richland.csv
+                  - filename: ross.csv
+                  - filename: sandusky.csv
+                  - filename: seneca.csv
+                  - filename: shelby.csv
+                  - filename: stark.csv
+                  - filename: summit.csv
+                    add_osm_boundaries: true
+                  - filename: toledo.csv
+                  - filename: trumbull.csv
+                  - filename: tuscarawas.csv
+                  - filename: union.csv
+                  - filename: van_wert.csv
+                  - filename: vinton.csv
+                  - filename: washington.csv
+                  - filename: wayne.csv
+                  - filename: williams.csv
+                  - filename: wood.csv
+                  - filename: wyandot.csv
 
             pa:
                 add:
