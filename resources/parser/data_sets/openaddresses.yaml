@@ -1276,3 +1276,15 @@ countries:
                       add_osm_boundaries: true
                     - filename: waupaca.csv
                     - filename: waushara.csv
+
+            wv:
+                add:
+                    state: WV
+                files:
+                    - filename: hancock.csv
+                    - filename: harrison.csv
+                    - filename: raleigh.csv
+                    - filename: statewide.csv
+                      add_osm_boundaries: true
+
+
