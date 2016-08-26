@@ -1,6 +1,7 @@
 import csv
 import os
 import random
+import re
 import six
 import yaml
 
@@ -23,6 +24,8 @@ OPENADDRESSES_PARSER_DATA_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, 
 
 OPENADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'openaddresses_formatted_addresses_tagged.tsv'
 OPENADDRESS_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
+
+not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 
 
 class OpenAddressesFormatter(object):
@@ -162,6 +165,9 @@ class OpenAddressesFormatter(object):
                     value = self.components.cleaned_name(value, first_comma_delimited_phrase=True)
                     if value and len(value) < 2 or is_numeric(value):
                         continue
+
+                if not_applicable_regex.match(value):
+                    continue
 
                 components[key] = value.strip(', ')
 
