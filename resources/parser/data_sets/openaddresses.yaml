@@ -489,6 +489,21 @@ countries:
                 files:
                     - filename: statewide.csv
 
+            mo:
+                add:
+                    state: MO
+                files:
+                    - filename: boone.csv
+                    - filename: city_of_columbia.csv
+                    - filename: city_of_st_louis.csv
+                      add_osm_boundaries: true
+                    - filename: cole.csv
+                    - filename: greene.csv
+                    - filename: jackson.csv
+                    - filename: new_madrid.csv
+                      add_osm_boundaries: true
+                    - filename: st_louis_county.csv
+
             ms:
                 add:
                     state: MS
