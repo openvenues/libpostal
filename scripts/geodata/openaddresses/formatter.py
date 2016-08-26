@@ -5,7 +5,7 @@ import re
 import six
 import yaml
 
-from geodata.addresses.unit import Unit
+from geodata.addresses.units import Unit
 from geodata.address_expansions.abbreviations import abbreviate
 from geodata.address_expansions.gazetteers import street_types_gazetteer, unit_types_gazetteer
 from geodata.address_formatting.formatter import AddressFormatter
@@ -25,6 +25,7 @@ OPENADDRESSES_PARSER_DATA_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, 
 OPENADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'openaddresses_formatted_addresses_tagged.tsv'
 OPENADDRESS_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
 
+numeric_range_regex = re.compile(six.u('[\s]*\-[\s]*'))
 not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 
 
@@ -192,7 +193,7 @@ class OpenAddressesFormatter(object):
 
                 house_number = components.get(AddressFormatter.HOUSE_NUMBER, None)
                 if house_number:
-                    house_number = house_number.strip()
+                    house_number = numeric_range_regex.replace(six.u('-'), house_number).strip()
 
                 postcode = components.get(AddressFormatter.POSTCODE, None)
                 if postcode:
