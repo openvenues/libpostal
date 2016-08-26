@@ -160,7 +160,7 @@ class OpenAddressesFormatter(object):
 
                 if key in AddressFormatter.BOUNDARY_COMPONENTS:
                     value = self.components.cleaned_name(value, first_comma_delimited_phrase=True)
-                    if value and len(value) < 2:
+                    if value and len(value) < 2 or is_numeric(value):
                         continue
 
                 components[key] = value.strip(', ')
