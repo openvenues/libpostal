@@ -1441,6 +1441,36 @@ countries:
                     - filename: waupaca.csv
                     - filename: waushara.csv
 
+            wa:
+                add:
+                    state: WA
+                files:
+                    - filename: bellingham.csv
+                    - filename: chelan.csv
+                    - filename: city_of_bellevue.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_spokane.csv
+                    - filename: clallam.csv
+                    - filename: cowlitz.csv
+                    - filename: douglas.csv
+                    - filename: franklin.csv
+                      add_osm_boundaries: true
+                    - filename: garfield.csv
+                    - filename: jefferson.csv
+                    - filename: king.csv
+                    - filename: kitsap.csv
+                    - filename: mason.csv
+                      add_osm_boundaries: true
+                    - filename: okanogan.csv
+                      add_osm_boundaries: true
+                    - filename: pacific.csv
+                      add_osm_boundaries: true
+                    - filename: snohomish_county.csv
+                      add_osm_boundaries: true
+                    - filename: snohomish.csv
+                    - filename: spokane.csv
+                    - filename: walla_walla.csv
+
             wv:
                 add:
                     state: WV
