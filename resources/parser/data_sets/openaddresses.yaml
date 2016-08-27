@@ -1503,4 +1503,24 @@ countries:
                     - filename: statewide.csv
                       add_osm_boundaries: true
 
-
+            wy:
+                add:
+                    state: WY
+                files:
+                  - filename: albany.csv
+                    add_osm_boundaries: true
+                  - filename: campbell.csv
+                    add_osm_boundaries: true
+                  - filename: city_of_gillette.csv
+                  - filename: city_of_wright.csv
+                    add_osm_boundaries: true
+                  - filename: crook.csv
+                    add_osm_boundaries: true
+                  - filename: goshen.csv
+                  - filename: hot_springs.csv
+                  - filename: laramie.csv
+                    add_osm_boundaries: true
+                  - filename: natrona.csv
+                    add_osm_boundaries: true
+                  - filename: teton.csv
+                    add_osm_boundaries: true
