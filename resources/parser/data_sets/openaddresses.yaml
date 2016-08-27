@@ -146,6 +146,10 @@ countries:
                 - filename: ns.csv
                   add:
                       state: NS
+                - filename: pe.csv
+                  add:
+                      state: PE
+                  add_osm_boundaries: true
 
             mb:
                 add:
