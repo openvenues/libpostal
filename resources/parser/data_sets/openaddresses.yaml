@@ -141,12 +141,22 @@ countries:
                   add:
                       state: NB
                   add_osm_boundaries: true
+                - filename: ns.csv
+                  add:
+                      state: NS
 
             mb:
                 add:
                     state: MB
                 files:
                     - filename: brandon.csv
+
+            ns:
+                add:
+                    state: NS
+                files:
+                    - filename: halifax.csv
+                      add_osm_boundaries: true
 
     us:
         cldr_country_probability: 0.05
