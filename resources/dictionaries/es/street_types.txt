@@ -76,7 +76,7 @@ paso
 pasillo|psllo
 peatonal|peat
 periferico|perif
-plaza|pl|plza|pza|p.za
+plaza|pl|plza|pza|p.za|pz
 plazoleta|pzta|plzta|plta
 plazuela|plzla
 poblado|pbdo
