@@ -42,7 +42,7 @@ class OpenAddressesFormatter(object):
 
     for (lang, dictionary_type), values in six.iteritems(address_phrase_dictionaries.phrases):
         if dictionary_type == 'unit_types_numbered':
-            unit_phrases = itertools.chain(*[safe_encode(p) for p in values if len(p) > 1])
+            unit_phrases = itertools.chain(*[safe_encode(p) for p in values if len(p) > 2])
             pattern = re.compile(r'\b(?:{})\s+(?:#?\s*)(?:[\d]+|[a-z]|[a-z][\d]+|[\d]+[a-z])\s*$'.format(six.u('|').join(unit_phrases)),
                                  re.I | re.UNICODE)
             unit_type_regexes[lang] = pattern
