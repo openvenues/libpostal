@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import csv
 import itertools
 import os
@@ -33,6 +35,9 @@ null_regex = re.compile('^\s*(?:null|none)\s*$', re.I)
 unknown_regex = re.compile('^\s*(?:unknown)\s*$', re.I)
 number_sign_regex = re.compile('^#', re.UNICODE)
 not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
+sin_numero_regex = re.compile('^\s*s\s\s*/\s*n\s*$')
+
+SPANISH = 'es'
 
 
 class OpenAddressesFormatter(object):
@@ -99,10 +104,22 @@ class OpenAddressesFormatter(object):
             except (ValueError, TypeError):
                 return house_number.strip('# ') and is_numeric(house_number) and not all((c == '0' for c in house_number if c.isdigit()))
 
+        @classmethod
+        def validate_house_number_spanish(cls, house_number):
+            if sin_numero_regex.match(house_number):
+                return True
+            return cls.validate_house_number(house_number)
+
     component_validators = {
         AddressFormatter.HOUSE_NUMBER: validators.validate_house_number,
         AddressFormatter.ROAD: validators.validate_street,
         AddressFormatter.POSTCODE: validators.validate_postcode,
+    }
+
+    language_validators = {
+        SPANISH: {
+            AddressFormatter.HOUSE_NUMBER: validators.validate_house_number_spanish,
+        },
     }
 
     def get_property(self, key, *configs):
@@ -155,6 +172,23 @@ class OpenAddressesFormatter(object):
                 pass
         return num
 
+    def spanish_street_name(self, street):
+        '''
+        Most Spanish street names begin with Calle officially
+        but since it's so common, this is often omitted entirely.
+        As such, for Spanish-speaking places with numbered streets
+        like Mérida in Mexico, it would be legitimate to have a
+        simple number like "27" for the street name in a GIS
+        data set which omits the Calle. However, we don't really
+        want to train on "27/road 1/house_number" as that's not
+        typically how a numeric-only street would be written. However,
+        we don't want to neglect entire cities like Mérida which are
+        predominantly a grid, so add Calle (may be abbreviated later).
+        '''
+        if is_numeric(street):
+            street = six.u('Calle {}').format(street)
+        return street
+
     def strip_unit_phrases_for_language(self, value, language):
         if language in self.unit_type_regexes:
             return self.unit_type_regexes[language].sub(six.u(''), value)
@@ -206,7 +240,11 @@ class OpenAddressesFormatter(object):
                 if not value:
                     continue
 
-                validator = self.component_validators.get(key, None)
+                if key == AddressFormatter.ROAD and language == SPANISH:
+                    value = self.spanish_street_name(value)
+
+                validator = self.language_validators.get(language, {}).get(key, self.component_validators.get(key, None))
+
                 if validator is not None and not validator(value):
                     continue
 
