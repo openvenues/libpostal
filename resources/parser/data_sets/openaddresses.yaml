@@ -285,6 +285,13 @@ countries:
                     - filename: montreal.csv
                       add_osm_boundaries: true
 
+            sk:
+                add:
+                    state: SK
+                files:
+                    - filename: regina.csv
+                      add_osm_boundaries: true
+
 
     us:
         cldr_country_probability: 0.05
