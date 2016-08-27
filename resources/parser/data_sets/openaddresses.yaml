@@ -299,6 +299,10 @@ countries:
                     - filename: whitehorse.csv
                       add_osm_boundaries: true
 
+    lu:
+        files:
+            - filename: countrywide.csv
+
     us:
         cldr_country_probability: 0.05
         ignore_fields_containing:
