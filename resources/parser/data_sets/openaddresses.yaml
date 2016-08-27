@@ -292,6 +292,12 @@ countries:
                     - filename: regina.csv
                       add_osm_boundaries: true
 
+            yk:
+                add:
+                    state: YT
+                files:
+                    - filename: whitehorse.csv
+                      add_osm_boundaries: true
 
     us:
         cldr_country_probability: 0.05
