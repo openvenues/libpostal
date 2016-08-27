@@ -455,6 +455,29 @@ countries:
                     - filename: winneshiek.csv
                     - filename: wright.csv
 
+            id:
+                add:
+                    state: ID
+                files:
+                    - filename: ada.csv
+                    - filename: bannock.csv
+                      add_osm_boundaries: true
+                    - filename: bingham.csv
+                    - filename: blaine.csv
+                    - filename: bonner.csv
+                    - filename: bonneville.csv
+                    - filename: city_of_boise.csv
+                    - filename: custer.csv
+                      add_osm_boundaries: true
+                    - filename: fremont.csv
+                      add_osm_boundaries: true
+                    - filename: kootenai.csv
+                    - filename: latah.csv
+                      add_osm_boundaries: true
+                    - filename: nez_perce.csv
+                      add_osm_boundaries: true
+                    - filename: post_falls.csv
+
             il:
                 add:
                     state: IL
@@ -1381,7 +1404,6 @@ countries:
                 files:
                     - filename: statewide.csv
                       postcode_strip_non_digit_chars: true
-
 
             vt:
                 add:
