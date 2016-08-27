@@ -60,7 +60,7 @@ global:
 
     # Turned off by default to avoid performance penalty for reverse geocoding
     add_osm_boundaries: false
-    add_osm_neighborhoods: false
+    add_osm_neighborhoods: true
 
     # Units have strong restrictions, have to be a number or hyphenated number
     non_numeric_units: false
@@ -90,9 +90,9 @@ countries:
                       language: fr
                     - filename: brussels-nl.csv
                       language: nl
+
     us:
         cldr_country_probability: 0.05
-        add_osm_neighborhoods: true
         ignore_fields_containing:
             city:
                 - "\\bcounty\\b"
@@ -1279,6 +1279,13 @@ countries:
                     - filename: union.csv
                     - filename: venango.csv
                     - filename: wayne.csv
+
+            pr:
+                # Don't add state=PR, Puerto Rico is treated as a country in libpostal
+                cldr_country_probability: 1.0
+                language: es
+                files:
+                    - filename: statewide.csv
 
             ri:
                 add:
