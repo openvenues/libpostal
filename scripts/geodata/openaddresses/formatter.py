@@ -29,6 +29,7 @@ OPENADDRESS_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
 
 numeric_range_regex = re.compile('[\s]*\-[\s]*')
 null_regex = re.compile('^\s*(?:null|none)\s*$', re.I)
+unknown_regex = re.compile('^\s*(?:unknown)\s*$', re.I)
 not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 
 
@@ -212,7 +213,7 @@ class OpenAddressesFormatter(object):
                     if value and len(value) < 2 or is_numeric(value):
                         continue
 
-                if not_applicable_regex.match(value) or null_regex.match(value):
+                if not_applicable_regex.match(value) or null_regex.match(value) or unknown_regex.match(value):
                     continue
 
                 for exp, sub_val in self.all_field_regex_replacements:
