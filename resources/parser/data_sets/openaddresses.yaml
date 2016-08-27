@@ -1017,6 +1017,25 @@ countries:
                     - filename: statewide.csv
                       add_osm_boundaries: true
 
+            nm:
+                add:
+                    state: NM
+                files:
+                    - filename: albuquerque.csv
+                      add_osm_boundaries: true
+                    - filename: bernalillo.csv
+                    - filename: city_of_las_cruces.csv
+                      add_osm_boundaries: true
+                    - filename: dona_ana-2.csv
+                      add_osm_boundaries: true
+                    - filename: dona_ana.csv
+                      add_osm_boundaries: true
+                    - filename: los_alamos.csv
+                    - filename: luna.csv
+                    - filename: san_juan.csv
+                      add_osm_boundaries: true
+                    - filename: taos.csv
+
             nv:
                 add:
                     state: NV
