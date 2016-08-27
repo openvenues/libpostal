@@ -896,6 +896,18 @@ countries:
                     - filename: wilson.csv
                       add_osm_boundaries: true
 
+            nd:
+                add:
+                    state: ND
+                files:
+                    - filename: city_of_bismarck.csv
+                      add_osm_boundaries: true
+                    - filename: dickinson.csv
+                      add_osm_boundaries: true
+                    - filename: stark_county.csv
+                      add_osm_boundaries: true
+                    - filename: williams.csv
+
             ne:
                 add:
                     state: NE
@@ -1215,6 +1227,14 @@ countries:
                       add_osm_boundaries: true
                     - filename: sumter.csv
                     - filename: york.csv
+
+            sd:
+                add:
+                    state: SD
+                files:
+                    - filename: lawrence.csv
+                      add_osm_boundaries: true
+                    - filename: statewide.csv
 
             tn:
                 add:
