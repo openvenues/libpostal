@@ -136,6 +136,12 @@ countries:
                     - filename: west_kelowna.csv
                       add_osm_boundaries: true
 
+            files:
+                - filename: nb.csv
+                  add:
+                      state: NB
+                  add_osm_boundaries: true
+
             mb:
                 add:
                     state: MB
