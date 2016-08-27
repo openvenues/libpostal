@@ -136,6 +136,12 @@ countries:
                     - filename: west_kelowna.csv
                       add_osm_boundaries: true
 
+            mb:
+                add:
+                    state: MB
+                files:
+                    - filename: brandon.csv
+
     us:
         cldr_country_probability: 0.05
         ignore_fields_containing:
