@@ -1398,6 +1398,14 @@ countries:
                     - filename: wood.csv
                     - filename: zavala.csv
 
+            ut:
+                add:
+                    state: UT
+                files:
+                    - filename: duchesne.csv
+                      add_osm_boundaries: true
+                    - filename: statewide.csv
+
             va:
                 add:
                     state: VA
