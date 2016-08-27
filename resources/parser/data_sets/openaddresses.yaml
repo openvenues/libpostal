@@ -122,6 +122,20 @@ countries:
                     - filename: city_of_fayetteville.csv
                     - filename: statewide.csv
 
+            az:
+                add:
+                    state: AZ
+                files:
+                    - filename: city_of_glendale.csv
+                    - filename: city_of_mesa.csv
+                    - filename: gila.csv
+                    - filename: maricopa.csv
+                    - filename: pima.csv
+                    - filename: pinal.csv
+                      add_osm_boundaries: true
+                    - filename: yavapai.csv
+                    - filename: yuma.csv
+
             ca:
                 add:
                     state: CA
