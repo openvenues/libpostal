@@ -697,6 +697,12 @@ countries:
                     - filename: winneshiek.csv
                     - filename: wright.csv
 
+            # Placeholder for Hawaii, no files with proper addresses yet
+            hi:
+                add:
+                    state: HI
+                files: []
+
             id:
                 add:
                     state: ID
