@@ -95,9 +95,9 @@ countries:
         add_osm_neighborhoods: true
         ignore_fields_containing:
             city:
-                - "\bcounty\b"
+                - "\\bcounty\\b"
             road:
-                - "\bp\.?\s*o\.?\s*box"
+                - "\\bp\\.?\\s*o\\.?\\s*box\\b"
         subdirs:
             al:
                 add:
