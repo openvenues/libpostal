@@ -1,4 +1,5 @@
 import csv
+import itertools
 import os
 import random
 import re
@@ -7,6 +8,7 @@ import yaml
 
 from geodata.addresses.units import Unit
 from geodata.address_expansions.abbreviations import abbreviate
+from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
 from geodata.address_expansions.gazetteers import street_types_gazetteer, unit_types_gazetteer
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.components import AddressComponents
@@ -35,6 +37,15 @@ class OpenAddressesFormatter(object):
         (re.compile('<\s*null\s*>', re.I), six.u('')),
         (re.compile('[\s]{2,}'), six.u(' '))
     ]
+
+    unit_type_regexes = {}
+
+    for (lang, dictionary_type), values in six.iteritems(address_phrase_dictionaries.phrases):
+        if dictionary_type == 'unit_types_numbered':
+            unit_phrases = itertools.chain(*[safe_encode(p) for p in values if len(p) > 1])
+            pattern = re.compile(r'\b(?:{})\s+(?:#?\s*)(?:[\d]+|[a-z]|[a-z][\d]+|[\d]+[a-z])\s*$'.format(six.u('|').join(unit_phrases)),
+                                 re.I | re.UNICODE)
+            unit_type_regexes[lang] = pattern
 
     def __init__(self, components):
         self.components = components
@@ -141,6 +152,11 @@ class OpenAddressesFormatter(object):
                 pass
         return postcode
 
+    def strip_unit_phrases_for_language(self, value, language):
+        if language in self.unit_type_regexes:
+            return self.unit_type_regexes[language].sub(six.u(''), value)
+        return value
+
     def formatted_addresses(self, path, configs, tag_components=True):
         abbreviate_street_prob = float(self.get_property('abbreviate_street_probability', *configs))
         separate_street_prob = float(self.get_property('separate_street_probability', *configs) or 0.0)
@@ -202,7 +218,7 @@ class OpenAddressesFormatter(object):
                 for exp, sub_val in self.all_field_regex_replacements:
                     value = exp.sub(sub_val, value)
 
-                value = value.strip(', ')
+                value = value.strip(', -')
 
                 if key in ignore_fields_containing and ignore_fields_containing[key].search(value):
                     continue
@@ -222,6 +238,14 @@ class OpenAddressesFormatter(object):
                 if street is not None:
                     street = street.strip()
                     street = AddressComponents.cleaned_name(street)
+
+                    if language == UNKNOWN_LANGUAGE:
+                        strip_unit_language = candidate_languages[0]['lang'] if candidate_languages else None
+                    else:
+                        strip_unit_language = language
+
+                    self.strip_unit_phrases_for_language(street, strip_unit_language)
+
                     street = abbreviate(street_types_gazetteer, street, language,
                                         abbreviate_prob=abbreviate_street_prob,
                                         separate_prob=separate_street_prob)
