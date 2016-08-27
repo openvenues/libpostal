@@ -303,6 +303,202 @@ countries:
         files:
             - filename: countrywide.csv
 
+
+    mx:
+        language: es
+        subdirs:
+            aguascalientes:
+                add:
+                    state: AG
+                files:
+                    - filename: statewide.csv
+
+            baja-california:
+                add:
+                    state: BN
+                files:
+                    - filename: statewide.csv
+
+            baja-california-sur:
+                add:
+                    state: BS
+                files:
+                    - filename: statewide.csv
+
+            campeche:
+                add:
+                    state: CM
+                files:
+                    - filename: statewide.csv
+
+            chiapas:
+                add:
+                    state: CP
+                files:
+                    - filename: statewide.csv
+
+            chihuahua:
+                add:
+                    state: CH
+                files:
+                    - filename: statewide.csv
+
+            coahuila-de-zaragoza:
+                add:
+                    state: Coahuila
+                files:
+                    - filename: statewide.csv
+
+            colima:
+                add:
+                    state: CL
+                files:
+                    - filename: statewide.csv
+
+            distrito-federal:
+                add:
+                    state: DF
+                files:
+                    - filename: statewide.csv
+
+            durango:
+                add:
+                    state: DU
+                files:
+                    - filename: statewide.csv
+
+            guanajuato:
+                add:
+                    state: GT
+                files:
+                    - filename: statewide.csv
+
+            guerrero:
+                add:
+                    state: GR
+                files:
+                    - filename: statewide.csv
+
+            hidalgo:
+                add:
+                    state: HI
+                files:
+                    - filename: statewide.csv
+
+            jalisco:
+                add:
+                    state: JA
+                files:
+                    - filename: statewide.csv
+
+            méxico:
+                add:
+                    state: MX
+                files:
+                    - filename: statewide.csv
+
+            michoacán-de-ocampo:
+                add:
+                    state: MC
+                files:
+                    - filename: statewide.csv
+
+            morelos:
+                add:
+                    state: MR
+                files:
+                    - filename: statewide.csv
+
+            nayarit:
+                add:
+                    state: NA
+                files:
+                    - filename: statewide.csv
+
+            nuevo-león:
+                add:
+                    state: NL
+                files:
+                    - filename: statewide.csv
+
+            oaxaca:
+                add:
+                    state: OA
+                files:
+                    - filename: statewide.csv
+
+            puebla:
+                add:
+                    state: PU
+                files:
+                    - filename: statewide.csv
+
+            querétaro:
+                add:
+                    state: QE
+                files:
+                    - filename: statewide.csv
+
+            quintana-roo:
+                add:
+                    state: QR
+                files:
+                    - filename: statewide.csv
+
+            san-luis-potosí:
+                add:
+                    state: SL
+                files:
+                    - filename: statewide.csv
+
+            sinaloa:
+                add:
+                    state: SI
+                files:
+                    - filename: statewide.csv
+
+            sonora:
+                add:
+                    state: SO
+                files:
+                    - filename: statewide.csv
+
+            tabasco:
+                add:
+                    state: TB
+                files:
+                    - filename: statewide.csv
+
+            tamaulipas:
+                add:
+                    state: TM
+                files:
+                    - filename: statewide.csv
+
+            tlaxcala:
+                add:
+                    state: TL
+                 files:
+                    - filename: statewide.csv
+
+           veracruz-de-ignacio-de-la-llave:
+                add:
+                    state: VE
+                  files:
+                    - filename: statewide.csv
+
+            yucatán:
+                add:
+                    state: YU
+                files:
+                  - filename: statewide.csv
+
+            zacatecas:
+                add:
+                    state: ZA
+                files:
+                  - filename: statewide.csv
+
     us:
         cldr_country_probability: 0.05
         ignore_fields_containing:
