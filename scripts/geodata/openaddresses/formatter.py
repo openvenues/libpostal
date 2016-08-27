@@ -14,6 +14,7 @@ from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.components import AddressComponents
 from geodata.countries.names import country_names
 from geodata.encoding import safe_decode, safe_encode
+from geodata.language_id.disambiguation import UNKNOWN_LANGUAGE
 from geodata.math.sampling import cdf, weighted_choice
 from geodata.text.utils import is_numeric, is_numeric_strict
 
@@ -133,25 +134,25 @@ class OpenAddressesFormatter(object):
 
         return country_name
 
-    def cleanup_postcode(self, postcode):
-        postcode = postcode.strip()
+    def cleanup_number(self, num):
+        num = num.strip()
         try:
-            postcode_int = int(postcode)
+            num_int = int(num)
         except (ValueError, TypeError):
             try:
-                postcode_float = float(postcode)
-                num_leading_zeros = 0
-                for c in postcode:
+                num_float = float(num)
+                leading_zeros = 0
+                for c in num:
                     if c == six.u('0'):
-                        num_leading_zeros += 1
+                        leading_zeros += 1
                     else:
                         break
-                postcode = safe_decode(int(postcode_float))
-                if num_leading_zeros:
-                    postcode = six.u('{}{}').format(six.u('0') * num_leading_zeros, postcode)
+                num = safe_decode(int(num_float))
+                if leading_zeros:
+                    num = six.u('{}{}').format(six.u('0') * leading_zeros, num)
             except (ValueError, TypeError):
                 pass
-        return postcode
+        return num
 
     def strip_unit_phrases_for_language(self, value, language):
         if language in self.unit_type_regexes:
@@ -255,10 +256,11 @@ class OpenAddressesFormatter(object):
                 house_number = components.get(AddressFormatter.HOUSE_NUMBER, None)
                 if house_number:
                     house_number = numeric_range_regex.replace(six.u('-'), house_number).strip()
+                    house_number = self.cleanup_number(house_number)
 
                 postcode = components.get(AddressFormatter.POSTCODE, None)
                 if postcode:
-                    postcode = self.cleanup_postcode(postcode)
+                    postcode = self.cleanup_number(postcode)
 
                     if postcode_strip_non_digit_chars:
                         postcode = six.u('').join((c for c in postcode if c.isdigit()))
