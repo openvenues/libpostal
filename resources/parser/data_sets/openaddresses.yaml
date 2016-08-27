@@ -99,6 +99,22 @@ countries:
             road:
                 - "\\bp\\.?\\s*o\\.?\\s*box\\b"
         subdirs:
+            ak:
+                add:
+                    state: AK
+                files:
+                    - filename: anchorage.csv
+                      add_osm_boundaries: true
+                    - filename: fairbanks_north_star_borough.csv
+                      add_osm_boundaries: true
+                    - filename: kenai_peninsula_borough.csv
+                    - filename: kodiak_island_borough.csv
+                      add_osm_boundaries: true
+                    - filename: matanuska_susitna_borough.csv
+                      add_osm_boundaries: true
+                    - filename: yakutat_borough.csv
+                      add_osm_boundaries: true
+
             al:
                 add:
                     state: AL
