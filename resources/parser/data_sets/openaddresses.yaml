@@ -98,6 +98,8 @@ countries:
                 - "\\bcounty\\b"
             road:
                 - "\\bp\\.?\\s*o\\.?\\s*box\\b"
+            postcode:
+                - "\\bx1x1x1\\b"
         subdirs:
             ab:
                 add:
@@ -156,6 +158,119 @@ countries:
                     state: NS
                 files:
                     - filename: halifax.csv
+                      add_osm_boundaries: true
+
+            on:
+                add:
+                    state: ON
+                files:
+                    - filename: adelaide.csv
+                      add_osm_boundaries: true
+                    - filename: amherstburg.csv
+                      add_osm_boundaries: true
+                    - filename: brant.csv
+                      add_osm_boundaries: true
+                    - filename: bruce.csv
+                    - filename: chatham_kent.csv
+                    - filename: city_of_burlington.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_guelph.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_hamilton.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_hanover.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_kingston.csv
+                    - filename: city_of_kitchener.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_ottawa.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_thunder_bay.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_toronto.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_welland.csv
+                      add_osm_boundaries: true
+                    - filename: cobourg.csv
+                      add_osm_boundaries: true
+                    - filename: couchicing.csv
+                      add_osm_boundaries: true
+                    - filename: dufferin.csv
+                      add_osm_boundaries: true
+                    - filename: elgin.csv
+                      add_osm_boundaries: true
+                    - filename: essex.csv
+                      add_osm_boundaries: true
+                    - filename: grey.csv
+                      add_osm_boundaries: true
+                    - filename: grey_dufferin.csv
+                    - filename: haldimand.csv
+                      add_osm_boundaries: true
+                    - filename: haliburton.csv
+                      add_osm_boundaries: true
+                    - filename: halton.csv
+                    - filename: hastings.csv
+                      add_osm_boundaries: true
+                    - filename: lambton.csv
+                    - filename: lasalle.csv
+                      add_osm_boundaries: true
+                    - filename: leeds_grenville.csv
+                    - filename: lennoxaddington.csv
+                    - filename: lucan_biddulph.csv
+                      add_osm_boundaries: true
+                    - filename: middlesex_centre.csv
+                      add_osm_boundaries: true
+                    - filename: muskoka.csv
+                      add_osm_boundaries: true
+                    - filename: newbury.csv
+                      add_osm_boundaries: true
+                    - filename: niagara_region.csv
+                    - filename: norfolk.csv
+                      add_osm_boundaries: true
+                    - filename: north_middlesex.csv
+                      add_osm_boundaries: true
+                    - filename: northumberland.csv
+                      add_osm_boundaries: true
+                    - filename: oxford.csv
+                    - filename: parry_sound.csv
+                      add_osm_boundaries: true
+                    - filename: peel-region.csv
+                    - filename: perth.csv
+                      add_osm_boundaries: true
+                    - filename: peterborough.csv
+                      add_osm_boundaries: true
+                    - filename: prescott_russell.csv
+                      add_osm_boundaries: true
+                    - filename: prince_edward.csv
+                      add_osm_boundaries: true
+                    - filename: quinte_west.csv
+                      add_osm_boundaries: true
+                    - filename: rainy_river.csv
+                      add_osm_boundaries: true
+                    - filename: renfrew.csv
+                      add_osm_boundaries: true
+                    - filename: seguin.csv
+                    - filename: seine_river.csv
+                      add_osm_boundaries: true
+                    - filename: simcoe.csv
+                      add_osm_boundaries: true
+                    - filename: southwest-middlesex.csv
+                      add_osm_boundaries: true
+                    - filename: stormont_dundas_glengarry.csv
+                    - filename: stratford.csv
+                      add_osm_boundaries: true
+                    - filename: strathroy-caradoc.csv
+                      add_osm_boundaries: true
+                    - filename: thames_centre.csv
+                      add_osm_boundaries: true
+                    - filename: town_of_oakville.csv
+                      add_osm_boundaries: true
+                    - filename: township_of_durham.csv
+                    - filename: waterloo.csv
+                      add_osm_boundaries: true
+                    - filename: west_parry_sound_district.csv
+                      add_osm_boundaries: true
+                    - filename: york.csv
                       add_osm_boundaries: true
 
     us:
