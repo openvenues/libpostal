@@ -196,6 +196,62 @@ countries:
                     - filename: yolo.csv
                       add_osm_boundaries: true
                     - filename: yuba.csv
+            co:
+                add:
+                    state: CO
+                files:
+                  - filename: arapahoe.csv
+                  - filename: city_of_arvada.csv
+                  - filename: city_of_aurora.csv
+                  - filename: city_of_boulder.csv
+                  - filename: city_of_erie.csv
+                  - filename: city_of_fort_collins.csv
+                    add_osm_boundaries: true
+                  - filename: city_of_greeley.csv
+                  - filename: city_of_loveland.csv
+                    add_osm_boundaries: true
+                  - filename: clear_creek.csv
+                    add_osm_boundaries: true
+                  - filename: conejos.csv
+                    add_osm_boundaries: true
+                  - filename: delta.csv
+                  - filename: denver.csv
+                    add_osm_boundaries: true
+                  - filename: douglas.csv
+                  - filename: eagle.csv
+                  - filename: fremont.csv
+                    add_osm_boundaries: true
+                  - filename: garfield.csv
+                  - filename: gilpin.csv
+                    add_osm_boundaries: true
+                  - filename: grand.csv
+                    add_osm_boundaries: true
+                  - filename: gunnison.csv
+                    add_osm_boundaries: true
+                  - filename: jefferson.csv
+                    add_osm_boundaries: true
+                  - filename: la_plata.csv
+                  - filename: mesa.csv
+                  - filename: mineral.csv
+                    add_osm_boundaries: true
+                  - filename: moffat.csv
+                    add_osm_boundaries: true
+                  - filename: montezuma.csv
+                  - filename: montrose.csv
+                  - filename: park.csv
+                    add_osm_boundaries: true
+                  - filename: pitkin.csv
+                    add_osm_boundaries: true
+                  - filename: pueblo.csv
+                  - filename: rio_blanco.csv
+                  - filename: routt.csv
+                    add_osm_boundaries: true
+                  - filename: sanmiguel.csv
+                  - filename: teller.csv
+                    add_osm_boundaries: true
+                  - filename: washington.csv
+                  - filename: weld.csv
+                    add_osm_boundaries: true
 
             ct:
                 add:
