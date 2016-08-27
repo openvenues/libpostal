@@ -25,13 +25,17 @@ OPENADDRESSES_PARSER_DATA_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, 
 OPENADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'openaddresses_formatted_addresses_tagged.tsv'
 OPENADDRESS_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
 
-multiple_spaces_regex = re.compile('[\s]{2,}')
 numeric_range_regex = re.compile('[\s]*\-[\s]*')
 null_regex = re.compile('^\s*(?:null|none)\s*$', re.I)
 not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 
 
 class OpenAddressesFormatter(object):
+    all_field_regex_replacements = [
+        (re.compile('<\s*null\s*>', re.I), six.u('')),
+        (re.compile('[\s]{2,}'), six.u(' '))
+    ]
+
     def __init__(self, components):
         self.components = components
         self.language_rtree = components.language_rtree
@@ -195,7 +199,8 @@ class OpenAddressesFormatter(object):
                 if not_applicable_regex.match(value) or null_regex.match(value):
                     continue
 
-                value = multiple_spaces_regex.sub(six.u(' '), value)
+                for exp, sub_val in self.all_field_regex_replacements:
+                    value = exp.sub(sub_val, value)
 
                 value = value.strip(', ')
 
