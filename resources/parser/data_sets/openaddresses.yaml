@@ -1148,6 +1148,16 @@ countries:
                   - filename: wood.csv
                   - filename: wyandot.csv
 
+            ok:
+                add:
+                    state: OK
+                files:
+                    - filename: acog-counties.csv
+                      add_osm_boundaries: true
+                    - filename: carter-county.csv
+                    - filename: city_of_lawton.csv
+                      add_osm_boundaries: true
+
             or:
                 add:
                     state: OR
