@@ -91,6 +91,28 @@ countries:
                     - filename: brussels-nl.csv
                       language: nl
 
+    ca:
+        cldr_country_probability: 0.3
+        ignore_fields_containing:
+            city:
+                - "\\bcounty\\b"
+            road:
+                - "\\bp\\.?\\s*o\\.?\\s*box\\b"
+        subdirs:
+            ab:
+                add:
+                    state: AB
+                files:
+                    - filename: airdrie.csv
+                      add_osm_boundaries: true
+                    - filename: banff.csv
+                      add_osm_boundaries: true
+                    - filename: calgary.csv
+                      add_osm_boundaries: true
+                    - filename: grande_prairie.csv
+                      add_osm_boundaries: true
+                    - filename: strathcona-county.csv
+
     us:
         cldr_country_probability: 0.05
         ignore_fields_containing:
