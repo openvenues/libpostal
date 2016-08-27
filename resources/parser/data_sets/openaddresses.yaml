@@ -840,6 +840,73 @@ countries:
                     - filename: wilson.csv
                       add_osm_boundaries: true
 
+            ne:
+                add:
+                    state: NE
+                files:
+                    - filename: antelope.csv
+                      add_osm_boundaries: true
+                    - filename: blaine.csv
+                      add_osm_boundaries: true
+                    - filename: brown.csv
+                      add_osm_boundaries: true
+                    - filename: cass.csv
+                      add_osm_boundaries: true
+                    - filename: custer.csv
+                      add_osm_boundaries: true
+                    - filename: dixon.csv
+                      add_osm_boundaries: true
+                    - filename: frontier.csv
+                      add_osm_boundaries: true
+                    - filename: gage.csv
+                      add_osm_boundaries: true
+                    - filename: harlan.csv
+                      add_osm_boundaries: true
+                    - filename: hitchcock.csv
+                      add_osm_boundaries: true
+                    - filename: holt.csv
+                      add_osm_boundaries: true
+                    - filename: howard.csv
+                      add_osm_boundaries: true
+                    - filename: johnson.csv
+                      add_osm_boundaries: true
+                    - filename: keith.csv
+                      add_osm_boundaries: true
+                    - filename: keya_paha.csv
+                      add_osm_boundaries: true
+                    - filename: lancaster.csv
+                      add_osm_boundaries: true
+                    - filename: madison.csv
+                      add_osm_boundaries: true
+                    - filename: omaha.csv
+                    - filename: otoe.csv
+                      add_osm_boundaries: true
+                    - filename: perkins.csv
+                      add_osm_boundaries: true
+                    - filename: phelps.csv
+                      add_osm_boundaries: true
+                    - filename: pierce.csv
+                      add_osm_boundaries: true
+                    - filename: polk.csv
+                      add_osm_boundaries: true
+                    - filename: red_willow.csv
+                      add_osm_boundaries: true
+                    - filename: richardson.csv
+                      add_osm_boundaries: true
+                    - filename: rock.csv
+                      add_osm_boundaries: true
+                    - filename: saline.csv
+                      add_osm_boundaries: true
+                    - filename: sarpy.csv
+                    - filename: seward.csv
+                      add_osm_boundaries: true
+                    - filename: sheridan.csv
+                      add_osm_boundaries: true
+                    - filename: sherman.csv
+                      add_osm_boundaries: true
+                    - filename: valley.csv
+                      add_osm_boundaries: true
+
             nh:
                 add:
                     state: NH
