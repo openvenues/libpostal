@@ -346,6 +346,8 @@ cross_streets:
         canonical: con
     en: &en
         canonical: en
+    x: &x
+        canonical: x
     corner_of: &esquina_de
         canonical: esquina de
         abbreviated: esq de
@@ -375,10 +377,12 @@ cross_streets:
               probability: 0.2
             - alternative: *en
               probability: 0.1
+            - alternative: *x
+              probability: 0.075
             - alternative: *esquina_de
-              probability: 0.1
-            - alternative: *en_la_esquina_de
               probability: 0.05
+            - alternative: *en_la_esquina_de
+              probability: 0.025
 
     between:
         canonical: entre

@@ -534,12 +534,17 @@ cross_streets:
     at_the_corner_of: &at_the_corner_of
         canonical: at the corner of
 
+    x: &x
+        canonical: x
+
     intersection:
         default: *and
         probability: 0.7
         alternatives:
             - alternative: *at
-              probability: 0.15
+              probability: 0.125
+            - alternative: *x
+              probability: 0.025
             - alternative: *corner_of
               probability: 0.1
             - alternative: *at_the_corner_of
