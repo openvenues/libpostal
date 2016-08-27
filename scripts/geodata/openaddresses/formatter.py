@@ -117,6 +117,26 @@ class OpenAddressesFormatter(object):
 
         return country_name
 
+    def cleanup_postcode(self, postcode):
+        postcode = postcode.strip()
+        try:
+            postcode_int = int(postcode)
+        except (ValueError, TypeError):
+            try:
+                postcode_float = float(postcode)
+                num_leading_zeros = 0
+                for c in postcode:
+                    if c == six.u('0'):
+                        num_leading_zeros += 1
+                    else:
+                        break
+                postcode = safe_decode(int(postcode_float))
+                if num_leading_zeros:
+                    postcode = six.u('{}{}').format(six.u('0') * num_leading_zeros, postcode)
+            except (ValueError, TypeError):
+                pass
+        return postcode
+
     def formatted_addresses(self, path, configs, tag_components=True):
         abbreviate_street_prob = float(self.get_property('abbreviate_street_probability', *configs))
         separate_street_prob = float(self.get_property('separate_street_probability', *configs) or 0.0)
@@ -208,15 +228,7 @@ class OpenAddressesFormatter(object):
 
                 postcode = components.get(AddressFormatter.POSTCODE, None)
                 if postcode:
-                    postcode = postcode.strip()
-                    try:
-                        postcode = int(postcode)
-                    except (ValueError, TypeError):
-                        try:
-                            postcode = float(postcode)
-                            postcode = safe_decode(int(postcode))
-                        except (ValueError, TypeError):
-                            postcode = safe_decode(postcode)
+                    postcode = self.cleanup_postcode(postcode)
 
                     if postcode_strip_non_digit_chars:
                         postcode = six.u('').join((c for c in postcode if c.isdigit()))
