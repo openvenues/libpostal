@@ -277,6 +277,15 @@ countries:
                     - filename: york.csv
                       add_osm_boundaries: true
 
+            qc:
+                add:
+                    state: QC
+                language: fr
+                files:
+                    - filename: montreal.csv
+                      add_osm_boundaries: true
+
+
     us:
         cldr_country_probability: 0.05
         ignore_fields_containing:
