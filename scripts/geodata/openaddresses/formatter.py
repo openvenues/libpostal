@@ -31,6 +31,7 @@ OPENADDRESS_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
 numeric_range_regex = re.compile('[\s]*\-[\s]*')
 null_regex = re.compile('^\s*(?:null|none)\s*$', re.I)
 unknown_regex = re.compile('^\s*(?:unknown)\s*$', re.I)
+number_sign_regex = re.compile('^#', re.UNICODE)
 not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 
 
@@ -96,7 +97,7 @@ class OpenAddressesFormatter(object):
                 house_number = int(house_number.strip())
                 return house_number > 0
             except (ValueError, TypeError):
-                return house_number.strip() and is_numeric(house_number) and not all((c == '0' for c in house_number if c.isdigit()))
+                return house_number.strip('# ') and is_numeric(house_number) and not all((c == '0' for c in house_number if c.isdigit()))
 
     component_validators = {
         AddressFormatter.HOUSE_NUMBER: validators.validate_house_number,
@@ -256,6 +257,7 @@ class OpenAddressesFormatter(object):
                 house_number = components.get(AddressFormatter.HOUSE_NUMBER, None)
                 if house_number:
                     house_number = numeric_range_regex.replace(six.u('-'), house_number).strip()
+                    house_number = number_sign_regex.replace(six.u(''), house_number)
                     house_number = self.cleanup_number(house_number)
 
                 postcode = components.get(AddressFormatter.POSTCODE, None)
