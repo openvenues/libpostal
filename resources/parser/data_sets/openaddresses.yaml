@@ -113,6 +113,29 @@ countries:
                       add_osm_boundaries: true
                     - filename: strathcona-county.csv
 
+            bc:
+                add:
+                    state: BC
+                files:
+                    - filename: kamloops.csv
+                      add_osm_boundaries: true
+                    - filename: kelowna.csv
+                      add_osm_boundaries: true
+                    - filename: langley.csv
+                      add_osm_boundaries: true
+                    - filename: nanaimo.csv
+                      add_osm_boundaries: true
+                    - filename: north_cowichan.csv
+                    - filename: prince_george.csv
+                    - filename: province.csv
+                    - filename: thompson-nicola-regional-district.csv
+                    - filename: vancouver.csv
+                      add_osm_boundaries: true
+                    - filename: victoria.csv
+                      add_osm_boundaries: true
+                    - filename: west_kelowna.csv
+                      add_osm_boundaries: true
+
     us:
         cldr_country_probability: 0.05
         ignore_fields_containing:
