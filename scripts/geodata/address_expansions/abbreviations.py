@@ -28,10 +28,9 @@ expansion_token_regex = re.compile('([^  \-\.]+)([\.\- ]+|$)')
 def recase_abbreviation(expansion, tokens, space_token=six.u(' ')):
     expansion_tokens = expansion_token_regex.findall(expansion)
 
-    print expansion, expansion_tokens, tokens
     if len(tokens) > len(expansion_tokens) and all((token_capitalization(t) != LOWER for t, c in tokens)):
-        expansion_tokens = tokenize(expansion)
-        is_acronym = len(expansion_tokens) == 1 and expansion_tokens[0][1] == token_types.ACRONYM
+        expansion_tokenized = tokenize(expansion)
+        is_acronym = len(expansion_tokenized) == 1 and expansion_tokenized[0][1] == token_types.ACRONYM
         if len(expansion) <= 3 or is_acronym:
             return expansion.upper()
         else:
@@ -57,7 +56,15 @@ def recase_abbreviation(expansion, tokens, space_token=six.u(' ')):
                 strings.append(space_token)
         return six.u('').join(strings)
     else:
-        return space_token.join([t.title() for t in expansion_tokens])
+
+        strings = []
+        for e, suf in expansion_tokens:
+            strings.append(e.title())
+            if suf == six.u(' '):
+                strings.append(space_token)
+            else:
+                strings.append(suf)
+        return six.u('').join(strings)
 
 
 def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2, add_period_hyphen_prob=0.3):
