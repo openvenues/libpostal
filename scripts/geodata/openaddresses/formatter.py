@@ -47,7 +47,7 @@ class OpenAddressesFormatter(object):
         ],
         AddressFormatter.HOUSE_NUMBER: [
             # Most of the house numbers in Montreal start with "#"
-            (re.compile('^#', re.UNICODE), sixu('')),
+            (re.compile('^#', re.UNICODE), six.u('')),
             # Some house number ranges are split up like "12 -14"
             (re.compile('[\s]*\-[\s]*'), six.u('-')),
         ]
