@@ -30,10 +30,8 @@ OPENADDRESSES_PARSER_DATA_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, 
 OPENADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'openaddresses_formatted_addresses_tagged.tsv'
 OPENADDRESS_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
 
-numeric_range_regex = re.compile('[\s]*\-[\s]*')
 null_regex = re.compile('^\s*(?:null|none)\s*$', re.I)
 unknown_regex = re.compile('^\s*(?:unknown)\s*$', re.I)
-number_sign_regex = re.compile('^#', re.UNICODE)
 not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 sin_numero_regex = re.compile('^\s*s\s\s*/\s*n\s*$')
 
@@ -41,10 +39,21 @@ SPANISH = 'es'
 
 
 class OpenAddressesFormatter(object):
-    all_field_regex_replacements = [
-        (re.compile('<\s*null\s*>', re.I), six.u('')),
-        (re.compile('[\s]{2,}'), six.u(' '))
-    ]
+    field_regex_replacements = {
+        # All fields
+        None:
+            [
+                (re.compile('<\s*null\s*>', re.I), six.u('')),
+                (re.compile('[\s]{2,}'), six.u(' '))
+            ]
+        },
+        AddressFormatter.HOUSE_NUMBER: [
+            # Most of the house numbers in Montreal start with "#"
+            (re.compile('^#', re.UNICODE), sixu('')),
+            # Some house number ranges are split up like "12 -14"
+            (re.compile('[\s]*\-[\s]*'), six.u('-')),
+        ]
+    }
 
     unit_type_regexes = {}
 
@@ -102,7 +111,7 @@ class OpenAddressesFormatter(object):
                 house_number = int(house_number.strip())
                 return house_number > 0
             except (ValueError, TypeError):
-                return house_number.strip('# ') and is_numeric(house_number) and not all((c == '0' for c in house_number if c.isdigit()))
+                return house_number.strip() and is_numeric(house_number) and not all((c == '0' for c in house_number if c.isdigit()))
 
         @classmethod
         def validate_house_number_spanish(cls, house_number):
@@ -243,11 +252,6 @@ class OpenAddressesFormatter(object):
                 if key == AddressFormatter.ROAD and language == SPANISH:
                     value = self.spanish_street_name(value)
 
-                validator = self.language_validators.get(language, {}).get(key, self.component_validators.get(key, None))
-
-                if validator is not None and not validator(value):
-                    continue
-
                 if key in AddressFormatter.BOUNDARY_COMPONENTS:
                     value = self.components.cleaned_name(value, first_comma_delimited_phrase=True)
                     if value and len(value) < 2 or is_numeric(value):
@@ -256,10 +260,18 @@ class OpenAddressesFormatter(object):
                 if not_applicable_regex.match(value) or null_regex.match(value) or unknown_regex.match(value):
                     continue
 
-                for exp, sub_val in self.all_field_regex_replacements:
+                for exp, sub_val in self.field_regex_replacements.get(key, []):
+                    value = exp.sub(sub_val, value)
+
+                for exp, sub_val in self.field_regex_replacements.get(None, []):
                     value = exp.sub(sub_val, value)
 
                 value = value.strip(', -')
+
+                validator = self.language_validators.get(language, {}).get(key, self.component_validators.get(key, None))
+
+                if validator is not None and not validator(value):
+                    continue
 
                 if key in ignore_fields_containing and ignore_fields_containing[key].search(value):
                     continue
@@ -294,8 +306,6 @@ class OpenAddressesFormatter(object):
 
                 house_number = components.get(AddressFormatter.HOUSE_NUMBER, None)
                 if house_number:
-                    house_number = numeric_range_regex.replace(six.u('-'), house_number).strip()
-                    house_number = number_sign_regex.replace(six.u(''), house_number)
                     house_number = self.cleanup_number(house_number)
 
                 postcode = components.get(AddressFormatter.POSTCODE, None)
