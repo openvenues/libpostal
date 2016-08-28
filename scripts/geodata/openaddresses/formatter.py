@@ -407,13 +407,13 @@ class OpenAddressesFormatter(object):
 
         i = 0
 
-        for country, config in six.iteritems(self.country_configs):
+        for country_dir, config in six.iteritems(self.country_configs):
             for file_config in config.get('files', []):
                 filename = file_config['filename']
 
-                print(six.u('doing {}/{}').format(country, filename))
+                print(six.u('doing {}/{}').format(country_dir, filename))
 
-                path = os.path.join(base_dir, country, filename)
+                path = os.path.join(base_dir, country_dir, filename)
                 configs = (file_config, config, self.config)
                 for language, country, formatted_address in self.formatted_addresses(path, configs, tag_components=tag_components):
                     if not formatted_address or not formatted_address.strip():
@@ -437,9 +437,9 @@ class OpenAddressesFormatter(object):
                 for file_config in subdir_config.get('files', []):
                     filename = file_config['filename']
 
-                    print(six.u('doing {}/{}/{}').format(country, subdir, filename))
+                    print(six.u('doing {}/{}/{}').format(country_dir, subdir, filename))
 
-                    path = os.path.join(base_dir, country, subdir, filename)
+                    path = os.path.join(base_dir, country_dir, subdir, filename)
 
                     configs = (file_config, subdir_config, config, self.config)
                     for language, country, formatted_address in self.formatted_addresses(path, configs, tag_components=tag_components):
