@@ -107,9 +107,11 @@ countries:
                   state: NB
               add_osm_boundaries: true
             - filename: ns.csv
+              language: en
               add:
                   state: NS
             - filename: pe.csv
+              language: en
               add:
                   state: PE
               add_osm_boundaries: true
@@ -118,6 +120,7 @@ countries:
             ab:
                 add:
                     state: AB
+                language: en
                 files:
                     - filename: airdrie.csv
                       add_osm_boundaries: true
@@ -132,6 +135,7 @@ countries:
             bc:
                 add:
                     state: BC
+                language: en
                 files:
                     - filename: kamloops.csv
                       add_osm_boundaries: true
@@ -161,13 +165,14 @@ countries:
             ns:
                 add:
                     state: NS
+                language: en
                 files:
                     - filename: halifax.csv
                       add_osm_boundaries: true
 
-            on:
+            "on":
                 add:
-                    state: ON
+                    state: "ON"
                 files:
                     - filename: adelaide.csv
                       add_osm_boundaries: true
@@ -289,6 +294,7 @@ countries:
             sk:
                 add:
                     state: SK
+                language: en
                 files:
                     - filename: regina.csv
                       add_osm_boundaries: true
@@ -296,6 +302,7 @@ countries:
             yk:
                 add:
                     state: YT
+                language: en
                 files:
                     - filename: whitehorse.csv
                       add_osm_boundaries: true
