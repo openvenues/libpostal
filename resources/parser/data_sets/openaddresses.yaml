@@ -478,26 +478,26 @@ countries:
             tlaxcala:
                 add:
                     state: TL
-                 files:
+                files:
                     - filename: statewide.csv
 
-           veracruz-de-ignacio-de-la-llave:
+            veracruz-de-ignacio-de-la-llave:
                 add:
                     state: VE
-                  files:
+                files:
                     - filename: statewide.csv
 
             yucatán:
                 add:
                     state: YU
                 files:
-                  - filename: statewide.csv
+                    - filename: statewide.csv
 
             zacatecas:
                 add:
                     state: ZA
                 files:
-                  - filename: statewide.csv
+                    - filename: statewide.csv
 
     us:
         cldr_country_probability: 0.05
