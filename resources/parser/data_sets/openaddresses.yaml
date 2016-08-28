@@ -77,6 +77,15 @@ countries:
                     - filename: buenos_aires.csv
                       add_osm_boundaries: true
 
+    at:
+        language: de
+        add_osm_boundaries: true
+        files:
+            - filename: 31254.csv
+            - filename: 31255.csv
+            - filename: 31266.csv
+            - filename: city_of_vienna.csv
+
     au:
         fields: *fields_with_state_and_unit
         files:
