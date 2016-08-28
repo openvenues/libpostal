@@ -41,12 +41,10 @@ SPANISH = 'es'
 class OpenAddressesFormatter(object):
     field_regex_replacements = {
         # All fields
-        None:
-            [
-                (re.compile('<\s*null\s*>', re.I), six.u('')),
-                (re.compile('[\s]{2,}'), six.u(' '))
-            ]
-        },
+        None: [
+            (re.compile('<\s*null\s*>', re.I), six.u('')),
+            (re.compile('[\s]{2,}'), six.u(' '))
+        ],
         AddressFormatter.HOUSE_NUMBER: [
             # Most of the house numbers in Montreal start with "#"
             (re.compile('^#', re.UNICODE), sixu('')),
