@@ -37,6 +37,7 @@ not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 sin_numero_regex = re.compile('^\s*s\s\s*/\s*n\s*$')
 
 SPANISH = 'es'
+PORTUGUESE = 'pt'
 
 
 class OpenAddressesFormatter(object):
@@ -115,7 +116,7 @@ class OpenAddressesFormatter(object):
                 return house_number.strip() and is_numeric(house_number) and not all((c == '0' for c in house_number if c.isdigit()))
 
         @classmethod
-        def validate_house_number_spanish(cls, house_number):
+        def validate_house_number_sin_numero(cls, house_number):
             if sin_numero_regex.match(house_number):
                 return True
             return cls.validate_house_number(house_number)
@@ -128,8 +129,11 @@ class OpenAddressesFormatter(object):
 
     language_validators = {
         SPANISH: {
-            AddressFormatter.HOUSE_NUMBER: validators.validate_house_number_spanish,
+            AddressFormatter.HOUSE_NUMBER: validators.validate_house_number_sin_numero,
         },
+        PORTUGUESE: {
+            AddressFormatter.HOUSE_NUMBER: validators.validate_house_number_sin_numero,
+        }
     }
 
     def get_property(self, key, *configs):
