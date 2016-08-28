@@ -108,6 +108,11 @@ countries:
                     - filename: brussels-nl.csv
                       language: nl
 
+    bm:
+        cldr_country_probability: 1.0
+        files:
+            - filename: territory_wide.csv
+
     ca:
         cldr_country_probability: 0.3
         ignore_fields_containing:
