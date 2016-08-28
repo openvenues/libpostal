@@ -306,6 +306,8 @@ class OpenAddressesFormatter(object):
                 house_number = components.get(AddressFormatter.HOUSE_NUMBER, None)
                 if house_number:
                     house_number = self.cleanup_number(house_number)
+                    if house_number is not None:
+                        components[AddressFormatter.HOUSE_NUMBER] = house_number
 
                 postcode = components.get(AddressFormatter.POSTCODE, None)
                 if postcode:
@@ -324,10 +326,9 @@ class OpenAddressesFormatter(object):
 
                 # If there's a postcode, we can still use just the city/state/postcode, otherwise discard
                 if not (street and house_number) or street.lower() == house_number.lower() or (unit and street and street.lower() == unit.lower()):
-                    components = self.components.drop_address(components)
-
                     if not postcode:
                         continue
+                    components = self.components.drop_address(components)
 
                 # Now that checks, etc. are completed, fetch unit and add phrases, abbreviate, etc.
                 unit = components.get(AddressFormatter.UNIT, None)

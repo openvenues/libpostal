@@ -709,6 +709,8 @@ class AddressComponents(object):
                 containing_components = osm_components[i + 1:]
 
                 component = self.categorize_osm_component(country, props, containing_components)
+                if component is None:
+                    continue
 
                 if (props.get('type'), safe_encode(props.get('id', ''))) in self.use_admin_center_ids:
                     props = props.get('admin_center', props)
