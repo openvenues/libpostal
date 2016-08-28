@@ -55,6 +55,11 @@ if __name__ == '__main__':
                         default=None,
                         help='Neighborhoods reverse geocoder RTree directory')
 
+    parser.add_argument('--debug',
+                        action='store_true',
+                        default=False,
+                        help='Test on a sample of each file to debug config')
+
     parser.add_argument('-o', '--out-dir',
                         default=os.getcwd(),
                         help='Output directory')
@@ -83,5 +88,5 @@ if __name__ == '__main__':
     if args.openaddresses_dir and args.format:
         components = AddressComponents(osm_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames)
 
-        oa_formatter = OpenAddressesFormatter(components)
+        oa_formatter = OpenAddressesFormatter(components, debug=args.debug)
         oa_formatter.build_training_data(args.openaddresses_dir, args.out_dir, tag_components=not args.untagged)

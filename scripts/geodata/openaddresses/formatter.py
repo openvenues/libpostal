@@ -63,13 +63,15 @@ class OpenAddressesFormatter(object):
                                  re.I | re.UNICODE)
             unit_type_regexes[lang] = pattern
 
-    def __init__(self, components):
+    def __init__(self, components, debug=False):
         self.components = components
         self.language_rtree = components.language_rtree
 
         config = yaml.load(open(OPENADDRESSES_PARSER_DATA_CONFIG))
         self.config = config['global']
         self.country_configs = config['countries']
+
+        self.debug = debug
 
         self.formatter = AddressFormatter()
 
@@ -432,6 +434,8 @@ class OpenAddressesFormatter(object):
                     i += 1
                     if i % 1000 == 0 and i > 0:
                         print('did {} formatted addresses'.format(i))
+                        if self.debug:
+                            break
 
             for subdir, subdir_config in six.iteritems(config.get('subdirs', {})):
                 for file_config in subdir_config.get('files', []):
@@ -460,3 +464,5 @@ class OpenAddressesFormatter(object):
                         i += 1
                         if i % 1000 == 0 and i > 0:
                             print('did {} formatted addresses'.format(i))
+                            if self.debug:
+                                break
