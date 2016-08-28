@@ -35,6 +35,7 @@ null_regex = re.compile('^\s*(?:null|none)\s*$', re.I)
 unknown_regex = re.compile('^\s*(?:unknown)\s*$', re.I)
 not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 sin_numero_regex = re.compile('^\s*s\s\s*/\s*n\s*$')
+number_space_letter_regex = re.compile('^[\d]+ [a-z]', re.I)
 
 SPANISH = 'es'
 PORTUGUESE = 'pt'
@@ -113,7 +114,7 @@ class OpenAddressesFormatter(object):
                 house_number = int(house_number.strip())
                 return house_number > 0
             except (ValueError, TypeError):
-                return house_number.strip() and is_numeric(house_number) and not all((c == '0' for c in house_number if c.isdigit()))
+                return house_number.strip() and (is_numeric(house_number) or number_space_letter_regex.match(house_number)) and not all((c == '0' for c in house_number if c.isdigit()))
 
         @classmethod
         def validate_house_number_sin_numero(cls, house_number):
