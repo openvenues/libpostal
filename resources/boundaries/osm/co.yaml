@@ -4,8 +4,14 @@
     "3": "country_region"
     "4": "state"
     "5": "state_district"
-    "6": "state_district"
-    "7": "city"
-    "8": "city"
+    "6": "city"
+    "7": "city_district"
+    "8": "city_district"
     "9": "suburb"
 
+
+    overrides:
+        id:
+            relation:
+                # Bogotá
+                "1387968": "city"
