@@ -113,6 +113,14 @@ countries:
         files:
             - filename: territory_wide.csv
 
+    br:
+        subdirs:
+            es:
+                add:
+                    state: ES
+                files:
+                    - filename: vitoria.csv
+
     ca:
         cldr_country_probability: 0.3
         ignore_fields_containing:
