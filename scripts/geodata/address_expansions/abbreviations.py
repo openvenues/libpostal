@@ -94,7 +94,7 @@ def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2, a
         abbreviated = []
 
         # Append the original tokens with whitespace if there is any
-        if random.random() > abbreviate_prob or not any((is_canonical or lang in (language, 'all') for lang, dictionary, is_canonical, canonical in data)):
+        if random.random() > abbreviate_prob or not any((is_canonical and lang in (language, 'all') for lang, dictionary, is_canonical, canonical in data)):
             for j, (t_i, c_i) in enumerate(t):
                 abbreviated.append(tokens[i + j][0])
                 if i + j < n - 1 and raw_tokens[i + j + 1][0] > sum(raw_tokens[i + j][:2]):
