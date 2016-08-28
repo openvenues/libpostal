@@ -392,6 +392,8 @@ class OpenAddressesFormatter(object):
             for file_config in config.get('files', []):
                 filename = file_config['filename']
 
+                print('doing {}/{}'.format(country, filename))
+
                 path = os.path.join(base_dir, country, filename)
                 configs = (file_config, config, self.config)
                 for language, country, formatted_address in self.formatted_addresses(path, configs, tag_components=tag_components):
@@ -415,6 +417,8 @@ class OpenAddressesFormatter(object):
             for subdir, subdir_config in six.iteritems(config.get('subdirs', {})):
                 for file_config in subdir_config.get('files', []):
                     filename = file_config['filename']
+
+                    print('doing {}/{}/{}'.format(country, subdir, filename))
 
                     path = os.path.join(base_dir, country, subdir, filename)
 
