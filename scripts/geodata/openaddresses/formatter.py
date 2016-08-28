@@ -18,6 +18,7 @@ from geodata.countries.names import country_names
 from geodata.encoding import safe_decode, safe_encode
 from geodata.language_id.disambiguation import UNKNOWN_LANGUAGE
 from geodata.math.sampling import cdf, weighted_choice
+from geodata.places.config import place_config
 from geodata.text.utils import is_numeric, is_numeric_strict
 
 from geodata.csv_utils import tsv_string, unicode_csv_reader
@@ -365,14 +366,26 @@ class OpenAddressesFormatter(object):
 
                 # This is expensive, so only turn on for files that don't supply their own city names
                 # or for which those names are flawed
+                osm_components = []
+                population = None
                 if add_osm_boundaries or AddressFormatter.CITY not in components:
                     osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
                     self.components.add_admin_boundaries(components, osm_components, country, language)
+                    categorized = self.components.categorized_osm_components(country, osm_components)
+                    for component, label in categorized:
+                        if label == AddressFormatter.CITY and 'population' in component:
+                            population = component['population']
+                            break
 
                 # The neighborhood index is cheaper so can turn on for whole countries
+                neighborhood_components = []
                 if add_osm_neighborhoods:
                     neighborhood_components = self.components.neighborhood_components(latitude, longitude)
                     self.components.add_neighborhoods(components, neighborhood_components)
+
+                if add_osm_boundaries or add_osm_neighborhoods:
+                    all_osm_components = osm_components + neighborhood_components
+                    components = place_config.dropout_components(components, all_osm_components, country=country, population=population)
 
                 formatted = self.formatter.format_address(components, country,
                                                           language=language, tag_components=tag_components)
