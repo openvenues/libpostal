@@ -28,8 +28,8 @@ this_dir = os.path.realpath(os.path.dirname(__file__))
 OPENADDRESSES_PARSER_DATA_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                                 'resources', 'parser', 'data_sets', 'openaddresses.yaml')
 
-OPENADDRESS_FORMAT_DATA_TAGGED_FILENAME = 'openaddresses_formatted_addresses_tagged.tsv'
-OPENADDRESS_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
+OPENADDRESSES_FORMAT_DATA_TAGGED_FILENAME = 'openaddresses_formatted_addresses_tagged.tsv'
+OPENADDRESSES_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
 
 null_regex = re.compile('^\s*(?:null|none)\s*$', re.I)
 unknown_regex = re.compile('^\s*(?:unknown)\s*$', re.I)
@@ -367,7 +367,12 @@ class OpenAddressesFormatter(object):
                 # This is expensive, so only turn on for files that don't supply their own city names
                 # or for which those names are flawed
                 osm_components = []
-                population = None
+
+                # Using population=0 instead of None means if there's no known population or
+                # we don't need to add OSM components, we assume the population of the town is
+                # very small and the place name shouldn't be used unqualified (i.e. needs information
+                # like state name to disambiguate it)
+                population = 0
                 if add_osm_boundaries or AddressFormatter.CITY not in components:
                     osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
                     self.components.add_admin_boundaries(components, osm_components, country, language)
@@ -383,9 +388,9 @@ class OpenAddressesFormatter(object):
                     neighborhood_components = self.components.neighborhood_components(latitude, longitude)
                     self.components.add_neighborhoods(components, neighborhood_components)
 
-                if add_osm_boundaries or add_osm_neighborhoods:
-                    all_osm_components = osm_components + neighborhood_components
-                    components = place_config.dropout_components(components, all_osm_components, country=country, population=population)
+                # Component dropout
+                all_osm_components = osm_components + neighborhood_components
+                components = place_config.dropout_components(components, all_osm_components, country=country, population=population)
 
                 formatted = self.formatter.format_address(components, country,
                                                           language=language, tag_components=tag_components)
@@ -393,10 +398,10 @@ class OpenAddressesFormatter(object):
 
     def build_training_data(self, base_dir, out_dir, tag_components=True):
         if tag_components:
-            formatted_tagged_file = open(os.path.join(out_dir, OPENADDRESS_FORMAT_DATA_TAGGED_FILENAME), 'w')
+            formatted_tagged_file = open(os.path.join(out_dir, OPENADDRESSES_FORMAT_DATA_TAGGED_FILENAME), 'w')
             writer = csv.writer(formatted_tagged_file, 'tsv_no_quote')
         else:
-            formatted_tagged_file = open(os.path.join(out_dir, OPENADDRESS_FORMAT_DATA_FILENAME), 'w')
+            formatted_tagged_file = open(os.path.join(out_dir, OPENADDRESSES_FORMAT_DATA_FILENAME), 'w')
             writer = csv.writer(formatted_tagged_file, 'tsv_no_quote')
 
         i = 0
