@@ -337,10 +337,13 @@ countries:
                     - filename: whitehorse.csv
                       add_osm_boundaries: true
 
-    lu:
+    cz:
         files:
             - filename: countrywide.csv
 
+    lu:
+        files:
+            - filename: countrywide.csv
 
     mx:
         language: es
