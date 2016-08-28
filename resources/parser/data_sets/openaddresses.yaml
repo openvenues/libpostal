@@ -100,6 +100,20 @@ countries:
                 - "\\bp\\.?\\s*o\\.?\\s*box\\b"
             postcode:
                 - "\\bx1x1x1\\b"
+
+        files:
+            - filename: nb.csv
+              add:
+                  state: NB
+              add_osm_boundaries: true
+            - filename: ns.csv
+              add:
+                  state: NS
+            - filename: pe.csv
+              add:
+                  state: PE
+              add_osm_boundaries: true
+
         subdirs:
             ab:
                 add:
@@ -137,19 +151,6 @@ countries:
                       add_osm_boundaries: true
                     - filename: west_kelowna.csv
                       add_osm_boundaries: true
-
-            files:
-                - filename: nb.csv
-                  add:
-                      state: NB
-                  add_osm_boundaries: true
-                - filename: ns.csv
-                  add:
-                      state: NS
-                - filename: pe.csv
-                  add:
-                      state: PE
-                  add_osm_boundaries: true
 
             mb:
                 add:
