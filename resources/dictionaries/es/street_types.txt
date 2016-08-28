@@ -39,8 +39,9 @@ carretil|crtil
 carril|crril
 cerrada|cda|cer
 cinturón|cinturon|cint
+circular|cq
 circuito|cto
-circunvalar|cv|crv
+circunvalar|cv|crv|cirv
 circunvalación|circunvalacion|ccvcn
 corredor|crrdo
 costanilla|cstan
