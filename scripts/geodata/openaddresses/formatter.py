@@ -213,6 +213,8 @@ class OpenAddressesFormatter(object):
         numeric_postcodes_only = bool(self.get_property('numeric_postcodes_only', *configs) or False)
         postcode_strip_non_digit_chars = bool(self.get_property('postcode_strip_non_digit_chars', *configs) or False)
 
+        ignore_rows_missing_fields = set(self.get_property('ignore_rows_missing_fields', *configs) or [])
+
         ignore_fields_containing = {field: re.compile(six.u('|').join([six.u('(?:{})').format(safe_decode(v)) for v in value]), re.I | re.UNICODE)
                                     for field, value in six.iteritems(dict(self.get_property('ignore_fields_containing', *configs) or {}))}
 
@@ -242,9 +244,15 @@ class OpenAddressesFormatter(object):
                 continue
 
             components = {}
+
+            skip_record = False
+
             for i, key in six.iteritems(header_indices):
                 value = row[i].strip()
-                if not value:
+                if not value and key in ignore_rows_missing_fields:
+                    skip_record = True
+                    break
+                elif not value:
                     continue
 
                 if key == AddressFormatter.ROAD and language == SPANISH:
@@ -276,6 +284,9 @@ class OpenAddressesFormatter(object):
 
                 if value:
                     components[key] = value
+
+            if skip_row:
+                continue
 
             if components:
                 country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
