@@ -363,6 +363,14 @@ countries:
                 files:
                     - filename: statewide.csv
 
+    es:
+        add_osm_boundaries: true
+        files:
+            - filename: 25829.csv
+            - filename: 25830.csv
+            - filename: 25831.csv
+            - filename: 32628.csv
+
     lu:
         files:
             - filename: countrywide.csv
