@@ -31,9 +31,9 @@ def main(out_dir):
 
             zip_path = os.path.join(out_dir, zip_file)
 
-            print('downloading: {}', source)
+            print('downloading: {}'.format(source))
             if download_file(url, zip_path):
-                subprocess.check_call(['unzip', zip_path])
+                subprocess.check_call(['unzip', '-o', zip_path])
                 remove_file(zip_path)
 
 
