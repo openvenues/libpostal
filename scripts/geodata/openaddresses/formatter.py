@@ -18,15 +18,11 @@ from geodata.countries.names import country_names
 from geodata.encoding import safe_decode, safe_encode
 from geodata.language_id.disambiguation import UNKNOWN_LANGUAGE
 from geodata.math.sampling import cdf, weighted_choice
+from geodata.openaddresses.config import openaddresses_config
 from geodata.places.config import place_config
 from geodata.text.utils import is_numeric, is_numeric_strict
 
 from geodata.csv_utils import tsv_string, unicode_csv_reader
-
-this_dir = os.path.realpath(os.path.dirname(__file__))
-
-OPENADDRESSES_PARSER_DATA_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                                                'resources', 'parser', 'data_sets', 'openaddresses.yaml')
 
 OPENADDRESSES_FORMAT_DATA_TAGGED_FILENAME = 'openaddresses_formatted_addresses_tagged.tsv'
 OPENADDRESSES_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
@@ -68,10 +64,6 @@ class OpenAddressesFormatter(object):
     def __init__(self, components, debug=False):
         self.components = components
         self.language_rtree = components.language_rtree
-
-        config = yaml.load(open(OPENADDRESSES_PARSER_DATA_CONFIG))
-        self.config = config['global']
-        self.country_configs = config['countries']
 
         self.debug = debug
 
@@ -414,14 +406,14 @@ class OpenAddressesFormatter(object):
 
         i = 0
 
-        for country_dir, config in six.iteritems(self.country_configs):
+        for country_dir, config in six.iteritems(openaddresses_config.country_configs):
             for file_config in config.get('files', []):
                 filename = file_config['filename']
 
                 print(six.u('doing {}/{}').format(country_dir, filename))
 
                 path = os.path.join(base_dir, country_dir, filename)
-                configs = (file_config, config, self.config)
+                configs = (file_config, config, openaddresses_config.config)
                 for language, country, formatted_address in self.formatted_addresses(path, configs, tag_components=tag_components):
                     if not formatted_address or not formatted_address.strip():
                         continue
