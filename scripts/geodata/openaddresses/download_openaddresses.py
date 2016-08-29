@@ -22,8 +22,6 @@ OPENADDRESSES_EXTENSION = '.zip'
 def main(out_dir):
     ensure_dir(out_dir)
 
-    config = yaml.load(open(OPENADDRESSES_PARSER_DATA_CONFIG))
-
     with cd(out_dir):
         for path in openaddresses_config.sources:
             source = '/'.join(path)
