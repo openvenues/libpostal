@@ -208,6 +208,8 @@ countries:
                       add_osm_boundaries: true
                     - filename: amherstburg.csv
                       add_osm_boundaries: true
+                    - filename: belleville.csv
+                      add_osm_boundaries: true
                     - filename: brant.csv
                       add_osm_boundaries: true
                     - filename: bruce.csv
@@ -230,6 +232,8 @@ countries:
                     - filename: city_of_toronto.csv
                       add_osm_boundaries: true
                     - filename: city_of_welland.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_windsor.csv
                       add_osm_boundaries: true
                     - filename: cobourg.csv
                       add_osm_boundaries: true
