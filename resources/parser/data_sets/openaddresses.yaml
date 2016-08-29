@@ -371,6 +371,62 @@ countries:
             - filename: 25831.csv
             - filename: 32628.csv
 
+    fi:
+        add_osm_boundaries: true
+        ignore_rows_missing_fields:
+            - road
+        files:
+            - filename: ahvenanmaa-fi.csv
+              language: fi
+            - filename: ahvenanmaa-sv.csv
+              language: sv
+            - filename: etelä-karjala-fi.csv
+              language: fi
+            - filename: etelä-pohjanmaa-fi.csv
+              language: fi
+            - filename: etelä-savo-fi.csv
+              language: fi
+            - filename: kainuu-fi.csv
+              language: fi
+            - filename: kanta-häme-fi.csv
+              language: fi
+            - filename: keski-pohjanmaa-fi.csv
+              language: fi
+            - filename: keski-pohjanmaa-sv.csv
+              language: sv
+            - filename: keski-suomi-fi.csv
+              language: fi
+            - filename: kymeenlaakso-fi.csv
+              language: fi
+            - filename: kymeenlaakso-sv.csv
+              language: sv
+            - filename: lappi-fi.csv
+              language: fi
+            - filename: päijät-häme-fi.csv
+              language: fi
+            - filename: pirkanmaa-fi.csv
+              language: fi
+            - filename: pohjanmaa-fi.csv
+              language: fi
+            - filename: pohjanmaa-sv.csv
+              language: sv
+            - filename: pohjois-karjala-fi.csv
+              language: fi
+            - filename: pohjois-pohjanmaa-fi.csv
+              language: fi
+            - filename: pohjois-savo-fi.csv
+              language: fi
+            - filename: satakunta-fi.csv
+              language: fi
+            - filename: uusimaa-fi.csv
+              language: fi
+            - filename: uusimaa-sv.csv
+              language: sv
+            - filename: varsinais-suomi-fi.csv
+              language: fi
+            - filename: varsinais-suomi-sv.csv
+              language: sv
+
     lu:
         files:
             - filename: countrywide.csv
