@@ -14,7 +14,7 @@ from geodata.openaddresses.config import openaddresses_config
 from geodata.file_utils import ensure_dir, download_file, cd, remove_file
 
 BASE_OPENADDRESSES_DATA_URL = 'http://results.openaddresses.io'
-OPENADDRESSES_LATEST_URL = BASE_OPENADDRESSES_URL + '/latest/run/'
+OPENADDRESSES_LATEST_URL = BASE_OPENADDRESSES_DATA_URL + '/latest/run/'
 
 OPENADDRESSES_EXTENSION = '.zip'
 
