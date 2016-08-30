@@ -577,6 +577,10 @@ countries:
                       add_osm_boundaries: true
                     - filename: statewide.csv
 
+    jm:
+        files:
+            - filename: august_town.csv
+
     lu:
         files:
             - filename: countrywide.csv
