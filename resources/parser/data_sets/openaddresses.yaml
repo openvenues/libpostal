@@ -545,6 +545,38 @@ countries:
             - filename: countrywide.csv
               add_osm_boundaries: true
 
+    it:
+        subdirs:
+            # Trentino-Alto Adige/Südtirol
+            32:
+                files:
+                    - filename: south-tyrol.csv
+            # Friuli-Venezia Giulia
+            36:
+                files:
+                    - filename: statewide.csv
+            # Emilia-Romagna
+            45:
+                files:
+                    - filename: bo.csv
+                    - filename: bologna.csv
+                    - filename: fc.csv
+                    - filename: fe.csv
+                    - filename: ferrara.csv
+                      add_osm_boundaries: true
+                    - filename: mo.csv
+                    - filename: pc.csv
+                    - filename: pr.csv
+                    - filename: ra.csv
+                    - filename: re.csv
+                    - filename: rn.csv
+            # Toscana
+            52:
+                files:
+                    - filename: firenze.csv
+                      add_osm_boundaries: true
+                    - filename: statewide.csv
+
     lu:
         files:
             - filename: countrywide.csv
