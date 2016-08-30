@@ -131,11 +131,12 @@ class OSMAddressComponents(object):
         values = [(k, v) for k, v in six.iteritems(properties) if isinstance(v, collections.Hashable)]
 
         # place=city, place=suburb, etc. override per-country boundaries
-        for k, v in values:
-            containing_component = self.global_keys_override.get(k, {}).get(v, None)
+        if not config.get('no_global_overrides', False):
+            for k, v in values:
+                containing_component = self.global_keys_override.get(k, {}).get(v, None)
 
-            if containing_component is not None:
-                return containing_component
+                if containing_component is not None:
+                    return containing_component
 
         # admin_level tags are mapped per country
         for k, v in values:
