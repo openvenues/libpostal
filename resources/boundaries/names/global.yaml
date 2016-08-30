@@ -31,7 +31,7 @@ names:
 
     regex_replacements:
         - country: fr
-          pattern: "(?:lyon|paris|marseilles) ([\\d]+er? arrondissement)"
+          pattern: "(?:lyon|paris|marseilles?) ([\\d]+(?:e|er|ème|eme) arrondissement)"
           replace_with_group: 1
           replace_probability: 0.5
 
