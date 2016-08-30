@@ -31,7 +31,7 @@ null_regex = re.compile('^\s*(?:null|none)\s*$', re.I)
 unknown_regex = re.compile('^\s*(?:unknown)\s*$', re.I)
 not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 sin_numero_regex = re.compile('^\s*s\s\s*/\s*n\s*$')
-fraction_regex = re.compile('^\s*[\d]+[\s]*/[\s]*[\d]+[\s]*$', re.I)
+fraction_regex = re.compile('^\s*[\d]+[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*$', re.I)
 number_space_letter_regex = re.compile('^[\d]+ [a-z]', re.I)
 
 SPANISH = 'es'
