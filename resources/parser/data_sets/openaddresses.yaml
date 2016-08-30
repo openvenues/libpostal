@@ -540,6 +540,11 @@ countries:
             - filename: yonne.csv
             - filename: yvelines.csv
 
+    is:
+        files:
+            - filename: countrywide.csv
+              add_osm_boundaries: true
+
     lu:
         files:
             - filename: countrywide.csv
