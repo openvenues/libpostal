@@ -427,6 +427,119 @@ countries:
             - filename: varsinais-suomi-sv.csv
               language: sv
 
+    fr:
+        ignore_fields_containing:
+            city:
+                - "(?:lyon|paris|marseilles?) ([\\d]+(?:e|er|ème|eme) arrondissement)"
+        files:
+            - filename: ain.csv
+            - filename: aisne.csv
+            - filename: allier.csv
+            - filename: alpes_de_haute_provence.csv
+            - filename: alpes_maritimes.csv
+            - filename: ardeche.csv
+            - filename: ardennes.csv
+            - filename: ariege.csv
+            - filename: aube.csv
+            - filename: aveyron.csv
+            - filename: bas_rhin.csv
+            - filename: bouches_du_rhone.csv
+            - filename: calvados.csv
+            - filename: cantal.csv
+            - filename: charente.csv
+            - filename: charente_maritime.csv
+            - filename: cher.csv
+            - filename: correze.csv
+            - filename: corse_du_sud.csv
+            - filename: cote_dor.csv
+            - filename: cotes_darmor.csv
+            - filename: creuse.csv
+            - filename: deux_sevres.csv
+            - filename: dordogne.csv
+            - filename: doubs.csv
+            - filename: drome.csv
+            - filename: essonne.csv
+            - filename: eure.csv
+            - filename: finistere.csv
+            - filename: gard.csv
+            - filename: gers.csv 
+            - filename: gironde.csv
+              # Guadeloupe - overseas department (treated as a country in libpostal)
+            - filename: guadeloupe.csv
+              cldr_country_probability: 1.0
+              # French Guiana - overseas department (treated as a country in libpostal)
+            - filename: guyane.csv
+              cldr_country_probability: 1.0
+            - filename: haute_corse.csv
+            - filename: haute_garonne.csv
+            - filename: haute_loire.csv
+            - filename: haute_marne.csv
+            - filename: haute_rhin.csv
+            - filename: hautes_alpes.csv
+            - filename: haute_saone.csv
+            - filename: haute_savoie.csv
+            - filename: hautes_pyrenees.csv
+            - filename: haute_vienne.csv
+            - filename: hauts_de_seine.csv
+            - filename: herault.csv
+            - filename: ille_et_vilaine.csv
+            - filename: indre.csv
+            - filename: indre_et_loire.csv
+            - filename: isere.csv
+            - filename: jura.csv
+            - filename: landes.csv
+              # Réunion - overseas department (treated as a country in libpostal)
+            - filename: la_reunion.csv
+              cldr_country_probability: 1.0
+            - filename: loire_atlantique.csv
+            - filename: loire.csv
+            - filename: loir_et_cher.csv
+            - filename: loiret.csv
+            - filename: lot.csv
+            - filename: lozere.csv
+            - filename: maine_et_loire.csv
+            - filename: manche.csv
+            - filename: marne.csv
+              # Martinique - overseas department (treated as a country in libpostal)
+            - filename: martinique.csv
+              cldr_country_probability: 1.0
+              # Mayotte - overseas department (treated as a country in libpostal)
+            - filename: mayotte.csv
+              cldr_country_probability: 1.0
+            - filename: meurthe_et_moselle.csv
+            - filename: meuse.csv
+            - filename: montpellier.csv
+              add_osm_boundaries: true
+            - filename: morbihan.csv
+            - filename: moselle.csv
+            - filename: nievre.csv
+            - filename: nord.csv
+            - filename: oise.csv
+            - filename: orne.csv
+            - filename: paris.csv
+            - filename: pas_de_calais.csv
+            - filename: puy_de_dome.csv
+            - filename: pyrenees_atlantiques.csv
+            - filename: rhone.csv
+            - filename: saone_et_loire.csv
+            - filename: sarthe.csv
+            - filename: savoie.csv
+            - filename: seien_et_marne.csv
+            - filename: seine_maritime.csv
+            - filename: seine_saint_denis.csv
+            - filename: somme.csv
+            - filename: tarn.csv
+            - filename: tarn_et_garonne.csv
+            - filename: territoire_de_belfort.csv
+            - filename: val_de_marne.csv
+            - filename: val_doise.csv
+            - filename: var.csv
+            - filename: vaucluse.csv
+            - filename: vendee.csv
+            - filename: vienne.csv
+            - filename: yonne.csv
+            - filename: yvelines.csv
+
     lu:
         files:
             - filename: countrywide.csv
