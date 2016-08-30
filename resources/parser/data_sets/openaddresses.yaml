@@ -585,6 +585,10 @@ countries:
         files:
             - filename: countrywide.csv
 
+    lv:
+        files:
+            - filename: city_of_riga.csv
+
     mx:
         language: es
         subdirs:
