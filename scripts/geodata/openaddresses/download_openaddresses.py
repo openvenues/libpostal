@@ -43,9 +43,9 @@ def openaddresses_download_all_files(out_dir):
     if not download_file(OPENADDRESSES_STATE_URL, local_state_file_path):
         sys.exit('Could not download state.txt file')
 
-    reader = unicode_csv_reader(local_state_file_path, delimiter='\t')
-
+    reader = unicode_csv_reader(open(local_state_file_path), delimiter='\t')
     headers = reader.next()
+
     source_index = headers.index('source')
     url_index = headers.index('processed')
 
