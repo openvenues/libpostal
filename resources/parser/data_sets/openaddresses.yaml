@@ -2003,7 +2003,6 @@ countries:
                     - filename: calhoun.csv
                     - filename: charleston.csv
                     - filename: city_of_charleston.csv
-                      add_osm_neighborhoods: true
                     - filename: colleton.csv
                     - filename: darlington.csv
                     - filename: dorchester.csv
@@ -2017,6 +2016,7 @@ countries:
                       add_osm_boundaries: true
                     - filename: horry.csv
                     - filename: laurens.csv
+                    - filename: newberry.csv
                     - filename: saluda.csv
                       add_osm_boundaries: true
                     - filename: sumter.csv
