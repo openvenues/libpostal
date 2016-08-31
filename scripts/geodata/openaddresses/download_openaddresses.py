@@ -13,6 +13,7 @@ this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.openaddresses.config import openaddresses_config
+from geodata.csv_utils import unicode_csv_reader
 from geodata.file_utils import ensure_dir, download_file, cd, remove_file
 
 BASE_OPENADDRESSES_DATA_URL = 'http://results.openaddresses.io'
