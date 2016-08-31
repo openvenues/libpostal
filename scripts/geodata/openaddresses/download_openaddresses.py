@@ -28,7 +28,7 @@ def download_and_unzip_file(url, out_dir):
     zip_filename = url.rsplit('/', 1)[-1].strip()
     zip_local_path = os.path.join(out_dir, zip_filename)
 
-    success = download_file(url, zip_local_path) and subprocess.check_call(['unzip', '-o', zip_local_path, '-d', OPENADDRESSES_DIR]) == 0
+    success = download_file(url, zip_local_path) and subprocess.check_call(['unzip', '-o', zip_local_path, '-d', out_dir]) == 0
 
     if os.path.exists(zip_local_path):
         remove_file(zip_local_path)
