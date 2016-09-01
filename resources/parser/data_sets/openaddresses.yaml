@@ -795,6 +795,10 @@ countries:
         files:
             - filename: countrywide.json
 
+    "no":
+        files:
+            - filename: countrywide.json
+
     us:
         cldr_country_probability: 0.05
         ignore_fields_containing:
