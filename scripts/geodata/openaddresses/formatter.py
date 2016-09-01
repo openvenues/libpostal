@@ -163,7 +163,8 @@ class OpenAddressesFormatter(object):
 
         return country_name
 
-    def cleanup_number(self, num):
+    @classmethod
+    def cleanup_number(cls, num):
         num = num.strip()
         try:
             num_int = int(num)
@@ -183,7 +184,8 @@ class OpenAddressesFormatter(object):
                 pass
         return num
 
-    def spanish_street_name(self, street):
+    @classmethod
+    def spanish_street_name(cls, street):
         '''
         Most Spanish street names begin with Calle officially
         but since it's so common, this is often omitted entirely.
@@ -201,7 +203,8 @@ class OpenAddressesFormatter(object):
         return street
 
     # HACK: remove method when #1932 is resolved in OpenAddresses
-    def dutch_house_number(self, house_number):
+    @classmethod
+    def dutch_house_number(cls, house_number):
         house_number = safe_decode(house_number)
         match = dutch_house_number_regex.match(house_number)
         if not match:
