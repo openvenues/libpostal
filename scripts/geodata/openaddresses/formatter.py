@@ -34,6 +34,8 @@ sin_numero_regex = re.compile('^\s*s\s\s*/\s*n\s*$')
 fraction_regex = re.compile('^\s*[\d]+[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*$', re.I)
 number_space_letter_regex = re.compile('^[\d]+ [a-z]', re.I)
 
+dutch_house_number_regex = re.compile('([\d]+)( [a-z])?( [\d]+)?', re.I)
+
 SPANISH = 'es'
 PORTUGUESE = 'pt'
 
@@ -128,7 +130,7 @@ class OpenAddressesFormatter(object):
         },
         PORTUGUESE: {
             AddressFormatter.HOUSE_NUMBER: validators.validate_house_number_sin_numero,
-        }
+        },
     }
 
     def get_property(self, key, *configs):
@@ -198,6 +200,26 @@ class OpenAddressesFormatter(object):
             street = six.u('Calle {}').format(street)
         return street
 
+    # HACK: remove method when #1932 is resolved in OpenAddresses
+    def dutch_house_number(self, house_number):
+        house_number = safe_decode(house_number)
+        match = dutch_house_number_regex.match(house_number)
+        if not match:
+            return house_number
+
+        number, letter, additional = match.groups()
+
+        parts = []
+        if number:
+            parts.append(number)
+        if letter:
+            parts.append(letter)
+        if additional:
+            if parts:
+                parts.append(six.u('-'))
+            parts.append(additional)
+        return six.u('').join(parts)
+
     def strip_unit_phrases_for_language(self, value, language):
         if language in self.unit_type_regexes:
             return self.unit_type_regexes[language].sub(six.u(''), value)
@@ -238,6 +260,9 @@ class OpenAddressesFormatter(object):
         latitude_index = headers.index('LAT')
         longitude_index = headers.index('LON')
 
+        # HACK: remove when #1932 is resolved in OpenAddresses
+        is_netherlands = 'nl' in path.lower().split(os.path.sep)[-3:]
+
         for row in reader:
             try:
                 latitude = float(row[latitude_index])
@@ -259,6 +284,10 @@ class OpenAddressesFormatter(object):
 
                 if key == AddressFormatter.ROAD and language == SPANISH:
                     value = self.spanish_street_name(value)
+
+                # HACK: remove when #1932 is resolved in OpenAddresses
+                if key == AddressFormatter.HOUSE_NUMBER and is_netherlands:
+                    value = self.dutch_house_number(value)
 
                 if key in AddressFormatter.BOUNDARY_COMPONENTS:
                     value = self.components.cleaned_name(value, first_comma_delimited_phrase=True)

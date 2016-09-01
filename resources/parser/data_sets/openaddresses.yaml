@@ -791,6 +791,10 @@ countries:
                 files:
                     - filename: statewide.csv
 
+    nl:
+        files:
+            - filename: countrywide.json
+
     us:
         cldr_country_probability: 0.05
         ignore_fields_containing:
