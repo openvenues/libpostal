@@ -28,7 +28,7 @@ OPENADDRESSES_FORMAT_DATA_TAGGED_FILENAME = 'openaddresses_formatted_addresses_t
 OPENADDRESSES_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
 
 null_regex = re.compile('^\s*(?:null|none)\s*$', re.I)
-unknown_regex = re.compile('^\s*(?:unknown)\s*$', re.I)
+unknown_regex = re.compile('\bunknown\b', re.I)
 not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 sin_numero_regex = re.compile('^\s*s\s\s*/\s*n\s*$')
 fraction_regex = re.compile('^\s*[\d]+[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*$', re.I)
