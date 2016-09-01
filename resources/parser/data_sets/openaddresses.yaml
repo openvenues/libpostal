@@ -341,6 +341,13 @@ countries:
                     - filename: whitehorse.csv
                       add_osm_boundaries: true
 
+    ch:
+        files:
+            - filename: geneva.csv
+              language: fr
+            - filename: zurich.csv
+              language: de
+
     cz:
         files:
             - filename: countrywide.csv
