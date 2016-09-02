@@ -2347,3 +2347,9 @@ countries:
                     add_osm_boundaries: true
                   - filename: teton.csv
                     add_osm_boundaries: true
+
+    uy:
+        subdirs:
+            mo:
+                files:
+                    - filename: montevideo.csv
