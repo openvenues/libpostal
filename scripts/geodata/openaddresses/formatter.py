@@ -323,7 +323,7 @@ class OpenAddressesFormatter(object):
                 if value:
                     components[key] = value
 
-            if skip_row:
+            if skip_record:
                 continue
 
             if components:
