@@ -33,6 +33,8 @@ not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 sin_numero_regex = re.compile('^\s*s\s\s*/\s*n\s*$')
 fraction_regex = re.compile('^\s*[\d]+[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*$', re.I)
 number_space_letter_regex = re.compile('^[\d]+ [a-z]', re.I)
+number_slash_number_regex = re.compile('^(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)', re.I)
+number_fraction_regex = re.compile('^(?:[\d]+ )?(?:1[\s]*/[\s]*[234]|2[\s]*/[\s]*3)$')
 
 dutch_house_number_regex = re.compile('([\d]+)( [a-z])?( [\d]+)?', re.I)
 
@@ -110,7 +112,9 @@ class OpenAddressesFormatter(object):
                 house_number = int(house_number.strip())
                 return house_number > 0
             except (ValueError, TypeError):
-                return house_number.strip() and (is_numeric(house_number) or fraction_regex.match(house_number) or number_space_letter_regex.match(house_number)) and not all((c == '0' for c in house_number if c.isdigit()))
+                house_number = house_number.strip()
+                return house_number and (is_numeric(house_number) or fraction_regex.match(house_number) or number_space_letter_regex.match(house_number) or
+                                         number_slash_number_regex.match(house_number) or number_fraction_regex.match(house_number)) and not all((c == '0' for c in house_number if c.isdigit()))
 
         @classmethod
         def validate_house_number_sin_numero(cls, house_number):
