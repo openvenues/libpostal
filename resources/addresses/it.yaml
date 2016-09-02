@@ -561,6 +561,17 @@ units:
             direction: left
             add_number_phrase: true
             add_number_phrase_probability: 0.1
+    interno: &interno
+        canonical: interno
+        abbreviated: int
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.4
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.1
     room: &sala
         canonical: sala
         sample: true
@@ -573,8 +584,10 @@ units:
 
     alphanumeric: &unit_alphanumeric
         default: *appartamento
-        probability: 0.85
+        probability: 0.75
         alternatives:
+            - alternative: *interno
+              probability: 0.1
               # e.g. just plain #3 or No. 4
             - alternative: *numero
               probability: 0.05
