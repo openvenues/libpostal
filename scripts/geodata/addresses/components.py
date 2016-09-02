@@ -1027,7 +1027,7 @@ class AddressComponents(object):
         not be simply listed as "1" and people expected to understand.
         '''
         for component in list(address_components):
-            if component not in self.BOUNDARY_COMPONENTS and component != AddressFormatter.POSTCODE:
+            if component not in self.BOUNDARY_COMPONENTS or component == AddressFormatter.POSTCODE:
                 continue
             value = address_components[component]
             if value.isdigit():
