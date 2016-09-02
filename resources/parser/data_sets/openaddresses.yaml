@@ -801,6 +801,25 @@ countries:
             - filename: countrywide.csv
             - filename: city_of_palmerston_north.csv
 
+    pl:
+        files:
+            - filename: dolnoslaskie.csv
+            - filename: kujawsko-pomorskie.csv
+            - filename: lodzkie.csv
+            - filename: lubelskie.csv
+            - filename: lubuskie.csv
+            - filename: malopolski.csv
+            - filename: mazowieckie.csv
+            - filename: opolskie.csv
+            - filename: podkarpackie.csv
+            - filename: podlaskie.csv
+            - filename: pomorskie.csv
+            - filename: slaskie.csv
+            - filename: swietokrzyskie.csv
+            - filename: warminsko-mazurskie.csv
+            - filename: wielkopolskie.csv
+            - filename: zachodniopomorskie.csv
+
     us:
         cldr_country_probability: 0.05
         ignore_fields_containing:
