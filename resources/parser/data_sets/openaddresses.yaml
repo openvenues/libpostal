@@ -823,6 +823,7 @@ countries:
     sg:
         files:
             - filename: countrywide.csv
+              add_osm_boundaries: true
 
     sk:
         files:
@@ -833,7 +834,7 @@ countries:
             12:
                 files:
                     - filename: city_of_dnipropetrovsk.csv
-
+                      add_osm_boundaries: true
     us:
         cldr_country_probability: 0.05
         ignore_fields_containing:
@@ -2353,3 +2354,4 @@ countries:
             mo:
                 files:
                     - filename: montevideo.csv
+                      add_osm_boundaries: true
