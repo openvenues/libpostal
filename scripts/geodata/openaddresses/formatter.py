@@ -227,12 +227,18 @@ class OpenAddressesFormatter(object):
             parts.append(additional)
         return six.u('').join(parts)
 
+    # HACK: remove when join function handles nulls
+    @classmethod
+    def italian_house_number(cls, house_number):
+        house_number = safe_decode(house_number)
+        return re.sub('[\s]+', six.u('/'), house_number)
+
     def strip_unit_phrases_for_language(self, value, language):
         if language in self.unit_type_regexes:
             return self.unit_type_regexes[language].sub(six.u(''), value)
         return value
 
-    def formatted_addresses(self, path, configs, tag_components=True):
+    def formatted_addresses(self, country_dir, path, configs, tag_components=True):
         abbreviate_street_prob = float(self.get_property('abbreviate_street_probability', *configs))
         separate_street_prob = float(self.get_property('separate_street_probability', *configs) or 0.0)
         abbreviate_unit_prob = float(self.get_property('abbreviate_unit_probability', *configs))
@@ -268,7 +274,9 @@ class OpenAddressesFormatter(object):
         longitude_index = headers.index('LON')
 
         # HACK: remove when #1932 is resolved in OpenAddresses
-        is_netherlands = 'nl' in path.lower().split(os.path.sep)[-3:]
+        is_netherlands = country_dir == 'nl'
+        # HACK: remove when join function handles nulls
+        is_italy = country_dir == 'it'
 
         for row in reader:
             try:
@@ -295,6 +303,10 @@ class OpenAddressesFormatter(object):
                 # HACK: remove when #1932 is resolved in OpenAddresses
                 if key == AddressFormatter.HOUSE_NUMBER and is_netherlands:
                     value = self.dutch_house_number(value)
+
+                # HACK: remove when join function handles nulls
+                if key == AddressFormatter.HOUSE_NUMBER and is_italy:
+                    value = self.italian_house_number(value)
 
                 if key in AddressFormatter.BOUNDARY_COMPONENTS and key != AddressFormatter.POSTCODE:
                     value = self.components.cleaned_name(value, first_comma_delimited_phrase=True)
@@ -463,7 +475,7 @@ class OpenAddressesFormatter(object):
 
                 path = os.path.join(base_dir, country_dir, filename)
                 configs = (file_config, config, openaddresses_config.config)
-                for language, country, formatted_address in self.formatted_addresses(path, configs, tag_components=tag_components):
+                for language, country, formatted_address in self.formatted_addresses(country_dir, path, configs, tag_components=tag_components):
                     if not formatted_address or not formatted_address.strip():
                         continue
 
