@@ -277,6 +277,8 @@ class OpenAddressesFormatter(object):
         is_netherlands = country_dir == 'nl'
         # HACK: remove when join function handles nulls
         is_italy = country_dir == 'it'
+        # HACK: remove when join function handles nulls
+        is_honololu = path.endswith('honolulu.csv')
 
         for row in reader:
             try:
@@ -303,6 +305,10 @@ class OpenAddressesFormatter(object):
                 # HACK: remove when #1932 is resolved in OpenAddresses
                 if key == AddressFormatter.HOUSE_NUMBER and is_netherlands:
                     value = self.dutch_house_number(value)
+
+                # HACK: remove when join function handles nulls
+                if key == AddressFormatter.HOUSE_NUMBER and is_honololu:
+                    value = value.strip('- ')
 
                 # HACK: remove when join function handles nulls
                 if key == AddressFormatter.HOUSE_NUMBER and is_italy:
