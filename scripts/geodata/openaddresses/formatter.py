@@ -81,7 +81,7 @@ class OpenAddressesFormatter(object):
             '''
             Postcodes that are all zeros are improperly-formatted NULL values
             '''
-            return not all((c == '0' for c in postcode))
+            return not all((c in ('0', '-') for c in postcode))
 
         @classmethod
         def validate_street(cls, street):
