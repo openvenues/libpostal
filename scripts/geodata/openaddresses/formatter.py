@@ -441,8 +441,8 @@ class OpenAddressesFormatter(object):
                 all_osm_components = osm_components + neighborhood_components
                 components = place_config.dropout_components(components, all_osm_components, country=country, population=population)
 
-                formatted = self.formatter.format_address(components, country,
-                                                          language=language, tag_components=tag_components)
+                formatted = self.formatter.format_address(components, country, language=language,
+                                                          minimal_only=False, tag_components=tag_components)
                 yield (language, country, formatted)
 
     def build_training_data(self, base_dir, out_dir, tag_components=True):
