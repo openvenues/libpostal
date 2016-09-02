@@ -91,10 +91,6 @@ countries:
         files:
             - filename: countrywide.csv
               non_numeric_units: true
-    nz:
-        files:
-            - filename: countrywide.csv
-            - filename: city_of_palmerston_north.csv
 
     be:
         files:
@@ -798,6 +794,12 @@ countries:
     "no":
         files:
             - filename: countrywide.json
+
+    nz:
+        add_osm_boundaries: true
+        files:
+            - filename: countrywide.csv
+            - filename: city_of_palmerston_north.csv
 
     us:
         cldr_country_probability: 0.05
