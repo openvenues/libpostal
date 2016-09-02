@@ -496,7 +496,7 @@ class OpenAddressesFormatter(object):
                             break
 
             for subdir, subdir_config in six.iteritems(config.get('subdirs', {})):
-                subdir = safe_encode(subdir)
+                subdir = safe_decode(subdir)
                 for file_config in subdir_config.get('files', []):
                     filename = file_config['filename']
 
