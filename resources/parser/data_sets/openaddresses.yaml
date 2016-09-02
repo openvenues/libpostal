@@ -2355,3 +2355,14 @@ countries:
                 files:
                     - filename: montevideo.csv
                       add_osm_boundaries: true
+
+    za:
+        subdirs:
+            nl:
+                files:
+                    - filename: ethekwini.csv
+                      add_osm_boundaries: true
+            wc:
+                files:
+                    - filename: cape_town.csv
+                      add_osm_boundaries: true
