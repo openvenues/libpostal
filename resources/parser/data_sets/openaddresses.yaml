@@ -1426,6 +1426,8 @@ countries:
                     - filename: osage_county.csv
                     - filename: pawnee_county.csv
                     - filename: pottawatomie_county.csv
+                    - filename: reno_county.csv
+                      add_osm_boundaries: true
                     - filename: riley_county.csv
                     - filename: rush_county.csv
                     - filename: scott_county.csv
