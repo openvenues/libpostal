@@ -296,9 +296,9 @@ class OpenAddressesFormatter(object):
                 if key == AddressFormatter.HOUSE_NUMBER and is_netherlands:
                     value = self.dutch_house_number(value)
 
-                if key in AddressFormatter.BOUNDARY_COMPONENTS:
+                if key in AddressFormatter.BOUNDARY_COMPONENTS and key != AddressFormatter.POSTCODE:
                     value = self.components.cleaned_name(value, first_comma_delimited_phrase=True)
-                    if value and len(value) < 2 or is_numeric(value):
+                    if value and (len(value) < 2 or is_numeric(value)):
                         continue
 
                 if not_applicable_regex.match(value) or null_regex.match(value) or unknown_regex.match(value):
