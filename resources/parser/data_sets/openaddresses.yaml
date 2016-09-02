@@ -828,6 +828,12 @@ countries:
         files:
             - filename: countrywide.csv
 
+    ua:
+        subdirs:
+            12:
+                files:
+                    - filename: city_of_dnipropetrovsk.csv
+
     us:
         cldr_country_probability: 0.05
         ignore_fields_containing:
