@@ -9,6 +9,7 @@
     overrides:
         id:
             relation:
+                # Bangkok
                 "92277": "city"
         contained_by:
             relation:
@@ -16,3 +17,8 @@
                     admin_level:
                         "6": "city_district"
                         "8": "suburb"
+
+        use_admin_center:
+            - id: 92277 # Bangkok
+              type: relation
+              probability: 0.85

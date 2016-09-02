@@ -1,15 +1,21 @@
 ---
-  admin_level: 
-    "2": "country"
-    "4": "state"
-    "5": "state_district"
-    "6": "state_district"
-    "8": "city"
-    "9": "suburb"
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "5": "state_district"
+        "6": "state_district"
+        "8": "city"
+        "9": "suburb"
 
     overrides:
         contained_by:
-                    relation:
-                        "407489":
-                            admin_level:
-                                "9": "city_district"
+            relation:
+                # Luxembourg City
+                "407489":
+                    admin_level:
+                        "9": "city_district"
+
+        use_admin_center:
+            - id: 407489 # Luxembourg City
+              type: relation
+              probability: 0.6

@@ -8,6 +8,8 @@ from copy import deepcopy
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.configs.utils import recursive_merge
 
+from geodata.encoding import safe_encode
+
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
 OSM_BOUNDARIES_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
@@ -61,18 +63,23 @@ class OSMAddressComponents(object):
     def __init__(self, boundaries_dir=OSM_BOUNDARIES_DIR):
         self.config = {}
 
+        self.use_admin_center = {}
+
         for filename in os.listdir(boundaries_dir):
             if not filename.endswith('.yaml'):
                 continue
 
             country_code = filename.rsplit('.yaml', 1)[0]
             data = yaml.load(open(os.path.join(boundaries_dir, filename)))
+
             for prop, values in six.iteritems(data):
                 for k, v in values.iteritems():
                     if isinstance(v, six.string_types) and v not in AddressFormatter.address_formatter_fields:
                         raise ValueError(u'Invalid value in {} for prop={}, key={}: {}'.format(filename, prop, k, v))
 
                 if prop == 'overrides':
+                    self.use_admin_center.update({(r['type'], safe_encode(r['id'])): r.get('probability', 1.0) for r in values.get('use_admin_center', [])})
+
                     containing_overrides = values.get('contained_by', {})
 
                     if not containing_overrides:

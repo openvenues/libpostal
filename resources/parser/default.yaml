@@ -109,12 +109,6 @@ category:
 
 boundaries:
     abbreviate_toponym_probability: 0.35
-    # OSM relations should inherit properties from their admin_center
-    override_with_admin_center:
-        - id: 92277 # Bangkok, Thailand
-          type: relation
-        - id: 1387968 # Bogotá, Colombia
-          type: relation
 
 neighborhood:
     # Usually in Germany, may have e.g. name:prefix=Ortsteil
