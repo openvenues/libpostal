@@ -820,6 +820,10 @@ countries:
             - filename: wielkopolskie.csv
             - filename: zachodniopomorskie.csv
 
+    sg:
+        files:
+            - filename: countrywide.csv
+
     us:
         cldr_country_probability: 0.05
         ignore_fields_containing:
