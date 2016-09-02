@@ -505,7 +505,7 @@ class OpenAddressesFormatter(object):
                     path = os.path.join(base_dir, country_dir, subdir, filename)
 
                     configs = (file_config, subdir_config, config, openaddresses_config.config)
-                    for language, country, formatted_address in self.formatted_addresses(path, configs, tag_components=tag_components):
+                    for language, country, formatted_address in self.formatted_addresses(country_dir, path, configs, tag_components=tag_components):
                         if not formatted_address or not formatted_address.strip():
                             continue
 
