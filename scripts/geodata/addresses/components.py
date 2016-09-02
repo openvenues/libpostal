@@ -710,7 +710,7 @@ class AddressComponents(object):
                 if component is None:
                     continue
 
-                admin_center_prob = osm_address_components.use_admin_center_ids.get(props.get('type'), safe_encode(props.get('id', '')), None)
+                admin_center_prob = osm_address_components.use_admin_center.get((props.get('type'), safe_encode(props.get('id', ''))), None)
 
                 if admin_center_prob is not None:
                     if admin_center_prob == 1.0 or random.random() < admin_center_prob:
