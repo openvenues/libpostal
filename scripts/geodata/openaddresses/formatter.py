@@ -218,13 +218,13 @@ class OpenAddressesFormatter(object):
 
         parts = []
         if number:
-            parts.append(number)
+            parts.append(number.strip())
         if letter:
-            parts.append(letter)
+            parts.append(letter.strip())
         if additional:
             if parts:
                 parts.append(six.u('-'))
-            parts.append(additional)
+            parts.append(additional.strip())
         return six.u('').join(parts)
 
     # HACK: remove when join function handles nulls
