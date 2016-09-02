@@ -794,11 +794,11 @@ countries:
 
     nl:
         files:
-            - filename: countrywide.json
+            - filename: countrywide.csv
 
     "no":
         files:
-            - filename: countrywide.json
+            - filename: countrywide.csv
 
     nz:
         add_osm_boundaries: true
