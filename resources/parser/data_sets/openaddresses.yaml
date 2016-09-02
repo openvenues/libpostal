@@ -1588,6 +1588,8 @@ countries:
                     - filename: scott.csv
                     - filename: sherburne.csv
                     - filename: stearns.csv
+                    - filename: wadena.csv
+                      add_osm_boundaries: true
                     - filename: waseca.csv
                     - filename: washington.csv
                     - filename: yellow_medicine.csv
@@ -2315,6 +2317,8 @@ countries:
                     - filename: okanogan.csv
                       add_osm_boundaries: true
                     - filename: pacific.csv
+                      add_osm_boundaries: true
+                    - filename: seattle.csv
                       add_osm_boundaries: true
                     - filename: snohomish_county.csv
                       add_osm_boundaries: true
