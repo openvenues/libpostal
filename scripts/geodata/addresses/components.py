@@ -147,8 +147,6 @@ class AddressComponents(object):
     def __init__(self, osm_admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames):
         self.config = yaml.load(open(PARSER_DEFAULT_CONFIG))
 
-        self.use_admin_center_ids = set([(r['type'], safe_encode(r['id'])) for r in nested_get(self.config, ('boundaries', 'override_with_admin_center'), default=[])])
-
         self.setup_component_dependencies()
         # Non-admin component dropout
         self.address_level_dropout_probabilities = {k: v['probability'] for k, v in six.iteritems(self.config['dropout'])}
@@ -712,8 +710,11 @@ class AddressComponents(object):
                 if component is None:
                     continue
 
-                if (props.get('type'), safe_encode(props.get('id', ''))) in self.use_admin_center_ids:
-                    props = props.get('admin_center', props)
+                admin_center_prob = osm_address_components.use_admin_center_ids.get(props.get('type'), safe_encode(props.get('id', '')), None)
+
+                if admin_center_prob is not None:
+                    if admin_center_prob == 1.0 or random.random() < admin_center_prob:
+                        props = props.get('admin_center', props)
                 elif 'admin_center' in props:
                     admin_center = {k: v for k, v in six.iteritems(props['admin_center']) if k != 'admin_level'}
                     admin_center_component = self.categorize_osm_component(country, admin_center, containing_components)
