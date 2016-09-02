@@ -116,6 +116,11 @@ countries:
                     state: ES
                 files:
                     - filename: vitoria.csv
+            pe:
+                add:
+                    state: PE
+                files:
+                    - filename: recife.csv
 
     ca:
         cldr_country_probability: 0.3
