@@ -1238,7 +1238,8 @@ countries:
             hi:
                 add:
                     state: HI
-                files: []
+                files:
+                    - filename: honoloulu.csv
 
             id:
                 add:
