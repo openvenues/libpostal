@@ -2377,4 +2377,6 @@ countries:
             wc:
                 files:
                     - filename: cape_town.csv
+                      add:
+                          city: Cape Town
                       add_osm_boundaries: true
