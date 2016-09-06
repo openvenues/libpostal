@@ -1172,8 +1172,10 @@ units:
               # e.g. just plain #3 or No. 4
             - alternative: *number
               probability: 0.2
+            - alternatives: *lot
+              probability: 0.03
             - alternative: *door
-              probability: 0.04
+              probability: 0.01
             - alternative: *penthouse_numeric
               probability: 0.01
             - alternative: *apartment
@@ -1336,12 +1338,12 @@ countries:
                       probability: 0.1
                     - alternative: *number
                       probability: 0.2
+                    - alternatives: *lot
+                      probability: 0.03
                     - alternative: *door
-                      probability: 0.02
-                    - alternative: *suite
-                      probability: 0.05
+                      probability: 0.005
                     - alternative: *penthouse_numeric
-                      probability: 0.02
+                      probability: 0.005
                     - alternative: *flat
                       probability: 0.01 # See this e.g. in Milwaukee with Polish flats
 
@@ -1356,8 +1358,6 @@ countries:
                           probability: 0.2
                         - alternative: *office
                           probability: 0.3
-                university:
-                    default: *room
 
     # Canada
     # Specifically Canadian English. If the address is in French it will use fr.yaml
@@ -1420,16 +1420,16 @@ countries:
                 sample: true
                 default: *flat
                 # Reduce the default's probability to make room for sampling
-                probability: 0.39
-                sample_probability: 0.01
+                probability: 0.49
+                sample_probability: 0.51
                 numeric:
                     direction: left
             standalone:
                 default: *penthouse
                 sample: true
                 # Reduce the default's probability to make room for sampling
-                probability: 0.39
-                sample_probability: 0.01
+                probability: 0.49
+                sample_probability: 0.51
                 standalone_probability: 1.0
 
             # For unit types like 2/34
