@@ -5,9 +5,10 @@ import six
 
 def download_file(url, dest, retries=3, retry_delay=5):
     ensure_dir(os.path.dirname(dest))
-    return subprocess.call(['curl', url, '-L', '--retry', six.text_type(retries),
-                            '--retry-delay', six.text_type(retry_delay),
-                            '-o', dest, '--silent']) == 0
+    return subprocess.check_output(['curl', url, '-L', '-w', '%{http_code}',
+                                    '--retry', six.text_type(retries),
+                                    '--retry-delay', six.text_type(retry_delay),
+                                    '-o', dest, '--silent']) == '200'
 
 
 def unzip_file(filename, dest):
