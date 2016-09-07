@@ -66,9 +66,13 @@ def openaddresses_download_all_files(out_dir):
 
 def openaddresses_download_configured_files(out_dir):
     for path in openaddresses_config.sources:
+
         source = six.b('/').join([safe_encode(p) for p in path])
-        zip_path = source + '.zip'
-        url = urljoin(OPENADDRESSES_LATEST_DIR, quote_plus(zip_path))
+        filename = safe_encode(path[-1]) + six.b('.zip')
+        zip_path = filename + '.zip'
+        zip_url_path = six.b('/').join([safe_encode(p) for p in path[:-1]] + [quote_plus(filename)])
+
+        url = urljoin(OPENADDRESSES_LATEST_DIR, zip_url_path)
 
         print(six.u('doing {}').format(safe_decode(source)))
         success = download_and_unzip_file(url, out_dir)
