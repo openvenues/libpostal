@@ -12,7 +12,7 @@ global:
         city_district:
             probability: 0.2
         city:
-            probability: 0.9
+            probability: 1.0
         island:
             # Islands are usually not represented in addresses
             probability: 0.0
@@ -178,7 +178,7 @@ countries:
                     - <<: *new_york_county
                       probability: 0.1
             city:
-                probability: 0.9
+                probability: 1.0
                 containing:
                     - <<: *kings_county
                       probability: 0.1
