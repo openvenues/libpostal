@@ -56,6 +56,9 @@ class OSMAddressComponents(object):
             'province': AddressFormatter.STATE,
             'district': AddressFormatter.STATE_DISTRICT,
             'county': AddressFormatter.STATE_DISTRICT,
+        },
+        'gnis:class': {
+            'populated place': AddressFormatter.CITY,
         }
     }
 
@@ -134,7 +137,7 @@ class OSMAddressComponents(object):
                         config = override_config
                         break
 
-        values = [(k, v) for k, v in six.iteritems(properties) if isinstance(v, collections.Hashable)]
+        values = [(k.lower(), v.lower()) for k, v in six.iteritems(properties) if isinstance(v, six.string_types)]
 
         # place=city, place=suburb, etc. override per-country boundaries
         if not config.get('no_global_overrides', False):
