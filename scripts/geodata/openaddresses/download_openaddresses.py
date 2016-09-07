@@ -7,7 +7,7 @@ import sys
 import tempfile
 import yaml
 
-from six.moves.urllib_parse import urljoin, urlencode
+from six.moves.urllib_parse import urljoin, quote_plus
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
@@ -68,7 +68,7 @@ def openaddresses_download_configured_files(out_dir):
     for path in openaddresses_config.sources:
         source = six.b('/').join([safe_encode(p) for p in path])
         zip_path = source + '.zip'
-        url = urljoin(OPENADDRESSES_LATEST_DIR, urlencode(zip_path))
+        url = urljoin(OPENADDRESSES_LATEST_DIR, quote_plus(zip_path))
 
         print(six.u('doing {}').format(safe_decode(source)))
         success = download_and_unzip_file(url, out_dir)
