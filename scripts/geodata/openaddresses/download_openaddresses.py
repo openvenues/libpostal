@@ -15,7 +15,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 from geodata.openaddresses.config import openaddresses_config
 from geodata.csv_utils import unicode_csv_reader
 from geodata.file_utils import ensure_dir, download_file, cd, remove_file
-from geodata.encoding import safe_encode
+from geodata.encoding import safe_encode, safe_decode
 
 BASE_OPENADDRESSES_DATA_URL = 'http://results.openaddresses.io'
 
@@ -70,7 +70,7 @@ def openaddresses_download_configured_files(out_dir):
         zip_path = source + '.zip'
         url = urljoin(OPENADDRESSES_LATEST_DIR, zip_path)
 
-        print(six.u('doing {}').format(source))
+        print(six.u('doing {}').format(safe_decode(source)))
         success = download_and_unzip_file(url, out_dir)
         if not success:
             print(six.u('ERR: could not download {}').format(source))
