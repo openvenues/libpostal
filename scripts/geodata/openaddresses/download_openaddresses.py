@@ -38,7 +38,7 @@ def download_and_unzip_file(url, out_dir):
 
 
 def download_pre_release_downloads(out_dir):
-    for url in openaddresses_config.pre_release_downloads:
+    for url in openaddresses_config.config.get('pre_release_downloads', []):
         print(six.u('doing pre_release {}').format(safe_decode(url)))
 
         success = download_and_unzip_file(url, out_dir)
