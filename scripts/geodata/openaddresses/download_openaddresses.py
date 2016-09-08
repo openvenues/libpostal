@@ -7,7 +7,7 @@ import sys
 import tempfile
 import yaml
 
-from six.moves.urllib_parse import urljoin, quote_plus
+from six.moves.urllib_parse import urljoin, quote_plus, unquote_plus
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
@@ -37,6 +37,17 @@ def download_and_unzip_file(url, out_dir):
     return success
 
 
+def download_pre_release_downloads(out_dir):
+    for url in openaddresses_config.pre_release_downloads:
+        print(six.u('doing pre_release {}').format(safe_decode(url)))
+
+        success = download_and_unzip_file(url, out_dir)
+        if not success:
+            print(six.u('ERR: could not download {}').format(source))
+            return False
+    return True
+
+
 def openaddresses_download_all_files(out_dir):
     temp_dir = tempfile.gettempdir()
 
@@ -49,6 +60,8 @@ def openaddresses_download_all_files(out_dir):
 
     source_index = headers.index('source')
     url_index = headers.index('processed')
+
+    download_pre_release_downloads(out_dir)
 
     for row in reader:
         source = row[source_index].rsplit('.')[0]
@@ -73,6 +86,8 @@ def openaddresses_download_configured_files(out_dir):
         zip_url_path = six.b('/').join([safe_encode(p) for p in path[:-1]] + [quote_plus(filename)])
 
         url = urljoin(OPENADDRESSES_LATEST_DIR, zip_url_path)
+
+        download_pre_release_downloads(out_dir)
 
         print(six.u('doing {}').format(safe_decode(source)))
         success = download_and_unzip_file(url, out_dir)

@@ -14,6 +14,7 @@ class OpenAddressesConfig(object):
 
         config = yaml.load(open(path))
         self.config = config['global']
+        self.pre_release_downloads = config.get('pre_release_downloads', [])
         self.country_configs = config['countries']
 
     @property

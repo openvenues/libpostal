@@ -12,6 +12,10 @@ global:
     place_only_probability: 0.2
     place_and_postcode_probability: 0.1
 
+    pre_release_downloads:
+        # Italy countrywide with postcodes, must have
+        - "http://s3.amazonaws.com/data.openaddresses.io/runs/104280/it/countrywide.zip"
+
     fields: &default_fields
         - field_name: NUMBER
           component: house_number
@@ -557,6 +561,8 @@ countries:
               add_osm_boundaries: true
 
     it:
+        files:
+            - filename: countrywide.csv
         subdirs:
             # Trentino-Alto Adige/Südtirol
             32:
