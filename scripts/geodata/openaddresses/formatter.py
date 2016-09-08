@@ -476,9 +476,10 @@ class OpenAddressesFormatter(object):
                     if rand_val < place_and_postcode_probability:
                         components = self.components.drop_postcode(components)
 
-                    formatted = self.formatter.format_address(components, country, language=language,
-                                                              minimal_only=False, tag_components=tag_components)
-                    yield (language, country, formatted)
+                    if components:
+                        formatted = self.formatter.format_address(components, country, language=language,
+                                                                  minimal_only=False, tag_components=tag_components)
+                        yield (language, country, formatted)
 
     def build_training_data(self, base_dir, out_dir, tag_components=True):
         if tag_components:
