@@ -1,2 +1,5 @@
 kælderetage|kaelderetage|kl
 stueetage|st
+til venstre|tv
+til højre|th
+midtfor|mf
