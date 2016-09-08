@@ -609,6 +609,9 @@ class AddressFormatter(object):
                     values, probs = insertions
                     order, other = weighted_choice(values, probs)
 
+                # Even though we may change the value of "other" below, use
+                # the original cache key because changes from here on are
+                # deterministic and should be cached.
                 insertion_id = (scope, component, order, other)
                 cache_keys.append(insertion_id)
 
@@ -618,9 +621,43 @@ class AddressFormatter(object):
                     template = self.template_cache[cache_key]
                     continue
 
-                if order == self.BEFORE and self.tag_token(other) in template:
+                # Don't allow insertions between road and house_number
+                # This can happen if e.g. "level" is supposed to be inserted
+                # after house number assuming that it's a continental European
+                # address where house number comes after road. If in a previous
+                # insertion we were to swap house_number and road to create an
+                # English-style address, the final ordering would be
+                # house_number, unit, road, which we don't want. So effectively
+                # treat house_number and road as an atomic unit.
+
+                other_token = self.tag_token(other)
+
+                if other == self.HOUSE_NUMBER and component != self.ROAD:
+                    road_tag = self.tag_token(self.ROAD)
+                    house_number_tag = other_token
+
+                    if house_number_tag in template and road_tag in template:
+                        road_after_house_number = template.index(road_tag) > template.index(house_number_tag)
+
+                        if road_after_house_number and order == self.AFTER:
+                            other = self.ROAD
+                        elif not road_after_house_number and order == self.BEFORE:
+                            other = self.ROAD
+                elif other == self.ROAD and component != self.HOUSE_NUMBER:
+                    house_number_tag = self.tag_token(self.HOUSE_NUMBER)
+                    road_tag = other_token
+
+                    if house_number_tag in template and road_tag in template:
+                        road_before_house_number = template.index(road_tag) < template.index(house_number_tag)
+
+                        if road_before_house_number and order == self.AFTER:
+                            other = self.HOUSE_NUMBER
+                        elif not road_before_house_number and order == self.BEFORE:
+                            other = self.HOUSE_NUMBER
+
+                if order == self.BEFORE and other_token in template:
                     template = self.insert_component(template, component, before=other)
-                elif order == self.AFTER and self.tag_token(other) in template:
+                elif order == self.AFTER and other_token in template:
                     template = self.insert_component(template, component, after=other)
                 elif order == self.LAST:
                     template = self.insert_component(template, component, last=True)
