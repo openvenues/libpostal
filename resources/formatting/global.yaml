@@ -84,6 +84,11 @@ global:
 languages:
     continental_european_languages:
         insertions: &continental_european_template_insertions
+            house_number:
+                house_number_before_road:
+                    before: road
+                    probability: 0.01
+
             building:
                 building_after_house_number:
                     after: house_number
@@ -602,6 +607,11 @@ countries:
     fr:
         insertions: &france_template_insertions
             <<: *english_template_insertions
+            house_number:
+                house_number_after_road:
+                    after: road
+                    probability: 0.01
+
             level:
                 level_after_road:
                     after: road
