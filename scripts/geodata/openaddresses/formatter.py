@@ -250,6 +250,11 @@ class OpenAddressesFormatter(object):
         numeric_postcodes_only = bool(self.get_property('numeric_postcodes_only', *configs) or False)
         postcode_strip_non_digit_chars = bool(self.get_property('postcode_strip_non_digit_chars', *configs) or False)
 
+        place_only_probability = float(self.get_property('place_only_probability', *configs))
+        place_and_postcode_probability = float(self.get_property('place_and_postcode_probability', *configs))
+
+        drop_address_probability = place_only_probability + place_and_postcode_probability
+
         ignore_rows_missing_fields = set(self.get_property('ignore_rows_missing_fields', *configs) or [])
 
         ignore_fields_containing = {field: re.compile(six.u('|').join([six.u('(?:{})').format(safe_decode(v)) for v in value]), re.I | re.UNICODE)
@@ -462,6 +467,18 @@ class OpenAddressesFormatter(object):
                 formatted = self.formatter.format_address(components, country, language=language,
                                                           minimal_only=False, tag_components=tag_components)
                 yield (language, country, formatted)
+
+                rand_val = random.random()
+
+                if street and house_number and rand_val < drop_address_probability:
+                    components = self.components.drop_address(components)
+
+                    if rand_val < place_and_postcode_probability:
+                        components = self.components.drop_postcode(components)
+
+                    formatted = self.formatter.format_address(components, country, language=language,
+                                                              minimal_only=False, tag_components=tag_components)
+                    yield (language, country, formatted)
 
     def build_training_data(self, base_dir, out_dir, tag_components=True):
         if tag_components:

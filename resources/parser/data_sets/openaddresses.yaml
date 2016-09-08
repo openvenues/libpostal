@@ -9,6 +9,9 @@ global:
     abbreviate_unit_probability: 0.3
     separate_unit_probability: 0.2
 
+    place_only_probability: 0.2
+    place_and_postcode_probability: 0.1
+
     fields: &default_fields
         - field_name: NUMBER
           component: house_number
