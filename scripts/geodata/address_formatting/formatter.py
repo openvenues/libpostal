@@ -623,6 +623,8 @@ class AddressFormatter(object):
                     template = self.template_cache[cache_key]
                     continue
 
+                other_token = self.tag_token(other)
+
                 # Don't allow insertions between road and house_number
                 # This can happen if e.g. "level" is supposed to be inserted
                 # after house number assuming that it's a continental European
@@ -633,7 +635,6 @@ class AddressFormatter(object):
                 # treat house_number and road as an atomic unit.
 
                 if not allow_between_house_number_and_road:
-                    other_token = self.tag_token(other)
 
                     if other == self.HOUSE_NUMBER and component != self.ROAD:
                         road_tag = self.tag_token(self.ROAD)
