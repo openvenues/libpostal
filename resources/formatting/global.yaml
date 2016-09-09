@@ -674,6 +674,7 @@ countries:
                 city_before_road:
                     before: road
                     probability: 0.001
+                    allow_between_house_number_and_road: true
 
     # Andorra, uses same template as France
     ad_ca:
