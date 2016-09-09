@@ -206,33 +206,6 @@ class OpenAddressesFormatter(object):
             street = six.u('Calle {}').format(street)
         return street
 
-    # HACK: remove method when #1932 is resolved in OpenAddresses
-    @classmethod
-    def dutch_house_number(cls, house_number):
-        house_number = safe_decode(house_number)
-        match = dutch_house_number_regex.match(house_number)
-        if not match:
-            return house_number
-
-        number, letter, additional = match.groups()
-
-        parts = []
-        if number:
-            parts.append(number.strip())
-        if letter:
-            parts.append(letter.strip())
-        if additional:
-            if parts:
-                parts.append(six.u('-'))
-            parts.append(additional.strip())
-        return six.u('').join(parts)
-
-    # HACK: remove when join function handles nulls
-    @classmethod
-    def italian_house_number(cls, house_number):
-        house_number = safe_decode(house_number)
-        return re.sub('[\s]+', six.u('/'), house_number)
-
     def strip_unit_phrases_for_language(self, value, language):
         if language in self.unit_type_regexes:
             return self.unit_type_regexes[language].sub(six.u(''), value)
@@ -278,13 +251,6 @@ class OpenAddressesFormatter(object):
         latitude_index = headers.index('LAT')
         longitude_index = headers.index('LON')
 
-        # HACK: remove when #1932 is resolved in OpenAddresses
-        is_netherlands = country_dir == 'nl'
-        # HACK: remove when join function handles nulls
-        is_italy = country_dir == 'it'
-        # HACK: remove when join function handles nulls
-        is_honololu = path.endswith('honolulu.csv')
-
         for row in reader:
             try:
                 latitude = float(row[latitude_index])
@@ -306,18 +272,6 @@ class OpenAddressesFormatter(object):
 
                 if key == AddressFormatter.ROAD and language == SPANISH:
                     value = self.spanish_street_name(value)
-
-                # HACK: remove when #1932 is resolved in OpenAddresses
-                if key == AddressFormatter.HOUSE_NUMBER and is_netherlands:
-                    value = self.dutch_house_number(value)
-
-                # HACK: remove when join function handles nulls
-                if key == AddressFormatter.HOUSE_NUMBER and is_honololu:
-                    value = value.strip('- ')
-
-                # HACK: remove when join function handles nulls
-                if key == AddressFormatter.HOUSE_NUMBER and is_italy:
-                    value = self.italian_house_number(value)
 
                 if key in AddressFormatter.BOUNDARY_COMPONENTS and key != AddressFormatter.POSTCODE:
                     value = self.components.cleaned_name(value, first_comma_delimited_phrase=True)
