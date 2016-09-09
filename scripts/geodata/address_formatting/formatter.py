@@ -285,7 +285,7 @@ class AddressFormatter(object):
         # If the probabilities don't sum to 1, add a "do nothing" action
         if not isclose(sum(probs), 1.0):
             probs.append(1.0 - sum(probs))
-            values.append((None, None))
+            values.append((None, None, False))
 
         return values, cdf(probs)
 
