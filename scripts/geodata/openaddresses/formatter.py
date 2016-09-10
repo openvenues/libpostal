@@ -380,7 +380,7 @@ class OpenAddressesFormatter(object):
                     if component is not None:
                         component = abbreviate(toponym_gazetteer, component, language,
                                                abbreviate_prob=abbreviate_toponym_prob)
-                        components[AddressFormatter.ROAD] = component
+                        components[component_key] = component
 
                 # CLDR country name
                 country_name = self.cldr_country_name(country, language, configs)
