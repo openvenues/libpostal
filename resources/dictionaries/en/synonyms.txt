@@ -40,7 +40,7 @@ paradise|pde|pdse
 port|pt|prt
 park|pk|prk
 rear of|r / o|r o
-river|r|riv|rvr
+river|riv|rvr|rivr
 slope|slpe|slp
 springs|spgs|sprngs
 stream|strm|stm
