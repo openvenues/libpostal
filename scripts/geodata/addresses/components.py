@@ -12,6 +12,7 @@ from itertools import combinations
 from geodata.address_formatting.formatter import AddressFormatter
 
 from geodata.address_expansions.abbreviations import abbreviate
+from geodata.address_expansions.gazetteers import *
 from geodata.addresses.config import address_config
 from geodata.addresses.floors import Floor
 from geodata.addresses.entrances import Entrance
