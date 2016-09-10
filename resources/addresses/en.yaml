@@ -1335,7 +1335,7 @@ countries:
                 probability: 0.6
                 alternatives:
                     - alternative: *unit
-                      probability: 0.1
+                      probability: 0.15
                     - alternative: *number
                       probability: 0.2
                     - alternative: *lot
@@ -1420,16 +1420,16 @@ countries:
                 sample: true
                 default: *flat
                 # Reduce the default's probability to make room for sampling
-                probability: 0.49
-                sample_probability: 0.51
+                probability: 0.39
+                sample_probability: 0.01
                 numeric:
                     direction: left
             standalone:
                 default: *penthouse
                 sample: true
                 # Reduce the default's probability to make room for sampling
-                probability: 0.49
-                sample_probability: 0.51
+                probability: 0.39
+                sample_probability: 0.01
                 standalone_probability: 1.0
 
             # For unit types like 2/34
