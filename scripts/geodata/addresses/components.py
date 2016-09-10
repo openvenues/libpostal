@@ -773,7 +773,7 @@ class AddressComponents(object):
                         if component == AddressFormatter.STATE and random.random() < abbreviate_state_prob:
                             val = state_abbreviations.get_abbreviation(country, language, val, default=val)
                         elif random.random() < abbreviate_toponym_prob:
-                            val = abbreviate(qualifiers_gazetteer, val, language, abbreviate_prob=abbreviate_toponym_prob)
+                            val = abbreviate(toponym_gazetteer, val, language, abbreviate_prob=abbreviate_toponym_prob)
 
                     address_components[component] = val
 
