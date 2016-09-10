@@ -375,17 +375,17 @@ class OpenAddressesFormatter(object):
                         components.pop(AddressFormatter.UNIT)
                         unit = None
 
+                # CLDR country name
+                country_name = self.cldr_country_name(country, language, configs)
+                if country_name:
+                    components[AddressFormatter.COUNTRY] = country_name
+
                 for component_key in AddressFormatter.BOUNDARY_COMPONENTS:
                     component = components.get(component_key, None)
                     if component is not None:
                         component = abbreviate(toponym_gazetteer, component, language,
                                                abbreviate_prob=abbreviate_toponym_prob)
                         components[component_key] = component
-
-                # CLDR country name
-                country_name = self.cldr_country_name(country, language, configs)
-                if country_name:
-                    components[AddressFormatter.COUNTRY] = country_name
 
                 # Any components specified to be added by the config (usually state)
                 if add_components:
