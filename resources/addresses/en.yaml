@@ -1172,7 +1172,7 @@ units:
               # e.g. just plain #3 or No. 4
             - alternative: *number
               probability: 0.2
-            - alternatives: *lot
+            - alternative: *lot
               probability: 0.03
             - alternative: *door
               probability: 0.01
@@ -1338,7 +1338,7 @@ countries:
                       probability: 0.1
                     - alternative: *number
                       probability: 0.2
-                    - alternatives: *lot
+                    - alternative: *lot
                       probability: 0.03
                     - alternative: *door
                       probability: 0.005
