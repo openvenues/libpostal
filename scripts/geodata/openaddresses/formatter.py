@@ -11,7 +11,7 @@ import yaml
 from geodata.addresses.units import Unit
 from geodata.address_expansions.abbreviations import abbreviate
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
-from geodata.address_expansions.gazetteers import street_types_gazetteer, unit_types_gazetteer, toponym_gazetteer
+from geodata.address_expansions.gazetteers import street_types_gazetteer, unit_types_gazetteer, toponym_abbreviations_gazetteer
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.components import AddressComponents
 from geodata.countries.names import country_names
@@ -383,7 +383,7 @@ class OpenAddressesFormatter(object):
                 for component_key in AddressFormatter.BOUNDARY_COMPONENTS:
                     component = components.get(component_key, None)
                     if component is not None:
-                        component = abbreviate(toponym_gazetteer, component, language,
+                        component = abbreviate(toponym_abbreviations_gazetteer, component, language,
                                                abbreviate_prob=abbreviate_toponym_prob)
                         components[component_key] = component
 
