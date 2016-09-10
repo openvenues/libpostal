@@ -216,6 +216,7 @@ class OpenAddressesFormatter(object):
         separate_street_prob = float(self.get_property('separate_street_probability', *configs) or 0.0)
         abbreviate_unit_prob = float(self.get_property('abbreviate_unit_probability', *configs))
         separate_unit_prob = float(self.get_property('separate_unit_probability', *configs) or 0.0)
+        abbreviate_toponym_prob = float(self.get_property('abbreviate_toponym_probability', *configs))
 
         add_osm_boundaries = bool(self.get_property('add_osm_boundaries', *configs) or False)
         add_osm_neighborhoods = bool(self.get_property('add_osm_neighborhoods', *configs) or False)
@@ -373,6 +374,13 @@ class OpenAddressesFormatter(object):
                     else:
                         components.pop(AddressFormatter.UNIT)
                         unit = None
+
+                for component_key in AddressFormatter.BOUNDARY_COMPONENTS:
+                    component = components.get(component_key, None)
+                    if component is not None:
+                        component = abbreviate(toponym_gazetteer, component, language,
+                                               abbreviate_prob=abbreviate_toponym_prob)
+                        components[AddressFormatter.ROAD] = component
 
                 # CLDR country name
                 country_name = self.cldr_country_name(country, language, configs)

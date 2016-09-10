@@ -9,6 +9,8 @@ global:
     abbreviate_unit_probability: 0.3
     separate_unit_probability: 0.2
 
+    abbreviate_toponym_probability: 0.3
+
     place_only_probability: 0.2
     place_and_postcode_probability: 0.1
 
