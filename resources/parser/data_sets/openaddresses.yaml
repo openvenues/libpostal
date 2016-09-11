@@ -950,6 +950,8 @@ countries:
                     - filename: los_angeles.csv
                     - filename: madera.csv
                       add_osm_boundaries: true
+                    - filename: merced.csv
+                      add_osm_boundaries: true
                     - filename: mono.csv
                     - filename: monterey.csv
                     - filename: napa.csv
@@ -990,58 +992,59 @@ countries:
                 add:
                     state: CO
                 files:
-                  - filename: arapahoe.csv
-                  - filename: city_of_arvada.csv
-                  - filename: city_of_aurora.csv
-                  - filename: city_of_boulder.csv
-                  - filename: city_of_erie.csv
-                  - filename: city_of_fort_collins.csv
-                    add_osm_boundaries: true
-                  - filename: city_of_greeley.csv
-                  - filename: city_of_loveland.csv
-                    add_osm_boundaries: true
-                  - filename: clear_creek.csv
-                    add_osm_boundaries: true
-                  - filename: conejos.csv
-                    add_osm_boundaries: true
-                  - filename: delta.csv
-                  - filename: denver.csv
-                    add_osm_boundaries: true
-                  - filename: douglas.csv
-                  - filename: eagle.csv
-                  - filename: fremont.csv
-                    add_osm_boundaries: true
-                  - filename: garfield.csv
-                  - filename: gilpin.csv
-                    add_osm_boundaries: true
-                  - filename: grand.csv
-                    add_osm_boundaries: true
-                  - filename: gunnison.csv
-                    add_osm_boundaries: true
-                  - filename: jefferson.csv
-                    add_osm_boundaries: true
-                  - filename: la_plata.csv
-                  - filename: mesa.csv
-                  - filename: mineral.csv
-                    add_osm_boundaries: true
-                  - filename: moffat.csv
-                    add_osm_boundaries: true
-                  - filename: montezuma.csv
-                  - filename: montrose.csv
-                  - filename: park.csv
-                    add_osm_boundaries: true
-                  - filename: pitkin.csv
-                    add_osm_boundaries: true
-                  - filename: pueblo.csv
-                  - filename: rio_blanco.csv
-                  - filename: routt.csv
-                    add_osm_boundaries: true
-                  - filename: sanmiguel.csv
-                  - filename: teller.csv
-                    add_osm_boundaries: true
-                  - filename: washington.csv
-                  - filename: weld.csv
-                    add_osm_boundaries: true
+                    - filename: arapahoe.csv
+                    - filename: broomfield.csv
+                    - filename: city_of_arvada.csv
+                    - filename: city_of_aurora.csv
+                    - filename: city_of_boulder.csv
+                    - filename: city_of_erie.csv
+                    - filename: city_of_fort_collins.csv
+                      add_osm_boundaries: true
+                    - filename: city_of_greeley.csv
+                    - filename: city_of_loveland.csv
+                      add_osm_boundaries: true
+                    - filename: clear_creek.csv
+                      add_osm_boundaries: true
+                    - filename: conejos.csv
+                      add_osm_boundaries: true
+                    - filename: delta.csv
+                    - filename: denver.csv
+                      add_osm_boundaries: true
+                    - filename: douglas.csv
+                    - filename: eagle.csv
+                    - filename: fremont.csv
+                      add_osm_boundaries: true
+                    - filename: garfield.csv
+                    - filename: gilpin.csv
+                      add_osm_boundaries: true
+                    - filename: grand.csv
+                      add_osm_boundaries: true
+                    - filename: gunnison.csv
+                      add_osm_boundaries: true
+                    - filename: jefferson.csv
+                      add_osm_boundaries: true
+                    - filename: la_plata.csv
+                    - filename: mesa.csv
+                    - filename: mineral.csv
+                      add_osm_boundaries: true
+                    - filename: moffat.csv
+                      add_osm_boundaries: true
+                    - filename: montezuma.csv
+                    - filename: montrose.csv
+                    - filename: park.csv
+                      add_osm_boundaries: true
+                    - filename: pitkin.csv
+                      add_osm_boundaries: true
+                    - filename: pueblo.csv
+                    - filename: rio_blanco.csv
+                    - filename: routt.csv
+                      add_osm_boundaries: true
+                    - filename: sanmiguel.csv
+                    - filename: teller.csv
+                      add_osm_boundaries: true
+                    - filename: washington.csv
+                    - filename: weld.csv
+                      add_osm_boundaries: true
 
             ct:
                 add:
@@ -1186,6 +1189,13 @@ countries:
                     - filename: wheeler.csv
                     - filename: wilkinson.csv
 
+            # Placeholder for Hawaii, no files with proper addresses yet
+            hi:
+                add:
+                    state: HI
+                files:
+                    - filename: honoloulu.csv
+
             ia:
                 add:
                     state: IA
@@ -1244,13 +1254,6 @@ countries:
                     - filename: winnebago.csv
                     - filename: winneshiek.csv
                     - filename: wright.csv
-
-            # Placeholder for Hawaii, no files with proper addresses yet
-            hi:
-                add:
-                    state: HI
-                files:
-                    - filename: honoloulu.csv
 
             id:
                 add:
@@ -1532,7 +1535,6 @@ countries:
                 files:
                     - filename: statewide.csv
 
-
             me:
                 add:
                     state: ME
@@ -1614,6 +1616,8 @@ countries:
                 files:
                     - filename: boone.csv
                     - filename: city_of_columbia.csv
+                    - filename: city_of_perryville.csv
+                      add_osm_boundaries: true
                     - filename: city_of_st_louis.csv
                       add_osm_boundaries: true
                     - filename: cole.csv
@@ -2255,59 +2259,6 @@ countries:
                     state: VT
                 files:
                     - filename: statewide.csv
-
-            wi:
-                add:
-                    state: WI
-                files:
-                    - filename: adams.csv
-                      add_osm_boundaries: true
-                    - filename: bayfield.csv
-                    - filename: calumet.csv
-                    - filename: city_of_milwaukee.csv
-                    - filename: city_of_shorewood.csv
-                      add_osm_boundaries: true
-                    - filename: columbia.csv
-                      add_osm_boundaries: true
-                    - filename: crawford.csv
-                      add_osm_boundaries: true
-                    - filename: fond_du_lac.csv
-                      add_osm_boundaries: true
-                    - filename: green.csv
-                    - filename: green_lake.csv
-                    - filename: iron.csv
-                      add_osm_boundaries: true
-                    - filename: juneau.csv
-                      add_osm_boundaries: true
-                    - filename: kenosha.csv
-                    - filename: kewaunee.csv
-                      add_osm_boundaries: true
-                    - filename: la_crosse.csv
-                      add_osm_boundaries: true
-                    - filename: lincoln.csv
-                    - filename: milwaukee.csv
-                    - filename: oneida.csv
-                    - filename: outagamie.csv
-                    - filename: pierce.csv
-                      add_osm_boundaries: true
-                    - filename: portage.csv
-                    - filename: richland.csv
-                    - filename: rock.csv
-                    - filename: sauk.csv
-                    - filename: statewide.csv
-                    - filename: st_croix.csv
-                      add_osm_boundaries: true
-                    - filename: trempealeau.csv
-                      add_osm_boundaries: true
-                    - filename: vernon.csv
-                      add_osm_boundaries: true
-                    - filename: vilas.csv
-                    - filename: walworth.csv
-                    - filename: waukesha.csv
-                      add_osm_boundaries: true
-                    - filename: waupaca.csv
-                    - filename: waushara.csv
-
             wa:
                 add:
                     state: WA
@@ -2339,6 +2290,59 @@ countries:
                     - filename: snohomish.csv
                     - filename: spokane.csv
                     - filename: walla_walla.csv
+
+            wi:
+                add:
+                    state: WI
+                files:
+                    - filename: adams.csv
+                      add_osm_boundaries: true
+                    - filename: bayfield.csv
+                    - filename: calumet.csv
+                    - filename: city_of_milwaukee.csv
+                    - filename: city_of_shorewood.csv
+                      add_osm_boundaries: true
+                    - filename: columbia.csv
+                      add_osm_boundaries: true
+                    - filename: crawford.csv
+                      add_osm_boundaries: true
+                    - filename: fond_du_lac.csv
+                      add_osm_boundaries: true
+                    - filename: green.csv
+                    - filename: green_lake.csv
+                    - filename: iron.csv
+                      add_osm_boundaries: true
+                    - filename: juneau.csv
+                      add_osm_boundaries: true
+                    - filename: kenosha.csv
+                    - filename: kewaunee.csv
+                      add_osm_boundaries: true
+                    - filename: la_crosse.csv
+                      add_osm_boundaries: true
+                    - filename: lincoln.csv
+                    - filename: manitowoc.csv
+                    - filename: milwaukee.csv
+                    - filename: oneida.csv
+                    - filename: outagamie.csv
+                    - filename: pierce.csv
+                      add_osm_boundaries: true
+                    - filename: portage.csv
+                    - filename: richland.csv
+                    - filename: rock.csv
+                    - filename: sauk.csv
+                    - filename: statewide.csv
+                    - filename: st_croix.csv
+                      add_osm_boundaries: true
+                    - filename: trempealeau.csv
+                      add_osm_boundaries: true
+                    - filename: vernon.csv
+                      add_osm_boundaries: true
+                    - filename: vilas.csv
+                    - filename: walworth.csv
+                    - filename: waukesha.csv
+                      add_osm_boundaries: true
+                    - filename: waupaca.csv
+                    - filename: waushara.csv
 
             wv:
                 add:
