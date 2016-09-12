@@ -664,6 +664,18 @@ countries:
                     state: DF
                 files:
                     - filename: statewide.csv
+                      fields:
+                          - field_name: NUMBER
+                            component: house_number
+                          - field_name: STREET
+                            component: road
+                          - field_name: UNIT
+                            component: unit
+                          - field_name: CITY
+                            component: city_district
+                          - field_name: POSTCODE
+                            component: postcode
+                      add_osm_boundaries: true
 
             durango:
                 add:
