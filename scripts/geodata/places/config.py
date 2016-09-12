@@ -30,6 +30,7 @@ class PlaceConfig(object):
         AddressFormatter.STATE,
         AddressFormatter.COUNTRY_REGION,
         AddressFormatter.COUNTRY,
+        AddressFormatter.WORLD_REGION,
     }
 
     numeric_ops = (('lte', operator.le),
@@ -139,6 +140,13 @@ class PlaceConfig(object):
                     value = components[component]
                     for c in names[value]:
                         new_components.pop(c, None)
+
+        for component in self.ADMIN_COMPONENTS:
+            value = self.get_property(('components', component, 'value'), country=country, default=None)
+
+            if value is not None and component not in components and self.include_component(component, containing_ids, country=country, population=population):
+                new_components[component] = value
+
         return new_components
 
 

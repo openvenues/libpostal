@@ -75,6 +75,7 @@ class AddressFormatter(object):
     POSTCODE = 'postcode'
     COUNTRY_REGION = 'country_region'
     COUNTRY = 'country'
+    WORLD_REGION = 'world_region'
 
     component_order = {k: i for i, k in enumerate([
         CATEGORY,
@@ -102,6 +103,7 @@ class AddressFormatter(object):
         POSTCODE,
         COUNTRY_REGION,
         COUNTRY,
+        WORLD_REGION,
     ])}
 
     BOUNDARY_COMPONENTS_ORDERED = [
@@ -115,6 +117,7 @@ class AddressFormatter(object):
         STATE,
         COUNTRY_REGION,
         COUNTRY,
+        WORLD_REGION,
     ]
 
     BOUNDARY_COMPONENTS = set(BOUNDARY_COMPONENTS_ORDERED)
@@ -153,6 +156,7 @@ class AddressFormatter(object):
             ('county', STATE_DISTRICT),
             ('state_code', STATE),
             ('country_name', COUNTRY),
+            ('continent', WORLD_REGION),
             ('postal_code', POSTCODE),
             ('post_code', POSTCODE),
         ])

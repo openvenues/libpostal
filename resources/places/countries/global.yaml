@@ -24,8 +24,23 @@ global:
             probability: 0.05
         country:
             probability: 0.8
+        world_region:
+            probability: 0.001
+
+
+add_west_indies: &add_west_indies
+    components:
+        world_region: &add_west_indies_world_region
+            probability: 0.1
+            value: West Indies
 
 countries:
+    # Anguilla
+    ai: *add_west_indies
+
+    # Antigua and Barbuda
+    ag: *add_west_indies
+
     # Australia
     au:
         components:
@@ -34,11 +49,20 @@ countries:
             country:
                 probability: 0.5
 
+    # Barbados
+    bb: *add_west_indies
+
+    # Bermuda
+    bm: *add_west_indies
+
     # Brazil
     br:
         components:
             state:
                 probability: 0.6
+
+    # Bahamas
+    bs: *add_west_indies
 
     # Canada
     ca:
@@ -47,6 +71,9 @@ countries:
                 probability: 0.7
             country:
                 probability: 0.2
+
+    # Dominica
+    dm: *add_west_indies
 
     # France
     fr:
@@ -63,6 +90,11 @@ countries:
                 probability: 0.5
             country:
                 probability: 0.6
+
+
+    # Grenada
+    gd: *add_west_indies
+
 
     # Indonesia
     id:
@@ -83,6 +115,9 @@ countries:
                     - id: 2278450 # Hong Kong Island (already a "state")
                       type: relation
                       probability: 0.0
+
+    # Jamaica
+    jm: *add_west_indies
 
     # Japan
     jp:
@@ -110,6 +145,16 @@ countries:
         components:
             island:
                 probability: 0.8
+            world_region: *add_west_indies_world_region
+
+    # Cayman Islands
+    ky: *add_west_indies
+
+    # Saint Lucia
+    lc: *add_west_indies
+
+    # Montserrat
+    ms: *add_west_indies
 
     # Mexico
     mx:
@@ -133,6 +178,15 @@ countries:
         components:
             island:
                 probability: 0.8
+
+    # Sint Maarten
+    sx: *add_west_indies
+
+    # Turks and Caicos
+    tc: *add_west_indies
+
+    # Trinidad and Tobago
+    tt: *add_west_indies
 
     # United States
     us:
@@ -234,14 +288,19 @@ countries:
             island:
                 probability: 0.8
 
+    # Saint Vincent and the Grenadines
+    vc: *add_west_indies
+
     # US Virgin Islands
     vi:
         components:
             island:
                 probability: 0.8
+            world_region: *add_west_indies_world_region
 
     # British Virgin Islands
     vg:
         components:
             island:
                 probability: 0.8
+            world_region: *add_west_indies_world_region
