@@ -13,7 +13,7 @@ def download_file(url, dest, retries=3, retry_delay=5):
 
 def unzip_file(filename, dest):
     ensure_dir(dest)
-    subprocess.call(['unzip', '-o', filename, '-d', dest])
+    return subprocess.check_call(['unzip', '-o', filename, '-d', dest]) == 0
 
 
 def remove_file(filename):
