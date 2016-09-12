@@ -1,7 +1,3 @@
-import gevent
-from gevent import monkey
-monkey.patch_all()
-
 import os
 import requests
 import subprocess
@@ -11,9 +7,10 @@ import ujson as json
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
-from geodata.whosonfirst.crawl import WhosOnFirstCrawler
 from geodata.file_utils import ensure_dir
 
+
+WOF_PLACE_DATA_REPO = 'https://github.com/whosonfirst-data/whosonfirst-data'
 SEED_URLS_JSON = 'https://raw.githubusercontent.com/whosonfirst-data/whosonfirst-data-postalcode/master/data.json'
 
 
@@ -29,7 +26,8 @@ def clone_repo(wof_dir, repo):
 
 def download_wof_postcodes(wof_dir):
     ensure_dir(wof_dir)
-    crawler = WhosOnFirstCrawler(wof_dir)
+
+    clone_repo(wof_dir, WOF_PLACE_DATA_REPO)
 
     response = requests.get(SEED_URLS_JSON)
     if response.ok:
@@ -44,9 +42,6 @@ def download_wof_postcodes(wof_dir):
 
                 repo_dir = clone_repo(wof_dir, repo)
 
-                for i, postcode in enumerate(crawler.crawl(repo_dir)):
-                    if i % 100 == 0 and i > 0:
-                        print('downloaded {} postcodes from WoF'.format(i))
             else:
                 print('skipping {}'.format(repo_name))
 
