@@ -1,9 +1,37 @@
 ---
-  admin_level: 
-    "2": "country"
-    "4": "state"
-    "5": "state_district"
-    "6": "state_district"
-    "8": "city"
-    "10": "city"
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "5": "state_district"
+        "6": "state_district"
+        "8": "city"
+        "10": "city"
 
+    overrides:
+        id:
+            relation:
+                # Beijing
+                "912940": "city"
+
+                # Shanghai
+                "913067": "city"
+
+                # Tianjin
+                "912999": "city"
+
+                # Chongqing
+                "913069": "city"
+
+        use_admin_center:
+            - id: 912940 # Beijing
+              type: relation
+              probability: 0.6
+            - id: 913067 # Shanghai
+              type: relation
+              probability: 0.6
+            - id: 912999 # Tianjin
+              type: relation
+              probability: 0.6
+            - id: 913069 # Chongqing
+              type: relation
+              probability: 0.6
