@@ -51,9 +51,6 @@ def recase_abbreviation(expansion, tokens, space_token=six.u(' ')):
                 strings.append(t)
             else:
                 strings.append(six.u('').join((e.title(), suf)))
-
-            if suf == six.u(' '):
-                strings.append(space_token)
         return six.u('').join(strings)
     else:
 
@@ -97,7 +94,8 @@ def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2, a
         if random.random() > abbreviate_prob or not any((int(is_canonical) and lang in (language, 'all') for lang, dictionary, is_canonical, canonical in data)):
             for j, (t_i, c_i) in enumerate(t):
                 abbreviated.append(tokens[i + j][0])
-                if i + j < n - 1 and raw_tokens[i + j + 1][0] > sum(raw_tokens[i + j][:2]):
+
+                if j < length - 1:
                     abbreviated.append(space_token)
             return abbreviated
 
@@ -122,8 +120,6 @@ def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2, a
                 token = random.choice(abbreviations) if abbreviations else canonical
                 token = recase_abbreviation(token, tokens[i:i + len(t)], space_token=space_token)
                 abbreviated.append(token)
-                if i + len(t) < n and raw_tokens[i + len(t)][0] > sum(raw_tokens[i + len(t) - 1][:2]):
-                    abbreviated.append(space_token)
                 break
             elif is_prefix:
                 token = tokens[i][0]
@@ -184,8 +180,8 @@ def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2, a
             else:
                 for j, (t_i, c_i) in enumerate(t):
                     abbreviated.append(tokens[i + j][0])
-                    if i + j < n - 1 and raw_tokens[i + j + 1][0] > sum(raw_tokens[i + j][:2]):
-                        abbreviated.append(six.u(' '))
+                    if j < length - 1:
+                        abbreviated.append(space_token)
             return abbreviated
         return abbreviated
 
@@ -193,7 +189,12 @@ def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2, a
         if c == token_types.PHRASE:
             abbrev_tokens = abbreviated_tokens(i, tokens, t, c, length, data)
             abbreviated.extend(abbrev_tokens)
+
+            if i + len(t) < n and raw_tokens[i + len(t)][0] > sum(raw_tokens[i + len(t) - 1][:2]):
+                abbreviated.append(six.u(' '))
+
             i += len(t)
+
         else:
             token = tokens[i][0]
             if not non_breaking_dash_regex.search(token):
