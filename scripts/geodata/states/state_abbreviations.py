@@ -32,7 +32,7 @@ class StateAbbreviations(object):
                     full_name = safe_decode(full_name)
                     abbreviation = safe_decode(abbreviation)
                     country_abbreviations[full_name.lower()][language] = abbreviation
-                    country_full_names[abbreviation][language] = full_name
+                    country_full_names[abbreviation.lower()][language] = full_name
 
             self.abbreviations[country] = dict(country_abbreviations)
             self.full_names[country] = dict(country_full_names)
