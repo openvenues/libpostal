@@ -2071,6 +2071,9 @@ countries:
             pr:
                 # Don't add state=PR, Puerto Rico is treated as a country in libpostal
                 cldr_country_probability: 1.0
+                iso_alpha_2_code_probability: 0.7
+                iso_alpha_3_code_probability: 0.1
+                localized_name_probability: 0.2
                 language: es
                 files:
                     - filename: statewide.csv
