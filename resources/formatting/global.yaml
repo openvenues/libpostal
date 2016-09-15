@@ -594,7 +594,11 @@ countries:
 
     # Puerto Rico
     pr:
-        insertions: *us_template_insertions
+        insertions: 
+            <<: *us_template_insertions
+            postcode:
+                postcode_after_country:
+                    probability: 0.85
 
     # U.S. Minor Outlying Islands
     um:
