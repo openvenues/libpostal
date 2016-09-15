@@ -227,6 +227,8 @@ class OpenAddressesFormatter(object):
         place_only_probability = float(self.get_property('place_only_probability', *configs))
         place_and_postcode_probability = float(self.get_property('place_and_postcode_probability', *configs))
 
+        postcode_length = int(self.get_property('postcode_length', *configs))
+
         drop_address_probability = place_only_probability + place_and_postcode_probability
 
         ignore_rows_missing_fields = set(self.get_property('ignore_rows_missing_fields', *configs) or [])
@@ -346,6 +348,9 @@ class OpenAddressesFormatter(object):
                         components.pop(AddressFormatter.POSTCODE)
                         postcode = None
                     else:
+                        if postcode_length:
+                            postcode = postcode.zfill(postcode_length)
+
                         components[AddressFormatter.POSTCODE] = postcode
 
                 unit = components.get(AddressFormatter.UNIT, None)

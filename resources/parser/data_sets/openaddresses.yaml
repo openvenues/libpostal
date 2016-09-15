@@ -2073,6 +2073,8 @@ countries:
                 language: es
                 files:
                     - filename: statewide.csv
+                      # postcodes should be like 00901
+                      postcode_length: 5
 
             ri:
                 add:
