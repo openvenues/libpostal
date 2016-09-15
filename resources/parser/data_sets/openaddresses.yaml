@@ -1886,6 +1886,7 @@ countries:
                     - filename: city_of_rochester.csv
                     - filename: erie.csv
                       fields: *fields_no_postcode
+                    - filename: westchester.csv
 
             oh:
               add:
