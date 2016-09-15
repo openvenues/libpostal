@@ -1862,6 +1862,7 @@ countries:
                     - filename: clark.csv
                     - filename: douglas.csv
                       add_osm_boundaries: true
+                    - filename: elko.csv
                     - filename: henderson.csv
                       add_osm_boundaries: true
                     - filename: lyon.csv
