@@ -562,7 +562,16 @@ class AddressFormatter(object):
         if not template:
             return None
 
-        country = self.country_aliases.get(country.upper(), country).lower()
+        country_language = None
+        if language:
+            country_language = '{}_{}'.format(country, language)
+
+        alias_country = self.country_aliases.get(country.upper(), country).lower()
+        for term in (country, country_language):
+            if term in self.country_insertions or term in self.country_conditionals:
+                break
+        else:
+            country = alias_country
 
         cache_keys = []
 
@@ -570,9 +579,6 @@ class AddressFormatter(object):
             scope = country
             insertions = nested_get(self.country_insertions, (country, component), default=None)
             conditionals = nested_get(self.country_conditionals, (country, component), default=None)
-
-            if language:
-                country_language = '{}_{}'.format(country, language)
 
             if insertions is None and language:
                 insertions = nested_get(self.country_insertions, (country_language, component), default=None)
