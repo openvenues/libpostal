@@ -17,6 +17,7 @@ component_dependencies:
             - suburb
             - city_district
             - city
+            - state_district
             - postcode
 
     road:
