@@ -277,6 +277,8 @@ class OpenAddressesFormatter(object):
                     value = self.spanish_street_name(value)
 
                 if key in AddressFormatter.BOUNDARY_COMPONENTS and key != AddressFormatter.POSTCODE:
+                    if add_osm_boundaries:
+                        continue
                     value = self.components.cleaned_name(value, first_comma_delimited_phrase=True)
                     if value and (len(value) < 2 or is_numeric(value)):
                         continue
