@@ -1207,7 +1207,7 @@ countries:
                 add:
                     state: HI
                 files:
-                    - filename: honoloulu.csv
+                    - filename: honolulu.csv
 
             ia:
                 add:
