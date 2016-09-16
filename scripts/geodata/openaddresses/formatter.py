@@ -459,7 +459,7 @@ class OpenAddressesFormatter(object):
         i = 0
 
         for country_dir, country_config in six.iteritems(openaddresses_config.country_configs):
-            for file_config in config.get('files', []):
+            for file_config in country_config.get('files', []):
                 filename = file_config['filename']
 
                 print(six.u('doing {}/{}').format(country_dir, filename))
