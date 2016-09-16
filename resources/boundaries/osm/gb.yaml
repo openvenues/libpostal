@@ -18,6 +18,14 @@
                 "65606": "city"
                 # City of London
                 "51800": "city"
+                # Exeter
+                "2154556": "city"
+                # Chelmsford
+                "176965": "city"
+                # Norwich
+                "172506": "city"
+                # Oxford
+                "394037": "city"
 
         contained_by:
             relation:
