@@ -1617,6 +1617,7 @@ countries:
                     - filename: scott.csv
                     - filename: sherburne.csv
                     - filename: stearns.csv
+                    - filename: st_louis.csv
                     - filename: wadena.csv
                       add_osm_boundaries: true
                     - filename: waseca.csv
@@ -2040,6 +2041,9 @@ countries:
                       add_osm_boundaries: true
                     - filename: clinton.csv
                     - filename: crawford.csv
+                    - filename: cumberland.csv
+                    - filename: dauphin.csv
+                      add_osm_boundaries: true
                     - filename: erie.csv
                     - filename: forest.csv
                     - filename: franklin.csv
