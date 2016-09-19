@@ -39,16 +39,17 @@ cd $OUT_DIR
 # Download planet as PBF
 # TODO: currently uses single mirror, randomly choose one instead
 echo "Started OSM download: `date`"
-wget http://ftp5.gwdg.de/pub/misc/openstreetmap/planet.openstreetmap.org/pbf/planet-latest.osm.pbf &
-wget http://download.geofabrik.de/asia/japan-latest.osm.pbf &
+
+PLANET_PBF="planet-latest.osm.pbf"
+JAPAN_PBF="japan-latest.osm.pbf"
+
+wget http://ftp5.gwdg.de/pub/misc/openstreetmap/planet.openstreetmap.org/pbf/planet-latest.osm.pbf -O $OUT_DIR/$PLANET_PBF &
+wget http://download.geofabrik.de/asia/japan-latest.osm.pbf -O $OUT_DIR/$JAPAN_PBF &
 
 wait
 
 echo "Converting to o5m: `date`"
-PLANET_PBF="planet-latest.osm.pbf"
 PLANET_O5M="planet-latest.o5m"
-
-JAPAN_PBF="japan-latest.osm.pbf"
 JAPAN_O5M="japan-latest.o5m"
 
 # Needs to be in O5M for some of the subsequent steps to work whereas PBF is smaller for download
