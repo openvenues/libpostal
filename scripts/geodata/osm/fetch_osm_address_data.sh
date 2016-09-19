@@ -174,7 +174,7 @@ rm $PLANET_VENUES_LATLONS
 echo "Filtering for buildings: `date`"
 PLANET_BUILDINGS_O5M="planet-buildings.o5m"
 VALID_BUILDING_KEYS="building= or building:part="
-VALID_BUILDINGS="( ( $VALID_BUILDING_KEYS ) and ( building!=yes or name= ) )"
+VALID_BUILDINGS="( ( $VALID_BUILDING_KEYS ) and ( building!=yes or name= or addr:housename= or addr:street= or addr:housenumber= or addr:postcode= ) )"
 osmfilter $PLANET_O5M --keep="$VALID_BUILDINGS" --drop-author --drop-version -o=$PLANET_BUILDINGS_O5M
 PLANET_BUILDINGS_LATLONS="planet-buildings-latlons.o5m"
 osmconvert $PLANET_BUILDINGS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_BUILDINGS_LATLONS
