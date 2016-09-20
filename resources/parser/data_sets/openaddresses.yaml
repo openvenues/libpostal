@@ -2008,6 +2008,8 @@ countries:
                     - filename: gresham.csv
                     - filename: jackson.csv
                     - filename: lane.csv
+                    - filename: marion.csv
+                      add_osm_boundaries: true
                     - filename: oregon_city.csv
                       add_osm_boundaries: true
                     - filename: portland.csv
