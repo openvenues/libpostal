@@ -1485,6 +1485,7 @@ countries:
                       add_osm_boundaries: true
                     - filename: oldham.csv
                       add_osm_boundaries: true
+                    - filename: warren.csv
 
             la:
                 add:
