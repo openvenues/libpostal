@@ -2206,6 +2206,7 @@ countries:
                     - filename: fayette.csv
                     - filename: freestone.csv
                       add_osm_boundaries: true
+                    - filename: galveston.csv
                     - filename: gaines.csv
                       add_osm_boundaries: true
                     - filename: gray.csv
