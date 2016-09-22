@@ -17,6 +17,8 @@ else
     OUT_DIR=`pwd`
 fi
 
+set -e
+
 # Check for osmfilter and osmconvert
 if ! type -P osmfilter osmconvert > /dev/null; then
 cat << EOF
@@ -43,8 +45,8 @@ echo "Started OSM download: `date`"
 PLANET_PBF="planet-latest.osm.pbf"
 JAPAN_PBF="japan-latest.osm.pbf"
 
-wget http://ftp5.gwdg.de/pub/misc/openstreetmap/planet.openstreetmap.org/pbf/planet-latest.osm.pbf -O $OUT_DIR/$PLANET_PBF &
-wget http://download.geofabrik.de/asia/japan-latest.osm.pbf -O $OUT_DIR/$JAPAN_PBF &
+wget --quiet http://ftp5.gwdg.de/pub/misc/openstreetmap/planet.openstreetmap.org/pbf/planet-latest.osm.pbf -O $OUT_DIR/$PLANET_PBF &
+wget --quiet http://download.geofabrik.de/asia/japan-latest.osm.pbf -O $OUT_DIR/$JAPAN_PBF &
 
 wait
 
