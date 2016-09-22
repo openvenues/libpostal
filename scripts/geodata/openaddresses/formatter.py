@@ -429,6 +429,17 @@ class OpenAddressesFormatter(object):
                     neighborhood_components = self.components.neighborhood_components(latitude, longitude)
                     self.components.add_neighborhoods(components, neighborhood_components)
 
+                self.components.replace_name_affixes(components, language)
+
+                self.components.replace_names(components)
+
+                self.components.prune_duplicate_names(address_components)
+
+                self.components.remove_numeric_boundary_names(address_components)
+                self.components.cleanup_boundary_names(address_components)
+                self.components.add_house_number_phrase(address_components, language, country=country)
+                self.components.add_postcode_phrase(address_components, language, country=country)
+
                 # Component dropout
                 all_osm_components = osm_components + neighborhood_components
                 components = place_config.dropout_components(components, all_osm_components, country=country, population=population)
