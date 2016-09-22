@@ -9,8 +9,8 @@ from collections import defaultdict
 
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
 from geodata.address_formatting.formatter import AddressFormatter
-from geodata.configs.utils import nested_get, DoesNotExist, recursive_merge
-from geodata.math.sampling import cdf, check_probability_distribution
+from geodata.configs.utils import nested_get, recursive_merge
+from geodata.math.sampling import cdf, weighted_choice
 
 from geodata.encoding import safe_encode
 
@@ -45,6 +45,8 @@ class PlaceConfig(object):
 
         self.global_config = place_config['global']
         self.country_configs = {}
+
+        self.cdf_cache = {}
 
         countries = place_config.pop('countries', {})
 
@@ -143,6 +145,18 @@ class PlaceConfig(object):
 
         for component in self.ADMIN_COMPONENTS:
             value = self.get_property(('components', component, 'value'), country=country, default=None)
+
+            if not value:
+                values, probs = self.cdf_cache.get((country, component), (None, None))
+                if values is None:
+                    values = self.get_property(('components', component, 'values'), country=country, default=None)
+                    if values is not None:
+                        values, probs = zip(*[(v['value'], float(v['probability'])) for v in values])
+                        probs = cdf(probs)
+                        self.cdf_cache[(country, component)] = (values, probs)
+
+                if values is not None:
+                    value = weighted_choice(values, probs)
 
             if value is not None and component not in components and self.include_component(component, containing_ids, country=country, population=population):
                 new_components[component] = value

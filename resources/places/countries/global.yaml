@@ -32,7 +32,13 @@ add_west_indies: &add_west_indies
     components:
         world_region: &add_west_indies_world_region
             probability: 0.1
-            value: West Indies
+            values:
+                - value: West Indies
+                  probability: 0.6
+                - value: W.I.
+                  probability: 0.2
+                - value: WI
+                  probability: 0.2
 
 countries:
     # Anguilla
