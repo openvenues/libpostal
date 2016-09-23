@@ -203,6 +203,9 @@ class OSMPolygonReader(object):
                 if lat is None or lon is None:
                     continue
 
+                if isclose(lat, 90.0):
+                    lat = 89.999
+
                 if isclose(lon, 180.0):
                     lon = 179.999
 

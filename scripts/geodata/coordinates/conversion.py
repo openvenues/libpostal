@@ -57,8 +57,6 @@ def degrees_to_decimal(degrees, minutes, seconds):
     return degrees + (minutes / 60.0) + (seconds / 3600.0)
 
 
-
-
 def is_valid_latitude(latitude):
     '''Latitude must be real number between -90.0 and 90.0'''
     try:
@@ -66,7 +64,7 @@ def is_valid_latitude(latitude):
     except (ValueError, TypeError):
         return False
 
-    if latitude >= 90.0 or latitude < -90.0 or math.isinf(latitude) or math.isnan(latitude):
+    if latitude > 90.0 or latitude < -90.0 or math.isinf(latitude) or math.isnan(latitude):
         return False
     return True
 
