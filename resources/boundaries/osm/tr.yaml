@@ -1,7 +1,78 @@
 ---
-  admin_level: 
-    "2": "country"
-    "3": "country_region"
-    "4": "state"
-    "6": "state_district"
+    admin_level: 
+        "2": "country"
+        "3": "country_region"
+        "4": "state"
+        "6": "state_district"
+
+    overrides:
+        id:
+            relation:
+                # Istanbul, coterminous with the city
+                "223474": "city"
+
+                # Ankara metropolitan districts
+                "1812321": "city_district" # Çankaya
+                "1812354": "city_district" # Etimesgut
+                "1811046": "city_district" # Sincan
+                "1812356": "city_district" # Yenimahalle
+                "1811393": "city_district" # Keçiören
+                "1811454": "city_district" # Pursaklar
+                "1812317": "city_district" # Altındağ
+                "1812319": "city_district" # Mamak
+
+        contained_by:
+            relation:
+                # Istanbul
+                "223474":
+                    admin_level:
+                        "6": "city_district"
+                        "8": "suburb"
+                # Ankara
+                "223422":
+                    admin_level:
+                        "8": "suburb"
+
+                # Change Ankara (province) to the city in metropolitan districts
+
+                # Çankaya
+                "1812321":
+                    admin_level:
+                        "4": "city"
+
+                # Etimesgut
+                "1812354":
+                    admin_level:
+                        "4": "city"
+
+                # Sincan
+                "1811046":
+                    admin_level:
+                        "4": "city"
+
+                # Yenimahalle
+                "1812356":
+                    admin_level:
+                        "4": "city"
+
+                # Keçiören
+                "1811393":
+                    admin_level:
+                        "4": "city"
+
+                # Pursaklar
+                "1811454":
+                    admin_level:
+                        "4": "city"
+
+                # Altındağ
+                "1812317":
+                    admin_level:
+                        "4": "city"
+
+                # Mamak
+                "1812319":
+                    admin_level:
+                        "4": "city"
+
 
