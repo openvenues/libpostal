@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 : '
-fetch_geoplanet.sh
+create_geoplanet_db.sh
 -------------------------
 
 Shell script to download Geo Planet and derive inputs
 for address parser training set construction.
 
-Usage: ./fetch_geoplanet.sh out_dir
+Usage: ./create_geoplanet_db.sh out_dir
 '
 
 if [ "$#" -ge 1 ]; then
