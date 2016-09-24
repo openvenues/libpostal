@@ -14,7 +14,7 @@
             "6": "city_district"
             "7": "suburb"
             "8": "suburb"
-        no_global_overrides: true
+        global_overrides_last: true
 
     overrides:
         id:

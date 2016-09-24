@@ -139,8 +139,10 @@ class OSMAddressComponents(object):
 
         values = [(k.lower(), v.lower()) for k, v in six.iteritems(properties) if isinstance(v, six.string_types)]
 
+        global_overrides_last = config.get('global_overrides_last', False)
+
         # place=city, place=suburb, etc. override per-country boundaries
-        if not config.get('no_global_overrides', False):
+        if not global_overrides_last:
             for k, v in values:
                 containing_component = self.global_keys_override.get(k, {}).get(v, None)
 
@@ -161,6 +163,13 @@ class OSMAddressComponents(object):
 
             if containing_component is not None:
                 return containing_component
+
+        if global_overrides_last:
+            for k, v in values:
+                containing_component = self.global_keys_override.get(k, {}).get(v, None)
+
+                if containing_component is not None:
+                    return containing_component
 
         return None
 
