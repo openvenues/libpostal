@@ -429,3 +429,42 @@
     and place_type = "County"
     and parent_id in (select id from places where country_code = "NO" and place_type = "State");
 
+-- Turkey
+    -- Istanbul (city)
+    update places
+    set parent_id = 2347289
+    where id = 2344116;
+
+    update admins
+    set county_id = 0
+    where id = 2344116;
+
+    -- districts of Istanbul
+    update places
+    set parent_id = 2344116, -- Istanbul (city)
+    place_type = "LocalAdmin"
+    where parent_id = 2347289 -- Istanbul (province)
+    and place_type = "County";
+
+    -- Ankara
+    update places
+    set parent_id = 2347263
+    where id = 2343732;
+
+    update admins
+    set county_id = 0
+    where id = 2343732;
+
+    -- metropolitan districts of Ankara
+    update places
+    set parent_id = 2343732, -- Ankara
+    place_type = "LocalAdmin"
+    where id in (
+        29390074, -- Altındağ
+        29390201, -- Çankaya
+        29390321, -- Etimesgut
+        29390485, -- Keçiören
+        29390552, -- Mamak
+        29390757, -- Sincan
+        29390874 -- Yenimahalle
+    );
