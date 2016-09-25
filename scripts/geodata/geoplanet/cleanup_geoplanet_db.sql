@@ -93,7 +93,7 @@
 
     -- shire districts with City in the name are cities
     update places
-    set place_type = "City"
+    set place_type = "Town"
     where country_code = "GB"
     and place_type = "LocalAdmin"
     and name like  "%City%"
@@ -445,4 +445,99 @@
     place_type = "LocalAdmin"
     where parent_id = 2347289 -- Istanbul (province)
     and place_type = "County";
+
+-- Bulgaria
+    -- municipalities (cities) in OSM
+    update places
+    set place_type = "Town"
+    where country_code = "BG"
+    and place_type = "County";
+
+    update admins
+    set county_id = 0
+    where country_code = "BG";
+
+-- Argentina - OK
+
+-- Indonesia
+    
+    -- Set sub-municipalities of Jakaarta (e.g. Jakarta Barat) to city
+    update places
+    set place_type = "Town"
+    where parent_id = 1047378 -- Jakarta (city)
+    and place_type = "County";
+
+-- Luxembourg
+
+    -- Set suburbs of Luxembourg (city) to city_district
+    update places
+    set place_type = "LocalAdmin"
+    where parent_id = 979721  -- Luxembourg City
+    and place_type = "Suburb";
+
+-- Switzerland
+    -- using postal codes for Zürich the city
+    update postal_codes
+    set parent_id = 784794 -- Zürich (city)
+    where parent_id = 12593130; -- Zürich (county)
+
+-- Australia - OK
+
+-- Finland
+    -- "LocalAdmin" level is city in OSM.
+    update places
+    set place_type = "Town"
+    where country_code = "FI"
+    and place_type = "LocalAdmin";
+
+-- Czech Republic
+    -- Use the prefix okres for Czech counties
+    update places
+    set name = printf("okres %s", name)
+    where country_code = "CZ"
+    and place_type = "County";
+
+    -- LocalAdmins used here don't appear to have a 
+    update places
+    set parent_id = (select p_sub.parent_id from places p_sub where p_sub.id = places.parent_id)
+    where id in (
+        select p1.id
+        from places p1
+        join places p2
+            on p1.parent_id = p2.id
+        where p1.country_code = "CZ"
+        and p1.place_type = "Town"
+        and p2.place_type = "LocalAdmin"
+    );
+
+    update places
+    set place_type = "Town"
+    where country_code = "CZ"
+    and place_type = "LocalAdmin";
+
+-- Hungary
+    -- Set Budapest's parent_id to the state
+    update places
+    set parent_id = 12577915
+    where id = 804365;
+
+    -- Set districts of Budapest to city_district, parented by Budapest the city
+    update places
+    set parent_id = 804365,
+    place_type = "LocalAdmin"
+    where parent_id = 12577915
+    and place_type = "County";
+
+    -- These are suburbs in OSM
+    update places
+    set place_type = "Suburb"
+    where parent_id = 12593336 -- Bátonyterenye
+    and place_type = "Town";
+
+    -- Set all other counties to town
+    update places
+    set place_type = "Town"
+    where country_code = "HU"
+    and place_type = "County";
+
 
