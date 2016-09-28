@@ -1,9 +1,9 @@
-barat
-barat daya
-barat laut
-selatan
-tengah
-tenggara
-timur
-timur laut
-utara
+west|barat
+southwest|barat daya
+northwest|barat laut
+south|selatan
+center|central|centre|tengah
+southeast|tenggara
+east|timur
+northeast|timur laut
+north|utara
