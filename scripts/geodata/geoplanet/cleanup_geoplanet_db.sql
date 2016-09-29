@@ -497,7 +497,7 @@
     where country_code = "CZ"
     and place_type = "County";
 
-    -- LocalAdmins used here don't appear to have a 
+    -- LocalAdmins used here don't appear to have a corresponding type in OSM
     update places
     set parent_id = (select p_sub.parent_id from places p_sub where p_sub.id = places.parent_id)
     where id in (
@@ -540,4 +540,255 @@
     where country_code = "HU"
     and place_type = "County";
 
+-- Algeria - OK
 
+-- South Africa
+    -- these are municipalities/cities
+    update places
+    set place_type = "Town"
+    where country_code = "ZA"
+    and place_type = "LocalAdmin";
+
+-- Malaysia
+    -- LocalAdmins used here don't appear to have a type in OSM
+    update places
+    set parent_id = (select p_sub.parent_id from places p_sub where p_sub.id = places.parent_id)
+    where id in (
+        select p1.id
+        from places p1
+        join places p2
+            on p1.parent_id = p2.id
+        where p1.country_code = "MY"
+        and p1.place_type = "Town"
+        and p2.place_type = "LocalAdmin"
+    );
+
+    update places
+    set place_type = "Town"
+    where id = 1140856; -- Bayan Lepas
+
+    update places
+    set parent_id = 1141153, -- George Town
+    place_type = "Suburb"
+    where parent_id = 56013581
+    and id != 1141153 -- except George Town itself
+    and place_type = "Town";
+
+    update postal_codes
+    set parent_id = 1149014 -- Kampong Sungai Gelugor
+    where parent_id = 1149059; -- Kampong Sungai Keluang
+
+    update postal_codes
+    set parent_id = 1155026 -- Petaling Jaya
+    where parent_id = 56013632; -- Petaling (county)
+
+    update postal_codes
+    set parent_id = (
+        select p2.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.id = postal_codes.parent_id
+        and p1.place_type = "County"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+        limit 1
+    )
+    where parent_id in (
+        select distinct p1.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.country_code = "MY"
+        and p1.place_type = "County"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+    );
+
+-- Austria
+    -- Set Vienna's parent to the state
+    update places
+    set parent_id = 2344716
+    where id = 551801;
+
+    -- Use the prefix Bezirk for Austrian counties
+    update places
+    set name = printf("Bezirk %s", name)
+    where country_code = "AT"
+    and place_type = "County";
+
+
+    -- Postal codes assigned to a LocalAdmin with a coterminous city should use the city
+    update postal_codes
+    set parent_id = (
+        select p2.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.id = postal_codes.parent_id
+        and p1.place_type = "LocalAdmin"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+        limit 1
+    )
+    where parent_id in (
+        select distinct p1.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.country_code = "AT"
+        and p1.place_type = "LocalAdmin"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+    );
+
+    -- Towns parented by a LocalAdmin should be parented by the grandparent County
+    update places
+    set parent_id = (select p_sub.parent_id from places p_sub where p_sub.id = places.parent_id)
+    where id in (
+        select p1.id
+        from places p1
+        join places p2
+            on p1.parent_id = p2.id
+        where p1.country_code = "AT"
+        and p1.place_type = "Town"
+        and p2.place_type = "LocalAdmin"
+    );
+
+    -- Convert all other LocalAdmins to cities
+    update places
+    set place_type = "Town"
+    where country_code = "AT"
+    and place_type = "LocalAdmin";
+
+    -- Except the few districts/boroughs of Vienna listed in GeoPlanet
+    update places
+    set place_type = "LocalAdmin"
+    where id in (542098, 551778);
+
+-- China
+    -- special cities that have state status
+    update places
+    set name = replace(name, "直辖市", "市"),
+    place_type = "Town"
+    where id in (
+        12578011, -- Beijing
+        12578012, -- Shanghai
+        12578017, -- Tianjin
+        20070171  -- Chongqing
+    );
+
+    -- City districts should be directly parented by their city
+    update places
+    set parent_id = (select p_sub.parent_id from places p_sub where p_sub.id = places.parent_id)
+    where id in (
+        select p1.id
+        from places p1
+        join places p2
+            on p1.parent_id = p2.id
+        where p1.country_code = "CN"
+        and p1.place_type = "LocalAdmin"
+        and p2.place_type = "County"
+        and p2.parent_id in (
+            12578011, -- Beijing
+            12578012, -- Shanghai
+            12578017, -- Tianjin
+            20070171  -- Chongqing
+        )
+    );
+
+    -- City districts should be directly parented by their city
+    update places
+    set parent_id = (select grandparent.parent_id from places parent join places grandparent on parent.parent_id = grandparent.id where parent.id = places.parent_id)
+    where id in (
+        select p1.id
+        from places p1
+        join places p2
+            on p1.parent_id = p2.id
+        join places p3
+            on p2.parent_id = p3.id
+        where p1.country_code = "CN"
+        and p1.place_type = "LocalAdmin"
+        and p3.parent_id in (
+            12578011, -- Beijing
+            12578012, -- Shanghai
+            12578017, -- Tianjin
+            20070171  -- Chongqing
+        )
+    );
+
+    -- GeoPlanet has 4 digit postcodes. They're correct but Chine uses 6 digits and pads with zeros
+    update postal_codes
+    set name = printf("%s00", name)
+    where country_code = "CN"
+    and length(name) = 4;
+
+    -- LocalAdmin ending with shi (市) should be city
+    update places
+    set place_type = "Town"
+    where country_code = "CN" 
+    and name like "%市"
+    and place_type in ("County", "LocalAdmin");
+
+    -- Prefecture-level cities are labeled counties
+    update places
+    set place_type = "Town"
+    where country_code = "CN"
+    and place_type = "County"
+    and replace(name, " ", "") not like "%自治州";
+
+
+    -- Counties are labeled LocalAdmin
+    update places
+    set place_type = "County"
+    where country_code = "CN" 
+    and place_type = "LocalAdmin"
+    and name like "%县";
+
+
+-- New Zealand
+    -- Hokianga Harbour is listed as a bay in OSM and these "suburbs" are villages around the bay
+    update places
+    set place_type = "Town"
+    where place_type = "Suburb"
+    and parent_id = 28645523;
+
+    -- Silverdale listed as town in OSM
+    update places
+    set place_type = "Town"
+    where id = 2350555;
+
+    -- Wellington is both a city and a region
+    update places
+    set name = "Wellington Region"
+    where id = 15021762;
+
+-- Philippines
+    -- States in GeoPlanet are admin_level=3 (country_region) in libpostal
+    update places
+    set place_type = "CountryRegion"
+    where country_code = "PH"
+    and place_type = "State";
+
+    -- Counties in GeoPlanet are admin_level=4 (state) in libpostal
+    update places
+    set place_type = "State"
+    where country_code = "PH"
+    and place_type = "County";
+
+-- Pakistan - OK
+
+-- Lebanon - OK
+
+-- Lithuania
+    -- LocalAdmins are admin_level=6 (state_district)
+    update places
+    set place_type = "County"
+    where country_code = "LT"
+    and place_type = "LocalAdmin";
+
+    -- Suburbs are admin_level=10 (city_district)
+    update places
+    set place_type = "LocalAdmin"
+    where country_code = "LT"
+    and place_type = "Suburb";
