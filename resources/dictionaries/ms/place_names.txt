@@ -117,7 +117,7 @@ kitar semula
 restoran
 bilik|blk
 sekolah menengah|sek menengah|sekolah men|sek men
-shopping mall|pusat membeli-belah
+pusat membeli-belah
 kedai
 kelab sosial
 stor
