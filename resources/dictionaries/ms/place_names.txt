@@ -1,139 +1,139 @@
-academy|akademi
-animal hospital|hospital haiwan
-air force base|pangkalan tentera udara
-airport|lapangan terbang|lpg terbang
-aquarium|akuarium
-arcade|arked
-art gallery|galleri seni
-arts center|arts centre|pusat seni
+akademi
+hospital haiwan
+pangkalan tentera udara
+lapangan terbang|lpg terbang
+akuarium
+arked
+galleri seni
+pusat seni
 auditorium
 bank
-barrack|berek
-beach|pantai
-beauty salon|salon kecantikan
-book store|kedai buku
-cafe|kafe
-campus|kampus
-car park|tempat letak kereta|tapak letak kereta|parkir
-casino|kasino
-castle|istana
-chiropractic|kiropraktik
-church|gereja
-cinema|panggung wayang gambar|pawagam
-city hall|dewan bandar
-clinic|klinik
-club|kelab
-clubhouse|rumah kelab
-coffee|kopi
-college|kolej
-committee|jawatankuasa|jawatan kuasa
-community center|pusat komuniti
-community|komuniti
-complex|kompleks
-concert hall|dewan konsert
-courthouse|mahkamah
-culture center|pusat kebudayaan
-dam|empangan
-dance studio|studio tarian
-development|pembangunan
-distributor|pengedar
-doctors|doktor-doktor
-dormitory|asrama
-elementary school|sekolah rendah|sekolah ren|sek rendah|sek ren
-embassy|kedutaan
-factory|kilang
-farmer's market|pasar tani|pasar petani
-farm|ladang pertanian|ladang
-fire department|jabatan bomba
-fire station|balai bomba
-fitness center|pusat kecergasan
-flats|rumah pangsa|pangsapuri|p/puri
-fountain|mata air
-garage|garajcesaasdf
-garden|taman
-gallery|galeri
-gas station|stesen minyak
-gate|pintu gerbang|pintu pagar
-golf course|padang golf
-golf club|kelab golfic
-graveyard|tanah perkuburan
-gym|gim|gynasium|gimnasium
-hall|dewan
-harbour|pelabuhan
-headquarters|ibu pejabat|ibu pej
-health center|pusat kesihatan
-home|rumah kediaman
-home for the aged|rumah orang tua
+berek
+pantai
+salon kecantikan
+kedai buku
+kafe
+kampus
+tempat letak kereta|tapak letak kereta|parkir
+kasino
+istana
+kiropraktik
+gereja
+panggung wayang gambar|pawagam
+dewan bandar
+klinik
+kelab
+rumah kelab
+kopi
+kolej
+jawatankuasa|jawatan kuasa
+pusat komuniti
+komuniti
+kompleks
+dewan konsert
+mahkamah
+pusat kebudayaan
+empangan
+studio tarian
+pembangunan
+pengedar
+doktor-doktor
+asrama
+sekolah rendah|sekolah ren|sek rendah|sek ren
+kedutaan
+kilang
+pasar tani|pasar petani
+ladang pertanian|ladang
+jabatan bomba
+balai bomba
+pusat kecergasan
+flat|rumah pangsa|pangsapuri|p/puri
+mata air
+garaj
+taman
+galeri
+stesen minyak
+pintu gerbang|pintu pagar
+padang golf
+kelab golf
+tanah perkuburan
+gim|gimnasium
+dewan
+pelabuhan
+ibu pejabat|ibu pej
+pusat kesihatan
+rumah kediaman
+rumah orang tua
 hospital|rumah sakit
 hostel
-house|rumah|rmh
-ice cream|aiskrim
-industrial park|taman perindustrian|taman industri|tmn ind|tmn perindustrian|tmn ind
-institute|institut
-jail|penjara
-jetty|jeti
-kindergarten|tadika
-kitchen|dapur
-league|liga
-library|perpustakaan
-marketplace|pasaran
-mansion|rumah
-medical|perubatan
-mission|misi
-monastery|biara
-monument|monumen
-municipal building|bangunan perbandaran
-museum|muzium
-music hall|dewan muzik
-night club|kelab malam
-nursing|kejururawatan
-nursing center|pusat kejururawatan
-nursing home|pusat penjagaan
-middle school|junior high school|high school|sekolah menegah|sekolah men|sek menengah|sek men
-laboratory|lab|makmal
-market|pasar
-movie theater|pawagam
-national park|taman negara
-nursery|nurseri
-office|pejabat
-office tower|menara pejabat
-parking lot|tempat letak kereta
-pediatric|pediatrik
-performing arts center|pusat seni persembahan
-pharmacy|farmasi
-pier|dermaga
-police department|jabatan polis
-police station|balai polis
-polytechnic|politeknik
-port|pelabuhan
-post office|pejabat pos
-precinct|presint
-pre school|pra sekolah
-primary school|sekolah rendah|sek rendah|sekolah ren|sek ren
-prison|penjara
+rumah|rmh
+aiskrim
+taman perindustrian|taman industri|tmn ind|tmn perindustrian|tmn ind
+institut
+penjara
+jeti
+tadika
+dapur
+liga
+perpustakaan
+pasaran
+rumah
+perubatan
+misi
+biara
+monumen
+bangunan perbandaran
+muzium
+dewan muzik
+kelab malam
+kejururawatan
+pusat kejururawatan
+pusat penjagaan
+junior high school|high school|sekolah menegah|sekolah men|sek menengah|sek men
+makmal
+pasar
+pawagam
+taman negara
+nurseri
+pejabat
+menara pejabat
+tempat letak kereta
+pediatrik
+pusat seni persembahan
+farmasi
+dermaga
+jabatan polis
+balai polis
+politeknik
+pelabuhan
+pejabat pos
+presint
+pra sekolah
+sekolah rendah|sek rendah|sekolah ren|sek ren
+penjara
 pub
-public pool|kolam renang awam
-recycling|kitar semula
-restaurant|restoran
-room|bilik|blk
-secondary school|sekolah menengah|sek menengah|sekolah men|sek men
-shopping center|shopping mall|pusat membeli-belah
-shop|kedai
-social club|kelab sosial
-store|stor
-supermarket|pasar raya|pasaraya
-swimming pool|kolam renang
-tea|teh
-terrace|teres
-theater|panggung
-tower|menara
-town hall|dewan bandar
-university|universiti
-vault|bilik kebal
-vet|doktor haiwan|dr haiwan
-veterinary|veterinar
-village|kampung|kampong|kg
-youth center|pusat belia
+kolam renang awam
+kitar semula
+restoran
+bilik|blk
+sekolah menengah|sek menengah|sekolah men|sek men
+shopping mall|pusat membeli-belah
+kedai
+kelab sosial
+stor
+pasar raya|pasaraya
+kolam renang
+teh
+teres
+panggung
+menara
+dewan bandar
+universiti
+bilik kebal
+doktor haiwan|dr haiwan
+veterinar
+kampung|kampong|kg
+pusat belia
 jelapang
 masjid
 sekolah|sek

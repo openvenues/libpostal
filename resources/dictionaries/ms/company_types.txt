@@ -1,6 +1,6 @@
 bank
-company|syarikat
-football club|kelab bola sepak
-limited|berhad|bhd
-private limited company|pte ltd|sendirian berhad|sdn bhd
-society|persatuan
+syarikat
+kelab bola sepak
+berhad|bhd
+sendirian berhad|sdn bhd
+persatuan

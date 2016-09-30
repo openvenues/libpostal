@@ -26,69 +26,66 @@ to puan
 datin paduka
 dato wira
 dato paduka
-field marshal|fil marsyal
-admiral of the fleet|laksamana armada
-marshal of the air force|marsyal tentera udara
-general|jeneral
-admiral|laksamana
-lieutenant general|leftenan jeneral
-vice admiral|laksamana madya
-major general|mejar jeneral
-rear admiral|laksamana muda
-brigadier general|brigedier jeneral
-commodore|laksamana pertama
-brigadier general|brigedier jeneral
-colonel|kolonel
-captain|kapten
-lieutenant colonel|leftenan kolonel
-commander|komander
-major|mejar
-lieutenant commander|leftenan komander
-lieutenant|leftenan
-sub-lieutenant|leftenan mad
-second lieutenant|leftenan muda
-junior sublieutenant|leftenan muda
-sublieutenant|leftenan muda
-midshipman|kadet kanan
-officer cadet|pegawai kadet
-warrant officer first class|pegawai waran kelas pertama
-warrant officer second class|pegawai waran kelas kedua
-staff sergeant|staff sarjan
-chief petty officer|bintara kanan
-flight sergeant|flait sarjan
-sergeant|sarjan
-petty officer|bintara muda
-air sergeant|sarjan udara
-corporal|korporal
-leading rate|laskar kanan
-air corporal|korporal udara
-lance corporal|lans korporal
-able seaman|laskar kelas pertama
-leading aircraftman|laskar udara kanan
-ordinary seaman|laskar kelas kedua
-aircraftman first class|laskar udara kelas pertama
-private|prebet
-seaman|laskar muda
-aircraftman second class|laskar udara kelas kedua
-recruit|rekrut
-seaman recruit|parajurit muda
+fil marsyal
+laksamana armada
+marsyal tentera udara
+jeneral
+laksamana
+leftenan jeneral
+laksamana madya
+mejar jeneral
+laksamana muda
+brigedier jeneral
+laksamana pertama
+kolonel
+kapten
+leftenan kolonel
+komander
+mejar
+leftenan komander
+leftenan
+leftenan madya
+leftenan muda
+kadet kanan
+pegawai kadet
+pegawai waran kelas pertama
+pegawai waran kelas kedua
+staff sarjan
+bintara kanan
+flait sarjan
+sarjan
+bintara muda
+sarjan udara
+korporal
+laskar kanan
+korporal udara
+lans korporal
+laskar kelas pertama
+laskar udara kanan
+laskar kelas kedua
+laskar udara kelas pertama
+prebet
+laskar muda
+laskar udara kelas kedua
+rekrut
+parajurit muda
 ahli dewan undangan negeri|adun
-chairman|pengerusi
-deputy prime minister|timbalan perdana menteri
-doctor|doktor|dr
-judge|hakim
-minister|menteri
-mister|mr|encik|en
-misses|mrs|puan|pn
-miss|ms|cik
-officer|pegawai
-president|presiden
-prime minister|perdana menteri
-price|putera|putra
-princess|puteri|putri
-sir|tuan
-representative|wakil
-representatitves|wakil-wakil
-vice chairman|vice chairperson|naib pengerusi
-vice presiden|timbalan presiden
-vice prime minister|timbalan perdana menteri
+pengerusi
+timbalan perdana menteri
+doktor|dr
+hakim
+menteri
+mr|encik|en
+mrs|puan|pn
+ms|cik
+pegawai
+presiden
+perdana menteri
+putera|putra
+puteri|putri
+tuan
+wakil
+wakil-wakil
+naib pengerusi
+timbalan presiden
+timbalan perdana menteri

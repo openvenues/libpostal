@@ -1,2 +1,2 @@
-bag|beg
-mail|mel|surat
+beg
+mel|surat
