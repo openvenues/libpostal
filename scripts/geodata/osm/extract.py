@@ -75,11 +75,15 @@ def parse_osm(filename, allowed_types=ALL_OSM_TAGS, dependencies=False):
 
         if item_type in allowed_types:
             attrs = OrderedDict(elem.attrib)
+            top_level_attrs = set(attrs)
             deps = [] if dependencies else None
 
             for e in elem.getchildren():
                 if e.tag == 'tag':
-                    attrs[e.attrib['k']] = e.attrib['v']
+                    # Prevent user-defined lat/lon keys from overriding the lat/lon on the node
+                    key = e.attrib['k']
+                    if key not in top_level_attrs:
+                        attrs[key] = e.attrib['v']
                 elif dependencies and item_type == 'way' and e.tag == 'nd':
                     deps.append(long(e.attrib['ref']))
                 elif dependencies and item_type == 'relation' and e.tag == 'member' and 'role' in e.attrib:
