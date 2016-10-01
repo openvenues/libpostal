@@ -112,9 +112,12 @@ rm $JAPAN_ADDRESSES_LATLONS
 
 # Border data set for use in R-tree index/reverse geocoding, parsing, language detection
 echo "Filtering for borders: `date`"
+PLANET_COUNTRIES="planet-countries.osm"
 PLANET_BORDERS_O5M="planet-borders.o5m"
 PLANET_BORDERS="planet-borders.osm"
 PLANET_ADMIN_BORDERS_OSM="planet-admin-borders.osm"
+
+VALID_COUNTRY_KEYS="ISO3166-1:alpha2="
 
 VALID_ADMIN_BORDER_KEYS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish or boundary=civil or boundary=ceremonial or place=island or place=city or place=town or place=village or place=hamlet or place=municipality or place=settlement"
 
@@ -134,6 +137,7 @@ osmconvert $PLANET_BORDERS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANE
 rm $PLANET_BORDERS_O5M
 osmfilter $PLANET_BORDERS_LATLONS --keep="$VALID_ADMIN_BORDER_KEYS or $VALID_LOCALITY_KEYS" -o=$PLANET_BORDERS
 rm $PLANET_BORDERS_LATLONS
+osmfilter $PLANET_O5M --keep="$VALID_COUNTRY_KEYS" --drop-author --drop-version -o=$PLANET_COUNTRIES
 
 echo "Filtering for rail stations"
 VALID_RAIL_STATION_KEYS="railway=station"

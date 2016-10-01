@@ -308,3 +308,13 @@ class OSMSubdivisionPolygonReader(OSMPolygonReader):
 class OSMBuildingPolygonReader(OSMPolygonReader):
     def include_polygon(self, props):
         return 'building' in props or 'building:part' in props or props.get('type', None) == 'building'
+
+
+class OSMCountryPolygonReader(OSMPolygonReader):
+    def include_polygon(self, props):
+        return 'ISO3166-1:alpha2' in props
+
+
+class OSMPostalCodesPolygonReader(OSMPolygonReader):
+    def include_polygon(self, props):
+        return props.get('boundary') == 'postal_code'

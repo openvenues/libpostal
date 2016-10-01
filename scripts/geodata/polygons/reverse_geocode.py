@@ -452,6 +452,21 @@ class OSMBuildingReverseGeocoder(OSMReverseGeocoder):
     include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['building', 'building:levels', 'building:part', 'addr:*'])
 
 
+class OSMPostalCodeReverseGeocoder(OSMReverseGeocoder):
+    persistent_polygons = True
+    cache_size = 10000
+    simplify_polygons = False
+    polygon_reader = OSMPostalCodesPolygonReader
+    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['postal_code'])
+
+
+class OSMCountryReverseGeocoder(OSMReverseGeocoder):
+    persistent_polygons = True
+    cache_size = 1000
+    simplify_polygons = False
+    polygon_reader = OSMCountryPolygonReader
+
+
 if __name__ == '__main__':
     # Handle argument parsing here
     parser = argparse.ArgumentParser()
@@ -468,6 +483,12 @@ if __name__ == '__main__':
     parser.add_argument('-b', '--osm-building-polygons-file',
                         help='Path to OSM building polygons file (with dependencies, .osm format)')
 
+    parser.add_argument('-p', '--osm-postal-code-polygons-file',
+                        help='Path to OSM postal code polygons file (with dependencies, .osm format)')
+
+    parser.add_argument('-c', '--osm-country-polygons-file',
+                        help='Path to OSM country polygons file (with dependencies, .osm format)')
+
     parser.add_argument('-o', '--out-dir',
                         default=os.getcwd(),
                         help='Output directory')
@@ -481,6 +502,10 @@ if __name__ == '__main__':
         index = OSMSubdivisionReverseGeocoder.create_from_osm_file(args.osm_subdivisions_file, args.out_dir)
     elif args.osm_building_polygons_file:
         index = OSMBuildingReverseGeocoder.create_from_osm_file(args.osm_building_polygons_file, args.out_dir)
+    elif args.osm_country_polygons_file:
+        index = OSMCountryReverseGeocoder.create_from_osm_file(args.osm_country_polygons_file, args.out_dir)
+    elif args.osm_postal_code_polygons_file:
+        index = OSMPostalCodeReverseGeocoder.create_from_osm_file(args.osm_postal_code_polygons_file, args.out_dir)
     elif args.quattroshapes_dir:
         index = QuattroshapesReverseGeocoder.create_with_quattroshapes(args.quattroshapes_dir, args.out_dir)
     else:
