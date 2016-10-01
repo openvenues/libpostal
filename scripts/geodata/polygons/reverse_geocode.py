@@ -34,7 +34,7 @@ from geodata.i18n.unicode_properties import get_chars_by_script
 from geodata.i18n.word_breaks import ideographic_scripts
 from geodata.names.deduping import NameDeduper
 from geodata.osm.extract import parse_osm, osm_type_and_id, NODE, WAY, RELATION, OSM_NAME_TAGS
-from geodata.osm.admin_boundaries import OSMAdminPolygonReader, OSMSubdivisionPolygonReader, OSMBuildingPolygonReader
+from geodata.osm.admin_boundaries import *
 from geodata.polygons.index import *
 from geodata.statistics.tf_idf import IDFIndex
 
