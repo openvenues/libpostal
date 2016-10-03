@@ -7,4 +7,5 @@
     overrides:
         id:
             relation:
+                # Conakry
                 "3731500": "city"
