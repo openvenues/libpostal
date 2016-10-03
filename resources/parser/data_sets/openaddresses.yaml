@@ -2255,6 +2255,8 @@ countries:
                     - filename: san_antonio.csv
                       add_osm_boundaries: true
                     - filename: shackelford.csv
+                    - filename: city_of_sugar_land.csv
+                      add_osm_boundaries: true
                     - filename: tarrant-county.csv
                     - filename: texoma-counties.csv
                       add_osm_boundaries: true
