@@ -435,7 +435,6 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         candidates = super(OSMReverseGeocoder, self).get_candidate_polygons(lat, lon)
         return sorted(candidates, key=self.sort_level, reverse=True)
 
-
 class OSMSubdivisionReverseGeocoder(OSMReverseGeocoder):
     persistent_polygons = True
     cache_size = 10000
@@ -462,9 +461,46 @@ class OSMPostalCodeReverseGeocoder(OSMReverseGeocoder):
 
 class OSMCountryReverseGeocoder(OSMReverseGeocoder):
     persistent_polygons = True
-    cache_size = 1000
+    cache_size = 10000
     simplify_polygons = False
     polygon_reader = OSMCountryPolygonReader
+
+    @classmethod
+    def country_and_languages(cls, osm_components):
+        country = None
+        for c in reversed(osm_components):
+            country = c.get('ISO3166-1:alpha2')
+            if country:
+                break
+        else:
+            return None, None
+
+        country = country.lower()
+
+        regional = None
+
+        for c in osm_components:
+            place_id = '{}:{}'.format(c.get('type', 'relation'), c.get('id', '0'))
+
+            regional = get_regional_languages(country, 'osm', place_id)
+
+            if regional:
+                break
+
+        languages = []
+        if not regional:
+            languages = get_country_languages(country).items()
+        else:
+            if not all(regional.values()):
+                languages = get_country_languages(country)
+                languages.update(regional)
+                languages = languages.items()
+            else:
+                languages = regional.items()
+
+        default_languages = sorted(languages, key=operator.itemgetter(1), reverse=True)
+
+        return country, default_languages
 
 
 if __name__ == '__main__':
