@@ -75,9 +75,9 @@ timbalan perdana menteri
 doktor|dr
 hakim
 menteri
-mr|encik|en
-mrs|puan|pn
-ms|cik
+encik|en
+puan|pn
+cik
 pegawai
 presiden
 perdana menteri
