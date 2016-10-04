@@ -1,8 +1,14 @@
 ---
-  admin_level: 
-    "2": "country"
-    "5": "state"
-    "6": "state_district"
-    "7": "city_district"
-    "10": "suburb"
+    admin_level: 
+        "2": "country"
+        "5": "country_region"
+        "6": "state"
+        "7": "state"
+        "10": "suburb"
 
+
+    overrides:
+        id:
+            relation:
+                # Dublin
+                "1109531": "city"
