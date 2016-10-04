@@ -1,1 +1,2 @@
-aras|tingkat|tkt
+aras
+tingkat|tkt
