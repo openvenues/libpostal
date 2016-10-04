@@ -1,7 +1,7 @@
 apartment|aparment|apartmen|apt
 bangunan|bgn
 kondominium|kondo
-flat|pangsapuri|rumah pangsa|p/puri
+pangsapuri|rumah pangsa|p/puri
 dewan
 rumah|rmh
 residensi|residen
