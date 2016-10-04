@@ -1,7 +1,7 @@
 ---
     admin_level: 
         "3": "country"
-        "7": "state_district"
+        "7": "state"
         "8": "city"
 
     overrides:
