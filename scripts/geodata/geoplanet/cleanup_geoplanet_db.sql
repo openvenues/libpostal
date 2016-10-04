@@ -792,3 +792,658 @@
     set place_type = "LocalAdmin"
     where country_code = "LT"
     and place_type = "Suburb";
+
+-- Estonia
+    -- Counties in GeoPlanet are municipalities/cities
+    update places
+    set place_type = "Town"
+    where country_code = "EE"
+    and place_type = "County";
+
+-- Slovakia
+    -- Use the prefix okres for Slovak counties
+    update places
+    set name = printf("okres %s", name)
+    where country_code = "SK"
+    and place_type = "County"
+    and id not in (
+        29399347, -- Bratislava
+        29399357 -- Košice
+    );
+
+    update places
+    set place_type = "Town"
+    where id in (
+        select p1.id
+        from places p1
+        join places p2
+            on p1.parent_id = p2.id
+        where p1.country_code = "SK"
+        and p1.place_type = "LocalAdmin"
+        and p2.place_type = "County"
+    );
+
+-- Bangladesh
+    -- only one postal code assigned to a district, so assign to town
+    update postal_codes
+    set parent_id = 1915034 -- Cox's Bazar (city)
+    where parent_id = 23706415; -- Cox's Bazar District
+
+-- Moldova
+    -- weirdly the name of the capital city is spelled wrong
+    update places
+    set name = "Chișinău"
+    where id = 480793;
+
+    -- name of the state of Chișinău
+    update places
+    set name = "Municipiul Chișinău"
+    where id = 20069878;
+
+    -- Bălţi also has a weird spelling
+    update places
+    set name = "Bălţi"
+    where id = 480080;
+
+    -- Change state name to include Municipiul
+    update places
+    set name = "Municipiul Bălți"
+    where id = 20069873;
+
+    update places
+    set name = printf("raionul %s", name)
+    where country_code = "MD"
+    and place_type = "State"
+    and id not in (
+        20069878, -- Municipiul Chișinău
+        20069873, -- Municipiul Bălți
+        20069881  -- Gagauzia
+    );
+
+-- Denmark
+    -- Counties are municipalities/cities
+    update places
+    set place_type = "Town"
+    where country_code = "DK"
+    and place_type = "County";
+
+-- Greece
+    -- Counties are municipalities/cities
+    update places
+    set place_type = "Town"
+    where country_code = "GR"
+    and place_type = "LocalAdmin";
+
+    -- uses English names, add "Region" to the end
+    update places
+    set name = printf("%s Region", name)
+    where country_code = "GR"
+    and place_type = "County";
+
+-- Belgium
+    -- LocalAdmins are municipalities/cities
+    update places
+    set place_type = "Town"
+    where country_code = "BE"
+    and place_type = "LocalAdmin";
+
+    -- Suburbs of Antwerp are city_districts
+    update places
+    set place_type = "LocalAdmin"
+    where country_code = "BE"
+    and place_type = "Suburb"
+    and parent_id = 966591; -- Antwerp
+
+-- Israel
+    -- Add "District" to Haifa, Tel Aviv, and Jerusalem
+    update places
+    set name = printf("%s District", name)
+    where country_code = "IL"
+    and place_type = "State"
+    and id in (
+        2345794, -- Haifa
+        2345795, -- Tel Aviv
+        2345796  -- Jerusalem
+    );
+
+-- Kenya - OK
+
+-- Cyprus - OK
+
+-- Croatia
+    -- Towns parented by Counties should be parented by State
+    update places
+    set parent_id = (select p_sub.parent_id from places p_sub where p_sub.id = places.parent_id)
+    where id in (
+        select p1.id
+        from places p1
+        join places p2
+            on p1.parent_id = p2.id
+        where p1.country_code = "HR"
+        and p1.place_type = "Town"
+        and p2.place_type = "County"
+    );
+
+-- Georgia - OK
+
+-- Latvia - OK
+
+-- Chile
+    -- Región Metropolitana de Santiago
+    update places
+    set name = "Región Metropolitana de Santiago"
+    where id = 2345029;
+
+    -- other states should begin with "Región de"
+    update places
+    set name = printf("Región de %s", name)
+    where country_code = "CL"
+    and place_type = "State"
+    and id != 2345029;
+
+    -- Counties begin with "Provincia de"
+    update places
+    set name = printf("Provincia de %s", name)
+    where country_code = "CL"
+    and place_type = "County";
+
+    -- LocalAdmins are cities
+    update places
+    set place_type = "Town"
+    where country_code = "CL"
+    and place_type = "LocalAdmin";
+
+-- México
+    -- "Counties" parented by Mexico City are city_districts
+    update places
+    set place_type = "LocalAdmin",
+    parent_id = 116545
+    where country_code = "MX"
+    and place_type = "County"
+    and parent_id = 2346272;
+
+-- Tunisia - OK
+
+-- Ecuador
+    -- Counties should begin with "Cantón"
+    update places
+    set name = printf("Cantón %s", name)
+    where country_code = "EC"
+    and place_type = "County";
+
+-- Thailand
+    -- Set postal codes parented by Bangkok (state) to Bangkok (city)
+    update postal_codes
+    set parent_id = 1225448
+    where parent_id = 2347165;
+
+    -- Bangkok city districts
+    update places
+    set place_type = "LocalAdmin",
+    parent_id = 1225448
+    where parent_id = 2347165
+    and place_type = "County";
+
+-- Nepal
+    -- LocalAdmins are state_districts
+    update places
+    set place_type = "County"
+    where country_code = "NP"
+    and place_type = "LocalAdmin";
+
+-- Macedonia
+    -- no states in Macedonia, only municipalities
+    update places
+    set place_type = "Town"
+    where country_code = "MK"
+    and place_type = "State";
+
+-- Morocco
+    -- LocalAdmins are state_districts
+    update places
+    set place_type = "County"
+    where country_code = "MA"
+    and place_type = "LocalAdmin";
+
+-- Venezuela
+    -- LocalAdmin
+    update places
+    set place_type = "Town"
+    where country_code = "VE"
+    and place_type = "LocalAdmin";
+
+-- Belarus - OK
+
+-- Slovenia
+    -- States/Counties in Slovenia are just municipalities
+    update places
+    set place_type = "Town"
+    where country_code = "SI"
+    and place_type in ("State", "County");
+
+-- Guatemala
+    -- Counties in Guatemala are just municipalities
+    update places
+    set place_type = "Town"
+    where country_code = "GT"
+    and place_type = "County";
+
+-- Bosnia and Herzegovina - OK
+
+-- Armenia - OK
+
+-- Jordan - OK
+
+-- Paraguay
+    -- Counties in Paraguay are just municipalities
+    update places
+    set place_type = "Town"
+    where country_code = "PY"
+    and place_type = "County";
+
+-- Sri Lanka
+    -- add the suffix "Province" to states/provinces
+    update places
+    set name = printf("%s Province", name)
+    where country_code = "LK"
+    and place_type = "State";
+
+    -- add the suffix "District" to all districts
+    update places
+    set name = printf("%s District", name)
+    where country_code = "LK"
+    and place_type = "County";
+
+-- Senegal - OK
+
+-- Honduras
+    -- Postal codes assigned to a County with a coterminous city should use the city
+    update postal_codes
+    set parent_id = (
+        select p2.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.id = postal_codes.parent_id
+        and p1.place_type = "County"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+        limit 1
+    )
+    where parent_id in (
+        select distinct p1.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.country_code = "HN"
+        and p1.place_type = "County"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+    );
+
+-- Mozambique - OK
+
+-- Iraq - OK
+
+-- Iran - OK
+
+-- El Salvador
+    -- States should be prefixed with "Departamento de"
+    update places
+    set name = printf("Departamento de %s", name)
+    where country_code = "SV"
+    and place_type = "State";
+
+    -- Assign postal codes that are part of counties to their coterminous towns
+    update postal_codes
+    set parent_id = (
+        select p2.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.id = postal_codes.parent_id
+        and p1.place_type = "County"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+        limit 1
+    )
+    where parent_id in (
+        select distinct p1.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.country_code = "SV"
+        and p1.place_type = "County"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+    );
+
+    -- The rest of the Counties are towns
+    update places
+    set place_type = "Town"
+    where country_code = "SV"
+    and place_type = "County";
+
+-- Uruguay - OK
+
+-- Egypt - OK
+
+-- Nigeria - OK
+
+-- Sudan - OK
+
+-- Kazhakstan - OK
+
+-- South Korea
+    -- Counties below cities are city_districts
+    update places
+    set place_type = "LocalAdmin"
+    where id in (
+        select p1.id
+        from places p1
+        join places p2
+            on p1.parent_id = p2.id
+        where p1.country_code = "KR"
+        and p1.place_type = "County"
+        and p2.place_type = "Town"
+    );
+
+    -- Set LocalAdmins ending with 동/dong to suburb
+    update places
+    set place_type = "Suburb"
+    where country_code = "KR"
+    and place_type = "LocalAdmin"
+    and name like "%동";
+
+-- Monaco
+    -- City of Monaco is parented by the country
+    update places
+    set parent_id = 23424892
+    where id = 483301;
+
+    -- Set wards of Monaco to city_district
+    update places
+    set place_type = "LocalAdmin"
+    where parent_id = 483301;
+
+-- Dominican Republic - OK
+
+-- Russia - OK
+
+-- Kuwait - OK
+
+-- Maldives - OK
+
+-- Uzbekiztan - OK
+
+-- Puerto Rico
+    -- Assign postal codes that are part of counties to their coterminous towns
+    update postal_codes
+    set parent_id = (
+        select p2.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.id = postal_codes.parent_id
+        and p1.place_type = "County"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+        limit 1
+    )
+    where parent_id in (
+        select distinct p1.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.country_code = "PR"
+        and p1.place_type = "County"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+    );
+
+    -- The rest of the Counties are towns
+    update places
+    set place_type = "Town"
+    where country_code = "PR"
+    and place_type = "County";
+
+    -- States are counties
+    update places
+    set place_type = "County"
+    where country_code = "PR"
+    and place_type = "State";
+
+-- Costa Rica
+    -- prefix states with "Provincia"
+    update places
+    set name = printf("Provincia %s", name)
+    where country_code = "CR"
+    and place_type = "State";
+
+    -- prefix counties with "Cantón"
+    update places
+    set name = printf("Cantón %s", name)
+    where country_code = "CR"
+    and place_type = "County";
+
+    -- Towns parented by LocalAdmins should be parented by counties
+    update places
+    set parent_id = (select p_sub.parent_id from places p_sub where p_sub.id = places.parent_id)
+    where id in (
+        select p1.id
+        from places p1
+        join places p2
+            on p1.parent_id = p2.id
+        where p1.country_code = "CR"
+        and p1.place_type = "Town"
+        and p2.place_type = "LocalAdmin"
+    );
+
+    -- The rest of the LocalAdmins are villages
+    update places
+    set place_type = "Town"
+    where country_code = "CR"
+    and place_type = "LocalAdmin";
+
+-- Haiti - OK
+
+-- Palestine
+    update places
+    set place_type = "CountryRegion"
+    where country_code = "PS"
+    and place_type = "State";
+
+-- Iceland - OK
+
+-- Montegnegro
+    -- add the prefix "Opština" to states
+    update places
+    set name = printf("Opština %s", name)
+    where country_code = "ME"
+    and place_type = "State";
+
+-- Laos - OK
+
+-- Faroe Islands
+    -- add the suffix "sýsla" to states
+    update places
+    set name = printf("%s sýsla", name)
+    where country_code = "FO"
+    and place_type = "State";
+
+-- Ethiopia
+    -- Set Addis Ababa's parent to the state
+    update places
+    set parent_id = 56013543
+    where id = 1313090; 
+
+    -- Set zones of Addis Ababa to city_district parented by the city
+    update places
+    set place_type = "LocalAdmin",
+    parent_id = 1313090
+    where id in (
+        56017368, -- Addis Ababa Zone 1
+        56017369, -- Addis Ababa Zone 2
+        56017370, -- Addis Ababa Zone 3
+        56017371, -- Addis Ababa Zone 4
+        56017372, -- Addis Ababa Zone 5
+        56017373  -- Addis Ababa Zone 6
+    );
+
+-- Madagascar
+    -- Set towns and counties in Madagascar to just be parented by the country itself
+    update places
+    set parent_id = 23424883
+    where country_code = "MG"
+    and place_type in ("Town", "County");
+
+    -- Set Antananarivo postal codes to the city
+    update postal_codes
+    set parent_id = 1358594
+    where parent_id = 2346150;
+
+    -- All other counties in Madagascar in GeoPlanet are municipalities
+    update places
+    set place_type = "Town"
+    where country_code = "MG"
+    and place_type = "County";
+
+-- Papua New Guinea - OK
+
+-- Guinea Bissau
+    update places
+    set name = printf("Região de %s", name)
+    where country_code = "GW"
+    and place_type = "State";
+
+-- Singapore
+    update places
+    set name = printf("%s Community Development Council", name)
+    where country_code = "SG"
+    and place_type = "State";
+
+-- Bermuda - OK
+
+-- Guinea
+    -- Add prefix "Région de" to states
+    update places
+    set name = printf("Région de %s", name)
+    where country_code = "GN"
+    and place_type = "State";
+
+    -- Add prefix "Préfecture de" to counties
+    update places
+    set name = printf("Préfecture de %s", name)
+    where country_code = "GN"
+    and place_type = "County";
+
+-- Niger
+    -- Add prefix "Région de" to states
+    update places
+    set name = printf("Région de %s", name)
+    where country_code = "NE"
+    and place_type = "State";
+
+    -- Add prefix "Département de" to counties
+    update places
+    set name = printf("Département de %s", name)
+    where country_code = "NE"
+    and place_type = "County";
+
+-- Ukraine - OK
+
+-- Swaziland
+    update places
+    set name = printf("Inkhundla %s", name)
+    where country_code = "SZ"
+    and place_type = "County";
+
+-- Vietnam - OK
+
+-- Azerbaijan - OK
+
+-- French Polynesia
+    -- Counties in French Polynesia are municipalities
+    update places
+    set place_type = "Town"
+    where country_code = "PF"
+    and place_type = "County";
+
+    -- States in French Polynesia are state_districts
+    update places
+    set place_type = "County"
+    where country_code = "PF"
+    and place_type = "State";
+
+-- Kyrgyzstan
+    -- add suffix "Oblast" to the states
+    update places
+    set name = printf("%s Oblast", name)
+    where country_code = "KG"
+    and place_type = "State";
+
+-- Turkmenistan
+    -- Towns should be parented by the country
+    update places
+    set parent_id = 23424972
+    where country_code = "TM"
+    and place_type = "Town";Å
+    -- States should be cities
+    update places
+    set place_type = "Town"
+    where country_code = "TM"
+    and place_type = "State";
+
+-- Brunei
+    -- Counties are just cities/villages
+    update places
+    set place_type = "Town"
+    where country_code = "BN"
+    and place_type = "County";
+
+-- Åland Islands - OK
+
+-- Réunion - OK
+
+-- Guadeloupe - OK
+
+-- Cabo Verde - OK
+
+-- Mongolia - OK
+
+-- New Caledonia
+    -- Set correct names for the provinces
+    update places
+    set name = "Province des Îles Loyauté"
+    where id = 24549805;
+
+    update places
+    set name = "Province du Nord"
+    where id = 24549806;
+
+    update places
+    set name = "Province Sud"
+    where id = 24549807;
+
+    -- Counties in New Caledonia are municipalities
+    update places
+    set place_type = "Town"
+    where country_code = "NC"
+    and place_type = "County";
+
+-- Martinique
+    -- Counties in Martinique are municipalities
+    update places
+    set place_type = "Town"
+    where country_code = "MQ"
+    and place_type = "County";
+
+
+-- Greenland
+    -- Towns in Greenland should just be parented by the country, states aren't current anyway
+    update places
+    set parent_id = 23424828
+    where country_code = "GL"
+    and place_type = "Town";
+
+-- Malta - OK
