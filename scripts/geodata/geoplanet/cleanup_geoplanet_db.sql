@@ -1248,6 +1248,7 @@
 -- Haiti - OK
 
 -- Palestine
+    -- Gaza / West Bank are country_region
     update places
     set place_type = "CountryRegion"
     where country_code = "PS"
@@ -1446,4 +1447,211 @@
     where country_code = "GL"
     and place_type = "Town";
 
--- Malta - OK
+-- Malta
+    -- Counties in Malta are municipalities
+    update places
+    set place_type = "Town"
+    where country_code = "MT"
+    and place_type = "County";
+
+-- South Sudan - OK
+
+-- French Guiana - OK
+
+-- Ireland
+    update places
+    set name = printf("County %s", name)
+    where country_code = "IE"
+    and place_type = "State";
+
+-- Guam
+    update places
+    set place_type = "Town"
+    where country_code = "GU"
+    and place_type = "State";
+
+-- US Virgin Islands
+    -- Towns parented by counties should be parented by the island/state
+    update places
+    set parent_id = (select p_sub.parent_id from places p_sub where p_sub.id = places.parent_id)
+    where id in (
+        select p1.id
+        from places p1
+        join places p2
+            on p1.parent_id = p2.id
+        where p1.country_code = "VI"
+        and p1.place_type = "Town"
+        and p2.place_type = "County"
+    );
+
+    -- GeoPlanet counties in the Virgin Islands are municipalities
+    update places
+    set place_type = "Town"
+    where country_code = "VI"
+    and place_type = "County";
+
+    -- States in the Virgin Islands are US counties
+    update places
+    set place_type = "County"
+    where country_code = "VI"
+    and place_type = "State";
+
+-- Oman
+    -- Counties in Oman are municipalities
+    update places
+    set place_type = "Town"
+    where country_code = "OM"
+    and place_type = "County";
+
+-- Liechtenstein
+    -- States in Liechtenstein are municipalities (gemeinde)
+    update places
+    set place_type = "Town"
+    where country_code = "LI"
+    and place_type = "State";
+
+-- Mayotte
+    -- States in Mayotte are municipalities (gemeinde)
+    update places
+    set place_type = "Town"
+    where country_code = "YT"
+    and place_type = "State";
+
+-- Bahrain
+    -- add the suffix "محافظة" (governorate) to states
+    update places
+    set name = printf("%s محافظة", name)
+    where country_code = "BH"
+    and place_type = "State";
+
+    -- Counties in Bahrain are municipalities
+    update places
+    set place_type = "Town"
+    where country_code = "BH"
+    and place_type = "County";
+
+-- San Marino
+    -- Città di San Marino
+    update places
+    set name = "Città di San Marino"
+    where id = 532373;
+
+    -- States in San Marino are municipalities
+    update places
+    set place_type = "Town"
+    where country_code = "SM"
+    and place_type = "State";
+
+    -- Map postal codes to cities instead of states
+    update postal_codes
+    set parent_id = (
+        select p2.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.id = postal_codes.parent_id
+        and p1.place_type = "State"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+        limit 1
+    )
+    where parent_id in (
+        select distinct p1.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.country_code = "SM"
+        and p1.place_type = "State"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+    );
+
+    -- Cities should be parented by the country, not the states
+    update places
+    set parent_id = (select p_sub.parent_id from places p_sub where p_sub.id = places.parent_id)
+    where id in (
+        select p1.id
+        from places p1
+        join places p2
+            on p1.parent_id = p2.id
+        where p1.country_code = "SM"
+        and p1.place_type = "Town"
+        and p2.place_type = "State"
+    );
+
+-- Timor Leste - OK
+
+-- Zambia
+    -- Add suffix "Province" on states
+    update places
+    set name = printf("%s Province", name)
+    where country_code = "ZM"
+    and place_type = "State";
+
+-- Andorra
+    -- Postal codes for Andorra la Vella should be on the city, not the state
+    update postal_codes
+    set parent_id = 472553 -- Andorra la Vella (city)
+    where parent_id = 20070553; -- Andorra la Vella (state)
+
+-- Federated States of Micronesia - OK
+
+-- Northern Mariana Islands
+    -- Add suffix "Municipality" and set states to counties
+    update places
+    set name = printf("%s Municipality", name),
+    place_type = "County"
+    where country_code = "MP"
+    and place_type = "State";
+
+-- Tajikistan - OK
+
+-- Wallis-et-Futuna
+    -- Cities should be parented by country, not states
+    update places
+    set parent_id = 23424989 -- Wallis-et-Futuna
+    where id = 1064134; -- Matâ' Utu
+
+-- Marshall Islands
+    -- States in the Marshall Islands are US counties
+    update places
+    set place_type = "County"
+    where country_code = "MH"
+    and place_type = "State";
+
+-- American Samoa
+    -- Counties in American Samoa should be parented by the country
+    update places
+    set parent_id = 23424746 -- American Samoa
+    where country_code = "AS"
+    and place_type = "County";
+
+-- Saint-Barthélemy - OK
+
+-- Cocos (Keeling) Islands - OK
+
+-- Christmas Island - OK
+
+-- Norfolk Island - OK
+
+-- Saint-Pierre-et-Miquelon
+    -- Set all postal codes to the country
+    update postal_codes
+    set parent_id = 23424939 -- Saint-Pierre-et-Miquelon
+    where country_code = "PM";
+
+-- Palau - OK
+
+-- US Minor Outlying Islands
+    -- Counties should be parented by the country
+    update places
+    set place_type = "County"
+    where country_code = "UM"
+    and place_type = "State";
+
+    -- Set all postal codes to the country
+    update postal_codes
+    set parent_id = 28289407 -- US Minor Outlying Islands
+    where country_code = "UM";
+
+-- Vatican - OK
