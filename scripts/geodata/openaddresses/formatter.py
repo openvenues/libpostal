@@ -433,12 +433,12 @@ class OpenAddressesFormatter(object):
 
                 self.components.replace_names(components)
 
-                self.components.prune_duplicate_names(address_components)
+                self.components.prune_duplicate_names(components)
 
-                self.components.remove_numeric_boundary_names(address_components)
-                self.components.cleanup_boundary_names(address_components)
-                self.components.add_house_number_phrase(address_components, language, country=country)
-                self.components.add_postcode_phrase(address_components, language, country=country)
+                self.components.remove_numeric_boundary_names(components)
+                self.components.cleanup_boundary_names(components)
+                self.components.add_house_number_phrase(components, language, country=country)
+                self.components.add_postcode_phrase(components, language, country=country)
 
                 # Component dropout
                 all_osm_components = osm_components + neighborhood_components
