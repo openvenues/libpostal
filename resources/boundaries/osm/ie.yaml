@@ -6,6 +6,10 @@
         "7": "state"
         "10": "suburb"
 
+    # With the introduction of Eire code, Dublin postal districts 
+    # have basically become city_districts
+    boundary:
+        postal_district: "city_district"
 
     overrides:
         id:
