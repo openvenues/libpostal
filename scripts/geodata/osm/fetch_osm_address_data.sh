@@ -124,7 +124,7 @@ PLANET_ADMIN_BORDERS_OSM="planet-admin-borders.osm"
 VALID_COUNTRY_KEYS="ISO3166-1:alpha2="
 ADMIN1_LANGUAGE_EXCEPTION_IDS=$(grep "osm" $ADMIN1_FILE | sed 's/^.*relation:\([0-9][0-9]*\).*$/@id=\1/' | xargs echo | sed 's/\s/ or /g')
 
-VALID_ADMIN_BORDER_KEYS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish or boundary=civil or boundary=ceremonial or place=island or place=city or place=town or place=village or place=hamlet or place=municipality or place=settlement"
+VALID_ADMIN_BORDER_KEYS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish or boundary=civil or boundary=ceremonial or boundary=postal_district or place=island or place=city or place=town or place=village or place=hamlet or place=municipality or place=settlement"
 
 VALID_POPULATED_PLACE_KEYS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=locality or place=settlement or place=census-designated or place:ph=village"
 VALID_NEIGHBORHOOD_KEYS="place=neighbourhood or place=suburb or place=quarter or place=borough or place:ph=barangay"
@@ -133,8 +133,11 @@ VALID_LOCALITY_KEYS="place=city or place=town or place=village or place=hamlet o
 
 VALID_ADMIN_NODE_KEYS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=neighbourhood or place=suburb or place=quarter or place=borough or place=island or place=islet or place=county or place=region or place=state or place=subdistrict or place=township or place=archipelago or place=department or place=country or place=district or place=census-designated or place=ward or place=subward or place=province or place=peninsula or place=settlement or place=subregion"
 
-osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDER_KEYS" --drop-author --drop-version -o=$PLANET_ADMIN_BORDERS_OSM
-osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDER_KEYS or $VALID_LOCALITY_KEYS" --drop-author --drop-version -o=$PLANET_BORDERS_O5M
+osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDER_KEYS" --drop-author --drop-version -o=$PLANET_ADMIN_BORDERS_OSM &
+osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDER_KEYS or $VALID_LOCALITY_KEYS" --drop-author --drop-version -o=$PLANET_BORDERS_O5M &
+
+wait
+
 PLANET_ADMIN_NODES="planet-admin-nodes.osm"
 osmfilter $PLANET_O5M --keep="$VALID_ADMIN_NODE_KEYS" --drop-ways --drop-relations --ignore-dependencies --drop-author --drop-version -o=$PLANET_ADMIN_NODES
 PLANET_BORDERS_LATLONS="planet-borders-latlons.o5m"
