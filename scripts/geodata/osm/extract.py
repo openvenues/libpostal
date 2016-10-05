@@ -76,7 +76,7 @@ def parse_osm(filename, allowed_types=ALL_OSM_TAGS, dependencies=False):
         if item_type in allowed_types:
             attrs = OrderedDict(elem.attrib)
             attrs['type'] = item_type
-            attrs['id'] = elem_id
+            attrs['id'] = safe_encode(elem_id)
 
             top_level_attrs = set(attrs)
             deps = [] if dependencies else None
