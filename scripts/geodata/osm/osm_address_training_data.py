@@ -160,7 +160,7 @@ def get_language_names(country_rtree, key, value, tag_prefix='name'):
                 ambiguous_already_seen.add(v)
         elif not has_alternate_names and k.startswith(tag_first_component) and (has_colon or ':' not in k) and normalize_osm_name_tag(k, script=True) == tag_last_component:
             if num_langs == 1:
-                name_language[candidate_languages[0][0].append(v)
+                name_language[candidate_languages[0][0]].append(v)
             else:
                 lang = disambiguate_language(v, candidate_languages)
                 default_lang = candidate_languages[0][0]
