@@ -465,7 +465,7 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
     polygon_reader = OSMCountryPolygonReader
 
     @classmethod
-    def country_and_languages(cls, osm_components):
+    def country_and_languages_from_components(cls, osm_components):
         country = None
         for c in reversed(osm_components):
             country = c.get('ISO3166-1:alpha2')
@@ -500,6 +500,10 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
         default_languages = sorted(languages, key=operator.itemgetter(1), reverse=True)
 
         return country, default_languages
+
+    def country_and_languages(self, lat, lon):
+        osm_components = self.point_in_poly(lat, lon, return_all=True)
+        return self.country_and_languages_from_components(osm_components)
 
 
 if __name__ == '__main__':

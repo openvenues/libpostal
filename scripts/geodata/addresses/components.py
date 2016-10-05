@@ -35,6 +35,7 @@ from geodata.math.sampling import cdf, weighted_choice
 from geodata.names.normalization import name_affixes
 from geodata.osm.components import osm_address_components
 from geodata.places.config import place_config
+from geodata.polygons.reverse_geocode import OSMCountryReverseGeocoder
 from geodata.states.state_abbreviations import state_abbreviations
 from geodata.text.utils import is_numeric
 
@@ -69,7 +70,7 @@ class AddressComponents(object):
     prefixes like "London Borough of", pruning duplicates like "Antwerpen, Antwerpen, Antwerpen".
 
     Usage:
-    >>> components = AddressComponents(osm_admin_rtree, language_rtree, neighborhoods_rtree, buildings_rtree, subdivisions_rtree, quattroshapes_rtree, geonames)
+    >>> components = AddressComponents(osm_admin_rtree, neighborhoods_rtree, buildings_rtree, subdivisions_rtree, quattroshapes_rtree, geonames)
     >>> components.expand({'name': 'Hackney Empire'}, 51.54559, -0.05567)
 
     Returns (results vary because of randomness):
@@ -145,7 +146,7 @@ class AddressComponents(object):
         AddressFormatter.UNIT: Unit,
     }
 
-    def __init__(self, osm_admin_rtree, language_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames):
+    def __init__(self, osm_admin_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames):
         self.config = yaml.load(open(PARSER_DEFAULT_CONFIG))
 
         self.setup_component_dependencies()
@@ -153,7 +154,6 @@ class AddressComponents(object):
         self.address_level_dropout_probabilities = {k: v['probability'] for k, v in six.iteritems(self.config['dropout'])}
 
         self.osm_admin_rtree = osm_admin_rtree
-        self.language_rtree = language_rtree
         self.neighborhoods_rtree = neighborhoods_rtree
         self.quattroshapes_rtree = quattroshapes_rtree
         self.geonames = geonames
@@ -249,6 +249,9 @@ class AddressComponents(object):
     def osm_reverse_geocoded_components(self, latitude, longitude):
         return self.osm_admin_rtree.point_in_poly(latitude, longitude, return_all=True)
 
+    def osm_country_and_languages(self, osm_components):
+        return OSMCountryReverseGeocoder.country_and_languages_from_components(osm_components)
+
     def categorize_osm_component(self, country, props, containing_components):
 
         containing_ids = [(c['type'], c['id']) for c in containing_components if 'type' in c and 'id' in c]
@@ -288,17 +291,16 @@ class AddressComponents(object):
         language = None
 
         if len(candidate_languages) == 1:
-            language = candidate_languages[0]['lang']
+            language = candidate_languages[0][0]
         else:
             street = components.get(AddressFormatter.ROAD, None)
 
-            lang_tuples = [(l['lang'], l['default']) for l in candidate_languages]
             if street is not None:
-                language = disambiguate_language(street, lang_tuples)
+                language = disambiguate_language(street, candidate_languages)
             else:
-                if has_non_latin_script(lang_tuples):
+                if has_non_latin_script(candidate_languages):
                     for component, value in six.iteritems(components):
-                        language, script_langs = disambiguate_language_script(value, lang_tuples)
+                        language, script_langs = disambiguate_language_script(value, candidate_languages)
                         if language is not UNKNOWN_LANGUAGE:
                             break
                     else:
@@ -1247,16 +1249,14 @@ class AddressComponents(object):
         except Exception:
             return None, None, None
 
-        country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
-        if not (country and candidate_languages):
-            return None, None, None
+        osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
+        country, candidate_languages = self.osm_country_and_languages(osm_components)
 
         more_than_one_official_language = len(candidate_languages) > 1
 
         non_local_language = None
         language_suffix = ''
 
-        osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
         neighborhoods = self.neighborhood_components(latitude, longitude)
 
         all_osm_components = osm_components + neighborhoods
@@ -1272,7 +1272,7 @@ class AddressComponents(object):
         if address_state:
             address_components[AddressFormatter.STATE] = address_state
 
-        all_languages = set([l['lang'] for l in candidate_languages])
+        all_languages = set([l for l, d in candidate_languages])
 
         self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
@@ -1329,7 +1329,9 @@ class AddressComponents(object):
         except Exception:
             return None, None, None
 
-        country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
+        osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
+        country, candidate_languages = self.osm_country_and_languages(osm_components)
+
         if not (country and candidate_languages):
             return None, None, None
 
@@ -1355,10 +1357,9 @@ class AddressComponents(object):
 
         street = address_components.get(AddressFormatter.ROAD)
 
-        osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
         neighborhoods = self.neighborhood_components(latitude, longitude)
 
-        all_languages = set([l['lang'] for l in candidate_languages])
+        all_languages = set([l for l, d in candidate_languages])
 
         all_osm_components = osm_components + neighborhoods
         language_suffix = self.pick_language_suffix(all_osm_components, language, non_local_language, more_than_one_official_language)

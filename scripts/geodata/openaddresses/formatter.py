@@ -67,9 +67,9 @@ class OpenAddressesFormatter(object):
                                  re.I | re.UNICODE)
             unit_type_regexes[lang] = pattern
 
-    def __init__(self, components, debug=False):
+    def __init__(self, components, country_rtree, debug=False):
         self.components = components
-        self.language_rtree = components.language_rtree
+        self.country_rtree = country_rtree
 
         self.debug = debug
 
@@ -309,7 +309,7 @@ class OpenAddressesFormatter(object):
                 continue
 
             if components:
-                country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
+                country, candidate_languages = self.country_rtree.country_and_languages(latitude, longitude)
                 if not (country and candidate_languages):
                     continue
 

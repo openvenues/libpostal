@@ -7,7 +7,7 @@ import six
 import sys
 import yaml
 
-from collections import OrderedDict
+from collections import defaultdict, OrderedDict, Counter
 from six import itertools
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
@@ -109,8 +109,8 @@ class OSMAddressFormatter(object):
             ('is_in:region', AddressFormatter.STATE),
             # Used in Tunisia
             ('addr:governorate', AddressFormatter.STATE),
-            ('addr:postal_code', AddressFormatter.POSTCODE),
             ('addr:postcode', AddressFormatter.POSTCODE),
+            ('addr:postal_code', AddressFormatter.POSTCODE),
             ('addr:zipcode', AddressFormatter.POSTCODE),
             ('postal_code', AddressFormatter.POSTCODE),
             ('addr:country', AddressFormatter.COUNTRY),
@@ -138,6 +138,8 @@ class OSMAddressFormatter(object):
             'commercial': AddressComponents.zones.COMMERCIAL,
             'industrial': AddressComponents.zones.INDUSTRIAL,
             'residential': AddressComponents.zones.RESIDENTIAL,
+            'university': AddressComponents.zones.UNIVERSITY,
+            'college': AddressComponents.zones.UNIVERSITY,
         },
         'amenity': {
             'university': AddressComponents.zones.UNIVERSITY,
@@ -147,10 +149,10 @@ class OSMAddressFormatter(object):
 
     boundary_component_priorities = {k: i for i, k in enumerate(AddressFormatter.BOUNDARY_COMPONENTS_ORDERED)}
 
-    def __init__(self, components, subdivisions_rtree=None, buildings_rtree=None, metro_stations_index=None):
+    def __init__(self, components, country_rtree, subdivisions_rtree=None, buildings_rtree=None, metro_stations_index=None):
         # Instance of AddressComponents, contains structures for reverse geocoding, etc.
         self.components = components
-        self.language_rtree = components.language_rtree
+        self.country_rtree = country_rtree
 
         self.subdivisions_rtree = subdivisions_rtree
         self.buildings_rtree = buildings_rtree
@@ -168,7 +170,7 @@ class OSMAddressFormatter(object):
         if len(candidate_languages) > 1:
             street = tags.get('addr:street', None)
 
-            namespaced = [l['lang'] for l in candidate_languages if 'addr:street:{}'.format(l['lang']) in tags]
+            namespaced = [l for l, d in candidate_languages if 'addr:street:{}'.format(l) in tags]
 
             if namespaced and random.random() < pick_namespaced_language_prob:
                 language = random.choice(namespaced)
@@ -344,7 +346,6 @@ class OSMAddressFormatter(object):
             return True
         return False
 
-
     def add_metro_station(self, address_components, latitude, longitude, language=None, default_language=None):
         '''
         Metro stations
@@ -476,19 +477,10 @@ class OSMAddressFormatter(object):
             return (), None
 
         osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
-        country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
-        if country and candidate_languages:
-            local_languages = [(l['lang'], bool(int(l['default']))) for l in candidate_languages]
-        else:
-            for c in reversed(osm_components):
-                country = c.get('ISO3166-1:alpha2')
-                if country:
-                    country = country.lower()
-                    break
-            else:
-                return (), None
 
-            local_languages = [(lang, bool(int(default))) for lang, default in get_country_languages(country).iteritems()]
+        country, candidate_languages = OSMCountryReverseGeocoder.country_and_languages_from_components(osm_components)
+
+        local_languages = candidate_languages
 
         all_local_languages = set([l for l, d in local_languages])
         random_languages = set(INTERNET_LANGUAGE_DISTRIBUTION)
@@ -551,12 +543,17 @@ class OSMAddressFormatter(object):
         # Calculate how many records to produce for this place given its population
         population_divisor = 10000  # Add one record for every 10k in population
         min_references = 5  # Every place gets at least 5 reference to account for variations
+        if component_name == AddressFormatter.CITY:
+            # Cities get a few extra references over e.g. a state_district with the same name
+            # so that if the population is unknown, hopefully the city will have more references
+            # and the parser will prefer that meaning
+            min_references += 2
         max_references = 1000  # Cap the number of references e.g. for India and China country nodes
         num_references = min(population / population_divisor + min_references, max_references)
 
         cldr_country_prob = float(nested_get(self.config, ('places', 'cldr_country_probability'), default=0.0))
 
-        for name_tag in ('name', 'alt_name', 'loc_name', 'short_name', 'int_name'):
+        for name_tag in ('name', 'alt_name', 'loc_name', 'short_name', 'int_name', 'name:simple', 'official_name'):
             if more_than_one_official_language:
                 name = tags.get(name_tag)
                 language_suffix = ''
@@ -757,7 +754,7 @@ class OSMAddressFormatter(object):
         except Exception:
             return None, None, None
 
-        country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
+        country, candidate_languages = self.country_rtree.country_and_languages(latitude, longitude)
         if not (country and candidate_languages):
             return None, None, None
 
@@ -880,7 +877,7 @@ class OSMAddressFormatter(object):
         except Exception:
             return None, None, None
 
-        country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
+        country, candidate_languages = self.country_rtree.country_and_languages(latitude, longitude)
         if not (country and candidate_languages):
             return None, None, None
 
@@ -986,8 +983,10 @@ class OSMAddressFormatter(object):
         for node_id, tags, deps in parse_osm(infile):
             tags['type'], tags['id'] = node_id.split(':')
             place_tags, country = self.node_place_tags(tags)
+
             for address_components, language, is_default in place_tags:
                 addresses = self.formatted_places(address_components, country, language)
+
                 if language is None:
                     language = UNKNOWN_LANGUAGE
 
@@ -1083,11 +1082,11 @@ class OSMAddressFormatter(object):
             except Exception:
                 continue
 
-            country, candidate_languages, language_props = self.language_rtree.country_and_languages(latitude, longitude)
+            country, candidate_languages = self.country_rtree.country_and_languages(latitude, longitude)
             if not (country and candidate_languages):
                 continue
 
-            more_than_one_official_language = sum((1 for l in candidate_languages if int(l['default']))) > 1
+            more_than_one_official_language = sum((1 for l, d in candidate_languages if d)) > 1
 
             base_name_tag = None
             for t in all_base_name_tags:
@@ -1103,7 +1102,7 @@ class OSMAddressFormatter(object):
                 names = defaultdict(list)
 
                 if len(candidate_languages) == 1:
-                    default_language = candidate_languages[0]['lang']
+                    default_language = candidate_languages[0][0]
                 elif not more_than_one_official_language:
                     default_language = None
                     name = way['name']

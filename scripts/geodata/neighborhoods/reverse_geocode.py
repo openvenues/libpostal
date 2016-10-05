@@ -23,7 +23,7 @@ from geodata.osm.definitions import osm_definitions
 from geodata.osm.extract import parse_osm, osm_type_and_id, NODE, WAY, RELATION, OSM_NAME_TAGS
 from geodata.polygons.index import *
 from geodata.polygons.language_polys import LanguagePolygonIndex
-from geodata.polygons.reverse_geocode import QuattroshapesReverseGeocoder, OSMReverseGeocoder
+from geodata.polygons.reverse_geocode import QuattroshapesReverseGeocoder, OSMCountryReverseGeocoder, OSMReverseGeocoder
 from geodata.statistics.tf_idf import IDFIndex
 
 
@@ -234,7 +234,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         return doc
 
     @classmethod
-    def create_from_osm_and_quattroshapes(cls, filename, quattroshapes_dir, language_rtree_dir, osm_rtree_dir, output_dir):
+    def create_from_osm_and_quattroshapes(cls, filename, quattroshapes_dir, country_rtree_dir, osm_rtree_dir, output_dir):
         '''
         Given an OSM file (planet or some other bounds) containing neighborhoods
         as points (some suburbs have boundaries)
@@ -259,7 +259,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         logger.info('Creating ClickThatHood neighborhoods')
         cth = ClickThatHoodReverseGeocoder.create_neighborhoods_index()
 
-        language_rtree = LanguagePolygonIndex.load(language_rtree_dir)
+        country_rtree = OSMCountryReverseGeocoder.load(country_rtree_dir)
 
         osm_admin_rtree = OSMReverseGeocoder.load(osm_rtree_dir)
 
@@ -307,7 +307,8 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             possible_neighborhood = osm_definitions.meets_definition(attrs, osm_definitions.NEIGHBORHOOD)
             is_neighborhood = attrs.get('place') in ('neighbourhood', 'neighborhood')
 
-            country, candidate_languages, language_props = language_rtree.country_and_languages(lat, lon)
+            country, candidate_languages = country_rtree.country_and_languages(lat, lon)
+
             component_name = None
 
             component_name = osm_address_components.component_from_properties(country, attrs)
@@ -473,8 +474,8 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--osm-admin-rtree-dir',
                         help='Path to OSM admin rtree dir')
 
-    parser.add_argument('-l', '--language-rtree-dir',
-                        help='Path to language rtree dir')
+    parser.add_argument('-c', '--country-rtree-dir',
+                        help='Path to country rtree dir')
 
     parser.add_argument('-n', '--osm-neighborhoods-file',
                         help='Path to OSM neighborhoods file (no dependencies, .osm format)')
@@ -486,10 +487,11 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
 
     args = parser.parse_args()
-    if args.osm_neighborhoods_file and args.quattroshapes_dir and args.osm_admin_rtree_dir and args.language_rtree_dir:
+    if args.osm_neighborhoods_file and args.quattroshapes_dir and args.osm_admin_rtree_dir and args.country_rtree_dir:
         index = NeighborhoodReverseGeocoder.create_from_osm_and_quattroshapes(
             args.osm_neighborhoods_file,
             args.quattroshapes_dir,
+            args.country_rtree_dir,
             args.language_rtree_dir,
             args.osm_admin_rtree_dir,
             args.out_dir
