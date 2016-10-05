@@ -35,7 +35,7 @@ class MetroStationReverseGeocoder(PointIndex):
         'wikipedia:*',
     ])
 
-    def nearest_metro(self, lat, lon, n=1, language_rtree=None):
+    def nearest_metro(self, lat, lon, n=1):
         nearest = self.nearest_point(lat, lon)
         if not nearest:
             return None

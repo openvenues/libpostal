@@ -104,12 +104,13 @@ def get_language_names(country_rtree, key, value, tag_prefix='name'):
     except Exception:
         return None, None
 
-    country, candidate_languages = country_rtree.country_and_languages(latitude, longitude)
+    osm_country_components = country_rtree.point_in_poly(latitude, longitude, return_all=True)
+    country, candidate_languages = country_rtree.country_and_languages_from_components(osm_country_components)
     if not (country and candidate_languages):
         return None, None
 
     num_langs = len(candidate_languages)
-    default_langs = set([l['lang'] for l in candidate_languages if l.get('default')])
+    default_langs = set([l for l, d in candidate_languages if d])
     num_defaults = len(default_langs)
     name_language = defaultdict(list)
 
@@ -131,13 +132,14 @@ def get_language_names(country_rtree, key, value, tag_prefix='name'):
     country_defaults = 0
     regional_langs = set()
     country_langs = set()
-    for p in language_props:
-        if p['admin_level'] > 0:
-            regional_defaults += sum((1 for lang in p['languages'] if lang.get('default')))
-            regional_langs |= set([l['lang'] for l in p['languages']])
+    for c in osm_country_components:
+        _, langs = country_rtree.country_and_languages_from_components([c])
+        if 'ISO3166-1:alpha2' not in c:
+            regional_defaults += sum((1 for l, d in langs if d))
+            regional_langs |= set([l for l, d in langs])
         else:
-            country_defaults += sum((1 for lang in p['languages'] if lang.get('default')))
-            country_langs |= set([l['lang'] for l in p['languages']])
+            country_defaults += sum((1 for l, d in langs if d))
+            country_langs |= set([l for l, d in langs])
 
     ambiguous_already_seen = set()
 
@@ -158,10 +160,10 @@ def get_language_names(country_rtree, key, value, tag_prefix='name'):
                 ambiguous_already_seen.add(v)
         elif not has_alternate_names and k.startswith(tag_first_component) and (has_colon or ':' not in k) and normalize_osm_name_tag(k, script=True) == tag_last_component:
             if num_langs == 1:
-                name_language[candidate_languages[0]['lang']].append(v)
+                name_language[candidate_languages[0][0].append(v)
             else:
-                lang = disambiguate_language(v, [(l['lang'], l['default']) for l in candidate_languages])
-                default_lang = candidate_languages[0]['lang']
+                lang = disambiguate_language(v, candidate_languages)
+                default_lang = candidate_languages[0][0]
 
                 if lang == AMBIGUOUS_LANGUAGE:
                     return None, None
@@ -268,7 +270,9 @@ def build_toponym_training_data(country_rtree, infile, out_dir):
         except Exception:
             continue
 
-        country, candidate_languages = country_rtree.country_and_languages(latitude, longitude)
+
+        osm_country_components = country_rtree.point_in_poly(latitude, longitude, return_all=True)
+        country, candidate_languages = country_rtree.country_and_languages_from_components(osm_country_components)
         if not (country and candidate_languages):
             continue
 
@@ -278,7 +282,7 @@ def build_toponym_training_data(country_rtree, infile, out_dir):
 
         default_langs = set([l for l, default in official.iteritems() if default])
 
-        regional_langs = list(chain(*(p['languages'] for p in language_props if p.get('admin_level', 0) > 0)))
+        _, regional_langs = country_rtree.country_and_languages_from_components([c for c in osm_country_components if 'ISO3166-1:alpha2' not in c])
 
         top_lang = None
         if len(official) > 0:
@@ -288,7 +292,7 @@ def build_toponym_training_data(country_rtree, infile, out_dir):
         if top_lang is not None and top_lang not in WELL_REPRESENTED_LANGUAGES and len(default_langs) > 1:
             default_langs -= WELL_REPRESENTED_LANGUAGES
 
-        valid_languages = set([l['lang'] for l in candidate_languages])
+        valid_languages = set([l for l, d in candidate_languages])
 
         '''
         WELL_REPRESENTED_LANGUAGES are languages like English, French, etc. for which we have a lot of data

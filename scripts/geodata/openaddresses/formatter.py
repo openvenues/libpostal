@@ -322,7 +322,7 @@ class OpenAddressesFormatter(object):
                     street = AddressComponents.cleaned_name(street)
 
                     if language == UNKNOWN_LANGUAGE:
-                        strip_unit_language = candidate_languages[0]['lang'] if candidate_languages else None
+                        strip_unit_language = candidate_languages[0][0] if candidate_languages else None
                     else:
                         strip_unit_language = language
 
