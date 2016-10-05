@@ -1320,7 +1320,8 @@ class AddressComponents(object):
         return False
 
     def expanded(self, address_components, latitude, longitude, language=None,
-                 dropout_places=True, population=None, add_sub_building_components=True,
+                 dropout_places=True, population=None, population_from_city=False,
+                 add_sub_building_components=True,
                  num_floors=None, num_basements=None, zone=None):
         '''
         Expanded components
@@ -1377,6 +1378,8 @@ class AddressComponents(object):
         if city:
             address_components[AddressFormatter.CITY] = city
 
+
+
         self.add_neighborhoods(address_components, neighborhoods,
                                language_suffix=language_suffix)
 
@@ -1405,6 +1408,20 @@ class AddressComponents(object):
                                              num_floors=num_floors, num_basements=num_basements, zone=zone)
 
         if dropout_places:
+            # Population of the city helps us determine if the city can be used
+            # on its own like "Seattle" or "New York" vs. smaller cities like
+            # have to be qualified with a state, country, etc.
+            if population is None and population_from_city:
+                tagged = self.categorized_osm_components(osm_components)
+                for props, component in (tagged or []):
+                    if component == AddressFormatter.CITY and 'population' in props:
+                        try:
+                            population = int(props['population'])
+                        except (ValueError, TypeError):
+                            continue
+
+                population = 0
+
             # Perform dropout on places
             address_components = place_config.dropout_components(address_components, all_osm_components, country=country, population=population)
 

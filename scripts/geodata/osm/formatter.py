@@ -815,7 +815,8 @@ class OSMAddressFormatter(object):
 
         address_components, country, language = self.components.expanded(revised_tags, latitude, longitude, language=language or namespaced_language,
                                                                          num_floors=num_floors, num_basements=num_basements,
-                                                                         zone=zone, add_sub_building_components=add_sub_building_components)
+                                                                         zone=zone, add_sub_building_components=add_sub_building_components,
+                                                                         population_from_city=True)
 
         if not address_components:
             return None, None, None
