@@ -22,7 +22,6 @@ from geodata.osm.components import osm_address_components
 from geodata.osm.definitions import osm_definitions
 from geodata.osm.extract import parse_osm, osm_type_and_id, NODE, WAY, RELATION, OSM_NAME_TAGS
 from geodata.polygons.index import *
-from geodata.polygons.language_polys import LanguagePolygonIndex
 from geodata.polygons.reverse_geocode import QuattroshapesReverseGeocoder, OSMCountryReverseGeocoder, OSMReverseGeocoder
 from geodata.statistics.tf_idf import IDFIndex
 
@@ -492,7 +491,6 @@ if __name__ == '__main__':
             args.osm_neighborhoods_file,
             args.quattroshapes_dir,
             args.country_rtree_dir,
-            args.language_rtree_dir,
             args.osm_admin_rtree_dir,
             args.out_dir
         )
