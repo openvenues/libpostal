@@ -947,6 +947,7 @@ countries:
                     - filename: city_of_san_jose.csv
                       add_osm_boundaries: true
                     - filename: city_of_temecula.csv
+                    - filename: colusa.csv
                     - filename: contra_costa.csv
                       add_osm_boundaries: true
                     - filename: el_dorado.csv
@@ -956,6 +957,7 @@ countries:
                     - filename: glenn.csv
                       add_osm_boundaries: true
                     - filename: humboldt.csv
+                    - filename: inyo.csv
                     - filename: kings.csv
                       add_osm_boundaries: true
                     - filename: lake.csv
