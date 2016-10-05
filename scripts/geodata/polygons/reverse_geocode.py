@@ -31,6 +31,7 @@ from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.encoding import safe_decode
 from geodata.file_utils import ensure_dir, download_file
 from geodata.i18n.unicode_properties import get_chars_by_script
+from geodata.i18n.languages import *
 from geodata.i18n.word_breaks import ideographic_scripts
 from geodata.names.deduping import NameDeduper
 from geodata.osm.extract import parse_osm, osm_type_and_id, NODE, WAY, RELATION, OSM_NAME_TAGS
@@ -334,8 +335,6 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                      six.u('{}:*').format(k.split(six.u(':'), 1)[0]) in cls.include_property_patterns)}
 
             id_type, element_id = osm_type_and_id(element_id)
-            props['type'] = id_type
-            props['id'] = element_id
 
             if admin_center:
                 props['admin_center'] = {k: v for k, v in six.iteritems(admin_center)
