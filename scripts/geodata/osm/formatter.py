@@ -651,13 +651,16 @@ class OSMAddressFormatter(object):
         for address_components, language, is_default in place_tags:
             revised_address_components = place_config.dropout_components(address_components, osm_components, country=country, population=population)
             revised_address_components[component_name] = address_components[component_name]
+
+            self.components.cleanup_boundary_names(revised_address_components)
+            self.components.country_specific_cleanup(revised_address_components, country)
+
             self.components.drop_invalid_components(revised_address_components, country)
 
             self.components.replace_name_affixes(revised_address_components, language)
             self.components.replace_names(revised_address_components)
 
             self.components.remove_numeric_boundary_names(revised_address_components)
-            self.components.cleanup_boundary_names(revised_address_components)
 
             if (AddressFormatter.COUNTRY in address_components or place_config.include_component(AddressFormatter.COUNTRY, containing_ids, country=country)) and random.random() < cldr_country_prob:
                 address_country = self.components.cldr_country_name(country, language)
