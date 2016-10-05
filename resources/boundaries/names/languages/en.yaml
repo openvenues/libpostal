@@ -16,7 +16,6 @@ prefixes:
     - autonomous city of
     - territorial waters of
     - county of
-    - county
     - district of
 
 # Suffixes which can be stripped to normalize a place name
