@@ -3,6 +3,7 @@ import operator
 import os
 import pycountry
 import random
+import re
 import six
 import yaml
 
@@ -44,7 +45,6 @@ this_dir = os.path.realpath(os.path.dirname(__file__))
 
 PARSER_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                      'resources', 'parser', 'default.yaml')
-
 
 class ComponentDependencies(object):
     '''
@@ -132,6 +132,9 @@ class AddressComponents(object):
     NULL_PHRASE = 'null'
     ALPHANUMERIC_PHRASE = 'alphanumeric'
     STANDALONE_PHRASE = 'standalone'
+
+    IRELAND = 'ie'
+    JAMAICA = 'jm'
 
     class zones:
         COMMERCIAL = 'commercial'
@@ -675,6 +678,87 @@ class AddressComponents(object):
         else:
             return ':{}'.format(language_script or non_local_language or language)
 
+    # e.g. Dublin 3
+    dublin_postal_district_regex_str = '(?:[1-9]|1[1-9]|2[0-4]|6w)'
+    dublin_postal_district_regex = re.compile('^{}$'.format(dublin_postal_district_regex_str), re.I)
+    dublin_city_district_regex = re.compile('dublin {}$'.format(dublin_postal_district_regex_str), re.I)
+
+    def format_dublin_postal_district(self, address_components):
+        '''
+        Dublin postal districts
+        -----------------------
+
+        Since the introduction of the Eire code, former Dublin postcodes
+        are basically being used as what we would call a city_district in
+        libpostal, so fix that here.
+
+        If addr:city is given as "Dublin 3", make it city_district instead
+        If addr:city is given as "Dublin" or "City of Dublin" and addr:postcode
+        is given as "3", remove city/postcode and make it city_district "Dublin 3"
+        '''
+
+        city = address_components.get(AddressFormatter.CITY)
+        # Change to city_district
+        if city and self.dublin_city_district_regex.match(city):
+            address_components[AddressFormatter.CITY_DISTRICT] = address_components.pop(AddressFormatter.CITY)
+            postcode = address_components.get(AddressFormatter.POSTCODE)
+            if postcode and (self.dublin_postal_district_regex.match(postcode) or self.dublin_city_district_regex.match(postcode)):
+                address_components.pop(AddressFormatter.POSTCODE)
+            return True
+        elif city.lower() in ('dublin', 'city of dublin', 'dublin city') and AddressFormatter.POSTCODE in address_components:
+            postcode = address_components[AddressFormatter.POSTCODE]
+            if self.dublin_postal_district_regex.match(postcode):
+                address_components.pop(AddressFormatter.CITY)
+                address_components[AddressFormatter.CITY_DISTRICT] = 'Dublin {}'.format(address_components.pop(AddressFormatter.POSTCODE))
+                return True
+            elif self.dublin_city_district_regex.match(postcode):
+                address_components[AddressFormatter.CITY_DISTRICT] = address_components.pop(AddressFormatter.POSTCODE)
+                return True
+        return False
+
+    # e.g. Kingston 5
+    kingston_postcode_regex = re.compile('(kingston )?([1-9]|1[1-9]|20|c\.?s\.?o\.?)$', re.I)
+
+    def format_kingston_postcode(self, address_components):
+        '''
+        Kingston postcodes
+        ------------------
+        Jamaica does not have a postcode system, except in Kingston where
+        there are postal zones 1-20 plus the Central Sorting Office (CSO).
+
+        These are not always consistently labeled in OSM, so normalize here.
+
+        If city is given as "Kingston 20", separate into city="Kingston", postcode="20"
+        '''
+        city = address_components.get(AddressFormatter.CITY)
+        postcode = address_components.get(AddressFormatter.POSTCODE)
+
+        if city:
+            match = self.kingston_postcode_regex.match(city)
+            if match:
+                city, postcode = match.groups()
+                if city:
+                    address_components[AddressFormatter.CITY] = city
+                else:
+                    address_components.pop(AddressFormatter.CITY)
+
+                if postcode:
+                    address_components[AddressFormatter.POSTCODE] = postcode
+
+                return True
+        elif postcode:
+            match = self.kingston_postcode_regex.match(postcode)
+            if match:
+                city, postcode = match.groups()
+                if city and AddressFormatter.CITY not in address_components:
+                    address_components[AddressFormatter.CITY] = city
+
+                if postcode:
+                    address_components[AddressFormatter.POSTCODE] = postcode
+
+                return True
+        return False
+
     def add_admin_boundaries(self, address_components,
                              osm_components,
                              country, language,
@@ -1138,6 +1222,12 @@ class AddressComponents(object):
             else:
                 address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
 
+    def country_specific_cleanup(self, address_components, country):
+        if country == self.IRELAND:
+            return self.format_dublin_postal_district(address_components)
+        elif country == self.JAMAICA:
+            return self.format_kingston_postcode(address_components)
+
     def add_house_number_phrase(self, address_components, language, country=None):
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER, None)
         if not is_numeric(house_number) and (not house_number or house_number.lower() not in self.latin_alphabet_lower):
@@ -1292,6 +1382,9 @@ class AddressComponents(object):
 
         street = address_components.get(AddressFormatter.ROAD)
 
+        self.cleanup_boundary_names(address_components)
+        self.country_specific_cleanup(address_components, country)
+
         self.replace_name_affixes(address_components, non_local_language or language)
 
         self.replace_names(address_components)
@@ -1303,7 +1396,6 @@ class AddressComponents(object):
         self.cleanup_house_number(address_components)
 
         self.remove_numeric_boundary_names(address_components)
-        self.cleanup_boundary_names(address_components)
         self.add_house_number_phrase(address_components, language, country=country)
         self.add_postcode_phrase(address_components, language, country=country)
         self.add_metro_station_phrase(address_components, language, country=country)
