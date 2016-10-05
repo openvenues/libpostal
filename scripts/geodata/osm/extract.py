@@ -17,7 +17,7 @@ from lxml import etree
 
 from geodata.csv_utils import unicode_csv_reader
 from geodata.text.normalize import normalize_string, NORMALIZE_STRING_DECOMPOSE, NORMALIZE_STRING_LATIN_ASCII
-from geodata.encoding import safe_decode
+from geodata.encoding import safe_decode, safe_encode
 
 
 WAY_OFFSET = 10 ** 15
