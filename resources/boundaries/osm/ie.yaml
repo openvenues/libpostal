@@ -8,8 +8,8 @@
 
     # With the introduction of Eire code, Dublin postal districts 
     # have basically become city_districts
-    boundary:
-        postal_district: "city_district"
+    place:
+        district: "city_district"
 
     overrides:
         id:
