@@ -4,8 +4,30 @@
     set place_type = "Country"
     where place_type = "Nationality";
 
--- United Kingdom
+    -- For postal_codes parented by something like "LandFeature" or "Estate" or "HistoricalCounty"
+    -- or some other non-admin feature, set to the parent_id
+    update postal_codes
+    set parent_id = (select p_sub.parent_id from all_places p_sub where p_sub.id = postal_codes.parent_id)
+    where parent_id in (
+        select distinct pc.parent_id
+        from postal_codes pc
+        left join places p
+            on pc.parent_id = p.id
+        where p.id is null
+    );
 
+    -- Run again for non-admin features parented by non-admin features
+    update postal_codes
+    set parent_id = (select p_sub.parent_id from all_places p_sub where p_sub.id = postal_codes.parent_id)
+    where parent_id in (
+        select distinct pc.parent_id
+        from postal_codes pc
+        left join places p
+            on pc.parent_id = p.id
+        where p.id is null
+    );
+
+-- United Kingdom
     -- City of London
     update places
     set place_type = "Town"
@@ -91,12 +113,37 @@
     update postal_codes set country_code = "JE"
     where parent_id in (select id from places where country_code = "JE");
 
+    -- Postal codes assigned to a unitary authority should use the city
+    update postal_codes
+    set parent_id = (
+        select sub.id
+        from places parent
+        join places sub
+            on sub.parent_id = parent.id
+        where parent.id = postal_codes.parent_id
+        and sub.place_type = "Town"
+        and parent.place_type = "LocalAdmin"
+        and replace(parent.name, " City", "") = sub.name
+        limit 1
+    )
+    where parent_id in (
+        select distinct parent.id
+        from places parent
+        join places sub
+            on sub.parent_id = parent.id
+        where parent.country_code = "GB"
+        and parent.name like "% City"
+        and sub.place_type = "Town"
+        and parent.place_type = "LocalAdmin"
+        and replace(parent.name, " City", "") = sub.name
+    );
+
     -- shire districts with City in the name are cities
     update places
     set place_type = "Town"
     where country_code = "GB"
     and place_type = "LocalAdmin"
-    and name like  "%City%"
+    and name like  "% City" or name like "City %"
     -- except for City of Westminster in London
     and parent_id != 44418;
 
