@@ -429,8 +429,8 @@ class OpenAddressesFormatter(object):
                     neighborhood_components = self.components.neighborhood_components(latitude, longitude)
                     self.components.add_neighborhoods(components, neighborhood_components)
 
-                self.components.cleanup_boundary_names(address_components)
-                self.components.country_specific_cleanup(address_components, country)
+                self.components.cleanup_boundary_names(components)
+                self.components.country_specific_cleanup(components, country)
 
                 self.components.replace_name_affixes(components, language)
 
