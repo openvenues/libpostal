@@ -1388,7 +1388,7 @@
     update places
     set parent_id = 23424972
     where country_code = "TM"
-    and place_type = "Town";Å
+    and place_type = "Town";
     -- States should be cities
     update places
     set place_type = "Town"
