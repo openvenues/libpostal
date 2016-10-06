@@ -44,7 +44,7 @@ function download_file() {
 
 if [ ! -f $OUT_DIR/$GEOPLANET_ZIP_FILE ]; then
     echo "Downloading GeoPlanet"
-    download_file $GEOPLANET_URL GEOPLANET_ZIP_FILE
+    download_file $GEOPLANET_URL $GEOPLANET_ZIP_FILE
 fi
 
 cd $OUT_DIR
