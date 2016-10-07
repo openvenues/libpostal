@@ -1,5 +1,4 @@
 timur|timor
-aras|tingkat|tkt
 air|ayer
 kampung|kampong|kg
 itam|hitam
@@ -22,4 +21,3 @@ jelutung|jelutong
 tanduk|tandok
 chempaka|cempaka
 suleiman|sulaiman
-mohammad|muhammad
