@@ -848,6 +848,13 @@ class OSMAddressFormatter(object):
 
         formatted_addresses.extend(self.formatted_places(address_components, country, language))
 
+        # In Japan an address without places is basically just house_number + metro_station (if given)
+        # However, where there are streets, it's useful to have address-only queries as well
+        if country != JAPAN:
+            address_only_components = self.components.drop_places(address_components)
+            formatted_addresses.extend(self.formatted_addresses_with_venue_names(address_only_components, venue_names, country, language=language,
+                                                                                 tag_components=tag_components, minimal_only=False))
+
         # Generate a PO Box address at random (only returns non-None values occasionally) and add it to the list
         po_box_components = self.components.po_box_address(address_components, language, country=country)
         if po_box_components:
