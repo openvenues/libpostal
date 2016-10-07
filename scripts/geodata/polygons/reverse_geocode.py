@@ -474,7 +474,7 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
             if country:
                 break
         else:
-            return None, None
+            return None, []
 
         country = country.lower()
 
