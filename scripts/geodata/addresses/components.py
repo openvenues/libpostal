@@ -1412,7 +1412,7 @@ class AddressComponents(object):
             # on its own like "Seattle" or "New York" vs. smaller cities like
             # have to be qualified with a state, country, etc.
             if population is None and population_from_city:
-                tagged = self.categorized_osm_components(osm_components)
+                tagged = self.categorized_osm_components(country, osm_components)
                 for props, component in (tagged or []):
                     if component == AddressFormatter.CITY and 'population' in props:
                         try:
