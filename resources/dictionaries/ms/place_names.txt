@@ -47,7 +47,6 @@ ladang pertanian|ladang
 jabatan bomba
 balai bomba
 pusat kecergasan
-flat|rumah pangsa|pangsapuri|p/puri
 mata air
 garaj
 taman
@@ -57,7 +56,7 @@ pintu gerbang|pintu pagar
 padang golf
 kelab golf
 tanah perkuburan
-gim|gimnasium
+gimnasium|gim
 dewan
 pelabuhan
 ibu pejabat|ibu pej
@@ -89,7 +88,6 @@ kelab malam
 kejururawatan
 pusat kejururawatan
 pusat penjagaan
-junior high school|high school|sekolah menegah|sekolah men|sek menengah|sek men
 makmal
 pasar
 pawagam
