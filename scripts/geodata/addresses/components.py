@@ -705,7 +705,7 @@ class AddressComponents(object):
             if postcode and (self.dublin_postal_district_regex.match(postcode) or self.dublin_city_district_regex.match(postcode)):
                 address_components.pop(AddressFormatter.POSTCODE)
             return True
-        elif city.lower() in ('dublin', 'city of dublin', 'dublin city') and AddressFormatter.POSTCODE in address_components:
+        elif city and city.lower() in ('dublin', 'city of dublin', 'dublin city') and AddressFormatter.POSTCODE in address_components:
             postcode = address_components[AddressFormatter.POSTCODE]
             if self.dublin_postal_district_regex.match(postcode):
                 address_components.pop(AddressFormatter.CITY)
