@@ -479,6 +479,8 @@ class OSMAddressFormatter(object):
         osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
 
         country, candidate_languages = OSMCountryReverseGeocoder.country_and_languages_from_components(osm_components)
+        if not (country and candidate_languages):
+            return (), None
 
         local_languages = candidate_languages
 

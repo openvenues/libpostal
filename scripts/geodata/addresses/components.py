@@ -1342,6 +1342,8 @@ class AddressComponents(object):
 
         osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
         country, candidate_languages = self.osm_country_and_languages(osm_components)
+        if not (country and candidate_languages):
+            return None, None, None
 
         more_than_one_official_language = len(candidate_languages) > 1
 
@@ -1377,8 +1379,6 @@ class AddressComponents(object):
         city = self.quattroshapes_city(address_components, latitude, longitude, language, non_local_language=non_local_language)
         if city:
             address_components[AddressFormatter.CITY] = city
-
-
 
         self.add_neighborhoods(address_components, neighborhoods,
                                language_suffix=language_suffix)
