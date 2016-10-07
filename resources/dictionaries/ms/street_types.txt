@@ -10,7 +10,7 @@ gerbang|grb
 haji|hj
 halaman|hlm
 hilir|hlr
-jalan|jln|jl|road|rd
+jalan|jln|jl
 lapangan
 laluan
 laman|lmn
