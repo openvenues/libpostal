@@ -58,6 +58,10 @@ names:
           type: relation
           default: name # Richmond County
           probability: 1.0
+        - id: 6577227 # Kingston Parish (always use Kingston)
+          type: relation
+          default: name # Kingston
+          probability: 1.0
         - id: 556706 # New Zealand
           type: relation
           default: name:en

@@ -5,6 +5,10 @@
         "8": "city"
 
     overrides:
+        id:
+            # Kingston (parish)
+            "6577227": "city"
+
         use_admin_center:
             - id: 319355 # Kingston and St Andrew Corporation
               type: relation
