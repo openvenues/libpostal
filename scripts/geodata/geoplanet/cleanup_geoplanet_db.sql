@@ -515,6 +515,15 @@
     and place_type = "County";
 
 -- Luxembourg
+    update places
+    set name = printf("District de %s", name)
+    where country_code = "LU"
+    and place_type = "State";
+
+    update places
+    set name = printf("Canton de %s", name)
+    where country_code = "LU"
+    and place_type = "County";
 
     -- Set suburbs of Luxembourg (city) to city_district
     update places
@@ -522,11 +531,58 @@
     where parent_id = 979721  -- Luxembourg City
     and place_type = "Suburb";
 
+    -- Postal codes assigned to a LocalAdmin with a coterminous city should use the city
+    update postal_codes
+    set parent_id = (
+        select p2.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.id = postal_codes.parent_id
+        and p1.place_type = "LocalAdmin"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+        limit 1
+    )
+    where parent_id in (
+        select distinct p1.id
+        from places p1
+        join places p2
+            on p1.id = p2.parent_id
+        where p1.country_code = "LU"
+        and p1.place_type = "LocalAdmin"
+        and p2.place_type = "Town"
+        and p1.name = p2.name
+    );
+
+    update places
+    set place_type = "Town"
+    where country_code = "LU"
+    and parent_id != 979721  -- Luxembourg City
+    and place_type = "LocalAdmin";
+
 -- Switzerland
     -- using postal codes for Zürich the city
     update postal_codes
     set parent_id = 784794 -- Zürich (city)
     where parent_id = 12593130; -- Zürich (county)
+
+    update places
+    set parent_id = (select p_sub.parent_id from places p_sub where p_sub.id = places.parent_id)
+    where id in (
+        select p1.id
+        from places p1
+        join places p2
+            on p1.parent_id = p2.id
+        where p1.country_code = "CH"
+        and p1.place_type = "Town"
+        and p2.place_type = "LocalAdmin"
+    );
+
+    update places
+    set place_type = "Town"
+    where country_code = "CH"
+    and place_type = "LocalAdmin";
 
 -- Australia - OK
 
