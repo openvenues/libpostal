@@ -197,6 +197,7 @@ class AddressFormatter(object):
         self.setup_place_only_templates()
 
         self.template_cache = {}
+        self.parsed_cache = {}
 
     def clone_repo(self):
         subprocess.check_call(['rm', '-rf', self.formatter_repo_path])
@@ -841,16 +842,24 @@ class AddressFormatter(object):
         template_text = self.revised_template(template_text, components, country, language=language)
         if template_text is None:
             return None
+
+        if tag_components:
+            template_text = self.tag_template_separators(template_text)
+
+        if template_text in self.parsed_cache:
+            template = self.parsed_cache[template_text]
+        else:
+            template = pystache.parse(template_text)
+            self.parsed_cache[template_text] = template
+
         if replace_aliases:
             self.aliases.replace(components)
 
         if tag_components:
-            template_text = self.tag_template_separators(template_text)
             components = {k: self.tagged_tokens(v, k) for k, v in six.iteritems(components)}
 
-        text = self.render_template(template_text, components, tagged=tag_components)
+        text = self.render_template(template, components, tagged=tag_components)
 
         text = self.remove_repeat_template_separators(text)
 
-        text = self.post_replacements(template, text)
         return text
