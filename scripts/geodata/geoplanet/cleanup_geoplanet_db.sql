@@ -28,6 +28,11 @@
     );
 
 -- United Kingdom
+    -- Make UK an abbreviation rather than a variant (as those aren't used)
+    update aliases set name_type = "A"
+    where id = 23424975 -- United Kingdom
+    and name = "UK" and language = "ENG";
+
     -- City of London
     update places
     set place_type = "Town"
@@ -56,6 +61,10 @@
     place_type = "State"
     where parent_id = 23424847;
 
+    update places
+    set country_code = "IM"
+    where id in (select id from admins where country_code = "IM");
+
     update postal_codes set country_code = "IM"
     where parent_id in (select id from places where country_code = "IM");
 
@@ -83,6 +92,10 @@
     place_type = "State"
     where parent_id = 23424827;
 
+    update places
+    set country_code = "GG"
+    where id in (select id from admins where country_code = "GG");
+
     update postal_codes set country_code = "GG"
     where parent_id in (select id from places where country_code = "GG");
 
@@ -109,6 +122,10 @@
     set country_code = "JE",
     place_type = "State"
     where parent_id = 23424857;
+
+    update places
+    set country_code = "JE"
+    where id in (select id from admins where country_code = "JE");
 
     update postal_codes set country_code = "JE"
     where parent_id in (select id from places where country_code = "JE");
@@ -285,6 +302,20 @@
     update admins
     set county_id = 0
     where state_id = 2347567;
+
+    -- Preferred name for New York
+    update aliases
+    set name_type = "P"
+    where id = 2459115
+    and name = "New York City"
+    and language = "ENG";
+
+    -- Additional abbreviations for NYC
+    update aliases
+    set name_type = "A"
+    where id = 2459115
+    and name in ("NY City", "NY Cty", "New York Cty")
+    and language = "ENG";
 
     -- Boroughs of NYC
     -- listed as counties, make them LocalAdmin
