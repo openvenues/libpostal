@@ -214,6 +214,20 @@
     set county_id = 0
     where state_id = 2344920;
 
+    -- Québec
+    -- listed as both county and state
+    update postal_codes
+    set parent_id = 2344924
+    where parent_id = 29375121;
+
+    update places
+    set parent_id = 2344924
+    where parent_id = 29375121;
+
+    update admins
+    set county_id = 0
+    where county_id = 29375121;
+
     -- Saskatchewan
     -- listed as both county and state
     update places
