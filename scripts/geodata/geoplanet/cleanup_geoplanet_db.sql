@@ -172,6 +172,12 @@
     -- except for boroughs of London
     and parent_id != 44418;
 
+    -- One place in the UK (Garrison) is parented by a postal_code
+    update places
+    set parent_id = 20078335 -- Fermanagh
+    where parent_id = 26353948; -- BT93 4
+
+
 -- Canada
 
     -- Alberta
