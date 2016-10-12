@@ -394,26 +394,28 @@ class AddressFormatter(object):
                 last_removed = False
         return ''.join(new_components).strip()
 
-    def insert_component(self, template, tag, before=None, after=None, first=False, last=False, separate=True, is_reverse=False):
+    def insert_component(self, template, tag, before=None, after=None, first=False, last=False,
+                         separate=True, is_reverse=False, exact_order=True):
         if not before and not after and not first and not last:
             return
 
         template = template.rstrip()
 
-        first_template_regex = re.compile(six.u('{{#first}}.*?{{/first}}'), re.UNICODE)
-        sans_firsts = first_template_regex.sub(six.u(''), template)
+        if not exact_order:
+            first_template_regex = re.compile(six.u('{{#first}}.*?{{/first}}'), re.UNICODE)
+            sans_firsts = first_template_regex.sub(six.u(''), template)
 
-        tag_match = re.compile(self.tag_token(tag)).search(sans_firsts)
+            tag_match = re.compile(self.tag_token(tag)).search(sans_firsts)
 
-        if before:
-            before_match = re.compile(self.tag_token(after)).search(sans_firsts)
-            if before_match and tag_match and before_match.start() > tag_match.start():
-                return template
+            if before:
+                before_match = re.compile(self.tag_token(after)).search(sans_firsts)
+                if before_match and tag_match and before_match.start() > tag_match.start():
+                    return template
 
-        if after:
-            after_match = re.compile(self.tag_token(after)).search(sans_firsts)
-            if after_match and tag_match and tag_match.start() > after_match.start():
-                return template
+            if after:
+                after_match = re.compile(self.tag_token(after)).search(sans_firsts)
+                if after_match and tag_match and tag_match.start() > after_match.start():
+                    return template
 
         key_added = False
         skip_next_non_token = False
@@ -449,6 +451,9 @@ class AddressFormatter(object):
 
             elif hasattr(el, 'key'):
                 if el.key == tag:
+                    if i == num_tokens - 1 and last:
+                        new_components.append('{{{{{{{key}}}}}}}'.format(key=el.key))
+
                     skip_next_non_token = True
                     continue
 
@@ -501,7 +506,7 @@ class AddressFormatter(object):
         if i > 1:
             for component in self.BOUNDARY_COMPONENTS_ORDERED[i - 1:0:-1]:
                 kw = {'before': prev} if not is_reverse else {'after': prev}
-                template = self.insert_component(template, component, **kw)
+                template = self.insert_component(template, component, exact_order=False, **kw)
 
                 prev = component
 
@@ -510,7 +515,7 @@ class AddressFormatter(object):
         if i < len(self.BOUNDARY_COMPONENTS_ORDERED) - 1:
             for component in self.BOUNDARY_COMPONENTS_ORDERED[i + 1:]:
                 kw = {'after': prev} if not is_reverse else {'before': prev}
-                template = self.insert_component(template, component, **kw)
+                template = self.insert_component(template, component, exact_order=False, **kw)
 
                 prev = component
 
@@ -590,7 +595,7 @@ class AddressFormatter(object):
 
             if insertions is None and language:
                 insertions = nested_get(self.language_insertions, (language, component), default=None)
-                scope = language
+                scope = 'lang:{}'.format(language)
 
             if conditionals is None and language:
                 conditionals = nested_get(self.language_conditionals, (language, component), default=None)
@@ -767,6 +772,9 @@ class AddressFormatter(object):
 
     def tagged_tokens(self, name, label):
         return six.u(' ').join([six.u('{}/{}').format(t.replace(' ', ''), label if t != ',' else self.separator_tag) for t, c in tokenize(name)])
+
+    def template_language_matters(self, country, language):
+        return '{}_{}'.format(country.upper(), language) in self.country_formats or '{}_{}'.format(country, language) in self.country_formats
 
     def format_category_query(self, category_query, address_components, country, language, tag_components=True):
         if tag_components:
