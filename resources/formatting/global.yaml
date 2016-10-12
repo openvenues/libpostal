@@ -722,19 +722,19 @@ countries:
     tw:
         insertions: {}
 
-    en_tw:
+    tw_en:
         insertions: *us_template_insertions
 
     # Japan
     jp:
         insertions: {}
 
-    en_jp:
+    jp_en:
         insertions: *us_template_insertions
 
     # South Korea
     kr:
         insertions: {}
 
-    en_kr:
+    kr_en:
         insertions: *us_template_insertions
