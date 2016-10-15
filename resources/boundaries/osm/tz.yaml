@@ -1,8 +1,13 @@
 ---
-  admin_level: 
-    "2": "country"
-    "4": "state"
-    "5": "state_district"
-    "7": "state_district"
-    "9": "city"
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "5": "state_district"
+        "7": "state_district"
+        "9": "city_district"
+
+    overrides:
+        id:
+            # Dar es Salaam
+            "1600803": "city"
 
