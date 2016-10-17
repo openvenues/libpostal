@@ -512,7 +512,7 @@ class OSMAddressFormatter(object):
             for i, c in enumerate(osm_components):
                 c_name = osm_address_components.component_from_properties(country, c, containing=containing_ids[i + 1:])
                 c_index = self.boundary_component_priorities.get(c_name, -1)
-                if c_index >= component_index  and (c['type'], c['id']) != (tags.get('type', 'node'), tags.get('id')):
+                if c_index >= component_index and (c['type'], c['id']) != (tags.get('type', 'node'), tags.get('id')):
                     revised_osm_components.append(c)
 
                     if not first_valid:
@@ -566,6 +566,9 @@ class OSMAddressFormatter(object):
                     elif six.u(',') in name:
                         name = name.split(six.u(','), 1)[0]
 
+                    if six.u('|') in name:
+                        name = name.replace(six.u('|'), six.u(''))
+
                     for i in xrange(num_references if name_tag == 'name' else 1):
                         address_components = {component_name: name.strip()}
                         self.components.add_admin_boundaries(address_components, osm_components, country, UNKNOWN_LANGUAGE,
@@ -590,6 +593,9 @@ class OSMAddressFormatter(object):
                     name = random.choice(name.split(six.u(';')))
                 elif six.u(',') in name:
                     name = name.split(six.u(','), 1)[0]
+
+                if six.u('|') in name:
+                    name = name.replace(six.u('|'), six.u(''))
 
                 n = min_references / 2
                 if name_tag == 'name':
@@ -621,6 +627,9 @@ class OSMAddressFormatter(object):
                     name = random.choice(name.split(six.u(';')))
                 elif six.u(',') in name:
                     name = name.split(six.u(','), 1)[0]
+
+                if six.u('|') in name:
+                    name = name.replace(six.u('|'), six.u(''))
 
                 # Add half as many English records as the local language, every other language gets min_referenes / 2
                 for i in xrange(num_references / 2 if language == ENGLISH else min_references / 2):
