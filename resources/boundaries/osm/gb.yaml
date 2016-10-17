@@ -11,6 +11,8 @@
         non_metropolitan_district: "state_district"
         unitary_authority: "state_district"
         civil_parish: "city"
+    _DESCRIPTIO_:
+        "Civil Parish or Community": "city"
     overrides:
         id:
             relation:
