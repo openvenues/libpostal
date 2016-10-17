@@ -277,7 +277,7 @@ class OSMPolygonReader(object):
                             admin_centers.append(val)
                     elif role == 'label' and elem_type == 'node':
                         val = self.nodes.get(long(elem_id))
-                        if val is not None:
+                        if val is not None and val.get('name', six.u('')).lower() == props.get('name', six.u('')).lower():
                             props.update({k: v for k, v in six.iteritems(val)
                                           if k not in props})
 
