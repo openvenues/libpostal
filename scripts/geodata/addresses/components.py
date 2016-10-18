@@ -1222,6 +1222,42 @@ class AddressComponents(object):
             else:
                 address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
 
+    name_regex = re.compile('^[\s\-]*(.*?)[\s\-]*$')
+    whitespace_regex = re.compile('[\s]+')
+    hyphen_regex = re.compile('[\-]+')
+
+    def dehyphenate_multiword_name(self, name):
+        return self.hyphen_regex.sub(six.u(' '), name)
+
+    def hyphenate_multiword_name(self, name):
+        return self.whitespace_regex.sub(six.u('-'), name)
+
+    def strip_whitespace_and_hyphens(self, name):
+        return self.name_regex.match(name).group(1)
+
+    def name_hyphens(self, name, hyphenate_multiword_probability=None, remove_hyphen_probability=None):
+        '''
+        Hyphenated names
+        ----------------
+
+        With some probability, replace hyphens with spaces. With some other probability,
+        replace spaces with hyphens.
+        '''
+        if hyphenate_multiword_probability is None:
+            hyphenate_multiword_probability = float(nested_get(self.config, ('places', 'hyphenate_multiword_probability')))
+
+        if remove_hyphen_probability is None:
+            remove_hyphen_probability = float(nested_get(self.config, ('places', 'remove_hyphen_probability')))
+
+        # Clean string of trailing space/hyphens, the above regex will match any string
+        name = self.strip_whitespace_and_hyphens(name)
+
+        if self.hyphen_regex.search(name) and random.random() < remove_hyphen_probability:
+            return self.dehyphenate_multiword_name(name)
+        elif self.whitespace_regex.search(name) and random.random() < hyphenate_multiword_probability:
+            return self.hyphenate_multiword_name(name)
+        return name
+
     def country_specific_cleanup(self, address_components, country):
         if country == self.IRELAND:
             return self.format_dublin_postal_district(address_components)
