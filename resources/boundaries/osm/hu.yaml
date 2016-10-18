@@ -9,3 +9,9 @@
         "9": "city_district"
         "10": "suburb"
 
+    overrides:
+        contained_by:
+            relation:
+                "1244004":
+                    place:
+                        "district": "city_district"

@@ -6,6 +6,9 @@
         "8": "city_district"
         "10": "city"
 
+    place:
+        "district": "state_district"
+
     overrides:
         id:
             relation:

@@ -54,7 +54,6 @@ class OSMAddressComponents(object):
             'state': AddressFormatter.STATE,
             'region': AddressFormatter.STATE,
             'province': AddressFormatter.STATE,
-            'district': AddressFormatter.STATE_DISTRICT,
             'county': AddressFormatter.STATE_DISTRICT,
         },
         'gnis:class': {
@@ -112,7 +111,7 @@ class OSMAddressComponents(object):
 
         return self.global_keys.get(prop, {}).get(value, None)
 
-    def component_from_properties(self, country, properties, containing=()):
+    def component_from_properties(self, country, properties, containing=(), global_keys=True):
         country_config = self.config.get(country, {})
 
         config = country_config
@@ -157,7 +156,7 @@ class OSMAddressComponents(object):
                 return containing_component
 
         # other place keys like place=state, etc. serve as a backup
-        # when no boundaries are available
+        # when no admin_level tags are available
         for k, v in values:
             containing_component = self.global_keys.get(k, {}).get(v, None)
 

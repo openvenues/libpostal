@@ -8,6 +8,9 @@
         "8": "state_district"
         "10": "city"
 
+    place:
+        "district": "state_district"
+
     overrides:
         id:
             # Kuala Lumpur
