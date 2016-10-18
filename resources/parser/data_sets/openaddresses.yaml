@@ -2009,11 +2009,20 @@ countries:
                 files:
                     - filename: benton.csv
                     - filename: clackamas.csv
+                    - filename: crook.csv
+                    - filename: deschutes.csv
                     - filename: gresham.csv
+                    - filename: hood_river.csv
+                      add_osm_boundaries: true
                     - filename: jackson.csv
+                    - filename: josephine.csv
+                    - filename: klamath.csv
+                      add_osm_boundaries: true
+                    - filename: lake.csv
                     - filename: lane.csv
                     - filename: marion.csv
                       add_osm_boundaries: true
+                    - filename: multnomah.csv
                     - filename: oregon_city.csv
                       add_osm_boundaries: true
                     - filename: portland.csv
