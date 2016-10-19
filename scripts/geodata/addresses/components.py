@@ -1224,8 +1224,8 @@ class AddressComponents(object):
                 address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
 
     name_regex = re.compile('^[\s\-]*(.*?)[\s\-]*$')
-    whitespace_regex = re.compile('[\s]+')
-    hyphen_regex = re.compile('[\-]+')
+    whitespace_regex = re.compile('(?<=[\w])[\s]+(?=[\w])')
+    hyphen_regex = re.compile('[\s]*[\-]+[\s]*')
 
     def dehyphenate_multiword_name(self, name):
         return self.hyphen_regex.sub(six.u(' '), name)
