@@ -81,3 +81,7 @@ names:
                 probability: 0.01
               - alternative: official_name
                 probability: 0.01
+        - id: 2383266 # Melbourne (city center)
+          type: relation
+          default: alt_name # Melbourne
+          probability: 1.0
