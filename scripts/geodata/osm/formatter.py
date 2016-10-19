@@ -550,7 +550,7 @@ class OSMAddressFormatter(object):
                     same_name_components[i] = c_name
 
                 if first_valid_admin_center is None:
-                    if component_index <= self.boundary_component_priorities[AddressFormatter.CITY] and
+                    if (component_index <= self.boundary_component_priorities[AddressFormatter.CITY] and
                        tags.get('type') == 'node' and 'admin_center' in c and
                        tags.get('id') and c['admin_center']['id'] == tags['id'] and
                        c.get('name', '').lower() == tags['name'].lower()):
