@@ -2317,9 +2317,14 @@ countries:
                     - filename: franklin.csv
                       add_osm_boundaries: true
                     - filename: garfield.csv
+                    - filename: grant.csv
                     - filename: jefferson.csv
                     - filename: king.csv
                     - filename: kitsap.csv
+                    - filename: kittitas.csv
+                      add_osm_boundaries: true
+                    - filename: lewis.csv
+                      add_osm_boundaries: true
                     - filename: mason.csv
                       add_osm_boundaries: true
                     - filename: okanogan.csv
