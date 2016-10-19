@@ -506,6 +506,9 @@ class OSMAddressFormatter(object):
         except Exception:
             return (), None
 
+        if 'name' not in tags:
+            return (), None
+
         osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
 
         country, candidate_languages = OSMCountryReverseGeocoder.country_and_languages_from_components(osm_components)
@@ -546,7 +549,7 @@ class OSMAddressFormatter(object):
             for i, c in enumerate(osm_components):
                 c_name = osm_address_components.component_from_properties(country, c, containing=containing_ids[i + 1:])
 
-                if 'name' in tags and c.get('name', '').lower() == tags['name'].lower():
+                if c.get('name', '').lower() == tags['name'].lower():
                     same_name_components[i] = c_name
 
                 if first_valid_admin_center is None:
