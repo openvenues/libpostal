@@ -457,11 +457,14 @@ class OSMAddressFormatter(object):
             valid_postcode = False
             if validate:
                 postcode_regex = postcode_regexes.get(country)
+                values = number_split_regex.split(postal_code)
+
                 if postcode_regex:
-                    match = postcode_regex.match(postal_code)
-                    if match and match.end() == len(postal_code):
-                        valid_postcode = True
-                        postal_codes.append(postal_code)
+                    for p in values:
+                        match = postcode_regex.match(p)
+                        if match and match.end() == len(p):
+                            valid_postcode = True
+                            postal_codes.append(p)
             else:
                 valid_postcode = True
 
