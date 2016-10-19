@@ -109,7 +109,7 @@ category:
     drop_postcode_probability: 0.3 # drop postal code
 
 places:
-    hyphenate_multiword_probability: 0.005
+    hyphenate_multiword_probability: 0.01
     remove_hyphen_probability: 0.5
 
 boundaries:
