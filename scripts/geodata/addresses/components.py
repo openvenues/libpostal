@@ -861,7 +861,8 @@ class AddressComponents(object):
                             val = state_abbreviations.get_abbreviation(country, language, val, default=val)
                         elif random.random() < abbreviate_toponym_prob:
                             val = abbreviate(toponym_abbreviations_gazetteer, val, language, abbreviate_prob=abbreviate_toponym_prob)
-
+                        else:
+                            val = self.name_hyphens(val)
                     address_components[component] = val
 
     def quattroshapes_city(self, address_components,
