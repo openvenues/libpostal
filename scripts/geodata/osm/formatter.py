@@ -512,6 +512,7 @@ class OSMAddressFormatter(object):
             for i, c in enumerate(osm_components):
                 c_name = osm_address_components.component_from_properties(country, c, containing=containing_ids[i + 1:])
                 c_index = self.boundary_component_priorities.get(c_name, -1)
+
                 if c_index >= component_index and (c['type'], c['id']) != (tags.get('type', 'node'), tags.get('id')):
                     revised_osm_components.append(c)
 
@@ -555,6 +556,8 @@ class OSMAddressFormatter(object):
 
         cldr_country_prob = float(nested_get(self.config, ('places', 'cldr_country_probability'), default=0.0))
 
+        cldr_country_prob = float(nested_get(self.config, ('places', 'cldr_country_probability'), default=0.0))
+
         for name_tag in ('name', 'alt_name', 'loc_name', 'short_name', 'int_name', 'name:simple', 'official_name'):
             if more_than_one_official_language:
                 name = tags.get(name_tag)
@@ -569,14 +572,29 @@ class OSMAddressFormatter(object):
                     if six.u('|') in name:
                         name = name.replace(six.u('|'), six.u(''))
 
+                    name = self.components.strip_whitespace_and_hyphens(name)
+
+                    sans_hyphens = self.components.dehyphenate_multiword_name(name)
+                    with_hyphens = self.components.hyphenate_multiword_name(name)
+
                     for i in xrange(num_references if name_tag == 'name' else 1):
-                        address_components = {component_name: name.strip()}
+                        address_components = {component_name: name}
+
                         self.components.add_admin_boundaries(address_components, osm_components, country, UNKNOWN_LANGUAGE,
                                                              random_key=num_references > 1,
                                                              language_suffix=language_suffix,
                                                              drop_duplicate_city_names=False)
 
                         place_tags.append((address_components, None, True))
+                        if sans_hyphens != name:
+                            address_components = address_components.copy()
+                            address_components[component_name] = sans_hyphens
+                            place_tags.append((address_components, None, True))
+
+                        if with_hyphens != name:
+                            address_components = address_components.copy()
+                            address_components[component_name] = with_hyphens
+                            place_tags.append((address_components, None, True))
 
             for language, is_default in local_languages:
                 if is_default and not more_than_one_official_language:
@@ -604,14 +622,29 @@ class OSMAddressFormatter(object):
                     else:
                         n = num_references / 2
 
+                name = self.components.strip_whitespace_and_hyphens(name)
+
+                sans_hyphens = self.components.dehyphenate_multiword_name(name)
+                with_hyphens = self.components.hyphenate_multiword_name(name)
+
                 for i in xrange(n):
-                    address_components = {component_name: name.strip()}
+                    address_components = {component_name: name}
                     self.components.add_admin_boundaries(address_components, osm_components, country, language,
                                                          random_key=is_default,
                                                          language_suffix=language_suffix,
                                                          drop_duplicate_city_names=False)
 
                     place_tags.append((address_components, language, is_default))
+
+                    if sans_hyphens != name:
+                        address_components = address_components.copy()
+                        address_components[component_name] = sans_hyphens
+                        place_tags.append((address_components, language, is_default))
+
+                    if with_hyphens != name:
+                        address_components = address_components.copy()
+                        address_components[component_name] = with_hyphens
+                        place_tags.append((address_components, language, is_default))
 
             for language in random_languages - all_local_languages:
                 language_suffix = ':{}'.format(language)
@@ -631,9 +664,14 @@ class OSMAddressFormatter(object):
                 if six.u('|') in name:
                     name = name.replace(six.u('|'), six.u(''))
 
+                name = self.components.strip_whitespace_and_hyphens(name)
+
+                sans_hyphens = self.components.dehyphenate_multiword_name(name)
+                with_hyphens = self.components.hyphenate_multiword_name(name)
+
                 # Add half as many English records as the local language, every other language gets min_referenes / 2
                 for i in xrange(num_references / 2 if language == ENGLISH else min_references / 2):
-                    address_components = {component_name: name.strip()}
+                    address_components = {component_name: name}
                     self.components.add_admin_boundaries(address_components, osm_components, country, language,
                                                          random_key=False,
                                                          non_local_language=language,
@@ -641,6 +679,16 @@ class OSMAddressFormatter(object):
                                                          drop_duplicate_city_names=False)
 
                     place_tags.append((address_components, language, False))
+
+                    if sans_hyphens != name:
+                        address_components = address_components.copy()
+                        address_components[component_name] = sans_hyphens
+                        place_tags.append((address_components, language, False))
+
+                    if with_hyphens != name:
+                        address_components = address_components.copy()
+                        address_components[component_name] = with_hyphens
+                        place_tags.append((address_components, language, False))
 
             if postal_codes:
                 extra_place_tags = []
