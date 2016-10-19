@@ -538,22 +538,57 @@ class OSMAddressFormatter(object):
         if component_index:
             revised_osm_components = []
 
-            first_valid = False
+            same_name_components = [None] * len(osm_components)
+
+            # If this node is the admin center for one of its containing polygons, note it
+            first_valid_admin_center = None
+
+            for i, c in enumerate(osm_components):
+                c_name = osm_address_components.component_from_properties(country, c, containing=containing_ids[i + 1:])
+
+                if c.get('name', '').lower() == tags['name'].lower():
+                    same_name_components[i] = c_name
+
+                if first_valid_admin_center is None:
+                    if component_index <= self.boundary_component_priorities[AddressFormatter.CITY] and
+                       tags.get('type') == 'node' and 'admin_center' in c and
+                       tags.get('id') and c['admin_center']['id'] == tags['id'] and
+                       c.get('name', '').lower() == tags['name'].lower()):
+                            first_valid_admin_center = i
+
+            # Check if, for instance, a node is labeled place=town, but its enclosing polygon with the same name
+            # is city_district or suburb. However, sometimes there's a "suburb" version of a city indicating the
+            # city proper, though there's also a city polygon encompassing the municipality. Don't want to classify
+            # the unqualified city node as suburb.
+            same_name_and_level_exists = any((c_name for c_name in same_name_components if c_name == component_name))
+            same_name_max_below_level = None
+
             for i, c in enumerate(osm_components):
                 c_name = osm_address_components.component_from_properties(country, c, containing=containing_ids[i + 1:])
                 c_index = self.boundary_component_priorities.get(c_name, -1)
 
-                if c_index >= component_index and (c['type'], c['id']) != (tags.get('type', 'node'), tags.get('id')):
-                    revised_osm_components.append(c)
+                if first_valid_admin_center == i:
+                    component_name = c_name
+                    component_index = c_index
+                    continue
 
-                    if not first_valid:
-                        if (component_index <= self.boundary_component_priorities[AddressFormatter.CITY] and
-                           component_index != c_index and tags.get('type') == 'node' and 'admin_center' in c and
-                           tags.get('id') and c['admin_center']['id'] == tags['id'] and c.get('name', '').lower() == tags['name'].lower()):
-                            component_name = c_name
-                            component_index = c_index
-                            revised_osm_components.pop()
-                        first_valid = True
+                same_name_component = same_name_components[i]
+                if same_name_component is not None and not same_name_and_level_exists and c_index < component_index:
+                    same_name_max_below_level = c_name
+
+            if same_name_max_below_level is not None and not same_name_and_level_exists and first_valid_admin_center is None:
+                component_name = same_name_max_below_level
+                component_index = self.boundary_component_priorities.get(same_name_max_below_level, -1)
+
+            # Add any admin components above the computed level
+            for i, c in enumerate(osm_components):
+                c_name = osm_address_components.component_from_properties(country, c, containing=containing_ids[i + 1:])
+                c_index = self.boundary_component_priorities.get(c_name, -1)
+
+                same_name_component = same_name_components[i]
+                if c_index >= component_index and first_valid_admin_center != i and same_name_component != component_name and (c['type'], c['id']) != (tags.get('type', 'node'), tags.get('id')):
+                    revised_osm_components.append(c)
+                    added_component = True
 
             osm_components = revised_osm_components
 
