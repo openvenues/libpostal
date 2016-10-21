@@ -1227,14 +1227,17 @@ class AddressComponents(object):
     whitespace_regex = re.compile('(?<=[\w])[\s]+(?=[\w])')
     hyphen_regex = re.compile('[\s]*[\-]+[\s]*')
 
-    def dehyphenate_multiword_name(self, name):
-        return self.hyphen_regex.sub(six.u(' '), name)
+    @classmethod
+    def dehyphenate_multiword_name(cls, name):
+        return cls.hyphen_regex.sub(six.u(' '), name)
 
-    def hyphenate_multiword_name(self, name):
-        return self.whitespace_regex.sub(six.u('-'), name)
+    @classmethod
+    def hyphenate_multiword_name(cls, name):
+        return cls.whitespace_regex.sub(six.u('-'), name)
 
-    def strip_whitespace_and_hyphens(self, name):
-        return self.name_regex.match(name).group(1)
+    @classmethod
+    def strip_whitespace_and_hyphens(cls, name):
+        return cls.name_regex.match(name).group(1)
 
     def name_hyphens(self, name, hyphenate_multiword_probability=None, remove_hyphen_probability=None):
         '''
@@ -1258,6 +1261,37 @@ class AddressComponents(object):
         elif self.whitespace_regex.search(name) and random.random() < hyphenate_multiword_probability:
             return self.hyphenate_multiword_name(name)
         return name
+
+    @classmethod
+    def alt_place_names(cls, name, language):
+        names = []
+
+        abbrev_name = abbreviate(toponym_abbreviations_gazetteer, name, language, abbreviate_prob=1.0)
+        if abbrev_name != name:
+            names.append(abbrev_name)
+
+        sans_hyphens = cls.dehyphenate_multiword_name(name)
+        if sans_hyphens != name:
+            names.append(sans_hyphens)
+
+            abbrev_sans_hyphens = abbreviate(toponym_abbreviations_gazetteer, sans_hyphens, language, abbreviate_prob=1.0)
+            if abbrev_sans_hyphens != sans_hyphens:
+                names.append(abbrev_sans_hyphens)
+
+                abbrev_hyphens = cls.hyphenate_multiword_name(abbrev_sans_hyphens)
+                if abbrev_hyphens != abbrev_sans_hyphens:
+                    names.append(abbrev_hyphens)
+
+        with_hyphens = cls.hyphenate_multiword_name(name)
+        if with_hyphens != name:
+            names.append(with_hyphens)
+
+        if abbrev_name != name:
+            abbrev_name_hyphens = cls.hyphenate_multiword_name(abbrev_name)
+            if abbrev_name_hyphens != abbrev_name:
+                names.append(abbrev_name_hyphens)
+
+        return names
 
     def country_specific_cleanup(self, address_components, country):
         if country == self.IRELAND:

@@ -473,36 +473,6 @@ class OSMAddressFormatter(object):
 
         return postal_codes
 
-    def alt_place_names(self, name, language):
-        names = []
-
-        abbrev_name = abbreviate(toponym_abbreviations_gazetteer, name, language, abbreviate_prob=1.0)
-        if abbrev_name != name:
-            names.append(abbrev_name)
-
-        sans_hyphens = self.components.dehyphenate_multiword_name(name)
-        if sans_hyphens != name:
-            names.append(sans_hyphens)
-
-            abbrev_sans_hyphens = abbreviate(toponym_abbreviations_gazetteer, sans_hyphens, language, abbreviate_prob=1.0)
-            if abbrev_sans_hyphens != sans_hyphens:
-                names.append(abbrev_sans_hyphens)
-
-                abbrev_hyphens = self.components.hyphenate_multiword_name(abbrev_sans_hyphens)
-                if abbrev_hyphens != abbrev_sans_hyphens:
-                    names.append(abbrev_hyphens)
-
-        with_hyphens = self.components.hyphenate_multiword_name(name)
-        if with_hyphens != name:
-            names.append(with_hyphens)
-
-        if abbrev_name != name:
-            abbrev_name_hyphens = self.components.hyphenate_multiword_name(abbrev_name)
-            if abbrev_name_hyphens != abbrev_name:
-                names.append(abbrev_name_hyphens)
-
-        return names
-
     def node_place_tags(self, tags):
         try:
             latitude, longitude = latlon_to_decimal(tags['lat'], tags['lon'])
@@ -643,7 +613,7 @@ class OSMAddressFormatter(object):
 
                     name = self.components.strip_whitespace_and_hyphens(name)
 
-                    alt_names = self.alt_place_names(name, None)
+                    alt_names = self.components.alt_place_names(name, None)
 
                     for i in xrange(num_references if name_tag == 'name' else 1):
                         address_components = {component_name: name}
@@ -687,7 +657,7 @@ class OSMAddressFormatter(object):
 
                 name = self.components.strip_whitespace_and_hyphens(name)
 
-                alt_names = self.alt_place_names(name, language)
+                alt_names = self.components.alt_place_names(name, language)
 
                 for i in xrange(n):
                     address_components = {component_name: name}
@@ -722,7 +692,7 @@ class OSMAddressFormatter(object):
 
                 name = self.components.strip_whitespace_and_hyphens(name)
 
-                alt_names = self.alt_place_names(name, language)
+                alt_names = self.components.alt_place_names(name, language)
 
                 # Add half as many English records as the local language, every other language gets min_referenes / 2
                 for i in xrange(num_references / 2 if language == ENGLISH else min_references / 2):
