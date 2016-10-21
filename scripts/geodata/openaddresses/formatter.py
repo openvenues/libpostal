@@ -218,6 +218,7 @@ class OpenAddressesFormatter(object):
         separate_unit_prob = float(self.get_property('separate_unit_probability', *configs) or 0.0)
         abbreviate_toponym_prob = float(self.get_property('abbreviate_toponym_probability', *configs))
 
+
         add_osm_boundaries = bool(self.get_property('add_osm_boundaries', *configs) or False)
         add_osm_neighborhoods = bool(self.get_property('add_osm_neighborhoods', *configs) or False)
         non_numeric_units = bool(self.get_property('non_numeric_units', *configs) or False)
@@ -392,6 +393,7 @@ class OpenAddressesFormatter(object):
                     if component is not None:
                         component = abbreviate(toponym_abbreviations_gazetteer, component, language,
                                                abbreviate_prob=abbreviate_toponym_prob)
+                        component = self.components.name_hyphens(component)
                         components[component_key] = component
 
                 # Any components specified to be added by the config (usually state)
