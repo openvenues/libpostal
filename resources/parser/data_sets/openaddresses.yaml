@@ -2322,9 +2322,7 @@ countries:
                     - filename: king.csv
                     - filename: kitsap.csv
                     - filename: kittitas.csv
-                      add_osm_boundaries: true
                     - filename: lewis.csv
-                      add_osm_boundaries: true
                     - filename: mason.csv
                       add_osm_boundaries: true
                     - filename: okanogan.csv
