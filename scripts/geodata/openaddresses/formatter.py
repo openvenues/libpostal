@@ -218,13 +218,13 @@ class OpenAddressesFormatter(object):
         separate_unit_prob = float(self.get_property('separate_unit_probability', *configs) or 0.0)
         abbreviate_toponym_prob = float(self.get_property('abbreviate_toponym_probability', *configs))
 
-
         add_osm_boundaries = bool(self.get_property('add_osm_boundaries', *configs) or False)
         add_osm_neighborhoods = bool(self.get_property('add_osm_neighborhoods', *configs) or False)
         non_numeric_units = bool(self.get_property('non_numeric_units', *configs) or False)
         numeric_postcodes_only = bool(self.get_property('numeric_postcodes_only', *configs) or False)
         postcode_strip_non_digit_chars = bool(self.get_property('postcode_strip_non_digit_chars', *configs) or False)
 
+        address_only_probability = float(self.get_property('address_only_probability', *configs))
         place_only_probability = float(self.get_property('place_only_probability', *configs))
         place_and_postcode_probability = float(self.get_property('place_and_postcode_probability', *configs))
 
@@ -451,6 +451,13 @@ class OpenAddressesFormatter(object):
                 formatted = self.formatter.format_address(components, country, language=language,
                                                           minimal_only=False, tag_components=tag_components)
                 yield (language, country, formatted)
+
+                if random.random() < address_only_probability:
+                    address_only_components = self.components.drop_places(components)
+                    address_only_components = self.components.drop_postcode(address_only_components)
+                    formatted = self.formatter.format_address(address_only_components, country, language=language,
+                                                              minimal_only=False, tag_components=tag_components)
+                    yield (language, country, formatted)
 
                 rand_val = random.random()
 
