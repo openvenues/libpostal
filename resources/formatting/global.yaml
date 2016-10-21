@@ -608,6 +608,10 @@ countries:
     vi:
         insertions: *us_template_insertions
 
+    # Canada
+    ca:
+        insertions: *us_template_insertions
+
     fr:
         insertions: &france_template_insertions
             <<: *english_template_insertions
