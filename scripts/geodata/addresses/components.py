@@ -1392,7 +1392,7 @@ class AddressComponents(object):
 
     def expanded(self, address_components, latitude, longitude, language=None,
                  dropout_places=True, population=None, population_from_city=False,
-                 add_sub_building_components=True,
+                 add_sub_building_components=True, hyphenation=True,
                  num_floors=None, num_basements=None, zone=None):
         '''
         Expanded components
@@ -1410,6 +1410,14 @@ class AddressComponents(object):
             latitude, longitude = latlon_to_decimal(latitude, longitude)
         except Exception:
             return None, None, None
+
+        if hyphenation:
+            for component in address_components:
+                if component in place_config.ADMIN_COMPONENTS:
+                    value = address_components[component]
+                    value_hyphens = self.name_hyphens(value)
+                    if value_hyphens != value:
+                        address_components[component] = value_hyphens
 
         osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
         country, candidate_languages = self.osm_country_and_languages(osm_components)
