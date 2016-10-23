@@ -351,8 +351,9 @@ class NumberedComponent(object):
         props = phrase_props[num_type]
 
         if is_integer:
+            num = int(num)
             if phrase_props.get('number_abs_value', False):
-                num = abs(int(num))
+                num = abs(num)
 
             if 'number_min_abs_value' in phrase_props and num < phrase_props['number_min_abs_value']:
                 return None
