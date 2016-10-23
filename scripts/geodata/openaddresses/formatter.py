@@ -16,6 +16,7 @@ from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.components import AddressComponents
 from geodata.countries.names import country_names
 from geodata.encoding import safe_decode, safe_encode
+from geodata.i18n.languages import get_country_languages
 from geodata.language_id.disambiguation import UNKNOWN_LANGUAGE
 from geodata.math.sampling import cdf, weighted_choice
 from geodata.openaddresses.config import openaddresses_config
@@ -315,8 +316,9 @@ class OpenAddressesFormatter(object):
 
             if components:
                 country, candidate_languages = self.country_rtree.country_and_languages(latitude, longitude)
-                if not (country and candidate_languages):
-                    continue
+                if not (country and candidate_languages) or country != country_dir:
+                    country = country_dir
+                    candidate_languages = get_country_languages(country)
 
                 if language is None:
                     language = AddressComponents.address_language(components, candidate_languages)
