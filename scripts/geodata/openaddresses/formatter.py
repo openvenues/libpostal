@@ -258,7 +258,6 @@ class OpenAddressesFormatter(object):
         # Clear cached polygons
         self.components.osm_admin_rtree.clear_cache()
         self.components.neighborhoods_rtree.clear_cache()
-        self.country_rtree.clear_cache()
 
         for row in reader:
             try:
@@ -488,6 +487,9 @@ class OpenAddressesFormatter(object):
         i = 0
 
         for country_dir, country_config in six.iteritems(openaddresses_config.country_configs):
+            # Clear country cache for each new country
+            self.country_rtree.clear_cache()
+
             for file_config in country_config.get('files', []):
                 filename = file_config['filename']
 
