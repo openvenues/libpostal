@@ -255,6 +255,9 @@ class OpenAddressesFormatter(object):
         latitude_index = headers.index('LAT')
         longitude_index = headers.index('LON')
 
+        # Clear cached polygons
+        self.components.osm_admin_rtree.clear_cache()
+
         for row in reader:
             try:
                 latitude = float(row[latitude_index])

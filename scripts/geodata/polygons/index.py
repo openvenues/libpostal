@@ -1,4 +1,5 @@
 import fiona
+import gc
 import geohash
 import os
 import rtree
@@ -85,6 +86,12 @@ class PolygonIndex(object):
 
     def setup(self):
         pass
+
+    def clear_cache(self, garbage_collect=True):
+        if self.persistent_polygons and self.cache_size > 0:
+            self.polygons.clear()
+            if garbage_collect:
+                gc.collect()
 
     def simplify_polygon(self, poly, simplify_tolerance=None, preserve_topology=None):
         if simplify_tolerance is None:
