@@ -253,11 +253,11 @@ class NumberedComponent(object):
         is_none = False
         if num is not None:
             try:
-                num = int(num)
+                num_int = int(num)
                 is_integer = True
             except ValueError:
                 try:
-                    num = float(num)
+                    num_float = float(num)
                 except ValueError:
                     tokens = tokenize(safe_decode(num))
                     has_numeric = False
