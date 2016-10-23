@@ -1281,7 +1281,9 @@ countries:
                     - filename: bannock.csv
                       add_osm_boundaries: true
                     - filename: bingham.csv
+                      postcode_length: 5
                     - filename: blaine.csv
+                      postcode_length: 5
                     - filename: bonner.csv
                     - filename: bonneville.csv
                     - filename: city_of_boise.csv
