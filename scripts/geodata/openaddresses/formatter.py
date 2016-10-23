@@ -257,6 +257,8 @@ class OpenAddressesFormatter(object):
 
         # Clear cached polygons
         self.components.osm_admin_rtree.clear_cache()
+        self.components.neighborhoods_rtree.clear_cache()
+        self.country_rtree.clear_cache()
 
         for row in reader:
             try:
