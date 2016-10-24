@@ -2181,6 +2181,8 @@ countries:
                     - filename: bastrop.csv
                     - filename: bexar.csv
                       add_osm_boundaries: true
+                    - filename: brazoria.csv
+                      add_osm_boundaries: true
                     - filename: brazos.csv
                       add_osm_boundaries: true
                     - filename: burleson.csv
