@@ -319,6 +319,9 @@ class OpenAddressesFormatter(object):
                 if not (country and candidate_languages) or country != country_dir:
                     country = country_dir
                     candidate_languages = get_country_languages(country)
+                    if not candidate_languages:
+                        continue
+                    candidate_languages = candidate_languages.items()
 
                 if language is None:
                     language = AddressComponents.address_language(components, candidate_languages)
