@@ -358,6 +358,7 @@ countries:
         files:
             - filename: geneva.csv
               language: fr
+            - filename: bern.csv
             - filename: zurich.csv
               language: de
 
@@ -1636,6 +1637,7 @@ countries:
                 add:
                     state: MO
                 files:
+                    - filename: bates.csv
                     - filename: boone.csv
                     - filename: city_of_columbia.csv
                     - filename: city_of_perryville.csv
@@ -2417,7 +2419,6 @@ countries:
                   - filename: city_of_wright.csv
                     add_osm_boundaries: true
                   - filename: crook.csv
-                    add_osm_boundaries: true
                   - filename: goshen.csv
                   - filename: hot_springs.csv
                   - filename: laramie.csv
