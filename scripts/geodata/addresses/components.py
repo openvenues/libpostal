@@ -1223,6 +1223,7 @@ class AddressComponents(object):
             else:
                 address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
 
+    newline_regex = re.compile('[\n]+')
     name_regex = re.compile('^[\s\-]*(.*?)[\s\-]*$')
     whitespace_regex = re.compile('(?<=[\w])[\s]+(?=[\w])')
     hyphen_regex = re.compile('[\s]*[\-]+[\s]*')
@@ -1237,6 +1238,7 @@ class AddressComponents(object):
 
     @classmethod
     def strip_whitespace_and_hyphens(cls, name):
+        name = cls.newline_regex.sub(six.u(' '), name)
         return cls.name_regex.match(name).group(1)
 
     def name_hyphens(self, name, hyphenate_multiword_probability=None, remove_hyphen_probability=None):
