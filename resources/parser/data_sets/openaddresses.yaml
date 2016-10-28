@@ -901,6 +901,8 @@ countries:
                     - filename: calhoun.csv
                       add_osm_boundaries: true
                     - filename: city_of_huntsville.csv
+                    - filename: jefferson.csv
+                      add_osm_boundaries: true
                     - filename: montgomery.csv
                     - filename: shelby.csv
                       add_osm_boundaries: true
