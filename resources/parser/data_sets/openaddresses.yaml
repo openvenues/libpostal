@@ -1294,8 +1294,11 @@ countries:
                       add_osm_boundaries: true
                     - filename: fremont.csv
                       add_osm_boundaries: true
+                    - filename: jefferson.csv
                     - filename: kootenai.csv
                     - filename: latah.csv
+                      add_osm_boundaries: true
+                    - filename: madison.csv
                       add_osm_boundaries: true
                     - filename: nez_perce.csv
                       add_osm_boundaries: true
