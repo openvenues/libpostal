@@ -1720,6 +1720,8 @@ countries:
                       add_osm_boundaries: true
                     - filename: davie.csv
                       add_osm_boundaries: true
+                    - filename: forsyth.csv
+                      add_osm_boundaries: true
                     - filename: franklin.csv
                     - filename: granville.csv
                     - filename: guilford.csv

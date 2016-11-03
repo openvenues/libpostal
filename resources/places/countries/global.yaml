@@ -228,13 +228,13 @@ countries:
                 probability: 0.2
                 containing:
                     - <<: *kings_county
-                      probability: 0.85
+                      probability: 1.0
                     - <<: *queens_county
-                      probability: 0.85
+                      probability: 1.0
                     - <<: *bronx_county
-                      probability: 0.85
+                      probability: 1.0
                     - <<: *richmond_county
-                      probability: 0.85
+                      probability: 1.0
                     - <<: *new_york_county
                       probability: 0.1
             city:
