@@ -900,6 +900,8 @@ countries:
                       add_osm_boundaries: true
                     - filename: calhoun.csv
                       add_osm_boundaries: true
+                    - filename: city_of_auburn.csv
+                      add_osm_boundaries: true
                     - filename: city_of_huntsville.csv
                     - filename: jefferson.csv
                       add_osm_boundaries: true
@@ -1198,6 +1200,8 @@ countries:
                     - filename: pierce.csv
                     - filename: quitman.csv
                     - filename: randolph.csv
+                    - filename: richmond.csv
+                      add_osm_boundaries: false
                     - filename: stewart.csv
                     - filename: sumter.csv
                     - filename: tattnall.csv
@@ -1575,6 +1579,7 @@ countries:
                     - filename: city_of_rochester.csv
                     - filename: detroit.csv
                       add_osm_boundaries: true
+                    - filename: flint.csv
                     - filename: kent.csv
                       add_osm_boundaries: true
                       numeric_postcodes_only: true
