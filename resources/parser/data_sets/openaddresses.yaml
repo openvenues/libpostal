@@ -881,6 +881,8 @@ countries:
                 files:
                     - filename: anchorage.csv
                       add_osm_boundaries: true
+                    - filename: city_of_juneau.csv
+                      add_osm_boundaries: true
                     - filename: fairbanks_north_star_borough.csv
                       add_osm_boundaries: true
                     - filename: ketchikan.csv
@@ -903,6 +905,8 @@ countries:
                     - filename: city_of_auburn.csv
                       add_osm_boundaries: true
                     - filename: city_of_huntsville.csv
+                    - filename: city_of_mobile.csv
+                      add_osm_boundaries: true
                     - filename: jefferson.csv
                       add_osm_boundaries: true
                     - filename: montgomery.csv
@@ -1220,6 +1224,7 @@ countries:
                     state: HI
                 files:
                     - filename: honolulu.csv
+                    - filename: maui.csv
 
             ia:
                 add:
@@ -1500,6 +1505,8 @@ countries:
                       add_osm_boundaries: true
                     - filename: mccracken.csv
                       add_osm_boundaries: true
+                    - filename: meade.csv
+                      add_osm_boundaries: true
                     - filename: oldham.csv
                       add_osm_boundaries: true
                     - filename: warren.csv
@@ -1580,6 +1587,7 @@ countries:
                     - filename: detroit.csv
                       add_osm_boundaries: true
                     - filename: flint.csv
+                    - filename: genesee.csv
                     - filename: kent.csv
                       add_osm_boundaries: true
                       numeric_postcodes_only: true
@@ -1772,6 +1780,7 @@ countries:
                 files:
                     - filename: city_of_bismarck.csv
                       add_osm_boundaries: true
+                    - filename: city_of_fargo.csv
                     - filename: dickinson.csv
                       add_osm_boundaries: true
                     - filename: stark_county.csv
@@ -1867,6 +1876,7 @@ countries:
                     - filename: bernalillo.csv
                     - filename: city_of_las_cruces.csv
                       add_osm_boundaries: true
+                    - filename: city_of_santa_fe.csv
                     - filename: dona_ana-2.csv
                       add_osm_boundaries: true
                     - filename: dona_ana.csv
@@ -2207,6 +2217,8 @@ countries:
                     - filename: carson.csv
                       add_osm_boundaries: true
                     - filename: city_of_abilene.csv
+                    - filename: city_of_beaumont.csv
+                      add_osm_boundaries: true
                     - filename: city_of_austin.csv
                       add_osm_boundaries: true
                     - filename: city_of_carrollton.csv
@@ -2220,6 +2232,7 @@ countries:
                     - filename: city_of_sherman.csv
                     - filename: city_of_temple.csv
                       add_osm_boundaries: true
+                    - filename: city_of_waco.csv
                     - filename: colleyville.csv
                       add_osm_boundaries: true
                     - filename: colorado.csv
@@ -2265,6 +2278,8 @@ countries:
                     - filename: midland.csv
                       add_osm_boundaries: true
                     - filename: milam.csv
+                    - filename: nacogdoches.csv
+                      add_osm_boundaries: true
                     - filename: new_braunfels.csv
                       add_osm_boundaries: true
                     - filename: nolan.csv
@@ -2330,6 +2345,7 @@ countries:
                     - filename: city_of_bellevue.csv
                       add_osm_boundaries: true
                     - filename: city_of_spokane.csv
+                    - filename: city_of_yakima.csv
                     - filename: clallam.csv
                     - filename: cowlitz.csv
                     - filename: douglas.csv
