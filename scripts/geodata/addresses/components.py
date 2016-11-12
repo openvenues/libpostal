@@ -46,15 +46,43 @@ this_dir = os.path.realpath(os.path.dirname(__file__))
 PARSER_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                      'resources', 'parser', 'default.yaml')
 
+
 class ComponentDependencies(object):
     '''
     Declare an address component and its dependencies e.g.
     a house_numer cannot be used in the absence of a road name.
     '''
 
-    def __init__(self, name, dependencies=tuple()):
-        self.name = name
-        self.dependencies = dependencies
+    component_bit_values = {}
+
+    def __init__(self, graph):
+        self.dependencies = {}
+
+        self.all_values = long('1' * len(graph), 2)
+
+        self.dependency_order = [c for c in topsort(graph)]
+
+        for component, deps in six.iteritems(graph):
+            self.dependencies[component] = self.component_bitset(deps) if deps else self.all_values
+
+    def __getitem__(self, key):
+        return self.dependencies.__getitem__(key)
+
+    def __contains__(self, key):
+        return self.dependencies.__contains__(key)
+
+    @classmethod
+    def get_component_bit_value(cls, name):
+        val = cls.component_bit_values.get(name)
+        if val is None:
+            num_values = len(cls.component_bit_values)
+            val = 1 << num_values
+            cls.component_bit_values[name] = val
+        return val
+
+    @classmethod
+    def component_bitset(cls, components):
+        return reduce(operator.or_, [cls.get_component_bit_value(name) for name in components])
 
 
 class AddressComponents(object):
@@ -162,19 +190,9 @@ class AddressComponents(object):
         self.geonames = geonames
 
     def setup_component_dependencies(self):
-        self.component_dependencies = defaultdict(dict)
-        self.component_dependency_order = {}
-        self.component_bit_values = {}
-        self.valid_component_bitsets = set()
-        self.component_combinations = set()
+        self.component_dependencies = {}
 
         default_deps = self.config.get('component_dependencies', {})
-
-        all_values = 0
-
-        for i, component in enumerate(AddressFormatter.address_formatter_fields):
-            self.component_bit_values[component] = 1 << i
-            all_values |= 1 << i
 
         country_components = default_deps.pop('exceptions', {})
         for c in list(country_components):
@@ -186,16 +204,8 @@ class AddressComponents(object):
         for country, country_deps in six.iteritems(country_components):
             graph = {k: c['dependencies'] for k, c in six.iteritems(country_deps)}
             graph.update({c: [] for c in AddressFormatter.address_formatter_fields if c not in graph})
-            self.component_dependency_order[country] = [c for c in topsort(graph) if graph[c]]
 
-            for component, conf in six.iteritems(country_deps):
-                deps = conf['dependencies']
-                self.component_dependencies[country][component] = self.component_bitset(deps) if deps else all_values
-
-        self.component_dependencies = dict(self.component_dependencies)
-
-    def component_bitset(self, components):
-        return reduce(operator.or_, [self.component_bit_values[c] for c in components])
+            self.component_dependencies[country] = ComponentDependencies(graph)
 
     def address_level_dropout_order(self, components, country):
         '''
@@ -223,23 +233,24 @@ class AddressComponents(object):
         if not components:
             return []
 
-        component_bitset = self.component_bitset(components)
+        component_bitset = ComponentDependencies.component_bitset(components)
 
-        candidates = [c for c in components if c in self.address_level_dropout_probabilities]
-        random.shuffle(candidates)
+        deps = self.component_dependencies.get(country, self.component_dependencies[None])
+        candidates = [c for c in reversed(deps.dependency_order) if c in components and c in self.address_level_dropout_probabilities]
         retained = set(candidates)
 
         dropout_order = []
 
-        deps = self.component_dependencies.get(country, self.component_dependencies[None])
+        for component in candidates:
+            if component not in retained:
+                continue
 
-        for component in candidates[:-1]:
             if random.random() >= self.address_level_dropout_probabilities.get(component, 0.0):
                 continue
-            bit_value = self.component_bit_values.get(component, 0)
+            bit_value = deps.component_bit_values.get(component, 0)
             candidate_bitset = component_bitset ^ bit_value
 
-            if all((candidate_bitset & deps[c] for c in retained if c != component)):
+            if all(((candidate_bitset & deps[c]) for c in retained if c != component)) or not (component_bitset & deps[component]):
                 dropout_order.append(component)
                 component_bitset = candidate_bitset
                 retained.remove(component)
@@ -1344,8 +1355,8 @@ class AddressComponents(object):
             return
         component_bitset = self.component_bitset(address_components)
 
-        dep_order = self.component_dependency_order.get(country, self.component_dependency_order[None])
         deps = self.component_dependencies.get(country, self.component_dependencies[None])
+        dep_order = deps.dependency_order
 
         for c in dep_order:
             if c not in address_components:
