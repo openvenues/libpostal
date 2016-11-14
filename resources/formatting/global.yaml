@@ -55,8 +55,8 @@ global:
 
         # PO Box should be the same in most countries
         po_box:
-            po_box_before_city:
-                before: city
+            po_box_before_suburb:
+                before: suburb
                 probability: 0.7
 
             po_box_after_house:
@@ -708,37 +708,61 @@ countries:
     tn_fr:
         insertions: *france_template_insertions
 
+    east_asia_insertions:
+        postcode: {}
+        po_box:
+            po_box_after_suburb:
+                after: house_number
+                probability: 0.7
+
+            po_box_after_house:
+                after: house
+                probability: 0.2
+
+            po_box_last:
+                last: true
+                probability: 0.1
+
+        care_of: {}
+
+        subdivision:
+            subdivision_after_suburb:
+                after: suburb
+                probability: 1.0
+
+
+
     # China
     cn:
-        insertions: {}
+        insertions: *east_asia_insertions
 
     cn_en:
         insertions: *us_template_insertions
 
     # Hong Kong
     hk:
-        insertions: {}
+        insertions: *east_asia_insertions
 
     hk_en:
         insertions: *english_template_insertions
 
     # Taiwan
     tw:
-        insertions: {}
+        insertions: *east_asia_insertions
 
     tw_en:
         insertions: *us_template_insertions
 
     # Japan
     jp:
-        insertions: {}
+        insertions: *east_asia_insertions
 
     jp_en:
         insertions: *us_template_insertions
 
     # South Korea
     kr:
-        insertions: {}
+        insertions: *east_asia_insertions
 
     kr_en:
         insertions: *us_template_insertions
