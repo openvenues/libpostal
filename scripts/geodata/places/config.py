@@ -7,6 +7,7 @@ import yaml
 
 from collections import defaultdict
 
+from geodata.addresses.dependencies import ComponentDependencies
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.configs.utils import nested_get, recursive_merge
@@ -54,6 +55,19 @@ class PlaceConfig(object):
             country_config = countries[k]
             global_config_copy = copy.deepcopy(self.global_config)
             self.country_configs[k] = recursive_merge(global_config_copy, country_config)
+
+        self.country_configs[None] = self.global_config
+
+        self.setup_component_dependencies()
+
+    def setup_component_dependencies(self):
+        self.component_dependencies = {}
+
+        for country, conf in six.iteritems(self.country_configs):
+            graph = {k: c['dependencies'] for k, c in six.iteritems(conf['components']) if 'dependencies' in c}
+            graph.update({c: [] for c in self.ADMIN_COMPONENTS if c not in graph})
+
+            self.component_dependencies[country] = ComponentDependencies(graph)
 
     def get_property(self, key, country=None, default=None):
         if isinstance(key, six.string_types):
@@ -106,6 +120,21 @@ class PlaceConfig(object):
 
         return random.random() < probability
 
+    def drop_invalid_components(self, address_components, country, original_bitset=None):
+        if not address_components:
+            return
+        component_bitset = ComponentDependencies.component_bitset(address_components)
+
+        deps = self.component_dependencies.get(country, self.component_dependencies[None])
+        dep_order = deps.dependency_order
+
+        for c in dep_order:
+            if c not in address_components:
+                continue
+            if c in deps and not component_bitset & deps[c] and (original_bitset is None or original_bitset & deps[c]):
+                address_components.pop(c)
+                component_bitset ^= ComponentDependencies.component_bit_values[c]
+
     def dropout_components(self, components, boundaries=(), country=None, population=None):
         containing_ids = set()
 
@@ -115,6 +144,8 @@ class PlaceConfig(object):
             if not (object_type and object_id):
                 continue
             containing_ids.add((object_type, object_id))
+
+        original_bitset = ComponentDependencies.component_bitset(components)
 
         names = defaultdict(list)
         admin_components = [c for c in components if c in self.ADMIN_COMPONENTS]
@@ -160,6 +191,8 @@ class PlaceConfig(object):
 
             if value is not None and component not in components and self.include_component(component, containing_ids, country=country, population=population):
                 new_components[component] = value
+
+        self.drop_invalid_components(new_components, country, original_bitset=original_bitset)
 
         return new_components
 

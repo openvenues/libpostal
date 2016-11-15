@@ -7,6 +7,9 @@ global:
     components:
         suburb:
             probability: 0.2
+            dependencies:
+                - city
+                - city_district
         metro_station:
             probability: 0.05
         city_district:
@@ -18,15 +21,24 @@ global:
             probability: 0.0
         state_district:
             probability: 0.05
+            dependencies:
+                - city
         state:
             probability: 0.1
+            dependencies:
+                - city
+                - country
         country_region:
             probability: 0.05
+            dependencies:
+                - country
         country:
             probability: 0.8
+
         world_region:
             probability: 0.001
-
+            dependencies:
+                - country
 
 add_west_indies: &add_west_indies
     components:
@@ -50,8 +62,17 @@ countries:
     # Australia
     au:
         components:
+            suburb:
+                dependencies:
+                    - city_district
+                    - city
+                    - state_district
+                    - state
             state:
                 probability: 0.6
+                dependencies:
+                    - city
+                    - city_district
             country:
                 probability: 0.5
 
@@ -64,8 +85,17 @@ countries:
     # Brazil
     br:
         components:
+            suburb:
+                dependencies:
+                    - city_district
+                    - city
+                    - state_district
+                    - state
             state:
                 probability: 0.6
+                dependencies:
+                    - city
+                    - city_district
 
     # Bahamas
     bs: *add_west_indies
@@ -73,8 +103,17 @@ countries:
     # Canada
     ca:
         components:
+            suburb:
+                dependencies:
+                    - city_district
+                    - city
+                    - state_district
+                    - state
             state:
                 probability: 0.7
+                dependencies:
+                    - city
+                    - city_district
             country:
                 probability: 0.2
 
@@ -86,12 +125,17 @@ countries:
         components:
             city_district:
                 probability: 0.4
+                dependencies:
+                    - city
 
     # United Kingdom
     gb:
         components:
             state_district:
                 probability: 0.15
+                dependencies:
+                    - city_district
+                    - city
             suburb:
                 probability: 0.5
             country:
@@ -111,10 +155,15 @@ countries:
     # Hong Kong
     hk:
         components:
+            suburb:
+                dependencies:
+                    - country
             country:
                 probability: 0.85
             state:
                 probability: 0.2
+                dependencies:
+                    - country
             island:
                 probability: 0.4
                 containing:
@@ -149,6 +198,9 @@ countries:
     # Saint Kitts and Nevis
     kn:
         components:
+            suburb:
+                dependencies:
+                    - country
             island:
                 probability: 0.8
             world_region: *add_west_indies_world_region
@@ -165,8 +217,18 @@ countries:
     # Mexico
     mx:
         components:
+            suburb:
+                dependencies:
+                    - city_district
+                    - city
+                    - state_district
+                    - state
             state:
                 probability: 0.5
+                dependencies:
+                    - city_district
+                    - city
+
     # Malaysia
     my:
         components:
@@ -224,6 +286,11 @@ countries:
         components:
             suburb:
                 probability: 0.4
+                dependencies:
+                    - city_district
+                    - city
+                    - state_district
+                    - state
             city_district:
                 probability: 0.2
                 containing:
@@ -264,6 +331,9 @@ countries:
                       probability: 0.9
                     - lt: 10000
                       probability: 1.0
+                dependencies:
+                    - city_district
+                    - city
 
             state_district:
                 probability: 0.1
@@ -284,9 +354,16 @@ countries:
                       probability: 0.1
                     - <<: *richmond_county
                       probability: 0.1
+                dependencies:
+                    - city_district
+                    - city
+                    - state
 
             country:
                 probability: 0.1
+                dependencies:
+                    - city
+                    - city_district
 
     # Tuvalu
     tv:
