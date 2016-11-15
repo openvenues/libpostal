@@ -708,7 +708,7 @@ countries:
     tn_fr:
         insertions: *france_template_insertions
 
-    east_asia_insertions:
+    east_asia_insertions: &east_asia_insertions
         postcode: {}
         po_box:
             po_box_after_suburb:
