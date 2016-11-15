@@ -1316,7 +1316,7 @@ class AddressComponents(object):
     def drop_invalid_components(self, address_components, country):
         if not address_components:
             return
-        component_bitset = self.component_bitset(address_components)
+        component_bitset = ComponentDependencies.component_bitset(address_components)
 
         deps = self.component_dependencies.get(country, self.component_dependencies[None])
         dep_order = deps.dependency_order
@@ -1326,7 +1326,7 @@ class AddressComponents(object):
                 continue
             if c in deps and not component_bitset & deps[c]:
                 address_components.pop(c)
-                component_bitset ^= self.component_bit_values[c]
+                component_bitset ^= ComponentDependencies.component_bit_values[c]
 
     def po_box_address(self, address_components, language, country=None):
         po_box_config = self.config['po_box']
