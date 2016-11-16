@@ -28,6 +28,8 @@
                 "172506": "city"
                 # Oxford
                 "394037": "city"
+                # York
+                "134353": "city"
 
         contained_by:
             relation:
