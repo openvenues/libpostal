@@ -711,14 +711,17 @@ countries:
     east_asia_insertions: &east_asia_insertions
         postcode: {}
         po_box:
+            po_box_before_suburb: {}
             po_box_after_suburb:
                 after: house_number
                 probability: 0.7
 
-            po_box_after_house:
-                after: house
+            po_box_after_house: {}
+            po_box_before_house:
+                before: house
                 probability: 0.2
 
+            po_box_first: {}
             po_box_last:
                 last: true
                 probability: 0.1
