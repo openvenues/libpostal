@@ -38,3 +38,7 @@
                     admin_level:
                         "6": "city"
                         "8": "city_district"
+                # West Midlands (county)
+                "57517":
+                    admin_level:
+                        "6": "city"
