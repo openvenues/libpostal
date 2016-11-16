@@ -4,7 +4,7 @@ from collections import Mapping
 
 def recursive_merge(a, b):
     for k, v in six.iteritems(b):
-        if isinstance(v, Mapping):
+        if isinstance(v, Mapping) and v:
             existing = a.get(k, v)
             merged = recursive_merge(existing, v)
             a[k] = merged

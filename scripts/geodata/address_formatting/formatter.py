@@ -266,8 +266,9 @@ class AddressFormatter(object):
     def insertion_distribution(self, insertions):
         values = []
         probs = []
+
         for k, v in six.iteritems(insertions):
-            if k == 'conditional':
+            if k == 'conditional' or not v:
                 continue
 
             allow_between_house_number_and_road = v.get('allow_between_house_number_and_road', False)
