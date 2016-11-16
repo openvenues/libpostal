@@ -20,14 +20,34 @@
                 "65606": "city"
                 # City of London
                 "51800": "city"
-                # Exeter
-                "2154556": "city"
+                # Aberdeen
+                "1900654": "city"
+                # Brighton and Hove
+                "114085": "city"
                 # Chelmsford
                 "176965": "city"
+                # Dundee
+                "1921173": "city"
+                # Edinburgh
+                "1920901": "city"
+                # Exeter
+                "2154556": "city"
+                # Glasgow
+                "1906767": "city"
+                # Kingston-upon-Hull
+                "60148": "city"
+                # Leicester
+                "162353": "city"
+                # Luton
+                "158392": "city"
                 # Norwich
                 "172506": "city"
                 # Oxford
                 "394037": "city"
+                # Portsmouth
+                "127167": "city"
+                # Southampton
+                "127864": "city"
                 # York
                 "134353": "city"
 
