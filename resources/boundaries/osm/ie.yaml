@@ -4,7 +4,7 @@
         "5": "country_region"
         "6": "state"
         "7": "state"
-        "10": "suburb"
+        "10": "city"
 
     # With the introduction of Eire code, Dublin postal districts 
     # have basically become city_districts
