@@ -379,11 +379,6 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                     if poly is None or not poly.bounds or len(poly.bounds) != 4:
                         continue
 
-                    if not poly.is_valid and not poly.contains(poly.centroid):
-                        poly_fix = cls.fix_polygon(poly)
-                        if poly_fix is not None and poly_fix.bounds and len(poly_fix.bounds) == 4 and poly_fix.is_valid and (poly_fix.contains(poly.centroid) or poly_fix.contains(poly_fix.representative_point())):
-                            poly = poly_fix
-
                     interior = []
                     try:
                         # Figure out which outer polygon contains each inner polygon

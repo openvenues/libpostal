@@ -167,6 +167,11 @@ class PolygonIndex(object):
                 holes = [(lon + 360.0 if lon < 0 else lon, lat) for lon, lat in holes]
 
         poly = Polygon(coords, holes)
+        if not poly.is_valid and not poly.contains(poly.centroid):
+            poly_fix = cls.fix_polygon(poly)
+            if poly_fix is not None and poly_fix.bounds and len(poly_fix.bounds) == 4 and poly_fix.is_valid and (poly_fix.contains(poly.centroid) or poly_fix.contains(poly_fix.representative_point())):
+                poly = poly_fix
+
         return poly
 
     def add_geojson_like_record(self, rec, include_only_properties=None):
