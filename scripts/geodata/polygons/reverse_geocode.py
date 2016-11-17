@@ -289,6 +289,8 @@ class OSMReverseGeocoder(RTreePolygonIndex):
     cache_size = 250000
     simplify_polygons = False
 
+    fix_invalid_polygons = True
+
     include_property_patterns = set([
         'id',
         'type',
@@ -436,6 +438,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         candidates = super(OSMReverseGeocoder, self).get_candidate_polygons(lat, lon)
         return sorted(candidates, key=self.sort_level, reverse=True)
 
+
 class OSMSubdivisionReverseGeocoder(OSMReverseGeocoder):
     persistent_polygons = True
     cache_size = 10000
@@ -448,6 +451,9 @@ class OSMBuildingReverseGeocoder(OSMReverseGeocoder):
     persistent_polygons = True
     cache_size = 10000
     simplify_polygons = False
+
+    fix_invalid_polygons = False
+
     polygon_reader = OSMBuildingPolygonReader
     include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['building', 'building:levels', 'building:part', 'addr:*'])
 
