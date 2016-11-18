@@ -153,7 +153,7 @@ class PolygonIndex(object):
         return poly
 
     @classmethod
-    def to_polygon(cls, coords, holes=None):
+    def to_polygon(cls, coords, holes=None, test_point=None):
         '''
         Create shapely polygon from list of coordinate tuples if valid
         '''
@@ -176,10 +176,15 @@ class PolygonIndex(object):
         if invalid:
             try:
                 poly_fix = cls.fix_polygon(poly)
-                if poly_fix is not None and poly_fix.bounds and len(poly_fix.bounds) == 4 and poly_fix.is_valid and (poly_fix.contains(poly.centroid) or poly_fix.contains(poly_fix.representative_point())):
-                    poly = poly_fix
+
+                if poly_fix is not None and poly_fix.bounds and len(poly_fix.bounds) == 4 and poly_fix.is_valid and poly_fix.type == poly.type:
+                    if test_point is None:
+                        test_point = poly_fix.representative_point()
+
+                    if poly_fix.contains(test_point):
+                        poly = poly_fix
             except Exception:
-                poly = None
+                pass
 
         return poly
 

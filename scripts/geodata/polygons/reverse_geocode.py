@@ -340,10 +340,18 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
             id_type, element_id = osm_type_and_id(element_id)
 
+            test_point = None
+
             if admin_center:
-                props['admin_center'] = {k: v for k, v in six.iteritems(admin_center)
-                                         if k in ('id', 'type', 'lat', 'lon') or k in cls.include_property_patterns or (six.u(':') in k and
-                                         six.u('{}:*').format(k.split(six.u(':'), 1)[0]) in cls.include_property_patterns)}
+                admin_center_props = {k: v for k, v in six.iteritems(admin_center)
+                                      if k in ('id', 'type', 'lat', 'lon') or k in cls.include_property_patterns or (six.u(':') in k and
+                                      six.u('{}:*').format(k.split(six.u(':'), 1)[0]) in cls.include_property_patterns)}
+
+                if cls.fix_invalid_polygons:
+                    center_lat, center_lon = latlon_to_decimal(admin_center_props['lat'], admin_center_props['lon'])
+                    test_point = Point(center_lon, center_lat)
+
+                props['admin_center'] = admin_center_props
 
             if inner_polys and not outer_polys:
                 logger.warn('inner polygons with no outer')
@@ -363,12 +371,8 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                 # Validate inner polygons (holes)
                 for p in inner_polys:
                     poly = cls.to_polygon(p)
-                    if poly is None or not poly.bounds or len(poly.bounds) != 4:
+                    if poly is None or not poly.bounds or len(poly.bounds) != 4 or not poly.is_valid:
                         continue
-                    if not poly.is_valid:
-                        poly = cls.fix_polygon(poly)
-                        if poly is None or not poly.bounds or len(poly.bounds) != 4:
-                            continue
 
                     if poly.type != 'MultiPolygon':
                         inner.append(poly)
@@ -377,7 +381,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
                 # Validate outer polygons
                 for p in outer_polys:
-                    poly = cls.to_polygon(p)
+                    poly = cls.to_polygon(p, test_point=admin_center_point)
                     if poly is None or not poly.bounds or len(poly.bounds) != 4:
                         continue
 
@@ -390,7 +394,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
                     if interior:
                         # Polygon with holes constructor
-                        poly = cls.to_polygon(p, [zip(*p2.exterior.coords.xy) for p2 in interior])
+                        poly = cls.to_polygon(p, [zip(*p2.exterior.coords.xy) for p2 in interior], test_point=admin_center_point)
                         if poly is None or not poly.bounds or len(poly.bounds) != 4:
                             continue
                     # R-tree only stores the bounding box, so add the whole polygon
