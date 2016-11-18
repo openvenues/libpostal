@@ -849,7 +849,7 @@ class AddressComponents(object):
 
                     new_admin_components[component] = val
 
-            self.abbreviate_admin_components(new_admin_components)
+            self.abbreviate_admin_components(new_admin_components, country, language)
 
             address_components.update(new_admin_components)
 
