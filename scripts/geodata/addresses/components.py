@@ -733,6 +733,22 @@ class AddressComponents(object):
                 return True
         return False
 
+    def abbreviate_admin_components(self, address_components, country, language, hyphenation=True):
+        abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
+        abbreviate_toponym_prob = float(nested_get(self.config, ('boundaries', 'abbreviate_toponym_probability')))
+
+        for component, val in six.iteritems(address_components):
+            if component not in AddressFormatter.BOUNDARY_COMPONENTS:
+                continue
+
+            if component == AddressFormatter.STATE and random.random() < abbreviate_state_prob:
+                val = state_abbreviations.get_abbreviation(country, language, val, default=val)
+            else:
+                val = abbreviate(toponym_abbreviations_gazetteer, val, language, abbreviate_prob=abbreviate_toponym_prob)
+                if hyphenation:
+                    val = self.name_hyphens(val)
+            address_components[component] = val
+
     def add_admin_boundaries(self, address_components,
                              osm_components,
                              country, language,
@@ -815,10 +831,10 @@ class AddressComponents(object):
                         poly_components[component].append(name)
                         seen.add((component, name))
 
-            abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
             join_state_district_prob = float(nested_get(self.config, ('state_district', 'join_probability')))
             replace_with_non_local_prob = float(nested_get(self.config, ('languages', 'replace_non_local_probability')))
-            abbreviate_toponym_prob = float(nested_get(self.config, ('boundaries', 'abbreviate_toponym_probability')))
+
+            new_admin_components = {}
 
             for component, vals in poly_components.iteritems():
                 if component not in address_components or (non_local_language and random.random() < replace_with_non_local_prob):
@@ -831,13 +847,11 @@ class AddressComponents(object):
                         else:
                             val = random.choice(vals)
 
-                        if component == AddressFormatter.STATE and random.random() < abbreviate_state_prob:
-                            val = state_abbreviations.get_abbreviation(country, language, val, default=val)
-                        elif random.random() < abbreviate_toponym_prob:
-                            val = abbreviate(toponym_abbreviations_gazetteer, val, language, abbreviate_prob=abbreviate_toponym_prob)
-                        else:
-                            val = self.name_hyphens(val)
-                    address_components[component] = val
+                    new_admin_components[component] = val
+
+            self.abbreviate_admin_components(new_admin_components)
+
+            address_components.update(new_admin_components)
 
     def quattroshapes_city(self, address_components,
                            latitude, longitude,
@@ -1387,14 +1401,6 @@ class AddressComponents(object):
         except Exception:
             return None, None, None
 
-        if hyphenation:
-            for component in address_components:
-                if component in place_config.ADMIN_COMPONENTS:
-                    value = address_components[component]
-                    value_hyphens = self.name_hyphens(value)
-                    if value_hyphens != value:
-                        address_components[component] = value_hyphens
-
         osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
         country, candidate_languages = self.osm_country_and_languages(osm_components)
         if not (country and candidate_languages):
@@ -1415,6 +1421,8 @@ class AddressComponents(object):
             language_suffix = self.pick_language_suffix(all_osm_components, language, non_local_language, more_than_one_official_language)
         else:
             language_suffix = ':{}'.format(language)
+
+        self.abbreviate_admin_components(address_components, country, language, hyphenation=hyphenation)
 
         address_state = self.state_name(address_components, country, language, non_local_language=non_local_language)
         if address_state:
