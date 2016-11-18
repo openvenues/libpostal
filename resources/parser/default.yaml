@@ -10,16 +10,6 @@ languages:
 # Dependencies for including each component in an "address"
 # Two-way dependencies are not an issue
 component_dependencies:
-    house:
-        dependencies:
-            - house_number
-            - road
-            - suburb
-            - city_district
-            - city
-            - state_district
-            - postcode
-
     road:
         dependencies: []
 

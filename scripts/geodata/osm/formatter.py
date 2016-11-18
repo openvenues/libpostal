@@ -399,7 +399,7 @@ class OSMAddressFormatter(object):
         # Since venue names are only one-per-record, this wrapper will try them all (name, alt_name, etc.)
         formatted_addresses = []
 
-        if AddressFormatter.HOUSE not in address_components or not venue_names:
+        if not venue_names:
             return [self.formatter.format_address(address_components, country, language=language,
                                                   tag_components=tag_components, minimal_only=minimal_only)]
 
