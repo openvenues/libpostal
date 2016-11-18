@@ -18,6 +18,7 @@ global:
     pre_release_downloads:
         # Italy countrywide with postcodes, must have
         - "http://s3.amazonaws.com/data.openaddresses.io/runs/104280/it/countrywide.zip"
+        - "http://s3.amazonaws.com/data.openaddresses.io/runs/127209/za/ec/nelson_mandela_bay.zip"
 
     fields: &default_fields
         - field_name: NUMBER
@@ -2471,6 +2472,10 @@ countries:
 
     za:
         subdirs:
+            ec:
+                files:
+                    - filename: nelson_mandela_bay.csv
+                      add_osm_boundaries: true
             nl:
                 files:
                     - filename: ethekwini.csv
