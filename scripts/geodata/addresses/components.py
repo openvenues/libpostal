@@ -39,6 +39,7 @@ from geodata.osm.components import osm_address_components
 from geodata.places.config import place_config
 from geodata.polygons.reverse_geocode import OSMCountryReverseGeocoder
 from geodata.states.state_abbreviations import state_abbreviations
+from geodata.text.tokenize import tokenize, token_types
 from geodata.text.utils import is_numeric
 
 
@@ -403,7 +404,7 @@ class AddressComponents(object):
     def normalize_place_names(self, address_components, osm_components, country=None, languages=None):
         for key in list(address_components):
             name = address_components[key]
-            if key in set(self.BOUNDARY_COMPONENTS):
+            if key in self.BOUNDARY_COMPONENTS:
                 name = self.normalized_place_name(name, key, osm_components,
                                                   country=country, languages=languages)
 
@@ -1164,22 +1165,6 @@ class AddressComponents(object):
             name = name.split(six.u(','), 1)[0].strip()
         return name
 
-    def cleanup_venue_name(self, address_components):
-        '''
-        Venue name cleanup
-        ------------------
-
-        A venue name that's the same as the house number is not valid.
-        This occurs sometimes in OSM where perhaps "7" could be the name
-        of the building but also its house number.
-        '''
-
-        venue_name = address_components.get(AddressFormatter.HOUSE)
-        house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
-
-        if venue_name and house_number and venue_name.strip() == house_number.strip():
-            address_components.pop(AddressFormatter.HOUSE)
-
     def cleanup_house_number(self, address_components):
         '''
         House number cleanup
@@ -1383,7 +1368,8 @@ class AddressComponents(object):
     def expanded(self, address_components, latitude, longitude, language=None,
                  dropout_places=True, population=None, population_from_city=False,
                  add_sub_building_components=True, hyphenation=True,
-                 num_floors=None, num_basements=None, zone=None):
+                 num_floors=None, num_basements=None, zone=None,
+                 osm_components=None):
         '''
         Expanded components
         -------------------
@@ -1401,7 +1387,9 @@ class AddressComponents(object):
         except Exception:
             return None, None, None
 
-        osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
+        if osm_components is None:
+            osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
+
         country, candidate_languages = self.osm_country_and_languages(osm_components)
         if not (country and candidate_languages):
             return None, None, None
@@ -1456,8 +1444,6 @@ class AddressComponents(object):
         self.replace_names(address_components)
 
         self.prune_duplicate_names(address_components)
-
-        self.cleanup_venue_name(address_components)
 
         self.cleanup_house_number(address_components)
 
