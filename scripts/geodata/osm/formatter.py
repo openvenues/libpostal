@@ -933,7 +933,7 @@ class OSMAddressFormatter(object):
         venue_names.extend(building_venue_names)
 
         expanded_components = address_components.copy()
-        for props, component in self.components.categorized_osm_components(osm_components):
+        for props, component in self.components.categorized_osm_components(country, osm_components):
             if 'name' in props and component not in place_components:
                 expanded_components[component] = props['name']
 
