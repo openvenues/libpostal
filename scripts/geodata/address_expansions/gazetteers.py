@@ -156,16 +156,16 @@ class DictionaryPhraseFilter(PhraseFilter):
 
 
 STREET_TYPES_ONLY_DICTIONARIES = ('street_types',
+                                  'directionals',
                                   'concatenated_suffixes_separable',
                                   'concatenated_suffixes_inseparable',
-                                  'concatenated_prefixes_separable',
+                                  'people',
+                                  'personal_suffixes',
+                                  'personal_titles',
                                   )
 
-STREET_TYPES_DICTIONARIES = STREET_TYPES_ONLY_DICTIONARIES + ('directionals',
+STREET_TYPES_DICTIONARIES = STREET_TYPES_ONLY_DICTIONARIES + ('concatenated_prefixes_separable',
                                                               'organizations',
-                                                              'people',
-                                                              'personal_suffixes',
-                                                              'personal_titles',
                                                               'qualifiers',
                                                               'stopwords',
                                                               )

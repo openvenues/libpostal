@@ -215,7 +215,7 @@ class OSMAddressFormatter(object):
         venue_phrases = venue_names_gazetteer.extract_phrases(name, languages=languages)
         street_phrases = street_types_only_gazetteer.extract_phrases(name, languages=languages)
 
-        if street_phrases - venue_phrases and not (AddressFormatter.HOUSE_NUMBER in address_components and AddressFormatter.ROAD in address_components):
+        if street_phrases - venue_phrases and not venue_phrases - street_phrases and not (AddressFormatter.HOUSE_NUMBER in address_components and AddressFormatter.ROAD in address_components):
             return False
 
         if not address_components and not venue_phrases:
