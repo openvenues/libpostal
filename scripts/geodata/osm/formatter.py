@@ -998,10 +998,7 @@ class OSMAddressFormatter(object):
             chain_queries = self.chain_queries(venue_name, address_components, language, country, tag_components=tag_components)
             formatted_addresses.extend(chain_queries)
 
-        if tag_components:
-            if not address_components:
-                return []
-
+        if tag_components and address_components:
             # Pick a random dropout order
             dropout_order = self.components.address_level_dropout_order(address_components, country)
 
