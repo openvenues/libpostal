@@ -896,11 +896,11 @@ class OSMAddressFormatter(object):
                                                                          zone=zone, add_sub_building_components=add_sub_building_components,
                                                                          population_from_city=True)
 
-        if not address_components:
-            return None, None, None
-
         languages = country_languages[country].keys()
         venue_names = self.venue_names(tags, languages) or []
+
+        if not address_components and not venue_names:
+            return None, None, None
 
         # Abbreviate the street name with random probability
         street_name = address_components.get(AddressFormatter.ROAD)
@@ -949,7 +949,6 @@ class OSMAddressFormatter(object):
             formatted_addresses.extend(self.chain_queries(venue_name, address_components, language, country, tag_components=tag_components))
 
         if tag_components:
-
             if not address_components:
                 return []
 
