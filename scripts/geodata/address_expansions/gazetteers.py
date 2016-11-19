@@ -1,6 +1,5 @@
 import os
-import sys
-import ujson as json
+import six
 
 from collections import defaultdict, OrderedDict
 
@@ -119,6 +118,40 @@ class DictionaryPhraseFilter(PhraseFilter):
                 c = token_types.PHRASE
             yield t, c, len(t), map(safe_decode, data)
 
+    def gen_phrases(self, s, canonical_only=False, languages=None):
+        tokens = tokenize(s)
+        norm_tokens = [(t.lower() if c in token_types.WORD_TOKEN_TYPES else t, c) for t, c in tokens]
+
+        if not languages:
+            languages = None
+        elif not hasattr(languages, '__contains__'):
+            languages = set([languages])
+
+        for t, c, length, data in self.filter(norm_tokens):
+            if c == token_types.PHRASE:
+                if not canonical_only and languages is None:
+                    yield six.u(' ').join([t_i for t_i, c_i in t])
+                else:
+                    phrase = None
+                    for d in data:
+                        lang, dictionary, is_canonical, canonical = d.split(six.b('|'))
+
+                        if (bool(int(is_canonical)) or not canonical_only) and (languages is None or lang in languages):
+                            phrase = phrase if phrase is not None else six.u(' ').join([t_i for t_i, c_i in t])
+                            yield phrase
+
+    def string_contains_phrases(self, s, canonical_only=False, languages=None):
+        phrases = self.gen_phrases(s, canonical_only=canonical_only, languages=languages)
+        try:
+            phrases.next()
+            return True
+        except StopIteration:
+            return False
+
+    def extract_phrases(self, s, canonical_only=False, languages=None):
+        return set(self.gen_phrases(s, canonical_only=canonical_only, languages=languages))
+
+
 STREET_TYPES_DICTIONARIES = ('street_types',
                              'directionals',
                              'concatenated_suffixes_separable',
@@ -138,18 +171,18 @@ CHAIN_DICTIONARY = 'chains'
 
 SYNONYM_DICTIONARY = 'synonyms'
 
-NAME_DICTIONARIES = (GIVEN_NAME_DICTIONARY,
-                     SURNAME_DICTIONARY,)
+PERSONAL_NAME_DICTIONARIES = (GIVEN_NAME_DICTIONARY,
+                              SURNAME_DICTIONARY,)
 
 
-NAME_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + ('academic_degrees',
-                                                              'building_types',
-                                                              'company_types',
-                                                              'place_names',
-                                                              'qualifiers',
-                                                              'synonyms',
-                                                              'toponyms',
-                                                              )
+NAME_DICTIONARIES = STREET_TYPES_DICTIONARIES + ('academic_degrees',
+                                                 'building_types',
+                                                 'company_types',
+                                                 'place_names',
+                                                 'qualifiers',
+                                                 'synonyms',
+                                                 'toponyms',
+                                                 )
 
 QUALIFIERS_DICTIONARY = 'qualifiers'
 
@@ -177,9 +210,18 @@ UNIT_ABBREVIATION_DICTIONARIES = ('level_types_basement',
                                   'unit_types_standalone',
                                   )
 
+VENUE_NAME_DICTIONARIES = ('academic_degrees',
+                           'building_types',
+                           'company_types',
+                           'organizations',
+                           'people',
+                           'personal_suffixes',
+                           'personal_titles',
+                           'place_names',
+                           )
 
 ALL_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + \
-    NAME_ABBREVIATION_DICTIONARIES + \
+    NAME_DICTIONARIES + \
     UNIT_ABBREVIATION_DICTIONARIES + \
     ('no_number', 'nulls',)
 
@@ -195,7 +237,7 @@ def create_gazetteer(*dictionaries):
 
 street_types_gazetteer = create_gazetteer(*STREET_TYPES_DICTIONARIES)
 qualifiers_gazetteer = create_gazetteer(QUALIFIERS_DICTIONARY)
-names_gazetteer = create_gazetteer(*NAME_ABBREVIATION_DICTIONARIES)
+names_gazetteer = create_gazetteer(*NAME_DICTIONARIES)
 chains_gazetteer = create_gazetteer(CHAIN_DICTIONARY)
 unit_types_gazetteer = create_gazetteer(*UNIT_ABBREVIATION_DICTIONARIES)
 street_and_synonyms_gazetteer = create_gazetteer(*(STREET_TYPES_DICTIONARIES + (SYNONYM_DICTIONARY, )))
@@ -203,3 +245,4 @@ abbreviations_gazetteer = create_gazetteer(*ALL_ABBREVIATION_DICTIONARIES)
 toponym_abbreviations_gazetteer = create_gazetteer(*TOPONYM_ABBREVIATION_DICTIONARIES)
 toponym_gazetteer = create_gazetteer(TOPONYMS_DICTIONARY)
 given_name_gazetteer = create_gazetteer(GIVEN_NAME_DICTIONARY)
+venue_name_gazetteer = create_gazetteer(*VENUE_NAME_DICTIONARIES)
