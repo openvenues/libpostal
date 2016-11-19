@@ -934,7 +934,7 @@ class OSMAddressFormatter(object):
 
         expanded_components = address_components.copy()
         for props, component in self.components.categorized_osm_components(country, osm_components):
-            if 'name' in props and component not in place_components:
+            if 'name' in props and component not in expanded_components:
                 expanded_components[component] = props['name']
 
         street_languages = set((language,) if language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE) else languages)
