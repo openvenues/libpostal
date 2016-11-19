@@ -122,6 +122,7 @@ geriatric unit
 golf course
 golf club
 graveyard|grave yard
+green|grn|gn
 grill
 ground
 gym|gymnasium
