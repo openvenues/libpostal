@@ -124,8 +124,11 @@ class DictionaryPhraseFilter(PhraseFilter):
 
         if not languages:
             languages = None
-        elif not hasattr(languages, '__contains__'):
-            languages = set([languages])
+        elif not hasattr(languages, '__iter__'):
+            languages = [languages]
+
+        if not hasattr(languages, '__contains__'):
+            languages = set(languages)
 
         for t, c, length, data in self.filter(norm_tokens):
             if c == token_types.PHRASE:
