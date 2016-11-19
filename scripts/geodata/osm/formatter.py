@@ -423,6 +423,7 @@ class OSMAddressFormatter(object):
         formatted_addresses = []
 
         if not venue_names:
+            address_components = {c: v for c, v in six.iteritems(address_components) if c != AddressFormatter.HOUSE}
             return [self.formatter.format_address(address_components, country, language=language,
                                                   tag_components=tag_components, minimal_only=minimal_only)]
 
@@ -976,9 +977,10 @@ class OSMAddressFormatter(object):
             address_only_components = self.components.drop_postcode(address_only_components)
 
             if address_only_components:
-                address_only_venue_names = venue_names
+                address_only_venue_names = []
                 if not address_only_components or (len(address_only_components) == 1 and list(address_only_components)[0] == AddressFormatter.HOUSE):
                     address_only_venue_names = [venue_name for venue_name in venue_names if self.valid_venue_name(venue_name, address_only_components, street_languages)]
+
                 formatted_addresses.extend(self.formatted_addresses_with_venue_names(address_only_components, address_only_venue_names, country, language=language,
                                                                                      tag_components=tag_components, minimal_only=False))
 
