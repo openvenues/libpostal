@@ -139,7 +139,7 @@ class DictionaryPhraseFilter(PhraseFilter):
                     for d in data:
                         lang, dictionary, is_canonical, canonical = d.split(six.b('|'))
 
-                        if (bool(int(is_canonical)) or not canonical_only) and (languages is None or lang in languages):
+                        if (bool(int(is_canonical)) or not canonical_only) and (languages is None or lang in languages or lang == 'all'):
                             phrase = phrase if phrase is not None else six.u(' ').join([t_i for t_i, c_i in t])
                             yield phrase
 
@@ -155,17 +155,20 @@ class DictionaryPhraseFilter(PhraseFilter):
         return set(self.gen_phrases(s, canonical_only=canonical_only, languages=languages))
 
 
-STREET_TYPES_DICTIONARIES = ('street_types',
-                             'directionals',
-                             'concatenated_suffixes_separable',
-                             'concatenated_suffixes_inseparable',
-                             'concatenated_prefixes_separable',
-                             'organizations',
-                             'people',
-                             'personal_suffixes',
-                             'personal_titles',
-                             'qualifiers',
-                             'stopwords',)
+STREET_TYPES_ONLY_DICTIONARIES = ('street_types',
+                                  'concatenated_suffixes_separable',
+                                  'concatenated_suffixes_inseparable',
+                                  'concatenated_prefixes_separable',
+                                  )
+
+STREET_TYPES_DICTIONARIES = STREET_TYPES_ONLY_DICTIONARIES + ('directionals',
+                                                              'organizations',
+                                                              'people',
+                                                              'personal_suffixes',
+                                                              'personal_titles',
+                                                              'qualifiers',
+                                                              'stopwords',
+                                                              )
 
 GIVEN_NAME_DICTIONARY = 'given_names'
 SURNAME_DICTIONARY = 'surnames'
@@ -215,12 +218,17 @@ UNIT_ABBREVIATION_DICTIONARIES = ('level_types_basement',
 
 VENUE_NAME_DICTIONARIES = ('academic_degrees',
                            'building_types',
+                           'chains',
                            'company_types',
+                           'directionals',
+                           'given_names',
                            'organizations',
                            'people',
                            'personal_suffixes',
                            'personal_titles',
                            'place_names',
+                           'stopwords',
+                           'surnames',
                            )
 
 ALL_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + \
@@ -239,6 +247,7 @@ def create_gazetteer(*dictionaries):
 
 
 street_types_gazetteer = create_gazetteer(*STREET_TYPES_DICTIONARIES)
+street_types_only_gazetteer = create_gazetteer(*STREET_TYPES_ONLY_DICTIONARIES)
 qualifiers_gazetteer = create_gazetteer(QUALIFIERS_DICTIONARY)
 names_gazetteer = create_gazetteer(*NAME_DICTIONARIES)
 chains_gazetteer = create_gazetteer(CHAIN_DICTIONARY)
