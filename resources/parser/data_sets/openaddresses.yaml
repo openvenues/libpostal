@@ -2075,6 +2075,8 @@ countries:
                     - filename: armstrong.csv
                     - filename: bedford.csv
                     - filename: berks.csv
+                    - filename: bucks.csv
+                      add_osm_boundaries: true
                     - filename: butler.csv
                     - filename: cameron.csv
                       add_osm_boundaries: true
