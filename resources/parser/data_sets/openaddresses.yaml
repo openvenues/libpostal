@@ -1586,9 +1586,9 @@ countries:
                     state: MI
                 files:
                     - filename: city_of_rochester.csv
+                    - filename: city_of_flint.csv
                     - filename: detroit.csv
                       add_osm_boundaries: true
-                    - filename: flint.csv
                     - filename: genesee.csv
                     - filename: kent.csv
                       add_osm_boundaries: true
