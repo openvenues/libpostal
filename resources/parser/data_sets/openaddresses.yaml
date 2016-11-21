@@ -143,21 +143,6 @@ countries:
             postcode:
                 - "\\bx1x1x1\\b"
 
-        files:
-            - filename: nb.csv
-              add:
-                  state: NB
-              add_osm_boundaries: true
-            - filename: ns.csv
-              language: en
-              add:
-                  state: NS
-            - filename: pe.csv
-              language: en
-              add:
-                  state: PE
-              add_osm_boundaries: true
-
         subdirs:
             ab:
                 add:
@@ -204,12 +189,21 @@ countries:
                 files:
                     - filename: brandon.csv
 
+            nb:
+              add:
+                  state: NB
+              files:
+                  - filename: province.csv
+                    add_osm_boundaries: true
+
             ns:
                 add:
                     state: NS
                 language: en
                 files:
                     - filename: halifax.csv
+                      add_osm_boundaries: true
+                    - filename: province.csv
                       add_osm_boundaries: true
 
             "on":
@@ -329,6 +323,14 @@ countries:
                     - filename: west_parry_sound_district.csv
                       add_osm_boundaries: true
                     - filename: york.csv
+                      add_osm_boundaries: true
+
+            pe:
+                add:
+                    state: PE
+                language: en
+                files:
+                    - filename: province.csv
                       add_osm_boundaries: true
 
             qc:
