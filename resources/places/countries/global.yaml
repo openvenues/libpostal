@@ -411,3 +411,9 @@ countries:
             island:
                 probability: 0.8
             world_region: *add_west_indies_world_region
+
+    za:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district
