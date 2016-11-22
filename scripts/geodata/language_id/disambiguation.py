@@ -97,7 +97,7 @@ LATIN_TRANSLITERATED_SCRIPTS = {'Arabic', 'Cyrllic'}
 
 def has_non_latin_script(languages):
     for lang, is_default in languages:
-        scripts = script_languages.get(lang, set())
+        scripts = lang_scripts.get(lang, set())
         if LATIN_SCRIPT not in scripts or scripts & LATIN_TRANSLITERATED_SCRIPTS:
             return True
     return False

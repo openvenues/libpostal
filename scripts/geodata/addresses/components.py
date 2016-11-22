@@ -284,7 +284,11 @@ class AddressComponents(object):
                     else:
                         language = UNKNOWN_LANGUAGE
                 else:
-                    language = UNKNOWN_LANGUAGE
+                    default_languages = [lang for lang, default in candidate_languages if default]
+                    if len(default_languages) == 1:
+                        language = default_languages[0]
+                    else:
+                        language = UNKNOWN_LANGUAGE
 
         return language
 
