@@ -159,10 +159,14 @@ class PlaceConfig(object):
 
         new_components = components.copy()
 
+        city_replacements = set()
+        if AddressFormatter.CITY not in components:
+            city_replacements = set(self.get_property(('city_replacements', ), country=country))
+
         for component in admin_components:
             include = self.include_component(component, containing_ids, country=country, population=population)
 
-            if not include:
+            if not include and component not in city_replacements:
                 # Note: this check is for cities that have the same name as their admin
                 # areas e.g. Luxembourg, Luxembourg. In cases like this, if we were to drop
                 # city, we don't want to include country on its own. This should help the parser

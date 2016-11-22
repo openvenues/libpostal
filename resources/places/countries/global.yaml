@@ -3,6 +3,7 @@
 # and standalone place queries)
 
 global:
+    city_replacements: []
     # Probability of including individual components
     components:
         suburb:
@@ -61,6 +62,10 @@ countries:
 
     # Australia
     au:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district
         components:
             suburb:
                 dependencies:
@@ -84,6 +89,10 @@ countries:
 
     # Brazil
     br:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district
         components:
             suburb:
                 dependencies:
@@ -102,6 +111,10 @@ countries:
 
     # Canada
     ca:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district
         components:
             suburb:
                 dependencies:
@@ -130,6 +143,10 @@ countries:
 
     # United Kingdom
     gb:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district
         components:
             state_district:
                 probability: 0.15
@@ -216,6 +233,9 @@ countries:
 
     # Mexico
     mx:
+        city_replacements:
+            - suburb
+            - city_district
         components:
             suburb:
                 dependencies:
@@ -258,6 +278,10 @@ countries:
 
     # United States
     us:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district
         # Definitions
         new_york_county: &new_york_county
             id: 2552485 # New York County (Manhattan, NY)
