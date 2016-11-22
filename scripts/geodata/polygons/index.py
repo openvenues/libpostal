@@ -169,7 +169,9 @@ class PolygonIndex(object):
 
         poly = Polygon(coords, holes)
         try:
-            invalid = cls.fix_invalid_polygons and not poly.is_valid and not poly.contains(poly.centroid)
+            if test_point is None:
+                test_point = poly.representative_point()
+            invalid = cls.fix_invalid_polygons and not poly.is_valid and not poly.contains(test_point)
         except Exception:
             invalid = True
 
