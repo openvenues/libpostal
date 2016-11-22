@@ -479,7 +479,7 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
     @classmethod
     def country_and_languages_from_components(cls, osm_components):
         country = None
-        for c in reversed(osm_components):
+        for c in osm_components:
             country = c.get('ISO3166-1:alpha2')
             if country:
                 break
