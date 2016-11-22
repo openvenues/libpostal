@@ -9,8 +9,9 @@
 
     overrides:
         id:
-            # Brussels-Capital Region
-            "54094": "state"
+            relation:
+                # Brussels-Capital Region
+                "54094": "state"
 
         contained_by:
             relation:

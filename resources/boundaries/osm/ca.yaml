@@ -10,5 +10,6 @@
 
     overrides:
         id:
-            # Calgary
-            "3227127": "city"
+            relation:
+                # Calgary
+                "3227127": "city"
