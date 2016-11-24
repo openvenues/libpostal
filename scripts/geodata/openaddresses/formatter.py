@@ -229,7 +229,7 @@ class OpenAddressesFormatter(object):
         place_only_probability = float(self.get_property('place_only_probability', *configs))
         place_and_postcode_probability = float(self.get_property('place_and_postcode_probability', *configs))
 
-        city_replacements = self.get_property('city_replacements', *configs, default={})
+        city_replacements = self.get_property('city_replacements', *configs)
 
         postcode_length = int(self.get_property('postcode_length', *configs) or 0)
 
