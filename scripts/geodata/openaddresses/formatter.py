@@ -437,7 +437,7 @@ class OpenAddressesFormatter(object):
                             break
 
                 if AddressFormatter.CITY not in components and city_replacements:
-                    components.update({k: v for k, v in six.iteritems(city_replacements) if k not in components)
+                    components.update({k: v for k, v in six.iteritems(city_replacements) if k not in components})
 
                 # The neighborhood index is cheaper so can turn on for whole countries
                 neighborhood_components = []
