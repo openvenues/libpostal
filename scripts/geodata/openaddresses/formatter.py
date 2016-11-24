@@ -229,6 +229,8 @@ class OpenAddressesFormatter(object):
         place_only_probability = float(self.get_property('place_only_probability', *configs))
         place_and_postcode_probability = float(self.get_property('place_and_postcode_probability', *configs))
 
+        city_replacements = self.get_property('city_replacements', *configs, default={})
+
         postcode_length = int(self.get_property('postcode_length', *configs) or 0)
 
         drop_address_probability = place_only_probability + place_and_postcode_probability
@@ -433,6 +435,9 @@ class OpenAddressesFormatter(object):
                         if label == AddressFormatter.CITY and 'population' in component:
                             population = component['population']
                             break
+
+                if AddressFormatter.CITY not in components and city_replacements:
+                    components.update({k: v for k, v in six.iteritems(city_replacements) if k not in components)
 
                 # The neighborhood index is cheaper so can turn on for whole countries
                 neighborhood_components = []
