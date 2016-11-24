@@ -1976,9 +1976,9 @@ countries:
                     - filename: sumner_county.csv
                     - filename: thomas_county.csv
                       add_osm_boundaries: true
-                       city_replacements:
+                      city_replacements:
                           state_district: Thomas County
-                   - filename: wabaunsee_county.csv
+                    - filename: wabaunsee_county.csv
 
             ky:
                 add:
@@ -2625,13 +2625,13 @@ countries:
                   - filename: athens.csv
                   - filename: auglaize.csv
                     add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Auglaize County
+                    city_replacements:
+                        state_district: Auglaize County
                   - filename: brown.csv
                   - filename: butler.csv
                     add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Butler County
+                    city_replacements:
+                        state_district: Butler County
                   - filename: carroll.csv
                   - filename: champaign.csv
                   - filename: city_of_perrysburg.csv
@@ -2646,21 +2646,21 @@ countries:
                   - filename: defiance.csv
                   - filename: delaware.csv
                     add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Delaware County
+                    city_replacements:
+                        state_district: Delaware County
                   - filename: erie.csv
                   - filename: fairfield.csv
                   - filename: fayette.csv
                   - filename: franklin.csv
                   - filename: fulton.csv
                     add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Fulton County
+                    city_replacements:
+                        state_district: Fulton County
                   - filename: gallia.csv
                   - filename: geauga.csv
                     add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Geauga County
+                    city_replacements:
+                        state_district: Geauga County
                   - filename: greene.csv
                   - filename: guernsey.csv
                   - filename: hancock.csv
@@ -2677,8 +2677,8 @@ countries:
                   - filename: lake.csv
                   - filename: lawrence.csv
                     add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Lawrence County
+                    city_replacements:
+                        state_district: Lawrence County
                   - filename: licking.csv
                   - filename: logan.csv
                   - filename: lorain.csv
@@ -2712,8 +2712,8 @@ countries:
                   - filename: stark.csv
                   - filename: summit.csv
                     add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Summit County
+                    city_replacements:
+                        state_district: Summit County
                   - filename: toledo.csv
                   - filename: trumbull.csv
                   - filename: tuscarawas.csv
@@ -3317,32 +3317,32 @@ countries:
                 files:
                   - filename: albany.csv
                     add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Albany County
+                    city_replacements:
+                        state_district: Albany County
                   - filename: campbell.csv
                     add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Campbell County
+                    city_replacements:
+                        state_district: Campbell County
                   - filename: city_of_gillette.csv
                   - filename: city_of_wright.csv
                     add_osm_boundaries: true
-                      city_replacements:
-                          city: Wright
+                    city_replacements:
+                        city: Wright
                   - filename: crook.csv
                   - filename: goshen.csv
                   - filename: hot_springs.csv
                   - filename: laramie.csv
                     add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Laramie County
+                    city_replacements:
+                        state_district: Laramie County
                   - filename: natrona.csv
                     add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Natrona County
+                    city_replacements:
+                        state_district: Natrona County
                   - filename: teton.csv
                     add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Teton County
+                    city_replacements:
+                        state_district: Teton County
 
     uy:
         subdirs:
