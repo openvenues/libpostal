@@ -1242,6 +1242,9 @@ countries:
                     state: CO
                 files:
                     - filename: arapahoe.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Arapahoe County
                     - filename: broomfield.csv
                     - filename: city_of_arvada.csv
                     - filename: city_of_aurora.csv
