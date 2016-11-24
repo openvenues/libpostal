@@ -2310,7 +2310,7 @@ countries:
                     - filename: cary.csv
                       add_osm_boundaries: true
                       city_replacements:
-                          state_district: Cary County
+                          city: Cary
                     - filename: caswell.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -3021,7 +3021,7 @@ countries:
                     - filename: colleyville.csv
                       add_osm_boundaries: true
                       city_replacements:
-                          state_district: Colleyville County
+                          city: Colleyville
                     - filename: colorado.csv
                     - filename: comal.csv
                     - filename: comanche.csv
