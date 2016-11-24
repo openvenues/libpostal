@@ -1271,6 +1271,10 @@ countries:
                           city: Denver
                     - filename: douglas.csv
                     - filename: eagle.csv
+                    - filename: el_paso.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: El Paso County
                     - filename: fremont.csv
                       add_osm_boundaries: true
                       city_replacements:
