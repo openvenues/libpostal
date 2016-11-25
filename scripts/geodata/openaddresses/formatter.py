@@ -481,7 +481,7 @@ class OpenAddressesFormatter(object):
                     if rand_val < place_and_postcode_probability:
                         components = self.components.drop_postcode(components)
 
-                    if components:
+                    if components and (len(components) > 1 or add_osm_boundaries):
                         formatted = self.formatter.format_address(components, country, language=language,
                                                                   minimal_only=False, tag_components=tag_components)
                         yield (language, country, formatted)
