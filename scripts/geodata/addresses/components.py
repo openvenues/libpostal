@@ -1501,7 +1501,7 @@ class AddressComponents(object):
 
                 for props, component in (tagged or []):
                     if component == AddressFormatter.CITY:
-                        if self.unambiguous_wikipedia(component, language):
+                        if self.unambiguous_wikipedia(props, language):
                             unambiguous_city = True
 
                         if 'population' in props:
