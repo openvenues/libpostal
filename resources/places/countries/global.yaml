@@ -38,9 +38,9 @@ global:
             population:
                 - lt: 100000
                   gte: 10000
-                  probability: 0.9
+                  probability: 0.85
                 - lt: 10000
-                  probability: 1.0
+                  probability: 0.9
 
         world_region:
             probability: 0.001
