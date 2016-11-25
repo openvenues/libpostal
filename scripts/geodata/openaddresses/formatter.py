@@ -427,13 +427,16 @@ class OpenAddressesFormatter(object):
                 # very small and the place name shouldn't be used unqualified (i.e. needs information
                 # like state name to disambiguate it)
                 population = 0
+                unambiguous_city = False
                 if add_osm_boundaries or AddressFormatter.CITY not in components:
                     osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
                     self.components.add_admin_boundaries(components, osm_components, country, language)
                     categorized = self.components.categorized_osm_components(country, osm_components)
                     for component, label in categorized:
-                        if label == AddressFormatter.CITY and 'population' in component:
-                            population = component['population']
+                        if label == AddressFormatter.CITY:
+                            unambiguous_city = self.components.unambiguous_wikipedia(component, language)
+                            if 'population' in component:
+                                population = component['population']
                             break
 
                 if AddressFormatter.CITY not in components and city_replacements:
@@ -460,7 +463,7 @@ class OpenAddressesFormatter(object):
 
                 # Component dropout
                 all_osm_components = osm_components + neighborhood_components
-                components = place_config.dropout_components(components, all_osm_components, country=country, population=population)
+                components = place_config.dropout_components(components, all_osm_components, country=country, population=population, unambiguous_city=unambiguous_city)
 
                 formatted = self.formatter.format_address(components, country, language=language,
                                                           minimal_only=False, tag_components=tag_components)

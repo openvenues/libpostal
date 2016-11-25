@@ -121,8 +121,8 @@ class PlaceConfig(object):
 
         return random.random() < probability
 
-    def include_component(self, component, containing_ids, country=None, population=None, check_population=True):
-        if check_population:
+    def include_component(self, component, containing_ids, country=None, population=None, check_population=True, unambiguous_city=False):
+        if check_population and not unambiguous_city:
             population_exceptions = self.get_property(('components', component, 'population'), country=country, default=None)
             if population_exceptions and self.include_by_population_exceptions(population_exceptions, population=population or 0):
                 return True
@@ -143,7 +143,7 @@ class PlaceConfig(object):
                 address_components.pop(c)
                 component_bitset ^= ComponentDependencies.component_bit_values[c]
 
-    def dropout_components(self, components, boundaries=(), country=None, population=None):
+    def dropout_components(self, components, boundaries=(), country=None, population=None, unambiguous_city=False):
         containing_ids = set()
 
         for boundary in boundaries:
@@ -172,7 +172,7 @@ class PlaceConfig(object):
             city_replacements = set(self.get_property(('city_replacements', ), country=country))
 
         for component in admin_components:
-            include = self.include_component(component, containing_ids, country=country, population=population)
+            include = self.include_component(component, containing_ids, country=country, population=population, unambiguous_city=unambiguous_city)
 
             if not include and component not in city_replacements:
                 # Note: this check is for cities that have the same name as their admin
@@ -201,7 +201,7 @@ class PlaceConfig(object):
                 if values is not None:
                     value = weighted_choice(values, probs)
 
-            if value is not None and component not in components and self.include_component(component, containing_ids, country=country, population=population):
+            if value is not None and component not in components and self.include_component(component, containing_ids, country=country, population=population, unambiguous_city=unambiguous_city):
                 new_components[component] = value
 
         self.drop_invalid_components(new_components, country, original_bitset=original_bitset)

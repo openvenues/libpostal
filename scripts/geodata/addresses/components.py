@@ -909,6 +909,34 @@ class AddressComponents(object):
 
         return city
 
+    generic_wiki_name_regex = re.compile('^[a-z]{2,3}:')
+
+    @classmethod
+    def unambiguous_wikipedia(cls, osm_component, language):
+        name = osm_component.get('name')
+        if not name:
+            return False
+
+        wiki_name = osm_component.get('wikipedia:{}'.format(language))
+        if not wiki_name:
+            wiki_name = osm_component.get('wikipedia')
+            if wiki_name:
+                if (language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE) and wiki_name.lower().startswith(six.u('{}:'.format(language))) or cls.generic_wiki_name_regex.match(wiki_name)):
+                    wiki_name = wiki_name.split(six.u(':'), 1)[-1]
+
+        norm_name = safe_decode(name).strip().lower()
+
+        if not wiki_name and language in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE):
+            for k, v in six.iteritems(osm_component):
+                if k.startswith('wikipedia:') and safe_decode(v).strip().lower() == norm_name:
+                    return True
+            else:
+                return False
+        elif not wiki_name:
+            return False
+
+        return norm_name == safe_decode(wiki_name).strip().lower()
+
     def neighborhood_components(self, latitude, longitude):
         return self.neighborhoods_rtree.point_in_poly(latitude, longitude, return_all=True)
 
@@ -1370,7 +1398,8 @@ class AddressComponents(object):
         return False
 
     def expanded(self, address_components, latitude, longitude, language=None,
-                 dropout_places=True, population=None, population_from_city=False,
+                 dropout_places=True, population=None,
+                 population_from_city=False, check_city_wikipedia=False,
                  add_sub_building_components=True, hyphenation=True,
                  num_floors=None, num_basements=None, zone=None,
                  osm_components=None):
@@ -1464,19 +1493,25 @@ class AddressComponents(object):
             # Population of the city helps us determine if the city can be used
             # on its own like "Seattle" or "New York" vs. smaller cities like
             # have to be qualified with a state, country, etc.
-            if population is None and population_from_city:
-                tagged = self.categorized_osm_components(country, osm_components)
-                for props, component in (tagged or []):
-                    if component == AddressFormatter.CITY and 'population' in props:
-                        try:
-                            population = int(props['population'])
-                        except (ValueError, TypeError):
-                            continue
+            unambiguous_city = False
 
+            if population is None and population_from_city:
                 population = 0
+                tagged = self.categorized_osm_components(country, osm_components)
+
+                for props, component in (tagged or []):
+                    if component == AddressFormatter.CITY:
+                        if self.unambiguous_wikipedia(component, language):
+                            unambiguous_city = True
+
+                        if 'population' in props:
+                            try:
+                                population = int(props['population'])
+                            except (ValueError, TypeError):
+                                continue
 
             # Perform dropout on places
-            address_components = place_config.dropout_components(address_components, all_osm_components, country=country, population=population)
+            address_components = place_config.dropout_components(address_components, all_osm_components, country=country, population=population, unambiguous_city=unambiguous_city)
 
         self.drop_invalid_components(address_components, country)
 

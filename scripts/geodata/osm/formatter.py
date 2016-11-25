@@ -920,7 +920,7 @@ class OSMAddressFormatter(object):
         address_components, country, language = self.components.expanded(revised_tags, latitude, longitude, language=language or namespaced_language,
                                                                          num_floors=num_floors, num_basements=num_basements,
                                                                          zone=zone, add_sub_building_components=add_sub_building_components,
-                                                                         population_from_city=True, osm_components=osm_components)
+                                                                         population_from_city=True, check_city_wikipedia=True, osm_components=osm_components)
 
         languages = list(country_languages[country])
         venue_names = self.venue_names(tags, languages) or []
