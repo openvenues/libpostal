@@ -28,12 +28,21 @@
                 "158396": "city"
                 # Blackpool
                 "148603": "city"
+                # Bolsover
+                "108323": "city"
+                # Boston
+                "58553": "city"
                 # Bournemouth
                 "130884": "city"
+                # Brentwood
+                "76515": "city"
                 # Bristol
                 "57539": "city"
                 # Brighton and Hove
                 "114085": "city"
+                # Bromsgrove
+                "1875338": "city"
+                "1875160": "city"
                 # Burnley
                 "149101": "city"
                 # Canterbury
@@ -44,14 +53,22 @@
                 "176965": "city"
                 # Chester
                 "1441701": "city"
+                # Chesterfield
+                "138738": "city"
                 # Chichester
                 "114677": "city"
                 # Chorley
                 "148744": "city"
+                # Colchester
+                "76493": "city"
+                # Corby
+                "310064": "city"
                 # Coventry
                 "162370": "city"
                 # Darlington
                 "153377": "city"
+                # Daventry
+                "1637109": "city"
                 # Derby
                 "142308": "city"
                 # Dundee
@@ -66,6 +83,8 @@
                 "1906767": "city"
                 # Guildford
                 "108787": "city"
+                # Harrogate
+                "150872": "city"
                 # Hartlepool
                 "153375": "city"
                 # Havant
@@ -78,6 +97,12 @@
                 "168501": "city"
                 # Luton
                 "158392": "city"
+                # Kettering
+                "310065": "city"
+                # Maldon
+                "1551151": "city"
+                # Mansfield
+                "154006": "city"
                 # Middlesbrough
                 "150988": "city"
                 # Milton Keynes
@@ -98,8 +123,14 @@
                 "127167": "city"
                 # Reading
                 "115074": "city"
+                # Redditch
+                "1875340": "city"
                 # St Albans
                 "2683265": "city"
+                # Scarborough
+                "149163": "city"
+                # Selby
+                "135523": "city"
                 # Slough
                 "117097": "city"
                 # Southend-on-Sea
@@ -118,8 +149,12 @@
                 "87944": "city"
                 # Swindon
                 "110212": "city"
+                # Tamworth
+                "165856": "city"
                 # Warrington
                 "147278": "city"
+                # Wellingsborough
+                "1637026": "city"
                 # Winchester
                 "127238": "city"
                 # Wolverhampton
