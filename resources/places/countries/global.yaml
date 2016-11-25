@@ -35,6 +35,12 @@ global:
                 - country
         country:
             probability: 0.8
+            population:
+                - lt: 100000
+                  gte: 10000
+                  probability: 0.9
+                - lt: 10000
+                  probability: 1.0
 
         world_region:
             probability: 0.001
@@ -75,11 +81,18 @@ countries:
                     - state
             state:
                 probability: 0.6
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.9
+                    - lt: 10000
+                      probability: 1.0
                 dependencies:
                     - city
                     - city_district
             country:
                 probability: 0.5
+                population: []
 
     # Barbados
     bb: *add_west_indies
@@ -102,9 +115,17 @@ countries:
                     - state
             state:
                 probability: 0.6
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.9
+                    - lt: 10000
+                      probability: 1.0
                 dependencies:
                     - city
                     - city_district
+            country:
+                population: []
 
     # Bahamas
     bs: *add_west_indies
@@ -124,11 +145,18 @@ countries:
                     - state
             state:
                 probability: 0.7
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.9
+                    - lt: 10000
+                      probability: 1.0
                 dependencies:
                     - city
                     - city_district
             country:
                 probability: 0.2
+                population: []
 
     # Dominica
     dm: *add_west_indies
@@ -205,7 +233,7 @@ countries:
             state:
                 probability: 0.8
             country:
-                probability: 0.4
+                probability: 0.8
 
     hu:
         components:
@@ -245,9 +273,17 @@ countries:
                     - state
             state:
                 probability: 0.5
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.9
+                    - lt: 10000
+                      probability: 1.0
                 dependencies:
                     - city_district
                     - city
+            country:
+                population: []
 
     # Malaysia
     my:
@@ -385,6 +421,7 @@ countries:
 
             country:
                 probability: 0.1
+                population: []
                 dependencies:
                     - city
                     - city_district
