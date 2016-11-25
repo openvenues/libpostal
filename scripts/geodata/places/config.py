@@ -34,11 +34,11 @@ class PlaceConfig(object):
         AddressFormatter.WORLD_REGION,
     }
 
-    numeric_ops = (('lte', operator.le),
-                   ('gt', operator.gt),
-                   ('lt', operator.lt),
-                   ('gte', operator.ge),
-                   )
+    numeric_ops = {'lte': operator.le,
+                   'gt': operator.gt,
+                   'lt': operator.lt,
+                   'gte': operator.ge,
+                   }
 
     def __init__(self, config_file=PLACE_CONFIG_FILE):
         self.cache = {}
@@ -82,7 +82,34 @@ class PlaceConfig(object):
 
         return nested_get(config, key, default=default)
 
-    def include_component(self, component, containing_ids, country=None, population=None):
+    def include_by_population_exceptions(self, population_exceptions, population):
+        if population_exceptions:
+            try:
+                population = int(population)
+            except (TypeError, ValueError):
+                population = 0
+
+            for exc in population_exceptions:
+                support = 0
+
+                for k in exc:
+                    op = self.numeric_ops.get(k)
+                    if not op:
+                        continue
+                    res = op(population, exc[k])
+                    if not res:
+                        support = 0
+                        break
+
+                    support += 1
+
+                if support > 0:
+                    probability = exc.get('probability', 0.0)
+                    if random.random() < probability:
+                        return True
+        return False
+
+    def include_component_simple(self, component, containing_ids, country=None):
         containing = self.get_property(('components', component, 'containing'), country=country, default=None)
 
         if containing is not None:
@@ -90,35 +117,16 @@ class PlaceConfig(object):
                 if (c['type'], safe_encode(c['id'])) in containing_ids:
                     return random.random() < c['probability']
 
-        if population is not None:
-            population_exceptions = self.get_property(('components', component, 'population'), country=country, default=None)
-            if population_exceptions:
-                try:
-                    population = int(population)
-                except (TypeError, ValueError):
-                    population = 0
-
-                for exc in population_exceptions:
-                    support = 0
-
-                    for k, op in self.numeric_ops:
-                        if k not in exc:
-                            continue
-
-                        res = op(population, exc[k])
-                        if not res:
-                            support = 0
-                            break
-
-                        support += 1
-
-                    if support > 0:
-                        probability = exc.get('probability', 0.0)
-                        return random.random() < probability
-
         probability = self.get_property(('components', component, 'probability'), country=country, default=0.0)
 
         return random.random() < probability
+
+    def include_component(self, component, containing_ids, country=None, population=None, check_population=True):
+        if check_population:
+            population_exceptions = self.get_property(('components', component, 'population'), country=country, default=None)
+            if population_exceptions and self.include_by_population_exceptions(population_exceptions, population=population or 0):
+                return True
+        return self.include_component_simple(component, containing_ids, country=country)
 
     def drop_invalid_components(self, address_components, country, original_bitset=None):
         if not address_components:

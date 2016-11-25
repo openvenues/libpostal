@@ -764,7 +764,7 @@ class OSMAddressFormatter(object):
 
             self.components.remove_numeric_boundary_names(revised_address_components)
 
-            if (AddressFormatter.COUNTRY in address_components or place_config.include_component(AddressFormatter.COUNTRY, containing_ids, country=country)) and random.random() < cldr_country_prob:
+            if (AddressFormatter.COUNTRY in address_components or place_config.include_component(AddressFormatter.COUNTRY, containing_ids, country=country, check_population=False)) and random.random() < cldr_country_prob:
                 address_country = self.components.cldr_country_name(country, language)
                 if address_country:
                     address_components[AddressFormatter.COUNTRY] = address_country
