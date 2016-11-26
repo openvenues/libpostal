@@ -2436,6 +2436,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Stark County
+                    - filename:
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Ward County
                     - filename: williams.csv
 
             ne:
