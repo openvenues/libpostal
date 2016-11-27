@@ -197,6 +197,12 @@ countries:
             island:
                 probability: 0.4
 
+    # India
+    in:
+        components:
+            state:
+                probability: 0.8
+
     # Hong Kong
     hk:
         components:
@@ -430,6 +436,12 @@ countries:
     tv:
         components:
             island:
+                probability: 0.8
+
+    # Venezuela
+    ve:
+        components:
+            state:
                 probability: 0.8
 
     # Saint Vincent and the Grenadines
