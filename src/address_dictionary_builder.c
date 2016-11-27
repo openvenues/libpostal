@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
             for (int j = lang_index.index; j < lang_index.index + lang_index.len; j++) {
                 address_expansion_rule_t expansion_rule = expansion_rules[j];
 
-                uint16_t address_components = 0;
+                uint32_t address_components = 0;
 
                 address_expansion_t expansion;
                 expansion.separable = 0;
@@ -87,7 +87,7 @@ int main(int argc, char **argv) {
                         log_error("Invalid dictionary_type: %d\n", dictionary_id);
                         exit(EXIT_FAILURE);
                     }
-                    address_components |= (uint16_t) kh_value(dictionary_components, k);
+                    address_components |= kh_value(dictionary_components, k);
                 }
 
                 char *canonical = NULL;
@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
 
                     if (k != kh_end(phrase_address_components)) {
                         uint32_t val = kh_value(phrase_address_components, k);
-                        expansion.address_components = (uint16_t)val;
+                        expansion.address_components = val;
                     } else {
                         expansion.address_components = address_components;
                     }

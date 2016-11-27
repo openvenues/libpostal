@@ -275,13 +275,13 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
                 }
             }
 
-            expansion_value_t value;
-            value.value = phrase.data;
+            uint32_t expansion_index = phrase.data;
+            address_expansion_value_t *value = address_dictionary_get_expansions(expansion_index);
 
             token_t token;
 
             size_t added_expansions = 0;
-            if ((value.components & options.address_components) > 0) {
+            if ((value->components & options.address_components) > 0) {
                 key->n = namespace_len;
                 for (size_t j = phrase.start; j < phrase.start + phrase.len; j++) {
                     token = tokens->a[j];
@@ -296,7 +296,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
 
                 char *key_str = char_array_get_string(key);
                 log_debug("key_str=%s\n", key_str);
-                address_expansion_array *expansions = address_dictionary_get_expansions(key_str);
+                address_expansion_array *expansions = value->expansions;
 
                 if (expansions != NULL) {
                     for (size_t j = 0; j < expansions->n; j++) {
@@ -517,27 +517,14 @@ static void add_postprocessed_string(cstring_array *strings, char *str, normaliz
 
 
 
-static address_expansion_array *get_affix_expansions(char_array *key, char *str, char *lang, token_t token, phrase_t phrase, bool reverse, normalize_options_t options) {
-    expansion_value_t value;
-    value.value = phrase.data;
-    address_expansion_array *expansions = NULL;
-
-    if (value.components & options.address_components && (value.separable || !value.canonical)) {
-        char_array_clear(key);
-        char_array_cat(key, lang);
-        char_array_cat(key, NAMESPACE_SEPARATOR_CHAR);
-        if (reverse) {
-            char_array_cat(key, TRIE_SUFFIX_CHAR);
-            char_array_cat_reversed_len(key, str + token.offset + phrase.start, phrase.len);
-        } else {
-            char_array_cat(key, TRIE_PREFIX_CHAR);
-            char_array_cat_len(key, str + token.offset + phrase.start, phrase.len);
-        }
-        char *key_str = char_array_get_string(key);
-        log_debug("key_str=%s\n", key_str);
-        expansions = address_dictionary_get_expansions(key_str);
+static address_expansion_array *get_affix_expansions(phrase_t phrase, normalize_options_t options) {
+    uint32_t expansion_index = phrase.data;
+    address_expansion_value_t *value = address_dictionary_get_expansions(expansion_index);
+    if (value != NULL && value->components & options.address_components) {
+        return value->expansions;
     }
-    return expansions;
+
+    return NULL;
 }
 
 static inline void cat_affix_expansion(char_array *key, char *str, address_expansion_t expansion, token_t token, phrase_t phrase, normalize_options_t options) {
@@ -586,12 +573,12 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
     size_t prefix_start, prefix_end, root_end, suffix_start;
 
     if (have_prefix) {
-        prefix_expansions = get_affix_expansions(key, str, lang, token, prefix, false, options);
+        prefix_expansions = get_affix_expansions(prefix, options);
         if (prefix_expansions == NULL) have_prefix = false;
     }
 
     if (have_suffix) {
-        suffix_expansions = get_affix_expansions(key, str, lang, token, suffix, true, options);
+        suffix_expansions = get_affix_expansions(suffix, options);
         if (suffix_expansions == NULL) have_suffix = false;
     }
 
