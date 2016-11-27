@@ -773,7 +773,6 @@ inline phrase_t trie_search_prefixes(trie_t *self, char *word, size_t len) {
     return trie_search_prefixes_from_index_get_prefix_char(self, word, len, ROOT_NODE_ID);
 }
 
-
 inline char *cstring_array_get_phrase(cstring_array *str, char_array *phrase_tokens, phrase_t phrase) {
     char_array_clear(phrase_tokens);
 

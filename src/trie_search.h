@@ -40,6 +40,6 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, size_t len, u
 phrase_t trie_search_prefixes_from_index_get_prefix_char(trie_t *self, char *word, size_t len, uint32_t start_node_id);
 phrase_t trie_search_prefixes(trie_t *self, char *word, size_t len);
 
-char *cstring_array_get_phrase(tokenized_string_t *str, char_array *phrase_tokens, phrase_t phrase);
+char *cstring_array_get_phrase(cstring_array *str, char_array *phrase_tokens, phrase_t phrase);
 
 #endif
