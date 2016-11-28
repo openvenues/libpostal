@@ -90,9 +90,7 @@ ssize_t string_next_hyphen_index(char *str, size_t len);
 bool string_contains_hyphen(char *str);
 bool string_contains_hyphen_len(char *str, size_t len);
 
-size_t string_ltrim(char *str);
-size_t string_rtrim(char *str);
-size_t string_trim(char *str);
+char *string_trim(char *str);
 
 /* char_array is a dynamic character array defined in collections.h
 but has a few additional methods related to string manipulation.

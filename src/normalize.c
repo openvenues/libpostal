@@ -11,7 +11,10 @@ char *normalize_string_utf8(char *str, uint64_t options) {
     bool have_utf8proc_options = false;
 
     if (options & NORMALIZE_STRING_TRIM) {
-        string_trim(str);
+        char *trimmed = string_trim(str);
+        if (trimmed != NULL) {
+            str = trimmed;
+        }
     }
 
     if (options & NORMALIZE_STRING_DECOMPOSE) {

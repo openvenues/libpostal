@@ -411,7 +411,7 @@ inline bool string_contains_hyphen(char *str) {
     return string_next_hyphen_index(str, strlen(str)) >= 0;
 }
 
-size_t string_rtrim(char *str) {
+size_t string_right_spaces(char *str) {
     size_t spaces = 0;
 
     uint8_t *ptr = (uint8_t *)str;
@@ -433,14 +433,11 @@ size_t string_rtrim(char *str) {
         spaces++;
     }
 
-    if (spaces > 0) {
-        *(str + index) = '\0';
-    }
-
     return spaces;
+
 }
 
-size_t string_ltrim(char *str) {
+size_t string_left_spaces(char *str) {
     size_t spaces = 0;
 
     uint8_t *ptr = (uint8_t *)str;
@@ -462,17 +459,15 @@ size_t string_ltrim(char *str) {
         spaces++;
     }
 
-    if (spaces > 0) {
-        memmove(str, str + index, len + 1 - index);
-    }
-
     return spaces;
 }
 
-inline size_t string_trim(char *str) {
-    size_t spaces = string_ltrim(str);
-    spaces += string_rtrim(str);
-    return spaces;
+char *string_trim(char *str) {
+    size_t left_spaces = string_left_spaces(str);
+    size_t right_spaces = string_right_spaces(str);
+    size_t len = strlen(str);
+    char *ret = strndup(str + left_spaces, len - left_spaces - right_spaces);
+    return ret;
 }
 
 char_array *char_array_from_string(char *str) {
