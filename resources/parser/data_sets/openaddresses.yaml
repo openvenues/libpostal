@@ -1227,6 +1227,7 @@ countries:
                       city_replacements:
                           state_district: Stanislaus County
                     - filename: trinity.csv
+                    - filename: tulare.csv
                     - filename: tuolumne.csv
                       add_osm_boundaries: true
                       city_replacements:
