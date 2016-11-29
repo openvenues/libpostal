@@ -1226,6 +1226,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Stanislaus County
+                    - filename: tehama.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Tehama County
                     - filename: trinity.csv
                     - filename: tulare.csv
                     - filename: tuolumne.csv
