@@ -80,10 +80,14 @@ inline void string_upper(char *s) {
     for (; *s; ++s) *s = toupper(*s);
 }
 
-inline void string_replace(char *s, char c1, char c2) {
-    for (; *s; ++s) {
-        if (*s == c1) *s = c2;
+inline char *string_replace(char *s, char c1, char c2) {
+    char *repl = strdup(s);
+    if (repl == NULL) return NULL;
+    char *ptr = repl;
+    for (; *ptr; ++ptr) {
+        if (*ptr == c1) *ptr = c2;
     }
+    return repl;
 }
 
 inline bool string_is_upper(char *s) {

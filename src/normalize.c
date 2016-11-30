@@ -10,10 +10,13 @@ char *normalize_string_utf8(char *str, uint64_t options) {
 
     bool have_utf8proc_options = false;
 
+    char *normalized = NULL;
+
     if (options & NORMALIZE_STRING_TRIM) {
         char *trimmed = string_trim(str);
         if (trimmed != NULL) {
-            str = trimmed;
+            normalized = trimmed;
+            str = normalized;
         }
     }
 
@@ -37,8 +40,6 @@ char *normalize_string_utf8(char *str, uint64_t options) {
         utf8proc_options |= UTF8PROC_OPTIONS_LOWERCASE;
     }
 
-    char *normalized = NULL;
-
     if (have_utf8proc_options) {
         utf8proc_map((uint8_t *)str, 0, &utf8proc_normalized, utf8proc_options);
 
@@ -46,9 +47,11 @@ char *normalize_string_utf8(char *str, uint64_t options) {
         str = normalized;
     }
 
-    if (options & NORMALIZE_STRING_REPLACE_HYPHENS) {
-        string_replace(str, '-', ' ');
-        normalized = str;
+    if (options & NORMALIZE_STRING_REPLACE_HYPHENS && strchr(str, '-') != NULL) {
+        char *replaced = string_replace(str, '-', ' ');
+        if (replaced != NULL) {
+            normalized = replaced;
+        }
     }
 
     return normalized;
