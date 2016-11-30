@@ -193,14 +193,12 @@ khash_t(class_weights) *averaged_perceptron_trainer_get_class_weights(averaged_p
 
 
 static inline bool averaged_perceptron_trainer_update_weight(khash_t(class_weights) *weights, uint64_t iter, uint32_t class_id, double value) {
-    class_weight_t weight;
+    class_weight_t weight = NULL_WEIGHT;
     size_t index;
 
     khiter_t k;
     k = kh_get(class_weights, weights, class_id);
-    if (k == kh_end(weights)) {
-        weight = NULL_WEIGHT;
-    } else {
+    if (k != kh_end(weights)) {
         weight = kh_value(weights, k);
     }
 
@@ -257,7 +255,7 @@ uint32_t averaged_perceptron_trainer_predict(averaged_perceptron_trainer_t *self
         scores->n = num_classes;
     }
 
-    double_array_set(scores->a, scores->n, 0.0);
+    double_array_zero(scores->a, scores->n);
 
     cstring_array_foreach(features, i, feature, {
         if (!averaged_perceptron_trainer_get_feature_id(self, feature, &feature_id, add_if_missing)) {
@@ -368,7 +366,6 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
         }
 
         uint32_t guess = averaged_perceptron_trainer_predict(self, features);
-        char *predicted = cstring_array_get_string(self->class_strings, guess);
 
         // Online error-driven learning, only needs to update weights when it gets a wrong answer, making training fast
         if (guess != truth) {
