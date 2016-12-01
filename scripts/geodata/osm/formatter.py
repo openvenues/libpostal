@@ -194,7 +194,7 @@ class OSMAddressFormatter(object):
         sub_building_components = {k: v for k, v in six.iteritems(sub_building_components) if k in AddressFormatter.address_formatter_fields}
         return sub_building_components
 
-    def valid_venue_name(self, name, address_components, languages=None):
+    def valid_venue_name(self, name, address_components, languages=None, is_rail_station=False):
         if not name:
             return False
 
@@ -216,6 +216,9 @@ class OSMAddressFormatter(object):
         street_phrases = street_types_only_gazetteer.extract_phrases(name, languages=languages)
 
         if street_phrases - venue_phrases and not venue_phrases - street_phrases and not (AddressFormatter.HOUSE_NUMBER in address_components and AddressFormatter.ROAD in address_components):
+            return False
+
+        if is_rail_station and not venue_phrases:
             return False
 
         if not address_components and not venue_phrases:
@@ -774,6 +777,9 @@ class OSMAddressFormatter(object):
 
         return revised_place_tags, country
 
+    def is_rail_station(self, tags):
+        return tags.get('railway', '').lower() == 'station'
+
     def category_queries(self, tags, address_components, language, country=None, tag_components=True):
         formatted_addresses = []
         possible_category_keys = category_config.has_keys(language, tags)
@@ -880,6 +886,8 @@ class OSMAddressFormatter(object):
             else:
                 language = None
 
+        is_rail_station = self.is_rail_station(tags)
+
         revised_tags = self.normalize_address_components(tags)
         sub_building_tags = self.normalize_sub_building_components(tags)
         revised_tags.update(sub_building_tags)
@@ -897,8 +905,12 @@ class OSMAddressFormatter(object):
         building_venue_names = []
 
         building_components = self.building_components(latitude, longitude)
+        building_is_rail_station = False
         if building_components:
             num_floors = self.num_floors(building_components)
+
+            building_is_rail_station = self.is_rail_station(building_components)
+
             num_basements = self.num_floors(building_components, key='building:levels:underground')
 
             for building_tags in building_components:
@@ -931,8 +943,6 @@ class OSMAddressFormatter(object):
         if street_name:
             address_components[AddressFormatter.ROAD] = self.abbreviated_street(street_name, language)
 
-        venue_names.extend(building_venue_names)
-
         expanded_components = address_components.copy()
         for props, component in self.components.categorized_osm_components(country, osm_components):
             if 'name' in props and component not in expanded_components:
@@ -940,7 +950,9 @@ class OSMAddressFormatter(object):
 
         street_languages = set((language,) if language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE) else languages)
 
-        venue_names = [venue_name for venue_name in venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages)]
+        venue_names = [venue_name for venue_name in venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_rail_station=is_rail_station)]
+        venue_names.extend([venue_name for venue_name in building_venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_rail_station=building_is_rail_station)])
+
         all_venue_names = set(venue_names)
 
         # Ditto for venue names
