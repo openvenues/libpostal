@@ -42,6 +42,18 @@ global:
         - field_name: CITY
           component: city
 
+    fields_with_state: &fields_with_state
+        - field_name: NUMBER
+          component: house_number
+        - field_name: STREET
+          component: road
+        - field_name: CITY
+          component: city
+        - field_name: REGION
+          component: state
+        - field_name: POSTCODE
+          component: postcode
+
     fields_with_unit: &fields_with_unit
         - field_name: NUMBER
           component: house_number
@@ -257,6 +269,7 @@ countries:
                       city_replacements:
                           state_district: Bruce County
                     - filename: chatham_kent.csv
+                    - filename: city_of_brampton.csv
                     - filename: city_of_burlington.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -1077,19 +1090,27 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Mobile
+                    - filename: etowah.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Etowah County
                     - filename: jefferson.csv
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Jefferson County
                     - filename: montgomery.csv
                     - filename: shelby.csv
-                      add_osm_boundaries: true
+                      # Don't add OSM boundaries by default, only use county as backup
                       city_replacements:
                           state_district: Shelby County
                     - filename: st_clair.csv
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Saint Clair County
+                    - filename: talladega.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Talladega County
                     - filename: tuscaloosa.csv
 
             ar:
@@ -1159,6 +1180,8 @@ countries:
                       city_replacements:
                           state_district: Glenn County
                     - filename: humboldt.csv
+                      city_replacements:
+                          state_district: Humboldt County
                     - filename: inyo.csv
                     - filename: kings.csv
                       add_osm_boundaries: true
@@ -1266,7 +1289,6 @@ countries:
                       city_replacements:
                           city: Loveland
                     - filename: clear_creek.csv
-                      add_osm_boundaries: true
                       city_replacements:
                           state_district: Clear Creek County
                     - filename: conejos.csv
@@ -1285,7 +1307,6 @@ countries:
                       city_replacements:
                           state_district: El Paso County
                     - filename: fremont.csv
-                      add_osm_boundaries: true
                       city_replacements:
                           state_district: Fremont County
                     - filename: garfield.csv
@@ -1500,8 +1521,18 @@ countries:
                       add_osm_boundaries: false
                       fields: *fields_with_state_and_unit
                     - filename: city_of_sandy_springs.csv
+                      add_osm_boundaries: true
                       city_replacements:
                           city: Sandy Springs
+                    - filename: city_of_savannah.csv
+                    fields: *fields_with_state_and_unit
+                      add_osm_boundaries: true
+                      fields: *fields_with_state
+                      ignore_fields_containing:
+                          state:
+                              - "^[\s]*(?!ga)"
+                      city_replacements:
+                          city: Savannah
                     - filename: coffee.csv
                       city_replacements:
                           state_district: Coffee County
@@ -1901,6 +1932,7 @@ countries:
                     - filename: orange.csv
                     - filename: owen.csv
                     - filename: porter.csv
+                    - filename: statewide.csv
                     - filename: st_joseph.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -2867,6 +2899,8 @@ countries:
                     - filename: pike.csv
                     - filename: potter.csv
                     - filename: snyder.csv
+                      city_replacements:
+                          state_district: Snyder County
                     - filename: somerset.csv
                     - filename: sullivan.csv
                     - filename: tioga.csv
@@ -3357,6 +3391,7 @@ countries:
                     city_replacements:
                         city: Wright
                   - filename: crook.csv
+                  - filename: fremont.csv
                   - filename: goshen.csv
                   - filename: hot_springs.csv
                   - filename: laramie.csv
@@ -3369,6 +3404,7 @@ countries:
                         state_district: Natrona County
                   - filename: teton.csv
                     add_osm_boundaries: true
+                    fields: *fields_with_unit
                     city_replacements:
                         state_district: Teton County
 
