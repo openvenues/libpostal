@@ -90,12 +90,14 @@ def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2, a
         # local copy
         abbreviated = []
 
+        n = len(t)
+
         # Append the original tokens with whitespace if there is any
         if random.random() > abbreviate_prob or not any((int(is_canonical) and lang in (language, 'all') for lang, dictionary, is_canonical, canonical in data)):
             for j, (t_i, c_i) in enumerate(t):
                 abbreviated.append(tokens[i + j][0])
 
-                if j < length - 1:
+                if j < n - 1:
                     abbreviated.append(space_token)
             return abbreviated
 
@@ -117,6 +119,9 @@ def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2, a
 
             if not is_prefix and not is_suffix:
                 abbreviations = gazetteer.canonicals.get((canonical, lang, dictionary))
+                # TODO: maybe make this a Zipfian choice e.g. so "St" gets chosen most often for "Street"
+                # would require an audit of the dictionaries though so abbreviations are listed from
+                # left-to-right by frequency of usage
                 token = random.choice(abbreviations) if abbreviations else canonical
                 token = recase_abbreviation(token, tokens[i:i + len(t)], space_token=space_token)
                 abbreviated.append(token)
@@ -175,14 +180,12 @@ def abbreviate(gazetteer, s, language, abbreviate_prob=0.3, separate_prob=0.2, a
                     abbreviated.append(abbreviation.title())
                 else:
                     abbreviated.append(abbreviation)
-                abbreviated.append(space_token)
                 break
-            else:
-                for j, (t_i, c_i) in enumerate(t):
-                    abbreviated.append(tokens[i + j][0])
-                    if j < length - 1:
-                        abbreviated.append(space_token)
-            return abbreviated
+        else:
+            for j, (t_i, c_i) in enumerate(t):
+                abbreviated.append(tokens[i + j][0])
+                if j < n - 1:
+                    abbreviated.append(space_token)
         return abbreviated
 
     for t, c, length, data in gazetteer.filter(norm_tokens):
