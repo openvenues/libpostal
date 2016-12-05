@@ -141,7 +141,7 @@ class AddressComponents(object):
         AddressFormatter.UNIT: Unit,
     }
 
-    def __init__(self, osm_admin_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames):
+    def __init__(self, osm_admin_rtree, neighborhoods_rtree, places_index, quattroshapes_rtree, geonames):
         self.config = yaml.load(open(PARSER_DEFAULT_CONFIG))
 
         self.setup_component_dependencies()
@@ -150,6 +150,7 @@ class AddressComponents(object):
 
         self.osm_admin_rtree = osm_admin_rtree
         self.neighborhoods_rtree = neighborhoods_rtree
+        self.places_index = places_index
         self.quattroshapes_rtree = quattroshapes_rtree
         self.geonames = geonames
 
@@ -754,9 +755,18 @@ class AddressComponents(object):
                     val = self.name_hyphens(val)
             address_components[component] = val
 
+    def add_city_and_equivalent_points(self, grouped_components, containing_components, country, latitude, longitude):
+        city_replacements = place_config.city_replacements(country)
+        for props, lat, lon, dist in self.place_index.nearest_points(latitude, longitude):
+            component = self.categorize_osm_component(country, props, containing_components)
+
+            if (component == AddressFormatter.CITY or component in city_replacements) and component not in grouped_components:
+                grouped_components[component].append(props)
+
     def add_admin_boundaries(self, address_components,
                              osm_components,
                              country, language,
+                             latitude, longitude,
                              non_local_language=None,
                              language_suffix='',
                              random_key=True,
@@ -809,6 +819,9 @@ class AddressComponents(object):
             poly_components = defaultdict(list)
 
             existing_city_name = address_components.get(AddressFormatter.CITY)
+
+            if not existing_city_name and AddressFormatter.CITY not in grouped_osm_components:
+                self.add_city_and_equivalent_points(grouped_components, osm_components, country, latitude, longitude)
 
             for component, components_values in grouped_osm_components.iteritems():
                 seen = set()
@@ -1457,6 +1470,7 @@ class AddressComponents(object):
         self.replace_country_name(address_components, country, non_local_language or language)
 
         self.add_admin_boundaries(address_components, osm_components, country, language,
+                                  latitude, longitude,
                                   non_local_language=non_local_language,
                                   language_suffix=language_suffix)
 
@@ -1564,6 +1578,7 @@ class AddressComponents(object):
         self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
         self.add_admin_boundaries(address_components, osm_components, country, language,
+                                  latitude, longitude,
                                   language_suffix=language_suffix,
                                   non_local_language=non_local_language,
                                   random_key=False,

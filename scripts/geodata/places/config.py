@@ -143,6 +143,9 @@ class PlaceConfig(object):
                 address_components.pop(c)
                 component_bitset ^= ComponentDependencies.component_bit_values[c]
 
+    def city_replacements(self, country):
+        return set(self.get_property(('city_replacements', ), country=country))
+
     def dropout_components(self, components, boundaries=(), country=None, population=None, unambiguous_city=False):
         containing_ids = set()
 
@@ -169,7 +172,7 @@ class PlaceConfig(object):
 
         city_replacements = set()
         if AddressFormatter.CITY not in components:
-            city_replacements = set(self.get_property(('city_replacements', ), country=country))
+            city_replacements = self.city_replacements(country)
 
         for component in admin_components:
             include = self.include_component(component, containing_ids, country=country, population=population, unambiguous_city=unambiguous_city)
