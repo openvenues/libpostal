@@ -299,7 +299,7 @@ ring
 rise|ri
 riverway|rvwy
 riviera|rvra
-road|rd|road|r|ro|roa
+road|rd|ro|r|roa|raod
 roads|raods|rds
 roadside|rdsd|road side
 roadway|rdwy|rdw|rdy
