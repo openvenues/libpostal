@@ -821,7 +821,7 @@ class AddressComponents(object):
             existing_city_name = address_components.get(AddressFormatter.CITY)
 
             if not existing_city_name and AddressFormatter.CITY not in grouped_osm_components:
-                self.add_city_and_equivalent_points(grouped_components, osm_components, country, latitude, longitude)
+                self.add_city_and_equivalent_points(grouped_osm_components, osm_components, country, latitude, longitude)
 
             for component, components_values in grouped_osm_components.iteritems():
                 seen = set()
