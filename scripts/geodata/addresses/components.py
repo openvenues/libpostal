@@ -757,7 +757,7 @@ class AddressComponents(object):
 
     def add_city_and_equivalent_points(self, grouped_components, containing_components, country, latitude, longitude):
         city_replacements = place_config.city_replacements(country)
-        for props, lat, lon, dist in self.place_index.nearest_points(latitude, longitude):
+        for props, lat, lon, dist in self.places_index.nearest_points(latitude, longitude):
             component = self.categorize_osm_component(country, props, containing_components)
 
             if (component == AddressFormatter.CITY or component in city_replacements) and component not in grouped_components:
