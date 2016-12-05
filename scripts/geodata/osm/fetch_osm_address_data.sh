@@ -159,8 +159,8 @@ rm $PLANET_RAILWAYS_O5M
 osmfilter $PLANET_RAILWAYS_LATLONS --keep="$VALID_RAIL_STATION_KEYS" -o=$PLANET_RAILWAYS
 
 echo "Filtering for neighborhoods"
-PLANET_NEIGHBORHOODS="planet-neighborhoods.osm"
-osmfilter $PLANET_O5M --keep="name= and ( $VALID_LOCALITY_KEYS )" --drop-relations --drop-ways --ignore-dependencies --drop-author --drop-version -o=$PLANET_NEIGHBORHOODS
+PLANET_LOCALITIES="planet-localities.osm"
+osmfilter $PLANET_O5M --keep="name= and ( $VALID_LOCALITY_KEYS )" --drop-relations --drop-ways --ignore-dependencies --drop-author --drop-version -o=$PLANET_LOCALITIES
 
 echo "Filtering for subdivision polygons"
 PLANET_SUBDIVISIONS="planet-subdivisions.osm"
