@@ -62,7 +62,7 @@ class AddressComponents(object):
     prefixes like "London Borough of", pruning duplicates like "Antwerpen, Antwerpen, Antwerpen".
 
     Usage:
-    >>> components = AddressComponents(osm_admin_rtree, neighborhoods_rtree, buildings_rtree, subdivisions_rtree, quattroshapes_rtree, geonames)
+    >>> components = AddressComponents(osm_admin_rtree, neighborhoods_rtree, places_index, quattroshapes_rtree, geonames)
     >>> components.expand({'name': 'Hackney Empire'}, 51.54559, -0.05567)
 
     Returns (results vary because of randomness):

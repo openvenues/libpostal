@@ -430,7 +430,7 @@ class OpenAddressesFormatter(object):
                 unambiguous_city = False
                 if add_osm_boundaries or AddressFormatter.CITY not in components:
                     osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
-                    self.components.add_admin_boundaries(components, osm_components, country, language)
+                    self.components.add_admin_boundaries(components, osm_components, country, language, latitude, longitude)
                     categorized = self.components.categorized_osm_components(country, osm_components)
                     for component, label in categorized:
                         if label == AddressFormatter.CITY:

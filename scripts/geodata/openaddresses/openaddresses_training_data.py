@@ -15,6 +15,7 @@ from geodata.addresses.components import AddressComponents
 from geodata.geonames.db import GeoNamesDB
 from geodata.polygons.language_polys import LanguagePolygonIndex
 from geodata.neighborhoods.reverse_geocode import NeighborhoodReverseGeocoder
+from geodata.places.reverse_geocode import PlaceReverseGeocoder
 from geodata.polygons.reverse_geocode import OSMReverseGeocoder, OSMCountryReverseGeocoder, QuattroshapesReverseGeocoder
 
 
@@ -47,6 +48,10 @@ if __name__ == '__main__':
                         default=None,
                         help='Quattroshapes reverse geocoder RTree directory')
 
+    parser.add_argument('--places-index-dir',
+                        default=None,
+                        help='Places index directory')
+
     parser.add_argument('--geonames-db',
                         default=None,
                         help='GeoNames db file')
@@ -76,6 +81,10 @@ if __name__ == '__main__':
     if args.neighborhoods_rtree_dir:
         neighborhoods_rtree = NeighborhoodReverseGeocoder.load(args.neighborhoods_rtree_dir)
 
+    places_index = None
+    if args.places_index_dir:
+        places_index = PlaceReverseGeocoder.load(args.places_index_dir)
+
     quattroshapes_rtree = None
     if args.quattroshapes_rtree_dir:
         quattroshapes_rtree = QuattroshapesReverseGeocoder.load(args.quattroshapes_rtree_dir)
@@ -86,7 +95,7 @@ if __name__ == '__main__':
         geonames = GeoNamesDB(args.geonames_db)
 
     if args.openaddresses_dir and args.format:
-        components = AddressComponents(osm_rtree, neighborhoods_rtree, quattroshapes_rtree, geonames)
+        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index, quattroshapes_rtree, geonames)
 
         oa_formatter = OpenAddressesFormatter(components, country_rtree, debug=args.debug)
         oa_formatter.build_training_data(args.openaddresses_dir, args.out_dir, tag_components=not args.untagged)

@@ -646,6 +646,7 @@ class OSMAddressFormatter(object):
                         address_components = {component_name: name}
 
                         self.components.add_admin_boundaries(address_components, osm_components, country, UNKNOWN_LANGUAGE,
+                                                             latitude, longitude,
                                                              random_key=num_references > 1,
                                                              language_suffix=language_suffix,
                                                              drop_duplicate_city_names=False)
@@ -689,6 +690,7 @@ class OSMAddressFormatter(object):
                 for i in xrange(n):
                     address_components = {component_name: name}
                     self.components.add_admin_boundaries(address_components, osm_components, country, language,
+                                                         latitude, longitude,
                                                          random_key=is_default,
                                                          language_suffix=language_suffix,
                                                          drop_duplicate_city_names=False)
@@ -725,6 +727,7 @@ class OSMAddressFormatter(object):
                 for i in xrange(num_references / 2 if language == ENGLISH else min_references / 2):
                     address_components = {component_name: name}
                     self.components.add_admin_boundaries(address_components, osm_components, country, language,
+                                                         latitude, longitude,
                                                          random_key=False,
                                                          non_local_language=language,
                                                          language_suffix=language_suffix,

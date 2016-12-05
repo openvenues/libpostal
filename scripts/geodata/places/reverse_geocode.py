@@ -94,7 +94,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-i', '--osm-places-file',
-                        help='Path to OSM metro stations file')
+                        help='Path to OSM places file')
 
     parser.add_argument('-p', '--precision',
                         type=int,
