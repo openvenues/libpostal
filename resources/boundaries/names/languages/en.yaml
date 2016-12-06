@@ -2,6 +2,8 @@
 # Note these will be stripped off the front at random, not every time
 prefixes:
     - city of
+    - city and borough of
+    - city and county of
     - township of
     - town of
     - regional municipality of
@@ -16,6 +18,7 @@ prefixes:
     - free state of
     - autonomous city of
     - territorial waters of
+    - county
     - county of
     - district of
 
