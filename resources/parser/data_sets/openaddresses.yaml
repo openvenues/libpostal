@@ -511,9 +511,10 @@ countries:
 
     ch:
         files:
+            - filename: bern.csv
+            - filename: fribourg.csv
             - filename: geneva.csv
               language: fr
-            - filename: bern.csv
             - filename: zurich.csv
               language: de
 
@@ -1012,6 +1013,10 @@ countries:
             - filename: warminsko-mazurskie.csv
             - filename: wielkopolskie.csv
             - filename: zachodniopomorskie.csv
+
+    se:
+        files:
+            - filename: municipality_of_kalmar.csv
 
     sg:
         files:
