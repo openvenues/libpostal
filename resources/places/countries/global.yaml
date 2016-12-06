@@ -197,6 +197,17 @@ countries:
             island:
                 probability: 0.4
 
+    # Ireland
+    ie:
+        components:
+            state_district:
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.5
+                    - lt: 10000
+                      probability: 0.8
+
     # India
     in:
         components:
