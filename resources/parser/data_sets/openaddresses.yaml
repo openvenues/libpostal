@@ -2479,7 +2479,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Stark County
-                    - filename:
+                    - filename: ward.csv
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Ward County
