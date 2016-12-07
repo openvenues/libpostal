@@ -1017,6 +1017,7 @@ countries:
     se:
         files:
             - filename: municipality_of_kalmar.csv
+            - filename: municipality_of_Österåker.csv
 
     sg:
         files:
@@ -1103,6 +1104,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Jefferson County
+                    - filename: madison.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Madison County
                     - filename: montgomery.csv
                     - filename: shelby.csv
                       # Don't add OSM boundaries by default, only use county as backup
@@ -1131,6 +1136,10 @@ countries:
                 files:
                     - filename: city_of_glendale.csv
                     - filename: city_of_mesa.csv
+                    - filename: coconino.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Coconino County
                     - filename: gila.csv
                     - filename: maricopa.csv
                     - filename: pima.csv
@@ -2483,6 +2492,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Stark County
+                    - filename: stutsman.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Stutsman County
                     - filename: ward.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -2789,12 +2802,22 @@ countries:
                     state: OK
                 files:
                     - filename: acog-counties.csv
-                      add_osm_boundaries: true
+                      ignore_fields_containing:
+                          city:
+                              - "^[\\s]*rural[\\s]*$"
                     - filename: carter-county.csv
                     - filename: city_of_lawton.csv
                       add_osm_boundaries: true
                       city_replacements:
                           city: Lawton
+                    - filename: oklahoma.csv
+                      add_osm_boundaries: true
+                      ignore_fields_containing:
+                          # Intersections, not valid house numbers
+                          house_number:
+                              - "^99999$"
+                      city_replacements:
+                          state_district: Oklahoma County
 
             or:
                 add:
@@ -3012,6 +3035,9 @@ countries:
                     - filename: city_of_nashville.csv
                     - filename: city_of_spring_hill.csv
                     - filename: franklin.csv
+                    - filename: hamilton.csv
+                      city_replacements:
+                          state_district: Hamilton County
                     - filename: putnam.csv
                     - filename: sevier.csv
                     - filename: shelby.csv
@@ -3185,6 +3211,9 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Red River County
+                    - filename: rockwall.csv
+                      city_replacements:
+                          city: Rockwall
                     - filename: round_rock.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -3411,6 +3440,10 @@ countries:
                     add_osm_boundaries: true
                     city_replacements:
                         state_district: Natrona County
+                  - filename: sublette.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Sublette County
                   - filename: teton.csv
                     add_osm_boundaries: true
                     fields: *fields_with_unit
