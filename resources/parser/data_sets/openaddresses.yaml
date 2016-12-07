@@ -2272,6 +2272,7 @@ countries:
                     - filename: bates.csv
                     - filename: boone.csv
                     - filename: city_of_columbia.csv
+                    - filename: city_of_kansas_city.csv
                     - filename: city_of_perryville.csv
                       add_osm_boundaries: true
                       city_replacements:
