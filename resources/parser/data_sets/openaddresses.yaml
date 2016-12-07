@@ -1530,12 +1530,12 @@ countries:
                       city_replacements:
                           city: Sandy Springs
                     - filename: city_of_savannah.csv
-                    fields: *fields_with_state_and_unit
+                      fields: *fields_with_state_and_unit
                       add_osm_boundaries: true
                       fields: *fields_with_state
                       ignore_fields_containing:
                           state:
-                              - "^[\s]*(?!ga)"
+                            - "^[\\s]*(?!ga)"
                       city_replacements:
                           city: Savannah
                     - filename: coffee.csv
