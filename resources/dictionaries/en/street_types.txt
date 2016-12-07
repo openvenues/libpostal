@@ -379,8 +379,8 @@ turnpike|tpk|tpke
 underpass|upas|upass|ups|under pass
 union|un
 unions|uns
-us highway|us hwy
-us route|us rte
+us highway|us hwy|u s hwy
+us route|us rte|u s rte
 vale|va|vl
 valley|vlly|vly|vy
 valleys|vlys|vllys
