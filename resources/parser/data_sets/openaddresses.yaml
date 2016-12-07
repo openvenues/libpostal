@@ -2051,6 +2051,9 @@ countries:
                       city_replacements:
                           state_district: Hardin County
                     - filename: jefferson.csv
+                    - filename: kenton.csv
+                      city_replacements:
+                          state_district: Kenton County
                     - filename: lexington-fayette.csv
                       add_osm_boundaries: true
                       city_replacements:
