@@ -18,18 +18,27 @@ prefixes:
     - free state of
     - autonomous city of
     - territorial waters of
-    - county
     - county of
+    - county
     - district of
 
 # Suffixes which can be stripped to normalize a place name
 suffixes:
     - township
     - municipality
-    - city
     - cp
     - civil parish
     - community development council
     - cdc
     - council
+    - borough council
     - city council
+
+countries:
+    gb:
+        suffixes:
+            - city
+
+    ie:
+        suffixes:
+            - city
