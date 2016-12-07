@@ -1099,7 +1099,7 @@ class AddressComponents(object):
         self.add_sub_building_phrase(AddressFormatter.LEVEL, floor_phrase_type, address_components, generated[AddressFormatter.LEVEL], language, country=country, num_floors=num_floors)
         self.add_sub_building_phrase(AddressFormatter.UNIT, unit_phrase_type, address_components, generated[AddressFormatter.UNIT], language, country=country, zone=zone)
 
-    def replace_name_affixes(self, address_components, language):
+    def replace_name_affixes(self, address_components, language, country=None):
         '''
         Name normalization
         ------------------
@@ -1115,10 +1115,11 @@ class AddressComponents(object):
             name = address_components[component]
             if not name:
                 continue
-            replacement = name_affixes.replace_suffixes(name, language)
-            replacement = name_affixes.replace_prefixes(replacement, language)
-            if replacement != name and random.random() < replacement_prob and not replacement.isdigit():
-                address_components[component] = replacement
+
+            if random.random() < replacement_prob:
+                replacement = name_affixes.replace_affixes(name, language, country=country)
+                if replacement != name and not replacement.isdigit():
+                    address_components[component] = replacement
 
     def replace_names(self, address_components):
         '''
@@ -1486,7 +1487,7 @@ class AddressComponents(object):
         self.cleanup_boundary_names(address_components)
         self.country_specific_cleanup(address_components, country)
 
-        self.replace_name_affixes(address_components, non_local_language or language)
+        self.replace_name_affixes(address_components, non_local_language or language, country=country)
 
         self.replace_names(address_components)
 

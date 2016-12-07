@@ -114,22 +114,23 @@ class GeoPlanetFormatter(object):
 
         print('Doing variant aliases')
         variant_aliases = 0
-        for i, row in enumerate(self.db.execute('''select a.*, p.name from aliases a
+        for i, row in enumerate(self.db.execute('''select a.*, p.name, p.country_code from aliases a
                                                    join places p using(id)
                                                    where a.name_type = "V"
                                                    and a.language = p.language''')):
-            place_name = row[-1]
+            place_name, country_code = row[-2:]
+            country = country_code.lower()
 
-            row = row[:-1]
+            row = row[:-2]
             place_id, alias, name_type, language = row
 
             language = self.language_codes[language]
             if language != 'unk':
-                alias_sans_affixes = name_affixes.replace_prefixes(name_affixes.replace_suffixes(alias, language), language)
+                alias_sans_affixes = name_affixes.replace_affixes(alias, language, country=country)
                 if alias_sans_affixes:
                     alias = alias_sans_affixes
 
-                place_name_sans_affixes = name_affixes.replace_prefixes(name_affixes.replace_suffixes(place_name, language), language)
+                place_name_sans_affixes = name_affixes.replace_affixes(alias, language, country=country)
                 if place_name_sans_affixes:
                     place_name = place_name_sans_affixes
             else:
@@ -280,7 +281,7 @@ class GeoPlanetFormatter(object):
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
-        sys.exit('Usage: python download_geoplanet.py geoplanet_db_path out_dir')
+        sys.exit('Usage: python geoplanet_training_data.py geoplanet_db_path out_dir')
 
     geoplanet_db_path = sys.argv[1]
     out_dir = sys.argv[2]

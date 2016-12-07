@@ -109,4 +109,7 @@ class NameAffixes(object):
 
         return re.sub(six.u(''), name)
 
+    def replace_affixes(self, name, lang, country=None, sim_only=False):
+        return self.replace_prefixes(self.replace_suffixes(name, lang, country=country, sim_only=sim_only), lang, country=country, sim_only=sim_only)
+
 name_affixes = NameAffixes()
