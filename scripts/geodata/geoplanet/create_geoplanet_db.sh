@@ -24,6 +24,7 @@ GEOPLANET_ORIGINAL_PLACES_FILE="geoplanet_places_7.10.0.tsv"
 GEOPLANET_ADMINS_FILE="geoplanet_admins_7.10.0.tsv"
 GEOPLANET_ORIGINAL_ALIASES_FILE="geoplanet_aliases_7.10.0.tsv"
 
+GEOPLANET_ALL_PLACES_FILE="geoplanet_all_places.tsv"
 GEOPLANET_PLACES_FILE="geoplanet_places.tsv"
 GEOPLANET_POSTAL_CODES_FILE="geoplanet_postal_codes.tsv"
 GEOPLANET_ALIASES_FILE="geoplanet_aliases.tsv"
@@ -55,6 +56,9 @@ unzip -o $GEOPLANET_ZIP_FILE
 echo "Creating GeoPlanet postal codes file"
 awk -F'\t' 'BEGIN{OFS="\t";} {if ($5 == "Zip") print $0;}' $GEOPLANET_ORIGINAL_PLACES_FILE > $GEOPLANET_POSTAL_CODES_FILE
 
+echo "Creating GeoPlanet all places file"
+tail +2 $GEOPLANET_ORIGINAL_PLACES_FILE > $GEOPLANET_ALL_PLACES_FILE
+
 echo "Creating GeoPlanet places file"
 awk -F'\t' 'BEGIN{OFS="\t";} {if ($5 == "Continent" || $5 == "Country" || $5 == "Nationality" || $5 == "State" || $5 == "County" ||  $5 == "Town" || $5 == "LocalAdmin" || $5 == "Island" || $5 == "Suburb") print $0;}' $GEOPLANET_ORIGINAL_PLACES_FILE > $GEOPLANET_PLACES_FILE
 
@@ -83,6 +87,10 @@ CREATE TABLE places (
 CREATE INDEX places_parent_id_index on places(parent_id);
 CREATE INDEX places_country_code on places(country_code);
 
+DROP TABLE IF EXISTS all_places;
+CREATE TABLE all_places AS SELECT * FROM places WHERE 0;
+.import $OUT_DIR/$GEOPLANET_ALL_PLACES_FILE all_places
+
 DROP TABLE IF EXISTS postal_codes;
 CREATE TABLE postal_codes (
     id integer primary key,
@@ -93,7 +101,7 @@ CREATE TABLE postal_codes (
     parent_id integer
 );
 
-.import $GEOPLANET_POSTAL_CODES_FILE postal_codes
+.import $OUT_DIR/$GEOPLANET_POSTAL_CODES_FILE postal_codes
 CREATE INDEX postal_codes_parent_id_index on postal_codes(parent_id);
 CREATE INDEX postal_codes_country_code on postal_codes(country_code);
 
@@ -108,7 +116,7 @@ CREATE TABLE admins (
     continent_id integer
 );
 
-.import $GEOPLANET_ADMINS_FILE admins
+.import $OUT_DIR/$GEOPLANET_ADMINS_FILE admins
 
 CREATE INDEX admin_country_code on admins(country_code);
 CREATE INDEX admin_state_id on admins(state_id);
@@ -125,7 +133,7 @@ CREATE TABLE aliases (
     language text
 );
 
-.import $GEOPLANET_ALIASES_FILE aliases
+.import $OUT_DIR/$GEOPLANET_ALIASES_FILE aliases
 
 CREATE INDEX alias_id on aliases(id);
 
@@ -139,7 +147,7 @@ CREATE TABLE geonames_concordance (
 );
 
 .mode csv
-.import $GEOPLANET_GEONAMES_CONCORDANCE_FILE geonames_concordance
+.import $OUT_DIR/$GEOPLANET_GEONAMES_CONCORDANCE_FILE geonames_concordance
 
 CREATE INDEX geonames_concordance_geonames_id on geonames_concordance(geonames_id);
 
