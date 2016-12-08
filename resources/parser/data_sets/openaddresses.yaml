@@ -1559,6 +1559,9 @@ countries:
                     - filename: dougherty.csv
                       city_replacements:
                           state_district: Dougherty County
+                    - filename: douglas.csv
+                      city_replacements:
+                          state_district: Douglas County
                     - filename: echols.csv
                       city_replacements:
                           state_district: Echols County
@@ -1613,6 +1616,9 @@ countries:
                     - filename: muscogee.csv
                       city_replacements:
                           state_district: Muscogee County
+                    - filename: paulding.csv
+                      city_replacements:
+                          state_district: Paulding County
                     - filename: pierce.csv
                       city_replacements:
                           state_district: Pierce County
@@ -2334,10 +2340,15 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Hinds County
+                    - filename: jackson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Jackson County
                     - filename: pontotoc.csv
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Pontotoc County
+                    - filename: rankin.csv
                     - filename: simpson.csv
 
             mt:
