@@ -88,6 +88,32 @@ class GeoPlanetFormatter(object):
         self.places = {row[0]: row[1:] for row in self.db.execute('select * from places')}
         self.aliases = defaultdict(list)
 
+        self.coterminous_admins = {}
+        self.admins_with_ambiguous_city = set()
+
+        print('Doing admin ambiguities')
+        for row in self.db.execute('''select p.id,
+                                             (select count(*) from places where parent_id = p.id) as num_places,
+                                             (select count(*) from places where parent_id = p.id and place_type = "Town") as num_towns,
+                                             p2.id
+                                      from places p
+                                      join places p2
+                                          on p2.parent_id = p.id
+                                          and p.name = p2.name
+                                          and p.place_type != "Town"
+                                          and p2.place_type = "Town"
+                                      group by p.id'''):
+            place_id, num_places, num_towns, coterminous_town_id = row
+            num_places = int(num_places)
+            num_towns = int(num_towns)
+
+            if num_places == 1 and num_towns == 1:
+                self.coterminous_admins[place_id] = coterminous_town_id
+            self.admins_with_ambiguous_city.add(place_id)
+
+        print('num coterminous: {}'.format(len(self.coterminous_admins)))
+        print('num ambiguous: {}'.format(len(self.admins_with_ambiguous_city)))
+
         print('Doing aliases')
         for row in self.db.execute('''select a.* from aliases a
                                       left join places p
@@ -130,7 +156,7 @@ class GeoPlanetFormatter(object):
                 if alias_sans_affixes:
                     alias = alias_sans_affixes
 
-                place_name_sans_affixes = name_affixes.replace_affixes(alias, language, country=country)
+                place_name_sans_affixes = name_affixes.replace_affixes(place_name, language, country=country)
                 if place_name_sans_affixes:
                     place_name = place_name_sans_affixes
             else:
@@ -173,6 +199,11 @@ class GeoPlanetFormatter(object):
 
             language = self.language_codes[language]
 
+            # If the county/state is coterminous with a city and contains only one place,
+            # set the parent_id to the city instead
+            if parent_id in self.coterminous_admins:
+                parent_id = self.coterminous_admins[parent_id]
+
             place_hierarchy = self.get_place_hierarchy(parent_id)
 
             containing_places = defaultdict(set)
@@ -183,6 +214,15 @@ class GeoPlanetFormatter(object):
 
             have_default_language = False
 
+            if place_hierarchy:
+                base_place_id, _, _, _, base_place_type, _ = place_hierarchy[0]
+                base_place_type = self.place_types[base_place_type]
+            else:
+                base_place_id = None
+                base_place_type = None
+
+            place_types_seen = set()
+
             for place_id, country, name, lang, place_type, parent in place_hierarchy:
                 country = country.lower()
 
@@ -191,13 +231,12 @@ class GeoPlanetFormatter(object):
                     language = self.language_codes[lang]
                     have_default_language = True
 
-                name = self.cleanup_name(name)
-
                 place_type = self.place_types[place_type]
-                containing_places[place_type].add(name)
+                if AddressFormatter.CITY not in place_types_seen and place_id in self.admins_with_ambiguous_city:
+                    continue
 
-                if place_type == AddressFormatter.COUNTRY:
-                    pass
+                name = self.cleanup_name(name)
+                containing_places[place_type].add(name)
 
                 aliases = self.get_aliases(place_id)
                 for name, name_type, alias_lang in aliases:
@@ -215,6 +254,10 @@ class GeoPlanetFormatter(object):
 
                     lang_places[place_type].add(name)
 
+                place_types_seen.add(place_type)
+
+            default_city_names = set([name.lower() for name in language_places.get(None, {}).get(AddressFormatter.CITY, [])])
+
             for language, containing_places in six.iteritems(language_places):
                 if language is None:
                     language = original_language
@@ -229,12 +272,19 @@ class GeoPlanetFormatter(object):
                 keys = containing_places.keys()
                 all_values = containing_places.values()
 
+                keys_set = set(keys)
+
                 for i, values in enumerate(itertools.product(*all_values)):
                     components = {
                         AddressFormatter.POSTCODE: postal_code
                     }
 
-                    components.update(zip(keys, values))
+                    if not default_city_names:
+                        components.update(zip(keys, values))
+                    else:
+                        for k, v in zip(keys, values):
+                            if k == AddressFormatter.CITY or AddressFormatter.CITY in keys_set or v.lower() not in default_city_names:
+                                components[k] = v
 
                     format_language = language if self.formatter.template_language_matters(country, language) else None
                     formatted = self.formatter.format_address(components, country, language=format_language,
