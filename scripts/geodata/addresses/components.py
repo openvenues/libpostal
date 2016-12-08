@@ -231,6 +231,9 @@ class AddressComponents(object):
     def osm_country_and_languages(self, osm_components):
         return OSMCountryReverseGeocoder.country_and_languages_from_components(osm_components)
 
+    def osm_component_is_village(self, component):
+        return component.get('place', '').lower() in ('locality', 'village', 'hamlet')
+
     def categorize_osm_component(self, country, props, containing_components):
 
         containing_ids = [(c['type'], c['id']) for c in containing_components if 'type' in c and 'id' in c]
@@ -757,10 +760,13 @@ class AddressComponents(object):
 
     def add_city_and_equivalent_points(self, grouped_components, containing_components, country, latitude, longitude):
         city_replacements = place_config.city_replacements(country)
+
         for props, lat, lon, dist in self.places_index.nearest_points(latitude, longitude):
             component = self.categorize_osm_component(country, props, containing_components)
 
-            if (component == AddressFormatter.CITY or component in city_replacements) and component not in grouped_components:
+            have_sub_city = AddressFormatter.SUBURB in grouped_components or AddressFormatter.CITY_DISTRICT in grouped_components
+
+            if (component == AddressFormatter.CITY or component in city_replacements) and component not in grouped_components and (not have_sub_city or not self.osm_component_is_village(props)):
                 grouped_components[component].append(props)
 
     def add_admin_boundaries(self, address_components,
