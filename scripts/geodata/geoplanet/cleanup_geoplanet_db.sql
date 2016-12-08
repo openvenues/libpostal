@@ -323,6 +323,21 @@
     set county_id = 0
     where state_id = 2347567;
 
+    -- Counties outside of Louisiana should be $name County
+    update places
+    set name = printf("%s County", name)
+    where country_code = "US"
+    and place_type = "County"
+    and name not like "% City"
+    and parent_id not in (2347577, 2347560);
+
+    -- Counties outside of Louisiana should be $name County
+    update places
+    set name = printf("%s Parish", name)
+    where country_code = "US"
+    and place_type = "County"
+    and parent_id != 2347577;
+
     -- Preferred name for New York
     update aliases
     set name_type = "P"
