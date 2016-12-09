@@ -37,6 +37,9 @@ DEFAULT_TOKEN_OPTIONS = NORMALIZE_TOKEN_REPLACE_HYPHENS | \
     NORMALIZE_TOKEN_DROP_ENGLISH_POSSESSIVES | \
     NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE
 
+TOKEN_OPTIONS_DROP_PERIODS = NORMALIZE_TOKEN_DELETE_FINAL_PERIOD | \
+    NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS
+
 DEFAULT_TOKEN_OPTIONS_NUMERIC = (DEFAULT_TOKEN_OPTIONS | NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC)
 
 
@@ -62,6 +65,10 @@ def normalize_string(s, string_options=DEFAULT_STRING_OPTIONS):
         normalized = _normalize.normalize_string_utf8(s, string_options)
 
     return normalized
+
+
+def normalize_token(s, t, token_options=DEFAULT_TOKEN_OPTIONS):
+    return _normalize.normalize_token(s, t, token_options)
 
 
 def normalized_tokens(s, string_options=DEFAULT_STRING_OPTIONS,
