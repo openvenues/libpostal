@@ -171,8 +171,10 @@ class OpenAddressesFormatter(object):
         return country_name
 
     @classmethod
-    def cleanup_number(cls, num):
+    def cleanup_number(cls, num, strip_commas=False):
         num = num.strip()
+        if strip_commas:
+            num = num.replace(six.u(','), six.u(''))
         try:
             num_int = int(num)
         except (ValueError, TypeError):
@@ -224,6 +226,7 @@ class OpenAddressesFormatter(object):
         add_osm_boundaries = bool(self.get_property('add_osm_boundaries', *configs) or False)
         add_osm_neighborhoods = bool(self.get_property('add_osm_neighborhoods', *configs) or False)
         non_numeric_units = bool(self.get_property('non_numeric_units', *configs) or False)
+        house_number_strip_commas = bool(self.get_property('house_number_strip_commas', *configs) or False)
         numeric_postcodes_only = bool(self.get_property('numeric_postcodes_only', *configs) or False)
         postcode_strip_non_digit_chars = bool(self.get_property('postcode_strip_non_digit_chars', *configs) or False)
 
@@ -349,7 +352,7 @@ class OpenAddressesFormatter(object):
 
                 house_number = components.get(AddressFormatter.HOUSE_NUMBER, None)
                 if house_number:
-                    house_number = self.cleanup_number(house_number)
+                    house_number = self.cleanup_number(house_number, strip_commas=house_number_strip_commas)
                     if house_number is not None:
                         components[AddressFormatter.HOUSE_NUMBER] = house_number
 

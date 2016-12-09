@@ -85,6 +85,8 @@ global:
     add_osm_boundaries: false
     add_osm_neighborhoods: true
 
+    house_number_strip_commas: false
+
     # Units have strong restrictions, have to be a number or hyphenated number
     non_numeric_units: false
 
@@ -1140,6 +1142,8 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Coconino County
+                    - filename: cochise.csv
+                      house_number_strip_commas: true
                     - filename: gila.csv
                     - filename: maricopa.csv
                     - filename: pima.csv
@@ -2049,10 +2053,6 @@ countries:
                 add:
                     state: KY
                 files:
-                    - filename: boone.csv
-                      add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Boone County
                     - filename: city_of_paducah.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -3294,6 +3294,7 @@ countries:
                     - filename: city_of_spokane.csv
                     - filename: city_of_yakima.csv
                     - filename: clallam.csv
+                    - filename: clark.csv
                     - filename: cowlitz.csv
                     - filename: douglas.csv
                     - filename: franklin.csv
@@ -3329,6 +3330,7 @@ countries:
                           state_district: Snohomish County
                     - filename: snohomish.csv
                     - filename: spokane.csv
+                    - filename: thurston.csv
                     - filename: walla_walla.csv
 
             wi:
