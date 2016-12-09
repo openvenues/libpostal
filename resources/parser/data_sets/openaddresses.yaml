@@ -3331,6 +3331,7 @@ countries:
                     - filename: snohomish.csv
                     - filename: spokane.csv
                     - filename: thurston.csv
+                      fields: *fields_with_unit
                     - filename: walla_walla.csv
 
             wi:
