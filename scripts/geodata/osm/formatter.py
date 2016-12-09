@@ -912,8 +912,6 @@ class OSMAddressFormatter(object):
         if building_components:
             num_floors = self.num_floors(building_components)
 
-            building_is_rail_station = self.is_rail_station(building_components)
-
             num_basements = self.num_floors(building_components, key='building:levels:underground')
 
             for building_tags in building_components:
@@ -924,6 +922,8 @@ class OSMAddressFormatter(object):
                         revised_tags[k] = v
                     elif k == AddressFormatter.HOUSE:
                         building_venue_names.append(v)
+
+                    building_is_rail_station = building_is_rail_station or self.is_rail_station(building_tags)
 
         subdivision_components = self.subdivision_components(latitude, longitude)
         if subdivision_components:
