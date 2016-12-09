@@ -25,6 +25,8 @@ typedef struct address_parser_data_set {
     FILE *f;
     token_array *tokens;
     tokenized_string_t *tokenized_str;
+    cstring_array *normalizations;
+    size_t norm;
     cstring_array *labels;
     uint32_array *separators;
     char_array *language;
