@@ -358,7 +358,9 @@ class AddressComponents(object):
         phrase_filter = PhraseFilter([(n.lower(), '') for n in names])
 
         tokens = tokenize(name)
-        tokens_lower = [(t.lower(), c) for t, c in tokens]
+        tokens_lower = normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
+                                         token_options=TOKEN_OPTIONS_DROP_PERIODS)
+
         phrases = list(phrase_filter.filter(tokens_lower))
 
         num_phrases = 0
