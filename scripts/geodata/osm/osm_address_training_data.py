@@ -516,10 +516,6 @@ if __name__ == '__main__':
     if args.places_index_dir:
         places_index = PlaceReverseGeocoder.load(args.places_index_dir)
 
-    quattroshapes_rtree = None
-    if args.quattroshapes_rtree_dir:
-        quattroshapes_rtree = QuattroshapesReverseGeocoder.load(args.quattroshapes_rtree_dir)
-
     metro_stations_index = None
     if args.metro_stations_index_dir:
         metro_stations_index = MetroStationReverseGeocoder.load(args.metro_stations_index_dir)
@@ -531,11 +527,6 @@ if __name__ == '__main__':
     buildings_rtree = None
     if args.buildings_rtree_dir:
         buildings_rtree = OSMBuildingReverseGeocoder.load(args.buildings_rtree_dir)
-
-    geonames = None
-
-    if args.geonames_db:
-        geonames = GeoNamesDB(args.geonames_db)
 
     # Can parallelize
     if args.streets_file:
@@ -550,28 +541,24 @@ if __name__ == '__main__':
             parser.error('--rtree-dir required for formatted addresses')
         elif neighborhoods_rtree is None:
             parser.error('--neighborhoods-rtree-dir required for formatted addresses')
-        elif quattroshapes_rtree is None:
-            parser.error('--quattroshapes-rtree-dir required for formatted addresses')
-        elif geonames is None:
-            parser.error('--geonames-db required for formatted addresses')
         elif places_index is None:
             parser.error('--places-index-dir required for formatted addresses')
 
     if args.address_file and args.format:
-        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index, quattroshapes_rtree, geonames)
+        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index)
         osm_formatter = OSMAddressFormatter(components, country_rtree, subdivisions_rtree, buildings_rtree, metro_stations_index)
         osm_formatter.build_training_data(args.address_file, args.out_dir, tag_components=not args.untagged)
     if args.address_file and args.limited_addresses:
-        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index, quattroshapes_rtree, geonames)
+        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index)
         osm_formatter = OSMAddressFormatter(components, country_rtree, subdivisions_rtree, buildings_rtree, metro_stations_index, splitter=u' ')
         osm_formatter.build_limited_training_data(args.address_file, args.out_dir)
 
     if args.place_nodes_file and args.format:
-        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index, quattroshapes_rtree, geonames)
+        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index)
         osm_formatter = OSMAddressFormatter(components, country_rtree, subdivisions_rtree, buildings_rtree, metro_stations_index)
         osm_formatter.build_place_training_data(args.place_nodes_file, args.out_dir, tag_components=not args.untagged)
 
     if args.intersections_file and args.format:
-        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index, quattroshapes_rtree, geonames)
+        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index)
         osm_formatter = OSMAddressFormatter(components, country_rtree, subdivisions_rtree, buildings_rtree, metro_stations_index)
         osm_formatter.build_intersections_training_data(args.intersections_file, args.out_dir, tag_components=not args.untagged)

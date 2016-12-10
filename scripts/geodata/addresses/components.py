@@ -63,7 +63,7 @@ class AddressComponents(object):
     prefixes like "London Borough of", pruning duplicates like "Antwerpen, Antwerpen, Antwerpen".
 
     Usage:
-    >>> components = AddressComponents(osm_admin_rtree, neighborhoods_rtree, places_index, quattroshapes_rtree, geonames)
+    >>> components = AddressComponents(osm_admin_rtree, neighborhoods_rtree, places_index)
     >>> components.expand({'name': 'Hackney Empire'}, 51.54559, -0.05567)
 
     Returns (results vary because of randomness):
@@ -142,7 +142,7 @@ class AddressComponents(object):
         AddressFormatter.UNIT: Unit,
     }
 
-    def __init__(self, osm_admin_rtree, neighborhoods_rtree, places_index, quattroshapes_rtree, geonames):
+    def __init__(self, osm_admin_rtree, neighborhoods_rtree, places_index):
         self.config = yaml.load(open(PARSER_DEFAULT_CONFIG))
 
         self.setup_component_dependencies()
@@ -152,8 +152,6 @@ class AddressComponents(object):
         self.osm_admin_rtree = osm_admin_rtree
         self.neighborhoods_rtree = neighborhoods_rtree
         self.places_index = places_index
-        self.quattroshapes_rtree = quattroshapes_rtree
-        self.geonames = geonames
 
     def setup_component_dependencies(self):
         self.component_dependencies = {}
@@ -880,57 +878,6 @@ class AddressComponents(object):
 
             address_components.update(new_admin_components)
 
-    def quattroshapes_city(self, address_components,
-                           latitude, longitude,
-                           language, non_local_language=None,
-                           always_use_full_names=False):
-        '''
-        Quattroshapes/GeoNames cities
-        -----------------------------
-
-        Quattroshapes isn't great for everything, but it has decent city boundaries
-        in places where OSM sometimes does not (or at least in places where we aren't
-        currently able to create valid polygons). While Quattroshapes itself doesn't
-        reliably use local names, which we'll want for consistency, Quattroshapes cities
-        are linked with GeoNames, which has per-language localized names for most places.
-        '''
-
-        city = None
-
-        qs_add_city_prob = float(nested_get(self.config, ('city', 'quattroshapes_geonames_backup_city_probability')))
-        abbreviated_name_prob = float(nested_get(self.config, ('city', 'quattroshapes_geonames_abbreviated_probability')))
-
-        if AddressFormatter.CITY not in address_components and random.random() < qs_add_city_prob:
-            lang = non_local_language or language
-            quattroshapes_cities = self.quattroshapes_rtree.point_in_poly(latitude, longitude, return_all=True)
-            for result in quattroshapes_cities:
-                if result.get(self.quattroshapes_rtree.LEVEL) == self.quattroshapes_rtree.LOCALITY and self.quattroshapes_rtree.GEONAMES_ID in result:
-                    geonames_id = int(result[self.quattroshapes_rtree.GEONAMES_ID].split(',')[0])
-                    names = self.geonames.get_alternate_names(geonames_id)
-
-                    if not names or lang not in names:
-                        continue
-
-                    city = None
-                    if 'abbr' not in names or non_local_language:
-                        # Use the common city name in the target language
-                        city = names[lang][0][0]
-                    elif not always_use_full_names and random.random() < abbreviated_name_prob:
-                        # Use an abbreviation: NYC, BK, SF, etc.
-                        city = random.choice(names['abbr'])[0]
-
-                    if not city or not city.strip():
-                        continue
-                    return city
-                    break
-            else:
-                if non_local_language and AddressFormatter.CITY in address_components and (
-                        AddressFormatter.CITY_DISTRICT in address_components or
-                        AddressFormatter.SUBURB in address_components):
-                    address_components.pop(AddressFormatter.CITY)
-
-        return city
-
     generic_wiki_name_regex = re.compile('^[a-z]{2,3}:')
 
     @classmethod
@@ -1484,12 +1431,6 @@ class AddressComponents(object):
                                   non_local_language=non_local_language,
                                   language_suffix=language_suffix)
 
-        city = self.quattroshapes_city(address_components, latitude, longitude, language, non_local_language=non_local_language)
-        if city:
-            city = self.normalized_place_name(city, AddressFormatter.CITY, all_osm_components, country=country, languages=all_languages)
-            if city:
-                address_components[AddressFormatter.CITY] = city
-
         self.add_neighborhoods(address_components, neighborhoods,
                                language_suffix=language_suffix)
 
@@ -1595,14 +1536,6 @@ class AddressComponents(object):
                                   non_local_language=non_local_language,
                                   random_key=False,
                                   always_use_full_names=True)
-
-        city = self.quattroshapes_city(address_components, latitude, longitude, language, non_local_language=non_local_language,
-                                       always_use_full_names=True)
-
-        if city:
-            city = self.normalized_place_name(city, AddressFormatter.CITY, all_osm_components, country=country, languages=all_languages)
-            if city:
-                address_components[AddressFormatter.CITY] = city
 
         self.add_neighborhoods(address_components, neighborhoods,
                                language_suffix=language_suffix)
