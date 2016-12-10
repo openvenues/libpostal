@@ -1,4 +1,5 @@
 import os
+import random
 import six
 import sys
 import yaml
@@ -24,30 +25,34 @@ class StateAbbreviations(object):
             country = filename.split('.yaml')[0]
             country_config = yaml.load(open(os.path.join(base_dir, filename)))
 
-            country_abbreviations = defaultdict(dict)
-            country_full_names = defaultdict(dict)
+            country_abbreviations = defaultdict(list)
+            country_full_names = defaultdict(list)
 
             for abbreviation, vals in six.iteritems(country_config):
                 for language, full_name in six.iteritems(vals):
                     full_name = safe_decode(full_name)
                     abbreviation = safe_decode(abbreviation)
-                    country_abbreviations[full_name.lower()][language] = abbreviation
-                    country_full_names[abbreviation.lower()][language] = full_name
+                    country_abbreviations[(full_name.lower(), language)].append(abbreviation)
+                    country_full_names[(abbreviation.lower(), language)].append(full_name)
 
             self.abbreviations[country] = dict(country_abbreviations)
             self.full_names[country] = dict(country_full_names)
 
     def get_abbreviation(self, country, language, state, default=None):
-        value = nested_get(self.abbreviations, (country.lower(), state.lower(), language.lower()))
-        if value is DoesNotExist:
+        values = nested_get(self.abbreviations, (country.lower(), (state.lower(), language.lower())))
+        if values is DoesNotExist:
             return default
-        return value
+        if len(values) == 1:
+            return values[0]
+        return random.choice(values)
 
     def get_full_name(self, country, language, state, default=None):
-        value = nested_get(self.full_names, (country.lower(), state.lower(), language.lower()))
-        if value is DoesNotExist:
+        values = nested_get(self.full_names, (country.lower(), (state.lower(), language.lower())))
+        if values is DoesNotExist:
             return default
-        return value
+        if len(values) == 1:
+            return values[0]
+        return random.choice(values)
 
 
 state_abbreviations = StateAbbreviations()
