@@ -334,27 +334,28 @@ class AddressComponents(object):
         tokens = tokenize(name)
         tokens_lower = normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
                                          token_options=TOKEN_OPTIONS_DROP_PERIODS)
-        name_norm = u''.join([t for t, c in tokens_lower])
+
+        name_norm = six.u('').join([t for t, c in normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
+                                                                    token_options=TOKEN_OPTIONS_DROP_PERIODS, whitespace=True)])
 
         for i, props in enumerate(osm_components):
-            component_names = set(self.all_names(props, languages or []))
+            component_names = set([n.lower() for n in self.all_names(props, languages or [])])
 
-            same_name_as_original = False
+            valid_component_names = set()
             for n in component_names:
-                norm = u''.join([t for t, c in normalized_tokens(n, string_options=NORMALIZE_STRING_LOWERCASE,
-                                 token_options=TOKEN_OPTIONS_DROP_PERIODS)])
+                norm = six.u('').join([t for t, c in normalized_tokens(n, string_options=NORMALIZE_STRING_LOWERCASE,
+                                       token_options=TOKEN_OPTIONS_DROP_PERIODS, whitespace=True)])
 
                 if norm == name_norm:
-                    same_name_as_original = True
-                    break
+                    continue
+
+                valid_component_names.add(norm)
 
             containing_ids = [(c['type'], c['id']) for c in osm_components[i + 1:] if 'type' in c and 'id' in c]
 
             component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
-            if same_name_as_original and component == tag:
-                continue
 
-            names |= component_names
+            names |= valid_component_names
 
             is_state = False
 
@@ -370,9 +371,9 @@ class AddressComponents(object):
                     for language in languages:
                         abbreviations = state_abbreviations.get_all_abbreviations(country, language, state, default=None)
                         if abbreviations:
-                            names.update(abbreviations)
+                            names.update([a.lower() for a in abbreviations])
 
-        phrase_filter = PhraseFilter([(n.lower(), '') for n in names])
+        phrase_filter = PhraseFilter([(n, '') for n in names])
 
         phrases = list(phrase_filter.filter(tokens_lower))
 
