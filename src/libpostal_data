@@ -118,7 +118,7 @@ download_file() {
         if date -d "@$(date -ur . +%s)" >/dev/null 2>&1; then
             echo $(date -d "$(date -d "@$(date -ur $local_path +%s)") + 1 second") > $updated_path;
         elif stat -f %Sm . >/dev/null 2>&1; then
-            echo $(date -r $(stat -f %m $local_path) -v+1S) > $updated_path;
+            echo $(date -ur $(stat -f %m $local_path) -v+1S) > $updated_path;
         fi;
         tar -xvzf $local_path -C $data_dir;
         rm $local_path;
