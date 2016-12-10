@@ -1486,6 +1486,7 @@ class AddressComponents(object):
 
         city = self.quattroshapes_city(address_components, latitude, longitude, language, non_local_language=non_local_language)
         if city:
+            city = self.normalized_place_name(city, AddressFormatter.CITY, all_osm_components, country=country, languages=all_languages)
             address_components[AddressFormatter.CITY] = city
 
         self.add_neighborhoods(address_components, neighborhoods,
@@ -1598,9 +1599,8 @@ class AddressComponents(object):
                                        always_use_full_names=True)
 
         if city:
+            city = self.normalized_place_name(city, AddressFormatter.CITY, all_osm_components, country=country, languages=all_languages)
             address_components[AddressFormatter.CITY] = city
-
-        neighborhoods = self.neighborhood_components(latitude, longitude)
 
         self.add_neighborhoods(address_components, neighborhoods,
                                language_suffix=language_suffix)
