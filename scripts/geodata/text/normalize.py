@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import six
+
 from geodata.text import _normalize
 from geodata.text.tokenize import tokenize_raw
 from geodata.text.token_types import token_types
@@ -71,9 +73,26 @@ def normalize_token(s, t, token_options=DEFAULT_TOKEN_OPTIONS):
     return _normalize.normalize_token(s, t, token_options)
 
 
+def normalize_tokens_whitespace(s, raw_tokens, token_options=DEFAULT_TOKEN_OPTIONS):
+    last_end = 0
+    tokens = []
+
+    for t in raw_tokens:
+        t_norm = _normalize.normalize_token(s, t, token_options)
+        t_class = token_types.from_id(t[-1])
+
+        if last_end < t[0]:
+            tokens.append((six.u(' '), token_types.WHITESPACE))
+        last_end = sum(t[:2])
+
+        tokens.append((t_norm, t_class))
+
+    return tokens
+
+
 def normalized_tokens(s, string_options=DEFAULT_STRING_OPTIONS,
                       token_options=DEFAULT_TOKEN_OPTIONS,
-                      strip_parentheticals=True):
+                      strip_parentheticals=True, whitespace=False):
     '''
     Normalizes a string, tokenizes, and normalizes each token
     with string and token-level options.
@@ -89,8 +108,14 @@ def normalized_tokens(s, string_options=DEFAULT_STRING_OPTIONS,
 
     # Tuples of (offset, len, type)
     raw_tokens = tokenize_raw(normalized)
-    tokens = [(_normalize.normalize_token(normalized, t, token_options),
-               token_types.from_id(t[-1])) for t in raw_tokens]
+    tokens = []
+    last_end = 0
+
+    if not whitespace:
+        tokens = [(_normalize.normalize_token(normalized, t, token_options),
+                   token_types.from_id(t[-1])) for t in raw_tokens]
+    else:
+        tokens = normalize_tokens_whitespace(normalized, raw_tokens, token_options=token_options)
 
     if strip_parentheticals:
         return remove_parens(tokens)
