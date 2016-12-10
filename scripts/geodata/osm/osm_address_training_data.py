@@ -21,13 +21,13 @@ Limited formatted addresses:
 python osm_address_training_data.py -a -l $(OSM_DIR)/planet-addresses.osm --country-rtree-dir=$(COUNTRY_RTREE_DIR) --rtree-dir=$(RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR)  -o $(OUT_DIR)
 
 Formatted addresses (tagged):
-python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm -f --country-rtree-dir=$(COUNTRY_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR) --rtree-dir=$(RTREE_DIR) --quattroshapes-rtree-dir=$(QS_TREE_DIR) --geonames-db=$(GEONAMES_DB_PATH) -o $(OUT_DIR)
+python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm -f --country-rtree-dir=$(COUNTRY_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR) --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
 
 Formatted addresses (untagged):
-python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm  -f -u --country-rtree-dir=$(COUNTRY_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR)  --rtree-dir=$(RTREE_DIR) --quattroshapes-rtree-dir=$(QS_TREE_DIR) --geonames-db=$(GEONAMES_DB_PATH) -o $(OUT_DIR)
+python osm_address_training_data.py -a $(OSM_DIR)/planet-addresses.osm  -f -u --country-rtree-dir=$(COUNTRY_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR)  --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
 
 Intersections (after running intersections.py to create the JSON file):
-python osm_address_training_data -x $(OSM_DIR)/intersections.json -f --country-rtree-dir=$(COUNTRY_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR)  --rtree-dir=$(RTREE_DIR) --quattroshapes-rtree-dir=$(QS_TREE_DIR) --geonames-db=$(GEONAMES_DB_PATH) -o $(OUT_DIR)
+python osm_address_training_data -x $(OSM_DIR)/intersections.json -f --country-rtree-dir=$(COUNTRY_RTREE_DIR) --neighborhoods-rtree-dir=$(NEIGHBORHOODS_RTREE_DIR)  --rtree-dir=$(RTREE_DIR) -o $(OUT_DIR)
 
 Toponyms:
 python osm_address_training_data.py -b $(OSM_DIR)/planet-borders.osm --country-rtree-dir=$(COUNTRY_RTREE_DIR) -o $(OUT_DIR)
@@ -57,7 +57,6 @@ from geodata.address_expansions.abbreviations import abbreviate
 from geodata.address_expansions.gazetteers import *
 from geodata.addresses.components import AddressComponents
 from geodata.coordinates.conversion import *
-from geodata.geonames.db import GeoNamesDB
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
 from geodata.i18n.languages import *
@@ -468,10 +467,6 @@ if __name__ == '__main__':
                         default=None,
                         help='OSM reverse geocoder RTree directory')
 
-    parser.add_argument('--quattroshapes-rtree-dir',
-                        default=None,
-                        help='Quattroshapes reverse geocoder RTree directory')
-
     parser.add_argument('--places-index-dir',
                         default=None,
                         help='Places index directory')
@@ -487,10 +482,6 @@ if __name__ == '__main__':
     parser.add_argument('--buildings-rtree-dir',
                         default=None,
                         help='Buildings reverse geocoder RTree directory')
-
-    parser.add_argument('--geonames-db',
-                        default=None,
-                        help='GeoNames db file')
 
     parser.add_argument('--neighborhoods-rtree-dir',
                         default=None,
