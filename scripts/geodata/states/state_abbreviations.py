@@ -45,7 +45,7 @@ class StateAbbreviations(object):
         return values
 
     def get_abbreviation(self, country, language, state, default=None):
-        values = selfg.get_all_abbreviations(country, language, state, default=default)
+        values = self.get_all_abbreviations(country, language, state, default=default)
         if values == default:
             return default
         elif len(values) == 1:
