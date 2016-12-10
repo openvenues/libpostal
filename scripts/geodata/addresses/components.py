@@ -348,6 +348,8 @@ class AddressComponents(object):
                     same_name_as_original = True
                     break
 
+            containing_ids = [(c['type'], c['id']) for c in osm_components[i + 1:] if 'type' in c and 'id' in c]
+
             component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
             if name_equal and component == tag:
                 continue
@@ -355,8 +357,6 @@ class AddressComponents(object):
             names |= component_names
 
             is_state = False
-
-            containing_ids = [(c['type'], c['id']) for c in osm_components[i + 1:] if 'type' in c and 'id' in c]
 
             if component is not None:
                 for cn in component_names:
