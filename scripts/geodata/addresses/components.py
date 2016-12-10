@@ -350,9 +350,9 @@ class AddressComponents(object):
             if is_state:
                 for state in component_names:
                     for language in languages:
-                        state_code = state_abbreviations.get_abbreviation(country, language, state, default=None)
-                        if state_code:
-                            names.add(state_code.upper())
+                        abbreviations = state_abbreviations.get_all_abbreviations(country, language, state, default=None)
+                        if abbreviations:
+                            names.update([a.upper() for a in abbreviations])
 
         phrase_filter = PhraseFilter([(n.lower(), '') for n in names])
 
