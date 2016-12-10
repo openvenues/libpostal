@@ -791,6 +791,7 @@ class AddressComponents(object):
                              latitude, longitude,
                              non_local_language=None,
                              language_suffix='',
+                             normalize_languages=None,
                              random_key=True,
                              always_use_full_names=False,
                              drop_duplicate_city_names=True,
@@ -888,6 +889,8 @@ class AddressComponents(object):
                             val = random.choice(vals)
 
                     new_admin_components[component] = val
+
+            self.normalize_place_names(new_admin_components, osm_components, country=country, languages=normalize_languages)
 
             self.abbreviate_admin_components(new_admin_components, country, language)
 
@@ -1444,6 +1447,7 @@ class AddressComponents(object):
         self.add_admin_boundaries(address_components, osm_components, country, language,
                                   latitude, longitude,
                                   non_local_language=non_local_language,
+                                  normalize_languages=all_languages,
                                   language_suffix=language_suffix)
 
         self.add_neighborhoods(address_components, neighborhoods,
@@ -1549,6 +1553,7 @@ class AddressComponents(object):
                                   latitude, longitude,
                                   language_suffix=language_suffix,
                                   non_local_language=non_local_language,
+                                  normalize_languages=all_languages,
                                   random_key=False,
                                   always_use_full_names=True)
 
