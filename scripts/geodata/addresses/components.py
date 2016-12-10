@@ -39,6 +39,7 @@ from geodata.osm.components import osm_address_components
 from geodata.places.config import place_config
 from geodata.polygons.reverse_geocode import OSMCountryReverseGeocoder
 from geodata.states.state_abbreviations import state_abbreviations
+from geodata.text.normalize import *
 from geodata.text.tokenize import tokenize, token_types
 from geodata.text.utils import is_numeric
 
