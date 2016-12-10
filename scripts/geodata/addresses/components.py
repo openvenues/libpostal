@@ -331,15 +331,33 @@ class AddressComponents(object):
 
         components = defaultdict(set)
 
+        tokens = tokenize(name)
+        tokens_lower = normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
+                                         token_options=TOKEN_OPTIONS_DROP_PERIODS)
+        name_norm = u''.join([t for t, c in tokens_lower])
+
         for i, props in enumerate(osm_components):
             component_names = set(self.all_names(props, languages or []))
+
+            same_name_as_original = False
+            for n in component_names:
+                norm = u''.join([t for t, c in normalized_tokens(n, string_options=NORMALIZE_STRING_LOWERCASE,
+                                 token_options=TOKEN_OPTIONS_DROP_PERIODS)])
+
+                if norm == name_norm:
+                    same_name_as_original = True
+                    break
+
+            component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
+            if name_equal and component == tag:
+                continue
+
             names |= component_names
 
             is_state = False
 
             containing_ids = [(c['type'], c['id']) for c in osm_components[i + 1:] if 'type' in c and 'id' in c]
 
-            component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
             if component is not None:
                 for cn in component_names:
                     components[cn.lower()].add(component)
@@ -352,13 +370,9 @@ class AddressComponents(object):
                     for language in languages:
                         abbreviations = state_abbreviations.get_all_abbreviations(country, language, state, default=None)
                         if abbreviations:
-                            names.update([a.upper() for a in abbreviations])
+                            names.update(abbreviations)
 
         phrase_filter = PhraseFilter([(n.lower(), '') for n in names])
-
-        tokens = tokenize(name)
-        tokens_lower = normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
-                                         token_options=TOKEN_OPTIONS_DROP_PERIODS)
 
         phrases = list(phrase_filter.filter(tokens_lower))
 
