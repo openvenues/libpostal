@@ -890,6 +890,10 @@ class AddressComponents(object):
 
                     new_admin_components[component] = val
 
+            if normalize_languages is None:
+                normalize_languages = []
+                if language is not None:
+                    normalize_languages.append(language)
             self.normalize_place_names(new_admin_components, osm_components, country=country, languages=normalize_languages)
 
             self.abbreviate_admin_components(new_admin_components, country, language)
