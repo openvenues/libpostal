@@ -962,7 +962,7 @@ class AddressComponents(object):
             key, raw_key = self.pick_random_name_key(neighborhood, neighborhood_level, suffix=language_suffix)
             name = neighborhood.get(key, neighborhood.get(raw_key))
 
-            if place_type == 'borough' or (not place and polygon_type == 'local_admin'):
+            if place_type == 'borough' or (not place_type and polygon_type == 'local_admin'):
                 neighborhood_level = AddressFormatter.CITY_DISTRICT
 
                 # Optimization so we don't use e.g. Brooklyn multiple times
