@@ -793,6 +793,7 @@ class AddressComponents(object):
                              language_suffix='',
                              normalize_languages=None,
                              random_key=True,
+                             add_city_points=True,
                              always_use_full_names=False,
                              drop_duplicate_city_names=True,
                              ):
@@ -843,14 +844,17 @@ class AddressComponents(object):
 
             existing_city_name = address_components.get(AddressFormatter.CITY)
 
-            if not existing_city_name and AddressFormatter.CITY not in grouped_osm_components:
+            if add_city_points and not existing_city_name and AddressFormatter.CITY not in grouped_osm_components:
                 self.add_city_and_equivalent_points(grouped_osm_components, osm_components, country, latitude, longitude)
+
+            city_replacements = place_config.city_replacements(country)
+            have_city = AddressFormatter.CITY in grouped_osm_components or set(grouped_osm_components) & set(city_replacements)
 
             for component, components_values in grouped_osm_components.iteritems():
                 seen = set()
 
                 for component_value in components_values:
-                    if random_key:
+                    if random_key and not (component == AddressFormatter.STATE_DISTRICT and not have_city):
                         key, raw_key = self.pick_random_name_key(component_value, component, suffix=language_suffix)
                     else:
                         key, raw_key = name_key, raw_name_key
