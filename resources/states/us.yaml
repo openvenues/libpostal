@@ -56,20 +56,40 @@ MS:
     en: Mississippi
 MT:
     en: Montana
+"N.C":
+    en: North Carolina
+"N.C.":
+    en: North Carolina
 NC:
     en: North Carolina
+"N.D":
+    en: North Dakota
+"N.D.":
+    en: North Dakota
 ND:
     en: North Dakota
 NE:
     en: Nebraska
 NH:
     en: New Hampshire
+"N.J":
+    en: New Jersey
+"N.J.":
+    en: New Jersey
 NJ:
     en: New Jersey
+"N.M":
+    en: New Mexico
+"N.M.":
+    en: New Mexico
 NM:
     en: New Mexico
 NV:
     en: Nevada
+"N.Y":
+    en: New York
+"N.Y.":
+    en: New York
 NY:
     en: New York
 OH:
@@ -80,10 +100,22 @@ OR:
     en: Oregon
 PA:
     en: Pennsylvania
+"R.I":
+    en: Rhode Island
+"R.I.":
+    en: Rhode Island
 RI:
     en: Rhode Island
+"S.C":
+    en: South Carolina
+"S.C.":
+    en: South Carolina
 SC:
     en: South Carolina
+"S.D":
+    en: South Dakota
+"S.D.":
+    en: South Dakota
 SD:
     en: South Dakota
 TN:
@@ -100,6 +132,10 @@ WA:
     en: Washington
 WI:
     en: Wisconsin
+"W.V":
+    en: West Virginia
+"W.V.":
+    en: West Virginia
 WV:
     en: West Virginia
 WY:
