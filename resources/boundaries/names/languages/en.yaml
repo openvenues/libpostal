@@ -20,7 +20,6 @@ prefixes:
     - territorial waters of
     - county of
     - county
-    - district of
 
 # Suffixes which can be stripped to normalize a place name
 suffixes:
@@ -35,14 +34,28 @@ suffixes:
     - city council
 
 countries:
+    au:
+        prefixes:
+            - district of
+
     gb:
+        prefixes:
+            - district of
+
         suffixes:
             - city
 
     ie:
         suffixes:
             - city
+            - municipal district
+
+    in:
+        prefixes:
+            - district of
 
     nz:
+        prefixes:
+            - district of
         suffixes:
             - city
