@@ -25,3 +25,8 @@
             way:
                 # Manhattan
                 "400014249": "city_district"
+            relation:
+                # Boothbay Harbour, Maine (would be city_district, part of city with same name)
+                "132812": null
+                # Narragansett Pier, RI (would be city_district)
+                "191221": "city"
