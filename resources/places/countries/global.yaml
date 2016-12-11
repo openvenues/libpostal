@@ -442,6 +442,7 @@ countries:
                 dependencies:
                     - city
                     - city_district
+                    - state
 
     # Tuvalu
     tv:
