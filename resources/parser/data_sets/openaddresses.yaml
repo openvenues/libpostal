@@ -207,6 +207,7 @@ countries:
                     - filename: north_cowichan.csv
                     - filename: prince_george.csv
                     - filename: province.csv
+                    - filename: sunshine_coast.csv
                     - filename: thompson-nicola-regional-district.csv
                     - filename: vancouver.csv
                       add_osm_boundaries: true
@@ -762,6 +763,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Firenze
+                    - filename: statewide.csv
+            # Sardegna
+            88:
+                files:
                     - filename: statewide.csv
 
     jm:
