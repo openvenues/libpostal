@@ -4,11 +4,11 @@ building|bdg|bldg|blg
 bungalow|bongalow|bunglow|bungalo|bngw|bnglw
 cabin|cabn
 cottage|ctg|ctge
-duplex|dup
+duplex|dup|dupl
 factory|fcty|fty|fy
 farm|frm
 garage|grge
-house|hous|hs|hse|ho
+house|hse|hous|hs|ho
 maisonette|msnt
 reserve|rsve|rsrv|rsv
 shed|shd

@@ -1,0 +1,191 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	فرودگاه
+aeroway	aerodrome	1	فرودگاهs
+amenity	atm	0	عابر بانک
+amenity	atm	1	عابر بانکs
+amenity	bank	0	بانک
+amenity	bank	1	بانکs
+amenity	bench	0	نیمکت
+amenity	bench	1	نیمکتs
+amenity	brothel	0	فاحشه خانه
+amenity	brothel	1	فاحشه خانهs
+amenity	cafe	0	کافه
+amenity	cafe	1	کافهs
+amenity	cinema	0	سینما
+amenity	cinema	1	سینماs
+amenity	clinic	0	درمانگاه
+amenity	clinic	1	درمانگاهs
+amenity	courthouse	0	دادگاه
+amenity	courthouse	1	دادگاهs
+amenity	dentist	0	دندانپزشک
+amenity	dentist	1	دندانپزشکs
+amenity	dormitory	0	خوابگاه دانشجویی
+amenity	dormitory	1	خوابگاه دانشجوییs
+amenity	embassy	0	سفارت
+amenity	embassy	1	سفارتs
+amenity	fire_station	0	آتش نشانی
+amenity	fire_station	1	آتش نشانیs
+amenity	fuel	0	پمپ بنزین
+amenity	fuel	1	پمپ بنزینs
+amenity	hospital	0	بیمارستان
+amenity	hospital	1	بیمارستانs
+amenity	hotel	0	هتل
+amenity	hotel	1	هتلs
+amenity	kindergarten	0	کودکستان
+amenity	kindergarten	1	کودکستانs
+amenity	library	0	کتابخانه
+amenity	library	1	کتابخانهs
+amenity	market	0	بازار
+amenity	market	1	بازارs
+amenity	marketplace	0	بازار
+amenity	marketplace	1	بازارs
+amenity	office	0	دفتر
+amenity	office	1	دفترs
+amenity	park	0	پارک
+amenity	park	1	پارکs
+amenity	parking	0	پارکینگ
+amenity	parking	1	پارکینگs
+amenity	pharmacy	0	داروخانه
+amenity	pharmacy	1	داروخانهs
+amenity	police	0	پلیس
+amenity	police	1	پلیسs
+amenity	post_box	0	صندوق پست
+amenity	post_box	1	صندوق پستs
+amenity	post_office	0	اداره پست
+amenity	post_office	1	اداره پستs
+amenity	prison	0	زندان
+amenity	prison	1	زندانs
+amenity	pub	0	میخانه
+amenity	pub	1	میخانهs
+amenity	recycling	0	بازیافت
+amenity	recycling	1	بازیافتs
+amenity	restaurant	0	رستوران
+amenity	restaurant	1	رستورانs
+amenity	school	0	مدرسه
+amenity	school	1	مدرسهs
+amenity	supermarket	0	سوپرمارکت
+amenity	supermarket	1	سوپرمارکتs
+amenity	taxi	0	تاکسی
+amenity	taxi	1	تاکسیs
+amenity	theatre	0	تئاتر
+amenity	theatre	1	تئاترs
+amenity	townhall	0	شهر داری
+amenity	townhall	1	شهر داریs
+amenity	university	0	دانشگاه
+amenity	university	1	دانشگاهs
+amenity	waste_basket	0	سطل اشغال
+amenity	waste_basket	1	سطل اشغالs
+building	garage	0	گاراژ
+building	garage	1	گاراژs
+building	hotel	0	هتل
+building	hotel	1	هتلs
+building	house	0	خانه
+building	house	1	خانهs
+building	stadium	0	ورزشگاه
+building	stadium	1	ورزشگاهs
+building	tower	0	برج
+building	tower	1	برجs
+highway	bus_stop	0	ایستگاه اتوبوس
+highway	bus_stop	1	ایستگاه اتوبوسs
+highway	motorway	0	اتوبان
+highway	motorway	1	اتوبانs
+highway	path	0	مسیر
+highway	path	1	مسیرs
+highway	road	0	جاده
+highway	road	1	جادهs
+highway	steps	0	پله
+highway	steps	1	پلهs
+highway	trunk	0	بزرگراه
+highway	trunk	1	بزرگراهs
+historic	castle	0	قلعه
+historic	castle	1	قلعهs
+historic	museum	0	موزه
+historic	museum	1	موزهs
+historic	tower	0	برج
+historic	tower	1	برجs
+landuse	farmland	0	زمین کشاورزی
+landuse	farmland	1	زمین کشاورزیs
+landuse	forest	0	جنگل
+landuse	forest	1	جنگلs
+landuse	mountain	0	کوه
+landuse	mountain	1	کوهs
+landuse	park	0	پارک
+landuse	park	1	پارکs
+landuse	railway	0	ریل
+landuse	railway	1	ریلs
+leisure	garden	0	باغ
+leisure	garden	1	باغs
+leisure	park	0	پارک
+leisure	park	1	پارکs
+leisure	stadium	0	ورزشگاه
+leisure	stadium	1	ورزشگاهs
+natural	beach	0	ساحل
+natural	beach	1	ساحلs
+natural	channel	0	کانال
+natural	channel	1	کانالs
+natural	coastline	0	ساحل
+natural	coastline	1	ساحلs
+natural	hill	0	تپه
+natural	hill	1	تپهs
+natural	island	0	جزیره
+natural	island	1	جزیرهs
+natural	point	0	نقطه
+natural	point	1	نقطهs
+natural	river	0	رود خانه
+natural	river	1	رود خانهs
+natural	rock	0	صخره
+natural	rock	1	صخرهs
+natural	tree	0	درخت
+natural	tree	1	درختs
+natural	valley	0	دره
+natural	valley	1	درهs
+natural	volcano	0	کوه آتشفشان
+natural	volcano	1	کوه آتشفشانs
+natural	water	0	اب
+natural	water	1	ابs
+natural	wood	0	جنگل
+natural	wood	1	جنگلs
+place	city	0	شهر بزرگ
+place	city	1	شهر بزرگs
+place	country	0	کشور
+place	country	1	کشورs
+place	farm	0	مزرعه
+place	farm	1	مزرعهs
+place	house	0	خانه
+place	house	1	خانهs
+place	island	0	جزیره
+place	island	1	جزیرهs
+place	sea	0	دریا
+place	sea	1	دریاs
+place	suburb	0	محله
+place	suburb	1	محلهs
+place	town	0	شهر
+place	town	1	شهرs
+place	village	0	دهکده
+place	village	1	دهکدهs
+shop	bakery	0	نانوایی
+shop	bakery	1	نانواییs
+shop	butcher	0	قصاب
+shop	butcher	1	قصابs
+shop	kiosk	0	کیوسک
+shop	kiosk	1	کیوسکs
+shop	market	0	بازار
+shop	market	1	بازارs
+shop	supermarket	0	سوپرمارکت
+shop	supermarket	1	سوپرمارکتs
+tourism	hotel	0	هتل
+tourism	hotel	1	هتلs
+tourism	motel	0	متل
+tourism	motel	1	متلs
+tourism	museum	0	موزه
+tourism	museum	1	موزهs
+tourism	valley	0	دره
+tourism	valley	1	درهs
+tourism	zoo	0	باغ وحش
+tourism	zoo	1	باغ وحشs
+waterway	canal	0	کانال
+waterway	canal	1	کانالs
+waterway	river	0	رودخانه
+waterway	river	1	رودخانهs
+waterway	waterfall	0	ابشار
+waterway	waterfall	1	ابشارs

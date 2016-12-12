@@ -829,17 +829,23 @@ inline int64_t cstring_array_token_length(cstring_array *self, uint32_t i) {
     }
 }
 
-cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, size_t *count) {
+static cstring_array *cstring_array_split_options(char *str, const char *separator, size_t separator_len, bool ignore_consecutive, size_t *count) {
     *count = 0;
     char_array *array = char_array_new_size(strlen(str));
 
+    bool last_was_separator = false;
+
     while (*str) {
         if ((separator_len == 1 && *str == separator[0]) || (memcmp(str, separator, separator_len) == 0)) {
-            char_array_push(array, '\0');
+            if (!ignore_consecutive || !last_was_separator) {
+                char_array_push(array, '\0');
+            }
             str += separator_len;
+            last_was_separator = true;
         } else {
             char_array_push(array, *str);
             str++;
+            last_was_separator = false;
         }
     }
     char_array_push(array, '\0');
@@ -849,6 +855,17 @@ cstring_array *cstring_array_split(char *str, const char *separator, size_t sepa
 
     return string_array;
 }
+
+
+cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, size_t *count) {
+    return cstring_array_split_options(str, separator, separator_len, false, count);
+}
+
+
+cstring_array *cstring_array_split_ignore_consecutive(char *str, const char *separator, size_t separator_len, size_t *count) {
+    return cstring_array_split_options(str, separator, separator_len, true, count);
+}
+
 
 cstring_array *cstring_array_split_no_copy(char *str, char separator, size_t *count) {
     *count = 0;

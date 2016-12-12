@@ -1,0 +1,5 @@
+bel étage|bel etage
+dernier étage|dernier etage
+étage noble|etage noble
+rez-de-chaussée|rdc|r.d.c|r d c|rez|rez-de-chaussee|rez de chaussée|rez de chaussee|rc|r.c|r c
+rez-de-jardin|rez de jardin

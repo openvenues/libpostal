@@ -1,0 +1,11 @@
+# Prefixes which can be stripped to normalize a place name
+prefixes:
+    - stadtteil
+    - stadtbezirk
+    - gemeinde
+    - landkreis
+    - kreis
+    - grenze
+    - freistaat
+    - regierungsbezirk
+    - gemeindefreies gebiet

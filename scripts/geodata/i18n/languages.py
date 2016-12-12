@@ -21,12 +21,12 @@ road_language_overrides = defaultdict(OrderedDict)
 
 languages = set()
 
-initialized = False
+languages_initialized = False
 
 
 def init_languages(languages_dir=LANGUAGES_DIR):
-    global initialized
-    if initialized:
+    global languages_initialized
+    if languages_initialized:
         return
     path = os.path.join(languages_dir, 'countries', 'country_language.tsv')
     if not os.path.exists(path):
@@ -56,7 +56,10 @@ def init_languages(languages_dir=LANGUAGES_DIR):
             if lang not in languages:
                 languages.add(lang)
 
-    initialized = True
+    languages_initialized = True
+
+
+init_languages()
 
 
 def get_country_languages(country, official=True, overrides=True):

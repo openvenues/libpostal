@@ -142,6 +142,14 @@ int main(int argc, char **argv) {
 
     log_info("address dictionary module loaded\n");
 
+    // Needs to load for normalization
+    if (!transliteration_module_setup(NULL)) {
+        log_error("Could not load transliteration module\n");
+        exit(EXIT_FAILURE);
+    }
+
+    log_info("transliteration module loaded\n");
+
     if (!geodb_module_setup(NULL)) {
         log_error("Could not load geodb dictionaries\n");
         exit(EXIT_FAILURE);

@@ -1,0 +1,10 @@
+appartement|app|ap|appt|apt|appart
+bureau|bur
+boîte|bte
+chambre
+lotissement|lot
+parcelle
+porte|p|pte
+salle
+suite
+unité|u|unite

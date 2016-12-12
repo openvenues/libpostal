@@ -183,7 +183,7 @@ impasse|imp
 inlet|inlt
 interchange|intg|intchg|inter change
 intersection|intn|inter section|intsctn
-interstate|inter state|i
+interstate|inter state|i|ih|i h
 island|is|id|i|isl|isld
 islands|iss|ids|islds
 isle
@@ -313,6 +313,7 @@ roundabout
 route|rt|rte
 row|rw
 run|rn
+rural route|rr|r.r|r r
 service road|svc rd|svc road|service rd
 serviceway|swy|svwy|svcwy
 shoal|shl
