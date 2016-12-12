@@ -854,7 +854,7 @@ class AddressComponents(object):
                 seen = set()
 
                 for component_value in components_values:
-                    if random_key and not (component == AddressFormatter.STATE_DISTRICT and not have_city):
+                    if random_key and not (component in (AddressFormatter.STATE_DISTRICT, AddressFormatter.STATE) and not have_city):
                         key, raw_key = self.pick_random_name_key(component_value, component, suffix=language_suffix)
                     else:
                         key, raw_key = name_key, raw_name_key
