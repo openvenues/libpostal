@@ -8,6 +8,7 @@ import sys
 import yaml
 
 from collections import defaultdict, OrderedDict, Counter
+from shapely.geometry import Point
 from six import itertools
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
@@ -624,6 +625,9 @@ class OSMAddressFormatter(object):
 
         cldr_country_prob = float(nested_get(self.config, ('places', 'cldr_country_probability'), default=0.0))
 
+        component_order = AddressFormatter.component_order[component_name]
+        sub_city = component_order < AddressFormatter.component_order[AddressFormatter.CITY]
+
         for name_tag in ('name', 'alt_name', 'loc_name', 'short_name', 'int_name', 'name:simple', 'official_name'):
             if more_than_one_official_language:
                 name = tags.get(name_tag)
@@ -649,7 +653,8 @@ class OSMAddressFormatter(object):
                                                              latitude, longitude,
                                                              random_key=num_references > 1,
                                                              language_suffix=language_suffix,
-                                                             drop_duplicate_city_names=False)
+                                                             drop_duplicate_city_names=False,
+                                                             add_city_points=sub_city)
 
                         place_tags.append((address_components, None, True))
                         for alt_name in alt_names:
@@ -693,7 +698,8 @@ class OSMAddressFormatter(object):
                                                          latitude, longitude,
                                                          random_key=is_default,
                                                          language_suffix=language_suffix,
-                                                         drop_duplicate_city_names=False)
+                                                         drop_duplicate_city_names=False,
+                                                         add_city_points=sub_city)
 
                     place_tags.append((address_components, language, is_default))
                     for alt_name in alt_names:
@@ -731,7 +737,8 @@ class OSMAddressFormatter(object):
                                                          random_key=False,
                                                          non_local_language=language,
                                                          language_suffix=language_suffix,
-                                                         drop_duplicate_city_names=False)
+                                                         drop_duplicate_city_names=False,
+                                                         add_city_points=sub_city)
 
                     place_tags.append((address_components, language, False))
                     for alt_name in alt_names:
@@ -1165,10 +1172,15 @@ class OSMAddressFormatter(object):
                 print('did {} formatted places'.format(i))
 
         for tags, poly in iter(self.components.osm_admin_rtree):
-            try:
-                point = poly.context.representative_point()
-            except ValueError:
-                point = poly.context.centroid
+            if 'admin_center' in tags and 'lat' in tags['admin_center'] and 'lon' in tags['admin_center']:
+                admin_center = tags['admin_center']
+                point = Point(admin_center['lon'], admin_center['lat'])
+            else:
+                try:
+                    point = poly.context.representative_point()
+                except ValueError:
+                    point = poly.context.centroid
+
             lat = point.y
             lon = point.x
             tags['lat'] = lat
