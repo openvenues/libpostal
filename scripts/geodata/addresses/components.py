@@ -782,7 +782,9 @@ class AddressComponents(object):
 
             have_sub_city = AddressFormatter.SUBURB in grouped_components or AddressFormatter.CITY_DISTRICT in grouped_components
 
-            if (component == AddressFormatter.CITY or component in city_replacements) and component not in grouped_components and (not have_sub_city or not self.osm_component_is_village(props)):
+            have_city = AddressFormatter.CITY in grouped_components
+
+            if (component == AddressFormatter.CITY or (component in city_replacements and not have_city)) and component not in grouped_components and (not have_sub_city or not self.osm_component_is_village(props)):
                 grouped_components[component].append(props)
 
     def add_admin_boundaries(self, address_components,
