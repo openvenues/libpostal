@@ -323,21 +323,22 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             for name_key in OSM_NAME_TAGS:
                 osm_names.extend([v for k, v in six.iteritems(attrs) if k.startswith('{}:'.format(name_key))])
 
-            if component_name and component_name != AddressFormatter.SUBURB:
+            if component_name and component_name not in (AddressFormatter.SUBURB, AddressFormatter.CITY_DISTRICT):
                 existing_osm_boundaries = osm_admin_rtree.point_in_poly(lat, lon, return_all=True)
-                containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries]
 
                 skip_node = False
-                for props in existing_osm_boundaries:
+                for i, props in enumerate(existing_osm_boundaries):
                     containing_component = None
                     name = props.get('name')
                     # Only exact name matches here since we're comparins OSM to OSM
-                    if name and name == attrs.get('name'):
+                    if name and name != attrs.get('name'):
                         continue
+
+                    containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries[i + 1:]]
 
                     containing_component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
 
-                    if containing_component and containing_component != AddressFormatter.SUBURB:
+                    if containing_component and containing_component not in (AddressFormatter.SUBURB, AddressFormatter.CITY_DISTRICT):
                         skip_node = True
                         break
                 # Skip this element
