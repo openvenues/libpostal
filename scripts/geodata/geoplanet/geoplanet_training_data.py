@@ -18,6 +18,7 @@ from geodata.address_expansions.gazetteers import *
 from geodata.address_formatting.formatter import AddressFormatter
 
 from geodata.countries.names import country_names
+from geodata.i18n.google import postcode_regexes
 from geodata.names.normalization import name_affixes
 from geodata.places.config import place_config
 
@@ -198,6 +199,18 @@ class GeoPlanetFormatter(object):
             postcode_language = language
 
             language = self.language_codes[language]
+
+            if len(postal_code) <= 3:
+                postcode_regex = postcode_regexes.get(country)
+
+                valid_postcode = False
+                if postcode_regex:
+                    match = postcode_regex.match(postal_code)
+                    if match and match.end() == len(postal_code):
+                        valid_postcode = True
+
+                if not valid_postcode:
+                    continue
 
             # If the county/state is coterminous with a city and contains only one place,
             # set the parent_id to the city instead
