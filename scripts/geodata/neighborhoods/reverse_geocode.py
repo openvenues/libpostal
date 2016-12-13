@@ -261,6 +261,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         country_rtree = OSMCountryReverseGeocoder.load(country_rtree_dir)
 
         osm_admin_rtree = OSMReverseGeocoder.load(osm_rtree_dir)
+        osm_admin_rtree.cache_size = 10000
 
         logger.info('Creating IDF index')
         idf = IDFIndex()
