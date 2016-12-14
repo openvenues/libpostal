@@ -954,7 +954,6 @@ class AddressComponents(object):
         neighborhood_levels = defaultdict(list)
 
         add_prefix_prob = float(nested_get(self.config, ('neighborhood', 'add_prefix_probability')))
-        add_neighborhood_prob = float(nested_get(self.config, ('neighborhood', 'add_neighborhood_probability')))
 
         name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, language_suffix))
         raw_name_key = boundary_names.DEFAULT_NAME_KEY
@@ -993,7 +992,7 @@ class AddressComponents(object):
             neighborhood_levels[neighborhood_level].append(name)
 
         for component, neighborhoods in neighborhood_levels.iteritems():
-            if component not in address_components and random.random() < add_neighborhood_prob:
+            if component not in address_components:
                 address_components[component] = neighborhoods[0]
 
     def generate_sub_building_component(self, component, address_components, language, country=None, **kw):

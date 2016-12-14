@@ -108,7 +108,6 @@ boundaries:
 neighborhood:
     # Usually in Germany, may have e.g. name:prefix=Ortsteil
     add_prefix_probability: 0.5
-    add_neighborhood_probability: 0.5
 
 city:
     quattroshapes_geonames_backup_city_probability: 0.2
