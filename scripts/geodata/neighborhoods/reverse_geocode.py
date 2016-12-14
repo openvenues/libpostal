@@ -261,7 +261,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         country_rtree = OSMCountryReverseGeocoder.load(country_rtree_dir)
 
         osm_admin_rtree = OSMReverseGeocoder.load(osm_rtree_dir)
-        osm_admin_rtree.cache_size = 10000
+        osm_admin_rtree.cache_size = 1000
 
         logger.info('Creating IDF index')
         idf = IDFIndex()
@@ -323,6 +323,8 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
             for name_key in OSM_NAME_TAGS:
                 osm_names.extend([v for k, v in six.iteritems(attrs) if k.startswith('{}:'.format(name_key))])
+
+            existing_osm_boundaries = None
 
             if component_name and component_name not in (AddressFormatter.SUBURB, AddressFormatter.CITY_DISTRICT):
                 existing_osm_boundaries = osm_admin_rtree.point_in_poly(lat, lon, return_all=True)
@@ -392,11 +394,19 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             if ranks and ranks[0][0] >= cls.DUPE_THRESHOLD:
                 score, props, poly, idx, i = ranks[0]
 
+                if existing_osm_boundaries is None:
+                    existing_osm_boundaries = osm_admin_rtree.point_in_poly(lat, lon, return_all=True)
+
+                containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries]
+                component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
+                attrs['component'] = component
+
                 if idx is cth:
                     attrs['polygon_type'] = 'neighborhood'
                     source = 'osm_cth'
                 else:
                     level = props.get(QuattroshapesReverseGeocoder.LEVEL, None)
+
                     source = 'osm_quattro'
                     if level == 'neighborhood':
                         attrs['polygon_type'] = 'neighborhood'
@@ -420,6 +430,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                     continue
                 props['source'] = source
                 if idx is cth or props.get(QuattroshapesReverseGeocoder.LEVEL, None) == 'neighborhood':
+                    props['component'] = AddressFormatter.SUBURB
                     props['polygon_type'] = 'neighborhood'
                 else:
                     # We don't actually care about local admin polygons unless they match OSM
