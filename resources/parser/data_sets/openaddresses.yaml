@@ -834,7 +834,8 @@ countries:
 
             distrito-federal:
                 add:
-                    state: DF
+                    city: Ciudad de México
+                    state: Distrito Federal
                 files:
                     - filename: statewide.csv
                       fields:
