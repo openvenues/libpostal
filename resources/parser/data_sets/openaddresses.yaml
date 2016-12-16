@@ -21,64 +21,43 @@ global:
         - "http://s3.amazonaws.com/data.openaddresses.io/runs/127209/za/ec/nelson_mandela_bay.zip"
 
     fields: &default_fields
-        - field_name: NUMBER
-          component: house_number
-        - field_name: STREET
-          component: road
-        - field_name: UNIT
-          component: unit
-        - field_name: CITY
-          component: city
-        - field_name: POSTCODE
-          component: postcode
+        NUMBER:
+            component: house_number
+        STREET:
+            component: road
+        UNIT:
+            component: unit
+        CITY:
+            component: city
+        POSTCODE:
+            component: postcode
 
     fields_no_postcode: &fields_no_postcode
-        - field_name: NUMBER
-          component: house_number
-        - field_name: STREET
-          component: road
-        - field_name: UNIT
-          component: unit
-        - field_name: CITY
-          component: city
+        NUMBER:
+            component: house_number
+        STREET:
+            component: road
+        UNIT:
+            component: unit
+        CITY:
+            component: city
 
     fields_with_state: &fields_with_state
-        - field_name: NUMBER
-          component: house_number
-        - field_name: STREET
-          component: road
-        - field_name: CITY
-          component: city
-        - field_name: REGION
-          component: state
-        - field_name: POSTCODE
-          component: postcode
+        <<: *default_fields
+        REGION:
+            component: state
 
     fields_with_unit: &fields_with_unit
-        - field_name: NUMBER
-          component: house_number
-        - field_name: STREET
-          component: road
-        - field_name: UNIT
-          component: unit
-        - field_name: CITY
-          component: city
-        - field_name: POSTCODE
-          component: postcode
+        <<: *default_fields
+        UNIT:
+            component: unit
 
     fields_with_state_and_unit: &fields_with_state_and_unit
-        - field_name: NUMBER
-          component: house_number
-        - field_name: STREET
-          component: road
-        - field_name: UNIT
-          component: unit
-        - field_name: CITY
-          component: city
-        - field_name: REGION
-          component: state
-        - field_name: POSTCODE
-          component: postcode
+        <<: *default_fields
+        REGION:
+            component: state
+        UNIT:
+            component: unit
 
 
     # Turned off by default to avoid performance penalty for reverse geocoding
@@ -730,6 +709,122 @@ countries:
     it:
         files:
             - filename: countrywide.csv
+              fields:
+                  <<: *default_fields
+                  DISTRICT:
+                      component: state_district
+                      value_map:
+                          "AGRIGENTO": AG
+                          "ALESSANDRIA": AL
+                          "ANCONA": AN
+                          "AOSTA": AO
+                          "AREZZO": AR
+                          "ASCOLI PICENO": AP
+                          "ASTI": AT
+                          "AVELLINO": AV
+                          "BARI": BA
+                          "BARLETTA-ANDRIA-TRANI": BT
+                          "BELLUNO": BL
+                          "BENEVENTO": BN
+                          "BERGAMO": BG
+                          "BIELLA": BI
+                          "BOLOGNA": BO
+                          "BOLZANO/BOZEN": BZ
+                          "BRESCIA": BS
+                          "BRINDISI": BR
+                          "CAGLIARI": CA
+                          "CALTANISSETTA": CL
+                          "CAMPOBASSO": CB
+                          "CARBONIA-IGLESIAS": CI
+                          "CASERTA": CE
+                          "CATANIA": CT
+                          "CATANZARO": CZ
+                          "CHIETI": CH
+                          "COMO": CO
+                          "COSENZA": CS
+                          "CREMONA": CR
+                          "CROTONE": KR
+                          "CUNEO": CN
+                          "ENNA": EN
+                          "FERMO": FM
+                          "FERRARA": FE
+                          "FIRENZE": FI
+                          "FOGGIA": FG
+                          "FORLI'-CESENA": FC
+                          "FROSINONE": FR
+                          "GENOVA": GE
+                          "GORIZIA": GO
+                          "GROSSETO": GR
+                          "IMPERIA": IM
+                          "ISERNIA": IS
+                          "LA SPEZIA": SP
+                          "L'AQUILA": AQ
+                          "LATINA": LT
+                          "LECCE": LE
+                          "LECCO": LC
+                          "LIVORNO": LI
+                          "LODI": LO
+                          "LUCCA": LU
+                          "MACERATA": MC
+                          "MANTOVA": MN
+                          "MASSA-CARRARA": MS
+                          "MATERA": MT
+                          "MEDIO CAMPIDANO": VS
+                          "MESSINA": ME
+                          "MILANO": MI
+                          "MODENA": MO
+                          "MONZA E DELLA BRIANZA": MB
+                          "NAPOLI": NA
+                          "NOVARA": NO
+                          "NUORO": NU
+                          "OGLIASTRA": OG
+                          "OLBIA-TEMPIO": OT
+                          "ORISTANO": OR
+                          "PADOVA": PD
+                          "PALERMO": PA
+                          "PARMA": PR
+                          "PAVIA": PV
+                          "PERUGIA": PG
+                          "PESARO E URBINO": PU
+                          "PESCARA": PE
+                          "PIACENZA": PC
+                          "PISA": PI
+                          "PISTOIA": PT
+                          "PORDENONE": PN
+                          "POTENZA": PZ
+                          "PRATO": PO
+                          "RAGUSA": RG
+                          "RAVENNA": RA
+                          "REGGIO DI CALABRIA": RC
+                          "REGGIO NELL'EMILIA": RE
+                          "RIETI": RI
+                          "RIMINI": RN
+                          "ROMA": RM
+                          "ROVIGO": RO
+                          "SALERNO": SA
+                          "SASSARI": SS
+                          "SAVONA": SV
+                          "SIENA": SI
+                          "SIRACUSA": SR
+                          "SONDRIO": SO
+                          "TARANTO": TA
+                          "TERAMO": TE
+                          "TERNI": TR
+                          "TORINO": TO
+                          "TRAPANI": TP
+                          "TRENTO": TN
+                          "TREVISO": TV
+                          "TRIESTE": TS
+                          "UDINE": UD
+                          "VARESE": VA
+                          "VENEZIA": VE
+                          "VERBANO-CUSIO-OSSOLA": VB
+                          "VERCELLI": VC
+                          "VERONA": VR
+                          "VIBO VALENTIA": VV
+                          "VICENZA": VI
+                          "VITERBO": VT
+
         subdirs:
             # Trentino-Alto Adige/Südtirol
             32:
@@ -839,16 +934,9 @@ countries:
                 files:
                     - filename: statewide.csv
                       fields:
-                          - field_name: NUMBER
-                            component: house_number
-                          - field_name: STREET
-                            component: road
-                          - field_name: UNIT
-                            component: unit
-                          - field_name: CITY
-                            component: city_district
-                          - field_name: POSTCODE
-                            component: postcode
+                          <<: *default_fields
+                          CITY:
+                              component: city_district
                       add_osm_boundaries: true
 
             durango:
