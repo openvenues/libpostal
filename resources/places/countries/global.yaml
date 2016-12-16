@@ -214,6 +214,15 @@ countries:
             state:
                 probability: 0.8
 
+
+    # Italy
+    it:
+        components:
+            state_district:
+                probability: 0.7
+            state:
+                probability: 0.2
+
     # Hong Kong
     hk:
         components:
