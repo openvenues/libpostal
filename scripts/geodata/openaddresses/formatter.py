@@ -50,6 +50,7 @@ class OpenAddressesFormatter(object):
             (re.compile('<\s*null\s*>', re.I), six.u('')),
             (re.compile('[\s]{2,}'), six.u(' ')),
             (re.compile('\`'), six.u("'")),
+            (re.compile('\-?\*'), six.u("")),
         ],
         AddressFormatter.HOUSE_NUMBER: [
             # Most of the house numbers in Montreal start with "#"
