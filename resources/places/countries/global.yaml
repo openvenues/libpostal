@@ -158,6 +158,14 @@ countries:
                 probability: 0.2
                 population: []
 
+    # Switzerland
+    ch:
+        components:
+            state:
+                population:
+                    - lt: 100000
+                      probability: 0.4
+
     # Dominica
     dm: *add_west_indies
 
