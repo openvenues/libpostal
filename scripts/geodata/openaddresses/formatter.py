@@ -260,7 +260,7 @@ class OpenAddressesFormatter(object):
         reader = unicode_csv_reader(f)
         headers = reader.next()
 
-        header_indices = {i: fields[k] for i, k in enumerate(headers) if k in field_map}
+        header_indices = {i: field_map[k] for i, k in enumerate(headers) if k in field_map}
         latitude_index = headers.index('LAT')
         longitude_index = headers.index('LON')
 
