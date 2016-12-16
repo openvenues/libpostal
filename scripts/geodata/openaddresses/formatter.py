@@ -254,6 +254,7 @@ class OpenAddressesFormatter(object):
             return
 
         fields = {f['field_name']: f['component'] for f in fields}
+        mapped_values = {f['component']: f['value_map'] for f in fields if hasattr(f.get('value_map'), 'get')}
 
         f = open(path)
         reader = unicode_csv_reader(f)
@@ -285,6 +286,9 @@ class OpenAddressesFormatter(object):
                     break
                 elif not value:
                     continue
+
+                if key in mapped_values:
+                    value = mapped_values[key].get(value, value)
 
                 if key == AddressFormatter.ROAD and language == SPANISH:
                     value = self.spanish_street_name(value)
