@@ -253,14 +253,14 @@ class OpenAddressesFormatter(object):
         if not fields:
             return
 
-        fields = {f['field_name']: f['component'] for f in fields}
-        mapped_values = {f['component']: f['value_map'] for f in fields if hasattr(f.get('value_map'), 'get')}
+        field_map = {field_name: f['component'] for field_name, f in six.iteritems(fields)}
+        mapped_values = {f['component']: f['value_map'] for f in six.itervalues(fields) if hasattr(f.get('value_map'), 'get')}
 
         f = open(path)
         reader = unicode_csv_reader(f)
         headers = reader.next()
 
-        header_indices = {i: fields[k] for i, k in enumerate(headers) if k in fields}
+        header_indices = {i: fields[k] for i, k in enumerate(headers) if k in field_map}
         latitude_index = headers.index('LAT')
         longitude_index = headers.index('LON')
 
