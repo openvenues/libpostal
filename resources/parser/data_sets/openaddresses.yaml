@@ -494,12 +494,19 @@ countries:
     ch:
         files:
             - filename: bern.csv
+              add:
+                  state: BE
             - filename: fribourg.csv
+              add:
+                  state: FR
             - filename: geneva.csv
               language: fr
+              add:
+                  state: GE
             - filename: zurich.csv
               language: de
-
+              add:
+                  state: ZH
     cz:
         files:
             - filename: countrywide.csv
