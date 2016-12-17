@@ -924,7 +924,7 @@ countries:
 
             coahuila-de-zaragoza:
                 add:
-                    state: Coahuila
+                    state: CA
                 files:
                     - filename: statewide.csv
 
@@ -937,7 +937,7 @@ countries:
             distrito-federal:
                 add:
                     city: Ciudad de México
-                    state: Distrito Federal
+                    state: D.F.
                 files:
                     - filename: statewide.csv
                       fields:
