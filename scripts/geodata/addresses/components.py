@@ -319,21 +319,8 @@ class AddressComponents(object):
                     names[v] = None
         return names.keys()
 
-    def normalized_place_name(self, name, tag, osm_components, country=None, languages=None):
-        '''
-        Multiple place names
-        --------------------
-
-        This is to help with things like  addr:city="New York NY"
-        '''
-
+    def place_phrase_gazetteer(self, name, osm_components):
         names = set()
-
-        components = defaultdict(set)
-
-        tokens = tokenize(name)
-        tokens_lower = normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
-                                         token_options=TOKEN_OPTIONS_DROP_PERIODS)
 
         name_norm = six.u('').join([t for t, c in normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
                                                                     token_options=TOKEN_OPTIONS_DROP_PERIODS, whitespace=True)])
@@ -374,6 +361,23 @@ class AddressComponents(object):
                             names.update([a.lower() for a in abbreviations])
 
         phrase_filter = PhraseFilter([(n, '') for n in names])
+        return phrase_filter
+
+    def normalized_place_name(self, name, tag, osm_components, country=None, languages=None):
+        '''
+        Multiple place names
+        --------------------
+
+        This is to help with things like  addr:city="New York NY"
+        '''
+
+        tokens = tokenize(name)
+        tokens_lower = normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
+                                         token_options=TOKEN_OPTIONS_DROP_PERIODS)
+
+        phrase_filter = self.place_phrase_gazetteer(name, osm_component_is_village)
+
+        components = defaultdict(set)
 
         phrases = list(phrase_filter.filter(tokens_lower))
 
