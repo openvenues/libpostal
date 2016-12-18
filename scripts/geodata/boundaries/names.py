@@ -66,15 +66,19 @@ class BoundaryNames(object):
             probs = cdf(probs)
             self.exceptions[(object_type, object_id)] = (keys, probs)
 
-    def name_key(self, props, component):
+    def name_key_dist(self, props, component):
         object_type = props.get('type')
         object_id = safe_encode(props.get('id', ''))
 
         if (object_type, object_id) in self.exceptions:
             values, probs = self.exceptions[(object_type, object_id)]
-            return weighted_choice(values, probs)
+            return values, probs
 
         name_keys, probs = self.component_name_keys.get(component, (self.name_keys, self.name_key_probs))
+        return name_keys, probs
+
+    def name_key(self, props, component):
+        name_keys, probs = self.name_key_dist(props, component)
         return weighted_choice(name_keys, probs)
 
     def name(self, country, name):
@@ -87,7 +91,6 @@ class BoundaryNames(object):
             if match and random.random() < prob:
                 name = match.group(group)
         return name
-
 
 
 boundary_names = BoundaryNames()
