@@ -393,7 +393,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                     continue
 
                 containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries]
-                component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
+                component = osm_address_components.component_from_properties(country, attrs, containing=containing_ids)
                 attrs['component'] = component
 
                 if idx is cth:
