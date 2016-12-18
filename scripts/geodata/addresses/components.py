@@ -307,26 +307,33 @@ class AddressComponents(object):
         key = ''.join((raw_key, suffix)) if ':' not in raw_key else raw_key
         return key, raw_key
 
-    def all_names(self, props, languages, keys=ALL_OSM_NAME_KEYS):
+    def all_names(self, props, languages, component=None, keys=ALL_OSM_NAME_KEYS):
         # Preserve uniqueness and order
-        names = OrderedDict()
+        valid_names, _ = boundary_names.name_key_dist(props, component)
+        names = OrderedDict.fromkeys(valid_names)
+        valid_names = set(valid_names)
+
         for k, v in six.iteritems(props):
-            if k in keys:
-                names[v] = None
-            elif ':' in k:
+            if ':' in k:
+                if k == 'name:simple' and 'en' in languages:
+                    names[v] = None
                 k, qual = k.split(':', 1)
-                if k in self.ALL_OSM_NAME_KEYS and qual.split('_', 1)[0] in languages:
+                if k in valid_names and qual.split('_', 1)[0] in languages:
                     names[v] = None
         return names.keys()
 
-    def place_phrase_gazetteer(self, name, osm_components):
+    def place_names_and_components(self, name, osm_components, country=None, languages=None):
         names = set()
+        components = defaultdict(set)
 
         name_norm = six.u('').join([t for t, c in normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
                                                                     token_options=TOKEN_OPTIONS_DROP_PERIODS, whitespace=True)])
-
         for i, props in enumerate(osm_components):
-            component_names = set([n.lower() for n in self.all_names(props, languages or [])])
+            containing_ids = [(c['type'], c['id']) for c in osm_components[i + 1:] if 'type' in c and 'id' in c]
+
+            component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
+
+            component_names = set([n.lower() for n in self.all_names(props, languages or [] )])
 
             valid_component_names = set()
             for n in component_names:
@@ -337,10 +344,6 @@ class AddressComponents(object):
                     continue
 
                 valid_component_names.add(norm)
-
-            containing_ids = [(c['type'], c['id']) for c in osm_components[i + 1:] if 'type' in c and 'id' in c]
-
-            component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
 
             names |= valid_component_names
 
@@ -360,8 +363,7 @@ class AddressComponents(object):
                         if abbreviations:
                             names.update([a.lower() for a in abbreviations])
 
-        phrase_filter = PhraseFilter([(n, '') for n in names])
-        return phrase_filter
+        return names, components
 
     def normalized_place_name(self, name, tag, osm_components, country=None, languages=None):
         '''
@@ -375,9 +377,9 @@ class AddressComponents(object):
         tokens_lower = normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
                                          token_options=TOKEN_OPTIONS_DROP_PERIODS)
 
-        phrase_filter = self.place_phrase_gazetteer(name, osm_component_is_village)
+        names, components = self.place_names_and_components(name, osm_components, country=country, languages=languages)
 
-        components = defaultdict(set)
+        phrase_filter = PhraseFilter([(n, '') for n in names])
 
         phrases = list(phrase_filter.filter(tokens_lower))
 
