@@ -246,6 +246,9 @@ class OpenAddressesFormatter(object):
         ignore_fields_containing = {field: re.compile(six.u('|').join([six.u('(?:{})').format(safe_decode(v)) for v in value]), re.I | re.UNICODE)
                                     for field, value in six.iteritems(dict(self.get_property('ignore_fields_containing', *configs) or {}))}
 
+        alias_fields_containing = {field: [(re.compile(v['pattern']), re.I | re.UNICODE), v) for v in value]
+                                   for field, value in six.iteritems(dict(self.get_property('alias_fields_containing', *configs) or {}))}
+
         language = self.get_property('language', *configs)
 
         add_components = self.get_property('add', *configs)
@@ -319,6 +322,11 @@ class OpenAddressesFormatter(object):
 
                 if key in ignore_fields_containing and ignore_fields_containing[key].search(value):
                     continue
+
+                for (pattern, alias) in alias_fields_containing.get(key, []):
+                    if pattern.search(value):
+                        if 'component' in alias:
+                            key = alias['component']
 
                 if value:
                     components[key] = value
