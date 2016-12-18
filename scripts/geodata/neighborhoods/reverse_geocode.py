@@ -395,9 +395,6 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             if ranks and ranks[0][0] >= cls.DUPE_THRESHOLD:
                 score, props, poly, idx, i = ranks[0]
 
-                if existing_osm_boundaries is None:
-                    existing_osm_boundaries = osm_admin_rtree.point_in_poly(lat, lon, return_all=True)
-
                 containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries]
                 component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
                 attrs['component'] = component
