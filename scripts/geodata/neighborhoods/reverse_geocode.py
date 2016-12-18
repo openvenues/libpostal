@@ -373,14 +373,14 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                 existing_osm_boundaries = osm_admin_rtree.point_in_poly(lat, lon, return_all=True)
 
                 skip_node = False
-                for i, osm_props in enumerate(existing_osm_boundaries):
+                for poly_index, osm_props in enumerate(existing_osm_boundaries):
                     containing_component = None
                     name = osm_props.get('name')
                     # Only exact name matches here since we're comparins OSM to OSM
                     if name and name.lower() != attrs.get('name', ''.lower()):
                         continue
 
-                    containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries[i + 1:]]
+                    containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries[poly_index + 1:]]
 
                     containing_component = osm_address_components.component_from_properties(country, osm_props, containing=containing_ids)
 
