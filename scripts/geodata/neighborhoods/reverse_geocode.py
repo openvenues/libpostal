@@ -324,28 +324,6 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             for name_key in OSM_NAME_TAGS:
                 osm_names.extend([v for k, v in six.iteritems(attrs) if k.startswith('{}:'.format(name_key))])
 
-            existing_osm_boundaries = osm_admin_rtree.point_in_poly(lat, lon, return_all=True)
-
-            skip_node = False
-            for i, props in enumerate(existing_osm_boundaries):
-                containing_component = None
-                name = props.get('name')
-                # Only exact name matches here since we're comparins OSM to OSM
-                if name and name.lower() != attrs.get('name', ''.lower()):
-                    continue
-
-                containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries[i + 1:]]
-
-                containing_component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
-
-                if containing_component and containing_component != component_name and AddressFormatter.component_order[containing_component] <= AddressFormatter.component_order[AddressFormatter.CITY]:
-                    skip_node = True
-                    break
-
-            # Skip this element
-            if skip_node:
-                continue
-
             for idx in (cth, qs):
                 candidates = idx.get_candidate_polygons(lat, lon, return_all=True)
 
@@ -387,6 +365,31 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
                     if arg_max:
                         ranks.append(arg_max)
+
+            if not ranks:
+                continue
+
+            existing_osm_boundaries = osm_admin_rtree.point_in_poly(lat, lon, return_all=True)
+
+            skip_node = False
+            for i, props in enumerate(existing_osm_boundaries):
+                containing_component = None
+                name = props.get('name')
+                # Only exact name matches here since we're comparins OSM to OSM
+                if name and name.lower() != attrs.get('name', ''.lower()):
+                    continue
+
+                containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries[i + 1:]]
+
+                containing_component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
+
+                if containing_component and containing_component != component_name and AddressFormatter.component_order[containing_component] <= AddressFormatter.component_order[AddressFormatter.CITY]:
+                    skip_node = True
+                    break
+
+            # Skip this element
+            if skip_node:
+                continue
 
             ranks.sort(key=operator.itemgetter(0), reverse=True)
             if ranks and ranks[0][0] >= cls.DUPE_THRESHOLD:
