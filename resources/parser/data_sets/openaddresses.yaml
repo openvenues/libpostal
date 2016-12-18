@@ -595,9 +595,10 @@ countries:
               language: sv
 
     fr:
-        ignore_fields_containing:
+        alias_fields_containing:
             city:
-                - "(?:lyon|paris|marseilles?) ([\\d]+(?:e|er|ème|eme) arrondissement)"
+                - pattern: "(?:lyon|paris|marseilles?) ([\\d]+(?:e|er|ème|eme) arrondissement)"
+                  component: city_district
         files:
             - filename: ain.csv
             - filename: aisne.csv
