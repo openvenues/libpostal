@@ -310,15 +310,17 @@ class AddressComponents(object):
     def all_names(self, props, languages, component=None, keys=ALL_OSM_NAME_KEYS):
         # Preserve uniqueness and order
         valid_names, _ = boundary_names.name_key_dist(props, component)
-        names = OrderedDict.fromkeys([k for k in valid_names if k in keys])
-        valid_names = set(names)
+        names = OrderedDict()
+        valid_names = set([k for k in valid_names if k in keys])
 
         for k, v in six.iteritems(props):
-            if ':' in k:
+            if k in valid_names:
+                names[v] = None
+            elif ':' in k:
                 if k == 'name:simple' and 'en' in languages and k in keys:
                     names[v] = None
                 k, qual = k.split(':', 1)
-                if k in valid_names and qual.split('_', 1)[0] in languages and k in keys:
+                if k in valid_names and qual.split('_', 1)[0] in languages:
                     names[v] = None
         return names.keys()
 
