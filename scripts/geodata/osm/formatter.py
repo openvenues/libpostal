@@ -195,6 +195,17 @@ class OSMAddressFormatter(object):
         sub_building_components = {k: v for k, v in six.iteritems(sub_building_components) if k in AddressFormatter.address_formatter_fields}
         return sub_building_components
 
+    def normalized_street_name(self, address_components, country=None, language=None):
+        street = address_components.get(AddressFormatter.ROAD)
+        if street and ',' in street:
+            street_parts = [part.strip() for part in street.split(',')]
+
+            if len(street_parts) > 1 and (street_parts[-1].lower() == address_components.get(AddressFormatter.HOUSE_NUMBER, '').lower()) and self.formatter.house_number_before_road(country, language):
+                street = street_parts[0]
+                return street
+
+        return None
+
     def valid_venue_name(self, name, address_components, languages=None, is_rail_station=False):
         if not name:
             return False
@@ -951,6 +962,11 @@ class OSMAddressFormatter(object):
         street_name = address_components.get(AddressFormatter.ROAD)
 
         if street_name:
+            normalized_street_name = self.normalized_street_name(address_components, country, language)
+            if normalized_street_name:
+                street_name = normalized_street_name
+                address_components[AddressFormatter.ROAD] = street_name
+
             address_components[AddressFormatter.ROAD] = self.abbreviated_street(street_name, language)
 
         expanded_components = address_components.copy()
