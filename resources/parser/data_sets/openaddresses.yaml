@@ -3435,6 +3435,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Seattle
+                    - filename: skagit.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Skagitt County
                     - filename: snohomish_county.csv
                       add_osm_boundaries: true
                       city_replacements:
