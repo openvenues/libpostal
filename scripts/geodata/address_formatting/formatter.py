@@ -207,6 +207,8 @@ class AddressFormatter(object):
         config = yaml.load(open(os.path.join(self.formatter_repo_path,
                                 'conf', 'countries', 'worldwide.yaml')))
         self.country_aliases = {}
+        self.house_number_ordering = {}
+
         for key in list(config):
             country = key
             language = None
@@ -231,6 +233,18 @@ class AddressFormatter(object):
             else:
                 address_template = value
                 config[country] = self.add_postprocessing_tags(value, country, language=language)
+
+            try:
+                house_number_index = address_template.index(self.tag_token(self.HOUSE_NUMBER))
+                road_index = address_template.index(self.tag_token(self.ROAD))
+
+                if house_number_index < road_index:
+                    self.house_number_ordering[key.lower()] = -1
+                else:
+                    self.house_number_ordering[key.lower()] = 1
+            except ValueError:
+                self.house_number_ordering[key.lower()] = 0
+
         self.country_formats = config
 
     def load_config(self):
@@ -301,6 +315,26 @@ class AddressFormatter(object):
             component_insertions[component] = self.insertion_distribution(insertions)
 
         return component_insertions
+
+    def house_number_before_road(self, country, language=None):
+        key = value = None
+        if language is not None:
+            key = six.u('_').join((country.lower(), language.lower()))
+            if key in self.house_number_ordering:
+                value = self.house_number_ordering[key]
+
+        if value is None:
+            key = country
+            if key in self.house_number_ordering:
+                value = self.house_number_ordering[key]
+
+        if value is None:
+            value = 0
+
+        if value <= 0:
+            return True
+        else:
+            return False
 
     def conditional_insertion_probs(self, conditionals):
         conditional_insertions = defaultdict(OrderedDict)
