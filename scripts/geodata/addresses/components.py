@@ -363,7 +363,10 @@ class AddressComponents(object):
                     for language in languages:
                         abbreviations = state_abbreviations.get_all_abbreviations(country, language, state, default=None)
                         if abbreviations:
-                            names.update([a.lower() for a in abbreviations])
+                            abbrev_names = [a.lower() for a in abbreviations]
+                            names.update(abbrev_names)
+                            for a in abbrev_names:
+                                components[a].add(AddressFormatter.STATE)
 
         return names, components
 
