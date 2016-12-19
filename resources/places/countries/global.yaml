@@ -191,6 +191,8 @@ countries:
                     - city
             suburb:
                 probability: 0.5
+            city_district:
+                probability: 0.3
             country:
                 probability: 0.6
 
