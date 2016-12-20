@@ -82,8 +82,10 @@ class NameAffixes(object):
         re = None
         if country is not None:
             re = d.get((country, lang))
-        if re is None:
-            re = d.get(lang)
+            if re:
+                name = re.sub(six.u(''), name)
+
+        re = d.get(lang)
 
         if not re:
             return name
@@ -101,8 +103,10 @@ class NameAffixes(object):
         re = None
         if country is not None:
             re = d.get((country, lang))
-        if re is None:
-            re = d.get(lang)
+            if re:
+                name = re.sub(six.u(''), name)
+
+        re = d.get(lang)
 
         if not re:
             return name
