@@ -370,7 +370,7 @@ class AddressComponents(object):
 
         return names, components
 
-    def normalized_place_name(self, name, tag, osm_components, country=None, languages=None):
+    def normalized_place_name(self, name, tag, osm_components, country=None, languages=None, phrase_from_component=False):
         '''
         Multiple place names
         --------------------
@@ -406,7 +406,7 @@ class AddressComponents(object):
                         total_tokens -= 1
                     # Return phrase with original capitalization
                     return join_phrase.join([t for t, c in tokens[:total_tokens]])
-                elif num_phrases == 0 and total_tokens > 0:
+                elif num_phrases == 0 and total_tokens > 0 and not phrase_from_component:
                     # We're only talking about addr:city tags, etc. so default to
                     # the reverse geocoded components (better names) if we encounter
                     # an unknown phrase followed by a containing boundary phrase.
@@ -420,7 +420,7 @@ class AddressComponents(object):
                 current_phrase = join_phrase.join([t for t, c in current_phrase_tokens])
                 # Handles cases like addr:city="Harlem" when Harlem is a neighborhood
                 tags = components.get(current_phrase, set())
-                if tags and tag not in tags:
+                if tags and tag not in tags and not phrase_from_component:
                     return None
 
                 total_tokens += len(phrase_tokens)
@@ -807,7 +807,6 @@ class AddressComponents(object):
                              normalize_languages=None,
                              random_key=True,
                              add_city_points=True,
-                             always_use_full_names=False,
                              drop_duplicate_city_names=True,
                              ):
         '''
@@ -896,7 +895,7 @@ class AddressComponents(object):
 
             for component, vals in poly_components.iteritems():
                 if component not in address_components or (non_local_language and random.random() < replace_with_non_local_prob):
-                    if not always_use_full_names:
+                    if random_key:
                         if component == AddressFormatter.STATE_DISTRICT and random.random() < join_state_district_prob:
                             num = random.randrange(1, len(vals) + 1)
                             val = six.u(', ').join(vals[:num])
@@ -904,6 +903,8 @@ class AddressComponents(object):
                             val = vals[0]
                         else:
                             val = random.choice(vals)
+                    else:
+                        val = vals[0]
 
                     new_admin_components[component] = val
 
@@ -911,7 +912,7 @@ class AddressComponents(object):
                 normalize_languages = []
                 if language is not None:
                     normalize_languages.append(language)
-            self.normalize_place_names(new_admin_components, osm_components, country=country, languages=normalize_languages)
+            self.normalize_place_names(new_admin_components, osm_components, country=country, languages=normalize_languages, phrase_from_component=True)
 
             self.abbreviate_admin_components(new_admin_components, country, language)
 
@@ -1575,8 +1576,7 @@ class AddressComponents(object):
                                   language_suffix=language_suffix,
                                   non_local_language=non_local_language,
                                   normalize_languages=all_languages,
-                                  random_key=False,
-                                  always_use_full_names=True)
+                                  random_key=False)
 
         self.add_neighborhoods(address_components, neighborhoods,
                                language_suffix=language_suffix)
