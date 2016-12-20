@@ -470,6 +470,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Montréal
+                    - filename: gatineau.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Gatineau
 
             sk:
                 add:
@@ -2164,6 +2168,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Paducah
+                    - filename: city_of_owensboro.csv
                     - filename: clark.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -2184,6 +2189,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: McCracken County
+                    - filename: madison.csv
                     - filename: meade.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -2317,6 +2323,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Ottawa County
+                    - filename: st_clair.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Saint Clair County
                     - filename: troy.csv
                     - filename: washtenaw.csv
 
@@ -2606,6 +2616,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Dickinson
+                    - filename: grand_forks.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Grand Forks
                     - filename: stark_county.csv
                       add_osm_boundaries: true
                       city_replacements:
