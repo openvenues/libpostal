@@ -950,8 +950,8 @@ class AddressComponents(object):
     def neighborhood_components(self, latitude, longitude):
         return self.neighborhoods_rtree.point_in_poly(latitude, longitude, return_all=True)
 
-    def add_neighborhoods(self, address_components,
-                          neighborhoods, language_suffix=''):
+    def add_neighborhoods(self, address_components, neighborhoods,
+                          country, language, language_suffix=''):
         '''
         Neighborhoods
         -------------
@@ -1004,9 +1004,14 @@ class AddressComponents(object):
 
             neighborhood_levels[neighborhood_level].append(name)
 
+        neighborhood_components = {}
+
         for component, neighborhoods in neighborhood_levels.iteritems():
             if component not in address_components:
-                address_components[component] = neighborhoods[0]
+                neighborhood_components[component] = neighborhoods[0]
+
+        self.abbreviate_admin_components(neighborhood_components, country, language)
+        address_components.update(neighborhood_components)
 
     def generate_sub_building_component(self, component, address_components, language, country=None, **kw):
         existing = address_components.get(component, None)
@@ -1473,7 +1478,7 @@ class AddressComponents(object):
                                   normalize_languages=all_languages,
                                   language_suffix=language_suffix)
 
-        self.add_neighborhoods(address_components, neighborhoods,
+        self.add_neighborhoods(address_components, neighborhoods, country, language,
                                language_suffix=language_suffix)
 
         street = address_components.get(AddressFormatter.ROAD)
@@ -1579,7 +1584,7 @@ class AddressComponents(object):
                                   normalize_languages=all_languages,
                                   random_key=False)
 
-        self.add_neighborhoods(address_components, neighborhoods,
+        self.add_neighborhoods(address_components, neighborhoods, country, language,
                                language_suffix=language_suffix)
 
         self.replace_name_affixes(address_components, non_local_language or language)

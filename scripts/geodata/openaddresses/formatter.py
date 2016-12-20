@@ -464,7 +464,7 @@ class OpenAddressesFormatter(object):
                 neighborhood_components = []
                 if add_osm_neighborhoods:
                     neighborhood_components = self.components.neighborhood_components(latitude, longitude)
-                    self.components.add_neighborhoods(components, neighborhood_components)
+                    self.components.add_neighborhoods(components, neighborhood_components, country, language)
 
                 self.components.cleanup_boundary_names(components)
                 self.components.country_specific_cleanup(components, country)
