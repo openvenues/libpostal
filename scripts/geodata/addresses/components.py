@@ -436,12 +436,13 @@ class AddressComponents(object):
 
         return name
 
-    def normalize_place_names(self, address_components, osm_components, country=None, languages=None):
+    def normalize_place_names(self, address_components, osm_components, country=None, languages=None, phrase_from_component=False):
         for key in list(address_components):
             name = address_components[key]
             if key in self.BOUNDARY_COMPONENTS:
                 name = self.normalized_place_name(name, key, osm_components,
-                                                  country=country, languages=languages)
+                                                  country=country, languages=languages,
+                                                  phrase_from_component=phrase_from_component)
 
                 if name is not None:
                     address_components[key] = name
