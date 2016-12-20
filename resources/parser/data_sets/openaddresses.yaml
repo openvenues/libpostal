@@ -165,7 +165,7 @@ countries:
 
             bc:
                 add:
-                    state: BC
+                    state: British Columbia
                 language: en
                 files:
                     - filename: kamloops.csv
@@ -488,7 +488,7 @@ countries:
 
             yk:
                 add:
-                    state: YT
+                    state: Yukon
                 language: en
                 files:
                     - filename: whitehorse.csv
@@ -1529,7 +1529,7 @@ countries:
 
             dc:
                 add:
-                    state: D.C.
+                    state: District of Columbia
                 files:
                     - filename: statewide.csv
 
@@ -2480,7 +2480,7 @@ countries:
 
             nc:
                 add:
-                    state: NC
+                    state: North Carolina
                 files:
                     - filename: alamance.csv
                       add_osm_boundaries: true
@@ -2609,7 +2609,7 @@ countries:
 
             nd:
                 add:
-                    state: ND
+                    state: North Dakota
                 files:
                     - filename: city_of_bismarck.csv
                       add_osm_boundaries: true
@@ -2739,20 +2739,20 @@ countries:
 
             nh:
                 add:
-                    state: NH
+                    state: New Hampshire
                 files:
                     - filename: statewide.csv
 
             nj:
                 add:
-                    state: NJ
+                    state: New Jersey
                 files:
                     - filename: statewide.csv
                       add_osm_boundaries: true
 
             nm:
                 add:
-                    state: NM
+                    state: New Mexico
                 files:
                     - filename: albuquerque.csv
                       add_osm_boundaries: true
@@ -2804,7 +2804,7 @@ countries:
 
             ny:
                 add:
-                    state: NY
+                    state: New York
                 files:
                     # Note: uses New York as the city for all 5 boroughs of NYC, which
                     # is correct and what the OSM data uses as well. We store boroughs
@@ -3099,13 +3099,13 @@ countries:
 
             ri:
                 add:
-                    state: RI
+                    state: Rhode Island
                 files:
                     - filename: statewide.csv
 
             sc:
                 add:
-                    state: SC
+                    state: South Carolina
                 files:
                     - filename: aiken.csv
                     - filename: anderson.csv
@@ -3145,7 +3145,7 @@ countries:
 
             sd:
                 add:
-                    state: SD
+                    state: South Dakota
                 files:
                     - filename: lawrence.csv
                       add_osm_boundaries: true
@@ -3550,7 +3550,7 @@ countries:
 
             wv:
                 add:
-                    state: WV
+                    state: West Virginia
                 files:
                     - filename: hancock.csv
                     - filename: harrison.csv
