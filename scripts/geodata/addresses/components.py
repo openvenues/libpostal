@@ -770,16 +770,22 @@ class AddressComponents(object):
                 return True
         return False
 
-    def abbreviate_admin_components(self, address_components, country, language, hyphenation=True):
+    def abbreviated_state(self, state, country, language):
         abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
+
+        if random.random() < abbreviate_state_prob:
+            state = state_abbreviations.get_abbreviation(country, language, state, default=state)
+        return state
+
+    def abbreviate_admin_components(self, address_components, country, language, hyphenation=True):
         abbreviate_toponym_prob = float(nested_get(self.config, ('boundaries', 'abbreviate_toponym_probability')))
 
         for component, val in six.iteritems(address_components):
             if component not in AddressFormatter.BOUNDARY_COMPONENTS:
                 continue
 
-            if component == AddressFormatter.STATE and random.random() < abbreviate_state_prob:
-                val = state_abbreviations.get_abbreviation(country, language, val, default=val)
+            if component == AddressFormatter.STATE:
+                val = self.abbreviated_state(val, country, language)
             else:
                 val = abbreviate(toponym_abbreviations_gazetteer, val, language, abbreviate_prob=abbreviate_toponym_prob)
                 if hyphenation:

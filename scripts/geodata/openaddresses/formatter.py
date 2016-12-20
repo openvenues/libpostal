@@ -436,6 +436,12 @@ class OpenAddressesFormatter(object):
                 if address_state:
                     components[AddressFormatter.STATE] = address_state
 
+                state = components.get(AddressFormatter.STATE)
+                if state:
+                    state = self.components.abbreviated_state(state, country, language)
+                    if state:
+                        components[AddressFormatter.STATE] = state
+
                 # This is expensive, so only turn on for files that don't supply their own city names
                 # or for which those names are flawed
                 osm_components = []
