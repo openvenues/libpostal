@@ -307,6 +307,9 @@ countries:
                     - city
                     - state_district
                     - state
+            # Boroughs of Mexico City
+            city_district:
+                probability: 0.4
             state:
                 probability: 0.5
                 population:
