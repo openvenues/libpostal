@@ -91,6 +91,7 @@ countries:
             - filename: 31255.csv
             - filename: 31256.csv
             - filename: city_of_vienna.csv
+            - filename: tirol.csv
 
     au:
         fields: *fields_with_state_and_unit
@@ -525,6 +526,9 @@ countries:
             hh:
                 files:
                     - filename: statewide.csv
+            ni:
+                files:
+                    - filename: bentheim.csv
             nw:
                 files:
                     - filename: city_of_cologne.csv
