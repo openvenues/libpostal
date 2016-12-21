@@ -2189,11 +2189,11 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Lexington
+                    - filename: madison.csv
                     - filename: mccracken.csv
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: McCracken County
-                    - filename: madison.csv
                     - filename: meade.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -2385,6 +2385,9 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Red Lake County
+                    - filename: rice.csv
+                      city_replacements:
+                          state_district: Rice County
                     - filename: roseau.csv
                     - filename: scott.csv
                     - filename: sherburne.csv
