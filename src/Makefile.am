@@ -1,13 +1,18 @@
 SUBDIRS = sparkey
 
-CFLAGS_BASE = -Wfloat-equal -Wpointer-arith -DLIBPOSTAL_DATA_DIR='"$(datadir)/libpostal"'
+# Inherited from autoconf / user-specified
+CFLAGS_CONF = @CFLAGS@
+CFLAGS_BASE = -Wfloat-equal -Wpointer-arith -DLIBPOSTAL_DATA_DIR='"$(datadir)/libpostal"' -g $(CFLAGS_CONF)
+
 CFLAGS_O0 = $(CFLAGS_BASE) -O0
 CFLAGS_O1 = $(CFLAGS_BASE) -O1
 CFLAGS_O2 = $(CFLAGS_BASE) -O2
 CFLAGS_O3 = $(CFLAGS_BASE) -O3
 DEFAULT_INCLUDES = -I.. -I/usr/local/include
 
-CFLAGS = $(CFLAGS_BASE)
+# Wonky but have to be able to override the user's optimization level to compile the scanner
+# as it takes an unreasonably long time to compile with the optimizer on.
+CFLAGS =
 
 lib_LTLIBRARIES = libpostal.la
 libpostal_la_SOURCES = libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c trie_utils.c string_utils.c file_utils.c numex.c utf8proc/utf8proc.c cmp/cmp.c geodb.c geo_disambiguation.c normalize.c bloom.c features.c geonames.c geohash/geohash.c unicode_scripts.c msgpack_utils.c address_parser.c address_parser_io.c averaged_perceptron.c sparse_matrix.c averaged_perceptron_tagger.c graph.c graph_builder.c language_classifier.c language_features.c logistic_regression.c logistic.c matrix.c minibatch.c float_utils.c
