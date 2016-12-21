@@ -544,7 +544,7 @@ class AddressComponents(object):
 
     def get_component_phrase(self, cls, component, language, country=None):
         component = safe_decode(component)
-        if not is_numeric(component):
+        if not is_numeric(component) and not (component.isalpha() and len(component) == 1):
             return None
 
         phrase = cls.phrase(component, language, country=country)
@@ -552,6 +552,14 @@ class AddressComponents(object):
             return phrase
         else:
             return None
+
+    def normalize_sub_building_components(self, address_components, language, country=None):
+        for component, cls in six.iteritems(self.sub_building_component_class_map):
+            if component in address_components:
+                val = address_components[component]
+                new_val = self.get_component_phrase(cls, val, language, country)
+                if new_val is not None:
+                    address_components[component] = new_val
 
     def cldr_country_name(self, country_code, language):
         '''
@@ -1504,6 +1512,8 @@ class AddressComponents(object):
         self.add_house_number_phrase(address_components, language, country=country)
         self.add_postcode_phrase(address_components, language, country=country)
         self.add_metro_station_phrase(address_components, language, country=country)
+
+        self.normalize_sub_building_components(address_components, language, country=country)
 
         if add_sub_building_components:
             self.add_sub_building_components(address_components, language, country=country,
