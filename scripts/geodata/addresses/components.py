@@ -1244,6 +1244,12 @@ class AddressComponents(object):
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
         if not house_number:
             return
+
+        house_number = house_number.strip(six.u(',;- '))
+        if not house_number:
+            address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
+            return
+
         if six.u(';') in house_number:
             house_number = house_number.replace(six.u(';'), six.u(','))
             address_components[AddressFormatter.HOUSE_NUMBER] = house_number
