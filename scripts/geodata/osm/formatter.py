@@ -1031,9 +1031,11 @@ class OSMAddressFormatter(object):
 
         for alternate_house_number in (conscription_number, austro_hungarian_street_number):
             if alternate_house_number is not None:
+                original_house_number = address_components[AddressFormatter.HOUSE_NUMBER]
                 address_components[AddressFormatter.HOUSE_NUMBER] = alternate_house_number
                 formatted_addresses = self.formatted_addresses_with_venue_names(address_components, reduced_venue_names, country, language=language,
                                                                                 tag_components=tag_components, minimal_only=not tag_components)
+                address_components[AddressFormatter.HOUSE_NUMBER] = original_house_number
 
         if expanded_only_venue_names:
             formatted_addresses.extend(self.formatted_addresses_with_venue_names(expanded_components, expanded_only_venue_names, country, language=language,
