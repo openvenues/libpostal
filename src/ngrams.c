@@ -1,7 +1,7 @@
 #include "ngrams.h"
 #include "utf8proc/utf8proc.h"
 
-bool add_ngrams(cstring_array *grams, char *str, size_t n, size_t len, bool prefix, bool suffix) {
+bool add_ngrams(cstring_array *grams, size_t n, char *str, size_t len, bool prefix, bool suffix) {
     if (n == 0) return false;
     
     size_t lengths[n];
