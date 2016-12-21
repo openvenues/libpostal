@@ -1,16 +1,153 @@
 # libpostal: international street address NLP
 
 [![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal) [![License](https://img.shields.io/github/license/openvenues/libpostal.svg)](https://github.com/openvenues/libpostal/blob/master/LICENSE)
+[![OpenCollective](https://opencollective.com/libpostal/sponsors/badge.svg)](#sponsors)
+[![OpenCollective](https://opencollective.com/libpostal/backers/badge.svg)](#backers) 
 
-:jp: :us: :gb: :ru: :fr: :kr: :it: :es: :cn: :de:
+<span>&#x1f1e7;&#x1f1f7;</span> <span>&#x1f1eb;&#x1f1ee;</span>  <span>&#x1f1f3;&#x1f1ec;</span> :jp: <span>&#x1f1fd;&#x1f1f0; </span> <span>&#x1f1e7;&#x1f1e9; </span> <span>&#x1f1f5;&#x1f1f1; </span> <span>&#x1f1fb;&#x1f1f3; </span> <span>&#x1f1e7;&#x1f1ea; </span> <span>&#x1f1f2;&#x1f1e6; </span> <span>&#x1f1fa;&#x1f1e6; </span> <span>&#x1f1ef;&#x1f1f2; </span> :ru: <span>&#x1f1ee;&#x1f1f3; </span> <span>&#x1f1f1;&#x1f1fb; </span> <span>&#x1f1e7;&#x1f1f4; </span> :de: <span>&#x1f1f8;&#x1f1f3; </span>  <span>&#x1f1e6;&#x1f1f2; </span> :kr: <span>&#x1f1f3;&#x1f1f4; </span>  <span>&#x1f1f2;&#x1f1fd; </span> <span>&#x1f1e8;&#x1f1ff; </span> <span>&#x1f1f9;&#x1f1f7; </span> :es: <span>&#x1f1f8;&#x1f1f8; </span> <span>&#x1f1ea;&#x1f1ea; </span> <span>&#x1f1e7;&#x1f1ed; </span> <span>&#x1f1f3;&#x1f1f1; </span> :cn:  <span>&#x1f1f5;&#x1f1f9; </span> <span>&#x1f1f5;&#x1f1f7; </span> :gb: <span>&#x1f1f5;&#x1f1f8; </span> 
 
-libpostal is a C library for parsing/normalizing street addresses around the world. This [introductory blog post](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86) is a good overview of the research and thought process behind libpostal.
+libpostal is a C library for parsing/normalizing street addresses around the world using statistical NLP and open data. For a more comprehensive overview of the research, check out the [introductory blog post](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86), but to sum up, the goal of this project is to understand location-based strings in every language, everywhere.
 
-Addresses and the geographic coordinates they represent are essential for any location-based application (map search, transportation, on-demand/delivery services, check-ins, reviews). Yet even the simplest addresses are packed with local conventions, abbreviations and context, making them difficult to index/query effectively with traditional full-text search engines, which are designed for document indexing. This library helps convert the free-form addresses that humans use into clean normalized forms suitable for machine comparison and full-text indexing.
+<span>&#x1f1f7;&#x1f1f4; </span> <span>&#x1f1ec;&#x1f1ed; </span> <span>&#x1f1e6;&#x1f1fa; </span> <span>&#x1f1f2;&#x1f1fe; </span> <span>&#x1f1ed;&#x1f1f7; </span> <span>&#x1f1ed;&#x1f1f9; </span> :us: <span>&#x1f1ff;&#x1f1e6; </span> <span>&#x1f1f7;&#x1f1f8; </span> <span>&#x1f1e8;&#x1f1f1; </span> :it: <span>&#x1f1f0;&#x1f1ea; <span>&#x1f1e8;&#x1f1ed; </span> <span>&#x1f1e8;&#x1f1fa; </span> <span>&#x1f1f8;&#x1f1f0; </span> <span>&#x1f1e6;&#x1f1f4; </span> <span>&#x1f1e9;&#x1f1f0; </span> <span>&#x1f1f9;&#x1f1ff; </span> <span>&#x1f1e6;&#x1f1f1; </span> <span>&#x1f1e8;&#x1f1f4; </span> <span>&#x1f1ee;&#x1f1f1; </span> <span>&#x1f1ec;&#x1f1f9; </span>  :fr: <span>&#x1f1f5;&#x1f1ed; </span> <span>&#x1f1e6;&#x1f1f9; </span> <span>&#x1f1f1;&#x1f1e8; </span>  <span>&#x1f1ee;&#x1f1f8; <span>&#x1f1ee;&#x1f1e9; </span> </span> <span>&#x1f1e6;&#x1f1ea; </span> </span> <span>&#x1f1f8;&#x1f1f0; </span> <span>&#x1f1f9;&#x1f1f3; </span> <span>&#x1f1f0;&#x1f1ed; </span> <span>&#x1f1e6;&#x1f1f7; </span> <span>&#x1f1ed;&#x1f1f0; </span>
 
-While libpostal is not itself a full geocoder, it can be used as a preprocessing step to make any geocoding application smarter, simpler, and more consistent internationally.
+Addresses and the locations they represent are essential for any application dealing with maps (place search, transportation, on-demand/delivery services, check-ins, reviews). Yet even the simplest addresses are packed with local conventions, abbreviations and context, making them difficult to index/query effectively with traditional full-text search engines. This library helps convert the free-form addresses that humans use into clean normalized forms suitable for machine comparison and full-text indexing. Though libpostal is not itself a full geocoder, it can be used as a preprocessing step to make any geocoding application smarter, simpler, and more consistent internationally.
 
 The core library is written in pure C. Language bindings for [Python](https://github.com/openvenues/pypostal), [Ruby](https://github.com/openvenues/ruby_postal), [Go](https://github.com/openvenues/gopostal), [Java](https://github.com/openvenues/jpostal), [PHP](https://github.com/openvenues/php-postal), and [NodeJS](https://github.com/openvenues/node-postal) are officially supported and it's easy to write bindings in other languages.
+
+Sponsors
+------------
+
+If your company is using libpostal, consider asking your organization to sponsor the project and help fund our continued research into geo + NLP. Interpreting what humans mean when they refer to locations is far from a solved problem, and sponsorships help us pursue new frontiers in machine geospatial intelligence. As a sponsor, your company logo will appear prominently on the Github repo page along with a link to your site. [Sponsorship info](https://opencollective.com/libpostal#sponsor)
+
+<a href="https://opencollective.com/libpostal/sponsor/0/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/1/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/2/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/3/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/4/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/5/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/6/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/7/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/8/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/9/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/9/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/10/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/10/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/11/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/11/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/12/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/12/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/13/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/13/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/14/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/14/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/15/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/15/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/16/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/16/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/17/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/17/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/18/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/18/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/19/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/19/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/20/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/20/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/21/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/21/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/22/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/22/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/23/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/23/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/24/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/24/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/25/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/25/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/26/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/26/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/27/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/27/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/28/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/28/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/sponsor/29/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/29/avatar.svg"></a>
+
+Backers
+------------
+
+Individual users can also help support open geo NLP research by making a monthly donation:
+
+<a href="https://opencollective.com/libpostal/backer/0/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/0/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/1/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/1/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/2/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/2/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/3/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/3/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/4/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/4/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/5/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/5/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/6/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/6/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/7/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/7/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/8/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/8/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/9/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/9/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/10/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/10/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/11/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/11/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/12/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/12/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/13/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/13/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/14/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/14/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/15/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/15/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/16/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/16/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/17/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/17/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/18/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/18/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/19/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/19/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/20/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/20/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/21/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/21/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/22/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/22/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/23/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/23/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/24/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/24/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/25/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/25/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/26/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/26/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/27/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/27/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/28/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/28/avatar.svg"></a>
+<a href="https://opencollective.com/libpostal/backer/29/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/29/avatar.svg"></a>
+
+Examples of parsing
+-------------------
+
+libpostal implements the first statistical address parser that works well internationally,
+trained on ~50 million addresses in over 100 countries and as many
+languages. We use OpenStreetMap (anything with an addr:* tag) and the OpenCage
+address format templates at: https://github.com/OpenCageData/address-formatting
+to construct the training data, supplementing with containing polygons and
+perturbing the inputs in a number of ways to make the parser as robust as possible
+to messy real-world input. 
+
+These example parse results are taken from the interactive address_parser program 
+that builds with libpostal when you run ```make```. Note that the parser is robust to 
+commas vs. no commas, casing, different permutations of components (if the input
+is e.g. just city or just city/postcode).
+
+![parser](https://cloud.githubusercontent.com/assets/238455/13209628/2c465b50-d8f4-11e5-8e70-915c6b6d207b.gif)
+
+The parser achieves very high accuracy on held-out data, currently 98.9%
+correct full parses (meaning a 1 in the numerator for getting *every* token
+in the address correct).
+
+Usage (parser)
+--------------
+
+Here's an example of the parser API using the Python bindings:
+
+```python
+
+from postal.parser import parse_address
+parse_address('The Book Club 100-106 Leonard St Shoreditch London EC2A 4RH, United Kingdom')
+```
+
+And an example with the C API:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <libpostal/libpostal.h>
+
+int main(int argc, char **argv) {
+    // Setup (only called once at the beginning of your program)
+    if (!libpostal_setup() || !libpostal_setup_parser()) {
+        exit(EXIT_FAILURE);
+    }
+
+    address_parser_options_t options = get_libpostal_address_parser_default_options();
+    address_parser_response_t *parsed = parse_address("781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", options);
+
+    for (size_t i = 0; i < parsed->num_components; i++) {
+        printf("%s: %s\n", parsed->labels[i], parsed->components[i]);
+    }
+
+    // Free parse result
+    address_parser_response_destroy(parsed);
+
+    // Teardown (only called once at the end of your program)
+    libpostal_teardown();
+    libpostal_teardown_parser();
+}
+```
+
 
 Examples of normalization
 -------------------------
@@ -85,81 +222,24 @@ int main(int argc, char **argv) {
 }
 ```
 
-Examples of parsing
--------------------
-
-libpostal implements the first statistical address parser that works well internationally,
-trained on ~50 million addresses in over 100 countries and as many
-languages. We use OpenStreetMap (anything with an addr:* tag) and the OpenCage
-address format templates at: https://github.com/OpenCageData/address-formatting
-to construct the training data, supplementing with containing polygons and
-perturbing the inputs in a number of ways to make the parser as robust as possible
-to messy real-world input. 
-
-These example parse results are taken from the interactive address_parser program 
-that builds with libpostal when you run ```make```. Note that the parser is robust to 
-commas vs. no commas, casing, different permutations of components (if the input
-is e.g. just city or just city/postcode).
-
-![parser](https://cloud.githubusercontent.com/assets/238455/13209628/2c465b50-d8f4-11e5-8e70-915c6b6d207b.gif)
-
-The parser achieves very high accuracy on held-out data, currently 98.9%
-correct full parses (meaning a 1 in the numerator for getting *every* token
-in the address correct).
-
-Usage (parser)
---------------
-
-Here's an example of the parser API using the Python bindings:
-
-```python
-
-from postal.parser import parse_address
-parse_address('The Book Club 100-106 Leonard St Shoreditch London EC2A 4RH, United Kingdom')
-```
-
-And an example with the C API:
-
-```c
-#include <stdio.h>
-#include <stdlib.h>
-#include <libpostal/libpostal.h>
-
-int main(int argc, char **argv) {
-    // Setup (only called once at the beginning of your program)
-    if (!libpostal_setup() || !libpostal_setup_parser()) {
-        exit(EXIT_FAILURE);
-    }
-
-    address_parser_options_t options = get_libpostal_address_parser_default_options();
-    address_parser_response_t *parsed = parse_address("781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", options);
-
-    for (size_t i = 0; i < parsed->num_components; i++) {
-        printf("%s: %s\n", parsed->labels[i], parsed->components[i]);
-    }
-
-    // Free parse result
-    address_parser_response_destroy(parsed);
-
-    // Teardown (only called once at the end of your program)
-    libpostal_teardown();
-    libpostal_teardown_parser();
-}
-```
-
 Installation
 ------------
 
 Before you install, make sure you have the following prerequisites:
 
-**On Linux (Ubuntu)**
+**On Ubuntu/Debian**
 ```
 sudo apt-get install curl libsnappy-dev autoconf automake libtool pkg-config
 ```
 
+**On CentOS/RHEL**
+```
+sudo yum install snappy snappy-devel autoconf automake libtool pkgconfig
+```
+
 **On Mac OSX**
 ```
-sudo brew install snappy autoconf automake libtool pkg-config
+brew install snappy autoconf automake libtool pkg-config
 ```
 
 Then to install the C library:
@@ -203,15 +283,24 @@ Libpostal is designed to be used by higher-level languages.  If you don't see yo
 - Java/JVM: [jpostal](https://github.com/openvenues/jpostal)
 - PHP: [php-postal](https://github.com/openvenues/php-postal)
 - NodeJS: [node-postal](https://github.com/openvenues/node-postal)
+- R: [poster](https://github.com/ironholds/poster)
 
 **Unofficial language bindings**
 
 - LuaJIT: [lua-resty-postal](https://github.com/bungle/lua-resty-postal)
-- R: [poster](https://github.com/ironholds/poster)
+- Perl: [Geo::libpostal](https://metacpan.org/pod/Geo::libpostal)
 
 **Database extensions**
 
 - PostgreSQL: [pgsql-postal](https://github.com/pramsey/pgsql-postal)
+
+**Unofficial REST API**
+
+- Libpostal REST: [libpostal REST](https://github.com/johnlonganecker/libpostal-rest)
+
+**Libpostal REST Docker**
+
+- Libpostal REST Docker [Libpostal REST Docker](https://github.com/johnlonganecker/libpostal-rest-docker)
 
 Command-line usage (expand)
 ---------------------------

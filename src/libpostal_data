@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 set -e
 
@@ -26,7 +26,7 @@ LIBPOSTAL_GEO_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated_geo
 LIBPOSTAL_PARSER_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated_parser
 LIBPOSTAL_LANG_CLASS_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated_language_classifier
 
-BASIC_MODULE_DIRS=(address_expansions numex transliteration)
+BASIC_MODULE_DIRS="address_expansions numex transliteration"
 GEODB_MODULE_DIR=geodb
 PARSER_MODULE_DIR=address_parser
 LANGUAGE_CLASSIFIER_MODULE_DIR=language_classifier
@@ -36,41 +36,51 @@ export LC_ALL=C
 EPOCH_DATE="Jan  1 00:00:00 1970"
 
 MB=$((1024*1024))
-LARGE_FILE_SIZE=$((100*$MB))
+CHUNK_SIZE=$((64*$MB))
 
-NUM_WORKERS=5
+LARGE_FILE_SIZE=$((CHUNK_SIZE*2))
 
-function kill_background_processes { 
+
+NUM_WORKERS=10
+
+kill_background_processes() {
     jobs -p | xargs kill;
     exit
 }
 
-trap kill_background_processes SIGINT
+trap kill_background_processes INT
 
-function download_multipart() {
+PART_MSG='echo "Downloading part $1: filename=$5, offset=$2, max=$3"'
+PART_CURL='curl $4 --silent -H"Range:bytes=$2-$3" --retry 3 --retry-delay 2 -o $5'
+DOWNLOAD_PART="$PART_MSG;$PART_CURL"
+
+
+download_multipart() {
     url=$1
     filename=$2
     size=$3
-    num_workers=$4
 
-    echo "Downloading multipart: $url, size=$size"
-    chunk_size=$((size/num_workers))
-
+    num_chunks=$((size/CHUNK_SIZE))
+    echo "Downloading multipart: $url, size=$size, num_chunks=$num_chunks"
     offset=0
-    for i in `seq 1 $((num_workers-1))`; do
+    i=0
+    while [ $i -lt $num_chunks ]; do
+        i=$((i+1))
         part_filename="$filename.$i"
-        echo "Downloading part $i: filename=$part_filename, offset=$offset, max=$((offset+chunk_size-1))"
-        curl $url --silent -H"Range:bytes=$offset-$((offset+chunk_size-1))" -o $part_filename &
-        offset=$((offset+chunk_size))
-    done;
-
-    echo "Downloading part $num_workers: filename=$filename.$num_workers, offset=$offset, max=$((size))"
-    curl --silent -H"Range:bytes=$offset-$size" $url -o "$filename.$num_workers" &
-    wait
+        if [ $i -lt $num_chunks ]; then
+            max=$((offset+CHUNK_SIZE-1));
+        else
+            max=$size;
+        fi;
+        printf "%s\0%s\0%s\0%s\0%s\0" "$i" "$offset" "$max" "$url" "$part_filename"
+        offset=$((offset+CHUNK_SIZE))
+    done | xargs -0 -n 5 -P $NUM_WORKERS sh -c "$DOWNLOAD_PART" --
 
     > $local_path
 
-    for i in `seq 1 $((num_workers))`; do
+    i=0
+    while [ $i -lt $num_chunks ]; do
+        i=$((i+1))
         part_filename="$filename.$i"
         cat $part_filename >> $local_path
         rm $part_filename
@@ -79,7 +89,7 @@ function download_multipart() {
 }
 
 
-function download_file() {
+download_file() {
     updated_path=$1
     data_dir=$2
     filename=$3
@@ -100,15 +110,15 @@ function download_file() {
         content_length=$(curl -I $url 2> /dev/null | awk '/^Content-Length:/ { print $2 }' | tr -d '[[:space:]]')
 
         if [ $content_length -ge $LARGE_FILE_SIZE ]; then
-            download_multipart $url $local_path $content_length $NUM_WORKERS
+            download_multipart $url $local_path $content_length
         else
-            curl $url -o $local_path
+            curl $url --retry 3 --retry-delay 2 -o $local_path
         fi
-        
-        if date -ur . >/dev/null 2>&1; then
+
+        if date -d "@$(date -ur . +%s)" >/dev/null 2>&1; then
             echo $(date -d "$(date -d "@$(date -ur $local_path +%s)") + 1 second") > $updated_path;
         elif stat -f %Sm . >/dev/null 2>&1; then
-            echo $(date -r $(stat -f %m $local_path) -v+1S) > $updated_path;
+            echo $(date -ur $(stat -f %m $local_path) -v+1S) > $updated_path;
         fi;
         tar -xvzf $local_path -C $data_dir;
         rm $local_path;
@@ -123,23 +133,23 @@ if [ $COMMAND = "download" ]; then
     if [ $FILE = "base" ] || [ $FILE = "all" ]; then
         download_file $LIBPOSTAL_DATA_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_DATA_FILE "data file"
     fi
-    if [ $FILE = "geodb" ] || [ $FILE = "all" ]; then 
+    if [ $FILE = "geodb" ] || [ $FILE = "all" ]; then
         download_file $LIBPOSTAL_GEO_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_GEODB_FILE "geodb data file"
     fi
-    if [ $FILE = "parser" ] || [ $FILE = "all" ]; then 
+    if [ $FILE = "parser" ] || [ $FILE = "all" ]; then
         download_file $LIBPOSTAL_PARSER_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_PARSER_FILE "parser data file"
     fi
-    if [ $FILE = "language_classifier" ] || [ $FILE = "all" ]; then 
+    if [ $FILE = "language_classifier" ] || [ $FILE = "all" ]; then
         download_file $LIBPOSTAL_LANG_CLASS_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_LANG_CLASS_FILE "language classifier data file"
     fi
 
 elif [ $COMMAND = "upload" ]; then
 
     if [ $FILE = "base" ] || [ $FILE = "all" ]; then
-        tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE ${BASIC_MODULE_DIRS[*]}
+        tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $BASIC_MODULE_DIRS
         aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $LIBPOSTAL_S3_KEY
     fi
-    
+
     if [ $FILE = "geodb" ] || [ $FILE = "all" ]; then
         tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_GEODB_FILE $GEODB_MODULE_DIR
         aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_GEODB_FILE $LIBPOSTAL_S3_KEY

@@ -84,6 +84,31 @@ TEST test_expansions_language_classifier(void) {
     PASS();
 }
 
+TEST test_expansions_no_options(void) {
+    normalize_options_t options = get_libpostal_default_options();
+    options.lowercase = false;
+    options.latin_ascii = false;
+    options.transliterate = false;
+    options.strip_accents = false;
+    options.decompose = false;
+    options.trim_string = false;
+    options.drop_parentheticals = false;
+    options.replace_numeric_hyphens = false;
+    options.delete_numeric_hyphens = false;
+    options.split_alpha_from_numeric = false;
+    options.replace_word_hyphens = false;
+    options.delete_word_hyphens = false;
+    options.delete_final_periods = false;
+    options.delete_acronym_periods = false;
+    options.drop_english_possessives = false;
+    options.delete_apostrophes = false;
+    options.expand_numex = false;
+    options.roman_numerals = false;
+
+    CHECK_CALL(test_expansion_contains_with_languages("120 E 96th St New York", "120 E 96th St New York", options, 0, NULL));
+    PASS();
+}
+
 
 SUITE(libpostal_expansion_tests) {
 
@@ -94,6 +119,7 @@ SUITE(libpostal_expansion_tests) {
 
     RUN_TEST(test_expansions);
     RUN_TEST(test_expansions_language_classifier);
+    RUN_TEST(test_expansions_no_options);
 
     libpostal_teardown();
     libpostal_teardown_language_classifier();

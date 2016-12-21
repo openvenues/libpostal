@@ -69,6 +69,8 @@
 
 #define is_punctuation(type) ((type) >= PERIOD && (type) < OTHER)
 
+#define is_special_punctuation(type) ((type) == AMPERSAND || (type) == PLUS || (type) == POUND)
+
 #define is_special_token(type) ((type) == EMAIL || (type) == URL || (type) == US_PHONE || (type) == INTL_PHONE)
 
 #define is_whitespace(type) ((type) == WHITESPACE)
