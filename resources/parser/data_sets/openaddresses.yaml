@@ -2624,6 +2624,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Grand Forks
+                    - filename: richland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Richland County
                     - filename: stark_county.csv
                       add_osm_boundaries: true
                       city_replacements:
