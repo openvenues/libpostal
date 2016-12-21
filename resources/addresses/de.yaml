@@ -68,6 +68,17 @@ house_numbers:
 
     alphanumeric_phrase_probability: 0.0001
 
+conscription_numbers:
+    alphanumeric:
+        default: 
+            canonical: konskriptionsnummer
+            abbreviated: konskr. nr
+            canonical_probability: 0.15
+            abbreviated_probability: 0.65
+            sample: true
+            sample_probability: 0.2
+            numeric:
+                direction: left
 
 and:
     default: &und

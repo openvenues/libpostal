@@ -50,6 +50,18 @@ and:
         sample: true
         sample_probability: 0.05
 
+conscription_numbers:
+    alphanumeric:
+        default: 
+            canonical: súpisné číslo
+            abbreviated: s.č.
+            canonical_probability: 0.05
+            abbreviated_probability: 0.85
+            sample: true
+            sample_probability: 0.1
+            numeric:
+                direction: left
+
 cross_streets:
     and: *a
     at: &na
