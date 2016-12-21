@@ -21,6 +21,7 @@ from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.blocks import Block
 from geodata.addresses.config import address_config
 from geodata.addresses.components import AddressComponents
+from geodata.addresses.conscription_numbers import ConscriptionNumber
 from geodata.addresses.house_numbers import HouseNumber
 from geodata.categories.config import category_config
 from geodata.categories.query import Category, NULL_CATEGORY_QUERY
@@ -383,6 +384,29 @@ class OSMAddressFormatter(object):
 
             return True
         return False
+
+    def conscription_number(self, tags, language, country):
+        conscription_number = tags.get('addr:conscriptionnumber', None)
+        if conscription_number is not None:
+            phrase_probability = float(nested_get(self.config, ('conscription_numbers', 'phrase_probability'), default=0.0))
+            no_phrase_probability = float(nested_get(self.config, ('conscription_numbers', 'no_phrase_probability'), default=0.0))
+
+            if random.random() < phrase_probability:
+                return ConscriptionNumber.phrase(conscription_number, language, country=country)
+            elif random.random() < no_phrase_probability:
+                return safe_decode(conscription_number)
+
+        return None
+
+    def austro_hungarian_street_number(self, tags, language, country):
+        austro_hungarian_street_number = tags.get('addr:streetnumber', None)
+
+        if austro_hungarian_street_number is not None:
+            no_phrase_probability = float(nested_get(self.config, ('austro_hungarian_street_numbers', 'no_phrase_probability'), default=0.0))
+            if random.random() < no_phrase_probability:
+                return safe_decode(austro_hungarian_street_number)
+
+        return None
 
     def add_metro_station(self, address_components, latitude, longitude, language=None, default_language=None):
         '''
@@ -958,6 +982,9 @@ class OSMAddressFormatter(object):
         languages = list(country_languages[country])
         venue_names = self.venue_names(tags, languages) or []
 
+        conscription_number = self.conscription_number(tags, language, country)
+        austro_hungarian_street_number = self.austro_hungarian_street_number(tags, language, country)
+
         # Abbreviate the street name with random probability
         street_name = address_components.get(AddressFormatter.ROAD)
 
@@ -1001,6 +1028,12 @@ class OSMAddressFormatter(object):
 
         formatted_addresses = self.formatted_addresses_with_venue_names(address_components, reduced_venue_names, country, language=language,
                                                                         tag_components=tag_components, minimal_only=not tag_components)
+
+        for alternate_house_number in (conscription_number, austro_hungarian_street_number):
+            if alternate_house_number is not None:
+                address_components[AddressFormatter.HOUSE_NUMBER] = alternate_house_number
+                formatted_addresses = self.formatted_addresses_with_venue_names(address_components, reduced_venue_names, country, language=language,
+                                                                                tag_components=tag_components, minimal_only=not tag_components)
 
         if expanded_only_venue_names:
             formatted_addresses.extend(self.formatted_addresses_with_venue_names(expanded_components, expanded_only_venue_names, country, language=language,

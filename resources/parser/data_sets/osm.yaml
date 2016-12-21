@@ -5,6 +5,13 @@ categories:
     plural_probability: 0.6
     place_only_probability: 0.9
 
+conscription_numbers:
+    phrase_probability: 0.4
+    no_phrase_probability: 0.1
+
+austro_hungarian_street_numbers:
+    no_phrase_probability: 0.1
+
 chains:
     sample_probability: 0.5
     place_only_probability: 0.9
