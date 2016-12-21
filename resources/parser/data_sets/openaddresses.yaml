@@ -2327,10 +2327,6 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Ottawa County
-                    - filename: st_clair.csv
-                      add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Saint Clair County
                     - filename: troy.csv
                     - filename: washtenaw.csv
 
