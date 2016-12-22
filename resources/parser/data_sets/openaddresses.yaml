@@ -843,6 +843,12 @@ countries:
                           "VITERBO": VT
 
         subdirs:
+            04:
+                files:
+                    - filename: acerra.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Acerra
             # Trentino-Alto Adige/Südtirol
             32:
                 files:
