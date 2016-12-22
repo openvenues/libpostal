@@ -843,7 +843,7 @@ countries:
                           "VITERBO": VT
 
         subdirs:
-            04:
+            "04":
                 files:
                     - filename: acerra.csv
                       add_osm_boundaries: true
