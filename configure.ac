@@ -78,4 +78,14 @@ AS_IF([test "x$enable_sse2" != "xno"], [
 
 AX_BLAS()
 
+AC_ARG_ENABLE([data-download],
+              [  --disable-data-download    Disable downloading data],
+              [case "${enableval}" in
+                yes)  DOWNLOAD_DATA=true ;;
+                no) DOWNLOAD_DATA=false ;;
+                *) AC_MSG_ERROR([bad value ${enableval} for --disable-data-download]) ;;
+              esac], [DOWNLOAD_DATA=true])
+
+AM_CONDITIONAL([DOWNLOAD_DATA], [test "x$DOWNLOAD_DATA" = "xtrue"])
+
 AC_OUTPUT
