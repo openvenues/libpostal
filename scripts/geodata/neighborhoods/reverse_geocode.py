@@ -223,7 +223,14 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
     regex_replacements = [
         # Paris arrondissements, listed like "PARIS-1ER-ARRONDISSEMENT" in Quqttroshapes
         (re.compile('^paris-(?=[\d])', re.I), ''),
+        (re.compile('^prague(?= [\d]+$)', re.I), 'Praha'),
     ]
+
+    quattroshapes_city_district_patterns = [
+        six.u('Praha [\d]+'),
+    ]
+
+    quattroshapes_city_district_regex = re.compile('|'.join([six.u('^\s*{}\s*$').format(p) for p in quattroshapes_city_district_patterns]), re.I | re.U)
 
     @classmethod
     def count_words(cls, s):
@@ -425,7 +432,20 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                     continue
                 props['source'] = source
                 if idx is cth or props.get(QuattroshapesReverseGeocoder.LEVEL, None) == 'neighborhood':
-                    props['component'] = AddressFormatter.SUBURB
+                    component = AddressFormatter.SUBURB
+                    if source == 'quattroshapes':
+                        name = props.get('name')
+                        if not name:
+                            continue
+                        for pattern, repl in cls.regex_replacements:
+                            name = pattern.sub(repl, name)
+
+                        props['name'] = name
+
+                        if cls.quattroshapes_city_district_regex.match(name):
+                            component = AddressFormatter.CITY_DISTRICT
+
+                    props['component'] = component
                     props['polygon_type'] = 'neighborhood'
                 else:
                     # We don't actually care about local admin polygons unless they match OSM
