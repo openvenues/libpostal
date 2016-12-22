@@ -60,4 +60,14 @@ AC_CHECK_PROG([FOUND_SHUF], [shuf], [yes])
 
 AS_IF([test "x$FOUND_SHUF" = xyes],  [AC_DEFINE([HAVE_SHUF], [1], [shuf available])])
 
+AC_ARG_ENABLE([data-download],
+              [  --disable-data-download    Disable downloading data],
+              [case "${enableval}" in
+                yes)  DOWNLOAD_DATA=true ;;
+                no) DOWNLOAD_DATA=false ;;
+                *) AC_MSG_ERROR([bad value ${enableval} for --disable-data-download]) ;;
+              esac], [DOWNLOAD_DATA=true])
+
+AM_CONDITIONAL([DOWNLOAD_DATA], [test "x$DOWNLOAD_DATA" = "xtrue"])
+
 AC_OUTPUT
