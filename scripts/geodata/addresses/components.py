@@ -1274,6 +1274,13 @@ class AddressComponents(object):
             else:
                 address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
 
+    invalid_street_regex = re.compile('^\s*(?:none|null|not applicable|n\s*/\s*a)\s*$', re.I)
+
+    def cleanup_street(self, address_components):
+        street = address_components.get(AddressFormatter.ROAD)
+        if street is not None and (invalid_street_regex.match(street) or not any(c.isalnum() for c in street):
+            address_components.pop(AddressFormatter.ROAD)
+
     newline_regex = re.compile('[\n]+')
     name_regex = re.compile('^[\s\-]*(.*?)[\s\-]*$')
     whitespace_regex = re.compile('(?<=[\w])[\s]+(?=[\w])')
@@ -1512,6 +1519,7 @@ class AddressComponents(object):
                                language_suffix=language_suffix)
 
         street = address_components.get(AddressFormatter.ROAD)
+        self.cleanup_street(address_components)
 
         self.cleanup_boundary_names(address_components)
         self.country_specific_cleanup(address_components, country)
