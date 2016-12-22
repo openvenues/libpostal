@@ -969,7 +969,7 @@ class AddressComponents(object):
         return self.neighborhoods_rtree.point_in_poly(latitude, longitude, return_all=True)
 
     def add_neighborhoods(self, address_components, neighborhoods,
-                          country, language, language_suffix=''):
+                          country, language, language_suffix='', replace_city=False):
         '''
         Neighborhoods
         -------------
@@ -989,6 +989,8 @@ class AddressComponents(object):
         name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, language_suffix))
         raw_name_key = boundary_names.DEFAULT_NAME_KEY
 
+        city_name = address_components.get(AddressFormatter.CITY)
+
         for neighborhood in neighborhoods:
             place_type = neighborhood.get('place')
             polygon_type = neighborhood.get('polygon_type')
@@ -997,17 +999,16 @@ class AddressComponents(object):
             neighborhood_level = AddressFormatter.SUBURB
 
             key, raw_key = self.pick_random_name_key(neighborhood, neighborhood_level, suffix=language_suffix)
+
+            standard_name = neighborhoods.get(name_key, neighborhood.get(raw_name_key , six.u('')))
             name = neighborhood.get(key, neighborhood.get(raw_key))
 
             if component == AddressFormatter.CITY_DISTRICT:
                 neighborhood_level = AddressFormatter.CITY_DISTRICT
 
-                # Optimization so we don't use e.g. Brooklyn multiple times
-                city_name = address_components.get(AddressFormatter.CITY)
-                if name == city_name:
-                    name = neighborhood.get(name_key, neighborhood.get(raw_name_key))
-                    if not name or name == city_name:
-                        continue
+                # Optimization so we don't use e.g. same name multiple times for suburb, city_district, city, etc.
+                if not replace_city and name == city_name and (not standard_name or standard_name == city_name):
+                    continue
 
             if not name:
                 name = neighborhood.get(name_key, neighborhood.get(raw_name_key))
@@ -1019,6 +1020,11 @@ class AddressComponents(object):
 
             if not name:
                 continue
+
+            # For cases like OpenAddresses
+            if replace_city and city_name and (name.lower() == city_name.lower() or standard_name.lower() == city_name.lower()):
+                components.pop(AddressFormatter.CITY)
+                components[neighborhood_level] = name
 
             neighborhood_levels[neighborhood_level].append(name)
 
@@ -1206,7 +1212,7 @@ class AddressComponents(object):
                           AddressFormatter.CITY_DISTRICT, AddressFormatter.SUBURB):
             name = address_components.get(component)
             if name:
-                name_components[name].append(component)
+                name_components[name.lower()].append(component)
 
         for name, components in name_components.iteritems():
             if len(components) > 1:
