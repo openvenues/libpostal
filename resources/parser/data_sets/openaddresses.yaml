@@ -2964,6 +2964,11 @@ countries:
                 files:
                     - filename: benton.csv
                     - filename: clackamas.csv
+                      ignore_fields_containing:
+                          road:
+                              - "^\\sNO SITUS\\s*$"
+                          city:
+                              - "^\\ADDRESS\\s*$"
                     - filename: crook.csv
                     - filename: deschutes.csv
                     - filename: gresham.csv
