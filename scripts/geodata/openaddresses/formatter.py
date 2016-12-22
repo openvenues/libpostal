@@ -226,6 +226,7 @@ class OpenAddressesFormatter(object):
 
         add_osm_boundaries = bool(self.get_property('add_osm_boundaries', *configs) or False)
         add_osm_neighborhoods = bool(self.get_property('add_osm_neighborhoods', *configs) or False)
+        osm_neighborhood_overrides_city = self.get_property('osm_neighborhood_overrides_city', *configs)
         non_numeric_units = bool(self.get_property('non_numeric_units', *configs) or False)
         house_number_strip_commas = bool(self.get_property('house_number_strip_commas', *configs) or False)
         numeric_postcodes_only = bool(self.get_property('numeric_postcodes_only', *configs) or False)
@@ -470,7 +471,7 @@ class OpenAddressesFormatter(object):
                 neighborhood_components = []
                 if add_osm_neighborhoods:
                     neighborhood_components = self.components.neighborhood_components(latitude, longitude)
-                    self.components.add_neighborhoods(components, neighborhood_components, country, language)
+                    self.components.add_neighborhoods(components, neighborhood_components, country, language, replace_city=osm_neighborhood_overrides_city)
 
                 self.components.cleanup_boundary_names(components)
                 self.components.country_specific_cleanup(components, country)
