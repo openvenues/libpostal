@@ -1278,7 +1278,7 @@ class AddressComponents(object):
 
     def cleanup_street(self, address_components):
         street = address_components.get(AddressFormatter.ROAD)
-        if street is not None and (invalid_street_regex.match(street) or not any(c.isalnum() for c in street):
+        if street is not None and (invalid_street_regex.match(street) or not any((c.isalnum() for c in street)):
             address_components.pop(AddressFormatter.ROAD)
 
     newline_regex = re.compile('[\n]+')
