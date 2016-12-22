@@ -63,6 +63,7 @@ global:
     # Turned off by default to avoid performance penalty for reverse geocoding
     add_osm_boundaries: false
     add_osm_neighborhoods: true
+    osm_neighborhood_overrides_city: false
 
     house_number_strip_commas: false
 
@@ -95,6 +96,7 @@ countries:
 
     au:
         fields: *fields_with_state_and_unit
+        osm_neighborhood_overrides_city: true
         files:
             - filename: countrywide.csv
               non_numeric_units: true
@@ -724,6 +726,7 @@ countries:
                   country: Ísland
 
     it:
+        osm_neighborhood_overrides_city: true
         files:
             - filename: countrywide.csv
               fields:
