@@ -375,10 +375,14 @@ class AddressComponents(object):
         Multiple place names
         --------------------
 
-        This is to help with things like  addr:city="New York NY"
+        This is to help with things like  addr:city="New York NY" and cleanup other invalid user-specified boundary names
         '''
 
         tokens = tokenize(name)
+        # Sometimes there are garbage tags like addr:city="?", etc.
+        if not phrase_from_component and not any((c in token_types.WORD_TOKEN_TYPES for t, c in tokens)):
+            return None
+
         tokens_lower = normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
                                          token_options=TOKEN_OPTIONS_DROP_PERIODS)
 
@@ -1245,14 +1249,20 @@ class AddressComponents(object):
         if not house_number:
             return
 
-        house_number = house_number.strip(six.u(',;- '))
+        orig_house_number = house_number
+
+        house_number = house_number.strip(six.u(',; ')).rstrip(six.u('-'))
         if not house_number:
             address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
             return
 
+        if house_number != orig_house_number:
+            address_components[AddressFormatter.HOUSE_NUMBER] = house_number
+
         if six.u(';') in house_number:
             house_number = house_number.replace(six.u(';'), six.u(','))
             address_components[AddressFormatter.HOUSE_NUMBER] = house_number
+
         if house_number and house_number.count(six.u(',')) >= 2:
             house_numbers = house_number.split(six.u(','))
             random.shuffle(house_numbers)
