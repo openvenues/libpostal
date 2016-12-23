@@ -227,6 +227,9 @@ countries:
 
     # Italy
     it:
+        city_replacements:
+            - suburb
+            - city_district
         components:
             state_district:
                 probability: 0.7
