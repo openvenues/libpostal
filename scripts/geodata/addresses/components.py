@@ -1000,7 +1000,7 @@ class AddressComponents(object):
 
             key, raw_key = self.pick_random_name_key(neighborhood, neighborhood_level, suffix=language_suffix)
 
-            standard_name = neighborhoods.get(name_key, neighborhood.get(raw_name_key , six.u('')))
+            standard_name = neighborhood.get(name_key, neighborhood.get(raw_name_key , six.u('')))
             name = neighborhood.get(key, neighborhood.get(raw_key))
 
             if component == AddressFormatter.CITY_DISTRICT:
