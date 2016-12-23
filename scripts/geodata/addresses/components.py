@@ -994,6 +994,8 @@ class AddressComponents(object):
         raw_name_key = boundary_names.DEFAULT_NAME_KEY
 
         city_name = address_components.get(AddressFormatter.CITY)
+        if city_name:
+            city_name = self.dehyphenate_multiword_name(city_name)
 
         for neighborhood in neighborhoods:
             place_type = neighborhood.get('place')
