@@ -13,6 +13,7 @@ from itertools import combinations
 from geodata.address_formatting.formatter import AddressFormatter
 
 from geodata.address_expansions.abbreviations import abbreviate
+from geodata.address_expansions.equivalence import equivalent
 from geodata.address_expansions.gazetteers import *
 from geodata.addresses.config import address_config
 from geodata.addresses.dependencies import ComponentDependencies
@@ -994,8 +995,6 @@ class AddressComponents(object):
         raw_name_key = boundary_names.DEFAULT_NAME_KEY
 
         city_name = address_components.get(AddressFormatter.CITY)
-        if city_name:
-            city_name = self.dehyphenate_multiword_name(city_name)
 
         for neighborhood in neighborhoods:
             place_type = neighborhood.get('place')
@@ -1026,7 +1025,7 @@ class AddressComponents(object):
                 continue
 
             # For cases like OpenAddresses
-            if replace_city and city_name and (name.lower() == city_name.lower() or standard_name.lower() == city_name.lower()):
+            if replace_city and city_name and (equivalent(name, city_name, toponym_abbreviations_gazetteer, language) or equivalent(standard_name, city_name, toponym_abbreviations_gazetteer, language)):
                 address_components.pop(AddressFormatter.CITY, None)
                 city_name = None
                 address_components[neighborhood_level] = name
