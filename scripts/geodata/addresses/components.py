@@ -1023,8 +1023,8 @@ class AddressComponents(object):
 
             # For cases like OpenAddresses
             if replace_city and city_name and (name.lower() == city_name.lower() or standard_name.lower() == city_name.lower()):
-                components.pop(AddressFormatter.CITY)
-                components[neighborhood_level] = name
+                address_components.pop(AddressFormatter.CITY)
+                address_components[neighborhood_level] = name
 
             neighborhood_levels[neighborhood_level].append(name)
 
