@@ -1000,7 +1000,7 @@ class AddressComponents(object):
             polygon_type = neighborhood.get('polygon_type')
             component = neighborhood.get('component')
 
-            neighborhood_level = component
+            neighborhood_level = component or AddressFormatter.SUBURB
 
             key, raw_key = self.pick_random_name_key(neighborhood, neighborhood_level, suffix=language_suffix)
 
