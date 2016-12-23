@@ -1000,7 +1000,7 @@ class AddressComponents(object):
             polygon_type = neighborhood.get('polygon_type')
             component = neighborhood.get('component')
 
-            neighborhood_level = AddressFormatter.SUBURB
+            neighborhood_level = component
 
             key, raw_key = self.pick_random_name_key(neighborhood, neighborhood_level, suffix=language_suffix)
 
@@ -1008,8 +1008,6 @@ class AddressComponents(object):
             name = neighborhood.get(key, neighborhood.get(raw_key))
 
             if component == AddressFormatter.CITY_DISTRICT:
-                neighborhood_level = AddressFormatter.CITY_DISTRICT
-
                 # Optimization so we don't use e.g. same name multiple times for suburb, city_district, city, etc.
                 if not replace_city and name == city_name and (not standard_name or standard_name == city_name):
                     continue
