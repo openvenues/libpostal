@@ -63,9 +63,17 @@ class Digits(object):
         '9': safe_decode('９'),
     }
 
+    full_width_digit_map = {
+        v: k for k, v in six.iteritems(unicode_full_width_map)
+    }
+
     @classmethod
     def rewrite_full_width(cls, s):
         return six.u('').join([cls.unicode_full_width_map.get(c, c) for c in s])
+
+    @classmethod
+    def rewrite_standard_width(cls, s):
+        return six.u('').join([cls.full_width_digit_map.get(c, c) for c in s])
 
     @classmethod
     def rewrite_roman_numeral(cls, s):
