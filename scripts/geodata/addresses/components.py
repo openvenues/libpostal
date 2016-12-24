@@ -150,6 +150,10 @@ class AddressComponents(object):
         INDUSTRIAL = 'industrial'
         UNIVERSITY = 'university'
 
+    language_code_aliases = {
+        'zh_py': 'zh_pinyin'
+    }
+
     sub_building_component_class_map = {
         AddressFormatter.ENTRANCE: Entrance,
         AddressFormatter.STAIRCASE: Staircase,
@@ -708,12 +712,8 @@ class AddressComponents(object):
                 if ':' not in k:
                     continue
                 splits = k.split(':')
-                if len(splits) > 0 and splits[0] == 'name' and '_' in splits[-1]:
-                    lang, script = splits[-1].split('_', 1)
-                    if lang in CJK_LANGUAGES or script.lower() in self.valid_scripts:
-                        language_scripts[splits[-1]] += 1
-                    else:
-                        language_scripts[None] += 1
+                if len(splits) > 0 and splits[0] == 'name' and '_' in splits[-1] and splits[-1].split('_', 1)[0] == use_language:
+                    language_scripts[splits[-1]] += 1
                 elif k == 'name' or (splits[0] == 'name' and splits[-1]) == use_language:
                     language_scripts[None] += 1
 
@@ -1080,7 +1080,7 @@ class AddressComponents(object):
         self.abbreviate_admin_components(neighborhood_components, country, language)
 
         address_components.update(neighborhood_components)
-        if country == JAPAN and (language == JAPANESE_ROMAJI or non_local_language == ENGLISH):
+        if country == JAPAN and (language_suffix.endswith(JAPANESE_ROMAJI) or non_local_language == ENGLISH):
             self.format_japanese_neighborhood_romaji(address_components)
 
     def generate_sub_building_component(self, component, address_components, language, country=None, **kw):
@@ -1545,10 +1545,6 @@ class AddressComponents(object):
             language = self.address_language(address_components, candidate_languages)
             non_local_language = self.non_local_language()
             language_suffix = self.pick_language_suffix(all_osm_components, language, non_local_language, more_than_one_official_language)
-            if language_suffix and not non_local_language:
-                suffix = language_suffix.lstrip(':')
-                if suffix.startswith(language) and suffix != language:
-                    language = suffix
         else:
             language_suffix = ':{}'.format(language)
 
@@ -1580,6 +1576,13 @@ class AddressComponents(object):
         self.cleanup_boundary_names(address_components)
         self.country_specific_cleanup(address_components, country)
 
+        language_altered = False
+        if language_suffix and not non_local_language and language in CJK_LANGUAGES:
+            suffix = language_suffix.lstrip(':').lower()
+            if suffix.split('_', 1)[0] == language:
+                language = self.language_code_aliases.get(suffix, suffix)
+                language_altered = True
+
         self.replace_name_affixes(address_components, non_local_language or language, country=country)
 
         self.replace_names(address_components)
@@ -1589,6 +1592,7 @@ class AddressComponents(object):
         self.cleanup_house_number(address_components)
 
         self.remove_numeric_boundary_names(address_components)
+
         self.add_house_number_phrase(address_components, language, country=country)
         self.add_postcode_phrase(address_components, language, country=country)
         self.add_metro_station_phrase(address_components, language, country=country)
@@ -1625,8 +1629,13 @@ class AddressComponents(object):
 
         self.drop_invalid_components(address_components, country)
 
-        if language_suffix and not non_local_language:
-            language = language_suffix.lstrip(':')
+        if language_suffix and not non_local_language and not language_altered:
+            language = language_suffix.lstrip(':').lower()
+            if '_' in language:
+                lang, script = language.split('_', 1)
+                if lang not in CJK_LANGUAGES and script.lower() not in self.valid_scripts:
+                    language = lang
+
         return address_components, country, language
 
     def limited(self, address_components, latitude, longitude):
@@ -1690,5 +1699,9 @@ class AddressComponents(object):
 
         if language_suffix and not non_local_language:
             language = language_suffix.lstrip(':').lower()
+            if '_' in language:
+                lang, script = language.split('_', 1)
+                if lang not in CJK_LANGUAGES and script.lower() not in self.valid_scripts:
+                    language = lang
 
         return address_components, country, language
