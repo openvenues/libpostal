@@ -130,7 +130,7 @@ def read_dictionary_file(path):
 
 
 def quote_string(s):
-    return u'"{}"'.format(safe_decode(s).replace('"', '\\"'))
+    return u'"{}"'.format(safe_decode(s).replace('\\', '\\\\').replace('"', '\\"'))
 
 
 class AddressPhraseDictionaries(object):
