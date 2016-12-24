@@ -33,6 +33,7 @@ from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.countries.names import *
 from geodata.encoding import safe_encode
 from geodata.graph.topsort import topsort
+from geodata.i18n.unicode_properties import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import sample_random_language
 from geodata.math.floats import isclose
@@ -56,6 +57,12 @@ PARSER_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
 JAPAN = 'jp'
 JAPANESE_ROMAJI = 'ja_rm'
 ENGLISH = 'en'
+
+JAPANESE = 'ja'
+CHINESE = 'zh'
+KOREAN = 'ko'
+
+CJK_LANGUAGES = set([CHINESE, JAPANESE, KOREAN])
 
 
 class AddressComponents(object):
@@ -160,6 +167,16 @@ class AddressComponents(object):
         self.osm_admin_rtree = osm_admin_rtree
         self.neighborhoods_rtree = neighborhoods_rtree
         self.places_index = places_index
+
+        self.setup_valid_scripts()
+
+    def setup_valid_scripts(self):
+        chars = get_chars_by_script()
+        all_scripts = build_master_scripts_list(chars)
+        script_codes = get_script_codes(all_scripts)
+        valid_scripts = set(all_scripts) - set([COMMON_SCRIPT, UNKNOWN_SCRIPT])
+        valid_scripts |= set([code for code, script in six.iteritems(script_codes) if script not in valid_scripts])
+        self.valid_scripts = set([s.lower() for s in valid_script_codes])
 
     def setup_component_dependencies(self):
         self.component_dependencies = {}
@@ -691,8 +708,12 @@ class AddressComponents(object):
                 if ':' not in k:
                     continue
                 splits = k.split(':')
-                if len(splits) > 0 and splits[0] == 'name' and '_' in splits[-1] and splits[-1].split('_', 1)[0] == use_language:
-                    language_scripts[splits[-1]] += 1
+                if len(splits) > 0 and splits[0] == 'name' and '_' in splits[-1]:
+                    lang, script = splits[-1].split('_', 1)
+                    if lang in CJK_LANGUAGES or script.lower() in self.valid_scripts:
+                        language_scripts[splits[-1]] += 1
+                    else:
+                        language_scripts[None] += 1
                 elif k == 'name' or (splits[0] == 'name' and splits[-1]) == use_language:
                     language_scripts[None] += 1
 
@@ -1524,6 +1545,10 @@ class AddressComponents(object):
             language = self.address_language(address_components, candidate_languages)
             non_local_language = self.non_local_language()
             language_suffix = self.pick_language_suffix(all_osm_components, language, non_local_language, more_than_one_official_language)
+            if language_suffix and not non_local_language:
+                suffix = language_suffix.lstrip(':')
+                if suffix.startswith(language) and suffix != language:
+                    language = suffix
         else:
             language_suffix = ':{}'.format(language)
 
@@ -1602,7 +1627,6 @@ class AddressComponents(object):
 
         if language_suffix and not non_local_language:
             language = language_suffix.lstrip(':')
-
         return address_components, country, language
 
     def limited(self, address_components, latitude, longitude):

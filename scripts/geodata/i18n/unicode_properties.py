@@ -114,6 +114,7 @@ def script_name_constant(i, u):
 
 
 UNKNOWN_SCRIPT = 'Unknown'
+COMMON_SCRIPT = 'Common'
 
 
 def parse_char_range(r):
