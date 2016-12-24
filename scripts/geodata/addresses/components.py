@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import copy
 import operator
 import os
@@ -21,6 +22,7 @@ from geodata.addresses.floors import Floor
 from geodata.addresses.entrances import Entrance
 from geodata.addresses.house_numbers import HouseNumber
 from geodata.addresses.metro_stations import MetroStation
+from geodata.addresses.numbering import Digits
 from geodata.addresses.po_boxes import POBox
 from geodata.addresses.postcodes import PostCode
 from geodata.addresses.staircases import Staircase
@@ -49,6 +51,11 @@ this_dir = os.path.realpath(os.path.dirname(__file__))
 
 PARSER_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                      'resources', 'parser', 'default.yaml')
+
+
+JAPAN = 'jp'
+JAPANESE_ROMAJI = 'ja_rm'
+ENGLISH = 'en'
 
 
 class AddressComponents(object):
@@ -783,6 +790,17 @@ class AddressComponents(object):
                 return True
         return False
 
+    def format_japanese_neighborhood_romaji(self, address_components):
+        neighborhood = safe_decode(address_components.get(AddressFormatter.SUBURB, ''))
+        if neighborhood.endswith(safe_decode('丁目')):
+            neighborhood = neighborhood[:-2]
+            if neighborhood and neighborhood.isdigit():
+                if random.random() < 0.5:
+                    neighborhood = Digits.rewrite_standard_width(neighborhood)
+                suffix = safe_decode(random.choice(('chōme', 'chome')))
+                hyphen = six.u('-') if random.random < 0.5 else six.u(' ')
+                address_components[AddressFormatter.SUBURB] = six.u('{}{}{}').format(neighborhood, hyphen, suffix)
+
     def abbreviated_state(self, state, country, language):
         abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
 
@@ -974,7 +992,7 @@ class AddressComponents(object):
         return self.neighborhoods_rtree.point_in_poly(latitude, longitude, return_all=True)
 
     def add_neighborhoods(self, address_components, neighborhoods,
-                          country, language, language_suffix='', replace_city=False):
+                          country, language, non_local_language=None, language_suffix='', replace_city=False):
         '''
         Neighborhoods
         -------------
@@ -1039,7 +1057,10 @@ class AddressComponents(object):
                 neighborhood_components[component] = neighborhoods[0]
 
         self.abbreviate_admin_components(neighborhood_components, country, language)
+
         address_components.update(neighborhood_components)
+        if country == JAPAN and (language == JAPANESE_ROMAJI or non_local_language == ENGLISH):
+            self.format_japanese_neighborhood_romaji(address_components)
 
     def generate_sub_building_component(self, component, address_components, language, country=None, **kw):
         existing = address_components.get(component, None)
@@ -1525,7 +1546,7 @@ class AddressComponents(object):
                                   normalize_languages=all_languages,
                                   language_suffix=language_suffix)
 
-        self.add_neighborhoods(address_components, neighborhoods, country, language,
+        self.add_neighborhoods(address_components, neighborhoods, country, language, non_local_language=non_local_language,
                                language_suffix=language_suffix)
 
         street = address_components.get(AddressFormatter.ROAD)
