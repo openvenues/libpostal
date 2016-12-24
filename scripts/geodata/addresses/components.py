@@ -180,7 +180,7 @@ class AddressComponents(object):
         script_codes = get_script_codes(all_scripts)
         valid_scripts = set(all_scripts) - set([COMMON_SCRIPT, UNKNOWN_SCRIPT])
         valid_scripts |= set([code for code, script in six.iteritems(script_codes) if script not in valid_scripts])
-        self.valid_scripts = set([s.lower() for s in valid_script_codes])
+        self.valid_scripts = set([s.lower() for s in valid_scripts])
 
     def setup_component_dependencies(self):
         self.component_dependencies = {}
