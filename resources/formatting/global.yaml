@@ -710,6 +710,95 @@ countries:
 
     east_asia_insertions: &east_asia_insertions
         postcode: {}
+
+        building:
+            building_after_house_number:
+                after: house_number
+                probability: 1.0
+
+        entrance:
+            # e.g. Calle Foo 3, entrada 1
+            entrance_after_house_number:
+                after: house_number
+                probability: 1.0
+            conditional:
+                - component: building
+                  probabilities:
+                      entrance_after_building:
+                          after: building
+                          probability: 1.0
+
+        staircase:
+            # e.g. 123 East 45th St, Staircase C, NYC
+            staircase_after_house_number:
+                after: house_number
+                probability: 1.0
+            conditional:
+                - component: entrance
+                  probabilities:
+                      # default: 0.1
+                      staircase_after_entrance:
+                          after: entrance
+                          probability: 1.0
+                - component: building
+                  probabilities:
+                      # default: 0.1
+                      staircase_after_building:
+                          after: building
+                          probability: 1.0
+
+        level:
+            # e.g. Calle Ruiz de Alarcón 23 piso 3
+            level_after_house_number:
+                after: house_number
+                probability: 1.0
+
+            conditional:
+                - component: staircase
+                  probabilities:
+                      level_after_staircase:
+                          after: staircase
+                          probability: 1.0
+                - component: entrance
+                  probabilities:
+                      level_after_entrance:
+                          after: entrance
+                          probability: 1.0
+                - component: building
+                  probabilities:
+                      level_after_building:
+                          after: building
+                          probability: 1.0
+
+        unit:
+            unit_after_house_number:
+                after: house_number
+                probability: 1.0
+            conditional:
+                - component: level
+                  probabilities:
+                      unit_after_level:
+                          after: level
+                          probability: 0.95
+                      unit_before_level:
+                          before: level
+                          probability: 0.05
+                - component: staircase
+                  probabilities:
+                      unit_after_staircase:
+                          after: staircase
+                          probability: 1.0
+                - component: entrance
+                  probabilities:
+                      unit_after_entrance:
+                          after: entrance
+                          probability: 1.0
+                - component: building
+                  probabilities:
+                      unit_after_building:
+                          after: building
+                          probability: 1.0
+
         po_box:
             po_box_before_suburb: {}
             po_box_after_suburb:
