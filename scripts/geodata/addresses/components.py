@@ -863,7 +863,7 @@ class AddressComponents(object):
             if is_japan and component == AddressFormatter.SUBURB and not first_suburb:
                 existing = grouped_components[component]
                 for p in existing:
-                    if (props['id'] == p['id'] and props['type'] == p['type']]) or ('place' in p and 'place' in props and props['place'] == p['place']) or ('name' in props and name in 'p' and props['name'] == p['name']):
+                    if (props['id'] == p['id'] and props['type'] == p['type']) or ('place' in p and 'place' in props and props['place'] == p['place']) or ('name' in props and name in 'p' and props['name'] == p['name']):
                         break
                 else:
                     grouped_components[component].append(props)
