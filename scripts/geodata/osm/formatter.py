@@ -385,6 +385,24 @@ class OSMAddressFormatter(object):
             return True
         return False
 
+    def combined_japanese_suburb(self, tags):
+        neighborhood = tags.pop('addr:neighbourhood', None)
+        if 'addr:neighborhood' in tags:
+            neighborhood = tags.pop('addr:neighborhood', None)
+
+        suburb = tags.pop('addr:suburb', None)
+        if not neighborhood:
+            neighborhood = suburb
+        quarter = tags.pop('addr:quarter', None)
+        if quarter and neighborhood:
+            return six.u('').join(safe_decode(quarter), safe_decode(neighborhood))
+        elif neighborhood:
+            return safe_decode(neighborhood)
+        elif quarter:
+            return safe_decode(quarter)
+
+        return None
+
     def conscription_number(self, tags, language, country):
         conscription_number = tags.get('addr:conscriptionnumber', None)
         if conscription_number is not None:
@@ -922,6 +940,8 @@ class OSMAddressFormatter(object):
         language = None
         japanese_variant = None
 
+        japanese_suburb = None
+
         if country == JAPAN:
             japanese_variant = JAPANESE
             if random.random() < float(nested_get(self.config, ('countries', 'jp', 'romaji_probability'), default=0.0)):
@@ -931,9 +951,15 @@ class OSMAddressFormatter(object):
             else:
                 language = None
 
+            japanese_suburb = self.combined_japanese_suburb(tags, japanese_variant)
+            if japanese_suburb is not None and japanese_variant != JAPANESE:
+                japanese_suburb = None
+
         is_rail_station = self.is_rail_station(tags)
 
         revised_tags = self.normalize_address_components(tags)
+        if japanese_suburb is not None:
+            revised_tags[AddressFormatter.SUBURB] = japanese_suburb
         sub_building_tags = self.normalize_sub_building_components(tags)
         revised_tags.update(sub_building_tags)
 
