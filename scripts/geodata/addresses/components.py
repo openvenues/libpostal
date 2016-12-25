@@ -845,7 +845,7 @@ class AddressComponents(object):
         if admin_level and admin_level.isdigit():
             return int(admin_level)
         else:
-            return self.japanese_node_admin_level_map.get(p.get('place'), 1000)
+            return self.japanese_node_admin_level_map.get(val.get('place'), 1000)
 
     def abbreviated_state(self, state, country, language):
         abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
