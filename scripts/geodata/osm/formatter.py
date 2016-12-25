@@ -207,7 +207,7 @@ class OSMAddressFormatter(object):
 
         return None
 
-    def valid_venue_name(self, name, address_components, languages=None, is_rail_station=False):
+    def valid_venue_name(self, name, address_components, languages=None, is_generic=False):
         if not name:
             return False
 
@@ -231,7 +231,7 @@ class OSMAddressFormatter(object):
         if street_phrases - venue_phrases and not venue_phrases - street_phrases and not (AddressFormatter.HOUSE_NUMBER in address_components and AddressFormatter.ROAD in address_components):
             return False
 
-        if is_rail_station and not venue_phrases:
+        if is_generic and not venue_phrases:
             return False
 
         if not address_components and not venue_phrases:
@@ -826,8 +826,8 @@ class OSMAddressFormatter(object):
 
         return revised_place_tags, country
 
-    def is_rail_station(self, tags):
-        return tags.get('railway', '').lower() == 'station'
+    def is_generic_place(self, tags):
+        return tags.get('railway', '').lower() == 'station' or tags.get('amenity', '').lower() == 'post_office'
 
     def category_queries(self, tags, address_components, language, country=None, tag_components=True):
         formatted_addresses = []
@@ -939,7 +939,7 @@ class OSMAddressFormatter(object):
 
             self.remove_japanese_suburb_tags(tags)
 
-        is_rail_station = self.is_rail_station(tags)
+        is_generic_place = self.is_generic_place(tags)
 
         revised_tags = self.normalize_address_components(tags)
         if japanese_suburb is not None:
@@ -960,7 +960,7 @@ class OSMAddressFormatter(object):
         building_venue_names = []
 
         building_components = self.building_components(latitude, longitude)
-        building_is_rail_station = False
+        building_is_generic_place = False
         if building_components:
             num_floors = self.num_floors(building_components)
 
@@ -975,7 +975,7 @@ class OSMAddressFormatter(object):
                     elif k == AddressFormatter.HOUSE:
                         building_venue_names.append(v)
 
-                    building_is_rail_station = building_is_rail_station or self.is_rail_station(building_tags)
+                    building_is_generic_place = building_is_generic_place or self.is_generic_place(building_tags)
 
         subdivision_components = self.subdivision_components(latitude, longitude)
         if subdivision_components:
@@ -1013,8 +1013,8 @@ class OSMAddressFormatter(object):
 
         street_languages = set((language,) if language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE) else languages)
 
-        venue_names = [venue_name for venue_name in venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_rail_station=is_rail_station)]
-        venue_names.extend([venue_name for venue_name in building_venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_rail_station=building_is_rail_station)])
+        venue_names = [venue_name for venue_name in venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_generic=is_generic_place)]
+        venue_names.extend([venue_name for venue_name in building_venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_generic_place=building_is_generic_place)])
 
         all_venue_names = set(venue_names)
 
