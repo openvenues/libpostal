@@ -54,7 +54,10 @@ PARSER_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                      'resources', 'parser', 'default.yaml')
 
 
+CHINA = 'cn'
 JAPAN = 'jp'
+KOREA = 'kr'
+
 JAPANESE_ROMAJI = 'ja_rm'
 ENGLISH = 'en'
 
@@ -63,6 +66,7 @@ CHINESE = 'zh'
 KOREAN = 'ko'
 
 CJK_LANGUAGES = set([CHINESE, JAPANESE, KOREAN])
+CJK_COUNTRIES = set([CHINA, JAPAN, KOREA])
 
 
 class AddressComponents(object):
@@ -1661,6 +1665,8 @@ class AddressComponents(object):
                 lang, script = language.split('_', 1)
                 if lang not in CJK_LANGUAGES and script.lower() not in self.valid_scripts:
                     language = lang
+        elif country in CJK_COUNTRIES and (non_local_language == ENGLISH or (language_suffix or '').lstrip(':').lower() == ENGLISH):
+            language = ENGLISH
 
         return address_components, country, language
 
