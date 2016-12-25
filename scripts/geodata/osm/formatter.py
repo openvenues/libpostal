@@ -1014,7 +1014,7 @@ class OSMAddressFormatter(object):
         street_languages = set((language,) if language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE) else languages)
 
         venue_names = [venue_name for venue_name in venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_generic=is_generic_place)]
-        venue_names.extend([venue_name for venue_name in building_venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_generic_place=building_is_generic_place)])
+        venue_names.extend([venue_name for venue_name in building_venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_generic=building_is_generic_place)])
 
         all_venue_names = set(venue_names)
 
