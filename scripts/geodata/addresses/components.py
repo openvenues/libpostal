@@ -1597,9 +1597,9 @@ class AddressComponents(object):
         self.country_specific_cleanup(address_components, country)
 
         language_altered = False
-        if language_suffix and not non_local_language and language in CJK_LANGUAGES:
+        if language_suffix and not non_local_language:
             suffix = language_suffix.lstrip(':').lower()
-            if suffix.split('_', 1)[0] == language:
+            if suffix.split('_', 1)[0] in CJK_LANGUAGES:
                 language = self.language_code_aliases.get(suffix, suffix)
                 language_altered = True
 
