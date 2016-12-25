@@ -865,7 +865,7 @@ class AddressComponents(object):
             if (component == AddressFormatter.CITY or (component in city_replacements and not have_city)) and component not in grouped_components and (not have_sub_city or not self.osm_component_is_village(props)):
                 grouped_components[component].append(props)
 
-            if is_japan and component == AddressFormatter.SUBURB and not first_suburb:
+            if is_japan and component == AddressFormatter.SUBURB and not checked_first_suburb:
                 existing = grouped_components[component]
                 for p in existing:
                     if (props['id'] == p['id'] and props['type'] == p['type']) or \
