@@ -847,6 +847,9 @@ class AddressComponents(object):
     def add_city_and_equivalent_points(self, grouped_components, containing_components, country, latitude, longitude):
         city_replacements = place_config.city_replacements(country)
 
+        is_japan = country == JAPAN
+        checked_first_suburb = False
+
         for props, lat, lon, dist in self.places_index.nearest_points(latitude, longitude):
             component = self.categorize_osm_component(country, props, containing_components)
 
@@ -857,6 +860,14 @@ class AddressComponents(object):
             if (component == AddressFormatter.CITY or (component in city_replacements and not have_city)) and component not in grouped_components and (not have_sub_city or not self.osm_component_is_village(props)):
                 grouped_components[component].append(props)
 
+            if is_japan and component == AddressFormatter.SUBURB and not first_suburb:
+                existing = grouped_components[component]
+                for p in existing:
+                    if (props['id'] == p['id'] and props['type'] == p['type']]) or ('place' in p and 'place' in props and props['place'] == p['place']) or ('name' in props and name in 'p' and props['name'] == p['name']):
+                        break
+                else:
+                    grouped_components[component].append(props)
+                checked_first_suburb = True
 
     def add_admin_boundaries(self, address_components,
                              osm_components,
@@ -956,10 +967,15 @@ class AddressComponents(object):
 
             new_admin_components = {}
 
+            is_japan = country == JAPAN
+
             for component, vals in poly_components.iteritems():
                 if component not in address_components or (non_local_language and random.random() < replace_with_non_local_prob):
                     if random_key:
-                        if component == AddressFormatter.STATE_DISTRICT and random.random() < join_state_district_prob:
+                        if is_japan and component == AddressFormatter.SUBURB:
+                            separator = six.u('') if language != JAPANESE_ROMAJI and non_local_language != ENGLISH else six.u(' ')
+                            val = separator.join(vals)
+                        elif component == AddressFormatter.STATE_DISTRICT and random.random() < join_state_district_prob:
                             num = random.randrange(1, len(vals) + 1)
                             val = six.u(', ').join(vals[:num])
                         elif len(vals) == 1:
