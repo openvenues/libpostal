@@ -495,7 +495,12 @@ class AddressComponents(object):
 
         for combo in combo_config:
             components = OrderedDict.fromkeys(combo['components']).keys()
+
             if not all((is_numeric(address_components.get(c, generated.get(c))) for c in components)):
+                if combo['probability'] == 1.0:
+                    for c in components:
+                        if c in address_components and c in generated:
+                            address_components.pop(c, None)
                 continue
 
             combos.append((len(components), combo))
@@ -1613,7 +1618,6 @@ class AddressComponents(object):
 
         self.remove_numeric_boundary_names(address_components)
 
-        self.add_house_number_phrase(address_components, language, country=country)
         self.add_postcode_phrase(address_components, language, country=country)
         self.add_metro_station_phrase(address_components, language, country=country)
 
@@ -1622,6 +1626,8 @@ class AddressComponents(object):
         if add_sub_building_components:
             self.add_sub_building_components(address_components, language, country=country,
                                              num_floors=num_floors, num_basements=num_basements, zone=zone)
+
+        self.add_house_number_phrase(address_components, language, country=country)
 
         if dropout_places:
             # Population of the city helps us determine if the city can be used
