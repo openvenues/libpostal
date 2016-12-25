@@ -74,6 +74,10 @@ class OSMAddressComponents(object):
             data = yaml.load(open(os.path.join(boundaries_dir, filename)))
 
             for prop, values in six.iteritems(data):
+                if not hasattr(values, 'items'):
+                    # non-dict key
+                    continue
+
                 for k, v in values.iteritems():
                     if isinstance(v, six.string_types) and v not in AddressFormatter.address_formatter_fields:
                         raise ValueError(u'Invalid value in {} for prop={}, key={}: {}'.format(filename, prop, k, v))
