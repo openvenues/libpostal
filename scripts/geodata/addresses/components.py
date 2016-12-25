@@ -57,6 +57,9 @@ PARSER_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
 CHINA = 'cn'
 JAPAN = 'jp'
 KOREA = 'kr'
+TAIWAN = 'tw'
+HONG_KONG = 'hk'
+MACAO = 'mo'
 
 JAPANESE_ROMAJI = 'ja_rm'
 ENGLISH = 'en'
@@ -66,7 +69,7 @@ CHINESE = 'zh'
 KOREAN = 'ko'
 
 CJK_LANGUAGES = set([CHINESE, JAPANESE, KOREAN])
-CJK_COUNTRIES = set([CHINA, JAPAN, KOREA])
+CJK_COUNTRIES = set([CHINA, JAPAN, KOREA, TAIWAN, HONG_KONG, MACAO])
 
 
 class AddressComponents(object):
