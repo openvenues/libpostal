@@ -834,6 +834,19 @@ class AddressComponents(object):
                 hyphen = six.u('-') if random.random < 0.5 else six.u(' ')
                 address_components[AddressFormatter.SUBURB] = six.u('{}{}{}').format(neighborhood, hyphen, suffix)
 
+    japanese_node_admin_level_map = {
+        'quarter': 9,
+        'neighborhood': 10,
+        'neighbourhood': 10,
+    }
+
+    def japanese_neighborhood_sort_key(self, val):
+        admin_level = val.get('admin_level')
+        if admin_level and admin_level.isdigit():
+            return int(admin_level)
+        else:
+            return self.japanese_node_admin_level_map.get(p.get('place'), 1000)
+
     def abbreviated_state(self, state, country, language):
         abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
 
@@ -954,6 +967,9 @@ class AddressComponents(object):
 
             for component, components_values in grouped_osm_components.iteritems():
                 seen = set()
+
+                if country == JAPAN and component == AddressFormatter.SUBURB:
+                    component_values = sorted(component_values, key=self.japanese_neighborhood_sort_key)
 
                 for component_value in components_values:
                     if random_key and not (component in (AddressFormatter.STATE_DISTRICT, AddressFormatter.STATE) and not have_city):
