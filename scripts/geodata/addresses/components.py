@@ -969,7 +969,7 @@ class AddressComponents(object):
                 seen = set()
 
                 if country == JAPAN and component == AddressFormatter.SUBURB:
-                    component_values = sorted(component_values, key=self.japanese_neighborhood_sort_key)
+                    components_values = sorted(components_values, key=self.japanese_neighborhood_sort_key)
 
                 for component_value in components_values:
                     if random_key and not (component in (AddressFormatter.STATE_DISTRICT, AddressFormatter.STATE) and not have_city):
