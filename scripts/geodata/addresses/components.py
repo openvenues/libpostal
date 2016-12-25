@@ -892,7 +892,7 @@ class AddressComponents(object):
                        (props.get('place') in ('neighbourhood', 'neighborhood') and p.get('admin_level') == '10') or \
                        (props.get('place') == 'quarter' and p.get('admin_level') == '9') or \
                        ('place' in p and 'place' in props and props['place'] == p['place']) or \
-                       ('name' in props and name in 'p' and props['name'] == p['name']):
+                       ('name' in props and 'name' in 'p' and props['name'] == p['name']):
                         break
                 else:
                     grouped_components[component].append(props)
