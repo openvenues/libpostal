@@ -385,23 +385,9 @@ class OSMAddressFormatter(object):
             return True
         return False
 
-    def combined_japanese_suburb(self, tags):
-        neighborhood = tags.pop('addr:neighbourhood', None)
-        if 'addr:neighborhood' in tags:
-            neighborhood = tags.pop('addr:neighborhood', None)
-
-        suburb = tags.pop('addr:suburb', None)
-        if not neighborhood:
-            neighborhood = suburb
-        quarter = tags.pop('addr:quarter', None)
-        if quarter and neighborhood:
-            return six.u('').join(safe_decode(quarter), safe_decode(neighborhood))
-        elif neighborhood:
-            return safe_decode(neighborhood)
-        elif quarter:
-            return safe_decode(quarter)
-
-        return None
+    def remove_japanese_suburb_tags(self, tags):
+        for tag in ('addr:neighbourhood', 'addr:neighbourhood', 'addr:quarter', 'addr:suburb'):
+            tags.pop(tag, None)
 
     def conscription_number(self, tags, language, country):
         conscription_number = tags.get('addr:conscriptionnumber', None)
@@ -951,9 +937,7 @@ class OSMAddressFormatter(object):
             else:
                 language = None
 
-            japanese_suburb = self.combined_japanese_suburb(tags, japanese_variant)
-            if japanese_suburb is not None and japanese_variant != JAPANESE:
-                japanese_suburb = None
+            self.remove_japanese_suburb_tags(tags)
 
         is_rail_station = self.is_rail_station(tags)
 
