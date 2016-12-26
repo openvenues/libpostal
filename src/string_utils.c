@@ -836,10 +836,11 @@ static cstring_array *cstring_array_split_options(char *str, const char *separat
     char_array *array = char_array_new_size(strlen(str));
 
     bool last_was_separator = false;
+    bool first_char = false;
 
     while (*str) {
         if ((separator_len == 1 && *str == separator[0]) || (memcmp(str, separator, separator_len) == 0)) {
-            if (!ignore_consecutive || !last_was_separator) {
+            if (first_char && (!ignore_consecutive || !last_was_separator)) {
                 char_array_push(array, '\0');
             }
             str += separator_len;
@@ -848,6 +849,7 @@ static cstring_array *cstring_array_split_options(char *str, const char *separat
             char_array_push(array, *str);
             str++;
             last_was_separator = false;
+            first_char = true;
         }
     }
     char_array_push(array, '\0');
