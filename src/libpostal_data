@@ -115,8 +115,8 @@ download_file() {
             curl $url --retry 3 --retry-delay 2 -o $local_path
         fi
 
-        if date -d "@$(date -ur . +%s)" >/dev/null 2>&1; then
-            echo $(date -d "$(date -d "@$(date -ur $local_path +%s)") + 1 second") > $updated_path;
+        if date -ud "@$(date -ur . +%s)" >/dev/null 2>&1; then
+            echo $(date -ud "$(date -ud "@$(date -ur $local_path +%s)") + 1 second") > $updated_path;
         elif stat -f %Sm . >/dev/null 2>&1; then
             echo $(date -ur $(stat -f %m $local_path) -v+1S) > $updated_path;
         fi;
