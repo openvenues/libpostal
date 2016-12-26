@@ -100,6 +100,11 @@ void libpostal_teardown_parser(void);
 bool libpostal_setup_language_classifier(void);
 void libpostal_teardown_language_classifier(void);
 
+/*
+ * Status / utility functions
+ */
+const char* libpostal_version(void);
+
 #ifdef __cplusplus
 }
 #endif

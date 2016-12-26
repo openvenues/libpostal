@@ -9,6 +9,6 @@ CFLAGS = $(CFLAGS_BASE)
 
 TESTS = test_libpostal
 noinst_PROGRAMS = test_libpostal
-test_libpostal_SOURCES = test.c test_expand.c test_parser.c test_transliterate.c test_numex.c test_trie.c
+test_libpostal_SOURCES = test.c test_expand.c test_parser.c test_transliterate.c test_numex.c test_trie.c test_utils.c
 test_libpostal_LDADD = ../src/libpostal.la
 test_libpostal_CFLAGS = $(CFLAGS_O3)

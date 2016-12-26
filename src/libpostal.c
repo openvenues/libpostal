@@ -1111,3 +1111,7 @@ void libpostal_teardown_parser(void) {
     geodb_module_teardown();
     address_parser_module_teardown();
 }
+
+const char* libpostal_version(void) {
+    return PACKAGE_VERSION;
+}
