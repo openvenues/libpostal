@@ -108,6 +108,8 @@ bool address_parser_data_set_tokenize_line(address_parser_data_set_t *self, char
 
         if (last_separator == NULL) {
             log_error("All tokens must be delimited with '/'\n");
+            log_error("line = %s\n", input);
+            log_error("str = %s, i=%d\n", str, i);
             return false;
         }
 
@@ -174,6 +176,8 @@ bool address_parser_data_set_tokenize_line(address_parser_data_set_t *self, char
                 cstring_array_add_string(labels, label);
                 token_array_push(tokens, sub_token);
             }
+
+            token_array_destroy(sub_tokens);
 
         }
 
