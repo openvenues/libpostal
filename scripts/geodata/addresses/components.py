@@ -497,13 +497,14 @@ class AddressComponents(object):
 
     def combine_fields(self, address_components, language, country=None, generated=None):
         combo_config = address_config.get_property('components.combinations', language, country=country, default={})
+
         combos = []
         probs = {}
 
         for combo in combo_config:
             components = OrderedDict.fromkeys(combo['components']).keys()
 
-            if not all((is_numeric(address_components.get(c, generated.get(c))) for c in components)):
+            if not all((is_numeric(address_components.get(c, generated.get(c))) or c in generated for c in components)):
                 if combo['probability'] == 1.0:
                     for c in components:
                         if c in address_components and c in generated:
