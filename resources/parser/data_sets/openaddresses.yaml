@@ -791,7 +791,7 @@ countries:
                           "MODENA": MO
                           "MONZA E DELLA BRIANZA": MB
                           "NAPOLI": NA
-                          "NOVARA": NO
+                          "NOVARA": "NO"
                           "NUORO": NU
                           "OGLIASTRA": OG
                           "OLBIA-TEMPIO": OT
