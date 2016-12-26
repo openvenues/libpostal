@@ -59,7 +59,12 @@ char *normalize_string_utf8(char *str, uint64_t options) {
 
 
 char *normalize_string_latin(char *str, size_t len, uint64_t options) {
-    char *transliterated = transliterate(LATIN_ASCII, str, len);
+    char *latin_transliterator = LATIN_ASCII;
+    if (options & NORMALIZE_STRING_SIMPLE_LATIN_ASCII) {
+        latin_transliterator = LATIN_ASCII_SIMPLE;
+    }
+
+    char *transliterated = transliterate(latin_transliterator, str, len);
     
     char *utf8_normalized;
     if (transliterated == NULL) {
