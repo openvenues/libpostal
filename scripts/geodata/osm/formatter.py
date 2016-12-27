@@ -544,7 +544,7 @@ class OSMAddressFormatter(object):
 
         return postal_codes
 
-    def node_place_tags(self, tags):
+    def node_place_tags(self, tags, city_or_below=False):
         try:
             latitude, longitude = latlon_to_decimal(tags['lat'], tags['lon'])
         except Exception:
@@ -581,6 +581,9 @@ class OSMAddressFormatter(object):
         if component_name is None:
             return (), None
         component_index = self.boundary_component_priorities.get(component_name)
+
+        if city_or_below and (not component_index or component_index <= self.boundary_component_priorities[AddressFormatter.CITY]):
+            return (), None
 
         if component_index:
             revised_osm_components = []
@@ -1255,7 +1258,7 @@ class OSMAddressFormatter(object):
             lon = point.x
             tags['lat'] = lat
             tags['lon'] = lon
-            place_tags, country = self.node_place_tags(tags)
+            place_tags, country = self.node_place_tags(tags, city_or_below=True)
             for address_components, language, is_default in place_tags:
                 addresses = self.formatted_places(address_components, country, language)
                 if language is None:
