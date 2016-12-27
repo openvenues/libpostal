@@ -27,6 +27,7 @@ suffixes:
     - municipality
     - local municipality
     - metropolitan municipality
+    - district municipality
     - cp
     - civil parish
     - community development council
