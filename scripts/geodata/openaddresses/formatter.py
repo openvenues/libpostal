@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import csv
+import ftfy
 import itertools
 import os
 import random
@@ -217,6 +218,9 @@ class OpenAddressesFormatter(object):
             return self.unit_type_regexes[language].sub(six.u(''), value)
         return value
 
+    def fix_component_encodings(self, components):
+        return {k: ftfy.fix_encoding(safe_decode(v)) for k, v in six.iteritems(components)}
+
     def formatted_addresses(self, country_dir, path, configs, tag_components=True):
         abbreviate_street_prob = float(self.get_property('abbreviate_street_probability', *configs))
         separate_street_prob = float(self.get_property('separate_street_probability', *configs) or 0.0)
@@ -343,6 +347,8 @@ class OpenAddressesFormatter(object):
                     if not candidate_languages:
                         continue
                     candidate_languages = candidate_languages.items()
+
+                components = self.fix_component_encodings(components)
 
                 if language is None:
                     language = AddressComponents.address_language(components, candidate_languages)

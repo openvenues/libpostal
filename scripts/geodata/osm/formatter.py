@@ -5,6 +5,7 @@ import random
 import re
 import six
 import sys
+import ftfy
 import yaml
 
 from collections import defaultdict, OrderedDict, Counter
@@ -195,6 +196,9 @@ class OSMAddressFormatter(object):
         self.aliases.replace(sub_building_components)
         sub_building_components = {k: v for k, v in six.iteritems(sub_building_components) if k in AddressFormatter.address_formatter_fields}
         return sub_building_components
+
+    def fix_component_encodings(self, tags):
+        return {k: ftfy.fix_encoding(safe_decode(v)) for k, v in six.iteritems(tags)}
 
     def normalized_street_name(self, address_components, country=None, language=None):
         street = address_components.get(AddressFormatter.ROAD)
@@ -667,6 +671,8 @@ class OSMAddressFormatter(object):
         component_order = AddressFormatter.component_order[component_name]
         sub_city = component_order < AddressFormatter.component_order[AddressFormatter.CITY]
 
+        revised_tags = self.fix_component_encodings(revised_tags)
+
         for name_tag in ('name', 'alt_name', 'loc_name', 'short_name', 'int_name', 'name:simple', 'official_name'):
             if more_than_one_official_language:
                 name = tags.get(name_tag)
@@ -983,6 +989,8 @@ class OSMAddressFormatter(object):
 
         venue_sub_building_prob = float(nested_get(self.config, ('venues', 'sub_building_probability'), default=0.0))
         add_sub_building_components = AddressFormatter.HOUSE_NUMBER in revised_tags and (AddressFormatter.HOUSE not in revised_tags or random.random() < venue_sub_building_prob)
+
+        revised_tags = self.fix_component_encodings(revised_tags)
 
         address_components, country, language = self.components.expanded(revised_tags, latitude, longitude, language=language or namespaced_language,
                                                                          num_floors=num_floors, num_basements=num_basements,
