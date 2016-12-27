@@ -26,6 +26,7 @@ suffixes:
     - township
     - municipality
     - local municipality
+    - metropolitan municipality
     - cp
     - civil parish
     - community development council
