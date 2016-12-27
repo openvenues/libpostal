@@ -1610,6 +1610,8 @@ class AddressComponents(object):
         # If a country was already specified
         self.replace_country_name(address_components, country, non_local_language or language)
 
+        self.country_specific_cleanup(address_components, country)
+
         self.add_admin_boundaries(address_components, osm_components, country, language,
                                   latitude, longitude,
                                   non_local_language=non_local_language,
@@ -1623,7 +1625,6 @@ class AddressComponents(object):
         self.cleanup_street(address_components)
 
         self.cleanup_boundary_names(address_components)
-        self.country_specific_cleanup(address_components, country)
 
         language_altered = False
         if language_suffix and not non_local_language:
