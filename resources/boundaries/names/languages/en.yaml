@@ -25,6 +25,7 @@ prefixes:
 suffixes:
     - township
     - municipality
+    - local municipality
     - cp
     - civil parish
     - community development council
