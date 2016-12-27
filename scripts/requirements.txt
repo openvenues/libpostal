@@ -12,6 +12,7 @@ cssselect==0.9.1
 distribute==0.7.3
 future==0.15.2
 futures==3.0.5
+ftfy==4.2.0
 gevent==1.1.2
 greenlet==0.4.10
 jmespath==0.9.0
