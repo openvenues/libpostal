@@ -806,7 +806,6 @@ class AddressFormatter(object):
         return self.get_template_from_config(self.templates_place_only, country, language=language)
 
     def tagged_tokens(self, name, label):
-        name = ftfy.fix_encoding(name)
         return six.u(' ').join([six.u('{}/{}').format(t.replace(' ', ''), label if t not in (',', '-') else self.separator_tag) for t, c in tokenize(name)])
 
     def template_language_matters(self, country, language):
