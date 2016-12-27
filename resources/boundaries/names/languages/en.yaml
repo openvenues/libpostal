@@ -28,6 +28,7 @@ suffixes:
     - local municipality
     - metropolitan municipality
     - district municipality
+    - regional municipality
     - cp
     - civil parish
     - community development council
@@ -35,6 +36,7 @@ suffixes:
     - council
     - borough council
     - city council
+    - regional council
 
 countries:
     au:
