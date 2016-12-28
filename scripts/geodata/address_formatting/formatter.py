@@ -2,6 +2,7 @@
 import copy
 import os
 import pystache
+import random
 import re
 import six
 import subprocess
@@ -316,6 +317,10 @@ class AddressFormatter(object):
 
         return component_insertions
 
+    def inverted(self, template):
+        lines = template.split(six.u('\n'))
+        return six.u('\n').join(reversed(lines))
+
     def house_number_before_road(self, country, language=None):
         key = value = None
         if language is not None:
@@ -352,13 +357,20 @@ class AddressFormatter(object):
         self.global_insertions = self.insertion_probs(config)
         self.global_conditionals = self.conditional_insertion_probs(config)
 
+        self.global_invert_probability = self.config.get('invert_probability', 0.0)
+
         self.country_insertions = {}
         self.country_conditionals = {}
+
+        self.country_invert_probabilities = {}
 
         for country, config in six.iteritems(self.country_configs):
             if 'insertions' in config:
                 self.country_insertions[country.lower()] = self.insertion_probs(config['insertions'])
                 self.country_conditionals[country.lower()] = self.conditional_insertion_probs(config['insertions'])
+
+            if 'invert_probability' in config:
+                self.country_invert_probabilities[country] = config['invert_probability']
 
         self.language_insertions = {}
         self.language_conditionals = {}
@@ -615,6 +627,11 @@ class AddressFormatter(object):
             country = alias_country
 
         cache_keys = []
+
+        invert_probability = self.country_invert_probabilities.get(country, self.global_invert_probability)
+        if random.random() < invert_probability:
+            template = self.inverted(template)
+            cache_keys.append('inverted')
 
         for component in sorted(components, key=self.component_order.get):
             scope = country
