@@ -982,7 +982,7 @@ class AddressComponents(object):
                         name = component_value.get(k)
 
                         if name:
-                            name = boundary_names.name(country, name)
+                            name = boundary_names.name(country, component, name)
 
                         if name and not (name == existing_city_name and component != AddressFormatter.CITY and drop_duplicate_city_names):
                             name = self.cleaned_name(name, first_comma_delimited_phrase=True)
