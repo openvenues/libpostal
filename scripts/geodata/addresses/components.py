@@ -962,7 +962,7 @@ class AddressComponents(object):
         include these qualifiers in the training data.
         '''
 
-        suffix_lang = None if not language_suffixe else language_suffix.lstrip(':')
+        suffix_lang = None if not language_suffix else language_suffix.lstrip(':')
 
         if osm_components:
             name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, language_suffix))
