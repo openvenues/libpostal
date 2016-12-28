@@ -858,31 +858,31 @@ class AddressComponents(object):
         else:
             return self.japanese_node_admin_level_map.get(val.get('place'), 1000)
 
-    def locative_name(self, name, language):
+    def genitive_name(self, name, language):
         morph = self.slavic_morphology_analyzers.get(language)
         if not morph:
             return None
         norm = []
         words = safe_decode(name).split()
         n = len(words)
-        for i, word in enumerate(words):
+
+        for word in words:
             parsed = morph.parse(word)[0]
-            word_class = {'gent'} if i < n - 1 else {'loct'}
-            inflected = parsed.inflect(word_class)
+            inflected = parsed.inflect({'gent'})
             if inflected and inflected.word:
                 norm.append(inflected.word)
             else:
                 norm.append(word)
         return six.u(' ').join(norm)
 
-    def add_locatives(self, address_components, language):
+    def add_genitives(self, address_components, language):
         if language in self.slavic_morphology_analyzers and AddressFormatter.CITY in address_components:
             for component in address_components:
                 if component not in AddressFormatter.BOUNDARY_COMPONENTS:
                     continue
-                locative_probability = nested_get(self.config, ('slavic_names', component, 'locative_probability'), default=None)
-                if locative_probability is not None and random.random() < float(locative_probability):
-                    address_components[component] = self.locative_name(address_components[component], language)
+                genitive_probability = nested_get(self.config, ('slavic_names', component, 'genitive_probability'), default=None)
+                if genitive_probability is not None and random.random() < float(genitive_probability):
+                    address_components[component] = self.genitive_name(address_components[component], language)
 
     def abbreviated_state(self, state, country, language):
         abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
@@ -1719,7 +1719,7 @@ class AddressComponents(object):
 
         self.drop_invalid_components(address_components, country)
 
-        self.add_locatives(address_components, language)
+        self.add_genitives(address_components, language)
 
         if language_suffix and not non_local_language and not language_altered:
             language = language_suffix.lstrip(':').lower()
