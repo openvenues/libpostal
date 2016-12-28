@@ -9,7 +9,7 @@
         "9": "city_district"
         "10": "suburb"
 
-    exceptions:
+    overrides:
         contained_by:
             relation:
                 # Moscow
