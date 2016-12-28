@@ -876,10 +876,11 @@ class AddressComponents(object):
         return six.u(' ').join(norm)
 
     def add_locatives(self, address_components, language):
-        for component in address_components:
-            locative_probability = float(nested_get(self.config, ('slavic_names', component, 'locative_probability')))
-            if locative_probability is not None and random.random() < locative_probability:
-                address_components[component] = self.locative_name(address_components[component], language)
+        if language in self.slavic_morphology_analyzers and AddressFormatter.CITY in address_components:
+            for component in address_components:
+                locative_probability = nested_get(self.config, ('slavic_names', component, 'locative_probability'))
+                if locative_probability is not None and random.random() < float(locative_probability):
+                    address_components[component] = self.locative_name(address_components[component], language)
 
     def abbreviated_state(self, state, country, language):
         abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
@@ -1713,8 +1714,7 @@ class AddressComponents(object):
 
         self.drop_invalid_components(address_components, country)
 
-        if language in self.slavic_morphology_analyzers and AddressFormatter.CITY in address_components:
-            self.add_locatives(address_components, language)
+        self.add_locatives(address_components, language)
 
         if language_suffix and not non_local_language and not language_altered:
             language = language_suffix.lstrip(':').lower()
