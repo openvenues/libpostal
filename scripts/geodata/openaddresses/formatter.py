@@ -496,6 +496,8 @@ class OpenAddressesFormatter(object):
                 all_osm_components = osm_components + neighborhood_components
                 components = place_config.dropout_components(components, all_osm_components, country=country, population=population, unambiguous_city=unambiguous_city)
 
+                self.components.add_locatives(components, language)
+
                 formatted = self.formatter.format_address(components, country, language=language,
                                                           minimal_only=False, tag_components=tag_components)
                 yield (language, country, formatted)
