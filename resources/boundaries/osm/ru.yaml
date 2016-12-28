@@ -21,10 +21,12 @@
                 # Moscow
                 "102269":
                     admin_level:
-                        "8": "city_district"
+                        "5": "city_district"
+                        "8": "suburb"
                     global_overrides_last: true
                 # St Petersburg
                 "337422":
                     admin_level:
-                        "8": "city_district"
+                        "5": "city_district"
+                        "8": "suburb"
                     global_overrides_last: true
