@@ -630,8 +630,13 @@ class AddressFormatter(object):
 
         invert_probability = self.country_invert_probabilities.get(country, self.global_invert_probability)
         if random.random() < invert_probability:
-            template = self.inverted(template)
             cache_keys.append('inverted')
+            cache_key = tuple(sorted(cache_keys))
+            if cache_key in self.template_cache:
+                template = self.template_cache[cache_key]
+            else:
+                template = self.inverted(template)
+                self.template_cache[cache_key] = template
 
         for component in sorted(components, key=self.component_order.get):
             scope = country

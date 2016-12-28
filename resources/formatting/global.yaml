@@ -8,6 +8,9 @@ global:
         ko_rm: en
         zh_pinyin: en        
 
+    # Former Soviet states sometimes write addresses generai-to-specific
+    invert_probability: 0.0
+
     insertions:
         # For each component, insertions are mutually exclusive
         # They don't have to sum to 1 (especially for components
@@ -857,3 +860,63 @@ countries:
 
     kr_en:
         insertions: *us_template_insertions
+
+    # Russia
+    ru:
+        invert_probability: 0.2
+
+    # Ukraine
+    uk:
+        invert_probability: 0.2
+
+    # Belarus (using inverted by default)
+    by:
+        invert_probability: 0.4
+
+    # Kazakhstan (using inverted by default)
+    kz:
+        invert_probability: 0.4
+
+    # Kyrgyzstan (using inverted by default)
+    kg:
+        invert_probability: 0.4
+
+    # Latvia
+    lv:
+        invert_probability: 0.2
+
+    # Lithuania
+    lt:
+        invert_probability: 0.2
+
+    # Estonia
+    ee:
+        invert_probability: 0.2
+
+    # Armenia
+    am:
+        invert_probability: 0.2
+
+    # Azerbaijan
+    az:
+        invert_probability: 0.2
+
+    # Georgia
+    ge:
+        invert_probability: 0.2
+
+    # Moldova
+    md:
+        invert_probability: 0.2
+
+    # Uzbekistan
+    uz:
+        invert_probability: 0.2
+
+    # Tajikistan
+    tj:
+        invert_probability: 0.2
+
+    # Turkmenistan
+    tm:
+        invert_probability: 0.2
