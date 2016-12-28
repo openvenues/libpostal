@@ -878,7 +878,9 @@ class AddressComponents(object):
     def add_locatives(self, address_components, language):
         if language in self.slavic_morphology_analyzers and AddressFormatter.CITY in address_components:
             for component in address_components:
-                locative_probability = nested_get(self.config, ('slavic_names', component, 'locative_probability'))
+                if component not in AddressFormatter.BOUNDARY_COMPONENTS:
+                    continue
+                locative_probability = nested_get(self.config, ('slavic_names', component, 'locative_probability'), default=None)
                 if locative_probability is not None and random.random() < float(locative_probability):
                     address_components[component] = self.locative_name(address_components[component], language)
 
