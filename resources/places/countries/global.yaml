@@ -53,11 +53,13 @@ add_west_indies: &add_west_indies
             probability: 0.1
             values:
                 - value: West Indies
-                  probability: 0.6
+                  probability: 0.5
                 - value: W.I.
                   probability: 0.2
+                - value: W.I
+                  probability: 0.15
                 - value: WI
-                  probability: 0.2
+                  probability: 0.15
 
 countries:
     # Anguilla
