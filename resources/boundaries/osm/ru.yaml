@@ -10,7 +10,7 @@
         "10": "suburb"
 
     exceptions:
-        containing:
+        contained_by:
             relation:
                 # Moscow
                 "102269":
