@@ -121,6 +121,13 @@ state:
     full_name_probability: 0.2
     abbreviated_probability: 0.8
 
+# Currently for Russian and Ukrainian, convert some names to the genitive/locative case
+slavic_names:
+    state:
+        locative_probability: 0.4
+    state_district:
+        locative_probability: 0.4
+
 country:
     # If no country is specified, pull the country name from CLDR (authoratative country names translated into different languages)
     cldr_country_probability: 0.5

@@ -8,6 +8,11 @@ import re
 import six
 import yaml
 
+# Russian/Ukrainian parsing and inflection
+import pymorphy2
+import pymorphy2_dicts_ru
+import pymorphy2_dicts_uk
+
 from collections import defaultdict, OrderedDict
 from itertools import combinations
 
@@ -159,6 +164,11 @@ class AddressComponents(object):
 
     language_code_aliases = {
         'zh_py': 'zh_pinyin'
+    }
+
+    slavic_morphology_analyzers = {
+        'ru': pymorphy2.MorphAnalyzer(pymorphy2_dicts_ru.get_path(), lang='ru'),
+        'uk': pymorphy2.MorphAnalyzer(pymorphy2_dicts_uk.get_path(), lang='uk'),
     }
 
     sub_building_component_class_map = {
@@ -847,6 +857,29 @@ class AddressComponents(object):
             return int(admin_level)
         else:
             return self.japanese_node_admin_level_map.get(val.get('place'), 1000)
+
+    def locative_name(self, name, language):
+        morph = self.slavic_morphology_analyzers.get(language)
+        if not morph:
+            return None
+        norm = []
+        words = safe_decode(name).split()
+        n = len(words)
+        for i, word in enumerate(words):
+            parsed = morph.parse(word)[0]
+            word_class = {'gent'} if i < n - 1 else {'loct'}
+            inflected = parsed.inflect(word_class)
+            if inflected and inflected.word:
+                norm.append(inflected.word)
+            else:
+                norm.append(word)
+        return six.u(' ').join(norm)
+
+    def add_locatives(self, address_components, language):
+        for component in address_components:
+            locative_probability = float(nested_get(self.config, ('slavic_names', component, 'locative_probability')))
+            if locative_probability is not None and random.random() < locative_probability:
+                address_components[component] = self.locative_name(address_components[component], language)
 
     def abbreviated_state(self, state, country, language):
         abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
@@ -1679,6 +1712,9 @@ class AddressComponents(object):
             address_components = place_config.dropout_components(address_components, all_osm_components, country=country, population=population, unambiguous_city=unambiguous_city)
 
         self.drop_invalid_components(address_components, country)
+
+        if language in self.slavic_morphology_analyzers and AddressFormatter.CITY in address_components:
+            self.add_locatives(address_components, language)
 
         if language_suffix and not non_local_language and not language_altered:
             language = language_suffix.lstrip(':').lower()
