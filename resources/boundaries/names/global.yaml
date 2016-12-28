@@ -35,6 +35,20 @@ names:
           replace_with_group: 1
           replace_probability: 0.5
 
+    prefixes:
+        ru:
+            city:
+                default:
+                    prefix: г.
+                probability: 0.35
+                alternatives:
+                    - alternative:
+                          prefix: г
+                      probability: 0.1
+                    - alternative:
+                          prefix: город
+                      probability: 0.05
+
     # This section overrides place names
     exceptions:
         # Boroughs of New York City
