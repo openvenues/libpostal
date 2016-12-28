@@ -962,6 +962,8 @@ class AddressComponents(object):
         include these qualifiers in the training data.
         '''
 
+        suffix_lang = None if not language_suffixe else language_suffix.lstrip(':')
+
         if osm_components:
             name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, language_suffix))
             raw_name_key = boundary_names.DEFAULT_NAME_KEY
@@ -1018,7 +1020,8 @@ class AddressComponents(object):
                         name = component_value.get(k)
 
                         if name:
-                            name = boundary_names.name(country, component, name)
+                            name_lang = language if not suffix_lang or not k.endswith(language_suffix) else suffix_lang
+                            name = boundary_names.name(country, name_lang, component, name)
 
                         if name and not (name == existing_city_name and component != AddressFormatter.CITY and drop_duplicate_city_names):
                             name = self.cleaned_name(name, first_comma_delimited_phrase=True)

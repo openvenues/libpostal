@@ -59,39 +59,39 @@ class BoundaryNames(object):
         self.suffixes = {}
         self.suffix_regexes = {}
 
-        for country, components in six.iteritems(nested_get(config, ('names', 'prefixes',), default={}) ):
+        for language, components in six.iteritems(nested_get(config, ('names', 'prefixes', 'language'), default={}) ):
             for component, affixes in six.iteritems(components):
                 affix_values, probs = alternative_probabilities(affixes)
 
                 for val in affix_values:
                     if 'prefix' not in val:
-                        raise AssertionError(six.u('Invalid prefix value for (country={}, component={}): {} ').format(country, component, val))
+                        raise AssertionError(six.u('Invalid prefix value for (language={}, component={}): {} ').format(language, component, val))
 
                 prefix_regex = six.u('|').join([six.u('(?:{} )').format(self._string_as_regex(v['prefix'])) if v.get('whitespace') else self._string_as_regex(v['prefix']) for v in affix_values])
-                self.prefix_regexes[(country, component)] = re.compile(six.u('^{}').format(prefix_regex), re.I | re.U)
+                self.prefix_regexes[(language, component)] = re.compile(six.u('^{}').format(prefix_regex), re.I | re.U)
 
                 if not isclose(sum(probs), 1.0):
                     affix_values.append(None)
                     probs.append(1.0 - sum(probs))
                 affix_probs_cdf = cdf(probs)
-                self.prefixes[(country, component)] = affix_values, affix_probs_cdf
+                self.prefixes[(language, component)] = affix_values, affix_probs_cdf
 
-        for country, components in six.iteritems(nested_get(config, ('names', 'suffixes',), default={}) ):
+        for language, components in six.iteritems(nested_get(config, ('names', 'suffixes', 'language'), default={}) ):
             for component, affixes in six.iteritems(components):
                 affix_values, probs = alternative_probabilities(affixes)
 
                 for val in affix_values:
                     if 'suffix' not in val:
-                        raise AssertionError(six.u('Invalid suffix value for (country={}, component={}): {} ').format(country, component, val))
+                        raise AssertionError(six.u('Invalid suffix value for (language={}, component={}): {} ').format(language, component, val))
 
                 suffix_regex = six.u('|').join([six.u('(?: {})').format(self._string_as_regex(v['suffix'])) if v.get('whitespace') else self._string_as_regex(v['suffix']) for v in affix_values])
-                self.suffix_regexes[(country, component)] = re.compile(six.u('{}$').format(suffix_regex), re.I | re.U)
+                self.suffix_regexes[(language, component)] = re.compile(six.u('{}$').format(suffix_regex), re.I | re.U)
 
                 if not isclose(sum(probs), 1.0):
                     affix_values.append(None)
                     probs.append(1.0 - sum(probs))
                 affix_probs_cdf = cdf(probs)
-                self.suffixes[(country, component)] = affix_values, affix_probs_cdf
+                self.suffixes[(language, component)] = affix_values, affix_probs_cdf
 
         self.exceptions = {}
 
@@ -125,11 +125,11 @@ class BoundaryNames(object):
         name_keys, probs = self.name_key_dist(props, component)
         return weighted_choice(name_keys, probs)
 
-    def name(self, country, component, name):
+    def name(self, country, language, component, name):
         all_replacements = self.country_regex_replacements.get(country, []) + self.country_regex_replacements.get(None, [])
 
-        prefixes, prefix_probs = self.prefixes.get((country, component), (None, None))
-        suffixes, suffix_probs = self.suffixes.get((country, component), (None, None))
+        prefixes, prefix_probs = self.prefixes.get((language, component), (None, None))
+        suffixes, suffix_probs = self.suffixes.get((language, component), (None, None))
 
         if not all_replacements and not prefixes and not suffixes:
             return name
@@ -142,7 +142,7 @@ class BoundaryNames(object):
         for affixes, affix_probs, regexes, key, direction in ((prefixes, prefix_probs, self.prefix_regexes, 'prefix', 0),
                                                               (suffixes, suffix_probs, self.suffix_regexes, 'suffix', 1)):
             if affixes is not None:
-                regex = regexes[country, component]
+                regex = regexes[language, component]
                 if regex.match(name):
                     continue
 
