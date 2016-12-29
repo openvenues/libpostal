@@ -284,14 +284,11 @@ address_parser_t *address_parser_init(char *filename) {
                         }
                     }
 
-                    log_info("phrase=%s\n", phrase);
-
                     cstring_array_add_string(phrases, phrase);
                     cstring_array_add_string(phrase_labels, prev_label);
                 }
 
                 if (i == num_strings - 1 && !same_as_previous_label && prev_label != NULL) {
-                    log_info("phrase=%s\n", normalized);
                     cstring_array_add_string(phrases, normalized);
                     cstring_array_add_string(phrase_labels, label);
                 }
@@ -368,7 +365,6 @@ address_parser_t *address_parser_init(char *filename) {
             for (int p_i = 0; p_i < sizeof(phrases) / sizeof(char *); p_i++) {
                 phrase = phrases[p_i];
                 if (phrase == NULL) continue;
-                log_info("adding: %s\n", phrase);
 
                 k = kh_get(phrase_stats, phrase_stats, phrase);
 
@@ -429,7 +425,6 @@ address_parser_t *address_parser_init(char *filename) {
             }
 
             if (normalized_phrase != NULL) {
-                log_info("freeing\n");
                 free(normalized_phrase);
                 normalized_phrase = NULL;
             }
@@ -443,7 +438,7 @@ address_parser_t *address_parser_init(char *filename) {
         }
     }
 
-    log_debug("Done with vocab, total size=%d\n", vocab_size);
+    log_info("Done with vocab, total size=%d\n", vocab_size);
 
     for (k = kh_begin(vocab); k != kh_end(vocab); ++k) {
         token = (char *)kh_key(vocab, k);
@@ -457,7 +452,12 @@ address_parser_t *address_parser_init(char *filename) {
         }
     }
 
+    log_info("Creating phrases trie\n");
+
+
     phrase_counts_trie = trie_new_from_hash(phrase_counts);
+
+    log_info("Calculating phrase types\n");
 
     kh_foreach(phrase_stats, token, stats, {
         class_counts = stats.class_counts;
@@ -494,6 +494,8 @@ address_parser_t *address_parser_init(char *filename) {
 
     parser->model = NULL;
 
+    log_info("Creating vocab trie\n");
+
     parser->vocab = trie_new_from_hash(vocab);
     if (parser->vocab == NULL) {
         log_error("Error initializing vocabulary\n");
@@ -501,6 +503,8 @@ address_parser_t *address_parser_init(char *filename) {
         parser = NULL;
         goto exit_hashes_allocated;
     }
+
+    log_info("Creating phrase_types trie\n");
 
     parser->phrase_types = trie_new_from_hash(phrase_types);
     if (parser->phrase_types == NULL) {
@@ -510,11 +514,14 @@ address_parser_t *address_parser_init(char *filename) {
         goto exit_hashes_allocated;
     }
 
+    log_info("Freeing memory from initialization\n");
+
 exit_hashes_allocated:
     // Free memory for hashtables, etc.
 
     char_array_destroy(token_builder);
     char_array_destroy(postcode_token_builder);
+    char_array_destroy(sub_token_builder);
     char_array_destroy(phrase_builder);
     cstring_array_destroy(phrases);
     cstring_array_destroy(phrase_labels);
@@ -569,8 +576,6 @@ bool address_parser_train_epoch(address_parser_t *self, averaged_perceptron_trai
 
     address_parser_context_t *context = address_parser_context_new();
 
-    bool success = false;
-
     size_t examples = 0;
     size_t errors = trainer->num_errors;
 
@@ -608,13 +613,11 @@ bool address_parser_train_epoch(address_parser_t *self, averaged_perceptron_trai
 
     }
 
-    success = true;
-
 exit_epoch_training_started:
     address_parser_data_set_destroy(data_set);
     address_parser_context_destroy(context);
 
-    return success;
+    return true;
 }
 
 bool address_parser_train(address_parser_t *self, char *filename, uint32_t num_iterations) {
@@ -726,13 +729,6 @@ int main(int argc, char **argv) {
 
     log_info("transliteration module loaded\n");
 
-    if (!geodb_module_setup(NULL)) {
-        log_error("Could not load geodb dictionaries\n");
-        exit(EXIT_FAILURE);
-    }
-
-    log_info("geodb module loaded\n");
-
     address_parser_t *parser = address_parser_init(filename);
 
     if (parser == NULL) {
@@ -757,6 +753,5 @@ int main(int argc, char **argv) {
     address_parser_destroy(parser);
 
     address_dictionary_module_teardown();
-    geodb_module_teardown();
     log_debug("Done\n");
 }
