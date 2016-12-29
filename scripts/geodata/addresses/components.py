@@ -912,6 +912,8 @@ class AddressComponents(object):
         is_japan = country == JAPAN
         checked_first_suburb = False
 
+        first_village = None
+
         for props, lat, lon, dist in self.places_index.nearest_points(latitude, longitude):
             component = self.categorize_osm_component(country, props, containing_components)
 
@@ -919,8 +921,13 @@ class AddressComponents(object):
 
             have_city = AddressFormatter.CITY in grouped_components
 
-            if (component == AddressFormatter.CITY or (component in city_replacements and not have_city)) and component not in grouped_components and (not have_sub_city or not self.osm_component_is_village(props)):
+            is_village = self.osm_component_is_village(props)
+
+            if (component == AddressFormatter.CITY or (component in city_replacements and not have_city)) and component not in grouped_components and not is_village:
                 grouped_components[component].append(props)
+
+            if is_village:
+                first_village = props
 
             if is_japan and component == AddressFormatter.SUBURB and not checked_first_suburb:
                 existing = grouped_components[component]
@@ -934,6 +941,11 @@ class AddressComponents(object):
                 else:
                     grouped_components[component].append(props)
                 checked_first_suburb = True
+
+        have_city = AddressFormatter.CITY in grouped_components
+        if not have_city and first_village:
+            grouped_components[AddressFormatter.CITY].append(first_village)
+
 
     def add_admin_boundaries(self, address_components,
                              osm_components,
