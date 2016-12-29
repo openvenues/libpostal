@@ -26,6 +26,7 @@ class PlaceReverseGeocoder(PointIndex):
         'ISO3166-1:alpha2',
         'ISO3166-1:alpha3',
         'int_name',
+        'is_in',
         'is_in:*',
         'official_name',
         'official_name:*',
