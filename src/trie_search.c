@@ -198,11 +198,12 @@ int trie_node_search_tail_tokens(trie_t *self, trie_node_t node, char *str, toke
     
     if (!(*tail_ptr)) {
         log_debug("tail matches!\n");
-        return token_index-1;
+        return token_index - 1;
     }
 
     log_debug("Searching tail: %s\n", tail_ptr);
-    for (int i = token_index; i < tokens->n; i++) {
+    size_t num_tokens = tokens->n;
+    for (int i = token_index; i < num_tokens; i++) {
         token_t token = tokens->a[i];
 
         char *ptr = str + token.offset;
@@ -210,7 +211,7 @@ int trie_node_search_tail_tokens(trie_t *self, trie_node_t node, char *str, toke
 
         if (!(*tail_ptr)) {
             log_debug("tail matches!\n");
-            return i-1;
+            return i - 1;
         }
 
         if (token.type == WHITESPACE && *tail_ptr == ' ') continue;
@@ -224,6 +225,10 @@ int trie_node_search_tail_tokens(trie_t *self, trie_node_t node, char *str, toke
 
         if (strncmp((char *)tail_ptr, ptr, token_length) == 0) {
             tail_ptr += token_length;
+
+            if (i == num_tokens - 1 && !(*tail_ptr)) {
+                return i;
+            }
         } else {
             return -1;
         }
