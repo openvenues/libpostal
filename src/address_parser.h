@@ -135,30 +135,42 @@ typedef struct address_parser_context {
     char_array *phrase;
     char_array *context_phrase;
     char_array *long_context_phrase;
+    char_array *prefix_phrase;
+    char_array *context_prefix_phrase;
+    char_array *suffix_phrase;
+    char_array *context_suffix_phrase;
     char_array *component_phrase;
     char_array *context_component_phrase;
     char_array *long_context_component_phrase;
-    char_array *geodb_phrase;
-    char_array *context_geodb_phrase;
-    char_array *long_context_geodb_phrase;
+    // ngrams and prefix/suffix features
+    cstring_array *ngrams;
     // For hyphenated words
     char_array *sub_token;
     token_array *sub_tokens;
     // Strings/arrays relating to the sentence
     uint32_array *separators;
     cstring_array *normalized;
+    token_array *normalized_tokens;
+    cstring_array *normalized_admin;
+    token_array *normalized_admin_tokens;
     // Known phrases
     phrase_array *address_dictionary_phrases;
     int64_array *address_phrase_memberships; // Index in address_dictionary_phrases or -1
-    phrase_array *geodb_phrases;
-    int64_array *geodb_phrase_memberships; // Index in gedob_phrases or -1
     phrase_array *component_phrases;
     int64_array *component_phrase_memberships; // Index in component_phrases or -1
+    phrase_array *prefix_phrases;
+    phrase_array *suffix_phrases;
+    // The tokenized string used to conveniently access both words as C strings and tokens by index
     tokenized_string_t *tokenized_str;
 } address_parser_context_t;
 
+typedef struct parser_options {
+    uint64_t rare_word_threshold;
+} parser_options_t;
+
 // Can add other gazetteers as well
 typedef struct address_parser {
+    parser_options_t options;
     averaged_perceptron_t *model;
     trie_t *vocab;
     trie_t *phrase_types;
@@ -167,6 +179,7 @@ typedef struct address_parser {
 // General usage
 
 address_parser_t *address_parser_new(void);
+address_parser_t *address_parser_new_options(parser_options_t options);
 address_parser_t *get_address_parser(void);
 bool address_parser_load(char *dir);
 
