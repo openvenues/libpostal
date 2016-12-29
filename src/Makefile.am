@@ -14,7 +14,7 @@ DEFAULT_INCLUDES = -I.. -I/usr/local/include
 CFLAGS =
 
 lib_LTLIBRARIES = libpostal.la
-libpostal_la_SOURCES = libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c trie_utils.c string_utils.c file_utils.c numex.c utf8proc/utf8proc.c cmp/cmp.c geodb.c geo_disambiguation.c normalize.c bloom.c features.c geonames.c geohash/geohash.c unicode_scripts.c msgpack_utils.c address_parser.c address_parser_io.c averaged_perceptron.c sparse_matrix.c averaged_perceptron_tagger.c graph.c graph_builder.c language_classifier.c language_features.c logistic_regression.c logistic.c minibatch.c float_utils.c
+libpostal_la_SOURCES = libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c trie_utils.c string_utils.c file_utils.c numex.c utf8proc/utf8proc.c cmp/cmp.c geodb.c geo_disambiguation.c normalize.c bloom.c features.c geonames.c geohash/geohash.c unicode_scripts.c msgpack_utils.c address_parser.c address_parser_io.c averaged_perceptron.c sparse_matrix.c averaged_perceptron_tagger.c graph.c graph_builder.c language_classifier.c language_features.c logistic_regression.c logistic.c minibatch.c float_utils.c ngrams.c
 libpostal_la_LIBADD = libscanner.la sparkey/libsparkey.la $(BLAS_LIBS)
 libpostal_la_CFLAGS = $(CFLAGS_O2)
 
@@ -41,10 +41,10 @@ build_numex_table_SOURCES = numex_table_builder.c numex.c file_utils.c string_ut
 build_numex_table_CFLAGS = $(CFLAGS_O3)
 build_trans_table_SOURCES = transliteration_table_builder.c transliterate.c trie.c trie_search.c file_utils.c string_utils.c utf8proc/utf8proc.c
 build_trans_table_CFLAGS = $(CFLAGS_O3)
-address_parser_train_SOURCES = address_parser_train.c address_parser.c address_parser_io.c averaged_perceptron.c sparse_matrix.c float_utils.c averaged_perceptron_trainer.c averaged_perceptron_tagger.c address_dictionary.c geodb.c geo_disambiguation.c graph.c graph_builder.c normalize.c features.c geonames.c geohash/geohash.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c msgpack_utils.c file_utils.c shuffle.c utf8proc/utf8proc.c cmp/cmp.c
+address_parser_train_SOURCES = address_parser_train.c address_parser.c address_parser_io.c averaged_perceptron.c sparse_matrix.c float_utils.c averaged_perceptron_trainer.c averaged_perceptron_tagger.c address_dictionary.c geodb.c geo_disambiguation.c graph.c graph_builder.c normalize.c features.c geonames.c geohash/geohash.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c msgpack_utils.c file_utils.c shuffle.c utf8proc/utf8proc.c cmp/cmp.c ngrams.c
 address_parser_train_LDADD = sparkey/libsparkey.la libscanner.la $(BLAS_LIBS)
 address_parser_train_CFLAGS = $(CFLAGS_O3)
-address_parser_test_SOURCES = address_parser_test.c address_parser.c address_parser_io.c averaged_perceptron.c sparse_matrix.c float_utils.c averaged_perceptron_trainer.c averaged_perceptron_tagger.c address_dictionary.c geodb.c geo_disambiguation.c graph.c graph_builder.c normalize.c features.c geonames.c geohash/geohash.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c msgpack_utils.c file_utils.c utf8proc/utf8proc.c cmp/cmp.c
+address_parser_test_SOURCES = address_parser_test.c address_parser.c address_parser_io.c averaged_perceptron.c sparse_matrix.c float_utils.c averaged_perceptron_trainer.c averaged_perceptron_tagger.c address_dictionary.c geodb.c geo_disambiguation.c graph.c graph_builder.c normalize.c features.c geonames.c geohash/geohash.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c msgpack_utils.c file_utils.c utf8proc/utf8proc.c cmp/cmp.c ngrams.c
 address_parser_test_LDADD = sparkey/libsparkey.la libscanner.la  $(BLAS_LIBS)
 address_parser_test_CFLAGS = $(CFLAGS_O3)
 address_parser_SOURCES = address_parser_cli.c json_encode.c linenoise/linenoise.c
