@@ -89,7 +89,6 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
                     uint32_t truth_index = get_class_index(parser, truth);
 
                     result->confusion[predicted_index * num_classes + truth_index]++;
-
                 }
                 result->num_predictions++;
 
@@ -150,13 +149,6 @@ int main(int argc, char **argv) {
 
     log_info("transliteration module loaded\n");
 
-    if (!geodb_module_setup(NULL)) {
-        log_error("Could not load geodb dictionaries\n");
-        exit(EXIT_FAILURE);
-    }
-
-    log_info("geodb module loaded\n");
-
     if (!address_parser_load(address_parser_dir)) {
         log_error("Could not initialize parser\n");
         exit(EXIT_FAILURE);
@@ -179,20 +171,26 @@ int main(int argc, char **argv) {
 
     printf("Confusion matrix:\n\n");
     uint32_t num_classes = parser->model->num_classes;
-    for (uint32_t i = 0; i < num_classes; i++) {
-        for (uint32_t j = 0; j < num_classes; j++) {
-            if (i == j) {
-                continue;
-            }
-            uint32_t class_errors = results.confusion[i * num_classes + j];
 
-            if (class_errors > 0) {
-                char *predicted = cstring_array_get_string(parser->model->classes, i);
-                char *truth = cstring_array_get_string(parser->model->classes, j);
+    size_t *confusion_sorted = uint32_array_argsort(results.confusion, num_classes * num_classes);
 
-                printf("(%s, %s): %d\n", predicted, truth, class_errors);
-            }
+    for (ssize_t k = num_classes * num_classes - 1; k >= 0; k--) {
+        uint32_t idx = confusion_sorted[k];
+
+        uint32_t i = idx / num_classes;
+        uint32_t j = idx % num_classes;
+
+        uint32_t class_errors = results.confusion[idx];
+
+        if (i == j) continue;
+
+        if (class_errors > 0) {
+            char *predicted = cstring_array_get_string(parser->model->classes, i);
+            char *truth = cstring_array_get_string(parser->model->classes, j);
+
+            printf("(%s, %s): %d\n", predicted, truth, class_errors);
         }
+
     }
 
     free(results.confusion);
@@ -200,5 +198,4 @@ int main(int argc, char **argv) {
     address_parser_module_teardown();
 
     address_dictionary_module_teardown();
-    geodb_module_teardown();
 }
