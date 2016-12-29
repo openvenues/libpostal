@@ -121,11 +121,25 @@ countries:
                     state: ES
                 files:
                     - filename: vitoria.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Vitória
             pe:
                 add:
                     state: PE
                 files:
                     - filename: recife.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Recife
+            sc:
+                add:
+                    state: SC
+                files:
+                    - filnemae: joinville.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Joinville
 
     ca:
         cldr_country_probability: 0.3
