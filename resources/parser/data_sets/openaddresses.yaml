@@ -2332,6 +2332,8 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Ottawa County
+                    - filename: semcog.csv
+                      add_osm_boundaries: true
                     - filename: troy.csv
                     - filename: washtenaw.csv
 
