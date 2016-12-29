@@ -10,7 +10,6 @@
 #include "address_parser.h"
 #include "collections.h"
 #include "constants.h"
-#include "geodb.h"
 #include "language_classifier.h"
 #include "numex.h"
 #include "normalize.h"
@@ -1065,11 +1064,6 @@ bool libpostal_setup_language_classifier(void) {
 }
 
 bool libpostal_setup_parser(void) {
-    if (!geodb_module_setup(NULL)) {
-        log_error("Error loading geodb module.\n");
-        return false;
-    }
-
     if (!address_parser_module_setup(NULL)) {
         log_error("Error loading address parser module\n");
         return false;
@@ -1091,6 +1085,5 @@ void libpostal_teardown_language_classifier(void) {
 }
 
 void libpostal_teardown_parser(void) {
-    geodb_module_teardown();
     address_parser_module_teardown();
 }
