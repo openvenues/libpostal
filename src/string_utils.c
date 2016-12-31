@@ -214,6 +214,11 @@ char *utf8_case(const char *s, casing_option_t casing, utf8proc_option_t options
     return (char *)buffer;
 }
 
+typedef enum casing_option {
+    UTF8_LOWER,
+    UTF8_UPPER
+} casing_option_t;
+
 inline char *utf8_lower_options(const char *s, utf8proc_option_t options) {
     return utf8_case(s, UTF8_LOWER, options);
 }
@@ -1030,7 +1035,8 @@ inline uint32_t string_tree_num_strings(string_tree_t *self) {
 
 inline uint32_t string_tree_num_alternatives(string_tree_t *self, uint32_t i) {
     if (i >= self->token_indices->n) return 0;
-    return self->token_indices->a[i + 1] - self->token_indices->a[i];
+    uint32_t n = self->token_indices->a[i + 1] - self->token_indices->a[i];
+    return n > 0 ? n : 1;
 }
 
 void string_tree_destroy(string_tree_t *self) {
@@ -1047,10 +1053,6 @@ void string_tree_destroy(string_tree_t *self) {
     free(self);
 }
 
-#define STRING_TREE_ITER_DIRECTION_LEFT -1
-#define STRING_TREE_ITER_DIRECTION_RIGHT 1
-
-
 string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
     string_tree_iterator_t *self = malloc(sizeof(string_tree_iterator_t));
     self->tree = tree;
@@ -1061,8 +1063,6 @@ string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
     // calloc since the first path through the tree is all zeros
     self->path = calloc(num_tokens, sizeof(uint32_t));
 
-    self->num_alternatives = calloc(num_tokens, sizeof(uint32_t));
-
     uint32_t permutations = 1;
     uint32_t num_strings;
 
@@ -1070,7 +1070,6 @@ string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
         // N + 1 indices stored in token_indices, so this is always valid
         num_strings = string_tree_num_alternatives(tree, i);
         if (num_strings > 0) {
-            self->num_alternatives[i] = num_strings;
             // 1 or more strings in the string_tree means use those instead of the actual token
             permutations *= num_strings;
         }
@@ -1078,65 +1077,32 @@ string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
 
     if (permutations > 1) {
         self->remaining = (uint32_t)permutations;
-        self->single_path = false;
     } else{
         self->remaining = 1;
-        self->single_path = true;
     }
-
-    // Start on the right going backward
-    self->cursor = self->num_tokens - 1;
-    self->direction = -1;
 
     return self;
 }
 
-static inline void string_tree_iterator_switch_direction(string_tree_iterator_t *self) {
-    self->direction *= -1;
-}
-
-static inline void string_tree_iterator_reset_right(string_tree_iterator_t *self) {
-    size_t offset = self->cursor + 1;
-    size_t num_bytes = self->num_tokens - offset;
-    memset(self->path + offset, 0, sizeof(uint32_t) * num_bytes);
-}
-
-static int string_tree_iterator_do_iteration(string_tree_iterator_t *self) {
-    uint32_t num_alternatives;
-    int32_t direction = self->direction;
-
-    uint32_t sentinel = (direction == STRING_TREE_ITER_DIRECTION_LEFT ? -1 : self->num_tokens); 
-
-    for (uint32_t cursor = self->cursor; cursor != sentinel; cursor += direction) {
-        self->cursor = cursor;
-        num_alternatives = self->num_alternatives[cursor];
-        if (num_alternatives > 1 && self->path[cursor] < num_alternatives - 1) {
-            self->path[cursor]++;
-            if (direction == STRING_TREE_ITER_DIRECTION_LEFT && self->cursor < self->num_tokens - 1) {
-                string_tree_iterator_reset_right(self);
-                self->cursor++;
-            }
-            string_tree_iterator_switch_direction(self);
-            self->remaining--;
-            return 1;
-        }
-    }
-    
-    return -1;
-}
-
 void string_tree_iterator_next(string_tree_iterator_t *self) {
-    if (!self->single_path && string_tree_iterator_do_iteration(self) == -1 && self->remaining > 0) {
-        string_tree_iterator_switch_direction(self);
-        if (string_tree_iterator_do_iteration(self) == -1) {
+    if (self->remaining > 0) {
+        int i;
+        for (i = self->num_tokens - 1; i >= 0; i--) {
+            self->path[i]++;
+            if (self->path[i] == string_tree_num_alternatives(self->tree, i)) {
+                self->path[i] = 0;
+                self->remaining--;
+            } else {
+                self->remaining--;
+                break;
+            }
+        }
+
+        if (i < 0) {
             self->remaining = 0;
         }
-    } else if (self->single_path) {       
-        self->remaining--;
-        return;
     }
 }
-
 
 char *string_tree_iterator_get_string(string_tree_iterator_t *self, uint32_t i) {
     if (i >= self->num_tokens) {
@@ -1157,10 +1123,6 @@ void string_tree_iterator_destroy(string_tree_iterator_t *self) {
 
     if (self->path) {
         free(self->path);
-    }
-
-    if (self->num_alternatives) {
-        free(self->num_alternatives);
     }
 
     free(self);
