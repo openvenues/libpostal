@@ -166,6 +166,7 @@ typedef struct address_parser_context {
 
 typedef struct parser_options {
     uint64_t rare_word_threshold;
+    bool print_features;
 } parser_options_t;
 
 // Can add other gazetteers as well

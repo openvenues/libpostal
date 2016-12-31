@@ -64,6 +64,8 @@ int main(int argc, char **argv) {
 
     char *input = NULL;
 
+    address_parser_t *parser = get_address_parser();
+
     while((input = linenoise("> ")) != NULL) {
 
         if (input[0] != '\0') {
@@ -103,6 +105,22 @@ int main(int argc, char **argv) {
 
             cstring_array_destroy(command);
             goto next_input;
+        } else if (string_starts_with(input, ".print_features")) {
+            size_t num_tokens = 0;
+            cstring_array *command = cstring_array_split(input, " ", 1, &num_tokens);
+            if (cstring_array_num_strings(command) > 1) {
+                char *flag = cstring_array_get_string(command, 1);
+                if (string_compare_case_insensitive(flag, "off") == 0) {
+                    parser->options.print_features = false;
+                } else if (string_compare_case_insensitive(flag, "on") == 0) {
+                    parser->options.print_features = true;
+                }
+            } else {
+                parser->options.print_features = true;
+            }
+
+            cstring_array_destroy(command);
+            goto next_input;
         } else if (strlen(input) == 0) {
             goto next_input;
         }
@@ -116,16 +134,9 @@ int main(int argc, char **argv) {
             printf("{\n");
             for (int i = 0; i < parsed->num_components; i++) {
                 char *component = parsed->components[i];
-                utf8proc_uint8_t *normalized = NULL;
-                utf8proc_map((utf8proc_uint8_t *)component, 0, &normalized, UTF8PROC_NULLTERM | UTF8PROC_COMPOSE);
-                if (normalized == NULL) {
-                    log_error("Error parsing address\n");
-                    exit(EXIT_FAILURE);
-                }
 
-                char *json_string = json_encode_string((char *)normalized);
+                char *json_string = json_encode_string(component);
                 printf("  \"%s\": %s%s\n", parsed->labels[i], json_string, i < parsed->num_components - 1 ? "," : "");
-                free(normalized);
                 free(json_string);
             }
             printf("}\n");

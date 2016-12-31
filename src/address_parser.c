@@ -17,8 +17,6 @@
 
 static address_parser_t *parser = NULL;
 
-//#define PRINT_ADDRESS_PARSER_FEATURES
-
 typedef enum {
     ADDRESS_PARSER_NULL_PHRASE,
     ADDRESS_PARSER_DICTIONARY_PHRASE,
@@ -29,7 +27,8 @@ typedef enum {
 
 
 static parser_options_t PARSER_DEFAULT_OPTIONS = {
-    .rare_word_threshold = DEFAULT_RARE_WORD_THRESHOLD
+    .rare_word_threshold = DEFAULT_RARE_WORD_THRESHOLD,
+    .print_features = false
 };
 
 address_parser_t *address_parser_new_options(parser_options_t options) {
@@ -873,7 +872,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             log_warn("expansion_value is NULL. word=%s, sentence=%s\n", word, tokenized->str);
         }
 
-        if (address_phrase_types & (ADDRESS_STREET | ADDRESS_HOUSE_NUMBER | ADDRESS_NAME)) {
+        if (address_phrase_types & (ADDRESS_STREET | ADDRESS_HOUSE_NUMBER | ADDRESS_NAME | ADDRESS_UNIT)) {
             phrase_string = cstring_array_get_phrase(context->normalized, phrase_tokens, phrase);
 
             add_word_feature = false;
@@ -1146,22 +1145,18 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         //feature_array_add(features, 4, "prev tag+word+next word", prev || "START", word, next_word);
     }
 
-    #ifndef PRINT_ADDRESS_PARSER_FEATURES
-    if (0) {
-    #endif
+    if (parser->options.print_features) {
+        uint32_t fidx;
+        char *feature;
 
-    uint32_t fidx;
-    char *feature;
-
-    printf("{");
-    cstring_array_foreach(features, fidx, feature, {
-        printf("  %s, ", feature);
-    })
-    printf("}\n");
-
-    #ifndef PRINT_ADDRESS_PARSER_FEATURES
+        printf("{ ");
+        size_t num_features = cstring_array_num_strings(features);
+        cstring_array_foreach(context->features, fidx, feature, {
+            printf("%s", feature);
+            if (fidx < num_features - 1) printf(", ");
+        })
+        printf(" }\n");
     }
-    #endif
 
     return true;
 
