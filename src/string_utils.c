@@ -1149,7 +1149,7 @@ char *string_tree_iterator_get_string(string_tree_iterator_t *self, uint32_t i) 
 }
 
 bool string_tree_iterator_done(string_tree_iterator_t *self) {
-    return self->remaining > 0;
+    return self->remaining <= 0;
 }
 
 void string_tree_iterator_destroy(string_tree_iterator_t *self) {

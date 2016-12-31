@@ -230,7 +230,7 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
 
         string_tree_iterator_t *trans_iter = string_tree_iterator_new(transliterators);
 
-        for (; string_tree_iterator_done(trans_iter); string_tree_iterator_next(trans_iter)) {
+        for (; !string_tree_iterator_done(trans_iter); string_tree_iterator_next(trans_iter)) {
             char *prev = NULL;
             char *transliterated = str;
             string_tree_iterator_foreach_token(trans_iter, trans_name, {

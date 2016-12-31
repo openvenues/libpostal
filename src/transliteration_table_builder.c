@@ -360,7 +360,7 @@ int main(int argc, char **argv) {
 
                     char_array *pre_context_perm = char_array_new_size(pre_context_len);
 
-                    for (; string_tree_iterator_done(pre_context_iter); string_tree_iterator_next(pre_context_iter)) {
+                    for (; !string_tree_iterator_done(pre_context_iter); string_tree_iterator_next(pre_context_iter)) {
                         char_array_clear(pre_context_perm);
                         for (c = 0; c < pre_context_iter->num_tokens; c++) {
                             token = string_tree_iterator_get_string(pre_context_iter, c);
@@ -411,7 +411,7 @@ int main(int argc, char **argv) {
 
                     char_array *post_context_perm = char_array_new_size(post_context_len);
 
-                    for (; string_tree_iterator_done(post_context_iter); string_tree_iterator_next(post_context_iter)) {
+                    for (; !string_tree_iterator_done(post_context_iter); string_tree_iterator_next(post_context_iter)) {
                         char_array_clear(post_context_perm);
                         for (c = 0; c < post_context_iter->num_tokens; c++) {
                             token = string_tree_iterator_get_string(post_context_iter, c);
@@ -517,7 +517,7 @@ int main(int argc, char **argv) {
                 
                 char *key_str;
 
-                for (; string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
+                for (; !string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
                     rule_key->n = step_key_len;
 
                     for (c = 0; c < iter->num_tokens; c++) {

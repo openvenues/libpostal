@@ -814,7 +814,7 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
 
     kh_resize(str_set, unique_strings, kh_size(unique_strings) + tokenized_iter->remaining);
 
-    for (; string_tree_iterator_done(tokenized_iter); string_tree_iterator_next(tokenized_iter)) {
+    for (; !string_tree_iterator_done(tokenized_iter); string_tree_iterator_next(tokenized_iter)) {
         char_array_clear(temp_string);
 
         string_tree_iterator_foreach_token(tokenized_iter, token, {
@@ -868,7 +868,7 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
         iter = string_tree_iterator_new(alternatives);
         log_debug("iter->num_tokens=%d\n", iter->num_tokens);
 
-        for (; string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
+        for (; !string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
             char_array_clear(temp_string);
             string_tree_iterator_foreach_token(iter, token, {
                 log_debug("token=%s\n", token);
@@ -937,7 +937,7 @@ char **expand_address(char *input, normalize_options_t options, size_t *n) {
         log_debug("Adding alternatives for multiple normalizations\n");
         string_tree_iterator_t *iter = string_tree_iterator_new(tree);
 
-        for (; string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
+        for (; !string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
             char *segment;
             char_array_clear(temp_string);
             bool is_first = true;
