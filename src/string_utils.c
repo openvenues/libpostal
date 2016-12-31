@@ -174,6 +174,11 @@ error_free_output:
     return NULL;
 }
 
+typedef enum casing_option {
+    UTF8_LOWER,
+    UTF8_UPPER
+} casing_option_t;
+
 char *utf8_case(const char *s, casing_option_t casing, utf8proc_option_t options) {
     ssize_t len = (ssize_t)strlen(s);
     utf8proc_uint8_t *str = (utf8proc_uint8_t *)s;
@@ -213,11 +218,6 @@ char *utf8_case(const char *s, casing_option_t casing, utf8proc_option_t options
 
     return (char *)buffer;
 }
-
-typedef enum casing_option {
-    UTF8_LOWER,
-    UTF8_UPPER
-} casing_option_t;
 
 inline char *utf8_lower_options(const char *s, utf8proc_option_t options) {
     return utf8_case(s, UTF8_LOWER, options);
@@ -1115,7 +1115,7 @@ char *string_tree_iterator_get_string(string_tree_iterator_t *self, uint32_t i) 
 }
 
 bool string_tree_iterator_done(string_tree_iterator_t *self) {
-    return self->remaining <= 0;
+    return self->remaining == 0;
 }
 
 void string_tree_iterator_destroy(string_tree_iterator_t *self) {
