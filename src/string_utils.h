@@ -68,7 +68,12 @@ uint32_t string_translate(char *str, size_t len, char *word_chars, char *word_re
 char *utf8_reversed_string(const char *s); // returns a copy, caller frees
 ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *dst);
 
-char *utf8_lower(const char *s); // returns a copy, caller frees
+// Casing functions return a copy, caller frees
+char *utf8_lower_options(const char *s, utf8proc_option_t options);
+char *utf8_lower(const char *s);
+char *utf8_upper_options(const char *s, utf8proc_option_t options);
+char *utf8_lower(const char *s);
+
 int utf8_compare(const char *str1, const char *str2);
 int utf8_compare_len(const char *str1, const char *str2, size_t len);
 size_t utf8_common_prefix(const char *str1, const char *str2);
@@ -136,6 +141,7 @@ void char_array_cat_printf(char_array *array, char *format, ...);
 
 // Mainly for paths or delimited strings
 void char_array_append_vjoined(char_array *array, char *separator, bool strip_separator, int count, va_list args);
+void char_array_add_vjoined(char_array *array, char *separator, bool strip_separator, int count, va_list args);
 void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...);
 void char_array_cat_joined(char_array *array, char *separator, bool strip_separator, int count, ...);
 
