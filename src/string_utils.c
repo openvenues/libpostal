@@ -174,13 +174,62 @@ error_free_output:
     return NULL;
 }
 
-char *utf8_lower(const char *s) {
+char *utf8_case(const char *s, casing_option_t casing, utf8proc_option_t options) {
     ssize_t len = (ssize_t)strlen(s);
-    uint8_t *dest;
+    utf8proc_uint8_t *str = (utf8proc_uint8_t *)s;
+    utf8proc_uint8_t *dest = NULL;
 
-    utf8proc_map((const uint8_t *)s, len, &dest, UTF8PROC_OPTIONS_LOWERCASE);
-    return (char *)dest;
+    utf8proc_ssize_t result;
+    result = utf8proc_decompose(str, len, NULL, 0, options);
+
+    if (result < 0) return NULL;
+    utf8proc_int32_t *buffer = (utf8proc_int32_t *) malloc(result * sizeof(utf8proc_int32_t) + 1);
+    if (buffer == NULL) return NULL;
+
+    result = utf8proc_decompose(str, len, buffer, result, options);
+    if (result < 0) {
+        free(buffer);
+        return NULL;
+    }
+
+    for (utf8proc_ssize_t i = 0; i < result; i++) {
+        utf8proc_int32_t uc = buffer[i];
+        utf8proc_int32_t norm;
+
+        if (casing == UTF8_LOWER) {
+            norm = utf8proc_tolower(uc);
+        } else if (casing == UTF8_UPPER) {
+            norm = utf8proc_toupper(uc);
+        }
+    }
+
+    result = utf8proc_reencode(buffer, result, options);
+
+    utf8proc_int32_t *newptr;
+    newptr = (utf8proc_int32_t *) realloc(buffer, (size_t)result+1);
+    if (newptr) buffer = newptr;
+
+    free(buffer);
+
+    return (char *)buffer;
 }
+
+inline char *utf8_lower_options(const char *s, utf8proc_option_t options) {
+    return utf8_case(s, UTF8_LOWER, options);
+}
+
+inline char *utf8_lower(const char *s) {
+    return utf8_case(s, UTF8_LOWER, UTF8PROC_OPTIONS_NFC);
+}
+
+inline char *utf8_upper_options(const char *s, utf8proc_option_t options) {
+    return utf8_case(s, UTF8_UPPER, options);
+}
+
+inline char *utf8_upper(const char *s) {
+    return utf8_case(s, UTF8_UPPER, UTF8PROC_OPTIONS_NFC);
+}
+
 
 inline bool utf8_is_letter(int cat) {
     return cat == UTF8PROC_CATEGORY_LL || cat == UTF8PROC_CATEGORY_LU        \
@@ -217,6 +266,18 @@ inline bool utf8_is_symbol(int cat) {
 
 inline bool utf8_is_separator(int cat) {
     return cat == UTF8PROC_CATEGORY_ZS || cat == UTF8PROC_CATEGORY_ZL || cat == UTF8PROC_CATEGORY_ZP;
+}
+
+inline bool utf8_is_whitespace(int32_t ch) {
+    int cat = utf8proc_category(ch);
+    return utf8_is_separator(cat) || 
+           ch == 9 || // character tabulation
+           ch == 10 || // line feed
+           ch == 11 || // line tabulation
+           ch == 12 || // form feed
+           ch == 13 || // carriage return
+           ch == 133 // next line
+           ;
 }
 
 int utf8_compare_len(const char *str1, const char *str2, size_t len) {
@@ -415,11 +476,10 @@ inline bool string_contains_hyphen(char *str) {
     return string_next_hyphen_index(str, strlen(str)) >= 0;
 }
 
-size_t string_right_spaces(char *str) {
+size_t string_right_spaces_len(char *str, size_t len) {
     size_t spaces = 0;
 
     uint8_t *ptr = (uint8_t *)str;
-    ssize_t len = strlen(str);
     int32_t ch = 0;
     ssize_t index = len;
 
@@ -428,24 +488,22 @@ size_t string_right_spaces(char *str) {
 
         if (ch <= 0) break;
 
-        int cat = utf8proc_category(ch);
-        if (!utf8_is_separator(cat)) {
+        if (!utf8_is_whitespace(ch)) {
             break;
         }
 
         index -= char_len;
-        spaces++;
+        spaces += char_len;
     }
 
     return spaces;
 
 }
 
-size_t string_left_spaces(char *str) {
+size_t string_left_spaces_len(char *str, size_t len) {
     size_t spaces = 0;
 
     uint8_t *ptr = (uint8_t *)str;
-    size_t len = strlen(str);
     int32_t ch = 0;
     ssize_t index = 0;
 
@@ -454,22 +512,21 @@ size_t string_left_spaces(char *str) {
 
         if (ch <= 0) break;
 
-        int cat = utf8proc_category(ch);
-        if (!utf8_is_separator(cat)) {
+        if (!utf8_is_whitespace(ch)) {
             break;
         }
         index += char_len;
         ptr += char_len;
-        spaces++;
+        spaces += char_len;
     }
 
     return spaces;
 }
 
 char *string_trim(char *str) {
-    size_t left_spaces = string_left_spaces(str);
-    size_t right_spaces = string_right_spaces(str);
     size_t len = strlen(str);
+    size_t left_spaces = string_left_spaces_len(str, len);
+    size_t right_spaces = string_right_spaces_len(str, len);
     char *ret = strndup(str + left_spaces, len - left_spaces - right_spaces);
     return ret;
 }
