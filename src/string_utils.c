@@ -1091,7 +1091,6 @@ void string_tree_iterator_next(string_tree_iterator_t *self) {
             self->path[i]++;
             if (self->path[i] == string_tree_num_alternatives(self->tree, i)) {
                 self->path[i] = 0;
-                self->remaining--;
             } else {
                 self->remaining--;
                 break;
