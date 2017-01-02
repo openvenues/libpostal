@@ -1205,19 +1205,19 @@ extra_transforms = {
         (STEP_TRANSFORM, 'latin-ascii'),
     ],
 
+    # Swedish/Danish/Norwegian transliterations not handled by standard NFD or Latin-ASCII
     'scandinavian-ascii': [
         (STEP_RULESET, [
-
-            # Swedish transliterations not handled by standard NFD normalization
+            # ø => oe
             (u'"\\xc3\\xb8"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', 'NULL', '0', 'NULL', '0'),
 
-            # Å => Aa if followed by lower case Latin letter
+            # Ø => Oe if followed by lower case Latin letter
             (u'"\\xc3\\x98"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', latin_lower_rule, str(latin_lower_rule_len), u'"Oe"', '2', 'NULL', '0', 'NULL', '0'),
 
-            # Å => AA otherwise
+            # Ø => OE otherwise
             (u'"\\xc3\\x98"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"OE"', '2', 'NULL', '0', 'NULL', '0'),
 
-            # Swedish transliterations not handled by standard NFD normalization
+            # å => aa
             (u'"\\xc3\\xa5"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"aa"', '2', 'NULL', '0', 'NULL', '0'),
 
             # Å => Aa if followed by lower case Latin letter
@@ -1522,6 +1522,7 @@ script_transliterators = {
     'cherokee': None,
     'common': {None: ['latin-ascii'],
                'de': ['german-ascii'],
+               'et': ['german-ascii'],
                'da': ['scandinavian-ascii', 'latin-ascii'],
                'nb': ['scandinavian-ascii', 'latin-ascii'],
                'sv': ['scandinavian-ascii', 'latin-ascii'],
@@ -1560,6 +1561,7 @@ script_transliterators = {
     'lao': None,
     'latin': {None: ['latin-ascii'],
               'de': ['german-ascii'],
+              'et': ['german-ascii'],
               'da': ['scandinavian-ascii', 'latin-ascii'],
               'nb': ['scandinavian-ascii', 'latin-ascii'],
               'sv': ['scandinavian-ascii', 'latin-ascii'],
