@@ -206,15 +206,22 @@ char *utf8_case(const char *s, casing_option_t casing, utf8proc_option_t options
         } else if (casing == UTF8_UPPER) {
             norm = utf8proc_toupper(uc);
         }
+        buffer[i] = norm;
     }
 
     result = utf8proc_reencode(buffer, result, options);
+    if (result < 0) {
+        free(buffer);
+        return NULL;
+    }
 
-    utf8proc_int32_t *newptr;
-    newptr = (utf8proc_int32_t *) realloc(buffer, (size_t)result+1);
-    if (newptr) buffer = newptr;
-
-    free(buffer);
+    utf8proc_int32_t *newptr = (utf8proc_int32_t *) realloc(buffer, (size_t)result+1);
+    if (newptr != NULL) {
+        buffer = newptr;
+    } else {
+        free(buffer);
+        return NULL;
+    }
 
     return (char *)buffer;
 }
