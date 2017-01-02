@@ -124,6 +124,16 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Vitória
+
+            rj:
+                add:
+                    state: RJ
+                files:
+                    - filename: rio_de_janeiro.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Rio de Janeiro
+
             pe:
                 add:
                     state: PE
@@ -901,10 +911,17 @@ countries:
                     - filename: statewide.csv
 
     jm:
+        cldr_country_probability: 0.8
         files:
             - filename: august_town.csv
 
+    li:
+        cldr_country_probability: 0.9
+        files:
+            - filename: countrywide.csv
+
     lu:
+        cldr_country_probability: 0.8
         files:
             - filename: countrywide.csv
 
@@ -1150,6 +1167,7 @@ countries:
         files:
             - filename: municipality_of_kalmar.csv
             - filename: municipality_of_Österåker.csv
+            - filename: municipality_of_stockholm.csv
 
     sg:
         files:
