@@ -88,6 +88,7 @@ bool utf8_is_letter_or_number(int cat);
 bool utf8_is_punctuation(int cat);
 bool utf8_is_symbol(int cat);
 bool utf8_is_separator(int cat);
+bool utf8_is_whitespace(int32_t ch);
 
 bool string_is_ignorable(char *str, size_t len);
 
