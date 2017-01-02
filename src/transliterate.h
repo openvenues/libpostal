@@ -15,6 +15,7 @@
 
 #define LATIN_ASCII "latin-ascii"
 #define LATIN_ASCII_SIMPLE "latin-ascii-simple"
+#define HTML_ESCAPE "html-escape"
 
 #define DEFAULT_TRANSLITERATION_PATH LIBPOSTAL_TRANSLITERATION_DIR PATH_SEPARATOR "transliteration.dat"
 
