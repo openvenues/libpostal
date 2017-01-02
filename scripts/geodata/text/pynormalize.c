@@ -310,6 +310,7 @@ init_normalize(void) {
     PyModule_AddObject(module, "NORMALIZE_STRING_LOWERCASE", PyLong_FromUnsignedLongLong(NORMALIZE_STRING_LOWERCASE));
     PyModule_AddObject(module, "NORMALIZE_STRING_TRIM", PyLong_FromUnsignedLongLong(NORMALIZE_STRING_TRIM));
     PyModule_AddObject(module, "NORMALIZE_STRING_REPLACE_HYPHENS", PyLong_FromUnsignedLongLong(NORMALIZE_STRING_REPLACE_HYPHENS));
+    PyModule_AddObject(module, "NORMALIZE_STRING_SIMPLE_LATIN_ASCII", PyLong_FromUnsignedLongLong(NORMALIZE_STRING_SIMPLE_LATIN_ASCII));
 
 
     PyModule_AddObject(module, "NORMALIZE_TOKEN_REPLACE_HYPHENS", PyLong_FromUnsignedLongLong(NORMALIZE_TOKEN_REPLACE_HYPHENS));
