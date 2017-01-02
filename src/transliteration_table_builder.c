@@ -273,7 +273,7 @@ int main(int argc, char **argv) {
 
             size_t step_name_len = strlen(step_source.name);
 
-            log_info("Doing step: %s, type=%d\n", step_source.name, step_source.type);
+            log_debug("Doing step: %s, type=%d\n", step_source.name, step_source.type);
 
             if (!transliteration_table_add_step(trans_table, step_source.type, step_source.name)) {
                 log_error("Step couldn't be added\n");
@@ -391,7 +391,7 @@ int main(int argc, char **argv) {
                 size_t num_pre_context_strings = 0;
                 if (pre_context_type != CONTEXT_TYPE_NONE) {
                     num_pre_context_strings = cstring_array_num_strings(pre_context_strings);
-                    log_info("num_pre_context_strings = %zu\n", num_pre_context_strings);
+                    log_debug("num_pre_context_strings = %zu\n", num_pre_context_strings);
                 }
 
                 string_tree_t *post_context_tree = NULL;
@@ -441,7 +441,7 @@ int main(int argc, char **argv) {
                 size_t num_post_context_strings = 0;
                 if (post_context_type != CONTEXT_TYPE_NONE) {
                     num_post_context_strings = cstring_array_num_strings(post_context_strings);
-                    log_info("num_post_context_strings = %zu\n", num_post_context_strings);
+                    log_debug("num_post_context_strings = %zu\n", num_post_context_strings);
                 }
 
                 cstring_array *context_strings = NULL;
@@ -502,7 +502,7 @@ int main(int argc, char **argv) {
                 }
 
                 if (num_context_strings > 0) {
-                    log_info("num_context_strings = %zu\n", num_context_strings);
+                    log_debug("num_context_strings = %zu\n", num_context_strings);
                 }
 
 
@@ -513,7 +513,7 @@ int main(int argc, char **argv) {
 
                 string_tree_iterator_t *iter = string_tree_iterator_new(tree);
 
-                log_info("iter->remaining=%d\n", iter->remaining);
+                log_debug("iter->remaining=%d\n", iter->remaining);
                 
                 char *key_str;
 
