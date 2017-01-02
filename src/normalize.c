@@ -11,12 +11,26 @@ char *normalize_string_utf8(char *str, uint64_t options) {
     bool have_utf8proc_options = false;
 
     char *normalized = NULL;
+    bool normalized_allocated = false;
 
     if (options & NORMALIZE_STRING_TRIM) {
         char *trimmed = string_trim(str);
         if (trimmed != NULL) {
             normalized = trimmed;
             str = normalized;
+            normalized_allocated = true;
+        }
+    }
+
+    if (options & NORMALIZE_STRING_LOWERCASE) {
+        char *lowercased = utf8_lower(str);
+        if (lowercased != NULL) {
+            if (normalized_allocated) {
+                free(normalized);
+            }
+            normalized = lowercased;
+            str = normalized;
+            normalized_allocated = true;
         }
     }
 
@@ -35,22 +49,30 @@ char *normalize_string_utf8(char *str, uint64_t options) {
         utf8proc_options |= UTF8PROC_OPTIONS_STRIP_ACCENTS;
     }
 
-    if (options & NORMALIZE_STRING_LOWERCASE) {
-        have_utf8proc_options = true;
-        utf8proc_options |= UTF8PROC_OPTIONS_LOWERCASE;
-    }
-
     if (have_utf8proc_options) {
         utf8proc_map((uint8_t *)str, 0, &utf8proc_normalized, utf8proc_options);
 
-        normalized = (char *)utf8proc_normalized;
-        str = normalized;
+        if (utf8proc_normalized != NULL) {
+            if (normalized_allocated) {
+                free(normalized);
+            }
+
+            normalized = (char *)utf8proc_normalized;
+            str = normalized;
+            normalized_allocated = true;
+        }
     }
 
     if (options & NORMALIZE_STRING_REPLACE_HYPHENS && strchr(str, '-') != NULL) {
         char *replaced = string_replace(str, '-', ' ');
         if (replaced != NULL) {
+            if (normalized_allocated) {
+                free(normalized);
+            }
+
             normalized = replaced;
+            str = normalized;
+            normalized_allocated = true;
         }
     }
 
@@ -156,8 +178,16 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
 
         // Shortcut if the string is all ASCII
         if (options & NORMALIZE_STRING_LOWERCASE && is_ascii && script_len == len) {
+            char *html_escaped = transliterate(HTML_ESCAPE, str, len);
+            if (html_escaped != NULL) {
+                str = html_escaped;
+            }
             utf8_normalized = normalize_string_utf8(str, NORMALIZE_STRING_LOWERCASE);
             if (utf8_normalized != NULL) {
+                if (html_escaped != NULL) {
+                    free(html_escaped);
+                    html_escaped = NULL;
+                }
                 string_tree_add_string(tree, utf8_normalized);
                 string_tree_finalize_token(tree);
                 free(utf8_normalized);
