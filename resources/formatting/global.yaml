@@ -48,10 +48,6 @@ global:
                 after: country
                 probability: 0.01
 
-            postcode_first:
-                first: true
-                probability: 0.001
-
             postcode_last:
                 last: true
                 probability: 0.01
@@ -91,6 +87,11 @@ languages:
                 house_number_before_road:
                     before: road
                     probability: 0.01
+
+            postcode:
+                postcode_first:
+                    first: true
+                    probability: 0.001
 
             building:
                 building_after_house_number:
