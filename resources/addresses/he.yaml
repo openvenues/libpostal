@@ -182,9 +182,6 @@ entrances:
         alternatives:
             - alternative: *knisa_latin
               probability: 0.01
-        alpha_probability: 1.0
-
-    alphanumeric:
         numeric_probability: 0.1
         alpha_probability: 0.9
 
