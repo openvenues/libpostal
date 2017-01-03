@@ -195,24 +195,6 @@ class OpenAddressesFormatter(object):
                 pass
         return num
 
-    @classmethod
-    def spanish_street_name(cls, street):
-        '''
-        Most Spanish street names begin with Calle officially
-        but since it's so common, this is often omitted entirely.
-        As such, for Spanish-speaking places with numbered streets
-        like Mérida in Mexico, it would be legitimate to have a
-        simple number like "27" for the street name in a GIS
-        data set which omits the Calle. However, we don't really
-        want to train on "27/road 1/house_number" as that's not
-        typically how a numeric-only street would be written. However,
-        we don't want to neglect entire cities like Mérida which are
-        predominantly a grid, so add Calle (may be abbreviated later).
-        '''
-        if is_numeric(street):
-            street = six.u('Calle {}').format(street)
-        return street
-
     def strip_unit_phrases_for_language(self, value, language):
         if language in self.unit_type_regexes:
             return self.unit_type_regexes[language].sub(six.u(''), value)
@@ -300,7 +282,7 @@ class OpenAddressesFormatter(object):
                     value = mapped_values[key].get(value, value)
 
                 if key == AddressFormatter.ROAD and language == SPANISH:
-                    value = self.spanish_street_name(value)
+                    value = self.components.spanish_street_name(value)
 
                 if key in AddressFormatter.BOUNDARY_COMPONENTS and key != AddressFormatter.POSTCODE:
                     if add_osm_boundaries:

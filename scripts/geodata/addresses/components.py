@@ -68,6 +68,7 @@ MACAO = 'mo'
 
 JAPANESE_ROMAJI = 'ja_rm'
 ENGLISH = 'en'
+SPANISH = 'es'
 
 JAPANESE = 'ja'
 CHINESE = 'zh'
@@ -884,6 +885,24 @@ class AddressComponents(object):
                 if genitive_probability is not None and random.random() < float(genitive_probability):
                     address_components[component] = self.genitive_name(address_components[component], language)
 
+    @classmethod
+    def spanish_street_name(cls, street):
+        '''
+        Most Spanish street names begin with Calle officially
+        but since it's so common, this is often omitted entirely.
+        As such, for Spanish-speaking places with numbered streets
+        like Mérida in Mexico, it would be legitimate to have a
+        simple number like "27" for the street name in a GIS
+        data set which omits the Calle. However, we don't really
+        want to train on "27/road 1/house_number" as that's not
+        typically how a numeric-only street would be written. However,
+        we don't want to neglect entire cities like Mérida which are
+        predominantly a grid, so add Calle (may be abbreviated later).
+        '''
+        if is_numeric(street):
+            street = six.u('Calle {}').format(street)
+        return street
+
     def abbreviated_state(self, state, country, language):
         abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
 
@@ -1672,8 +1691,14 @@ class AddressComponents(object):
         self.add_neighborhoods(address_components, neighborhoods, country, language, non_local_language=non_local_language,
                                language_suffix=language_suffix)
 
-        street = address_components.get(AddressFormatter.ROAD)
         self.cleanup_street(address_components)
+        street = address_components.get(AddressFormatter.ROAD)
+
+        if language == SPANISH and street:
+            norm_street = self.spanish_street_name(street)
+            if norm_street:
+                address_components[AddressFormatter.ROAD] = norm_street
+                street = norm_street
 
         self.cleanup_boundary_names(address_components)
 
