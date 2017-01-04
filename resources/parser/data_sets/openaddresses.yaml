@@ -523,6 +523,9 @@ countries:
             - filename: bern.csv
               add:
                   state: BE
+            - filename: basel-land.csv
+              add:
+                  state: BL
             - filename: fribourg.csv
               add:
                   state: FR
