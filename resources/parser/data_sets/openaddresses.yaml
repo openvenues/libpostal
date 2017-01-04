@@ -911,9 +911,15 @@ countries:
                     - filename: statewide.csv
 
     jm:
-        cldr_country_probability: 0.8
+        cldr_country_probability: 0.9
         files:
             - filename: august_town.csv
+            - filename: countrywide.csv
+              ignore_fields_containing:
+                  city:
+                      - "^\\s*S\\s*$"
+                  state:
+                      - "^\\s*KINGSTON\\s*$"
 
     li:
         cldr_country_probability: 0.9
