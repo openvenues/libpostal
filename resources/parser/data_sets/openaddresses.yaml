@@ -542,6 +542,10 @@ countries:
               language: de
               add:
                   state: SH
+            - filename: solothurn.csv
+              language: de
+              add:
+                  state: SO
             - filename: zurich.csv
               language: de
               add:
