@@ -524,9 +524,11 @@ countries:
               add:
                   state: BE
             - filename: basel-land.csv
+              language: de
               add:
                   state: BL
             - filename: basel-stadt.csv
+              language: de
               add:
                   state: BS
             - filename: fribourg.csv
@@ -536,6 +538,10 @@ countries:
               language: fr
               add:
                   state: GE
+            - filename: schaffhausen.csv
+              language: de
+              add:
+                  state: SH
             - filename: zurich.csv
               language: de
               add:
