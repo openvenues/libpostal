@@ -2214,6 +2214,10 @@ countries:
                 add:
                     state: KY
                 files:
+                    - filename: boyd.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Boyd County
                     - filename: city_of_paducah.csv
                       add_osm_boundaries: true
                       city_replacements:
