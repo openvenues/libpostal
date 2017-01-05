@@ -1171,62 +1171,67 @@ html_escape_step = [(quote_string(name), str(len(name)), CONTEXT_TYPE_NONE, '0',
                     for name, value in six.iteritems(html_escapes)
                     ]
 
+HTML_ESCAPE = 'html-escape'
+LATIN_ASCII = 'latin-ascii'
+LATIN_ASCII_SIMPLE = 'latin-ascii-simple'
+GERMAN_ASCII = 'german-ascii'
+SCANDINAVIAN_ASCII = 'scandinavian-ascii'
+
+custom_transforms = {
+    GERMAN_ASCII: {
+        safe_decode('ä'): safe_decode('ae'),
+        safe_decode('Ä'): safe_decode('AE'),
+        safe_decode('ö'): safe_decode('oe'),
+        safe_decode('Ö'): safe_decode('OE'),
+        safe_decode('ü'): safe_decode('ue'),
+        safe_decode('Ü'): safe_decode('UE'),
+    },
+    SCANDINAVIAN_ASCII: {
+        safe_decode('ø'): safe_decode('oe'),
+        safe_decode('Ø'): safe_decode('OE'),
+        safe_decode('å'): safe_decode('aa'),
+        safe_decode('Å'): safe_decode('AA'),
+    },
+}
+
+
+def make_char_rules(transforms, char_lower, char_upper, titlecase=True):
+    lower_char_encoded = safe_encode(char_lower)
+    upper_char_encoded = safe_encode(char_upper)
+    lower_replacement = safe_encode(transforms[char_lower])
+    upper_replacement = safe_encode(transforms[char_upper])
+
+    rules = [
+        (safe_decode(quote_string(escape_string(safe_encode(lower_char_encoded)))), safe_encode(len(lower_char_encoded)), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', safe_decode(quote_string(escape_string(safe_encode(lower_replacement)))), safe_encode(len(lower_replacement)), 'NULL', '0', 'NULL', '0'),
+    ]
+    if titlecase:
+        title_replacement = upper_replacement.title()
+        rules.append((safe_decode(quote_string(escape_string(safe_encode(upper_char_encoded)))), safe_encode(len(upper_char_encoded)), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', latin_lower_rule, safe_encode(latin_lower_rule_len), safe_decode(quote_string(escape_string(safe_encode(title_replacement)))), safe_encode(len(title_replacement)), 'NULL', '0', 'NULL', '0'))
+
+    rules.append((safe_decode(quote_string(escape_string(safe_encode(upper_char_encoded)))), safe_encode(len(upper_char_encoded)), CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', safe_decode(quote_string(escape_string(safe_encode(upper_replacement)))), safe_encode(len(lower_replacement)), 'NULL', '0', 'NULL', '0'))
+    return rules
+
+
 extra_transforms = {
-    'html-escape': [
+    HTML_ESCAPE: [
         (STEP_RULESET, html_escape_step)
     ],
-    'german-ascii': [
-        (STEP_RULESET, [
-            # German transliterations not handled by standard NFD normalization
-            # ä => ae
-            (u'"\\xc3\\xa4"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ae"', '2', 'NULL', '0', 'NULL', '0'),
-            # Ä => Ae if followed by lower case Latin letter
-            (u'"\\xc3\\x84"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', latin_lower_rule, str(latin_lower_rule_len), u'"Ae"', '2', 'NULL', '0', 'NULL', '0'),
-            # Ä => AE otherwise
-            (u'"\\xc3\\x84"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"AE"', '2', 'NULL', '0', 'NULL', '0'),
-            # ö => oe
-            (u'"\\xc3\\xb6"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', 'NULL', '0', 'NULL', '0'),
-            # Ö => Oe if followed by lower case Latin letter
-            (u'"\\xc3\\x96"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', latin_lower_rule, str(latin_lower_rule_len), u'"Oe"', '2', 'NULL', '0', 'NULL', '0'),
-            # Ö => OE otherwise
-            (u'"\\xc3\\x96"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"OE"', '2', 'NULL', '0', 'NULL', '0'),
-
-            # Note this is the German form. In Swedish ü => y,
-            # might make sense to split these rules into
-            # language-specific transliterators
-
-            # ü => ue
-            (u'"\\xc3\\xbc"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"ue"', '2', 'NULL', '0', 'NULL', '0'),
-            # Ü => Ue if followed by lower case Latin letter
-            (u'"\\xc3\\x96"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', latin_lower_rule, str(latin_lower_rule_len), u'"Ue"', '2', 'NULL', '0', 'NULL', '0'),
-            # Ü => UE otherwise
-            (u'"\\xc3\\x96"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"UE"', '2', 'NULL', '0', 'NULL', '0'),
-        ]),
-        (STEP_TRANSFORM, 'latin-ascii'),
+    GERMAN_ASCII: [
+        (STEP_RULESET, 
+            make_char_rules(custom_transforms[GERMAN_ASCII], safe_decode('ä'), safe_decode('Ä')) + \
+            make_char_rules(custom_transforms[GERMAN_ASCII], safe_decode('ö'), safe_decode('Ö')) + \
+            make_char_rules(custom_transforms[GERMAN_ASCII], safe_decode('ü'), safe_decode('Ü'))
+        ),
+        (STEP_TRANSFORM, LATIN_ASCII),
     ],
 
     # Swedish/Danish/Norwegian transliterations not handled by standard NFD or Latin-ASCII
-    'scandinavian-ascii': [
-        (STEP_RULESET, [
-            # ø => oe
-            (u'"\\xc3\\xb8"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"oe"', '2', 'NULL', '0', 'NULL', '0'),
-
-            # Ø => Oe if followed by lower case Latin letter
-            (u'"\\xc3\\x98"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', latin_lower_rule, str(latin_lower_rule_len), u'"Oe"', '2', 'NULL', '0', 'NULL', '0'),
-
-            # Ø => OE otherwise
-            (u'"\\xc3\\x98"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"OE"', '2', 'NULL', '0', 'NULL', '0'),
-
-            # å => aa
-            (u'"\\xc3\\xa5"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"aa"', '2', 'NULL', '0', 'NULL', '0'),
-
-            # Å => Aa if followed by lower case Latin letter
-            (u'"\\xc3\\x85"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_REGEX, '1', latin_lower_rule, str(latin_lower_rule_len), u'"Aa"', '2', 'NULL', '0', 'NULL', '0'),
-
-            # Å => AA otherwise
-            (u'"\\xc3\\x85"', '2', CONTEXT_TYPE_NONE, '0', 'NULL', '0', CONTEXT_TYPE_NONE, '0', 'NULL', '0', u'"AA"', '2', 'NULL', '0', 'NULL', '0'),
-        ]),
-        (STEP_TRANSFORM, 'latin-ascii'),
+    SCANDINAVIAN_ASCII: [
+        (STEP_RULESET,
+            make_char_rules(custom_transforms[SCANDINAVIAN_ASCII], safe_decode('ø'), safe_decode('Ø')) + \
+            make_char_rules(custom_transforms[SCANDINAVIAN_ASCII], safe_decode('å'), safe_decode('Å'))
+        ),
+        (STEP_TRANSFORM, LATIN_ASCII),
     ],
 
 }
@@ -1234,9 +1239,9 @@ extra_transforms = {
 
 # Extra rules defined here
 supplemental_transliterations = {
-    'latin-ascii': [
+    LATIN_ASCII: [
         # Prepend transformations get applied in the reverse order of their appearance here
-        (PREPEND_STEP, [(STEP_TRANSFORM, 'html-escape')]),
+        (PREPEND_STEP, [(STEP_TRANSFORM, HTML_ESCAPE)]),
     ],
 }
 
@@ -1250,11 +1255,11 @@ def simple_latin_ruleset():
         for c in chars:
             cats[wide_ord(c)] = cat
 
-    ruleset = [(STEP_TRANSFORM, 'html-escape')]
+    ruleset = [(STEP_TRANSFORM, HTML_ESCAPE)]
 
     simple_rules = []
 
-    for rule_type, rule in parse_transform_rules('latin-ascii', xml):
+    for rule_type, rule in parse_transform_rules(LATIN_ASCII, xml):
         if rule_type == RULE:
             key = safe_decode(rule[0])
             pre_context_type = rule[1]
@@ -1271,7 +1276,7 @@ def simple_latin_ruleset():
 
     return ruleset
 
-extra_transforms['latin-ascii-simple'] = simple_latin_ruleset()
+extra_transforms[LATIN_ASCII_SIMPLE] = simple_latin_ruleset()
 
 
 def get_all_transform_rules():
@@ -1367,7 +1372,7 @@ def get_all_transform_rules():
 
         bidirectional = name in BIDIRECTIONAL_TRANSLITERATORS
 
-        if target.lower() == 'latin' or name == 'latin-ascii' and not internal:
+        if target.lower() == 'latin' or name == LATIN_ASCII and not internal:
             to_latin.add(name)
             retain_transforms.add(name)
         elif (reverse and source.lower() == 'latin') and not internal:
@@ -1520,12 +1525,12 @@ script_transliterators = {
     'canadian_aboriginal': {None: ['canadianaboriginal-latin']},
     'cham': None,
     'cherokee': None,
-    'common': {None: ['latin-ascii'],
-               'de': ['german-ascii'],
-               'et': ['german-ascii'],
-               'da': ['scandinavian-ascii', 'latin-ascii'],
-               'nb': ['scandinavian-ascii', 'latin-ascii'],
-               'sv': ['scandinavian-ascii', 'latin-ascii'],
+    'common': {None: [LATIN_ASCII],
+               'de': [GERMAN_ASCII],
+               'et': [GERMAN_ASCII],
+               'da': [SCANDINAVIAN_ASCII, LATIN_ASCII],
+               'nb': [SCANDINAVIAN_ASCII, LATIN_ASCII],
+               'sv': [SCANDINAVIAN_ASCII, LATIN_ASCII],
                },
     'coptic': None,
     'cyrillic': {None: ['cyrillic-latin'],
@@ -1559,12 +1564,12 @@ script_transliterators = {
     'kayah_li': None,
     'khmer': None,
     'lao': None,
-    'latin': {None: ['latin-ascii'],
-              'de': ['german-ascii'],
-              'et': ['german-ascii'],
-              'da': ['scandinavian-ascii', 'latin-ascii'],
-              'nb': ['scandinavian-ascii', 'latin-ascii'],
-              'sv': ['scandinavian-ascii', 'latin-ascii'],
+    'latin': {None: [LATIN_ASCII],
+              'de': [GERMAN_ASCII],
+              'et': [GERMAN_ASCII],
+              'da': [SCANDINAVIAN_ASCII, LATIN_ASCII],
+              'nb': [SCANDINAVIAN_ASCII, LATIN_ASCII],
+              'sv': [SCANDINAVIAN_ASCII, LATIN_ASCII],
               },
     'lepcha': None,
     'limbu': None,
