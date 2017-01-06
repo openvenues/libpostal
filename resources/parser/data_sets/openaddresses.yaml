@@ -1417,6 +1417,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Sacramento County
+                    - filename: san_benito.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: San Benito County
                     - filename: san_bernardino.csv
                     - filename: san_diego.csv
                     - filename: san_francisco.csv
@@ -2231,6 +2235,11 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Boyd County
+                    - filename: campbell.csv
+                      fields: *fields_with_unit
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Campbell County
                     - filename: city_of_paducah.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -2265,6 +2274,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Oldham County
+                    - filename: pendleton.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Pendleton County
                     - filename: warren.csv
 
             la:
