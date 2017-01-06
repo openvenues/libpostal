@@ -538,14 +538,29 @@ countries:
               language: fr
               add:
                   state: GE
+            - filename: glarus.csv
+              language: de
+              add:
+                  state: SZ
+            - filename: grisons.csv
+              add:
+                  state: GR
             - filename: schaffhausen.csv
               language: de
               add:
                   state: SH
+            - filename: schwyz.csv
+              language: de
+              add:
+                  state: SZ
             - filename: solothurn.csv
               language: de
               add:
                   state: SO
+            - filename: uri.csv
+              language: de
+              add:
+                  state: UR
             - filename: zurich.csv
               language: de
               add:
