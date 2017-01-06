@@ -195,11 +195,6 @@ class OpenAddressesFormatter(object):
                 pass
         return num
 
-    def strip_unit_phrases_for_language(self, value, language):
-        if language in self.unit_type_regexes:
-            return self.unit_type_regexes[language].sub(six.u(''), value)
-        return value
-
     def fix_component_encodings(self, components):
         return {k: ftfy.fix_encoding(safe_decode(v)) for k, v in six.iteritems(components)}
 
@@ -345,7 +340,7 @@ class OpenAddressesFormatter(object):
                     else:
                         strip_unit_language = language
 
-                    self.strip_unit_phrases_for_language(street, strip_unit_language)
+                    street = self.components.strip_unit_phrases_for_language(street, strip_unit_language)
 
                     street = abbreviate(street_types_gazetteer, street, language,
                                         abbreviate_prob=abbreviate_street_prob,
