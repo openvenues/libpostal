@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import copy
+import itertools
 import operator
 import os
 import pycountry
@@ -14,7 +15,6 @@ import pymorphy2_dicts_ru
 import pymorphy2_dicts_uk
 
 from collections import defaultdict, OrderedDict
-from itertools import combinations
 
 from geodata.address_formatting.formatter import AddressFormatter
 
@@ -65,6 +65,7 @@ KOREA = 'kr'
 TAIWAN = 'tw'
 HONG_KONG = 'hk'
 MACAO = 'mo'
+UNITED_STATES = 'us'
 
 JAPANESE_ROMAJI = 'ja_rm'
 ENGLISH = 'en'
@@ -903,6 +904,28 @@ class AddressComponents(object):
             street = six.u('Calle {}').format(street)
         return street
 
+    street_unit_suffix_regex = re.compile("^(.+?)(?:\\s+\(?\\s*(?:unit|apartment|apt\.?|suite|ste\.?|bldg\.?|lot)\\b(?:(?:\\s*#|\\s+(?:number|no|no.)\\b)?)).*$", re.I)
+
+    unit_type_regexes = {}
+
+    lang_phrase_dictionaries = [lang for lang, dictionary_type in six.iterkeys(address_phrase_dictionaries.phrases)]
+
+    for lang in lang_phrase_dictionaries:
+        numbers = address_phrase_dictionaries.phrases.get((lang, 'number'), [])
+        numbered_units = address_phrase_dictionaries.phrases.get((lang, 'unit_types_numbered'), [])
+
+        number_phrases = [safe_encode(p) for p in itertools.chain(*numbers)]
+        unit_phrases = [safe_encode(p) for p in itertools.chain(*numbered_units) if len(p) > 2]
+        pattern = re.compile(r'\s*\b(?:{})[\.?\s]\s*(?:{})?\s*(?:[\d]+|[a-z]|[a-z][\d]*\-?[\d]+|[\d]+\-?[\d]*[a-z])\s*$'.format(safe_encode('|').join(unit_phrases), safe_encode('|').join(number_phrases)),
+                             re.I | re.UNICODE)
+        unit_type_regexes[lang] = pattern
+
+    @classmethod
+    def strip_unit_phrases_for_language(cls, value, language):
+        if language in cls.unit_type_regexes:
+            return cls.unit_type_regexes[language].sub(six.u(''), value)
+        return value
+
     def abbreviated_state(self, state, country, language):
         abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
 
@@ -1699,6 +1722,11 @@ class AddressComponents(object):
             if norm_street:
                 address_components[AddressFormatter.ROAD] = norm_street
                 street = norm_street
+
+        if street:
+            norm_street = self.strip_unit_phrases_for_language(street, language)
+            address_components[AddressFormatter.ROAD] = norm_street
+            street = norm_street
 
         self.cleanup_boundary_names(address_components)
 
