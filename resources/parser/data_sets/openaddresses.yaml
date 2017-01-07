@@ -15,10 +15,7 @@ global:
     place_only_probability: 0.2
     place_and_postcode_probability: 0.1
 
-    pre_release_downloads:
-        # Italy countrywide with postcodes, must have
-        - "http://s3.amazonaws.com/data.openaddresses.io/runs/104280/it/countrywide.zip"
-        - "http://s3.amazonaws.com/data.openaddresses.io/runs/127209/za/ec/nelson_mandela_bay.zip"
+    pre_release_downloads: []
 
     fields: &default_fields
         NUMBER:
@@ -326,6 +323,8 @@ countries:
                           city: Cobourg
                     - filename: couchicing.csv
                       add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Couchiching First Nation
                     - filename: dufferin.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -435,6 +434,8 @@ countries:
                     - filename: seguin.csv
                     - filename: seine_river.csv
                       add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Seine River First Nation
                     - filename: simcoe.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -739,6 +740,8 @@ countries:
             - filename: meuse.csv
             - filename: montpellier.csv
               add_osm_boundaries: true
+              city_replacements:
+                  city: Montpellier
             - filename: morbihan.csv
             - filename: moselle.csv
             - filename: nievre.csv
@@ -1207,6 +1210,7 @@ countries:
             - filename: municipality_of_stockholm.csv
 
     sg:
+        cldr_country_probability: 0.8
         files:
             - filename: countrywide.csv
               add_osm_boundaries: true
@@ -1531,6 +1535,8 @@ countries:
                           state_district: Grand County
                     - filename: gunnison.csv
                       add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Gunnison County
                     - filename: jefferson.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -1543,6 +1549,8 @@ countries:
                           state_district: Mineral County
                     - filename: moffat.csv
                       add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Moffat County
                     - filename: montezuma.csv
                     - filename: montrose.csv
                     - filename: park.csv
@@ -2914,6 +2922,8 @@ countries:
                     - filename: broome.csv
                     - filename: city_of_new_york.csv
                       add_osm_boundaries: true
+                      city_replacements:
+                          city: New York City
                     - filename: city_of_rochester.csv
                     - filename: erie.csv
                       fields: *fields_no_postcode
