@@ -541,7 +541,7 @@ countries:
             - filename: glarus.csv
               language: de
               add:
-                  state: SZ
+                  state: GL
             - filename: grisons.csv
               add:
                   state: GR
@@ -3617,6 +3617,9 @@ countries:
                     - filename: lincoln.csv
                     - filename: manitowoc.csv
                     - filename: milwaukee.csv
+                      ignore_fields_containing:
+                          city:
+                              - "^[0-9]+$"
                     - filename: oneida.csv
                     - filename: outagamie.csv
                     - filename: pierce.csv
