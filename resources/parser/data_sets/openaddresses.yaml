@@ -1655,6 +1655,8 @@ countries:
                           state_district: Hillsborough County
                     - filename: lake.csv
                       add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Lake County
                     - filename: lee.csv
                     - filename: leon.csv
                       add_osm_boundaries: true
