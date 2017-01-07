@@ -3629,9 +3629,9 @@ countries:
                     - filename: lincoln.csv
                     - filename: manitowoc.csv
                     - filename: milwaukee.csv
-                      ignore_fields_containing:
-                          city:
-                              - "^[0-9]+$"
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Milwaukee County
                     - filename: oneida.csv
                     - filename: outagamie.csv
                     - filename: pierce.csv
