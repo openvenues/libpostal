@@ -60,6 +60,8 @@ FORMATTED_PLACE_DATA_TAGGED_FILENAME = 'formatted_places_tagged.tsv'
 FORMATTED_PLACE_DATA_FILENAME = 'formatted_places.tsv'
 INTERSECTIONS_FILENAME = 'intersections.tsv'
 INTERSECTIONS_TAGGED_FILENAME = 'intersections_tagged.tsv'
+WAYS_TAGGED_FILENAME = 'formatted_ways_tagged.tsv'
+WAYS_FILENAME = 'formatted_ways.tsv'
 
 ALL_LANGUAGES = 'all'
 
@@ -1281,6 +1283,55 @@ class OSMAddressFormatter(object):
             if i % 1000 == 0 and i > 0:
                 print('did {} formatted places'.format(i))
 
+    def way_names(self, way, candidate_languages):
+        names = defaultdict(list)
+
+        more_than_one_official_language = sum((1 for l, d in candidate_languages if d)) > 1
+
+        if len(candidate_languages) == 1:
+            default_language = candidate_languages[0][0]
+        elif not more_than_one_official_language:
+            default_language = None
+            name = way['name']
+            if not name:
+                continue
+            address_language = self.components.address_language({AddressFormatter.ROAD: name}, candidate_languages)
+            if address_language and address_language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE):
+                default_language = address_language
+
+        for tag in way:
+            tag = safe_decode(tag)
+            base_tag = tag.rsplit(six.u(':'), 1)[0]
+
+            normalized_tag = self.replace_numbered_tag(base_tag)
+            if normalized_tag:
+                base_tag = normalized_tag
+            if base_tag not in all_name_tags:
+                continue
+            lang = safe_decode(tag.rsplit(six.u(':'))[-1]) if six.u(':') in tag else None
+            if lang and lang.lower() in all_languages:
+                lang = lang.lower()
+            elif default_language:
+                lang = default_language
+            else:
+                continue
+
+            namespaced_languages.add(lang)
+
+            name = way[tag]
+            if default_language is None and tag == 'name':
+                address_language = self.components.address_language({AddressFormatter.ROAD: name}, candidate_languages)
+                if address_language and address_language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE):
+                    default_language = address_language
+
+            names[lang].append((way[tag], False))
+
+        if base_name_tag in way and default_language:
+            names[default_language].append((way[base_name_tag], True))
+
+        return names
+
+
     def build_intersections_training_data(self, infile, out_dir, tag_components=True):
         '''
         Intersection addresses like "4th & Main Street" are represented in OSM
@@ -1329,8 +1380,6 @@ class OSMAddressFormatter(object):
             if not (country and candidate_languages):
                 continue
 
-            more_than_one_official_language = sum((1 for l, d in candidate_languages if d)) > 1
-
             base_name_tag = None
             for t in all_base_name_tags:
                 if any((t in way for way in ways)):
@@ -1342,52 +1391,12 @@ class OSMAddressFormatter(object):
             default_language = None
 
             for way in ways:
-                names = defaultdict(list)
-
-                if len(candidate_languages) == 1:
-                    default_language = candidate_languages[0][0]
-                elif not more_than_one_official_language:
-                    default_language = None
-                    name = way['name']
-                    if not name:
-                        continue
-                    address_language = self.components.address_language({AddressFormatter.ROAD: name}, candidate_languages)
-                    if address_language and address_language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE):
-                        default_language = address_language
-
-                for tag in way:
-                    tag = safe_decode(tag)
-                    base_tag = tag.rsplit(six.u(':'), 1)[0]
-
-                    normalized_tag = self.replace_numbered_tag(base_tag)
-                    if normalized_tag:
-                        base_tag = normalized_tag
-                    if base_tag not in all_name_tags:
-                        continue
-                    lang = safe_decode(tag.rsplit(six.u(':'))[-1]) if six.u(':') in tag else None
-                    if lang and lang.lower() in all_languages:
-                        lang = lang.lower()
-                    elif default_language:
-                        lang = default_language
-                    else:
-                        continue
-
-                    namespaced_languages.add(lang)
-
-                    name = way[tag]
-                    if default_language is None and tag == 'name':
-                        address_language = self.components.address_language({AddressFormatter.ROAD: name}, candidate_languages)
-                        if address_language and address_language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE):
-                            default_language = address_language
-
-                    names[lang].append((way[tag], False))
-
-                if base_name_tag in way and default_language:
-                    names[default_language].append((way[base_name_tag], True))
+                names = self.way_names(way, candidate_languages)
 
                 if not names:
                     continue
 
+                namespaced_languages |= set(names)
                 way_names.append(names)
 
             if not way_names or len(way_names) < 2:
@@ -1439,6 +1448,75 @@ class OSMAddressFormatter(object):
             i += 1
             if i % 1000 == 0 and i > 0:
                 print('did {} intersections'.format(i))
+
+    def build_ways_training_data(self, infile, out_dir, tag_components=True):
+        '''
+        Simple street names and their containing boundaries.
+
+        Example:
+
+        en  us  34th/road Street/road New/city York/city NY/state
+        '''
+        i = 0
+
+        if tag_components:
+            formatted_tagged_file = open(os.path.join(out_dir, WAYS_TAGGED_FILENAME), 'w')
+            writer = csv.writer(formatted_tagged_file, 'tsv_no_quote')
+        else:
+            formatted_file = open(os.path.join(out_dir, WAYS_FILENAME), 'w')
+            writer = csv.writer(formatted_file, 'tsv_no_quote')
+
+        all_name_tags = set(OSM_NAME_TAGS)
+        all_base_name_tags = set(OSM_BASE_NAME_TAGS)
+
+        for key, value, deps in parse_osm(infile, allowed_types=WAYS_RELATIONS):
+            latitude = value['lat']
+            longitude = value['lon']
+
+            try:
+                latitude, longitude = latlon_to_decimal(latitude, longitude)
+            except Exception:
+                continue
+
+            country, candidate_languages = self.country_rtree.country_and_languages(latitude, longitude)
+            if not (country and candidate_languages):
+                continue
+
+            names = self.way_names(value, candidate_languages)
+
+            if not names:
+                continue
+
+            osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
+
+            for lang, vals in name_language.iteritems():
+                way_tags = []
+                for v in vals:
+                    for street_name in v.split(';'):
+                        street_name = street_name.strip()
+                        if street_name:
+                            address_components = {AddressFormatter.ROAD: street_name}
+
+                            self.components.add_admin_boundaries(address_components, osm_components,
+                                                                 country, lang,
+                                                                 latitude, longitude)
+
+                            way_tags.append(address_components)
+
+                            normalized = self.abbreviated_street(street_name, language)
+                            if normalized and normalized != street_name:
+                                address_components = address_components.copy()
+                                address_components[AddressFormatter.ROAD] = normalized
+
+                for address_components in way_tags:
+                    formatted = self.formatter.format_address(address_components, country, language=language,
+                                                              tag_components=tag_components, minimal_only=False)
+
+                    writer.writerow((lang, country, tsv_string(formatted)))
+
+            if i % 1000 == 0 and i > 0:
+                print('did {} ways'.format(i))
+            i += 1
 
     def build_limited_training_data(self, infile, out_dir):
         '''
