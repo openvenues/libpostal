@@ -488,8 +488,6 @@ class AddressComponents(object):
         # If the name contains a comma, stop and only use the phrase before the comma
         if ',' in name:
             return name.split(',', 1)[0].strip()
-        elif '/' in name:
-            return name.split('/', 1)[0].strip()
 
         return name
 
