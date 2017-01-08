@@ -418,6 +418,8 @@ class AddressComponents(object):
 
         return names, components
 
+    parens_regex = re.compile('\(.*?\)')
+
     def normalized_place_name(self, name, tag, osm_components, country=None, languages=None, phrase_from_component=False):
         '''
         Multiple place names
@@ -479,6 +481,9 @@ class AddressComponents(object):
                 num_phrases += 1
             else:
                 total_tokens += 1
+
+        if self.parens_regex.search(name):
+            name = parens_regex.sub(six.u(''), name).strip()
 
         # If the name contains a comma, stop and only use the phrase before the comma
         if ',' in name:
