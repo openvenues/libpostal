@@ -25,7 +25,7 @@ bend|bnd
 block|blk|blck
 bluff|blf|bluf|bluffs
 boardwalk|bwk|bwlk|board walk
-boulevard|bd|bde|blv|blvd|blvde|blvrd|boulavard|boul|boulv|bvd|boulevarde
+boulevard|blvd|bd|bde|blv|bl|blvde|blvrd|boulavard|boul|boulv|bvd|boulevarde
 bottom|bot|bottm|btm|bttm
 bottoms|bttms|btms|bottms
 boundary|bdy
