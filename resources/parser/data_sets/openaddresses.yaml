@@ -587,6 +587,7 @@ countries:
                 files:
                     - filename: city_of_cologne.csv
                     - filename: kreis_viersen.csv
+                    - filename: statewide.csv
             sn:
                 files:
                     - filename: statewide.csv
