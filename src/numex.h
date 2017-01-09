@@ -20,7 +20,8 @@
 #include "trie.h"
 #include "trie_search.h"
 
-#define DEFAULT_NUMEX_PATH LIBPOSTAL_DATA_DIR PATH_SEPARATOR "numex" PATH_SEPARATOR "numex.dat"
+#define NUMEX_DATA_FILE "numex.dat"
+#define DEFAULT_NUMEX_PATH LIBPOSTAL_DATA_DIR PATH_SEPARATOR "numex" PATH_SEPARATOR NUMEX_DATA_FILE
 
 #define LATIN_LANGUAGE_CODE "la"
 
