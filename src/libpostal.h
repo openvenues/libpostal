@@ -92,12 +92,15 @@ address_parser_response_t *parse_address(char *address, address_parser_options_t
 // Setup/teardown methods
 
 bool libpostal_setup(void);
+bool libpostal_setup_datadir(char *datadir);
 void libpostal_teardown(void);
 
 bool libpostal_setup_parser(void);
+bool libpostal_setup_parser_datadir(char *datadir);
 void libpostal_teardown_parser(void);
 
 bool libpostal_setup_language_classifier(void);
+bool libpostal_setup_language_classifier_datadir(char *datadir);
 void libpostal_teardown_language_classifier(void);
 
 #ifdef __cplusplus
