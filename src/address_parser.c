@@ -775,7 +775,6 @@ static bool add_ngram_features(cstring_array *features, char *feature_prefix, cs
     return true;
 }
 
-
 /*
 address_parser_features
 -----------------------
@@ -1008,6 +1007,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
         // For rare words and unknown words (so unknown words can benefit from statistics of known but super common words)
         if (word_freq <= parser->options.rare_word_threshold && is_word) {
+            log_debug("rare word: %s\n", word);
             bool ngrams_added = false;
             size_t hyphenated_word_offset = 0;
             bool first_sub_token = true;
@@ -1039,20 +1039,26 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
                 bool add_prefix = first_sub_token && prefix_len < sub_word_len;
                 bool add_suffix = last_sub_token && suffix_len < sub_word_len;
 
+                uint32_t sub_word_freq = word_freq;
                 if (is_hyphenated) {
-                    uint32_t sub_word_freq = word_vocab_frequency(parser, sub_word);
+                    sub_word_freq = word_vocab_frequency(parser, sub_word);
                     if (sub_word_freq > 0) {
                         feature_array_add(features, 2, "sub_word", sub_word);
                     }
+
                 }
 
-                // N-gram features from 3-6 characters
-                for (size_t ng = 3; ng <= 6; ng++) {
-                    ngrams_added = add_ngram_features(features, is_hyphenated ? "sub_word" : "word", context->ngrams, sub_word, ng, add_prefix ? prefix_len : 0, add_suffix ? suffix_len : 0);
+                if (sub_word_freq <= parser->options.rare_word_threshold) {
+                    // prefix/suffix features from 3-6 characters
+                    for (size_t ng = 3; ng <= 6; ng++) {
+                        ngrams_added = add_ngram_features(features, is_hyphenated ? "sub_word" : "word", context->ngrams, sub_word, ng, add_prefix ? prefix_len : 0, add_suffix ? suffix_len : 0);
+                    }
                 }
 
                 hyphenated_word_offset += next_hyphen_index + 1;
                 first_sub_token = false;
+
+                log_debug("next_hyphen_index=%d\n", next_hyphen_index);
             } while(next_hyphen_index >= 0);
 
         }
@@ -1143,6 +1149,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
         // Prev tag, current word and next word
         //feature_array_add(features, 4, "prev tag+word+next word", prev || "START", word, next_word);
+
     }
 
     if (parser->options.print_features) {
