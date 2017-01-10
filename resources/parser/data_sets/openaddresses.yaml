@@ -1786,6 +1786,10 @@ countries:
                     - filename: gordon.csv
                       city_replacements:
                           state_district: Gordon County
+                    - filename: habersham.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Habersham County
                     - filename: harris.csv
                       city_replacements:
                           state_district: Harris County
