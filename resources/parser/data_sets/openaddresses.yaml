@@ -1206,9 +1206,13 @@ countries:
 
     se:
         files:
+            - filename: municipality_of_helsingborg.csv
             - filename: municipality_of_kalmar.csv
             - filename: municipality_of_Österåker.csv
+            - filename: municipality_of_malmo.csv
             - filename: municipality_of_stockholm.csv
+            - filename: municipality_of_vaxholm.csv
+            - filename: municipality_of_vaxjo.csv
 
     sg:
         cldr_country_probability: 0.8
