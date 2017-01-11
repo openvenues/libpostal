@@ -6,7 +6,7 @@ import yaml
 from copy import deepcopy
 
 from geodata.address_formatting.formatter import AddressFormatter
-from geodata.configs.utils import recursive_merge
+from geodata.configs.utils import recursive_merge, DoesNotExist
 
 from geodata.encoding import safe_encode
 
@@ -147,36 +147,36 @@ class OSMAddressComponents(object):
         # place=city, place=suburb, etc. override per-country boundaries
         if not global_overrides_last:
             for k, v in values:
-                containing_component = self.global_keys_override.get(k, {}).get(v, None)
+                containing_component = self.global_keys_override.get(k, {}).get(v, DoesNotExist)
 
-                if containing_component is not None:
+                if containing_component is not DoesNotExist:
                     return containing_component
 
                 if k != self.ADMIN_LEVEL and k in config:
-                    containing_component = config.get(k, {}).get(v, None)
-                    if containing_component:
+                    containing_component = config.get(k, {}).get(v, DoesNotExist)
+                    if containing_component is not DoesNotExist:
                         return containing_component
 
         # admin_level tags are mapped per country
         for k, v in values:
-            containing_component = config.get(k, {}).get(v, None)
+            containing_component = config.get(k, {}).get(v, DoesNotExist)
 
-            if containing_component is not None:
+            if containing_component is not DoesNotExist:
                 return containing_component
 
         # other place keys like place=state, etc. serve as a backup
         # when no admin_level tags are available
         for k, v in values:
-            containing_component = self.global_keys.get(k, {}).get(v, None)
+            containing_component = self.global_keys.get(k, {}).get(v, DoesNotExist)
 
-            if containing_component is not None:
+            if containing_component is not DoesNotExist:
                 return containing_component
 
         if global_overrides_last:
             for k, v in values:
-                containing_component = self.global_keys_override.get(k, {}).get(v, None)
+                containing_component = self.global_keys_override.get(k, {}).get(v, DoesNotExist)
 
-                if containing_component is not None:
+                if containing_component is not DoesNotExist:
                     return containing_component
 
         return None

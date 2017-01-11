@@ -907,6 +907,33 @@ class AddressComponents(object):
             street = six.u('Calle {}').format(street)
         return street
 
+    BRASILIA_RELATION_ID = '2758138'
+
+    @classmethod
+    def is_in(cls, osm_components, component_id, component_type='relation'):
+        for c in osm_components:
+            if c.get('type') == component_type and c.get('id') == component_id:
+                return True
+        return False
+
+    brasilia_street_name_regex = re.compile('(?:\\s*\-\\s*)?\\bbloco\\b.*$', re.I | re.U)
+    brasilia_building_regex = re.compile('^\\s*bloco.*$', re.I | re.U)
+
+    @classmethod
+    def format_brasilia_address(cls, address_components):
+        '''
+        Brasília, Brazil's capital, uses a grid-like system
+        '''
+
+        street = address_components.get(AddressFormatter.ROAD)
+        if street:
+            address_components[AddressFormatter.ROAD] = street = cls.brasilia_street_name_regex.sub(six.u(''), street)
+
+        name = address_components.get(AddressFormatter.HOUSE)
+
+        if name and cls.brasilia_building_regex.match(name):
+            address_components[AddressFormatter.HOUSE_NUMBER] = address_components.pop(AddressFormatter.HOUSE)
+
     street_unit_suffix_regex = re.compile("^(.+?)(?:\\s+\(?\\s*(?:unit|apartment|apt\.?|suite|ste\.?|bldg\.?|lot)\\b(?:(?:\\s*#|\\s+(?:number|no|no.)\\b)?)).*$", re.I)
 
     unit_type_regexes = {}
@@ -961,6 +988,8 @@ class AddressComponents(object):
 
         for props, lat, lon, dist in self.places_index.nearest_points(latitude, longitude):
             component = self.categorize_osm_component(country, props, containing_components)
+            if component is None:
+                continue
 
             have_sub_city = any((key in grouped_components and key in city_replacements for key in (AddressFormatter.SUBURB, AddressFormatter.CITY_DISTRICT)))
 
@@ -1707,6 +1736,8 @@ class AddressComponents(object):
         self.replace_country_name(address_components, country, non_local_language or language)
 
         self.country_specific_cleanup(address_components, country)
+        if self.is_in(osm_components, self.BRASILIA_RELATION_ID):
+            self.format_brasilia_address(address_components)
 
         self.add_admin_boundaries(address_components, osm_components, country, language,
                                   latitude, longitude,
