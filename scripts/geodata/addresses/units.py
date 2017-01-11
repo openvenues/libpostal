@@ -1,3 +1,4 @@
+import itertools
 import random
 import six
 
@@ -17,7 +18,37 @@ class Unit(NumberedComponent):
     # likely than 2, etc.
     max_units = 99
     max_basements = 2
-    numbered_units = range(1, max_units + 1) + range(0, -max_basements - 1, -1)
+
+    hundreds_numbered_units_tens = [range(101, 110) + [100],
+                                    range(201, 210) + [200],
+                                    range(301, 310) + [300],
+                                    range(401, 410) + [400],
+                                    range(501, 510) + [500],
+                                    ]
+
+    hundreds_numbered_units = [range(110, 200),
+                               range(210, 300),
+                               range(310, 400),
+                               range(410, 500),
+                               range(510, 600),
+                               ]
+
+    thousands_numbered_units = [range(1001, 1030) + [1000],
+                                range(2001, 2030) + [2000],
+                                range(3001, 3030) + [3000],
+                                range(4001, 4030) + [4000],
+                                range(5001, 5030) + [5000]
+                                ]
+
+    numbered_units = range(1, 10)
+    numbered_units.extend(itertools.chain(*itertools.izip(*hundreds_numbered_units_tens)))
+    numbered_units.extend(range(10, 100))
+    numbered_units.extend(itertools.chain(*itertools.izip(*hundreds_numbered_units)))
+    numbered_units.extend(itertools.chain(*itertools.izip(*thousands_numbered_units)))
+    numbered_units.extend(range(10001, 10100) + [10000])
+    numbered_units.append(0)
+    numbered_units.extend(range(0, -max_basements - 1, -1))
+
     unit_probs = zipfian_distribution(len(numbered_units), 0.7)
     unit_probs_cdf = cdf(unit_probs)
 
