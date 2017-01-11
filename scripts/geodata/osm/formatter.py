@@ -37,6 +37,7 @@ from geodata.i18n.languages import *
 from geodata.intersections.query import Intersection, IntersectionQuery
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.osm.components import osm_address_components
+from geodata.osm.definitions import osm_definitions
 from geodata.osm.extract import *
 from geodata.osm.intersections import OSMIntersectionReader
 from geodata.places.config import place_config
@@ -213,23 +214,76 @@ class OSMAddressFormatter(object):
 
         return None
 
-    def valid_venue_name(self, name, address_components, languages=None, is_generic=False):
+    @classmethod
+    def alphanumeric_tokens(cls, name):
+        return [t for t, c in tokenize(name) if c in token_types.WORD_TOKEN_TYPES or c in token_types.NUMERIC_TOKEN_TYPES]
+
+    @classmethod
+    def valid_venue_name(cls, name, address_components, languages=(), is_generic=False, is_known_venue_type=False):
+        '''
+        The definition of "what is a venue" is pretty loose in libpostal, but
+        there are several cases we want to avoid:
+
+        Firstly, if the venue name is the same as the house number, usually in the
+        case of a named building, it's not valid.
+
+        Sometimes a particular street is synonymous with a tourist attraction or neighborhood
+        or historic district and OSM might label it as something like a landmark,
+        which passes the "named place" test but is really just a street, so if the
+        name of the place is exactly equal to the street name and there's no house number
+        (this still allows for bars or restaurants, etc. that might be named after the
+        street they're on), call it invalid.
+
+        Often the name or a building in OSM will just be its street address. Example:
+
+        addr:housename="123 Park Place"
+        addr:housenumber="123"
+        addr:street="Park Place"
+
+        This method will invalidate the venue name if and only if
+        the set of unique tokens in the venue name is exactly equal
+        to the set of unique tokens in the house number + street name.
+        This does not apply to known venue typess (like a restaurant)
+        where we'd want to preserve the name.
+        '''
+
         if not name:
             return False
 
         name_norm = name.strip().lower()
 
-        if AddressFormatter.ROAD in address_components and address_components[AddressFormatter.ROAD].strip().lower() == name_norm:
+        street = address_components.get(AddressFormatter.ROAD)
+        if street:
+            street = street.strip().lower()
+
+        house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
+        if house_number:
+            house_number = house_number.strip().lower()
+
+        if street and street == name_norm and not house_number:
             return False
 
-        if AddressFormatter.HOUSE_NUMBER not in address_components:
+        if not house_number:
             if not any((c in token_types.WORD_TOKEN_TYPES for t, c in tokenize(name))):
                 return False
 
-            if AddressFormatter.ROAD not in address_components:
+            if not street:
                 for component, place_name in six.iteritems(address_components):
                     if (component in AddressFormatter.BOUNDARY_COMPONENTS or component == AddressFormatter.HOUSE_NUMBER) and place_name.strip().lower() == name_norm:
                         return False
+
+        if street and not is_known_venue_type:
+            unique_tokens_name = set([t.lower() for t in cls.alphanumeric_tokens(name)])
+
+            unique_tokens_street_house_number = set()
+            if street:
+                unique_tokens_street_house_number.update([t.lower() for t in cls.alphanumeric_tokens(street)])
+
+            if house_number:
+                unique_tokens_street_house_number.update([t.lower() for t in cls.alphanumeric_tokens(house_number)])
+
+            if len(unique_tokens_name) == len(unique_tokens_street_house_number) == len(unique_tokens_name & unique_tokens_street_house_number):
+                return False
 
         venue_phrases = venue_names_gazetteer.extract_phrases(name, languages=languages)
         street_phrases = street_types_only_gazetteer.extract_phrases(name, languages=languages)
@@ -837,8 +891,16 @@ class OSMAddressFormatter(object):
 
         return revised_place_tags, country
 
-    def is_generic_place(self, tags):
+    @classmethod
+    def is_generic_place(cls, tags):
         return tags.get('railway', '').lower() == 'station' or tags.get('amenity', '').lower() == 'post_office'
+
+    @classmethod
+    def is_known_venue_type(cls, tags):
+        for definition in (osm_definitions.AMENITY, osm_definitions.SHOP, osm_definitions.AEROWAY):
+            if osm_definitions.meets_definition(tags, definition):
+                return True
+        return False
 
     def category_queries(self, tags, address_components, language, country=None, tag_components=True):
         formatted_addresses = []
@@ -951,6 +1013,7 @@ class OSMAddressFormatter(object):
             self.remove_japanese_suburb_tags(tags)
 
         is_generic_place = self.is_generic_place(tags)
+        is_known_venue_type = self.is_known_venue_type(tags)
 
         revised_tags = self.normalize_address_components(tags)
         if japanese_suburb is not None:
@@ -971,7 +1034,7 @@ class OSMAddressFormatter(object):
         building_venue_names = []
 
         building_components = self.building_components(latitude, longitude)
-        building_is_generic_place = False
+
         if building_components:
             num_floors = self.num_floors(building_components)
 
@@ -980,13 +1043,15 @@ class OSMAddressFormatter(object):
             for building_tags in building_components:
                 building_tags = self.normalize_address_components(building_tags)
 
+                building_is_generic_place = building_is_generic_place or self.is_generic_place(building_tags)
+                building_is_known_venue_type = building_is_known_venue_type or self.is_known_venue_type(building_tags)
+
                 for k, v in six.iteritems(building_tags):
                     if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD, AddressFormatter.POSTCODE):
                         revised_tags[k] = v
                     elif k == AddressFormatter.HOUSE:
-                        building_venue_names.append(v)
+                        building_venue_names.append((v, building_is_generic_place, building_is_known_venue_type))
 
-                    building_is_generic_place = building_is_generic_place or self.is_generic_place(building_tags)
 
         subdivision_components = self.subdivision_components(latitude, longitude)
         if subdivision_components:
@@ -1027,7 +1092,7 @@ class OSMAddressFormatter(object):
         street_languages = set((language,) if language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE) else languages)
 
         venue_names = [venue_name for venue_name in venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_generic=is_generic_place)]
-        venue_names.extend([venue_name for venue_name in building_venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_generic=building_is_generic_place)])
+        venue_names.extend([venue_name for venue_name, building_is_generic_place, building_is_known_venue_type in building_venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_generic=building_is_generic_place, is_known_venue_type=building_is_known_venue_type)])
 
         all_venue_names = set(venue_names)
 
@@ -1292,12 +1357,11 @@ class OSMAddressFormatter(object):
             default_language = candidate_languages[0][0]
         elif not more_than_one_official_language:
             default_language = None
-            name = way['name']
-            if not name:
-                continue
-            address_language = self.components.address_language({AddressFormatter.ROAD: name}, candidate_languages)
-            if address_language and address_language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE):
-                default_language = address_language
+            name = way.get('name')
+            if name:
+                address_language = self.components.address_language({AddressFormatter.ROAD: name}, candidate_languages)
+                if address_language and address_language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE):
+                    default_language = address_language
 
         for tag in way:
             tag = safe_decode(tag)
