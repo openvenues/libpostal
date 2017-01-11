@@ -916,7 +916,7 @@ class AddressComponents(object):
                 return True
         return False
 
-    brasilia_street_name_regex = re.compile('(?:\\s*\-\\s*)?\\bbloco\\b.*$', re.I | re.U)
+    brasilia_street_name_regex = re.compile('(?:\\s*\-\\s*)?\\b(bloco|bl|lote|lt)\\b.*$', re.I | re.U)
     brasilia_building_regex = re.compile('^\\s*bloco.*$', re.I | re.U)
 
     @classmethod
