@@ -483,7 +483,7 @@ class AddressComponents(object):
                 total_tokens += 1
 
         if self.parens_regex.search(name):
-            name = parens_regex.sub(six.u(''), name).strip()
+            name = self.parens_regex.sub(six.u(''), name).strip()
 
         # If the name contains a comma, stop and only use the phrase before the comma
         if ',' in name:
