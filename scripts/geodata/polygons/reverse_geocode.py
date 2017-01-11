@@ -470,6 +470,14 @@ class OSMPostalCodeReverseGeocoder(OSMReverseGeocoder):
     include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['postal_code'])
 
 
+class OSMAirportReverseGeocoder(OSMReverseGeocoder):
+    persistent_polygons = True
+    cache_size = 10000
+    simplify_polygons = False
+    polygon_reader = OSMAirportsPolygonReader
+    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['iata', 'aerodrome', 'aerodrome:type', 'city_served'])
+
+
 class OSMCountryReverseGeocoder(OSMReverseGeocoder):
     persistent_polygons = True
     cache_size = 10000
@@ -537,6 +545,9 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--osm-postal-code-polygons-file',
                         help='Path to OSM postal code polygons file (with dependencies, .osm format)')
 
+    parser.add_argument('-r', '--osm-airport-polygons-file',
+                        help='Path to OSM airport polygons file (with dependencies, .osm format)')
+
     parser.add_argument('-c', '--osm-country-polygons-file',
                         help='Path to OSM country polygons file (with dependencies, .osm format)')
 
@@ -557,6 +568,8 @@ if __name__ == '__main__':
         index = OSMCountryReverseGeocoder.create_from_osm_file(args.osm_country_polygons_file, args.out_dir)
     elif args.osm_postal_code_polygons_file:
         index = OSMPostalCodeReverseGeocoder.create_from_osm_file(args.osm_postal_code_polygons_file, args.out_dir)
+    elif args.osm_airport_polygons_file:
+        index = OSMAirportReverseGeocoder.create_from_osm_file(args.osm_airport_polygons_file, args.out_dir)
     elif args.quattroshapes_dir:
         index = QuattroshapesReverseGeocoder.create_with_quattroshapes(args.quattroshapes_dir, args.out_dir)
     else:

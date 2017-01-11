@@ -320,3 +320,8 @@ class OSMCountryPolygonReader(OSMPolygonReader):
 class OSMPostalCodesPolygonReader(OSMPolygonReader):
     def include_polygon(self, props):
         return props.get('boundary') == 'postal_code'
+
+
+class OSMAirportsPolygonReader(OSMPolygonReader):
+    def include_polygon(self, props):
+        return 'aerodrome' in props
