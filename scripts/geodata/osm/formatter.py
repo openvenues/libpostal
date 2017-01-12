@@ -607,7 +607,7 @@ class OSMAddressFormatter(object):
         except Exception:
             return (), None
 
-        if 'name' not in tags and not any((t.startswith('name:') for t in tags)):
+        if 'name' not in tags:
             return (), None
 
         osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
