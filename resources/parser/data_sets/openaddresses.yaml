@@ -113,6 +113,53 @@ countries:
 
     br:
         subdirs:
+            ac:
+                add:
+                    state: AC
+                files:
+                    - filename: statewide.csv
+
+            al:
+                add:
+                    state: AL
+                files:
+                    - filename: statewide.csv
+
+            am:
+                add:
+                    state: AM
+                files:
+                    - filename: statewide.csv
+
+            ap:
+                add:
+                    state: AP
+                files:
+                    - filename: statewide.csv
+
+            ba:
+                add:
+                    state: BA
+                files:
+                    - filename: statewide.csv
+
+            ce:
+                add:
+                    state: CE
+                files:
+                    - filename: statewide.csv
+
+            df:
+                add:
+                    state: DF
+                files:
+                    - filename: statewide.csv
+                      # Cities and postcodes only
+                      fields:
+                          CITY:
+                              component: city
+                          POSTCODE:
+                              component: postcode
             es:
                 add:
                     state: ES
@@ -121,15 +168,49 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Vitória
+                    - filename: statewide.csv
 
-            rj:
+            go:
                 add:
-                    state: RJ
+                    state: GO
                 files:
-                    - filename: rio_de_janeiro.csv
-                      add_osm_boundaries: true
-                      city_replacements:
-                          city: Rio de Janeiro
+                    - filename: statewide.csv
+
+            ma:
+                add:
+                    state: MA
+                files:
+                    - filename: statewide.csv
+
+            mg:
+                add:
+                    state: MG
+                files:
+                    - filename: statewide.csv
+
+            ms:
+                add:
+                    state: MS
+                files:
+                    - filename: statewide.csv
+
+            mt:
+                add:
+                    state: MT
+                files:
+                    - filename: statewide.csv
+
+            pa:
+                add:
+                    state: PA
+                files:
+                    - filename: statewide.csv
+
+            pb:
+                add:
+                    state: PB
+                files:
+                    - filename: statewide.csv
 
             pe:
                 add:
@@ -139,6 +220,60 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Recife
+                    - filename: statewide.csv
+
+            pi:
+                add:
+                    state: PI
+                files:
+                    - filename: statewide.csv
+
+            pr:
+                add:
+                    state: PR
+                files:
+                    - filename: statewide.csv
+
+            rj:
+                add:
+                    state: RJ
+                files:
+                    - filename: rio_de_janeiro.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Rio de Janeiro
+                    - filename: statewide.csv
+
+            rn:
+                add:
+                    state: RN
+                files:
+                    - filename: statewide.csv
+
+            ro:
+                add:
+                    state: RO
+                files:
+                    - filename: statewide.csv
+
+            ro:
+                add:
+                    state: RO
+                files:
+                    - filename: statewide.csv
+
+            rr:
+                add:
+                    state: RR
+                files:
+                    - filename: statewide.csv
+
+            rs:
+                add:
+                    state: RS
+                files:
+                    - filename: statewide.csv
+
             sc:
                 add:
                     state: SC
@@ -147,6 +282,26 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Joinville
+                    - filename: statewide.csv
+
+            se:
+                add:
+                    state: SE
+                files:
+                    - filename: statewide.csv
+
+            sp:
+                add:
+                    state: SP
+                files:
+                    - filename: statewide.csv
+
+            to:
+                add:
+                    state: TO
+                files:
+                    - filename: statewide.csv
+
 
     ca:
         cldr_country_probability: 0.3
