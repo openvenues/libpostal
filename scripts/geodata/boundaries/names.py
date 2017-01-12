@@ -111,7 +111,8 @@ class BoundaryNames(object):
         return safe_decode(s).replace(six.u('.'), six.u('\\.'))
 
     def valid_name(self, object_type, object_id, name):
-        return name in self.exceptions.get((object_type, object_id), ((), ()))[0]
+        exceptions, probs  = self.exceptions.get((object_type, object_id), ((), ()))
+        return not exceptions or name in exceptions
 
     def name_key_dist(self, props, component):
         object_type = props.get('type')
