@@ -606,7 +606,7 @@ class OSMAddressFormatter(object):
         except Exception:
             return (), None
 
-        if 'name' not in tags:
+        if 'name' not in tags and not any((t.startswith('name:') for t in tags)):
             return (), None
 
         osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
@@ -732,7 +732,13 @@ class OSMAddressFormatter(object):
 
         revised_tags = self.fix_component_encodings(revised_tags)
 
+        object_type = tags.get('type')
+        object_id = tags.get('id')
+
         for name_tag in ('name', 'alt_name', 'loc_name', 'short_name', 'int_name', 'name:simple', 'official_name'):
+            if not boundary_names.valid_name(object_type, object_id, name_tag):
+                continue
+
             if more_than_one_official_language:
                 name = tags.get(name_tag)
                 language_suffix = ''
