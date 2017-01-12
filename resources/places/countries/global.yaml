@@ -188,6 +188,9 @@ countries:
         components:
             state_district:
                 probability: 0.15
+                population:
+                    - lt: 10000
+                      probability: 0.5
                 dependencies:
                     - city_district
                     - city
