@@ -77,6 +77,15 @@ names:
           type: relation
           default: name # Kingston
           probability: 1.0
+        - id: 30674098 # Sao Paulo
+          type: node
+          default: name
+          probability: 0.9
+          alternatives:
+              - alternative: alt_name
+                probability: 0.09
+              - alternative: official_name
+                probability: 0.01
         - id: 556706 # New Zealand
           type: relation
           default: name:en
