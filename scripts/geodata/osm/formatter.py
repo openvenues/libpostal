@@ -598,6 +598,15 @@ class OSMAddressFormatter(object):
 
             if not valid_postcode:
                 postal_codes = parse_osm_number_range(postal_code, parse_letter_range=False, max_range=1000)
+                if validate:
+                    valid_postal_codes = []
+                    postcode_regex = postcode_regexes.get(country)
+                    if postcode_regex:
+                        for pc in postal_codes:
+                            match = postcode_regex.match(pc)
+                            if match and match.end() == len(pc):
+                                valid_postal_codes.append(pc)
+                    postal_codes = valid_postal_codes
 
         return postal_codes
 
