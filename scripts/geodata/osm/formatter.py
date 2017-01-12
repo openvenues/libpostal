@@ -24,6 +24,7 @@ from geodata.addresses.config import address_config
 from geodata.addresses.components import AddressComponents
 from geodata.addresses.conscription_numbers import ConscriptionNumber
 from geodata.addresses.house_numbers import HouseNumber
+from geodata.boundaries.names import boundary_names
 from geodata.categories.config import category_config
 from geodata.categories.query import Category, NULL_CATEGORY_QUERY
 from geodata.chains.query import Chain, NULL_CHAIN_QUERY
