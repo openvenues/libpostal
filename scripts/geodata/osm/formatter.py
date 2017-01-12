@@ -734,7 +734,7 @@ class OSMAddressFormatter(object):
 
         for name_tag in ('name', 'alt_name', 'loc_name', 'short_name', 'int_name', 'name:simple', 'official_name'):
             if more_than_one_official_language:
-                name = revised_tags.get(name_tag)
+                name = tags.get(name_tag)
                 language_suffix = ''
 
                 if name and name.strip():
@@ -769,10 +769,10 @@ class OSMAddressFormatter(object):
             for language, is_default in local_languages:
                 if is_default and not more_than_one_official_language:
                     language_suffix = ''
-                    name = revised_tags.get(name_tag)
+                    name = tags.get(name_tag)
                 else:
                     language_suffix = ':{}'.format(language)
-                    name = revised_tags.get('{}{}'.format(name_tag, language_suffix))
+                    name = tags.get('{}{}'.format(name_tag, language_suffix))
 
                 if not name or not name.strip():
                     continue
@@ -814,9 +814,9 @@ class OSMAddressFormatter(object):
             for language in random_languages - all_local_languages:
                 language_suffix = ':{}'.format(language)
 
-                name = revised_tags.get('{}{}'.format(name_tag, language_suffix))
+                name = tags.get('{}{}'.format(name_tag, language_suffix))
                 if (not name or not name.strip()) and language == ENGLISH:
-                    name = revised_tags.get(name_tag)
+                    name = tags.get(name_tag)
 
                 if not name or not name.strip():
                     continue
