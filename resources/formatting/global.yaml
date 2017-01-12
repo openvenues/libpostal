@@ -867,7 +867,7 @@ countries:
         invert_probability: 0.2
 
     # Ukraine
-    uk:
+    ua:
         invert_probability: 0.2
 
     # Belarus (using inverted by default)
