@@ -734,7 +734,7 @@ class OSMAddressFormatter(object):
 
         for name_tag in ('name', 'alt_name', 'loc_name', 'short_name', 'int_name', 'name:simple', 'official_name'):
             if more_than_one_official_language:
-                name = tags.get(name_tag)
+                name = revised_tags.get(name_tag)
                 language_suffix = ''
 
                 if name and name.strip():
@@ -769,10 +769,10 @@ class OSMAddressFormatter(object):
             for language, is_default in local_languages:
                 if is_default and not more_than_one_official_language:
                     language_suffix = ''
-                    name = tags.get(name_tag)
+                    name = revised_tags.get(name_tag)
                 else:
                     language_suffix = ':{}'.format(language)
-                    name = tags.get('{}{}'.format(name_tag, language_suffix))
+                    name = revised_tags.get('{}{}'.format(name_tag, language_suffix))
 
                 if not name or not name.strip():
                     continue
@@ -814,9 +814,9 @@ class OSMAddressFormatter(object):
             for language in random_languages - all_local_languages:
                 language_suffix = ':{}'.format(language)
 
-                name = tags.get('{}{}'.format(name_tag, language_suffix))
+                name = revised_tags.get('{}{}'.format(name_tag, language_suffix))
                 if (not name or not name.strip()) and language == ENGLISH:
-                    name = tags.get(name_tag)
+                    name = revised_tags.get(name_tag)
 
                 if not name or not name.strip():
                     continue
@@ -881,10 +881,10 @@ class OSMAddressFormatter(object):
 
             self.components.remove_numeric_boundary_names(revised_address_components)
 
-            if (AddressFormatter.COUNTRY in address_components or place_config.include_component(AddressFormatter.COUNTRY, containing_ids, country=country, check_population=False)) and random.random() < cldr_country_prob:
+            if (AddressFormatter.COUNTRY in revised_address_components or place_config.include_component(AddressFormatter.COUNTRY, containing_ids, country=country, check_population=False)) and random.random() < cldr_country_prob:
                 address_country = self.components.cldr_country_name(country, language)
                 if address_country:
-                    address_components[AddressFormatter.COUNTRY] = address_country
+                    revised_address_components[AddressFormatter.COUNTRY] = address_country
 
             if revised_address_components:
                 revised_place_tags.append((revised_address_components, language, is_default))
