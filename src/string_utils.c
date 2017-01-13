@@ -711,7 +711,7 @@ cstring_array *cstring_array_new_size(size_t size) {
 
 cstring_array *cstring_array_from_char_array(char_array *str) {
     cstring_array *array = malloc(sizeof(cstring_array));
-    if (array == NULL) return NULL;
+    if (array == NULL || str==NULL || str->n==0) return NULL;
 
     array->str = str;
     array->indices = uint32_array_new_size(1);
