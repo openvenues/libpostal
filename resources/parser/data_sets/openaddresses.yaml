@@ -1987,6 +1987,10 @@ countries:
                     - filename: muscogee.csv
                       city_replacements:
                           state_district: Muscogee County
+                    - filename: newton.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Newton County
                     - filename: paulding.csv
                       city_replacements:
                           state_district: Paulding County
