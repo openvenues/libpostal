@@ -34,7 +34,7 @@ static inline void _aligned_free(void *p)
         name *array = malloc(sizeof(name));                                         \
         if (array == NULL) return NULL;                                             \
         array->n = array->m = 0;                                                    \
-        array->a = malloc(size * sizeof(type));                                     \
+        array->a = malloc((size > 0 ? size : 1) * sizeof(type));                    \
         if (array->a == NULL) return NULL;                                          \
         array->m = size;                                                            \
         return array;                                                               \
