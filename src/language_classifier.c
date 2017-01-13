@@ -35,7 +35,7 @@ void language_classifier_destroy(language_classifier_t *self) {
 }
 
 language_classifier_t *language_classifier_new(void) {
-    language_classifier_t *language_classifier = malloc(sizeof(language_classifier_t));
+    language_classifier_t *language_classifier = calloc(1, sizeof(language_classifier_t));
     return language_classifier;
 }
 

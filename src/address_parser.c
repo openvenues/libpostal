@@ -17,7 +17,7 @@ static address_parser_t *parser = NULL;
 
 
 address_parser_t *address_parser_new(void) {
-    address_parser_t *parser = malloc(sizeof(address_parser_t));
+    address_parser_t *parser = calloc(1, sizeof(address_parser_t));
     return parser;
 }
 

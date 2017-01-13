@@ -51,7 +51,7 @@ numex_table_t *numex_table_init(void) {
     numex_table_t *numex_table = get_numex_table();
 
     if (numex_table == NULL) {
-        numex_table = malloc(sizeof(numex_table_t));
+        numex_table = calloc(1, sizeof(numex_table_t));
 
         if (numex_table == NULL) return NULL;
 

@@ -1087,7 +1087,7 @@ transliteration_table_t *transliteration_table_init(void) {
     transliteration_table_t *trans_table = get_transliteration_table();
 
     if (trans_table == NULL) {
-        trans_table = malloc(sizeof(transliteration_table_t));
+        trans_table = calloc(1, sizeof(transliteration_table_t));
 
         trans_table->trie = trie_new();
         if (trans_table->trie == NULL) {

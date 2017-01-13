@@ -32,7 +32,7 @@ Constructors
 */
 
 static trie_t *trie_new_empty(uint8_t *alphabet, uint32_t alphabet_size) {
-    trie_t *self = malloc(sizeof(trie_t));
+    trie_t *self = calloc(1, sizeof(trie_t));
     if (!self)
         goto exit_no_malloc;
 
