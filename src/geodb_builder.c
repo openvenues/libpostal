@@ -338,7 +338,7 @@ void geodb_builder_destroy(geodb_builder_t *self) {
 }
 
 geodb_builder_t *geodb_builder_new(char *log_filename) {
-    geodb_builder_t *builder = malloc(sizeof(geodb_builder_t));
+    geodb_builder_t *builder = calloc(1, sizeof(geodb_builder_t));
 
     if (builder == NULL) return NULL;
 

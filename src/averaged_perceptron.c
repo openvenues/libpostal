@@ -93,7 +93,7 @@ averaged_perceptron_t *averaged_perceptron_read(FILE *f) {
         return NULL;
     }
 
-    averaged_perceptron_t *perceptron = malloc(sizeof(averaged_perceptron_t));
+    averaged_perceptron_t *perceptron = calloc(1, sizeof(averaged_perceptron_t));
 
     if (!file_read_uint32(f, &perceptron->num_features) ||
         !file_read_uint32(f, &perceptron->num_classes) ||

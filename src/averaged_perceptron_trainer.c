@@ -386,7 +386,7 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
 }
 
 averaged_perceptron_trainer_t *averaged_perceptron_trainer_new(void) {
-    averaged_perceptron_trainer_t *self = malloc(sizeof(averaged_perceptron_trainer_t));
+    averaged_perceptron_trainer_t *self = calloc(1, sizeof(averaged_perceptron_trainer_t));
 
     if (self == NULL) return NULL;
 

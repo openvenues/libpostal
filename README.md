@@ -148,6 +148,20 @@ int main(int argc, char **argv) {
 }
 ```
 
+Parser labels
+-------------
+
+The address parser can use any string labels that are defined in the training data, but these are the default labels, based on the fields defined in [OpenCage's address-formatting library](https://github.com/OpenCageData/address-formatting):
+
+- **house**: venue name e.g. "Brooklyn Academy of Music", and building names e.g. "Empire State Building"
+- **house_number**: usually refers to the external (street-facing) building number. In some countries this may be a compount, hyphenated number which also includes an apartment number, or a block number (a la Japan), but libpostal will just call it the house_number for simplicity.
+- **road**: street name(s)
+- **suburb**: usually an unofficial neighborhood name like "Harlem", "South Bronx", or "Crown Heights"
+- **city_district**: these are usually boroughs or districts within a city that serve some official purpose e.g. "Brooklyn" or "Hackney" or "Bratislava IV"
+- **city**: any human settlement including cities, towns, villages, hamlets, localities, etc.
+- **state_district**: usually a second-level administrative division or county.
+- **state**: a first-level administrative division. Scotland, Northern Ireland, Wales, and England in the UK are mapped to "state" as well (convention used in OSM, GeoPlanet, etc.)
+- **country**: sovereign nations and their dependent territories, anything with an [ISO-3166 code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 
 Examples of normalization
 -------------------------

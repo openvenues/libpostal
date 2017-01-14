@@ -2,7 +2,7 @@
 #include "klib/ksort.h"
 
 sparse_matrix_t *sparse_matrix_new_shape(size_t m, size_t n) {
-    sparse_matrix_t *matrix = malloc(sizeof(sparse_matrix_t));
+    sparse_matrix_t *matrix = calloc(1, sizeof(sparse_matrix_t));
     if (matrix == NULL) return NULL;
     matrix->m = m;
     matrix->n = n;

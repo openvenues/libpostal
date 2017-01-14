@@ -25,14 +25,13 @@ typedef enum {
     ADDRESS_PARSER_SUFFIX_PHRASE
 } address_parser_phrase_type_t;
 
-
 static parser_options_t PARSER_DEFAULT_OPTIONS = {
     .rare_word_threshold = DEFAULT_RARE_WORD_THRESHOLD,
     .print_features = false
 };
 
 address_parser_t *address_parser_new_options(parser_options_t options) {
-    address_parser_t *parser = malloc(sizeof(address_parser_t));
+    address_parser_t *parser = calloc(1, sizeof(address_parser_t));
     parser->options = options;
     return parser;
 }

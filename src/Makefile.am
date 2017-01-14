@@ -21,9 +21,11 @@ libpostal_la_CFLAGS = $(CFLAGS_O2)
 dist_bin_SCRIPTS = libpostal_data
 
 # Scanner can take a very long time to compile with higher optimization levels, so always use -O0, scanner is fast enough
+# On cross-compilation for ARM using gcc-4.7, there are "out of range" errors during compilation that can be fixed by adding
+# -marm option. For that, CFLAGS_SCANNER_EXTRA is provided that can be filled during configuration stage (see ./configure --help). 
 noinst_LTLIBRARIES = libscanner.la
 libscanner_la_SOURCES = scanner.c
-libscanner_la_CFLAGS = $(CFLAGS_O0)
+libscanner_la_CFLAGS = $(CFLAGS_O0) $(CFLAGS_SCANNER_EXTRA)
 
 noinst_PROGRAMS = libpostal bench build_address_dictionary build_geodb build_numex_table build_trans_table address_parser_train address_parser_test address_parser language_classifier_train language_classifier language_classifier_test
 libpostal_SOURCES = main.c json_encode.c

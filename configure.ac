@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([libpostal], [0.3])
+AC_INIT([libpostal], [0.3.3])
 
 AC_CONFIG_MACRO_DIRS([m4])
 
@@ -47,10 +47,8 @@ AC_TYPE_UINT8_T
 AC_CHECK_TYPES([ptrdiff_t])
 
 # Checks for library functions.
-AC_FUNC_MALLOC
 AC_FUNC_MMAP
-AC_FUNC_REALLOC
-AC_CHECK_FUNCS([getcwd gettimeofday memmove memset munmap regcomp setlocale sqrt strdup strndup])
+AC_CHECK_FUNCS([malloc realloc getcwd gettimeofday memmove memset munmap regcomp setlocale sqrt strdup strndup])
 
 AC_CONFIG_FILES([Makefile
                  libpostal.pc
@@ -87,5 +85,19 @@ AC_ARG_ENABLE([data-download],
               esac], [DOWNLOAD_DATA=true])
 
 AM_CONDITIONAL([DOWNLOAD_DATA], [test "x$DOWNLOAD_DATA" = "xtrue"])
+
+AC_ARG_WITH(cflags-scanner-extra, [AS_HELP_STRING([--with-cflags-scanner-extra@<:@=VALUE@:>@], [Extra compilation options for scanner.c])],
+[
+ if test "x$withval" = "xno"; then
+    CFLAGS_SCANNER_EXTRA=""
+ else
+   CFLAGS_SCANNER_EXTRA="$withval"
+ fi
+],
+[ CFLAGS_SCANNER_EXTRA="" ]
+)
+
+AC_MSG_NOTICE([extra cflags for scanner.c: $CFLAGS_SCANNER_EXTRA])
+AC_SUBST(CFLAGS_SCANNER_EXTRA)
 
 AC_OUTPUT

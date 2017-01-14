@@ -47,7 +47,7 @@ void geodb_destroy(geodb_t *self) {
 geodb_t *geodb_init(char *dir) {
     if (dir == NULL) return NULL;
 
-    geodb_t *gdb = malloc(sizeof(geodb_t));
+    geodb_t *gdb = calloc(1, sizeof(geodb_t));
 
     if (gdb == NULL) return NULL;
 

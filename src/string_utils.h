@@ -141,7 +141,6 @@ void char_array_cat_vprintf(char_array *array, char *format, va_list args);
 void char_array_cat_printf(char_array *array, char *format, ...);
 
 // Mainly for paths or delimited strings
-void char_array_append_vjoined(char_array *array, char *separator, bool strip_separator, int count, va_list args);
 void char_array_add_vjoined(char_array *array, char *separator, bool strip_separator, int count, va_list args);
 void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...);
 void char_array_cat_joined(char_array *array, char *separator, bool strip_separator, int count, ...);

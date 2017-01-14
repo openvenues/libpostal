@@ -1,7 +1,7 @@
 #include "graph.h"
 
 graph_t *graph_new_dims(graph_type_t type, uint32_t m, uint32_t n, size_t nnz, bool fixed_rows) {
-    graph_t *graph = malloc(sizeof(graph_t));
+    graph_t *graph = calloc(1, sizeof(graph_t));
     graph->m = m;
     graph->fixed_rows = fixed_rows;
     graph->n = n;

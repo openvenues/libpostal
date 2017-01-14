@@ -1036,40 +1036,106 @@ address_parser_response_t *parse_address(char *address, address_parser_options_t
     return parsed;
 }
 
+bool libpostal_setup_datadir(char *datadir) {
+    char *transliteration_path = NULL;
+    char *numex_path = NULL;
+    char *address_dictionary_path = NULL;
+
+    if (datadir != NULL) {
+        transliteration_path = path_join(3, datadir, LIBPOSTAL_TRANSLITERATION_SUBDIR, TRANSLITERATION_DATA_FILE);
+        numex_path = path_join(3, datadir, LIBPOSTAL_NUMEX_SUBDIR, NUMEX_DATA_FILE);
+        address_dictionary_path = path_join(3, datadir, LIBPOSTAL_ADDRESS_EXPANSIONS_SUBDIR, ADDRESS_DICTIONARY_DATA_FILE);
+    }
+
+    if (!transliteration_module_setup(transliteration_path)) {
+        log_error("Error loading transliteration module, dir=%s\n", transliteration_path);
+        return false;
+    }
+
+    if (!numex_module_setup(numex_path)) {
+        log_error("Error loading numex module, dir=%s\n", numex_path);
+        return false;
+    }
+
+    if (!address_dictionary_module_setup(address_dictionary_path)) {
+        log_error("Error loading dictionary module, dir=%s\n", address_dictionary_path);
+        return false;
+    }
+
+    if (transliteration_path != NULL) {
+        free(transliteration_path);
+    }
+
+    if (numex_path != NULL) {
+        free(numex_path);
+    }
+
+    if (address_dictionary_path != NULL) {
+        free(address_dictionary_path);
+    }
+
+    return true;
+}
+
 bool libpostal_setup(void) {
-    if (!transliteration_module_setup(NULL)) {
-        log_error("Error loading transliteration module\n");
+    return libpostal_setup_datadir(NULL);
+}
+
+bool libpostal_setup_language_classifier_datadir(char *datadir) {
+    char *language_classifier_dir = NULL;
+
+    if (datadir != NULL) {
+        language_classifier_dir = path_join(2, datadir, LIBPOSTAL_LANGUAGE_CLASSIFIER_SUBDIR);
+    }
+
+    if (!language_classifier_module_setup(language_classifier_dir)) {
+        log_error("Error loading language classifier, dir=%s\n", language_classifier_dir);
         return false;
     }
 
-    if (!numex_module_setup(NULL)) {
-        log_error("Error loading numex module\n");
-        return false;
-    }
-
-    if (!address_dictionary_module_setup(NULL)) {
-        log_error("Error loading dictionary module\n");
-        return false;
+    if (language_classifier_dir != NULL) {
+        free(language_classifier_dir);
     }
 
     return true;
 }
 
 bool libpostal_setup_language_classifier(void) {
-    if (!language_classifier_module_setup(NULL)) {
-        log_error("Error loading language classifier\n");
+    return libpostal_setup_language_classifier_datadir(NULL);
+}
+
+bool libpostal_setup_parser_datadir(char *datadir) {
+    char *parser_dir = NULL;
+    char *geodb_dir = NULL;
+
+    if (datadir != NULL) {
+        parser_dir = path_join(2, datadir, LIBPOSTAL_ADDRESS_PARSER_SUBDIR);
+        geodb_dir = path_join(2, datadir, LIBPOSTAL_GEODB_SUBDIR);
+    }
+
+    if (!geodb_module_setup(geodb_dir)) {
+        log_error("Error loading geodb module, dir=%s\n", geodb_dir);
         return false;
     }
+
+    if (!address_parser_module_setup(parser_dir)) {
+        log_error("Error loading address parser module, dir=%s\n", parser_dir);
+        return false;
+    }
+
+    if (parser_dir != NULL) {
+        free(parser_dir);
+    }
+
+    if (geodb_dir != NULL) {
+        free(geodb_dir);
+    }
+
     return true;
 }
 
 bool libpostal_setup_parser(void) {
-    if (!address_parser_module_setup(NULL)) {
-        log_error("Error loading address parser module\n");
-        return false;
-    }
-
-    return true;
+    return libpostal_setup_parser_datadir(NULL);
 }
 
 void libpostal_teardown(void) {
