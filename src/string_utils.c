@@ -781,18 +781,21 @@ cstring_array *cstring_array_new_size(size_t size) {
 }
 
 cstring_array *cstring_array_from_char_array(char_array *str) {
+    if (str == NULL) return NULL;
+    if (str->n == 0)
+        return cstring_array_new();
+
     cstring_array *array = malloc(sizeof(cstring_array));
-    if (array == NULL || str == NULL) return NULL;
+    if (array == NULL) return NULL;
 
     array->str = str;
     array->indices = uint32_array_new_size(1);
+
     uint32_array_push(array->indices, 0);
     char *ptr = str->a;
-    if (str->n > 0) {
-        for (uint32_t i = 0; i < str->n - 1; i++, ptr++) {
-            if (*ptr == '\0') {
-                uint32_array_push(array->indices, i + 1);
-            }
+    for (uint32_t i = 0; i < str->n - 1; i++, ptr++) {
+        if (*ptr == '\0') {
+            uint32_array_push(array->indices, i + 1);
         }
     }
     return array;
