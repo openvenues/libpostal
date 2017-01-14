@@ -1328,17 +1328,30 @@ class OSMAddressFormatter(object):
                 print('did {} formatted places'.format(i))
 
         for tags, poly in iter(self.components.osm_admin_rtree):
+            point = None
             if 'admin_center' in tags and 'lat' in tags['admin_center'] and 'lon' in tags['admin_center']:
                 admin_center = tags['admin_center']
-                point = Point(admin_center['lon'], admin_center['lat'])
-            else:
+
+                latitude = admin_center['lat']
+                longitude = admin_center['lon']
+
+                try:
+                    latitude, longitude = latlon_to_decimal(latitude, longitude)
+                    point = Point(longitude, latitude)
+                except Exception:
+                    point = None
+
+            if point is None:
                 try:
                     point = poly.context.representative_point()
                 except ValueError:
                     point = poly.context.centroid
 
-            lat = point.y
-            lon = point.x
+            try:
+                lat = point.y
+                lon = point.x
+            except Exception:
+                continue
             tags['lat'] = lat
             tags['lon'] = lon
             place_tags, country = self.node_place_tags(tags, city_or_below=True)
