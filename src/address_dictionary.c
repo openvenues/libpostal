@@ -284,7 +284,7 @@ phrase_t search_address_dictionaries_suffix(char *str, size_t len, char *lang) {
 bool address_dictionary_init(void) {
     if (address_dict != NULL) return false;
 
-    address_dict = malloc(sizeof(address_dictionary_t));
+    address_dict = calloc(1, sizeof(address_dictionary_t));
     if (address_dict == NULL) return false;
 
     address_dict->canonical = cstring_array_new();
