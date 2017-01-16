@@ -520,7 +520,7 @@ if __name__ == '__main__':
         buildings_rtree = OSMBuildingReverseGeocoder.load(args.buildings_rtree_dir)
 
     # Can parallelize
-    if args.streets_file:
+    if args.streets_file and not args.format:
         build_ways_training_data(country_rtree, args.streets_file, args.out_dir, abbreviate_streets=not args.unabbreviated)
     if args.borders_file:
         build_toponym_training_data(country_rtree, args.borders_file, args.out_dir)
@@ -553,3 +553,8 @@ if __name__ == '__main__':
         components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index)
         osm_formatter = OSMAddressFormatter(components, country_rtree, subdivisions_rtree, buildings_rtree, metro_stations_index)
         osm_formatter.build_intersections_training_data(args.intersections_file, args.out_dir, tag_components=not args.untagged)
+
+    if args.streets_file and args.format:
+        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index)
+        osm_formatter = OSMAddressFormatter(components, country_rtree, subdivisions_rtree, buildings_rtree, metro_stations_index)
+        osm_formatter.build_ways_training_data(args.streets_file, args.out_dir, tag_components=not args.untagged)
