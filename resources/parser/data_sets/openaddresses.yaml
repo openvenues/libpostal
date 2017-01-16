@@ -278,7 +278,7 @@ countries:
                 add:
                     state: SC
                 files:
-                    - filnemae: joinville.csv
+                    - filename: joinville.csv
                       add_osm_boundaries: true
                       city_replacements:
                           city: Joinville
