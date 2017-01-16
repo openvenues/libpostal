@@ -1366,6 +1366,7 @@ countries:
             - filename: municipality_of_helsingborg.csv
             - filename: municipality_of_hoganas.csv
             - filename: municipality_of_kalmar.csv
+            - filename: municipality_of_kristinehamn.csv
             - filename: municipality_of_Österåker.csv
             - filename: municipality_of_malmo.csv
             - filename: municipality_of_stockholm.csv
