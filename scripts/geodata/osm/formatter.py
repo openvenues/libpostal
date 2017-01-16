@@ -1559,7 +1559,7 @@ class OSMAddressFormatter(object):
         all_name_tags = set(OSM_NAME_TAGS)
         all_base_name_tags = set(OSM_BASE_NAME_TAGS)
 
-        for key, value, deps in parse_osm(infile, allowed_types=WAYS_RELATIONS):
+        for key, value, deps in parse_osm(infile):
             latitude = value['lat']
             longitude = value['lon']
 
