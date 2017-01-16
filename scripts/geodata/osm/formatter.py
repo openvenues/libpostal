@@ -1068,7 +1068,6 @@ class OSMAddressFormatter(object):
                     elif k == AddressFormatter.HOUSE:
                         building_venue_names.append((v, building_is_generic_place, building_is_known_venue_type))
 
-
         subdivision_components = self.subdivision_components(latitude, longitude)
         if subdivision_components:
             zone = self.zone(subdivision_components)
@@ -1581,7 +1580,7 @@ class OSMAddressFormatter(object):
 
             for lang, vals in six.iteritems(names):
                 way_tags = []
-                for v in vals:
+                for v, is_base in vals:
                     for street_name in v.split(';'):
                         street_name = street_name.strip()
                         if street_name:
