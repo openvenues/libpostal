@@ -1579,7 +1579,7 @@ class OSMAddressFormatter(object):
 
             osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
 
-            for lang, vals in name_language.iteritems():
+            for lang, vals in six.iteritems(names):
                 way_tags = []
                 for v in vals:
                     for street_name in v.split(';'):
