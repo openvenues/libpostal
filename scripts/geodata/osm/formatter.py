@@ -1598,7 +1598,7 @@ class OSMAddressFormatter(object):
                                 address_components[AddressFormatter.ROAD] = normalized
 
                 for address_components in way_tags:
-                    formatted = self.formatter.format_address(address_components, country, language=language,
+                    formatted = self.formatter.format_address(address_components, country, language=lang,
                                                               tag_components=tag_components, minimal_only=False)
 
                     writer.writerow((lang, country, tsv_string(formatted)))
