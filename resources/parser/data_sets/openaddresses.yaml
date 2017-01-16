@@ -1361,7 +1361,10 @@ countries:
 
     se:
         files:
+            - filename: municipality_of_alingsas.csv
+            - filename: municipality_of_gislaved.csv
             - filename: municipality_of_helsingborg.csv
+            - filename: municipality_of_hoganas.csv
             - filename: municipality_of_kalmar.csv
             - filename: municipality_of_Österåker.csv
             - filename: municipality_of_malmo.csv
