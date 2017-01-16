@@ -1377,7 +1377,7 @@ class OSMAddressFormatter(object):
             if i % 1000 == 0 and i > 0:
                 print('did {} formatted places'.format(i))
 
-    def way_names(self, way, candidate_languages):
+    def way_names(self, way, candidate_languages, all_name_tags=frozenset(OSM_NAME_TAGS), all_base_name_tags=frozenset(OSM_BASE_NAME_TAGS)):
         names = defaultdict(list)
 
         more_than_one_official_language = sum((1 for l, d in candidate_languages if d)) > 1
