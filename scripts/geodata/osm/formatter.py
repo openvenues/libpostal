@@ -1592,7 +1592,7 @@ class OSMAddressFormatter(object):
 
                             way_tags.append(address_components)
 
-                            normalized = self.abbreviated_street(street_name, language)
+                            normalized = self.abbreviated_street(street_name, lang)
                             if normalized and normalized != street_name:
                                 address_components = address_components.copy()
                                 address_components[AddressFormatter.ROAD] = normalized
