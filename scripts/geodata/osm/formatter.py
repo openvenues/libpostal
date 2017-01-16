@@ -1409,8 +1409,6 @@ class OSMAddressFormatter(object):
             else:
                 continue
 
-            namespaced_languages.add(lang)
-
             name = way[tag]
             if default_language is None and tag == 'name':
                 address_language = self.components.address_language({AddressFormatter.ROAD: name}, candidate_languages)
