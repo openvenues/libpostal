@@ -1377,7 +1377,7 @@ class OSMAddressFormatter(object):
             if i % 1000 == 0 and i > 0:
                 print('did {} formatted places'.format(i))
 
-    def way_names(self, way, candidate_languages, all_name_tags=frozenset(OSM_NAME_TAGS), all_base_name_tags=frozenset(OSM_BASE_NAME_TAGS)):
+    def way_names(self, way, candidate_languages, base_name_tag='name', all_name_tags=frozenset(OSM_NAME_TAGS), all_base_name_tags=frozenset(OSM_BASE_NAME_TAGS)):
         names = defaultdict(list)
 
         more_than_one_official_language = sum((1 for l, d in candidate_languages if d)) > 1
@@ -1421,7 +1421,6 @@ class OSMAddressFormatter(object):
             names[default_language].append((way[base_name_tag], True))
 
         return names
-
 
     def build_intersections_training_data(self, infile, out_dir, tag_components=True):
         '''
@@ -1482,7 +1481,7 @@ class OSMAddressFormatter(object):
             default_language = None
 
             for way in ways:
-                names = self.way_names(way, candidate_languages)
+                names = self.way_names(way, candidate_languages, base_name_tag=base_name_tag)
 
                 if not names:
                     continue
