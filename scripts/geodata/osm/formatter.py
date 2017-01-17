@@ -1381,6 +1381,8 @@ class OSMAddressFormatter(object):
 
         more_than_one_official_language = sum((1 for l, d in candidate_languages if d)) > 1
 
+        default_language = None
+
         if len(candidate_languages) == 1:
             default_language = candidate_languages[0][0]
         elif not more_than_one_official_language:
@@ -1558,7 +1560,7 @@ class OSMAddressFormatter(object):
         all_name_tags = set(OSM_NAME_TAGS)
         all_base_name_tags = set(OSM_BASE_NAME_TAGS)
 
-        for key, value, deps in parse_osm(infile):
+        for key, value, deps in parse_osm(infile, allowed_types=WAYS_RELATIONS):
             latitude = value['lat']
             longitude = value['lon']
 
