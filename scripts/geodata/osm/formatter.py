@@ -610,6 +610,31 @@ class OSMAddressFormatter(object):
 
         return postal_codes
 
+    def cleanup_place_components(self, address_components, osm_components, country, language, containing_ids, population=None, keep_component=None, population_from_city=False):
+        revised_address_components = self.components.dropout_places(address_components, osm_components, country, language, population=population, population_from_city=population_from_city)
+
+        if keep_components is not None:
+            revised_address_components[keep_component] = address_components[keep_component]
+
+        self.components.cleanup_boundary_names(revised_address_components)
+        self.components.country_specific_cleanup(revised_address_components, country)
+
+        self.components.drop_invalid_components(revised_address_components, country)
+
+        self.components.replace_name_affixes(revised_address_components, language)
+        self.components.replace_names(revised_address_components)
+
+        self.components.remove_numeric_boundary_names(revised_address_components)
+
+        cldr_country_prob = float(nested_get(self.config, ('places', 'cldr_country_probability'), default=0.0))
+
+        if (AddressFormatter.COUNTRY in revised_address_components or place_config.include_component(AddressFormatter.COUNTRY, containing_ids, country=country, check_population=False)) and random.random() < cldr_country_prob:
+            address_country = self.components.cldr_country_name(country, language)
+            if address_country:
+                revised_address_components[AddressFormatter.COUNTRY] = address_country
+
+        return revised_address_components
+
     def node_place_tags(self, tags, city_or_below=False):
         try:
             latitude, longitude = latlon_to_decimal(tags['lat'], tags['lon'])
@@ -734,8 +759,6 @@ class OSMAddressFormatter(object):
             min_references += 2
         max_references = 1000  # Cap the number of references e.g. for India and China country nodes
         num_references = min(population / population_divisor + min_references, max_references)
-
-        cldr_country_prob = float(nested_get(self.config, ('places', 'cldr_country_probability'), default=0.0))
 
         component_order = AddressFormatter.component_order[component_name]
         sub_city = component_order < AddressFormatter.component_order[AddressFormatter.CITY]
@@ -884,23 +907,7 @@ class OSMAddressFormatter(object):
 
         revised_place_tags = []
         for address_components, language, is_default in place_tags:
-            revised_address_components = place_config.dropout_components(address_components, osm_components, country=country, population=population)
-            revised_address_components[component_name] = address_components[component_name]
-
-            self.components.cleanup_boundary_names(revised_address_components)
-            self.components.country_specific_cleanup(revised_address_components, country)
-
-            self.components.drop_invalid_components(revised_address_components, country)
-
-            self.components.replace_name_affixes(revised_address_components, language)
-            self.components.replace_names(revised_address_components)
-
-            self.components.remove_numeric_boundary_names(revised_address_components)
-
-            if (AddressFormatter.COUNTRY in revised_address_components or place_config.include_component(AddressFormatter.COUNTRY, containing_ids, country=country, check_population=False)) and random.random() < cldr_country_prob:
-                address_country = self.components.cldr_country_name(country, language)
-                if address_country:
-                    revised_address_components[AddressFormatter.COUNTRY] = address_country
+            revised_address_components = self.cleanup_place_components(address_components, osm_components, country, language, containing_ids, population=population, keep_component=component_name)
 
             if revised_address_components:
                 revised_place_tags.append((revised_address_components, language, is_default))
@@ -1580,6 +1587,8 @@ class OSMAddressFormatter(object):
 
             osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
 
+            containing_ids = [(b['type'], b['id']) for b in osm_components]
+
             for lang, vals in six.iteritems(names):
                 way_tags = []
                 for v, is_base in vals:
@@ -1592,12 +1601,15 @@ class OSMAddressFormatter(object):
                                                                  country, lang,
                                                                  latitude, longitude)
 
-                            way_tags.append(address_components)
+                            revised_address_components = self.cleanup_place_components(address_components, osm_components, country, lang, containing_ids, population_from_city=True)
+
+                            way_tags.append(revised_address_components)
 
                             normalized = self.abbreviated_street(street_name, lang)
                             if normalized and normalized != street_name:
-                                address_components = address_components.copy()
-                                address_components[AddressFormatter.ROAD] = normalized
+                                revisd_address_components = revised_address_components.copy()
+                                revised_address_components[AddressFormatter.ROAD] = normalized
+                                way_tags.append(revised_address_components)
 
                 for address_components in way_tags:
                     formatted = self.formatter.format_address(address_components, country, language=lang,
