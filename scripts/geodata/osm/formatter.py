@@ -613,7 +613,7 @@ class OSMAddressFormatter(object):
     def cleanup_place_components(self, address_components, osm_components, country, language, containing_ids, population=None, keep_component=None, population_from_city=False):
         revised_address_components = self.components.dropout_places(address_components, osm_components, country, language, population=population, population_from_city=population_from_city)
 
-        if keep_components is not None:
+        if keep_component is not None:
             revised_address_components[keep_component] = address_components[keep_component]
 
         self.components.cleanup_boundary_names(revised_address_components)
