@@ -1669,6 +1669,31 @@ class AddressComponents(object):
         else:
             return None
 
+    def dropout_places(self, address_components, osm_components, country, language, population=None, population_from_city=False):
+        # Population of the city helps us determine if the city can be used
+        # on its own like "Seattle" or "New York" vs. smaller cities like
+        # have to be qualified with a state, country, etc.
+        unambiguous_city = False
+
+        if population is None and population_from_city:
+            population = 0
+            tagged = self.categorized_osm_components(country, osm_components)
+
+            for props, component in (tagged or []):
+                if component == AddressFormatter.CITY:
+                    if self.unambiguous_wikipedia(props, language):
+                        unambiguous_city = True
+
+                    if 'population' in props:
+                        try:
+                            population = int(props['population'])
+                        except (ValueError, TypeError):
+                            continue
+
+        # Perform dropout on places
+        address_components = place_config.dropout_components(address_components, osm_components, country=country, population=population, unambiguous_city=unambiguous_city)
+        return address_components
+
     def dropout_address_level_component(self, address_components, component):
         probability = self.address_level_dropout_probabilities.get(component, None)
         if probability is not None and random.random() < probability:
@@ -1793,28 +1818,7 @@ class AddressComponents(object):
         self.add_house_number_phrase(address_components, language, country=country)
 
         if dropout_places:
-            # Population of the city helps us determine if the city can be used
-            # on its own like "Seattle" or "New York" vs. smaller cities like
-            # have to be qualified with a state, country, etc.
-            unambiguous_city = False
-
-            if population is None and population_from_city:
-                population = 0
-                tagged = self.categorized_osm_components(country, osm_components)
-
-                for props, component in (tagged or []):
-                    if component == AddressFormatter.CITY:
-                        if self.unambiguous_wikipedia(props, language):
-                            unambiguous_city = True
-
-                        if 'population' in props:
-                            try:
-                                population = int(props['population'])
-                            except (ValueError, TypeError):
-                                continue
-
-            # Perform dropout on places
-            address_components = place_config.dropout_components(address_components, all_osm_components, country=country, population=population, unambiguous_city=unambiguous_city)
+            address_components = self.dropout_places(address_components, all_osm_components, country, language, population=population, population_from_city=population_from_city)
 
         self.drop_invalid_components(address_components, country)
 
