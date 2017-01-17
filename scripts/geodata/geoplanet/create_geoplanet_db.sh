@@ -57,13 +57,13 @@ echo "Creating GeoPlanet postal codes file"
 awk -F'\t' 'BEGIN{OFS="\t";} {if ($5 == "Zip") print $0;}' $GEOPLANET_ORIGINAL_PLACES_FILE > $GEOPLANET_POSTAL_CODES_FILE
 
 echo "Creating GeoPlanet all places file"
-tail +2 $GEOPLANET_ORIGINAL_PLACES_FILE > $GEOPLANET_ALL_PLACES_FILE
+tail -n+2 $GEOPLANET_ORIGINAL_PLACES_FILE > $GEOPLANET_ALL_PLACES_FILE
 
 echo "Creating GeoPlanet places file"
 awk -F'\t' 'BEGIN{OFS="\t";} {if ($5 == "Continent" || $5 == "Country" || $5 == "Nationality" || $5 == "State" || $5 == "County" ||  $5 == "Town" || $5 == "LocalAdmin" || $5 == "Island" || $5 == "Suburb") print $0;}' $GEOPLANET_ORIGINAL_PLACES_FILE > $GEOPLANET_PLACES_FILE
 
 echo "Creating GeoPlanet aliases file"
-tail +2 $GEOPLANET_ORIGINAL_ALIASES_FILE > $GEOPLANET_ALIASES_FILE
+tail -n+2 $GEOPLANET_ORIGINAL_ALIASES_FILE > $GEOPLANET_ALIASES_FILE
 
 echo "Fetching GeoNames concordance"
 download_file $GEOPLANET_GEONAMES_CONCORDANCE_URL $GEOPLANET_GEONAMES_CONCORDANCE_FILE
