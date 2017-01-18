@@ -701,6 +701,9 @@ countries:
             - filename: grisons.csv
               add:
                   state: GR
+            - filename: luzern.csv
+              add:
+                  state: LU
             - filename: schaffhausen.csv
               language: de
               add:
