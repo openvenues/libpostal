@@ -936,6 +936,14 @@ countries:
             - filename: yonne.csv
             - filename: yvelines.csv
 
+    il:
+        cldr_country_probability: 0.8
+        files:
+            - filename: countrywide-hebrew.csv
+              language: he
+            - filename: countrywide-latin.csv
+              language: en
+
     is:
         files:
             - filename: countrywide.csv
