@@ -1119,6 +1119,11 @@ countries:
         files:
             - filename: countrywide.csv
 
+    lt:
+        cldr_country_probability: 0.8
+        files:
+            - filename: countrywide.csv
+
     lu:
         cldr_country_probability: 0.8
         files:
