@@ -309,6 +309,8 @@ countries:
                     state: Витебская область
                 files:
                     - filename: regionwide.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
 
     ca:
         cldr_country_probability: 0.3
@@ -942,6 +944,13 @@ countries:
             - filename: vienne.csv
             - filename: yonne.csv
             - filename: yvelines.csv
+
+    il:
+        files:
+            - filename: countrywide-hebrew.csv
+              language: he
+            - filename: countrywide-latin.csv
+              language: en
 
     is:
         files:
