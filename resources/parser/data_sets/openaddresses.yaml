@@ -1127,6 +1127,14 @@ countries:
                   state:
                       - "^\\s*KINGSTON\\s*$"
 
+    kw:
+        add_osm_boundaries: true
+        files:
+            - filename: countrywide-arabic.csv
+              language: ar
+            - filename: countrywide-latin.csv
+              language: en
+
     li:
         cldr_country_probability: 0.9
         files:
