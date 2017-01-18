@@ -231,7 +231,7 @@ class OpenAddressesFormatter(object):
         alias_fields_containing = {field: [(re.compile(v['pattern'], re.I | re.UNICODE), v) for v in value]
                                    for field, value in six.iteritems(dict(self.get_property('alias_fields_containing', *configs) or {}))}
 
-        language = self.get_property('language', *configs)
+        config_language = self.get_property('language', *configs)
 
         add_components = self.get_property('add', *configs)
 
@@ -260,6 +260,8 @@ class OpenAddressesFormatter(object):
                 longitude = float(row[longitude_index])
             except (ValueError, TypeError):
                 continue
+
+            language = config_language
 
             components = {}
 
