@@ -302,6 +302,13 @@ countries:
                 files:
                     - filename: statewide.csv
 
+    by:
+        subdirs:
+            vitebsk:
+                add:
+                    state: Витебская область
+                files:
+                    - filename: regionwide.csv
 
     ca:
         cldr_country_probability: 0.3
