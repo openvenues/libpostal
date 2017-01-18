@@ -1058,6 +1058,8 @@ class OSMAddressFormatter(object):
 
         building_components = self.building_components(latitude, longitude)
 
+        building_is_generic_place = False
+
         if building_components:
             num_floors = self.num_floors(building_components)
 
