@@ -728,6 +728,11 @@ countries:
         files:
             - filename: countrywide.csv
 
+    cw:
+        files:
+            - filename: countrywide.csv
+              add_osm_boundaries: true
+
     de:
         files:
             - filename: berlin.csv
