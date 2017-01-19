@@ -553,6 +553,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Norfolk County
+                    - filename: north_glengarry.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: North Glengarry
                     - filename: north_middlesex.csv
                       add_osm_boundaries: true
                       city_replacements:
