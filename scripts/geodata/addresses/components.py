@@ -1502,9 +1502,12 @@ class AddressComponents(object):
 
     invalid_street_regex = re.compile('^\s*(?:none|null|not applicable|n\s*/\s*a)\s*$', re.I)
 
+    def street_name_is_valid(self, street):
+        return street is not None and not (self.invalid_street_regex.match(street) or not any((c.isalnum() for c in street)))
+
     def cleanup_street(self, address_components):
         street = address_components.get(AddressFormatter.ROAD)
-        if street is not None and (self.invalid_street_regex.match(street) or not any((c.isalnum() for c in street))):
+        if not self.street_name_is_valid(street):
             address_components.pop(AddressFormatter.ROAD)
 
     newline_regex = re.compile('[\n]+')
