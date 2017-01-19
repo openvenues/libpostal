@@ -511,7 +511,8 @@ class OpenAddressesFormatter(object):
 
         i = 0
 
-        for country_dir, country_config in six.iteritems(openaddresses_config.country_configs):
+        for country_dir in sorted(openaddresses_config.country_configs.keys()):
+            country_config = openaddresses_config.country_configs[country_dir]
             # Clear country cache for each new country
             self.country_rtree.clear_cache()
 
@@ -542,8 +543,9 @@ class OpenAddressesFormatter(object):
                         if self.debug:
                             break
 
-            for subdir, subdir_config in six.iteritems(country_config.get('subdirs', {})):
+            for subdir in sorted(country_config.get('subdirs', {}).keys()):
                 subdir = safe_decode(subdir)
+                subdir_config = country_config['subdirs'][subdir]
                 for file_config in subdir_config.get('files', []):
                     filename = file_config['filename']
 
