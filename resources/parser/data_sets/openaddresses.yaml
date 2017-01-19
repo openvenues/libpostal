@@ -1501,6 +1501,9 @@ countries:
                       city_replacements:
                           state_district: Madison County
                     - filename: montgomery.csv
+                    - filename: pike.csv
+                      city_replacements:
+                          state_district: Pike County
                     - filename: shelby.csv
                       # Don't add OSM boundaries by default, only use county as backup
                       city_replacements:
@@ -2038,10 +2041,6 @@ countries:
                     - filename: pierce.csv
                       city_replacements:
                           state_district: Pierce County
-                    - filename: pike.csv
-                      add_osm_boundaries: false
-                      city_replacements:
-                          state_district: Pike County
                     - filename: quitman.csv
                       city_replacements:
                           state_district: Quitman County
