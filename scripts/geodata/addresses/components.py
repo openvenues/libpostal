@@ -1507,7 +1507,7 @@ class AddressComponents(object):
 
     def cleanup_street(self, address_components):
         street = address_components.get(AddressFormatter.ROAD)
-        if not self.street_name_is_valid(street):
+        if street is not None and not self.street_name_is_valid(street):
             address_components.pop(AddressFormatter.ROAD)
 
     newline_regex = re.compile('[\n]+')
