@@ -125,8 +125,19 @@ house_numbers:
             - alternative: *dom_latin
               probability: 0.05
 
+    # без номера (б/н) addresses
+    no_number:
+        default:
+            canonical: без номера
+            abbreviated: б/н
+            sample: true
+            canonical_probability: 0.1
+            abbreviated_probability: 0.7
+            sample_probability: 0.2
+
     # Very common in Russian to write dom/d
     alphanumeric_phrase_probability: 0.6
+    no_number_probability: 0.1 # With this probability, use без номера if no house_number is specified
 
 and:
     default: &i
