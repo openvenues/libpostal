@@ -455,7 +455,7 @@ class AddressFormatter(object):
             tag_match = re.compile(self.tag_token(tag)).search(sans_firsts)
 
             if before:
-                before_match = re.compile(self.tag_token(after)).search(sans_firsts)
+                before_match = re.compile(self.tag_token(before)).search(sans_firsts)
                 if before_match and tag_match and before_match.start() > tag_match.start():
                     return template
 
@@ -554,7 +554,6 @@ class AddressFormatter(object):
             for component in self.BOUNDARY_COMPONENTS_ORDERED[i - 1:0:-1]:
                 kw = {'before': prev} if not is_reverse else {'after': prev}
                 template = self.insert_component(template, component, exact_order=False, **kw)
-
                 prev = component
 
         prev = pivot
@@ -563,7 +562,6 @@ class AddressFormatter(object):
             for component in self.BOUNDARY_COMPONENTS_ORDERED[i + 1:]:
                 kw = {'after': prev} if not is_reverse else {'before': prev}
                 template = self.insert_component(template, component, exact_order=False, **kw)
-
                 prev = component
 
         return template
