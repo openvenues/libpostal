@@ -2038,6 +2038,10 @@ countries:
                     - filename: pierce.csv
                       city_replacements:
                           state_district: Pierce County
+                    - filename: pike.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Pike County
                     - filename: quitman.csv
                       city_replacements:
                           state_district: Quitman County
