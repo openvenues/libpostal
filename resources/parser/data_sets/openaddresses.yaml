@@ -1143,6 +1143,15 @@ countries:
             - filename: countrywide-latin.csv
               language: en
 
+    kz:
+        files:
+            - filename: asa-statewide.csv
+              add_osm_boundaries: true
+              city_replacements:
+                  city: Алматы
+            - filename: ala-statewide.csv
+              add_osm_boundaries: true
+
     li:
         cldr_country_probability: 0.9
         files:
