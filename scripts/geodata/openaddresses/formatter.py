@@ -32,7 +32,8 @@ OPENADDRESSES_FORMAT_DATA_FILENAME = 'openaddresses_formatted_addresses.tsv'
 null_regex = re.compile('^\s*(?:null|none)\s*$', re.I)
 unknown_regex = re.compile('\bunknown\b', re.I)
 not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
-sin_numero_regex = re.compile('^\s*s\s\s*/\s*n\s*$')
+sin_numero_regex = re.compile('^\s*s\s*/\s*n\s*$', re.I)
+bea_nomera_regex = re.compile('^\s*б\s*/\s*н\s*$', re.I)
 fraction_regex = re.compile('^\s*[\d]+[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*$', re.I)
 number_space_letter_regex = re.compile('^[\d]+ [a-z]$', re.I)
 number_slash_number_regex = re.compile('^(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)$', re.I)
@@ -42,6 +43,7 @@ dutch_house_number_regex = re.compile('([\d]+)( [a-z])?( [\d]+)?', re.I)
 
 SPANISH = 'es'
 PORTUGUESE = 'pt'
+RUSSIAN = 'ru'
 
 
 class OpenAddressesFormatter(object):
@@ -127,6 +129,12 @@ class OpenAddressesFormatter(object):
                 return True
             return cls.validate_house_number(house_number)
 
+        @classmethod
+        def validate_house_number_bea_nomera(cls, house_number):
+            if bea_nomera_regex.match(house_number):
+                return True
+            return cls.validate_house_number(house_number)
+
     component_validators = {
         AddressFormatter.HOUSE_NUMBER: validators.validate_house_number,
         AddressFormatter.ROAD: validators.validate_street,
@@ -140,6 +148,9 @@ class OpenAddressesFormatter(object):
         PORTUGUESE: {
             AddressFormatter.HOUSE_NUMBER: validators.validate_house_number_sin_numero,
         },
+        RUSSIAN: {
+            AddressFormatter.HOUSE_NUMBER: validators.validate_house_number_bea_nomera,
+        }
     }
 
     def get_property(self, key, *configs):
