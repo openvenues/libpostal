@@ -1144,6 +1144,7 @@ countries:
               language: en
 
     kz:
+        language: ru
         files:
             - filename: asa-statewide.csv
               add_osm_boundaries: true
@@ -1404,6 +1405,14 @@ countries:
             - filename: warminsko-mazurskie.csv
             - filename: wielkopolskie.csv
             - filename: zachodniopomorskie.csv
+
+    ru:
+        subdirs:
+            vgg:
+                add:
+                    state: Волгоградская область
+                files:
+                    - filename: statewide.csv
 
     se:
         files:
