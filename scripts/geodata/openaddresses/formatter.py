@@ -555,8 +555,8 @@ class OpenAddressesFormatter(object):
                             break
 
             for subdir in sorted(country_config.get('subdirs', {}).keys()):
-                subdir = safe_decode(subdir)
                 subdir_config = country_config['subdirs'][subdir]
+                subdir = safe_decode(subdir)
                 for file_config in subdir_config.get('files', []):
                     filename = file_config['filename']
 
