@@ -304,6 +304,13 @@ countries:
 
     by:
         subdirs:
+            mogilev:
+                add:
+                    state: Могилёвская область
+                files:
+                    - filename: regionwide.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
             vitebsk:
                 add:
                     state: Витебская область
@@ -691,6 +698,7 @@ countries:
         files:
             - filename: aargau.csv
               add_osm_boundaries: true
+              language: de
               add:
                   state: AG
             - filename: bern.csv
