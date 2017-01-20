@@ -1431,6 +1431,12 @@ countries:
 
     ru:
         subdirs:
+            mow:
+                add:
+                    state: Московская область
+                files:
+                    - filename: statewide.csv
+
             vgg:
                 add:
                     state: Волгоградская область
