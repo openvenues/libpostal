@@ -33,11 +33,14 @@ null_regex = re.compile('^\s*(?:null|none)\s*$', re.I)
 unknown_regex = re.compile('\bunknown\b', re.I)
 not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 sin_numero_regex = re.compile('^\s*s\s*/\s*n\s*$', re.I)
-bea_nomera_regex = re.compile('^\s*б\s*/\s*н\s*$', re.I)
+
+russian_number_regex_str = safe_decode(r'(?:(?:[\d]+\w?(?:[\-/](?:(?:[\d]+\w?)|\w))*)|(?:[\d]+\s*\w?)|(?:\b\w\b))')
+dom_korpus_stroyeniye_regex = re.compile(safe_decode('(?:(?:дом(?=\s)|д\.?)\s*)?{}(?:(?:\s*,|\s+)\s*(?:(?:корпус(?=\s)|к\.?)\s*)?{})?(?:(?:\s*,|\s+)\s*(?:(?:строение(?=\s)|с\.?)\s*)?{})?\s*$').format(russian_number_regex_str, russian_number_regex_str, russian_number_regex_str), re.I | re.U)
+bea_nomera_regex = re.compile(safe_decode('^\s*б\s*/\s*н\s*$'), re.I)
 fraction_regex = re.compile('^\s*[\d]+[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*$', re.I)
-number_space_letter_regex = re.compile('^[\d]+ [a-z]$', re.I)
+number_space_letter_regex = re.compile('^[\d]+\s+[a-z]$', re.I)
 number_slash_number_regex = re.compile('^(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)$', re.I)
-number_fraction_regex = re.compile('^(?:[\d]+ )?(?:1[\s]*/[\s]*[234]|2[\s]*/[\s]*3)$')
+number_fraction_regex = re.compile('^(?:[\d]+\s+)?(?:1[\s]*/[\s]*[234]|2[\s]*/[\s]*3)$')
 
 dutch_house_number_regex = re.compile('([\d]+)( [a-z])?( [\d]+)?', re.I)
 
@@ -130,7 +133,9 @@ class OpenAddressesFormatter(object):
             return cls.validate_house_number(house_number)
 
         @classmethod
-        def validate_house_number_bea_nomera(cls, house_number):
+        def validate_russian_house_number(cls, house_number):
+            if dom_korpus_stroyeniye_regex.match(house_number):
+                return True
             if bea_nomera_regex.match(house_number):
                 return True
             return cls.validate_house_number(house_number)
@@ -149,7 +154,7 @@ class OpenAddressesFormatter(object):
             AddressFormatter.HOUSE_NUMBER: validators.validate_house_number_sin_numero,
         },
         RUSSIAN: {
-            AddressFormatter.HOUSE_NUMBER: validators.validate_house_number_bea_nomera,
+            AddressFormatter.HOUSE_NUMBER: validators.validate_russian_house_number,
         }
     }
 
