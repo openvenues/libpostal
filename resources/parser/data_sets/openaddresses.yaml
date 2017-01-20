@@ -689,6 +689,10 @@ countries:
 
     ch:
         files:
+            - filename: aargau.csv
+              add_osm_boundaries: true
+              add:
+                  state: AG
             - filename: bern.csv
               add:
                   state: BE
