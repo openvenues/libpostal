@@ -1879,6 +1879,7 @@ countries:
                 files:
                     - filename: kent.csv
                     - filename: new_castle.csv
+                    - filename: sussex.csv
 
             fl:
                 add:
