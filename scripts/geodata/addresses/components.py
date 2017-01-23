@@ -294,8 +294,7 @@ class AddressComponents(object):
             if not name:
                 continue
 
-            containing_components = osm_components[i + 1:]
-            component = self.categorize_osm_component(country, props, containing_components)
+            component = self.categorize_osm_component(country, props, osm_components)
 
             if component is not None:
                 components.append((props, component))
@@ -1057,12 +1056,10 @@ class AddressComponents(object):
             grouped_osm_components = defaultdict(list)
 
             for i, props in enumerate(osm_components):
-                containing_components = osm_components[i + 1:]
-
                 if 'name' not in props:
                     continue
 
-                component = self.categorize_osm_component(country, props, containing_components)
+                component = self.categorize_osm_component(country, props, osm_components)
                 if component is None:
                     continue
 
@@ -1073,7 +1070,7 @@ class AddressComponents(object):
                         props = props.get('admin_center', props)
                 elif 'admin_center' in props:
                     admin_center = {k: v for k, v in six.iteritems(props['admin_center']) if k != 'admin_level'}
-                    admin_center_component = self.categorize_osm_component(country, admin_center, containing_components)
+                    admin_center_component = self.categorize_osm_component(country, admin_center, osm_components)
                     if admin_center_component == component and admin_center.get('name') and admin_center['name'].lower() == props.get('name', '').lower():
                         props = props.copy()
                         props.update({k: v for k, v in six.iteritems(admin_center) if k not in props})
