@@ -2807,6 +2807,10 @@ countries:
                       city_replacements:
                           state_district: New Madrid County
                     - filename: st_louis_county.csv
+                      fields: *fields_with_unit
+                      ignore_fields_containing:
+                          unit:
+                              - "^[A-Z]$"
                     - filename: st_charles.csv
                       city_replacements:
                           state_district: Saint Charles County
