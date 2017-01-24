@@ -2807,6 +2807,9 @@ countries:
                       city_replacements:
                           state_district: New Madrid County
                     - filename: st_louis_county.csv
+                    - filename: st_charles.csv
+                      city_replacements:
+                          state_district: Saint Charles County
 
             ms:
                 add:
