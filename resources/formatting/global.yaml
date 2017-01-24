@@ -181,7 +181,7 @@ languages:
                               after: building
                               probability: 0.99
 
-            unit:
+            unit: &continental_european_unit_insertions
                 unit_after_house_number:
                     after: house_number
                     probability: 0.9
@@ -385,7 +385,16 @@ languages:
 
     # Polish
     pl:
-        insertions: *continental_european_template_insertions
+        insertions:
+            <<: *continental_european_template_insertions
+            unit:
+                <<: *continental_european_unit_insertions
+                unit_after_house_number:
+                    after: house_number
+                    probability: 1.0
+                unit_before_road:
+                    before: road
+                    probability: 0.0
 
     # Russian
     ru:
