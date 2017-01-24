@@ -3966,6 +3966,10 @@ countries:
                     add_osm_boundaries: true
                     city_replacements:
                         state_district: Natrona County
+                  - filename: park.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Park County
                   - filename: sublette.csv
                     add_osm_boundaries: true
                     city_replacements:
