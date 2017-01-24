@@ -413,11 +413,20 @@ countries:
                     - filename: brandon.csv
 
             nb:
-              add:
-                  state: NB
-              files:
-                  - filename: province.csv
-                    add_osm_boundaries: true
+                add:
+                    state: NB
+                files:
+                    - filename: province.csv
+                      add_osm_boundaries: true
+
+            nl:
+                add:
+                    state: NL
+                files:
+                    - filename: city_of_st_johns.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: St. John's
 
             ns:
                 add:
