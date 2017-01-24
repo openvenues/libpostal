@@ -621,7 +621,7 @@ class OSMAddressFormatter(object):
 
         self.components.drop_invalid_components(revised_address_components, country)
 
-        self.components.replace_name_affixes(revised_address_components, language)
+        self.components.replace_name_affixes(revised_address_components, language, country=country)
         self.components.replace_names(revised_address_components)
 
         self.components.remove_numeric_boundary_names(revised_address_components)

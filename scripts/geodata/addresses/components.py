@@ -1888,7 +1888,7 @@ class AddressComponents(object):
         self.add_neighborhoods(address_components, neighborhoods, country, language,
                                language_suffix=language_suffix)
 
-        self.replace_name_affixes(address_components, non_local_language or language)
+        self.replace_name_affixes(address_components, non_local_language or language, country=country)
 
         self.replace_names(address_components)
 

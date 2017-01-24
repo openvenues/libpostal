@@ -477,7 +477,7 @@ class OpenAddressesFormatter(object):
                 self.components.cleanup_boundary_names(components)
                 self.components.country_specific_cleanup(components, country)
 
-                self.components.replace_name_affixes(components, language)
+                self.components.replace_name_affixes(components, language, country=country)
 
                 self.components.replace_names(components)
 
