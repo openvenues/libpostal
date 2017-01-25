@@ -385,7 +385,10 @@ class OpenAddressesFormatter(object):
                         if postcode_length:
                             postcode = postcode.zfill(postcode_length)[:postcode_length]
 
+                    if postcode:
                         components[AddressFormatter.POSTCODE] = postcode
+                    elif AddressFormatter.POSTCODE in components:
+                        component.pop(AddressFormatter.POSTCODE)
 
                 unit = components.get(AddressFormatter.UNIT, None)
 
