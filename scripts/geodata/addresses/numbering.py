@@ -359,18 +359,20 @@ class NumberedComponent(object):
         props = phrase_props[num_type]
 
         if is_integer:
-            num = int(num)
+            num_int = int(num)
             if phrase_props.get('number_abs_value', False):
-                num = abs(num)
+                num_int = abs(num_int)
+                num = num_int
 
-            if 'number_min_abs_value' in phrase_props and num < phrase_props['number_min_abs_value']:
+            if 'number_min_abs_value' in phrase_props and num_int < phrase_props['number_min_abs_value']:
                 return None
 
-            if 'number_max_abs_value' in phrase_props and num > phrase_props['number_max_abs_value']:
+            if 'number_max_abs_value' in phrase_props and num_int > phrase_props['number_max_abs_value']:
                 return None
 
             if phrase_props.get('number_subtract_abs_value'):
-                num -= phrase_props['number_subtract_abs_value']
+                num_int -= phrase_props['number_subtract_abs_value']
+                num = num_int
 
         num = safe_decode(num)
         digits_props = props.get('digits')
