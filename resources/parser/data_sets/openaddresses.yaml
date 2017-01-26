@@ -1513,6 +1513,7 @@ countries:
             - filename: municipality_of_kristinehamn.csv
             - filename: municipality_of_Österåker.csv
             - filename: municipality_of_malmo.csv
+            - filename: municipality_of_savsjö.csv
             - filename: municipality_of_stockholm.csv
             - filename: municipality_of_vaxholm.csv
             - filename: municipality_of_vaxjo.csv
