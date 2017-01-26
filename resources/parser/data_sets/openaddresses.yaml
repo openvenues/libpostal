@@ -1187,6 +1187,37 @@ countries:
                   state:
                       - "^\\s*KINGSTON\\s*$"
 
+    kr:
+        subdirs:
+            seoul:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: chongnogu-old.csv
+                    - filename: chunggu-old.csv
+                    - filename: chungnanggu-old.csv
+                    - filename: kangbukku-old.csv
+                    - filename: kangdonggu-old.csv
+                    - filename: kangnamgu-old.csv
+                    - filename: kangseogu-old.csv
+                    - filename: keumcheongu-old.csv
+                    - filename: kurogu-old.csv
+                    - filename: kwanakku-old.csv
+                    - filename: kwangjingu-old.csv
+                    - filename: mapogu-old.csv
+                    - filename: noweongu-old.csv
+                    - filename: seochogu-old.csv
+                    - filename: seodaemungu-old.csv
+                    - filename: seongbukku-old.csv
+                    - filename: seongdonggu-old.csv
+                    - filename: songpagu-old.csv
+                    - filename: tobonggu-old.csv
+                    - filename: tongdaemungu-old.csv
+                    - filename: tongjakku-old.csv
+                    - filename: yangcheongu-old.csv
+                    - filename: yeongdeungpogu-old.csv
+                    - filename: yongsangu-old.csv
+
     kw:
         add_osm_boundaries: true
         files:
