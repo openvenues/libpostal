@@ -3640,6 +3640,12 @@ countries:
                     - filename: horry.csv
                     - filename: laurens.csv
                     - filename: newberry.csv
+                    - filename: orangeburg.csv
+                      city_replacements:
+                          state_district: Orangeburg County
+                      ignore_fields_containing:
+                          city:
+                              - "\\bunspecified\\b"
                     - filename: saluda.csv
                       add_osm_boundaries: true
                       city_replacements:
