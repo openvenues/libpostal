@@ -99,7 +99,7 @@ countries:
             - filename: flanders.csv
               language: nl
         subdirs:
-            wa:
+            bru:
                 files:
                     - filename: brussels-fr.csv
                       language: fr
