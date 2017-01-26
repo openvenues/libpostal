@@ -1187,6 +1187,62 @@ countries:
                   state:
                       - "^\\s*KINGSTON\\s*$"
 
+    jp:
+        language: ja
+        fields:
+            NUMBER:
+                component: house_number
+            STREET:
+                component: suburb
+        files:
+            - filename: aichi.csv
+            - filename: akita.csv
+            - filename: aomori.csv
+            - filename: chiba.csv
+            - filename: ehime.csv
+            - filename: fukui.csv
+            - filename: fukuoka.csv
+            - filename: fukushima.csv
+            - filename: gifu.csv
+            - filename: gunma.csv
+            - filename: hiroshima.csv
+            - filename: hokkaido.csv
+            - filename: hyogo.csv
+            - filename: ibaraki.csv
+            - filename: ishikawa.csv
+            - filename: iwate.csv
+            - filename: kagawa.csv
+            - filename: kagoshima.csv
+            - filename: kanagawa.csv
+            - filename: kochi.csv
+            - filename: kumamoto.csv
+            - filename: kyoto.csv
+            - filename: mie.csv
+            - filename: miyagi.csv
+            - filename: miyazaki.csv
+            - filename: nagano.csv
+            - filename: nagasaki.csv
+            - filename: nara.csv
+            - filename: niigata.csv
+            - filename: oita.csv
+            - filename: okayama.csv
+            - filename: okinawa.csv
+            - filename: osaka.csv
+            - filename: saga.csv
+            - filename: saitama.csv
+            - filename: shiga.csv
+            - filename: shimane.csv
+            - filename: shizuoka.csv
+            - filename: tochigi.csv
+            - filename: tokushima.csv
+            - filename: tokyo.csv
+            - filename: tottori.csv
+            - filename: toyama.csv
+            - filename: wakayama.csv
+            - filename: yamagata.csv
+            - filename: yamaguchi.csv
+            - filename: yamanashi.csv
+
     kr:
         subdirs:
             seoul:
