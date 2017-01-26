@@ -2125,6 +2125,10 @@ countries:
                     - filename: laurens.csv
                       city_replacements:
                           state_district: Laurens County
+                    - filename: limestone.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Limestone County
                     - filename: long.csv
                       city_replacements:
                           state_district: Long County
