@@ -15,6 +15,7 @@ from geodata.address_expansions.address_dictionaries import address_phrase_dicti
 from geodata.address_expansions.gazetteers import street_types_gazetteer, unit_types_gazetteer, toponym_abbreviations_gazetteer
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.components import AddressComponents
+from geodata.countries.constants import Countries
 from geodata.countries.names import country_names
 from geodata.encoding import safe_decode, safe_encode
 from geodata.i18n.languages import get_country_languages
@@ -47,8 +48,6 @@ dutch_house_number_regex = re.compile('([\d]+)( [a-z])?( [\d]+)?', re.I)
 SPANISH = 'es'
 PORTUGUESE = 'pt'
 RUSSIAN = 'ru'
-
-JAPAN = 'jp'
 
 
 class OpenAddressesFormatter(object):
@@ -394,8 +393,10 @@ class OpenAddressesFormatter(object):
 
                 unit = components.get(AddressFormatter.UNIT, None)
 
+                street_not_required = country == Countries.JAPAN or country in Countries.FORMER_SOVIET_COUNTRIES
+
                 # If there's a postcode, we can still use just the city/state/postcode, otherwise discard
-                if ((not street or country == JAPAN) and not house_number) or (street and house_number and (street.lower() == house_number.lower())) or (unit and street and street.lower() == unit.lower()):
+                if ((not street or street_not_required) and not house_number) or (street and house_number and (street.lower() == house_number.lower())) or (unit and street and street.lower() == unit.lower()):
                     if not postcode:
                         continue
                     components = self.components.drop_address(components)
@@ -502,7 +503,7 @@ class OpenAddressesFormatter(object):
                                                           minimal_only=False, tag_components=tag_components)
                 yield (language, country, formatted)
 
-                if random.random() < address_only_probability:
+                if random.random() < address_only_probability and street:
                     address_only_components = self.components.drop_places(components)
                     address_only_components = self.components.drop_postcode(address_only_components)
                     formatted = self.formatter.format_address(address_only_components, country, language=language,
