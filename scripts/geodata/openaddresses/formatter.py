@@ -393,7 +393,7 @@ class OpenAddressesFormatter(object):
 
                 unit = components.get(AddressFormatter.UNIT, None)
 
-                street_not_required = country == Countries.JAPAN or country in Countries.FORMER_SOVIET_COUNTRIES
+                street_not_required = country == Countries.JAPAN or country in Countries.FORMER_SOVIET_UNION_COUNTRIES
 
                 # If there's a postcode, we can still use just the city/state/postcode, otherwise discard
                 if ((not street or street_not_required) and not house_number) or (street and house_number and (street.lower() == house_number.lower())) or (unit and street and street.lower() == unit.lower()):
