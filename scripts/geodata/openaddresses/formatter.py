@@ -48,6 +48,8 @@ SPANISH = 'es'
 PORTUGUESE = 'pt'
 RUSSIAN = 'ru'
 
+JAPAN = 'jp'
+
 
 class OpenAddressesFormatter(object):
     field_regex_replacements = {
@@ -393,7 +395,7 @@ class OpenAddressesFormatter(object):
                 unit = components.get(AddressFormatter.UNIT, None)
 
                 # If there's a postcode, we can still use just the city/state/postcode, otherwise discard
-                if not (street and house_number) or street.lower() == house_number.lower() or (unit and street and street.lower() == unit.lower()):
+                if ((not street or country == JAPAN) and not house_number) or (street and house_number and (street.lower() == house_number.lower())) or (unit and street and street.lower() == unit.lower()):
                     if not postcode:
                         continue
                     components = self.components.drop_address(components)
