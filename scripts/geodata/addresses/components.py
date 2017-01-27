@@ -35,6 +35,7 @@ from geodata.addresses.units import Unit
 from geodata.boundaries.names import boundary_names
 from geodata.configs.utils import nested_get, recursive_merge
 from geodata.coordinates.conversion import latlon_to_decimal
+from geodata.countries.constants import Countries
 from geodata.countries.names import *
 from geodata.encoding import safe_encode
 from geodata.graph.topsort import topsort
