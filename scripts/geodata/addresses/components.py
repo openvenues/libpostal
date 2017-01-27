@@ -58,15 +58,6 @@ this_dir = os.path.realpath(os.path.dirname(__file__))
 PARSER_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
                                      'resources', 'parser', 'default.yaml')
 
-
-CHINA = 'cn'
-JAPAN = 'jp'
-KOREA = 'kr'
-TAIWAN = 'tw'
-HONG_KONG = 'hk'
-MACAO = 'mo'
-UNITED_STATES = 'us'
-
 JAPANESE_ROMAJI = 'ja_rm'
 ENGLISH = 'en'
 SPANISH = 'es'
@@ -76,7 +67,6 @@ CHINESE = 'zh'
 KOREAN = 'ko'
 
 CJK_LANGUAGES = set([CHINESE, JAPANESE, KOREAN])
-CJK_COUNTRIES = set([CHINA, JAPAN, KOREA, TAIWAN, HONG_KONG, MACAO])
 
 
 class AddressComponents(object):
@@ -980,7 +970,7 @@ class AddressComponents(object):
     def add_city_and_equivalent_points(self, grouped_components, containing_components, country, latitude, longitude):
         city_replacements = place_config.city_replacements(country)
 
-        is_japan = country == JAPAN
+        is_japan = country == Countries.JAPAN
         checked_first_suburb = False
 
         first_village = None
@@ -1090,7 +1080,7 @@ class AddressComponents(object):
             for component, components_values in grouped_osm_components.iteritems():
                 seen = set()
 
-                if country == JAPAN and component == AddressFormatter.SUBURB:
+                if country == Countries.JAPAN and component == AddressFormatter.SUBURB:
                     components_values = sorted(components_values, key=self.japanese_neighborhood_sort_key)
 
                 for component_value in components_values:
@@ -1122,7 +1112,7 @@ class AddressComponents(object):
 
             new_admin_components = {}
 
-            is_japan = country == JAPAN
+            is_japan = country == Countries.JAPAN
 
             for component, vals in poly_components.iteritems():
                 if component not in address_components or (non_local_language and random.random() < replace_with_non_local_prob):
@@ -1251,7 +1241,7 @@ class AddressComponents(object):
         self.abbreviate_admin_components(neighborhood_components, country, language)
 
         address_components.update(neighborhood_components)
-        if country == JAPAN and (language_suffix.endswith(JAPANESE_ROMAJI) or non_local_language == ENGLISH):
+        if country == Countries.JAPAN and (language_suffix.endswith(JAPANESE_ROMAJI) or non_local_language == ENGLISH):
             self.format_japanese_neighborhood_romaji(address_components)
 
     def generate_sub_building_component(self, component, address_components, language, country=None, **kw):
@@ -1830,7 +1820,7 @@ class AddressComponents(object):
                 lang, script = language.split('_', 1)
                 if lang not in CJK_LANGUAGES and script.lower() not in self.valid_scripts:
                     language = lang
-        elif country in CJK_COUNTRIES and (non_local_language == ENGLISH or (language_suffix or '').lstrip(':').lower() == ENGLISH):
+        elif country in Countries.CJK_COUNTRIES and (non_local_language == ENGLISH or (language_suffix or '').lstrip(':').lower() == ENGLISH):
             language = ENGLISH
 
         return address_components, country, language
