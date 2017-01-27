@@ -1547,6 +1547,18 @@ countries:
 
     ru:
         subdirs:
+            ce:
+                add:
+                    state: Чечня
+                files:
+                    - filename: argun.csv
+                    - filename: gikalo.csv
+                    - filename: grozny.csv
+                      city_replacements:
+                          city: Грозный
+                    - filename: gudermes.csv
+                    - filename: kurchaloy.csv
+
             ko:
                 add:
                     state: Республика Коми
