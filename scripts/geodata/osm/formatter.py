@@ -84,7 +84,6 @@ class OSMAddressFormatter(object):
             ('addr:housenumber', AddressFormatter.HOUSE_NUMBER),
             ('addr:house_number', AddressFormatter.HOUSE_NUMBER),
             ('addr:street', AddressFormatter.ROAD),
-            ('addr:place', AddressFormatter.ROAD),
             ('addr:suburb', AddressFormatter.SUBURB),
             ('is_in:suburb', AddressFormatter.SUBURB),
             ('addr:neighbourhood', AddressFormatter.SUBURB),
