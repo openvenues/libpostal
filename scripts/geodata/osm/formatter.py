@@ -22,6 +22,7 @@ from geodata.address_formatting.formatter import AddressFormatter
 from geodata.addresses.blocks import Block
 from geodata.addresses.config import address_config
 from geodata.addresses.components import AddressComponents
+from geodata.countries.constants import Countries
 from geodata.addresses.conscription_numbers import ConscriptionNumber
 from geodata.addresses.house_numbers import HouseNumber
 from geodata.boundaries.names import boundary_names
@@ -67,7 +68,6 @@ WAYS_FILENAME = 'formatted_ways.tsv'
 
 ALL_LANGUAGES = 'all'
 
-JAPAN = 'jp'
 JAPANESE = 'ja'
 JAPANESE_ROMAJI = 'ja_rm'
 
@@ -1024,7 +1024,7 @@ class OSMAddressFormatter(object):
 
         japanese_suburb = None
 
-        if country == JAPAN:
+        if country == Countries.JAPAN:
             japanese_variant = JAPANESE
             if random.random() < float(nested_get(self.config, ('countries', 'jp', 'romaji_probability'), default=0.0)):
                 japanese_variant = JAPANESE_ROMAJI
@@ -1045,7 +1045,7 @@ class OSMAddressFormatter(object):
         revised_tags.update(sub_building_tags)
 
         # Only including nearest metro station in Japan
-        if country == JAPAN:
+        if country == Countries.JAPAN:
             if random.random() < float(nested_get(self.config, ('countries', 'jp', 'add_metro_probability'), default=0.0)):
                 if self.add_metro_station(revised_tags, latitude, longitude, japanese_variant, default_language=JAPANESE):
                     language = japanese_variant
@@ -1157,9 +1157,11 @@ class OSMAddressFormatter(object):
 
         formatted_addresses.extend(self.formatted_places(address_components, country, language))
 
+
+
         # In Japan an address without places is basically just house_number + metro_station (if given)
         # However, where there are streets, it's useful to have address-only queries as well
-        if country != JAPAN:
+        if country != Countries.JAPAN:
             address_only_components = self.components.drop_places(address_components)
             address_only_components = self.components.drop_postcode(address_only_components)
 
