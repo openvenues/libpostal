@@ -1142,6 +1142,11 @@ countries:
             32:
                 files:
                     - filename: south-tyrol.csv
+            # Veneto
+            34:
+                files:
+                    - filename: venice.csv
+                      add_osm_boundaries: true
             # Friuli-Venezia Giulia
             36:
                 files:
