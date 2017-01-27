@@ -781,6 +781,13 @@ countries:
               language: de
               add:
                   state: ZH
+
+    cn:
+        subdirs:
+            42:
+                files:
+                    - filename: wuhan.csv
+                      add_osm_boundaries: true
     cz:
         files:
             - filename: countrywide.csv
