@@ -1547,6 +1547,12 @@ countries:
 
     ru:
         subdirs:
+            ko:
+                add:
+                    state: Республика Коми
+                files:
+                    - filename: statewide.csv
+
             mow:
                 add:
                     state: Московская область
