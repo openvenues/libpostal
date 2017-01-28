@@ -271,7 +271,7 @@ countries:
             metro_station:
                 probability: 0.6
             suburb:
-                probability: 0.6
+                probability: 1.0
             city_district:
                 probability: 0.8
             state:
