@@ -19,7 +19,8 @@ from geodata.countries.constants import Countries
 from geodata.countries.names import country_names
 from geodata.encoding import safe_decode, safe_encode
 from geodata.i18n.languages import get_country_languages
-from geodata.language_id.disambiguation import UNKNOWN_LANGUAGE
+from geodata.i18n.word_breaks import ideographic_scripts
+from geodata.language_id.disambiguation import UNKNOWN_LANGUAGE, get_string_script
 from geodata.math.sampling import cdf, weighted_choice
 from geodata.openaddresses.config import openaddresses_config
 from geodata.places.config import place_config
@@ -302,7 +303,7 @@ class OpenAddressesFormatter(object):
                     if add_osm_boundaries:
                         continue
                     value = self.components.cleaned_name(value, first_comma_delimited_phrase=True)
-                    if value and (len(value) < 2 or is_numeric(value)):
+                    if value and ((len(value) < 2 and not get_string_script(value)[0].lower() in ideographic_scripts) or is_numeric(value)):
                         continue
 
                 if not_applicable_regex.match(value) or null_regex.match(value) or unknown_regex.match(value):
