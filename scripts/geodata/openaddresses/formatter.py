@@ -318,6 +318,9 @@ class OpenAddressesFormatter(object):
                 if key in mapped_values:
                     value = mapped_values[key].get(value, value)
 
+                if key == AddressFormatter.ROAD and language == SPANISH:
+                    value = self.components.spanish_street_name(value)
+
                 if key in AddressFormatter.BOUNDARY_COMPONENTS and key != AddressFormatter.POSTCODE:
                     if add_osm_boundaries:
                         continue
@@ -373,9 +376,6 @@ class OpenAddressesFormatter(object):
                 if street is not None:
                     street = street.strip()
                     street = AddressComponents.cleaned_name(street)
-
-                    if street and language == SPANISH:
-                        street = self.components.spanish_street_name(street)
 
                     if language == UNKNOWN_LANGUAGE:
                         strip_unit_language = candidate_languages[0][0] if candidate_languages else None
