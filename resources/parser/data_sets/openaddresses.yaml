@@ -787,6 +787,7 @@ countries:
             42:
                 files:
                     - filename: wuhan.csv
+                      language: zh
                       add_osm_boundaries: true
                       fields:
                           <<: *default_fields
@@ -1562,6 +1563,7 @@ countries:
             - filename: zachodniopomorskie.csv
 
     ru:
+        language: ru
         subdirs:
             ce:
                 add:
