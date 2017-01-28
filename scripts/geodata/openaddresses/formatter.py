@@ -150,14 +150,16 @@ class OpenAddressesFormatter(object):
             if not house_number:
                 return False
             tokens = tokenize(house_number)
-            return all((c in token_types.NUMERIC_TOKEN_TYPES or t in (u'号', u'栋', u'附')) for t, c in tokens)
+
+            if all((c in token_types.NUMERIC_TOKEN_TYPES or t in (u'号', u'栋', u'附')) for t, c in tokens):
+                return True
+            return cls.validate_house_number(house_number)
 
     component_validators = {
         AddressFormatter.HOUSE_NUMBER: validators.validate_house_number,
         AddressFormatter.ROAD: validators.validate_street,
         AddressFormatter.POSTCODE: validators.validate_postcode,
     }
-
 
     language_validators = {
         SPANISH: {
