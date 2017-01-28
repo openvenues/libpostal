@@ -24,6 +24,8 @@ from geodata.language_id.disambiguation import UNKNOWN_LANGUAGE, get_string_scri
 from geodata.math.sampling import cdf, weighted_choice
 from geodata.openaddresses.config import openaddresses_config
 from geodata.places.config import place_config
+from geodata.text.tokenize import tokenize
+from geodata.text.token_types import token_types
 from geodata.text.utils import is_numeric, is_numeric_strict
 
 from geodata.csv_utils import tsv_string, unicode_csv_reader
@@ -49,6 +51,7 @@ dutch_house_number_regex = re.compile('([\d]+)( [a-z])?( [\d]+)?', re.I)
 SPANISH = 'es'
 PORTUGUESE = 'pt'
 RUSSIAN = 'ru'
+CHINESE = 'zh'
 
 
 class OpenAddressesFormatter(object):
@@ -142,11 +145,19 @@ class OpenAddressesFormatter(object):
                 return True
             return cls.validate_house_number(house_number)
 
+        @classmethod
+        def validate_chinese_house_number(cls, house_number):
+            if not house_number:
+                return False
+            tokens = tokenize(house_number)
+            return all((c in token_types.NUMERIC_TOKEN_TYPES or t in (u'号', u'栋', u'附')) for t, c in tokens)
+
     component_validators = {
         AddressFormatter.HOUSE_NUMBER: validators.validate_house_number,
         AddressFormatter.ROAD: validators.validate_street,
         AddressFormatter.POSTCODE: validators.validate_postcode,
     }
+
 
     language_validators = {
         SPANISH: {
@@ -157,8 +168,19 @@ class OpenAddressesFormatter(object):
         },
         RUSSIAN: {
             AddressFormatter.HOUSE_NUMBER: validators.validate_russian_house_number,
+        },
+        CHINESE: {
+            AddressFormatter.HOUSE_NUMBER: validators.validate_chinese_house_number,
         }
     }
+
+    chinese_annex_regex = re.compile(u'([\d]+)(?![号栋])', re.U)
+
+    @classmethod
+    def format_chinese_house_number(cls, house_number):
+        if not house_number:
+            return house_number
+        return cls.chinese_annex_regex.sub(u'\\1号', house_number)
 
     def get_property(self, key, *configs):
         for config in configs:
@@ -296,9 +318,6 @@ class OpenAddressesFormatter(object):
                 if key in mapped_values:
                     value = mapped_values[key].get(value, value)
 
-                if key == AddressFormatter.ROAD and language == SPANISH:
-                    value = self.components.spanish_street_name(value)
-
                 if key in AddressFormatter.BOUNDARY_COMPONENTS and key != AddressFormatter.POSTCODE:
                     if add_osm_boundaries:
                         continue
@@ -355,6 +374,9 @@ class OpenAddressesFormatter(object):
                     street = street.strip()
                     street = AddressComponents.cleaned_name(street)
 
+                    if street and language == SPANISH:
+                        street = self.components.spanish_street_name(street)
+
                     if language == UNKNOWN_LANGUAGE:
                         strip_unit_language = candidate_languages[0][0] if candidate_languages else None
                     else:
@@ -370,6 +392,10 @@ class OpenAddressesFormatter(object):
                 house_number = components.get(AddressFormatter.HOUSE_NUMBER, None)
                 if house_number:
                     house_number = self.cleanup_number(house_number, strip_commas=house_number_strip_commas)
+
+                    if language == CHINESE:
+                        house_number = self.format_chinese_house_number(house_number)
+
                     if house_number is not None:
                         components[AddressFormatter.HOUSE_NUMBER] = house_number
 
