@@ -788,6 +788,13 @@ countries:
                 files:
                     - filename: wuhan.csv
                       add_osm_boundaries: true
+                      fields:
+                          NUMBER:
+                              component: house_number
+                          STREET:
+                              component: road
+                          DISTIRCT:
+                              component: city_district
     cz:
         files:
             - filename: countrywide.csv
