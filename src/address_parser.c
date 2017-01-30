@@ -1078,7 +1078,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
         if (idx == 0) {
             //feature_array_add(features, 1, "prev tag=START");
-            feature_array_add(features, 2, "idx-1 tag=START+word", word);
+            feature_array_add(features, 2, "first word", word);
             //feature_array_add(features, 3, "prev tag=START+word+next word", word, next_word);
         }
 
