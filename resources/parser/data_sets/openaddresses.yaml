@@ -1605,6 +1605,8 @@ countries:
             - filename: municipality_of_kristinehamn.csv
             - filename: municipality_of_Österåker.csv
             - filename: municipality_of_malmo.csv
+            - filename: municipality_of_nacka.csv
+              add_osm_boundaries: true
             - filename: municipality_of_savsjö.csv
             - filename: municipality_of_stockholm.csv
             - filename: municipality_of_vasteras.csv
