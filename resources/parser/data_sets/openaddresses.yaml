@@ -405,6 +405,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Vancouver
+                    - filename: vernon.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Vernon
                     - filename: victoria.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -2115,7 +2119,14 @@ countries:
                     - filename: bacon.csv
                       city_replacements:
                           state_district: Bacon County
+                    - filename: bartow.csv
+                      city_replacements:
+                          state_district: Bartow County
+                    - filename: ben_hill.csv
+                      city_replacements:
+                          state_district: Ben Hill County
                     - filename: berrien.csv
+                      add_osm_boundaries: false
                       city_replacements:
                           state_district: Berrien County
                     - filename: bibb.csv
@@ -2125,8 +2136,12 @@ countries:
                       city_replacements:
                           state_district: Bleckley County
                     - filename: brooks.csv
+                      add_osm_boundaries: false
                       city_replacements:
                           state_district: Brooks County
+                    - filename: bryan.csv
+                      city_replacements:
+                          state_district: Bryan County
                     - filename: burke.csv
                       city_replacements:
                           state_district: Burke County
@@ -2146,6 +2161,9 @@ countries:
                       fields: *fields_with_state_and_unit
                       city_replacements:
                           state_district: Chatham County
+                    - filename: city_of_alma.csv
+                      city_replacements:
+                          city: Alma
                     - filename: city_of_johns_creek.csv
                       add_osm_boundaries: false
                       fields: *fields_with_state_and_unit
@@ -2168,6 +2186,10 @@ countries:
                     - filename: colquitt.csv
                       city_replacements:
                           state_district: Colquitt County
+                    - filename: cook.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Cook County
                     - filename: dooly.csv
                       city_replacements:
                           state_district: Dooly County
@@ -3318,6 +3340,10 @@ countries:
                     state: NV
                 files:
                     - filename: carson_city.csv
+                    - filename: churchill.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Churchill County
                     - filename: clark.csv
                     - filename: douglas.csv
                       add_osm_boundaries: true
