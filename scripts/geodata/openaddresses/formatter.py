@@ -38,8 +38,9 @@ unknown_regex = re.compile('\bunknown\b', re.I)
 not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 sin_numero_regex = re.compile('^\s*s\s*/\s*n\s*$', re.I)
 
-russian_number_regex_str = safe_decode(r'(?:(?:[\d]+\w?(?:[\-/](?:(?:[\d]+\w?)|\w))*)|(?:[\d]+\s*\w?)|(?:\b\w\b))')
-dom_korpus_stroyeniye_regex = re.compile(safe_decode('(?:(?:дом(?=\s)|д\.?)\s*)?{}(?:(?:\s*,|\s+)\s*(?:(?:корпус(?=\s)|к\.?)\s*)?{})?(?:(?:\s*,|\s+)\s*(?:(?:строение(?=\s)|с\.?)\s*)?{})?\s*$').format(russian_number_regex_str, russian_number_regex_str, russian_number_regex_str), re.I | re.U)
+russian_number_regex_str = safe_decode(r'(?:№\s*)?(?:(?:[\d]+\w?(?:[\-/](?:(?:[\d]+\w?)|\w))*)|(?:[\d]+\s*\w?)|(?:\b\w\b))')
+dom_korpus_stroyeniye_regex = re.compile(safe_decode('(?:(?:дом(?=\s)|д\.?)\s*)?{}(?:(?:\s*,|\s+)\s*(?:(?:корпус(?=\s)|к\.?)\s*){})?(?:(?:\s*,|\s+)\s*(?:(?:строение(?=\s)|с\.?)\s*){})?\s*$').format(russian_number_regex_str, russian_number_regex_str, russian_number_regex_str), re.I | re.U)
+uchastok_regex = re.compile(safe_decode('{}\s*(?:,?\s*участок\s+{}\s*)?$').format(russian_number_regex_str, russian_number_regex_str), re.I | re.U)
 bea_nomera_regex = re.compile(safe_decode('^\s*б\s*/\s*н\s*$'), re.I)
 fraction_regex = re.compile('^\s*[\d]+[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*$', re.I)
 number_space_letter_regex = re.compile('^[\d]+\s+[a-z]$', re.I)
@@ -141,7 +142,9 @@ class OpenAddressesFormatter(object):
         def validate_russian_house_number(cls, house_number):
             if dom_korpus_stroyeniye_regex.match(house_number):
                 return True
-            if bea_nomera_regex.match(house_number):
+            elif uchastok_regex.match(house_number):
+                return True
+            elif bea_nomera_regex.match(house_number):
                 return True
             return cls.validate_house_number(house_number)
 
@@ -323,6 +326,18 @@ class OpenAddressesFormatter(object):
                 if key == AddressFormatter.ROAD and language == SPANISH:
                     value = self.components.spanish_street_name(value)
 
+                if key == AddressFormatter.POSTCODE:
+                    value = self.cleanup_number(value)
+
+                    if postcode_strip_non_digit_chars:
+                        value = six.u('').join((c for c in value if c.isdigit()))
+
+                    if value and not is_numeric(value) and numeric_postcodes_only:
+                        continue
+                    else:
+                        if postcode_length:
+                            value = value.zfill(postcode_length)[:postcode_length]
+
                 if key in AddressFormatter.BOUNDARY_COMPONENTS and key != AddressFormatter.POSTCODE:
                     if add_osm_boundaries:
                         continue
@@ -401,28 +416,11 @@ class OpenAddressesFormatter(object):
                     if house_number is not None:
                         components[AddressFormatter.HOUSE_NUMBER] = house_number
 
-                postcode = components.get(AddressFormatter.POSTCODE, None)
-                if postcode:
-                    postcode = self.cleanup_number(postcode)
-
-                    if postcode_strip_non_digit_chars:
-                        postcode = six.u('').join((c for c in postcode if c.isdigit()))
-
-                    if postcode and not is_numeric(postcode) and numeric_postcodes_only:
-                        components.pop(AddressFormatter.POSTCODE)
-                        postcode = None
-                    else:
-                        if postcode_length:
-                            postcode = postcode.zfill(postcode_length)[:postcode_length]
-
-                    if postcode:
-                        components[AddressFormatter.POSTCODE] = postcode
-                    elif AddressFormatter.POSTCODE in components:
-                        components.pop(AddressFormatter.POSTCODE)
-
                 unit = components.get(AddressFormatter.UNIT, None)
 
                 street_required = country != Countries.JAPAN and country not in Countries.FORMER_SOVIET_UNION_COUNTRIES
+
+                postcode = components.get(AddressFormatter.POSTCODE, None)
 
                 # If there's a postcode, we can still use just the city/state/postcode, otherwise discard
                 if (not street and street_required and not house_number) or (street and house_number and (street.lower() == house_number.lower())) or (unit and street and street.lower() == unit.lower()):
