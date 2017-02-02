@@ -3991,6 +3991,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Richland
+                    - filename: city_of_tacoma.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Tacoma
                     - filename: city_of_spokane.csv
                     - filename: city_of_yakima.csv
                     - filename: clallam.csv
