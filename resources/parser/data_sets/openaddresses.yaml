@@ -807,6 +807,7 @@ countries:
               add_osm_boundaries: true
 
     de:
+        postcode_length: 5
         files:
             - filename: berlin.csv
         subdirs:
@@ -898,6 +899,7 @@ countries:
               language: sv
 
     fr:
+        postcode_length: 5
         alias_fields_containing:
             city:
                 - pattern: "(?:lyon|paris|marseilles?) ([\\d]+(?:e|er|ème|eme) arrondissement)"
@@ -1028,6 +1030,7 @@ countries:
                   country: Ísland
 
     it:
+        postcode_length: 5
         osm_neighborhood_overrides_city: true
         files:
             - filename: countrywide.csv
@@ -1334,6 +1337,7 @@ countries:
 
     mx:
         language: es
+        postcode_length: 5
         subdirs:
             aguascalientes:
                 add:
@@ -1598,6 +1602,9 @@ countries:
                     state: Волгоградская область
                 files:
                     - filename: statewide.csv
+                      ignore_fields_containing:
+                          postcode:
+                              - "^[0-9]{1,5}$"
 
     se:
         files:
