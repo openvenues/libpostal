@@ -1649,6 +1649,9 @@ countries:
                 - "\\bcounty\\b"
             road:
                 - "\\bp\\.?\\s*o\\.?\\s*box\\b"
+            postcode:
+                - "^[0-9]{1,4}$"
+
         subdirs:
             ak:
                 add:
@@ -3311,6 +3314,7 @@ countries:
                 files:
                     - filename: statewide.csv
                       add_osm_boundaries: true
+                      postcode_length: 5
 
             nm:
                 add:
