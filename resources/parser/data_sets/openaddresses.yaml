@@ -3383,7 +3383,6 @@ countries:
                     # can still show up in this data set, but if it were listing city=Brooklyn
                     # and so forth, we'd have to stick add_osm_boundaries on statewide.csv
                     - filename: statewide.csv
-                      fields: *fields_no_postcode
                     - filename: broome.csv
                     - filename: city_of_new_york.csv
                       add_osm_boundaries: true
