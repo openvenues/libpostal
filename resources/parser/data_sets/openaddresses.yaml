@@ -2715,6 +2715,10 @@ countries:
                           state_district: Boyd County
                     - filename: campbell.csv
                       fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit:
+                              - "^(?:[A-Z]?[0-9]*|[0-9]*[A-Z]?)$"
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Campbell County
@@ -2984,9 +2988,10 @@ countries:
                           state_district: New Madrid County
                     - filename: st_louis_county.csv
                       fields: *fields_with_unit
+                      non_numeric_units: true
                       ignore_fields_containing:
                           unit:
-                              - "^[A-Z]$"
+                              - "^(?:[A-Z]?[0-9]*|[0-9]*[A-Z]?)$"
                     - filename: st_charles.csv
                       city_replacements:
                           state_district: Saint Charles County
@@ -3383,6 +3388,11 @@ countries:
                     # can still show up in this data set, but if it were listing city=Brooklyn
                     # and so forth, we'd have to stick add_osm_boundaries on statewide.csv
                     - filename: statewide.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit:
+                              - "^(?:[A-Z]?[0-9]*|[0-9]*[A-Z]?)$"
                     - filename: broome.csv
                     - filename: city_of_new_york.csv
                       add_osm_boundaries: true
@@ -3541,6 +3551,9 @@ countries:
                     - filename: city_of_albany.csv
                       fields: *fields_with_unit
                       non_numeric_units: true
+                      ignore_fields_containing:
+                          unit:
+                              - "^(?:[A-Z]?[0-9]*|[0-9]*[A-Z]?)$"
                     - filename: crook.csv
                     - filename: deschutes.csv
                     - filename: gresham.csv
@@ -3582,6 +3595,9 @@ countries:
                     - filename: adams.csv
                       fields: *fields_with_unit
                       non_numeric_units: true
+                      ignore_fields_containing:
+                          unit:
+                              - "^(?:[A-Z]?[0-9]*|[0-9]*[A-Z]?)$"
                     - filename: allegheny.csv
                     - filename: armstrong.csv
                     - filename: bedford.csv
@@ -3603,6 +3619,9 @@ countries:
                       fields: *fields_with_unit
                       add_osm_boundaries: true
                       non_numeric_units: true
+                      ignore_fields_containing:
+                          unit:
+                              - "^(?:[A-Z]?[0-9]*|[0-9]*[A-Z]?)$"
                       city_replacements:
                           state_district: Chester County
                     - filename: clearfield.csv
@@ -3658,6 +3677,9 @@ countries:
                     - filename: york.csv
                       fields: *fields_with_unit
                       non_numeric_units: true
+                      ignore_fields_containing:
+                          unit:
+                              - "^(?:[A-Z]?[0-9]*|[0-9]*[A-Z]?)$"
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: York County
@@ -4055,6 +4077,10 @@ countries:
                     - filename: spokane.csv
                     - filename: thurston.csv
                       fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit:
+                              - "^(?:[A-Z]?[0-9]*|[0-9]*[A-Z]?)$"
                     - filename: walla_walla.csv
 
             wi:
@@ -4191,6 +4217,9 @@ countries:
                   - filename: teton.csv
                     add_osm_boundaries: true
                     fields: *fields_with_unit
+                    ignore_fields_containing:
+                        unit:
+                            - "^(?:[A-Z]?[0-9]*|[0-9]*[A-Z]?)$"
                     city_replacements:
                         state_district: Teton County
 
