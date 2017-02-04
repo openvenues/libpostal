@@ -833,6 +833,10 @@ countries:
                 files:
                     - filename: statewide.csv
 
+            th:
+                files:
+                    - filename: statewide.csv
+
     es:
         add_osm_boundaries: true
         postcode_length: 5
