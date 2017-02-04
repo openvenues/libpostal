@@ -418,7 +418,7 @@ class OpenAddressesFormatter(object):
 
                 unit = components.get(AddressFormatter.UNIT, None)
 
-                street_required = country != Countries.JAPAN and country not in Countries.FORMER_SOVIET_UNION_COUNTRIES
+                street_required = country not in (Countries.JAPAN, Countries.CZECH_REPUBLIC) and country not in Countries.FORMER_SOVIET_UNION_COUNTRIES
 
                 postcode = components.get(AddressFormatter.POSTCODE, None)
 
