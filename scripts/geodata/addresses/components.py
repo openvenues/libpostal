@@ -924,6 +924,31 @@ class AddressComponents(object):
         if name and cls.brasilia_building_regex.match(name):
             address_components[AddressFormatter.HOUSE_NUMBER] = address_components.pop(AddressFormatter.HOUSE)
 
+    central_european_cities = {
+        # Czech Republic
+        'cz': [u'praha', u'prague'],
+        # Poland
+        'pl': [u'kraków', u'crakow', u'krakow'],
+        # Hungary
+        'hu': [u'budapest'],
+        # Slovakia
+        'sk': [u'bratislava', u'košice', u'kosice'],
+        # Austria
+        'at': [u'wien', u'vienna', u'graz', u'linz', u'klagenfurt'],
+    }
+    central_european_city_district_regexes = {country: re.compile(u'^({})\s+(?:[0-9]+|[ivx]+\.?)\\s*$'.format(u'|'.join(cities)), re.I | re.U)
+                                              for country, cities in six.iteritems(central_european_cities)}
+
+    @classmethod
+    def format_central_european_city_district(cls, country, address_components):
+        city = address_components.get(AddressFormatter.CITY)
+        city_district_regexes = cls.central_european_city_district_regexes.get(country)
+        if city and city_district_regexes:
+            match = city_district_regexes.match(city)
+            if match:
+                address_components[AddressFormatter.CITY_DISTRICT] = address_components.pop(AddressFormatter.CITY)
+                address_components[AddressFormatter.CITY] = match.group(1)
+
     street_unit_suffix_regex = re.compile("^(.+?)(?:\\s+\(?\\s*(?:unit|apartment|apt\.?|suite|ste\.?|bldg\.?|lot)\\b(?:(?:\\s*#|\\s+(?:number|no|no.)\\b)?)).*$", re.I)
 
     unit_type_regexes = {}
@@ -1571,10 +1596,13 @@ class AddressComponents(object):
         return names
 
     def country_specific_cleanup(self, address_components, country):
+        if country in cls.central_european_city_district_regexes:
+            self.format_central_european_city_district(country, address_components)
+
         if country == self.IRELAND:
-            return self.format_dublin_postal_district(address_components)
+            self.format_dublin_postal_district(address_components)
         elif country == self.JAMAICA:
-            return self.format_kingston_postcode(address_components)
+            self.format_kingston_postcode(address_components)
 
     def add_house_number_phrase(self, address_components, language, country=None):
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER, None)
