@@ -1596,7 +1596,7 @@ class AddressComponents(object):
         return names
 
     def country_specific_cleanup(self, address_components, country):
-        if country in cls.central_european_city_district_regexes:
+        if country in self.central_european_city_district_regexes:
             self.format_central_european_city_district(country, address_components)
 
         if country == self.IRELAND:
