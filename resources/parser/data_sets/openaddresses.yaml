@@ -1778,7 +1778,6 @@ countries:
                     - filename: berkeley.csv
                     - filename: butte.csv
                     - filename: city_of_anaheim.csv
-                      add_osm_boundaries: true
                       city_replacements:
                           city: Anaheim
                     - filename: city_of_bakersfield.csv
