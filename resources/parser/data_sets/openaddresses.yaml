@@ -4215,6 +4215,10 @@ countries:
                     add_osm_boundaries: true
                     city_replacements:
                         state_district: Laramie County
+                  - filename: lincoln.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Lincoln County
                   - filename: natrona.csv
                     add_osm_boundaries: true
                     city_replacements:
