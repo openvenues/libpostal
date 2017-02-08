@@ -827,6 +827,10 @@ countries:
             nw:
                 files:
                     - filename: city_of_cologne.csv
+                    - filename: city_of_wuppertal.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Wuppertal
                     - filename: kreis_viersen.csv
                     - filename: statewide.csv
             sn:
@@ -2178,6 +2182,8 @@ countries:
                     - filename: city_of_alma.csv
                       city_replacements:
                           city: Alma
+                    - filename: city_of_atlanta.csv
+                      add_osm_boundaries: false
                     - filename: city_of_johns_creek.csv
                       add_osm_boundaries: false
                       fields: *fields_with_state_and_unit
@@ -2185,8 +2191,11 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Sandy Springs
+                    - filename: city_of_marietta.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Marietta
                     - filename: city_of_savannah.csv
-                      fields: *fields_with_state_and_unit
                       add_osm_boundaries: true
                       fields: *fields_with_state
                       ignore_fields_containing:
@@ -3557,6 +3566,7 @@ countries:
                       ignore_fields_containing:
                           unit:
                               - "^(?:[A-Z]?[0-9]*|[0-9]*[A-Z]?)$"
+                    - filename: city_of_salem.csv
                     - filename: crook.csv
                     - filename: deschutes.csv
                     - filename: gresham.csv
