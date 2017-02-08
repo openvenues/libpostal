@@ -56,8 +56,6 @@ with the general error-driven averaged perceptron.
 
 #define DEFAULT_ADDRESS_PARSER_PATH LIBPOSTAL_ADDRESS_PARSER_DIR PATH_SEPARATOR "address_parser.dat"
 
-#define NULL_PHRASE_MEMBERSHIP -1
-
 #define ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS NORMALIZE_STRING_COMPOSE | NORMALIZE_STRING_LOWERCASE | NORMALIZE_STRING_SIMPLE_LATIN_ASCII
 #define ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS_LATIN NORMALIZE_STRING_COMPOSE | NORMALIZE_STRING_LOWERCASE | NORMALIZE_STRING_LATIN_ASCII
 #define ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS_UTF8 NORMALIZE_STRING_COMPOSE | NORMALIZE_STRING_LOWERCASE | NORMALIZE_STRING_STRIP_ACCENTS
@@ -96,7 +94,6 @@ typedef enum {
     ADDRESS_PARSER_BOUNDARY_STATE_DISTRICT,
     ADDRESS_PARSER_BOUNDARY_ISLAND,
     ADDRESS_PARSER_BOUNDARY_STATE,
-    ADDRESS_PARSER_BOUNDARY_POSTAL_CODE,
     ADDRESS_PARSER_BOUNDARY_COUNTRY_REGION,
     ADDRESS_PARSER_BOUNDARY_COUNTRY,
     ADDRESS_PARSER_BOUNDARY_WORLD_REGION,
@@ -118,6 +115,7 @@ typedef enum {
 #define ADDRESS_PARSER_LABEL_COUNTRY  "country"
 #define ADDRESS_PARSER_LABEL_WORLD_REGION "world_region"
 
+
 typedef union address_parser_types {
     uint32_t value;
     struct {
@@ -126,6 +124,7 @@ typedef union address_parser_types {
     };
 } address_parser_types_t;
 
+VECTOR_INIT(address_parser_types_array, address_parser_types_t)
 
 typedef struct address_parser_context {
     char *language;
@@ -158,11 +157,23 @@ typedef struct address_parser_context {
     int64_array *address_phrase_memberships; // Index in address_dictionary_phrases or -1
     phrase_array *component_phrases;
     int64_array *component_phrase_memberships; // Index in component_phrases or -1
+    phrase_array *postal_code_phrases;
+    int64_array *postal_code_phrase_memberships; // Index in postal_code_phrases or -1
     phrase_array *prefix_phrases;
     phrase_array *suffix_phrases;
     // The tokenized string used to conveniently access both words as C strings and tokens by index
     tokenized_string_t *tokenized_str;
 } address_parser_context_t;
+
+typedef union postal_code_context_value {
+    uint64_t value;
+    struct {
+        uint64_t postcode:32;
+        uint64_t admin:32;
+    };
+} postal_code_context_value_t;
+
+#define POSTAL_CODE_CONTEXT(pc, ad) ((postal_code_context_value_t){.postcode = (pc), .admin = (ad) })
 
 typedef struct parser_options {
     uint64_t rare_word_threshold;
@@ -174,7 +185,10 @@ typedef struct address_parser {
     parser_options_t options;
     averaged_perceptron_t *model;
     trie_t *vocab;
-    trie_t *phrase_types;
+    trie_t *phrases;
+    address_parser_types_array *phrase_types;
+    trie_t *postal_codes;
+    khash_t(int64_set) *postal_code_contexts;
 } address_parser_t;
 
 // General usage
