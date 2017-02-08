@@ -199,7 +199,7 @@ char *utf8_case(const char *s, casing_option_t casing, utf8proc_option_t options
 
     for (utf8proc_ssize_t i = 0; i < result; i++) {
         utf8proc_int32_t uc = buffer[i];
-        utf8proc_int32_t norm;
+        utf8proc_int32_t norm = uc;
 
         if (casing == UTF8_LOWER) {
             norm = utf8proc_tolower(uc);
