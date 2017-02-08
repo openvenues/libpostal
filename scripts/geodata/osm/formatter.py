@@ -562,6 +562,17 @@ class OSMAddressFormatter(object):
                 formatted_addresses.append(formatted_address)
         return formatted_addresses
 
+    @classmethod
+    def valid_postal_code(self, country, postal_code):
+        postcode_regex = postcode_regexes.get(country)
+
+        if postcode_regex:
+            postal_code = postal_code.strip()
+            match = postcode_regex.match(postal_code)
+            if match and match.end() == len(postal_code):
+                return True
+            return False
+
     def extract_valid_postal_codes(self, country, postal_code, validate=True):
         '''
         "Valid" postal codes
@@ -583,15 +594,11 @@ class OSMAddressFormatter(object):
         if postal_code:
             valid_postcode = False
             if validate:
-                postcode_regex = postcode_regexes.get(country)
                 values = number_split_regex.split(postal_code)
-
-                if postcode_regex:
-                    for p in values:
-                        match = postcode_regex.match(p)
-                        if match and match.end() == len(p):
-                            valid_postcode = True
-                            postal_codes.append(p)
+                for p in values:
+                    if self.valid_postal_code(country, p):
+                        valid_postcode = True
+                        postal_codes.append(p)
             else:
                 valid_postcode = True
 
@@ -599,12 +606,9 @@ class OSMAddressFormatter(object):
                 postal_codes = parse_osm_number_range(postal_code, parse_letter_range=False, max_range=1000)
                 if validate:
                     valid_postal_codes = []
-                    postcode_regex = postcode_regexes.get(country)
-                    if postcode_regex:
-                        for pc in postal_codes:
-                            match = postcode_regex.match(pc)
-                            if match and match.end() == len(pc):
-                                valid_postal_codes.append(pc)
+                    for pc in postal_codes:
+                        if self.valid_postal_code(country, pc):
+                            valid_postal_codes.append(pc)
                     postal_codes = valid_postal_codes
 
         return postal_codes
@@ -776,13 +780,13 @@ class OSMAddressFormatter(object):
                 language_suffix = ''
 
                 if name and name.strip():
-                    if six.u(';') in name:
-                        name = random.choice(name.split(six.u(';')))
-                    elif six.u(',') in name:
-                        name = name.split(six.u(','), 1)[0]
+                    if u';' in name:
+                        name = random.choice(name.split(u';'))
+                    elif u',' in name:
+                        name = name.split(u',', 1)[0]
 
-                    if six.u('|') in name:
-                        name = name.replace(six.u('|'), six.u(''))
+                    if u'|' in name:
+                        name = name.replace(u'|', u'')
 
                     name = self.components.strip_whitespace_and_hyphens(name)
 
@@ -1053,6 +1057,20 @@ class OSMAddressFormatter(object):
         num_basements = None
         zone = None
 
+        postal_code = revised_tags.get(AddressFormatter.POSTCODE, None)
+
+        if postal_code and u';' in postal_code:
+            postal_code = random.choice(postal_code.split(u';'))
+
+        if postal_code and u',' in postal_code:
+            for p in postal_code.split(u','):
+                if self.valid_postal_code(country, p):
+                    revised_tags[AddressFormatter.POSTCODE] = postal_code = p.strip()
+                    break
+            else:
+                revised_tags.pop(AddressFormatter.POSTCODE)
+                postal_code = None
+
         building_venue_names = []
 
         building_components = self.building_components(latitude, longitude)
@@ -1072,8 +1090,21 @@ class OSMAddressFormatter(object):
                 building_is_known_venue_type = building_is_known_venue_type or self.is_known_venue_type(building_tags)
 
                 for k, v in six.iteritems(building_tags):
-                    if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD, AddressFormatter.POSTCODE):
+                    if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD):
                         revised_tags[k] = v
+                    elif k not in revised_tags and k == AddressFormatter.POSTCODE:
+                        m = number_split_regex.search(v)
+
+                        if not m:
+                            revised_tags[k] = v
+                        else:
+                            if u';' in v:
+                                v = random.choice(v.split(u';'))
+
+                            for p in v.split(','):
+                                if self.valid_postal_code(country, p):
+                                    revised_tags[AddressFormatter.POSTCODE] = p.strip()
+                                    break
                     elif k == AddressFormatter.HOUSE:
                         building_venue_names.append((v, building_is_generic_place, building_is_known_venue_type))
 
@@ -1155,8 +1186,6 @@ class OSMAddressFormatter(object):
                                                                                  tag_components=tag_components, minimal_only=not tag_components))
 
         formatted_addresses.extend(self.formatted_places(address_components, country, language))
-
-
 
         # In Japan an address without places is basically just house_number + metro_station (if given)
         # However, where there are streets, it's useful to have address-only queries as well
