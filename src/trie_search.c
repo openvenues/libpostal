@@ -778,6 +778,34 @@ inline phrase_t trie_search_prefixes(trie_t *self, char *word, size_t len) {
     return trie_search_prefixes_from_index_get_prefix_char(self, word, len, ROOT_NODE_ID);
 }
 
+bool token_phrase_memberships(phrase_array *phrases, int64_array *phrase_memberships, size_t len) {
+    if (phrases == NULL || phrase_memberships == NULL) {
+        return false;
+    }
+
+    int64_t i = 0;
+    for (int64_t j = 0; j < phrases->n; j++) {
+        phrase_t phrase = phrases->a[j];
+
+        for (; i < phrase.start; i++) {
+            int64_array_push(phrase_memberships, NULL_PHRASE_MEMBERSHIP);
+            log_debug("token i=%lld, null phrase membership\n", i);
+        }
+
+        for (i = phrase.start; i < phrase.start + phrase.len; i++) {
+            log_debug("token i=%lld, phrase membership=%lld\n", i, j);
+            int64_array_push(phrase_memberships, j);
+        }
+    }
+
+    for (; i < len; i++) {
+        log_debug("token i=%lld, null phrase membership\n", i);
+        int64_array_push(phrase_memberships, NULL_PHRASE_MEMBERSHIP);
+    }
+
+    return true;
+}
+
 inline char *cstring_array_get_phrase(cstring_array *str, char_array *phrase_tokens, phrase_t phrase) {
     char_array_clear(phrase_tokens);
 
