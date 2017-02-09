@@ -2777,6 +2777,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Pendleton County
+                    - filename: scott.csv
                     - filename: warren.csv
 
             la:
