@@ -2760,6 +2760,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Hardin County
+                    - filename: henderson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Henderson County
                     - filename: jefferson.csv
                     - filename: kenton.csv
                       city_replacements:
