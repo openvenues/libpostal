@@ -316,6 +316,12 @@ Libpostal is designed to be used by higher-level languages.  If you don't see yo
 
 - Libpostal REST Docker [Libpostal REST Docker](https://github.com/johnlonganecker/libpostal-rest-docker)
 
+
+**Libpostal ZeroMQ Docker**
+
+- Libpostal ZeroMQ Docker image: [pasupulaphani/libpostal-zeromq](https://hub.docker.com/r/pasupulaphani/libpostal-zeromq/) , Source: [Github](https://github.com/pasupulaphani/libpostal-docker) 
+
+
 Command-line usage (expand)
 ---------------------------
 
