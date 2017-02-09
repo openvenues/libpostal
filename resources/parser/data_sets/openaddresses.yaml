@@ -719,6 +719,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Regina
+                    - filename: saskatoon.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Saskatoon
 
             yk:
                 add:
