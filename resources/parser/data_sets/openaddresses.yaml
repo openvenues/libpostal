@@ -1337,6 +1337,7 @@ countries:
     lt:
         cldr_country_probability: 0.8
         files:
+            - filename: city_of_vilnius.csv
             - filename: countrywide.csv
 
     lu:
