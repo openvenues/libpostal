@@ -1321,6 +1321,10 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
     tokenized_string_destroy(tokenized_str);
     cstring_array_destroy(token_labels);
 
+    if (is_normalized) {
+        free(normalized);
+    }
+
     return response;
 }
 
