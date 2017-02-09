@@ -118,6 +118,7 @@ int main(int argc, char **argv) {
             for (int i = 0; i < parsed->num_components; i++) {
                 char *json_string = json_encode_string(parsed->components[i]);
                 printf("  \"%s\": %s%s\n", parsed->labels[i], json_string, i < parsed->num_components - 1 ? "," : "");
+                free(json_string);
             }
             printf("}\n");
             printf("\n");
