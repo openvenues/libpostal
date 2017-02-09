@@ -477,6 +477,7 @@ countries:
                       city_replacements:
                           state_district: Bruce County
                     - filename: chatham_kent.csv
+                    - filename: city_of_ajax.csv
                     - filename: city_of_brampton.csv
                     - filename: city_of_burlington.csv
                       add_osm_boundaries: true
