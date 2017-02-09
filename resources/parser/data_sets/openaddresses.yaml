@@ -1825,6 +1825,13 @@ countries:
                       city_replacements:
                           state_district: Humboldt County
                     - filename: inyo.csv
+                    - filename: kern.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Kern County
+                      ignore_fields_containing:
+                          road:
+                              - "^[A-Z0-9]$"
                     - filename: kings.csv
                       add_osm_boundaries: true
                       city_replacements:
