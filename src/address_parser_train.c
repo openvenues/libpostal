@@ -11,13 +11,15 @@
 
 #include "log/log.h"
 
-    
 typedef struct phrase_stats {
     khash_t(int_uint32) *class_counts;
-    address_parser_types_t parser_types;
+    uint16_t components;
 } phrase_stats_t;
 
 KHASH_MAP_INIT_STR(phrase_stats, phrase_stats_t)
+KHASH_MAP_INIT_STR(postal_code_context_phrases, khash_t(str_set) *)
+KHASH_MAP_INIT_STR(phrase_types, address_parser_types_t)
+
 
 // Training
 
@@ -40,6 +42,270 @@ static inline bool is_admin_component(char *label) {
            string_equals(label, ADDRESS_PARSER_LABEL_COUNTRY_REGION) ||
            string_equals(label, ADDRESS_PARSER_LABEL_COUNTRY) ||
            string_equals(label, ADDRESS_PARSER_LABEL_WORLD_REGION));
+}
+
+typedef struct vocab_context {
+    char_array *token_builder;
+    char_array *postal_code_token_builder;
+    char_array *sub_token_builder;
+    char_array *phrase_builder;
+    phrase_array *dictionary_phrases;
+    int64_array *phrase_memberships;
+    phrase_array *postal_code_dictionary_phrases;
+    token_array *sub_tokens;
+} vocab_context_t;
+
+bool address_phrases_and_labels(address_parser_data_set_t *data_set, cstring_array *phrases, cstring_array *phrase_labels, vocab_context_t *ctx) {
+    tokenized_string_t *tokenized_str = data_set->tokenized_str;
+    if (tokenized_str == NULL) {
+        log_error("tokenized_str == NULL\n");
+        return false;
+    }
+
+    char *language = char_array_get_string(data_set->language);
+    if (string_equals(language, UNKNOWN_LANGUAGE) || string_equals(language, AMBIGUOUS_LANGUAGE)) {
+        language = NULL;
+    }
+
+    char_array *token_builder = ctx->token_builder;
+    char_array *postal_code_token_builder = ctx->postal_code_token_builder;
+    char_array *sub_token_builder = ctx->sub_token_builder;
+    char_array *phrase_builder = ctx->phrase_builder;
+    phrase_array *dictionary_phrases = ctx->dictionary_phrases;
+    int64_array *phrase_memberships = ctx->phrase_memberships;
+    phrase_array *postal_code_dictionary_phrases = ctx->postal_code_dictionary_phrases;
+    token_array *sub_tokens = ctx->sub_tokens;
+
+    uint32_t i = 0;
+    uint32_t j = 0;
+
+    char *normalized;
+    char *phrase;
+
+    char *label;
+    char *prev_label;
+
+    const char *token;
+
+    char *str = tokenized_str->str;
+    token_array *tokens = tokenized_str->tokens;
+
+    prev_label = NULL;
+
+    size_t num_strings = cstring_array_num_strings(tokenized_str->strings);
+
+    cstring_array_clear(phrases);
+    cstring_array_clear(phrase_labels);
+
+    bool is_admin = false;
+    bool is_postal = false;
+    bool have_postal_code = false;
+
+    bool last_was_separator = false;
+
+    int64_array_clear(phrase_memberships);
+    phrase_array_clear(dictionary_phrases);
+    char_array_clear(postal_code_token_builder);
+
+    // One specific case where "CP" or "CEP" can be concatenated onto the front of the token
+    bool have_dictionary_phrases = search_address_dictionaries_tokens_with_phrases(tokenized_str->str, tokenized_str->tokens, language, &dictionary_phrases);
+    token_phrase_memberships(dictionary_phrases, phrase_memberships, tokenized_str->tokens->n);
+
+    cstring_array_foreach(tokenized_str->strings, i, token, {
+        token_t t = tokens->a[i];
+
+        label = cstring_array_get_string(data_set->labels, i);
+        if (label == NULL) {
+            continue;
+        }
+
+        char_array_clear(token_builder);
+
+        is_admin = is_admin_component(label);
+        is_postal = !is_admin && is_postal_code(label);
+
+        uint64_t normalize_token_options = ADDRESS_PARSER_NORMALIZE_TOKEN_OPTIONS;
+
+        if (is_admin || is_postal) {
+            normalize_token_options = ADDRESS_PARSER_NORMALIZE_ADMIN_TOKEN_OPTIONS;
+        }
+
+        add_normalized_token(token_builder, str, t, normalize_token_options);
+        if (token_builder->n == 0) {
+            continue;
+        }
+
+        normalized = char_array_get_string(token_builder);
+
+        int64_t phrase_membership = NULL_PHRASE_MEMBERSHIP;
+
+        if (!is_admin && !is_postal) {
+            // Check if this is a (potentially multi-word) dictionary phrase
+            phrase_membership = phrase_memberships->a[i];
+            if (phrase_membership != NULL_PHRASE_MEMBERSHIP) {
+                phrase_t current_phrase = dictionary_phrases->a[phrase_membership];
+
+                if (current_phrase.start == i) {
+                    char_array_clear(phrase_builder);
+                    char *first_label = label;
+                    bool invalid_phrase = false;
+                    // On the start of every phrase, check that all its tokens have the
+                    // same label, otherwise set to memberships to the null phrase
+                    for (j = current_phrase.start + 1; j < current_phrase.start + current_phrase.len; j++) {
+                        char *token_label = cstring_array_get_string(data_set->labels, j);
+                        if (!string_equals(token_label, first_label)) {
+                            for (j = current_phrase.start; j < current_phrase.start + current_phrase.len; j++) {
+                                phrase_memberships->a[j] = NULL_PHRASE_MEMBERSHIP;
+                            }
+                            invalid_phrase = true;
+                            break;
+                        }
+                    }
+                    // If the phrase was invalid, add the single word
+                    if (invalid_phrase) {
+                        cstring_array_add_string(phrases, normalized);
+                        cstring_array_add_string(phrase_labels, label);
+                     }
+                }
+                // If we're in a valid phrase, add the current word to the phrase
+                char_array_cat(phrase_builder, normalized);
+                if (i < current_phrase.start + current_phrase.len - 1) {
+                    char_array_cat(phrase_builder, " ");
+                } else {
+                    // If we're at the end of a phrase, add entire phrase as a string
+                    normalized = char_array_get_string(phrase_builder);
+                    cstring_array_add_string(phrases, normalized);
+                    cstring_array_add_string(phrase_labels, label);
+                }
+
+            } else {
+
+                cstring_array_add_string(phrases, normalized);
+                cstring_array_add_string(phrase_labels, label);
+            }
+
+            prev_label = NULL;
+
+            continue;
+        }
+
+        if (is_postal) {
+            add_normalized_token(postal_code_token_builder, str, t, ADDRESS_PARSER_NORMALIZE_POSTAL_CODE_TOKEN_OPTIONS);
+            char *postal_code_normalized = char_array_get_string(postal_code_token_builder);
+
+            token_array_clear(sub_tokens);
+            phrase_array_clear(postal_code_dictionary_phrases);
+            tokenize_add_tokens(sub_tokens, postal_code_normalized, strlen(postal_code_normalized), false);
+
+            // One specific case where "CP" or "CEP" can be concatenated onto the front of the token
+            if (sub_tokens->n > 1 && search_address_dictionaries_tokens_with_phrases(postal_code_normalized, sub_tokens, language, &postal_code_dictionary_phrases) && postal_code_dictionary_phrases->n > 0) {
+                phrase_t first_postal_code_phrase = postal_code_dictionary_phrases->a[0];
+                address_expansion_value_t *value = address_dictionary_get_expansions(first_postal_code_phrase.data);
+                if (value != NULL && value->components & ADDRESS_POSTAL_CODE) {
+                    char_array_clear(token_builder);
+                    size_t first_real_token_index = first_postal_code_phrase.start + first_postal_code_phrase.len;
+                    token_t first_real_token =  sub_tokens->a[first_real_token_index];
+                    char_array_cat(token_builder, postal_code_normalized + first_real_token.offset);
+                    normalized = char_array_get_string(token_builder);
+                }
+            }
+        }
+
+        bool last_was_postal = string_equals(prev_label, ADDRESS_PARSER_LABEL_POSTAL_CODE);
+        bool same_as_previous_label = string_equals(label, prev_label) && (!last_was_separator || last_was_postal);
+
+        if (prev_label == NULL || !same_as_previous_label || i == num_strings - 1) {
+            if (i == num_strings - 1 && (same_as_previous_label || prev_label == NULL)) {
+                if (prev_label != NULL) {
+                   char_array_cat(phrase_builder, " ");
+                }
+
+                char_array_cat(phrase_builder, normalized);
+            }
+
+            // End of phrase, add to hashtable
+            if (prev_label != NULL) {
+
+                phrase = char_array_get_string(phrase_builder);
+
+                if (last_was_postal) {
+                    token_array_clear(sub_tokens);
+                    phrase_array_clear(dictionary_phrases);
+
+                    tokenize_add_tokens(sub_tokens, phrase, strlen(phrase), false);
+
+                    if (sub_tokens->n > 0 && search_address_dictionaries_tokens_with_phrases(phrase, sub_tokens, language, &dictionary_phrases) && dictionary_phrases->n > 0) {
+                        char_array_clear(sub_token_builder);
+
+                        phrase_t current_phrase = NULL_PHRASE;
+                        phrase_t prev_phrase = NULL_PHRASE;
+                        token_t current_sub_token;
+
+                        for (size_t pc = 0; pc < dictionary_phrases->n; pc++) {
+                            current_phrase = dictionary_phrases->a[pc];
+
+                            address_expansion_value_t *phrase_value = address_dictionary_get_expansions(current_phrase.data);
+                            size_t current_phrase_end = current_phrase.start + current_phrase.len;
+                            if (phrase_value != NULL && phrase_value->components & ADDRESS_POSTAL_CODE) {
+                                current_phrase_end = current_phrase.start;
+                            }
+
+                            for (size_t j = prev_phrase.start + prev_phrase.len; j < current_phrase_end; j++) {
+                                current_sub_token = sub_tokens->a[j];
+
+                                char_array_cat_len(sub_token_builder, phrase + current_sub_token.offset, current_sub_token.len);
+
+                                if (j < sub_tokens->n - 1) {
+                                    char_array_cat(sub_token_builder, " ");
+                                }
+                            }
+                            prev_phrase = current_phrase;
+                        }
+
+                        if (prev_phrase.len > 0) {
+                            for (size_t j = prev_phrase.start + prev_phrase.len; j < sub_tokens->n; j++) {
+                                current_sub_token = sub_tokens->a[j];
+
+                                char_array_cat_len(sub_token_builder, phrase + current_sub_token.offset, current_sub_token.len);
+
+                                if (j < sub_tokens->n - 1) {
+                                    char_array_cat(sub_token_builder, " ");
+                                }
+                            }
+                        }
+
+                        phrase = char_array_get_string(sub_token_builder);
+                    }
+                }
+
+                cstring_array_add_string(phrases, phrase);
+                cstring_array_add_string(phrase_labels, prev_label);
+
+            }
+
+            if (i == num_strings - 1 && !same_as_previous_label && prev_label != NULL) {
+                cstring_array_add_string(phrases, normalized);
+                cstring_array_add_string(phrase_labels, label);
+            }
+
+            char_array_clear(phrase_builder);
+        } else if (prev_label != NULL) {
+            char_array_cat(phrase_builder, " ");
+        }
+
+        char_array_cat(phrase_builder, normalized);
+
+        last_was_separator = false;
+
+        prev_label = label;
+
+        if (data_set->separators->a[i] == ADDRESS_SEPARATOR_FIELD_INTERNAL) {
+            last_was_separator = true;
+        }
+
+    })
+
+    return true;
 }
 
 address_parser_t *address_parser_init(char *filename) {
@@ -79,16 +345,34 @@ address_parser_t *address_parser_init(char *filename) {
         return NULL;
     }
 
-    khash_t(str_uint32) *phrase_types = kh_init(str_uint32);
+    khash_t(phrase_types) *phrase_types = kh_init(phrase_types);
     if (phrase_types == NULL) {
         log_error("Could not allocate phrase_types\n");
+        return NULL;
+    }
+
+    khash_t(str_uint32) *postal_code_counts = kh_init(str_uint32);
+    if (postal_code_counts == NULL) {
+        log_error("Could not allocate postal_code\n");
+        return NULL;
+    }
+
+    khash_t(postal_code_context_phrases) *postal_code_admin_contexts = kh_init(postal_code_context_phrases);
+    if (postal_code_admin_contexts == NULL) {
+        log_error("Could not allocate postal_code_admin_contexts\n");
+        return NULL;
+    }
+
+    khash_t(int64_set) *postal_code_contexts = kh_init(int64_set);
+    if (postal_code_contexts == NULL) {
+        log_error("Could not allocate postal_code_contexts\n");
         return NULL;
     }
 
     khiter_t k;
     char *str;
 
-    uint32_t i;
+    uint32_t i, j;
 
     phrase_stats_t stats;
     khash_t(int_uint32) *class_counts;
@@ -103,25 +387,49 @@ address_parser_t *address_parser_init(char *filename) {
     char *key;
     int ret = 0;
 
-    bool is_postal;
+    postal_code_context_value_t pc_ctx;
+
+    bool is_postal = false;
 
     char *label;
     char *prev_label;
 
-    char_array *token_builder = char_array_new();
-    char_array *postcode_token_builder = char_array_new();
-    char_array *sub_token_builder = char_array_new();
+    vocab_context_t *vocab_context = malloc(sizeof(vocab_context_t));
+    if (vocab_context == NULL) {
+        log_error("Error allocationg vocab_context\n");
+        return NULL;
+    }
 
-    char_array *phrase_builder = char_array_new();
+    vocab_context->token_builder = char_array_new();
+    vocab_context->postal_code_token_builder = char_array_new();
+    vocab_context->sub_token_builder = char_array_new();
+    vocab_context->phrase_builder = char_array_new();
+    vocab_context->dictionary_phrases = phrase_array_new();
+    vocab_context->phrase_memberships = int64_array_new();
+    vocab_context->postal_code_dictionary_phrases = phrase_array_new();
+    vocab_context->sub_tokens = token_array_new();
+
+    if (vocab_context->token_builder == NULL ||
+        vocab_context->postal_code_token_builder == NULL ||
+        vocab_context->sub_token_builder == NULL ||
+        vocab_context->phrase_builder == NULL ||
+        vocab_context->dictionary_phrases == NULL ||
+        vocab_context->phrase_memberships == NULL ||
+        vocab_context->postal_code_dictionary_phrases == NULL ||
+        vocab_context->sub_tokens == NULL) {
+        log_error("Error initializing vocab_context\n");
+        return NULL;
+    }
 
     cstring_array *phrases = cstring_array_new();
     cstring_array *phrase_labels = cstring_array_new();
 
+    if (phrases == NULL || phrase_labels == NULL) {
+        log_error("Error setting up arrays for vocab building\n");
+        return NULL;
+    }
+
     char *phrase;
-
-    phrase_array *dictionary_phrases = phrase_array_new();
-
-    token_array *sub_tokens = token_array_new();
 
     trie_t *phrase_counts_trie = NULL;
 
@@ -133,175 +441,27 @@ address_parser_t *address_parser_init(char *filename) {
 
         if (tokenized_str == NULL) {
             log_error("tokenized str is NULL\n");
-            kh_destroy(str_uint32, vocab);
-            return NULL;
+            goto exit_hashes_allocated;
         }
 
-        char *language = char_array_get_string(data_set->language);
-        if (string_equals(language, UNKNOWN_LANGUAGE) || string_equals(language, AMBIGUOUS_LANGUAGE)) {
-            language = NULL;
+        if (!address_phrases_and_labels(data_set, phrases, phrase_labels, vocab_context)) {
+            log_error("Error in address phrases and labels\n");
+            goto exit_hashes_allocated;
         }
 
-        str = tokenized_str->str;
-        tokens = tokenized_str->tokens;
+        // Iterate through one time to see if there is a postal code in the string
+        bool have_postal_code = false;
+        char *postal_code_phrase = NULL;
 
-        prev_label = NULL;
+        cstring_array_foreach(phrases, i, phrase, {
+            if (phrase == NULL) continue;
+            char *phrase_label = cstring_array_get_string(phrase_labels, i);
 
-        size_t num_strings = cstring_array_num_strings(tokenized_str->strings);
-
-        cstring_array_clear(phrases);
-        cstring_array_clear(phrase_labels);
-
-        cstring_array_foreach(tokenized_str->strings, i, token, {
-            token_t t = tokens->a[i];
-
-            label = cstring_array_get_string(data_set->labels, i);
-            if (label == NULL) {
-                continue;
+            if (is_postal_code(phrase_label)) {
+                have_postal_code = true;
+                postal_code_phrase = phrase;
+                break;
             }
-
-            char_array_clear(token_builder);
-
-            bool is_admin = is_admin_component(label);
-            is_postal = !is_admin && is_postal_code(label);
-
-            uint64_t normalize_token_options = ADDRESS_PARSER_NORMALIZE_TOKEN_OPTIONS;
-
-            if (is_admin || is_postal) {
-                normalize_token_options = ADDRESS_PARSER_NORMALIZE_ADMIN_TOKEN_OPTIONS;
-            }
-
-            add_normalized_token(token_builder, str, t, normalize_token_options);
-            if (token_builder->n == 0) {
-                continue;
-            }
-
-            normalized = char_array_get_string(token_builder);
-
-            if (!is_admin && !is_postal) {
-                k = kh_get(str_uint32, vocab, normalized);
-
-                if (k == kh_end(vocab)) {
-                    key = strdup(normalized);
-                    k = kh_put(str_uint32, vocab, key, &ret);
-                    if (ret < 0) {
-                        log_error("Error in kh_put in vocab\n");
-                        free(key);
-                        goto exit_hashes_allocated;
-                    }
-                    kh_value(vocab, k) = 1;
-                    vocab_size++;
-                } else {
-                    kh_value(vocab, k)++;
-                }
-
-                prev_label = NULL;
-
-                continue;
-            }
-
-            if (is_postal) {
-                char_array_clear(postcode_token_builder);
-                add_normalized_token(postcode_token_builder, str, t, ADDRESS_PARSER_NORMALIZE_POSTAL_CODE_TOKEN_OPTIONS);
-                char *postcode_normalized = char_array_get_string(postcode_token_builder);
-
-                token_array_clear(sub_tokens);
-                phrase_array_clear(dictionary_phrases);
-                tokenize_add_tokens(sub_tokens, postcode_normalized, strlen(postcode_normalized), false);
-
-                // One specific case where "CP" or "CEP" can be concatenated onto the front of the token
-                if (sub_tokens->n > 1 && search_address_dictionaries_tokens_with_phrases(postcode_normalized, sub_tokens, language, &dictionary_phrases) && dictionary_phrases->n > 0) {
-                    phrase_t first_postcode_phrase = dictionary_phrases->a[0];
-                    address_expansion_value_t *value = address_dictionary_get_expansions(first_postcode_phrase.data);
-                    if (value != NULL && value->components & ADDRESS_POSTAL_CODE) {
-                        char_array_clear(token_builder);
-                        size_t first_real_token_index = first_postcode_phrase.start + first_postcode_phrase.len;
-                        token_t first_real_token =  sub_tokens->a[first_real_token_index];
-                        char_array_cat(token_builder, postcode_normalized + first_real_token.offset);
-                        normalized = char_array_get_string(token_builder);
-                    }
-                }
-            }
-
-
-            bool same_as_previous_label = string_equals(label, prev_label);
-
-            if (prev_label == NULL || !same_as_previous_label || i == num_strings - 1) {
-                if (i == num_strings - 1 && (same_as_previous_label || prev_label == NULL)) {
-                    if (prev_label != NULL) {
-                       char_array_cat(phrase_builder, " ");
-                    }
-
-                    char_array_cat(phrase_builder, normalized);
-                }
-
-                // End of phrase, add to hashtable
-                if (prev_label != NULL) {
-                    bool last_was_postal = string_equals(prev_label, ADDRESS_PARSER_LABEL_POSTAL_CODE);
-
-                    phrase = char_array_get_string(phrase_builder);
-
-                    if (last_was_postal) {
-                        token_array_clear(sub_tokens);
-                        phrase_array_clear(dictionary_phrases);
-
-                        tokenize_add_tokens(sub_tokens, phrase, strlen(phrase), false);
-
-                        if (sub_tokens->n > 0 && search_address_dictionaries_tokens_with_phrases(phrase, sub_tokens, language, &dictionary_phrases) && dictionary_phrases->n > 0) {
-                            char_array_clear(sub_token_builder);
-
-                            phrase_t current_phrase = NULL_PHRASE;
-                            phrase_t prev_phrase = NULL_PHRASE;
-                            token_t current_sub_token;
-
-                            for (size_t pc = 0; pc < dictionary_phrases->n; pc++) {
-                                current_phrase = dictionary_phrases->a[pc];
-                                for (size_t j = prev_phrase.start + prev_phrase.len; j < current_phrase.start; j++) {
-                                    current_sub_token = sub_tokens->a[j];
-
-                                    char_array_cat_len(sub_token_builder, phrase + current_sub_token.offset, current_sub_token.len);
-
-                                    if (j < current_phrase.start - 1) {
-                                        char_array_cat(sub_token_builder, " ");
-                                    }
-                                }
-                                prev_phrase = current_phrase;
-                            }
-
-                            if (prev_phrase.len > 0) {
-                                for (size_t j = prev_phrase.start + prev_phrase.len; j < sub_tokens->n; j++) {
-                                    current_sub_token = sub_tokens->a[j];
-
-                                    char_array_cat_len(sub_token_builder, phrase + current_sub_token.offset, current_sub_token.len);
-
-                                    if (j < sub_tokens->n - 1) {
-                                        char_array_cat(sub_token_builder, " ");
-                                    }
-                                }
-                            }
-
-                            phrase = char_array_get_string(sub_token_builder);
-                        }
-                    }
-
-                    cstring_array_add_string(phrases, phrase);
-                    cstring_array_add_string(phrase_labels, prev_label);
-                }
-
-                if (i == num_strings - 1 && !same_as_previous_label && prev_label != NULL) {
-                    cstring_array_add_string(phrases, normalized);
-                    cstring_array_add_string(phrase_labels, label);
-                }
-
-                char_array_clear(phrase_builder);
-            } else if (prev_label != NULL) {
-                char_array_cat(phrase_builder, " ");
-            }
-
-            char_array_cat(phrase_builder, normalized);
-
-            prev_label = label;
-
         })
 
         cstring_array_foreach(phrases, i, phrase, {
@@ -326,9 +486,31 @@ address_parser_t *address_parser_init(char *filename) {
                 class_id = ADDRESS_PARSER_BOUNDARY_COUNTRY;
                 component = ADDRESS_COMPONENT_COUNTRY;
             } else if (string_equals(phrase_label, ADDRESS_PARSER_LABEL_POSTAL_CODE)) {
-                class_id = ADDRESS_PARSER_BOUNDARY_POSTAL_CODE;
-                component = ADDRESS_COMPONENT_POSTAL_CODE;
                 is_postal = true;
+
+                char_array *token_builder = vocab_context->token_builder;
+                token_array *sub_tokens = vocab_context->sub_tokens;
+                tokenize_add_tokens(sub_tokens, phrase, strlen(phrase), false);
+
+                char_array_clear(token_builder);
+
+                for (j = 0; j < sub_tokens->n; j++) {
+                    token_array_clear(sub_tokens);
+                    token_t t = sub_tokens->a[j];
+                    add_normalized_token(token_builder, phrase, t, ADDRESS_PARSER_NORMALIZE_TOKEN_OPTIONS);
+
+                    if (token_builder->n == 0) {
+                        continue;
+                    }
+
+                    char *sub_token = char_array_get_string(token_builder);
+                    if (!str_uint32_hash_incr(vocab, sub_token)) {
+                        log_error("Error in str_uint32_hash_incr\n");
+                        goto exit_hashes_allocated;
+                    }
+
+                }
+
             } else if (string_equals(phrase_label, ADDRESS_PARSER_LABEL_COUNTRY_REGION)) {
                 class_id = ADDRESS_PARSER_BOUNDARY_COUNTRY_REGION;
                 component = ADDRESS_COMPONENT_COUNTRY_REGION;
@@ -348,13 +530,21 @@ address_parser_t *address_parser_init(char *filename) {
                 class_id = ADDRESS_PARSER_BOUNDARY_ISLAND;
                 component = ADDRESS_COMPONENT_ISLAND;
             } else {
-                // Shouldn't happen but just in case
+                bool in_vocab = false;
+                if (!str_uint32_hash_incr_exists(vocab, phrase, &in_vocab)) {
+                    log_error("Error in str_uint32_hash_incr\n");
+                    goto exit_hashes_allocated;
+                }
+
+                if (!in_vocab) {
+                    vocab_size++;
+                }
                 continue;
             }
 
             char *normalized_phrase = NULL;
 
-            if (string_contains_hyphen(phrase) && !is_postal) {
+            if (!is_postal && string_contains_hyphen(phrase)) {
                 normalized_phrase = normalize_string_utf8(phrase, NORMALIZE_STRING_REPLACE_HYPHENS);
             }
 
@@ -365,6 +555,51 @@ address_parser_t *address_parser_init(char *filename) {
             for (int p_i = 0; p_i < sizeof(phrases) / sizeof(char *); p_i++) {
                 phrase = phrases[p_i];
                 if (phrase == NULL) continue;
+
+                if (is_postal) {
+                    if (!str_uint32_hash_incr(postal_code_counts, phrase)) {
+                        log_error("Error in str_uint32_hash_incr for postal_code_counts\n");
+                        goto exit_hashes_allocated;
+                    }
+                    continue;
+                }
+
+                if (have_postal_code && !is_postal) {
+                    khash_t(str_set) *context_postal_codes = NULL;
+
+                    k = kh_get(postal_code_context_phrases, postal_code_admin_contexts, postal_code_phrase);
+                    if (k == kh_end(postal_code_admin_contexts)) {
+                        key = strdup(postal_code_phrase);
+                        ret = 0;
+                        k = kh_put(postal_code_context_phrases, postal_code_admin_contexts, key, &ret);
+
+                        if (ret < 0) {
+                            log_error("Error in kh_put in postal_code_admin_contexts\n");
+                            free(key);
+                            goto exit_hashes_allocated;
+                        }
+                        context_postal_codes = kh_init(str_set);
+                        if (context_postal_codes == NULL) {
+                            log_error("Error in kh_init for context_postal_codes\n");
+                            free(key);
+                            goto exit_hashes_allocated;
+                        }
+                        kh_value(postal_code_admin_contexts, k) = context_postal_codes;
+                    } else {
+                        context_postal_codes = kh_value(postal_code_admin_contexts, k);
+                    }
+
+                    k = kh_get(str_set, context_postal_codes, phrase);
+                    if (k == kh_end(context_postal_codes)) {
+                        char *context_key = strdup(phrase);
+                        k = kh_put(str_set, context_postal_codes, context_key, &ret);
+                        if (ret < 0) {
+                            log_error("Error in kh_put in context_postal_codes\n");
+                            free(context_key);
+                            goto exit_hashes_allocated;
+                        }
+                    }
+                }
 
                 k = kh_get(phrase_stats, phrase_stats, phrase);
 
@@ -380,48 +615,25 @@ address_parser_t *address_parser_init(char *filename) {
                     class_counts = kh_init(int_uint32);
                 
                     stats.class_counts = class_counts;
-                    stats.parser_types.components = component;
-                    stats.parser_types.most_common = 0;
+                    stats.components = component;
                     
                     kh_value(phrase_stats, k) = stats;
                 } else {
                     stats = kh_value(phrase_stats, k);
                     class_counts = stats.class_counts;
-                    stats.parser_types.components |= component;
+                    stats.components |= component;
                 }
 
-                k = kh_get(int_uint32, class_counts, (khint_t)class_id);
-
-                if (k == kh_end(class_counts)) {
-                    ret = 0;
-                    k = kh_put(int_uint32, class_counts, class_id, &ret);
-                    if (ret < 0) {
-                        log_error("Error in kh_put in class_counts\n");
-                        goto exit_hashes_allocated;
-                    }
-                    kh_value(class_counts, k) = 1;
-                } else {
-                    kh_value(class_counts, k)++;
+                if (!int_uint32_hash_incr(class_counts, (khint_t)class_id)) {
+                    log_error("Error in int_uint32_hash_incr in class_counts\n");
+                    goto exit_hashes_allocated;
                 }
 
-                k = kh_get(str_uint32, phrase_counts, phrase);
-
-                if (k != kh_end(phrase_counts)) {
-                    kh_value(phrase_counts, k)++;
-                } else {
-                    key = strdup(phrase);
-                    ret = 0;
-                    k = kh_put(str_uint32, phrase_counts, key, &ret);
-                    if (ret < 0) {
-                        log_error("Error in kh_put in phrase_counts\n");
-                        free(key);
-                        if (normalized_phrase != NULL) {
-                            free(normalized_phrase);
-                        }
-                        goto exit_hashes_allocated;
-                    }
-                    kh_value(phrase_counts, k) = 1;
+                if (!str_uint32_hash_incr(phrase_counts, phrase)) {
+                    log_error("Error in str_uint32_hash_incr in phrase_counts\n");
+                    goto exit_hashes_allocated;
                 }
+
             }
 
             if (normalized_phrase != NULL) {
@@ -436,6 +648,7 @@ address_parser_t *address_parser_init(char *filename) {
         if (examples % 10000 == 0 && examples != 0) {
             log_info("Counting vocab: did %zu examples\n", examples);
         }
+
     }
 
     log_info("Done with vocab, total size=%d\n", vocab_size);
@@ -459,9 +672,81 @@ address_parser_t *address_parser_init(char *filename) {
 
     log_info("Calculating phrase types\n");
 
-    kh_foreach(phrase_stats, token, stats, {
+    parser->model = NULL;
+
+    log_info("Creating vocab trie\n");
+
+    parser->vocab = trie_new_from_hash(vocab);
+    if (parser->vocab == NULL) {
+        log_error("Error initializing vocabulary\n");
+        address_parser_destroy(parser);
+        parser = NULL;
+        goto exit_hashes_allocated;
+    }
+
+    kh_foreach(phrase_counts, token, count, {
+        if (!str_uint32_hash_incr_by(vocab, token, count)) {
+            log_error("Error adding phrases to vocabulary\n");
+            address_parser_destroy(parser);
+            parser = NULL;
+            goto exit_hashes_allocated;
+        }
+    })
+
+    kh_foreach(postal_code_counts, token, count, {
+        if (!str_uint32_hash_incr_by(vocab, token, count)) {
+            log_error("Error adding postal_codes to vocabulary\n");
+            address_parser_destroy(parser);
+            parser = NULL;
+            goto exit_hashes_allocated;
+        }
+    })
+
+    log_info("Creating phrase_types trie\n");
+
+    bool sort_reverse = true;
+    char **phrase_keys = str_uint32_hash_sort_keys_by_value(phrase_counts, sort_reverse);
+    if (phrase_keys == NULL) {
+        log_error("phrase_keys == NULL\n");
+        address_parser_destroy(parser);
+        parser = NULL;
+        goto exit_hashes_allocated;
+    }
+
+    size_t hash_size = kh_size(phrase_counts);
+    address_parser_types_array *phrase_types_array = address_parser_types_array_new_size(hash_size);
+
+    for (size_t idx = 0; idx < hash_size; idx++) {
+        char *phrase_key = phrase_keys[idx];
+        khiter_t pk = kh_get(str_uint32, phrase_counts, phrase_key);
+        if (pk == kh_end(phrase_counts)) {
+            log_error("Key %zu did not exist in phrase_counts: %s\n", idx, phrase_key);
+            address_parser_destroy(parser);
+            parser = NULL;
+            goto exit_hashes_allocated;
+        }
+
+        uint32_t phrase_count = kh_value(phrase_counts, pk);
+        if (phrase_count < MIN_PHRASE_COUNT) {
+            token = (char *)kh_key(phrase_counts, pk);
+            kh_del(str_uint32, phrase_counts, pk);
+            free((char *)token);
+            continue;
+        }
+
+        k = kh_get(phrase_stats, phrase_stats, phrase_key);
+
+        if (k == kh_end(phrase_stats)) {
+            log_error("Key %zu did not exist in phrase_stats: %s\n", idx, phrase_key);
+            address_parser_destroy(parser);
+            parser = NULL;
+            goto exit_hashes_allocated;
+        }
+
+        stats = kh_value(phrase_stats, k);
+
         class_counts = stats.class_counts;
-        int most_common = -1;
+        int32_t most_common = -1;
         uint32_t max_count = 0;
         uint32_t total = 0;
         for (int i = 0; i < NUM_ADDRESS_PARSER_BOUNDARY_TYPES; i++) {
@@ -477,63 +762,140 @@ address_parser_t *address_parser_init(char *filename) {
             }
         }
 
-        if (most_common > -1 && total >= MIN_PHRASE_COUNT) {
-            stats.parser_types.most_common = (uint32_t)most_common;
-            ret = 0;
-            char *key = strdup(token);
-            k = kh_put(str_uint32, phrase_types, key, &ret);
-            if (ret < 0) {
-                log_error("Error on kh_put in phrase_types\n");
-                free(key);
+        if (most_common > -1) {
+            address_parser_types_t types = {.components = stats.components, .most_common = (uint16_t)most_common};
+
+            kh_value(phrase_counts, pk) = (uint32_t)phrase_types_array->n;
+            address_parser_types_array_push(phrase_types_array, types);
+        }
+    }
+
+    if (phrase_keys != NULL) {
+        free(phrase_keys);
+    }
+
+    parser->phrases = trie_new_from_hash(phrase_counts);
+    if (parser->phrases == NULL) {
+        log_error("Error converting phrase_counts to trie\n");
+        address_parser_destroy(parser);
+        parser = NULL;
+        goto exit_hashes_allocated;
+    }
+
+    if (phrase_types_array == NULL) {
+        log_error("phrase_types_array is NULL\n");
+        address_parser_destroy(parser);
+        parser = NULL;
+        goto exit_hashes_allocated;
+    }
+
+    parser->phrase_types = phrase_types_array;
+
+    char **postal_code_keys = str_uint32_hash_sort_keys_by_value(postal_code_counts, true);
+    if (postal_code_keys == NULL) {
+        log_error("postal_code_keys == NULL\n");
+        free(phrase_keys);
+        address_parser_destroy(parser);
+        parser = NULL;
+        goto exit_hashes_allocated;
+    }
+
+    hash_size = kh_size(postal_code_counts);
+    for (size_t idx = 0; idx < hash_size; idx++) {
+        char *phrase_key = postal_code_keys[idx];
+
+        k = kh_get(str_uint32, postal_code_counts, phrase_key);
+        if (k == kh_end(postal_code_counts)) {
+            log_error("Key %zu did not exist in postal_code_counts: %s\n", idx, phrase_key);
+            address_parser_destroy(parser);
+            parser = NULL;
+            goto exit_hashes_allocated;
+        }
+        uint32_t pc_count = kh_value(postal_code_counts, k);
+        kh_value(postal_code_counts, k) = (uint32_t)idx;
+    }
+
+    if (postal_code_keys != NULL) {
+        free(postal_code_keys);
+    }
+
+    parser->postal_codes = trie_new_from_hash(postal_code_counts);
+    if (parser->postal_codes == NULL) {
+        log_error("Error converting postal_code_counts to trie\n");
+        address_parser_destroy(parser);
+        parser = NULL;
+        goto exit_hashes_allocated;
+    }
+
+    khash_t(str_set) *context_phrases;
+    const char *context_token;
+
+    uint32_t postal_code_id;
+    uint32_t context_phrase_id;
+
+    kh_foreach(postal_code_admin_contexts, token, context_phrases, {
+        if (!trie_get_data(parser->postal_codes, (char *)token, &postal_code_id)) {
+            log_error("Key %s did not exist in parser->postal_codes\n", (char *)token);
+            address_parser_destroy(parser);
+            parser = NULL;
+            goto exit_hashes_allocated;
+        }
+        kh_foreach_key(context_phrases, context_token, {
+            if (!trie_get_data(parser->phrases, (char *)context_token, &context_phrase_id)) {
+                log_error("Key %s did not exist in phrases trie\n", (char *)context_token);
+                address_parser_destroy(parser);
+                parser = NULL;
                 goto exit_hashes_allocated;
             }
 
-            kh_value(phrase_types, k) = stats.parser_types.value;
-        }
+            postal_code_context_value_t postal_code_context = POSTAL_CODE_CONTEXT(postal_code_id, context_phrase_id);
+
+            ret = 0;
+            k = kh_put(int64_set, postal_code_contexts, postal_code_context.value, &ret);
+            if (ret < 0) {
+                log_error("Error in kh_put for postal_code_contexts\n");
+                address_parser_destroy(parser);
+                parser = NULL;
+                goto exit_hashes_allocated;
+            }
+        })
     })
 
-    parser->model = NULL;
-
-    log_info("Creating vocab trie\n");
-
-    parser->vocab = trie_new_from_hash(vocab);
-    if (parser->vocab == NULL) {
-        log_error("Error initializing vocabulary\n");
+    // NOTE: don't destroy this during deallocation
+    if (postal_code_contexts == NULL) {
+        log_error("postal_code_contexts is NULL\n");
         address_parser_destroy(parser);
         parser = NULL;
         goto exit_hashes_allocated;
     }
-
-    log_info("Creating phrase_types trie\n");
-
-    parser->phrase_types = trie_new_from_hash(phrase_types);
-    if (parser->phrase_types == NULL) {
-        log_error("Error converting phrase_types to trie\n");
-        address_parser_destroy(parser);
-        parser = NULL;
-        goto exit_hashes_allocated;
-    }
+    parser->postal_code_contexts = postal_code_contexts;
 
     log_info("Freeing memory from initialization\n");
 
 exit_hashes_allocated:
     // Free memory for hashtables, etc.
+    if (vocab_context != NULL) {
+        char_array_destroy(vocab_context->token_builder);
+        char_array_destroy(vocab_context->postal_code_token_builder);
+        char_array_destroy(vocab_context->sub_token_builder);
+        char_array_destroy(vocab_context->phrase_builder);
+        phrase_array_destroy(vocab_context->dictionary_phrases);
+        int64_array_destroy(vocab_context->phrase_memberships);
+        phrase_array_destroy(vocab_context->postal_code_dictionary_phrases);
+        token_array_destroy(vocab_context->sub_tokens);
+        free(vocab_context);
+    }
 
-    char_array_destroy(token_builder);
-    char_array_destroy(postcode_token_builder);
-    char_array_destroy(sub_token_builder);
-    char_array_destroy(phrase_builder);
     cstring_array_destroy(phrases);
     cstring_array_destroy(phrase_labels);
-    phrase_array_destroy(dictionary_phrases);
-    token_array_destroy(sub_tokens);
+
     address_parser_data_set_destroy(data_set);
 
     if (phrase_counts_trie != NULL) {
         trie_destroy(phrase_counts_trie);
     }
 
-    kh_foreach(vocab, token, count, {
+    kh_foreach_key(vocab, token, {
         free((char *)token);
     })
     kh_destroy(str_uint32, vocab);
@@ -545,19 +907,37 @@ exit_hashes_allocated:
 
     kh_destroy(phrase_stats, phrase_stats);
 
-    kh_foreach(phrase_counts, token, count, {
+    kh_foreach_key(phrase_counts, token, {
         free((char *)token);
     })
 
     kh_destroy(str_uint32, phrase_counts);
 
-    kh_foreach(phrase_types, token, count, {
+    kh_foreach_key(phrase_types, token, {
         free((char *)token);
     })
-    kh_destroy(str_uint32, phrase_types);
+    kh_destroy(phrase_types, phrase_types);
+
+    khash_t(str_set) *pc_set;
+
+    kh_foreach(postal_code_admin_contexts, token, pc_set, {
+        if (pc_set != NULL) {
+            kh_foreach_key(pc_set, context_token, {
+                free((char *)context_token);
+            })
+            kh_destroy(str_set, pc_set);
+        }
+        free((char *)token);
+    })
+
+    kh_destroy(postal_code_context_phrases, postal_code_admin_contexts);
+
+    kh_foreach_key(postal_code_counts, token, {
+        free((char *)token);
+    })
+    kh_destroy(str_uint32, postal_code_counts);
 
     return parser;
-
 }
 
 
