@@ -8,7 +8,8 @@
 
 #define ADDRESS_PARSER_MODEL_FILENAME "address_parser.dat"
 #define ADDRESS_PARSER_VOCAB_FILENAME "address_parser_vocab.trie"
-#define ADDRESS_PARSER_PHRASE_FILENAME "address_parser_phrases.trie"
+#define ADDRESS_PARSER_PHRASE_FILENAME "address_parser_phrases.dat"
+#define ADDRESS_PARSER_POSTAL_CODES_FILENAME "address_parser_postal_codes.dat"
 
 #define UNKNOWN_WORD "UNKNOWN"
 #define UNKNOWN_NUMERIC "UNKNOWN_NUMERIC"
@@ -71,9 +72,64 @@ bool address_parser_save(address_parser_t *self, char *output_dir) {
     char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, ADDRESS_PARSER_PHRASE_FILENAME);
     char *phrases_path = char_array_get_string(path);
 
-    if (!trie_save(self->phrase_types, phrases_path)) {
+    FILE *phrases_file = fopen(phrases_path, "w+");
+    if (phrases_file == NULL || self->phrases == NULL) {
         return false;
     }
+
+    if (!trie_write(self->phrases, phrases_file)) {
+        return false;
+    }
+
+    if (self->phrase_types == NULL) {
+        return false;
+    }
+
+    size_t num_phrase_types = self->phrase_types->n;
+    if (!file_write_uint64(phrases_file, num_phrase_types)) {
+        return false;
+    }
+
+    for (size_t i = 0; i < self->phrase_types->n; i++) {
+        address_parser_types_t phrase_type_value = self->phrase_types->a[i];
+        if (!file_write_uint32(phrases_file, phrase_type_value.value)) {
+            return false;
+        }
+    }
+
+    fclose(phrases_file);
+
+    char_array_clear(path);
+
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, ADDRESS_PARSER_POSTAL_CODES_FILENAME);
+    char *postal_codes_path = char_array_get_string(path);
+
+    FILE *postal_codes_file = fopen(postal_codes_path, "w+");
+    if (postal_codes_file == NULL || self->postal_codes == NULL) {
+        return false;
+    }
+
+    if (!trie_write(self->postal_codes, postal_codes_file)) {
+        return false;
+    }
+
+    if (self->postal_code_contexts == NULL) {
+        return false;
+    }
+
+    size_t num_postal_code_contexts = kh_size(self->postal_code_contexts);
+    if (!file_write_uint64(postal_codes_file, num_postal_code_contexts)) {
+        return false;
+    }
+
+    uint64_t postal_code_context;
+    kh_foreach_key(self->postal_code_contexts, postal_code_context, {
+        if (!file_write_uint64(postal_codes_file, postal_code_context)) {
+            return false;
+        }
+    })
+
+    fclose(postal_codes_file);
 
     char_array_destroy(path);
 
@@ -111,9 +167,7 @@ bool address_parser_load(char *dir) {
     trie_t *vocab = trie_load(vocab_path);
 
     if (vocab == NULL) {
-        address_parser_destroy(parser);
-        char_array_destroy(path);
-        return false;
+        goto exit_address_parser_created;
     }
 
     parser->vocab = vocab;
@@ -121,21 +175,98 @@ bool address_parser_load(char *dir) {
     char_array_clear(path);
 
     char_array_add_joined(path, PATH_SEPARATOR, true, 2, dir, ADDRESS_PARSER_PHRASE_FILENAME);
-
     char *phrases_path = char_array_get_string(path);
 
-    trie_t *phrase_types = trie_load(phrases_path);
-
-    if (phrase_types == NULL) {
-        address_parser_destroy(parser);
-        char_array_destroy(path);
-        return false;
+    FILE *phrases_file = fopen(phrases_path, "r");
+    if (phrases_file == NULL) {
+        goto exit_address_parser_created;
     }
 
-    parser->phrase_types = phrase_types;
+    parser->phrases = trie_read(phrases_file);
+    if (parser->phrases == NULL) {
+        goto exit_address_parser_created;
+    }
+
+    uint64_t num_phrase_types;
+
+    if (!file_read_uint64(phrases_file, &num_phrase_types)) {
+        goto exit_address_parser_created;
+    }
+
+    parser->phrase_types = address_parser_types_array_new_size(num_phrase_types);
+
+    uint32_array *phrase_type_values = uint32_array_new_size(num_phrase_types);
+    if (!file_read_uint32_array(phrases_file, phrase_type_values->a, num_phrase_types)) {
+        uint32_array_destroy(phrase_type_values);
+        goto exit_address_parser_created;
+    }
+    phrase_type_values->n = num_phrase_types;
+
+    for (size_t i = 0; i < phrase_type_values->n; i++) {
+        uint32_t phrase_type_value = phrase_type_values->a[i];
+        address_parser_types_t phrase_type = {.value = phrase_type_value};
+        address_parser_types_array_push(parser->phrase_types, phrase_type);
+    }
+
+    uint32_array_destroy(phrase_type_values);
+
+    fclose(phrases_file);
+
+    char_array_clear(path);
+
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, dir, ADDRESS_PARSER_POSTAL_CODES_FILENAME);
+
+    char *postal_codes_path = char_array_get_string(path);
+
+    FILE *postal_codes_file = fopen(postal_codes_path, "r");
+    if (postal_codes_file == NULL) {
+        goto exit_address_parser_created;
+    }
+
+    parser->postal_codes = trie_read(postal_codes_file);
+    if (parser->postal_codes == NULL) {
+        goto exit_address_parser_created;
+    }
+
+    uint64_t num_postal_code_contexts;
+
+    if (!file_read_uint64(postal_codes_file, &num_postal_code_contexts)) {
+        goto exit_address_parser_created;
+    }
+
+    log_info("num_postal_code_contexts = %llu\n", num_postal_code_contexts);
+
+    uint64_array *postal_code_context_values = uint64_array_new_size(num_postal_code_contexts);
+    if (!file_read_uint64_array(postal_codes_file, postal_code_context_values->a, num_postal_code_contexts)) {
+        uint64_array_destroy(postal_code_context_values);
+        goto exit_address_parser_created;
+    }
+    postal_code_context_values->n = num_postal_code_contexts;
+
+
+    parser->postal_code_contexts = kh_init(int64_set);
+    if (parser->postal_code_contexts == NULL) {
+        goto exit_address_parser_created;
+    }
+
+    for (size_t i = 0; i < postal_code_context_values->n; i++) {
+        uint64_t context_value = postal_code_context_values->a[i];
+        int ret = 0;
+        kh_put(int64_set, parser->postal_code_contexts, context_value, &ret);
+        if (ret < 0) {
+            goto exit_address_parser_created;
+        }
+    }
+
+    uint64_array_destroy(postal_code_context_values);
 
     char_array_destroy(path);
     return true;
+
+exit_address_parser_created:
+    address_parser_destroy(parser);
+    char_array_destroy(path);
+    return false;
 }
 
 void address_parser_destroy(address_parser_t *self) {
@@ -149,8 +280,20 @@ void address_parser_destroy(address_parser_t *self) {
         trie_destroy(self->vocab);
     }
 
+    if (self->phrases != NULL) {
+        trie_destroy(self->phrases);
+    }
+
     if (self->phrase_types != NULL) {
-        trie_destroy(self->phrase_types);
+        address_parser_types_array_destroy(self->phrase_types);
+    }
+
+    if (self->postal_codes != NULL) {
+        trie_destroy(self->postal_codes);
+    }
+
+    if (self->postal_code_contexts != NULL) {
+        kh_destroy(int64_set, self->postal_code_contexts);
     }
 
     free(self);
@@ -272,6 +415,14 @@ void address_parser_context_destroy(address_parser_context_t *self) {
 
     if (self->component_phrase_memberships != NULL) {
         int64_array_destroy(self->component_phrase_memberships);
+    }
+
+    if (self->postal_code_phrases != NULL) {
+        phrase_array_destroy(self->postal_code_phrases);
+    }
+
+    if (self->postal_code_phrase_memberships != NULL) {
+        int64_array_destroy(self->postal_code_phrase_memberships);
     }
 
     if (self->prefix_phrases != NULL) {
@@ -413,6 +564,16 @@ address_parser_context_t *address_parser_context_new(void) {
         goto exit_address_parser_context_allocated;
     }
 
+    context->postal_code_phrases = phrase_array_new();
+    if (context->postal_code_phrases == NULL) {
+        goto exit_address_parser_context_allocated;
+    }
+
+    context->postal_code_phrase_memberships = int64_array_new();
+    if (context->postal_code_phrase_memberships == NULL) {
+        goto exit_address_parser_context_allocated;
+    }
+
     context->prefix_phrases = phrase_array_new();
     if (context->prefix_phrases == NULL) {
         goto exit_address_parser_context_allocated;
@@ -429,29 +590,6 @@ exit_address_parser_context_allocated:
     address_parser_context_destroy(context);
     return NULL;
 }
-
-inline static void fill_phrase_memberships(phrase_array *phrases, int64_array *phrase_memberships, size_t len) {
-    int64_t i = 0;
-    for (int64_t j = 0; j < phrases->n; j++) {
-        phrase_t phrase = phrases->a[j];
-
-        for (; i < phrase.start; i++) {
-            int64_array_push(phrase_memberships, NULL_PHRASE_MEMBERSHIP);
-            log_debug("token i=%lld, null phrase membership\n", i);
-        }
-
-        for (i = phrase.start; i < phrase.start + phrase.len; i++) {
-            log_debug("token i=%lld, phrase membership=%lld\n", i, j);
-            int64_array_push(phrase_memberships, j);
-        }
-    }
-
-    for (; i < len; i++) {
-        log_debug("token i=%lld, null phrase membership\n", i);
-        int64_array_push(phrase_memberships, NULL_PHRASE_MEMBERSHIP);
-    }
-}
-
 
 void address_parser_context_fill(address_parser_context_t *context, address_parser_t *parser, tokenized_string_t *tokenized_str, char *language, char *country) {
     uint32_t token_index;
@@ -528,8 +666,8 @@ void address_parser_context_fill(address_parser_context_t *context, address_pars
 
     size_t num_tokens = tokens->n;
 
-    bool have_address_phrases = search_address_dictionaries_tokens_with_phrases(normalized_str, normalized_tokens, context->language, &context->address_dictionary_phrases);
-    fill_phrase_memberships(address_dictionary_phrases, address_phrase_memberships, num_tokens);
+    bool have_address_phrases = search_address_dictionaries_tokens_with_phrases(normalized_str, normalized_tokens, context->language, &address_dictionary_phrases);
+    token_phrase_memberships(address_dictionary_phrases, address_phrase_memberships, num_tokens);
 
     for (size_t i = 0; i < num_tokens; i++) {
         token_t token = tokens->a[i];
@@ -560,8 +698,17 @@ void address_parser_context_fill(address_parser_context_t *context, address_pars
     phrase_array *component_phrases = context->component_phrases;
     int64_array *component_phrase_memberships = context->component_phrase_memberships;
 
-    bool have_component_phrases = trie_search_tokens_with_phrases(parser->phrase_types, normalized_str_admin, normalized_admin_tokens, &component_phrases);
-    fill_phrase_memberships(component_phrases, component_phrase_memberships, num_tokens);
+    bool have_component_phrases = trie_search_tokens_with_phrases(parser->phrases, normalized_str_admin, normalized_admin_tokens, &component_phrases);
+    token_phrase_memberships(component_phrases, component_phrase_memberships, num_tokens);
+
+    phrase_array_clear(context->postal_code_phrases);
+    int64_array_clear(context->postal_code_phrase_memberships);
+
+    phrase_array *postal_code_phrases = context->postal_code_phrases;
+    int64_array *postal_code_phrase_memberships = context->postal_code_phrase_memberships;
+
+    bool have_postal_code_phrases = trie_search_tokens_with_phrases(parser->postal_codes, normalized_str_admin, normalized_admin_tokens, &postal_code_phrases);
+    token_phrase_memberships(postal_code_phrases, postal_code_phrase_memberships, num_tokens);
 
 }
 
@@ -585,7 +732,7 @@ typedef struct address_parser_phrase {
     phrase_t phrase;
 } address_parser_phrase_t;
 
-static inline address_parser_phrase_t word_or_phrase_at_index(tokenized_string_t *tokenized, address_parser_context_t *context, uint32_t i) {
+static inline address_parser_phrase_t word_or_phrase_at_index(address_parser_t *parser, tokenized_string_t *tokenized, address_parser_context_t *context, uint32_t i) {
     phrase_t phrase;
     address_parser_phrase_t response;
     char *phrase_string = NULL;
@@ -603,13 +750,8 @@ static inline address_parser_phrase_t word_or_phrase_at_index(tokenized_string_t
         return response;
     }
 
-    address_parser_types_t types;
-
     phrase = phrase_at_index(context->component_phrases, context->component_phrase_memberships, i);
     if (phrase.len > 0) {
-        types.value = phrase.data;
-        uint32_t component_phrase_types = types.components;
-
         phrase_string = cstring_array_get_phrase(context->normalized_admin, context->context_component_phrase, phrase);
 
         response = (address_parser_phrase_t){
@@ -815,6 +957,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     int64_array *address_phrase_memberships = context->address_phrase_memberships;
     phrase_array *component_phrases = context->component_phrases;
     int64_array *component_phrase_memberships = context->component_phrase_memberships;
+    phrase_array *postal_code_phrases = context->postal_code_phrases;
+    int64_array *postal_code_phrase_memberships = context->postal_code_phrase_memberships;
     cstring_array *normalized = context->normalized;
 
     uint32_array *separators = context->separators;
@@ -853,6 +997,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
     bool add_word_feature = true;
 
+    size_t num_tokens = tokenized->tokens->n;
+
     // Address dictionary phrases
     if (address_phrase_index != NULL_PHRASE_MEMBERSHIP) {
         phrase = address_dictionary_phrases->a[address_phrase_index];
@@ -870,7 +1016,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             log_warn("expansion_value is NULL. word=%s, sentence=%s\n", word, tokenized->str);
         }
 
-        if (address_phrase_types & (ADDRESS_STREET | ADDRESS_HOUSE_NUMBER | ADDRESS_NAME | ADDRESS_UNIT)) {
+        if (address_phrase_types & (ADDRESS_STREET | ADDRESS_HOUSE_NUMBER | ADDRESS_NAME | ADDRESS_UNIT | ADDRESS_POSTAL_CODE)) {
             phrase_string = cstring_array_get_phrase(context->normalized, phrase_tokens, phrase);
 
             add_word_feature = false;
@@ -879,7 +1025,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             add_phrase_features(features, address_phrase_types, ADDRESS_STREET, "street", phrase_string);
             add_phrase_features(features, address_phrase_types, ADDRESS_NAME, "name", phrase_string);
             add_phrase_features(features, address_phrase_types, ADDRESS_HOUSE_NUMBER, "house_number", phrase_string);
-
+            add_phrase_features(features, address_phrase_types, ADDRESS_POSTAL_CODE, "postal_code", phrase_string);
         }
     }
 
@@ -888,20 +1034,28 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
     address_parser_types_t types;
 
-    bool possible_postal_code = false;
-
     // Component phrases
     if (component_phrase_index != NULL_PHRASE_MEMBERSHIP) {
         phrase = component_phrases->a[component_phrase_index];
 
         component_phrase_string = cstring_array_get_phrase(context->normalized_admin, component_phrase_tokens, phrase);
         
-        types.value = phrase.data;
+        uint32_t component_phrase_index = phrase.data;
+        if (component_phrase_index > parser->phrase_types->n) {
+            log_error("Invalid component_phrase_index: %u (parser->phrase_types->n=%zu)\n", component_phrase_index, parser->phrase_types->n);
+            return false;
+        }
+
+        types = parser->phrase_types->a[component_phrase_index];
+
         uint32_t component_phrase_types = types.components;
         uint32_t most_common = types.most_common;
 
-        if (last_index >= (ssize_t)phrase.start - 1 || next_index <= (ssize_t)phrase.start + phrase.len - 1) {
+        if (last_index >= (ssize_t)phrase.start - 1) {
             last_index = (ssize_t)phrase.start - 1;
+        }
+
+        if (next_index < (ssize_t)phrase.start + phrase.len) {
             next_index = (ssize_t)phrase.start + phrase.len;
         }
 
@@ -917,33 +1071,99 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_ISLAND, "island", component_phrase_string);
             add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_STATE_DISTRICT, "state_district", component_phrase_string);
             add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_STATE, "state", component_phrase_string);
-            add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_POSTAL_CODE, "postal_code", component_phrase_string);
             add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_COUNTRY_REGION, "country_region", component_phrase_string);
             add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_COUNTRY, "country", component_phrase_string);
             add_phrase_features(features, component_phrase_types, ADDRESS_COMPONENT_WORLD_REGION, "world_region", component_phrase_string);
         }
 
-        if (most_common == ADDRESS_PARSER_BOUNDARY_CITY) {
-            feature_array_add(features, 2, "commonly city", component_phrase_string);
-        } else if (most_common == ADDRESS_PARSER_BOUNDARY_STATE) {
-            feature_array_add(features, 2, "commonly state", component_phrase_string);
-        } else if (most_common == ADDRESS_PARSER_BOUNDARY_COUNTRY) {
-            feature_array_add(features, 2, "commonly country", component_phrase_string);
-        } else if (most_common == ADDRESS_PARSER_BOUNDARY_COUNTRY_REGION) {
-            feature_array_add(features, 2, "commonly country_region", component_phrase_string);
-        } else if (most_common == ADDRESS_PARSER_BOUNDARY_STATE_DISTRICT) {
-            feature_array_add(features, 2, "commonly state_district", component_phrase_string);
-        } else if (most_common == ADDRESS_PARSER_BOUNDARY_ISLAND) {
-            feature_array_add(features, 2, "commonly island", component_phrase_string);
-        } else if (most_common == ADDRESS_PARSER_BOUNDARY_SUBURB) {
-            feature_array_add(features, 2, "commonly suburb", component_phrase_string);
-        } else if (most_common == ADDRESS_PARSER_BOUNDARY_CITY_DISTRICT) {
-            feature_array_add(features, 2, "commonly city_district", component_phrase_string);
-        } else if (most_common == ADDRESS_PARSER_BOUNDARY_POSTAL_CODE) {
-            feature_array_add(features, 2, "commonly postal_code", component_phrase_string);
-            possible_postal_code = true;
+        if (component_phrase_types != most_common) {
+            if (most_common == ADDRESS_PARSER_BOUNDARY_CITY) {
+                feature_array_add(features, 2, "commonly city", component_phrase_string);
+            } else if (most_common == ADDRESS_PARSER_BOUNDARY_COUNTRY) {
+                feature_array_add(features, 2, "commonly country", component_phrase_string);
+            } else if (most_common == ADDRESS_PARSER_BOUNDARY_SUBURB) {
+                feature_array_add(features, 2, "commonly suburb", component_phrase_string);
+            } else if (most_common == ADDRESS_PARSER_BOUNDARY_CITY_DISTRICT) {
+                feature_array_add(features, 2, "commonly city_district", component_phrase_string);
+            } else if (most_common == ADDRESS_PARSER_BOUNDARY_STATE) {
+                feature_array_add(features, 2, "commonly state", component_phrase_string);
+            } else if (most_common == ADDRESS_PARSER_BOUNDARY_COUNTRY_REGION) {
+                feature_array_add(features, 2, "commonly country_region", component_phrase_string);
+            } else if (most_common == ADDRESS_PARSER_BOUNDARY_STATE_DISTRICT) {
+                feature_array_add(features, 2, "commonly state_district", component_phrase_string);
+            } else if (most_common == ADDRESS_PARSER_BOUNDARY_ISLAND) {
+                feature_array_add(features, 2, "commonly island", component_phrase_string);
+            }
         }
 
+    }
+
+    bool possible_postal_code = false;
+    bool postal_code_have_admin = false;
+    int64_t postal_code_phrase_index = postal_code_phrase_memberships->a[idx];
+    phrase_t postal_code_phrase = NULL_PHRASE;
+
+    if (postal_code_phrase_index != NULL_PHRASE_MEMBERSHIP) {
+        postal_code_phrase = postal_code_phrases->a[postal_code_phrase_index];
+
+        uint32_t postal_code_id = postal_code_phrase.data;
+
+        possible_postal_code = true;
+
+        if (last_index >= (ssize_t)postal_code_phrase.start - 1) {
+            last_index = (ssize_t)postal_code_phrase.start - 1;
+        }
+
+        if (next_index < (ssize_t)postal_code_phrase.start + postal_code_phrase.len) {
+            next_index = (ssize_t)postal_code_phrase.start + postal_code_phrase.len;
+        }
+
+        uint32_t admin_id;
+        uint64_t postal_code_context;
+
+        khiter_t k;
+
+        if (last_index >= 0) {
+            int64_t last_component_phrase_index = component_phrase_memberships->a[last_index];
+            if (last_component_phrase_index != NULL_PHRASE_MEMBERSHIP) {
+                phrase_t last_component_phrase = component_phrases->a[last_component_phrase_index];
+                admin_id = last_component_phrase.data;
+                postal_code_context_value_t postal_code_context_value = POSTAL_CODE_CONTEXT(postal_code_id, admin_id);
+                postal_code_context = postal_code_context_value.value;
+
+                k = kh_get(int64_set, parser->postal_code_contexts, postal_code_context);
+
+                if (k != kh_end(parser->postal_code_contexts)) {
+                    postal_code_have_admin = true;
+                }
+            }
+        }
+
+        if (!postal_code_have_admin && next_index < num_tokens) {
+            int64_t next_component_phrase_index = component_phrase_memberships->a[next_index];
+            if (next_component_phrase_index != NULL_PHRASE_MEMBERSHIP) {
+                phrase_t next_component_phrase = component_phrases->a[next_component_phrase_index];
+                admin_id = next_component_phrase.data;
+                postal_code_context_value_t postal_code_context_value = POSTAL_CODE_CONTEXT(postal_code_id, admin_id);
+                postal_code_context = postal_code_context_value.value;
+
+                k = kh_get(int64_set, parser->postal_code_contexts, postal_code_context);
+
+                if (k != kh_end(parser->postal_code_contexts)) {
+                    postal_code_have_admin = true;
+                }
+            }
+        }
+
+    }
+
+    if (possible_postal_code) {
+        if (postal_code_have_admin) {
+            feature_array_add(features, 1, "postcode have context");
+            feature_array_add(features, 2, "postcode have context", word);
+        } else {
+            feature_array_add(features, 2, "postcode no context", word);
+        }
     }
 
     uint32_t word_freq = word_vocab_frequency(parser, word);
@@ -1057,7 +1277,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
                 hyphenated_word_offset += next_hyphen_index + 1;
                 first_sub_token = false;
 
-                log_debug("next_hyphen_index=%d\n", next_hyphen_index);
+                log_debug("next_hyphen_index=%zd\n", next_hyphen_index);
             } while(next_hyphen_index >= 0);
 
         }
@@ -1101,7 +1321,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     }
 
     if (last_index >= 0) {
-        address_parser_phrase_t prev_word_or_phrase = word_or_phrase_at_index(tokenized, context, last_index);
+        address_parser_phrase_t prev_word_or_phrase = word_or_phrase_at_index(parser, tokenized, context, last_index);
         char *prev_word = prev_word_or_phrase.str;
 
         if (prev_word_or_phrase.type == ADDRESS_PARSER_NULL_PHRASE) {
@@ -1123,10 +1343,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         feature_array_add(features, 3, "prev word+word", prev_word, word);
     }
 
-    size_t num_tokens = tokenized->tokens->n;
-
     if (next_index < num_tokens) {
-        address_parser_phrase_t next_word_or_phrase = word_or_phrase_at_index(tokenized, context, next_index);
+        address_parser_phrase_t next_word_or_phrase = word_or_phrase_at_index(parser, tokenized, context, next_index);
         char *next_word = next_word_or_phrase.str;
         size_t next_word_len = 1;
 
@@ -1148,7 +1366,6 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
         // Prev tag, current word and next word
         //feature_array_add(features, 4, "prev tag+word+next word", prev || "START", word, next_word);
-
     }
 
     if (parser->options.print_features) {
@@ -1228,18 +1445,24 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
     address_parser_response_t *response = NULL;
 
     // If the whole input string is a single known phrase at the SUBURB level or higher, bypass sequence prediction altogether
-
+    phrase_t only_phrase = NULL_PHRASE;
+    bool is_postal = false;
     if (context->component_phrases->n == 1) {
-        phrase_t only_phrase = context->component_phrases->a[0];
-        if (only_phrase.start == 0 && only_phrase.len == tokenized_str->tokens->n) {
-            address_parser_types_t types;
+        only_phrase = context->component_phrases->a[0];
+    } else if (context->postal_code_phrases->n == 1) {
+        only_phrase = context->postal_code_phrases->a[0];
+        is_postal = true;
+    }
 
-            types.value = only_phrase.data;
-            uint32_t most_common = types.most_common;
+    if (only_phrase.start == 0 && only_phrase.len == tokenized_str->tokens->n && only_phrase.len > 0) {
+        uint32_t most_common = 0;
 
-            char *label = NULL;
+        char *label = NULL;
 
-            response = address_parser_response_new();
+        if (!is_postal) {
+            uint32_t component_phrase_index = only_phrase.data;
+            address_parser_types_t types = parser->phrase_types->a[component_phrase_index];
+            most_common = types.most_common;
 
             if (most_common == ADDRESS_PARSER_BOUNDARY_CITY) {
                 label = strdup(ADDRESS_PARSER_LABEL_CITY);
@@ -1257,25 +1480,27 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
                 label = strdup(ADDRESS_PARSER_LABEL_CITY_DISTRICT);
             } else if (most_common == ADDRESS_PARSER_BOUNDARY_WORLD_REGION) {
                 label = strdup(ADDRESS_PARSER_LABEL_WORLD_REGION);
-            } else if (most_common == ADDRESS_PARSER_BOUNDARY_POSTAL_CODE) {
-                label = strdup(ADDRESS_PARSER_LABEL_POSTAL_CODE);
             }
+        } else {
+            label = strdup(ADDRESS_PARSER_LABEL_POSTAL_CODE);
+        }
 
-            // Implicit: if most_common is not one of the above, ignore and parse regularly
-            if (label != NULL) {
-                char **single_label = malloc(sizeof(char *));
-                single_label[0] = label;
-                char **single_component = malloc(sizeof(char *));
-                single_component[0] = strdup(normalized);
+        response = address_parser_response_new();
 
-                response->num_components = 1;
-                response->labels = single_label;
-                response->components = single_component;
+        // Implicit: if most_common is not one of the above, ignore and parse regularly
+        if (label != NULL) {
+            char **single_label = malloc(sizeof(char *));
+            single_label[0] = label;
+            char **single_component = malloc(sizeof(char *));
+            single_component[0] = strdup(normalized);
 
-                token_array_destroy(tokens);
-                tokenized_string_destroy(tokenized_str);
-                return response;
-            }
+            response->num_components = 1;
+            response->labels = single_label;
+            response->components = single_component;
+
+            token_array_destroy(tokens);
+            tokenized_string_destroy(tokenized_str);
+            return response;
         }
     }
 
