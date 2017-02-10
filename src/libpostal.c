@@ -1106,16 +1106,9 @@ bool libpostal_setup_language_classifier(void) {
 
 bool libpostal_setup_parser_datadir(char *datadir) {
     char *parser_dir = NULL;
-    char *geodb_dir = NULL;
 
     if (datadir != NULL) {
         parser_dir = path_join(2, datadir, LIBPOSTAL_ADDRESS_PARSER_SUBDIR);
-        geodb_dir = path_join(2, datadir, LIBPOSTAL_GEODB_SUBDIR);
-    }
-
-    if (!geodb_module_setup(geodb_dir)) {
-        log_error("Error loading geodb module, dir=%s\n", geodb_dir);
-        return false;
     }
 
     if (!address_parser_module_setup(parser_dir)) {
@@ -1125,10 +1118,6 @@ bool libpostal_setup_parser_datadir(char *datadir) {
 
     if (parser_dir != NULL) {
         free(parser_dir);
-    }
-
-    if (geodb_dir != NULL) {
-        free(geodb_dir);
     }
 
     return true;
