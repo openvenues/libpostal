@@ -18,7 +18,7 @@ from geodata.address_expansions.gazetteers import *
 from geodata.address_formatting.formatter import AddressFormatter
 
 from geodata.countries.names import country_names
-from geodata.i18n.google import postcode_regexes
+from geodata.postal_codes.validation import postcode_regexes
 from geodata.names.normalization import name_affixes
 from geodata.places.config import place_config
 

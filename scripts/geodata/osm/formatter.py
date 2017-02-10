@@ -34,7 +34,6 @@ from geodata.configs.utils import nested_get
 from geodata.countries.country_names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import INTERNET_LANGUAGE_DISTRIBUTION
-from geodata.i18n.google import postcode_regexes
 from geodata.i18n.languages import *
 from geodata.intersections.query import Intersection, IntersectionQuery
 from geodata.address_formatting.formatter import AddressFormatter
@@ -45,6 +44,7 @@ from geodata.osm.intersections import OSMIntersectionReader
 from geodata.places.config import place_config
 from geodata.polygons.language_polys import *
 from geodata.polygons.reverse_geocode import *
+from geodata.postal_codes.validation import postcode_regexes
 from geodata.i18n.unicode_paths import DATA_DIR
 from geodata.text.tokenize import tokenize, token_types
 from geodata.text.utils import is_numeric
@@ -1101,10 +1101,11 @@ class OSMAddressFormatter(object):
                             if u';' in v:
                                 v = random.choice(v.split(u';'))
 
-                            for p in v.split(','):
-                                if self.valid_postal_code(country, p):
-                                    revised_tags[AddressFormatter.POSTCODE] = p.strip()
-                                    break
+                            if u',' in v:
+                                for p in v.split(','):
+                                    if self.valid_postal_code(country, p):
+                                        revised_tags[AddressFormatter.POSTCODE] = p.strip()
+                                        break
                     elif k == AddressFormatter.HOUSE:
                         building_venue_names.append((v, building_is_generic_place, building_is_known_venue_type))
 

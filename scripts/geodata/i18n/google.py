@@ -35,26 +35,3 @@ class GoogleI18N(object):
 
 
 google_i18n = GoogleI18N()
-
-
-class PostcodeRegexes(object):
-    def __init__(self):
-        self.responses = {}
-        self.postcode_regexes = {}
-
-    def get(self, country_code):
-        ret = self.postcode_regexes.get(country_code.lower())
-        if ret is None:
-            response = google_i18n.get(country_code)
-            if response:
-                postcode_expression = response.get('zip')
-                if not postcode_expression:
-                    self.postcode_regexes[country_code.lower()] = None
-                    return None
-                ret = re.compile(postcode_expression, re.I)
-                self.postcode_regexes[country_code.lower()] = ret
-
-        return ret
-
-
-postcode_regexes = PostcodeRegexes()
