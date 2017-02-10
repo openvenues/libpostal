@@ -22,6 +22,8 @@
                 "158851392": "city_district"
                 # New York county node
                 "316976731": null
+                # Manhattan node
+                "357644127": "city_district"
             way:
                 # Manhattan
                 "400014249": "city_district"
