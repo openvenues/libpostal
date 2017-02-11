@@ -424,7 +424,7 @@ class OpenAddressesFormatter(object):
                 postcode = components.get(AddressFormatter.POSTCODE, None)
 
                 if postcode:
-                    components[AddressFormatter.POSTCODE] = PostalCodes.add_country_phrase(postcode, country)
+                    components[AddressFormatter.POSTCODE] = PostalCodes.add_country_code(postcode, country)
 
                 # If there's a postcode, we can still use just the city/state/postcode, otherwise discard
                 if (not street and street_required and not house_number) or (street and house_number and (street.lower() == house_number.lower())) or (unit and street and street.lower() == unit.lower()):
