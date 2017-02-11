@@ -1102,7 +1102,7 @@ class OSMAddressFormatter(object):
 
             if len(expanded_postal_codes) == 1:
                 revised_tags[AddressFormatter.POSTCODE] = expanded_postal_codes[0]
-            elif not expanded_postal_codes:
+            else:
                 revised_tags.pop(AddressFormatter.POSTCODE)
                 postal_code = None
 
@@ -1132,20 +1132,6 @@ class OSMAddressFormatter(object):
 
                         if len(expanded_postal_codes) == 1:
                             revised_tags[AddressFormatter.POSTCODE] = expanded_postal_codes[0]
-
-                        m = number_split_regex.search(v)
-
-                        if not m:
-                            revised_tags[k] = v
-                        else:
-                            if u';' in v:
-                                v = random.choice(v.split(u';'))
-
-                            if u',' in v:
-                                for p in v.split(','):
-                                    if self.valid_postal_code(country, p):
-                                        revised_tags[AddressFormatter.POSTCODE] = p.strip()
-                                        break
                     elif k == AddressFormatter.HOUSE:
                         building_venue_names.append((v, building_is_generic_place, building_is_known_venue_type))
 
