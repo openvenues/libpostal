@@ -76,7 +76,7 @@ class PlaceConfig(object):
         config = self.global_config
 
         if country:
-            country_config = self.country_configs.get(country, {})
+            country_config = self.country_configs.get(country.lower(), {})
             if country_config:
                 config = country_config
 
