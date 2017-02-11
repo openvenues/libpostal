@@ -615,7 +615,7 @@ class OSMAddressFormatter(object):
         e.g. addr:postcode="750 Park Pl, Brooklyn, NY 11216", sometimes
         just "NY 11216", etc.
         '''
-        match = self.number_split_regex.search(postal_code)
+        match = number_split_regex.search(postal_code)
         valid = []
 
         should_strip_components = PostalCodes.should_strip_components(country)
@@ -633,7 +633,7 @@ class OSMAddressFormatter(object):
                 valid.append(PostalCodes.add_country_code(postal_code, country))
 
         else:
-            candidates = self.number_split_regex.split(postal_code)
+            candidates = number_split_regex.split(postal_code)
             if not should_strip_components and not needs_validation:
                 return [c.strip() for c in candidates]
 
