@@ -408,6 +408,39 @@ class AddressComponents(object):
 
         return names, components
 
+    def strip_components(self, name, osm_components, country, languages):
+        if not name or not osm_components:
+            return name
+
+        tokens = tokenize(name)
+
+        tokens_lower = normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
+                                         token_options=TOKEN_OPTIONS_DROP_PERIODS)
+
+        names, components = self.place_names_and_components(name, osm_components, country=country, languages=languages)
+
+        phrase_filter = PhraseFilter([(n, '') for n in names])
+
+        stripped = []
+
+        for is_phrase, tokens, value in phrases:
+            if not is_phrase:
+                t, c = tokens
+                if stripped and c not in (token_types.IDEOGRAPHIC_CHAR, token_types.IDEOGRAPHIC_NUMBER):
+                    stripped.append(u' ')
+                stripped.append(t)
+
+        name = u''.join(stripped)
+
+        if self.parens_regex.search(name):
+            name = self.parens_regex.sub(six.u(''), name).strip()
+
+        # If the name contains a comma, stop and only use the phrase before the comma
+        if ',' in name:
+            return name.split(',', 1)[0].strip()
+
+        return name
+
     parens_regex = re.compile('\(.*?\)')
 
     def normalized_place_name(self, name, tag, osm_components, country=None, languages=None, phrase_from_component=False):
