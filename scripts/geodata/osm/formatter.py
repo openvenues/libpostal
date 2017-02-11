@@ -1225,7 +1225,7 @@ class OSMAddressFormatter(object):
         if len(expanded_postal_codes) > 1:
             for postal_code in expanded_postal_codes:
                 address_components[AddressFormatter.POSTCODE] = postal_code
-                self.components.add_postcode_phrase(address_components)
+                self.components.add_postcode_phrase(address_components, language, country=country)
                 formatted_addresses.extend(self.formatted_addresses_with_venue_names(address_components, reduced_venue_names, country, language=language,
                                                                                      tag_components=tag_components, minimal_only=not tag_components))
 
