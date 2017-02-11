@@ -566,7 +566,7 @@ class OSMAddressFormatter(object):
     def valid_postal_code(self, country, postal_code):
         return PostalCodes.is_valid(postal_code, country)
 
-    def extract_valid_postal_codes(self, country, postal_code, validate=True):
+    def parse_valid_postal_codes(self, country, postal_code, validate=True):
         '''
         "Valid" postal codes
         --------------------
@@ -605,6 +605,49 @@ class OSMAddressFormatter(object):
                     postal_codes = valid_postal_codes
 
         return postal_codes
+
+    def expand_postal_codes(self, postal_code, country, languages, osm_components):
+        '''
+        Expanded postal codes
+        ---------------------
+
+        Clean up OSM addr:postcode tag. Sometimes it will be a full address
+        e.g. addr:postcode="750 Park Pl, Brooklyn, NY 11216", sometimes
+        just "NY 11216", etc.
+        '''
+        match = self.number_split_regex.search(postal_code)
+        valid = []
+
+        should_strip_components = PostalCodes.should_strip_components(country)
+        needs_validation = PostalCodes.needs_validation(country)
+
+        if not match:
+            if not should_strip_components and not needs_validation:
+                valid.append(postal_code)
+                return valid
+
+            if should_strip_components:
+                postal_code = self.components.strip_components(postal_code, osm_components, country, languages)
+
+            if not needs_validation or PostalCodes.is_valid(postal_code, country):
+                valid.append(PostalCodes.add_country_code(postal_code, country))
+
+        else:
+            candidates = self.number_split_regex.split(postal_code)
+            if not should_strip_components and not needs_validation:
+                return [c.strip() for c in candidates]
+
+            for candidate in candidates:
+                if should_strip_components:
+                    candidate = self.components.strip_components(candidate, osm_components, country, languages)
+                    if not candidate:
+                        continue
+
+                # If we're splitting, validate every delimited phrase
+                if PostalCodes.is_valid(candidate, country):
+                    valid.append(PostalCodes.add_country_code(candidate, country))
+
+        return valid
 
     def cleanup_place_components(self, address_components, osm_components, country, language, containing_ids, population=None, keep_component=None, population_from_city=False):
         revised_address_components = self.components.dropout_places(address_components, osm_components, country, language, population=population, population_from_city=population_from_city)
@@ -738,7 +781,7 @@ class OSMAddressFormatter(object):
 
         postal_codes = []
         if postal_code:
-            postal_codes = self.extract_valid_postal_codes(country, postal_code)
+            postal_codes = self.parse_valid_postal_codes(country, postal_code)
 
         try:
             population = int(tags.get('population', 0))
@@ -1012,6 +1055,9 @@ class OSMAddressFormatter(object):
         if not (country and candidate_languages):
             return None, None, None
 
+        all_local_languages = set([l for l, d in candidate_languages])
+        random_languages = set(INTERNET_LANGUAGE_DISTRIBUTION)
+
         combined_street = self.combine_street_name(tags)
 
         namespaced_language = self.namespaced_language(tags, candidate_languages)
@@ -1051,21 +1097,14 @@ class OSMAddressFormatter(object):
         zone = None
 
         postal_code = revised_tags.get(AddressFormatter.POSTCODE, None)
+        expanded_postal_codes = []
 
-        postcode_needs_validation = PostalCodes.needs_validation(country)
-        postcode_strip_components = PostalCodes.should_strip_components(country)
+        if postal_code:
+            expanded_postal_codes = self.expand_postal_codes(postal_code, osm_components, country, all_local_languages | random_languages)
 
-        if postal_code and u';' in postal_code:
-            postal_code = random.choice(postal_code.split(u';'))
-
-        if postal_code and u',' in postal_code:
-            for p in postal_code.split(u','):
-                if PostalCodes.is_valid(p, country):
-                    revised_tags[AddressFormatter.POSTCODE] = postal_code = p.strip()
-                    break
-                elif postcode_strip_components:
-
-            else:
+            if len(expanded_postal_codes) == 1:
+                revised_tags[AddressFormatter.POSTCODE] = expanded_postal_codes[0]
+            elif not expanded_postal_codes:
                 revised_tags.pop(AddressFormatter.POSTCODE)
                 postal_code = None
 
@@ -1091,6 +1130,14 @@ class OSMAddressFormatter(object):
                     if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD):
                         revised_tags[k] = v
                     elif k not in revised_tags and k == AddressFormatter.POSTCODE:
+                        expanded_postal_codes = self.expand_postal_codes(v, osm_components, country, all_local_languages | random_languages)
+
+                        if not expanded_postal_codes:
+                            revised_tags.pop(AddressFormatter.POSTCODE)
+                            postal_code = None
+                        elif len(expanded_postal_codes) == 1:
+                            revised_tags[AddressFormatter.POSTCODE] = expanded_postal_codes[0]
+
                         m = number_split_regex.search(v)
 
                         if not m:
@@ -1175,10 +1222,17 @@ class OSMAddressFormatter(object):
             if alternate_house_number is not None:
                 original_house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
                 address_components[AddressFormatter.HOUSE_NUMBER] = alternate_house_number
-                formatted_addresses = self.formatted_addresses_with_venue_names(address_components, reduced_venue_names, country, language=language,
-                                                                                tag_components=tag_components, minimal_only=not tag_components)
+                formatted_addresses.extend(self.formatted_addresses_with_venue_names(address_components, reduced_venue_names, country, language=language,
+                                                                                     tag_components=tag_components, minimal_only=not tag_components))
                 if original_house_number:
                     address_components[AddressFormatter.HOUSE_NUMBER] = original_house_number
+
+        if len(expanded_postal_codes) > 1:
+            for postal_code in expanded_postal_codes:
+                address_components[AddressFormatter.POSTCODE] = postal_code
+                self.components.add_postcode_phrase(address_components)
+                formatted_addresses.extend(self.formatted_addresses_with_venue_names(address_components, reduced_venue_names, country, language=language,
+                                                                                     tag_components=tag_components, minimal_only=not tag_components))
 
         if expanded_only_venue_names:
             formatted_addresses.extend(self.formatted_addresses_with_venue_names(expanded_components, expanded_only_venue_names, country, language=language,
