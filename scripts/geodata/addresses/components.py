@@ -430,7 +430,7 @@ class AddressComponents(object):
                 t, c = tokens
                 if stripped and c not in (token_types.IDEOGRAPHIC_CHAR, token_types.IDEOGRAPHIC_NUMBER):
                     stripped.append(u' ')
-                if c not in PUNCTUATION_TOKEN_TYPES:
+                if c not in token_types.PUNCTUATION_TOKEN_TYPES:
                     stripped.append(t)
 
         name = u''.join(stripped)
