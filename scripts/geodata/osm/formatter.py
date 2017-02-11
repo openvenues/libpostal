@@ -44,7 +44,7 @@ from geodata.osm.intersections import OSMIntersectionReader
 from geodata.places.config import place_config
 from geodata.polygons.language_polys import *
 from geodata.polygons.reverse_geocode import *
-from geodata.postal_codes.validation import postcode_regexes
+from geodata.postal_codes.phrases import PostalCodes
 from geodata.i18n.unicode_paths import DATA_DIR
 from geodata.text.tokenize import tokenize, token_types
 from geodata.text.utils import is_numeric
@@ -564,14 +564,7 @@ class OSMAddressFormatter(object):
 
     @classmethod
     def valid_postal_code(self, country, postal_code):
-        postcode_regex = postcode_regexes.get(country)
-
-        if postcode_regex:
-            postal_code = postal_code.strip()
-            match = postcode_regex.match(postal_code)
-            if match and match.end() == len(postal_code):
-                return True
-            return False
+        return PostalCodes.is_valid(postal_code, country)
 
     def extract_valid_postal_codes(self, country, postal_code, validate=True):
         '''
@@ -1059,14 +1052,19 @@ class OSMAddressFormatter(object):
 
         postal_code = revised_tags.get(AddressFormatter.POSTCODE, None)
 
+        postcode_needs_validation = PostalCodes.needs_validation(country)
+        postcode_strip_components = PostalCodes.should_strip_components(country)
+
         if postal_code and u';' in postal_code:
             postal_code = random.choice(postal_code.split(u';'))
 
         if postal_code and u',' in postal_code:
             for p in postal_code.split(u','):
-                if self.valid_postal_code(country, p):
+                if PostalCodes.is_valid(p, country):
                     revised_tags[AddressFormatter.POSTCODE] = postal_code = p.strip()
                     break
+                elif postcode_strip_components:
+
             else:
                 revised_tags.pop(AddressFormatter.POSTCODE)
                 postal_code = None
