@@ -25,8 +25,8 @@ class PostalCodes(object):
         return postal_codes_config.get_property('validate_postcode', country=country, default=False)
 
     @classmethod
-    def should_strip_components(cls, country_code):
-        return postal_codes_config.get_property('strip_components', country=country_code)
+    def should_strip_components(cls, country):
+        return postal_codes_config.get_property('strip_components', country=country)
 
     @classmethod
     def add_country_code(cls, postal_code, country):
