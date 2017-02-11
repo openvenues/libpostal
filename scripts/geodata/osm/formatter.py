@@ -1132,10 +1132,7 @@ class OSMAddressFormatter(object):
                     elif k not in revised_tags and k == AddressFormatter.POSTCODE:
                         expanded_postal_codes = self.expand_postal_codes(v, country, all_local_languages | random_languages, osm_components)
 
-                        if not expanded_postal_codes:
-                            revised_tags.pop(AddressFormatter.POSTCODE)
-                            postal_code = None
-                        elif len(expanded_postal_codes) == 1:
+                        if len(expanded_postal_codes) == 1:
                             revised_tags[AddressFormatter.POSTCODE] = expanded_postal_codes[0]
 
                         m = number_split_regex.search(v)
