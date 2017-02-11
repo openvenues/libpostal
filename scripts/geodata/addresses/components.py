@@ -430,16 +430,10 @@ class AddressComponents(object):
                 t, c = tokens
                 if stripped and c not in (token_types.IDEOGRAPHIC_CHAR, token_types.IDEOGRAPHIC_NUMBER):
                     stripped.append(u' ')
-                stripped.append(t)
+                if c not in PUNCTUATION_TOKEN_TYPES:
+                    stripped.append(t)
 
         name = u''.join(stripped)
-
-        if self.parens_regex.search(name):
-            name = self.parens_regex.sub(six.u(''), name).strip()
-
-        # If the name contains a comma, stop and only use the phrase before the comma
-        if ',' in name:
-            return name.split(',', 1)[0].strip()
 
         return name
 
