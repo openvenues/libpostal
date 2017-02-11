@@ -421,6 +421,8 @@ class AddressComponents(object):
 
         phrase_filter = PhraseFilter([(n, '') for n in names])
 
+        phrases = list(phrase_filter.filter(tokens_lower))
+
         stripped = []
 
         for is_phrase, tokens, value in phrases:
