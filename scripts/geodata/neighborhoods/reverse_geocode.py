@@ -462,7 +462,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         self.priorities.append((self.level_priorities[properties['polygon_type']], self.source_priorities[properties['source']]))
 
     def load_polygon_properties(self, d):
-        self.priorities = json.load(open(os.path.join(d, self.PRIORITIES_FILENAME)))
+        self.priorities = [tuple(p) for p in json.load(open(os.path.join(d, self.PRIORITIES_FILENAME)))]
 
     def save_polygon_properties(self, d):
         json.dump(self.priorities, open(os.path.join(d, self.PRIORITIES_FILENAME), 'w'))
