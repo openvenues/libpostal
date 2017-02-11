@@ -623,7 +623,7 @@ class OSMAddressFormatter(object):
 
         if not match:
             if not should_strip_components and not needs_validation:
-                valid.append(postal_code)
+                valid.append(PostalCodes.add_country_code(postal_code, country))
                 return valid
 
             if should_strip_components:
