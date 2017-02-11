@@ -24,6 +24,7 @@ from geodata.language_id.disambiguation import UNKNOWN_LANGUAGE, get_string_scri
 from geodata.math.sampling import cdf, weighted_choice
 from geodata.openaddresses.config import openaddresses_config
 from geodata.places.config import place_config
+from geodata.postal_codes.phrases import PostalCodes
 from geodata.text.tokenize import tokenize
 from geodata.text.token_types import token_types
 from geodata.text.utils import is_numeric, is_numeric_strict
