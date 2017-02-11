@@ -634,10 +634,8 @@ class OSMAddressFormatter(object):
 
         else:
             candidates = number_split_regex.split(postal_code)
-            if not should_strip_components and not needs_validation:
-                return [c.strip() for c in candidates]
-
             for candidate in candidates:
+                candidate = candidate.strip()
                 if should_strip_components:
                     candidate = self.components.strip_components(candidate, osm_components, country, languages)
                     if not candidate:
