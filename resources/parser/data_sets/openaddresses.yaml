@@ -2911,6 +2911,10 @@ countries:
                       city_replacements:
                           state_district: Macomb County
                     - filename: muskegon.csv
+                    - filename: newaygo.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Newaygo County
                     - filename: ottawa.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -3526,6 +3530,10 @@ countries:
                   - filename: richland.csv
                   - filename: ross.csv
                   - filename: sandusky.csv
+                  - filename: scioto.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Scioto County
                   - filename: seneca.csv
                   - filename: shelby.csv
                   - filename: stark.csv
