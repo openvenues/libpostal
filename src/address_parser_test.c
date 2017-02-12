@@ -10,6 +10,8 @@
 
 #include "log/log.h"
 
+//#define ADDRESS_PARSER_TEST_PRINT_ERRORS
+
 typedef struct address_parser_test_results {
     size_t num_errors;
     size_t num_predictions;
@@ -34,7 +36,7 @@ uint32_t get_class_index(address_parser_t *parser, char *name) {
 
 #define EMPTY_ADDRESS_PARSER_TEST_RESULT (address_parser_test_results_t){0, 0, 0, 0, NULL}
 
-bool address_parser_test(address_parser_t *parser, char *filename, address_parser_test_results_t *result) {
+bool address_parser_test(address_parser_t *parser, char *filename, address_parser_test_results_t *result, bool print_errors) {
     if (filename == NULL) {
         log_error("Filename was NULL\n");
         return NULL;
@@ -59,6 +61,8 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
 
     bool logged = false;
 
+    cstring_array *token_labels = cstring_array_new();
+
     while (address_parser_data_set_next(data_set)) {
         char *language = char_array_get_string(data_set->language);
         if (string_equals(language, UNKNOWN_LANGUAGE) || string_equals(language, AMBIGUOUS_LANGUAGE)) {
@@ -68,7 +72,7 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
 
         address_parser_context_fill(context, parser, data_set->tokenized_str, language, country);
 
-        cstring_array *token_labels = cstring_array_new_size(data_set->tokenized_str->strings->str->n);
+        cstring_array_clear(token_labels);
 
         char *prev_label = NULL;
 
@@ -89,14 +93,16 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
                     uint32_t truth_index = get_class_index(parser, truth);
 
                     result->confusion[predicted_index * num_classes + truth_index]++;
+
+                    if (print_errors) {
+                        printf("%s\t%s\t%d\t%s\n", predicted, truth, i, data_set->tokenized_str->str);
+                    }
                 }
                 result->num_predictions++;
 
             })
 
         }
-
-        cstring_array_destroy(token_labels);
 
         if (result->num_errors > starting_errors) {
             result->num_address_errors++;
@@ -113,12 +119,14 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
 
     }
 
+    cstring_array_destroy(token_labels);
+
     address_parser_data_set_destroy(data_set);
     address_parser_context_destroy(context);
 
+
     return true;
 }
-
 
 int main(int argc, char **argv) {
     char *address_parser_dir = LIBPOSTAL_ADDRESS_PARSER_DIR;
@@ -128,10 +136,28 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    char *filename = argv[1];
+    size_t position = 0;
+    
+    bool print_errors = false;
 
-    if (argc > 2) {
-        address_parser_dir = argv[2];
+    ssize_t arg_iterations;
+
+    char *filename = NULL;
+    char *addres_parser_dir = NULL;
+
+    for (int i = 1; i < argc; i++) {
+        char *arg = argv[i];
+
+        if (string_equals(arg, "--print-errors")) {
+            print_errors = true;
+            continue;
+        } else if (position == 0) {
+            filename = arg;
+            position++;
+        } else if (position == 1) {
+            address_parser_dir = arg;
+            position++;
+        }
     }
 
     if (!address_dictionary_module_setup(NULL)) {
@@ -160,7 +186,7 @@ int main(int argc, char **argv) {
 
     address_parser_test_results_t results = EMPTY_ADDRESS_PARSER_TEST_RESULT;
 
-    if (!address_parser_test(parser, filename, &results)) {
+    if (!address_parser_test(parser, filename, &results, print_errors)) {
         log_error("Error in training\n");
         exit(EXIT_FAILURE);
     }
@@ -194,8 +220,9 @@ int main(int argc, char **argv) {
     }
 
     free(results.confusion);
+    free(confusion_sorted);
 
     address_parser_module_teardown();
-
+    transliteration_module_teardown();
     address_dictionary_module_teardown();
 }
