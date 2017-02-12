@@ -65,7 +65,7 @@
 
 #define is_ideographic(type) ((type) == IDEOGRAPHIC_CHAR || (type) == HANGUL_SYLLABLE || (type) == IDEOGRAPHIC_NUMBER)
 
-#define is_numeric_token(type) ((type) == NUMERIC)
+#define is_numeric_token(type) ((type) == NUMERIC || (type) == IDEOGRAPHIC_NUMBER)
 
 #define is_punctuation(type) ((type) >= PERIOD && (type) < OTHER)
 
