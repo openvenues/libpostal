@@ -28,6 +28,7 @@ class OSMDefinitions(object):
     NATURAL = 'natural'
     LOCALITY = 'locality'
     NEIGHBORHOOD = 'neighborhood'
+    EXTENDED_NEIGHBORHOOD = 'extended_neighborhood'
     OFFICE = 'office'
     PLACE = 'place'
     POPULATED_PLACE = 'populated_place'

@@ -128,11 +128,12 @@ ADMIN1_LANGUAGE_EXCEPTION_IDS=$(grep "osm" $ADMIN1_FILE | sed 's/^.*relation:\([
 VALID_ADMIN_BORDER_KEYS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish or boundary=civil or boundary=ceremonial or boundary=postal_district or place=island or place=city or place=town or place=village or place=hamlet or place=municipality or place=settlement"
 
 VALID_POPULATED_PLACE_KEYS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=locality or place=settlement or place=census-designated or place:ph=village"
-VALID_NEIGHBORHOOD_KEYS="place=neighbourhood or place=suburb or place=quarter or place=borough or place:ph=barangay"
+VALID_NEIGHBORHOOD_KEYS="place=neighbourhood or place=neighborhood or place:ph=barangay"
+VALID_EXTENDED_NEIGHBORHOOD_KEYS="place=neighbourhood or place=neighborhood or place=suburb or place=quarter or place=borough or place:ph=barangay"
 
-VALID_LOCALITY_KEYS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=neighbourhood or place=suburb or place=quarter or place=borough or place=locality or place=settlement or place=census-designated or place:ph=barangay or place:ph=village"
+VALID_LOCALITY_KEYS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=neighbourhood or place=neighborhood or place=suburb or place=quarter or place=borough or place=locality or place=settlement or place=census-designated or place:ph=barangay or place:ph=village"
 
-VALID_ADMIN_NODE_KEYS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=neighbourhood or place=suburb or place=quarter or place=borough or place=island or place=islet or place=county or place=region or place=state or place=subdistrict or place=township or place=archipelago or place=department or place=country or place=district or place=census-designated or place=ward or place=subward or place=province or place=peninsula or place=settlement or place=subregion"
+VALID_ADMIN_NODE_KEYS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=neighbourhood or place=neighborhood or place=suburb or place=quarter or place=borough or place=island or place=islet or place=county or place=region or place=state or place=subdistrict or place=township or place=archipelago or place=department or place=country or place=district or place=census-designated or place=ward or place=subward or place=province or place=peninsula or place=settlement or place=subregion"
 
 osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDER_KEYS" --drop-author --drop-version -o=$PLANET_ADMIN_BORDERS_OSM &
 osmfilter $PLANET_O5M --keep="$VALID_ADMIN_BORDER_KEYS or $VALID_LOCALITY_KEYS" --drop-author --drop-version -o=$PLANET_BORDERS_O5M &
@@ -147,6 +148,13 @@ rm $PLANET_BORDERS_O5M
 osmfilter $PLANET_BORDERS_LATLONS --keep="$VALID_ADMIN_BORDER_KEYS or $VALID_LOCALITY_KEYS" -o=$PLANET_BORDERS
 rm $PLANET_BORDERS_LATLONS
 osmfilter $PLANET_O5M --keep="$VALID_COUNTRY_KEYS or $ADMIN1_LANGUAGE_EXCEPTION_IDS" --drop-author --drop-version -o=$PLANET_COUNTRIES
+
+echo "Filtering for neighborhoods"
+PLANET_LOCALITIES="planet-localities.osm"
+PLANET_NEIGHBORHOOD_BORDERS="planet-neighborhood-borders.osm"
+
+osmfilter $PLANET_O5M --keep="$VALID_NEIGHBORHOOD_KEYS" --drop-author --drop-version -o=$PLANET_NEIGHBORHOOD_BORDERS
+osmfilter $PLANET_O5M --keep="name= and ( $VALID_LOCALITY_KEYS )" --drop-relations --drop-ways --ignore-dependencies --drop-author --drop-version -o=$PLANET_LOCALITIES
 
 echo "Filtering for rail stations"
 VALID_RAIL_STATION_KEYS="railway=station"
@@ -173,10 +181,6 @@ osmconvert $PLANET_AIRPORTS_O5M -o=$PLANET_AIRPORT_POLYGONS
 rm $PLANET_AIRPORTS_O5M
 osmfilter $PLANET_AIRPORTS_LATLONS --keep="$VALID_AIRPORT_KEYS" -o=$PLANET_AIRPORTS
 rm $PLANET_AIRPORTS_LATLONS
-
-echo "Filtering for neighborhoods"
-PLANET_LOCALITIES="planet-localities.osm"
-osmfilter $PLANET_O5M --keep="name= and ( $VALID_LOCALITY_KEYS )" --drop-relations --drop-ways --ignore-dependencies --drop-author --drop-version -o=$PLANET_LOCALITIES
 
 echo "Filtering for subdivision polygons"
 PLANET_SUBDIVISIONS="planet-subdivisions.osm"
