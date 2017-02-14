@@ -1064,7 +1064,6 @@ class AddressComponents(object):
         if not have_city and first_village:
             grouped_components[AddressFormatter.CITY].append(first_village)
 
-
     def add_admin_boundaries(self, address_components,
                              osm_components,
                              country, language,
@@ -1093,6 +1092,8 @@ class AddressComponents(object):
         '''
 
         suffix_lang = None if not language_suffix else language_suffix.lstrip(':')
+
+        add_prefix_prob = float(nested_get(self.config, ('admin_components', 'add_prefix_probability')))
 
         if osm_components:
             name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, language_suffix))
@@ -1151,9 +1152,15 @@ class AddressComponents(object):
                             name_lang = language if not suffix_lang or not k.endswith(language_suffix) else suffix_lang
                             name = boundary_names.name(country, name_lang, component, name)
 
+                        name_prefix = component_value.get('{}:prefix'.format(k))
+
+                        if name and name_prefix and random.random() < add_prefix_prob:
+                            name = u' '.join([name_prefix, name])
+
                         if name and not (name == existing_city_name and component != AddressFormatter.CITY and drop_duplicate_city_names):
                             name = self.cleaned_name(name, first_comma_delimited_phrase=True)
                             break
+
                     # if we've checked all keys without finding a valid name, leave this component out
                     else:
                         continue
@@ -1261,20 +1268,18 @@ class AddressComponents(object):
             key, raw_key = self.pick_random_name_key(neighborhood, neighborhood_level, suffix=language_suffix)
 
             standard_name = neighborhood.get(name_key, neighborhood.get(raw_name_key , six.u('')))
-            name = neighborhood.get(key, neighborhood.get(raw_key))
+            for k in (key, raw_key, name_key, raw_name_key):
+                name = neighborhood.get(k)
+                name_prefix = neighborhood.get('{}:prefix'.format(k))
+                if name and name_prefix and random.random() < add_prefix_prob:
+                    name = u' '.join([name_prefix, name])
+                if name:
+                    break
 
             if component == AddressFormatter.CITY_DISTRICT:
                 # Optimization so we don't use e.g. same name multiple times for suburb, city_district, city, etc.
                 if not replace_city and name == city_name and (not standard_name or standard_name == city_name):
                     continue
-
-            if not name:
-                name = neighborhood.get(name_key, neighborhood.get(raw_name_key))
-
-                name_prefix = neighborhood.get('name:prefix')
-
-                if name and name_prefix and random.random() < add_prefix_prob:
-                    name = six.u(' ').join([name_prefix, name])
 
             if not name:
                 continue
