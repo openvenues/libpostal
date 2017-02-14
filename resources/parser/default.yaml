@@ -105,7 +105,7 @@ places:
 boundaries:
     abbreviate_toponym_probability: 0.35
     # Usually in Germany, may have e.g. name:prefix=Stadtbezirk
-    add_prefix_probability: 0.7
+    add_prefix_probability: 0.5
 
 neighborhood:
     # Usually in Germany, may have e.g. name:prefix=Ortsteil
