@@ -278,8 +278,6 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         qs_scratch_dir = os.path.join(quattroshapes_dir, 'qs_neighborhoods')
         ensure_dir(qs_scratch_dir)
 
-        osm_neighborhoods_scratch_dir = os.path.join(tmp_dir)
-
         logger.info('Creating Quattroshapes neighborhoods')
 
         qs = QuattroshapesNeighborhoodsReverseGeocoder.create_neighborhoods_index(quattroshapes_dir, qs_scratch_dir)
