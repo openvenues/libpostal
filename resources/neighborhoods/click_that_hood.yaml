@@ -1,0 +1,264 @@
+
+files:
+    - filename: akron.geojson
+      component: suburb
+    - filename: alameda.geojson
+      component: suburb
+    - filename: albany.geojson
+      component: suburb
+    - filename: amsterdam.geojson
+      component: suburb
+    - filename: anchorage.geojson
+      component: suburb
+    - filename: angers.geojson
+      component: suburb
+    - filename: antwerp.geojson
+      component: suburb
+    - filename: atlanta.geojson
+      component: suburb
+    - filename: augsburg.geojson
+      component: city_district
+    - filename: austin.geojson
+      component: suburb
+    - filename: baltimore.geojson
+      component: suburb
+    - filename: bari.geojson
+      component: suburb
+    - filename: berlin.geojson
+      component: suburb
+    - filename: birmingham.geojson
+      component: suburb
+    - filename: blacksburg.geojson
+      component: suburb
+    - filename: blumenau.geojson
+      component: suburb
+    - filename: boston.geojson
+      component: suburb
+    - filename: braunschweig.geojson
+      component: city_district
+    - filename: bremen.geojson
+      component: city_district
+    - filename: bronx.geojson
+      component: suburb
+    - filename: brooklyn.geojson
+      component: suburb
+    - filename: calgary.geojson
+      component: suburb
+    - filename: canberra.geojson
+      component: suburb
+    - filename: chapel-hill.geojson
+      component: suburb
+    - filename: charlottesville.geojson
+      component: suburb
+    - filename: chemnitz.geojson
+      component: city_district
+    - filename: chesapeake.geojson
+      component: suburb
+    - filename: chicago.geojson
+      component: suburb
+    - filename: cincinnati.geojson
+      component: suburb
+    - filename: cleveland.geojson
+      component: suburb
+    - filename: cologne.geojson
+      component: city_district
+    - filename: columbus.geojson
+      component: suburb
+    - filename: copenhagen.geojson
+      component: suburb
+    - filename: dallas.geojson
+      component: suburb
+    - filename: denver.geojson
+      component: suburb
+    - filename: des-moines.geojson
+      component: suburb
+    - filename: detroit.geojson
+      component: suburb
+    - filename: dresden.geojson
+      component: suburb
+    - filename: dublin.geojson
+      component: suburb
+    - filename: duesseldorf.geojson
+      component: city_district
+    - filename: edmonton.geojson
+      component: suburb
+    - filename: eindhoven.geojson
+      component: suburb
+    - filename: esztergom.geojson
+      component: suburb
+    - filename: fairbanks.geojson
+      component: suburb
+    - filename: fargo.geojson
+      component: suburb
+    - filename: fort-lauderdale.geojson
+      component: suburb
+    - filename: frankfurt-main.geojson
+      component: suburb
+    - filename: freiburg.geojson
+      component: city_district
+    - filename: ghent.geojson
+      component: suburb
+    - filename: gisborne.geojson
+      component: suburb
+    - filename: grand-rapids.geojson
+      component: suburb
+    - filename: hamburg.geojson
+      component: suburb
+    - filename: hampton.geojson
+      component: suburb
+    - filename: hartford.geojson
+      component: suburb
+    - filename: henderson.geojson
+      component: suburb
+    - filename: honolulu.geojson
+      component: suburb
+    - filename: houston.geojson
+      component: suburb
+    - filename: indianapolis.geojson
+      component: suburb
+    - filename: kansas-city.geojson
+      component: suburb
+    - filename: las-vegas.geojson
+      component: suburb
+    - filename: lexington.geojson
+      component: suburb
+    - filename: long-beach.geojson
+      component: suburb
+    - filename: los-angeles-county.geojson
+      component: suburb
+    - filename: louisville.geojson
+      component: suburb
+    - filename: macon.geojson
+      component: suburb
+    - filename: madrid.geojson
+      component: suburb
+    - filename: manhattan.geojson
+      component: suburb
+    - filename: melbourne.geojson
+      component: suburb
+    - filename: miami.geojson
+      component: suburb
+    - filename: milan.geojson
+      component: suburb
+    - filename: milwaukee.geojson
+      component: suburb
+    - filename: minneapolis.geojson
+      component: suburb
+    - filename: mississauga.geojson
+      component: suburb
+    - filename: montreal.geojson
+      component: suburb
+    - filename: moscow.geojson
+      component: suburb
+    - filename: muenster.geojson
+      component: suburb
+    - filename: new-haven.geojson
+      component: suburb
+    - filename: new-orleans.geojson
+      component: suburb
+    - filename: norfolk.geojson
+      component: suburb
+    - filename: oakland.geojson
+      component: suburb
+    - filename: olympia.geojson
+      component: suburb
+    - filename: orlando.geojson
+      component: suburb
+    - filename: paris.geojson
+      component: suburb
+    - filename: philadelphia.geojson
+      component: suburb
+    - filename: phoenix.geojson
+      component: suburb
+    - filename: pittsburgh.geojson
+      component: suburb
+    - filename: porirua.geojson
+      component: suburb
+    - filename: portland.geojson
+      component: suburb
+    - filename: providence.geojson
+      component: suburb
+    - filename: queens.geojson
+      component: suburb
+    - filename: raleigh.geojson
+      component: suburb
+    - filename: red-deer.geojson
+      component: suburb
+    - filename: richmond.geojson
+      component: suburb
+    - filename: rochester.geojson
+      component: suburb
+    - filename: rockville.geojson
+      component: suburb
+    - filename: rotterdam.geojson
+      component: city_district
+    - filename: sacramento.geojson
+      component: suburb
+    - filename: salt-lake-city.geojson
+      component: suburb
+    - filename: san-antonio.geojson
+      component: suburb
+    - filename: san-diego.geojson
+      component: suburb
+    - filename: san-francisco.geojson
+      component: suburb
+    - filename: san-jose.geojson
+      component: suburb
+    - filename: saskatoon.geojson
+      component: suburb
+    - filename: seattle.geojson
+      component: suburb
+    - filename: springfield.geojson
+      component: suburb
+    - filename: st-louis.geojson
+      component: suburb
+    - filename: st-petersburg.geojson
+      component: suburb
+    - filename: stamford.geojson
+      component: suburb
+    - filename: staten-island.geojson
+      component: suburb
+    - filename: surrey.geojson
+      component: suburb
+    - filename: sydney.geojson
+      component: suburb
+    - filename: szczecin.geojson
+      component: suburb
+    - filename: tampa.geojson
+      component: suburb
+    - filename: the-hague.geojson
+      component: suburb
+    - filename: toronto.geojson
+      component: suburb
+    - filename: turku.geojson
+      component: suburb
+    - filename: ulm.geojson
+      component: suburb
+    - filename: unna.geojson
+      component: city_district
+    - filename: utrecht.geojson
+      component: city_district
+    - filename: vancouver.geojson
+      component: suburb
+    - filename: venice.geojson
+      component: suburb
+    - filename: venlo.geojson
+      component: city_district
+    - filename: vienna.geojson
+      component: city_district
+    - filename: washington.geojson
+      component: suburb
+    - filename: wellington.geojson
+      component: suburb
+    - filename: west-linn.geojson
+      component: suburb
+    - filename: west-palm-beach.geojson
+      component: suburb
+    - filename: williamsburg.geojson
+      component: suburb
+    - filename: windsor.geojson
+      component: suburb
+    - filename: winterthur.geojson
+      component: city_district
+    - filename: zurich-city.geojson
+      component: suburb

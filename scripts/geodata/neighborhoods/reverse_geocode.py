@@ -7,6 +7,7 @@ import re
 import six
 import subprocess
 import sys
+import yaml
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
@@ -18,6 +19,7 @@ from geodata.file_utils import ensure_dir, download_file
 from geodata.i18n.unicode_properties import get_chars_by_script
 from geodata.i18n.word_breaks import ideographic_scripts
 from geodata.names.deduping import NameDeduper
+from geodata.osm.admin_boundaries import OSMNeighborhoodPolygonReader
 from geodata.osm.components import osm_address_components
 from geodata.osm.definitions import osm_definitions
 from geodata.osm.extract import parse_osm, osm_type_and_id, NODE, WAY, RELATION, OSM_NAME_TAGS
@@ -126,15 +128,18 @@ class NeighborhoodDeduper(NameDeduper):
 
 
 class ClickThatHoodReverseGeocoder(GeohashPolygonIndex):
-    simplify_tolerance = 0.00001
-    preserve_topology = True
     persistent_polygons = False
     cache_size = 0
 
     SCRATCH_DIR = '/tmp'
 
     # Contains accurate boundaries for neighborhoods sans weird GeoPlanet names like "Adelphi" or "Crown Heights South"
-    NEIGHBORHOODS_REPO = 'https://github.com/blackmad/neighborhoods'
+    NEIGHBORHOODS_REPO = 'https://github.com/codeforamerica/click_that_hood'
+
+    config_path = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
+                               'resources', 'neighborhoods', 'click_that_hood.yaml')
+
+    config = yaml.load(open(config_path))
 
     @classmethod
     def clone_repo(cls, path):
@@ -144,43 +149,56 @@ class ClickThatHoodReverseGeocoder(GeohashPolygonIndex):
     @classmethod
     def create_neighborhoods_index(cls):
         scratch_dir = cls.SCRATCH_DIR
+        repo_path = os.path.join(scratch_dir, 'click_that_hood')
+        cls.clone_repo(repo_path)
+
+        data_path = os.path.join(repo_path, 'public', 'data')
+
+        neighborhoods_dir = os.path.join(scratch_dir, 'neighborhoods')
+        ensure_dir(neighborhoods_dir)
+
+        index = cls(save_dir=neighborhoods_dir)
+
+        for c in cls.config['files']:
+            filename = c['filename']
+            component = c['component']
+
+            print('doing {}'.format(filename))
+
+            path = os.path.join(data_path, filename)
+            features = json.load(open(path))['features']
+            for f in features:
+                f['properties']['component'] = component
+
+            try:
+                index.add_geojson_like_file(features)
+            except ValueError:
+                continue
+
+        return index
+
+
+class OSMNeighborhoodReverseGeocoder(OSMReverseGeocoder):
+    persistent_polygons = False
+    cache_size = 10000
+    simplify_polygons = False
+    polygon_reader = OSMNeighborhoodPolygonReader
+    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['postal_code'])
+
+    cache_size = 0
+
+    SCRATCH_DIR = '/tmp'
+
+    @classmethod
+    def create_neighborhoods_index(cls, osm_neighborhoods_file):
+        scratch_dir = cls.SCRATCH_DIR
         repo_path = os.path.join(scratch_dir, 'neighborhoods')
         cls.clone_repo(repo_path)
 
         neighborhoods_dir = os.path.join(scratch_dir, 'neighborhoods', 'index')
         ensure_dir(neighborhoods_dir)
 
-        index = cls(save_dir=neighborhoods_dir)
-
-        have_geonames = set()
-        is_neighborhood = set()
-
-        for filename in os.listdir(repo_path):
-            path = os.path.join(repo_path, filename)
-            base_name = filename.split('.')[0].split('gn-')[-1]
-            if filename.endswith('.geojson') and filename.startswith('gn-'):
-                have_geonames.add(base_name)
-            elif filename.endswith('metadata.json'):
-                data = json.load(open(os.path.join(repo_path, filename)))
-                if data.get('neighborhoodNoun', [None])[0] in (None, 'rione'):
-                    is_neighborhood.add(base_name)
-
-        for filename in os.listdir(repo_path):
-            if not filename.endswith('.geojson'):
-                continue
-            base_name = filename.rsplit('.geojson')[0]
-            if base_name in have_geonames:
-                f = open(os.path.join(repo_path, 'gn-{}'.format(filename)))
-            elif base_name in is_neighborhood:
-                f = open(os.path.join(repo_path, filename))
-            else:
-                continue
-            try:
-                index.add_geojson_like_file(json.load(f)['features'])
-            except ValueError:
-                continue
-
-        return index
+        return cls.create_from_osm_file(osm_neighborhoods_file, output_dir=neighborhoods_dir)
 
 
 class NeighborhoodReverseGeocoder(RTreePolygonIndex):
@@ -209,10 +227,11 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
     cache_size = 100000
 
     source_priorities = {
-        'clickthathood': 0,  # Best names/polygons
-        'osm_cth': 1,        # OSM names matched with ClickThatHood polygon
-        'osm_quattro': 2,    # OSM names matched with Quattroshapes polygon
-        'quattroshapes': 3,  # Good results in some countries/areas
+        'osm': 0,            # Best names/polygons, same coordinate system
+        'osm_cth': 1,        # Prefer the OSM names if possible
+        'clickthathood': 2,  # Better names/polygons than Quattroshapes
+        'osm_quattro': 3,    # Prefer OSM names matched with Quattroshapes polygon
+        'quattroshapes': 4,  # Good results in some countries/areas
     }
 
     level_priorities = {
@@ -240,7 +259,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         return doc
 
     @classmethod
-    def create_from_osm_and_quattroshapes(cls, filename, quattroshapes_dir, country_rtree_dir, osm_rtree_dir, output_dir):
+    def create_from_osm_and_quattroshapes(cls, filename, quattroshapes_dir, country_rtree_dir, osm_rtree_dir, osm_neighborhood_borders_file, output_dir):
         '''
         Given an OSM file (planet or some other bounds) containing neighborhoods
         as points (some suburbs have boundaries)
@@ -259,6 +278,8 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         qs_scratch_dir = os.path.join(quattroshapes_dir, 'qs_neighborhoods')
         ensure_dir(qs_scratch_dir)
 
+        osm_neighborhoods_scratch_dir = os.path.join(tmp_dir)
+
         logger.info('Creating Quattroshapes neighborhoods')
 
         qs = QuattroshapesNeighborhoodsReverseGeocoder.create_neighborhoods_index(quattroshapes_dir, qs_scratch_dir)
@@ -270,12 +291,14 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         osm_admin_rtree = OSMReverseGeocoder.load(osm_rtree_dir)
         osm_admin_rtree.cache_size = 1000
 
+        osmn = OSMNeighborhoodReverseGeocoder.create_neighborhoods_index(osm_neighborhood_borders_file)
+
         logger.info('Creating IDF index')
         idf = IDFIndex()
 
         char_scripts = get_chars_by_script()
 
-        for idx in (cth, qs):
+        for idx in (cth, qs, osmn):
             for i in xrange(idx.i):
                 props = idx.get_properties(i)
                 name = props.get('name')
@@ -288,6 +311,15 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                 if any((k.startswith(name_key) for name_key in OSM_NAME_TAGS)):
                     doc = cls.count_words(v)
                     idf.update(doc)
+
+        for i in six.moves.xrange(osmn.i):
+            props = osmn.get_properties(i)
+            poly = osmn.get_polygon(i)
+
+            props['source'] = 'osm'
+            props['polygon_type'] = 'neighborhood'
+            index.index_polygon(poly)
+            index.add_polygon(poly, props)
 
         qs.matched = [False] * qs.i
         cth.matched = [False] * cth.i
@@ -311,8 +343,8 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             props['type'] = id_type
             props['id'] = element_id
 
-            possible_neighborhood = osm_definitions.meets_definition(attrs, osm_definitions.NEIGHBORHOOD)
-            is_neighborhood = attrs.get('place') in ('neighbourhood', 'neighborhood')
+            possible_neighborhood = osm_definitions.meets_definition(attrs, osm_definitions.EXTENDED_NEIGHBORHOOD)
+            is_neighborhood = osm_definitions.meets_definition(attrs, osm_definitions.NEIGHBORHOOD)
 
             country, candidate_languages = country_rtree.country_and_languages(lat, lon)
 
@@ -378,21 +410,26 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                 score, props, poly, idx, i = ranks[0]
 
                 existing_osm_boundaries = osm_admin_rtree.point_in_poly(lat, lon, return_all=True)
+                existing_neighborhood_boundaries = osmn.point_in_poly(lat, lon, return_all=True)
 
                 skip_node = False
-                for poly_index, osm_props in enumerate(existing_osm_boundaries):
-                    containing_component = None
-                    name = osm_props.get('name')
-                    # Only exact name matches here since we're comparins OSM to OSM
-                    if name and name.lower() != attrs.get('name', '').lower():
-                        continue
 
-                    containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries[poly_index + 1:]]
+                for boundaries in (existing_osm_boundaries, existing_neighborhood_boundaries):
+                    for poly_index, osm_props in enumerate(existing_osm_boundaries):
+                        containing_component = None
+                        name = osm_props.get('name')
+                        # Only exact name matches here since we're comparins OSM to OSM
+                        if name and name.lower() != attrs.get('name', '').lower():
+                            continue
 
-                    containing_component = osm_address_components.component_from_properties(country, osm_props, containing=containing_ids)
+                        containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries[poly_index + 1:]]
 
-                    if containing_component and containing_component != component_name and AddressFormatter.component_order[containing_component] <= AddressFormatter.component_order[AddressFormatter.CITY]:
-                        skip_node = True
+                        containing_component = osm_address_components.component_from_properties(country, osm_props, containing=containing_ids)
+
+                        if containing_component and containing_component != component_name and AddressFormatter.component_order[containing_component] <= AddressFormatter.component_order[AddressFormatter.CITY]:
+                            skip_node = True
+                            break
+                    if skip_node:
                         break
 
                 # Skip this element
@@ -504,6 +541,9 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--country-rtree-dir',
                         help='Path to country rtree dir')
 
+    parser.add_argument('-b', '--osm-neighborhood-borders-file',
+                        help='Path to OSM neighborhood borders file (with dependencies, .osm format)')
+
     parser.add_argument('-n', '--osm-neighborhoods-file',
                         help='Path to OSM neighborhoods file (no dependencies, .osm format)')
 
@@ -514,12 +554,13 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
 
     args = parser.parse_args()
-    if args.osm_neighborhoods_file and args.quattroshapes_dir and args.osm_admin_rtree_dir and args.country_rtree_dir:
+    if args.osm_neighborhoods_file and args.quattroshapes_dir and args.osm_admin_rtree_dir and args.country_rtree_dir and args.osm_neighborhood_borders_file:
         index = NeighborhoodReverseGeocoder.create_from_osm_and_quattroshapes(
             args.osm_neighborhoods_file,
             args.quattroshapes_dir,
             args.country_rtree_dir,
             args.osm_admin_rtree_dir,
+            args.osm_neighborhood_borders_file,
             args.out_dir
         )
     else:
