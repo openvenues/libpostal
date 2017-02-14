@@ -411,16 +411,19 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                 skip_node = False
 
                 for boundaries in (existing_osm_boundaries, existing_neighborhood_boundaries):
-                    for poly_index, osm_props in enumerate(existing_osm_boundaries):
+                    for poly_index, osm_props in enumerate(boundaries):
                         containing_component = None
                         name = osm_props.get('name')
                         # Only exact name matches here since we're comparins OSM to OSM
                         if name and name.lower() != attrs.get('name', '').lower():
                             continue
 
-                        containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries[poly_index + 1:]]
+                        if boundaries is existing_neighborhood_boundaries:
+                            containing_component = AddressFormatter.SUBURB
+                        else:
+                            containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries[poly_index + 1:]]
 
-                        containing_component = osm_address_components.component_from_properties(country, osm_props, containing=containing_ids)
+                            containing_component = osm_address_components.component_from_properties(country, osm_props, containing=containing_ids)
 
                         if containing_component and containing_component != component_name and AddressFormatter.component_order[containing_component] <= AddressFormatter.component_order[AddressFormatter.CITY]:
                             skip_node = True
