@@ -19,6 +19,7 @@ from geodata.file_utils import ensure_dir
 from geodata.graph.scc import strongly_connected_components
 from geodata.i18n.languages import osm_admin1_ids
 from geodata.math.floats import isclose
+from geodata.osm.definitions import osm_definitions
 from geodata.osm.extract import *
 
 
@@ -315,6 +316,11 @@ class OSMBuildingPolygonReader(OSMPolygonReader):
 class OSMCountryPolygonReader(OSMPolygonReader):
     def include_polygon(self, props):
         return 'ISO3166-1:alpha2' in props or (props.get('type', 'relation'), safe_encode(props.get('id', ''))) in osm_admin1_ids
+
+
+class OSMNeighborhoodPolygonReader(OSMPolygonReader):
+    def include_polygon(self, props):
+        return osm_definitions.meets_definition(props, osm_definitions.NEIGHBORHOOD)
 
 
 class OSMPostalCodesPolygonReader(OSMPolygonReader):
