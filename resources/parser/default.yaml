@@ -104,10 +104,13 @@ places:
 
 boundaries:
     abbreviate_toponym_probability: 0.35
+    # Usually in Germany, may have e.g. name:prefix=Stadtbezirk
+    add_prefix_probability: 0.7
 
 neighborhood:
     # Usually in Germany, may have e.g. name:prefix=Ortsteil
     add_prefix_probability: 0.5
+    use_first_match_probability: 0.8
 
 city:
     quattroshapes_geonames_backup_city_probability: 0.2
