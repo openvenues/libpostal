@@ -430,12 +430,11 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                 if skip_node:
                     continue
 
-                containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries]
-                component = osm_address_components.component_from_properties(country, attrs, containing=containing_ids)
-                attrs['component'] = component
-
                 if idx is cth:
-                    attrs['polygon_type'] = 'neighborhood'
+                    if attrs['component'] == AddressFormatter.SUBURB:
+                        attrs['polygon_type'] = 'neighborhood'
+                    else:
+                        attrs['polygon_type'] = 'local_admin'
                     source = 'osm_cth'
                 else:
                     level = props.get(QuattroshapesReverseGeocoder.LEVEL, None)
@@ -445,6 +444,10 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                         attrs['polygon_type'] = 'neighborhood'
                     else:
                         attrs['polygon_type'] = 'local_admin'
+
+                containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries]
+                component = osm_address_components.component_from_properties(country, attrs, containing=containing_ids)
+                attrs['component'] = component
 
                 attrs['source'] = source
                 index.index_polygon(poly)
@@ -462,19 +465,26 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                 if idx.matched[i]:
                     continue
                 props['source'] = source
-                if idx is cth or props.get(QuattroshapesReverseGeocoder.LEVEL, None) == 'neighborhood':
+                if idx is cth:
+                    component = props['component']
+                    if component == AddressFormatter.SUBURB:
+                        props['polygon_type'] = 'neighborhood'
+                    elif component == AddressFormatter.CITY_DISTRICT:
+                        props['polygon_type'] = 'local_admin'
+                    else:
+                        continue
+                elif props.get(QuattroshapesReverseGeocoder.LEVEL, None) == 'neighborhood':
                     component = AddressFormatter.SUBURB
-                    if source == 'quattroshapes':
-                        name = props.get('name')
-                        if not name:
-                            continue
-                        for pattern, repl in cls.regex_replacements:
-                            name = pattern.sub(repl, name)
+                    name = props.get('name')
+                    if not name:
+                        continue
+                    for pattern, repl in cls.regex_replacements:
+                        name = pattern.sub(repl, name)
 
-                        props['name'] = name
+                    props['name'] = name
 
-                        if cls.quattroshapes_city_district_regex.match(name):
-                            component = AddressFormatter.CITY_DISTRICT
+                    if cls.quattroshapes_city_district_regex.match(name):
+                        component = AddressFormatter.CITY_DISTRICT
 
                     props['component'] = component
                     props['polygon_type'] = 'neighborhood'
