@@ -74,14 +74,13 @@ with the general error-driven averaged perceptron.
 #define SEPARATOR_LABEL "sep"
 #define FIELD_SEPARATOR_LABEL "fsep"
 
-#define ADDRESS_COMPONENT_NON_BOUNDARY 1 << 0
+#define ADDRESS_COMPONENT_NON_BOUNDARY 0
 #define ADDRESS_COMPONENT_SUBURB 1 << 3
 #define ADDRESS_COMPONENT_CITY_DISTRICT 1 << 4
 #define ADDRESS_COMPONENT_CITY 1 << 5
 #define ADDRESS_COMPONENT_ISLAND 1 << 7
 #define ADDRESS_COMPONENT_STATE_DISTRICT 1 << 8
 #define ADDRESS_COMPONENT_STATE 1 << 9
-#define ADDRESS_COMPONENT_POSTAL_CODE 1 << 10
 #define ADDRESS_COMPONENT_COUNTRY_REGION 1 << 11
 #define ADDRESS_COMPONENT_COUNTRY 1 << 13
 #define ADDRESS_COMPONENT_WORLD_REGION 1 << 14
@@ -136,8 +135,10 @@ typedef struct address_parser_context {
     char_array *long_context_phrase;
     char_array *prefix_phrase;
     char_array *context_prefix_phrase;
+    char_array *long_context_prefix_phrase;
     char_array *suffix_phrase;
     char_array *context_suffix_phrase;
+    char_array *long_context_suffix_phrase;
     char_array *component_phrase;
     char_array *context_component_phrase;
     char_array *long_context_component_phrase;

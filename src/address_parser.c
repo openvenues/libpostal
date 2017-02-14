@@ -234,7 +234,7 @@ bool address_parser_load(char *dir) {
         goto exit_address_parser_created;
     }
 
-    log_info("num_postal_code_contexts = %llu\n", num_postal_code_contexts);
+    log_debug("num_postal_code_contexts = %llu\n", num_postal_code_contexts);
 
     uint64_array *postal_code_context_values = uint64_array_new_size(num_postal_code_contexts);
     if (!file_read_uint64_array(postal_codes_file, postal_code_context_values->a, num_postal_code_contexts)) {
@@ -243,6 +243,7 @@ bool address_parser_load(char *dir) {
     }
     postal_code_context_values->n = num_postal_code_contexts;
 
+    fclose(postal_codes_file);
 
     parser->postal_code_contexts = kh_init(int64_set);
     if (parser->postal_code_contexts == NULL) {
@@ -353,12 +354,20 @@ void address_parser_context_destroy(address_parser_context_t *self) {
         char_array_destroy(self->context_prefix_phrase);
     }
 
+    if (self->long_context_prefix_phrase != NULL) {
+        char_array_destroy(self->long_context_prefix_phrase);
+    }
+
     if (self->suffix_phrase != NULL) {
         char_array_destroy(self->suffix_phrase);
     }
 
     if (self->context_suffix_phrase != NULL) {
         char_array_destroy(self->context_suffix_phrase);
+    }
+
+    if (self->long_context_suffix_phrase != NULL) {
+        char_array_destroy(self->long_context_suffix_phrase);
     }
 
     if (self->ngrams != NULL) {
@@ -484,6 +493,11 @@ address_parser_context_t *address_parser_context_new(void) {
         goto exit_address_parser_context_allocated;
     }
 
+    context->long_context_prefix_phrase = char_array_new();
+    if (context->long_context_prefix_phrase == NULL) {
+        goto exit_address_parser_context_allocated;
+    }
+
     context->suffix_phrase = char_array_new();
     if (context->suffix_phrase == NULL) {
         goto exit_address_parser_context_allocated;
@@ -491,6 +505,11 @@ address_parser_context_t *address_parser_context_new(void) {
 
     context->context_suffix_phrase = char_array_new();
     if (context->context_suffix_phrase == NULL) {
+        goto exit_address_parser_context_allocated;
+    }
+
+    context->long_context_suffix_phrase = char_array_new();
+    if (context->long_context_suffix_phrase == NULL) {
         goto exit_address_parser_context_allocated;
     }
 
@@ -726,13 +745,33 @@ static inline phrase_t phrase_at_index(phrase_array *phrases, int64_array *phras
     return NULL_PHRASE;
 }
 
+char *phrase_prefix(char *word, size_t len, phrase_t prefix_phrase, char_array *prefix_phrase_array) {
+    char_array_clear(prefix_phrase_array);
+    size_t prefix_len = prefix_phrase.len;
+    char_array_add_len(prefix_phrase_array, word, prefix_len);
+    char *prefix = char_array_get_string(prefix_phrase_array);
+    return prefix;
+}
+
+char *phrase_suffix(char *word, size_t len, phrase_t suffix_phrase, char_array *suffix_phrase_array) {
+    char_array_clear(suffix_phrase_array);
+    size_t suffix_len = suffix_phrase.len;
+    char_array_add_len(suffix_phrase_array, word + (len - suffix_len), suffix_len);
+    char *suffix = char_array_get_string(suffix_phrase_array);
+    return suffix;
+}
+
 typedef struct address_parser_phrase {
     char *str;
     address_parser_phrase_type_t type;
     phrase_t phrase;
 } address_parser_phrase_t;
 
-static inline address_parser_phrase_t word_or_phrase_at_index(address_parser_t *parser, tokenized_string_t *tokenized, address_parser_context_t *context, uint32_t i) {
+inline bool is_plain_word_phrase_type(address_parser_phrase_type_t type) {
+    return type == ADDRESS_PARSER_NULL_PHRASE || type == ADDRESS_PARSER_SUFFIX_PHRASE || type == ADDRESS_PARSER_PREFIX_PHRASE;
+}
+
+static address_parser_phrase_t word_or_phrase_at_index(address_parser_t *parser, tokenized_string_t *tokenized, address_parser_context_t *context, uint32_t i, bool long_context) {
     phrase_t phrase;
     address_parser_phrase_t response;
     char *phrase_string = NULL;
@@ -740,7 +779,7 @@ static inline address_parser_phrase_t word_or_phrase_at_index(address_parser_t *
     phrase = phrase_at_index(context->address_dictionary_phrases, context->address_phrase_memberships, i);
     
     if (phrase.len > 0) {
-        phrase_string = cstring_array_get_phrase(context->normalized, context->context_phrase, phrase),
+        phrase_string = cstring_array_get_phrase(context->normalized, long_context ? context->long_context_phrase : context->context_phrase, phrase),
 
         response = (address_parser_phrase_t){
             phrase_string,
@@ -752,7 +791,7 @@ static inline address_parser_phrase_t word_or_phrase_at_index(address_parser_t *
 
     phrase = phrase_at_index(context->component_phrases, context->component_phrase_memberships, i);
     if (phrase.len > 0) {
-        phrase_string = cstring_array_get_phrase(context->normalized_admin, context->context_component_phrase, phrase);
+        phrase_string = cstring_array_get_phrase(context->normalized_admin, long_context ? context->long_context_component_phrase : context->context_component_phrase, phrase);
 
         response = (address_parser_phrase_t){
             phrase_string,
@@ -779,12 +818,8 @@ static inline address_parser_phrase_t word_or_phrase_at_index(address_parser_t *
         expansion_value = address_dictionary_get_expansions(expansion_index);
 
         if (expansion_value->components & ADDRESS_STREET) {
-            char_array_clear(context->context_suffix_phrase);
-            size_t suffix_len = suffix_phrase.len;
-            char_array_add_len(context->context_suffix_phrase, word + (token.len - suffix_phrase.len), suffix_len);
-            char *suffix = char_array_get_string(context->suffix_phrase);
             response = (address_parser_phrase_t){
-                suffix,
+                word,
                 ADDRESS_PARSER_SUFFIX_PHRASE,
                 suffix_phrase
             };
@@ -799,12 +834,8 @@ static inline address_parser_phrase_t word_or_phrase_at_index(address_parser_t *
 
         // Don't include elisions like l', d', etc. which are in the ADDRESS_ANY category
         if (expansion_value->components ^ ADDRESS_ANY) {
-            char_array_clear(context->context_prefix_phrase);
-            size_t prefix_len = prefix_phrase.len;
-            char_array_add_len(context->context_prefix_phrase, word, prefix_len);
-            char *prefix = char_array_get_string(context->context_prefix_phrase);
             response = (address_parser_phrase_t){
-                prefix,
+                word,
                 ADDRESS_PARSER_PREFIX_PHRASE,
                 prefix_phrase
             };
@@ -1059,7 +1090,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             next_index = (ssize_t)phrase.start + phrase.len;
         }
 
-        if (component_phrase_string != NULL && component_phrase_types ^ ADDRESS_COMPONENT_POSTAL_CODE) {
+        if (component_phrase_string != NULL && component_phrase_types > 0) {
             feature_array_add(features, 2, "phrase", component_phrase_string);
             add_word_feature = false;
         }
@@ -1297,7 +1328,6 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         }
 
         if (idx == 0) {
-            //feature_array_add(features, 1, "prev tag=START");
             feature_array_add(features, 2, "first word", word);
             //feature_array_add(features, 3, "prev tag=START+word+next word", word, next_word);
         }
@@ -1321,19 +1351,21 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     }
 
     if (last_index >= 0) {
-        address_parser_phrase_t prev_word_or_phrase = word_or_phrase_at_index(parser, tokenized, context, last_index);
+        address_parser_phrase_t prev_word_or_phrase = word_or_phrase_at_index(parser, tokenized, context, last_index, false);
         char *prev_word = prev_word_or_phrase.str;
 
-        if (prev_word_or_phrase.type == ADDRESS_PARSER_NULL_PHRASE) {
+        if (is_plain_word_phrase_type(prev_word_or_phrase.type)) {
             uint32_t prev_word_freq = word_vocab_frequency(parser, prev_word);
+            token_t prev_token = tokenized->tokens->a[last_index];
+            bool prev_token_numeric = is_numeric_token(prev_token.type);
             if (prev_word_freq == 0) {
-                token_t prev_token = tokenized->tokens->a[last_index];
-                prev_word = (prev_token.type != NUMERIC && prev_token.type != IDEOGRAPHIC_NUMBER) ? UNKNOWN_WORD : UNKNOWN_NUMERIC;
+                prev_word = !prev_token_numeric ? UNKNOWN_WORD : UNKNOWN_NUMERIC;
             }
         }
 
         // Previous word
         feature_array_add(features, 2, "prev word", prev_word);
+
 
         if (last_index == idx - 1) {
             feature_array_add(features, 3, "prev tag+prev word", prev, prev_word);
@@ -1344,15 +1376,16 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     }
 
     if (next_index < num_tokens) {
-        address_parser_phrase_t next_word_or_phrase = word_or_phrase_at_index(parser, tokenized, context, next_index);
+        address_parser_phrase_t next_word_or_phrase = word_or_phrase_at_index(parser, tokenized, context, next_index, false);
         char *next_word = next_word_or_phrase.str;
         size_t next_word_len = 1;
 
-        if (next_word_or_phrase.type == ADDRESS_PARSER_NULL_PHRASE) {
+        if (is_plain_word_phrase_type(next_word_or_phrase.type) {
             uint32_t next_word_freq = word_vocab_frequency(parser, next_word);
+            token_t next_token = tokenized->tokens->a[next_index];
+            bool next_token_numeric = is_numeric_token(next_token.type);
             if (next_word_freq == 0) {
-                token_t next_token = tokenized->tokens->a[next_index];
-                next_word = (next_token.type != NUMERIC && next_token.type != IDEOGRAPHIC_NUMBER) ? UNKNOWN_WORD : UNKNOWN_NUMERIC;
+                next_word = !next_token_numeric ? UNKNOWN_WORD : UNKNOWN_NUMERIC;
             }
         } else {
             next_word_len = next_word_or_phrase.phrase.len;
@@ -1366,6 +1399,110 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
         // Prev tag, current word and next word
         //feature_array_add(features, 4, "prev tag+word+next word", prev || "START", word, next_word);
+
+        // Venue names ("house") are almost always at the beginning of the string
+        // and often contain out-of-vocabulary words. Consider a case like "Barboncino 781 Franklin Ave".
+        // The features available to classify "Barboncino" are going to be unknown word featuers (n-grams),
+        // next word features (unknown word where next word=DDD is just as likely to be a street)
+        // and no previous tags of history since it's the first word. If the parser predicts the
+        // first token correctly, it's going to have an easier time getting the rest of the sequence
+        // correct (unknown word + prev tag was "house" is probably still part of the venue, etc.) so
+        // we're only really worried about that first token.  This group of features, called
+        // "long-context features" finds the relative position of the next numeric token as well
+        // as the next street-level phrase (words like "ave", "street", etc.) in the right context.
+        // In an English or French address, if we know there's a number somewhere to our right,
+        // and that a word like "Ave" appears to the right of the number, it's very likely that
+        // the current unknown word is part of a venue name. Similarly, if a venue-word like "Pizzeria"
+        // occurred prior to the number, that would also be strong evidence that we're in a venue name.
+        // Conversely, if we're in a Spanish address and a word like "Calle" comes before the first number
+        // to our right, it's also likely that we're in a venue name, but we'd need to note that the
+        // phrase we saw was "Calle" and not an English thoroughfare type.
+
+        if (idx == 0 && add_word_feature && is_unknown_word) {
+            bool seen_number = false;
+            bool seen_phrase = false;
+            for (uint32_t right_idx = idx + 1; right_idx < num_tokens; right_idx++) {
+                token_t right_token = tokens->a[right_idx];
+
+                /* Check */
+                address_parser_phrase_t right_context_word_or_phrase = word_or_phrase_at_index(parser, tokenized, context, right_idx, true);
+                address_parser_phrase_type_t right_context_phrase_type = right_context_word_or_phrase.type;
+                if (right_context_phrase_type != ADDRESS_PARSER_NULL_PHRASE &&
+                    right_context_phrase_type != ADDRESS_PARSER_DICTIONARY_PHRASE &&
+                    right_context_phrase_type != ADDRESS_PARSER_SUFFIX_PHRASE &&
+                    right_context_phrase_type != ADDRESS_PARSER_PREFIX_PHRASE) {
+                    continue;
+                }
+                char *right_context_word = right_context_word_or_phrase.str;
+                phrase_t right_context_phrase = right_context_word_or_phrase.phrase;
+
+                phrase_t suffix_phrase = context->suffix_phrases->a[right_idx];
+
+                uint32_t right_context_expansion_index;
+                address_expansion_value_t *right_context_expansion_value;
+
+                uint32_t right_context_components = 0;
+                bool right_context_name = false;
+                bool right_context_street = false;
+
+                if (right_context_phrase.len > 0) {
+                    right_context_expansion_index = right_context_phrase.data;
+                    right_context_expansion_value = address_dictionary_get_expansions(right_context_expansion_index);
+                    right_context_components = right_context_expansion_value->components;
+
+                    char *right_affix_type = NULL;
+                    char *right_context_affix = NULL;
+
+                    char *relation_to_number = seen_number ? "after number" : "before number";
+
+                    seen_phrase = true;
+
+                     if (right_context_phrase_type == ADDRESS_PARSER_SUFFIX_PHRASE) {
+                        right_affix_type = "suffix";
+                        right_context_affix = phrase_suffix(right_context_word, strlen(right_context_word), right_context_phrase, context->long_context_suffix_phrase);
+                    } else if (right_context_word_or_phrase.type == ADDRESS_PARSER_PREFIX_PHRASE) {
+                        right_affix_type = "prefix";
+                        right_context_affix = phrase_prefix(right_context_word, strlen(right_context_word), right_context_phrase, context->long_context_suffix_phrase);
+                    }
+
+                    if (right_context_components & ADDRESS_STREET && !(right_context_components & ADDRESS_NAME)) {
+                        feature_array_add(features, 2, "first word unknown+street phrase right", relation_to_number);
+                        feature_array_add(features, 3, "first word unknown+street phrase right", relation_to_number, right_context_word);
+                        if (right_context_affix != NULL && right_affix_type != NULL) {
+                            feature_array_add(features, 4, "first word unknown+street affix right", relation_to_number, right_affix_type, right_context_affix);
+                        }
+                        break;
+                    } else if (right_context_components & ADDRESS_NAME && !(right_context_components & ADDRESS_STREET)) {
+                        feature_array_add(features, 2, "first word unknown+venue phrase right", relation_to_number);
+                        feature_array_add(features, 3, "first word unknown+venue phrase right", relation_to_number, right_context_word);
+                        if (right_context_affix != NULL && right_affix_type != NULL) {
+                            feature_array_add(features, 4, "first word unknown+venue affix right", relation_to_number, right_affix_type, right_context_affix);
+                        }
+                    } else if (right_context_components & (ADDRESS_NAME | ADDRESS_STREET)) {
+                        if (seen_number) {
+                            feature_array_add(features, 1, "first word unknown+number+ambiguous phrase right");
+                            feature_array_add(features, 2, "first word unknown+number+ambiguous phrase right", right_context_word);
+                            if (right_context_affix != NULL && right_affix_type != NULL) {
+                                feature_array_add(features, 3, "first word unknown+number+ambiguous affix right", right_affix_type, right_context_affix);
+                            }
+                            break;
+                        } else {
+                            continue;
+                        }
+                    }
+
+                    if (seen_number) break;
+                }
+
+                if (is_numeric_token(right_token.type)) {
+                    seen_number = true;
+                    char *relation_to_phrase = seen_phrase ? "after phrase" : "before phrase";
+                    feature_array_add(features, 2, "first word unknown+number right", relation_to_phrase);
+                    feature_array_add(features, 3, "first word unknown+number right", relation_to_phrase, right_context_word);
+                    if (seen_phrase) break;
+                }
+            }
+        }
     }
 
     if (parser->options.print_features) {
