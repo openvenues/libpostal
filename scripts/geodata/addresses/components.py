@@ -1093,7 +1093,7 @@ class AddressComponents(object):
 
         suffix_lang = None if not language_suffix else language_suffix.lstrip(':')
 
-        add_prefix_prob = float(nested_get(self.config, ('admin_components', 'add_prefix_probability')))
+        add_prefix_prob = float(nested_get(self.config, ('boundaries', 'add_prefix_probability')))
 
         if osm_components:
             name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, language_suffix))
