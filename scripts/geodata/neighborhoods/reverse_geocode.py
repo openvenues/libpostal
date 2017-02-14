@@ -163,8 +163,6 @@ class ClickThatHoodReverseGeocoder(GeohashPolygonIndex):
             filename = c['filename']
             component = c['component']
 
-            print('doing {}'.format(filename))
-
             path = os.path.join(data_path, filename)
             features = json.load(open(path))['features']
             for f in features:
