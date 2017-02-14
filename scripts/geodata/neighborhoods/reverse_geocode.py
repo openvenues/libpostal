@@ -420,6 +420,8 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
                         if boundaries is existing_neighborhood_boundaries:
                             containing_component = AddressFormatter.SUBURB
+                            skip_node = True
+                            break
                         else:
                             containing_ids = [(boundary['type'], boundary['id']) for boundary in existing_osm_boundaries[poly_index + 1:]]
 
