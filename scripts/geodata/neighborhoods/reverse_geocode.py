@@ -433,10 +433,12 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                     continue
 
                 if idx is cth:
-                    if attrs['component'] == AddressFormatter.SUBURB:
+                    if props['component'] == AddressFormatter.SUBURB:
                         attrs['polygon_type'] = 'neighborhood'
-                    else:
+                    elif props['component'] == AddressFormatter.CITY_DISTRICT:
                         attrs['polygon_type'] = 'local_admin'
+                    else:
+                        continue
                     source = 'osm_cth'
                 else:
                     level = props.get(QuattroshapesReverseGeocoder.LEVEL, None)
