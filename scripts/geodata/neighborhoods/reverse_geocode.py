@@ -311,6 +311,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             poly = osmn.get_polygon(i)
 
             props['source'] = 'osm'
+            props['component'] = AddressFormatter.SUBURB
             props['polygon_type'] = 'neighborhood'
             index.index_polygon(poly)
             index.add_polygon(poly, props)
