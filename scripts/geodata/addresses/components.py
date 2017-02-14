@@ -1297,7 +1297,7 @@ class AddressComponents(object):
 
         for component, neighborhoods in neighborhood_levels.iteritems():
             if component not in address_components:
-                if len(neighborhoods) == 1 or random.random() < use_first_match_probability:
+                if len(neighborhoods) == 1 or random.random() < use_first_match_prob:
                     neighborhood_components[component] = neighborhoods[0]
                 else:
                     neighborhood_components[component] = random.choice(neighborhoods)
