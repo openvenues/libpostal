@@ -278,18 +278,19 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
         qs_scratch_dir = os.path.join(quattroshapes_dir, 'qs_neighborhoods')
         ensure_dir(qs_scratch_dir)
 
-        logger.info('Creating Quattroshapes neighborhoods')
-
-        qs = QuattroshapesNeighborhoodsReverseGeocoder.create_neighborhoods_index(quattroshapes_dir, qs_scratch_dir)
         logger.info('Creating ClickThatHood neighborhoods')
         cth = ClickThatHoodReverseGeocoder.create_neighborhoods_index()
+
+        logger.info('Creating OSM neighborhoods')
+        osmn = OSMNeighborhoodReverseGeocoder.create_neighborhoods_index(osm_neighborhood_borders_file)
+
+        logger.info('Creating Quattroshapes neighborhoods')
+        qs = QuattroshapesNeighborhoodsReverseGeocoder.create_neighborhoods_index(quattroshapes_dir, qs_scratch_dir)
 
         country_rtree = OSMCountryReverseGeocoder.load(country_rtree_dir)
 
         osm_admin_rtree = OSMReverseGeocoder.load(osm_rtree_dir)
         osm_admin_rtree.cache_size = 1000
-
-        osmn = OSMNeighborhoodReverseGeocoder.create_neighborhoods_index(osm_neighborhood_borders_file)
 
         logger.info('Creating IDF index')
         idf = IDFIndex()
