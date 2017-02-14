@@ -542,11 +542,12 @@ phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, size_t len, u
                 size_t remaining_char_len = char_len - i - 1;
                 log_debug("remaining_char_len = %zu\n", remaining_char_len);
 
-                if (remaining_char_len > 0 && strncmp((char *)char_ptr, (char *)current_tail, remaining_char_len) == 0) {
+                if (remaining_char_len > 0 && strncmp((char *)char_ptr + 1, (char *)current_tail, remaining_char_len) == 0) {
                     log_debug("tail string comparison successful\n");
                     tail_remaining -= remaining_char_len;
+                    current_tail += remaining_char_len;
                 } else if (remaining_char_len > 0) {
-                    log_debug("tail comparison unsuccessful, \n");
+                    log_debug("tail comparison unsuccessful, %s vs %s\n", char_ptr, current_tail);
                     index = 0;
                     break;
                 }
@@ -557,8 +558,8 @@ phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, size_t len, u
                     log_debug("phrase_start = %d, phrase_len=%d\n", phrase_start, phrase_len);
                     value = tail_value;
                     index = 0;
-                    break;
                 }
+                break;
             } else if (i == char_len - 1) {
                 trie_node_t terminal_node = trie_get_transition(self, node, '\0');
                 if (terminal_node.check == node_id) {
