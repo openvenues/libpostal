@@ -1252,6 +1252,7 @@ class AddressComponents(object):
         neighborhood_levels = defaultdict(list)
 
         add_prefix_prob = float(nested_get(self.config, ('neighborhood', 'add_prefix_probability')))
+        use_first_match_prob = float(nested_get(self.config, ('neighborhood', 'use_first_match_probability')))
 
         name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, language_suffix))
         raw_name_key = boundary_names.DEFAULT_NAME_KEY
@@ -1259,11 +1260,11 @@ class AddressComponents(object):
         city_name = address_components.get(AddressFormatter.CITY)
 
         for neighborhood in neighborhoods:
-            place_type = neighborhood.get('place')
-            polygon_type = neighborhood.get('polygon_type')
             component = neighborhood.get('component')
 
             neighborhood_level = component or AddressFormatter.SUBURB
+            if (component not in (AddressFormatter.SUBURB, AddressFormatter.CITY_DISTRICT)):
+                continue
 
             key, raw_key = self.pick_random_name_key(neighborhood, neighborhood_level, suffix=language_suffix)
 
@@ -1296,7 +1297,10 @@ class AddressComponents(object):
 
         for component, neighborhoods in neighborhood_levels.iteritems():
             if component not in address_components:
-                neighborhood_components[component] = neighborhoods[0]
+                if len(neighborhoods) == 1 or random.random() < use_first_match_probability:
+                    neighborhood_components[component] = neighborhoods[0]
+                else:
+                    neighborhood_components[component] = random.choice(neighborhoods)
 
         self.abbreviate_admin_components(neighborhood_components, country, language)
 
