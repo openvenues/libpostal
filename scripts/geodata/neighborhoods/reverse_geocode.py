@@ -190,9 +190,6 @@ class OSMNeighborhoodReverseGeocoder(OSMReverseGeocoder):
     @classmethod
     def create_neighborhoods_index(cls, osm_neighborhoods_file):
         scratch_dir = cls.SCRATCH_DIR
-        repo_path = os.path.join(scratch_dir, 'neighborhoods')
-        cls.clone_repo(repo_path)
-
         neighborhoods_dir = os.path.join(scratch_dir, 'neighborhoods', 'index')
         ensure_dir(neighborhoods_dir)
 
