@@ -1380,7 +1380,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         char *next_word = next_word_or_phrase.str;
         size_t next_word_len = 1;
 
-        if (is_plain_word_phrase_type(next_word_or_phrase.type) {
+        if (is_plain_word_phrase_type(next_word_or_phrase.type)) {
             uint32_t next_word_freq = word_vocab_frequency(parser, next_word);
             token_t next_token = tokenized->tokens->a[next_index];
             bool next_token_numeric = is_numeric_token(next_token.type);
