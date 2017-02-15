@@ -1,4 +1,4 @@
 asunto|as
 bostad|bst
-kerostallo
+kerrostalo
 porras
