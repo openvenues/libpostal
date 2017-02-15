@@ -7,8 +7,12 @@ This script generates several training sets from OpenAddresses.
 '''
 
 import argparse
+import logging
 import os
 import sys
+
+from shapely.geos import LOG as shapely_geos_logger
+shapely_geos_logger.setLevel(logging.CRITICAL)
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
