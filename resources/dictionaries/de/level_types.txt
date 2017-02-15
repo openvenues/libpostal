@@ -1,1 +1,16 @@
+parkdeck
 untergeschoss|ug|u g
+erdgeschoss
+obergeschoss
+unterste etage
+oberste etage
+erste etage| 1. etage
+zweite etage|2. etage
+dritte etage|3. etage
+vierte etage|4. etage
+fünfte etage|funfte etage|fuefte etage|5. etage
+sechste etage|6. etage
+siebte etage|7. etage
+achte etage|8. etage
+neunte etage|9. etage
+zwehnte etage|10. etage
