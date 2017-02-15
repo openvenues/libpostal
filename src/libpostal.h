@@ -103,6 +103,11 @@ bool libpostal_setup_language_classifier(void);
 bool libpostal_setup_language_classifier_datadir(char *datadir);
 void libpostal_teardown_language_classifier(void);
 
+/*
+ * Status / utility functions
+ */
+const char* libpostal_version(void);
+
 #ifdef __cplusplus
 }
 #endif
