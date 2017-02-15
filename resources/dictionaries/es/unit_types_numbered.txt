@@ -1,0 +1,13 @@
+apartamento|apto|apt|apartamiento|ap
+ático|át|atico|at
+casa
+consultorio|cn
+departamento|dpto|dept|dto|depto
+interior|int|in
+número interior|no int|# int|nº int|№ int|n.º int|núm int|númr int|numr int|númro int|numro int|núm.ro int|nr int|num.ro int|nro int|n.ro int|no in|# in|nº in|№ in|n.º in|núm in|númr in|numr in|númro in|numro in|núm.ro in|nr in|num.ro in|nro in|n.ro in
+lote|lt
+oficina|of|ofc
+parcela
+puerta|pta
+sala
+unidad|unid|udad|un

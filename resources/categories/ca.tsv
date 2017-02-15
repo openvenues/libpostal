@@ -1,0 +1,483 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	aeroport
+aeroway	aerodrome	1	aeroports
+amenity	atm	0	caixer automàtic
+amenity	atm	1	caixers automàtics
+amenity	auditorium	0	auditori
+amenity	auditorium	1	auditoris
+amenity	bank	0	banc
+amenity	bank	1	bancs
+amenity	bar	0	bar
+amenity	bar	1	bars
+amenity	bench	0	banc
+amenity	bench	1	bancs
+amenity	bicycle_rental	0	lloguer de bicicletes
+amenity	bicycle_rental	1	lloguers de bicicletes
+amenity	brothel	0	prostíbul
+amenity	brothel	1	prostíbuls
+amenity	bureau_de_change	0	oficina de canvi
+amenity	bureau_de_change	1	oficines de canvi
+amenity	bus_station	0	estació d'autobusos
+amenity	bus_station	1	estacions d'autobusos
+amenity	cafe	0	cafè
+amenity	cafe	1	cafès
+amenity	car_rental	0	lloguer de cotxes
+amenity	car_rental	1	lloguers de cotxes
+amenity	casino	0	casino
+amenity	casino	1	casinos
+amenity	cinema	0	cinema
+amenity	cinema	1	cinemes
+amenity	clinic	0	clínica
+amenity	clinic	1	clíniques
+amenity	club	0	club
+amenity	club	1	clubs
+amenity	courthouse	0	jutjat
+amenity	courthouse	1	jutjats
+amenity	crematorium	0	crematori
+amenity	crematorium	1	crematoris
+amenity	dentist	0	dentista
+amenity	dentist	1	dentistes
+amenity	doctors	0	metge
+amenity	doctors	1	metges
+amenity	drinking_water	0	aigua potable
+amenity	drinking_water	1	aigües potables
+amenity	driving_school	0	autoescola
+amenity	driving_school	1	autoescoles
+amenity	embassy	0	ambaixada
+amenity	embassy	1	ambaixades
+amenity	emergency_phone	0	telèfon d'emergència
+amenity	emergency_phone	1	telèfons d'emergència
+amenity	fire_station	0	parc de bombers
+amenity	fire_station	1	parcs de bombers
+amenity	fountain	0	font
+amenity	fountain	1	fonts
+amenity	fuel	0	gasolinera
+amenity	fuel	1	gasolineres
+amenity	grave_yard	0	cementiri
+amenity	grave_yard	1	cementiris
+amenity	health_centre	0	centre de salut
+amenity	health_centre	1	centres de salut
+amenity	hospital	0	hospital
+amenity	hospital	1	hospitals
+amenity	hotel	0	hotel
+amenity	hotel	1	hotels
+amenity	ice_cream	0	gelat
+amenity	ice_cream	1	gelats
+amenity	kindergarten	0	jardí d'infància
+amenity	kindergarten	1	jardins d'infància
+amenity	library	0	biblioteca
+amenity	library	1	biblioteques
+amenity	market	0	mercat
+amenity	market	1	mercats
+amenity	nightclub	0	club nocturn
+amenity	nightclub	1	clubs nocturns
+amenity	park	0	parc
+amenity	park	1	parcs
+amenity	parking	0	pàrquing
+amenity	parking	1	pàrquings
+amenity	pharmacy	0	farmàcia
+amenity	pharmacy	1	farmàcies
+amenity	place_of_worship	0	lloc de culte
+amenity	place_of_worship	1	llocs de culte
+amenity	police	0	policia
+amenity	police	1	policies
+amenity	post_box	0	bústia
+amenity	post_box	1	bústies
+amenity	post_office	0	oficina de correus
+amenity	post_office	1	oficines de correus
+amenity	preschool	0	pre-escola
+amenity	preschool	1	pre-escoles
+amenity	prison	0	presó
+amenity	prison	1	presons
+amenity	pub	0	pub
+amenity	pub	1	pubs
+amenity	public_building	0	edifici públic
+amenity	public_building	1	edificis públics
+amenity	recycling	0	punt de reciclatge
+amenity	recycling	1	punts de reciclatge
+amenity	restaurant	0	restaurant
+amenity	restaurant	1	restaurants
+amenity	sauna	0	sauna
+amenity	sauna	1	saunes
+amenity	school	0	escola
+amenity	school	1	escoles
+amenity	shelter	0	refugi
+amenity	shelter	1	refugis
+amenity	shop	0	botiga
+amenity	shop	1	botigues
+amenity	social_club	0	club social
+amenity	social_club	1	club socials
+amenity	supermarket	0	supermercat
+amenity	supermarket	1	supermercats
+amenity	taxi	0	taxi
+amenity	taxi	1	taxis
+amenity	telephone	0	telèfon públic
+amenity	telephone	1	telèfon públics
+amenity	theatre	0	teatre
+amenity	theatre	1	teatres
+amenity	toilets	0	banys
+amenity	toilets	1	banyss
+amenity	townhall	0	ajuntament
+amenity	townhall	1	ajuntaments
+amenity	university	0	universitat
+amenity	university	1	universitats
+amenity	wifi	0	accés a internet wifi
+amenity	wifi	1	accés a internet wifis
+amenity	youth_centre	0	centre juvenil
+amenity	youth_centre	1	centre juvenils
+building	apartments	0	bloc d'apartaments
+building	apartments	1	bloc d'apartamentss
+building	chapel	0	capella
+building	chapel	1	capellas
+building	church	0	església
+building	church	1	esglésias
+building	city_hall	0	ajuntament
+building	city_hall	1	ajuntaments
+building	commercial	0	edifici comercial
+building	commercial	1	edifici comercials
+building	faculty	0	edifici facultatiu
+building	faculty	1	edifici facultatius
+building	flats	0	pisos
+building	flats	1	pisoss
+building	garage	0	garatge
+building	garage	1	garatges
+building	hospital	0	edifici hospitalari
+building	hospital	1	edifici hospitalaris
+building	hotel	0	hotel
+building	hotel	1	hotels
+building	house	0	casa
+building	house	1	casas
+building	industrial	0	edifici industrial
+building	industrial	1	edifici industrials
+building	public	0	edifici públic
+building	public	1	edifici públics
+building	school	0	edifici escolar
+building	school	1	edifici escolars
+building	stadium	0	estadi
+building	stadium	1	estadis
+building	store	0	magatzem
+building	store	1	magatzems
+building	tower	0	torre
+building	tower	1	torres
+building	train_station	0	estació de tren
+building	train_station	1	estació de trens
+building	university	0	edifici universitari
+building	university	1	edifici universitaris
+building	&quot;yes&quot;	0	edifici
+building	&quot;yes&quot;	1	edificis
+highway	bus_stop	0	parada d'autobús
+highway	bus_stop	1	parada d'autobúss
+highway	cycleway	0	ruta per a bicicletes
+highway	cycleway	1	ruta per a bicicletess
+highway	emergency_access_point	0	accés d'emergència
+highway	emergency_access_point	1	accés d'emergèncias
+highway	footway	0	sendera
+highway	footway	1	senderas
+highway	gate	0	porta
+highway	gate	1	portas
+highway	path	0	camí
+highway	path	1	camís
+highway	primary_link	0	carretera principal
+highway	primary_link	1	carretera principals
+highway	residential	0	residencial
+highway	residential	1	residencials
+highway	road	0	carretera
+highway	road	1	carreteras
+highway	secondary	0	carretera secundària
+highway	secondary	1	carretera secundàrias
+highway	secondary_link	0	carretera secundària
+highway	secondary_link	1	carretera secundàrias
+highway	steps	0	graons
+highway	steps	1	graonss
+highway	stile	0	escala per a travessar reixats
+highway	stile	1	escala per a travessar reixatss
+highway	tertiary	0	carretera terciària
+highway	tertiary	1	carretera terciàrias
+highway	trail	0	sendera
+highway	trail	1	senderas
+highway	unclassified	0	carretera sense classificar
+highway	unclassified	1	carretera sense classificars
+historic	archaeological_site	0	lloc arqueològic
+historic	archaeological_site	1	lloc arqueològics
+historic	battlefield	0	camp de batalla
+historic	battlefield	1	camp de batallas
+historic	building	0	edifici
+historic	building	1	edificis
+historic	castle	0	castell
+historic	castle	1	castells
+historic	church	0	església
+historic	church	1	esglésias
+historic	house	0	casa
+historic	house	1	casas
+historic	icon	0	icona
+historic	icon	1	iconas
+historic	memorial	0	memorial
+historic	memorial	1	memorials
+historic	mine	0	mina
+historic	mine	1	minas
+historic	monument	0	monument
+historic	monument	1	monuments
+historic	museum	0	museu
+historic	museum	1	museus
+historic	ruins	0	ruïnes
+historic	ruins	1	ruïness
+historic	tower	0	torre
+historic	tower	1	torres
+landuse	cemetery	0	cementiri
+landuse	cemetery	1	cementiris
+landuse	commercial	0	zona comercial
+landuse	commercial	1	zona comercials
+landuse	construction	0	construcció
+landuse	construction	1	construcciós
+landuse	farm	0	granja
+landuse	farm	1	granjas
+landuse	forest	0	bosc
+landuse	forest	1	boscs
+landuse	industrial	0	zona industrial
+landuse	industrial	1	zona industrials
+landuse	mine	0	mina
+landuse	mine	1	minas
+landuse	mountain	0	muntanya
+landuse	mountain	1	muntanyas
+landuse	park	0	parc
+landuse	park	1	parcs
+landuse	plaza	0	plaça
+landuse	plaza	1	plaças
+landuse	quarry	0	pedrera
+landuse	quarry	1	pedreras
+landuse	residential	0	àrea residencial
+landuse	residential	1	àrea residencials
+landuse	wetland	0	aiguamoll
+landuse	wetland	1	aiguamolls
+landuse	wood	0	fusta
+landuse	wood	1	fustas
+leisure	fishing	0	àrea de pesca
+leisure	fishing	1	àrea de pescas
+leisure	garden	0	jardí
+leisure	garden	1	jardís
+leisure	golf_course	0	camp de golf
+leisure	golf_course	1	camp de golfs
+leisure	ice_rink	0	pista de patinatge sobre gel
+leisure	ice_rink	1	pista de patinatge sobre gels
+leisure	marina	0	port esportiu
+leisure	marina	1	port esportius
+leisure	miniature_golf	0	minigolf
+leisure	miniature_golf	1	minigolfs
+leisure	nature_reserve	0	reserva natural
+leisure	nature_reserve	1	reserva naturals
+leisure	park	0	parc
+leisure	park	1	parcs
+leisure	sports_centre	0	centre esportiu
+leisure	sports_centre	1	centre esportius
+leisure	stadium	0	estadi
+leisure	stadium	1	estadis
+leisure	swimming_pool	0	piscina
+leisure	swimming_pool	1	piscinas
+leisure	water_park	0	parc aquàtic
+leisure	water_park	1	parc aquàtics
+natural	bay	0	badia
+natural	bay	1	badias
+natural	beach	0	platja
+natural	beach	1	platjas
+natural	cape	0	cap
+natural	cape	1	caps
+natural	cave_entrance	0	entrada a cova
+natural	cave_entrance	1	entrada a covas
+natural	channel	0	canal
+natural	channel	1	canals
+natural	cliff	0	cingle
+natural	cliff	1	cingles
+natural	coastline	0	litoral
+natural	coastline	1	litorals
+natural	crater	0	cràter
+natural	crater	1	cràters
+natural	fell	0	forest
+natural	fell	1	forests
+natural	fjord	0	fiord
+natural	fjord	1	fiords
+natural	geyser	0	guèiser
+natural	geyser	1	guèisers
+natural	glacier	0	glacera
+natural	glacier	1	glaceras
+natural	heath	0	bruguerar
+natural	heath	1	bruguerars
+natural	hill	0	pujol
+natural	hill	1	pujols
+natural	island	0	illa
+natural	island	1	illas
+natural	moor	0	amarratge
+natural	moor	1	amarratges
+natural	mud	0	llot
+natural	mud	1	llots
+natural	peak	0	pic
+natural	peak	1	pics
+natural	point	0	punt
+natural	point	1	punts
+natural	reef	0	escull
+natural	reef	1	esculls
+natural	ridge	0	cresta
+natural	ridge	1	crestas
+natural	river	0	riu
+natural	river	1	rius
+natural	rock	0	roca
+natural	rock	1	rocas
+natural	scree	0	pedregar
+natural	scree	1	pedregars
+natural	shoal	0	banc
+natural	shoal	1	bancs
+natural	spring	0	deu
+natural	spring	1	deus
+natural	strait	0	estret
+natural	strait	1	estrets
+natural	tree	0	arbre
+natural	tree	1	arbres
+natural	valley	0	vall
+natural	valley	1	valls
+natural	volcano	0	volcà
+natural	volcano	1	volcàs
+natural	water	0	aigua
+natural	water	1	aiguas
+natural	wetland	0	aiguamoll
+natural	wetland	1	aiguamolls
+natural	wetlands	0	aiguamolls
+natural	wetlands	1	aiguamollss
+natural	wood	0	bosc
+natural	wood	1	boscs
+place	city	0	ciutat
+place	city	1	ciutats
+place	country	0	país
+place	country	1	paíss
+place	county	0	comtat
+place	county	1	comtats
+place	farm	0	granja
+place	farm	1	granjas
+place	hamlet	0	aldea
+place	hamlet	1	aldeas
+place	house	0	casa
+place	house	1	casas
+place	houses	0	cases
+place	houses	1	casess
+place	island	0	illa
+place	island	1	illas
+place	islet	0	illot
+place	islet	1	illots
+place	locality	0	localitat
+place	locality	1	localitats
+place	moor	0	amarrador
+place	moor	1	amarradors
+place	municipality	0	municipi
+place	municipality	1	municipis
+place	postcode	0	codi postal
+place	postcode	1	codi postals
+place	region	0	regió
+place	region	1	regiós
+place	sea	0	mar
+place	sea	1	mars
+place	state	0	estat o província
+place	state	1	estat o províncias
+place	subdivision	0	subdivisió
+place	subdivision	1	subdivisiós
+place	suburb	0	suburbi
+place	suburb	1	suburbis
+place	town	0	poble
+place	town	1	pobles
+place	village	0	aldea
+place	village	1	aldeas
+railway	level_crossing	0	pas a nivell
+railway	level_crossing	1	pas a nivells
+railway	monorail	0	monorail
+railway	monorail	1	monorails
+railway	subway	0	estació de metro
+railway	subway	1	estació de metros
+railway	tram	0	tramvia
+railway	tram	1	tramvias
+railway	tram_stop	0	parada de tramvia
+railway	tram_stop	1	parada de tramvias
+shop	bakery	0	fleca
+shop	bakery	1	flecas
+shop	bicycle	0	tenda de bicicletes
+shop	bicycle	1	tenda de bicicletess
+shop	books	0	llibreria
+shop	books	1	llibrerias
+shop	butcher	0	carnisseria
+shop	butcher	1	carnisserias
+shop	car_repair	0	reparació d'automòbils
+shop	car_repair	1	reparació d'automòbilss
+shop	chemist	0	farmàcia
+shop	chemist	1	farmàcias
+shop	fish	0	peixateria
+shop	fish	1	peixaterias
+shop	florist	0	floristeria
+shop	florist	1	floristerias
+shop	hairdresser	0	perruqueria o barberia
+shop	hairdresser	1	perruqueria o barberias
+shop	jewelry	0	joieria
+shop	jewelry	1	joierias
+shop	laundry	0	bugaderia
+shop	laundry	1	bugaderias
+shop	mall	0	centre comercial
+shop	mall	1	centre comercials
+shop	market	0	mercat
+shop	market	1	mercats
+shop	shoes	0	sabateria
+shop	shoes	1	sabaterias
+shop	supermarket	0	supermercat
+shop	supermarket	1	supermercats
+shop	travel_agency	0	agència de viatges
+shop	travel_agency	1	agència de viatgess
+tourism	alpine_hut	0	cabanya alpina
+tourism	alpine_hut	1	cabanya alpinas
+tourism	artwork	0	il·lustració
+tourism	artwork	1	il·lustraciós
+tourism	attraction	0	atracció
+tourism	attraction	1	atracciós
+tourism	bed_and_breakfast	0	llist i esmorzar (b&amp;b)
+tourism	bed_and_breakfast	1	llist i esmorzar (b&amp;b)s
+tourism	cabin	0	cabanya
+tourism	cabin	1	cabanyas
+tourism	camp_site	0	campament
+tourism	camp_site	1	campaments
+tourism	caravan_site	0	càmping per a caravanes
+tourism	caravan_site	1	càmping per a caravaness
+tourism	chalet	0	xalet
+tourism	chalet	1	xalets
+tourism	guest_house	0	alberg
+tourism	guest_house	1	albergs
+tourism	hostel	0	hostal
+tourism	hostel	1	hostals
+tourism	hotel	0	hotel
+tourism	hotel	1	hotels
+tourism	information	0	informació
+tourism	information	1	informaciós
+tourism	lean_to	0	nau
+tourism	lean_to	1	naus
+tourism	motel	0	motel
+tourism	motel	1	motels
+tourism	museum	0	museu
+tourism	museum	1	museus
+tourism	picnic_site	0	àrea de pícnic
+tourism	picnic_site	1	àrea de pícnics
+tourism	theme_park	0	parc temàtic
+tourism	theme_park	1	parc temàtics
+tourism	valley	0	vall
+tourism	valley	1	valls
+tourism	viewpoint	0	mirador
+tourism	viewpoint	1	miradors
+tourism	zoo	0	zoològic
+tourism	zoo	1	zoològics
+waterway	canal	0	canal
+waterway	canal	1	canals
+waterway	ditch	0	séquia
+waterway	ditch	1	séquias
+waterway	mooring	0	amarradors
+waterway	mooring	1	amarradorss
+waterway	rapids	0	ràpids
+waterway	rapids	1	ràpidss
+waterway	river	0	riu
+waterway	river	1	rius
+waterway	wadi	0	torrent
+waterway	wadi	1	torrents
+waterway	water_point	0	punt d'aigua
+waterway	water_point	1	punt d'aiguas
+waterway	waterfall	0	cascada
+waterway	waterfall	1	cascadas

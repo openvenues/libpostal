@@ -6,21 +6,21 @@ angosta|angta
 apeadero|apdro
 autopista|auto|autop
 autovía|autovia|autov
-avenida|av|avd|avda
+avenida|av|avd|avda|av /
+avenida calle|ac|av cl
+avenida carrera|ak
 bajada|bjada
 banda|bda
 barranco|branc
 barranquillo|bqllo
 barriada|barda
-barrio|bo
-bloque|blque|bloq|blq
 boulevard|blvd|bvd
 brazal|brzal
 bulevar|bulev|blev|blv|bv
-calle|c|cl|cll|c/|c /|ca
+calle|c|cl|cll|c /|ca
 calleja|cllja
 callejón|callejon|callej|cjón|cjon|cllon|cllón|cj
-calle privada|calle priv|c priv|cl priv|cll priv|c/priv|c / priv
+calle privada|calle priv|c priv|cl priv|cll priv|c / priv
 callejuela|cjla
 callizo|cllzo
 calzada|czada|calz
@@ -32,8 +32,8 @@ caminito|cmt
 camping|campg
 cantera|cantr
 cantón|canton|cant
-carrera|cra|carra|carr
-carretera|ctra|cr
+carrera|cra|carra|carr|cr|kra
+carretera|ctra|cr|ct
 carreterín|carreterin|ctrin
 carretil|crtil
 carril|crril
@@ -45,11 +45,12 @@ corredor|crrdo
 costanilla|cstan
 costera
 cuesta|custa
-diagonal|diag
+diagonal|diag|dg
 diseminado|disem
 espalda|eslda
 estrada|estda
 explanada|expla
+extensión|ext|extension
 extramuros|extrm
 galería|galeria|gale
 glorieta|gta|g
@@ -95,7 +96,7 @@ sendera|sedra
 sendero|send|sedro
 subida|sbida
 tránsito|transito|trans
-transversal|trval|trvsal
+transversal|trval|trvsal|tv
 trasera|tras
 travesía|travesia|trva|trvsía|trvsia
 vereda|vreda|ver

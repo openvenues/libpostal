@@ -10,20 +10,21 @@ cabo|cbo
 campo|cpo|cmpo
 campos|cpos|cmpos
 canal|cnl
-capital federal|cap fed
 centro|cntro|ctro
 cerro|crro
-codigo postal|cp|c p
-distrito federal|df|d f
-distrito postal|dp|d p
+corral|crral
+corralillo|crrlo
+diseminado|disem
 enero|en|eno|ene|en o
-diciembre|dic|dicbre|dic.bre|dice|dic.e|dbre|d.bre|10bre|10.bre|10 bre
+diciembre|dic|dicbre|dic.bre|dice|dic.e|dbre|d.bre|10bre|10.bre|10 bre|xbre|x.bre|x bre
 febrero|febo|feb.o|febro|feb.ro|febr|feb
 gobierno|gob|gobno|gob.no
 grande|gr
 guerra|ga
 independencia|indep
 infantería|infanteria|infa|ynfa|ynfanta
+jardín|jdin|jard|jardin
+jardínes|jdins|jards|jardines
 junio|jun|jn
 julio|jul|jl
 lago|lg
@@ -39,10 +40,12 @@ montes|mts|mtes|mntes|mnts
 nacional|nal|nacl
 noviembre|nbre|n.bre|nvre|n.vre|nove|nov.e|novre|nov.re|novbre|nov.bre|9bre|9.bre|9 bre
 octubre|oct|octbre|oct.bre|octe|oct.e|8bre|8.bre|8 bre
+portillo|ptilo|ptllo
 prado|prdo
 primeros|pros
 privada|priv
 punta|pnta
+quebrada|qbda
 real|rl
 republica|rep
 revolucion|rev

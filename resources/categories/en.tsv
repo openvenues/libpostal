@@ -1,0 +1,944 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	airport
+aeroway	aerodrome	1	airports
+amenity	animal_boarding	0	animal boarding facility
+amenity	animal_boarding	1	animal boarding facilities
+amenity	animal_shelter	0	animal shelter
+amenity	animal_shelter	1	animal shelters
+amenity	arts_centre	0	arts centre
+amenity	arts_centre	1	arts centres
+amenity	arts_centre	0	arts center
+amenity	arts_centre	1	arts centers
+amenity	atm	0	atm
+amenity	atm	1	atms
+amenity	atm	0	cash
+amenity	atm	1	cash
+amenity	atm	0	cash machine
+amenity	atm	1	cash machines
+amenity	auditorium	0	auditorium
+amenity	auditorium	1	auditoriums
+amenity	bank	0	bank
+amenity	bank	1	banks
+amenity	bar	0	bar
+amenity	bar	1	bars
+amenity	pub	0	bar
+amenity	pub	1	bars
+amenity	bench	0	bench
+amenity	bench	1	benches
+amenity	bicycle_parking	0	cycle parking
+amenity	bicycle_parking	1	cycle parkings
+amenity	bicycle_rental	0	cycle rental
+amenity	bicycle_rental	1	cycle rentals
+amenity	bicycle_parking	0	bicycle parking
+amenity	bicycle_parking	1	bicycle parkings
+amenity	bicycle_rental	0	bicycle rental
+amenity	bicycle_rental	1	bicycle rentals
+amenity	brothel	0	brothel
+amenity	brothel	1	brothels
+amenity	bureau_de_change	0	bureau de change
+amenity	bureau_de_change	1	bureau de changes
+amenity	bureau_de_change	1	bureaus de change
+amenity	bus_station	0	bus station
+amenity	bus_station	1	bus stations
+amenity	cafe	0	cafe
+amenity	cafe	1	cafes
+amenity	car_rental	0	car rental
+amenity	car_rental	1	car rentals
+amenity	car_sharing	0	car share
+amenity	car_sharing	0	car sharing
+amenity	car_sharing	1	car sharings
+amenity	car_wash	0	car wash
+amenity	car_wash	1	car washes
+amenity	casino	0	casino
+amenity	casino	1	casinos
+amenity	cinema	0	cinema
+amenity	cinema	1	cinemas
+amenity	clinic	0	clinic
+amenity	clinic	1	clinics
+amenity	club	0	club
+amenity	club	1	clubs
+amenity	college	0	college
+amenity	college	1	colleges
+amenity	community_centre	0	community centre
+amenity	community_centre	1	community centres
+amenity	community_centre	0	community center
+amenity	community_centre	1	community centers
+amenity	courthouse	0	courthouse
+amenity	courthouse	1	courthouses
+amenity	crematorium	0	crematorium
+amenity	crematorium	1	crematoriums
+amenity	dentist	0	dentist
+amenity	dentist	1	dentists
+amenity	doctors	0	doctor
+amenity	doctors	1	doctors
+amenity	dojo	0	martial arts
+amenity	dojo	1	martial arts
+amenity	dojo	0	dojo
+amenity	dojo	1	dojos
+amenity	dojo	0	dojang
+amenity	dojo	1	dojang
+amenity	dormitory	0	dormitory
+amenity	dormitory	1	dormitorys
+amenity	dormitory	1	dormitories
+amenity	drinking_water	0	drinking water
+amenity	drinking_water	0	water
+amenity	driving_school	0	driving school
+amenity	driving_school	1	driving schools
+amenity	embassy	0	embassy
+amenity	embassy	1	embassys
+amenity	embassy	1	embassies
+amenity	emergency_phone	0	emergency phone
+amenity	emergency_phone	1	emergency phones
+amenity	fast_food	0	fast food
+amenity	restaurant	0	food
+amenity	fast_food	0	food
+amenity	restaurant	1	food
+amenity	fast_food	1	food
+amenity	ferry_terminal	0	ferry terminal
+amenity	ferry_terminal	1	ferry terminals
+amenity	fire_hydrant	0	fire hydrant
+amenity	fire_hydrant	1	fire hydrants
+amenity	fire_station	0	fire station
+amenity	fire_station	1	fire stations
+amenity	fountain	0	fountain
+amenity	fountain	1	fountains
+amenity	fuel	0	fuel
+amenity	fuel	1	fuels
+amenity	fuel	0	fuel station
+amenity	fuel	1	fuel stations
+amenity	fuel	0	gas
+amenity	fuel	1	gas
+amenity	fuel	0	gas station
+amenity	fuel	1	gas stations
+amenity	fuel	0	petrol
+amenity	fuel	0	petrol station
+amenity	fuel	1	petrol stations
+amenity	grave_yard	0	grave yard
+amenity	grave_yard	1	grave yards
+amenity	gym	0	fitness centre
+amenity	gym	1	fitness centres
+amenity	gym	0	fitness center
+amenity	gym	1	fitness centers
+amenity	gym	0	gym
+amenity	gym	1	gyms
+amenity	hall	0	hall
+amenity	hall	1	halls
+amenity	health_centre	0	health centre
+amenity	health_centre	1	health centres
+amenity	health_centre	0	health center
+amenity	health_centre	1	health centers
+amenity	hospital	0	hospital
+amenity	hospital	1	hospitals
+amenity	hotel	0	hotel
+amenity	hotel	1	hotels
+amenity	hunting_stand	0	hunting stand
+amenity	hunting_stand	1	hunting stands
+amenity	ice_cream	0	ice cream
+amenity	kindergarten	0	kindergarten
+amenity	kindergarten	1	kindergartens
+amenity	library	0	library
+amenity	library	1	librarys
+amenity	library	1	libraries
+amenity	market	0	market
+amenity	market	1	markets
+amenity	marketplace	0	marketplace
+amenity	marketplace	1	marketplaces
+amenity	mountain_rescue	0	mountain rescue
+amenity	mountain_rescue	1	mountain rescues
+amenity	nightclub	0	night club
+amenity	nightclub	1	night clubs
+amenity	nursery	0	nursery
+amenity	nursery	1	nurserys
+amenity	nursery	1	nurseries
+amenity	nursing_home	0	nursing home
+amenity	nursing_home	1	nursing homes
+amenity	office	0	office
+amenity	office	1	offices
+amenity	park	0	park
+amenity	park	1	parks
+amenity	parking	0	parking
+amenity	pharmacy	0	pharmacy
+amenity	pharmacy	1	pharmacys
+amenity	pharmacy	1	pharmacies
+amenity	place_of_worship	0	church
+amenity	place_of_worship	1	churches
+amenity	place_of_worship	0	place of worship
+amenity	place_of_worship	1	place of worships
+amenity	place_of_worship	1	places of worship
+amenity	police	0	police
+amenity	post_box	0	post box
+amenity	post_box	1	post boxes
+amenity	post_office	0	post office
+amenity	post_office	1	post offices
+amenity	preschool	0	pre-school
+amenity	preschool	1	pre-schools
+amenity	prison	0	prison
+amenity	prison	1	prisons
+amenity	bar	0	pub
+amenity	bar	1	pubs
+amenity	pub	0	pub
+amenity	pub	1	pubs
+amenity	public_building	0	public building
+amenity	public_building	1	public buildings
+amenity	public_market	0	public market
+amenity	public_market	1	public markets
+amenity	reception_area	0	reception area
+amenity	reception_area	1	reception areas
+amenity	recycling	0	recycling point
+amenity	recycling	1	recycling points
+amenity	restaurant	0	restaurant
+amenity	restaurant	1	restaurants
+amenity	retirement_home	0	retirement home
+amenity	retirement_home	1	retirement homes
+amenity	sauna	0	sauna
+amenity	sauna	1	saunas
+amenity	school	0	school
+amenity	school	1	schools
+amenity	shelter	0	shelter
+amenity	shelter	1	shelters
+amenity	shop	0	shop
+amenity	shop	1	shops
+amenity	shopping	0	shopping
+amenity	social_club	0	social club
+amenity	social_club	1	social clubs
+amenity	studio	0	studio
+amenity	studio	1	studios
+amenity	supermarket	0	supermarket
+amenity	supermarket	1	supermarkets
+amenity	swingerclub	0	swinger club
+amenity	swingerclub	1	swinger clubs
+amenity	taxi	0	taxi
+amenity	taxi	1	taxis
+amenity	taxi	0	taxi rank
+amenity	taxi	1	taxi ranks
+amenity	telephone	0	telephone
+amenity	telephone	1	telephones
+amenity	telephone	0	public telephone
+amenity	telephone	1	public telephones
+amenity	telephone	0	phone booth
+amenity	telephone	1	phone booths
+amenity	theatre	0	theatre
+amenity	theatre	1	theatres
+amenity	toilets	0	toilet
+amenity	toilets	1	toilets
+amenity	townhall	0	town hall
+amenity	townhall	1	town halls
+amenity	university	0	university
+amenity	university	1	universitys
+amenity	university	1	universities
+amenity	vending_machine	0	vending machine
+amenity	vending_machine	1	vending machines
+amenity	veterinary	0	veterinary surgery
+amenity	veterinary	1	veterinary surgeries
+amenity	village_hall	0	village hall
+amenity	village_hall	1	village halls
+amenity	waste_basket	0	waste basket
+amenity	waste_basket	1	waste baskets
+amenity	waste_basket	0	rubbish bin
+amenity	waste_basket	1	rubbish bins
+amenity	waste_basket	0	bin
+amenity	waste_basket	1	bins
+amenity	wifi	0	wifi access
+amenity	wifi	0	wifi
+amenity	wifi	0	wifi point
+amenity	wifi	1	wifi points
+amenity	youth_centre	0	youth centre
+amenity	youth_centre	1	youth centres
+amenity	youth_centre	0	youth center
+amenity	youth_centre	1	youth centers
+building	apartments	0	apartment block
+building	apartments	1	apartment blocks
+building	block	0	building block
+building	block	1	building blocks
+building	bunker	0	bunker
+building	bunker	1	bunkers
+building	chapel	0	chapel
+building	chapel	1	chapels
+building	church	0	church
+building	church	1	churchs
+building	church	1	churches
+building	city_hall	0	city hall
+building	city_hall	1	city halls
+building	commercial	0	commercial building
+building	commercial	1	commercial buildings
+building	dormitory	0	dormitory
+building	dormitory	1	dormitorys
+building	entrance	0	building entrance
+building	entrance	1	building entrances
+building	faculty	0	faculty building
+building	faculty	1	faculty buildings
+building	farm	0	farm building
+building	farm	1	farm buildings
+building	flats	0	flats
+building	flats	1	flats
+building	garage	0	garage
+building	garage	1	garages
+building	hall	0	hall
+building	hall	1	halls
+building	hospital	0	hospital building
+building	hospital	1	hospital buildings
+building	hotel	0	hotel
+building	hotel	1	hotels
+building	house	0	house
+building	house	1	houses
+building	industrial	0	industrial building
+building	industrial	1	industrial buildings
+building	office	0	office building
+building	office	1	office buildings
+building	public	0	public building
+building	public	1	public buildings
+building	residential	0	residential building
+building	residential	1	residential buildings
+building	retail	0	retail building
+building	retail	1	retail buildings
+building	school	0	school building
+building	school	1	school buildings
+building	shop	0	shop
+building	shop	1	shops
+building	stadium	0	stadium
+building	stadium	1	stadiums
+building	store	0	store
+building	store	1	stores
+building	terrace	0	terrace
+building	terrace	1	terraces
+building	tower	0	tower
+building	tower	1	towers
+building	train_station	0	railway station
+building	train_station	1	railway stations
+building	train_station	0	station
+building	train_station	1	stations
+building	university	0	university building
+building	university	1	university buildings
+building	yes	0	building
+building	yes	1	buildings
+highway	bridleway	0	bridleway
+highway	bridleway	1	bridleways
+highway	bus_guideway	0	guided bus lane
+highway	bus_guideway	1	guided bus lanes
+highway	bus_stop	0	bus stop
+highway	bus_stop	1	bus stops
+highway	byway	0	byway
+highway	byway	1	byways
+highway	construction	0	highway under construction
+highway	construction	1	highways under construction
+highway	cycleway	0	cycle path
+highway	cycleway	1	cycle paths
+highway	distance_marker	0	distance marker
+highway	distance_marker	1	distance markers
+highway	emergency_access_point	0	emergency access point
+highway	emergency_access_point	1	emergency access points
+highway	footway	0	footpath
+highway	footway	1	footpaths
+highway	ford	0	ford
+highway	ford	1	fords
+highway	gate	0	gate
+highway	gate	1	gates
+highway	living_street	0	living street
+highway	living_street	1	living streets
+highway	minor	0	minor road
+highway	minor	1	minor roads
+highway	motorway	0	motorway
+highway	motorway	1	motorways
+highway	motorway_junction	0	motorway junction
+highway	motorway_junction	1	motorway junctions
+highway	motorway_link	0	motorway road
+highway	motorway_link	1	motorway roads
+highway	path	0	path
+highway	path	1	paths
+highway	pedestrian	0	pedestrian way
+highway	pedestrian	1	pedestrian ways
+highway	platform	0	platform
+highway	platform	1	platforms
+highway	primary	0	primary road
+highway	primary	1	primary roads
+highway	primary_link	0	primary road
+highway	primary_link	1	primary roads
+highway	raceway	0	raceway
+highway	raceway	1	raceways
+highway	residential	0	residential
+highway	residential	1	residentials
+highway	residential	0	residential road
+highway	residential	1	residential roads
+highway	rest_area	0	rest area
+highway	rest_area	0	rest stop
+highway	road	0	road
+highway	road	1	roads
+highway	secondary	0	secondary road
+highway	secondary	1	secondary roads
+highway	secondary_link	0	secondary road
+highway	secondary_link	1	secondary roads
+highway	service	0	service road
+highway	service	1	service roads
+highway	services	0	service area
+highway	services	0	motorway services
+highway	services	1	motorway services
+highway	steps	0	steps
+highway	steps	1	steps
+highway	stile	0	stile
+highway	stile	1	stiles
+highway	tertiary	0	tertiary road
+highway	tertiary	1	tertiary roads
+highway	track	0	track
+highway	track	1	tracks
+highway	trail	0	trail
+highway	trail	1	trails
+highway	trunk	0	trunk road
+highway	trunk	1	trunk roads
+highway	trunk_link	0	trunk road
+highway	trunk_link	1	trunk roads
+highway	unclassified	0	unclassified road
+highway	unclassified	1	unclassified roads
+highway	unsurfaced	0	unsurfaced road
+highway	unsurfaced	1	unsurfaced roads
+historic	archaeological_site	0	archaeological site
+historic	archaeological_site	1	archaeological sites
+historic	battlefield	0	battlefield
+historic	battlefield	1	battlefields
+historic	boundary_stone	0	boundary stone
+historic	boundary_stone	1	boundary stones
+historic	building	0	building
+historic	building	1	buildings
+historic	castle	0	castle
+historic	castle	1	castles
+historic	church	0	church
+historic	church	1	churchs
+historic	church	1	churches
+historic	house	0	house
+historic	house	1	houses
+historic	icon	0	icon
+historic	icon	1	icons
+historic	manor	0	manor
+historic	manor	1	manors
+historic	memorial	0	memorial
+historic	memorial	1	memorials
+historic	mine	0	mine
+historic	mine	1	mines
+historic	monument	0	monument
+historic	monument	1	monuments
+historic	museum	0	museum
+historic	museum	1	museums
+historic	ruins	0	ruin
+historic	ruins	1	ruins
+historic	tower	0	tower
+historic	tower	1	towers
+historic	wayside_cross	0	wayside cross
+historic	wayside_cross	1	wayside crosses
+historic	wayside_shrine	0	wayside shrine
+historic	wayside_shrine	1	wayside shrines
+historic	wreck	0	wreck
+historic	wreck	1	wrecks
+landuse	allotments	0	allotment
+landuse	allotments	1	allotments
+landuse	basin	0	basin
+landuse	basin	1	basins
+landuse	brownfield	0	brownfield land
+landuse	brownfield	1	brownfield lands
+landuse	cemetery	0	cemetery
+landuse	cemetery	1	cemeterys
+landuse	cemetery	1	cemeteries
+landuse	commercial	0	commercial area
+landuse	commercial	1	commercial areas
+landuse	conservation	0	conservation
+landuse	conservation	1	conservations
+landuse	construction	0	construction
+landuse	construction	1	constructions
+landuse	farm	0	farm
+landuse	farm	1	farms
+landuse	farmland	0	farmland
+landuse	farmland	1	farmlands
+landuse	farmyard	0	farmyard
+landuse	farmyard	1	farmyards
+landuse	forest	0	forest
+landuse	forest	1	forests
+landuse	grass	0	grass
+landuse	grass	1	grasses
+landuse	greenfield	0	greenfield land
+landuse	greenfield	1	greenfield lands
+landuse	industrial	0	industrial area
+landuse	industrial	1	industrial areas
+landuse	landfill	0	landfill
+landuse	landfill	1	landfills
+landuse	meadow	0	meadow
+landuse	meadow	1	meadows
+landuse	military	0	military area
+landuse	military	1	military areas
+landuse	mine	0	mine
+landuse	mine	1	mines
+landuse	mountain	0	mountain
+landuse	mountain	1	mountains
+landuse	nature_reserve	0	nature reserve
+landuse	nature_reserve	1	nature reserves
+landuse	park	0	park
+landuse	park	1	parks
+landuse	piste	0	piste
+landuse	piste	1	pistes
+landuse	plaza	0	plaza
+landuse	plaza	1	plazas
+landuse	quarry	0	quarry
+landuse	quarry	1	quarrys
+landuse	quarry	1	quarries
+landuse	railway	0	railway
+landuse	railway	1	railways
+landuse	recreation_ground	0	recreation ground
+landuse	recreation_ground	1	recreation grounds
+landuse	reservoir	0	reservoir
+landuse	reservoir	1	reservoirs
+landuse	residential	0	residential area
+landuse	residential	1	residential areas
+landuse	retail	0	retail
+landuse	retail	1	retails
+landuse	village_green	0	village green
+landuse	village_green	1	village greens
+landuse	vineyard	0	vineyard
+landuse	vineyard	1	vineyards
+landuse	wetland	0	wetland
+landuse	wetland	1	wetlands
+landuse	wood	0	wood
+landuse	wood	1	woods
+leisure	beach_resort	0	beach resort
+leisure	beach_resort	1	beach resorts
+leisure	common	0	common land
+leisure	common	1	common lands
+leisure	fishing	0	fishing area
+leisure	fishing	1	fishing areas
+leisure	garden	0	garden
+leisure	garden	1	gardens
+leisure	golf_course	0	golf course
+leisure	golf_course	1	golf courses
+leisure	hackerspace	0	hackerspace
+leisure	hackerspace	1	hackerspaces
+leisure	ice_rink	0	ice rink
+leisure	ice_rink	1	ice rinks
+leisure	marina	0	marina
+leisure	marina	1	marinas
+leisure	miniature_golf	0	miniature golf
+leisure	miniature_golf	1	miniature golfs
+leisure	nature_reserve	0	nature reserve
+leisure	nature_reserve	1	nature reserves
+leisure	park	0	park
+leisure	park	1	parks
+leisure	pitch	0	sports pitch
+leisure	pitch	1	sports pitches
+leisure	playground	0	playground
+leisure	playground	1	playgrounds
+leisure	recreation_ground	0	recreation ground
+leisure	recreation_ground	1	recreation grounds
+leisure	slipway	0	slipway
+leisure	slipway	1	slipways
+leisure	sports_centre	0	sports centre
+leisure	sports_centre	1	sports centres
+leisure	sports_centre	0	sports centre
+leisure	sports_centre	1	sports centers
+leisure	stadium	0	stadium
+leisure	stadium	1	stadiums
+leisure	swimming_pool	0	swimming pool
+leisure	swimming_pool	1	swimming pools
+leisure	track	0	running track
+leisure	track	1	running tracks
+leisure	water_park	0	water park
+leisure	water_park	1	water parks
+natural	bay	0	bay
+natural	bay	1	bays
+natural	beach	0	beach
+natural	beach	1	beachs
+natural	beach	1	beaches
+natural	cape	0	cape
+natural	cape	1	capes
+natural	cave_entrance	0	cave entrance
+natural	cave_entrance	1	cave entrances
+natural	channel	0	channel
+natural	channel	1	channels
+natural	cliff	0	cliff
+natural	cliff	1	cliffs
+natural	coastline	0	coastline
+natural	coastline	1	coastlines
+natural	crater	0	crater
+natural	crater	1	craters
+natural	feature	0	feature
+natural	feature	1	features
+natural	fell	0	fell
+natural	fell	1	fells
+natural	fjord	0	fjord
+natural	fjord	1	fjords
+natural	geyser	0	geyser
+natural	geyser	1	geysers
+natural	glacier	0	glacier
+natural	glacier	1	glaciers
+natural	heath	0	heath
+natural	heath	1	heaths
+natural	hill	0	hill
+natural	hill	1	hills
+natural	island	0	island
+natural	island	1	islands
+natural	land	0	land
+natural	land	1	lands
+natural	marsh	0	marsh
+natural	marsh	1	marshs
+natural	marsh	1	marshes
+natural	moor	0	moor
+natural	moor	1	moors
+natural	mud	0	mud
+natural	mud	1	muds
+natural	peak	0	peak
+natural	peak	1	peaks
+natural	point	0	point
+natural	point	1	points
+natural	reef	0	reef
+natural	reef	1	reefs
+natural	ridge	0	ridge
+natural	ridge	1	ridges
+natural	river	0	river
+natural	river	1	rivers
+natural	rock	0	rock
+natural	rock	1	rocks
+natural	scree	0	scree
+natural	scree	1	screes
+natural	scrub	0	scrub
+natural	scrub	1	scrubs
+natural	shoal	0	shoal
+natural	shoal	1	shoals
+natural	spring	0	spring
+natural	spring	1	springs
+natural	strait	0	strait
+natural	strait	1	straits
+natural	tree	0	tree
+natural	tree	1	trees
+natural	valley	0	valley
+natural	valley	1	valleys
+natural	volcano	0	volcano
+natural	volcano	1	volcanos
+natural	water	0	water
+natural	water	1	waters
+natural	wetland	0	wetland
+natural	wetland	1	wetlands
+natural	wetlands	0	wetlands
+natural	wetlands	1	wetlands
+natural	wood	0	wood
+natural	wood	1	woods
+place	city	0	city
+place	city	1	citys
+place	city	1	cities
+place	country	0	country
+place	country	1	countrys
+place	country	1	countries
+place	county	0	county
+place	county	1	countys
+place	county	1	counties
+place	farm	0	farm
+place	farm	1	farms
+place	hamlet	0	hamlet
+place	hamlet	1	hamlets
+place	house	0	house
+place	house	1	houses
+place	houses	0	houses
+place	houses	1	houses
+place	island	0	island
+place	island	1	islands
+place	islet	0	islet
+place	islet	1	islets
+place	locality	0	locality
+place	locality	1	localitys
+place	locality	1	localities
+place	moor	0	moor
+place	moor	1	moors
+place	municipality	0	municipality
+place	municipality	1	municipalitys
+place	municipality	1	municipalities
+place	postcode	0	postcode
+place	postcode	1	postcodes
+place	region	0	region
+place	region	1	regions
+place	sea	0	sea
+place	sea	1	seas
+place	state	0	state
+place	state	1	states
+place	subdivision	0	subdivision
+place	subdivision	1	subdivisions
+place	suburb	0	suburb
+place	suburb	1	suburbs
+place	town	0	town
+place	town	1	towns
+place	unincorporated_area	0	unincorporated area
+place	unincorporated_area	1	unincorporated areas
+place	village	0	village
+place	village	1	villages
+railway	abandoned	0	abandoned railway
+railway	abandoned	1	abandoned railways
+railway	construction	0	railway under construction
+railway	construction	1	railway under constructions
+railway	disused	0	disused railway
+railway	disused	1	disused railways
+railway	disused_station	0	disused railway station
+railway	disused_station	1	disused railway stations
+railway	funicular	0	funicular railway
+railway	funicular	1	funicular railways
+railway	halt	0	train stop
+railway	halt	1	train stops
+railway	historic_station	0	historic railway station
+railway	historic_station	1	historic railway stations
+railway	junction	0	railway junction
+railway	junction	1	railway junctions
+railway	level_crossing	0	level crossing
+railway	level_crossing	1	level crossings
+railway	light_rail	0	light rail
+railway	light_rail	1	light rails
+railway	monorail	0	monorail
+railway	monorail	1	monorails
+railway	narrow_gauge	0	narrow gauge railway
+railway	narrow_gauge	1	narrow gauge railways
+railway	platform	0	railway platform
+railway	platform	1	railway platforms
+railway	preserved	0	preserved railway
+railway	preserved	1	preserved railways
+railway	spur	0	railway spur
+railway	spur	1	railway spurs
+railway	station	0	railway station
+railway	station	1	railway stations
+railway	station	0	station
+railway	station	1	stations
+railway	subway	0	subway station
+railway	subway	1	subway stations
+railway	subway_entrance	0	subway entrance
+railway	subway_entrance	1	subway entrances
+railway	switch	0	railway points
+railway	switch	1	railway points
+railway	tram	0	tramway
+railway	tram	1	tramways
+railway	tram_stop	0	tram stop
+railway	tram_stop	1	tram stops
+railway	yard	0	railway yard
+railway	yard	1	railway yards
+shop	alcohol	0	off license
+shop	alcohol	1	off licenses
+shop	apparel	0	apparel shop
+shop	apparel	1	apparel shops
+shop	art	0	art shop
+shop	art	1	art shops
+shop	bakery	0	bakery
+shop	bakery	1	bakerys
+shop	bakery	1	bakeries
+shop	beauty	0	beauty shop
+shop	beauty	1	beauty shops
+shop	beverages	0	beverages shop
+shop	beverages	1	beverages shops
+shop	bicycle	0	bicycle shop
+shop	bicycle	1	bicycle shops
+shop	books	0	book shop
+shop	books	1	book shops
+shop	butcher	0	butcher
+shop	butcher	1	butchers
+shop	car	0	car shop
+shop	car	1	car shops
+shop	car_dealer	0	car dealer
+shop	car_dealer	1	car dealers
+shop	car_parts	0	car parts
+shop	car_parts	1	car parts
+shop	carpet	0	carpet shop
+shop	carpet	1	carpet shops
+shop	car_repair	0	car repair
+shop	car_repair	1	car repairs
+shop	charity	0	charity shop
+shop	charity	1	charity shops
+shop	chemist	0	chemist
+shop	chemist	1	chemists
+shop	clothes	0	clothes shop
+shop	clothes	1	clothes shops
+shop	computer	0	computer shop
+shop	computer	1	computer shops
+shop	confectionery	0	confectionery shop
+shop	confectionery	1	confectionery shops
+shop	convenience	0	convenience store
+shop	convenience	1	convenience stores
+shop	copyshop	0	copy shop
+shop	copyshop	1	copy shops
+shop	cosmetics	0	cosmetics shop
+shop	cosmetics	1	cosmetics shops
+shop	department_store	0	department store
+shop	department_store	1	department stores
+shop	discount	0	discount items shop
+shop	discount	1	discount items shops
+shop	doityourself	0	do-it-yourself
+shop	doityourself	1	do-it-yourselfs
+shop	doityourself	1	do-it-yourselves
+shop	drugstore	0	drugstore
+shop	drugstore	1	drugstores
+shop	dry_cleaning	0	dry cleaning
+shop	dry_cleaning	1	dry cleanings
+shop	electronics	0	electronics shop
+shop	electronics	1	electronics shops
+shop	estate_agent	0	estate agent
+shop	estate_agent	1	estate agents
+shop	farm	0	farm shop
+shop	farm	1	farm shops
+shop	fashion	0	fashion shop
+shop	fashion	1	fashion shops
+shop	fish	0	fish shop
+shop	fish	1	fish shops
+shop	florist	0	florist
+shop	florist	1	florists
+shop	food	0	food shop
+shop	food	1	food shops
+shop	funeral_directors	0	funeral director
+shop	funeral_directors	1	funeral directors
+shop	furniture	0	furniture
+shop	furniture	1	furnitures
+shop	gallery	0	gallery
+shop	gallery	1	gallerys
+shop	gallery	1	galleries
+shop	garden_centre	0	garden centre
+shop	garden_centre	1	garden centres
+shop	garden_centre	0	garden center
+shop	garden_centre	1	garden centers
+shop	general	0	general store
+shop	general	1	general stores
+shop	gift	0	gift shop
+shop	gift	1	gift shops
+shop	greengrocer	0	greengrocer
+shop	greengrocer	1	greengrocers
+shop	grocery	0	grocery shop
+shop	grocery	1	grocery shops
+shop	hairdresser	0	hairdresser
+shop	hairdresser	1	hairdressers
+shop	hardware	0	hardware store
+shop	hardware	1	hardware stores
+shop	hifi	0	hi-fi
+shop	hifi	1	hi-fis
+shop	insurance	0	insurance
+shop	insurance	1	insurances
+shop	jewelry	0	jewelry shop
+shop	jewelry	1	jewelry shops
+shop	kiosk	0	kiosk shop
+shop	kiosk	1	kiosk shops
+shop	laundry	0	laundry
+shop	laundry	1	laundrys
+shop	laundry	1	laundries
+shop	mall	0	mall
+shop	mall	1	malls
+shop	market	0	market
+shop	market	1	markets
+shop	mobile_phone	0	mobile phone shop
+shop	mobile_phone	1	mobile phone shops
+shop	motorcycle	0	motorcycle shop
+shop	motorcycle	1	motorcycle shops
+shop	music	0	music shop
+shop	music	1	music shops
+shop	newsagent	0	newsagent
+shop	newsagent	1	newsagents
+shop	optician	0	optician
+shop	optician	1	opticians
+shop	organic	0	organic food shop
+shop	organic	1	organic food shops
+shop	outdoor	0	outdoor shop
+shop	outdoor	1	outdoor shops
+shop	pet	0	pet shop
+shop	pet	1	pet shops
+shop	photo	0	photo shop
+shop	photo	1	photo shops
+shop	salon	0	salon
+shop	salon	1	salons
+shop	shoes	0	shoe shop
+shop	shoes	1	shoe shops
+shop	shopping_centre	0	shopping centre
+shop	shopping_centre	1	shopping centres
+shop	shopping_centre	0	shopping center
+shop	shopping_centre	1	shopping centers
+shop	sports	0	sports shop
+shop	sports	1	sports shops
+shop	stationery	0	stationery shop
+shop	stationery	1	stationery shops
+shop	supermarket	0	supermarket
+shop	supermarket	1	supermarkets
+shop	toys	0	toy shop
+shop	toys	1	toy shops
+shop	travel_agency	0	travel agency
+shop	travel_agency	1	travel agencys
+shop	travel_agency	1	travel agencies
+shop	video	0	video shop
+shop	video	1	video shops
+shop	wine	0	off license
+shop	wine	1	off licenses
+tourism	alpine_hut	0	alpine hut
+tourism	alpine_hut	1	alpine huts
+tourism	artwork	0	artwork
+tourism	artwork	1	artworks
+tourism	attraction	0	attraction
+tourism	attraction	1	attractions
+tourism	bed_and_breakfast	0	bed and breakfast
+tourism	bed_and_breakfast	1	bed and breakfasts
+tourism	cabin	0	cabin
+tourism	cabin	1	cabins
+tourism	camp_site	0	camp site
+tourism	camp_site	1	camp sites
+tourism	caravan_site	0	caravan site
+tourism	caravan_site	1	caravan sites
+tourism	chalet	0	chalet
+tourism	chalet	1	chalets
+tourism	guest_house	0	guest house
+tourism	guest_house	1	guest houses
+tourism	hostel	0	hostel
+tourism	hostel	1	hostels
+tourism	hotel	0	hotel
+tourism	hotel	1	hotels
+tourism	information	0	information
+tourism	information	1	informations
+tourism	lean_to	0	lean to
+tourism	lean_to	1	lean tos
+tourism	motel	0	motel
+tourism	motel	1	motels
+tourism	museum	0	museum
+tourism	museum	1	museums
+tourism	picnic_site	0	picnic site
+tourism	picnic_site	1	picnic sites
+tourism	theme_park	0	theme park
+tourism	theme_park	1	theme parks
+tourism	valley	0	valley
+tourism	valley	1	valleys
+tourism	viewpoint	0	viewpoint
+tourism	viewpoint	1	viewpoints
+tourism	zoo	0	zoo
+tourism	zoo	1	zoos
+waterway	boatyard	0	boatyard
+waterway	boatyard	1	boatyards
+leisure	slipway	0	boat ramp
+leisure	slipway	1	boat ramps
+waterway	canal	0	canal
+waterway	canal	1	canals
+waterway	connector	0	waterway connector
+waterway	connector	1	waterway connectors
+waterway	dam	0	dam
+waterway	dam	1	dams
+waterway	derelict_canal	0	derelict canal
+waterway	derelict_canal	1	derelict canals
+waterway	ditch	0	ditch
+waterway	ditch	1	ditchs
+waterway	ditch	1	ditches
+waterway	dock	0	dock
+waterway	dock	1	docks
+waterway	drain	0	drain
+waterway	drain	1	drains
+waterway	lock	0	lock
+waterway	lock	1	locks
+waterway	lock_gate	0	lock gate
+waterway	lock_gate	1	lock gates
+waterway	mineral_spring	0	mineral spring
+waterway	mineral_spring	1	mineral springs
+waterway	mooring	0	mooring
+waterway	mooring	1	moorings
+waterway	rapids	0	rapids
+waterway	rapids	1	rapids
+waterway	river	0	river
+waterway	river	1	rivers
+waterway	riverbank	0	riverbank
+waterway	riverbank	1	riverbanks
+waterway	stream	0	stream
+waterway	stream	1	streams
+waterway	wadi	0	wadi
+waterway	wadi	1	wadis
+waterway	waterfall	0	waterfall
+waterway	waterfall	1	waterfalls
+waterway	water_point	0	water point
+waterway	water_point	1	water points
+waterway	weir	0	weir
+waterway	weir	1	weirs
+man_made	windmill	0	windmill
+man_made	windmill	1	windmills

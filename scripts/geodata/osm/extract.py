@@ -6,33 +6,29 @@ Extracts nodes/ways/relations, their metadata and dependencies
 from .osm XML files.
 '''
 
-import os
 import re
-import sys
+import six
 import urllib
-import ujson as json
 import HTMLParser
 
 from collections import OrderedDict
 from lxml import etree
 
-this_dir = os.path.realpath(os.path.dirname(__file__))
-sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
-from geodata.address_formatting.formatter import AddressFormatter
 from geodata.csv_utils import unicode_csv_reader
-
-
-OSM_BOUNDARIES_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                                  'resources', 'boundaries', 'osm')
-
+from geodata.text.normalize import normalize_string, NORMALIZE_STRING_DECOMPOSE, NORMALIZE_STRING_LATIN_ASCII
 from geodata.encoding import safe_decode
+
 
 WAY_OFFSET = 10 ** 15
 RELATION_OFFSET = 2 * 10 ** 15
 
-ALL_OSM_TAGS = set(['node', 'way', 'relation'])
-WAYS_RELATIONS = set(['way', 'relation'])
+NODE = 'node'
+WAY = 'way'
+RELATION = 'relation'
+
+ALL_OSM_TAGS = set([NODE, WAY, RELATION])
+WAYS_RELATIONS = set([WAY, RELATION])
 
 OSM_NAME_TAGS = (
     'name',
@@ -95,6 +91,20 @@ def parse_osm(filename, allowed_types=ALL_OSM_TAGS, dependencies=False):
             while elem.getprevious() is not None:
                 del elem.getparent()[0]
 
+
+def osm_type_and_id(element_id):
+    element_id = long(element_id)
+    if element_id >= RELATION_OFFSET:
+        id_type = RELATION
+        element_id -= RELATION_OFFSET
+    elif element_id >= WAY_OFFSET:
+        id_type = WAY
+        element_id -= WAY_OFFSET
+    else:
+        id_type = NODE
+
+    return id_type, element_id
+
 apposition_regex = re.compile('(.*[^\s])[\s]*\([\s]*(.*[^\s])[\s]*\)$', re.I)
 
 html_parser = HTMLParser.HTMLParser()
@@ -126,57 +136,53 @@ def osm_wikipedia_title_and_language(key, value):
     return normalize_wikipedia_title(value), language
 
 
-class OSMAddressComponents(object):
-    '''
-    Keeps a map of OSM keys and values to the standard components
-    of an address like city, state, etc. used for address formatting.
-    When we reverse geocode a point, it will fall into a number of
-    polygons, and we simply need to assign the names of said polygons
-    to an address field.
-    '''
+non_breaking_dash = six.u('[-\u058a\u05be\u1400\u1806\u2010-\u2013\u2212\u2e17\u2e1a\ufe32\ufe63\uff0d]')
+simple_number = six.u('(?:{})?[0-9]+(?:\.[0-9]+)?').format(non_breaking_dash)
+simple_number_regex = re.compile(simple_number, re.UNICODE)
 
-    ADMIN_LEVEL = 'admin_level'
+non_breaking_dash_regex = re.compile(non_breaking_dash, re.UNICODE)
+number_range_regex = re.compile(six.u('({}){}({})').format(simple_number, non_breaking_dash, simple_number), re.UNICODE)
+letter_range_regex = re.compile(r'([^\W\d_]){}([^\W\d_])'.format(non_breaking_dash.encode('unicode-escape')), re.UNICODE)
 
-    # These keys are country-independent
-    global_keys = {
-        'place': {
-            'country': AddressFormatter.COUNTRY,
-            'state': AddressFormatter.STATE,
-            'region': AddressFormatter.STATE,
-            'province': AddressFormatter.STATE,
-            'county': AddressFormatter.STATE_DISTRICT,
-            'municipality': AddressFormatter.CITY,
-            'city': AddressFormatter.CITY,
-            'town': AddressFormatter.CITY,
-            'village': AddressFormatter.CITY,
-            'hamlet': AddressFormatter.CITY,
-            'borough': AddressFormatter.CITY_DISTRICT,
-            'suburb': AddressFormatter.SUBURB,
-            'quarter': AddressFormatter.SUBURB,
-            'neighbourhood': AddressFormatter.SUBURB
-        }
-    }
 
-    def __init__(self):
-        self.config = {}
-
-    def configure(self, boundaries_dir=OSM_BOUNDARIES_DIR):
-        for filename in os.listdir(boundaries_dir):
-            if not filename.endswith('.json'):
+def parse_osm_number_range(value):
+    value = normalize_string(value, string_options=NORMALIZE_STRING_LATIN_ASCII | NORMALIZE_STRING_DECOMPOSE)
+    numbers = []
+    values = value.split(six.u(';'))
+    for val in values:
+        val = val.strip()
+        match = number_range_regex.match(val)
+        if match:
+            start_num, end_num = match.groups()
+            try:
+                start_num = int(start_num)
+                end_num = int(end_num)
+                if end_num > start_num:
+                    if end_num - start_num > 100:
+                        end_num = start_num + 100
+                    for i in xrange(start_num, end_num + 1):
+                        numbers.append(safe_decode(i))
+                else:
+                    numbers.extend([start_num, end_num])
+                    continue
+            except (TypeError, ValueError):
+                numbers.extend([start_num, end_num])
                 continue
 
-            country_code = filename.rsplit('.json', 1)[0]
-            data = json.load(open(os.path.join(boundaries_dir, filename)))
-            for prop, values in data.iteritems():
-                for k, v in values.iteritems():
-                    if v not in AddressFormatter.address_formatter_fields:
-                        raise ValueError(u'Invalid value in {} for prop={}, key={}: {}'.format(filename, prop, k, v))
-            self.config[country_code] = data
-
-    def get_component(self, country, prop, value):
-        props = self.config.get(country, {}).get(prop, {})
-        if not props and prop in self.global_keys:
-            props = self.global_keys[prop]
-        return props.get(value, None)
-
-osm_address_components = OSMAddressComponents()
+        else:
+            letter_match = letter_range_regex.match(val)
+            if letter_match:
+                start_num, end_num = letter_match.groups()
+                start_num = ord(start_num)
+                end_num = ord(end_num)
+                if end_num > start_num:
+                    if end_num - start_num > 100:
+                        end_num = start_num + 100
+                    for i in xrange(start_num, end_num + 1):
+                        numbers.append(six.unichr(i))
+                else:
+                    numbers.extend([six.unichr(start_num), six.unichr(end_num)])
+                    continue
+            else:
+                numbers.extend(non_breaking_dash_regex.split(safe_decode(val)))
+    return numbers

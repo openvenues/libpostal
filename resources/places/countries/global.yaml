@@ -1,0 +1,201 @@
+# This config specifies isolated and conditional probabilities
+# of including various admin components (applies to both addresses
+# and standalone place queries)
+
+global:
+    # Probability of including individual components
+    components:
+        suburb:
+            probability: 0.2
+        city_district:
+            probability: 0.2
+        city:
+            probability: 0.85
+        island:
+            # Islands are usually not represented in addresses
+            probability: 0.0
+        state_district:
+            probability: 0.05
+        state:
+            probability: 0.1
+        country:
+            probability: 0.6
+
+countries:
+    # Australia
+    au:
+        components:
+            state:
+                probability: 0.6
+
+    # Canada
+    ca:
+        components:
+            state:
+                probability: 0.7
+
+    # France
+    fr:
+        components:
+            city_district:
+                probability: 0.4
+
+    # United Kingdom
+    gb:
+        components:
+            suburb:
+                probability: 0.5
+
+    # Indonesia
+    id:
+        components:
+            island:
+                probability: 0.4
+
+    # Hong Kong
+    hk:
+        components:
+            country:
+                probability: 0.85
+            state:
+                probability: 0.2
+            island:
+                probability: 0.4
+                containing:
+                    - id: 2278450 # Hong Kong Island (already a "state")
+                      type: relation
+                      probability: 0.0
+
+    # Japan
+    jp:
+        components:
+            island:
+                probability: 0.4
+            suburb:
+                probability: 0.6
+            city_district:
+                probability: 0.8
+            state:
+                probability: 0.8
+            country:
+                probability: 0.4
+
+    hu:
+        components:
+            country:
+                probability: 0.1
+
+    # Saint Kitts and Nevis
+    kn:
+        components:
+            island:
+                probability: 0.8
+
+    # Malaysia
+    my:
+        components:
+            island:
+                probability: 0.3
+
+    # Pitcairn Islands
+    pn:
+        components:
+            island:
+                probability: 0.8
+
+    # Seychelles
+    sc:
+        components:
+            island:
+                probability: 0.8
+
+    # United States
+    us:
+        # Definitions
+        kings_county: &kings_county
+            id: 369518 # Kings County (Brooklyn, NY)
+            type: relation
+
+        queens_county: &queens_county
+            id: 369519 # Queens County (Queens, NY)
+            type: relation
+
+        bronx_county: &bronx_county
+            id: 2552450 # Bronx County (Bronx, NY)
+            type: relation
+
+        richmond_county: &richmond_county
+            id: 962876 # Richmond County (Staten Island, NY)
+            type: relation
+
+        hawaii: &hawaii
+            id: 166563 # State of Hawaii
+            type: relation
+
+        components:
+            suburb:
+                probability: 0.4
+            city_district:
+                probability: 0.2
+                containing:
+                    - <<: *kings_county
+                      probability: 0.85
+                    - <<: *queens_county
+                      probability: 0.85
+                    - <<: *bronx_county
+                      probability: 0.85
+                    - <<: *richmond_county
+                      probability: 0.85
+            city:
+                containing:
+                    - <<: *kings_county
+                      probability: 0.1
+                    - <<: *queens_county
+                      probability: 0.1
+                    - <<: *bronx_county
+                      probability: 0.1
+                    - <<: *richmond_county
+                      probability: 0.1
+            island:
+                order:
+                    direction: before
+                    component: state_district
+                containing:
+                    # Island is more common in Hawaiian addresses
+                    - <<: *hawaii
+                      probability: 0.8
+            state:
+                probability: 0.7
+                # Higher probability of Brooklyn/city_district NY/state
+                containing:
+                    - <<: *kings_county
+                      probability: 0.8
+                    - <<: *queens_county
+                      probability: 0.8
+                    - <<: *bronx_county
+                      probability: 0.8
+                    - <<: *richmond_county
+                      probability: 0.8
+
+            state_district:
+                probability: 0.1
+            country:
+                probability: 0.1
+
+    # Tuvalu
+    tv:
+        components:
+            island:
+                probability: 0.8
+
+    # US Virgin Islands
+    vi:
+        components:
+            island:
+                probability: 0.8
+
+    # British Virgin Islands
+    vg:
+        components:
+            island:
+                probability: 0.8

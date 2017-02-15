@@ -1,9 +1,12 @@
 c
+cr
 d
 e
 g
+i
 n
 p
 s
 v
+un
 w

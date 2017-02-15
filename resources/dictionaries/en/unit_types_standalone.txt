@@ -1,0 +1,16 @@
+front|frnt
+garage|grge
+lobby|lby|lbby
+lower left|lower l|lwr l
+lower right|lower r|lwr r
+maisonette|msnt
+penthouse|pths|ph|pent house
+rear
+rear lower|rear lwr
+side|sd
+top floor left|tfl|t f l|t.f.l|t / f / l
+top floor right|tfr|t f r|t.f.r|t / f / r
+top left|tl|t l|t.l|t / l
+top right|tr|t r|t.r|t / r
+upper left|upper l|upr left|uppr left|upr l|uppr l
+upper right|upper r|upr right|uppr right|upr r|uppr r

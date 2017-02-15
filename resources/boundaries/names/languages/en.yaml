@@ -1,0 +1,28 @@
+# Prefixes which can be stripped to normalize a place name
+# Note these will be stripped off the front at random, not every time
+prefixes:
+    - city of
+    - township of
+    - town of
+    - regional municipality of
+    - rural city of
+    - municipality of
+    - borough of
+    - london borough of
+    - royal borough of
+    - shire of
+    - parish of
+    - free state of
+    - autonomous city of
+    - territorial waters of
+    - county of
+    - county
+    - district of
+
+# Suffixes which can be stripped to normalize a place name
+suffixes:
+    - township
+    - municipality
+    - city
+    - cp
+    - civil parish

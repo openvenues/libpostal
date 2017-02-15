@@ -1,0 +1,499 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	aeroporto
+aeroway	aerodrome	1	aeroportos
+amenity	arts_centre	0	centro artístico
+amenity	arts_centre	1	centro artísticos
+amenity	atm	0	caixeiro automático
+amenity	atm	1	caixeiro automáticos
+amenity	auditorium	0	auditorio
+amenity	auditorium	1	auditorios
+amenity	bank	0	banco
+amenity	bank	1	bancos
+amenity	bar	0	bar
+amenity	bar	1	bars
+amenity	bench	0	banco
+amenity	bench	1	bancos
+amenity	bicycle_parking	0	aparcadoiro de bicicletas
+amenity	bicycle_parking	1	aparcadoiro de bicicletass
+amenity	bicycle_rental	0	aluguer de bicicletas
+amenity	bicycle_rental	1	aluguer de bicicletass
+amenity	brothel	0	prostíbulo
+amenity	brothel	1	prostíbulos
+amenity	bus_station	0	estación de autobuses
+amenity	bus_station	1	estación de autobusess
+amenity	cafe	0	cafetaría
+amenity	cafe	1	cafetarías
+amenity	car_rental	0	aluguer de automóbiles
+amenity	car_rental	1	aluguer de automóbiless
+amenity	car_sharing	0	aluguer de automóbiles
+amenity	car_sharing	1	aluguer de automóbiless
+amenity	casino	0	casino
+amenity	casino	1	casinos
+amenity	cinema	0	cine
+amenity	cinema	1	cines
+amenity	clinic	0	clínica
+amenity	clinic	1	clínicas
+amenity	club	0	club
+amenity	club	1	clubs
+amenity	college	0	instituto
+amenity	college	1	institutos
+amenity	community_centre	0	centro comunitario
+amenity	community_centre	1	centro comunitarios
+amenity	courthouse	0	xulgado
+amenity	courthouse	1	xulgados
+amenity	crematorium	0	crematorio
+amenity	crematorium	1	crematorios
+amenity	dentist	0	dentista
+amenity	dentist	1	dentistas
+amenity	dormitory	0	residencia universitaria
+amenity	dormitory	1	residencia universitarias
+amenity	drinking_water	0	auga potable
+amenity	drinking_water	1	auga potables
+amenity	driving_school	0	escola de condución
+amenity	driving_school	1	escola de conducións
+amenity	emergency_phone	0	teléfono de emerxencia
+amenity	emergency_phone	1	teléfono de emerxencias
+amenity	fast_food	0	comida rápida
+amenity	fast_food	1	comida rápidas
+amenity	fire_station	0	parque de bombeiros
+amenity	fire_station	1	parque de bombeiross
+amenity	fountain	0	fonte
+amenity	fountain	1	fontes
+amenity	fuel	0	combustible
+amenity	fuel	1	combustibles
+amenity	grave_yard	0	cemiterio
+amenity	grave_yard	1	cemiterios
+amenity	gym	0	ximnasio
+amenity	gym	1	ximnasios
+amenity	health_centre	0	centro de saúde
+amenity	health_centre	1	centro de saúdes
+amenity	hospital	0	hospital
+amenity	hospital	1	hospitals
+amenity	hotel	0	hotel
+amenity	hotel	1	hotels
+amenity	ice_cream	0	xeadaría
+amenity	ice_cream	1	xeadarías
+amenity	kindergarten	0	xardín de infancia
+amenity	kindergarten	1	xardín de infancias
+amenity	library	0	biblioteca
+amenity	library	1	bibliotecas
+amenity	market	0	mercado
+amenity	market	1	mercados
+amenity	marketplace	0	praza de mercado
+amenity	marketplace	1	praza de mercados
+amenity	nightclub	0	club nocturno
+amenity	nightclub	1	club nocturnos
+amenity	office	0	oficina
+amenity	office	1	oficinas
+amenity	park	0	parque
+amenity	park	1	parques
+amenity	parking	0	aparcadoiro
+amenity	parking	1	aparcadoiros
+amenity	pharmacy	0	farmacia
+amenity	pharmacy	1	farmacias
+amenity	place_of_worship	0	lugar de culto
+amenity	place_of_worship	1	lugar de cultos
+amenity	police	0	policía
+amenity	police	1	policías
+amenity	post_box	0	caixa de correos
+amenity	post_box	1	caixa de correoss
+amenity	post_office	0	oficina de correos
+amenity	post_office	1	oficina de correoss
+amenity	preschool	0	preescolar
+amenity	preschool	1	preescolars
+amenity	prison	0	prisión
+amenity	prison	1	prisións
+amenity	pub	0	pub
+amenity	pub	1	pubs
+amenity	public_building	0	edificio público
+amenity	public_building	1	edificio públicos
+amenity	public_market	0	mercado público
+amenity	public_market	1	mercado públicos
+amenity	recycling	0	punto de reciclaxe
+amenity	recycling	1	punto de reciclaxes
+amenity	restaurant	0	restaurante
+amenity	restaurant	1	restaurantes
+amenity	retirement_home	0	residencia de xubilados
+amenity	retirement_home	1	residencia de xubiladoss
+amenity	sauna	0	sauna
+amenity	sauna	1	saunas
+amenity	school	0	escola
+amenity	school	1	escolas
+amenity	shelter	0	abeiro
+amenity	shelter	1	abeiros
+amenity	shop	0	tenda
+amenity	shop	1	tendas
+amenity	shopping	0	comercio
+amenity	shopping	1	comercios
+amenity	social_club	0	club social
+amenity	social_club	1	club socials
+amenity	studio	0	estudio
+amenity	studio	1	estudios
+amenity	supermarket	0	supermercado
+amenity	supermarket	1	supermercados
+amenity	telephone	0	teléfono público
+amenity	telephone	1	teléfono públicos
+amenity	theatre	0	teatro
+amenity	theatre	1	teatros
+amenity	toilets	0	aseos
+amenity	toilets	1	aseoss
+amenity	townhall	0	concello
+amenity	townhall	1	concellos
+amenity	university	0	universidade
+amenity	university	1	universidades
+amenity	vending_machine	0	máquina expendedora
+amenity	vending_machine	1	máquina expendedoras
+amenity	veterinary	0	clínica veterinaria
+amenity	veterinary	1	clínica veterinarias
+amenity	wifi	0	acceso wifi
+amenity	wifi	1	acceso wifis
+amenity	youth_centre	0	casa da xuventude
+amenity	youth_centre	1	casa da xuventudes
+highway	bridleway	0	pista de cabalos
+highway	bridleway	1	pista de cabaloss
+highway	bus_stop	0	parada de autobús
+highway	bus_stop	1	parada de autobúss
+highway	byway	0	camiño secundario
+highway	byway	1	camiño secundarios
+highway	construction	0	autoestrada en construción
+highway	construction	1	autoestrada en construcións
+highway	cycleway	0	pista de bicicletas
+highway	cycleway	1	pista de bicicletass
+highway	distance_marker	0	indicador quilométrico
+highway	distance_marker	1	indicador quilométricos
+highway	emergency_access_point	0	punto de acceso de emerxencia
+highway	emergency_access_point	1	punto de acceso de emerxencias
+highway	footway	0	carreiro
+highway	footway	1	carreiros
+highway	ford	0	vao
+highway	ford	1	vaos
+highway	gate	0	porta
+highway	gate	1	portas
+highway	living_street	0	rúa residencial
+highway	living_street	1	rúa residencials
+highway	minor	0	estrada lateral
+highway	minor	1	estrada laterals
+highway	motorway	0	autoestrada
+highway	motorway	1	autoestradas
+highway	motorway_junction	0	cruce de autovías
+highway	motorway_junction	1	cruce de autovíass
+highway	motorway_link	0	enlace de autoestrada
+highway	motorway_link	1	enlace de autoestradas
+highway	path	0	camiño
+highway	path	1	camiños
+highway	pedestrian	0	camiño peonil
+highway	pedestrian	1	camiño peonils
+highway	platform	0	plataforma
+highway	platform	1	plataformas
+highway	primary	0	estrada primaria
+highway	primary	1	estrada primarias
+highway	primary_link	0	estrada principal
+highway	primary_link	1	estrada principals
+highway	raceway	0	circuíto
+highway	raceway	1	circuítos
+highway	residential	0	residencial
+highway	residential	1	residencials
+highway	road	0	estrada
+highway	road	1	estradas
+highway	secondary	0	estrada secundaria
+highway	secondary	1	estrada secundarias
+highway	secondary_link	0	estrada secundaria
+highway	secondary_link	1	estrada secundarias
+highway	service	0	estrada de servizo
+highway	service	1	estrada de servizos
+highway	services	0	área de servizo
+highway	services	1	área de servizos
+highway	steps	0	chanzos
+highway	steps	1	chanzoss
+highway	stile	0	escada
+highway	stile	1	escadas
+highway	tertiary	0	estrada terciaria
+highway	tertiary	1	estrada terciarias
+highway	track	0	pista
+highway	track	1	pistas
+highway	trail	0	pista
+highway	trail	1	pistas
+highway	trunk	0	estrada nacional
+highway	trunk	1	estrada nacionals
+highway	trunk_link	0	estrada nacional
+highway	trunk_link	1	estrada nacionals
+highway	unclassified	0	estrada sen clasificar
+highway	unclassified	1	estrada sen clasificars
+highway	unsurfaced	0	estrada non pavimentada
+highway	unsurfaced	1	estrada non pavimentadas
+leisure	beach_resort	0	balneario
+leisure	beach_resort	1	balnearios
+leisure	common	0	terreo común
+leisure	common	1	terreo comúns
+leisure	fishing	0	área de pesca
+leisure	fishing	1	área de pescas
+leisure	garden	0	xardín
+leisure	garden	1	xardíns
+leisure	golf_course	0	campo de golf
+leisure	golf_course	1	campo de golfs
+leisure	ice_rink	0	pista de patinaxe sobre xeo
+leisure	ice_rink	1	pista de patinaxe sobre xeos
+leisure	marina	0	porto deportivo
+leisure	marina	1	porto deportivos
+leisure	miniature_golf	0	minigolf
+leisure	miniature_golf	1	minigolfs
+leisure	nature_reserve	0	reserva natural
+leisure	nature_reserve	1	reserva naturals
+leisure	park	0	parque
+leisure	park	1	parques
+leisure	pitch	0	cancha deportiva
+leisure	pitch	1	cancha deportivas
+leisure	playground	0	patio de recreo
+leisure	playground	1	patio de recreos
+leisure	recreation_ground	0	área recreativa
+leisure	recreation_ground	1	área recreativas
+leisure	slipway	0	varadoiro
+leisure	slipway	1	varadoiros
+leisure	sports_centre	0	centro deportivo
+leisure	sports_centre	1	centro deportivos
+leisure	stadium	0	estadio
+leisure	stadium	1	estadios
+leisure	swimming_pool	0	piscina
+leisure	swimming_pool	1	piscinas
+leisure	track	0	pista de carreiras
+leisure	track	1	pista de carreirass
+leisure	water_park	0	parque acuático
+leisure	water_park	1	parque acuáticos
+natural	bay	0	baía
+natural	bay	1	baías
+natural	beach	0	praia
+natural	beach	1	praias
+natural	cape	0	cabo
+natural	cape	1	cabos
+natural	cave_entrance	0	entrada de cova
+natural	cave_entrance	1	entrada de covas
+natural	channel	0	canal
+natural	channel	1	canals
+natural	cliff	0	cantil
+natural	cliff	1	cantils
+natural	coastline	0	litoral
+natural	coastline	1	litorals
+natural	crater	0	cráter
+natural	crater	1	cráters
+natural	feature	0	elemento
+natural	feature	1	elementos
+natural	fell	0	brañal
+natural	fell	1	brañals
+natural	fjord	0	fiorde
+natural	fjord	1	fiordes
+natural	geyser	0	géiser
+natural	geyser	1	géisers
+natural	glacier	0	glaciar
+natural	glacier	1	glaciars
+natural	hill	0	outeiro
+natural	hill	1	outeiros
+natural	island	0	illa
+natural	island	1	illas
+natural	land	0	terra
+natural	land	1	terras
+natural	marsh	0	marisma
+natural	marsh	1	marismas
+natural	moor	0	páramo
+natural	moor	1	páramos
+natural	mud	0	lama
+natural	mud	1	lamas
+natural	peak	0	pico
+natural	peak	1	picos
+natural	point	0	punto
+natural	point	1	puntos
+natural	reef	0	arrecife
+natural	reef	1	arrecifes
+natural	ridge	0	crista
+natural	ridge	1	cristas
+natural	river	0	río
+natural	river	1	ríos
+natural	rock	0	rocha
+natural	rock	1	rochas
+natural	scree	0	pedregal
+natural	scree	1	pedregals
+natural	scrub	0	matogueira
+natural	scrub	1	matogueiras
+natural	shoal	0	cardume
+natural	shoal	1	cardumes
+natural	spring	0	primavera
+natural	spring	1	primaveras
+natural	strait	0	estreito
+natural	strait	1	estreitos
+natural	tree	0	árbore
+natural	tree	1	árbores
+natural	valley	0	val
+natural	valley	1	vals
+natural	volcano	0	volcán
+natural	volcano	1	volcáns
+natural	water	0	auga
+natural	water	1	augas
+natural	wetland	0	pantano
+natural	wetland	1	pantanos
+natural	wetlands	0	pantano
+natural	wetlands	1	pantanos
+natural	wood	0	bosque
+natural	wood	1	bosques
+place	city	0	cidade
+place	city	1	cidades
+place	country	0	país
+place	country	1	paíss
+place	county	0	condado
+place	county	1	condados
+place	farm	0	granxa
+place	farm	1	granxas
+place	hamlet	0	aldea
+place	hamlet	1	aldeas
+place	house	0	casa
+place	house	1	casas
+place	houses	0	casas
+place	houses	1	casass
+place	island	0	illa
+place	island	1	illas
+place	islet	0	illote
+place	islet	1	illotes
+place	locality	0	localidade
+place	locality	1	localidades
+place	moor	0	páramo
+place	moor	1	páramos
+place	municipality	0	municipio
+place	municipality	1	municipios
+place	postcode	0	código postal
+place	postcode	1	código postals
+place	region	0	rexión
+place	region	1	rexións
+place	sea	0	mar
+place	sea	1	mars
+place	state	0	estado/provincia
+place	state	1	estado/provincias
+place	subdivision	0	subdivisión
+place	subdivision	1	subdivisións
+place	suburb	0	barrio
+place	suburb	1	barrios
+place	town	0	cidade
+place	town	1	cidades
+place	unincorporated_area	0	área non incorporada
+place	unincorporated_area	1	área non incorporadas
+place	village	0	vila
+place	village	1	vilas
+shop	apparel	0	tenda de roupa
+shop	apparel	1	tenda de roupas
+shop	art	0	tenda de arte
+shop	art	1	tenda de artes
+shop	bakery	0	panadaría
+shop	bakery	1	panadarías
+shop	bicycle	0	tenda de bicicletas
+shop	bicycle	1	tenda de bicicletass
+shop	books	0	libraría
+shop	books	1	librarías
+shop	butcher	0	carnizaría
+shop	butcher	1	carnizarías
+shop	car_repair	0	taller mecánico
+shop	car_repair	1	taller mecánicos
+shop	carpet	0	tenda de alfombras
+shop	carpet	1	tenda de alfombrass
+shop	charity	0	tenda benéfica
+shop	charity	1	tenda benéficas
+shop	chemist	0	farmacia
+shop	chemist	1	farmacias
+shop	clothes	0	tenda de roupa
+shop	clothes	1	tenda de roupas
+shop	computer	0	tenda informática
+shop	computer	1	tenda informáticas
+shop	department_store	0	gran almacén
+shop	department_store	1	gran almacéns
+shop	doityourself	0	tenda de bricolaxe
+shop	doityourself	1	tenda de bricolaxes
+shop	estate_agent	0	axencia inmobiliaria
+shop	estate_agent	1	axencia inmobiliarias
+shop	fashion	0	tenda de moda
+shop	fashion	1	tenda de modas
+shop	fish	0	peixaría
+shop	fish	1	peixarías
+shop	florist	0	floraría
+shop	florist	1	florarías
+shop	food	0	tenda de alimentación
+shop	food	1	tenda de alimentacións
+shop	gallery	0	galería
+shop	gallery	1	galerías
+shop	general	0	tenda de ultramarinos
+shop	general	1	tenda de ultramarinoss
+shop	hairdresser	0	perrucaría
+shop	hairdresser	1	perrucarías
+shop	hardware	0	ferraxaría
+shop	hardware	1	ferraxarías
+shop	hifi	0	hi-fi
+shop	hifi	1	hi-fis
+shop	jewelry	0	xoiaría
+shop	jewelry	1	xoiarías
+shop	mall	0	centro comercial
+shop	mall	1	centro comercials
+shop	market	0	mercado
+shop	market	1	mercados
+shop	mobile_phone	0	tenda de telefonía móbil
+shop	mobile_phone	1	tenda de telefonía móbils
+shop	motorcycle	0	tenda de motocicletas
+shop	motorcycle	1	tenda de motocicletass
+shop	music	0	tenda de música
+shop	music	1	tenda de músicas
+shop	optician	0	oftalmólogo
+shop	optician	1	oftalmólogos
+shop	organic	0	tenda de alimentos orgánicos
+shop	organic	1	tenda de alimentos orgánicoss
+shop	outdoor	0	tenda de deportes ao aire libre
+shop	outdoor	1	tenda de deportes ao aire libres
+shop	photo	0	tenda de fotografía
+shop	photo	1	tenda de fotografías
+shop	shoes	0	zapataría
+shop	shoes	1	zapatarías
+shop	shopping_centre	0	centro comercial
+shop	shopping_centre	1	centro comercials
+shop	sports	0	tenda de deportes
+shop	sports	1	tenda de deportess
+shop	stationery	0	papelaría
+shop	stationery	1	papelarías
+shop	supermarket	0	supermercado
+shop	supermarket	1	supermercados
+shop	toys	0	xoguetaría
+shop	toys	1	xoguetarías
+shop	travel_agency	0	axencia de viaxes
+shop	travel_agency	1	axencia de viaxess
+tourism	alpine_hut	0	cabana alpina
+tourism	alpine_hut	1	cabana alpinas
+tourism	artwork	0	obra de arte
+tourism	artwork	1	obra de artes
+tourism	attraction	0	atracción
+tourism	attraction	1	atraccións
+tourism	bed_and_breakfast	0	cama e almorzo
+tourism	bed_and_breakfast	1	cama e almorzos
+tourism	cabin	0	cabana
+tourism	cabin	1	cabanas
+tourism	camp_site	0	campamento
+tourism	camp_site	1	campamentos
+tourism	caravan_site	0	sitio de caravanas
+tourism	caravan_site	1	sitio de caravanass
+tourism	chalet	0	chalé
+tourism	chalet	1	chalés
+tourism	guest_house	0	albergue
+tourism	guest_house	1	albergues
+tourism	hostel	0	hostal
+tourism	hostel	1	hostals
+tourism	hotel	0	hotel
+tourism	hotel	1	hotels
+tourism	information	0	información
+tourism	information	1	informacións
+tourism	lean_to	0	caseta
+tourism	lean_to	1	casetas
+tourism	motel	0	motel
+tourism	motel	1	motels
+tourism	museum	0	museo
+tourism	museum	1	museos
+tourism	picnic_site	0	sitio de pícnic
+tourism	picnic_site	1	sitio de pícnics
+tourism	theme_park	0	parque temático
+tourism	theme_park	1	parque temáticos
+tourism	valley	0	val
+tourism	valley	1	vals
+tourism	viewpoint	0	miradoiro
+tourism	viewpoint	1	miradoiros
+tourism	zoo	0	zoolóxico
+tourism	zoo	1	zoolóxicos
