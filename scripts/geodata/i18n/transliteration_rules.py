@@ -1667,16 +1667,17 @@ def write_transliteration_data_file(filename):
     f.write(safe_encode(template))
 
 
+SRC_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir, 'src')
 TRANSLITERATION_DATA_FILENAME = 'transliteration_data.c'
 TRANSLITERATION_SCRIPTS_FILENAME = 'transliteration_scripts_data.c'
 
 
-def main(out_dir):
+def main(out_dir=SRC_DIR):
     write_transliteration_data_file(os.path.join(out_dir, TRANSLITERATION_DATA_FILENAME))
     write_transliterator_scripts_file(os.path.join(out_dir, TRANSLITERATION_SCRIPTS_FILENAME))
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print 'Usage: python transliteration_rules.py out_dir'
-        exit(1)
-    main(sys.argv[1])
+    if len(sys.argv) > 1:
+        main(sys.argv[1])
+    else:
+        main()
