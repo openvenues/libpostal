@@ -50,6 +50,9 @@ from collections import defaultdict, OrderedDict
 from lxml import etree
 from itertools import ifilter, chain, combinations
 
+from shapely.geos import LOG as shapely_geos_logger
+shapely_geos_logger.propagate = False
+
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
