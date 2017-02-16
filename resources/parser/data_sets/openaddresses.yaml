@@ -3783,6 +3783,9 @@ countries:
                       ignore_fields_containing:
                           city:
                               - "\\bunspecified\\b"
+                    - filename: pickens.csv
+                      city_replacements:
+                          state_district: Pickens County
                     - filename: saluda.csv
                       add_osm_boundaries: true
                       city_replacements:
