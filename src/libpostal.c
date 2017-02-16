@@ -35,7 +35,7 @@ KSORT_INIT(phrase_language_array, phrase_language_t, ks_lt_phrase_language)
 static normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
         .languages = NULL,
         .num_languages = 0,
-        .address_components = ADDRESS_NAME | ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_UNIT,
+        .address_components = ADDRESS_NAME | ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_PO_BOX | ADDRESS_UNIT | ADDRESS_LEVEL | ADDRESS_ENTRANCE | ADDRESS_STAIRCASE | ADDRESS_POSTAL_CODE,
         .latin_ascii = true,
         .transliterate = true,
         .strip_accents = true,
