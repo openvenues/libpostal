@@ -1763,6 +1763,15 @@ countries:
                 files:
                     - filename: city_of_glendale.csv
                     - filename: city_of_mesa.csv
+                    - filename: city_of_scotsdale.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit:
+                              - "^(?:[A-Z]?[0-9]*|[0-9]*[A-Z]?)$"
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Scotsdale
                     - filename: coconino.csv
                       add_osm_boundaries: true
                       city_replacements:
