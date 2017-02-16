@@ -523,10 +523,10 @@ address_parser_t *address_parser_init(char *filename) {
             } else if (string_equals(phrase_label, ADDRESS_PARSER_LABEL_CITY_DISTRICT)) {
                 class_id = ADDRESS_PARSER_BOUNDARY_CITY_DISTRICT;
                 component = ADDRESS_COMPONENT_CITY_DISTRICT;
-            } else if (string_equals(label, ADDRESS_PARSER_LABEL_WORLD_REGION)) {
+            } else if (string_equals(phrase_label, ADDRESS_PARSER_LABEL_WORLD_REGION)) {
                 class_id = ADDRESS_PARSER_BOUNDARY_WORLD_REGION;
                 component = ADDRESS_COMPONENT_WORLD_REGION;
-            } else if (string_equals(label, ADDRESS_PARSER_LABEL_ISLAND)) {
+            } else if (string_equals(phrase_label, ADDRESS_PARSER_LABEL_ISLAND)) {
                 class_id = ADDRESS_PARSER_BOUNDARY_ISLAND;
                 component = ADDRESS_COMPONENT_ISLAND;
             } else {
