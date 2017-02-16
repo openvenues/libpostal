@@ -2484,6 +2484,7 @@ countries:
                       city_replacements:
                           city: East Peoria
                     - filename: city_of_naperville.csv
+                    - filename: city-of-ofallon.csv
                     - filename: city_of_schaumburg.csv
                     - filename: city_of_west_peoria.csv
                     - filename: coles.csv
