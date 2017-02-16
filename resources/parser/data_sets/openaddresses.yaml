@@ -1812,6 +1812,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: San Jose
+                    - filename: city_of_san_luis_obispo.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: San Luis Obispo
                     - filename: city_of_temecula.csv
                     - filename: colusa.csv
                     - filename: contra_costa.csv
