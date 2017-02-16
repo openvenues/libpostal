@@ -685,16 +685,16 @@ void address_parser_context_fill(address_parser_context_t *context, address_pars
 
     size_t num_tokens = tokens->n;
 
-    bool have_address_phrases = search_address_dictionaries_tokens_with_phrases(normalized_str, normalized_tokens, context->language, &address_dictionary_phrases);
+    bool have_address_phrases = search_address_dictionaries_tokens_with_phrases(normalized_str, normalized_tokens, NULL, &address_dictionary_phrases);
     token_phrase_memberships(address_dictionary_phrases, address_phrase_memberships, num_tokens);
 
     for (size_t i = 0; i < num_tokens; i++) {
         token_t token = tokens->a[i];
 
-        phrase_t prefix_phrase = search_address_dictionaries_prefix(str + token.offset, token.len, language);
+        phrase_t prefix_phrase = search_address_dictionaries_prefix(str + token.offset, token.len, NULL);
         phrase_array_push(context->prefix_phrases, prefix_phrase);
 
-        phrase_t suffix_phrase = search_address_dictionaries_suffix(str + token.offset, token.len, language);
+        phrase_t suffix_phrase = search_address_dictionaries_suffix(str + token.offset, token.len, NULL);
         phrase_array_push(context->suffix_phrases, suffix_phrase);
     }
 
