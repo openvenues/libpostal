@@ -19,6 +19,7 @@
 
 KHASH_MAP_INIT_INT(int_uint32, uint32_t)
 KHASH_MAP_INIT_INT64(int64_uint32, uint32_t)
+KHASH_MAP_INIT_INT64(int64_double, double)
 
 #define kh_char_hash_func(key) (uint32_t)(key)
 #define kh_char_hash_equal(a, b) ((a) == (b))
@@ -87,7 +88,7 @@ KHASH_SORT_BY_VALUE(str_uint32, char *, uint32_t, uint32_array)
 KHASH_SORT_BY_VALUE(str_double, char *, double, double_array)
 
 #define KHASH_STR_GET(name, key_type, val_type)                                                             \
-    static bool name##_hash_get(khash_t(name) *h, key_type *key, val_type *val) {                           \
+    static bool name##_hash_get(khash_t(name) *h, key_type key, val_type *val) {                            \
         khiter_t k;                                                                                         \
         k = kh_get(name, h, (const key_type)key);                                                           \
         if (k != kh_end(h)) {                                                                               \
@@ -196,5 +197,6 @@ KHASH_STR_TO_ID(str_uint32, uint32_t)
 
 KHASH_INCR(int_uint32, khint32_t, uint32_t)
 KHASH_INCR(int64_uint32, khint64_t, uint32_t)
+KHASH_INCR(int64_double, khint64_t, double)
 
 #endif
