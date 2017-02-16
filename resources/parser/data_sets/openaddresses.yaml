@@ -3141,6 +3141,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Craven County
+                    - filename: cumberland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Cumberland County
                     - filename: davie.csv
                       add_osm_boundaries: true
                       city_replacements:
