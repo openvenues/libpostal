@@ -31,7 +31,7 @@ Address dictionaries
 
 #define ADDRESS_TOPONYM (1 << 13)
 #define ADDRESS_POSTAL_CODE (1 << 14)
-#define ADDRESS_NEIGHBORHOOD (1 << 15)
+#define ADDRESS_PO_BOX (1 << 15)
 #define ADDRESS_ALL ((1 << 16) - 1)
 
 typedef struct normalize_options {
