@@ -80,8 +80,8 @@ inline void string_upper(char *s) {
     for (; *s; ++s) *s = toupper(*s);
 }
 
-inline char *string_replace(char *s, char c1, char c2) {
-    char *repl = strdup(s);
+inline char *string_replace_char(char *str, char c1, char c2) {
+    char *repl = strdup(str);
     if (repl == NULL) return NULL;
     char *ptr = repl;
     for (; *ptr; ++ptr) {
@@ -89,6 +89,51 @@ inline char *string_replace(char *s, char c1, char c2) {
     }
     return repl;
 }
+
+bool string_replace_with_array(char *str, char *replace, char *with, char_array *result) {
+    if (str == NULL) return false;
+    if (result == NULL) return false;
+
+    if (replace == NULL) {
+        replace = "";
+    }
+
+    size_t len_replace = strlen(replace);
+    if (len_replace == 0) {
+        return true;        
+    }
+
+    if (with == NULL) {
+        with = "";
+    }
+
+    size_t len_with = strlen(with);
+
+    char *temp;
+    char *start = str;
+
+    for (size_t count = 0; (temp = strstr(start, replace)); count++) {
+        char_array_cat_len(result, start, temp - start);
+        char_array_cat_len(result, with, len_with);
+        start = temp + len_replace;
+    }
+
+    char_array_cat(result, start);
+
+    return true;
+}
+
+char *string_replace(char *str, char *replace, char *with) {
+    if (str == NULL) return NULL;
+
+    char_array *array = char_array_new_size(strlen(str));
+    if (!string_replace_with_array(str, replace, with, array)) {
+        char_array_destroy(array);
+        return NULL;
+    }
+    return char_array_to_string(array);
+}
+
 
 inline bool string_is_upper(char *s) {
     for (; *s; ++s) {

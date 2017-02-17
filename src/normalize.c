@@ -64,7 +64,7 @@ char *normalize_string_utf8(char *str, uint64_t options) {
     }
 
     if (options & NORMALIZE_STRING_REPLACE_HYPHENS && strchr(str, '-') != NULL) {
-        char *replaced = string_replace(str, '-', ' ');
+        char *replaced = string_replace_char(str, '-', ' ');
         if (replaced != NULL) {
             if (normalized_allocated) {
                 free(normalized);

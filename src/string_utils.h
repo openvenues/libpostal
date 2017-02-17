@@ -55,7 +55,9 @@ void string_lower(char *s);
 bool string_is_upper(char *s);
 void string_upper(char *s);
 
-char *string_replace(char *s, char c1, char c2);
+char *string_replace_char(char *str, char c1, char c2);
+bool string_replace_with_array(char *str, char *replace, char *with, char_array *result);
+char *string_replace(char *str, char *replace, char *with);
 
 bool string_starts_with(const char *str, const char *start);
 bool string_ends_with(const char *str, const char *ending);
