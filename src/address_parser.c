@@ -761,6 +761,28 @@ char *phrase_suffix(char *word, size_t len, phrase_t suffix_phrase, char_array *
     return suffix;
 }
 
+bool is_valid_dictionary_phrase(phrase_t phrase) {
+    uint32_t expansion_index = phrase.data;
+    address_expansion_value_t *expansion_value = address_dictionary_get_expansions(expansion_index);
+
+    if (expansion_value == NULL) {
+        log_warn("expansion_value is NULL for index %u\n", expansion_index);
+        return false;
+    }
+    uint32_t address_phrase_types = expansion_value->components;
+
+    if (address_phrase_types & (ADDRESS_STREET | ADDRESS_HOUSE_NUMBER | ADDRESS_NAME | ADDRESS_CATEGORY | ADDRESS_NEAR | ADDRESS_UNIT | ADDRESS_LEVEL | ADDRESS_ENTRANCE | ADDRESS_STAIRCASE | ADDRESS_POSTAL_CODE | ADDRESS_PO_BOX)) {
+        for (size_t i = 0; i < expansion_value->expansions->n; i++) {
+            address_expansion_t expansion = expansion_value->expansions->a[i];
+            if (!address_expansion_in_dictionary(expansion, DICTIONARY_TOPONYM)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 typedef struct address_parser_phrase {
     char *str;
     address_parser_phrase_type_t type;
@@ -778,7 +800,9 @@ static address_parser_phrase_t word_or_phrase_at_index(address_parser_t *parser,
 
     phrase = phrase_at_index(context->address_dictionary_phrases, context->address_phrase_memberships, i);
     
-    if (phrase.len > 0) {
+    phrase_t component_phrase = phrase_at_index(context->component_phrases, context->component_phrase_memberships, i);
+
+    if (phrase.len > 0 && is_valid_dictionary_phrase(phrase) && component_phrase.len <= phrase.len) {
         phrase_string = cstring_array_get_phrase(context->normalized, long_context ? context->long_context_phrase : context->context_phrase, phrase),
 
         response = (address_parser_phrase_t){
@@ -789,7 +813,8 @@ static address_parser_phrase_t word_or_phrase_at_index(address_parser_t *parser,
         return response;
     }
 
-    phrase = phrase_at_index(context->component_phrases, context->component_phrase_memberships, i);
+    phrase = component_phrase;
+
     if (phrase.len > 0) {
         phrase_string = cstring_array_get_phrase(context->normalized_admin, long_context ? context->long_context_component_phrase : context->context_component_phrase, phrase);
 
@@ -1014,11 +1039,21 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     log_debug("word=%s\n", word);
 
     phrase_t phrase = NULL_PHRASE;
+    phrase_t component_phrase = NULL_PHRASE;
 
     char *phrase_string = NULL;
     char *component_phrase_string = NULL;
 
     int64_t address_phrase_index = address_phrase_memberships->a[idx];
+    int64_t component_phrase_index = component_phrase_memberships->a[idx];
+    
+    if (address_phrase_index != NULL_PHRASE_MEMBERSHIP) {
+        phrase = address_dictionary_phrases->a[address_phrase_index];
+    }
+
+    if (component_phrase_index != NULL_PHRASE_MEMBERSHIP) {
+        component_phrase = component_phrases->a[component_phrase_index];
+    }
 
     char_array *phrase_tokens = context->phrase;
     char_array *component_phrase_tokens = context->component_phrase;
@@ -1031,23 +1066,22 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     size_t num_tokens = tokenized->tokens->n;
 
     // Address dictionary phrases
-    if (address_phrase_index != NULL_PHRASE_MEMBERSHIP) {
-        phrase = address_dictionary_phrases->a[address_phrase_index];
+    if (phrase.len > 0 && phrase.len >= component_phrase.len) {
         log_debug("phrase\n");
 
         last_index = (ssize_t)phrase.start - 1;
         next_index = (ssize_t)phrase.start + phrase.len;
 
-        expansion_index = phrase.data;
-        expansion_value = address_dictionary_get_expansions(expansion_index);
-        uint32_t address_phrase_types = 0;
-        if (expansion_value != NULL) {
-            address_phrase_types = expansion_value->components;
-        } else {
-            log_warn("expansion_value is NULL. word=%s, sentence=%s\n", word, tokenized->str);
-        }
+        if(is_valid_dictionary_phrase(phrase)) {
+            uint32_t expansion_index = phrase.data;
+            address_expansion_value_t *expansion_value = address_dictionary_get_expansions(expansion_index);
 
-        if (address_phrase_types & (ADDRESS_STREET | ADDRESS_HOUSE_NUMBER | ADDRESS_NAME | ADDRESS_UNIT | ADDRESS_POSTAL_CODE)) {
+            if (expansion_value == NULL) {
+                log_warn("expansion_value is NULL for index %u\n", expansion_index);
+                return false;
+            }
+            uint32_t address_phrase_types = expansion_value->components;
+
             phrase_string = cstring_array_get_phrase(context->normalized, phrase_tokens, phrase);
 
             add_word_feature = false;
@@ -1055,23 +1089,27 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
             add_phrase_features(features, address_phrase_types, ADDRESS_STREET, "street", phrase_string);
             add_phrase_features(features, address_phrase_types, ADDRESS_NAME, "name", phrase_string);
+            add_phrase_features(features, address_phrase_types, ADDRESS_CATEGORY, "category", phrase_string);
+            add_phrase_features(features, address_phrase_types, ADDRESS_UNIT, "unit", phrase_string);
+            add_phrase_features(features, address_phrase_types, ADDRESS_PO_BOX, "po_box", phrase_string);
+            add_phrase_features(features, address_phrase_types, ADDRESS_LEVEL, "level", phrase_string);
+            add_phrase_features(features, address_phrase_types, ADDRESS_ENTRANCE, "entrance", phrase_string);
+            add_phrase_features(features, address_phrase_types, ADDRESS_STAIRCASE, "staircase", phrase_string);
             add_phrase_features(features, address_phrase_types, ADDRESS_HOUSE_NUMBER, "house_number", phrase_string);
             add_phrase_features(features, address_phrase_types, ADDRESS_POSTAL_CODE, "postal_code", phrase_string);
         }
     }
 
-    int64_t component_phrase_index = component_phrase_memberships->a[idx];
-    phrase = NULL_PHRASE;
 
     address_parser_types_t types;
 
     // Component phrases
-    if (component_phrase_index != NULL_PHRASE_MEMBERSHIP) {
-        phrase = component_phrases->a[component_phrase_index];
+    if (component_phrase.len > 0 && component_phrase.len >= phrase.len) {
+        component_phrase = component_phrases->a[component_phrase_index];
 
-        component_phrase_string = cstring_array_get_phrase(context->normalized_admin, component_phrase_tokens, phrase);
+        component_phrase_string = cstring_array_get_phrase(context->normalized_admin, component_phrase_tokens, component_phrase);
         
-        uint32_t component_phrase_index = phrase.data;
+        uint32_t component_phrase_index = component_phrase.data;
         if (component_phrase_index > parser->phrase_types->n) {
             log_error("Invalid component_phrase_index: %u (parser->phrase_types->n=%zu)\n", component_phrase_index, parser->phrase_types->n);
             return false;
@@ -1082,12 +1120,12 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         uint32_t component_phrase_types = types.components;
         uint32_t most_common = types.most_common;
 
-        if (last_index >= (ssize_t)phrase.start - 1) {
-            last_index = (ssize_t)phrase.start - 1;
+        if (last_index >= (ssize_t)component_phrase.start - 1) {
+            last_index = (ssize_t)component_phrase.start - 1;
         }
 
-        if (next_index < (ssize_t)phrase.start + phrase.len) {
-            next_index = (ssize_t)phrase.start + phrase.len;
+        if (next_index < (ssize_t)component_phrase.start + component_phrase.len) {
+            next_index = (ssize_t)component_phrase.start + component_phrase.len;
         }
 
         if (component_phrase_string != NULL && component_phrase_types > 0) {
@@ -1126,7 +1164,6 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
                 feature_array_add(features, 2, "commonly island", component_phrase_string);
             }
         }
-
     }
 
     bool possible_postal_code = false;
