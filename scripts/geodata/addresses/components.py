@@ -1763,7 +1763,7 @@ class AddressComponents(object):
                  population_from_city=False, check_city_wikipedia=False,
                  add_sub_building_components=True, hyphenation=True,
                  num_floors=None, num_basements=None, zone=None,
-                 osm_components=None):
+                 osm_components=None, neighborhoods=None):
         '''
         Expanded components
         -------------------
@@ -1793,7 +1793,8 @@ class AddressComponents(object):
         non_local_language = None
         language_suffix = ''
 
-        neighborhoods = self.neighborhood_components(latitude, longitude)
+        if neighborhoods is None:
+            neighborhoods = self.neighborhood_components(latitude, longitude)
 
         all_osm_components = osm_components + neighborhoods
 
