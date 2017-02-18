@@ -3822,6 +3822,7 @@ countries:
                 add:
                     state: South Dakota
                 files:
+                    - filename: city_of_sioux_falls.csv
                     - filename: lawrence.csv
                       add_osm_boundaries: true
                       city_replacements:
