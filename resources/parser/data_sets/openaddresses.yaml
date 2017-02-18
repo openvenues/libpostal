@@ -3013,6 +3013,9 @@ countries:
                     - filename: scott.csv
                     - filename: sherburne.csv
                     - filename: stearns.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Stearns County
                     - filename: st_louis.csv
                     - filename: wadena.csv
                       add_osm_boundaries: true
