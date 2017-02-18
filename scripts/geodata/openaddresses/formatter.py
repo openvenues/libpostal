@@ -214,7 +214,11 @@ class OpenAddressesFormatter(object):
             if u' ' in building_number and random.choice((True, False)):
                 building_number = building_number.replace(u' ', u'')
 
-            return separator.join([cross_street, building_number])
+            house_number = separator.join([cross_street, building_number])
+            house_number_prefixes = (u'#', u'no.', u'no', u'nº')
+            if random.choice((True, False)) and not any((house_number.lower().startswith(p) for p in house_number_prefixes)):
+                house_number = u' '.join([random.choice(house_number_prefixes), house_number])
+
         return house_number
 
     def get_property(self, key, *configs):
