@@ -32,8 +32,6 @@ numbers:
         canonical_probability: 0.1
         abbreviated_probability: 0.4
         sample_probability: 0.5
-        sample_exclude:
-            - "#"
         numeric:
             direction: left
         numeric_affix:
