@@ -804,6 +804,14 @@ countries:
                           <<: *default_fields
                           DISTIRCT:
                               component: city_district
+
+    co:
+        files:
+            - filename: bogota.csv
+              add_osm_boundaries: true
+              city_replacements:
+                  city: Bogotá
+
     cz:
         files:
             - filename: countrywide.csv
