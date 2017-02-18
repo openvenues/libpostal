@@ -11,7 +11,7 @@ class HouseNumber(NumberedComponent):
         if number is not None:
             prob_key = 'house_numbers.alphanumeric_phrase_probability'
             key = 'house_numbers.alphanumeric'
-            dictionaries = ['house_numbers']
+            dictionaries = ['house_numbers', 'number']
             default = safe_decode(number)
         else:
             prob_key = 'house_numbers.no_number_probability'
