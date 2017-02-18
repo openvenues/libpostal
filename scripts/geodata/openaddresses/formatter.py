@@ -150,6 +150,10 @@ class OpenAddressesFormatter(object):
             return cls.validate_house_number(house_number)
 
         @classmethod
+        def validate_colombian_house_number(cls, house_number):
+            return True
+
+        @classmethod
         def validate_chinese_house_number(cls, house_number):
             if not house_number:
                 return False
@@ -177,6 +181,12 @@ class OpenAddressesFormatter(object):
         },
         CHINESE: {
             AddressFormatter.HOUSE_NUMBER: validators.validate_chinese_house_number,
+        }
+    }
+
+    country_validators = {
+        Countries.COLOMBIA: {
+            AddressFormatter.HOUSE_NUMBER: validators.validate_colombian_house_number
         }
     }
 
@@ -357,7 +367,7 @@ class OpenAddressesFormatter(object):
 
                 value = value.strip(', -')
 
-                validator = self.language_validators.get(language, {}).get(key, self.component_validators.get(key, None))
+                validator = self.country_validators.get(country_dir, {}).get(key, self.language_validators.get(language, {}).get(key, self.component_validators.get(key, None)))
 
                 if validator is not None and not validator(value):
                     continue
