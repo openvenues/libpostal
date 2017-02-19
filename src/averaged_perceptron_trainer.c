@@ -320,7 +320,7 @@ bool averaged_perceptron_trainer_update_counts(averaged_perceptron_trainer_t *se
     return true;
 }
 
-bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *self, void *tagger, void *context, cstring_array *features, ap_tagger_feature_function feature_function, tokenized_string_t *tokenized, cstring_array *labels) {
+bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *self, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *prev2_tag_features, ap_tagger_feature_function feature_function, tokenized_string_t *tokenized, cstring_array *labels) {
     // Keep two tags of history in training
     char *prev = START;
     char *prev2 = START2;
@@ -353,7 +353,7 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
             prev2 = START;
         }
 
-        if (!feature_function(tagger, context, tokenized, i, prev, prev2)) {
+        if (!feature_function(tagger, context, tokenized, i)) {
             log_error("Could not add address parser features\n");
             return false;
         }
@@ -364,6 +364,17 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
             log_error("Get class id failed\n");
             return false;
         }
+
+        uint32_t fidx;
+        const char *feature;
+
+        cstring_array_foreach(prev_tag_features, fidx, feature, {
+            feature_array_add(features, 2, (char *)feature, prev);
+        })
+
+        cstring_array_foreach(prev2_tag_features, fidx, feature, {
+            feature_array_add(features, 3, (char *)feature, prev2, prev);
+        })
 
         uint32_t guess = averaged_perceptron_trainer_predict(self, features);
 

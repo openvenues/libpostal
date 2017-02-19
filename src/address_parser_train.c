@@ -4,6 +4,7 @@
 #include "averaged_perceptron_trainer.h"
 #include "collections.h"
 #include "constants.h"
+#include "cooccurrences.h"
 #include "file_utils.h"
 #include "geodb.h"
 #include "shuffle.h"
@@ -702,9 +703,13 @@ address_parser_t *address_parser_init(char *filename) {
         }
     })
 
+    size_t hash_size;
+    const char *context_token;
+    bool sort_reverse = true;
+
     log_info("Creating phrase_types trie\n");
 
-    bool sort_reverse = true;
+    sort_reverse = true;
     char **phrase_keys = str_uint32_hash_sort_keys_by_value(phrase_counts, sort_reverse);
     if (phrase_keys == NULL) {
         log_error("phrase_keys == NULL\n");
@@ -713,7 +718,7 @@ address_parser_t *address_parser_init(char *filename) {
         goto exit_hashes_allocated;
     }
 
-    size_t hash_size = kh_size(phrase_counts);
+    hash_size = kh_size(phrase_counts);
     address_parser_types_array *phrase_types_array = address_parser_types_array_new_size(hash_size);
 
     for (size_t idx = 0; idx < hash_size; idx++) {
@@ -828,7 +833,6 @@ address_parser_t *address_parser_init(char *filename) {
     }
 
     khash_t(str_set) *context_phrases;
-    const char *context_token;
 
     uint32_t postal_code_id;
     uint32_t context_phrase_id;
@@ -970,7 +974,7 @@ bool address_parser_train_epoch(address_parser_t *self, averaged_perceptron_trai
 
         address_parser_context_fill(context, self, data_set->tokenized_str, language, country);
 
-        bool example_success = averaged_perceptron_trainer_train_example(trainer, self, context, context->features, &address_parser_features, data_set->tokenized_str, data_set->labels);
+        bool example_success = averaged_perceptron_trainer_train_example(trainer, self, context, context->features, context->prev_tag_features, context->prev2_tag_features, &address_parser_features, data_set->tokenized_str, data_set->labels);
 
         if (!example_success) {
             log_error("Error training example\n");

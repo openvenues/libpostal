@@ -2,11 +2,11 @@
 #include "log/log.h"
 
 
-bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagger, void *context, cstring_array *features, cstring_array *labels, ap_tagger_feature_function feature_function, tokenized_string_t *tokenized) {
+bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *prev2_tag_features, cstring_array *labels, ap_tagger_feature_function feature_function, tokenized_string_t *tokenized) {
 
     // Keep two tags of history in training
-    char *prev = START;
-    char *prev2 = START2;
+    char *prev = NULL;
+    char *prev2 = NULL;
 
     uint32_t prev_id = 0;
     uint32_t prev2_id = 0;
@@ -22,16 +22,25 @@ bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagg
 
         if (i > 1) {
             prev2 = cstring_array_get_string(model->classes, prev2_id);            
-        } else if (i == 1) {
-            prev2 = START;
         }
 
         log_debug("prev=%s, prev2=%s\n", prev, prev2);
 
-        if (!feature_function(tagger, context, tokenized, i, prev, prev2)) {
+        if (!feature_function(tagger, context, tokenized, i)) {
             log_error("Could not add address parser features\n");
             return false;
         }
+
+        uint32_t fidx;
+        const char *feature;
+
+        cstring_array_foreach(prev_tag_features, fidx, feature, {
+            feature_array_add(features, 2, (char *)feature, prev);
+        })
+
+        cstring_array_foreach(prev2_tag_features, fidx, feature, {
+            feature_array_add(features, 3, (char *)feature, prev2, prev);
+        })
 
         uint32_t guess = averaged_perceptron_predict(model, features);
         char *predicted = cstring_array_get_string(model->classes, guess);

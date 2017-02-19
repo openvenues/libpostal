@@ -80,7 +80,7 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
 
         size_t starting_errors = result->num_errors;
 
-        if (averaged_perceptron_tagger_predict(parser->model, parser, context, context->features, token_labels, &address_parser_features, data_set->tokenized_str)) {
+        if (averaged_perceptron_tagger_predict(parser->model, parser, context, context->features, context->prev_tag_features, context->prev2_tag_features, token_labels, &address_parser_features, data_set->tokenized_str)) {
             uint32_t i;
             char *predicted;
             cstring_array_foreach(token_labels, i, predicted, {

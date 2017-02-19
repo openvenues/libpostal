@@ -18,14 +18,15 @@ the current value.
 #include <string.h>
 
 #include "averaged_perceptron.h"
+#include "features.h"
 #include "tokens.h"
 
 #define START "START"
 #define START2 "START2"
 
-// Arguments:                              tagger, context, tokenized str, index, i-1 tag, i-2 tag
-typedef bool (*ap_tagger_feature_function)(void *, void *, tokenized_string_t *, uint32_t, char *, char *);
+// Arguments:                              tagger, context, tokenized str, index
+typedef bool (*ap_tagger_feature_function)(void *, void *, tokenized_string_t *, uint32_t);
 
-bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagger, void *context, cstring_array *features, cstring_array *labels, ap_tagger_feature_function feature_function, tokenized_string_t *tokenized);
+bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *prev2_tag_features, cstring_array *labels, ap_tagger_feature_function feature_function, tokenized_string_t *tokenized);
 
 #endif

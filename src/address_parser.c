@@ -406,6 +406,14 @@ void address_parser_context_destroy(address_parser_context_t *self) {
         cstring_array_destroy(self->features);
     }
 
+    if (self->prev_tag_features != NULL) {
+        cstring_array_destroy(self->prev_tag_features);
+    }
+
+    if (self->prev2_tag_features != NULL) {
+        cstring_array_destroy(self->prev2_tag_features);
+    }
+
     if (self->tokenized_str != NULL) {
         tokenized_string_destroy(self->tokenized_str);
     }
@@ -555,6 +563,16 @@ address_parser_context_t *address_parser_context_new(void) {
 
     context->features = cstring_array_new();
     if (context->features == NULL) {
+        goto exit_address_parser_context_allocated;
+    }
+
+    context->prev_tag_features = cstring_array_new();
+    if (context->prev_tag_features == NULL) {
+        goto exit_address_parser_context_allocated;
+    }
+
+    context->prev2_tag_features = cstring_array_new();
+    if (context->prev2_tag_features == NULL) {
         goto exit_address_parser_context_allocated;
     }
 
@@ -999,13 +1017,15 @@ char *prev2: the predicted tag at index i - 2
 
 */
 
-bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenized, uint32_t idx, char *prev, char *prev2) {
+bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenized, uint32_t idx) {
     if (self == NULL || ctx == NULL) return false;
 
     address_parser_t *parser = (address_parser_t *)self;
     address_parser_context_t *context = (address_parser_context_t *)ctx;
 
     cstring_array *features = context->features;
+    cstring_array *prev_tag_features = context->prev_tag_features;
+    cstring_array *prev2_tag_features = context->prev2_tag_features;
     char *language = context->language;
     char *country = context->country;
 
@@ -1020,6 +1040,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     uint32_array *separators = context->separators;
 
     cstring_array_clear(features);
+    cstring_array_clear(prev_tag_features);
+    cstring_array_clear(prev2_tag_features);
 
     token_array *tokens = tokenized->tokens;
 
@@ -1366,7 +1388,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
         if (idx == 0) {
             feature_array_add(features, 2, "first word", word);
-            //feature_array_add(features, 3, "prev tag=START+word+next word", word, next_word);
+            //feature_array_add(features, 3, "first word+next word", word, next_word);
         }
 
     } else if (component_phrase_string != NULL) {
@@ -1375,16 +1397,15 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         word = phrase_string;
     }
 
-    if (prev != NULL && last_index == idx - 1) {
+    if (last_index == idx - 1) {
         // Previous tag and current word
-        feature_array_add(features, 3, "prev tag+word", prev, word);
-        feature_array_add(features, 2, "prev tag", prev);
+        feature_array_add(prev_tag_features, 2, "prev tag+word", word);
+        feature_array_add(prev_tag_features, 1, "prev tag");
 
-        if (prev2 != NULL) {
-            // Previous two tags and current word
-            feature_array_add(features, 4, "prev2 tag+prev tag+word", prev2, prev, word);
-            feature_array_add(features, 3, "prev2 tag+prev tag", prev2, prev);
-        }
+        
+        // Previous two tags and current word
+        feature_array_add(prev2_tag_features, 2, "prev2 tag+prev tag+word", word);
+        feature_array_add(prev2_tag_features, 1, "prev2 tag+prev tag");
     }
 
     if (last_index >= 0) {
@@ -1405,7 +1426,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
 
         if (last_index == idx - 1) {
-            feature_array_add(features, 3, "prev tag+prev word", prev, prev_word);
+            feature_array_add(prev_tag_features, 2, "prev tag+prev word", prev_word);
         }
 
         // Previous word and current word
@@ -1542,19 +1563,6 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         }
     }
 
-    if (parser->options.print_features) {
-        uint32_t fidx;
-        char *feature;
-
-        printf("{ ");
-        size_t num_features = cstring_array_num_strings(features);
-        cstring_array_foreach(context->features, fidx, feature, {
-            printf("%s", feature);
-            if (fidx < num_features - 1) printf(", ");
-        })
-        printf(" }\n");
-    }
-
     return true;
 
 }
@@ -1682,8 +1690,22 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
 
     char *prev_label = NULL;
 
-    if (averaged_perceptron_tagger_predict(model, parser, context, context->features, token_labels, &address_parser_features, tokenized_str)) {
+    if (averaged_perceptron_tagger_predict(model, parser, context, context->features, context->prev_tag_features, context->prev2_tag_features, token_labels, &address_parser_features, tokenized_str)) {
         response = address_parser_response_new();
+
+        if (parser->options.print_features) {
+            uint32_t fidx;
+            char *feature;
+
+            printf("{ ");
+            size_t num_features = cstring_array_num_strings(context->features);
+            cstring_array_foreach(context->features, fidx, feature, {
+                printf("%s", feature);
+                if (fidx < num_features - 1) printf(", ");
+            })
+            printf(" }\n");
+        }
+
 
         size_t num_strings = cstring_array_num_strings(tokenized_str->strings);
 

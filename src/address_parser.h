@@ -129,6 +129,8 @@ typedef struct address_parser_context {
     char *language;
     char *country;
     cstring_array *features;
+    cstring_array *prev_tag_features;
+    cstring_array *prev2_tag_features;
     // Temporary strings used at each token during feature extraction
     char_array *phrase;
     char_array *context_phrase;
@@ -211,7 +213,7 @@ void address_parser_context_destroy(address_parser_context_t *self);
 void address_parser_context_fill(address_parser_context_t *context, address_parser_t *parser, tokenized_string_t *tokenized_str, char *language, char *country);
 
 // Feature function
-bool address_parser_features(void *self, void *ctx, tokenized_string_t *str, uint32_t i, char *prev, char *prev2);
+bool address_parser_features(void *self, void *ctx, tokenized_string_t *str, uint32_t i);
 
 // I/O methods
 

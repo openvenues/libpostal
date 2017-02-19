@@ -36,6 +36,7 @@ Link: http://www.cs.columbia.edu/~mcollins/papers/tagperc.pdf
 #include "averaged_perceptron.h"
 #include "averaged_perceptron_tagger.h"
 #include "collections.h"
+#include "features.h"
 #include "string_utils.h"
 #include "tokens.h"
 #include "trie.h"
@@ -75,6 +76,8 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
                                                void *tagger,
                                                void *context,
                                                cstring_array *features,
+                                               cstring_array *prev_tag_features,
+                                               cstring_array *prev2_tag_features,
                                                ap_tagger_feature_function feature_function,
                                                tokenized_string_t *tokenized,
                                                cstring_array *labels
