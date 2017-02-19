@@ -3579,6 +3579,10 @@ countries:
                   - filename: union.csv
                   - filename: van_wert.csv
                   - filename: vinton.csv
+                  - filename: warren.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Warren County
                   - filename: washington.csv
                   - filename: wayne.csv
                   - filename: williams.csv
