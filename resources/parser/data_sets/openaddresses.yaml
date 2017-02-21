@@ -1847,6 +1847,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Contra Costa County
+                    - filename: del_norte.csv
                     - filename: el_dorado.csv
                       add_osm_boundaries: true
                       city_replacements:
