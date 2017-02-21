@@ -3915,19 +3915,23 @@ countries:
                       city_replacements:
                           state_district: Carson County
                     - filename: city_of_abilene.csv
-                    - filename: city_of_beaumont.csv
-                      add_osm_boundaries: true
-                      city_replacements:
-                          city: Beaumont
                     - filename: city_of_austin.csv
                       add_osm_boundaries: true
                       city_replacements:
                           city: Austin
+                    - filename: city_of_beaumont.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Beaumont
                     - filename: city_of_carrollton.csv
                       add_osm_boundaries: true
                       city_replacements:
                           city: Carrollton
                     - filename: city_of_denton.csv
+                    - filename: city_of_flower_mound.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Flower Mound
                     - filename: city_of_killeen.csv
                       add_osm_boundaries: true
                       city_replacements:
