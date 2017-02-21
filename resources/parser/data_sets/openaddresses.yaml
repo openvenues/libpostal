@@ -382,6 +382,18 @@ countries:
                     state: British Columbia
                 language: en
                 files:
+                    - filename: capital-regional-district.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Capital Regional District
+                    - filename: cowichan_valley.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Cowichan Valley Regional District
+                    - filename: columbia-shuswap.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Columbia-Shuswap Regional District
                     - filename: kamloops.csv
                       add_osm_boundaries: true
                       city_replacements:
