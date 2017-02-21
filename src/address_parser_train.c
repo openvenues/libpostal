@@ -553,7 +553,7 @@ address_parser_t *address_parser_init(char *filename) {
             phrases[0] = phrase;
             phrases[1] = normalized_phrase;
 
-            for (int p_i = 0; p_i < sizeof(phrases) / sizeof(char *); p_i++) {
+            for (size_t p_i = 0; p_i < sizeof(phrases) / sizeof(char *); p_i++) {
                 phrase = phrases[p_i];
                 if (phrase == NULL) continue;
 
@@ -754,7 +754,7 @@ address_parser_t *address_parser_init(char *filename) {
         int32_t most_common = -1;
         uint32_t max_count = 0;
         uint32_t total = 0;
-        for (int i = 0; i < NUM_ADDRESS_PARSER_BOUNDARY_TYPES; i++) {
+        for (uint32_t i = 0; i < NUM_ADDRESS_PARSER_BOUNDARY_TYPES; i++) {
             k = kh_get(int_uint32, class_counts, (khint_t)i);
             if (k != kh_end(class_counts)) {
                 count = kh_value(class_counts, k);

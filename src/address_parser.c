@@ -1593,7 +1593,7 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
 
     tokenized_string_t *tokenized_str = tokenized_string_new_from_str_size(normalized, strlen(normalized), tokens->n);
 
-    for (int i = 0; i < tokens->n; i++) {
+    for (size_t i = 0; i < tokens->n; i++) {
         token_t token = tokens->a[i];
         if (ADDRESS_PARSER_IS_SEPARATOR(token.type)) {
             uint32_array_push(context->separators, ADDRESS_SEPARATOR_FIELD_INTERNAL);
@@ -1712,7 +1712,7 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
         cstring_array *labels = cstring_array_new_size(num_strings);
         cstring_array *components = cstring_array_new_size(strlen(address) + num_strings);
 
-        for (int i = 0; i < num_strings; i++) {
+        for (size_t i = 0; i < num_strings; i++) {
             char *str = tokenized_string_get_token(tokenized_str, i);
             char *label = cstring_array_get_string(token_labels, i);
 
