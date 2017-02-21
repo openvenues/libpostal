@@ -2939,10 +2939,15 @@ countries:
                 files:
                     - filename: city_of_rochester.csv
                     - filename: city_of_flint.csv
+                    - filename: city_of_tecumseh.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Tecumseh
                     - filename: detroit.csv
                       add_osm_boundaries: true
                       city_replacements:
                           city: Detroit
+                    - filename: eaton.csv
                     - filename: genesee.csv
                     - filename: kent.csv
                       add_osm_boundaries: true
