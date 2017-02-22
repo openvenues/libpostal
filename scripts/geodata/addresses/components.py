@@ -978,8 +978,6 @@ class AddressComponents(object):
                 address_components[AddressFormatter.CITY_DISTRICT] = address_components.pop(AddressFormatter.CITY)
                 address_components[AddressFormatter.CITY] = match.group(1)
 
-    street_unit_suffix_regex = re.compile("^(.+?)(?:\\s+\(?\\s*(?:unit|apartment|apt\.?|suite|ste\.?|bldg\.?|lot)\\b(?:(?:\\s*#|\\s+(?:number|no|no.)\\b)?)).*$", re.I)
-
     unit_type_regexes = {}
 
     lang_phrase_dictionaries = [lang for lang, dictionary_type in six.iterkeys(address_phrase_dictionaries.phrases)]
@@ -994,10 +992,26 @@ class AddressComponents(object):
                              re.I | re.UNICODE)
         unit_type_regexes[lang] = pattern
 
+    english_streets = address_phrase_dictionaries.phrases.get((ENGLISH, 'street_types'), [])
+    english_directionals = address_phrase_dictionaries.phrases.get((ENGLISH, 'directionals'), [])
+    english_numbered_route_regex = re.compile('highway|route')
+    english_numbered_route_phrases = set([safe_encode(p) for p in itertools.chain(*[streets for streets in english_streets if english_numbered_route_regex.search(streets[0])])])
+    english_street_phrases = [safe_encode(p) for p in itertools.chain(*(english_streets + english_directionals)) if safe_encode(p) not in english_numbered_route_phrases]
+    english_numbered_unit_regex = re.compile('^(.+ (?:{}))\s*#\s*(?:[\d]+|[a-z]|[a-z][\d]*\-?[\d]+|[\d]+\-?[\d]*[a-z])\s*$'.format(safe_encode('|').join(english_street_phrases)), re.I)
+
+    @classmethod
+    def strip_english_unit_number_suffix(cls, value):
+        match = cls.english_numbered_unit_regex.match(value)
+        if match:
+            return match.group(1)
+        return value
+
     @classmethod
     def strip_unit_phrases_for_language(cls, value, language):
         if language in cls.unit_type_regexes:
-            return cls.unit_type_regexes[language].sub(six.u(''), value)
+            value = cls.unit_type_regexes[language].sub(six.u(''), value)
+        if language == ENGLISH:
+            value = cls.strip_english_unit_number_suffix(value)
         return value
 
     def abbreviated_state(self, state, country, language):
