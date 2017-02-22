@@ -3637,6 +3637,7 @@ countries:
                 add:
                     state: OR
                 files:
+                    - filename: baker.csv
                     - filename: benton.csv
                     - filename: clackamas.csv
                       ignore_fields_containing:
@@ -3649,15 +3650,27 @@ countries:
                       non_numeric_units: true
                       ignore_fields_containing:
                           unit: *simple_unit_regex
+                    - filename: city_of_corvallis.csv
                     - filename: city_of_salem.csv
+                    - filename: clatsop.csv
+                    - filename: coos.csv
                     - filename: crook.csv
+                    - filename: curry.csv
                     - filename: deschutes.csv
+                    - filename: grant.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Grant County
+                      ignore_fields_containing:
+                          postcode:
+                              - "[a-z]"
                     - filename: gresham.csv
                     - filename: hood_river.csv
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Hood River County
                     - filename: jackson.csv
+                    - filename: jefferson.csv
                     - filename: josephine.csv
                     - filename: klamath.csv
                       add_osm_boundaries: true
@@ -3665,16 +3678,22 @@ countries:
                           state_district: Klamath County
                     - filename: lake.csv
                     - filename: lane.csv
+                    - filename: linn.csv
+                    - filename: malheur.csv
                     - filename: marion.csv
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Marion County
+                    - filename: marion_and_polk.csv
+                      add_osm_boundaries: true
                     - filename: multnomah.csv
                     - filename: oregon_city.csv
                       add_osm_boundaries: true
                       city_replacements:
                           city: Oregon City
                     - filename: portland.csv
+                    - filename: sherman.csv
+                    - filename: umatilla.csv
                     - filename: wallowa.csv
                     - filename: wasco.csv
                       add_osm_boundaries: true
