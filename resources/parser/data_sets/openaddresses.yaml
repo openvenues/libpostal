@@ -2406,7 +2406,15 @@ countries:
                     state: HI
                 files:
                     - filename: honolulu.csv
+                    - filename: kauai.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          island: Kauai
+                          state_district: Kauai County
                     - filename: maui.csv
+                      add:
+                          island: Maui
+                          state_district: Maui County
 
             ia:
                 add:
