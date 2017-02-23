@@ -814,7 +814,7 @@ countries:
                       add_osm_boundaries: true
                       fields:
                           <<: *default_fields
-                          DISTIRCT:
+                          DISTRICT:
                               component: city_district
 
     co:
