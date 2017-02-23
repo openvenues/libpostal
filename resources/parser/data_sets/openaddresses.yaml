@@ -823,6 +823,13 @@ countries:
               add_osm_boundaries: true
               city_replacements:
                   city: Bogotá
+        subdirs:
+            ant:
+                files:
+                    - filename: medellin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Medellín
 
     cz:
         files:
