@@ -4,7 +4,6 @@
 #include "averaged_perceptron_trainer.h"
 #include "collections.h"
 #include "constants.h"
-#include "cooccurrences.h"
 #include "file_utils.h"
 #include "geodb.h"
 #include "shuffle.h"
