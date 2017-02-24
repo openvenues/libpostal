@@ -62,18 +62,18 @@ class OpenAddressesFormatter(object):
     field_regex_replacements = {
         # All fields
         None: [
-            (re.compile('<\s*null\s*>', re.I), six.u('')),
+            (re.compile('<\s*null\s*>', re.I), u''),
             (re.compile('[\s]{2,}'), six.u(' ')),
-            (re.compile('\`'), six.u("'")),
-            (re.compile('\-?\*'), six.u("")),
+            (re.compile('\`'), u"'"),
+            (re.compile('\-?\*'), u""),
         ],
         AddressFormatter.HOUSE_NUMBER: [
             # Most of the house numbers in Montreal start with "#"
-            (re.compile('^#', re.UNICODE), six.u('')),
+            (re.compile('^#', re.UNICODE), u''),
             # Some house numbers have multiple hyphens
-            (re.compile('[\-]{2,}'), six.u('-')),
+            (re.compile('[\-]{2,}'), u'-'),
             # Some house number ranges are split up like "12 -14"
-            (re.compile('[\s]*\-[\s]*'), six.u('-')),
+            (re.compile('[\s]*\-[\s]*'), u'-'),
         ]
     }
 
@@ -590,7 +590,19 @@ class OpenAddressesFormatter(object):
                                                                   minimal_only=False, tag_components=tag_components)
                         yield (language, country, formatted)
 
-    def build_training_data(self, base_dir, out_dir, tag_components=True):
+    def build_training_data(self, base_dir, out_dir, tag_components=True, sources_only=None):
+        all_sources_valid = sources_only is None
+        valid_sources = set()
+        if not all_sources_valid:
+            for source in sources_only:
+                if source.startswith(base_dir):
+                    source = os.path.relpath(source, base_dir)
+
+                parts = source.strip('/ ').split('/')
+                if len(parts) > 3:
+                    raise AssertionError('Sources may only have at maximum 3 parts')
+                valid_sources.add(tuple(parts))
+
         if tag_components:
             formatted_tagged_file = open(os.path.join(out_dir, OPENADDRESSES_FORMAT_DATA_TAGGED_FILENAME), 'w')
             writer = csv.writer(formatted_tagged_file, 'tsv_no_quote')
@@ -607,6 +619,9 @@ class OpenAddressesFormatter(object):
 
             for file_config in country_config.get('files', []):
                 filename = file_config['filename']
+
+                if not all_sources_valid and not ((country_dir, filename) in valid_sources or (country_dir,) in valid_sources):
+                    continue
 
                 print(six.u('doing {}/{}').format(country_dir, filename))
 
@@ -637,6 +652,9 @@ class OpenAddressesFormatter(object):
                 subdir = safe_decode(subdir)
                 for file_config in subdir_config.get('files', []):
                     filename = file_config['filename']
+
+                    if not all_sources_valid and not ((country_dir, subdir, filename) in valid_sources or (country_dir, subdir) in valid_sources or (country_dir,) in valid_sources):
+                        continue
 
                     print(six.u('doing {}/{}/{}').format(country_dir, subdir, filename))
 

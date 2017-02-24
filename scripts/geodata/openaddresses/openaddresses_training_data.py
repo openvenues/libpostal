@@ -30,6 +30,8 @@ if __name__ == '__main__':
     # Handle argument parsing here
     parser = argparse.ArgumentParser()
 
+    parser.add_argument('sources', nargs='*')
+
     parser.add_argument('-i', '--openaddresses-dir',
                         help='Path to OpenAddresses directory')
 
@@ -88,4 +90,4 @@ if __name__ == '__main__':
         components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index)
 
         oa_formatter = OpenAddressesFormatter(components, country_rtree, debug=args.debug)
-        oa_formatter.build_training_data(args.openaddresses_dir, args.out_dir, tag_components=not args.untagged)
+        oa_formatter.build_training_data(args.openaddresses_dir, args.out_dir, tag_components=not args.untagged, sources_only=args.sources or None)
