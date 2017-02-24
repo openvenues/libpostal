@@ -3099,6 +3099,10 @@ countries:
                     - filename: st_charles.csv
                       city_replacements:
                           state_district: Saint Charles County
+                    - filename: vernon.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Vernon County
 
             ms:
                 add:
