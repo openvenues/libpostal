@@ -2958,6 +2958,7 @@ countries:
                 files:
                     - filename: city_of_rochester.csv
                     - filename: city_of_flint.csv
+                    - filename: city_of_monroe.csv
                     - filename: city_of_tecumseh.csv
                       add_osm_boundaries: true
                       city_replacements:
