@@ -716,14 +716,18 @@ countries:
                     state: QC
                 language: fr
                 files:
-                    - filename: montreal.csv
-                      add_osm_boundaries: true
-                      city_replacements:
-                          city: Montréal
                     - filename: gatineau.csv
                       add_osm_boundaries: true
                       city_replacements:
                           city: Gatineau
+                    - filename: montreal.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Montréal
+                    - filename: laval.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Laval
 
             sk:
                 add:
