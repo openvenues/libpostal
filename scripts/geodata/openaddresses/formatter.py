@@ -48,7 +48,7 @@ number_space_letter_regex = re.compile('^[\d]+\s+[a-z]$', re.I)
 number_slash_number_regex = re.compile('^(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)$', re.I)
 number_fraction_regex = re.compile('^(?:[\d]+\s+)?(?:1[\s]*/[\s]*[234]|2[\s]*/[\s]*3)$')
 
-colombian_standard_house_number_regex = re.compile('^(\d+[\s]*[a-z]?)(?: ([a-z]?[\d]+[\s]*[a-z]?))?', re.I)
+colombian_standard_house_number_regex = re.compile('^(\d+[\s]*[a-z]?)\s+([a-z]?[\d]+[\s]*[a-z]?)?', re.I)
 
 dutch_house_number_regex = re.compile('([\d]+)( [a-z])?( [\d]+)?', re.I)
 
@@ -202,22 +202,31 @@ class OpenAddressesFormatter(object):
 
     @classmethod
     def format_colombian_house_number(cls, house_number):
+        house_number = house_number.strip()
         match = colombian_standard_house_number_regex.match(house_number)
         if match:
             separator = random.choice((u'-', u' - ', u' '))
 
             cross_street, building_number = match.groups()
 
-            if u' ' in cross_street and random.choice((True, False)):
+            numbers = []
+            if cross_street and u' ' in cross_street and random.choice((True, False)):
                 cross_street = cross_street.replace(u' ', u'')
 
-            if u' ' in building_number and random.choice((True, False)):
+            if cross_street:
+                numbers.append(cross_street)
+
+            if building_number and u' ' in building_number and random.choice((True, False)):
                 building_number = building_number.replace(u' ', u'')
 
-            house_number = separator.join([cross_street, building_number])
-            house_number_prefixes = (u'#', u'no.', u'no', u'nº')
-            if random.choice((True, False)) and not any((house_number.lower().startswith(p) for p in house_number_prefixes)):
-                house_number = u' '.join([random.choice(house_number_prefixes), house_number])
+            if building_number:
+                numbers.append(building_number)
+
+            if numbers:
+                house_number = separator.join(numbers)
+                house_number_prefixes = (u'#', u'no.', u'no', u'nº')
+                if random.choice((True, False)) and not any((house_number.lower().startswith(p) for p in house_number_prefixes)):
+                    house_number = u' '.join([random.choice(house_number_prefixes), house_number])
 
         return house_number
 
