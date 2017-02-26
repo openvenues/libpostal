@@ -816,6 +816,8 @@ countries:
                     - filename: wuhan.csv
                       language: zh
                       add_osm_boundaries: true
+                      add:
+                          city: 武汉市
                       fields:
                           <<: *default_fields
                           DISTRICT:
