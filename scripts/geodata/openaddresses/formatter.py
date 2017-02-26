@@ -48,7 +48,7 @@ number_space_letter_regex = re.compile('^[\d]+\s+[a-z]$', re.I)
 number_slash_number_regex = re.compile('^(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)$', re.I)
 number_fraction_regex = re.compile('^(?:[\d]+\s+)?(?:1[\s]*/[\s]*[234]|2[\s]*/[\s]*3)$')
 
-colombian_standard_house_number_regex = re.compile('^(\d+[\s]*[a-z]?) ([a-z]?[\d]+[\s]*[a-z]?)?', re.I)
+colombian_standard_house_number_regex = re.compile('^(\d+[\s]*[a-z]?)(?: ([a-z]?[\d]+[\s]*[a-z]?))?', re.I)
 
 dutch_house_number_regex = re.compile('([\d]+)( [a-z])?( [\d]+)?', re.I)
 
@@ -192,7 +192,7 @@ class OpenAddressesFormatter(object):
         }
     }
 
-    chinese_annex_regex = re.compile(u'([\d]+)(?![号栋])', re.U)
+    chinese_annex_regex = re.compile(u'([\d]+)(?![\d号栋])', re.U)
 
     @classmethod
     def format_chinese_house_number(cls, house_number):
