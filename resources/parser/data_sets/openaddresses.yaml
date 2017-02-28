@@ -2302,6 +2302,9 @@ countries:
                     - filename: evans.csv
                       city_replacements:
                           state_district: Evans County
+                    - filename: fayette.csv
+                      city_replacements:
+                          state_district: Fayette County
                     - filename: fulton.csv
                       add_osm_boundaries: false
                       fields: *fields_with_state_and_unit
