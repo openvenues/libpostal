@@ -2287,6 +2287,12 @@ countries:
                       add_osm_boundaries: false
                       city_replacements:
                           state_district: Cook County
+                    - filename: dekalb.csv
+                      add_osm_boundaries: false
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      city_replacements:
+                          state_district: DeKalb County
                     - filename: dooly.csv
                       city_replacements:
                           state_district: Dooly County
