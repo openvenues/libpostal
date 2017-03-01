@@ -3883,6 +3883,7 @@ countries:
                 iso_alpha_2_code_probability: 0.7
                 iso_alpha_3_code_probability: 0.1
                 localized_name_probability: 0.2
+                override_country_dir: pr
                 language: es
                 files:
                     - filename: statewide.csv
