@@ -171,13 +171,12 @@ class AddressComponents(object):
         AddressFormatter.UNIT: Unit,
     }
 
+    config = yaml.load(open(PARSER_DEFAULT_CONFIG))
+    # Non-admin component dropout
+    address_level_dropout_probabilities = {k: v['probability'] for k, v in six.iteritems(config['dropout'])}
+
     def __init__(self, osm_admin_rtree, neighborhoods_rtree, places_index):
-        self.config = yaml.load(open(PARSER_DEFAULT_CONFIG))
-
         self.setup_component_dependencies()
-        # Non-admin component dropout
-        self.address_level_dropout_probabilities = {k: v['probability'] for k, v in six.iteritems(self.config['dropout'])}
-
         self.osm_admin_rtree = osm_admin_rtree
         self.neighborhoods_rtree = neighborhoods_rtree
         self.places_index = places_index
@@ -266,26 +265,30 @@ class AddressComponents(object):
     def osm_reverse_geocoded_components(self, latitude, longitude):
         return self.osm_admin_rtree.point_in_poly(latitude, longitude, return_all=True)
 
-    def osm_country_and_languages(self, osm_components):
+    @classmethod
+    def osm_country_and_languages(cls, osm_components):
         return OSMCountryReverseGeocoder.country_and_languages_from_components(osm_components)
 
-    def osm_component_is_village(self, component):
+    @classmethod
+    def osm_component_is_village(cls, component):
         return component.get('place', '').lower() in ('locality', 'village', 'hamlet')
 
-    def categorize_osm_component(self, country, props, containing_components):
+    @classmethod
+    def categorize_osm_component(cls, country, props, containing_components):
 
         containing_ids = [(c['type'], c['id']) for c in containing_components if 'type' in c and 'id' in c]
 
         return osm_address_components.component_from_properties(country, props, containing=containing_ids)
 
-    def categorized_osm_components(self, country, osm_components):
+    @classmethod
+    def categorized_osm_components(cls, country, osm_components):
         components = []
         for i, props in enumerate(osm_components):
             name = props.get('name')
             if not name:
                 continue
 
-            component = self.categorize_osm_component(country, props, osm_components)
+            component = cls.categorize_osm_component(country, props, osm_components)
 
             if component is not None:
                 components.append((props, component))
@@ -333,7 +336,8 @@ class AddressComponents(object):
 
         return language
 
-    def pick_random_name_key(self, props, component, suffix=''):
+    @classmethod
+    def pick_random_name_key(cls, props, component, suffix=''):
         '''
         Random name
         -----------
@@ -345,7 +349,8 @@ class AddressComponents(object):
         key = ''.join((raw_key, suffix)) if ':' not in raw_key else raw_key
         return key, raw_key
 
-    def all_names(self, props, languages, component=None, keys=ALL_OSM_NAME_KEYS):
+    @classmethod
+    def all_names(cls, props, languages, component=None, keys=ALL_OSM_NAME_KEYS):
         # Preserve uniqueness and order
         valid_names, _ = boundary_names.name_key_dist(props, component)
         names = OrderedDict()
@@ -362,7 +367,8 @@ class AddressComponents(object):
                     names[v] = None
         return names.keys()
 
-    def place_names_and_components(self, name, osm_components, country=None, languages=None):
+    @classmethod
+    def place_names_and_components(cls, name, osm_components, country=None, languages=None):
         names = set()
         components = defaultdict(set)
 
@@ -373,7 +379,7 @@ class AddressComponents(object):
 
             component = osm_address_components.component_from_properties(country, props, containing=containing_ids)
 
-            component_names = set([n.lower() for n in self.all_names(props, languages or [] )])
+            component_names = set([n.lower() for n in cls.all_names(props, languages or [] )])
 
             valid_component_names = set()
             for n in component_names:
@@ -408,7 +414,8 @@ class AddressComponents(object):
 
         return names, components
 
-    def strip_components(self, name, osm_components, country, languages):
+    @classmethod
+    def strip_components(cls, name, osm_components, country, languages):
         if not name or not osm_components:
             return name
 
@@ -417,7 +424,7 @@ class AddressComponents(object):
         tokens_lower = normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
                                          token_options=TOKEN_OPTIONS_DROP_PERIODS)
 
-        names, components = self.place_names_and_components(name, osm_components, country=country, languages=languages)
+        names, components = cls.place_names_and_components(name, osm_components, country=country, languages=languages)
 
         phrase_filter = PhraseFilter([(n, '') for n in names])
 
@@ -439,7 +446,8 @@ class AddressComponents(object):
 
     parens_regex = re.compile('\(.*?\)')
 
-    def normalized_place_name(self, name, tag, osm_components, country=None, languages=None, phrase_from_component=False):
+    @classmethod
+    def normalized_place_name(cls, name, tag, osm_components, country=None, languages=None, phrase_from_component=False):
         '''
         Multiple place names
         --------------------
@@ -455,7 +463,7 @@ class AddressComponents(object):
         tokens_lower = normalized_tokens(name, string_options=NORMALIZE_STRING_LOWERCASE,
                                          token_options=TOKEN_OPTIONS_DROP_PERIODS)
 
-        names, components = self.place_names_and_components(name, osm_components, country=country, languages=languages)
+        names, components = cls.place_names_and_components(name, osm_components, country=country, languages=languages)
 
         phrase_filter = PhraseFilter([(n, '') for n in names])
 
@@ -501,8 +509,8 @@ class AddressComponents(object):
             else:
                 total_tokens += 1
 
-        if self.parens_regex.search(name):
-            name = self.parens_regex.sub(six.u(''), name).strip()
+        if cls.parens_regex.search(name):
+            name = cls.parens_regex.sub(six.u(''), name).strip()
 
         # If the name contains a comma, stop and only use the phrase before the comma
         if ',' in name:
@@ -510,13 +518,14 @@ class AddressComponents(object):
 
         return name
 
-    def normalize_place_names(self, address_components, osm_components, country=None, languages=None, phrase_from_component=False):
+    @classmethod
+    def normalize_place_names(cls, address_components, osm_components, country=None, languages=None, phrase_from_component=False):
         for key in list(address_components):
             name = address_components[key]
-            if key in self.BOUNDARY_COMPONENTS:
-                name = self.normalized_place_name(name, key, osm_components,
-                                                  country=country, languages=languages,
-                                                  phrase_from_component=phrase_from_component)
+            if key in cls.BOUNDARY_COMPONENTS:
+                name = cls.normalized_place_name(name, key, osm_components,
+                                                 country=country, languages=languages,
+                                                 phrase_from_component=phrase_from_component)
 
                 if name is not None:
                     address_components[key] = name
@@ -529,7 +538,8 @@ class AddressComponents(object):
         self.formatter.aliases.replace(address_components)
         return address_components
 
-    def combine_fields(self, address_components, language, country=None, generated=None):
+    @classmethod
+    def combine_fields(cls, address_components, language, country=None, generated=None):
         combo_config = address_config.get_property('components.combinations', language, country=country, default={})
 
         combos = []
@@ -582,7 +592,8 @@ class AddressComponents(object):
         address_components[new_label] = new_value
         return set(components)
 
-    def generated_type(self, component, existing_components, language, country=None):
+    @classmethod
+    def generated_type(cls, component, existing_components, language, country=None):
         component_config = address_config.get_property('components.{}'.format(component), language, country=country)
         if not component_config:
             return None
@@ -600,7 +611,7 @@ class AddressComponents(object):
 
         values = []
         probs = []
-        for num_type in (self.NULL_PHRASE, self.ALPHANUMERIC_PHRASE, self.STANDALONE_PHRASE):
+        for num_type in (cls.NULL_PHRASE, cls.ALPHANUMERIC_PHRASE, cls.STANDALONE_PHRASE):
             key = '{}_probability'.format(num_type)
             prob = prob_dist.get(key)
             if prob is not None:
@@ -617,12 +628,13 @@ class AddressComponents(object):
         probs = cdf(probs)
         num_type = weighted_choice(values, probs)
 
-        if num_type == self.NULL_PHRASE:
+        if num_type == cls.NULL_PHRASE:
             return None
         else:
             return num_type
 
-    def get_component_phrase(self, cls, component, language, country=None):
+    @classmethod
+    def get_component_phrase(cls, component, language, country=None):
         component = safe_decode(component)
         if not is_numeric(component) and not (component.isalpha() and len(component) == 1):
             return None
@@ -633,15 +645,17 @@ class AddressComponents(object):
         else:
             return None
 
-    def normalize_sub_building_components(self, address_components, language, country=None):
-        for component, cls in six.iteritems(self.sub_building_component_class_map):
+    @classmethod
+    def normalize_sub_building_components(cls, address_components, language, country=None):
+        for component, cls in six.iteritems(cls.sub_building_component_class_map):
             if component in address_components:
                 val = address_components[component]
-                new_val = self.get_component_phrase(cls, val, language, country)
+                new_val = cls.get_component_phrase(cls, val, language, country)
                 if new_val is not None:
                     address_components[component] = new_val
 
-    def cldr_country_name(self, country_code, language):
+    @classmethod
+    def cldr_country_name(cls, country_code, language):
         '''
         Country names
         -------------
@@ -666,7 +680,7 @@ class AddressComponents(object):
         3. This is implicit, but with probability (1-b)(1-a), keep the country code
         '''
 
-        cldr_config = nested_get(self.config, ('country', 'cldr'))
+        cldr_config = nested_get(cls.config, ('country', 'cldr'))
 
         alpha_2_iso_code_prob = float(cldr_config['iso_alpha_2_code_probability'])
         localized_name_prob = float(cldr_config['localized_name_probability'])
@@ -1014,26 +1028,28 @@ class AddressComponents(object):
             value = cls.strip_english_unit_number_suffix(value)
         return value
 
-    def abbreviated_state(self, state, country, language):
-        abbreviate_state_prob = float(nested_get(self.config, ('state', 'abbreviated_probability')))
+    @classmethod
+    def abbreviated_state(cls, state, country, language):
+        abbreviate_state_prob = float(nested_get(cls.config, ('state', 'abbreviated_probability')))
 
         if random.random() < abbreviate_state_prob:
             state = state_abbreviations.get_abbreviation(country, language, state, default=state)
         return state
 
-    def abbreviate_admin_components(self, address_components, country, language, hyphenation=True):
-        abbreviate_toponym_prob = float(nested_get(self.config, ('boundaries', 'abbreviate_toponym_probability')))
+    @classmethod
+    def abbreviate_admin_components(cls, address_components, country, language, hyphenation=True):
+        abbreviate_toponym_prob = float(nested_get(cls.config, ('boundaries', 'abbreviate_toponym_probability')))
 
         for component, val in six.iteritems(address_components):
             if component not in AddressFormatter.BOUNDARY_COMPONENTS:
                 continue
 
             if component == AddressFormatter.STATE:
-                val = self.abbreviated_state(val, country, language)
+                val = cls.abbreviated_state(val, country, language)
             else:
                 val = abbreviate(toponym_abbreviations_gazetteer, val, language, abbreviate_prob=abbreviate_toponym_prob)
                 if hyphenation:
-                    val = self.name_hyphens(val)
+                    val = cls.name_hyphens(val)
             address_components[component] = val
 
     def add_city_and_equivalent_points(self, grouped_components, containing_components, country, latitude, longitude):
@@ -1322,29 +1338,31 @@ class AddressComponents(object):
         if country == Countries.JAPAN and (language_suffix.endswith(JAPANESE_ROMAJI) or non_local_language == ENGLISH):
             self.format_japanese_neighborhood_romaji(address_components)
 
-    def generate_sub_building_component(self, component, address_components, language, country=None, **kw):
+    @classmethod
+    def generate_sub_building_component(cls, component, address_components, language, country=None, **kw):
         existing = address_components.get(component, None)
 
         if existing is None:
-            generated_type = self.generated_type(component, address_components, language, country=country)
+            generated_type = cls.generated_type(component, address_components, language, country=country)
             return generated_type
 
         return None
 
-    def add_sub_building_phrase(self, component, phrase_type, address_components, generated, language, country, **kw):
-        if not generated and not phrase_type != self.STANDALONE_PHRASE:
+    @classmethod
+    def add_sub_building_phrase(cls, component, phrase_type, address_components, generated, language, country, **kw):
+        if not generated and not phrase_type != cls.STANDALONE_PHRASE:
             return
 
-        component_class = self.sub_building_component_class_map[component]
+        component_class = cls.sub_building_component_class_map[component]
 
-        if generated or phrase_type == self.STANDALONE_PHRASE:
+        if generated or phrase_type == cls.STANDALONE_PHRASE:
             phrase = component_class.phrase(generated, language, country=country, **kw)
 
             if phrase:
                 address_components[component] = phrase
         elif component in address_components:
             existing = address_components[component]
-            phrase = self.get_component_phrase(component_class, existing, language, country=country)
+            phrase = cls.get_component_phrase(component_class, existing, language, country=country)
             if phrase and phrase != existing:
                 address_components[component] = phrase
             elif not phrase:
@@ -1432,7 +1450,8 @@ class AddressComponents(object):
                 if replacement != name and not replacement.isdigit():
                     address_components[component] = replacement
 
-    def replace_names(self, address_components):
+    @classmethod
+    def replace_names(cls, address_components):
         '''
         Name replacements
         -----------------
@@ -1441,14 +1460,15 @@ class AddressComponents(object):
         '''
 
         for component, value in address_components.iteritems():
-            replacement = nested_get(self.config, ('value_replacements', component, value), default=None)
+            replacement = nested_get(cls.config, ('value_replacements', component, value), default=None)
             if replacement is not None:
                 new_value = repl['replacement']
                 prob = repl['probability']
                 if random.random() < prob:
                     address_components[component] = new_value
 
-    def remove_numeric_boundary_names(self, address_components):
+    @classmethod
+    def remove_numeric_boundary_names(cls, address_components):
         '''
         Numeric boundary name cleanup
         -----------------------------
@@ -1461,13 +1481,14 @@ class AddressComponents(object):
         not be simply listed as "1" and people expected to understand.
         '''
         for component in list(address_components):
-            if component not in self.BOUNDARY_COMPONENTS or component == AddressFormatter.POSTCODE:
+            if component not in cls.BOUNDARY_COMPONENTS or component == AddressFormatter.POSTCODE:
                 continue
             value = address_components[component]
             if value.isdigit():
                 address_components.pop(component)
 
-    def cleanup_boundary_names(self, address_components):
+    @classmethod
+    def cleanup_boundary_names(cls, address_components):
         '''
         Boundary name cleanup
         ---------------------
@@ -1475,12 +1496,13 @@ class AddressComponents(object):
         Cleanup things like addr:city=Rockport,
         '''
         for component in list(address_components):
-            if component not in self.BOUNDARY_COMPONENTS:
+            if component not in cls.BOUNDARY_COMPONENTS:
                 continue
 
             address_components[component] = address_components[component].strip(six.u(', '))
 
-    def prune_duplicate_names(self, address_components):
+    @classmethod
+    def prune_duplicate_names(cls, address_components):
         '''
         Name deduping
         -------------
@@ -1522,7 +1544,8 @@ class AddressComponents(object):
             name = name.split(six.u(','), 1)[0].strip()
         return name
 
-    def cleanup_house_number(self, address_components):
+    @classmethod
+    def cleanup_house_number(cls, address_components):
         '''
         House number cleanup
         --------------------
@@ -1567,12 +1590,14 @@ class AddressComponents(object):
 
     invalid_street_regex = re.compile('^\s*(?:none|null|not applicable|n\s*/\s*a)\s*$', re.I)
 
-    def street_name_is_valid(self, street):
-        return street is not None and not (self.invalid_street_regex.match(street) or not any((c.isalnum() for c in street)))
+    @classmethod
+    def street_name_is_valid(cls, street):
+        return street is not None and not (cls.invalid_street_regex.match(street) or not any((c.isalnum() for c in street)))
 
-    def cleanup_street(self, address_components):
+    @classmethod
+    def cleanup_street(cls, address_components):
         street = address_components.get(AddressFormatter.ROAD)
-        if street is not None and not self.street_name_is_valid(street):
+        if street is not None and not cls.street_name_is_valid(street):
             address_components.pop(AddressFormatter.ROAD)
 
     newline_regex = re.compile('[\n]+')
@@ -1593,7 +1618,8 @@ class AddressComponents(object):
         name = cls.newline_regex.sub(six.u(' '), name)
         return cls.name_regex.match(name).group(1)
 
-    def name_hyphens(self, name, hyphenate_multiword_probability=None, remove_hyphen_probability=None):
+    @classmethod
+    def name_hyphens(cls, name, hyphenate_multiword_probability=None, remove_hyphen_probability=None):
         '''
         Hyphenated names
         ----------------
@@ -1602,18 +1628,18 @@ class AddressComponents(object):
         replace spaces with hyphens.
         '''
         if hyphenate_multiword_probability is None:
-            hyphenate_multiword_probability = float(nested_get(self.config, ('places', 'hyphenate_multiword_probability')))
+            hyphenate_multiword_probability = float(nested_get(cls.config, ('places', 'hyphenate_multiword_probability')))
 
         if remove_hyphen_probability is None:
-            remove_hyphen_probability = float(nested_get(self.config, ('places', 'remove_hyphen_probability')))
+            remove_hyphen_probability = float(nested_get(cls.config, ('places', 'remove_hyphen_probability')))
 
         # Clean string of trailing space/hyphens, the above regex will match any string
-        name = self.strip_whitespace_and_hyphens(name)
+        name = cls.strip_whitespace_and_hyphens(name)
 
-        if self.hyphen_regex.search(name) and random.random() < remove_hyphen_probability:
-            return self.dehyphenate_multiword_name(name)
-        elif self.whitespace_regex.search(name) and random.random() < hyphenate_multiword_probability:
-            return self.hyphenate_multiword_name(name)
+        if cls.hyphen_regex.search(name) and random.random() < remove_hyphen_probability:
+            return cls.dehyphenate_multiword_name(name)
+        elif cls.whitespace_regex.search(name) and random.random() < hyphenate_multiword_probability:
+            return cls.hyphenate_multiword_name(name)
         return name
 
     @classmethod
@@ -1647,30 +1673,34 @@ class AddressComponents(object):
 
         return names
 
-    def country_specific_cleanup(self, address_components, country):
-        if country in self.central_european_city_district_regexes:
-            self.format_central_european_city_district(country, address_components)
+    @classmethod
+    def country_specific_cleanup(cls, address_components, country):
+        if country in cls.central_european_city_district_regexes:
+            cls.format_central_european_city_district(country, address_components)
 
-        if country == self.IRELAND:
-            self.format_dublin_postal_district(address_components)
-        elif country == self.JAMAICA:
-            self.format_kingston_postcode(address_components)
+        if country == Countries.IRELAND:
+            cls.format_dublin_postal_district(address_components)
+        elif country == Countries.JAMAICA:
+            cls.format_kingston_postcode(address_components)
 
-    def add_house_number_phrase(self, address_components, language, country=None):
+    @classmethod
+    def add_house_number_phrase(cls, address_components, language, country=None):
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER, None)
-        if not is_numeric(house_number) and (not house_number or house_number.lower() not in self.latin_alphabet_lower):
+        if not is_numeric(house_number) and (not house_number or house_number.lower() not in cls.latin_alphabet_lower):
             return
         phrase = HouseNumber.phrase(house_number, language, country=country)
         if phrase and phrase != house_number:
             address_components[AddressFormatter.HOUSE_NUMBER] = phrase
 
-    def add_metro_station_phrase(self, address_components, language, country=None):
+    @classmethod
+    def add_metro_station_phrase(cls, address_components, language, country=None):
         metro_station = address_components.get(AddressFormatter.METRO_STATION, None)
         phrase = MetroStation.phrase(metro_station, language, country=country)
         if phrase and phrase != metro_station:
             address_components[AddressFormatter.METRO_STATION] = phrase
 
-    def add_postcode_phrase(self, address_components, language, country=None):
+    @classmethod
+    def add_postcode_phrase(cls, address_components, language, country=None):
         postcode = address_components.get(AddressFormatter.POSTCODE, None)
         if postcode:
             phrase = PostCode.phrase(postcode, language, country=country)
@@ -1714,8 +1744,9 @@ class AddressComponents(object):
                 address_components.pop(c)
                 component_bitset ^= ComponentDependencies.component_bit_values[c]
 
-    def po_box_address(self, address_components, language, country=None):
-        po_box_config = self.config['po_box']
+    @classmethod
+    def po_box_address(cls, address_components, language, country=None):
+        po_box_config = cls.config['po_box']
         po_box_probability = float(po_box_config['probability'])
         if random.random() < po_box_probability:
             address_components = address_components.copy()
@@ -1730,22 +1761,23 @@ class AddressComponents(object):
 
             drop_address_probability = po_box_config['drop_address_probability']
             if random.random() < drop_address_probability:
-                address_components = self.drop_address(address_components)
+                address_components = cls.drop_address(address_components)
 
             drop_places_probability = po_box_config['drop_places_probability']
             if random.random() < drop_places_probability:
-                address_components = self.drop_places(address_components)
-                address_components = self.drop_localities(address_components)
+                address_components = cls.drop_places(address_components)
+                address_components = cls.drop_localities(address_components)
 
             drop_postcode_probability = po_box_config['drop_postcode_probability']
             if random.random() < drop_postcode_probability:
-                address_components = self.drop_postcode(address_components)
+                address_components = cls.drop_postcode(address_components)
 
             return address_components
         else:
             return None
 
-    def dropout_places(self, address_components, osm_components, country, language, population=None, population_from_city=False):
+    @classmethod
+    def dropout_places(cls, address_components, osm_components, country, language, population=None, population_from_city=False):
         # Population of the city helps us determine if the city can be used
         # on its own like "Seattle" or "New York" vs. smaller cities like
         # have to be qualified with a state, country, etc.
@@ -1753,11 +1785,11 @@ class AddressComponents(object):
 
         if population is None and population_from_city:
             population = 0
-            tagged = self.categorized_osm_components(country, osm_components)
+            tagged = cls.categorized_osm_components(country, osm_components)
 
             for props, component in (tagged or []):
                 if component == AddressFormatter.CITY:
-                    if self.unambiguous_wikipedia(props, language):
+                    if cls.unambiguous_wikipedia(props, language):
                         unambiguous_city = True
 
                     if 'population' in props:
@@ -1770,8 +1802,9 @@ class AddressComponents(object):
         address_components = place_config.dropout_components(address_components, osm_components, country=country, population=population, unambiguous_city=unambiguous_city)
         return address_components
 
-    def dropout_address_level_component(self, address_components, component):
-        probability = self.address_level_dropout_probabilities.get(component, None)
+    @classmethod
+    def dropout_address_level_component(cls, address_components, component):
+        probability = cls.address_level_dropout_probabilities.get(component, None)
         if probability is not None and random.random() < probability:
             address_components.pop(component)
             return True
