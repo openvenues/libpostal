@@ -283,7 +283,8 @@ class OpenAddressesFormatter(object):
                 pass
         return num
 
-    def fix_component_encodings(self, components):
+    @classmethod
+    def fix_component_encodings(cls, components):
         return {k: ftfy.fix_encoding(safe_decode(v)) for k, v in six.iteritems(components)}
 
     def formatted_addresses(self, country_dir, path, configs, tag_components=True):
@@ -306,6 +307,8 @@ class OpenAddressesFormatter(object):
         place_and_postcode_probability = float(self.get_property('place_and_postcode_probability', *configs))
 
         city_replacements = self.get_property('city_replacements', *configs)
+
+        override_country_dir = set(self.get_property('override_country_dir', *configs) or None)
 
         postcode_length = int(self.get_property('postcode_length', *configs) or 0)
 
@@ -420,7 +423,7 @@ class OpenAddressesFormatter(object):
 
             if components:
                 country, candidate_languages = self.country_rtree.country_and_languages(latitude, longitude)
-                if not (country and candidate_languages) or country != country_dir:
+                if not (country and candidate_languages) or (country != country_dir and not override_country_dir):
                     country = country_dir
                     candidate_languages = get_country_languages(country)
                     if not candidate_languages:
