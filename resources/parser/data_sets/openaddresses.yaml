@@ -2277,6 +2277,9 @@ countries:
                       add_osm_boundaries: false
                       city_replacements:
                           state_district: Clayton County
+                    - filename: cobb.csv
+                      city_replacements:
+                          state_district: Cobb County
                     - filename: coffee.csv
                       city_replacements:
                           state_district: Coffee County
