@@ -1677,19 +1677,24 @@ class AddressComponents(object):
             if phrase and phrase != postcode:
                 address_components[AddressFormatter.POSTCODE] = phrase
 
-    def drop_names(self, address_components):
-        return {c: v for c, v in six.iteritems(address_components) if c not in self.NAME_COMPONENTS}
+    @classmethod
+    def drop_names(cls, address_components):
+        return {c: v for c, v in six.iteritems(address_components) if c not in cls.NAME_COMPONENTS}
 
-    def drop_address(self, address_components):
-        return {c: v for c, v in six.iteritems(address_components) if c not in self.ADDRESS_LEVEL_COMPONENTS}
+    @classmethod
+    def drop_address(cls, address_components):
+        return {c: v for c, v in six.iteritems(address_components) if c not in cls.ADDRESS_LEVEL_COMPONENTS}
 
-    def drop_places(self, address_components):
+    @classmethod
+    def drop_places(cls, address_components):
         return {c: v for c, v in six.iteritems(address_components) if c not in place_config.ADMIN_COMPONENTS}
 
-    def drop_localities(self, address_components):
-        return {c: v for c, v in six.iteritems(address_components) if c not in self.LOCALITY_COMPONENTS}
+    @classmethod
+    def drop_localities(cls, address_components):
+        return {c: v for c, v in six.iteritems(address_components) if c not in cls.LOCALITY_COMPONENTS}
 
-    def drop_postcode(self, address_components):
+    @classmethod
+    def drop_postcode(cls, address_components):
         if AddressFormatter.POSTCODE not in address_components:
             return address_components
         return {c: v for c, v in six.iteritems(address_components) if c != AddressFormatter.POSTCODE}

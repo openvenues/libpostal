@@ -500,7 +500,15 @@ countries:
 
     # United Kingdom, in case language is unknown
     gb:
-      insertions: *english_template_insertions
+      insertions:
+          <<: *english_template_insertions
+          postcode:
+              postcode_before_suburb:
+                  before: suburb
+                  probability: 0.1
+              postcode_before_city:
+                  before: city
+                  probability: 0.1
 
     us:
         insertions: &us_template_insertions
