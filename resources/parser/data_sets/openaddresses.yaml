@@ -2590,9 +2590,6 @@ countries:
                     - filename: city_of_aurora.csv
                     - filename: city_of_chicago.csv
                     - filename: city_of_east_peoria.csv
-                      add_osm_boundaries: true
-                      city_replacements:
-                          city: East Peoria
                     - filename: city_of_naperville.csv
                     - filename: city-of-ofallon.csv
                     - filename: city_of_schaumburg.csv
