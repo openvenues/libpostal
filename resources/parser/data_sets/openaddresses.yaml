@@ -1063,6 +1063,15 @@ countries:
             - filename: yonne.csv
             - filename: yvelines.csv
 
+    gr:
+        subdirs:
+            b:
+                files:
+                    - filename: municipality_of_kalamaria.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Θεσσαλονίκη
+
     il:
         files:
             - filename: countrywide-hebrew.csv
