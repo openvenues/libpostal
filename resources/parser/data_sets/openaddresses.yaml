@@ -2305,6 +2305,10 @@ countries:
                       non_numeric_units: true
                       city_replacements:
                           state_district: DeKalb County
+                      ignore_fields_containing:
+                          unit:
+                              # Ignore units like "Fl 2" as that's a level in our parlance
+                              - "\\bfl\\b"
                     - filename: dooly.csv
                       city_replacements:
                           state_district: Dooly County
