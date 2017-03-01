@@ -988,9 +988,11 @@ countries:
               # Guadeloupe - overseas department (treated as a country in libpostal)
             - filename: guadeloupe.csv
               cldr_country_probability: 1.0
+              override_country_dir: gp
               # French Guiana - overseas department (treated as a country in libpostal)
             - filename: guyane.csv
               cldr_country_probability: 1.0
+              override_country_dir: gf
             - filename: haute_corse.csv
             - filename: haute_garonne.csv
             - filename: haute_loire.csv
@@ -1012,6 +1014,7 @@ countries:
               # Réunion - overseas department (treated as a country in libpostal)
             - filename: la_reunion.csv
               cldr_country_probability: 1.0
+              override_country_dir: re
             - filename: loire_atlantique.csv
             - filename: loire.csv
             - filename: loir_et_cher.csv
@@ -1024,9 +1027,11 @@ countries:
               # Martinique - overseas department (treated as a country in libpostal)
             - filename: martinique.csv
               cldr_country_probability: 1.0
+              override_country_dir: mq
               # Mayotte - overseas department (treated as a country in libpostal)
             - filename: mayotte.csv
               cldr_country_probability: 1.0
+              override_country_dir: yt
             - filename: meurthe_et_moselle.csv
             - filename: meuse.csv
             - filename: montpellier.csv
