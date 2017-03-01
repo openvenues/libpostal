@@ -2349,6 +2349,9 @@ countries:
                     - filename: heard.csv
                       city_replacements:
                           state_district: Heard County
+                    - filename: henry.csv
+                      city_replacements:
+                          state_district: Henry County
                     - filename: houston.csv
                       city_replacements:
                           state_district: Houston County
