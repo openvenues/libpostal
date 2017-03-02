@@ -796,7 +796,8 @@ class AddressComponents(object):
     dublin_postal_district_regex = re.compile('^{}$'.format(dublin_postal_district_regex_str), re.I)
     dublin_city_district_regex = re.compile('dublin {}$'.format(dublin_postal_district_regex_str), re.I)
 
-    def format_dublin_postal_district(self, address_components):
+    @classmethod
+    def format_dublin_postal_district(cls, address_components):
         '''
         Dublin postal districts
         -----------------------
@@ -812,19 +813,19 @@ class AddressComponents(object):
 
         city = address_components.get(AddressFormatter.CITY)
         # Change to city_district
-        if city and self.dublin_city_district_regex.match(city):
+        if city and cls.dublin_city_district_regex.match(city):
             address_components[AddressFormatter.CITY_DISTRICT] = address_components.pop(AddressFormatter.CITY)
             postcode = address_components.get(AddressFormatter.POSTCODE)
-            if postcode and (self.dublin_postal_district_regex.match(postcode) or self.dublin_city_district_regex.match(postcode)):
+            if postcode and (cls.dublin_postal_district_regex.match(postcode) or cls.dublin_city_district_regex.match(postcode)):
                 address_components.pop(AddressFormatter.POSTCODE)
             return True
         elif city and city.lower() in ('dublin', 'city of dublin', 'dublin city') and AddressFormatter.POSTCODE in address_components:
             postcode = address_components[AddressFormatter.POSTCODE]
-            if self.dublin_postal_district_regex.match(postcode):
+            if cls.dublin_postal_district_regex.match(postcode):
                 address_components.pop(AddressFormatter.CITY)
                 address_components[AddressFormatter.CITY_DISTRICT] = 'Dublin {}'.format(address_components.pop(AddressFormatter.POSTCODE))
                 return True
-            elif self.dublin_city_district_regex.match(postcode):
+            elif cls.dublin_city_district_regex.match(postcode):
                 address_components[AddressFormatter.CITY_DISTRICT] = address_components.pop(AddressFormatter.POSTCODE)
                 return True
         return False
@@ -832,7 +833,8 @@ class AddressComponents(object):
     # e.g. Kingston 5
     kingston_postcode_regex = re.compile('(kingston )?([1-9]|1[1-9]|20|c\.?s\.?o\.?)$', re.I)
 
-    def format_kingston_postcode(self, address_components):
+    @classmethod
+    def format_kingston_postcode(cls, address_components):
         '''
         Kingston postcodes
         ------------------
@@ -847,7 +849,7 @@ class AddressComponents(object):
         postcode = address_components.get(AddressFormatter.POSTCODE)
 
         if city:
-            match = self.kingston_postcode_regex.match(city)
+            match = cls.kingston_postcode_regex.match(city)
             if match:
                 city, postcode = match.groups()
                 if city:
@@ -860,7 +862,7 @@ class AddressComponents(object):
 
                 return True
         elif postcode:
-            match = self.kingston_postcode_regex.match(postcode)
+            match = cls.kingston_postcode_regex.match(postcode)
             if match:
                 city, postcode = match.groups()
                 if city and AddressFormatter.CITY not in address_components:
@@ -872,7 +874,8 @@ class AddressComponents(object):
                 return True
         return False
 
-    def format_japanese_neighborhood_romaji(self, address_components):
+    @classmethod
+    def format_japanese_neighborhood_romaji(cls, address_components):
         neighborhood = safe_decode(address_components.get(AddressFormatter.SUBURB, ''))
         if neighborhood.endswith(safe_decode('丁目')):
             neighborhood = neighborhood[:-2]
@@ -896,8 +899,9 @@ class AddressComponents(object):
         else:
             return self.japanese_node_admin_level_map.get(val.get('place'), 1000)
 
-    def genitive_name(self, name, language):
-        morph = self.slavic_morphology_analyzers.get(language)
+    @classmethod
+    def genitive_name(cls, name, language):
+        morph = cls.slavic_morphology_analyzers.get(language)
         if not morph:
             return None
         norm = []
@@ -913,14 +917,15 @@ class AddressComponents(object):
                 norm.append(word)
         return six.u(' ').join(norm)
 
-    def add_genitives(self, address_components, language):
-        if language in self.slavic_morphology_analyzers and AddressFormatter.CITY in address_components:
+    @classmethod
+    def add_genitives(cls, address_components, language):
+        if language in cls.slavic_morphology_analyzers and AddressFormatter.CITY in address_components:
             for component in address_components:
                 if component not in AddressFormatter.BOUNDARY_COMPONENTS:
                     continue
-                genitive_probability = nested_get(self.config, ('slavic_names', component, 'genitive_probability'), default=None)
+                genitive_probability = nested_get(cls.config, ('slavic_names', component, 'genitive_probability'), default=None)
                 if genitive_probability is not None and random.random() < float(genitive_probability):
-                    address_components[component] = self.genitive_name(address_components[component], language)
+                    address_components[component] = cls.genitive_name(address_components[component], language)
 
     @classmethod
     def spanish_street_name(cls, street):
