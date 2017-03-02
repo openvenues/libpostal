@@ -2764,6 +2764,13 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Saint Joseph County
+                    - filename: tippecanoe.csv
+                      fields:
+                          <<: *default_fields
+                          CITY:
+                              component: city
+                              value_map:
+                                  "LAF": "LAFAYETTE"
                     - filename: white.csv
                       add_osm_boundaries: true
                       city_replacements:
