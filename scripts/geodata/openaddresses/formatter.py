@@ -308,7 +308,7 @@ class OpenAddressesFormatter(object):
 
         city_replacements = self.get_property('city_replacements', *configs)
 
-        override_country_dir = set(self.get_property('override_country_dir', *configs) or None)
+        override_country_dir = self.get_property('override_country_dir', *configs)
 
         postcode_length = int(self.get_property('postcode_length', *configs) or 0)
 
