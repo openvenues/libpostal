@@ -2799,6 +2799,7 @@ countries:
                     - filename: chautauqua_county.csv
                     - filename: city_of_lenexa.csv
                     - filename: city_of_olathe.csv
+                    - filename: city_of_salina.csv
                     - filename: cowley_county.csv
                     - filename: crawford_county.csv
                     - filename: doniphan_county.csv
