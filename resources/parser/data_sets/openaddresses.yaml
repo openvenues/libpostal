@@ -3583,6 +3583,9 @@ countries:
                     - filename: city_of_rochester.csv
                     - filename: erie.csv
                       fields: *fields_no_postcode
+                    - filename: orange.csv
+                      city_replacements:
+                          state_district: Orange County
                     - filename: westchester.csv
 
             oh:
