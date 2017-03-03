@@ -3331,6 +3331,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Orange County
+                    - filename: polk.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Polk County
                     - filename: rutherford.csv
                     - filename: stanly.csv
                       add_osm_boundaries: true
