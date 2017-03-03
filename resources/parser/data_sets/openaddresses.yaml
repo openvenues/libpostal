@@ -3721,6 +3721,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Lawton
+                    - filename: city_of_muskogee.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Muskogee
                     - filename: oklahoma.csv
                       add_osm_boundaries: true
                       ignore_fields_containing:
