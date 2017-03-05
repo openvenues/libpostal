@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 #include "address_parser.h"
 #include "address_parser_io.h"
 #include "address_dictionary.h"
@@ -20,9 +22,9 @@ KHASH_MAP_INIT_STR(phrase_stats, phrase_stats_t)
 KHASH_MAP_INIT_STR(postal_code_context_phrases, khash_t(str_set) *)
 KHASH_MAP_INIT_STR(phrase_types, address_parser_types_t)
 
-#define CHUNK_SIZE_MB 1024 * 1024
-#define CHUNK_SIZE_GB 1024 * (CHUNK_SIZE_MB)
-#define DEFAULT_SHUFFLE_CHUNK_SIZE 2 * (CHUNK_SIZE_GB)
+#define CHUNK_SIZE_MB UINT64_C(1024) * UINT64_C(1024)
+#define CHUNK_SIZE_GB UINT64_C(1024) * (CHUNK_SIZE_MB)
+#define DEFAULT_SHUFFLE_CHUNK_SIZE UINT64_C(2) * (CHUNK_SIZE_GB)
 
 // Training
 
@@ -1053,7 +1055,7 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    #if !defined(HAVE_SHUF)
+    #if !defined(HAVE_SHUF) && !defined(HAVE_GSHUF)
     log_warn("shuf must be installed to train address parser effectively. If this is a production machine, please install shuf. No shuffling will be performed.\n");
     #endif
 
