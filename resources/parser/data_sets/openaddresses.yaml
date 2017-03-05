@@ -3141,6 +3141,7 @@ countries:
                 files:
                     - filename: bates.csv
                     - filename: boone.csv
+                    - filename: city_of_cape_girardeau.csv
                     - filename: city_of_columbia.csv
                     - filename: city_of_kansas_city.csv
                     - filename: city_of_perryville.csv
@@ -3185,6 +3186,10 @@ countries:
                           city: Diamondhead
                     - filename: city_of_diberville.csv
                     - filename: city_of_ocean_springs.csv
+                    - filename: city_of_pascagoula.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Pascagoula
                     - filename: city_of_pelahatchie.csv
                     - filename: city_of_vicksburg.csv
                       add_osm_boundaries: true
@@ -3213,6 +3218,13 @@ countries:
                           state_district: Pontotoc County
                     - filename: rankin.csv
                     - filename: simpson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Simpson County
+                    - filename: warren.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Warren County
 
             mt:
                 add:
