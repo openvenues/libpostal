@@ -20,6 +20,9 @@ KHASH_MAP_INIT_STR(phrase_stats, phrase_stats_t)
 KHASH_MAP_INIT_STR(postal_code_context_phrases, khash_t(str_set) *)
 KHASH_MAP_INIT_STR(phrase_types, address_parser_types_t)
 
+#define CHUNK_SIZE_MB 1024 * 1024
+#define CHUNK_SIZE_GB 1024 * (CHUNK_SIZE_MB)
+#define DEFAULT_SHUFFLE_CHUNK_SIZE 2 * (CHUNK_SIZE_GB)
 
 // Training
 
@@ -1011,10 +1014,10 @@ bool address_parser_train(address_parser_t *self, char *filename, uint32_t num_i
 
         trainer->iterations = iter;
 
-        #if defined(HAVE_SHUF)
+        #if defined(HAVE_SHUF) || defined(HAVE_GSHUF)
         log_info("Shuffling\n");
 
-        if (!shuffle_file(filename)) {
+        if (!shuffle_file_chunked_size(filename, DEFAULT_SHUFFLE_CHUNK_SIZE)) {
             log_error("Error in shuffle\n");
             averaged_perceptron_trainer_destroy(trainer);
             return false;
@@ -1033,7 +1036,6 @@ bool address_parser_train(address_parser_t *self, char *filename, uint32_t num_i
     log_debug("Done with training, averaging weights\n");
 
     self->model = averaged_perceptron_trainer_finalize(trainer);
-    
 
     return true;
 }
