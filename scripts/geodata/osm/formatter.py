@@ -1682,6 +1682,8 @@ class OSMAddressFormatter(object):
                     formatted = self.formatter.format_address(address_components, country, language=lang,
                                                               tag_components=tag_components, minimal_only=False)
 
+                    if not formatted or not formatted.strip():
+                        continue
                     writer.writerow((lang, country, tsv_string(formatted)))
 
             if i % 1000 == 0 and i > 0:
