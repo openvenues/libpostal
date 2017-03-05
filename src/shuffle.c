@@ -1,6 +1,7 @@
 #include "shuffle.h"
 
 #include <config.h>
+
 #include "string_utils.h"
 
 // Run shuf/gshuf on a file in-place if the shuf command is available.
@@ -56,10 +57,13 @@ bool shuffle_file_chunked(char *filename, size_t parts) {
     char *outfile = filename;
 
     char_array *command = char_array_new();
+    if (command == NULL) {
+        return false;
+    }
 
     // Split the file randomly into $parts files
     // Need to be assigned randomly, not just every nth line or it's not really a random permutation
-    char_array_cat_printf(command, "awk -v parts=%zu -v filename=%s 'BEGIN{srand();} { print > filename\".\"int(rand() * parts) }'", parts, filename);
+    char_array_cat_printf(command, "awk -v parts=%zu 'BEGIN{srand();} { f = \"%s.\"int(rand() * parts); print > f }' %s", parts, filename, filename);
 
     int ret = system(char_array_get_string(command));
     if (ret != EXIT_SUCCESS) {
@@ -92,6 +96,7 @@ bool shuffle_file_chunked(char *filename, size_t parts) {
     if (ret != EXIT_SUCCESS) {
         goto exit_char_array_allocated;
     }
+
 
 exit_char_array_allocated:
     char_array_destroy(command);
