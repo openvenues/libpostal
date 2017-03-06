@@ -783,6 +783,8 @@ address_parser_t *address_parser_init(char *filename) {
         free(phrase_keys);
     }
 
+    log_info("Creating phrases trie\n");
+
     parser->phrases = trie_new_from_hash(phrase_counts);
     if (parser->phrases == NULL) {
         log_error("Error converting phrase_counts to trie\n");
@@ -837,6 +839,8 @@ address_parser_t *address_parser_init(char *filename) {
         parser = NULL;
         goto exit_hashes_allocated;
     }
+
+    log_info("Building postal code contexts\n");
 
     khash_t(str_set) *context_phrases;
 
