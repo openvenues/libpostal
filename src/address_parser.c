@@ -1399,13 +1399,13 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
     if (last_index == idx - 1) {
         // Previous tag and current word
-        feature_array_add(prev_tag_features, 2, "prev tag+word", word);
-        feature_array_add(prev_tag_features, 1, "prev tag");
+        feature_array_add(prev_tag_features, 2, "word", word);
+        feature_array_add(prev_tag_features, 1, "trans");
 
         
         // Previous two tags and current word
-        feature_array_add(prev2_tag_features, 2, "prev2 tag+prev tag+word", word);
-        feature_array_add(prev2_tag_features, 1, "prev2 tag+prev tag");
+        feature_array_add(prev2_tag_features, 2, "word", word);
+        feature_array_add(prev2_tag_features, 1, "trans");
     }
 
     if (last_index >= 0) {
@@ -1426,7 +1426,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
 
         if (last_index == idx - 1) {
-            feature_array_add(prev_tag_features, 2, "prev tag+prev word", prev_word);
+            feature_array_add(prev_tag_features, 2, "prev word", prev_word);
         }
 
         // Previous word and current word
