@@ -2935,6 +2935,10 @@ countries:
                       city_replacements:
                           state_district: Beauregard Parish
                     - filename: bienville.csv
+                    - filename: city_of_alexandria.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Alexandria
                     - filename: city_of_bossier.csv
                       add_osm_boundaries: true
                       city_replacements:
