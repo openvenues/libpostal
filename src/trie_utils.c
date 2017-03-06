@@ -40,6 +40,9 @@ trie_t *trie_new_from_hash(khash_t(str_uint32) *hash) {
             trie_destroy(trie);
             return NULL;
         }
+        if (i % 100000 == 0 && i > 0) {
+            log_info("added %zu keys to trie\n");
+        }
     }
 
     string_array_destroy(hash_keys);
