@@ -3197,6 +3197,10 @@ countries:
                       city_replacements:
                           city: Diamondhead
                     - filename: city_of_diberville.csv
+                    - filename: city_of_hattiesburg.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Hattiesburg
                     - filename: city_of_ocean_springs.csv
                     - filename: city_of_pascagoula.csv
                       add_osm_boundaries: true
