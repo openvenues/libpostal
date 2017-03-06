@@ -720,6 +720,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Gatineau
+                    - filename: longueuil.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Longueuil
                     - filename: montreal.csv
                       add_osm_boundaries: true
                       city_replacements:
