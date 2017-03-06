@@ -186,6 +186,7 @@ typedef struct parser_options {
 // Can add other gazetteers as well
 typedef struct address_parser {
     parser_options_t options;
+    size_t num_classes;
     averaged_perceptron_t *model;
     trie_t *vocab;
     trie_t *phrases;
