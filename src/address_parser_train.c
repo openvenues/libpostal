@@ -809,6 +809,8 @@ address_parser_t *address_parser_init(char *filename) {
         goto exit_hashes_allocated;
     }
 
+    log_info("Creating postal codes trie\n");
+
     hash_size = kh_size(postal_code_counts);
     for (size_t idx = 0; idx < hash_size; idx++) {
         char *phrase_key = postal_code_keys[idx];
