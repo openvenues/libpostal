@@ -1056,6 +1056,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         return false;
     }
 
+    char *word_pre_norm = tokenized_string_get_token(tokenized, idx);
+
     size_t word_len = strlen(word);
 
     log_debug("word=%s\n", word);
@@ -1289,7 +1291,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
                 known_prefix = true;
                 char_array_clear(phrase_tokens);
                 prefix_len = prefix_phrase.len;
-                char_array_add_len(phrase_tokens, word, prefix_len);
+                char_array_add_len(phrase_tokens, word_pre_norm, prefix_len);
                 prefix = char_array_get_string(phrase_tokens);
                 log_debug("got prefix: %s\n", prefix);
                 feature_array_add(features, 2, "prefix", prefix);
@@ -1305,7 +1307,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
                 known_suffix = true;
                 char_array_clear(context->suffix_phrase);
                 suffix_len = suffix_phrase.len;
-                char_array_add_len(context->suffix_phrase, word + (token.len - suffix_phrase.len), suffix_len);
+                char_array_add_len(context->suffix_phrase, word_pre_norm + (token.len - suffix_phrase.len), suffix_len);
                 suffix = char_array_get_string(context->suffix_phrase);
                 log_debug("got suffix: %s\n", suffix);
                 feature_array_add(features, 2, "suffix", suffix);
@@ -1402,7 +1404,6 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         feature_array_add(prev_tag_features, 2, "word", word);
         feature_array_add(prev_tag_features, 1, "trans");
 
-        
         // Previous two tags and current word
         feature_array_add(prev2_tag_features, 2, "word", word);
         feature_array_add(prev2_tag_features, 1, "trans");
