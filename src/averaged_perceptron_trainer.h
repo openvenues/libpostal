@@ -60,15 +60,17 @@ typedef struct averaged_perceptron_trainer {
     uint64_t num_updates;
     uint64_t num_errors;
     uint32_t iterations;
+    uint64_t min_updates;
     khash_t(str_uint32) *features;
     khash_t(str_uint32) *classes;
     cstring_array *class_strings;
     // {feature_id => {class_id => class_weight_t}}
     khash_t(feature_class_weights) *weights;
+    uint64_array *update_counts;
     double_array *scores;
 } averaged_perceptron_trainer_t;
 
-averaged_perceptron_trainer_t *averaged_perceptron_trainer_new(void);
+averaged_perceptron_trainer_t *averaged_perceptron_trainer_new(uint64_t min_updates);
 
 uint32_t averaged_perceptron_trainer_predict(averaged_perceptron_trainer_t *self, cstring_array *features);
 

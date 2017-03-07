@@ -29,6 +29,7 @@ KHASH_MAP_INIT_STR(phrase_types, address_parser_types_t)
 // Training
 
 #define DEFAULT_ITERATIONS 5
+#define DEFAULT_MIN_UPDATES 5
 
 #define MIN_VOCAB_COUNT 5
 #define MIN_PHRASE_COUNT 1
@@ -692,7 +693,6 @@ address_parser_t *address_parser_init(char *filename) {
 
     parser->model = NULL;
 
-
     size_t num_classes = kh_size(class_counts);
     log_info("num_classes = %zu\n", num_classes);
     parser->num_classes = num_classes;
@@ -1037,8 +1037,8 @@ exit_epoch_training_started:
     return true;
 }
 
-bool address_parser_train(address_parser_t *self, char *filename, uint32_t num_iterations) {
-    averaged_perceptron_trainer_t *trainer = averaged_perceptron_trainer_new();
+bool address_parser_train(address_parser_t *self, char *filename, uint32_t num_iterations, size_t min_updates) {
+    averaged_perceptron_trainer_t *trainer = averaged_perceptron_trainer_new(min_updates);
 
     for (uint32_t iter = 0; iter < num_iterations; iter++) {
         log_info("Doing epoch %d\n", iter);
@@ -1073,7 +1073,8 @@ bool address_parser_train(address_parser_t *self, char *filename, uint32_t num_i
 
 typedef enum {
     ADDRESS_PARSER_TRAIN_POSITIONAL_ARG,
-    ADDRESS_PARSER_TRAIN_ARG_ITERATIONS
+    ADDRESS_PARSER_TRAIN_ARG_ITERATIONS,
+    ADDRESS_PARSER_TRAIN_ARG_MIN_UPDATES
 } address_parser_train_keyword_arg_t;
 
 #define USAGE "Usage: ./address_parser_train filename output_dir [--iterations number]\n"
@@ -1093,9 +1094,11 @@ int main(int argc, char **argv) {
     address_parser_train_keyword_arg_t kwarg = ADDRESS_PARSER_TRAIN_POSITIONAL_ARG;
 
     size_t num_iterations = DEFAULT_ITERATIONS;
+    uint64_t min_updates = DEFAULT_MIN_UPDATES;
     size_t position = 0;
 
     ssize_t arg_iterations;
+    uint64_t arg_min_updates;
 
     char *filename = NULL;
     char *output_dir = NULL;
@@ -1108,12 +1111,24 @@ int main(int argc, char **argv) {
             continue;
         }
 
+        if (string_equals(arg, "--min-updates")) {
+            kwarg = ADDRESS_PARSER_TRAIN_ARG_MIN_UPDATES;
+            continue;
+        }
+
         if (kwarg == ADDRESS_PARSER_TRAIN_ARG_ITERATIONS) {
             if (sscanf(arg, "%zd", &arg_iterations) != 1 || arg_iterations < 0) {
                 log_error("Bad arg for --iterations: %s\n", arg);
                 exit(EXIT_FAILURE);
             }
             num_iterations = (size_t)arg_iterations;
+        } else if (kwarg == ADDRESS_PARSER_TRAIN_ARG_MIN_UPDATES) {
+            if (sscanf(arg, "%llu", &arg_min_updates) != 1) {
+                log_error("Bad arg for --min-updates: %s\n", arg);
+                exit(EXIT_FAILURE);
+            }
+            min_updates = arg_min_updates;
+            log_info("min_updates = %llu\n", min_updates);
         } else if (position == 0) {
             filename = arg;
             position++;
@@ -1154,7 +1169,7 @@ int main(int argc, char **argv) {
 
     log_info("Finished initialization\n");
 
-    if (!address_parser_train(parser, filename, num_iterations)) {
+    if (!address_parser_train(parser, filename, num_iterations, min_updates)) {
         log_error("Error in training\n");
         exit(EXIT_FAILURE);
     }

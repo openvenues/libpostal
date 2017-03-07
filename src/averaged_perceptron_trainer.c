@@ -35,6 +35,10 @@ void averaged_perceptron_trainer_destroy(averaged_perceptron_trainer_t *self) {
         kh_destroy(feature_class_weights, self->weights);
     }
 
+    if (self->update_counts != NULL) {
+        uint64_array_destroy(self->update_counts);
+    }
+
     if (self->scores != NULL) {
         double_array_destroy(self->scores);
     }
@@ -107,6 +111,7 @@ bool averaged_perceptron_trainer_get_feature_id(averaged_perceptron_trainer_t *s
         kh_value(features, k) = new_id;
         *feature_id = new_id;
 
+        uint64_array_push(self->update_counts, 0);
         self->num_features++;
         return true;
     }
@@ -117,33 +122,84 @@ bool averaged_perceptron_trainer_get_feature_id(averaged_perceptron_trainer_t *s
 averaged_perceptron_t *averaged_perceptron_trainer_finalize(averaged_perceptron_trainer_t *self) {
     if (self == NULL || self->num_classes == 0) return NULL;
 
-    sparse_matrix_t *averaged_weights = sparse_matrix_new();
-
     uint32_t class_id;
     class_weight_t weight;
 
     uint64_t updates = self->num_updates;
     khash_t(class_weights) *weights;
 
-    for (uint32_t feature_id = 0; feature_id < self->num_features; feature_id++) {
-        khiter_t k;
+    char **feature_keys = malloc(sizeof(char *) * self->num_features);
+    uint32_t feature_id;
+    const char *feature;
+    kh_foreach(self->features, feature, feature_id, {
+        if (feature_id >= self->num_features) {
+            free(feature_keys);
+            return NULL;
+        }
+        feature_keys[feature_id] = (char *)feature;
+    })
+
+    sparse_matrix_t *averaged_weights = sparse_matrix_new();
+
+    uint32_t next_feature_id = 0;
+    khiter_t k;
+
+    uint64_t *update_counts = self->update_counts->a;
+
+    log_info("Finalizing trainer, num_features=%u\n", self->num_features);
+
+    log_info("Pruning weights with < min_updates = %llu\n", self->min_updates);
+
+    for (feature_id = 0; feature_id < self->num_features; feature_id++) {
         k = kh_get(feature_class_weights, self->weights, feature_id);
         if (k == kh_end(self->weights)) {
             sparse_matrix_destroy(averaged_weights);
+            free(feature_keys);
             return NULL;
         }
 
         weights = kh_value(self->weights, k);
         uint32_t class_id;
 
-        kh_foreach(weights, class_id, weight, {
-            weight.total += (updates - weight.last_updated) * weight.value;
-            double value = weight.total / updates;
-            sparse_matrix_append(averaged_weights, class_id, value);
-        })
+        uint64_t update_count = update_counts[feature_id];
+        bool keep_feature = update_count >= self->min_updates;
 
-        sparse_matrix_finalize_row(averaged_weights);
+        uint32_t new_feature_id = next_feature_id;
+
+        if (keep_feature) {
+            kh_foreach(weights, class_id, weight, {
+                weight.total += (updates - weight.last_updated) * weight.value;
+                double value = weight.total / updates;
+                sparse_matrix_append(averaged_weights, class_id, value);
+            })
+
+            sparse_matrix_finalize_row(averaged_weights);
+            next_feature_id++;
+        }
+
+
+        if (!keep_feature || new_feature_id != feature_id) {
+            feature = feature_keys[feature_id];
+            k = kh_get(str_uint32, self->features, feature);
+            if (k != kh_end(self->features)) {
+                if (keep_feature) {
+                    kh_value(self->features, k) = new_feature_id;
+                } else {
+                    kh_del(str_uint32, self->features, k);
+                }
+            } else {
+                log_error("Error in kh_get on self->features\n");
+                averaged_perceptron_trainer_destroy(self);
+                return NULL;
+            }
+        }
+
     }
+
+    free(feature_keys);
+
+    self->num_features = kh_size(self->features);
+    log_info("After pruning, num_features=%u\n", self->num_features);
 
     averaged_perceptron_t *perceptron = malloc(sizeof(averaged_perceptron_t));
 
@@ -230,6 +286,9 @@ static inline bool averaged_perceptron_trainer_update_feature(averaged_perceptro
        !averaged_perceptron_trainer_update_weight(weights, updates, truth, value)) {
         return false;
     }
+
+    uint64_t *update_counts = self->update_counts->a;
+    update_counts[feature_id]++;
 
     return true;
 }
@@ -320,7 +379,7 @@ bool averaged_perceptron_trainer_update_counts(averaged_perceptron_trainer_t *se
     return true;
 }
 
-bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *self, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *prev2_tag_features, ap_tagger_feature_function feature_function, tokenized_string_t *tokenized, cstring_array *labels) {
+bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *self, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *prev2_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, cstring_array *labels) {
     // Keep two tags of history in training
     char *prev = NULL;
     char *prev2 = NULL;
@@ -395,7 +454,7 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
 
 }
 
-averaged_perceptron_trainer_t *averaged_perceptron_trainer_new(void) {
+averaged_perceptron_trainer_t *averaged_perceptron_trainer_new(uint64_t min_updates) {
     averaged_perceptron_trainer_t *self = calloc(1, sizeof(averaged_perceptron_trainer_t));
 
     if (self == NULL) return NULL;
@@ -405,6 +464,8 @@ averaged_perceptron_trainer_t *averaged_perceptron_trainer_new(void) {
     self->num_updates = 0;
     self->num_errors = 0;
     self->iterations = 0;
+
+    self->min_updates = min_updates;
 
     self->features = kh_init(str_uint32);
     if (self->features == NULL) {
@@ -427,7 +488,15 @@ averaged_perceptron_trainer_t *averaged_perceptron_trainer_new(void) {
         goto exit_trainer_created;
     }
 
+    self->update_counts = uint64_array_new();
+    if (self->update_counts == NULL) {
+        goto exit_trainer_created;
+    }
+
     self->scores = double_array_new();
+    if (self->scores == NULL) {
+        goto exit_trainer_created;
+    }
 
     return self;
 
