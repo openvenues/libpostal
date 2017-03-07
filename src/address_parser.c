@@ -706,13 +706,17 @@ void address_parser_context_fill(address_parser_context_t *context, address_pars
     bool have_address_phrases = search_address_dictionaries_tokens_with_phrases(normalized_str, normalized_tokens, NULL, &address_dictionary_phrases);
     token_phrase_memberships(address_dictionary_phrases, address_phrase_memberships, num_tokens);
 
+    phrase_array_clear(context->prefix_phrases);
+    phrase_array_clear(context->suffix_phrases);
+
     for (size_t i = 0; i < num_tokens; i++) {
         token_t token = tokens->a[i];
+        char *word_pre_norm = tokenized_string_get_token(tokenized_str, i);
 
-        phrase_t prefix_phrase = search_address_dictionaries_prefix(str + token.offset, token.len, NULL);
+        phrase_t prefix_phrase = search_address_dictionaries_prefix(word_pre_norm, token.len, NULL);
         phrase_array_push(context->prefix_phrases, prefix_phrase);
 
-        phrase_t suffix_phrase = search_address_dictionaries_suffix(str + token.offset, token.len, NULL);
+        phrase_t suffix_phrase = search_address_dictionaries_suffix(word_pre_norm, token.len, NULL);
         phrase_array_push(context->suffix_phrases, suffix_phrase);
     }
 
@@ -1050,13 +1054,13 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     ssize_t last_index = (ssize_t)idx - 1;
     ssize_t next_index = (ssize_t)idx + 1;
 
+    char *word_pre_norm = tokenized_string_get_token(tokenized, idx);
+
     char *word = cstring_array_get_string(normalized, idx);
     if (word == NULL) {
         log_error("got NULL word at %d\n", idx);
         return false;
     }
-
-    char *word_pre_norm = tokenized_string_get_token(tokenized, idx);
 
     size_t word_len = strlen(word);
 
@@ -1307,7 +1311,9 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
                 known_suffix = true;
                 char_array_clear(context->suffix_phrase);
                 suffix_len = suffix_phrase.len;
-                char_array_add_len(context->suffix_phrase, word_pre_norm + (token.len - suffix_phrase.len), suffix_len);
+                size_t word_pre_norm_len = cstring_array_token_length(tokenized->strings, idx);
+                size_t suffix_offset = word_pre_norm_len - suffix_len;
+                char_array_add_len(context->suffix_phrase, word_pre_norm + suffix_offset, suffix_len);
                 suffix = char_array_get_string(context->suffix_phrase);
                 log_debug("got suffix: %s\n", suffix);
                 feature_array_add(features, 2, "suffix", suffix);
@@ -1325,6 +1331,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             bool last_sub_token = true;
 
             ssize_t next_hyphen_index;
+
+            token_array_clear(context->sub_tokens);
 
             do {
                 next_hyphen_index = string_next_hyphen_index(word + hyphenated_word_offset, word_len - hyphenated_word_offset);
