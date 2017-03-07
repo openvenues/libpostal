@@ -1,7 +1,7 @@
 #include "averaged_perceptron_tagger.h"
 #include "log/log.h"
 
-bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *prev2_tag_features, cstring_array *labels, ap_tagger_feature_function feature_function, tokenized_string_t *tokenized) {
+bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *prev2_tag_features, cstring_array *labels, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features) {
 
     // Keep two tags of history in training
     char *prev = NULL;
@@ -37,15 +37,26 @@ bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagg
 
         if (prev) {
             cstring_array_foreach(prev_tag_features, fidx, feature, {
-                feature_array_add(features, 2, (char *)feature, prev);
+                feature_array_add(features, 3, "prev", prev, (char *)feature);
             })
         }
 
         if (prev2) {
             cstring_array_foreach(prev2_tag_features, fidx, feature, {
-                feature_array_add(features, 3, (char *)feature, prev2, prev);
+                feature_array_add(features, 5, "prev2", prev2, "prev", prev, (char *)feature);
             })
         }
+
+        if (print_features) {
+            printf("{ ");
+            size_t num_features = cstring_array_num_strings(features);
+            cstring_array_foreach(features, fidx, feature, {
+                printf("%s", feature);
+                if (fidx < num_features - 1) printf(", ");
+            })
+            printf(" }\n");
+        }
+
 
         uint32_t guess = averaged_perceptron_predict(model, features);
         char *predicted = cstring_array_get_string(model->classes, guess);

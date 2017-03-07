@@ -1691,22 +1691,8 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
 
     char *prev_label = NULL;
 
-    if (averaged_perceptron_tagger_predict(model, parser, context, context->features, context->prev_tag_features, context->prev2_tag_features, token_labels, &address_parser_features, tokenized_str)) {
+    if (averaged_perceptron_tagger_predict(model, parser, context, context->features, context->prev_tag_features, context->prev2_tag_features, token_labels, &address_parser_features, tokenized_str, parser->options.print_features)) {
         response = address_parser_response_new();
-
-        if (parser->options.print_features) {
-            uint32_t fidx;
-            char *feature;
-
-            printf("{ ");
-            size_t num_features = cstring_array_num_strings(context->features);
-            cstring_array_foreach(context->features, fidx, feature, {
-                printf("%s", feature);
-                if (fidx < num_features - 1) printf(", ");
-            })
-            printf(" }\n");
-        }
-
 
         size_t num_strings = cstring_array_num_strings(tokenized_str->strings);
 
