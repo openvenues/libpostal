@@ -2171,6 +2171,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Gulf County
+                    - filename: hernando.csv
                     - filename: highlands.csv
                       add_osm_boundaries: true
                       city_replacements:
