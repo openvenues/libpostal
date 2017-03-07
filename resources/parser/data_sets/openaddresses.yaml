@@ -3542,6 +3542,10 @@ countries:
                       city_replacements:
                           city: Albuquerque
                     - filename: bernalillo.csv
+                    - filename: city_of_carlsbad.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Carlsbad                    
                     - filename: city_of_las_cruces.csv
                       add_osm_boundaries: true
                       city_replacements:
