@@ -78,7 +78,7 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
                                                cstring_array *features,
                                                cstring_array *prev_tag_features,
                                                cstring_array *prev2_tag_features,
-                                               ap_tagger_feature_function feature_function,
+                                               tagger_feature_function feature_function,
                                                tokenized_string_t *tokenized,
                                                cstring_array *labels
                                                );
