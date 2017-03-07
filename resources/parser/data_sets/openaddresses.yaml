@@ -1033,6 +1033,7 @@ countries:
               cldr_country_probability: 1.0
               override_country_dir: mq
               # Mayotte - overseas department (treated as a country in libpostal)
+            - filename: mayenne.csv
             - filename: mayotte.csv
               cldr_country_probability: 1.0
               override_country_dir: yt
