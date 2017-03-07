@@ -45,11 +45,41 @@
                                                                                                             \
     }                                                                                                       \
                                                                                                             \
+    static name##_t *name##_new_aligned(size_t m, size_t n, size_t alignment) {                             \
+        name##_t *matrix = malloc(sizeof(name##_t));                                                        \
+                                                                                                            \
+        if (matrix == NULL) {                                                                               \
+            return NULL;                                                                                    \
+        }                                                                                                   \
+                                                                                                            \
+        matrix->m = m;                                                                                      \
+        matrix->n = n;                                                                                      \
+                                                                                                            \
+        matrix->values = _aligned_malloc(sizeof(type) * m * n, alignment);                                  \
+        if (matrix->values == NULL) {                                                                       \
+            free(matrix);                                                                                   \
+            return NULL;                                                                                    \
+        }                                                                                                   \
+                                                                                                            \
+        return matrix;                                                                                      \
+                                                                                                            \
+    }                                                                                                       \
+                                                                                                            \
     static void name##_destroy(name##_t *self) {                                                            \
         if (self == NULL) return;                                                                           \
                                                                                                             \
         if (self->values != NULL) {                                                                         \
             free(self->values);                                                                             \
+        }                                                                                                   \
+                                                                                                            \
+        free(self);                                                                                         \
+    }                                                                                                       \
+                                                                                                            \
+    static void name##_destroy_aligned(name##_t *self) {                                                    \
+        if (self == NULL) return;                                                                           \
+                                                                                                            \
+        if (self->values != NULL) {                                                                         \
+            _aligned_free(self->values);                                                                    \
         }                                                                                                   \
                                                                                                             \
         free(self);                                                                                         \
@@ -64,10 +94,30 @@
         if (self == NULL) return false;                                                                     \
                                                                                                             \
         if (m * n > (self->m * self->n)) {                                                                  \
-            self->values = realloc(self->values, sizeof(type) * m * n);                                     \
-            if (self->values == NULL) {                                                                     \
+            type *ptr = realloc(self->values, sizeof(type) * m * n);                                        \
+            if (ptr == NULL) {                                                                              \
                 return false;                                                                               \
             }                                                                                               \
+            self->values = ptr;                                                                             \
+        }                                                                                                   \
+                                                                                                            \
+        self->m = m;                                                                                        \
+        self->n = n;                                                                                        \
+                                                                                                            \
+        name##_zero(self);                                                                                  \
+                                                                                                            \
+        return true;                                                                                        \
+    }                                                                                                       \
+                                                                                                            \
+    static inline bool name##_resize_aligned(name##_t *self, size_t m, size_t n, size_t alignment) {        \
+        if (self == NULL) return false;                                                                     \
+                                                                                                            \
+        if (m * n > (self->m * self->n)) {                                                                  \
+            type *ptr = _aligned_realloc(self->values, sizeof(type) * m * n, alignment);                    \
+            if (ptr == NULL) {                                                                              \
+                return false;                                                                               \
+            }                                                                                               \
+            self->values = ptr;                                                                             \
         }                                                                                                   \
                                                                                                             \
         self->m = m;                                                                                        \
@@ -90,7 +140,7 @@
         if (self->m != other->m || self->n != other->n) {                                                   \
             return false;                                                                                   \
         }                                                                                                   \
-        size_t num_values = self->n * self->n;                                                              \
+        size_t num_values = self->m * self->n;                                                              \
                                                                                                             \
         memcpy(other->values, self->values, num_values * sizeof(type));                                     \
         return true;                                                                                        \
