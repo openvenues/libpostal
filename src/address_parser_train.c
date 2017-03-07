@@ -344,9 +344,9 @@ address_parser_t *address_parser_init(char *filename) {
         return NULL;
     }
 
-    khash_t(str_set) *unique_classes = kh_init(str_set);
-    if (unique_classes == NULL) {
-        log_error("Could not allocate unique_classes\n");
+    khash_t(str_uint32) *class_counts = kh_init(str_uint32);
+    if (class_counts == NULL) {
+        log_error("Could not allocate class_counts\n");
         return NULL;
     }
 
@@ -476,15 +476,9 @@ address_parser_t *address_parser_init(char *filename) {
         })
 
         cstring_array_foreach(phrase_labels, i, label, {
-            k = kh_get(str_set, unique_classes, label);
-            if (k == kh_end(unique_classes)) {
-                char *label_key = strdup(label);
-                k = kh_put(str_set, unique_classes, label_key, &ret);
-                if (ret < 0) {
-                    log_error("Error in kh_put in unique_classes\n");
-                    free(label_key);
-                    goto exit_hashes_allocated;
-                }
+            if (!str_uint32_hash_incr(class_counts, label)) {
+                log_error("Error in hash_incr for class_counts\n");
+                goto exit_hashes_allocated;
             }
         })
 
@@ -699,7 +693,7 @@ address_parser_t *address_parser_init(char *filename) {
     parser->model = NULL;
 
 
-    size_t num_classes = kh_size(unique_classes);
+    size_t num_classes = kh_size(class_counts);
     log_info("num_classes = %zu\n", num_classes);
     parser->num_classes = num_classes;
 
@@ -938,10 +932,10 @@ exit_hashes_allocated:
     })
     kh_destroy(str_uint32, vocab);
 
-    kh_foreach_key(unique_classes, token, {
+    kh_foreach_key(class_counts, token, {
         free((char *)token);
     })
-    kh_destroy(str_set, unique_classes);
+    kh_destroy(str_uint32, class_counts);
 
     kh_foreach(phrase_stats, token, stats, {
         kh_destroy(int_uint32, stats.class_counts);
