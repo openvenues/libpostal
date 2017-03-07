@@ -322,8 +322,8 @@ bool averaged_perceptron_trainer_update_counts(averaged_perceptron_trainer_t *se
 
 bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *self, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *prev2_tag_features, ap_tagger_feature_function feature_function, tokenized_string_t *tokenized, cstring_array *labels) {
     // Keep two tags of history in training
-    char *prev = START;
-    char *prev2 = START2;
+    char *prev = NULL;
+    char *prev2 = NULL;
 
     uint32_t prev_id = 0;
     uint32_t prev2_id = 0;
@@ -337,20 +337,12 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
 
     for (uint32_t i = 0; i < num_tokens; i++) {
         cstring_array_clear(features);
+        cstring_array_clear(prev_tag_features);
+        cstring_array_clear(prev2_tag_features);
 
         char *label = cstring_array_get_string(labels, i);
         if (label == NULL) {
             log_error("label is NULL\n");
-        }
-
-        if (i > 0) {
-            prev = cstring_array_get_string(self->class_strings, prev_id);
-        }
-
-        if (i > 1) {
-            prev2 = cstring_array_get_string(self->class_strings, prev2_id);            
-        } else if (i == 1) {
-            prev2 = START;
         }
 
         if (!feature_function(tagger, context, tokenized, i)) {
@@ -368,13 +360,20 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
         uint32_t fidx;
         const char *feature;
 
-        cstring_array_foreach(prev_tag_features, fidx, feature, {
-            feature_array_add(features, 2, (char *)feature, prev);
-        })
+        if (i > 0) {
+            prev = cstring_array_get_string(self->class_strings, prev_id);
 
-        cstring_array_foreach(prev2_tag_features, fidx, feature, {
-            feature_array_add(features, 3, (char *)feature, prev2, prev);
-        })
+            cstring_array_foreach(prev_tag_features, fidx, feature, {
+                feature_array_add(features, 3, "prev", prev, (char *)feature);
+            })
+
+            if (i > 1) {
+                prev2 = cstring_array_get_string(self->class_strings, prev2_id);
+                cstring_array_foreach(prev2_tag_features, fidx, feature, {
+                    feature_array_add(features, 5, "prev2", prev2, "prev", prev, (char *)feature);
+                })
+            }
+        }
 
         uint32_t guess = averaged_perceptron_trainer_predict(self, features);
 
