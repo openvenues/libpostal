@@ -4075,6 +4075,7 @@ countries:
                       city_replacements:
                           state_district: Carson County
                     - filename: city_of_abilene.csv
+                    - filename: city_of_amarillo.csv
                     - filename: city_of_austin.csv
                       add_osm_boundaries: true
                       city_replacements:
