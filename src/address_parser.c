@@ -1524,12 +1524,16 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
                     seen_phrase = true;
 
+                    char *right_context_word_pre_norm;
+
                      if (right_context_phrase_type == ADDRESS_PARSER_SUFFIX_PHRASE) {
                         right_affix_type = "suffix";
-                        right_context_affix = phrase_suffix(right_context_word, strlen(right_context_word), right_context_phrase, context->long_context_suffix_phrase);
+                        right_context_word_pre_norm = tokenized_string_get_token(tokenized, right_idx);
+                        right_context_affix = phrase_suffix(right_context_word, strlen(right_context_word_pre_norm), right_context_phrase, context->long_context_suffix_phrase);
                     } else if (right_context_word_or_phrase.type == ADDRESS_PARSER_PREFIX_PHRASE) {
                         right_affix_type = "prefix";
-                        right_context_affix = phrase_prefix(right_context_word, strlen(right_context_word), right_context_phrase, context->long_context_suffix_phrase);
+                        right_context_word_pre_norm = tokenized_string_get_token(tokenized, right_idx);
+                        right_context_affix = phrase_prefix(right_context_word, strlen(right_context_word_pre_norm), right_context_phrase, context->long_context_suffix_phrase);
                     }
 
                     if (right_context_components & ADDRESS_STREET && !(right_context_components & ADDRESS_NAME)) {
