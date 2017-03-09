@@ -144,6 +144,7 @@ KHASH_STR_INCR(str_uint32, uint32_t)
         k = kh_get(name, h, key);                                                                           \
         if (k == kh_end(h)) {                                                                               \
             char *key_copy = strdup(key);                                                                   \
+            val_type new_id = (val_type)kh_size(h);                                                         \
             if (key_copy == NULL) {                                                                         \
                 return false;                                                                               \
             }                                                                                               \
@@ -152,8 +153,12 @@ KHASH_STR_INCR(str_uint32, uint32_t)
                 free(key_copy);                                                                             \
                 return false;                                                                               \
             }                                                                                               \
-            kh_value(h, k) = (val_type)kh_size(h);                                                          \
+            kh_value(h, k) = new_id;                                                                        \
+            *val = new_id;                                                                                  \
             *exists = false;                                                                                \
+            return true;                                                                                    \
+        } else {                                                                                            \
+            *exists = true;                                                                                 \
         }                                                                                                   \
         *val = kh_value(h, k);                                                                              \
         return true;                                                                                        \
