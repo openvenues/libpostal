@@ -249,6 +249,9 @@ bool address_parser_load(char *dir) {
     if (parser->postal_code_contexts == NULL) {
         goto exit_address_parser_created;
     }
+    if (kh_resize(int64_set, parser->postal_code_contexts, num_postal_code_contexts) < 0) {
+        goto exit_address_parser_created;
+    }
 
     for (size_t i = 0; i < postal_code_context_values->n; i++) {
         uint64_t context_value = postal_code_context_values->a[i];
