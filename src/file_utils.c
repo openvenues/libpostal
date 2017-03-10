@@ -32,6 +32,13 @@ char *file_getline(FILE * f)
     return ret;
 }
 
+bool file_exists(char *filename) {
+    FILE *f = fopen(filename, "r");
+    bool exists = f != NULL;
+    if (exists) fclose(f);
+    return exists;
+}
+
 bool is_relative_path(struct dirent *ent) {
     return strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0;
 }

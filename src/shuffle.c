@@ -47,11 +47,9 @@ bool shuffle_file_chunked(char *filename, size_t parts) {
     }
 
     // Make sure the input file exists
-    FILE *f = fopen(filename, "r");
-    if (f == NULL) {
+    if (!file_exists(filename)) {
         return false;
     }
-    fclose(f);
 
     // This is an in-place shuffle to keep the API simple
     char *outfile = filename;

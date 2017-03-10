@@ -31,7 +31,6 @@ bool crf_trainer_hash_feature_to_id_exists(crf_trainer_t *self, char *feature, u
 bool crf_trainer_hash_prev_tag_feature_to_id(crf_trainer_t *self, char *feature, uint32_t *feature_id);
 bool crf_trainer_hash_prev_tag_feature_to_id_exists(crf_trainer_t *self, char *feature, uint32_t *feature_id, bool *exists);
 
-
 bool crf_trainer_get_feature_id(crf_trainer_t *self, char *feature, uint32_t *feature_id);
 bool crf_trainer_get_prev_tag_feature_id(crf_trainer_t *self, char *feature, uint32_t *feature_id);
 
