@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 
     printf("Loading models...\n");
 
-    if (!libpostal_setup() || !geodb_module_setup(NULL) || !address_parser_module_setup(address_parser_dir)) {
+    if (!libpostal_setup() || !address_parser_module_setup(address_parser_dir)) {
         exit(EXIT_FAILURE);
     }
 
