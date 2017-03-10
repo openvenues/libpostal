@@ -5,6 +5,7 @@ SUITE_EXTERN(libpostal_parser_tests);
 SUITE_EXTERN(libpostal_transliteration_tests);
 SUITE_EXTERN(libpostal_numex_tests);
 SUITE_EXTERN(libpostal_trie_tests);
+SUITE_EXTERN(libpostal_crf_context_tests);
 
 GREATEST_MAIN_DEFS();
 
@@ -17,5 +18,6 @@ int main(int argc, char **argv) {
     RUN_SUITE(libpostal_transliteration_tests);
     RUN_SUITE(libpostal_numex_tests);
     RUN_SUITE(libpostal_trie_tests);
+    RUN_SUITE(libpostal_crf_context_tests);
     GREATEST_MAIN_END();
 }
