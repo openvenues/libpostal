@@ -4138,6 +4138,9 @@ countries:
                     - filename: ellis.csv
                     - filename: fannin.csv
                     - filename: fayette.csv
+                    - filename: fisher.csv
+                      city_replacements:
+                          state_district: Fisher County
                     - filename: freestone.csv
                       add_osm_boundaries: true
                       city_replacements:
