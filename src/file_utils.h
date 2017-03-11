@@ -54,6 +54,8 @@
 
 char *file_getline(FILE * f);
 
+bool file_exists(char *filename);
+
 bool is_relative_path(struct dirent *ent);
 
 char *path_join(int n, ...);
