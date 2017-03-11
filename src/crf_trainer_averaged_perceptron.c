@@ -539,7 +539,7 @@ bool crf_averaged_perceptron_trainer_update(crf_averaged_perceptron_trainer_t *s
         truth = labels[t];
         guess = viterbi[t];
 
-        if (t > 0 && guess != truth) {
+        if (t > 0 && (guess != truth || prev_guess != prev_truth)) {
             uint32_t idx = indptr[t];
             uint32_t next_start = indptr[t + 1];
 
@@ -580,7 +580,7 @@ bool crf_averaged_perceptron_trainer_update(crf_averaged_perceptron_trainer_t *s
         truth = labels[t];
         guess = viterbi[t];
 
-        if (t > 0 && guess != truth) {
+        if (t > 0 && (guess != truth || prev_guess != prev_truth)) {
             if (!crf_averaged_perceptron_trainer_update_trans_feature(self, prev_guess, prev_truth, guess, truth, value)) {
                 return false;
             }
@@ -592,6 +592,7 @@ bool crf_averaged_perceptron_trainer_update(crf_averaged_perceptron_trainer_t *s
 
     return true;
 }
+
 
 bool crf_averaged_perceptron_trainer_train_example(crf_averaged_perceptron_trainer_t *self, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, cstring_array *labels) {
     if (self == NULL || self->base_trainer == NULL) return false;
