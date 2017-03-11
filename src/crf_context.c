@@ -611,7 +611,7 @@ double crf_context_viterbi(crf_context_t *self, uint32_t *labels) {
                 /* Store this path if it has the maximum score. */
                 if (max_score < score) {
                     max_score = score;
-                    back[j] = i;
+                    argmax_score = i;
                 }
             }
 
