@@ -46,11 +46,13 @@ with the general error-driven averaged perceptron.
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "averaged_perceptron.h"
-#include "averaged_perceptron_tagger.h"
 #include "libpostal.h"
 #include "libpostal_config.h"
+
+#include "averaged_perceptron.h"
+#include "averaged_perceptron_tagger.h"
 #include "collections.h"
+#include "crf.h"
 #include "normalize.h"
 #include "string_utils.h"
 
@@ -178,6 +180,11 @@ typedef union postal_code_context_value {
 
 #define POSTAL_CODE_CONTEXT(pc, ad) ((postal_code_context_value_t){.postcode = (pc), .admin = (ad) })
 
+typedef enum address_parser_model_type {
+    ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON,
+    ADDRESS_PARSER_TYPE_CRF
+} address_parser_model_type_t;
+
 typedef struct parser_options {
     uint64_t rare_word_threshold;
     bool print_features;
@@ -187,7 +194,11 @@ typedef struct parser_options {
 typedef struct address_parser {
     parser_options_t options;
     size_t num_classes;
-    averaged_perceptron_t *model;
+    address_parser_model_type_t model_type;
+    union {
+        averaged_perceptron_t *ap;
+        crf_t *crf;
+    } model;
     trie_t *vocab;
     trie_t *phrases;
     address_parser_types_array *phrase_types;
@@ -207,6 +218,8 @@ void address_parser_destroy(address_parser_t *self);
 
 char *address_parser_normalize_string(char *str);
 void address_parser_normalize_token(cstring_array *array, char *str, token_t token);
+
+bool address_parser_predict(address_parser_t *self, address_parser_context_t *context, cstring_array *token_labels, tagger_feature_function feature_function, tokenized_string_t *tokenized_str);
 
 address_parser_context_t *address_parser_context_new(void);
 void address_parser_context_destroy(address_parser_context_t *self);

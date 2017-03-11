@@ -7,6 +7,7 @@
 #include "log/log.h"
 
 #define ADDRESS_PARSER_MODEL_FILENAME "address_parser.dat"
+#define ADDRESS_PARSER_MODEL_FILENAME_CRF "address_parser_crf.dat"
 #define ADDRESS_PARSER_VOCAB_FILENAME "address_parser_vocab.trie"
 #define ADDRESS_PARSER_PHRASE_FILENAME "address_parser_phrases.dat"
 #define ADDRESS_PARSER_POSTAL_CODES_FILENAME "address_parser_postal_codes.dat"
@@ -48,14 +49,32 @@ address_parser_t *get_address_parser(void) {
 bool address_parser_save(address_parser_t *self, char *output_dir) {
     if (self == NULL || output_dir == NULL) return false;
 
+    char *model_filename = NULL;
+    if (self->model_type == ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON) {
+        model_filename = ADDRESS_PARSER_MODEL_FILENAME;
+    } else if (self->model_type == ADDRESS_PARSER_TYPE_CRF) {
+        model_filename = ADDRESS_PARSER_MODEL_FILENAME_CRF;
+    } else {
+        return false;
+    }
+
     char_array *path = char_array_new_size(strlen(output_dir));
 
-    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, ADDRESS_PARSER_MODEL_FILENAME);
+    char_array_add_joined(path, PATH_SEPARATOR, true, 2, output_dir, model_filename);
     char *model_path = char_array_get_string(path);
 
-    if (!averaged_perceptron_save(self->model, model_path)) {
-        char_array_destroy(path);
-        return false;
+    if (self->model_type == ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON) {
+        if (!averaged_perceptron_save(self->model.ap, model_path)) {
+            log_info("Error in averaged_perceptron_save\n");
+            char_array_destroy(path);
+            return false;
+        }
+    } else if (self->model_type == ADDRESS_PARSER_TYPE_CRF) {
+        if (!crf_save(self->model.crf, model_path)) {
+            log_info("Error in crf_save\n");
+            char_array_destroy(path);
+            return false;
+        }
     }
 
     char_array_clear(path);
@@ -148,15 +167,47 @@ bool address_parser_load(char *dir) {
     char_array_add_joined(path, PATH_SEPARATOR, true, 2, dir, ADDRESS_PARSER_MODEL_FILENAME);
     char *model_path = char_array_get_string(path);
 
-    averaged_perceptron_t *model = averaged_perceptron_load(model_path);
-
-    if (model == NULL) {
-        char_array_destroy(path);
-        return false;
+    if (file_exists(model_path)) {
+        averaged_perceptron_t *ap_model = averaged_perceptron_load(model_path);
+        if (ap_model != NULL) {
+            parser = address_parser_new();
+            parser->model_type = ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON;
+            parser->model.ap = ap_model;
+        } else {
+            char_array_destroy(model_path);
+            log_error("Averaged perceptron model could not be loaded\n");
+            return false;
+        }
+    } else {
+        model_path = NULL;
     }
 
-    parser = address_parser_new();
-    parser->model = model;
+    if (model_path == NULL) {
+        char_array_clear(path);
+        char_array_add_joined(path, PATH_SEPARATOR, true, 2, dir, ADDRESS_PARSER_MODEL_FILENAME_CRF);
+        model_path = char_array_get_string(path);
+
+        if (file_exists(model_path)) {
+            crf_t *crf_model = crf_load(model_path);
+            if (crf_model != NULL) {
+                parser = address_parser_new();
+                parser->model_type = ADDRESS_PARSER_TYPE_CRF;
+                parser->model.crf = crf_model;
+            } else {
+                char_array_destroy(model_path);
+                log_error("Averaged perceptron model could not be loaded\n");
+                return false;
+            }
+        } else {
+            model_path == NULL;
+        }
+    }
+
+    if (parser == NULL) {
+        char_array_destroy(path);
+        log_error("Could not find parser model file of known type\n");
+        return false;
+    }
 
     char_array_clear(path);
 
@@ -276,8 +327,10 @@ exit_address_parser_created:
 void address_parser_destroy(address_parser_t *self) {
     if (self == NULL) return;
 
-    if (self->model != NULL) {
-        averaged_perceptron_destroy(self->model);
+    if (self->model_type == ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON && self->model.ap != NULL) {
+        averaged_perceptron_destroy(self->model.ap);
+    } else if (self->model_type == ADDRESS_PARSER_TYPE_CRF && self->model.crf != NULL) {
+        crf_destroy(self->model.crf);
     }
 
     if (self->vocab != NULL) {
@@ -313,7 +366,7 @@ inline void address_parser_normalize_token(cstring_array *array, char *str, toke
     normalize_token(array, str, token, ADDRESS_PARSER_NORMALIZE_TOKEN_OPTIONS);
 }
 
-inline void address_parser_normalize_phrase_token(cstring_array *array, char *str, token_t token) {
+static inline void address_parser_normalize_phrase_token(cstring_array *array, char *str, token_t token) {
     normalize_token(array, str, token, ADDRESS_PARSER_NORMALIZE_ADMIN_TOKEN_OPTIONS);
 }
 
@@ -814,7 +867,7 @@ typedef struct address_parser_phrase {
     phrase_t phrase;
 } address_parser_phrase_t;
 
-inline bool is_plain_word_phrase_type(address_parser_phrase_type_t type) {
+static inline bool is_plain_word_phrase_type(address_parser_phrase_type_t type) {
     return type == ADDRESS_PARSER_NULL_PHRASE || type == ADDRESS_PARSER_SUFFIX_PHRASE || type == ADDRESS_PARSER_PREFIX_PHRASE;
 }
 
@@ -1003,8 +1056,8 @@ address_parser_features
 
 This is a feature function similar to those found in MEMM and CRF models.
 
-Follows the signature of an ap_feature_function so it can be called
-as a function pointer by the averaged perceptron model.
+Follows the signature of a tagger_feature_function so it can be called
+as a function pointer by the averaged perceptron or CRF model.
 
 Parameters:
 
@@ -1399,7 +1452,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             }
         }
 
-        if (idx == 0) {
+        if (idx == 0 && !is_unknown_word) {
             feature_array_add(features, 2, "first word", word);
             //feature_array_add(features, 3, "first word+next word", word, next_word);
         }
@@ -1413,11 +1466,17 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     if (last_index == idx - 1) {
         // Previous tag and current word
         feature_array_add(prev_tag_features, 2, "word", word);
-        feature_array_add(prev_tag_features, 1, "trans");
 
         // Previous two tags and current word
-        feature_array_add(prev2_tag_features, 2, "word", word);
-        feature_array_add(prev2_tag_features, 1, "trans");
+        if (parser->model_type == ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON) {
+            // In the CRF this is accounted for by the transition weights
+            // so only need it for the averaged perceptron
+            feature_array_add(prev_tag_features, 1, "trans");
+
+            // Averaged perceptron uses two tags of history, CRF uses one
+            feature_array_add(prev2_tag_features, 2, "word", word);
+            feature_array_add(prev2_tag_features, 1, "trans");
+        }
     }
 
     if (last_index >= 0) {
@@ -1583,6 +1642,17 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
 }
 
+bool address_parser_predict(address_parser_t *self, address_parser_context_t *context, cstring_array *token_labels, tagger_feature_function feature_function, tokenized_string_t *tokenized_str) {
+    if (self->model_type == ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON) {
+        return averaged_perceptron_tagger_predict(self->model.ap, self, context, context->features, context->prev_tag_features, context->prev2_tag_features, token_labels, feature_function, tokenized_str, self->options.print_features);
+    } else if (self->model_type == ADDRESS_PARSER_TYPE_CRF) {
+        return crf_tagger_predict(self->model.crf, self, context, context->features, context->prev_tag_features, token_labels, feature_function, tokenized_str, self->options.print_features);
+    } else {
+        log_error("Parser has unknown model type\n");
+    }
+    return false;
+}
+
 address_parser_response_t *address_parser_response_new(void) {
     address_parser_response_t *response = malloc(sizeof(address_parser_response_t));
     return response;
@@ -1602,8 +1672,6 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
     if (!is_normalized) {
         normalized = address;
     }
-
-    averaged_perceptron_t *model = parser->model;
 
     token_array *tokens = tokenize(normalized);
 
@@ -1706,7 +1774,9 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
 
     char *prev_label = NULL;
 
-    if (averaged_perceptron_tagger_predict(model, parser, context, context->features, context->prev_tag_features, context->prev2_tag_features, token_labels, &address_parser_features, tokenized_str, parser->options.print_features)) {
+    bool prediction_success = address_parser_predict(parser, context, token_labels, &address_parser_features, tokenized_str);
+
+    if (prediction_success) {
         response = address_parser_response_new();
 
         size_t num_strings = cstring_array_num_strings(tokenized_str->strings);
@@ -1738,6 +1808,8 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
         response->components = cstring_array_to_strings(components);
         response->labels = cstring_array_to_strings(labels);
 
+    } else {
+        log_error("Error in prediction\n");
     }
 
     token_array_destroy(tokens);
