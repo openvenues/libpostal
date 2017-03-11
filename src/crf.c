@@ -46,8 +46,11 @@ bool crf_tagger_score(crf_t *self, void *tagger, void *tagger_context, cstring_a
                 if (fidx < num_features - 1) printf(", ");
             })
             size_t num_prev_tag_features = cstring_array_num_strings(prev_tag_features);
+            if (num_prev_tag_features > 0) {
+                printf(", ");
+            }
             cstring_array_foreach(prev_tag_features, fidx, feature, {
-                printf("%s", feature);
+                printf("prev tag+%s", feature);
                 if (fidx < num_prev_tag_features - 1) printf(", ");
             })
             printf(" }\n");
