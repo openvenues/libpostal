@@ -3793,6 +3793,7 @@ countries:
                     - filename: crook.csv
                     - filename: curry.csv
                     - filename: deschutes.csv
+                    - filename: douglas.csv
                     - filename: grant.csv
                       add_osm_boundaries: true
                       city_replacements:
