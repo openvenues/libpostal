@@ -69,6 +69,12 @@ static inline void _aligned_free(void *p)
     static inline name *name##_new(void) {                                                  \
         return name##_new_size(DEFAULT_VECTOR_SIZE);                                        \
     }                                                                                       \
+    static inline name *name##_new_size_fixed(size_t size) {                                \
+        name *array = name##_new_size(size);                                                \
+        if (array == NULL) return NULL;                                                     \
+        array->n = size;                                                                    \
+        return array;                                                                       \
+    }                                                                                       \
     static inline name *name##_new_aligned(size_t size, size_t alignment) {                 \
         name *array = malloc(sizeof(name));                                                 \
         if (array == NULL) return NULL;                                                     \
@@ -79,7 +85,7 @@ static inline void _aligned_free(void *p)
         return array;                                                                       \
     }                                                                                       \
     static inline bool name##_resize(name *array, size_t size) {                            \
-        if (size <= array->m) return true;                                                  \
+        if (size <= array->m)return true;                                                   \
         type *ptr = realloc(array->a, sizeof(type) * size);                                 \
         if (ptr == NULL) return false;                                                      \
         array->a = ptr;                                                                     \
@@ -92,6 +98,16 @@ static inline void _aligned_free(void *p)
         if (ptr == NULL) return false;                                                      \
         array->a = ptr;                                                                     \
         array->m = size;                                                                    \
+        return true;                                                                        \
+    }                                                                                       \
+    static inline bool name##_resize_fixed(name *array, size_t size) {                      \
+        if (!name##_resize(array, size)) return false;                                      \
+        array->n = size;                                                                    \
+        return true;                                                                        \
+    }                                                                                       \
+    static inline bool name##_resize_fixed_aligned(name *array, size_t size, size_t alignment) {  \
+        if (!name##_resize_aligned(array, size, alignment)) return false;                   \
+        array->n = size;                                                                    \
         return true;                                                                        \
     }                                                                                       \
     static inline void name##_push(name *array, type value) {                               \
