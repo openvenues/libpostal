@@ -7,7 +7,6 @@
 #include "collections.h"
 #include "constants.h"
 #include "file_utils.h"
-#include "geodb.h"
 #include "json_encode.h"
 #include "libpostal.h"
 #include "normalize.h"
@@ -25,13 +24,6 @@ bool load_address_parser_dependencies(void) {
     }
 
     log_info("address dictionary module loaded\n");
-
-    if (!geodb_module_setup(NULL)) {
-        log_error("Could not load geodb dictionaries\n");
-        return false;
-    }
-
-    log_info("geodb module loaded\n");
 
     return true;
 }
