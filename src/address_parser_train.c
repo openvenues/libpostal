@@ -367,7 +367,7 @@ address_parser_t *address_parser_init(char *filename) {
 
     khash_t(str_uint32) *postal_code_counts = kh_init(str_uint32);
     if (postal_code_counts == NULL) {
-        log_error("Could not allocate postal_code\n");
+        log_error("Could not allocate postal_code_counts\n");
         return NULL;
     }
 
@@ -391,7 +391,6 @@ address_parser_t *address_parser_init(char *filename) {
     phrase_stats_t stats;
     khash_t(int_uint32) *place_class_counts;
 
-    uint32_t vocab_size = 0;
     size_t examples = 0;
 
     const char *token;
@@ -556,10 +555,6 @@ address_parser_t *address_parser_init(char *filename) {
                     log_error("Error in str_uint32_hash_incr\n");
                     goto exit_hashes_allocated;
                 }
-
-                if (!in_vocab) {
-                    vocab_size++;
-                }
                 continue;
             }
 
@@ -672,7 +667,7 @@ address_parser_t *address_parser_init(char *filename) {
 
     }
 
-    log_info("Done with vocab, total size=%d\n", vocab_size);
+    log_info("Done with vocab, total size=%zu\n", kh_size(vocab));
 
     for (k = kh_begin(vocab); k != kh_end(vocab); ++k) {
         token = (char *)kh_key(vocab, k);
@@ -685,6 +680,9 @@ address_parser_t *address_parser_init(char *filename) {
             free((char *)token);
         }
     }
+
+    log_info("After pruning vocab size=%zu\n", kh_size(vocab));
+
 
     log_info("Creating phrases trie\n");
 
