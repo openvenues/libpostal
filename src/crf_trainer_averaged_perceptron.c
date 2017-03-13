@@ -676,6 +676,7 @@ bool crf_averaged_perceptron_trainer_train_example(crf_averaged_perceptron_train
         return false;
     }
 
+    uint32_t *viterbi = self->viterbi->a;
     double viterbi_score = crf_context_viterbi(crf_context, viterbi);
 
     if (self->viterbi->n != num_tokens || self->label_ids->n != num_tokens) {
@@ -685,7 +686,6 @@ bool crf_averaged_perceptron_trainer_train_example(crf_averaged_perceptron_train
 
     uint32_t *true_labels = self->label_ids->a;
 
-    uint32_t *viterbi = self->viterbi->a;
 
     for (uint32_t i = 0; i < num_tokens; i++) {
         uint32_t truth = true_labels[i];
