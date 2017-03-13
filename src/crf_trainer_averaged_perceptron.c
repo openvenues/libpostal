@@ -671,9 +671,11 @@ bool crf_averaged_perceptron_trainer_train_example(crf_averaged_perceptron_train
         return false;
     }
 
-    uint32_array_resize_fixed(self->viterbi, num_tokens);
+    if (!uint32_array_resize_fixed(self->viterbi, num_tokens)) {
+        log_error("Error resizing Viterbi, num_tokens=%zu\n", num_tokens);
+        return false;
+    }
 
-    uint32_t *viterbi = self->viterbi->a;
     double viterbi_score = crf_context_viterbi(crf_context, viterbi);
 
     if (self->viterbi->n != num_tokens || self->label_ids->n != num_tokens) {
@@ -682,6 +684,8 @@ bool crf_averaged_perceptron_trainer_train_example(crf_averaged_perceptron_train
     }
 
     uint32_t *true_labels = self->label_ids->a;
+
+    uint32_t *viterbi = self->viterbi->a;
 
     for (uint32_t i = 0; i < num_tokens; i++) {
         uint32_t truth = true_labels[i];
@@ -932,11 +936,9 @@ crf_t *crf_averaged_perceptron_trainer_finalize(crf_averaged_perceptron_trainer_
 
     crf->state_trans_features = state_trans_features;
 
-    crf->viterbi = self->viterbi;
-    self->viterbi = NULL;
+    crf->viterbi = uint32_array_new();
 
-    crf->context = self->base_trainer->context;
-    self->base_trainer->context = NULL;
+    crf->context = crf_context_new(CRF_CONTEXT_VITERBI | CRF_CONTEXT_MARGINALS, num_classes, CRF_CONTEXT_DEFAULT_NUM_ITEMS);
 
     crf_averaged_perceptron_trainer_destroy(self);
 
