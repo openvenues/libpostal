@@ -1227,7 +1227,10 @@ countries:
             # Trentino-Alto Adige/Südtirol
             32:
                 files:
-                    - filename: south-tyrol.csv
+                    - filename: south-tyrol-de.json
+                      language: de
+                    - filename: south-tyrol-it.json
+                      language: it
             # Veneto
             34:
                 files:
