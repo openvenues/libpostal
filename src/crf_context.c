@@ -564,6 +564,9 @@ double crf_context_viterbi(crf_context_t *self, uint32_t *labels) {
     const double *trans = NULL;
 
     const size_t T = self->num_items;
+    if (T == 0) {
+        return max_score;
+    }
     const size_t L = self->num_labels;
 
     // This function assumes state and trans scores to be in the logarithm domain.

@@ -15,9 +15,8 @@ void crf_averaged_perceptron_trainer_destroy(crf_averaged_perceptron_trainer_t *
         kh_destroy(feature_class_weights, self->weights);
     }
 
+    khash_t(prev_tag_class_weights) *prev_tag_weights;
     if (self->prev_tag_weights != NULL) {
-        khash_t(prev_tag_class_weights) *prev_tag_weights;
-
         kh_foreach(self->prev_tag_weights, feature_id, prev_tag_weights, {
             if (prev_tag_weights != NULL) {
                 kh_destroy(prev_tag_class_weights, prev_tag_weights);
@@ -600,6 +599,10 @@ bool crf_averaged_perceptron_trainer_train_example(crf_averaged_perceptron_train
     size_t num_tokens = tokenized->tokens->n;
     if (cstring_array_num_strings(labels) != num_tokens) {
         return false;
+    }
+
+    if (num_tokens == 0) {
+        return true;
     }
 
     uint32_array_clear(self->sequence_features_indptr);
