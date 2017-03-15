@@ -638,6 +638,7 @@ address_parser_t *address_parser_init(char *filename) {
                     stats = kh_value(phrase_stats, k);
                     place_class_counts = stats.class_counts;
                     stats.components |= component;
+                    kh_value(phrase_stats, k) = stats;
                 }
 
                 if (!int_uint32_hash_incr(place_class_counts, (khint_t)class_id)) {
