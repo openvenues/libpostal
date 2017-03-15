@@ -351,7 +351,7 @@ void crf_context_alpha_score(crf_context_t *self) {
     state = exp_state_score(self, 0);
     double_array_raw_copy(cur, state, L);
     double sum = double_array_sum(cur, L);
-    double scale_t = (sum != 0.) ? 1. / sum : 1.;
+    double scale_t = !double_equals(sum, 0.) ? 1. / sum : 1.;
     scale[0] = scale_t;
     double_array_mul(cur, scale[0], L);
 
@@ -374,7 +374,7 @@ void crf_context_alpha_score(crf_context_t *self) {
 
         double_array_mul_array(cur, state, L);
         sum = double_array_sum(cur, L);
-        scale[t] = scale_t = (sum != 0.) ? 1. / sum : 1.;
+        scale[t] = scale_t = !double_equals(sum, 0.) ? 1. / sum : 1.;
         double_array_mul(cur, scale_t, L);
     }
 

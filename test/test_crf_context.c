@@ -4,6 +4,7 @@
 #include <stdarg.h>
 
 #include "greatest.h"
+#include "../src/float_utils.c"
 #include "../src/crf_context.c"
 
 SUITE(libpostal_crf_context_tests);
