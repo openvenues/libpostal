@@ -1712,6 +1712,7 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
 
     // If the whole input string is a single known phrase at the SUBURB level or higher, bypass sequence prediction altogether
     phrase_t only_phrase = NULL_PHRASE;
+    token_t token, prev_token;
     bool is_postal = false;
     if (context->component_phrases->n == 1) {
         only_phrase = context->component_phrases->a[0];
@@ -1784,8 +1785,11 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
         cstring_array *labels = cstring_array_new_size(num_strings);
         cstring_array *components = cstring_array_new_size(strlen(address) + num_strings);
 
+        token_t *tokens = tokenized_str->tokens->a;
+
         for (size_t i = 0; i < num_strings; i++) {
             char *str = tokenized_string_get_token(tokenized_str, i);
+
             char *label = cstring_array_get_string(token_labels, i);
 
             if (prev_label == NULL || strcmp(label, prev_label) != 0) {
@@ -1795,7 +1799,11 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
             }
 
             if (prev_label != NULL && strcmp(label, prev_label) == 0) {
-                cstring_array_cat_string(components, " ");
+                token = tokens[i];
+                prev_token = tokens[i - 1];
+                if (token.offset > prev_token.offset + prev_token.len) {
+                    cstring_array_cat_string(components, " ");
+                }
                 cstring_array_cat_string(components, str);
             } else {
                 cstring_array_append_string(components, str);
