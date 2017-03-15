@@ -465,9 +465,10 @@ static inline void remez9_0_log2_sse(double *values, size_t num)
                                                                                \
     static inline type name##_log_sum_exp(type *array, size_t n) {             \
         type max = name##_max(array, n);                                       \
-        name##_sub(array, max, n);                                             \
-        remez9_0_log2_sse(array, n);                                           \
-        type result = name##_sum(array, n);                                    \
+        type result = 0;                                                       \
+        for (size_t i = 0; i < n; i++) {                                       \
+            result += exp(array[i] - max);                                     \
+        }                                                                      \
         return max + log(result);                                              \
     }
 
