@@ -684,6 +684,18 @@ exit_address_parser_context_allocated:
     return NULL;
 }
 
+bool is_valid_component_phrase(cstring_array *strings, phrase_t phrase) {
+    bool valid = false;
+    for (uint32_t i = phrase.start; i < phrase.start + phrase.len; i++) {
+        char *s = cstring_array_get_string(strings, i);
+        if (!string_is_digit(s, strlen(s))) {
+            valid = true;
+            break;
+        }
+    }
+    return valid;
+}
+
 void address_parser_context_fill(address_parser_context_t *context, address_parser_t *parser, tokenized_string_t *tokenized_str, char *language, char *country) {
     uint32_t token_index;
     char *word;
@@ -797,6 +809,15 @@ void address_parser_context_fill(address_parser_context_t *context, address_pars
 
     bool have_component_phrases = trie_search_tokens_with_phrases(parser->phrases, normalized_str_admin, normalized_admin_tokens, &component_phrases);
     token_phrase_memberships(component_phrases, component_phrase_memberships, num_tokens);
+
+    for (size_t i = 0; i < component_phrases->n; i++) {
+        phrase_t phrase = component_phrases->a[i];
+        if (!is_valid_component_phrase(context->normalized_admin, phrase)) {
+            for (size_t j = phrase.start; j < phrase.start + phrase.len; j++) {
+                component_phrase_memberships->a[j] = NULL_PHRASE_MEMBERSHIP;
+            }
+        }
+    }
 
     phrase_array_clear(context->postal_code_phrases);
     int64_array_clear(context->postal_code_phrase_memberships);
