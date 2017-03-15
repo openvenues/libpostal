@@ -92,6 +92,7 @@ bool utf8_is_symbol(int cat);
 bool utf8_is_separator(int cat);
 bool utf8_is_whitespace(int32_t ch);
 
+bool string_is_digit(char *str, size_t len);
 bool string_is_ignorable(char *str, size_t len);
 
 ssize_t string_next_hyphen_index(char *str, size_t len);
