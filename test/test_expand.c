@@ -16,14 +16,23 @@ static greatest_test_res test_expansion_contains(char *input, char *output, norm
     char *expansion;
     for (size_t i = 0; i < num_expansions; i++) {
         expansion = expansions[i];
-        if (strcmp(output, expansion) == 0) {
+        if (string_equals(output, expansion)) {
             contains_expansion = true;
             break;
         }
 
     }
 
-    ASSERT(contains_expansion);
+    if (!contains_expansion) {
+        printf("Expansions should contain %s, got {", output);
+        for (size_t i = 0; i < num_expansions; i++) {
+            expansion = expansions[i];
+            printf("%s%s", expansion, i < num_expansions - 1 ? "," : "");
+        }
+        printf("}\n");
+        FAIL();
+    }
+
     PASS();
 }
 
@@ -111,7 +120,6 @@ TEST test_expansions_no_options(void) {
 
 
 SUITE(libpostal_expansion_tests) {
-
     if (!libpostal_setup() || !libpostal_setup_language_classifier()) {
         printf("Could not setup libpostal\n");
         exit(EXIT_FAILURE);
