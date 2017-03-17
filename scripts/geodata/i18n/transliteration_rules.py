@@ -601,10 +601,11 @@ def get_raw_rules_and_variables(xml, reverse=False):
     compound_rule = []
 
     nodes = xml.xpath('*//tRule')
-    if reverse:
-        nodes = reversed(nodes)
 
-    queue = deque([l for n in nodes for l in (newline_regex.split(n.text) if n.text else [])])
+    lines = [l for n in nodes for l in (newline_regex.split(n.text) if n.text else [])]
+    if reverse:
+        lines = reversed(lines)
+    queue = deque(lines)
 
     while queue:
         rule = queue.popleft()
