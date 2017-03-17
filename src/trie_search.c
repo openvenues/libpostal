@@ -101,7 +101,6 @@ bool trie_search_from_index(trie_t *self, char *text, uint32_t start_node_id, ph
                     int32_t data_index = -1*node.base;
                     trie_data_node_t data_node = self->data->a[data_index];
                     unsigned char *current_tail = self->tail->a + data_node.tail;
-                    data = data_node.data;
 
                     size_t tail_len = strlen((char *)current_tail);
                     char *query_tail = (char *)(*ptr ? ptr + 1 : ptr);
@@ -289,7 +288,6 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
                     uint32_t data_index = -1*node.base;
                     trie_data_node_t data_node = self->data->a[data_index];
                     uint32_t current_tail_pos = data_node.tail;
-                    data = data_node.data;
 
                     unsigned char *current_tail = self->tail->a + current_tail_pos;
 
@@ -314,6 +312,7 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
                             phrase_len = tail_search_result - phrase_start + 1;
                             last_match_index = i = tail_search_result;
                             last_state = SEARCH_STATE_MATCH;
+                            data = data_node.data;
                         }
                         break;
 
