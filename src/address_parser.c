@@ -1664,6 +1664,7 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
     for (size_t i = 0; i < tokens->n; i++) {
         token_t token = tokens->a[i];
         if (ADDRESS_PARSER_IS_SEPARATOR(token.type)) {
+            uint32_array_pop(context->separators);
             uint32_array_push(context->separators, ADDRESS_SEPARATOR_FIELD_INTERNAL);
             continue;
         } else if (ADDRESS_PARSER_IS_IGNORABLE(token.type)) {

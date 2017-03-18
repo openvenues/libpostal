@@ -136,6 +136,7 @@ bool address_parser_data_set_tokenize_line(address_parser_data_set_t *self, char
 
         if (token.len == expected_len) {
             if (ADDRESS_PARSER_IS_SEPARATOR(token.type)) {
+                uint32_array_pop(separators);
                 uint32_array_push(separators, ADDRESS_SEPARATOR_FIELD_INTERNAL);
                 continue;
             } else if (ADDRESS_PARSER_IS_IGNORABLE(token.type)) {
