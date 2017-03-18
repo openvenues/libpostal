@@ -47,10 +47,9 @@ static graph_t *graph_builder_build_edges(graph_builder_t *self, bool remove_dup
         graph_edge_t edge = self->edges->a[i];
         if (edge.v1 > last_vertex) {
             for (uint32_t row = last_vertex; row < edge.v1; row++) {
-                graph_finalize_vertex(graph);
-
+                // Sorting is done prior to this
+                graph_finalize_vertex_no_sort(graph);
             }
-
         }
 
         if (!remove_duplicates || i == 0 || edge.v1 != last_vertex || edge.v2 != last_edge) {
@@ -60,7 +59,7 @@ static graph_t *graph_builder_build_edges(graph_builder_t *self, bool remove_dup
         last_edge = edge.v2;
     }
 
-    graph_finalize_vertex(graph);
+    graph_finalize_vertex_no_sort(graph);
 
     return graph;
 }

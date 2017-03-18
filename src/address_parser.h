@@ -53,6 +53,7 @@ with the general error-driven averaged perceptron.
 #include "averaged_perceptron_tagger.h"
 #include "collections.h"
 #include "crf.h"
+#include "graph.h"
 #include "normalize.h"
 #include "string_utils.h"
 
@@ -203,7 +204,7 @@ typedef struct address_parser {
     trie_t *phrases;
     address_parser_types_array *phrase_types;
     trie_t *postal_codes;
-    khash_t(int64_set) *postal_code_contexts;
+    graph_t *postal_code_contexts;
 } address_parser_t;
 
 // General usage

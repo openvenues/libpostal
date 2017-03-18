@@ -8,7 +8,8 @@
 #include "collections.h"
 #include "constants.h"
 #include "file_utils.h"
-#include "geodb.h"
+#include "graph.h"
+#include "graph_builder.h"
 #include "shuffle.h"
 #include "transliterate.h"
 
@@ -303,13 +304,9 @@ bool address_phrases_and_labels(address_parser_data_set_t *data_set, cstring_arr
 
         char_array_cat(phrase_builder, normalized);
 
-        last_was_separator = false;
-
         prev_label = label;
 
-        if (data_set->separators->a[i] == ADDRESS_SEPARATOR_FIELD_INTERNAL) {
-            last_was_separator = true;
-        }
+        last_was_separator = data_set->separators->a[i] == ADDRESS_SEPARATOR_FIELD_INTERNAL;
 
     })
 
@@ -374,12 +371,6 @@ address_parser_t *address_parser_init(char *filename) {
     khash_t(postal_code_context_phrases) *postal_code_admin_contexts = kh_init(postal_code_context_phrases);
     if (postal_code_admin_contexts == NULL) {
         log_error("Could not allocate postal_code_admin_contexts\n");
-        return NULL;
-    }
-
-    khash_t(int64_set) *postal_code_contexts = kh_init(int64_set);
-    if (postal_code_contexts == NULL) {
-        log_error("Could not allocate postal_code_contexts\n");
         return NULL;
     }
 
@@ -859,10 +850,13 @@ address_parser_t *address_parser_init(char *filename) {
 
     log_info("Building postal code contexts\n");
 
-    khash_t(str_set) *context_phrases;
+    bool fixed_rows = false;
+    graph_builder_t *postal_code_contexts_builder = graph_builder_new(GRAPH_BIPARTITE, fixed_rows);
 
     uint32_t postal_code_id;
     uint32_t context_phrase_id;
+
+    khash_t(str_set) *context_phrases;
 
     kh_foreach(postal_code_admin_contexts, token, context_phrases, {
         if (!trie_get_data(parser->postal_codes, (char *)token, &postal_code_id)) {
@@ -879,18 +873,13 @@ address_parser_t *address_parser_init(char *filename) {
                 goto exit_hashes_allocated;
             }
 
-            postal_code_context_value_t postal_code_context = POSTAL_CODE_CONTEXT(postal_code_id, context_phrase_id);
-
-            ret = 0;
-            k = kh_put(int64_set, postal_code_contexts, postal_code_context.value, &ret);
-            if (ret < 0) {
-                log_error("Error in kh_put for postal_code_contexts\n");
-                address_parser_destroy(parser);
-                parser = NULL;
-                goto exit_hashes_allocated;
-            }
+            graph_builder_add_edge(postal_code_contexts_builder, postal_code_id, context_phrase_id);
         })
     })
+
+    bool sort_edges = true;
+    bool remove_duplicates = true;
+    graph_t *postal_code_contexts = graph_builder_finalize(postal_code_contexts_builder, sort_edges, remove_duplicates);
 
     // NOTE: don't destroy this during deallocation
     if (postal_code_contexts == NULL) {

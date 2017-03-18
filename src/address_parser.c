@@ -4,6 +4,9 @@
 #include "ngrams.h"
 #include "scanner.h"
 
+#include "graph_builder.h"
+
+#include "klib/ksort.h"
 #include "log/log.h"
 
 #define ADDRESS_PARSER_MODEL_FILENAME "address_parser.dat"
@@ -136,17 +139,9 @@ bool address_parser_save(address_parser_t *self, char *output_dir) {
         return false;
     }
 
-    size_t num_postal_code_contexts = kh_size(self->postal_code_contexts);
-    if (!file_write_uint64(postal_codes_file, num_postal_code_contexts)) {
+    if (!graph_write(self->postal_code_contexts, postal_codes_file)) {
         return false;
     }
-
-    uint64_t postal_code_context;
-    kh_foreach_key(self->postal_code_contexts, postal_code_context, {
-        if (!file_write_uint64(postal_codes_file, postal_code_context)) {
-            return false;
-        }
-    })
 
     fclose(postal_codes_file);
 
@@ -155,6 +150,11 @@ bool address_parser_save(address_parser_t *self, char *output_dir) {
     return true;
 }
 
+static bool postal_code_context_exists(address_parser_t *self, uint32_t postal_code_id, uint32_t admin_id) {
+    graph_t *g = self->postal_code_contexts;
+
+    return graph_has_edge(g, postal_code_id, admin_id);
+}
 
 bool address_parser_load(char *dir) {
     if (parser != NULL) return false;
@@ -174,7 +174,7 @@ bool address_parser_load(char *dir) {
             parser->model_type = ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON;
             parser->model.ap = ap_model;
         } else {
-            char_array_destroy(model_path);
+            char_array_destroy(path);
             log_error("Averaged perceptron model could not be loaded\n");
             return false;
         }
@@ -194,12 +194,12 @@ bool address_parser_load(char *dir) {
                 parser->model_type = ADDRESS_PARSER_TYPE_CRF;
                 parser->model.crf = crf_model;
             } else {
-                char_array_destroy(model_path);
+                char_array_destroy(path);
                 log_error("Averaged perceptron model could not be loaded\n");
                 return false;
             }
         } else {
-            model_path == NULL;
+            model_path = NULL;
         }
     }
 
@@ -279,41 +279,13 @@ bool address_parser_load(char *dir) {
         goto exit_address_parser_created;
     }
 
-    uint64_t num_postal_code_contexts;
+    parser->postal_code_contexts = graph_read(postal_codes_file);
 
-    if (!file_read_uint64(postal_codes_file, &num_postal_code_contexts)) {
-        goto exit_address_parser_created;
-    }
-
-    log_debug("num_postal_code_contexts = %llu\n", num_postal_code_contexts);
-
-    uint64_array *postal_code_context_values = uint64_array_new_size(num_postal_code_contexts);
-    if (!file_read_uint64_array(postal_codes_file, postal_code_context_values->a, num_postal_code_contexts)) {
-        uint64_array_destroy(postal_code_context_values);
-        goto exit_address_parser_created;
-    }
-    postal_code_context_values->n = num_postal_code_contexts;
-
-    fclose(postal_codes_file);
-
-    parser->postal_code_contexts = kh_init(int64_set);
     if (parser->postal_code_contexts == NULL) {
         goto exit_address_parser_created;
     }
-    if (kh_resize(int64_set, parser->postal_code_contexts, num_postal_code_contexts) < 0) {
-        goto exit_address_parser_created;
-    }
 
-    for (size_t i = 0; i < postal_code_context_values->n; i++) {
-        uint64_t context_value = postal_code_context_values->a[i];
-        int ret = 0;
-        kh_put(int64_set, parser->postal_code_contexts, context_value, &ret);
-        if (ret < 0) {
-            goto exit_address_parser_created;
-        }
-    }
-
-    uint64_array_destroy(postal_code_context_values);
+    fclose(postal_codes_file);
 
     char_array_destroy(path);
     return true;
@@ -350,7 +322,7 @@ void address_parser_destroy(address_parser_t *self) {
     }
 
     if (self->postal_code_contexts != NULL) {
-        kh_destroy(int64_set, self->postal_code_contexts);
+        graph_destroy(self->postal_code_contexts);
     }
 
     free(self);
@@ -1301,12 +1273,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             if (last_component_phrase_index != NULL_PHRASE_MEMBERSHIP) {
                 phrase_t last_component_phrase = component_phrases->a[last_component_phrase_index];
                 admin_id = last_component_phrase.data;
-                postal_code_context_value_t postal_code_context_value = POSTAL_CODE_CONTEXT(postal_code_id, admin_id);
-                postal_code_context = postal_code_context_value.value;
 
-                k = kh_get(int64_set, parser->postal_code_contexts, postal_code_context);
-
-                if (k != kh_end(parser->postal_code_contexts)) {
+                if (postal_code_context_exists(parser, postal_code_id, admin_id)) {
                     postal_code_have_admin = true;
                 }
             }
@@ -1317,12 +1285,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             if (next_component_phrase_index != NULL_PHRASE_MEMBERSHIP) {
                 phrase_t next_component_phrase = component_phrases->a[next_component_phrase_index];
                 admin_id = next_component_phrase.data;
-                postal_code_context_value_t postal_code_context_value = POSTAL_CODE_CONTEXT(postal_code_id, admin_id);
-                postal_code_context = postal_code_context_value.value;
-
-                k = kh_get(int64_set, parser->postal_code_contexts, postal_code_context);
-
-                if (k != kh_end(parser->postal_code_contexts)) {
+                if (postal_code_context_exists(parser, postal_code_id, admin_id)) {
                     postal_code_have_admin = true;
                 }
             }

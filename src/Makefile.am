@@ -28,15 +28,17 @@ libscanner_la_SOURCES = scanner.c
 libscanner_la_CFLAGS = $(CFLAGS_O0) $(CFLAGS_SCANNER_EXTRA)
 
 noinst_PROGRAMS = libpostal bench address_parser address_parser_train address_parser_test build_address_dictionary build_geodb build_numex_table build_trans_table address_parser_train address_parser_test language_classifier_train language_classifier language_classifier_test
+
 libpostal_SOURCES = main.c json_encode.c
 libpostal_LDADD = libpostal.la
 libpostal_CFLAGS = $(CFLAGS_O3)
 bench_SOURCES = bench.c
 bench_LDADD = libpostal.la libscanner.la $(BLAS_LIBS)
 bench_CFLAGS = $(CFLAGS_O3)
-address_parser_SOURCES = address_parser_cli.c json_encode.c linenoise/linenoise.c libpostal.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c float_utils.c averaged_perceptron_tagger.c address_dictionary.c normalize.c features.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c file_utils.c utf8proc/utf8proc.c ngrams.c numex.c language_classifier.c language_features.c logistic_regression.c logistic.c minibatch.c
+address_parser_SOURCES = address_parser_cli.c json_encode.c linenoise/linenoise.c libpostal.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c graph.c graph_builder.c float_utils.c averaged_perceptron_tagger.c address_dictionary.c normalize.c features.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c file_utils.c utf8proc/utf8proc.c ngrams.c numex.c language_classifier.c language_features.c logistic_regression.c logistic.c minibatch.c
 address_parser_LDADD = libscanner.la $(BLAS_LIBS)
 address_parser_CFLAGS = $(CFLAGS_O3)
+
 build_address_dictionary_SOURCES = address_dictionary_builder.c address_dictionary.c file_utils.c string_utils.c trie.c trie_search.c utf8proc/utf8proc.c
 build_address_dictionary_CFLAGS = $(CFLAGS_O3)
 build_geodb_SOURCES = geodb_builder.c geodb.c geo_disambiguation.c graph.c graph_builder.c normalize.c features.c geonames.c geohash/geohash.c unicode_scripts.c transliterate.c trie.c trie_search.c string_utils.c msgpack_utils.c file_utils.c utf8proc/utf8proc.c cmp/cmp.c
@@ -46,11 +48,11 @@ build_numex_table_SOURCES = numex_table_builder.c numex.c file_utils.c string_ut
 build_numex_table_CFLAGS = $(CFLAGS_O3)
 build_trans_table_SOURCES = transliteration_table_builder.c transliterate.c trie.c trie_search.c file_utils.c string_utils.c utf8proc/utf8proc.c
 build_trans_table_CFLAGS = $(CFLAGS_O3)
-address_parser_train_SOURCES = address_parser_train.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c float_utils.c averaged_perceptron_trainer.c crf_trainer.c crf_trainer_averaged_perceptron.c averaged_perceptron_tagger.c address_dictionary.c normalize.c features.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c file_utils.c shuffle.c utf8proc/utf8proc.c ngrams.c
+address_parser_train_SOURCES = address_parser_train.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c graph.c graph_builder.c float_utils.c averaged_perceptron_trainer.c crf_trainer.c crf_trainer_averaged_perceptron.c averaged_perceptron_tagger.c address_dictionary.c normalize.c features.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c file_utils.c shuffle.c utf8proc/utf8proc.c ngrams.c
 address_parser_train_LDADD = libscanner.la $(BLAS_LIBS)
 address_parser_train_CFLAGS = $(CFLAGS_O3)
 
-address_parser_test_SOURCES = address_parser_test.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c float_utils.c averaged_perceptron_tagger.c address_dictionary.c normalize.c features.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c file_utils.c utf8proc/utf8proc.c ngrams.c
+address_parser_test_SOURCES = address_parser_test.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c graph.c graph_builder.c float_utils.c averaged_perceptron_tagger.c address_dictionary.c normalize.c features.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c file_utils.c utf8proc/utf8proc.c ngrams.c
 address_parser_test_LDADD = libscanner.la  $(BLAS_LIBS)
 address_parser_test_CFLAGS = $(CFLAGS_O3)
 
