@@ -114,10 +114,17 @@ bool crf_context_set_num_items(crf_context_t *self, size_t T) {
             return false;
     }
 
+    double_matrix_zero(self->alpha_score);
+    double_matrix_zero(self->beta_score);
+    double_matrix_zero(self->state);
+    double_matrix_zero(self->state_trans);
+
     if (self->flag & CRF_CONTEXT_VITERBI && self->backward_edges != NULL) {
         if (!uint32_matrix_resize(self->backward_edges, T, L)) {
             return false;
         }
+
+        uint32_matrix_zero(self->backward_edges);
     }
 
     if (self->flag & CRF_CONTEXT_MARGINALS &&
@@ -136,6 +143,11 @@ bool crf_context_set_num_items(crf_context_t *self, size_t T) {
             !double_matrix_resize(self->mexp_state_trans, T, L * L)
         )) {
         return false;
+
+        double_matrix_zero(self->exp_state);
+        double_matrix_zero(self->mexp_state);
+        double_matrix_zero(self->exp_state_trans);
+        double_matrix_zero(self->mexp_state_trans);
     }
 
     self->num_items = T;

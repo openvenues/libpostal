@@ -3989,6 +3989,7 @@ countries:
                           state_district: Beaufort County
                     - filename: calhoun.csv
                     - filename: charleston.csv
+                    - filename: chesterfield.csv
                     - filename: city_of_charleston.csv
                     - filename: colleton.csv
                     - filename: darlington.csv

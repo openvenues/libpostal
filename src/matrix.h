@@ -104,8 +104,6 @@
         self->m = m;                                                                                        \
         self->n = n;                                                                                        \
                                                                                                             \
-        name##_zero(self);                                                                                  \
-                                                                                                            \
         return true;                                                                                        \
     }                                                                                                       \
                                                                                                             \
@@ -122,8 +120,6 @@
                                                                                                             \
         self->m = m;                                                                                        \
         self->n = n;                                                                                        \
-                                                                                                            \
-        name##_zero(self);                                                                                  \
                                                                                                             \
         return true;                                                                                        \
     }                                                                                                       \
