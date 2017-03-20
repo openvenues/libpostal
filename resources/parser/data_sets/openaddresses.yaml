@@ -1668,6 +1668,12 @@ countries:
                 files:
                     - filename: statewide.csv
 
+            nvs:
+                add:
+                    state: Новосибирская область
+                files:
+                    - filename: statewide.csv
+
             vgg:
                 add:
                     state: Волгоградская область
