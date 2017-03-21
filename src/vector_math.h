@@ -65,6 +65,24 @@
         return vector;                                                                                  \
     }                                                                                                   \
                                                                                                         \
+    static inline bool name##_resize_fill_zeros(name *self, size_t n) {                             \
+        size_t old_n = self->n;                                                                         \
+        bool ret = name##_resize(self, n);                                                              \
+        if (ret && n > old_n) {                                                                         \
+            memset(self->a + old_n, 0, (n - old_n) * sizeof(type));                                \
+        }                                                                                               \
+        return ret;                                                                                     \
+    }                                                                                                   \
+                                                                                                        \
+    static inline bool name##_resize_aligned_fill_zeros(name *self, size_t n, size_t alignment) {   \
+        size_t old_n = self->n;                                                                         \
+        bool ret = name##_resize_aligned(self, n, alignment);                                           \
+        if (ret && n > old_n) {                                                                         \
+            memset(self->a + old_n, 0, (n - old_n) * sizeof(type));                                \
+        }                                                                                               \
+        return ret;                                                                                     \
+    }                                                                                                   \
+                                                                                                        \
     static inline type name##_max(type *array, size_t n) {                                              \
         if (n < 1) return (type) 0;                                                                     \
         type val = array[0];                                                                            \
