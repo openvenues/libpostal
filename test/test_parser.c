@@ -332,6 +332,171 @@ TEST test_us_parses(void) {
         (labeled_component_t){"postcode", "98103"}
     ));
 
+    CHECK_CALL(test_parse_result_equals(
+        // newline
+        "452 Maxwell Ave, Apt 3A\nRochester, NY 14619",
+        options,
+        6,
+        (labeled_component_t){"house_number", "452"},
+        (labeled_component_t){"road", "maxwell ave"},
+        (labeled_component_t){"unit", "apt 3a"},
+        (labeled_component_t){"city", "rochester"},
+        (labeled_component_t){"state", "ny"},
+        (labeled_component_t){"postcode", "14619"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "1600 Pennsylvania Ave NW, Washington DC 20500",
+        options,
+        5,
+        (labeled_component_t){"house_number", "1600"},
+        (labeled_component_t){"road", "pennsylvania ave nw"},
+        (labeled_component_t){"city", "washington"},
+        (labeled_component_t){"state", "dc"},
+        (labeled_component_t){"postcode", "20500"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "1600 Pennsylvania Ave NW, Washington D.C 20500",
+        options,
+        5,
+        (labeled_component_t){"house_number", "1600"},
+        (labeled_component_t){"road", "pennsylvania ave nw"},
+        (labeled_component_t){"city", "washington"},
+        (labeled_component_t){"state", "d.c"},
+        (labeled_component_t){"postcode", "20500"}
+    ));
+
+
+    CHECK_CALL(test_parse_result_equals(
+        "1600 Pennsylvania Ave NW, Washington D.C. 20500",
+        options,
+        5,
+        (labeled_component_t){"house_number", "1600"},
+        (labeled_component_t){"road", "pennsylvania ave nw"},
+        (labeled_component_t){"city", "washington"},
+        (labeled_component_t){"state", "d.c."},
+        (labeled_component_t){"postcode", "20500"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        // Queens address
+        "99-40 63rd Rd, Queens, NY 11374",
+        options,
+        5,
+        (labeled_component_t){"house_number", "99-40"},
+        (labeled_component_t){"road", "63rd rd"},
+        (labeled_component_t){"city_district", "queens"},
+        (labeled_component_t){"state", "ny"},
+        (labeled_component_t){"postcode", "11374"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        // Prefix directional
+        "351 NW North St, Chehalis, WA 98532-1900",
+        options,
+        5,
+        (labeled_component_t){"house_number", "351"},
+        (labeled_component_t){"road", "nw north st"},
+        (labeled_component_t){"city", "chehalis"},
+        (labeled_component_t){"state", "wa"},
+        (labeled_component_t){"postcode", "98532-1900"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        // full state name
+        "2501 N Blackwelder Ave, Oklahoma City, Oklahoma 73106",
+        options,
+        5,
+        (labeled_component_t){"house_number", "2501"},
+        (labeled_component_t){"road", "n blackwelder ave"},
+        (labeled_component_t){"city", "oklahoma city"},
+        (labeled_component_t){"state", "oklahoma"},
+        (labeled_component_t){"postcode", "73106"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        // disambiguation: less common form of Indiana, usually a state
+        "1011 South Dr, Indiana, Pennsylvania 15705",
+        options,
+        5,
+        (labeled_component_t){"house_number", "1011"},
+        (labeled_component_t){"road", "south dr"},
+        (labeled_component_t){"city", "indiana"},
+        (labeled_component_t){"state", "pennsylvania"},
+        (labeled_component_t){"postcode", "15705"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        // Different form of N.Y.
+        "444 South 5th St #3A Brooklyn, N.Y. 11211",
+        options,
+        6,
+        (labeled_component_t){"house_number", "444"},
+        (labeled_component_t){"road", "south 5th st"},
+        (labeled_component_t){"unit", "#3a"},
+        (labeled_component_t){"city_district", "brooklyn"},
+        (labeled_component_t){"state", "n.y."},
+        (labeled_component_t){"postcode", "11211"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "Atrium Mall, 640 Arthur Kill Rd, Staten Island, NY 10312",
+        options,
+        6,
+        (labeled_component_t){"house", "atrium mall"},
+        (labeled_component_t){"house_number", "640"},
+        (labeled_component_t){"road", "arthur kill rd"},
+        (labeled_component_t){"city_district", "staten island"},
+        (labeled_component_t){"state", "ny"},
+        (labeled_component_t){"postcode", "10312"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "5276 Old Mill Rd NE, Bainbridge Island, WA 98110",
+        options,
+        5,
+        (labeled_component_t){"house_number", "5276"},
+        (labeled_component_t){"road", "old mill rd ne"},
+        (labeled_component_t){"city", "bainbridge island"},
+        (labeled_component_t){"state", "wa"},
+        (labeled_component_t){"postcode", "98110"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "1400 West Transport Road, Fayetteville, AR, 72704",
+        options,
+        5,
+        (labeled_component_t){"house_number", "1400"},
+        (labeled_component_t){"road", "west transport road"},
+        (labeled_component_t){"city", "fayetteville"},
+        (labeled_component_t){"state", "ar"},
+        (labeled_component_t){"postcode", "72704"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "10 Amelia Village Circle, Fernandina Beach, FL, 32034",
+        options,
+        5,
+        (labeled_component_t){"house_number", "10"},
+        (labeled_component_t){"road", "amelia village circle"},
+        (labeled_component_t){"city", "fernandina beach"},
+        (labeled_component_t){"state", "fl"},
+        (labeled_component_t){"postcode", "32034"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        // highway address
+        "5850 US Highway 431, STE 1, Albertville, AL, 35950-2049",
+        options,
+        6,
+        (labeled_component_t){"house_number", "5850"},
+        (labeled_component_t){"road", "us highway 431"},
+        (labeled_component_t){"unit", "ste 1"},
+        (labeled_component_t){"city", "albertville"},
+        (labeled_component_t){"state", "al"},
+        (labeled_component_t){"postcode", "35950-2049"}
+    ));
 
     // Tests of simple place names
     CHECK_CALL(test_parse_result_equals(
@@ -446,6 +611,32 @@ TEST test_ca_parses(void) {
         (labeled_component_t){"state", "bc"},
         (labeled_component_t){"postcode", "v8v 2g9"}
     ));
+
+    // Montreal / Montréal
+
+    CHECK_CALL(test_parse_result_equals(
+        "123 Main St SE\nMontreal QC H3Z 2Y7",
+        options,
+        5,
+        (labeled_component_t){"house_number", "123"},
+        (labeled_component_t){"road", "main st se"},
+        (labeled_component_t){"city", "montreal"},
+        (labeled_component_t){"state", "qc"},
+        (labeled_component_t){"postcode", "h3z 2y7"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "123 Main St SE Montréal QC H3Z 2Y7",
+        options,
+        5,
+        (labeled_component_t){"house_number", "123"},
+        (labeled_component_t){"road", "main st se"},
+        (labeled_component_t){"city", "montréal"},
+        (labeled_component_t){"state", "qc"},
+        (labeled_component_t){"postcode", "h3z 2y7"}
+    ));
+
+    PASS();
 }
 
 TEST test_jm_parses(void) {
@@ -480,6 +671,7 @@ TEST test_jm_parses(void) {
 
     ));
 
+    PASS();
 }
 
 
@@ -561,13 +753,282 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
-        "Knutsford, Cheshire East WA16 9EX, UK",
+        "Stocks Ln, Knutsford, Cheshire East WA16 9EX, UK",
         options,
-        4,
+        5,
+        (labeled_component_t){"road", "stocks ln"},
         (labeled_component_t){"city", "knutsford"},
         (labeled_component_t){"state_district", "cheshire east"},
         (labeled_component_t){"postcode", "wa16 9ex"},
         (labeled_component_t){"country", "uk"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "Royal Opera House, Bow St, Covent Garden, London, WC2E 9DD, United Kingdom",
+        options,
+        6,
+        (labeled_component_t){"house", "royal opera house"},
+        (labeled_component_t){"road", "bow st"},
+        (labeled_component_t){"suburb", "covent garden"},
+        (labeled_component_t){"city", "london"},
+        (labeled_component_t){"postcode", "wc2e 9dd"},
+        (labeled_component_t){"country", "united kingdom"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "1A Egmont Road, Middlesbrough, TS4 2HT",
+        options,
+        4,
+        (labeled_component_t){"house_number", "1a"},
+        (labeled_component_t){"road", "egmont road"},
+        (labeled_component_t){"city", "middlesbrough"},
+        (labeled_component_t){"postcode", "ts4 2ht"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "0 Egmont Road, Middlesbrough, TS4 2HT",
+        options,
+        4,
+        (labeled_component_t){"house_number", "0"},
+        (labeled_component_t){"road", "egmont road"},
+        (labeled_component_t){"city", "middlesbrough"},
+        (labeled_component_t){"postcode", "ts4 2ht"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "-1 Priory Road, Newbury, RG14 7QS",
+        options,
+        4,
+        (labeled_component_t){"house_number", "-1"},
+        (labeled_component_t){"road", "priory road"},
+        (labeled_component_t){"city", "newbury"},
+        (labeled_component_t){"postcode", "rg14 7qs"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "Idas Court, 4-6 Princes Road, Hull, HU5 2RD",
+        options,
+        5,
+        (labeled_component_t){"house", "idas court"},
+        (labeled_component_t){"house_number", "4-6"},
+        (labeled_component_t){"road", "princes road"},
+        (labeled_component_t){"city", "hull"},
+        (labeled_component_t){"postcode", "hu5 2rd"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "Flat 14, Ziggurat Building, 60-66 Saffron Hill, London, EC1N 8QX, United Kingdom",
+        options,
+        7,
+        (labeled_component_t){"unit", "flat 14"},
+        (labeled_component_t){"house", "ziggurat building"},
+        (labeled_component_t){"house_number", "60-66"},
+        (labeled_component_t){"road", "saffron hill"},
+        (labeled_component_t){"city", "london"},
+        (labeled_component_t){"postcode", "ec1n 8qx"},
+        (labeled_component_t){"country", "united kingdom"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "Flat 18, Da Vinci House, 44 Saffron Hill, London, EC1N 8FH, United Kingdom",
+        options,
+        7,
+        (labeled_component_t){"unit", "flat 18"},
+        (labeled_component_t){"house", "da vinci house"},
+        (labeled_component_t){"house_number", "44"},
+        (labeled_component_t){"road", "saffron hill"},
+        (labeled_component_t){"city", "london"},
+        (labeled_component_t){"postcode", "ec1n 8fh"},
+        (labeled_component_t){"country", "united kingdom"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "22B Derwent Parade, South Ockendon RM15 5EE, United Kingdom",
+        options,
+        5,
+        (labeled_component_t){"house_number", "22b"},
+        (labeled_component_t){"road", "derwent parade"},
+        (labeled_component_t){"city", "south ockendon"},
+        (labeled_component_t){"postcode", "rm15 5ee"},
+        (labeled_component_t){"country", "united kingdom"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        // Unit with no house number
+        "Unit 26 Roper Close, Canterbury, CT2 7EP",
+        options,
+        4,
+        (labeled_component_t){"unit", "unit 26"},
+        (labeled_component_t){"road", "roper close"},
+        (labeled_component_t){"city", "canterbury"},
+        (labeled_component_t){"postcode", "ct2 7ep"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        // Strange road name
+        "Lorem House, The Marina, Lowestoft NR32 1HH, United Kingdom",
+        options,
+        5,
+        (labeled_component_t){"house", "lorem house"},
+        (labeled_component_t){"road", "the marina"},
+        (labeled_component_t){"city", "lowestoft"},
+        (labeled_component_t){"postcode", "nr32 1hh"},
+        (labeled_component_t){"country", "united kingdom"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "St Johns Centre, Rope Walk, Bedford, Bedfordshire, MK42 0XE, United Kingdom",
+        options,
+        6,
+        (labeled_component_t){"house", "st johns centre"},
+        (labeled_component_t){"road", "rope walk"},
+        (labeled_component_t){"city", "bedford"},
+        (labeled_component_t){"state_district", "bedfordshire"},
+        (labeled_component_t){"postcode", "mk42 0xe"},
+        (labeled_component_t){"country", "united kingdom"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "St Johns Centre, 8 Rope Walk, Bedford, Bedfordshire, MK42 0XE, United Kingdom",
+        options,
+        7,
+        (labeled_component_t){"house", "st johns centre"},
+        (labeled_component_t){"house_number", "8"},
+        (labeled_component_t){"road", "rope walk"},
+        (labeled_component_t){"city", "bedford"},
+        (labeled_component_t){"state_district", "bedfordshire"},
+        (labeled_component_t){"postcode", "mk42 0xe"},
+        (labeled_component_t){"country", "united kingdom"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        // Studio might be a unit, may change this later
+        "Studio J, 4th Floor,,8 Lower Ormond St, Manchester M1 5QF, United Kingdom",
+        options,
+        7,
+        (labeled_component_t){"house", "studio j"},
+        (labeled_component_t){"level", "4th floor"},
+        (labeled_component_t){"house_number", "8"},
+        (labeled_component_t){"road", "lower ormond st"},
+        (labeled_component_t){"city", "manchester"},
+        (labeled_component_t){"postcode", "m1 5qf"},
+        (labeled_component_t){"country", "united kingdom"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "Victoria Institute, The Blvd, ST6 6BD, United Kingdom",
+        options,
+        4,
+        (labeled_component_t){"house", "victoria institute"},
+        (labeled_component_t){"road", "the blvd"},
+        (labeled_component_t){"postcode", "st6 6bd"},
+        (labeled_component_t){"country", "united kingdom"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "29 Lottbridge Drove, Eastbourne, East Sussex BN23 6QD",
+        options,
+        5,
+        (labeled_component_t){"house_number", "29"},
+        (labeled_component_t){"road", "lottbridge drove"},
+        (labeled_component_t){"city", "eastbourne"},
+        (labeled_component_t){"state_district", "east sussex"},
+        (labeled_component_t){"postcode", "bn23 6qd"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "Stoke-on-Trent, United Kingdom",
+        options,
+        2,
+        (labeled_component_t){"city", "stoke-on-trent"},
+        (labeled_component_t){"country", "united kingdom"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "The Rushes, Loughborough, Leicestershire LE11 5BG, United Kingdom",
+        options,
+        5,
+        (labeled_component_t){"road", "the rushes"},
+        (labeled_component_t){"city", "loughborough"},
+        (labeled_component_t){"state_district", "leicestershire"},
+        (labeled_component_t){"postcode", "le11 5bg"},
+        (labeled_component_t){"country", "united kingdom"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "The Old Manor, 11-12 Sparrow Hill, Loughborough LE11 1BT, United Kingdom",
+        options,
+        6,
+        (labeled_component_t){"house", "the old manor"},
+        (labeled_component_t){"house_number", "11-12"},
+        (labeled_component_t){"road", "sparrow hill"},
+        (labeled_component_t){"city", "loughborough"},
+        (labeled_component_t){"postcode", "le11 1bt"},
+        (labeled_component_t){"country", "united kingdom"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "Stockwell Head, Hinckley LE10 1RD, United Kingdom",
+        options,
+        4,
+        (labeled_component_t){"road", "stockwell head"},
+        (labeled_component_t){"city", "hinckley"},
+        (labeled_component_t){"postcode", "le10 1rd"},
+        (labeled_component_t){"country", "united kingdom"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "Admiral Retail Park Lottbridge Drove, Eastbourne, East Sussex BN23 6QD",
+        options,
+        5,
+        (labeled_component_t){"house", "admiral retail park"},
+        (labeled_component_t){"road", "lottbridge drove"},
+        (labeled_component_t){"city", "eastbourne"},
+        (labeled_component_t){"state_district", "east sussex"},
+        (labeled_component_t){"postcode", "bn23 6qd"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        // odd structure, county abbreviation
+        "12 Newgate Shopping Centre, George St, Bishop Auckland, Co. Durham, DL14 7JQ",
+        options,
+        6,
+        (labeled_component_t){"house_number", "12"},
+        (labeled_component_t){"house", "newgate shopping centre"},
+        (labeled_component_t){"road", "george st"},
+        (labeled_component_t){"city", "bishop auckland"},
+        (labeled_component_t){"state_district", "co. durham"},
+        (labeled_component_t){"postcode", "dl14 7jq"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "Castle Court Shopping Centre Castle Street Caerphilly CF83 1NY",
+        options,
+        4,
+        (labeled_component_t){"house", "castle court shopping centre"},
+        (labeled_component_t){"road", "castle street"},
+        (labeled_component_t){"city", "caerphilly"},
+        (labeled_component_t){"postcode", "cf83 1ny"}
+    ));
+
+    PASS();
+}
+
+TEST test_im_parses(void) {
+    address_parser_options_t options = get_libpostal_address_parser_default_options();
+
+    CHECK_CALL(test_parse_result_equals(
+        // Multiple house names
+        "Lloyds Bank International Limited, PO Box 111, Peveril Buildings, Peveril Square, Douglas, Isle of Man IM99 1JJ",
+        options,
+        7,
+        (labeled_component_t){"house", "lloyds bank international limited"},
+        (labeled_component_t){"po_box", "po box 111"},
+        (labeled_component_t){"house", "peveril buildings"},
+        (labeled_component_t){"road", "peveril square"},
+        (labeled_component_t){"city", "douglas"},
+        (labeled_component_t){"country", "isle of man"},
+        (labeled_component_t){"postcode", "im99 1jj"}
     ));
 
     PASS();
@@ -922,6 +1383,7 @@ TEST test_my_parses(void) {
         (labeled_component_t){"city", "kuala lumpur"},
         (labeled_component_t){"country", "malaysia"}
     ));
+
     PASS();
 }
 
@@ -1169,6 +1631,7 @@ TEST test_no_parses(void) {
         (labeled_component_t){"postcode", "562"},
         (labeled_component_t){"city", "oslo"}
     ));
+
     PASS();
 }
 
@@ -1263,7 +1726,6 @@ TEST test_ru_parses(void) {
         (labeled_component_t){"unit", "кв. 40"}
     ));
 
-    /*
     CHECK_CALL(test_parse_result_equals(
         // Uses genitive place names, see https://github.com/openvenues/libpostal/issues/125#issuecomment-269438636
         "188541, г. Сосновый Бор Ленинградской области, пр. Героев 40, кв. 400",
@@ -1276,7 +1738,6 @@ TEST test_ru_parses(void) {
         (labeled_component_t){"house_number", "40"},
         (labeled_component_t){"unit", "кв. 400"}
     ));
-    */
 
     PASS();
 }
@@ -1290,6 +1751,7 @@ SUITE(libpostal_parser_tests) {
     RUN_TEST(test_us_parses);
     RUN_TEST(test_jm_parses);
     RUN_TEST(test_gb_parses);
+    RUN_TEST(test_im_parses);
     RUN_TEST(test_nz_parses);
     RUN_TEST(test_fr_parses);
     RUN_TEST(test_es_parses);
