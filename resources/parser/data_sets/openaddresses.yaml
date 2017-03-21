@@ -1265,6 +1265,10 @@ countries:
                       city_replacements:
                           city: Firenze
                     - filename: statewide.csv
+            # Sicilia
+            82:
+                files:
+                    - filename: statewide.csv
             # Sardegna
             88:
                 files:
