@@ -636,6 +636,27 @@ TEST test_ca_parses(void) {
         (labeled_component_t){"postcode", "h3z 2y7"}
     ));
 
+    CHECK_CALL(test_parse_result_equals(
+        // From: https://github.com/pelias/pelias/issues/275
+        "LaSalle Montréal QC",
+        options,
+        3,
+        (labeled_component_t){"suburb", "lasalle"},
+        (labeled_component_t){"city", "montréal"},
+        (labeled_component_t){"state", "qc"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        // From: https://github.com/pelias/pelias/issues/275
+        "LaSalle Montreal QC",
+        options,
+        3,
+        (labeled_component_t){"suburb", "lasalle"},
+        (labeled_component_t){"city", "montreal"},
+        (labeled_component_t){"state", "qc"}
+    ));
+
+
     PASS();
 }
 
