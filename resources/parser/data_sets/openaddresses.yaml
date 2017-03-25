@@ -1372,6 +1372,186 @@ countries:
                     - filename: yeongdeungpogu-old.csv
                     - filename: yongsangu-old.csv
 
+            # Seoul
+            11:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Busan
+            26:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Daegu
+            27:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Incheon
+            28:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Gwangju
+            29:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Daejeon
+            30:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Ulsan
+            31:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Gyeonggi
+            41:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # Gangwon
+            42:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # North Chungcheong
+            43:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # South Chungcheong
+            44:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # North Jeolla
+            45:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # South Jeolla
+            46:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # North Gyeongsang
+            47:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # South Gyeongsang
+            48:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # Jeju
+            49:
+                language: ko
+                add_osm_boundaries: true
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *fields_with_state
+                    DISTRICT:
+                        component: suburb
+                files:
+                    - filename: provincewide.csv
+
+            # Sejong
+            50:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
     kw:
         add_osm_boundaries: true
         files:
