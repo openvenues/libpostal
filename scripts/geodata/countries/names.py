@@ -52,6 +52,7 @@ class CountryNames(object):
         self.base_dir = base_dir
 
         self.country_alpha3_codes = {c.alpha2.lower(): c.alpha3.lower() for c in pycountry.countries}
+        self.iso_3166_names = {c.alpha2.lower(): c.name for c in pycountry.countries}
 
         self.language_country_names = {}
         self.country_language_names = defaultdict(dict)
@@ -177,7 +178,10 @@ class CountryNames(object):
             return self.country_language_names.get(country_code, {}).get(language)
 
     def alpha3_code(self, alpha2_code):
-        alpha3 =  self.country_alpha3_codes.get(alpha2_code.lower())
+        alpha3 = self.country_alpha3_codes.get(alpha2_code.lower())
         return alpha3.upper() if alpha3 else None
+
+    def iso_3166_name(self, alpha2_code):
+        return self.iso_3166_names.get(alpha2_code.lower())
 
 country_names = CountryNames()

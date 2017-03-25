@@ -1,8 +1,9 @@
 global:
     cldr_country_probability: 0.5
-    localized_name_probability: 0.7
+    localized_name_probability: 0.6
     iso_alpha_2_code_probability: 0.2
     iso_alpha_3_code_probability: 0.1
+    iso_3166_name_probability: 0.1
 
     abbreviate_street_probability: 0.3
     separate_street_probability: 0.2

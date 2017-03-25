@@ -139,6 +139,7 @@ country:
     # When the user-specified country is an ISO code, remove it from the components with this probability (fall back on geocoded components)
     remove_iso_code_probability: 0.1
     cldr:
-        localized_name_probability: 0.97
+        localized_name_probability: 0.92
         iso_alpha_2_code_probability: 0.02
         iso_alpha_3_code_probability: 0.01
+        iso_3166_name_probability: 0.05

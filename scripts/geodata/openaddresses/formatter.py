@@ -243,18 +243,21 @@ class OpenAddressesFormatter(object):
         country_name = None
 
         if random.random() < cldr_country_prob:
-            localized, alpha2, alpha3 = values = range(3)
+            localized, iso_3166, alpha2, alpha3 = values = range(4)
             localized_prob = float(self.get_property('localized_name_probability', *configs))
+            iso_3166_prob = float(self.get_property('iso_3166_name_probability', *configs))
             alpha2_prob = float(self.get_property('iso_alpha_2_code_probability', *configs))
             alpha3_prob = float(self.get_property('iso_alpha_3_code_probability', *configs))
 
-            probs = cdf([localized_prob, alpha2_prob, alpha3_prob])
+            probs = cdf([localized_prob, iso_3166_prob, alpha2_prob, alpha3_prob])
 
             country_type = weighted_choice(values, probs)
 
             country_name = country_code.upper()
             if country_type == localized:
                 country_name = country_names.localized_name(country_code, language) or country_names.localized_name(country_code) or country_name
+            elif country_type == iso_3166:
+                country_name = country_names.iso3166_name(country_code)
             elif country_type == alpha3:
                 country_name = country_names.alpha3_code(country_code) or country_name
 

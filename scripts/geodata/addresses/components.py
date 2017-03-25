@@ -684,10 +684,11 @@ class AddressComponents(object):
 
         alpha_2_iso_code_prob = float(cldr_config['iso_alpha_2_code_probability'])
         localized_name_prob = float(cldr_config['localized_name_probability'])
+        iso_3166_name_prob = float(cldr_config['iso_3166_name_probability'])
         alpha_3_iso_code_prob = float(cldr_config['iso_alpha_3_code_probability'])
 
-        values = ('localized', 'alpha3', 'alpha2')
-        probs = cdf([localized_name_prob, alpha_3_iso_code_prob, alpha_2_iso_code_prob])
+        localized, iso_3166, alpha3, alpha2 = range(4)
+        probs = cdf([localized_name_prob, iso_3166_name_prob, alpha_3_iso_code_prob, alpha_2_iso_code_prob])
         value = weighted_choice(values, probs)
 
         country_name = country_code.upper()
@@ -695,9 +696,11 @@ class AddressComponents(object):
         if language in (AMBIGUOUS_LANGUAGE, UNKNOWN_LANGUAGE):
             language = None
 
-        if value == 'localized':
+        if value == localized:
             country_name = country_names.localized_name(country_code, language) or country_names.localized_name(country_code) or country_name
-        elif value == 'alpha3':
+        elif value == iso_3166:
+            country_name = country_names.iso_3166_name(country_code)
+        elif value == alpha3:
             country_name = country_names.alpha3_code(country_code) or country_name
 
         return country_name
