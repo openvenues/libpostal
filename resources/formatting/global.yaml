@@ -879,62 +879,85 @@ countries:
     kr_en:
         insertions: *us_template_insertions
 
+    former_ussr:
+        insertions: &former_ussr_insertions
+            postcode:
+                postcode_before_city:
+                    before: city
+                    probability: 0.2
+
+
     # Russia
     ru:
         invert_probability: 0.2
+        insertions: *former_ussr_insertions
 
     # Ukraine
     ua:
         invert_probability: 0.2
+        insertions: *former_ussr_insertions
 
     # Belarus (using inverted by default)
     by:
         invert_probability: 0.4
+        insertions: *former_ussr_insertions
 
     # Kazakhstan (using inverted by default)
     kz:
         invert_probability: 0.4
+        insertions: *former_ussr_insertions
 
     # Kyrgyzstan (using inverted by default)
     kg:
         invert_probability: 0.4
+        insertions: *former_ussr_insertions
 
     # Latvia
     lv:
         invert_probability: 0.2
+        insertions: *former_ussr_insertions
 
     # Lithuania
     lt:
         invert_probability: 0.2
+        insertions: *former_ussr_insertions
 
     # Estonia
     ee:
         invert_probability: 0.2
+        insertions: *former_ussr_insertions
 
     # Armenia
     am:
         invert_probability: 0.2
+        insertions: *former_ussr_insertions
 
     # Azerbaijan
     az:
         invert_probability: 0.2
+        insertions: *former_ussr_insertions
 
     # Georgia
     ge:
         invert_probability: 0.2
+        insertions: *former_ussr_insertions
 
     # Moldova
     md:
         invert_probability: 0.2
+        insertions: *former_ussr_insertions
 
     # Uzbekistan
     uz:
         invert_probability: 0.2
+        insertions: *former_ussr_insertions
 
     # Tajikistan
     tj:
         invert_probability: 0.2
+        insertions: *former_ussr_insertions
 
     # Turkmenistan
     tm:
         invert_probability: 0.2
+        insertions: *former_ussr_insertions
