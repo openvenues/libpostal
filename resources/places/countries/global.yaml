@@ -226,6 +226,8 @@ countries:
     # India
     in:
         components:
+            state_district:
+                probability: 0.3
             state:
                 probability: 0.8
 
