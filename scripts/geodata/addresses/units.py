@@ -139,6 +139,26 @@ class Unit(NumberedComponent):
 
         if num_type == cls.NUMERIC:
             return safe_decode(number)
+        elif num_type == cls.HYPHENATED_NUMBER:
+            number2 = weighted_choice(cls.positive_units, cls.positive_units_cdf)
+            range_prob = float(address_config.get_property('units.alphanumeric.hyphenated_number.range_probability', language, country=country, default=0.5))
+            direction = address_config.get_property('units.alphanumeric.hyphenated_number.direction', language, country=country, default='right')
+            direction_prob = float(address_config.get_property('units.alphanumeric.hyphenated_number.direction_probability', language, country=country, default=0.0))
+
+            if random.random() < direction_prob:
+                direction = 'left' if direction == 'right' else 'right'
+
+            direction_right = direction == 'right'
+
+            if random.random() < range_prob:
+                if direction_right:
+                    number2 += number
+                else:
+                    number2 = max(0, number - number2)
+            if direction == 'right':
+                return u'{}-{}'.format(number, number2)
+            else:
+                return u'{}-{}'.format(number2, number)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             alphabet_probability = address_config.get_property('alphabet_probability', language, country=country, default=None)
@@ -151,8 +171,14 @@ class Unit(NumberedComponent):
                 if num_floors is None:
                     number = weighted_choice(cls.positive_units_letters, cls.positive_units_letters_cdf)
 
-                whitespace_probability = nested_get(num_type_props, (num_type, 'whitespace_probability'))
-                whitespace_phrase = six.u(' ') if whitespace_probability and random.random() < whitespace_probability else six.u('')
+                whitespace_probability = float(num_type_props.get('whitespace_probability', 0.0))
+                hyphen_probability = float(num_type_props.get('hyphen_probability', 0.0))
+                whitespace_phrase = u''
+                r = random.random()
+                if r < whitespace_probability:
+                    whitespace_phrase = u' '
+                elif r < (whitespace_probability + hyphen_probability):
+                    whitespace_phrase = u'-' 
 
                 if num_type == cls.ALPHA_PLUS_NUMERIC:
                     return six.u('{}{}{}').format(letter, whitespace_phrase, number)

@@ -142,7 +142,6 @@ levels:
     # Numbered floors
     floor: &floor
         canonical: floor
-        plural: floors
         abbreviated: fl
         canonical_probability: 0.5 # With this probability, use canonical version
         abbreviated_probability: 0.4 # With this probability, use abbreviated version
@@ -150,6 +149,9 @@ levels:
         sample_exclude:
             - / f # Exclude this abbreviation since it's used as an affix
         sample: true
+        plural:
+            canonical: floors
+            abbreviated: fls
         # e.g. Floor 1
         numeric:
             direction: left # Floor/Fl goes to the left of the number
@@ -500,15 +502,19 @@ levels:
               probability: 0.025
             - alternative: *storey
               probability: 0.025
-        numeric_probability: 0.99 # With this probability, pick an integer
+        numeric_probability: 0.96 # With this probability, pick an integer
         alpha_probability: 0.0098 # With this probability, pick a letter e.g. Floor A
         numeric_plus_alpha_probability: 0.0001 # e.g. Floor 2A
         alpha_plus_numeric_probability: 0.0001 # e.g. Floor A2
+        hyphenated_number_probability: 0.03 # e.g. 11-10
         numeric_plus_alpha:
             whitespace_probability: 0.1
         alpha_plus_numeric:
             whitespace_probability: 0.1
-
+        hyphenated_number:
+            range_probability: 0.5
+            direction: right
+            direction_probability: 0.6
 
 # Intersections
 # =============
@@ -1180,15 +1186,22 @@ units:
               probability: 0.01
             - alternative: *apartment
               probability: 0.1
-        numeric_probability: 0.9 # e.g. Flat 1
+        numeric_probability: 0.87 # e.g. Flat 1
         numeric_plus_alpha_probability: 0.03 # e.g. 1A
         alpha_plus_numeric_probability: 0.03 # e.g. A1
         alpha_probability: 0.04 # e.g. Flat A
+        hyphenated_number_probability: 0.03 # e.g. 11-10
 
         alpha_plus_numeric:
-            whitespace_probability: 0.1
+            whitespace_probability: 0.2
+            hyphen_probability: 0.2
         numeric_plus_alpha:
-            whitespace_probability: 0.1
+            whitespace_probability: 0.2
+            hyphen_probability: 0.2
+        hyphenated_number:
+            range_probability: 0.5
+            direction: right
+            direction_probability: 0.6
 
         # Separate random probability for adding directions like 2L, 2R, etc.
         add_direction: true

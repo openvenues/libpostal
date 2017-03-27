@@ -226,6 +226,7 @@ class NumberedComponent(object):
     ALPHA = 'alpha'
     ALPHA_PLUS_NUMERIC = 'alpha_plus_numeric'
     NUMERIC_PLUS_ALPHA = 'numeric_plus_alpha'
+    HYPHENATED_NUMBER = 'hyphenated_number'
     ROMAN_NUMERAL = 'roman_numeral'
 
     @classmethod
@@ -237,7 +238,7 @@ class NumberedComponent(object):
         values = []
         probs = []
 
-        for num_type in (cls.NUMERIC, cls.ALPHA, cls.ALPHA_PLUS_NUMERIC, cls.NUMERIC_PLUS_ALPHA, cls.ROMAN_NUMERAL):
+        for num_type in (cls.NUMERIC, cls.ALPHA, cls.ALPHA_PLUS_NUMERIC, cls.NUMERIC_PLUS_ALPHA, cls.HYPHENATED_NUMBER, cls.ROMAN_NUMERAL):
             key = '{}_probability'.format(num_type)
             prob = alphanumeric_props.get(key)
             if prob is not None:

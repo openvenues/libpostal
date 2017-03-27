@@ -29,6 +29,10 @@ class Entrance(NumberedComponent):
         if num_type == cls.NUMERIC:
             number = weighted_choice(cls.entrance_range, cls.entrance_range_cdf)
             return safe_decode(number)
+        elif num_type == cls.HYPHENATED_NUMBER:
+            number = weighted_choice(cls.entrance_range, cls.entrance_range_cdf)
+            number2 = number + weighted_choice(cls.entrance_range, cls.entrance_range_cdf)
+            return u'{}-{}'.format(number, number2)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             alphabet_probability = address_config.get_property('alphabet_probability', language, country=country, default=None)
@@ -41,7 +45,13 @@ class Entrance(NumberedComponent):
                 number = weighted_choice(cls.entrance_range, cls.entrance_range_cdf)
 
                 whitespace_probability = float(num_type_props.get('whitespace_probability', 0.0))
-                whitespace_phrase = six.u(' ') if whitespace_probability and random.random() < whitespace_probability else six.u('')
+                hyphen_probability = float(num_type_props.get('hyphen_probability', 0.0))
+                whitespace_phrase = u''
+                r = random.random()
+                if r < whitespace_probability:
+                    whitespace_phrase = u' '
+                elif r < (whitespace_probability + hyphen_probability):
+                    whitespace_phrase = u'-'
 
                 if num_type == cls.ALPHA_PLUS_NUMERIC:
                     return six.u('{}{}{}').format(letter, whitespace_phrase, number)

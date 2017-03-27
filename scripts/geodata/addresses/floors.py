@@ -71,6 +71,9 @@ class Floor(NumberedComponent):
                 return roman_numeral
             else:
                 return safe_decode(number)
+        elif num_type == cls.HYPHENATED_NUMBER:
+            number2 = number + sample_floors_range(1, cls.max_floors)
+            return u'{}-{}'.format(number, number2)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             alphabet_probability = address_config.get_property('alphabet_probability', language, country=country, default=None)
