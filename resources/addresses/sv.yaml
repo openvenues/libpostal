@@ -108,7 +108,16 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
-        numeric_probability: 1.0
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        ordinal:
+            direction: left
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        numeric_probability: 0.8
+        ordinal_probability: 0.2
     plan: &plan
         canonical: plan
         sample: true
@@ -128,9 +137,19 @@ levels:
         sample_probability: 0.2
         numeric:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         number_min_abs_value: 2
         number_max_abs_value: 2
         number_subtract_abs_value: 1
+        numeric_probability: 0.8
+        ordinal_probability: 0.2
     trappor_upp: &trappor_upp
         canonical: trappor upp
         sample: true
@@ -138,8 +157,18 @@ levels:
         sample_probability: 0.2
         numeric:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         number_min_abs_value: 3
         number_subtract_abs_value: 1
+        numeric_probability: 0.8
+        ordinal_probability: 0.2
     trappa: &trappa
         canonical: trappa
         abbreviated: tr
@@ -148,10 +177,20 @@ levels:
         abbreviated_probability: 0.6
         sample_probability: 0.2
         numeric:
+            direction: left
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         number_min_abs_value: 2
         number_max_abs_value: 2
         number_subtract_abs_value: 1
+        numeric_probability: 0.8
+        ordinal_probability: 0.2
     trappor: &trappor
         canonical: trappor
         abbreviated: tr
@@ -160,9 +199,19 @@ levels:
         abbreviated_probability: 0.6
         sample_probability: 0.2
         numeric:
+            direction: left
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
         number_min_abs_value: 3
         number_subtract_abs_value: 1
+        numeric_probability: 0.8
+        ordinal_probability: 0.2
     bottenvaning: &bottenvaning
         canonical: bottenvåning
         abbreviated: bv
