@@ -3343,6 +3343,7 @@ countries:
                     - filename: roseau.csv
                     - filename: scott.csv
                     - filename: sherburne.csv
+                    - filename: sibley.csv
                     - filename: stearns.csv
                       add_osm_boundaries: true
                       city_replacements:
