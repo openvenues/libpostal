@@ -71,6 +71,51 @@ TEST test_us_parses(void) {
     address_parser_options_t options = get_libpostal_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        "Black Alliance for Just Immigration 660 Nostrand Ave, Brooklyn, N.Y., 11216",
+        options,
+        6,
+        (labeled_component_t){"house", "black alliance for just immigration"},
+        (labeled_component_t){"house_number", "660"},
+        (labeled_component_t){"road", "nostrand ave"},
+        (labeled_component_t){"city_district", "brooklyn"},
+        (labeled_component_t){"state", "n.y."},
+        (labeled_component_t){"postcode", "11216"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "Planned Parenthood, 44 Court St, 6th Floor, Brooklyn 11201",
+        options,
+        6,
+        (labeled_component_t){"house", "planned parenthood"},
+        (labeled_component_t){"house_number", "44"},
+        (labeled_component_t){"road", "court st"},
+        (labeled_component_t){"level", "6th floor"},
+        (labeled_component_t){"city_district", "brooklyn"},
+        (labeled_component_t){"postcode", "11201"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "Make the Road New York 92-10 Roosevelt Avenue Jackson Heights Queens 11372",
+        options,
+        6,
+        (labeled_component_t){"house", "make the road new york"},
+        (labeled_component_t){"house_number", "92-10"},
+        (labeled_component_t){"road", "roosevelt avenue"},
+        (labeled_component_t){"suburb", "jackson heights"},
+        (labeled_component_t){"city_district", "queens"},
+        (labeled_component_t){"postcode", "11372"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "Do the Right Thing Way, Bed-Stuy, BK",
+        options,
+        3,
+        (labeled_component_t){"road", "do the right thing way"},
+        (labeled_component_t){"suburb", "bed-stuy"},
+        (labeled_component_t){"city_district", "bk"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
         // Rare venue name without any common venue tokens following it
         // Neighborhood name
         "Barboncino 781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA",
