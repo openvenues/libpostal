@@ -3849,6 +3849,9 @@ countries:
                     add_osm_boundaries: true
                     city_replacements:
                         state_district: Auglaize County
+                  - filename: belmont.csv
+                    city_replacements:
+                        state_district: Belmont County
                   - filename: brown.csv
                   - filename: butler.csv
                     add_osm_boundaries: true
