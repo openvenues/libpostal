@@ -1308,6 +1308,25 @@ TEST test_mx_parses(void) {
 }
 
 
+TEST test_br_parses(void) {
+    address_parser_options_t options = get_libpostal_address_parser_default_options();
+
+    CHECK_CALL(test_parse_result_equals(
+        // Brazil address with sem número (s/n) and CEP used with postal code
+        "Theatro Municipal de São Paulo Pç. Ramos de Azevedo, s/n São Paulo - SP, CEP 01037-010",
+        options,
+        6,
+        (labeled_component_t){"house", "theatro municipal de são paulo"},
+        (labeled_component_t){"road", "pç. ramos de azevedo"},
+        (labeled_component_t){"house_number", "s/n"},
+        (labeled_component_t){"city", "são paulo"},
+        (labeled_component_t){"state", "sp"},
+        (labeled_component_t){"postcode", "cep 01037-010"}
+    ));
+
+    PASS();
+}
+
 TEST test_cn_parses(void) {
     address_parser_options_t options = get_libpostal_address_parser_default_options();
 
@@ -1710,6 +1729,27 @@ TEST test_hu_parses(void) {
     PASS();
 }
 
+TEST test_ro_parses(void) {
+    address_parser_options_t options = get_libpostal_address_parser_default_options();
+
+    CHECK_CALL(test_parse_result_equals(
+        // Romanian address with staircase
+        "str. Pacienței, nr. 9 sc. M et. 7 ap. 96 Brașov, 505722 România",
+        options,
+        8,
+        (labeled_component_t){"road", "str. pacienței"},
+        (labeled_component_t){"house_number", "nr. 9"},
+        (labeled_component_t){"staircase", "sc. m"},
+        (labeled_component_t){"level", "et. 7"},
+        (labeled_component_t){"unit", "ap. 96"},
+        (labeled_component_t){"city", "brașov"},
+        (labeled_component_t){"postcode", "505722"},
+        (labeled_component_t){"country", "românia"}
+    ));
+    PASS();
+}
+
+
 TEST test_ru_parses(void) {
     address_parser_options_t options = get_libpostal_address_parser_default_options();
 
@@ -1795,6 +1835,7 @@ SUITE(libpostal_parser_tests) {
     RUN_TEST(test_es_parses);
     RUN_TEST(test_co_parses);
     RUN_TEST(test_mx_parses);
+    RUN_TEST(test_br_parses);
     RUN_TEST(test_cn_parses);
     RUN_TEST(test_jp_parses);
     RUN_TEST(test_kr_parses);
@@ -1808,6 +1849,7 @@ SUITE(libpostal_parser_tests) {
     RUN_TEST(test_no_parses);
     RUN_TEST(test_se_parses);
     RUN_TEST(test_hu_parses);
+    RUN_TEST(test_ro_parsers);
     RUN_TEST(test_ru_parses);
 
     libpostal_teardown();
