@@ -15,7 +15,7 @@ CFLAGS =
 
 lib_LTLIBRARIES = libpostal.la
 libpostal_la_SOURCES = libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c trie_utils.c string_utils.c file_utils.c numex.c utf8proc/utf8proc.c cmp/cmp.c geodb.c geo_disambiguation.c normalize.c bloom.c features.c geonames.c geohash/geohash.c unicode_scripts.c msgpack_utils.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c averaged_perceptron_tagger.c graph.c graph_builder.c language_classifier.c language_features.c logistic_regression.c logistic.c minibatch.c float_utils.c ngrams.c
-libpostal_la_LIBADD = libscanner.la sparkey/libsparkey.la $(BLAS_LIBS)
+libpostal_la_LIBADD = libscanner.la sparkey/libsparkey.la $(CBLAS_LIBS)
 libpostal_la_CFLAGS = $(CFLAGS_O2)
 
 dist_bin_SCRIPTS = libpostal_data
@@ -33,10 +33,10 @@ libpostal_SOURCES = main.c json_encode.c
 libpostal_LDADD = libpostal.la
 libpostal_CFLAGS = $(CFLAGS_O3)
 bench_SOURCES = bench.c
-bench_LDADD = libpostal.la libscanner.la $(BLAS_LIBS)
+bench_LDADD = libpostal.la libscanner.la $(CBLAS_LIBS)
 bench_CFLAGS = $(CFLAGS_O3)
 address_parser_SOURCES = address_parser_cli.c json_encode.c linenoise/linenoise.c libpostal.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c graph.c graph_builder.c float_utils.c averaged_perceptron_tagger.c address_dictionary.c normalize.c features.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c file_utils.c utf8proc/utf8proc.c ngrams.c numex.c language_classifier.c language_features.c logistic_regression.c logistic.c minibatch.c
-address_parser_LDADD = libscanner.la $(BLAS_LIBS)
+address_parser_LDADD = libscanner.la $(CBLAS_LIBS)
 address_parser_CFLAGS = $(CFLAGS_O3)
 
 build_address_dictionary_SOURCES = address_dictionary_builder.c address_dictionary.c file_utils.c string_utils.c trie.c trie_search.c utf8proc/utf8proc.c
@@ -49,21 +49,21 @@ build_numex_table_CFLAGS = $(CFLAGS_O3)
 build_trans_table_SOURCES = transliteration_table_builder.c transliterate.c trie.c trie_search.c file_utils.c string_utils.c utf8proc/utf8proc.c
 build_trans_table_CFLAGS = $(CFLAGS_O3)
 address_parser_train_SOURCES = address_parser_train.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c graph.c graph_builder.c float_utils.c averaged_perceptron_trainer.c crf_trainer.c crf_trainer_averaged_perceptron.c averaged_perceptron_tagger.c address_dictionary.c normalize.c features.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c file_utils.c shuffle.c utf8proc/utf8proc.c ngrams.c
-address_parser_train_LDADD = libscanner.la $(BLAS_LIBS)
+address_parser_train_LDADD = libscanner.la $(CBLAS_LIBS)
 address_parser_train_CFLAGS = $(CFLAGS_O3)
 
 address_parser_test_SOURCES = address_parser_test.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c graph.c graph_builder.c float_utils.c averaged_perceptron_tagger.c address_dictionary.c normalize.c features.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c file_utils.c utf8proc/utf8proc.c ngrams.c
-address_parser_test_LDADD = libscanner.la  $(BLAS_LIBS)
+address_parser_test_LDADD = libscanner.la  $(CBLAS_LIBS)
 address_parser_test_CFLAGS = $(CFLAGS_O3)
 
-language_classifier_train_SOURCES = language_classifier_train.c language_classifier.c language_features.c language_classifier_io.c logistic_regression_trainer.c logistic_regression.c logistic.c sparse_matrix.c sparse_matrix_utils.c features.c minibatch.c float_utils.c stochastic_gradient_descent.c normalize.c transliterate.c trie.c trie_search.c trie_utils.c address_dictionary.c string_utils.c file_utils.c utf8proc/utf8proc.c unicode_scripts.c shuffle.c
-language_classifier_train_LDADD = libscanner.la $(BLAS_LIBS)
+language_classifier_train_SOURCES = language_classifier_train.c language_classifier.c language_features.c language_classifier_io.c logistic_regression_trainer.c logistic_regression.c logistic.c sparse_matrix.c sparse_matrix_utils.c features.c minibatch.c float_utils.c stochastic_gradient_descent.c ftrl.c regularization.c cartesian_product.c normalize.c transliterate.c trie.c trie_search.c trie_utils.c address_dictionary.c string_utils.c file_utils.c utf8proc/utf8proc.c unicode_scripts.c shuffle.c
+language_classifier_train_LDADD = libscanner.la $(CBLAS_LIBS)
 language_classifier_train_CFLAGS = $(CFLAGS_O3)
 language_classifier_SOURCES = language_classifier_cli.c language_classifier.c language_features.c logistic_regression.c logistic.c sparse_matrix.c features.c minibatch.c float_utils.c normalize.c transliterate.c trie.c trie_search.c trie_utils.c address_dictionary.c string_utils.c file_utils.c utf8proc/utf8proc.c unicode_scripts.c
-language_classifier_LDADD = libscanner.la $(BLAS_LIBS)
+language_classifier_LDADD = libscanner.la $(CBLAS_LIBS)
 language_classifier_CFLAGS = $(CFLAGS_O3)
 language_classifier_test_SOURCES = language_classifier_test.c language_classifier.c language_classifier_io.c language_features.c logistic_regression.c logistic.c sparse_matrix.c features.c minibatch.c float_utils.c normalize.c transliterate.c trie.c trie_search.c trie_utils.c address_dictionary.c string_utils.c file_utils.c utf8proc/utf8proc.c unicode_scripts.c
-language_classifier_test_LDADD = libscanner.la $(BLAS_LIBS)
+language_classifier_test_LDADD = libscanner.la $(CBLAS_LIBS)
 language_classifier_test_CFLAGS = $(CFLAGS_O3)
 
 
