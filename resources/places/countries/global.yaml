@@ -138,6 +138,7 @@ countries:
             - suburb
             - city_district
             - state_district
+            - state
         components:
             suburb:
                 dependencies:
@@ -145,6 +146,8 @@ countries:
                     - city
                     - state_district
                     - state
+            city:
+                probability: 0.95
             state:
                 probability: 0.7
                 population:
@@ -367,6 +370,7 @@ countries:
             - suburb
             - city_district
             - state_district
+            - state
         # Definitions
         new_york_county: &new_york_county
             id: 2552485 # New York County (Manhattan, NY)
@@ -414,7 +418,7 @@ countries:
                     - <<: *new_york_county
                       probability: 0.1
             city:
-                probability: 1.0
+                probability: 0.95
                 containing:
                     - <<: *kings_county
                       probability: 0.1
@@ -424,6 +428,8 @@ countries:
                       probability: 0.1
                     - <<: *richmond_county
                       probability: 0.1
+                    - <<: *new_york_county
+                      probability: 1.0
             island:
                 order:
                     direction: before
