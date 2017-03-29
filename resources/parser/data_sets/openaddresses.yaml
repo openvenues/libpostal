@@ -1225,6 +1225,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Acerra
+            # Piemonte
+            21:
+                files:
+                    - filename: statewide.csv
             # Trentino-Alto Adige/Südtirol
             32:
                 files:
