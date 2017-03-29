@@ -13,7 +13,7 @@
 #include "vector.h"
 #include "vector_math.h"
 
-#ifdef HAVE_BLAS
+#ifdef HAVE_CBLAS
 #include <cblas.h>
 #else
 #warning "No CLBAS"
@@ -145,7 +145,7 @@
     static inline name##_t *name##_new_copy(name##_t *self) {                                                   \
         name##_t *cpy = name##_new(self->m, self->n);                                                           \
         size_t num_values = self->m * self->n;                                                                  \
-        memcpy(cpy->values, self->values, num_values);                                                          \
+        memcpy(cpy->values, self->values, num_values * sizeof(type));                                           \
                                                                                                                 \
         return cpy;                                                                                             \
     }                                                                                                           \
@@ -382,7 +382,7 @@
     }
 
 
-#ifdef HAVE_BLAS
+#ifdef HAVE_CBLAS
 #define MATRIX_INIT_FLOAT(name, type, type_name, array_type, blas_prefix)                                   \
     MATRIX_INIT_FLOAT_BASE(name, type, type_name, array_type)                                               \
                                                                                                             \
