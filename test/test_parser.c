@@ -1849,7 +1849,7 @@ SUITE(libpostal_parser_tests) {
     RUN_TEST(test_no_parses);
     RUN_TEST(test_se_parses);
     RUN_TEST(test_hu_parses);
-    RUN_TEST(test_ro_parsers);
+    RUN_TEST(test_ro_parses);
     RUN_TEST(test_ru_parses);
 
     libpostal_teardown();
