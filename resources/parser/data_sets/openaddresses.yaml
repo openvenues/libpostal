@@ -1598,6 +1598,9 @@ countries:
     mx:
         language: es
         postcode_length: 5
+        files:
+            - filename: countrywide.csv
+              add_osm_boundaries: true
         subdirs:
             aguascalientes:
                 add:
@@ -3179,7 +3182,6 @@ countries:
                       city_replacements:
                           city: New Iberia
                     - filename: city_of_new_orleans.csv
-                      add_osm_boundaries: true
                       city_replacements:
                           city: New Orleans
                     - filename: claiborne.csv
