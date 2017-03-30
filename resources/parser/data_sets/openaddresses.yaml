@@ -2942,7 +2942,6 @@ countries:
                 files:
                     - filename: adams.csv
                     - filename: allen.csv
-                      add_osm_boundaries: true
                       city_replacements:
                           state_district: Allen County
                     - filename: bartholomew.csv
@@ -3808,6 +3807,9 @@ countries:
                       city_replacements:
                           state_district: Churchill County
                     - filename: clark.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Clark County
                     - filename: douglas.csv
                       add_osm_boundaries: true
                       city_replacements:
