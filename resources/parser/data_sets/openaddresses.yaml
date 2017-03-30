@@ -3359,6 +3359,11 @@ countries:
                       city_replacements:
                           state_district: Stearns County
                     - filename: st_louis.csv
+                      city_replacements:
+                          state_district: Saint Louis County
+                      ignore_fields_containing:
+                          city:
+                              - "^ut "
                     - filename: wadena.csv
                       add_osm_boundaries: true
                       city_replacements:
