@@ -44,7 +44,7 @@ CHUNK_SIZE=$((64*$MB))
 LARGE_FILE_SIZE=$((CHUNK_SIZE*2))
 
 
-NUM_WORKERS=10
+NUM_WORKERS=12
 
 kill_background_processes() {
     jobs -p | xargs kill;
