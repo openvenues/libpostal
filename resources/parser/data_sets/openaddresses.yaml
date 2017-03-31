@@ -3483,7 +3483,9 @@ countries:
                     state: North Carolina
                 files:
                     - filename: alamance.csv
-                      add_osm_boundaries: true
+                      ignore_fields_containing:
+                          city:
+                              - "county"
                       city_replacements:
                           state_district: Almance County
                     - filename: alleghany.csv
