@@ -3379,6 +3379,10 @@ countries:
                 files:
                     - filename: bates.csv
                     - filename: boone.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
                     - filename: city_of_cape_girardeau.csv
                       fields: *fields_with_unit
                       non_numeric_units: true
