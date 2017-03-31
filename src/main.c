@@ -13,10 +13,10 @@
 
 #define LIBPOSTAL_USAGE "Usage: ./libpostal address [...languages] [--json]\n"
 
-static inline void print_output(char *address, normalize_options_t options, bool use_json) {
+static inline void print_output(char *address, libpostal_normalize_options_t options, bool use_json) {
     size_t num_expansions;
 
-    char **strings = expand_address(address, options, &num_expansions);
+    char **strings = libpostal_expand_address(address, options, &num_expansions);
 
     char *normalized;
 
@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    normalize_options_t options = get_libpostal_default_options();
+    libpostal_normalize_options_t options = libpostal_get_default_options();
 
     if (languages != NULL) {
         options.languages = languages->a;

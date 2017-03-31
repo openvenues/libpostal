@@ -32,10 +32,10 @@ KSORT_INIT(phrase_language_array, phrase_language_t, ks_lt_phrase_language)
 #define DEFAULT_KEY_LEN 32
 
 
-static normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
+static libpostal_normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
         .languages = NULL,
         .num_languages = 0,
-        .address_components = ADDRESS_NAME | ADDRESS_HOUSE_NUMBER | ADDRESS_STREET | ADDRESS_PO_BOX | ADDRESS_UNIT | ADDRESS_LEVEL | ADDRESS_ENTRANCE | ADDRESS_STAIRCASE | ADDRESS_POSTAL_CODE,
+        .address_components = LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_HOUSE_NUMBER | LIBPOSTAL_ADDRESS_STREET | LIBPOSTAL_ADDRESS_PO_BOX | LIBPOSTAL_ADDRESS_UNIT | LIBPOSTAL_ADDRESS_LEVEL | LIBPOSTAL_ADDRESS_ENTRANCE | LIBPOSTAL_ADDRESS_STAIRCASE | LIBPOSTAL_ADDRESS_POSTAL_CODE,
         .latin_ascii = true,
         .transliterate = true,
         .strip_accents = true,
@@ -56,11 +56,11 @@ static normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
         .roman_numerals = true
 };
 
-normalize_options_t get_libpostal_default_options(void) {
+libpostal_normalize_options_t libpostal_get_default_options(void) {
     return LIBPOSTAL_DEFAULT_OPTIONS;
 }
 
-static inline uint64_t get_normalize_token_options(normalize_options_t options) {
+static inline uint64_t get_normalize_token_options(libpostal_normalize_options_t options) {
     uint64_t normalize_token_options = 0;
 
     normalize_token_options |= options.delete_final_periods ? NORMALIZE_TOKEN_DELETE_FINAL_PERIOD : 0;
@@ -71,7 +71,7 @@ static inline uint64_t get_normalize_token_options(normalize_options_t options) 
     return normalize_token_options;
 }
 
-static inline uint64_t get_normalize_string_options(normalize_options_t options) {
+static inline uint64_t get_normalize_string_options(libpostal_normalize_options_t options) {
     uint64_t normalize_string_options = 0;
     normalize_string_options |= options.transliterate ? NORMALIZE_STRING_TRANSLITERATE : 0;
     normalize_string_options |= options.latin_ascii ? NORMALIZE_STRING_LATIN_ASCII : 0;
@@ -83,7 +83,7 @@ static inline uint64_t get_normalize_string_options(normalize_options_t options)
     return normalize_string_options;
 }
 
-static void add_normalized_strings_token(cstring_array *strings, char *str, token_t token, normalize_options_t options) {
+static void add_normalized_strings_token(cstring_array *strings, char *str, token_t token, libpostal_normalize_options_t options) {
 
     uint64_t normalize_token_options = get_normalize_token_options(options);
 
@@ -135,7 +135,7 @@ static void add_normalized_strings_token(cstring_array *strings, char *str, toke
     }
 }
 
-static string_tree_t *add_string_alternatives(char *str, normalize_options_t options) {
+static string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t options) {
     char_array *key = NULL;
 
     log_debug("input=%s\n", str);
@@ -500,7 +500,7 @@ static string_tree_t *add_string_alternatives(char *str, normalize_options_t opt
     return tree;
 }
 
-static void add_postprocessed_string(cstring_array *strings, char *str, normalize_options_t options) {
+static void add_postprocessed_string(cstring_array *strings, char *str, libpostal_normalize_options_t options) {
     cstring_array_add_string(strings, str);
 
     if (options.roman_numerals) {
@@ -516,7 +516,7 @@ static void add_postprocessed_string(cstring_array *strings, char *str, normaliz
 
 
 
-static address_expansion_array *get_affix_expansions(phrase_t phrase, normalize_options_t options) {
+static address_expansion_array *get_affix_expansions(phrase_t phrase, libpostal_normalize_options_t options) {
     uint32_t expansion_index = phrase.data;
     address_expansion_value_t *value = address_dictionary_get_expansions(expansion_index);
     if (value != NULL && value->components & options.address_components) {
@@ -526,7 +526,7 @@ static address_expansion_array *get_affix_expansions(phrase_t phrase, normalize_
     return NULL;
 }
 
-static inline void cat_affix_expansion(char_array *key, char *str, address_expansion_t expansion, token_t token, phrase_t phrase, normalize_options_t options) {
+static inline void cat_affix_expansion(char_array *key, char *str, address_expansion_t expansion, token_t token, phrase_t phrase, libpostal_normalize_options_t options) {
     if (expansion.canonical_index != NULL_CANONICAL_INDEX) {
         char *canonical = address_dictionary_get_canonical(expansion.canonical_index);
         uint64_t normalize_string_options = get_normalize_string_options(options);
@@ -542,7 +542,7 @@ static inline void cat_affix_expansion(char_array *key, char *str, address_expan
     }
 }
 
-static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t token, phrase_t prefix, phrase_t suffix, normalize_options_t options) {
+static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t token, phrase_t prefix, phrase_t suffix, libpostal_normalize_options_t options) {
     cstring_array *strings = tree->strings;
 
     bool have_suffix = suffix.len > 0 && suffix.len < token.len;
@@ -753,7 +753,7 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
 
 }
 
-static inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, token_t token, normalize_options_t options) {
+static inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, token_t token, libpostal_normalize_options_t options) {
     phrase_t suffix = search_address_dictionaries_suffix(str + token.offset, token.len, lang);
 
     phrase_t prefix = search_address_dictionaries_prefix(str + token.offset, token.len, lang);
@@ -764,7 +764,7 @@ static inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, to
     return add_affix_expansions(tree, str, lang, token, prefix, suffix, options);
 }
 
-static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *str, token_array *tokens, normalize_options_t options) {
+static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *str, token_array *tokens, libpostal_normalize_options_t options) {
     cstring_array *strings = tree->strings;
 
     for (size_t i = 0; i < tokens->n; i++) {
@@ -795,7 +795,7 @@ static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *s
 }
 
 
-static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_strings, char *str, normalize_options_t options) {
+static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_strings, char *str, libpostal_normalize_options_t options) {
     size_t len = strlen(str);
     token_array *tokens = tokenize_keep_whitespace(str);
     string_tree_t *token_tree = string_tree_new_size(len);
@@ -901,8 +901,8 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
     char_array_destroy(temp_string);
 }
 
-char **expand_address(char *input, normalize_options_t options, size_t *n) {
-    options.address_components |= ADDRESS_ANY;
+char **libpostal_expand_address(char *input, libpostal_normalize_options_t options, size_t *n) {
+    options.address_components |= LIBPOSTAL_ADDRESS_ANY;
 
     uint64_t normalize_string_options = get_normalize_string_options(options);
 
@@ -980,14 +980,14 @@ char **expand_address(char *input, normalize_options_t options, size_t *n) {
 
 }
 
-void expansion_array_destroy(char **expansions, size_t n) {
+void libpostal_expansion_array_destroy(char **expansions, size_t n) {
     for (size_t i = 0; i < n; i++) {
         free(expansions[i]);
     }
     free(expansions);
 }
 
-void address_parser_response_destroy(address_parser_response_t *self) {
+void libpostal_address_parser_response_destroy(libpostal_address_parser_response_t *self) {
     if (self == NULL) return;
 
     for (size_t i = 0; i < self->num_components; i++) {
@@ -1011,23 +1011,23 @@ void address_parser_response_destroy(address_parser_response_t *self) {
     free(self);
 }
 
-static address_parser_options_t LIBPOSTAL_ADDRESS_PARSER_DEFAULT_OPTIONS =  {
+static libpostal_address_parser_options_t LIBPOSTAL_ADDRESS_PARSER_DEFAULT_OPTIONS =  {
     .language = NULL,
     .country = NULL
 };
 
-inline address_parser_options_t get_libpostal_address_parser_default_options(void) {
+inline libpostal_address_parser_options_t libpostal_get_address_parser_default_options(void) {
     return LIBPOSTAL_ADDRESS_PARSER_DEFAULT_OPTIONS;
 }
 
-address_parser_response_t *parse_address(char *address, address_parser_options_t options) {
+libpostal_address_parser_response_t *libpostal_parse_address(char *address, libpostal_address_parser_options_t options) {
     address_parser_context_t *context = address_parser_context_new();
-    address_parser_response_t *parsed = address_parser_parse(address, options.language, options.country, context);
+    libpostal_address_parser_response_t *parsed = address_parser_parse(address, options.language, options.country, context);
 
     if (parsed == NULL) {
         log_error("Parser returned NULL\n");
         address_parser_context_destroy(context);
-        address_parser_response_destroy(parsed);
+        libpostal_address_parser_response_destroy(parsed);
         return NULL;
     }
 

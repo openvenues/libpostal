@@ -27,7 +27,7 @@ static const size_t GAMMA_SCHEDULE_SIZE = sizeof(GAMMA_SCHEDULE) / sizeof(double
 #define DEFAULT_GAMMA_0 10.0
 
 static  double LAMBDA_SCHEDULE[]  = {0.0, 1e-5, 1e-4, 0.001, 0.01, 0.1, \
-                                     0.2, 0.5, 1.0, 2.0, 5.0, 10.0};
+                                     0.2, 0.5, 1.0};
 static const size_t LAMBDA_SCHEDULE_SIZE  = sizeof(LAMBDA_SCHEDULE) / sizeof(double);
 
 #define DEFAULT_LAMBDA 0.0

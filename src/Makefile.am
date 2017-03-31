@@ -1,5 +1,3 @@
-SUBDIRS = sparkey
-
 # Inherited from autoconf / user-specified
 CFLAGS_CONF = @CFLAGS@
 CFLAGS_BASE = -Wall -Wextra -Wno-unused-function -Wdeclaration-after-statement -Wformat -Werror=format-security -Winit-self -Wno-sign-compare -DLIBPOSTAL_DATA_DIR='"$(datadir)/libpostal"' -g $(CFLAGS_CONF)
@@ -14,9 +12,10 @@ DEFAULT_INCLUDES = -I.. -I/usr/local/include
 CFLAGS =
 
 lib_LTLIBRARIES = libpostal.la
-libpostal_la_SOURCES = libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c trie_utils.c string_utils.c file_utils.c numex.c utf8proc/utf8proc.c cmp/cmp.c geodb.c geo_disambiguation.c normalize.c bloom.c features.c geonames.c geohash/geohash.c unicode_scripts.c msgpack_utils.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c averaged_perceptron_tagger.c graph.c graph_builder.c language_classifier.c language_features.c logistic_regression.c logistic.c minibatch.c float_utils.c ngrams.c
-libpostal_la_LIBADD = libscanner.la sparkey/libsparkey.la $(CBLAS_LIBS)
+libpostal_la_SOURCES = libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c trie_utils.c string_utils.c file_utils.c numex.c utf8proc/utf8proc.c cmp/cmp.c normalize.c bloom.c features.c unicode_scripts.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c averaged_perceptron_tagger.c graph.c graph_builder.c language_classifier.c language_features.c logistic_regression.c logistic.c minibatch.c float_utils.c ngrams.c
+libpostal_la_LIBADD = libscanner.la $(CBLAS_LIBS)
 libpostal_la_CFLAGS = $(CFLAGS_O2)
+libpostal_la_LDFLAGS = -version-info @LIBPOSTAL_SO_VERSION@
 
 dist_bin_SCRIPTS = libpostal_data
 
@@ -27,7 +26,7 @@ noinst_LTLIBRARIES = libscanner.la
 libscanner_la_SOURCES = scanner.c
 libscanner_la_CFLAGS = $(CFLAGS_O0) $(CFLAGS_SCANNER_EXTRA)
 
-noinst_PROGRAMS = libpostal bench address_parser address_parser_train address_parser_test build_address_dictionary build_geodb build_numex_table build_trans_table address_parser_train address_parser_test language_classifier_train language_classifier language_classifier_test
+noinst_PROGRAMS = libpostal bench address_parser address_parser_train address_parser_test build_address_dictionary build_numex_table build_trans_table address_parser_train address_parser_test language_classifier_train language_classifier language_classifier_test
 
 libpostal_SOURCES = main.c json_encode.c
 libpostal_LDADD = libpostal.la
@@ -41,9 +40,6 @@ address_parser_CFLAGS = $(CFLAGS_O3)
 
 build_address_dictionary_SOURCES = address_dictionary_builder.c address_dictionary.c file_utils.c string_utils.c trie.c trie_search.c utf8proc/utf8proc.c
 build_address_dictionary_CFLAGS = $(CFLAGS_O3)
-build_geodb_SOURCES = geodb_builder.c geodb.c geo_disambiguation.c graph.c graph_builder.c normalize.c features.c geonames.c geohash/geohash.c unicode_scripts.c transliterate.c trie.c trie_search.c string_utils.c msgpack_utils.c file_utils.c utf8proc/utf8proc.c cmp/cmp.c
-build_geodb_LDADD = sparkey/libsparkey.la
-build_geodb_CFLAGS = $(CFLAGS_O3)
 build_numex_table_SOURCES = numex_table_builder.c numex.c file_utils.c string_utils.c tokens.c trie.c trie_search.c utf8proc/utf8proc.c
 build_numex_table_CFLAGS = $(CFLAGS_O3)
 build_trans_table_SOURCES = transliteration_table_builder.c transliterate.c trie.c trie_search.c file_utils.c string_utils.c utf8proc/utf8proc.c

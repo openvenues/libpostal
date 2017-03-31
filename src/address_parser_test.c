@@ -98,8 +98,6 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
 
         char *prev_label = NULL;
 
-        address_parser_response_t *response = NULL;
-
         size_t starting_errors = result->num_errors;
 
         bool prediction_success = address_parser_predict(parser, context, token_labels, &address_parser_features, data_set->tokenized_str);

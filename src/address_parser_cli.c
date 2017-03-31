@@ -117,10 +117,10 @@ int main(int argc, char **argv) {
             goto next_input;
         }
 
-        address_parser_response_t *parsed;
-        address_parser_options_t options = get_libpostal_address_parser_default_options();
+        libpostal_address_parser_response_t *parsed;
+        libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
-        if ((parsed = parse_address(input, options))) {
+        if ((parsed = libpostal_parse_address(input, options))) {
             printf("\n");
             printf("Result:\n\n");
             printf("{\n");
@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
             printf("}\n");
             printf("\n");
 
-            address_parser_response_destroy(parsed);
+            libpostal_address_parser_response_destroy(parsed);
         } else {
             log_error("Error parsing address\n");
             exit(EXIT_FAILURE);

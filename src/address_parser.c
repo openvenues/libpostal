@@ -842,7 +842,7 @@ bool is_valid_dictionary_phrase(phrase_t phrase) {
     }
     uint32_t address_phrase_types = expansion_value->components;
 
-    if (address_phrase_types & (ADDRESS_STREET | ADDRESS_HOUSE_NUMBER | ADDRESS_NAME | ADDRESS_CATEGORY | ADDRESS_NEAR | ADDRESS_UNIT | ADDRESS_LEVEL | ADDRESS_ENTRANCE | ADDRESS_STAIRCASE | ADDRESS_POSTAL_CODE | ADDRESS_PO_BOX)) {
+    if (address_phrase_types & (LIBPOSTAL_ADDRESS_STREET | LIBPOSTAL_ADDRESS_HOUSE_NUMBER | LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_CATEGORY | LIBPOSTAL_ADDRESS_NEAR | LIBPOSTAL_ADDRESS_UNIT | LIBPOSTAL_ADDRESS_LEVEL | LIBPOSTAL_ADDRESS_ENTRANCE | LIBPOSTAL_ADDRESS_STAIRCASE | LIBPOSTAL_ADDRESS_POSTAL_CODE | LIBPOSTAL_ADDRESS_PO_BOX)) {
         for (size_t i = 0; i < expansion_value->expansions->n; i++) {
             address_expansion_t expansion = expansion_value->expansions->a[i];
             if (!address_expansion_in_dictionary(expansion, DICTIONARY_TOPONYM)) {
@@ -913,7 +913,7 @@ static address_parser_phrase_t word_or_phrase_at_index(address_parser_t *parser,
         expansion_index = suffix_phrase.data;
         expansion_value = address_dictionary_get_expansions(expansion_index);
 
-        if (expansion_value->components & ADDRESS_STREET) {
+        if (expansion_value->components & LIBPOSTAL_ADDRESS_STREET) {
             response = (address_parser_phrase_t){
                 word,
                 ADDRESS_PARSER_SUFFIX_PHRASE,
@@ -928,8 +928,8 @@ static address_parser_phrase_t word_or_phrase_at_index(address_parser_t *parser,
         expansion_index = prefix_phrase.data;
         expansion_value = address_dictionary_get_expansions(expansion_index);
 
-        // Don't include elisions like l', d', etc. which are in the ADDRESS_ANY category
-        if (expansion_value->components ^ ADDRESS_ANY) {
+        // Don't include elisions like l', d', etc. which are in the LIBPOSTAL_ADDRESS_ANY category
+        if (expansion_value->components ^ LIBPOSTAL_ADDRESS_ANY) {
             response = (address_parser_phrase_t){
                 word,
                 ADDRESS_PARSER_PREFIX_PHRASE,
@@ -1164,16 +1164,16 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             add_word_feature = false;
             log_debug("phrase_string=%s\n", phrase_string);
 
-            add_phrase_features(features, address_phrase_types, ADDRESS_STREET, "street", phrase_string);
-            add_phrase_features(features, address_phrase_types, ADDRESS_NAME, "name", phrase_string);
-            add_phrase_features(features, address_phrase_types, ADDRESS_CATEGORY, "category", phrase_string);
-            add_phrase_features(features, address_phrase_types, ADDRESS_UNIT, "unit", phrase_string);
-            add_phrase_features(features, address_phrase_types, ADDRESS_PO_BOX, "po_box", phrase_string);
-            add_phrase_features(features, address_phrase_types, ADDRESS_LEVEL, "level", phrase_string);
-            add_phrase_features(features, address_phrase_types, ADDRESS_ENTRANCE, "entrance", phrase_string);
-            add_phrase_features(features, address_phrase_types, ADDRESS_STAIRCASE, "staircase", phrase_string);
-            add_phrase_features(features, address_phrase_types, ADDRESS_HOUSE_NUMBER, "house_number", phrase_string);
-            add_phrase_features(features, address_phrase_types, ADDRESS_POSTAL_CODE, "postal_code", phrase_string);
+            add_phrase_features(features, address_phrase_types, LIBPOSTAL_ADDRESS_STREET, "street", phrase_string);
+            add_phrase_features(features, address_phrase_types, LIBPOSTAL_ADDRESS_NAME, "name", phrase_string);
+            add_phrase_features(features, address_phrase_types, LIBPOSTAL_ADDRESS_CATEGORY, "category", phrase_string);
+            add_phrase_features(features, address_phrase_types, LIBPOSTAL_ADDRESS_UNIT, "unit", phrase_string);
+            add_phrase_features(features, address_phrase_types, LIBPOSTAL_ADDRESS_PO_BOX, "po_box", phrase_string);
+            add_phrase_features(features, address_phrase_types, LIBPOSTAL_ADDRESS_LEVEL, "level", phrase_string);
+            add_phrase_features(features, address_phrase_types, LIBPOSTAL_ADDRESS_ENTRANCE, "entrance", phrase_string);
+            add_phrase_features(features, address_phrase_types, LIBPOSTAL_ADDRESS_STAIRCASE, "staircase", phrase_string);
+            add_phrase_features(features, address_phrase_types, LIBPOSTAL_ADDRESS_HOUSE_NUMBER, "house_number", phrase_string);
+            add_phrase_features(features, address_phrase_types, LIBPOSTAL_ADDRESS_POSTAL_CODE, "postal_code", phrase_string);
         }
     }
 
@@ -1330,8 +1330,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             expansion_index = prefix_phrase.data;
             expansion_value = address_dictionary_get_expansions(expansion_index);
 
-            // Don't include elisions like l', d', etc. which are in the ADDRESS_ANY category
-            if (expansion_value->components ^ ADDRESS_ANY) {
+            // Don't include elisions like l', d', etc. which are in the LIBPOSTAL_ADDRESS_ANY category
+            if (expansion_value->components ^ LIBPOSTAL_ADDRESS_ANY) {
                 known_prefix = true;
                 char_array_clear(phrase_tokens);
                 prefix_len = prefix_phrase.len;
@@ -1347,7 +1347,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             expansion_index = suffix_phrase.data;
             expansion_value = address_dictionary_get_expansions(expansion_index);
 
-            if (expansion_value->components & ADDRESS_STREET) {
+            if (expansion_value->components & LIBPOSTAL_ADDRESS_STREET) {
                 known_suffix = true;
                 char_array_clear(context->suffix_phrase);
                 suffix_len = suffix_phrase.len;
@@ -1582,20 +1582,20 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
                         right_context_affix = phrase_prefix(right_context_word, strlen(right_context_word_pre_norm), right_context_phrase, context->long_context_suffix_phrase);
                     }
 
-                    if (right_context_components & ADDRESS_STREET && !(right_context_components & ADDRESS_NAME)) {
+                    if (right_context_components & LIBPOSTAL_ADDRESS_STREET && !(right_context_components & LIBPOSTAL_ADDRESS_NAME)) {
                         feature_array_add(features, 2, "first word unknown+street phrase right", relation_to_number);
                         feature_array_add(features, 3, "first word unknown+street phrase right", relation_to_number, right_context_word);
                         if (right_context_affix != NULL && right_affix_type != NULL) {
                             feature_array_add(features, 4, "first word unknown+street affix right", relation_to_number, right_affix_type, right_context_affix);
                         }
                         break;
-                    } else if (right_context_components & ADDRESS_NAME && !(right_context_components & ADDRESS_STREET)) {
+                    } else if (right_context_components & LIBPOSTAL_ADDRESS_NAME && !(right_context_components & LIBPOSTAL_ADDRESS_STREET)) {
                         feature_array_add(features, 2, "first word unknown+venue phrase right", relation_to_number);
                         feature_array_add(features, 3, "first word unknown+venue phrase right", relation_to_number, right_context_word);
                         if (right_context_affix != NULL && right_affix_type != NULL) {
                             feature_array_add(features, 4, "first word unknown+venue affix right", relation_to_number, right_affix_type, right_context_affix);
                         }
-                    } else if (right_context_components & (ADDRESS_NAME | ADDRESS_STREET)) {
+                    } else if (right_context_components & (LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET)) {
                         if (seen_number) {
                             feature_array_add(features, 1, "first word unknown+number+ambiguous phrase right");
                             feature_array_add(features, 2, "first word unknown+number+ambiguous phrase right", right_context_word);
@@ -1637,12 +1637,12 @@ bool address_parser_predict(address_parser_t *self, address_parser_context_t *co
     return false;
 }
 
-address_parser_response_t *address_parser_response_new(void) {
-    address_parser_response_t *response = malloc(sizeof(address_parser_response_t));
+libpostal_address_parser_response_t *address_parser_response_new(void) {
+    libpostal_address_parser_response_t *response = malloc(sizeof(libpostal_address_parser_response_t));
     return response;
 }
 
-address_parser_response_t *address_parser_parse(char *address, char *language, char *country, address_parser_context_t *context) {
+libpostal_address_parser_response_t *address_parser_parse(char *address, char *language, char *country, address_parser_context_t *context) {
     if (address == NULL || context == NULL) return NULL;
 
     address_parser_t *parser = get_address_parser();
@@ -1693,7 +1693,7 @@ address_parser_response_t *address_parser_parse(char *address, char *language, c
     country = NULL;
     address_parser_context_fill(context, parser, tokenized_str, language, country);
 
-    address_parser_response_t *response = NULL;
+    libpostal_address_parser_response_t *response = NULL;
 
     // If the whole input string is a single known phrase at the SUBURB level or higher, bypass sequence prediction altogether
     phrase_t only_phrase = NULL_PHRASE;

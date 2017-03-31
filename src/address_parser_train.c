@@ -210,7 +210,7 @@ bool address_phrases_and_labels(address_parser_data_set_t *data_set, cstring_arr
             if (sub_tokens->n > 1 && search_address_dictionaries_tokens_with_phrases(postal_code_normalized, sub_tokens, language, &postal_code_dictionary_phrases) && postal_code_dictionary_phrases->n > 0) {
                 phrase_t first_postal_code_phrase = postal_code_dictionary_phrases->a[0];
                 address_expansion_value_t *value = address_dictionary_get_expansions(first_postal_code_phrase.data);
-                if (value != NULL && value->components & ADDRESS_POSTAL_CODE) {
+                if (value != NULL && value->components & LIBPOSTAL_ADDRESS_POSTAL_CODE) {
                     char_array_clear(token_builder);
                     size_t first_real_token_index = first_postal_code_phrase.start + first_postal_code_phrase.len;
                     token_t first_real_token =  sub_tokens->a[first_real_token_index];
@@ -255,7 +255,7 @@ bool address_phrases_and_labels(address_parser_data_set_t *data_set, cstring_arr
 
                             address_expansion_value_t *phrase_value = address_dictionary_get_expansions(current_phrase.data);
                             size_t current_phrase_end = current_phrase.start + current_phrase.len;
-                            if (phrase_value != NULL && phrase_value->components & ADDRESS_POSTAL_CODE) {
+                            if (phrase_value != NULL && phrase_value->components & LIBPOSTAL_ADDRESS_POSTAL_CODE) {
                                 current_phrase_end = current_phrase.start;
                             }
 

@@ -132,15 +132,15 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    address_parser_options_t options = get_libpostal_address_parser_default_options();
-    address_parser_response_t *parsed = parse_address("781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", options);
+    libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
+    libpostal_address_parser_response_t *parsed = libpostal_parse_address("781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", options);
 
     for (size_t i = 0; i < parsed->num_components; i++) {
         printf("%s: %s\n", parsed->labels[i], parsed->components[i]);
     }
 
     // Free parse result
-    address_parser_response_destroy(parsed);
+    libpostal_address_parser_response_destroy(parsed);
 
     // Teardown (only called once at the end of your program)
     libpostal_teardown();
@@ -220,15 +220,15 @@ int main(int argc, char **argv) {
     }
 
     size_t num_expansions;
-    normalize_options_t options = get_libpostal_default_options();
-    char **expansions = expand_address("Quatre-vingt-douze Ave des Champs-Élysées", options, &num_expansions);
+    libpostal_normalize_options_t options = libpostal_get_default_options();
+    char **expansions = libpostal_expand_address("Quatre-vingt-douze Ave des Champs-Élysées", options, &num_expansions);
 
     for (size_t i = 0; i < num_expansions; i++) {
         printf("%s\n", expansions[i]);
     }
 
     // Free expansions
-    expansion_array_destroy(expansions, num_expansions);
+    libpostal_expansion_array_destroy(expansions, num_expansions);
 
     // Teardown (only called once at the end of your program)
     libpostal_teardown();
