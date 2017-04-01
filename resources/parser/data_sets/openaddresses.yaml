@@ -3530,6 +3530,9 @@ countries:
                           city: Carolina Beach
                     - filename: city_of_elizabeth_city.csv
                     - filename: city_of_king.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: King
                     - filename: city_of_salisbury.csv
                     - filename: cleveland.csv
                       add_osm_boundaries: true
