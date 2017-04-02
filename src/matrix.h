@@ -19,6 +19,11 @@
 #warning "No CLBAS"
 #endif
 
+typedef enum {
+    MATRIX_DENSE,
+    MATRIX_SPARSE
+} matrix_type_t;
+
 #define MATRIX_INIT(name, type, type_name, array_type)                                                          \
     typedef struct {                                                                                            \
         size_t m, n;                                                                                            \
