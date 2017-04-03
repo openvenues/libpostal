@@ -3165,6 +3165,10 @@ countries:
                       city_replacements:
                           state_district: Beauregard Parish
                     - filename: bienville.csv
+                    - filename: caddo.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Caddo Parish
                     - filename: city_of_alexandria.csv
                       add_osm_boundaries: true
                       city_replacements:
