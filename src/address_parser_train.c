@@ -24,10 +24,6 @@ KHASH_MAP_INIT_STR(phrase_stats, phrase_stats_t)
 KHASH_MAP_INIT_STR(postal_code_context_phrases, khash_t(str_set) *)
 KHASH_MAP_INIT_STR(phrase_types, address_parser_types_t)
 
-#define CHUNK_SIZE_MB UINT64_C(1024) * UINT64_C(1024)
-#define CHUNK_SIZE_GB UINT64_C(1024) * (CHUNK_SIZE_MB)
-#define DEFAULT_SHUFFLE_CHUNK_SIZE UINT64_C(2) * (CHUNK_SIZE_GB)
-
 // Training
 
 #define DEFAULT_ITERATIONS 5
