@@ -398,8 +398,8 @@ Libpostal is a bit different because it's trained on open data that's available 
 
 Training data are stored on S3 by the date they were created. There's also a file stored on S3 to point to the most recent training data. To always point to the latest data, use something like: ```latest=$(curl https://s3.amazonaws.com/libpostal/training_data/latest)``` and use that variable in place of the date.
 
-### Parser training data ###
-All files can be found at s3://libpostal/training_data/YYYY-MM-DD/parser/ as gzip'd tab-separated values (TSV) files formatted as ```language\tcountry\tformatted_address```.
+### Parser training sets ###
+All files can be found under s3://libpostal/training_data/YYYY-MM-DD/parser/ as gzip'd tab-separated values (TSV) files formatted like:```language\tcountry\taddress```.
 
 - **formatted_addresses_tagged.random.tsv.gz** (ODBL): OSM addresses. Apartments, PO boxes, categories, etc. are added primarily to these examples
 - **formatted_places_tagged.random.tsv.gz** (ODBL): every toponym in OSM (even cities represented as points, etc.), reverse-geocoded to its parent admins, possibly including postal codes if they're listed on the point/polygon. Every place gets a base level of representation and places with higher populations get proportionally more.
@@ -586,7 +586,7 @@ Preprocessing (Python)
 
 The [geodata](https://github.com/openvenues/libpostal/tree/master/scripts/geodata) Python package in the libpostal repo contains the pipeline for preprocessing the various geo
 data sets and building training data for the C models to use.
-This package shouldn't be needed for most users. However, for those interested in generating new types of addresses or improving libpostal's training data, this is where it all happens.
+This package shouldn't be needed for most users, but for those interested in generating new types of addresses or improving libpostal's training data, this is where to look.
 
 Address parser accuracy
 -----------------------
