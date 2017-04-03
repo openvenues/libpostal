@@ -87,7 +87,7 @@ KSORT_INIT_STR
 KHASH_SORT_BY_VALUE(str_uint32, char *, uint32_t, uint32_array)
 KHASH_SORT_BY_VALUE(str_double, char *, double, double_array)
 
-#define KHASH_STR_GET(name, key_type, val_type)                                                             \
+#define KHASH_GET(name, key_type, val_type)                                                                 \
     static bool name##_hash_get(khash_t(name) *h, key_type key, val_type *val) {                            \
         khiter_t k;                                                                                         \
         k = kh_get(name, h, (const key_type)key);                                                           \
@@ -98,7 +98,8 @@ KHASH_SORT_BY_VALUE(str_double, char *, double, double_array)
         return false;                                                                                       \
     }
 
-KHASH_STR_GET(str_uint32, kh_cstr_t, uint32_t)
+KHASH_GET(str_uint32, kh_cstr_t, uint32_t)
+KHASH_GET(int_uint32, khint32_t, uint32_t)
 
 #define KHASH_STR_INCR(name, val_type)                                                                      \
     static bool name##_hash_incr_by_exists(khash_t(name) *h, const char *key, val_type val, bool *exists) { \
