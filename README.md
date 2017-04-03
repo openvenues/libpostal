@@ -15,8 +15,7 @@ Addresses and the locations they represent are essential for any application dea
 The core library is written in pure C. Language bindings for [Python](https://github.com/openvenues/pypostal), [Ruby](https://github.com/openvenues/ruby_postal), [Go](https://github.com/openvenues/gopostal), [Java](https://github.com/openvenues/jpostal), [PHP](https://github.com/openvenues/php-postal), and [NodeJS](https://github.com/openvenues/node-postal) are officially supported and it's easy to write bindings in other languages.
 
 
-For a more comprehensive overview of the research and thought process behind libpostal, check out the introductory blog post:
-- [Statistical NLP on OpenStreetMap](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86)
+For a more comprehensive overview of the research behind libpostal, check out the introductory blog post: [Statistical NLP on OpenStreetMap](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86)
 
 Sponsors
 --------
@@ -407,7 +406,7 @@ All files can be found at s3://libpostal/training_data/YYYY-MM-DD/parser/ as gzi
 - **formatted_ways_tagged.random.tsv.gz** (ODBL): every street in OSM (ways with highway=*, with a few conditions), reverse-geocoded to its admins
 - **geoplanet_formatted_addresses_tagged.random.tsv.gz** (CC-BY): every postal code in Yahoo GeoPlanet (includes almost every postcode in the UK, Canada, etc.) and their parent admins. The GeoPlanet admins have been cleaned up and mapped to libpostal's tagset
 - **openaddresses_formatted_addresses_tagged.random.tsv.gz** (various licenses, mostly CC-BY): most of the address data sets from [OpenAddresses](https://openaddresses.io/), which in turn come directly from government sources
-- **uk_openaddresses_formatted_addresses_tagged.random.tsv.gz** (CC-BY): address data from [OpenAddresses UK](https://alpha.openaddressesuk.org/)
+- **uk_openaddresses_formatted_addresses_tagged.random.tsv.gz** (CC-BY): addresses from [OpenAddresses UK](https://alpha.openaddressesuk.org/)
 
 If the parser doesn't perform as well as you'd hoped on a particular type of address, the best recourse is to use grep/awk to look through the training data and try to determine if there's some pattern/style of address that's not being captured.
 
