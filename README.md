@@ -399,7 +399,7 @@ Libpostal is a bit different because it's trained on open data that's available 
 
 Training data are stored on S3 by the date they were created. There's also a file stored on S3 to point to the most recent training data. To always point to the latest data, use something like: ```latest=$(curl https://s3.amazonaws.com/libpostal/training_data/latest)``` and use that variable in place of the date.
 
-**Parser training data**
+### Parser training data ###
 All files can be found at s3://libpostal/training_data/YYYY-MM-DD/parser/ as gzip'd tab-separated values (TSV) files formatted as ```language\tcountry\tformatted_address```.
 
 - **formatted_addresses_tagged.random.tsv.gz** (ODBL): OSM addresses. Apartments, PO boxes, categories, etc. are added primarily to these examples

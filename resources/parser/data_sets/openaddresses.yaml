@@ -4259,6 +4259,10 @@ countries:
                     state: South Dakota
                 files:
                     - filename: city_of_sioux_falls.csv
+                    - filename: fall_river.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Fall River County
                     - filename: lawrence.csv
                       add_osm_boundaries: true
                       city_replacements:
