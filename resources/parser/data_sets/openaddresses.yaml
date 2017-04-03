@@ -3622,6 +3622,10 @@ countries:
                       city_replacements:
                           state_district: Rowan County
                     - filename: rutherford.csv
+                    - filename: sampson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Sampson County
                     - filename: stanly.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -3642,6 +3646,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Wilson County
+                    - filename: yadkin.csv
 
             nd:
                 add:
@@ -4266,6 +4271,7 @@ countries:
                       city_replacements:
                           state_district: Saluda County
                     - filename: sumter.csv
+                    - filename: union.csv
                     - filename: york.csv
 
             sd:
