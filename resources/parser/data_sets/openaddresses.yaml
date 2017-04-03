@@ -3617,6 +3617,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Polk County
+                    - filename: rowan.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Rowan County
                     - filename: rutherford.csv
                     - filename: stanly.csv
                       add_osm_boundaries: true
