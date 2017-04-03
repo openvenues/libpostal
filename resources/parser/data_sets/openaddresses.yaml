@@ -3522,6 +3522,7 @@ countries:
                     - filename: burke.csv
                     - filename: cabarrus.csv
                     - filename: camden.csv
+                    - filename: carteret.csv
                     - filename: cary.csv
                       add_osm_boundaries: true
                       city_replacements:
