@@ -210,6 +210,26 @@
         return result;                                                                                  \
     }                                                                                                   \
                                                                                                         \
+    static inline double name##_mean(type *array, size_t n) {                                           \
+        unsigned_type sum = name##_sum(array, n);                                                       \
+        return (double)sum / n;                                                                         \
+    }                                                                                                   \
+                                                                                                        \
+    static inline double name##_var(type *array, size_t n) {                                            \
+        double mu = name##_mean(array, n);                                                              \
+        double sigma2 = 0.0;                                                                            \
+        for (size_t i = 0; i < n; i++) {                                                                \
+            double dev = (double)array[i] - mu;                                                         \
+            sigma2 += dev * dev;                                                                        \
+        }                                                                                               \
+        return sigma2 / n;                                                                              \
+    }                                                                                                   \
+                                                                                                        \
+    static inline double name##_std(type *array, size_t n) {                                            \
+        double sigma2 = name##_var(array, n);                                                           \
+        return sqrt(sigma2);                                                                            \
+    }                                                                                                   \
+                                                                                                        \
     static inline type name##_product(type *array, size_t n) {                                          \
         type result = 0;                                                                                \
         for (size_t i = 0; i < n; i++) {                                                                \
