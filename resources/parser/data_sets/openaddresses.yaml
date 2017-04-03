@@ -4263,10 +4263,6 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Fall River County
-                    - filename: lawrence.csv
-                      add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Lawrence County
                     - filename: statewide.csv
 
             tn:
