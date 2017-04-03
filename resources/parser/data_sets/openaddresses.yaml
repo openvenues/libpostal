@@ -2222,6 +2222,7 @@ countries:
                       city_replacements:
                           city: Loveland
                     - filename: clear_creek.csv
+                      add_osm_boundaries: true
                       city_replacements:
                           state_district: Clear Creek County
                     - filename: conejos.csv
