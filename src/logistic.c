@@ -27,10 +27,8 @@ void softmax_matrix(double_matrix_t *matrix) {
     size_t num_rows = matrix->m;
     size_t num_cols = matrix->n;
 
-    double *values = matrix->values;
-
     for (int i = 0; i < num_rows; i++) {
+        double *values = double_matrix_get_row(matrix, i);
         softmax_vector(values, num_cols);
-        values += num_cols;
     }
 }
