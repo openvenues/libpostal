@@ -72,13 +72,11 @@ global:
 countries:
     ar:
         language: es
-        subdirs:
-            ba:
-                files:
-                    - filename: buenos_aires.csv
-                      add_osm_boundaries: true
-                      city_replacements:
-                          city: Buenos Aires
+        files:
+            - filename: city_of_buenos_aires.csv
+              add_osm_boundaries: true
+              city_replacements:
+                  city: Buenos Aires
 
     at:
         language: de
@@ -2203,6 +2201,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Arapahoe County
+                    - filename: boulder.csv
                     - filename: broomfield.csv
                     - filename: city_of_arvada.csv
                     - filename: city_of_aurora.csv
