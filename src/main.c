@@ -16,30 +16,28 @@
 static inline void print_output(char *address, libpostal_normalize_options_t options, bool use_json) {
     size_t num_expansions;
 
-    char **strings = libpostal_expand_address(address, options, &num_expansions);
+    char **expansions = libpostal_expand_address(address, options, &num_expansions);
 
     char *normalized;
 
     if (!use_json) {
         for (size_t i = 0; i < num_expansions; i++) {
-            normalized = strings[i];
+            normalized = expansions[i];
             printf("%s\n", normalized);        
-            free(normalized);
         }
     } else {
         printf("{\"expansions\": [");
         for (size_t i = 0; i < num_expansions; i++) {
-            normalized = strings[i];
+            normalized = expansions[i];
             char *json_string = json_encode_string(normalized);
             printf("%s%s", json_string, i < num_expansions - 1 ? ", ": "");
-            free(normalized);
             free(json_string);
         }
         printf("]}\n");
 
     }
 
-    free(strings);
+    libpostal_expansion_array_destroy(expansions, num_expansions);
 
 }
 
