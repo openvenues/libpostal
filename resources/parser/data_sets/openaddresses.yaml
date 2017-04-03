@@ -2372,6 +2372,7 @@ countries:
                           city: Lakeland
                     - filename: clay.csv
                     - filename: collier.csv
+                    - filename: desoto.csv
                     - filename: duval.csv
                     - filename: gulf.csv
                       add_osm_boundaries: true
