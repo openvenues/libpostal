@@ -52,7 +52,7 @@ address_parser_test_SOURCES = address_parser_test.c address_parser.c address_par
 address_parser_test_LDADD = libscanner.la  $(CBLAS_LIBS)
 address_parser_test_CFLAGS = $(CFLAGS_O3)
 
-language_classifier_train_SOURCES = language_classifier_train.c language_classifier.c language_features.c language_classifier_io.c logistic_regression_trainer.c logistic_regression.c logistic.c sparse_matrix.c sparse_matrix_utils.c features.c minibatch.c float_utils.c stochastic_gradient_descent.c normalize.c transliterate.c trie.c trie_search.c trie_utils.c address_dictionary.c string_utils.c file_utils.c utf8proc/utf8proc.c unicode_scripts.c shuffle.c
+language_classifier_train_SOURCES = language_classifier_train.c language_classifier.c language_features.c language_classifier_io.c logistic_regression_trainer.c logistic_regression.c logistic.c sparse_matrix.c sparse_matrix_utils.c features.c minibatch.c float_utils.c stochastic_gradient_descent.c ftrl.c regularization.c cartesian_product.c normalize.c transliterate.c trie.c trie_search.c trie_utils.c address_dictionary.c string_utils.c file_utils.c utf8proc/utf8proc.c unicode_scripts.c shuffle.c
 language_classifier_train_LDADD = libscanner.la $(CBLAS_LIBS)
 language_classifier_train_CFLAGS = $(CFLAGS_O3)
 language_classifier_SOURCES = language_classifier_cli.c language_classifier.c language_features.c logistic_regression.c logistic.c sparse_matrix.c features.c minibatch.c float_utils.c normalize.c transliterate.c trie.c trie_search.c trie_utils.c address_dictionary.c string_utils.c file_utils.c utf8proc/utf8proc.c unicode_scripts.c
