@@ -3801,6 +3801,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Las Cruces
+                    - filename: city_of_ruidoso.csv
                     - filename: city_of_santa_fe.csv
                     - filename: dona_ana-2.csv
                       add_osm_boundaries: true
