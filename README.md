@@ -4,7 +4,7 @@
 [![OpenCollective](https://opencollective.com/libpostal/sponsors/badge.svg)](#sponsors)
 [![OpenCollective](https://opencollective.com/libpostal/backers/badge.svg)](#backers) 
 
-libpostal is a C library for parsing/normalizing street addresses around the world using statistical NLP and open data. The goal of this project is to understand location-based strings in every language, everywhere.
+libpostal is a C library for parsing/normalizing street addresses around the world using statistical NLP and open data. The goal of this project is to understand location-based strings in every language, everywhere. For a more comprehensive overview of the research behind libpostal, check out the introductory blog post: [Statistical NLP on OpenStreetMap](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86)
 
 <span>&#x1f1e7;&#x1f1f7;</span> <span>&#x1f1eb;&#x1f1ee;</span>  <span>&#x1f1f3;&#x1f1ec;</span> :jp: <span>&#x1f1fd;&#x1f1f0; </span> <span>&#x1f1e7;&#x1f1e9; </span> <span>&#x1f1f5;&#x1f1f1; </span> <span>&#x1f1fb;&#x1f1f3; </span> <span>&#x1f1e7;&#x1f1ea; </span> <span>&#x1f1f2;&#x1f1e6; </span> <span>&#x1f1fa;&#x1f1e6; </span> <span>&#x1f1ef;&#x1f1f2; </span> :ru: <span>&#x1f1ee;&#x1f1f3; </span> <span>&#x1f1f1;&#x1f1fb; </span> <span>&#x1f1e7;&#x1f1f4; </span> :de: <span>&#x1f1f8;&#x1f1f3; </span>  <span>&#x1f1e6;&#x1f1f2; </span> :kr: <span>&#x1f1f3;&#x1f1f4; </span>  <span>&#x1f1f2;&#x1f1fd; </span> <span>&#x1f1e8;&#x1f1ff; </span> <span>&#x1f1f9;&#x1f1f7; </span> :es: <span>&#x1f1f8;&#x1f1f8; </span> <span>&#x1f1ea;&#x1f1ea; </span> <span>&#x1f1e7;&#x1f1ed; </span> <span>&#x1f1f3;&#x1f1f1; </span> :cn:  <span>&#x1f1f5;&#x1f1f9; </span> <span>&#x1f1f5;&#x1f1f7; </span> :gb: <span>&#x1f1f5;&#x1f1f8; </span> 
 
@@ -13,9 +13,6 @@ Addresses and the locations they represent are essential for any application dea
 <span>&#x1f1f7;&#x1f1f4; </span> <span>&#x1f1ec;&#x1f1ed; </span> <span>&#x1f1e6;&#x1f1fa; </span> <span>&#x1f1f2;&#x1f1fe; </span> <span>&#x1f1ed;&#x1f1f7; </span> <span>&#x1f1ed;&#x1f1f9; </span> :us: <span>&#x1f1ff;&#x1f1e6; </span> <span>&#x1f1f7;&#x1f1f8; </span> <span>&#x1f1e8;&#x1f1f1; </span> :it: <span>&#x1f1f0;&#x1f1ea; <span>&#x1f1e8;&#x1f1ed; </span> <span>&#x1f1e8;&#x1f1fa; </span> <span>&#x1f1f8;&#x1f1f0; </span> <span>&#x1f1e6;&#x1f1f4; </span> <span>&#x1f1e9;&#x1f1f0; </span> <span>&#x1f1f9;&#x1f1ff; </span> <span>&#x1f1e6;&#x1f1f1; </span> <span>&#x1f1e8;&#x1f1f4; </span> <span>&#x1f1ee;&#x1f1f1; </span> <span>&#x1f1ec;&#x1f1f9; </span>  :fr: <span>&#x1f1f5;&#x1f1ed; </span> <span>&#x1f1e6;&#x1f1f9; </span> <span>&#x1f1f1;&#x1f1e8; </span>  <span>&#x1f1ee;&#x1f1f8; <span>&#x1f1ee;&#x1f1e9; </span> </span> <span>&#x1f1e6;&#x1f1ea; </span> </span> <span>&#x1f1f8;&#x1f1f0; </span> <span>&#x1f1f9;&#x1f1f3; </span> <span>&#x1f1f0;&#x1f1ed; </span> <span>&#x1f1e6;&#x1f1f7; </span> <span>&#x1f1ed;&#x1f1f0; </span>
 
 The core library is written in pure C. Language bindings for [Python](https://github.com/openvenues/pypostal), [Ruby](https://github.com/openvenues/ruby_postal), [Go](https://github.com/openvenues/gopostal), [Java](https://github.com/openvenues/jpostal), [PHP](https://github.com/openvenues/php-postal), and [NodeJS](https://github.com/openvenues/node-postal) are officially supported and it's easy to write bindings in other languages.
-
-
-For a more comprehensive overview of the research behind libpostal, check out the introductory blog post: [Statistical NLP on OpenStreetMap](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86)
 
 Sponsors
 --------
