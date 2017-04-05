@@ -95,6 +95,31 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        "Congresswoman Yvette Clarke 222 Lenox Road, Ste 1 Brooklyn New York 11226",
+        options,
+        7,
+        (labeled_component_t){"house", "congresswoman yvette clarke"},
+        (labeled_component_t){"house_number", "222"},
+        (labeled_component_t){"road", "lenox road"},
+        (labeled_component_t){"unit", "ste 1"},
+        (labeled_component_t){"city_district", "brooklyn"},
+        (labeled_component_t){"state", "new york"},
+        (labeled_component_t){"postcode", "11226"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "ACLU DC P.O. Box 11637 Washington, DC 20008 United States",
+        options,
+        6,
+        (labeled_component_t){"house", "aclu dc"},
+        (labeled_component_t){"po_box", "p.o. box 11637"},
+        (labeled_component_t){"city", "washington"},
+        (labeled_component_t){"state", "dc"},
+        (labeled_component_t){"postcode", "20008"},
+        (labeled_component_t){"country", "united states"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
         "Make the Road New York 92-10 Roosevelt Avenue Jackson Heights Queens 11372",
         options,
         6,
@@ -113,6 +138,24 @@ TEST test_us_parses(void) {
         (labeled_component_t){"road", "do the right thing way"},
         (labeled_component_t){"suburb", "bed-stuy"},
         (labeled_component_t){"city_district", "bk"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "book stores near me",
+        options,
+        2,
+        (labeled_component_t){"category", "book stores"},
+        (labeled_component_t){"near", "near me"}
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "theatres in Fort Greene Brooklyn",
+        options,
+        4,
+        (labeled_component_t){"category", "theatres"},
+        (labeled_component_t){"near", "in"},
+        (labeled_component_t){"suburb", "fort greene"},
+        (labeled_component_t){"city_district", "brooklyn"}
     ));
 
     CHECK_CALL(test_parse_result_equals(
@@ -723,6 +766,18 @@ TEST test_jm_parses(void) {
         (labeled_component_t){"postcode", "2"},
         (labeled_component_t){"country", "jamaica"}
 
+    ));
+
+    CHECK_CALL(test_parse_result_equals(
+        "16½ Windward Road Kingston 2 Jamaica, West Indies",
+        options,
+        6,
+        (labeled_component_t){"house_number", "16½"},
+        (labeled_component_t){"road", "windward road"},
+        (labeled_component_t){"city", "kingston"},
+        (labeled_component_t){"postcode", "2"},
+        (labeled_component_t){"country", "jamaica"},
+        (labeled_component_t){"world_region", "west indies"}
     ));
 
     PASS();
@@ -1718,9 +1773,10 @@ TEST test_hu_parses(void) {
 
     CHECK_CALL(test_parse_result_equals(
         // Hungarian, 4-digit postal code
-        "1075 Budapest kazinczy utca, 14",
+        "Szimpla Kert 1075 Budapest kazinczy utca, 14",
         options,
-        4,
+        5,
+        (labeled_component_t){"house", "szimpla kert"},
         (labeled_component_t){"postcode", "1075"},
         (labeled_component_t){"city", "budapest"},
         (labeled_component_t){"road", "kazinczy utca"},
