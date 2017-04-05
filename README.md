@@ -134,38 +134,6 @@ For example, if you write a program called app.c, you can compile it like this:
 gcc app.c `pkg-config --cflags --libs libpostal`
 ```
 
-Bindings
---------
-
-Libpostal is designed to be used by higher-level languages.  If you don't see your language of choice, or if you're writing a language binding, please let us know!
-
-**Officially supported language bindings**
-
-- Python: [pypostal](https://github.com/openvenues/pypostal)
-- Ruby: [ruby_postal](https://github.com/openvenues/ruby_postal)
-- Go: [gopostal](https://github.com/openvenues/gopostal)
-- Java/JVM: [jpostal](https://github.com/openvenues/jpostal)
-- PHP: [php-postal](https://github.com/openvenues/php-postal)
-- NodeJS: [node-postal](https://github.com/openvenues/node-postal)
-- R: [poster](https://github.com/ironholds/poster)
-
-**Unofficial language bindings**
-
-- LuaJIT: [lua-resty-postal](https://github.com/bungle/lua-resty-postal)
-- Perl: [Geo::libpostal](https://metacpan.org/pod/Geo::libpostal)
-
-**Database extensions**
-
-- PostgreSQL: [pgsql-postal](https://github.com/pramsey/pgsql-postal)
-
-**Unofficial REST API**
-
-- Libpostal REST: [libpostal REST](https://github.com/johnlonganecker/libpostal-rest)
-
-**Libpostal REST Docker**
-
-- Libpostal REST Docker [Libpostal REST Docker](https://github.com/johnlonganecker/libpostal-rest-docker)
-
 Examples of parsing
 -------------------
 
@@ -350,6 +318,44 @@ cd src/
 
 address_parser is an interactive shell. Just type addresses and libpostal will
 parse them and print the result.
+
+
+Bindings
+--------
+
+Libpostal is designed to be used by higher-level languages.  If you don't see your language of choice, or if you're writing a language binding, please let us know!
+
+**Officially supported language bindings**
+
+- Python: [pypostal](https://github.com/openvenues/pypostal)
+- Ruby: [ruby_postal](https://github.com/openvenues/ruby_postal)
+- Go: [gopostal](https://github.com/openvenues/gopostal)
+- Java/JVM: [jpostal](https://github.com/openvenues/jpostal)
+- PHP: [php-postal](https://github.com/openvenues/php-postal)
+- NodeJS: [node-postal](https://github.com/openvenues/node-postal)
+- R: [poster](https://github.com/ironholds/poster)
+
+**Unofficial language bindings**
+
+- LuaJIT: [lua-resty-postal](https://github.com/bungle/lua-resty-postal)
+- Perl: [Geo::libpostal](https://metacpan.org/pod/Geo::libpostal)
+
+**Database extensions**
+
+- PostgreSQL: [pgsql-postal](https://github.com/pramsey/pgsql-postal)
+
+**Unofficial REST API**
+
+- Libpostal REST: [libpostal REST](https://github.com/johnlonganecker/libpostal-rest)
+
+**Libpostal REST Docker**
+
+- Libpostal REST Docker [Libpostal REST Docker](https://github.com/johnlonganecker/libpostal-rest-docker)
+
+**Libpostal ZeroMQ Docker**
+
+- Libpostal ZeroMQ Docker image: [pasupulaphani/libpostal-zeromq](https://hub.docker.com/r/pasupulaphani/libpostal-zeromq/) , Source: [Github](https://github.com/pasupulaphani/libpostal-docker) 
+
 
 Tests
 -----
