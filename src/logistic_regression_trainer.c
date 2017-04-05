@@ -122,7 +122,7 @@ bool logistic_regression_trainer_reset_params_ftrl(logistic_regression_trainer_t
     return ftrl_trainer_reset_params(ftrl_trainer, alpha, beta, lambda1, lambda2);
 }
 
-double logistic_regression_trainer_minibatch_cost(logistic_regression_trainer_t *self, feature_count_array *features, cstring_array *labels) {
+static double logistic_regression_trainer_minibatch_cost_params(logistic_regression_trainer_t *self, feature_count_array *features, cstring_array *labels, bool regularized) {
     size_t n = self->num_labels;
 
     sparse_matrix_t *x = feature_matrix(self->feature_ids, features);
@@ -141,22 +141,45 @@ double logistic_regression_trainer_minibatch_cost(logistic_regression_trainer_t 
 
     cost = logistic_regression_cost_function(weights, x, y, p_y);
 
-    if (self->optimizer_type == LOGISTIC_REGRESSION_OPTIMIZER_SGD) {
-        sgd_trainer_t *sgd_trainer = self->optimizer.sgd;
-        double reg_cost = stochastic_gradient_descent_reg_cost(sgd_trainer, self->batch_columns, x->m);
-        cost += reg_cost;
-    } else if (self->optimizer_type == LOGISTIC_REGRESSION_OPTIMIZER_FTRL) {
-        ftrl_trainer_t *ftrl_trainer = self->optimizer.ftrl;
-        double reg_cost = ftrl_reg_cost(ftrl_trainer, weights, self->batch_columns, x->m);
-        cost += reg_cost;
+    if (regularized) {
+        if (self->optimizer_type == LOGISTIC_REGRESSION_OPTIMIZER_SGD) {
+            sgd_trainer_t *sgd_trainer = self->optimizer.sgd;
+            double reg_cost = stochastic_gradient_descent_reg_cost(sgd_trainer, self->batch_columns, x->m);
+            cost += reg_cost;
+        } else if (self->optimizer_type == LOGISTIC_REGRESSION_OPTIMIZER_FTRL) {
+            ftrl_trainer_t *ftrl_trainer = self->optimizer.ftrl;
+            double reg_cost = ftrl_reg_cost(ftrl_trainer, weights, self->batch_columns, x->m);
+            cost += reg_cost;
+        }
     }
 
 exit_cost_matrices_created:
     double_matrix_destroy(p_y);
     uint32_array_destroy(y);
     sparse_matrix_destroy(x);
-    return cost;    
+    return cost;
 }
+
+inline double logistic_regression_trainer_minibatch_cost(logistic_regression_trainer_t *self, feature_count_array *features, cstring_array *labels) {
+    return logistic_regression_trainer_minibatch_cost_params(self, features, labels, false);
+}
+
+inline double logistic_regression_trainer_minibatch_cost_regularized(logistic_regression_trainer_t *self, feature_count_array *features, cstring_array *labels) {
+    return logistic_regression_trainer_minibatch_cost_params(self, features, labels, true);
+}
+
+double logistic_regression_trainer_regularization_cost(logistic_regression_trainer_t *self, size_t m) {
+    if (self->optimizer_type == LOGISTIC_REGRESSION_OPTIMIZER_SGD) {
+        sgd_trainer_t *sgd_trainer = self->optimizer.sgd;
+        return stochastic_gradient_descent_reg_cost(sgd_trainer, NULL, m);
+    } else if (self->optimizer_type == LOGISTIC_REGRESSION_OPTIMIZER_FTRL) {
+        ftrl_trainer_t *ftrl_trainer = self->optimizer.ftrl;
+        double_matrix_t *weights = logistic_regression_trainer_get_weights(self);
+        return ftrl_reg_cost(ftrl_trainer, weights, NULL, m);
+    }
+    return 0.0;
+}
+
 
 bool logistic_regression_trainer_train_minibatch(logistic_regression_trainer_t *self, feature_count_array *features, cstring_array *labels) {
     double_matrix_t *gradient = self->gradient;
@@ -233,16 +256,9 @@ double_matrix_t *logistic_regression_trainer_get_weights(logistic_regression_tra
 
     if (self->optimizer_type == LOGISTIC_REGRESSION_OPTIMIZER_SGD) {
         if (self->optimizer.sgd == NULL) return NULL;
-        double_matrix_t *full_weights = self->optimizer.sgd->theta;
-        uint32_t *columns = self->batch_columns->a;
 
-        for (size_t i = 0; i < m; i++) {
-            uint32_t col = columns[i];
-            double *theta_row = double_matrix_get_row(full_weights, col);
-            double *row = double_matrix_get_row(batch_weights, i);
-            for (size_t j = 0; j < n; j++) {
-                row[j] = theta_row[j];
-            }
+        if (!stochastic_gradient_descent_set_regularized_weights(self->optimizer.sgd, self->batch_weights, self->batch_columns)) {
+            return NULL;
         }
 
         return batch_weights;

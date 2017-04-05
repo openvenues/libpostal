@@ -28,6 +28,8 @@ sgd_trainer_t *sgd_trainer_new(size_t m, size_t n, bool fit_intercept, regulariz
         if (sgd->penalties == NULL) {
             goto exit_sgd_trainer_created;
         }
+        // Penalty for last_updated == 0 is 0
+        double_array_push(sgd->penalties, 0.0);
     } else {
         sgd->last_updated = NULL;
         sgd->penalties = NULL;
@@ -60,6 +62,7 @@ bool sgd_trainer_reset_params(sgd_trainer_t *self, double lambda, double gamma_0
         } else {
             double_array_clear(self->penalties);
         }
+        double_array_push(self->penalties, 0.0);
     }
 
     double_matrix_zero(self->theta);
@@ -70,7 +73,7 @@ bool sgd_trainer_reset_params(sgd_trainer_t *self, double lambda, double gamma_0
 }
 
 
-inline double stochastic_gradient_descent_gamma_t(double gamma_0, double lambda, uint32_t t) {
+static inline double stochastic_gradient_descent_gamma_t(double gamma_0, double lambda, uint32_t t) {
     return gamma_0 / (1.0 + lambda * gamma_0 * (double)t);
 }
 
@@ -194,18 +197,16 @@ bool stochastic_gradient_descent_update_sparse(sgd_trainer_t *self, double_matri
     double lambda_update = 0.0;
     double penalty = 0.0;
 
+    double *penalties = self->penalties->a;
+
     if (reg_type != REGULARIZATION_NONE) {
         lambda_update = lambda / (double)batch_size * gamma_t;
 
-        if (self->iterations > 0) {
-            uint32_t penalty_index = t - 1;
-
-            if (penalty_index >= self->penalties->n) {
-                log_info("t = %zu, penalty_index = %u, penalties->n = %zu\n", t, penalty_index, self->penalties->n);
-                return false;
-            }
-            penalty = self->penalties->a[penalty_index];
-        }        
+        if (t > self->penalties->n) {
+            log_info("t = %zu, penalties->n = %zu\n", t, self->penalties->n);
+            return false;
+        }
+        penalty = self->penalties->a[t];
     }
 
     for (size_t i = 0; i < num_updated; i++) {
@@ -218,20 +219,23 @@ bool stochastic_gradient_descent_update_sparse(sgd_trainer_t *self, double_matri
 
         if (self->iterations > 0) {
             if (last_updated >= self->penalties->n) {
-                log_info("t = %zu, last_updated = %zu, penalties->n = %zu\n", col, indices[i - 1], t, last_updated, self->penalties->n);
+                log_info("col = %u, t = %zu, last_updated = %zu, penalties->n = %zu\n", col, t, last_updated, self->penalties->n);
                 return false;
             }
-            last_update_penalty = self->penalties->a[last_updated];
+
+            last_update_penalty = penalties[last_updated];
 
             // Update the weights to what they would have been
             // if all the regularization updates were applied
 
-            double penalty_update = penalty - last_update_penalty;
+            if (last_updated < t) {
+                double penalty_update = penalty - last_update_penalty;
 
-            if (reg_type == REGULARIZATION_L2 && col >= i_start) {
-                regularize_l2(theta_i, n, penalty_update);
-            } else if (reg_type == REGULARIZATION_L1 && col >= i_start) {
-                regularize_l1(theta_i, n, penalty_update);
+                if (reg_type == REGULARIZATION_L2 && col >= i_start) {
+                    regularize_l2(theta_i, n, penalty_update);
+                } else if (reg_type == REGULARIZATION_L1 && col >= i_start) {
+                    regularize_l1(theta_i, n, penalty_update);
+                }
             }
         }
 
@@ -248,8 +252,9 @@ bool stochastic_gradient_descent_update_sparse(sgd_trainer_t *self, double_matri
             regularize_l1(theta_i, n, lambda_update);
         }
 
-        // Set the last updated timestep for this feature to time t
-        updates[col] = t;
+        // Set the last updated timestep for this feature to time t + 1
+        // since we're upating the iteration count
+        updates[col] = t + 1;
     }
 
     if (reg_type != REGULARIZATION_NONE) {
@@ -270,19 +275,28 @@ double stochastic_gradient_descent_reg_cost(sgd_trainer_t *self, uint32_array *u
     if (reg_type == REGULARIZATION_NONE) return cost;
 
     double_matrix_t *theta = self->theta;
+    size_t m = theta->m;
+    size_t n = theta->n;
 
-    uint32_t *indices = update_indices->a;
-    size_t num_indices = update_indices->n;
+    uint32_t *indices = NULL;
+    size_t num_indices = m;
 
-    size_t n = self->theta->n;
+    if (update_indices != NULL) {
+        uint32_t *indices = update_indices->a;
+        size_t num_indices = update_indices->n;
+    }
+    size_t i_start = self->fit_intercept ? 1 : 0;
 
     for (size_t i = 0; i < num_indices; i++) {
-        uint32_t row = indices[i];
+        uint32_t row = i;
+        if (indices != NULL) {
+            row = indices[i];
+        }
         double *theta_i = double_matrix_get_row(theta, row);
 
-        if (reg_type == REGULARIZATION_L2) {
+        if (reg_type == REGULARIZATION_L2 && row >= i_start) {
             cost += double_array_l2_norm(theta_i, n);
-        } else if (reg_type == REGULARIZATION_L1) {
+        } else if (reg_type == REGULARIZATION_L1 && row >= i_start) {
             cost += double_array_l1_norm(theta_i, n);
         }
     }
@@ -293,11 +307,10 @@ double stochastic_gradient_descent_reg_cost(sgd_trainer_t *self, uint32_array *u
         cost *= self->lambda;
     }
 
-    return cost * 1.0 / (double)batch_size;
+    return cost / (double)batch_size;
 }
 
-
-bool stochastic_gradient_descent_regularize_weights(sgd_trainer_t *self) {
+bool stochastic_gradient_descent_set_regularized_weights(sgd_trainer_t *self, double_matrix_t *w, uint32_array *indices) {
     if (self == NULL || self->theta == NULL) {
         if (self->theta == NULL) {
             log_info("stochastic_gradient_descent_regularize_weights theta NULL\n");
@@ -306,56 +319,87 @@ bool stochastic_gradient_descent_regularize_weights(sgd_trainer_t *self) {
     }
 
     double lambda = self->lambda;
+    double gamma_0 = self->gamma_0;
     regularization_type_t reg_type = self->reg_type;
 
-    if (lambda > 0.0 && reg_type != REGULARIZATION_NONE) {
-        double_matrix_t *theta = self->theta;
+    double_matrix_t *theta = self->theta;
 
-        size_t m = theta->m;
-        size_t n = theta->n;
+    size_t m = theta->m;
+    size_t n = theta->n;
 
-        size_t i_start = self->fit_intercept ? 1 : 0;
+    uint32_t *row_indices = NULL;
+    size_t num_indices = m;
 
-        double prev_penalty = 0.0;
-        if (reg_type != REGULARIZATION_NONE) {
-            if (self->iterations > 0) {
-                uint32_t penalty_index = self->iterations - 1;
-                if (penalty_index >= self->penalties->n) {
-                    log_error("penalty_index (%u) >= self->penalties->n (%zu)\n", penalty_index, self->penalties->n);
-                    return false;
-                }
-                prev_penalty = self->penalties->a[penalty_index];
-            } else {
-                prev_penalty = 1.0;
-            }
+    if (indices != NULL) {
+        row_indices = indices->a;
+        num_indices = indices->n;
+    }
+
+    uint32_t *updates = self->last_updated->a;
+    double *penalties = self->penalties->a;
+
+    if (w != NULL && !double_matrix_resize(w, num_indices, n)) {
+        log_error("Resizing weights failed\n");
+        return false;
+    }
+
+    size_t i_start = self->fit_intercept ? 1 : 0;
+    bool regularize = lambda > 0.0 && reg_type != REGULARIZATION_NONE;
+
+    for (size_t i = 0; i < num_indices; i++) {
+        uint32_t row_idx = i;
+        if (indices != NULL) {
+            row_idx = row_indices[i];
         }
 
-        uint32_t *updates = self->last_updated->a;
+        double *theta_i = double_matrix_get_row(theta, row_idx);
+        double *w_i = theta_i;
+        if (w != NULL) {
+            w_i = double_matrix_get_row(w, i);
+            double_array_raw_copy(w_i, theta_i, n);
+        }
 
-        for (size_t i = 0; i < m; i++) {
-            double *theta_i = double_matrix_get_row(theta, i);
+        if (regularize && i >= i_start) {
+            double most_recent_penalty = 0.0;
+            uint32_t most_recent_iter = 0;
+
+            if (self->iterations > 0) {
+                most_recent_iter = self->iterations;
+                if (most_recent_iter >= self->penalties->n) {
+                    log_error("penalty_index (%u) >= self->penalties->n (%zu)\n", most_recent_iter, self->penalties->n);
+                    return false;
+                }
+                most_recent_penalty = penalties[most_recent_iter];
+            } else {
+                most_recent_penalty = lambda / gamma_0;
+            }
+
             uint32_t last_updated = updates[i];
-            if (last_updated > self->penalties->n) {
+            if (last_updated >= self->penalties->n) {
                 log_error("last_updated (%zu) >= self->penalties-> (%zu)\n", last_updated, self->penalties->n);
                 return false;
             }
-            double last_update_penalty = self->penalties->a[last_updated];
+            double last_update_penalty = penalties[last_updated];
 
-            double penalty_update = prev_penalty - last_update_penalty;
+            if (last_updated < most_recent_iter) {
+                double penalty_update = most_recent_penalty - last_update_penalty;
 
-            if (reg_type == REGULARIZATION_L2 && i >= i_start) {
-                regularize_l2(theta_i, n, penalty_update);
-            } else if (reg_type == REGULARIZATION_L1 && i >= i_start) {
-                regularize_l1(theta_i, n, penalty_update);
+                if (reg_type == REGULARIZATION_L2) {
+                    regularize_l2(w_i, n, penalty_update);
+                } else if (reg_type == REGULARIZATION_L1) {
+                    regularize_l1(w_i, n, penalty_update);
+                }
             }
         }
-    }
 
-    if (reg_type != REGULARIZATION_NONE) {
-        uint32_array_set(self->last_updated->a, (self->iterations > 0 ? self->iterations - 1 : 0), self->last_updated->n);
     }
 
     return true;
+}
+
+
+bool stochastic_gradient_descent_regularize_weights(sgd_trainer_t *self) {
+    return stochastic_gradient_descent_set_regularized_weights(self, NULL, NULL);
 }
 
 double_matrix_t *stochastic_gradient_descent_get_weights(sgd_trainer_t *self) {

@@ -50,6 +50,8 @@ bool logistic_regression_trainer_reset_params_sgd(logistic_regression_trainer_t 
 bool logistic_regression_trainer_reset_params_ftrl(logistic_regression_trainer_t *self, double alpha, double beta, double lambda1, double lambda2);
 bool logistic_regression_trainer_train_minibatch(logistic_regression_trainer_t *self, feature_count_array *features, cstring_array *labels);
 double logistic_regression_trainer_minibatch_cost(logistic_regression_trainer_t *self, feature_count_array *features, cstring_array *labels);
+double logistic_regression_trainer_minibatch_cost_regularized(logistic_regression_trainer_t *self, feature_count_array *features, cstring_array *labels);
+double logistic_regression_trainer_regularization_cost(logistic_regression_trainer_t *self, size_t m);
 
 double_matrix_t *logistic_regression_trainer_get_weights(logistic_regression_trainer_t *self);
 double_matrix_t *logistic_regression_trainer_get_regularized_weights(logistic_regression_trainer_t *self);

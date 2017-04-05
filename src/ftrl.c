@@ -178,22 +178,33 @@ bool ftrl_update_gradient(ftrl_trainer_t *self, double_matrix_t *gradient, doubl
     return true;
 }
 
-double ftrl_reg_cost(ftrl_trainer_t *self, double_matrix_t *theta, uint32_array *indices, size_t batch_size) {
+double ftrl_reg_cost(ftrl_trainer_t *self, double_matrix_t *theta, uint32_array *update_indices, size_t batch_size) {
     double cost = 0.0;
 
     size_t m = theta->m;
     size_t n = theta->n;
 
+    uint32_t *indices = NULL;
+    size_t num_indices = m;
+
+    if (update_indices != NULL) {
+        uint32_t *indices = update_indices->a;
+        size_t num_indices = update_indices->n;
+    }
+    size_t i_start = self->fit_intercept ? 1 : 0;
+
     double lambda1 = self->lambda1;
     double lambda2 = self->lambda2;
-
-    size_t i_start = self->fit_intercept ? 1 : 0;
 
     double l2_cost = 0.0;
     double l1_cost = 0.0;
 
     for (size_t i = 0; i < m; i++) {
-        uint32_t row_idx = indices->a[i];
+        uint32_t row_idx = i;
+        if (indices != NULL) {
+            row_idx = indices[i];
+        }
+
         if (row_idx >= i_start) {
             double *theta_i = double_matrix_get_row(theta, i);
 
@@ -205,8 +216,9 @@ double ftrl_reg_cost(ftrl_trainer_t *self, double_matrix_t *theta, uint32_array 
     cost += lambda2 / 2.0 * l2_cost;
     cost += lambda1 * l1_cost;
 
-    return cost;
+    return cost * 1.0 / (double)batch_size;
 }
+
 
 double_matrix_t *ftrl_weights_finalize(ftrl_trainer_t *self) {
     if (!ftrl_set_weights(self, self->z, NULL)) {

@@ -38,6 +38,7 @@ bool sgd_trainer_reset_params(sgd_trainer_t *self, double lambda, double gamma_0
 bool stochastic_gradient_descent_update(sgd_trainer_t *self, double_matrix_t *gradient, size_t batch_size);
 bool stochastic_gradient_descent_update_sparse(sgd_trainer_t *self, double_matrix_t *gradient, uint32_array *update_indices, size_t batch_size);
 double stochastic_gradient_descent_reg_cost(sgd_trainer_t *self, uint32_array *indices, size_t batch_size);
+bool stochastic_gradient_descent_set_regularized_weights(sgd_trainer_t *self, double_matrix_t *w, uint32_array *indices);
 bool stochastic_gradient_descent_regularize_weights(sgd_trainer_t *self);
 double_matrix_t *stochastic_gradient_descent_get_weights(sgd_trainer_t *self);
 sparse_matrix_t *stochastic_gradient_descent_get_weights_sparse(sgd_trainer_t *self);
