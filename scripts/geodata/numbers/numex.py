@@ -34,7 +34,8 @@ gender_map = {
 CATEGORY_PLURAL = 'CATEGORY_PLURAL'
 CATEGORY_DEFAULT = 'CATEGORY_DEFAULT'
 
-valid_numex_keys = set(['name', 'value', 'type', 'left', 'right', 'gender', 'category', 'radix'])
+valid_numex_keys = set(['name', 'value', 'type', 'left', 'right', 'gender', 'category', 'radix',
+                        'multiply_gte', 'exact_multiple_only', 'left_separator', 'right_separator'])
 
 valid_ordinal_keys = set(['suffixes', 'gender', 'category'])
 
@@ -138,7 +139,10 @@ def parse_numex_rules(dirname=NUMEX_DATA_DIR, outfile=NUMEX_RULES_FILE):
             key = rule['name']
             value = rule['value']
             radix = rule.get('radix', 10)
-            category = category_map[rule.get('category')]
+            rule_category = rule.get('category')
+            category = category_map.get(rule_category)
+            if category is None:
+                continue
             left_context_type = left_context_map[rule.get('left')]
             right_context_type = right_context_map[rule.get('right')]
             all_keys.append(unicode(numex_key_template.format(key=key)))
