@@ -144,7 +144,7 @@ that builds with libpostal when you run ```make```. Note that the parser can han
 commas vs. no commas as well as various casings and permutations of components (if the input
 is e.g. just city or just city/postcode).
 
-![parser](https://cloud.githubusercontent.com/assets/238455/13209628/2c465b50-d8f4-11e5-8e70-915c6b6d207b.gif)
+![parser](https://cloud.githubusercontent.com/assets/238455/24703087/acbe35d8-19cf-11e7-8850-77fb1c3446a7.gif)
 
 The parser achieves very high accuracy on held-out data, currently 99.45%
 correct full parses (meaning a 1 in the numerator for getting *every* token
