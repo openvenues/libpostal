@@ -241,7 +241,7 @@ Here's a short list of some less straightforward normalizations in various langu
 | Marktstrasse 14                     | markt straße 14                         |
 
 libpostal currently supports these types of normalizations in *60+ languages*,
-and you can [add more](https://github.com/openvenues/libpostal/tree/master/resources/dictionaries)(without having to write any C).
+and you can [add more](https://github.com/openvenues/libpostal/tree/master/resources/dictionaries) (without having to write any C).
 
 For further reading and some bizarre address edge-cases, see:
 [Falsehoods Programmers Believe About Addresses](https://www.mjt.me.uk/posts/falsehoods-programmers-believe-about-addresses/).
