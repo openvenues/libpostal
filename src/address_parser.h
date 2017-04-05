@@ -200,6 +200,7 @@ typedef struct address_parser {
         averaged_perceptron_t *ap;
         crf_t *crf;
     } model;
+    address_parser_context_t *context;
     trie_t *vocab;
     trie_t *phrases;
     address_parser_types_array *phrase_types;
@@ -214,7 +215,7 @@ address_parser_t *address_parser_new_options(parser_options_t options);
 address_parser_t *get_address_parser(void);
 bool address_parser_load(char *dir);
 
-libpostal_address_parser_response_t *address_parser_parse(char *address, char *language, char *country, address_parser_context_t *context);
+libpostal_address_parser_response_t *address_parser_parse(char *address, char *language, char *country);
 void address_parser_destroy(address_parser_t *self);
 
 char *address_parser_normalize_string(char *str);

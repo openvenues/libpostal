@@ -1021,17 +1021,13 @@ inline libpostal_address_parser_options_t libpostal_get_address_parser_default_o
 }
 
 libpostal_address_parser_response_t *libpostal_parse_address(char *address, libpostal_address_parser_options_t options) {
-    address_parser_context_t *context = address_parser_context_new();
-    libpostal_address_parser_response_t *parsed = address_parser_parse(address, options.language, options.country, context);
+    libpostal_address_parser_response_t *parsed = address_parser_parse(address, options.language, options.country);
 
     if (parsed == NULL) {
         log_error("Parser returned NULL\n");
-        address_parser_context_destroy(context);
         libpostal_address_parser_response_destroy(parsed);
         return NULL;
     }
-
-    address_parser_context_destroy(context);
 
     return parsed;
 }
