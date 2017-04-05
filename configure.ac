@@ -75,9 +75,7 @@ AS_IF([test "x$enable_sse2" != "xno"], [
     CFLAGS="-mfpmath=sse -msse2 -DUSE_SSE ${CFLAGS}"
 ])
 
-AC_CHECK_HEADERS([cblas.h], [
-    AX_CBLAS()
-])
+AC_CHECK_HEADER(cblas.h, [AX_CBLAS])
 
 AC_ARG_ENABLE([data-download],
               [  --disable-data-download    Disable downloading data],
