@@ -46,9 +46,7 @@ int main(int argc, char **argv) {
 
     printf("Welcome to libpostal's address parser.\n\n");
     printf("Type in any address to parse and print the result.\n\n");
-    printf("Special commands:\n\n");
-    printf(".language [code] to specify a language\n");
-    printf(".country [code] to specify a country\n");
+    printf("Special commands:\n");
     printf(".exit to quit the program\n\n");
 
     char *language = NULL;
