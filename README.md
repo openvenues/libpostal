@@ -433,8 +433,8 @@ tagged traning examples for every inhabited country in the world. Many types of 
 are performed to make the training data resemble real messy geocoder input as closely as possible.
 
 - **Language classification**: multinomial logistic regression
-trained on all of OpenStreetMap ways, addr:* tags, toponyms and formatted
-addresses. Labels are derived using point-in-polygon tests in Quattroshapes
+trained (using the [FTRL-Proximal](https://research.google.com/pubs/archive/41159.pdf) method to induce sparsity) on all of OpenStreetMap ways, addr:* tags, toponyms and formatted
+addresses. Labels are derived using point-in-polygon tests for both OSM countries
 and official/regional languages for countries and admin 1 boundaries
 respectively. So, for example, Spanish is the default language in Spain but
 in different regions e.g. Catalunya, Galicia, the Basque region, the respective 
