@@ -82,6 +82,13 @@ int main(int argc, char **argv) {
             char *str_key = char_array_get_string(key);
 
             trie_add(numex_table->trie, str_key, value);
+
+            if (string_contains_hyphen(str_key)) {
+                char *replaced = string_replace_char(str_key, '-', ' ');
+                trie_add(numex_table->trie, replaced, value);
+                free(replaced);
+            }
+
         }
 
         for (j = ordinal_indicator_index; j < ordinal_indicator_index + num_ordinal_indicators; j++) {

@@ -1,0 +1,4 @@
+istok|i
+jug|j
+sjever|s
+zapad|z

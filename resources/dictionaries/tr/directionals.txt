@@ -1,0 +1,4 @@
+batı|bati|b
+doğu|dogu|d
+güney|guney|g
+kuzey|k

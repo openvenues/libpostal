@@ -1,0 +1,11 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "city"
+        "10": "city_district"
+
+    overrides:
+        id:
+            relation:
+                # Doha listed as both admin_level 4 and 10
+                "3671049": "city"

@@ -1,0 +1,12 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "6": "state_district"
+        "9": "city_district"
+
+    overrides:
+        id:
+            relation:
+                # Mogadishu
+                "1720125": "city"

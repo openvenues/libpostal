@@ -1,0 +1,951 @@
+# Note: default config is for France. Canadian, Swiss, Belgian, and other
+# conventions go in country overrides
+
+components:
+    level:
+        # If no floor number is specified
+        null_probability: 0.8
+        alphanumeric_probability: 0.2
+
+    staircase:
+        null_probability: 0.99
+        alphanumeric_probability: 0.01
+
+    entrance:
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
+
+    unit:
+        # If no unit number is specified
+        null_probability: 0.8
+        alphanumeric_probability: 0.2
+
+    combinations:
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: /
+                  probability: 0.8
+                - separator: "-"
+                  probability: 0.1
+                - separator: " - "
+                  probability: 0.1
+            probability: 0.005
+
+numbers:
+    default: &numero
+        canonical: numéro
+        abbreviated: "nº"
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.5
+        sample_probability: 0.3
+        sample_exclude:
+            - "#" # Used in numeric affix. Needs to be quoted, otherwise it's a comment
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: "#"
+            direction: left
+        # Probabilities for numbers
+        numeric_probability: 0.7
+        numeric_affix_probability: 0.3
+
+and:
+    default: &and
+        canonical: et
+        abbreviated: "&"
+        canonical_probability: 0.7
+        abbreviated_probability: 0.25
+        sample: true
+        sample_probability: 0.05
+
+house_numbers:
+    # sans numéro (s/n) addresses
+    no_number: 
+        canonical: sans numéro
+        abbreviated: s/n
+        sample: true
+        canonical_probability: 0.1
+        abbreviated_probability: 0.7
+        sample_probability: 0.2
+
+    alphanumeric:
+        default: *numero
+
+    alphanumeric_phrase_probability: 0.01
+    no_number_probability: 0.05 # With this probability, use sin número if no house_number is specified
+
+levels:
+    floor: &etage
+        canonical: étage
+        abbreviated: ét
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.1
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.05
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        numeric_probability: 0.75
+        ordinal_probability: 0.25
+    niveau: &niveau
+        canonical: niveau
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.05
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        numeric_probability: 0.75
+        ordinal_probability: 0.25
+    bel_etage: &bel_etage
+        canonical: bel étage
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+    etage_noble: &etage_noble
+        canonical: étage noble
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+    dernier_etage: &dernier_etage
+        canonical: dernier étage
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+    basement: &sous_sol
+        canonical: sous-sol
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        number_abs_value: true
+        number_min_abs_value: 1
+        standalone_probability: 0.99
+        numeric_probability: 0.005
+        ordinal_probability: 0.005
+    sub_basement: &soubassement
+        canonical: soubassement
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        number_abs_value: true
+        number_min_abs_value: 2
+        number_subtract_abs_value: 1
+        standalone_probability: 0.99
+        numeric_probability: 0.005
+        ordinal_probability: 0.005
+    mezzanine: &entresol
+        canonical: entresol
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    # Ground floor
+    rez_de_chaussee: &rez_de_chaussee
+        canonical: rez-de-chaussée
+        abbreviated: rdc
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.3
+        sample_probability: 0.3
+    rez_de_chaussee_bas: &rez_de_chaussee_bas
+        canonical: rez-de-chaussée bas
+        abbreviated: rcb
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+    rez_de_chaussee_haut: &rez_de_chaussee_haut
+        canonical: rez-de-chaussée haut
+        abbreviated: rch
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+    parterre: &parterre
+        canonical: parterre
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    rez_de_jardin: &rez_de_jardin
+        canonical: rez-de-jardin
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    aliases:
+        "<-1":
+            default: *sous_sol
+            probability: 0.6
+            alternatives:
+                - alternative: *soubassement
+                  probability: 0.3995
+                - alternative: *etage
+                  probability: 0.0005
+        "-1":
+            default: *sous_sol
+            probability: 0.9995
+            alternatives:
+                - alternative: *etage
+                  probability: 0.0005
+        half_floors:
+            default: *entresol
+        "0":
+            default: *rez_de_chaussee
+            probability: 0.74
+            alternatives:
+                - alternative: *rez_de_jardin
+                  probability: 0.01
+                - alternative: *rez_de_chaussee_bas
+                  probability: 0.1
+                - alternative: *rez_de_chaussee_haut
+                  probability: 0.1
+                - alternative: *etage
+                  probability: 0.05
+        "1":
+            default: *etage
+            probability: 0.8
+            alternatives:
+                - alternative: *bel_etage
+                  probability: 0.1
+                - alternative: *etage_noble
+                  probability: 0.1
+        top:
+            default: *etage
+            probability: 0.9
+            alternatives:
+                - alternative: *dernier_etage
+                  probability: 0.1
+
+    alphanumeric:
+        default: *etage
+        probability: 0.95
+        alternatives:
+            - alternative: *niveau
+              probability: 0.05
+        numeric_probability: 0.99
+        alpha_probability: 0.01
+
+    numbering_starts_at: 0
+
+
+cross_streets:
+    # 26th & 6th Avenue
+    and: *and
+    # 26th @ Broadway
+    a: &a
+        canonical: à
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+
+    au: &au
+        canonical: au
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+
+    corner_of: &langle_de
+        canonical: l'angle de
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+
+    at_the_corner_of: &a_langle_de
+        canonical: à l'angle de
+
+    intersection:
+        default: *and
+        probability: 0.7
+        alternatives:
+            - alternative: *a
+              probability: 0.025
+            - alternative: *au
+              probability: 0.025
+            - alternative: *langle_de
+              probability: 0.15
+            - alternative: *a_langle_de
+              probability: 0.1
+
+    # 26th betw 5th Ave and 6th Ave
+    between:
+        canonical: entre
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probability: 0.5 # Probability of using parentheses e.g. (between 5th and 6th)
+
+directions:
+    right: &droit
+        canonical: droit
+        abbreviated: dr
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.2
+        sample_probability: 0.3
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: d
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.7
+        numeric_affix_probability: 0.3
+    left: &gauche
+        canonical: gauche
+        abbreviated: g
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: g
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.6
+    rear: &arriere
+        canonical: arrière
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    front: &avant
+        canonical: avant
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    alternatives:
+        - alternative: *droit
+          probability: 0.49
+        - alternative: *gauche
+          probability: 0.49
+        - alternative: *arriere
+          probability: 0.01
+        - alternative: *avant
+          probability: 0.01
+
+    anteroposterior:
+        alternatives:
+            - alternative: *avant
+              probability: 0.5
+            - alternative: *arriere
+              probability: 0.5
+
+    lateral:
+        alternatives:
+            - alternative: *droit
+              probability: 0.5
+            - alternative: *gauche
+              probability: 0.5
+
+cardinal_directions:
+    east: &est
+        canonical: est
+        abbreviated: e
+        canonical_probability: 0.4
+        abbreviated_probability: 0.6 
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: e
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    west: &ouest
+        canonical: ouest
+        abbreviated: o
+        canonical_probability: 0.4
+        abbreviated_probability: 0.6
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: o
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    north: &nord
+        canonical: nord
+        abbreviated: n
+        canonical_probability: 0.4
+        abbreviated_probability: 0.6
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: n
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    south: &sud
+        canonical: sud
+        abbreviated: s
+        canonical_probability: 0.4
+        abbreviated_probability: 0.6
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: s
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    alternatives:
+        - alternative: *nord
+          probability: 0.25
+        - alternative: *est
+          probability: 0.25
+        - alternative: *sud
+          probability: 0.25
+        - alternative: *ouest
+          probability: 0.25
+
+entrances:
+    entrance: &entrance
+        canonical: entrance
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Entrance 1, Entrance A, etc.
+    alphanumeric: &entrance_alphanumeric
+        default: *entrance
+        numeric_probability: 0.1 # e.g. Entrance 1
+        alpha_probability: 0.85 # e.g. Entrnace A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            modifier:
+                direction: right # e.g. Entrance Nord
+                direction_probability: 0.95
+                alternatives:
+                    - alternative: *nord
+                    - alternative: *sud
+                    - alternative: *est
+                    - alternative: *ouest
+                    - alternative: *droit
+                    - alternative: *gauche
+                    - alternative: *arriere
+                    - alternative: *avant
+
+staircases:
+    escalier: &escalier
+        canonical: escalier
+        abbreviated: esc
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+
+    alphanumeric:
+        # For alphanumerics, Escalier A, Esc 1, etc.
+        default: *escalier
+        numeric_probability: 0.6 # e.g. Escalier 1
+        alpha_probability: 0.35 # e.g. Escalier A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: right # e.g. Escalier Izq
+            direction_probability: 0.9
+            modifier:
+                alternatives:
+                    - alternative: *nord
+                    - alternative: *sud
+                    - alternative: *est
+                    - alternative: *ouest
+                    - alternative: *droit
+                    - alternative: *gauche
+                    - alternative: *arriere
+                    - alternative: *avant
+
+
+po_boxes:
+    boite_postal: &boite_postal
+        canonical: boîte postale
+        abbreviated: bp
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2 # BP No 1234
+        numeric_probability: 1.0
+    case_postal: &case_postal
+        canonical: case postale
+        abbreviated: cp
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2 # CP No 1234
+        numeric_probability: 1.0
+    alphanumeric:
+        sample: false
+        default: *boite_postal
+        numeric_probability: 0.9 # BP 123
+        alpha_probability: 0.05 # BP A
+        numeric_plus_alpha_probability: 0.04 # BP 123G
+        alpha_plus_numeric_probability: 0.01 # BP A123
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+
+units:
+    flat: &appartement
+        canonical: appartement
+        abbreviated: app
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.5
+        sample_probability: 0.3
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+    unit: &unite
+        canonical: unité
+        abbreviated: u
+        sample: true
+        canonical_probability: 0.8
+        abbreviated_probability: 0.1
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+    suite: &suite
+        canonical: suite
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4
+    office: &bureau
+        canonical: bureau
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.3
+    door: &porte
+        canonical: porte
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.1
+    room: &salle
+        canonical: salle
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+    chambre: &chambre
+        canonical: chambre
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+    boite: &boite
+        canonical: boîte
+        abbreviated: bte
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.4
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+    lot: &lotissement
+        canonical: lotissement
+        abbreviated: lot
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.5
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+    parcelle: &parcelle
+        canonical: parcelle
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+
+    allotments:
+        lot:
+            default: *lotissement
+            numeric_probability: 0.8
+            alphanumeric_probability: 0.1
+            alpha_probability: 0.1
+        parcel:
+            default: *parcelle
+            numeric_probability: 0.3
+            alphanumeric_probability: 0.3
+            alpha_probability: 0.4
+        lot_probability: 0.9
+        parcel_probability: 0.06
+        lot_plus_parcel_probability: 0.02
+        parcel_plus_lot_probability: 0.02
+
+    alphanumeric: &unit_alphanumeric
+        default: *appartement
+        probability: 0.85
+        alternatives:
+              # e.g. just plain #3 or No. 4
+            - alternative: *numero
+              probability: 0.05
+            - alternative: *porte
+              probability: 0.095
+            - alternative: *chambre
+              probability: 0.005
+        numeric_probability: 0.9 # e.g. Appartement 1
+        numeric_plus_alpha_probability: 0.03 # e.g. 1A
+        alpha_plus_numeric_probability: 0.03 # e.g. A1
+        alpha_probability: 0.04 # e.g. Appartement A
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        # Separate random probability for adding directions like 2D, 2G, etc.
+        add_direction: true
+        add_direction_probability: 0.1
+
+        # Add directions for plain numbers
+        add_direction_numeric: true
+        # Add direction only e.g. Unité Gauche
+        add_direction_standalone: true
+
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.1
+
+    zones:
+        residential: *unit_alphanumeric
+        commercial:
+            default: *bureau
+            probability: 0.8
+            alternatives:
+                - alternative: *suite
+                  probability: 0.2
+
+            numeric_probability: 0.9 # e.g. Bureau 1
+            numeric_plus_alpha_probability: 0.01 # e.g. Bureau 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. Bureau A1
+            alpha_probability: 0.08 # e.g. Bureau A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1
+
+        industrial:
+            default: *lotissement
+            probability: 0.5
+            alternatives:
+                - alternative: *bureau
+                  probability: 0.3
+                - alternative: *unite
+                  probability: 0.19
+                - alternative: *parcelle
+                  probability: 0.01
+
+            numeric_probability: 0.9 # e.g. Lote 1
+            numeric_plus_alpha_probability: 0.01 # e.g. Lote 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. Lote A1
+            alpha_probability: 0.08 # e.g. Lote A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1
+
+        university:
+            default: *salle
+            probability: 0.9
+            alternatives:
+                - alternative: *porte
+                  probability: 0.1
+
+            numeric_probability: 0.9 # e.g. Salle 1
+            numeric_plus_alpha_probability: 0.01 # e.g. Salle 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. Salle A1
+            alpha_probability: 0.08 # e.g. Salle A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1
+
+categories:
+    near:
+        default:
+            canonical: près de
+        probability: 0.6
+        alternatives:
+            - alternative:
+                canonical: à coté de
+              probability: 0.05
+            - alternative:
+                canonical: proche de
+              probability: 0.05
+            - alternative:
+                canonical: proches de
+              probability: 0.05
+            - alternative:
+                canonical: a cote de
+              probability: 0.05
+            - alternative:
+                canonical: pres de
+              probability: 0.05
+            - alternative:
+                canonical: aux environs de
+              probability: 0.05
+            - alternative:
+                canonical: à proximité de
+              probability: 0.05
+            - alternative:
+                canonical: a proximite de
+              probability: 0.05
+    nearby:
+        default:
+            canonical: proche
+        probability: 0.4
+        alternatives:
+            - alternative:
+                canonical: à coté
+              probability: 0.05
+            - alternative:
+                canonical: a cote
+              probability: 0.05
+            - alternative:
+                canonical: près d'ici
+              probability: 0.05
+            - alternative:
+                canonical: près dici
+              probability: 0.05
+            - alternative:
+                canonical: pres d'ici
+              probability: 0.05
+            - alternative:
+                canonical: pres dici
+              probability: 0.05
+            - alternative:
+                canonical: près de là
+              probability: 0.05
+            - alternative:
+                canonical: pres de la
+              probability: 0.05
+            - alternative:
+                canonical: par ici
+              probability: 0.05
+            - alternative:
+                canonical: dans les alentours
+              probability: 0.05
+            - alternative:
+                canonical: à proximité de là
+              probability: 0.05
+            - alternative:
+                canonical: a proximite de la
+              probability: 0.05
+    near_me:
+        default:
+            canonical: proche de chez moi
+        probability: 0.6
+        alternatives:
+            - alternative:
+                canonical: près de moi
+              probability: 0.1
+            - alternative:
+                canonical: pres de moi
+              probability: 0.1
+            - alternative:
+                canonical: à proximité de moi
+              probability: 0.1
+            - alternative:
+                canonical: a proximite de moi
+              probability: 0.1
+    in:
+        default:
+            canonical: à
+        probability: 0.7
+        alternatives:
+            - alternative:
+                canonical: en
+              probability: 0.1
+            - alternative:
+                canonical: a
+              probability: 0.1
+            - alternative:
+                canonical: dans
+              probability: 0.1
+
+    # Probabilities of each phrase
+    near_probability: 0.35
+    nearby_probability: 0.2
+    near_me_probability: 0.1
+    in_probability: 0.35
+
+countries:
+    # Belgium
+    be:
+        units:
+            alphanumeric:
+                default: *boite
+                probability: 0.75
+                alternatives:
+                    - alternative: *appartement
+                      probability: 0.1
+                      # e.g. just plain #3 or No. 4
+                    - alternative: *numero
+                      probability: 0.05
+                    - alternative: *porte
+                      probability: 0.095
+                    - alternative: *chambre
+                      probability: 0.005
+    # Canada
+    ca:
+        components:
+
+            unit:
+                null_probability: 0.6
+                alphanumeric_probability: 0.4
+            combinations:
+                -
+                    components:
+                        - unit
+                        - house_number
+                    label: house_number
+                    separators:
+                        - separator: /
+                          probability: 0.04
+                        - separator: "-"
+                          probability: 0.95
+                        - separator: " - "
+                          probability: 0.01
+                    probability: 0.1
+        levels:
+            numbering_starts_at: 1
+            aliases:
+                "1":
+                    # Have to do this because etage is numeric
+                    # and has keys like "numeric_probability" which 
+                    # we don't want to infect rez_de_chausee when doing
+                    # a recursive merge
+                    default: *etage
+                    probability: 0.1
+                    alternatives:
+                        - alternative: *rez_de_chaussee
+                          probability: 0.8
+                        - alternative: *bel_etage
+                          probability: 0.05
+                        - alternative: *etage_noble
+                          probability: 0.05
+
+        units:
+            alphanumeric:
+                # More common to use in in Canada, as in the US
+                use_floor_probability: 0.35
+
+        po_boxes:
+            alphanumeric:
+                default: *case_postal
+    # Switzerland
+    ch:
+        levels:
+            aliases:
+                "0":
+                    default: *parterre
+                    probability: 0.9
+                    alternatives:
+                        - alternative: *rez_de_chaussee
+                          probability: 0.05
+                        - alternative: *etage
+                          probability: 0.05
+        po_boxes:
+            alphanumeric:
+                default: *case_postal

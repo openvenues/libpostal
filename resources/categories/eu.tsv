@@ -1,0 +1,531 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	aireportu
+aeroway	aerodrome	1	aireportus
+amenity	arts_centre	0	arte zentroa
+amenity	arts_centre	1	arte zentroas
+amenity	auditorium	0	entzunareto
+amenity	auditorium	1	entzunaretos
+amenity	bank	0	banku
+amenity	bank	1	bankus
+amenity	bar	0	taberna
+amenity	bar	1	tabernas
+amenity	bicycle_rental	0	txirrindu alokairua
+amenity	bicycle_rental	1	txirrindu alokairuas
+amenity	brothel	0	putetxe
+amenity	brothel	1	putetxes
+amenity	bureau_de_change	0	diru-truke bulegoa
+amenity	bureau_de_change	1	diru-truke bulegoas
+amenity	bus_station	0	autobus-geltoki
+amenity	bus_station	1	autobus-geltokis
+amenity	cafe	0	kafetegi
+amenity	cafe	1	kafetegis
+amenity	car_rental	0	ibilgailu-alokairu
+amenity	car_rental	1	ibilgailu-alokairus
+amenity	car_wash	0	auto garbiketa
+amenity	car_wash	1	auto garbiketas
+amenity	casino	0	kasino
+amenity	casino	1	kasinos
+amenity	cinema	0	zinema
+amenity	cinema	1	zinemas
+amenity	clinic	0	klinika
+amenity	clinic	1	klinikas
+amenity	club	0	diskoteka
+amenity	club	1	diskotekas
+amenity	community_centre	0	komunitate zentroa
+amenity	community_centre	1	komunitate zentroas
+amenity	courthouse	0	epaitegia
+amenity	courthouse	1	epaitegias
+amenity	crematorium	0	errauste labe
+amenity	crematorium	1	errauste labes
+amenity	dentist	0	dentista
+amenity	dentist	1	dentistas
+amenity	doctors	0	medikuak
+amenity	doctors	1	medikuaks
+amenity	drinking_water	0	edateko ur
+amenity	drinking_water	1	edateko urs
+amenity	driving_school	0	autoeskola
+amenity	driving_school	1	autoeskolas
+amenity	embassy	0	enbaxada
+amenity	embassy	1	enbaxadas
+amenity	emergency_phone	0	larrialdi telefonoa
+amenity	emergency_phone	1	larrialdi telefonoas
+amenity	fast_food	0	janari azkarra
+amenity	fast_food	1	janari azkarras
+amenity	ferry_terminal	0	ferry terminal
+amenity	ferry_terminal	1	ferry terminals
+amenity	fire_station	0	suhiltzaileak
+amenity	fire_station	1	suhiltzaileaks
+amenity	fountain	0	iturri
+amenity	fountain	1	iturris
+amenity	grave_yard	0	hilerri
+amenity	grave_yard	1	hilerris
+amenity	gym	0	osasun zentroa / gimnasioa
+amenity	gym	1	osasun zentroa / gimnasioas
+amenity	health_centre	0	osasun zentroa
+amenity	health_centre	1	osasun zentroas
+amenity	hospital	0	ospitalea
+amenity	hospital	1	ospitaleas
+amenity	hotel	0	hotel
+amenity	hotel	1	hotels
+amenity	ice_cream	0	izozkiak
+amenity	ice_cream	1	izozkiaks
+amenity	kindergarten	0	haurtzaindegi
+amenity	kindergarten	1	haurtzaindegis
+amenity	library	0	liburutegia
+amenity	library	1	liburutegias
+amenity	market	0	merkatu
+amenity	market	1	merkatus
+amenity	marketplace	0	merkatua
+amenity	marketplace	1	merkatuas
+amenity	mountain_rescue	0	mendiko erreskatea
+amenity	mountain_rescue	1	mendiko erreskateas
+amenity	nightclub	0	gau-klub
+amenity	nightclub	1	gau-klubs
+amenity	nursery	0	haurtzaindegi
+amenity	nursery	1	haurtzaindegis
+amenity	office	0	bulego
+amenity	office	1	bulegos
+amenity	park	0	parke
+amenity	park	1	parkes
+amenity	parking	0	aparkaleku
+amenity	parking	1	aparkalekus
+amenity	pharmacy	0	farmazia
+amenity	pharmacy	1	farmazias
+amenity	place_of_worship	0	otoitzerako lekua
+amenity	place_of_worship	1	otoitzerako lekuas
+amenity	police	0	polizia
+amenity	police	1	polizias
+amenity	post_box	0	postontzia
+amenity	post_box	1	postontzias
+amenity	post_office	0	postetxe
+amenity	post_office	1	postetxes
+amenity	preschool	0	eskolaurre
+amenity	preschool	1	eskolaurres
+amenity	prison	0	espetxe
+amenity	prison	1	espetxes
+amenity	public_building	0	eraikin publiko
+amenity	public_building	1	eraikin publikos
+amenity	public_market	0	herri azoka
+amenity	public_market	1	herri azokas
+amenity	recycling	0	birziklatze gune
+amenity	recycling	1	birziklatze gunes
+amenity	restaurant	0	jatetxe
+amenity	restaurant	1	jatetxes
+amenity	sauna	0	sauna
+amenity	sauna	1	saunas
+amenity	school	0	ikastetxe
+amenity	school	1	ikastetxes
+amenity	shop	0	denda
+amenity	shop	1	dendas
+amenity	shopping	0	erosketak
+amenity	shopping	1	erosketaks
+amenity	studio	0	estudio
+amenity	studio	1	estudios
+amenity	supermarket	0	supermerkatu
+amenity	supermarket	1	supermerkatus
+amenity	taxi	0	taxi
+amenity	taxi	1	taxis
+amenity	telephone	0	telefono publiko
+amenity	telephone	1	telefono publikos
+amenity	theatre	0	antzokia
+amenity	theatre	1	antzokias
+amenity	toilets	0	komunak
+amenity	toilets	1	komunaks
+amenity	townhall	0	udaletxe
+amenity	townhall	1	udaletxes
+amenity	university	0	unibertsitate
+amenity	university	1	unibertsitates
+amenity	vending_machine	0	salmenta automatiko
+amenity	vending_machine	1	salmenta automatikos
+amenity	wifi	0	wifi sarbidea
+amenity	wifi	1	wifi sarbideas
+amenity	youth_centre	0	gaztelekua
+amenity	youth_centre	1	gaztelekuas
+boundary	administrative	0	muga administratiboa
+boundary	administrative	1	muga administratiboas
+building	bunker	0	bunker
+building	bunker	1	bunkers
+building	chapel	0	kapera
+building	chapel	1	kaperas
+building	church	0	eliza
+building	church	1	elizas
+building	city_hall	0	udaletxea
+building	city_hall	1	udaletxeas
+building	garage	0	garajea
+building	garage	1	garajeas
+building	hospital	0	ospitale erakina
+building	hospital	1	ospitale erakinas
+building	hotel	0	hotela
+building	hotel	1	hotelas
+building	house	0	etxe
+building	house	1	etxes
+building	industrial	0	eraikin industriala
+building	industrial	1	eraikin industrialas
+building	public	0	eraikin publiko
+building	public	1	eraikin publikos
+building	school	0	eskola eraikina
+building	school	1	eskola eraikinas
+building	shop	0	denda
+building	shop	1	dendas
+building	stadium	0	estadio
+building	stadium	1	estadios
+building	store	0	denda
+building	store	1	dendas
+building	tower	0	dorre
+building	tower	1	dorres
+building	train_station	0	tren geltokia
+building	train_station	1	tren geltokias
+building	university	0	unibertsitate eraikina
+building	university	1	unibertsitate eraikinas
+building	&quot;yes&quot;	0	eraikina
+building	&quot;yes&quot;	1	eraikinas
+highway	bus_stop	0	autobus-geraleku
+highway	bus_stop	1	autobus-geralekus
+highway	construction	0	eraikitze-lanetan dagoen autopista
+highway	construction	1	eraikitze-lanetan dagoen autopistas
+highway	emergency_access_point	0	larrialdi sarbide gunea
+highway	emergency_access_point	1	larrialdi sarbide guneas
+highway	footway	0	oinezkoen bide
+highway	footway	1	oinezkoen bides
+highway	gate	0	ate
+highway	gate	1	ates
+highway	motorway	0	autobide
+highway	motorway	1	autobides
+highway	motorway_link	0	autobidea
+highway	motorway_link	1	autobideas
+highway	platform	0	nasa
+highway	platform	1	nasas
+highway	primary	0	lehen mailako errepide
+highway	primary	1	lehen mailako errepides
+highway	primary_link	0	errepide nagusi
+highway	primary_link	1	errepide nagusis
+highway	residential	0	bizileku
+highway	residential	1	bizilekus
+highway	road	0	errepide
+highway	road	1	errepides
+highway	secondary	0	bigarren mailako errepide
+highway	secondary	1	bigarren mailako errepides
+highway	secondary_link	0	bigarren mailako errepide
+highway	secondary_link	1	bigarren mailako errepides
+highway	service	0	zerbitzu errepidea
+highway	service	1	zerbitzu errepideas
+highway	services	0	autobide zerbitzuak
+highway	services	1	autobide zerbitzuaks
+highway	steps	0	eskailera-mailak
+highway	steps	1	eskailera-mailaks
+highway	tertiary	0	hirugarren mailako errepide
+highway	tertiary	1	hirugarren mailako errepides
+highway	track	0	pista
+highway	track	1	pistas
+historic	archaeological_site	0	aztarnategi arkeologiko
+historic	archaeological_site	1	aztarnategi arkeologikos
+historic	building	0	eraikina
+historic	building	1	eraikinas
+historic	castle	0	gaztelu
+historic	castle	1	gaztelus
+historic	church	0	eliza
+historic	church	1	elizas
+historic	house	0	etxea
+historic	house	1	etxeas
+historic	memorial	0	memoriala
+historic	memorial	1	memorialas
+historic	mine	0	meategi
+historic	mine	1	meategis
+historic	monument	0	monumentu
+historic	monument	1	monumentus
+historic	museum	0	museo
+historic	museum	1	museos
+historic	tower	0	dorre
+historic	tower	1	dorres
+landuse	cemetery	0	hilerri
+landuse	cemetery	1	hilerris
+landuse	commercial	0	merkataritza eremua
+landuse	commercial	1	merkataritza eremuas
+landuse	forest	0	baso
+landuse	forest	1	basos
+landuse	meadow	0	larre
+landuse	meadow	1	larres
+landuse	military	0	eremu militarra
+landuse	military	1	eremu militarras
+landuse	mine	0	meategi
+landuse	mine	1	meategis
+landuse	mountain	0	mendi
+landuse	mountain	1	mendis
+landuse	nature_reserve	0	natura-erreserba
+landuse	nature_reserve	1	natura-erreserbas
+landuse	park	0	parke
+landuse	park	1	parkes
+landuse	plaza	0	enparantza
+landuse	plaza	1	enparantzas
+landuse	quarry	0	harrobi
+landuse	quarry	1	harrobis
+landuse	railway	0	trenbide
+landuse	railway	1	trenbides
+landuse	reservoir	0	urtegi
+landuse	reservoir	1	urtegis
+leisure	beach_resort	0	hondartza konplexu
+leisure	beach_resort	1	hondartza konplexus
+leisure	common	0	lur komunak
+leisure	common	1	lur komunaks
+leisure	fishing	0	arrantza lekua
+leisure	fishing	1	arrantza lekuas
+leisure	garden	0	lorategi
+leisure	garden	1	lorategis
+leisure	golf_course	0	golf-zelai
+leisure	golf_course	1	golf-zelais
+leisure	ice_rink	0	izotz-pista
+leisure	ice_rink	1	izotz-pistas
+leisure	marina	0	kirol-portu
+leisure	marina	1	kirol-portus
+leisure	miniature_golf	0	minigolfa
+leisure	miniature_golf	1	minigolfas
+leisure	nature_reserve	0	natura erreserba
+leisure	nature_reserve	1	natura erreserbas
+leisure	park	0	parkea
+leisure	park	1	parkeas
+leisure	pitch	0	kirolgunea
+leisure	pitch	1	kirolguneas
+leisure	playground	0	jolastoki
+leisure	playground	1	jolastokis
+leisure	sports_centre	0	kiroldegi
+leisure	sports_centre	1	kiroldegis
+leisure	stadium	0	estadio
+leisure	stadium	1	estadios
+leisure	swimming_pool	0	igerilekua
+leisure	swimming_pool	1	igerilekuas
+natural	bay	0	badia
+natural	bay	1	badias
+natural	beach	0	hondartza
+natural	beach	1	hondartzas
+natural	cape	0	lurmutur
+natural	cape	1	lurmuturs
+natural	cave_entrance	0	kobazulo sarrera
+natural	cave_entrance	1	kobazulo sarreras
+natural	channel	0	kanal
+natural	channel	1	kanals
+natural	coastline	0	itsasertz
+natural	coastline	1	itsasertzs
+natural	crater	0	crater
+natural	crater	1	craters
+natural	fjord	0	fiordo
+natural	fjord	1	fiordos
+natural	geyser	0	geiser
+natural	geyser	1	geisers
+natural	glacier	0	glaziar
+natural	glacier	1	glaziars
+natural	hill	0	muinoa
+natural	hill	1	muinoas
+natural	island	0	irla
+natural	island	1	irlas
+natural	mud	0	lohi
+natural	mud	1	lohis
+natural	peak	0	gailur
+natural	peak	1	gailurs
+natural	point	0	puntu
+natural	point	1	puntus
+natural	reef	0	arrezife
+natural	reef	1	arrezifes
+natural	river	0	ibai
+natural	river	1	ibais
+natural	rock	0	arroka
+natural	rock	1	arrokas
+natural	scree	0	harritza
+natural	scree	1	harritzas
+natural	shoal	0	hondar-banku
+natural	shoal	1	hondar-bankus
+natural	tree	0	zuhaitza
+natural	tree	1	zuhaitzas
+natural	valley	0	haran
+natural	valley	1	harans
+natural	volcano	0	sumendi
+natural	volcano	1	sumendis
+natural	water	0	ura
+natural	water	1	uras
+natural	wood	0	baso
+natural	wood	1	basos
+place	city	0	hiria
+place	city	1	hirias
+place	country	0	herrialdea
+place	country	1	herrialdeas
+place	county	0	konderria
+place	county	1	konderrias
+place	farm	0	baserria
+place	farm	1	baserrias
+place	hamlet	0	herrixka
+place	hamlet	1	herrixkas
+place	house	0	etxe
+place	house	1	etxes
+place	houses	0	etxeak
+place	houses	1	etxeaks
+place	island	0	irla
+place	island	1	irlas
+place	islet	0	uhartea
+place	islet	1	uharteas
+place	locality	0	lokalitate
+place	locality	1	lokalitates
+place	municipality	0	udalerri
+place	municipality	1	udalerris
+place	postcode	0	posta-kode
+place	postcode	1	posta-kodes
+place	region	0	eskualde
+place	region	1	eskualdes
+place	sea	0	itsasoa
+place	sea	1	itsasoas
+place	state	0	estatua
+place	state	1	estatuas
+place	subdivision	0	subdibisio
+place	subdivision	1	subdibisios
+place	suburb	0	aldiri
+place	suburb	1	aldiris
+place	town	0	herria
+place	town	1	herrias
+place	unincorporated_area	0	elkartu gabeko gunea
+place	unincorporated_area	1	elkartu gabeko guneas
+place	village	0	herrixka
+place	village	1	herrixkas
+railway	construction	0	eraikitze-lanetan dagoen trenbidea
+railway	construction	1	eraikitze-lanetan dagoen trenbideas
+railway	halt	0	tren geralekua
+railway	halt	1	tren geralekuas
+railway	historic_station	0	tren geltoki historikoa
+railway	historic_station	1	tren geltoki historikoas
+railway	light_rail	0	tren arina
+railway	light_rail	1	tren arinas
+railway	monorail	0	monoraila
+railway	monorail	1	monorailas
+railway	platform	0	trenbide plataforma
+railway	platform	1	trenbide plataformas
+railway	station	0	tren geltokia
+railway	station	1	tren geltokias
+railway	subway	0	metro geltoki
+railway	subway	1	metro geltokis
+railway	subway_entrance	0	metro sarbidea
+railway	subway_entrance	1	metro sarbideas
+railway	tram	0	tranbia
+railway	tram	1	tranbias
+railway	tram_stop	0	tranbia geltoki
+railway	tram_stop	1	tranbia geltokis
+shop	art	0	arte-denda
+shop	art	1	arte-dendas
+shop	bakery	0	okindegi
+shop	bakery	1	okindegis
+shop	books	0	liburudenda
+shop	books	1	liburudendas
+shop	butcher	0	harategi
+shop	butcher	1	harategis
+shop	chemist	0	farmazia
+shop	chemist	1	farmazias
+shop	clothes	0	arropa denda
+shop	clothes	1	arropa dendas
+shop	computer	0	ordenagailu-denda
+shop	computer	1	ordenagailu-dendas
+shop	confectionery	0	gozotegi
+shop	confectionery	1	gozotegis
+shop	electronics	0	elektronika-denda
+shop	electronics	1	elektronika-dendas
+shop	estate_agent	0	higiezinen agente
+shop	estate_agent	1	higiezinen agentes
+shop	fish	0	arrantza-denda
+shop	fish	1	arrantza-dendas
+shop	florist	0	loradenda
+shop	florist	1	loradendas
+shop	food	0	janari-denda
+shop	food	1	janari-dendas
+shop	furniture	0	altzari
+shop	furniture	1	altzaris
+shop	gallery	0	galeria
+shop	gallery	1	galerias
+shop	gift	0	opari-denda
+shop	gift	1	opari-dendas
+shop	greengrocer	0	barazki-saltzaile
+shop	greengrocer	1	barazki-saltzailes
+shop	grocery	0	janaridenda
+shop	grocery	1	janaridendas
+shop	hairdresser	0	ile-apaindegi
+shop	hairdresser	1	ile-apaindegis
+shop	hifi	0	hi-fi
+shop	hifi	1	hi-fis
+shop	insurance	0	aseguruak
+shop	insurance	1	aseguruaks
+shop	jewelry	0	bitxi-denda
+shop	jewelry	1	bitxi-dendas
+shop	kiosk	0	kiosko
+shop	kiosk	1	kioskos
+shop	laundry	0	garbitegi
+shop	laundry	1	garbitegis
+shop	mall	0	merkataritza-gunea
+shop	mall	1	merkataritza-guneas
+shop	market	0	merkatu
+shop	market	1	merkatus
+shop	mobile_phone	0	mugikor-denda
+shop	mobile_phone	1	mugikor-dendas
+shop	music	0	musika-denda
+shop	music	1	musika-dendas
+shop	newsagent	0	kioskoa
+shop	newsagent	1	kioskoas
+shop	optician	0	optika
+shop	optician	1	optikas
+shop	pet	0	animalia-denda
+shop	pet	1	animalia-dendas
+shop	photo	0	argazki-denda
+shop	photo	1	argazki-dendas
+shop	shoes	0	zapatadenda
+shop	shoes	1	zapatadendas
+shop	shopping_centre	0	merkatal gunea
+shop	shopping_centre	1	merkatal guneas
+shop	sports	0	kirol denda
+shop	sports	1	kirol dendas
+shop	supermarket	0	supermerkatu
+shop	supermarket	1	supermerkatus
+shop	toys	0	jostailu denda
+shop	toys	1	jostailu dendas
+shop	travel_agency	0	bidaia-agentzia
+shop	travel_agency	1	bidaia-agentzias
+tourism	alpine_hut	0	aterpe alpinoa
+tourism	alpine_hut	1	aterpe alpinoas
+tourism	attraction	0	atrakzio
+tourism	attraction	1	atrakzios
+tourism	bed_and_breakfast	0	ohe eta gosari (b&amp;b)
+tourism	bed_and_breakfast	1	ohe eta gosari (b&amp;b)s
+tourism	camp_site	0	kanpin
+tourism	camp_site	1	kanpins
+tourism	chalet	0	txalet
+tourism	chalet	1	txalets
+tourism	guest_house	0	aterpe
+tourism	guest_house	1	aterpes
+tourism	hostel	0	ostatu
+tourism	hostel	1	ostatus
+tourism	hotel	0	hotel
+tourism	hotel	1	hotels
+tourism	information	0	informazioa
+tourism	information	1	informazioas
+tourism	motel	0	motel
+tourism	motel	1	motels
+tourism	museum	0	museoa
+tourism	museum	1	museoas
+tourism	picnic_site	0	piknik-gune
+tourism	picnic_site	1	piknik-gunes
+tourism	theme_park	0	parke tematiko
+tourism	theme_park	1	parke tematikos
+tourism	valley	0	haran
+tourism	valley	1	harans
+tourism	viewpoint	0	behatoki
+tourism	viewpoint	1	behatokis
+tourism	zoo	0	zoologiko
+tourism	zoo	1	zoologikos
+waterway	canal	0	kanal
+waterway	canal	1	kanals
+waterway	dam	0	urtegia
+waterway	dam	1	urtegias
+waterway	ditch	0	lubakia
+waterway	ditch	1	lubakias
+waterway	drain	0	isurbidea
+waterway	drain	1	isurbideas
+waterway	rapids	0	ur-lasterrak
+waterway	rapids	1	ur-lasterraks
+waterway	river	0	ibai
+waterway	river	1	ibais
+waterway	waterfall	0	ur-jauzi
+waterway	waterfall	1	ur-jauzis
+waterway	weir	0	uharka
+waterway	weir	1	uharkas

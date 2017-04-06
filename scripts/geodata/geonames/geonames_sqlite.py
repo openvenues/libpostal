@@ -106,14 +106,8 @@ geonames_ddl = {
         geonames (feature_code)''',
         '''CREATE INDEX country_code ON
         geonames (country_code)''',
-        '''CREATE INDEX admin1_code ON
-        geonames (admin1_code)''',
-        '''CREATE INDEX admin2_code ON
-        geonames (admin2_code)''',
-        '''CREATE INDEX admin3_code ON
-        geonames (admin3_code)''',
-        '''CREATE INDEX admin4_code ON
-        geonames (admin4_code)''',
+        '''CREATE INDEX admin_codes ON
+        geonames (country_code, admin1_code, admin2_code, admin3_code, admin4_code)''',
     ),
 
     'alternate_names': (
@@ -161,6 +155,8 @@ geonames_ddl = {
         )''',
         '''CREATE INDEX post_code_index ON
         postal_codes (country_code, postal_code)''',
+        '''CREATE INDEX postal_code_admins ON
+        postal_codes (country_code, admin1_code, admin2_code, admin3_code)''',
     ),
     'admin1_codes': admin_ddl(1),
     'admin2_codes': admin_ddl(2),

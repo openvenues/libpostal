@@ -1,0 +1,260 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "null"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "üks"
+      value: 1
+      type: "cardinal"
+      multiply_gte: 100
+    - 
+      name: "uks"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "kaks"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "kolm"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "neli"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "viis"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "kuus"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "seitse"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "kaheksa"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "üheksa"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "uheksa"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "kümme"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "kumme"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "üksteist"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "kaksteist"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "kolmteist"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "neliteist"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "viisteist"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "kuusteist"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "seitseteist"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "kaheksateist"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "üheksateist"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "kakskümmend"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kakskummend"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kolmkümmend"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kolmkummend"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "nelikümmend"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "nelikummend"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "viiskümmend"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "viiskummend"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kuuskümmend"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kuuskummend"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seitsekümmend"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seitsekummend"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kaheksakümmend"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kaheksakummend"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "üheksakümmend"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "üheksakummend"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sada"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tuhat"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miljon"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miljonit"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miljard"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miljardit"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biljon"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biljonit"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biljard"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biljardit"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "."
+        "1":
+          - "."
+        "2":
+          - "."
+        "3":
+          - "."
+        "4":
+          - "."
+        "5":
+          - "."
+        "6":
+          - "."
+        "7":
+          - "."
+        "8":
+          - "."
+        "9":
+          - "."
+

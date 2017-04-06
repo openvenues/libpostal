@@ -1,0 +1,4 @@
+admin_codes:
+    # The GeoNames admin1 boundaries are admin_level=5 or 6 in OSM
+    # However, they do appear to be states, might need to update Czech OSM config
+    admin1: state_district

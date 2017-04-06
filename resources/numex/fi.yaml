@@ -1,0 +1,564 @@
+---
+  whole_words_only: true
+  default_separator: ""
+  rules:
+    - 
+      name: "nolla"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "yksi"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "kaksi"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "kolme"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "neljä"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "viisi"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "kuusi"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "seitsemän"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "kahdeksan"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "yhdeksän"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "kymmenen"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "yksitoista"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "kaksitoista"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "kolmetoista"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "neljätoista"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "viisitoista"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "kuusitoista"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "seitsemäntoista"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "kahdeksantoista"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "yhdeksäntoista"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "kaksikymmentä"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kaksikymmenta"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kaksikymmentae"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kolmekymmentä"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kolmekymmenta"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kolmekymmentae"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "neljäkymmentä"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "neljäkymmenta"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "neljäkymmentae"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "viisikymmentä"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "viisikymmenta"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "viisikymmentae"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kuusikymmentä"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kuusikymmenta"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kuusikymmentae"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seitsemänkymmentä"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seitsemankymmenta"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seitsemaenkymmentae"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kahdeksankymmentä"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kahdeksankymmenta"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kahdeksankymmentae"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "yhdeksänkymmentä"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "yhdeksänkymmenta"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "yhdeksänkymmentae"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sata"
+      value: 100
+      type: "cardinal"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "sataa"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tuhat"
+      value: 1000
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "tuhatta"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miljoona"
+      value: 1000000
+      type: "cardinal"
+      right: "add"
+      exact_multiple_only: true
+      left_separator: " "
+    - 
+      name: "miljoonaa"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      left_separator: " "
+    - 
+      name: "miljardi"
+      value: 1000000000
+      type: "cardinal"
+      right: "add"
+      exact_multiple_only: true
+      left_separator: " "
+    - 
+      name: "miljardia"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      left_separator: " "
+    - 
+      name: "biljoona"
+      value: 1000000000000
+      type: "cardinal"
+      right: "add"
+      exact_multiple_only: true
+      left_separator: " "
+    - 
+      name: "biljoonaa"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      left_separator: " "
+    - 
+      name: "ensimmäinen"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "ensimmainen"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "ensimmaeinen"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "toinen"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "kolmas"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "neljäs"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "neljas"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "neljaes"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "viides"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "kuudes"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "seitsemäs"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "seitsemas"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "seitsemaes"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "kahdeksas"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "yhdeksäs"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "yhdeksas"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "yhdeksaes"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "kymmenes"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "yhdestoista"
+      value: 11
+      type: "ordinal"
+    - 
+      name: "kahdestoista"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "kolmastoista"
+      value: 13
+      type: "ordinal"
+    - 
+      name: "neljästoista"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "neljastoista"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "neljaestoista"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "viidestoista"
+      value: 15
+      type: "ordinal"
+    - 
+      name: "kuudestoista"
+      value: 16
+      type: "ordinal"
+    - 
+      name: "seitsemästoista"
+      value: 17
+      type: "ordinal"
+    - 
+      name: "seitsemastoista"
+      value: 17
+      type: "ordinal"
+    - 
+      name: "seitsemaestoista"
+      value: 17
+      type: "ordinal"
+    - 
+      name: "kahdeksastoista"
+      value: 18
+      type: "ordinal"
+    - 
+      name: "yhdeksästoista"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "yhdeksastoista"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "yhdeksaestoista"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "kahdeskymmenes"
+      value: 20
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "kolmaskymmenes"
+      value: 30
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "neljäskymmenes"
+      value: 40
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "neljaskymmenes"
+      value: 40
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "neljaeskymmenes"
+      value: 40
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "viideskymmenes"
+      value: 50
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "kuudeskymmenes"
+      value: 60
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "seitsemäskymmenes"
+      value: 70
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "seitsemaskymmenes"
+      value: 70
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "seitsemaeskymmenes"
+      value: 70
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "kahdeksaskymmenes"
+      value: 80
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "yhdeksäskymmenes"
+      value: 90
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "yhdeksaskymmenes"
+      value: 90
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "yhdeksaeskymmenes"
+      value: 90
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "sadas"
+      value: 100
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tuhannes"
+      value: 1000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miljoonas"
+      value: 1000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miljardis"
+      value: 1000000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biljoonas"
+      value: 1000000000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - ":s"
+          - "."
+        "1":
+          - ":nen"
+          - "."
+        "2":
+          - ":nen"
+          - "."
+        "3":
+          - ":s"
+          - "."
+        "4":
+          - ":s"
+          - "."
+        "5":
+          - ":s"
+          - "."
+        "6":
+          - ":s"
+          - "."
+        "7":
+          - ":s"
+          - "."
+        "8":
+          - ":s"
+          - "."
+        "9":
+          - ":s"
+          - "."
+        "11":
+          - ":sta"
+          - "."
+        "12":
+          - ":sta"
+          - "."
+        "13":
+          - ":sta"
+          - "."
+        "14":
+          - ":sta"
+          - "."
+        "15":
+          - ":sta"
+          - "."
+        "16":
+          - ":sta"
+          - "."
+        "17":
+          - ":sta"
+          - "."
+        "18":
+          - ":sta"
+          - "."
+        "19":
+          - ":sta"
+          - "."
+  stopwords:
+    - "ja"
+

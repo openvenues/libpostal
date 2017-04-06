@@ -7,15 +7,8 @@ nördliches|nordliches|noerdliches
 nordost|no
 nordosten
 nordöstlich|nordostlich|nordoestlich
-nordöstliche|nordostliche|nordoestliche
-nordöstlicher|nordostlicher|nordoestlicher
-nordöstliches|nordostliches|nordoestliches
 nordwest|nw
-nordwesten
-nordwestlich
 nordwestliche
-nordwestlicher
-nordwestliches
 ost|o
 osten
 östlich|östl|ostlich|ostl|oestlich

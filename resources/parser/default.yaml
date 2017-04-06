@@ -1,0 +1,145 @@
+names:
+    replace_affix_probability: 0.6
+
+languages:
+    # sample a language from the distribution of languages found on the Internet
+    non_local_language_probability: 0.05
+    # Replace user-tagged admin components with the non-local language version
+    replace_non_local_probability: 0.4
+
+# Dependencies for including each component in an "address"
+# Two-way dependencies are not an issue
+component_dependencies:
+    road:
+        dependencies: []
+
+    po_box:
+        dependencies:
+            - road
+            - suburb
+            - city_district
+            - city
+            - postcode
+
+    house_number:
+        dependencies:
+            - road
+
+    entrance:
+        dependencies:
+            - house_number
+
+    staircase:
+        dependencies:
+            - house_number
+
+    level:
+        dependencies:
+            - house_number
+
+    unit:
+        dependencies:
+            - house_number
+
+    metro_station:
+        dependencies:
+            - house
+            - road
+            - house_number
+
+    postcode:
+        dependencies: []
+
+    # Country exceptions
+    exceptions:
+        jp:
+            house_number:
+                dependencies:
+                    - road
+                    - suburb
+                    - city_district
+
+
+
+# Each component is dropped out separately and a new address
+# is added to the training set. These are only the address-level
+# components. Places/boundaries are taken care of elsewhere.
+dropout:
+    attention:
+        probability: 0.8
+    care_of:
+        probability: 0.8
+    house:
+        probability: 0.6
+    house_number:
+        probability: 0.5
+    road:
+        probability: 0.4
+    entrance:
+        probability: 0.8
+    staircase:
+        probability: 0.8
+    level:
+        probability: 0.6
+    unit:
+        probability: 0.5
+    postcode:
+        probability: 0.6
+po_box:
+    probability: 0.1 
+    # Note: these probabilities all independent (don't need to sum to 1)
+    drop_address_probability: 0.8 # drop house number, road, etc.
+    drop_places_probability: 0.1 # drop place names
+    drop_postcode_probability: 0.3 # drop postal code
+
+category:
+    # Same thing for category queries
+    drop_address_probability: 0.8 # drop house number, road, etc.
+    drop_places_probability: 0.1 # drop place names
+    drop_postcode_probability: 0.3 # drop postal code
+
+places:
+    hyphenate_multiword_probability: 0.01
+    remove_hyphen_probability: 0.5
+
+boundaries:
+    abbreviate_toponym_probability: 0.35
+    # Usually in Germany, may have e.g. name:prefix=Stadtbezirk
+    add_prefix_probability: 0.5
+
+neighborhood:
+    # Usually in Germany, may have e.g. name:prefix=Ortsteil
+    add_prefix_probability: 0.5
+    use_first_match_probability: 0.8
+
+city:
+    quattroshapes_geonames_backup_city_probability: 0.2
+    quattroshapes_geonames_abbreviated_probability: 0.1
+
+state_district:
+    join_probability: 0.5
+
+state:
+    # Probability of using full name e.g. New York vs. NY
+    full_name_probability: 0.2
+    abbreviated_probability: 0.8
+
+# Currently for Russian and Ukrainian, convert some names to the genitive case
+slavic_names:
+    state:
+        genitive_probability: 0.4
+    state_district:
+        genitive_probability: 0.4
+
+country:
+    # If no country is specified, pull the country name from CLDR (authoratative country names translated into different languages)
+    cldr_country_probability: 0.5
+    # When a country is specified and is simply an ISO code (e.g. US, DE), replace with one of the CLDR names
+    replace_with_cldr_country_probability: 0.9
+    # When the user-specified country is an ISO code, remove it from the components with this probability (fall back on geocoded components)
+    remove_iso_code_probability: 0.1
+    cldr:
+        localized_name_probability: 0.92
+        iso_alpha_2_code_probability: 0.02
+        iso_alpha_3_code_probability: 0.01
+        iso_3166_name_probability: 0.05

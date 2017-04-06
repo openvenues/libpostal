@@ -1,0 +1,3 @@
+apartmán|apartman|apt
+izba
+kancelária|kancelaria

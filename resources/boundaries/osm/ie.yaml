@@ -1,0 +1,18 @@
+---
+    admin_level: 
+        "2": "country"
+        "5": "state"
+        "6": "state_district"
+        "7": "state_district"
+        "10": "city"
+
+    # With the introduction of Eire code, Dublin postal districts 
+    # have basically become city_districts
+    place:
+        district: "city_district"
+
+    overrides:
+        id:
+            relation:
+                # Dublin
+                "1109531": "city"

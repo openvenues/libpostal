@@ -10,13 +10,10 @@ fu
 shi
 区
 ku
-特別区
-tokubetsu ku
-tokubetsuku
 郡
 gun
 町
-cho
+chō|cho
 machi
 村
 mura
@@ -24,10 +21,18 @@ son
 字
 aza
 丁目
-chome
+chōme|chome|choume
+駅
+eki
 大字
-oaza
+ōaza|oaza
 小字
 koaza
 街区
 gaiku
+番
+ban
+番地
+banchi
+番地の
+banchi-no|banchi no

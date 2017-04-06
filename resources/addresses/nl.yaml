@@ -1,0 +1,572 @@
+# nl.yaml
+# -------
+# Note: base config covers Dutch as spoken in the Netherlands
+# Belgium overrides go in country configs
+
+components:
+    level:
+        null_probability: 0.85
+        alphanumeric_probability: 0.1
+        standalone_probability: 0.05
+
+    staircase:
+        null_probability: 0.99
+        alphanumeric_probability: 0.01
+
+    entrance:
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
+
+    unit:
+        null_probability: 0.8
+        alphanumeric_probability: 0.2
+
+    combinations:
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: /
+                  probability: 0.9
+                - separator: "-"
+                  probability: 0.1
+            probability: 0.005
+        -
+            components:
+                - house_number
+                - level
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 0.9
+                - separator: /
+                  probability: 0.1
+            probability: 0.01
+
+
+and:
+    default: &en
+        canonical: en
+        abbreviated: "&"
+        canonical_probability: 0.2
+        abbreviated_probability: 0.75
+        sample: true
+        sample_probability: 0.05
+
+numbers:
+    default: &nummer
+        canonical: nummer
+        abbreviated: nr
+        sample: true
+        # Probabilities
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        sample_exclude:
+            - "#"
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: "#"
+            direction: left
+
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.6
+
+house_numbers:
+    alphanumeric:
+        default: *nummer
+    alphanumeric_phrase_probability: 0.01
+
+levels:
+    verdieping: &verdieping
+        canonical: verdieping
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.2
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.5
+                roman_numeral_probability: 0.3
+                spellout_probability: 0.2
+        numeric_probability: 0.7
+        ordinal_probability: 0.3
+    etage: &etage
+        canonical: etage
+        abbreviated: et
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.1
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.2
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.5
+                roman_numeral_probability: 0.3
+                spellout_probability: 0.2
+        numeric_probability: 0.7
+        ordinal_probability: 0.3
+    begane_grond: &begane_grond
+        canonical: begane grond
+        abbreviated: bg
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.2
+        sample_probability: 0.3
+    benedenverdieping: &benedenverdieping
+        canonical: benedenverdieping
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    parterre: &parterre
+        canonical: parterre
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    gelijkvloers: &gelijkvloers
+        canonical: gelijkvloers
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    het_gelijkvloers: &het_gelijkvloers
+        canonical: het gelijkvloers
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    aliases:
+        "0":
+            default: *begane_grond
+            probability: 0.6
+            alternatives:
+                - alternative: *benedenverdieping
+                  probability: 0.35
+                - alternative: *parterre
+                  probability: 0.04
+                - alternative: *het_gelijkvloers
+                  probability: 0.005
+                - alternative: *gelijkvloers
+                  probability: 0.005
+    alphanumeric:
+        default: *verdieping
+        probability: 0.99
+        alternatives:
+            - alternative: *etage
+              probability: 0.01
+        numeric_probability: 0.79 # With this probability, pick an integer
+        roman_numeral_probability: 0.2 # Pick a Roman numeral for the actual value
+        alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
+        numeric_plus_alpha_probability: 0.0001 # e.g. 2A
+        alpha_plus_numeric_probability: 0.0001 # e.g. A2
+
+categories:
+    near:
+        default:
+            canonical: in de buurt van
+        probability: 0.8
+        alternatives:
+            - alternative:
+                canonical: bij
+              probability: 0.1
+            - alternative:
+                canonical: nabij
+              probability: 0.1
+    nearby:
+        default:
+            canonical: in de buurt
+    near_me:
+        default:
+            canonical: in de buurt van me
+
+    in:
+        default:
+            canonical: in
+        probability: 0.6
+        alternatives:
+            - alternative:
+                canonical: te
+              probability: 0.4
+    # Probabilities of each phrase
+    near_probability: 0.35
+    nearby_probability: 0.2
+    near_me_probability: 0.1
+    in_probability: 0.35
+
+
+
+cross_streets:
+    and: *en
+    corner_of: &hoek_van
+        canonical: hoek van
+    at_the_corner_of: &op_de_hoek_van
+        canonical: op de hoek van
+    intersection:
+        default: *en
+        probability: 0.7
+        alternatives:
+            - alternative: *hoek_van
+              probability: 0.15
+            - alternative: *op_de_hoek_van
+              probability: 0.15
+
+    between:
+        canonical: tussen
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probability: 0.5
+
+
+entrances:
+    ingang: &ingang
+        canonical: ingang
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Eingang 1, Eingang A, etc.
+    alphanumeric: &entrance_alphanumeric
+        default: *ingang
+        numeric_probability: 0.1 # e.g. Eingang 1
+        alpha_probability: 0.85 # e.g. Eingang A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+po_boxes:
+    postbus: &postbus
+        canonical: postbus
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+    antwoordnummer: &antwoordnummer
+        canonical: antwoordnummer
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+    alphanumeric:
+        sample: false
+        default: *postbus
+        probability: 0.8
+        alternatives:
+            - alternative: *antwoordnummer
+              probability: 0.2
+        numeric_probability: 0.9 # 123
+        alpha_probability: 0.05 # A
+        numeric_plus_alpha_probability: 0.04 # 123G
+        alpha_plus_numeric_probability: 0.01 # A123
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+directions:
+    right: &rechts
+        canonical: rechts
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: r
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.8
+        numeric_affix_probability: 0.2
+    left: &links
+        canonical: links
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: l
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.6
+    alternatives:
+        - alternative: *rechts
+          probability: 0.5
+        - alternative: *links
+          probability: 0.5
+
+
+cardinal_directions:
+    east: &oost
+        canonical: oost
+        abbreviated: o
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: o
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    oosten: &oosten
+        <<: *oost
+        canonical: oosten
+
+    oostelijke: &oostelijke
+        canonical: oostelijke
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+
+    west: &west
+        canonical: west
+        abbreviated: w
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: w
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    westen: &westen
+        <<: *west
+        canonical: westen
+
+    westelijke: &westelijke
+        canonical: westelijke
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+
+    north: &noord
+        canonical: noord
+        abbreviated: n
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: n
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    noorden: &noorden
+        <<: *noord
+        canonical: noorden
+
+    noordelijke: &noordelijke
+        canonical: noordelijke
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+
+    south: &zuid
+        canonical: zuid
+        abbreviated: z
+        sample: true
+        canonical_probability: 0.75
+        abbreviated_probability: 0.1
+        sample_probability: 0.15
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: z
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    zuiden: &zuiden
+        <<: *zuid
+        canonical: zuiden
+
+    zuidelijke: &zuidelijke
+        canonical: zuidelijke
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+
+    alternatives:
+        - alternative: *noord
+          probability: 0.25
+        - alternative: *oost
+          probability: 0.25
+        - alternative: *zuid
+          probability: 0.25
+        - alternative: *west
+          probability: 0.25
+
+
+staircases:
+    stiege: &stiege
+        canonical: stiege
+        abbreviated: stg
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    trap: &trap
+        canonical: trap
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    alphanumeric: &staircase_alphanumeric
+        default: *trap
+        probability: 0.6
+        alternatives:
+            - alternative: *stiege
+              probability: 0.4
+        numeric_probability: 0.75
+        alpha_probability: 0.2
+        numeric_plus_alpha_probability: 0.025
+        alpha_plus_numeric_probability: 0.025
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+units:
+    appartement: &appartement
+        canonical: appartement
+        abbreviated: apt
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    kamer: &kamer
+        canonical: kamer
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    alphanumeric: &unit_alphanumeric
+        default: *appartement
+        probability: 0.6
+        alternatives:
+            - alternative: *kamer
+              probability: 0.4
+        numeric_probability: 0.9 # e.g. Apt 1
+        numeric_plus_alpha_probability: 0.03 # e.g. 1A
+        alpha_plus_numeric_probability: 0.03 # e.g. A1
+        alpha_probability: 0.04 # e.g. Apt A
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        # Separate random probability for adding directions like 2R, 2L, etc.
+        add_direction: true
+        add_direction_probability: 0.1
+
+        # Add directions for plain numbers
+        add_direction_numeric: true
+        # Add direction only e.g. Apt Rechts
+        add_direction_standalone: true
+
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.1
+
+
+countries:
+    be:
+        components:
+            unit:
+                null_probability: 0.65
+                alphanumeric_probability: 0.35
+
+        levels:
+            verdieping: &verdieping_flemish
+                canonical: verdieping
+                abbreviated: verdiep
+                sample: true
+                canonical_probability: 0.3
+                abbreviated_probability: 0.5
+                sample_probability: 0.2
+                numeric:
+                    direction: left
+                ordinal:
+                    direction: right
+                    digits:
+                        ascii_probability: 0.8
+                        spellout_probability: 0.2
+                numeric_probability: 0.7
+                ordinal_probability: 0.3
+
+            aliases:
+                "0":
+                    default: *het_gelijkvloers
+                    probability: 0.5
+                    alternatives:
+                        - alternative: *gelijkvloers
+                          probability: 0.5
+            alphanumeric:
+                default: *verdieping_flemish
+                probability: 0.9
+                alternatives:
+                    - alternative: *etage
+                      probability: 0.1
+
+        units:
+            bus: &bus
+                canonical: bus
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+                numeric:
+                    direction: left
+            alphanumeric:
+                default: *appartement
+                probability: 0.1
+                alternatives:
+                    - alternative: *bus
+                      probability: 0.7
+                    - alternative: *kamer
+                      probability: 0.2

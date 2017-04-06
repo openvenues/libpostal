@@ -1,0 +1,17 @@
+admin_codes:
+    admin1: state
+    # admin2 is a mix of state_district and city, need to list specifically
+    admin2: state_district
+overrides:
+    id:
+        # Districts of Bratislava
+        "8986283": "city_district" # Okres Bratislava I
+        "8986339": "city_district" # Okres Bratislava II
+        "8986340": "city_district" # Okres Bratislava III
+        "8986341": "city_district" # Okres Bratislava IV
+        "8986342": "city_district" # Okres Bratislava V
+        # Districts of Košice
+        "8986335": "city_district" # Košice I
+        "8986336": "city_district" # Košice II
+        "8986337": "city_district" # Košice III
+        "8986338": "city_district" # Košice IV

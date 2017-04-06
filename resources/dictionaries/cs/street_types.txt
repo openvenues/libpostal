@@ -1,3 +1,6 @@
+nábřeží|nabrezi|nábř|nabr
 náměstí|nám|namesti|nam
-trh
-ulice|ul
+příčná|pricna
+třída|tř|trida|tr
+ulice|ul|u
+ulička|ulicka

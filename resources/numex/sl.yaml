@@ -1,0 +1,287 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "nič"
+      value: 0
+      type: "cardinal"
+      multiply_gte: 1000000
+    - 
+      name: "nic"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "ena"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "dva"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "dvije"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "tri"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "štiri"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "stiri"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "pet"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "šest"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sest"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sedem"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "osem"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "devet"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "deset"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "enajst"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "dvanajst"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "trinajst"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "štrinajst"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "strinajst"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "petnajst"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "šestnajst"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sestnajst"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sedemnajst"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "asemnajst"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "devetnajst"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "dvaset"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trideset"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "štirideset"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "stirideset"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "petdeset"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "šestdeset"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sestdeset"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sedemdeset"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "osemdeset"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "devetdeset"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sto"
+      value: 100
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dvjesto"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "tristo"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "štiristo"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "stiristo"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "petsto"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "šesto"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sesto"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sedemsto"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "osemsto"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "devetsto"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "tisuću"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tisucu"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tisuće"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tisuce"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milijun"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milijuny"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliarda"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliardy"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilijun"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilijuny"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliarda"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliardy"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+

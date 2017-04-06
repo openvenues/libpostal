@@ -25,6 +25,8 @@ typedef struct address_parser_data_set {
     FILE *f;
     token_array *tokens;
     tokenized_string_t *tokenized_str;
+    cstring_array *normalizations;
+    size_t norm;
     cstring_array *labels;
     uint32_array *separators;
     char_array *language;
@@ -33,8 +35,9 @@ typedef struct address_parser_data_set {
 
 
 address_parser_data_set_t *address_parser_data_set_init(char *filename);
-bool address_parser_data_set_tokenize_line(address_parser_data_set_t *data_ser, char *input);
-bool address_parser_data_set_next(address_parser_data_set_t *data_set);
+bool address_parser_data_set_rewind(address_parser_data_set_t *self);
+bool address_parser_data_set_tokenize_line(address_parser_data_set_t *self, char *input);
+bool address_parser_data_set_next(address_parser_data_set_t *self);
 void address_parser_data_set_destroy(address_parser_data_set_t *self);
 
 #endif

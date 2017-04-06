@@ -1,0 +1,398 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "nul"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "en"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "et"
+      value: 1
+      type: "cardinal"
+      gender: "n"
+      multiply_gte: 100
+    - 
+      name: "to"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "tre"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "fire"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "fem"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "seks"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "syv"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "otte"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "ni"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "ti"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "elve"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "tolv"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "tretten"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "fjorten"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "femten"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "seksten"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sytten"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "atten"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "nitten"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "tyve"
+      value: 20
+      type: "cardinal"
+      left: "add"
+      left_separator: "og"
+    - 
+      name: "tredive"
+      value: 30
+      type: "cardinal"
+      left: "add"
+      left_separator: "og"
+    - 
+      name: "fyrre"
+      value: 40
+      type: "cardinal"
+      left: "add"
+      left_separator: "og"
+    - 
+      name: "halvtreds"
+      value: 50
+      type: "cardinal"
+      left: "add"
+      left_separator: "og"
+    - 
+      name: "tres"
+      value: 60
+      type: "cardinal"
+      left: "add"
+      left_separator: "og"
+    - 
+      name: "halvfjerds"
+      value: 70
+      type: "cardinal"
+      left: "add"
+      left_separator: "og"
+    - 
+      name: "firs"
+      value: 80
+      type: "cardinal"
+      left: "add"
+      left_separator: "og"
+    - 
+      name: "halvfems"
+      value: 90
+      type: "cardinal"
+      left: "add"
+      left_separator: "og"
+    - 
+      name: "hundrede"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      left_separator: ""
+      right: "add"
+      right_separator: " og "
+    - 
+      name: "tusinde"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right: "add"
+      right_separator: " og "
+    - 
+      name: "tusind"
+      value: 1000
+      type: "cardinal"
+      gender: "n"
+      left: "multiply"
+      right: "add"
+      right_separator: " og "
+    - 
+      name: "million"
+      value: 1000000
+      type: "cardinal"
+      right: "add"
+    -
+      name: "millioner"
+      value: 1000000
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "milliard"
+      value: 1000000000
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "milliarder"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billion"
+      value: 1000000000000
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "billioner"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billiard"
+      value: 1000000000000000
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "billiarder"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    -
+      name: "nulte"
+      value: 0
+      type: "ordinal"
+    -
+      name: "første"
+      value: 1
+      type: "ordinal"
+    -
+      name: "foerste"
+      value: 1
+      type: "ordinal"
+    -
+      name: "anden"
+      value: 2
+      type: "ordinal"
+    -
+      name: "tredje"
+      value: 3
+      type: "ordinal"
+    -
+      name: "fjerde"
+      value: 4
+      type: "ordinal"
+    -
+      name: "femte"
+      value: 5
+      type: "ordinal"
+    -
+      name: "sjette"
+      value: 6
+      type: "ordinal"
+    -
+      name: "syvende"
+      value: 7
+      type: "ordinal"
+    -
+      name: "ottende"
+      value: 8
+      type: "ordinal"
+    -
+      name: "niende"
+      value: 9
+      type: "ordinal"
+    -
+      name: "tiende"
+      value: 10
+      type: "ordinal"
+    -
+      name: "ellevte"
+      value: 11
+      type: "ordinal"
+    -
+      name: "tolvte"
+      value: 12
+      type: "ordinal"
+    -
+      name: "trettende"
+      value: 13
+      type: "ordinal"
+    -
+      name: "fjortende"
+      value: 14
+      type: "ordinal"
+    -
+      name: "femtende"
+      value: 15
+      type: "ordinal"
+    -
+      name: "sekstende"
+      value: 16
+      type: "ordinal"
+    -
+      name: "syttende"
+      value: 17
+      type: "ordinal"
+    -
+      name: "attende"
+      value: 18
+      type: "ordinal"
+    -
+      name: "nittende"
+      value: 19
+      type: "ordinal"
+    -
+      name: "tyvende"
+      value: 20
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "tredivte"
+      value: 30
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "fyrrende"
+      value: 40
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "halvtredsindstyvende"
+      value: 50
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "tresindstyvende"
+      value: 60
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "halvfjerdsindstyvende"
+      value: 70
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "firsindstyvende"
+      value: 80
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    -
+      name: "halvfemsindstyvende"
+      value: 90
+      type: "ordinal"
+      left: "add"
+      left_separator: "og"
+    - 
+      name: "hundredede"
+      value: 100
+      type: "ordinal"
+      left: "multiply"
+      left_separator: " "
+    - 
+      name: "tusinde"
+      value: 1000
+      type: "ordinal"
+      left: "multiply"
+      left_separator: " "
+    - 
+      name: "millionte"
+      value: 1000000
+      type: "ordinal"
+      left: "multiply"
+      left_separator: " "
+    - 
+      name: "milliardte"
+      value: 1000000000
+      type: "ordinal"
+      left: "multiply"
+      left_separator: " "
+    - 
+      name: "billionte"
+      value: 1000000000000
+      type: "ordinal"
+      left: "multiply"
+      left_separator: " "
+    - 
+      name: "billiardte"
+      value: 1000000000000000
+      type: "ordinal"
+      left: "multiply"
+      left_separator: " "
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "."
+        "1":
+          - "."
+        "2":
+          - "."
+        "3":
+          - "."
+        "4":
+          - "."
+        "5":
+          - "."
+        "6":
+          - "."
+        "7":
+          - "."
+        "8":
+          - "."
+        "9":
+          - "."
+  stopwords:
+    - "og"
+

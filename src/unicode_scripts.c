@@ -13,7 +13,7 @@ inline script_languages_t get_script_languages(script_t script) {
     return script_languages[script];
 }
 
-inline bool is_common_script(script_t script) {
+static inline bool is_common_script(script_t script) {
     return script == SCRIPT_COMMON || script == SCRIPT_INHERITED;
 }
 

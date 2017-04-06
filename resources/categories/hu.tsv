@@ -1,0 +1,841 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	repülőtér
+aeroway	aerodrome	1	repülőterek
+amenity	arts_centre	0	művészeti központ
+amenity	arts_centre	1	művészeti központok
+amenity	atm	0	bankautomata
+amenity	atm	1	bankautomaták
+amenity	auditorium	0	auditórium
+amenity	auditorium	1	auditóriumok
+amenity	bank	0	bank
+amenity	bank	1	bankok
+amenity	bar	0	bár
+amenity	bar	1	bárok
+amenity	bench	0	pad
+amenity	bench	1	padok
+amenity	bicycle_parking	0	kerékpártároló
+amenity	bicycle_parking	1	kerékpártárolók
+amenity	bicycle_rental	0	kerékpárkölcsönző
+amenity	bicycle_rental	1	kerékpárkölcsönzők
+amenity	brothel	0	bordélyház
+amenity	brothel	1	bordélyházak
+amenity	bureau_de_change	0	pénzváltó
+amenity	bureau_de_change	1	pénzváltók
+amenity	bus_station	0	autóbusz-állomás
+amenity	bus_station	1	autóbusz-állomások
+amenity	cafe	0	kávézó
+amenity	cafe	1	kávézók
+amenity	car_rental	0	autókölcsönző
+amenity	car_rental	1	autókölcsönzők
+amenity	car_sharing	0	autómegosztó
+amenity	car_sharing	1	autómegosztók
+amenity	car_wash	0	autómosó
+amenity	car_wash	1	autómosók
+amenity	casino	0	kaszinó
+amenity	casino	1	kaszinók
+amenity	cinema	0	mozi
+amenity	cinema	1	mozik
+amenity	clinic	0	klinika
+amenity	clinic	1	klinikasák
+amenity	club	0	klub
+amenity	club	1	klubok
+amenity	college	0	fõiskola
+amenity	college	1	főiskolák
+amenity	community_centre	0	művelődési központ
+amenity	community_centre	1	művelődési központok
+amenity	courthouse	0	bíróság
+amenity	courthouse	1	bíróságok
+amenity	crematorium	0	krematórium
+amenity	crematorium	1	krematóriumok
+amenity	dentist	0	fogorvos
+amenity	dentist	1	fogorvosok
+amenity	doctors	0	orvosi rendelő
+amenity	doctors	1	orvosi rendelők
+amenity	dormitory	0	kollégium
+amenity	dormitory	1	kollégiumok
+amenity	drinking_water	0	ivóvíz
+amenity	drinking_water	1	ivóvizek
+amenity	driving_school	0	autósiskola
+amenity	driving_school	1	autósiskolák
+amenity	embassy	0	nagykövetség
+amenity	embassy	1	nagykövetségek
+amenity	emergency_phone	0	segélyhívó
+amenity	emergency_phone	1	segélyhívók
+amenity	fast_food	0	gyorsétterem
+amenity	fast_food	1	gyorséttermek
+amenity	ferry_terminal	0	kompkikötő
+amenity	ferry_terminal	1	kompkikötők
+amenity	fire_hydrant	0	tűzcsap
+amenity	fire_hydrant	1	tűzcsapok
+amenity	fire_station	0	tűzoltóság
+amenity	fire_station	1	tűzoltóságok
+amenity	fountain	0	szökőkút
+amenity	fountain	1	szökőkutak
+amenity	fuel	0	benzinkút
+amenity	fuel	1	benzinkutak
+amenity	grave_yard	0	kis temető
+amenity	grave_yard	1	kis temetők
+amenity	gym	0	fitness- / tornaterem
+amenity	gym	1	fitness- / tornatermek
+amenity	hall	0	csarnok
+amenity	hall	1	csarnokok
+amenity	health_centre	0	egészségügyi központ
+amenity	health_centre	1	egészségügyi központok
+amenity	hospital	0	kórház
+amenity	hospital	1	kórházak
+amenity	hotel	0	szálloda
+amenity	hotel	1	szállodák
+amenity	hunting_stand	0	magasles
+amenity	hunting_stand	1	magaslesek
+amenity	ice_cream	0	jégkrém
+amenity	ice_cream	1	jégkrémek
+amenity	kindergarten	0	óvoda
+amenity	kindergarten	1	óvodák
+amenity	library	0	könyvtár
+amenity	library	1	könyvtárak
+amenity	market	0	piac
+amenity	market	1	piacok
+amenity	marketplace	0	vásártér
+amenity	marketplace	1	vásárterek
+amenity	mountain_rescue	0	hegyimentő
+amenity	mountain_rescue	1	hegyimentők
+amenity	nightclub	0	éjszakai bár
+amenity	nightclub	1	éjszakai bárok
+amenity	nursery	0	óvoda
+amenity	nursery	1	óvodák
+amenity	nursing_home	0	idősek otthona
+amenity	nursing_home	1	idősek otthonai
+amenity	office	0	iroda
+amenity	office	1	irodák
+amenity	park	0	park
+amenity	park	1	parkok
+amenity	parking	0	parkoló
+amenity	parking	1	parkolók
+amenity	pharmacy	0	gyógyszertár
+amenity	pharmacy	1	gyógyszertárak
+amenity	place_of_worship	0	vallási hely
+amenity	place_of_worship	1	vallási helyek
+amenity	police	0	rendőrség
+amenity	police	1	rendőrségek
+amenity	post_box	0	postaláda
+amenity	post_box	1	postaládák
+amenity	post_office	0	posta
+amenity	post_office	1	posták
+amenity	preschool	0	óvoda
+amenity	preschool	1	óvodák
+amenity	prison	0	börtön
+amenity	prison	1	börtönök
+amenity	pub	0	kocsma
+amenity	pub	1	kocsmák
+amenity	public_building	0	középület
+amenity	public_building	1	középületek
+amenity	public_market	0	piac
+amenity	public_market	1	piacok
+amenity	reception_area	0	recepció
+amenity	reception_area	1	recepciók
+amenity	recycling	0	szelektív hulladékgyűjtő
+amenity	recycling	1	szelektív hulladékgyűjtők
+amenity	restaurant	0	étterem
+amenity	restaurant	1	étteremek
+amenity	retirement_home	0	nyugdíjasotthon
+amenity	retirement_home	1	nyugdíjasotthonok
+amenity	sauna	0	szauna
+amenity	sauna	1	szaunák
+amenity	school	0	iskola
+amenity	school	1	iskolák
+amenity	shelter	0	esőház
+amenity	shelter	1	esőházak
+amenity	shop	0	bolt
+amenity	shop	1	boltok
+amenity	shopping	0	vásárlás
+amenity	shopping	1	vásárlás
+amenity	social_club	0	társasági klub
+amenity	social_club	1	társasági klubok
+amenity	studio	0	stúdió
+amenity	studio	1	stúdiók
+amenity	supermarket	0	szupermarket
+amenity	supermarket	1	szupermarketek
+amenity	taxi	0	taxi
+amenity	taxi	1	taxik
+amenity	telephone	0	nyilvános telefon
+amenity	telephone	1	nyilvános telefonok
+amenity	theatre	0	színház
+amenity	theatre	1	színházak
+amenity	toilets	0	wc
+amenity	toilets	1	wc-k
+amenity	townhall	0	városháza
+amenity	townhall	1	városházák
+amenity	university	0	egyetem
+amenity	university	1	egyetemek
+amenity	vending_machine	0	árusító automata
+amenity	vending_machine	1	árusító automaták
+amenity	veterinary	0	állatorvosi rendelő
+amenity	veterinary	1	állatorvosi rendelők
+amenity	village_hall	0	községháza
+amenity	village_hall	1	községházak
+amenity	waste_basket	0	szemétgyűjtő kosár
+amenity	waste_basket	1	szemétgyűjtő kosarak
+amenity	wifi	0	wifi hozzáférés
+amenity	wifi	1	wifi hozzáférések
+amenity	youth_centre	0	ifjúsági központ
+amenity	youth_centre	1	ifjúsági központok
+boundary	administrative	0	közigazgatási határ
+boundary	administrative	1	közigazgatási határok
+building	apartments	0	társasház
+building	apartments	1	társasházak
+building	block	0	háztömb
+building	block	1	háztömbök
+building	bunker	0	bunker
+building	bunker	1	bunkerek
+building	chapel	0	kápolna
+building	chapel	1	kápolnas
+building	church	0	templom
+building	church	1	temploms
+building	city_hall	0	városháza
+building	city_hall	1	városházas
+building	commercial	0	kereskedelmi épület
+building	commercial	1	kereskedelmi épülets
+building	dormitory	0	kollégium
+building	dormitory	1	kollégiums
+building	entrance	0	épületbejárat
+building	entrance	1	épületbejárats
+building	faculty	0	egyetemi épület
+building	faculty	1	egyetemi épülets
+building	farm	0	tanyaépület
+building	farm	1	tanyaépülets
+building	flats	0	lakások
+building	flats	1	lakásoks
+building	garage	0	garázs
+building	garage	1	garázss
+building	hall	0	csarnok
+building	hall	1	csarnoks
+building	hospital	0	kórházépület
+building	hospital	1	kórházépülets
+building	hotel	0	szálloda
+building	hotel	1	szállodas
+building	house	0	ház
+building	house	1	házs
+building	industrial	0	ipari épület
+building	industrial	1	ipari épülets
+building	office	0	irodaház
+building	office	1	irodaházs
+building	public	0	középület
+building	public	1	középülets
+building	residential	0	lakóház
+building	residential	1	lakóházs
+building	retail	0	kereskedelmi épület
+building	retail	1	kereskedelmi épülets
+building	school	0	iskolaépület
+building	school	1	iskolaépülets
+building	shop	0	bolt
+building	shop	1	bolts
+building	stadium	0	stadion
+building	stadium	1	stadions
+building	store	0	áruház
+building	store	1	áruházs
+building	terrace	0	sorház
+building	terrace	1	sorházs
+building	tower	0	torony
+building	tower	1	toronys
+building	train_station	0	vasútállomás
+building	train_station	1	vasútállomáss
+building	university	0	egyetemi épület
+building	university	1	egyetemi épülets
+building	&quot;yes&quot;	0	épület
+building	&quot;yes&quot;	1	épülets
+highway	bridleway	0	lovaglóút
+highway	bridleway	1	lovaglóúts
+highway	bus_guideway	0	buszsín
+highway	bus_guideway	1	buszsíns
+highway	bus_stop	0	buszmegálló
+highway	bus_stop	1	buszmegállós
+highway	byway	0	kiépítetlen ösvény
+highway	byway	1	kiépítetlen ösvénys
+highway	construction	0	építés alatt álló közút
+highway	construction	1	építés alatt álló közúts
+highway	cycleway	0	kerékpárút
+highway	cycleway	1	kerékpárúts
+highway	distance_marker	0	távolságjelölő
+highway	distance_marker	1	távolságjelölős
+highway	emergency_access_point	0	vészhelyzeti hozzáférési pont
+highway	emergency_access_point	1	vészhelyzeti hozzáférési ponts
+highway	footway	0	gyalogút
+highway	footway	1	gyalogúts
+highway	ford	0	gázló
+highway	ford	1	gázlós
+highway	gate	0	kapu
+highway	gate	1	kapus
+highway	living_street	0	pihenőút
+highway	living_street	1	pihenőúts
+highway	minor	0	alárendelt út
+highway	minor	1	alárendelt úts
+highway	motorway	0	autópálya
+highway	motorway	1	autópályas
+highway	motorway_junction	0	autópálya-csomópont
+highway	motorway_junction	1	autópálya-csomóponts
+highway	motorway_link	0	autópálya
+highway	motorway_link	1	autópályas
+highway	path	0	ösvény
+highway	path	1	ösvénys
+highway	pedestrian	0	sétálóutca
+highway	pedestrian	1	sétálóutcas
+highway	platform	0	peron
+highway	platform	1	perons
+highway	primary	0	főút
+highway	primary	1	főúts
+highway	primary_link	0	főút
+highway	primary_link	1	főúts
+highway	raceway	0	versenypálya
+highway	raceway	1	versenypályas
+highway	residential	0	lakóövezeti út
+highway	residential	1	lakóövezeti úts
+highway	road	0	út
+highway	road	1	úts
+highway	secondary	0	összekötő út
+highway	secondary	1	összekötő úts
+highway	secondary_link	0	összekötő út
+highway	secondary_link	1	összekötő úts
+highway	service	0	szervizút
+highway	service	1	szervizúts
+highway	services	0	autópálya-pihenőhely
+highway	services	1	autópálya-pihenőhelys
+highway	steps	0	lépcső
+highway	steps	1	lépcsős
+highway	stile	0	lépcsős átjáró
+highway	stile	1	lépcsős átjárós
+highway	tertiary	0	bekötőút
+highway	tertiary	1	bekötőúts
+highway	track	0	földút
+highway	track	1	földúts
+highway	trail	0	túraút
+highway	trail	1	túraúts
+highway	trunk	0	autóút
+highway	trunk	1	autóúts
+highway	trunk_link	0	autóút
+highway	trunk_link	1	autóúts
+highway	unclassified	0	egyéb út
+highway	unclassified	1	egyéb úts
+highway	unsurfaced	0	burkolatlan út
+highway	unsurfaced	1	burkolatlan úts
+historic	archaeological_site	0	régészeti lelőhely
+historic	archaeological_site	1	régészeti lelőhelys
+historic	battlefield	0	csatamező
+historic	battlefield	1	csatamezős
+historic	boundary_stone	0	határkő
+historic	boundary_stone	1	határkős
+historic	building	0	épület
+historic	building	1	épülets
+historic	castle	0	vár
+historic	castle	1	várs
+historic	church	0	templom
+historic	church	1	temploms
+historic	house	0	ház
+historic	house	1	házs
+historic	icon	0	ikon
+historic	icon	1	ikons
+historic	manor	0	majorság
+historic	manor	1	majorságs
+historic	memorial	0	emlékmű
+historic	memorial	1	emlékműs
+historic	mine	0	bánya
+historic	mine	1	bányas
+historic	monument	0	műemlék
+historic	monument	1	műemléks
+historic	museum	0	múzeum
+historic	museum	1	múzeums
+historic	ruins	0	rom
+historic	ruins	1	roms
+historic	tower	0	torony
+historic	tower	1	toronys
+historic	wayside_cross	0	útszéli kereszt
+historic	wayside_cross	1	útszéli kereszts
+historic	wayside_shrine	0	útszéli kegyhely
+historic	wayside_shrine	1	útszéli kegyhelys
+historic	wreck	0	hajóroncs
+historic	wreck	1	hajóroncss
+landuse	allotments	0	kert
+landuse	allotments	1	kerts
+landuse	basin	0	medence
+landuse	basin	1	medences
+landuse	brownfield	0	barnamező
+landuse	brownfield	1	barnamezős
+landuse	cemetery	0	temető
+landuse	cemetery	1	temetős
+landuse	commercial	0	irodaterület
+landuse	commercial	1	irodaterülets
+landuse	conservation	0	védelmi terület
+landuse	conservation	1	védelmi területs
+landuse	construction	0	építési terület
+landuse	construction	1	építési területs
+landuse	farm	0	tanya
+landuse	farm	1	tanyas
+landuse	farmland	0	mezőgazdasági terület
+landuse	farmland	1	mezőgazdasági területs
+landuse	farmyard	0	tanya épületei
+landuse	farmyard	1	tanya épületeis
+landuse	forest	0	erdő
+landuse	forest	1	erdős
+landuse	grass	0	füves terület
+landuse	grass	1	füves területs
+landuse	greenfield	0	zöldmező
+landuse	greenfield	1	zöldmezős
+landuse	industrial	0	ipari terület
+landuse	industrial	1	ipari területs
+landuse	landfill	0	hulladéklerakó
+landuse	landfill	1	hulladéklerakós
+landuse	meadow	0	rét
+landuse	meadow	1	réts
+landuse	military	0	katonai terület
+landuse	military	1	katonai területs
+landuse	mine	0	bánya
+landuse	mine	1	bányas
+landuse	mountain	0	hegy
+landuse	mountain	1	hegys
+landuse	nature_reserve	0	természetvédelmi terület
+landuse	nature_reserve	1	természetvédelmi területs
+landuse	park	0	park
+landuse	park	1	parks
+landuse	piste	0	sípálya
+landuse	piste	1	sípályas
+landuse	plaza	0	tér
+landuse	plaza	1	térs
+landuse	quarry	0	kőfejtő
+landuse	quarry	1	kőfejtős
+landuse	railway	0	vasúti terület
+landuse	railway	1	vasúti területs
+landuse	recreation_ground	0	szabadidőpark
+landuse	recreation_ground	1	szabadidőparks
+landuse	reservoir	0	víztározó
+landuse	reservoir	1	víztározós
+landuse	residential	0	lakóövezet
+landuse	residential	1	lakóövezets
+landuse	retail	0	kereskedelmi terület
+landuse	retail	1	kereskedelmi területs
+landuse	village_green	0	közös mező
+landuse	village_green	1	közös mezős
+landuse	vineyard	0	szőlős
+landuse	vineyard	1	szőlőss
+landuse	wetland	0	láp
+landuse	wetland	1	láps
+landuse	wood	0	erdő
+landuse	wood	1	erdős
+leisure	beach_resort	0	tengerparti üdülőhely
+leisure	beach_resort	1	tengerparti üdülőhelys
+leisure	common	0	közös terület
+leisure	common	1	közös területs
+leisure	fishing	0	horgászterület
+leisure	fishing	1	horgászterülets
+leisure	garden	0	kert
+leisure	garden	1	kerts
+leisure	golf_course	0	golfpálya
+leisure	golf_course	1	golfpályas
+leisure	ice_rink	0	műjégpálya
+leisure	ice_rink	1	műjégpályas
+leisure	marina	0	kishajókikötő
+leisure	marina	1	kishajókikötős
+leisure	miniature_golf	0	minigolfpálya
+leisure	miniature_golf	1	minigolfpályas
+leisure	nature_reserve	0	természetvédelmi terület
+leisure	nature_reserve	1	természetvédelmi területs
+leisure	park	0	park
+leisure	park	1	parks
+leisure	pitch	0	labdarúgópálya
+leisure	pitch	1	labdarúgópályas
+leisure	playground	0	játszótér
+leisure	playground	1	játszótérs
+leisure	recreation_ground	0	szabadidőpark
+leisure	recreation_ground	1	szabadidőparks
+leisure	slipway	0	sólya
+leisure	slipway	1	sólyas
+leisure	sports_centre	0	sportközpont
+leisure	sports_centre	1	sportközponts
+leisure	stadium	0	stadion
+leisure	stadium	1	stadions
+leisure	swimming_pool	0	uszoda
+leisure	swimming_pool	1	uszodas
+leisure	track	0	futópálya
+leisure	track	1	futópályas
+leisure	water_park	0	vízipark
+leisure	water_park	1	víziparks
+natural	bay	0	öböl
+natural	bay	1	öböls
+natural	beach	0	part
+natural	beach	1	parts
+natural	cape	0	partfok
+natural	cape	1	partfoks
+natural	cave_entrance	0	barlangbejárat
+natural	cave_entrance	1	barlangbejárats
+natural	channel	0	csatorna
+natural	channel	1	csatornas
+natural	cliff	0	szikla
+natural	cliff	1	sziklas
+natural	coastline	0	tengerpart
+natural	coastline	1	tengerparts
+natural	crater	0	kráter
+natural	crater	1	kráters
+natural	feature	0	tereptárgy
+natural	feature	1	tereptárgys
+natural	fell	0	kopár
+natural	fell	1	kopárs
+natural	fjord	0	fjord
+natural	fjord	1	fjords
+natural	geyser	0	gejzír
+natural	geyser	1	gejzírs
+natural	glacier	0	gleccser
+natural	glacier	1	gleccsers
+natural	heath	0	puszta
+natural	heath	1	pusztas
+natural	hill	0	domb
+natural	hill	1	dombs
+natural	island	0	sziget
+natural	island	1	szigets
+natural	land	0	szárazföld
+natural	land	1	szárazfölds
+natural	marsh	0	mocsár
+natural	marsh	1	mocsárs
+natural	moor	0	mocsár
+natural	moor	1	mocsárs
+natural	mud	0	iszap
+natural	mud	1	iszaps
+natural	peak	0	hegycsúcs
+natural	peak	1	hegycsúcss
+natural	point	0	pont
+natural	point	1	ponts
+natural	reef	0	zátony
+natural	reef	1	zátonys
+natural	ridge	0	hegygerinc
+natural	ridge	1	hegygerincs
+natural	river	0	folyó
+natural	river	1	folyós
+natural	rock	0	szikla
+natural	rock	1	sziklas
+natural	scree	0	sziklatörmelék
+natural	scree	1	sziklatörmeléks
+natural	scrub	0	cserjés
+natural	scrub	1	cserjéss
+natural	shoal	0	zátony
+natural	shoal	1	zátonys
+natural	spring	0	forrás
+natural	spring	1	forráss
+natural	strait	0	tengerszoros
+natural	strait	1	tengerszoross
+natural	tree	0	fa
+natural	tree	1	fas
+natural	valley	0	völgy
+natural	valley	1	völgys
+natural	volcano	0	vulkán
+natural	volcano	1	vulkáns
+natural	water	0	tó
+natural	water	1	tós
+natural	wetland	0	láp
+natural	wetland	1	láps
+natural	wetlands	0	láp
+natural	wetlands	1	láps
+natural	wood	0	erdő
+natural	wood	1	erdős
+place	city	0	nagyváros
+place	city	1	nagyváross
+place	country	0	ország
+place	country	1	országs
+place	county	0	megye
+place	county	1	megyes
+place	farm	0	tanya
+place	farm	1	tanyas
+place	hamlet	0	község
+place	hamlet	1	községs
+place	house	0	ház
+place	house	1	házs
+place	houses	0	házak
+place	houses	1	házaks
+place	island	0	sziget
+place	island	1	szigets
+place	islet	0	kis sziget
+place	islet	1	kis szigets
+place	locality	0	hely
+place	locality	1	helys
+place	moor	0	mocsár
+place	moor	1	mocsárs
+place	municipality	0	település
+place	municipality	1	településs
+place	postcode	0	irányítószám
+place	postcode	1	irányítószáms
+place	region	0	régió
+place	region	1	régiós
+place	sea	0	tenger
+place	sea	1	tengers
+place	state	0	állam
+place	state	1	állams
+place	subdivision	0	településrész
+place	subdivision	1	településrészs
+place	suburb	0	városrész
+place	suburb	1	városrészs
+place	town	0	város
+place	town	1	váross
+place	unincorporated_area	0	jogi személyiséggel nem rendelkező terület
+place	unincorporated_area	1	jogi személyiséggel nem rendelkező területs
+place	village	0	nagyközség
+place	village	1	nagyközségs
+railway	abandoned	0	felhagyott vasút
+railway	abandoned	1	felhagyott vasúts
+railway	construction	0	építés alatt álló vasút
+railway	construction	1	építés alatt álló vasúts
+railway	disused	0	használaton kívüli vasút
+railway	disused	1	használaton kívüli vasúts
+railway	disused_station	0	használaton kívüli vasútállomás
+railway	disused_station	1	használaton kívüli vasútállomáss
+railway	funicular	0	siklóvasút
+railway	funicular	1	siklóvasúts
+railway	halt	0	vasúti megállóhely
+railway	halt	1	vasúti megállóhelys
+railway	historic_station	0	történelmi vasútállomás
+railway	historic_station	1	történelmi vasútállomáss
+railway	junction	0	vasúti csomópont
+railway	junction	1	vasúti csomóponts
+railway	level_crossing	0	vasúti átjáró
+railway	level_crossing	1	vasúti átjárós
+railway	light_rail	0	hév
+railway	light_rail	1	hévs
+railway	monorail	0	egysínű vasút
+railway	monorail	1	egysínű vasúts
+railway	narrow_gauge	0	keskeny nyomközű vasút
+railway	narrow_gauge	1	keskeny nyomközű vasúts
+railway	platform	0	vasúti peron
+railway	platform	1	vasúti perons
+railway	preserved	0	megőrzött vasút
+railway	preserved	1	megőrzött vasúts
+railway	spur	0	vasúti szárnyvonal
+railway	spur	1	vasúti szárnyvonals
+railway	station	0	vasútállomás
+railway	station	1	vasútállomáss
+railway	subway	0	metróállomás
+railway	subway	1	metróállomáss
+railway	subway_entrance	0	metrókijárat
+railway	subway_entrance	1	metrókijárats
+railway	switch	0	vasúti váltó
+railway	switch	1	vasúti váltós
+railway	tram	0	villamos
+railway	tram	1	villamoss
+railway	tram_stop	0	villamosmegálló
+railway	tram_stop	1	villamosmegállós
+railway	yard	0	rendező-pályaudvar
+railway	yard	1	rendező-pályaudvars
+shop	alcohol	0	alkoholos italbolt
+shop	alcohol	1	alkoholos italbolts
+shop	apparel	0	ruházati bolt
+shop	apparel	1	ruházati bolts
+shop	art	0	művészeti bolt
+shop	art	1	művészeti bolts
+shop	bakery	0	pékség
+shop	bakery	1	pékségs
+shop	beauty	0	szépészeti bolt
+shop	beauty	1	szépészeti bolts
+shop	beverages	0	italbolt
+shop	beverages	1	italbolts
+shop	bicycle	0	kerékpárbolt
+shop	bicycle	1	kerékpárbolts
+shop	books	0	könyvesbolt
+shop	books	1	könyvesbolts
+shop	butcher	0	hentesbolt
+shop	butcher	1	hentesbolts
+shop	car	0	autókereskedés
+shop	car	1	autókereskedéss
+shop	car_dealer	0	autókereskedés
+shop	car_dealer	1	autókereskedéss
+shop	car_parts	0	autóalkatrészbolt
+shop	car_parts	1	autóalkatrészbolts
+shop	car_repair	0	autószerviz
+shop	car_repair	1	autószervizs
+shop	carpet	0	szőnyegbolt
+shop	carpet	1	szőnyegbolts
+shop	charity	0	adománybolt
+shop	charity	1	adománybolts
+shop	chemist	0	vegyipari bolt
+shop	chemist	1	vegyipari bolts
+shop	clothes	0	ruházati bolt
+shop	clothes	1	ruházati bolts
+shop	computer	0	számítástechnikai bolt
+shop	computer	1	számítástechnikai bolts
+shop	confectionery	0	cukrászda
+shop	confectionery	1	cukrászdas
+shop	convenience	0	kisbolt
+shop	convenience	1	kisbolts
+shop	copyshop	0	fénymásoló bolt
+shop	copyshop	1	fénymásoló bolts
+shop	cosmetics	0	kozmetikai bolt
+shop	cosmetics	1	kozmetikai bolts
+shop	department_store	0	áruház
+shop	department_store	1	áruházs
+shop	discount	0	diszkontárubolt
+shop	discount	1	diszkontárubolts
+shop	doityourself	0	barkácsbolt
+shop	doityourself	1	barkácsbolts
+shop	drugstore	0	illatszerbolt
+shop	drugstore	1	illatszerbolts
+shop	dry_cleaning	0	ruhatisztító
+shop	dry_cleaning	1	ruhatisztítós
+shop	electronics	0	elektronikai bolt
+shop	electronics	1	elektronikai bolts
+shop	estate_agent	0	ingatlankereskedés
+shop	estate_agent	1	ingatlankereskedéss
+shop	farm	0	kertészbolt
+shop	farm	1	kertészbolts
+shop	fashion	0	divatbolt
+shop	fashion	1	divatbolts
+shop	fish	0	halbolt
+shop	fish	1	halbolts
+shop	florist	0	virágárus
+shop	florist	1	virágáruss
+shop	food	0	élelmiszerbolt
+shop	food	1	élelmiszerbolts
+shop	funeral_directors	0	temetkezési vállalkozó
+shop	funeral_directors	1	temetkezési vállalkozós
+shop	furniture	0	bútorbolt
+shop	furniture	1	bútorbolts
+shop	gallery	0	galéria
+shop	gallery	1	galérias
+shop	garden_centre	0	cserepes virágbolt
+shop	garden_centre	1	cserepes virágbolts
+shop	general	0	vegyeskereskedés
+shop	general	1	vegyeskereskedéss
+shop	gift	0	ajándékbolt
+shop	gift	1	ajándékbolts
+shop	greengrocer	0	zöldséges
+shop	greengrocer	1	zöldségess
+shop	grocery	0	fűszerbolt
+shop	grocery	1	fűszerbolts
+shop	hairdresser	0	fodrászat
+shop	hairdresser	1	fodrászats
+shop	hardware	0	szerelési bolt
+shop	hardware	1	szerelési bolts
+shop	hifi	0	hi-fi bolt
+shop	hifi	1	hi-fi bolts
+shop	insurance	0	biztosító
+shop	insurance	1	biztosítós
+shop	jewelry	0	ékszerbolt
+shop	jewelry	1	ékszerbolts
+shop	kiosk	0	trafik
+shop	kiosk	1	trafiks
+shop	laundry	0	mosoda
+shop	laundry	1	mosodas
+shop	mall	0	üzletház
+shop	mall	1	üzletházs
+shop	market	0	piac
+shop	market	1	piacs
+shop	mobile_phone	0	mobiltelefonbolt
+shop	mobile_phone	1	mobiltelefonbolts
+shop	motorcycle	0	motorbolt
+shop	motorcycle	1	motorbolts
+shop	music	0	zenebolt
+shop	music	1	zenebolts
+shop	newsagent	0	újságárus
+shop	newsagent	1	újságáruss
+shop	optician	0	látszerész
+shop	optician	1	látszerészs
+shop	organic	0	bioélelmiszerbolt
+shop	organic	1	bioélelmiszerbolts
+shop	outdoor	0	túrabolt
+shop	outdoor	1	túrabolts
+shop	pet	0	állatkereskedés
+shop	pet	1	állatkereskedéss
+shop	photo	0	fotóbolt
+shop	photo	1	fotóbolts
+shop	salon	0	szalon
+shop	salon	1	szalons
+shop	shoes	0	cipőbolt
+shop	shoes	1	cipőbolts
+shop	shopping_centre	0	bevásárlóközpont
+shop	shopping_centre	1	bevásárlóközponts
+shop	sports	0	sportbolt
+shop	sports	1	sportbolts
+shop	stationery	0	írószerbolt
+shop	stationery	1	írószerbolts
+shop	supermarket	0	szupermarket
+shop	supermarket	1	szupermarkets
+shop	toys	0	játékbolt
+shop	toys	1	játékbolts
+shop	travel_agency	0	utazási iroda
+shop	travel_agency	1	utazási irodas
+shop	video	0	videókölcsönző
+shop	video	1	videókölcsönzős
+shop	wine	0	borárusító italbolt
+shop	wine	1	borárusító italbolts
+tourism	alpine_hut	0	alpesi kunyhó
+tourism	alpine_hut	1	alpesi kunyhós
+tourism	artwork	0	műalkotás
+tourism	artwork	1	műalkotáss
+tourism	attraction	0	látnivaló
+tourism	attraction	1	látnivalós
+tourism	bed_and_breakfast	0	vendégház
+tourism	bed_and_breakfast	1	vendégházs
+tourism	cabin	0	kunyhó
+tourism	cabin	1	kunyhós
+tourism	camp_site	0	kemping
+tourism	camp_site	1	kempings
+tourism	caravan_site	0	lakókocsitábor
+tourism	caravan_site	1	lakókocsitábors
+tourism	chalet	0	nyaralóház
+tourism	chalet	1	nyaralóházs
+tourism	guest_house	0	vendégház
+tourism	guest_house	1	vendégházs
+tourism	hostel	0	turistaszálló
+tourism	hostel	1	turistaszállós
+tourism	hotel	0	szálloda
+tourism	hotel	1	szállodas
+tourism	information	0	információ
+tourism	information	1	információs
+tourism	lean_to	0	kunyhó
+tourism	lean_to	1	kunyhós
+tourism	motel	0	motel
+tourism	motel	1	motels
+tourism	museum	0	múzeum
+tourism	museum	1	múzeums
+tourism	picnic_site	0	piknikezőhely
+tourism	picnic_site	1	piknikezőhelys
+tourism	theme_park	0	vidámpark
+tourism	theme_park	1	vidámparks
+tourism	valley	0	völgy
+tourism	valley	1	völgys
+tourism	viewpoint	0	kilátó
+tourism	viewpoint	1	kilátós
+tourism	zoo	0	állatkert
+tourism	zoo	1	állatkerts
+waterway	boatyard	0	hajóhangár
+waterway	boatyard	1	hajóhangárs
+waterway	canal	0	csatorna
+waterway	canal	1	csatornas
+waterway	connector	0	vízi csatlakozó
+waterway	connector	1	vízi csatlakozós
+waterway	dam	0	gát
+waterway	dam	1	gáts
+waterway	derelict_canal	0	felhagyott csatorna
+waterway	derelict_canal	1	felhagyott csatornas
+waterway	ditch	0	árok
+waterway	ditch	1	ároks
+waterway	dock	0	kikötõ
+waterway	dock	1	kikötõs
+waterway	drain	0	árok
+waterway	drain	1	ároks
+waterway	lock	0	zsilip
+waterway	lock	1	zsilips
+waterway	lock_gate	0	zsilip
+waterway	lock_gate	1	zsilips
+waterway	mineral_spring	0	ásványos patak
+waterway	mineral_spring	1	ásványos pataks
+waterway	mooring	0	kikötő
+waterway	mooring	1	kikötős
+waterway	rapids	0	zuhatag
+waterway	rapids	1	zuhatags
+waterway	river	0	folyó
+waterway	river	1	folyós
+waterway	riverbank	0	folyópart
+waterway	riverbank	1	folyóparts
+waterway	stream	0	patak
+waterway	stream	1	pataks
+waterway	wadi	0	vádi
+waterway	wadi	1	vádis
+waterway	water_point	0	vízi fordítópont
+waterway	water_point	1	vízi fordítóponts
+waterway	waterfall	0	vízesés
+waterway	waterfall	1	vízeséss
+waterway	weir	0	bukógát
+waterway	weir	1	bukógáts

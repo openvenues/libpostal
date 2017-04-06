@@ -1,9 +1,13 @@
+агрогородок|аг
+agrogorodok|ag
 блок
 blok
-деревня|дер
-derevnya|der
+деревня|дер|д
+derevnya|der|d
 гмина|гм
 gmina|gm
+квартал|кварт|кв|кв-л
+kvartal|kvart|kv|kv-l
 микрорайон
 mikrorayon
 област|обл
@@ -14,7 +18,14 @@ posblok
 ostrov|o
 город|г
 gorod|g
+городской посёлок |гп
+gorodskoy posolok|gp
 раион|р-н
 raion|r-n
+сельсовет
+сельский совет|с / с|сельсовет|сельскии совет
+sel'skiy sovet|s / s|sel'sovet|selskiy sovet|selsovet
 посёлок|поселок|пос
-poselok|pos
+posolok|pos
+посёлок городско́го ти́па|пгт|посёлок городского типа|поселок городского типа
+posolok gorodskógo típa|pgt|posolok gorodskogo tipa

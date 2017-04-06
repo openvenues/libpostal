@@ -84,6 +84,7 @@ deli|delicatessen
 dental
 dentist
 dentistry
+department|dept
 detention|det|detn
 development
 diner
@@ -121,6 +122,7 @@ geriatric unit
 golf course
 golf club
 graveyard|grave yard
+green|grn|gn
 grill
 ground
 gym|gymnasium
@@ -141,6 +143,7 @@ house
 houses|hses
 hub
 ice cream|icecream
+industrial estate|ind est|ind.est
 industrial park|ind park
 inn
 institute|inst
@@ -180,6 +183,7 @@ nursing center|nursing centre
 nursing home|nh|nhome|nrs|nrsg|nsg|nurs|nrsng hm|n h|nrs home|n home|nursing hom|nursing ho|nursing h
 high school|hs|h s
 junior high school|jr high school|jhs|j h s|jr hs|jr h s
+kiosk
 laboratory
 lab
 labs
@@ -216,7 +220,7 @@ police department|pd|p d
 police station
 polytechnic
 port|pt|prt
-post office
+post office|po|postoffice
 precinct|pct
 pre school|preschool|pre-school
 pre-kindergarten|prekindergarten|pre-k|prek|pre k

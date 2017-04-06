@@ -1,0 +1,36 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "5": "state_district"
+        "6": "state_district"
+        "7": "state_district"
+        "8": "state_district"
+        "10": "city"
+
+    place:
+        "district": "state_district"
+        "hamlet": "suburb"
+
+    overrides:
+        id:
+            relation:
+                # Kuala Lumpur
+                "2939672": "city"
+
+        contained_by:
+            relation:
+                # Kuala Lumpur
+                "2939672":
+                    place:
+                        "village": "suburb"
+
+                # Selangor
+                "2932285":
+                    place:
+                        "village": "suburb"
+
+                # Putrajaya
+                "4443881":
+                    place:
+                        "village": "suburb"

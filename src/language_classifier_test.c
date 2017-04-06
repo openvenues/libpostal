@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
         filename = argv[1];
     }
 
-    if (!language_classifier_module_setup(argv[1]) || !address_dictionary_module_setup(NULL)) {
+    if (!language_classifier_module_setup(dir) || !address_dictionary_module_setup(NULL) || !transliteration_module_setup(NULL)) {
         log_error("Error setting up classifier\n");
     }
 

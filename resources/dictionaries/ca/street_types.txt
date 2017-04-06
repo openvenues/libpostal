@@ -1,8 +1,8 @@
 autopista|auto|autop
 autovia|autov
-avinguda|av|avd|avda
+avinguda|av|avd|avda|avgda
 camí|cami
-carrer|carr
+carrer|carr|c /
 carrera|cra|carra
 carreró|cró|carrero|cro|carro|carr
 carretera|ctra

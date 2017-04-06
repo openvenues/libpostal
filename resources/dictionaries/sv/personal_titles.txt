@@ -1,3 +1,3 @@
 doktor|dr
-sankt|s:t
-sankta|s:ta
+sankt|s:t|st|skt
+sankta|s:ta|sta|skta

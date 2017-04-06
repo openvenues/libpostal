@@ -1,0 +1,439 @@
+# hu.yaml
+# -------
+# Hungarian language specification.
+
+components:
+    level:
+        null_probability: 0.75
+        alphanumeric_probability: 0.2
+        standalone_probability: 0.05
+
+    unit:
+        null_probability: 0.75
+        alphanumeric_probability: 0.25
+
+    combinations:
+        -
+            components:
+                - level
+                - unit
+            label: unit
+            separators:
+                - separator: "/"
+                  probability: 0.55
+                - separator: " "
+                  probability: 0.4
+                - separator: "-"
+                  probability: 0.05
+            probability: 0.8
+
+
+numbers:
+    default: &szam
+        canonical: szám
+        sample: true
+        # Probabilities
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.6
+
+and:
+    default: &es
+        canonical: és
+        abbreviated: "&"
+        canonical_probability: 0.2
+        abbreviated_probability: 0.75
+        sample: true
+        sample_probability: 0.05
+    probability: 0.6
+    alternatives:
+        - alternative: &es_a
+            canonical: és a
+            canonical_probability: 0.9
+            sample: true
+            sample_probability: 0.1
+          probability: 0.2
+        - alternative: &es_az
+            canonical: és az
+            canonical_probability: 0.9
+            sample: true
+            sample_probability: 0.1
+          probability: 0.2
+
+cross_streets:
+    and: *es
+    corner_of: &sarkan
+        canonical: sarkán
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    intersection:
+        default: *es
+        probability: 0.6
+        alternatives:
+            - alternative: *es_a
+              probability: 0.1
+            - alternative: *es_az
+              probability: 0.1
+            - alternative: *sarkan
+              probability: 0.2
+
+    between:
+        canonical: között
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probability: 0.5
+
+levels:
+    floor: &emelet
+        canonical: emelet
+        abbreviated: em
+        sample: true
+        canonical_probability: 0.1
+        abbreviated_probability: 0.85
+        sample_probability: 0.05
+        numeric:
+            direction: left
+            direction_probability: 0.9
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.2
+                roman_numeral_probability: 0.8
+        numeric_probability: 0.1
+        ordinal_probability: 0.9
+    foldszint: &foldszint
+        canonical: földszint
+        abbreviated: fszt
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.6
+        sample_probability: 0.2
+    felemelet: &felemelet
+        canonical: félemelet
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    magasfoldszint: &magasfoldszint
+        canonical: magasföldszint
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    pince: &pince
+        canonical: pince
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        standalone_probability: 0.99
+        number_abs_value: true
+        number_min_abs_value: 1
+        numeric_probability: 0.005
+        ordinal_probability: 0.005
+    alagsor: &alagsor
+        canonical: alagsor
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        standalone_probability: 0.99
+        number_abs_value: true
+        number_min_abs_value: 1
+        numeric_probability: 0.005
+        ordinal_probability: 0.005
+    felszuteren: &felszuteren
+        canonical: félszuterén
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        standalone_probability: 0.99
+        number_abs_value: true
+        number_min_abs_value: 1
+        numeric_probability: 0.005
+        ordinal_probability: 0.005
+    szuteren: &szuteren
+        canonical: szuterén
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        standalone_probability: 0.99
+        number_abs_value: true
+        number_min_abs_value: 1
+        numeric_probability: 0.005
+        ordinal_probability: 0.005
+    aliases:
+        "<-1":
+            default: *alagsor
+            probability: 0.6
+            alternatives:
+                - alternative: *pince
+                  probability: 0.3
+                - alternative: *szuteren
+                  probability: 0.1
+        "-1":
+            default: *alagsor
+            probability: 0.5
+            alternatives:
+                - alternative: *pince
+                  probability: 0.3
+                - alternative: *szuteren
+                  probability: 0.1
+                - alternative: *felszuteren
+                  probability: 0.1
+
+        "0":
+            default: *foldszint
+            probability: 0.9
+            alternatives:
+                - alternative: *emelet
+                  probability: 0.1
+
+        "1":
+            default: *emelet
+            probability: 0.9
+            alternatives:
+                - alternative: *felemelet
+                  probability: 0.1
+
+        "2":
+            default: *emelet
+            probability: 0.9
+            alternatives:
+                - alternative: *magasfoldszint
+                  probability: 0.1
+
+    numbering_starts_at: 0
+
+    alphanumeric:
+        default: *emelet
+        numeric_probability: 0.59 # With this probability, pick an integer
+        roman_numeral_probability: 0.4 # Pick a Roman numeral for the actual value
+        alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
+        numeric_plus_alpha_probability: 0.0001 # e.g. 2A
+        alpha_plus_numeric_probability: 0.0001 # e.g. A2
+
+categories:
+    near:
+        default:
+            canonical: közelében
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+    nearby:
+        default:
+            canonical: közelben
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+
+    near_me:
+        default:
+            canonical: közelemben
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+
+    # Probabilities of each phrase
+    near_probability: 0.7
+    nearby_probability: 0.2
+    near_me_probability: 0.1
+
+directions:
+    right: &jobb
+        canonical: jobb
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    left: &bal
+        canonical: bal
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    alternatives:
+        - alternative: *jobb
+          probability: 0.5
+        - alternative: *bal
+          probability: 0.5
+
+cardinal_directions:
+    east: &kelet
+        canonical: kelet
+        abbreviated: k
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: k
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    west: &nyugat
+        canonical: nyugat
+        abbreviated: n
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: n
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    north: &eszak
+        canonical: észak
+        abbreviated: e
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: e
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    south: &del
+        canonical: dél
+        abbreviated: d
+        sample: true
+        canonical_probability: 0.75
+        abbreviated_probability: 0.1
+        sample_probability: 0.15
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: d
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    alternatives:
+        - alternative: *eszak
+          probability: 0.25
+        - alternative: *kelet
+          probability: 0.25
+        - alternative: *del
+          probability: 0.25
+        - alternative: *nyugat
+          probability: 0.25
+
+
+po_boxes:
+    postafiok: &postafiok
+        canonical: postafiók
+        abbreviated: pf
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.7
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    alphanumeric:
+        default: *postafiok
+        numeric_probability: 0.9 # Pf 123
+        alpha_probability: 0.05 # Pf A
+        numeric_plus_alpha_probability: 0.04 # Pf 123G
+        alpha_plus_numeric_probability: 0.01 # Pf A123
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+units:
+    lakas: &lakas
+        canonical: lakás
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        numeric_probability: 0.3
+        ordinal_probability: 0.7
+    iroda: &iroda
+        canonical: iroda
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    szoba: &szoba
+        canonical: szoba
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    alphanumeric: &unit_alphanumeric
+        default: *lakas
+        probability: 0.9
+        alternatives:
+            - alternative: *szoba
+              probability: 0.1
+        numeric_probability: 0.95 # e.g. m. 1
+        numeric_plus_alpha_probability: 0.005 # e.g. 1A
+        alpha_plus_numeric_probability: 0.005 # e.g. A1
+        alpha_probability: 0.04 # e.g. m. A
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.2
+
+    zones:
+        commercial: &commercial_unit_types
+            default: *iroda
+            numeric_probability: 0.95 # e.g. pokój 1
+            numeric_plus_alpha_probability: 0.01 # e.g. pokój 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. pokój A1
+            alpha_probability: 0.03 # e.g. pokój A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1
+        university: *commercial_unit_types

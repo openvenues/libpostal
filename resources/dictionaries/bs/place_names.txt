@@ -1,3 +1,6 @@
+crkva
+dom
+džamija|dzamija
 gradina
 kula
 luka

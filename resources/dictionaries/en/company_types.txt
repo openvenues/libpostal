@@ -39,7 +39,7 @@ national trust and savings association|national trust & savings association|nt &
 no liability|nl|n l
 nonprofit|non profit
 open ended investment company|oeic|o e i c
-private limited company|pvt ltd|pte ltd
+private limited company|pvt ltd
 professional limited liability company|pllc|p l l c
 professional service corporation|psc|p s c
 proprietary|pty
