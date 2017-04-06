@@ -157,20 +157,20 @@ elif [ $COMMAND = "upload" ]; then
 
     if [ $FILE = "base" ] || [ $FILE = "all" ]; then
         tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $BASIC_MODULE_DIRS
-        aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $LIBPOSTAL_DATA_S3_PREFIX
+        aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $LIBPOSTAL_S3_KEY/$LIBPOSTAL_DATA_S3_PREFIX/
     fi
 
     if [ $FILE = "parser" ] || [ $FILE = "all" ]; then
         latest_parser=$(curl --silent $LIBPOSTAL_S3_BUCKET_URL/$LIBPOSTAL_PARSER_S3_PREFIX/latest)
         tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_PARSER_FILE $PARSER_MODULE_DIR
-        parser_s3_dir="$LIBPOSTAL_PARSER_S3_PREFIX/$latest_parser/"
+        parser_s3_dir="$LIBPOSTAL_S3_KEY/$LIBPOSTAL_PARSER_S3_PREFIX/$latest_parser/"
         aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_PARSER_FILE $parser_s3_dir
     fi
 
     if [ $FILE = "language_classifier" ] || [ $FILE = "all" ]; then
         latest_lang_class=$(curl --silent $LIBPOSTAL_S3_BUCKET_URL/$LIBPOSTAL_LANG_CLASS_S3_PREFIX/latest)
         tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_LANG_CLASS_FILE $LANGUAGE_CLASSIFIER_MODULE_DIR
-        lang_class_s3_dir="LIBPOSTAL_LANG_CLASS_S3_PREFIX/$latest_lang_class"
+        lang_class_s3_dir="$LIBPOSTAL_S3_KEY/$LIBPOSTAL_LANG_CLASS_S3_PREFIX/$latest_lang_class/"
         aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_LANG_CLASS_FILE $lang_class_s3_dir
     fi
 
