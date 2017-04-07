@@ -24,6 +24,9 @@ COMMAND=$1
 FILE=$2
 LIBPOSTAL_DATA_DIR=$3
 
+LIBPOSTAL_DATA_VERSION_FILE=$LIBPOSTAL_DATA_DIR/data_version
+LIBPOSTAL_DATA_DIR_VERSION=
+
 mkdir -p $LIBPOSTAL_DATA_DIR
 
 LIBPOSTAL_DATA_UPDATED_PATH=$LIBPOSTAL_DATA_DIR/last_updated
@@ -137,6 +140,26 @@ download_file() {
 }
 
 if [ $COMMAND = "download" ]; then
+    if [ -e $LIBPOSTAL_DATA_VERSION_FILE ]; then
+        LIBPOSTAL_DATA_DIR_VERSION=$(cat $LIBPOSTAL_DATA_VERSION_FILE)
+    fi
+
+    if [ "$LIBPOSTAL_DATA_DIR_VERSION" != "$LIBPOSTAL_VERSION_STRING" ]; then
+        echo "Old version of datadir detected, removing..."
+        for subdir in $BASIC_MODULE_DIRS $PARSER_MODULE_DIR $LANGUAGE_CLASSIFIER_MODULE_DIR; do
+            rm -rf $LIBPOSTAL_DATA_DIR/$subdir;
+        done
+
+        # Legacy, blow it away too to be nice
+        if [ -e $LIBPOSTAL_DATA_DIR/geodb ]; then
+            rm -rf $LIBPOSTAL_DATA_DIR/geodb;
+        fi
+
+        rm -f $LIBPOSTAL_DATA_UPDATED_PATH
+        rm -f $LIBPOSTAL_LANG_CLASS_UPDATED_PATH
+        rm -f $LIBPOSTAL_PARSER_UPDATED_PATH
+    fi
+
     mkdir -p $LIBPOSTAL_DATA_DIR
 
     if [ $FILE = "base" ] || [ $FILE = "all" ]; then
@@ -151,6 +174,10 @@ if [ $COMMAND = "download" ]; then
         latest_lang_class=$(curl --silent "$LIBPOSTAL_S3_BUCKET_URL/$LIBPOSTAL_LANG_CLASS_S3_PREFIX/latest")
         lang_class_s3_prefix="$LIBPOSTAL_LANG_CLASS_S3_PREFIX/$latest_lang_class"
         download_file $LIBPOSTAL_LANG_CLASS_UPDATED_PATH $LIBPOSTAL_DATA_DIR $lang_class_s3_prefix $LIBPOSTAL_LANG_CLASS_FILE "language classifier data file" $LANGUAGE_CLASSIFIER_MODULE_DIR
+    fi
+
+    if [ "$LIBPOSTAL_DATA_DIR_VERSION" != "$LIBPOSTAL_VERSION_STRING" ]; then
+        echo $LIBPOSTAL_VERSION_STRING > $LIBPOSTAL_DATA_VERSION_FILE;
     fi
 
 elif [ $COMMAND = "upload" ]; then
