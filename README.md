@@ -558,8 +558,8 @@ needed to construct the training data.
 where we may be limited to < 1GB of RAM per process depending on the machine
 configuration. As much as possible libpostal uses contiguous arrays, tries
 (built on contiguous arrays), bloom filters and compressed sparse matrices to
-keep memory usage low. It's conceivable that libpostal could even be used on
-a mobile device, although that's not an explicit goal of the project.
+keep memory usage low. It's possible to use libpostal on a mobile device with
+models trained on a single country or a handful of countries.
 
 3. **Performance**: this is last on the list for a reason. Most of the
 optimizations in libpostal are for memory usage rather than performance.
