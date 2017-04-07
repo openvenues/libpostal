@@ -1,0 +1,938 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "nula"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "jedan"
+      value: 1
+      type: "cardinal"
+      multiply_gte: 1000000
+    - 
+      name: "jedna"
+      value: 1
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "jedno"
+      value: 1
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "dva"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "dvije"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "tri"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "četiri"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "cetiri"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "pet"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "šest"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sest"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sedam"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "osam"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "devet"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "deset"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "jedanaest"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "dvanaest"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "trinaest"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "četrnaest"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "cetrnaest"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "petnaest"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "šesnaest"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sesnaest"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sedamnaest"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "osamnaest"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "devetnaest"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "dvadeset"
+      value: 20
+      type: "cardinal"
+      right: "add"
+      right_separator: " i "
+    - 
+      name: "trideset"
+      value: 30
+      type: "cardinal"
+      right: "add"
+      right_separator: " i "
+    - 
+      name: "četrdeset"
+      value: 40
+      type: "cardinal"
+      right: "add"
+      right_separator: " i "
+    - 
+      name: "cetrdeset"
+      value: 40
+      type: "cardinal"
+      right: "add"
+      right_separator: " i "
+    - 
+      name: "pedeset"
+      value: 50
+      type: "cardinal"
+      right: "add"
+      right_separator: " i "
+    - 
+      name: "šezdeset"
+      value: 60
+      type: "cardinal"
+      right: "add"
+      right_separator: " i "
+    - 
+      name: "sezdeset"
+      value: 60
+      type: "cardinal"
+      right: "add"
+      right_separator: " i "
+    - 
+      name: "sedamdeset"
+      value: 70
+      type: "cardinal"
+      right: "add"
+      right_separator: " i "
+    - 
+      name: "osamdeset"
+      value: 80
+      type: "cardinal"
+      right: "add"
+      right_separator: " i "
+    - 
+      name: "devedeset"
+      value: 90
+      type: "cardinal"
+      right: "add"
+      right_separator: " i "
+    - 
+      name: "sto"
+      value: 100
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dvjesto"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "tristo"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "četiristo"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "cetiristo"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "petsto"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "šeststo"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seststo"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sedamsto"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "osamsto"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "devetsto"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "tisuću"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "tisucu"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "tisuće"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tisuce"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tisuća"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tisuca"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milijun"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "milijuna"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milijarda"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "milijarde"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milijardi"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilijun"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "bilijuna"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilijarda"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "bilijarde"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilijardi"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "nulai"
+      value: 0
+      type: "ordinal"
+    - 
+      name: "prvi"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "drugi"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "treći"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "treci"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "četvrti"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "cetvrti"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "peti"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "šesti"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "sesti"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "sedmi"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "osmi"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "deveti"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "deseti"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "jedanaesti"
+      value: 11
+      type: "ordinal"
+    - 
+      name: "dvanaesti"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "trinaesti"
+      value: 13
+      type: "ordinal"
+    - 
+      name: "četrnaesti"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "cetrnaesti"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "petnaesti"
+      value: 15
+      type: "ordinal"
+    - 
+      name: "šesnaesti"
+      value: 16
+      type: "ordinal"
+    - 
+      name: "sesnaesti"
+      value: 16
+      type: "ordinal"
+    - 
+      name: "sedamnaesti"
+      value: 17
+      type: "ordinal"
+    - 
+      name: "osamnaesti"
+      value: 18
+      type: "ordinal"
+    - 
+      name: "devetnaesti"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "dvadeseti"
+      value: 20
+      type: "ordinal"
+    - 
+      name: "trideseti"
+      value: 30
+      type: "ordinal"
+    - 
+      name: "četrdeseti"
+      value: 40
+      type: "ordinal"
+    - 
+      name: "cetrdeseti"
+      value: 40
+      type: "ordinal"
+    - 
+      name: "pedeseti"
+      value: 50
+      type: "ordinal"
+    - 
+      name: "šezdeseti"
+      value: 60
+      type: "ordinal"
+    - 
+      name: "sezdeseti"
+      value: 60
+      type: "ordinal"
+    - 
+      name: "sedamdeseti"
+      value: 70
+      type: "ordinal"
+    - 
+      name: "osamdeseti"
+      value: 80
+      type: "ordinal"
+    - 
+      name: "devedeseti"
+      value: 90
+      type: "ordinal"
+    - 
+      name: "stoti"
+      value: 100
+      type: "ordinal"
+    - 
+      name: "st"
+      value: 100
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "dvest"
+      value: 200
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "trist"
+      value: 300
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "četrist"
+      value: 400
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "cetrist"
+      value: 400
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "petst"
+      value: 500
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "šest"
+      value: 600
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "sest"
+      value: 600
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "sedamst"
+      value: 700
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "osamst"
+      value: 800
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "devetst"
+      value: 900
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "milijuny"
+      value: 1000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milijardy"
+      value: 1000000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilijuny"
+      value: 1000000000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilijardy"
+      value: 1000000000000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "nulaa"
+      value: 0
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "prva"
+      value: 1
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "druga"
+      value: 2
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "treća"
+      value: 3
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "treca"
+      value: 3
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "četvrta"
+      value: 4
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "cetvrta"
+      value: 4
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "peta"
+      value: 5
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "šesta"
+      value: 6
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "sesta"
+      value: 6
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "sedma"
+      value: 7
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "osma"
+      value: 8
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "deveta"
+      value: 9
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "deseta"
+      value: 10
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "jedanaesta"
+      value: 11
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "dvanaesta"
+      value: 12
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "trinaesta"
+      value: 13
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "četrnaesta"
+      value: 14
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "cetrnaesta"
+      value: 14
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "petnaesta"
+      value: 15
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "šesnaesta"
+      value: 16
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "sesnaesta"
+      value: 16
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "sedamnaesta"
+      value: 17
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "osamnaesta"
+      value: 18
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "devetnaesta"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "dvadeseta"
+      value: 20
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "trideseta"
+      value: 30
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "četrdeseta"
+      value: 40
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "cetrdeseta"
+      value: 40
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "pedeseta"
+      value: 50
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "šezdeseta"
+      value: 60
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "sezdeseta"
+      value: 60
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "sedamdeseta"
+      value: 70
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "osamdeseta"
+      value: 80
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "devedeseta"
+      value: 90
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "stota"
+      value: 100
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "nulao"
+      value: 0
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "prvo"
+      value: 1
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "drugo"
+      value: 2
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "treće"
+      value: 3
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "trece"
+      value: 3
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "četvrto"
+      value: 4
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "cetvrto"
+      value: 4
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "peto"
+      value: 5
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "šesto"
+      value: 6
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "sesto"
+      value: 6
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "sedmo"
+      value: 7
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "osmo"
+      value: 8
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "deveto"
+      value: 9
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "deseto"
+      value: 10
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "jedanaesto"
+      value: 11
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "dvanaesto"
+      value: 12
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "trinaesto"
+      value: 13
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "četrnaesto"
+      value: 14
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "cetrnaesto"
+      value: 14
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "petnaesto"
+      value: 15
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "šesnaesto"
+      value: 16
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "sesnaesto"
+      value: 16
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "sedamnaesto"
+      value: 17
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "osamnaesto"
+      value: 18
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "devetnaesto"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "dvadeseto"
+      value: 20
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "trideseto"
+      value: 30
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "četrdeseto"
+      value: 40
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "cetrdeseto"
+      value: 40
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "pedeseto"
+      value: 50
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "šezdeseto"
+      value: 60
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "sezdeseto"
+      value: 60
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "sedamdeseto"
+      value: 70
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "osamdeseto"
+      value: 80
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "devedeseto"
+      value: 90
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "stoto"
+      value: 100
+      type: "ordinal"
+      gender: "n"
+  stopwords:
+    - "i"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "."
+        "1":
+          - "."
+        "2":
+          - "."
+        "3":
+          - "."
+        "4":
+          - "."
+        "5":
+          - "."
+        "6":
+          - "."
+        "7":
+          - "."
+        "8":
+          - "."
+        "9":
+          - "."

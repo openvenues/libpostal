@@ -1,0 +1,19 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "6": "city"
+        "7": "state_district"
+        "8": "city"
+
+    overrides:
+        id:
+            relation:
+                # Yangon
+                "6004094": "city"
+        contained_by:
+            relation:
+                # Yangon
+                "6004094":
+                    admin_level:
+                        "8": "city_district"

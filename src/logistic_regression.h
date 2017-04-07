@@ -26,10 +26,9 @@ may be called softmax regression.
 #include "matrix.h"
 #include "sparse_matrix.h"
 
-bool logistic_regression_model_expectation(matrix_t *theta, sparse_matrix_t *x, matrix_t *p_y);
-double logistic_regression_cost_function(matrix_t *theta, sparse_matrix_t *x, uint32_array *y, matrix_t *p_y, double lambda);
-bool logistic_regression_gradient(matrix_t *theta, matrix_t *gradient, sparse_matrix_t *x, uint32_array *y, matrix_t *p_y, double lambda);
-bool logistic_regression_gradient_sparse(matrix_t *theta, matrix_t *gradient, sparse_matrix_t *x, uint32_array *y, matrix_t *p_y, 
-                                         uint32_array *x_cols, double lambda);
+bool logistic_regression_model_expectation(double_matrix_t *theta, sparse_matrix_t *x, double_matrix_t *p_y);
+bool logistic_regression_model_expectation_sparse(sparse_matrix_t *theta, sparse_matrix_t *x, double_matrix_t *p_y);
+double logistic_regression_cost_function(double_matrix_t *theta, sparse_matrix_t *x, uint32_array *y, double_matrix_t *p_y);
+bool logistic_regression_gradient(double_matrix_t *theta, double_matrix_t *gradient, sparse_matrix_t *x, uint32_array *y, double_matrix_t *p_y);
 
 #endif

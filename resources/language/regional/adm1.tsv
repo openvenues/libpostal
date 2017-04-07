@@ -138,6 +138,9 @@ ch	qs_a1_lc	26	fr	1
 ch	name	Jura	fr	1
 ch	gn_id	2660207	fr	1
 ch	osm	relation:1697347	fr	1
+cn	qs_a1	Xizang	bo,zh	1
+cn	gn_id	1279685	bo,zh	1
+cn	osm	relation:153292	bo,zh	1
 cy	qs_a1	Αμμόχωστος	tr	1
 cy	gn_id	146615	tr	1
 cy	osm	relation:3264447	tr	1
@@ -174,6 +177,9 @@ es	osm	relation:2521383	ca,es	1
 es	qs_a1r	País Vasco/Euskadi	eu	1
 es	gn_id	3336903	eu	1
 es	osm	relation:349042	eu	1
+es	qs_a1r	Principado de Asturias	ast	0
+es	gn_id	3114710	ast	0
+es	osm	relation:349033	ast	0
 fr	qs_a1r	Bretagne	br	0
 fr	gn_id	3030293	br	0
 fr	osm	relation:102740	br	0

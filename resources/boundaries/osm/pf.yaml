@@ -1,0 +1,12 @@
+---
+    admin_level: 
+        "3": "country"
+        "7": "state"
+        "8": "city"
+
+    overrides:
+        contained_by:
+            relation:
+                 "5829526":
+                    admin_level:
+                        "10": "suburb"

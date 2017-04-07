@@ -1,0 +1,1119 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "zéro"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "zero"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "un"
+      value: 1
+      type: "cardinal"
+      gender: "m"
+      multiply_gte: 1000000
+    - 
+      name: "une"
+      value: 1
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "deux"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "trois"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "quatre"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "cinq"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "six"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sept"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "huit"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "neuf"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "dix"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "onze"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "douze"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "treize"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "quatorze"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "quinze"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "seize"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "dix-sept"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "dix sept"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "dix-huit"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "dix huit"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "dixhuit"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "dix-neuf"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "dix neuf"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "dixneuf"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "vingt"
+      value: 20
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "vingt-et-un"
+      value: 21
+      type: "cardinal"
+    - 
+      name: "trente"
+      value: 30
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "trente-et-un"
+      value: 31
+      type: "cardinal"
+    - 
+      name: "quarante"
+      value: 40
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "quarante-et-un"
+      value: 41
+      type: "cardinal"
+    - 
+      name: "cinquante"
+      value: 50
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "cinquante-et-un"
+      value: 51
+      type: "cardinal"
+    - 
+      name: "soixante"
+      value: 60
+      type: "cardinal"
+      radix: 20
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "septante"
+      value: 70
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "huitante"
+      value: 80
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "quatre-vingt"
+      value: 80
+      type: "cardinal"
+      radix: 20
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "quatre-vingt"
+      value: 80
+      type: "cardinal"
+      radix: 20
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "quatrevingt"
+      value: 80
+      type: "cardinal"
+      radix: 20
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "quatre-vingts"
+      value: 80
+      type: "cardinal"
+      radix: 20
+    - 
+      name: "quatre vingts"
+      value: 80
+      type: "cardinal"
+      radix: 20
+    - 
+      name: "quatrevingts"
+      value: 80
+      type: "cardinal"
+      radix: 20
+      right: "add"
+    - 
+      name: "octante"
+      value: 80
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "nonante"
+      value: 90
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "cent"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "cents"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "mille"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "million"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "millions"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milliard"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milliards"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billion"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billions"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billiard"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billiards"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "zeroième"
+      value: 0
+      type: "ordinal"
+    - 
+      name: "zeroieme"
+      value: 0
+      type: "ordinal"
+    - 
+      name: "unième"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "unieme"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "premier"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "premiers"
+      value: 1
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "première"
+      value: 1
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "premiere"
+      value: 1
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "premieres"
+      value: 1
+      type: "ordinal"
+      gender: "f"
+      category: "plural"
+    - 
+      name: "deuxième"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "deuxieme"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "deuxièmes"
+      value: 2
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "deuxiemes"
+      value: 2
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "second"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "seconde"
+      value: 2
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "secondes"
+      value: 2
+      type: "ordinal"
+      gender: "f"
+      category: "plural"
+    - 
+      name: "troisième"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "troisieme"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "troisièmes"
+      value: 3
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "troisiemes"
+      value: 3
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "quatrième"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "quatrieme"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "quatrièmes"
+      value: 4
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "quatrieme"
+      value: 4
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "cinquieme"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "cinquième"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "cinquiemes"
+      value: 5
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "cinquièmes"
+      value: 5
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "sixieme"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "sixième"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "sixiemes"
+      value: 6
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "sixièmes"
+      value: 6
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "septieme"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "septième"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "septiemes"
+      value: 7
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "septièmes"
+      value: 7
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "huitieme"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "huitième"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "huitiemes"
+      value: 8
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "huitièmes"
+      value: 8
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "neuvieme"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "neuvième"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "neuviemes"
+      value: 9
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "neuvièmes"
+      value: 9
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dixieme"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "dixième"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "dixiemes"
+      value: 10
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dixièmes"
+      value: 10
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "onzieme"
+      value: 11
+      type: "ordinal"
+    - 
+      name: "onzième"
+      value: 11
+      type: "ordinal"
+    - 
+      name: "onziemes"
+      value: 11
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "onzièmes"
+      value: 11
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "douzieme"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "douzième"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "douziemes"
+      value: 12
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "douzièmes"
+      value: 12
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "treizieme"
+      value: 13
+      type: "ordinal"
+    - 
+      name: "treizième"
+      value: 13
+      type: "ordinal"
+    - 
+      name: "treiziemes"
+      value: 13
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "treizièmes"
+      value: 13
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "quatorzieme"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "quatorzième"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "quatorziemes"
+      value: 14
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "quatorzièmes"
+      value: 14
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "quinzieme"
+      value: 15
+      type: "ordinal"
+    - 
+      name: "quinzième"
+      value: 15
+      type: "ordinal"
+    - 
+      name: "quinziemes"
+      value: 15
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "quinzièmes"
+      value: 15
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "seizieme"
+      value: 16
+      type: "ordinal"
+    - 
+      name: "seizième"
+      value: 16
+      type: "ordinal"
+    - 
+      name: "seiziemes"
+      value: 16
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "seizièmes"
+      value: 16
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dix septieme"
+      value: 17
+      type: "ordinal"
+    - 
+      name: "dix septième"
+      value: 17
+      type: "ordinal"
+    - 
+      name: "dix septiemes"
+      value: 17
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dix septièmes"
+      value: 17
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dixseptieme"
+      value: 17
+      type: "ordinal"
+    - 
+      name: "dixseptième"
+      value: 17
+      type: "ordinal"
+    - 
+      name: "dixseptiemes"
+      value: 17
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dixseptièmes"
+      value: 17
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dix huitieme"
+      value: 18
+      type: "ordinal"
+    - 
+      name: "dix huitième"
+      value: 18
+      type: "ordinal"
+    - 
+      name: "dix huitiemes"
+      value: 18
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dix huitièmes"
+      value: 18
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dixhuitieme"
+      value: 18
+      type: "ordinal"
+    - 
+      name: "dixhuitième"
+      value: 18
+      type: "ordinal"
+    - 
+      name: "dixhuitiemes"
+      value: 18
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dixhuitièmes"
+      value: 18
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dix neuvieme"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "dix neuvième"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "dix neuviemes"
+      value: 19
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dix neuvièmes"
+      value: 19
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dixneuvieme"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "dixneuvième"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "dixneuviemes"
+      value: 19
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "dixneuvièmes"
+      value: 19
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "vingtieme"
+      value: 20
+      type: "ordinal"
+    - 
+      name: "vingtième"
+      value: 20
+      type: "ordinal"
+    - 
+      name: "vingtiemes"
+      value: 20
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "vingtièmes"
+      value: 20
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "trentieme"
+      value: 30
+      type: "ordinal"
+    - 
+      name: "trentième"
+      value: 30
+      type: "ordinal"
+    - 
+      name: "trentiemes"
+      value: 30
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "trentièmes"
+      value: 30
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "quarantieme"
+      value: 40
+      type: "ordinal"
+    - 
+      name: "quarantième"
+      value: 40
+      type: "ordinal"
+    - 
+      name: "quarantiemes"
+      value: 40
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "quarantièmes"
+      value: 40
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "cinquantieme"
+      value: 50
+      type: "ordinal"
+    - 
+      name: "cinquantième"
+      value: 50
+      type: "ordinal"
+    - 
+      name: "cinquantiemes"
+      value: 50
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "cinquantièmes"
+      value: 50
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "soixantieme"
+      value: 60
+      type: "ordinal"
+    - 
+      name: "soixantième"
+      value: 60
+      type: "ordinal"
+    - 
+      name: "soixantiemes"
+      value: 60
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "soixantièmes"
+      value: 60
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "septantieme"
+      value: 70
+      type: "ordinal"
+    - 
+      name: "septantième"
+      value: 70
+      type: "ordinal"
+    - 
+      name: "septantiemes"
+      value: 70
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "septantièmes"
+      value: 70
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "quatre vingtieme"
+      value: 80
+      type: "ordinal"
+    - 
+      name: "quatre vingtième"
+      value: 80
+      type: "ordinal"
+    - 
+      name: "quatre vingtiemes"
+      value: 80
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "quatre vingtièmes"
+      value: 80
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "quatrevingtieme"
+      value: 80
+      type: "ordinal"
+    - 
+      name: "quatrevingtième"
+      value: 80
+      type: "ordinal"
+    - 
+      name: "quatrevingtiemes"
+      value: 80
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "quatrevingtièmes"
+      value: 80
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "huitantieme"
+      value: 80
+      type: "ordinal"
+    - 
+      name: "huitantième"
+      value: 80
+      type: "ordinal"
+    - 
+      name: "huitantiemes"
+      value: 80
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "huitantièmes"
+      value: 80
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "nonantieme"
+      value: 90
+      type: "ordinal"
+    - 
+      name: "nonantième"
+      value: 90
+      type: "ordinal"
+    - 
+      name: "nonantiemes"
+      value: 90
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "nonantièmes"
+      value: 90
+      type: "ordinal"
+      category: "plural"
+    - 
+      name: "centieme"
+      value: 100
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "centième"
+      value: 100
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "centiemes"
+      value: 100
+      type: "ordinal"
+      category: "plural"
+      left: "multiply"
+    - 
+      name: "centièmes"
+      value: 100
+      type: "ordinal"
+      category: "plural"
+      left: "multiply"
+    - 
+      name: "millieme"
+      value: 1000
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "millième"
+      value: 1000
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "milliemes"
+      value: 1000
+      type: "ordinal"
+      category: "plural"
+      left: "multiply"
+    - 
+      name: "millièmes"
+      value: 1000
+      type: "ordinal"
+      category: "plural"
+      left: "multiply"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "e"
+        "1":
+          - "er"
+        "2":
+          - "e"
+          - "d"
+        "3":
+          - "e"
+        "4":
+          - "e"
+        "5":
+          - "e"
+        "6":
+          - "e"
+        "7":
+          - "e"
+        "8":
+          - "e"
+        "9":
+          - "e"
+        "11":
+          - "e"
+        "21":
+          - "e"
+        "31":
+          - "e"
+        "41":
+          - "e"
+        "51":
+          - "e"
+        "61":
+          - "e"
+        "71":
+          - "e"
+        "81":
+          - "e"
+        "91":
+          - "e"
+    - 
+      category: "plural"
+      suffixes:
+        "0":
+          - "es"
+        "1":
+          - "ers"
+        "2":
+          - "es"
+          - "ds"
+        "3":
+          - "es"
+        "4":
+          - "es"
+        "5":
+          - "es"
+        "6":
+          - "es"
+        "7":
+          - "es"
+        "8":
+          - "es"
+        "9":
+          - "es"
+        "11":
+          - "es"
+        "21":
+          - "es"
+        "31":
+          - "es"
+        "41":
+          - "es"
+        "51":
+          - "es"
+        "61":
+          - "es"
+        "71":
+          - "es"
+        "81":
+          - "es"
+        "91":
+          - "es"
+    - 
+      gender: "f"
+      suffixes:
+        "0":
+          - "e"
+        "1":
+          - "re"
+        "2":
+          - "e"
+          - "de"
+        "3":
+          - "e"
+        "4":
+          - "e"
+        "5":
+          - "e"
+        "6":
+          - "e"
+        "7":
+          - "e"
+        "8":
+          - "e"
+        "9":
+          - "e"
+        "11":
+          - "e"
+        "21":
+          - "e"
+        "31":
+          - "e"
+        "41":
+          - "e"
+        "51":
+          - "e"
+        "61":
+          - "e"
+        "71":
+          - "e"
+        "81":
+          - "e"
+        "91":
+          - "e"
+    - 
+      category: "plural"
+      gender: "f"
+      suffixes:
+        "0":
+          - "es"
+        "1":
+          - "res"
+        "2":
+          - "es"
+          - "des"
+        "3":
+          - "es"
+        "4":
+          - "es"
+        "5":
+          - "es"
+        "6":
+          - "es"
+        "7":
+          - "es"
+        "8":
+          - "es"
+        "9":
+          - "es"
+        "11":
+          - "es"
+        "21":
+          - "es"
+        "31":
+          - "es"
+        "41":
+          - "es"
+        "51":
+          - "es"
+        "61":
+          - "es"
+        "71":
+          - "es"
+        "81":
+          - "es"
+        "91":
+          - "es"
+  stopwords:
+    - "et"
+

@@ -28,8 +28,8 @@ j
 jbt
 ks
 ky
-la
 l
+la
 ma
 me
 mb
@@ -53,6 +53,7 @@ no
 ns
 nsw
 nu
+nt
 nw
 nwt
 nv
@@ -68,6 +69,7 @@ qc
 qld
 r
 ri
+ro
 s
 sc
 sd
@@ -78,6 +80,7 @@ tas
 tn
 tx
 ut
+un
 vic
 vt
 va

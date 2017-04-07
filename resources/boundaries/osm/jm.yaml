@@ -1,0 +1,19 @@
+---
+    admin_level: 
+        "2": "country"
+        "6": "state"
+        "8": "city"
+
+    overrides:
+        id:
+            relation:
+                # Kingston (parish)
+                "6577227": "city"
+
+        use_admin_center:
+            - id: 319355 # Kingston and St Andrew Corporation
+              type: relation
+              # Typically we'll use Kingston and St Andrew Corporation as the
+              # boundary for Kingston the city, but occasionally will add it
+              # as the state instead
+              probability: 0.9

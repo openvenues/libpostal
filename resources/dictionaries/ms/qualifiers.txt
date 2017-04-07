@@ -1,6 +1,3 @@
 nusa
 penampang
 pulau
-blok
-seksyen
-kampung|kampong|kg

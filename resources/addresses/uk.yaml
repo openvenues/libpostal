@@ -1,0 +1,1001 @@
+# uk.yaml
+# -------
+# Ukranian language specification
+
+alphabet: абвгґдеєжзиіїйклмнопрстуфхцчшщьюя
+alphabet_probability: 0.7
+
+components:
+    level:
+        null_probability: 0.95
+        alphanumeric_probability: 0.04
+        standalone_probability: 0.01
+
+    staircase:
+        null_probability: 0.99
+        alphanumeric_probability: 0.01
+
+    entrance:
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
+
+    unit:
+        null_probability: 0.6
+        alphanumeric_probability: 0.4
+
+
+numbers:
+    default: &nomer
+        canonical: номер
+        abbreviated: №
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.4
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    probability: 0.95
+    alternatives:
+        - alternative: &nomer_latin
+            canonical: nomer
+            abbreviated: "no"
+            sample: true
+            canonical_probability: 0.4
+            abbreviated_probability: 0.4
+            sample_probability: 0.2
+            numeric:
+                direction: left
+          probability: 0.05
+
+
+house_numbers:
+    budnyok: &budnyok
+        canonical: будинок
+        abbreviated: буд
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    budnyok_latin: &budnyok_latin
+        canonical: budnyok
+        abbreviated: bud
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
+        sample_probability: 0.1
+        numeric:
+            direction: left
+
+    dom: &dom
+        canonical: дом
+        abbreviated: д
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    dom_latin: &dom_latin
+        canonical: dom
+        abbreviated: d
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
+        sample_probability: 0.1
+        numeric:
+            direction: left
+
+    alphanumeric:
+        default: *budnyok
+        probability: 0.65
+        alternatives:
+            - alternative: *budnyok_latin
+              probability: 0.05
+            - alternative: *dom
+              probability: 0.25
+            - alternative: *dom_latin
+              probability: 0.05
+
+    # Very common in Ukranian to write bud/dom
+    alphanumeric_phrase_probability: 0.6
+
+
+
+and:
+    default: &i
+        canonical: і
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    probability: 0.9
+    alternatives:
+        - alternative: &i_latin
+            canonical: i
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+          probability: 0.1
+
+
+cross_streets:
+    i: *i
+    i_latin: *i_latin
+    kut: &kut
+        canonical: кут
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    kut_latin: &kut_latin
+        canonical: kut
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    rozi: &rozi
+        canonical: розі
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    rozi_latin: &rozi_latin
+        canonical: rozi
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    na_rozi: &na_rozi
+        canonical: на розі
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    na_rozi_latin: &na_rozi_latin
+        canonical: na rozi
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    intersection:
+        default: *i
+        probability: 0.65
+        alternatives:
+            - alternative: *i_latin
+              probability: 0.05
+            - alternative: *rozi
+              probability: 0.075
+            - alternative: *rozi_latin
+              probability: 0.075
+            - alternative: *na_rozi
+              probability: 0.05
+            - alternative: *na_rozi_latin
+              probability: 0.05
+            - alternative: *kut
+              probability: 0.025
+            - alternative: *kut_latin
+              probability: 0.025
+    mizh: &mizh
+        canonical: між
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probability: 0.5
+    mizh_latin: &mizh_latin
+        canonical: mizh
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probability: 0.5
+    between:
+        default: *mizh
+        probability: 0.9
+        alternatives:
+            - alternative: *mizh_latin
+              probability: 0.1
+
+
+levels:
+    poverkh: &poverkh
+        canonical: поверх
+        abbreviated: пов
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.3
+        sample_probability: 0.3
+        numeric:
+            direction: left
+            direction_probability: 0.9
+        ordinal:
+            direction: right
+        numeric_probability: 0.4
+        ordinal_probability: 0.6
+    poverkh_latin: &poverkh_latin
+        canonical: poverkh
+        abbreviated: pov
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.3
+        sample_probability: 0.3
+        numeric:
+            direction: left
+            direction_probability: 0.9
+        ordinal:
+            direction: right
+        numeric_probability: 0.4
+        ordinal_probability: 0.6
+    riven: &riven
+        canonical: рівень
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+        numeric:
+            direction: left
+            direction_probability: 0.9
+        ordinal:
+            direction: right
+        numeric_probability: 0.4
+        ordinal_probability: 0.6
+    riven_latin: &riven_latin
+        canonical: riven'
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+        numeric:
+            direction: left
+            direction_probability: 0.9
+        ordinal:
+            direction: right
+        numeric_probability: 0.4
+        ordinal_probability: 0.6
+    pershyy_poverkh: &pershyy_poverkh
+        canonical: перший поверх
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+    pershyy_poverkh_latin: &pershyy_poverkh_latin
+        canonical: pershyy poverkh
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+    nyzhniy_poverkh: &nyzhniy_poverkh
+        canonical: нижній поверх
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+    nyzhniy_poverkh_latin: &nyzhniy_poverkh_latin
+        canonical: nyzhniy poverkh
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+
+    tsokolnyy_poverkh: &tsokolnyy_poverkh
+        canonical: цокольний поверх
+        abbreviated: цок пов
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.4
+        sample_probability: 0.2
+    tsokolnyy_poverkh_latin: &tsokolnyy_poverkh_latin
+        canonical: tsokolʹnyy poverkh
+        abbreviated: tsok pov
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.4
+        sample_probability: 0.2
+    pidval: &pidval
+        canonical: підвал
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            direction_probability: 0.9
+        numeric_affix:
+            affix: п
+            direction: left
+        ordinal:
+            direction: right
+        ordinal:
+            direction: right
+        number_abs_value: true
+        number_min_abs_value: 2
+        # Basement 2 == Sub-basement 1
+        number_subtract_abs_value: 1
+        standalone_probability: 0.985
+        numeric_probability: 0.005
+        numeric_affix_probability: 0.005
+        ordinal_probability: 0.005
+    pidval_latin: &pidval_latin
+        canonical: pidval
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            direction_probability: 0.9
+        numeric_affix:
+            affix: p
+            direction: left
+        ordinal:
+            direction: right
+        ordinal:
+            direction: right
+        number_abs_value: true
+        number_min_abs_value: 2
+        # Basement 2 == Sub-basement 1
+        number_subtract_abs_value: 1
+        standalone_probability: 0.985
+        numeric_probability: 0.005
+        numeric_affix_probability: 0.005
+        ordinal_probability: 0.005
+
+    aliases:
+        "<-1":
+            default: *pidval
+            probability: 0.9
+            alternatives:
+                - alternative: *pidval_latin
+                  probability: 0.1
+        "-1": &ground_floor
+            default: *tsokolnyy_poverkh
+            probability: 0.89
+            alternatives:
+                - alternative: *tsokolnyy_poverkh_latin
+                  probability: 0.01
+                - alternative: *poverkh
+                  probability: 0.09
+                - alternative: *poverkh_latin
+                  probability: 0.01
+        "0":
+            default: *pershyy_poverkh
+            probability: 0.6
+            alternatives:
+                - alternative: *pershyy_poverkh_latin
+                  probability: 0.05
+                - alternative: *nyzhniy_poverkh
+                  probability: 0.2
+                - alternative: *nyzhniy_poverkh_latin
+                  probability: 0.05
+                - alternative: *tsokolnyy_poverkh
+                  probability: 0.075
+                - alternative: *tsokolnyy_poverkh_latin
+                  probability: 0.025
+    numbering_starts_at: 0
+
+    alphanumeric:
+        default: *poverkh
+        probability: 0.8
+        alternatives:
+            - alternative: *poverkh_latin
+              probability: 0.1
+            - alternative: *riven
+              probability: 0.09
+            - alternative: *riven_latin
+              probability: 0.01
+        numeric_probability: 0.99 # With this probability, pick an integer
+        alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
+        numeric_plus_alpha_probability: 0.0001 # e.g. 2A
+        alpha_plus_numeric_probability: 0.0001 # e.g. A2
+
+
+blocks:
+    alphanumeric:
+        default: &blok
+            canonical: блок
+            abbreviated: бл
+            sample: true
+            canonical_probability: 0.4
+            abbreviated_probability: 0.4
+            sample_probability: 0.2
+            numeric:
+                direction: left
+        probability: 0.95
+        alternatives:
+            - alternative: &blok_latin
+                canonical: blok
+                abbreviated: bl
+                sample: true
+                canonical_probability: 0.4
+                abbreviated_probability: 0.4
+                sample_probability: 0.2
+                numeric:
+                    direction: left
+              probability: 0.05
+
+categories:
+    near:
+        default:
+            canonical: поруч
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.59
+        alternatives:
+            - alternative:
+                canonical: poruch
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.01
+            - alternative:
+                canonical: поблизу
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.19
+            - alternative:
+                canonical: poblyzu
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.01
+            - alternative:
+                canonical: близько
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.04
+            - alternative:
+                canonical: blyzʹko
+                sample: true
+                canonical_probability: 0.6
+                sample_probability: 0.4
+              probability: 0.01
+            - alternative:
+                canonical: у
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.04
+            - alternative:
+                canonical: u
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.01
+            - alternative:
+                canonical: біля
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.04
+            - alternative:
+                canonical: bilye
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.01
+            - alternative:
+                canonical: поруч з
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.04
+            - alternative:
+                canonical: poruch z
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.01
+
+    nearby:
+        default:
+            canonical: поблизу
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.64
+        alternatives:
+            - alternative:
+                canonical: poblyzu
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.01
+            - alternative:
+                canonical: поруч тут
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.19
+            - alternative:
+                canonical: poruch tut
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.01
+            - alternative:
+                canonical: тут
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.09
+            - alternative:
+                canonical: tut
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.01
+            - alternative:
+                canonical: поруч
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.04
+            - alternative:
+                canonical: poruch
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.01
+    near_me:
+        default:
+            canonical: поруч з мною
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.99
+        alternatives:
+            - alternative:
+                canonical: poruch z mnoyu
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.01
+    in:
+        default:
+            canonical: в
+        probability: 0.99
+        alternatives:
+            - alternative:
+                canonical: v
+              probability: 0.01
+
+    # Probabilities of each phrase
+    near_probability: 0.35
+    nearby_probability: 0.2
+    near_me_probability: 0.1
+    in_probability: 0.35
+
+directions:
+    pravo: &pravo
+        canonical: право
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    pravo_latin: &pravo_latin
+        canonical: pravo
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    livo: &livo
+        canonical: ліво
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    livo_latin: &livo_latin
+        canonical: livo
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    alternatives:
+        - alternative: *pravo
+          probability: 0.49
+        - alternative: *pravo_latin
+          probability: 0.01
+        - alternative: *livo
+          probability: 0.49
+        - alternative: *livo_latin
+          probability: 0.01
+
+
+
+cardinal_directions:
+    shkid: &shkid
+        canonical: схід
+        abbreviated: с
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: с
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    shkid_latin: &shkid_latin
+        canonical: shkid
+        abbreviated: s
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: s
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    zakhid: &zakhid
+        canonical: захід
+        abbreviated: з
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+
+    zakhid_latin: &zakhid_latin
+        canonical: zakhid
+        abbreviated: z
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+
+    pivnikh: &pivnikh
+        canonical: північ
+        abbreviated: півн
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+
+    pivnikh_latin: &pivnikh_latin
+        canonical: pivnikh
+        abbreviated: pivn
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+
+    pivden: &pivden
+        canonical: південь
+        abbreviated: півд
+        sample: true
+        canonical_probability: 0.75
+        abbreviated_probability: 0.1
+        sample_probability: 0.15
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: Ю
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    pivden_latin: &pivden_latin
+        canonical: pivden'
+        abbreviated: pivd
+        sample: true
+        canonical_probability: 0.55
+        abbreviated_probability: 0.1
+        sample_probability: 0.35
+        numeric:
+            direction: right
+
+    alternatives:
+        - alternative: *pivnikh
+          probability: 0.24
+        - alternative: *pivnikh_latin
+          probability: 0.01
+        - alternative: *shkid
+          probability: 0.24
+        - alternative: *shkid_latin
+          probability: 0.01
+        - alternative: *pivden
+          probability: 0.24
+        - alternative: *pivden_latin
+          probability: 0.01
+        - alternative: *zakhid
+          probability: 0.24
+        - alternative: *zakhid_latin
+          probability: 0.01
+
+entrances:
+    vkhid: &vkhid
+        canonical: вхід
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    vkhod_latin: &vkhid_latin
+        canonical: vkhid
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # вход 1, вход A, etc.
+    alphanumeric:
+        default: *vkhid
+        probability: 0.99
+        alternatives:
+            - alternative: *vkhid_latin
+              probability: 0.01
+        numeric_probability: 0.1 # e.g. Vkhid 1
+        alpha_probability: 0.85 # e.g. Vkhid A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+staircases:
+    skhody: &skhody
+        canonical: сходи
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    skhody_latin: &skhody_latin
+        canonical: skhody
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    alphanumeric: &staircase_alphanumeric
+        default: *skhody
+        probability: 0.99
+        alternatives:
+            - alternative: *skhody_latin
+              probability: 0.01
+        numeric_probability: 0.75
+        alpha_probability: 0.2
+        numeric_plus_alpha_probability: 0.025
+        alpha_plus_numeric_probability: 0.025
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: left
+            direction_probability: 0.85
+            modifier:
+                alternatives:
+                    - alternative: *pivnikh
+                    - alternative: *shkid
+                    - alternative: *pivden
+                    - alternative: *zakhid
+
+po_boxes:
+    abonementnykh_skrynka: &abonementnykh_skrynka
+        canonical: абонементна скринька
+        abbreviated: а/с
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.4
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+    abonementnykh_skrynka_latin: &abonementnykh_skrynka_latin
+        canonical: abonementnykh skrynʹka
+        abbreviated: a/s
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.1
+        sample_probability: 0.5
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+
+    alphanumeric:
+        default: *abonementnykh_skrynka
+        probability: 0.99
+        alternatives:
+            - alternative: *abonementnykh_skrynka_latin
+              probability: 0.01
+        numeric_probability: 0.9 # 123
+        alpha_probability: 0.05 # А
+        numeric_plus_alpha_probability: 0.04 # 123А
+        alpha_plus_numeric_probability: 0.01 # А123
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+units:
+    kvartyra: &kvartyra
+        canonical: квартира
+        abbreviated: кв
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.6
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    kvartyra_latin: &kvartyra_latin
+        canonical: kvartyra
+        abbreviated: kv
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.6
+        sample_probability: 0.1
+        numeric:
+            direction: left
+
+    kabinet: &kabinet
+        canonical: кабінет
+        abbreviated: каб
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    kabinet_latin: &kabinet_latin
+        canonical: kabinet
+        abbreviated: kab
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    kimnata: &kimnata
+        canonical: кімната
+        abbreviated: км
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    kimnata_latin: &kimnata_latin
+        canonical: kimnata
+        abbreviated: km
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+
+    litera: &litera
+        canonical: літера
+        abbreviated: літ
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    litera_latin: &litera_latin
+        canonical: litera
+        abbreviated: lit
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+
+    ofis: &ofis
+        canonical: офіс
+        abbreviated: оф
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.5
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    ofis_latin: &ofis_latin
+        canonical: ofis
+        abbreviated: of
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.5
+        sample_probability: 0.1
+        numeric:
+            direction: left
+
+    alphanumeric: &unit_alphanumeric
+        default: *kvartyra
+        probability: 0.89
+        alternatives:
+            - alternative: *kvartyra
+              probability: 0.01
+            - alternative: *kimnata
+              probability: 0.09
+            - alternative: *kimnata_latin
+              probability: 0.01
+
+        numeric_probability: 0.9 # e.g. кв 1
+        numeric_plus_alpha_probability: 0.03 # e.g. 1А
+        alpha_plus_numeric_probability: 0.03 # e.g. AА1
+        alpha_probability: 0.04 # e.g. кв А
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.1
+
+        alpha:
+            default: *kvartyra
+            probability: 0.79
+            alternatives:
+                - alternative: *kvartyra_latin
+                  probability: 0.01
+                - alternative: *kimnata
+                  probability: 0.09
+                - alternative: *kimnata_latin
+                  probability: 0.01
+                - alternative: *litera
+                  probability: 0.09
+                - alternative: *litera_latin
+                  probability: 0.01
+
+
+    zones:
+        commercial:
+            default: *kabinet
+            probability: 0.59
+            alternatives:
+                - alternative: *kabinet_latin
+                  probability: 0.01
+                - alternative: *ofis
+                  probability: 0.29
+                - alternative: *ofis_latin
+                  probability: 0.01
+                - alternative: *kimnata
+                  probability: 0.09
+                - alternative: *kimnata_latin
+                  probability: 0.01
+            numeric_probability: 0.95 # e.g. kabinet 1
+            numeric_plus_alpha_probability: 0.01 # e.g. kabinet 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. kab A1
+            alpha_probability: 0.03 # e.g. kab A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1
+
+        university:
+            default: *kimnata
+            probability: 0.99
+            alternatives:
+                - alternative: *kimnata_latin
+                  probability: 0.01
+            numeric_probability: 0.95 # e.g. kimnata 1
+            numeric_plus_alpha_probability: 0.01 # e.g. kimnata 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. km A1
+            alpha_probability: 0.03 # e.g. km A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1

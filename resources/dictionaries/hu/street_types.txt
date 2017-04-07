@@ -6,6 +6,7 @@ körönd|korond|krnd
 körút|korut|krt
 köz|koz
 lejtő|lejto
+lépcső|lepcso
 liget
 mező|mezo
 park

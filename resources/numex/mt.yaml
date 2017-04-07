@@ -1,0 +1,485 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "żero"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "zero"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "wieħed"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "wiehed"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "tnejn"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "żewġ"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "zewg"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "tlieta"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "tliet"
+      value: 3
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "erbgħa"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "erbgha"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "erbaʼ"
+      value: 4
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "erba'"
+      value: 4
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "erba"
+      value: 4
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "ħamsa"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "hamsa"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "ħames"
+      value: 5
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "hames"
+      value: 5
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "sitta"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sitt"
+      value: 6
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "sebgħa"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "sebgha"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "sebaʼ"
+      value: 7
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "seba'"
+      value: 7
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "seba"
+      value: 7
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "tmienja"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "tmien"
+      value: 8
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "disgħa"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "disgha"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "disaʼ"
+      value: 9
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "disa'"
+      value: 9
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "disa"
+      value: 9
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "għaxra"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "ghaxra"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "għaxar"
+      value: 10
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "ghaxar"
+      value: 10
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "ħdax"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "hdax"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "ħdax-il"
+      value: 11
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "hdax-il"
+      value: 11
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "tnax"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "tnax-il"
+      value: 12
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "tlettax"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "tlettax-il"
+      value: 13
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "erbatax"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "erbatax-il"
+      value: 14
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "ħmistax"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "hmistax"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "ħmistax-il"
+      value: 15
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "hmistax-il"
+      value: 15
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "sittax"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sittax-il"
+      value: 16
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "sbatax"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "sbatax-il"
+      value: 17
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "tmintax"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "tmintax-il"
+      value: 18
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "dsatax"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "dsatax-il"
+      value: 19
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "għoxrin"
+      value: 20
+      type: "cardinal"
+      left: "add"
+      left_separator: " u "
+    - 
+      name: "ghoxrin"
+      value: 20
+      type: "cardinal"
+      left: "add"
+      left_separator: " u "
+    - 
+      name: "tletin"
+      value: 30
+      type: "cardinal"
+      left: "add"
+      left_separator: " u "
+    - 
+      name: "erbgħin"
+      value: 40
+      type: "cardinal"
+      left: "add"
+      left_separator: " u "
+    - 
+      name: "erbghin"
+      value: 40
+      type: "cardinal"
+      left: "add"
+      left_separator: " u "
+    - 
+      name: "ħamsin"
+      value: 50
+      type: "cardinal"
+      left: "add"
+      left_separator: " u "
+    - 
+      name: "sittin"
+      value: 60
+      type: "cardinal"
+      left: "add"
+      left_separator: " u "
+    - 
+      name: "sebgħin"
+      value: 70
+      type: "cardinal"
+      left: "add"
+      left_separator: " u "
+    - 
+      name: "sebghin"
+      value: 70
+      type: "cardinal"
+      left: "add"
+      left_separator: " u "
+    - 
+      name: "tmenin"
+      value: 80
+      type: "cardinal"
+      left: "add"
+      left_separator: " u "
+    - 
+      name: "disgħin"
+      value: 90
+      type: "cardinal"
+      left: "add"
+      left_separator: " u "
+    - 
+      name: "disghin"
+      value: 90
+      type: "cardinal"
+      left: "add"
+      left_separator: " u "
+    - 
+      name: "mija"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+      right_separator: " u "
+    - 
+      name: "mitt"
+      value: 100
+      type: "cardinal"
+    - 
+      name: "mitejn"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "elf"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "elfejn"
+      value: 2000
+      type: "cardinal"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "tlitt elef"
+      value: 3000
+      type: "cardinal"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "erbat elef"
+      value: 4000
+      type: "cardinal"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "ħamest elef"
+      value: 5000
+      type: "cardinal"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "sitt elef"
+      value: 6000
+      type: "cardinal"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "sebat elef"
+      value: 7000
+      type: "cardinal"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "tmint elef"
+      value: 8000
+      type: "cardinal"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "disat elef"
+      value: 9000
+      type: "cardinal"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "għaxart elef"
+      value: 10000
+      type: "cardinal"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "ghaxart elef"
+      value: 10000
+      type: "cardinal"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "miljun"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+      right_separator: " u "
+      exact_multiple_only: true
+      right_separator: " u "
+    - 
+      name: "miljuni"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "biljun"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+      right_separator: " u "
+    - 
+      name: "biljuni"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "triljun"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+      right_separator: " u "
+    - 
+      name: "triljuni"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " u "
+    - 
+      name: "kvadriljun"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+      right_separator: " u "
+    - 
+      name: "kvadriljuni"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " u "
+  stopwords:
+    - "u"
+

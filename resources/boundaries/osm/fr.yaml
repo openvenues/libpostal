@@ -1,0 +1,56 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "6": "state_district"
+        "7": "state_district"
+        "8": "city"
+        "9": "city_district"
+        "10": "suburb"
+    overrides:
+        id:
+            node:
+                "253456008": "city_district" # Paris 1er Arrondissement
+                "938321858": "city_district" # Paris 3e Arrondissement
+                "938323516": "city_district" # Paris 4e Arrondissement
+                "237417884": "city_district" # Paris 5e Arrondissement
+                "161608370": "city_district" # Paris 6e Arrondissement
+                "248177663": "city_district" # Paris 7e Arrondissement
+                "241099674": "city_district" # Paris 8e Arrondissement
+                "938334959": "city_district" # Paris 9e Arrondissement
+                "938336881": "city_district" # Paris 10e Arrondissement
+                "938338196": "city_district" # Paris 11e Arrondissement
+                "938387959": "city_district" # Paris 12e Arrondissement
+                "237422047": "city_district" # Paris 13e Arrondissement
+                "175517170": "city_district" # Paris 14e Arrondissement
+                "148950780": "city_district" # Paris 15e Arrondissement
+                "517969463": "city_district" # Paris 16e Arrondissement
+                "241092821": "city_district" # Paris 17e Arrondissement
+                "317476952": "city_district" # Paris 18e Arrondissement
+                "938394241": "city_district" # Paris 19e Arrondissement
+                "938396405": "city_district" # Paris 20e Arrondissement
+                "2492498840": "city_district" # Marseille 1er Arrondissement
+                "2492498845": "city_district" # Marseille 2e Arrondissement
+                "2492498849": "city_district" # Marseille 3e Arrondissement
+                "2492498852": "city_district" # Marseille 4e Arrondissement
+                "2492498856": "city_district" # Marseille 5e Arrondissement
+                "2492498861": "city_district" # Marseille 6e Arrondissement
+                "2492498864": "city_district" # Marseille 7e Arrondissement
+                "2492498868": "city_district" # Marseille 8e Arrondissement
+                "2492498874": "city_district" # Marseille 9e Arrondissement
+                "2492498805": "city_district" # Marseille 10e Arrondissement
+                "2492498811": "city_district" # Marseille 11e Arrondissement
+                "2492498815": "city_district" # Marseille 12e Arrondissement
+                "2492498821": "city_district" # Marseille 13e Arrondissement
+                "2492498826": "city_district" # Marseille 14e Arrondissement
+                "2492498830": "city_district" # Marseille 15e Arrondissement
+                "2492498835": "city_district" # Marseille 16e Arrondissement
+                "1557125622": "city_district" # Lyon 1er Arrondissement
+                "1557125621": "city_district" # Lyon 2e Arrondissement
+                "1557139371": "city_district" # Lyon 3e Arrondissement
+                "1557130248": "city_district" # Lyon 4e Arrondissement
+                "1557156018": "city_district" # Lyon 5e Arrondissement
+                "1557139375": "city_district" # Lyon 6e Arrondissement
+                "1557141157": "city_district" # Lyon 7e Arrondissement
+                "2492525205": "city_district" # Lyon 8e Arrondissement
+                "1557130268": "city_district" # Lyon 9e Arrondissement

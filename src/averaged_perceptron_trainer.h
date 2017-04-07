@@ -36,6 +36,7 @@ Link: http://www.cs.columbia.edu/~mcollins/papers/tagperc.pdf
 #include "averaged_perceptron.h"
 #include "averaged_perceptron_tagger.h"
 #include "collections.h"
+#include "features.h"
 #include "string_utils.h"
 #include "tokens.h"
 #include "trie.h"
@@ -59,15 +60,17 @@ typedef struct averaged_perceptron_trainer {
     uint64_t num_updates;
     uint64_t num_errors;
     uint32_t iterations;
+    uint64_t min_updates;
     khash_t(str_uint32) *features;
     khash_t(str_uint32) *classes;
     cstring_array *class_strings;
     // {feature_id => {class_id => class_weight_t}}
     khash_t(feature_class_weights) *weights;
+    uint64_array *update_counts;
     double_array *scores;
 } averaged_perceptron_trainer_t;
 
-averaged_perceptron_trainer_t *averaged_perceptron_trainer_new(void);
+averaged_perceptron_trainer_t *averaged_perceptron_trainer_new(uint64_t min_updates);
 
 uint32_t averaged_perceptron_trainer_predict(averaged_perceptron_trainer_t *self, cstring_array *features);
 
@@ -75,7 +78,9 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
                                                void *tagger,
                                                void *context,
                                                cstring_array *features,
-                                               ap_tagger_feature_function feature_function,
+                                               cstring_array *prev_tag_features,
+                                               cstring_array *prev2_tag_features,
+                                               tagger_feature_function feature_function,
                                                tokenized_string_t *tokenized,
                                                cstring_array *labels
                                                );

@@ -1,0 +1,4 @@
+direito|dir|dto|drt
+esquerdo|esq
+frente|fte|frt|fren
+traseiro|tras

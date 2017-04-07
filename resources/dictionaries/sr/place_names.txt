@@ -1,2 +1,12 @@
-виноградска
-школска
+банка
+banka
+црква
+crkva
+дом
+dom
+ресторан
+restoran
+школа
+škola|skola
+виноград
+vinograd

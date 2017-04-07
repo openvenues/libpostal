@@ -1,0 +1,417 @@
+---
+  whole_words_only: true
+  default_separator: ""
+  rules:
+    - 
+      name: "nula"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "jeden"
+      value: 1
+      type: "cardinal"
+      multiply_gte: 1000000
+    - 
+      name: "jedna"
+      value: 1
+      type: "cardinal"
+      gender: "f"
+      multiply_gte: 100
+    - 
+      name: "jedno"
+      value: 1
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "dva"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "dve"
+      value: 2
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "tri"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "štyri"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "styri"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "päť"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "pat"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "šesť"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sest"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sedem"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "osem"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "deväť"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "devat"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "desať"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "desat"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "jedenásť"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "jedenast"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "dvaásť"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "dvaast"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "trinásť"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "trinast"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "štrnásť"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "strnast"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "pätnásť"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "patnast"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "šestnásť"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sestnast"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sedemnásť"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "sedemnast"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "osemnásť"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "osemnast"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "devätnásť"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "devatnast"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "dvasať"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dvasat"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trisať"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trisat"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "štyridsať"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "styridsat"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "päťdesiat"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "patdesiat"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "šesťdesiat"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sestdesiat"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sedemdesiat"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "osemdesiat"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "deväťdesiat"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "devatdesiat"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sto"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tisíc"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "tisic"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "milión"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "milion"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "milióny"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "miliony"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "miliónov"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "milionov"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "miliarda"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "miliardy"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "miliardov"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "bilión"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "bilion"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "bilióny"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "biliony"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "biliónov"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "bilionov"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "biliarda"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "biliardy"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+    - 
+      name: "biliardov"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      left_separator: " "
+      right: "add"
+      right_separator: " "
+
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "."
+        "1":
+          - "."
+        "2":
+          - "."
+        "3":
+          - "."
+        "4":
+          - "."
+        "5":
+          - "."
+        "6":
+          - "."
+        "7":
+          - "."
+        "8":
+          - "."
+        "9":
+          - "."

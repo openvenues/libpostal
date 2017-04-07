@@ -25,7 +25,8 @@ typedef struct phrase {
 
 VECTOR_INIT(phrase_array, phrase_t)
 
-#define NULL_PHRASE (phrase_t){0, 0, 0};
+#define NULL_PHRASE (phrase_t){0, 0, 0}
+#define NULL_PHRASE_MEMBERSHIP -1
 
 phrase_array *trie_search(trie_t *self, char *text);
 bool trie_search_from_index(trie_t *self, char *text, uint32_t start_node_id, phrase_array **phrases);
@@ -40,6 +41,8 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, size_t len, u
 phrase_t trie_search_prefixes_from_index_get_prefix_char(trie_t *self, char *word, size_t len, uint32_t start_node_id);
 phrase_t trie_search_prefixes(trie_t *self, char *word, size_t len);
 
- 
+bool token_phrase_memberships(phrase_array *phrases, int64_array *phrase_memberships, size_t len);
+
+char *cstring_array_get_phrase(cstring_array *str, char_array *phrase_tokens, phrase_t phrase);
 
 #endif

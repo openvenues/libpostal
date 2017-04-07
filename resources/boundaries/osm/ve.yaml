@@ -1,0 +1,56 @@
+---
+    admin_level: 
+        "2": "country"
+        "3": "country_region"
+        "4": "state"
+        "6": "state_district"
+        "7": "state_district"
+        "8": "city"
+        "9": "suburb"
+
+    overrides:
+        id:
+            relation:
+                # Municipio Libertador
+                "3321735": "city"
+                # Municipio Chacao (part of Caracas)
+                "3335672": "city"
+                # Municipio Sucre (part of Caracas)
+                "3335761": "city"
+                # Municipio Baruta
+                "3335760": "city"
+                # Municipio El Hatillo
+                "2458293": "city"
+
+        contained_by:
+            relation:
+                # Municipio Libertador
+                "3321735":
+                    global_overrides_last: true
+                    admin_level:
+                        "8": "city_district"
+                # Municipio Chacao (part of Caracas)
+                "3335672":
+                    global_overrides_last: true
+                    admin_level:
+                        "8": "city_district"
+                # Municipio Sucre (part of Caracas)
+                "3335761":
+                    global_overrides_last: true
+                    admin_level:
+                        "8": "city_district"
+                # Municipio Baruta
+                "3335760":
+                    global_overrides_last: true
+                    admin_level:
+                        "8": "city_district"
+                # Municipio El Hatillo
+                "2458293":
+                    global_overrides_last: true
+                    admin_level:
+                        "8": "city_district"
+
+        use_admin_center:
+            - id: 2444378 # Caracas (Districto Capital)
+              type: relation
+              probability: 0.65

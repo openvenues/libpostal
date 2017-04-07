@@ -26,7 +26,3 @@ oberösterreichisches|oberosterreichisches|oberoesterreichisches
 österreichischer gebirgsverein|ögb|ogb|osterreichischer gebirgsverein|oesterreichischer gebirgsverein
 österreichischer touristenklub|ötk|otk|osterreichischer touristenklub|oesterreichischer touristenklub
 wiener|wr
-eiflerisch|eifler
-eiflerische|eifler
-eiflerischer|eifler
-eiflerisches|eifler

@@ -1,0 +1,6 @@
+апартамент|ап|апт
+apartament|ap|apt
+офис|оф
+ofis|of
+стая
+staya

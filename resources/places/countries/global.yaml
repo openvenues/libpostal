@@ -1,0 +1,518 @@
+# This config specifies isolated and conditional probabilities
+# of including various admin components (applies to both addresses
+# and standalone place queries)
+
+global:
+    city_replacements: []
+    # Probability of including individual components
+    components:
+        suburb:
+            probability: 0.2
+            dependencies:
+                - city
+                - city_district
+        metro_station:
+            probability: 0.05
+        city_district:
+            probability: 0.2
+        city:
+            probability: 1.0
+        island:
+            # Islands are usually not represented in addresses
+            probability: 0.0
+        state_district:
+            probability: 0.05
+            dependencies:
+                - city
+        state:
+            probability: 0.1
+            dependencies:
+                - city
+                - country
+        country_region:
+            probability: 0.05
+            dependencies:
+                - country
+        country:
+            probability: 0.8
+            population:
+                - lt: 100000
+                  gte: 10000
+                  probability: 0.85
+                - lt: 10000
+                  probability: 0.9
+
+        world_region:
+            probability: 0.001
+            dependencies:
+                - country
+
+add_west_indies: &add_west_indies
+    components:
+        world_region: &add_west_indies_world_region
+            probability: 0.1
+            values:
+                - value: West Indies
+                  probability: 0.5
+                - value: W.I.
+                  probability: 0.2
+                - value: W.I
+                  probability: 0.15
+                - value: WI
+                  probability: 0.15
+
+countries:
+    # Anguilla
+    ai: *add_west_indies
+
+    # Antigua and Barbuda
+    ag: *add_west_indies
+
+    # Australia
+    au:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district
+        components:
+            suburb:
+                dependencies:
+                    - city_district
+                    - city
+                    - state_district
+                    - state
+            state:
+                probability: 0.6
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.9
+                    - lt: 10000
+                      probability: 1.0
+                dependencies:
+                    - city
+                    - city_district
+            country:
+                probability: 0.5
+                population: []
+
+    # Barbados
+    bb: *add_west_indies
+
+    # Bermuda
+    bm: *add_west_indies
+
+    # Brazil
+    br:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district
+        components:
+            suburb:
+                dependencies:
+                    - city_district
+                    - city
+                    - state_district
+                    - state
+            state:
+                probability: 0.6
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.9
+                    - lt: 10000
+                      probability: 1.0
+                dependencies:
+                    - city
+                    - city_district
+            country:
+                population: []
+
+    # Bahamas
+    bs: *add_west_indies
+
+    # Canada
+    ca:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district
+            - state
+        components:
+            suburb:
+                dependencies:
+                    - city_district
+                    - city
+                    - state_district
+                    - state
+            city:
+                probability: 0.95
+            state:
+                probability: 0.7
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.9
+                    - lt: 10000
+                      probability: 1.0
+                dependencies:
+                    - city
+                    - city_district
+            country:
+                probability: 0.2
+                population: []
+
+    # Switzerland
+    ch:
+        components:
+            state:
+                population:
+                    - lt: 100000
+                      probability: 0.4
+
+    # Dominica
+    dm: *add_west_indies
+
+    # France
+    fr:
+        components:
+            city_district:
+                probability: 0.4
+                dependencies:
+                    - city
+
+    # United Kingdom
+    gb:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district
+        components:
+            state_district:
+                probability: 0.15
+                population:
+                    - lt: 10000
+                      probability: 0.5
+                dependencies:
+                    - city_district
+                    - city
+            suburb:
+                probability: 0.5
+            city_district:
+                probability: 0.3
+            country:
+                probability: 0.6
+
+
+    # Grenada
+    gd: *add_west_indies
+
+
+    # Indonesia
+    id:
+        components:
+            island:
+                probability: 0.4
+
+    # Ireland
+    ie:
+        components:
+            state_district:
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.5
+                    - lt: 10000
+                      probability: 0.8
+
+    # India
+    in:
+        components:
+            state_district:
+                probability: 0.3
+            state:
+                probability: 0.8
+
+
+    # Italy
+    it:
+        city_replacements:
+            - suburb
+            - city_district
+        components:
+            state_district:
+                probability: 0.7
+            state:
+                probability: 0.2
+
+    # Hong Kong
+    hk:
+        components:
+            suburb:
+                dependencies:
+                    - country
+            country:
+                probability: 0.85
+            state:
+                probability: 0.2
+                dependencies:
+                    - country
+            island:
+                probability: 0.4
+                containing:
+                    - id: 2278450 # Hong Kong Island (already a "state")
+                      type: relation
+                      probability: 0.0
+
+    # Jamaica
+    jm: *add_west_indies
+
+    # Japan
+    jp:
+        components:
+            island:
+                probability: 0.4
+            metro_station:
+                probability: 0.6
+            suburb:
+                probability: 1.0
+            city_district:
+                probability: 0.8
+            state:
+                probability: 0.8
+            country:
+                probability: 0.8
+
+    hu:
+        components:
+            country:
+                probability: 0.1
+
+    # Saint Kitts and Nevis
+    kn:
+        components:
+            suburb:
+                dependencies:
+                    - country
+            island:
+                probability: 0.8
+            world_region: *add_west_indies_world_region
+
+    # Cayman Islands
+    ky: *add_west_indies
+
+    # Saint Lucia
+    lc: *add_west_indies
+
+    # Montserrat
+    ms: *add_west_indies
+
+    # Mexico
+    mx:
+        city_replacements:
+            - suburb
+            - city_district
+        components:
+            suburb:
+                dependencies:
+                    - city_district
+                    - city
+                    - state_district
+                    - state
+            # Boroughs of Mexico City
+            city_district:
+                probability: 0.4
+            state:
+                probability: 0.5
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.9
+                    - lt: 10000
+                      probability: 1.0
+                dependencies:
+                    - city_district
+                    - city
+            country:
+                population: []
+
+    # Malaysia
+    my:
+        components:
+            island:
+                probability: 0.3
+
+    # Pitcairn Islands
+    pn:
+        components:
+            island:
+                probability: 0.8
+
+    # Seychelles
+    sc:
+        components:
+            island:
+                probability: 0.8
+
+    # Sint Maarten
+    sx: *add_west_indies
+
+    # Turks and Caicos
+    tc: *add_west_indies
+
+    # Trinidad and Tobago
+    tt: *add_west_indies
+
+    # United States
+    us:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district
+            - state
+        # Definitions
+        new_york_county: &new_york_county
+            id: 2552485 # New York County (Manhattan, NY)
+            type: relation
+
+        kings_county: &kings_county
+            id: 369518 # Kings County (Brooklyn, NY)
+            type: relation
+
+        queens_county: &queens_county
+            id: 369519 # Queens County (Queens, NY)
+            type: relation
+
+        bronx_county: &bronx_county
+            id: 2552450 # Bronx County (Bronx, NY)
+            type: relation
+
+        richmond_county: &richmond_county
+            id: 962876 # Richmond County (Staten Island, NY)
+            type: relation
+
+        hawaii: &hawaii
+            id: 166563 # State of Hawaii
+            type: relation
+
+        components:
+            suburb:
+                probability: 0.4
+                dependencies:
+                    - city_district
+                    - city
+                    - state_district
+                    - state
+            city_district:
+                probability: 0.2
+                containing:
+                    - <<: *kings_county
+                      probability: 1.0
+                    - <<: *queens_county
+                      probability: 1.0
+                    - <<: *bronx_county
+                      probability: 1.0
+                    - <<: *richmond_county
+                      probability: 1.0
+                    - <<: *new_york_county
+                      probability: 0.1
+            city:
+                probability: 0.95
+                containing:
+                    - <<: *kings_county
+                      probability: 0.1
+                    - <<: *queens_county
+                      probability: 0.1
+                    - <<: *bronx_county
+                      probability: 0.1
+                    - <<: *richmond_county
+                      probability: 0.1
+                    - <<: *new_york_county
+                      probability: 1.0
+            island:
+                order:
+                    direction: before
+                    component: state_district
+                containing:
+                    # Island is more common in Hawaiian addresses
+                    - <<: *hawaii
+                      probability: 0.5
+            state:
+                probability: 0.8
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.9
+                    - lt: 10000
+                      probability: 1.0
+                dependencies:
+                    - city_district
+                    - city
+
+            state_district:
+                probability: 0.1
+                population:
+                    - lt: 100000
+                      gte: 10000
+                      probability: 0.2
+                    - lt: 10000
+                      probability: 0.4
+                containing:
+                    - <<: *new_york_county
+                      probability: 0.1
+                    - <<: *kings_county
+                      probability: 0.1
+                    - <<: *queens_county
+                      probability: 0.1
+                    - <<: *bronx_county
+                      probability: 0.1
+                    - <<: *richmond_county
+                      probability: 0.1
+                dependencies:
+                    - city_district
+                    - city
+                    - state
+
+            country:
+                probability: 0.1
+                population: []
+                dependencies:
+                    - city
+                    - city_district
+                    - state
+
+    # Tuvalu
+    tv:
+        components:
+            island:
+                probability: 0.8
+
+    # Venezuela
+    ve:
+        components:
+            state:
+                probability: 0.8
+
+    # Saint Vincent and the Grenadines
+    vc: *add_west_indies
+
+    # US Virgin Islands
+    vi:
+        components:
+            island:
+                probability: 0.8
+            world_region: *add_west_indies_world_region
+
+    # British Virgin Islands
+    vg:
+        components:
+            island:
+                probability: 0.8
+            world_region: *add_west_indies_world_region
+
+    za:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district

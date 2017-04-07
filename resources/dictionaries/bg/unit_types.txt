@@ -1,6 +1,0 @@
-вход|вх
-vkhod|vkh
-апартамент|ап
-apartament|ap
-стая
-staya

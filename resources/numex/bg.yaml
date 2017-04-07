@@ -1,0 +1,249 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "нула"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "един"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "едно"
+      value: 1
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "два"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "две"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "три"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "четири"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "пет"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "шест"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "седем"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "осем"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "девет"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "десет"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "единадесет"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "дванадесет"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "тринадесет"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "четиринадесет"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "петнадесет"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "шестнадесет"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "седемнадесет"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "осемнадесет"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "деветнадесет"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "двадесет"
+      value: 20
+      type: "cardinal"
+      right: "add"
+      right_separator: " и "
+    - 
+      name: "тридесет"
+      value: 30
+      type: "cardinal"
+      right: "add"
+      right_separator: " и "
+    - 
+      name: "четиридесет"
+      value: 40
+      type: "cardinal"
+      right: "add"
+      right_separator: " и "
+    - 
+      name: "петдесет"
+      value: 50
+      type: "cardinal"
+      right: "add"
+      right_separator: " и "
+    - 
+      name: "шестдесет"
+      value: 60
+      type: "cardinal"
+      right: "add"
+      right_separator: " и "
+    - 
+      name: "седемдесет"
+      value: 70
+      type: "cardinal"
+      right: "add"
+      right_separator: " и "
+    - 
+      name: "осемдесет"
+      value: 80
+      type: "cardinal"
+      right: "add"
+      right_separator: " и "
+    - 
+      name: "деветдесет"
+      value: 90
+      type: "cardinal"
+      right: "add"
+      right_separator: " и "
+    - 
+      name: "сто"
+      value: 100
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "двеста"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "триста"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "четиристотин"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "петстотин"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "шестстотин"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "седемстотин"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "осемстотин"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "деветстотин"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "хиляда"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "хиляди"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "милион"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "милиона"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "милиард"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "милиарда"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "трилион"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "трилиона"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "квадрилион"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "квадрилиона"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+  stopwords:
+    - "и"
+

@@ -1,0 +1,10 @@
+apartamento|ap|apt|apto|apt.o
+casa
+conjunto|conj|cj
+letra
+lote|lt
+parcela
+porta|pta
+moradia
+sala
+unidade|un

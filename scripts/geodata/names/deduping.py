@@ -1,4 +1,4 @@
-from postal.text.normalize import *
+from geodata.text.normalize import *
 from geodata.names.similarity import soft_tfidf_similarity, jaccard_similarity
 
 from collections import Counter
@@ -39,8 +39,7 @@ class NameDeduper(object):
 
     @classmethod
     def tokenize(cls, s):
-        token_options = DEFAULT_TOKEN_OPTIONS ^ NORMALIZE_TOKEN_REPLACE_DIGITS
-        return normalized_tokens(s, token_options=token_options)
+        return normalized_tokens(s)
 
     @classmethod
     def content_tokens(cls, s):
@@ -49,8 +48,8 @@ class NameDeduper(object):
             tokens = remove_parens(tokens)
         return [(cls.replacements.get(t, t), c)
                 for t, c in tokens
-                if c in cls.content_categories
-                and t not in cls.stopwords]
+                if c in cls.content_categories and
+                t not in cls.stopwords]
 
     @classmethod
     def possible_match(cls, tokens1, tokens2):

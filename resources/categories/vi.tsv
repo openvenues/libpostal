@@ -1,0 +1,607 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	sân bay
+aeroway	aerodrome	1	các sân bay
+aeroway	aerodrome	0	phi trường
+aeroway	aerodrome	1	các phi trường
+aeroway	aerodrome	0	trung tâm nghệ thuật
+amenity	arts_centre	1	các trung tâm nghệ thuật
+amenity	atm	0	máy rút tiền tự động
+amenity	atm	1	các máy rút tiền tự động
+amenity	bank	0	ngân hàng
+amenity	bank	1	các ngân hàng
+amenity	bar	0	quán rượu
+amenity	bar	1	các quán rượu
+amenity	bench	0	ghế
+amenity	bench	1	các ghế
+amenity	bicycle_parking	0	chỗ đậu xe đạp
+amenity	bicycle_parking	1	các chỗ đậu xe đạp
+amenity	bicycle_rental	0	chỗ mướn xe đạp
+amenity	bicycle_rental	1	các chỗ mướn xe đạp
+amenity	bus_station	0	các trạm xe buýt
+amenity	bus_station	1	các trạm xe bus
+amenity	cafe	0	quán cà phê
+amenity	cafe	1	các quán cà phê
+amenity	car_rental	0	chỗ mướn xe
+amenity	car_rental	1	các chỗ mướn xe
+amenity	car_sharing	0	chia sẻ xe cộ
+amenity	car_sharing	1	các chia sẻ xe cộ
+amenity	car_wash	0	tiệm rửa xe
+amenity	car_wash	1	các tiệm rửa xe
+amenity	casino	0	sòng bạc
+amenity	casino	1	các sòng bạc
+amenity	cinema	0	rạp phim
+amenity	cinema	1	các rạp phim
+amenity	club	0	câu lạc bộ
+amenity	club	1	các câu lạc bộ
+amenity	college	0	trường cao đẳng
+amenity	college	1	các trường cao đẳng
+amenity	community_centre	0	trung tâm cộng đồng
+amenity	community_centre	1	các trung tâm cộng đồng
+amenity	courthouse	0	tòa
+amenity	courthouse	1	các tòa
+amenity	dentist	0	nha sĩ
+amenity	dentist	1	các nha sĩ
+amenity	doctors	0	bác sĩ
+amenity	doctors	1	các bác sĩ
+amenity	dormitory	0	ký túc xá
+amenity	dormitory	1	các ký túc xá
+amenity	drinking_water	0	vòi nước uống
+amenity	drinking_water	1	các vòi nước uống
+amenity	driving_school	0	trường lái xe
+amenity	driving_school	1	các trường lái xe
+amenity	embassy	0	tòa đại sứ
+amenity	embassy	1	các tòa đại sứ
+amenity	emergency_phone	0	điện thoại khẩn cấp
+amenity	emergency_phone	1	các điện thoại khẩn cấp
+amenity	fast_food	0	nhà hàng ăn nhanh
+amenity	fast_food	1	các nhà hàng ăn nhanh
+amenity	ferry_terminal	0	trạm phà
+amenity	ferry_terminal	1	các trạm phà
+amenity	fire_hydrant	0	vòi nước máy
+amenity	fire_hydrant	1	các vòi nước máy
+amenity	fire_station	0	trạm cứu hỏa
+amenity	fire_station	1	các trạm cứu hỏa
+amenity	fountain	0	vòi nước
+amenity	fountain	1	các vòi nước
+amenity	fuel	0	cây xăng
+amenity	fuel	1	các cây xăng
+amenity	grave_yard	0	nghĩa địa
+amenity	grave_yard	1	các nghĩa địa
+amenity	gym	0	nhà thể dục
+amenity	gym	1	các nhà thể dục
+amenity	health_centre	0	trung tâm y tế
+amenity	health_centre	1	các trung tâm y tế
+amenity	hospital	0	bệnh viện
+amenity	hospital	1	các bệnh viện
+amenity	hotel	0	khách sạn
+amenity	hotel	1	các khách sạn
+amenity	ice_cream	0	tiệm kem
+amenity	ice_cream	1	các tiệm kem
+amenity	kindergarten	0	tiểu học
+amenity	kindergarten	1	các tiểu học
+amenity	library	0	thư viện
+amenity	library	1	các thư viện
+amenity	market	0	chợ
+amenity	market	1	các chợ
+amenity	marketplace	0	chợ phiên
+amenity	marketplace	1	các chợ phiên
+amenity	nursery	0	nhà trẻ
+amenity	nursery	1	các nhà trẻ
+amenity	office	0	văn phòng
+amenity	office	1	các văn phòng
+amenity	park	0	công viên
+amenity	park	1	các công viên
+amenity	parking	0	chỗ đậu xe
+amenity	parking	1	các chỗ đậu xe
+amenity	pharmacy	0	nhà thuốc
+amenity	pharmacy	1	các nhà thuốc
+amenity	place_of_worship	0	nơi thờ phụng
+amenity	place_of_worship	1	các nơi thờ phụng
+amenity	police	0	cảnh sát
+amenity	police	1	các cảnh sát
+amenity	post_box	0	hòm thư
+amenity	post_box	1	các hòm thư
+amenity	post_office	0	bưu điện
+amenity	post_office	1	các bưu điện
+amenity	preschool	0	trường mầm non
+amenity	preschool	1	các trường mầm non
+amenity	prison	0	nhà tù
+amenity	prison	1	các nhà tù
+amenity	pub	0	quán rượu
+amenity	pub	1	các quán rượu
+amenity	public_market	0	chợ phiên
+amenity	public_market	1	các chợ phiên
+amenity	restaurant	0	nhà hàng
+amenity	restaurant	1	các nhà hàng
+amenity	sauna	0	nhà tắm hơi
+amenity	sauna	1	các nhà tắm hơi
+amenity	school	0	trường học
+amenity	school	1	các trường học
+amenity	shop	0	tiệm
+amenity	shop	1	các tiệm
+amenity	shopping	0	tiệm
+amenity	shopping	1	các tiệm
+amenity	supermarket	0	siêu thị
+amenity	supermarket	1	các siêu thị
+amenity	taxi	0	taxi
+amenity	taxi	1	các taxi
+amenity	telephone	0	điện thoại công cộng
+amenity	telephone	1	các điện thoại công cộng
+amenity	theatre	0	nhà hát
+amenity	theatre	1	các nhà hát
+amenity	toilets	0	vệ sinh
+amenity	toilets	1	các vệ sinh
+amenity	townhall	0	thị sảnh
+amenity	townhall	1	các thị sảnh
+amenity	university	0	trường đại học
+amenity	university	1	các trường đại học
+amenity	vending_machine	0	máy bán hàng
+amenity	vending_machine	1	các máy bán hàng
+amenity	waste_basket	0	thùng rác
+amenity	waste_basket	1	các thùng rác
+amenity	wifi	0	điểm truy cập không dây
+amenity	wifi	1	các điểm truy cập không dây
+amenity	youth_centre	0	trung tâm thanh niên
+amenity	youth_centre	1	các trung tâm thanh niên
+boundary	administrative	0	biên giới hành chính
+boundary	administrative	1	các biên giới hành chính
+building	bunker	0	boong ke
+building	bunker	1	các boong ke
+building	church	0	nhà thờ
+building	church	1	các nhà thờ
+building	city_hall	0	trụ sở thành phố
+building	city_hall	1	các trụ sở thành phố
+building	commercial	0	tòa nhà thương mại
+building	commercial	1	các tòa nhà thương mại
+building	dormitory	0	ký túc xá
+building	dormitory	1	các ký túc xá
+building	entrance	0	cửa vào
+building	entrance	1	các cửa vào
+building	garage	0	ga ra
+building	garage	1	các ga ra
+building	hospital	0	tòa nhà bệnh viện
+building	hospital	1	các tòa nhà bệnh viện
+building	hotel	0	khách sạn
+building	hotel	1	các khách sạn
+building	house	0	nhà ở
+building	house	1	các nhà ở
+building	industrial	0	tòa nhà công nghiệp
+building	industrial	1	các tòa nhà công nghiệp
+building	office	0	tòa nhà văn phòng
+building	office	1	các tòa nhà văn phòng
+building	residential	0	nhà ở
+building	residential	1	các nhà ở
+building	school	0	nhà trường
+building	school	1	các nhà trường
+building	shop	0	tiệm
+building	shop	1	các tiệm
+building	stadium	0	sân vận động
+building	stadium	1	các sân vận động
+building	store	0	tiệm
+building	store	1	các tiệm
+building	tower	0	tháp
+building	tower	1	các tháp
+building	train_station	0	nhà ga
+building	train_station	1	các nhà ga
+building	university	0	tòa nhà đại học
+building	university	1	các tòa nhà đại học
+building	&quot;yes&quot;	0	tòa nhà
+building	&quot;yes&quot;	1	các tòa nhà
+highway	bridleway	0	đường cưỡi ngựa
+highway	bridleway	1	các đường cưỡi ngựa
+highway	bus_stop	0	chỗ đậu xe buýt
+highway	bus_stop	1	các chỗ đậu xe buýt
+highway	construction	0	đường đang xây
+highway	construction	1	các đường đang xây
+highway	cycleway	0	đường xe đạp
+highway	cycleway	1	các đường xe đạp
+highway	distance_marker	0	cây số
+highway	distance_marker	1	các cây số
+highway	footway	0	đường bộ
+highway	footway	1	các đường bộ
+highway	gate	0	cổng
+highway	gate	1	các cổng
+highway	living_street	0	đường hàng xóm
+highway	living_street	1	các đường hàng xóm
+highway	minor	0	đường nhỏ
+highway	minor	1	các đường nhỏ
+highway	motorway	0	đường cao tốc
+highway	motorway	1	các đường cao tốc
+highway	motorway_junction	0	ngã tư đường cao tốc
+highway	motorway_junction	1	các ngã tư đường cao tốc
+highway	motorway_link	0	đường cao tốc
+highway	motorway_link	1	các đường cao tốc
+highway	path	0	lối
+highway	path	1	các lối
+highway	pedestrian	0	đường bộ lớn
+highway	pedestrian	1	các đường bộ lớn
+highway	primary	0	đường chính
+highway	primary	1	các đường chính
+highway	primary_link	0	đường chính
+highway	primary_link	1	các đường chính
+highway	raceway	0	đường đua
+highway	raceway	1	các đường đua
+highway	residential	0	đường nhà ở
+highway	residential	1	các đường nhà ở
+highway	road	0	đường
+highway	road	1	các đường
+highway	secondary	0	đường lớn
+highway	secondary	1	các đường lớn
+highway	secondary_link	0	đường lớn
+highway	secondary_link	1	các đường lớn
+highway	service	0	đường phụ
+highway	service	1	các đường phụ
+highway	services	0	dịch vụ dọc đường cao tốc
+highway	services	1	các dịch vụ dọc đường cao tốc
+highway	steps	0	cầu thang
+highway	steps	1	các cầu thang
+highway	tertiary	0	đường lớn
+highway	tertiary	1	các đường lớn
+highway	track	0	đường mòn
+highway	track	1	các đường mòn
+highway	trail	0	đường mòn
+highway	trail	1	các đường mòn
+highway	trunk	0	xa lộ
+highway	trunk	1	các xa lộ
+highway	trunk_link	0	xa lộ
+highway	trunk_link	1	các xa lộ
+highway	unclassified	0	đường không phân loại
+highway	unclassified	1	các đường không phân loại
+highway	unsurfaced	0	đường không lát
+highway	unsurfaced	1	các đường không lát
+historic	archaeological_site	0	khu vực khảo cổ
+historic	archaeological_site	1	các khu vực khảo cổ
+historic	battlefield	0	chiến trường
+historic	battlefield	1	các chiến trường
+historic	boundary_stone	0	mốc biên giới
+historic	boundary_stone	1	các mốc biên giới
+historic	building	0	tòa nhà
+historic	building	1	các tòa nhà
+historic	castle	0	lâu đài
+historic	castle	1	các lâu đài
+historic	church	0	nhà thờ
+historic	church	1	các nhà thờ
+historic	house	0	nhà ở
+historic	house	1	các nhà ở
+historic	icon	0	thánh tượng
+historic	icon	1	các thánh tượng
+historic	manor	0	trang viên
+historic	manor	1	các trang viên
+historic	memorial	0	đài tưởng niệm
+historic	memorial	1	các đài tưởng niệm
+historic	mine	0	mỏ
+historic	mine	1	các mỏ
+historic	monument	0	đài kỷ niệm
+historic	monument	1	các đài kỷ niệm
+historic	museum	0	bảo tàng
+historic	museum	1	các bảo tàng
+historic	ruins	0	tàn tích
+historic	ruins	1	các tàn tích
+historic	tower	0	tháp
+historic	tower	1	các tháp
+historic	wayside_cross	0	thánh giá dọc đường
+historic	wayside_cross	1	các thánh giá dọc đường
+historic	wayside_shrine	0	đền thánh dọc đường
+historic	wayside_shrine	1	các đền thánh dọc đường
+landuse	allotments	0	khu vườn gia đình
+landuse	allotments	1	các khu vườn gia đình
+landuse	basin	0	lưu vực
+landuse	basin	1	các lưu vực
+landuse	cemetery	0	nghĩa địa
+landuse	cemetery	1	các nghĩa địa
+landuse	commercial	0	khu vực thương mại
+landuse	commercial	1	các khu vực thương mại
+landuse	conservation	0	bảo tồn
+landuse	conservation	1	các bảo tồn
+landuse	construction	0	công trường xây dựng
+landuse	construction	1	các công trường xây dựng
+landuse	farm	0	trại
+landuse	farm	1	các trại
+landuse	farmland	0	trại
+landuse	farmland	1	các trại
+landuse	farmyard	0	sân trại
+landuse	farmyard	1	các sân trại
+landuse	forest	0	rừng trồng cây
+landuse	forest	1	các rừng trồng cây
+landuse	grass	0	cỏ
+landuse	grass	1	các cỏ
+landuse	industrial	0	khu vực công nghiệp
+landuse	industrial	1	các khu vực công nghiệp
+landuse	landfill	0	nơi đổ rác
+landuse	landfill	1	các nơi đổ rác
+landuse	meadow	0	đồng cỏ
+landuse	meadow	1	các đồng cỏ
+landuse	military	0	khu vực quân sự
+landuse	military	1	các khu vực quân sự
+landuse	mine	0	mỏ
+landuse	mine	1	các mỏ
+landuse	mountain	0	núi
+landuse	mountain	1	các núi
+landuse	nature_reserve	0	khu bảo tồn thiên niên
+landuse	nature_reserve	1	các khu bảo tồn thiên niên
+landuse	park	0	công viên
+landuse	park	1	các công viên
+landuse	piste	0	đường trượt tuyết
+landuse	piste	1	các đường trượt tuyết
+landuse	plaza	0	quảng trường
+landuse	plaza	1	các quảng trường
+landuse	quarry	0	mỏ đá
+landuse	quarry	1	các mỏ đá
+landuse	railway	0	đường sắt
+landuse	railway	1	các đường sắt
+landuse	recreation_ground	0	sân chơi
+landuse	recreation_ground	1	các sân chơi
+landuse	reservoir	0	bể nước
+landuse	reservoir	1	các bể nước
+landuse	residential	0	khu vực nhà ở
+landuse	residential	1	các khu vực nhà ở
+landuse	retail	0	khu vực buôn bán
+landuse	retail	1	các khu vực buôn bán
+landuse	vineyard	0	vườn nho
+landuse	vineyard	1	các vườn nho
+landuse	wetland	0	đầm lầy
+landuse	wetland	1	các đầm lầy
+landuse	wood	0	rừng
+landuse	wood	1	các rừng
+leisure	fishing	0	hồ đánh cá
+leisure	fishing	1	các hồ đánh cá
+leisure	garden	0	vườn
+leisure	garden	1	các vườn
+leisure	golf_course	0	sân golf
+leisure	golf_course	1	các sân golf
+leisure	ice_rink	0	sân băng
+leisure	ice_rink	1	các sân băng
+leisure	nature_reserve	0	khu bảo tồn thiên niên
+leisure	nature_reserve	1	các khu bảo tồn thiên niên
+leisure	park	0	công viên
+leisure	park	1	các công viên
+leisure	pitch	0	bãi thể thao
+leisure	pitch	1	các bãi thể thao
+leisure	playground	0	sân chơi
+leisure	playground	1	các sân chơi
+leisure	recreation_ground	0	sân giải trí
+leisure	recreation_ground	1	các sân giải trí
+leisure	sports_centre	0	trung tâm thể thao
+leisure	sports_centre	1	các trung tâm thể thao
+leisure	stadium	0	sân vận động
+leisure	stadium	1	các sân vận động
+leisure	swimming_pool	0	hồ bơi
+leisure	swimming_pool	1	các hồ bơi
+leisure	water_park	0	công viên nước
+leisure	water_park	1	các công viên nước
+natural	bay	0	vịnh
+natural	bay	1	các vịnh
+natural	beach	0	bãi biển
+natural	beach	1	các bãi biển
+natural	cape	0	mũi đất
+natural	cape	1	các mũi đất
+natural	cave_entrance	0	cửa vào hang
+natural	cave_entrance	1	các cửa vào hang
+natural	channel	0	eo biển
+natural	channel	1	các eo biển
+natural	cliff	0	vách đá
+natural	cliff	1	các vách đá
+natural	coastline	0	bờ biển
+natural	coastline	1	các bờ biển
+natural	geyser	0	mạch nước phun
+natural	geyser	1	các mạch nước phun
+natural	glacier	0	sông băng
+natural	glacier	1	các sông băng
+natural	heath	0	bãi hoang
+natural	heath	1	các bãi hoang
+natural	hill	0	đồi
+natural	hill	1	các đồi
+natural	island	0	đảo
+natural	island	1	các đảo
+natural	land	0	đất
+natural	land	1	các đất
+natural	moor	0	truông
+natural	moor	1	các truông
+natural	peak	0	đỉnh
+natural	peak	1	các đỉnh
+natural	reef	0	rạn san hô
+natural	reef	1	các rạn san hô
+natural	river	0	sông
+natural	river	1	các sông
+natural	rock	0	đá
+natural	rock	1	các đá
+natural	spring	0	suối
+natural	spring	1	các suối
+natural	strait	0	eo biển
+natural	strait	1	các eo biển
+natural	tree	0	cây
+natural	tree	1	các cây
+natural	valley	0	thung lũng
+natural	valley	1	các thung lũng
+natural	volcano	0	núi lửa
+natural	volcano	1	các núi lửa
+natural	water	0	nước
+natural	water	1	các nước
+natural	wetlands	0	đầm lầy
+natural	wetlands	1	các đầm lầy
+natural	wood	0	rừng
+natural	wood	1	các rừng
+place	city	0	thành phố
+place	city	1	các thành phố
+place	country	0	quốc gia
+place	country	1	các quốc gia
+place	county	0	quận hạt
+place	county	1	các quận hạt
+place	farm	0	trại
+place	farm	1	các trại
+place	house	0	nhà ở
+place	house	1	các nhà ở
+place	houses	0	dãy nhà
+place	houses	1	các dãy nhà
+place	island	0	đảo
+place	island	1	các đảo
+place	locality	0	địa phương
+place	locality	1	các địa phương
+place	postcode	0	mã bưu điện
+place	postcode	1	các mã bưu điện
+place	region	0	miền
+place	region	1	các miền
+place	sea	0	biển
+place	sea	1	các biển
+place	state	0	tỉnh bang
+place	state	1	các tỉnh bang
+place	subdivision	0	hàng xóm
+place	subdivision	1	các hàng xóm
+place	suburb	0	ngoại ô
+place	suburb	1	các ngoại ô
+place	town	0	thị xã/trấn
+place	town	1	các thị xã/trấn
+place	unincorporated_area	0	khu chưa hợp nhất
+place	unincorporated_area	1	các khu chưa hợp nhất
+place	village	0	làng
+place	village	1	các làng
+railway	construction	0	đường sắt đang xây
+railway	construction	1	các đường sắt đang xây
+railway	disused_station	0	nhà ga đóng cửa
+railway	disused_station	1	các nhà ga đóng cửa
+railway	funicular	0	đường sắt leo núi
+railway	funicular	1	các đường sắt leo núi
+railway	historic_station	0	nhà ga lịch sử
+railway	historic_station	1	các nhà ga lịch sử
+railway	junction	0	ga đầu mối
+railway	junction	1	các ga đầu mối
+railway	monorail	0	đường một ray
+railway	monorail	1	các đường một ray
+railway	station	0	nhà ga
+railway	station	1	các nhà ga
+railway	subway	0	trạm xe điện ngầm
+railway	subway	1	các trạm xe điện ngầm
+railway	subway_entrance	0	cửa vào nhà ga xe điện ngầm
+railway	subway_entrance	1	các cửa vào nhà ga xe điện ngầm
+railway	tram	0	đường xe điện
+railway	tram	1	các đường xe điện
+shop	bakery	0	tiệm bánh
+shop	bakery	1	các tiệm bánh
+shop	bicycle	0	tiệm xe đạp
+shop	bicycle	1	các tiệm xe đạp
+shop	books	0	tiệm sách
+shop	books	1	các tiệm sách
+shop	car	0	tiệm xe hơi
+shop	car	1	các tiệm xe hơi
+shop	car_dealer	0	cửa hàng xe hơi
+shop	car_dealer	1	các cửa hàng xe hơi
+shop	car_repair	0	tiệm sửa xe
+shop	car_repair	1	các tiệm sửa xe
+shop	carpet	0	tiệm thảm
+shop	carpet	1	các tiệm thảm
+shop	chemist	0	nhà thuốc
+shop	chemist	1	các nhà thuốc
+shop	clothes	0	tiệm quần áo
+shop	clothes	1	các tiệm quần áo
+shop	computer	0	tiệm máy tính
+shop	computer	1	các tiệm máy tính
+shop	confectionery	0	tiệm kẹo
+shop	confectionery	1	các tiệm kẹo
+shop	convenience	0	tiệm tập hóa
+shop	convenience	1	các tiệm tập hóa
+shop	cosmetics	0	tiệm mỹ phẩm
+shop	cosmetics	1	các tiệm mỹ phẩm
+shop	drugstore	0	nhà thuốc
+shop	drugstore	1	các nhà thuốc
+shop	fashion	0	tiệm thời trang
+shop	fashion	1	các tiệm thời trang
+shop	fish	0	tiệm cá
+shop	fish	1	các tiệm cá
+shop	florist	0	tiệm hoa
+shop	florist	1	các tiệm hoa
+shop	food	0	tiệm thực phẩm
+shop	food	1	các tiệm thực phẩm
+shop	grocery	0	tiệm tạp phẩm
+shop	grocery	1	các tiệm tạp phẩm
+shop	hairdresser	0	tiệm làm tóc
+shop	hairdresser	1	các tiệm làm tóc
+shop	insurance	0	bảo hiểm
+shop	insurance	1	các bảo hiểm
+shop	jewelry	0	tiệm kim hoàn
+shop	jewelry	1	các tiệm kim hoàn
+shop	laundry	0	tiệm giặt quần áo
+shop	laundry	1	các tiệm giặt quần áo
+shop	mall	0	trung tâm mua sắm
+shop	mall	1	các trung tâm mua sắm
+shop	market	0	chợ
+shop	market	1	các chợ
+shop	mobile_phone	0	tiệm điện thoại di động
+shop	mobile_phone	1	các tiệm điện thoại di động
+shop	motorcycle	0	cửa hàng xe mô tô
+shop	motorcycle	1	các cửa hàng xe mô tô
+shop	music	0	tiệm nhạc
+shop	music	1	các tiệm nhạc
+shop	newsagent	0	tiệm báo
+shop	newsagent	1	các tiệm báo
+shop	optician	0	tiệm kính mắt
+shop	optician	1	các tiệm kính mắt
+shop	organic	0	tiệm thực phẩm hữu cơ
+shop	organic	1	các tiệm thực phẩm hữu cơ
+shop	photo	0	tiệm rửa hình
+shop	photo	1	các tiệm rửa hình
+shop	salon	0	tiệm làm tóc
+shop	salon	1	các tiệm làm tóc
+shop	shoes	0	tiệm giày
+shop	shoes	1	các tiệm giày
+shop	shopping_centre	0	trung tâm mua sắm
+shop	shopping_centre	1	các trung tâm mua sắm
+shop	sports	0	tiệm thể thao
+shop	sports	1	các tiệm thể thao
+shop	supermarket	0	siêu thị
+shop	supermarket	1	các siêu thị
+shop	toys	0	tiệm đồ chơi
+shop	toys	1	các tiệm đồ chơi
+shop	travel_agency	0	văn phòng du lịch
+shop	travel_agency	1	các văn phòng du lịch
+shop	video	0	tiệm phim
+shop	video	1	các tiệm phim
+tourism	alpine_hut	0	túp lều trên núi
+tourism	alpine_hut	1	các túp lều trên núi
+tourism	artwork	0	tác phẩm nghệ thuật
+tourism	artwork	1	các tác phẩm nghệ thuật
+tourism	attraction	0	nơi du lịch
+tourism	attraction	1	các nơi du lịch
+tourism	bed_and_breakfast	0	nhà trọ
+tourism	bed_and_breakfast	1	các nhà trọ
+tourism	cabin	0	túp lều
+tourism	cabin	1	các túp lều
+tourism	camp_site	0	nơi cắm trại
+tourism	camp_site	1	các nơi cắm trại
+tourism	chalet	0	nhà ván
+tourism	chalet	1	các nhà ván
+tourism	hostel	0	nhà trọ
+tourism	hostel	1	các nhà trọ
+tourism	hotel	0	khách sạn
+tourism	hotel	1	các khách sạn
+tourism	information	0	thông tin
+tourism	information	1	các thông tin
+tourism	lean_to	0	nhà chái
+tourism	lean_to	1	các nhà chái
+tourism	motel	0	khách sạn dọc đường
+tourism	motel	1	các khách sạn dọc đường
+tourism	museum	0	bảo tàng
+tourism	museum	1	các bảo tàng
+tourism	picnic_site	0	bàn ăn ngoài trời
+tourism	picnic_site	1	các bàn ăn ngoài trời
+tourism	theme_park	0	công viên giải trí
+tourism	theme_park	1	các công viên giải trí
+tourism	valley	0	thung lũng
+tourism	valley	1	các thung lũng
+tourism	viewpoint	0	thắng cảnh
+tourism	viewpoint	1	các thắng cảnh
+tourism	zoo	0	vườn thú
+tourism	zoo	1	các vườn thú
+waterway	canal	0	kênh
+waterway	canal	1	các kênh
+waterway	dam	0	đập
+waterway	dam	1	các đập
+waterway	rapids	0	thác ghềnh
+waterway	rapids	1	các thác ghềnh
+waterway	river	0	sông
+waterway	river	1	các sông
+waterway	riverbank	0	bờ sông
+waterway	riverbank	1	các bờ sông
+waterway	stream	0	dòng suối
+waterway	stream	1	các dòng suối
+waterway	waterfall	0	thác
+waterway	waterfall	1	các thác

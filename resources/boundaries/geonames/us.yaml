@@ -1,0 +1,16 @@
+admin_codes:
+    admin1: state
+    admin2: state_district
+
+overrides:
+    id:
+        # Manhattan (Island)
+        "8479493": "city_district"
+        # Brooklyn
+        "5110300": "city_district"
+        # Bronx
+        "5110266": "city_district"
+        # Queens
+        "5133266": "city_district"
+        # Staten Island
+        "5139568": "city_district"

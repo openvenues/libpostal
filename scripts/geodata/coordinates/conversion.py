@@ -19,6 +19,7 @@ import math
 import re
 
 from geodata.encoding import safe_decode
+from geodata.math.floats import isclose
 
 beginning_re = re.compile('^[^0-9\-]+', re.UNICODE)
 end_re = re.compile('[^0-9]+$', re.UNICODE)
@@ -57,8 +58,6 @@ def degrees_to_decimal(degrees, minutes, seconds):
     return degrees + (minutes / 60.0) + (seconds / 3600.0)
 
 
-
-
 def is_valid_latitude(latitude):
     '''Latitude must be real number between -90.0 and 90.0'''
     try:
@@ -66,7 +65,7 @@ def is_valid_latitude(latitude):
     except (ValueError, TypeError):
         return False
 
-    if latitude >= 90.0 or latitude < -90.0 or math.isinf(latitude) or math.isnan(latitude):
+    if latitude > 90.0 or latitude < -90.0 or math.isinf(latitude) or math.isnan(latitude):
         return False
     return True
 
@@ -78,6 +77,19 @@ def is_valid_longitude(longitude):
     except (ValueError, TypeError):
         return False
     return not math.isinf(longitude) and not math.isnan(longitude)
+
+
+def to_valid_latitude(latitude):
+    '''Convert longitude into the -180 to 180 scale'''
+    if not is_valid_latitude(latitude):
+        raise ValueError('Invalid latitude {}'.format(latitude))
+
+    if isclose(latitude, 90.0):
+        latitude = 89.9999
+    elif isclose(latitude, -90.0):
+        latitude = -89.9999
+
+    return latitude
 
 
 def to_valid_longitude(longitude):
@@ -147,6 +159,7 @@ def latlon_to_decimal(latitude, longitude):
     if not is_valid_longitude(longitude):
         raise ValueError('Invalid longitude: {}'.format(longitude))
 
+    latitude = to_valid_latitude(latitude)
     longitude = to_valid_longitude(longitude)
 
     return latitude, longitude

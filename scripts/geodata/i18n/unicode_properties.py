@@ -35,9 +35,11 @@ from geodata.string_utils import NUM_CODEPOINTS, wide_unichr
 
 from cldr_languages import *
 from download_cldr import download_cldr
-from languages import init_languages, get_country_languages
+from languages import get_country_languages
 from unicode_paths import UNICODE_DATA_DIR
 from word_breaks import script_regex, regex_char_range
+
+SRC_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir, 'src')
 
 SCRIPTS_DATA_DIR = os.path.join(UNICODE_DATA_DIR, 'scripts')
 LOCAL_SCRIPTS_FILE = os.path.join(SCRIPTS_DATA_DIR, 'Scripts.txt')
@@ -112,6 +114,7 @@ def script_name_constant(i, u):
 
 
 UNKNOWN_SCRIPT = 'Unknown'
+COMMON_SCRIPT = 'Common'
 
 
 def parse_char_range(r):
@@ -395,12 +398,10 @@ def get_script_languages():
     return script_languages
 
 
-def main(out_dir):
+def main(out_dir=SRC_DIR):
     # Output is a C header and data file, see templates
     out_file = open(os.path.join(out_dir, SCRIPTS_DATA_FILENAME), 'w')
     out_header = open(os.path.join(out_dir, SCRIPTS_HEADER), 'w')
-
-    init_languages()
 
     download_file(SCRIPTS_URL, LOCAL_SCRIPTS_FILE)
     download_file(BLOCKS_URL, LOCAL_BLOCKS_FILE)
@@ -459,8 +460,4 @@ def main(out_dir):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print 'Usage: python unicode_properties.py out_dir'
-        sys.exit(1)
-
-    main(sys.argv[1])
+    main(*sys.argv[1:])

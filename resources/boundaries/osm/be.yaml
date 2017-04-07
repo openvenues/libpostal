@@ -1,0 +1,21 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "country_region"
+        "6": "state"
+        "7": "state_district"
+        "8": "city"
+        "9": "city"
+
+    overrides:
+        id:
+            relation:
+                # Brussels-Capital Region
+                "54094": "state"
+
+        contained_by:
+            relation:
+                # Antwerpen
+                "59518":
+                    admin_level:
+                        "9": "city_district"

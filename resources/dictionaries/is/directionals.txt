@@ -1,0 +1,4 @@
+austur|a
+norður|norour|n
+suður|suour|s
+vestur|v

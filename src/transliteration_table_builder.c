@@ -260,14 +260,20 @@ int main(int argc, char **argv) {
         char_array *trans_key = char_array_from_string(trans_source.name);
         char_array_cat(trans_key, NAMESPACE_SEPARATOR_CHAR);
 
-        transliterator_t *trans = transliterator_new(trans_source.name, trans_source.internal, trans_table->steps->n, trans_source.steps_length);
+        char *trans_name = strdup(trans_source.name);
+        if (trans_name == NULL) {
+            log_error("strdup returned NULL on trans_source.name\n");
+            goto exit_teardown;
+        }
+
+        transliterator_t *trans = transliterator_new(trans_name, trans_source.internal, trans_table->steps->n, trans_source.steps_length);
 
         for (int j = 0; j < trans_source.steps_length; j++) {
             transliteration_step_source_t step_source = steps_source[trans_source.steps_start + j];
 
             size_t step_name_len = strlen(step_source.name);
 
-            log_info("Doing step: %s, type=%d\n", step_source.name, step_source.type);
+            log_debug("Doing step: %s, type=%d\n", step_source.name, step_source.type);
 
             if (!transliteration_table_add_step(trans_table, step_source.type, step_source.name)) {
                 log_error("Step couldn't be added\n");
@@ -354,7 +360,7 @@ int main(int argc, char **argv) {
 
                     char_array *pre_context_perm = char_array_new_size(pre_context_len);
 
-                    for (; string_tree_iterator_done(pre_context_iter); string_tree_iterator_next(pre_context_iter)) {
+                    for (; !string_tree_iterator_done(pre_context_iter); string_tree_iterator_next(pre_context_iter)) {
                         char_array_clear(pre_context_perm);
                         for (c = 0; c < pre_context_iter->num_tokens; c++) {
                             token = string_tree_iterator_get_string(pre_context_iter, c);
@@ -385,7 +391,7 @@ int main(int argc, char **argv) {
                 size_t num_pre_context_strings = 0;
                 if (pre_context_type != CONTEXT_TYPE_NONE) {
                     num_pre_context_strings = cstring_array_num_strings(pre_context_strings);
-                    log_info("num_pre_context_strings = %zu\n", num_pre_context_strings);
+                    log_debug("num_pre_context_strings = %zu\n", num_pre_context_strings);
                 }
 
                 string_tree_t *post_context_tree = NULL;
@@ -405,7 +411,7 @@ int main(int argc, char **argv) {
 
                     char_array *post_context_perm = char_array_new_size(post_context_len);
 
-                    for (; string_tree_iterator_done(post_context_iter); string_tree_iterator_next(post_context_iter)) {
+                    for (; !string_tree_iterator_done(post_context_iter); string_tree_iterator_next(post_context_iter)) {
                         char_array_clear(post_context_perm);
                         for (c = 0; c < post_context_iter->num_tokens; c++) {
                             token = string_tree_iterator_get_string(post_context_iter, c);
@@ -435,7 +441,7 @@ int main(int argc, char **argv) {
                 size_t num_post_context_strings = 0;
                 if (post_context_type != CONTEXT_TYPE_NONE) {
                     num_post_context_strings = cstring_array_num_strings(post_context_strings);
-                    log_info("num_post_context_strings = %zu\n", num_post_context_strings);
+                    log_debug("num_post_context_strings = %zu\n", num_post_context_strings);
                 }
 
                 cstring_array *context_strings = NULL;
@@ -496,7 +502,7 @@ int main(int argc, char **argv) {
                 }
 
                 if (num_context_strings > 0) {
-                    log_info("num_context_strings = %zu\n", num_context_strings);
+                    log_debug("num_context_strings = %zu\n", num_context_strings);
                 }
 
 
@@ -507,11 +513,11 @@ int main(int argc, char **argv) {
 
                 string_tree_iterator_t *iter = string_tree_iterator_new(tree);
 
-                log_info("iter->remaining=%d\n", iter->remaining);
+                log_debug("iter->remaining=%d\n", iter->remaining);
                 
                 char *key_str;
 
-                for (; string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
+                for (; !string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
                     rule_key->n = step_key_len;
 
                     for (c = 0; c < iter->num_tokens; c++) {

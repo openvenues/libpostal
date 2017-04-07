@@ -1,0 +1,12 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "6": "state_district"
+        "8": "city"
+
+    overrides:
+        id:
+            relation:
+                # Nairobi
+                "3492709": "city"

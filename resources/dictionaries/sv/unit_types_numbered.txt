@@ -1,0 +1,5 @@
+bostad|bst
+hus
+lägenhet|lgh|lagenhet|laegenhet|lg
+lägenhetsnummer|lgh nr|lghnr|lagenhetsnummer|laegenhetsnummer|lgnr|lg nr
+rum

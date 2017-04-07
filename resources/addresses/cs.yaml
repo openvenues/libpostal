@@ -1,0 +1,570 @@
+# cs.yaml
+# -------
+# Czech language specification
+
+
+components:
+    level:
+        null_probability: 0.95
+        alphanumeric_probability: 0.04
+        standalone_probability: 0.01
+
+    staircase:
+        null_probability: 0.99
+        alphanumeric_probability: 0.01
+
+    entrance:
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
+
+    unit:
+        null_probability: 0.9
+        alphanumeric_probability: 0.1
+
+    # Note: no combinations because of the house numbering scheme
+
+numbers:
+    default: &cislo
+        canonical: číslo
+        abbreviated: č
+        sample: true
+        # Probabilities
+        canonical_probability: 0.3
+        abbreviated_probability: 0.6
+        sample_probability: 0.1
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: "č."
+            direction: left
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.6
+
+and:
+    default: &a
+        canonical: a
+        abbreviated: "&"
+        canonical_probability: 0.2
+        abbreviated_probability: 0.75
+        sample: true
+        sample_probability: 0.05
+
+conscription_numbers:
+    alphanumeric:
+        default: 
+            canonical: číslo popisné
+            abbreviated: "č.p."
+            canonical_probability: 0.05
+            abbreviated_probability: 0.85
+            sample: true
+            sample_probability: 0.1
+            numeric:
+                direction: left
+
+cross_streets:
+    and: *a
+    at: &na
+        canonical: na
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2        
+    corner_of: &rohu
+        canonical: rohu
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    corner: &roh
+        canonical: roh
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    at_the_corner_of: &na_rohu
+        canonical: na rohu
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    intersection:
+        default: *a
+        probability: 0.6
+        alternatives:
+            - alternative: *na
+              probability: 0.1
+            - alternative: *rohu
+              probability: 0.1
+            - alternative: *roh
+              probability: 0.1
+            - alternative: *na_rohu
+              probability: 0.1
+
+    between:
+        canonical: mezi
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probability: 0.5
+
+levels:
+    floor: &patro
+        canonical: patro
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            direction_probability: 0.9
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
+            add_number_phrase: true
+            add_number_phrase_probability: 0.1
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.3
+                roman_numeral_probability: 0.7
+            add_number_phrase: true
+            add_number_phrase_probability: 0.1
+        numeric_probability: 0.4
+        ordinal_probability: 0.6
+    nadzemni_podlazi: &nadzemni_podlazi
+        canonical: nadzemní podlaží
+        abbreviated: np
+        sample: true
+        canonical_probability: 0.1
+        abbreviated_probability: 0.8
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            direction_probability: 0.9
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
+        numeric_probability: 0.4
+        ordinal_probability: 0.6
+    etaz: &etaz
+        canonical: etáž
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            direction_probability: 0.9
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
+        numeric_probability: 0.4
+        ordinal_probability: 0.6
+    prizemi: &prizemi
+        canonical: přízemí
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+    podzemni_podlazi: &podzemni_podlazi
+        canonical: podzemní podlaží
+        abbreviated: pp
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.2
+        sample_probability: 0.3
+        # e.g. podzemní podlaží 1
+        numeric:
+            direction: left
+            direction_probability: 0.8
+        # e.g. pp1
+        numeric_affix:
+            affix: pp
+            direction: left
+        # e.g. 1. podzemní podlaží
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
+        standalone_probability: 0.985
+        number_abs_value: true
+        number_min_abs_value: 1
+        numeric_probability: 0.005
+        numeric_affix_probability: 0.005
+        ordinal_probability: 0.005
+    aliases:
+        "<-1":
+            default: *podzemni_podlazi
+        "-1":
+            default: *podzemni_podlazi
+        "0":
+            default: *prizemi
+            probability: 0.9
+            alternatives:
+                - alternative: *patro
+                  probability: 0.1
+
+    numbering_starts_at: 0
+
+    alphanumeric:
+        default: *patro
+        probability: 0.8
+        alternatives:
+            - alternative: *nadzemni_podlazi
+              probability: 0.19
+            - alternative: *etaz
+              probability: 0.01
+        numeric_probability: 0.99 # With this probability, pick an integer
+        alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
+        numeric_plus_alpha_probability: 0.0001 # e.g. 2A
+        alpha_plus_numeric_probability: 0.0001 # e.g. A2
+
+categories:
+    near:
+        default:
+            canonical: poblíž
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.75
+        alternatives:
+            - alternative:
+                canonical: v blízkém okolí
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+            - alternative:
+                canonical: u
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+            - alternative:
+                canonical: kolem
+                sample: true
+                canonical_probability: 0.7
+                sample_probability: 0.3
+              probability: 0.05
+    nearby:
+        default:
+            canonical: poblíž
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.45
+        alternatives:
+            - alternative:
+                canonical: blízko
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.2
+            - alternative:
+                canonical: v blízkosti
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+            - alternative:
+                canonical: tady poblíž
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+            - alternative:
+                canonical: tady
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.05
+            - alternative:
+                canonical: okolo
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.05
+            - alternative:
+                canonical: v okolí
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.05
+    near_me:
+        default:
+            canonical: v blízkosti mně
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+
+    # Don't worry about agreement
+    in:
+        default:
+            canonical: v
+        probability: 0.7
+        alternatives:
+            - alternative:
+                canonical: ve
+              probability: 0.3
+
+    # Probabilities of each phrase
+    near_probability: 0.35
+    nearby_probability: 0.2
+    near_me_probability: 0.1
+    in_probability: 0.35
+
+directions:
+    right: &prava
+        canonical: pravá
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    left: &leva
+        canonical: levá
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    alternatives:
+        - alternative: *prava
+          probability: 0.5
+        - alternative: *leva
+          probability: 0.5
+
+cardinal_directions:
+    east: &vychod
+        canonical: východ
+        abbreviated: v
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: v
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    west: &zapad
+        canonical: západ
+        abbreviated: z
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: z
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    north: &sever
+        canonical: sever
+        abbreviated: s
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: s
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    south: &jih
+        canonical: jih
+        abbreviated: j
+        sample: true
+        canonical_probability: 0.75
+        abbreviated_probability: 0.1
+        sample_probability: 0.15
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: j
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    alternatives:
+        - alternative: *sever
+          probability: 0.25
+        - alternative: *vychod
+          probability: 0.25
+        - alternative: *jih
+          probability: 0.25
+        - alternative: *zapad
+          probability: 0.25
+entrances:
+    vchod: &vchod
+        canonical: vchod
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Wejście 1, Wejście A, etc.
+    alphanumeric: &entrance_alphanumeric
+        default: *vchod
+        numeric_probability: 0.1 # e.g. Wejście 1
+        alpha_probability: 0.85 # e.g. Wejście A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+staircases:
+    schodiste: &schodiste
+        canonical: schodiště
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    alphanumeric: &staircase_alphanumeric
+        default: *schodiste
+        numeric_probability: 0.75
+        alpha_probability: 0.2
+        numeric_plus_alpha_probability: 0.025
+        alpha_plus_numeric_probability: 0.025
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: left
+            direction_probability: 0.85
+            modifier:
+                alternatives:
+                    - alternative: *sever
+                    - alternative: *jih
+                    - alternative: *vychod
+                    - alternative: *zapad
+
+po_boxes:
+    postovni_prihradka: &postovni_prihradka
+        canonical: poštovní přihrádka
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2 # poštovní přihrádka 1234
+    alphanumeric:
+        default: *postovni_prihradka
+        numeric_probability: 0.9 # poštovní přihrádka 123
+        alpha_probability: 0.05 # poštovní přihrádka A
+        numeric_plus_alpha_probability: 0.04 # poštovní přihrádka 123G
+        alpha_plus_numeric_probability: 0.01 # poštovní přihrádka A123
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+units:
+    apartaman: &apartaman
+        canonical: apartmán
+        abbreviated: apt
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.5
+        sample_probability: 0.3
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.1
+    pokoj: &pokoj
+        canonical: pokoj
+        abbreviated: pok
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.5
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.1
+    kancelar: &kancelar
+        canonical: kancelář
+        sample: true
+        canonical_probability: 0.6
+        sample_probability: 0.4
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.1
+    alphanumeric: &unit_alphanumeric
+        default: *apartaman
+        probability: 0.9
+        alternatives:
+            - alternative: *pokoj
+              probability: 0.1
+        numeric_probability: 0.9 # e.g. apt. 1
+        numeric_plus_alpha_probability: 0.03 # e.g. 1A
+        alpha_plus_numeric_probability: 0.03 # e.g. A1
+        alpha_probability: 0.04 # e.g. apt. A
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.01
+
+    zones:
+        commercial: &commercial_unit_types
+            default: *pokoj
+            probability: 0.6
+            alternatives:
+                - alternative: *kancelar
+                  probability: 0.4
+            numeric_probability: 0.95 # e.g. pokoj 1
+            numeric_plus_alpha_probability: 0.01 # e.g. pokoj 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. pokoj A1
+            alpha_probability: 0.03 # e.g. pokoj A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1
+        university:
+            default: *pokoj
+            numeric_probability: 0.95 # e.g. pokoj 1
+            numeric_plus_alpha_probability: 0.01 # e.g. pok 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. pokoj A1
+            alpha_probability: 0.03 # e.g. pokoj A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1

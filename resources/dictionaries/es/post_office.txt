@@ -1,1 +1,4 @@
-apartado|apdo
+apartado|apdo|aptdo
+apartado de correos|apdo de correos
+apartado postal|apdo postal|aptdo postal
+casilla de correos|c.c|cc|c c

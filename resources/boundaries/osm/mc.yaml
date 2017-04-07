@@ -1,0 +1,5 @@
+---
+  admin_level: 
+    "2": "country"
+    "8": "city"
+    "10": "city_district"

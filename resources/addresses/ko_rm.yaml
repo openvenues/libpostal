@@ -1,0 +1,90 @@
+# ko_rm.yaml
+# ----------
+# Romanized Korean language specification
+
+whitespace: false
+
+components:
+    level:
+        null_probability: 0.85 # Probability of doing nothing if no floor number is specified
+        alphanumeric_probability: 0.15
+
+    unit:
+        # If no unit number is specified
+        null_probability: 0.6
+        alphanumeric_probability: 0.4
+
+numbers:
+    combinations:
+        # Unit is just appended onto the house number
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 1.0
+            probability: 1.0
+
+numbers:
+    default: &ho
+        canonical: ho
+        numeric_affix:
+            affix: -ho
+            upper_case: false
+            direction: right
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+levels:
+    cheung: &cheung
+        canonical: cheung
+        numeric_affix:
+            affix: -cheung
+            upper_case: false
+            direction: right
+            digits:
+                ascii_probability: 0.3
+                unicode_full_width_probability: 0.5
+                spellout_probability: 0.2
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+    numbering_starts_at: 1
+
+    alphanumeric:
+        default: *cheung
+        numeric_probability: 1.0
+
+po_boxes:
+    saseoham: &saseoham
+        canonical: saseoham
+        numeric:
+            direction: left
+
+    alphanumeric:
+        default: *saseoham
+        numeric_probability: 1.0
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+units:
+    alphanumeric:
+        default: *ho
+        numeric_probability: 1.0
+        use_positive_numbers_probability: 1.0
+        # If we have a floor number (from building:levels), use it
+        use_floor_probability: 0.8

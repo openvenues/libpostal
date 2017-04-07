@@ -1,9 +1,0 @@
-appartement|app
-département|departement|dept
-escalier|esc
-escaliers|escs
-jardin|jard|jrd
-jardins|jards|jrds
-porche|pch|prch
-résidence|residence|rés|res
-résidences|residences

@@ -1,0 +1,4 @@
+apartman|ap|apt
+soba
+stan
+ured

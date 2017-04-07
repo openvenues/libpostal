@@ -54,6 +54,8 @@
 
 char *file_getline(FILE * f);
 
+bool file_exists(char *filename);
+
 bool is_relative_path(struct dirent *ent);
 
 char *path_join(int n, ...);
@@ -64,6 +66,11 @@ bool file_read_uint64(FILE *file, uint64_t *value);
 bool file_write_uint64(FILE *file, uint64_t value);
 
 bool file_read_uint64_array(FILE *file, uint64_t *value, size_t n);
+
+bool file_read_float(FILE *file, float *value);
+bool file_write_float(FILE *file, float value);
+
+bool file_read_float_array(FILE *file, float *value, size_t n);
 
 bool file_read_double(FILE *file, double *value);
 bool file_write_double(FILE *file, double value);

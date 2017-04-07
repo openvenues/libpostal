@@ -1,0 +1,47 @@
+banka
+čajovná|cajovna
+chrám|chram
+cukrárna|cukrarna
+divadlo
+dům|dum
+galérie|galerie
+gymnázium|gymnazium
+hlavní nádražní|hlavni nadrazni|hl nád|hl nad
+hospoda
+hostinec
+hřbitovní|hrbitovni
+hrad
+kaple
+katedralá|katedrala
+kavárna|kavarna
+kino
+knihkupectví|knihkupectvi
+knihovna
+komerční banka|komercni banka
+kostel
+koupaliště|koupaliste
+kulturní dům|kulturni dum
+lékárna|lekarna
+mateřská škola|materska skola
+městský úřad|mestsky urad
+most
+muzeum
+nádražní|nadrazni|nád|nad
+obecní úřad|obecni urad
+pekárna|pekarna
+penzion
+pivnice
+pivovar
+poliklinika
+potraviny
+restaurace
+škola|skola
+školní|skolni
+stadionu
+trh
+úřad|urad
+vêž|vez
+vinárna|vinarna
+zahrada
+základní škola|zakladni skola
+zámek|zamek

@@ -1,0 +1,43 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "5": "state_district"
+        "6": "state_district"
+        "7": "city"
+        "9": "suburb"
+        "10": "suburb"
+
+    overrides:
+        id:
+            relation:
+                # City of Sydney
+                "1251066": "city"
+                # Sydney (suburb)
+                "5729534": "city"
+                # City of Melbourne
+                "2404870": "city"
+                # Melbourne (suburb)
+                "2383266": "city"
+                # City of Adelaide
+                "3093825": "city"
+                # Adelaide (suburb)
+                "3114051": "city"
+                # City of Darwin
+                "5515884": "city"
+                # Canberra City
+                "5342034": "city"
+                # City of Wollongong
+                "6303077": "city"
+                # Wollongong (locality)
+                "6076763": "city"
+                # City of Newcastle
+                "6189831": "city"
+                # Newcastle (suburb)
+                "5989933": "city"
+                # city of Hobart
+                "6269038": "city"
+                # City of Greater Geelong
+                "2646730": "city"
+                # Geelong (suburb)
+                "2456176": "city"

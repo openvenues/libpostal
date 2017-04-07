@@ -1,0 +1,368 @@
+# el.yaml
+# -------
+# Greek language specification
+
+
+alphabet: αβγδεζηθικλμνξοπρστυφχψω
+alphabet_probability: 0.8
+
+components:
+    level:
+        null_probability: 0.95
+        alphanumeric_probability: 0.05
+
+    entrance:
+        null_probability: 0.9
+        alphanumeric_probability: 0.1
+
+    unit:
+        null_probability: 0.6
+        alphanumeric_probability: 0.4
+
+
+    combinations:
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: "/"
+                  probability: 0.95
+                - separator: "-"
+                  probability: 0.05
+            probability: 0.1
+
+levels:
+    orofos: &orofos
+        canonical: όροφος
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: left
+        numeric_probability: 0.4
+        ordinal_probability: 0.6
+    orofos_latin: &orofos_latin
+        canonical: órofos
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+        numeric:
+            direction: left
+        ordinal:
+            direction: left
+        numeric_probability: 0.4
+        ordinal_probability: 0.6
+
+    isogelo: &isogelo
+        canonical: ισόγειο
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    isogelo_latin: &isogelo_latin
+        canonical: isógeio
+        sample: true
+        canonical_probability: 0.6
+        sample_probability: 0.4
+    imiorofos: &imiorofos
+        canonical: ημιώροφος
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    imiorofos_latin: &imiorofos_latin
+        canonical: imiórofos
+        sample: true
+        canonical_probability: 0.6
+        sample_probability: 0.4
+
+    ypogeio: &ypogeio
+        canonical: υπόγειο
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: left
+        number_abs_value: true
+        number_min_abs_value: 1
+        standalone_probability: 0.985
+        numeric_probability: 0.01
+        ordinal_probability: 0.005
+    ypogeio_latin: &ypogeio_latin
+        canonical: ypógeio
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: left
+        number_abs_value: true
+        number_min_abs_value: 1
+        standalone_probability: 0.985
+        numeric_probability: 0.01
+        ordinal_probability: 0.005
+
+    aliases:
+        "<-1":
+            default: *ypogeio
+            probability: 0.9
+            alternatives:
+                - alternative: *ypogeio_latin
+                  probability: 0.1
+        "-1":
+            default: *ypogeio
+            probability: 0.9
+            alternatives:
+                - alternative: *ypogeio_latin
+                  probability: 0.1
+
+        half_floors:
+            default: *imiorofos
+            probability: 0.9
+            alternatives:
+                - alternative: *imiorofos_latin
+                  probability: 0.1
+
+        "0":
+            default: *isogelo
+            probability: 0.9
+            alternatives:
+                - alternative: *isogelo_latin
+                  probability: 0.1
+
+    numbering_starts_at: 0
+
+    alphanumeric:
+        default: *orofos
+        probability: 0.9
+        alternatives:
+            - alternative: *orofos_latin
+              probability: 0.1
+        numeric_probability: 0.99 # With this probability, pick an integer
+        alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
+        numeric_plus_alpha_probability: 0.0001 # e.g. 2A
+        alpha_plus_numeric_probability: 0.0001 # e.g. A2
+
+entrances:
+    eisodos: &eisodos
+        canonical: είσοδος
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    eisodos_latin: &eisodos_latin
+        canonical: eísodos
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # είσοδος 1, etc.
+    alphanumeric:
+        default: *eisodos
+        probability: 0.99
+        alternatives:
+            - alternative: *eisodos_latin
+              probability: 0.01
+        numeric_probability: 0.1
+        alpha_probability: 0.9
+
+staircases:
+    skala: &skala
+        canonical: σκάλα
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+        numeric:
+            direction: left
+
+    skala_latin: &skala_latin
+        canonical: skála
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+        numeric:
+            direction: left
+
+    alphanumeric:
+        # For alphanumerics, skála A, skála 1, etc.
+        default: *skala
+        probability: 0.9
+        alternatives:
+            - alternative: *skala_latin
+              probability: 0.1
+        numeric_probability: 0.6 # e.g. skála 1
+        alpha_probability: 0.35 # e.g. skála A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+po_boxes:
+    tachydromiki_thyrida: &tachydromiki_thyrida
+        canonical: ταχυδρομική θυρίδα
+        abbreviated: τ.θ
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.4
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    tachydromiki_thyrida_latin: &tachydromiki_thyrida_latin
+        canonical: tachydromikí thyrída
+        abbreviated: t.th
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.4
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    alphanumeric:
+        default: *tachydromiki_thyrida
+        probability: 0.8
+        alternatives:
+            - alternative: *tachydromiki_thyrida_latin
+              probability: 0.2
+        numeric_probability: 0.9 # t.th 123
+        alpha_probability: 0.05 # t.th А
+        numeric_plus_alpha_probability: 0.04 # t.th 123А
+        alpha_plus_numeric_probability: 0.01 # t.th А123
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+units:
+    diamerisma: &diamerisma
+        canonical: διαμέρισμα
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        numeric_probability: 0.6
+        ordinal_probability: 0.4
+    diamerisma_latin: &diamerisma_latin
+        canonical: diamérisma
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        numeric_probability: 0.6
+        ordinal_probability: 0.4
+
+    domatio: &domatio
+        canonical: δωμάτιο
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        numeric_probability: 0.6
+        ordinal_probability: 0.4
+    domatio_latin: &domatio_latin
+        canonical: domátio
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        numeric_probability: 0.6
+        ordinal_probability: 0.4
+
+    grafeiou: &grafeiou
+        canonical: γραφείου
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        numeric_probability: 0.6
+        ordinal_probability: 0.4
+    grafeiou_latin: &grafeiou_latin
+        canonical: grafeíou
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        numeric_probability: 0.6
+        ordinal_probability: 0.4
+
+    alphanumeric: &unit_alphanumeric
+        default: *diamerisma
+        probability: 0.8
+        alternatives:
+            - alternative: *diamerisma_latin
+              probability: 0.1
+            - alternative: *domatio
+              probability: 0.09
+            - alternative: *domatio_latin
+              probability: 0.01
+
+        numeric_probability: 0.9 # e.g. diamérisma 1
+        numeric_plus_alpha_probability: 0.03 # e.g. 1А
+        alpha_plus_numeric_probability: 0.03 # e.g. AА1
+        alpha_probability: 0.04 # e.g. διαμέρισμα А
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.1
+
+    zone:
+        residential: *unit_alphanumeric
+        commercial:
+            default: *grafeiou
+            probability: 0.9
+            alternatives:
+                - alternative: *grafeiou_latin
+                  probability: 0.1
+        university:
+            default: *domatio
+            probability: 0.9
+            alternatives:
+                - alternative: *domatio_latin
+                  probability: 0.1

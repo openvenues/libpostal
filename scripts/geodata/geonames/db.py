@@ -17,8 +17,11 @@ class GeoNamesDB(object):
     def __init__(self, filename):
         self.db = sqlite3.connect(filename)
 
+    def query(self, query, *params):
+        return self.db.execute(self.names_query, params)
+
     def get_alternate_names(self, geonames_id):
-        cursor = self.db.execute(self.names_query, [geonames_id])
+        cursor = self.query(self.names_query, geonames_id)
         language_names = defaultdict(list)
         for language, name, is_preferred, is_short in cursor:
             language_names[language].append((name,

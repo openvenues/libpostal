@@ -1,0 +1,12 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "5": "state_district"
+        "8": "city"
+
+    overrides:
+        use_admin_center:
+            - id: 1707699 # Addis Ababa
+              type: relation
+              probability: 0.75

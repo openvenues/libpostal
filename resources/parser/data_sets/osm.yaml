@@ -1,0 +1,39 @@
+languages:
+    pick_namespaced_language_probability: 0.6
+
+categories:
+    plural_probability: 0.6
+    place_only_probability: 0.9
+
+conscription_numbers:
+    phrase_probability: 0.4
+    no_phrase_probability: 0.1
+
+austro_hungarian_street_numbers:
+    no_phrase_probability: 0.1
+
+chains:
+    sample_probability: 0.5
+    place_only_probability: 0.9
+
+places:
+    drop_postcode_probability: 0.6
+    cldr_country_probability: 0.5
+
+streets:
+    abbreviate_probability: 0.3
+    separate_probability: 0.2
+
+venues:
+    address_probability: 0.4
+    abbreviate_probability: 0.3
+    separate_probability: 0.0
+    sub_building_probability: 0.05
+
+countries:
+    jp:
+        # Always do this as there are plenty of examples of block numbers without house number
+        combine_block_house_number_probability: 1.0
+        block_phrase_probability: 0.4
+        romaji_probability: 0.4
+        add_metro_probability: 0.6

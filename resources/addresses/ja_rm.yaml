@@ -1,0 +1,180 @@
+# ja_rm.yaml
+# ----------
+# Romaji (Romanized Japanese) language specification
+
+components:
+    level:
+        null_probability: 0.95 # Probability of doing nothing if no floor number is specified
+        alphanumeric_probability: 0.05
+
+    unit:
+        # If no unit number is specified
+        null_probability: 1.0
+        conditional:
+            - component: level
+              probabilities:
+                  null_probability: 0.95
+                  alphanumeric_probability: 0.05
+            - component: house_number
+              probabilities:
+                  null_probability: 0.6
+                  alphanumeric_probability: 0.4
+
+
+    combinations:
+        # Unit is just appended onto the house number
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 1.0
+            probability: 1.0
+
+numbers:
+    default: &go
+        canonical: go
+        numeric_affix:
+            affix: -go
+            upper_case: false
+            direction: right
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+blocks:
+    alphanumeric:
+        default: &ban
+            canonical: ban
+            numeric_affix:
+                affix: -ban
+                upper_case: false
+                direction: right
+            numeric_probability: 0.0
+            numeric_affix_probability: 1.0
+        probability: 0.85
+        alternatives:
+            - alternative: &banchi
+                canonical: banchi
+                numeric_affix:
+                    affix: -ban
+                    upper_case: false
+                    direction: right
+                numeric_probability: 0.0
+                numeric_affix_probability: 1.0
+              probability: 0.1
+            - alternative: &banchi_no
+                canonical: banchi-no
+                numeric_affix:
+                    affix: -banchi-no
+                    upper_case: false
+                    direction: right
+                numeric_probability: 0.0
+                numeric_affix_probability: 1.0
+              probability: 0.05
+        numeric_probability: 1.0
+    alphanumeric_phrase_probability: 0.4
+
+house_numbers:
+    alphanumeric:
+        default: *go
+    alphanumeric_phrase_probability: 0.4
+
+levels:
+    kai: &kai
+        canonical: kai
+        numeric_affix:
+            affix: -kai
+            upper_case: false
+            direction: right
+            digits:
+                ascii_probability: 0.3
+                unicode_full_width_probability: 0.5
+                spellout_probability: 0.2
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    gai: &gai
+        canonical: gai
+        numeric_affix:
+            affix: -gai
+            upper_case: false
+            direction: right
+            digits:
+                ascii_probability: 0.3
+                unicode_full_width_probability: 0.5
+                spellout_probability: 0.2
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+
+    numbering_starts_at: 1
+
+    alphanumeric:
+        default: *kai
+        probability: 0.6
+        alternatives:
+            - alternative: *gai
+              probability: 0.4
+        numeric_probability: 1.0
+
+po_boxes:
+    shishobako: &shishobako
+        canonical: shishobako
+        numeric:
+            direction: left
+        numeric_probability: 1.0
+
+    alphanumeric:
+        default: *shishobako
+        numeric_probability: 1.0
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+
+metro_stations:
+    alphanumeric:
+        default: &eki
+            canonical: eki
+            numeric:
+                direction: right
+                title_case: false
+            numeric_affix:
+                affix: -eki
+                title_case: false
+                direction: right
+            numeric_affix_probability: 1.0
+    alphanumeric_phrase_probability: 1.0
+
+
+postcodes:
+    alphanumeric:
+        # This should still be the default in Romaji
+        default:
+            canonical: 〒
+            numeric_affix:
+                affix: 〒
+                direction: left
+            # null_probability means the chance of doing nothing e.g. just the postal code
+            null_probability: 0.1
+            numeric_probability: 0.0
+            numeric_affix_probability: 0.9
+
+units:
+    alphanumeric:
+        numeric_probability: 1.0
+        use_positive_numbers_probability: 1.0
+        # If we have a floor number (from building:levels), use it
+        use_floor_probability: 0.8

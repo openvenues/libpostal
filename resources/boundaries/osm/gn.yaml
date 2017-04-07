@@ -1,0 +1,11 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "6": "state_district"
+
+    overrides:
+        id:
+            relation:
+                # Conakry
+                "3731500": "city"

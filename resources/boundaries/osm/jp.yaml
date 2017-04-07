@@ -1,0 +1,18 @@
+---
+    admin_level: 
+        "2": "country"
+        "3": "country_region"
+        "4": "state"
+        "5": "state_district"
+        "6": "state_district"
+        "7": "city"
+        "8": "city_district"
+        "9": "suburb"
+        "10": "suburb"
+
+    global_overrides_last: true
+
+    overrides:
+        id:
+            relation:
+                "1803923": "country_region"

@@ -1,0 +1,428 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "zero"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "jeden"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "dwa"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "trzy"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "cztery"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "pięć"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "piec"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "sześć"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "szesc"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "siedem"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "osiem"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "dziewięć"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "dziewiec"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "jedenaście"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "jedenascie"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "dwanaście"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "dwanascie"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "trzynaście"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "trzynascie"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "czternaście"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "czternascie"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "piętnaście"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "pietnascie"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "szesnaście"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "szesnascie"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "siedemnaście"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "siedemnascie"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "osiemnaście"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "osiemnascie"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "dziewiętnaście"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "dziewietnascie"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "dwadzieścia"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dwadziescia"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trzydzieści"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trzydziesci"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "czterdzieści"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "czterdziesci"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "pięćdziesiąt"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "piecdziesiat"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sześćdziesiąt"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "szescdziesiat"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "siedemdziesiąt"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "siedemdziesiat"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "osiemdziesiąt"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "osiemdziesiat"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dziewięćdziesiąt"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dziewiecdziesiat"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sto"
+      value: 100
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dwieście"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dwiescie"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trzysta"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "czterysta"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "pięćset"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "piecset"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sześćset"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "szescset"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "siedemset"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "osiemset"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dziewięćset"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dziewiecset"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "tysiąc"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tysiac"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tysiące"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tysiace"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tysięcy"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tysiecy"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milion"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliony"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milionów"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milionow"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliard"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliardy"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliardów"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliardow"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilion"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliony"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilionów"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilionow"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliard"
+      value: 1000000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliardy"
+      value: 1000000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliardów"
+      value: 1000000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliardow"
+      value: 1000000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "."
+        "1":
+          - "."
+        "2":
+          - "."
+        "3":
+          - "."
+        "4":
+          - "."
+        "5":
+          - "."
+        "6":
+          - "."
+        "7":
+          - "."
+        "8":
+          - "."
+        "9":
+          - "."
+

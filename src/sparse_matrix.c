@@ -231,7 +231,7 @@ int sparse_matrix_sum_rows(sparse_matrix_t *self, uint32_t *rows, size_t m, doub
 
 
 
-int sparse_matrix_dot_dense(sparse_matrix_t *self, matrix_t *matrix, matrix_t *result) {
+int sparse_matrix_dot_dense(sparse_matrix_t *self, double_matrix_t *matrix, double_matrix_t *result) {
     if (self->n != matrix->m || self->m != result->m || matrix->n != result->n) {
         return -1;
     }
@@ -267,7 +267,7 @@ int sparse_matrix_dot_dense(sparse_matrix_t *self, matrix_t *matrix, matrix_t *r
 
 
 
-int sparse_matrix_dot_sparse(sparse_matrix_t *self, sparse_matrix_t *other, matrix_t *result) {
+int sparse_matrix_dot_sparse(sparse_matrix_t *self, sparse_matrix_t *other, double_matrix_t *result) {
     if (self->n != other->m || self->m != result->m || other->n != result->n) {
         return -1;
     }
