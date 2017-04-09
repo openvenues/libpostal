@@ -315,7 +315,7 @@ class OSMBuildingPolygonReader(OSMPolygonReader):
 
 class OSMCountryPolygonReader(OSMPolygonReader):
     def include_polygon(self, props):
-        return 'ISO3166-1:alpha2' in props or (props.get('type', 'relation'), safe_encode(props.get('id', ''))) in osm_admin1_ids
+        return 'ISO3166-1:alpha2' in props or 'ISO3166-2' in props or (props.get('type', 'relation'), safe_encode(props.get('id', ''))) in osm_admin1_ids
 
 
 class OSMNeighborhoodPolygonReader(OSMPolygonReader):

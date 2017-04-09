@@ -28,6 +28,7 @@ this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.coordinates.conversion import latlon_to_decimal
+from goedata.countries.constants import Countries
 from geodata.encoding import safe_decode
 from geodata.file_utils import ensure_dir, download_file
 from geodata.i18n.unicode_properties import get_chars_by_script
@@ -298,6 +299,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         'name:*',
         'ISO3166-1:alpha2',
         'ISO3166-1:alpha3',
+        'ISO3166-2',
         'int_name',
         'official_name',
         'official_name:*',
@@ -492,7 +494,16 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
             if country:
                 break
         else:
-            return None, []
+            # See if there's an ISO3166-2 code that matches
+            # in case the country polygon is wacky
+            for c in osm_components:
+                admin1 = c.get('ISO3166-2')
+                if admin1:
+                    # If so, and if the country is valid, use that
+                    country = admin1[:2]
+                    if not Countries.is_valid_country_code(country.lower()):
+                        return None, []
+                    break
 
         country = country.lower()
 
