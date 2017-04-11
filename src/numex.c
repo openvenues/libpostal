@@ -684,6 +684,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
 
     bool is_space = false;
     bool is_hyphen = false;
+    bool is_punct = false;
 
     char_array *number_str = NULL;
 
@@ -702,8 +703,12 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
             if (codepoint == 0) break;
 
             is_space = utf8_is_separator(cat);
+            is_punct = utf8_is_punctuation(cat);
             if (is_space) {
                 log_debug("is_space\n");
+                is_hyphen = false;
+            } else if (is_punct) {
+                log_debug("is_punct\n");
                 is_hyphen = false;
             } else {
                 is_hyphen = utf8_is_hyphen(codepoint);
@@ -741,7 +746,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 possible_complete_token = true;
             } else {
                 log_debug("other char\n");
-                if (result.len > 0 && (!whole_tokens_only || (prev_state.state != NUMEX_SEARCH_STATE_MATCH && complete_token))) {
+                if (result.len > 0 && (!whole_tokens_only || (prev_state.state == NUMEX_SEARCH_STATE_MATCH && is_punct) || (prev_state.state != NUMEX_SEARCH_STATE_MATCH && complete_token))) {
                     results = (results != NULL) ? results : numex_result_array_new_size(1);
                     numex_result_array_push(results, result);
                     log_debug("Adding phrase from partial token, value=%" PRId64 "\n", result.value);
@@ -904,6 +909,71 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
     return results;
 }
 
+static trie_prefix_result_t get_ordinal_namespace_prefix(trie_t *trie, char *lang, gender_t gender, grammatical_category_t category, bool use_default_if_not_found) {
+    numex_language_t *language = get_numex_language(lang);
+
+    if (language == NULL) {
+        return NULL_PREFIX_RESULT;
+    }
+
+    bool whole_tokens_only = language->whole_tokens_only;
+
+    trie_prefix_result_t prefix = trie_get_prefix(trie, lang);
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        return NULL_PREFIX_RESULT;
+    }
+
+    prefix = trie_get_prefix_from_index(trie, ORDINAL_NAMESPACE_PREFIX, ORDINAL_NAMESPACE_PREFIX_LEN, prefix.node_id, prefix.tail_pos);
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        return NULL_PREFIX_RESULT;
+    }
+
+    trie_prefix_result_t ordinal_prefix = prefix;
+
+    char *gender_str = GENDER_NONE_PREFIX;
+    if (gender == GENDER_FEMININE) {
+        gender_str = GENDER_FEMININE_PREFIX;
+    } else if (gender == GENDER_MASCULINE) {
+        gender_str = GENDER_MASCULINE_PREFIX;
+    } else if (gender == GENDER_NEUTER) {
+        gender_str = GENDER_NEUTER_PREFIX;
+    }
+
+    prefix = trie_get_prefix_from_index(trie, gender_str, strlen(gender_str), ordinal_prefix.node_id, ordinal_prefix.tail_pos);
+
+    if (prefix.node_id == NULL_NODE_ID && gender != GENDER_NONE && use_default_if_not_found) {
+        prefix = trie_get_prefix_from_index(trie, GENDER_NONE_PREFIX, strlen(GENDER_NONE_PREFIX), ordinal_prefix.node_id, ordinal_prefix.tail_pos);
+    }
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        return prefix;
+    }
+
+    trie_prefix_result_t gender_prefix = prefix;
+
+    char *category_str = CATEGORY_DEFAULT_PREFIX;
+
+    if (category == CATEGORY_PLURAL) {
+        category_str = CATEGORY_PLURAL_PREFIX;
+    }
+
+    prefix = trie_get_prefix_from_index(trie, category_str, strlen(category_str), gender_prefix.node_id, gender_prefix.tail_pos);
+
+    if (prefix.node_id == NULL_NODE_ID && category != CATEGORY_DEFAULT && use_default_if_not_found) {
+        prefix = trie_get_prefix_from_index(trie, CATEGORY_DEFAULT_PREFIX, strlen(CATEGORY_DEFAULT_PREFIX), gender_prefix.node_id, gender_prefix.tail_pos);
+    }
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        return prefix;
+    }
+
+    prefix = trie_get_prefix_from_index(trie, NAMESPACE_SEPARATOR_CHAR, NAMESPACE_SEPARATOR_CHAR_LEN, prefix.node_id, prefix.tail_pos);
+
+    return prefix;
+}
+
 char *get_ordinal_suffix(char *numeric_string, char *lang, numex_result_t result) {
     if (numex_table == NULL) {
         log_error(NUMEX_SETUP_ERROR);
@@ -915,67 +985,8 @@ char *get_ordinal_suffix(char *numeric_string, char *lang, numex_result_t result
         return NULL;
     }
 
-    numex_language_t *language = get_numex_language(lang);
-
-    if (language == NULL) {
-        return NULL;
-    }
-
-    bool whole_tokens_only = language->whole_tokens_only;
-
-    trie_prefix_result_t prefix = trie_get_prefix(trie, lang);
-
-    if (prefix.node_id == NULL_NODE_ID) {
-        return NULL;
-    }
-
-    prefix = trie_get_prefix_from_index(trie, ORDINAL_NAMESPACE_PREFIX, ORDINAL_NAMESPACE_PREFIX_LEN, prefix.node_id, prefix.tail_pos);
-
-    if (prefix.node_id == NULL_NODE_ID) {
-        return NULL;
-    }
-
-
-    trie_prefix_result_t ordinal_prefix = prefix;
-
-    char *gender = GENDER_NONE_PREFIX;
-    if (result.gender == GENDER_FEMININE) {
-        gender = GENDER_FEMININE_PREFIX;
-    } else if (result.gender == GENDER_MASCULINE) {
-        gender = GENDER_MASCULINE_PREFIX;
-    } else if (result.gender == GENDER_NEUTER) {
-        gender = GENDER_NEUTER_PREFIX;
-    }
-
-    prefix = trie_get_prefix_from_index(trie, gender, strlen(gender), ordinal_prefix.node_id, ordinal_prefix.tail_pos);
-
-    if (prefix.node_id == NULL_NODE_ID && result.gender != GENDER_NONE) {
-        prefix = trie_get_prefix_from_index(trie, GENDER_NONE_PREFIX, strlen(GENDER_NONE_PREFIX), ordinal_prefix.node_id, ordinal_prefix.tail_pos);
-    }
-
-    if (prefix.node_id == NULL_NODE_ID) {
-        return NULL;
-    }
-
-    trie_prefix_result_t gender_prefix = prefix;
-
-    char *category = CATEGORY_DEFAULT_PREFIX;
-
-    if (result.category == CATEGORY_PLURAL) {
-        category = CATEGORY_PLURAL_PREFIX;
-    }
-
-    prefix = trie_get_prefix_from_index(trie, category, strlen(category), gender_prefix.node_id, gender_prefix.tail_pos);
-
-    if (prefix.node_id == NULL_NODE_ID && result.category != CATEGORY_DEFAULT) {
-        prefix = trie_get_prefix_from_index(trie, CATEGORY_DEFAULT_PREFIX, strlen(CATEGORY_DEFAULT_PREFIX), gender_prefix.node_id, gender_prefix.tail_pos);
-    }
-
-    if (prefix.node_id == NULL_NODE_ID) {
-        return NULL;
-    }
-
-    prefix = trie_get_prefix_from_index(trie, NAMESPACE_SEPARATOR_CHAR, NAMESPACE_SEPARATOR_CHAR_LEN, prefix.node_id, prefix.tail_pos);
+    bool use_default_if_not_found = true;
+    trie_prefix_result_t prefix = get_ordinal_namespace_prefix(trie, lang, result.gender, result.category, use_default_if_not_found);
 
     if (prefix.node_id == NULL_NODE_ID) {
         return NULL;
