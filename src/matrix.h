@@ -16,7 +16,7 @@
 #ifdef HAVE_CBLAS
 #include <cblas.h>
 #else
-#warning "No CLBAS"
+#warning "No CBLAS"
 #endif
 
 typedef enum {
