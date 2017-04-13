@@ -744,6 +744,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 log_debug("last was separator\n");
                 last_was_separator = false;
                 possible_complete_token = true;
+                complete_token = false;
             } else {
                 log_debug("other char\n");
                 if (result.len > 0 && (!whole_tokens_only || (prev_state.state == NUMEX_SEARCH_STATE_MATCH && is_punct) || (prev_state.state != NUMEX_SEARCH_STATE_MATCH && complete_token))) {
@@ -754,6 +755,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 }
                 result = NULL_NUMEX_RESULT;
                 rule = prev_rule = NUMEX_NULL_RULE;
+                prev_state = NULL_NUMEX_SEARCH_STATE;
                 last_was_separator = false;
                 possible_complete_token = false;
                 complete_token = false;
@@ -1054,4 +1056,3 @@ char *replace_numeric_expressions(char *str, char *lang) {
 
     return char_array_to_string(replacement);
 }
-
