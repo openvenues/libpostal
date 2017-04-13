@@ -783,7 +783,9 @@ address_parser_t *address_parser_init(char *filename) {
         }
 
         if (most_common > -1) {
-            address_parser_types_t types = {.components = stats.components, .most_common = (uint16_t)most_common};
+            address_parser_types_t types;
+            types.components = stats.components;
+            types.most_common = (uint16_t)most_common;
 
             kh_value(phrase_counts, pk) = (uint32_t)phrase_types_array->n;
             address_parser_types_array_push(phrase_types_array, types);
