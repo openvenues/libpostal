@@ -220,7 +220,9 @@ static inline bool crf_averaged_perceptron_trainer_update_weight(khash_t(class_w
 static inline bool crf_averaged_perceptron_trainer_update_prev_tag_weight(khash_t(prev_tag_class_weights) *weights, uint64_t iter, uint32_t prev_class_id, uint32_t class_id, double value) {
     class_weight_t weight = NULL_WEIGHT;
 
-    tag_bigram_t tag_bigram = {.prev_class_id = prev_class_id, .class_id = class_id};
+    tag_bigram_t tag_bigram;
+    tag_bigram.prev_class_id = prev_class_id;
+    tag_bigram.class_id = class_id;
 
     uint64_t key = tag_bigram.value;
 
