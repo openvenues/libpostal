@@ -1727,6 +1727,7 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
     phrase_t only_phrase = NULL_PHRASE;
     token_t token, prev_token;
     bool is_postal = false;
+
     if (context->component_phrases->n == 1) {
         only_phrase = context->component_phrases->a[0];
     } else if (context->postal_code_phrases->n == 1) {
@@ -1783,7 +1784,6 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
             return response;
         }
     }
-    */
 
     cstring_array *token_labels = cstring_array_new_size(tokens->n);
 
