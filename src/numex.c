@@ -911,7 +911,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
     return results;
 }
 
-static trie_prefix_result_t get_ordinal_namespace_prefix(trie_t *trie, char *lang, gender_t gender, grammatical_category_t category, bool use_default_if_not_found) {
+static trie_prefix_result_t get_ordinal_namespace_prefix(trie_t *trie, char *lang, char *ns, gender_t gender, grammatical_category_t category, bool use_default_if_not_found) {
     numex_language_t *language = get_numex_language(lang);
 
     if (language == NULL) {
@@ -926,7 +926,7 @@ static trie_prefix_result_t get_ordinal_namespace_prefix(trie_t *trie, char *lan
         return NULL_PREFIX_RESULT;
     }
 
-    prefix = trie_get_prefix_from_index(trie, ORDINAL_NAMESPACE_PREFIX, ORDINAL_NAMESPACE_PREFIX_LEN, prefix.node_id, prefix.tail_pos);
+    prefix = trie_get_prefix_from_index(trie, ns, strlen(ns), prefix.node_id, prefix.tail_pos);
 
     if (prefix.node_id == NULL_NODE_ID) {
         return NULL_PREFIX_RESULT;
@@ -976,7 +976,7 @@ static trie_prefix_result_t get_ordinal_namespace_prefix(trie_t *trie, char *lan
     return prefix;
 }
 
-char *get_ordinal_suffix(char *numeric_string, char *lang, numex_result_t result) {
+static char *get_ordinal_suffix(char *numeric_string, size_t len, char *lang, gender_t gender, grammatical_category_t category) {
     if (numex_table == NULL) {
         log_error(NUMEX_SETUP_ERROR);
         return NULL;
@@ -988,13 +988,13 @@ char *get_ordinal_suffix(char *numeric_string, char *lang, numex_result_t result
     }
 
     bool use_default_if_not_found = true;
-    trie_prefix_result_t prefix = get_ordinal_namespace_prefix(trie, lang, result.gender, result.category, use_default_if_not_found);
+    trie_prefix_result_t prefix = get_ordinal_namespace_prefix(trie, lang, ORDINAL_NAMESPACE_PREFIX, gender, category, use_default_if_not_found);
 
     if (prefix.node_id == NULL_NODE_ID) {
         return NULL;
     }
 
-    phrase_t phrase = trie_search_suffixes_from_index(trie, numeric_string, strlen(numeric_string), prefix.node_id);
+    phrase_t phrase = trie_search_suffixes_from_index(trie, numeric_string, len, prefix.node_id);
 
     if (phrase.len == 0) {
         return NULL;
@@ -1007,6 +1007,87 @@ char *get_ordinal_suffix(char *numeric_string, char *lang, numex_result_t result
     ordinal_indicator_t *ordinal = numex_table->ordinal_indicators->a[phrase.data];
     return ordinal->suffix;
 
+}
+
+static size_t possible_ordinal_digit_len(char *str, size_t len) {
+    uint8_t *ptr = (uint8_t *)str;
+    size_t idx = 0;
+
+    bool ignorable = true;
+
+    bool is_digit = false;
+    bool last_was_digit = false;
+
+    int32_t ch;
+
+    size_t digit_len = 0;
+
+    while (idx < len) {
+        ssize_t char_len = utf8proc_iterate(ptr, len, &ch);
+
+        if (char_len <= 0) break;
+        if (ch == 0) break;
+        if (!(utf8proc_codepoint_valid(ch))) return 0;
+
+        // 0-9 only for this
+        is_digit = ch >= 48 && ch <= 57;
+
+        if ((idx == 0 && !is_digit) || (idx > 0 && is_digit && !last_was_digit)) {
+            return 0;
+        }
+
+        if (is_digit) {
+            digit_len += char_len;
+        }
+
+        ptr += char_len;
+        idx += char_len;
+        last_was_digit = is_digit;
+    }
+
+    return digit_len;
+}
+
+size_t ordinal_suffix_len(char *str, size_t len, char *lang) {
+    if (str == NULL || len == 0) {
+        return 0;
+    }
+
+    size_t ordinal_digit_len = possible_ordinal_digit_len(str, len);
+    if (ordinal_digit_len == 0) {
+        return 0;
+    }
+
+    if (numex_table == NULL) {
+        log_error(NUMEX_SETUP_ERROR);
+        return 0;
+    }
+
+    trie_t *trie = numex_table->trie;
+    if (trie == NULL) {
+        return 0;
+    }
+
+    bool use_default_if_not_found = false;
+
+    // Default (GENDER_NONE and CATEGORY_DEFAULT) are at the end of the enums, so iterate backward
+    for (int gender = NUM_GENDERS - 1; gender >= 0; gender--) {
+        for (int category = NUM_CATEGORIES - 1; category >= 0; category--) {
+            trie_prefix_result_t prefix = get_ordinal_namespace_prefix(trie, lang, ORDINAL_PHRASE_NAMESPACE_PREFIX, gender, category, use_default_if_not_found);
+
+            if (prefix.node_id == NULL_NODE_ID) {
+                continue;
+            }
+
+            phrase_t phrase = trie_search_suffixes_from_index(trie, str, len, prefix.node_id);
+
+            if (phrase.len == len - ordinal_digit_len) {
+                return len - ordinal_digit_len;
+            }
+        }
+    }
+
+    return 0;
 }
 
 char *replace_numeric_expressions(char *str, char *lang) {
@@ -1040,7 +1121,7 @@ char *replace_numeric_expressions(char *str, char *lang) {
         char_array_append(replacement, numeric_string);
 
         if (result.is_ordinal) {
-            char *ordinal_suffix = get_ordinal_suffix(numeric_string, lang, result);
+            char *ordinal_suffix = get_ordinal_suffix(numeric_string, strlen(numeric_string), lang, result.gender, result.category);
             if (ordinal_suffix != NULL) {
                 char_array_append(replacement, ordinal_suffix);
             }
