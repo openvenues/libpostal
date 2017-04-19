@@ -71,7 +71,7 @@ particular|parti
 partida|ptda
 pasadizo|pzo
 pasaje|psaje|psj
-paseo|pº|po|pso|pseo|pas|ps|p|p.o|p.º
+paseo|pº|p°|po|pso|pseo|pas|ps|p|p.o|p.º|p.°
 paseo maritimo|psmar|ps mar
 paso
 pasillo|psllo

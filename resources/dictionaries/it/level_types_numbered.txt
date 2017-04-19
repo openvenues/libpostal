@@ -1,2 +1,2 @@
 livello
-piano|pº|p.º|p.o|p.nº|p.no|pnº|pno
+piano|pº|p°|p.º|p.°|p.o|p.nº|p.n°|p.no|pnº|pn°|pno
