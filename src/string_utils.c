@@ -227,7 +227,6 @@ typedef enum casing_option {
 char *utf8_case(const char *s, casing_option_t casing, utf8proc_option_t options) {
     ssize_t len = (ssize_t)strlen(s);
     utf8proc_uint8_t *str = (utf8proc_uint8_t *)s;
-    utf8proc_uint8_t *dest = NULL;
 
     utf8proc_ssize_t result;
     result = utf8proc_decompose(str, len, NULL, 0, options);
