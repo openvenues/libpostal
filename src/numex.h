@@ -34,7 +34,8 @@ typedef enum {
     GENDER_MASCULINE,
     GENDER_FEMININE,
     GENDER_NEUTER,
-    GENDER_NONE
+    GENDER_NONE,
+    NUM_GENDERS
 } gender_t;
 
 #define CATEGORY_PLURAL_PREFIX "p"
@@ -42,7 +43,8 @@ typedef enum {
 
 typedef enum {
     CATEGORY_PLURAL,
-    CATEGORY_DEFAULT
+    CATEGORY_DEFAULT,
+    NUM_CATEGORIES
 } grammatical_category_t;
 
 typedef enum {
@@ -85,9 +87,13 @@ typedef struct numex_rule {
 VECTOR_INIT(numex_rule_array, numex_rule_t)
 
 #define ORDINAL_NAMESPACE_CHAR "o"
+#define ORDINAL_PHRASE_NAMESPACE_CHAR "p"
 
 #define ORDINAL_NAMESPACE_PREFIX NAMESPACE_SEPARATOR_CHAR ORDINAL_NAMESPACE_CHAR NAMESPACE_SEPARATOR_CHAR            
 #define ORDINAL_NAMESPACE_PREFIX_LEN strlen(ORDINAL_NAMESPACE_PREFIX)
+
+#define ORDINAL_PHRASE_NAMESPACE_PREFIX NAMESPACE_SEPARATOR_CHAR ORDINAL_PHRASE_NAMESPACE_CHAR NAMESPACE_SEPARATOR_CHAR
+#define ORDINAL_PHRASE_NAMESPACE_PREFIX_LEN strlen(ORDINAL_PHRASE_NAMESPACE_PREFIX)
 
 typedef struct ordinal_indicator {
     char *key;
@@ -142,7 +148,7 @@ VECTOR_INIT(numex_result_array, numex_result_t)
 
 char *replace_numeric_expressions(char *str, char *lang);
 numex_result_array *convert_numeric_expressions(char *str, char *lang);
-char *get_ordinal_suffix(char *numeric_string, char *lang, numex_result_t result);
+size_t ordinal_suffix_len(char *s, size_t len, char *lang);
 
 bool numex_table_write(FILE *file);
 bool numex_table_save(char *filename);

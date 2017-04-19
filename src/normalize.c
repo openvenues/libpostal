@@ -3,8 +3,24 @@
 #define FULL_STOP_CODEPOINT 0x002e
 #define APOSTROPHE_CODEPOINT 0x0027
 
+char *normalize_replace_numex(char *str, size_t num_languages, char **languages) {
+    char *numex_normalized = NULL;
 
-char *normalize_string_utf8(char *str, uint64_t options) {    
+    for (size_t i = 0; i < num_languages; i++) {
+        char *lang = languages[i];
+        char *numex_replaced = replace_numeric_expressions(numex_normalized == NULL ? str : numex_normalized, lang);
+        if (numex_replaced != NULL) {
+            if (numex_normalized != NULL) {
+                free(numex_normalized);
+            }
+            numex_normalized = numex_replaced;
+        }
+    }
+
+    return numex_normalized;
+}
+
+char *normalize_string_utf8_languages(char *str, uint64_t options, size_t num_languages, char **languages) {
     int utf8proc_options = UTF8PROC_OPTIONS_BASE | UTF8PROC_IGNORE | UTF8PROC_NLF2LF | UTF8PROC_STRIPCC;
     uint8_t *utf8proc_normalized = NULL;
 
@@ -63,7 +79,7 @@ char *normalize_string_utf8(char *str, uint64_t options) {
         }
     }
 
-    if (options & NORMALIZE_STRING_REPLACE_HYPHENS && strchr(str, '-') != NULL) {
+    if (options & NORMALIZE_STRING_REPLACE_HYPHENS && string_contains_hyphen(str)) {
         char *replaced = string_replace_char(str, '-', ' ');
         if (replaced != NULL) {
             if (normalized_allocated) {
@@ -76,11 +92,28 @@ char *normalize_string_utf8(char *str, uint64_t options) {
         }
     }
 
+    if (options & NORMALIZE_STRING_REPLACE_NUMEX && num_languages > 0) {
+        char *numex_normalized = normalize_replace_numex(str, num_languages, languages);
+        if (numex_normalized != NULL) {
+            if (normalized_allocated) {
+                free(normalized);
+            }
+            normalized = numex_normalized;
+            str = normalized;
+            normalized_allocated = true;
+        }
+
+    }
+
     return normalized;
 }
 
+char *normalize_string_utf8(char *str, uint64_t options) {
+    return normalize_string_utf8_languages(str, options, 0, NULL);
+}
 
-char *normalize_string_latin(char *str, size_t len, uint64_t options) {
+
+char *normalize_string_latin_languages(char *str, size_t len, uint64_t options, size_t num_languages, char **languages) {
     char *latin_transliterator = LATIN_ASCII;
     if (options & NORMALIZE_STRING_SIMPLE_LATIN_ASCII) {
         latin_transliterator = LATIN_ASCII_SIMPLE;
@@ -90,9 +123,9 @@ char *normalize_string_latin(char *str, size_t len, uint64_t options) {
     
     char *utf8_normalized;
     if (transliterated == NULL) {
-        utf8_normalized = normalize_string_utf8(str, options);
+        utf8_normalized = normalize_string_utf8_languages(str, options, num_languages, languages);
     } else {
-        utf8_normalized = normalize_string_utf8(transliterated, options);
+        utf8_normalized = normalize_string_utf8_languages(transliterated, options, num_languages, languages);
         free(transliterated);
         transliterated = NULL;
     }
@@ -100,7 +133,11 @@ char *normalize_string_latin(char *str, size_t len, uint64_t options) {
     return utf8_normalized;
 }
 
-void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t options) {
+char *normalize_string_latin(char *str, size_t len, uint64_t options) {
+    return normalize_string_latin_languages(str, len, options, 0, NULL);
+}
+
+void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t options, size_t num_languages, char **languages) {
     
     char *transliterated = NULL;
     char *utf8_normalized = NULL;
@@ -114,7 +151,7 @@ void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t
     if (options & NORMALIZE_STRING_LATIN_ASCII) {
         transliterated = transliterate(latin_transliterator, str, len);
         if (transliterated != NULL) {
-            utf8_normalized = normalize_string_utf8(transliterated, options);
+            utf8_normalized = normalize_string_utf8_languages(transliterated, options, num_languages, languages);
             free(transliterated);
             transliterated = NULL;
         }
@@ -127,7 +164,7 @@ void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t
     }
 
     char *str_copy = strndup(str, len);
-    utf8_normalized = normalize_string_utf8(str_copy, options);
+    utf8_normalized = normalize_string_utf8_languages(str_copy, options, num_languages, languages);
     free(str_copy);
 
     if (options & NORMALIZE_STRING_LATIN_ASCII && utf8_normalized != NULL) {
@@ -150,8 +187,8 @@ void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t
     if (prev_string != NULL) {
         free(prev_string);
     }
-
 }
+
 
 string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t num_languages, char **languages) {
     size_t len = strlen(str);
@@ -161,15 +198,16 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
 
     khash_t(int_set) *scripts = kh_init(int_set);
     char *utf8_normalized = NULL;
-
-    char *ptr = str;
+    char *numex_replaced = NULL;
 
     script_t script;
 
     char *trans_name = NULL;
     char *lang;
 
-    bool transliterate_latin = false;
+    char *ptr = str;
+
+    bool have_latin_transliterator = false;
     while (consumed < len)  {
         string_script_t script_span = get_string_script(ptr, len - consumed);
         script = script_span.script;
@@ -182,12 +220,16 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
             if (html_escaped != NULL) {
                 str = html_escaped;
             }
-            utf8_normalized = normalize_string_utf8(str, NORMALIZE_STRING_LOWERCASE);
+
+            options ^= NORMALIZE_STRING_COMPOSE | NORMALIZE_STRING_DECOMPOSE | NORMALIZE_STRING_STRIP_ACCENTS | NORMALIZE_STRING_LATIN_ASCII;
+
+            utf8_normalized = normalize_string_utf8_languages(str, options, num_languages, languages);
             if (utf8_normalized != NULL) {
                 if (html_escaped != NULL) {
                     free(html_escaped);
                     html_escaped = NULL;
                 }
+
                 string_tree_add_string(tree, utf8_normalized);
                 string_tree_finalize_token(tree);
                 free(utf8_normalized);
@@ -200,22 +242,22 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
 
         log_debug("script_len=%zu\n", script_len);
 
-        if (script == SCRIPT_LATIN && num_languages > 0 && !transliterate_latin) {
+        if (script == SCRIPT_LATIN && num_languages > 0 && !have_latin_transliterator) {
             for (size_t i = 0; i < num_languages; i++) {
                 lang = languages[i];
                 foreach_transliterator(script, lang, trans_name, {
                     if (!string_equals(trans_name, LATIN_ASCII)) {
-                        transliterate_latin = true;
+                        have_latin_transliterator = true;
                         break;
                     }
                 })
 
-                if (transliterate_latin) break;
+                if (have_latin_transliterator) break;
             }
 
         }
 
-        if ((script != SCRIPT_LATIN || transliterate_latin) && script_len > 0) {
+        if ((script != SCRIPT_LATIN || have_latin_transliterator) && script_len > 0) {
             int ret;
             khiter_t key = kh_put(int_set, scripts, (khint_t)script, &ret);
             if (ret < 0) {
@@ -230,8 +272,8 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
         ptr += script_len;
     }
 
-    if (!transliterate_latin) {
-        add_latin_alternatives(tree, str, len, options);
+    if (!have_latin_transliterator) {
+        add_latin_alternatives(tree, str, len, options, num_languages, languages);
     }
 
     size_t transliterate_scripts = kh_size(scripts);
@@ -276,7 +318,7 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
                 prev = transliterated;
             })
 
-            add_latin_alternatives(tree, transliterated, strlen(transliterated), options);
+            add_latin_alternatives(tree, transliterated, strlen(transliterated), options, num_languages, languages);
             if (transliterated != str) {
                 free(transliterated);
             }
@@ -287,8 +329,8 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
 
     }
 
-    if (transliterate_latin) {
-        add_latin_alternatives(tree, str, len, options);
+    if (have_latin_transliterator) {
+        add_latin_alternatives(tree, str, len, options, num_languages, languages);
     }
     
     kh_destroy(int_set, scripts);

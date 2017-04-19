@@ -79,6 +79,7 @@ static inline uint64_t get_normalize_string_options(libpostal_normalize_options_
     normalize_string_options |= options.strip_accents ? NORMALIZE_STRING_STRIP_ACCENTS : 0;
     normalize_string_options |= options.lowercase ? NORMALIZE_STRING_LOWERCASE : 0;
     normalize_string_options |= options.trim_string ? NORMALIZE_STRING_TRIM : 0;
+    normalize_string_options |= options.expand_numex ? NORMALIZE_STRING_REPLACE_NUMEX : 0;
 
     return normalize_string_options;
 }
@@ -558,7 +559,6 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
     address_expansion_t prefix_expansion;
     address_expansion_t suffix_expansion;
 
-    char_array *key = char_array_new_size(token.len);
     char *expansion;
 
     size_t num_strings = 0;
@@ -582,10 +582,11 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
     }
 
     if (!have_suffix && !have_prefix) {
-        char_array_destroy(key);
         return false;
     }
-    
+
+    char_array *key = char_array_new_size(token.len);
+
     if (have_prefix && have_suffix) {
         for (size_t i = 0; i < prefix_expansions->n; i++) {
             prefix_expansion = prefix_expansions->a[i];
@@ -760,8 +761,25 @@ static inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, to
 
     if ((suffix.len == 0 && prefix.len == 0)) return false;
 
-
     return add_affix_expansions(tree, str, lang, token, prefix, suffix, options);
+}
+
+static inline bool normalize_ordinal_suffixes(string_tree_t *tree, char *str, char *lang, token_t token, libpostal_normalize_options_t options) {
+    size_t len_ordinal_suffix = ordinal_suffix_len(str + token.offset, token.len, lang);
+
+    if (len_ordinal_suffix == 0) return false;
+
+    cstring_array *strings = tree->strings;
+    // Add the original form first. When this function returns true,
+    // add_normalized_strings_token won't be called a second time.
+    add_normalized_strings_token(strings, str, token, options);
+
+    char_array *key = char_array_new_size(token.len - len_ordinal_suffix + 1);
+    char_array_cat_len(key, str + token.offset, token.len - len_ordinal_suffix);
+    char *expansion = char_array_get_string(key);
+    cstring_array_add_string(strings, expansion);
+    char_array_destroy(key);
+    return true;
 }
 
 static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *str, token_array *tokens, libpostal_normalize_options_t options) {
@@ -770,6 +788,7 @@ static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *s
     for (size_t i = 0; i < tokens->n; i++) {
         token_t token = tokens->a[i];
         bool have_phrase = false;
+        bool have_ordinal = false;
 
         if (is_special_token(token.type)) {
             string_tree_add_string_len(tree, str + token.offset, token.len);
@@ -783,9 +802,14 @@ static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *s
                 have_phrase = true;
                 break;
             }
+
+            if (normalize_ordinal_suffixes(tree, str, lang, token, options)) {
+                have_ordinal = true;
+                break;
+            }
         }
 
-        if (!have_phrase) {
+        if (!have_phrase && !have_ordinal) {
             add_normalized_strings_token(strings, str, token, options);
         }
 
@@ -826,44 +850,17 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
         char_array_terminate(temp_string);
 
         char *tokenized_str = char_array_get_string(temp_string);
-
-        char *new_str = tokenized_str;
-        char *last_numex_str = NULL;
-        if (options.expand_numex) {
-            char *numex_replaced = NULL;
-            for (size_t i = 0; i < options.num_languages; i++)  {
-                lang = options.languages[i];
-
-                numex_replaced = replace_numeric_expressions(new_str, lang);
-                if (numex_replaced != NULL) {
-                    new_str = numex_replaced;
-                
-                    if (last_numex_str != NULL) {
-                        free(last_numex_str);
-                    }            
-                    last_numex_str = numex_replaced;
-                }
-            }
-
-        }
         
         string_tree_t *alternatives;
 
         int ret;
-        log_debug("new_str=%s\n", new_str);
-
         log_debug("Adding alternatives for single normalization\n");
-        alternatives = add_string_alternatives(new_str, options);
-
-        if (last_numex_str != NULL) {
-            free(last_numex_str);
-        }
+        alternatives = add_string_alternatives(tokenized_str, options);
 
         if (alternatives == NULL) {
             log_debug("alternatives = NULL\n");
             continue;
         }
-
 
         iter = string_tree_iterator_new(alternatives);
         log_debug("iter->num_tokens=%d\n", iter->num_tokens);
