@@ -764,10 +764,20 @@ static inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, to
     return add_affix_expansions(tree, str, lang, token, prefix, suffix, options);
 }
 
-static inline bool normalize_ordinal_suffixes(string_tree_t *tree, char *str, char *lang, token_t token, libpostal_normalize_options_t options) {
+static inline bool normalize_ordinal_suffixes(string_tree_t *tree, char *str, char *lang, token_t token, size_t i, token_t prev_token, libpostal_normalize_options_t options) {
+    size_t token_digit_len = possible_ordinal_digit_len(str + token.offset, token.len);
     size_t len_ordinal_suffix = ordinal_suffix_len(str + token.offset, token.len, lang);
 
-    if (len_ordinal_suffix == 0) return false;
+    bool ret = false;
+
+    if (len_ordinal_suffix == 0 || token_digit_len + len_ordinal_suffix < token.len) {
+        return false;
+    } else if (len_ordinal_suffix == token.len && i > 0 && prev_token.len > 0) {
+        size_t prev_token_digit_len = possible_ordinal_digit_len(str + prev_token.offset, prev_token.len);
+        ret = prev_token_digit_len == prev_token.len;
+    } else {
+        ret = true;
+    }
 
     cstring_array *strings = tree->strings;
     // Add the original form first. When this function returns true,
@@ -779,11 +789,13 @@ static inline bool normalize_ordinal_suffixes(string_tree_t *tree, char *str, ch
     char *expansion = char_array_get_string(key);
     cstring_array_add_string(strings, expansion);
     char_array_destroy(key);
-    return true;
+    return ret;
 }
 
 static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *str, token_array *tokens, libpostal_normalize_options_t options) {
     cstring_array *strings = tree->strings;
+
+    token_t prev_token = (token_t){0, 0, 0};
 
     for (size_t i = 0; i < tokens->n; i++) {
         token_t token = tokens->a[i];
@@ -803,7 +815,7 @@ static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *s
                 break;
             }
 
-            if (normalize_ordinal_suffixes(tree, str, lang, token, options)) {
+            if (normalize_ordinal_suffixes(tree, str, lang, token, i, prev_token, options)) {
                 have_ordinal = true;
                 break;
             }
@@ -814,6 +826,7 @@ static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *s
         }
 
         string_tree_finalize_token(tree);
+        prev_token = token;
     }
 
 }
