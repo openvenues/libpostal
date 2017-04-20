@@ -11,7 +11,7 @@ env:
         - secure: "OGNJ6Cj3trq4nASgm4BK331aij+FZ11St7/YF9rfxeQBwg4MCPH2+D0jvAULBHvJR7K2RmepX/FG5d4S+rtwKNGngg3ovPdd1MbwFltHpn5/KM+hxe7kCZx2+V9/FN+4YSyO0zSUDra6AXHOs72mfyrZoB3a36SS4lg2sAp33gU="
         - GH_REF=github.com/openvenues/libpostal
         - DICTIONARIES_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "resources/dictionaries/.*/*.txt" | wc -l)
-        - NUMEX_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep -E "(resources/numex|src/numex_table_builder.c)|" | wc -l)
+        - NUMEX_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep -E "(resources/numex|src/numex_table_builder.c)" | wc -l)
         - TRANSLIT_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "src/transliteration_data.c" | wc -l)
 compiler:
     - clang
