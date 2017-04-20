@@ -1009,7 +1009,7 @@ static char *get_ordinal_suffix(char *numeric_string, size_t len, char *lang, ge
 
 }
 
-static size_t possible_ordinal_digit_len(char *str, size_t len) {
+size_t possible_ordinal_digit_len(char *str, size_t len) {
     uint8_t *ptr = (uint8_t *)str;
     size_t idx = 0;
 
@@ -1053,11 +1053,6 @@ size_t ordinal_suffix_len(char *str, size_t len, char *lang) {
         return 0;
     }
 
-    size_t ordinal_digit_len = possible_ordinal_digit_len(str, len);
-    if (ordinal_digit_len == 0) {
-        return 0;
-    }
-
     if (numex_table == NULL) {
         log_error(NUMEX_SETUP_ERROR);
         return 0;
@@ -1081,8 +1076,8 @@ size_t ordinal_suffix_len(char *str, size_t len, char *lang) {
 
             phrase_t phrase = trie_search_suffixes_from_index(trie, str, len, prefix.node_id);
 
-            if (phrase.len == len - ordinal_digit_len) {
-                return len - ordinal_digit_len;
+            if (phrase.len + phrase.start == len) {
+                return phrase.len;
             }
         }
     }

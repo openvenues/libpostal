@@ -4,7 +4,7 @@ autoestrada|auto estrada|auto estr|autoestr
 avenida|av|ava|ave
 avenida marginal|ave marg|av marg|ava marg 
 azinhaga|az
-bairro|b|bº|bo|brº|bro
+bairro|b|bº|b°|bo|brº|br°|bro
 beco|bc|bco
 calçada|calcada|cc
 calçadinha|caclcadinha|ccnh
