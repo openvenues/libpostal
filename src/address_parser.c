@@ -1151,6 +1151,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
     size_t num_tokens = tokenized->tokens->n;
 
+    bool multiword_phrase = false;
+
     // Address dictionary phrases
     if (phrase.len > 0 && phrase.len >= component_phrase.len) {
         log_debug("phrase\n");
@@ -1161,6 +1163,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         if(is_valid_dictionary_phrase(phrase)) {
             uint32_t expansion_index = phrase.data;
             address_expansion_value_t *expansion_value = address_dictionary_get_expansions(expansion_index);
+
+            multiword_phrase = phrase.len > 1;
 
             if (expansion_value == NULL) {
                 log_warn("expansion_value is NULL for index %u\n", expansion_index);
@@ -1216,6 +1220,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
         if (component_phrase_string != NULL && component_phrase_types > 0) {
             feature_array_add(features, 2, "phrase", component_phrase_string);
+            multiword_phrase = component_phrase.len > 1;
             add_word_feature = false;
         }
 
@@ -1326,6 +1331,8 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
     char *prefix = NULL;
     char *suffix = NULL;
+
+    char *word_or_phrase = NULL;
 
     if (add_word_feature) {
         // Bias unit, acts as an intercept
@@ -1450,15 +1457,21 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             //feature_array_add(features, 3, "first word+next word", word, next_word);
         }
 
+        word_or_phrase = word;
+
     } else if (component_phrase_string != NULL) {
-        word = component_phrase_string;
+        word_or_phrase = component_phrase_string;
     } else if (phrase_string != NULL) {
-        word = phrase_string;
+        word_or_phrase = phrase_string;
     }
 
-    if (last_index == idx - 1) {
+    if (idx > 0) {
         // Previous tag and current word
-        feature_array_add(prev_tag_features, 2, "word", word);
+        if (!multiword_phrase) {
+            feature_array_add(prev_tag_features, 2, "word", word);
+        } else {
+            feature_array_add(prev_tag_features, 4, "phrase", word_or_phrase, "word", word);
+        }
 
         // Previous two tags and current word
         if (parser->model_type == ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON) {
@@ -1467,7 +1480,11 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
             feature_array_add(prev_tag_features, 1, "trans");
 
             // Averaged perceptron uses two tags of history, CRF uses one
-            feature_array_add(prev2_tag_features, 2, "word", word);
+            if (!multiword_phrase) {
+                feature_array_add(prev2_tag_features, 2, "word", word_or_phrase);
+            } else {
+                feature_array_add(prev2_tag_features, 4, "phrase", word_or_phrase, "word", word);
+            }
             feature_array_add(prev2_tag_features, 1, "trans");
         }
     }
@@ -1494,7 +1511,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         }
 
         // Previous word and current word
-        feature_array_add(features, 3, "prev word+word", prev_word, word);
+        feature_array_add(features, 3, "prev word+word", prev_word, word_or_phrase);
     }
 
     if (next_index < num_tokens) {
@@ -1517,7 +1534,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         feature_array_add(features, 2, "next word", next_word);
 
         // Current word and next word
-        feature_array_add(features, 3, "word+next word", word, next_word);
+        feature_array_add(features, 3, "word+next word", word_or_phrase, next_word);
 
         // Prev tag, current word and next word
         //feature_array_add(features, 4, "prev tag+word+next word", prev || "START", word, next_word);
@@ -1710,6 +1727,7 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
     phrase_t only_phrase = NULL_PHRASE;
     token_t token, prev_token;
     bool is_postal = false;
+
     if (context->component_phrases->n == 1) {
         only_phrase = context->component_phrases->a[0];
     } else if (context->postal_code_phrases->n == 1) {
