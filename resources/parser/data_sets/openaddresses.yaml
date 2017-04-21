@@ -3631,6 +3631,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Stanly County
+                    - filename: statewide.csv
                     - filename: surry.csv
                     - filename: swain.csv
                     - filename: town_of_chapel_hill.csv
