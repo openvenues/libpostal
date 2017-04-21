@@ -4242,6 +4242,7 @@ countries:
                     - filename: charleston.csv
                     - filename: chesterfield.csv
                     - filename: city_of_charleston.csv
+                    - filename: city_of_summerville.csv
                     - filename: colleton.csv
                     - filename: darlington.csv
                     - filename: dorchester.csv
