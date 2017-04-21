@@ -348,8 +348,19 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
                 node = last_node = trie_get_node(self, start_node_id);
                 continue;
             } else if (last_state == SEARCH_STATE_PARTIAL_MATCH) {
-                log_debug("last_state == SEARCH_STATE_PARTIAL_MATCH\n");
+                // we're in the middle of a phrase that did not fully
+                // match the trie. Imagine a trie that contains "a b c" and "b"
+                // and our string is "a b d". When we get to "d", we've matched
+                // the prefix "a b" and then will fall off the trie. So we'll actually 
+                // need to go back to token "b" and start searching from the root
+
+                // Note: i gets incremented with the next iteration of the for loop
                 i = phrase_start;
+                log_debug("last_state == SEARCH_STATE_PARTIAL_MATCH, i = %zu\n", i);
+                last_match_index = -1;
+                phrase_start = phrase_len = 0;
+                node_id = last_node_id = start_node_id;
+                node = last_node = trie_get_node(self, start_node_id);
                 continue;
             } else {
                 phrase_start = phrase_len = 0;
