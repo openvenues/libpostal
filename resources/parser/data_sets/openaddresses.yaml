@@ -3582,6 +3582,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Henderson County
+                    - filename: hertford.csv
                     - filename: iredell.csv
                     - filename: lee.csv
                     - filename: lincoln.csv
@@ -3631,6 +3632,7 @@ countries:
                       city_replacements:
                           state_district: Stanly County
                     - filename: surry.csv
+                    - filename: swain.csv
                     - filename: town_of_chapel_hill.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -3640,6 +3642,9 @@ countries:
                       city_replacements:
                           state_district: Union County
                     - filename: wake.csv
+                    - filename: warren.csv
+                      city_replacements:
+                          state_district: Warren County
                     - filename: washington.csv
                     - filename: wayne.csv
                     - filename: wilson.csv
