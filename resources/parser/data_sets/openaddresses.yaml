@@ -274,6 +274,14 @@ countries:
                     state: RS
                 files:
                     - filename: statewide.csv
+                    - filename: caxias_do_sul.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Caxias do Sul
+                      # Some of the roads look like lot numbers
+                      ignore_fields_containing:
+                          road:
+                              - "[0-9]+ [0-9]+"
 
             sc:
                 add:
