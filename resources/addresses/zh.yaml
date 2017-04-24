@@ -200,6 +200,23 @@ units:
         numeric_probability: 0.0
         numeric_affix_probability: 1.0
 
+    zhi: &zhi
+        canonical: 之
+        numeric_affix:
+            affix: 之
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.5
+            numeric:
+                direction: right
+            digits:
+                ascii_probability: 0.15
+                unicode_full_width_probability: 0.8
+                spellout_probability: 0.05
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+
     alphanumeric:
         default: *shi
         numeric_probability: 1.0
@@ -273,7 +290,7 @@ countries:
         postcodes: *postcodes_prefer_traditional
 
         units:
-            alphanumeric_probability:
+            alphanumeric:
                 numeric_probability: 0.9
                 alpha_probability: 0.1
 
@@ -287,6 +304,7 @@ countries:
         postcodes: *postcodes_prefer_traditional
 
         units:
-            alphanumeric_probability:
+            alphanumeric:
+                default: *zhi
                 numeric_probability: 0.9
                 alpha_probability: 0.1
