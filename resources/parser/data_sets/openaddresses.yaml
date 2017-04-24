@@ -1937,6 +1937,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Fairbanks North Star Borough
+                    - filename: haines.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Haines Borough
                     - filename: ketchikan.csv
                     - filename: kenai_peninsula_borough.csv
                     - filename: kodiak_island_borough.csv
@@ -1969,6 +1973,10 @@ countries:
                       city_replacements:
                           city: Auburn
                     - filename: city_of_huntsville.csv
+                    - filename: city_of_key_biscayne.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Key Biscayne
                     - filename: city_of_mobile.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -1981,6 +1989,9 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Jefferson County
+                    - filename: limestone.csv
+                      city_replacements:
+                          state_district: Limestone County
                     - filename: madison.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -2075,9 +2086,6 @@ countries:
                     - filename: city_of_temecula.csv
                     - filename: colusa.csv
                     - filename: contra_costa.csv
-                      add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Contra Costa County
                     - filename: del_norte.csv
                     - filename: el_dorado.csv
                       add_osm_boundaries: true
@@ -2366,10 +2374,15 @@ countries:
                       city_replacements:
                           state_district: Charlotte County
                     - filename: citrus.csv
+                    - filename: city_of_fort_lauderdale.csv
                     - filename: city_of_lakeland.csv
                       add_osm_boundaries: true
                       city_replacements:
                           city: Lakeland
+                    - filename: city_of_pinellas_park.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Pinellas Park
                     - filename: clay.csv
                     - filename: collier.csv
                     - filename: desoto.csv
@@ -2401,6 +2414,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Miami-Dade County
+                    - filename: nassau.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Nassau County
                     - filename: orange_county.csv
                     - filename: osceola.csv
                       add_osm_boundaries: true
@@ -2482,11 +2499,17 @@ countries:
                     - filename: city_of_alma.csv
                       city_replacements:
                           city: Alma
+                    - filename: city_of_alpharetta.csv
                     - filename: city_of_atlanta.csv
                       add_osm_boundaries: false
                     - filename: city_of_johns_creek.csv
                       add_osm_boundaries: false
                       fields: *fields_with_state_and_unit
+                    - filename: city_of_longview.csv
+                      add_osm_boundaries: true
+                      fields: *fields_with_unit
+                      city_replacements:
+                          city: Longview
                     - filename: city_of_sandy_springs.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -2503,6 +2526,10 @@ countries:
                             - "^[\\s]*(?!ga)"
                       city_replacements:
                           city: Savannah
+                    - filename: clarke.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Clarke County
                     - filename: clayton.csv
                       add_osm_boundaries: false
                       city_replacements:
@@ -2577,6 +2604,10 @@ countries:
                     - filename: gordon.csv
                       city_replacements:
                           state_district: Gordon County
+                    - filename: greater_houston.csv
+                      fields:
+                          <<: *fields_with_state_and_unit
+                          DISTRICT: state_district
                     - filename: gwinnett.csv
                       add_osm_boundaries: false
                       fields: *fields_with_unit
@@ -2632,6 +2663,9 @@ countries:
                     - filename: long.csv
                       city_replacements:
                           state_district: Long County
+                    - filename: lumpkin.csv
+                      city_replacements:
+                          state_district: Lumpkin County
                     - filename: mcintosh.csv
                       city_replacements:
                           state_district: McIntosh County
@@ -2692,6 +2726,10 @@ countries:
                     - filename: wheeler.csv
                       city_replacements:
                           state_district: Wheeler County
+                    - filename: whitfield.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Whitfield County
                     - filename: wilkinson.csv
                       city_replacements:
                           state_district: Wilkinson County
@@ -2954,6 +2992,7 @@ countries:
                     - filename: cass.csv
                     - filename: city-of-hobart.csv
                     - filename: clark.csv
+                    - filename: delaware.csv
                     - filename: elkhart.csv
                     - filename: floyd.csv
                     - filename: grant.csv
@@ -3153,6 +3192,10 @@ countries:
                       city_replacements:
                           state_district: Pendleton County
                     - filename: scott.csv
+                    - filename: shelby.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Shelby County
                     - filename: warren.csv
 
             la:
@@ -3208,6 +3251,10 @@ countries:
                       city_replacements:
                           state_district: Jefferson Parish
                     - filename: lafayette.csv
+                    - filename: lincoln.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Lincoln Parish
                     - filename: natchitoches.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -3217,7 +3264,12 @@ countries:
                       city_replacements:
                           state_district: Orleans Parish
                     - filename: pointe_coupee.csv
+                    - filename: rapides.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Rapides Parish
                     - filename: red_river_parish.csv
+                    - filename: richland.csv
                     - filename: st_charles_parish.csv
                     - filename: st_james.csv
                     - filename: st_john_the_baptist_parish.csv
@@ -3225,6 +3277,17 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Saint Martin Parish
+                    - filename: st_mary.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Saint Mary Parish
+                      ignore_fields_containing:
+                          postcode:
+                              - "^99999$"
+                    - filename: tangipahoa.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Tangipahoa Parish
                     - filename: terrebonne.csv
                     - filename: washington.csv
                       add_osm_boundaries: true
@@ -3339,6 +3402,7 @@ countries:
                     - filename: kandiyohi.csv
                     - filename: kittson.csv
                     - filename: koochiching.csv
+                    - filename: lake_of_the_woods.csv
                     - filename: marshall.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -3429,6 +3493,7 @@ countries:
                     - filename: st_charles.csv
                       city_replacements:
                           state_district: Saint Charles County
+                    - filename: taney.csv
                     - filename: vernon.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -3478,6 +3543,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Jackson County
+                    - filename: lauderdale.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Lauderdale County
                     - filename: pontotoc.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -3899,6 +3968,9 @@ countries:
                     - filename: orange.csv
                       city_replacements:
                           state_district: Orange County
+                    - filename: sullivan.csv
+                      city_replacements:
+                          state_district: Sullivan County
                     - filename: westchester.csv
 
             oh:
@@ -4175,6 +4247,7 @@ countries:
                       city_replacements:
                           state_district: Fulton County
                     - filename: juniata.csv
+                    - filename: lackawanna.csv
                     - filename: lancaster.csv
                     - filename: lawrence.csv
                       add_osm_boundaries: true
@@ -4247,6 +4320,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Beaufort County
+                    - filename: berkeley.csv
                     - filename: calhoun.csv
                     - filename: charleston.csv
                     - filename: chesterfield.csv
@@ -4381,11 +4455,16 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Carrollton
+                    - filename: city_of_dalhart.csv
                     - filename: city_of_denton.csv
                     - filename: city_of_flower_mound.csv
                       add_osm_boundaries: true
                       city_replacements:
                           city: Flower Mound
+                    - filename: city_of_garland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Garland
                     - filename: city_of_killeen.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -4448,6 +4527,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Gray County
+                    - filename: guadalupe.csv
                     - filename: houston.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -4665,6 +4745,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Shorewood
+                    - filename: city_of_west_bend.csv
                     - filename: columbia.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -4673,6 +4754,14 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Crawford County
+                    - filename: douglas.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Douglas County
+                    - filename: dunn.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Dunn County
                     - filename: fond_du_lac.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -4680,9 +4769,6 @@ countries:
                     - filename: green.csv
                     - filename: green_lake.csv
                     - filename: iron.csv
-                      add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Iron County
                     - filename: juneau.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -4698,6 +4784,7 @@ countries:
                           state_district: La Crosse County
                     - filename: lincoln.csv
                     - filename: manitowoc.csv
+                    - filename: marathon.csv
                     - filename: milwaukee.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -4740,6 +4827,10 @@ countries:
                 files:
                     - filename: hancock.csv
                     - filename: harrison.csv
+                    - filename: jefferson.csv
+                      fields: *fields_with_unit
+                      city_replacements:
+                          state_district: Jefferson County
                     - filename: raleigh.csv
                     - filename: statewide.csv
                       add_osm_boundaries: true
@@ -4797,7 +4888,7 @@ countries:
         subdirs:
             mo:
                 files:
-                    - filename: montevideo.csv
+                    - filename: regionwide.csv
                       add_osm_boundaries: true
 
     za:
