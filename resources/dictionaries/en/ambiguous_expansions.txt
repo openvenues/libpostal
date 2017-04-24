@@ -7,47 +7,80 @@ ar
 az
 arc
 bc
+ba
+b a
+bs
+b s
 c
 ca
+ch
+c h
 co
+cr
+c r
 ct
 de
 dc
 e
 f
+fc
+f c
+fd
+f d
 fl
 g
 ga
+gp
+g p
 hi
+hs
+h s
 i
 id
+ih
+i h
 il
 in
 ia
 j
 jbt
+jd
+j d
 ks
 ky
 l
 la
+lc
+l c
 ma
+m a
+mc
+m c
 me
 mb
 md
+m d
 mi
 mn
 ms
+m s
 mo
 mt
 m
 n
+na
+n a
+na
 nb
 nc
 nd
 ne
+n e
 nh
+n h
 nj
 nl
+n l
 nm
 no
 ns
@@ -55,6 +88,7 @@ nsw
 nu
 nt
 nw
+n w
 nwt
 nv
 ny
@@ -63,21 +97,46 @@ on
 ok
 or
 pa
+pd
+p d
 pe
 pei
+ps
+p s
 qc
 qld
 r
+rh
+r h
 ri
 ro
+r o
+rr
+r r
 s
 sc
 sd
 se
+s e
+sh
+s h
 sk
+sp
+s p
+sr
+s r
 sw
+s w
 tas
+tf
+t f
+th
+t h
+tl
+t l
 tn
+tr
+t r
 tx
 ut
 un

@@ -1,2 +1,6 @@
 s
 с
+pk
+p k
+zk
+z k

@@ -1,17 +1,45 @@
 a
+aa
+a a
+ad
+a d
 b
+bg
+b g
 ch
 d
+db
+d b
+eg
+e g
+ev
+e v
+fc
+f c
 g
 h
 i
+id
+i d
+jh
+j h
 k
 l
 n
 o
+og
+o g
 r
 s
+tu
+t u
 u
+ub
+u b
+ug
+u g
 v
+vd
+v d
 w
 z

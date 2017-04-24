@@ -2,3 +2,7 @@ b
 d
 g
 k
+pk
+p k
+zk
+z k

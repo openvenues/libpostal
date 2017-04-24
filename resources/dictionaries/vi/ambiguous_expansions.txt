@@ -1,3 +1,39 @@
+cd
+c d
+ct
+c t
+cv
+c v
+dl
+d l
+ds
+d s
 d
+ks
+k s
+nh
+n h
+nt
+n t
 p
+pt
+p t
 q
+ql
+q l
+qt
+q t
+rh
+r h
+sb
+s b
+th
+t h
+tl
+t l
+tp
+t p
+tt
+t t
+tx
+t x

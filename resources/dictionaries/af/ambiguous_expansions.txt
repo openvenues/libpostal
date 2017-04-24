@@ -2,7 +2,17 @@ h
 k
 l
 n
+no
+n o
+nw
+n w
 o
 s
+so
+s o
+sw
+s w
 v
+vd
+v d
 w

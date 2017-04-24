@@ -2,23 +2,65 @@ a
 ab
 bc
 c
+cc
+c c
+cp
+c p
 e
+ei
+e i
 g
+gr
+g r
 m
 n
 mb
+mf
+m f
 nb
+nd
+n d
+ne
+n e
 nl
+no
+n o
 ns
 nt
 nu
 o
 on
 p
+pa
+p a
 pe
+pn
+p n
 qc
 r
+ri
+r i
+rn
+r n
+rp
+r p
 s
+sa
+s a
+sc
+s c
+se
+s e
 sk
+sn
+s n
+so
+s o
+ss
+s s
 yt
 z
+za
+z a
+zi
+z i

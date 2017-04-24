@@ -1,5 +1,9 @@
+bb
+b b
 c
 i
 j
+pp
+p p
 s
 z

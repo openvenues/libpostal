@@ -1,7 +1,48 @@
+ac
+a c
 c
+cc
+c c
+co
+cp
+c p
 e
+fc
+f c
+fv
+f v
 l
 n
+ne
+n e
+no
+n o
 o
+pt
+p t
+rm
+r m
+rp
+r p
 s
+sc
+s c
+se
+s e
+so
+s o
+sp
+s p
+sr
+s r
+ss
+s s
+sv
+s v
 v
+vc
+v c
+vp
+v p
+vs
+v s

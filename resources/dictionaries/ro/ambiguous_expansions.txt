@@ -1,4 +1,6 @@
 e
+fn
+f n
 n
 s
 v
