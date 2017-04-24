@@ -105,6 +105,23 @@ numbers:
         numeric_probability: 0.4 # With this probability, use the standard numeric
         numeric_affix_probability: 0.6 # With this probability, use e.g. #3 instead of No. 3
 
+# House number phrases
+
+house_numbers:
+    house_number: &house_number
+        canonical: house number
+        abbreviated: house no.
+        sample: true
+        canonical_probability: 0.05
+        abbreviated_probability: 0.75
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    alphanumeric:
+        default: *house_number
+    alphanumeric_phrase_probability: 0.001
+
+
 # And
 # ===
 # The word for "and". Used both in intersections and phrases like "Units 1 & 2", etc.
@@ -506,7 +523,7 @@ levels:
         alpha_probability: 0.0098 # With this probability, pick a letter e.g. Floor A
         numeric_plus_alpha_probability: 0.0001 # e.g. Floor 2A
         alpha_plus_numeric_probability: 0.0001 # e.g. Floor A2
-        hyphenated_number_probability: 0.03 # e.g. 11-10
+        hyphenated_number_probability: 0.03 # e.g. 10-12
         numeric_plus_alpha:
             whitespace_probability: 0.1
         alpha_plus_numeric:
@@ -1129,6 +1146,23 @@ units:
             # Flat #1 and Flat No. 1
             add_number_phrase: true
             add_number_phrase_probability: 0.4
+    condominium: &condominium
+        canonical: condominium
+        abbreviated: condo
+        sample: true
+        canonical_probability: 0.05
+        abbreviated_probability: 0.85
+        sample_probability: 0.1
+        plural:
+            canonical: condominiums
+            abbreviated: condos
+            canonical_probability: 0.1
+            abbreviated_probability: 0.9
+        numeric:
+            direction: left
+            # Condo #1 and Condo No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.1
     lot: &lot
         canonical: lot
         sample: true
@@ -1179,18 +1213,21 @@ units:
             - alternative: *number
               probability: 0.2
             - alternative: *lot
-              probability: 0.03
+              probability: 0.02
             - alternative: *door
               probability: 0.01
             - alternative: *penthouse_numeric
               probability: 0.01
+            - alternative: *condominium
+              probability: 0.01
             - alternative: *apartment
               probability: 0.1
-        numeric_probability: 0.87 # e.g. Flat 1
+        numeric_probability: 0.85 # e.g. Flat 1
         numeric_plus_alpha_probability: 0.03 # e.g. 1A
         alpha_plus_numeric_probability: 0.03 # e.g. A1
         alpha_probability: 0.04 # e.g. Flat A
         hyphenated_number_probability: 0.03 # e.g. 11-10
+        decimal_number_probability: 0.02 # e.g. 1.10
 
         alpha_plus_numeric:
             whitespace_probability: 0.2
@@ -1200,6 +1237,7 @@ units:
             hyphen_probability: 0.2
         hyphenated_number:
             range_probability: 0.5
+            # direction of the range, not the phrase
             direction: right
             direction_probability: 0.6
 
@@ -1466,3 +1504,25 @@ countries:
         units: *australia_unit_types
 
 
+    # Singapore
+    sg:
+        house_numbers: &block_format
+            block: &block
+                canonical: block
+                abbreviated: blk
+                sample: true
+                canonical_probability: 0.3
+                abbreviated_probability: 0.5
+                sample_probability: 0.2
+                numeric:
+                    direction: left
+                    add_number_phrase: true
+                    add_number_phrase_probability: 0.2
+            alphanumeric:
+                default: *block
+                probability: 0.8
+                alternatives:
+                    - alternative: *house_number
+                      probability: 0.2
+
+            alphanumeric_phrase_probability: 0.1
