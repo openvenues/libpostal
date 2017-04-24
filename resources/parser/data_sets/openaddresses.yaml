@@ -4888,7 +4888,7 @@ countries:
         subdirs:
             mo:
                 files:
-                    - filename: regionwide.csv
+                    - filename: montevideo.csv
                       add_osm_boundaries: true
 
     za:
