@@ -3632,6 +3632,10 @@ countries:
                       city_replacements:
                           state_district: Stanly County
                     - filename: statewide.csv
+                    - filename: stokes.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Stokes County
                     - filename: surry.csv
                     - filename: swain.csv
                     - filename: town_of_chapel_hill.csv
@@ -4243,6 +4247,7 @@ countries:
                     - filename: charleston.csv
                     - filename: chesterfield.csv
                     - filename: city_of_charleston.csv
+                    - filename: city_of_spartanburg.csv
                     - filename: city_of_summerville.csv
                     - filename: colleton.csv
                     - filename: darlington.csv
