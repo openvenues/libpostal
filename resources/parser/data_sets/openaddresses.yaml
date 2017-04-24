@@ -2411,6 +2411,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Pinellas County
+                    - filename: santa_rosa.csv
+                      fields: *fields_with_unit
+                      city_replacements:
+                          state_district: Santa Rosa County
                     - filename: sarasota.csv
                       add_osm_boundaries: true
                       city_replacements:
