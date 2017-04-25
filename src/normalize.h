@@ -61,6 +61,8 @@ As well as normalizations for individual string tokens:
 
 // Replace digits with capital D e.g. 10013 => DDDDD, intended for use with lowercased strings
 #define DIGIT_CHAR "D"
+// Replace ideographic numbers with capital N e.g. ½ => N
+#define IDEOGRAPHIC_NUMBER_CHAR "N"
 
 char *normalize_string_utf8(char *str, uint64_t options);
 

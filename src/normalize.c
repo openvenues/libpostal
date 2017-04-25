@@ -433,7 +433,11 @@ void add_normalized_token(char_array *array, char *str, token_t token, uint64_t 
         }
 
         if (is_number && options & NORMALIZE_TOKEN_REPLACE_DIGITS) {
-            char_array_append(array, DIGIT_CHAR);
+            if (token.type != IDEOGRAPHIC_NUMBER && token.type != IDEOGRAPHIC_CHAR) {
+                char_array_append(array, DIGIT_CHAR);
+            } else {
+                char_array_append(array, IDEOGRAPHIC_NUMBER_CHAR);
+            }
             append_char = false;
         }
 
