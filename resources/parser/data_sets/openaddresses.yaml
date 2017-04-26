@@ -1909,6 +1909,37 @@ countries:
         files:
             - filename: countrywide.csv
 
+    tw:
+        subdirs:
+            hua:
+                files:
+                    - filename: regionwide.csv
+                      fields: *fields_with_unit
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: 花蓮縣
+            tnn:
+                files:
+                    - filename: regionwide.csv
+                      fields:
+                          <<: *fields_with_unit
+                          CITY:
+                              component: suburb
+                          DISTRICT:
+                              component: city_district
+                          STATE:
+                              component: city
+            tpe:
+                files:
+                    - filename: regionwide.csv
+                      fields:
+                          <<: *fields_with_unit
+                          CITY:
+                              component: city_district
+                      add:
+                          city: 臺北市
+
+
     ua:
         subdirs:
             12:
