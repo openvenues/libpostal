@@ -76,7 +76,7 @@ VALID_SHOP_KEYS="shop="
 VALID_HISTORIC_KEYS="historic=archaeological_site or historic=castle or historic=fort or historic=memorial or historic=monument or historic=ruins or historic=tomb"
 VALID_PLACE_KEYS="place=farm or place=isolated_dwelling or place=square"
 VALID_TOURISM_KEYS="tourism=hotel or tourism=attraction or tourism=guest_house or tourism=museum or tourism=chalet or tourism=motel or tourism=hostel or tourism=alpine_hut or tourism=theme_park or tourism=zoo or tourism=apartment or tourism=wilderness_hut or tourism=gallery or tourism=bed_and_breakfast or tourism=hanami or tourism=wine_cellar or tourism=resort or tourism=aquarium or tourism=apartments or tourism=cabin or tourism=winery or tourism=hut"
-VALID_LEISURE_KEYS="leisure=adult_gaming_centre or leisure=amusement_arcade or leisure=arena or leisure=bandstand or leisure=beach_resort or leisure=bbq or leisure=bird_hide or leisure=bowling_alley or leisure=casino or leisure=common or leisure=club or leisure=dance or leisure=dancing or leisure=disc_golf_course or leisure=dog_park or leisure=fishing or leisure=fitness_centre or leisure=gambling or leisure=garden or leisure=golf_course or leisure=hackerspace or leisure=horse_riding or leisure=hospital or leisure=hot_spring or leisure=ice_rink leisure=landscape_reserve or leisure=marina or leisure=maze or leisure=miniature_golf or leisure=nature_reserve or leisure=padding_pool or leisure=park or leisure=pitch or leisure=playground or leisure=recreation_ground or leisure=resort or leisure=sailing_club or leisure=sauna or leisure=social_club or leisure=sports_centre or leisure=stadium or leisure=summer_camp or leisure=swimming_pool or leisure=tanning_salon or leisure=track or leisure=trampoline_park or leisure=turkish_bath or leisure=video_arcade or leisure=water_park or leisure=wildlife_hide"
+VALID_LEISURE_KEYS="leisure=adult_gaming_centre or leisure=amusement_arcade or leisure=arena or leisure=bandstand or leisure=beach_resort or leisure=bbq or leisure=bird_hide or leisure=bowling_alley or leisure=casino or leisure=common or leisure=club or leisure=dance or leisure=dancing or leisure=disc_golf_course or leisure=dog_park or leisure=fishing or leisure=fitness_centre or leisure=gambling or leisure=garden or leisure=golf_course or leisure=hackerspace or leisure=horse_riding or leisure=hospital or leisure=hot_spring or leisure=ice_rink or leisure=landscape_reserve or leisure=marina or leisure=maze or leisure=miniature_golf or leisure=nature_reserve or leisure=padding_pool or leisure=park or leisure=pitch or leisure=playground or leisure=recreation_ground or leisure=resort or leisure=sailing_club or leisure=sauna or leisure=social_club or leisure=sports_centre or leisure=stadium or leisure=summer_camp or leisure=swimming_pool or leisure=tanning_salon or leisure=track or leisure=trampoline_park or leisure=turkish_bath or leisure=video_arcade or leisure=water_park or leisure=wildlife_hide"
 VALID_LANDUSE_KEYS="landuse=allotmenets or landuse=basin or landuse=cemetery or landuse=commercial or landuse=construction or landuse=farmland or landuse=forest or landuse=grass or landuse=greenhouse_horticulture or landuse=industrial or landuse=landfill or landuse=meadow or landuse=military or landuse=orchard or landuse=plant_nursery or landuse=port or landuse=quarry or landuse=recreation_ground or landuse=resevoir or landuse=residential or landuse=retail or landuse=village_green or landuse=vineyard"
 
 VALID_VENUE_KEYS="( ( $VALID_AEROWAY_KEYS ) or ( $VALID_AMENITY_KEYS ) or ( $VALID_HISTORIC_KEYS ) or ( $VALID_OFFICE_KEYS ) or ( $VALID_PLACE_KEYS ) or ( $VALID_SHOP_KEYS ) or ( $VALID_TOURISM_KEYS ) or ( $VALID_LEISURE_KEYS ) or ( $VALID_LANDUSE_KEYS ) )"
@@ -185,15 +185,19 @@ rm $PLANET_AIRPORTS_LATLONS
 
 echo "Filtering for subdivision polygons"
 PLANET_SUBDIVISIONS="planet-subdivisions.osm"
-SUBDIVISION_AMENITY_TYPES="amenity=university or amentiy=college or amentiy=school or amentiy=hospital"
-SUBDIVISION_LANDUSE_TYPES="landuse=residential or landuse=commercial or landuse=industrial or landuse=retail or landuse=military"
-SUBDIVISION_PLACE_TYPES="place=allotmenets or place=city_block or place=block or place=plot or place=subdivision"
-osmfilter $PLANET_O5M --keep="( $SUBDIVISION_AMENITY_TYPES or $SUBDIVISION_PLACE_TYPES or $SUBDIVISION_LANDUSE_TYPES )" --drop="( place= and not ( $SUBDIVISION_PLACE_TYPES ) ) or boundary=" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS
+
+SUBDIVISION_AEROWAY_KEYS="aeroway=aerodrome"
+SUBDIVISION_AMENITY_KEYS="amenity=university or amentiy=college or amentiy=school or amentiy=hospital"
+SUBDIVISION_LANDUSE_KEYS="landuse=allotmenets or landuse=residential or landuse=commercial or landuse=construction or landuse=industrial or landuse=retail or landuse=military"
+SUBDIVISION_PLACE_KEYS="place=allotments or place=city_block or place=block or place=plot or place=subdivision or $VALID_PLACE_KEYS"
+
+SUBDIVISION_VALID_KEYS="( $SUBDIVISION_AEROWAY_KEYS or $SUBDIVISION_AMENITY_KEYS or $SUBDIVISION_LANDUSE_KEYS or $SUBDIVISION_PLACE_KEYS or ( name= and ( $VALID_VENUE_KEYS ) ) )"
+
+osmfilter $PLANET_O5M --keep-ways="SUBDIVISION_VALID_KEYS" --keep-relations="$SUBDIVISION_VALID_KEYS" --keey-nodes= --drop="boundary=" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS
 
 echo "Filtering for postal_code polygons"
 PLANET_POSTAL_CODES="planet-postcodes.osm"
 osmfilter $PLANET_O5M --keep="boundary=postal_code" --drop-author --drop-version -o=$PLANET_POSTAL_CODES
-
 
 # Venue data set for use in venue classification
 echo "Filtering for venue records: `date`"
@@ -222,7 +226,6 @@ rm $PLANET_BUILDINGS_LATLONS
 echo "Filtering for building polygons: `date`"
 PLANET_BUILDING_POLYGONS="planet-building-polygons.osm"
 osmfilter $PLANET_O5M --keep="( ( building= or building:part= or type=building ) and ( building:levels= or name= or addr:street= or addr:place= or addr:housename= or addr:housenumber= ) )" --drop-author --drop-version -o=$PLANET_BUILDING_POLYGONS
-
 
 echo "Filtering for amenities: `date`"
 PLANET_AMENITIES_O5M="planet-amenities.o5m"
