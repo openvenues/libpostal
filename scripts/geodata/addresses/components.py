@@ -1823,7 +1823,7 @@ class AddressComponents(object):
                  population_from_city=False, check_city_wikipedia=False,
                  add_sub_building_components=True, hyphenation=True,
                  num_floors=None, num_basements=None, zone=None,
-                 osm_components=None, neighborhoods=None):
+                 osm_components=None, neighborhoods=None, country=None):
         '''
         Expanded components
         -------------------
@@ -1844,7 +1844,13 @@ class AddressComponents(object):
         if osm_components is None:
             osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
 
-        country, candidate_languages = self.osm_country_and_languages(osm_components)
+        if country is None:
+            country, candidate_languages = self.osm_country_and_languages(osm_components)
+        else:
+            _, candidate_languages = self.osm_country_and_languages(osm_components)
+            if not candidate_languages:
+                candidate_languages = get_country_lanaguages(country).items()
+
         if not (country and candidate_languages):
             return None, None, None
 
