@@ -16,7 +16,8 @@ global:
     place_only_probability: 0.2
     place_and_postcode_probability: 0.1
 
-    pre_release_downloads: []
+    pre_release_downloads:
+        - "https://s3.amazonaws.com/data.openaddresses.io/runs/175338/be/wallonia.zip"
 
     fields: &default_fields
         NUMBER:
@@ -99,6 +100,17 @@ countries:
         files:
             - filename: flanders.csv
               language: nl
+            - filename: wallonia.csv
+              ignore_fields_containing:
+                  road:
+                      - "\?"
+                  house_number:
+                      - "\?"
+                  city:
+                      - "\?"
+                  postcode:
+                      - "\?"
+
         subdirs:
             bru:
                 files:
