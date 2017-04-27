@@ -1923,6 +1923,15 @@ countries:
 
     tw:
         subdirs:
+            cyi:
+                files:
+                    - filename: regionwide.csv
+                      fields:
+                          <<: *fields_with_unit
+                          DISTRICT:
+                              component: city_district
+                      add:
+                          city: 嘉義市
             hua:
                 files:
                     - filename: regionwide.csv
@@ -1930,6 +1939,13 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: 花蓮縣
+            tao:
+                files:
+                    - filename: regionwide.csv
+                      fields:
+                          <<: *fields_with_unit
+                          DISTRICT:
+                              component: city_district
             tnn:
                 files:
                     - filename: regionwide.csv
