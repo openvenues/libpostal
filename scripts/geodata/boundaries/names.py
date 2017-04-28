@@ -54,44 +54,59 @@ class BoundaryNames(object):
 
         self.country_regex_replacements = dict(self.country_regex_replacements)
 
-        self.prefixes = {}
+        self.affixes = {}
         self.prefix_regexes = {}
-        self.suffixes = {}
         self.suffix_regexes = {}
 
-        for language, components in six.iteritems(nested_get(config, ('names', 'prefixes', 'language'), default={}) ):
+        self.conditional_affixes = defaultdict(dict)
+
+        for language, components in six.iteritems(nested_get(config, ('names', 'affixes', 'language'), default={}) ):
             for component, affixes in six.iteritems(components):
-                affix_values, probs = alternative_probabilities(affixes)
+                if component != 'conditionals':
+                    affix_values, probs = alternative_probabilities(affixes)
+                    for val in affix_values:
+                        if 'affix' not in val:
+                            raise AssertionError(six.u('Invalid prefix value for (language={}, component={}): {} ').format(language, component, val))
+                    direction = affixes['direction']
+                    is_prefix = direction == 'left'
 
-                for val in affix_values:
-                    if 'prefix' not in val:
-                        raise AssertionError(six.u('Invalid prefix value for (language={}, component={}): {} ').format(language, component, val))
+                    if is_prefix:
+                        prefix_regex = u'|'.join([u'(?:{}{})'.format(self._string_as_regex(v['affix']), u' ' if v.get('whitespace', True) else u'') for v in affix_values])
+                        self.prefix_regexes[(language, component)] = re.compile(six.u('^{}').format(prefix_regex), re.I | re.U)
+                    else:
+                        suffix_regex = u'|'.join([u'(?:{}{})'.format(u' ' if v.get('whitespace', True) else u'', self._string_as_regex(v['affix'])) for v in affix_values])
+                        self.suffix_regexes[(language, component)] = re.compile(u'{}$'.format(suffix_regex), re.I | re.U)
 
-                prefix_regex = six.u('|').join([six.u('(?:{} )').format(self._string_as_regex(v['prefix'])) if v.get('whitespace') else self._string_as_regex(v['prefix']) for v in affix_values])
-                self.prefix_regexes[(language, component)] = re.compile(six.u('^{}').format(prefix_regex), re.I | re.U)
+                    if not isclose(sum(probs), 1.0):
+                        affix_values.append(None)
+                        probs.append(1.0 - sum(probs))
+                    affix_probs_cdf = cdf(probs)
 
-                if not isclose(sum(probs), 1.0):
-                    affix_values.append(None)
-                    probs.append(1.0 - sum(probs))
-                affix_probs_cdf = cdf(probs)
-                self.prefixes[(language, component)] = affix_values, affix_probs_cdf
+                    self.affixes[(language, component)] = affix_values, affix_probs_cdf, direction
+                else:
+                    for cond in affixes:
+                        key = cond['key']
+                        val = cond['value']
 
-        for language, components in six.iteritems(nested_get(config, ('names', 'suffixes', 'language'), default={}) ):
-            for component, affixes in six.iteritems(components):
-                affix_values, probs = alternative_probabilities(affixes)
+                        direction = cond['direction']
 
-                for val in affix_values:
-                    if 'suffix' not in val:
-                        raise AssertionError(six.u('Invalid suffix value for (language={}, component={}): {} ').format(language, component, val))
+                        is_prefix = direction == 'left'
 
-                suffix_regex = six.u('|').join([six.u('(?: {})').format(self._string_as_regex(v['suffix'])) if v.get('whitespace') else self._string_as_regex(v['suffix']) for v in affix_values])
-                self.suffix_regexes[(language, component)] = re.compile(six.u('{}$').format(suffix_regex), re.I | re.U)
+                        affix_values, probs = alternative_probabilities(cond)
 
-                if not isclose(sum(probs), 1.0):
-                    affix_values.append(None)
-                    probs.append(1.0 - sum(probs))
-                affix_probs_cdf = cdf(probs)
-                self.suffixes[(language, component)] = affix_values, affix_probs_cdf
+                        if is_prefix:
+                            prefix_regex = u'|'.join([u'(?:{}{})'.format(self._string_as_regex(v['affix']), u' ' if v.get('whitespace', True) else u'') for v in affix_values])
+                            self.prefix_regexes[(key, val)] = re.compile(u'^{}'.format(prefix_regex), re.I | re.U)
+                        else:
+                            suffix_regex = u'|'.join([u'(?:{}{})'.format(u' ' if v.get('whitespace', True) else u'', self._string_as_regex(v['affix'])) for v in affix_values])
+                            self.suffix_regexes[(key, val)] = re.compile(u'{}$'.format(suffix_regex), re.I | re.U)
+
+                        if not isclose(sum(probs), 1.0):
+                            affix_values.append(None)
+                            probs.append(1.0 - sum(probs))
+
+                        affix_probs_cdf = cdf(probs)
+                        self.conditional_affixes[key][val] = affix_values, affix_probs_cdf, direction
 
         self.exceptions = {}
 
@@ -129,37 +144,54 @@ class BoundaryNames(object):
         name_keys, probs = self.name_key_dist(props, component)
         return weighted_choice(name_keys, probs)
 
-    def name(self, country, language, component, name):
+    def name(self, country, language, component, name, props):
         all_replacements = self.country_regex_replacements.get(country, []) + self.country_regex_replacements.get(None, [])
 
-        prefixes, prefix_probs = self.prefixes.get((language, component), (None, None))
-        suffixes, suffix_probs = self.suffixes.get((language, component), (None, None))
+        affixes = affix_probs = direction = regexes = None
+        is_prefix = False
 
-        if not all_replacements and not prefixes and not suffixes:
+        for key, value in six.iteritems(props):
+            affixes, affix_probs, direction = self.conditional_affixes.get(key, {}).get(value, (None, None, None))
+            is_prefix = direction == 'left'
+
+            regexes = self.prefix_regexes if is_prefix else self.suffix_regexes
+
+            pattern = regexes.get((key, value), None)
+            if pattern and pattern.search(name):
+                return name
+
+            if affixes is not None:
+                break
+
+        if affixes is None:
+            affixes, affix_probs, direction = self.affixes.get((language, component), (None, None, None))
+            is_prefix = direction == 'left'
+
+            regexes = self.prefix_regexes if is_prefix else self.suffix_regexes
+
+            pattern = regexes.get((language, component), None)
+            if pattern and pattern.search(name):
+                return name
+
+        if not all_replacements and not affixes:
             return name
 
         for regex, group, prob in all_replacements:
-            match = regex.match(name)
+            match = regex.search(name)
             if match and random.random() < prob:
                 name = match.group(group)
 
-        for affixes, affix_probs, regexes, key, direction in ((prefixes, prefix_probs, self.prefix_regexes, 'prefix', 0),
-                                                              (suffixes, suffix_probs, self.suffix_regexes, 'suffix', 1)):
-            if affixes is not None:
-                regex = regexes[language, component]
-                if regex.match(name):
-                    continue
+        if affixes is not None:
+            affix = weighted_choice(affixes, affix_probs)
 
-                affix = weighted_choice(affixes, affix_probs)
-
-                if affix is not None:
-                    whitespace = affix.get('whitespace', True)
-                    space_val = six.u(' ') if whitespace else six.u('')
-                    affix = affix[key]
-                    if direction == 0:
-                        return six.u('{}{}{}').format(affix, space_val, safe_decode(name))
-                    else:
-                        return six.u('{}{}{}').format(safe_decode(name), space_val, affix)
+            if affix is not None:
+                whitespace = affix.get('whitespace', True)
+                space_val = u' ' if whitespace else u''
+                affix = affix['affix']
+                if is_prefix:
+                    return u'{}{}{}'.format(affix, space_val, safe_decode(name))
+                else:
+                    return u'{}{}{}'.format(safe_decode(name), space_val, affix)
 
         return name
 

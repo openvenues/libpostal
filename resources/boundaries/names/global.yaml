@@ -35,20 +35,306 @@ names:
           replace_with_group: 1
           replace_probability: 0.5
 
-    prefixes:
+    affixes:
         language:
             ru:
                 city:
                     default:
-                        prefix: г.
-                    probability: 0.35
+                        affix: г.
+                    probability: 0.25
                     alternatives:
                         - alternative:
-                              prefix: г
+                              affix: г
                           probability: 0.1
                         - alternative:
-                              prefix: город
+                              affix: гор.
                           probability: 0.05
+                        - alternative:
+                              affix: гор
+                          probability: 0.05
+                        - alternative:
+                              affix: город
+                          probability: 0.05
+                    direction: left
+                # https://ru.wikipedia.org/wiki/%D0%9D%D0%B0%D1%81%D0%B5%D0%BB%D1%91%D0%BD%D0%BD%D1%8B%D0%B5_%D0%BF%D1%83%D0%BD%D0%BA%D1%82%D1%8B_%D0%B2_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8
+                conditionals:
+                    - key: official_status
+                      value: "ru:город"
+                      default:
+                          affix: г.
+                      probability: 0.35
+                      alternatives:
+                          - alternative:
+                                affix: г
+                            probability: 0.1
+                          - alternative:
+                                affix: гор.
+                            probability: 0.05
+                          - alternative:
+                                affix: гор
+                            probability: 0.05
+                          - alternative:
+                                affix: город
+                            probability: 0.05
+                      direction: left
+                    - key: official_status
+                      value: "ru:деревня"
+                      default:
+                          affix: д.
+                      probability: 0.35
+                      alternatives:
+                          - alternative:
+                                affix: д
+                            probability: 0.1
+                          - alternative:
+                                affix: дер.
+                            probability: 0.05
+                          - alternative:
+                                affix: дер
+                            probability: 0.05
+                          - alternative:
+                                affix: деревня
+                            probability: 0.1
+                      direction: left
+                    - key: official_status
+                      value: "ru:село"
+                      default:
+                          affix: с.
+                      probability: 0.35
+                      alternatives:
+                          - alternative:
+                                affix: с
+                            probability: 0.1
+                          - alternative:
+                                affix: село
+                            probability: 0.1
+                      direction: left
+                    - key: official_status
+                      value: "ru:сельское поселение"
+                      default:
+                          affix: сп
+                      probability: 0.35
+                      alternatives:
+                          - alternative:
+                                affix: "се́льское поселе́ние"
+                            probability: 0.1
+                          - alternative:
+                                affix: сельское поселение
+                            probability: 0.1
+                      direction: right
+                    - key: official_status
+                      value: "ru:посёлок"
+                      default:
+                          affix: п.
+                      probability: 0.35
+                      alternatives:
+                          - alternative:
+                                affix: п
+                            probability: 0.1
+                          - alternative:
+                                affix: пос.
+                            probability: 0.05
+                          - alternative:
+                                affix: пос
+                            probability: 0.05
+                          - alternative:
+                                affix: посёлок
+                            probability: 0.05
+                          - alternative:
+                                affix: поселок
+                            probability: 0.05
+                      direction: left
+                    - key: official_status
+                      value: "ru:хутор"
+                      default:
+                          affix: х.
+                      probability: 0.35
+                      alternatives:
+                          - alternative:
+                                affix: х
+                            probability: 0.1
+                          - alternative:
+                                affix: хутор
+                            probability: 0.1
+                      direction: left
+                    - key: official_status
+                      value: "ru:муниципальный район"
+                      default:
+                          affix: мун. р-н
+                      probability: 0.35
+                      alternatives:
+                          - alternative:
+                                affix: мун р-н
+                            probability: 0.1
+                          - alternative:
+                                affix: мун.р-н
+                            probability: 0.1
+                          - alternative:
+                                affix: муниципальный район
+                            probability: 0.05
+                          - alternative:
+                                affix: муниципальныи раион
+                            probability: 0.05
+                      direction: right
+                    - key: official_status
+                      value: "ru:городское поселение"
+                      default:
+                          affix: г.п.
+                      probability: 0.35
+                      alternatives:
+                          - alternative:
+                                affix: г.п
+                            probability: 0.1
+                          - alternative:
+                                affix: гп
+                            probability: 0.1
+                          - alternative:
+                                affix: городское поселение
+                            probability: 0.05
+                      direction: right
+                    - key: official_status
+                      value: "ru:посёлок городского типа"
+                      default:
+                          affix: п.г.т.
+                      probability: 0.25
+                      alternatives:
+                          - alternative:
+                                affix: п.г.т
+                            probability: 0.1
+                          - alternative:
+                                affix: пгт
+                            probability: 0.1
+                          - alternative:
+                                affix: "посёлок городско́го ти́па"
+                            probability: 0.05
+                          - alternative:
+                                affix: посёлок городского типа
+                            probability: 0.05
+                          - alternative:
+                                affix: поселок городского типа
+                            probability: 0.05
+                      direction: left
+                    - key: official_status
+                      value: "ru:станица"
+                      default:
+                          affix: ст-ца
+                      probability: 0.35
+                      alternatives:
+                          - alternative:
+                                affix: стца
+                            probability: 0.05
+                          - alternative:
+                                affix: станица
+                            probability: 0.1
+                      direction: left
+                    - key: official_status
+                      value: "ru:городской округ"
+                      default:
+                          affix: городок
+                      probability: 0.35
+                      alternatives:
+                          - alternative:
+                                affix: гор. окр.
+                            probability: 0.1
+                          - alternative:
+                                affix: гор.окр.
+                            probability: 0.05
+                          - alternative:
+                                affix: гор.окр
+                            probability: 0.05
+                          - alternative:
+                                affix: гор окр
+                            probability: 0.05
+                          - alternative:
+                                affix: городской округ
+                            probability: 0.05
+                          - alternative:
+                                affix: городскои округ
+                            probability: 0.05
+                      direction: right
+                    - key: official_status
+                      value: "ru:рабочий посёлок"
+                      default:
+                          affix: р.п.
+                      probability: 0.35
+                      alternatives:
+                          - alternative:
+                                affix: рп
+                            probability: 0.1
+                          - alternative:
+                                affix: р.п
+                            probability: 0.1
+                          - alternative:
+                                affix: рабочий посёлок
+                            probability: 0.05
+                          - alternative:
+                                affix: рабочии поселок
+                            probability: 0.05
+                      direction: right
+                    - key: official_status
+                      value: "ru:станция"
+                      default:
+                          affix: ст.
+                      probability: 0.25
+                      alternatives:
+                          - alternative:
+                                affix: ст
+                            probability: 0.1
+                          - alternative:
+                                affix: станция
+                            probability: 0.1
+                      direction: left
+                    - key: official_status
+                      value: "ru:аул"
+                      default:
+                          affix: аул
+                      probability: 0.35
+                      direction: left
+                    - key: official_status
+                      value: "ru:посёлок при станции"
+                      default:
+                          affix: п/ст
+                      probability: 0.35
+                      alternatives:
+                          - alternative:
+                                affix: п ст
+                            probability: 0.1
+                          - alternative:
+                                affix: п. ст.
+                            probability: 0.1
+                          - alternative:
+                                affix: п.ст.
+                            probability: 0.05
+                          - alternative:
+                                affix: п.ст
+                            probability: 0.05
+                          - alternative:
+                                affix: посёлок при станции
+                            probability: 0.05
+                          - alternative:
+                                affix: поселок при станции
+                            probability: 0.05
+                      direction: left
+                    - key: official_status
+                      value: "ru:разъезд"
+                      default:
+                          affix: рзд
+                      probability: 0.35
+                      alternatives:
+                          - alternative:
+                              affix: разъезд
+                              probability: 0.1
+                      direction: left
+                    - key: official_status
+                      value: "ru:слобода"
+                      default:
+                          affix: сл
+                          probability: 0.35
+                      alternatives:
+                          - alternative:
+                              affix: слобода
+                              probability: 0.1
+                      direction: left
 
     # This section overrides place names
     exceptions:
