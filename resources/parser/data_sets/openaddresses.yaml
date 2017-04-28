@@ -1950,6 +1950,13 @@ countries:
                               component: city_district
                           STATE:
                               component: city
+            mia:
+                files:
+                    - filename: regionwide-zh.csv
+                      fields: *fields_with_unit
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: 苗栗縣
             nwt:
                 files:
                     - filename: regionwide.csv
