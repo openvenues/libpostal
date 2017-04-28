@@ -1939,6 +1939,17 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: 花蓮縣
+            khh:
+                files:
+                    - filename: regionwide.csv
+                      fields:
+                          <<: *fields_with_unit
+                          CITY:
+                              component: suburb
+                          DISTRICT:
+                              component: city_district
+                          STATE:
+                              component: city
             nwt:
                 files:
                     - filename: regionwide.csv
