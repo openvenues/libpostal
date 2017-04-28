@@ -1993,7 +1993,15 @@ countries:
                               component: city_district
                       add:
                           city: 臺北市
-
+            txg:
+                files:
+                    - filename: regionwide.csv
+                      fields:
+                          <<: *fields_with_unit
+                          CITY:
+                              component: city_district
+                      add:
+                          city: 臺中市
 
     ua:
         subdirs:
