@@ -1939,6 +1939,15 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: 花蓮縣
+            nwt:
+                files:
+                    - filename: regionwide.csv
+                      fields:
+                          <<: *fields_with_unit
+                          CITY:
+                              component: city_district
+                      add:
+                          city: 臺北市
             tao:
                 files:
                     - filename: regionwide.csv
