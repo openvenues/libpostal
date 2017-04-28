@@ -60,6 +60,8 @@ class AddressFormatter(object):
     PO_BOX = 'po_box'
     ROAD = 'road'
     BUILDING = 'building'
+    NAMED_BUILDING = 'named_building'
+    BLOCK = 'block'
     ENTRANCE = 'entrance'
     STAIRCASE = 'staircase'
     LEVEL = 'level'
@@ -162,6 +164,12 @@ class AddressFormatter(object):
             ('post_code', POSTCODE),
         ])
     )
+
+    tag_aliases = {
+        NAMED_BUILDING: HOUSE,
+        SUBDIVISION: HOUSE,
+        BLOCK: HOUSE_NUMBER,
+    }
 
     category_template = '{{{category}}} {{{near}}} {{{place}}}'
     chain_template = '{{{house}}} {{{near}}} {{{place}}}'
@@ -915,7 +923,7 @@ class AddressFormatter(object):
             self.aliases.replace(components)
 
         if tag_components:
-            components = {k: self.tagged_tokens(v, k) for k, v in six.iteritems(components)}
+            components = {k: self.tagged_tokens(v, self.tag_aliases.get(k, k)) for k, v in six.iteritems(components)}
 
         text = self.render_template(template, components, tagged=tag_components)
 
