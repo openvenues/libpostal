@@ -4667,7 +4667,6 @@ countries:
                       city_replacements:
                           state_district: Midland County
                     - filename: milam.csv
-                    - filename: montgomery.csv
                     - filename: moore.csv
                     - filename: nacogdoches.csv
                       add_osm_boundaries: true
