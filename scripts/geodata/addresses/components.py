@@ -1475,6 +1475,8 @@ class AddressComponents(object):
                 if random.random() < prob:
                     address_components[component] = new_value
 
+    numeric_boundary_name_regex = re.compile('^[\d]+[a-z]?$', re.I)
+
     @classmethod
     def remove_numeric_boundary_names(cls, address_components):
         '''
@@ -1492,7 +1494,7 @@ class AddressComponents(object):
             if component not in cls.BOUNDARY_COMPONENTS or component == AddressFormatter.POSTCODE:
                 continue
             value = address_components[component]
-            if value.isdigit():
+            if cls.numeric_boundary_name_regex.match(value.strip()):
                 address_components.pop(component)
 
     @classmethod
