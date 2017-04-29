@@ -388,98 +388,104 @@ void add_normalized_token(char_array *array, char *str, token_t token, uint64_t 
 
     uint8_t *ptr = (uint8_t *)str + token.offset;
     size_t len = token.len;
-    if (token.len == 0) return;
+    if (token.len > 0) {
 
-    bool alpha_numeric_split = false;
-    char *append_if_not_numeric = NULL;
+        bool alpha_numeric_split = false;
+        char *append_if_not_numeric = NULL;
 
-    int32_t ch;
-    ssize_t char_len;
+        int32_t ch;
+        ssize_t char_len;
 
-    bool last_was_letter = false;
-    bool append_char = true;
+        bool last_was_letter = false;
+        bool append_char = true;
 
-    while (idx < len) {
-        char_len = utf8proc_iterate(ptr, len, &ch);
-        
-        if (char_len <= 0) break;
+        while (idx < len) {
+            char_len = utf8proc_iterate(ptr, len, &ch);
 
-        bool is_hyphen = utf8_is_hyphen(ch);
-        int cat = utf8proc_category(ch);
+            if (char_len <= 0) break;
 
-        bool is_letter = utf8_is_letter(cat);
-        bool is_number = utf8_is_number(cat);
+            bool is_hyphen = utf8_is_hyphen(ch);
+            int cat = utf8proc_category(ch);
 
-        bool is_full_stop = ch == FULL_STOP_CODEPOINT;
+            bool is_letter = utf8_is_letter(cat);
+            bool is_number = utf8_is_number(cat);
 
-        if (is_hyphen && last_was_letter && options & NORMALIZE_TOKEN_REPLACE_HYPHENS) {
-            char_array_append(array, " ");
-            append_char = false;
-        } else if (is_hyphen && options & NORMALIZE_TOKEN_DELETE_HYPHENS) {
-            append_char = false;
-        }
+            bool is_full_stop = ch == FULL_STOP_CODEPOINT;
 
-        if ((is_hyphen || is_full_stop) && token.type == NUMERIC && options & NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC && last_was_letter) {
-            ptr += char_len;
-            idx += char_len;
-            append_if_not_numeric = is_hyphen ? "-" : ".";
-            append_char = true;
-            continue;
-        }
-
-        if (!is_number && append_if_not_numeric != NULL) {
-            char_array_append(array, append_if_not_numeric);
-            append_if_not_numeric = NULL;
-        }
-
-        if (is_number && options & NORMALIZE_TOKEN_REPLACE_DIGITS) {
-            if (token.type != IDEOGRAPHIC_NUMBER && token.type != IDEOGRAPHIC_CHAR) {
-                char_array_append(array, DIGIT_CHAR);
-            } else {
-                char_array_append(array, IDEOGRAPHIC_NUMBER_CHAR);
-            }
-            append_char = false;
-        }
-
-        if (options & NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC && token.type == NUMERIC && last_was_letter && is_number && !alpha_numeric_split) {
-            char_array_append(array, " ");
-            alpha_numeric_split = true;
-        }
-
-        if (is_full_stop) {
-            if (options & NORMALIZE_TOKEN_DELETE_FINAL_PERIOD && idx == len - 1) {
-                break;
-            }
-
-            if (token.type == ACRONYM && options & NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS) {
+            if (is_hyphen && last_was_letter && options & NORMALIZE_TOKEN_REPLACE_HYPHENS) {
+                char_array_append(array, " ");
+                append_char = false;
+            } else if (is_hyphen && options & NORMALIZE_TOKEN_DELETE_HYPHENS) {
                 append_char = false;
             }
-        }
 
-        if (idx == len - 2 && len > 2 && options & NORMALIZE_TOKEN_DROP_ENGLISH_POSSESSIVES) {
-            char this_char = *ptr;
-            char next_char = *(ptr + 1);
-
-            if ((this_char == '\'' && next_char == 's') || (this_char == 's' && next_char == '\'')) {
-                char_array_append(array, "s");
-                break;
+            if ((is_hyphen || is_full_stop) && token.type == NUMERIC && options & NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC && last_was_letter) {
+                ptr += char_len;
+                idx += char_len;
+                append_if_not_numeric = is_hyphen ? "-" : ".";
+                append_char = true;
+                continue;
             }
+
+            if (!is_number && append_if_not_numeric != NULL) {
+                char_array_append(array, append_if_not_numeric);
+                append_if_not_numeric = NULL;
+            }
+
+            if (is_number && options & NORMALIZE_TOKEN_REPLACE_DIGITS) {
+                if (token.type != IDEOGRAPHIC_NUMBER && token.type != IDEOGRAPHIC_CHAR) {
+                    char_array_append(array, DIGIT_CHAR);
+                } else {
+                    char_array_append(array, IDEOGRAPHIC_NUMBER_CHAR);
+                }
+                append_char = false;
+            }
+
+            if (is_number && options & NORMALIZE_TOKEN_REPLACE_DIGITS) {
+                char_array_append(array, DIGIT_CHAR);
+                append_char = false;
+            }
+
+            if (options & NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC && token.type == NUMERIC && last_was_letter && is_number && !alpha_numeric_split) {
+                char_array_append(array, " ");
+                alpha_numeric_split = true;
+            }
+
+            if (is_full_stop) {
+                if (options & NORMALIZE_TOKEN_DELETE_FINAL_PERIOD && idx == len - 1) {
+                    break;
+                }
+
+                if (token.type == ACRONYM && options & NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS) {
+                    append_char = false;
+                }
+            }
+
+            if (idx == len - 2 && len > 2 && options & NORMALIZE_TOKEN_DROP_ENGLISH_POSSESSIVES) {
+                char this_char = *ptr;
+                char next_char = *(ptr + 1);
+
+                if ((this_char == '\'' && next_char == 's') || (this_char == 's' && next_char == '\'')) {
+                    char_array_append(array, "s");
+                    break;
+                }
+            }
+
+            if (ch == APOSTROPHE_CODEPOINT && token.type == WORD && options & NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE) {
+                append_char = false;
+            }
+
+            if (append_char) {
+                char_array_append_len(array, (char *)ptr, char_len);
+            }
+
+            ptr += char_len;
+            idx += char_len;
+            append_char = true;
+
+            last_was_letter = is_letter;
+
         }
-
-        if (ch == APOSTROPHE_CODEPOINT && token.type == WORD && options & NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE) {
-            append_char = false;
-        }
-
-        if (append_char) {
-            char_array_append_len(array, (char *)ptr, char_len);
-        }
-
-        ptr += char_len;
-        idx += char_len;
-        append_char = true;
-
-        last_was_letter = is_letter;
-
     }
 
     char_array_terminate(array);
