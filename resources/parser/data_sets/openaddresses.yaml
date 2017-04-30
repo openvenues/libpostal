@@ -1851,6 +1851,20 @@ countries:
             - filename: wielkopolskie.csv
             - filename: zachodniopomorskie.csv
 
+    pt:
+        subdirs:
+            "11":
+                files:
+                    - filename: amadora.csv
+                      add_osm_boundaries: true
+            "13":
+                files:
+                    - filename: porto.csv
+                      add_osm_boundaries: true
+            "14":
+                files:
+                    - filename: ourem.csv
+                      add_osm_boundaries: true
     ru:
         language: ru
         subdirs:
