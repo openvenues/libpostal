@@ -67,8 +67,13 @@ house_numbers:
             sample_probability: 0.2
     alphanumeric:
         default: *numero
-        probability: 0.99
+        probability: 0.89
         alternatives:
+            - alternative:
+                  canonical: al
+                  numeric:
+                      direction: left
+              probability: 0.1
             - alternative:
                   canonical: número exterior
                   abbreviated: "nº ext"
