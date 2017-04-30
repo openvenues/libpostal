@@ -348,6 +348,46 @@ names:
                               affix: слобода
                               probability: 0.1
                       direction: left
+        country:
+            ph:
+                suburb:
+                    default:
+                        affix: Barangay
+                    probability: 0.6
+                    direction: left
+
+                conditionals:
+                    - key: place:ph
+                      value: barangay
+                      default:
+                          affix: Barangay
+                      probability: 0.7
+                      direction: left
+                    - key: place
+                      value: Barangay
+                      default:
+                          affix: Barangay
+                      probability: 0.7
+                      direction: left
+                    - key: admin_type:PH
+                      value: barangay
+                      default:
+                          affix: Barangay
+                      probability: 0.7
+                      direction: left
+                    - key: admin_type:PH
+                      value: sitio
+                      default:
+                          affix: Sitio
+                      probability: 0.7
+                      direction: left
+                    - key: admin_type:PH
+                      value: purok
+                      default:
+                          affix: Purok
+                      probability: 0.7
+                      direction: left
+
 
     # This section overrides place names
     exceptions:
