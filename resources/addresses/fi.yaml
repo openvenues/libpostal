@@ -23,6 +23,22 @@ components:
     combinations:
         -
             components:
+                - house_number
+                - staircase
+                - unit
+            label: house_number
+            separators:
+                - separator: " "
+                  probability: 0.8
+                - separator: "-"
+                  probability: 0.1
+                - separator: "/"
+                  probability: 0.05
+                - separator: " - "
+                  probability: 0.05
+            probability: 0.45
+        -
+            components:
                 - staircase
                 - unit
             label: unit
@@ -35,7 +51,7 @@ components:
                   probability: 0.05
                 - separator: " - "
                   probability: 0.05
-            probability: 0.85
+            probability: 0.4
 
 numbers:
     default: &numero
