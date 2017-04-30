@@ -37,6 +37,19 @@ names:
 
     affixes:
         language:
+            bg:
+                city:
+                    default:
+                        affix: гр.
+                    probability: 0.25
+                    alternatives:
+                        - alternative:
+                              affix: гр
+                          probability: 0.1
+                        - alternative:
+                              affix: град
+                          probability: 0.05
+                    direction: left
             ru:
                 city:
                     default:
