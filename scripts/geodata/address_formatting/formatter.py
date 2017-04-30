@@ -72,6 +72,7 @@ class AddressFormatter(object):
     SUBURB = 'suburb'
     CITY_DISTRICT = 'city_district'
     CITY = 'city'
+    POSTAL_TOWN = 'postal_town'
     ISLAND = 'island'
     STATE = 'state'
     STATE_DISTRICT = 'state_district'
@@ -169,6 +170,7 @@ class AddressFormatter(object):
         NAMED_BUILDING: HOUSE,
         SUBDIVISION: HOUSE,
         BLOCK: HOUSE_NUMBER,
+        POSTAL_TOWN: CITY,
     }
 
     category_template = '{{{category}}} {{{near}}} {{{place}}}'
