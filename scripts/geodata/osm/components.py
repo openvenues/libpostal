@@ -36,8 +36,8 @@ class OSMAddressComponents(object):
             'city': AddressFormatter.CITY,
             'town': AddressFormatter.CITY,
             'township': AddressFormatter.CITY,
-            'village': AddressFormatter.CITY,
-            'hamlet': AddressFormatter.CITY,
+            'village': AddressFormatter.LOCALITY,
+            'hamlet': AddressFormatter.LOCALITY,
             'suburb': AddressFormatter.SUBURB,
             'quarter': AddressFormatter.SUBURB,
             'neighbourhood': AddressFormatter.SUBURB
