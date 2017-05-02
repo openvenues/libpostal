@@ -390,6 +390,14 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Edmonton
+                    - filename: city_of_lethbridge.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Lethbridge
+                    - filename: city_of_medicine_hat.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Medicine Hat
                     - filename: grande_prairie.csv
                       add_osm_boundaries: true
                       city_replacements:
