@@ -159,6 +159,14 @@ class Unit(NumberedComponent):
                 return u'{}-{}'.format(number, number2)
             else:
                 return u'{}-{}'.format(number2, number)
+        elif num_type == cls.DECIMAL_NUMBER:
+            if (floor is not None and floor.isdigit()):
+                whole_part = floor
+                decimal_part = number
+            else:
+                whole_part = number
+                decimal_part = weighted_choice(cls.positive_units, cls.positive_units_cdf)
+            return u'{}.{}'.format(whole_part, decimal_part)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             alphabet_probability = address_config.get_property('alphabet_probability', language, country=country, default=None)
