@@ -210,7 +210,12 @@ countries:
                   probability: 0.4
 
     # Netherlands
-    nl: *use_country_code_seldomly
+    nl:
+        <<: *use_country_code_seldomly
+        regex_replacements:
+            - regex: "([\\d]{4})([a-z]{2})"
+              replacement: "\\1 \\2"
+              probability: 0.5
 
     # Norway
     "no":
