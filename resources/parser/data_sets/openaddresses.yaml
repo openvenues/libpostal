@@ -3724,6 +3724,10 @@ countries:
                       city_replacements:
                           city: Carolina Beach
                     - filename: city_of_elizabeth_city.csv
+                    - filename: city_of_fuquay_varina.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Fuquay-Varina
                     - filename: city_of_king.csv
                       add_osm_boundaries: true
                       city_replacements:
