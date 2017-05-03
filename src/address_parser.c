@@ -228,7 +228,7 @@ bool address_parser_load(char *dir) {
     char_array_add_joined(path, PATH_SEPARATOR, true, 2, dir, ADDRESS_PARSER_PHRASE_FILENAME);
     char *phrases_path = char_array_get_string(path);
 
-    FILE *phrases_file = fopen(phrases_path, "r");
+    FILE *phrases_file = fopen(phrases_path, "rb");
     if (phrases_file == NULL) {
         goto exit_address_parser_created;
     }
@@ -269,7 +269,7 @@ bool address_parser_load(char *dir) {
 
     char *postal_codes_path = char_array_get_string(path);
 
-    FILE *postal_codes_file = fopen(postal_codes_path, "r");
+    FILE *postal_codes_file = fopen(postal_codes_path, "rb");
     if (postal_codes_file == NULL) {
         goto exit_address_parser_created;
     }
