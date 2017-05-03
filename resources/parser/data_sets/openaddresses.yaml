@@ -402,6 +402,11 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Grande Prairie
+                    - filename: provincewide.csv
+                      add_osm_boundaries: true
+                      ignore_fields_containing:
+                          house_number:
+                              - "^[a-z]$"
                     - filename: strathcona-county.csv
 
             bc:
