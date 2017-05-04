@@ -36,6 +36,8 @@ class PlaceReverseGeocoder(PointIndex):
         'short_name:*',
         'admin_level',
         'place',
+        'place:ph',
+        'admin_type:PH',
         'population',
         'designation',
         'description',
