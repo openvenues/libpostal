@@ -193,7 +193,7 @@ SUBDIVISION_PLACE_KEYS="place=allotments or place=city_block or place=block or p
 
 SUBDIVISION_VALID_KEYS="( $SUBDIVISION_AEROWAY_KEYS or $SUBDIVISION_AMENITY_KEYS or $SUBDIVISION_LANDUSE_KEYS or $SUBDIVISION_PLACE_KEYS or ( name= and ( $VALID_VENUE_KEYS ) ) )"
 
-osmfilter $PLANET_O5M --keep-ways="SUBDIVISION_VALID_KEYS" --keep-relations="$SUBDIVISION_VALID_KEYS" --keey-nodes= --drop="boundary=" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS
+osmfilter $PLANET_O5M --keep-ways="SUBDIVISION_VALID_KEYS" --keep-relations="$SUBDIVISION_VALID_KEYS" --keep-nodes= --drop="boundary=" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS
 
 echo "Filtering for postal_code polygons"
 PLANET_POSTAL_CODES="planet-postcodes.osm"
