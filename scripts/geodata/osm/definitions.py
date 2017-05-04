@@ -35,6 +35,7 @@ class OSMDefinitions(object):
     SHOP = 'shop'
     TOURISM = 'tourism'
     VENUE = 'venue'
+    SUBDIVISION = 'subdivision'
     WATERWAY = 'waterway'
 
     def __init__(self, filename=DEFAULT_SCRIPT_PATH):
@@ -62,6 +63,7 @@ class OSMDefinitions(object):
             for v in variables:
                 v = v.lower()
                 text = text.replace('$VALID_{}_KEYS'.format(v.upper()), match_text[v])
+            match_text[definition] = text
 
             kvs = defaultdict(set)
 
