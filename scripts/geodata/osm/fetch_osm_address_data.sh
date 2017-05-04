@@ -186,14 +186,14 @@ rm $PLANET_AIRPORTS_LATLONS
 echo "Filtering for subdivision polygons"
 PLANET_SUBDIVISIONS="planet-subdivisions.osm"
 
-SUBDIVISION_AEROWAY_KEYS="aeroway=aerodrome"
-SUBDIVISION_AMENITY_KEYS="amenity=university or amentiy=college or amentiy=school or amentiy=hospital"
-SUBDIVISION_LANDUSE_KEYS="landuse=allotmenets or landuse=commercial or landuse=construction or landuse=farmland or landuse=forest or landuse=grass or landuse=industrial or landuse=military or landuse=meadow or landuse=orchard or landuse=residential or landuse=retail"
-SUBDIVISION_PLACE_KEYS="place=allotments or place=city_block or place=block or place=plot or place=subdivision or $VALID_PLACE_KEYS"
+VALID_SUBDIVISION_AEROWAY_KEYS="aeroway=aerodrome"
+VALID_SUBDIVISION_AMENITY_KEYS="amenity=university or amentiy=college or amentiy=school or amentiy=hospital"
+VALID_SUBDIVISION_LANDUSE_KEYS="landuse=allotmenets or landuse=commercial or landuse=construction or landuse=farmland or landuse=forest or landuse=grass or landuse=industrial or landuse=military or landuse=meadow or landuse=orchard or landuse=residential or landuse=retail"
+VALID_SUBDIVISION_PLACE_KEYS="place=allotments or place=city_block or place=block or place=plot or place=subdivision or $VALID_PLACE_KEYS"
 
-SUBDIVISION_VALID_KEYS="( $SUBDIVISION_AEROWAY_KEYS or $SUBDIVISION_AMENITY_KEYS or $SUBDIVISION_LANDUSE_KEYS or $SUBDIVISION_PLACE_KEYS or ( name= and ( $VALID_VENUE_KEYS ) ) )"
+VALID_SUBDIVISION_KEYS="( $VALID_SUBDIVISION_AEROWAY_KEYS or $VALID_SUBDIVISION_AMENITY_KEYS or $VALID_SUBDIVISION_LANDUSE_KEYS or $VALID_SUBDIVISION_PLACE_KEYS )"
 
-osmfilter $PLANET_O5M --keep-ways="SUBDIVISION_VALID_KEYS" --keep-relations="$SUBDIVISION_VALID_KEYS" --keep-nodes= --drop="boundary=" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS
+osmfilter $PLANET_O5M --keep-ways="$VALID_SUBDIVISION_KEYS or ( name= and ( $VALID_VENUE_KEYS ) )" --keep-relations="$VALID_SUBDIVISION_KEYS or ( name= and ( $VALID_VENUE_KEYS ) )" --keep-nodes= --drop="boundary=" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS
 
 echo "Filtering for postal_code polygons"
 PLANET_POSTAL_CODES="planet-postcodes.osm"
