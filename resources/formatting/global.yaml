@@ -8,7 +8,7 @@ global:
         ko_rm: en
         zh_pinyin: en        
 
-    # Former Soviet states sometimes write addresses generai-to-specific
+    # Former Soviet states sometimes write addresses general-to-specific
     invert_probability: 0.0
 
     insertions:
@@ -874,84 +874,107 @@ countries:
         insertions: *us_template_insertions
 
     former_ussr:
-        insertions: &former_ussr_insertions
-            postcode:
-                postcode_before_city:
-                    before: city
-                    probability: 0.2
-
+        alt_formats: &former_ussr_alt_formats
+            ussr_format1:
+                format: &ussr_format1 |
+                    {{{country}}}
+                    {{{postcode}}}
+                    {{{city}}}
+                    {{{city_district}}}
+                    {{{suburb}}}
+                    {{{state_district}}}
+                    {{{state}}}
+                    {{{country_region}}}
+                    {{{road}}} {{{house_number}}}
+                    {{{house}}}
+                    {{{attention}}}
+                probability: 0.1
+            ussr_format2:
+                format: &ussr_format2 |
+                    {{{country}}}
+                    {{{postcode}}}
+                    {{{city_district}}}
+                    {{{suburb}}}
+                    {{{city}}}
+                    {{{state_district}}}
+                    {{{state}}}
+                    {{{country_region}}}
+                    {{{road}}} {{{house_number}}}
+                    {{{house}}}
+                    {{{attention}}}
+                probability: 0.1
 
     # Russia
     ru:
-        invert_probability: 0.2
-        insertions: *former_ussr_insertions
+        invert_probability: 0.1
+        alt_formats: *former_ussr_alt_formats
 
     # Ukraine
     ua:
-        invert_probability: 0.2
-        insertions: *former_ussr_insertions
+        invert_probability: 0.1
+        alt_formats: *former_ussr_alt_formats
 
     # Belarus (using inverted by default)
     by:
         invert_probability: 0.4
-        insertions: *former_ussr_insertions
+        alt_formats: *former_ussr_alt_formats
 
     # Kazakhstan (using inverted by default)
     kz:
         invert_probability: 0.4
-        insertions: *former_ussr_insertions
+        alt_formats: *former_ussr_alt_formats
 
     # Kyrgyzstan (using inverted by default)
     kg:
         invert_probability: 0.4
-        insertions: *former_ussr_insertions
+        alt_formats: *former_ussr_alt_formats
 
     # Latvia
     lv:
-        invert_probability: 0.2
-        insertions: *former_ussr_insertions
+        invert_probability: 0.1
+        alt_formats: *former_ussr_alt_formats
 
     # Lithuania
     lt:
-        invert_probability: 0.2
-        insertions: *former_ussr_insertions
+        invert_probability: 0.1
+        alt_formats: *former_ussr_alt_formats
 
     # Estonia
     ee:
-        invert_probability: 0.2
-        insertions: *former_ussr_insertions
+        invert_probability: 0.1
+        alt_formats: *former_ussr_alt_formats
 
     # Armenia
     am:
-        invert_probability: 0.2
-        insertions: *former_ussr_insertions
+        invert_probability: 0.1
+        alt_formats: *former_ussr_alt_formats
 
     # Azerbaijan
     az:
-        invert_probability: 0.2
-        insertions: *former_ussr_insertions
+        invert_probability: 0.1
+        alt_formats: *former_ussr_alt_formats
 
     # Georgia
     ge:
-        invert_probability: 0.2
-        insertions: *former_ussr_insertions
+        invert_probability: 0.1
+        alt_formats: *former_ussr_alt_formats
 
     # Moldova
     md:
-        invert_probability: 0.2
-        insertions: *former_ussr_insertions
+        invert_probability: 0.1
+        alt_formats: *former_ussr_alt_formats
 
     # Uzbekistan
     uz:
-        invert_probability: 0.2
-        insertions: *former_ussr_insertions
+        invert_probability: 0.1
+        alt_formats: *former_ussr_alt_formats
 
     # Tajikistan
     tj:
-        invert_probability: 0.2
-        insertions: *former_ussr_insertions
+        invert_probability: 0.1
+        alt_formats: *former_ussr_alt_formats
 
     # Turkmenistan
     tm:
-        invert_probability: 0.2
-        insertions: *former_ussr_insertions
+        invert_probability: 0.1
+        alt_formats: *former_ussr_alt_formats

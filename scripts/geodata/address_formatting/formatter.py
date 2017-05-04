@@ -240,6 +240,11 @@ class AddressFormatter(object):
                 if address_template:
                     value['address_template'] = self.add_postprocessing_tags(address_template, country, language=language)
 
+                alt_formats = value.get('alt_formats')
+                if alt_formats:
+                    for k, v in six.iteritems(alt_formats):
+                        v['format'] = self.add_postprocessing_tags(v['format'], country, language=language)
+
                 post_format_replacements = value.get('postformat_replace')
                 if post_format_replacements:
                     value['postformat_replace'] = [[pattern, replacement.replace('$', '\\')] for pattern, replacement in post_format_replacements]
@@ -316,7 +321,7 @@ class AddressFormatter(object):
         # If the probabilities don't sum to 1, add a "do nothing" action
         if not isclose(sum(probs), 1.0):
             probs.append(1.0 - sum(probs))
-            values.append((None, None, False))
+            values.append((None, None))
 
         return values, cdf(probs)
 
@@ -373,6 +378,7 @@ class AddressFormatter(object):
         self.country_conditionals = {}
 
         self.country_invert_probabilities = {}
+        self.country_alt_formats = {}
 
         for country, config in six.iteritems(self.country_configs):
             if 'insertions' in config:
@@ -381,6 +387,16 @@ class AddressFormatter(object):
 
             if 'invert_probability' in config:
                 self.country_invert_probabilities[country] = config['invert_probability']
+
+            if 'alt_formats' in config:
+                alt_formats = config['alt_formats']
+                alternates = [safe_decode(f['format']) for f in alt_formats.values()]
+                probs = [f['probability'] for f in alt_formats.values()]
+                if not isclose(sum(probs), 1.0):
+                    alternates.append(None)
+                    probs.append(1.0 - sum(probs))
+                probs_cdf = cdf(probs)
+                self.country_alt_formats[country.lower()] = (alternates, probs_cdf)
 
         self.language_insertions = {}
         self.language_conditionals = {}
@@ -754,10 +770,10 @@ class AddressFormatter(object):
         return template
 
     def remove_repeat_template_separators(self, template):
-        return re.sub('(?:[\s]*([,;\-]/{})[\s]*){{2,}}'.format(self.separator_tag), r' \1 ', template)
+        return re.sub('(?:[\s]*([,;\-]/{})[\s]*){{2,}}'.format(self.separator_tag), u' \\1 ', template)
 
     def tag_template_separators(self, template):
-        template = re.sub(r'}\s*([,\-;])\s*', r'}} \1/{} '.format(self.separator_tag), template)
+        template = re.sub(u'}\s*([,\-;])\s*', u'}} \\1/{} '.format(self.separator_tag), template)
         return template
 
     def strip_component(self, value, tagged=False):
@@ -826,6 +842,13 @@ class AddressFormatter(object):
 
     def get_template(self, country, language=None):
         return self.get_template_from_config(self.country_formats, country, language=language)
+
+    def get_alt_template(self, country):
+        if country.lower() in self.country_alt_formats:
+            alternates, probs = self.country_alt_formats[country]
+            alt_template = weighted_choice(alternates, probs)
+            return alt_template
+        return None
 
     def get_no_name_template(self, country, language=None):
         return self.get_template_from_config(self.templates_no_name, country, language=language)
@@ -902,17 +925,22 @@ class AddressFormatter(object):
         if minimal_only and not self.minimal_components(components):
             return None
 
-        template = self.get_template(country, language=language)
-        if not template:
-            return None
+        alt_template = self.get_alt_template(country)
 
-        if not template or 'address_template' not in template:
-            return None
-        template_text = template['address_template']
+        if alt_template is None:
+            template = self.get_template(country, language=language)
+            if not template:
+                return None
 
-        template_text = self.revised_template(template_text, components, country, language=language)
-        if template_text is None:
-            return None
+            if not template or 'address_template' not in template:
+                return None
+            template_text = template['address_template']
+
+            template_text = self.revised_template(template_text, components, country, language=language)
+            if template_text is None:
+                return None
+        else:
+            template_text = alt_template
 
         if tag_components:
             template_text = self.tag_template_separators(template_text)
