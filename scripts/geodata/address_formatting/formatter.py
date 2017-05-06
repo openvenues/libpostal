@@ -98,6 +98,7 @@ class AddressFormatter(object):
         SUBDIVISION,
         NAMED_BUILDING,
         BUILDING,
+        BLOCK,
         METRO_STATION,
         SUBURB,
         CITY_DISTRICT,
@@ -308,14 +309,16 @@ class AddressFormatter(object):
             if k == 'conditional' or not v:
                 continue
 
+            allow_between_house_number_and_road = v.get('allow_between_house_number_and_road', False)
+
             if 'before' in v:
-                val = (self.BEFORE, v['before'])
+                val = (self.BEFORE, v['before'], allow_between_house_number_and_road)
             elif 'after' in v:
-                val = (self.AFTER, v['after'])
+                val = (self.AFTER, v['after'], allow_between_house_number_and_road)
             elif 'last' in v:
-                val = (self.LAST, None)
+                val = (self.LAST, None, False)
             elif 'first' in v:
-                val = (self.FIRST, None)
+                val = (self.FIRST, None, False)
             else:
                 raise ValueError('Insertions must contain one of {{first, before, after, last}}. Value was: {}'.format(v))
 
@@ -326,7 +329,7 @@ class AddressFormatter(object):
         # If the probabilities don't sum to 1, add a "do nothing" action
         if not isclose(sum(probs), 1.0):
             probs.append(1.0 - sum(probs))
-            values.append((None, None))
+            values.append((None, None, False))
 
         return values, cdf(probs)
 
@@ -701,17 +704,17 @@ class AddressFormatter(object):
                             conditional_insertions = v
                             break
 
-                order, other = None, None
+                order, other, allow_between_house_number_and_road = None, None, False
 
                 # Check the conditional probabilities first
                 if conditional_insertions is not None:
                     values, probs = conditional_insertions
-                    order, other = weighted_choice(values, probs)
+                    order, other, allow_between_house_number_and_road = weighted_choice(values, probs)
 
                 # If there are no conditional probabilites or the "default" value was chosen, sample from the marginals
                 if other is None:
                     values, probs = insertions
-                    order, other = weighted_choice(values, probs)
+                    order, other, allow_between_house_number_and_road = weighted_choice(values, probs)
 
                 # Even though we may change the value of "other" below, use
                 # the original cache key because changes from here on are
@@ -736,28 +739,29 @@ class AddressFormatter(object):
                 # house_number, unit, road, which we don't want. So effectively
                 # treat house_number and road as an atomic unit.
 
-                if other == self.HOUSE_NUMBER and component != self.ROAD:
-                    road_tag = self.tag_token(self.ROAD)
-                    house_number_tag = other_token
+                if not allow_between_house_number_and_road:
+                    if other == self.HOUSE_NUMBER and component != self.ROAD:
+                        road_tag = self.tag_token(self.ROAD)
+                        house_number_tag = other_token
 
-                    if house_number_tag in template and road_tag in template:
-                        road_after_house_number = template.index(road_tag) > template.index(house_number_tag)
+                        if house_number_tag in template and road_tag in template:
+                            road_after_house_number = template.index(road_tag) > template.index(house_number_tag)
 
-                        if road_after_house_number and order == self.AFTER:
-                            other = self.ROAD
-                        elif not road_after_house_number and order == self.BEFORE:
-                            other = self.ROAD
-                elif other == self.ROAD and component != self.HOUSE_NUMBER:
-                    house_number_tag = self.tag_token(self.HOUSE_NUMBER)
-                    road_tag = other_token
+                            if road_after_house_number and order == self.AFTER:
+                                other = self.ROAD
+                            elif not road_after_house_number and order == self.BEFORE:
+                                other = self.ROAD
+                    elif other == self.ROAD and component != self.HOUSE_NUMBER:
+                        house_number_tag = self.tag_token(self.HOUSE_NUMBER)
+                        road_tag = other_token
 
-                    if house_number_tag in template and road_tag in template:
-                        road_before_house_number = template.index(road_tag) < template.index(house_number_tag)
+                        if house_number_tag in template and road_tag in template:
+                            road_before_house_number = template.index(road_tag) < template.index(house_number_tag)
 
-                        if road_before_house_number and order == self.AFTER:
-                            other = self.HOUSE_NUMBER
-                        elif not road_before_house_number and order == self.BEFORE:
-                            other = self.HOUSE_NUMBER
+                            if road_before_house_number and order == self.AFTER:
+                                other = self.HOUSE_NUMBER
+                            elif not road_before_house_number and order == self.BEFORE:
+                                other = self.HOUSE_NUMBER
 
                 if order == self.BEFORE and other_token in template:
                     template = self.insert_component(template, component, before=other)

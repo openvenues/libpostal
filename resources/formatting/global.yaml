@@ -67,18 +67,54 @@ global:
                 probability: 0.1
 
         block:
-            block_before_level:
-                before: level
-                probability: 0.4
-            block_before_unit:
-                before: unit
-                probability: 0.4
             block_before_house_number:
                 before: house_number
-                probability: 0.1
-            block_after_house_number:
-                after: house_number
-                probability: 0.1
+                probability: 1.0
+                allow_between_house_number_and_road: true
+            conditional:
+                - component: entrance
+                  probabilities:
+                      block_before_entrance:
+                          before: entrance
+                          probability: 0.3
+                      block_after_entrance:
+                          after: entrance
+                          probability: 0.2
+                - component: staircase
+                  probabilities:
+                      block_before_staircase:
+                          before: staircase
+                          probability: 0.3
+                      block_after_staircase:
+                          after: staircase
+                          probability: 0.2
+                - component: level
+                  probabilities:
+                      block_before_level:
+                          before: level
+                          probability: 0.4
+                      block_after_level:
+                          after: level
+                          probability: 0.2
+                - component: unit
+                  probabilities:
+                      block_before_unit:
+                          before: unit
+                          probability: 0.4
+                      block_after_unit:
+                          after: unit
+                          probability: 0.2
+                - component: house_number
+                  probabilities:
+                      block_before_house_number:
+                          before: house_number
+                          probability: 0.5
+                          allow_between_house_number_and_road: true
+                      block_after_house_number:
+                          after: house_number
+                          probability: 0.5
+                          allow_between_house_number_and_road: true
+
 
         locality:
             locality_before_city:
