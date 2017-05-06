@@ -35,7 +35,8 @@ class OSMDefinitions(object):
     SHOP = 'shop'
     TOURISM = 'tourism'
     VENUE = 'venue'
-    SUBDIVISION = 'subdivision'
+    SUBDIVISION_NAMED = 'subdivision_named'
+    SUBDIVISION_UNNAMED = 'subdivision_unnamed'
     WATERWAY = 'waterway'
 
     def __init__(self, filename=DEFAULT_SCRIPT_PATH):

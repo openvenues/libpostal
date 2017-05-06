@@ -305,7 +305,9 @@ class OSMAdminPolygonReader(OSMPolygonReader):
 
 class OSMSubdivisionPolygonReader(OSMPolygonReader):
     def include_polygon(self, props):
-        return osm_definitions.meets_definition(props, osm_definitions.SUBDIVISION) or ('name' in props and osm_definitions.meets_definition(props, osm_definitions.VENUE))
+        return osm_definitions.meets_definition(props, osm_definitions.SUBDIVISION_UNNAMED) or ('name' in props and ( osm_definitions.meets_definition(props, osm_definitions.VENUE) or
+                                                                                                                      osm_definitions.meets_definition(props, osm_definitions.SUBDIVISION_NAMED))
+                                                                                                )
 
 
 class OSMBuildingPolygonReader(OSMPolygonReader):

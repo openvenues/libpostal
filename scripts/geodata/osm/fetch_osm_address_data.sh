@@ -184,16 +184,25 @@ osmfilter $PLANET_AIRPORTS_LATLONS --keep="$VALID_AIRPORT_KEYS" -o=$PLANET_AIRPO
 rm $PLANET_AIRPORTS_LATLONS
 
 echo "Filtering for subdivision polygons"
+PLANET_SUBDIVISIONS_O5M="planet-subdivisions.o5m"
+PLANET_VENUE_BOUNDARIES_O5M="planet-venue-boundaries.o5m"
 PLANET_SUBDIVISIONS="planet-subdivisions.osm"
 
 VALID_SUBDIVISION_AEROWAY_KEYS="aeroway=aerodrome"
 VALID_SUBDIVISION_AMENITY_KEYS="amenity=university or amentiy=college or amentiy=school or amentiy=hospital"
-VALID_SUBDIVISION_LANDUSE_KEYS="landuse=allotmenets or landuse=commercial or landuse=construction or landuse=farmland or landuse=forest or landuse=grass or landuse=industrial or landuse=military or landuse=meadow or landuse=orchard or landuse=residential or landuse=retail"
+VALID_SUBDIVISION_LANDUSE_KEYS="landuse=allotmenets or landuse=commercial or landuse=industrial or landuse=military or landuse=residential or landuse=retail"
+VALID_SUBDIVISION_LANDUSE_NAMED_KEYS="landuse=construction or landuse=farmland or landuse=forest or landuse=grass or landuse=meadow or landuse=orchard"
 VALID_SUBDIVISION_PLACE_KEYS="place=allotments or place=city_block or place=block or place=plot or place=subdivision or $VALID_PLACE_KEYS"
 
-VALID_SUBDIVISION_KEYS="( $VALID_SUBDIVISION_AEROWAY_KEYS or $VALID_SUBDIVISION_AMENITY_KEYS or $VALID_SUBDIVISION_LANDUSE_KEYS or $VALID_SUBDIVISION_PLACE_KEYS )"
+VALID_SUBDIVISION_NAMED_KEYS="( $VALID_SUBDIVISION_LANDUSE_NAMED_KEYS or $VALID_SUBDIVISION_PLACE_KEYS )"
+VALID_SUBDIVISION_UNNAMED_KEYS="( $VALID_SUBDIVISION_AEROWAY_KEYS or $VALID_SUBDIVISION_AMENITY_KEYS or $VALID_SUBDIVISION_LANDUSE_KEYS )"
 
-osmfilter $PLANET_O5M --keep-ways="$VALID_SUBDIVISION_KEYS or ( name= and ( $VALID_VENUE_KEYS ) )" --keep-relations="$VALID_SUBDIVISION_KEYS or ( name= and ( $VALID_VENUE_KEYS ) )" --keep-nodes= --drop="boundary=" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS
+osmfilter $PLANET_O5M --keep="$VALID_SUBDIVISION_UNNAMED_KEYS or ( name= and ( $VALID_SUBDIVISION_NAMED_KEYS ) )" --drop="boundary= or ( place= and not ( $VALID_SUBDIVISION_PLACE_KEYS ) )" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS_O5M &
+osmfilter $PLANET_O5M --keep="( name= and ( $VALID_VENUE_KEYS ) )" --drop-nodes --drop="boundary= or ( place= and not ( $VALID_SUBDIVISION_PLACE_KEYS ) )" --drop-author --drop-version -o=$PLANET_VENUE_BOUNDARIES_O5M &
+
+wait
+
+osmconvert $PLANET_SUBDIVISIONS_O5M $PLANET_VENUE_BOUNDARIES_O5M -o=$PLANET_SUBDIVISIONS
 
 echo "Filtering for postal_code polygons"
 PLANET_POSTAL_CODES="planet-postcodes.osm"
