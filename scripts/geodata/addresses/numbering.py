@@ -151,6 +151,8 @@ class NumericPhrase(object):
     NUMERIC = 'numeric'
     NUMERIC_AFFIX = 'numeric_affix'
 
+
+
     @classmethod
     def pick_phrase_and_type(cls, number, language, country=None):
         values, probs = address_config.alternative_probabilities(cls.key, language, dictionaries=cls.dictionaries, country=country)
@@ -229,6 +231,14 @@ class NumberedComponent(object):
     HYPHENATED_NUMBER = 'hyphenated_number'
     DECIMAL_NUMBER = 'decimal_number'
     ROMAN_NUMERAL = 'roman_numeral'
+
+    @classmethod
+    def random_num_digits(cls, max_digits=6):
+        return random.randrange(1, max_digits + 1)
+
+    @classmethod
+    def random_digits(cls, num_digits):
+        return random.randrange(10 ** num_digits, 10 ** (num_digits + 1))
 
     @classmethod
     def choose_alphanumeric_type(cls, key, language, country=None):
