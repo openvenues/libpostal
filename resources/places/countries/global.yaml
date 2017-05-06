@@ -89,9 +89,7 @@ countries:
                       probability: 0.9
                     - lt: 10000
                       probability: 1.0
-                dependencies:
-                    - city
-                    - city_district
+                dependencies: []
             country:
                 probability: 0.5
                 population: []
@@ -115,6 +113,8 @@ countries:
                     - city
                     - state_district
                     - state
+            city:
+                probability: 0.95
             state:
                 probability: 0.6
                 population:
@@ -123,9 +123,7 @@ countries:
                       probability: 0.9
                     - lt: 10000
                       probability: 1.0
-                dependencies:
-                    - city
-                    - city_district
+                dependencies: []
             country:
                 population: []
 
@@ -156,9 +154,7 @@ countries:
                       probability: 0.9
                     - lt: 10000
                       probability: 1.0
-                dependencies:
-                    - city
-                    - city_district
+                dependencies: []
             country:
                 probability: 0.2
                 population: []
@@ -176,11 +172,14 @@ countries:
 
     # France
     fr:
+        city_replacements:
+            - suburb
+            - city_district
         components:
             city_district:
                 probability: 0.4
-                dependencies:
-                    - city
+            city:
+                probability: 0.95
 
     # United Kingdom
     gb:
@@ -199,6 +198,8 @@ countries:
                     - city
             suburb:
                 probability: 0.5
+            city:
+                probability: 0.95
             city_district:
                 probability: 0.3
             country:
@@ -217,7 +218,13 @@ countries:
 
     # Ireland
     ie:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district
         components:
+            city:
+                probability: 0.95
             state_district:
                 population:
                     - lt: 100000
@@ -229,11 +236,15 @@ countries:
     # India
     in:
         components:
+            suburb:
+                probability: 0.4
+            city_district:
+                probability: 0.4
             state_district:
                 probability: 0.3
             state:
                 probability: 0.8
-
+                dependencies: []
 
     # Italy
     it:
@@ -243,6 +254,10 @@ countries:
         components:
             state_district:
                 probability: 0.7
+                dependencies:
+                    - suburb
+                    - city
+                    - city_district
             state:
                 probability: 0.2
 
@@ -279,8 +294,11 @@ countries:
                 probability: 1.0
             city_district:
                 probability: 0.8
+            state_district:
+                probability: 0.8
             state:
                 probability: 0.8
+                dependencies: []
             country:
                 probability: 0.8
 
@@ -331,9 +349,7 @@ countries:
                       probability: 0.9
                     - lt: 10000
                       probability: 1.0
-                dependencies:
-                    - city_district
-                    - city
+                dependencies: []
             country:
                 population: []
 
@@ -370,7 +386,6 @@ countries:
             - suburb
             - city_district
             - state_district
-            - state
         # Definitions
         new_york_county: &new_york_county
             id: 2552485 # New York County (Manhattan, NY)
@@ -399,22 +414,21 @@ countries:
         components:
             suburb:
                 probability: 0.4
-                dependencies:
-                    - city_district
-                    - city
-                    - state_district
-                    - state
+                containing:
+                    - <<: *queens_county
+                      probability: 0.6
+                dependencies: []
             city_district:
                 probability: 0.2
                 containing:
                     - <<: *kings_county
-                      probability: 1.0
+                      probability: 0.95
                     - <<: *queens_county
-                      probability: 1.0
+                      probability: 0.6
                     - <<: *bronx_county
-                      probability: 1.0
+                      probability: 0.95
                     - <<: *richmond_county
-                      probability: 1.0
+                      probability: 0.95
                     - <<: *new_york_county
                       probability: 0.1
             city:
@@ -429,7 +443,7 @@ countries:
                     - <<: *richmond_county
                       probability: 0.1
                     - <<: *new_york_county
-                      probability: 1.0
+                      probability: 0.95
             island:
                 order:
                     direction: before
@@ -446,9 +460,7 @@ countries:
                       probability: 0.9
                     - lt: 10000
                       probability: 1.0
-                dependencies:
-                    - city_district
-                    - city
+                dependencies: []
 
             state_district:
                 probability: 0.1
@@ -469,18 +481,10 @@ countries:
                       probability: 0.1
                     - <<: *richmond_county
                       probability: 0.1
-                dependencies:
-                    - city_district
-                    - city
-                    - state
 
             country:
                 probability: 0.1
                 population: []
-                dependencies:
-                    - city
-                    - city_district
-                    - state
 
     # Tuvalu
     tv:
