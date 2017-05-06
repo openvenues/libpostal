@@ -89,7 +89,6 @@ class AddressFormatter(object):
         HOUSE,
         PO_BOX,
         HOUSE_NUMBER,
-        BUILDING,
         ENTRANCE,
         STAIRCASE,
         LEVEL,
@@ -97,6 +96,8 @@ class AddressFormatter(object):
         ROAD,
         INTERSECTION,
         SUBDIVISION,
+        NAMED_BUILDING,
+        BUILDING,
         METRO_STATION,
         SUBURB,
         CITY_DISTRICT,
@@ -112,7 +113,6 @@ class AddressFormatter(object):
     ])}
 
     BOUNDARY_COMPONENTS_ORDERED = [
-        SUBDIVISION,
         METRO_STATION,
         SUBURB,
         CITY_DISTRICT,
@@ -129,6 +129,7 @@ class AddressFormatter(object):
     BOUNDARY_COMPONENTS = set(BOUNDARY_COMPONENTS_ORDERED)
 
     SUB_BUILDING_COMPONENTS = {
+        BUILDING,
         ENTRANCE,
         STAIRCASE,
         LEVEL,
@@ -137,6 +138,7 @@ class AddressFormatter(object):
 
     STREET_COMPONENTS = {
         HOUSE_NUMBER,
+        BLOCK,
         ROAD,
     }
 
@@ -146,6 +148,8 @@ class AddressFormatter(object):
         ATTENTION,
         CARE_OF,
         HOUSE,
+        NAMED_BUILDING,
+        SUBDIVISION,
     }
 
     address_formatter_fields = set(component_order)
@@ -170,6 +174,7 @@ class AddressFormatter(object):
 
     tag_aliases = {
         NAMED_BUILDING: HOUSE,
+        BUILDING: HOUSE,
         SUBDIVISION: HOUSE,
         BLOCK: HOUSE_NUMBER,
         LOCALITY: CITY,
@@ -333,13 +338,13 @@ class AddressFormatter(object):
         return component_insertions
 
     def inverted(self, template):
-        lines = template.split(six.u('\n'))
-        return six.u('\n').join(reversed(lines))
+        lines = template.split(u'\n')
+        return u'\n'.join(reversed(lines))
 
     def house_number_before_road(self, country, language=None):
         key = value = None
         if language is not None:
-            key = six.u('_').join((country.lower(), language.lower()))
+            key = u'_'.join((country.lower(), language.lower()))
             if key in self.house_number_ordering:
                 value = self.house_number_ordering[key]
 
@@ -475,8 +480,8 @@ class AddressFormatter(object):
         template = template.rstrip()
 
         if not exact_order:
-            first_template_regex = re.compile(six.u('{{#first}}.*?{{/first}}'), re.UNICODE)
-            sans_firsts = first_template_regex.sub(six.u(''), template)
+            first_template_regex = re.compile(u'{{#first}}.*?{{/first}}', re.UNICODE)
+            sans_firsts = first_template_regex.sub(u'', template)
 
             tag_match = re.compile(self.tag_token(tag)).search(sans_firsts)
 
@@ -822,7 +827,7 @@ class AddressFormatter(object):
                 else:
                     end = num_tokens - j - 1
 
-            return six.u(' ').join(tokens[start:end])
+            return u' '.join(tokens[start:end])
 
     def get_template_from_config(self, config, country, language=None):
         template = None
@@ -857,7 +862,7 @@ class AddressFormatter(object):
         return self.get_template_from_config(self.templates_place_only, country, language=language)
 
     def tagged_tokens(self, name, label):
-        return six.u(' ').join([six.u('{}/{}').format(t.replace(' ', ''), label if t != ',' else self.separator_tag) for t, c in tokenize(name)])
+        return u' '.join([u'{}/{}'.format(t.replace(' ', ''), label if t != ',' else self.separator_tag) for t, c in tokenize(name)])
 
     def template_language_matters(self, country, language):
         return '{}_{}'.format(country.upper(), language) in self.country_formats or '{}_{}'.format(country, language) in self.country_formats

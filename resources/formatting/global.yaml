@@ -66,6 +66,25 @@ global:
                 first: true
                 probability: 0.1
 
+        block:
+            block_before_level:
+                before: level
+                probability: 0.4
+            block_before_unit:
+                before: unit
+                probability: 0.4
+            block_before_house_number:
+                before: house_number
+                probability: 0.1
+            block_after_house_number:
+                after: house_number
+                probability: 0.1
+
+        locality:
+            locality_before_city:
+                before: city
+                probability: 1.0
+
         care_of:
             care_of_after_attention:
                 after: attention
@@ -73,6 +92,183 @@ global:
             care_of_after_house:
                 after: house
                 probability: 0.1
+
+        building:
+            building_after_house_number:
+                after: house_number
+                probability: 0.8
+            building_before_suburb:
+                after: suburb
+                probability: 0.2
+            conditional:
+                - component: entrance
+                  probabilities:
+                      building_after_house_number:
+                          after: house_number
+                          probability: 0.3
+                      building_before_entrance:
+                          after: entrance
+                          probability: 0.2
+                      building_after_entrance:
+                          after: entrance
+                          probability: 0.3
+                      building_before_suburb:
+                          before: suburb
+                          probability: 0.2
+                - component: staircase
+                  probabilities:
+                      building_after_house_number:
+                          after: house_number
+                          probability: 0.3
+                      building_before_staircase:
+                          after: staircase
+                          probability: 0.2
+                      building_after_staircase:
+                          after: staircase
+                          probability: 0.3
+                      building_before_suburb:
+                          before: suburb
+                          probability: 0.2
+                - component: level
+                  probabilities:
+                      building_after_house_number:
+                          after: house_number
+                          probability: 0.3
+                      building_before_level:
+                          after: level
+                          probability: 0.2
+                      building_after_level:
+                          after: level
+                          probability: 0.3
+                      building_before_suburb:
+                          before: suburb
+                          probability: 0.2
+                - component: unit
+                  probabilities:
+                      building_after_house_number:
+                          after: house_number
+                          probability: 0.3
+                      building_before_unit:
+                          after: unit
+                          probability: 0.2
+                      building_after_unit:
+                          after: unit
+                          probability: 0.3
+                      building_before_suburb:
+                          before: suburb
+                          probability: 0.2
+                - component: house
+                  probabilities:
+                      building_after_house_number:
+                          after: house_number
+                          probability: 0.3
+                      building_before_house:
+                          after: house
+                          probability: 0.2
+                      building_after_house:
+                          after: house
+                          probability: 0.3
+                      building_before_suburb:
+                          before: suburb
+                          probability: 0.2
+                - component: subdivision
+                  probabilities:
+                      building_after_house_number:
+                          after: house_number
+                          probability: 0.6
+                      building_before_subdivision:
+                          before: subdivision
+                          probability: 0.2
+                      building_after_subdivision:
+                          after: subdivision
+                          probability: 0.2
+
+        named_building:
+            named_building_after_house:
+                after: house
+                probability: 0.8
+            named_building_before_suburb:
+                after: suburb
+                probability: 0.2
+            conditional:
+                - component: entrance
+                  probabilities:
+                      named_building_after_house:
+                          after: house
+                          probability: 0.3
+                      named_building_before_entrance:
+                          after: entrance
+                          probability: 0.2
+                      named_building_after_entrance:
+                          after: entrance
+                          probability: 0.3
+                      named_building_before_suburb:
+                          before: suburb
+                          probability: 0.2
+                - component: staircase
+                  probabilities:
+                      named_building_after_house:
+                          after: house
+                          probability: 0.3
+                      named_building_before_staircase:
+                          after: staircase
+                          probability: 0.2
+                      named_building_after_staircase:
+                          after: staircase
+                          probability: 0.3
+                      named_building_before_suburb:
+                          before: suburb
+                          probability: 0.2
+                - component: level
+                  probabilities:
+                      named_building_after_house:
+                          after: house
+                          probability: 0.3
+                      named_building_before_level:
+                          after: level
+                          probability: 0.2
+                      named_building_after_level:
+                          after: level
+                          probability: 0.3
+                      named_building_before_suburb:
+                          before: suburb
+                          probability: 0.2
+                - component: unit
+                  probabilities:
+                      named_building_after_house:
+                          after: house
+                          probability: 0.3
+                      named_building_before_unit:
+                          after: unit
+                          probability: 0.2
+                      named_building_after_unit:
+                          after: unit
+                          probability: 0.3
+                      named_building_before_suburb:
+                          before: suburb
+                          probability: 0.2
+                - component: house
+                  probabilities:
+                      named_building_before_house:
+                          after: house
+                          probability: 0.3
+                      named_building_after_house:
+                          after: house
+                          probability: 0.5
+                      named_building_before_suburb:
+                          before: suburb
+                          probability: 0.2
+                - component: subdivision
+                  probabilities:
+                      named_building_after_house:
+                          after: house
+                          probability: 0.6
+                      named_building_before_subdivision:
+                          before: subdivision
+                          probability: 0.2
+                      named_building_after_subdivision:
+                          after: subdivision
+                          probability: 0.2
 
         subdivision:
             subdivision_before_suburb:
@@ -93,26 +289,6 @@ languages:
                     first: true
                     probability: 0.001
 
-            building:
-                building_after_house_number:
-                    after: house_number
-                    probability: 0.8
-                building_after_house:
-                    after: house
-                    probability: 0.05
-                building_before_suburb:
-                    before: suburb
-                    probability: 0.15
-                conditional:
-                    - component: subdivision
-                      probabilities:
-                          building_after_house_number:
-                              after: house_number
-                              probability: 0.8
-                          building_before_subdivision:
-                              before: subdivision
-                              probability: 0.2
-
             entrance:
                 # e.g. Calle Foo 3, entrada 1
                 entrance_after_house_number:
@@ -121,12 +297,6 @@ languages:
                 entrance_after_house:
                     after: house
                     probability: 0.2
-                conditional:
-                    - component: building
-                      probabilities:
-                          entrance_after_building:
-                              after: building
-                              probability: 0.9
 
             staircase:
                 # e.g. 123 East 45th St, Staircase C, NYC
@@ -142,12 +312,6 @@ languages:
                           # default: 0.1
                           staircase_after_entrance:
                               after: entrance
-                              probability: 0.9
-                    - component: building
-                      probabilities:
-                          # default: 0.1
-                          staircase_after_building:
-                              after: building
                               probability: 0.9
 
             level:
@@ -174,11 +338,6 @@ languages:
                       probabilities:
                           level_after_entrance:
                               after: entrance
-                              probability: 0.99
-                    - component: building
-                      probabilities:
-                          level_after_building:
-                              after: building
                               probability: 0.99
 
             unit: &continental_european_unit_insertions
@@ -212,37 +371,9 @@ languages:
                           unit_after_entrance:
                               after: entrance
                               probability: 0.9
-                    - component: building
-                      probabilities:
-                          # default: 0.1
-                          unit_after_building:
-                              after: building
-                              probability: 0.9
 
     en:
         insertions: &english_template_insertions
-            building:
-                building_after_house:
-                    after: house
-                    probability: 0.6
-                building_after_road:
-                    after: road
-                    probability: 0.3
-                building_before_suburb:
-                    before: suburb
-                    probability: 0.1
-                conditional:
-                    - component: subdivision
-                      probabilities:
-                          building_after_house:
-                              after: house
-                              probability: 0.6
-                          building_after_road:
-                              after: road
-                              probability: 0.2
-                          building_before_subdivision:
-                              before: subdivision
-                              probability: 0.2
             entrance:
                 # e.g. 123 East 45th St, 6th Floor, NYC
                 entrance_after_road:
@@ -255,13 +386,6 @@ languages:
                 entrance_before_house_number:
                     before: house_number
                     probability: 0.15
-                conditional:
-                    - component: building
-                      probabilities:
-                          # default: 0.8
-                          entrance_after_building:
-                              after: building
-                              probability: 0.2
 
             staircase:
                 # e.g. 123 East 45th St, Staircase C, NYC
@@ -497,6 +621,7 @@ countries:
                     - state
                 before:
                     - country
+        insertions: *english_template_insertions
 
     # United Kingdom, in case language is unknown
     gb:
@@ -520,13 +645,6 @@ countries:
                 entrance_before_house_number:
                     before: house_number
                     probability: 0.2
-                conditional:
-                    - component: building
-                      probabilities:
-                          # default: 0.8
-                          entrance_after_building:
-                              after: building
-                              probability: 0.2
 
             staircase:
                 # e.g. 123 East 45th St, Staircase C, NYC
@@ -726,41 +844,45 @@ countries:
     east_asia_insertions: &east_asia_insertions
         postcode: {}
 
-        building:
+        building: &east_asia_building_insertions
             building_after_house_number:
                 after: house_number
                 probability: 1.0
+            conditional:
+                - component: entrance
+                  probabilities:
+                      building_before_entrance:
+                          before: entrance
+                          probability: 1.0
+                - component: staircase
+                  probabilities:
+                      building_before_staircase:
+                          before: staircase
+                          probability: 1.0
+                - component: level
+                  probabilities:
+                      building_before_level:
+                          before: level
+                          probability: 1.0
+                - component: unit
+                  probabilities:
+                      building_before_unit:
+                          before: unit
+                          probability: 1.0
+
+        named_building: *east_asia_building_insertions
 
         entrance:
             # e.g. Calle Foo 3, entrada 1
             entrance_after_house_number:
                 after: house_number
                 probability: 1.0
-            conditional:
-                - component: building
-                  probabilities:
-                      entrance_after_building:
-                          after: building
-                          probability: 1.0
 
         staircase:
             # e.g. 123 East 45th St, Staircase C, NYC
             staircase_after_house_number:
                 after: house_number
                 probability: 1.0
-            conditional:
-                - component: entrance
-                  probabilities:
-                      # default: 0.1
-                      staircase_after_entrance:
-                          after: entrance
-                          probability: 1.0
-                - component: building
-                  probabilities:
-                      # default: 0.1
-                      staircase_after_building:
-                          after: building
-                          probability: 1.0
 
         level:
             # e.g. Calle Ruiz de Alarcón 23 piso 3
@@ -778,11 +900,6 @@ countries:
                   probabilities:
                       level_after_entrance:
                           after: entrance
-                          probability: 1.0
-                - component: building
-                  probabilities:
-                      level_after_building:
-                          after: building
                           probability: 1.0
 
         unit:
@@ -807,11 +924,6 @@ countries:
                   probabilities:
                       unit_after_entrance:
                           after: entrance
-                          probability: 1.0
-                - component: building
-                  probabilities:
-                      unit_after_building:
-                          after: building
                           probability: 1.0
 
         po_box:
@@ -876,7 +988,7 @@ countries:
     former_ussr:
         alt_formats: &former_ussr_alt_formats
             ussr_format1:
-                format: &ussr_format1 |
+                format: |
                     {{{country}}}
                     {{{postcode}}}
                     {{{city}}}
@@ -890,7 +1002,7 @@ countries:
                     {{{attention}}}
                 probability: 0.1
             ussr_format2:
-                format: &ussr_format2 |
+                format: |
                     {{{country}}}
                     {{{postcode}}}
                     {{{city_district}}}
