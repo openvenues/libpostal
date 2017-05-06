@@ -13,10 +13,15 @@ class Floor(NumberedComponent):
     # When we don't know the number of floors, use a Zipfian distribution
     # to choose randomly between 1 and max_floors with 1 being much more
     # likely than 2, etc.
-    max_floors = 10
+    max_floors_common = 10
+    max_floors = 130
     max_basements = 2
-    numbered_floors = range(max_floors + 1) + range(-1, -max_basements - 1, -1)
-    floor_probs = zipfian_distribution(len(numbered_floors), 0.75)
+    numbered_floors_common = range(max_floors_common + 1) + range(-1, -max_basements - 1, -1)
+    common_floor_probs = zipfian_distribution(len(numbered_floors_common), 0.75)
+    numbered_floors_rare = range(max_floors_common + 1, max_floors + 1)
+    rare_floor_probs = zipfian_distribution(len(numbered_floors_rare), 1.0)
+    numbered_floors = numbered_floors_common + numbered_floors_rare
+    floor_probs = [0.9 * p for p in common_floor_probs] + [0.1 * p for p in rare_floor_probs]
     floor_probs_cdf = cdf(floor_probs)
 
     # For use with letters e.g. A0 is probably not as common
@@ -72,7 +77,7 @@ class Floor(NumberedComponent):
             else:
                 return safe_decode(number)
         elif num_type == cls.HYPHENATED_NUMBER:
-            number2 = number + sample_floors_range(1, cls.max_floors)
+            number2 = number + cls.sample_floors_range(1, cls.max_floors)
             return u'{}-{}'.format(number, number2)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
