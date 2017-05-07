@@ -450,7 +450,7 @@ class OSMSubdivisionReverseGeocoder(OSMReverseGeocoder):
     cache_size = 10000
     simplify_polygons = False
     polygon_reader = OSMSubdivisionPolygonReader
-    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['landuse', 'place', 'amenity'])
+    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['aeroway', 'amenity', 'historic', 'landuse', 'leisure', 'office', 'place', 'shop', 'tourism'])
 
 
 class OSMBuildingReverseGeocoder(OSMReverseGeocoder):
