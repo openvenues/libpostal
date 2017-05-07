@@ -117,6 +117,7 @@ class AddressComponents(object):
 
     LOCALITY_COMPONENTS = OrderedDict.fromkeys((
         AddressFormatter.SUBDIVISION,
+        AddressFormatter.LOCALITY,
         AddressFormatter.METRO_STATION,
     ))
 
@@ -1002,6 +1003,10 @@ class AddressComponents(object):
 
     unit_type_regexes = {}
 
+    language_number_phrases = {}
+
+    numeric_pattern = '(?:[\d]+|[a-z]*[\d]*\-?[\d]+|[\d]+\-?[\d]*[a-z]*|[a-z])'
+
     lang_phrase_dictionaries = [lang for lang, dictionary_type in six.iterkeys(address_phrase_dictionaries.phrases)]
 
     for lang in lang_phrase_dictionaries:
@@ -1009,8 +1014,12 @@ class AddressComponents(object):
         numbered_units = address_phrase_dictionaries.phrases.get((lang, 'unit_types_numbered'), [])
 
         number_phrases = [safe_encode(p) for p in itertools.chain(*numbers)]
-        unit_phrases = [safe_encode(p) for p in itertools.chain(*numbered_units) if len(p) > 2]
-        pattern = re.compile(r'\s*\b(?:{})[\.?\s]\s*(?:{})?\s*(?:[\d]+|[a-z]|[a-z][\d]*\-?[\d]+|[\d]+\-?[\d]*[a-z])\s*$'.format(safe_encode('|').join(unit_phrases), safe_encode('|').join(number_phrases)),
+        language_number_phrases[lang] = number_phrases
+        unit_phrases = [safe_encode(p) for p in itertools.chain(*numbered_units) if len(p) > 2 and p not in house_number_phrases]
+
+        phrase_number_pattern = r'\s*\b(?:{})[\.\s]\s*(?:{})?[\s\.]?\s*{}\s*$'
+
+        pattern = re.compile(phrase_number_pattern.format(safe_encode('|').join(unit_phrases), safe_encode('|').join(number_phrases), safe_encode(numeric_pattern)),
                              re.I | re.UNICODE)
         unit_type_regexes[lang] = pattern
 
@@ -1019,11 +1028,36 @@ class AddressComponents(object):
     english_numbered_route_regex = re.compile('highway|route')
     english_numbered_route_phrases = set([safe_encode(p) for p in itertools.chain(*[streets for streets in english_streets if english_numbered_route_regex.search(streets[0])])])
     english_street_phrases = [safe_encode(p) for p in itertools.chain(*(english_streets + english_directionals)) if safe_encode(p) not in english_numbered_route_phrases]
-    english_numbered_unit_regex = re.compile('^(.+ (?:{}))\s*#\s*(?:[\d]+|[a-z]|[a-z][\d]*\-?[\d]+|[\d]+\-?[\d]*[a-z])\s*$'.format(safe_encode('|').join(english_street_phrases)), re.I)
+    english_numbered_unit_suffix_regex = re.compile('^(.+ (?:{}))\s*#\s*\\b(?:[\d]+|[a-z]|[a-z]\s*[\d]*\-?[\d]+|[\d]+\-?[\d]*\s*[a-z]|[\d]+\-[\d]+)\\b\s*$'.format(safe_encode('|').join(english_street_phrases)), re.I)
+    english_unit_suffix_regex = re.compile('^(.+ (?:{}))\s*\\b(?:[\d]+|[a-z]|[a-z][\d]*\-?[\d]+|[\d]+\-?[\d]*\s*[a-z]|[\d]+\-[\d]+)\\b\s*$'.format(safe_encode('|').join(english_street_phrases)), re.I)
+
+    english_block_phrases = []
+    english_lot_phrases = []
+    english_number_phrases = language_number_phrases.get('en', [])
+    for p in address_phrase_dictionaries.phrases.get(('en', 'qualifiers')):
+        if p[0] == 'block':
+            english_block_phrases = p
+            break
+    else:
+        english_block_phrases = ['block', 'blk', 'bl', 'blck']
+
+    for p in address_phrase_dictionaries.phrases.get(('en', 'unit_types_numbered')):
+        if p[0] == 'lot':
+            english_lot_phrases = p
+            break
+    else:
+        english_lot_phrases = ['lot', 'lt']
+
+    english_block_regex = re.compile('(\\b(?:{})\\b[\.\s]\s*(?:{}[\.\s])?\s*{}\\b)'.format(safe_encode('|').join(english_block_phrases), safe_encode('|').join(english_number_phrases), numeric_pattern), re.I)
+
+    english_lot_regex = re.compile('(\\b(?:{})\\b[\.\s]\s*(?:{}[\.\s])?\s*{}\\b)'.format(safe_encode('|').join(english_lot_phrases), safe_encode('|').join(english_number_phrases), numeric_pattern), re.I)
 
     @classmethod
     def strip_english_unit_number_suffix(cls, value):
-        match = cls.english_numbered_unit_regex.match(value)
+        match = cls.english_numbered_unit_suffix_regex.match(value)
+        if match:
+            return match.group(1)
+        match = cls.english_unit_suffix_regex.match(value)
         if match:
             return match.group(1)
         return value
@@ -1035,6 +1069,16 @@ class AddressComponents(object):
         if language == ENGLISH:
             value = cls.strip_english_unit_number_suffix(value)
         return value
+
+    @classmethod
+    def extract_english_lot_block_pattern(cls, value):
+        block_match = cls.english_block_regex.search(value)
+        lot_match = cls.english_lot_regex.search(value)
+
+        if not block_match and not lot_match:
+            return None, None
+
+        return block_match.group(1), lot_match.group(1)
 
     @classmethod
     def abbreviated_state(cls, state, country, language):
