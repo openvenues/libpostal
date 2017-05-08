@@ -1890,6 +1890,12 @@ countries:
                     - filename: gudermes.csv
                     - filename: kurchaloy.csv
 
+            khm:
+                add:
+                    state: Ханты-Мансийский автономный округ - Югра
+                files:
+                    - filename: regionwide.csv
+
             ko:
                 add:
                     state: Республика Коми
@@ -1902,11 +1908,23 @@ countries:
                 files:
                     - filename: statewide.csv
 
+            nen:
+                add:
+                    state: Ненецкий автономный округ
+                files:
+                    - filename: regionwide.csv
+
             nvs:
                 add:
                     state: Новосибирская область
                 files:
                     - filename: statewide.csv
+
+            tyu:
+                add:
+                    state: Тюменская область
+                files:
+                    - filename: regionwide.csv
 
             vgg:
                 add:
@@ -1916,6 +1934,12 @@ countries:
                       ignore_fields_containing:
                           postcode:
                               - "^[0-9]{1,5}$"
+
+            yan:
+                add:
+                    state: Ямало-Ненецкий автономный округ
+                files:
+                    - filename: regionwide.csv
 
     se:
         files:
