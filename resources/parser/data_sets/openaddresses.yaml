@@ -1965,6 +1965,10 @@ countries:
             - filename: countrywide.csv
               add_osm_boundaries: true
 
+    si:
+        files:
+            - filename: countrywide.csv
+
     sk:
         files:
             - filename: countrywide.csv
