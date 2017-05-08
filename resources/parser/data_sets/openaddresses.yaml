@@ -78,6 +78,13 @@ countries:
               add_osm_boundaries: true
               city_replacements:
                   city: Buenos Aires
+        subdirs:
+            m:
+                files:
+                    - filename: mendoza.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Mendoza
 
     at:
         language: de
