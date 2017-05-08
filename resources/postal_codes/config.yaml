@@ -148,6 +148,13 @@ countries:
     im:
         validate_postcode: true
 
+    # India
+    in:
+        regex_replacements:
+            - regex: "([\\d]{3})([\\d]{3})"
+              replacement: "\\1 \\2"
+              probability: 0.5
+
     # Iceland
     is: *use_country_code_seldomly
 
