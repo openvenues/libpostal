@@ -4,8 +4,8 @@ apartment|apt|ap|aprt|aptmnt
 barbecue|bbq|barbeque
 berth|brth
 boatshed|btsd
-building|bdg|bldg|blg
 block|blk|bl|blck
+building|bdg|bldg|blg
 bungalow|bnglw|bongalow|bunglow|bungalo|bngw
 cage
 caravan|cvan
@@ -28,7 +28,7 @@ kiosk|ksk
 lease|lse
 lobby|lby|lbby
 location|loc|locn|loctn
-lot
+lot|lt
 maisonette|msnt
 marine berth|mb|mbth
 office|ofc|off|o|offc
