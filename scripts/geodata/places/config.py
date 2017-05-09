@@ -23,6 +23,7 @@ PLACE_CONFIG_FILE = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
 
 class PlaceConfig(object):
     ADMIN_COMPONENTS = {
+        AddressFormatter.LOCALITY,
         AddressFormatter.SUBURB,
         AddressFormatter.CITY_DISTRICT,
         AddressFormatter.CITY,
@@ -208,6 +209,19 @@ class PlaceConfig(object):
                 new_components[component] = value
 
         self.drop_invalid_components(new_components, country, original_bitset=original_bitset)
+
+        if AddressFormatter.LOCALITY in new_components:
+            replace_city_with_locality_prob = float(self.get_property(('replace_city_with_locality_probability',), country=country, default=0.0))
+            locality_and_city_prob = float(self.get_property(('locality_and_city_probability',), country=country, default=0.0))
+
+            locality = new_components[AddressFormatter.LOCALITY]
+
+            if random.random() > locality_and_city_prob:
+                new_components.pop(AddressFormatter.LOCALITY, None)
+
+            if random.random() < replace_city_with_locality_prob:
+                new_components.pop(AddressFormatter.LOCALITY, None)
+                new_components[AddressFormatter.CITY] = locality
 
         if AddressFormatter.CITY not in new_components and not any((c in city_replacements for c in new_components)):
             city = components.get(AddressFormatter.CITY)
