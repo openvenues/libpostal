@@ -531,6 +531,10 @@ countries:
                           state_district: Bruce County
                     - filename: chatham_kent.csv
                     - filename: city_of_ajax.csv
+                    - filename: city_of_barrie.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Barrie
                     - filename: city_of_brampton.csv
                     - filename: city_of_burlington.csv
                       add_osm_boundaries: true
