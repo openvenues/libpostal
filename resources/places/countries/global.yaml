@@ -4,6 +4,8 @@
 
 global:
     city_replacements: []
+    replace_city_with_locality_probability: 0.9
+    locality_and_city_probability: 0.0
     # Probability of including individual components
     components:
         suburb:
@@ -15,6 +17,8 @@ global:
             probability: 0.05
         city_district:
             probability: 0.2
+        locality:
+            probability: 1.0
         city:
             probability: 1.0
         island:
@@ -187,6 +191,8 @@ countries:
             - suburb
             - city_district
             - state_district
+        replace_city_with_locality_probability: 0.2
+        locality_and_city_probability: 0.8
         components:
             state_district:
                 probability: 0.15
@@ -222,6 +228,8 @@ countries:
             - suburb
             - city_district
             - state_district
+        replace_city_with_locality_probability: 0.2
+        locality_and_city_probability: 0.8
         components:
             city:
                 probability: 0.95
@@ -235,6 +243,8 @@ countries:
 
     # India
     in:
+        replace_city_with_locality_probability: 0.2
+        locality_and_city_probability: 0.2
         components:
             suburb:
                 probability: 0.4

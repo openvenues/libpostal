@@ -192,7 +192,7 @@ NAME_DICTIONARIES = STREET_TYPES_DICTIONARIES + ('academic_degrees',
 
 QUALIFIERS_DICTIONARY = 'qualifiers'
 
-HOUSE_NUMBER_DICTIONARIES = ('house_number', 'no_number')
+HOUSE_NUMBER_DICTIONARIES = ('house_numbers', 'number', 'no_number')
 
 POSTCODE_DICTIONARIES = ('postcode',)
 
@@ -246,6 +246,7 @@ def create_gazetteer(*dictionaries):
     return g
 
 
+house_number_gazetteer = create_gazetteer(*HOUSE_NUMBER_DICTIONARIES)
 street_types_gazetteer = create_gazetteer(*STREET_TYPES_DICTIONARIES)
 street_types_only_gazetteer = create_gazetteer(*STREET_TYPES_ONLY_DICTIONARIES)
 qualifiers_gazetteer = create_gazetteer(QUALIFIERS_DICTIONARY)
