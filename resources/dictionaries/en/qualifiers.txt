@@ -1,3 +1,4 @@
+barangay|brgy|bgy
 block|blk|bl|blck
 quadrant|qd|quad
 section|sec|sect|sxn
