@@ -1002,10 +1002,9 @@ class AddressComponents(object):
                 address_components[AddressFormatter.CITY] = match.group(1)
 
     unit_type_regexes = {}
-
     language_number_phrases = {}
 
-    numeric_pattern = '(?:[\d]+|[a-z]*[\d]*\-?[\d]+|[\d]+\-?[\d]*[a-z]*|[a-z])'
+    numeric_pattern = '(?:[\d]+|[a-z]*[\d]*[\-\./]?[\d]+|[\d]+[\-\./]?[\d]*[a-z]*|[a-z])'
 
     lang_phrase_dictionaries = [lang for lang, dictionary_type in six.iterkeys(address_phrase_dictionaries.phrases)]
 
@@ -1579,6 +1578,74 @@ class AddressComponents(object):
             if len(components) > 1:
                 for component in components[1:]:
                     address_components.pop(component, None)
+
+    block_words = {u'block', u'blok', u'bloc', u'bloco', u'bloque', u'блок', u'blokea', u'blocco'}
+
+    @classmethod
+    def is_valid_house_number(cls, house_number, country=None):
+        if not house_number:
+            return False
+
+        house_number = house_number.strip()
+        if not house_number:
+            return False
+
+        if house_number.isdigit():
+            return True
+
+        possible_languages = get_country_languages(country).keys()
+
+        norm_tokens = normalized_tokens(house_number, string_options=NORMALIZE_STRING_LOWERCASE,
+                                        token_options=TOKEN_OPTIONS_DROP_PERIODS, strip_parentheticals=False)
+        last_phrase_was_block = False
+        for t, c, length, data in house_number_gazetteer.filter(norm_tokens):
+            if c == token_types.NUMERIC:
+                prev_class = token_types.WHITESPACE
+                for ch in t:
+                    if ch.isdigit():
+                        current_class = token_types.NUMERIC
+                    elif ch.isalpha():
+                        current_class = token_types.WORD
+                    elif ch == '-':
+                        current_class = token_types.HYPHEN
+                    elif ch == ',':
+                        current_class = token_types.COMMA
+                    elif ch == '.':
+                        current_class = token_tyeps.PERIOD
+                    else:
+                        current_class = token_types.OTHER
+
+                    if current_class == token_types.WORD and prev_class == token_types.WORD:
+                        return False
+
+                    prev_class = current_class
+            elif c == token_types.WORD:
+                max_len = 1 if not last_phrase_was_block else 2
+                for sub in t.split(u'-'):
+                    if len(sub) > max_len:
+                        return False
+            elif c == token_types.PHRASE:
+                valid_phrase = False
+                last_phrase_was_block = False
+                for d in data:
+                    lang, dictionary, _, canonical = safe_decode(d).split(u'|')
+                    if canonical in cls.block_words:
+                        last_phrase_was_block = True
+                    if lang in possible_languages:
+                        valid_phrase = True
+                        break
+                if not valid_phrase:
+                    max_len = 1 if not last_phrase_was_block else 2
+                    for t_i, c_i in t:
+                        for sub in t_i.split(u'-'):
+                            if len(sub) > max_len:
+                                return False
+            elif c not in (token_types.IDEOGRAPHIC_NUMBER, token_types.SLASH, token_types.HYPHEN, token_types.POUND, token_types.COMMA, token_types.PERIOD):
+                return False
+
+            if c != token_types.PHRASE:
+                last_phrase_was_block = False
+        return True
 
     @classmethod
     def cleaned_name(cls, name, first_comma_delimited_phrase=False):
