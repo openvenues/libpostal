@@ -65,6 +65,7 @@ community center|communitycentre|communitycenter|community centre
 community|cmnty|cmty
 complex
 concert hall
+condominiums|condos|conds
 conservatory
 convalescent center|convalescent|convalescent centre|convalescent home|convalescent hospital
 correctional facility
