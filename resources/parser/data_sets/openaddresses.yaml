@@ -4673,10 +4673,6 @@ countries:
                       city_replacements:
                           state_district: Freestone County
                     - filename: galveston.csv
-                    - filename: gaines.csv
-                      add_osm_boundaries: true
-                      city_replacements:
-                          state_district: Gaines County
                     - filename: gillespie.csv
                       add_osm_boundaries: true
                       city_replacements:
