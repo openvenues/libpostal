@@ -5,7 +5,7 @@ import random
 import six
 import yaml
 
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 from geodata.addresses.dependencies import ComponentDependencies
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
@@ -144,7 +144,7 @@ class PlaceConfig(object):
                 component_bitset ^= ComponentDependencies.component_bit_values[c]
 
     def city_replacements(self, country):
-        return set(self.get_property(('city_replacements', ), country=country))
+        return OrderedDict.fromkeys(self.get_property(('city_replacements', ), country=country))
 
     def dropout_components(self, components, boundaries=(), country=None, population=None, unambiguous_city=False):
         containing_ids = set()
@@ -170,14 +170,14 @@ class PlaceConfig(object):
 
         new_components = components.copy()
 
-        city_replacements = set()
+        city_replacements = OrderedDict()
         if AddressFormatter.CITY not in components:
             city_replacements = self.city_replacements(country)
 
         for component in admin_components:
             include = self.include_component(component, containing_ids, country=country, population=population, unambiguous_city=unambiguous_city)
 
-            if not include and component not in city_replacements:
+            if not include:
                 # Note: this check is for cities that have the same name as their admin
                 # areas e.g. Luxembourg, Luxembourg. In cases like this, if we were to drop
                 # city, we don't want to include country on its own. This should help the parser
@@ -208,6 +208,17 @@ class PlaceConfig(object):
                 new_components[component] = value
 
         self.drop_invalid_components(new_components, country, original_bitset=original_bitset)
+
+        if AddressFormatter.CITY not in new_components and not any((c in city_replacements for c in new_components)):
+            city = components.get(AddressFormatter.CITY)
+            if city:
+                new_components[AddressFormatter.CITY] = city
+            else:
+                for c in city_replacements.keys():
+                    val = components.get(c)
+                    if val:
+                        new_components[c] = val
+                        break
 
         return new_components
 
