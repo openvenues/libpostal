@@ -352,6 +352,7 @@ countries:
 
     # Mexico
     mx:
+        locality_and_city_probability: 0.4
         city_replacements:
             - suburb
             - city_district
