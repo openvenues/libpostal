@@ -1,4 +1,5 @@
 bâtiment|batiment|bat|bât|bt
+bloc|bl
 immeuble|imm
 maison
 villa|vla

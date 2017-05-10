@@ -2,7 +2,6 @@ agglomeratión|agglomeration|agl|agglom
 arrondissement|arrdt
 aire
 aires
-bloc
 bourg|brg
 canton|con
 cité|cite
