@@ -50,6 +50,14 @@ countries:
         suffixes:
             - city
 
+    id:
+        prefixes:
+            - kampung
+            - kampong
+        suffixes:
+            - kampung
+            - kampong
+
     ie:
         suffixes:
             - city
@@ -59,8 +67,22 @@ countries:
         prefixes:
             - district of
 
+    my:
+        prefixes:
+            - kampung
+            - kampong
+        suffixes:
+            - kampung
+            - kampong
+
     nz:
         prefixes:
             - district of
         suffixes:
             - city
+
+    ph:
+        prefixes:
+            - barangay
+        suffixes:
+            - barangay

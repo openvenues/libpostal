@@ -1,0 +1,10 @@
+# Prefixes which can be stripped to normalize a place name
+# Note these will be stripped off the front at random, not every time
+prefixes:
+    - kampung
+    - kampong
+
+# Suffixes which can be stripped to normalize a place name
+suffixes:
+    - kampung
+    - kampong
