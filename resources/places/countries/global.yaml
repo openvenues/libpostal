@@ -134,6 +134,10 @@ countries:
     # Bahamas
     bs: *add_west_indies
 
+    # Belarus
+    by:
+        locality_and_city_probability: 0.2
+
     # Canada
     ca:
         city_replacements:
