@@ -26,3 +26,4 @@ shosseynaya
 tupik|tup
 улица|ул
 ulitsa|ulica|ul
+мост|м
