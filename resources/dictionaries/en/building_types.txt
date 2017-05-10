@@ -3,6 +3,7 @@ annexe
 building|bdg|bldg|blg
 bungalow|bongalow|bunglow|bungalo|bngw|bnglw
 cabin|cabn
+condominium|condo|cond
 cottage|ctg|ctge
 duplex|dup|dupl
 factory|fcty|fty|fy
