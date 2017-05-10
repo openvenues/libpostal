@@ -1,2 +1,6 @@
 дом|д
 dom|d
+корпус|к
+korpus|k
+строение|стр
+stroenie|str
