@@ -15,6 +15,10 @@
 # How likely we are to generate a component at random (on its own or conditional on other components)
 
 components:
+    building:
+        null_probability: 0.995
+        alphanumeric_probability: 0.005
+
     entrance:
         null_probability: 0.9995
         alphanumeric_probability: 0.0005
@@ -868,6 +872,74 @@ cardinal_directions:
         - alternative: *west
           probability: 0.25
 
+# Building
+# ========
+# For strings like "Building A"
+
+
+buildings:
+    building: &building
+        canonical: building
+        abbreviated: bldg
+        sample: true
+        canonical_probability: 0.4
+        abbreviated: 0.4
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    condominium: &condominium
+        canonical: condominium
+        abbreviated: condo
+        sample: true
+        canonical_probability: 0.4
+        abbreviated: 0.4
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    tower: &tower
+        canonical: tower
+        abbreviated: twr
+        sample: true
+        canonical_probability: 0.4
+        abbreviated: 0.4
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Building 1, Bldg A, etc.
+    alphanumeric: &building_alphanumeric
+        default: *building
+        probability: 0.7
+        alternatives:
+            - alternative: *tower
+              probability: 0.2
+            - alternative: *condominium
+              probability: 0.1
+        numeric_probability: 0.05 # e.g. Building 1
+        alpha_probability: 0.85 # e.g. Bldg A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+        hyphenated_number_probability: 0.03 # e.g. 11-10
+        decimal_number_probability: 0.02 # e.g. 1.10
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+            hyphen_probability: 0.2
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+            hyphen_probability: 0.2
+
+        hyphenated_number:
+            range_probability: 0.5
+            # direction of the range, not the phrase
+            direction: right
+            direction_probability: 0.6
+            alpha_plus_numeric_probability: 0.1
+            alpha_plus_numeric_whitespace_probability: 0.1
+            numeric_plus_alpha_probability: 0.1
+            numeric_plus_alpha_whitespace_probability: 0.1
+
 # Entrance
 # ========
 # For deriving strings like "North Entrance"
@@ -1240,6 +1312,10 @@ units:
             # direction of the range, not the phrase
             direction: right
             direction_probability: 0.6
+            alpha_plus_numeric_probability: 0.1
+            alpha_plus_numeric_whitespace_probability: 0.1
+            numeric_plus_alpha_probability: 0.1
+            numeric_plus_alpha_whitespace_probability: 0.1
 
         # Separate random probability for adding directions like 2L, 2R, etc.
         add_direction: true
