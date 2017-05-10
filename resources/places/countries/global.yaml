@@ -226,6 +226,7 @@ countries:
 
     # Indonesia
     id:
+        locality_and_city_probability: 0.4
         components:
             island:
                 probability: 0.4
