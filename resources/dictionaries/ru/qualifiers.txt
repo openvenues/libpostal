@@ -8,24 +8,73 @@ derevnya|der|d
 gmina|gm
 квартал|кварт|кв|кв-л
 kvartal|kvart|kv|kv-l
-микрорайон
-mikrorayon
+край|кр|краи
+krai|kr
+микрорайон|мкр-н|мкр|мкрн|м / н|м-н|м / р-н|мрн|м-р
+mikrorayon|mkr-n|mkr|mkrn|m / n|m-n|m / r-n|mrn|m-r
 област|обл
 oblast|obl
 посблок|пос
 posblok
-остров|о
-ostrov|o
-город|г
-gorod|g
-городской посёлок |гп
-gorodskoy posolok|gp
+остров|о|о-в
+ostrov|o|o-v
+город|г|гор
+gorod|g|gor
+городской посёлок|г.п.|гп|г.п|г п|городскои поселок
+gorodskoy posyolok|g.p.|gp|g.p|g p|gorodskoy poselok
+округ|окр
+okrug|okr
+городской округ|гор.окр.|гор окр|гор.окр|городскои округ|городок
+gorodskoy okrug|gor.okr.|gor okr|gor.okr|gorodok
 раион|р-н
-raion|r-n
-сельсовет
+raion|r-n|rayon|rajon
 сельский совет|с / с|сельсовет|сельскии совет
 sel'skiy sovet|s / s|sel'sovet|selskiy sovet|selsovet
-посёлок|поселок|пос
-posolok|pos
-посёлок городско́го ти́па|пгт|посёлок городского типа|поселок городского типа
-posolok gorodskógo típa|pgt|posolok gorodskogo tipa
+посёлок|поселок|пос|п|посёлок сельского типа
+posyolok|pos|p|posyolok selskogo tipa|poselok|poselok selskogo tipa
+посёлок городско́го ти́па|п.г.т.|посёлок городского типа|поселок городского типа|пгт|п.г.т|п г т
+posyolok gorodskógo típa|p.g.t.|posyolok gorodskogo tipa|pgt|p.g.t|p g t|poselok gorodskógo típa|poselok gorodskogo tipa
+рабочий посёлок|р.п.|рп|р.п|р п|рабочии поселок
+rabochy posyolok|r.p.|rp|r.p|r p|rabochy poselok
+курортный посёлок|к.п.|кп|к.п|к п|курортныи поселок
+kurortny posyolok|k.p.|kp|k.p|k p|kurortny poselok
+дачный посёлок|д.п.|дп|д.п|д п|дачныи поселок
+dachny posyolok|d.p.|dp|d.p|d p|dachny poselok
+населённый пункт|н.п.|нп|н.п|н п|населенныи пункт
+nаselennyj punkt|n.p.|np|n.p|n p
+се́льское поселе́ние|сп|сельское поселение
+selskoye poseleniye|sp|selskoe poselenie
+муниципальный район|мун р-н|мун.р-н|муниципальныи раион
+munitsipalnyy rayon|munitsipalʹnyy rayon|municipalʹnyj rajon|municipalnyj rajon
+городское поселение|г.п.|гп|г.п
+gorodskoye poseleniye|g.p.|gp|gorodskoe poselenie
+аул
+aul
+село|с
+selo|s
+хутор|х
+khutor|kh
+посёлок при станции|п / ст|п. ст.|п.ст.|п ст|п.ст|пст|поселок при станции
+posyolok pri stantsii|p. st.|p.st.|p st|p.st|pst|poselok pri stantsii
+станция|ст
+stanitsya|st
+железнодорожная станция|ж / д ст|жд ст
+zheleznodorozhnaya stantsiya|z / d st|zd st
+слобода|сл
+sloboda|sl
+станица|ст-ца|ст-ца
+stanitsa|st-tsa|sttsa
+зимовье|зим
+zimovye|zim|zimovʹye
+кишлак|к
+kishlak|k
+сомон|смн
+somon|smn
+волость|вл
+volost|vl
+местечко|м
+mestechko|m
+улус|у
+ulus|u
+разъезд|рзд
+raz'yezd|rzd|razyezd
