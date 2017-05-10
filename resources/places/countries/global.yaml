@@ -254,13 +254,13 @@ countries:
         locality_and_city_probability: 0.2
         components:
             suburb:
-                probability: 0.4
+                probability: 0.5
             city_district:
                 probability: 0.4
             state_district:
                 probability: 0.3
             state:
-                probability: 0.8
+                probability: 0.7
                 dependencies: []
 
     # Italy
