@@ -883,7 +883,7 @@ buildings:
         abbreviated: bldg
         sample: true
         canonical_probability: 0.4
-        abbreviated: 0.4
+        abbreviated_probability: 0.4
         sample_probability: 0.2
         numeric:
             direction: left
@@ -892,7 +892,7 @@ buildings:
         abbreviated: condo
         sample: true
         canonical_probability: 0.4
-        abbreviated: 0.4
+        abbreviated_probability: 0.4
         sample_probability: 0.2
         numeric:
             direction: left
@@ -901,7 +901,7 @@ buildings:
         abbreviated: twr
         sample: true
         canonical_probability: 0.4
-        abbreviated: 0.4
+        abbreviated_probability: 0.4
         sample_probability: 0.2
         numeric:
             direction: left
@@ -1195,7 +1195,7 @@ units:
             canonical: apartments
             abbreviated: apts
             canonical_probability: 0.2
-            abbreviated: 0.8
+            abbreviated_probability: 0.8
         numeric:
             direction: left
             # Apt #1 and Apt No. 1
@@ -1218,23 +1218,6 @@ units:
             # Flat #1 and Flat No. 1
             add_number_phrase: true
             add_number_phrase_probability: 0.4
-    condominium: &condominium
-        canonical: condominium
-        abbreviated: condo
-        sample: true
-        canonical_probability: 0.05
-        abbreviated_probability: 0.85
-        sample_probability: 0.1
-        plural:
-            canonical: condominiums
-            abbreviated: condos
-            canonical_probability: 0.1
-            abbreviated_probability: 0.9
-        numeric:
-            direction: left
-            # Condo #1 and Condo No. 1
-            add_number_phrase: true
-            add_number_phrase_probability: 0.1
     lot: &lot
         canonical: lot
         sample: true
@@ -1285,12 +1268,10 @@ units:
             - alternative: *number
               probability: 0.2
             - alternative: *lot
-              probability: 0.02
+              probability: 0.03
             - alternative: *door
               probability: 0.01
             - alternative: *penthouse_numeric
-              probability: 0.01
-            - alternative: *condominium
               probability: 0.01
             - alternative: *apartment
               probability: 0.1
