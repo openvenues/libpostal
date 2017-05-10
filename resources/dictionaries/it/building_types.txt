@@ -1,3 +1,4 @@
+blocco|bl.o|blo|blo
 casa|c|ca|ca'
 casetto|c.etto
 edificio|edif.o|edifo

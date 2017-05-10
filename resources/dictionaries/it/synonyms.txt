@@ -15,6 +15,7 @@ basso|b.so|bso
 basse|b.se|bse
 bealera|b.ra|bra
 bealere|b.re|bre
+blocchi|bl.i|bli|bli
 calvario|calv.o|calvo
 canale|can.le|canle
 canali|can.li|canli
