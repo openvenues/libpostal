@@ -1,7 +1,5 @@
 агрогородок|аг
 agrogorodok|ag
-блок
-blok
 деревня|дер|д
 derevnya|der|d
 гмина|гм
