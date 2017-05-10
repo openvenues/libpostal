@@ -243,7 +243,6 @@ countries:
 
     # India
     in:
-        replace_city_with_locality_probability: 0.2
         locality_and_city_probability: 0.2
         components:
             suburb:
