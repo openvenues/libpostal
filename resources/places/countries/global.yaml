@@ -175,6 +175,10 @@ countries:
                     - lt: 100000
                       probability: 0.4
 
+    # Chile
+    cl:
+        locality_and_city_probability: 0.4
+
     # Dominica
     dm: *add_west_indies
 
