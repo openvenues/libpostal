@@ -11,5 +11,5 @@ edificio|edifc|edfc|edif
 estancia|estanc|est
 local|loc|lc
 residencial|resid|res
-torre|to
+torre|to|tor
 vivienda|vvda

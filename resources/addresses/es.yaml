@@ -100,7 +100,7 @@ buildings:
         abbreviated: edif
         sample: true
         canonical_probability: 0.3
-        abbreviated: 0.4
+        abbreviated_probability: 0.4
         sample_probability: 0.3
         numeric:
             direction: left
@@ -109,7 +109,7 @@ buildings:
         abbreviated: cond
         sample: true
         canonical_probability: 0.5
-        abbreviated: 0.4
+        abbreviated_probability: 0.4
         sample_probability: 0.1
         numeric:
             direction: left
@@ -118,7 +118,7 @@ buildings:
         abbreviated: compj
         sample: true
         canonical_probability: 0.5
-        abbreviated: 0.3
+        abbreviated_probability: 0.3
         sample_probability: 0.2
         numeric:
             direction: left
@@ -127,15 +127,16 @@ buildings:
         abbreviated: blq
         sample: true
         canonical_probability: 0.7
-        abbreviated: 0.2
+        abbreviated_probability: 0.2
         sample_probability: 0.1
         numeric:
             direction: left
-
     torre: &torre
         canonical: torre
+        abbreviated: to
         sample: true
-        canonical_probability: 0.8
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
         sample_probability: 0.2
         numeric:
             direction: left
