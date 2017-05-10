@@ -4,19 +4,23 @@
 # as well as any other country-specific norms)
 
 components:
-    level:
-        # If no floor number is specified
-        null_probability: 0.6
-        alphanumeric_probability: 0.35
-        standalone_probability: 0.05
+    building:
+        null_probability: 0.995
+        alphanumeric_probability: 0.005
+
+    entrance:
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
 
     staircase:
         null_probability: 0.99
         alphanumeric_probability: 0.01
 
-    entrance:
-        null_probability: 0.999
-        alphanumeric_probability: 0.001
+    level:
+        # If no floor number is specified
+        null_probability: 0.6
+        alphanumeric_probability: 0.35
+        standalone_probability: 0.05
 
     unit:
         # If no unit number is specified
@@ -89,6 +93,88 @@ house_numbers:
 
     alphanumeric_phrase_probability: 0.1
     no_number_probability: 0.1 # With this probability, use sin número if no house_number is specified
+
+buildings:
+    edificio: &edificio
+        canonical: edificio
+        abbreviated: edif
+        sample: true
+        canonical_probability: 0.3
+        abbreviated: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    condominio: &condominio
+        canonical: condominio
+        abbreviated: cond
+        sample: true
+        canonical_probability: 0.5
+        abbreviated: 0.4
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    complejo: &complejo
+        canonical: complejo
+        abbreviated: compj
+        sample: true
+        canonical_probability: 0.5
+        abbreviated: 0.3
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    bloque: &bloque
+        canonical: bloque
+        abbreviated: blq
+        sample: true
+        canonical_probability: 0.7
+        abbreviated: 0.2
+        sample_probability: 0.1
+        numeric:
+            direction: left
+
+    torre: &torre
+        canonical: torre
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Edificio 1, Edif A, etc.
+    alphanumeric: &building_alphanumeric
+        default: *edificio
+        probability: 0.7
+        alternatives:
+            - alternative: *torre
+              probability: 0.1
+            - alternative: *condominio
+              probability: 0.075
+            - alternative: *bloque
+              probability: 0.075
+            - alternative: *complejo
+              probability: 0.05
+        numeric_probability: 0.075 # e.g. Edificio 1
+        alpha_probability: 0.85 # e.g. Edif A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+        hyphenated_number_probability: 0.0125 # e.g. 11-10
+        decimal_number_probability: 0.0125 # e.g. 1.10
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        hyphenated_number:
+            range_probability: 0.5
+            # direction of the range, not the phrase
+            direction: right
+            direction_probability: 0.6
+            alpha_plus_numeric_probability: 0.1
+            alpha_plus_numeric_whitespace_probability: 0.1
+            numeric_plus_alpha_probability: 0.1
+            numeric_plus_alpha_whitespace_probability: 0.1
 
 levels:
     # Everywhere except Spain
