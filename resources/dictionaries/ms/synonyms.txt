@@ -1,6 +1,5 @@
 timur|timor
 air|ayer
-kampung|kampong|kg
 itam|hitam
 tanjung|tanjong
 sri|seri
