@@ -5,6 +5,14 @@
 whitespace: false
 
 components:
+    building:
+        null_probability: 0.9
+        alphanumeric_probability: 0.1
+
+    entrance:
+        null_probability: 0.95
+        alphanumeric_probability: 0.05
+
     level:
         null_probability: 0.85 # Probability of doing nothing if no floor number is specified
         alphanumeric_probability: 0.15
@@ -28,6 +36,92 @@ house_numbers:
     alphanumeric:
         default: *hao
     alphanumeric_phrase_probability: 0.6
+
+
+buildings:
+    dong: &dong
+        canonical: dong
+        numeric_affix:
+            affix: -dong
+            direction: right
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+            digits:
+                ascii_probability: 0.6
+                unicode_full_width_probability: 0.3
+                spellout_probability: 0.1
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    alphanumeric:
+        default: *dong
+        numeric_probability: 1.0
+
+entrances:
+    danyuan: &danyuan
+        canonical: dānyuán
+        numeric_affix:
+            affix: -dānyuán
+            direction: right
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+            digits:
+                ascii_probability: 0.6
+                unicode_full_width_probability: 0.3
+                spellout_probability: 0.1
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    danyuan_no_accent: &danyuan_no_accent
+        canonical: danyuan
+        numeric_affix:
+            affix: -danyuan
+            direction: right
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+            digits:
+                ascii_probability: 0.6
+                unicode_full_width_probability: 0.3
+                spellout_probability: 0.1
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    rukou: &rukou
+        canonical: rùkǒu
+        numeric_affix:
+            affix: -rùkǒu
+            direction: left
+            direction_probability: 0.6
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+            digits:
+                ascii_probability: 0.6
+                unicode_full_width_probability: 0.3
+                spellout_probability: 0.1
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    rukou_no_accent: &rukou_no_accent
+        canonical: rukou
+        numeric_affix:
+            affix: -rukou
+            direction: left
+            direction_probability: 0.6
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+            digits:
+                ascii_probability: 0.6
+                unicode_full_width_probability: 0.3
+                spellout_probability: 0.1
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    alphanumeric:
+        default: *danyuan
+        probability: 0.75
+        alternatives:
+            - alternative: *danyuan_no_accent
+              probability: 0.05
+            - alternative: *rukou
+              probability: 0.15
+            - alternative: *rukou_no_accent
+              probability: 0.05
+        numeric_probability: 1.0
 
 levels:
     lou: &lou
