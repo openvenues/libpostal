@@ -298,6 +298,13 @@ countries:
                       type: relation
                       probability: 0.0
 
+    # Hungary
+    hu:
+        components:
+            country:
+                probability: 0.1
+
+
     # Jamaica
     jm: *add_west_indies
 
@@ -320,11 +327,6 @@ countries:
             country:
                 probability: 0.8
 
-    hu:
-        components:
-            country:
-                probability: 0.1
-
     # Saint Kitts and Nevis
     kn:
         components:
@@ -340,6 +342,10 @@ countries:
 
     # Saint Lucia
     lc: *add_west_indies
+
+    # Latvia
+    lv:
+        locality_and_city_probability: 0.2
 
     # Montserrat
     ms: *add_west_indies
