@@ -1,6 +1,7 @@
 barangay|brgy|bgy
 block|blk|bl|blck
 quadrant|qd|quad
+republic|rep
 section|sec|sect|sxn
 township|twp|tshp
 village|vil|vge|vill|villag|villg|vlg|vlge|vllg|vl
