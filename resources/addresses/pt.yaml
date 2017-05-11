@@ -326,18 +326,6 @@ levels:
         numeric_probability: 0.99
         alpha_probability: 0.01
 
-blocks:
-    alphanumeric:
-        default:
-            canonical: bloco
-            abbreviated: blc
-            sample: true
-            canonical_probability: 0.6
-            abbreviated_probability: 0.2
-            sample_probability: 0.2
-            numeric:
-                direction: left
-
 categories:
     near:
         default:
@@ -617,6 +605,79 @@ cardinal_directions:
           probability: 0.25
         - alternative: *oeste
           probability: 0.25
+
+
+buildings:
+    edificio: &edificio
+        canonical: edifício
+        abbreviated: edif
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    condominio: &condominio
+        canonical: condominio
+        abbreviated: cond
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.4
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    bloco: &bloco
+        canonical: bloco
+        abbreviated: blc
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    torre: &torre
+        canonical: torre
+        abbreviated: tr
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Edificio 1, Edif A, etc.
+    alphanumeric: &building_alphanumeric
+        default: *edificio
+        probability: 0.75
+        alternatives:
+            - alternative: *torre
+              probability: 0.1
+            - alternative: *condominio
+              probability: 0.075
+            - alternative: *bloco
+              probability: 0.075
+        numeric_probability: 0.075 # e.g. Edificio 1
+        alpha_probability: 0.85 # e.g. Edif A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+        hyphenated_number_probability: 0.0125 # e.g. 11-10
+        decimal_number_probability: 0.0125 # e.g. 1.10
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        hyphenated_number:
+            range_probability: 0.5
+            # direction of the range, not the phrase
+            direction: right
+            direction_probability: 0.6
+            alpha_plus_numeric_probability: 0.1
+            alpha_plus_numeric_whitespace_probability: 0.1
+            numeric_plus_alpha_probability: 0.1
+            numeric_plus_alpha_whitespace_probability: 0.1
 
 entrances:
     entrada: &entrada
