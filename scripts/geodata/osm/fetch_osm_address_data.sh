@@ -198,7 +198,7 @@ VALID_SUBDIVISION_NAMED_KEYS="( $VALID_SUBDIVISION_LANDUSE_NAMED_KEYS or $VALID_
 VALID_SUBDIVISION_UNNAMED_KEYS="( $VALID_SUBDIVISION_AEROWAY_KEYS or $VALID_SUBDIVISION_AMENITY_KEYS or $VALID_SUBDIVISION_LANDUSE_KEYS )"
 
 osmfilter $PLANET_O5M --keep="$VALID_SUBDIVISION_UNNAMED_KEYS or ( name= and ( $VALID_SUBDIVISION_NAMED_KEYS ) )" --drop="boundary= or ( place= and not ( $VALID_SUBDIVISION_PLACE_KEYS ) )" --drop-author --drop-version -o=$PLANET_SUBDIVISIONS_O5M &
-osmfilter $PLANET_O5M --keep="( name= and ( $VALID_VENUE_KEYS ) )" --drop-nodes --drop="boundary= or ( place= and not ( $VALID_SUBDIVISION_PLACE_KEYS ) )" --drop-author --drop-version -o=$PLANET_VENUE_BOUNDARIES_O5M &
+osmfilter $PLANET_O5M --keep="( name= and ( $VALID_VENUE_KEYS ) )" --drop="boundary= or ( place= and not ( $VALID_SUBDIVISION_PLACE_KEYS ) )" --drop-author --drop-version -o=$PLANET_VENUE_BOUNDARIES_O5M &
 
 wait
 
