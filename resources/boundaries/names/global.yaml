@@ -399,9 +399,9 @@ names:
                                 affix: Jud
                             probability: 0.2
                           - alternative:
-                                affix: Județ
-                            probability: 0.1
-                      direction: right
+                                affix: Județul
+                            probability: 0.2
+                      direction: left
 
 
 
