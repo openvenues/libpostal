@@ -183,9 +183,12 @@ PERSONAL_NAME_DICTIONARIES = (GIVEN_NAME_DICTIONARY,
 
 NAME_DICTIONARIES = STREET_TYPES_DICTIONARIES + ('academic_degrees',
                                                  'building_types',
+                                                 'chains',
                                                  'company_types',
+                                                 'given_names',
                                                  'place_names',
                                                  'qualifiers',
+                                                 'surnames',
                                                  'synonyms',
                                                  'toponyms',
                                                  )
