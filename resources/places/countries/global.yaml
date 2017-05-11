@@ -380,9 +380,23 @@ countries:
 
     # Malaysia
     my:
+        locality_and_city_probability: 0.4
         components:
             island:
                 probability: 0.3
+
+    # New Zealand
+    nz:
+        components:
+            island:
+                probability: 0.1
+
+    # Philippines
+    ph:
+        locality_and_city_probability: 0.3
+        components:
+            island:
+                probability: 0.2
 
     # Pitcairn Islands
     pn:
