@@ -91,14 +91,12 @@ class OSMAddressFormatter(object):
             ('addr:neighborhood', AddressFormatter.SUBURB),
             ('is_in:neighborhood', AddressFormatter.SUBURB),
             ('addr:barangay', AddressFormatter.SUBURB),
-            # Used in the UK for civil parishes, sometimes others
-            ('addr:locality', AddressFormatter.SUBURB),
             # This is actually used for suburb
             ('suburb', AddressFormatter.SUBURB),
             ('addr:city', AddressFormatter.CITY),
             ('is_in:city', AddressFormatter.CITY),
-            ('addr:locality', AddressFormatter.CITY),
-            ('is_in:locality', AddressFormatter.CITY),
+            ('addr:locality', AddressFormatter.LOCALITY),
+            ('is_in:locality', AddressFormatter.LOCALITY),
             ('addr:municipality', AddressFormatter.CITY),
             ('is_in:municipality', AddressFormatter.CITY),
             ('addr:hamlet', AddressFormatter.CITY),
