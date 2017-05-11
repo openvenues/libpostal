@@ -387,6 +387,22 @@ names:
                           affix: Purok
                       probability: 0.7
                       direction: left
+            ro:
+                conditionals:
+                    - key: place:ro
+                      value: județ
+                      default:
+                          affix: Jud.
+                      probability: 0.3
+                      alternatives:
+                          - alternative:
+                                affix: Jud
+                            probability: 0.2
+                          - alternative:
+                                affix: Județ
+                            probability: 0.1
+                      direction: right
+
 
 
     # This section overrides place names
