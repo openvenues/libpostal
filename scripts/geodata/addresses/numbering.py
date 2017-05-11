@@ -151,8 +151,6 @@ class NumericPhrase(object):
     NUMERIC = 'numeric'
     NUMERIC_AFFIX = 'numeric_affix'
 
-
-
     @classmethod
     def pick_phrase_and_type(cls, number, language, country=None):
         values, probs = address_config.alternative_probabilities(cls.key, language, dictionaries=cls.dictionaries, country=country)
@@ -183,9 +181,23 @@ class NumericPhrase(object):
     def combine_with_number(cls, number, phrase, num_type, props, whitespace_default=False):
 
         if num_type == cls.NUMERIC_AFFIX:
-            phrase = props['affix']
-            if 'zero_pad' in props and number.isdigit():
-                number = number.rjust(props['zero_pad'], props.get('zero_char', '0'))
+            if 'probability' not in props:
+                alt_props = props
+            else:
+                affixes = [props]
+                affix_probs = [props['probability']]
+
+                for a in props.get('alternatives', []):
+                    affixes.append(a['alternative'])
+                    affix_probs.append(a['probability'])
+
+                affix_probs = cdf(affix_probs)
+                alt_props = weighted_choice(affixes, affix_probs)
+
+            phrase = alt_props['affix']
+
+            if 'zero_pad' in alt_props and number.isdigit():
+                number = number.rjust(alt_props['zero_pad'], alt_props.get('zero_char', '0'))
 
         direction = props['direction']
         whitespace = props.get('whitespace', whitespace_default)
@@ -403,11 +415,23 @@ class NumberedComponent(object):
         whitespace_default = True
 
         if num_type == 'numeric_affix':
-            phrase = props['affix']
-            if props.get('upper_case', True):
+            if 'probability' not in props:
+                alt_props = props
+            else:
+                affixes = [props]
+                affix_probs = [props['probability']]
+                for a in props.get('alternatives', []):
+                    affixes.append(a['alternative'])
+                    affix_probs.append(a['probability'])
+                affix_probs = cdf(affix_probs)
+                alt_props = weighted_choice(affixes, affix_probs)
+
+            phrase = alt_props['affix']
+
+            if alt_props.get('upper_case', True):
                 phrase = phrase.upper()
-            if 'zero_pad' in props and num.isdigit():
-                num = num.rjust(props['zero_pad'], props.get('zero_char', '0'))
+            if 'zero_pad' in alt_props and num.isdigit():
+                num = num.rjust(alt_props['zero_pad'], alt_props.get('zero_char', '0'))
             whitespace_default = False
         elif num_type == 'ordinal' and safe_decode(num).isdigit():
             ordinal_expression = ordinal_expressions.suffixed_number(num, language, gender=props.get('gender', None))

@@ -52,8 +52,18 @@ numbers:
         numeric:
             direction: left
         numeric_affix:
-            affix: "#"
-            direction: left
+            affix: "#" # e.g. #3, #2F, etc.
+            probability: 0.5
+            alternatives:
+                - alternative:
+                      affix: nº
+                      direction: left
+                  probability: 0.35
+                - alternative:
+                      affix: nº.
+                      direction: left
+                  probability: 0.15
+
         # Probabilities for numbers
         numeric_probability: 0.7
         numeric_affix_probability: 0.3
