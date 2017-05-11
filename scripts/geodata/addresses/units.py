@@ -9,6 +9,7 @@ from geodata.addresses.numbering import NumberedComponent, sample_alphabet, lati
 from geodata.configs.utils import nested_get
 from geodata.encoding import safe_decode
 from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
+from geodata.math.floats import isclose
 from geodata.text.utils import is_numeric_strict
 
 
@@ -142,6 +143,10 @@ class Unit(NumberedComponent):
         elif num_type == cls.HYPHENATED_NUMBER:
             number2 = weighted_choice(cls.positive_units, cls.positive_units_cdf)
             range_prob = float(address_config.get_property('units.alphanumeric.hyphenated_number.range_probability', language, country=country, default=0.5))
+            alpha_plus_numeric_prob = float(address_config.get_property('units.alphanumeric.hyphenated_number.alpha_plus_numeric_probability', language, country=country, default=0.1))
+            alpha_plus_numeric_whitespace_prob = float(address_config.get_property('units.alphanumeric.hyphenated_number.alpha_plus_numeric_whitespace_probability', language, country=country, default=0.1))
+            numeric_plus_alpha_prob = float(address_config.get_property('units.alphanumeric.hyphenated_number.numeric_plus_alpha_probability', language, country=country, default=0.1))
+            numeric_plus_alpha_whitespace_prob = float(address_config.get_property('units.alphanumeric.hyphenated_number.numeric_plus_alpha_whitespace_probability', language, country=country, default=0.1))
             direction = address_config.get_property('units.alphanumeric.hyphenated_number.direction', language, country=country, default='right')
             direction_prob = float(address_config.get_property('units.alphanumeric.hyphenated_number.direction_probability', language, country=country, default=0.0))
 
@@ -155,6 +160,32 @@ class Unit(NumberedComponent):
                     number2 += number
                 else:
                     number2 = max(0, number - number2)
+
+            letter_choices = [cls.ALPHA_PLUS_NUMERIC, cls.NUMERIC_PLUS_ALPHA]
+            letter_probs = [alpha_plus_numeric_prob, numeric_plus_alpha_prob]
+            if not isclose(sum(letter_probs), 1.0):
+                letter_choices.append(None)
+                letter_probs.append(1.0 - sum(letter_probs))
+
+            letter_probs_cdf = cdf(letter_probs)
+            letter_type = weighted_choice(letter_choices, letter_probs)
+
+            if letter_type is not None:
+                alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
+                alphabet_probability = address_config.get_property('alphabet_probability', language, country=country, default=None)
+                if alphabet_probability is not None and random.random() >= alphabet_probability:
+                    alphabet = latin_alphabet
+                letter = sample_alphabet(alphabet)
+
+                if letter_type == cls.ALPHA_PLUS_NUMERIC:
+                    whitespace_prob = alpha_plus_numeric_whitespace_prob
+                    whitespace = u' ' if random.random() < whitespace_prob else u''
+                    number = u'{}{}{}'.format(letter, whitespace, number)
+                elif letter_type == cls.NUMERIC_PLUS_ALPHA:
+                    whitespace_prob = numeric_plus_alpha_whitespace_prob
+                    whitespace = u' ' if random.random() < whitespace_prob else u''
+                    number2 = u'{}{}{}'.format(number2, whitespace, letter)
+
             if direction == 'right':
                 return u'{}-{}'.format(number, number2)
             else:
