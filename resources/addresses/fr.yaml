@@ -2,18 +2,22 @@
 # conventions go in country overrides
 
 components:
-    level:
-        # If no floor number is specified
-        null_probability: 0.8
-        alphanumeric_probability: 0.2
+    building:
+        null_probability: 0.995
+        alphanumeric_probability: 0.005
+
+    entrance:
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
 
     staircase:
         null_probability: 0.99
         alphanumeric_probability: 0.01
 
-    entrance:
-        null_probability: 0.999
-        alphanumeric_probability: 0.001
+    level:
+        # If no floor number is specified
+        null_probability: 0.8
+        alphanumeric_probability: 0.2
 
     unit:
         # If no unit number is specified
@@ -428,6 +432,78 @@ cardinal_directions:
           probability: 0.25
         - alternative: *ouest
           probability: 0.25
+
+
+buildings:
+    batiment: &batiment
+        canonical: bâtiment
+        abbreviated: bât
+        sample: true
+        canonical_probability: 0.15
+        abbreviated_probability: 0.35
+        sample_probability: 0.5
+        numeric:
+            direction: left
+    immeuble: &immeuble
+        canonical: immeuble
+        abbreviated: imm
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.4
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    bloc: &bloc
+        canonical: bloc
+        abbreviated: bl
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+        numeric:
+            direction: left
+
+    tour: &tour
+        canonical: tour
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Bâtiment 1, Bât A, etc.
+    alphanumeric: &building_alphanumeric
+        default: *batiment
+        probability: 0.8
+        alternatives:
+            - alternative: *immeuble
+              probability: 0.075
+            - alternative: *bloc
+              probability: 0.075
+            - alternative: *tour
+              probability: 0.05
+        numeric_probability: 0.075 # e.g. Edificio 1
+        alpha_probability: 0.85 # e.g. Edif A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+        hyphenated_number_probability: 0.0125 # e.g. 11-10
+        decimal_number_probability: 0.0125 # e.g. 1.10
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        hyphenated_number:
+            range_probability: 0.5
+            # direction of the range, not the phrase
+            direction: right
+            direction_probability: 0.6
+            alpha_plus_numeric_probability: 0.1
+            alpha_plus_numeric_whitespace_probability: 0.1
+            numeric_plus_alpha_probability: 0.1
+            numeric_plus_alpha_whitespace_probability: 0.1
 
 entrances:
     entrance: &entrance
