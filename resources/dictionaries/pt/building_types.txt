@@ -1,5 +1,5 @@
-bloco|bl
-condominio
+bloco|bl|blc
+condominio|cond|condo
 edifício|edificio|edf|edif
 habitação|habitacao|hab
 residencia|res
