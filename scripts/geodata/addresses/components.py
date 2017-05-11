@@ -1002,6 +1002,7 @@ class AddressComponents(object):
                 address_components[AddressFormatter.CITY] = match.group(1)
 
     unit_type_regexes = {}
+
     language_number_phrases = {}
 
     numeric_pattern = '(?:[\d]+|[a-z]*[\d]*[\-\./]?[\d]+|[\d]+[\-\./]?[\d]*[a-z]*|[a-z])'
@@ -1012,8 +1013,11 @@ class AddressComponents(object):
         numbers = address_phrase_dictionaries.phrases.get((lang, 'number'), [])
         numbered_units = address_phrase_dictionaries.phrases.get((lang, 'unit_types_numbered'), [])
 
+        house_numbers = address_phrase_dictionaries.phrases.get((lang, 'house_numbers'), [])
+
         number_phrases = [safe_encode(p) for p in itertools.chain(*numbers)]
         language_number_phrases[lang] = number_phrases
+        house_number_phrases = set([safe_encode(p) for p in itertools.chain(*house_numbers)])
         unit_phrases = [safe_encode(p) for p in itertools.chain(*numbered_units) if len(p) > 2 and p not in house_number_phrases]
 
         phrase_number_pattern = r'\s*\b(?:{})[\.\s]\s*(?:{})?[\s\.]?\s*{}\s*$'
