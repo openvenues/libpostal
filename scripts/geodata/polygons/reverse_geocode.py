@@ -14,6 +14,7 @@ import argparse
 import logging
 import operator
 import os
+import pyproj
 import re
 import requests
 import shutil
@@ -43,6 +44,7 @@ from geodata.statistics.tf_idf import IDFIndex
 from geodata.text.tokenize import tokenize, token_types
 from geodata.text.normalize import *
 
+from shapely.ops import transform
 from shapely.topology import TopologicalError
 
 decode_latin1 = partial(safe_decode, encoding='latin1')
@@ -445,7 +447,38 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         return sorted(candidates, key=self.sort_level, reverse=True)
 
 
-class OSMSubdivisionReverseGeocoder(OSMReverseGeocoder):
+class OSMAreaReverseGeocoder(OSMReverseGeocoder):
+    AREAS_FILENAME = 'areas.json'
+
+    def setup(self):
+        self.areas = []
+
+    def index_polygon_geometry(self, poly):
+        poly_area = transform(partial(pyproj.transform,
+                                      pyproj.Proj(init='EPSG:4326'),
+                                      pyproj.Proj(
+                                          proj='aea',
+                                          lat1=poly.bounds[1],
+                                          lat2=poly.bounds[3])
+                                      ),
+                              poly).area * 1e-6
+
+        self.areas.append(poly_area)
+
+    def index_polygon_properties(self, properties):
+        pass
+
+    def load_polygon_properties(self, d):
+        self.areas = json.load(open(os.path.join(d, self.AREAS_FILENAME)))
+
+    def save_polygon_properties(self, d):
+        json.dump(self.areas, open(os.path.join(d, self.AREAS_FILENAME), 'w'))
+
+    def sort_level(self, i):
+        return self.areas[i]
+
+
+class OSMSubdivisionReverseGeocoder(OSMAreaReverseGeocoder):
     persistent_polygons = True
     cache_size = 10000
     simplify_polygons = False
@@ -453,7 +486,7 @@ class OSMSubdivisionReverseGeocoder(OSMReverseGeocoder):
     include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['aeroway', 'amenity', 'historic', 'landuse', 'leisure', 'office', 'place', 'shop', 'tourism'])
 
 
-class OSMBuildingReverseGeocoder(OSMReverseGeocoder):
+class OSMBuildingReverseGeocoder(OSMAreaReverseGeocoder):
     persistent_polygons = True
     cache_size = 10000
     simplify_polygons = False
@@ -464,7 +497,7 @@ class OSMBuildingReverseGeocoder(OSMReverseGeocoder):
     include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['building', 'building:levels', 'building:part', 'addr:*'])
 
 
-class OSMPostalCodeReverseGeocoder(OSMReverseGeocoder):
+class OSMPostalCodeReverseGeocoder(OSMAreaReverseGeocoder):
     persistent_polygons = True
     cache_size = 10000
     simplify_polygons = False
@@ -472,7 +505,7 @@ class OSMPostalCodeReverseGeocoder(OSMReverseGeocoder):
     include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['postal_code'])
 
 
-class OSMAirportReverseGeocoder(OSMReverseGeocoder):
+class OSMAirportReverseGeocoder(OSMAreaReverseGeocoder):
     persistent_polygons = True
     cache_size = 10000
     simplify_polygons = False
