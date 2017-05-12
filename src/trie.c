@@ -1110,7 +1110,7 @@ exit_file_read:
 trie_t *trie_load(char *path) {
     FILE *file;
 
-    file = fopen(path, "r");
+    file = fopen(path, "rb");
     if (!file)
         return NULL;
 
