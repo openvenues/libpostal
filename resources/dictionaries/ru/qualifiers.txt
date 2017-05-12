@@ -10,7 +10,7 @@ kvartal|kvart|kv|kv-l
 krai|kr
 микрорайон|мкр-н|мкр|мкрн|м / н|м-н|м / р-н|мрн|м-р
 mikrorayon|mkr-n|mkr|mkrn|m / n|m-n|m / r-n|mrn|m-r
-област|обл
+область|област|обл
 oblast|obl
 посблок|пос
 posblok
@@ -24,7 +24,7 @@ gorodskoy posyolok|g.p.|gp|g.p|g p|gorodskoy poselok
 okrug|okr
 городской округ|гор.окр.|гор окр|гор.окр|городскои округ|городок
 gorodskoy okrug|gor.okr.|gor okr|gor.okr|gorodok
-раион|р-н
+район|раион|р-н
 raion|r-n|rayon|rajon
 сельский совет|с / с|сельсовет|сельскии совет
 sel'skiy sovet|s / s|sel'sovet|selskiy sovet|selsovet
