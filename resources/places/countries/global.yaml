@@ -450,6 +450,10 @@ countries:
             id: 166563 # State of Hawaii
             type: relation
 
+        district_of_columbia: &district_of_columbia
+            id: 162069 # District of Columbia
+            type: relation
+
         components:
             suburb:
                 probability: 0.4
@@ -483,6 +487,11 @@ countries:
                       probability: 0.1
                     - <<: *new_york_county
                       probability: 0.95
+                    - <<: *hawaii
+                      probability: 0.9
+                    - <<: *district_of_columbia
+                      probabilities: 0.85
+
             island:
                 order:
                     direction: before
@@ -500,6 +509,9 @@ countries:
                     - lt: 10000
                       probability: 1.0
                 dependencies: []
+                containing:
+                    - <<: *district_of_columbia
+                      probability: 0.9
 
             state_district:
                 probability: 0.1
