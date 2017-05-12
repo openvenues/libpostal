@@ -55,7 +55,7 @@ global:
             component: unit
 
     ignore_simple_units: &ignore_simple_units
-        - &simple_unit_regex "^(?:[A-Z]?\-?[0-9]*(?:[\\s]*/[\\s]*[0-9]*)?|[0-9]*(?:[\\s]*/[\\s]*[0-9]*)?-?[A-Z]?|[A-Z]*[0-9]+[A-Z]?/[0-9]*[A-Z][0-9]*|[0-9]*[A-Z][0-9*]/[0-9]+[A-Z]?)$"
+        - &simple_unit_regex "^(?:[A-Z]?\\-?[0-9]*(?:[\\s]*/[\\s]*[0-9]*)?|[0-9]*(?:[\\s]*/[\\s]*[0-9]*)?-?[A-Z]?|[A-Z]*[0-9]+[A-Z]?/[0-9]*[A-Z][0-9]*|[0-9]*[A-Z][0-9*]/[0-9]+[A-Z]?)$"
 
     # Turned off by default to avoid performance penalty for reverse geocoding
     add_osm_boundaries: false
@@ -110,13 +110,13 @@ countries:
             - filename: wallonia.csv
               ignore_fields_containing:
                   road:
-                      - "\?"
+                      - "\\?"
                   house_number:
-                      - "\?"
+                      - "\\?"
                   city:
-                      - "\?"
+                      - "\\?"
                   postcode:
-                      - "\?"
+                      - "\\?"
 
         subdirs:
             bru:
