@@ -477,6 +477,10 @@ class OSMAreaReverseGeocoder(OSMReverseGeocoder):
     def sort_level(self, i):
         return self.areas[i]
 
+    def get_candidate_polygons(self, lat, lon):
+        candidates = super(OSMReverseGeocoder, self).get_candidate_polygons(lat, lon)
+        return sorted(candidates, key=self.sort_level)
+
 
 class OSMSubdivisionReverseGeocoder(OSMAreaReverseGeocoder):
     persistent_polygons = True
