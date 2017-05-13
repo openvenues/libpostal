@@ -31,6 +31,7 @@ KSORT_INIT(phrase_language_array, phrase_language_t, ks_lt_phrase_language)
 
 #define DEFAULT_KEY_LEN 32
 
+#define EXCESSIVE_PERMUTATIONS 100
 
 static libpostal_normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
         .languages = NULL,
@@ -93,6 +94,7 @@ static void add_normalized_strings_token(cstring_array *strings, char *str, toke
         bool contains_hyphen = string_contains_hyphen_len(str + token.offset, token.len);
 
         if (!contains_hyphen || token.type == HYPHEN) {
+            log_debug("str = %s, token = {%u, %u, %u}\n", str, token.offset, token.len, token.type);
             normalize_token(strings, str, token, normalize_token_options);
         } else if (is_word_token(token.type)) {
             normalize_token(strings, str, token, normalize_token_options);
@@ -663,15 +665,22 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
 
         }
     } else if (have_suffix) {
+        log_debug("suffix.start=%zu\n", suffix.start);
         root_len = suffix.start;
         root_token = (token_t){token.offset, root_len, token.type};
-        root_strings = cstring_array_new_size(root_len);
+        log_debug("root_len=%u\n", root_len);
+        log_debug("root_token = {%u, %u, %u}\n", root_token.offset, root_token.len, root_token.type);
+
+        root_strings = cstring_array_new_size(root_len + 1);
         add_normalized_strings_token(root_strings, str, root_token, options);
         num_strings = cstring_array_num_strings(root_strings);
+
+        log_debug("num_strings = %zu\n", num_strings);
 
         for (size_t j = 0; j < num_strings; j++) {
             char_array_clear(key);
             root_word = cstring_array_get_string(root_strings, j);
+            log_debug("root_word=%s\n", root_word);
             char_array_cat(key, root_word);
             root_end = key->n - 1;
 
@@ -851,6 +860,14 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
 
     kh_resize(str_set, unique_strings, kh_size(unique_strings) + tokenized_iter->remaining);
 
+    bool excessive_perms_outer = tokenized_iter->remaining >= EXCESSIVE_PERMUTATIONS;
+
+    if (!excessive_perms_outer) {
+        kh_resize(str_set, unique_strings, kh_size(unique_strings) + tokenized_iter->remaining);
+    }
+
+    log_debug("tokenized_iter->remaining=%d\n", tokenized_iter->remaining);
+
     for (; !string_tree_iterator_done(tokenized_iter); string_tree_iterator_next(tokenized_iter)) {
         char_array_clear(temp_string);
 
@@ -870,6 +887,8 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
         log_debug("Adding alternatives for single normalization\n");
         alternatives = add_string_alternatives(tokenized_str, options);
 
+        log_debug("num strings = %zu\n", string_tree_num_strings(alternatives));
+
         if (alternatives == NULL) {
             log_debug("alternatives = NULL\n");
             continue;
@@ -877,30 +896,42 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
 
         iter = string_tree_iterator_new(alternatives);
         log_debug("iter->num_tokens=%d\n", iter->num_tokens);
+        log_debug("iter->remaining=%d\n", iter->remaining);
 
-        for (; !string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
-            char_array_clear(temp_string);
-            string_tree_iterator_foreach_token(iter, token, {
-                log_debug("token=%s\n", token);
-                char_array_append(temp_string, token);
-            })
-            char_array_terminate(temp_string);
+        bool excessive_perms_inner = iter->remaining >= EXCESSIVE_PERMUTATIONS;
 
-            token = char_array_get_string(temp_string);
-            log_debug("full string=%s\n", token);
-            khiter_t k = kh_get(str_set, unique_strings, token);
+        if (!excessive_perms_inner && !excessive_perms_outer) {
+            for (; !string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
+                char_array_clear(temp_string);
+                string_tree_iterator_foreach_token(iter, token, {
+                    log_debug("token=%s\n", token);
+                    char_array_append(temp_string, token);
+                })
+                char_array_terminate(temp_string);
 
-            if (k == kh_end(unique_strings)) {
-                log_debug("doing postprocessing\n");
-                add_postprocessed_string(strings, token, options);
-                k = kh_put(str_set, unique_strings, strdup(token), &ret);
+                token = char_array_get_string(temp_string);
+                log_debug("full string=%s\n", token);
+                khiter_t k = kh_get(str_set, unique_strings, token);
+
+                if (k == kh_end(unique_strings)) {
+                    log_debug("doing postprocessing\n");
+                    add_postprocessed_string(strings, token, options);
+                    k = kh_put(str_set, unique_strings, strdup(token), &ret);
+                }
+
+                log_debug("iter->remaining = %d\n", iter->remaining);
+
             }
-
-
+        } else {
+            cstring_array_add_string(strings, tokenized_str);
         }
 
         string_tree_iterator_destroy(iter);
         string_tree_destroy(alternatives);
+
+        if (excessive_perms_outer) {
+            break;
+        }
     }
 
     string_tree_iterator_destroy(tokenized_iter);
