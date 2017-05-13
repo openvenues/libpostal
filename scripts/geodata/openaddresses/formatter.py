@@ -50,10 +50,10 @@ number_fraction_regex = re.compile('^(?:[\d]+\s+)?(?:1[\s]*/[\s]*[234]|2[\s]*/[\
 
 colombian_standard_house_number_regex = re.compile('^(\d+[\s]*[a-z]?)\s+([a-z]?[\d]+[\s]*[a-z]?)?', re.I)
 
+chinese_building_regex = re.compile(u'^(.*?)([0-9０-９]+栋)(.*?)$', re.I | re.U)
+
 taiwan_floor_unit_regex = re.compile(u'^((?:[^之]+?[楼樓层層])|地下室)?(之[０-９]+[號号]?)?$', re.UNICODE)
 taiwan_unit_floor_regex = re.compile(u'^(之[０-９]+[號号]?)?((?:[^之]+?[楼樓层層])|地下室)?$', re.UNICODE)
-
-dutch_house_number_regex = re.compile('([\d]+)( [a-z])?( [\d]+)?', re.I)
 
 SPANISH = 'es'
 PORTUGUESE = 'pt'
@@ -246,6 +246,16 @@ class OpenAddressesFormatter(object):
             unit, level = match.groups()
             return level, unit
         return None, None
+
+    @classmethod
+    def chinese_house_number_and_building(cls, house_number):
+        if not house_number:
+            return house_number, None
+        match = chinese_building_regex.match(house_number.strip())
+        if match:
+            house_number_pre, building, house_number_post = match.groups()
+            return u''.join((house_number_pre, house_number_post)), building
+        return house_number, None
 
     def get_property(self, key, *configs):
         for config in configs:
@@ -475,15 +485,21 @@ class OpenAddressesFormatter(object):
                 house_number = components.get(AddressFormatter.HOUSE_NUMBER, None)
                 if house_number:
                     house_number = self.cleanup_number(house_number, strip_commas=house_number_strip_commas)
+                    house_number_building = None
 
                     if language == CHINESE:
                         house_number = self.format_chinese_house_number(house_number)
+                        if house_number:
+                            house_number, house_number_building = self.chinese_house_number_and_building(house_number)
 
                     if country_dir == Countries.COLOMBIA:
                         house_number = self.format_colombian_house_number(house_number)
 
-                    if house_number is not None:
+                    if house_number:
                         components[AddressFormatter.HOUSE_NUMBER] = house_number
+
+                    if house_number_building:
+                        components[AddressFormatter.BUILDING] = house_number_building
 
                 unit = components.get(AddressFormatter.UNIT, None)
 
