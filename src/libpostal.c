@@ -770,7 +770,7 @@ static inline bool normalize_ordinal_suffixes(string_tree_t *tree, char *str, ch
 
     bool ret = false;
 
-    if (len_ordinal_suffix == 0 || token_digit_len + len_ordinal_suffix < token.len) {
+    if (len_ordinal_suffix == 0 || token_digit_len == 0 || token_digit_len + len_ordinal_suffix < token.len) {
         return false;
     } else if (len_ordinal_suffix == token.len && i > 0 && prev_token.len > 0) {
         size_t prev_token_digit_len = possible_ordinal_digit_len(str + prev_token.offset, prev_token.len);
