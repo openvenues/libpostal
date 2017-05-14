@@ -94,7 +94,7 @@ static void add_normalized_strings_token(cstring_array *strings, char *str, toke
         bool contains_hyphen = string_contains_hyphen_len(str + token.offset, token.len);
 
         if (!contains_hyphen || token.type == HYPHEN) {
-            log_debug("str = %s, token = {%u, %u, %u}\n", str, token.offset, token.len, token.type);
+            log_debug("str = %s, token = {%zu, %zu, %u}\n", str, token.offset, token.len, token.type);
             normalize_token(strings, str, token, normalize_token_options);
         } else if (is_word_token(token.type)) {
             normalize_token(strings, str, token, normalize_token_options);
@@ -668,8 +668,8 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
         log_debug("suffix.start=%zu\n", suffix.start);
         root_len = suffix.start;
         root_token = (token_t){token.offset, root_len, token.type};
-        log_debug("root_len=%u\n", root_len);
-        log_debug("root_token = {%u, %u, %u}\n", root_token.offset, root_token.len, root_token.type);
+        log_debug("root_len=%zu\n", root_len);
+        log_debug("root_token = {%zu, %zu, %u}\n", root_token.offset, root_token.len, root_token.type);
 
         root_strings = cstring_array_new_size(root_len + 1);
         add_normalized_strings_token(root_strings, str, root_token, options);
