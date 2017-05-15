@@ -928,7 +928,7 @@ class AddressComponents(object):
     @classmethod
     def format_chinese_address(cls, address_components):
         new_components = {}
-        for field in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.HOUSE, AddressFormatter.BUILDING):
+        for field in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.HOUSE, AddressFormatter.BUILDING, AddressFormatter.UNIT):
             original_field = address_components.get(field)
             if original_field:
                 current_field = safe_decode(original_field)
