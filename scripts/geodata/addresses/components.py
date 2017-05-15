@@ -45,6 +45,7 @@ from geodata.language_id.sample import sample_random_language
 from geodata.math.floats import isclose
 from geodata.math.sampling import cdf, weighted_choice
 from geodata.names.normalization import name_affixes
+from geodata.numbers.spellout import numeric_expressions
 from geodata.osm.components import osm_address_components
 from geodata.places.config import place_config
 from geodata.polygons.reverse_geocode import OSMCountryReverseGeocoder
@@ -903,6 +904,63 @@ class AddressComponents(object):
         else:
             return self.japanese_node_admin_level_map.get(val.get('place'), 1000)
 
+    chinese_numbers = u''.join([rule[0]['name'] for rule in numeric_expressions.cardinal_rules['zh'].values() if rule[0]['value'] < 1000000])
+
+    chinese_house_number_regex = re.compile(u'^.*?([0-9０-９]+[號号])', re.I | re.U)
+
+    chinese_building_regex = re.compile(u'((?:[0-9０-９]+|[a-z])栋)', re.I | re.U)
+    taiwan_unit_regex = re.compile(u'(之[0-9０-９{}]+[號号]?)'.format(chinese_numbers), re.UNICODE)
+    chinese_unit_regex = re.compile(u'([0-9０-９]+室)', re.U)
+    chinese_floor_regex = re.compile(u'((?:[0-9０-９{}]+?[楼樓层層])|(?:地下室))'.format(chinese_numbers), re.UNICODE)
+
+    @classmethod
+    def extract_regex(cls, regex, value):
+        if not value:
+            return value, None
+        value = value.strip()
+        match = regex.search(value)
+        if match:
+            sep = match.group(0)
+            value = regex.sub(u'', value)
+            return value, sep
+        return value, None
+
+    @classmethod
+    def format_chinese_address(cls, address_components):
+        new_components = {}
+        for field in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.HOUSE, AddressFormatter.BUILDING):
+            original_field = address_components.get(field)
+            if original_field:
+                current_field = safe_decode(original_field)
+                current_field, building = cls.extract_regex(cls.chinese_building_regex, current_field)
+                current_field, level = cls.extract_regex(cls.chinese_floor_regex, current_field)
+                current_field, unit = cls.extract_regex(cls.chinese_unit_regex, current_field)
+                if not unit:
+                    current_field, unit = cls.extract_regex(cls.taiwan_unit_regex, current_field)
+
+                current_field = current_field.strip()
+                if current_field != original_field.strip():
+                    if current_field.strip():
+                        address_components[field] = current_field
+                    else:
+                        address_components.pop(field, None)
+                if unit and AddressFormatter.UNIT not in new_components:
+                    new_components[AddressFormatter.UNIT] = unit
+                if level and AddressFormatter.LEVEL not in new_components:
+                    new_components[AddressFormatter.LEVEL] = level
+                if building and AddressFormatter.BUILDING not in new_components:
+                    new_components[AddressFormatter.BUILDING] = building
+
+        address_components.update(new_components)
+
+        house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
+        if house_number and not cls.is_valid_house_number(house_number):
+            match = cls.chinese_house_number_regex.match(house_number)
+            if match:
+                address_components[AddressFormatter.HOUSE_NUMBER] = match.group(1)
+            else:
+                address_components.pop(AddressFormatter.HOUSE_NUMBER)
+
     @classmethod
     def genitive_name(cls, name, language):
         morph = cls.slavic_morphology_analyzers.get(language)
@@ -971,10 +1029,15 @@ class AddressComponents(object):
         if street:
             address_components[AddressFormatter.ROAD] = street = cls.brasilia_street_name_regex.sub(six.u(''), street)
 
+        house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
+
+        if house_number and cls.brasilia_building_regex.match(name):
+            address_components[AddressFormatter.BUILDING] = address_components.pop(AddressFormatter.HOUSE_NUMBER)
+
         name = address_components.get(AddressFormatter.HOUSE)
 
         if name and cls.brasilia_building_regex.match(name):
-            address_components[AddressFormatter.HOUSE_NUMBER] = address_components.pop(AddressFormatter.HOUSE)
+            address_components[AddressFormatter.BUILDING] = address_components.pop(AddressFormatter.HOUSE)
 
     central_european_cities = {
         # Czech Republic
@@ -2004,6 +2067,9 @@ class AddressComponents(object):
         self.country_specific_cleanup(address_components, country)
         if self.is_in(osm_components, self.BRASILIA_RELATION_ID):
             self.format_brasilia_address(address_components)
+
+        if language == CHINESE:
+            cls.format_chinese_address(address_components)
 
         self.add_admin_boundaries(address_components, osm_components, country, language,
                                   latitude, longitude,
