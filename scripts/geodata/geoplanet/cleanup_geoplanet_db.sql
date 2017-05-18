@@ -77,7 +77,7 @@
     update admins
     set country_code = "GG",
     country_id = county_id, -- Guernsey is a "county" in GeoPlanet
-    state_id = local_admin_id, -- States in Guernsey are labeled local_admins
+    state_id = 0,
     county_id = 0,
     local_admin_id = 0
     where county_id = 23424827;
@@ -89,7 +89,7 @@
 
     update places
     set country_code = "GG",
-    place_type = "State"
+    place_type = "Town"
     where parent_id = 23424827;
 
     update places
@@ -108,7 +108,7 @@
     update admins
     set country_code = "JE",
     country_id = county_id, -- Jersey is a "county" in GeoPlanet
-    state_id = local_admin_id, -- States in Jersey are labeled local_admins
+    state_id = 0,
     county_id = 0,
     local_admin_id = 0
     where county_id = 23424857;
@@ -120,7 +120,7 @@
 
     update places
     set country_code = "JE",
-    place_type = "State"
+    place_type = "Town"
     where parent_id = 23424857;
 
     update places
