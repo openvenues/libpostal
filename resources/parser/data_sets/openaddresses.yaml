@@ -1116,6 +1116,10 @@ countries:
             - filename: yonne.csv
             - filename: yvelines.csv
 
+    fo:
+        files:
+            - filename: countrywide.csv
+
     gr:
         subdirs:
             b:
