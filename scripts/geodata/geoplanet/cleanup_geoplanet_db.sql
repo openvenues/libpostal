@@ -684,6 +684,25 @@
     where country_code = "CZ"
     and place_type = "LocalAdmin";
 
+    update places
+    set place_type = "LocalAdmin"
+    where country_code = "CZ"
+    and parent_id = 796597 -- Prague
+    and name like "Praha %";
+
+    update places
+    set place_type = "LocalAdmin"
+    where country_code = "CZ"
+    and parent_id = 796597 -- Prague
+    and name like "Praha %";
+
+    -- One city district is named "Prague 11"
+    update places
+    set name = "Praha 11",
+    language = "CZE",
+    place_type = "LocalAdmin"
+    where id = 23407534;
+
 -- Hungary
     -- Set Budapest's parent_id to the state
     update places
