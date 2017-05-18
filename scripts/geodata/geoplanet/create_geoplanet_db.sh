@@ -21,13 +21,14 @@ GEOPLANET_ZIP_FILE="geoplanet_data_7.10.0.zip"
 # Internet Archive URL
 GEOPLANET_URL="https://archive.org/download/$GEOPLANET_ZIP_FILE/$GEOPLANET_ZIP_FILE"
 GEOPLANET_ORIGINAL_PLACES_FILE="geoplanet_places_7.10.0.tsv"
-GEOPLANET_ADMINS_FILE="geoplanet_admins_7.10.0.tsv"
+GEOPLANET_ORIGINAL_ADMINS_FILE="geoplanet_admins_7.10.0.tsv"
 GEOPLANET_ORIGINAL_ALIASES_FILE="geoplanet_aliases_7.10.0.tsv"
 
 GEOPLANET_ALL_PLACES_FILE="geoplanet_all_places.tsv"
 GEOPLANET_PLACES_FILE="geoplanet_places.tsv"
 GEOPLANET_POSTAL_CODES_FILE="geoplanet_postal_codes.tsv"
 GEOPLANET_ALIASES_FILE="geoplanet_aliases.tsv"
+GEOPLANET_ADMINS_FILE="geoplanet_admins.tsv"
 
 GEOPLANET_GEONAMES_CONCORDANCE_FILE="geonames-geoplanet-matches.csv"
 GEOPLANET_GEONAMES_CONCORDANCE_URL="https://github.com/blackmad/geoplanet-concordance/raw/master/current/$GEOPLANET_GEONAMES_CONCORDANCE_FILE"
@@ -61,6 +62,9 @@ tail -n+2 $GEOPLANET_ORIGINAL_PLACES_FILE > $GEOPLANET_ALL_PLACES_FILE
 
 echo "Creating GeoPlanet places file"
 awk -F'\t' 'BEGIN{OFS="\t";} {if ($5 == "Continent" || $5 == "Country" || $5 == "Nationality" || $5 == "State" || $5 == "County" ||  $5 == "Town" || $5 == "LocalAdmin" || $5 == "Island" || $5 == "Suburb") print $0;}' $GEOPLANET_ORIGINAL_PLACES_FILE > $GEOPLANET_PLACES_FILE
+
+echo "Creating GeoPlanet admins file"
+tail -n+2 $GEOPLANET_ORIGINAL_ADMINS_FILE > $GEOPLANET_ADMINS_FILE
 
 echo "Creating GeoPlanet aliases file"
 tail -n+2 $GEOPLANET_ORIGINAL_ALIASES_FILE > $GEOPLANET_ALIASES_FILE
