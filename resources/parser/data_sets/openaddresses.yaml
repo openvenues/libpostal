@@ -1945,6 +1945,17 @@ countries:
                 files:
                     - filename: regionwide.csv
 
+    sa:
+        subdirs:
+            al-madinah:
+                files:
+                    - filname: yanbu-ar.csv
+                      add:
+                          city: ينبع
+                    - filename: yanbu-en.csv
+                      add:
+                          city: Yanbu
+
     se:
         files:
             - filename: municipality_of_alingsas.csv
