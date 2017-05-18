@@ -1120,6 +1120,10 @@ countries:
         files:
             - filename: countrywide.csv
 
+    gg:
+        files:
+            - filename: countrywide.csv
+
     gr:
         subdirs:
             b:
