@@ -6,7 +6,7 @@ magister agama|mag|m ag
 magister akuntansi|mak|m ak
 magister epidemiolog|mepid|m epid
 magister farmasi|mfarm|m farmasi
-magister hukum|m h|
+magister hukum|m h|mh
 magister humaniora|mhum|m hum
 magister ilmu biomedik|mbiomedik|m biomedik
 magister ilmu komputer|mkom|m kom
