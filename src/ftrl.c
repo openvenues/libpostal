@@ -243,7 +243,7 @@ sparse_matrix_t *ftrl_weights_finalize_sparse(ftrl_trainer_t *self) {
     double lambda2 = self->lambda2;
 
     sparse_matrix_t *weights = sparse_matrix_new();
-    log_info("weights->m = %zu\n", weights->m);
+    log_info("weights->m = %" PRIu32 "\n", weights->m);
 
     size_t i_start = 0;
 
@@ -259,7 +259,7 @@ sparse_matrix_t *ftrl_weights_finalize_sparse(ftrl_trainer_t *self) {
         sparse_matrix_finalize_row(weights);
         i_start = 1;
     }
-    log_info("after intercept weights->m = %zu\n", weights->m);
+    log_info("after intercept weights->m = %" PRIu32 "\n", weights->m);
 
     for (size_t i = i_start; i < m; i++) {
         double *row = double_matrix_get_row(self->z, (size_t)i);
@@ -275,7 +275,7 @@ sparse_matrix_t *ftrl_weights_finalize_sparse(ftrl_trainer_t *self) {
         sparse_matrix_finalize_row(weights);
 
         if (i % 1000 == 0 && i > 0) {
-            log_info("adding rows, weights->m = %zu\n", weights->m);
+            log_info("adding rows, weights->m = %" PRIu32 "\n", weights->m);
         }
     }
 
