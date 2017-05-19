@@ -1,0 +1,34 @@
+bali
+bangka belitung|babel
+banten
+bengkulu
+daerah istimewa yogyakarta|di yogyakarta|d.i. yogyakarta|diy
+dki jakarta|jakarta
+gorontalo
+jambi
+jawa barat|jabar
+jawa tengah|jateng
+jawa timur|jatim
+kalimantan barat|kalbar
+kalimantan selatan|kalsel
+kalimantan tengah|kalteng
+kalimantan timur|kaltim
+kalimantan utara|kalut
+kepulauan riau|kepri
+lampung
+maluku
+maluku utara|malut
+nanggroe aceh darussalam|nanggro aceh darussalam|nanggroe aceh darusalam|nad|n a d
+nusa tenggara barat|ntb
+nusa tenggara timur|ntt
+papua
+papua barat
+riau
+sulawesi barat|sulbar
+sulawesi selatan|sulsel
+sulawesi tengah|sulteng
+sulawesi tenggara|sultra
+sulawesi utara|sulut
+sumatera barat|sumatra barat|sumbar
+sumatera selatan|sumatra selatan|sumsel
+sumatera utara|sumatra utara|sumut

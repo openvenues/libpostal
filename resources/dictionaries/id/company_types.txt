@@ -1,0 +1,29 @@
+bank
+company|co
+cooperative|coop|co op
+corporation|corp
+dan rekan|& rekan
+enterprise|ent
+firma|fa|f a
+foundation
+general patnership|gp|g p
+incorporated|inc
+intermediary|nt|n t
+international business company|ibc|i b c
+koperasi|kop|kprs
+koperasi usaha dagang|kud|k ud
+limited company|lc|l c|ltd co
+limited liability company|llc|l l c|ltd liability company|ltd liability co
+limited|ltd
+national association|na|n a
+nonprofit|non profit
+perseroan komanditer|comanditaire venotschap|cv|c v
+perseroan terbatas|pt|p t
+perusahaan daerah|pd
+perusahaan dagang|pd|p d
+perusahaan jawatan|pj|pjaw|p jaw
+perusahaan umum|perum|p u
+trust
+unlimited|ultd|unltd
+usaha dagang|ud|u d
+yayasan

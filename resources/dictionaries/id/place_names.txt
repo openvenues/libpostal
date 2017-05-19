@@ -1,5 +1,222 @@
+air mancur
+akademi|akdm
+akuarium|akrium
+amfiteater
+apartmen|apt
+arkade
+auditorium
+bakery
+balai kota
+ballroom
+bandar udara|bandara
+banjar|bjr
+bank
+bank perkreditan rakyat|bpr
+bar
+barak
+bazar
+bendungan
+benteng
+benteng
+biara
+bioskop
+bistro
+business park|bus pk|biz pk|bus prk|biz prk
+cafe|café
+cagar alam
+child care|childcare
+cinema
+cineplex
+club|clb
+clubhouse|club house
+clubrooms
+cottage|cott|cottg
+cuci mobil
+daerah
+danau
+dance studio
+day care
+dental
+dentist
+departmen|dep
+dermaga
+desa|ds
+developmen
+distributor|dstr|distrib|dstrb
+dojo
+dokter hewan
+dormitory|dorm
+dusun|dsn
+embassy
+farmasi
+farm|frm
+fitness center|fitness centre
+flat|flt
+galeri
+galeri seni
+gampong|gp
+garasi
+gedung rekreasi
+gerbang
+gereja
+golf club
+gym|gymnasium
+hall
+headquarter
+health center|health centre
+hostel
+hostel|host|hostl|hstel|hstl
+hotel|hot|hotl|htel
+hub
+ice cream|icecream
+institut|inst
+istana
 jembatan
-mesjid
-perkebunan
-pondok
+kabupaten|kab
+kafe|kafé
+kali
+kampung|kp|kpg|kmpg
+kampus
+kandang
+kantor bupati
+kantor|kntr
+kantor pos
+kantor pusat
+kapel
+karang taruan
+kawasan industri
+kebun binatang|bonbin
+kecamatan|kec
+kedai
+kedutaan
+kelompok bermain|kb
+kelurahan|kel
+kennel
+kepolisian daerah|polda
+kepolisian resor|polres
+kepolisian sektor|polsek
+kindergarten
+kios
+kitchen
+klinik
+kolam renang
+komite
+kompleks
+komunitas
+konservatori
+kopi
+kos|kosan
+kota
+krematorium
+kuburan
+lab
+laboratorium
+lapangan
+lapangan golf
+lembaga pemasyarakatan
+lounge
+mall|mll
+mansion
+marina
+markas besar|mabes
+market|mkt|mrkt
+medik|med
+memorial|mem
+mesjid|masjid|msjd
+monumen
+motel|mot|motl|mtel
+museum|mus
+night club|nightclub
+office|ofc
+office tower|ofc twr|office twr|ofc tower
+pabrik|pbrk
+pandai besi
+pangkalan udara|lanud|lanud
+pantai|pante
+panti jompo|pnt jmp|pnti jmpo
+parking
+parking lot
+parkiran
+park|pk|prk
+paroki
+pasar
+pavilion
+paviliun|pav
+pediatric
+pelabuhan
+pemadam kebakaran
+pemakaman
+penampungan
+penampungan hewan
+pengadilan
+penginapan
+penitipan anak
+penjara
+perkebunan|kebun|kbn|kebon
+perpustakaan
+perserikatan
+playgroup
+plaza
+politeknik
+pom bensin
+pondok|pndok
+pos polisi
+provinsi|prov
 puri
+pusat kebudayaan
+pusat kesehatan
+pusat pemulihan
+pusat perawatan
+pusat seni
+reservation|res|resrv|resv|rsrv|rserv|rs
+resort
+restoran
+ruangan
+rumah makan|rm
+rumah|rmh|rmah|rumh
+rumah sakit hewan|rs hewan
+rumah sakit|rs|r s
+rumah sakit wanita|rs wanita|r s wanita
+salon
+saloon
+sauna
+sekolah dasar neger|sdn|sd n
+sekolah menengah atas negeri|sma n|sma
+sekolah menengah pertama negeri|smp n|smpn
+shopping center|shoppingcenter|shoppingcentre|shopping|shoppingtown|shopping town|shopping centre|shctr|sh ctr|s / centre|shp / centre
+shop|shp
+showground
+sirkuit
+sirkus
+situ
+social club
+spa
+stadium
+stasiun
+steakhouse
+studio
+suaka margasatwa nasional
+sungai
+supermarket|super market
+tahanan
+taman
+taman kanak|tk
+taman nasional
+teater
+tempat pembuangan umum|tpu
+tempat pertunjukan
+tepi pantai
+terminal|term
+toko
+toko
+toko buku
+tower|twr
+townhouse|town house
+unit
+unit gawat darurat|ugd
+unit geriatrik
+universitas|univ|uni
+velodrome
+vila|vl|vla
+warung
+yoga

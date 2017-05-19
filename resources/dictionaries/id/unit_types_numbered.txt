@@ -1,0 +1,33 @@
+flat|flt
+garasi|grsi
+gedung|gdg|gd
+gudang|gdng
+hangar|hngr
+kamar|kmr
+kantor
+kavling|kav|kv
+kebun|kebon|kbn
+kios
+pabrik|pabrk|pbrk
+parcel
+parkiran|park
+penthouse|pths|ph|pent house
+reserve|rsve|rsrv|rsv|resv
+room|rm
+rukun tetangga|rt
+rukun warga|rw
+shed|shd
+shop|shp
+showroom|shrm
+stasiun
+stop
+studio|stu
+suite|ste|se
+tenancy|tncy
+toko|tko
+tower|twr
+townhouse|tnhs|twnhs|tnhse|twnhse
+unit|un|unt|u
+vila|vla|vl
+warehouse|we|whs|wrhs
+workshop|wshp|wkshp|wksp

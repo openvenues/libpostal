@@ -1,0 +1,3 @@
+lantai|lt|ltai|lt.
+level|lev|levl|lvel|lvl|l|/ l
+platform|pf
