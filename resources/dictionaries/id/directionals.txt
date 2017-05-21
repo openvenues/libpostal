@@ -1,9 +1,9 @@
-barat
-barat daya
-barat laut
-selatan
-tengah
-tenggara
-timur
-timur laut
-utara
+barat|bar|brt|brat|kulon|kln|klon
+barat daya|brt dy|bar day|brat dya
+barat laut|brt lt|bar laut
+selatan|sel|sltn|slatan|kidul|kdl|kdul
+tengah|teng|tngh
+tenggara|teng|tnggra
+timur|tim|tmur|wetan|wtan
+timur laut|tim laut|tmur laut
+utara|ut|utra|utr|lor

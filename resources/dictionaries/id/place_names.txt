@@ -1,5 +1,151 @@
+air mancur
+akademi|akdm
+akuarium|akrium
+amfiteater
+apartmen|apt
+arkade
+auditorium
+balai kota
+bandar udara|bandara
+banjar|bjr
+bank perkreditan rakyat|bpr
+bar
+barak
+bendungan
+benteng
+benteng
+biara
+bioskop
+cagar alam
+cuci mobil
+daerah
+danau
+departmen|dep
+dermaga
+desa|ds
+distributor|dstr|distrib|dstrb
+dokter hewan
+dusun|dsn
+farmasi
+galeri
+galeri seni
+gampong|gp|gpg|gmpg
+garasi
+gedung rekreasi
+gerbang
+gereja
+institut|inst
+istana
 jembatan
-mesjid
-perkebunan
-pondok
+kabupaten|kab
+kali
+kampung|kp|kpg|kmpg
+kampus
+kandang
+kantor bupati
+kantor|kntr
+kantor pos
+kantor pusat
+kapel
+karang taruna
+kawasan industri
+kebun binatang|bonbin
+kecamatan|kec
+kedai
+kedutaan
+kelompok bermain|kb
+kelurahan|kel
+kepolisian daerah|polda
+kepolisian resor|polres
+kepolisian sektor|polsek
+kindergarten
+kios
+kitchen
+klinik
+kolam renang
+komite
+kompleks
+komunitas
+konservatori
+kopi
+kos|kosan
+kota
+krematorium
+kuburan
+lab
+laboratorium
+lapangan
+lapangan golf
+lembaga pemasyarakatan
+mansion
+marina
+markas besar|mabes
+medik|med
+mesjid|masjid|msjd
+monumen
+pabrik|pbrk
+pandai besi
+pangkalan udara|lanud|lanud
+pantai|pante
+panti jompo|pnt jmp|pnti jmpo
+parkiran
+paroki
+pasar
+paviliun|pav
+pelabuhan
+pemadam kebakaran
+pemakaman
+penampungan
+penampungan hewan
+pengadilan
+penginapan
+penitipan anak
+penjara
+perkebunan|kebun|kbn|kebon
+perpustakaan
+perserikatan
+politeknik
+pom bensin
+pondok|pndok
+pos polisi
+provinsi|prov
 puri
+pusat kebudayaan
+pusat kesehatan
+pusat pemulihan
+pusat perawatan
+pusat seni
+restoran
+ruangan
+rumah makan|rm
+rumah|rmh|rmah|rumh
+rumah sakit hewan|rs hewan
+rumah sakit|rs|r s
+rumah sakit wanita|rs wanita|r s wanita
+sekolah dasar neger|sdn|sd n
+sekolah menengah atas negeri|sma n|sma
+sekolah menengah pertama negeri|smp n|smpn
+sirkuit
+sirkus
+situ
+stasiun
+suaka margasatwa nasional
+sungai
+tahanan
+taman
+taman kanak|tk
+taman nasional
+teater
+tempat pembuangan umum|tpu
+tempat pertunjukan
+tepi pantai
+terminal|term
+toko
+toko
+toko buku
+unit gawat darurat|ugd
+unit geriatrik
+universitas|univ|uni
+vila|vl|vla
+warung
+yoga
