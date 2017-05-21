@@ -68,6 +68,9 @@ download_multipart() {
     size=$3
 
     num_chunks=$((size/CHUNK_SIZE))
+    if [ $((num_chunks*CHUNK_SIZE)) -lt $size ]; then
+        num_chunks=$((num_chunks+1))
+    fi
     echo "Downloading multipart: $url, size=$size, num_chunks=$num_chunks"
     offset=0
     i=0
