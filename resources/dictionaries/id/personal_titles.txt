@@ -15,6 +15,7 @@ letnan jenderal|let jen|letjen|lt jn
 mas|bang|ms|bg
 mayor|may|myr
 mayor jenderal|may jen|mayjen
+mas
 mbak
 menteri|mentri|mntr
 pangeran|pngrn
@@ -25,6 +26,7 @@ prajurit|prjrt
 presiden|pres
 profesor|prof
 raden|rdn|r
+raden mas|rm|r m
 raden rara|rdn rara|rr
 raja|rja
 ratu

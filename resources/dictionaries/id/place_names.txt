@@ -7,10 +7,8 @@ arkade
 auditorium
 bakery
 balai kota
-ballroom
 bandar udara|bandara
 banjar|bjr
-bank
 bank perkreditan rakyat|bpr
 bar
 barak
@@ -21,37 +19,19 @@ benteng
 biara
 bioskop
 bistro
-business park|bus pk|biz pk|bus prk|biz prk
-cafe|café
 cagar alam
-child care|childcare
-cinema
-cineplex
-club|clb
-clubhouse|club house
-clubrooms
-cottage|cott|cottg
 cuci mobil
 daerah
 danau
-dance studio
-day care
 dental
 dentist
 departmen|dep
 dermaga
 desa|ds
-developmen
 distributor|dstr|distrib|dstrb
-dojo
 dokter hewan
-dormitory|dorm
 dusun|dsn
-embassy
 farmasi
-farm|frm
-fitness center|fitness centre
-flat|flt
 galeri
 galeri seni
 gampong|gp
@@ -59,21 +39,10 @@ garasi
 gedung rekreasi
 gerbang
 gereja
-golf club
-gym|gymnasium
-hall
-headquarter
-health center|health centre
-hostel
-hostel|host|hostl|hstel|hstl
-hotel|hot|hotl|htel
-hub
-ice cream|icecream
 institut|inst
 istana
 jembatan
 kabupaten|kab
-kafe|kafé
 kali
 kampung|kp|kpg|kmpg
 kampus
@@ -91,7 +60,6 @@ kedai
 kedutaan
 kelompok bermain|kb
 kelurahan|kel
-kennel
 kepolisian daerah|polda
 kepolisian resor|polres
 kepolisian sektor|polsek
@@ -114,8 +82,6 @@ laboratorium
 lapangan
 lapangan golf
 lembaga pemasyarakatan
-lounge
-mall|mll
 mansion
 marina
 markas besar|mabes
@@ -125,22 +91,14 @@ memorial|mem
 mesjid|masjid|msjd
 monumen
 motel|mot|motl|mtel
-museum|mus
-night club|nightclub
-office|ofc
-office tower|ofc twr|office twr|ofc tower
 pabrik|pbrk
 pandai besi
 pangkalan udara|lanud|lanud
 pantai|pante
 panti jompo|pnt jmp|pnti jmpo
-parking
-parking lot
 parkiran
-park|pk|prk
 paroki
 pasar
-pavilion
 paviliun|pav
 pediatric
 pelabuhan
@@ -155,8 +113,6 @@ penjara
 perkebunan|kebun|kbn|kebon
 perpustakaan
 perserikatan
-playgroup
-plaza
 politeknik
 pom bensin
 pondok|pndok
@@ -168,8 +124,6 @@ pusat kesehatan
 pusat pemulihan
 pusat perawatan
 pusat seni
-reservation|res|resrv|resv|rsrv|rserv|rs
-resort
 restoran
 ruangan
 rumah makan|rm
@@ -177,27 +131,15 @@ rumah|rmh|rmah|rumh
 rumah sakit hewan|rs hewan
 rumah sakit|rs|r s
 rumah sakit wanita|rs wanita|r s wanita
-salon
-saloon
-sauna
 sekolah dasar neger|sdn|sd n
 sekolah menengah atas negeri|sma n|sma
 sekolah menengah pertama negeri|smp n|smpn
-shopping center|shoppingcenter|shoppingcentre|shopping|shoppingtown|shopping town|shopping centre|shctr|sh ctr|s / centre|shp / centre
-shop|shp
-showground
 sirkuit
 sirkus
 situ
-social club
-spa
-stadium
 stasiun
-steakhouse
-studio
 suaka margasatwa nasional
 sungai
-supermarket|super market
 tahanan
 taman
 taman kanak|tk
@@ -210,13 +152,9 @@ terminal|term
 toko
 toko
 toko buku
-tower|twr
-townhouse|town house
-unit
 unit gawat darurat|ugd
 unit geriatrik
 universitas|univ|uni
-velodrome
 vila|vl|vla
 warung
 yoga

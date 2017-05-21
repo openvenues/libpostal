@@ -1,3 +1,4 @@
+asosiasi
 bank
 company|co
 cooperative|coop|co op
@@ -7,16 +8,10 @@ enterprise|ent
 firma|fa|f a
 foundation
 general patnership|gp|g p
-incorporated|inc
-intermediary|nt|n t
-international business company|ibc|i b c
 koperasi|kop|kprs
 koperasi usaha dagang|kud|k ud
-limited company|lc|l c|ltd co
-limited liability company|llc|l l c|ltd liability company|ltd liability co
-limited|ltd
-national association|na|n a
 nonprofit|non profit
+persekutuan
 perseroan komanditer|comanditaire venotschap|cv|c v
 perseroan terbatas|pt|p t
 perusahaan daerah|pd

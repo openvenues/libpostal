@@ -1,11 +1,9 @@
+belakang bawah|belakang bwh|blkg bwh
+belakang bawah|belakang bwh|blkg bwh
+belakang|blkg
 depan|dpn
 garasi|grsi
-lobby|lby|lbby
-kiri bawah|kiri bwh|kri bwh
 kanan bawah|kanan bwh|knan bwh
-penthouse|pths|ph|pent house
-belakang|blkg
-rear lower|rear lwr
-belakang bawah|belakang bwh|blkg bwh
-sisi
-
+kiri bawah|kiri bwh|kri bwh
+lobi|lbi|lbbi
+sisi|ssi
