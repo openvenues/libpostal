@@ -15,7 +15,6 @@ kelurahan|klrhn
 mas|ms
 mbak|mba|mb
 medikal|med
-memorial|mem
 militer|mil
 national|nasl|nas'l
 sungai|sngai

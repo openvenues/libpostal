@@ -26,9 +26,6 @@ magister statistik|mstat|m stat
 magister teknik|mt|m t
 magister teknologi informasi|mti|m ti
 magister veteriner|mvet|m vet
-master of arts|ma|m a
-master of public health|mph|m p h
-master of scienc|msc|m sc
 sarjana administrasi bisnis|sab|s ab
 sarjana administrasi publik|sap|s ap
 sarjana agama|s ag|sag|sa g|s a g

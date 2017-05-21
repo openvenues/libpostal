@@ -1,13 +1,7 @@
 asosiasi
 bank
-company|co
-cooperative|coop|co op
-corporation|corp
 dan rekan|& rekan
-enterprise|ent
 firma|fa|f a
-foundation
-general patnership|gp|g p
 koperasi|kop|kprs
 koperasi usaha dagang|kud|k ud
 nonprofit|non profit
@@ -18,7 +12,5 @@ perusahaan daerah|pd
 perusahaan dagang|pd|p d
 perusahaan jawatan|pj|pjaw|p jaw
 perusahaan umum|perum|p u
-trust
-unlimited|ultd|unltd
 usaha dagang|ud|u d
 yayasan

@@ -5,14 +5,12 @@ amfiteater
 apartmen|apt
 arkade
 auditorium
-bakery
 balai kota
 bandar udara|bandara
 banjar|bjr
 bank perkreditan rakyat|bpr
 bar
 barak
-bazar
 bendungan
 benteng
 benteng
@@ -23,8 +21,6 @@ cagar alam
 cuci mobil
 daerah
 danau
-dental
-dentist
 departmen|dep
 dermaga
 desa|ds
@@ -34,7 +30,7 @@ dusun|dsn
 farmasi
 galeri
 galeri seni
-gampong|gp
+gampong|gp|gpg|gmpg
 garasi
 gedung rekreasi
 gerbang
@@ -52,7 +48,7 @@ kantor|kntr
 kantor pos
 kantor pusat
 kapel
-karang taruan
+karang taruna
 kawasan industri
 kebun binatang|bonbin
 kecamatan|kec
@@ -85,12 +81,9 @@ lembaga pemasyarakatan
 mansion
 marina
 markas besar|mabes
-market|mkt|mrkt
 medik|med
-memorial|mem
 mesjid|masjid|msjd
 monumen
-motel|mot|motl|mtel
 pabrik|pbrk
 pandai besi
 pangkalan udara|lanud|lanud
@@ -100,7 +93,6 @@ parkiran
 paroki
 pasar
 paviliun|pav
-pediatric
 pelabuhan
 pemadam kebakaran
 pemakaman
