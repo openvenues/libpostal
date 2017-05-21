@@ -41,7 +41,7 @@ trie_t *trie_new_from_hash(khash_t(str_uint32) *hash) {
             return NULL;
         }
         if (i % 100000 == 0 && i > 0) {
-            log_info("added %zu keys to trie\n", i);
+            log_info("added %d keys to trie\n", i);
         }
     }
 
