@@ -662,7 +662,7 @@ address_parser_t *address_parser_init(char *filename) {
 
     }
 
-    log_info("Done with vocab, total size=%zu\n", kh_size(vocab));
+    log_info("Done with vocab, total size=%" PRIkh32 "\n", kh_size(vocab));
 
     for (k = kh_begin(vocab); k != kh_end(vocab); ++k) {
         token = (char *)kh_key(vocab, k);
@@ -676,7 +676,7 @@ address_parser_t *address_parser_init(char *filename) {
         }
     }
 
-    log_info("After pruning vocab size=%zu\n", kh_size(vocab));
+    log_info("After pruning vocab size=%" PRIkh32 "\n", kh_size(vocab));
 
 
     log_info("Creating phrases trie\n");
