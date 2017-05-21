@@ -800,17 +800,17 @@ bool token_phrase_memberships(phrase_array *phrases, int64_array *phrase_members
 
         for (; i < phrase.start; i++) {
             int64_array_push(phrase_memberships, NULL_PHRASE_MEMBERSHIP);
-            log_debug("token i=%lld, null phrase membership\n", i);
+            log_debug("token i=%" PRId64 ", null phrase membership\n", i);
         }
 
         for (i = phrase.start; i < phrase.start + phrase.len; i++) {
-            log_debug("token i=%lld, phrase membership=%lld\n", i, j);
+            log_debug("token i=%" PRId64 ", phrase membership=%" PRId64 "\n", i, j);
             int64_array_push(phrase_memberships, j);
         }
     }
 
     for (; i < len; i++) {
-        log_debug("token i=%lld, null phrase membership\n", i);
+        log_debug("token i=%" PRId64 ", null phrase membership\n", i);
         int64_array_push(phrase_memberships, NULL_PHRASE_MEMBERSHIP);
     }
 
