@@ -31,7 +31,7 @@ bool logistic_regression_model_expectation(double_matrix_t *theta, sparse_matrix
     }
 
     if (sparse_matrix_dot_dense(x, theta, p_y) != 0) {
-        log_error("x->m = %" PRIu32 ", x->n = %" PRIu32 ", theta->m = %" PRIu32 ", theta->n = %" PRIu32 ", p_y->m = %zu, p_y->n = %zu\n", x->m, x->n, theta->m, theta->n, p_y->m, p_y->n);
+        log_error("x->m = %" PRIu32 ", x->n = %" PRIu32 ", theta->m = %zu, theta->n = %zu, p_y->m = %zu, p_y->n = %zu\n", x->m, x->n, theta->m, theta->n, p_y->m, p_y->n);
         return false;
     }
 
