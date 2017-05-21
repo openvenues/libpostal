@@ -16,7 +16,6 @@ benteng
 benteng
 biara
 bioskop
-bistro
 cagar alam
 cuci mobil
 daerah

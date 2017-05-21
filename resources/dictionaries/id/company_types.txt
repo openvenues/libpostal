@@ -1,5 +1,4 @@
 asosiasi
-bank
 dan rekan|& rekan
 firma|fa|f a
 koperasi|kop|kprs
@@ -10,7 +9,8 @@ perseroan komanditer|comanditaire venotschap|cv|c v
 perseroan terbatas|pt|p t
 perusahaan daerah|pd
 perusahaan dagang|pd|p d
-perusahaan jawatan|pj|pjaw|p jaw
+perusahaan jawatan|pj|pjaw|p jaw|p j
+perusahaan otobus|po|p o
 perusahaan umum|perum|p u
 usaha dagang|ud|u d
 yayasan
