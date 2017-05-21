@@ -421,7 +421,7 @@ bool numex_table_read(FILE *f) {
         goto exit_numex_table_load_error;
     }
 
-    log_debug("read num_languages = %llu\n", num_languages);
+    log_debug("read num_languages = %" PRIu64 "\n", num_languages);
 
     int i = 0;
 
@@ -443,7 +443,7 @@ bool numex_table_read(FILE *f) {
         goto exit_numex_table_load_error;
     }
 
-    log_debug("read num_rules = %llu\n", num_rules);
+    log_debug("read num_rules = %" PRIu64 "\n", num_rules);
 
     numex_rule_t rule;
 

@@ -1090,7 +1090,7 @@ bool address_parser_train_epoch(address_parser_t *self, void *trainer, char *fil
             uint64_t prev_errors = errors;
             errors = address_parser_train_num_errors(self, trainer);
 
-            log_info("Iter %d: Did %zu examples with %llu errors\n", iteration, examples, errors - prev_errors);
+            log_info("Iter %d: Did %zu examples with %" PRIu64 " errors\n", iteration, examples, errors - prev_errors);
         }
     }
 
@@ -1211,7 +1211,7 @@ int main(int argc, char **argv) {
                 exit(EXIT_FAILURE);
             }
             min_updates = arg_min_updates;
-            log_info("min_updates = %llu\n", min_updates);
+            log_info("min_updates = %" PRIu64 "\n", min_updates);
         } else if (kwarg == ADDRESS_PARSER_TRAIN_ARG_MODEL_TYPE) {
             if (string_equals(arg, "crf")) {
                 model_type = ADDRESS_PARSER_TYPE_CRF;
