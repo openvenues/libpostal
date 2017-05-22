@@ -53,6 +53,7 @@ numbers:
             direction: left
         numeric_affix:
             affix: "#" # e.g. #3, #2F, etc.
+            direction: left
             probability: 0.5
             alternatives:
                 - alternative:
