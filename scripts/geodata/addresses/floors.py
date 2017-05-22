@@ -10,6 +10,7 @@ from geodata.numbers.spellout import numeric_expressions
 
 
 class Floor(NumberedComponent):
+    key = 'levels'
     # When we don't know the number of floors, use a Zipfian distribution
     # to choose randomly between 1 and max_floors with 1 being much more
     # likely than 2, etc.

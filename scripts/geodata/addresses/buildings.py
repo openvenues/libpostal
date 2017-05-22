@@ -14,6 +14,7 @@ from geodata.math.floats import isclose
 
 class Building(NumberedComponent):
     max_buildings = 10
+    key = 'buildings'
 
     building_range = range(1, max_buildings + 1)
     building_range_probs = zipfian_distribution(len(building_range), 2.0)

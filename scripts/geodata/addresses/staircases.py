@@ -14,6 +14,7 @@ from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 
 
 class Staircase(NumberedComponent):
+    key = 'staircases'
     max_staircases = 10
 
     staircase_range = range(1, max_staircases + 1)

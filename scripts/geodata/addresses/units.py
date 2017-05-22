@@ -19,6 +19,7 @@ class Unit(NumberedComponent):
     # likely than 2, etc.
     max_units = 99
     max_basements = 2
+    key = 'units'
 
     hundreds_numbered_units_tens = [range(101, 110) + [100],
                                     range(201, 210) + [200],

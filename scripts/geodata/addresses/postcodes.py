@@ -3,6 +3,8 @@ from geodata.encoding import safe_decode
 
 
 class PostCode(NumberedComponent):
+    key = 'postcodes'
+
     @classmethod
     def phrase(cls, postcode, language, country=None):
         if postcode is None:

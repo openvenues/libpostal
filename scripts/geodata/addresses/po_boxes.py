@@ -8,6 +8,8 @@ from geodata.math.sampling import cdf, weighted_choice
 
 
 class POBox(NumberedComponent):
+    key = 'po_boxes'
+
     @classmethod
     def random_digits(cls, num_digits):
         # Note: PO Boxes can have leading zeros but not important for the parser

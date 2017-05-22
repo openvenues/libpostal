@@ -6,6 +6,8 @@ from geodata.encoding import safe_decode
 
 
 class ConscriptionNumber(NumberedComponent):
+    key = 'conscription_numbers'
+
     @classmethod
     def phrase(cls, number, language, country=None):
         if number is None:

@@ -13,6 +13,7 @@ from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 
 class Block(NumberedComponent):
     max_blocks = 10
+    key = 'blocks'
 
     block_range = range(1, max_blocks + 1)
     block_range_probs = zipfian_distribution(len(block_range), 2.0)

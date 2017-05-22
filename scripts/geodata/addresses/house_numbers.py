@@ -6,6 +6,8 @@ from geodata.encoding import safe_decode
 
 
 class HouseNumber(NumberedComponent):
+    key = 'house_numbers'
+
     @classmethod
     def phrase(cls, number, language, country=None):
         if number is not None:
