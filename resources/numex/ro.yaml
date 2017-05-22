@@ -254,6 +254,53 @@
       type: "cardinal"
       left: "multiply"
       right: "add"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "-lea"
+        "1":
+          - "-lea"
+        "2":
+          - "-lea"
+        "3":
+          - "-lea"
+        "4":
+          - "-lea"
+        "5":
+          - "-lea"
+        "6":
+          - "-lea"
+        "7":
+          - "-lea"
+        "8":
+          - "-lea"
+        "9":
+          - "-lea"
+    - 
+      gender: "f"
+      suffixes:
+        "0":
+          - "-a"
+        "1":
+          - "-a"
+        "2":
+          - "-a"
+        "3":
+          - "-a"
+        "4":
+          - "-a"
+        "5":
+          - "-a"
+        "6":
+          - "-a"
+        "7":
+          - "-a"
+        "8":
+          - "-a"
+        "9":
+          - "-a"
+
   stopwords:
     - "şi"
     - "si"
