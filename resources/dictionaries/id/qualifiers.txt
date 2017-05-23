@@ -5,8 +5,7 @@ dusun|dsn|dsun
 gampong|gmpg|gpg|gp
 gedung|gdg|gd
 kabupaten|kab|kbptn|kbp
-kampong|kmpg|kpg|kp
-kampung|kmpg|kpg|kp
+kampung|kmpg|kpg|kp|kampong
 kecamatan|kec|kcmntn|kcm
 kelurahan|kel|klrhn|klh
 kompleks|komp|kmplk
