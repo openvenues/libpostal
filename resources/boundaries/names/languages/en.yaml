@@ -37,6 +37,7 @@ suffixes:
     - borough council
     - city council
     - regional council
+    - province
 
 countries:
     au:
