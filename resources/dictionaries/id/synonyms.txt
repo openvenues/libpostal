@@ -16,7 +16,7 @@ mas|ms
 mbak|mba|mb
 medikal|med
 militer|mil
-national|nasl|nas'l
+nasional|nasl|nas'l
 sungai|sngai
 tanjung|tjg
 utama|utm
