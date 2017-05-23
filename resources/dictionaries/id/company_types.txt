@@ -3,7 +3,6 @@ dan rekan|& rekan
 firma|fa|f a
 koperasi|kop|kprs
 koperasi usaha dagang|kud|k ud
-nonprofit|non profit
 persekutuan
 perseroan komanditer|comanditaire venotschap|cv|c v
 perseroan terbatas|pt|p t
