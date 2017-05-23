@@ -8,11 +8,9 @@ kavling|kav|kv
 kebun|kebon|kbn
 kios
 pabrik|pabrk|pbrk
-parcel
 parkiran|park
 rukun tetangga|rt
 rukun warga|rw
 stasiun
-stop
 toko|tko
 vila|vla|vl
