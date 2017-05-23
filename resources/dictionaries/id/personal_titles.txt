@@ -1,3 +1,4 @@
+abang|bang|bg
 brigadir jendral|brig jen|brigjen
 bapak|pak
 doktor|dr|dok
@@ -12,7 +13,7 @@ komandan letnan|kmndn let|kmd lt
 letnan|letn|lt
 letnan kolonel|letkol|lt kol|lt kl
 letnan jenderal|let jen|letjen|lt jn
-mas|bang|ms|bg
+mas|ms
 mayor|may|myr
 mayor jenderal|may jen|mayjen
 mbak
