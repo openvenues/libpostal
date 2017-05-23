@@ -39,7 +39,6 @@ istana
 jembatan
 kabupaten|kab
 kali
-kampung|kp|kpg|kmpg
 kampus
 kandang
 kantor bupati
@@ -58,9 +57,7 @@ kelurahan|kel
 kepolisian daerah|polda
 kepolisian resor|polres
 kepolisian sektor|polsek
-kindergarten
 kios
-kitchen
 klinik
 kolam renang
 komite
@@ -72,12 +69,10 @@ kos|kosan
 kota
 krematorium
 kuburan
-lab
-laboratorium
+laboratorium|lab
 lapangan
 lapangan golf
 lembaga pemasyarakatan
-mansion
 marina
 markas besar|mabes
 medik|med
@@ -140,7 +135,6 @@ tempat pembuangan umum|tpu
 tempat pertunjukan
 tepi pantai
 terminal|term
-toko
 toko
 toko buku
 unit gawat darurat|ugd
