@@ -356,7 +356,7 @@ bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens,
 
                 // Note: i gets incremented with the next iteration of the for loop
                 i = phrase_start;
-                log_debug("last_state == SEARCH_STATE_PARTIAL_MATCH, i = %zu\n", i);
+                log_debug("last_state == SEARCH_STATE_PARTIAL_MATCH, i = %d\n", i);
                 last_match_index = -1;
                 phrase_start = phrase_len = 0;
                 node_id = last_node_id = start_node_id;

@@ -1,5 +1,34 @@
-imam
-jenderal
-pangeran
-raja
-sultan
+abang|bang|bg
+brigadir jendral|brig jen|brigjen
+bapak|pak
+doktor|dr|dok
+doktorandus|drs
+ibu|bu|ibuk|buk
+jenderal|jend|jnd|jen|jendral
+kapten|kpt|kapt
+kolonel|kol
+komandan|kmndn|kmd
+kopral|koprl|kpl
+komandan letnan|kmndn let|kmd lt
+letnan|letn|lt
+letnan kolonel|letkol|lt kol|lt kl
+letnan jenderal|let jen|letjen|lt jn
+mas|ms
+mayor|may|myr
+mayor jenderal|may jen|mayjen
+mbak
+menteri|mentri|mntr
+pangeran|pngrn
+pastor
+pendeta|pdt
+ustadz|ust
+prajurit|prjrt
+presiden|pres
+profesor|prof
+raden|rdn|r
+raden mas|rm|r m
+raden rara|rdn rara|rr
+raja|rja
+ratu
+sersan|sers|sersn
+sultan|sltn
