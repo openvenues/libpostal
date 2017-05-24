@@ -1,18 +1,7 @@
 alun-alun|alun alun|alunalun
-gang
-jalan|jln|jl
-jalan besar|jl besar|jl.besar|jln besar|jln.besar
-jalan desa|jl desa|jl.desa|jln desa|jln.desa
-jalan tol lingkar|jl tol lingkar|jl.tol lingkar|jln tol lingkar|jln.tol lingkar
-jalan lingkar|jl lingkar|jl.lingkar|jln lingkar|jln.lingkar
-jalan lintas|jl lintas|jl.lintas|jln lintas|jln.lintas
-jalan pedesaan|jl pedesaan|jl.pedesaan|jln pedesaan|jln.pedesaan
-jalan pemukiman|jl pemukiman|jl.pemukiman|jln pemukiman|jln.pemukiman
-jalan poros|jl poros|jl.poros|jln poros|jln.poros
-jalan raya|jl raya|jl.raya|jln raya|jln.raya
-jalan tol|jl tol|jl.tol|jln tol|jln.tol
-jalan utama|jl utama|jl.utama|jln utama|jln.utama
+gang|gg
+jalan|jln|jl|jl.
 jalur
 jembatan
-lorong
+lorong|lrong
 terowongan
