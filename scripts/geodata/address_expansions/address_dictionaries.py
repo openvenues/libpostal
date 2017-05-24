@@ -65,6 +65,7 @@ address_language_index_t expansion_languages[] = {{
 gazetteer_types = {
     'academic_degrees': 'DICTIONARY_ACADEMIC_DEGREE',
     'ambiguous_expansions': 'DICTIONARY_AMBIGUOUS_EXPANSION',
+    'blocks': 'DICTIONARY_BLOCK',
     'building_types': 'DICTIONARY_BUILDING_TYPE',
     'categories': 'DICTIONARY_CATEGORY',
     'categories_plural': 'DICTIONARY_CATEGORY_PLURAL',
@@ -84,6 +85,7 @@ gazetteer_types = {
     'level_types_numbered': 'DICTIONARY_LEVEL_NUMBERED',
     'level_types_standalone': 'DICTIONARY_LEVEL_STANDALONE',
     'level_types_sub_basement': 'DICTIONARY_LEVEL_SUB_BASEMENT',
+    'lots': 'DICTIONARY_LOT',
     'near': 'DICTIONARY_NEAR',
     'no_number': 'DICTIONARY_NO_NUMBER',
     'number': 'DICTIONARY_NUMBER',
@@ -99,6 +101,7 @@ gazetteer_types = {
     'staircases': 'DICTIONARY_STAIRCASE',
     'stopwords': 'DICTIONARY_STOPWORD',
     'street_types': 'DICTIONARY_STREET_TYPE',
+    'superblocks': 'DICTIONARY_SUPERBLOCK',
     'surnames': 'DICTIONARY_SURNAME',
     'synonyms': 'DICTIONARY_SYNONYM',
     'toponyms': 'DICTIONARY_TOPONYM',
