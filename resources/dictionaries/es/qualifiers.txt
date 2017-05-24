@@ -28,7 +28,6 @@ provincia|pcia
 punto kilométrico|punto kilometrico|pk|p.k.|p k
 sección|seccion|secc|sccn|scn|sec
 sector|sect
-supermanzana|sm|s.m.|s.m|s m|super mz|super manzana
 urbanización|urbanizacion|urb|ur
 vecindario|vecin
 zona|zna|zn
