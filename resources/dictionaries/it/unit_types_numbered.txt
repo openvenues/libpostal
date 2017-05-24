@@ -2,7 +2,6 @@ appartamento|app
 casa|c|ca|ca'
 garage|g.ge|gge
 interno|int
-lotto
 officina|off.a|off
 porta
 sala

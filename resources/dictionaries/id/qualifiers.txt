@@ -1,5 +1,4 @@
 banjar|bjr
-blok|blk|bl
 desa|ds|dsa
 dusun|dsn|dsun
 gampong|gmpg|gpg|gp

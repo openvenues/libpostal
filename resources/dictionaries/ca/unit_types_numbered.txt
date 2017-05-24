@@ -2,7 +2,6 @@ apartament|apmt
 casa
 habitació|hab|habitacio
 lletra
-lot|lt
 oficina|of
 parcel·la|parc|parcella
 porta|pta

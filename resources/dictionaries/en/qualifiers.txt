@@ -1,5 +1,4 @@
 barangay|brgy|bgy
-block|blk|bl|blck
 quadrant|qd|quad
 republic|rep
 section|sec|sect|sxn

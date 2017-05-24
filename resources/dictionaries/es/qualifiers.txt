@@ -4,7 +4,6 @@ auzoa
 barriada|barda
 barrio|bo|brio|brrio|bº|b°|b.º|b.°|b /|br
 barrios|bos|brios|brrios
-bloque|blque|bloq|blq|bl|bq|blo
 colonia|col
 comuna
 conjunto|cjto|conj|cto

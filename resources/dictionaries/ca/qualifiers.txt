@@ -1,5 +1,4 @@
 barri|b
-bloc|bl
 cantonada|cant
 districte|distr
 polígon|pol|poligon

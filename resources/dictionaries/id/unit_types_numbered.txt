@@ -7,7 +7,6 @@ kantor
 kavling|kav|kv
 kebun|kebon|kbn
 kios
-lot
 pabrik|pabrk|pbrk
 parkiran|park
 rukun tetangga|rt

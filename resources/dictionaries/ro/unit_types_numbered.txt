@@ -1,4 +1,3 @@
 apartament|ap|apt|apart
 birou
-lotul
 sală|sala

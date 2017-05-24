@@ -1,4 +1,3 @@
-bloco|bl|blc
 condominio|cond|condo
 edifício|edificio|edf|edif
 habitação|habitacao|hab

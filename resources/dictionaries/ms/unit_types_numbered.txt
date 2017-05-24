@@ -1,3 +1,2 @@
 apartment|aparment|apartmen|apt
 flat|flt
-lot
