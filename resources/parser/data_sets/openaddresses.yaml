@@ -883,6 +883,9 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Medellín
+                      ignore_fields_containing:
+                          road:
+                              - "^\\s*ERROR\\s*$"
 
     cz:
         files:
