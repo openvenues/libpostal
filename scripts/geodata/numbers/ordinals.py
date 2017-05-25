@@ -50,6 +50,7 @@ class OrdinalExpressions(object):
 
         self.ordinal_rules = {}
         self.ordinal_suffix_rules = {}
+        self.ordinal_suffixes = {}
 
         for filename in os.listdir(base_dir):
             if filename.endswith('.yaml'):
@@ -84,6 +85,7 @@ class OrdinalExpressions(object):
                     for rule_set in ordinal_indicators:
                         gender = rule_set.get('gender', None)
                         category = rule_set.get('category', None)
+                        self.ordinal_suffixes[(lang, gender, category)] = rule_set['suffixes']
                         self.ordinal_suffix_rules[(lang, gender, category)] = OrdinalSuffixTrie(rule_set['suffixes'])
 
     def get_suffixes(self, num, lang, gender=None, category=None):
