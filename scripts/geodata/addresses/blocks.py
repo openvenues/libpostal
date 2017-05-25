@@ -55,6 +55,6 @@ class Block(NumberedComponent):
         phrase_prob = address_config.get_property('blocks.alphanumeric_phrase_probability', language, country=country, default=0.0)
         if random.random() < phrase_prob:
             return cls.numeric_phrase('blocks.alphanumeric', block, language,
-                                      dictionaries=['qualifiers'], country=country)
+                                      dictionaries=['blocks'], country=country)
         else:
             return None
