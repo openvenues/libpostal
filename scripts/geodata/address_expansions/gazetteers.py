@@ -195,7 +195,7 @@ NAME_DICTIONARIES = STREET_TYPES_DICTIONARIES + ('academic_degrees',
 
 QUALIFIERS_DICTIONARY = 'qualifiers'
 
-HOUSE_NUMBER_DICTIONARIES = ('house_numbers', 'number', 'no_number')
+HOUSE_NUMBER_DICTIONARIES = ('house_numbers', 'superblocks', 'blocks', 'lots', 'number', 'no_number')
 
 POSTCODE_DICTIONARIES = ('postcode',)
 
