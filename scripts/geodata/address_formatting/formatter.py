@@ -61,7 +61,9 @@ class AddressFormatter(object):
     ROAD = 'road'
     BUILDING = 'building'
     NAMED_BUILDING = 'named_building'
+    SUPERBLOCK = 'superblock'
     BLOCK = 'block'
+    LOT = 'lot'
     ENTRANCE = 'entrance'
     STAIRCASE = 'staircase'
     LEVEL = 'level'
@@ -89,6 +91,9 @@ class AddressFormatter(object):
         HOUSE,
         PO_BOX,
         HOUSE_NUMBER,
+        SUPERBLOCK,
+        BLOCK,
+        LOT,
         ENTRANCE,
         STAIRCASE,
         LEVEL,
@@ -98,7 +103,6 @@ class AddressFormatter(object):
         SUBDIVISION,
         NAMED_BUILDING,
         BUILDING,
-        BLOCK,
         METRO_STATION,
         SUBURB,
         CITY_DISTRICT,
@@ -139,7 +143,9 @@ class AddressFormatter(object):
 
     STREET_COMPONENTS = {
         HOUSE_NUMBER,
+        SUPERBLOCK,
         BLOCK,
+        LOT,
         ROAD,
     }
 
@@ -177,7 +183,9 @@ class AddressFormatter(object):
         NAMED_BUILDING: HOUSE,
         BUILDING: HOUSE,
         SUBDIVISION: HOUSE,
+        SUPERBLOCK: HOUSE_NUMBER,
         BLOCK: HOUSE_NUMBER,
+        LOT: HOUSE_NUMBER,
         LOCALITY: CITY,
     }
 
