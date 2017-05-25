@@ -34,6 +34,7 @@ class OSMDefinitions(object):
     POPULATED_PLACE = 'populated_place'
     SHOP = 'shop'
     TOURISM = 'tourism'
+    LEISURE = 'leisure'
     VENUE = 'venue'
     SUBDIVISION_NAMED = 'subdivision_named'
     SUBDIVISION_UNNAMED = 'subdivision_unnamed'
