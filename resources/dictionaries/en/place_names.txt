@@ -60,7 +60,7 @@ clubhouse|club house
 clubrooms
 coffee
 college
-committee
+committee|cmte
 commercial center|commercial centre|commercialcenter|commercialcentre
 community center|communitycentre|communitycenter|community centre
 community|cmnty|cmty
