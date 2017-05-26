@@ -332,15 +332,18 @@ class OpenAddressesFormatter(object):
             return
 
         field_map = {field_name: f['component'] for field_name, f in six.iteritems(fields)}
+        field_conditions = {field_name: f['conditions'] for field_name, f in six.items(fields) if 'conditions' in f}
+
         mapped_values = {f['component']: f['value_map'] for f in six.itervalues(fields) if hasattr(f.get('value_map'), 'get')}
 
         f = open(path)
         reader = unicode_csv_reader(f)
         headers = reader.next()
 
+        header_fields = {k: i for i, k in enumerate(headers)}
         header_indices = {i: field_map[k] for i, k in enumerate(headers) if k in field_map}
-        latitude_index = headers.index('LAT')
-        longitude_index = headers.index('LON')
+        latitude_index = header_fields['LAT']
+        longitude_index = header_fields['LON']
 
         # Clear cached polygons
         self.components.osm_admin_rtree.clear_cache()
@@ -366,6 +369,28 @@ class OpenAddressesFormatter(object):
                     break
                 elif not value:
                     continue
+
+                original_header = headers[i]
+                if original_header in field_conditions:
+                    conditions = field_conditions[original_header]
+                    for cond in conditions:
+                        other_field = cond.get('field')
+                        if other_field:
+                            other_index = header_indices[other_field]
+                            other = row[other_index].strip()
+                            equal_to_field = cond.get('equal_to_field')
+                            if equal_to_field:
+                                equal_to_field_index = header_indices[equal_to_field]
+                                equal_to = row[equal_to_field_index]
+                                if other == equal_to:
+                                    key = cond['component']
+                                    break
+                            check_exists = cond.get('exists')
+                            if check_exists and other:
+                                key = cond['component']
+                                break
+                    if key is None:
+                        continue
 
                 if key in mapped_values:
                     value = mapped_values[key].get(value, value)
