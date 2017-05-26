@@ -3,70 +3,130 @@ act
 ab
 al
 ak
+ap
 ar
+av
 az
 arc
 bc
 ba
 b a
+bg
+bh
+bl
+bk
+br
 bs
 b s
 byu
 c
 ca
+cc
+ce
 ch
 c h
+ci
+cl
+cn
 co
+cp
 cr
 c r
+cs
 ct
-de
+cv
 dc
+d c
+dd
+d d
+de
+dm
+dn
+dr
+dv
 e
+ex
 f
 fc
 f c
 fd
 f d
 fl
+fr
+ft
+fw
+fy
 g
 ga
+gd
+gl
+g l
+gn
+gf
 gp
 g p
+gr
+gt
+hd
 hi
+hk
+h k
+hl
+hm
+ho
 hs
 h s
+ht
+hw
 i
+ia
 id
 ih
 i h
 il
 in
-ia
+is
 j
 jbt
 jd
 j d
+jr
+kg
 ks
 ky
 l
 la
+lb
+l b
 lc
 l c
+lf
+lg
+l g
+lk
+ln
+lp
+l p
+lr
+lt
 ma
 m a
+mb
+m b
 mc
 m c
 me
-mb
 md
 m d
 mi
+ml
 mn
 ms
 m s
 mo
+mr
 mt
+mw
 m
 n
 na
@@ -84,10 +144,14 @@ nl
 n l
 nm
 no
+np
+n p
+nr
 ns
 nsw
 nu
 nt
+n t
 nw
 n w
 nwt
@@ -98,23 +162,52 @@ on
 ok
 or
 pa
+pb
+p b
 pd
 p d
 pe
 pei
+pf
+p f
+ph
+p h
+pk
+pl
+pm
+p m
+pn
+po
+p o
+pr
 ps
 p s
+pt
+pz
 qc
+qd
 qld
+qy
 r
+ra
+rd
+rf
 rh
 r h
 ri
+rm
+rn
+r n
 ro
 r o
 rr
 r r
+rs
+rt
+rw
 s
+sb
+s b
 sc
 sd
 se
@@ -122,10 +215,15 @@ s e
 sh
 s h
 sk
+sl
 sp
 s p
+sq
 sr
 s r
+ss
+st
+su
 sw
 s w
 tas
@@ -139,15 +237,26 @@ tn
 tr
 t r
 tx
-ut
+ug
+u g
 un
-vic
-vt
+up
+ut
 va
+vic
+vl
+vt
+vw
+vy
 w
 wa
 we
-wv
 wi
+wk
+wl
+wm
+wv
 yt
+wd
 wy
+yd
