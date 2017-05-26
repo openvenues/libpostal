@@ -61,6 +61,7 @@ clubrooms
 coffee
 college
 committee
+commercial center|commercial centre|commercialcenter|commercialcentre
 community center|communitycentre|communitycenter|community centre
 community|cmnty|cmty
 complex
@@ -96,7 +97,7 @@ doctors
 dojo
 dormitory|dorm
 dormitories|dorms
-elementary school|primary school|public school|ps|p s
+elementary school
 embassy
 estate
 ex services complex
@@ -231,7 +232,7 @@ prison
 pub
 public market
 public pool
-public school|ps
+public school|ps|p s
 raceway
 racing track
 racecourse
