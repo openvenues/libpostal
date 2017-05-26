@@ -1,3 +1,5 @@
+beach|bch|bh
+branch|br|brnch|brch
 brothers|bros
 cape|cpe|cp
 city|cty
@@ -18,6 +20,7 @@ greater|grtr|gtr
 greens|grns
 groves|grvs
 heights|hghts|hgts|hieghts|ht|hts|hgths
+hill|hl
 international|intl|int'l
 lake|lk
 lakes|lks
@@ -46,6 +49,8 @@ springs|spgs|sprngs
 stream|strm|stm
 triangle|tri
 upper|up|upr|uppr
+vale|va|vl
+valley|vy|vlly|vly
 village|vlg|vlge|vilg|vilge
 ville|vl
 villages|vlgs

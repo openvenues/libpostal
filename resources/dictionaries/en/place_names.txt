@@ -25,7 +25,7 @@ barn
 barbecue|barbeque|bar be que|bar be cue|bbq
 barracks|barrack|baracks
 bazaar
-beach
+beach|bch|bh|baech
 beauty salon
 boarding house|bhouse|bh|board house
 bistro

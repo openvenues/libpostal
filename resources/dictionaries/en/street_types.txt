@@ -19,7 +19,7 @@ bank|bnk
 basin|basn|bsn
 bay
 bayou|byu|bayoo
-beach|baech|bch|beech
+beach|bch|bh|baech
 belt|blt
 bend|bnd
 block|blk|blck
@@ -382,7 +382,7 @@ unions|uns
 us highway|us hwy|u s hwy
 us route|us rte|u s rte
 vale|va|vl
-valley|vlly|vly|vy
+valley|vy|vlly|vly
 valleys|vlys|vllys
 vennel
 viaduct|via|viad|vdct|viadct
