@@ -1862,10 +1862,27 @@ countries:
             - filename: countrywide.csv
 
     nz:
-        add_osm_boundaries: true
         files:
             - filename: countrywide.csv
+              fields:
+                  <<: *default_fields
+                  CITY:
+                      component: city
+                      conditions:
+                          - field: DISTRICT
+                            equal_to_field: CITY
+                            component: city
+                          - field: DISTRICT
+                            exists: true
+                            component: suburb
+                  DISTRICT:
+                      component: city
+                      conditions:
+                          - field: DISTRICT
+                            equal_to_field: CITY
+                            component: null
             - filename: city_of_palmerston_north.csv
+              add_osm_boundaries: true
 
     pl:
         files:
