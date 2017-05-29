@@ -1,0 +1,7 @@
+apartemen|apart|aprtmn
+garasi|grs
+gedung|gd|gdg
+gudang|gdang
+kebun|kebon|kbn
+rumah|rmah|rmh
+vila|vla|vl

@@ -1,0 +1,4 @@
+belakang|blkg|blkang
+depan|dpn
+kanan|knan|knn
+kiri|kri|kr
