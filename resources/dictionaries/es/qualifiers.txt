@@ -17,7 +17,6 @@ extramuros|extrm
 isla|isl|is
 islas|isls|iss
 kilómetro|km|kilometro|kilom
-manzana|mz|mza
 núcleo|ncleo|nucleo
 partida|ptda
 poblado|pbdo|pob|pobl
