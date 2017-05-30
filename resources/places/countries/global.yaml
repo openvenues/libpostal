@@ -18,9 +18,9 @@ global:
         city_district:
             probability: 0.2
         locality:
-            probability: 1.0
+            probability: 0.99
         city:
-            probability: 1.0
+            probability: 0.99
         island:
             # Islands are usually not represented in addresses
             probability: 0.0
@@ -53,6 +53,8 @@ global:
 
 add_west_indies: &add_west_indies
     components:
+        city:
+            probability: 0.7
         world_region: &add_west_indies_world_region
             probability: 0.1
             values:
@@ -78,6 +80,8 @@ countries:
             - suburb
             - city_district
             - state_district
+        replace_city_with_locality_probability: 0.8
+        locality_and_city_probability: 0.1
         components:
             suburb:
                 dependencies:
@@ -285,6 +289,8 @@ countries:
             suburb:
                 dependencies:
                     - country
+            city:
+                probability: 0.7
             country:
                 probability: 0.85
             state:
@@ -333,6 +339,8 @@ countries:
             suburb:
                 dependencies:
                     - country
+            city:
+                probability: 0.7
             island:
                 probability: 0.8
             world_region: *add_west_indies_world_region
@@ -380,6 +388,7 @@ countries:
 
     # Malaysia
     my:
+        replace_city_with_locality_probability: 0.2
         locality_and_city_probability: 0.4
         components:
             island:
@@ -387,12 +396,19 @@ countries:
 
     # New Zealand
     nz:
+        city_replacements:
+            - suburb
+            - city_district
+            - state_district
+        replace_city_with_locality_probability: 0.7
+        locality_and_city_probability: 0.1
         components:
             island:
                 probability: 0.1
 
     # Philippines
     ph:
+        replace_city_with_locality_probability: 0.2
         locality_and_city_probability: 0.3
         components:
             island:
@@ -401,12 +417,16 @@ countries:
     # Pitcairn Islands
     pn:
         components:
+            city:
+                probability: 0.7
             island:
                 probability: 0.8
 
     # Seychelles
     sc:
         components:
+            city:
+                probability: 0.7
             island:
                 probability: 0.8
 
@@ -540,6 +560,8 @@ countries:
     # Tuvalu
     tv:
         components:
+            city:
+                probability: 0.7
             island:
                 probability: 0.8
 
@@ -555,6 +577,8 @@ countries:
     # US Virgin Islands
     vi:
         components:
+            city:
+                probability: 0.7
             island:
                 probability: 0.8
             world_region: *add_west_indies_world_region
@@ -562,6 +586,8 @@ countries:
     # British Virgin Islands
     vg:
         components:
+            city:
+                probability: 0.7
             island:
                 probability: 0.8
             world_region: *add_west_indies_world_region
