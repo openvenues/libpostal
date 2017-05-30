@@ -599,13 +599,13 @@ static language_classifier_t *trainer_finalize(logistic_regression_trainer_t *tr
             sparse_matrix_t *sparse_weights = logistic_regression_trainer_final_weights_sparse(trainer);
             classifier->weights_type = MATRIX_SPARSE;
             classifier->weights.sparse = sparse_weights;
-            log_info("Weights sparse: %zu rows (m=%u), %zu cols, %zu elements\n", sparse_weights->indptr->n, sparse_weights->m, sparse_weights->n, sparse_weights->data->n);
+            log_info("Weights sparse: %zu rows (m=%u), %" PRIu32 " cols, %zu elements\n", sparse_weights->indptr->n, sparse_weights->m, sparse_weights->n, sparse_weights->data->n);
         }
     } else if (trainer->optimizer_type == LOGISTIC_REGRESSION_OPTIMIZER_FTRL) {
         sparse_matrix_t *sparse_weights = logistic_regression_trainer_final_weights_sparse(trainer);
         classifier->weights_type = MATRIX_SPARSE;
         classifier->weights.sparse = sparse_weights;
-        log_info("Weights sparse: %zu rows (m=%u), %zu cols, %zu elements\n", sparse_weights->indptr->n, sparse_weights->m, sparse_weights->n, sparse_weights->data->n);
+        log_info("Weights sparse: %zu rows (m=%u), %" PRIu32 " cols, %zu elements\n", sparse_weights->indptr->n, sparse_weights->m, sparse_weights->n, sparse_weights->data->n);
     }
 
 

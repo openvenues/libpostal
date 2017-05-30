@@ -148,7 +148,7 @@ averaged_perceptron_t *averaged_perceptron_trainer_finalize(averaged_perceptron_
 
     log_info("Finalizing trainer, num_features=%u\n", self->num_features);
 
-    log_info("Pruning weights with < min_updates = %llu\n", self->min_updates);
+    log_info("Pruning weights with < min_updates = %" PRIu64 "\n", self->min_updates);
 
     for (feature_id = 0; feature_id < self->num_features; feature_id++) {
         k = kh_get(feature_class_weights, self->weights, feature_id);

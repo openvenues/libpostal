@@ -15,7 +15,7 @@ address_dictionary_t *get_address_dictionary(void) {
 
 address_expansion_value_t *address_dictionary_get_expansions(uint32_t i) {
     if (address_dict == NULL || address_dict->values == NULL || i > address_dict->values->n) {
-        log_error("i=%zu, address_dict->values->n=%zu\n", i, address_dict->values->n);
+        log_error("i=%" PRIu32 ", address_dict->values->n=%zu\n", i, address_dict->values->n);
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
         return NULL;
     }
