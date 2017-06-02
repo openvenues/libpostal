@@ -71,6 +71,24 @@ global:
     numeric_postcodes_only: true
 
 countries:
+    ae:
+        subdirs:
+            du:
+                files:
+                    - filename: dubai-ar.csv
+                      add:
+                          city: دبي‎‎
+                      fields:
+                          <<: *default_fields
+                          DISTRICT:
+                              component: suburb
+                    - filename: dubai-en.csv
+                      add:
+                          city: Dubai
+                      fields:
+                          <<: *default_fields
+                          DISTRICT:
+                              component: suburb
     ar:
         language: es
         files:
