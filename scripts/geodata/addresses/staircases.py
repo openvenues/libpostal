@@ -16,6 +16,7 @@ from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 class Staircase(NumberedComponent):
     key = 'staircases'
     max_staircases = 10
+    dictionaries = ['staircases']
 
     staircase_range = range(1, max_staircases + 1)
     staircase_range_probs = zipfian_distribution(len(staircase_range), 2.0)
@@ -64,4 +65,4 @@ class Staircase(NumberedComponent):
         if staircase is None:
             return None
         return cls.numeric_phrase('staircases.alphanumeric', staircase, language,
-                                  dictionaries=['staircases'], country=country)
+                                  dictionaries=cls.dictionaries, country=country)

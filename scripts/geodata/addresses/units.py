@@ -20,6 +20,7 @@ class Unit(NumberedComponent):
     max_units = 99
     max_basements = 2
     key = 'units'
+    dictionaries = ['unit_types_numbered', 'unit_types_standalone']
 
     hundreds_numbered_units_tens = [range(101, 110) + [100],
                                     range(201, 210) + [200],

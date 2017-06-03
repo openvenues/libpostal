@@ -7,6 +7,7 @@ from geodata.encoding import safe_decode
 
 class HouseNumber(NumberedComponent):
     key = 'house_numbers'
+    dictionaries = ['house_numbers', 'number', 'no_number']
 
     @classmethod
     def phrase(cls, number, language, country=None):

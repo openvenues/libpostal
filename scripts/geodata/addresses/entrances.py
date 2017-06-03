@@ -16,6 +16,7 @@ from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 class Entrance(NumberedComponent):
     max_entrances = 10
     key = 'entrances'
+    dictionaries = ['entrances']
 
     entrance_range = range(1, max_entrances + 1)
     entrance_range_probs = zipfian_distribution(len(entrance_range), 2.0)
@@ -64,4 +65,4 @@ class Entrance(NumberedComponent):
         if entrance is None:
             return None
         return cls.numeric_phrase('entrances.alphanumeric', entrance, language,
-                                  dictionaries=['entrances'], country=country)
+                                  dictionaries=cls.dictionaries, country=country)

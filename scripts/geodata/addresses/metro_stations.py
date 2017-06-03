@@ -14,6 +14,7 @@ class MetroStationPhrase(NumericPhrase):
 
 class MetroStation(object):
     key = 'metro_stations'
+    dictionaries = ['metro_stations']
 
     @classmethod
     def phrase(cls, station, language, country=None):

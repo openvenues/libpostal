@@ -14,6 +14,7 @@ from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 class Block(NumberedComponent):
     max_blocks = 10
     key = 'blocks'
+    dictionaries = ['blocks']
 
     block_range = range(1, max_blocks + 1)
     block_range_probs = zipfian_distribution(len(block_range), 2.0)
@@ -55,6 +56,6 @@ class Block(NumberedComponent):
         phrase_prob = address_config.get_property('blocks.alphanumeric_phrase_probability', language, country=country, default=0.0)
         if random.random() < phrase_prob:
             return cls.numeric_phrase('blocks.alphanumeric', block, language,
-                                      dictionaries=['blocks'], country=country)
+                                      dictionaries=cls.dictionaries, country=country)
         else:
             return None

@@ -15,6 +15,7 @@ from geodata.math.floats import isclose
 class Building(NumberedComponent):
     max_buildings = 10
     key = 'buildings'
+    dictionaries = ['building_types']
 
     building_range = range(1, max_buildings + 1)
     building_range_probs = zipfian_distribution(len(building_range), 2.0)
@@ -119,4 +120,4 @@ class Building(NumberedComponent):
             return None
 
         return cls.numeric_phrase('buildings.alphanumeric', building, language,
-                                  dictionaries=['building_types'], country=country)
+                                  dictionaries=cls.dictionaries, country=country)

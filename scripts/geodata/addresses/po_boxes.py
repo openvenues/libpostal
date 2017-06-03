@@ -9,6 +9,7 @@ from geodata.math.sampling import cdf, weighted_choice
 
 class POBox(NumberedComponent):
     key = 'po_boxes'
+    dictionaries = ['post_office']
 
     @classmethod
     def random_digits(cls, num_digits):
@@ -75,4 +76,4 @@ class POBox(NumberedComponent):
         if box_number is None:
             return None
         return cls.numeric_phrase('po_boxes.alphanumeric', safe_decode(box_number), language,
-                                  dictionaries=['post_office'], country=country)
+                                  dictionaries=cls.dictionaries, country=country)

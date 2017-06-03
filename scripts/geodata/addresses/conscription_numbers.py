@@ -7,6 +7,7 @@ from geodata.encoding import safe_decode
 
 class ConscriptionNumber(NumberedComponent):
     key = 'conscription_numbers'
+    dictionaries = ['house_numbers']
 
     @classmethod
     def phrase(cls, number, language, country=None):
@@ -14,8 +15,7 @@ class ConscriptionNumber(NumberedComponent):
             return number
 
         key = 'conscription_numbers.alphanumeric'
-        dictionaries = ['house_numbers']
         default = safe_decode(number)
 
         return cls.numeric_phrase(key, safe_decode(number), language,
-                                  dictionaries=dictionaries, country=country)
+                                  dictionaries=cls.dictionaries, country=country)

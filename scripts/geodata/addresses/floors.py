@@ -11,6 +11,7 @@ from geodata.numbers.spellout import numeric_expressions
 
 class Floor(NumberedComponent):
     key = 'levels'
+    dictionaries = ['level_types_numbered', 'level_types_standalone', 'level_types_mezzanine', 'level_types_basement', 'level_types_sub_basement']
     # When we don't know the number of floors, use a Zipfian distribution
     # to choose randomly between 1 and max_floors with 1 being much more
     # likely than 2, etc.
@@ -160,11 +161,7 @@ class Floor(NumberedComponent):
 
             if alias:
                 return cls.numeric_phrase('{}.{}'.format(alias_prefix, alias), floor, language,
-                                          dictionaries=['level_types_basement',
-                                                        'level_types_mezzanine',
-                                                        'level_types_numbered',
-                                                        'level_types_standalone',
-                                                        'level_types_sub_basement'],
+                                          dictionaries=cls.dictionaries,
                                           country=country)
 
         return cls.numeric_phrase('levels.alphanumeric', floor, language,
