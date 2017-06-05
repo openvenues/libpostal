@@ -342,6 +342,7 @@ Libpostal is designed to be used by higher-level languages.  If you don't see yo
 
 - LuaJIT: [lua-resty-postal](https://github.com/bungle/lua-resty-postal)
 - Perl: [Geo::libpostal](https://metacpan.org/pod/Geo::libpostal)
+- Elixir: [Expostal](https://github.com/SweetIQ/expostal)
 
 **Database extensions**
 
