@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 import random
+import re
 import six
 
+from collections import defaultdict
+
 from geodata.addresses.config import address_config
+from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
 from geodata.encoding import safe_decode
 from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 from geodata.math.floats import isclose
@@ -251,6 +255,316 @@ class NumberedComponent(object):
     @classmethod
     def random_digits(cls, num_digits):
         return random.randrange(10 ** num_digits, 10 ** (num_digits + 1))
+
+    numeric_pattern = u'\\b(?:[^\W\d_]{,2}[\d]+[^\W\d_]{,2}[\-\u2013\./][^\W\d_]{,2}[\d]+[^\W\d_]{,2}|[\d]*[^\W\d_][\d]*(?:[\-\u2013\./ ]|\s[\-\u2013/]\s)?[^\W\d_]?[\d]+[^\W\d_]?|[^\W\d_]?[\d]+[^\W\d_]?(?:[\-\u2013\./ ]|\s[\-\u2013/]\s)?[\d]*[^\W\d_][\d]*|[\d]+|[^\W\d_](?:(?:[\-\u2013/][^\W\d_])|(?:[\-\u2013\./][^\W\d_]?[\d]+[^\W\d_]?))?)\\b'
+
+    @classmethod
+    def numeric_regex(cls, language, country=None):
+        left_phrases = []
+        left_phrases_with_number = []
+        left_affix_phrases = []
+        left_ordinal_phrases = defaultdict(list)
+        right_phrases = []
+        right_phrases_with_number = []
+        right_affix_phrases = []
+        right_ordinal_phrases = defaultdict(list)
+        standalone_phrases = []
+
+        regexes = []
+
+        alphanumeric_props = address_config.get_property('{}.alphanumeric'.format(cls.key), language, country=country)
+        if not alphanumeric_props:
+            return None
+
+        default = alphanumeric_props.get('default')
+        alternatives = alphanumeric_props.get('alternatives', [])
+        config_phrases = [default] + [a['alternative'] for a in alternatives]
+        sample = alphanumeric_props.get('sample')
+        seen_phrases = set([c['canonical'] for c in config_phrases])
+
+        whitespace = address_config.get_property('whitespace', language, country=country, default=True)
+
+        canonical_phrases = defaultdict(set)
+        for dictionary in cls.dictionaries:
+            for p in address_phrase_dictionaries.phrases.get((language, dictionary), []):
+                canonical_phrases[p[0]].update(p[1:])
+
+        number_canonical_phrases = defaultdict(set)
+        all_number_phrases = set()
+        for dictionary in Number.dictionaries:
+            for p in address_phrase_dictionaries.phrases.get((language, dictionary), []):
+                number_canonical_phrases[p[0]].update(p[1:])
+                all_number_phrases.update(p)
+
+        zone_props = address_config.get_property('{}.zones'.format(cls.key), language, country=country)
+        if zone_props:
+            for zone, props in six.iteritems(zone_props):
+                default = props.get('default')
+                if default and default['canonical'] not in seen_phrases:
+                    config_phrases.append(default)
+                alternatives = props.get('alternatives', [])
+                for a in alternatives:
+                    alt = a['alternative']
+                    if alt and alt['canonical'] not in seen_phrases:
+                        config_phrases.append(alt)
+
+        seen_phrases = set([c['canonical'] for c in config_phrases])
+
+        alias_props = address_config.get_property('{}.aliases'.format(cls.key), language, country=country)
+        if alias_props:
+            for alias, props in six.iteritems(alias_props):
+                default = props.get('default')
+                if default and default['canonical'] not in seen_phrases:
+                    config_phrases.append(default)
+                alternatives = props.get('alternatives', [])
+                for a in alternatives:
+                    alt = a['alternative']
+                    if alt and alt['canonical'] not in seen_phrases:
+                        config_phrases.append(alt)
+
+        seen_phrases = set([c['canonical'] for c in config_phrases])
+
+        number_props = address_config.get_property(Number.key, language, country=country)
+        number_default = number_props.get('default')
+        number_alternatives = number_props.get('alternatives', [])
+        number_phrases = [number_default] + [a['alternative'] for a in number_alternatives]
+
+        left_number_phrases = []
+        left_number_affix_phrases = []
+        right_number_phrases = []
+        right_number_affix_phrases = []
+
+        for c in number_phrases:
+            numeric = c.get('numeric')
+            numeric_affix = c.get('numeric_affix')
+            ordinal = c.get('ordinal')
+            sample = c.get('sample')
+
+            sample_exclude = set(c.get('sample_exclude', []))
+            canonical = c.get('canonical')
+            if canonical:
+                canonical = safe_decode(canonical)
+            abbreviated = c.get('abbreviated')
+            if abbreviated:
+                abbreviated = safe_decode(abbreviated)
+
+            if numeric:
+                direction = numeric['direction']
+                if direction == 'left':
+                    phrases = left_number_phrases
+                else:
+                    phrases = right_number_phrases
+
+                phrases.append(canonical)
+                if abbreviated:
+                    phrases.append(u'{}.'.format(abbreviated))
+                    phrases.append(abbreviated)
+                if sample:
+                    sample_phrases = list(number_canonical_phrases[canonical] - set([abbreviated]) - sample_exclude)
+                    sample_phrases.extend([u'{}.'.format(p) for p in sample_phrases if len(p) < len(canonical) and not p.endswith(u'.')])
+                    sample_phrases.sort(key=len, reverse=True)
+                    phrases.extend(sample_phrases)
+
+            if numeric_affix:
+                direction = numeric_affix['direction']
+                if direction == 'left':
+                    phrases = left_number_affix_phrases
+                else:
+                    phrases = right_number_affix_phrases
+
+                affix = numeric_affix['affix']
+
+                phrases.append(affix)
+
+        for c in config_phrases:
+            numeric = c.get('numeric')
+            numeric_affix = c.get('numeric_affix')
+            ordinal = c.get('ordinal')
+            sample = c.get('sample')
+            standalone = not numeric and not numeric_affix and not ordinal
+
+            sample_exclude = set(c.get('sample_exclude', []))
+            canonical = c.get('canonical')
+            if canonical:
+                canonical = safe_decode(canonical)
+
+            if canonical in all_number_phrases:
+                continue
+            abbreviated = c.get('abbreviated')
+            if abbreviated:
+                abbreviated = safe_decode(abbreviated)
+
+            if numeric:
+                direction = numeric['direction']
+                add_number_phrase = numeric.get('add_number_phrase', False)
+                direction_probability = numeric.get('direction_probability', None)
+                if direction == 'left':
+                    if not add_number_phrase:
+                        all_phrases = [left_phrases]
+                        if direction_probability is not None:
+                            all_phrases.append(right_phrases)
+                    else:
+                        all_phrases = [left_phrases_with_number]
+                        if direction_probability is not None:
+                            all_phrases.append(right_phrases_with_number)
+                else:
+                    if not add_number_phrase:
+                        all_phrases = [right_phrases]
+                        if direction_probability is not None:
+                            all_phrases.append(left_phrases)
+                    else:
+                        all_phrases = [right_phrases_with_number]
+                        if direction_probability is not None:
+                            all_phrases.append(left_phrases_with_number)
+
+                for phrases in all_phrases:
+                    phrases.append(canonical)
+                    if abbreviated:
+                        phrases.append(u'{}.'.format(abbreviated))
+                        phrases.append(abbreviated)
+                    if sample:
+                        sample_phrases = list(canonical_phrases[canonical] - set([abbreviated]) - sample_exclude)
+                        sample_phrases.extend([u'{}.'.format(p) for p in sample_phrases if len(p) < len(canonical) and not p.endswith(u'.')])
+                        sample_phrases.sort(key=len, reverse=True)
+                        phrases.extend(sample_phrases)
+
+            if standalone:
+                standalone_phrases.append(canonical)
+                if abbreviated:
+                    standalone_phrases.append(u'{}.'.format(abbreviated))
+                    standalone_phrases.append(abbreviated)
+                if sample:
+                    sample_phrases = list(canonical_phrases[canonical] - set([abbreviated]) - sample_exclude)
+                    sample_phrases.extend([u'{}.'.format(p) for p in sample_phrases if len(p) < len(canonical) and not p.endswith(u'.')])
+                    sample_phrases.sort(key=len, reverse=True)
+                    standalone_phrases.extend(sample_phrases)
+
+            if numeric_affix:
+                direction = numeric_affix['direction']
+                if direction == 'left':
+                    phrases = left_affix_phrases
+                else:
+                    phrases = right_affix_phrases
+
+                affix = numeric_affix['affix']
+                if affix in all_number_phrases:
+                    continue
+
+                phrases.append(affix)
+
+            if ordinal:
+                direction = ordinal['direction']
+                gender = ordinal.get('gender')
+                category = ordinal.get('category')
+                if direction == 'left':
+                    phrases = left_ordinal_phrases[(gender, category)]
+                else:
+                    phrases = right_ordinal_phrases[(gender, category)]
+
+                phrases.append(canonical)
+                if abbreviated:
+                    phrases.append(u'{}.'.format(abbreviated))
+                    phrases.append(abbreviated)
+                if sample:
+                    sample_phrases = list(canonical_phrases[canonical] - set([abbreviated]) - sample_exclude)
+                    sample_phrases.extend([u'{}.'.format(p) for p in sample_phrases if len(p) < len(canonical) and not p.endswith(u'.')])
+                    sample_phrases.sort(key=len, reverse=True)
+                    phrases.extend(sample_phrases)
+
+        ordinal_suffixes = defaultdict(set)
+        cardinal_left_phrases = defaultdict(set)
+        ordinal_phrases = defaultdict(set)
+
+        for exprs in numeric_expressions.cardinal_rules.get(language, {}).values():
+            for expr in exprs:
+                gender = expr.get('gender')
+                category = expr.get('category')
+                cardinal_left_phrases[gender, category].add(expr['name'])
+
+        for exprs in numeric_expressions.ordinal_rules.get(language, {}).values():
+            for expr in exprs:
+                gender = expr.get('gender')
+                category = expr.get('category')
+                ordinal_phrases[gender, category].add(expr['name'])
+
+        for (l, g, c), suffixes in six.iteritems(ordinal_expressions.ordinal_suffixes):
+            if l == language:
+                for vals in suffixes.values():
+                    ordinal_suffixes[(g, c)].update(vals)
+
+        ordinal_suffix_phrase_regexes = {k: u'(?:\\b[\d]+(?:{}))'.format(u'|'.join(v)) for k, v in six.iteritems(ordinal_suffixes)}
+
+        default_numeric_separator = numeric_expressions.default_separators.get(language, numeric_expressions.default_separator)
+
+        numeric_separator_phrase = u'[{}\-]'.format(default_numeric_separator) if default_numeric_separator else u'[\-]?'
+
+        ordinal_phrase_components = defaultdict(list)
+        if cardinal_left_phrases and ordinal_phrases:
+            for k, vals in six.iteritems(cardinal_left_phrases):
+                ordinal_phrase_components[k].append(u'(?:{}{})*'.format(u'|'.join(vals), numeric_separator_phrase))
+
+        if ordinal_phrases:
+            for k, vals in six.iteritems(ordinal_phrases):
+                ordinal_phrase_components[k].append(u'(?:{})'.format(u'|'.join(vals)))
+
+        whitespace_phrase = u'[ \.]' if whitespace else u''
+        whitespace_or_beginning = u'\\b' if whitespace else u''
+        whitespace_lookahead = u'\\b' if whitespace else u''
+
+        if right_ordinal_phrases:
+            for k, vals in six.iteritems(right_ordinal_phrases):
+                ordinal_parts = [u''.join(ordinal_phrase_components[k])]
+                ordinal_suffix_regex = ordinal_suffix_phrase_regexes.get(k)
+                if ordinal_suffix_regex:
+                    ordinal_parts.append(ordinal_suffix_regex)
+
+                regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(ordinal_parts).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(vals).replace(u'.', u'\\.')))
+
+        if left_affix_phrases:
+            regexes.append(u'(?:{})(?:{})'.format(u'|'.join(left_affix_phrases).replace(u'.', u'\\.'), cls.numeric_pattern))
+
+        if left_phrases_with_number:
+            if left_number_affix_phrases:
+                regexes.append(u'(?:{}){}(?:{})?(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), cls.numeric_pattern))
+            if left_number_phrases:
+                regexes.append(u'(?:{}){}(?:(?:{}){})?(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(left_number_phrases).replace(u'.', u'\\.'), whitespace_phrase, cls.numeric_pattern))
+            if right_number_affix_phrases:
+                regexes.append(u'(?:{}){}(?:{})(?:{})?'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, cls.numeric_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.')))
+            if right_number_phrases:
+                regexes.append(u'(?:{}){}(?:{})(?:{}(?:{}))?'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, cls.numeric_pattern, whitespace_phrase, u'|'.join(right_number_phrases).replace(u'.', u'\\.')))
+
+        if left_phrases:
+            regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(left_phrases).replace(u'.', u'\\.'), whitespace_phrase, cls.numeric_pattern))
+
+        if left_ordinal_phrases:
+            for k, vals in six.iteritems(left_ordinal_phrases):
+                ordinal_parts = [u''.join(ordinal_phrase_components[k])]
+                ordinal_suffix_regex = ordinal_suffix_phrase_regexes.get(k)
+                if ordinal_suffix_regex:
+                    ordinal_parts.append(ordinal_suffix_regex)
+
+                regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(vals).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(ordinal_parts).replace(u'.', u'\\.')))
+
+        if right_affix_phrases:
+            regexes.append(u'(?:{})(?:{})'.format(cls.numeric_pattern, u'|'.join(right_affix_phrases).replace(u'.', u'\\.')))
+
+        if right_phrases_with_number:
+            if left_number_affix_phrases:
+                regexes.append(u'(?:{})?(?:{}){}(?:{})'.format(u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), cls.numeric_pattern, whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
+            if left_number_phrases:
+                regexes.append(u'(?:(?:{}){})?(?:{}){}(?:{})'.format(u'|'.join(left_number_phrases).replace(u'.', u'\\.'), whitespace_phrase, cls.numeric_pattern, whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
+            if right_number_affix_phrases:
+                regexes.append(u'(?:{})(?:{})?{}(?:{})'.format(cls.numeric_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
+            if right_number_phrases:
+                regexes.append(u'(?:{})(?:{}(?:{}))?{}(?:{})'.format(cls.numeric_pattern, whitespace_phrase, u'|'.join(right_number_phrases).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
+
+        if right_phrases:
+            regexes.append(u'(?:{}){}(?:{})'.format(cls.numeric_pattern, whitespace_phrase, u'|'.join(right_phrases).replace(u'.', u'\\.')))
+
+        if standalone_phrases:
+            regexes.append(u'(?:{})'.format(u'|'.join(standalone_phrases).replace(u'.', u'\\.')))
+
+        return u'{}(?:{}){}'.format(whitespace_or_beginning, u'|'.join([u'(?:{})'.format(r) for r in regexes]), whitespace_lookahead)
 
     @classmethod
     def choose_alphanumeric_type(cls, key, language, country=None):
