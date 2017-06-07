@@ -527,19 +527,16 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
     buffering_levels = [0.0] + [10.0 ** i for i in range(buffer_min_level, 0)]
 
     def buffered_polygon_key(self, base, precision):
-        return '{}:buf{}'.format(base_key, precision)
+        return '{}:buf{}'.format(base, precision)
 
     def index_polygon_geometry(self, poly):
         super(OSMCountryReverseGeocoder, self).index_polygon_geometry(poly)
         base_key = self.polygon_key(self.i)
 
         for precision, level in zip(self.buffer_range, self.buffering_levels):
-            try:
-                buffered = poly.buffer(level)
-                key = self.buffered_polygon_key(base_key, precision)
-                self.polygons_db.Put(key, json.dumps(self.polygon_geojson(buffered)))
-            except Exception:
-                continue
+            buffered = poly.buffer(level)
+            key = self.buffered_polygon_key(base_key, precision)
+            self.polygons_db.Put(key, json.dumps(self.polygon_geojson(buffered)))
 
     @classmethod
     def country_and_languages_from_components(cls, osm_components):
@@ -596,6 +593,47 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
         default_languages = sorted(languages, key=operator.itemgetter(1), reverse=True)
 
         return country, default_languages
+
+    def polygons_contain(self, candidates, point, return_all=False):
+        containing = None
+        if return_all:
+            containing = []
+        for i in candidates:
+            poly = self.get_polygon(i)
+            contains = poly.contains(point)
+            if contains:
+                properties = self.get_properties(i)
+                if not return_all:
+                    return properties
+                else:
+                    containing.append(properties)
+
+        if not containing:
+            for precision in self.buffering_levels:
+                for i in candidates:
+                    poly_key = self.buffered_polygon_key(i, precision)
+                    poly_data = self.polygons.get(poly_key)
+                    if not poly_data:
+                        try:
+                            poly_data = self.polygons_db.Get(poly_key)
+                        except KeyError:
+                            poly_data = None
+                    if not poly_data:
+                        continue
+                    poly = prep(self.polygon_from_geojson(json.loads(poly_data)))
+                    if self.persistent_polygons:
+                        self.polygons[poly_key] = poly
+                    contains = poly.contains(point)
+                    if contains:
+                        properties = self.get_properties(i)
+                        if not return_all:
+                            return properties
+                        else:
+                            containing.append(properties)
+                if containing:
+                    break
+
+        return containing
 
     def country_and_languages(self, lat, lon):
         osm_components = self.point_in_poly(lat, lon, return_all=True)
