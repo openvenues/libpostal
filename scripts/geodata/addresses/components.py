@@ -173,6 +173,8 @@ class AddressComponents(object):
         AddressFormatter.UNIT: Unit,
     }
 
+    numeric_phrase_regexes = {}
+
     config = yaml.load(open(PARSER_DEFAULT_CONFIG))
     # Non-admin component dropout
     address_level_dropout_probabilities = {k: v['probability'] for k, v in six.iteritems(config['dropout'])}
@@ -915,7 +917,7 @@ class AddressComponents(object):
 
     @classmethod
     def extract_regex(cls, regex, value):
-        if not value:
+        if not value or not regex:
             return value, None
         value = value.strip()
         match = regex.search(value)
@@ -924,6 +926,15 @@ class AddressComponents(object):
             value = regex.sub(u'', value)
             return value, sep
         return value, None
+
+    @classmethod
+    def get_numeric_regex(cls, numeric_class, language, country=None):
+        regex = cls.numeric_phrase_regexes.get((numeric_class.key, language, country))
+        if not regex:
+            regex_str = numeric_class.numeric_regex(language, country=country)
+            regex = re.compile(regex_str, re.I | re.U)
+            cls.numeric_phrase_regexes[numeric_class.key] = regex
+        return regex
 
     @classmethod
     def format_chinese_address(cls, address_components):
@@ -960,6 +971,11 @@ class AddressComponents(object):
                 address_components[AddressFormatter.HOUSE_NUMBER] = match.group(1)
             else:
                 address_components.pop(AddressFormatter.HOUSE_NUMBER)
+
+    @classmethod
+    def extract_field(cls, value, numeric_class, language, country=None):
+        regex = cls.get_numeric_regex(numeric_class, language, country=country)
+        return cls.extract_regex(regex, value)
 
     @classmethod
     def genitive_name(cls, name, language):
