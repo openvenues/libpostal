@@ -107,7 +107,7 @@ class PolygonIndex(object):
     def index_polygon_geometry(self, poly):
         pass
 
-    def polygon_geojson(self, poly, properties):
+    def polygon_geojson(self, poly):
         return {
             'type': 'Feature',
             'geometry': mapping(poly),
@@ -121,7 +121,7 @@ class PolygonIndex(object):
             self.polygons[self.i] = prep(poly)
 
         if self.persistent_polygons:
-            self.polygons_db.Put(self.polygon_key(self.i), json.dumps(self.polygon_geojson(poly, properties)))
+            self.polygons_db.Put(self.polygon_key(self.i), json.dumps(self.polygon_geojson(poly)))
 
         self.polygons_db.Put(self.properties_key(self.i), json.dumps(properties))
         self.index_polygon_properties(properties)

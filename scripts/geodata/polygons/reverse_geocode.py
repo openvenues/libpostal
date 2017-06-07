@@ -522,6 +522,24 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
     cache_size = 10000
     simplify_polygons = False
     polygon_reader = OSMCountryPolygonReader
+    buffer_min_level = -7
+    buffer_range = [0] + range(buffer_min_level, 0)
+    buffering_levels = [0.0] + [10.0 ** i for i in range(buffer_min_level, 0)]
+
+    def buffered_polygon_key(self, base, precision):
+        return '{}:buf{}'.format(base_key, precision)
+
+    def index_polygon_geometry(self, poly):
+        super(OSMCountryReverseGeocoder, self).index_polygon_geometry(poly)
+        base_key = self.polygon_key(self.i)
+
+        for precision, level in zip(self.buffer_range, self.buffering_levels):
+            try:
+                buffered = poly.buffer(level)
+                key = self.buffered_polygon_key(base_key, precision)
+                self.polygons_db.Put(key, json.dumps(self.polygon_geojson(buffered)))
+            except Exception:
+                continue
 
     @classmethod
     def country_and_languages_from_components(cls, osm_components):
