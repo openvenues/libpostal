@@ -211,6 +211,8 @@ class OSMPolygonReader(object):
 
                 if isclose(lon, 180.0):
                     lon = 179.999
+                elif isclose(lon, -180.0):
+                    lon = -179.999
 
                 if 'name' in props and 'place' in props:
                     self.nodes[node_id] = props

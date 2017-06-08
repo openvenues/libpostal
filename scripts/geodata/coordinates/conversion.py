@@ -97,7 +97,7 @@ def to_valid_longitude(longitude):
     if not is_valid_longitude(longitude):
         raise ValueError('Invalid longitude {}'.format(longitude))
 
-    while longitude <= -180.0:
+    while longitude < -180.0:
         longitude += 360.0
 
     while longitude > 180.0:
