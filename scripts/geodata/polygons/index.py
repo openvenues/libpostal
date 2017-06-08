@@ -104,7 +104,7 @@ class PolygonIndex(object):
     def index_polygon_properties(self, properties):
         pass
 
-    def index_polygon_geometry(self, poly):
+    def index_polygon_geometry(self, poly, properties):
         pass
 
     def polygon_geojson(self, poly):
@@ -125,7 +125,7 @@ class PolygonIndex(object):
 
         self.polygons_db.Put(self.properties_key(self.i), json.dumps(properties))
         self.index_polygon_properties(properties)
-        self.index_polygon_geometry(poly)
+        self.index_polygon_geometry(poly, properties)
         self.i += 1
 
     @classmethod

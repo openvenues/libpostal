@@ -453,7 +453,7 @@ class OSMAreaReverseGeocoder(OSMReverseGeocoder):
     def setup(self):
         self.areas = []
 
-    def index_polygon_geometry(self, poly):
+    def index_polygon_geometry(self, poly, properties):
         poly_area = transform(partial(pyproj.transform,
                                       pyproj.Proj(init='EPSG:4326'),
                                       pyproj.Proj(
@@ -523,24 +523,25 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
     simplify_polygons = False
     polygon_reader = OSMCountryPolygonReader
 
-    buffer_levels = [(0, 0.0), (-6, 10e-6), (-3, 0.001), (-2, 0.01), (-1, 0.1), (2, 0.2), (3, 0.3), (4, 0.4), (5, 0.5)]
+    buffer_levels = [(0, 0.0), (-6, 10e-6), (-3, 0.001), (-2, 0.01), (-1, 0.1), (2, 0.2), (3, 0.3), (4, 0.4), (5, 0.5), (10, 1.0), (20, 2.0), (30, 3.0)]
 
     buffered_simplify_tolerance = 0.001
 
     def buffered_polygon_key(self, base, precision):
         return '{}:buf{}'.format(base, precision)
 
-    def index_polygon_geometry(self, poly):
+    def index_polygon_geometry(self, poly, properties):
         super(OSMCountryReverseGeocoder, self).index_polygon_geometry(poly)
         base_key = self.polygon_key(self.i)
 
-        for precision, level in self.buffer_levels:
-            buffered = poly.buffer(level)
-            if level < self.buffered_simplify_tolerance:
-                buffered = buffered.simplify(self.buffered_simplify_tolerance)
+        if 'ISO3166-1:alpha2' in properties:
+            for precision, level in self.buffer_levels:
+                buffered = poly.buffer(level)
+                if level < self.buffered_simplify_tolerance:
+                    buffered = buffered.simplify(self.buffered_simplify_tolerance)
 
-            key = self.buffered_polygon_key(base_key, precision)
-            self.polygons_db.Put(key, json.dumps(self.polygon_geojson(buffered)))
+                key = self.buffered_polygon_key(base_key, precision)
+                self.polygons_db.Put(key, json.dumps(self.polygon_geojson(buffered)))
 
     @classmethod
     def country_and_languages_from_components(cls, osm_components):
