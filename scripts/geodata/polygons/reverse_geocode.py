@@ -522,9 +522,10 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
     cache_size = 10000
     simplify_polygons = False
     polygon_reader = OSMCountryPolygonReader
-    buffer_min_level = -7
-    buffer_range = [0] + range(buffer_min_level, 0)
-    buffering_levels = [0.0] + [10.0 ** i for i in range(buffer_min_level, 0)]
+
+    buffer_levels = [(0, 0), (-6, 10e-6), (-3, 0.001), (-2, 0.01), (-1, 0.1), (2, 0.2), (3, 0.3), (4, 0.4), (5, 0.5)]
+
+    buffered_simplify_tolerance = 0.001
 
     def buffered_polygon_key(self, base, precision):
         return '{}:buf{}'.format(base, precision)
@@ -533,8 +534,11 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
         super(OSMCountryReverseGeocoder, self).index_polygon_geometry(poly)
         base_key = self.polygon_key(self.i)
 
-        for precision, level in zip(self.buffer_range, self.buffering_levels):
+        for precision, level in self.buffer_levels:
             buffered = poly.buffer(level)
+            if level < self.buffered_simplify_tolerance:
+                buffered = buffered.simplify(self.buffered_simplify_tolerance)
+
             key = self.buffered_polygon_key(base_key, precision)
             self.polygons_db.Put(key, json.dumps(self.polygon_geojson(buffered)))
 
@@ -611,7 +615,7 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
         if not containing:
             base_keys = [self.polygon_key(i) for i in candidates]
             candidate_keys = zip(candidates, base_keys)
-            for precision in self.buffer_range:
+            for precision, level in self.buffer_levels:
                 for i, base_key in candidate_keys:
                     cache_key = (i, precision)
                     poly = self.polygons.get(cache_key)
