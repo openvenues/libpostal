@@ -609,20 +609,22 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
                     containing.append(properties)
 
         if not containing:
-            for precision in self.buffering_levels:
-                for i in candidates:
-                    poly_key = self.buffered_polygon_key(i, precision)
-                    poly_data = self.polygons.get(poly_key)
-                    if not poly_data:
+            base_keys = [self.polygon_key(i) for i in candidates]
+            candidate_keys = zip(candidates, base_keys)
+            for precision in self.buffer_range:
+                for i, base_key in candidate_keys:
+                    cache_key = (i, precision)
+                    poly = self.polygons.get(cache_key)
+                    if not poly and self.persistent_polygons:
+                        poly_key = self.buffered_polygon_key(base_key, precision)
                         try:
                             poly_data = self.polygons_db.Get(poly_key)
                         except KeyError:
                             poly_data = None
-                    if not poly_data:
+                        poly = prep(self.polygon_from_geojson(json.loads(poly_data)))
+                        self.polygons[cache_key] = poly
+                    if not poly:
                         continue
-                    poly = prep(self.polygon_from_geojson(json.loads(poly_data)))
-                    if self.persistent_polygons:
-                        self.polygons[poly_key] = poly
                     contains = poly.contains(point)
                     if contains:
                         properties = self.get_properties(i)
