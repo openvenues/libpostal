@@ -537,8 +537,9 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
         if 'ISO3166-1:alpha2' in properties:
             for precision, level in self.buffer_levels:
                 buffered = poly.buffer(level)
-                if level < self.buffered_simplify_tolerance:
-                    buffered = buffered.simplify(self.buffered_simplify_tolerance)
+                if level > 0.0:
+                    simplify_level = self.buffered_simplify_tolerance if level >= self.buffered_simplify_tolerance else level
+                    buffered = buffered.simplify(simplify_level)
 
                 key = self.buffered_polygon_key(base_key, precision)
                 self.polygons_db.Put(key, json.dumps(self.polygon_geojson(buffered)))
