@@ -523,7 +523,7 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
     simplify_polygons = False
     polygon_reader = OSMCountryPolygonReader
 
-    buffer_levels = [(0, 0), (-6, 10e-6), (-3, 0.001), (-2, 0.01), (-1, 0.1), (2, 0.2), (3, 0.3), (4, 0.4), (5, 0.5)]
+    buffer_levels = [(0, 0.0), (-6, 10e-6), (-3, 0.001), (-2, 0.01), (-1, 0.1), (2, 0.2), (3, 0.3), (4, 0.4), (5, 0.5)]
 
     buffered_simplify_tolerance = 0.001
 
@@ -613,6 +613,7 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
                     containing.append(properties)
 
         if not containing:
+            candidates = [i for i in candidates if 'ISO3166-1:alpha2' in self.get_properties(i) or {}]
             base_keys = [self.polygon_key(i) for i in candidates]
             candidate_keys = zip(candidates, base_keys)
             for precision, level in self.buffer_levels:
