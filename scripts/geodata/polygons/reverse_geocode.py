@@ -531,7 +531,7 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
         return '{}:buf{}'.format(base, precision)
 
     def index_polygon_geometry(self, poly, properties):
-        super(OSMCountryReverseGeocoder, self).index_polygon_geometry(poly)
+        super(OSMCountryReverseGeocoder, self).index_polygon_geometry(poly, properties)
         base_key = self.polygon_key(self.i)
 
         if 'ISO3166-1:alpha2' in properties:
