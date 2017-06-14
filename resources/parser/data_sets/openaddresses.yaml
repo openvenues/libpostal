@@ -2717,6 +2717,8 @@ countries:
                     - filename: city_of_alpharetta.csv
                     - filename: city_of_atlanta.csv
                       add_osm_boundaries: false
+                    - filename: city_of_brookhaven.csv
+                      add_osm_boundaries: false
                     - filename: city_of_johns_creek.csv
                       add_osm_boundaries: false
                       fields: *fields_with_state_and_unit
@@ -2762,6 +2764,10 @@ countries:
                       add_osm_boundaries: false
                       city_replacements:
                           state_district: Cook County
+                    - filename: coweta.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Coweta County
                     - filename: dekalb.csv
                       add_osm_boundaries: false
                       fields: *fields_with_unit
