@@ -2719,6 +2719,8 @@ countries:
                       add_osm_boundaries: false
                     - filename: city_of_brookhaven.csv
                       add_osm_boundaries: false
+                      city_replacements:
+                          city: Brookhaven
                     - filename: city_of_johns_creek.csv
                       add_osm_boundaries: false
                       fields: *fields_with_state_and_unit
@@ -4680,7 +4682,14 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Carrollton
+                    - filename: city_of_colleyville.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Colleyville
                     - filename: city_of_dalhart.csv
+                    - filename: city_of_denison.csv
+                      city_replacements:
+                          city: Denison
                     - filename: city_of_denton.csv
                     - filename: city_of_flower_mound.csv
                       add_osm_boundaries: true
@@ -4690,10 +4699,15 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Garland
+                    - filename: city_of_hurst.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Hurst
                     - filename: city_of_killeen.csv
                       add_osm_boundaries: true
                       city_replacements:
                           city: Killeen
+                    - filename: city_of_mansfield.csv
                     - filename: city_of_mckinney.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -4705,6 +4719,7 @@ countries:
                       city_replacements:
                           city: Pflugerville
                     - filename: city_of_sherman.csv
+                    - filename: city_of_southlake.csv
                     - filename: city_of_sugar_land.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -4713,6 +4728,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Temple
+                    - filename: city_of_university_park.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: University Park
                     - filename: city_of_waco.csv
                     - filename: colleyville.csv
                       add_osm_boundaries: true
