@@ -4979,6 +4979,7 @@ countries:
                           state_district: Adams County
                     - filename: bayfield.csv
                     - filename: calumet.csv
+                    - filename: city_of_arena.csv
                     - filename: city_of_milwaukee.csv
                     - filename: city_of_shorewood.csv
                       add_osm_boundaries: true
