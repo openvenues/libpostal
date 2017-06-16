@@ -545,6 +545,7 @@ countries:
                           # Weird but correct
                           city: County of Brant
                     - filename: bruce.csv
+                      add_osm_boundaries: true
                       city_replacements:
                           state_district: Bruce County
                     - filename: chatham_kent.csv
