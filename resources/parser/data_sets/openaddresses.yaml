@@ -756,7 +756,6 @@ countries:
                       city_replacements:
                           city: Waterloo
                     - filename: west_parry_sound_district.csv
-                      add_osm_boundaries: true
                       city_replacements:
                           city: Parry Sound
                     - filename: york.csv
