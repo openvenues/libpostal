@@ -560,7 +560,6 @@ countries:
                       city_replacements:
                           city: Burlington
                     - filename: city_of_guelph.csv
-                      add_osm_boundaries: true
                       city_replacements:
                           city: Guelph
                     - filename: city_of_hamilton.csv
