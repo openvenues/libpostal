@@ -2194,6 +2194,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Mobile
+                    - filename: cullman.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Cullman County
                     - filename: etowah.csv
                       add_osm_boundaries: true
                       city_replacements:
