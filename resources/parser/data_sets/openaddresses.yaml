@@ -3898,7 +3898,6 @@ countries:
                       city_replacements:
                           state_district: Lincoln County
                     - filename: madison.csv
-                      add_osm_boundaries: true
                       city_replacements:
                           state_district: Madison County
                     - filename: mecklenburg.csv
