@@ -2514,6 +2514,8 @@ countries:
                       city_replacements:
                           state_district: Routt County
                     - filename: sanmiguel.csv
+                    - filename: statewide.csv
+                      add_osm_boundaries: true
                     - filename: teller.csv
                       add_osm_boundaries: true
                       city_replacements:
