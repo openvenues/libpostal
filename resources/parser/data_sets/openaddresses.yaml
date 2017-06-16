@@ -5040,7 +5040,6 @@ countries:
                     - filename: sauk.csv
                     - filename: statewide.csv
                     - filename: st_croix.csv
-                      add_osm_boundaries: true
                       city_replacements:
                           state_district: Saint Croix County
                     - filename: trempealeau.csv
