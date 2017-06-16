@@ -626,7 +626,6 @@ countries:
                           state_district: Grey County
                     - filename: grey_dufferin.csv
                     - filename: haldimand.csv
-                      add_osm_boundaries: true
                       city_replacements:
                           state_district: Haldimand County
                     - filename: haliburton.csv
