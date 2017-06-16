@@ -3822,6 +3822,10 @@ countries:
                           state_district: Buncombe County
                     - filename: burke.csv
                     - filename: cabarrus.csv
+                    - filename: caldwell.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Caldwell County
                     - filename: camden.csv
                     - filename: carteret.csv
                     - filename: cary.csv
