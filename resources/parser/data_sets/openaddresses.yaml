@@ -3090,7 +3090,6 @@ countries:
                     - filename: boone.csv
                     - filename: champaign.csv
                     - filename: city_of_aurora.csv
-                    - filename: city_of_chicago.csv
                     - filename: city_of_east_peoria.csv
                     - filename: city_of_naperville.csv
                     - filename: city-of-ofallon.csv
