@@ -3832,6 +3832,10 @@ countries:
                       city_replacements:
                           state_district: Caswell County
                     - filename: chatham.csv
+                    - filename: city_of_boone.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Boone
                     - filename: city_of_carolina_beach.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -3922,6 +3926,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Polk County
+                    - filename: rockingham.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Rockingham County
                     - filename: rowan.csv
                       add_osm_boundaries: true
                       city_replacements:
