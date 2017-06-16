@@ -3815,6 +3815,7 @@ countries:
                           state_district: Avery County
                     - filename: beaufort.csv
                     - filename: bladen.csv
+                    - filename: brunswick.csv
                     - filename: buncombe.csv
                       add_osm_boundaries: true
                       city_replacements:
