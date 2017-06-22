@@ -1899,6 +1899,11 @@ countries:
                             component: null
             - filename: city_of_palmerston_north.csv
               add_osm_boundaries: true
+        subdirs:
+            bay_of_plenty:
+                files:
+                    - filename: rotorua.csv
+                      add_osm_boundaries: true
 
     pl:
         files:
