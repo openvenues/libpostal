@@ -28,6 +28,7 @@ kiosk|ksk
 lease|lse
 lobby|lby|lbby
 location|loc|locn|loctn
+lot|lt
 maisonette|msnt
 marine berth|mb|mbth
 office|ofc|off|o|offc
