@@ -4147,6 +4147,7 @@ countries:
                           city: Las Cruces
                     - filename: city_of_ruidoso.csv
                     - filename: city_of_santa_fe.csv
+                    - filename: de_baca.csv
                     - filename: dona_ana-2.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -4162,6 +4163,10 @@ countries:
                       city_replacements:
                           state_district: San Juan County
                     - filename: taos.csv
+                    - filename: torrance.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Torrance County
 
             nv:
                 add:
