@@ -130,6 +130,8 @@ fall|fl
 falls|fls
 fare
 farm|frm
+farm road|frm rd|farm rd
+farm to market road|fm|f.m.|f.m|fm rd|f.m. rd|f.m rd|farm to market|farmtomarket|farm-to-market|farm to market rd|farmtomarket rd|farm-to-market rd|farmtomarket road|farm-to-market road
 farms|frms
 fern
 ferry|fry|fy
@@ -281,6 +283,8 @@ ramble|ra|rmbl
 ramp|rmp
 ranae|ran
 ranch|rnch
+ranch to market road|rm|r.m.|r.m|rm rd|r.m. rd|r.m rd|ranch to market|ranchtomarket|ranch-to-market|ranch to market rd|ranchtomarket rd|ranch-to-market rd|ranchtomarket road|ranch-to-market road
+ranch road|rnch rd|ranch rd
 rapid|rpd
 rapids|rpds
 range|rng|rnge|rang
