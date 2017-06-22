@@ -505,6 +505,7 @@ countries:
                 files:
                     - filename: province.csv
                       add_osm_boundaries: true
+                    - filename: city_of_fredericton.csv
 
             nl:
                 add:
