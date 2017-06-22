@@ -3608,6 +3608,7 @@ countries:
                     - filename: cass.csv
                     - filename: chippewa.csv
                     - filename: chisago.csv
+                    - filename: city_of_moorhead.csv
                     - filename: clay.csv
                     - filename: clearwater.csv
                     - filename: cook.csv
