@@ -529,6 +529,16 @@ countries:
                     - filename: province.csv
                       add_osm_boundaries: true
 
+            nt:
+                add:
+                    state: NT
+                language: en
+                files:
+                    - filename: city_of_yellow_knife.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Yellowknife
+
             "on":
                 add:
                     state: "ON"
