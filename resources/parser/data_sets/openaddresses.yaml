@@ -575,6 +575,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Burlington
+                    - filename: city_of_cambridge.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Cambridge
                     - filename: city_of_guelph.csv
                       city_replacements:
                           city: Guelph
@@ -2313,6 +2317,10 @@ countries:
                           city: Long Beach
                     - filename: city_of_mountain_view.csv
                     - filename: city_of_orange.csv
+                    - filename: city_of_riverside.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Riverside
                     - filename: city_of_san_jose.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -3761,6 +3769,7 @@ countries:
                       city_replacements:
                           city: Diamondhead
                     - filename: city_of_diberville.csv
+                    - filename: city_of_gulfport.csv
                     - filename: city_of_hattiesburg.csv
                       add_osm_boundaries: true
                       city_replacements:
