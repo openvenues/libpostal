@@ -456,6 +456,12 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Columbia-Shuswap Regional District
+                    - filename: east_kootenay.csv
+                      ignore_fields_containing:
+                          road:
+                              - "^[0-9]+$"
+                      city_replacements:
+                          state_district: Regional District of East Kootenay
                     - filename: kamloops.csv
                       add_osm_boundaries: true
                       city_replacements:
