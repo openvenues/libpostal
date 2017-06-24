@@ -443,6 +443,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Capital Regional District
+                    - filename: city_of_coquitlam.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Coquitlam
                     - filename: city_of_new_westminster.csv
                     - filename: city_of_saanich.csv
                       add_osm_boundaries: true
