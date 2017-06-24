@@ -609,6 +609,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Kitchener
+                    - filename: city_of_niagara_falls.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Niagara Falls
                     - filename: city_of_oakville.csv
                       add_osm_boundaries: true
                       city_replacements:
