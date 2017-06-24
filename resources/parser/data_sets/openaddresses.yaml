@@ -2494,6 +2494,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Loveland
+                    - filename: city_of_vail.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Vail
                     - filename: clear_creek.csv
                       add_osm_boundaries: true
                       city_replacements:
