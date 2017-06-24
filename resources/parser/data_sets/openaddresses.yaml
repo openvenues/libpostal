@@ -452,6 +452,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Saanich
+                    - filename: city_of_west_kelowna.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: West Kelowna
                     - filename: cowichan_valley.csv
                       add_osm_boundaries: true
                       city_replacements:
