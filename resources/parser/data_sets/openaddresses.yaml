@@ -513,6 +513,10 @@ countries:
                     state: MB
                 files:
                     - filename: brandon.csv
+                    - filename: city_of_winnipeg.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Winnipeg
 
             nb:
                 add:
