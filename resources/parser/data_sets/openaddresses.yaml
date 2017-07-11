@@ -2470,6 +2470,10 @@ countries:
                 add:
                     state: CO
                 files:
+                    - filename: adams.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Adams County
                     - filename: arapahoe.csv
                       add_osm_boundaries: true
                       city_replacements:
