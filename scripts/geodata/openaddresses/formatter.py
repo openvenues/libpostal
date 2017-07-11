@@ -47,6 +47,7 @@ fraction_regex = re.compile('^\s*[\d]+[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z]
 number_space_letter_regex = re.compile('^[\d]+\s+[a-z]$', re.I)
 number_slash_number_regex = re.compile('^(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)$', re.I)
 number_fraction_regex = re.compile('^(?:[\d]+\s+)?(?:1[\s]*/[\s]*[234]|2[\s]*/[\s]*3)$')
+float_regex = re.compile('(?<=[0-9])\.0')
 
 colombian_standard_house_number_regex = re.compile('^(\d+[\s]*[a-z]?)\s+([a-z]?[\d]+[\s]*[a-z]?)?', re.I)
 
@@ -264,6 +265,7 @@ class OpenAddressesFormatter(object):
     @classmethod
     def cleanup_number(cls, num, strip_commas=False):
         num = num.strip()
+        num = float_regex.sub(u'', num)
         if strip_commas:
             num = num.replace(six.u(','), six.u(''))
         try:
