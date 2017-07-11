@@ -33,6 +33,11 @@ class TestAddressConfigs(unittest.TestCase):
 
             self.assertTrue(isclose(total_prob, 1.0), six.u('language: {}, country: {}, component: {}'.format(language, country, component)))
 
+    def check_building_phrases(self, language, country=None):
+        for i in xrange(1000):
+            phrase = Building.phrase(Building.random(language, country=country), language, country=country)
+            self.assertTrue(self.valid_phrase(phrase), six.u('phrase was: {}').format(phrase))
+
     def check_entrance_phrases(self, language, country=None):
         for i in xrange(1000):
             phrase = Entrance.phrase(Entrance.random(language, country=country), language, country=country)
@@ -101,6 +106,8 @@ class TestAddressConfigs(unittest.TestCase):
         print('Doing lang={}, country={}'.format(language, country))
         print('Checking components')
         self.check_components(language, country=country)
+        print('Checking buildings')
+        self.check_building_phrases(language, country=country)
         print('Checking entrances')
         self.check_entrance_phrases(language, country=country)
         print('Checking staircases')
