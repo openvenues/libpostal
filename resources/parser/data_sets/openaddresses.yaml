@@ -2478,6 +2478,9 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Arapahoe County
+                    - filename: archuleta.csv
+                      city_replacements:
+                          state_district: Archuleta County
                     - filename: boulder.csv
                     - filename: broomfield.csv
                     - filename: city_of_arvada.csv
@@ -2502,6 +2505,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Vail
+                    - filename: city_of_westminster.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Westminster
                     - filename: clear_creek.csv
                       add_osm_boundaries: true
                       city_replacements:
