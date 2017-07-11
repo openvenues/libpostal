@@ -53,6 +53,7 @@ fd
 f d
 fl
 fr
+f r
 ft
 fw
 fy

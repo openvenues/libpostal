@@ -138,6 +138,7 @@ ferry|fry|fy
 field|fld|fd
 fields|flds|fds
 fireline|fline|fire line|flne
+fire route|fr|f.r.|f.r|f r|f rt|f rte|f.rt|f.rte|fire rt|fire rte
 firetrack|ftrk|fire track
 firetrail|fit|fitr|fire trail
 flat|fl|flt
