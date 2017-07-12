@@ -3119,6 +3119,10 @@ countries:
                       postcode_length: 5
                     - filename: bonner.csv
                     - filename: bonneville.csv
+                    - filename: canyon.csv
+                      ignore_fields_containing:
+                          city:
+                              - "^[A-Za-z]{2}$"
                     - filename: city_of_boise.csv
                     - filename: custer.csv
                       add_osm_boundaries: true
