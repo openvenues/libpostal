@@ -3225,6 +3225,9 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Massac County
+                    - filename: mcdonough.csv
+                      city_replacements:
+                          state_district: McDonough County
                     - filename: mchenry.csv
                       add_osm_boundaries: true
                       city_replacements:
