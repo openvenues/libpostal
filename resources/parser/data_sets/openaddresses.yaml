@@ -3182,6 +3182,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Effingham County
+                    - filename: jackson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Jackson County
                     - filename: jersey.csv
                       add_osm_boundaries: true
                       city_replacements:
