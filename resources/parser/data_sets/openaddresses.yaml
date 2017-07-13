@@ -4053,6 +4053,9 @@ countries:
                 add:
                     state: North Dakota
                 files:
+                    - filename: cass.csv
+                      city_replacements:
+                          state_district: Cass County
                     - filename: city_of_bismarck.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -4138,6 +4141,7 @@ countries:
                     - filename: lancaster.csv
                       city_replacements:
                           state_district: Lancaster County
+                    - filename: lincoln.csv
                     - filename: madison.csv
                       city_replacements:
                           state_district: Madison County
