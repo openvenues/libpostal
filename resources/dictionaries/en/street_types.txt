@@ -77,8 +77,9 @@ corners|cnrs|crns|cors
 corseo|cseo
 corso|cso
 county highway|ch|c.h.|c.h|c h|c.hw|c hw|co.hw|co hw|cty.hw|cty hw|c.hgwy|c hgwy|co.hgwy|co hgwy|cty.hgwy|cty hgwy|c.hway|c hway|co.hway|co hway|cty.hway|cty hway|c.hwy|c hwy|co.hwy|co hwy|cty.hwy|cty hwy|c.hi|c hi|co.hi|co hi|cty.hi|cty hi
-county road|cr|c.r.|c.r|c r|co.r|co r|c.rd|c rd|co.rd|co rd|cty.r|cty r|cty.rd|cty rd
-county route|cr|c.r.|c.r|c r|co.r|co r|c.rt|c rt|co.rt|co rt|cty.r|cty r|cty.rt|cty rt|c.rte|c rte|co.rte|co rte|cty.rte|cty rte|county touring route
+county road|cr|c.r.|c.r|c r|co.r|co r|c.rd|c rd|co.rd|co rd|cty.r|cty r|cty.rd|cty rd|county rd
+county route|cr|c.r.|c.r|c r|co.r|co r|c.rt|c rt|co.rt|co rt|cty.r|cty r|cty.rt|cty rt|c.rte|c rte|co.rte|co rte|cty.rte|cty rte|county rt|county rte
+county touring route|cty touring rt|cty touring rte|co touring rt|co touring rte
 course|crse
 court|ct|crt
 courts|crts|cts
@@ -130,7 +131,7 @@ fall|fl
 falls|fls
 fare
 farm|frm
-farm road|frm rd|farm rd
+farm road|frm rd|farm rd|frm road
 farm to market road|fm|f.m.|f.m|fm rd|f.m. rd|f.m rd|farm to market|farmtomarket|farm-to-market|farm to market rd|farmtomarket rd|farm-to-market rd|farmtomarket road|farm-to-market road
 farms|frms
 fern
@@ -273,7 +274,7 @@ prairie|pr
 priors|prrs
 private|pvt
 promenade|prom|prm
-provincial trunk highway|pth|p.t.h.|p.t.h|p t h
+provincial trunk highway|pth|p.t.h.|p.t.h|p t h|prov trunk hwy|provincial trunk hwy
 pursuit|pur
 quad|qd
 quadrangle|qdgl
@@ -286,7 +287,7 @@ ramp|rmp
 ranae|ran
 ranch|rnch
 ranch to market road|rm|r.m.|r.m|rm rd|r.m. rd|r.m rd|ranch to market|ranchtomarket|ranch-to-market|ranch to market rd|ranchtomarket rd|ranch-to-market rd|ranchtomarket road|ranch-to-market road
-ranch road|rnch rd|ranch rd
+ranch road|rnch rd|ranch rd|rnch road
 rapid|rpd
 rapids|rpds
 range|rng|rnge|rang
@@ -318,7 +319,7 @@ roundabout
 route|rt|rte
 row|rw
 run|rn
-rural route|rr|r.r|r r
+rural route|rr|r.r|r r|rural rt|rural rte|r rt|r rte|r.rt|r.rte
 service road|svc rd|svc road|service rd|sv rd|svrd
 serviceway|swy|svwy|svcwy
 shoal|shl
@@ -362,8 +363,8 @@ tollway|tlwy|twy
 top
 tor
 township highway|th|t.h.|t.h|t h|twp.h|twp h|tshp.h|tshp h|t.hw|t hw|twp.hw|twp hw|tshp.hw|tshp hw|t.hgwy|t hgwy|twp.hgwy|twp hgwy|tshp.hgwy|tshp hgwy|t.hway|t hway|twp.hway|twp hway|tshp.hway|tshp hway|t.hwy|t hwy|twp.hwy|twp hwy|tshp.hwy|tshp hwy|t.hi|t hi|twp.hi|twp hi|tshp.hi|tshp hi
-township road|tr|t.r.|t.r|t r|t rd|t.rd|trd|twpr|twp.r|twp r|twp.rd|twp rd|tshp.r|tshp r|tshp.rd|tshp rd
-township route|tr|t.r.|t.r|t r|t rt|t.rt|trt|t.rte|t rte|twpr|twp.r|twp r|twp.rt|twp rt|twp.rte|twp rte|tshp.r|tshp r|tshp.rt|tshp rt|tshp.rte|tshp rte
+township road|tr|t.r.|t.r|t r|t rd|t.rd|trd|twpr|twp.r|twp r|twp.rd|twp rd|tshp.r|tshp r|tshp.rd|tshp rd|township rd
+township route|tr|t.r.|t.r|t r|t rt|t.rt|trt|t.rte|t rte|twpr|twp.r|twp r|twp.rt|twp rt|twp.rte|twp rte|tshp.r|tshp r|tshp.rt|tshp rt|tshp.rte|tshp rte|township rt|township rte
 tower|twr
 towers|twrs
 townline|tline
@@ -385,8 +386,8 @@ turnpike|tpk|tpke
 underpass|upas|upass|ups|under pass
 union|un
 unions|uns
-us highway|us hwy|u s hwy
-us route|us rte|u s rte
+us highway|us hwy|u s hwy|u.s. hwy|u.s hwy|us hy|u s hy|u.s. hy|u.s hy
+us route|us rt|us rte|u s rt|u s rte|u.s. rt|u.s. rte|u.s rt|u.s rte
 vale|va|vl
 valley|vy|vlly|vly
 valleys|vlys|vllys
