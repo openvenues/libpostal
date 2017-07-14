@@ -5107,6 +5107,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Pacific County
+                    - filename: pend_oreille.csv
                     - filename: pierce.csv
                       add_osm_boundaries: true
                       city_replacements:
