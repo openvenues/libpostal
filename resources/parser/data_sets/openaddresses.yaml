@@ -4528,6 +4528,9 @@ countries:
                     - filename: washington.csv
                     - filename: wheeler.csv
                     - filename: yarnhill.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Yamhill County
 
             pa:
                 add:
