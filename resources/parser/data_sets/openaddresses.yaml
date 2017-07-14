@@ -4824,6 +4824,9 @@ countries:
                           city: McKinney
                     - filename: city_of_palestine.csv
                     - filename: city_of_pearland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Pearland
                     - filename: city_of_pflugerville.csv
                       add_osm_boundaries: true
                       city_replacements:
