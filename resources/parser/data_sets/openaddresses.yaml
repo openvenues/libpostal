@@ -4920,6 +4920,13 @@ countries:
                           road:
                               - "^[A-Za-z]{,3}$"
                               - ".*?\(.*?\)"
+                    - filename: liveoak.csv
+                      city_replacements:
+                          state_district: Live Oak County
+                    - filename: llano.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Llano County
                     - filename: lubbock.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -4929,7 +4936,7 @@ countries:
                     - filename: mcculloch.csv
                       add_osm_boundaries: true
                       city_replacements:
-                          state_district: McCullough County
+                          state_district: McCulloch County
                     - filename: mcmullen.csv
                     - filename: medina.csv
                       city_replacements:
