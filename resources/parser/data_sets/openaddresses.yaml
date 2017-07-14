@@ -4984,6 +4984,7 @@ countries:
                       city_replacements:
                           state_district: Van Zandt County
                     - filename: walker.csv
+                    - filename: washington.csv
                     - filename: wharton.csv
                     - filename: williamson.csv
                       add_osm_boundaries: true
