@@ -4300,6 +4300,9 @@ countries:
                       city_replacements:
                           state_district: Sullivan County
                     - filename: westchester.csv
+                      ignore_fields_containing:
+                          road:
+                              - "^[a-z]{,3}$"
 
             oh:
               add:
