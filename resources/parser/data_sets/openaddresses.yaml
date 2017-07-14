@@ -4927,6 +4927,9 @@ countries:
                     - filename: madison.csv
                     - filename: maverick.csv
                     - filename: mcmullen.csv
+                    - filename: medina.csv
+                      city_replacements:
+                          state_district: Medina County
                     - filename: midland.csv
                       add_osm_boundaries: true
                       city_replacements:
