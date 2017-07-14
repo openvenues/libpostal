@@ -4353,6 +4353,10 @@ countries:
                         state_district: Geauga County
                   - filename: greene.csv
                   - filename: guernsey.csv
+                  - filename: hamilton.csv
+                    ignore_fields_containing:
+                        city:
+                            - ".*? OH$"
                   - filename: hancock.csv
                   - filename: hardin.csv
                   - filename: harrison.csv
