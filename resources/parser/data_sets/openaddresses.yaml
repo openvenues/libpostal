@@ -4992,6 +4992,9 @@ countries:
                     - filename: texoma-counties.csv
                       add_osm_boundaries: true
                     - filename: titus.csv
+                    - filename: trinity.csv
+                      city_replacements:
+                          state_district: Trinity County
                     - filename: uvalde.csv
                     - filename: vanzandt.csv
                       add_osm_boundaries: true
