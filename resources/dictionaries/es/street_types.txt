@@ -58,6 +58,7 @@ galería|galeria|gale
 glorieta|gta|g
 gran vía|gran via|gv|g v
 hacienda|hda
+jirón|jiron|jr
 ladera|ldera
 laderas|lderas
 llanura|llnra
