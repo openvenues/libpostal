@@ -8,14 +8,16 @@ languages:
     replace_non_local_probability: 0.4
 
 # Dependencies for including each component in an "address"
-# Two-way dependencies are not an issue
+# Cyclical dependencies are not an issue here
 component_dependencies:
     road:
         dependencies: []
 
     po_box:
         dependencies:
+            - house
             - road
+            - named_building
             - suburb
             - city_district
             - city
@@ -24,28 +26,55 @@ component_dependencies:
     house_number:
         dependencies:
             - road
+            - subdivision
+
+    building:
+        dependencies:
+            - road
+            - named_building
+            - subdivision
 
     entrance:
         dependencies:
             - house_number
+            - building
+            - named_building
 
     staircase:
         dependencies:
             - house_number
+            - building
+            - named_building
 
     level:
         dependencies:
             - house_number
+            - building
+            - named_building
 
     unit:
         dependencies:
             - house_number
+            - building
+            - named_building
+            - subdivision
+
+    subdivision:
+        dependencies:
+            - house
+            - road
+            - building
+            - named_building
+
 
     metro_station:
         dependencies:
             - house
             - road
             - house_number
+            - building
+            - named_building
+            - subdivision
 
     postcode:
         dependencies: []
@@ -58,6 +87,7 @@ component_dependencies:
                     - road
                     - suburb
                     - city_district
+                    - subdivision
 
 
 
@@ -75,6 +105,12 @@ dropout:
         probability: 0.5
     road:
         probability: 0.4
+    subdivision:
+        probability: 0.5
+    named_building:
+        probability: 0.5
+    building:
+        probability: 0.5
     entrance:
         probability: 0.8
     staircase:
