@@ -1,13 +1,13 @@
 import fiona
 import gc
 import geohash
+import leveldb
 import os
 import rtree
 import six
 import ujson as json
 
 from collections import OrderedDict, defaultdict
-from leveldb import LevelDB
 from lru import LRU
 from shapely.geometry import Point, Polygon, MultiPolygon
 from shapely.prepared import prep
@@ -71,7 +71,8 @@ class PolygonIndex(object):
             polygons_db_path = os.path.join(save_dir or '.', self.POLYGONS_DB_DIR)
 
         if not polygons_db:
-            self.polygons_db = LevelDB(polygons_db_path)
+            leveldb.DestroyDB(polygons_db_path)
+            self.polygons_db = leveldb.LevelDB(polygons_db_path)
         else:
             self.polygons_db = polygons_db
 
@@ -322,7 +323,8 @@ class PolygonIndex(object):
             polys = cls.load_polygons(os.path.join(d, polys_filename))
         else:
             polys = None
-        polygons_db = LevelDB(os.path.join(d, polys_db_dir))
+        polygons_db_path = os.path.join(d, polys_db_dir)
+        polygons_db = leveldb.LevelDB(os.path.join(d, polys_db_dir))
         polygon_index = cls(index=index, polygons=polys, polygons_db=polygons_db, save_dir=d)
         polygon_index.load_properties(os.path.join(d, properties_filename))
         polygon_index.load_polygon_properties(d)
