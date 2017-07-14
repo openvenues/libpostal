@@ -273,6 +273,7 @@ prairie|pr
 priors|prrs
 private|pvt
 promenade|prom|prm
+provincial trunk highway|pth|p.t.h.|p.t.h|p t h
 pursuit|pur
 quad|qd
 quadrangle|qdgl
