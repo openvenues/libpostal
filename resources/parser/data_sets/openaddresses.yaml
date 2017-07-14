@@ -4973,6 +4973,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Red River County
+                    - filename: reeves.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Reeves County
                     - filename: rockwall.csv
                       city_replacements:
                           city: Rockwall
