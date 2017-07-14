@@ -4946,6 +4946,10 @@ countries:
                       city_replacements:
                           state_district: Midland County
                     - filename: milam.csv
+                    - filename: mills.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Mills County
                     - filename: moore.csv
                     - filename: nacogdoches.csv
                       add_osm_boundaries: true
@@ -4969,6 +4973,9 @@ countries:
                     - filename: orange.csv
                     - filename: parmer.csv
                     - filename: plano.csv
+                    - filename: rains.csv
+                      city_replacements:
+                          state_district: Rains County
                     - filename: redriver.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -5016,6 +5023,9 @@ countries:
                       city_replacements:
                           state_district: Williamson County
                     - filename: wood.csv
+                    - filename: young.csv
+                      city_replacements:
+                          state_district: Young County
                     - filename: zavala.csv
 
             ut:
