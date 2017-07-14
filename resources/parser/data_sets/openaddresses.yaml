@@ -4985,6 +4985,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: San Antonio
+                    - filename: schleicher.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Schleicher County
                     - filename: shackelford.csv
                     - filename: statewide.csv
                       add_osm_boundaries: true
