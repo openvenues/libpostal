@@ -155,6 +155,10 @@ class DictionaryPhraseFilter(PhraseFilter):
         return set(self.gen_phrases(s, canonical_only=canonical_only, languages=languages))
 
 
+STREET_BOILERPLATE_DICTIONARIES = ('street_types',
+                                   'directionals',
+                                   )
+
 STREET_TYPES_ONLY_DICTIONARIES = ('street_types',
                                   'directionals',
                                   'concatenated_suffixes_separable',
@@ -252,6 +256,7 @@ def create_gazetteer(*dictionaries):
 house_number_gazetteer = create_gazetteer(*HOUSE_NUMBER_DICTIONARIES)
 street_types_gazetteer = create_gazetteer(*STREET_TYPES_DICTIONARIES)
 street_types_only_gazetteer = create_gazetteer(*STREET_TYPES_ONLY_DICTIONARIES)
+street_boilerplate_gazetteer = create_gazetteer(*STREET_BOILERPLATE_DICTIONARIES)
 qualifiers_gazetteer = create_gazetteer(QUALIFIERS_DICTIONARY)
 names_gazetteer = create_gazetteer(*NAME_DICTIONARIES)
 chains_gazetteer = create_gazetteer(CHAIN_DICTIONARY)

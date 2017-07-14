@@ -23,6 +23,7 @@ from geodata.address_expansions.equivalence import equivalent
 from geodata.address_expansions.gazetteers import *
 from geodata.addresses.config import address_config
 from geodata.addresses.dependencies import ComponentDependencies
+from geodata.addresses.buildings import Building
 from geodata.addresses.floors import Floor
 from geodata.addresses.entrances import Entrance
 from geodata.addresses.house_numbers import HouseNumber
@@ -916,11 +917,15 @@ class AddressComponents(object):
     chinese_floor_regex = re.compile(u'((?:[0-9０-９{}]+?[楼樓层層])|(?:地下室))'.format(chinese_numbers), re.UNICODE)
 
     @classmethod
-    def extract_regex(cls, regex, value):
+    def regex_match(cls, regex, value):
         if not value or not regex:
-            return value, None
+            return value
         value = value.strip()
-        match = regex.search(value)
+        return regex.search(value)
+
+    @classmethod
+    def extract_regex(cls, regex, value):
+        match = cls.regex_match(regex, value)
         if match:
             sep = match.group(0)
             value = regex.sub(u'', value)
@@ -932,6 +937,8 @@ class AddressComponents(object):
         regex = cls.numeric_phrase_regexes.get((numeric_class.key, language, country))
         if not regex:
             regex_str = numeric_class.numeric_regex(language, country=country)
+            if not regex_str:
+                return None
             regex = re.compile(regex_str, re.I | re.U)
             cls.numeric_phrase_regexes[numeric_class.key] = regex
         return regex
@@ -1094,8 +1101,8 @@ class AddressComponents(object):
 
     lang_phrase_dictionaries = [lang for lang, dictionary_type in six.iterkeys(address_phrase_dictionaries.phrases)]
 
-    phrase_number_pattern = r'\s*\b(?:{})[\.\s]\s*(?:(?:{})[\s\.]?)?\s*{}\s*'
-    number_phrase_pattern = r'\s*\b(?:(?:{})[\s\.]?)?\s*{}\s*(?:{})[\.\s]\s*'
+    phrase_number_pattern = u'\\b(?:{})[\\.\\s]\\s*(?:(?:{})[\\s\\.]?)?\\s*{}\\b'
+    number_phrase_pattern = u'\\b(?:(?:{})[\\s\\.]?)?\\s*{}\\s*(?:{})[\\.]?\\b'
 
     for lang in lang_phrase_dictionaries:
         numbers = address_phrase_dictionaries.phrases.get((lang, 'number'), [])
@@ -1106,51 +1113,80 @@ class AddressComponents(object):
 
         house_numbers = address_phrase_dictionaries.phrases.get((lang, 'house_numbers'), [])
 
-        number_phrases = [safe_encode(p) for p in itertools.chain(*numbers)]
+        number_phrases = [safe_decode(p) for p in itertools.chain(*numbers)]
         language_number_phrases[lang] = number_phrases
-        house_number_phrases = set([safe_encode(p) for p in itertools.chain(*house_numbers)])
-        unit_phrases = [safe_encode(p) for p in itertools.chain(*numbered_units) if len(p) > 2 and p not in house_number_phrases]
+        house_number_phrases = set([safe_decode(p) for p in itertools.chain(*house_numbers)])
+        unit_phrases = [safe_decode(p) for p in itertools.chain(*numbered_units) if len(p) > 2 and p not in house_number_phrases]
 
-        superblock_phrases = [safe_encode(p) for p in itertools.chain(*numbered_superblocks)]
-        block_phrases = [safe_encode(p) for p in itertools.chain(*numbered_blocks)]
-        lot_phrases = [safe_encode(p) for p in itertools.chain(*numbered_lots)]
+        superblock_phrases = [safe_decode(p) for p in itertools.chain(*numbered_superblocks)]
+        block_phrases = [safe_decode(p) for p in itertools.chain(*numbered_blocks)]
+        lot_phrases = [safe_decode(p) for p in itertools.chain(*numbered_lots)]
 
-        pattern = re.compile(phrase_number_pattern.format(safe_encode('|').join(unit_phrases), safe_encode('|').join(number_phrases), safe_encode(numeric_pattern)),
+        pattern = re.compile(phrase_number_pattern.format(u'|'.join(unit_phrases), u'|'.join(number_phrases), safe_decode(numeric_pattern)),
                              re.I | re.UNICODE)
         unit_type_regexes[lang] = pattern
 
-        pattern = re.compile(phrase_number_pattern.format(safe_encode('|').join(superblock_phrases), safe_encode('|').join(number_phrases), safe_encode(numeric_pattern)),
-                             re.I | re.UNICODE)
-        superblock_regexes[lang] = pattern
+        if superblock_phrases:
+            pattern = re.compile(phrase_number_pattern.format(u'|'.join(superblock_phrases), u'|'.join(number_phrases), safe_decode(numeric_pattern)),
+                                 re.I | re.UNICODE)
+            superblock_regexes[lang] = pattern
 
-        pattern = re.compile(phrase_number_pattern.format(safe_encode('|').join(block_phrases), safe_encode('|').join(number_phrases), safe_encode(numeric_pattern)),
-                             re.I | re.UNICODE)
-        block_number_regexes[lang] = pattern
+        if block_phrases:
+            pattern = re.compile(phrase_number_pattern.format(u'|'.join(block_phrases), u'|'.join(number_phrases), safe_decode(numeric_pattern)),
+                                 re.I | re.UNICODE)
+            block_number_regexes[lang] = pattern
 
-        pattern = re.compile(number_phrase_pattern.format(safe_encode('|').join(number_phrases), safe_encode(numeric_pattern), safe_encode('|').join(block_phrases)),
-                             re.I | re.UNICODE)
-        number_block_regexes[lang] = pattern
+            pattern = re.compile(number_phrase_pattern.format(u'|'.join(number_phrases), safe_decode(numeric_pattern), u'|'.join(block_phrases)),
+                                 re.I | re.UNICODE)
+            number_block_regexes[lang] = pattern
 
-        pattern = re.compile(phrase_number_pattern.format(safe_encode('|').join(lot_phrases), safe_encode('|').join(number_phrases), safe_encode(numeric_pattern)),
-                             re.I | re.UNICODE)
-        lot_regexes[lang] = pattern
+        if lot_phrases:
+            pattern = re.compile(phrase_number_pattern.format(u'|'.join(lot_phrases), u'|'.join(number_phrases), safe_decode(numeric_pattern)),
+                                 re.I | re.UNICODE)
+            lot_regexes[lang] = pattern
 
     english_streets = address_phrase_dictionaries.phrases.get((ENGLISH, 'street_types'), [])
     english_directionals = address_phrase_dictionaries.phrases.get((ENGLISH, 'directionals'), [])
     english_numbered_route_regex = re.compile('highway|route')
+
     english_numbered_route_phrases = set([safe_encode(p) for p in itertools.chain(*[streets for streets in english_streets if english_numbered_route_regex.search(streets[0])])])
     english_street_phrases = [safe_encode(p) for p in itertools.chain(*(english_streets + english_directionals)) if safe_encode(p) not in english_numbered_route_phrases]
     english_numbered_unit_suffix_regex = re.compile('^(.+ (?:{}))\s*#\s*\\b(?:[\d]+|[a-z]|[a-z]\s*[\d]*\-?[\d]+|[\d]+\-?[\d]*\s*[a-z]|[\d]+\-[\d]+)\\b\s*$'.format(safe_encode('|').join(english_street_phrases)), re.I)
     english_unit_suffix_regex = re.compile('^(.+ (?:{}))\s*\\b(?:[\d]+|[a-z]|[a-z][\d]*\-?[\d]+|[\d]+\-?[\d]*\s*[a-z]|[\d]+\-[\d]+)\\b\s*$'.format(safe_encode('|').join(english_street_phrases)), re.I)
 
+    federal_highway_regex = re.compile('^u\.?s\.?|ca$', re.I)
+
     @classmethod
     def strip_english_unit_number_suffix(cls, value):
         match = cls.english_numbered_unit_suffix_regex.match(value)
         if match:
-            return match.group(1)
-        match = cls.english_unit_suffix_regex.match(value)
-        if match:
-            return match.group(1)
+            candidate_value = match.group(1)
+            norm_tokens = normalized_tokens(candidate_value,
+                                            string_options=NORMALIZE_STRING_LOWERCASE,
+                                            token_options=TOKEN_OPTIONS_DROP_PERIODS,
+                                            strip_parentheticals=False)
+
+            have_non_boilerplate_word = False
+            first_phrase = True
+            for t, c, length, data in reversed(list(street_boilerplate_gazetteer.filter(norm_tokens))):
+                if c == token_types.PHRASE:
+                    if first_phrase:
+                        first_phrase = False
+                        for d in data:
+                            _, _, _, canonical = safe_decode(d).split(u'|')
+                            if canonical in cls.english_numbered_route_phrases:
+                                have_non_boilerplate_word = True
+                                break
+                    continue
+                elif c in token_types.WORD_TOKEN_TYPES and not cls.federal_highway_regex.match(t):
+                    have_non_boilerplate_word = True
+
+                if have_non_boilerplate_word:
+                    break
+
+            if have_non_boilerplate_word:
+                value = candidate_value
+
         return value
 
     @classmethod
@@ -1182,6 +1218,8 @@ class AddressComponents(object):
         lot_regexes = cls.lot_regexes.get(language)
         if lot_regexes:
             stripped, lot = cls.extract_regex(lot_regexes, stripped)
+
+        stripped = stripped.strip()
 
         return stripped, superblock, block, lot
 
@@ -1685,8 +1723,6 @@ class AddressComponents(object):
                 for component in components[1:]:
                     address_components.pop(component, None)
 
-    block_words = {u'block', u'blok', u'bloc', u'bloco', u'bloque', u'блок', u'blokea', u'blocco'}
-
     @classmethod
     def is_valid_house_number(cls, house_number, country=None):
         if not house_number:
@@ -1700,6 +1736,27 @@ class AddressComponents(object):
             return True
 
         possible_languages = get_country_languages(country).keys()
+
+        superblock = block = lot = None
+
+        hn = house_number
+
+        for language in possible_languages:
+            hn, sb, bl, lt = cls.extract_block_lot_patterns(hn, language)
+
+            if sb:
+                superblock = sb
+
+            if bl:
+                block = bl
+
+            if lt:
+                lot = lt
+
+        house_number = hn
+
+        if (not house_number.strip() or house_number.isdigit()) and (superblock or block or lot):
+            return True
 
         norm_tokens = normalized_tokens(house_number, string_options=NORMALIZE_STRING_LOWERCASE,
                                         token_options=TOKEN_OPTIONS_DROP_PERIODS, strip_parentheticals=False)
@@ -1726,17 +1783,14 @@ class AddressComponents(object):
 
                     prev_class = current_class
             elif c == token_types.WORD:
-                max_len = 1 if not last_phrase_was_block else 2
+                max_len = 1
                 for sub in t.split(u'-'):
                     if len(sub) > max_len:
                         return False
             elif c == token_types.PHRASE:
                 valid_phrase = False
-                last_phrase_was_block = False
                 for d in data:
                     lang, dictionary, _, canonical = safe_decode(d).split(u'|')
-                    if canonical in cls.block_words:
-                        last_phrase_was_block = True
                     if lang in possible_languages:
                         valid_phrase = True
                         break
@@ -1772,7 +1826,42 @@ class AddressComponents(object):
         return name
 
     @classmethod
-    def cleanup_house_number(cls, address_components):
+    def extract_sub_building_components(cls, address_components, key, languages=(), country=None):
+        value = address_components.get(key)
+        if value is None:
+            return
+
+        original_value = value
+
+        for language in languages:
+
+            value, unit = cls.extract_regex(cls.get_numeric_regex(Unit, language, country), value)
+            if unit:
+                address_components[AddressFormatter.UNIT] = unit
+            value, floor = cls.extract_regex(cls.get_numeric_regex(Floor, language, country), value)
+            if floor:
+                address_components[AddressFormatter.LEVEL] = floor
+            value, building = cls.extract_regex(cls.get_numeric_regex(Building, language, country), value)
+            if building:
+                address_components[AddressFormatter.BUILDING] = building
+            value, staircase = cls.extract_regex(cls.get_numeric_regex(Staircase, language, country), value)
+            if staircase:
+                address_components[AddressFormatter.STAIRCASE] = staircase
+            value, entrance = cls.extract_regex(cls.get_numeric_regex(Entrance, language, country), value)
+            if entrance:
+                address_components[AddressFormatter.ENTRANCE] = entrance
+
+            value = value.strip()
+
+        if value != original_value:
+            value = value.strip()
+            if value:
+                address_components[key] = value
+            else:
+                address_components.pop(key)
+
+    @classmethod
+    def cleanup_house_number(cls, address_components, languages=(), country=None):
         '''
         House number cleanup
         --------------------
@@ -1790,15 +1879,14 @@ class AddressComponents(object):
         if not house_number:
             return
 
-        orig_house_number = house_number
+        cls.extract_sub_building_components(address_components, AddressFormatter.HOUSE_NUMBER, languages, country=country)
+
+        house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
 
         house_number = house_number.strip(six.u(',; ')).rstrip(six.u('-'))
         if not house_number:
             address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
             return
-
-        if house_number != orig_house_number:
-            address_components[AddressFormatter.HOUSE_NUMBER] = house_number
 
         if six.u(';') in house_number:
             house_number = house_number.replace(six.u(';'), six.u(','))
@@ -2148,7 +2236,7 @@ class AddressComponents(object):
 
         self.prune_duplicate_names(address_components)
 
-        self.cleanup_house_number(address_components)
+        self.cleanup_house_number(address_components, all_languages)
 
         self.remove_numeric_boundary_names(address_components)
 
