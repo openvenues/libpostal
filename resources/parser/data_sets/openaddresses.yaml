@@ -4588,7 +4588,6 @@ countries:
                     - filename: lackawanna.csv
                     - filename: lancaster.csv
                     - filename: lawrence.csv
-                      add_osm_boundaries: true
                       city_replacements:
                           state_district: Lawrence County
                     - filename: lehigh.csv
