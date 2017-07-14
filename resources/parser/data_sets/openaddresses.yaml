@@ -4302,7 +4302,7 @@ countries:
                     - filename: westchester.csv
                       ignore_fields_containing:
                           road:
-                              - "^[a-z]{,3}$"
+                              - "^[A-Za-z]{,3}$"
 
             oh:
               add:
@@ -4913,6 +4913,13 @@ countries:
                           state_district: Kendall County
                     - filename: lamar.csv
                     - filename: lasalle.csv
+                    - filename: lee.csv
+                      city_replacements:
+                          state_district: Lee County
+                      ignore_fields_containing:
+                          road:
+                              - "^[A-Za-z]{,3}$"
+                              - ".*?\(.*?\)"
                     - filename: lubbock.csv
                       add_osm_boundaries: true
                       city_replacements:
