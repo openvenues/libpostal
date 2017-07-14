@@ -1113,14 +1113,14 @@ class AddressComponents(object):
 
         house_numbers = address_phrase_dictionaries.phrases.get((lang, 'house_numbers'), [])
 
-        number_phrases = [safe_decode(p) for p in itertools.chain(*numbers)]
+        number_phrases = sorted([safe_decode(p) for p in itertools.chain(*numbers)], reverse=True)
         language_number_phrases[lang] = number_phrases
         house_number_phrases = set([safe_decode(p) for p in itertools.chain(*house_numbers)])
-        unit_phrases = [safe_decode(p) for p in itertools.chain(*numbered_units) if len(p) > 2 and p not in house_number_phrases]
+        unit_phrases = sorted([safe_decode(p) for p in itertools.chain(*numbered_units) if len(p) > 2 and p not in house_number_phrases], reverse=True)
 
-        superblock_phrases = [safe_decode(p) for p in itertools.chain(*numbered_superblocks)]
-        block_phrases = [safe_decode(p) for p in itertools.chain(*numbered_blocks)]
-        lot_phrases = [safe_decode(p) for p in itertools.chain(*numbered_lots)]
+        superblock_phrases = sorted([safe_decode(p) for p in itertools.chain(*numbered_superblocks)], reverse=True)
+        block_phrases = sorted([safe_decode(p) for p in itertools.chain(*numbered_blocks)], reverse=True)
+        lot_phrases = sorted([safe_decode(p) for p in itertools.chain(*numbered_lots)], reverse=True)
 
         pattern = re.compile(phrase_number_pattern.format(u'|'.join(unit_phrases), u'|'.join(number_phrases), safe_decode(numeric_pattern)),
                              re.I | re.UNICODE)
@@ -1147,10 +1147,11 @@ class AddressComponents(object):
 
     english_streets = address_phrase_dictionaries.phrases.get((ENGLISH, 'street_types'), [])
     english_directionals = address_phrase_dictionaries.phrases.get((ENGLISH, 'directionals'), [])
-    english_numbered_route_regex = re.compile('highway|route')
+    english_numbered_route_regex = re.compile('\\b(highway|route|county|state|township|farm|ranch)\\b')
 
-    english_numbered_route_phrases = set([safe_encode(p) for p in itertools.chain(*[streets for streets in english_streets if english_numbered_route_regex.search(streets[0])])])
-    english_street_phrases = [safe_encode(p) for p in itertools.chain(*(english_streets + english_directionals)) if safe_encode(p) not in english_numbered_route_phrases]
+    english_numbered_route_canonicals = set([safe_encode(streets[0]) for streets in english_streets if english_numbered_route_regex.search(streets[0])])
+    english_numbered_route_phrases = set([safe_encode(p) for p in itertools.chain(*[streets for streets in english_streets if streets[0] in english_numbered_route_canonicals])])
+    english_street_phrases = sorted([safe_encode(p) for p in itertools.chain(*(english_streets + english_directionals)) if safe_encode(p) not in english_numbered_route_phrases], reverse=True)
     english_numbered_unit_suffix_regex = re.compile('^(.+ (?:{}))\s*#\s*\\b(?:[\d]+|[a-z]|[a-z]\s*[\d]*\-?[\d]+|[\d]+\-?[\d]*\s*[a-z]|[\d]+\-[\d]+)\\b\s*$'.format(safe_encode('|').join(english_street_phrases)), re.I)
     english_unit_suffix_regex = re.compile('^(.+ (?:{}))\s*\\b(?:[\d]+|[a-z]|[a-z][\d]*\-?[\d]+|[\d]+\-?[\d]*\s*[a-z]|[\d]+\-[\d]+)\\b\s*$'.format(safe_encode('|').join(english_street_phrases)), re.I)
 
@@ -1174,9 +1175,9 @@ class AddressComponents(object):
                         first_phrase = False
                         for d in data:
                             _, _, _, canonical = safe_decode(d).split(u'|')
-                            if canonical in cls.english_numbered_route_phrases:
-                                have_non_boilerplate_word = True
-                                break
+                            if canonical in cls.english_numbered_route_canonicals:
+                                # Definitely valid e.g. County Road #12
+                                return value
                     continue
                 elif c in token_types.WORD_TOKEN_TYPES and not cls.federal_highway_regex.match(t):
                     have_non_boilerplate_word = True
@@ -1184,17 +1185,10 @@ class AddressComponents(object):
                 if have_non_boilerplate_word:
                     break
 
+            # If there's something other than a street phrase, can see "Road #2" in some places
             if have_non_boilerplate_word:
                 value = candidate_value
 
-        return value
-
-    @classmethod
-    def strip_unit_phrases_for_language(cls, value, language):
-        if language in cls.unit_type_regexes:
-            value = cls.unit_type_regexes[language].sub(six.u(''), value)
-        if language == ENGLISH:
-            value = cls.strip_english_unit_number_suffix(value)
         return value
 
     @classmethod
@@ -1910,10 +1904,22 @@ class AddressComponents(object):
         return street is not None and not (cls.invalid_street_regex.match(street) or not any((c.isalnum() for c in street)))
 
     @classmethod
-    def cleanup_street(cls, address_components):
+    def cleanup_street(cls, address_components, languages=(), country=None):
         street = address_components.get(AddressFormatter.ROAD)
+        original_street = street
+
+        cls.extract_sub_building_components(address_components, AddressFormatter.ROAD, languages, country)
+
+        street = address_components.get(AddressFormatter.ROAD)
+
+        if ENGLISH in languages:
+            street = cls.strip_english_unit_number_suffix(street)
+
         if street is not None and not cls.street_name_is_valid(street):
             address_components.pop(AddressFormatter.ROAD)
+
+        if street is not None and street != original_street:
+            address_components[AddressFormatter.ROAD] = street
 
     newline_regex = re.compile('[\n]+')
     name_regex = re.compile('^[\s\-]*(.*?)[\s\-]*$')
@@ -2207,7 +2213,7 @@ class AddressComponents(object):
         self.add_neighborhoods(address_components, neighborhoods, country, language, non_local_language=non_local_language,
                                language_suffix=language_suffix)
 
-        self.cleanup_street(address_components)
+        self.cleanup_street(address_components, all_languages, country=country)
         street = address_components.get(AddressFormatter.ROAD)
 
         if language == SPANISH and street:
@@ -2215,11 +2221,6 @@ class AddressComponents(object):
             if norm_street:
                 address_components[AddressFormatter.ROAD] = norm_street
                 street = norm_street
-
-        if street:
-            norm_street = self.strip_unit_phrases_for_language(street, language)
-            address_components[AddressFormatter.ROAD] = norm_street
-            street = norm_street
 
         self.cleanup_boundary_names(address_components)
 
