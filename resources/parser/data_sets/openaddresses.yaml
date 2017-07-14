@@ -4881,6 +4881,13 @@ countries:
                       city_replacements:
                           state_district: Gray County
                     - filename: guadalupe.csv
+                    - filename: hartley.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Hartley County
+                    - filename: hays.csv
+                      city_replacements:
+                          state_district: Hays County
                     - filename: houston.csv
                       add_osm_boundaries: true
                       city_replacements:
