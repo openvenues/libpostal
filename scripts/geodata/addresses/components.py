@@ -919,7 +919,7 @@ class AddressComponents(object):
     @classmethod
     def regex_match(cls, regex, value):
         if not value or not regex:
-            return value
+            return None
         value = value.strip()
         return regex.search(value)
 
@@ -2237,7 +2237,7 @@ class AddressComponents(object):
 
         self.prune_duplicate_names(address_components)
 
-        self.cleanup_house_number(address_components, all_languages)
+        self.cleanup_house_number(address_components, all_languages, country=country)
 
         self.remove_numeric_boundary_names(address_components)
 
