@@ -5241,7 +5241,9 @@ countries:
                           state_district: Jefferson County
                     - filename: raleigh.csv
                     - filename: statewide.csv
-                      add_osm_boundaries: true
+                      ignore_fields_containing:
+                          city:
+                              - "^[0-9]+$"
 
             wy:
                 add:
