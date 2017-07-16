@@ -511,6 +511,23 @@ class NumberedComponent(object):
         whitespace_or_beginning = u'\\b' if whitespace else u''
         whitespace_lookahead = u'\\b' if whitespace else u''
 
+        left_ordinal_phrases = {k: sorted(vals, reverse=True) for k, v in six.iteritems(left_ordinal_phrases)}
+        right_ordinal_phrases = {k: sorted(vals, reverse=True) for k, v in six.iteritems(right_ordinal_phrases)}
+
+
+        left_affix_phrases.sort(reverse=True)
+        left_phrases_with_number.sort(reverse=True)
+        left_phrases.sort(reverse=True)
+        right_affix_phrases.sort(reverse=True)
+        right_phrases_with_number.sort(reverse=True)
+        right_phrases.sort(reverse=True)
+        standalone_phrases.sort(reverse=True)
+
+        left_number_affix_phrases.sort(reverse=True)
+        left_number_phrases.sort(reverse=True)
+        right_number_affix_phrases.sort(reverse=True)
+        right_number_phrases.sort(reverse=True)
+
         if right_ordinal_phrases:
             for k, vals in six.iteritems(right_ordinal_phrases):
                 ordinal_parts = [u''.join(ordinal_phrase_components[k])]
@@ -518,7 +535,7 @@ class NumberedComponent(object):
                 if ordinal_suffix_regex:
                     ordinal_parts.append(ordinal_suffix_regex)
 
-                regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(ordinal_parts).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(vals).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(ordinal_parts).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(sorted(vals, reverse=True)).replace(u'.', u'\\.')))
 
         if left_affix_phrases:
             regexes.append(u'(?:{})(?:{})'.format(u'|'.join(left_affix_phrases).replace(u'.', u'\\.'), cls.numeric_pattern))
