@@ -1,2 +1,3 @@
 block|blk|bl|blck
-house number|house no|house #|house nbr|house nr|house num|house №
+house|hse
+house number|house no|house #|house nbr|house nr|house num|house №|hse no|hse #|hse nbr|hse nr|hse num|hse №
