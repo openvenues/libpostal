@@ -4198,7 +4198,6 @@ countries:
                     state: New Jersey
                 files:
                     - filename: statewide.csv
-                      add_osm_boundaries: true
                       postcode_length: 5
 
             nm:
