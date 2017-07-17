@@ -1848,7 +1848,7 @@ class AddressComponents(object):
             value = value.strip()
 
         if value != original_value:
-            value = value.strip()
+            value = value.strip(u' ,')
             if value:
                 address_components[key] = value
             else:
@@ -1882,12 +1882,20 @@ class AddressComponents(object):
             address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
             return
 
-        if six.u(';') in house_number:
-            house_number = house_number.replace(six.u(';'), six.u(','))
-            address_components[AddressFormatter.HOUSE_NUMBER] = house_number
+        house_numbers = []
+        if u',' in house_number:
+            for h in house_number.split(u','):
+                h = h.strip()
+                if not is_numeric(h):
+                    house_numbers = []
+                    break
+                house_numbers.append(h)
 
-        if house_number and house_number.count(six.u(',')) >= 2:
-            house_numbers = house_number.split(six.u(','))
+        have_semicolon = u';' in house_number
+        if have_semicolon:
+            house_numbers = [h.strip(u',; ') for h in house_number.split(u';')]
+
+        if house_numbers and (have_semicolon or len(house_numbers) >= 2):
             random.shuffle(house_numbers)
             for num in house_numbers:
                 num = num.strip()
