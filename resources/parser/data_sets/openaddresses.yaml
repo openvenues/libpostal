@@ -834,6 +834,9 @@ countries:
                     state: SK
                 language: en
                 files:
+                    - filename: moosejaw.csv
+                      city_replacements:
+                          city: Moosejaw
                     - filename: regina.csv
                       add_osm_boundaries: true
                       city_replacements:
