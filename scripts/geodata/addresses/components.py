@@ -1768,7 +1768,7 @@ class AddressComponents(object):
                     elif ch == ',':
                         current_class = token_types.COMMA
                     elif ch == '.':
-                        current_class = token_tyeps.PERIOD
+                        current_class = token_types.PERIOD
                     else:
                         current_class = token_types.OTHER
 
