@@ -80,8 +80,8 @@ AC_CHECK_HEADER(cblas.h, [AX_CBLAS])
 AC_ARG_ENABLE([data-download],
               [  --disable-data-download    Disable downloading data],
               [case "${enableval}" in
-                yes)  DOWNLOAD_DATA=true ;;
-                no) DOWNLOAD_DATA=false ;;
+                yes)  DOWNLOAD_DATA=false ;;
+                no) DOWNLOAD_DATA=true ;;
                 *) AC_MSG_ERROR([bad value ${enableval} for --disable-data-download]) ;;
               esac], [DOWNLOAD_DATA=true])
 
