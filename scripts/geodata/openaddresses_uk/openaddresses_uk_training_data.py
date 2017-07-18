@@ -121,7 +121,7 @@ class OpenAddressesUKFormatter(object):
                 if street is not None:
                     street = street.strip()
                     street = AddressComponents.cleaned_name(street)
-                    if AddressComponents.street_name_is_valid(street):
+                    if AddressComponents.is_valid_street_name(street):
 
                         street = abbreviate(street_types_gazetteer, street, language)
                         components[AddressFormatter.ROAD] = street

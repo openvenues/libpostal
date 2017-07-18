@@ -1908,7 +1908,7 @@ class AddressComponents(object):
     invalid_street_regex = re.compile('^\s*(?:none|null|not applicable|n\s*/\s*a)\s*$', re.I)
 
     @classmethod
-    def street_name_is_valid(cls, street):
+    def is_valid_street_name(cls, street):
         return street is not None and not (cls.invalid_street_regex.match(street) or not any((c.isalnum() for c in street)))
 
     @classmethod
@@ -1923,7 +1923,7 @@ class AddressComponents(object):
         if ENGLISH in languages:
             street = cls.strip_english_unit_number_suffix(street)
 
-        if street is not None and not cls.street_name_is_valid(street):
+        if street is not None and not cls.is_valid_street_name(street):
             address_components.pop(AddressFormatter.ROAD)
 
         if street is not None and street != original_street:

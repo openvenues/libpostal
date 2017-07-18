@@ -1683,7 +1683,7 @@ class OSMAddressFormatter(object):
                 for v, is_base in vals:
                     for street_name in v.split(';'):
                         street_name = street_name.strip()
-                        if street_name and self.components.street_name_is_valid(street_name):
+                        if street_name and self.components.is_valid_street_name(street_name):
                             address_components = {AddressFormatter.ROAD: street_name}
 
                             self.components.add_admin_boundaries(address_components, osm_components,
