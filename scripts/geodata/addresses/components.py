@@ -692,7 +692,7 @@ class AddressComponents(object):
         iso_3166_name_prob = float(cldr_config['iso_3166_name_probability'])
         alpha_3_iso_code_prob = float(cldr_config['iso_alpha_3_code_probability'])
 
-        localized, iso_3166, alpha3, alpha2 = range(4)
+        localized, iso_3166, alpha3, alpha2 = values = range(4)
         probs = cdf([localized_name_prob, iso_3166_name_prob, alpha_3_iso_code_prob, alpha_2_iso_code_prob])
         value = weighted_choice(values, probs)
 
