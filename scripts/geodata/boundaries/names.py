@@ -151,6 +151,9 @@ class BoundaryNames(object):
         is_prefix = False
 
         for key, value in six.iteritems(props):
+            if not isinstance(value, six.string_types):
+                continue
+
             affixes, affix_probs, direction = self.conditional_affixes.get(key, {}).get(value, (None, None, None))
             is_prefix = direction == 'left'
 
