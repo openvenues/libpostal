@@ -1254,7 +1254,7 @@ class AddressComponents(object):
             if component is None:
                 continue
 
-            have_sub_city = any((key in grouped_components and key in city_replacements for key in (AddressFormatter.SUBURB, AddressFormatter.CITY_DISTRICT)))
+            have_sub_city = any((key in grouped_components and key in city_replacements for key in (AddressFormatter.SUBURB, AddressFormatter.CITY_DISTRICT, AddressFormatter.LOCALITY)))
 
             have_city = AddressFormatter.CITY in grouped_components
 
@@ -1263,7 +1263,7 @@ class AddressComponents(object):
             if (component == AddressFormatter.CITY or (component in city_replacements and not have_city)) and component not in grouped_components and not is_village:
                 grouped_components[component].append(props)
 
-            if is_village:
+            if is_village and not first_village:
                 first_village = props
 
             if is_japan and component == AddressFormatter.SUBURB and not checked_first_suburb:
@@ -1279,10 +1279,8 @@ class AddressComponents(object):
                     grouped_components[component].append(props)
                 checked_first_suburb = True
 
-        have_city = AddressFormatter.CITY in grouped_components
-        have_locality = AddressFormatter.LOCALITY in grouped_components
-        if not have_city and not have_locality and first_village:
-            grouped_components[AddressFormatter.CITY].append(first_village)
+        if first_village and AddressFormatter.LOCALITY not in grouped_components:
+            grouped_components[AddressFormatter.LOCALITY].append(first_village)
 
     def add_admin_boundaries(self, address_components,
                              osm_components,
