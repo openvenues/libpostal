@@ -511,9 +511,8 @@ class NumberedComponent(object):
         whitespace_or_beginning = u'\\b' if whitespace else u''
         whitespace_lookahead = u'\\b' if whitespace else u''
 
-        left_ordinal_phrases = {k: sorted(vals, reverse=True) for k, v in six.iteritems(left_ordinal_phrases)}
-        right_ordinal_phrases = {k: sorted(vals, reverse=True) for k, v in six.iteritems(right_ordinal_phrases)}
-
+        left_ordinal_phrases = {k: sorted(v, reverse=True) for k, v in six.iteritems(left_ordinal_phrases)}
+        right_ordinal_phrases = {k: sorted(v, reverse=True) for k, v in six.iteritems(right_ordinal_phrases)}
 
         left_affix_phrases.sort(reverse=True)
         left_phrases_with_number.sort(reverse=True)
