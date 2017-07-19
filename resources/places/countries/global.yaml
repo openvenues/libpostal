@@ -4,7 +4,7 @@
 
 global:
     city_replacements: []
-    replace_city_with_locality_probability: 0.9
+    replace_city_with_locality_probability: 0.95
     locality_and_city_probability: 0.0
     # Probability of including individual components
     components:

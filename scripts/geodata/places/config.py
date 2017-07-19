@@ -216,12 +216,11 @@ class PlaceConfig(object):
 
             locality = new_components[AddressFormatter.LOCALITY]
 
-            if random.random() > locality_and_city_prob:
-                new_components.pop(AddressFormatter.LOCALITY, None)
-
             if random.random() < replace_city_with_locality_prob:
                 new_components.pop(AddressFormatter.LOCALITY, None)
                 new_components[AddressFormatter.CITY] = locality
+            elif random.random() > locality_and_city_prob:
+                new_components.pop(AddressFormatter.LOCALITY, None)
 
         if AddressFormatter.CITY not in new_components and not any((c in city_replacements for c in new_components)):
             city = components.get(AddressFormatter.CITY)
