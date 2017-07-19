@@ -1280,7 +1280,8 @@ class AddressComponents(object):
                 checked_first_suburb = True
 
         have_city = AddressFormatter.CITY in grouped_components
-        if not have_city and first_village:
+        have_locality = AddressFormatter.LOCALITY in grouped_components
+        if not have_city and not have_locality and first_village:
             grouped_components[AddressFormatter.CITY].append(first_village)
 
     def add_admin_boundaries(self, address_components,
