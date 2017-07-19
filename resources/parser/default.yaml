@@ -32,7 +32,9 @@ component_dependencies:
         dependencies:
             - road
             - named_building
-            - subdivision
+
+    named_building:
+        dependencies: []
 
     entrance:
         dependencies:
