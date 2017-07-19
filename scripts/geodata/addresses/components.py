@@ -1834,6 +1834,7 @@ class AddressComponents(object):
             for (numeric_cls, k) in [(Unit, AddressFormatter.UNIT),
                                      (Floor, AddressFormatter.LEVEL),
                                      (Building, AddressFormatter.BUILDING),
+                                     (POBox, AddressFormatter.PO_BOX),
                                      (Staircase, AddressFormatter.STAIRCASE),
                                      (Entrance, AddressFormatter.ENTRANCE)]:
                 value, extracted = cls.extract_regex(cls.get_numeric_regex(numeric_cls, language, country), value)
