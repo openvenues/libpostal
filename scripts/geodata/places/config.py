@@ -11,6 +11,7 @@ from geodata.addresses.dependencies import ComponentDependencies
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
 from geodata.address_formatting.formatter import AddressFormatter
 from geodata.configs.utils import nested_get, recursive_merge
+from geodata.math.floats import isclose
 from geodata.math.sampling import cdf, weighted_choice
 
 from geodata.encoding import safe_encode
@@ -143,6 +144,10 @@ class PlaceConfig(object):
             if c in deps and not component_bitset & deps[c] and (original_bitset is None or original_bitset & deps[c]):
                 address_components.pop(c)
                 component_bitset ^= ComponentDependencies.component_bit_values[c]
+
+    def country_uses_locality_and_city(self, country):
+        locality_and_city_prob = float(self.get_property(('locality_and_city_probability',), country=country, default=0.0))
+        return not isclose(locality_and_city_prob, 0.0)
 
     def city_replacements(self, country):
         return OrderedDict.fromkeys(self.get_property(('city_replacements', ), country=country))

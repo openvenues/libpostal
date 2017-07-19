@@ -808,7 +808,9 @@ class OSMAddressFormatter(object):
         num_references = min(population / population_divisor + min_references, max_references)
 
         component_order = AddressFormatter.component_order[component_name]
-        sub_city = component_order < AddressFormatter.component_order[AddressFormatter.CITY]
+        sub_city = component_order < AddressFormatter.component_order[AddressFormatter.CITY] and component_name != AddressFormatter.LOCALITY
+        country_uses_locality = place_config.country_uses_locality_and_city(country)
+        add_city_to_locality = country_uses_locality and component_name == AddressFormatter.LOCALITY
 
         revised_tags = self.fix_component_encodings(revised_tags)
 
@@ -844,7 +846,7 @@ class OSMAddressFormatter(object):
                                                              random_key=num_references > 1,
                                                              language_suffix=language_suffix,
                                                              drop_duplicate_city_names=False,
-                                                             add_city_points=sub_city)
+                                                             add_city_points=sub_city or add_city_to_locality)
 
                         place_tags.append((address_components, None, True))
                         for alt_name in alt_names:
