@@ -1369,7 +1369,7 @@ class AddressComponents(object):
 
                         if name:
                             name_lang = language if not suffix_lang or not k.endswith(language_suffix) else suffix_lang
-                            name = boundary_names.name(country, name_lang, component, name)
+                            name = boundary_names.name(country, name_lang, component, name, component_value)
 
                         name_prefix = component_value.get('{}:prefix'.format(k))
 
