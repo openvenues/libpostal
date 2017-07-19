@@ -510,7 +510,7 @@ countries:
                     - <<: *hawaii
                       probability: 0.9
                     - <<: *district_of_columbia
-                      probabilities: 0.85
+                      probability: 0.85
 
             island:
                 order:
