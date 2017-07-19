@@ -1819,6 +1819,8 @@ class AddressComponents(object):
             name = name.split(six.u(','), 1)[0].strip()
         return name
 
+    stray_dot_regex = re.compile(u'(?<![\w])\.')
+
     @classmethod
     def extract_sub_building_components(cls, address_components, key, languages=(), country=None):
         value = address_components.get(key)
@@ -1829,30 +1831,33 @@ class AddressComponents(object):
 
         for language in languages:
 
-            value, unit = cls.extract_regex(cls.get_numeric_regex(Unit, language, country), value)
-            if unit:
-                address_components[AddressFormatter.UNIT] = unit
-            value, floor = cls.extract_regex(cls.get_numeric_regex(Floor, language, country), value)
-            if floor:
-                address_components[AddressFormatter.LEVEL] = floor
-            value, building = cls.extract_regex(cls.get_numeric_regex(Building, language, country), value)
-            if building:
-                address_components[AddressFormatter.BUILDING] = building
-            value, staircase = cls.extract_regex(cls.get_numeric_regex(Staircase, language, country), value)
-            if staircase:
-                address_components[AddressFormatter.STAIRCASE] = staircase
-            value, entrance = cls.extract_regex(cls.get_numeric_regex(Entrance, language, country), value)
-            if entrance:
-                address_components[AddressFormatter.ENTRANCE] = entrance
+            for (numeric_cls, k) in [(Unit, AddressFormatter.UNIT),
+                                     (Floor, AddressFormatter.LEVEL),
+                                     (Building, AddressFormatter.BUILDING),
+                                     (Staircase, AddressFormatter.STAIRCASE),
+                                     (Entrance, AddressFormatter.ENTRANCE)]:
+                value, extracted = cls.extract_regex(cls.get_numeric_regex(numeric_cls, language, country), value)
+                if extracted:
+                    if k not in address_components:
+                        address_components[k] = extracted
+                    else:
+                        existing = address_components[k]
+                        if random.random() < 0.5:
+                            address_components[k] = u'/'.join([existing, extracted])
+                        else:
+                            address_components[k] = u'/'.join([extracted, existing])
 
             value = value.strip()
 
         if value != original_value:
-            value = value.strip(u' ,')
+            value = cls.stray_dot_regex.sub(u'', value)
+            value = value.strip(u' ,/:')
             if value:
                 address_components[key] = value
             else:
                 address_components.pop(key)
+
+    numeric_house_number_regex = re.compile(u'^[0-9]+\s*(?:bis|[^\d\W])$', re.I)
 
     @classmethod
     def cleanup_house_number(cls, address_components, languages=(), country=None):
@@ -1876,8 +1881,10 @@ class AddressComponents(object):
         cls.extract_sub_building_components(address_components, AddressFormatter.HOUSE_NUMBER, languages, country=country)
 
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
+        if not house_number:
+            return
 
-        house_number = house_number.strip(six.u(',; ')).rstrip(six.u('-'))
+        house_number = house_number.strip(six.u(',;/ ')).rstrip(six.u('-/'))
         if not house_number:
             address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
             return
@@ -1886,7 +1893,7 @@ class AddressComponents(object):
         if u',' in house_number:
             for h in house_number.split(u','):
                 h = h.strip()
-                if not is_numeric(h):
+                if not is_numeric(h) and not cls.numeric_house_number_regex.match(h):
                     house_numbers = []
                     break
                 house_numbers.append(h)
