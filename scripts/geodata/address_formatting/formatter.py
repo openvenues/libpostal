@@ -472,9 +472,12 @@ class AddressFormatter(object):
         return ''.join(new_components).strip()
 
     def insert_component(self, template, tag, before=None, after=None, first=False, last=False,
-                         separate=True, is_reverse=False, exact_order=True):
+                         is_reverse=False, exact_order=True):
         if not before and not after and not first and not last:
             return
+
+        other = before or after
+        separate = self.tag_aliases.get(tag, tag) == other
 
         template = template.rstrip()
 
@@ -503,11 +506,12 @@ class AddressFormatter(object):
         parsed = pystache.parse(safe_decode(template))
         num_tokens = len(parsed._parse_tree)
         for i, el in enumerate(parsed._parse_tree):
-
             if hasattr(el, 'parsed'):
                 keys = [e.key for e in el.parsed._parse_tree if hasattr(e, 'key')]
                 if (before in set(keys) or first) and not key_added:
-                    token = new_components[-1] if new_components and '{' not in new_components[-1] else '\n'
+                    token = '\n'
+                    if new_components and '{' not in new_components[-1] and not separate:
+                        token = new_components[-1]
                     new_components.extend([tag_token, token])
                     key_added = True
 
@@ -521,7 +525,7 @@ class AddressFormatter(object):
 
                 if (after in set(keys) or i == num_tokens - 1) and not key_added:
                     token = '\n'
-                    if i < num_tokens - 1 and isinstance(parsed._parse_tree[i + 1], six.string_types):
+                    if i < num_tokens - 1 and isinstance(parsed._parse_tree[i + 1], six.string_types) and not separate:
                         token = parsed._parse_tree[i + 1]
                     new_components.extend([token, tag_token])
                     key_added = True
@@ -536,7 +540,7 @@ class AddressFormatter(object):
 
                 if (el.key == before or first) and not key_added:
                     token = '\n'
-                    if new_components and '{' not in new_components[-1]:
+                    if new_components and '{' not in new_components[-1] and not separate:
                         token = new_components[-1]
                     new_components.extend([tag_token, token])
                     key_added = True
@@ -545,7 +549,7 @@ class AddressFormatter(object):
 
                 if (el.key == after or i == num_tokens - 1) and not key_added:
                     token = '\n'
-                    if i < num_tokens - 1 and isinstance(parsed._parse_tree[i + 1], six.string_types):
+                    if i < num_tokens - 1 and isinstance(parsed._parse_tree[i + 1], six.string_types) and not separate:
                         token = parsed._parse_tree[i + 1]
                     new_components.extend([token, tag_token])
                     key_added = True
