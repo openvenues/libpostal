@@ -665,7 +665,7 @@ static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, tok
 
         }
     } else if (have_suffix) {
-        log_debug("suffix.start=%zu\n", suffix.start);
+        log_debug("suffix.start=%" PRId32 "\n", suffix.start);
         root_len = suffix.start;
         root_token = (token_t){token.offset, root_len, token.type};
         log_debug("root_len=%zu\n", root_len);
@@ -887,7 +887,7 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
         log_debug("Adding alternatives for single normalization\n");
         alternatives = add_string_alternatives(tokenized_str, options);
 
-        log_debug("num strings = %zu\n", string_tree_num_strings(alternatives));
+        log_debug("num strings = %" PRIu32 "\n", string_tree_num_strings(alternatives));
 
         if (alternatives == NULL) {
             log_debug("alternatives = NULL\n");

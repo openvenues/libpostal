@@ -227,33 +227,47 @@ static bool numex_language_write(numex_language_t *language, FILE *f) {
 }
 
 static bool numex_rule_read(FILE *f, numex_rule_t *rule) {
-    if (!file_read_uint64(f, (uint64_t *)&rule->left_context_type)) {
+    uint64_t left_context_type;
+    if (!file_read_uint64(f, &left_context_type)) {
         return false;
     }
+    rule->left_context_type = left_context_type;
 
-    if (!file_read_uint64(f, (uint64_t *)&rule->right_context_type)) {
+    uint64_t right_context_type;
+    if (!file_read_uint64(f, &right_context_type)) {
         return false;
     }
+    rule->right_context_type = right_context_type;
 
-    if (!file_read_uint64(f, (uint64_t *)&rule->rule_type)) {
+    uint64_t rule_type;
+    if (!file_read_uint64(f, &rule_type)) {
         return false;
     }
+    rule->rule_type = rule_type;
 
-    if (!file_read_uint64(f, (uint64_t *)&rule->gender)) {
+    uint64_t gender;
+    if (!file_read_uint64(f, &gender)) {
         return false;
     }
+    rule->gender = gender;
 
-    if (!file_read_uint64(f, (uint64_t *)&rule->category)) {
+    uint64_t category;
+    if (!file_read_uint64(f, &category)) {
         return false;
     }
+    rule->category = category;
 
-    if (!file_read_uint32(f, &rule->radix)) {
+    uint32_t radix;
+    if (!file_read_uint32(f, &radix)) {
         return false;
     }
+    rule->radix = radix;
 
-    if (!file_read_uint64(f, (uint64_t *)&rule->value)) {
+    uint64_t value;
+    if (!file_read_uint64(f, &value)) {
         return false;
     }
+    rule->value = value;
 
     return true;
 }
@@ -343,15 +357,17 @@ static ordinal_indicator_t *ordinal_indicator_read(FILE *f) {
         return NULL;
     }
 
-    gender_t gender;
-    if (!file_read_uint64(f, (uint64_t *)&gender)) {
+    uint64_t gender_uint64;
+    if (!file_read_uint64(f, &gender_uint64)) {
         return NULL;
     }
+    gender_t gender = gender_uint64;
 
-    grammatical_category_t category;
-    if (!file_read_uint64(f, (uint64_t *)&category)) {
+    uint64_t category_uint64;
+    if (!file_read_uint64(f, &category_uint64)) {
         return NULL;
     }
+    grammatical_category_t category = category_uint64;
 
     uint64_t ordinal_suffix_len;
     if (!file_read_uint64(f, &ordinal_suffix_len)) {
@@ -421,7 +437,7 @@ bool numex_table_read(FILE *f) {
         goto exit_numex_table_load_error;
     }
 
-    log_debug("read num_languages = %llu\n", num_languages);
+    log_debug("read num_languages = %" PRIu64 "\n", num_languages);
 
     int i = 0;
 
@@ -443,7 +459,7 @@ bool numex_table_read(FILE *f) {
         goto exit_numex_table_load_error;
     }
 
-    log_debug("read num_rules = %llu\n", num_rules);
+    log_debug("read num_rules = %" PRIu64 "\n", num_rules);
 
     numex_rule_t rule;
 

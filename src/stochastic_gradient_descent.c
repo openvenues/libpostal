@@ -203,7 +203,7 @@ bool stochastic_gradient_descent_update_sparse(sgd_trainer_t *self, double_matri
         lambda_update = lambda / (double)batch_size * gamma_t;
 
         if (t > self->penalties->n) {
-            log_info("t = %zu, penalties->n = %zu\n", t, self->penalties->n);
+            log_info("t = %" PRIu32 ", penalties->n = %zu\n", t, self->penalties->n);
             return false;
         }
         penalty = self->penalties->a[t];
@@ -219,7 +219,7 @@ bool stochastic_gradient_descent_update_sparse(sgd_trainer_t *self, double_matri
 
         if (self->iterations > 0) {
             if (last_updated >= self->penalties->n) {
-                log_info("col = %u, t = %zu, last_updated = %zu, penalties->n = %zu\n", col, t, last_updated, self->penalties->n);
+                log_info("col = %u, t = %" PRIu32 ", last_updated = %" PRIu32 ", penalties->n = %zu\n", col, t, last_updated, self->penalties->n);
                 return false;
             }
 
@@ -376,7 +376,7 @@ bool stochastic_gradient_descent_set_regularized_weights(sgd_trainer_t *self, do
 
             uint32_t last_updated = updates[i];
             if (last_updated >= self->penalties->n) {
-                log_error("last_updated (%zu) >= self->penalties-> (%zu)\n", last_updated, self->penalties->n);
+                log_error("last_updated (%" PRIu32 ") >= self->penalties-> (%zu)\n", last_updated, self->penalties->n);
                 return false;
             }
             double last_update_penalty = penalties[last_updated];

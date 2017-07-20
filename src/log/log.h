@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <errno.h>
+#include <inttypes.h>
 #include <string.h>
 
 #define LOG_LEVEL_DEBUG 10

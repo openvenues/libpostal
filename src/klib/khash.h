@@ -101,14 +101,18 @@ int main() {
 
 #if UINT_MAX == 0xffffffffu
 typedef unsigned int khint32_t;
+#define PRIkh32 "u"
 #elif ULONG_MAX == 0xffffffffu
 typedef unsigned long khint32_t;
+#define PRIkh32 "lu"
 #endif
 
 #if ULONG_MAX == ULLONG_MAX
 typedef unsigned long khint64_t;
+#define PRIkh64 "lu"
 #else
 typedef unsigned long long khint64_t;
+#define PRIkh64 "llu"
 #endif
 
 #ifndef kh_inline

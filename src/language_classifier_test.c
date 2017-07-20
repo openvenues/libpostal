@@ -53,7 +53,7 @@ double test_accuracy(char *filename) {
 
     }
 
-    log_info("total=%zu\n", total);
+    log_info("total=%" PRIu32 "\n", total);
 
     trie_destroy(label_ids);
 

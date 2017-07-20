@@ -755,7 +755,7 @@ crf_t *crf_averaged_perceptron_trainer_finalize(crf_averaged_perceptron_trainer_
     uint32_t next_feature_id = 0;
     uint64_t *update_counts = self->update_counts->a;
 
-    log_info("Pruning weights with < min_updates = %llu\n", self->min_updates);
+    log_info("Pruning weights with < min_updates = %" PRIu64 "\n", self->min_updates);
 
     for (feature_id = 0; feature_id < num_features; feature_id++) {
         k = kh_get(feature_class_weights, self->weights, feature_id);
