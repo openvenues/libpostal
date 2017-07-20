@@ -2353,6 +2353,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: San Luis Obispo
+                    - filename: city_of_santa_cruz.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Santa Cruz
                     - filename: city_of_temecula.csv
                     - filename: colusa.csv
                     - filename: contra_costa.csv
@@ -4728,6 +4732,9 @@ countries:
                       city_replacements:
                           state_district: Cheatham County
                     - filename: city_of_chattanooga.csv
+                    - filename: city_of_johnson_city.csv
+                      city_replacements:
+                          city: Johnson City
                     - filename: city_of_memphis.csv
                     - filename: city_of_murfreesboro.csv
                       add_osm_boundaries: true
@@ -4794,6 +4801,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Beaumont
+                    - filename: city_of_buda.csv
                     - filename: city_of_carrollton.csv
                       add_osm_boundaries: true
                       city_replacements:
