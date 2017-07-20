@@ -662,7 +662,7 @@ class OSMAddressFormatter(object):
 
         if keep_component is not None:
             revised_address_components[keep_component] = address_components[keep_component]
-            if keep_component == AddressFormatter.LOCALITY and AddressFormatter.CITY in revised_address_components and address_components[AddressFormatter.LOCALITY] == address_components[AddressFormatter.CITY]:
+            if keep_component == AddressFormatter.LOCALITY and AddressFormatter.CITY in revised_address_components and revised_address_components[AddressFormatter.LOCALITY] == revised_address_components[AddressFormatter.CITY]:
                 revised_address_components.pop(AddressFormatter.CITY)
 
         self.components.cleanup_boundary_names(revised_address_components)
