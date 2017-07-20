@@ -1358,7 +1358,7 @@ class AddressComponents(object):
                     components_values = sorted(components_values, key=self.japanese_neighborhood_sort_key)
 
                 for component_value in components_values:
-                    if component == AddressFormatter.CITY and AddressFormatter.LOCALITY in address_components and  component_value.get('name', u'') == address_components[AddressFormatter.LOCALITY]:
+                    if component == AddressFormatter.CITY and AddressFormatter.LOCALITY in address_components and component_value.get('name', u'') == address_components[AddressFormatter.LOCALITY]:
                         continue
 
                     if random_key and not (component in (AddressFormatter.STATE_DISTRICT, AddressFormatter.STATE) and not have_city):
