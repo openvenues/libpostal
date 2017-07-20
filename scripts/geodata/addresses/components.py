@@ -1373,9 +1373,9 @@ class AddressComponents(object):
                             name_lang = language if not suffix_lang or not k.endswith(language_suffix) else suffix_lang
                             name = boundary_names.name(country, name_lang, component, name, component_value)
 
-                        name_prefix = component_value.get('{}:prefix'.format(k))
+                        name_prefix = component_value.get('{}:prefix{}'.format(k, language_suffix))
 
-                        if name and name_prefix and random.random() < add_prefix_prob:
+                        if name and name_prefix and not name.lower().startswith(name_prefix.lower()) and random.random() < add_prefix_prob:
                             name = u' '.join([name_prefix, name])
 
                         if name and not (name == existing_city_name and component != AddressFormatter.CITY and drop_duplicate_city_names):
