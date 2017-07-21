@@ -836,6 +836,7 @@ class OSMAddressFormatter(object):
                     if u'|' in name:
                         name = name.replace(u'|', u'')
 
+                    name = self.components.parens_regex.sub(u''), name).strip()
                     name = self.components.strip_whitespace_and_hyphens(name)
 
                     alt_names = self.components.alt_place_names(name, None)
@@ -882,6 +883,7 @@ class OSMAddressFormatter(object):
                     else:
                         n = num_references / 2
 
+                name = self.components.parens_regex.sub(u''), name).strip()
                 name = self.components.strip_whitespace_and_hyphens(name)
 
                 alt_names = self.components.alt_place_names(name, language)
@@ -919,6 +921,7 @@ class OSMAddressFormatter(object):
                 if six.u('|') in name:
                     name = name.replace(six.u('|'), six.u(''))
 
+                name = self.components.parens_regex.sub(u''), name).strip()
                 name = self.components.strip_whitespace_and_hyphens(name)
 
                 alt_names = self.components.alt_place_names(name, language)
