@@ -3705,6 +3705,7 @@ countries:
                       city_replacements:
                           state_district: Fillmore County
                     - filename: goodhue.csv
+                    - filename: grant.csv
                     - filename: hennepin.csv
                     - filename: hubbard.csv
                     - filename: itasca.csv
@@ -3713,24 +3714,35 @@ countries:
                           state_district: Itasca County
                     - filename: kandiyohi.csv
                     - filename: kittson.csv
+                      city_replacements:
+                          state_district: Kittson County
                     - filename: koochiching.csv
                     - filename: lake_of_the_woods.csv
                     - filename: marshall.csv
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Marshall County
+                    - filename: mille_lacs.csv
+                      city_replacements:
+                          state_district: Mille Lacs County
                     - filename: norman.csv
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Norman County
                     - filename: olmsted.csv
+                    - filename: otter_tail.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Otter Tail County
                     - filename: pennington.csv
+                    - filename: polk.csv
                     - filename: pope.csv
                     - filename: ramsey.csv
                     - filename: red_lake.csv
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Red Lake County
+                    - filename: renville.csv
                     - filename: rice.csv
                       city_replacements:
                           state_district: Rice County
@@ -3748,6 +3760,11 @@ countries:
                       ignore_fields_containing:
                           city:
                               - "^ut "
+                    - filename: todd.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
                     - filename: wadena.csv
                       add_osm_boundaries: true
                       city_replacements:
