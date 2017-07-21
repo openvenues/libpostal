@@ -8,6 +8,7 @@ penthouse|pths|ph|pent house
 rear
 rear lower|rear lwr
 side|sd
+shop|shp
 top floor left|tfl|t f l|t.f.l|t / f / l
 top floor right|tfr|t f r|t.f.r|t / f / r
 top left|tl|t l|t.l|t / l
