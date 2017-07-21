@@ -5289,6 +5289,10 @@ countries:
                     add_osm_boundaries: true
                     city_replacements:
                         state_district: Campbell County
+                  - filename: carbon.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Carbon County
                   - filename: city_of_gillette.csv
                   - filename: city_of_wright.csv
                     add_osm_boundaries: true
