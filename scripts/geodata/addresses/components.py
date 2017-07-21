@@ -1881,7 +1881,21 @@ class AddressComponents(object):
         if not house_number:
             return
 
-        cls.extract_sub_building_components(address_components, AddressFormatter.HOUSE_NUMBER, languages, country=country)
+        hn = house_number
+        for lang in languages:
+            hn, superblock, block, lot = cls.extract_block_lot_patterns(hn, lang)
+
+        temp_address_components = {AddressFormatter.HOUSE_NUMBER: hn}
+
+        cls.extract_sub_building_components(temp_address_components, AddressFormatter.HOUSE_NUMBER, languages, country=country)
+        for k, v in temp_address_components.items():
+            if k != AddressFormatter.HOUSE_NUMBER:
+                house_number = house_number.replace(v, u'')
+
+                if k not in address_components:
+                    address_components[k] = v
+
+        address_components[AddressFormatter.HOUSE_NUMBER] = house_number
 
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
         if not house_number:
