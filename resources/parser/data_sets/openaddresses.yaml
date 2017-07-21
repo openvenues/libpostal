@@ -2359,6 +2359,9 @@ countries:
                           city: Santa Cruz
                     - filename: city_of_temecula.csv
                     - filename: colusa.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Colusa County
                     - filename: contra_costa.csv
                     - filename: del_norte.csv
                     - filename: el_dorado.csv
