@@ -10,9 +10,7 @@ libpostal is all about addresses, and addresses are all about how people communi
 
 In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, primary language(s), race, religion, or sexual identity and orientation.
 
-We pledge to encourage and support people who are directly and/or indirectly marginalized in the open source community and in our societies around the world.
-
-Your reality matters here.
+It's a core tenet of this project to represent different cultures, languages, and realities. This can only be accomplished through creating an inclusive community that goes beyond simply tolerating differences, and instead intrinsically values and seeks out the diverse experiences of people around the world. We pledge to encourage and support people who are directly and/or indirectly marginalized in the open source community and in our societies.
 
 ## Our Standards
 
