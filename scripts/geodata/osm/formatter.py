@@ -217,7 +217,7 @@ class OSMAddressFormatter(object):
         return [t for t, c in tokenize(name) if c in token_types.WORD_TOKEN_TYPES or c in token_types.NUMERIC_TOKEN_TYPES]
 
     @classmethod
-    def valid_venue_name(cls, name, address_components, languages=(), is_generic=False, is_known_venue_type=False):
+    def is_valid_venue_name(cls, name, address_components, languages=(), is_generic=False, is_known_venue_type=False):
         '''
         The definition of "what is a venue" is pretty loose in libpostal, but
         there are several cases we want to avoid:
@@ -520,7 +520,7 @@ class OSMAddressFormatter(object):
         With a certain probability, add None to the list so we drop the name
         '''
 
-        return self.components.all_names(props, languages, keys=('name', 'alt_name', 'loc_name', 'int_name', 'old_name'))
+        return self.components.all_names(props, languages, keys=('name', 'alt_name', 'loc_name', 'int_name', 'old_name', 'short_name', 'official_name', 'full_name', 'uic_name', 'sorting_name', 'nat_name', 'reg_name'))
 
     def formatted_addresses_with_venue_and_building_names(self, address_components, venue_names, building_names, country, language=None,
                                                           tag_components=True, minimal_only=False):
@@ -1191,11 +1191,11 @@ class OSMAddressFormatter(object):
 
         street_languages = set((language,) if language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE) else languages)
 
-        venue_names = [venue_name for venue_name in venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_generic=is_generic_place)]
-        building_names = [venue_name for venue_name, building_is_generic_place, building_is_known_venue_type in building_venue_names if self.valid_venue_name(venue_name, expanded_components, street_languages, is_generic=building_is_generic_place, is_known_venue_type=building_is_known_venue_type)]
+        venue_names = [venue_name for venue_name in venue_names if self.is_valid_venue_name(venue_name, expanded_components, street_languages, is_generic=is_generic_place)]
+        building_names = [venue_name for venue_name, building_is_generic_place, building_is_known_venue_type in building_venue_names if self.is_valid_venue_name(venue_name, expanded_components, street_languages, is_generic=building_is_generic_place, is_known_venue_type=building_is_known_venue_type)]
 
         all_venue_names = set(venue_names)
-        all_building_names = set(building_names)
+        all_building_names = set(building_names) - all_venue_names
 
         # Ditto for venue names
         for venue_name in all_venue_names:
@@ -1214,12 +1214,19 @@ class OSMAddressFormatter(object):
         reduced_venue_names = []
         reduced_building_names = []
         expanded_only_venue_names = []
+        expanded_only_building_names = []
 
-        for venue_name in venue_names + building_names:
-            if self.valid_venue_name(venue_name, address_components, street_languages):
+        for venue_name in venue_names:
+            if self.is_valid_venue_name(venue_name, address_components, street_languages):
                 reduced_venue_names.append(venue_name)
             else:
                 expanded_only_venue_names.append(venue_name)
+
+        for building_name in building_names:
+            if self.is_valid_venue_name(building_name, address_components, street_languages):
+                reduced_building_names.append(building_name)
+            else:
+                expanded_only_building_names.append(building_name)
 
         formatted_addresses = self.formatted_addresses_with_venue_and_building_names(address_components, reduced_venue_names, reduced_building_names, country, language=language,
                                                                                      tag_components=tag_components, minimal_only=not tag_components)
@@ -1256,8 +1263,8 @@ class OSMAddressFormatter(object):
                 address_only_venue_names = []
                 address_only_building_names = []
                 if not address_only_components or (len(address_only_components) == 1 and list(address_only_components)[0] == AddressFormatter.HOUSE):
-                    address_only_venue_names = [venue_name for venue_name in venue_names if self.valid_venue_name(venue_name, address_only_components, street_languages)]
-                    address_only_building_names = [building_name for building_name in building_names if self.valid_venue_name(building_name, address_only_components, street_languages)]
+                    address_only_venue_names = [venue_name for venue_name in venue_names if self.is_valid_venue_name(venue_name, address_only_components, street_languages)]
+                    address_only_building_names = [building_name for building_name in building_names if self.is_valid_venue_name(building_name, address_only_components, street_languages)]
 
                 formatted_addresses.extend(self.formatted_addresses_with_venue_and_building_names(address_only_components, address_only_venue_names, address_only_building_names, country, language=language,
                                                                                                   tag_components=tag_components, minimal_only=False))
@@ -1286,8 +1293,8 @@ class OSMAddressFormatter(object):
                 dropout_venue_names = venue_names
                 dropout_building_names = building_names
                 if not address_components or (len(address_components) == 1 and list(address_components)[0] in (AddressFormatter.HOUSE, AddressFormatter.NAMED_BUILDING)):
-                    dropout_venue_names = [venue_name for venue_name in venue_names if self.valid_venue_name(venue_name, address_components, street_languages)]
-                    dropout_building_names = [building_name for building_name in building_names if self.valid_venue_name(building_name, address_components, street_languages)]
+                    dropout_venue_names = [venue_name for venue_name in venue_names if self.is_valid_venue_name(venue_name, address_components, street_languages)]
+                    dropout_building_names = [building_name for building_name in building_names if self.is_valid_venue_name(building_name, address_components, street_languages)]
 
                 formatted_addresses.extend(self.formatted_addresses_with_venue_and_building_names(address_components, dropout_venue_names, dropout_building_names, country, language=language,
                                                                                                   tag_components=tag_components, minimal_only=False))

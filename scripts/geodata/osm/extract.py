@@ -42,6 +42,11 @@ OSM_NAME_TAGS = (
     'common_name',
     'place_name',
     'short_name',
+    'full_name',
+    'uic_name',
+    'sorting_name',
+    'nat_name',
+    'reg_name',
 )
 
 OSM_BASE_NAME_TAGS = (
