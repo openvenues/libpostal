@@ -1351,6 +1351,8 @@ class AddressComponents(object):
             city_replacements = place_config.city_replacements(country)
             have_city = AddressFormatter.CITY in grouped_osm_components or set(grouped_osm_components) & set(city_replacements)
 
+            city_names = set([val['name'] for val in grouped_osm_components.get(AddressFormatter.CITY)])
+
             for component, components_values in grouped_osm_components.iteritems():
                 seen = set()
 
@@ -1359,6 +1361,8 @@ class AddressComponents(object):
 
                 for component_value in components_values:
                     if component == AddressFormatter.CITY and AddressFormatter.LOCALITY in address_components and component_value.get('name', u'') == address_components[AddressFormatter.LOCALITY]:
+                        continue
+                    elif component == AddressFormatter.LOCALITY and component_value.get('name', u'') in city_names:
                         continue
 
                     if random_key and not (component in (AddressFormatter.STATE_DISTRICT, AddressFormatter.STATE) and not have_city):
