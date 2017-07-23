@@ -1351,7 +1351,7 @@ class AddressComponents(object):
             city_replacements = place_config.city_replacements(country)
             have_city = AddressFormatter.CITY in grouped_osm_components or set(grouped_osm_components) & set(city_replacements)
 
-            city_names = set([val['name'] for val in grouped_osm_components.get(AddressFormatter.CITY)])
+            city_names = set([val['name'] for val in grouped_osm_components.get(AddressFormatter.CITY, [])])
 
             for component, components_values in grouped_osm_components.iteritems():
                 seen = set()
