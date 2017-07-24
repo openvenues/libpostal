@@ -127,7 +127,7 @@ def latlon_to_decimal(latitude, longitude):
     elif lat_dir:
         d, c = lat_dir.groups()
         sign = direction_sign(c)
-        latitude = return_type(d) * sign
+        latitude = float(d) * sign
         have_lat = True
     else:
         latitude = re.sub(beginning_re, u'', latitude)
@@ -144,7 +144,7 @@ def latlon_to_decimal(latitude, longitude):
     elif lon_dir:
         d, c = lon_dir.groups()
         sign = direction_sign(c)
-        longitude = return_type(d) * sign
+        longitude = float(d) * sign
         have_lon = True
     else:
         longitude = re.sub(beginning_re, u'', longitude)
