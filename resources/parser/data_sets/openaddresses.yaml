@@ -5174,6 +5174,7 @@ countries:
                       city_replacements:
                           state_district: Adams County
                     - filename: bayfield.csv
+                    - filename: brown.csv
                     - filename: burnett.csv
                       add_osm_boundaries: true
                       city_replacements:
