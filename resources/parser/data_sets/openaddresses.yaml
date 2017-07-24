@@ -809,7 +809,6 @@ countries:
                 language: en
                 files:
                     - filename: province.csv
-                      add_osm_boundaries: true
 
             qc:
                 add:
