@@ -428,6 +428,10 @@ names:
           type: relation
           default: name # Richmond County
           probability: 1.0
+        - id: 396482 # San Diego County
+          type: relation
+          default: name # San Diego County
+          probability: 1.0
         - id: 6577227 # Kingston Parish (always use Kingston)
           type: relation
           default: name # Kingston
