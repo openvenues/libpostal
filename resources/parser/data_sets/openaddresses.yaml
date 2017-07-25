@@ -4755,9 +4755,11 @@ countries:
                           city: Johnson City
                     - filename: city_of_memphis.csv
                     - filename: city_of_murfreesboro.csv
-                      add_osm_boundaries: true
                       city_replacements:
                           city: Murfreesboro
+                      fields: *fields_with_unit
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
                     - filename: city_of_nashville.csv
                     - filename: city_of_spring_hill.csv
                     - filename: franklin.csv
