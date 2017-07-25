@@ -71,6 +71,22 @@ class PlaceConfig(object):
 
             self.component_dependencies[country] = ComponentDependencies(graph)
 
+            conf_graphs = {}
+
+            for k, v in six.iteritems(conf['components']):
+                for conf in v.get('containing', []):
+                    if 'dependencies' in conf:
+                        elem_type = conf['type']
+                        elem_id = safe_encode(conf['id'])
+
+                        conf_graph = conf_graphs.get((elem_type, elem_id))
+                        if not conf_graph:
+                            conf_graphs[(elem_type, elem_id)] = conf_graph = graph.copy()
+
+                        conf_graph[k] = conf['dependencies']
+
+            self.component_dependencies.update({k: ComponentDependencies(v) for k, v in six.iteritems(conf_graphs)})
+
     def get_property(self, key, country=None, default=None):
         if isinstance(key, six.string_types):
             key = key.split('.')
@@ -130,18 +146,23 @@ class PlaceConfig(object):
                 return True
         return self.include_component_simple(component, containing_ids, country=country)
 
-    def drop_invalid_components(self, address_components, country, original_bitset=None):
+    def drop_invalid_components(self, address_components, country, containing_ids=(), original_bitset=None):
         if not address_components:
             return
         component_bitset = ComponentDependencies.component_bitset(address_components)
 
-        deps = self.component_dependencies.get(country, self.component_dependencies[None])
+        for object_type, object_id in containing_ids:
+            deps = self.component_dependencies.get((object_type, object_id))
+            if deps:
+                break
+        else:
+            deps = self.component_dependencies.get(country, self.component_dependencies[None])
         dep_order = deps.dependency_order
 
         for c in dep_order:
             if c not in address_components:
                 continue
-            if c in deps and not component_bitset & deps[c] and (original_bitset is None or original_bitset & deps[c]):
+            if c in deps and not component_bitset & deps[c] and (original_bitset is None or not original_bitset & deps[c]):
                 address_components.pop(c)
                 component_bitset ^= ComponentDependencies.component_bit_values[c]
 
@@ -213,7 +234,7 @@ class PlaceConfig(object):
             if value is not None and component not in components and self.include_component(component, containing_ids, country=country, population=population, unambiguous_city=unambiguous_city):
                 new_components[component] = value
 
-        self.drop_invalid_components(new_components, country, original_bitset=original_bitset)
+        self.drop_invalid_components(new_components, country, containing_ids=containing_ids, original_bitset=original_bitset)
 
         if AddressFormatter.LOCALITY in new_components:
             replace_city_with_locality_prob = float(self.get_property(('replace_city_with_locality_probability',), country=country, default=0.0))

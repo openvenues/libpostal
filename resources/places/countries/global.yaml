@@ -11,6 +11,7 @@ global:
         suburb:
             probability: 0.2
             dependencies:
+                - locality
                 - city
                 - city_district
         metro_station:
@@ -27,10 +28,12 @@ global:
         state_district:
             probability: 0.05
             dependencies:
+                - locality
                 - city
         state:
             probability: 0.1
             dependencies:
+                - locality
                 - city
                 - country
         country_region:
@@ -86,6 +89,7 @@ countries:
             suburb:
                 dependencies:
                     - city_district
+                    - locality
                     - city
                     - state_district
                     - state
@@ -118,6 +122,7 @@ countries:
             suburb:
                 dependencies:
                     - city_district
+                    - locality
                     - city
                     - state_district
                     - state
@@ -153,6 +158,7 @@ countries:
             suburb:
                 dependencies:
                     - city_district
+                    - locality
                     - city
                     - state_district
                     - state
@@ -213,6 +219,7 @@ countries:
                       probability: 0.5
                 dependencies:
                     - city_district
+                    - locality
                     - city
             suburb:
                 probability: 0.5
@@ -278,6 +285,7 @@ countries:
                 probability: 0.7
                 dependencies:
                     - suburb
+                    - locality
                     - city
                     - city_district
             state:
@@ -368,6 +376,7 @@ countries:
             suburb:
                 dependencies:
                     - city_district
+                    - locality
                     - city
                     - state_district
                     - state
@@ -474,6 +483,10 @@ countries:
             id: 162069 # District of Columbia
             type: relation
 
+        new_york_state: &new_york_state
+            id: 61320 # New York State
+            type: relation
+
         components:
             suburb:
                 probability: 0.4
@@ -532,6 +545,13 @@ countries:
                 containing:
                     - <<: *district_of_columbia
                       probability: 0.9
+                    - <<: *new_york_state
+                      dependencies:
+                          - suburb
+                          - city_district
+                          - locality
+                          - city
+                          - state_district
 
             state_district:
                 probability: 0.1
