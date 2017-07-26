@@ -168,6 +168,7 @@ class AddressComponents(object):
     }
 
     sub_building_component_class_map = {
+        AddressFormatter.BUILDING: Building,
         AddressFormatter.ENTRANCE: Entrance,
         AddressFormatter.STAIRCASE: Staircase,
         AddressFormatter.LEVEL: Floor,
@@ -1567,11 +1568,21 @@ class AddressComponents(object):
         generated_components = set()
 
         generated = {
+            AddressFormatter.BUILDING: None,
             AddressFormatter.ENTRANCE: None,
             AddressFormatter.STAIRCASE: None,
             AddressFormatter.LEVEL: None,
             AddressFormatter.UNIT: None,
         }
+
+        building_phrase_type = self.generate_sub_building_component(AddressFormatter.BUILDING, address_components, language, country=country)
+        if building_phrase_type == self.ALPHANUMERIC_PHRASE:
+            building = Building.random(language, country=country)
+            if building:
+                generated[AddressFormatter.BUILDING] = building
+                generated_components.add(AddressFormatter.BUILDING)
+        elif building_phrase_type == self.STANDALONE_PHRASE:
+            generated_components.add(AddressFormatter.BUILDING)
 
         entrance_phrase_type = self.generate_sub_building_component(AddressFormatter.ENTRANCE, address_components, language, country=country)
         if entrance_phrase_type == self.ALPHANUMERIC_PHRASE:
@@ -1618,6 +1629,7 @@ class AddressComponents(object):
             for k in combined:
                 generated[k] = None
 
+        self.add_sub_building_phrase(AddressFormatter.BUILDING, entrance_phrase_type, address_components, generated[AddressFormatter.BUILDING], language, country=country)
         self.add_sub_building_phrase(AddressFormatter.ENTRANCE, entrance_phrase_type, address_components, generated[AddressFormatter.ENTRANCE], language, country=country)
         self.add_sub_building_phrase(AddressFormatter.STAIRCASE, staircase_phrase_type, address_components, generated[AddressFormatter.STAIRCASE], language, country=country)
         self.add_sub_building_phrase(AddressFormatter.LEVEL, floor_phrase_type, address_components, generated[AddressFormatter.LEVEL], language, country=country, num_floors=num_floors)

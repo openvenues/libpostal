@@ -172,7 +172,6 @@ class AddressFormatter(object):
 
     tag_aliases = {
         NAMED_BUILDING: HOUSE,
-        BUILDING: HOUSE,
         SUBDIVISION: HOUSE,
         LOCALITY: CITY,
     }
