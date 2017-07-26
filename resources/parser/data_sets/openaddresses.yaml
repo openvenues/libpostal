@@ -4292,7 +4292,14 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Henderson
+                    - filename: lincoln.csv
+                      city_replacements:
+                          state_district: Lincoln County
                     - filename: lyon.csv
+                    - filename: pershing.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Pershing County
                     - filename: storey.csv
                       add_osm_boundaries: true
                       city_replacements:
