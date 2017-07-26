@@ -129,15 +129,6 @@ buildings:
         sample_probability: 0.2
         numeric:
             direction: left
-    bloque: &bloque
-        canonical: bloque
-        abbreviated: blq
-        sample: true
-        canonical_probability: 0.7
-        abbreviated_probability: 0.2
-        sample_probability: 0.1
-        numeric:
-            direction: left
     torre: &torre
         canonical: torre
         abbreviated: to
@@ -151,14 +142,12 @@ buildings:
     # Edificio 1, Edif A, etc.
     alphanumeric: &building_alphanumeric
         default: *edificio
-        probability: 0.7
+        probability: 0.75
         alternatives:
             - alternative: *torre
               probability: 0.1
             - alternative: *condominio
-              probability: 0.075
-            - alternative: *bloque
-              probability: 0.075
+              probability: 0.1
             - alternative: *complejo
               probability: 0.05
         numeric_probability: 0.075 # e.g. Edificio 1
