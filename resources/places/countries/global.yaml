@@ -551,7 +551,9 @@ countries:
                           - city_district
                           - locality
                           - city
+                          - island
                           - state_district
+                      probability: 0.8
 
             state_district:
                 probability: 0.1
