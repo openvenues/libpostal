@@ -4895,6 +4895,10 @@ countries:
                     - filename: desoto.csv
                     - filename: dimmit.csv
                     - filename: duval.csv
+                    - filename: ector.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Ector County
                     - filename: ellis.csv
                     - filename: fannin.csv
                     - filename: fayette.csv
@@ -5000,10 +5004,6 @@ countries:
                     - filename: north_richland_hills.csv
                       add_osm_boundaries: true
                     - filename: ochiltree.csv
-                    - filename: odessa.csv
-                      add_osm_boundaries: true
-                      city_replacements:
-                          city: Odessa
                     - filename: orange.csv
                     - filename: parmer.csv
                     - filename: plano.csv
