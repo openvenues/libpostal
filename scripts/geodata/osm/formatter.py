@@ -217,6 +217,43 @@ class OSMAddressFormatter(object):
         return [t for t, c in tokenize(name) if c in token_types.WORD_TOKEN_TYPES or c in token_types.NUMERIC_TOKEN_TYPES]
 
     @classmethod
+    def is_valid_building_name(cls, name, address_components, languages=(), country=None, is_generic=False, is_known_venue_type=False):
+        if not name:
+            return False
+
+        possible_languages = get_country_languages(country).keys()
+
+        n = name
+        for language in possible_languages:
+            n, sb, bl, lt = AddressComponents.extract_block_lot_patterns(n, language)
+
+        if is_numeric(n):
+            return False
+
+        components = {AddressFormatter.NAMED_BUILDING: name}
+        AddressComponents.extract_sub_building_components(components, AddressFormatter.NAMED_BUILDING, languages=languages, country=country)
+
+        if AddressFormatter.NAMED_BUILDING not in components or not components[AddressFormatter.NAMED_BUILDING].strip():
+            return False
+
+        name_norm = name.strip().lower()
+
+        street = address_components.get(AddressFormatter.ROAD)
+        if street:
+            street_norm = street.strip().lower()
+            name_norm = name_norm.replace(street_norm, u'')
+
+        house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
+        if house_number:
+            house_number_norm = house_number.strip().lower()
+            name_norm = name_norm.replace(house_number_norm, u'')
+
+        if not name_norm.strip():
+            return False
+
+        return cls.is_valid_venue_name(name, address_components, languages=languages, is_generic=is_generic, is_known_venue_type=is_known_venue_type)
+
+    @classmethod
     def is_valid_venue_name(cls, name, address_components, languages=(), is_generic=False, is_known_venue_type=False):
         '''
         The definition of "what is a venue" is pretty loose in libpostal, but
@@ -1192,7 +1229,7 @@ class OSMAddressFormatter(object):
         street_languages = set((language,) if language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE) else languages)
 
         venue_names = [venue_name for venue_name in venue_names if self.is_valid_venue_name(venue_name, expanded_components, street_languages, is_generic=is_generic_place)]
-        building_names = [venue_name for venue_name, building_is_generic_place, building_is_known_venue_type in building_venue_names if self.is_valid_venue_name(venue_name, expanded_components, street_languages, is_generic=building_is_generic_place, is_known_venue_type=building_is_known_venue_type)]
+        building_names = [venue_name for venue_name, building_is_generic_place, building_is_known_venue_type in building_venue_names if self.is_valid_building_name(venue_name, expanded_components, street_languages, is_generic=building_is_generic_place, is_known_venue_type=building_is_known_venue_type)]
 
         all_venue_names = set(venue_names)
         all_building_names = set(building_names) - all_venue_names
