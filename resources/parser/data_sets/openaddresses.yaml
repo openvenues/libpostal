@@ -3988,6 +3988,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Forsyth County
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
                     - filename: franklin.csv
                     - filename: granville.csv
                     - filename: guilford.csv
