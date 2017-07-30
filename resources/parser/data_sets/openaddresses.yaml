@@ -3865,6 +3865,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Vicksburg
+                    - filename: copiah.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Copiah County
                     - filename: desoto.csv
                     - filename: hancock.csv
                       add_osm_boundaries: true
