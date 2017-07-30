@@ -2570,6 +2570,9 @@ countries:
                       city_replacements:
                           state_district: Jefferson County
                     - filename: la_plata.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: La Plata County
                     - filename: mesa.csv
                     - filename: mineral.csv
                       add_osm_boundaries: true
