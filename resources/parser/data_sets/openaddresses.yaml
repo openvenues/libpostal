@@ -2340,6 +2340,10 @@ countries:
                           city: Long Beach
                     - filename: city_of_mountain_view.csv
                     - filename: city_of_orange.csv
+                    - filename: city_of_palo_alto.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Palo Alto
                     - filename: city_of_riverside.csv
                       add_osm_boundaries: true
                       city_replacements:
