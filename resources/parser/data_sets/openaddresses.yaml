@@ -2677,6 +2677,7 @@ countries:
                           state_district: Charlotte County
                     - filename: citrus.csv
                     - filename: city_of_fort_lauderdale.csv
+                    - filename: city_of_gainesville.csv
                     - filename: city_of_lakeland.csv
                       add_osm_boundaries: true
                       city_replacements:
