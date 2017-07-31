@@ -40,6 +40,7 @@ OSM_NAME_TAGS = (
     'official_name',
     'commonname',
     'common_name',
+    'name:short',
     'place_name',
     'short_name',
     'full_name',
