@@ -143,7 +143,7 @@ class AddressComponents(object):
 
     ALL_OSM_NAME_KEYS = set(['name', 'name:simple',
                              'ISO3166-1:alpha2', 'ISO3166-1:alpha3',
-                             'short_name', 'alt_name', 'official_name'])
+                             'short_name', 'name:short', 'alt_name', 'official_name'])
 
     NULL_PHRASE = 'null'
     ALPHANUMERIC_PHRASE = 'alphanumeric'
