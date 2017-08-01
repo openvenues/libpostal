@@ -33,12 +33,31 @@ class BoundaryNames(object):
         self.name_keys = name_keys
         self.name_key_probs = cdf(probs)
 
+        self.fallbacks = {}
+
+        if 'fallback' in default_names:
+            self.fallbacks[default_names['default']] = default_names['fallback']
+
+        for alt in default_names.get('alternatives', []):
+            if 'fallback' in alt:
+                self.fallbacks[alt['alternative']] = alt['fallback']
+
         self.component_name_keys = {}
+        self.component_name_key_fallbacks = defaultdict(dict)
 
         for component, component_config in six.iteritems(nested_get(config, ('names', 'components'), default={})):
             component_names = component_config.get('keys')
             component_name_keys, component_probs = alternative_probabilities(component_names)
             self.component_name_keys[component] = (component_name_keys, cdf(component_probs))
+
+            if 'fallback' in component_names:
+                self.component_name_key_fallbacks[component][component_names['default']] = component_names['fallback']
+
+            for alt in default_names.get('alternatives', []):
+                if 'fallback' in alt:
+                    self.component_name_key_fallbacks[component][alt['alternative']] = alt['fallback']
+
+        self.component_name_key_fallbacks = dict(self.component_name_key_fallbacks)
 
         self.country_regex_replacements = defaultdict(list)
         for props in nested_get(config, ('names', 'regex_replacements',), default=[]):
@@ -135,14 +154,21 @@ class BoundaryNames(object):
 
         if (object_type, object_id) in self.exceptions:
             values, probs = self.exceptions[(object_type, object_id)]
-            return values, probs
+        else:
+            values, probs = self.component_name_keys.get(component, (self.name_keys, self.name_key_probs))
 
-        name_keys, probs = self.component_name_keys.get(component, (self.name_keys, self.name_key_probs))
-        return name_keys, probs
+        return values, probs
 
     def name_key(self, props, component):
         name_keys, probs = self.name_key_dist(props, component)
-        return weighted_choice(name_keys, probs)
+
+        key = weighted_choice(name_keys, probs)
+
+        if key not in props:
+            fallback = self.component_name_key_fallbacks.get(component, {}).get(key, self.fallbacks.get(key))
+            if fallback:
+                return fallback
+        return key
 
     def name(self, country, language, component, name, props):
         all_replacements = self.country_regex_replacements.get(country, []) + self.country_regex_replacements.get(None, [])

@@ -4,7 +4,10 @@ names:
         probability: 0.75
         alternatives:
             - alternative: short_name # e.g. NYC
-              probability: 0.12
+              probability: 0.09
+            - alternative: name:short
+              probability: 0.03
+              fallback: short_name
             - alternative: alt_name # e.g. New York (instead of New York City)
               probability: 0.12
             - alternative: official_name # e.g. United Kingdom of Great Britain and Northern Ireland
@@ -21,7 +24,10 @@ names:
                     - alternative: ISO3166-1:alpha3
                       probability: 0.01
                     - alternative: short_name
-                      probability: 0.04
+                      probability: 0.02
+                    - alternative: name:short
+                      probability: 0.02
+                      fallback: short_name
                     - alternative: alt_name
                       probability: 0.04
                     - alternative: int_name
