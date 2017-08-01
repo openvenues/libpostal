@@ -2,7 +2,7 @@
 
 When submitting issues to libpostal, please repeect these guildelines:
 
-- Be constructive. Try to help solve the problem. We don't make any claims that libpostal can or will ever be able to handle every bizarre edge case.
+- Be constructive. Try to help solve the problem.
 - Always search for existing issues before submitting one.
 - If you've written your own address parsing library/service, whether open-source or proprietary, don't raise issues with the intent of highlighting libpostal's shortcomings relative to your own solution. Build your project up rather than tearing others down.
 
