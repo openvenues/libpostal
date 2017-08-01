@@ -4,11 +4,11 @@ When submitting issues to libpostal, please repeect these guildelines:
 
 - Be constructive. Try to help solve the problem.
 - Always search for existing issues before submitting one.
-- If you've written your own address parsing library/service, whether open-source or proprietary, don't raise issues with the intent of highlighting libpostal's shortcomings relative to your own solution. Build your project up rather than tearing others down.
+- If you've written your own address parsing library/service, whether open-source or proprietary, don't raise issues simply to advertise for your project/solution. Write about it elsewhere, and save the issues page for people who are actually using libpostal.
 
 ### Bad parses
 
-Libpostal's parser uses machine learning. Contrary to the hype, that doesn't mean it can do everything a human brain can do. Addresses have many edge cases, and while we cover a substantial number of them, we may not be able to handle every bizarre edge case that comes up.
+Libpostal's parser uses machine learning. It improves as the data improves, but contrary to the hype, that doesn't mean it can do everything a human brain can do. Addresses have many edge cases, and while we cover a substantial number of them, we may not be able to handle every bizarre edge case that comes up.
 
 When reporting a parser issue, only submit one issue per problematic *pattern* of address, preferably with multiple addresses attached. For each address, please include at minimum:
 
