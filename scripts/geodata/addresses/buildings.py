@@ -31,10 +31,11 @@ class Building(NumberedComponent):
         return weighted_choice(cls.compound_building_digits_range, cls.compound_building_digits_range_cdf)
 
     @classmethod
-    def random(cls, language, country=None):
-        num_type, num_type_props = cls.choose_alphanumeric_type('buildings.alphanumeric', language, country=country)
-        if num_type is None:
-            return None
+    def random(cls, language, country=None, num_type=None, num_type_props=None):
+        if not num_type:
+            num_type, num_type_props = cls.choose_alphanumeric_type(language, country=country)
+            if num_type is None:
+                return None
 
         if num_type == cls.NUMERIC:
             number = weighted_choice(cls.building_range, cls.building_range_cdf)
@@ -115,7 +116,7 @@ class Building(NumberedComponent):
                     return six.u('{}{}{}').format(number, whitespace_phrase, letter)
 
     @classmethod
-    def phrase(cls, building, language, country=None):
+    def phrase(cls, building, language, country=None, num_type=None):
         if building is None:
             return None
 

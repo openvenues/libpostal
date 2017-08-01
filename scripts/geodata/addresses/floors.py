@@ -60,10 +60,11 @@ class Floor(NumberedComponent):
         return number
 
     @classmethod
-    def random_from_int(cls, number, language, country=None):
-        num_type, num_type_props = cls.choose_alphanumeric_type('levels.alphanumeric', language, country=country)
-        if num_type is None:
-            return None
+    def random_from_int(cls, number, language, country=None, num_type=None, num_type_props=None):
+        if not num_type:
+            num_type, num_type_props = cls.choose_alphanumeric_type(language, country=country)
+            if num_type is None:
+                return None
 
         numbering_starts_at = int(address_config.get_property('levels.numbering_starts_at', language, country=country, default=0))
 
@@ -79,8 +80,12 @@ class Floor(NumberedComponent):
             else:
                 return safe_decode(number)
         elif num_type == cls.HYPHENATED_NUMBER:
+            if number < 0:
+                number = cls.sample_floors(1, cls.max_floors)
             number2 = number + cls.sample_floors_range(1, cls.max_floors)
             return u'{}-{}'.format(number, number2)
+        elif num_type == cls.NUMERIC_LIST:
+            return cls.random_numeric_list(num_type_props, language, country=country)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             alphabet_probability = address_config.get_property('alphabet_probability', language, country=country, default=None)
@@ -100,69 +105,73 @@ class Floor(NumberedComponent):
         return None
 
     @classmethod
-    def random(cls, language, country=None, num_floors=None, num_basements=None):
+    def random(cls, language, country=None, num_floors=None, num_basements=None, num_type=None, num_type_props=None):
         number = cls.random_int(language, country=country, num_floors=num_floors, num_basements=num_basements)
-        return cls.random_from_int(number, language, country=country)
+        return cls.random_from_int(number, language, country=country, num_type=num_type, num_type_props=num_type_props)
 
     @classmethod
-    def phrase(cls, floor, language, country=None, num_floors=None):
+    def phrase(cls, floor, language, country=None, num_floors=None, num_type=None):
         if floor is None:
             return None
 
         integer_floor = False
-        floor = safe_decode(floor)
-        try:
-            floor = int(floor)
-            integer_floor = True
-        except (ValueError, TypeError):
-            try:
-                floor = float(floor)
-                integer_floor = int(floor) == floor
-            except (ValueError, TypeError):
-                return cls.numeric_phrase('levels.alphanumeric', floor, language,
-                                          dictionaries=['level_types_numbered'], country=country)
 
-        numbering_starts_at = int(address_config.get_property('levels.numbering_starts_at', language, country=country, default=0))
-        try:
-            num_floors = int(num_floors)
-            top_floor = num_floors if numbering_starts_at == 1 else num_floors - 1
-            is_top = num_floors and floor == top_floor
-        except (ValueError, TypeError):
-            is_top = False
+        is_list = num_type == cls.NUMERIC_LIST
 
-        alias_prefix = 'levels.aliases'
-        aliases = address_config.get_property(alias_prefix, language, country=country)
-        if aliases:
-            alias = None
-
-            if not integer_floor and floor >= 0 and 'half_floors' in aliases:
-                floor = int(floor)
-                alias = 'half_floors'
-            elif not integer_floor and floor < 0 and 'half_floors_negative' in aliases:
-                floor = int(floor)
-                alias = 'half_floors_negative'
-            elif floor < -1 and '<-1' in aliases:
-                alias = '<-1'
-            elif is_top and 'top' in aliases:
-                alias = 'top'
-            elif safe_decode(floor) in aliases:
-                alias = safe_decode(floor)
-
+        if not is_list:
             floor = safe_decode(floor)
+            try:
+                floor = int(floor)
+                integer_floor = True
+            except (ValueError, TypeError):
+                try:
+                    floor = float(floor)
+                    integer_floor = int(floor) == floor
+                except (ValueError, TypeError):
+                    return cls.numeric_phrase('levels.alphanumeric', floor, language,
+                                              dictionaries=['level_types_numbered'], country=country, num_type=num_type)
 
-            if alias:
-                alias_props = aliases.get(alias)
+            numbering_starts_at = int(address_config.get_property('levels.numbering_starts_at', language, country=country, default=0))
+            try:
+                num_floors = int(num_floors)
+                top_floor = num_floors if numbering_starts_at == 1 else num_floors - 1
+                is_top = num_floors and floor == top_floor
+            except (ValueError, TypeError):
+                is_top = False
 
-                # Aliases upon aliases, e.g. for something like "Upper Mezzanine"
-                # where it's an alias for "1" under the half_floors key
-                if safe_decode(floor) in alias_props.get('aliases', {}):
-                    alias_prefix = '{}.{}.aliases'.format(alias_prefix, alias)
+            alias_prefix = 'levels.aliases'
+            aliases = address_config.get_property(alias_prefix, language, country=country)
+            if aliases:
+                alias = None
+
+                if not integer_floor and floor >= 0 and 'half_floors' in aliases:
+                    floor = int(floor)
+                    alias = 'half_floors'
+                elif not integer_floor and floor < 0 and 'half_floors_negative' in aliases:
+                    floor = int(floor)
+                    alias = 'half_floors_negative'
+                elif floor < -1 and '<-1' in aliases:
+                    alias = '<-1'
+                elif is_top and 'top' in aliases:
+                    alias = 'top'
+                elif safe_decode(floor) in aliases:
                     alias = safe_decode(floor)
 
-            if alias:
-                return cls.numeric_phrase('{}.{}'.format(alias_prefix, alias), floor, language,
-                                          dictionaries=cls.dictionaries,
-                                          country=country)
+                floor = safe_decode(floor)
+
+                if alias:
+                    alias_props = aliases.get(alias)
+
+                    # Aliases upon aliases, e.g. for something like "Upper Mezzanine"
+                    # where it's an alias for "1" under the half_floors key
+                    if safe_decode(floor) in alias_props.get('aliases', {}):
+                        alias_prefix = '{}.{}.aliases'.format(alias_prefix, alias)
+                        alias = safe_decode(floor)
+
+                if alias:
+                    return cls.numeric_phrase('{}.{}'.format(alias_prefix, alias), floor, language,
+                                              dictionaries=cls.dictionaries,
+                                              country=country)
 
         return cls.numeric_phrase('levels.alphanumeric', floor, language,
-                              dictionaries=['level_types_numbered'], country=country)
+                                  dictionaries=['level_types_numbered'], country=country, num_type=num_type)

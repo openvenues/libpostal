@@ -7,6 +7,7 @@ from collections import defaultdict
 
 from geodata.addresses.config import address_config
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
+from geodata.configs.utils import alternative_probabilities
 from geodata.encoding import safe_decode
 from geodata.math.sampling import weighted_choice, zipfian_distribution, cdf
 from geodata.math.floats import isclose
@@ -110,12 +111,7 @@ class Digits(object):
             return s
 
     @classmethod
-    def rewrite(cls, d, lang, props, num_type=CARDINAL):
-        if not props:
-            return d
-
-        d = safe_decode(d)
-
+    def choose_digit_type(cls, lang, props):
         values = []
         probs = []
 
@@ -131,7 +127,10 @@ class Digits(object):
 
         probs = cdf(probs)
         digit_type = weighted_choice(values, probs)
+        return digit_type
 
+    @classmethod
+    def rewrite_type(cls, d, lang, props, digit_type, num_type=CARDINAL):
         if digit_type == cls.ASCII:
             return d
         elif digit_type == cls.SPELLOUT:
@@ -145,8 +144,17 @@ class Digits(object):
             return roman_numeral
         elif digit_type == cls.UNICODE_FULL_WIDTH:
             return cls.rewrite_full_width(d)
-        else:
+        return d
+
+    @classmethod
+    def rewrite(cls, d, lang, props, num_type=CARDINAL):
+        if not props:
             return d
+
+        d = safe_decode(d)
+
+        digit_type = cls.choose_digit_type(lang, props)
+        return cls.rewrite_type(d, lang, props, digit_type, num_type=num_type)
 
 
 class NumericPhrase(object):
@@ -245,8 +253,10 @@ class NumberedComponent(object):
     ALPHA_PLUS_NUMERIC = 'alpha_plus_numeric'
     NUMERIC_PLUS_ALPHA = 'numeric_plus_alpha'
     HYPHENATED_NUMBER = 'hyphenated_number'
+    NUMERIC_LIST = 'numeric_list'
     DECIMAL_NUMBER = 'decimal_number'
     ROMAN_NUMERAL = 'roman_numeral'
+    DIRECTIONAL = 'directional'
 
     @classmethod
     def random_num_digits(cls, max_digits=6):
@@ -583,7 +593,8 @@ class NumberedComponent(object):
         return u'{}(?:{}){}'.format(whitespace_or_beginning, u'|'.join([u'(?:{})'.format(r) for r in regexes]), whitespace_lookahead)
 
     @classmethod
-    def choose_alphanumeric_type(cls, key, language, country=None):
+    def choose_alphanumeric_type(cls, language, country=None, exclude=()):
+        key = '{}.alphanumeric'.format(cls.key)
         alphanumeric_props = address_config.get_property(key, language, country=country, default=None)
         if alphanumeric_props is None:
             return None, None
@@ -591,7 +602,11 @@ class NumberedComponent(object):
         values = []
         probs = []
 
-        for num_type in (cls.NUMERIC, cls.ALPHA, cls.ALPHA_PLUS_NUMERIC, cls.NUMERIC_PLUS_ALPHA, cls.HYPHENATED_NUMBER, cls.DECIMAL_NUMBER, cls.ROMAN_NUMERAL):
+        exclude = set(exclude)
+
+        for num_type in (cls.NUMERIC, cls.ALPHA, cls.ALPHA_PLUS_NUMERIC, cls.NUMERIC_PLUS_ALPHA, cls.HYPHENATED_NUMBER, cls.DECIMAL_NUMBER, cls.ROMAN_NUMERAL, cls.NUMERIC_LIST, cls.DIRECTIONAL):
+            if num_type in exclude:
+                continue
             key = '{}_probability'.format(num_type)
             prob = alphanumeric_props.get(key)
             if prob is not None:
@@ -601,19 +616,80 @@ class NumberedComponent(object):
         if not values:
             return None, None
 
+        if exclude:
+            total_prob = sum(probs)
+            probs = [x / total_prob for x in probs]
+
         probs = cdf(probs)
+
         num_type = weighted_choice(values, probs)
         num_type_props = alphanumeric_props.get(num_type, {})
 
         return num_type, num_type_props
 
     @classmethod
-    def numeric_phrase(cls, key, num, language, country=None, dictionaries=(), strict_numeric=False, is_alpha=False):
+    def random_numeric_list(cls, properties, language, country=None):
+        list_num_type, list_num_type_props = cls.choose_alphanumeric_type(language, country=country, exclude=set([cls.NUMERIC_LIST, cls.DIRECTIONAL]))
+
+        length_conf = properties.get('length')
+
+        length = 2
+        if length_conf:
+            lengths, length_probs = alternative_probabilities(length_conf)
+            length_probs = cdf(length_probs)
+            length = weighted_choice(lengths, length_probs)
+
+        numbers = []
+        number_set = set()
+
+        while len(number_set) < length:
+            num = cls.random(language, country=country, num_type=list_num_type, num_type_props=list_num_type_props)
+            # no negative integers
+            if list_num_type == cls.NUMERIC:
+                num = safe_decode(abs(long(num)))
+            if num and num not in number_set:
+                numbers.append(num)
+                number_set.add(num)
+
+        numbers = sorted(numbers, key=lambda num: (len(num), num))
+
+        return numbers
+
+    @classmethod
+    def join_numeric_list(cls, numbers, properties, language):
+        whitespace = properties.get('whitespace', True)
+        comma_separator = u', ' if whitespace else u','
+        comma_part = comma_separator.join(numbers[:-1])
+
+        final_separator_conf = properties.get('final_separator')
+        sep_values, sep_probs = address_config.form_probabilities(final_separator_conf, language, dictionaries=('stopwords',))
+        sep_value = weighted_choice(sep_values, cdf(sep_probs))
+
+        separator = u' {} '.format(sep_value) if whitespace else sep_value
+
+        return separator.join((comma_part, numbers[-1]))
+
+    @classmethod
+    def random_directional(cls, properties, language):
+        alternatives, probs = alternative_probabilities(properties['modifier'])
+        alternative = weighted_choice(alternatives, cdf(probs))
+
+        values, probs = address_config.form_probabilities(alternative, language, dictionaries=('directionals',))
+        value = weighted_choice(values, cdf(probs))
+        # Dictionaries are lowercased, so title case here
+        if properties.get('title_case', True):
+            value = value.title()
+
+        return value
+
+    @classmethod
+    def numeric_phrase(cls, key, num, language, country=None, dictionaries=(), strict_numeric=False, is_alpha=False, num_type=None, direction=None, direction_probability=None):
         has_alpha = False
         has_numeric = True
         is_integer = False
         is_none = False
-        if num is not None:
+        is_list = num_type == cls.NUMERIC_LIST
+        if num is not None and not is_list:
             try:
                 num_int = int(num)
                 is_integer = True
@@ -631,26 +707,59 @@ class NumberedComponent(object):
 
                     if strict_numeric and has_alpha:
                         return safe_decode(num)
-
-        else:
+        elif num is None:
             is_none = True
+
+        if num_type is not None and not is_list:
+            null_phrase_probability = address_config.get_property('{}.{}.null_phrase_probability'.format(key, num_type), language, country=country, default=0.0)
+            if random.random() < null_phrase_probability:
+                return safe_decode(num)
 
         values, probs = None, None
 
-        if is_alpha:
+        is_directional = num_type == cls.DIRECTIONAL
+        is_hyphenated = num_type == cls.HYPHENATED_NUMBER
+
+        if is_alpha and not is_directional:
             values, probs = address_config.alternative_probabilities('{}.alpha'.format(key), language, dictionaries=dictionaries, country=country)
 
         # Pick a phrase given the probability distribution from the config
         if values is None:
             values, probs = address_config.alternative_probabilities(key, language, dictionaries=dictionaries, country=country)
 
-        if not values:
+        if not values and not is_list:
             return safe_decode(num) if not is_none else None
 
         phrase, phrase_props = weighted_choice(values, probs)
 
-        values = []
-        probs = []
+        if is_directional:
+            if direction == 'left':
+                direction = 'right'
+            elif direction == 'right':
+                direction = 'left'
+
+            whitespace = phrase_props.get('whitespace', True)
+
+            if direction_probability is not None and random.random() > direction_probability:
+                if direction == 'left':
+                    direction = 'right'
+                elif direction == 'right':
+                    direction = 'left'
+
+            whitespace_phrase = u' ' if whitespace else u''
+            if direction == 'left':
+                return six.u('{}{}{}').format(phrase, whitespace_phrase, num)
+            elif direction == 'right':
+                return six.u('{}{}{}').format(num, whitespace_phrase, phrase)
+
+        num_type_props = address_config.get_property('{}.{}'.format(key, num_type), language, country=country, default={})
+
+        if num_type is not None and num_type_props and 'plural_probability' in num_type_props and 'plural' in phrase_props:
+            plural_probability = num_type_props['plural_probability']
+            if random.random() < plural_probability:
+                plural_props = phrase_props['plural']
+                values, probs = address_config.form_probabilities(plural_props, language, dictionaries=dictionaries)
+                phrase = weighted_choice(values, cdf(probs))
 
         # Dictionaries are lowercased, so title case here
         if phrase_props.get('title_case', True):
@@ -666,18 +775,22 @@ class NumberedComponent(object):
         '''
         have_standalone = False
         have_null = False
-        for num_type in ('standalone', 'null', 'numeric', 'numeric_affix', 'ordinal'):
-            key = '{}_probability'.format(num_type)
+
+        values = []
+        probs = []
+
+        for phrase_type in ('standalone', 'null', 'numeric', 'numeric_affix', 'ordinal'):
+            key = '{}_probability'.format(phrase_type)
             prob = phrase_props.get(key)
             if prob is not None:
-                if num_type == 'standalone':
+                if phrase_type == 'standalone':
                     have_standalone = True
-                elif num_type == 'null':
+                elif phrase_type == 'null':
                     have_null = True
-                values.append(num_type)
+                values.append(phrase_type)
                 probs.append(prob)
-            elif num_type in phrase_props:
-                values.append(num_type)
+            elif phrase_type in phrase_props:
+                values.append(phrase_type)
                 probs.append(1.0)
                 break
 
@@ -692,25 +805,34 @@ class NumberedComponent(object):
                 return None
 
             probs = [p / total for p in probs]
+        elif is_list:
+            values, probs = zip(*[(v, p) for v, p in zip(values, probs) if v in ('numeric', 'ordinal')])
+            total = float(sum(probs))
+            if isclose(total, 0.0):
+                return None
+            have_standalone = False
+            have_null = False
+
+            probs = [p / total for p in probs]
 
         probs = cdf(probs)
 
         if len(values) < 2:
             if have_standalone:
-                num_type = 'standalone'
+                phrase_type = 'standalone'
             elif have_null:
-                num_type = 'null'
+                phrase_type = 'null'
             else:
-                num_type = 'numeric'
+                phrase_type = 'numeric'
         else:
-            num_type = weighted_choice(values, probs)
+            phrase_type = weighted_choice(values, probs)
 
-        if num_type == 'standalone':
+        if phrase_type == 'standalone':
             return phrase
-        elif num_type == 'null':
+        elif phrase_type == 'null':
             return safe_decode(num)
 
-        props = phrase_props[num_type]
+        props = phrase_props[phrase_type]
 
         if is_integer:
             num_int = int(num)
@@ -728,23 +850,35 @@ class NumberedComponent(object):
                 num_int -= phrase_props['number_subtract_abs_value']
                 num = num_int
 
-        num = safe_decode(num)
         digits_props = props.get('digits')
         if digits_props:
             # Inherit the gender and category e.g. for ordinals
             for k in ('gender', 'category'):
                 if k in props:
                     digits_props[k] = props[k]
-            num = Digits.rewrite(num, language, digits_props, num_type=Digits.CARDINAL if num_type != 'ordinal' else Digits.ORDINAL)
 
-        # Do we add the numeric phrase e.g. Floor No 1
-        add_number_phrase = props.get('add_number_phrase', False)
-        if add_number_phrase and random.random() < props['add_number_phrase_probability']:
-            num = Number.phrase(num, language, country=country)
+        if not is_list:
+            num = safe_decode(num)
+            if digits_props:
+                num = Digits.rewrite(num, language, digits_props, num_type=Digits.CARDINAL if phrase_type != 'ordinal' else Digits.ORDINAL)
+
+            # Do we add the numeric phrase e.g. Floor No 1
+            add_number_phrase = props.get('add_number_phrase', False)
+            if add_number_phrase and random.random() < props['add_number_phrase_probability']:
+                num = Number.phrase(num, language, country=country)
+        else:
+            if digits_props:
+                digits_type = Digits.choose_digit_type(language, digits_props)
+                num = [Digits.rewrite_type(n, language, digits_props, digits_type, num_type=Digits.ORDINAL) for n in num]
+
+            if phrase_type == 'ordinal':
+                num = [(ordinal_expressions.suffixed_number(n, language) or n) for n in num]
+
+            num = cls.join_numeric_list(num, num_type_props, language)
 
         whitespace_default = True
 
-        if num_type == 'numeric_affix':
+        if phrase_type == 'numeric_affix':
             if 'probability' not in props:
                 alt_props = props
             else:
@@ -763,25 +897,30 @@ class NumberedComponent(object):
             if 'zero_pad' in alt_props and num.isdigit():
                 num = num.rjust(alt_props['zero_pad'], alt_props.get('zero_char', '0'))
             whitespace_default = False
-        elif num_type == 'ordinal' and safe_decode(num).isdigit():
+        elif phrase_type == 'ordinal' and not is_list and safe_decode(num).isdigit():
             ordinal_expression = ordinal_expressions.suffixed_number(num, language, gender=props.get('gender', None))
 
             if ordinal_expression is not None:
                 num = ordinal_expression
 
-        if 'null_phrase_probability' in props and (num_type == 'ordinal' or (has_alpha and (has_numeric or 'null_phrase_alpha_only' in props))):
+        if 'null_phrase_probability' in props and not is_list and (phrase_type == 'ordinal' or (has_alpha and (has_numeric or 'null_phrase_alpha_only' in props))):
             if random.random() < props['null_phrase_probability']:
                 return num
 
-        direction = props['direction']
         whitespace = props.get('whitespace', whitespace_default)
 
         whitespace_probability = props.get('whitespace_probability')
         if whitespace_probability is not None:
             whitespace = random.random() < whitespace_probability
 
+        if direction is None:
+            direction = props['direction']
+
+        if direction_probability is None:
+            direction_probability = props.get('direction_probability', 1.0)
+
         # Occasionally switch up if direction_probability is specified
-        if random.random() > props.get('direction_probability', 1.0):
+        if random.random() > direction_probability:
             if direction == 'left':
                 direction = 'right'
             elif direction == 'right':

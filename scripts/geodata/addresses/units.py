@@ -90,10 +90,14 @@ class Unit(NumberedComponent):
         return six.u('{}{}').format(floor_number, safe_decode(unit).zfill(num_digits))
 
     @classmethod
-    def random(cls, language, country=None, num_floors=None, num_basements=None, floor=None):
-        num_type, num_type_props = cls.choose_alphanumeric_type('units.alphanumeric', language, country=country)
-        if num_type is None:
-            return None
+    def random(cls, language, country=None, num_floors=None, num_basements=None, floor=None, num_type=None, num_type_props=None):
+        if not num_type:
+            num_type, num_type_props = cls.choose_alphanumeric_type('units.alphanumeric', language, country=country)
+            if num_type is None:
+                return None
+
+        if num_type == cls.NUMERIC_LIST:
+            return cls.random_numeric_list(num_type_props, language, country=country)
 
         use_floor_prob = address_config.get_property('units.alphanumeric.use_floor_probability', language, country=country, default=0.0)
 
@@ -105,7 +109,7 @@ class Unit(NumberedComponent):
             else:
                 number = weighted_choice(cls.positive_units, cls.positive_units_cdf)
         else:
-            if floor is None or not floor.isdigit():
+            if floor is None or not safe_decode(floor).isdigit():
                 floor = Floor.random_int(language, country=country, num_floors=num_floors, num_basements=num_basements)
 
             floor_numbering_starts_at = address_config.get_property('levels.numbering_starts_at', language, country=country, default=0)
@@ -135,8 +139,8 @@ class Unit(NumberedComponent):
                     return six.u('{}{}').format(floor_phrase, unit)
 
             floor_num_digits = address_config.get_property('units.alphanumeric.use_floor_floor_num_digits', language, country=country, default=None)
-            if floor_num_digits is not None and floor.isdigit():
-                floor = floor.zfill(floor_num_digits)
+            if floor_num_digits is not None and safe_decode(floor).isdigit():
+                floor = safe_decode(floor).zfill(floor_num_digits)
 
             number = cls.for_floor(floor)
 
@@ -158,10 +162,14 @@ class Unit(NumberedComponent):
             direction_right = direction == 'right'
 
             if random.random() < range_prob:
+                number = long(number)
+                number2 = long(number2)
                 if direction_right:
                     number2 += number
                 else:
                     number2 = max(0, number - number2)
+                number = safe_decode(number)
+                number2 = safe_decode(number2)
 
             letter_choices = [cls.ALPHA_PLUS_NUMERIC, cls.NUMERIC_PLUS_ALPHA]
             letter_probs = [alpha_plus_numeric_prob, numeric_plus_alpha_prob]
@@ -170,7 +178,7 @@ class Unit(NumberedComponent):
                 letter_probs.append(1.0 - sum(letter_probs))
 
             letter_probs_cdf = cdf(letter_probs)
-            letter_type = weighted_choice(letter_choices, letter_probs)
+            letter_type = weighted_choice(letter_choices, letter_probs_cdf)
 
             if letter_type is not None:
                 alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
@@ -193,13 +201,15 @@ class Unit(NumberedComponent):
             else:
                 return u'{}-{}'.format(number2, number)
         elif num_type == cls.DECIMAL_NUMBER:
-            if (floor is not None and floor.isdigit()):
+            if (floor is not None and safe_decode(floor).isdigit()):
                 whole_part = floor
                 decimal_part = number
             else:
                 whole_part = number
                 decimal_part = weighted_choice(cls.positive_units, cls.positive_units_cdf)
             return u'{}.{}'.format(whole_part, decimal_part)
+        elif num_type == cls.DIRECTIONAL:
+            return cls.random_directional(num_type_props, language)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             alphabet_probability = address_config.get_property('alphabet_probability', language, country=country, default=None)
@@ -219,7 +229,7 @@ class Unit(NumberedComponent):
                 if r < whitespace_probability:
                     whitespace_phrase = u' '
                 elif r < (whitespace_probability + hyphen_probability):
-                    whitespace_phrase = u'-' 
+                    whitespace_phrase = u'-'
 
                 if num_type == cls.ALPHA_PLUS_NUMERIC:
                     return six.u('{}{}{}').format(letter, whitespace_phrase, number)
@@ -290,31 +300,37 @@ class Unit(NumberedComponent):
         return unit
 
     @classmethod
-    def phrase(cls, unit, language, country=None, zone=None):
+    def phrase(cls, unit, language, country=None, zone=None, num_type=None, direction=None, direction_probability=None):
         if unit is not None:
-            key = 'units.alphanumeric' if zone is None else 'units.zones.{}'.format(zone)
+            key = 'units.alphanumeric' if zone is None else 'units.zones'
 
             if not address_config.get_property(key, language, country=country):
                 return None
 
-            is_alpha = safe_decode(unit).isalpha()
+            if num_type not in (cls.DIRECTIONAL, cls.HYPHENATED_NUMBER, cls.NUMERIC_LIST, cls.DECIMAL_NUMBER):
+                is_alpha = safe_decode(unit).isalpha()
 
-            direction_unit = None
-            add_direction = address_config.get_property('{}.add_direction'.format(key), language, country=country)
-            if add_direction:
-                direction_unit = cls.add_direction(key, unit, language, country=country)
+                direction_unit = None
+                add_direction = address_config.get_property('{}.add_direction'.format(key), language, country=country)
+                if add_direction:
+                    direction_unit = cls.add_direction(key, unit, language, country=country)
 
-            if direction_unit and direction_unit != unit:
-                unit = direction_unit
-                is_alpha = False
-            else:
-                add_quadrant = address_config.get_property('{}.add_quadrant'.format(key), language, country=country)
-                if add_quadrant:
-                    unit = cls.add_quadrant(key, unit, language, country=country)
+                if direction_unit and direction_unit != unit:
+                    unit = direction_unit
                     is_alpha = False
+                else:
+                    add_quadrant = address_config.get_property('{}.add_quadrant'.format(key), language, country=country)
+                    if add_quadrant:
+                        unit = cls.add_quadrant(key, unit, language, country=country)
+                        is_alpha = False
+            else:
+                is_alpha = False
 
-            return cls.numeric_phrase(key, safe_decode(unit), language,
-                                      dictionaries=['unit_types_numbered'], country=country, is_alpha=is_alpha)
+            if num_type != cls.NUMERIC_LIST:
+                unit = safe_decode(unit)
+
+            return cls.numeric_phrase(key, unit, language,
+                                      dictionaries=['unit_types_numbered'], country=country, is_alpha=is_alpha, num_type=num_type, direction=direction, direction_probability=direction_probability)
         else:
             key = 'units.standalone'
             values, probs = address_config.alternative_probabilities(key, language,

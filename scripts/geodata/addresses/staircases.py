@@ -23,10 +23,11 @@ class Staircase(NumberedComponent):
     staircase_range_cdf = cdf(staircase_range_probs)
 
     @classmethod
-    def random(cls, language, country=None):
-        num_type, num_type_props = cls.choose_alphanumeric_type('staircases.alphanumeric', language, country=country)
-        if num_type is None:
-            return None
+    def random(cls, language, country=None, num_type=None, num_type_props=None):
+        if not num_type:
+            num_type, num_type_props = cls.choose_alphanumeric_type(language, country=country)
+            if num_type is None:
+                return None
 
         if num_type == cls.NUMERIC:
             number = weighted_choice(cls.staircase_range, cls.staircase_range_cdf)
@@ -35,6 +36,10 @@ class Staircase(NumberedComponent):
             number = weighted_choice(cls.staircase_range, cls.staircase_range_cdf)
             number2 = number + weighted_choice(cls.staircase_range, cls.staircase_range_cdf)
             return u'{}-{}'.format(number, number2)
+        elif num_type == cls.DIRECTIONAL:
+            return cls.random_directional(num_type_props, language)
+        elif num_type == cls.NUMERIC_LIST:
+            return cls.random_numeric_list(num_type_props, language, country=country)
         else:
             alphabet = address_config.get_property('alphabet', language, country=country, default=latin_alphabet)
             alphabet_probability = address_config.get_property('alphabet_probability', language, country=country, default=None)
@@ -61,8 +66,9 @@ class Staircase(NumberedComponent):
                     return six.u('{}{}{}').format(number, whitespace_phrase, letter)
 
     @classmethod
-    def phrase(cls, staircase, language, country=None):
+    def phrase(cls, staircase, language, country=None, num_type=None, direction=None, direction_probability=None):
         if staircase is None:
             return None
-        return cls.numeric_phrase('staircases.alphanumeric', staircase, language,
-                                  dictionaries=cls.dictionaries, country=country)
+        key = 'staircases.alphanumeric'
+        return cls.numeric_phrase(key, staircase, language,
+                                  dictionaries=cls.dictionaries, country=country, num_type=num_type, direction=direction, direction_probability=direction_probability)

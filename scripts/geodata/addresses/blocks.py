@@ -21,10 +21,11 @@ class Block(NumberedComponent):
     block_range_cdf = cdf(block_range_probs)
 
     @classmethod
-    def random(cls, language, country=None):
-        num_type, num_type_props = cls.choose_alphanumeric_type('blocks.alphanumeric', language, country=country)
-        if num_type is None:
-            return None
+    def random(cls, language, country=None, num_type=None, num_type_props=None):
+        if not num_type:
+            num_type, num_type_props = cls.choose_alphanumeric_type(language, country=country)
+            if num_type is None:
+                return None
 
         if num_type == cls.NUMERIC:
             number = weighted_choice(cls.block_range, cls.block_range_cdf)
@@ -49,7 +50,7 @@ class Block(NumberedComponent):
                     return six.u('{}{}{}').format(number, whitespace_phrase, letter)
 
     @classmethod
-    def phrase(cls, block, language, country=None):
+    def phrase(cls, block, language, country=None, num_type=None):
         if block is None:
             return None
 
