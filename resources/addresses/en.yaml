@@ -173,6 +173,8 @@ levels:
         plural:
             canonical: floors
             abbreviated: fls
+            canonical_probability: 0.8
+            abbreviated_probability: 0.2
         # e.g. Floor 1
         numeric:
             direction: left # Floor/Fl goes to the left of the number
@@ -196,14 +198,19 @@ levels:
     # The word "level" is also occasionally used
     level: &level
         canonical: level
-        plural: levels
         abbreviated: lvl
         sample: true
+        plural:
+            canonical: levels
+            abbreviated: lvls
+            canonical_probability: 0.8
+            abbreviated_probability: 0.2
         canonical_probability: 0.5
         abbreviated_probability: 0.3
         sample_probability: 0.2
         sample_exclude:
             - / l # Exclude this abbreviation since it's used as an affix
+            - l # ambiguous with units and the abbreviation for left
         numeric:
             direction: left # Level/Lvl goes to the left of the number
             direction_probability: 0.8 # With 1 - this probability, Level/Lvl goes on the other side of the number
@@ -220,8 +227,12 @@ levels:
         ordinal_probability: 0.55
     platform: &platform
         canonical: platform
-        plural: platforms
         abbreviated: pf
+        plural:
+            canonical: platforms
+            abbreviated: pfs
+            canonical_probability: 0.8
+            abbreviated_probability: 0.2
         canonical_probability: 0.7
         abbreviated_probability: 0.3
         numeric:
@@ -232,7 +243,8 @@ levels:
         ordinal_probability: 0.5 # e.g. 1st Platform
     storey: &storey
         canonical: storey
-        plural: storeys
+        plural:
+            canonical: storeys
         numeric:
             direction: left
         ordinal:
@@ -527,7 +539,8 @@ levels:
         alpha_probability: 0.0098 # With this probability, pick a letter e.g. Floor A
         numeric_plus_alpha_probability: 0.0001 # e.g. Floor 2A
         alpha_plus_numeric_probability: 0.0001 # e.g. Floor A2
-        hyphenated_number_probability: 0.03 # e.g. 10-12
+        hyphenated_number_probability: 0.02 # e.g. 10-12
+        numeric_list_probability: 0.01 # e.g. Floor 1 & 2
         numeric_plus_alpha:
             whitespace_probability: 0.1
         alpha_plus_numeric:
@@ -536,6 +549,17 @@ levels:
             range_probability: 0.5
             direction: right
             direction_probability: 0.6
+        numeric_list:
+            plural_probability: 0.7
+            final_separator: *and
+            length:
+                default: 2
+                probability: 0.95
+                alternatives:
+                    - alternative: 3
+                      probability: 0.04
+                    - alternative: 4
+                      probability: 0.01
 
 # Intersections
 # =============
@@ -958,9 +982,10 @@ entrances:
     alphanumeric: &entrance_alphanumeric
         default: *entrance
         numeric_probability: 0.1 # e.g. Entrance 1
-        alpha_probability: 0.85 # e.g. Entrnace A
+        alpha_probability: 0.75 # e.g. Entrnace A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -969,21 +994,31 @@ entrances:
             whitespace_probability: 0.1
 
         directional:
+            direction: left # e.g. Left Entrance
+            direction_probability: 0.7
             modifier:
                 direction: left # e.g. North Entrance
                 direction_probability: 0.9
                 alternatives:
-                    - alternative: *north
-                    - alternative: *south
-                    - alternative: *east
-                    - alternative: *west
                     - alternative: *right
+                      probability: 0.325
                     - alternative: *left
+                      probability: 0.325
+                    - alternative: *north
+                      probability: 0.05
+                    - alternative: *south
+                      probability: 0.05
+                    - alternative: *east
+                      probability: 0.05
+                    - alternative: *west
+                      probability: 0.05
                     - alternative: *rear
+                      probability: 0.05
                     - alternative: *front
+                      probability: 0.05
                     - alternative:
                           canonical: freight
-
+                      probability: 0.05
 # Staircase
 # =========
 # For deriving strings like "Staircase A" in apartment buildings
@@ -1033,9 +1068,10 @@ staircases:
             - alternative: *stairwell
               probability: 0.2
         numeric_probability: 0.1 # e.g. Staircase 1
-        alpha_probability: 0.85 # e.g. Staircase A
+        alpha_probability: 0.75 # e.g. Staircase A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -1048,14 +1084,22 @@ staircases:
             direction_probability: 0.7
             modifier:
                 alternatives:
-                    - alternative: *north
-                    - alternative: *south
-                    - alternative: *east
-                    - alternative: *west
                     - alternative: *right
+                      probability: 0.35
                     - alternative: *left
+                      probability: 0.35
+                    - alternative: *north
+                      probability: 0.05
+                    - alternative: *south
+                      probability: 0.05
+                    - alternative: *east
+                      probability: 0.05
+                    - alternative: *west
+                      probability: 0.05
                     - alternative: *rear
+                      probability: 0.05
                     - alternative: *front
+                      probability: 0.05
 
 # Unit types
 # ==========
@@ -1220,11 +1264,16 @@ units:
             add_number_phrase_probability: 0.4
     lot: &lot
         canonical: lot
+        abbreviated: lt
         sample: true
-        canonical_probability: 0.9
+        canonical_probability: 0.8
+        abbreviated_probability: 0.1
         sample_probability: 0.1
         plural:
             canonical: lots
+            abbreviated: lts
+            canonical_probability: 0.7
+            abbreviated_probability: 0.3
         numeric:
             direction: left
             # Lot #1 and Lot No. 1
@@ -1276,20 +1325,25 @@ units:
             - alternative: *apartment
               probability: 0.1
         numeric_probability: 0.85 # e.g. Flat 1
-        numeric_plus_alpha_probability: 0.03 # e.g. 1A
-        alpha_plus_numeric_probability: 0.03 # e.g. A1
-        alpha_probability: 0.04 # e.g. Flat A
-        hyphenated_number_probability: 0.03 # e.g. 11-10
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+        alpha_probability: 0.035 # e.g. Flat A
+        hyphenated_number_probability: 0.025 # e.g. 11-10
         decimal_number_probability: 0.02 # e.g. 1.10
+        directional_probability: 0.01 # e.g. Left/Right/Front/Rear
+        numeric_list_probability: 0.01 # e.g. Floor 1 & 2
 
         alpha_plus_numeric:
             whitespace_probability: 0.2
             hyphen_probability: 0.2
+            null_phrase_probability: 0.05
         numeric_plus_alpha:
             whitespace_probability: 0.2
             hyphen_probability: 0.2
+            null_phrase_probability: 0.05
         hyphenated_number:
             range_probability: 0.5
+            plural_probability: 0.4
             # direction of the range, not the phrase
             direction: right
             direction_probability: 0.6
@@ -1297,6 +1351,20 @@ units:
             alpha_plus_numeric_whitespace_probability: 0.1
             numeric_plus_alpha_probability: 0.1
             numeric_plus_alpha_whitespace_probability: 0.1
+            null_phrase_probability: 0.05
+        decimal_number:
+            null_phrase_probability: 0.05
+        numeric_list:
+            plural_probability: 0.7
+            final_separator: *and
+            length:
+                default: 2
+                probability: 0.95
+                alternatives:
+                    - alternative: 3
+                      probability: 0.04
+                    - alternative: 4
+                      probability: 0.01
 
         # Separate random probability for adding directions like 2L, 2R, etc.
         add_direction: true
@@ -1317,6 +1385,24 @@ units:
 
         # If there are 10 floors, create unit numbers like #301 or #1032
         use_floor_probability: 0.35
+
+        directional:
+            direction: right # e.g. Unit Left
+            direction_probability: 0.8
+            modifier:
+                alternatives:
+                    - alternative: *right
+                      probability: 0.35
+                    - alternative: *left
+                      probability: 0.35
+                    - alternative: *rear
+                      probability: 0.1
+                    - alternative: *front
+                      probability: 0.1
+                    - alternative:
+                          canonical: side
+                          null_phrase_probability: 0.2
+                      probability: 0.1
 
     zones:
         residential: *unit_alphanumeric
