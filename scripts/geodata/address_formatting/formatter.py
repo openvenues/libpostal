@@ -69,6 +69,8 @@ class AddressFormatter(object):
     SUBDIVISION = 'subdivision'
     METRO_STATION = 'metro_station'
     SUBURB = 'suburb'
+    JAPAN_QUARTER = 'japan_quarter'
+    JAPAN_NEIGHBORHOOD = 'japan_neighborhood'
     CITY_DISTRICT = 'city_district'
     LOCALITY = 'locality'
     CITY = 'city'
@@ -98,6 +100,8 @@ class AddressFormatter(object):
         NAMED_BUILDING,
         BUILDING,
         METRO_STATION,
+        JAPAN_QUARTER,
+        JAPAN_NEIGHBORHOOD,
         SUBURB,
         CITY_DISTRICT,
         LOCALITY,
@@ -113,6 +117,8 @@ class AddressFormatter(object):
 
     BOUNDARY_COMPONENTS_ORDERED = [
         METRO_STATION,
+        JAPAN_QUARTER,
+        JAPAN_NEIGHBORHOOD,
         SUBURB,
         CITY_DISTRICT,
         LOCALITY,
@@ -173,6 +179,8 @@ class AddressFormatter(object):
     tag_aliases = {
         NAMED_BUILDING: HOUSE,
         SUBDIVISION: HOUSE,
+        JAPAN_QUARTER: SUBURB,
+        JAPAN_NEIGHBORHOOD: SUBURB,
         LOCALITY: CITY,
     }
 
