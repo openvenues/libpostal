@@ -636,7 +636,7 @@ ways the address parser can be improved even further (in order of difficulty):
 Contributing
 ------------
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/openvenues/libpostal.
+Bug reports, issues and pull requests are welcome. Please read the [contributing guide](CONTRIBUTING.md) before submitting your issue, bug report, or pull request. Submit issues at https://github.com/openvenues/libpostal/issues.
 
 License
 -------
