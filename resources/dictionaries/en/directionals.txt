@@ -2,19 +2,21 @@ center|c|ctr
 central|c|cn|ctrl|cntrl
 centre|c|ctr
 east|e
-eastern|eastrn|estrn|estn
+eastern|eastrn|estrn|estn|e
 lower|lowr|lwr
 middle|mdl|midle|mddl
 north|n|n.|nrt|nrth|nth|norh|nort|no
-northeast|north east|northe|north e|neast|n east|ne|n e|nrteast|nrt east|nrte|nrt e|nrtheast|nrth east|nrthe|nrth e|ntheast|nth east|nthe|nth e|norheast|norh east|norhe|norh e|norteast|nort east|norte|nort e
-northeastern|north eastern|northeastrn|north eastrn|northestrn|north estrn|northestn|north estn|neastern|n eastern|neastrn|n eastrn|nestrn|n estrn|nestn|n estn|nrteastern|nrt eastern|nrteastrn|nrt eastrn|nrtestrn|nrt estrn|nrtestn|nrt estn|nrtheastern|nrth eastern|nrtheastrn|nrth eastrn|nrthestrn|nrth estrn|nrthestn|nrth estn|ntheastern|nth eastern|ntheastrn|nth eastrn|nthestrn|nth estrn|nthestn|nth estn|norheastern|norh eastern|norheastrn|norh eastrn|norhestrn|norh estrn|norhestn|norh estn|norteastern|nort eastern|norteastrn|nort eastrn|nortestrn|nort estrn|nortestn|nort estn
-northwest|north west|northw|north w|northwst|north wst|nwest|n west|nw|n w|nwst|n wst|nrtwest|nrt west|nrtw|nrt w|nrtwst|nrt wst|nrthwest|nrth west|nrthw|nrth w|nrthwst|nrth wst|nthwest|nth west|nthw|nth w|nthwst|nth wst|norhwest|norh west|norhw|norh w|norhwst|norh wst|nortwest|nort west|nortw|nort w|nortwst|nort wst
-northwestern|north western|northwestrn|north westrn|northwstrn|north wstrn|northwstn|north wstn|nwestern|n western|nwestrn|n westrn|nwstrn|n wstrn|nwstn|n wstn|nrtwestern|nrt western|nrtwestrn|nrt westrn|nrtwstrn|nrt wstrn|nrtwstn|nrt wstn|nrthwestern|nrth western|nrthwestrn|nrth westrn|nrthwstrn|nrth wstrn|nrthwstn|nrth wstn|nthwestern|nth western|nthwestrn|nth westrn|nthwstrn|nth wstrn|nthwstn|nth wstn|norhwestern|norh western|norhwestrn|norh westrn|norhwstrn|norh wstrn|norhwstn|norh wstn|nortwestern|nort western|nortwestrn|nort westrn|nortwstrn|nort wstrn|nortwstn|nort wstn
+northeast|north east|northe|north e|neast|n east|ne|n e|n.e.|n.e|nrteast|nrt east|nrte|nrt e|nrtheast|nrth east|nrthe|nrth e|ntheast|nth east|nthe|nth e|norheast|norh east|norhe|norh e|norteast|nort east|norte|nort e
+northeastern|north eastern|northeastrn|north eastrn|northestrn|north estrn|northestn|north estn|neastern|n eastern|neastrn|n eastrn|nestrn|n estrn|nestn|n estn|nrteastern|nrt eastern|nrteastrn|nrt eastrn|nrtestrn|nrt estrn|nrtestn|nrt estn|nrtheastern|nrth eastern|nrtheastrn|nrth eastrn|nrthestrn|nrth estrn|nrthestn|nrth estn|ntheastern|nth eastern|ntheastrn|nth eastrn|nthestrn|nth estrn|nthestn|nth estn|norheastern|norh eastern|norheastrn|norh eastrn|norhestrn|norh estrn|norhestn|norh estn|norteastern|nort eastern|norteastrn|nort eastrn|nortestrn|nort estrn|nortestn|nort estn|ne|n e|n.e.|n.e
+northern|n|n.|nrtn|nrthrn|nrthn|nthn|norhn|nortn
+northwest|north west|northw|north w|northwst|north wst|nwest|n west|nw|n.w.|n.w|n w|nwst|n wst|nrtwest|nrt west|nrtw|nrt w|nrtwst|nrt wst|nrthwest|nrth west|nrthw|nrth w|nrthwst|nrth wst|nthwest|nth west|nthw|nth w|nthwst|nth wst|norhwest|norh west|norhw|norh w|norhwst|norh wst|nortwest|nort west|nortw|nort w|nortwst|nort wst
+northwestern|north western|northwestrn|north westrn|northwstrn|north wstrn|northwstn|north wstn|nwestern|n western|nwestrn|n westrn|nwstrn|n wstrn|nwstn|n wstn|nrtwestern|nrt western|nrtwestrn|nrt westrn|nrtwstrn|nrt wstrn|nrtwstn|nrt wstn|nrthwestern|nrth western|nrthwestrn|nrth westrn|nrthwstrn|nrth wstrn|nrthwstn|nrth wstn|nthwestern|nth western|nthwestrn|nth westrn|nthwstrn|nth wstrn|nthwstn|nth wstn|norhwestern|norh western|norhwestrn|norh westrn|norhwstrn|norh wstrn|norhwstn|norh wstn|nortwestern|nort western|nortwestrn|nort westrn|nortwstrn|nort wstrn|nortwstn|nort wstn|nw|n w|n.w.|n.w
 south|s|so|sth
-southeast|south east|southe|south e|seast|s east|se|s e|soeast|so east|so e|stheast|sth east|sthe|sth e
-southeastern|south eastern|southeastrn|south eastrn|southestrn|south estrn|southestn|south estn|seastern|s eastern|seastrn|s eastrn|sestrn|s estrn|sestn|s estn|soeastern|so eastern|soeastrn|so eastrn|soestrn|so estrn|soestn|so estn|stheastern|sth eastern|stheastrn|sth eastrn|sthestrn|sth estrn|sthestn|sth estn
-southwest|south west|southw|south w|southwst|south wst|swest|s west|sw|s w|swst|s wst|sowest|so west|so w|sowst|so wst|sthwest|sth west|sthw|sth w|sthwst|sth wst
-southwestern|south western|southwestrn|south westrn|southwstrn|south wstrn|southwstn|south wstn|swestern|s western|swestrn|s westrn|swstrn|s wstrn|swstn|s wstn|sowestern|so western|sowestrn|so westrn|sowstrn|so wstrn|sowstn|so wstn|sthwestern|sth western|sthwestrn|sth westrn|sthwstrn|sth wstrn|sthwstn|sth wstn
+southeast|south east|southe|south e|seast|s east|se|s e|s.e.|s.e|soeast|so east|so e|stheast|sth east|sthe|sth e
+southeastern|south eastern|southeastrn|south eastrn|southestrn|south estrn|southestn|south estn|seastern|s eastern|seastrn|s eastrn|sestrn|s estrn|sestn|s estn|soeastern|so eastern|soeastrn|so eastrn|soestrn|so estrn|soestn|so estn|stheastern|sth eastern|stheastrn|sth eastrn|sthestrn|sth estrn|sthestn|sth estn|se|s e|s.e.|s.e
+southwest|south west|southw|south w|southwst|south wst|swest|s west|sw|s w|s.w.|s.w|swst|s wst|sowest|so west|so w|sowst|so wst|sthwest|sth west|sthw|sth w|sthwst|sth wst
+southern|s|so|sthrn|sthn|sthn
+southwestern|south western|southwestrn|south westrn|southwstrn|south wstrn|southwstn|south wstn|swestern|s western|swestrn|s westrn|swstrn|s wstrn|swstn|s wstn|sowestern|so western|sowestrn|so westrn|sowstrn|so wstrn|sowstn|so wstn|sthwestern|sth western|sthwestrn|sth westrn|sthwstrn|sth wstrn|sthwstn|sth wstn|sw|s w|s.w.|s.w
 upper|uppr|upr|up
 west|w|wst
-western|westrn|wstrn|wstn
+western|westrn|wstrn|wstn|w
