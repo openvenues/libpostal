@@ -637,9 +637,10 @@ entrances:
             - alternative: *ulaz_latin
               probability: 0.2
         numeric_probability: 0.1 # e.g. Ulaz 1
-        alpha_probability: 0.85 # e.g. Ulaz A
+        alpha_probability: 0.75 # e.g. Ulaz A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -647,6 +648,36 @@ entrances:
         numeric_plus_alpha:
             whitespace_probability: 0.1
 
+
+        directional:
+            direction: right
+            direction_probability: 0.85
+            modifier:
+                alternatives:
+                    - alternative: *desno
+                      probability: 0.39
+                    - alternative: *desno_latin
+                      probability: 0.01
+                    - alternative: *levo
+                      probability: 0.39
+                    - alternative: *levo_latin
+                      probability: 0.01
+                    - alternative: *sever
+                      probability: 0.04
+                    - alternative: *sever_latin
+                      probability: 0.01
+                    - alternative: *jug
+                      probability: 0.04
+                    - alternative: *jug_latin
+                      probability: 0.01
+                    - alternative: *istok
+                      probability: 0.04
+                    - alternative: *istok_latin
+                      probability: 0.01
+                    - alternative: *zapad
+                      probability: 0.04
+                    - alternative: *zapad_latin
+                      probability: 0.01
 
 
 staircases:
@@ -673,10 +704,11 @@ staircases:
         alternatives:
             - alternative: *stepeniste_latin
               probability: 0.2
-        numeric_probability: 0.75
+        numeric_probability: 0.65
         alpha_probability: 0.2
         numeric_plus_alpha_probability: 0.025
         alpha_plus_numeric_probability: 0.025
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -690,27 +722,27 @@ staircases:
             modifier:
                 alternatives:
                     - alternative: *desno
-                      probability: 0.19
+                      probability: 0.39
                     - alternative: *desno_latin
                       probability: 0.01
                     - alternative: *levo
-                      probability: 0.19
+                      probability: 0.39
                     - alternative: *levo_latin
                       probability: 0.01
                     - alternative: *sever
-                      probability: 0.14
+                      probability: 0.04
                     - alternative: *sever_latin
                       probability: 0.01
                     - alternative: *jug
-                      probability: 0.14
+                      probability: 0.04
                     - alternative: *jug_latin
                       probability: 0.01
                     - alternative: *istok
-                      probability: 0.14
+                      probability: 0.04
                     - alternative: *istok_latin
                       probability: 0.01
                     - alternative: *zapad
-                      probability: 0.14
+                      probability: 0.04
                     - alternative: *zapad_latin
                       probability: 0.01
 

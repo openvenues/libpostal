@@ -470,10 +470,11 @@ staircases:
         alternatives:
             - alternative: *treppe
               probability: 0.4
-        numeric_probability: 0.75
+        numeric_probability: 0.65
         alpha_probability: 0.2
         numeric_plus_alpha_probability: 0.025
         alpha_plus_numeric_probability: 0.025
+        direcional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -486,10 +487,18 @@ staircases:
             direction_probability: 0.85
             modifier:
                 alternatives:
+                    - alternative: *rechts
+                      probability: 0.4
+                    - alternative: *links
+                      probability: 0.4
                     - alternative: *nord
+                      probability: 0.05
                     - alternative: *sud
+                      probability: 0.05
                     - alternative: *ost
+                      probability: 0.05
                     - alternative: *west
+                      probability: 0.05
 
 po_boxes:
     postfach: &postfach

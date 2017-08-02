@@ -329,16 +329,6 @@ staircases:
         default: *portaikko
         alpha_probability: 1.0
 
-        directional:
-            direction: left
-            direction_probability: 0.85
-            modifier:
-                alternatives:
-                    - alternative: *pohja
-                    - alternative: *etela
-                    - alternative: *itaan
-                    - alternative: *lansi
-
 po_boxes:
     postilokero: &postilokero
         canonical: postilokero

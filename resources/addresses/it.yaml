@@ -412,9 +412,10 @@ entrances:
     alphanumeric: &entrance_alphanumeric
         default: *ingresso
         numeric_probability: 0.1 # e.g. Ingresso 1
-        alpha_probability: 0.85 # e.g. Ingresso A
+        alpha_probability: 0.75 # e.g. Ingresso A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -423,18 +424,26 @@ entrances:
             whitespace_probability: 0.1
 
         directional:
+            direction: right # e.g. Ingresso Nord
+            direction_probability: 0.95
             modifier:
-                direction: right # e.g. Ingresso Nord
-                direction_probability: 0.95
                 alternatives:
-                    - alternative: *nord
-                    - alternative: *sud
-                    - alternative: *est
-                    - alternative: *ovest
                     - alternative: *destra
+                      probability: 0.35
                     - alternative: *sinistra
+                      probability: 0.35
                     - alternative: *posteriore
+                      probability: 0.05
                     - alternative: *anteriore
+                      probability: 0.05
+                    - alternative: *nord
+                      probability: 0.05
+                    - alternative: *sud
+                      probability: 0.05
+                    - alternative: *est
+                      probability: 0.05
+                    - alternative: *ovest
+                      probability: 0.05
 
 staircases:
     scala: &scala
@@ -448,10 +457,11 @@ staircases:
     alphanumeric:
         # For alphanumerics, Scala A, Scala 1, etc.
         default: *scala
-        numeric_probability: 0.6 # e.g. Scala 1
+        numeric_probability: 0.5 # e.g. Scala 1
         alpha_probability: 0.35 # e.g. Scala A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -464,15 +474,22 @@ staircases:
             direction_probability: 0.9
             modifier:
                 alternatives:
-                    - alternative: *nord
-                    - alternative: *sud
-                    - alternative: *est
-                    - alternative: *ovest
                     - alternative: *destra
+                      probability: 0.35
                     - alternative: *sinistra
+                      probability: 0.35
                     - alternative: *posteriore
+                      probability: 0.05
                     - alternative: *anteriore
-
+                      probability: 0.05
+                    - alternative: *nord
+                      probability: 0.05
+                    - alternative: *sud
+                      probability: 0.05
+                    - alternative: *est
+                      probability: 0.05
+                    - alternative: *ovest
+                      probability: 0.05
 
 po_boxes:
     casella_postale: &casella_postale
@@ -609,9 +626,10 @@ units:
             - alternative: *sala
               probability: 0.005
         numeric_probability: 0.9 # e.g. Appartement 1
-        numeric_plus_alpha_probability: 0.03 # e.g. 1A
-        alpha_plus_numeric_probability: 0.03 # e.g. A1
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
         alpha_probability: 0.04 # e.g. Appartement A
+        directional_probability: 0.01
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -629,6 +647,29 @@ units:
 
         # If there are 10 floors, create unit numbers like #301 or #1032
         use_floor_probability: 0.1
+
+        directional:
+            direction: right # e.g. Scala Destra
+            direction_probability: 0.9
+            modifier:
+                alternatives:
+                    - alternative: *destra
+                      probability: 0.35
+                    - alternative: *sinistra
+                      probability: 0.35
+                    - alternative: *posteriore
+                      probability: 0.05
+                    - alternative: *anteriore
+                      probability: 0.05
+                    - alternative: *nord
+                      probability: 0.05
+                    - alternative: *sud
+                      probability: 0.05
+                    - alternative: *est
+                      probability: 0.05
+                    - alternative: *ovest
+                      probability: 0.05
+
 
     zones:
         residential: *unit_alphanumeric

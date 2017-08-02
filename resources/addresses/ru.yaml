@@ -821,15 +821,47 @@ entrances:
             - alternative: *vkhod_latin
               probability: 0.01
         numeric_probability: 0.1 # e.g. Wejście 1
-        alpha_probability: 0.85 # e.g. Wejście A
+        alpha_probability: 0.75 # e.g. Wejście A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
 
         numeric_plus_alpha:
             whitespace_probability: 0.1
+
+        directional:
+            direction: right
+            direction_probability: 0.85
+            modifier:
+                alternatives:
+                    - alternative: *pravo
+                      probability: 0.19
+                    - alternative: *pravo_latin
+                      probability: 0.01
+                    - alternative: *levo
+                      probability: 0.19
+                    - alternative: *levo_latin
+                      probability: 0.01
+                    - alternative: *sever
+                      probability: 0.14
+                    - alternative: *sever_latin
+                      probability: 0.01
+                    - alternative: *yug
+                      probability: 0.14
+                    - alternative: *yug_latin
+                      probability: 0.01
+                    - alternative: *vostok
+                      probability: 0.14
+                    - alternative: *vostok_latin
+                      probability: 0.01
+                    - alternative: *zapad
+                      probability: 0.14
+                    - alternative: *zapad_latin
+                      probability: 0.01
+
 
 staircases:
     lestnitsa: &lestnitsa
@@ -853,10 +885,11 @@ staircases:
         alternatives:
             - alternative: *lestnitsa_latin
               probability: 0.01
-        numeric_probability: 0.75
+        numeric_probability: 0.65
         alpha_probability: 0.2
         numeric_plus_alpha_probability: 0.025
         alpha_plus_numeric_probability: 0.025
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1

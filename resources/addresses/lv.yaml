@@ -284,15 +284,34 @@ entrances:
     alphanumeric: &entrance_alphanumeric
         default: *ieeja
         numeric_probability: 0.1 # e.g. ieeja 1
-        alpha_probability: 0.85 # e.g. ieeja A
+        alpha_probability: 0.75 # e.g. ieeja A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
 
         numeric_plus_alpha:
             whitespace_probability: 0.1
+
+        directional:
+            direction: left
+            direction_probability: 0.85
+            modifier:
+                alternatives:
+                    - alternative: *pa_labi
+                      probability: 0.4
+                    - alternative: *pa_kreisi
+                      probability: 0.4
+                    - alternative: *ziemelu
+                      probability: 0.05
+                    - alternative: *dienvidu
+                      probability: 0.05
+                    - alternative: *austrumu
+                      probability: 0.05
+                    - alternative: *rietumu
+                      probability: 0.05
 
 staircases:
     kapnu: &kapnu
@@ -317,10 +336,11 @@ staircases:
         alternatives:
             - alternative: *kapnu_telpa
               probability: 0.4
-        numeric_probability: 0.75
+        numeric_probability: 0.65
         alpha_probability: 0.2
         numeric_plus_alpha_probability: 0.025
         alpha_plus_numeric_probability: 0.025
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -334,11 +354,17 @@ staircases:
             modifier:
                 alternatives:
                     - alternative: *pa_labi
+                      probability: 0.4
                     - alternative: *pa_kreisi
+                      probability: 0.4
                     - alternative: *ziemelu
+                      probability: 0.05
                     - alternative: *dienvidu
+                      probability: 0.05
                     - alternative: *austrumu
+                      probability: 0.05
                     - alternative: *rietumu
+                      probability: 0.05
 
 
 units:

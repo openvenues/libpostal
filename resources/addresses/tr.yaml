@@ -321,33 +321,10 @@ entrances:
     alphanumeric: &entrance_alphanumeric
         default: *giris
         numeric_probability: 0.1 # e.g. giriş 1
-        alpha_probability: 0.85 # e.g. giriş A
+        alpha_probability: 0.75 # e.g. giriş A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
-
-        alpha_plus_numeric:
-            whitespace_probability: 0.1
-
-        numeric_plus_alpha:
-            whitespace_probability: 0.1
-
-
-staircases:
-    merdiven: &merdiven
-        canonical: merdiven
-        sample: true
-        canonical_probability: 0.8
-        sample_probability: 0.2
-        numeric:
-            direction: left
-
-
-    alphanumeric: &staircase_alphanumeric
-        default: *merdiven
-        numeric_probability: 0.75
-        alpha_probability: 0.2
-        numeric_plus_alpha_probability: 0.025
-        alpha_plus_numeric_probability: 0.025
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -361,17 +338,59 @@ staircases:
             modifier:
                 alternatives:
                     - alternative: *sag
-                      probability: 0.2
+                      probability: 0.4
                     - alternative: *sol
-                      probability: 0.2
+                      probability: 0.4
                     - alternative: *kuzey
-                      probability: 0.15
+                      probability: 0.05
                     - alternative: *guney
-                      probability: 0.15
+                      probability: 0.05
                     - alternative: *dogu
-                      probability: 0.15
+                      probability: 0.05
                     - alternative: *bati
-                      probability: 0.15
+                      probability: 0.05
+
+staircases:
+    merdiven: &merdiven
+        canonical: merdiven
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+
+    alphanumeric: &staircase_alphanumeric
+        default: *merdiven
+        numeric_probability: 0.65
+        alpha_probability: 0.2
+        numeric_plus_alpha_probability: 0.025
+        alpha_plus_numeric_probability: 0.025
+        directional_probability: 0.1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: right
+            direction_probability: 0.85
+            modifier:
+                alternatives:
+                    - alternative: *sag
+                      probability: 0.4
+                    - alternative: *sol
+                      probability: 0.4
+                    - alternative: *kuzey
+                      probability: 0.05
+                    - alternative: *guney
+                      probability: 0.05
+                    - alternative: *dogu
+                      probability: 0.05
+                    - alternative: *bati
+                      probability: 0.05
 
 po_boxes:
     posta_kutusu: &posta_kutusu

@@ -289,9 +289,10 @@ entrances:
     alphanumeric:
         default: *sarrera
         numeric_probability: 0.1 # e.g. Sarrera 1
-        alpha_probability: 0.85 # e.g. Sarrera A
+        alpha_probability: 0.75 # e.g. Sarrera A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -367,9 +368,19 @@ units:
         numeric_probability: 0.7 # e.g. 1
         numeric_plus_alpha_probability: 0.01 # e.g. 1A
         alpha_plus_numeric_probability: 0.01 # e.g. A1
-        alpha_probability: 0.28 # e.g. A
+        alpha_probability: 0.25 # e.g. A
+        directional_probability: 0.03
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
         numeric_plus_alpha:
             whitespace_probability: 0.1
+
+        directional:
+            direction: left # e.g. Ezk.-ko Eskra
+            directional_probability: 0.8
+            modifier:
+                alternatives:
+                    - alternative: *eskuina
+                    - alternative: *ezkerreko
+

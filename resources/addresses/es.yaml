@@ -179,6 +179,8 @@ levels:
         canonical: piso
         abbreviated: p
         sample: true
+        plural:
+            canonical: pisos
         canonical_probability: 0.8
         abbreviated_probability: 0.1
         sample_probability: 0.1
@@ -191,6 +193,9 @@ levels:
             direction: left # P2
         # e.g. 2o piso
         ordinal:
+            gender: null
+            alt_gender: m
+            alt_gender_probability: 0.3
             direction: right
             direction_probability: 0.95 # Let it vary occasionally e.g. Piso 2o
             standalone_probability: 0.2 # Let e.g. 5º be the entire floor string
@@ -355,8 +360,22 @@ levels:
         default: *piso
         add_number_phrase: true
         add_number_phrase_probability: 0.05
-        numeric_probability: 0.99
+        numeric_probability: 0.98
         alpha_probability: 0.01
+        numeric_list_probability: 0.01
+
+        numeric_list:
+            plural_probability: 0.7
+            comma_probability: 0.5
+            final_separator: *y
+            length:
+                default: 2
+                probability: 0.95
+                alternatives:
+                    - alternative: 3
+                      probability: 0.04
+                    - alternative: 4
+                      probability: 0.01
 
 blocks:
     alphanumeric:
@@ -690,9 +709,10 @@ entrances:
     alphanumeric:
         default: *entrada
         numeric_probability: 0.1 # e.g. Entrance 1
-        alpha_probability: 0.85 # e.g. Entrnace A
+        alpha_probability: 0.75 # e.g. Entrnace A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -701,16 +721,26 @@ entrances:
             whitespace_probability: 0.1
 
         directional:
+            direction: right
+            direction_probability: 0.8
             modifier:
                 alternatives:
-                    - alternative: *norte
-                    - alternative: *sur
-                    - alternative: *este
-                    - alternative: *oeste
                     - alternative: *derecha
+                      probability: 0.35
                     - alternative: *izquierda
+                      probability: 0.35
+                    - alternative: *norte
+                      probability: 0.05
+                    - alternative: *sur
+                      probability: 0.05
+                    - alternative: *este
+                      probability: 0.05
+                    - alternative: *oeste
+                      probability: 0.05
                     - alternative: *trasera
+                      probability: 0.05
                     - alternative: *frente
+                      probability: 0.05
 
 staircases:
     escalera: &escalera
@@ -726,10 +756,11 @@ staircases:
     alphanumeric:
         # For alphanumerics, Stair A, Stair 1, etc.
         default: *escalera
-        numeric_probability: 0.6 # e.g. Escalera 1
+        numeric_probability: 0.5 # e.g. Escalera 1
         alpha_probability: 0.35 # e.g. Escalera A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -738,24 +769,37 @@ staircases:
             whitespace_probability: 0.1
 
         directional:
-            direction: right # e.g. Escalera Izq
-            direction_probability: 0.8
+            direction: right
+            directional_probability: 0.8
             modifier:
                 alternatives:
-                    - alternative: *norte
-                    - alternative: *sur
-                    - alternative: *este
-                    - alternative: *oeste
                     - alternative: *derecha
+                      probability: 0.35
                     - alternative: *izquierda
+                      probability: 0.35
+                    - alternative: *norte
+                      probability: 0.05
+                    - alternative: *sur
+                      probability: 0.05
+                    - alternative: *este
+                      probability: 0.05
+                    - alternative: *oeste
+                      probability: 0.05
                     - alternative: *trasera
+                      probability: 0.05
                     - alternative: *frente
+                      probability: 0.05
 
 units:
     apartment: &apartamento
         canonical: apartamento
         abbreviated: apto
         sample: true
+        plural:
+            canonical: apartamentos
+            abbreviated: aptos
+            canonical_probability: 0.4
+            abbreviated_probability: 0.6
         canonical_probability: 0.3
         abbreviated_probability: 0.4
         sample_probability: 0.3
@@ -766,15 +810,22 @@ units:
         sample: true
         canonical_probability: 0.7
         sample_probability: 0.3
+        plural:
+            canonical: suites
         numeric:
             direction: left
-    door: &puerta
+    puerta: &puerta
         canonical: puerta
         abbreviated: pta
         sample: true
         canonical_probability: 0.4
         abbreviated_probability: 0.4
         sample_probability: 0.2
+        plural:
+            canonical: puerta
+            abbreviated: pta
+            canonical_probability: 0.7
+            abbreviated_probability: 0.3
         numeric:
             direction: left
         ordinal:
@@ -788,12 +839,19 @@ units:
         sample: true
         canonical_probability: 0.9
         sample_probability: 0.1
+        plural:
+            canonical: letras
         numeric:
             direction: left
-    flat: &departamento
+    departamento: &departamento
         canonical: departamento
         abbreviated: dpto
         sample: true
+        plural:
+            canonical: departamentos
+            abbreviated: dptos
+            canonical_probability: 0.4
+            abbreviated_probability: 0.6
         canonical_probability: 0.2
         abbreviated_probability: 0.5
         sample_probability: 0.3
@@ -803,6 +861,11 @@ units:
         canonical: oficina
         abbreviated: of
         sample: true
+        plural:
+            canonical: oficinas
+            abbreviated: ofs
+            canonical_probability: 0.7
+            abbreviated_probability: 0.3
         canonical_probability: 0.4
         abbreviated_probability: 0.3
         sample_probability: 0.3
@@ -815,6 +878,11 @@ units:
         canonical: unidad
         abbreviated: un
         sample: true
+        plural:
+            canonical: unidades
+            abbreviated: uns
+            canonical_probability: 0.8
+            abbreviated_probability: 0.2
         canonical_probability: 0.4
         abbreviated_probability: 0.4
         sample_probability: 0.2
@@ -868,7 +936,10 @@ units:
         numeric_probability: 0.9 # e.g. Dpto 1
         numeric_plus_alpha_probability: 0.01 # e.g. Dpto 1A
         alpha_plus_numeric_probability: 0.01 # e.g. Dpto A1
-        alpha_probability: 0.08 # e.g. Dpto A
+        alpha_probability: 0.06 # e.g. Dpto A
+        directional_probability: 0.01
+        numeric_list_probability: 0.01
+
         alpha_plus_numeric:
             whitespace_probability: 0.1
         numeric_plus_alpha:
@@ -886,6 +957,34 @@ units:
                   probability: 0.05
                 - alternative: *letra
                   probability: 0.02
+
+        directional:
+            direction: right # e.g. Puerta Izq
+            direction_probability: 0.8
+            modifier:
+                alternatives:
+                    - alternative: *derecha
+                      probability: 0.4
+                    - alternative: *izquierda
+                      probability: 0.4
+                    - alternative: *trasera
+                      probability: 0.1
+                    - alternative: *frente
+                      probability: 0.1
+
+        numeric_list:
+            plural_probability: 0.7
+            comma_probability: 0.5
+            final_separator: *y
+            length:
+                default: 2
+                probability: 0.95
+                alternatives:
+                    - alternative: 3
+                      probability: 0.04
+                    - alternative: 4
+                      probability: 0.01
+
 
     alphanumeric_apartamento: &unit_alphanumeric_apartamento
         <<: *unit_alphanumeric
@@ -1035,6 +1134,11 @@ countries:
                 # Everywhere except Spain
                 canonical: planta
                 abbreviated: pl
+                plural:
+                    canonical: plantas
+                    abbreviated: pls
+                    canonical_probability: 0.8
+                    abbreviated_probability: 0.2
                 sample: true
                 # Numeric version e.g. Planta 1
                 numeric:
@@ -1048,6 +1152,8 @@ countries:
                 ordinal:
                     direction: right
                     gender: f
+                    alt_gender: null
+                    alt_gender_probability: 0.0
                     digits:
                         ascii_probability: 0.8
                         spellout_probability: 0.2
@@ -1126,8 +1232,6 @@ countries:
                 alternatives:
                     - alternative: *piso
                       probability: 0.5
-                numeric_probability: 0.99 # With this probability, pick an integer
-                alpha_probability: 0.01 # With this probability, pick a letter e.g. Floor A
 
         units:
             door: &puerta_espana
@@ -1159,7 +1263,9 @@ countries:
                 numeric_probability: 0.7 # e.g. Puerta 1a
                 numeric_plus_alpha_probability: 0.01 # e.g. Puerta 1A
                 alpha_plus_numeric_probability: 0.01 # e.g. Puerta A1
-                alpha_probability: 0.28 # e.g. Puerta A
+                alpha_probability: 0.25 # e.g. Puerta A
+                directional_probability: 0.02
+                numeric_list_probability: 0.01
 
                 alpha:
                     default: *puerta_espana

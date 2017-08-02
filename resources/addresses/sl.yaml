@@ -373,33 +373,10 @@ entrances:
     alphanumeric: &entrance_alphanumeric
         default: *vhod
         numeric_probability: 0.1 # e.g. Vhod 1
-        alpha_probability: 0.85 # e.g. Vhod A
+        alpha_probability: 0.75 # e.g. Vhod A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
-
-        alpha_plus_numeric:
-            whitespace_probability: 0.1
-
-        numeric_plus_alpha:
-            whitespace_probability: 0.1
-
-
-staircases:
-    stopnisce: &stopnisce
-        canonical: stopnišče
-        sample: true
-        canonical_probability: 0.8
-        sample_probability: 0.2
-        numeric:
-            direction: left
-
-
-    alphanumeric: &staircase_alphanumeric
-        default: *stopnisce
-        numeric_probability: 0.75
-        alpha_probability: 0.2
-        numeric_plus_alpha_probability: 0.025
-        alpha_plus_numeric_probability: 0.025
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -413,17 +390,59 @@ staircases:
             modifier:
                 alternatives:
                     - alternative: *prav
-                      probability: 0.2
+                      probability: 0.4
                     - alternative: *levo
-                      probability: 0.2
+                      probability: 0.4
                     - alternative: *sever
-                      probability: 0.15
+                      probability: 0.05
                     - alternative: *jug
-                      probability: 0.15
+                      probability: 0.05
                     - alternative: *vzhod
-                      probability: 0.15
+                      probability: 0.05
                     - alternative: *zahod
-                      probability: 0.15
+                      probability: 0.05
+
+staircases:
+    stopnisce: &stopnisce
+        canonical: stopnišče
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+
+    alphanumeric: &staircase_alphanumeric
+        default: *stopnisce
+        numeric_probability: 0.65
+        alpha_probability: 0.2
+        numeric_plus_alpha_probability: 0.025
+        alpha_plus_numeric_probability: 0.025
+        directional_probability: 0.1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: right
+            direction_probability: 0.85
+            modifier:
+                alternatives:
+                    - alternative: *prav
+                      probability: 0.4
+                    - alternative: *levo
+                      probability: 0.4
+                    - alternative: *sever
+                      probability: 0.05
+                    - alternative: *jug
+                      probability: 0.05
+                    - alternative: *vzhod
+                      probability: 0.05
+                    - alternative: *zahod
+                      probability: 0.05
 
 po_boxes:
     postni_predal: &postni_predal

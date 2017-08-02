@@ -551,6 +551,7 @@ levels:
             direction_probability: 0.6
         numeric_list:
             plural_probability: 0.7
+            comma_probability: 0.5
             final_separator: *and
             length:
                 default: 2
@@ -1356,6 +1357,7 @@ units:
             null_phrase_probability: 0.05
         numeric_list:
             plural_probability: 0.7
+            comma_probability: 0.5
             final_separator: *and
             length:
                 default: 2

@@ -307,9 +307,10 @@ entrances:
     alphanumeric:
         default: *intrare
         numeric_probability: 0.1 # e.g. Intrare 1
-        alpha_probability: 0.85 # e.g. Intrare A
+        alpha_probability: 0.75 # e.g. Intrare A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -320,12 +321,18 @@ entrances:
         directional:
             modifier:
                 alternatives:
-                    - alternative: *nord
-                    - alternative: *sud
-                    - alternative: *est
-                    - alternative: *vest
                     - alternative: *dreapta
+                      probability: 0.4
                     - alternative: *stanga
+                      probability: 0.4
+                    - alternative: *nord
+                      probability: 0.05
+                    - alternative: *sud
+                      probability: 0.05
+                    - alternative: *est
+                      probability: 0.05
+                    - alternative: *vest
+                      probability: 0.05
 
 staircases:
     scara: &scara
@@ -341,10 +348,11 @@ staircases:
     alphanumeric:
         # For alphanumerics, Scara A, Scara 1, etc.
         default: *scara
-        numeric_probability: 0.35 # e.g. Scara 1
+        numeric_probability: 0.25 # e.g. Scara 1
         alpha_probability: 0.6 # e.g. Scara A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -353,16 +361,20 @@ staircases:
             whitespace_probability: 0.1
 
         directional:
-            direction: right # e.g. Scara Nord
-            direction_probability: 0.8
             modifier:
                 alternatives:
-                    - alternative: *nord
-                    - alternative: *sud
-                    - alternative: *est
-                    - alternative: *vest
                     - alternative: *dreapta
+                      probability: 0.4
                     - alternative: *stanga
+                      probability: 0.4
+                    - alternative: *nord
+                      probability: 0.05
+                    - alternative: *sud
+                      probability: 0.05
+                    - alternative: *est
+                      probability: 0.05
+                    - alternative: *vest
+                      probability: 0.05
 
 po_boxes:
     casuta_postala: &casuta_postala
@@ -450,12 +462,20 @@ units:
         numeric_probability: 0.9 # e.g. ap 1
         numeric_plus_alpha_probability: 0.01 # e.g. ap 1A
         alpha_plus_numeric_probability: 0.01 # e.g. ap A1
-        alpha_probability: 0.08 # e.g. ap A
+        alpha_probability: 0.07 # e.g. ap A
+        directional_probability: 0.01
         alpha_plus_numeric:
             whitespace_probability: 0.1
         numeric_plus_alpha:
             whitespace_probability: 0.1
 
+        directional:
+            modifier:
+                alternatives:
+                    - alternative: *dreapta
+                      probability: 0.5
+                    - alternative: *stanga
+                      probability: 0.5
 
     zones:
         residential: *unit_alphanumeric

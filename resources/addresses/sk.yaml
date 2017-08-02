@@ -450,31 +450,10 @@ entrances:
     alphanumeric: &entrance_alphanumeric
         default: *vchod
         numeric_probability: 0.1 # e.g. Wejście 1
-        alpha_probability: 0.85 # e.g. Wejście A
+        alpha_probability: 0.75 # e.g. Wejście A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
-
-        alpha_plus_numeric:
-            whitespace_probability: 0.1
-
-        numeric_plus_alpha:
-            whitespace_probability: 0.1
-
-staircases:
-    schodisko: &schodisko
-        canonical: schodisko
-        sample: true
-        canonical_probability: 0.8
-        sample_probability: 0.2
-        numeric:
-            direction: left
-
-    alphanumeric: &staircase_alphanumeric
-        default: *schodisko
-        numeric_probability: 0.75
-        alpha_probability: 0.2
-        numeric_plus_alpha_probability: 0.025
-        alpha_plus_numeric_probability: 0.025
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -487,10 +466,60 @@ staircases:
             direction_probability: 0.85
             modifier:
                 alternatives:
+                    - alternative: *prava
+                      probability: 0.4
+                    - alternative: *lava
+                      probability: 0.4
                     - alternative: *sever
+                      probability: 0.05
                     - alternative: *juh
+                      probability: 0.05
                     - alternative: *vychod
+                      probability: 0.05
                     - alternative: *zapad
+                      probability: 0.05
+
+
+staircases:
+    schodisko: &schodisko
+        canonical: schodisko
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    alphanumeric: &staircase_alphanumeric
+        default: *schodisko
+        numeric_probability: 0.65
+        alpha_probability: 0.2
+        numeric_plus_alpha_probability: 0.025
+        alpha_plus_numeric_probability: 0.025
+        directional_probability: 0.1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: left
+            direction_probability: 0.85
+            modifier:
+                alternatives:
+                    - alternative: *prava
+                      probability: 0.4
+                    - alternative: *lava
+                      probability: 0.4
+                    - alternative: *sever
+                      probability: 0.05
+                    - alternative: *juh
+                      probability: 0.05
+                    - alternative: *vychod
+                      probability: 0.05
+                    - alternative: *zapad
+                      probability: 0.05
 
 po_boxes:
     postova_priehradka: &postova_priehradka

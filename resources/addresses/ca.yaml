@@ -595,9 +595,10 @@ entrances:
     alphanumeric:
         default: *entrada
         numeric_probability: 0.1 # e.g. Entrance 1
-        alpha_probability: 0.85 # e.g. Entrnace A
+        alpha_probability: 0.75 # e.g. Entrnace A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -608,14 +609,22 @@ entrances:
         directional:
             modifier:
                 alternatives:
-                    - alternative: *nord
-                    - alternative: *sud
-                    - alternative: *est
-                    - alternative: *oest
                     - alternative: *dreta
+                      probability: 0.35
                     - alternative: *esquerra
+                      probability: 0.35
+                    - alternative: *nord
+                      probability: 0.05
+                    - alternative: *sud
+                      probability: 0.05
+                    - alternative: *est
+                      probability: 0.05
+                    - alternative: *oest
+                      probability: 0.05
                     - alternative: *posterior
+                      probability: 0.05
                     - alternative: *front
+                      probability: 0.05
 
 staircases:
     escala: &escala
@@ -631,10 +640,11 @@ staircases:
     alphanumeric:
         # For alphanumerics, Stair A, Stair 1, etc.
         default: *escala
-        numeric_probability: 0.6 # e.g. Escalera 1
+        numeric_probability: 0.5 # e.g. Escalera 1
         alpha_probability: 0.35 # e.g. Escalera A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -647,14 +657,22 @@ staircases:
             direction_probability: 0.8
             modifier:
                 alternatives:
-                    - alternative: *nord
-                    - alternative: *sud
-                    - alternative: *est
-                    - alternative: *oest
                     - alternative: *dreta
+                      probability: 0.35
                     - alternative: *esquerra
+                      probability: 0.35
+                    - alternative: *nord
+                      probability: 0.05
+                    - alternative: *sud
+                      probability: 0.05
+                    - alternative: *est
+                      probability: 0.05
+                    - alternative: *oest
+                      probability: 0.05
                     - alternative: *posterior
+                      probability: 0.05
                     - alternative: *front
+                      probability: 0.05
 
 units:
     flat: &apartament
@@ -749,10 +767,11 @@ units:
         add_direction_numeric: true # Only for numbers
         add_direction_standalone: true # A unit can be as simple as "D"
 
-        numeric_probability: 0.7 # e.g. Porta 1a
+        numeric_probability: 0.6 # e.g. Porta 1a
         numeric_plus_alpha_probability: 0.01 # e.g. Porta 1A
         alpha_plus_numeric_probability: 0.01 # e.g. Porta A1
         alpha_probability: 0.28 # e.g. Porta A
+        directional_probability: 0.1 # e.g. Porta Dreta
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -773,6 +792,20 @@ units:
                   probability: 0.01
                 - alternative: *habitacio
                   probability: 0.01
+
+        directional:
+            direction: right # e.g. Escalera Izq
+            direction_probability: 0.8
+            modifier:
+                alternatives:
+                    - alternative: *dreta
+                      probability: 0.4
+                    - alternative: *esquerra
+                      probability: 0.4
+                    - alternative: *posterior
+                      probability: 0.1
+                    - alternative: *front
+                      probability: 0.1
 
     zones:
         residential: *unit_alphanumeric

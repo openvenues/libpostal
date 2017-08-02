@@ -97,12 +97,23 @@ class Digits(object):
             num = int(s)
             spellout = None
             gender = props.get('gender')
+            alt_gender = props.get('alt_gender')
+            alt_gender_probability = float(props.get('alt_gender_probability', 0.0))
+
             category = props.get('category')
 
             if num_type == cls.CARDINAL:
-                spellout = numeric_expressions.spellout_cardinal(num, lang, gender=gender, category=category)
+                spellout = None
+                if alt_gender and random.random() < alt_gender_probability:
+                    spellout = numeric_expressions.spellout_cardinal(num, lang, gender=alt_gender, category=category)
+                if not spellout:
+                    spellout = numeric_expressions.spellout_cardinal(num, lang, gender=gender, category=category)
             elif num_type == cls.ORDINAL:
-                spellout = numeric_expressions.spellout_ordinal(num, lang, gender=gender, category=category)
+                spellout = None
+                if alt_gender and random.random() < alt_gender_probability:
+                    spellout = numeric_expressions.spellout_ordinal(num, lang, gender=alt_gender, category=category)
+                if not spellout:
+                    spellout = numeric_expressions.spellout_ordinal(num, lang, gender=gender, category=category)
 
             if spellout:
                 return spellout.title()
@@ -138,7 +149,15 @@ class Digits(object):
         elif digit_type == cls.ROMAN_NUMERAL:
             roman_numeral = cls.rewrite_roman_numeral(d)
             if random.random() < props.get('ordinal_suffix_probability', 0.0):
-                ordinal_suffix = ordinal_expressions.get_suffix(d, lang, gender=props.get('gender', None))
+                gender = props.get('gender')
+                alt_gender = props.get('alt_gender')
+                alt_gender_probability = float(props.get('alt_gender_probability', 0.0))
+                ordinal_suffix = None
+                if alt_gender and random.random() < alt_gender_probability:
+                    ordinal_suffix = ordinal_expressions.get_suffix(d, lang, gender=alt_gender)
+                if not ordinal_suffix:
+                    ordinal_suffix = ordinal_expressions.get_suffix(d, lang, gender=gender)
+
                 if ordinal_suffix:
                     roman_numeral = six.u('{}{}').format(roman_numeral, ordinal_suffix)
             return roman_numeral
@@ -658,8 +677,13 @@ class NumberedComponent(object):
     @classmethod
     def join_numeric_list(cls, numbers, properties, language):
         whitespace = properties.get('whitespace', True)
-        comma_separator = u', ' if whitespace else u','
-        comma_part = comma_separator.join(numbers[:-1])
+        comma_probability = properties.get('comma_probability', 1.0)
+        use_comma = random.random() < comma_probability
+        if use_comma:
+            initial_separator = u', ' if whitespace else u','
+        else:
+            initial_separator = u' ' if whitespace else u''
+        initial_part = initial_separator.join(numbers[:-1])
 
         final_separator_conf = properties.get('final_separator')
         sep_values, sep_probs = address_config.form_probabilities(final_separator_conf, language, dictionaries=('stopwords',))
@@ -667,7 +691,7 @@ class NumberedComponent(object):
 
         separator = u' {} '.format(sep_value) if whitespace else sep_value
 
-        return separator.join((comma_part, numbers[-1]))
+        return separator.join((initial_part, numbers[-1]))
 
     @classmethod
     def random_directional(cls, properties, language):
@@ -852,8 +876,9 @@ class NumberedComponent(object):
 
         digits_props = props.get('digits')
         if digits_props:
+            digits_props = digits_props.copy()
             # Inherit the gender and category e.g. for ordinals
-            for k in ('gender', 'category'):
+            for k in ('gender', 'alt_gender', 'alt_gender_probability', 'category'):
                 if k in props:
                     digits_props[k] = props[k]
 
@@ -906,6 +931,7 @@ class NumberedComponent(object):
         if 'null_phrase_probability' in props and not is_list and (phrase_type == 'ordinal' or (has_alpha and (has_numeric or 'null_phrase_alpha_only' in props))):
             if random.random() < props['null_phrase_probability']:
                 return num
+
 
         whitespace = props.get('whitespace', whitespace_default)
 

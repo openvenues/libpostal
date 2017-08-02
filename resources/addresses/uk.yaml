@@ -720,15 +720,46 @@ entrances:
             - alternative: *vkhid_latin
               probability: 0.01
         numeric_probability: 0.1 # e.g. Vkhid 1
-        alpha_probability: 0.85 # e.g. Vkhid A
+        alpha_probability: 0.75 # e.g. Vkhid A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
 
         numeric_plus_alpha:
             whitespace_probability: 0.1
+
+        directional:
+            direction: left
+            direction_probability: 0.85
+            modifier:
+                alternatives:
+                    - alternative: *pravo
+                      probability: 0.39
+                    - alternative: *pravo_latin
+                      probability: 0.01
+                    - alternative: *livo
+                      probability: 0.39
+                    - alternatives: *livo_latin
+                      probability: 0.01
+                    - alternative: *pivnikh
+                      probability: 0.04
+                    - alternative: *pivnikh_latin
+                      probability: 0.01
+                    - alternative: *shkid
+                      probability: 0.04
+                    - alternative: *shkid_latin
+                      probability: 0.01
+                    - alternative: *pivden
+                      probability: 0.04
+                    - alternative: *pivden_latin
+                      probability: 0.01
+                    - alternative: *zakhid
+                      probability: 0.04
+                    - alternative: *zakhid_latin
+                      probability: 0.01
 
 staircases:
     skhody: &skhody
@@ -752,10 +783,11 @@ staircases:
         alternatives:
             - alternative: *skhody_latin
               probability: 0.01
-        numeric_probability: 0.75
+        numeric_probability: 0.65
         alpha_probability: 0.2
         numeric_plus_alpha_probability: 0.025
         alpha_plus_numeric_probability: 0.025
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -768,10 +800,30 @@ staircases:
             direction_probability: 0.85
             modifier:
                 alternatives:
+                    - alternative: *pravo
+                      probability: 0.39
+                    - alternative: *pravo_latin
+                      probability: 0.01
+                    - alternative: *livo
+                      probability: 0.39
+                    - alternatives: *livo_latin
+                      probability: 0.01
                     - alternative: *pivnikh
+                      probability: 0.04
+                    - alternative: *pivnikh_latin
+                      probability: 0.01
                     - alternative: *shkid
+                      probability: 0.04
+                    - alternative: *shkid_latin
+                      probability: 0.01
                     - alternative: *pivden
+                      probability: 0.04
+                    - alternative: *pivden_latin
+                      probability: 0.01
                     - alternative: *zakhid
+                      probability: 0.04
+                    - alternative: *zakhid_latin
+                      probability: 0.01
 
 po_boxes:
     abonementnykh_skrynka: &abonementnykh_skrynka

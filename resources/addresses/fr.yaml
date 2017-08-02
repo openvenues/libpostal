@@ -517,9 +517,10 @@ entrances:
     alphanumeric: &entrance_alphanumeric
         default: *entrance
         numeric_probability: 0.1 # e.g. Entrance 1
-        alpha_probability: 0.85 # e.g. Entrnace A
+        alpha_probability: 0.75 # e.g. Entrnace A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -532,14 +533,22 @@ entrances:
                 direction: right # e.g. Entrance Nord
                 direction_probability: 0.95
                 alternatives:
-                    - alternative: *nord
-                    - alternative: *sud
-                    - alternative: *est
-                    - alternative: *ouest
                     - alternative: *droit
+                      probability: 0.35
                     - alternative: *gauche
+                      probability: 0.35
+                    - alternative: *nord
+                      probability: 0.05
+                    - alternative: *sud
+                      probability: 0.05
+                    - alternative: *est
+                      probability: 0.05
+                    - alternative: *ouest
+                      probability: 0.05
                     - alternative: *arriere
+                      probability: 0.05
                     - alternative: *avant
+                      probability: 0.05
 
 staircases:
     escalier: &escalier
@@ -555,10 +564,11 @@ staircases:
     alphanumeric:
         # For alphanumerics, Escalier A, Esc 1, etc.
         default: *escalier
-        numeric_probability: 0.6 # e.g. Escalier 1
+        numeric_probability: 0.5 # e.g. Escalier 1
         alpha_probability: 0.35 # e.g. Escalier A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -567,18 +577,26 @@ staircases:
             whitespace_probability: 0.1
 
         directional:
-            direction: right # e.g. Escalier Izq
-            direction_probability: 0.9
             modifier:
+                direction: right # e.g. Escalier Nord
+                direction_probability: 0.9
                 alternatives:
-                    - alternative: *nord
-                    - alternative: *sud
-                    - alternative: *est
-                    - alternative: *ouest
                     - alternative: *droit
+                      probability: 0.35
                     - alternative: *gauche
+                      probability: 0.35
+                    - alternative: *nord
+                      probability: 0.05
+                    - alternative: *sud
+                      probability: 0.05
+                    - alternative: *est
+                      probability: 0.05
+                    - alternative: *ouest
+                      probability: 0.05
                     - alternative: *arriere
+                      probability: 0.05
                     - alternative: *avant
+                      probability: 0.05
 
 
 po_boxes:
@@ -761,9 +779,10 @@ units:
             - alternative: *chambre
               probability: 0.005
         numeric_probability: 0.9 # e.g. Appartement 1
-        numeric_plus_alpha_probability: 0.03 # e.g. 1A
-        alpha_plus_numeric_probability: 0.03 # e.g. A1
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
         alpha_probability: 0.04 # e.g. Appartement A
+        directional_probability: 0.01
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -781,6 +800,19 @@ units:
 
         # If there are 10 floors, create unit numbers like #301 or #1032
         use_floor_probability: 0.1
+
+        directional:
+            modifier:
+                direction: right
+                alternatives:
+                    - alternative: *droit
+                      probability: 0.35
+                    - alternative: *gauche
+                      probability: 0.35
+                    - alternative: *arriere
+                      probability: 0.15
+                    - alternative: *avant
+                      probability: 0.15
 
     zones:
         residential: *unit_alphanumeric
