@@ -67,6 +67,9 @@ class PolygonIndex(object):
 
             self.get_polygon = self.get_polygon_cached
 
+        if self.persistent_polygons:
+            self.save_geojson = self.save_geojson_persistent
+
         if not polygons_db_path:
             polygons_db_path = os.path.join(save_dir or '.', self.POLYGONS_DB_DIR)
 
@@ -259,16 +262,24 @@ class PolygonIndex(object):
 
     def save_geojson(self, out_filename):
         out = open(out_filename, 'w')
-        get_polygon = self.get_polygon if not self.persistent_polygons else self.get_polygon_from_db
         for i in xrange(self.i):
             props = self.get_properties(i)
-            poly = get_polygon(i)
-
+            poly = self.get_polygon(i)
             feature = {
                 'type': 'Feature',
-                'geometry': mapping(poly),
+                'geometry': mapping(poly.context),
                 'properties': props
             }
+
+            out.write(json.dumps(feature) + u'\n')
+
+    def save_geojson_persistent(self, out_filename):
+        out = open(out_filename, 'w')
+        for i in xrange(self.i):
+            props = self.get_properties(i)
+            feature = self.get_polygon_from_db(i)
+            feature['properties'] = props
+
             out.write(json.dumps(feature) + u'\n')
 
     def load_properties(self, filename):
