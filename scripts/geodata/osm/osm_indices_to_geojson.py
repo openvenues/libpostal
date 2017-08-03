@@ -1,5 +1,9 @@
 import argparse
 import os
+import sys
+
+this_dir = os.path.realpath(os.path.dirname(__file__))
+sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.metro_stations.reverse_geocode import MetroStationReverseGeocoder
 from geodata.neighborhoods.reverse_geocode import NeighborhoodReverseGeocoder
