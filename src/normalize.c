@@ -114,13 +114,19 @@ char *normalize_string_utf8(char *str, uint64_t options) {
 
 
 char *normalize_string_latin_languages(char *str, size_t len, uint64_t options, size_t num_languages, char **languages) {
-    char *latin_transliterator = LATIN_ASCII;
+    char *transliterated = NULL;
+    char *latin_transliterator = NULL;
+
     if (options & NORMALIZE_STRING_SIMPLE_LATIN_ASCII) {
         latin_transliterator = LATIN_ASCII_SIMPLE;
+    } else if (options & NORMALIZE_STRING_LATIN_ASCII) {
+        latin_transliterator = LATIN_ASCII;
     }
 
-    char *transliterated = transliterate(latin_transliterator, str, len);
-    
+    if (latin_transliterator != NULL) {
+        transliterated = transliterate(latin_transliterator, str, len);
+    }
+
     char *utf8_normalized;
     if (transliterated == NULL) {
         utf8_normalized = normalize_string_utf8_languages(str, options, num_languages, languages);

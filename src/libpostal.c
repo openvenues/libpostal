@@ -310,7 +310,7 @@ static string_tree_t *add_string_alternatives(char *str, libpostal_normalize_opt
 
                         if (expansion.canonical_index != NULL_CANONICAL_INDEX) {
                             char *canonical = address_dictionary_get_canonical(expansion.canonical_index);
-                            char *canonical_normalized = normalize_string_utf8(canonical, normalize_string_options);
+                            char *canonical_normalized = normalize_string_latin(canonical, strlen(canonical), normalize_string_options);
 
                             canonical = canonical_normalized != NULL ? canonical_normalized : canonical;
 
@@ -533,7 +533,7 @@ static inline void cat_affix_expansion(char_array *key, char *str, address_expan
     if (expansion.canonical_index != NULL_CANONICAL_INDEX) {
         char *canonical = address_dictionary_get_canonical(expansion.canonical_index);
         uint64_t normalize_string_options = get_normalize_string_options(options);
-        char *canonical_normalized = normalize_string_utf8(canonical, normalize_string_options);
+        char *canonical_normalized = normalize_string_latin(canonical, strlen(canonical), normalize_string_options);
         canonical = canonical_normalized != NULL ? canonical_normalized : canonical;
 
         char_array_cat(key, canonical);
