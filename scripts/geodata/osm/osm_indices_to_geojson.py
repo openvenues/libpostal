@@ -16,7 +16,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--country-rtree-dir',
-                        required=True,
+                        default=None,
                         help='Country RTree directory')
 
     parser.add_argument('--rtree-dir',
