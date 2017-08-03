@@ -257,6 +257,19 @@ class PolygonIndex(object):
         self.compact_polygons_db()
         self.save_polygon_properties(self.save_dir)
 
+    def save_geojson(self, out_filename):
+        out = open(out_filename, 'w')
+        for i in xrange(self.i):
+            props = self.get_properties(i)
+            poly = self.get_polygon(i)
+
+            feature = {
+                'type': 'Feature',
+                'geometry': mapping(poly.context),
+                'properties': props
+            }
+            out.write(json.dumps(feature) + u'\n')
+
     def load_properties(self, filename):
         properties = json.load(open(filename))
         self.i = int(properties.get('num_polygons', self.i))
