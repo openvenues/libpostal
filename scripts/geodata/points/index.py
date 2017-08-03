@@ -10,7 +10,6 @@ from collections import defaultdict, OrderedDict
 
 from leveldb import LevelDB
 
-from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.distance.haversine import haversine_distance
 
 
@@ -133,12 +132,7 @@ class PointIndex(object):
 
     def save_geojson(self, out_filename):
         out = open(out_filename, 'w')
-        for i in xrange(self.i):
-            props = self.get_properties(i)
-            lat = props['lat']
-            lon = props['lon']
-            lat, lon = latlon_to_decimal(lat, lon)
-
+        for props, lat, lon in self:
             feature = {
                 'type': 'Feature',
                 'geometry': {
