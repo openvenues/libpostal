@@ -11,7 +11,7 @@ from geodata.osm.extract import parse_osm
 
 def convert_osm_to_geojson(input_file, output_file):
     out = open(output_file, 'w')
-    for key, props, deps in parse_osm(infile):
+    for key, props, deps in parse_osm(input_file):
 
         lat, lon = latlon_to_decimal(props.pop('lat', None), props.pop('lon', None))
         if not lat or not lon:
