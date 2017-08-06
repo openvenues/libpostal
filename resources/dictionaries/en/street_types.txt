@@ -272,7 +272,8 @@ port|prt
 ports|prts
 prairie|pr
 priors|prrs
-private|pvt
+private|pvt|priv
+private drive|pd|p.d.|p.d|p d|pvt drive|pvt dr|pvt drv|pvt dv|pvt dve|pvt d|priv drive|priv dr|priv drv|priv dv|priv dve|priv d
 promenade|prom|prm
 provincial trunk highway|pth|p.t.h.|p.t.h|p t h|prov trunk hwy|provincial trunk hwy
 pursuit|pur
