@@ -5,6 +5,8 @@
         "6": "state_district"
         "7": "state_district"
         "10": "locality"
+    locality:
+        "townland": "locality"
 
     # With the introduction of Eire code, Dublin postal districts 
     # have basically become city_districts
