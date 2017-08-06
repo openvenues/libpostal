@@ -2,7 +2,7 @@ ag|aktiengesellschaft
 eingetragener verein|ev|e v
 firma|fa
 fußball club|fussball club|fc|f c
-gmbh|gesellschaft mit beschränkter haftung|gesellschaft mit beschrankter haftung|gesellschaft mit beschraenkter haftung
+gmbh|gesellschaft mit beschränkter haftung|gesellschaft mit beschrankter haftung|gesellschaft mit beschraenkter haftung|gesmbh|ges mbh|ges.m.b.h|g.m.b.h|ges m bh|ges m b h|g m bh|g m b h
 gesellschaft|ges
 kg|kommanditgesellschaft
 ohg|offene handelsgesellschaft
