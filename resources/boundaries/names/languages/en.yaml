@@ -27,6 +27,7 @@ suffixes:
     - municipality
     - local municipality
     - metropolitan municipality
+    - metropolitan borough
     - district municipality
     - regional municipality
     - cp
