@@ -9,10 +9,15 @@
     designation: 
         non_metropolitan_county: "state_district"
         non_metropolitan_district: "state_district"
+        metropolitan_district: "state_district"
         unitary_authority: "state_district"
         civil_parish: "locality"
+        london_borough: "city_district"
+        inner_london_borough: "city_district"
     _DESCRIPTIO_:
         "Civil Parish or Community": "locality"
+    locality:
+        "townland": "locality"
     overrides:
         id:
             relation:
@@ -22,10 +27,16 @@
                 "51800": "city"
                 # Aberdeen
                 "1900654": "city"
+                # Armagh
+                "6489715": "city"
                 # Basildon
                 "76516": "city"
+                # Bath
+                "5342409": "city"
                 # Bedford
                 "158396": "city"
+                # Birmingham
+                "162378": "city"
                 # Blackpool
                 "148603": "city"
                 # Bolsover
@@ -34,6 +45,8 @@
                 "58553": "city"
                 # Bournemouth
                 "130884": "city"
+                # Bradford
+                "118323": "city"
                 # Brentwood
                 "76515": "city"
                 # Bristol
@@ -45,10 +58,14 @@
                 "1875160": "city"
                 # Burnley
                 "149101": "city"
+                # Cambridge
+                "295355": "city"
                 # Canterbury
                 "448590": "city"
                 # Cardiff
                 "1625787": "city"
+                # Carlisle
+                "182118": "city"
                 # Chelmsford
                 "176965": "city"
                 # Chester
@@ -57,6 +74,8 @@
                 "138738": "city"
                 # Chichester
                 "114677": "city"
+                # City of London
+                "51800": "city"
                 # Chorley
                 "148744": "city"
                 # Colchester
@@ -77,10 +96,16 @@
                 "127815": "city"
                 # Edinburgh
                 "1920901": "city"
+                # Ely
+                "1609357": "city"
                 # Exeter
                 "2154556": "city"
+                # Gateshead
+                "140462": "state_district"
                 # Glasgow
                 "1906767": "city"
+                # Gloucester
+                "181362": "city"
                 # Guildford
                 "108787": "city"
                 # Harrogate
@@ -89,28 +114,48 @@
                 "153375": "city"
                 # Havant
                 "127165": "city"
+                # Hereford
+                "6137325": "city"
                 # Kingston-upon-Hull
                 "60148": "city"
+                # Lancaster
+                "148608": "city"
+                # Leeds
+                "118362": "city"
                 # Leicester
                 "162353": "city"
                 # Lichfield
                 "168501": "city"
+                # Lincoln
+                "69144": "city"
+                # Liverpool
+                "172987": "city"
+                # London
+                "65606": "city"
+                # Londonderry
+                "5153322": "city"
                 # Luton
                 "158392": "city"
                 # Kettering
                 "310065": "city"
                 # Maldon
                 "1551151": "city"
+                # Manchester
+                "146656": "city"
                 # Mansfield
                 "154006": "city"
                 # Middlesbrough
                 "150988": "city"
                 # Milton Keynes
                 "172504": "city"
-                # Nottingham
-                "123292": "city"
+                # Newcastle-upon-Tyne
+                "142282": "city"
+                # Newport
+                "335184": "city"
                 # Norwich
                 "172506": "city"
+                # Nottingham
+                "123292": "city"
                 # Oxford
                 "394037": "city"
                 # Peterborough
@@ -121,16 +166,24 @@
                 "130891": "city"
                 # Portsmouth
                 "127167": "city"
+                # Preston
+                "148606": "city"
                 # Reading
                 "115074": "city"
                 # Redditch
                 "1875340": "city"
+                # Salford
+                "146657": "city"
+                # Salisbury
+                "3404205": "city"
                 # St Albans
                 "2683265": "city"
                 # Scarborough
                 "149163": "city"
                 # Selby
                 "135523": "city"
+                # Sheffield
+                "106956": "city"
                 # Slough
                 "117097": "city"
                 # Southend-on-Sea
@@ -145,24 +198,37 @@
                 "1905258": "city"
                 # Stoke-on-Trent
                 "163183": "city"
+                # Sunderland
+                "116279": "city"
                 # Swansea
                 "87944": "city"
                 # Swindon
                 "110212": "city"
                 # Tamworth
                 "165856": "city"
+                # Truro
+                "5821558": "city"
+                # Wakefield
+                "109960": "city"
                 # Warrington
                 "147278": "city"
                 # Wellingsborough
                 "1637026": "city"
+                # Wells
+                "2922198": "city"
                 # Winchester
                 "127238": "city"
                 # Wolverhampton
                 "173722": "city"
+                # Worcester
+                "1875341": "city"
                 # Wokingham
                 "114311": "city"
                 # York
                 "134353": "city"
+            way:
+                # Ely
+                "273682735": "city"
 
         contained_by:
             relation:
