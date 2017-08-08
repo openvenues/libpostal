@@ -49,7 +49,6 @@ from geodata.names.normalization import name_affixes
 from geodata.numbers.spellout import numeric_expressions
 from geodata.osm.components import osm_address_components
 from geodata.places.config import place_config
-from geodata.polygons.reverse_geocode import OSMCountryReverseGeocoder
 from geodata.states.state_abbreviations import state_abbreviations
 from geodata.text.normalize import *
 from geodata.text.tokenize import tokenize, token_types
@@ -273,7 +272,59 @@ class AddressComponents(object):
 
     @classmethod
     def osm_country_and_languages(cls, osm_components):
-        return OSMCountryReverseGeocoder.country_and_languages_from_components(osm_components)
+        country = None
+        for c in osm_components:
+            country = c.get('ISO3166-1:alpha2')
+            if country:
+                break
+        else:
+            # See if there's an ISO3166-2 code that matches
+            # in case the country polygon is wacky
+            for c in osm_components:
+                admin1 = c.get('ISO3166-2')
+                if admin1:
+                    # If so, and if the country is valid, use that
+                    admin1_prefix = admin1[:2]
+                    if Countries.is_valid_country_code(admin1_prefix):
+                        country = admin1_prefix
+                        break
+                    else:
+                        country = None
+                else:
+                    is_in_country = c.get('is_in:country_code')
+                    if Countries.is_valid_country_code(is_in_country):
+                        country = is_in_country
+                        break
+
+        if country is None:
+            return None, []
+
+        country = country.lower()
+
+        regional = None
+
+        for c in osm_components:
+            place_id = '{}:{}'.format(c.get('type', 'relation'), c.get('id', '0'))
+
+            regional = get_regional_languages(country, 'osm', place_id)
+
+            if regional:
+                break
+
+        languages = []
+        if not regional:
+            languages = get_country_languages(country).items()
+        else:
+            if not all(regional.values()):
+                languages = get_country_languages(country)
+                languages.update(regional)
+                languages = languages.items()
+            else:
+                languages = regional.items()
+
+        default_languages = sorted(languages, key=operator.itemgetter(1), reverse=True)
+
+        return country, default_languages
 
     @classmethod
     def osm_component_is_village(cls, component):

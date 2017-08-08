@@ -28,6 +28,7 @@ from functools import partial
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
+from geodata.addresses.components import AddressComponents
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.countries.constants import Countries
 from geodata.encoding import safe_decode
@@ -544,62 +545,6 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
                 key = self.buffered_polygon_key(base_key, precision)
                 self.polygons_db.Put(key, json.dumps(self.polygon_geojson(buffered)))
 
-    @classmethod
-    def country_and_languages_from_components(cls, osm_components):
-        country = None
-        for c in osm_components:
-            country = c.get('ISO3166-1:alpha2')
-            if country:
-                break
-        else:
-            # See if there's an ISO3166-2 code that matches
-            # in case the country polygon is wacky
-            for c in osm_components:
-                admin1 = c.get('ISO3166-2')
-                if admin1:
-                    # If so, and if the country is valid, use that
-                    admin1_prefix = admin1[:2]
-                    if Countries.is_valid_country_code(admin1_prefix):
-                        country = admin1_prefix
-                        break
-                    else:
-                        country = None
-                else:
-                    is_in_country = c.get('is_in:country_code')
-                    if Countries.is_valid_country_code(is_in_country):
-                        country = is_in_country
-                        break
-
-        if country is None:
-            return None, []
-
-        country = country.lower()
-
-        regional = None
-
-        for c in osm_components:
-            place_id = '{}:{}'.format(c.get('type', 'relation'), c.get('id', '0'))
-
-            regional = get_regional_languages(country, 'osm', place_id)
-
-            if regional:
-                break
-
-        languages = []
-        if not regional:
-            languages = get_country_languages(country).items()
-        else:
-            if not all(regional.values()):
-                languages = get_country_languages(country)
-                languages.update(regional)
-                languages = languages.items()
-            else:
-                languages = regional.items()
-
-        default_languages = sorted(languages, key=operator.itemgetter(1), reverse=True)
-
-        return country, default_languages
-
     def polygons_contain(self, candidates, point, return_all=False):
         containing = None
         if return_all:
@@ -646,7 +591,7 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
 
     def country_and_languages(self, lat, lon):
         osm_components = self.point_in_poly(lat, lon, return_all=True)
-        return self.country_and_languages_from_components(osm_components)
+        return AddressComponents.osm_country_and_languages(osm_components)
 
 
 if __name__ == '__main__':
