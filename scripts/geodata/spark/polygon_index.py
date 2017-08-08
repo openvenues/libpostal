@@ -19,12 +19,12 @@ class PolygonIndexSpark(object):
     def polygon_contains(cls, poly, lat, lon):
         point = Point(lon, lat)
         if not hasattr(poly, '__iter__'):
-            return poly.contains(point)
+            return (None, poly.contains(point))
         else:
-            for p in poly:
+            for level, p in poly:
                 if p.contains(point):
-                    return True
-        return False
+                    return (level, True)
+        return (None, False)
 
     @classmethod
     def prep_polygons(cls, record, buffer_levels=(), buffered_simplify_tolerance=0.0):
@@ -32,13 +32,13 @@ class PolygonIndexSpark(object):
         if not buffer_levels:
             return prep(poly)
 
-        polys = [prep(poly)]
+        polys = [(None, prep(poly))]
         for level in buffer_levels:
             buffered = poly.buffer(level)
             if level > 0.0:
                 simplify_level = buffered_simplify_tolerance if level >= buffered_simplify_tolerance else level
                 buffered = buffered.simplify(simplify_level)
-            polys.append(prep(buffered))
+            polys.append((level, prep(buffered)))
         return polys
 
     @classmethod
@@ -62,20 +62,29 @@ class PolygonIndexSpark(object):
                                  .partitionBy(num_partitions)  # repartition the keys so theyre (poly_id, geohash) instead of just poly_id
 
         points_in_polygons = poly_groups.mapValues(lambda (rec, points): (cls.prep_polygons(rec, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance), points)) \
-                                        .flatMap(lambda ((poly_id, gh), (poly, points)): ((point_id, poly_id) for (point_id, lat, lon) in points if cls.polygon_contains(poly, lat, lon)))
+                                        .flatMap(lambda ((poly_id, gh), (poly, points)): ((point_id, poly_id, level) for point_id, poly_id, (level, contained) in ((point_id, poly_id, cls.polygon_contains(poly, lat, lon)) for (point_id, lat, lon) in points) if contained))
 
         return points_in_polygons
 
     @classmethod
-    def points_with_polygons(cls, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0):
+    def sort_level(cls, (polygon, level)):
+        return -float('inf') if level is None else level
+
+    @classmethod
+    def points_with_polygons(cls, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0, with_buffer_levels=False):
         points_in_polygons = cls.points_in_polygons(point_ids, polygon_ids, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance)
         polygon_props = polygon_ids.mapValues(lambda poly: poly['properties'])
 
-        return points_in_polygons.map(lambda (point_id, polygon_id): (polygon_id, point_id)) \
-                                 .join(polygon_props) \
-                                 .values() \
-                                 .mapValues(lambda poly_props: [poly_props]) \
-                                 .reduceByKey(lambda x, y: x + y)
+        points_with_polys = points_in_polygons.map(lambda (point_id, polygon_id, level): (polygon_id, (point_id, level))) \
+                                              .join(polygon_props) \
+                                              .values() \
+                                              .map(lambda ((point_id, level), poly_props): (point_id, [(poly_props, level)])) \
+                                              .reduceByKey(lambda x, y: x + y)
+
+        if not with_buffer_levels:
+            return points_with_polys.mapValues(lambda polys: sorted(polys, key=cls.sort_level))
+        else:
+            return points_with_polys.mapValues(lambda polys: [p for p, level in sorted(polys, key=cls.sort_level)])
 
     @classmethod
     def reverse_geocode(cls, point_ids, polygon_ids):
@@ -102,12 +111,15 @@ class CountryPolygonIndexSpark(OSMPolygonIndexSpark):
     @classmethod
     def reverse_geocode(cls, point_ids, polygon_ids):
         points_with_polygons = cls.points_with_polygons(point_ids, polygon_ids)
+
         points_without_polygons = point_ids.subtractByKey(points_with_polygons)
 
-        polygons_buffered = polygon_ids.filter(lambda (poly_id, rec): 'ISO3166-1:alpha2' in rec['properties'])
+        country_polygons = polygon_ids.filter(lambda (poly_id, rec): 'ISO3166-1:alpha2' in rec['properties'])
 
-        points_with_polygons_buffered = cls.points_with_polygons(points_without_polygons, polygons_buffered, buffer_levels=cls.buffer_levels, buffered_simplify_tolerance=cls.buffered_simplify_tolerance)
-
+        points_with_polygons_buffered = cls.points_with_polygons(points_without_polygons,
+                                                                 country_polygons,
+                                                                 buffer_levels=cls.buffer_levels,
+                                                                 buffered_simplify_tolerance=cls.buffered_simplify_tolerance)
         combined_points_with_polygons = points_with_polygons.union(points_with_polygons_buffered)
 
         all_points = point_ids.leftOuterJoin(combined_points_with_polygons) \
