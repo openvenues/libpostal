@@ -47,10 +47,14 @@ def main(base_dir, s3_path=OPENADDRESSES_S3_PATH):
         dest_geojson_path = os.path.join(source_dir, '{}.geojson'.format(source[-1]))
         output_filename = os.path.join(base_dir, dest_geojson_path)
 
+        print('connerting {} to {}'.format(input_filename, output_filename))
+
         convert_openaddresses_file_to_geojson(input_filename, output_filename)
 
         s3_path = os.path.join(s3_path, dest_geojson_path)
+        print('uploading {} to S3'.format(output_filename))
         upload_to_s3(output_filename, s3_path, public_read=True)
+        print('done uploading to S3')
 
         os.unlink(output_filename)
 
