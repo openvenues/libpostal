@@ -8,6 +8,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.csv_utils import unicode_csv_reader
+from geodata.encoding import safe_encode
 from geodata.file_utils import upload_file_s3
 from geodata.openaddresses.config import openaddresses_config
 
@@ -38,9 +39,9 @@ def convert_openaddresses_file_to_geojson(input_file, output_file):
         out.write(json.dumps(geojson) + u'\n')
 
 
-def main(base_dir, s3_path=OPENADDRESSES_S3_PATH):
+def main(base_dir, base_s3_path=OPENADDRESSES_S3_PATH):
     for source in openaddresses_config.sources:
-        source_dir = os.path.join(*source[:-1])
+        source_dir = os.path.join(*map(safe_encode, source[:-1]))
         source_csv_path = os.path.join(source_dir, '{}.csv'.format(source[-1]))
         input_filename = os.path.join(base_dir, source_csv_path)
 
@@ -51,7 +52,7 @@ def main(base_dir, s3_path=OPENADDRESSES_S3_PATH):
 
         convert_openaddresses_file_to_geojson(input_filename, output_filename)
 
-        s3_path = os.path.join(s3_path, dest_geojson_path)
+        s3_path = os.path.join(base_s3_path, dest_geojson_path)
         print('uploading {} to S3'.format(output_filename))
         upload_file_s3(output_filename, s3_path, public_read=True)
         print('done uploading to S3')

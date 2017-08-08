@@ -2041,7 +2041,7 @@ countries:
         subdirs:
             al-madinah:
                 files:
-                    - filname: yanbu-ar.csv
+                    - filename: yanbu-ar.csv
                       add:
                           city: ينبع
                     - filename: yanbu-en.csv
