@@ -427,7 +427,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Grande Prairie
-                    - filename: provincewide.csv
+                    - filename: province.csv
                       add_osm_boundaries: true
                       ignore_fields_containing:
                           house_number:
@@ -2234,10 +2234,6 @@ countries:
                       city_replacements:
                           city: Auburn
                     - filename: city_of_huntsville.csv
-                    - filename: city_of_key_biscayne.csv
-                      add_osm_boundaries: true
-                      city_replacements:
-                          city: Key Biscayne
                     - filename: city_of_mobile.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -2679,6 +2675,10 @@ countries:
                     - filename: citrus.csv
                     - filename: city_of_fort_lauderdale.csv
                     - filename: city_of_gainesville.csv
+                    - filename: city_of_key_biscayne.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Key Biscayne
                     - filename: city_of_lakeland.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -2813,11 +2813,6 @@ countries:
                     - filename: city_of_johns_creek.csv
                       add_osm_boundaries: false
                       fields: *fields_with_state_and_unit
-                    - filename: city_of_longview.csv
-                      add_osm_boundaries: true
-                      fields: *fields_with_unit
-                      city_replacements:
-                          city: Longview
                     - filename: city_of_sandy_springs.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -2916,10 +2911,6 @@ countries:
                     - filename: gordon.csv
                       city_replacements:
                           state_district: Gordon County
-                    - filename: greater_houston.csv
-                      fields:
-                          <<: *fields_with_state_and_unit
-                          DISTRICT: state_district
                     - filename: gwinnett.csv
                       add_osm_boundaries: false
                       fields: *fields_with_unit
@@ -4875,6 +4866,11 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Killeen
+                    - filename: city_of_longview.csv
+                      add_osm_boundaries: true
+                      fields: *fields_with_unit
+                      city_replacements:
+                          city: Longview
                     - filename: city_of_mansfield.csv
                     - filename: city_of_mckinney.csv
                       add_osm_boundaries: true
@@ -4942,6 +4938,10 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Gray County
+                    - filename: greater_houston.csv
+                      fields:
+                          <<: *fields_with_state_and_unit
+                          DISTRICT: state_district
                     - filename: guadalupe.csv
                     - filename: hartley.csv
                       add_osm_boundaries: true
