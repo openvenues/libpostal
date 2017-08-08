@@ -11,6 +11,14 @@ def download_file(url, dest, retries=3, retry_delay=5):
                                     '-o', dest, '--silent']) == '200'
 
 
+def upload_file_s3(filename, dest, public_read=True):
+    command = ['aws', 's3', 'cp']
+    if public_read:
+        command.append('--acl=public-read')
+    command.extend([filename, dest])
+    return subprocess.check_call(command) == 0
+
+
 def unzip_file(filename, dest):
     ensure_dir(dest)
     return subprocess.check_call(['unzip', '-o', filename, '-d', dest]) == 0
