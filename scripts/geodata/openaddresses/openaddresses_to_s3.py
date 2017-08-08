@@ -23,7 +23,15 @@ def convert_openaddresses_file_to_geojson(input_file, output_file):
 
     for row in reader:
         props = dict(zip(headers, row))
-        lat, lon = latlon_to_decimal(props.pop('LAT', None), props.pop('LON', None))
+        lat = props.pop('LAT', None)
+        lon = props.pop('LON', None)
+        if not lat or not lon:
+            continue
+
+        try:
+            lat, lon = latlon_to_decimal(lat, lon)
+        except (TypeError, ValueError):
+            continue
 
         if not lat or not lon:
             continue
