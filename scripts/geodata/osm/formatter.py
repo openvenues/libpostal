@@ -95,6 +95,7 @@ class OSMAddressFormatter(object):
             ('suburb', AddressFormatter.SUBURB),
             ('addr:city', AddressFormatter.CITY),
             ('is_in:city', AddressFormatter.CITY),
+            ('osak:municipality_name', AddressFormatter.CITY),
             ('addr:locality', AddressFormatter.LOCALITY),
             ('is_in:locality', AddressFormatter.LOCALITY),
             ('addr:municipality', AddressFormatter.CITY),
@@ -186,7 +187,7 @@ class OSMAddressFormatter(object):
 
         return language
 
-    def normalize_address_components(self, tags):
+    def normalize_address_components(self, tags, country=None):
         address_components = {k: v for k, v in six.iteritems(tags) if self.aliases.get(k)}
         self.aliases.replace(address_components)
         address_components = {k: v for k, v in six.iteritems(address_components) if k in AddressFormatter.address_formatter_fields}
@@ -433,7 +434,7 @@ class OSMAddressFormatter(object):
             return True
         return False
 
-    def combine_japanese_house_number(self, address_components, language):
+    def combine_japanese_house_number(self, tags, language):
         '''
         Japanese house numbers
         ----------------------
@@ -459,11 +460,11 @@ class OSMAddressFormatter(object):
 
         See: https://en.wikipedia.org/wiki/Japanese_addressing_system
         '''
-        house_number = address_components.get('addr:housenumber')
+        house_number = tags.get('addr:housenumber')
         if not house_number or not house_number.isdigit():
             return False
 
-        block = address_components.get('addr:block_number')
+        block = tags.get('addr:block_number')
         if not block or not block.isdigit():
             return False
 
@@ -479,7 +480,7 @@ class OSMAddressFormatter(object):
                 separator = six.u(' ') if language == JAPANESE_ROMAJI else six.u('')
 
             house_number = separator.join([block, house_number])
-            address_components['addr:housenumber'] = house_number
+            tags['addr:housenumber'] = house_number
 
             return True
         return False
