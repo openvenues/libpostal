@@ -12,16 +12,9 @@ Usage:
 '''
 import argparse
 import logging
-import operator
 import os
-import pyproj
-import re
-import requests
-import shutil
 import six
-import subprocess
 import sys
-import tempfile
 
 from functools import partial
 
@@ -39,13 +32,13 @@ from geodata.i18n.word_breaks import ideographic_scripts
 from geodata.names.deduping import NameDeduper
 from geodata.osm.extract import parse_osm, osm_type_and_id, NODE, WAY, RELATION, OSM_NAME_TAGS
 from geodata.osm.admin_boundaries import *
+from geodata.polygons.area import polygon_area
 from geodata.polygons.index import *
 from geodata.statistics.tf_idf import IDFIndex
 
 from geodata.text.tokenize import tokenize, token_types
 from geodata.text.normalize import *
 
-from shapely.ops import transform
 from shapely.topology import TopologicalError
 
 decode_latin1 = partial(safe_decode, encoding='latin1')
@@ -455,16 +448,10 @@ class OSMAreaReverseGeocoder(OSMReverseGeocoder):
         self.areas = []
 
     def index_polygon_geometry(self, poly, properties):
-        poly_area = transform(partial(pyproj.transform,
-                                      pyproj.Proj(init='EPSG:4326'),
-                                      pyproj.Proj(
-                                          proj='aea',
-                                          lat1=poly.bounds[1],
-                                          lat2=poly.bounds[3])
-                                      ),
-                              poly).area * 1e-6
+        poly_area = polygon_area(poly)
+        poly_area_km2 = poly_area * 1e-6
 
-        self.areas.append(poly_area)
+        self.areas.append(poly_area_km2)
 
     def index_polygon_properties(self, properties):
         pass
