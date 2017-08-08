@@ -2360,6 +2360,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Santa Cruz
+                    - filename: city_of_sunnyvale.csv
                     - filename: city_of_temecula.csv
                     - filename: colusa.csv
                       add_osm_boundaries: true
@@ -4980,7 +4981,7 @@ countries:
                       ignore_fields_containing:
                           road:
                               - "^[A-Za-z]{,3}$"
-                              - ".*?\(.*?\)"
+                              - ".*?\\(.*?\\)"
                     - filename: liveoak.csv
                       city_replacements:
                           state_district: Live Oak County
