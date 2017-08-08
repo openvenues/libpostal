@@ -47,7 +47,7 @@ def main(base_dir, s3_path=OPENADDRESSES_S3_PATH):
         dest_geojson_path = os.path.join(source_dir, '{}.geojson'.format(source[-1]))
         output_filename = os.path.join(base_dir, dest_geojson_path)
 
-        print('connerting {} to {}'.format(input_filename, output_filename))
+        print('converting {} to {}'.format(input_filename, output_filename))
 
         convert_openaddresses_file_to_geojson(input_filename, output_filename)
 
