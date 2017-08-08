@@ -21,7 +21,7 @@ def convert_openaddresses_file_to_geojson(input_file, output_file):
     headers = reader.next()
 
     for row in reader:
-        properties = dict(zip(headers, row))
+        props = dict(zip(headers, row))
         lat, lon = latlon_to_decimal(props.pop('LAT', None), props.pop('LON', None))
 
         if not lat or not lon:
@@ -32,7 +32,7 @@ def convert_openaddresses_file_to_geojson(input_file, output_file):
             'geometry': {
                 'coordinates': [lon, lat]
             },
-            'properties': properties
+            'properties': props
         }
 
         out.write(json.dumps(geojson) + u'\n')
