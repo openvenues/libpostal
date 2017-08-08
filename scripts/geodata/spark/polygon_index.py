@@ -82,9 +82,9 @@ class PolygonIndexSpark(object):
                                               .reduceByKey(lambda x, y: x + y)
 
         if not with_buffer_levels:
-            return points_with_polys.mapValues(lambda polys: sorted(polys, key=cls.sort_level))
-        else:
             return points_with_polys.mapValues(lambda polys: [p for p, level in sorted(polys, key=cls.sort_level)])
+        else:
+            return points_with_polys.mapValues(lambda polys: sorted(polys, key=cls.sort_level))
 
     @classmethod
     def reverse_geocode(cls, point_ids, polygon_ids):
