@@ -16,6 +16,13 @@ class PolygonIndexSpark(object):
         return geohash_ids.flatMap(lambda (key, gh): [(gh[:i], key) for i in range(GeohashPolygon.GEOHASH_MIN_PRECISION, GeohashPolygon.GEOHASH_MAX_PRECISION + 1)])
 
     @classmethod
+    def geojson_ids(cls, lines):
+        geojson = lines.map(lambda line: json.loads(line.rstrip()))
+        geojson_ids = geojson.zipWithIndex() \
+                             .map(lambda (rec, uid): (uid, cls.preprocess_geojson(rec)))
+        return geojson_ids
+
+    @classmethod
     def polygon_contains(cls, poly, lat, lon):
         point = Point(lon, lat)
         if not hasattr(poly, '__iter__'):
@@ -67,6 +74,14 @@ class PolygonIndexSpark(object):
         return points_in_polygons
 
     @classmethod
+    def preprocess_geojson(cls, rec):
+        return rec
+
+    @classmethod
+    def sort_key(cls, props):
+        return None
+
+    @classmethod
     def sort_level(cls, (polygon, level)):
         return -float('inf') if level is None else level
 
@@ -79,7 +94,8 @@ class PolygonIndexSpark(object):
                                               .join(polygon_props) \
                                               .values() \
                                               .map(lambda ((point_id, level), poly_props): (point_id, [(poly_props, level)])) \
-                                              .reduceByKey(lambda x, y: x + y)
+                                              .reduceByKey(lambda x, y: x + y) \
+                                              .mapValues(lambda polys: sorted(polys, key=cls.sort_key))
 
         if not with_buffer_levels:
             return points_with_polys.mapValues(lambda polys: [p for p, level in sorted(polys, key=cls.sort_level)])
@@ -91,38 +107,6 @@ class PolygonIndexSpark(object):
         points_with_polygons = cls.points_with_polygons(point_ids, polygon_ids)
 
         all_points = point_ids.leftOuterJoin(points_with_polygons) \
-                              .map(lambda (point_id, (point, polys)): (point, polys or []))
-
-        return all_points
-
-
-class OSMPolygonIndexSpark(PolygonIndexSpark):
-    @classmethod
-    def geojson_ids(cls, lines):
-        geojson = lines.map(lambda line: json.loads(line.rstrip()))
-        geojson_ids = geojson.map(lambda rec: ((rec['properties']['type'], rec['properties']['id']), rec))
-        return geojson_ids
-
-
-class CountryPolygonIndexSpark(OSMPolygonIndexSpark):
-    buffer_levels = (0.0, 10e-6, 0.001, 0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 1.0, 2.0, 3.0)
-    buffered_simplify_tolerance = 0.001
-
-    @classmethod
-    def reverse_geocode(cls, point_ids, polygon_ids):
-        points_with_polygons = cls.points_with_polygons(point_ids, polygon_ids)
-
-        points_without_polygons = point_ids.subtractByKey(points_with_polygons)
-
-        country_polygons = polygon_ids.filter(lambda (poly_id, rec): 'ISO3166-1:alpha2' in rec['properties'])
-
-        points_with_polygons_buffered = cls.points_with_polygons(points_without_polygons,
-                                                                 country_polygons,
-                                                                 buffer_levels=cls.buffer_levels,
-                                                                 buffered_simplify_tolerance=cls.buffered_simplify_tolerance)
-        combined_points_with_polygons = points_with_polygons.union(points_with_polygons_buffered)
-
-        all_points = point_ids.leftOuterJoin(combined_points_with_polygons) \
                               .map(lambda (point_id, (point, polys)): (point, polys or []))
 
         return all_points
