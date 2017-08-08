@@ -18,9 +18,12 @@ def polygon_area(poly):
     ).area
 
 
+def bounding_box_polygon(bbox):
+    return Polygon([(bbox[0], bbox[3]), (bbox[0], bbox[1]),
+                    (bbox[2], bbox[1]), (bbox[2], bbox[3]),
+                    ])
+
+
 def polygon_bounding_box_area(poly):
-    bbox = poly.bounds
-    p = Polygon([(bbox[0], bbox[3]), (bbox[0], bbox[1]),
-                 (bbox[2], bbox[1]), (bbox[2], bbox[3]),
-                 ])
+    p = bounding_box_polygon(poly.bounds)
     return polygon_area(p)
