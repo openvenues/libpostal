@@ -39,7 +39,7 @@ def convert_openaddresses_file_to_geojson(input_file, output_file):
 
 
 def main(base_dir, s3_path=OPENADDRESSES_S3_PATH):
-    for source in openaddresses_config:
+    for source in openaddresses_config.sources:
         source_dir = os.path.join(source[:-1])
         source_csv_path = os.path.join(source_dir, '{}.csv'.format(source[-1]))
         input_filename = os.path.join(base_dir, source_csv_path)
