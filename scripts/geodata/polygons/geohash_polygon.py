@@ -1,5 +1,6 @@
 import math
 import geohash
+from geodata.math.floats import isclose
 
 
 def height_degrees(n):
@@ -58,6 +59,8 @@ class GeohashPolygon(object):
             return lon
         elif lon < 0.0:
             return -cls.lon_to_180(abs(lon))
+        elif isclose(lon, 180.0):
+            return 179.999
         else:
             n = round(math.floor((lon + 180.0) / 360.0))
             return lon - n * 360.0
