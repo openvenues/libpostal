@@ -8,7 +8,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.csv_utils import unicode_csv_reader
-from geodata.file_utils import upload_to_s3
+from geodata.file_utils import upload_file_s3
 from geodata.openaddresses.config import openaddresses_config
 
 OPENADDRESSES_S3_PATH = 's3://libpostal/inputs/openaddresses'
@@ -53,7 +53,7 @@ def main(base_dir, s3_path=OPENADDRESSES_S3_PATH):
 
         s3_path = os.path.join(s3_path, dest_geojson_path)
         print('uploading {} to S3'.format(output_filename))
-        upload_to_s3(output_filename, s3_path, public_read=True)
+        upload_file_s3(output_filename, s3_path, public_read=True)
         print('done uploading to S3')
 
         os.unlink(output_filename)
