@@ -50,10 +50,10 @@ def convert_openaddresses_file_to_geojson(input_file, output_file):
 def main(base_dir, base_s3_path=OPENADDRESSES_S3_PATH):
     for source in openaddresses_config.sources:
         source_dir = os.path.join(*map(safe_encode, source[:-1]))
-        source_csv_path = os.path.join(source_dir, '{}.csv'.format(source[-1]))
+        source_csv_path = os.path.join(source_dir, '{}.csv'.format(safe_encode(source[-1])))
         input_filename = os.path.join(base_dir, source_csv_path)
 
-        dest_geojson_path = os.path.join(source_dir, '{}.geojson'.format(source[-1]))
+        dest_geojson_path = os.path.join(source_dir, '{}.geojson'.format(safe_encode(source[-1])))
         output_filename = os.path.join(base_dir, dest_geojson_path)
 
         print('converting {} to {}'.format(input_filename, output_filename))
