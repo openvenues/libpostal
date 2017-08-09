@@ -28,8 +28,8 @@ class GeohashPolygon(object):
     GEOHASH_MAX_PRECISION = 8
 
     MAX_HASH_LENGTH_CACHE = 8
-    height_degrees_cache = {n: height_degrees(n) for n in xrange(MAX_HASH_LENGTH_CACHE)}
-    width_degrees_cache = {n: width_degrees(n) for n in xrange(MAX_HASH_LENGTH_CACHE)}
+    height_degrees_cache = {n: height_degrees(n) for n in xrange(MAX_HASH_LENGTH_CACHE + 1)}
+    width_degrees_cache = {n: width_degrees(n) for n in xrange(MAX_HASH_LENGTH_CACHE + 1)}
 
     @classmethod
     def height_degrees(cls, n):
@@ -117,7 +117,7 @@ class GeohashPolygon(object):
     @classmethod
     def cover_polygon(cls, poly, precision=DEFAULT_GEOHASH_PRECISION):
         if poly.type != 'MultiPolygon':
-            return cls.cover_single_polygon(poly)
+            return cls.cover_single_polygon(poly, precision=precision)
         else:
             hashes = set()
             for p in poly:
