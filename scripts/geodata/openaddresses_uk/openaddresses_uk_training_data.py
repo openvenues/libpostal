@@ -13,7 +13,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.address_expansions.abbreviations import abbreviate
 from geodata.address_expansions.gazetteers import street_types_gazetteer, toponym_abbreviations_gazetteer
-from geodata.address_formatting.formatter import AddressFormatter
+from geodata.address_formatting.formatter import AddressFormatter, address_formatter
 
 from geodata.addresses.components import AddressComponents
 from geodata.countries.constants import Countries
@@ -42,7 +42,7 @@ class OpenAddressesUKFormatter(object):
     }
 
     def __init__(self):
-        self.formatter = AddressFormatter()
+        self.formatter = address_formatter
 
     component_validators = {
         AddressFormatter.HOUSE_NUMBER: OpenAddressesFormatter.validators.validate_house_number,

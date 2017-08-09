@@ -18,7 +18,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 from geodata.address_expansions.gazetteers import *
 from geodata.address_expansions.abbreviations import abbreviate
 from geodata.address_formatting.aliases import Aliases
-from geodata.address_formatting.formatter import AddressFormatter
+from geodata.address_formatting.formatter import AddressFormatter, address_formatter
 from geodata.addresses.blocks import Block
 from geodata.addresses.config import address_config
 from geodata.addresses.components import AddressComponents
@@ -36,7 +36,6 @@ from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import INTERNET_LANGUAGE_DISTRIBUTION
 from geodata.i18n.languages import *
 from geodata.intersections.query import Intersection, IntersectionQuery
-from geodata.address_formatting.formatter import AddressFormatter
 from geodata.osm.components import osm_address_components
 from geodata.osm.definitions import osm_definitions
 from geodata.osm.extract import *
@@ -165,7 +164,7 @@ class OSMAddressFormatter(object):
         self.metro_stations_index = metro_stations_index
 
         self.config = yaml.load(open(OSM_PARSER_DATA_DEFAULT_CONFIG))
-        self.formatter = AddressFormatter()
+        self.formatter = address_formatter
 
     def namespaced_language(self, tags, candidate_languages):
         language = None

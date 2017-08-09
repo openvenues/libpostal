@@ -13,7 +13,7 @@ from geodata.addresses.units import Unit
 from geodata.address_expansions.abbreviations import abbreviate
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
 from geodata.address_expansions.gazetteers import street_types_gazetteer, unit_types_gazetteer, toponym_abbreviations_gazetteer
-from geodata.address_formatting.formatter import AddressFormatter
+from geodata.address_formatting.formatter import AddressFormatter, address_formatter
 from geodata.addresses.components import AddressComponents
 from geodata.countries.constants import Countries
 from geodata.countries.names import country_names
@@ -91,7 +91,7 @@ class OpenAddressesFormatter(object):
 
         self.debug = debug
 
-        self.formatter = AddressFormatter()
+        self.formatter = address_formatter
 
     class validators:
         @classmethod

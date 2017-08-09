@@ -4,8 +4,8 @@ import os
 import pystache
 import random
 import re
+import requests
 import six
-import subprocess
 import yaml
 
 from collections import OrderedDict, defaultdict
@@ -18,7 +18,7 @@ from geodata.math.sampling import weighted_choice, cdf
 from geodata.text.tokenize import tokenize, tokenize_raw, token_types
 from geodata.encoding import safe_decode
 
-FORMATTER_GIT_REPO = 'https://github.com/OpenCageData/address-formatting'
+ADDRESS_FORMATTING_CONFIG_URL = 'https://raw.githubusercontent.com/OpenCageData/address-formatting/master/conf/countries/worldwide.yaml'
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
@@ -31,7 +31,6 @@ class AddressFormatter(object):
     Approximate Python port of lokku's Geo::Address::Formatter
 
     Usage:
-        address_formatter = AddressFormatter()
         components = {
             'house': u'Anticafé',
             'house_number': '2',
@@ -197,20 +196,19 @@ class AddressFormatter(object):
     MINIMAL_COMPONENT_KEYS = [
         (ROAD, HOUSE_NUMBER),
         (ROAD, HOUSE),
-        (ROAD, POSTCODE)
+        (ROAD, POSTCODE),
     ]
 
     FIRST, BEFORE, AFTER, LAST = range(4)
 
-    def __init__(self, scratch_dir='/tmp', splitter=None):
+    def __init__(self, splitter=None):
         if splitter is not None:
             self.splitter = splitter
 
-        self.formatter_repo_path = os.path.join(scratch_dir, 'address-formatting')
-        self.clone_repo()
-
         self.load_config()
-        self.load_country_formats()
+
+        address_config = self.download_address_config()
+        self.load_country_formats(address_config)
 
         self.language_code_replacements = self.config['language_code_replacements']
 
@@ -221,13 +219,12 @@ class AddressFormatter(object):
         self.template_cache = {}
         self.parsed_cache = {}
 
-    def clone_repo(self):
-        subprocess.check_call(['rm', '-rf', self.formatter_repo_path])
-        subprocess.check_call(['git', 'clone', FORMATTER_GIT_REPO, self.formatter_repo_path])
+    def download_address_config(self):
+        response = requests.get(ADDRESS_FORMATTING_CONFIG_URL)
+        config = yaml.load(response.content)
+        return config
 
-    def load_country_formats(self):
-        config = yaml.load(open(os.path.join(self.formatter_repo_path,
-                                'conf', 'countries', 'worldwide.yaml')))
+    def load_country_formats(self, config):
         self.country_aliases = {}
         self.house_number_ordering = {}
 
@@ -978,3 +975,5 @@ class AddressFormatter(object):
         text = self.remove_repeat_template_separators(text)
 
         return text
+
+address_formatter = AddressFormatter()

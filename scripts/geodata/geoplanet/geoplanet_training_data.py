@@ -15,7 +15,7 @@ from geodata.address_expansions.abbreviations import abbreviate
 from geodata.address_expansions.equivalence import equivalent
 from geodata.address_expansions.gazetteers import *
 
-from geodata.address_formatting.formatter import AddressFormatter
+from geodata.address_formatting.formatter import AddressFormatter, address_formatter
 
 from geodata.countries.names import country_names
 from geodata.postal_codes.validation import postcode_regexes
@@ -172,7 +172,7 @@ class GeoPlanetFormatter(object):
 
         self.aliases = dict(self.aliases)
 
-        self.formatter = AddressFormatter()
+        self.formatter = address_formatter
 
     def get_place_hierarchy(self, place_id):
         all_places = []
