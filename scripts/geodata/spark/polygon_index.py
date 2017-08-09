@@ -16,6 +16,10 @@ class PolygonIndexSpark(object):
         return geohash_ids.flatMap(lambda (key, gh): [(gh[:i], key) for i in range(GeohashPolygon.GEOHASH_MIN_PRECISION, GeohashPolygon.GEOHASH_MAX_PRECISION + 1)])
 
     @classmethod
+    def preprocess_geojson(cls, rec):
+        return rec
+
+    @classmethod
     def geojson_ids(cls, lines):
         geojson = lines.map(lambda line: json.loads(line.rstrip()))
         geojson_ids = geojson.zipWithIndex() \
@@ -74,12 +78,12 @@ class PolygonIndexSpark(object):
         return points_in_polygons
 
     @classmethod
-    def preprocess_geojson(cls, rec):
-        return rec
-
-    @classmethod
     def sort_key(cls, props):
         return None
+
+    @classmethod
+    def sort_key_tuple(cls, (props, level)):
+        return cls.sort_key(props)
 
     @classmethod
     def sort_level(cls, (polygon, level)):
@@ -95,7 +99,7 @@ class PolygonIndexSpark(object):
                                               .values() \
                                               .map(lambda ((point_id, level), poly_props): (point_id, [(poly_props, level)])) \
                                               .reduceByKey(lambda x, y: x + y) \
-                                              .mapValues(lambda polys: sorted(polys, key=cls.sort_key))
+                                              .mapValues(lambda polys: sorted(polys, key=cls.sort_key_tuple))
 
         if not with_buffer_levels:
             return points_with_polys.mapValues(lambda polys: [p for p, level in sorted(polys, key=cls.sort_level)])
