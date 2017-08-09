@@ -17,6 +17,8 @@ class OSMPolygonIndexSpark(PolygonIndexSpark):
 class OSMAdminPolygonIndexSpark(OSMPolygonIndexSpark):
     ADMIN_LEVEL_KEY = 'admin_level'
 
+    sort_reverse = True
+
     @classmethod
     def sort_key(cls, properties):
         admin_level_key = cls.ADMIN_LEVEL_KEY
@@ -30,6 +32,8 @@ class OSMAdminPolygonIndexSpark(OSMPolygonIndexSpark):
 
 class OSMAreaPolygonIndexSpark(OSMPolygonIndexSpark):
     AREA_KEY = '__area__'
+
+    sort_reverse = True
 
     @classmethod
     def preprocess_geojson(cls, rec):

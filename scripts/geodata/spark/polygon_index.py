@@ -6,6 +6,8 @@ from geodata.polygons.geohash_polygon import GeohashPolygon
 
 
 class PolygonIndexSpark(object):
+    sort_reverse = False
+
     @classmethod
     def polygon_geohashes(cls, geojson_ids):
         return geojson_ids.flatMap(lambda (key, rec): [(h, key) for h in GeohashPolygon.cover_polygon_find_precision(shape(rec['geometry']))])
@@ -99,7 +101,7 @@ class PolygonIndexSpark(object):
                                               .values() \
                                               .map(lambda ((point_id, level), poly_props): (point_id, [(poly_props, level)])) \
                                               .reduceByKey(lambda x, y: x + y) \
-                                              .mapValues(lambda polys: sorted(polys, key=cls.sort_key_tuple))
+                                              .mapValues(lambda polys: sorted(polys, key=cls.sort_key_tuple, reverse=cls.sort_reverse))
 
         if not with_buffer_levels:
             return points_with_polys.mapValues(lambda polys: [p for p, level in sorted(polys, key=cls.sort_level)])
