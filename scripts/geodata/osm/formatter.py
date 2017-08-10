@@ -153,6 +153,9 @@ class OSMAddressFormatter(object):
 
     boundary_component_priorities = {k: i for i, k in enumerate(AddressFormatter.BOUNDARY_COMPONENTS_ORDERED)}
 
+    config = yaml.load(open(OSM_PARSER_DATA_DEFAULT_CONFIG))
+    formatter = address_formatter
+
     def __init__(self, components, country_rtree, subdivisions_rtree=None, buildings_rtree=None, metro_stations_index=None):
         # Instance of AddressComponents, contains structures for reverse geocoding, etc.
         self.components = components
@@ -163,13 +166,11 @@ class OSMAddressFormatter(object):
 
         self.metro_stations_index = metro_stations_index
 
-        self.config = yaml.load(open(OSM_PARSER_DATA_DEFAULT_CONFIG))
-        self.formatter = address_formatter
-
-    def namespaced_language(self, tags, candidate_languages):
+    @classmethod
+    def namespaced_language(cls, tags, candidate_languages):
         language = None
 
-        pick_namespaced_language_prob = float(nested_get(self.config, ('languages', 'pick_namespaced_language_probability')))
+        pick_namespaced_language_prob = float(nested_get(cls.config, ('languages', 'pick_namespaced_language_probability')))
 
         if len(candidate_languages) > 1:
             street = tags.get('addr:street', None)
@@ -186,27 +187,31 @@ class OSMAddressFormatter(object):
 
         return language
 
-    def normalize_address_components(self, tags, country=None):
-        address_components = {k: v for k, v in six.iteritems(tags) if self.aliases.get(k)}
-        self.aliases.replace(address_components)
+    @classmethod
+    def normalize_address_components(cls, tags, country=None):
+        address_components = {k: v for k, v in six.iteritems(tags) if cls.aliases.get(k)}
+        cls.aliases.replace(address_components)
         address_components = {k: v for k, v in six.iteritems(address_components) if k in AddressFormatter.address_formatter_fields}
         return address_components
 
-    def normalize_sub_building_components(self, tags):
-        sub_building_components = {k: v for k, v in six.iteritems(tags) if self.sub_building_aliases.get(k) and is_numeric(v)}
-        self.aliases.replace(sub_building_components)
+    @classmethod
+    def normalize_sub_building_components(cls, tags):
+        sub_building_components = {k: v for k, v in six.iteritems(tags) if cls.sub_building_aliases.get(k) and is_numeric(v)}
+        cls.aliases.replace(sub_building_components)
         sub_building_components = {k: v for k, v in six.iteritems(sub_building_components) if k in AddressFormatter.address_formatter_fields}
         return sub_building_components
 
-    def fix_component_encodings(self, tags):
+    @classmethod
+    def fix_component_encodings(cls, tags):
         return {k: ftfy.fix_encoding(safe_decode(v)) for k, v in six.iteritems(tags)}
 
-    def normalized_street_name(self, address_components, country=None, language=None):
+    @classmethod
+    def normalized_street_name(cls, address_components, country=None, language=None):
         street = address_components.get(AddressFormatter.ROAD)
         if street and ',' in street:
             street_parts = [part.strip() for part in street.split(',')]
 
-            if len(street_parts) > 1 and (street_parts[-1].lower() == address_components.get(AddressFormatter.HOUSE_NUMBER, '').lower()) and self.formatter.house_number_before_road(country, language):
+            if len(street_parts) > 1 and (street_parts[-1].lower() == address_components.get(AddressFormatter.HOUSE_NUMBER, '').lower()) and cls.formatter.house_number_before_road(country, language):
                 street = street_parts[0]
                 return street
 
@@ -337,22 +342,25 @@ class OSMAddressFormatter(object):
     def subdivision_components(self, latitude, longitude):
         return self.subdivisions_rtree.point_in_poly(latitude, longitude, return_all=True)
 
-    def zone(self, subdivisions):
+    @classmethod
+    def zone(cls, subdivisions):
         for subdiv in subdivisions:
-            for k, v in six.iteritems(self.zones):
+            for k, v in six.iteritems(cls.zones):
                 zone = v.get(subdiv.get(k))
                 if zone:
                     return zone
         return None
 
-    def add_subdivision(self, address_components, subdivisions, languages):
+    @classmethod
+    def add_subdivision(cls, address_components, subdivisions, languages):
         for subdiv in subdivisions:
-            names = self.venue_names(subdiv, languages)
+            names = cls.venue_names(subdiv, languages)
 
     def building_components(self, latitude, longitude):
         return self.buildings_rtree.point_in_poly(latitude, longitude, return_all=True)
 
-    def num_floors(self, buildings, key='building:levels'):
+    @classmethod
+    def num_floors(cls, buildings, key='building:levels'):
         max_floors = None
         for b in buildings:
             num_floors = b.get(key)
@@ -369,7 +377,8 @@ class OSMAddressFormatter(object):
                     max_floors = num_floors
         return max_floors
 
-    def replace_numbered_tag(self, tag):
+    @classmethod
+    def replace_numbered_tag(cls, tag):
         '''
         If a tag is numbered like name_1, name_2, etc. replace it with name
         '''
@@ -378,7 +387,8 @@ class OSMAddressFormatter(object):
             return None
         return tag[:match.start()]
 
-    def abbreviated_street(self, street, language):
+    @classmethod
+    def abbreviated_street(cls, street, language):
         '''
         Street abbreviations
         --------------------
@@ -389,13 +399,14 @@ class OSMAddressFormatter(object):
         to capturing some non-standard abbreviations/surface forms which may be
         missing or sparse in OSM.
         '''
-        abbreviate_prob = float(nested_get(self.config, ('streets', 'abbreviate_probability'), default=0.0))
-        separate_prob = float(nested_get(self.config, ('streets', 'separate_probability'), default=0.0))
+        abbreviate_prob = float(nested_get(cls.config, ('streets', 'abbreviate_probability'), default=0.0))
+        separate_prob = float(nested_get(cls.config, ('streets', 'separate_probability'), default=0.0))
 
         return abbreviate(street_and_synonyms_gazetteer, street, language,
                           abbreviate_prob=abbreviate_prob, separate_prob=separate_prob)
 
-    def abbreviated_venue_name(self, name, language):
+    @classmethod
+    def abbreviated_venue_name(cls, name, language):
         '''
         Venue abbreviations
         -------------------
@@ -406,13 +417,14 @@ class OSMAddressFormatter(object):
         to capturing some non-standard abbreviations/surface forms which may be
         missing or sparse in OSM.
         '''
-        abbreviate_prob = float(nested_get(self.config, ('venues', 'abbreviate_probability'), default=0.0))
-        separate_prob = float(nested_get(self.config, ('venues', 'separate_probability'), default=0.0))
+        abbreviate_prob = float(nested_get(cls.config, ('venues', 'abbreviate_probability'), default=0.0))
+        separate_prob = float(nested_get(cls.config, ('venues', 'separate_probability'), default=0.0))
 
         return abbreviate(names_gazetteer, name, language,
                           abbreviate_prob=abbreviate_prob, separate_prob=separate_prob)
 
-    def combine_street_name(self, props):
+    @classmethod
+    def combine_street_name(cls, props):
         '''
         Combine street names
         --------------------
@@ -433,7 +445,12 @@ class OSMAddressFormatter(object):
             return True
         return False
 
-    def combine_japanese_house_number(self, tags, language):
+    @classmethod
+    def japanese_admin_components(cls, tags, language):
+        pass
+
+    @classmethod
+    def combine_japanese_house_number(cls, tags, language):
         '''
         Japanese house numbers
         ----------------------
@@ -469,9 +486,9 @@ class OSMAddressFormatter(object):
 
         separator = six.u('-')
 
-        combine_probability = float(nested_get(self.config, ('countries', 'jp', 'combine_block_house_number_probability'), default=0.0))
+        combine_probability = float(nested_get(cls.config, ('countries', 'jp', 'combine_block_house_number_probability'), default=0.0))
         if random.random() < combine_probability:
-            if random.random() < float(nested_get(self.config, ('countries', 'jp', 'block_phrase_probability'), default=0.0)):
+            if random.random() < float(nested_get(cls.config, ('countries', 'jp', 'block_phrase_probability'), default=0.0)):
                 block = Block.phrase(block, language)
                 house_number = HouseNumber.phrase(house_number, language)
                 if block is None or house_number is None:
@@ -484,15 +501,17 @@ class OSMAddressFormatter(object):
             return True
         return False
 
-    def remove_japanese_suburb_tags(self, tags):
+    @classmethod
+    def remove_japanese_suburb_tags(cls, tags):
         for tag in ('addr:neighbourhood', 'addr:neighbourhood', 'addr:quarter', 'addr:suburb'):
             tags.pop(tag, None)
 
-    def conscription_number(self, tags, language, country):
+    @classmethod
+    def conscription_number(cls, tags, language, country):
         conscription_number = tags.get('addr:conscriptionnumber', None)
         if conscription_number is not None:
-            phrase_probability = float(nested_get(self.config, ('conscription_numbers', 'phrase_probability'), default=0.0))
-            no_phrase_probability = float(nested_get(self.config, ('conscription_numbers', 'no_phrase_probability'), default=0.0))
+            phrase_probability = float(nested_get(cls.config, ('conscription_numbers', 'phrase_probability'), default=0.0))
+            no_phrase_probability = float(nested_get(cls.config, ('conscription_numbers', 'no_phrase_probability'), default=0.0))
 
             if random.random() < phrase_probability:
                 return ConscriptionNumber.phrase(conscription_number, language, country=country)
@@ -501,17 +520,24 @@ class OSMAddressFormatter(object):
 
         return None
 
-    def austro_hungarian_street_number(self, tags, language, country):
+    @classmethod
+    def austro_hungarian_street_number(cls, tags, language, country):
         austro_hungarian_street_number = tags.get('addr:streetnumber', None)
 
         if austro_hungarian_street_number is not None:
-            no_phrase_probability = float(nested_get(self.config, ('austro_hungarian_street_numbers', 'no_phrase_probability'), default=0.0))
+            no_phrase_probability = float(nested_get(cls.config, ('austro_hungarian_street_numbers', 'no_phrase_probability'), default=0.0))
             if random.random() < no_phrase_probability:
                 return safe_decode(austro_hungarian_street_number)
 
         return None
 
-    def add_metro_station(self, address_components, latitude, longitude, language=None, default_language=None):
+    def nearest_metro_station(self, latitude, longitude):
+        if self.metro_stations_index is None:
+            return False
+        return self.metro_stations_index.nearest_point(latitude, longitude)
+
+    @classmethod
+    def add_metro_station(cls, address_components, nearest_metro, language=None, default_language=None):
         '''
         Metro stations
         --------------
@@ -529,9 +555,6 @@ class OSMAddressFormatter(object):
         and a slightly more sophisticated phrase generator than what we employ for numeric components
         like apartment numbers.
         '''
-        if self.metro_stations_index is None:
-            return False
-        nearest_metro = self.metro_stations_index.nearest_point(latitude, longitude)
         if nearest_metro:
             props, lat, lon, distance = nearest_metro
             name = None
@@ -548,7 +571,8 @@ class OSMAddressFormatter(object):
 
         return False
 
-    def venue_names(self, props, languages):
+    @classmethod
+    def venue_names(cls, props, languages):
         '''
         Venue names
         -----------
@@ -557,24 +581,25 @@ class OSMAddressFormatter(object):
         With a certain probability, add None to the list so we drop the name
         '''
 
-        return self.components.all_names(props, languages, keys=('name', 'alt_name', 'loc_name', 'int_name', 'old_name', 'short_name', 'official_name', 'full_name', 'uic_name', 'sorting_name', 'nat_name', 'reg_name'))
+        return AddressComponents.all_names(props, languages, keys=('name', 'alt_name', 'loc_name', 'int_name', 'old_name', 'short_name', 'official_name', 'full_name', 'uic_name', 'sorting_name', 'nat_name', 'reg_name'))
 
-    def formatted_addresses_with_venue_and_building_names(self, address_components, venue_names, building_names, country, language=None,
+    @classmethod
+    def formatted_addresses_with_venue_and_building_names(cls, address_components, venue_names, building_names, country, language=None,
                                                           tag_components=True, minimal_only=False):
         # Since venue names are only one-per-record, this wrapper will try them all (name, alt_name, etc.)
         formatted_addresses = []
 
         if not venue_names and not building_names:
             address_components = {c: v for c, v in six.iteritems(address_components) if c != AddressFormatter.HOUSE}
-            return [self.formatter.format_address(address_components, country, language=language,
-                                                  tag_components=tag_components, minimal_only=minimal_only)]
+            return [cls.formatter.format_address(address_components, country, language=language,
+                                                 tag_components=tag_components, minimal_only=minimal_only)]
 
-        address_prob = float(nested_get(self.config, ('venues', 'address_probability'), default=0.0))
+        address_prob = float(nested_get(cls.config, ('venues', 'address_probability'), default=0.0))
         if random.random() < address_prob and (AddressFormatter.HOUSE in address_components or AddressFormatter.NAMED_BUILDING in address_components):
             address_components.pop(AddressFormatter.HOUSE, None)
             address_components.pop(AddressFormatter.NAMED_BUILDING, None)
-            formatted_address = self.formatter.format_address(address_components, country, language=language,
-                                                              tag_components=tag_components, minimal_only=minimal_only)
+            formatted_address = cls.formatter.format_address(address_components, country, language=language,
+                                                             tag_components=tag_components, minimal_only=minimal_only)
             formatted_addresses.append(formatted_address)
 
         if not venue_names:
@@ -587,33 +612,36 @@ class OSMAddressFormatter(object):
                 address_components[AddressFormatter.HOUSE] = venue_name
             if building_name:
                 address_components[AddressFormatter.NAMED_BUILDING] = building_name
-            formatted_address = self.formatter.format_address(address_components, country, language=language,
-                                                              tag_components=tag_components, minimal_only=minimal_only)
+            formatted_address = cls.formatter.format_address(address_components, country, language=language,
+                                                             tag_components=tag_components, minimal_only=minimal_only)
             formatted_addresses.append(formatted_address)
         return formatted_addresses
 
-    def formatted_places(self, address_components, country, language, tag_components=True):
+    @classmethod
+    def formatted_places(cls, address_components, country, language, tag_components=True):
         formatted_addresses = []
 
-        place_components = self.components.drop_address(address_components)
-        formatted_address = self.formatter.format_address(place_components, country, language=language,
-                                                          tag_components=tag_components, minimal_only=False)
+        place_components = AddressComponents.drop_address(address_components)
+        formatted_address = cls.formatter.format_address(place_components, country, language=language,
+                                                         tag_components=tag_components, minimal_only=False)
         formatted_addresses.append(formatted_address)
 
         if AddressFormatter.POSTCODE in address_components:
-            drop_postcode_prob = float(nested_get(self.config, ('places', 'drop_postcode_probability'), default=0.0))
+            drop_postcode_prob = float(nested_get(cls.config, ('places', 'drop_postcode_probability'), default=0.0))
             if random.random() < drop_postcode_prob:
-                place_components = self.components.drop_postcode(place_components)
-                formatted_address = self.formatter.format_address(place_components, country, language=language,
-                                                                  tag_components=tag_components, minimal_only=False)
+                place_components = AddressComponents.drop_postcode(place_components)
+                formatted_address = cls.formatter.format_address(place_components, country, language=language,
+                                                                 tag_components=tag_components, minimal_only=False)
                 formatted_addresses.append(formatted_address)
         return formatted_addresses
 
     @classmethod
-    def valid_postal_code(self, country, postal_code):
+    def valid_postal_code(cls, country, postal_code):
         return PostalCodes.is_valid(postal_code, country)
 
-    def parse_valid_postal_codes(self, country, postal_code, validate=True):
+
+    @classmethod
+    def parse_valid_postal_codes(cls, country, postal_code, validate=True):
         '''
         "Valid" postal codes
         --------------------
@@ -636,7 +664,7 @@ class OSMAddressFormatter(object):
             if validate:
                 values = number_split_regex.split(postal_code)
                 for p in values:
-                    if self.valid_postal_code(country, p):
+                    if cls.valid_postal_code(country, p):
                         valid_postcode = True
                         postal_codes.append(p)
             else:
@@ -647,13 +675,14 @@ class OSMAddressFormatter(object):
                 if validate:
                     valid_postal_codes = []
                     for pc in postal_codes:
-                        if self.valid_postal_code(country, pc):
+                        if cls.valid_postal_code(country, pc):
                             valid_postal_codes.append(pc)
                     postal_codes = valid_postal_codes
 
         return postal_codes
 
-    def expand_postal_codes(self, postal_code, country, languages, osm_components):
+    @classmethod
+    def expand_postal_codes(cls, postal_code, country, languages, osm_components):
         '''
         Expanded postal codes
         ---------------------
@@ -674,7 +703,7 @@ class OSMAddressFormatter(object):
                 return valid
 
             if should_strip_components:
-                postal_code = self.components.strip_components(postal_code, osm_components, country, languages)
+                postal_code = AddressComponents.strip_components(postal_code, osm_components, country, languages)
 
             if not needs_validation or PostalCodes.is_valid(postal_code, country):
                 valid.append(PostalCodes.add_country_code(postal_code, country))
@@ -684,7 +713,7 @@ class OSMAddressFormatter(object):
             for candidate in candidates:
                 candidate = candidate.strip()
                 if should_strip_components:
-                    candidate = self.components.strip_components(candidate, osm_components, country, languages)
+                    candidate = AddressComponents.strip_components(candidate, osm_components, country, languages)
                     if not candidate:
                         continue
 
@@ -694,28 +723,29 @@ class OSMAddressFormatter(object):
 
         return valid
 
-    def cleanup_place_components(self, address_components, osm_components, country, language, containing_ids, population=None, keep_component=None, population_from_city=False):
-        revised_address_components = self.components.dropout_places(address_components, osm_components, country, language, population=population, population_from_city=population_from_city)
+    @classmethod
+    def cleanup_place_components(cls, address_components, osm_components, country, language, containing_ids, population=None, keep_component=None, population_from_city=False):
+        revised_address_components = AddressComponents.dropout_places(address_components, osm_components, country, language, population=population, population_from_city=population_from_city)
 
         if keep_component is not None:
             revised_address_components[keep_component] = address_components[keep_component]
             if keep_component == AddressFormatter.LOCALITY and AddressFormatter.CITY in revised_address_components and revised_address_components[AddressFormatter.LOCALITY] == revised_address_components[AddressFormatter.CITY]:
                 revised_address_components.pop(AddressFormatter.CITY)
 
-        self.components.cleanup_boundary_names(revised_address_components)
-        self.components.country_specific_cleanup(revised_address_components, country)
+        AddressComponents.cleanup_boundary_names(revised_address_components)
+        AddressComponents.country_specific_cleanup(revised_address_components, country)
 
-        self.components.drop_invalid_components(revised_address_components, country)
+        AddressComponents.drop_invalid_components(revised_address_components, country)
 
-        self.components.replace_name_affixes(revised_address_components, language, country=country)
-        self.components.replace_names(revised_address_components)
+        AddressComponents.replace_name_affixes(revised_address_components, language, country=country)
+        AddressComponents.replace_names(revised_address_components)
 
-        self.components.remove_numeric_boundary_names(revised_address_components)
+        AddressComponents.remove_numeric_boundary_names(revised_address_components)
 
-        cldr_country_prob = float(nested_get(self.config, ('places', 'cldr_country_probability'), default=0.0))
+        cldr_country_prob = float(nested_get(cls.config, ('places', 'cldr_country_probability'), default=0.0))
 
         if (AddressFormatter.COUNTRY in revised_address_components or place_config.include_component(AddressFormatter.COUNTRY, containing_ids, country=country, check_population=False)) and random.random() < cldr_country_prob:
-            address_country = self.components.cldr_country_name(country, language)
+            address_country = AddressComponents.cldr_country_name(country, language)
             if address_country:
                 revised_address_components[AddressFormatter.COUNTRY] = address_country
 
@@ -1016,29 +1046,31 @@ class OSMAddressFormatter(object):
                 return True
         return False
 
-    def category_queries(self, tags, address_components, language, country=None, tag_components=True):
+    @classmethod
+    def category_queries(cls, tags, address_components, language, country=None, tag_components=True):
         formatted_addresses = []
         possible_category_keys = category_config.has_keys(language, tags)
 
-        plural_prob = float(nested_get(self.config, ('categories', 'plural_probability'), default=0.0))
-        place_only_prob = float(nested_get(self.config, ('categories', 'place_only_probability'), default=0.0))
+        plural_prob = float(nested_get(cls.config, ('categories', 'plural_probability'), default=0.0))
+        place_only_prob = float(nested_get(cls.config, ('categories', 'place_only_probability'), default=0.0))
 
         for key in possible_category_keys:
             value = tags[key]
             phrase = Category.phrase(language, key, value, country=country, is_plural=random.random() < plural_prob)
             if phrase is not NULL_CATEGORY_QUERY:
                 if phrase.add_place_name or phrase.add_address:
-                    address_components = self.components.drop_names(address_components)
+                    address_components = AddressComponents.drop_names(address_components)
 
                 if phrase.add_place_name and random.random() < place_only_prob:
-                    address_components = self.components.drop_address(address_components)
+                    address_components = AddressComponents.drop_address(address_components)
 
-                formatted_address = self.formatter.format_category_query(phrase, address_components, country, language, tag_components=tag_components)
+                formatted_address = cls.formatter.format_category_query(phrase, address_components, country, language, tag_components=tag_components)
                 if formatted_address:
                     formatted_addresses.append(formatted_address)
         return formatted_addresses
 
-    def chain_queries(self, venue_name, address_components, language, country=None, tag_components=True):
+    @classmethod
+    def chain_queries(cls, venue_name, address_components, language, country=None, tag_components=True):
         '''
         Chain queries
         -------------
@@ -1049,8 +1081,8 @@ class OSMAddressFormatter(object):
         formatted_addresses = []
 
         if is_chain:
-            sample_probability = float(nested_get(self.config, ('chains', 'sample_probability'), default=0.0))
-            place_only_prob = float(nested_get(self.config, ('chains', 'place_only_probability'), default=0.0))
+            sample_probability = float(nested_get(cls.config, ('chains', 'sample_probability'), default=0.0))
+            place_only_prob = float(nested_get(cls.config, ('chains', 'place_only_probability'), default=0.0))
 
             for t, c, l, vals in phrases:
                 for d in vals:
@@ -1065,15 +1097,251 @@ class OSMAddressFormatter(object):
                     phrase = Chain.phrase(name, language, country)
                     if phrase is not NULL_CHAIN_QUERY:
                         if phrase.add_place_name or phrase.add_address:
-                            address_components = self.components.drop_names(address_components)
+                            address_components = AddressComponents.drop_names(address_components)
 
                         if phrase.add_place_name and random.random() < place_only_prob:
-                            address_components = self.components.drop_address(address_components)
+                            address_components = AddressComponents.drop_address(address_components)
 
-                        formatted_address = self.formatter.format_chain_query(phrase, address_components, country, language, tag_components=tag_components)
+                        formatted_address = cls.formatter.format_chain_query(phrase, address_components, country, language, tag_components=tag_components)
                         if formatted_address:
                             formatted_addresses.append(formatted_address)
         return formatted_addresses
+
+    @classmethod
+    def formatted_addresses_with_reverse(cls, tags, osm_components, neighborhoods, city_point_components,
+                                         building_components, subdivision_components, nearest_metro_station=None, tag_components=True):
+        country, candidate_languages = AddressComponents.osm_country_and_languages(osm_components)
+        if not (country and candidate_languages):
+            return None, None, None
+
+        all_local_languages = set([l for l, d in candidate_languages])
+        random_languages = set(INTERNET_LANGUAGE_DISTRIBUTION)
+
+        combined_street = cls.combine_street_name(tags)
+
+        namespaced_language = cls.namespaced_language(tags, candidate_languages)
+        language = None
+        japanese_variant = None
+
+        japanese_suburb = None
+
+        if country == Countries.JAPAN:
+            japanese_variant = JAPANESE
+            if random.random() < float(nested_get(cls.config, ('countries', 'jp', 'romaji_probability'), default=0.0)):
+                japanese_variant = JAPANESE_ROMAJI
+            if cls.combine_japanese_house_number(tags, japanese_variant):
+                language = japanese_variant
+            else:
+                language = None
+
+            cls.remove_japanese_suburb_tags(tags)
+
+        is_generic_place = cls.is_generic_place(tags)
+        is_known_venue_type = cls.is_known_venue_type(tags)
+
+        revised_tags = cls.normalize_address_components(tags)
+        if japanese_suburb is not None:
+            revised_tags[AddressFormatter.SUBURB] = japanese_suburb
+        sub_building_tags = cls.normalize_sub_building_components(tags)
+        revised_tags.update(sub_building_tags)
+
+        # Only including nearest metro station in Japan
+        if nearest_metro_station and random.random() < float(nested_get(cls.config, ('countries', 'jp', 'add_metro_probability'), default=0.0)):
+            if cls.add_metro_station(revised_tags, nearest_metro_station, japanese_variant, default_language=JAPANESE):
+                language = japanese_variant
+
+        num_floors = None
+        num_basements = None
+        zone = None
+
+        postal_code = revised_tags.get(AddressFormatter.POSTCODE, None)
+        expanded_postal_codes = []
+
+        if postal_code:
+            expanded_postal_codes = cls.expand_postal_codes(postal_code, country, all_local_languages | random_languages, osm_components)
+
+            if len(expanded_postal_codes) == 1:
+                revised_tags[AddressFormatter.POSTCODE] = expanded_postal_codes[0]
+            else:
+                revised_tags.pop(AddressFormatter.POSTCODE)
+                postal_code = None
+
+        building_venue_names = []
+
+        building_is_generic_place = False
+        building_is_known_venue_type = False
+
+        if building_components:
+            num_floors = cls.num_floors(building_components)
+
+            num_basements = cls.num_floors(building_components, key='building:levels:underground')
+
+            for building_tags in building_components:
+                building_tags = cls.normalize_address_components(building_tags)
+
+                building_is_generic_place = building_is_generic_place or cls.is_generic_place(building_tags)
+                building_is_known_venue_type = building_is_known_venue_type or cls.is_known_venue_type(building_tags)
+
+                for k, v in six.iteritems(building_tags):
+                    if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD):
+                        revised_tags[k] = v
+                    elif k not in revised_tags and k == AddressFormatter.POSTCODE:
+                        expanded_postal_codes = cls.expand_postal_codes(v, country, all_local_languages | random_languages, osm_components)
+
+                        if len(expanded_postal_codes) == 1:
+                            revised_tags[AddressFormatter.POSTCODE] = expanded_postal_codes[0]
+                    elif k in (AddressFormatter.HOUSE, AddressFormatter.NAMED_BUILDING):
+                        building_venue_names.append((v, building_is_generic_place, building_is_known_venue_type))
+
+        if subdivision_components:
+            zone = cls.zone(subdivision_components)
+            cls.add_subdivision(subdivision_components)
+
+        venue_sub_building_prob = float(nested_get(cls.config, ('venues', 'sub_building_probability'), default=0.0))
+        add_sub_building_components = AddressFormatter.HOUSE_NUMBER in revised_tags and (AddressFormatter.HOUSE not in revised_tags or random.random() < venue_sub_building_prob)
+
+        revised_tags = cls.fix_component_encodings(revised_tags)
+
+        address_components, country, language = AddressComponents.expanded_with_reverse(revised_tags,
+                                                                                        osm_components, neighborhoods, city_point_components,
+                                                                                        language=language or namespaced_language,
+                                                                                        num_floors=num_floors, num_basements=num_basements,
+                                                                                        zone=zone, add_sub_building_components=add_sub_building_components,
+                                                                                        population_from_city=True, check_city_wikipedia=True)
+
+        languages = list(country_languages[country])
+        venue_names = cls.venue_names(tags, languages) or []
+
+        conscription_number = cls.conscription_number(tags, language, country)
+        austro_hungarian_street_number = cls.austro_hungarian_street_number(tags, language, country)
+
+        # Abbreviate the street name with random probability
+        street_name = address_components.get(AddressFormatter.ROAD)
+
+        if street_name:
+            normalized_street_name = cls.normalized_street_name(address_components, country, language)
+            if normalized_street_name:
+                street_name = normalized_street_name
+                address_components[AddressFormatter.ROAD] = street_name
+
+            address_components[AddressFormatter.ROAD] = cls.abbreviated_street(street_name, language)
+
+        expanded_components = address_components.copy()
+        for props, component in AddressComponents.categorized_osm_components(country, osm_components):
+            if 'name' in props and component not in expanded_components:
+                expanded_components[component] = props['name']
+
+        street_languages = set((language,) if language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE) else languages)
+
+        venue_names = [venue_name for venue_name in venue_names if cls.is_valid_venue_name(venue_name, expanded_components, street_languages, is_generic=is_generic_place)]
+        building_names = [venue_name for venue_name, building_is_generic_place, building_is_known_venue_type in building_venue_names if cls.is_valid_building_name(venue_name, expanded_components, street_languages, is_generic=building_is_generic_place, is_known_venue_type=building_is_known_venue_type)]
+
+        all_venue_names = set(venue_names)
+        all_building_names = set(building_names) - all_venue_names
+
+        # Ditto for venue names
+        for venue_name in all_venue_names:
+            abbreviated_venue = cls.abbreviated_venue_name(venue_name, language)
+            if abbreviated_venue != venue_name and abbreviated_venue not in all_venue_names:
+                venue_names.append(abbreviated_venue)
+
+        for building_name in all_building_names:
+            abbreviated_building = cls.abbreviated_venue_name(building_name, language)
+            if abbreviated_building != building_name and abbreviated_building not in all_building_names:
+                building_names.append(abbreviated_building)
+
+        if not address_components and not venue_names and not building_names:
+            return None, None, None
+
+        reduced_venue_names = []
+        reduced_building_names = []
+        expanded_only_venue_names = []
+        expanded_only_building_names = []
+
+        for venue_name in venue_names:
+            if cls.is_valid_venue_name(venue_name, address_components, street_languages):
+                reduced_venue_names.append(venue_name)
+            else:
+                expanded_only_venue_names.append(venue_name)
+
+        for building_name in building_names:
+            if cls.is_valid_venue_name(building_name, address_components, street_languages):
+                reduced_building_names.append(building_name)
+            else:
+                expanded_only_building_names.append(building_name)
+
+        formatted_addresses = cls.formatted_addresses_with_venue_and_building_names(address_components, reduced_venue_names, reduced_building_names, country, language=language,
+                                                                                    tag_components=tag_components, minimal_only=not tag_components)
+
+        for alternate_house_number in (conscription_number, austro_hungarian_street_number):
+            if alternate_house_number is not None:
+                original_house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
+                address_components[AddressFormatter.HOUSE_NUMBER] = alternate_house_number
+                formatted_addresses.extend(cls.formatted_addresses_with_venue_and_building_names(address_components, reduced_venue_names, reduced_building_names, country, language=language,
+                                                                                                 tag_components=tag_components, minimal_only=not tag_components))
+                if original_house_number:
+                    address_components[AddressFormatter.HOUSE_NUMBER] = original_house_number
+
+        if len(expanded_postal_codes) > 1:
+            for postal_code in expanded_postal_codes:
+                address_components[AddressFormatter.POSTCODE] = postal_code
+                AddressComponents.add_postcode_phrase(address_components, language, country=country)
+                formatted_addresses.extend(cls.formatted_addresses_with_venue_and_building_names(address_components, reduced_venue_names, reduced_building_names, country, language=language,
+                                                                                                 tag_components=tag_components, minimal_only=not tag_components))
+
+        if expanded_only_venue_names or expanded_only_building_names:
+            formatted_addresses.extend(cls.formatted_addresses_with_venue_and_building_names(expanded_components, expanded_only_venue_names, expanded_only_building_names, country, language=language,
+                                                                                             tag_components=tag_components, minimal_only=not tag_components))
+
+        formatted_addresses.extend(cls.formatted_places(address_components, country, language))
+
+        # In Japan an address without places is basically just house_number + metro_station (if given)
+        # However, where there are streets, it's useful to have address-only queries as well
+        if country != Countries.JAPAN:
+            address_only_components = AddressComponents.drop_places(address_components)
+            address_only_components = AddressComponents.drop_postcode(address_only_components)
+
+            if address_only_components:
+                address_only_venue_names = []
+                address_only_building_names = []
+                if not address_only_components or (len(address_only_components) == 1 and list(address_only_components)[0] == AddressFormatter.HOUSE):
+                    address_only_venue_names = [venue_name for venue_name in venue_names if cls.is_valid_venue_name(venue_name, address_only_components, street_languages)]
+                    address_only_building_names = [building_name for building_name in building_names if cls.is_valid_venue_name(building_name, address_only_components, street_languages)]
+
+                formatted_addresses.extend(cls.formatted_addresses_with_venue_and_building_names(address_only_components, address_only_venue_names, address_only_building_names, country, language=language,
+                                                                                                 tag_components=tag_components, minimal_only=False))
+
+        # Generate a PO Box address at random (only returns non-None values occasionally) and add it to the list
+        po_box_components = AddressComponents.po_box_address(address_components, language, country=country)
+        if po_box_components:
+            formatted_addresses.extend(cls.formatted_addresses_with_venue_and_building_names(po_box_components, venue_names, building_names, country, language=language,
+                                                                                             tag_components=tag_components, minimal_only=False))
+
+        formatted_addresses.extend(cls.category_queries(tags, address_components, language, country, tag_components=tag_components))
+
+        venue_name = tags.get('name')
+
+        if venue_name:
+            chain_queries = cls.chain_queries(venue_name, address_components, language, country, tag_components=tag_components)
+            formatted_addresses.extend(chain_queries)
+
+        if tag_components and address_components:
+            # Pick a random dropout order
+            dropout_order = AddressComponents.address_level_dropout_order(address_components, country)
+
+            for component in dropout_order:
+                address_components.pop(component, None)
+
+                dropout_venue_names = venue_names
+                dropout_building_names = building_names
+                if not address_components or (len(address_components) == 1 and list(address_components)[0] in (AddressFormatter.HOUSE, AddressFormatter.NAMED_BUILDING)):
+                    dropout_venue_names = [venue_name for venue_name in venue_names if cls.is_valid_venue_name(venue_name, address_components, street_languages)]
+                    dropout_building_names = [building_name for building_name in building_names if cls.is_valid_venue_name(building_name, address_components, street_languages)]
+
+                formatted_addresses.extend(cls.formatted_addresses_with_venue_and_building_names(address_components, dropout_venue_names, dropout_building_names, country, language=language,
+                                                                                                 tag_components=tag_components, minimal_only=False))
+
+        return OrderedDict.fromkeys(formatted_addresses).keys(), country, language
 
     def formatted_addresses(self, tags, tag_components=True):
         '''
@@ -1103,258 +1371,40 @@ class OSMAddressFormatter(object):
 
         osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
 
+        neighborhoods = self.components.neighborhood_components(latitude, longitude)
+
+        city_point_components = self.components.places_index.nearest_points(latitude, longitude)
+
         country, candidate_languages = self.components.osm_country_and_languages(osm_components)
-        if not (country and candidate_languages):
-            return None, None, None
 
-        all_local_languages = set([l for l, d in candidate_languages])
-        random_languages = set(INTERNET_LANGUAGE_DISTRIBUTION)
-
-        combined_street = self.combine_street_name(tags)
-
-        namespaced_language = self.namespaced_language(tags, candidate_languages)
-        language = None
-        japanese_variant = None
-
-        japanese_suburb = None
-
+        nearest_metro_station = None
         if country == Countries.JAPAN:
-            japanese_variant = JAPANESE
-            if random.random() < float(nested_get(self.config, ('countries', 'jp', 'romaji_probability'), default=0.0)):
-                japanese_variant = JAPANESE_ROMAJI
-            if self.combine_japanese_house_number(tags, japanese_variant):
-                language = japanese_variant
-            else:
-                language = None
-
-            self.remove_japanese_suburb_tags(tags)
-
-        is_generic_place = self.is_generic_place(tags)
-        is_known_venue_type = self.is_known_venue_type(tags)
-
-        revised_tags = self.normalize_address_components(tags)
-        if japanese_suburb is not None:
-            revised_tags[AddressFormatter.SUBURB] = japanese_suburb
-        sub_building_tags = self.normalize_sub_building_components(tags)
-        revised_tags.update(sub_building_tags)
-
-        # Only including nearest metro station in Japan
-        if country == Countries.JAPAN:
-            if random.random() < float(nested_get(self.config, ('countries', 'jp', 'add_metro_probability'), default=0.0)):
-                if self.add_metro_station(revised_tags, latitude, longitude, japanese_variant, default_language=JAPANESE):
-                    language = japanese_variant
-
-        num_floors = None
-        num_basements = None
-        zone = None
-
-        postal_code = revised_tags.get(AddressFormatter.POSTCODE, None)
-        expanded_postal_codes = []
-
-        if postal_code:
-            expanded_postal_codes = self.expand_postal_codes(postal_code, country, all_local_languages | random_languages, osm_components)
-
-            if len(expanded_postal_codes) == 1:
-                revised_tags[AddressFormatter.POSTCODE] = expanded_postal_codes[0]
-            else:
-                revised_tags.pop(AddressFormatter.POSTCODE)
-                postal_code = None
-
-        building_venue_names = []
+            nearest_metro_station = self.nearest_metro_station(revised_tags, latitude, longitude, japanese_variant, default_language=JAPANESE)
 
         building_components = self.building_components(latitude, longitude)
-
-        building_is_generic_place = False
-        building_is_known_venue_type = False
-
-        if building_components:
-            num_floors = self.num_floors(building_components)
-
-            num_basements = self.num_floors(building_components, key='building:levels:underground')
-
-            for building_tags in building_components:
-                building_tags = self.normalize_address_components(building_tags)
-
-                building_is_generic_place = building_is_generic_place or self.is_generic_place(building_tags)
-                building_is_known_venue_type = building_is_known_venue_type or self.is_known_venue_type(building_tags)
-
-                for k, v in six.iteritems(building_tags):
-                    if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD):
-                        revised_tags[k] = v
-                    elif k not in revised_tags and k == AddressFormatter.POSTCODE:
-                        expanded_postal_codes = self.expand_postal_codes(v, country, all_local_languages | random_languages, osm_components)
-
-                        if len(expanded_postal_codes) == 1:
-                            revised_tags[AddressFormatter.POSTCODE] = expanded_postal_codes[0]
-                    elif k in (AddressFormatter.HOUSE, AddressFormatter.NAMED_BUILDING):
-                        building_venue_names.append((v, building_is_generic_place, building_is_known_venue_type))
-
         subdivision_components = self.subdivision_components(latitude, longitude)
-        if subdivision_components:
-            zone = self.zone(subdivision_components)
-            self.add_subdivision(subdivision_components)
 
-        venue_sub_building_prob = float(nested_get(self.config, ('venues', 'sub_building_probability'), default=0.0))
-        add_sub_building_components = AddressFormatter.HOUSE_NUMBER in revised_tags and (AddressFormatter.HOUSE not in revised_tags or random.random() < venue_sub_building_prob)
+        return self.formatted_addresses_with_reverse(tags, osm_components=osm_components,
+                                                     neighborhoods=neighborhoods,
+                                                     city_point_components=city_point_components,
+                                                     building_components=building_components,
+                                                     subdivision_components=subdivision_components,
+                                                     nearest_metro_station=nearest_metro_station,
+                                                     tag_components=tag_components)
 
-        revised_tags = self.fix_component_encodings(revised_tags)
-
-        address_components, country, language = self.components.expanded(revised_tags, latitude, longitude, language=language or namespaced_language,
-                                                                         num_floors=num_floors, num_basements=num_basements,
-                                                                         zone=zone, add_sub_building_components=add_sub_building_components,
-                                                                         population_from_city=True, check_city_wikipedia=True, osm_components=osm_components)
-
-        languages = list(country_languages[country])
-        venue_names = self.venue_names(tags, languages) or []
-
-        conscription_number = self.conscription_number(tags, language, country)
-        austro_hungarian_street_number = self.austro_hungarian_street_number(tags, language, country)
-
-        # Abbreviate the street name with random probability
-        street_name = address_components.get(AddressFormatter.ROAD)
-
-        if street_name:
-            normalized_street_name = self.normalized_street_name(address_components, country, language)
-            if normalized_street_name:
-                street_name = normalized_street_name
-                address_components[AddressFormatter.ROAD] = street_name
-
-            address_components[AddressFormatter.ROAD] = self.abbreviated_street(street_name, language)
-
-        expanded_components = address_components.copy()
-        for props, component in self.components.categorized_osm_components(country, osm_components):
-            if 'name' in props and component not in expanded_components:
-                expanded_components[component] = props['name']
-
-        street_languages = set((language,) if language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE) else languages)
-
-        venue_names = [venue_name for venue_name in venue_names if self.is_valid_venue_name(venue_name, expanded_components, street_languages, is_generic=is_generic_place)]
-        building_names = [venue_name for venue_name, building_is_generic_place, building_is_known_venue_type in building_venue_names if self.is_valid_building_name(venue_name, expanded_components, street_languages, is_generic=building_is_generic_place, is_known_venue_type=building_is_known_venue_type)]
-
-        all_venue_names = set(venue_names)
-        all_building_names = set(building_names) - all_venue_names
-
-        # Ditto for venue names
-        for venue_name in all_venue_names:
-            abbreviated_venue = self.abbreviated_venue_name(venue_name, language)
-            if abbreviated_venue != venue_name and abbreviated_venue not in all_venue_names:
-                venue_names.append(abbreviated_venue)
-
-        for building_name in all_building_names:
-            abbreviated_building = self.abbreviated_venue_name(building_name, language)
-            if abbreviated_building != building_name and abbreviated_building not in all_building_names:
-                building_names.append(abbreviated_building)
-
-        if not address_components and not venue_names and not building_names:
-            return None, None, None
-
-        reduced_venue_names = []
-        reduced_building_names = []
-        expanded_only_venue_names = []
-        expanded_only_building_names = []
-
-        for venue_name in venue_names:
-            if self.is_valid_venue_name(venue_name, address_components, street_languages):
-                reduced_venue_names.append(venue_name)
-            else:
-                expanded_only_venue_names.append(venue_name)
-
-        for building_name in building_names:
-            if self.is_valid_venue_name(building_name, address_components, street_languages):
-                reduced_building_names.append(building_name)
-            else:
-                expanded_only_building_names.append(building_name)
-
-        formatted_addresses = self.formatted_addresses_with_venue_and_building_names(address_components, reduced_venue_names, reduced_building_names, country, language=language,
-                                                                                     tag_components=tag_components, minimal_only=not tag_components)
-
-        for alternate_house_number in (conscription_number, austro_hungarian_street_number):
-            if alternate_house_number is not None:
-                original_house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
-                address_components[AddressFormatter.HOUSE_NUMBER] = alternate_house_number
-                formatted_addresses.extend(self.formatted_addresses_with_venue_and_building_names(address_components, reduced_venue_names, reduced_building_names, country, language=language,
-                                                                                                  tag_components=tag_components, minimal_only=not tag_components))
-                if original_house_number:
-                    address_components[AddressFormatter.HOUSE_NUMBER] = original_house_number
-
-        if len(expanded_postal_codes) > 1:
-            for postal_code in expanded_postal_codes:
-                address_components[AddressFormatter.POSTCODE] = postal_code
-                self.components.add_postcode_phrase(address_components, language, country=country)
-                formatted_addresses.extend(self.formatted_addresses_with_venue_and_building_names(address_components, reduced_venue_names, reduced_building_names, country, language=language,
-                                                                                                  tag_components=tag_components, minimal_only=not tag_components))
-
-        if expanded_only_venue_names or expanded_only_building_names:
-            formatted_addresses.extend(self.formatted_addresses_with_venue_and_building_names(expanded_components, expanded_only_venue_names, expanded_only_building_names, country, language=language,
-                                                                                              tag_components=tag_components, minimal_only=not tag_components))
-
-        formatted_addresses.extend(self.formatted_places(address_components, country, language))
-
-        # In Japan an address without places is basically just house_number + metro_station (if given)
-        # However, where there are streets, it's useful to have address-only queries as well
-        if country != Countries.JAPAN:
-            address_only_components = self.components.drop_places(address_components)
-            address_only_components = self.components.drop_postcode(address_only_components)
-
-            if address_only_components:
-                address_only_venue_names = []
-                address_only_building_names = []
-                if not address_only_components or (len(address_only_components) == 1 and list(address_only_components)[0] == AddressFormatter.HOUSE):
-                    address_only_venue_names = [venue_name for venue_name in venue_names if self.is_valid_venue_name(venue_name, address_only_components, street_languages)]
-                    address_only_building_names = [building_name for building_name in building_names if self.is_valid_venue_name(building_name, address_only_components, street_languages)]
-
-                formatted_addresses.extend(self.formatted_addresses_with_venue_and_building_names(address_only_components, address_only_venue_names, address_only_building_names, country, language=language,
-                                                                                                  tag_components=tag_components, minimal_only=False))
-
-        # Generate a PO Box address at random (only returns non-None values occasionally) and add it to the list
-        po_box_components = self.components.po_box_address(address_components, language, country=country)
-        if po_box_components:
-            formatted_addresses.extend(self.formatted_addresses_with_venue_and_building_names(po_box_components, venue_names, building_names, country, language=language,
-                                                                                              tag_components=tag_components, minimal_only=False))
-
-        formatted_addresses.extend(self.category_queries(tags, address_components, language, country, tag_components=tag_components))
-
-        venue_name = tags.get('name')
-
-        if venue_name:
-            chain_queries = self.chain_queries(venue_name, address_components, language, country, tag_components=tag_components)
-            formatted_addresses.extend(chain_queries)
-
-        if tag_components and address_components:
-            # Pick a random dropout order
-            dropout_order = self.components.address_level_dropout_order(address_components, country)
-
-            for component in dropout_order:
-                address_components.pop(component, None)
-
-                dropout_venue_names = venue_names
-                dropout_building_names = building_names
-                if not address_components or (len(address_components) == 1 and list(address_components)[0] in (AddressFormatter.HOUSE, AddressFormatter.NAMED_BUILDING)):
-                    dropout_venue_names = [venue_name for venue_name in venue_names if self.is_valid_venue_name(venue_name, address_components, street_languages)]
-                    dropout_building_names = [building_name for building_name in building_names if self.is_valid_venue_name(building_name, address_components, street_languages)]
-
-                formatted_addresses.extend(self.formatted_addresses_with_venue_and_building_names(address_components, dropout_venue_names, dropout_building_names, country, language=language,
-                                                                                                  tag_components=tag_components, minimal_only=False))
-
-        return OrderedDict.fromkeys(formatted_addresses).keys(), country, language
-
-    def formatted_address_limited(self, tags):
-        try:
-            latitude, longitude = latlon_to_decimal(tags['lat'], tags['lon'])
-        except Exception:
-            return None, None, None
-
-        country, candidate_languages = self.country_rtree.country_and_languages(latitude, longitude)
+    @classmethod
+    def formatted_address_limited_with_reverse(cls, tags, osm_components, neighborhoods):
+        country, candidate_languages = AddressComponents.osm_country_and_languages(osm_components)
         if not (country and candidate_languages):
             return None, None, None
 
-        namespaced_language = self.namespaced_language(tags, candidate_languages)
+        namespaced_language = cls.namespaced_language(tags, candidate_languages)
 
-        revised_tags = self.normalize_address_components(tags)
+        revised_tags = cls.normalize_address_components(tags)
 
-        admin_dropout_prob = float(nested_get(self.config, ('limited', 'admin_dropout_prob'), default=0.0))
+        admin_dropout_prob = float(nested_get(cls.config, ('limited', 'admin_dropout_prob'), default=0.0))
 
-        address_components, country, language = self.components.limited(revised_tags, latitude, longitude, language=namespaced_language)
+        address_components, country, language = AddressComponents.limited_with_reverse(revised_tags, osm_components, neighborhoods, language=namespaced_language)
 
         if not address_components:
             return None, None, None
@@ -1373,9 +1423,22 @@ class OSMAddressFormatter(object):
             return None, None, None
 
         # Version with all components
-        formatted_address = self.formatter.format_address(address_components, country, language, tag_components=False, minimal_only=False)
+        formatted_address = cls.formatter.format_address(address_components, country, language, tag_components=False, minimal_only=False)
 
         return formatted_address, country, language
+
+    def formatted_address_limited(self, tags):
+        try:
+            latitude, longitude = latlon_to_decimal(tags['lat'], tags['lon'])
+        except Exception:
+            return None, None, None
+
+        osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
+
+        neighborhoods = self.components.neighborhood_components(latitude, longitude)
+
+        return self.formatted_address_limited_with_reverse(tags, osm_components, neighborhoods)
+
 
     def build_training_data(self, infile, out_dir, tag_components=True):
         '''
@@ -1523,7 +1586,8 @@ class OSMAddressFormatter(object):
             if i % 1000 == 0 and i > 0:
                 print('did {} formatted places'.format(i))
 
-    def way_names(self, way, candidate_languages, base_name_tag='name', all_name_tags=frozenset(OSM_NAME_TAGS), all_base_name_tags=frozenset(OSM_BASE_NAME_TAGS)):
+    @classmethod
+    def way_names(cls, way, candidate_languages, base_name_tag='name', all_name_tags=frozenset(OSM_NAME_TAGS), all_base_name_tags=frozenset(OSM_BASE_NAME_TAGS)):
         names = defaultdict(list)
 
         more_than_one_official_language = sum((1 for l, d in candidate_languages if d)) > 1
@@ -1536,7 +1600,7 @@ class OSMAddressFormatter(object):
             default_language = None
             name = way.get('name')
             if name:
-                address_language = self.components.address_language({AddressFormatter.ROAD: name}, candidate_languages)
+                address_language = AddressComponents.address_language({AddressFormatter.ROAD: name}, candidate_languages)
                 if address_language and address_language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE):
                     default_language = address_language
 
@@ -1544,7 +1608,7 @@ class OSMAddressFormatter(object):
             tag = safe_decode(tag)
             base_tag = tag.rsplit(six.u(':'), 1)[0]
 
-            normalized_tag = self.replace_numbered_tag(base_tag)
+            normalized_tag = cls.replace_numbered_tag(base_tag)
             if normalized_tag:
                 base_tag = normalized_tag
             if base_tag not in all_name_tags:
@@ -1559,7 +1623,7 @@ class OSMAddressFormatter(object):
 
             name = way[tag]
             if default_language is None and tag == 'name':
-                address_language = self.components.address_language({AddressFormatter.ROAD: name}, candidate_languages)
+                address_language = AddressComponents.address_language({AddressFormatter.ROAD: name}, candidate_languages)
                 if address_language and address_language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE):
                     default_language = address_language
 
