@@ -31,6 +31,7 @@ class AddressFormatter(object):
     Approximate Python port of lokku's Geo::Address::Formatter
 
     Usage:
+        address_formatter = AddressFormatter()
         components = {
             'house': u'Anticafé',
             'house_number': '2',
@@ -68,8 +69,8 @@ class AddressFormatter(object):
     SUBDIVISION = 'subdivision'
     METRO_STATION = 'metro_station'
     SUBURB = 'suburb'
-    JAPAN_QUARTER = 'japan_quarter'
-    JAPAN_NEIGHBORHOOD = 'japan_neighborhood'
+    JAPAN_MAJOR_NEIGHBORHOOD = 'japan_major_neighborhood'
+    JAPAN_MINOR_NEIGHBORHOOD = 'japan_minor_neighborhood'
     CITY_DISTRICT = 'city_district'
     LOCALITY = 'locality'
     CITY = 'city'
@@ -99,8 +100,8 @@ class AddressFormatter(object):
         NAMED_BUILDING,
         BUILDING,
         METRO_STATION,
-        JAPAN_QUARTER,
-        JAPAN_NEIGHBORHOOD,
+        JAPAN_MAJOR_NEIGHBORHOOD,
+        JAPAN_MINOR_NEIGHBORHOOD,
         SUBURB,
         CITY_DISTRICT,
         LOCALITY,
@@ -116,8 +117,8 @@ class AddressFormatter(object):
 
     BOUNDARY_COMPONENTS_ORDERED = [
         METRO_STATION,
-        JAPAN_QUARTER,
-        JAPAN_NEIGHBORHOOD,
+        JAPAN_MAJOR_NEIGHBORHOOD,
+        JAPAN_MINOR_NEIGHBORHOOD,
         SUBURB,
         CITY_DISTRICT,
         LOCALITY,
@@ -178,8 +179,8 @@ class AddressFormatter(object):
     tag_aliases = {
         NAMED_BUILDING: HOUSE,
         SUBDIVISION: HOUSE,
-        JAPAN_QUARTER: SUBURB,
-        JAPAN_NEIGHBORHOOD: SUBURB,
+        JAPAN_MAJOR_NEIGHBORHOOD: SUBURB,
+        JAPAN_MINOR_NEIGHBORHOOD: SUBURB,
         LOCALITY: CITY,
     }
 
