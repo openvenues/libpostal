@@ -500,7 +500,7 @@ if __name__ == '__main__':
 
     osm_rtree = None
     if args.rtree_dir:
-        osm_rtree = OSMReverseGeocoder.load(args.rtree_dir)
+        osm_rtree = OSMAdminReverseGeocoder.load(args.rtree_dir)
 
     neighborhoods_rtree = None
     if args.neighborhoods_rtree_dir:
