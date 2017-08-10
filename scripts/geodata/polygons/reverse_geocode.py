@@ -450,7 +450,9 @@ class OSMAdminReverseGeocoder(OSMReverseGeocoder):
         json.dump(self.admin_levels, open(os.path.join(d, self.ADMIN_LEVELS_FILENAME), 'w'))
 
     def tags_with_points(self):
-        for tags, poly in iter(self):
+        for i in xrange(self.i):
+            tags = self.get_properties(i)
+
             point = None
             if 'admin_center' in tags and 'lat' in tags['admin_center'] and 'lon' in tags['admin_center']:
                 admin_center = tags['admin_center']
@@ -465,10 +467,12 @@ class OSMAdminReverseGeocoder(OSMReverseGeocoder):
                     point = None
 
             if point is None:
+                feature = self.get_polygon_from_db(i)
+                poly = self.polygon_from_geojson(feature)
                 try:
-                    point = poly.context.representative_point()
+                    point = poly.representative_point()
                 except ValueError:
-                    point = poly.context.centroid
+                    point = poly.centroid
 
             try:
                 lat = point.y
@@ -478,7 +482,6 @@ class OSMAdminReverseGeocoder(OSMReverseGeocoder):
             tags['lat'] = lat
             tags['lon'] = lon
             yield tags
-
 
 class OSMAreaReverseGeocoder(OSMReverseGeocoder):
     AREAS_FILENAME = 'areas.json'
