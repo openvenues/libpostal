@@ -36,26 +36,23 @@ class PointIndexSpark(object):
     def distance_sort(cls, point):
         coords = point['geometry']['coordinates']
         lat, lon = coords[1], coords[0]
+
         def distance_to(other):
             other_coords = other['geometry']['coordinates']
             other_lat, other_lon = other_coords[1], other_coords[0]
             return haversine_distance(lat, lon, other_lat, other_lon)
         return distance_to
-                                                                                                                                             p['geometry']['coordinates'][1], p['geometry']['coordinates'][0])))
+
     @classmethod
     def nearby_points(cls, point_ids, indexed_point_ids, precision=None):
         indexed_point_geohashes = cls.indexed_point_geohashes(indexed_point_ids)
         point_geohashes = cls.point_geohashes(point_ids)
 
         nearby_points = indexed_point_geohashes.join(point_geohashes) \
-                                               # (index_point_id, point_id)
                                                .values() \
                                                .join(indexed_point_ids) \
-                                               # (point_id, index_point)
                                                .values() \
-                                               # (point_id, indexed_points)
                                                .groupByKey() \
-                                               # (point_id, (indexed_points, point))
                                                .join(point_ids)
 
         return nearby_points.mapValues(lambda (indexed_points, point): (point, sorted(list(indexed_points), key=cls.distance_sort)))
