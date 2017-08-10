@@ -87,7 +87,7 @@ if __name__ == '__main__':
         places_index = PlaceReverseGeocoder.load(args.places_index_dir)
 
     if args.openaddresses_dir and args.format:
-        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index)
+        components = AddressComponents(osm_rtree, country_rtree, neighborhoods_rtree, places_index)
 
-        oa_formatter = OpenAddressesFormatter(components, country_rtree, debug=args.debug)
+        oa_formatter = OpenAddressesFormatter(components, debug=args.debug)
         oa_formatter.build_training_data(args.openaddresses_dir, args.out_dir, tag_components=not args.untagged, sources_only=args.sources or None)

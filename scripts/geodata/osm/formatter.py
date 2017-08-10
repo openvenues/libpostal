@@ -1108,7 +1108,7 @@ class OSMAddressFormatter(object):
         return formatted_addresses
 
     @classmethod
-    def formatted_addresses_with_reverse(cls, tags, osm_components, neighborhoods, city_point_components,
+    def formatted_addresses_with_reverse(cls, tags, osm_components, country_components, neighborhoods, city_point_components,
                                          building_components, subdivision_components, nearest_metro_station=None, tag_components=True):
         country, candidate_languages = AddressComponents.osm_country_and_languages(osm_components)
         if not (country and candidate_languages):
@@ -1203,7 +1203,7 @@ class OSMAddressFormatter(object):
         revised_tags = cls.fix_component_encodings(revised_tags)
 
         address_components, country, language = AddressComponents.expanded_with_reverse(revised_tags,
-                                                                                        osm_components, neighborhoods, city_point_components,
+                                                                                        osm_components, country_components, neighborhoods, city_point_components,
                                                                                         language=language or namespaced_language,
                                                                                         num_floors=num_floors, num_basements=num_basements,
                                                                                         zone=zone, add_sub_building_components=add_sub_building_components,
@@ -1678,7 +1678,7 @@ class OSMAddressFormatter(object):
             except Exception:
                 continue
 
-            country, candidate_languages = self.country_rtree.country_and_languages(latitude, longitude)
+            country, candidate_languages = self.components.country_rtree.country_and_languages(latitude, longitude)
             if not (country and candidate_languages):
                 continue
 
@@ -1780,7 +1780,7 @@ class OSMAddressFormatter(object):
             except Exception:
                 continue
 
-            country, candidate_languages = self.country_rtree.country_and_languages(latitude, longitude)
+            country, candidate_languages = self.components.country_rtree.country_and_languages(latitude, longitude)
             if not (country and candidate_languages):
                 continue
 

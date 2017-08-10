@@ -85,9 +85,8 @@ class OpenAddressesFormatter(object):
                                  re.I | re.UNICODE)
             unit_type_regexes[lang] = pattern
 
-    def __init__(self, components, country_rtree, debug=False):
+    def __init__(self, components, debug=False):
         self.components = components
-        self.country_rtree = country_rtree
 
         self.debug = debug
 
@@ -450,7 +449,7 @@ class OpenAddressesFormatter(object):
                 continue
 
             if components:
-                country, candidate_languages = self.country_rtree.country_and_languages(latitude, longitude)
+                country, candidate_languages = self.components.country_rtree.country_and_languages(latitude, longitude)
                 if not (country and candidate_languages) or (country != country_dir and not override_country_dir):
                     country = country_dir
                     candidate_languages = get_country_languages(country)
@@ -662,7 +661,7 @@ class OpenAddressesFormatter(object):
         for country_dir in sorted(openaddresses_config.country_configs.keys()):
             country_config = openaddresses_config.country_configs[country_dir]
             # Clear country cache for each new country
-            self.country_rtree.clear_cache()
+            self.components.country_rtree.clear_cache()
 
             for file_config in country_config.get('files', []):
                 filename = file_config['filename']

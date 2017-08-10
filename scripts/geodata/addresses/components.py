@@ -113,7 +113,7 @@ class AddressComponents(object):
     prefixes like "London Borough of", pruning duplicates like "Antwerpen, Antwerpen, Antwerpen".
 
     Usage:
-    >>> components = AddressComponents(osm_admin_rtree, neighborhoods_rtree, places_index)
+    >>> components = AddressComponents(osm_admin_rtree, country_rtree, neighborhoods_rtree, places_index)
     >>> components.expand({'name': 'Hackney Empire'}, 51.54559, -0.05567)
 
     Returns (results vary because of randomness):
@@ -211,8 +211,9 @@ class AddressComponents(object):
     # Non-admin component dropout
     address_level_dropout_probabilities = {k: v['probability'] for k, v in six.iteritems(config['dropout'])}
 
-    def __init__(self, osm_admin_rtree, neighborhoods_rtree, places_index):
+    def __init__(self, osm_admin_rtree, country_rtree, neighborhoods_rtree, places_index):
         self.osm_admin_rtree = osm_admin_rtree
+        self.country_rtree = country_rtree
         self.neighborhoods_rtree = neighborhoods_rtree
         self.places_index = places_index
 
@@ -273,6 +274,9 @@ class AddressComponents(object):
 
     def osm_reverse_geocoded_components(self, latitude, longitude):
         return self.osm_admin_rtree.point_in_poly(latitude, longitude, return_all=True)
+
+    def country_reverse_geocoded_components(self, latitude, longitude):
+        return self.country_rtree.point_in_poly(latitude, longitude, return_all=True)
 
     @classmethod
     def osm_country_and_languages(cls, osm_components):
@@ -2272,7 +2276,8 @@ class AddressComponents(object):
 
     @classmethod
     def expanded_with_reverse(cls, address_components,
-                              osm_components, neighborhoods, city_point_components,
+                              osm_components, country_components,
+                              neighborhoods, city_point_components,
                               language=None, dropout_places=True, population=None,
                               population_from_city=False, check_city_wikipedia=False,
                               add_sub_building_components=True, hyphenation=True,
@@ -2292,9 +2297,9 @@ class AddressComponents(object):
         '''
 
         if country is None:
-            country, candidate_languages = cls.osm_country_and_languages(osm_components)
+            country, candidate_languages = cls.osm_country_and_languages(country_components)
         else:
-            _, candidate_languages = cls.osm_country_and_languages(osm_components)
+            _, candidate_languages = cls.osm_country_and_languages(country_components)
             if not candidate_languages:
                 candidate_languages = get_country_lanaguages(country).items()
 
@@ -2407,7 +2412,8 @@ class AddressComponents(object):
                  population_from_city=False, check_city_wikipedia=False,
                  add_sub_building_components=True, hyphenation=True,
                  num_floors=None, num_basements=None, zone=None,
-                 osm_components=None, neighborhoods=None, city_point_components=None,
+                 osm_components=None, country_components=None,
+                 neighborhoods=None, city_point_components=None,
                  country=None):
         '''
         Expanded components
@@ -2429,6 +2435,9 @@ class AddressComponents(object):
         if osm_components is None:
             osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
 
+        if country_components is None:
+            country_components = self.country_reverse_geocoded_components(latitude, longitude)
+
         if neighborhoods is None:
             neighborhoods = self.neighborhood_components(latitude, longitude)
 
@@ -2444,8 +2453,8 @@ class AddressComponents(object):
                                           country=country)
 
     @classmethod
-    def limited_with_reverse(cls, address_components, osm_components, neighborhoods, language=None):
-        country, candidate_languages = self.osm_country_and_languages(osm_components)
+    def limited_with_reverse(cls, address_components, osm_components, country_components, neighborhoods, language=None):
+        country, candidate_languages = self.osm_country_and_languages(country_components)
 
         if not (country and candidate_languages):
             return None, None, None
@@ -2507,7 +2516,8 @@ class AddressComponents(object):
             return None, None, None
 
         osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
+        country_components = self.country_reverse_geocoded_components(latitude, longitude)
 
         neighborhoods = self.neighborhood_components(latitude, longitude)
 
-        return self.limited_with_reverse(address_components, osm_components, neighborhoods, language=language)
+        return self.limited_with_reverse(address_components, osm_components, country_components, neighborhoods, language=language)

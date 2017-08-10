@@ -539,25 +539,25 @@ if __name__ == '__main__':
             parser.error('--places-index-dir required for formatted addresses')
 
     if args.address_file and args.format:
-        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index)
-        osm_formatter = OSMAddressFormatter(components, country_rtree, subdivisions_rtree, buildings_rtree, metro_stations_index)
+        components = AddressComponents(osm_rtree, country_rtree, neighborhoods_rtree, places_index)
+        osm_formatter = OSMAddressFormatter(components, subdivisions_rtree, buildings_rtree, metro_stations_index)
         osm_formatter.build_training_data(args.address_file, args.out_dir, tag_components=not args.untagged)
     if args.address_file and args.limited_addresses:
-        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index)
-        osm_formatter = OSMAddressFormatter(components, country_rtree, subdivisions_rtree, buildings_rtree, metro_stations_index, splitter=u' ')
+        components = AddressComponents(osm_rtree, country_rtree, neighborhoods_rtree, places_index)
+        osm_formatter = OSMAddressFormatter(components, subdivisions_rtree, buildings_rtree, metro_stations_index, splitter=u' ')
         osm_formatter.build_limited_training_data(args.address_file, args.out_dir)
 
     if args.place_nodes_file and args.format:
-        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index)
-        osm_formatter = OSMAddressFormatter(components, country_rtree, subdivisions_rtree, buildings_rtree, metro_stations_index)
+        components = AddressComponents(osm_rtree, country_rtree, neighborhoods_rtree, places_index)
+        osm_formatter = OSMAddressFormatter(components, subdivisions_rtree, buildings_rtree, metro_stations_index)
         osm_formatter.build_place_training_data(args.place_nodes_file, args.out_dir, tag_components=not args.untagged)
 
     if args.intersections_file and args.format:
-        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index)
-        osm_formatter = OSMAddressFormatter(components, country_rtree, subdivisions_rtree, buildings_rtree, metro_stations_index)
+        components = AddressComponents(osm_rtree, country_rtree, neighborhoods_rtree, places_index)
+        osm_formatter = OSMAddressFormatter(components, subdivisions_rtree, buildings_rtree, metro_stations_index)
         osm_formatter.build_intersections_training_data(args.intersections_file, args.out_dir, tag_components=not args.untagged)
 
     if args.streets_file and args.format:
-        components = AddressComponents(osm_rtree, neighborhoods_rtree, places_index)
-        osm_formatter = OSMAddressFormatter(components, country_rtree, subdivisions_rtree, buildings_rtree, metro_stations_index)
+        components = AddressComponents(osm_rtree, country_rtree, neighborhoods_rtree, places_index)
+        osm_formatter = OSMAddressFormatter(components, subdivisions_rtree, buildings_rtree, metro_stations_index)
         osm_formatter.build_ways_training_data(args.streets_file, args.out_dir, tag_components=not args.untagged)
