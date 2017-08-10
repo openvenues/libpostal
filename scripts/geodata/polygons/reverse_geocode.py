@@ -275,15 +275,11 @@ class OSMReverseGeocoder(RTreePolygonIndex):
     components to stitch together the polygons.
     '''
 
-    ADMIN_LEVEL = 'admin_level'
-
-    ADMIN_LEVELS_FILENAME = 'admin_levels.json'
-
-    polygon_reader = OSMAdminPolygonReader
+    polygon_reader = None
 
     persistent_polygons = True
-    # Cache almost everything
-    cache_size = 250000
+
+    cache_size = 0
     simplify_polygons = False
 
     fix_invalid_polygons = True
@@ -416,6 +412,23 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
         return index
 
+    def sort_level(self, i):
+        raise NotImplementedError('Children must implement')
+
+    def get_candidate_polygons(self, lat, lon):
+        candidates = super(OSMReverseGeocoder, self).get_candidate_polygons(lat, lon)
+        return sorted(candidates, key=self.sort_level, reverse=True)
+
+
+class OSMAdminReverseGeocoder(OSMReverseGeocoder):
+    polygon_reader = OSMAdminPolygonReader
+    # Cache almost everything
+    cache_size = 250000
+
+    ADMIN_LEVEL = 'admin_level'
+
+    ADMIN_LEVELS_FILENAME = 'admin_levels.json'
+
     def setup(self):
         self.admin_levels = []
 
@@ -427,18 +440,44 @@ class OSMReverseGeocoder(RTreePolygonIndex):
             admin_level = 0
         self.admin_levels.append(admin_level)
 
+    def sort_level(self, i):
+        return self.admin_levels[i]
+
     def load_polygon_properties(self, d):
         self.admin_levels = json.load(open(os.path.join(d, self.ADMIN_LEVELS_FILENAME)))
 
     def save_polygon_properties(self, d):
         json.dump(self.admin_levels, open(os.path.join(d, self.ADMIN_LEVELS_FILENAME), 'w'))
 
-    def sort_level(self, i):
-        return self.admin_levels[i]
+    def tags_with_points(self):
+        for tags, poly in iter(self):
+            point = None
+            if 'admin_center' in tags and 'lat' in tags['admin_center'] and 'lon' in tags['admin_center']:
+                admin_center = tags['admin_center']
 
-    def get_candidate_polygons(self, lat, lon):
-        candidates = super(OSMReverseGeocoder, self).get_candidate_polygons(lat, lon)
-        return sorted(candidates, key=self.sort_level, reverse=True)
+                latitude = admin_center['lat']
+                longitude = admin_center['lon']
+
+                try:
+                    latitude, longitude = latlon_to_decimal(latitude, longitude)
+                    point = Point(longitude, latitude)
+                except Exception:
+                    point = None
+
+            if point is None:
+                try:
+                    point = poly.context.representative_point()
+                except ValueError:
+                    point = poly.context.centroid
+
+            try:
+                lat = point.y
+                lon = point.x
+            except Exception:
+                continue
+            tags['lat'] = lat
+            tags['lon'] = lon
+            yield tags
 
 
 class OSMAreaReverseGeocoder(OSMReverseGeocoder):
@@ -505,7 +544,7 @@ class OSMAirportReverseGeocoder(OSMAreaReverseGeocoder):
     include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['iata', 'aerodrome', 'aerodrome:type', 'city_served'])
 
 
-class OSMCountryReverseGeocoder(OSMReverseGeocoder):
+class OSMCountryReverseGeocoder(OSMAdminReverseGeocoder):
     persistent_polygons = True
     cache_size = 10000
     simplify_polygons = False
