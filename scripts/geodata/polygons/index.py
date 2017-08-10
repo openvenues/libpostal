@@ -9,7 +9,7 @@ import ujson as json
 
 from collections import OrderedDict, defaultdict
 from lru import LRU
-from shapely.geometry import Point, Polygon, MultiPolygon
+from shapely.geometry import Point, Polygon, MultiPolygon, shape
 from shapely.prepared import prep
 from shapely.geometry.geo import mapping
 

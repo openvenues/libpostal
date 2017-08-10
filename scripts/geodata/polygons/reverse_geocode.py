@@ -468,7 +468,7 @@ class OSMAdminReverseGeocoder(OSMReverseGeocoder):
 
             if point is None:
                 feature = self.get_polygon_from_db(i)
-                poly = self.polygon_from_geojson(feature)
+                poly = shape(feature['geometry'])
                 try:
                     point = poly.representative_point()
                 except ValueError:
