@@ -82,7 +82,7 @@ class PlaceReverseGeocoder(PointIndex):
                      six.u('{}:*').format(k.split(six.u(':'), 1)[0]) in cls.include_property_patterns)}
 
             props['type'] = 'node'
-            props['id'] = node_id
+            props['id'] = safe_decode(node_id)
 
             index.add_point(lat, lon, props)
 

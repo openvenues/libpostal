@@ -276,7 +276,7 @@ class OSMPolygonReader(object):
                         val = self.nodes.get(long(elem_id))
                         if val is not None:
                             val['type'] = 'node'
-                            val['id'] = long(elem_id)
+                            val['id'] = safe_decode(elem_id)
                             admin_centers.append(val)
                     elif role == 'label' and elem_type == 'node':
                         val = self.nodes.get(long(elem_id))
