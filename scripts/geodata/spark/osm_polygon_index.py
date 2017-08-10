@@ -2,16 +2,27 @@ import ujson as json
 
 from shapely.geometry import shape
 
+from geodata.encoding import safe_decode
+
 from geodata.polygons.area import polygon_area
 from geodata.spark.polygon_index import PolygonIndexSpark
+from geodata.spark.point_index import PointIndexSpark
 
 
-class OSMPolygonIndexSpark(PolygonIndexSpark):
+class OSMIndexSpark(object):
     @classmethod
     def geojson_ids(cls, lines):
         geojson = lines.map(lambda line: json.loads(line.rstrip()))
-        geojson_ids = geojson.map(lambda rec: ((rec['properties']['type'], rec['properties']['id']), cls.preprocess_geojson(rec)))
+        geojson_ids = geojson.map(lambda rec: ((rec['properties']['type'], safe_decode(rec['properties']['id'])), cls.preprocess_geojson(rec)))
         return geojson_ids
+
+
+class OSMPolygonIndexSpark(OSMIndexSpark, PolygonIndexSpark):
+    pass
+
+
+class OSMPointIndexSpark(OSMIndexSpark, PointIndexSpark):
+    pass
 
 
 class OSMAdminPolygonIndexSpark(OSMPolygonIndexSpark):
