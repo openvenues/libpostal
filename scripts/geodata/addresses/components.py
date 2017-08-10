@@ -2444,7 +2444,7 @@ class AddressComponents(object):
                                           country=country)
 
     @classmethod
-    def limited_with_reverse(cls, address_components, osm_components, neighborhoods):
+    def limited_with_reverse(cls, address_components, osm_components, neighborhoods, language=None):
         country, candidate_languages = self.osm_country_and_languages(osm_components)
 
         if not (country and candidate_languages):
@@ -2455,11 +2455,10 @@ class AddressComponents(object):
         for key in remove_keys:
             _ = value.pop(key, None)
 
-        language = None
-
         more_than_one_official_language = len(candidate_languages) > 1
 
-        language = self.address_language(value, candidate_languages)
+        if not language:
+            language = self.address_language(value, candidate_languages)
 
         address_components = self.normalize_address_components(value)
 
@@ -2501,7 +2500,7 @@ class AddressComponents(object):
 
         return address_components, country, language
 
-    def limited(self, address_components, latitude, longitude):
+    def limited(self, address_components, latitude, longitude, language=None):
         try:
             latitude, longitude = latlon_to_decimal(latitude, longitude)
         except Exception:
@@ -2511,4 +2510,4 @@ class AddressComponents(object):
 
         neighborhoods = self.neighborhood_components(latitude, longitude)
 
-        return self.limited_with_reverse(address_components, osm_components, neighborhoods)
+        return self.limited_with_reverse(address_components, osm_components, neighborhoods, language=language)
