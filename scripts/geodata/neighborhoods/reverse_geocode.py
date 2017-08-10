@@ -165,8 +165,11 @@ class ClickThatHoodReverseGeocoder(GeohashPolygonIndex):
 
             path = os.path.join(data_path, filename)
             features = json.load(open(path))['features']
-            for f in features:
-                f['properties']['component'] = component
+            for i, f in enumerate(features):
+                props = f['properties']
+                props['component'] = component
+                props['type'] = 'clickthathood'
+                props['id'] = u'{}:{}'.format(filename, i)
 
             try:
                 index.add_geojson_like_file(features)
@@ -337,7 +340,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
             element_id = long(element_id)
 
             props['type'] = id_type
-            props['id'] = element_id
+            props['id'] = safe_decode(element_id)
 
             possible_neighborhood = osm_definitions.meets_definition(attrs, osm_definitions.EXTENDED_NEIGHBORHOOD)
             is_neighborhood = osm_definitions.meets_definition(attrs, osm_definitions.NEIGHBORHOOD)

@@ -51,6 +51,10 @@ def str_id(v):
     return str(v)
 
 
+def qs_type(v):
+    return u'qs_{}'.format(safe_decode(v))
+
+
 class QuattroshapesReverseGeocoder(RTreePolygonIndex):
     '''
     Quattroshapes polygons, for levels up to localities, are relatively
@@ -94,65 +98,74 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
 
     NAME = 'name'
     CODE = 'code'
-    LEVEL = 'level'
+    LEVEL = 'type'
     GEONAMES_ID = 'geonames_id'
     WOE_ID = 'woe_id'
+    ID = 'id'
 
     polygon_properties = {
         COUNTRIES_FILENAME: {
             NAME: ('qs_a0', safe_decode),
             CODE: ('qs_iso_cc', safe_decode),
-            LEVEL: ('qs_level', safe_decode),
+            LEVEL: ('qs_level', qs_type),
             GEONAMES_ID: ('qs_gn_id', str_id),
             WOE_ID: ('qs_woe_id', str_id),
+            ID: ('qs_woe_id', str_id),
         },
         ADMIN1_FILENAME: {
             NAME: ('qs_a1', safe_decode),
             CODE: ('qs_a1_lc', safe_decode),
-            LEVEL: ('qs_level', safe_decode),
+            LEVEL: ('qs_level', qs_type),
             GEONAMES_ID: ('qs_gn_id', str_id),
             WOE_ID: ('qs_woe_id', str_id),
+            ID: ('qs_woe_id', str_id),
         },
         ADMIN1_REGION_FILENAME: {
             NAME: ('qs_a1r', safe_decode),
             CODE: ('qs_a1r_lc', safe_decode),
-            LEVEL: ('qs_level', safe_decode),
+            LEVEL: ('qs_level', qs_type),
             GEONAMES_ID: ('qs_gn_id', str_id),
             WOE_ID: ('qs_woe_id', str_id),
+            ID: ('qs_woe_id', str_id),
         },
         ADMIN2_FILENAME: {
             NAME: ('qs_a2', decode_latin1),
             CODE: ('qs_a2_lc', safe_decode),
-            LEVEL: ('qs_level', safe_decode),
+            LEVEL: ('qs_level', qs_type),
             GEONAMES_ID: ('qs_gn_id', str_id),
             WOE_ID: ('qs_woe_id', str_id),
+            ID: ('qs_woe_id', str_id),
         },
         ADMIN2_REGION_FILENAME: {
             NAME: ('qs_a2r', safe_decode),
             CODE: ('qs_a2r_lc', safe_decode),
-            LEVEL: ('qs_level', safe_decode),
+            LEVEL: ('qs_level', qs_type),
             GEONAMES_ID: ('qs_gn_id', str_id),
             WOE_ID: ('qs_woe_id', str_id),
+            ID: ('qs_woe_id', str_id),
         },
         LOCAL_ADMIN_FILENAME: {
             NAME: ('qs_la', safe_decode),
             CODE: ('qs_la_lc', safe_decode),
-            LEVEL: ('qs_level', safe_decode),
+            LEVEL: ('qs_level', qs_type),
             GEONAMES_ID: ('qs_gn_id', str_id),
             WOE_ID: ('qs_woe_id', str_id),
+            ID: ('qs_woe_id', str_id),
         },
         LOCALITIES_FILENAME: {
             NAME: ('qs_loc', safe_decode),
-            LEVEL: ('qs_level', safe_decode),
+            LEVEL: ('qs_level', qs_type),
             GEONAMES_ID: ('qs_gn_id', str),
             WOE_ID: ('qs_woe_id', str),
+            ID: ('qs_woe_id', str_id),
         },
         NEIGHBORHOODS_FILENAME: {
             NAME: ('name', safe_decode),
             CODE: ('name_en', safe_decode),
-            LEVEL: ('qs_level', safe_decode),
+            LEVEL: ('qs_level', qs_type),
             GEONAMES_ID: ('gn_id', str_id),
             WOE_ID: ('woe_id', str_id),
+            ID: ('qs_woe_id', str_id),
         }
     }
 
