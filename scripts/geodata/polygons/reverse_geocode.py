@@ -165,7 +165,7 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
             LEVEL: ('qs_level', qs_type),
             GEONAMES_ID: ('gn_id', str_id),
             WOE_ID: ('woe_id', str_id),
-            ID: ('qs_woe_id', str_id),
+            ID: ('woe_id', str_id),
         }
     }
 
