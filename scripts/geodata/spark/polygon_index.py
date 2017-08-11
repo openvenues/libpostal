@@ -22,8 +22,7 @@ class PolygonIndexSpark(object):
         return rec
 
     @classmethod
-    def geojson_ids(cls, lines):
-        geojson = lines.map(lambda line: json.loads(line.rstrip()))
+    def geojson_ids(cls, geojson):
         geojson_ids = geojson.zipWithUniqueId() \
                              .map(lambda (rec, uid): (uid, cls.preprocess_geojson(rec)))
         return geojson_ids

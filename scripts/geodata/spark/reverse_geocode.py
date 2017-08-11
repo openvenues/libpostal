@@ -11,8 +11,7 @@ from geodata.spark.point_index import PointIndexSpark
 
 class OSMIndexSpark(object):
     @classmethod
-    def geojson_ids(cls, lines):
-        geojson = lines.map(lambda line: json.loads(line.rstrip()))
+    def geojson_ids(cls, geojson):
         geojson_ids = geojson.map(lambda rec: ((rec['properties']['type'], safe_decode(rec['properties']['id'])), cls.preprocess_geojson(rec)))
         return geojson_ids
 
@@ -49,7 +48,7 @@ class OSMMetroStationIndexSpark(OSMPointIndexSpark):
     pass
 
 
-class NeighborhoodsIndexSpark(PolygonIndexSpark):
+class NeighborhoodsIndexSpark(OSMPolygonIndexSpark):
     source_priorities = {
         'osm': 0,            # Best names/polygons, same coordinate system
         'osm_cth': 1,        # Prefer the OSM names if possible
