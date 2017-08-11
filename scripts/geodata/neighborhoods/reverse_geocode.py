@@ -24,7 +24,7 @@ from geodata.osm.components import osm_address_components
 from geodata.osm.definitions import osm_definitions
 from geodata.osm.extract import parse_osm, osm_type_and_id, NODE, WAY, RELATION, OSM_NAME_TAGS
 from geodata.polygons.index import *
-from geodata.polygons.reverse_geocode import QuattroshapesReverseGeocoder, OSMCountryReverseGeocoder, OSMReverseGeocoder
+from geodata.polygons.reverse_geocode import QuattroshapesReverseGeocoder, OSMCountryReverseGeocoder, OSMAdminReverseGeocoder
 from geodata.statistics.tf_idf import IDFIndex
 
 
@@ -179,12 +179,12 @@ class ClickThatHoodReverseGeocoder(GeohashPolygonIndex):
         return index
 
 
-class OSMNeighborhoodReverseGeocoder(OSMReverseGeocoder):
+class OSMNeighborhoodReverseGeocoder(OSMAdminReverseGeocoder):
     persistent_polygons = False
     cache_size = 10000
     simplify_polygons = False
     polygon_reader = OSMNeighborhoodPolygonReader
-    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['postal_code'])
+    include_property_patterns = OSMAdminReverseGeocoder.include_property_patterns | set(['postal_code'])
 
     cache_size = 0
 
@@ -287,7 +287,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
 
         country_rtree = OSMCountryReverseGeocoder.load(country_rtree_dir)
 
-        osm_admin_rtree = OSMReverseGeocoder.load(osm_rtree_dir)
+        osm_admin_rtree = OSMAdminReverseGeocoder.load(osm_rtree_dir)
         osm_admin_rtree.cache_size = 1000
 
         logger.info('Creating IDF index')
