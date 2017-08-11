@@ -41,6 +41,38 @@ class OSMAdminPolygonIndexSpark(OSMPolygonIndexSpark):
         return admin_level
 
 
+class OSMPlaceIndexSpark(OSMPointIndexSpark):
+    pass
+
+
+class OSMMetroStationIndexSpark(OSMPointIndexSpark):
+    pass
+
+
+class NeighborhoodsIndexSpark(PolygonIndexSpark):
+    source_priorities = {
+        'osm': 0,            # Best names/polygons, same coordinate system
+        'osm_cth': 1,        # Prefer the OSM names if possible
+        'clickthathood': 2,  # Better names/polygons than Quattroshapes
+        'osm_quattro': 3,    # Prefer OSM names matched with Quattroshapes polygon
+        'quattroshapes': 4,  # Good results in some countries/areas
+    }
+
+    level_priorities = {
+        'neighborhood': 0,
+        'local_admin': 1,
+    }
+
+    SOURCE_KEY = 'source'
+    POLYGON_TYPE_KEY = 'polygon_type'
+
+    @classmethod
+    def sort_key(cls, properties):
+        source = properties[cls.SOURCE_KEY]
+        polygon_type = properties[cls.POLYGON_TYPE_KEY]
+        return (cls.source_priorities[source], cls.level_priorities[polygon_type])
+
+
 class OSMAreaPolygonIndexSpark(OSMPolygonIndexSpark):
     AREA_KEY = '__area__'
 
@@ -58,6 +90,14 @@ class OSMAreaPolygonIndexSpark(OSMPolygonIndexSpark):
     def sort_key(cls, props):
         area_key = cls.AREA_KEY
         return props[area_key]
+
+
+class OSMSubdivisionsPolygonIndexSpark(OSMAreaPolygonIndexSpark):
+    pass
+
+
+class OSMBuildingsPolygonIndexSpark(OSMAreaPolygonIndexSpark):
+    pass
 
 
 class OSMCountryPolygonIndexSpark(OSMPolygonIndexSpark):
