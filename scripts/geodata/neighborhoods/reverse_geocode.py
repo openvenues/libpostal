@@ -485,7 +485,7 @@ class NeighborhoodReverseGeocoder(RTreePolygonIndex):
                         props['polygon_type'] = 'local_admin'
                     else:
                         continue
-                elif props.get(QuattroshapesReverseGeocoder.LEVEL, None) == 'neighborhood':
+                elif props.get(QuattroshapesReverseGeocoder.LEVEL, None) == 'qs_neighborhood':
                     component = AddressFormatter.SUBURB
                     name = props.get('name')
                     if not name:
