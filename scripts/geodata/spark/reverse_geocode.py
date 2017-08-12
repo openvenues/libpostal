@@ -12,7 +12,7 @@ from geodata.spark.point_index import PointIndexSpark
 class OSMIndexSpark(object):
     @classmethod
     def geojson_ids(cls, geojson):
-        geojson_ids = geojson.map(lambda rec: ((rec['properties']['type'], safe_decode(rec['properties']['id'])), cls.preprocess_geojson(rec)))
+        geojson_ids = geojson.map(lambda rec: ((rec['properties']['type'], safe_decode(rec['properties']['id'])), rec))
         return geojson_ids
 
 
