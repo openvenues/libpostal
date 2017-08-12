@@ -55,7 +55,6 @@ class PolygonIndexSpark(object):
 
     @classmethod
     def points_in_polygons(cls, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0):
-        polygon_ids = polygon_ids.mapValues(lambda rec: cls.preprocess_geojson(rec))
         polygon_geohashes = cls.polygon_geohashes(polygon_ids)
         point_geohashes = cls.point_geohashes(point_ids)
 
@@ -93,6 +92,7 @@ class PolygonIndexSpark(object):
 
     @classmethod
     def points_with_polygons(cls, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0, with_buffer_levels=False):
+        polygon_ids = polygon_ids.mapValues(lambda rec: cls.preprocess_geojson(rec))
         points_in_polygons = cls.points_in_polygons(point_ids, polygon_ids, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance)
         polygon_props = polygon_ids.mapValues(lambda poly: poly['properties'])
 
