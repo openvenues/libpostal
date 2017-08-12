@@ -41,11 +41,11 @@ class OSMAdminPolygonIndexSpark(OSMPolygonIndexSpark):
 
 
 class OSMPlaceIndexSpark(OSMPointIndexSpark):
-    pass
+    GEOHASH_PRECISION = 5
 
 
 class OSMMetroStationIndexSpark(OSMPointIndexSpark):
-    pass
+    GEOHASH_PRECISION = 6
 
 
 class NeighborhoodsIndexSpark(OSMPolygonIndexSpark):
