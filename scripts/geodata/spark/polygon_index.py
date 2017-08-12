@@ -24,7 +24,7 @@ class PolygonIndexSpark(object):
     @classmethod
     def geojson_ids(cls, geojson):
         geojson_ids = geojson.zipWithUniqueId() \
-                             .map(lambda (rec, uid): (uid, cls.preprocess_geojson(rec)))
+                             .map(lambda (rec, uid): (uid, rec))
         return geojson_ids
 
     @classmethod
@@ -55,6 +55,7 @@ class PolygonIndexSpark(object):
 
     @classmethod
     def points_in_polygons(cls, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0):
+        polygon_ids = polygon_ids.mapValues(lambda rec: cls.preprocess_geojson(rec))
         polygon_geohashes = cls.polygon_geohashes(polygon_ids)
         point_geohashes = cls.point_geohashes(point_ids)
 
