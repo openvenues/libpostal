@@ -31,7 +31,7 @@ from geodata.categories.query import Category, NULL_CATEGORY_QUERY
 from geodata.chains.query import Chain, NULL_CHAIN_QUERY
 from geodata.coordinates.conversion import *
 from geodata.configs.utils import nested_get, RESOURCES_DIR
-from geodata.countries.country_names import *
+from geodata.countries.names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import INTERNET_LANGUAGE_DISTRIBUTION
 from geodata.i18n.languages import *
