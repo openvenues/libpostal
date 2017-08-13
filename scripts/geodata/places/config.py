@@ -10,7 +10,7 @@ from collections import defaultdict, OrderedDict
 from geodata.addresses.dependencies import ComponentDependencies
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
 from geodata.address_formatting.formatter import AddressFormatter
-from geodata.configs.utils import nested_get, recursive_merge
+from geodata.configs.utils import nested_get, recursive_merge, RESOURCES_DIR
 from geodata.math.floats import isclose
 from geodata.math.sampling import cdf, weighted_choice
 
@@ -18,8 +18,7 @@ from geodata.encoding import safe_encode
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
-PLACE_CONFIG_FILE = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                                 'resources', 'places', 'countries', 'global.yaml')
+PLACE_CONFIG_FILE = os.path.join(RESOURCES_DIR, 'places', 'countries', 'global.yaml')
 
 
 class PlaceConfig(object):

@@ -7,17 +7,15 @@ import yaml
 from collections import Mapping
 
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
-from geodata.configs.utils import nested_get, DoesNotExist, recursive_merge, alternative_probabilities
+from geodata.configs.utils import nested_get, DoesNotExist, recursive_merge, alternative_probabilities, RESOURCES_DIR
 from geodata.math.sampling import cdf, check_probability_distribution
 
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
-ADDRESS_CONFIG_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                                  'resources', 'addresses')
+ADDRESS_CONFIG_DIR = os.path.join(RESOURCES_DIR, 'addresses')
 
-DICTIONARIES_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                                'resources', 'dictionaries')
+DICTIONARIES_DIR = os.path.join(RESOURCES_DIR, 'dictionaries')
 
 
 class AddressConfig(object):

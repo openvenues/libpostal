@@ -12,7 +12,6 @@ from marisa_trie import BytesTrie
 
 from geodata.text.phrases import PhraseFilter
 from geodata.encoding import safe_encode, safe_decode
-from geodata.i18n.unicode_paths import DATA_DIR
 
 from geodata.numbers.numex import NUMEX_DATA_DIR
 

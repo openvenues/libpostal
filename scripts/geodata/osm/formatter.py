@@ -30,7 +30,7 @@ from geodata.categories.config import category_config
 from geodata.categories.query import Category, NULL_CATEGORY_QUERY
 from geodata.chains.query import Chain, NULL_CHAIN_QUERY
 from geodata.coordinates.conversion import *
-from geodata.configs.utils import nested_get
+from geodata.configs.utils import nested_get, RESOURCES_DIR
 from geodata.countries.country_names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import INTERNET_LANGUAGE_DISTRIBUTION
@@ -44,7 +44,6 @@ from geodata.places.config import place_config
 from geodata.polygons.language_polys import *
 from geodata.polygons.reverse_geocode import *
 from geodata.postal_codes.phrases import PostalCodes
-from geodata.i18n.unicode_paths import DATA_DIR
 from geodata.text.tokenize import tokenize, token_types
 from geodata.text.utils import is_numeric
 
@@ -52,8 +51,7 @@ from geodata.csv_utils import *
 from geodata.file_utils import *
 
 
-OSM_PARSER_DATA_DEFAULT_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                                              'resources', 'parser', 'data_sets', 'osm.yaml')
+OSM_PARSER_DATA_DEFAULT_CONFIG = os.path.join(RESOURCES_DIR, 'parser', 'data_sets', 'osm.yaml')
 
 FORMATTED_ADDRESS_DATA_TAGGED_FILENAME = 'formatted_addresses_tagged.tsv'
 FORMATTED_ADDRESS_DATA_FILENAME = 'formatted_addresses.tsv'

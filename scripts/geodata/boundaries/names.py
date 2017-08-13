@@ -6,7 +6,7 @@ import yaml
 
 from collections import defaultdict
 
-from geodata.configs.utils import nested_get, DoesNotExist, alternative_probabilities
+from geodata.configs.utils import nested_get, DoesNotExist, alternative_probabilities, RESOURCES_DIR
 from geodata.encoding import safe_decode
 from geodata.math.floats import isclose
 from geodata.math.sampling import cdf, weighted_choice
@@ -15,8 +15,7 @@ from geodata.encoding import safe_encode
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
-BOUNDARY_NAMES_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                                  'resources', 'boundaries', 'names')
+BOUNDARY_NAMES_DIR = os.path.join(RESOURCES_DIR, 'boundaries', 'names')
 
 BOUNDARY_NAMES_CONFIG = os.path.join(BOUNDARY_NAMES_DIR, 'global.yaml')
 

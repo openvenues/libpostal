@@ -4,8 +4,8 @@ import six
 from collections import defaultdict, OrderedDict
 
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
+from geodata.configs.utils import RESOURCES_DIR
 from geodata.encoding import safe_decode, safe_encode
-from geodata.i18n.unicode_paths import DATA_DIR
 from geodata.text.normalize import normalized_tokens, normalize_string
 from geodata.text.tokenize import tokenize, token_types
 from geodata.text.phrases import PhraseFilter
@@ -14,7 +14,7 @@ from geodata.enum import EnumValue
 from marisa_trie import BytesTrie
 
 
-DICTIONARIES_DIR = os.path.join(DATA_DIR, 'dictionaries')
+DICTIONARIES_DIR = os.path.join(RESOURCES_DIR, 'dictionaries')
 
 PREFIX_KEY = u'\x02'
 SUFFIX_KEY = u'\x03'

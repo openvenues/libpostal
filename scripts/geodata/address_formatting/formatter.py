@@ -12,7 +12,7 @@ from collections import OrderedDict, defaultdict
 from itertools import ifilter
 
 from geodata.address_formatting.aliases import Aliases
-from geodata.configs.utils import nested_get, recursive_merge
+from geodata.configs.utils import nested_get, recursive_merge, RESOURCES_DIR
 from geodata.math.floats import isclose
 from geodata.math.sampling import weighted_choice, cdf
 from geodata.text.tokenize import tokenize, tokenize_raw, token_types
@@ -22,8 +22,7 @@ ADDRESS_FORMATTING_CONFIG_URL = 'https://raw.githubusercontent.com/OpenCageData/
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
-FORMATTER_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                                'resources', 'formatting', 'global.yaml')
+FORMATTER_CONFIG = os.path.join(RESOURCES_DIR, 'formatting', 'global.yaml')
 
 
 class AddressFormatter(object):

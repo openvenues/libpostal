@@ -12,14 +12,14 @@ from lxml import etree
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
+from geodata.configs.utils import RESOURCES_DIR
 from geodata.i18n.unicode_paths import CLDR_DIR
 from geodata.i18n.languages import *
 from geodata.encoding import safe_decode
 
 CLDR_MAIN_PATH = os.path.join(CLDR_DIR, 'common', 'main')
 
-COUNTRY_CONFIG = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                              'resources', 'countries', 'names.yaml')
+COUNTRY_CONFIG = os.path.join(RESOURCES_DIR, 'countries', 'names.yaml')
 
 IGNORE_COUNTRIES = set([six.u('ZZ')])
 

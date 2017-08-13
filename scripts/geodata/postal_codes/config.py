@@ -9,13 +9,12 @@ from collections import defaultdict
 
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
 from geodata.address_formatting.formatter import AddressFormatter
-from geodata.configs.utils import nested_get, recursive_merge
+from geodata.configs.utils import nested_get, recursive_merge, RESOURCES_DIR
 
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
-POSTAL_CODES_CONFIG_FILE = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                                        'resources', 'postal_codes', 'config.yaml')
+POSTAL_CODES_CONFIG_FILE = os.path.join(RESOURCES_DIR, 'postal_codes', 'config.yaml')
 
 
 class PostalCodesConfig(object):

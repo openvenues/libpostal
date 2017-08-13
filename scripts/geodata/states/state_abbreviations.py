@@ -8,12 +8,11 @@ from collections import defaultdict
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
-from geodata.configs.utils import nested_get, DoesNotExist
+from geodata.configs.utils import nested_get, DoesNotExist, RESOURCES_DIR
 from geodata.encoding import safe_decode
 
 
-STATE_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                         'resources', 'states')
+STATE_DIR = os.path.join(RESOURCES_DIR, 'states')
 
 
 class StateAbbreviations(object):

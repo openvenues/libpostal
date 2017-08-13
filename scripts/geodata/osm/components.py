@@ -6,14 +6,13 @@ import yaml
 from copy import deepcopy
 
 from geodata.address_formatting.formatter import AddressFormatter
-from geodata.configs.utils import recursive_merge, DoesNotExist
+from geodata.configs.utils import recursive_merge, DoesNotExist, RESOURCES_DIR
 
 from geodata.encoding import safe_encode
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
-OSM_BOUNDARIES_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                                  'resources', 'boundaries', 'osm')
+OSM_BOUNDARIES_DIR = os.path.join(RESOURCES_DIR, 'boundaries', 'osm')
 
 
 class OSMAddressComponents(object):

@@ -6,15 +6,14 @@ import yaml
 this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(this_dir, os.pardir, os.pardir)))
 
+from geodata.configs.utils import RESOURCES_DIR
 from geodata.encoding import safe_encode
-from geodata.i18n.unicode_paths import DATA_DIR
 
 
 class InvalidNumexRuleException(Exception):
     pass
 
-NUMEX_DATA_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                              'resources', 'numex')
+NUMEX_DATA_DIR = os.path.join(RESOURCES_DIR, 'numex')
 
 NUMEX_RULES_FILE = os.path.join(this_dir, os.pardir, os.pardir, os.pardir, 'src', 'numex_data.c')
 

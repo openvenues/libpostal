@@ -3,12 +3,12 @@ import re
 import six
 import yaml
 
+from geodata.configs.utils import RESOURCES_DIR
 from geodata.encoding import safe_decode
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
-AFFIX_CONFIG_DIR = os.path.join(this_dir, os.pardir, os.pardir, os.pardir,
-                                'resources', 'boundaries', 'names', 'languages')
+AFFIX_CONFIG_DIR = os.path.join(RESOURCES_DIR, 'boundaries', 'names', 'languages')
 
 
 class NameAffixes(object):
