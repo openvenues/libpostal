@@ -2,9 +2,9 @@ import os
 
 from setuptools import setup, Extension, find_packages
 
-this_dir = os.path.dirname(__file__)
-PROJECT_DIR = os.path.join(this_dir, os.pardir)
+PROJECT_DIR = os.pardir
 SRC_DIR = os.path.join(PROJECT_DIR, 'src')
+RESOURCES_DIR = 'resources'
 
 
 def main():
@@ -31,6 +31,7 @@ def main():
                                          'string_utils.c',
                                          'utf8proc/utf8proc.c',
                                          'tokens.c',
+                                         'numex.c',
                                          'unicode_scripts.c',
                                          'transliterate.c',
                                          'file_utils.c',
@@ -43,13 +44,17 @@ def main():
                                           '-Wno-unused-function'],
                       ),
         ],
+        data_files=[
+            (os.path.join('resources', os.path.relpath(d, RESOURCES_DIR)), [os.path.join(d, filename) for filename in filenames])
+            for d, _, filenames in os.walk(RESOURCES_DIR)
+        ],
         include_package_data=True,
         zip_safe=False,
-        url='http://mapzen.com',
+        url='http://github.com/openvenues/libpostal',
         description='Utilities for working with geographic data',
         license='MIT License',
-        maintainer='mapzen.com',
-        maintainer_email='pelias@mapzen.com'
+        maintainer='Al Barrentine',
+        maintainer_email='libpostal@gmail.com'
     )
 
 if __name__ == '__main__':
