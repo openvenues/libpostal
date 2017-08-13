@@ -1,7 +1,6 @@
 import argparse
 import array
 import logging
-import numpy
 import os
 import six
 import sys
@@ -116,9 +115,12 @@ class OSMIntersectionReader(object):
 
         i = 0
 
-        indices = numpy.argsort(self.intersection_edges_nodes)
-        self.intersection_edges_nodes = numpy.fromiter((self.intersection_edges_nodes[i] for i in indices), dtype=numpy.uint64)
-        self.intersection_edges_ways = numpy.fromiter((self.intersection_edges_ways[i] for i in indices), dtype=numpy.uint64)
+        edge_nodes = self.intersection_edges_nodes
+        indices = sorted(array.array('i', six.xrange(len(edge_nodes))), key=edge_nodes.__getitem__)
+
+        self.intersection_edges_nodes = array.array('q', (edge_nodes[i] for i in indices))
+        edge_ways = self.intersection_edges_ways
+        self.intersection_edge_ways = array.array('q', (edge_ways[i] for i in indices))
         del indices
 
         idx = 0
