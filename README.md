@@ -244,7 +244,7 @@ Here's a short list of some less straightforward normalizations in various langu
 | Marktstrasse 14                     | markt straße 14                         |
 
 libpostal currently supports these types of normalizations in *60+ languages*,
-and you can [add more](https://github.com/openvenues/libpostal/tree/master/resources/dictionaries) (without having to write any C).
+and you can [add more](scripts/resources/dictionaries) (without having to write any C).
 
 For further reading and some bizarre address edge-cases, see:
 [Falsehoods Programmers Believe About Addresses](https://www.mjt.me.uk/posts/falsehoods-programmers-believe-about-addresses/).
@@ -394,14 +394,14 @@ And replace $YOUR_DATA_DIR with whatever you passed to configure during install.
 Language dictionaries
 ---------------------
 
-libpostal contains a number of per-language dictionaries that influence expansion, the language classifier, and the parser. To explore the dictionaries or contribute abbreviations/phrases in your language, see [resources/dictionaries](https://github.com/openvenues/libpostal/tree/master/resources/dictionaries).
+libpostal contains a number of per-language dictionaries that influence expansion, the language classifier, and the parser. To explore the dictionaries or contribute abbreviations/phrases in your language, see [scripts/resources/dictionaries](scripts/resources/dictionaries).
 
 Training data
 -------------
 
 In machine learning, large amounts of training data are often essential for getting good results. Many open-source machine learning projects either release only the model code (results reproducible if and only if you're Google), or a pre-baked model where the training conditions are unknown.
 
-Libpostal is a bit different because it's trained on open data that's available to everyone, so we've released the entire training pipeline (the [geodata](https://github.com/openvenues/libpostal/tree/master/scripts/geodata) package in this repo), as well as the resulting training data itself on S3. It's over 100GB unzipped.
+Libpostal is a bit different because it's trained on open data that's available to everyone, so we've released the entire training pipeline (the [geodata](scripts/geodata) package in this repo), as well as the resulting training data itself on S3. It's over 100GB unzipped.
 
 Training data are stored on S3 by the date they were created. There's also a file stored on S3 to point to the most recent training data. To always point to the latest data, use something like: ```latest=$(curl https://s3.amazonaws.com/libpostal/training_data/latest)``` and use that variable in place of the date.
 
@@ -433,7 +433,7 @@ optionally be separated so Rosenstraße and Rosen Straße are equivalent.
 for a wide variety of countries and languages, not just US/English. 
 The model is trained on over 1 billion addresses and address-like strings, using the
 templates in the [OpenCage address formatting repo](https://github.com/OpenCageData/address-formatting) to construct formatted,
-tagged traning examples for every inhabited country in the world. Many types of [normalizations](https://github.com/openvenues/libpostal/blob/master/scripts/geodata/addresses/components.py)
+tagged traning examples for every inhabited country in the world. Many types of [normalizations](scripts/geodata/addresses/components.py)
 are performed to make the training data resemble real messy geocoder input as closely as possible.
 
 - **Language classification**: multinomial logistic regression
@@ -591,7 +591,7 @@ libpostal is written in modern, legible, C99 and uses the following conventions:
 Preprocessing (Python)
 ----------------------
 
-The [geodata](https://github.com/openvenues/libpostal/tree/master/scripts/geodata) Python package in the libpostal repo contains the pipeline for preprocessing the various geo
+The [geodata](scripts/geodata) Python package in the libpostal repo contains the pipeline for preprocessing the various geo
 data sets and building training data for the C models to use.
 This package shouldn't be needed for most users, but for those interested in generating new types of addresses or improving libpostal's training data, this is where to look.
 
