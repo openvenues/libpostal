@@ -48,10 +48,11 @@ class PointIndexSpark(object):
         indexed_point_ids = indexed_point_ids.mapValues(lambda rec: cls.preprocess_geojson(rec))
         indexed_point_geohashes = cls.indexed_point_geohashes(indexed_point_ids)
         point_geohashes = cls.point_geohashes(point_ids)
+        indexed_point_props = indexed_point_ids.mapValues(lambda point: point['properties'])
 
         nearby_points = indexed_point_geohashes.join(point_geohashes) \
                                                .values() \
-                                               .join(indexed_point_ids) \
+                                               .join(indexed_point_props) \
                                                .values() \
                                                .groupByKey() \
                                                .join(point_ids)
