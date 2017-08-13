@@ -48,6 +48,9 @@ def main():
             (os.path.join('resources', os.path.relpath(d, RESOURCES_DIR)), [os.path.join(d, filename) for filename in filenames])
             for d, _, filenames in os.walk(RESOURCES_DIR)
         ],
+        package_data={
+            'geodata': ['**/*.sh']
+        },
         include_package_data=True,
         zip_safe=False,
         url='http://github.com/openvenues/libpostal',
