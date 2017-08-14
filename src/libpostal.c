@@ -1137,6 +1137,76 @@ bool libpostal_setup_language_classifier_datadir(char *datadir) {
     return true;
 }
 
+
+libpostal_token_t *libpostal_tokenize(char *input, bool whitespace, size_t *n) {
+    token_array *tokens = NULL;
+    if (!whitespace) {
+        tokens = tokenize(input);
+    } else {
+        tokens = tokenize_keep_whitespace(input);
+    }
+
+    if (tokens == NULL) {
+        return NULL;
+    }
+
+    libpostal_token_t *a = tokens->a;
+    *n = tokens->n;
+    free(tokens);
+    return a;
+}
+
+char *libpostal_normalize_string(char *str, uint64_t options) {
+    if (options & LIBPOSTAL_NORMALIZE_STRING_LATIN_ASCII) {
+        return normalize_string_latin(str, strlen(str), options);
+    } else {
+        return normalize_string_utf8(str, options);
+    }
+}
+
+libpostal_normalized_token_t *libpostal_normalized_tokens(char *input, uint64_t string_options, uint64_t token_options, bool whitespace, size_t *n) {
+    if (input == NULL) {
+        return NULL;
+    }
+    char *normalized = libpostal_normalize_string(input, string_options);
+    if (normalized == NULL) {
+        return NULL;
+    }
+
+    token_array *tokens = NULL;
+    if (!whitespace) {
+        tokens = tokenize(normalized);
+    } else {
+        tokens = tokenize_keep_whitespace(normalized);
+    }
+
+    if (tokens == NULL || tokens->a == NULL) {
+        free(normalized);
+        return NULL;
+    }
+
+    size_t num_tokens = tokens->n;
+    token_t *token_array = tokens->a;
+    char_array *normalized_token = char_array_new_size(strlen(normalized));
+
+    libpostal_normalized_token_t *result = malloc(sizeof(libpostal_normalized_token_t) * num_tokens);
+
+    for (size_t i = 0; i < num_tokens; i++) {
+        token_t token = token_array[i];
+        char_array_clear(normalized_token);
+        add_normalized_token(normalized_token, normalized, token, token_options);
+        char *token_str = strdup(char_array_get_string(normalized_token));
+        result[i] = (libpostal_normalized_token_t){token_str, token};
+    }
+
+    free(normalized);
+    token_array_destroy(tokens);
+    char_array_destroy(normalized_token);
+
+    *n = num_tokens;
+    return result;
+}
+
 bool libpostal_setup_language_classifier(void) {
     return libpostal_setup_language_classifier_datadir(NULL);
 }
