@@ -119,7 +119,7 @@ static PyObject *py_normalized_tokens(PyObject *self, PyObject *args)
         if (str == NULL) {
             PyErr_SetString(PyExc_TypeError,
                             "Parameter could not be utf-8 encoded");
-            goto exit_normalized_tokens_decref_str;
+            goto exit_normalized_tokens_decref_unistr;
         }
 
         char *input = PyBytes_AsString(str);
@@ -275,7 +275,7 @@ init_normalize(void) {
     PyModule_AddObject(module, "NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE));
     PyModule_AddObject(module, "NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC));
     PyModule_AddObject(module, "NORMALIZE_TOKEN_REPLACE_DIGITS", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_DIGITS));
-
+    PyModule_AddObject(module, "NORMALIZE_TOKEN_REPLACE_NUMERIC_TOKEN_LETTERS", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_NUMERIC_TOKEN_LETTERS));
 
     PyModule_AddObject(module, "NORMALIZE_DEFAULT_STRING_OPTIONS", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_DEFAULT_STRING_OPTIONS));
     PyModule_AddObject(module, "NORMALIZE_DEFAULT_TOKEN_OPTIONS", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_DEFAULT_TOKEN_OPTIONS));

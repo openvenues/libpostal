@@ -65,6 +65,8 @@ As well as normalizations for individual string tokens:
 #define DIGIT_CHAR "D"
 // Replace ideographic numbers with capital N e.g. ½ => N
 #define IDEOGRAPHIC_NUMBER_CHAR "N"
+// Replace letters in numeric tokens with captial X e.g. "1a" and "1b" both become "DX"
+#define LETTER_CHAR "X"
 
 char *normalize_string_utf8(char *str, uint64_t options);
 

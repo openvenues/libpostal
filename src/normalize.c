@@ -441,6 +441,11 @@ void add_normalized_token(char_array *array, char *str, token_t token, uint64_t 
                 append_char = false;
             }
 
+            if (token.type == NUMERIC && options & NORMALIZE_TOKEN_REPLACE_NUMERIC_TOKEN_LETTERS && is_letter) {
+                char_array_append(array, LETTER_CHAR);
+                append_char = false;
+            }
+
             if (is_number && options & NORMALIZE_TOKEN_REPLACE_DIGITS) {
                 char_array_append(array, DIGIT_CHAR);
                 append_char = false;
