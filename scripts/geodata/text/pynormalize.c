@@ -1,7 +1,6 @@
 #include <Python.h>
 
-#include "src/normalize.h"
-#include "src/transliterate.h"
+#include <libpostal/libpostal.h>
 
 #if PY_MAJOR_VERSION >= 3
 #define IS_PY3K
@@ -19,9 +18,7 @@ struct module_state {
     static struct module_state _state;
 #endif
 
-
-
-static PyObject *py_normalize_string_utf8(PyObject *self, PyObject *args) 
+static PyObject *py_normalize_string(PyObject *self, PyObject *args) 
 {
     PyObject *arg1;
     uint64_t options;
@@ -48,7 +45,7 @@ static PyObject *py_normalize_string_utf8(PyObject *self, PyObject *args)
         if (str == NULL) {
             PyErr_SetString(PyExc_TypeError,
                             "Parameter could not be utf-8 encoded");
-            goto exit_decref_unistr;
+            goto exit_normalize_decref_unistr;
         }
 
         char *input = PyBytes_AsString(str);
@@ -56,13 +53,13 @@ static PyObject *py_normalize_string_utf8(PyObject *self, PyObject *args)
     #endif
 
     if (input == NULL) {
-        goto exit_decref_str;
+        goto exit_normalize_decref_str;
     }
 
-    char *normalized = normalize_string_utf8(input, options);
+    char *normalized = libpostal_normalize_string(input, options);
 
     if (normalized == NULL) {
-        goto exit_decref_str;
+        goto exit_normalize_decref_str;
     }
 
     PyObject *result = PyUnicode_DecodeUTF8((const char *)normalized, strlen(normalized), "strict");
@@ -70,7 +67,7 @@ static PyObject *py_normalize_string_utf8(PyObject *self, PyObject *args)
     if (result == NULL) {
             PyErr_SetString(PyExc_ValueError,
                             "Result could not be utf-8 decoded");
-            goto exit_decref_str;
+            goto exit_normalize_decref_str;
     }
 
     #ifndef IS_PY3K
@@ -80,21 +77,26 @@ static PyObject *py_normalize_string_utf8(PyObject *self, PyObject *args)
 
     return result;
 
-exit_decref_str:
+exit_normalize_decref_str:
 #ifndef IS_PY3K
     Py_XDECREF(str);
 #endif
-exit_decref_unistr:
+exit_normalize_decref_unistr:
     Py_XDECREF(unistr);
     return 0;
 }
 
 
-static PyObject *py_normalize_string_latin(PyObject *self, PyObject *args) 
+static PyObject *py_normalized_tokens(PyObject *self, PyObject *args) 
 {
     PyObject *arg1;
-    uint64_t options;
-    if (!PyArg_ParseTuple(args, "OK:normalize", &arg1, &options)) {
+    uint64_t string_options = LIBPOSTAL_NORMALIZE_DEFAULT_STRING_OPTIONS;
+    uint64_t token_options = LIBPOSTAL_NORMALIZE_DEFAULT_TOKEN_OPTIONS;
+    uint32_t arg_whitespace = 0;
+
+    PyObject *result = NULL;
+
+    if (!PyArg_ParseTuple(args, "O|KKI:normalize", &arg1, &string_options, &token_options, &arg_whitespace)) {
         return 0;
     }
 
@@ -117,7 +119,7 @@ static PyObject *py_normalize_string_latin(PyObject *self, PyObject *args)
         if (str == NULL) {
             PyErr_SetString(PyExc_TypeError,
                             "Parameter could not be utf-8 encoded");
-            goto exit_decref_unistr;
+            goto exit_normalized_tokens_decref_str;
         }
 
         char *input = PyBytes_AsString(str);
@@ -125,98 +127,46 @@ static PyObject *py_normalize_string_latin(PyObject *self, PyObject *args)
     #endif
 
     if (input == NULL) {
-        goto exit_decref_str;
+        goto exit_normalized_tokens_decref_str;
     }
 
-    char *normalized = normalize_string_latin(input, strlen(input), options);
+    bool whitespace = arg_whitespace;
 
-    PyObject *result = PyUnicode_DecodeUTF8((const char *)normalized, strlen(normalized), "strict");
-    free(normalized);
-    if (result == NULL) {
-        PyErr_SetString(PyExc_ValueError,
-                        "Result could not be utf-8 decoded");
-        goto exit_decref_str;
+    size_t num_tokens;
+    libpostal_normalized_token_t *normalized_tokens = libpostal_normalized_tokens(input, string_options, token_options, whitespace, &num_tokens);
+
+    if (normalized_tokens == NULL) {
+        goto exit_normalized_tokens_decref_str;
     }
 
-    #ifndef IS_PY3K
-    Py_XDECREF(str);
-    #endif
-    Py_XDECREF(unistr);
-
-    return result;
-
-exit_decref_str:
-#ifndef IS_PY3K
-    Py_XDECREF(str);
-#endif
-exit_decref_unistr:
-    Py_XDECREF(unistr);
-    return 0;
-}
-
-
-
-static PyObject *py_normalize_token(PyObject *self, PyObject *args) 
-{
-    PyObject *s;
-
-    uint32_t offset;
-    uint32_t len;
-    uint16_t type;
-
-    uint64_t options;
-    if (!PyArg_ParseTuple(args, "O(IIH)K:normalize", &s, &offset, &len, &type, &options)) {
-        PyErr_SetString(PyExc_TypeError,
-                        "Error parsing arguments");
-        return 0;
+    result = PyList_New((Py_ssize_t)num_tokens);
+    if (!result) {
+        goto exit_free_normalized_tokens;
     }
 
-    token_t token = (token_t){(size_t)offset, (size_t)len, type};
-
-    PyObject *unistr = PyUnicode_FromObject(s);
-    if (unistr == NULL) {
-        PyErr_SetString(PyExc_TypeError,
-                        "Parameter could not be converted to unicode in scanner");
-        return 0;
-    }
-
-    #ifdef IS_PY3K
-        // Python 3 encoding, supported by Python 3.3+
-
-        char *input = PyUnicode_AsUTF8(unistr);
-
-    #else
-        // Python 2 encoding
-
-        PyObject *str = PyUnicode_AsEncodedString(unistr, "utf-8", "strict");
-        if (str == NULL) {
-            PyErr_SetString(PyExc_ValueError,
-                            "Parameter could not be utf-8 encoded");
-            goto exit_decref_unistr;
+    for (size_t i = 0; i < num_tokens; i++) {
+        libpostal_normalized_token_t normalized_token = normalized_tokens[i];
+        char *token_str = normalized_token.str;
+        PyObject *py_token = PyUnicode_DecodeUTF8((const char *)token_str, strlen(token_str), "strict");
+        if (py_token == NULL) {
+            Py_DECREF(result);
+            goto exit_free_normalized_tokens;
         }
 
-        char *input = PyBytes_AsString(str);
+        PyObject *t = PyTuple_New(2);
+        PyObject *py_token_type = PyInt_FromLong(normalized_token.token.type);
 
-    #endif
+        PyTuple_SetItem(t, 0, py_token);
+        PyTuple_SetItem(t, 1, py_token_type);
 
-    if (input == NULL) {
-        goto exit_decref_str;
+        // Note: PyList_SetItem steals a reference, so don't worry about DECREF
+        PyList_SetItem(result, (Py_ssize_t)i, t);
     }
 
-    char_array *token_buffer = char_array_new_size(token.len);
-
-    add_normalized_token(token_buffer, input, token, options);
-    char *token_str = char_array_get_string(token_buffer);
-    PyObject *result = PyUnicode_DecodeUTF8((const char *)token_str, token_buffer->n - 1, "strict");
-
-    if (result == NULL) {
-        PyErr_SetString(PyExc_ValueError,
-                        "Error decoding token");
-        char_array_destroy(token_buffer);
-        goto exit_decref_str;
+    for (size_t i = 0; i < num_tokens; i++) {
+        free(normalized_tokens[i].str);
     }
-
-    char_array_destroy(token_buffer);
+    free(normalized_tokens);
 
     #ifndef IS_PY3K
     Py_XDECREF(str);
@@ -224,20 +174,24 @@ static PyObject *py_normalize_token(PyObject *self, PyObject *args)
     Py_XDECREF(unistr);
 
     return result;
-
-exit_decref_str:
+exit_free_normalized_tokens:
+    for (size_t i = 0; i < num_tokens; i++) {
+        free(normalized_tokens[i].str);
+    }
+    free(normalized_tokens);
+exit_normalized_tokens_decref_str:
 #ifndef IS_PY3K
     Py_XDECREF(str);
 #endif
-exit_decref_unistr:
+exit_normalized_tokens_decref_unistr:
     Py_XDECREF(unistr);
     return 0;
 }
+
 
 static PyMethodDef normalize_methods[] = {
-    {"normalize_string_utf8", (PyCFunction)py_normalize_string_utf8, METH_VARARGS, "normalize_string_utf8(input, options)"},
-    {"normalize_string_latin", (PyCFunction)py_normalize_string_latin, METH_VARARGS, "normalize_string_latin(input, options)"},
-    {"normalize_token", (PyCFunction)py_normalize_token, METH_VARARGS, "normalize_token(input, options)"},
+    {"normalize_string", (PyCFunction)py_normalize_string, METH_VARARGS, "normalize_string(input, options)"},
+    {"normalized_tokens", (PyCFunction)py_normalized_tokens, METH_VARARGS, "normalize_token(input, string_options, token_options, whitespace)"},
     {NULL, NULL},
 };
 
@@ -295,32 +249,40 @@ init_normalize(void) {
         INITERROR;
     }
 
-    if (!transliteration_module_setup(NULL)) {
+    if (!libpostal_setup()) {
         PyErr_SetString(PyExc_RuntimeError,
-                        "Could not load transliterate module");
+                        "Could not load libpostal");
         Py_DECREF(module);
         INITERROR;
     }
 
-    PyModule_AddObject(module, "NORMALIZE_STRING_LATIN_ASCII", PyLong_FromUnsignedLongLong(NORMALIZE_STRING_LATIN_ASCII));
-    PyModule_AddObject(module, "NORMALIZE_STRING_TRANSLITERATE", PyLong_FromUnsignedLongLong(NORMALIZE_STRING_TRANSLITERATE));
-    PyModule_AddObject(module, "NORMALIZE_STRING_STRIP_ACCENTS", PyLong_FromUnsignedLongLong(NORMALIZE_STRING_STRIP_ACCENTS));
-    PyModule_AddObject(module, "NORMALIZE_STRING_DECOMPOSE", PyLong_FromUnsignedLongLong(NORMALIZE_STRING_DECOMPOSE));
-    PyModule_AddObject(module, "NORMALIZE_STRING_COMPOSE", PyLong_FromUnsignedLongLong(NORMALIZE_STRING_COMPOSE));
-    PyModule_AddObject(module, "NORMALIZE_STRING_LOWERCASE", PyLong_FromUnsignedLongLong(NORMALIZE_STRING_LOWERCASE));
-    PyModule_AddObject(module, "NORMALIZE_STRING_TRIM", PyLong_FromUnsignedLongLong(NORMALIZE_STRING_TRIM));
-    PyModule_AddObject(module, "NORMALIZE_STRING_REPLACE_HYPHENS", PyLong_FromUnsignedLongLong(NORMALIZE_STRING_REPLACE_HYPHENS));
-    PyModule_AddObject(module, "NORMALIZE_STRING_SIMPLE_LATIN_ASCII", PyLong_FromUnsignedLongLong(NORMALIZE_STRING_SIMPLE_LATIN_ASCII));
+    PyModule_AddObject(module, "NORMALIZE_STRING_LATIN_ASCII", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_STRING_LATIN_ASCII));
+    PyModule_AddObject(module, "NORMALIZE_STRING_TRANSLITERATE", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_STRING_TRANSLITERATE));
+    PyModule_AddObject(module, "NORMALIZE_STRING_STRIP_ACCENTS", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_STRING_STRIP_ACCENTS));
+    PyModule_AddObject(module, "NORMALIZE_STRING_DECOMPOSE", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_STRING_DECOMPOSE));
+    PyModule_AddObject(module, "NORMALIZE_STRING_COMPOSE", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_STRING_COMPOSE));
+    PyModule_AddObject(module, "NORMALIZE_STRING_LOWERCASE", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_STRING_LOWERCASE));
+    PyModule_AddObject(module, "NORMALIZE_STRING_TRIM", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_STRING_TRIM));
+    PyModule_AddObject(module, "NORMALIZE_STRING_REPLACE_HYPHENS", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_STRING_REPLACE_HYPHENS));
+    PyModule_AddObject(module, "NORMALIZE_STRING_SIMPLE_LATIN_ASCII", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_STRING_SIMPLE_LATIN_ASCII));
 
 
-    PyModule_AddObject(module, "NORMALIZE_TOKEN_REPLACE_HYPHENS", PyLong_FromUnsignedLongLong(NORMALIZE_TOKEN_REPLACE_HYPHENS));
-    PyModule_AddObject(module, "NORMALIZE_TOKEN_DELETE_HYPHENS", PyLong_FromUnsignedLongLong(NORMALIZE_TOKEN_DELETE_HYPHENS));
-    PyModule_AddObject(module, "NORMALIZE_TOKEN_DELETE_FINAL_PERIOD", PyLong_FromUnsignedLongLong(NORMALIZE_TOKEN_DELETE_FINAL_PERIOD));
-    PyModule_AddObject(module, "NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS", PyLong_FromUnsignedLongLong(NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS));
-    PyModule_AddObject(module, "NORMALIZE_TOKEN_DROP_ENGLISH_POSSESSIVES", PyLong_FromUnsignedLongLong(NORMALIZE_TOKEN_DROP_ENGLISH_POSSESSIVES));
-    PyModule_AddObject(module, "NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE", PyLong_FromUnsignedLongLong(NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE));
-    PyModule_AddObject(module, "NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC", PyLong_FromUnsignedLongLong(NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC));
-    PyModule_AddObject(module, "NORMALIZE_TOKEN_REPLACE_DIGITS", PyLong_FromUnsignedLongLong(NORMALIZE_TOKEN_REPLACE_DIGITS));
+    PyModule_AddObject(module, "NORMALIZE_TOKEN_REPLACE_HYPHENS", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_HYPHENS));
+    PyModule_AddObject(module, "NORMALIZE_TOKEN_DELETE_HYPHENS", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_TOKEN_DELETE_HYPHENS));
+    PyModule_AddObject(module, "NORMALIZE_TOKEN_DELETE_FINAL_PERIOD", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_TOKEN_DELETE_FINAL_PERIOD));
+    PyModule_AddObject(module, "NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS));
+    PyModule_AddObject(module, "NORMALIZE_TOKEN_DROP_ENGLISH_POSSESSIVES", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_TOKEN_DROP_ENGLISH_POSSESSIVES));
+    PyModule_AddObject(module, "NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE));
+    PyModule_AddObject(module, "NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC));
+    PyModule_AddObject(module, "NORMALIZE_TOKEN_REPLACE_DIGITS", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_DIGITS));
+
+
+    PyModule_AddObject(module, "NORMALIZE_DEFAULT_STRING_OPTIONS", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_DEFAULT_STRING_OPTIONS));
+    PyModule_AddObject(module, "NORMALIZE_DEFAULT_TOKEN_OPTIONS", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_DEFAULT_TOKEN_OPTIONS));
+
+    PyModule_AddObject(module, "NORMALIZE_TOKEN_OPTIONS_DROP_PERIODS", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_TOKEN_OPTIONS_DROP_PERIODS));
+
+    PyModule_AddObject(module, "NORMALIZE_DEFAULT_TOKEN_OPTIONS_NUMERIC", PyLong_FromUnsignedLongLong(LIBPOSTAL_NORMALIZE_DEFAULT_TOKEN_OPTIONS_NUMERIC));
 
 
 #if PY_MAJOR_VERSION >= 3

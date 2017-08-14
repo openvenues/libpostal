@@ -1,6 +1,6 @@
 #include <Python.h>
 
-#include "src/scanner.h"
+#include <libpostal/libpostal.h>
 
 #if PY_MAJOR_VERSION >= 3
 #define IS_PY3K
@@ -18,13 +18,16 @@ struct module_state {
     static struct module_state _state;
 #endif
 
-
 static PyObject *py_tokenize(PyObject *self, PyObject *args) 
 {
     PyObject *arg1;
-    if (!PyArg_ParseTuple(args, "O:tokenize", &arg1)) {
+    uint32_t arg_whitespace = 0;
+
+    if (!PyArg_ParseTuple(args, "OI:tokenize", &arg1, &arg_whitespace)) {
         return 0;
     }
+
+    bool whitespace = arg_whitespace;
 
     PyObject *unistr = PyUnicode_FromObject(arg1);
     if (unistr == NULL) {
@@ -57,26 +60,28 @@ static PyObject *py_tokenize(PyObject *self, PyObject *args)
         goto error_decref_str;
     }
 
-    token_array *tokens = tokenize(input);
+    size_t num_tokens;
+
+    libpostal_token_t *tokens = libpostal_tokenize(input, whitespace, &num_tokens);
     if (tokens == NULL) {
         goto error_decref_str;
     }
 
-    PyObject *result = PyTuple_New(tokens->n);
+    PyObject *result = PyTuple_New(num_tokens);
     if (!result) {
-        token_array_destroy(tokens);
+        free(tokens);
         goto error_decref_str;
         return 0;
     }
 
     PyObject *tuple;
 
-    token_t token;
-    for (size_t i = 0; i < tokens->n; i++) {
-        token = tokens->a[i];
+    libpostal_token_t token;
+    for (size_t i = 0; i < num_tokens; i++) {
+        token = tokens[i];
         tuple = Py_BuildValue("III", token.offset, token.len, token.type);
         if (PyTuple_SetItem(result, i, tuple) < 0) {
-            token_array_destroy(tokens);
+            free(tokens);
             goto error_decref_str;
         }
     }
@@ -86,7 +91,7 @@ static PyObject *py_tokenize(PyObject *self, PyObject *args)
     #endif
     Py_XDECREF(unistr);
 
-    token_array_destroy(tokens);
+    free(tokens);
 
     return result;
 
@@ -100,11 +105,9 @@ error_decref_unistr:
 }
 
 static PyMethodDef tokenize_methods[] = {
-    {"tokenize", (PyCFunction)py_tokenize, METH_VARARGS, "tokenize(text)"},
+    {"tokenize", (PyCFunction)py_tokenize, METH_VARARGS, "tokenize(text, whitespace)"},
     {NULL, NULL},
 };
-
-
 
 #ifdef IS_PY3K
 
