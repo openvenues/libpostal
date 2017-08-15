@@ -2,7 +2,7 @@ import os
 
 from setuptools import setup, Extension, find_packages
 
-RESOURCES_DIR = 'resources'
+RESOURCES_DIR = os.path.join('geodata', 'resources')
 
 
 def main():

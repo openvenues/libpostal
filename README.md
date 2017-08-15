@@ -244,7 +244,7 @@ Here's a short list of some less straightforward normalizations in various langu
 | Marktstrasse 14                     | markt straße 14                         |
 
 libpostal currently supports these types of normalizations in *60+ languages*,
-and you can [add more](scripts/resources/dictionaries) (without having to write any C).
+and you can [add more](scripts/geodata/resources/dictionaries) (without having to write any C).
 
 For further reading and some bizarre address edge-cases, see:
 [Falsehoods Programmers Believe About Addresses](https://www.mjt.me.uk/posts/falsehoods-programmers-believe-about-addresses/).
@@ -394,7 +394,7 @@ And replace $YOUR_DATA_DIR with whatever you passed to configure during install.
 Language dictionaries
 ---------------------
 
-libpostal contains a number of per-language dictionaries that influence expansion, the language classifier, and the parser. To explore the dictionaries or contribute abbreviations/phrases in your language, see [scripts/resources/dictionaries](scripts/resources/dictionaries).
+libpostal contains a number of per-language dictionaries that influence expansion, the language classifier, and the parser. To explore the dictionaries or contribute abbreviations/phrases in your language, see the [dictionaries](scripts/geodata/resources/dictionaries).
 
 Training data
 -------------

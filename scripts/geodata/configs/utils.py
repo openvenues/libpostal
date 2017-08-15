@@ -4,7 +4,7 @@ from collections import Mapping
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
 
-RESOURCES_DIR = os.path.join(this_dir, os.pardir, os.pardir, 'resources')
+RESOURCES_DIR = os.path.join(this_dir, os.pardir, 'resources')
 
 
 def recursive_merge(a, b):
