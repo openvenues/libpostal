@@ -1,6 +1,7 @@
+boto==2.48.0
 boto3==1.4.0
 botocore==1.4.53
-Fiona==1.6.3.post1
+Fiona==1.7.8
 PyYAML==3.11
 Rtree==0.8.2
 Shapely==1.5.14
@@ -13,8 +14,6 @@ distribute==0.7.3
 future==0.15.2
 futures==3.0.5
 ftfy==4.2.0
-gevent==1.1.2
-greenlet==0.4.10
 jmespath==0.9.0
 leveldb==0.193
 lxml==3.6.0
