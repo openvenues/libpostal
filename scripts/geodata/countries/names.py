@@ -9,9 +9,6 @@ from collections import OrderedDict
 
 from lxml import etree
 
-this_dir = os.path.realpath(os.path.dirname(__file__))
-sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
-
 from geodata.configs.utils import RESOURCES_DIR
 from geodata.i18n.unicode_paths import CLDR_DIR
 from geodata.i18n.languages import *

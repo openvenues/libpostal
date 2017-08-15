@@ -10,7 +10,7 @@ import yaml
 from six.moves.urllib_parse import urljoin, quote_plus, unquote_plus
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
-sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
+sys.path.insert(0, (os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.openaddresses.config import openaddresses_config
 from geodata.csv_utils import unicode_csv_reader

@@ -8,7 +8,7 @@ from collections import defaultdict
 from collections import Counter
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
-sys.path.append(os.path.realpath(os.path.join(this_dir, os.pardir, os.pardir)))
+sys.path.insert(0, (os.path.realpath(os.path.join(this_dir, os.pardir, os.pardir)))
 
 from geodata.address_expansions.address_dictionaries import ADDRESS_EXPANSIONS_DIR
 from geodata.osm.extract import *
@@ -48,6 +48,16 @@ class VenueNames(object):
             if i % 1000 == 0 and i > 0:
                 print 'did', i
             i += 1
+
+    def write_to_config(self, out_filename=CHAINS_CONFIG_FILE):
+        for k, v in self.names_lower.most_common():
+            if k not in self.all_chains:
+                continue
+
+            canonical = self.chain_canonical.get(k)
+            if canonical:
+                canonical = self.names_cap[canonical].most_common(1)[0][0]
+
 
     def write_to_tsv(self, out_filename, min_threshold=5):
         writer = csv.writer(open(out_filename, 'w'), delimiter='\t')

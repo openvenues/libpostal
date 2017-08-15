@@ -4,9 +4,6 @@ import sys
 
 from collections import defaultdict, OrderedDict
 
-this_dir = os.path.realpath(os.path.dirname(__file__))
-sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
-
 from geodata.configs.utils import RESOURCES_DIR
 from geodata.csv_utils import unicode_csv_reader
 

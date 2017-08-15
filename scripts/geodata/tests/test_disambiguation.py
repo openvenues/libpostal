@@ -8,7 +8,7 @@ import sys
 import unittest
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
-sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
+sys.path.insert(0, (os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.i18n.languages import init_languages, get_country_languages, get_regional_languages
 from geodata.language_id.disambiguation import disambiguate_language, street_types_gazetteer, UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE

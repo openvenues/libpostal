@@ -13,7 +13,7 @@ from shapely.geometry import Point
 from six import itertools
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
-sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
+sys.path.insert(0, os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.address_expansions.gazetteers import *
 from geodata.address_expansions.abbreviations import abbreviate
