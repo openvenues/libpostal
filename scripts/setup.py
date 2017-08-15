@@ -2,10 +2,13 @@ import os
 
 from setuptools import setup, Extension, find_packages
 
+from geodata.i18n.download_cldr import download_cldr
+
 RESOURCES_DIR = os.path.join('geodata', 'resources')
 
 
 def main():
+    download_cldr()
     setup(
         name='geodata',
         version='0.1',
