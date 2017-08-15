@@ -403,17 +403,6 @@ def main(out_dir=SRC_DIR):
     out_file = open(os.path.join(out_dir, SCRIPTS_DATA_FILENAME), 'w')
     out_header = open(os.path.join(out_dir, SCRIPTS_HEADER), 'w')
 
-    download_file(SCRIPTS_URL, LOCAL_SCRIPTS_FILE)
-    download_file(BLOCKS_URL, LOCAL_BLOCKS_FILE)
-    download_file(PROPS_URL, LOCAL_PROPS_FILE)
-    download_file(PROP_ALIASES_URL, LOCAL_PROP_ALIASES_FILE)
-    download_file(PROP_VALUE_ALIASES_URL, LOCAL_PROP_VALUE_ALIASES_FILE)
-    download_file(DERIVED_CORE_PROPS_URL, LOCAL_DERIVED_CORE_PROPS_FILE)
-    download_file(WORD_BREAKS_URL, LOCAL_WORD_BREAKS_FILE)
-
-    if not os.path.exists(CLDR_SUPPLEMENTAL_DATA):
-        download_cldr()
-
     chars = get_chars_by_script()
     all_scripts = build_master_scripts_list(chars)
     script_codes = get_script_codes(all_scripts)

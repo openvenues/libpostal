@@ -3,12 +3,14 @@ import os
 from setuptools import setup, Extension, find_packages
 
 from geodata.i18n.download_cldr import download_cldr
+from geodata.i18n.download_unidata import download_unidata
 
 RESOURCES_DIR = os.path.join('geodata', 'resources')
 
 
 def main():
     download_cldr()
+    download_unidata()
     setup(
         name='geodata',
         version='0.1',
