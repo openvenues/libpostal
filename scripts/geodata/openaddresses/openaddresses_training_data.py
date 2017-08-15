@@ -15,7 +15,7 @@ from shapely.geos import LOG as shapely_geos_logger
 shapely_geos_logger.setLevel(logging.CRITICAL)
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
-sys.path.insert(0, (os.path.realpath(os.path.join(os.pardir, os.pardir)))
+sys.path.insert(0, os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.openaddresses.formatter import OpenAddressesFormatter
 

@@ -9,7 +9,7 @@ import sys
 from collections import defaultdict
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
-sys.path.insert(0, (os.path.realpath(os.path.join(os.pardir, os.pardir)))
+sys.path.insert(0, os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.address_expansions.abbreviations import abbreviate
 from geodata.address_expansions.equivalence import equivalent

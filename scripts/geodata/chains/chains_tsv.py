@@ -8,7 +8,7 @@ from collections import defaultdict
 from collections import Counter
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
-sys.path.insert(0, (os.path.realpath(os.path.join(this_dir, os.pardir, os.pardir)))
+sys.path.insert(0, os.path.realpath(os.path.join(this_dir, os.pardir, os.pardir)))
 
 from geodata.address_expansions.address_dictionaries import ADDRESS_EXPANSIONS_DIR
 from geodata.osm.extract import *

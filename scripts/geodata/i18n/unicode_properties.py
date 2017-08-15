@@ -27,7 +27,7 @@ from operator import itemgetter
 from zipfile import ZipFile
 
 this_dir = os.path.realpath(os.path.dirname(__file__))
-sys.path.insert(0, (os.path.realpath(os.path.join(os.pardir, os.pardir)))
+sys.path.insert(0, os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.encoding import safe_encode, safe_decode
 from geodata.file_utils import ensure_dir, download_file
