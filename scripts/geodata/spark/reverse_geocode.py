@@ -91,11 +91,11 @@ class OSMAreaPolygonIndexSpark(OSMPolygonIndexSpark):
         return props[area_key]
 
 
-class OSMSubdivisionsPolygonIndexSpark(OSMAreaPolygonIndexSpark):
+class OSMSubdivisionPolygonIndexSpark(OSMAreaPolygonIndexSpark):
     pass
 
 
-class OSMBuildingsPolygonIndexSpark(OSMAreaPolygonIndexSpark):
+class OSMBuildingPolygonIndexSpark(OSMAreaPolygonIndexSpark):
     pass
 
 
