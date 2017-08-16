@@ -238,10 +238,10 @@ Here's a short list of some less straightforward normalizations in various langu
 | One-hundred twenty E 96th St        | 120 east 96th street                    |
 | C/ Ocho, P.I. 4                     | calle 8 polígono industrial 4           |
 | V XX Settembre, 20                  | via 20 settembre 20                     |
-| Quatre vingt douze R. de l'Église   | 92 rue de l' église                     |
+| Quatre vingt douze R. de l'Église   | 92 rue de l eglise                      |
 | ул Каретный Ряд, д 4, строение 7    | улица каретныи ряд дом 4 строение 7     |
 | ул Каретный Ряд, д 4, строение 7    | ulitsa karetnyy ryad dom 4 stroyeniye 7 |
-| Marktstrasse 14                     | markt straße 14                         |
+| Marktstraße 14                      | markt strasse 14                        |
 
 libpostal currently supports these types of normalizations in *60+ languages*,
 and you can [add more](https://github.com/openvenues/libpostal/tree/master/resources/dictionaries) (without having to write any C).
