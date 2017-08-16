@@ -1,4 +1,3 @@
-import fiona
 import gc
 import geohash
 import leveldb
@@ -136,6 +135,9 @@ class PolygonIndex(object):
     def create_from_shapefiles(cls, inputs, output_dir,
                                index_filename=None,
                                include_only_properties=None):
+
+        import fiona
+
         index = cls(save_dir=output_dir, index_filename=index_filename or cls.INDEX_FILENAME)
         for input_file in inputs:
             if include_only_properties is not None:

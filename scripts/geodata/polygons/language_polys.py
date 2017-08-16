@@ -40,6 +40,8 @@ class LanguagePolygonIndex(RTreePolygonIndex):
                                index_filename=None,
                                polys_filename=DEFAULT_POLYS_FILENAME):
 
+        import fiona
+
         init_languages()
         index = cls(save_dir=output_dir, index_filename=index_filename)
 

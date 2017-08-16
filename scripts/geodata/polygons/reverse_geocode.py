@@ -177,6 +177,8 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
                                polys_filename=DEFAULT_POLYS_FILENAME,
                                use_all_props=False):
 
+        import fiona
+
         index = cls(save_dir=output_dir, index_filename=index_filename)
 
         for input_file in input_files:
