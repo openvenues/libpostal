@@ -25,7 +25,7 @@ Examples of behavior that contributes to creating a positive environment include
 
 Examples of unacceptable behavior by participants include:
 
-- Hate speech, overt or coded racism, use or promotion of hate symbols or iamgery
+- Hate speech, overt or coded racism, use or promotion of hate symbols or imagery
 - The use of sexualized language or imagery and unwelcome sexual attention or advances
 - Trolling, insulting/derogatory comments, and personal or political attacks
 - Public or private harassment
