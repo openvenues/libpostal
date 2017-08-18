@@ -51,6 +51,7 @@ class PointIndexSpark(object):
 
         nearby_points = indexed_point_geohashes.join(point_geohashes) \
                                                .values() \
+                                               .filter(lambda (indexed_point_id, point_id): indexed_point_id != point_id) \
                                                .join(indexed_point_ids) \
                                                .values() \
                                                .groupByKey() \

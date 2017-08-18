@@ -61,6 +61,7 @@ class PolygonIndexSpark(object):
         point_coords = point_ids.mapValues(lambda rec: (rec['geometry']['coordinates'][1], rec['geometry']['coordinates'][0]))
 
         poly_points = polygon_geohashes.join(point_geohashes) \
+                                       .filter(lambda (gh, (poly_id, point_id)): poly_id != point_id) \
                                        .map(lambda (gh, (poly_id, point_id)): (point_id, (poly_id, gh if len(gh) <= 4 else None))) \
                                        .join(point_coords) \
                                        .map(lambda (point_id, ((poly_id, gh), (lat, lon))): ((poly_id, gh), (point_id, lat, lon)))
