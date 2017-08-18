@@ -1986,6 +1986,10 @@ class AddressComponents(object):
         be legitimate, but if there are 2 or more, just take the first one.
         '''
 
+        if languages:
+            languages = list(languages)
+            random.shuffle(languages)
+
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
         if not house_number:
             return
@@ -1998,13 +2002,10 @@ class AddressComponents(object):
 
         cls.extract_sub_building_components(temp_address_components, AddressFormatter.HOUSE_NUMBER, languages, country=country)
         for k, v in temp_address_components.items():
-            if k != AddressFormatter.HOUSE_NUMBER:
-                house_number = house_number.replace(v, u'')
+            if k != AddressFormatter.HOUSE_NUMBER and k not in address_components:
+                address_components[k] = v
 
-                if k not in address_components:
-                    address_components[k] = v
-
-        address_components[AddressFormatter.HOUSE_NUMBER] = house_number
+        address_components[AddressFormatter.HOUSE_NUMBER] = temp_address_components[AddressFormatter.HOUSE_NUMBER]
 
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
         if not house_number:
@@ -2372,7 +2373,9 @@ class AddressComponents(object):
 
         cls.prune_duplicate_names(address_components)
 
-        cls.cleanup_house_number(address_components, all_languages, country=country)
+        all_languages_plus_english = all_languages | set([ENGLISH])
+
+        cls.cleanup_house_number(address_components, all_languages_plus_english, country=country)
 
         cls.remove_numeric_boundary_names(address_components)
 
