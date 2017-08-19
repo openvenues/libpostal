@@ -947,6 +947,10 @@ class AddressComponents(object):
                 return True
         return False
 
+    japan_neighborhood_classes = set([AddressFormatter.JAPAN_MAJOR_NEIGHBORHOOD,
+                                      AddressFormatter.JAPAN_MINOR_NEIGHBORHOOD,
+                                      AddressFormatter.SUBURB])
+
     japanese_number_regex_str = u'[0-9０-９一二三四五六七八九十百]+'
 
     japan_major_neighborhood_regex = re.compile(u'(?:.*?(?:町|駅南?))')
@@ -1315,19 +1319,50 @@ class AddressComponents(object):
             address_components[component] = val
 
     @classmethod
-    def add_city_and_equivalent_from_points(cls, grouped_components, city_point_components, containing_components, country):
+    def valid_city_points(cls, city_point_components, containing_components, country, max_num_cities=2, max_num_villages=3):
         city_replacements = place_config.city_replacements(country)
 
         is_japan = country == Countries.JAPAN
-        checked_first_suburb = False
 
-        first_village = None
+        num_villages = 0
+        num_cities = 0
 
-        for props, lat, lon, dist in city_point_components:
+        valid = []
+
+        seen_components = set()
+
+        for props in city_point_components:
             component = cls.categorize_osm_component(country, props, containing_components)
             if component is None:
                 continue
 
+            is_village = cls.osm_component_is_village(props)
+
+            if ((component == AddressFormatter.CITY or component in city_replacements) and num_cities < max_num_cities) and not is_village:
+                valid.append((component, props))
+                seen_components.add(component)
+                num_cities += 1
+
+            if is_village and not num_villages < max_num_villages:
+                valid.append((AddressFormatter.LOCALITY, props))
+                seen_components.add(component)
+                num_villages += 1
+
+            if is_japan and component in cls.japan_neighborhood_classes and component not in seen_components:
+                valid.append((component, props))
+                seen_components.add(component)
+
+        return valid
+
+    @classmethod
+    def add_city_and_equivalent_from_points(cls, grouped_components, city_point_components, containing_components, country):
+        city_replacements = place_config.city_replacements(country)
+
+        is_japan = country == Countries.JAPAN
+
+        first_village = None
+
+        for (component, props) in cls.valid_city_points(city_point_components, containing_components, country):
             have_sub_city = any((key in grouped_components and key in city_replacements for key in (AddressFormatter.SUBURB, AddressFormatter.CITY_DISTRICT, AddressFormatter.LOCALITY)))
 
             have_city = AddressFormatter.CITY in grouped_components
@@ -1340,8 +1375,8 @@ class AddressComponents(object):
             if is_village and not first_village:
                 first_village = props
 
-            if is_japan and component == AddressFormatter.SUBURB and not checked_first_suburb:
-                existing = grouped_components[component]
+            if is_japan and component in cls.japan_neighborhood_classes:
+                existing = grouped_components.get(component, [])
                 for p in existing:
                     if (props['id'] == p['id'] and props['type'] == p['type']) or \
                        (props.get('place') in ('neighbourhood', 'neighborhood') and p.get('admin_level') == '10') or \
@@ -1351,7 +1386,6 @@ class AddressComponents(object):
                         break
                 else:
                     grouped_components[component].append(props)
-                checked_first_suburb = True
 
         if first_village and AddressFormatter.LOCALITY not in grouped_components:
             grouped_components[AddressFormatter.LOCALITY].append(first_village)
