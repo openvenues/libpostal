@@ -187,7 +187,7 @@ class PointIndex(object):
         return sorted(distances, key=operator.itemgetter(-1))
 
     def points_with_properties(self, results):
-        return [(self.get_properties(i), lat, lon, distance)
+        return [self.get_properties(i)
                 for i, lat, lon, distance in results]
 
     def nearest_points(self, latitude, longitude):
