@@ -1343,7 +1343,7 @@ class AddressComponents(object):
                 seen_components.add(component)
                 num_cities += 1
 
-            if is_village and not num_villages < max_num_villages:
+            if is_village and num_villages < max_num_villages:
                 valid.append((AddressFormatter.LOCALITY, props))
                 seen_components.add(component)
                 num_villages += 1
