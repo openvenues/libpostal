@@ -2091,7 +2091,7 @@ class AddressComponents(object):
 
         street = address_components.get(AddressFormatter.ROAD)
 
-        if ENGLISH in languages:
+        if ENGLISH in languages and street:
             street = cls.strip_english_unit_number_suffix(street)
 
         if street is not None and not cls.is_valid_street_name(street):
