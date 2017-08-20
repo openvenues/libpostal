@@ -2317,8 +2317,7 @@ class AddressComponents(object):
                               language=None, dropout_places=True, population=None,
                               population_from_city=False, check_city_wikipedia=False,
                               add_sub_building_components=True, hyphenation=True,
-                              num_floors=None, num_basements=None, zone=None,
-                              country=None):
+                              num_floors=None, num_basements=None, zone=None):
         '''
         Expanded components
         -------------------
@@ -2449,8 +2448,7 @@ class AddressComponents(object):
                  add_sub_building_components=True, hyphenation=True,
                  num_floors=None, num_basements=None, zone=None,
                  osm_components=None, country_components=None,
-                 neighborhoods=None, city_point_components=None,
-                 country=None):
+                 neighborhoods=None, city_point_components=None):
         '''
         Expanded components
         -------------------
