@@ -2375,7 +2375,7 @@ class AddressComponents(object):
             cls.format_chinese_address(address_components)
 
         cls.add_admin_boundaries(address_components, osm_components, country, language,
-                                 znon_local_language=non_local_language,
+                                 non_local_language=non_local_language,
                                  normalize_languages=all_languages,
                                  language_suffix=language_suffix,
                                  city_point_components=city_point_components)
