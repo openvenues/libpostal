@@ -10,5 +10,6 @@ def tokenize(s, whitespace=False):
             for start, length, token_type in _tokenize.tokenize(u, whitespace)]
 
 
-def tokenize_raw(s):
-    return tokenize(s, whitespace=True)
+def tokenize_raw(s, whitespace=False):
+    u = safe_decode(s)
+    return _tokenize.tokenize(u, whitespace)
