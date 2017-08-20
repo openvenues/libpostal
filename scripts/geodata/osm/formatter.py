@@ -1206,8 +1206,8 @@ class OSMAddressFormatter(object):
 
         revised_tags = cls.fix_component_encodings(revised_tags)
 
-        address_components, country, language = AddressComponents.expanded_with_reverse(revised_tags,
-                                                                                        osm_components, country_components, neighborhoods, city_point_components,
+        address_components, country, language = AddressComponents.expanded_with_reverse(revised_tags, country, candidate_languages,
+                                                                                        osm_components, neighborhoods, city_point_components,
                                                                                         language=language or namespaced_language,
                                                                                         num_floors=num_floors, num_basements=num_basements,
                                                                                         zone=zone, add_sub_building_components=add_sub_building_components,
