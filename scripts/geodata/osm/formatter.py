@@ -1106,9 +1106,15 @@ class OSMAddressFormatter(object):
         return formatted_addresses
 
     @classmethod
-    def formatted_addresses_with_reverse(cls, tags, osm_components, country_components, neighborhoods, city_point_components,
+    def formatted_addresses_with_reverse(cls, tags, country, candidate_languages, osm_components, neighborhoods, city_point_components,
                                          building_components, subdivision_components, nearest_metro_station=None, tag_components=True):
-        country, candidate_languages = AddressComponents.osm_country_and_languages(osm_components)
+
+        if not country:
+            return None, None, None
+
+        if not candidate_languages:
+            candidate_languages = get_country_languages(country).items()
+
         if not (country and candidate_languages):
             return None, None, None
 
@@ -1373,7 +1379,8 @@ class OSMAddressFormatter(object):
 
         city_point_components = self.components.places_index.nearest_points(latitude, longitude)
 
-        country, candidate_languages = self.components.osm_country_and_languages(osm_components)
+        country_components = self.comonents.country_reverse_geocoded_components(latitude, longitude)
+        country, candidate_languages = self.components.osm_country_and_languages(country_components)
 
         nearest_metro_station = None
         if country == Countries.JAPAN:
@@ -1382,7 +1389,9 @@ class OSMAddressFormatter(object):
         building_components = self.building_components(latitude, longitude)
         subdivision_components = self.subdivision_components(latitude, longitude)
 
-        return self.formatted_addresses_with_reverse(tags, osm_components=osm_components,
+        return self.formatted_addresses_with_reverse(tags, country=country,
+                                                     candidate_languages=candidate_languages,
+                                                     osm_components=osm_components,
                                                      neighborhoods=neighborhoods,
                                                      city_point_components=city_point_components,
                                                      building_components=building_components,
@@ -1391,8 +1400,13 @@ class OSMAddressFormatter(object):
                                                      tag_components=tag_components)
 
     @classmethod
-    def formatted_address_limited_with_reverse(cls, tags, osm_components, neighborhoods):
-        country, candidate_languages = AddressComponents.osm_country_and_languages(osm_components)
+    def formatted_address_limited_with_reverse(cls, tags, country, candidate_languages, osm_components, neighborhoods):
+        if not country:
+            return None, None, None
+
+        if not candidate_languages:
+            candidate_languages = get_country_languages(country).items()
+
         if not (country and candidate_languages):
             return None, None, None
 
@@ -1402,7 +1416,7 @@ class OSMAddressFormatter(object):
 
         admin_dropout_prob = float(nested_get(cls.config, ('limited', 'admin_dropout_prob'), default=0.0))
 
-        address_components, country, language = AddressComponents.limited_with_reverse(revised_tags, osm_components, neighborhoods, language=namespaced_language)
+        address_components, country, language = AddressComponents.limited_with_reverse(revised_tags, country, candidate_languages, osm_components, neighborhoods, language=namespaced_language)
 
         if not address_components:
             return None, None, None
@@ -1432,11 +1446,12 @@ class OSMAddressFormatter(object):
             return None, None, None
 
         osm_components = self.components.osm_reverse_geocoded_components(latitude, longitude)
+        country_components = self.components.country_reverse_geocoded_components(latitude, longitude)
+        country, candidate_languages = self.components.osm_country_and_languages(country_components)
 
         neighborhoods = self.components.neighborhood_components(latitude, longitude)
 
         return self.formatted_address_limited_with_reverse(tags, osm_components, neighborhoods)
-
 
     def build_training_data(self, infile, out_dir, tag_components=True):
         '''

@@ -329,6 +329,9 @@ class AddressComponents(object):
             else:
                 languages = regional.items()
 
+            if not languages:
+                languages = get_country_languages(country).items()
+
         default_languages = sorted(languages, key=operator.itemgetter(1), reverse=True)
 
         return country, default_languages
@@ -2309,9 +2312,8 @@ class AddressComponents(object):
         return False
 
     @classmethod
-    def expanded_with_reverse(cls, address_components,
-                              osm_components, country_components,
-                              neighborhoods, city_point_components,
+    def expanded_with_reverse(cls, address_components, country, candidate_languages,
+                              osm_components, neighborhoods, city_point_components,
                               language=None, dropout_places=True, population=None,
                               population_from_city=False, check_city_wikipedia=False,
                               add_sub_building_components=True, hyphenation=True,
@@ -2331,11 +2333,10 @@ class AddressComponents(object):
         '''
 
         if country is None:
-            country, candidate_languages = cls.osm_country_and_languages(country_components)
-        else:
-            _, candidate_languages = cls.osm_country_and_languages(country_components)
-            if not candidate_languages:
-                candidate_languages = get_country_lanaguages(country).items()
+            return None, None, None
+
+        if not candidate_languages:
+            candidate_languages = get_country_lanaguages(country).items()
 
         if not (country and candidate_languages):
             return None, None, None
@@ -2442,7 +2443,6 @@ class AddressComponents(object):
 
         return address_components, country, language
 
-
     def expanded(self, address_components, latitude, longitude, language=None,
                  dropout_places=True, population=None,
                  population_from_city=False, check_city_wikipedia=False,
@@ -2474,6 +2474,8 @@ class AddressComponents(object):
         if country_components is None:
             country_components = self.country_reverse_geocoded_components(latitude, longitude)
 
+        country, candidate_languages = self.osm_country_and_languages(country_components)
+
         if neighborhoods is None:
             neighborhoods = self.neighborhood_components(latitude, longitude)
 
@@ -2489,8 +2491,12 @@ class AddressComponents(object):
                                           country=country)
 
     @classmethod
-    def limited_with_reverse(cls, address_components, osm_components, country_components, neighborhoods, language=None):
-        country, candidate_languages = self.osm_country_and_languages(country_components)
+    def limited_with_reverse(cls, address_components, country, candidate_languages, osm_components, neighborhoods, language=None):
+        if country is None:
+            return None, None, None
+
+        if not candidate_languages:
+            candidate_languages = get_country_lanaguages(country).items()
 
         if not (country and candidate_languages):
             return None, None, None
@@ -2498,49 +2504,49 @@ class AddressComponents(object):
         remove_keys = NAME_KEYS + HOUSE_NUMBER_KEYS + POSTAL_KEYS + OSM_IGNORE_KEYS
 
         for key in remove_keys:
-            _ = value.pop(key, None)
+            _ = address_components.pop(key, None)
 
         more_than_one_official_language = len(candidate_languages) > 1
 
         if not language:
-            language = self.address_language(value, candidate_languages)
+            language = cls.address_language(value, candidate_languages)
 
-        address_components = self.normalize_address_components(value)
+        address_components = cls.normalize_address_components(address_components)
 
-        non_local_language = self.non_local_language()
-        self.replace_country_name(address_components, country, non_local_language or language)
+        non_local_language = cls.non_local_language()
+        cls.replace_country_name(address_components, country, non_local_language or language)
 
-        address_state = self.state_name(address_components, country, language, non_local_language=non_local_language, always_use_full_names=True)
+        address_state = cls.state_name(address_components, country, language, non_local_language=non_local_language, always_use_full_names=True)
         if address_state:
             address_components[AddressFormatter.STATE] = address_state
 
         all_languages = set([l for l, d in candidate_languages])
 
         all_osm_components = osm_components + neighborhoods
-        language_suffix = self.pick_language_suffix(all_osm_components, language, non_local_language, more_than_one_official_language)
+        language_suffix = cls.pick_language_suffix(all_osm_components, language, non_local_language, more_than_one_official_language)
 
-        self.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
+        cls.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
-        self.add_admin_boundaries(address_components, osm_components, country, language,
-                                  language_suffix=language_suffix,
-                                  non_local_language=non_local_language,
-                                  normalize_languages=all_languages,
-                                  random_key=False)
+        cls.add_admin_boundaries(address_components, osm_components, country, language,
+                                 language_suffix=language_suffix,
+                                 non_local_language=non_local_language,
+                                 normalize_languages=all_languages,
+                                 random_key=False)
 
-        self.add_neighborhoods(address_components, neighborhoods, country, language,
-                               language_suffix=language_suffix)
+        cls.add_neighborhoods(address_components, neighborhoods, country, language,
+                              language_suffix=language_suffix)
 
-        self.replace_name_affixes(address_components, non_local_language or language, country=country)
+        cls.replace_name_affixes(address_components, non_local_language or language, country=country)
 
-        self.replace_names(address_components)
+        cls.replace_names(address_components)
 
-        self.prune_duplicate_names(address_components)
+        cls.prune_duplicate_names(address_components)
 
         if language_suffix and not non_local_language:
             language = language_suffix.lstrip(':').lower()
             if '_' in language:
                 lang, script = language.split('_', 1)
-                if lang not in CJK_LANGUAGES and script.lower() not in self.valid_scripts:
+                if lang not in CJK_LANGUAGES and script.lower() not in cls.valid_scripts:
                     language = lang
 
         return address_components, country, language
@@ -2553,7 +2559,8 @@ class AddressComponents(object):
 
         osm_components = self.osm_reverse_geocoded_components(latitude, longitude)
         country_components = self.country_reverse_geocoded_components(latitude, longitude)
+        country, candidate_languages = self.osm_country_and_languages(country_components)
 
         neighborhoods = self.neighborhood_components(latitude, longitude)
 
-        return self.limited_with_reverse(address_components, osm_components, country_components, neighborhoods, language=language)
+        return self.limited_with_reverse(address_components, country, candidate_languages, osm_components, neighborhoods, language=language)
