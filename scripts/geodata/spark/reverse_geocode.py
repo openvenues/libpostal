@@ -2,6 +2,7 @@ import ujson as json
 
 from shapely.geometry import shape
 
+from geodata.addresses.components import AddressComponents
 from geodata.encoding import safe_decode
 
 from geodata.polygons.area import polygon_area
@@ -103,9 +104,24 @@ class OSMCountryPolygonIndexSpark(OSMPolygonIndexSpark):
     buffer_levels = (0.0, 10e-6, 0.001, 0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 1.0, 2.0, 3.0)
     buffered_simplify_tolerance = 0.001
 
+    COUNTRY = 'country'
+    CANDIDATE_LANGUAGES = {}
+
+    @classmethod
+    def country_and_candidate_languages(cls, polys):
+        country, candidate_languages = AddressComponents.osm_country_and_languages(polys)
+
+        return {
+            cls.COUNTRY: country,
+            cls.CANDIDATE_LANGUAGES: candidate_languages
+        }
+
+        return rdd.mapValues(lambda polys: AddressComponents)
+
     @classmethod
     def reverse_geocode(cls, point_ids, polygon_ids):
-        points_with_polygons = cls.points_with_polygons(point_ids, polygon_ids)
+        points_with_polygons = cls.points_with_polygons(point_ids, polygon_ids) \
+                                  .mapValues(lambda polys: cls.country_and_candidate_languages(polys))
 
         points_without_polygons = point_ids.subtractByKey(points_with_polygons)
 
@@ -114,7 +130,9 @@ class OSMCountryPolygonIndexSpark(OSMPolygonIndexSpark):
         points_with_polygons_buffered = cls.points_with_polygons(points_without_polygons,
                                                                  country_polygons,
                                                                  buffer_levels=cls.buffer_levels,
-                                                                 buffered_simplify_tolerance=cls.buffered_simplify_tolerance)
+                                                                 buffered_simplify_tolerance=cls.buffered_simplify_tolerance) \
+                                           .mapValues(lambda polys: cls.country_and_candidate_languages(polys))
+
         combined_points_with_polygons = points_with_polygons.union(points_with_polygons_buffered)
 
         all_points = point_ids.leftOuterJoin(combined_points_with_polygons) \
