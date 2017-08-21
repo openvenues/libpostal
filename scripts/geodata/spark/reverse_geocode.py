@@ -105,7 +105,7 @@ class OSMCountryPolygonIndexSpark(OSMPolygonIndexSpark):
     buffered_simplify_tolerance = 0.001
 
     COUNTRY = 'country'
-    CANDIDATE_LANGUAGES = {}
+    CANDIDATE_LANGUAGES = 'candidate_languages'
 
     @classmethod
     def country_and_candidate_languages(cls, polys):
