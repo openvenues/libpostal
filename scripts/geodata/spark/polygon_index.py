@@ -39,8 +39,8 @@ class PolygonIndexSpark(object):
         return (None, False)
 
     @classmethod
-    def prep_polygons(cls, record, buffer_levels=(), buffered_simplify_tolerance=0.0):
-        poly = shape(record['geometry'])
+    def prep_polygons(cls, geometry, buffer_levels=(), buffered_simplify_tolerance=0.0):
+        poly = shape(geometry)
         if not buffer_levels:
             return prep(poly)
 
@@ -71,10 +71,10 @@ class PolygonIndexSpark(object):
         poly_groups = poly_points.groupByKey() \
                                  .map(lambda ((poly_id, gh), points): (poly_id, (gh, points))) \
                                  .join(polygon_ids) \
-                                 .map(lambda (poly_id, ((gh, points), rec)): ((poly_id, gh), (rec, points))) \
+                                 .map(lambda (poly_id, ((gh, points), rec)): ((poly_id, gh), (rec['geometry'], points))) \
                                  .partitionBy(num_partitions)  # repartition the keys so theyre (poly_id, geohash) instead of just poly_id
 
-        points_in_polygons = poly_groups.mapValues(lambda (rec, points): (cls.prep_polygons(rec, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance), points)) \
+        points_in_polygons = poly_groups.mapValues(lambda (geometry, points): (cls.prep_polygons(geometry, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance), points)) \
                                         .flatMap(lambda ((poly_id, gh), (poly, points)): ((point_id, poly_id, level) for point_id, poly_id, (level, contained) in ((point_id, poly_id, cls.polygon_contains(poly, lat, lon)) for (point_id, lat, lon) in points) if contained))
 
         return points_in_polygons
