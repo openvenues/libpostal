@@ -1,6 +1,7 @@
 import geohash
 import ujson as json
 from shapely.geometry import shape, Point
+from shapely.geometry.base import BaseGeometry
 from shapely.prepared import prep
 from geodata.polygons.geohash_polygon import GeohashPolygon
 
@@ -55,7 +56,7 @@ class PolygonIndexSpark(object):
 
     @classmethod
     def prep_polygons(cls, polys):
-        if not hasattr(polys, '__iter__'):
+        if isinstance(polys, BaseGeometry):
             poly = polys
             return prep(poly)
         else:
