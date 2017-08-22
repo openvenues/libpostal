@@ -44,8 +44,12 @@ class PointIndexSpark(object):
         return distance_to
 
     @classmethod
+    def preprocess_indexed_points(cls, indexed_point_ids):
+        return indexed_point_ids.mapValues(lambda rec: cls.preprocess_geojson(rec))
+
+    @classmethod
     def nearby_points(cls, point_ids, indexed_point_ids, precision=None):
-        indexed_point_ids = indexed_point_ids.mapValues(lambda rec: cls.preprocess_geojson(rec))
+        indexed_point_ids = cls.preprocess_indexed_points(indexed_point_ids)
         indexed_point_geohashes = cls.indexed_point_geohashes(indexed_point_ids)
         point_geohashes = cls.point_geohashes(point_ids)
 
