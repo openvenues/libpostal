@@ -84,7 +84,7 @@ class PolygonIndexSpark(object):
 
         poly_num_shards = candidate_points.map(lambda (poly_id, point_id): (poly_id, 1)) \
                                           .reduceByKey(lambda x, y: x + y) \
-                                          .mapValues(lambda count: cls.polygon_num_shards(count, per_shard=max_tests_per_shard))
+                                          .mapValues(lambda count: cls.polygon_num_shards(count, per_shard=max_per_shard))
 
         poly_points = candidate_points.zipWithUniqueId() \
                                       .map(lambda ((poly_id, point_id), uid): (poly_id, (point_id, uid))) \
@@ -98,7 +98,7 @@ class PolygonIndexSpark(object):
         poly_groups = poly_points.groupByKey() \
                                  .map(lambda ((poly_id, shard), points): (poly_id, (shard, points))) \
                                  .join(polygon_ids) \
-                                 .map(lambda (poly_id, ((shard, points), rec)): ((poly_id, shard), (cls.build_polygons(geometry, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance), points))) \
+                                 .map(lambda (poly_id, ((shard, points), rec)): ((poly_id, shard), (cls.build_polygons(rec['geometry'], buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance), points))) \
                                  .partitionBy(num_partitions)  # repartition the keys so theyre (poly_id, geohash) instead of just poly_id
 
         points_in_polygons = poly_groups.mapValues(lambda (poly, points): (cls.prep_polygons(poly), points)) \
