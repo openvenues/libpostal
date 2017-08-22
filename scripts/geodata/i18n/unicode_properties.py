@@ -60,15 +60,15 @@ LOCAL_WORD_BREAKS_FILE = os.path.join(WORD_BREAKS_DIR, 'WordBreakProperty.txt')
 SCRIPTS_HEADER = 'unicode_script_types.h'
 SCRIPTS_DATA_FILENAME = 'unicode_scripts_data.c'
 
-SCRIPTS_URL = 'http://unicode.org/Public/UNIDATA/Scripts.txt'
-BLOCKS_URL = 'http://unicode.org/Public/UNIDATA/Blocks.txt'
-PROPS_URL = 'http://unicode.org/Public/UNIDATA/PropList.txt'
-PROP_ALIASES_URL = 'http://unicode.org/Public/UNIDATA/PropertyAliases.txt'
-PROP_VALUE_ALIASES_URL = 'http://unicode.org/Public/UNIDATA/PropertyValueAliases.txt'
-DERIVED_CORE_PROPS_URL = 'http://unicode.org/Public/UNIDATA/DerivedCoreProperties.txt'
-WORD_BREAKS_URL = 'http://unicode.org/Public/UNIDATA/auxiliary/WordBreakProperty.txt'
+SCRIPTS_REMOTE_URL = 'http://unicode.org/Public/UNIDATA/Scripts.txt'
+BLOCKS_REMOTE_URL = 'http://unicode.org/Public/UNIDATA/Blocks.txt'
+PROPS_REMOTE_URL = 'http://unicode.org/Public/UNIDATA/PropList.txt'
+PROP_ALIASES_REMOTE_URL = 'http://unicode.org/Public/UNIDATA/PropertyAliases.txt'
+PROP_VALUE_ALIASES_REMOTE_URL = 'http://unicode.org/Public/UNIDATA/PropertyValueAliases.txt'
+DERIVED_CORE_PROPS_REMOTE_URL = 'http://unicode.org/Public/UNIDATA/DerivedCoreProperties.txt'
+WORD_BREAKS_REMOTE_URL = 'http://unicode.org/Public/UNIDATA/auxiliary/WordBreakProperty.txt'
 
-ISO_15924_URL = 'http://unicode.org/iso15924/iso15924.txt.zip'
+ISO_15924_REMOTE_URL = 'http://unicode.org/iso15924/iso15924.txt.zip'
 
 scripts_header_template = u'''#ifndef UNICODE_SCRIPT_TYPES_H
 #define UNICODE_SCRIPT_TYPES_H

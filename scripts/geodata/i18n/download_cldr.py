@@ -8,9 +8,10 @@ this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.insert(0, os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.i18n.unicode_paths import CLDR_DIR
-from geodata.file_utils import ensure_dir
+from geodata.file_utils import ensure_dir, download_file
 
-CLDR_URL = 'http://www.unicode.org/Public/cldr/latest/core.zip'
+CLDR_PATH = '/inputs/unicode/cldr/'
+CLDR_URL = 'https://libpostal.s3.amazonaws.com' + CLDR_PATH + 'core.zip'
 
 
 def download_cldr(temp_dir=None):
@@ -23,8 +24,9 @@ def download_cldr(temp_dir=None):
 
     cldr_filename = os.path.join(temp_dir, CLDR_URL.rsplit('/', 1)[-1])
 
-    subprocess.check_call(['wget', CLDR_URL, '-O', cldr_filename])
+    download_file(CLDR_URL, cldr_filename)
     subprocess.check_call(['unzip', cldr_filename, '-d', CLDR_DIR])
+
 
 if __name__ == '__main__':
     download_cldr(*sys.argv[1:])
