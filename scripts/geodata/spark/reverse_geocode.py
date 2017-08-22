@@ -121,7 +121,7 @@ class OSMCountryPolygonIndexSpark(OSMPolygonIndexSpark):
         points_with_polygons = cls.points_with_polygons(point_ids, polygon_ids) \
                                   .mapValues(lambda polys: cls.country_and_candidate_languages(polys))
 
-        points_without_polygons = point_ids.subtract(points_with_polygons.keys())
+        points_without_polygons = point_ids.subtractByKey(points_with_polygons)
 
         country_polygons = polygon_ids.filter(lambda (poly_id, rec): 'ISO3166-1:alpha2' in rec['properties'])
 
