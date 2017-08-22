@@ -143,7 +143,7 @@ class PolygonIndexSpark(object):
         polygon_ids = cls.preprocess_polygons(polygon_ids)
         points_in_polygons = cls.points_in_polygons(point_ids, polygon_ids, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance)
 
-        return cls.join_polys(points_in_polygons, polygon_ids, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance)
+        return cls.join_polys(points_in_polygons, polygon_ids, with_buffer_levels=bool(buffer_levels))
 
     @classmethod
     def reverse_geocode(cls, point_ids, polygon_ids):
