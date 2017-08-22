@@ -59,7 +59,7 @@ class PolygonIndexSpark(object):
             poly = polys
             return prep(poly)
         else:
-            return [prep(poly) for poly in polys]
+            return [(level, prep(poly)) for level, poly in polys]
 
     @classmethod
     def polygon_num_shards(cls, count, per_shard, remainder_split_threshold=0.4):
@@ -102,7 +102,7 @@ class PolygonIndexSpark(object):
                                  .partitionBy(num_partitions)  # repartition the keys so theyre (poly_id, geohash) instead of just poly_id
 
         points_in_polygons = poly_groups.mapValues(lambda (poly, points): (cls.prep_polygons(poly), points)) \
-                                        .flatMap(lambda ((poly_id, gh), (poly, points)): ((point_id, poly_id, level) for point_id, poly_id, (level, contained) in ((point_id, poly_id, cls.polygon_contains(poly, lat, lon)) for (point_id, lat, lon) in points) if contained))
+                                        .flatMap(lambda ((poly_id, shard), (poly, points)): ((point_id, poly_id, level) for point_id, poly_id, (level, contained) in ((point_id, poly_id, cls.polygon_contains(poly, lat, lon)) for (point_id, lat, lon) in points) if contained))
 
         return points_in_polygons
 
