@@ -135,9 +135,9 @@ class PolygonIndexSpark(object):
                                               .mapValues(lambda polys: sorted(polys, key=cls.sort_key_tuple, reverse=cls.sort_reverse))
 
         if not with_buffer_levels:
-            return points_with_polys.mapValues(lambda polys: [p for p, level in sorted(polys, key=cls.sort_level)])
+            return points_with_polys.mapValues(lambda polys: [p for p, level in polys])
         else:
-            return points_with_polys.mapValues(lambda polys: sorted(polys, key=cls.sort_level))
+            return points_with_polys.mapValues(lambda polys: polys)
 
     @classmethod
     def points_with_polygons(cls, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0):
