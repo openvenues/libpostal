@@ -140,11 +140,11 @@ class PolygonIndexSpark(object):
             return points_with_polys.mapValues(lambda polys: polys)
 
     @classmethod
-    def points_with_polygons(cls, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0):
+    def points_with_polygons(cls, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0, with_buffer_levels=False):
         polygon_ids = cls.preprocess_polygons(polygon_ids)
         points_in_polygons = cls.points_in_polygons(point_ids, polygon_ids, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance)
 
-        return cls.join_polys(points_in_polygons, polygon_ids, with_buffer_levels=bool(buffer_levels))
+        return cls.join_polys(points_in_polygons, polygon_ids, with_buffer_levels=with_buffer_levels)
 
     @classmethod
     def reverse_geocode(cls, point_ids, polygon_ids):
