@@ -83,14 +83,16 @@ class PolygonIndexSpark(object):
                                             .values() \
                                             .filter(lambda (poly_id, point_id): poly_id != point_id)
 
-        poly_num_shards = candidate_points.map(lambda (poly_id, point_id): (poly_id, 1)) \
-                                          .reduceByKey(lambda x, y: x + y) \
-                                          .mapValues(lambda count: cls.polygon_num_shards(count, per_shard=max_per_shard))
+        # No matter how many polygons there are, very few should have > max_per_shard points
+        large_poly_shards = sc.broadcast(candidate_points.map(lambda (poly_id, point_id): (poly_id, 1)) \
+                                                         .reduceByKey(lambda x, y: x + y) \
+                                                         .mapValues(lambda count: cls.polygon_num_shards(count, per_shard=max_per_shard)) \
+                                                         .filter(lambda (key, count): count > 1) \
+                                                         .collectAsMap()
+                                         )
 
         poly_points = candidate_points.zipWithUniqueId() \
-                                      .map(lambda ((poly_id, point_id), uid): (poly_id, (point_id, uid))) \
-                                      .join(poly_num_shards) \
-                                      .map(lambda (poly_id, ((point_id, uid), num_shards)): (point_id, (poly_id, uid % num_shards))) \
+                                      .map(lambda ((poly_id, point_id), uid): (point_id, (poly_id, uid % large_poly_shards.value.get(poly_id, 1)))) \
                                       .join(point_coords) \
                                       .map(lambda (point_id, ((poly_id, shard), (lat, lon))): ((poly_id, shard), (point_id, lat, lon)))
 
