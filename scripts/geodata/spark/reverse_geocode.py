@@ -117,15 +117,15 @@ class OSMCountryPolygonIndexSpark(OSMPolygonIndexSpark):
         }
 
     @classmethod
-    def reverse_geocode(cls, point_ids, polygon_ids):
-        points_with_polygons = cls.points_with_polygons(point_ids, polygon_ids) \
+    def reverse_geocode(cls, sc, point_ids, polygon_ids):
+        points_with_polygons = cls.points_with_polygons(sc, point_ids, polygon_ids) \
                                   .mapValues(lambda polys: cls.country_and_candidate_languages(polys))
 
         points_without_polygons = point_ids.subtractByKey(points_with_polygons)
 
         country_polygons = polygon_ids.filter(lambda (poly_id, rec): 'ISO3166-1:alpha2' in rec['properties'])
 
-        points_with_polygons_buffered = cls.points_with_polygons(points_without_polygons,
+        points_with_polygons_buffered = cls.points_with_polygons(sc, points_without_polygons,
                                                                  country_polygons,
                                                                  buffer_levels=cls.buffer_levels,
                                                                  buffered_simplify_tolerance=cls.buffered_simplify_tolerance) \

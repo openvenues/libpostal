@@ -73,7 +73,7 @@ class PolygonIndexSpark(object):
             return shards
 
     @classmethod
-    def points_in_polygons(cls, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0, max_per_shard=500000):
+    def points_in_polygons(cls, sc, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0, max_per_shard=500000):
         polygon_geohashes = cls.polygon_geohashes(polygon_ids)
         point_geohashes = cls.point_geohashes(point_ids)
 
@@ -152,15 +152,15 @@ class PolygonIndexSpark(object):
             return points_with_polys.mapValues(lambda polys: polys)
 
     @classmethod
-    def points_with_polygons(cls, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0, with_buffer_levels=False):
+    def points_with_polygons(cls, sc, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0, with_buffer_levels=False):
         polygon_ids = cls.preprocess_polygons(polygon_ids)
-        points_in_polygons = cls.points_in_polygons(point_ids, polygon_ids, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance)
+        points_in_polygons = cls.points_in_polygons(sc, point_ids, polygon_ids, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance)
 
         return cls.join_polys(points_in_polygons, polygon_ids, with_buffer_levels=with_buffer_levels)
 
     @classmethod
-    def reverse_geocode(cls, point_ids, polygon_ids):
-        points_with_polygons = cls.points_with_polygons(point_ids, polygon_ids)
+    def reverse_geocode(cls, sc, point_ids, polygon_ids):
+        points_with_polygons = cls.points_with_polygons(sc, point_ids, polygon_ids)
 
         all_points = point_ids.leftOuterJoin(points_with_polygons) \
                               .map(lambda (point_id, (point, polys)): (point, polys or []))
