@@ -126,14 +126,24 @@ class PolygonIndexSpark(object):
         return polygon_ids.mapValues(lambda rec: cls.preprocess_geojson(rec))
 
     @classmethod
+    def append_to_list(cls, l, val):
+        l.append(val)
+        return l
+
+    @classmethod
+    def extend_list(cls, l1, l2):
+        l1.extend(l2)
+        return l1
+
+    @classmethod
     def join_polys(cls, points_in_polygons, polygon_ids, with_buffer_levels=False):
         polygon_props = polygon_ids.mapValues(lambda poly: poly['properties'])
 
         points_with_polys = points_in_polygons.map(lambda (point_id, polygon_id, level): (polygon_id, (point_id, level))) \
                                               .join(polygon_props) \
                                               .values() \
-                                              .map(lambda ((point_id, level), poly_props): (point_id, [(poly_props, level)])) \
-                                              .reduceByKey(lambda x, y: x + y) \
+                                              .map(lambda ((point_id, level), poly_props): (point_id, (poly_props, level))) \
+                                              .aggregateByKey([], cls.append_to_list, cls.extend_list) \
                                               .mapValues(lambda polys: sorted(polys, key=cls.sort_key_tuple, reverse=cls.sort_reverse))
 
         if not with_buffer_levels:
