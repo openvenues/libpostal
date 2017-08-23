@@ -64,7 +64,7 @@ class PointIndexSpark(object):
         return nearby_points.mapValues(lambda (indexed_points, point): [p['properties'] for p in sorted(list(indexed_points), key=cls.distance_sort(point))])
 
     @classmethod
-    def reverse_geocode(cls, point_ids, indexed_point_ids, precision=None):
+    def reverse_geocode(cls, sc, point_ids, indexed_point_ids, precision=None):
         nearby_points = cls.nearby_points(point_ids, indexed_point_ids, precision=precision)
 
         all_points = point_ids.leftOuterJoin(nearby_points) \
