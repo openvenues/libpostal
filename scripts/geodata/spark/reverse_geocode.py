@@ -108,6 +108,11 @@ class OSMCountryPolygonIndexSpark(OSMPolygonIndexSpark):
     CANDIDATE_LANGUAGES = 'candidate_languages'
 
     @classmethod
+    def preprocess_geojson(cls, rec):
+        rec['properties'] = AddressComponents.country_polygon_minimal_properties(rec['properties'])
+        return rec
+
+    @classmethod
     def country_and_candidate_languages(cls, polys):
         country, candidate_languages = AddressComponents.osm_country_and_languages(polys)
 
