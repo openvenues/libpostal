@@ -277,6 +277,18 @@ class AddressComponents(object):
     def country_reverse_geocoded_components(self, latitude, longitude):
         return self.country_rtree.point_in_poly(latitude, longitude, return_all=True)
 
+    country_polygon_requited_keys = set([
+        'ISO3166-1:alpha2',
+        'ISO3166-2',
+        'is_in:country_code',
+        'type',
+        'id',
+    ])
+
+    @classmethod
+    def country_polygon_minimal_properties(cls, props):
+        return {k: v for k, v in six.iteritems(props) if k in cls.country_polygon_requited_keys}
+
     @classmethod
     def osm_country_and_languages(cls, osm_components):
         country = None
