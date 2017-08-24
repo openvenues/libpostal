@@ -219,7 +219,7 @@ class PolygonIndexSpark(object):
             points_in_polygons = cls.points_in_polygons(candidate_points, point_ids, polygon_ids, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance)
             return cls.join_polys(points_in_polygons, polygon_ids, with_buffer_levels=with_buffer_levels)
         else:
-            large_poly_shards = cls.large_poly_shards(sc, candidate_points, max_per_shard=cls.MAX_PER_SHARD)
+            large_poly_shards = cls.large_polygon_shards(sc, candidate_points, max_per_shard=cls.MAX_PER_SHARD)
             points_in_polygons = cls.points_in_polygons_large(candidate_points, point_ids, polygon_ids, large_poly_shards, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance)
 
             return cls.join_polys_large(points_in_polygons, polygon_ids, large_poly_shards, with_buffer_levels=with_buffer_levels)
