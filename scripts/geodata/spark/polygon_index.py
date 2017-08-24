@@ -14,8 +14,12 @@ class PolygonIndexSpark(object):
         return geojson_ids.flatMap(lambda (key, rec): [(h, key) for h in GeohashPolygon.cover_polygon_find_precision(shape(rec['geometry']))])
 
     @classmethod
+    def geohash_points(cls, geojson_ids):
+        return geojson_ids.mapValues(lambda rec: geohash.encode(rec['geometry']['coordinates'][1], rec['geometry']['coordinates'][0]))
+
+    @classmethod
     def point_geohashes(cls, geojson_ids):
-        geohash_ids = geojson_ids.mapValues(lambda rec: geohash.encode(rec['geometry']['coordinates'][1], rec['geometry']['coordinates'][0]))
+        geohash_ids = cls.geohash_points(geojson_ids)
         return geohash_ids.flatMap(lambda (key, gh): [(gh[:i], key) for i in range(GeohashPolygon.GEOHASH_MIN_PRECISION, GeohashPolygon.GEOHASH_MAX_PRECISION + 1)])
 
     @classmethod
@@ -98,10 +102,12 @@ class PolygonIndexSpark(object):
 
         num_partitions = poly_points.getNumPartitions()
 
+        poly_geometries = polygon_ids.mapValues(lambda rec: rec['geometry'])
+
         poly_groups = poly_points.groupByKey() \
                                  .map(lambda ((poly_id, shard), points): (poly_id, (shard, points))) \
-                                 .join(polygon_ids) \
-                                 .map(lambda (poly_id, ((shard, points), rec)): ((poly_id, shard), (cls.build_polygons(rec['geometry'], buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance), points))) \
+                                 .join(poly_geometries) \
+                                 .map(lambda (poly_id, ((shard, points), geometry)): ((poly_id, shard), (cls.build_polygons(geometry, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance), points))) \
                                  .partitionBy(num_partitions)  # repartition the keys so theyre (poly_id, geohash) instead of just poly_id
 
         points_in_polygons = poly_groups.mapValues(lambda (poly, points): (cls.prep_polygons(poly), points)) \
@@ -150,6 +156,7 @@ class PolygonIndexSpark(object):
             return points_with_polys.mapValues(lambda polys: [p for p, level in polys])
         else:
             return points_with_polys.mapValues(lambda polys: polys)
+
 
     @classmethod
     def points_with_polygons(cls, sc, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0, with_buffer_levels=False):
