@@ -4785,6 +4785,10 @@ countries:
                     - filename: putnam.csv
                     - filename: sevier.csv
                     - filename: shelby.csv
+                    - filename: rutherford.csv
+                      fields: *fields_with_unit
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
                     - filename: statewide.csv
                       add_osm_boundaries: true
                     - filename: williamson.csv
