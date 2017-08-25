@@ -47,30 +47,40 @@ def convert_openaddresses_file_to_geojson(input_file, output_file):
         out.write(json.dumps(geojson) + u'\n')
 
 
-def main(base_dir, base_s3_path=OPENADDRESSES_S3_PATH):
+def upload_openaddresses_file_to_s3(filename, base_s3_path=OPENADDRESSES_S3_PATH):
+    base_dir = os.path.dirname(filename)
+    dest_geojson_path = os.path.join(base_dir, '{}.geojson'.format(safe_encode(source[-1])))
+
+    print('converting {} to {}'.format(filename, dest_geojson_path))
+
+    convert_openaddresses_file_to_geojson(filename, dest_geojson_path)
+
+    s3_path = os.path.join(base_s3_path, dest_geojson_path)
+    print('uploading {} to S3'.format(dest_geojson_path))
+    upload_file_s3(dest_geojson_path, s3_path, public_read=True)
+    print('done uploading to S3')
+
+    os.unlink(dest_geojson_path)
+
+
+def upload_openaddresses_dir_to_s3(base_dir, base_s3_path=OPENADDRESSES_S3_PATH):
     for source in openaddresses_config.sources:
         source_dir = os.path.join(*map(safe_encode, source[:-1]))
         source_csv_path = os.path.join(source_dir, '{}.csv'.format(safe_encode(source[-1])))
         input_filename = os.path.join(base_dir, source_csv_path)
 
-        dest_geojson_path = os.path.join(source_dir, '{}.geojson'.format(safe_encode(source[-1])))
-        output_filename = os.path.join(base_dir, dest_geojson_path)
+        upload_openaddresses_file_to_s3(input_filename, base_s3_path=base_s3_path)
 
-        print('converting {} to {}'.format(input_filename, output_filename))
 
-        convert_openaddresses_file_to_geojson(input_filename, output_filename)
-
-        s3_path = os.path.join(base_s3_path, dest_geojson_path)
-        print('uploading {} to S3'.format(output_filename))
-        upload_file_s3(output_filename, s3_path, public_read=True)
-        print('done uploading to S3')
-
-        os.unlink(output_filename)
-
+def main(path):
+    if os.path.isdir(path):
+        upload_openaddresses_dir_to_s3(path)
+    else:
+        upload_openaddresses_file_to_s3(path)
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        sys.exit('Usage: python openaddresses_to_s3.py base_dir')
+        sys.exit('Usage: python openaddresses_to_s3.py base_dir_or_single_file')
 
-    base_dir = sys.argv[1]
-    main(base_dir)
+    path = sys.argv[1]
+    main(path)
