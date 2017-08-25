@@ -19,7 +19,7 @@ class PolygonIndexSpark(object):
 
     @classmethod
     def geohash_points(cls, geojson_ids):
-        return geojson_ids.mapValues(lambda rec: (rec['geometry']['coordinates'][1], rec['geometry']['coordinates'][0]))) \
+        return geojson_ids.mapValues(lambda rec: (rec['geometry']['coordinates'][1], rec['geometry']['coordinates'][0])) \
                           .mapValues(lambda (lat, lon): (geohash.encode(lat, lon), lat, lon))
 
     @classmethod
