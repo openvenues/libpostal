@@ -47,21 +47,46 @@ def convert_openaddresses_file_to_geojson(input_file, output_file):
         out.write(json.dumps(geojson) + u'\n')
 
 
-def upload_openaddresses_file_to_s3(path, base_s3_path=OPENADDRESSES_S3_PATH):
+def upload_openaddresses_file_to_s3(path, s3_path):
     base_dir = os.path.dirname(path)
     _, filename = os.path.split(path)
-    dest_geojson_path = os.path.join(base_dir, '{}.geojson'.format(safe_encode(filename.rsplit(u'.', 1)[0])))
+    output_filename = os.path.join(base_dir, '{}.geojson'.format(safe_encode(os.path.splitext(filename)[0])))
 
-    print('converting {} to {}'.format(path, dest_geojson_path))
+    print('converting {} to {}'.format(path, output_filename))
 
-    convert_openaddresses_file_to_geojson(path, dest_geojson_path)
+    convert_openaddresses_file_to_geojson(path, output_filename)
 
-    s3_path = os.path.join(base_s3_path, dest_geojson_path)
-    print('uploading {} to S3'.format(dest_geojson_path))
-    upload_file_s3(dest_geojson_path, s3_path, public_read=True)
+    print('uploading {} to S3'.format(output_filename))
+    upload_file_s3(output_filename, s3_path, public_read=True)
     print('done uploading to S3')
 
-    os.unlink(dest_geojson_path)
+    os.unlink(output_filename)
+
+
+def openaddresses_s3_path(filename):
+    dirname, filename = os.path.split(filename)
+    source, ext = os.path.splitext(filename)
+
+    config_filename = u'{}.csv'.format(source)
+
+    dirname, country_or_subdir = os.path.split(dirname)
+
+    country_config = openaddresses_config.country_configs.get(country_or_subdir)
+
+    if country_config and any((f['filename'] == config_filename for f in country_config.get('files', []))):
+        return u'/'.join([country_or_subdir.rstrip(u'/'), filename])
+
+    subdir = country_or_subdir
+    dirname, country_dir = os.path.split(dirname)
+
+    country_config = openaddresses_config.country_configs.get(country_dir)
+    if country_config:
+        subdir_config = country_config.get('subdirs', {}).get(subdir)
+
+        if subdir_config and any(f['filename'] == config_filename for f in subdir_config.get('files', [])):
+            return u'/'.join([country_dir.rstrip(u'/'), subdir.rstrip(u'/'), filename])
+
+    return None
 
 
 def upload_openaddresses_dir_to_s3(base_dir, base_s3_path=OPENADDRESSES_S3_PATH):
@@ -70,14 +95,23 @@ def upload_openaddresses_dir_to_s3(base_dir, base_s3_path=OPENADDRESSES_S3_PATH)
         source_csv_path = os.path.join(source_dir, '{}.csv'.format(safe_encode(source[-1])))
         input_filename = os.path.join(base_dir, source_csv_path)
 
-        upload_openaddresses_file_to_s3(input_filename, base_s3_path=base_s3_path)
+        dest_geojson_path = os.path.join(source_dir, '{}.geojson'.format(safe_encode(source[-1])))
+        s3_path = u'/'.join([base_s3_path.rstrip(u'/'), dest_geojson_path])
+
+        upload_openaddresses_file_to_s3(input_filename, s3_path=s3_path)
 
 
-def main(path):
+def main(path, base_s3_path=OPENADDRESSES_S3_PATH):
     if os.path.isdir(path):
         upload_openaddresses_dir_to_s3(path)
     else:
-        upload_openaddresses_file_to_s3(path)
+        dest_geojson_path = openaddresses_s3_path(path)
+        if dest_geojson_path is None:
+            raise ValueError(u'Path {} did not match OpenAddresses configuration'.format(path))
+
+        s3_path = u'/'.join([base_s3_path.rstrip(u'/'), dest_geojson_path])
+
+        upload_openaddresses_file_to_s3(path, s3_path=s3_path)
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
