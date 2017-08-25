@@ -4867,6 +4867,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           city: Killeen
+                    - filename: city_of_lewisville.csv
                     - filename: city_of_longview.csv
                       add_osm_boundaries: true
                       fields: *fields_with_unit
