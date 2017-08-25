@@ -529,6 +529,7 @@ countries:
                     - filename: province.csv
                       add_osm_boundaries: true
                     - filename: city_of_fredericton.csv
+                    - filename: city_of_moncton.csv
                     - filename: city_of_st_john.csv
                       add_osm_boundaries: true
                       city_replacements:
