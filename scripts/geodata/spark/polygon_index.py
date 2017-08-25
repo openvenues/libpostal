@@ -121,7 +121,7 @@ class PolygonIndexSpark(object):
         poly_geometries = cls.polygon_geometries(polygon_ids) \
                              .flatMap(lambda (poly_id, geometry): (((poly_id, i), geometry) for i in xrange(large_poly_shards.value.get(poly_id, 1))))
 
-        poly_groups = poly_points.groupByKey() \
+        poly_groups = poly_points.aggregateByKey([], cls.append_to_list, cls.extend_list) \
                                  .join(poly_geometries) \
                                  .mapValues(lambda (points, geometry): (cls.build_polygons(geometry, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance), points))
 
@@ -136,7 +136,7 @@ class PolygonIndexSpark(object):
 
         poly_geometries = cls.polygon_geometries(polygon_ids)
 
-        poly_groups = candidate_points.groupByKey() \
+        poly_groups = candidate_points.aggregateByKey([], cls.append_to_list, cls.extend_list) \
                                       .join(poly_geometries) \
                                       .map(lambda (poly_id, (points, geometry)): ((poly_id, (cls.build_polygons(geometry, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance), points))))
 
