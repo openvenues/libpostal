@@ -1,6 +1,6 @@
 import geohash
-import six
 
+from six.moves import xrange
 from shapely.geometry import shape, Point
 from shapely.geometry.base import BaseGeometry
 from shapely.prepared import prep
@@ -120,7 +120,7 @@ class PolygonIndexSpark(object):
                                       .map(lambda (point_id, ((poly_id, shard), (lat, lon))): ((poly_id, shard), (point_id, lat, lon)))
 
         poly_geometries = cls.polygon_geometries(polygon_ids) \
-                             .flatMap(lambda (poly_id, geometry): (((poly_id, i), geometry) for i in six.xrange(large_poly_shards.value.get(poly_id, 1))))
+                             .flatMap(lambda (poly_id, geometry): (((poly_id, i), geometry) for i in xrange(large_poly_shards.value.get(poly_id, 1))))
 
         poly_groups = poly_points.groupByKey() \
                                  .join(poly_geometries) \
@@ -179,7 +179,7 @@ class PolygonIndexSpark(object):
     @classmethod
     def join_polys_large(cls, points_in_polygons, polygon_ids, large_poly_shards, with_buffer_levels=False):
         polygon_props = cls.polygon_properties(polygon_ids) \
-                           .flatMap(lambda (poly_id, props): (((poly_id, i), props) for i in six.xrange(large_poly_shards.value.get(poly_id, 1))))
+                           .flatMap(lambda (poly_id, props): (((poly_id, i), props) for i in xrange(large_poly_shards.value.get(poly_id, 1))))
 
         points_with_polys = points_in_polygons.zipWithUniqueId() \
                                               .map(lambda ((point_id, poly_id, level), uid): ((poly_id, uid % large_poly_shards.value.get(poly_id, 1)), point_id, level)) \
