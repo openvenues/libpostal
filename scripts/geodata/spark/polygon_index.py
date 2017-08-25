@@ -19,12 +19,13 @@ class PolygonIndexSpark(object):
 
     @classmethod
     def geohash_points(cls, geojson_ids):
-        return geojson_ids.mapValues(lambda rec: geohash.encode(rec['geometry']['coordinates'][1], rec['geometry']['coordinates'][0]))
+        return geojson_ids.mapValues(lambda rec: (rec['geometry']['coordinates'][1], rec['geometry']['coordinates'][0]))) \
+                          .mapValues(lambda (lat, lon): (geohash.encode(lat, lon), lat, lon))
 
     @classmethod
     def point_geohashes(cls, geojson_ids):
         geohash_ids = cls.geohash_points(geojson_ids)
-        return geohash_ids.flatMap(lambda (key, gh): [(gh[:i], key) for i in range(GeohashPolygon.GEOHASH_MIN_PRECISION, GeohashPolygon.GEOHASH_MAX_PRECISION + 1)])
+        return geohash_ids.flatMap(lambda (key, (gh, lat, lon)): [(gh[:i], (key, lat, lon)) for i in range(GeohashPolygon.GEOHASH_MIN_PRECISION, GeohashPolygon.GEOHASH_MAX_PRECISION + 1)])
 
     @classmethod
     def preprocess_geojson(cls, rec):
@@ -96,7 +97,7 @@ class PolygonIndexSpark(object):
 
         return polygon_geohashes.join(point_geohashes) \
                                 .values() \
-                                .filter(lambda (poly_id, point_id): poly_id != point_id)
+                                .filter(lambda (poly_id, (point_id, lat, lon)): poly_id != point_id)
 
     @classmethod
     def point_coords(cls, point_ids):
@@ -115,9 +116,7 @@ class PolygonIndexSpark(object):
         point_coords = cls.point_coords(point_ids)
 
         poly_points = candidate_points.zipWithUniqueId() \
-                                      .map(lambda ((poly_id, point_id), uid): (point_id, (poly_id, uid % large_poly_shards.value.get(poly_id, 1)))) \
-                                      .join(point_coords) \
-                                      .map(lambda (point_id, ((poly_id, shard), (lat, lon))): ((poly_id, shard), (point_id, lat, lon)))
+                                      .map(lambda ((poly_id, (point_id, lat, lon)), uid): ((poly_id, uid % large_poly_shards.value.get(poly_id, 1)), (point_id, lat, lon)))
 
         poly_geometries = cls.polygon_geometries(polygon_ids) \
                              .flatMap(lambda (poly_id, geometry): (((poly_id, i), geometry) for i in xrange(large_poly_shards.value.get(poly_id, 1))))
@@ -135,15 +134,11 @@ class PolygonIndexSpark(object):
     def points_in_polygons(cls, candidate_points, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0):
         point_coords = cls.point_coords(point_ids)
 
-        poly_points = candidate_points.map(lambda (poly_id, point_id): (point_id, poly_id)) \
-                                      .join(point_coords) \
-                                      .map(lambda (point_id, (poly_id, (lat, lon))): (poly_id, (point_id, lat, lon)))
-
         poly_geometries = cls.polygon_geometries(polygon_ids)
 
-        poly_groups = poly_points.groupByKey() \
-                                 .join(poly_geometries) \
-                                 .map(lambda (poly_id, (points, geometry)): ((poly_id, (cls.build_polygons(geometry, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance), points))))
+        poly_groups = candidate_points.groupByKey() \
+                                      .join(poly_geometries) \
+                                      .map(lambda (poly_id, (points, geometry)): ((poly_id, (cls.build_polygons(geometry, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance), points))))
 
         points_in_polygons = poly_groups.mapValues(lambda (poly, points): (cls.prep_polygons(poly), points)) \
                                         .flatMap(lambda ((poly_id, shard), (poly, points)): ((point_id, poly_id, level) for point_id, poly_id, (level, contained) in ((point_id, poly_id, cls.polygon_contains(poly, lat, lon)) for (point_id, lat, lon) in points) if contained))
