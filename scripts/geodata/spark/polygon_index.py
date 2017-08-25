@@ -132,8 +132,6 @@ class PolygonIndexSpark(object):
 
     @classmethod
     def points_in_polygons(cls, candidate_points, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0):
-        point_coords = cls.point_coords(point_ids)
-
         poly_geometries = cls.polygon_geometries(polygon_ids)
 
         poly_groups = candidate_points.aggregateByKey([], cls.append_to_list, cls.extend_list) \
@@ -177,7 +175,7 @@ class PolygonIndexSpark(object):
                            .flatMap(lambda (poly_id, props): (((poly_id, i), props) for i in xrange(large_poly_shards.value.get(poly_id, 1))))
 
         points_with_polys = points_in_polygons.zipWithUniqueId() \
-                                              .map(lambda ((point_id, poly_id, level), uid): ((poly_id, uid % large_poly_shards.value.get(poly_id, 1)), point_id, level)) \
+                                              .map(lambda ((point_id, poly_id, level), uid): ((poly_id, uid % large_poly_shards.value.get(poly_id, 1)), (point_id, level))) \
                                               .join(polygon_props) \
                                               .values() \
                                               .map(lambda ((point_id, level), poly_props): (point_id, (poly_props, level))) \
