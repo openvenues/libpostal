@@ -47,13 +47,14 @@ def convert_openaddresses_file_to_geojson(input_file, output_file):
         out.write(json.dumps(geojson) + u'\n')
 
 
-def upload_openaddresses_file_to_s3(filename, base_s3_path=OPENADDRESSES_S3_PATH):
-    base_dir = os.path.dirname(filename)
-    dest_geojson_path = os.path.join(base_dir, '{}.geojson'.format(safe_encode(source[-1])))
+def upload_openaddresses_file_to_s3(path, base_s3_path=OPENADDRESSES_S3_PATH):
+    base_dir = os.path.dirname(path)
+    _, filename = os.path.split(path)
+    dest_geojson_path = os.path.join(base_dir, '{}.geojson'.format(safe_encode(filename.rsplit(u'.', 1)[0])))
 
-    print('converting {} to {}'.format(filename, dest_geojson_path))
+    print('converting {} to {}'.format(path, dest_geojson_path))
 
-    convert_openaddresses_file_to_geojson(filename, dest_geojson_path)
+    convert_openaddresses_file_to_geojson(path, dest_geojson_path)
 
     s3_path = os.path.join(base_s3_path, dest_geojson_path)
     print('uploading {} to S3'.format(dest_geojson_path))
