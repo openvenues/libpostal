@@ -67,7 +67,7 @@ def openaddresses_s3_path(filename):
     dirname, filename = os.path.split(filename)
     source, ext = os.path.splitext(filename)
 
-    config_filename = u'{}.csv'.format(source)
+    config_filename = '{}.csv'.format(safe_encode(source))
 
     dirname, country_or_subdir = os.path.split(dirname)
 
@@ -84,7 +84,7 @@ def openaddresses_s3_path(filename):
         subdir_config = country_config.get('subdirs', {}).get(subdir)
 
         if subdir_config and any(f['filename'] == config_filename for f in subdir_config.get('files', [])):
-            return u'/'.join([country_dir.rstrip(u'/'), subdir.rstrip(u'/'), filename])
+            return u'/'.join([country_dir.rstrip(u'/'), subdir.rstrip(u'/'), '{}.geojson'.format(safe_encode(source))])
 
     return None
 
