@@ -2,9 +2,10 @@ import geohash
 import ujson as json
 
 from geodata.distance.haversine import haversine_distance
+from geodata.spark.geo_index import GeoIndexSpark
 
 
-class PointIndexSpark(object):
+class PointIndexSpark(GeoIndexSpark):
     GEOHASH_PRECISION = 5
     sort_reverse = False
 
@@ -12,14 +13,15 @@ class PointIndexSpark(object):
     def point_geohashes(cls, geojson_ids, precision=None):
         if precision is None:
             precision = cls.GEOHASH_PRECISION
-        return geojson_ids.map(lambda (key, rec): (geohash.encode(rec['geometry']['coordinates'][1], rec['geometry']['coordinates'][0])[:precision], key))
+        geohash_ids = cls.geohash_points(geojson_ids)
+        return geohash_ids.map(lambda (key, (gh, lat, lon)): (gh[:precision], (key, lat, lon)))
 
     @classmethod
     def indexed_point_geohashes(cls, geojson_ids, precision=None):
         if precision is None:
             precision = cls.GEOHASH_PRECISION
-        geohash_ids = geojson_ids.mapValues(lambda rec: geohash.encode(rec['geometry']['coordinates'][1], rec['geometry']['coordinates'][0]))
-        return geohash_ids.flatMap(lambda (key, full_gh): [(gh, key) for gh in geohash.expand(full_gh[:precision])])
+        geohash_ids = cls.geohash_points(geojson_ids)
+        return geohash_ids.flatMap(lambda (key, (full_gh, lat, lon)): [(gh, key) for gh in geohash.expand(full_gh[:precision])])
 
     @classmethod
     def preprocess_geojson(cls, rec):
@@ -33,10 +35,7 @@ class PointIndexSpark(object):
         return geojson_ids
 
     @classmethod
-    def distance_sort(cls, point):
-        coords = point['geometry']['coordinates']
-        lat, lon = coords[1], coords[0]
-
+    def distance_sort(cls, lat, lon):
         def distance_to(other):
             other_coords = other['geometry']['coordinates']
             other_lat, other_lon = other_coords[1], other_coords[0]
@@ -53,15 +52,18 @@ class PointIndexSpark(object):
         indexed_point_geohashes = cls.indexed_point_geohashes(indexed_point_ids)
         point_geohashes = cls.point_geohashes(point_ids)
 
+        point_coords = point_geohashes.mapValues(lambda (point_id, lat, lon): (point_id, (lat, lon)))
+
         nearby_points = indexed_point_geohashes.join(point_geohashes) \
                                                .values() \
-                                               .filter(lambda (indexed_point_id, point_id): indexed_point_id != point_id) \
+                                               .filter(lambda (indexed_point_id, (point_id, lat, lon)): indexed_point_id != point_id) \
+                                               .map(lambda (indexed_point_id, (point_id, lat, lon)): (indexed_point_id, point_id)) \
                                                .join(indexed_point_ids) \
-                                               .values() \
-                                               .groupByKey() \
-                                               .join(point_ids)
+                                               .map(lambda (indexed_point_id, (point_id, indexed_point)): (point_id, indexed_point)) \
+                                               .aggregateByKey([], cls.append_to_list, cls.extend_list) \
+                                               .join(point_coords)
 
-        return nearby_points.mapValues(lambda (indexed_points, point): [p['properties'] for p in sorted(list(indexed_points), key=cls.distance_sort(point))])
+        return nearby_points.mapValues(lambda (indexed_points, (lat, lon)): [p['properties'] for p in sorted(list(indexed_points), key=cls.distance_sort(lat, lon))])
 
     @classmethod
     def reverse_geocode(cls, sc, point_ids, indexed_point_ids, precision=None):

@@ -5,9 +5,10 @@ from shapely.geometry import shape, Point
 from shapely.geometry.base import BaseGeometry
 from shapely.prepared import prep
 from geodata.polygons.geohash_polygon import GeohashPolygon
+from geodata.spark.geo_index import GeoIndexSpark
 
 
-class PolygonIndexSpark(object):
+class PolygonIndexSpark(GeoIndexSpark):
     sort_reverse = False
     large_polygons = False
 
@@ -16,11 +17,6 @@ class PolygonIndexSpark(object):
     @classmethod
     def polygon_geohashes(cls, geojson_ids):
         return geojson_ids.flatMap(lambda (key, rec): [(h, key) for h in GeohashPolygon.cover_polygon_find_precision(shape(rec['geometry']))])
-
-    @classmethod
-    def geohash_points(cls, geojson_ids):
-        return geojson_ids.mapValues(lambda rec: (rec['geometry']['coordinates'][1], rec['geometry']['coordinates'][0])) \
-                          .mapValues(lambda (lat, lon): (geohash.encode(lat, lon), lat, lon))
 
     @classmethod
     def point_geohashes(cls, geojson_ids):
@@ -98,10 +94,6 @@ class PolygonIndexSpark(object):
         return polygon_geohashes.join(point_geohashes) \
                                 .values() \
                                 .filter(lambda (poly_id, (point_id, lat, lon)): poly_id != point_id)
-
-    @classmethod
-    def point_coords(cls, point_ids):
-        return point_ids.mapValues(lambda rec: (rec['geometry']['coordinates'][1], rec['geometry']['coordinates'][0]))
 
     @classmethod
     def polygon_properties(cls, polygon_ids):
