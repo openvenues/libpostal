@@ -52,7 +52,7 @@ class PointIndexSpark(GeoIndexSpark):
         indexed_point_geohashes = cls.indexed_point_geohashes(indexed_point_ids)
         point_geohashes = cls.point_geohashes(point_ids)
 
-        point_coords = point_geohashes.mapValues(lambda (point_id, lat, lon): (point_id, (lat, lon)))
+        point_coords = point_geohashes.values().map(lambda (point_id, lat, lon): (point_id, (lat, lon)))
 
         nearby_points = indexed_point_geohashes.join(point_geohashes) \
                                                .values() \
