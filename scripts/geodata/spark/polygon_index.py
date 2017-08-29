@@ -105,8 +105,6 @@ class PolygonIndexSpark(GeoIndexSpark):
 
     @classmethod
     def points_in_polygons_large(cls, candidate_points, point_ids, polygon_ids, large_poly_shards, buffer_levels=(), buffered_simplify_tolerance=0.0):
-        point_coords = cls.point_coords(point_ids)
-
         poly_points = candidate_points.zipWithUniqueId() \
                                       .map(lambda ((poly_id, (point_id, lat, lon)), uid): ((poly_id, uid % large_poly_shards.value.get(poly_id, 1)), (point_id, lat, lon)))
 
@@ -131,7 +129,7 @@ class PolygonIndexSpark(GeoIndexSpark):
                                       .map(lambda (poly_id, (points, geometry)): ((poly_id, (cls.build_polygons(geometry, buffer_levels=buffer_levels, buffered_simplify_tolerance=buffered_simplify_tolerance), points))))
 
         points_in_polygons = poly_groups.mapValues(lambda (poly, points): (cls.prep_polygons(poly), points)) \
-                                        .flatMap(lambda ((poly_id, shard), (poly, points)): ((point_id, poly_id, level) for point_id, poly_id, (level, contained) in ((point_id, poly_id, cls.polygon_contains(poly, lat, lon)) for (point_id, lat, lon) in points) if contained))
+                                        .flatMap(lambda (poly_id, (poly, points)): ((point_id, poly_id, level) for point_id, poly_id, (level, contained) in ((point_id, poly_id, cls.polygon_contains(poly, lat, lon)) for (point_id, lat, lon) in points) if contained))
 
         return points_in_polygons
 
@@ -141,11 +139,11 @@ class PolygonIndexSpark(GeoIndexSpark):
 
     @classmethod
     def sort_key_tuple(cls, (props, level)):
-        return cls.sort_key(props)
+        return cls.sort_level(level), cls.sort_key(props)
 
     @classmethod
-    def sort_level(cls, (polygon, level)):
-        return -float('inf') if level is None else level
+    def sort_level(cls, level):
+        return level if level is not None else -float('inf') if not cls.sort_reverse else float('inf')
 
     @classmethod
     def preprocess_polygons(cls, polygon_ids):
