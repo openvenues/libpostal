@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.csv_utils import unicode_csv_reader
-from geodata.encoding import safe_encode
+from geodata.encoding import safe_encode, safe_decode
 from geodata.file_utils import upload_file_s3
 from geodata.openaddresses.config import openaddresses_config
 
