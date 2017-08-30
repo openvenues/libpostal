@@ -90,11 +90,6 @@ class OSMAreaPolygonIndexSpark(OSMPolygonIndexSpark):
         area_key = cls.AREA_KEY
         return props[area_key]
 
-    @classmethod
-    def postprocess_polygon_properties(cls, props):
-        props.pop(cls.AREA_KEY, None)
-        return props
-
 
 class OSMSubdivisionPolygonIndexSpark(OSMAreaPolygonIndexSpark):
     pass

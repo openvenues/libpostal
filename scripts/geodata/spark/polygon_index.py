@@ -28,10 +28,6 @@ class PolygonIndexSpark(GeoIndexSpark):
         return rec
 
     @classmethod
-    def postprocess_polygon_properties(cls, props):
-        return props
-
-    @classmethod
     def geojson_ids(cls, geojson):
         geojson_ids = geojson.zipWithUniqueId() \
                              .map(lambda (rec, uid): (uid, rec))
@@ -177,9 +173,9 @@ class PolygonIndexSpark(GeoIndexSpark):
                                               .mapValues(lambda polys: sorted(polys, key=cls.sort_key_tuple, reverse=cls.sort_reverse))
 
         if not with_buffer_levels:
-            return points_with_polys.mapValues(lambda polys: [cls.postprocess_polygon_properties(p) for p, level in polys])
+            return points_with_polys.mapValues(lambda polys: [p for p, level in polys])
         else:
-            return points_with_polys.mapValues(lambda polys: [cls.postprocess_polygon_properties(p) for p in polys])
+            return points_with_polys.mapValues(lambda polys: polys)
 
     @classmethod
     def join_polys(cls, points_in_polygons, polygon_ids, with_buffer_levels=False):
@@ -193,9 +189,9 @@ class PolygonIndexSpark(GeoIndexSpark):
                                               .mapValues(lambda polys: sorted(polys, key=cls.sort_key_tuple, reverse=cls.sort_reverse))
 
         if not with_buffer_levels:
-            return points_with_polys.mapValues(lambda polys: [cls.postprocess_polygon_properties(p) for p, level in polys])
+            return points_with_polys.mapValues(lambda polys: [p for p, level in polys])
         else:
-            return points_with_polys.mapValues(lambda polys: [cls.postprocess_polygon_properties(p) for p in polys])
+            return points_with_polys.mapValues(lambda polys: polys)
 
     @classmethod
     def points_with_polygons(cls, sc, point_ids, polygon_ids, buffer_levels=(), buffered_simplify_tolerance=0.0, with_buffer_levels=False):
