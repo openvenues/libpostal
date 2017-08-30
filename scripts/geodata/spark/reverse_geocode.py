@@ -90,6 +90,12 @@ class OSMAreaPolygonIndexSpark(OSMPolygonIndexSpark):
         area_key = cls.AREA_KEY
         return props[area_key]
 
+    @classmethod
+    def postprocess_geojson(cls, rec):
+        props = rec['properties']
+        props.pop(cls.AREA_KEY, None)
+        return rec
+
 
 class OSMSubdivisionPolygonIndexSpark(OSMAreaPolygonIndexSpark):
     pass
