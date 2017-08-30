@@ -498,8 +498,10 @@ class OSMAdminReverseGeocoder(OSMReverseGeocoder):
             tags['lon'] = lon
             yield tags
 
+
 class OSMAreaReverseGeocoder(OSMReverseGeocoder):
     AREAS_FILENAME = 'areas.json'
+    sort_reverse = True
 
     def setup(self):
         self.areas = []
@@ -524,7 +526,7 @@ class OSMAreaReverseGeocoder(OSMReverseGeocoder):
 
     def get_candidate_polygons(self, lat, lon):
         candidates = super(OSMReverseGeocoder, self).get_candidate_polygons(lat, lon)
-        return sorted(candidates, key=self.sort_level)
+        return sorted(candidates, key=self.sort_level, reverse=self.sort_reverse)
 
 
 class OSMSubdivisionReverseGeocoder(OSMAreaReverseGeocoder):
