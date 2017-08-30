@@ -122,7 +122,7 @@ def upload_openaddresses_dir_to_s3(base_dir, base_s3_path=OPENADDRESSES_S3_PATH)
 
         s3_full_path = u'/'.join([base_s3_path.rstrip(u'/'), s3_source_path])
 
-        upload_openaddresses_file_to_s3(input_filename, s3_path=s3_full_path, source=s3_source_path)
+        upload_openaddresses_file_to_s3(input_filename, s3_path=s3_full_path, source=u'/'.join(source))
 
 
 def main(path, base_s3_path=OPENADDRESSES_S3_PATH):
@@ -130,13 +130,14 @@ def main(path, base_s3_path=OPENADDRESSES_S3_PATH):
         upload_openaddresses_dir_to_s3(path)
     else:
         country, subdivision, source = openaddresses_source(path)
+
         s3_source_path = openaddresses_s3_path(country, subdivision, source)
         if s3_source_path is None:
             raise ValueError(u'Path {} did not match OpenAddresses configuration'.format(path))
 
         s3_path = u'/'.join([base_s3_path.rstrip(u'/'), s3_source_path])
 
-        upload_openaddresses_file_to_s3(path, s3_path=s3_path, source=s3_source_path)
+        upload_openaddresses_file_to_s3(path, s3_path=s3_path, source=u'/'.join([country, subdivision, source]))
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
