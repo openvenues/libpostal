@@ -353,10 +353,15 @@ class NumberedComponent(object):
 
         seen_phrases = set([c['canonical'] for c in config_phrases])
 
-        number_props = address_config.get_property(Number.key, language, country=country)
+        number_props = address_config.get_property(Number.key, language, country=country, default={})
+
         number_default = number_props.get('default')
         number_alternatives = number_props.get('alternatives', [])
-        number_phrases = [number_default] + [a['alternative'] for a in number_alternatives]
+        number_phrases = []
+        if number_default:
+            number_phrases.append(number_default)
+        if number_alternatives:
+            number_phrases.extend([a['alternative'] for a in number_alternatives])
 
         left_number_phrases = []
         left_number_affix_phrases = []
