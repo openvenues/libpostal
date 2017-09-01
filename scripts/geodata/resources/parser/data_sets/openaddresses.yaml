@@ -5375,6 +5375,13 @@ countries:
                 files:
                     - filename: nelson_mandela_bay.csv
                       add_osm_boundaries: true
+            gt:
+                files:
+                    - filename: ekurhuleni.csv
+                      <<: *default_fields
+                      DISTRICT:
+                          component: suburb
+
             nl:
                 files:
                     - filename: ethekwini.csv
