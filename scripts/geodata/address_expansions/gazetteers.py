@@ -223,20 +223,22 @@ UNIT_ABBREVIATION_DICTIONARIES = ('level_types_basement',
                                   'unit_types_standalone',
                                   )
 
-VENUE_NAME_DICTIONARIES = ('academic_degrees',
-                           'building_types',
-                           'chains',
-                           'company_types',
-                           'directionals',
-                           'given_names',
-                           'organizations',
-                           'people',
-                           'personal_suffixes',
-                           'personal_titles',
-                           'place_names',
-                           'stopwords',
-                           'surnames',
-                           )
+VENUE_NAME_STRICT_DICTIONARIES = ('academic_degrees',
+                                  'chains',
+                                  'company_types',
+                                  'organizations',
+                                  'place_names',
+                                  )
+
+VENUE_NAME_DICTIONARIES = VENUE_NAME_STRICT_DICTIONARIES + ('building_types',
+                                                            'directionals',
+                                                            'given_names',
+                                                            'people',
+                                                            'personal_suffixes',
+                                                            'personal_titles',
+                                                            'stopwords',
+                                                            'surnames',
+                                                            )
 
 ALL_ABBREVIATION_DICTIONARIES = STREET_TYPES_DICTIONARIES + \
     NAME_DICTIONARIES + \
@@ -267,3 +269,4 @@ toponym_abbreviations_gazetteer = create_gazetteer(*TOPONYM_ABBREVIATION_DICTION
 toponym_gazetteer = create_gazetteer(TOPONYMS_DICTIONARY)
 given_name_gazetteer = create_gazetteer(GIVEN_NAME_DICTIONARY)
 venue_names_gazetteer = create_gazetteer(*VENUE_NAME_DICTIONARIES)
+venue_names_strict_gazetteer = create_gazetteer(*VENUE_NAME_STRICT_DICTIONARIES)

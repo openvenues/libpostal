@@ -290,6 +290,9 @@ class OSMAddressFormatter(object):
 
         name_norm = name.strip().lower()
 
+        if is_numeric(name_norm) and (is_generic or not is_known_venue_type):
+            return False
+
         street = address_components.get(AddressFormatter.ROAD)
         if street:
             street = street.strip().lower()
@@ -324,15 +327,16 @@ class OSMAddressFormatter(object):
                 return False
 
         venue_phrases = venue_names_gazetteer.extract_phrases(name, languages=languages)
+        venue_phrases_strict = venue_names_strict_gazetteer.extract_phrases(name, languages=languages)
         street_phrases = street_types_only_gazetteer.extract_phrases(name, languages=languages)
 
-        if street_phrases - venue_phrases and not venue_phrases - street_phrases and not (AddressFormatter.HOUSE_NUMBER in address_components and AddressFormatter.ROAD in address_components):
+        if not is_known_venue_type and street_phrases - venue_phrases and not venue_phrases - street_phrases and not (AddressFormatter.HOUSE_NUMBER in address_components and AddressFormatter.ROAD in address_components):
             return False
 
-        if is_generic and not venue_phrases:
+        if is_generic and not venue_phrases_strict:
             return False
 
-        if not address_components and not venue_phrases:
+        if not is_known_venue_type and not house_number and not street and not venue_phrases:
             return False
 
         return True
