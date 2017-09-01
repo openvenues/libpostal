@@ -720,7 +720,7 @@ class AddressComponents(object):
             return None
 
         phrase = component_class.phrase(value, language, country=country)
-        if phrase != component:
+        if phrase != value:
             return phrase
         else:
             return None
@@ -1326,11 +1326,12 @@ class AddressComponents(object):
                 continue
 
             if component == AddressFormatter.STATE:
-                val = cls.abbreviated_state(val, country, language)
-            else:
-                val = abbreviate(toponym_abbreviations_gazetteer, val, language, abbreviate_prob=abbreviate_toponym_prob)
-                if hyphenation:
-                    val = cls.name_hyphens(val)
+                address_components[component] = cls.abbreviated_state(val, country, language)
+                continue
+
+            val = abbreviate(toponym_abbreviations_gazetteer, val, language, abbreviate_prob=abbreviate_toponym_prob)
+            if hyphenation:
+                val = cls.name_hyphens(val)
             address_components[component] = val
 
     @classmethod
