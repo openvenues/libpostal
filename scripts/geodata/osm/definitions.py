@@ -83,10 +83,12 @@ class OSMDefinitions(object):
         defs = self.definitions.get(category, {})
         if not defs:
             return False
-        elif self.ALL in defs:
-            return True
+
+        all_key = self.ALL
+
         for k, v in six.iteritems(props):
-            if v.lower() in defs.get(k.lower(), set()):
+            kvs = defs.get(k.lower(), set())
+            if isinstance(v, six.string_types) and (v.lower() in kvs or all_key in kvs):
                 return True
         return False
 
