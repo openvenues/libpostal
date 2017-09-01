@@ -1,4 +1,5 @@
 academy
+academies
 aerodome
 aged care center|aged care centre|aged care|centre for aged care|center for aged care|center for the aged|centre for the aged|aged care facilities
 amphitheatre|amphitheater
@@ -12,6 +13,7 @@ airport|aprt
 apartments|apts|appartments
 aquarium
 arcade
+arcades
 arms
 art gallery|arts gallery
 arts center
@@ -40,14 +42,19 @@ car park|carpark
 car wash|carwash
 casino
 castle|cst
+cavern
+caverns
 cemetery
 center for the arts|centre for the arts
 chalet
+chamber of commerce
 chambers
 chapel
 chase
 child care|childcare
 chiropractic
+chiropractor
+chiropractors
 church|chr
 cinema
 cinemas
@@ -120,6 +127,8 @@ garden
 gallery
 gas station
 gate
+general store
+general post office|gpo|g.p.o.|g.p.o|gen po|gen post ofc|gen post office
 geriatric unit
 golf course
 golf club
@@ -222,7 +231,7 @@ police department|pd|p d
 police station
 polytechnic
 port|pt|prt
-post office|po|postoffice
+post office|po|postoffice|post ofc
 precinct|pct
 pre school|preschool|pre-school
 pre-kindergarten|prekindergarten|pre-k|prek|pre k
@@ -269,10 +278,11 @@ stadium
 station|sta|stn
 steakhouse
 store|stor
+stores
 studio
 studios
 subdivision
-supermarket|super market
+supermarket|super market|supermkt|supermrkt|super mkt|super mrkt
 swimming pool
 tavern
 tea
@@ -283,10 +293,11 @@ theatre
 theatres
 theaters
 tower|twr
+towers|twrs
 town hall
 townhouse|town house
 townhouses|town houses
-trailer park|tlpk
+trailer park|tlpk|trlr pk|trlr prk|trlr park
 university|uni|univ|univers|unvrsty
 units
 urgent care
@@ -302,8 +313,10 @@ villas|vlls|vlas
 village|vil|vge|vill|villag|villg|vlg|vlge|vllg
 villages|vlgs
 vineyard
+vineyards
 wine bar|winebar
 winery
+wineries
 yoga
 youth center|youth centre
 zoo
