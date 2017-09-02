@@ -474,7 +474,7 @@ staircases:
         alpha_probability: 0.2
         numeric_plus_alpha_probability: 0.025
         alpha_plus_numeric_probability: 0.025
-        direcional_probability: 0.1
+        directional_probability: 0.1
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
