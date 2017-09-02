@@ -38,8 +38,6 @@ numbers:
         numeric_affix:
             affix: "#" # e.g. #3, #2F, etc.
             probability: 0.5
-            alternatives:
-                - alternative: 
             direction: left # affix goes on the number's left
 
         # Probabilities for numbers
