@@ -7,8 +7,8 @@
         "6": "state_district"
         "7": "city"
         "8": "city_district"
-        "9": "suburb"
-        "10": "suburb"
+        "9": "japan_major_neighborhood"
+        "10": "japan_minor_neighborhood"
 
     global_overrides_last: true
 
