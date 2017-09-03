@@ -674,6 +674,27 @@ po_boxes:
         - length: 6
           probability: 0.05
 
+postcodes:
+    alphanumeric:
+        default:
+            canonical: code postal
+            abbreviated: cp
+            sample: true
+            canonical_probability: 0.01
+            abbreviated_probability: 0.95
+            sample_probability: 0.04
+
+            numeric:
+                direction: left
+
+            numeric_affix:
+                affix: cp
+                direction: left
+            # null_probability means the chance of doing nothing e.g. just the postal code
+            null_probability: 0.995
+            numeric_probability: 0.003
+            numeric_affix_probability: 0.002
+            strict_numeric: true
 
 units:
     flat: &appartement
