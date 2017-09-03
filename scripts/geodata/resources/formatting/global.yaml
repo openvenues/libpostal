@@ -69,7 +69,11 @@ global:
         block:
             block_before_house_number:
                 before: house_number
-                probability: 1.0
+                probability: 0.2
+                allow_between_house_number_and_road: true
+            block_after_house_number:
+                after: house_number
+                probability: 0.8
                 allow_between_house_number_and_road: true
             conditional:
                 - component: entrance
@@ -104,17 +108,6 @@ global:
                       block_after_unit:
                           after: unit
                           probability: 0.2
-                - component: house_number
-                  probabilities:
-                      block_before_house_number:
-                          before: house_number
-                          probability: 0.5
-                          allow_between_house_number_and_road: true
-                      block_after_house_number:
-                          after: house_number
-                          probability: 0.5
-                          allow_between_house_number_and_road: true
-
 
         locality:
             locality_before_city:
@@ -307,8 +300,8 @@ global:
                           probability: 0.2
 
         subdivision:
-            subdivision_before_suburb:
-                before: suburb
+            subdivision_after_road:
+                after: road
                 probability: 1.0
 
 # Overrides for languages (better for e.g. covering all French-speaking countries)
@@ -884,6 +877,8 @@ countries:
             building_after_house_number:
                 after: house_number
                 probability: 1.0
+            building_before_suburb:
+                probability: 0.0
             conditional:
                 - component: entrance
                   probabilities:
@@ -906,7 +901,45 @@ countries:
                           before: unit
                           probability: 1.0
 
-        named_building: *east_asia_building_insertions
+        named_building:
+            named_building_after_house:
+                after: house
+                probability: 0.1
+            named_building_after_house_number:
+                after: house_number
+                probability: 0.9
+            named_building_before_suburb:
+                after: suburb
+                probability: 0.0
+            conditional:
+                - component: building
+                  probabilities:
+                      named_building_before_building:
+                          before: building
+                          probability: 0.5
+                      named_building_after_building:
+                          after: building
+                          probability: 0.5
+                - component: entrance
+                  probabilities:
+                      named_building_before_entrance:
+                          before: entrance
+                          probability: 1.0
+                - component: staircase
+                  probabilities:
+                      named_building_before_staircase:
+                          before: staircase
+                          probability: 1.0
+                - component: level
+                  probabilities:
+                      named_building_before_level:
+                          before: level
+                          probability: 1.0
+                - component: unit
+                  probabilities:
+                      named_building_before_unit:
+                          before: unit
+                          probability: 1.0
 
         entrance:
             # e.g. Calle Foo 3, entrada 1
@@ -1009,7 +1042,21 @@ countries:
 
     # Japan
     jp:
-        insertions: *east_asia_insertions
+        insertions:
+            <<: *east_asia_insertions
+            metro_station:
+                metro_station_after_suburb:
+                    after: suburb
+                    probability: 1.0
+                conditional:
+                    - component: subdivision
+                      probabilities:
+                          metro_station_after_subdivision:
+                              before: after
+                              probability: 0.5
+                          metro_station_before_subdivision:
+                              after: before
+                              probability: 0.5
 
     jp_en:
         insertions: *us_template_insertions
