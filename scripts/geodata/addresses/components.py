@@ -1089,7 +1089,7 @@ class AddressComponents(object):
             if not regex_str:
                 return None
             regex = re.compile(regex_str, re.I | re.U)
-            cls.numeric_phrase_regexes[numeric_class.key] = regex
+            cls.numeric_phrase_regexes[(numeric_class.key, language, country)] = regex
         return regex
 
     @classmethod
