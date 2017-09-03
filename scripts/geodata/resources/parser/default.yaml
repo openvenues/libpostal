@@ -154,6 +154,44 @@ city:
     quattroshapes_geonames_backup_city_probability: 0.2
     quattroshapes_geonames_abbreviated_probability: 0.1
 
+bucharest_sectors:
+    languages:
+        ro:
+            default:
+                affix: Sectorul
+                direction: left
+                roman_numeral_probability: 0.4
+            probability: 0.6
+            alternatives:
+                - alternative:
+                    affix: Sector
+                    direction: left
+                    roman_numeral_probability: 0.4
+                  probability: 0.25
+                - alternative:
+                    affix: Sec
+                    direction: left
+                    roman_numeral_probability: 0.4
+                  probability: 0.15
+        en:
+            default:
+                affix: District
+                direction: right
+                ordinal_probability: 0.5
+                roman_numeral_probability: 0.2
+            probability: 0.5
+            alternatives:
+                - alternative:
+                    affix: Sector
+                    direction: right
+                    ordinal_probability: 0.5
+                    roman_numeral_probability: 0.2
+                  probability: 0.3
+                - alternative:
+                    affix: Sector
+                    direction: left
+                  probability: 0.2
+
 state_district:
     join_probability: 0.5
 

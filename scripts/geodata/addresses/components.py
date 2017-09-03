@@ -35,7 +35,7 @@ from geodata.addresses.postcodes import PostCode
 from geodata.addresses.staircases import Staircase
 from geodata.addresses.units import Unit
 from geodata.boundaries.names import boundary_names
-from geodata.configs.utils import nested_get, recursive_merge, RESOURCES_DIR
+from geodata.configs.utils import nested_get, recursive_merge, RESOURCES_DIR, alternative_probabilities
 from geodata.coordinates.conversion import latlon_to_decimal
 from geodata.countries.constants import Countries
 from geodata.countries.names import *
@@ -47,6 +47,7 @@ from geodata.language_id.sample import sample_random_language
 from geodata.math.floats import isclose
 from geodata.math.sampling import cdf, weighted_choice
 from geodata.names.normalization import name_affixes
+from geodata.numbers.ordinals import ordinal_expressions
 from geodata.numbers.spellout import numeric_expressions
 from geodata.osm.components import osm_address_components
 from geodata.places.config import place_config
@@ -1019,6 +1020,59 @@ class AddressComponents(object):
                 return True
         return False
 
+    bucharest_city_district_regex = re.compile(u'^(?:Sector(?:ul)? ([1-6]))$', re.I | re.U)
+
+    @classmethod
+    def format_bucharest_sector(cls, city_district, language=None):
+        if not city_district:
+            return None
+
+        city_district = city_district.strip()
+
+        match = cls.bucharest_city_district_regex.match(city_district)
+        if not match:
+            return city_district
+
+        sector = match.group(1)
+        bucharest_sector_config = nested_get(cls.config, ('bucharest_sectors', 'languages', language))
+        if not bucharest_sector_config:
+            return city_district
+
+        confs, probs = alternative_probabilities(bucharest_sector_config)
+        probs_cdf = cdf(probs)
+
+        conf = weighted_choice(confs, probs_cdf)
+        ordinal_probability = conf.get('ordinal_probability', 0.0)
+        roman_numeral_probability = conf.get('roman_numeral_probability', 0.0)
+
+        if random.random() < ordinal_probability:
+            sector = ordinal_expressions.suffixed_number(sector, language)
+        elif random.random() < roman_numeral_probability:
+            sector = numeric_expressions.roman_numeral(sector)
+
+        direction = conf['direction']
+        affix = conf['affix']
+
+        if direction == 'left':
+            city_district = u'{} {}'.format(affix, sector)
+        else:
+            city_district = u'{} {}'.format(sector, affix)
+
+        return city_district
+
+    @classmethod
+    def format_romanian_city_district(cls, address_components, language=None):
+        city_district = address_components.get(AddressFormatter.CITY_DISTRICT)
+        if city_district:
+            city_district = cls.format_bucharest_sector(city_district, language=language)
+            if city_district:
+                address_components[AddressFormatter.CITY_DISTRICT] = city_district
+            else:
+                address_components.pop(AddressFormatter.CITY_DISTRICT)
+
+            return True
+        return False
+
     japan_neighborhood_classes = set([AddressFormatter.JAPAN_MAJOR_NEIGHBORHOOD,
                                       AddressFormatter.JAPAN_MINOR_NEIGHBORHOOD,
                                       AddressFormatter.SUBURB])
@@ -1227,6 +1281,8 @@ class AddressComponents(object):
         'sk': [u'bratislava', u'košice', u'kosice'],
         # Austria
         'at': [u'wien', u'vienna', u'graz', u'linz', u'klagenfurt'],
+        # Romania
+        'ro': [u'bucurești', u'bucuresti', u'bucharest']
     }
     central_european_city_district_regexes = {country: re.compile(u'^({})\s+(?:[0-9]+|[ivx]+\.?)\\s*$'.format(u'|'.join(cities)), re.I | re.U)
                                               for country, cities in six.iteritems(central_european_cities)}
@@ -2249,7 +2305,7 @@ class AddressComponents(object):
         return names
 
     @classmethod
-    def country_specific_cleanup(cls, address_components, country):
+    def country_specific_cleanup(cls, address_components, country, language=None):
         if country in cls.central_european_city_district_regexes:
             cls.format_central_european_city_district(country, address_components)
 
@@ -2257,6 +2313,8 @@ class AddressComponents(object):
             cls.format_dublin_postal_district(address_components)
         elif country == Countries.JAMAICA:
             cls.format_kingston_postcode(address_components)
+        elif country == Countries.ROMANIA:
+            cls.format_romanian_city_district(address_components, language)
 
     @classmethod
     def add_house_number_phrase(cls, address_components, language, country=None):
@@ -2442,7 +2500,7 @@ class AddressComponents(object):
         # If a country was already specified
         cls.replace_country_name(address_components, country, non_local_language or language)
 
-        cls.country_specific_cleanup(address_components, country)
+        cls.country_specific_cleanup(address_components, country, language=non_local_language or language)
         if cls.is_in(osm_components, cls.BRASILIA_RELATION_ID):
             cls.format_brasilia_address(address_components)
 
