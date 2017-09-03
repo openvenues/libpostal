@@ -1,2 +1,2 @@
-apartment|aparment|apartmen|apt
+apartemen|apt|apartment|apartament|aparment|apartmen
 flat|flt

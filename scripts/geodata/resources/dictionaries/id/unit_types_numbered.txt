@@ -1,3 +1,5 @@
+apartemen|apt|apartment|apartament|aparment|apartmen
+flat|flt
 garasi|grsi
 gedung|gdg|gd
 gudang|gdng
