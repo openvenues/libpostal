@@ -307,7 +307,13 @@ class NumberedComponent(object):
 
         default = alphanumeric_props.get('default')
         alternatives = alphanumeric_props.get('alternatives', [])
-        config_phrases = [default] + [a['alternative'] for a in alternatives]
+
+        config_phrases = []
+        if default:
+            config_phrases.append(default)
+        if alternatives:
+            config_phrases.extend([a['alternative'] for a in alternatives])
+
         sample = alphanumeric_props.get('sample')
         seen_phrases = set([c['canonical'] for c in config_phrases])
 
