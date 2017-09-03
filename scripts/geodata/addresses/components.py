@@ -1134,6 +1134,11 @@ class AddressComponents(object):
         return cls.extract_regex(regex, value)
 
     @classmethod
+    def name_is_numbered_building(cls, name, language, country=None):
+        name, extracted = cls.extract_field(name, Building, language, country=country)
+        return bool(name.strip())
+
+    @classmethod
     def genitive_name(cls, name, language):
         morph = cls.slavic_morphology_analyzers.get(language)
         if not morph:
