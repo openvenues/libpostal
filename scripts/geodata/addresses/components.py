@@ -7,6 +7,7 @@ import pycountry
 import random
 import re
 import six
+import unicodedata
 import yaml
 
 # Russian/Ukrainian parsing and inflection
@@ -429,21 +430,77 @@ class AddressComponents(object):
         return key, raw_key
 
     @classmethod
-    def all_names(cls, props, languages, component=None, keys=ALL_OSM_NAME_KEYS):
+    def is_multiscript_name(cls, name):
+        name = safe_decode(name)
+        script, script_len, is_ascii = get_string_script(name)
+        return script_len < len(name)
+
+    @classmethod
+    def strip_outer_parens(cls, name):
+        name = safe_decode(name)
+        if len(name) > 0:
+            first_char = name[0]
+            last_char = name[-1]
+            start_idx = 0
+            end_idx = len(name)
+            if unicodedata.category(first_char) == 'Ps':
+                start_idx += 1
+            if unicodedata.category(last_char) == 'Pe':
+                end_idx -= 1
+
+            return name[start_idx:end_idx]
+        return name
+
+    @classmethod
+    def expand_multiscript_name(cls, name, keep_multiscript=True):
+        normalized_names = OrderedDict()
+        name = safe_decode(name)
+
+        while len(name):
+            script, script_len, is_ascii = get_string_script(name)
+            if script_len == len(name):
+                name_span = cls.strip_outer_parens(name.strip())
+                if name_span:
+                    normalized_names[name_span] = None
+            elif script_len > 0:
+                name_span = cls.strip_outer_parens(name[:script_len].strip())
+                if name_span:
+                    normalized_names[name_span] = None
+            elif script_len == 0:
+                break
+
+            name = name[script_len:]
+        return normalized_names
+
+    @classmethod
+    def all_names(cls, props, languages, component=None, keys=ALL_OSM_NAME_KEYS, expand_multiscript=False):
         # Preserve uniqueness and order
         valid_names, _ = boundary_names.name_key_dist(props, component)
         names = OrderedDict()
         valid_names = set([k for k in valid_names if k in keys])
 
         for k, v in six.iteritems(props):
+            valid_value = False
             if k in valid_names:
-                names[v] = None
+                valid_value = True
             elif ':' in k:
                 if k == 'name:simple' and 'en' in languages and k in keys:
-                    names[v] = None
+                    valid_value = True
                 k, qual = k.split(':', 1)
                 if k in valid_names and qual.split('_', 1)[0] in languages:
-                    names[v] = None
+                    valid_value = True
+
+            if valid_value:
+                for v_sub in v.split(u';'):
+                    if v_sub not in names:
+                        names[v_sub] = None
+
+        if expand_multiscript:
+            name_keys = names.keys()
+            for name in name_keys:
+                normalized = cls.expand_multiscript_name(name)
+                names.update([(k, None) for k in normalized.keys() if k not in names])
+
         return names.keys()
 
     @classmethod
