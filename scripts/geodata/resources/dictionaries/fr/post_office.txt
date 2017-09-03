@@ -1,3 +1,4 @@
 boîte postale|boite postale|bp|b.p.|b.p|b p|bte postale
 case postale|cp|c.p.|c.p|c p
-cedex
+course spéciale|cs|c.s.|c.s|c s|course speciale
+tri service arrivée|tsa|t.s.a.|t.s.a|t s a|tri service arivee

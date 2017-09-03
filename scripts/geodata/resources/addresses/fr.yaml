@@ -612,6 +612,30 @@ po_boxes:
             add_number_phrase: true
             add_number_phrase_probability: 0.2 # BP No 1234
         numeric_probability: 1.0
+    course_speciale: &course_speciale
+        canonical: course spéciale
+        abbreviated: cs
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2 # BP No 1234
+        numeric_probability: 1.0
+    tri_service_arivee: &tri_service_arivee
+        canonical: tri service arrivée
+        abbreviated: tsa
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2 # BP No 1234
+        numeric_probability: 1.0
     case_postal: &case_postal
         canonical: case postale
         abbreviated: cp
