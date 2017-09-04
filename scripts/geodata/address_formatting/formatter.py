@@ -182,6 +182,7 @@ class AddressFormatter(object):
         JAPAN_MAJOR_NEIGHBORHOOD: SUBURB,
         JAPAN_MINOR_NEIGHBORHOOD: SUBURB,
         LOCALITY: CITY,
+        CEDEX: POSTCODE,
     }
 
     category_template = '{{{category}}} {{{near}}} {{{place}}}'
