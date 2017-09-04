@@ -1073,6 +1073,16 @@ class AddressComponents(object):
             return True
         return False
 
+    french_postal_code_regex = re.compile(u'\\b[0-9]{5}\\b')
+
+    @classmethod
+    def extract_french_postcode(cls, address_components):
+        postcode = address_components.get(AddressFormatter.POSTCODE)
+        if postcode and not is_numeric(postcode):
+            match = cls.french_postal_code_regex.search(postcode)
+            if match:
+                address_components[AddressFormatter.POSTCODE] = match.group(0)
+
     japan_neighborhood_classes = set([AddressFormatter.JAPAN_MAJOR_NEIGHBORHOOD,
                                       AddressFormatter.JAPAN_MINOR_NEIGHBORHOOD,
                                       AddressFormatter.SUBURB])
