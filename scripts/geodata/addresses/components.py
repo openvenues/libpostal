@@ -1097,6 +1097,15 @@ class AddressComponents(object):
                         return match.group(1)
         return None
 
+    @classmethod
+    def add_cedex_france(cls, address_components, arrondissement=None):
+        postcode = address_components.get(AddressFormatter.POSTCODE)
+        city = address_components.get(AddressFormatter.CITY)
+
+        if city and postcode:
+            cedex_phrase = u'CEDEX' if not arrondissement else u'CEDEX {}'.format(safe_decode(arrondissement).zfill(2))
+            address_components[AddressFormatter.CEDEX] = cedex_phrase
+
     japan_neighborhood_classes = set([AddressFormatter.JAPAN_MAJOR_NEIGHBORHOOD,
                                       AddressFormatter.JAPAN_MINOR_NEIGHBORHOOD,
                                       AddressFormatter.SUBURB])

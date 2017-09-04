@@ -77,6 +77,7 @@ class AddressFormatter(object):
     STATE = 'state'
     STATE_DISTRICT = 'state_district'
     POSTCODE = 'postcode'
+    CEDEX = 'cedex'
     COUNTRY_REGION = 'country_region'
     COUNTRY = 'country'
     WORLD_REGION = 'world_region'
