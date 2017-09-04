@@ -1083,6 +1083,20 @@ class AddressComponents(object):
             if match:
                 address_components[AddressFormatter.POSTCODE] = match.group(0)
 
+    french_arrondissement_number_regex = re.compile(u'\\b([0-9]+)[a-z]* Arrondissement', re.I)
+
+    @classmethod
+    def french_arrondissement_number(cls, neighborhoods):
+        for props in neighborhoods:
+            if props['component'] == AddressFormatter.CITY_DISTRICT:
+                name = props.get('name')
+                if name:
+                    name = name.strip()
+                    match = cls.french_arrondissement_number_regex.search(name)
+                    if match:
+                        return match.group(1)
+        return None
+
     japan_neighborhood_classes = set([AddressFormatter.JAPAN_MAJOR_NEIGHBORHOOD,
                                       AddressFormatter.JAPAN_MINOR_NEIGHBORHOOD,
                                       AddressFormatter.SUBURB])
