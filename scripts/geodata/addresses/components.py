@@ -1085,6 +1085,30 @@ class AddressComponents(object):
     japan_city_district_regex = re.compile(u'^.*区$')
 
     @classmethod
+    def extract_japanese_neighborhoods_from_street(cls, address_components):
+        street = address_components.get(AddressFormatter.ROAD)
+        if street:
+            street = safe_decode(street.strip())
+            match = cls.japan_minor_neighborhood_regex.search(street)
+            if match:
+                minor_neighborhood = match.group(0)
+                if AddressFormatter.JAPAN_MINOR_NEIGHBORHOOD not in address_components:
+                    address_components[AddressFormatter.JAPAN_MINOR_NEIGHBORHOOD] = minor_neighborhood
+                street = cls.japan_minor_neighborhood_regex.sub(u'', street)
+
+            match = cls.japan_major_neighborhood_regex.search(street)
+            if match:
+                major_neighborhood = match.group(0)
+                if AddressFormatter.JAPAN_MAJOR_NEIGHBORHOOD not in address_components:
+                    address_components[AddressFormatter.JAPAN_MAJOR_NEIGHBORHOOD] = major_neighborhood
+                street = cls.japan_major_neighborhood_regex.sub(u'', street)
+
+            if street and street.strip():
+                address_components[AddressFormatter.ROAD] = street.strip()
+            else:
+                address_components.pop(AddressFormatter.ROAD)
+
+    @classmethod
     def format_japanese_neighborhood_romaji(cls, address_components):
         neighborhood = safe_decode(address_components.get(AddressFormatter.JAPAN_MINOR_NEIGHBORHOOD, ''))
         if neighborhood.endswith(safe_decode('丁目')):
