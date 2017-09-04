@@ -1098,6 +1098,17 @@ class AddressComponents(object):
         return None
 
     @classmethod
+    def french_arrondissement_roman_numeral(cls, arrondissement, with_ordinal_suffix=True):
+        roman_numeral = numeric_expressions.roman_numeral(arrondissement)
+        if roman_numeral and not with_ordinal_suffix:
+            return roman_numeral
+        elif with_ordinal_suffix:
+            ordinal_suffix = ordinal_expressions.get_suffix(arrondissement, FRENCH)
+            if roman_numeral and ordinal_suffix:
+                return u'{}{}'.format(safe_decode(roman_numeral), safe_decode(ordinal_suffix))
+        return None
+
+    @classmethod
     def add_cedex_france(cls, address_components, arrondissement=None):
         postcode = address_components.get(AddressFormatter.POSTCODE)
         city = address_components.get(AddressFormatter.CITY)
