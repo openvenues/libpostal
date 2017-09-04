@@ -1,0 +1,7 @@
+edifici|edif|edifc|edfc
+condomini|cond
+complex|compl|compx|complx
+conjunt|cjt|cnj|cnjt
+cooperativa|coop
+residencial|resid|res
+torre|to|tor
