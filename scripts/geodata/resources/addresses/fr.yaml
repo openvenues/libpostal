@@ -481,8 +481,8 @@ buildings:
               probability: 0.15
             - alternative: *tour
               probability: 0.05
-        numeric_probability: 0.075 # e.g. Edificio 1
-        alpha_probability: 0.85 # e.g. Edif A
+        numeric_probability: 0.075 # e.g. Bâtiment 1
+        alpha_probability: 0.85 # e.g. Bât A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
         hyphenated_number_probability: 0.0125 # e.g. 11-10

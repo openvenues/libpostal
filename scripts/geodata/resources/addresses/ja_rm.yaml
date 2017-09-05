@@ -132,7 +132,7 @@ buildings:
             direction: left
         numeric_probability: 1.0
 
-    # 建物1, 建物A, etc.
+    # Tatemono 1, etc.
     alphanumeric: &building_alphanumeric
         default: *tatemono
         numeric_probability: 1.0

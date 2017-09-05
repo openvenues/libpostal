@@ -83,7 +83,7 @@ buildings:
         numeric_probability: 0.0
         numeric_affix_probability: 1.0
 
-    # 건물, etc.
+    # 건물1, etc.
     alphanumeric: &building_alphanumeric
         default: *geonmul
         numeric_probability: 1.0

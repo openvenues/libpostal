@@ -622,7 +622,7 @@ buildings:
         numeric:
             direction: left
 
-    # Edificio 1, Edif A, etc.
+    # Edifici 1, Edif A, etc.
     alphanumeric: &building_alphanumeric
         default: *edifici
         probability: 0.75
@@ -633,7 +633,7 @@ buildings:
               probability: 0.1
             - alternative: *complex
               probability: 0.05
-        numeric_probability: 0.075 # e.g. Edificio 1
+        numeric_probability: 0.075 # e.g. Edifici 1
         alpha_probability: 0.85 # e.g. Edif A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1

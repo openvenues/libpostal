@@ -174,7 +174,7 @@ buildings:
         numeric:
             direction: left
 
-    # Zgrada 1, Zgrada A, etc.
+    # Ktirio 1, Ktirio A, etc.
     alphanumeric: &building_alphanumeric
         default: *ktirio
         probability: 0.75
