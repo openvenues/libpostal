@@ -57,6 +57,20 @@ levels:
         default: *cheung
         numeric_probability: 1.0
 
+buildings:
+    geonmul: &geonmul
+        canonical: geonmul
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        numeric_probability: 1.0
+
+    # Geonmul 1, etc.
+    alphanumeric: &building_alphanumeric
+        default: *geonmul
+        numeric_probability: 1.0
+
 po_boxes:
     saseoham: &saseoham
         canonical: saseoham

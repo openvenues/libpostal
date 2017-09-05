@@ -65,6 +65,29 @@ levels:
         default: *cheung
         numeric_probability: 1.0
 
+
+buildings:
+    geonmul: &geonmul
+        canonical: 건물
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: 건물
+            direction: left
+            digits:
+                ascii_probability: 0.3
+                unicode_full_width_probability: 0.5
+                spellout_probability: 0.2
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+    # 건물, etc.
+    alphanumeric: &building_alphanumeric
+        default: *geonmul
+        numeric_probability: 1.0
+
 po_boxes:
     saseoham: &saseoham
         canonical: 사서함
