@@ -435,7 +435,7 @@ buildings:
         numeric:
             direction: left
 
-    # Budova 1, Budova A, etc.
+    # Bygning 1, Bygning A, etc.
     alphanumeric: &building_alphanumeric
         default: *bygning
         numeric_probability: 0.05 # e.g. Bygning 1
