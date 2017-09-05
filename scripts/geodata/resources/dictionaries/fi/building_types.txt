@@ -1,3 +1,4 @@
 huvila
 koti
+rakennus|rak
 talo
