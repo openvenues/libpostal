@@ -12,6 +12,10 @@ components:
         null_probability: 0.99
         alphanumeric_probability: 0.01
 
+    building:
+        null_probability: 0.995
+        alphanumeric_probability: 0.005
+
     entrance:
         null_probability: 0.999
         alphanumeric_probability: 0.001
@@ -237,6 +241,19 @@ cardinal_directions:
         - alternative: *vakarai
           probability: 0.25
 
+buildings:
+    pastatas: &pastatas
+        canonical: pastatas
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+
+    # 2 pastatas, etc.
+    alphanumeric: &building_alphanumeric
+        default: *pastatas
+        numeric_probability: 1.0
 
 entrances:
     wejscie: &iejimas
