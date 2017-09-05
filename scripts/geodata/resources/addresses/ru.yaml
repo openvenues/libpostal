@@ -442,30 +442,6 @@ levels:
         numeric_plus_alpha_probability: 0.0001 # e.g. 2A
         alpha_plus_numeric_probability: 0.0001 # e.g. A2
 
-blocks:
-    alphanumeric:
-        default: &blok
-            canonical: блок
-            abbreviated: бл
-            sample: true
-            canonical_probability: 0.4
-            abbreviated_probability: 0.4
-            sample_probability: 0.2
-            numeric:
-                direction: left
-        probability: 0.95
-        alternatives:
-            - alternative: &blok_latin
-                canonical: blok
-                abbreviated: bl
-                sample: true
-                canonical_probability: 0.4
-                abbreviated_probability: 0.4
-                sample_probability: 0.2
-                numeric:
-                    direction: left
-              probability: 0.05
-
 categories:
     near:
         default:

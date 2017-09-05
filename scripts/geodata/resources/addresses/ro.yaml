@@ -151,20 +151,6 @@ levels:
         numeric_probability: 0.99
         alpha_probability: 0.01
 
-blocks:
-    alphanumeric:
-        default:
-            canonical: bloc
-            abbreviated: bl
-            sample: true
-            canonical_probability: 0.6
-            abbreviated_probability: 0.2
-            sample_probability: 0.2
-            numeric:
-                direction: left
-
-
-
 categories:
     near:
         default:
