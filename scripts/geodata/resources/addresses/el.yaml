@@ -11,9 +11,14 @@ components:
         null_probability: 0.95
         alphanumeric_probability: 0.05
 
+    building:
+        null_probability: 0.95
+        alphanumeric_probability: 0.05
+
     entrance:
         null_probability: 0.9
         alphanumeric_probability: 0.1
+
 
     unit:
         null_probability: 0.6
@@ -147,6 +152,61 @@ levels:
         alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
         numeric_plus_alpha_probability: 0.0001 # e.g. 2A
         alpha_plus_numeric_probability: 0.0001 # e.g. A2
+
+buildings:
+    ktirio: &ktirio
+        canonical: κτίριο
+        abbreviated: κτ
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    ktirio_latin: &ktirio_latin
+        canonical: ktírio
+        abbreviated: kt
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Zgrada 1, Zgrada A, etc.
+    alphanumeric: &building_alphanumeric
+        default: *ktirio
+        probability: 0.75
+        alternatives:
+            - alternative: *ktirio_latin
+              probability: 0.25
+        numeric_probability: 0.05 # e.g. Ktirio 1
+        alpha_probability: 0.85 # e.g. Ktirio A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+        hyphenated_number_probability: 0.03 # e.g. 11-10
+        decimal_number_probability: 0.02 # e.g. 1.10
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+            hyphen_probability: 0.2
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+            hyphen_probability: 0.2
+
+        hyphenated_number:
+            range_probability: 0.5
+            # direction of the range, not the phrase
+            direction: right
+            direction_probability: 0.6
+            alpha_plus_numeric_probability: 0.1
+            alpha_plus_numeric_whitespace_probability: 0.1
+            numeric_plus_alpha_probability: 0.1
+            numeric_plus_alpha_whitespace_probability: 0.1
+
+
 
 entrances:
     eisodos: &eisodos
