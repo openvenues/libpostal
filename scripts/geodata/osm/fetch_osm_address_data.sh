@@ -95,7 +95,7 @@ wait
 
 PLANET_ADDRESSES_LATLONS="planet-addresses-latlons.o5m"
 JAPAN_ADDRESSES_LATLONS="japan-addresses-latlons.o5m"
-osmconvert $PLANET_ADDRESSES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_ADDRESSES_LATLONS &
+osmconvert $PLANET_ADDRESSES_O5M --max-objects=2500000000 --all-to-nodes -o=$PLANET_ADDRESSES_LATLONS &
 osmconvert $JAPAN_ADDRESSES_O5M --max-objects=1000000000 --all-to-nodes -o=$JAPAN_ADDRESSES_LATLONS &
 
 wait
