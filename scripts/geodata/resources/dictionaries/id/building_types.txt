@@ -1,5 +1,5 @@
 apartemen|apart|aprtmn
-bangunan
+bangunan|bgn
 garasi|grs
 gedung|gd|gdg
 gudang|gdang
