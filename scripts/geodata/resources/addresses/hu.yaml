@@ -3,6 +3,10 @@
 # Hungarian language specification.
 
 components:
+    building:
+        null_probability: 0.95
+        alphanumeric_probability: 0.05
+
     level:
         null_probability: 0.75
         alphanumeric_probability: 0.2
@@ -230,6 +234,46 @@ levels:
         alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
         numeric_plus_alpha_probability: 0.0001 # e.g. 2A
         alpha_plus_numeric_probability: 0.0001 # e.g. A2
+
+buildings:
+    building: &epulet
+        canonical: épület
+        abbreviated: ép
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.3
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Épület 1, Épület A, etc.
+    alphanumeric: &building_alphanumeric
+        default: *epulet
+        numeric_probability: 0.05 # e.g. Épület 1
+        alpha_probability: 0.85 # e.g. Épület A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+        hyphenated_number_probability: 0.03 # e.g. 11-10
+        decimal_number_probability: 0.02 # e.g. 1.10
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+            hyphen_probability: 0.2
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+            hyphen_probability: 0.2
+
+        hyphenated_number:
+            range_probability: 0.5
+            # direction of the range, not the phrase
+            direction: right
+            direction_probability: 0.6
+            alpha_plus_numeric_probability: 0.1
+            alpha_plus_numeric_whitespace_probability: 0.1
+            numeric_plus_alpha_probability: 0.1
+            numeric_plus_alpha_whitespace_probability: 0.1
+
 
 categories:
     near:
