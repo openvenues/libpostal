@@ -11,6 +11,10 @@ components:
         null_probability: 0.99
         alphanumeric_probability: 0.01
 
+    building:
+        null_probability: 0.995
+        alphanumeric_probability: 0.005
+
     entrance:
         null_probability: 0.999
         alphanumeric_probability: 0.001
@@ -307,6 +311,46 @@ cardinal_directions:
           probability: 0.23
         - alternative: *bati
           probability: 0.23
+
+
+
+buildings:
+    building: &bina
+        canonical: bina
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Bina 1, Bina A, etc.
+    alphanumeric: &building_alphanumeric
+        default: *bina
+        numeric_probability: 0.05 # e.g. Bina 1
+        alpha_probability: 0.85 # e.g. Bina A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+        hyphenated_number_probability: 0.03 # e.g. 11-10
+        decimal_number_probability: 0.02 # e.g. 1.10
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+            hyphen_probability: 0.2
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+            hyphen_probability: 0.2
+
+        hyphenated_number:
+            range_probability: 0.5
+            # direction of the range, not the phrase
+            direction: right
+            direction_probability: 0.6
+            alpha_plus_numeric_probability: 0.1
+            alpha_plus_numeric_whitespace_probability: 0.1
+            numeric_plus_alpha_probability: 0.1
+            numeric_plus_alpha_whitespace_probability: 0.1
+
 
 entrances:
     giris: &giris
