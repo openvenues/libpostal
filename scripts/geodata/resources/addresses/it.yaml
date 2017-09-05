@@ -12,6 +12,10 @@ components:
         null_probability: 0.99
         alphanumeric_probability: 0.01
 
+    building:
+        null_probability: 0.995
+        alphanumeric_probability: 0.005
+
     entrance:
         null_probability: 0.999
         alphanumeric_probability: 0.001
@@ -398,6 +402,44 @@ cardinal_directions:
           probability: 0.25
         - alternative: *ovest
           probability: 0.25
+
+
+buildings:
+    edificio: &edificio
+        canonical: edificio
+        abbreviated: edif.o
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+
+    # Edificio 1, Edif A, etc.
+    alphanumeric: &building_alphanumeric
+        default: *edificio
+        numeric_probability: 0.075 # e.g. Edificio 1
+        alpha_probability: 0.85 # e.g. Edif A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+        hyphenated_number_probability: 0.0125 # e.g. 11-10
+        decimal_number_probability: 0.0125 # e.g. 1.10
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        hyphenated_number:
+            range_probability: 0.5
+            # direction of the range, not the phrase
+            direction: right
+            direction_probability: 0.6
+            alpha_plus_numeric_probability: 0.1
+            alpha_plus_numeric_whitespace_probability: 0.1
+            numeric_plus_alpha_probability: 0.1
+            numeric_plus_alpha_whitespace_probability: 0.1
 
 entrances:
     entrance: &ingresso

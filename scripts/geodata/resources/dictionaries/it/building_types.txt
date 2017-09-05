@@ -1,6 +1,6 @@
 blocco|bl.o|blo|blo
 casa|c|ca|ca'
 casetto|c.etto
-edificio|edif.o|edifo
+edificio|edif.o|edifo|edif
 palazzina
 palazzo|pal.zo|palzo
