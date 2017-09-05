@@ -7,6 +7,10 @@ components:
         null_probability: 0.95 # Probability of doing nothing if no floor number is specified
         alphanumeric_probability: 0.05
 
+    building:
+        null_probability: 0.995
+        alphanumeric_probability: 0.005
+
     unit:
         # If no unit number is specified
         null_probability: 1.0
@@ -116,6 +120,21 @@ levels:
         alternatives:
             - alternative: *gai
               probability: 0.4
+        numeric_probability: 1.0
+
+
+buildings:
+    tatemono: &tatemono
+        canonical: tatemono
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        numeric_probability: 1.0
+
+    # 建物1, 建物A, etc.
+    alphanumeric: &building_alphanumeric
+        default: *tatemono
         numeric_probability: 1.0
 
 po_boxes:

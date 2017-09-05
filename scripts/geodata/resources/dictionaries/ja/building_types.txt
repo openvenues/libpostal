@@ -4,3 +4,6 @@ ban
 banchi
 番地の
 banchi no|banchino
+建物
+tatemono
+ビル
