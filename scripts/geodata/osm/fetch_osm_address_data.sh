@@ -20,10 +20,11 @@ fi
 set -e
 
 THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-RESOURCES_DIR=$THIS_DIR/../../../resources
+RESOURCES_DIR=$THIS_DIR/../resources
 ADMIN1_FILE=$RESOURCES_DIR/language/regional/adm1.tsv
 
 # Check for osmfilter and osmconvert
+# Note: may need latest versions of these, older versions seems to have issues related to 32-bit integers
 if ! type -P osmfilter osmconvert > /dev/null; then
 cat << EOF
 ERROR: osmfilter and osmconvert are required
