@@ -242,7 +242,7 @@ PLANET_AMENITIES_O5M="planet-amenities.o5m"
 ALL_AMENITIES="aeroway= or amenity= or or emergency= or historic= or internet_access= or landuse= or leisure= or man_made= or mountain_pass= or office= or place= or railway= or shop= or tourism="
 osmfilter $PLANET_O5M --keep="$ALL_AMENITIES" --drop-author --drop-version -o=$PLANET_AMENITIES_O5M
 PLANET_AMENITIES_LATLONS="planet-amenities-latlons.o5m"
-osmconvert $PLANET_AMENITIES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_AMENITIES_LATLONS
+osmconvert $PLANET_AMENITIES_O5M --max-objects=2500000000 --all-to-nodes -o=$PLANET_AMENITIES_LATLONS
 rm $PLANET_AMENITIES_O5M
 PLANET_AMENITIES="planet-amenities.osm"
 osmfilter $PLANET_AMENITIES_LATLONS --keep="$ALL_AMENITIES" -o=$PLANET_AMENITIES
@@ -264,7 +264,7 @@ PLANET_WATERWAYS_O5M="planet-waterways.o5m"
 VALID_WATERWAY_KEYS="waterway="
 osmfilter $PLANET_O5M --keep="$VALID_WATERWAY_KEYS" --drop-author --drop-version -o=$PLANET_WATERWAYS_O5M
 PLANET_WATERWAYS_LATLONS="planet-waterways-latlons.o5m"
-osmconvert $PLANET_WATERWAYS_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_WATERWAYS_LATLONS
+osmconvert $PLANET_WATERWAYS_O5M --max-objects=2500000000 --all-to-nodes -o=$PLANET_WATERWAYS_LATLONS
 rm $PLANET_WATERWAYS_O5M
 PLANET_WATERWAYS="planet-waterways.osm"
 osmfilter $PLANET_WATERWAYS_LATLONS --keep="$VALID_WATERWAY_KEYS" -o=$PLANET_WATERWAYS
