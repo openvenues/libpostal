@@ -1415,7 +1415,7 @@ class OSMAddressFormatter(object):
                 if expanded_only_subdivision_names:
                     all_subdivision_names_expanded_only.append(expanded_only_subdivision_names)
 
-        if not address_components and not venue_names and not all_building_names:
+        if not address_components and not all_venue_names and not all_building_names:
             return None, None, None
 
         formatted_addresses = cls.formatted_addresses_with_venue_building_and_subdivision_names(address_components, all_venue_names_reduced, all_building_names_reduced, all_subdivision_names_reduced,
