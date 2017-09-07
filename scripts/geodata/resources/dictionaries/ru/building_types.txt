@@ -1,2 +1,8 @@
 блок|бл
 blok|bl
+корпус|к
+korpus|k
+строение|стр
+stroenie|str
+здание|зд
+zdaniye|zd

@@ -16,8 +16,8 @@ components:
         alphanumeric_probability: 0.01
 
     building:
-        null_probability: 0.995
-        alphanumeric_probability: 0.005
+        null_probability: 0.95
+        alphanumeric_probability: 0.05
 
     entrance:
         null_probability: 0.999
@@ -53,6 +53,29 @@ numbers:
 
 
 house_numbers:
+    dom: &dom
+        canonical: дом
+        abbreviated: д
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+    dom_latin: &dom_latin
+        canonical: dom
+        abbreviated: d
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+
     budynok: &budynok
         canonical: будинок
         abbreviated: буд
@@ -62,6 +85,7 @@ house_numbers:
         sample_probability: 0.1
         numeric:
             direction: left
+
     budynok_latin: &budynok_latin
         canonical: budynok
         abbreviated: bud
@@ -72,39 +96,19 @@ house_numbers:
         numeric:
             direction: left
 
-    dom: &dom
-        canonical: дом
-        abbreviated: д
-        sample: true
-        canonical_probability: 0.6
-        abbreviated_probability: 0.3
-        sample_probability: 0.1
-        numeric:
-            direction: left
-    dom_latin: &dom_latin
-        canonical: dom
-        abbreviated: d
-        sample: true
-        canonical_probability: 0.6
-        abbreviated_probability: 0.3
-        sample_probability: 0.1
-        numeric:
-            direction: left
-
     alphanumeric:
-        default: *budynok
+        default: *dom
         probability: 0.65
         alternatives:
-            - alternative: *budynok_latin
-              probability: 0.05
-            - alternative: *dom
-              probability: 0.25
             - alternative: *dom_latin
               probability: 0.05
+            - alternative: *budynok
+              probability: 0.25
+            - alternative: *budynok_latin
+              probability: 0.05
 
-    # Very common in Ukranian to write bud/dom
+    # Very common in Ukranian to write dom
     alphanumeric_phrase_probability: 0.6
-
 
 
 and:
@@ -205,8 +209,16 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.1
+                spellout_probability: 0.1
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.1
+                spellout_probability: 0.1
         numeric_probability: 0.4
         ordinal_probability: 0.6
     poverkh_latin: &poverkh_latin
@@ -219,8 +231,14 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.2
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.2
         numeric_probability: 0.4
         ordinal_probability: 0.6
     riven: &riven
@@ -231,8 +249,16 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.1
+                spellout_probability: 0.1
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.1
+                spellout_probability: 0.1
         numeric_probability: 0.4
         ordinal_probability: 0.6
     riven_latin: &riven_latin
@@ -243,8 +269,14 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.2
         ordinal:
             direction: right
+            digits:
+                ascii_probability: 0.8
+                roman_numeral_probability: 0.2
         numeric_probability: 0.4
         ordinal_probability: 0.6
     pershyy_poverkh: &pershyy_poverkh
@@ -699,15 +731,19 @@ buildings:
 
     # Blok 1, Blok A, etc.
     alphanumeric: &building_alphanumeric
-        default: *blok
-        probability: 0.8
+        default: *budynok
+        probability: 0.75
         alternatives:
+            - alternative: *budynok_latin
+              probability: 0.05
+            - alternatives: *blok
+              probability: 0.15
             - alternative: *blok_latin
-              probability: 0.2
-        numeric_probability: 0.25 # e.g. Blok 1
-        alpha_probability: 0.25 # e.g. Blok A
+              probability: 0.05
+        numeric_probability: 0.75 # e.g. Blok 1
+        alpha_probability: 0.1 # e.g. Blok A
         numeric_plus_alpha_probability: 0.05 # e.g. 1A
-        alpha_plus_numeric_probability: 0.4 # e.g. A1
+        alpha_plus_numeric_probability: 0.05 # e.g. A1
         hyphenated_number_probability: 0.03 # e.g. 11-10
         decimal_number_probability: 0.02 # e.g. 1.10
 

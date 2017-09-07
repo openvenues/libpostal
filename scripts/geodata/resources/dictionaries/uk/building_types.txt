@@ -1,2 +1,4 @@
 блок|бл
 blok|bl
+будинок|буд
+budynok|bud
