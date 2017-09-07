@@ -92,10 +92,10 @@ house_numbers:
             direction: left
 
     alphanumeric:
-        default: *budnyok
+        default: *budynok
         probability: 0.65
         alternatives:
-            - alternative: *budnyok_latin
+            - alternative: *budynok_latin
               probability: 0.05
             - alternative: *dom
               probability: 0.25
