@@ -875,7 +875,7 @@ buildings:
               probability: 0.01
             - alternatives: *zdaniye
               probability: 0.09
-            - alternatives: zdaniye_latin:
+            - alternatives: zdaniye_latin
               probability: 0.01
 
         numeric_probability: 0.75 # e.g. Korpus 1
