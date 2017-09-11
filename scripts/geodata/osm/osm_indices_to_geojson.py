@@ -85,7 +85,7 @@ if __name__ == '__main__':
             out.write(json.dumps(geojson) + u'\n')
         out.close()
 
-    if args.places_index_dir and osm_rtree:
+    if args.places_index_dir:
         places_index = PlaceReverseGeocoder.load(args.places_index_dir)
         out_filename = os.path.join(args.output_dir, 'osm_place_points.geojson')
         places_index.save_geojson(out_filename)
