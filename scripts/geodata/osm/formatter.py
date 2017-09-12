@@ -616,9 +616,11 @@ class OSMAddressFormatter(object):
 
         address_prob = float(nested_get(cls.config, ('venues', 'address_probability'), default=0.0))
         if random.random() < address_prob and (AddressFormatter.HOUSE in address_components or AddressFormatter.NAMED_BUILDING in address_components):
-            address_components.pop(AddressFormatter.HOUSE, None)
-            address_components.pop(AddressFormatter.NAMED_BUILDING, None)
-            formatted_address = cls.formatter.format_address(address_components, country, language=language,
+            components = address_components.copy()
+            components.pop(AddressFormatter.HOUSE, None)
+            components.pop(AddressFormatter.NAMED_BUILDING, None)
+            components.pop(AddressFormatter.SUBDIVISION, None)
+            formatted_address = cls.formatter.format_address(components, country, language=language,
                                                              tag_components=tag_components, minimal_only=minimal_only)
             formatted_addresses.append(formatted_address)
 
@@ -632,21 +634,23 @@ class OSMAddressFormatter(object):
         if venue_names or subdivisions:
             all_building_names.append(None)
 
-        if venue_names or buildings:
-            all_subdivision_names.append(None)
+        all_subdivision_names.append(None)
 
         for venue_name, building_name, subdivision_name in itertools.product(venue_names, all_building_names, all_subdivision_names):
-            if not (venue_name or building_name or subdivision_name):
-                continue
-
             components = address_components.copy()
 
             if venue_name:
                 components[AddressFormatter.HOUSE] = venue_name
+            else:
+                components.pop(AddressFormatter.HOUSE, None)
             if building_name:
                 components[AddressFormatter.NAMED_BUILDING] = building_name
+            else:
+                components.pop(AddressFormatter.NAMED_BUILDING, None)
             if subdivision_name:
                 components[AddressFormatter.SUBDIVISION] = subdivision_name
+            else:
+                components.pop(AddressFormatter.SUBDIVISION, None)
 
             formatted_address = cls.formatter.format_address(components, country, language=language,
                                                              tag_components=tag_components, minimal_only=minimal_only)
