@@ -1187,6 +1187,8 @@ class AddressComponents(object):
     chinese_unit_regex = re.compile(u'([0-9０-９]+室)', re.U)
     chinese_floor_regex = re.compile(u'((?:[0-9０-９{}]+?[楼樓层層])|(?:地下室))'.format(chinese_numbers), re.UNICODE)
 
+    comma_space_regex = re.compile(u'\s*,?\s*')
+
     @classmethod
     def regex_match(cls, regex, value):
         if not value or not regex:
@@ -1195,11 +1197,14 @@ class AddressComponents(object):
         return regex.search(value)
 
     @classmethod
-    def extract_regex(cls, regex, value):
+    def extract_regex(cls, regex, value, count=None):
         match = cls.regex_match(regex, value)
         if match:
             sep = match.group(0)
-            value = regex.sub(u'', value)
+            if not count:
+                value = regex.sub(u'', value)
+            else:
+                value = regex.sub(u'', value, count)
             return value, sep
         return value, None
 
@@ -1253,12 +1258,31 @@ class AddressComponents(object):
     @classmethod
     def extract_field(cls, value, numeric_class, language, country=None):
         regex = cls.get_numeric_regex(numeric_class, language, country=country)
-        return cls.extract_regex(regex, value)
+        prev_match = None
+        matches = []
+        for match in regex.finditer(value):
+            if prev_match:
+                prev_end = prev_match.end()
+                start = match.start()
+                if start > prev_end + 1:
+                    mid = value[prev_end:start]
+                    if cls.comma_space_regex.match(mid):
+                        matches.append(mid)
+                    else:
+                        matches.append(u' ')
+
+            matches.append(match.group(0))
+            prev_match = match
+
+        if not matches:
+            return value, None
+        else:
+            return regex.sub(u'', value), u''.join(matches)
 
     @classmethod
     def name_is_numbered_building(cls, name, language, country=None):
         name, extracted = cls.extract_field(name, Building, language, country=country)
-        return bool(name.strip())
+        return not cls.cleanup_value_post_extraction(name)
 
     @classmethod
     def genitive_name(cls, name, language):
@@ -2169,6 +2193,12 @@ class AddressComponents(object):
     stray_dot_regex = re.compile(u'(?<![\w])\.')
 
     @classmethod
+    def cleanup_value_post_extraction(cls, value):
+        value = cls.stray_dot_regex.sub(u'', value)
+        value = value.strip(u' ,/:')
+        return value
+
+    @classmethod
     def extract_sub_building_components(cls, address_components, key, languages=(), country=None):
         value = address_components.get(key)
         if value is None:
@@ -2184,7 +2214,7 @@ class AddressComponents(object):
                                      (POBox, AddressFormatter.PO_BOX),
                                      (Staircase, AddressFormatter.STAIRCASE),
                                      (Entrance, AddressFormatter.ENTRANCE)]:
-                value, extracted = cls.extract_regex(cls.get_numeric_regex(numeric_cls, language, country), value)
+                value, extracted = cls.extract_field(value, numeric_cls, language, country=country)
                 if extracted:
                     if k not in address_components:
                         address_components[k] = extracted
@@ -2198,8 +2228,7 @@ class AddressComponents(object):
             value = value.strip()
 
         if value != original_value:
-            value = cls.stray_dot_regex.sub(u'', value)
-            value = value.strip(u' ,/:')
+            value = cls.cleanup_value_post_extraction(value)
             if value:
                 address_components[key] = value
             else:
