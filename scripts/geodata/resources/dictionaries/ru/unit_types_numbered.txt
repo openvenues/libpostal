@@ -1,7 +1,7 @@
 квартира|кв
 kvartira|kv
-кабинет|каб|к-т|к
-kabinet|kab|k-t|k
+кабинет|каб|к-т
+kabinet|kab|k-t
 литера|лит
 litera|lit
 офис|оф
