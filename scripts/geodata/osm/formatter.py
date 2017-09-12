@@ -1316,7 +1316,7 @@ class OSMAddressFormatter(object):
             if not venue_name or venue_name.lower() in all_venue_names_set:
                 continue
 
-            if any((AddressComponents.name_is_numbered_building(name, language, country=country) for language in languages)):
+            if any((AddressComponents.name_is_numbered_building(venue_name, language, country=country) for language in languages)):
                 address_components[AddressFormatter.BUILDING] = venue_name
                 continue
 
