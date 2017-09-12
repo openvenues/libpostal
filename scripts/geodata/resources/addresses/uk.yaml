@@ -736,7 +736,7 @@ buildings:
         alternatives:
             - alternative: *budynok_latin
               probability: 0.05
-            - alternatives: *blok
+            - alternative: *blok
               probability: 0.15
             - alternative: *blok_latin
               probability: 0.05
