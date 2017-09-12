@@ -40,7 +40,7 @@ not_applicable_regex = re.compile('^\s*n\.?\s*/?\s*a\.?\s*$', re.I)
 sin_numero_regex = re.compile('^\s*s\s*/\s*n\s*$', re.I)
 
 russian_number_regex_str = safe_decode(r'(?:№\s*)?(?:(?:[\d]+\w?(?:[\-/](?:(?:[\d]+\w?)|\w))*)|(?:[\d]+\s*\w?)|(?:\b\w\b))')
-dom_korpus_stroyeniye_regex = re.compile(safe_decode('(?:(?:дом(?=\s)|д\.?)\s*)?{}(?:(?:\s*,|\s+)\s*(?:(?:корпус(?=\s)|к\.?)\s*){})?(?:(?:\s*,|\s+)\s*(?:(?:строение(?=\s)|с\.?)\s*){})?\s*$').format(russian_number_regex_str, russian_number_regex_str, russian_number_regex_str), re.I | re.U)
+dom_korpus_stroyeniye_regex = re.compile(safe_decode('((?:(?:дом(?=\s)|д\.?)\s*)?{})(?:(?:\s*,|\s+)\s*((?:(?:корпус(?=\s)|к\.?)\s*){}))?(?:(?:\s*,|\s+)\s*((?:(?:строение(?=\s)|с\.?)\s*){}))?\s*$').format(russian_number_regex_str, russian_number_regex_str, russian_number_regex_str), re.I | re.U)
 uchastok_regex = re.compile(safe_decode('{}\s*(?:,?\s*участок\s+{}\s*)?$').format(russian_number_regex_str, russian_number_regex_str), re.I | re.U)
 bea_nomera_regex = re.compile(safe_decode('^\s*б\s*/\s*н\s*$'), re.I)
 fraction_regex = re.compile('^\s*[\d]+[\s]*/[\s]*(?:[\d]+|[a-z]|[\d]+[a-z]|[a-z][\d]+)[\s]*$', re.I)
@@ -462,6 +462,8 @@ class OpenAddressesFormatter(object):
                 if language is None:
                     language = AddressComponents.address_language(components, candidate_languages)
 
+                all_local_languages = [lang for lang, default in candidate_languages]
+
                 street = components.get(AddressFormatter.ROAD, None)
                 if street is not None:
                     street = street.strip()
@@ -482,22 +484,22 @@ class OpenAddressesFormatter(object):
                 house_number = components.get(AddressFormatter.HOUSE_NUMBER, None)
                 if house_number:
                     house_number = self.cleanup_number(house_number, strip_commas=house_number_strip_commas)
-                    house_number_building = None
 
                     if language == CHINESE:
                         house_number = self.format_chinese_house_number(house_number)
-                        if house_number:
-                            components[AddressFormatter.HOUSE_NUMBER] = house_number
-                            self.components.format_chinese_address(components)
 
                     if country_dir == Countries.COLOMBIA:
                         house_number = self.format_colombian_house_number(house_number)
 
                     if house_number:
                         components[AddressFormatter.HOUSE_NUMBER] = house_number
+                        AddressComponents.extract_sub_building_components(components, AddressFormatter.HOUSE_NUMBER, all_local_languages, country=country)
 
-                    if house_number_building:
-                        components[AddressFormatter.BUILDING] = house_number_building
+                        house_number = components.get(AddressFormatter.HOUSE_NUMBER, None)
+                        if not house_number:
+                            components.pop(AddressFormatter.HOUSE_NUMBER, None)
+                    else:
+                        components.pop(AddressFormatter.HOUSE_NUMBER, None)
 
                 unit = components.get(AddressFormatter.UNIT, None)
 
