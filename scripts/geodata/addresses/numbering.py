@@ -388,6 +388,10 @@ class NumberedComponent(object):
             if abbreviated:
                 abbreviated = safe_decode(abbreviated)
 
+            if numeric_affix:
+                affix = numeric_affix['affix']
+                sample_exclude.discard(affix)
+
             if numeric:
                 direction = numeric['direction']
                 if direction == 'left':
@@ -427,6 +431,10 @@ class NumberedComponent(object):
             canonical = c.get('canonical')
             if canonical:
                 canonical = safe_decode(canonical)
+
+            if numeric_affix:
+                affix = numeric_affix['affix']
+                sample_exclude.discard(affix)
 
             if canonical in all_number_phrases:
                 continue
