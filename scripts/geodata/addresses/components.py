@@ -1258,6 +1258,8 @@ class AddressComponents(object):
     @classmethod
     def extract_field(cls, value, numeric_class, language, country=None):
         regex = cls.get_numeric_regex(numeric_class, language, country=country)
+        if not regex:
+            return value, None
         prev_match = None
         matches = []
         for match in regex.finditer(value):
