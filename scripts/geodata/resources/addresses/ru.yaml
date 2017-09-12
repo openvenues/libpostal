@@ -89,6 +89,11 @@ numbers:
         sample_probability: 0.2
         numeric:
             direction: left
+        numeric_affix:
+            affix: №
+            direction: left
+        numeric_probability: 0.6
+        numeric_affix_probability: 0.4
     probability: 0.95
     alternatives:
         - alternative: &nomer_latin
@@ -100,6 +105,11 @@ numbers:
             sample_probability: 0.2
             numeric:
                 direction: left
+            numeric_affix:
+                affix: "no"
+                direction: left
+            numeric_probability: 0.8
+            numeric_affix_probability: 0.2
           probability: 0.05
 
 
@@ -113,6 +123,8 @@ house_numbers:
         sample_probability: 0.1
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
     dom_latin: &dom_latin
         canonical: dom
         abbreviated: d
@@ -122,6 +134,8 @@ house_numbers:
         sample_probability: 0.1
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
     alphanumeric:
         default: *dom
         probability: 0.95
@@ -245,6 +259,8 @@ levels:
                 ascii_probability: 0.8
                 roman_numeral_probability: 0.1
                 spellout_probability: 0.1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
         ordinal:
             direction: right
             digits:
@@ -267,6 +283,8 @@ levels:
                 ascii_probability: 0.8
                 roman_numeral_probability: 0.1
                 spellout_probability: 0.1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
         ordinal:
             direction: right
             digits:
@@ -287,6 +305,8 @@ levels:
                 ascii_probability: 0.8
                 roman_numeral_probability: 0.1
                 spellout_probability: 0.1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
         ordinal:
             direction: right
             digits:
@@ -307,6 +327,8 @@ levels:
                 ascii_probability: 0.8
                 roman_numeral_probability: 0.1
                 spellout_probability: 0.1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
         ordinal:
             direction: right
             digits:
@@ -357,6 +379,8 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
         numeric_affix:
             affix: п
             direction: left
@@ -378,6 +402,8 @@ levels:
         numeric:
             direction: left
             direction_probability: 0.9
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
         numeric_affix:
             affix: p
             direction: left
@@ -787,6 +813,8 @@ buildings:
         sample_probability: 0.2
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
 
     blok_latin: &blok_latin
         canonical: blok
@@ -797,6 +825,8 @@ buildings:
         sample_probability: 0.2
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
 
     korpus: &korpus
         canonical: корпус
@@ -807,6 +837,13 @@ buildings:
         sample_probability: 0.2
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+        numeric_affix:
+            affix: к
+            direction: left
+        numeric_probability: 0.9
+        numeric_affix_probability: 0.1
 
     korpus_latin: &korpus_latin
         canonical: korpus
@@ -817,6 +854,13 @@ buildings:
         sample_probability: 0.2
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+        numeric_affix:
+            affix: к
+            direction: left
+        numeric_probability: 0.9
+        numeric_affix_probability: 0.1
 
     stroenie: &stroenie
         canonical: строение
@@ -827,6 +871,8 @@ buildings:
         sample_probability: 0.2
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
 
     stroenie_latin: &stroenie_latin
         canonical: stroenie
@@ -837,6 +883,8 @@ buildings:
         sample_probability: 0.2
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
 
     zdaniye: &zdaniye
         canonical: здание
@@ -847,6 +895,8 @@ buildings:
         sample_probability: 0.2
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
 
     zdaniye_latin: &zdaniye_latin
         canonical: zdaniye
@@ -857,6 +907,8 @@ buildings:
         sample_probability: 0.2
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
 
     # Korpus 1, Bloc A, etc.
     alphanumeric: &building_alphanumeric
@@ -912,6 +964,8 @@ entrances:
         sample_probability: 0.2
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
     vkhod_latin: &vkhod_latin
         canonical: vkhod
         sample: true
@@ -919,6 +973,8 @@ entrances:
         sample_probability: 0.2
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
 
     # вход 1, вход A, etc.
     alphanumeric:
@@ -978,6 +1034,8 @@ staircases:
         sample_probability: 0.2
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
     lestnitsa_latin: &lestnitsa_latin
         canonical: lestnitsa
         sample: true
@@ -985,6 +1043,8 @@ staircases:
         sample_probability: 0.2
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
 
     alphanumeric: &staircase_alphanumeric
         default: *lestnitsa
@@ -1145,6 +1205,8 @@ units:
         sample_probability: 0.1
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
     kvartira_latin: &kvartira_latin
         canonical: kvartira
         abbreviated: kv
@@ -1154,6 +1216,8 @@ units:
         sample_probability: 0.1
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
 
     kabinet: &kabinet
         canonical: кабинет
@@ -1164,6 +1228,8 @@ units:
         sample_probability: 0.3
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
     kabinet_latin: &kabinet_latin
         canonical: kabinet
         abbreviated: kab
@@ -1173,6 +1239,8 @@ units:
         sample_probability: 0.3
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
 
     litera: &litera
         canonical: литера
@@ -1183,6 +1251,7 @@ units:
         sample_probability: 0.3
         numeric:
             direction: left
+
     litera_latin: &litera_latin
         canonical: litera
         abbreviated: lit
@@ -1202,6 +1271,8 @@ units:
         sample_probability: 0.1
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
     ofis_latin: &ofis_latin
         canonical: ofis
         abbreviated: of
@@ -1211,6 +1282,8 @@ units:
         sample_probability: 0.1
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
 
     pomeshhenie: &pomeshhenie
         canonical: помещение
@@ -1221,6 +1294,8 @@ units:
         sample_probability: 0.3
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
     pomeshhenie_latin: &pomeshhenie_latin
         canonical: pomeshhenie
         abbreviated: pom
@@ -1230,6 +1305,8 @@ units:
         sample_probability: 0.3
         numeric:
             direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
 
     alphanumeric: &unit_alphanumeric
         default: *kvartira
