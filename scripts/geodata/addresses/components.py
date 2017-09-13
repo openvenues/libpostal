@@ -1517,7 +1517,7 @@ class AddressComponents(object):
         if lot_regexes:
             stripped, lot = cls.extract_regex(lot_regexes, stripped)
 
-        stripped = stripped.strip()
+        stripped = cls.cleanup_value_post_extraction(stripped)
 
         return stripped, superblock, block, lot
 
