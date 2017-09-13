@@ -140,6 +140,6 @@ class OSMCountryPolygonIndexSpark(OSMPolygonIndexSpark):
         combined_points_with_polygons = points_with_polygons.union(points_with_polygons_buffered)
 
         all_points = point_ids.leftOuterJoin(combined_points_with_polygons) \
-                              .map(lambda (point_id, (point, polys)): (point, polys or []))
+                              .map(lambda (point_id, (point, polys)): (point, polys or {}))
 
         return all_points
