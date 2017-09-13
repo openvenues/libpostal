@@ -92,7 +92,7 @@ class Unit(NumberedComponent):
     @classmethod
     def random(cls, language, country=None, num_floors=None, num_basements=None, floor=None, num_type=None, num_type_props=None):
         if not num_type:
-            num_type, num_type_props = cls.choose_alphanumeric_type('units.alphanumeric', language, country=country)
+            num_type, num_type_props = cls.choose_alphanumeric_type(language, country=country)
             if num_type is None:
                 return None
 
@@ -302,7 +302,7 @@ class Unit(NumberedComponent):
     @classmethod
     def phrase(cls, unit, language, country=None, zone=None, num_type=None, direction=None, direction_probability=None):
         if unit is not None:
-            key = 'units.alphanumeric' if zone is None else 'units.zones'
+            key = 'units.alphanumeric' if zone is None else 'units.zones.{}'.format(zone)
 
             if not address_config.get_property(key, language, country=country):
                 return None

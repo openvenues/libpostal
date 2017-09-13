@@ -97,6 +97,11 @@ numbers:
         canonical_probability: 0.3 # With this probability, use the canonical
         abbreviated_probability: 0.5 # With this probability, use the abbreviated form
         sample_probability: 0.2 # With  this probability, sample other variations
+        plural:
+            canonical: numbers
+            abbreviated: nos
+            canonical_probability: 0.8
+            abbreviated_probability: 0.2
         sample_exclude:
             - "#" # Used in numeric affix. Needs to be quoted, otherwise it's a comment
         numeric:
@@ -662,7 +667,7 @@ po_boxes:
             add_number_phrase: true
             add_number_phrase_probability: 0.4 # PMB #1234
 
-    alphanumeric:
+    alphanumeric: &po_box_alphanumeric
         # Don't sample all the forms in post_office.txt as many of the PO box
         # phrases appear only in Australia
         sample: false
@@ -699,6 +704,7 @@ po_boxes:
     zones:
         # Overrides for commercial/office areas (landuse=commercial in OSM)
         commercial:
+            <<: *po_box_alphanumeric
             default: *po_box
             probability: 0.7
             alternatives:
@@ -706,6 +712,7 @@ po_boxes:
                   probability: 0.2
                 - alternative: *box
                   probability: 0.1
+
 
 # Categories
 # ==========
@@ -1409,6 +1416,7 @@ units:
     zones:
         residential: *unit_alphanumeric
         commercial:
+            <<: *unit_alphanumeric
             default: *office
             probability: 0.6
             alternatives:
@@ -1417,6 +1425,7 @@ units:
                 - alternative: *suite
                   probability: 0.2
         industrial:
+            <<: *unit_alphanumeric
             default: *lot
             probability: 0.5
             alternatives:
@@ -1427,6 +1436,7 @@ units:
                 - alternative: *parcel
                   probability: 0.01
         university:
+            <<: *unit_alphanumeric
             default: *room
             probability: 0.9
             alternatives:
@@ -1546,6 +1556,7 @@ countries:
             zones: &us_zones
                 residential: *us_units_alphanumeric
                 commercial:
+                    <<: *us_units_alphanumeric
                     # Suite is much more common in the US and Canada
                     default: *suite
                     probability: 0.5
