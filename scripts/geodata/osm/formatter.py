@@ -789,7 +789,7 @@ class OSMAddressFormatter(object):
 
                 # If we're splitting, validate every delimited phrase
                 if PostalCodes.is_valid(candidate, country):
-                    valid.append(PostalCodes.add_country_code(candidate, country))
+                    valid.append(PostalCodes.format(candidate, country))
 
         return valid
 
