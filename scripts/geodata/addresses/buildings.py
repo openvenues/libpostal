@@ -77,6 +77,10 @@ class Building(NumberedComponent):
                 alphabet_probability = address_config.get_property('alphabet_probability', language, country=country, default=None)
                 if alphabet_probability is not None and random.random() >= alphabet_probability:
                     alphabet = latin_alphabet
+                if num_type_props:
+                    latin_alphabet_probability = num_type_props.get('latin_probability')
+                    if latin_alphabet_probability and random.random() < latin_alphabet_probability:
+                        alphabet = latin_alphabet
                 letter = sample_alphabet(alphabet)
 
                 if letter_type == cls.ALPHA_PLUS_NUMERIC:
@@ -101,6 +105,10 @@ class Building(NumberedComponent):
             alphabet_probability = address_config.get_property('alphabet_probability', language, country=country, default=None)
             if alphabet_probability is not None and random.random() >= alphabet_probability:
                 alphabet = latin_alphabet
+            if num_type_props:
+                latin_alphabet_probability = num_type_props.get('latin_probability')
+                if latin_alphabet_probability and random.random() < latin_alphabet_probability:
+                    alphabet = latin_alphabet
             letter = sample_alphabet(alphabet, 2.0)
             if num_type == cls.ALPHA:
                 return safe_decode(letter)
