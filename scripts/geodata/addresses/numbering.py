@@ -220,7 +220,7 @@ class NumericPhrase(object):
                 affix_probs = [props['probability']]
 
                 for a in props.get('alternatives', []):
-                    affixes.append(a['alternative'])
+                    affixes.append(a['affix'])
                     affix_probs.append(a['probability'])
 
                 affix_probs = cdf(affix_probs)
