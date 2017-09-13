@@ -683,6 +683,9 @@ class AddressComponents(object):
         combos = []
         probs = {}
 
+        if generated is None:
+            generated = {}
+
         for combo in combo_config:
             components = OrderedDict.fromkeys(combo['components']).keys()
 
@@ -716,9 +719,6 @@ class AddressComponents(object):
         probs = cdf(probs)
         separator = weighted_choice(values, probs)
 
-        if generated is None:
-            generated = {}
-
         new_label = combo['label']
         new_component = []
         for c in components:
@@ -727,6 +727,8 @@ class AddressComponents(object):
                 component = generated[c]
             elif component is None:
                 continue
+            if hasattr(component, '__iter__'):
+                component = component[0]
             new_component.append(component)
 
         new_value = separator.join(new_component)
