@@ -13,6 +13,7 @@ from itertools import ifilter
 
 from geodata.address_formatting.aliases import Aliases
 from geodata.configs.utils import nested_get, recursive_merge, RESOURCES_DIR
+from geodata.countries.constants import Countries
 from geodata.math.floats import isclose
 from geodata.math.sampling import weighted_choice, cdf
 from geodata.text.tokenize import tokenize, tokenize_raw, token_types
@@ -185,6 +186,11 @@ class AddressFormatter(object):
         CEDEX: POSTCODE,
     }
 
+    country_specific_components = {
+        JAPAN_MAJOR_NEIGHBORHOOD: set([Countries.JAPAN]),
+        JAPAN_MINOR_NEIGHBORHOOD: set([Countries.JAPAN]),
+    }
+
     category_template = '{{{category}}} {{{near}}} {{{place}}}'
     chain_template = '{{{house}}} {{{near}}} {{{place}}}'
     intersection_template = '{{{road1}}} {{{intersection}}} {{{road2}}} {{{place}}}'
@@ -209,8 +215,8 @@ class AddressFormatter(object):
 
         self.load_config()
 
-        address_config = self.download_address_config()
-        self.load_country_formats(address_config)
+        self.address_config = self.download_address_config()
+        self.load_country_formats(self.address_config)
 
         self.language_code_replacements = self.config['language_code_replacements']
 
@@ -444,7 +450,36 @@ class AddressFormatter(object):
 
     def build_first_of_template(self, keys):
         """ For constructing """
-        return '{{{{#first}}}} {keys} {{{{/first}}}}'.format(keys=' || '.join(['{{{{{{{key}}}}}}}'.format(key=key) for key in keys]))
+
+        return '{{{{#first}}}} {keys} {{{{/first}}}}'.format(keys=u''.join(keys))
+
+    def build_first_of_keys(self, element, func):
+        keys = []
+        key_components = []
+        prev = None
+        for el in element.parsed._parse_tree:
+            if isinstance(el, six.string_types) and el.strip() == u'||':
+                if key_components:
+                    key = u''.join(key_components)
+                    if key.strip():
+                        keys.append(key)
+                key_components = []
+            elif hasattr(el, 'key'):
+                if func(el.key):
+                    if isinstance(prev, six.string_types) and prev.strip() == u'||':
+                        keys.append(prev)
+                    key_components.append(self.tag_token(el.key))
+            elif key_components:
+                key_components.append(el)
+            else:
+                keys.append(el)
+            prev = el
+        if key_components:
+            key = u''.join(key_components)
+            if key.strip():
+                keys.append(key)
+
+        return u''.join(keys)
 
     def tag_token(self, key):
         return '{{{{{{{key}}}}}}}'.format(key=key)
@@ -458,15 +493,15 @@ class AddressFormatter(object):
         last_removed = False
         for i, el in enumerate(parsed._parse_tree):
             if hasattr(el, 'parsed'):
-                keys = [e.key for e in el.parsed._parse_tree if hasattr(e, 'key') and e.key not in tags]
-                if keys:
-                    new_components.append(self.build_first_of_template(keys))
+                key_strings = self.build_first_of_keys(el, lambda key: key not in tags)
+                if key_strings:
+                    new_components.append(self.build_first_of_template(key_strings))
                     last_removed = False
                 else:
                     last_removed = True
             elif hasattr(el, 'key'):
                 if el.key not in tags:
-                    new_components.append('{{{{{{{key}}}}}}}'.format(key=el.key))
+                    new_components.append(self.tag_token(el.key))
                     last_removed = False
                 else:
                     last_removed = True
@@ -521,13 +556,16 @@ class AddressFormatter(object):
                     new_components.extend([tag_token, token])
                     key_added = True
 
-                keys = [k for k in keys if self.aliases.get(k, k) != tag]
-                if keys:
-                    new_components.append(self.build_first_of_template(keys))
+                key_strings = self.build_first_of_keys(el, lambda key: self.aliases.get(key, key) != tag)
+
+                if key_strings:
+                    new_components.append(self.build_first_of_template(key_strings))
                 else:
                     while new_components and '{' not in new_components[-1]:
                         new_components.pop()
                     continue
+
+                keys = [k for k in keys if self.aliases.get(k, k) != tag]
 
                 if (after in set(keys) or i == num_tokens - 1) and not key_added:
                     token = '\n'
@@ -539,7 +577,7 @@ class AddressFormatter(object):
             elif hasattr(el, 'key'):
                 if el.key == tag:
                     if i == num_tokens - 1 and last:
-                        new_components.append('{{{{{{{key}}}}}}}'.format(key=el.key))
+                        new_components.append(self.tag_token(el.key))
 
                     skip_next_non_token = True
                     continue
@@ -551,7 +589,7 @@ class AddressFormatter(object):
                     new_components.extend([tag_token, token])
                     key_added = True
 
-                new_components.append('{{{{{{{key}}}}}}}'.format(key=el.key))
+                new_components.append(self.tag_token(el.key))
 
                 if (el.key == after or i == num_tokens - 1) and not key_added:
                     token = '\n'
@@ -593,6 +631,8 @@ class AddressFormatter(object):
         if i > 1:
             for component in self.BOUNDARY_COMPONENTS_ORDERED[i - 1:0:-1]:
                 kw = {'before': prev} if not is_reverse else {'after': prev}
+                if component in self.country_specific_components and country.lower() not in self.country_specific_components[component]:
+                    continue
                 template = self.insert_component(template, component, exact_order=False, **kw)
                 prev = component
 
@@ -601,6 +641,8 @@ class AddressFormatter(object):
         if i < len(self.BOUNDARY_COMPONENTS_ORDERED) - 1:
             for component in self.BOUNDARY_COMPONENTS_ORDERED[i + 1:]:
                 kw = {'after': prev} if not is_reverse else {'before': prev}
+                if component in self.country_specific_components and country.lower() not in self.country_specific_components[component]:
+                    continue
                 template = self.insert_component(template, component, exact_order=False, **kw)
                 prev = component
 
