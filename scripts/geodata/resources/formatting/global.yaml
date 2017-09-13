@@ -1014,7 +1014,7 @@ countries:
         care_of: {}
 
         subdivision:
-            subdivision_before_suburb: {}
+            subdivision_after_road: {}
             subdivision_after_suburb:
                 after: suburb
                 probability: 1.0
