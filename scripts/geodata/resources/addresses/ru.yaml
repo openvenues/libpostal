@@ -815,6 +815,15 @@ buildings:
             direction: left
             add_number_phrase: true
             add_number_phrase_probability: 0.2
+        numeric_affix:
+            affix: бл.
+            direction: left
+            probability: 0.6
+            alternatives:
+                - affix: бл
+                  probability: 0.4
+        numeric_probability: 0.9
+        numeric_affix_probability: 0.1
 
     blok_latin: &blok_latin
         canonical: blok
@@ -827,6 +836,15 @@ buildings:
             direction: left
             add_number_phrase: true
             add_number_phrase_probability: 0.2
+        numeric_affix:
+            affix: bl.
+            direction: left
+            probability: 0.6
+            alternatives:
+                - affix: бл
+                  probability: 0.4
+        numeric_probability: 0.9
+        numeric_affix_probability: 0.1
 
     korpus: &korpus
         canonical: корпус
@@ -873,6 +891,11 @@ buildings:
             direction: left
             add_number_phrase: true
             add_number_phrase_probability: 0.2
+        numeric_affix:
+            affix: стр.
+            direction: left
+        numeric_probability: 0.9
+        numeric_affix_probability: 0.1
 
     stroenie_latin: &stroenie_latin
         canonical: stroenie
@@ -885,6 +908,11 @@ buildings:
             direction: left
             add_number_phrase: true
             add_number_phrase_probability: 0.2
+        numeric_affix:
+            affix: str.
+            direction: left
+        numeric_probability: 0.9
+        numeric_affix_probability: 0.1
 
     zdaniye: &zdaniye
         canonical: здание
@@ -897,6 +925,11 @@ buildings:
             direction: left
             add_number_phrase: true
             add_number_phrase_probability: 0.2
+        numeric_affix:
+            affix: зд.
+            direction: left
+        numeric_probability: 0.9
+        numeric_affix_probability: 0.1
 
     zdaniye_latin: &zdaniye_latin
         canonical: zdaniye
@@ -909,6 +942,11 @@ buildings:
             direction: left
             add_number_phrase: true
             add_number_phrase_probability: 0.2
+        numeric_affix:
+            affix: zd.
+            direction: left
+        numeric_probability: 0.9
+        numeric_affix_probability: 0.1
 
     # Korpus 1, Bloc A, etc.
     alphanumeric: &building_alphanumeric
