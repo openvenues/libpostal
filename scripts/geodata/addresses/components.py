@@ -716,6 +716,9 @@ class AddressComponents(object):
         probs = cdf(probs)
         separator = weighted_choice(values, probs)
 
+        if generated is None:
+            generated = {}
+
         new_label = combo['label']
         new_component = []
         for c in components:
@@ -727,6 +730,7 @@ class AddressComponents(object):
             new_component.append(component)
 
         new_value = separator.join(new_component)
+
         address_components[new_label] = new_value
         return set(components)
 
@@ -2197,7 +2201,7 @@ class AddressComponents(object):
     @classmethod
     def cleanup_value_post_extraction(cls, value):
         value = cls.stray_dot_regex.sub(u'', value)
-        value = value.strip(u' ,/:')
+        value = value.strip(u' ,/:').rstrip(six.u('-/'))
         return value
 
     @classmethod
@@ -2272,13 +2276,17 @@ class AddressComponents(object):
             if k != AddressFormatter.HOUSE_NUMBER and k not in address_components:
                 address_components[k] = v
 
-        address_components[AddressFormatter.HOUSE_NUMBER] = temp_address_components[AddressFormatter.HOUSE_NUMBER]
+        if AddressFormatter.HOUSE_NUMBER in temp_address_components:
+            address_components[AddressFormatter.HOUSE_NUMBER] = temp_address_components[AddressFormatter.HOUSE_NUMBER]
+        else:
+            address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
 
         house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
         if not house_number:
             return
 
-        house_number = house_number.strip(six.u(',;/ ')).rstrip(six.u('-/'))
+        house_number = cls.cleanup_value_post_extraction(house_number)
+
         if not house_number:
             address_components.pop(AddressFormatter.HOUSE_NUMBER, None)
             return
