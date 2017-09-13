@@ -16,6 +16,7 @@ from geodata.numbers.spellout import numeric_expressions
 from geodata.text.tokenize import tokenize, token_types
 
 alphabets = {}
+JAPANESE = 'ja'
 
 
 def sample_alphabet(alphabet, b=1.5):
@@ -285,7 +286,10 @@ class NumberedComponent(object):
     def random_digits(cls, num_digits):
         return random.randrange(10 ** num_digits, 10 ** (num_digits + 1))
 
-    numeric_pattern = u'\\b(?:[^\W\d_]{,2}[\d]+[^\W\d_]{,2}[\-\u2013\./][^\W\d_]{,2}[\d]+[^\W\d_]{,2}|[\d]*[^\W\d_][\d]*(?:[\-\u2013\./ ]|\s[\-\u2013/]\s)?[^\W\d_]?[\d]+[^\W\d_]?|[^\W\d_]?[\d]+[^\W\d_]?(?:[\-\u2013\./ ]|\s[\-\u2013/]\s)?[\d]*[^\W\d_][\d]*|[\d]+|[^\W\d_](?:(?:[\-\u2013/][^\W\d_])|(?:[\-\u2013\./][^\W\d_]?[\d]+[^\W\d_]?))?)\\b'
+    numeric_affix_pattern = u'(?:[^\W\d_]{,2}[\d]+[^\W\d_]{,2}[\-\u2013\./][^\W\d_]{,2}[\d]+[^\W\d_]{,2}|[\d]*[^\W\d_][\d]*(?:[\-\u2013\./ ]|\s[\-\u2013/]\s)?[^\W\d_]?[\d]+[^\W\d_]?|[^\W\d_]?[\d]+[^\W\d_]?(?:[\-\u2013\./ ]|\s[\-\u2013/]\s)?[\d]*[^\W\d_][\d]*|[\d]+|[^\W\d_](?:(?:[\-\u2013/][^\W\d_])|(?:[\-\u2013\./][^\W\d_]?[\d]+[^\W\d_]?))?)'
+    numeric_pattern = u'\\b{}\\b'.format(numeric_affix_pattern)
+
+    japanese_number_pattern = u'(?:[\d]+[\-\u2013\u30fc\u306e])*[\d]+'
 
     @classmethod
     def numeric_regex(cls, language, country=None):
@@ -575,6 +579,11 @@ class NumberedComponent(object):
         right_number_affix_phrases.sort(reverse=True)
         right_number_phrases.sort(reverse=True)
 
+        numeric_pattern = cls.numeric_pattern
+        numeric_affix_pattern = cls.numeric_affix_pattern
+        if language == JAPANESE:
+            numeric_pattern = numeric_affix_pattern = cls.japanese_number_pattern
+
         if right_ordinal_phrases:
             for k, vals in six.iteritems(right_ordinal_phrases):
                 ordinal_parts = [u''.join(ordinal_phrase_components[k])]
@@ -585,20 +594,20 @@ class NumberedComponent(object):
                 regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(ordinal_parts).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(sorted(vals, reverse=True)).replace(u'.', u'\\.')))
 
         if left_affix_phrases:
-            regexes.append(u'(?:{})(?:{})'.format(u'|'.join(left_affix_phrases).replace(u'.', u'\\.'), cls.numeric_pattern))
+            regexes.append(u'(?:{})(?:{})'.format(u'|'.join(left_affix_phrases).replace(u'.', u'\\.'), numeric_affix_pattern))
 
         if left_phrases_with_number:
             if left_number_affix_phrases:
-                regexes.append(u'(?:{}){}(?:{})?(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), cls.numeric_pattern))
+                regexes.append(u'(?:{}){}(?:{})?(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), numeric_affix_pattern))
             if left_number_phrases:
-                regexes.append(u'(?:{}){}(?:(?:{}){})?(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(left_number_phrases).replace(u'.', u'\\.'), whitespace_phrase, cls.numeric_pattern))
+                regexes.append(u'(?:{}){}(?:(?:{}){})?(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(left_number_phrases).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern))
             if right_number_affix_phrases:
-                regexes.append(u'(?:{}){}(?:{})(?:{})?'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, cls.numeric_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{}){}(?:{})(?:{})?'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.')))
             if right_number_phrases:
-                regexes.append(u'(?:{}){}(?:{})(?:{}(?:{}))?'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, cls.numeric_pattern, whitespace_phrase, u'|'.join(right_number_phrases).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{}){}(?:{})(?:{}(?:{}))?'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern, whitespace_phrase, u'|'.join(right_number_phrases).replace(u'.', u'\\.')))
 
         if left_phrases:
-            regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(left_phrases).replace(u'.', u'\\.'), whitespace_phrase, cls.numeric_pattern))
+            regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(left_phrases).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern))
 
         if left_ordinal_phrases:
             for k, vals in six.iteritems(left_ordinal_phrases):
@@ -610,20 +619,20 @@ class NumberedComponent(object):
                 regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(vals).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(ordinal_parts).replace(u'.', u'\\.')))
 
         if right_affix_phrases:
-            regexes.append(u'(?:{})(?:{})'.format(cls.numeric_pattern, u'|'.join(right_affix_phrases).replace(u'.', u'\\.')))
+            regexes.append(u'(?:{})(?:{})'.format(numeric_affix_pattern, u'|'.join(right_affix_phrases).replace(u'.', u'\\.')))
 
         if right_phrases_with_number:
             if left_number_affix_phrases:
-                regexes.append(u'(?:{})?(?:{}){}(?:{})'.format(u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), cls.numeric_pattern, whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{})?(?:{}){}(?:{})'.format(u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), numeric_pattern, whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
             if left_number_phrases:
-                regexes.append(u'(?:(?:{}){})?(?:{}){}(?:{})'.format(u'|'.join(left_number_phrases).replace(u'.', u'\\.'), whitespace_phrase, cls.numeric_pattern, whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
+                regexes.append(u'(?:(?:{}){})?(?:{}){}(?:{})'.format(u'|'.join(left_number_phrases).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern, whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
             if right_number_affix_phrases:
-                regexes.append(u'(?:{})(?:{})?{}(?:{})'.format(cls.numeric_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{})(?:{})?{}(?:{})'.format(numeric_affix_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
             if right_number_phrases:
-                regexes.append(u'(?:{})(?:{}(?:{}))?{}(?:{})'.format(cls.numeric_pattern, whitespace_phrase, u'|'.join(right_number_phrases).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{})(?:{}(?:{}))?{}(?:{})'.format(numeric_pattern, whitespace_phrase, u'|'.join(right_number_phrases).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
 
         if right_phrases:
-            regexes.append(u'(?:{}){}(?:{})'.format(cls.numeric_pattern, whitespace_phrase, u'|'.join(right_phrases).replace(u'.', u'\\.')))
+            regexes.append(u'(?:{}){}(?:{})'.format(numeric_pattern, whitespace_phrase, u'|'.join(right_phrases).replace(u'.', u'\\.')))
 
         if standalone_phrases:
             regexes.append(u'(?:{})'.format(u'|'.join(standalone_phrases).replace(u'.', u'\\.')))
