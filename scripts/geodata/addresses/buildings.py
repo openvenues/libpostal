@@ -78,7 +78,7 @@ class Building(NumberedComponent):
                 if alphabet_probability is not None and random.random() >= alphabet_probability:
                     alphabet = latin_alphabet
                 if num_type_props:
-                    latin_alphabet_probability = num_type_props.get('latin_probability')
+                    latin_alphabet_probability = num_type_props.get('latin_alphabet_probability')
                     if latin_alphabet_probability and random.random() < latin_alphabet_probability:
                         alphabet = latin_alphabet
                 letter = sample_alphabet(alphabet)
@@ -106,7 +106,7 @@ class Building(NumberedComponent):
             if alphabet_probability is not None and random.random() >= alphabet_probability:
                 alphabet = latin_alphabet
             if num_type_props:
-                latin_alphabet_probability = num_type_props.get('latin_probability')
+                latin_alphabet_probability = num_type_props.get('latin_alphabet_probability')
                 if latin_alphabet_probability and random.random() < latin_alphabet_probability:
                     alphabet = latin_alphabet
             letter = sample_alphabet(alphabet, 2.0)
