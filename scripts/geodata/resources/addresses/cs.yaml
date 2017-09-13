@@ -414,7 +414,7 @@ buildings:
         abbreviated: bud
         sample: true
         canonical_probability: 0.6
-        abbreviated: 0.2
+        abbreviated_probability: 0.2
         sample_probability: 0.2
         numeric:
             direction: left
