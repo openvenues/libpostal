@@ -435,7 +435,7 @@ entrances:
             direction_probability: 0.85
             modifier:
                 alternatives:
-                    - alternatives: *prawo
+                    - alternative: *prawo
                       probability: 0.4
                     - alternative: *lewo
                       probability: 0.4
@@ -476,7 +476,7 @@ taircases:
             direction_probability: 0.85
             modifier:
                 alternatives:
-                    - alternatives: *prawo
+                    - alternative: *prawo
                       probability: 0.4
                     - alternative: *lewo
                       probability: 0.4

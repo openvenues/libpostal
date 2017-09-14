@@ -813,7 +813,7 @@ entrances:
                       probability: 0.01
                     - alternative: *livo
                       probability: 0.39
-                    - alternatives: *livo_latin
+                    - alternative: *livo_latin
                       probability: 0.01
                     - alternative: *pivnikh
                       probability: 0.04
@@ -877,7 +877,7 @@ staircases:
                       probability: 0.01
                     - alternative: *livo
                       probability: 0.39
-                    - alternatives: *livo_latin
+                    - alternative: *livo_latin
                       probability: 0.01
                     - alternative: *pivnikh
                       probability: 0.04
