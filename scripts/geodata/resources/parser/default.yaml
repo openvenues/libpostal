@@ -31,6 +31,7 @@ component_dependencies:
     building:
         dependencies:
             - house_number
+            - named_building
 
     named_building:
         dependencies: []
@@ -64,7 +65,6 @@ component_dependencies:
         dependencies:
             - house
             - road
-            - building
             - named_building
 
 
