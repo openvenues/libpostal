@@ -329,6 +329,10 @@ countries:
                 probability: 0.4
             metro_station:
                 probability: 0.6
+            japan_major_neighborhood:
+                probability: 1.0
+            japan_minor_neighborhood:
+                probability: 1.0
             suburb:
                 probability: 1.0
             city_district:
