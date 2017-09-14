@@ -820,7 +820,9 @@ buildings:
             direction: left
             probability: 0.6
             alternatives:
-                - affix: бл
+                - alternative:
+                      affix: бл
+                      direction: left
                   probability: 0.4
         numeric_probability: 0.9
         numeric_affix_probability: 0.1
@@ -841,7 +843,9 @@ buildings:
             direction: left
             probability: 0.6
             alternatives:
-                - affix: бл
+                - alternative:
+                      affix: бл
+                      direction: left
                   probability: 0.4
         numeric_probability: 0.9
         numeric_affix_probability: 0.1
