@@ -30,8 +30,7 @@ component_dependencies:
 
     building:
         dependencies:
-            - road
-            - named_building
+            - house_number
 
     named_building:
         dependencies: []
@@ -90,7 +89,6 @@ component_dependencies:
                     - suburb
                     - city_district
                     - subdivision
-
 
 
 # Each component is dropped out separately and a new address
