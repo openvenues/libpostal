@@ -28,6 +28,7 @@ numbers:
         numeric_affix:
             affix: -hao
             upper_case: false
+            title_case: false
             direction: right
         numeric_probability: 0.0
         numeric_affix_probability: 1.0
@@ -44,6 +45,7 @@ buildings:
         numeric_affix:
             affix: -dong
             direction: right
+            upper_case: false
             add_number_phrase: true
             add_number_phrase_probability: 0.2
             digits:
@@ -52,8 +54,43 @@ buildings:
                 spellout_probability: 0.1
         numeric_probability: 0.0
         numeric_affix_probability: 1.0
+    zuo: &zuo
+        canonical: zuò
+        numeric_affix:
+            affix: -zuò
+            upper_case: false
+            direction: right
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+            digits:
+                ascii_probability: 0.6
+                unicode_full_width_probability: 0.3
+                spellout_probability: 0.1
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    zuo_no_accent: &zuo_no_accent
+        canonical: zuo
+        numeric_affix:
+            affix: -zuo
+            upper_case: false
+            direction: right
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+            digits:
+                ascii_probability: 0.6
+                unicode_full_width_probability: 0.3
+                spellout_probability: 0.1
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
     alphanumeric:
         default: *dong
+        probability: 0.7
+        alternatives:
+            - alternative: *zuo
+              probability: 0.2
+            - alternative: *zuo_no_accent
+              probability: 0.1
         numeric_probability: 1.0
 
 entrances:
@@ -61,6 +98,7 @@ entrances:
         canonical: dānyuán
         numeric_affix:
             affix: -dānyuán
+            upper_case: false
             direction: right
             add_number_phrase: true
             add_number_phrase_probability: 0.2
@@ -74,6 +112,7 @@ entrances:
         canonical: danyuan
         numeric_affix:
             affix: -danyuan
+            upper_case: false
             direction: right
             add_number_phrase: true
             add_number_phrase_probability: 0.2
@@ -87,7 +126,8 @@ entrances:
         canonical: rùkǒu
         numeric_affix:
             affix: -rùkǒu
-            direction: left
+            upper_case: false
+            direction: right
             direction_probability: 0.6
             add_number_phrase: true
             add_number_phrase_probability: 0.2
@@ -101,7 +141,8 @@ entrances:
         canonical: rukou
         numeric_affix:
             affix: -rukou
-            direction: left
+            upper_case: false
+            direction: right
             direction_probability: 0.6
             add_number_phrase: true
             add_number_phrase_probability: 0.2

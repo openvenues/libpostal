@@ -77,8 +77,26 @@ buildings:
                 spellout_probability: 0.1
         numeric_probability: 0.0
         numeric_affix_probability: 1.0
+    zuo: &zuo
+        canonical: 座
+        numeric_affix:
+            affix: 座
+            direction: right
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+            digits:
+                ascii_probability: 0.6
+                unicode_full_width_probability: 0.3
+                spellout_probability: 0.1
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
     alphanumeric:
         default: *dong
+        probability: 0.7
+        alternatives:
+            - alternative: *zuo
+              probability: 0.3
         numeric_probability: 1.0
 
 entrances:
