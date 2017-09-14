@@ -1711,9 +1711,10 @@ class AddressComponents(object):
                     components_values = sorted(components_values, key=cls.japanese_neighborhood_sort_key)
 
                 for component_value in components_values:
-                    if component == AddressFormatter.CITY and AddressFormatter.LOCALITY in address_components and component_value.get('name', u'') == address_components[AddressFormatter.LOCALITY]:
+                    component_name = component_value.get('name', u'')
+                    if component == AddressFormatter.CITY and AddressFormatter.LOCALITY in address_components and equivalent(component_name, address_components[AddressFormatter.LOCALITY], toponym_abbreviations_gazetteer, language):
                         continue
-                    elif component == AddressFormatter.LOCALITY and AddressFormatter.LOCALITY not in address_components and component_value.get('name', u'') in city_names:
+                    elif component == AddressFormatter.LOCALITY and AddressFormatter.LOCALITY not in address_components and any((equivalent(component_name, city_name, toponym_abbreviations_gazetteer, language) for city_name in city_names)):
                         continue
 
                     if random_key and not (component in (AddressFormatter.STATE_DISTRICT, AddressFormatter.STATE) and not have_city):
