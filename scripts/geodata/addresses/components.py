@@ -783,6 +783,10 @@ class AddressComponents(object):
         if not is_numeric(value) and not (value.isalpha() and len(value) == 1):
             return None
 
+        value, extracted = cls.extract_field(value, component_class, language, country=country)
+        if not cls.cleanup_value_post_extraction(value):
+            return None
+
         phrase = component_class.phrase(value, language, country=country)
         if phrase != value:
             return phrase
