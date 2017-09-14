@@ -220,6 +220,10 @@ class OSMAddressFormatter(object):
         return [t for t, c in tokenize(name) if c in token_types.WORD_TOKEN_TYPES or c in token_types.NUMERIC_TOKEN_TYPES]
 
     @classmethod
+    def is_building(cls, tags):
+        return osm_definitions.meets_definition(tags, osm_definitions.BUILDING)
+
+    @classmethod
     def is_valid_building_name(cls, name, address_components, languages=(), country=None, is_generic=False, is_known_venue_type=False):
         if not name:
             return False
@@ -610,7 +614,7 @@ class OSMAddressFormatter(object):
         formatted_addresses = []
 
         if not venue_names and not building_names and not subdivision_names:
-            address_components = {c: v for c, v in six.iteritems(address_components) if c != AddressFormatter.HOUSE}
+            address_components = {c: v for c, v in six.iteritems(address_components) if cls.aliases.get(c, c) != AddressFormatter.HOUSE}
             return [cls.formatter.format_address(address_components, country, language=language,
                                                  tag_components=tag_components, minimal_only=minimal_only)]
 
@@ -620,6 +624,7 @@ class OSMAddressFormatter(object):
             components.pop(AddressFormatter.HOUSE, None)
             components.pop(AddressFormatter.NAMED_BUILDING, None)
             components.pop(AddressFormatter.SUBDIVISION, None)
+
             formatted_address = cls.formatter.format_address(components, country, language=language,
                                                              tag_components=tag_components, minimal_only=minimal_only)
             formatted_addresses.append(formatted_address)
@@ -1138,6 +1143,10 @@ class OSMAddressFormatter(object):
         return formatted_addresses
 
     @classmethod
+    def is_subdivision(cls, tags):
+        return osm_definitions.meets_definition(tags, osm_definitions.SUBDIVISION_NAMED)
+
+    @classmethod
     def is_valid_subdivision(cls, subdivision, all_osm_components, languages):
         osm_component_names = set.union(*[set([n.lower() for n in AddressComponents.all_names(components, languages=languages)])
                                           for components in all_osm_components])
@@ -1309,6 +1318,8 @@ class OSMAddressFormatter(object):
             if 'name' in props and component not in expanded_components:
                 expanded_components[component] = props['name']
 
+        AddressComponents.drop_invalid_components(expanded_components, country)
+
         street_languages = set((language,) if language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE) else languages)
 
         all_venue_names = []
@@ -1316,31 +1327,39 @@ class OSMAddressFormatter(object):
         all_venue_names_expanded_only = []
         all_venue_names_set = set()
 
-        for venue_name in cls.venue_names(tags, languages) or []:
-            if not venue_name or venue_name.lower() in all_venue_names_set:
-                continue
+        is_building = cls.is_building(tags)
+        is_subdivision = cls.is_subdivision(tags)
 
-            if any((AddressComponents.name_is_numbered_building(venue_name, language, country=country) for language in languages)):
-                address_components[AddressFormatter.BUILDING] = venue_name
-                continue
+        if not is_building and not is_subdivision:
+            for venue_name in cls.venue_names(tags, languages) or []:
+                if not venue_name or venue_name.lower() in all_venue_names_set:
+                    continue
 
-            all_venue_names.append(venue_name)
-            if cls.is_valid_venue_name(venue_name, expanded_components, street_languages, is_generic=is_generic_place, is_known_venue_type=is_known_venue_type):
-                all_venue_names_reduced.append(venue_name)
-            else:
-                all_venue_names_expanded_only.append(venue_name)
+                if AddressComponents.name_is_numbered_building(venue_name, languages, country=country):
+                    address_components[AddressFormatter.BUILDING] = venue_name
+                    continue
 
-            all_venue_names_set.add(venue_name.lower())
-
-            abbreviated_venue = cls.abbreviated_venue_name(venue_name, language)
-            if abbreviated_venue != venue_name and abbreviated_venue.lower() not in all_venue_names_set:
-                all_venue_names.append(abbreviated_venue)
-                if cls.is_valid_venue_name(abbreviated_venue, expanded_components, street_languages, is_generic=is_generic_place, is_known_venue_type=is_known_venue_type):
-                    all_venue_names_reduced.append(abbreviated_venue)
+                all_venue_names.append(venue_name)
+                if cls.is_valid_venue_name(venue_name, expanded_components, street_languages, is_generic=is_generic_place, is_known_venue_type=is_known_venue_type):
+                    all_venue_names_reduced.append(venue_name)
                 else:
-                    all_venue_names_expanded_only.append(abbreviated_venue)
+                    all_venue_names_expanded_only.append(venue_name)
 
-                all_venue_names_set.add(abbreviated_venue.lower())
+                all_venue_names_set.add(venue_name.lower())
+
+                abbreviated_venue = cls.abbreviated_venue_name(venue_name, language)
+                if abbreviated_venue != venue_name and abbreviated_venue.lower() not in all_venue_names_set:
+                    all_venue_names.append(abbreviated_venue)
+                    if cls.is_valid_venue_name(abbreviated_venue, expanded_components, street_languages, is_generic=is_generic_place, is_known_venue_type=is_known_venue_type):
+                        all_venue_names_reduced.append(abbreviated_venue)
+                    else:
+                        all_venue_names_expanded_only.append(abbreviated_venue)
+
+                    all_venue_names_set.add(abbreviated_venue.lower())
+        elif is_building:
+            building_components = [tags] + (building_components or [])
+        elif is_subdivision:
+            subdivision_components = [tags] + (subdivision_components or [])
 
         all_building_names = []
         all_building_names_reduced = []
