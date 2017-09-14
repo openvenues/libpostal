@@ -162,8 +162,11 @@ class AddressComponents(object):
         AddressFormatter.ATTENTION,
         AddressFormatter.CARE_OF,
         AddressFormatter.HOUSE,
+        AddressFormatter.NAMED_BUILDING,
         AddressFormatter.HOUSE_NUMBER,
         AddressFormatter.ROAD,
+        AddressFormatter.INTERSECTION,
+        AddressFormatter.BUILDING,
         AddressFormatter.ENTRANCE,
         AddressFormatter.STAIRCASE,
         AddressFormatter.LEVEL,
@@ -1292,8 +1295,9 @@ class AddressComponents(object):
             return regex.sub(u'', value), u''.join(matches)
 
     @classmethod
-    def name_is_numbered_building(cls, name, language, country=None):
-        name, extracted = cls.extract_field(name, Building, language, country=country)
+    def name_is_numbered_building(cls, name, languages, country=None):
+        for language in languages:
+            name, extracted = cls.extract_field(name, Building, language, country=country)
         return not cls.cleanup_value_post_extraction(name)
 
     @classmethod
@@ -2505,6 +2509,9 @@ class AddressComponents(object):
             if po_box is None:
                 return None
             address_components[AddressFormatter.PO_BOX] = po_box
+            cls.drop_invalid_components(address_components, country)
+            if AddressFormatter.PO_BOX not in address_components:
+                return None
 
             drop_address_probability = po_box_config['drop_address_probability']
             if random.random() < drop_address_probability:

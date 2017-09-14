@@ -220,7 +220,7 @@ class NumericPhrase(object):
                 affix_probs = [props['probability']]
 
                 for a in props.get('alternatives', []):
-                    affixes.append(a['affix'])
+                    affixes.append(a['alternative'])
                     affix_probs.append(a['probability'])
 
                 affix_probs = cdf(affix_probs)
@@ -395,6 +395,8 @@ class NumberedComponent(object):
             if numeric_affix:
                 affix = numeric_affix['affix']
                 sample_exclude.discard(affix)
+                for alt in numeric_affix.get('alternatives', []):
+                    sample_exclude.discard(alt['alternative']['affix'])
 
             if numeric:
                 direction = numeric['direction']
@@ -421,8 +423,10 @@ class NumberedComponent(object):
                     phrases = right_number_affix_phrases
 
                 affix = numeric_affix['affix']
-
                 phrases.append(affix)
+
+                for alt in numeric_affix.get('alternatives', []):
+                    phrases.append(alt['alternative']['affix'])
 
         for c in config_phrases:
             numeric = c.get('numeric')
@@ -439,6 +443,8 @@ class NumberedComponent(object):
             if numeric_affix:
                 affix = numeric_affix['affix']
                 sample_exclude.discard(affix)
+                for alt in numeric_affix.get('alternatives', []):
+                    sample_exclude.discard(alt['alternative']['affix'])
 
             if canonical in all_number_phrases:
                 continue
@@ -499,10 +505,13 @@ class NumberedComponent(object):
                     phrases = right_affix_phrases
 
                 affix = numeric_affix['affix']
-                if affix in all_number_phrases:
-                    continue
+                if affix not in all_number_phrases:
+                    phrases.append(affix)
 
-                phrases.append(affix)
+                for alt in numeric_affix.get('alternatives', []):
+                    alt_affix = alt['alternative']['affix']
+                    if alt_affix not in all_number_phrases:
+                        phrases.append(alt_affix)
 
             if ordinal:
                 direction = ordinal['direction']
