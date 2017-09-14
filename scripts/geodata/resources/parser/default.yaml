@@ -112,9 +112,9 @@ dropout:
     road:
         probability: 0.4
     subdivision:
-        probability: 0.5
+        probability: 0.8
     named_building:
-        probability: 0.5
+        probability: 0.7
     building:
         probability: 0.5
     entrance:
