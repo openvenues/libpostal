@@ -1,0 +1,275 @@
+# ms.yaml
+# -------
+# Malay language specification.
+
+components:
+    level:
+        null_probability: 0.85 # Probability of doing nothing if no floor number is specified
+        alphanumeric_probability: 0.15 # Probability of generating an alphanumeric floor if none was specified
+
+        # Conditional probabilities
+        conditional:
+            # e.g. given that we have unit already (natural or generated)
+            - component: unit
+              probabilities:
+                  null_probability: 0.95
+                  alphanumeric_probability: 0.05
+
+    building:
+        null_probability: 0.9
+        alphanumeric_probability: 0.1
+
+    unit:
+        # If no unit number is specified
+        null_probability: 0.4
+        alphanumeric_probability: 0.6
+        conditional:
+            - component: level
+              probabilities:
+                  null_probability: 0.9
+                  alphanumeric_probability: 0.1
+
+    combinations:
+        # For unit types like 2-34
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 0.9
+                - separator: /
+                  probability: 0.1
+            probability: 0.005
+        # For unit types like 2-34-12
+        -
+            components:
+                - house_number
+                - level
+                - unit
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 0.9
+                - separator: /
+                  probability: 0.1
+            probability: 0.1
+
+# Number
+# ======
+# Number, No., #, etc. can be used in both floor and apartment numbers,
+# so we'll define it separately
+
+numbers:
+    default: &nombor
+        canonical: nombor # canonical word in libpostal dictionary
+        abbreviated: "no" # most common abbreviated form ("no" is a boolean in YAML, needs to be quoted)
+        sample: true # Randomly sample other variations (e.g. num, nr)
+        # Probabilities
+        canonical_probability: 0.3 # With this probability, use the canonical
+        abbreviated_probability: 0.5 # With this probability, use the abbreviated form
+        sample_probability: 0.2 # With  this probability, sample other variations
+        sample_exclude:
+            - "#" # Used in numeric affix. Needs to be quoted, otherwise it's a comment
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: "#" # e.g. #3, #2F, etc.
+            direction: left # affix goes on the number's left
+
+        # Probabilities for numbers
+        numeric_probability: 0.4 # With this probability, use the standard numeric
+        numeric_affix_probability: 0.6 # With this probability, use e.g. #3 instead of No. 3
+
+# House number phrases
+
+house_numbers:
+    blok: &blok
+        canonical: blok
+        abbreviated: blk
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+    alphanumeric:
+        default: *blok
+
+    alphanumeric_phrase_probability: 0.1
+
+
+# Floor/level
+# ===========
+# OSM doesn't usually concern itself with the address beyond the front door
+# yet many real-world addresses will have qualifying strings like "6th floor"
+# and we'd like the parser to handle those.
+#
+# When we do get floor numbers in OSM addresses, it's usually in the form of the
+# addr:floor or level tag, where the value is typically an integer or a half-floor
+# (to indicate mezzanines). Those tags are relatively scarce in OSM, but many OSM
+# addresses do have a building:levels tag. If we know there are 20 floors in the
+# building, we can randomly sample numbers <= the # of floors and come up with plausible
+# sounding addresses (i.e. a Floor 20 address is not as likely outside major cities).
+#
+# We're not done yet, because the integer value by itself isn't what people use when
+# writing addresses. This part of the config helps us rewrite the raw integer floor
+# numers as the sort of natural language text used in addresses like "Fl #1". The config
+# is designed to be cross-lingual, so we can use the same structure with different words
+# and do this for addresses in pretty much any language.
+
+levels:
+    tingkat: &tingkat
+        canonical: tingkat
+        abbreviated: tkt
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.2
+        sample_probability: 0.3
+        # e.g. Tingkat 4
+        numeric:
+            direction: left # goes to the left of the number
+            direction_probability: 0.8 # With 1 - this probability, Tingkat/tkt goes on the other side of the number
+            add_number_phrase: true # Occasionally add variation of "number", e.g. Tingkat No. 1
+            add_number_phrase_probability: 0.4 # With this probability, use Tingkat No. 1 or Tingkat #1 vs. Tingkat 1
+
+    # Integer for whether floors start at 0 or 1
+    numbering_starts_at: 1
+
+    # Associated phrases for alphanumeric floors (Floor 1, Floor A)
+    alphanumeric:
+        default: *tingkat
+        add_number_phrase: true
+        add_number_phrase_probability: 0.3
+        numeric_probability: 0.96 # With this probability, pick an integer
+        alpha_probability: 0.0098 # With this probability, pick a letter e.g. Floor A
+        numeric_plus_alpha_probability: 0.0001 # e.g. Floor 2A
+        alpha_plus_numeric_probability: 0.0001 # e.g. Floor A2
+        hyphenated_number_probability: 0.03 # e.g. 10-12
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        hyphenated_number:
+            range_probability: 0.5
+            direction: right
+            direction_probability: 0.6
+
+
+
+buildings:
+    kondominium: &kondominium
+        canonical: kondominium
+        abbreviated: kondo
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    bangunan: &bangunan
+        canonical: bangunan
+        abbreviated: bgn
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Bangunan 1, Bangunan A, etc.
+    alphanumeric: &building_alphanumeric
+        default: *bangunan
+        probability: 0.8
+        alternatives:
+            - alternative: *kondominium
+              probability: 0.2
+        numeric_probability: 0.05 # e.g. Bangunan 1
+        alpha_probability: 0.85 # e.g. Bangunan A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+        hyphenated_number_probability: 0.03 # e.g. 11-10
+        decimal_number_probability: 0.02 # e.g. 1.10
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+            hyphen_probability: 0.2
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+            hyphen_probability: 0.2
+
+        hyphenated_number:
+            range_probability: 0.5
+            # direction of the range, not the phrase
+            direction: right
+            direction_probability: 0.6
+            alpha_plus_numeric_probability: 0.1
+            alpha_plus_numeric_whitespace_probability: 0.1
+            numeric_plus_alpha_probability: 0.1
+            numeric_plus_alpha_whitespace_probability: 0.1
+
+
+# Unit types
+# ==========
+# Unit information is common in residential addresses, offices, business parks, etc.
+
+units:
+    apartemen: &apartemen
+        canonical: apartemen
+        abbreviated: apt
+        sample: true
+        canonical_probability: 0.15
+        abbreviated_probability: 0.6
+        sample_probability: 0.25
+        numeric:
+            direction: left
+            # Apt #1 and Apt No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4
+    flat: &flat
+        canonical: flat
+        abbreviated: flt
+        sample: true
+        canonical_probability: 0.8
+        abbreviated_probability: 0.1
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            # Flat #1 and Flt No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4
+    alphanumeric: &unit_alphanumeric
+        default: *apartemen
+        probability: 0.5
+        alternatives:
+            - alternative: *flat
+              probability: 0.5
+        numeric_probability: 0.85 # e.g. Flat 1
+        numeric_plus_alpha_probability: 0.03 # e.g. 1A
+        alpha_plus_numeric_probability: 0.03 # e.g. A1
+        alpha_probability: 0.04 # e.g. Flat A
+        hyphenated_number_probability: 0.03 # e.g. 11-10
+        decimal_number_probability: 0.02 # e.g. 1.10
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.2
+            hyphen_probability: 0.2
+        numeric_plus_alpha:
+            whitespace_probability: 0.2
+            hyphen_probability: 0.2
+        hyphenated_number:
+            range_probability: 0.5
+            direction: right
+            direction_probability: 0.6
+
+        # Separate random probability for adding directions like 2L, 2R, etc.
+        add_direction: true
+        add_direction_probability: 0.1
+
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.35
