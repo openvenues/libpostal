@@ -99,11 +99,9 @@ class OSMBuildingPolygonIndexSpark(OSMAreaPolygonIndexSpark):
     pass
 
 
-class OSMCountryPolygonIndexSpark(OSMPolygonIndexSpark):
+class OSMCountryPolygonIndexSpark(OSMAdminPolygonIndexSpark):
     buffer_levels = (0.0, 10e-6, 0.001, 0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 1.0, 2.0, 3.0)
     buffered_simplify_tolerance = 0.001
-
-    large_polygons = True
 
     COUNTRY = 'country'
     CANDIDATE_LANGUAGES = 'candidate_languages'
