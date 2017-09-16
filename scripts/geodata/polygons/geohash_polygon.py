@@ -106,6 +106,9 @@ class GeohashPolygon(object):
             hashes.add(gh)
             lon += width_degrees
 
+        gh = geohash_encode(top_left_lat, max_lon)[:precision]
+        hashes.add(gh)
+
         return hashes
 
     @classmethod
