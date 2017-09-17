@@ -286,6 +286,7 @@ class AddressComponents(object):
         'ISO3166-1:alpha2',
         'ISO3166-2',
         'is_in:country_code',
+        'admin_level',
         'type',
         'id',
     ])
