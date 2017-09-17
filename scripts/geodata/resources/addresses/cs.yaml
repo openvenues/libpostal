@@ -39,8 +39,16 @@ numbers:
         numeric:
             direction: left
         numeric_affix:
-            affix: "č."
+            affix: č.
             direction: left
+            upper_case: false
+            probability: 0.9
+            alternatives:
+                - alternative:
+                      affix: č
+                      direction: left
+                      upper_case: false
+                  probability: 0.1
         numeric_probability: 0.4
         numeric_affix_probability: 0.6
 
@@ -57,13 +65,84 @@ conscription_numbers:
     alphanumeric:
         default: 
             canonical: číslo popisné
-            abbreviated: "č.p."
+            abbreviated: č.p.
             canonical_probability: 0.05
             abbreviated_probability: 0.85
             sample: true
             sample_probability: 0.1
+            title_case: false
             numeric:
                 direction: left
+            numeric_affix:
+                affix: č.p.
+                direction: left
+                upper_case: false
+                probability: 0.8
+                alternatives:
+                    - alternative:
+                          affix: č.p
+                          direction: left
+                          upper_case: false
+                      probability: 0.1
+                    - alternative:
+                          affix: čp
+                          direction: left
+                          upper_case: false
+                      probability: 0.1
+            numeric_probability: 0.4
+            numeric_affix_probability: 0.6
+
+
+provisional_numbers:
+    alphanumeric:
+        default:
+            canonical: evidenční číslo
+            abbreviated: ev. č.
+            canonical_probability: 0.05
+            abbreviated_probability: 0.85
+            sample: true
+            sample_probability: 0.1
+            title_case: false
+            numeric:
+                direction: left
+            numeric_affix:
+                affix: "ev."
+                direction: left
+                upper_case: false
+                probability: 0.6
+                alternatives:
+                    - alternative:
+                          affix: č.e.
+                          direction: left
+                          upper_case: false
+                      probability: 0.1
+                    - alternative:
+                          affix: ev.č.
+                          direction: left
+                          upper_case: false
+                      probability: 0.1
+                    - alternative:
+                          affix: e
+                          direction: left
+                          upper_case: false
+                      probability: 0.1
+                    - alternative:
+                          affix: ev
+                          direction: left
+                          upper_case: false
+                      probability: 0.05
+                    - alternative:
+                          affix: če.
+                          direction: left
+                          upper_case: false
+                      probability: 0.025
+                    - alternative:
+                          affix: če
+                          direction: left
+                          upper_case: false
+                      probability: 0.025
+            numeric_probability: 0.3
+            numeric_affix_probability: 0.7
 
 cross_streets:
     and: *a
