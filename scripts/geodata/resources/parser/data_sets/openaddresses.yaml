@@ -2847,6 +2847,15 @@ countries:
                     - filename: colquitt.csv
                       city_replacements:
                           state_district: Colquitt County
+                    - filename: columbia.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Columbia County
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit:
+                              - *simple_unit_regex
                     - filename: cook.csv
                       add_osm_boundaries: false
                       city_replacements:
