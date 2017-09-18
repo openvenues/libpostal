@@ -4734,6 +4734,9 @@ countries:
                       city_replacements:
                           city: Hilton Head Island
                     - filename: horry.csv
+                    - filename: jasper.csv
+                      city_replacements:
+                          state_district: Jasper County
                     - filename: laurens.csv
                     - filename: newberry.csv
                     - filename: orangeburg.csv
