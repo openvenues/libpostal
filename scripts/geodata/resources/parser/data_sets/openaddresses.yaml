@@ -2222,6 +2222,13 @@ countries:
                 add:
                     state: AL
                 files:
+                    - filename: autauga.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Autauga County
+                    - filename: bibb0.csv
+                      city_replacements:
+                          state_district: Bibb County
                     - filename: baldwin.csv
                       add_osm_boundaries: true
                       city_replacements:
@@ -2247,10 +2254,21 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Etowah County
+                    - filename: franklin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Franklin County
+                    - filename: houston.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Houston County
                     - filename: jefferson.csv
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Jefferson County
+                    - filename: lawrence.csv
+                      city_replacements:
+                          state_district: Lawrence County
                     - filename: limestone.csv
                       city_replacements:
                           state_district: Limestone County
@@ -2258,7 +2276,21 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Madison County
+                    - filename: marengo.csv
+                      city_replacements:
+                          state_district: Marengo County
+                    - filename: marshall.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Marshall County
                     - filename: montgomery.csv
+                    - filename: morgan.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Morgan County
+                    - filename: pickens.csv
+                      city_replacements:
+                          state_district: Pickens County
                     - filename: pike.csv
                       city_replacements:
                           state_district: Pike County
@@ -2275,6 +2307,10 @@ countries:
                       city_replacements:
                           state_district: Talladega County
                     - filename: tuscaloosa.csv
+                    - filename: washington.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Washington County
 
             ar:
                 add:
