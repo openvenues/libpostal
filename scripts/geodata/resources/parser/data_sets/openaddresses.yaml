@@ -4391,7 +4391,6 @@ countries:
                   - filename: darke.csv
                   - filename: defiance.csv
                   - filename: delaware.csv
-                    add_osm_boundaries: true
                     city_replacements:
                         state_district: Delaware County
                   - filename: erie.csv
