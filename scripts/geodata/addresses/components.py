@@ -478,7 +478,7 @@ class AddressComponents(object):
         return normalized_names
 
     @classmethod
-    def all_names(cls, props, languages, component=None, keys=ALL_OSM_NAME_KEYS, expand_multiscript=False):
+    def all_names(cls, props, languages, component=None, keys=ALL_OSM_NAME_KEYS, add_raw_keys=True, expand_multiscript=False):
         # Preserve uniqueness and order
         valid_names, _ = boundary_names.name_key_dist(props, component)
         names = OrderedDict()
@@ -486,7 +486,7 @@ class AddressComponents(object):
 
         for k, v in six.iteritems(props):
             valid_value = False
-            if k in valid_names:
+            if k in valid_names and add_raw_keys:
                 valid_value = True
             elif ':' in k:
                 if k == 'name:simple' and 'en' in languages and k in keys:
