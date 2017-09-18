@@ -3053,6 +3053,9 @@ countries:
                     state: HI
                 files:
                     - filename: honolulu.csv
+                      ignore_fields_containing:
+                          city:
+                              - "/"
                     - filename: kauai.csv
                       add_osm_boundaries: true
                       city_replacements:
