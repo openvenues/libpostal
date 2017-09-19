@@ -2226,7 +2226,7 @@ countries:
                       add_osm_boundaries: true
                       city_replacements:
                           state_district: Autauga County
-                    - filename: bibb0.csv
+                    - filename: bibb.csv
                       city_replacements:
                           state_district: Bibb County
                     - filename: baldwin.csv
