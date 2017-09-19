@@ -3300,6 +3300,7 @@ countries:
                           state_district: Menard County
                     - filename: morgan.csv
                     - filename: moultrie.csv
+                    - filename: peoria.csv
                     - filename: piatt.csv
                     - filename: putnam.csv
                       add_osm_boundaries: true
