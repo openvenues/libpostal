@@ -6,8 +6,8 @@ whitespace: false
 
 components:
     building:
-        null_probability: 0.9
-        alphanumeric_probability: 0.1
+        null_probability: 0.6
+        alphanumeric_probability: 0.4
 
     entrance:
         null_probability: 0.95
