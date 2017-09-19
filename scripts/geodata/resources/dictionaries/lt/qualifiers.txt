@@ -1,5 +1,11 @@
-gyvenvietė|gyvenv|gyvenviete
-kaimas|k
-miestas|m
+apskritis|apskr|aps
+durpynas|drp
+gyvenvietė|gv|gyvenv|gyvenviete
+kaimas|km|k
+miestas|mst|m
 miestelis|mstl
 rajonas|r
+savivaldybė|saviv|sav
+seniūnija|sen
+sritis|sr
+valsčius|vlsč

@@ -1,7 +1,8 @@
 aikštė|a|aikste
 alėja|al|aleja
-akligatvis
+akligatvis|aklg
 gatvė|g|gatve
 plentas|pl
 prospektas|pr
 skersgatvis|skg
+skveras|skv
