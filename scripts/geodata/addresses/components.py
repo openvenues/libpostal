@@ -478,7 +478,7 @@ class AddressComponents(object):
         return normalized_names
 
     @classmethod
-    def all_names(cls, props, languages, component=None, keys=ALL_OSM_NAME_KEYS, add_raw_keys=True, expand_multiscript=False):
+    def all_names(cls, props, language, component=None, keys=ALL_OSM_NAME_KEYS, add_raw_keys=True, expand_multiscript=False):
         # Preserve uniqueness and order
         valid_names, _ = boundary_names.name_key_dist(props, component)
         names = OrderedDict()
@@ -489,10 +489,10 @@ class AddressComponents(object):
             if k in valid_names and add_raw_keys:
                 valid_value = True
             elif ':' in k:
-                if k == 'name:simple' and 'en' in languages and k in keys:
+                if k == 'name:simple' and language == ENGLISH and k in keys:
                     valid_value = True
                 k, qual = k.split(':', 1)
-                if k in valid_names and qual.split('_', 1)[0] in languages:
+                if qual.lower() == language:
                     valid_value = True
 
             if valid_value:
@@ -1270,14 +1270,15 @@ class AddressComponents(object):
                 address_components.pop(AddressFormatter.HOUSE_NUMBER)
 
     @classmethod
-    def extract_field(cls, value, numeric_class, language, country=None):
+    def extract_field(cls, value, numeric_class, language, country=None, only_if_last=False):
         regex = cls.get_numeric_regex(numeric_class, language, country=country)
         if not regex:
             return value, None
         prev_match = None
         matches = []
+
         for match in regex.finditer(value):
-            if prev_match:
+            if prev_match and not only_if_last:
                 prev_end = prev_match.end()
                 start = match.start()
                 if start > prev_end + 1:
@@ -1293,7 +1294,26 @@ class AddressComponents(object):
         if not matches:
             return value, None
         else:
+            if only_if_last:
+                if not value[prev_match.end():].strip():
+                    return value[:prev_match.start()], matches[-1]
+                else:
+                    return value, None
             return regex.sub(u'', value), u''.join(matches)
+
+    @classmethod
+    def extract_numbered_building_from_name(cls, address_components, key, language, country=None):
+        name = address_components.get(key)
+        if not name:
+            return
+        name, extracted = cls.extract_field(name, Building, language, country=country, only_if_last=True)
+        if extracted:
+            if name:
+                address_components[key] = name
+            else:
+                address_components.pop(key)
+            if AddressFormatter.BUILDING not in address_components:
+                address_components[AddressFormatter.BUILDING] = extracted
 
     @classmethod
     def name_is_numbered_building(cls, name, languages, country=None):
@@ -2434,6 +2454,11 @@ class AddressComponents(object):
             cls.format_kingston_postcode(address_components)
         elif country == Countries.ROMANIA:
             cls.format_romanian_city_district(address_components, language)
+
+    @classmethod
+    def is_simple_number_or_letter(cls, name):
+        name = safe_decode(name).strip()
+        return is_numeric(name) or (len(name) == 1 and name.isalpha())
 
     @classmethod
     def add_house_number_phrase(cls, address_components, language, country=None):
