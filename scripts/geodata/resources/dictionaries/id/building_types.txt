@@ -1,8 +1,8 @@
 apartemen|apart|aprtmn
 bangunan|bgn
+blok|bl|blk|block
 garasi|grs
 gedung|gd|gdg
 gudang|gdang
 kebun|kebon|kbn
-rumah|rmah|rmh
 vila|vla|vl

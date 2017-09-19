@@ -77,6 +77,14 @@ numbers:
         numeric_affix:
             affix: "#" # e.g. #3, #2F, etc.
             direction: left # affix goes on the number's left
+            probability: 0.5
+            alternatives:
+                - alternative:
+                      affix: "no."
+                  probability: 0.3
+                - alternative:
+                      affix: "no"
+                  probability: 0.2
 
         # Probabilities for numbers
         numeric_probability: 0.4 # With this probability, use the standard numeric
@@ -85,9 +93,9 @@ numbers:
 # House number phrases
 
 house_numbers:
-    blok: &blok
-        canonical: blok
-        abbreviated: blk
+    rumah: &rumah
+        canonical: rumah
+        abbreviated: rmh
         sample: true
         canonical_probability: 0.3
         abbreviated_probability: 0.5
@@ -96,9 +104,9 @@ house_numbers:
             direction: left
             add_number_phrase: true
             add_number_phrase_probability: 0.2
-    alphanumeric:
-        default: *blok
 
+    alphanumeric:
+        default: *rumah
     alphanumeric_phrase_probability: 0.1
 
 
@@ -181,11 +189,25 @@ buildings:
         numeric:
             direction: left
 
+    blok: &blok
+        canonical: blok
+        abbreviated: blk
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+
     # Bangunan 1, Bangunan A, etc.
     alphanumeric: &building_alphanumeric
         default: *bangunan
-        probability: 0.8
+        probability: 0.5
         alternatives:
+            - alternative: *blok
+              probability: 0.3
             - alternative: *kondominium
               probability: 0.2
         numeric_probability: 0.05 # e.g. Bangunan 1

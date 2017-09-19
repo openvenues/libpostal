@@ -1,8 +1,8 @@
 bangunan|bgn
+blok|bl|blk|block
 kondominium|kondo
 pangsapuri|p/puri
 dewan
-rumah|rmh
 rumah pangsa|rmh pangsa
 residensi|residen
 menara

@@ -85,9 +85,9 @@ numbers:
 # House number phrases
 
 house_numbers:
-    blok: &blok
-        canonical: blok
-        abbreviated: blk
+    rumah: &rumah
+        canonical: rumah
+        abbreviated: rmh
         sample: true
         canonical_probability: 0.3
         abbreviated_probability: 0.5
@@ -96,9 +96,9 @@ house_numbers:
             direction: left
             add_number_phrase: true
             add_number_phrase_probability: 0.2
-    alphanumeric:
-        default: *blok
 
+    alphanumeric:
+        default: *rumah
     alphanumeric_phrase_probability: 0.1
 
 
@@ -180,11 +180,25 @@ buildings:
         numeric:
             direction: left
 
+    blok: &blok
+        canonical: blok
+        abbreviated: blk
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+
     # Gedung 1, Gedung A, etc.
     alphanumeric: &building_alphanumeric
         default: *gedung
-        probability: 0.75
+        probability: 0.5
         alternatives:
+            - alternative: *blok
+              probability: 0.25
             - alternative: *bangunan
               probability: 0.25
         numeric_probability: 0.05 # e.g. Gedung 1
