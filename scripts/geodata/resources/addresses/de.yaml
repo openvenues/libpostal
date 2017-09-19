@@ -431,7 +431,7 @@ cardinal_directions:
 
 
 buildings:
-    building: &gebaude
+    gebaude: &gebaude
         canonical: gebäude
         abbreviated: geb
         sample: true
@@ -441,9 +441,25 @@ buildings:
         numeric:
             direction: left
 
+    block: &block
+        canonical: block
+        abbreviated: blk
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+
     # Gebäude 1, Gebäude A, etc.
     alphanumeric: &building_alphanumeric
         default: *gebaude
+        probability: 0.8
+        alternatives:
+            - alternative: *block
+              probability: 0.2
         numeric_probability: 0.05 # e.g. Gebäude 1
         alpha_probability: 0.85 # e.g. Gebäude A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
