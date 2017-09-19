@@ -938,15 +938,30 @@ buildings:
         numeric:
             direction: left
 
+    block: &block
+        canonical: block
+        abbreviated: blk
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+
+
     # Building 1, Bldg A, etc.
     alphanumeric: &building_alphanumeric
         default: *building
         probability: 0.7
         alternatives:
             - alternative: *tower
-              probability: 0.2
+              probability: 0.15
             - alternative: *condominium
               probability: 0.1
+            - alternative: *block
+              probability: 0.05
         numeric_probability: 0.05 # e.g. Building 1
         alpha_probability: 0.85 # e.g. Bldg A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
@@ -1663,22 +1678,7 @@ countries:
     # Singapore
     sg:
         house_numbers: &block_format
-            block: &block
-                canonical: block
-                abbreviated: blk
-                sample: true
-                canonical_probability: 0.3
-                abbreviated_probability: 0.5
-                sample_probability: 0.2
-                numeric:
-                    direction: left
-                    add_number_phrase: true
-                    add_number_phrase_probability: 0.2
             alphanumeric:
-                default: *block
-                probability: 0.8
-                alternatives:
-                    - alternative: *house_number
-                      probability: 0.2
+                default: *house_number
 
             alphanumeric_phrase_probability: 0.1
