@@ -30,7 +30,7 @@ numbers:
             direction: right
         numeric_probability: 0.0
         numeric_affix_probability: 1.0
-    probability: 0.8
+    probability: 0.7
     alternatives:
         - alternative: &hao_traditional
             canonical: 號
@@ -40,6 +40,14 @@ numbers:
             numeric_probability: 0.0
             numeric_affix_probability: 1.0
           probability: 0.2
+        - alternative: &di
+            canonical: 第
+            numeric_affix:
+                affix: 第
+                direction: left
+            numeric_probability: 0.0
+            numeric_affix_probability: 1.0
+          probability: 0.1
 
 house_numbers:
     alphanumeric:
