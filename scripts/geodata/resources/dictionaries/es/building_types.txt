@@ -1,3 +1,4 @@
+bloque|blq|blque|bloq|bl|bq|blo
 caserío|caserio|csrio
 casa
 casita
