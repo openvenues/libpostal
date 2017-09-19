@@ -76,7 +76,16 @@ countries:
     cy: *use_country_code_seldomly
 
     # Czech Republic
-    cz: *use_country_code_seldomly
+    cz:
+        <<: *use_country_code_seldomly
+        regex_replacements:
+            - regex: "^([\\d]{3}) ([\\d]{2})$"
+              replacement: "\\1\\2"
+              probability: 0.1
+            - regex: "^([\\d]{3})([\\d]{2})$"
+              replacement: "\\1 \\2"
+              probability: 0.1
+
 
     # Germany
     de:        
@@ -151,7 +160,7 @@ countries:
     # India
     in:
         regex_replacements:
-            - regex: "([\\d]{3})([\\d]{3})"
+            - regex: "^([\\d]{3})([\\d]{3})$"
               replacement: "\\1 \\2"
               probability: 0.5
 
