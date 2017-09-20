@@ -569,8 +569,8 @@ class NumberedComponent(object):
                 ordinal_phrase_components[k].append(u'(?:{})'.format(u'|'.join(vals)))
 
         whitespace_phrase = u'[ \.]' if whitespace else u''
-        whitespace_or_beginning = u'\\b' if whitespace else u''
-        whitespace_lookahead = u'\\b' if whitespace else u''
+        whitespace_or_beginning = u'(?<![^\s,;\(\)])' if whitespace else u''
+        whitespace_lookahead = u'(?![^\s,;\(\)])' if whitespace else u''
 
         left_ordinal_phrases = {k: sorted(v, reverse=True) for k, v in six.iteritems(left_ordinal_phrases)}
         right_ordinal_phrases = {k: sorted(v, reverse=True) for k, v in six.iteritems(right_ordinal_phrases)}
