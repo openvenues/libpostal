@@ -2318,6 +2318,10 @@ countries:
                 files:
                     - filename: city_of_fayetteville.csv
                     - filename: statewide.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
 
             az:
                 add:
