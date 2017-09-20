@@ -123,10 +123,6 @@ bool crf_tagger_predict(crf_t *self, void *tagger, void *context, cstring_array 
 
     uint32_t *viterbi = self->viterbi->a;
 
-    if (self->viterbi->n == 0) {
-        log_error("self->viterbi->n == 0\n");
-    }
-
     for (size_t i = 0; i < self->viterbi->n; i++) {
         char *predicted = cstring_array_get_string(self->classes, viterbi[i]);
         cstring_array_add_string(labels, predicted);
