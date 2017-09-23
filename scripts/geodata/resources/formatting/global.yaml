@@ -18,27 +18,27 @@ global:
         postcode:
             postcode_before_city:
                 before: city
-                probability: 0.001
+                probability: 0.02
 
             postcode_after_city:
                 after: city
-                probability: 0.0001
+                probability: 0.01
 
             postcode_before_city_district:
                 before: city_district
-                probability: 0.0001
+                probability: 0.01
 
             postcode_before_suburb:
                 before: suburb
-                probability: 0.0001
+                probability: 0.01
 
             postcode_before_state_district:
                 before: state
-                probability: 0.0001
+                probability: 0.005
 
             postcode_before_state:
                 before: state
-                probability: 0.0001
+                probability: 0.005
 
             postcode_before_country:
                 before: country
@@ -284,7 +284,7 @@ languages:
             postcode:
                 postcode_first:
                     first: true
-                    probability: 0.001
+                    probability: 0.01
 
             entrance:
                 # e.g. Calle Foo 3, entrada 1
@@ -713,7 +713,7 @@ countries:
 
     # United Kingdom, in case language is unknown
     gb:
-      insertions:
+      insertions: &uk_template_insertions
           <<: *english_template_insertions
           postcode:
               postcode_before_suburb:
@@ -722,6 +722,18 @@ countries:
               postcode_before_city:
                   before: city
                   probability: 0.1
+
+    # Guernsey
+    gg:
+        insertions: *uk_template_insertions
+
+    # Isle of Mann
+    im:
+        insertions: *uk_template_insertions
+
+    # Jersey
+    je:
+        insertions: *uk_template_insertions
 
     us:
         insertions: &us_template_insertions
@@ -737,7 +749,7 @@ countries:
                     - component: building
                       probabilities:
                           # default: 0.1
-                          staircase_after_building:
+                          entrance_after_building:
                               after: building
                               probability: 0.9
 
@@ -875,7 +887,18 @@ countries:
 
     # Canada
     ca:
-        insertions: *us_template_insertions
+        insertions:
+            <<: *us_template_insertions
+            postcode:
+                postcode_before_suburb:
+                    before: suburb
+                    probability: 0.1
+                postcode_before_city:
+                    before: city
+                    probability: 0.1
+                postcode_after_city:
+                    after: city
+                    probability: 0.1
 
     fr:
         insertions: &france_template_insertions
@@ -967,6 +990,54 @@ countries:
                           unit_after_building:
                               after: building
                               probability: 0.6
+
+    # Saint-Barthélemy
+    bl:
+        insertions: *france_template_insertions
+
+    # French Guiana
+    gf:
+        insertions: *france_template_insertions
+
+    # Guadeloupe
+    gp:
+        insertions: *france_template_insertions
+
+    # Saint-Martin
+    mf:
+        insertions: *france_template_insertions
+
+    # Martinique
+    mq:
+        insertions: *france_template_insertions
+
+    # Nouvelle-Calédonie
+    nc:
+        insertions: *france_template_insertions
+
+    # Polynésie française
+    pf:
+        insertions: *france_template_insertions
+
+    # Saint-Pierre-et-Miquelon
+    pm:
+        insertions: *france_template_insertions
+
+    # La Réunion
+    re:
+        insertions: *france_template_insertions
+
+    # Terres australes et antarctiques françaises
+    tf:
+        insertions: *france_template_insertions
+
+    # Wallis-et-Futuna
+    wf:
+        insertions: *france_template_insertions
+
+    # Mayotte
+    yt:
+        insertions: *france_template_insertions
 
     # Andorra, uses same template as France
     ad_ca:
