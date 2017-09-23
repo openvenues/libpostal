@@ -14,6 +14,10 @@ distrito postal|dp|d p|dtto postal
 estado|edo
 extrarradio|extrr
 extramuros|extrm
+ex hacienda|ex hda|exhda|exhacienda
+fraccionamiento|fracc
+hacienda|hda
+haciendas|hdas
 isla|isl|is
 islas|isls|iss
 kilómetro|km|kilometro|kilom
@@ -23,8 +27,10 @@ poblado|pbdo|pob|pobl
 polígono|poligono|políg|polig|pol
 polígono residencial|poligono residencial|políg res|polig res|pol.res|pol res|pgres|pg res|pr|p.r.|p.r|p r
 polígono industrial|poligono industrial|políg ind|polig ind|pol.ind|pol ind|pgind|pg ind|pi|p.i.|p.i|p i
+privada|priv
 provincia|pcia
 punto kilométrico|punto kilometrico|pk|p.k.|p k
+región|reg|region
 sección|seccion|secc|sccn|scn|sec
 sector|sect
 urbanización|urbanizacion|urb|ur
