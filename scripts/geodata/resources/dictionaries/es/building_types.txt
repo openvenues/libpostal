@@ -4,8 +4,9 @@ casa
 casita
 chalet|chlet
 complejo|compj|compl|complj
-condominio|cond
+condominio|cond|condo
 conjunto|cjto|conj|cto
+conjunto habitacional|c.hab.|c.hab|c.h.|c.h|c hab|c h
 cooperativa|coop
 cortijo|crtjo
 edificio|edifc|edfc|edif
@@ -14,4 +15,5 @@ local|loc|lc
 manzana|mz|mza
 residencial|resid|res
 torre|to|tor
+unidad habitacional|uh|u.h.|u.h
 vivienda|vvda
