@@ -4,8 +4,8 @@
         "4": "state"
         "6": "city"
         "8": "city"
-        "9": "city_district"
-        "10": "city_district"
+        "9": "suburb"
+        "10": "suburb"
 
     place:
         borough: "city_district"
@@ -21,6 +21,10 @@
                 "1376330":
                     admin_level:
                         "6": "city_district"
+                # Municipio de Querétaro
+                "5606178":
+                    admin_level:
+                        "9": "city_district"
 
         use_admin_center:
             - id: 1376330 # Mexico City
