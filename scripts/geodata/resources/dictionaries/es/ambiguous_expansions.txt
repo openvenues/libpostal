@@ -1,7 +1,9 @@
+bo
 c
 d
 e
 e /
+ej
 ep
 e p
 eu
@@ -19,16 +21,25 @@ w
 ac
 a c
 ag
+ags
+and
+bc
+b c
+bcs
+b c s
 bn
 bs
 ca
 c a
+camp
 cc
 c c
 cf
 c f
 ch
 c h
+chis
+chih
 cl
 cm
 cn
@@ -46,23 +57,40 @@ dc
 d c
 df
 d f
+di
+d i
+dgo
 dn
 d n
 dp
 d p
 du
+est
+fam
+gro
+gto
 gt
 gr
 gv
 g v
+hgo
 hi
+iq
+i q
 ja
+jal
+mat
+mex
 mx
 mc
+m c
+mich
 mg
 m g
+mor
 mr
 na
+nay
 ne
 n e
 nl
@@ -78,6 +106,7 @@ p k
 pr
 p r
 pu
+pue
 qe
 qr
 sa
@@ -90,11 +119,15 @@ sg
 s g
 sl
 si
+sin
+slp
+s l p
 sm
 s m
 sn
 s n
 so
+son
 sp
 s p
 ss
@@ -103,11 +136,19 @@ sv
 s v
 sw
 s w
+tab
 tb
 tm
 tl
+ts
+t s
 ud
 u d
+uh
+u h
+v
 ve
+ver
 yu
-za
+yuc
+zac

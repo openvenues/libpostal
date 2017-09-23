@@ -6,34 +6,34 @@ distrito federal|df|d.f|d f
 distrito capital|dc|d.c|d c
 distrito nacional|dn|d.n|d n
 madrid|madd
-aguascalientes|ag
-baja california|bn
-baja california sur|bs
-campeche|cm
-chiapas|cp
-chihuahua|ch
-coahuila|ca
-colima|cl
-durango|du
-guanajuato|gt
-guerrero|gr
-hidalgo|hi
-jalisco|ja
-méxico|mexico|mx
-michoacán|michoacan|mc
-morelos|mr
-nayarit|na
+aguascalientes|ag|ags
+baja california|bn|bc|b.c.|b.c|b c|bj cal
+baja california sur|bs|bcs|b.c.s.|b.c.s|b c s|bj cal s
+campeche|cm|camp
+chiapas|cp|chis
+chihuahua|ch|chih
+coahuila|ca|coah
+colima|cl|col
+durango|du|dgo
+guanajuato|gt|gto
+guerrero|gr|gro
+hidalgo|hi|hgo
+jalisco|ja|jal
+méxico|mexico|mx|mex
+michoacán|michoacan|mc|mich
+morelos|mr|mor
+nayarit|na|nay
 nuevo león|nuevo leon|nl
-oaxaca|oa
-puebla|pu
-querétaro|queretaro|qe
-quintana roo|qr|q.r.|q.r|q r
-san luis potosí|san luis potosi|sl
-sinaloa|si
-sonora|so
-tabasco|tb
-tamaulipas|tm
-tlaxcala|tl
-veracruz|ve
-yucatán|yucatan|yu
-zacatecas|za
+oaxaca|oa|oax
+puebla|pu|pue
+querétaro|queretaro|qe|qro
+quintana roo|qr|q.r.|q.r|q r|q roo|q.roo|q. roo
+san luis potosí|san luis potosi|sl|slp|s.l.p.|s.l.p|s l p
+sinaloa|si|sin
+sonora|so|son
+tabasco|tb|tab
+tamaulipas|tm|tamps
+tlaxcala|tl|tlax
+veracruz|ve|ver
+yucatán|yucatan|yu|yuc
+zacatecas|za|zac
