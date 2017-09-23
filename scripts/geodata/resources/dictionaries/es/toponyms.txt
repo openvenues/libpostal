@@ -27,7 +27,7 @@ nuevo león|nuevo leon|nl
 oaxaca|oa
 puebla|pu
 querétaro|queretaro|qe
-quintana roo|qr
+quintana roo|qr|q.r.|q.r|q r
 san luis potosí|san luis potosi|sl
 sinaloa|si
 sonora|so
