@@ -11,6 +11,7 @@ cortijo|crtjo
 edificio|edifc|edfc|edif
 estancia|estanc|est
 local|loc|lc
+manzana|mz|mza
 residencial|resid|res
 torre|to|tor
 vivienda|vvda
