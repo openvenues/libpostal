@@ -66,49 +66,6 @@ global:
                 first: true
                 probability: 0.1
 
-        block:
-            block_before_house_number:
-                before: house_number
-                probability: 0.2
-                allow_between_house_number_and_road: true
-            block_after_house_number:
-                after: house_number
-                probability: 0.8
-                allow_between_house_number_and_road: true
-            conditional:
-                - component: entrance
-                  probabilities:
-                      block_before_entrance:
-                          before: entrance
-                          probability: 0.3
-                      block_after_entrance:
-                          after: entrance
-                          probability: 0.2
-                - component: staircase
-                  probabilities:
-                      block_before_staircase:
-                          before: staircase
-                          probability: 0.3
-                      block_after_staircase:
-                          after: staircase
-                          probability: 0.2
-                - component: level
-                  probabilities:
-                      block_before_level:
-                          before: level
-                          probability: 0.4
-                      block_after_level:
-                          after: level
-                          probability: 0.2
-                - component: unit
-                  probabilities:
-                      block_before_unit:
-                          before: unit
-                          probability: 0.4
-                      block_after_unit:
-                          after: unit
-                          probability: 0.2
-
         locality:
             locality_before_city:
                 before: city
@@ -165,6 +122,20 @@ global:
                           probability: 0.2
                       building_after_level:
                           after: level
+                          probability: 0.3
+                      building_before_suburb:
+                          before: suburb
+                          probability: 0.2
+                - component: superblock
+                  probabilities:
+                      building_after_house_number:
+                          after: house_number
+                          probability: 0.3
+                      building_before_superblock:
+                          after: superblock
+                          probability: 0.2
+                      building_after_superblock:
+                          after: superblock
                           probability: 0.3
                       building_before_suburb:
                           before: suburb
@@ -386,6 +357,15 @@ languages:
                           level_before_building:
                               before: building
                               probability: 0.1
+                    - component: superblock
+                      probabilities:
+                          # default: 0.1
+                          level_after_superblock:
+                              after: superblock
+                              probability: 0.6
+                          level_before_superblock:
+                              before: superblock
+                              probability: 0.3
 
             unit: &continental_european_unit_insertions
                 unit_after_house_number:
@@ -427,6 +407,15 @@ languages:
                           unit_before_building:
                               before: building
                               probability: 0.1
+                    - component: superblock
+                      probabilities:
+                          # default: 0.1
+                          unit_after_superblock:
+                              after: superblock
+                              probability: 0.6
+                          unit_before_superblock:
+                              before: superblock
+                              probability: 0.3
 
     en:
         insertions: &english_template_insertions
