@@ -378,12 +378,16 @@ countries:
             - city_district
         components:
             suburb:
+                probability: 0.7
                 dependencies:
                     - city_district
                     - locality
                     - city
                     - state_district
                     - state
+                population:
+                    - gte: 100000
+                      probability: 0.8
             # Boroughs of Mexico City
             city_district:
                 probability: 0.4
