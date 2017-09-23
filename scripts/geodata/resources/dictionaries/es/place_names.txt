@@ -1,4 +1,4 @@
-aeropuerto
+aeropuerto|apto
 agencia de viajes
 albergue
 almacén|almacen
@@ -27,6 +27,7 @@ balneario|balnr
 baños|banos
 banco
 bar
+base naval|bnvl
 bazar
 biblioteca|bibl
 bodega
@@ -38,7 +39,7 @@ cafetería|cafeteria
 campo|cpo
 campo de golf|cpo de folf
 cama y desayuno
-campamento
+campamento|camp
 cantera|cantr
 cantina|canti
 capilla
@@ -60,10 +61,12 @@ centro juvenil|cto juvenil|ctro juvenil
 centro médico|centro medico|cto médico|cto medico|ctro médico|ctro medico
 charcutería|charcuteria
 cine
+ciudad industrial|cdad ind
 clínica|clinica
 clínica veterinaria|clinica veterinaria
 club|clb
 club social|clb social
+club de golf|cgolf|c.golf
 colegio
 colegio mayor
 comida rápida|comida rapida
@@ -74,6 +77,7 @@ concesionario
 concesionario de automóviles|concesionario de automoviles
 consultorio médico|consultorio medico
 conjunto|cjto|conj|cto
+conjunto habitacional|c.hab.|c.hab|c.h.|c.h|c hab|c h
 cooperativa|coop
 copistería|copisteria
 corral|crral
@@ -98,7 +102,7 @@ enfermería|enfermeria
 escaleras|escas
 escuela
 escuelas
-estación|estacion|estcn
+estación|estacion|estcn|est
 estación de autobuses|estacion de autobuses|estcn de autobuses
 estación de tren|estacion de tren|estcn de tren
 estacionamiento|estto
@@ -121,9 +125,10 @@ gasolinera
 gimnasio
 golfito
 grandes almacenes
-granja|granj
+granja|granj|grnja
 habitación|hab|habitacion
 hacienda|hda
+haciendas|hdas
 heladería|heladeria
 hipódromo|hipodromo|hipod
 horno
@@ -132,11 +137,12 @@ hostal
 hotel
 iglesia|igl|igla
 iglesias|iglas
+ingenio|ingno
 inmobiliaria
 instituto|inst
-jardín|jdin|jard|jardin
+jardín|jdin|jdín|jard|jardin|jdn
 jardín de infancia|jardin de infancia
-jardínes|jdins|jards|jardines
+jardínes|jdins|jards|jardines|jdns
 joyería|joyeria
 juguetería|jugueteria
 juzgado
@@ -167,6 +173,7 @@ parafarmacia
 parque|pque|parq|pq|pqe
 parque acuático|parque acuatico
 parque de bomberos
+parque industrial|pqind|pque ind|parq ind|pq ind|pqe ind
 parque infantil
 parque municipal
 parque temático|parque tematico
@@ -185,7 +192,7 @@ preescolar comunitario
 prisión|prision
 pub
 puebla|pbla
-pueblo|pblo
+pueblo|pbl|pblo|pbo
 puente|pnte
 puerta|pta
 puerto|pto
@@ -220,15 +227,18 @@ tienda
 tintorería|tintoreria
 torre
 transito|trans
+unidad habitacional|uh|u.h.|u.h
 universidad|univ|uni|univers
-villa|vla
+villa|vla|v
 villas|vlas
 videotienda
 vivero
 viñedo|vinedo
 viviendas|vvdas
 zapatería|zapateria
-zona comercial
-zona industrial
-zona militar
+zona comercial|zcom|z com|z.com
+zona federal|zfed|z fed|z.fed
+zona industrial|zind|z ind|z.ind
+zona militar|zmil|z mil|z.mil
+zona naval|znvl|z nvl|z.nvl
 zoológico|zoologico

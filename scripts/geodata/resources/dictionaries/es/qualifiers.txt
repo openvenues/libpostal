@@ -1,16 +1,18 @@
 aldea
-ampliación|amplicacion|ampl|amp
+ampliación|amp|amplicacion|ampl
 auzoa
 barriada|barda
 barrio|bo|brio|brrio|bº|b°|b.º|b.°|b /|br
 barrios|bos|brios|brrios
 colonia|col
 comuna
+congregación|cngr|congegacion
 conjunto|cjto|conj|cto
 ciudad|cdad|cd
 cuadra|cuadr
 distrito|dtto
 distrito postal|dp|d p|dtto postal
+ejido|ej
 estado|edo
 extrarradio|extrr
 extramuros|extrm
@@ -29,10 +31,15 @@ polígono residencial|poligono residencial|políg res|polig res|pol.res|pol res|
 polígono industrial|poligono industrial|políg ind|polig ind|pol.ind|pol ind|pgind|pg ind|pi|p.i.|p.i|p i
 privada|priv
 provincia|pcia
+pueblo|pbl|pblo|pbo
+poblado comunal|pcom|p com
 punto kilométrico|punto kilometrico|pk|p.k.|p k
+rancho|rcho
 región|reg|region
 sección|seccion|secc|sccn|scn|sec
 sector|sect
+supermanzana|sm|s.m.|s.m|s m|smz|smza|s.mz|s.mza|s mz|s mza|super mz|super manzana|supermz|supermza|super mz|super mza|super.mz|super.mza
+región|reg|region
 urbanización|urbanizacion|urb|ur
 vecindario|vecin
 zona|zna|zn
