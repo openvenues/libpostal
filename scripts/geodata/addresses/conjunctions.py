@@ -8,6 +8,7 @@ class Conjunction(object):
     DEFAULT_WHITESPACE_JOIN = ', '
     DEFAULT_NON_WHITESPACE_JOIN = ''
     key = 'and'
+    dictionaries = ['stopwords']
 
     @classmethod
     def join(cls, phrases, language, country=None):

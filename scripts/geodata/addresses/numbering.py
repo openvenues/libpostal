@@ -6,6 +6,7 @@ import six
 from collections import defaultdict
 
 from geodata.addresses.config import address_config
+from geodata.addresses.conjunctions import Conjunction
 from geodata.address_expansions.address_dictionaries import address_phrase_dictionaries
 from geodata.configs.utils import alternative_probabilities
 from geodata.encoding import safe_decode
@@ -303,6 +304,8 @@ class NumberedComponent(object):
         right_ordinal_phrases = defaultdict(list)
         standalone_phrases = []
 
+        conjunction_phrases = []
+
         regexes = []
 
         alphanumeric_props = address_config.get_property('{}.alphanumeric'.format(cls.key), language, country=country)
@@ -334,6 +337,34 @@ class NumberedComponent(object):
             for p in address_phrase_dictionaries.phrases.get((language, dictionary), []):
                 number_canonical_phrases[p[0]].update(p[1:])
                 all_number_phrases.update(p)
+
+        conjunction_canonical_phrases = defaultdict(set)
+        all_conjunction_phrases = set()
+        for dictionary in Conjunction.dictionaries:
+            for p in address_phrase_dictionaries.phrases.get((language, dictionary), []):
+                conjunction_canonical_phrases[p[0]].update(p[1:])
+                all_conjunction_phrases.update(p)
+
+        numeric_list_props = alphanumeric_props.get('numeric_list', {})
+        final_separator = numeric_list_props.get('final_separator', {})
+        if final_separator:
+            canonical = final_separator.get('canonical')
+            abbreviated = final_separator.get('abbreviated')
+            sample = final_separator.get('sample')
+            sample_exclude = set(final_separator.get('sample_exclude', []))
+
+            sample_phrases = conjunction_canonical_phrases.get(canonical)
+            if sample_exclude:
+                sample_phrases -= sample_exclude
+
+            if canonical:
+                conjunction_phrases.append(canonical)
+
+            if abbreviated:
+                conjunction_phrases.append(abbreviated)
+
+            if sample_phrases:
+                conjunction_phrases.extend(sample_phrases)
 
         zone_props = address_config.get_property('{}.zones'.format(cls.key), language, country=country)
         if zone_props:
@@ -373,6 +404,13 @@ class NumberedComponent(object):
         if number_alternatives:
             number_phrases.extend([a['alternative'] for a in number_alternatives])
 
+        plural_number_phrases = []
+        for c in number_phrases:
+            if 'plural' in c:
+                plural_number_phrases.append(c)
+
+        number_phrases.extend(plural_number_phrases)
+
         left_number_phrases = []
         left_number_affix_phrases = []
         right_number_phrases = []
@@ -383,6 +421,7 @@ class NumberedComponent(object):
             numeric_affix = c.get('numeric_affix')
             ordinal = c.get('ordinal')
             sample = c.get('sample')
+            plural = c.get('plural')
 
             sample_exclude = set(c.get('sample_exclude', []))
             canonical = c.get('canonical')
@@ -414,6 +453,15 @@ class NumberedComponent(object):
                     sample_phrases.extend([u'{}.'.format(p) for p in sample_phrases if len(p) < len(canonical) and not p.endswith(u'.')])
                     sample_phrases.sort(key=len, reverse=True)
                     phrases.extend(sample_phrases)
+
+                if plural:
+                    plural_canonical = plural.get('canonical')
+                    plural_abbreviated = plural.get('abbreviated')
+                    if plural_canonical:
+                        phrases.append(plural_canonical)
+
+                    if plural_abbreviated:
+                        phrases.append(plural_abbreviated)
 
             if numeric_affix:
                 direction = numeric_affix['direction']
@@ -452,6 +500,10 @@ class NumberedComponent(object):
             if abbreviated:
                 abbreviated = safe_decode(abbreviated)
 
+            plural = c.get('plural', {})
+            plural_canonical = plural.get('canonical')
+            plural_abbreviated = plural.get('abbreviated')
+
             if numeric:
                 direction = numeric['direction']
                 add_number_phrase = numeric.get('add_number_phrase', False)
@@ -485,6 +537,11 @@ class NumberedComponent(object):
                         sample_phrases.extend([u'{}.'.format(p) for p in sample_phrases if len(p) < len(canonical) and not p.endswith(u'.')])
                         sample_phrases.sort(key=len, reverse=True)
                         phrases.extend(sample_phrases)
+
+                    if plural:
+                        phrases.append(plural_canonical)
+                    if plural_abbreviated:
+                        phrases.append(plural_abbreviated)
 
             if standalone:
                 standalone_phrases.append(canonical)
@@ -588,10 +645,25 @@ class NumberedComponent(object):
         right_number_affix_phrases.sort(reverse=True)
         right_number_phrases.sort(reverse=True)
 
+        conjunction_phrases.sort(reverse=True)
+
         numeric_pattern = cls.numeric_pattern
         numeric_affix_pattern = cls.numeric_affix_pattern
         if language == JAPANESE:
             numeric_pattern = numeric_affix_pattern = cls.japanese_number_pattern
+
+        conjunction_words = []
+        conjunction_symbols = []
+
+        for p in conjunction_phrases:
+            if p.isalpha() or p.isdigit():
+                conjunction_words.append(p)
+            else:
+                conjunction_symbols.append(p)
+
+        if numeric_list_props:
+            numeric_affix_pattern = u'(?:{})(?:(?:,\s*|\s+)(?:{}))*(?:(?:(?:,?\s*(?:{})\s+)|(?:,?\s*(?:{})\s*))(?:{}))?'.format(cls.numeric_pattern, cls.numeric_pattern, u'|'.join(conjunction_words), u'|'.join(conjunction_symbols), cls.numeric_pattern)
+            numeric_pattern = u'\\b{}\\b'.format(numeric_affix_pattern)
 
         if right_ordinal_phrases:
             for k, vals in six.iteritems(right_ordinal_phrases):
@@ -607,11 +679,11 @@ class NumberedComponent(object):
 
         if left_phrases_with_number:
             if left_number_affix_phrases:
-                regexes.append(u'(?:{}){}(?:{})?(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), numeric_affix_pattern))
+                regexes.append(u'(?:{}){}(?:{})(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), numeric_affix_pattern))
             if left_number_phrases:
                 regexes.append(u'(?:{}){}(?:(?:{}){})?(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(left_number_phrases).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern))
             if right_number_affix_phrases:
-                regexes.append(u'(?:{}){}(?:{})(?:{})?'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{}){}(?:{})(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.')))
             if right_number_phrases:
                 regexes.append(u'(?:{}){}(?:{})(?:{}(?:{}))?'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern, whitespace_phrase, u'|'.join(right_number_phrases).replace(u'.', u'\\.')))
 
@@ -772,8 +844,9 @@ class NumberedComponent(object):
             is_none = True
 
         if num_type is not None and not is_list:
-            null_phrase_probability = address_config.get_property('{}.{}.null_phrase_probability'.format(key, num_type), language, country=country, default=0.0)
-            if random.random() < null_phrase_probability:
+            null_phrase_probability = float(address_config.get_property('{}.{}.null_phrase_probability'.format(key, num_type), language, country=country, default=0.0))
+            null_phrase_alpha_only = bool(address_config.get_property('{}.{}.null_phrase_alpha_only'.format(key, num_type), language, country=country, default=False))
+            if random.random() < null_phrase_probability and (not null_phrase_alpha_only or is_alpha):
                 return safe_decode(num)
 
         values, probs = None, None
