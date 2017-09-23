@@ -1,2 +1,6 @@
 licenciada|lcda|lda
 licenciado|lic|lcdo|ldo
+licenciado en administración de empresas|lae|licenciado en administracion de empresas
+licenciada en administración de empresas|lae|licenciada en administracion de empresas
+maestra en ciencias|mc|m c
+maestro en ciencias|mc|m c

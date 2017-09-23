@@ -1,6 +1,8 @@
 abad|abd
 abogada|abga|abgda|abg.da
 abogado|abg|abgdo|abg.do
+actuaria|act
+actuario|act
 administrador|admor|adm.or|admr
 administradora|admora|adm.ora|admra
 agrimensor|agrim
@@ -31,12 +33,14 @@ condesa|cdesa
 consejal|cjal
 consejero|cons|consejo
 contralmirante|contralmte
-coronel|cnel|col|crn
-diacono|diac
-diacona|diaca
+coronel|cnel|col|crn|crnl|crnel
+diácono|diac|diacono
+diácona|diaca|diacona
 diputado|dip
 director|dir
 directora|dira|dir.a
+diseñador industrial|di|d.i.|d.i|d i|dienador indutrial
+diseñadora industrial|di|d.i.|d.i|d i|dienadora indutrial
 doctor|dr
 doctora|dra
 don|d
@@ -51,9 +55,13 @@ escritora
 excelencia|exca|exc.a
 excelentisima|excma
 excelentisimo|excmo
+familia|fam
+físico|fis|fisico
 fray|fr
 gendarme|gdme
 general|gral|genl|gnal|gn
+geógrafa|geoga
+geógrafo|geog
 gobernadora|gdora|goba
 gobernador|gdor|gob
 hermana|hna
@@ -64,6 +72,8 @@ infanta|infa|infta
 infante|inf|infte
 ingeniera|inga
 ingeniero|ing|ingo
+ingenieros|ings|ingos
+ingeniero químico|iq|i q
 inspector|insp
 intendente|int
 jefe|jf
@@ -77,6 +87,7 @@ majestad
 mariscal|mscal
 marques|mq|marqs
 marquesa|mqa|marqsa
+matemático|mat|matematico
 mayor|my|may
 mayor de brigada|may brig|my brig
 mayor general|mg|m.g.|m.g|m g|my gen|my gral
@@ -85,9 +96,10 @@ ministro|mtro
 monseñor|monsenor|mons|msnr
 notario|not
 nuestra señora|nuestra senora|ns|n s|ntra sra
-obispo|ob
+obispo|ob|obpo
 padre|pe|p.e|pdre|p.dre
 piloto fluvial|plto flvial
+presbítero|pbro|presbitero
 presidenta|pdta|presa|pres.a|presida|presid.a|pta
 presidente|pdte|pres|presid|pte
 príncipe|principe
@@ -95,6 +107,10 @@ principal|pral
 procurador|proc
 profesor|prof|profr
 profesora|prof.ª|prof.a|profª|profa|profrª|profra
+psicóloga|psic|psicologa
+psiquiatra|psiq
+químico|quim|quím|quimico
+químico farmacobiólogo|qfb|q.fb|q fb|quimico farmacobiologo
 reina|ra
 reverendo|rvdo|rdo|rvd|rev
 reverendo|rvdo|rdo|rvd|rev
@@ -123,10 +139,13 @@ serenisima|serma|ser.ma
 serenisimo|sermo|ser.mo
 soldado|sold
 subteniente|subte|stn
+técnico|tec|tecnico
 teniente|tn|tte
 teniente coronel|tcnl|tte cnel|tte col|tn cnel|tn col
 teniente general|tn gral|tte gral|tn gen|tte gen
 teniente primero|tte pro|tn pro
+trabajador social|ts|t.s.|t.s|t s
+trabajadora social|ts|t.s.|t.s|t s
 vicealmirante|vice almirante|v alm|v alte|v almte
 vizconde|vde
 vizcondesa|vdesa
