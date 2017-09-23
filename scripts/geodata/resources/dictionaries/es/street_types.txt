@@ -1,7 +1,8 @@
 acceso|acces
 alameda|alam
 alquería|alqueria|alque
-andador|andad
+ampliación|amp|amplicacion|ampl
+andador|andad|and
 angosta|angta
 apeadero|apdro
 autopista|auto|autop|aut|ap
@@ -9,22 +10,22 @@ autovía|autovia|autov
 avenida|av|avd|avda|av /
 avenida calle|ac|av cl|av| cll|av calle
 avenida carrera|ak|av cr|av cra|avda cra|avda cr
-bajada|bjada
+bajada|bjada|bjd
 banda|bda
 barranco|branc
 barranquillo|bqllo
 barriada|barda
 boulevard|blvd|bvd
 brazal|brzal
-bulevar|bulev|blev|blv|bv|bl
-calle|c|cl|cll|c /|ca|call
+bulevar|bulev|blev|blv|bv|bl|boulevard
+calle|c|cl|cll|c /|ca|call|c.
 calleja|cllja
 callejón|callejon|callej|cjón|cjon|cllon|cllón|cj
-calle privada|calle priv|c priv|cl priv|cll priv|c / priv
+calle privada|calle priv|c priv|c.priv|cl priv|cl.priv|cll priv|cll.priv|c / priv|cll / priv
 callejuela|cjla
 callizo|cllzo
 calzada|czada|calz
-camino|cno|cmo|cmno|cm
+camino|cno|cmo|cmno|cm|cam
 camino hondo|ch|c.h.|c.h|c h
 camino nuevo|cn|c.n.|c.n|c n
 camino viejo|cv|c.v.|c.v|c v
@@ -33,7 +34,7 @@ camping|campg
 cantera|cantr
 cantón|canton|cant
 carrera|cra|carra|carr|cr|kra|kr
-carretera|ctra|cr|ct
+carretera|ctra|cr|ct|carr
 carreterín|carreterin|ctrin
 carretil|crtil
 carril|crril
@@ -42,10 +43,12 @@ cinturón|cinturon|cint
 circular|cq
 circuito|cto
 circunvalar|cv|crv|cirv
-circunvalación|circunvalacion|ccvcn
+circunvalación|cvln|ccvcn|circun|circunvalacion
 corredor|crrdo
 costanilla|cstan
 costera
+crucero|cro
+cuchilla|cuch
 cuesta|custa
 diagonal|diag|dg
 diseminado|disem
@@ -61,12 +64,13 @@ hacienda|hda
 jirón|jiron|jr
 ladera|ldera
 laderas|lderas
+libramiento|lib
 llanura|llnra
 malecón|malecon|malec
 mirador|mrdor
 muelle|meull
 pantano|pant
-paraje|praje
+paraje|praje|prj
 parque|pque|parq|pq|pqe
 particular|parti
 partida|ptda
@@ -77,8 +81,8 @@ paseo maritimo|psmar|ps mar
 paso
 pasillo|psllo
 peatonal|peat
-periferico|perif
-plaza|pl|plza|pza|p.za|pz
+periférico|perif|periferico
+plaza|pl|plza|pza|p.za|pz|plz
 plazoleta|pzta|plzta|plta
 plazuela|plzla
 poblado|pbdo
@@ -88,6 +92,7 @@ prolongación|prolongacion|prol
 puebla|pbla
 pueblo|pblo
 puente|pnte
+ramal|rml
 rambla|rbla
 rampla|rampa|rpla
 retorno|ret|rt
@@ -104,7 +109,7 @@ tránsito|transito|trans
 transversal|trval|trvsal|tv|tr
 trasera|tras
 travesía|travesia|trva|trvsía|trvsia
-vereda|vreda|ver
-viaducto|vcto|vd
+vereda|vreda|ver|vda
+viaducto|vcto|vd|vdto
 via|v
 vista|vst|vsta|vist

@@ -23,8 +23,8 @@ grande|gr
 guerra|ga
 independencia|indep
 infantería|infanteria|infa|ynfa|ynfanta
-jardín|jdin|jard|jardin
-jardínes|jdins|jards|jardines
+jardín|jdin|jdín|jard|jardin|jdn
+jardínes|jdins|jards|jardines|jdns
 junio|jun|jn
 julio|jul|jl
 lago|lg
