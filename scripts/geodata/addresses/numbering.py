@@ -590,14 +590,14 @@ class NumberedComponent(object):
                     phrases.extend(sample_phrases)
 
         ordinal_suffixes = defaultdict(set)
-        cardinal_left_phrases = defaultdict(set)
+        cardinal_phrases = defaultdict(set)
         ordinal_phrases = defaultdict(set)
 
         for exprs in numeric_expressions.cardinal_rules.get(language, {}).values():
             for expr in exprs:
                 gender = expr.get('gender')
                 category = expr.get('category')
-                cardinal_left_phrases[gender, category].add(expr['name'])
+                cardinal_phrases[gender, category].add(expr['name'])
 
         for exprs in numeric_expressions.ordinal_rules.get(language, {}).values():
             for expr in exprs:
@@ -614,12 +614,19 @@ class NumberedComponent(object):
 
         default_numeric_separator = numeric_expressions.default_separators.get(language, numeric_expressions.default_separator)
 
-        numeric_separator_phrase = u'[{}\-]'.format(default_numeric_separator) if default_numeric_separator else u'[\-]?'
+        numeric_separator_phrase = u'[{}\-]'.format(default_numeric_separator) if default_numeric_separator else u'[{}\-]?'.format(default_numeric_separator)
 
         ordinal_phrase_components = defaultdict(list)
-        if cardinal_left_phrases and ordinal_phrases:
-            for k, vals in six.iteritems(cardinal_left_phrases):
-                ordinal_phrase_components[k].append(u'(?:{}{})*'.format(u'|'.join(vals), numeric_separator_phrase))
+        cardinal_number_components = []
+
+        if cardinal_phrases and ordinal_phrases:
+            for k, vals in six.iteritems(cardinal_phrases):
+                val_list = u'|'.join(sorted(vals, reverse=True))
+                ordinal_phrase_components[k].append(u'(?:{}{})*'.format(val_list, numeric_separator_phrase))
+
+        if cardinal_phrases:
+            for k, vals in six.iteritems(cardinal_phrases):
+                cardinal_number_components.extend(vals)
 
         if ordinal_phrases:
             for k, vals in six.iteritems(ordinal_phrases):
@@ -652,6 +659,14 @@ class NumberedComponent(object):
         if language == JAPANESE:
             numeric_pattern = numeric_affix_pattern = cls.japanese_number_pattern
 
+        if cardinal_number_components:
+            cardinal_number_pattern = numeric_expressions.cardinal_regex(language)
+            if cardinal_number_pattern:
+                if language != JAPANESE:
+                    numeric_pattern = u'\\b(?:(?:{})|(?:{})|(?:{}))\\b'.format(numeric_affix_pattern, cardinal_number_pattern, numeric_expressions.roman_numeral_pattern)
+                else:
+                    numeric_pattern = u'(?:(?:{})|(?:{}))'.format(numeric_affix_pattern, cardinal_number_pattern)
+
         conjunction_words = []
         conjunction_symbols = []
 
@@ -662,7 +677,7 @@ class NumberedComponent(object):
                 conjunction_symbols.append(p)
 
         if numeric_list_props:
-            numeric_affix_pattern = u'(?:{})(?:(?:,\s*|\s+)(?:{}))*(?:(?:(?:,?\s*(?:{})\s+)|(?:,?\s*(?:{})\s*))(?:{}))?'.format(cls.numeric_pattern, cls.numeric_pattern, u'|'.join(conjunction_words), u'|'.join(conjunction_symbols), cls.numeric_pattern)
+            numeric_affix_pattern = u'(?:{})(?:(?:,\s*|\s+)(?:{}))*(?:(?:(?:,?\s*(?:{})\s+)|(?:,?\s*(?:{})\s*))(?:{}))?'.format(numeric_pattern, numeric_pattern, u'|'.join(conjunction_words), u'|'.join(conjunction_symbols), numeric_pattern)
             numeric_pattern = u'\\b{}\\b'.format(numeric_affix_pattern)
 
         if right_ordinal_phrases:
