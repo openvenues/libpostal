@@ -1219,7 +1219,7 @@ class AddressComponents(object):
                 value = regex.sub(u'', value)
             else:
                 value = regex.sub(u'', value, count)
-            return value, sep
+            return cls.cleanup_value_post_extraction(value), sep
         return value, None
 
     @classmethod
@@ -1295,11 +1295,11 @@ class AddressComponents(object):
             return value, None
         else:
             if only_if_last:
-                if not value[prev_match.end():].strip():
-                    return value[:prev_match.start()], matches[-1]
+                if not cls.cleanup_value_post_extraction(value[prev_match.end():]):
+                    return cls.cleanup_value_post_extraction(value[:prev_match.start()]), matches[-1]
                 else:
                     return value, None
-            return regex.sub(u'', value), u''.join(matches)
+            return cls.cleanup_value_post_extraction(regex.sub(u'', value)), u''.join(matches)
 
     @classmethod
     def extract_numbered_building_from_name(cls, address_components, key, language, country=None):
@@ -2143,7 +2143,6 @@ class AddressComponents(object):
         superblock = block = lot = None
 
         hn = house_number
-
         for language in possible_languages:
             hn, sb, bl, lt = cls.extract_block_lot_patterns(hn, language)
 
@@ -2641,6 +2640,7 @@ class AddressComponents(object):
             address_components[AddressFormatter.STATE] = address_state
 
         all_languages = set([l for l, d in candidate_languages])
+
 
         cls.normalize_place_names(address_components, all_osm_components, country=country, languages=all_languages)
 
