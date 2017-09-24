@@ -41,6 +41,17 @@ numbers:
         numeric_affix:
             affix: "č."
             direction: left
+            probability: 0.8
+            alternatives:
+                - alternative:
+                      affix: č
+                      direction: left
+                      upper_case: false
+                  probability: 0.1
+                - alternative:
+                      affix: "#"
+                      direction: left
+                  probability: 0.1
         numeric_probability: 0.4
         numeric_affix_probability: 0.6
 
