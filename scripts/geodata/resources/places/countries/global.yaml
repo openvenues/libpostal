@@ -24,7 +24,7 @@ global:
             probability: 0.99
         island:
             # Islands are usually not represented in addresses
-            probability: 0.0
+            probability: 0.1
         state_district:
             probability: 0.05
             dependencies:
@@ -541,6 +541,14 @@ countries:
                     # Island is more common in Hawaiian addresses
                     - <<: *hawaii
                       probability: 0.5
+                    # Manhattan Island
+                    - id: "3954665"
+                      type: relation
+                      probability: 0.0001
+                    # Long Island
+                    - id: "3955977"
+                      type: relation
+                      probability: 0.0001
             state:
                 probability: 0.8
                 population:
