@@ -1,17 +1,24 @@
+# -*- coding: utf-8 -*-
+
 import bisect
+import itertools
 import math
+import operator
 import os
 import random
+import re
 import six
 import yaml
 
 from collections import defaultdict
 
+from geodata.encoding import safe_decode
 from geodata.numbers.numex import NUMEX_DATA_DIR
 
 
 class NumericExpressions(object):
     default_separator = ' '
+    LATIN = 'la'
 
     def __init__(self, base_dir=NUMEX_DATA_DIR):
         self.cardinal_rules = {}
@@ -23,6 +30,10 @@ class NumericExpressions(object):
 
         self.ordinal_rules = {}
         self.ordinal_suffix_rules = {}
+
+        self.stopwords = {}
+
+        self.cardinal_regexes = {}
 
         for filename in os.listdir(base_dir):
             if filename.endswith('.yaml'):
@@ -58,8 +69,60 @@ class NumericExpressions(object):
 
                     self.cardinal_rules_sorted[lang] = sorted(set([v for v, g, c in cardinals]))
                     self.cardinal_rules_ones_sorted[lang] = sorted(self.cardinal_rules_ones[lang].keys())
+                if 'stopwords' in data:
+                    self.stopwords[lang] = data['stopwords']
+
+                if lang != self.LATIN:
+                    self.cardinal_regexes[lang] = self.make_cardinal_regex(lang)
 
         self.cardinal_rules_ones = dict(self.cardinal_rules_ones)
+
+    def cardinal_regex(self, lang):
+        return self.cardinal_regexes.get(lang)
+
+    def make_cardinal_regex(self, lang):
+        separator_pattern = u'[{}\.\-]{}'.format(self.default_separator, u'?' if lang in self.default_separators else u'')
+
+        stopwords = self.stopwords.get(lang, [])
+
+        if stopwords:
+            separator_pattern = u'{}(?:{}{})?'.format(separator_pattern, u'|'.join(stopwords), separator_pattern)
+
+        left_multiply = [(rule['name'], None) for rule in itertools.chain(*self.cardinal_rules.get(lang, {}).values()) if rule.get('left') == 'multiply' and 'right' not in rule]
+
+        left_add_rules = [rule for rule in itertools.chain(*self.cardinal_rules.get(lang, {}).values()) if rule.get('left') == 'add']
+        left_add = []
+
+        for rule in left_add_rules:
+            rule_name = rule['name']
+            separator_rule = None
+            if 'left_separator' in rule:
+                left_separator = rule['left_separator'].replace(u' ', u'[\- ]')
+                separator_rule = u'(?:{})?{}'.format(left_separator, rule['name'])
+
+            left_add.append((rule_name, separator_rule))
+
+        right_add_rules = [rule for rule in itertools.chain(*self.cardinal_rules.get(lang, {}).values()) if rule.get('right') == 'add']
+        right_add = []
+        for rule in right_add_rules:
+            rule_name = rule['name']
+            separator_rule = None
+            if 'right_separator' in rule:
+                right_separator = rule['right_separator'].replace(u' ', u'[\- ]')
+                separator_rule = u'{}(?:{})?'.format(rule['name'], right_separator)
+            right_add.append((rule_name, separator_rule))
+
+        simple_rules = [(rule['name'], None) for rule in itertools.chain(*self.cardinal_rules.get(lang, {}).values()) if 'right' not in rule and 'left' not in rule]
+
+        all_phrases_tuples = left_multiply + right_add + simple_rules + left_add
+        all_phrases_tuples.sort(key=operator.itemgetter(0), reverse=True)
+        all_phrases = []
+        for rule, rule_with_separator in all_phrases_tuples:
+            if rule_with_separator:
+                all_phrases.append(rule_with_separator)
+            all_phrases.append(rule)
+
+        return u'(?:(?:{}){})*(?:{})'.format(u'|'.join(all_phrases), separator_pattern, u'|'.join(all_phrases))
 
     def spellout_cardinal(self, num, lang, gender=None, category=None, random_choice_cardinals=False):
         num = int(num)
@@ -192,10 +255,103 @@ class NumericExpressions(object):
         return six.u('').join(cardinal_part)
 
     def roman_numeral(self, num):
-        numeral = self.spellout_cardinal(num, 'la')
+        numeral = self.spellout_cardinal(num, self.LATIN)
         if numeral is None:
             return None
         return numeral.upper()
+
+    roman_numeral_chars = {}
+
+    simple_roman_numeral_chars = {
+        'I': 1,
+        'V': 5,
+        'X': 10,
+        'L': 50,
+        'C': 100,
+        'D': 500,
+        'M': 1000,
+    }
+
+    roman_numeral_chars.update(simple_roman_numeral_chars)
+
+    roman_numeral_unicode_chars = {
+        u'Ⅰ': 1,
+        u'Ⅱ': 2,
+        u'Ⅲ': 3,
+        u'Ⅳ': 4,
+        u'Ⅴ': 5,
+        u'Ⅵ': 6,
+        u'Ⅶ': 7,
+        u'Ⅷ': 8,
+        u'Ⅸ': 9,
+        u'Ⅹ': 10,
+        u'Ⅺ': 11,
+        u'Ⅻ': 12,
+        u'Ⅼ': 50,
+        u'Ⅽ': 100,
+        u'Ⅾ': 500,
+        u'Ⅿ': 1000,
+        u'ⅰ': 1,
+        u'ⅱ': 2,
+        u'ⅲ': 3,
+        u'ⅳ': 4,
+        u'ⅴ': 5,
+        u'ⅵ': 6,
+        u'ⅶ': 7,
+        u'ⅷ': 8,
+        u'ⅸ': 9,
+        u'ⅹ': 10,
+        u'ⅺ': 11,
+        u'ⅻ': 12,
+        u'ⅼ': 50,
+        u'ⅽ': 100,
+        u'ⅾ': 500,
+        u'ⅿ': 1000,
+    }
+
+    roman_numeral_chars.update(roman_numeral_unicode_chars)
+
+    roman_numeral_ascii_pattern = u'(?=[ivxlcdm])(?:(?:m{0,4}(?:cm|cd|d?c{0,3})(?:xl|xc|l?x{0,3})(?:ix|iv|v?i{0,3})))(?<=[ivxlcdm])'
+    roman_numeral_unicode_pattern = u'\\b[{}]+\\b'.format(u''.join(roman_numeral_unicode_chars.keys()))
+    roman_numeral_pattern = u'\\b(?:{}|{})\\b'.format(roman_numeral_ascii_pattern, roman_numeral_unicode_pattern)
+
+    roman_numeral_regex = re.compile(roman_numeral_pattern, re.I | re.U)
+
+    def parse_roman_numeral(self, s):
+        s = safe_decode(s).upper()
+
+        simple_roman_numeral_chars = self.simple_roman_numeral_chars
+        roman_numeral_chars = self.roman_numeral_chars
+        value = 0
+
+        nums = []
+        for c in s:
+            val = roman_numeral_chars.get(c)
+            if val is None:
+                return None
+            nums.append(val)
+
+        n = len(nums)
+
+        for i in six.moves.xrange(n):
+            num = nums[i]
+            # If the next place holds a larger number, this value is negative
+            if i + 1 < n and nums[i + 1] > num and s[i] in simple_roman_numeral_chars:
+                value -= num
+            else:
+                value += num
+
+        return value
+
+    def sub_roman_numeral(self, match):
+        value = self.parse_roman_numeral(match.group(0))
+        if value is not None:
+            return safe_decode(value)
+        else:
+            return u''
+
+    def replace_roman_numerals(self, s):
+        return self.roman_numeral_regex.sub(self.sub_roman_numeral, s)
 
     def spellout_ordinal(self, num, lang, gender=None, category=None,
                          random_choice_cardinals=False, random_choice_ordinals=False):
