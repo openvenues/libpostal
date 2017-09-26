@@ -150,6 +150,11 @@ class OSMAddressFormatter(object):
         }
     }
 
+    name_keys = OrderedDict.fromkeys(['name', 'alt_name', 'loc_name', 'int_name',
+                                      'old_name', 'short_name', 'official_name',
+                                      'full_name', 'uic_name', 'sorting_name',
+                                      'nat_name', 'reg_name'])
+
     boundary_component_priorities = {k: i for i, k in enumerate(AddressFormatter.BOUNDARY_COMPONENTS_ORDERED)}
 
     config = yaml.load(open(OSM_PARSER_DATA_DEFAULT_CONFIG))
@@ -164,6 +169,37 @@ class OSMAddressFormatter(object):
         self.buildings_rtree = buildings_rtree
 
         self.metro_stations_index = metro_stations_index
+
+    @classmethod
+    def has_namespaced_tag_for_language(cls, tags, base_tag, language):
+        return '{}:{}'.format(base_tag, language) in tags
+
+    @classmethod
+    def namespaced_languages(cls, tags, candidate_languages):
+        namespaced = set()
+        for tag in tags:
+            if tag.startswith(u'name:') or tag.startswith(u'addr:street:'):
+                language = tag.rsplit(u':', 1)[-1]
+                if language.split('_', 1)[0].lower() in candidate_languages:
+                    namespaced.add(language.lower())
+
+        for (language, default) in candidate_languages:
+            if any((cls.has_namespaced_tag_for_language(tags, base_tag, language) for base_tag in ('name', 'addr:street'))):
+                namespaced.add(AddressComponents.language_code_aliases.get(language, language))
+        return namespaced
+
+    @classmethod
+    def namespaced_tags(cls, tags, language):
+        namespaced_tags = {}
+        for key, value in six.iteritems(tags):
+            split_key = key.rsplit(u':', 1)
+            if len(split_key) > 1 and split_key[-1].lower() == language:
+                if split_key[0] in cls.name_keys:
+                    namespaced_tags[key] = value
+                elif split_key[0] in cls.aliases.aliases:
+                    namespaced_tags[split_key[0]] = value
+
+        return namespaced_tags
 
     @classmethod
     def namespaced_language(cls, tags, candidate_languages):
@@ -236,9 +272,6 @@ class OSMAddressFormatter(object):
 
         if is_numeric(n):
             return False
-
-        components = {AddressFormatter.NAMED_BUILDING: name}
-        AddressComponents.extract_sub_building_components(components, AddressFormatter.NAMED_BUILDING, languages=languages, country=country)
 
         if AddressFormatter.NAMED_BUILDING not in components or not components[AddressFormatter.NAMED_BUILDING].strip():
             return False
@@ -358,8 +391,8 @@ class OSMAddressFormatter(object):
         return None
 
     @classmethod
-    def subdivision_names(cls, props, languages):
-        return cls.venue_names(props, languages) + [props[k] for k in props if cls.aliases.get(k) == AddressFormatter.SUBDIVISION]
+    def subdivision_names(cls, props, language):
+        return cls.venue_names(props, language) + [props[k] for k in props if cls.aliases.get(k) == AddressFormatter.SUBDIVISION]
 
     def building_components(self, latitude, longitude):
         return self.buildings_rtree.point_in_poly(latitude, longitude, return_all=True)
@@ -579,7 +612,7 @@ class OSMAddressFormatter(object):
         return False
 
     @classmethod
-    def venue_names(cls, props, languages):
+    def venue_names(cls, props, language):
         '''
         Venue names
         -----------
@@ -588,11 +621,11 @@ class OSMAddressFormatter(object):
         With a certain probability, add None to the list so we drop the name
         '''
 
-        return AddressComponents.all_names(props, languages, keys=('name', 'alt_name', 'loc_name', 'int_name', 'old_name', 'short_name', 'official_name', 'full_name', 'uic_name', 'sorting_name', 'nat_name', 'reg_name'))
+        return AddressComponents.all_names(props, language, keys=cls.name_keys, add_raw_keys=language is None)
 
     @classmethod
-    def building_names(cls, props, languages):
-        return cls.venue_names(props, languages) + [props[k] for k in props if cls.aliases.get(k) == AddressFormatter.NAMED_BUILDING]
+    def building_names(cls, props, language):
+        return cls.venue_names(props, language) + [props[k] for k in props if cls.aliases.get(k) == AddressFormatter.NAMED_BUILDING]
 
     @classmethod
     def all_name_permutations(cls, names):
@@ -697,7 +730,7 @@ class OSMAddressFormatter(object):
         for place in places:
             name = place.get('name')
             if not name or not isinstance(name, six.string_types) or not name.strip():
-                for name in AddressComponents.all_names(place, languages=set([SPANISH])):
+                for name in AddressComponents.all_names(place, language=SPANISH):
                     if cls.is_spanish_subdivision(name):
                         subdivisions.append(place)
                         break
@@ -1148,10 +1181,10 @@ class OSMAddressFormatter(object):
 
     @classmethod
     def is_valid_subdivision(cls, subdivision, all_osm_components, languages):
-        osm_component_names = set.union(*[set([n.lower() for n in AddressComponents.all_names(components, languages=languages)])
+        osm_component_names = set.union(*[set([n.lower() for language in languages for n in AddressComponents.all_names(components, language=language)])
                                           for components in all_osm_components])
 
-        subdiv_names = set([n.lower() for n in AddressComponents.all_names(subdivision, languages=languages)])
+        subdiv_names = set([n.lower() for language in languages for n in AddressComponents.all_names(subdivision, language)])
         return not subdiv_names & osm_component_names
 
     @classmethod
@@ -1210,7 +1243,7 @@ class OSMAddressFormatter(object):
 
         combined_street = cls.combine_street_name(tags)
 
-        namespaced_language = cls.namespaced_language(tags, candidate_languages)
+        namespaced_languages = cls.namespaced_languages(tags, candidate_languages)
         language = None
         japanese_variant = None
 
@@ -1230,304 +1263,319 @@ class OSMAddressFormatter(object):
         is_generic_place = cls.is_generic_place(tags)
         is_known_venue_type = cls.is_known_venue_type(tags)
 
-        revised_tags = cls.normalize_address_components(tags)
-        if japanese_suburb is not None:
-            revised_tags[AddressFormatter.SUBURB] = japanese_suburb
-        sub_building_tags = cls.normalize_sub_building_components(tags)
-        revised_tags.update(sub_building_tags)
+        address_languages = [None]
+        address_languages.extend(namespaced_languages)
 
-        # Only including nearest metro station in Japan
-        if nearest_metro_station and random.random() < float(nested_get(cls.config, ('countries', country, 'add_metro_probability'), default=0.0)):
-            if cls.add_metro_station(revised_tags, nearest_metro_station, japanese_variant, default_language=JAPANESE):
-                language = japanese_variant
+        response = []
+        original_tags = tags
 
-        num_floors = None
-        num_basements = None
-        zone = None
-
-        postal_code = revised_tags.get(AddressFormatter.POSTCODE, None)
-        expanded_postal_codes = []
-
-        if postal_code:
-            expanded_postal_codes = cls.expand_postal_codes(postal_code, country, all_local_languages | random_languages, osm_components)
-
-            if len(expanded_postal_codes) == 1:
-                revised_tags[AddressFormatter.POSTCODE] = expanded_postal_codes[0]
+        for address_language in address_languages:
+            if address_language is None:
+                tags = original_tags
             else:
-                revised_tags.pop(AddressFormatter.POSTCODE)
-                postal_code = None
+                tags = cls.namespaced_tags(original_tags, address_language)
 
-        if building_components:
-            num_floors = cls.num_floors(building_components)
+            revised_tags = cls.normalize_address_components(tags)
+            if japanese_suburb is not None:
+                revised_tags[AddressFormatter.SUBURB] = japanese_suburb
+            sub_building_tags = cls.normalize_sub_building_components(tags)
+            revised_tags.update(sub_building_tags)
 
-            num_basements = cls.num_floors(building_components, key='building:levels:underground')
+            # Only including nearest metro station in Japan
+            if nearest_metro_station and random.random() < float(nested_get(cls.config, ('countries', country, 'add_metro_probability'), default=0.0)):
+                if cls.add_metro_station(revised_tags, nearest_metro_station, japanese_variant, default_language=JAPANESE):
+                    address_language = japanese_variant
 
-            for building_tags in building_components:
-                building_tags_norm = cls.normalize_address_components(building_tags)
+            num_floors = None
+            num_basements = None
+            zone = None
 
-                for k, v in six.iteritems(building_tags_norm):
-                    if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD):
-                        revised_tags[k] = v
-                    elif k not in revised_tags and k == AddressFormatter.POSTCODE:
-                        expanded_postal_codes = cls.expand_postal_codes(v, country, all_local_languages | random_languages, osm_components)
+            postal_code = revised_tags.get(AddressFormatter.POSTCODE, None)
+            expanded_postal_codes = []
 
-                        if len(expanded_postal_codes) == 1:
-                            revised_tags[AddressFormatter.POSTCODE] = expanded_postal_codes[0]
+            if postal_code:
+                expanded_postal_codes = cls.expand_postal_codes(postal_code, country, all_local_languages | random_languages, osm_components)
 
-        if subdivision_components:
-            zone = cls.zone(subdivision_components)
-
-            all_osm_components = (osm_components or []) + (city_point_components or []) + (neighborhoods or [])
-            subdivision_components = [sub for sub in subdivision_components if cls.is_valid_subdivision(sub, all_osm_components, all_local_languages)]
-
-        if city_point_components and SPANISH in all_local_languages:
-            city_point_components, additional_subdivisions = cls.spanish_subdivisions(city_point_components)
-            if additional_subdivisions:
-                subdivision_components.extend(additional_subdivisions)
-
-        venue_sub_building_prob = float(nested_get(cls.config, ('venues', 'sub_building_probability'), default=0.0))
-        add_sub_building_components = AddressFormatter.HOUSE_NUMBER in revised_tags and (AddressFormatter.HOUSE not in revised_tags or random.random() < venue_sub_building_prob)
-
-        revised_tags = cls.fix_component_encodings(revised_tags)
-
-        address_components, country, language = AddressComponents.expanded_with_reverse(revised_tags, country, candidate_languages,
-                                                                                        osm_components, neighborhoods, city_point_components,
-                                                                                        language=language or namespaced_language,
-                                                                                        num_floors=num_floors, num_basements=num_basements,
-                                                                                        zone=zone, add_sub_building_components=add_sub_building_components,
-                                                                                        population_from_city=True, check_city_wikipedia=True)
-
-        languages = list(country_languages[country])
-
-        conscription_number = cls.conscription_number(tags, language, country)
-        austro_hungarian_street_number = cls.austro_hungarian_street_number(tags, language, country)
-
-        # Abbreviate the street name with random probability
-        street_name = address_components.get(AddressFormatter.ROAD)
-
-        if street_name:
-            normalized_street_name = cls.normalized_street_name(address_components, country, language)
-            if normalized_street_name:
-                street_name = normalized_street_name
-                address_components[AddressFormatter.ROAD] = street_name
-
-            address_components[AddressFormatter.ROAD] = cls.abbreviated_street(street_name, language)
-
-        expanded_components = address_components.copy()
-        for props, component in AddressComponents.categorized_osm_components(country, osm_components):
-            if 'name' in props and component not in expanded_components:
-                expanded_components[component] = props['name']
-
-        AddressComponents.drop_invalid_components(expanded_components, country)
-
-        street_languages = set((language,) if language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE) else languages)
-
-        all_venue_names = []
-        all_venue_names_reduced = []
-        all_venue_names_expanded_only = []
-        all_venue_names_set = set()
-
-        is_building = cls.is_building(tags)
-        is_subdivision = cls.is_subdivision(tags)
-
-        if not is_building and not is_subdivision:
-            for venue_name in cls.venue_names(tags, languages) or []:
-                if not venue_name or venue_name.lower() in all_venue_names_set:
-                    continue
-
-                if AddressComponents.name_is_numbered_building(venue_name, languages, country=country):
-                    address_components[AddressFormatter.BUILDING] = venue_name
-                    continue
-
-                all_venue_names.append(venue_name)
-                if cls.is_valid_venue_name(venue_name, expanded_components, street_languages, is_generic=is_generic_place, is_known_venue_type=is_known_venue_type):
-                    all_venue_names_reduced.append(venue_name)
+                if len(expanded_postal_codes) == 1:
+                    revised_tags[AddressFormatter.POSTCODE] = expanded_postal_codes[0]
                 else:
-                    all_venue_names_expanded_only.append(venue_name)
+                    revised_tags.pop(AddressFormatter.POSTCODE)
+                    postal_code = None
 
-                all_venue_names_set.add(venue_name.lower())
+            if building_components:
+                num_floors = cls.num_floors(building_components)
 
-                abbreviated_venue = cls.abbreviated_venue_name(venue_name, language)
-                if abbreviated_venue != venue_name and abbreviated_venue.lower() not in all_venue_names_set:
-                    all_venue_names.append(abbreviated_venue)
-                    if cls.is_valid_venue_name(abbreviated_venue, expanded_components, street_languages, is_generic=is_generic_place, is_known_venue_type=is_known_venue_type):
-                        all_venue_names_reduced.append(abbreviated_venue)
-                    else:
-                        all_venue_names_expanded_only.append(abbreviated_venue)
+                num_basements = cls.num_floors(building_components, key='building:levels:underground')
 
-                    all_venue_names_set.add(abbreviated_venue.lower())
-        elif is_building:
-            building_components = [tags] + (building_components or [])
-        elif is_subdivision:
-            subdivision_components = [tags] + (subdivision_components or [])
+                for building_tags in building_components:
+                    building_tags_norm = cls.normalize_address_components(building_tags)
 
-        all_building_names = []
-        all_building_names_reduced = []
-        all_building_names_expanded_only = []
-        all_building_names_set = set()
+                    for k, v in six.iteritems(building_tags_norm):
+                        if k not in revised_tags and k in (AddressFormatter.HOUSE_NUMBER, AddressFormatter.ROAD):
+                            revised_tags[k] = v
+                        elif k not in revised_tags and k == AddressFormatter.POSTCODE:
+                            expanded_postal_codes = cls.expand_postal_codes(v, country, all_local_languages | random_languages, osm_components)
 
-        if building_components:
-            for building_tags in building_components:
-                building_is_generic_place = cls.is_generic_place(building_tags)
-                building_is_known_venue_type = cls.is_known_venue_type(building_tags)
+                            if len(expanded_postal_codes) == 1:
+                                revised_tags[AddressFormatter.POSTCODE] = expanded_postal_codes[0]
 
-                building_names = []
-                expanded_only_building_names = []
-                for building_name in cls.building_names(building_tags, street_languages):
-                    if not building_name or building_name.lower() in all_building_names_set:
+            if subdivision_components:
+                zone = cls.zone(subdivision_components)
+
+                all_osm_components = (osm_components or []) + (city_point_components or []) + (neighborhoods or [])
+                subdivision_components = [sub for sub in subdivision_components if cls.is_valid_subdivision(sub, all_osm_components, all_local_languages)]
+
+            if city_point_components and SPANISH in all_local_languages:
+                city_point_components, additional_subdivisions = cls.spanish_subdivisions(city_point_components)
+                if additional_subdivisions:
+                    subdivision_components.extend(additional_subdivisions)
+
+            venue_sub_building_prob = float(nested_get(cls.config, ('venues', 'sub_building_probability'), default=0.0))
+            add_sub_building_components = AddressFormatter.HOUSE_NUMBER in revised_tags and (AddressFormatter.HOUSE not in revised_tags or random.random() < venue_sub_building_prob)
+
+            revised_tags = cls.fix_component_encodings(revised_tags)
+
+            address_components, country, language = AddressComponents.expanded_with_reverse(revised_tags, country, candidate_languages,
+                                                                                            osm_components, neighborhoods, city_point_components,
+                                                                                            language=address_language,
+                                                                                            num_floors=num_floors, num_basements=num_basements,
+                                                                                            zone=zone, add_sub_building_components=add_sub_building_components,
+                                                                                            population_from_city=True, check_city_wikipedia=True)
+
+            languages = list(country_languages[country])
+
+            conscription_number = cls.conscription_number(tags, language, country)
+            austro_hungarian_street_number = cls.austro_hungarian_street_number(tags, language, country)
+
+            # Abbreviate the street name with random probability
+            street_name = address_components.get(AddressFormatter.ROAD)
+
+            if street_name:
+                normalized_street_name = cls.normalized_street_name(address_components, country, language)
+                if normalized_street_name:
+                    street_name = normalized_street_name
+                    address_components[AddressFormatter.ROAD] = street_name
+
+                address_components[AddressFormatter.ROAD] = cls.abbreviated_street(street_name, language)
+
+            expanded_components = address_components.copy()
+            for props, component in AddressComponents.categorized_osm_components(country, osm_components):
+                if ('name:{}'.format(language) in props or 'name' in props) and component not in expanded_components:
+                    expanded_components[component] = props.get('name:{}'.format(language), props['name'])
+
+            AddressComponents.drop_invalid_components(expanded_components, country)
+
+            street_languages = set((language,) if address_language is not None and language not in (UNKNOWN_LANGUAGE, AMBIGUOUS_LANGUAGE) else languages)
+
+            all_venue_names = []
+            all_venue_names_reduced = []
+            all_venue_names_expanded_only = []
+            all_venue_names_set = set()
+
+            is_building = cls.is_building(tags)
+            is_subdivision = cls.is_subdivision(tags)
+
+            if not is_building and not is_subdivision:
+                for venue_name in cls.venue_names(tags, address_language) or []:
+                    if not venue_name or venue_name.lower() in all_venue_names_set:
                         continue
 
-                    if cls.is_valid_building_name(building_name, expanded_components, street_languages, country=country, is_generic=building_is_generic_place, is_known_venue_type=building_is_known_venue_type):
-                        building_names.append(building_name)
-                    else:
-                        expanded_only_building_names.append(building_name)
-
-                    all_building_names_set.add(building_name.lower())
-
-                    abbreviated_building = cls.abbreviated_venue_name(building_name, language)
-                    if abbreviated_building != building_name and abbreviated_building.lower() not in all_building_names_set:
-                        if cls.is_valid_building_name(abbreviated_building, expanded_components, street_languages, country=country, is_generic=building_is_generic_place, is_known_venue_type=building_is_known_venue_type):
-                            building_names.append(abbreviated_building)
-                        else:
-                            expanded_only_building_names.append(abbreviated_building)
-
-                        all_building_names_set.add(abbreviated_building.lower())
-
-                if building_names + expanded_only_building_names:
-                    all_building_names.append(building_names + expanded_only_building_names)
-
-                if building_names:
-                    all_building_names_reduced.append(building_names)
-
-                if expanded_only_building_names:
-                    all_building_names_expanded_only.append(expanded_only_building_names)
-
-        all_subdivision_names = []
-        all_subdivision_names_reduced = []
-        all_subdivision_names_expanded_only = []
-        all_subdivision_names_set = set()
-
-        if subdivision_components:
-            for subdiv_tags in subdivision_components:
-                subdiv_is_generic_place = cls.is_generic_place(subdiv_tags)
-                subdiv_is_known_venue_type = cls.is_known_venue_type(subdiv_tags)
-
-                subdivision_names = []
-                expanded_only_subdivision_names = []
-                for subdiv_name in cls.subdivision_names(subdiv_tags, language):
-                    if not subdiv_name or subdiv_name.lower() in all_subdivision_names_set:
+                    if AddressComponents.name_is_numbered_building(venue_name, languages, country=country):
+                        address_components[AddressFormatter.BUILDING] = venue_name
                         continue
 
-                    if cls.is_valid_building_name(subdiv_name, expanded_components, street_languages, country=country, is_generic=subdiv_is_generic_place, is_known_venue_type=subdiv_is_known_venue_type):
-                        subdivision_names.append(subdiv_name)
+                    all_venue_names.append(venue_name)
+                    if cls.is_valid_venue_name(venue_name, expanded_components, street_languages, is_generic=is_generic_place, is_known_venue_type=is_known_venue_type):
+                        all_venue_names_reduced.append(venue_name)
                     else:
-                        expanded_only_subdivision_names.append(subdiv_name)
+                        all_venue_names_expanded_only.append(venue_name)
 
-                    all_subdivision_names_set.add(subdiv_name.lower())
+                    all_venue_names_set.add(venue_name.lower())
 
-                    abbreviated_subdivision = cls.abbreviated_venue_name(subdiv_name, language)
-                    if abbreviated_subdivision != subdiv_name and abbreviated_subdivision.lower() not in all_subdivision_names_set:
-                        if cls.is_valid_building_name(abbreviated_subdivision, expanded_components, street_languages, country=country, is_generic=subdiv_is_generic_place, is_known_venue_type=subdiv_is_known_venue_type):
-                            subdivision_names.append(abbreviated_subdivision)
+                    abbreviated_venue = cls.abbreviated_venue_name(venue_name, language)
+                    if abbreviated_venue != venue_name and abbreviated_venue.lower() not in all_venue_names_set:
+                        all_venue_names.append(abbreviated_venue)
+                        if cls.is_valid_venue_name(abbreviated_venue, expanded_components, street_languages, is_generic=is_generic_place, is_known_venue_type=is_known_venue_type):
+                            all_venue_names_reduced.append(abbreviated_venue)
                         else:
-                            expanded_only_subdivision_names.append(abbreviated_subdivision)
-                        all_subdivision_names_set.add(abbreviated_subdivision.lower())
+                            all_venue_names_expanded_only.append(abbreviated_venue)
 
-                if subdivision_names + expanded_only_subdivision_names:
-                    all_subdivision_names.append(subdivision_names + expanded_only_subdivision_names)
+                        all_venue_names_set.add(abbreviated_venue.lower())
+            elif is_building:
+                building_components = [tags] + (building_components or [])
+            elif is_subdivision:
+                subdivision_components = [tags] + (subdivision_components or [])
 
-                if subdivision_names:
-                    all_subdivision_names_reduced.append(subdivision_names)
+            all_building_names = []
+            all_building_names_reduced = []
+            all_building_names_expanded_only = []
+            all_building_names_set = set()
 
-                if expanded_only_subdivision_names:
-                    all_subdivision_names_expanded_only.append(expanded_only_subdivision_names)
+            if building_components:
+                for building_tags in building_components:
+                    building_is_generic_place = cls.is_generic_place(building_tags)
+                    building_is_known_venue_type = cls.is_known_venue_type(building_tags)
 
-        if not address_components and not all_venue_names and not all_building_names:
-            return None, None, None
+                    building_names = []
+                    expanded_only_building_names = []
+                    for building_name in cls.building_names(building_tags, address_language):
+                        if not building_name or building_name.lower() in all_building_names_set:
+                            continue
 
-        formatted_addresses = cls.formatted_addresses_with_venue_building_and_subdivision_names(address_components, all_venue_names_reduced, all_building_names_reduced, all_subdivision_names_reduced,
-                                                                                                country, language=language, tag_components=tag_components, minimal_only=not tag_components)
+                        if cls.is_valid_building_name(building_name, expanded_components, languages, country=country, is_generic=building_is_generic_place, is_known_venue_type=building_is_known_venue_type):
+                            building_names.append(building_name)
+                        else:
+                            expanded_only_building_names.append(building_name)
 
-        for alternate_house_number in (conscription_number, austro_hungarian_street_number):
-            if alternate_house_number is not None:
-                original_house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
-                address_components[AddressFormatter.HOUSE_NUMBER] = alternate_house_number
-                formatted_addresses.extend(cls.formatted_addresses_with_venue_building_and_subdivision_names(address_components, all_venue_names_reduced, all_building_names_reduced, all_subdivision_names_reduced,
-                                                                                                             country, language=language, tag_components=tag_components, minimal_only=not tag_components))
-                if original_house_number:
-                    address_components[AddressFormatter.HOUSE_NUMBER] = original_house_number
+                        all_building_names_set.add(building_name.lower())
 
-        if len(expanded_postal_codes) > 1:
-            for postal_code in expanded_postal_codes:
-                address_components[AddressFormatter.POSTCODE] = postal_code
-                AddressComponents.add_postcode_phrase(address_components, language, country=country)
-                formatted_addresses.extend(cls.formatted_addresses_with_venue_building_and_subdivision_names(address_components, all_venue_names_reduced, all_building_names_reduced, all_subdivision_names_reduced,
-                                                                                                             country, language=language, tag_components=tag_components, minimal_only=not tag_components))
+                        abbreviated_building = cls.abbreviated_venue_name(building_name, language)
+                        if abbreviated_building != building_name and abbreviated_building.lower() not in all_building_names_set:
+                            if cls.is_valid_building_name(abbreviated_building, expanded_components, languages, country=country, is_generic=building_is_generic_place, is_known_venue_type=building_is_known_venue_type):
+                                print(building_name, expanded_components, languages, country, building_is_generic_place, building_is_known_venue_type)
+                                building_names.append(abbreviated_building)
+                            else:
+                                expanded_only_building_names.append(abbreviated_building)
 
-        if all_venue_names_expanded_only or all_building_names_expanded_only:
-            formatted_addresses.extend(cls.formatted_addresses_with_venue_building_and_subdivision_names(expanded_components, all_venue_names_expanded_only, all_building_names_expanded_only, all_subdivision_names_expanded_only,
-                                       country, language=language, tag_components=tag_components, minimal_only=not tag_components))
+                            all_building_names_set.add(abbreviated_building.lower())
 
-        formatted_addresses.extend(cls.formatted_places(address_components, country, language))
+                    if building_names + expanded_only_building_names:
+                        all_building_names.append(building_names + expanded_only_building_names)
 
-        # In Japan an address without places is basically just house_number + metro_station (if given)
-        # However, where there are streets, it's useful to have address-only queries as well
-        if country != Countries.JAPAN:
-            address_only_components = AddressComponents.drop_places(address_components)
-            address_only_components = AddressComponents.drop_postcode(address_only_components)
+                    if building_names:
+                        all_building_names_reduced.append(building_names)
 
-            if address_only_components:
-                address_only_venue_names = []
-                address_only_building_names = []
-                address_only_subdivision_names = []
-                if not address_only_components or (len(address_only_components) == 1 and list(address_only_components)[0] in (AddressFormatter.HOUSE, AddressFormatter.NAMED_BUILDING, AddressFormatter.SUBDIVISION)):
-                    address_only_venue_names = [venue_name for venue_name in all_venue_names if cls.is_valid_venue_name(venue_name, address_only_components, street_languages, is_generic=is_generic_place, is_known_venue_type=is_known_venue_type)]
-                    address_only_building_names = [[building_name for building_name in building_names if cls.is_valid_building_name(building_name, address_only_components, street_languages, country=country, is_generic=cls.is_generic_place(building_tags), is_known_venue_type=cls.is_known_venue_type(building_tags))]
-                                                   for building_names, building_tags in zip(all_building_names, building_components)]
+                    if expanded_only_building_names:
+                        all_building_names_expanded_only.append(expanded_only_building_names)
 
-                    address_only_subdivision_names = [[subdiv_name for subdiv_name in subdiv_names if cls.is_valid_building_name(subdiv_name, address_only_components, street_languages, country=country, is_generic=cls.is_generic_place(subdiv_tags), is_known_venue_type=cls.is_known_venue_type(subdiv_tags))]
-                                                      for subdiv_names, subdiv_tags in zip(all_subdivision_names, subdivision_components)]
+            all_subdivision_names = []
+            all_subdivision_names_reduced = []
+            all_subdivision_names_expanded_only = []
+            all_subdivision_names_set = set()
 
-                formatted_addresses.extend(cls.formatted_addresses_with_venue_building_and_subdivision_names(address_only_components, address_only_venue_names, address_only_building_names, address_only_subdivision_names,
+            if subdivision_components:
+                for subdiv_tags in subdivision_components:
+                    subdiv_is_generic_place = cls.is_generic_place(subdiv_tags)
+                    subdiv_is_known_venue_type = cls.is_known_venue_type(subdiv_tags)
+
+                    subdivision_names = []
+                    expanded_only_subdivision_names = []
+                    for subdiv_name in cls.subdivision_names(subdiv_tags, address_language):
+                        if not subdiv_name or subdiv_name.lower() in all_subdivision_names_set:
+                            continue
+
+                        if cls.is_valid_building_name(subdiv_name, expanded_components, languages, country=country, is_generic=subdiv_is_generic_place, is_known_venue_type=subdiv_is_known_venue_type):
+                            subdivision_names.append(subdiv_name)
+                        else:
+                            expanded_only_subdivision_names.append(subdiv_name)
+
+                        all_subdivision_names_set.add(subdiv_name.lower())
+
+                        abbreviated_subdivision = cls.abbreviated_venue_name(subdiv_name, language)
+                        if abbreviated_subdivision != subdiv_name and abbreviated_subdivision.lower() not in all_subdivision_names_set:
+                            if cls.is_valid_building_name(abbreviated_subdivision, expanded_components, languages, country=country, is_generic=subdiv_is_generic_place, is_known_venue_type=subdiv_is_known_venue_type):
+                                subdivision_names.append(abbreviated_subdivision)
+                            else:
+                                expanded_only_subdivision_names.append(abbreviated_subdivision)
+                            all_subdivision_names_set.add(abbreviated_subdivision.lower())
+
+                    if subdivision_names + expanded_only_subdivision_names:
+                        all_subdivision_names.append(subdivision_names + expanded_only_subdivision_names)
+
+                    if subdivision_names:
+                        all_subdivision_names_reduced.append(subdivision_names)
+
+                    if expanded_only_subdivision_names:
+                        all_subdivision_names_expanded_only.append(expanded_only_subdivision_names)
+
+            if not address_components and not all_venue_names and not all_building_names:
+                continue
+
+            formatted_addresses = cls.formatted_addresses_with_venue_building_and_subdivision_names(address_components, all_venue_names_reduced, all_building_names_reduced, all_subdivision_names_reduced,
+                                                                                                    country, language=language, tag_components=tag_components, minimal_only=not tag_components)
+
+            for alternate_house_number in (conscription_number, austro_hungarian_street_number):
+                if alternate_house_number is not None:
+                    original_house_number = address_components.get(AddressFormatter.HOUSE_NUMBER)
+                    address_components[AddressFormatter.HOUSE_NUMBER] = alternate_house_number
+                    formatted_addresses.extend(cls.formatted_addresses_with_venue_building_and_subdivision_names(address_components, all_venue_names_reduced, all_building_names_reduced, all_subdivision_names_reduced,
+                                                                                                                 country, language=language, tag_components=tag_components, minimal_only=not tag_components))
+                    if original_house_number:
+                        address_components[AddressFormatter.HOUSE_NUMBER] = original_house_number
+
+            if len(expanded_postal_codes) > 1:
+                for postal_code in expanded_postal_codes:
+                    address_components[AddressFormatter.POSTCODE] = postal_code
+                    AddressComponents.add_postcode_phrase(address_components, language, country=country)
+                    formatted_addresses.extend(cls.formatted_addresses_with_venue_building_and_subdivision_names(address_components, all_venue_names_reduced, all_building_names_reduced, all_subdivision_names_reduced,
+                                                                                                                 country, language=language, tag_components=tag_components, minimal_only=not tag_components))
+
+            if all_venue_names_expanded_only or all_building_names_expanded_only:
+                formatted_addresses.extend(cls.formatted_addresses_with_venue_building_and_subdivision_names(expanded_components, all_venue_names_expanded_only, all_building_names_expanded_only, all_subdivision_names_expanded_only,
+                                           country, language=language, tag_components=tag_components, minimal_only=not tag_components))
+
+            formatted_addresses.extend(cls.formatted_places(address_components, country, language))
+
+            # In Japan an address without places is basically just house_number + metro_station (if given)
+            # However, where there are streets, it's useful to have address-only queries as well
+            if country != Countries.JAPAN:
+                address_only_components = AddressComponents.drop_places(address_components)
+                address_only_components = AddressComponents.drop_postcode(address_only_components)
+
+                if address_only_components:
+                    address_only_venue_names = []
+                    address_only_building_names = []
+                    address_only_subdivision_names = []
+                    if not address_only_components or (len(address_only_components) == 1 and list(address_only_components)[0] in (AddressFormatter.HOUSE, AddressFormatter.NAMED_BUILDING, AddressFormatter.SUBDIVISION)):
+                        address_only_venue_names = [venue_name for venue_name in all_venue_names if cls.is_valid_venue_name(venue_name, address_only_components, street_languages, is_generic=is_generic_place, is_known_venue_type=is_known_venue_type)]
+                        address_only_building_names = [[building_name for building_name in building_names if cls.is_valid_building_name(building_name, address_only_components, languages, country=country, is_generic=cls.is_generic_place(building_tags), is_known_venue_type=cls.is_known_venue_type(building_tags))]
+                                                       for building_names, building_tags in zip(all_building_names, building_components)]
+
+                        address_only_subdivision_names = [[subdiv_name for subdiv_name in subdiv_names if cls.is_valid_building_name(subdiv_name, address_only_components, languages, country=country, is_generic=cls.is_generic_place(subdiv_tags), is_known_venue_type=cls.is_known_venue_type(subdiv_tags))]
+                                                          for subdiv_names, subdiv_tags in zip(all_subdivision_names, subdivision_components)]
+
+                    formatted_addresses.extend(cls.formatted_addresses_with_venue_building_and_subdivision_names(address_only_components, address_only_venue_names, address_only_building_names, address_only_subdivision_names,
+                                                                                                                 country, language=language, tag_components=tag_components, minimal_only=False))
+
+            # Generate a PO Box address at random (only returns non-None values occasionally) and add it to the list
+            po_box_components = AddressComponents.po_box_address(address_components, language, country=country)
+            if po_box_components:
+                formatted_addresses.extend(cls.formatted_addresses_with_venue_building_and_subdivision_names(po_box_components, all_venue_names_reduced, all_building_names_reduced, all_subdivision_names_reduced,
                                                                                                              country, language=language, tag_components=tag_components, minimal_only=False))
 
-        # Generate a PO Box address at random (only returns non-None values occasionally) and add it to the list
-        po_box_components = AddressComponents.po_box_address(address_components, language, country=country)
-        if po_box_components:
-            formatted_addresses.extend(cls.formatted_addresses_with_venue_building_and_subdivision_names(po_box_components, all_venue_names_reduced, all_building_names_reduced, all_subdivision_names_reduced,
-                                                                                                         country, language=language, tag_components=tag_components, minimal_only=False))
+            formatted_addresses.extend(cls.category_queries(tags, address_components, language, country, tag_components=tag_components))
 
-        formatted_addresses.extend(cls.category_queries(tags, address_components, language, country, tag_components=tag_components))
+            venue_name = tags.get('name')
 
-        venue_name = tags.get('name')
+            if venue_name:
+                chain_queries = cls.chain_queries(venue_name, address_components, language, country, tag_components=tag_components)
+                formatted_addresses.extend(chain_queries)
 
-        if venue_name:
-            chain_queries = cls.chain_queries(venue_name, address_components, language, country, tag_components=tag_components)
-            formatted_addresses.extend(chain_queries)
+            if tag_components and address_components:
+                # Pick a random dropout order
+                dropout_order = AddressComponents.address_level_dropout_order(address_components, country)
 
-        if tag_components and address_components:
-            # Pick a random dropout order
-            dropout_order = AddressComponents.address_level_dropout_order(address_components, country)
+                for component in dropout_order:
+                    address_components.pop(component, None)
 
-            for component in dropout_order:
-                address_components.pop(component, None)
+                    dropout_venue_names = all_venue_names_reduced
+                    dropout_building_names = all_building_names_reduced
+                    dropout_subdivision_names = all_subdivision_names_reduced
+                    if not address_components or (len(address_components) == 1 and list(address_components)[0] in (AddressFormatter.HOUSE, AddressFormatter.NAMED_BUILDING, AddressFormatter.SUBDIVISION)):
+                        dropout_venue_names = [venue_name for venue_name in all_venue_names if cls.is_valid_venue_name(venue_name, address_components, street_languages, is_generic=is_generic_place, is_known_venue_type=is_known_venue_type)]
 
-                dropout_venue_names = all_venue_names_reduced
-                dropout_building_names = all_building_names_reduced
-                dropout_subdivision_names = all_subdivision_names_reduced
-                if not address_components or (len(address_components) == 1 and list(address_components)[0] in (AddressFormatter.HOUSE, AddressFormatter.NAMED_BUILDING, AddressFormatter.SUBDIVISION)):
-                    dropout_venue_names = [venue_name for venue_name in all_venue_names if cls.is_valid_venue_name(venue_name, address_components, street_languages, is_generic=is_generic_place, is_known_venue_type=is_known_venue_type)]
+                        dropout_building_names = [[building_name for building_name in building_names if cls.is_valid_building_name(building_name, address_components, languages, country=country, is_generic=cls.is_generic_place(building_tags), is_known_venue_type=cls.is_known_venue_type(building_tags))]
+                                                  for building_names, building_tags in zip(all_building_names, building_components)]
 
-                    dropout_building_names = [[building_name for building_name in building_names if cls.is_valid_building_name(building_name, address_components, street_languages, country=country, is_generic=cls.is_generic_place(building_tags), is_known_venue_type=cls.is_known_venue_type(building_tags))]
-                                              for building_names, building_tags in zip(all_building_names, building_components)]
+                        dropout_subdivision_names = [[subdiv_name for subdiv_name in subdiv_names if cls.is_valid_building_name(subdiv_name, address_components, languages, country=country, is_generic=cls.is_generic_place(subdiv_tags), is_known_venue_type=cls.is_known_venue_type(subdiv_tags))]
+                                                     for subdiv_names, subdiv_tags in zip(all_subdivision_names, subdivision_components)]
 
-                    dropout_subdivision_names = [[subdiv_name for subdiv_name in subdiv_names if cls.is_valid_building_name(subdiv_name, address_components, street_languages, country=country, is_generic=cls.is_generic_place(subdiv_tags), is_known_venue_type=cls.is_known_venue_type(subdiv_tags))]
-                                                 for subdiv_names, subdiv_tags in zip(all_subdivision_names, subdivision_components)]
+                    formatted_addresses.extend(cls.formatted_addresses_with_venue_building_and_subdivision_names(address_components, dropout_venue_names, dropout_building_names, dropout_subdivision_names,
+                                                                                                                 country, language=language, tag_components=tag_components, minimal_only=False))
 
-                formatted_addresses.extend(cls.formatted_addresses_with_venue_building_and_subdivision_names(address_components, dropout_venue_names, dropout_building_names, dropout_subdivision_names,
-                                                                                                             country, language=language, tag_components=tag_components, minimal_only=False))
+            response.extend([(address, country, language) for address in OrderedDict.fromkeys(formatted_addresses).keys()])
 
-        return OrderedDict.fromkeys(formatted_addresses).keys(), country, language
+        return response
 
     def formatted_addresses(self, tags, tag_components=True):
         '''
@@ -1582,7 +1630,7 @@ class OSMAddressFormatter(object):
                                                      tag_components=tag_components)
 
     @classmethod
-    def formatted_address_limited_with_reverse(cls, tags, country, candidate_languages, osm_components, neighborhoods):
+    def formatted_addresses_limited_with_reverse(cls, tags, country, candidate_languages, osm_components, neighborhoods):
         if not country:
             return None, None, None
 
@@ -1592,36 +1640,41 @@ class OSMAddressFormatter(object):
         if not (country and candidate_languages):
             return None, None, None
 
-        namespaced_language = cls.namespaced_language(tags, candidate_languages)
-
+        namespaced_languages = cls.namespaced_languages(tags, candidate_languages)
         revised_tags = cls.normalize_address_components(tags)
 
         admin_dropout_prob = float(nested_get(cls.config, ('limited', 'admin_dropout_prob'), default=0.0))
 
-        address_components, country, language = AddressComponents.limited_with_reverse(revised_tags, country, candidate_languages, osm_components, neighborhoods, language=namespaced_language)
+        address_languages = [None] + list(namespaced_languages)
 
-        if not address_components:
-            return None, None, None
+        response = []
+        for language in address_languages:
 
-        address_components = {k: v for k, v in address_components.iteritems() if k in OSM_ADDRESS_COMPONENT_VALUES}
-        if not address_components:
-            return []
+            address_components, country, language = AddressComponents.limited_with_reverse(revised_tags, country, candidate_languages, osm_components, neighborhoods, language=language)
 
-        for component in (AddressFormatter.COUNTRY, AddressFormatter.STATE,
-                          AddressFormatter.STATE_DISTRICT, AddressFormatter.CITY,
-                          AddressFormatter.CITY_DISTRICT, AddressFormatter.SUBURB):
-            if random.random() < admin_dropout_prob:
-                _ = address_components.pop(component, None)
+            if not address_components:
+                return None, None, None
 
-        if not address_components:
-            return None, None, None
+            address_components = {k: v for k, v in address_components.iteritems() if k in OSM_ADDRESS_COMPONENT_VALUES}
+            if not address_components:
+                continue
 
-        # Version with all components
-        formatted_address = cls.formatter.format_address(address_components, country, language, tag_components=False, minimal_only=False)
+            for component in (AddressFormatter.COUNTRY, AddressFormatter.STATE,
+                              AddressFormatter.STATE_DISTRICT, AddressFormatter.CITY,
+                              AddressFormatter.CITY_DISTRICT, AddressFormatter.SUBURB):
+                if random.random() < admin_dropout_prob:
+                    _ = address_components.pop(component, None)
 
-        return formatted_address, country, language
+            if not address_components:
+                return None, None, None
 
-    def formatted_address_limited(self, tags):
+            # Version with all components
+            formatted_address = cls.formatter.format_address(address_components, country, language, tag_components=False, minimal_only=False)
+            response.append((formatted_address, country, language))
+
+        return response
+
+    def formatted_addresses_limited(self, tags):
         try:
             latitude, longitude = latlon_to_decimal(tags['lat'], tags['lon'])
         except Exception:
@@ -1634,7 +1687,7 @@ class OSMAddressFormatter(object):
 
         neighborhoods = self.components.neighborhood_components(latitude, longitude)
 
-        return self.formatted_address_limited_with_reverse(tags, osm_components, neighborhoods)
+        return self.formatted_addresses_limited_with_reverse(tags, osm_components, neighborhoods)
 
     def build_training_data(self, infile, out_dir, tag_components=True):
         '''
@@ -1675,11 +1728,7 @@ class OSMAddressFormatter(object):
             writer = csv.writer(formatted_file, 'tsv_no_quote')
 
         for node_id, value, deps in parse_osm(infile):
-            formatted_addresses, country, language = self.formatted_addresses(value, tag_components=tag_components)
-            if not formatted_addresses:
-                continue
-
-            for formatted_address in formatted_addresses:
+            for formatted_addresses, country, language in self.formatted_addresses(value, tag_components=tag_components):
                 if formatted_address and formatted_address.strip():
                     formatted_address = tsv_string(formatted_address)
                     if not formatted_address or not formatted_address.strip():
@@ -2042,18 +2091,18 @@ class OSMAddressFormatter(object):
         writer = csv.writer(f, 'tsv_no_quote')
 
         for node_id, value, deps in parse_osm(infile):
-            formatted_address, country, language = self.formatted_address_limited(value)
-            if not formatted_address:
-                continue
-
-            if formatted_address.strip():
-                formatted_address = tsv_string(formatted_address.strip())
-                if not formatted_address or not formatted_address.strip():
+            for formatted_address, country, language in self.formatted_address_limited(value):
+                if not formatted_address:
                     continue
 
-                row = (language, country, formatted_address)
-                writer.writerow(row)
+                if formatted_address.strip():
+                    formatted_address = tsv_string(formatted_address.strip())
+                    if not formatted_address or not formatted_address.strip():
+                        continue
 
-            i += 1
-            if i % 1000 == 0 and i > 0:
-                print('did {} formatted addresses'.format(i))
+                    row = (language, country, formatted_address)
+                    writer.writerow(row)
+
+                i += 1
+                if i % 1000 == 0 and i > 0:
+                    print('did {} formatted addresses'.format(i))
