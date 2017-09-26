@@ -1582,13 +1582,14 @@ class AddressComponents(object):
             address_components[component] = val
 
     @classmethod
-    def valid_city_points(cls, city_point_components, containing_components, country, max_num_cities=2, max_num_villages=3):
+    def valid_place_points(cls, city_point_components, containing_components, country, max_num_cities=2, max_num_villages=3, max_num_suburbs=2):
         city_replacements = place_config.city_replacements(country)
 
         is_japan = country == Countries.JAPAN
 
         num_villages = 0
         num_cities = 0
+        num_suburbs = 0
 
         valid = []
 
@@ -1601,7 +1602,7 @@ class AddressComponents(object):
 
             is_village = cls.osm_component_is_village(props)
 
-            if ((component == AddressFormatter.CITY or component in city_replacements) and num_cities < max_num_cities) and not is_village:
+            if ((component == AddressFormatter.CITY or (component in city_replacements and component != AddressFormatter.SUBURB) ) and num_cities < max_num_cities) and not is_village:
                 valid.append((component, props))
                 seen_components.add(component)
                 num_cities += 1
@@ -1615,6 +1616,11 @@ class AddressComponents(object):
                 valid.append((component, props))
                 seen_components.add(component)
 
+            if not is_japan and component == AddressFormatter.SUBURB and num_suburbs < max_num_suburbs:
+                valid.append((component, props))
+                seen_components.add(component)
+                num_suburbs += 1
+
         return valid
 
     @classmethod
@@ -1625,18 +1631,21 @@ class AddressComponents(object):
 
         first_village = None
 
-        for (component, props) in cls.valid_city_points(city_point_components, containing_components, country):
+        for (component, props) in cls.valid_place_points(city_point_components, containing_components, country):
             have_sub_city = any((key in grouped_components and key in city_replacements for key in (AddressFormatter.SUBURB, AddressFormatter.CITY_DISTRICT, AddressFormatter.LOCALITY)))
 
             have_city = AddressFormatter.CITY in grouped_components
 
             is_village = cls.osm_component_is_village(props)
 
-            if (component == AddressFormatter.CITY or (component in city_replacements and not have_city)) and component not in grouped_components and not is_village:
+            if (component == AddressFormatter.CITY or (component in city_replacements and component != AddressFormatter.SUBURB and not have_city)) and component not in grouped_components and not is_village:
                 grouped_components[component].append(props)
 
             if is_village and not first_village:
                 first_village = props
+
+            if not is_japan and component == AddressFormatter.SUBURB:
+                grouped_components[component].append(props)
 
             if is_japan and component in cls.japan_neighborhood_classes:
                 existing = grouped_components.get(component, [])
@@ -1735,7 +1744,7 @@ class AddressComponents(object):
                     component_name = component_value.get('name', u'')
                     if component == AddressFormatter.CITY and AddressFormatter.LOCALITY in address_components and equivalent(component_name, address_components[AddressFormatter.LOCALITY], toponym_abbreviations_gazetteer, language):
                         continue
-                    elif component == AddressFormatter.LOCALITY and AddressFormatter.LOCALITY not in address_components and any((equivalent(component_name, city_name, toponym_abbreviations_gazetteer, language) for city_name in city_names)):
+                    elif component == AddressFormatter.LOCALITY and component not in address_components and any((equivalent(component_name, city_name, toponym_abbreviations_gazetteer, language) for city_name in city_names)):
                         continue
 
                     if random_key and not (component in (AddressFormatter.STATE_DISTRICT, AddressFormatter.STATE) and not have_city):
