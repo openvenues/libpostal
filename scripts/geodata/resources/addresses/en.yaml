@@ -917,6 +917,11 @@ buildings:
         canonical_probability: 0.4
         abbreviated_probability: 0.4
         sample_probability: 0.2
+        plural:
+            canonical: buildings
+            abbreviated: bldgs
+            canonical_probability: 0.5
+            abbreviated_probability: 0.5
         numeric:
             direction: left
     condominium: &condominium
@@ -926,12 +931,22 @@ buildings:
         canonical_probability: 0.4
         abbreviated_probability: 0.4
         sample_probability: 0.2
+        plural:
+            canonical: condominiums
+            abbreviated: condos
+            canonical_probability: 0.2
+            abbreviated_probability: 0.8
         numeric:
             direction: left
     tower: &tower
         canonical: tower
         abbreviated: twr
         sample: true
+        plural:
+            canonical: towers
+            abbreviated: twrs
+            canonical_probability: 0.7
+            abbreviated_probability: 0.3
         canonical_probability: 0.4
         abbreviated_probability: 0.4
         sample_probability: 0.2
@@ -945,6 +960,11 @@ buildings:
         canonical_probability: 0.3
         abbreviated_probability: 0.5
         sample_probability: 0.2
+        plural:
+            canonical: blocks
+            abbreviated: blks
+            canonical_probability: 0.6
+            abbreviated_probability: 0.4
         numeric:
             direction: left
             add_number_phrase: true
@@ -963,11 +983,12 @@ buildings:
             - alternative: *block
               probability: 0.05
         numeric_probability: 0.05 # e.g. Building 1
-        alpha_probability: 0.85 # e.g. Bldg A
+        alpha_probability: 0.8 # e.g. Bldg A
         numeric_plus_alpha_probability: 0.025 # e.g. 1A
         alpha_plus_numeric_probability: 0.025 # e.g. A1
-        hyphenated_number_probability: 0.03 # e.g. 11-10
+        hyphenated_number_probability: 0.05 # e.g. 11-10
         decimal_number_probability: 0.02 # e.g. 1.10
+        numeric_list_probability: 0.03 # e.sg. 1.10
 
         alpha_plus_numeric:
             whitespace_probability: 0.1
@@ -979,6 +1000,7 @@ buildings:
 
         hyphenated_number:
             range_probability: 0.5
+            plural_probability: 0.4
             # direction of the range, not the phrase
             direction: right
             direction_probability: 0.6
@@ -986,6 +1008,19 @@ buildings:
             alpha_plus_numeric_whitespace_probability: 0.1
             numeric_plus_alpha_probability: 0.1
             numeric_plus_alpha_whitespace_probability: 0.1
+
+        numeric_list:
+            plural_probability: 0.7
+            comma_probability: 0.5
+            final_separator: *and
+            length:
+                default: 2
+                probability: 0.95
+                alternatives:
+                    - alternative: 3
+                      probability: 0.04
+                    - alternative: 4
+                      probability: 0.01
 
 # Entrance
 # ========
@@ -1682,3 +1717,4 @@ countries:
                 default: *house_number
 
             alphanumeric_phrase_probability: 0.1
+            convert_to_building_probability: 0.1
