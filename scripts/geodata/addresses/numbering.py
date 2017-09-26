@@ -633,24 +633,27 @@ class NumberedComponent(object):
                 ordinal_phrase_components[k].append(u'(?:{})'.format(u'|'.join(vals)))
 
         whitespace_phrase = u'[ \.]' if whitespace else u''
-        whitespace_or_beginning = u'(?<![^\s,;\(\)])' if whitespace else u''
-        whitespace_lookahead = u'(?![^\s,;\(\)])' if whitespace else u''
+        whitespace_or_hyphen_phrase = u'[ \-\u2013]' if whitespace else u''
+        whitespace_or_beginning = u'(?<![^\s,;\(\)\."])' if whitespace else u''
+        whitespace_lookahead = u'(?![^\s,;\(\)\."])' if whitespace else u''
 
         left_ordinal_phrases = {k: sorted(v, reverse=True) for k, v in six.iteritems(left_ordinal_phrases)}
         right_ordinal_phrases = {k: sorted(v, reverse=True) for k, v in six.iteritems(right_ordinal_phrases)}
 
         left_affix_phrases.sort(reverse=True)
-        left_phrases_with_number.sort(reverse=True)
-        left_phrases.sort(reverse=True)
+        left_phrases_with_number = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in left_phrases_with_number], reverse=True)
+        left_phrases = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in left_phrases], reverse=True)
         right_affix_phrases.sort(reverse=True)
-        right_phrases_with_number.sort(reverse=True)
-        right_phrases.sort(reverse=True)
+        right_phrases_with_number = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in right_phrases_with_number], reverse=True)
+        right_phrases = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in right_phrases], reverse=True)
         standalone_phrases.sort(reverse=True)
+        standalone_phrases = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in standalone_phrases], reverse=True)
 
         left_number_affix_phrases.sort(reverse=True)
-        left_number_phrases.sort(reverse=True)
+        left_number_phrases = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in left_number_phrases], reverse=True)
         right_number_affix_phrases.sort(reverse=True)
         right_number_phrases.sort(reverse=True)
+        right_number_phrases = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in right_number_phrases], reverse=True)
 
         conjunction_phrases.sort(reverse=True)
 
@@ -663,7 +666,8 @@ class NumberedComponent(object):
             cardinal_number_pattern = numeric_expressions.cardinal_regex(language)
             if cardinal_number_pattern:
                 if language != JAPANESE:
-                    numeric_pattern = u'\\b(?:(?:{})|(?:{})|(?:{}))\\b'.format(numeric_affix_pattern, cardinal_number_pattern, numeric_expressions.roman_numeral_pattern)
+                    numeric_affix_pattern = u'(?:(?:{})|(?:{})|(?:{}))'.format(numeric_affix_pattern, cardinal_number_pattern, numeric_expressions.roman_numeral_pattern)
+                    numeric_pattern = u'\\b{}\\b'.format(numeric_affix_pattern)
                 else:
                     numeric_pattern = u'(?:(?:{})|(?:{}))'.format(numeric_affix_pattern, cardinal_number_pattern)
 
