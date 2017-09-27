@@ -29,7 +29,7 @@ from geodata.addresses.floors import Floor
 from geodata.addresses.entrances import Entrance
 from geodata.addresses.house_numbers import HouseNumber
 from geodata.addresses.metro_stations import MetroStation
-from geodata.addresses.numbering import Digits
+from geodata.addresses.numbering import *
 from geodata.addresses.po_boxes import POBox
 from geodata.addresses.postcodes import PostCode
 from geodata.addresses.staircases import Staircase
@@ -64,12 +64,6 @@ PARSER_DEFAULT_CONFIG = os.path.join(RESOURCES_DIR, 'parser', 'default.yaml')
 JAPANESE_ROMAJI = 'ja_rm'
 ENGLISH = 'en'
 SPANISH = 'es'
-
-JAPANESE = 'ja'
-CHINESE = 'zh'
-KOREAN = 'ko'
-
-CJK_LANGUAGES = set([CHINESE, JAPANESE, KOREAN])
 
 
 def setup_component_dependencies(config):

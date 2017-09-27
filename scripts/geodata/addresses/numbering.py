@@ -17,7 +17,12 @@ from geodata.numbers.spellout import numeric_expressions
 from geodata.text.tokenize import tokenize, token_types
 
 alphabets = {}
+
 JAPANESE = 'ja'
+CHINESE = 'zh'
+KOREAN = 'ko'
+
+CJK_LANGUAGES = set([CHINESE, JAPANESE, KOREAN])
 
 
 def sample_alphabet(alphabet, b=1.5):
@@ -290,17 +295,19 @@ class NumberedComponent(object):
     numeric_affix_pattern = u'(?:[^\W\d_]{,2}[\d]+[^\W\d_]{,2}[\-\u2013\./][^\W\d_]{,2}[\d]+[^\W\d_]{,2}|[\d]*[^\W\d_][\d]*(?:[\-\u2013\./ ]|\s[\-\u2013/]\s)?[^\W\d_]?[\d]+[^\W\d_]?|[^\W\d_]?[\d]+[^\W\d_]?(?:[\-\u2013\./ ]|\s[\-\u2013/]\s)?[\d]*[^\W\d_][\d]*|[\d]+|[^\W\d_](?:(?:[\-\u2013/][^\W\d_])|(?:[\-\u2013\./][^\W\d_]?[\d]+[^\W\d_]?))?)'
     numeric_pattern = u'\\b{}\\b'.format(numeric_affix_pattern)
 
-    japanese_number_pattern = u'(?:[\d]+[\-\u2013\u30fc\u306e])*[\d]+'
+    cjk_number_pattern = u'(?:[\d]+[\-\u2013\u30fc\u306e])*[\d]+'
 
     @classmethod
     def numeric_regex(cls, language, country=None):
         left_phrases = []
         left_phrases_with_number = []
         left_affix_phrases = []
+        left_affix_phrases_with_number = []
         left_ordinal_phrases = defaultdict(list)
         right_phrases = []
         right_phrases_with_number = []
         right_affix_phrases = []
+        right_affix_phrases_with_number = []
         right_ordinal_phrases = defaultdict(list)
         standalone_phrases = []
 
@@ -556,10 +563,17 @@ class NumberedComponent(object):
 
             if numeric_affix:
                 direction = numeric_affix['direction']
+                add_number_phrase = numeric_affix.get('add_number_phrase', False)
                 if direction == 'left':
-                    phrases = left_affix_phrases
+                    if not add_number_phrase:
+                        phrases = left_affix_phrases
+                    else:
+                        phrases = left_affix_phrases_with_number
                 else:
-                    phrases = right_affix_phrases
+                    if not add_number_phrase:
+                        phrases = right_affix_phrases
+                    else:
+                        phrases = right_affix_phrases_with_number
 
                 affix = numeric_affix['affix']
                 if affix not in all_number_phrases:
@@ -641,9 +655,11 @@ class NumberedComponent(object):
         right_ordinal_phrases = {k: sorted(v, reverse=True) for k, v in six.iteritems(right_ordinal_phrases)}
 
         left_affix_phrases.sort(reverse=True)
+        left_affix_phrases_with_number.sort(reverse=True)
         left_phrases_with_number = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in left_phrases_with_number], reverse=True)
         left_phrases = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in left_phrases], reverse=True)
         right_affix_phrases.sort(reverse=True)
+        right_affix_phrases_with_number.sort(reverse=True)
         right_phrases_with_number = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in right_phrases_with_number], reverse=True)
         right_phrases = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in right_phrases], reverse=True)
         standalone_phrases.sort(reverse=True)
@@ -659,17 +675,17 @@ class NumberedComponent(object):
 
         numeric_pattern = cls.numeric_pattern
         numeric_affix_pattern = cls.numeric_affix_pattern
-        if language == JAPANESE:
-            numeric_pattern = numeric_affix_pattern = cls.japanese_number_pattern
+        if language in CJK_LANGUAGES:
+            numeric_pattern = numeric_affix_pattern = cls.cjk_number_pattern
 
         if cardinal_number_components:
             cardinal_number_pattern = numeric_expressions.cardinal_regex(language)
             if cardinal_number_pattern:
-                if language != JAPANESE:
+                if language not in CJK_LANGUAGES:
                     numeric_affix_pattern = u'(?:(?:{})|(?:{})|(?:{}))'.format(numeric_affix_pattern, cardinal_number_pattern, numeric_expressions.roman_numeral_pattern)
                     numeric_pattern = u'\\b{}\\b'.format(numeric_affix_pattern)
                 else:
-                    numeric_pattern = u'(?:(?:{})|(?:{}))'.format(numeric_affix_pattern, cardinal_number_pattern)
+                    numeric_affix_pattern = numeric_pattern = u'(?:(?:{})|(?:{}))'.format(numeric_affix_pattern, cardinal_number_pattern)
 
         conjunction_words = []
         conjunction_symbols = []
@@ -692,6 +708,12 @@ class NumberedComponent(object):
                     ordinal_parts.append(ordinal_suffix_regex)
 
                 regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(ordinal_parts).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(sorted(vals, reverse=True)).replace(u'.', u'\\.')))
+
+        if left_affix_phrases_with_number:
+            if left_number_affix_phrases:
+                regexes.append(u'(?:{})(?:{})(?:{})'.format(u'|'.join(left_affix_phrases_with_number).replace(u'.', u'\\.'), u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), numeric_affix_pattern))
+            if right_number_affix_phrases:
+                regexes.append(u'(?:{})(?:{})(?:{})'.format(u'|'.join(left_affix_phrases_with_number).replace(u'.', u'\\.'), numeric_affix_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.')))
 
         if left_affix_phrases:
             regexes.append(u'(?:{})(?:{})'.format(u'|'.join(left_affix_phrases).replace(u'.', u'\\.'), numeric_affix_pattern))
@@ -717,6 +739,13 @@ class NumberedComponent(object):
                     ordinal_parts.append(ordinal_suffix_regex)
 
                 regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(vals).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(ordinal_parts).replace(u'.', u'\\.')))
+
+        if right_affix_phrases_with_number:
+            if left_number_affix_phrases:
+                regexes.append(u'(?:{})(?:{})(?:{})'.format(u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), numeric_affix_pattern, u'|'.join(right_affix_phrases_with_number).replace(u'.', u'\\.')))
+
+            if right_number_affix_phrases:
+                regexes.append(u'(?:{})(?:{})(?:{})'.format(numeric_affix_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.'), u'|'.join(right_affix_phrases_with_number).replace(u'.', u'\\.')))
 
         if right_affix_phrases:
             regexes.append(u'(?:{})(?:{})'.format(numeric_affix_pattern, u'|'.join(right_affix_phrases).replace(u'.', u'\\.')))
