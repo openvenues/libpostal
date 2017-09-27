@@ -37,3 +37,6 @@ countries:
         block_phrase_probability: 0.4
         romaji_probability: 0.4
         add_metro_probability: 0.6
+
+    ph:
+        add_barangay_probability: 0.7

@@ -88,7 +88,6 @@ class OSMAddressFormatter(object):
             ('is_in:neighbourhood', AddressFormatter.SUBURB),
             ('addr:neighborhood', AddressFormatter.SUBURB),
             ('is_in:neighborhood', AddressFormatter.SUBURB),
-            ('addr:barangay', AddressFormatter.SUBURB),
             # This is actually used for suburb
             ('suburb', AddressFormatter.SUBURB),
             ('addr:city', AddressFormatter.CITY),
@@ -489,6 +488,59 @@ class OSMAddressFormatter(object):
     @classmethod
     def japanese_admin_components(cls, tags, language):
         pass
+
+    @classmethod
+    def remove_philippines_neighborhood_components(cls, tags):
+        for tag in ('addr:neighbourhood', 'addr:neighbourhood', 'addr:suburb'):
+            tags.pop(tag, None)
+
+    philippines_barangay_regex = re.compile(u'\\b(?:brgy|bgy|barangay)\\b', re.I)
+    philippines_purok_regex = re.compile(u'\\bpurok\\b', re.I)
+    philippines_sitio_regex = re.compile(u'\\bsitio\\b', re.I)
+
+    @classmethod
+    def format_philippines_neighborhood(cls, tags):
+        neighborhood = tags.get('addr:neighbourhood', tags.get('addr:neighborhood'))
+
+        neighborhood_tag = 'addr:neighbourhood'
+
+        barangay = tags.get('addr:barangay', tags.get('is_in:barangay'))
+        if barangay and barangay.strip() and not cls.philippines_barangay_regex.search(barangay):
+            barangay = u'Barangay {}'.format(barangay.strip())
+
+        if barangay:
+            cls.remove_philippines_neighborhood_components(tags)
+            tags[neighborhood_tag] = barangay
+            return barangay
+
+        purok = tags.get('addr:purok', tags.get('is_in:purok'))
+        if purok and purok.strip() and not cls.philippines_purok_regex.search(purok):
+            purok = u'Purok {}'.format(purok.strip())
+
+        if purok:
+            cls.remove_philippines_neighborhood_components(tags)
+            tags[neighborhood_tag] = purok
+            return purok
+
+        sitio = tags.get('addr:sitio', tags.get('is_in:sitio'))
+        if sitio and sitio.strip() and not cls.philippines_sitio_regex.search(sitio):
+            sitio = u'Sitio {}'.format(sitio.strip())
+
+        if sitio:
+            cls.remove_philippines_neighborhood_components(tags)
+            tags[neighborhood_tag] = sitio
+            return sitio
+
+        if neighborhood and neighborhood.strip() and not any((pattern.search(neighborhood) for pattern in (cls.philippines_barangay_regex, cls.philippines_purok_regex, cls.philippines_sitio_regex))):
+            barangay_prob = float(nested_get(cls.config, ('countries', 'ph', 'add_barangay_probability'), default=0.0))
+            if random.random() < barangay_prob:
+                neighborhood = u'Barangay {}'.format(neighborhood)
+
+            cls.remove_philippines_neighborhood_components(tags)
+            tags[neighborhood_tag] = neighborhood
+            return neighborhood
+
+        return None
 
     @classmethod
     def combine_japanese_house_number(cls, tags, language):
@@ -1259,6 +1311,8 @@ class OSMAddressFormatter(object):
                 language = None
 
             cls.remove_japanese_suburb_tags(tags)
+        elif country == Countries.PHILIPPINES:
+            cls.format_philippines_neighborhood(tags)
 
         is_generic_place = cls.is_generic_place(tags)
         is_known_venue_type = cls.is_known_venue_type(tags)
