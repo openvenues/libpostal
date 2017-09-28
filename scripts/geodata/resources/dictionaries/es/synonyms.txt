@@ -37,7 +37,7 @@ mayo|my|may
 militar|milr
 monte|mt|mte|mnte
 montes|mts|mtes|mntes|mnts
-nacional|nal|nacl
+nacional|nac|nal|nacl
 noviembre|nbre|n.bre|nvre|n.vre|nove|nov.e|novre|nov.re|novbre|nov.bre|9bre|9.bre|9 bre
 octubre|oct|octbre|oct.bre|octe|oct.e|8bre|8.bre|8 bre
 portillo|ptilo|ptllo
