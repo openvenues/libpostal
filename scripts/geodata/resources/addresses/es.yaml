@@ -38,16 +38,29 @@ numbers:
         sample_probability: 0.5
         numeric:
             direction: left
+        plural:
+            canonical: números
+            abbreviated: nºs
+            canonical_probability: 0.6
+            abbreviated_probability: 0.4
         numeric_affix:
             affix: "#" # e.g. #3, #2F, etc.
-            probability: 0.5
+            probability: 0.4
             alternatives:
                 - alternative:
                       affix: nº
                       direction: left
-                  probability: 0.35
+                  probability: 0.2
                 - alternative:
                       affix: nº.
+                      direction: left
+                  probability: 0.15
+                - alternative:
+                      affix: "no"
+                      direction: left
+                  probability: 0.1
+                - alternative:
+                      affix: no.
                       direction: left
                   probability: 0.15
             direction: left # affix goes on the number's left
@@ -111,6 +124,7 @@ buildings:
         sample_probability: 0.3
         numeric:
             direction: left
+
     condominio: &condominio
         canonical: condominio
         abbreviated: cond
@@ -120,6 +134,7 @@ buildings:
         sample_probability: 0.1
         numeric:
             direction: left
+
     complejo: &complejo
         canonical: complejo
         abbreviated: compj
@@ -129,6 +144,7 @@ buildings:
         sample_probability: 0.2
         numeric:
             direction: left
+
     torre: &torre
         canonical: torre
         abbreviated: to
@@ -139,16 +155,57 @@ buildings:
         numeric:
             direction: left
 
+    bloque: &bloque
+        canonical: bloque
+        abbreviated: blq
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    manzana: &manzana
+        canonical: manzana
+        abbreviated: mz
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.2
+        sample_probability: 0.4
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: mz
+            direction: left
+            probability: 0.7
+            alternatives:
+                - alternative:
+                      affix: mz.
+                  probability: 0.1
+                - alternative:
+                      affix: mza
+                  probability: 0.1
+                - alternative:
+                      affix: mza.
+                  probability: 0.1
+
+        numeric_probability: 0.8
+        numeric_affix_probability: 0.2
+
     # Edificio 1, Edif A, etc.
     alphanumeric: &building_alphanumeric
         default: *edificio
-        probability: 0.75
+        probability: 0.55
         alternatives:
+            - alternative: *manzana
+              probability: 0.15
             - alternative: *torre
               probability: 0.1
             - alternative: *condominio
               probability: 0.1
             - alternative: *complejo
+              probability: 0.05
+            - alternative: *bloque
               probability: 0.05
         numeric_probability: 0.075 # e.g. Edificio 1
         alpha_probability: 0.85 # e.g. Edif A
@@ -379,15 +436,79 @@ levels:
 
 blocks:
     alphanumeric:
-        default:
-            canonical: bloque
-            abbreviated: blq
-            sample: true
-            canonical_probability: 0.6
-            abbreviated_probability: 0.2
-            sample_probability: 0.2
-            numeric:
-                direction: left
+        default: *manzana
+        probability: 0.8
+        alternatives:
+            - alternative: *bloque
+              probability: 0.2
+
+
+superblocks:
+    supermanzana: &supermanzana
+        canonical: supermanzana
+        abbreviated: sm
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.4
+        sample_probability: 0.4
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: sm
+            direction: left
+            probability: 0.5
+            alternatives:
+                - alternative:
+                      affix: sm.
+                  probability: 0.1
+                - alternative:
+                      affix: s.m.
+                  probability: 0.05
+                - alternative:
+                      affix: s.m
+                  probability: 0.05
+                - alternative:
+                      affix: smz
+                  probability: 0.1
+                - alternative:
+                      affix: smz.
+                  probability: 0.1
+                - alternative:
+                      affix: smza
+                  probability: 0.05
+                - alternative:
+                      affix: smza.
+                  probability: 0.05
+        numeric_probability: 0.7
+        numeric_affix_probability: 0.3
+
+    region: &region
+        canonical: región
+        abbreviated: reg
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: reg
+            direction: left
+            probability: 0.7
+            alternatives:
+                - alternative:
+                      affix: reg.
+                  probability: 0.3
+        numeric_probability: 0.7
+        numeric_affix_probability: 0.3
+
+    alphanumeric:
+        default: *supermanzana
+        probability: 0.7
+        alternatives:
+            - alternative: *region
+              probability: 0.3
+
 
 categories:
     near:
@@ -857,6 +978,21 @@ units:
         sample_probability: 0.3
         numeric:
             direction: left
+    lot: &lote
+        canonical: lote
+        abbreviated: lt
+        sample: true
+        plural:
+            canonical: lotes
+            abbreviated: lts
+            canonical_probability: 0.7
+            abbreviated_probability: 0.3
+        numeric:
+            direction: left
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+
     office: &oficina
         canonical: oficina
         abbreviated: of
@@ -886,18 +1022,6 @@ units:
         canonical_probability: 0.4
         abbreviated_probability: 0.4
         sample_probability: 0.2
-    lot: &lote
-        canonical: lote
-        abbreviated: lt
-        sample: true
-        plural:
-            canonical: lotes
-            abbreviated: lts
-            canonical_probability: 0.7
-            abbreviated_probability: 0.3
-        canonical_probability: 0.6
-        abbreviated_probability: 0.2
-        sample_probability: 0.2
     parcel: &parcela
         canonical: parcela
         plural:
@@ -917,7 +1041,7 @@ units:
 
     alphanumeric: &unit_alphanumeric
         default: *departamento
-        probability: 0.8
+        probability: 0.75
         sample: true
         alternatives:
             - alternative: *apartamento
@@ -926,12 +1050,13 @@ units:
               probability: 0.05
             - alternative: *puerta
               probability: 0.05
+            - alternative: *lote
+              probability: 0.05
 
         # Separate random probability for adding directions like 2o Izq, 2 Dcha, etc.
         add_direction: true
         add_direction_probability: 0.1
         add_direction_numeric: true # Only for numbers
-        add_direction_standalone: true # A unit can be as simple as "D"
 
         numeric_probability: 0.9 # e.g. Dpto 1
         numeric_plus_alpha_probability: 0.01 # e.g. Dpto 1A
@@ -959,18 +1084,18 @@ units:
                   probability: 0.02
 
         directional:
-            direction: right # e.g. Puerta Izq
+            direction: right # e.g. Izq
             direction_probability: 0.8
             modifier:
                 alternatives:
                     - alternative: *derecha
-                      probability: 0.4
+                      probability: 0.45
                     - alternative: *izquierda
-                      probability: 0.4
+                      probability: 0.45
                     - alternative: *trasera
-                      probability: 0.1
+                      probability: 0.05
                     - alternative: *frente
-                      probability: 0.1
+                      probability: 0.05
 
         numeric_list:
             plural_probability: 0.7
@@ -989,9 +1114,11 @@ units:
     alphanumeric_apartamento: &unit_alphanumeric_apartamento
         <<: *unit_alphanumeric
         default: *apartamento
-        probability: 0.8
+        probability: 0.7
         alternatives:
             - alternative: *departamento
+              probability: 0.1
+            - alternative: *lote
               probability: 0.1
             - alternative: *casa
               probability: 0.05
@@ -1000,9 +1127,11 @@ units:
 
         alpha:
             default: *apartamento
-            probability: 0.8
+            probability: 0.7
             alternatives:
                 - alternative: *departamento
+                  probability: 0.1
+                - alternative: *lote
                   probability: 0.1
                 - alternative: *casa
                   probability: 0.03
@@ -1014,8 +1143,10 @@ units:
     alphanumeric_apartamento_exclusive: &unit_alphanumeric_apartamento_exclusive
         <<: *unit_alphanumeric
         default: *apartamento
-        probability: 0.9
+        probability: 0.8
         alternatives:
+            - alternative: *lote
+              probability: 0.1
             - alternative: *casa
               probability: 0.05
             - alternative: *puerta
@@ -1023,8 +1154,10 @@ units:
 
         alpha:
             default: *apartamento
-            probability: 0.9
+            probability: 0.8
             alternatives:
+                - alternative: *lote
+                  probability: 0.1
                 - alternative: *casa
                   probability: 0.03
                 - alternative: *puerta
@@ -1121,6 +1254,9 @@ units:
         lot_plus_parcel_probability: 0.02
         parcel_plus_lot_probability: 0.02
 
+lots:
+    alphanumeric:
+        default: *lote
 
 countries:
     # España / Spain
@@ -1246,6 +1382,7 @@ countries:
                     gender: f
                     direction_probability: 0.95
                     null_phrase_probability: 0.8 # Let e.g. 5a be the entire unit string
+
                 # These sum to 1
                 numeric_probability: 0.25
                 ordinal_probability: 0.75
@@ -1260,12 +1397,12 @@ countries:
                     - alternative: *casa
                       probability: 0.1
 
-                numeric_probability: 0.7 # e.g. Puerta 1a
-                numeric_plus_alpha_probability: 0.01 # e.g. Puerta 1A
-                alpha_plus_numeric_probability: 0.01 # e.g. Puerta A1
+                numeric_probability: 0.5 # e.g. Puerta 1a
+                numeric_plus_alpha_probability: 0.015 # e.g. Puerta 1A
+                alpha_plus_numeric_probability: 0.015 # e.g. Puerta A1
                 alpha_probability: 0.25 # e.g. Puerta A
-                directional_probability: 0.02
-                numeric_list_probability: 0.01
+                directional_probability: 0.2
+                numeric_list_probability: 0.02
 
                 alpha:
                     default: *puerta_espana
@@ -1341,6 +1478,9 @@ countries:
         # México uses the North American convention of starting floors at 1
         levels:
             numbering_starts_at: 1
+
+            zones:
+                residential: *unit_alphanumeric_apartamento_exclusive
 
     # Panamá
     pa:
