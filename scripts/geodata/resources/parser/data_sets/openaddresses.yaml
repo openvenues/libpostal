@@ -349,6 +349,17 @@ countries:
                     - filename: statewide.csv
 
     by:
+        files:
+            - filename: countrywide.csv
+              language: ru
+              fields:
+                  <<: *default_fields
+                  UNIT:
+                      component: building
+                  DISTRICT:
+                      component: state_district
+                  REGION:
+                      component: state
         subdirs:
             brest:
                 add:
