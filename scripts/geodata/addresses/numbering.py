@@ -554,9 +554,10 @@ class NumberedComponent(object):
                 standalone_phrases.append(canonical)
                 if abbreviated:
                     standalone_phrases.append(u'{}.'.format(abbreviated))
-                    standalone_phrases.append(abbreviated)
+                    if len(abbreviated) > 1:
+                        standalone_phrases.append(abbreviated)
                 if sample:
-                    sample_phrases = list(canonical_phrases[canonical] - set([abbreviated]) - sample_exclude)
+                    sample_phrases = list(set([p for p in canonical_phrases[canonical] if len(p) > 1]) - set([abbreviated]) - sample_exclude)
                     sample_phrases.extend([u'{}.'.format(p) for p in sample_phrases if len(p) < len(canonical) and not p.endswith(u'.')])
                     sample_phrases.sort(key=len, reverse=True)
                     standalone_phrases.extend(sample_phrases)
