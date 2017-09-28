@@ -315,11 +315,20 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         'short_name',
         'short_name:*',
         'admin_level',
+        'admin_type',
+        'admin_type:*',
+        'border_type',
+        'boundary',
+        'boundary:type',
         'place',
+        'place:*',
         'population',
         'designation',
+        'wikidata',
         'wikipedia',
         'wikipedia:*',
+        'addr:postcode',
+        'postal_code',
     ])
 
     @classmethod
