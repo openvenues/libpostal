@@ -2,9 +2,9 @@ barcelona|barna|bar.na
 buenos aires|bs as|bs.as
 capital federal|cap fed
 ciudad de méxico|c méx|c mex|c de méx|c de mex|ciudad de mexico
-distrito federal|df|d.f|d f
-distrito capital|dc|d.c|d c
-distrito nacional|dn|d.n|d n
+distrito federal|df|d.f|d f|d.f.|dist fed|dist. fed.|dis.fed|dist.fed.
+distrito capital|dc|d.c|d c|d.c.|dist cap|dist. cap.|dis.cap|dist.cap.
+distrito nacional|dn|d.n|d n|d.n.|dist nac|dist. nac.|dis.nac|dist.nac.
 madrid|madd
 aguascalientes|ag|ags
 baja california|bn|bc|b.c.|b.c|b c|bj cal
