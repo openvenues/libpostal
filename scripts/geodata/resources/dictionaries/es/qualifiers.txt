@@ -29,6 +29,7 @@ poblado|pbdo|pob|pobl
 polígono|poligono|políg|polig|pol
 polígono residencial|poligono residencial|políg res|polig res|pol.res|pol res|pgres|pg res|pr|p.r.|p.r|p r
 polígono industrial|poligono industrial|políg ind|polig ind|pol.ind|pol ind|pgind|pg ind|pi|p.i.|p.i|p i
+paraje|praje|prj
 privada|priv
 provincia|pcia
 pueblo|pbl|pblo|pbo
