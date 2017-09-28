@@ -33,6 +33,7 @@ from geodata.addresses.numbering import *
 from geodata.addresses.po_boxes import POBox
 from geodata.addresses.postcodes import PostCode
 from geodata.addresses.staircases import Staircase
+from geodata.addresses.superblocks import Superblock
 from geodata.addresses.units import Unit
 from geodata.boundaries.names import boundary_names
 from geodata.configs.utils import nested_get, recursive_merge, RESOURCES_DIR, alternative_probabilities
@@ -1525,32 +1526,6 @@ class AddressComponents(object):
         return value
 
     @classmethod
-    def extract_block_lot_patterns(cls, value, language):
-        stripped = value.strip()
-        if not stripped:
-            return stripped, None, None, None
-
-        superblock = None
-        block = None
-        lot = None
-        superblock_regexes = cls.superblock_regexes.get(language)
-        if superblock_regexes:
-            stripped, superblock = cls.extract_regex(superblock_regexes, stripped)
-        block_number_regexes = cls.block_number_regexes.get(language)
-        if block_number_regexes:
-            stripped, block = cls.extract_regex(block_number_regexes, stripped)
-        number_block_regexes = cls.number_block_regexes.get(language)
-        if number_block_regexes and not block:
-            stripped, block = cls.extract_regex(number_block_regexes, stripped)
-        lot_regexes = cls.lot_regexes.get(language)
-        if lot_regexes:
-            stripped, lot = cls.extract_regex(lot_regexes, stripped)
-
-        stripped = cls.cleanup_value_post_extraction(stripped)
-
-        return stripped, superblock, block, lot
-
-    @classmethod
     def abbreviated_state(cls, state, country, language):
         abbreviate_state_prob = float(nested_get(cls.config, ('state', 'abbreviated_probability')))
 
@@ -2145,21 +2120,6 @@ class AddressComponents(object):
 
         superblock = block = lot = None
 
-        hn = house_number
-        for language in possible_languages:
-            hn, sb, bl, lt = cls.extract_block_lot_patterns(hn, language)
-
-            if sb:
-                superblock = sb
-
-            if bl:
-                block = bl
-
-            if lt:
-                lot = lt
-
-        house_number = hn
-
         if (not house_number.strip() or house_number.isdigit()) and (superblock or block or lot):
             return True
 
@@ -2250,6 +2210,7 @@ class AddressComponents(object):
 
             for (numeric_cls, k) in [(Unit, AddressFormatter.UNIT),
                                      (Floor, AddressFormatter.LEVEL),
+                                     (Superblock, AddressFormatter.SUPERBLOCK),
                                      (Building, AddressFormatter.BUILDING),
                                      (POBox, AddressFormatter.PO_BOX),
                                      (Staircase, AddressFormatter.STAIRCASE),
@@ -2300,8 +2261,6 @@ class AddressComponents(object):
             return
 
         hn = house_number
-        for lang in languages:
-            hn, superblock, block, lot = cls.extract_block_lot_patterns(hn, lang)
 
         temp_address_components = {AddressFormatter.HOUSE_NUMBER: hn}
 
