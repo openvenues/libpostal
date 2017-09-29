@@ -4,14 +4,16 @@ auzoa
 barriada|barda
 barrio|bo|brio|brrio|bº|b°|b.º|b.°|b /|br
 barrios|bos|brios|brrios
+cantón|canton
 colonia|col
 comuna
 congregación|cngr|congegacion
 conjunto|cjto|conj|cto
 ciudad|cdad|cd
 cuadra|cuadr
-distrito|dtto
-distrito postal|dp|d p|dtto postal
+cuartel|ctel
+distrito|dtto|dist
+distrito postal|dp|d p|dtto postal|dist postal
 ejido|ej
 estado|edo
 extrarradio|extrr
@@ -23,6 +25,7 @@ haciendas|hdas
 isla|isl|is
 islas|isls|iss
 kilómetro|km|kilometro|kilom
+manzana|mz|mza
 núcleo|ncleo|nucleo
 partida|ptda
 poblado|pbdo|pob|pobl
@@ -34,13 +37,18 @@ privada|priv
 provincia|pcia
 pueblo|pbl|pblo|pbo
 poblado comunal|pcom|p com
+prolongación|prolongacion|prol
 punto kilométrico|punto kilometrico|pk|p.k.|p k
+ranchería|rchia|rancheria
 rancho|rcho
 región|reg|region
+rinconada|rcda|rcnda
 sección|seccion|secc|sccn|scn|sec
 sector|sect
 supermanzana|sm|s.m.|s.m|s m|smz|smza|s.mz|s.mza|s mz|s mza|super mz|super manzana|supermz|supermza|super mz|super mza|super.mz|super.mza
 región|reg|region
 urbanización|urbanizacion|urb|ur
 vecindario|vecin
+villa|vla|v
+villas|vlas
 zona|zna|zn

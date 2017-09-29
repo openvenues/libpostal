@@ -88,6 +88,7 @@ convento|cnvto
 cooperativa|coop
 cortijo|crtjo
 crematorio
+cuartel|ctel
 dehesa|dhsa
 de capital variable|de cv|de c v
 dentista
