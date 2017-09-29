@@ -1535,6 +1535,7 @@ class AddressComponents(object):
 
     @classmethod
     def abbreviate_admin_components(cls, address_components, country, language, hyphenation=True):
+        abbreviate_full_toponym_prob = float(nested_get(cls.config, ('boundaries', 'abbreviate_full_toponym_probability')))
         abbreviate_toponym_prob = float(nested_get(cls.config, ('boundaries', 'abbreviate_toponym_probability')))
 
         for component, val in six.iteritems(address_components):
@@ -1547,7 +1548,12 @@ class AddressComponents(object):
                     address_components[component] = abbreviated
                     continue
 
-            val = abbreviate(toponym_abbreviations_gazetteer, val, language, abbreviate_prob=abbreviate_toponym_prob)
+            abbreviated = abbreviate(toponym_gazetteer, val, language, abbreviate_prob=abbreviate_full_toponym_prob)
+            if abbreviated == val:
+                abbreviated = abbreviate(toponym_abbreviations_gazetteer, val, language, abbreviate_prob=abbreviate_toponym_prob)
+
+            val = abbreviated
+
             if hyphenation:
                 val = cls.name_hyphens(val)
             address_components[component] = val
