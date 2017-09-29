@@ -1542,8 +1542,10 @@ class AddressComponents(object):
                 continue
 
             if component == AddressFormatter.STATE:
-                address_components[component] = cls.abbreviated_state(val, country, language)
-                continue
+                abbreviated = cls.abbreviated_state(val, country, language)
+                if abbreviated != val:
+                    address_components[component] = abbreviated
+                    continue
 
             val = abbreviate(toponym_abbreviations_gazetteer, val, language, abbreviate_prob=abbreviate_toponym_prob)
             if hyphenation:
