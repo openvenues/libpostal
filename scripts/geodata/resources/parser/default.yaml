@@ -145,7 +145,8 @@ places:
     remove_hyphen_probability: 0.5
 
 boundaries:
-    abbreviate_toponym_probability: 0.35
+    abbreviate_full_toponym_probability: 0.4
+    abbreviate_toponym_probability: 0.3
     # Usually in Germany, may have e.g. name:prefix=Stadtbezirk
     add_prefix_probability: 0.5
 
