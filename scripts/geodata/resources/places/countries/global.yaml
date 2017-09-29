@@ -2,6 +2,7 @@
 # of including various admin components (applies to both addresses
 # and standalone place queries)
 
+
 global:
     city_replacements: []
     replace_city_with_locality_probability: 0.95
@@ -95,6 +96,7 @@ countries:
                     - state
             state:
                 probability: 0.6
+                population_unknown_probability: 0.8
                 population:
                     - lt: 100000
                       gte: 10000
@@ -130,6 +132,7 @@ countries:
                 probability: 0.95
             state:
                 probability: 0.6
+                population_unknown_probability: 0.8
                 population:
                     - lt: 100000
                       gte: 10000
@@ -166,6 +169,7 @@ countries:
                 probability: 0.95
             state:
                 probability: 0.7
+                population_unknown_probability: 0.8
                 population:
                     - lt: 100000
                       gte: 10000
@@ -214,6 +218,7 @@ countries:
         components:
             state_district:
                 probability: 0.15
+                population_unknown_probability: 0.4
                 population:
                     - lt: 10000
                       probability: 0.5
@@ -254,6 +259,7 @@ countries:
             city:
                 probability: 0.95
             state_district:
+                population_unknown_probability: 0.7
                 population:
                     - lt: 100000
                       gte: 10000
@@ -393,6 +399,7 @@ countries:
                 probability: 0.4
             state:
                 probability: 0.5
+                population_unknown_probability: 0.8
                 population:
                     - lt: 100000
                       gte: 10000
@@ -551,6 +558,7 @@ countries:
                       probability: 0.0001
             state:
                 probability: 0.8
+                population_unknown_probability: 0.9
                 population:
                     - lt: 100000
                       gte: 10000
@@ -573,6 +581,7 @@ countries:
 
             state_district:
                 probability: 0.1
+                population_unknown_probability: 0.3
                 population:
                     - lt: 100000
                       gte: 10000

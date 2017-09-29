@@ -141,6 +141,10 @@ class PlaceConfig(object):
     def include_component(self, component, containing_ids, country=None, population=None, check_population=True, unambiguous_city=False):
         if check_population and not unambiguous_city:
             population_exceptions = self.get_property(('components', component, 'population'), country=country, default=None)
+            if population is None:
+                population_unknown_prob = self.get_property(('components', component, 'population_unknown_probability'), country=country, default=None)
+                if population_unknown_prob is not None:
+                    return random.random() < float(population_unknown_prob)
             if population_exceptions and self.include_by_population_exceptions(population_exceptions, population=population or 0):
                 return True
         return self.include_component_simple(component, containing_ids, country=country)
