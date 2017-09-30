@@ -453,7 +453,10 @@ class AddressFormatter(object):
     def build_first_of_template(self, keys):
         """ For constructing """
 
-        return '{{{{#first}}}} {keys} {{{{/first}}}}'.format(keys=u''.join(keys))
+        if keys.strip():
+            return '{{{{#first}}}} {keys} {{{{/first}}}}'.format(keys=u''.join(keys))
+        else:
+            return ''
 
     def build_first_of_keys(self, element, func):
         keys = []
@@ -515,7 +518,7 @@ class AddressFormatter(object):
         return ''.join(new_components).strip()
 
     def insert_component(self, template, tag, before=None, after=None, first=False, last=False,
-                         is_reverse=False, exact_order=True):
+                         is_reverse=False, exact_order=True, allow_between_postcode_and_component=False):
         if not before and not after and not first and not last:
             return
 
@@ -530,15 +533,25 @@ class AddressFormatter(object):
 
             tag_match = re.compile(self.tag_token(tag)).search(sans_firsts)
 
+            postcode_match = None
+            if not allow_between_postcode_and_component and tag != self.POSTCODE:
+                postcode_match = re.compile(self.tag_token(self.POSTCODE)).search(sans_firsts)
+
             if before:
                 before_match = re.compile(self.tag_token(before)).search(sans_firsts)
                 if before_match and tag_match and before_match.start() > tag_match.start():
                     return template
 
+                if before_match and before != self.POSTCODE and postcode_match and postcode_match.start() < before_match.start() and u'{' not in sans_firsts[postcode_match.end():before_match.start()]:
+                    before = self.POSTCODE
+
             if after:
                 after_match = re.compile(self.tag_token(after)).search(sans_firsts)
                 if after_match and tag_match and tag_match.start() > after_match.start():
                     return template
+
+                if after_match and after != self.POSTCODE and postcode_match and postcode_match.start() > after_match.start() and u'{' not in sans_firsts[after_match.end():postcode_match.start()]:
+                    after = self.POSTCODE
 
         key_added = False
         skip_next_non_token = False
