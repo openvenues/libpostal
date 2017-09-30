@@ -648,7 +648,7 @@ class NumberedComponent(object):
                 ordinal_phrase_components[k].append(u'(?:{})'.format(u'|'.join(vals)))
 
         whitespace_phrase = u'[ \.]' if whitespace else u''
-        whitespace_or_hyphen_phrase = u'[ \-\u2013]' if whitespace else u''
+        whitespace_internal_phrase = u'[\.\s\-\u2013](?<=[\.\s])\s*' if whitespace else u''
         whitespace_or_beginning = u'(?<![^\s,;\(\)\."])' if whitespace else u''
         whitespace_lookahead = u'(?![^\s,;\(\)\."])' if whitespace else u''
 
@@ -657,20 +657,20 @@ class NumberedComponent(object):
 
         left_affix_phrases.sort(reverse=True)
         left_affix_phrases_with_number.sort(reverse=True)
-        left_phrases_with_number = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in left_phrases_with_number], reverse=True)
-        left_phrases = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in left_phrases], reverse=True)
+        left_phrases_with_number = sorted(left_phrases_with_number, reverse=True)
+        left_phrases = sorted(left_phrases, reverse=True)
         right_affix_phrases.sort(reverse=True)
         right_affix_phrases_with_number.sort(reverse=True)
-        right_phrases_with_number = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in right_phrases_with_number], reverse=True)
-        right_phrases = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in right_phrases], reverse=True)
+        right_phrases_with_number = sorted(right_phrases_with_number, reverse=True)
+        right_phrases = sorted(right_phrases, reverse=True)
         standalone_phrases.sort(reverse=True)
-        standalone_phrases = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in standalone_phrases], reverse=True)
+        standalone_phrases = sorted(standalone_phrases, reverse=True)
 
         left_number_affix_phrases.sort(reverse=True)
-        left_number_phrases = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in left_number_phrases], reverse=True)
+        left_number_phrases = sorted(left_number_phrases, reverse=True)
         right_number_affix_phrases.sort(reverse=True)
         right_number_phrases.sort(reverse=True)
-        right_number_phrases = sorted([p.replace(u' ', whitespace_or_hyphen_phrase) for p in right_number_phrases], reverse=True)
+        right_number_phrases = sorted(right_number_phrases, reverse=True)
 
         conjunction_phrases.sort(reverse=True)
 
@@ -708,29 +708,29 @@ class NumberedComponent(object):
                 if ordinal_suffix_regex:
                     ordinal_parts.append(ordinal_suffix_regex)
 
-                regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(ordinal_parts).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(sorted(vals, reverse=True)).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(ordinal_parts).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), whitespace_phrase, u'|'.join(sorted(vals, reverse=True)).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
 
         if left_affix_phrases_with_number:
             if left_number_affix_phrases:
-                regexes.append(u'(?:{})(?:{})(?:{})'.format(u'|'.join(left_affix_phrases_with_number).replace(u'.', u'\\.'), u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), numeric_affix_pattern))
+                regexes.append(u'(?:{})(?:{})(?:{})'.format(u'|'.join(left_affix_phrases_with_number).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), numeric_affix_pattern))
             if right_number_affix_phrases:
-                regexes.append(u'(?:{})(?:{})(?:{})'.format(u'|'.join(left_affix_phrases_with_number).replace(u'.', u'\\.'), numeric_affix_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{})(?:{})(?:{})'.format(u'|'.join(left_affix_phrases_with_number).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), numeric_affix_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
 
         if left_affix_phrases:
-            regexes.append(u'(?:{})(?:{})'.format(u'|'.join(left_affix_phrases).replace(u'.', u'\\.'), numeric_affix_pattern))
+            regexes.append(u'(?:{})(?:{})'.format(u'|'.join(left_affix_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), numeric_affix_pattern))
 
         if left_phrases_with_number:
             if left_number_affix_phrases:
-                regexes.append(u'(?:{}){}(?:{})(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), numeric_affix_pattern))
+                regexes.append(u'(?:{}){}(?:{})(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), whitespace_phrase, u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), numeric_affix_pattern))
             if left_number_phrases:
-                regexes.append(u'(?:{}){}(?:(?:{}){})?(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(left_number_phrases).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern))
+                regexes.append(u'(?:{}){}(?:(?:{}){})?(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), whitespace_phrase, u'|'.join(left_number_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), whitespace_phrase, numeric_pattern))
             if right_number_affix_phrases:
-                regexes.append(u'(?:{}){}(?:{})(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{}){}(?:{})(?:{})'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), whitespace_phrase, numeric_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
             if right_number_phrases:
-                regexes.append(u'(?:{}){}(?:{})(?:{}(?:{}))?'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern, whitespace_phrase, u'|'.join(right_number_phrases).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{}){}(?:{})(?:{}(?:{}))?'.format(u'|'.join(left_phrases_with_number).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), whitespace_phrase, numeric_pattern, whitespace_phrase, u'|'.join(right_number_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
 
         if left_phrases:
-            regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(left_phrases).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern))
+            regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(left_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), whitespace_phrase, numeric_pattern))
 
         if left_ordinal_phrases:
             for k, vals in six.iteritems(left_ordinal_phrases):
@@ -739,33 +739,33 @@ class NumberedComponent(object):
                 if ordinal_suffix_regex:
                     ordinal_parts.append(ordinal_suffix_regex)
 
-                regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(vals).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(ordinal_parts).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{}){}(?:{})'.format(u'|'.join(vals).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), whitespace_phrase, u'|'.join(ordinal_parts).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
 
         if right_affix_phrases_with_number:
             if left_number_affix_phrases:
-                regexes.append(u'(?:{})(?:{})(?:{})'.format(u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), numeric_affix_pattern, u'|'.join(right_affix_phrases_with_number).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{})(?:{})(?:{})'.format(u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), numeric_affix_pattern, u'|'.join(right_affix_phrases_with_number).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
 
             if right_number_affix_phrases:
-                regexes.append(u'(?:{})(?:{})(?:{})'.format(numeric_affix_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.'), u'|'.join(right_affix_phrases_with_number).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{})(?:{})(?:{})'.format(numeric_affix_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), u'|'.join(right_affix_phrases_with_number).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
 
         if right_affix_phrases:
-            regexes.append(u'(?:{})(?:{})'.format(numeric_affix_pattern, u'|'.join(right_affix_phrases).replace(u'.', u'\\.')))
+            regexes.append(u'(?:{})(?:{})'.format(numeric_affix_pattern, u'|'.join(right_affix_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
 
         if right_phrases_with_number:
             if left_number_affix_phrases:
-                regexes.append(u'(?:{})?(?:{}){}(?:{})'.format(u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.'), numeric_pattern, whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{})?(?:{}){}(?:{})'.format(u'|'.join(left_number_affix_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), numeric_pattern, whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
             if left_number_phrases:
-                regexes.append(u'(?:(?:{}){})?(?:{}){}(?:{})'.format(u'|'.join(left_number_phrases).replace(u'.', u'\\.'), whitespace_phrase, numeric_pattern, whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
+                regexes.append(u'(?:(?:{}){})?(?:{}){}(?:{})'.format(u'|'.join(left_number_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), whitespace_phrase, numeric_pattern, whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
             if right_number_affix_phrases:
-                regexes.append(u'(?:{})(?:{})?{}(?:{})'.format(numeric_affix_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{})(?:{})?{}(?:{})'.format(numeric_affix_pattern, u'|'.join(right_number_affix_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
             if right_number_phrases:
-                regexes.append(u'(?:{})(?:{}(?:{}))?{}(?:{})'.format(numeric_pattern, whitespace_phrase, u'|'.join(right_number_phrases).replace(u'.', u'\\.'), whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.')))
+                regexes.append(u'(?:{})(?:{}(?:{}))?{}(?:{})'.format(numeric_pattern, whitespace_phrase, u'|'.join(right_number_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase), whitespace_phrase, u'|'.join(right_phrases_with_number).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
 
         if right_phrases:
-            regexes.append(u'(?:{}){}(?:{})'.format(numeric_pattern, whitespace_phrase, u'|'.join(right_phrases).replace(u'.', u'\\.')))
+            regexes.append(u'(?:{}){}(?:{})'.format(numeric_pattern, whitespace_phrase, u'|'.join(right_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
 
         if standalone_phrases:
-            regexes.append(u'(?:{})'.format(u'|'.join(standalone_phrases).replace(u'.', u'\\.')))
+            regexes.append(u'(?:{})'.format(u'|'.join(standalone_phrases).replace(u'.', u'\\.').replace(u' ', whitespace_internal_phrase)))
 
         return u'{}(?:{}){}'.format(whitespace_or_beginning, u'|'.join([u'(?:{})'.format(r) for r in regexes]), whitespace_lookahead)
 
@@ -1090,7 +1090,6 @@ class NumberedComponent(object):
         if 'null_phrase_probability' in props and not is_list and (phrase_type == 'ordinal' or (has_alpha and (has_numeric or 'null_phrase_alpha_only' in props))):
             if random.random() < props['null_phrase_probability']:
                 return num
-
 
         whitespace = props.get('whitespace', whitespace_default)
 
