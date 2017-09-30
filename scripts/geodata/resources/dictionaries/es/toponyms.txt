@@ -6,34 +6,34 @@ distrito federal|df|d.f|d f|d.f.|dist fed|dist. fed.|dist.fed|dist.fed.|dtto fed
 distrito capital|dc|d.c|d c|d.c.|dist cap|dist. cap.|dist.cap|dist.cap.|dtto cap|dtto. cap.|dtto.cap|dtto.cap.
 distrito nacional|dn|d.n|d n|d.n.|dist nac|dist. nac.|dist.nac|dist.nac.|dtto nac|dtto. nac.|dtto.nac|dtto.nac.
 madrid|madd
-aguascalientes|ag|ags
-baja california|bn|bc|b.c.|b.c|b c|bj cal
-baja california sur|bs|bcs|b.c.s.|b.c.s|b c s|bj cal s
-campeche|cm|camp
-chiapas|cp|chis
-chihuahua|ch|chih
-coahuila|ca|coah
-colima|cl|col
-durango|du|dgo
-guanajuato|gt|gto
-guerrero|gr|gro
-hidalgo|hi|hgo
-jalisco|ja|jal
-méxico|mexico|mx|mex
-michoacán|michoacan|mc|mich
-morelos|mr|mor
-nayarit|na|nay
-nuevo león|nuevo leon|nl
-oaxaca|oa|oax
-puebla|pu|pue
-querétaro|queretaro|qe|qro
-quintana roo|qr|q.r.|q.r|q r|q roo|q.roo|q. roo
+aguascalientes|ag|ags.|ags
+baja california|bn|bc|b.c.|b.c|b c|bj cal|bj. cal.|bj. cal
+baja california sur|bs|bcs|b.c.s.|b.c.s|b c s|bj. cal. s.|bj cal s
+campeche|cm|camp.|camp
+chiapas|cp|chis.|chis
+chihuahua|ch|chih.|chih
+coahuila|ca|coah.|coah
+colima|cl|col.|col
+durango|du|dgo.|dgo
+guanajuato|gt|gto.|gto
+guerrero|gr|gro.|gro
+hidalgo|hi|hgo.|hgo
+jalisco|ja|jal.|jal
+méxico|mexico|mx|mex.|mex|méx.|méx
+michoacán|michoacan|mc|mich.|mich
+morelos|mr|mor.|mor
+nayarit|na|nay.|nay
+nuevo león|nuevo leon|nl|n.l.|n.l|n l
+oaxaca|oa|oax.|oax
+puebla|pu|pue.|pue
+querétaro|queretaro|qe|qro.|qro
+quintana roo|qr|q.r.|q.r|q r|q roo|q.roo|q. roo|qroo
 san luis potosí|san luis potosi|sl|slp|s.l.p.|s.l.p|s l p
-sinaloa|si|sin
-sonora|so|son
-tabasco|tb|tab
-tamaulipas|tm|tamps
-tlaxcala|tl|tlax
-veracruz|ve|ver
-yucatán|yucatan|yu|yuc
-zacatecas|za|zac
+sinaloa|si|sin.|sin
+sonora|so|son.|son
+tabasco|tb|tab.|tab
+tamaulipas|tm|tamps.|tamps
+tlaxcala|tl|tlax.|tlax
+veracruz|ve|ver.|ver
+yucatán|yucatan|yu|yuc.|yuc
+zacatecas|za|zac.|zac
