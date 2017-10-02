@@ -2,6 +2,7 @@ bairro|b|bº|b°|bo|brº|br°|bro
 distrito|dtto|dist
 divisao|div
 quadra|q|qd
+quilômetro|km|quilometro
 secao|sec
 superquadra|super quadra|sq|s.q.|s.q|s q
 urbanização|urbanizacao|urb

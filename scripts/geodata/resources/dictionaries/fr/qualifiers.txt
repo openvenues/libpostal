@@ -12,6 +12,7 @@ faubourg|faub|faubg|faugrb|fg
 île|ile
 îles|iles
 lieu-dit|lieu dit|lieudit|ld|ldit|l dit|l-dit
+kilomètre|km|kilometre
 lotissement|lot
 lotissements|lots
 quartier|qua|qrt|qu

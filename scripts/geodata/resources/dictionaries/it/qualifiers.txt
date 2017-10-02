@@ -2,6 +2,7 @@ borgata|borg.a|borga
 borgate|borg.e|borge
 borghi|b.ghi|bghi
 borgo|b.go|bgo
+chilometro|km
 colonia|col.a|cola
 fermata
 fortino|fort.no|fortno
