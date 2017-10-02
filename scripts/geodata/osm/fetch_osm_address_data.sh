@@ -128,7 +128,7 @@ VALID_COUNTRY_KEYS="ISO3166-1:alpha2="
 VALID_ADMIN1_KEYS="ISO3166-2="
 ADMIN1_LANGUAGE_EXCEPTION_IDS=$(grep "osm" $ADMIN1_FILE | sed 's/^.*relation:\([0-9][0-9]*\).*$/@id=\1/' | xargs echo | sed 's/\s/ or /g')
 
-VALID_ADMIN_BORDER_KEYS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish or boundary=civil or boundary=ceremonial or boundary=postal_district or place=island or place=city or place=town or place=village or place=hamlet or place=municipality or place=settlement"
+VALID_ADMIN_BORDER_KEYS="boundary=administrative or boundary=town or boundary=city_limit or boundary=civil_parish or boundary=civil or boundary=ceremonial or boundary=postal_district or boundary=aboriginal_lands or boundary:type=aboriginal_lands or place=island or place=city or place=town or place=village or place=hamlet or place=municipality or place=settlement"
 
 VALID_POPULATED_PLACE_KEYS="place=city or place=town or place=village or place=hamlet or placement=municipality or place=locality or place=settlement or place=census-designated or place:ph=village"
 VALID_NEIGHBORHOOD_KEYS="place=neighbourhood or place=neighborhood or place:ph=barangay"
