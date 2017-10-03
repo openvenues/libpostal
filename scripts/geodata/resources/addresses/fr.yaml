@@ -49,19 +49,32 @@ numbers:
         sample_probability: 0.3
         sample_exclude:
             - "#" # Used in numeric affix. Needs to be quoted, otherwise it's a comment
+        plural:
+            canonical: numéros
+            abbreviated: "nºs"
+            numeric:
+                direction: left
         numeric:
             direction: left
         numeric_affix:
             affix: "#" # e.g. #3, #2F, etc.
             direction: left
-            probability: 0.5
+            probability: 0.4
             alternatives:
                 - alternative:
                       affix: nº
                       direction: left
-                  probability: 0.35
+                  probability: 0.2
                 - alternative:
                       affix: nº.
+                      direction: left
+                  probability: 0.15
+                - alternative:
+                      affix: "no"
+                      direction: left
+                  probability: 0.1
+                - alternative:
+                      affix: no.
                       direction: left
                   probability: 0.15
 
@@ -102,6 +115,11 @@ levels:
         canonical_probability: 0.7
         abbreviated_probability: 0.1
         sample_probability: 0.2
+        plural:
+            canonical: numéros
+            abbreviated: "nºs"
+            numeric:
+                direction: left
         numeric:
             direction: left
             add_number_phrase: true
@@ -472,14 +490,26 @@ buildings:
         numeric:
             direction: left
 
+    bloc: &bloc
+        canonical: bloc
+        abbreviated: bl
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+        numeric:
+            direction: left
+
     # Bâtiment 1, Bât A, etc.
     alphanumeric: &building_alphanumeric
         default: *batiment
         probability: 0.8
         alternatives:
             - alternative: *immeuble
-              probability: 0.15
+              probability: 0.1
             - alternative: *tour
+              probability: 0.05
+            - alternative: *bloc
               probability: 0.05
         numeric_probability: 0.075 # e.g. Bâtiment 1
         alpha_probability: 0.85 # e.g. Bât A
