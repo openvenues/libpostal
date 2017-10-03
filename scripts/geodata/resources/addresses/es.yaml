@@ -1007,6 +1007,30 @@ units:
         sample_probability: 0.3
         numeric:
             direction: left
+    numero_interior: &numero_interior
+        canonical: número interior
+        abbreviated: no int
+        canonical_probability: 0.1
+        abbreviated_probability: 0.6
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    interior: &interior
+        canonical: interior
+        abbreviated: int
+        canonical_probability: 0.2
+        abbreviated_probability: 0.6
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    mojon: &mojon
+        canonical: mojón
+        abbreviated: mj
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
     # By default use departamento when e.g. addr:unit is encountered
     unit: *departamento
     # Another word for unit, used more in Colombia
@@ -1022,10 +1046,14 @@ units:
         canonical_probability: 0.4
         abbreviated_probability: 0.4
         sample_probability: 0.2
+        numeric:
+            direction: left
     parcel: &parcela
         canonical: parcela
         plural:
             canonical: parcelas
+        numeric:
+            direction: left
     casa: &casa
         canonical: casa
         plural:
@@ -1140,6 +1168,7 @@ units:
                 - alternative: *letra
                   probability: 0.02
 
+
     alphanumeric_apartamento_exclusive: &unit_alphanumeric_apartamento_exclusive
         <<: *unit_alphanumeric
         default: *apartamento
@@ -1165,6 +1194,39 @@ units:
                 - alternative: *letra
                   probability: 0.02
 
+    alphanumeric_mexico: &unit_alphanumeric_mexico
+        <<: *unit_alphanumeric_apartamento_exclusive
+        default: *apartamento
+        probability: 0.6
+        alternatives:
+            - alternative: *interior
+              probability: 0.15
+            - alternative: *lote
+              probability: 0.1
+            - alternative: *numero_interior
+              probability: 0.05
+            - alternative: *casa
+              probability: 0.05
+            - alternative: *puerta
+              probability: 0.05
+
+    alphanumeric_colombia: &unit_alphanumeric_colombia
+        <<: *unit_alphanumeric_apartamento_exclusive
+        default: *apartamento
+        probability: 0.55
+        alternatives:
+            - alternative: *interior
+              probability: 0.15
+            - alternative: *lote
+              probability: 0.1
+            - alternative: *numero_interior
+              probability: 0.05
+            - alternative: *casa
+              probability: 0.05
+            - alternative: *puerta
+              probability: 0.05
+            - alternative: *mojon
+              probability: 0.05
 
     zones:
         residential: *unit_alphanumeric
@@ -1415,6 +1477,12 @@ countries:
                         - alternative: *casa
                           probability: 0.01
 
+                    null_phrase_dependencies:
+                        - level
+
+                directional:
+                    null_phrase_dependencies:
+                        - level
             zones:
                 residential: *unit_alphanumeric_puerta
 
@@ -1459,10 +1527,10 @@ countries:
             alphanumeric_phrase_probability: 0.4
 
         units:
-            alphanumeric: *unit_alphanumeric_apartamento_exclusive
+            alphanumeric: *unit_alphanumeric_colombia
 
             zones:
-                residential: *unit_alphanumeric_apartamento_exclusive
+                residential: *unit_alphanumeric_colombia
 
 
     # Dominican Republic
@@ -1479,8 +1547,11 @@ countries:
         levels:
             numbering_starts_at: 1
 
+        units:
+            alphanumeric: *unit_alphanumeric_mexico
+
             zones:
-                residential: *unit_alphanumeric_apartamento_exclusive
+                residential: *unit_alphanumeric_mexico
 
     # Panamá
     pa:
