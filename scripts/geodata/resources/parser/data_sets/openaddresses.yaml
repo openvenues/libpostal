@@ -2789,7 +2789,6 @@ countries:
                       city_replacements:
                           state_district: Santa Rosa County
                     - filename: sarasota.csv
-                      add_osm_boundaries: true
                       city_replacements:
                           state_district: Sarasota County
                     - filename: seminole.csv
