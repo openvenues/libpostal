@@ -3837,6 +3837,7 @@ countries:
                           state_district: Wadena County
                     - filename: waseca.csv
                     - filename: washington.csv
+                    - filename: wilkin.csv
                     - filename: yellow_medicine.csv
                       add_osm_boundaries: true
                       city_replacements:
