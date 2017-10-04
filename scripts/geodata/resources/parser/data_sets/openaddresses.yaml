@@ -4794,6 +4794,7 @@ countries:
                           state_district: Jasper County
                     - filename: laurens.csv
                     - filename: newberry.csv
+                    - filename: oconee.csv
                     - filename: orangeburg.csv
                       city_replacements:
                           state_district: Orangeburg County
