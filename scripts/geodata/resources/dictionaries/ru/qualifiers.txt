@@ -74,5 +74,7 @@ volost|vl
 mestechko|m
 улус|у
 ulus|u
+республика|респ
+respublika|resp
 разъезд|рзд
 raz'yezd|rzd|razyezd
