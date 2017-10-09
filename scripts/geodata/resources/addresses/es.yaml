@@ -1082,6 +1082,20 @@ units:
         canonical_probability: 0.3
         abbreviated_probability: 0.5
         sample_probability: 0.2
+    despacho: &despacho
+        canonical: despacho
+        abbreviated: desp
+        sample: true
+        plural:
+            canonical: despachos
+            abbreviated: desps
+            canonical_probability: 0.7
+            abbreviated_probability: 0.3
+        canonical_probability: 0.5
+        abbreviated_probability: 0.3
+        sample_probability: 0.2
+        numeric:
+            direction: left
 
     office: &oficina
         canonical: oficina
@@ -1322,9 +1336,11 @@ units:
         residential: *unit_alphanumeric
         commercial:
             default: *oficina
-            probability: 0.8
+            probability: 0.6
             alternatives:
                 - alternative: *suite
+                  probability: 0.2
+                - alternative: *despacho
                   probability: 0.2
 
             numeric_probability: 0.9 # e.g. Oficina 1
@@ -1338,10 +1354,12 @@ units:
 
             alpha:
                 default: *oficina
-                probability: 0.8
+                probability: 0.55
                 alternatives:
                     - alternative: *suite
-                      probability: 0.15
+                      probability: 0.2
+                    - alternative: *despacho
+                      probability: 0.2
                     - alternative: *letra
                       probability: 0.05
 
