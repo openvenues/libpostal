@@ -77,7 +77,7 @@ concesionario
 concesionario de automóviles|concesionario de automoviles
 consultorio médico|consultorio medico
 conjunto|cjto|conj|cto
-conjunto habitacional|c.hab.|c.hab|c.h.|c.h|c hab|c h
+conjunto habitacional|c.hab.|c.hab|c.h.|c.h|c hab|c h|conj hab|conjhab|conj.hab
 cooperativa|coop
 copistería|copisteria
 corral|crral
@@ -112,6 +112,7 @@ estancias|estancs|ests
 estudio
 extensión|ext|extension
 fábrica|fabrica|fca|fbrca
+facultad|fac
 farmacia
 ferretería|ferreteria
 ferrocarril|fc|f.c.|f.c|f c
@@ -228,7 +229,7 @@ tienda
 tintorería|tintoreria
 torre
 transito|trans
-unidad habitacional|uh|u.h.|u.h
+unidad habitacional|uh|u.h.|u.h|u hab|uhab|u.hab
 universidad|univ|uni|univers
 villa|vla|v
 villas|vlas
