@@ -165,6 +165,16 @@ buildings:
         numeric:
             direction: left
 
+    local: &local
+        canonical: local
+        abbreviated: loc
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.5
+        sample_probability: 0.1
+        numeric:
+            direction: left
+
     manzana: &manzana
         canonical: manzana
         abbreviated: mz
@@ -195,7 +205,7 @@ buildings:
     # Edificio 1, Edif A, etc.
     alphanumeric: &building_alphanumeric
         default: *edificio
-        probability: 0.55
+        probability: 0.5
         alternatives:
             - alternative: *manzana
               probability: 0.15
@@ -206,6 +216,8 @@ buildings:
             - alternative: *complejo
               probability: 0.05
             - alternative: *bloque
+              probability: 0.05
+            - alternatives: *local
               probability: 0.05
         numeric_probability: 0.075 # e.g. Edificio 1
         alpha_probability: 0.85 # e.g. Edif A
