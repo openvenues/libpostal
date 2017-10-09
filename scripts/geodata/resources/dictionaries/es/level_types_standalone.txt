@@ -1,5 +1,9 @@
+alta|alt
+altos|alt
+baja|bja
 bajo|bjo|b.|b|bj
 bajos|bjos|bjs
+planta alta|pa|pl alta|p.a.|p.a|p a
 planta baja|pb|pl baja|p.b.|p.b|p b
 planta primera|pl primera
 piso principal|pso pral|piso ppal|p ppal|piso pral|p pral

@@ -217,7 +217,7 @@ buildings:
               probability: 0.05
             - alternative: *bloque
               probability: 0.05
-            - alternatives: *local
+            - alternative: *local
               probability: 0.05
         numeric_probability: 0.075 # e.g. Edificio 1
         alpha_probability: 0.85 # e.g. Edif A
@@ -282,6 +282,13 @@ levels:
         canonical_probability: 0.6
         abbreviated_probability: 0.3
         sample_probability: 0.1
+    altos: &altos
+        canonical: altos
+        abbreviated: alt
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
+        sample_probability: 0.1
     piso_bajo: &piso_bajo
         canonical: piso bajo
         abbreviated: pb
@@ -296,6 +303,63 @@ levels:
         canonical_probability: 0.8
         abbreviated_probability: 0.1
         sample_probability: 0.1
+    planta: &planta
+        # Everywhere except Spain
+        canonical: planta
+        abbreviated: pl
+        plural:
+            canonical: plantas
+            abbreviated: pls
+            canonical_probability: 0.8
+            abbreviated_probability: 0.2
+        sample: true
+        # Numeric version e.g. Planta 1
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.05
+        numeric_affix:
+            affix: p
+            direction: left
+        # Ordinal como 2a planta
+        ordinal:
+            direction: right
+            gender: f
+            alt_gender: null
+            alt_gender_probability: 0.0
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+        numeric_probability: 0.475
+        numeric_affix_probability: 0.05
+        ordinal_probability: 0.475
+    baja: &baja
+        canonical: baja
+        abbreviated: bja
+        canonical_probability: 0.8
+        abbreviated_probability: 0.2
+    planta_alta: &planta_alta
+        canonical: planta alta
+        abbreviated: pa
+        sample: true
+        canonical_probability: 0.1
+        abbreviated_probability: 0.6
+        sample_probability: 0.3
+    alta: &alta
+        canonical: alta
+        abbreviated: alt
+        canonical_probability: 0.8
+        abbreviated_probability: 0.2
+    planta_baja: &planta_baja
+        canonical: planta baja
+        abbreviated: pb
+        sample: true
+        canonical_probability: 0.1
+        abbreviated_probability: 0.6
+        sample_probability: 0.3
     # Used when floor number is < 0 (starts at -1 in all countries)
     sotano: &sotano
         canonical: sótano
@@ -405,23 +469,37 @@ levels:
             default: *entresuelo
         "0":
             default: *bajos
-            probability: 0.495
+            probability: 0.4
             alternatives:
-                - alternative: *piso_bajo
-                  probability: 0.395
+                - alternative: *planta_baja
+                  probability: 0.2
+                - alternative: *baja
+                  probability: 0.09
                 - alternative: *bajo
-                  probability: 0.1
+                  probability: 0.09
+                - alternative: *piso_bajo
+                  probability: 0.2
+                  # Planta/Piso 0 is uncommon
+                - alternative: *planta
+                  probability: 0.01
                 - alternative: *piso
-                  # Piso 0 is uncommon
                   probability: 0.01
         top:
-            default: *piso
-            probability: 0.85
+            default: *planta
+            probability: 0.25
             alternatives:
+                - alternative: *piso
+                  probability: 0.25
                 - alternative: *atico
                   probability: 0.1
+                - alternative: *altos
+                  probability: 0.1
+                - alternative: *alta
+                  probability: 0.1
+                - alternative: *planta_alta
+                  probability: 0.1
                 - alternative: *sobreatico
-                  probability: 0.05
+                  probability: 0.1
 
     numbering_starts_at: 0
 
@@ -1340,49 +1418,6 @@ countries:
                 null_probability: 0.97
                 alphanumeric_probability: 0.03
         levels:
-            planta: &planta
-                # Everywhere except Spain
-                canonical: planta
-                abbreviated: pl
-                plural:
-                    canonical: plantas
-                    abbreviated: pls
-                    canonical_probability: 0.8
-                    abbreviated_probability: 0.2
-                sample: true
-                # Numeric version e.g. Planta 1
-                numeric:
-                    direction: left
-                    add_number_phrase: true
-                    add_number_phrase_probability: 0.05
-                numeric_affix:
-                    affix: p
-                    direction: left
-                # Ordinal como 2a planta
-                ordinal:
-                    direction: right
-                    gender: f
-                    alt_gender: null
-                    alt_gender_probability: 0.0
-                    digits:
-                        ascii_probability: 0.8
-                        spellout_probability: 0.2
-                canonical_probability: 0.6
-                abbreviated_probability: 0.2
-                sample_probability: 0.2
-                numeric_probability: 0.475
-                numeric_affix_probability: 0.05
-                ordinal_probability: 0.475
-            baja: &baja
-                canonical: baja
-                abbreviated: bja
-                canonical_probability: 0.8
-                abbreviated_probability: 0.2
-            planta_baja: &planta_baja
-                canonical: planta baja
-                abbreviated: pb
-                prefer_abbreviated: true
-                sample: true
             entreplanta: &entreplanta
                 canonical: entreplanta
             principal: &planta_principal
@@ -1390,23 +1425,6 @@ countries:
                 abbreviated: ppl
                 sample: true
             aliases:
-                "0":
-                    default: *bajos
-                    probability: 0.4
-                    alternatives:
-                        - alternative: *planta_baja
-                          probability: 0.2
-                        - alternative: *baja
-                          probability: 0.09
-                        - alternative: *bajo
-                          probability: 0.09
-                        - alternative: *piso_bajo
-                          probability: 0.2
-                          # Planta/Piso 0 is uncommon
-                        - alternative: *planta
-                          probability: 0.01
-                        - alternative: *piso
-                          probability: 0.01
                 "1":
                     default: *planta
                     probability: 0.4
@@ -1425,16 +1443,6 @@ countries:
                           probability: 0.1
                         - alternative: *piso
                           probability: 0.4
-                top:
-                    default: *planta
-                    probability: 0.425
-                    alternatives:
-                        - alternative: *piso
-                          probability: 0.425
-                        - alternative: *atico
-                          probability: 0.1
-                        - alternative: *sobreatico
-                          probability: 0.05
 
             alphanumeric:
                 default: *planta
