@@ -65,6 +65,7 @@ PARSER_DEFAULT_CONFIG = os.path.join(RESOURCES_DIR, 'parser', 'default.yaml')
 JAPANESE_ROMAJI = 'ja_rm'
 ENGLISH = 'en'
 SPANISH = 'es'
+FRENCH = 'fr'
 
 
 def setup_component_dependencies(config):
@@ -1092,38 +1093,60 @@ class AddressComponents(object):
             if match:
                 address_components[AddressFormatter.POSTCODE] = match.group(0)
 
-    french_arrondissement_number_regex = re.compile(u'\\b([0-9]+)[a-z]* Arrondissement', re.I)
+    french_arrondissement_number_regex = re.compile(u'\\b([0-9]+)([a-z]*) Arrondissement', re.I)
 
     @classmethod
-    def french_arrondissement_number(cls, neighborhoods):
-        for props in neighborhoods:
-            if props['component'] == AddressFormatter.CITY_DISTRICT:
-                name = props.get('name')
-                if name:
-                    name = name.strip()
-                    match = cls.french_arrondissement_number_regex.search(name)
-                    if match:
-                        return match.group(1)
+    def french_arrondissement_number_and_suffix(cls, name):
+        match = cls.french_arrondissement_number_regex.match(name.strip())
+        if match:
+            arrondissement_number, ordinal_suffix = match.groups()
+            return arrondissement_number, ordinal_suffix
+        return None, None
+
+    @classmethod
+    def french_arrondissement_number(cls, address_components):
+        city_district = address_components.get(AddressFormatter.CITY_DISTRICT)
+        if city_district and city_district.strip():
+            arrondissement_number, ordinal_suffix = cls.french_arrondissement_number_and_suffix(city_district.strip())
+            return arrondissement_number
         return None
 
     @classmethod
-    def french_arrondissement_roman_numeral(cls, arrondissement, with_ordinal_suffix=True):
-        roman_numeral = numeric_expressions.roman_numeral(arrondissement)
-        if roman_numeral and not with_ordinal_suffix:
-            return roman_numeral
-        elif with_ordinal_suffix:
-            ordinal_suffix = ordinal_expressions.get_suffix(arrondissement, FRENCH)
-            if roman_numeral and ordinal_suffix:
-                return u'{}{}'.format(safe_decode(roman_numeral), safe_decode(ordinal_suffix))
-        return None
+    def format_french_arrondissement(cls, address_components, language=FRENCH):
+        arrondissement = cls.french_arrondissement_number(address_components)
+        if not arrondissement:
+            return
+
+        roman_numeral_probability = float(nested_get(cls.config, ('french_arrondissements', 'roman_numeral_probability'), default=0.0))
+        ordinal_suffix_probability = float(nested_get(cls.config, ('french_arrondissements', 'ordinal_suffix_probability'), default=0.0))
+
+        value = arrondissement
+        if random.random() < roman_numeral_probability:
+            roman_numeral = numeric_expressions.roman_numeral(arrondissement)
+            if roman_numeral is not None:
+                value = roman_numeral
+
+        if random.random() < ordinal_suffix_probability:
+            ordinal_suffix = ordinal_expressions.get_suffix(arrondissement, language)
+            if value and ordinal_suffix:
+                value = u'{}{}'.format(safe_decode(value), safe_decode(ordinal_suffix))
+
+        address_components[AddressFormatter.CITY_DISTRICT] = u'{} Arrondissement'.format(value)
 
     @classmethod
-    def add_cedex_france(cls, address_components, arrondissement=None):
+    def add_cedex_france(cls, address_components):
         postcode = address_components.get(AddressFormatter.POSTCODE)
         city = address_components.get(AddressFormatter.CITY)
 
+        arrondissement = cls.french_arrondissement_number(address_components)
+
         if city and postcode:
-            cedex_phrase = u'CEDEX' if not arrondissement else u'CEDEX {}'.format(safe_decode(arrondissement).zfill(2))
+            cedex_phrase = u'CEDEX'
+            if arrondissement and random.random() < 0.5:
+                cedex_phrase = u'CEDEX {}'.format(safe_decode(arrondissement).zfill(2))
+            elif arrondissement:
+                cedex_phrase = u'CEDEX {}'.formag(arrondissement)
+
             address_components[AddressFormatter.CEDEX] = cedex_phrase
 
     japan_neighborhood_classes = set([AddressFormatter.JAPAN_MAJOR_NEIGHBORHOOD,
@@ -2423,6 +2446,9 @@ class AddressComponents(object):
             cls.format_kingston_postcode(address_components)
         elif country == Countries.ROMANIA:
             cls.format_romanian_city_district(address_components, language)
+        elif country == Countries.FRANCE:
+            cls.add_cedex_france(address_components)
+            cls.format_french_arrondissement(address_components, language=language or FRENCH)
 
     @classmethod
     def is_simple_number_or_letter(cls, name):
