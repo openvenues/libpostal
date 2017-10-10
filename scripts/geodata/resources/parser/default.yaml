@@ -80,6 +80,13 @@ component_dependencies:
     postcode:
         dependencies: []
 
+    cedex:
+        dependencies:
+            - suburb
+            - locality
+            - city_district
+            - city
+
     # Country exceptions
     exceptions:
         jp:
@@ -204,6 +211,9 @@ bucharest_sectors:
 french_arrondissements:
     roman_numeral_probability: 0.4
     ordinal_suffix_probability: 0.7
+
+french_cedex:
+    add_cedex_probability: 0.1
 
 state_district:
     join_probability: 0.5

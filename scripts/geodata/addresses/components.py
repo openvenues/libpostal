@@ -1135,17 +1135,15 @@ class AddressComponents(object):
 
     @classmethod
     def add_cedex_france(cls, address_components):
-        postcode = address_components.get(AddressFormatter.POSTCODE)
-        city = address_components.get(AddressFormatter.CITY)
-
         arrondissement = cls.french_arrondissement_number(address_components)
 
-        if city and postcode:
+        add_cedex_probability = float(nested_get(cls.config, ('french_cedex', 'add_cedex_probability'), default=0.0))
+        if random.random() < add_cedex_probability:
             cedex_phrase = u'CEDEX'
             if arrondissement and random.random() < 0.5:
                 cedex_phrase = u'CEDEX {}'.format(safe_decode(arrondissement).zfill(2))
             elif arrondissement:
-                cedex_phrase = u'CEDEX {}'.formag(arrondissement)
+                cedex_phrase = u'CEDEX {}'.format(arrondissement)
 
             address_components[AddressFormatter.CEDEX] = cedex_phrase
 

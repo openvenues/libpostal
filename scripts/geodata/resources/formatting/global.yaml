@@ -900,96 +900,104 @@ countries:
                     after: city
                     probability: 0.1
 
+    france_template_insertions: &france_template_insertions
+        <<: *english_template_insertions
+        house_number:
+            house_number_after_road:
+                after: road
+                probability: 0.01
+
+        level:
+            level_after_road:
+                after: road
+                probability: 0.95
+            level_before_house:
+                before: house
+                probability: 0.01
+            level_before_house_number:
+                before: house_number
+                probability: 0.04
+
+            conditional:
+                - component: staircase
+                  probabilities:
+                      # default: 0.2
+                      level_after_staircase:
+                          after: staircase
+                          probability: 0.8
+                - component: entrance
+                  probabilities:
+                      # default: 0.2
+                      level_after_entrance:
+                          after: entrance
+                          probability: 0.8
+                - component: building
+                  probabilities:
+                      # default: 0.2
+                      level_after_building:
+                          after: building
+                          probability: 0.8
+
+        unit:
+            unit_before_house:
+                before: house
+                probability: 0.02
+
+            # e.g. Da Vinci House, Flat 18, 44 Saffron Hill, London
+            unit_before_house_number:
+                before: house_number
+                probability: 0.03
+
+            # e.g. Da Vinci House, 44 Saffron Hill, Flat 18, London (not as common in UK)
+            unit_after_road:
+                after: road
+                probability: 0.95
+
+            conditional:
+                - component: level
+                  probabilities:
+                      unit_before_house:
+                          before: house
+                          probability: 0.005
+                      # e.g. Da Vinci House, Flat 18, 44 Saffron Hill, London
+                      unit_before_house_number:
+                          before: house_number
+                          probability: 0.01
+                      # e.g. Floor 5, Apt 6
+                      unit_after_level:
+                          after: level
+                          probability: 0.98
+                      # e.g. Apt. 6, 5/F (less common)
+                      unit_before_level:
+                          before: level
+                          probability: 0.005
+                - component: staircase
+                  probabilities:
+                      # default: 0.4
+                      unit_after_staircase:
+                          after: staircase
+                          probability: 0.6
+                - component: entrance
+                  probabilities:
+                      # default: 0.4
+                      unit_after_entrance:
+                          after: entrance
+                          probability: 0.6
+                - component: building
+                  probabilities:
+                      # default: 0.4
+                      unit_after_building:
+                          after: building
+                          probability: 0.6
+
+    # France
     fr:
-        insertions: &france_template_insertions
-            <<: *english_template_insertions
-            house_number:
-                house_number_after_road:
-                    after: road
-                    probability: 0.01
-
-            level:
-                level_after_road:
-                    after: road
-                    probability: 0.95
-                level_before_house:
-                    before: house
-                    probability: 0.01
-                level_before_house_number:
-                    before: house_number
-                    probability: 0.04
-
-                conditional:
-                    - component: staircase
-                      probabilities:
-                          # default: 0.2
-                          level_after_staircase:
-                              after: staircase
-                              probability: 0.8
-                    - component: entrance
-                      probabilities:
-                          # default: 0.2
-                          level_after_entrance:
-                              after: entrance
-                              probability: 0.8
-                    - component: building
-                      probabilities:
-                          # default: 0.2
-                          level_after_building:
-                              after: building
-                              probability: 0.8
-
-            unit:
-                unit_before_house:
-                    before: house
-                    probability: 0.02
-
-                # e.g. Da Vinci House, Flat 18, 44 Saffron Hill, London
-                unit_before_house_number:
-                    before: house_number
-                    probability: 0.03
-
-                # e.g. Da Vinci House, 44 Saffron Hill, Flat 18, London (not as common in UK)
-                unit_after_road:
-                    after: road
-                    probability: 0.95
-
-                conditional:
-                    - component: level
-                      probabilities:
-                          unit_before_house:
-                              before: house
-                              probability: 0.005
-                          # e.g. Da Vinci House, Flat 18, 44 Saffron Hill, London
-                          unit_before_house_number:
-                              before: house_number
-                              probability: 0.01
-                          # e.g. Floor 5, Apt 6
-                          unit_after_level:
-                              after: level
-                              probability: 0.98
-                          # e.g. Apt. 6, 5/F (less common)
-                          unit_before_level:
-                              before: level
-                              probability: 0.005
-                    - component: staircase
-                      probabilities:
-                          # default: 0.4
-                          unit_after_staircase:
-                              after: staircase
-                              probability: 0.6
-                    - component: entrance
-                      probabilities:
-                          # default: 0.4
-                          unit_after_entrance:
-                              after: entrance
-                              probability: 0.6
-                    - component: building
-                      probabilities:
-                          # default: 0.4
-                          unit_after_building:
-                              after: building
-                              probability: 0.6
+        insertions:
+            <<: *france_template_insertions
+            cedex:
+                cedex_after_city:
+                    after: city
+                    probability: 1.0
 
     # Saint-Barthélemy
     bl:
