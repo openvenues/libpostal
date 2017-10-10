@@ -197,6 +197,10 @@ bucharest_sectors:
                     direction: left
                   probability: 0.2
 
+french_arrondissements:
+    roman_numeral_probability: 0.4
+    ordinal_suffix_probability: 0.7
+
 state_district:
     join_probability: 0.5
 
