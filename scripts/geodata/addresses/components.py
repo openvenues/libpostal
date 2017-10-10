@@ -1654,7 +1654,7 @@ class AddressComponents(object):
                        (props.get('place') in ('neighbourhood', 'neighborhood') and p.get('admin_level') == '10') or \
                        (props.get('place') == 'quarter' and p.get('admin_level') == '9') or \
                        ('place' in p and 'place' in props and props['place'] == p['place']) or \
-                       ('name' in props and 'name' in 'p' and props['name'] == p['name']):
+                       ('name' in props and 'name' in p and props['name'] == p['name']):
                         break
                 else:
                     grouped_components[component].append(props)
@@ -1695,13 +1695,14 @@ class AddressComponents(object):
         add_prefix_prob = float(nested_get(cls.config, ('boundaries', 'add_prefix_probability')))
 
         if osm_components:
-            name_key = ''.join((boundary_names.DEFAULT_NAME_KEY, language_suffix))
-            raw_name_key = boundary_names.DEFAULT_NAME_KEY
+            default_name_key = boundary_names.DEFAULT_NAME_KEY
+            name_key = ''.join((default_name_key, language_suffix))
+            raw_name_key = default_name_key
 
             grouped_osm_components = defaultdict(list)
 
             for i, props in enumerate(osm_components):
-                if 'name' not in props:
+                if raw_name_key not in props and name_key not in props:
                     continue
 
                 component = cls.categorize_osm_component(country, props, osm_components)
