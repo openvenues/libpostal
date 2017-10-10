@@ -1,6 +1,6 @@
 annex|anex|annx|anx
 annexe
-building|bdg|bldg|blg
+building|bdg|bld|bldg|blg
 bungalow|bongalow|bunglow|bungalo|bngw|bnglw
 cabin|cabn
 cottage|ctg|ctge
