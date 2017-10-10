@@ -87,7 +87,11 @@ component_dependencies:
                 dependencies:
                     - road
                     - suburb
+                    - japan_minor_neighborhood
+                    - japan_major_neighborhood
                     - city_district
+                    - locality
+                    - city
                     - subdivision
 
         ru:
