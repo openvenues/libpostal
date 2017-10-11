@@ -215,6 +215,9 @@ french_arrondissements:
 french_cedex:
     add_cedex_probability: 0.1
 
+philippines_neighborhoods:
+    add_barangay_probability: 0.6
+
 state_district:
     join_probability: 0.5
 

@@ -1083,6 +1083,19 @@ class AddressComponents(object):
             return True
         return False
 
+    philippines_barangay_regex = re.compile(u'\\b(?:brgy|bgy|barangay)\\b', re.I)
+
+    @classmethod
+    def format_philippines_neighborhood(cls, address_components):
+        neighborhood = address_components.get(AddressFormatter.SUBURB)
+        if neighborhood:
+
+            add_barangay_prob = nested_get(cls.config, ('philippines_neighborhoods', 'add_barangay_probability'), default=0.0)
+
+            if is_numeric(neighborhood) or (not cls.philippines_barangay_regex.search(neighborhood) and random.random() < add_barangay_prob):
+                neighborhood = u'Barangay {}'.format(neighborhood)
+                address_components[AddressFormatter.SUBURB] = neighborhood
+
     french_postal_code_regex = re.compile(u'\\b[0-9]{5}\\b')
 
     @classmethod
@@ -2448,6 +2461,8 @@ class AddressComponents(object):
         elif country == Countries.FRANCE:
             cls.add_cedex_france(address_components)
             cls.format_french_arrondissement(address_components, language=language or FRENCH)
+        elif country == Countries.PHILIPPINES:
+            cls.format_philippines_neighborhood(address_components)
 
     @classmethod
     def is_simple_number_or_letter(cls, name):
