@@ -1428,6 +1428,23 @@ class AddressComponents(object):
         if name and cls.brasilia_building_regex.match(name):
             address_components[AddressFormatter.BUILDING] = address_components.pop(AddressFormatter.HOUSE)
 
+    CANCUN_RELATION_ID = '6328810'
+
+    supermanzana_regex = re.compile('smz?\.? [0-9]+', re.I)
+
+    @classmethod
+    def format_cancun_address(cls, address_components, osm_components):
+        '''
+        Cancún has Supermanzanas
+        '''
+        for c in osm_components:
+            if (c.get('admin_level') == u'10' or c.get('place') in (u'neighbourhood', u'neighborhood')):
+                value, extracted = cls.extract_field(c['name'], Superblock, SPANISH, country=Countries.MEXICO)
+                if extracted and (not value or not value.strip()):
+                    address_components.pop(AddressFormatter.SUBURB, None)
+                    address_components[AddressFormatter.SUPERBLOCK] = extracted
+                    break
+
     central_european_cities = {
         # Czech Republic
         'cz': [u'praha', u'prague'],
@@ -2660,6 +2677,9 @@ class AddressComponents(object):
         cls.country_specific_cleanup(address_components, country, language=non_local_language or language)
         if cls.is_in(osm_components, cls.BRASILIA_RELATION_ID):
             cls.format_brasilia_address(address_components)
+
+        if cls.is_in(osm_components, cls.CANCUN_RELATION_ID):
+            cls.format_cancun_address(address_components, osm_components)
 
         if language == CHINESE:
             cls.format_chinese_address(address_components)
