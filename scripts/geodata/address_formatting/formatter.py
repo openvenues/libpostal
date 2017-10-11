@@ -67,6 +67,8 @@ class AddressFormatter(object):
     UNIT = 'unit'
     INTERSECTION = 'intersection'
     SUPERBLOCK = 'superblock'
+    BLOCK = 'block'
+    LOT = 'lot'
     SUBDIVISION = 'subdivision'
     METRO_STATION = 'metro_station'
     SUBURB = 'suburb'
@@ -181,6 +183,8 @@ class AddressFormatter(object):
     tag_aliases = {
         NAMED_BUILDING: HOUSE,
         SUPERBLOCK: SUBURB,
+        BLOCK: BUILDING,
+        LOT: UNIT,
         SUBDIVISION: HOUSE,
         JAPAN_MAJOR_NEIGHBORHOOD: SUBURB,
         JAPAN_MINOR_NEIGHBORHOOD: SUBURB,
