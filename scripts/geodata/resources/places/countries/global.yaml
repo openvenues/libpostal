@@ -82,6 +82,7 @@ countries:
     au:
         city_replacements:
             - suburb
+            - locality
             - city_district
             - state_district
         replace_city_with_locality_probability: 0.8
@@ -94,9 +95,10 @@ countries:
                     - city
                     - state_district
                     - state
+                    - postcode
             state:
                 probability: 0.6
-                population_unknown_probability: 0.8
+                have_postcode_probability: 0.7
                 population:
                     - lt: 100000
                       gte: 10000
@@ -119,6 +121,7 @@ countries:
         city_replacements:
             - suburb
             - city_district
+            - locality
             - state_district
         components:
             suburb:
@@ -132,7 +135,7 @@ countries:
                 probability: 0.95
             state:
                 probability: 0.6
-                population_unknown_probability: 0.8
+                have_postcode_probability: 0.8
                 population:
                     - lt: 100000
                       gte: 10000
@@ -155,6 +158,7 @@ countries:
         city_replacements:
             - suburb
             - city_district
+            - locality
             - state_district
             - state
         components:
@@ -165,6 +169,8 @@ countries:
                     - city
                     - state_district
                     - state
+            locality:
+                probability: 0.95
             city:
                 probability: 0.95
             state:
@@ -201,9 +207,14 @@ countries:
         city_replacements:
             - suburb
             - city_district
+            - locality
         components:
+            suburb:
+                probability: 0.4
             city_district:
                 probability: 0.4
+            locality:
+                probability: 0.95
             city:
                 probability: 0.95
 
@@ -212,6 +223,7 @@ countries:
         city_replacements:
             - suburb
             - city_district
+            - locality
             - state_district
         replace_city_with_locality_probability: 0.2
         locality_and_city_probability: 0.8
@@ -228,6 +240,8 @@ countries:
                     - city
             suburb:
                 probability: 0.5
+            locality:
+                probability: 0.95
             city:
                 probability: 0.95
             city_district:
@@ -252,10 +266,13 @@ countries:
         city_replacements:
             - suburb
             - city_district
+            - locality
             - state_district
         replace_city_with_locality_probability: 0.2
         locality_and_city_probability: 0.8
         components:
+            locality:
+                probability: 0.95
             city:
                 probability: 0.95
             state_district:
@@ -286,6 +303,7 @@ countries:
         city_replacements:
             - suburb
             - city_district
+            - locality
         components:
             state_district:
                 probability: 0.7
@@ -303,6 +321,8 @@ countries:
             suburb:
                 dependencies:
                     - country
+            locality:
+                probability: 0.7
             city:
                 probability: 0.7
             country:
@@ -357,6 +377,8 @@ countries:
             suburb:
                 dependencies:
                     - country
+            locality:
+                probability: 0.7
             city:
                 probability: 0.7
             island:
@@ -382,6 +404,7 @@ countries:
         city_replacements:
             - suburb
             - city_district
+            - locality
         components:
             suburb:
                 probability: 0.7
@@ -423,6 +446,7 @@ countries:
         city_replacements:
             - suburb
             - city_district
+            - locality
             - state_district
         replace_city_with_locality_probability: 0.7
         locality_and_city_probability: 0.1
@@ -441,6 +465,8 @@ countries:
     # Pitcairn Islands
     pn:
         components:
+            locality:
+                probability: 0.7
             city:
                 probability: 0.7
             island:
@@ -449,6 +475,8 @@ countries:
     # Seychelles
     sc:
         components:
+            locality:
+                probability: 0.7
             city:
                 probability: 0.7
             island:
@@ -468,6 +496,7 @@ countries:
         city_replacements:
             - suburb
             - city_district
+            - locality
             - state_district
         # Definitions
         new_york_county: &new_york_county
@@ -522,6 +551,8 @@ countries:
                       probability: 0.95
                     - <<: *new_york_county
                       probability: 0.1
+            locality:
+                probability: 0.95
             city:
                 probability: 0.95
                 containing:
@@ -607,6 +638,8 @@ countries:
     # Tuvalu
     tv:
         components:
+            locality:
+                probability: 0.7
             city:
                 probability: 0.7
             island:
@@ -624,6 +657,8 @@ countries:
     # US Virgin Islands
     vi:
         components:
+            locality:
+                probability: 0.7
             city:
                 probability: 0.7
             island:
@@ -633,14 +668,18 @@ countries:
     # British Virgin Islands
     vg:
         components:
+            locality:
+                probability: 0.7
             city:
                 probability: 0.7
             island:
                 probability: 0.8
             world_region: *add_west_indies_world_region
 
+    # South Africa
     za:
         city_replacements:
             - suburb
             - city_district
+            - locality
             - state_district
