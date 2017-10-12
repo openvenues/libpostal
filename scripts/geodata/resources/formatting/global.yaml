@@ -184,8 +184,8 @@ global:
             named_building_after_house:
                 after: house
                 probability: 0.8
-            named_building_before_suburb:
-                after: suburb
+            named_building_after_road:
+                after: road
                 probability: 0.2
             conditional:
                 - component: entrance
@@ -199,8 +199,8 @@ global:
                       named_building_after_entrance:
                           after: entrance
                           probability: 0.3
-                      named_building_before_suburb:
-                          before: suburb
+                      named_building_after_road:
+                          after: road
                           probability: 0.2
                 - component: staircase
                   probabilities:
@@ -213,8 +213,8 @@ global:
                       named_building_after_staircase:
                           after: staircase
                           probability: 0.3
-                      named_building_before_suburb:
-                          before: suburb
+                      named_building_after_road:
+                          after: road
                           probability: 0.2
                 - component: level
                   probabilities:
@@ -227,8 +227,8 @@ global:
                       named_building_after_level:
                           after: level
                           probability: 0.3
-                      named_building_before_suburb:
-                          before: suburb
+                      named_building_after_road:
+                          after: road
                           probability: 0.2
                 - component: unit
                   probabilities:
@@ -241,8 +241,8 @@ global:
                       named_building_after_unit:
                           after: unit
                           probability: 0.3
-                      named_building_before_suburb:
-                          before: suburb
+                      named_building_after_road:
+                          after: road
                           probability: 0.2
                 - component: house
                   probabilities:
@@ -252,8 +252,8 @@ global:
                       named_building_after_house:
                           after: house
                           probability: 0.5
-                      named_building_before_suburb:
-                          before: suburb
+                      named_building_after_road:
+                          after: road
                           probability: 0.2
                 - component: subdivision
                   probabilities:
@@ -1107,8 +1107,8 @@ countries:
             named_building_after_house_number:
                 after: house_number
                 probability: 0.8
-            named_building_before_suburb:
-                after: suburb
+            named_building_after_road:
+                after: road
                 probability: 0.0
             conditional:
                 - component: building
