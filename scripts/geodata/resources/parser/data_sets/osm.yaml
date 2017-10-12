@@ -40,3 +40,5 @@ countries:
 
     ph:
         add_barangay_probability: 0.7
+        add_purok_probability: 1.0
+        add_sitio_probability: 0.6

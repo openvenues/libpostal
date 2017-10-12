@@ -515,7 +515,9 @@ class OSMAddressFormatter(object):
 
         purok = tags.get('addr:purok', tags.get('is_in:purok'))
         if purok and purok.strip() and not cls.philippines_purok_regex.search(purok):
-            purok = u'Purok {}'.format(purok.strip())
+            purok_prob = float(nested_get(cls.config, ('countries', 'ph', 'add_purok_probability'), default=0.0))
+            if is_numeric(purok) or random.random() < purok_prob:
+                purok = u'Purok {}'.format(purok.strip())
 
         if purok:
             cls.remove_philippines_neighborhood_components(tags)
@@ -524,7 +526,9 @@ class OSMAddressFormatter(object):
 
         sitio = tags.get('addr:sitio', tags.get('is_in:sitio'))
         if sitio and sitio.strip() and not cls.philippines_sitio_regex.search(sitio):
-            sitio = u'Sitio {}'.format(sitio.strip())
+            sitio_prob = float(nested_get(cls.config, ('countries', 'ph', 'add_sitio_probability'), default=0.0))
+            if is_numeric(sitio) or random.random() < sitio_prob:
+                sitio = u'Sitio {}'.format(sitio.strip())
 
         if sitio:
             cls.remove_philippines_neighborhood_components(tags)
