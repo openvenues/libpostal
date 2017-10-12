@@ -33,6 +33,7 @@ class PlaceConfig(object):
         AddressFormatter.COUNTRY_REGION,
         AddressFormatter.COUNTRY,
         AddressFormatter.WORLD_REGION,
+        AddressFormatter.POSTCODE,
     }
 
     numeric_ops = {'lte': operator.le,
@@ -138,10 +139,14 @@ class PlaceConfig(object):
 
         return random.random() < probability
 
-    def include_component(self, component, containing_ids, country=None, population=None, check_population=True, unambiguous_city=False):
+    def include_component(self, component, containing_ids, country=None, population=None, check_population=True, unambiguous_city=False, have_postcode=False):
         if check_population and not unambiguous_city:
             population_exceptions = self.get_property(('components', component, 'population'), country=country, default=None)
             if population is None:
+                if have_postcode:
+                    have_postcode_prob = self.get_property(('components', component, 'have_postcode_probability'), country=country, default=None)
+                    if have_postcode_prob is not None:
+                        return random.random() < float(have_postcode_prob)
                 population_unknown_prob = self.get_property(('components', component, 'population_unknown_probability'), country=country, default=None)
                 if population_unknown_prob is not None:
                     return random.random() < float(population_unknown_prob)
