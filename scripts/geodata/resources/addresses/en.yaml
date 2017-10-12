@@ -1523,6 +1523,10 @@ units:
             - alternative: *top_floor_right
               probability: 0.15
 
+lots:
+    alphanumeric:
+        default: *lot
+
 # Country-specific overrides
 # ==========================
 # For each country, we allow a copy of the structures listed above
