@@ -259,6 +259,31 @@ class OSMAddressFormatter(object):
         return osm_definitions.meets_definition(tags, osm_definitions.BUILDING)
 
     @classmethod
+    def format_named_building(cls, address_components, languages=(), country=None):
+        name = address_components.get(AddressFormatter.NAMED_BUILDING)
+        if not name:
+            return
+
+        name = cls.strip_block_lot_patterns(name, languages)
+        if not name:
+            address_components.pop(AddressFormatter.NAMED_BUILDING)
+            return
+
+        sub_building_components = {AddressFormatter.NAMED_BUILDING: name}
+
+        AddressComponents.extract_sub_building_components(sub_building_components, AddressFormatter.NAMED_BUILDING, languages=languages, country=country)
+
+        if sub_building_components.get(AddressFormatter.NAMED_BUILDING):
+            name = sub_building_components[AddressFormatter.NAMED_BUILDING]
+            address_components[AddressFormatter.NAMED_BUILDING] = sub_building_components[AddressFormatter.NAMED_BUILDING]
+        else:
+            address_components.pop(AddressFormatter.NAMED_BUILDING, None)
+
+        for k, v in six.iteritems(sub_building_components):
+            if k not in address_components:
+                address_components[k] = v
+
+    @classmethod
     def is_valid_building_name(cls, name, address_components, languages=(), country=None, is_generic=False, is_known_venue_type=False):
         if not name:
             return False
@@ -739,6 +764,13 @@ class OSMAddressFormatter(object):
                 components.pop(AddressFormatter.HOUSE, None)
             if building_name:
                 components[AddressFormatter.NAMED_BUILDING] = building_name
+                languages = []
+                if country is not None:
+                    languages = get_country_languages(country).keys()
+                if not languages and language is not None:
+                    languages = [language]
+
+                cls.format_named_building(components, languages, country=country)
             else:
                 components.pop(AddressFormatter.NAMED_BUILDING, None)
             if subdivision_name:
