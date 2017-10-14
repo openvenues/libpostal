@@ -513,6 +513,61 @@ inline size_t utf8_common_prefix_ignore_separators(const char *str1, const char 
     return utf8_common_prefix_len_ignore_separators(str1, str2, strlen(str2));
 }
 
+bool utf8_equal_ignore_separators_len(const char *str1, const char *str2, size_t len) {
+    if (len == 0) return false;
+
+    int32_t c1 = -1, c2 = -1;
+    ssize_t len1, len2;
+
+    uint8_t *ptr1 = (uint8_t *)str1;
+    uint8_t *ptr2 = (uint8_t *)str2;
+
+    size_t remaining = len;
+
+    while (1) {
+        len1 = utf8proc_iterate(ptr1, -1, &c1);
+        len2 = utf8proc_iterate(ptr2, -1, &c2);
+
+        if (len1 < 0 && len2 < 0 && *ptr1 == *ptr2) {
+            ptr1++;
+            ptr2++;
+            remaining--;
+            if (remaining == 0) return true;
+            continue;
+        }
+
+        if (c1 != 0 && c2 != 0 && c1 == c2) {
+            ptr1 += len1;
+            ptr2 += len2;
+            remaining -= len1;
+        } else if (utf8_is_hyphen(c1) || utf8_is_separator(utf8proc_category(c1))) {
+            ptr1 += len1;
+            if (utf8_is_hyphen(c2) || utf8_is_separator(utf8proc_category(c2))) {
+                ptr2 += len2;
+            }
+            remaining -= len1;
+        } else if (utf8_is_hyphen(c2) || utf8_is_separator(utf8proc_category(c2))) {
+            ptr2 += len2;
+            remaining -= len2;
+        } else {
+            break;
+        }
+
+        if (remaining == 0) return true;
+
+    }
+
+    return false;
+}
+
+inline bool utf8_equal_ignore_separators(const char *str1, const char *str2) {
+    size_t len1 = strlen(str1);
+    size_t len2 = strlen(str2);
+    size_t len = len1 > len2 ? len1 : len2;
+
+    return utf8_equal_ignore_separators_len(str1, str2, len);
+}
+
 bool string_is_digit(char *str, size_t len) {
     uint8_t *ptr = (uint8_t *)str;
     size_t idx = 0;

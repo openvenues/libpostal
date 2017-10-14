@@ -83,6 +83,8 @@ size_t utf8_common_prefix_len(const char *str1, const char *str2, size_t len);
 size_t utf8_common_prefix_ignore_separators(const char *str1, const char *str2);
 size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *str2, size_t len);
 
+bool utf8_equal_ignore_separators(const char *str1, const char *str2);
+
 ssize_t utf8_len(const char *str, size_t len);
 
 bool utf8_is_hyphen(int32_t ch);
