@@ -54,11 +54,19 @@ static inline bool substring_equals(char *str, size_t len, ssize_t index, size_t
 
 }
 
-
 double_metaphone_codes_t *double_metaphone(char *input) {
     if (input == NULL) return NULL;
 
     char *ptr = utf8_upper(input);
+
+    /* Note: NFD normalization will help with simple decomposable accent characters
+       like "É", "Ü", etc. which effectively become "E\u0301" and "U\u0308". It does
+       not handle characters like "Ł". For these, use Latin-ASCII transliteration
+       prior to calling this function.
+
+       We can still check for a specific accented character like C with cedilla (Ç),
+       by comparing with its decomposed form i.e. "C\xcc\xa7"
+    */
 
     char *normalized = (char *)utf8proc_NFD((utf8proc_uint8_t *)ptr);
 
@@ -100,7 +108,7 @@ double_metaphone_codes_t *double_metaphone(char *input) {
         char c = *(str + current);
         if (c == '\x00') break;
 
-        if (is_vowel(c) && current == 0) {
+        if (current == 0 && is_vowel(c)) {
             char_array_append(primary, "A");
             char_array_append(secondary, "A");
             current++;
@@ -116,8 +124,8 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                 current++;
             }
             continue;
-        // C with cedilla (denormalized)
-        } else if (substring_equals(str, len, current, 3, 2, "C\xcc\xa7", "Ç")) { 
+        // Ç - C with cedilla (denormalized)
+        } else if (substring_equals(str, len, current, 3, 1, "C\xcc\xa7")) { 
             char_array_append(primary, "S");
             char_array_append(secondary, "S");
             current += 2;
@@ -125,7 +133,8 @@ double_metaphone_codes_t *double_metaphone(char *input) {
             // various germanic
             if ((current > 1)
                 && !is_vowel(get_char_at(str, len, current - 2))
-                && substring_equals(str, len, current - 1, 3, 1, "ACH")
+                && (substring_equals(str, len, current - 1, 3, 1, "ACH")
+                    && !substring_equals(str, len, current + 2, 1, 3, "O", "A", "U"))
                 && ((get_char_at(str, len, current + 2) != 'I')
                     && ((get_char_at(str, len, current + 2) != 'E')
                         || substring_equals(str, len, current - 2, 6, 2, "BACHER", "MACHER"))
@@ -162,7 +171,7 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                     && substring_equals(str, len, current, 4, 1, "CHAE"))
                 {
                     char_array_append(primary, "K");
-                    char_array_append(secondary, "K");
+                    char_array_append(secondary, "X");
                     current += 2;
                     continue;
                 }
@@ -171,7 +180,7 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                 if ((current == 0)
                     && (substring_equals(str, len, current + 1, 5, 3, "HARAC", "HARIS", "HOREO")
                      || substring_equals(str, len, current + 1, 4, 3, "HIRO", "HAOS", "HAOT")
-                     || substring_equals(str, len, current + 1, 3, 5, "HOR", "HYM", "HIA", "HEM", "HIM"))
+                     || (substring_equals(str, len, current + 1, 3, 5, "HOR", "HYM", "HIA", "HEM", "HIM") && !substring_equals(str, len, current + 1, 5, 2, "HEMIN")))
                     )
                 {
                     char_array_append(primary, "K");
@@ -186,19 +195,21 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                        || substring_equals(str, len, current - 5, 5, 2, " VAN ", " VON ")
                        || substring_equals(str, len, 0, 3, 1, "SCH"))
                       // "ochestra", "orchid", "architect" but not "arch"
-                      || substring_equals(str, len, current - 2, 6, 1, "ORCHES", "ARCHIT", "ORCHID")
+                      || substring_equals(str, len, current - 2, 6, 3, "ORCHES", "ARCHIT", "ORCHID")
                       || substring_equals(str, len, current + 2, 1, 2, "T", "S")
                       || (
-                            ((current == 0) || substring_equals(str, len, current - 1, 1, 4, "A", "O", "U", "E"))
+                            (((current == 0) || substring_equals(str, len, current - 1, 1, 4, "A", "O", "U", "E"))
+                             // e.g. not "breach", "broach", "pouch", "beech", etc.
+                             && !substring_equals(str, len, current - 2, 2, 6, "EA", "OU", "EE", "OA", "OO", "AU")
+                             // e.g. not "lunch", "birch", "gulch"
+                             && !substring_equals(str, len, current - 1, 1, 3, "L", "R", "N"))
                             // e.g. "wachtler", "wechsler", but not "tichner"
-                            && substring_equals(str, len, current + 2, 1, 10, "L", "R", "N", "M", "B", "H", "F", "V", "W", " ")
+                            && ((current + 1 == last) || substring_equals(str, len, current + 2, 1, 10, "L", "R", "N", "M", "B", "H", "F", "V", "W", " "))
                          )
                    )
                 {
                     char_array_append(primary, "K");
                     char_array_append(secondary, "K");
-                    current += 2;
-                    continue;
                 } else {
                     if (current > 0) {
                         if (substring_equals(str, len, 0, 2, 1, "MC")) {
@@ -210,7 +221,7 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                         }
                     } else {
                         char_array_append(primary, "X");
-                        char_array_append(secondary, "K");
+                        char_array_append(secondary, "X");
                     }
                 }
                 current += 2;
@@ -227,21 +238,13 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                 continue;
             }
 
-            // e.g. "focaccia"
-            if (substring_equals(str, len, current + 1, 3, 1, "CIA")) {
-                char_array_append(primary, "X");
-                char_array_append(secondary, "X");
-                current += 3;
-                continue;              
-            }
-
             // double 'C' but not if e.g. "McClellan"
             if (substring_equals(str, len, current, 2, 1, "CC")
                 && !((current == 1) && get_char_at(str, len, 0) == 'M'))
             {
                 // "bellocchio" but not "bacchus"
                 if (substring_equals(str, len, current + 2, 1, 3, "I", "E", "H")
-                    && !substring_equals(str, len, current + 2, 2, 1, "HU"))
+                    && !substring_equals(str, len, current + 2, 3, 4, "HUS", "HUM", "HUN", "HAN"))
                 {
                     // "accident", "accede", "succeed"
                     if (((current == 1)
@@ -250,18 +253,24 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                     {
                         char_array_append(primary, "KS");
                         char_array_append(secondary, "KS");
+                    // "pinocchio" but not "riccio" or "picchu"
+                    } else if (get_char_at(str, len, current + 2) == 'H'
+                           && !substring_equals(str, len, current + 2, 2, 2, "HU", "HA")) {
+                        char_array_append(primary, "K");
+                        char_array_append(secondary, "X");
                     } else {
                         char_array_append(primary, "X");
                         char_array_append(secondary, "X");
                     }
                     current += 3;
                     continue;
+                } else {
+                    // Pierce's rule
+                    char_array_append(primary, "K");
+                    char_array_append(secondary, "K");
+                    current += 2;
+                    continue;
                 }
-            } else {
-                char_array_append(primary, "K");
-                char_array_append(secondary, "K");
-                current += 2;
-                continue;
             }
 
             if (substring_equals(str, len, current, 2, 3, "CK", "CG", "CQ")) {
@@ -271,8 +280,8 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                 continue;
             }
 
-            if (substring_equals(str, len, current, 2, 3, "CI", "CE", "CY")) {
-                if (substring_equals(str, len, current, 3, 3, "CIO", "CIE", "CIA")) {
+            if (substring_equals(str, len, current, 2, 4, "CI", "CJ", "CE", "CY")) {
+                if (substring_equals(str, len, current, 3, 5, "CIO", "CIE", "CIA", "CIU")) {
                     char_array_append(primary, "S");
                     char_array_append(secondary, "X");         
                 } else {
@@ -297,11 +306,6 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                 current++;
             }
 
-            continue;
-        } else if (substring_equals(str, len, current, 2, 1, "Đ")) {
-            char_array_append(primary, "T");
-            char_array_append(secondary, "T");
-            current += 2;
             continue;
         } else if (c == 'D') {
             if (substring_equals(str, len, current, 2, 1, "DG")) {
@@ -350,7 +354,7 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                     continue;
                 }
 
-                if (current < 3) {
+                if (current == 0) {
                     // "ghislane", "ghiradelli"
                     if (get_char_at(str, len, current + 2) == 'I') {
                         char_array_append(primary, "J");
@@ -386,7 +390,7 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                         char_array_append(primary, "F");
                         char_array_append(secondary, "F");
                     } else if ((current > 0)
-                               && get_char_at(str, len, current - 1) == 'I')
+                               && get_char_at(str, len, current - 1) != 'I')
                     {
                         char_array_append(primary, "K");
                         char_array_append(secondary, "K");
@@ -399,7 +403,7 @@ double_metaphone_codes_t *double_metaphone(char *input) {
 
             if (get_char_at(str, len, current + 1) == 'N') {
                 if ((current == 1) && is_vowel(get_char_at(str, len, 0))
-                    && slavo_germanic)
+                    && !slavo_germanic)
                 {
                     char_array_append(primary, "KN");
                     char_array_append(secondary, "N");
@@ -431,7 +435,7 @@ double_metaphone_codes_t *double_metaphone(char *input) {
             // -ges-, -gep-, -gel-, -gie- at beginning
             if ((current == 0)
                 && ((get_char_at(str, len, current + 1) == 'Y')
-                    || substring_equals(str, len, current + 1, 2, 13, "ES", "EP",
+                    || substring_equals(str, len, current + 1, 2, 11, "ES", "EP",
                                         "EB", "EL", "EY", "IB", "IL", "IN", "IE",
                                         "EI", "ER")))
             {
@@ -469,6 +473,7 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                 {
                     char_array_append(primary, "K");
                     char_array_append(secondary, "K");
+
                 } else {
                     if (substring_equals(str, len, current + 1, 4, 1, "IER ")
                         || ((current == len - 3) && substring_equals(str, len, current + 1, 3, 1, "IER"))) 
@@ -479,9 +484,9 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                         char_array_append(primary, "J");
                         char_array_append(secondary, "K");
                     }
-                    current += 2;
-                    continue;
                 }
+                current += 2;
+                continue;
             }
 
             if (get_char_at(str, len, current + 1) == 'G') {
@@ -546,7 +551,7 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                     char_array_append(primary, "J");
                     char_array_append(secondary, "H");
                 } else {
-                    if (current == last) {
+                    if (current == last || ((current == last - 1 || get_char_at(str, len, current + 2) == ' ') && isalpha(get_char_at(str, len, current - 1)) && substring_equals(str, len, current + 1, 1, 2, "A", "O"))) {
                         char_array_append(primary, "J");
                     } else {
                         if (!substring_equals(str, len, current + 1, 1, 8, "L", "T",
@@ -558,7 +563,6 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                         }
                     }
                 }
-
 
                 // it could happen!
                 if (get_char_at(str, len, current + 1) == 'J') {
@@ -577,11 +581,6 @@ double_metaphone_codes_t *double_metaphone(char *input) {
 
             char_array_append(primary, "K");
             char_array_append(secondary, "K");
-            continue;
-        } else if (substring_equals(str, len, current, 2, 1, "Ł")) {
-            current += 2;
-            char_array_append(primary, "L");
-            char_array_append(secondary, "L");
             continue;
         } else if (c == 'L') {
             if (get_char_at(str, len, current + 1) == 'L') {
@@ -619,6 +618,12 @@ double_metaphone_codes_t *double_metaphone(char *input) {
             char_array_append(primary, "M");
             char_array_append(secondary, "M");
             continue;
+        // Ñ (NFD normalized)
+        } else if (substring_equals(str, len, current, 3, 1, "N\xcc\x83")) {
+            current += 3;
+            char_array_append(primary, "N");
+            char_array_append(secondary, "N");
+            continue;
         } else if (c == 'N') {
             if (get_char_at(str, len, current + 1) == 'N')  {
                 current += 2;
@@ -626,11 +631,6 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                 current++;
             }
 
-            char_array_append(primary, "N");
-            char_array_append(secondary, "N");
-            continue;
-        } else if (substring_equals(str, len, current, 2, 1, "Ñ")) {
-            current += 2;
             char_array_append(primary, "N");
             char_array_append(secondary, "N");
             continue;
@@ -798,7 +798,8 @@ double_metaphone_codes_t *double_metaphone(char *input) {
                 char_array_append(secondary, "S");
             }
 
-            if (substring_equals(str, len, current - 1, 1, 2, "S", "Z")) {
+            if (substring_equals(str, len, current + 1, 1, 2, "S", "Z")) {
+
                 current += 2;
             } else {
                 current++;
