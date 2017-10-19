@@ -361,10 +361,33 @@ ssize_t utf8_len(const char *str, size_t len) {
         if (remaining == 0) break;
 
         ptr += char_len;
-        num_utf8_chars += char_len;
+        num_utf8_chars++;
     }
 
     return num_utf8_chars;
+}
+
+uint32_array *unicode_codepoints(const char *str) {
+    if (str == NULL) return NULL;
+
+    uint32_array *a = uint32_array_new();
+
+    int32_t ch = 0;
+    ssize_t num_utf8_chars = 0;
+    ssize_t char_len;
+
+    uint8_t *ptr = (uint8_t *)str;
+
+    while (1) {
+        char_len = utf8proc_iterate(ptr, -1, &ch);
+
+        if (ch == 0) break;
+
+        uint32_array_push(a, (uint32_t)ch);
+        ptr += char_len;
+    }
+
+    return a;
 }
 
 

@@ -74,7 +74,7 @@ ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *ds
 char *utf8_lower_options(const char *s, utf8proc_option_t options);
 char *utf8_lower(const char *s);
 char *utf8_upper_options(const char *s, utf8proc_option_t options);
-char *utf8_lower(const char *s);
+char *utf8_upper(const char *s);
 
 int utf8_compare(const char *str1, const char *str2);
 int utf8_compare_len(const char *str1, const char *str2, size_t len);
@@ -86,6 +86,8 @@ size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *st
 bool utf8_equal_ignore_separators(const char *str1, const char *str2);
 
 ssize_t utf8_len(const char *str, size_t len);
+
+uint32_array *unicode_codepoints(const char *str);
 
 bool utf8_is_hyphen(int32_t ch);
 bool utf8_is_letter(int cat);
