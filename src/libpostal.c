@@ -774,18 +774,32 @@ static inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, to
 }
 
 static inline bool normalize_ordinal_suffixes(string_tree_t *tree, char *str, char *lang, token_t token, size_t i, token_t prev_token, libpostal_normalize_options_t options) {
-    size_t token_digit_len = possible_ordinal_digit_len(str + token.offset, token.len);
     size_t len_ordinal_suffix = ordinal_suffix_len(str + token.offset, token.len, lang);
 
-    bool ret = false;
+    int32_t unichr = 0;
+    const uint8_t *ptr = (const uint8_t *)str;
 
-    if (len_ordinal_suffix == 0 || token_digit_len == 0 || token_digit_len + len_ordinal_suffix < token.len) {
-        return false;
-    } else if (len_ordinal_suffix == token.len && i > 0 && prev_token.len > 0) {
-        size_t prev_token_digit_len = possible_ordinal_digit_len(str + prev_token.offset, prev_token.len);
-        ret = prev_token_digit_len == prev_token.len;
+    if (len_ordinal_suffix > 0) {
+        ssize_t start = 0;
+        size_t token_offset = token.offset;
+        size_t token_len = token.len;
+
+        if (len_ordinal_suffix < token.len) {
+            start = token.offset + token.len - len_ordinal_suffix;
+            token_offset = token.offset;
+            token_len = token.len - len_ordinal_suffix;
+        } else {
+            start = prev_token.offset + prev_token.len;
+            token_offset = prev_token.offset;
+            token_len = prev_token.len;
+        }
+        ssize_t prev_char_len = utf8proc_iterate_reversed(ptr, start, &unichr);
+        if (prev_char_len <= 0) return false;
+        if (!utf8_is_digit(utf8proc_category(unichr)) && !is_roman_numeral_len(str + token_offset, token_len)) {
+            return false;
+        }
     } else {
-        ret = true;
+        return false;
     }
 
     cstring_array *strings = tree->strings;
@@ -793,12 +807,10 @@ static inline bool normalize_ordinal_suffixes(string_tree_t *tree, char *str, ch
     // add_normalized_strings_token won't be called a second time.
     add_normalized_strings_token(strings, str, token, options);
 
-    char_array *key = char_array_new_size(token.len - len_ordinal_suffix + 1);
-    char_array_cat_len(key, str + token.offset, token.len - len_ordinal_suffix);
-    char *expansion = char_array_get_string(key);
-    cstring_array_add_string(strings, expansion);
-    char_array_destroy(key);
-    return ret;
+    token_t normalized_token = token;
+    normalized_token.len = token.len - len_ordinal_suffix;
+    add_normalized_strings_token(strings, str, normalized_token, options);
+    return true;
 }
 
 static inline void add_normalized_strings_tokenized(string_tree_t *tree, char *str, token_array *tokens, libpostal_normalize_options_t options) {
