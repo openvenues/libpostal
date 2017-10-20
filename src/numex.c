@@ -1160,3 +1160,57 @@ char *replace_numeric_expressions(char *str, char *lang) {
 
     return char_array_to_string(replacement);
 }
+
+
+static inline bool is_roman_numeral_char(char c) {
+    return (c == 'i' ||
+            c == 'v' ||
+            c == 'x' ||
+            c == 'l' ||
+            c == 'c' ||
+            c == 'd' ||
+            c == 'm' ||
+            c == 'I' ||
+            c == 'V' ||
+            c == 'X' ||
+            c == 'L' ||
+            c == 'C' ||
+            c == 'D' ||
+            c == 'M');
+}
+
+bool is_valid_roman_numeral(char *str, size_t len) {
+    char *copy = strndup(str, len);
+    if (copy == NULL) return false;
+
+    numex_result_array *results = convert_numeric_expressions(copy, LATIN_LANGUAGE_CODE);
+    if (results == NULL) {
+        free(copy);
+        return false;
+    }
+
+    bool ret = results->n == 1 && results->a[0].len == len;
+    numex_result_array_destroy(results);
+    free(copy);
+    return ret;
+}
+
+bool is_roman_numeral_len(char *str, size_t len) {
+    size_t i = 0;
+    bool seen_roman = false;
+    for (size_t i = 0; i < len; i++) {
+        char c = *(str + i);
+        if (c == 0) break;
+        if (is_roman_numeral_char(c)) {
+            seen_roman = true;
+        } else {
+            return false;
+        }
+    }
+
+    return seen_roman && is_valid_roman_numeral(str, len);
+}
+
+inline bool is_roman_numeral(char *str) {
+    return is_roman_numeral_len(str, strlen(str));
+}
