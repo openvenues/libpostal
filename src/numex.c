@@ -844,15 +844,21 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                        FLOOR_LOG_BASE(rule.value, prev_rule.radix) < FLOOR_LOG_BASE(prev_rule.value, prev_rule.radix)) {
                 result.value += rule.value;
                 log_debug("Last token was RIGHT_CONTEXT_ADD, value=%" PRId64 "\n", result.value);
-            } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD && (!whole_tokens_only || complete_token)) {
+            } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD) {
                 log_debug("Had previous token with no context, finishing previous rule before returning\n");
-
-                result.len = prev_result_len;
-                number_finished = true;
-                advance_index = false;
-                state = start_state;
-                rule = prev_rule = NUMEX_NULL_RULE;
-                prev_result_len = 0;
+                if (!whole_tokens_only || complete_token) {
+                    result.len = prev_result_len;
+                    number_finished = true;
+                    advance_index = false;
+                    state = start_state;
+                    rule = prev_rule = NUMEX_NULL_RULE;
+                    prev_result_len = 0;
+                } else {
+                    rule = NUMEX_NULL_RULE;
+                    last_was_separator = false;
+                    state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
+                    continue;
+                }
             } else if (rule.rule_type != NUMEX_STOPWORD) {
                 result.value = rule.value;
                 log_debug("Got number, result.value=%" PRId64 "\n", result.value);
@@ -879,6 +885,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 if (rule.right_context_type == NUMEX_RIGHT_CONTEXT_NONE && !whole_tokens_only) {
                     number_finished = true;
                 }
+
                 log_debug("rule is ordinal\n");
             } 
 
@@ -1037,6 +1044,7 @@ size_t possible_ordinal_digit_len(char *str, size_t len) {
     int32_t ch;
 
     size_t digit_len = 0;
+    bool seen_first_digit = false;
 
     while (idx < len) {
         ssize_t char_len = utf8proc_iterate(ptr, len, &ch);
@@ -1048,8 +1056,12 @@ size_t possible_ordinal_digit_len(char *str, size_t len) {
         // 0-9 only for this
         is_digit = ch >= 48 && ch <= 57;
 
-        if ((idx == 0 && !is_digit) || (idx > 0 && is_digit && !last_was_digit)) {
+        if ((seen_first_digit && is_digit && !last_was_digit)) {
             return 0;
+        }
+
+        if (is_digit && !seen_first_digit) {
+            seen_first_digit = true;
         }
 
         if (is_digit) {
