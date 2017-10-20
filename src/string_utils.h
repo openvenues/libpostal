@@ -92,6 +92,7 @@ uint32_array *unicode_codepoints(const char *str);
 bool utf8_is_hyphen(int32_t ch);
 bool utf8_is_letter(int cat);
 bool utf8_is_number(int cat);
+bool utf8_is_digit(int cat);
 bool utf8_is_letter_or_number(int cat);
 bool utf8_is_punctuation(int cat);
 bool utf8_is_symbol(int cat);
