@@ -50,7 +50,7 @@ size_t damerau_levenshtein_distance_unicode(uint32_array *u1_array, uint32_array
     return dist;
 }
 
-ssize_t damerau_levenshtein_distance_replace_cost(char *s1, char *s2, size_t replace_cost) {
+ssize_t damerau_levenshtein_distance_replace_cost(const char *s1, const char *s2, size_t replace_cost) {
     if (s1 == NULL || s2 == NULL) return -1;
 
     uint32_array *u1 = unicode_codepoints(s1);
@@ -70,7 +70,7 @@ ssize_t damerau_levenshtein_distance_replace_cost(char *s1, char *s2, size_t rep
     return lev;
 }
 
-ssize_t damerau_levenshtein_distance(char *s1, char *s2) {
+ssize_t damerau_levenshtein_distance(const char *s1, const char *s2) {
     return damerau_levenshtein_distance_replace_cost(s1, s2, 0);
 }
 
