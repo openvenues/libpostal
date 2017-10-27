@@ -849,6 +849,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 if (!whole_tokens_only || complete_token) {
                     result.len = prev_result_len;
                     number_finished = true;
+                    complete_token = false;
                     advance_index = false;
                     state = start_state;
                     rule = prev_rule = NUMEX_NULL_RULE;
