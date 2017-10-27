@@ -668,6 +668,45 @@ inline bool string_contains_hyphen(char *str) {
     return string_next_hyphen_index(str, strlen(str)) >= 0;
 }
 
+ssize_t string_next_codepoint_len(char *str, uint32_t codepoint, size_t len) {
+    uint8_t *ptr = (uint8_t *)str;
+    int32_t ch;
+    ssize_t idx = 0;
+
+    while (idx < len) {
+        ssize_t char_len = utf8proc_iterate(ptr, len, &ch);
+
+        if (char_len <= 0 || ch == 0) break;
+
+        if ((uint32_t)ch == codepoint) return idx;
+        ptr += char_len;
+        idx += char_len;
+    }
+    return -1;
+}
+
+ssize_t string_next_codepoint(char *str, uint32_t codepoint) {
+    return string_next_codepoint_len(str, codepoint, strlen(str));
+}
+
+#define PERIOD_CODEPOINT 46
+
+ssize_t string_next_period_len(char *str, size_t len) {
+    return string_next_codepoint_len(str, PERIOD_CODEPOINT, len);
+}
+
+ssize_t string_next_period(char *str) {
+    return string_next_codepoint(str, PERIOD_CODEPOINT);
+}
+
+inline bool string_contains_period_len(char *str, size_t len) {
+    return string_next_codepoint_len(str, PERIOD_CODEPOINT, len) >= 0;
+}
+
+inline bool string_contains_period(char *str) {
+    return string_next_codepoint(str, string_next_codepoint(str, PERIOD_CODEPOINT)) >= 0;
+}
+
 size_t string_right_spaces_len(char *str, size_t len) {
     size_t spaces = 0;
 

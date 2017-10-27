@@ -106,6 +106,15 @@ ssize_t string_next_hyphen_index(char *str, size_t len);
 bool string_contains_hyphen(char *str);
 bool string_contains_hyphen_len(char *str, size_t len);
 
+ssize_t string_next_codepoint_len(char *str, uint32_t codepoint, size_t len);
+ssize_t string_next_codepoint(char *str, uint32_t codepoint);
+
+ssize_t string_next_period_len(char *str, size_t len);
+ssize_t string_next_period(char *str);
+
+bool string_contains_period_len(char *str, size_t len);
+bool string_contains_period(char *str);
+
 char *string_trim(char *str);
 
 /* char_array is a dynamic character array defined in collections.h
