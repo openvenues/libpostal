@@ -1,4 +1,4 @@
-a
+a|&
 bližko|blizko
 cez
 do

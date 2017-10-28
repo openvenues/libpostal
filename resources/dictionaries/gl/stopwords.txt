@@ -15,7 +15,7 @@ deles
 delas
 detras
 do
-é
+e|&
 en
 encima
 enfronte
