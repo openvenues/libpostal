@@ -1,8 +1,7 @@
 #include "string_similarity.h"
 #include "string_utils.h"
 
-
-size_t damerau_levenshtein_distance_unicode(uint32_array *u1_array, uint32_array *u2_array, size_t replace_cost) {
+ssize_t damerau_levenshtein_distance_unicode(uint32_array *u1_array, uint32_array *u2_array, size_t replace_cost) {
     size_t len1 = u1_array->n;
     size_t len2 = u2_array->n;
 
@@ -12,6 +11,10 @@ size_t damerau_levenshtein_distance_unicode(uint32_array *u1_array, uint32_array
     size_t num_bytes = (len1 + 1) * sizeof(size_t);
 
     size_t *column = malloc(num_bytes);
+    if (column == NULL) {
+        return -1.0;
+    }
+
     for (size_t y = 1; y <= len1; y++) {
         column[y] = y;
     }
@@ -47,26 +50,26 @@ size_t damerau_levenshtein_distance_unicode(uint32_array *u1_array, uint32_array
 
     size_t dist = column[len1];
     free(column);
-    return dist;
+    return (ssize_t)dist;
 }
 
 ssize_t damerau_levenshtein_distance_replace_cost(const char *s1, const char *s2, size_t replace_cost) {
     if (s1 == NULL || s2 == NULL) return -1;
 
-    uint32_array *u1 = unicode_codepoints(s1);
-    if (u1 == NULL) return -1.0;
+    uint32_array *u1_array = unicode_codepoints(s1);
+    if (u1_array == NULL) return -1.0;
 
-    uint32_array *u2 = unicode_codepoints(s2);
+    uint32_array *u2_array = unicode_codepoints(s2);
 
-    if (u2 == NULL) {
-        uint32_array_destroy(u1);
+    if (u2_array == NULL) {
+        uint32_array_destroy(u1_array);
         return -1.0;
     }
 
-    ssize_t lev = damerau_levenshtein_distance_unicode(u1, u2, replace_cost);
+    ssize_t lev = damerau_levenshtein_distance_unicode(u1_array, u2_array, replace_cost);
 
-    uint32_array_destroy(u1);
-    uint32_array_destroy(u2);
+    uint32_array_destroy(u1_array);
+    uint32_array_destroy(u2_array);
     return lev;
 }
 
@@ -151,27 +154,6 @@ double jaro_distance(const char *s1, const char *s2) {
         return -1.0;
     }
 
-    uint32_array *u1 = unicode_codepoints(s1);
-    if (u1 == NULL) return -1.0;
-
-    uint32_array *u2 = unicode_codepoints(s2);
-
-    if (u2 == NULL) {
-        uint32_array_destroy(u1);
-        return -1.0;
-    }
-
-    double jaro = jaro_distance_unicode(u1, u2);
-    uint32_array_destroy(u1);
-    uint32_array_destroy(u2);
-    return jaro;
-}
-
-double jaro_winkler_distance_prefix_threshold(const char *s1, const char *s2, double prefix_scale, double bonus_threshold) {
-    if (s1 == NULL || s2 == NULL) {
-        return -1.0;
-    }
-
     uint32_array *u1_array = unicode_codepoints(s1);
     if (u1_array == NULL) return -1.0;
 
@@ -182,6 +164,13 @@ double jaro_winkler_distance_prefix_threshold(const char *s1, const char *s2, do
         return -1.0;
     }
 
+    double jaro = jaro_distance_unicode(u1_array, u2_array);
+    uint32_array_destroy(u1_array);
+    uint32_array_destroy(u2_array);
+    return jaro;
+}
+
+double jaro_winkler_distance_unicode_prefix_threshold(uint32_array *u1_array, uint32_array *u2_array, double prefix_scale, double bonus_threshold) {
     double jaro = jaro_distance_unicode(u1_array, u2_array);
 
     double j;
@@ -205,12 +194,36 @@ double jaro_winkler_distance_prefix_threshold(const char *s1, const char *s2, do
         jaro_winkler += (1.0 - jaro_winkler) * i * prefix_scale;
     }
 
+    return jaro_winkler > 1.0 ? 1.0 : jaro_winkler;
+}
+
+double jaro_winkler_distance_prefix_threshold(const char *s1, const char *s2, double prefix_scale, double bonus_threshold) {
+    if (s1 == NULL || s2 == NULL) {
+        return -1.0;
+    }
+
+    uint32_array *u1_array = unicode_codepoints(s1);
+    if (u1_array == NULL) return -1.0;
+
+    uint32_array *u2_array = unicode_codepoints(s2);
+
+    if (u2_array == NULL) {
+        uint32_array_destroy(u1_array);
+        return -1.0;
+    }
+
+    double jaro_winkler = jaro_winkler_distance_unicode_prefix_threshold(u1_array, u2_array, prefix_scale, bonus_threshold);
+
     uint32_array_destroy(u1_array);
     uint32_array_destroy(u2_array);
 
-    return jaro_winkler > 1.0 ? 1.0 : jaro_winkler;
+    return jaro_winkler;
 }
 
 inline double jaro_winkler_distance(const char *s1, const char *s2) {
     return jaro_winkler_distance_prefix_threshold(s1, s2, DEFAULT_JARO_WINKLER_PREFIX_SCALE, DEFAULT_JARO_WINKLER_BONUS_THRESHOLD);
+}
+
+inline double jaro_winkler_distance_unicode(uint32_array *u1_array, uint32_array *u2_array) {
+    return jaro_winkler_distance_unicode_prefix_threshold(u1_array, u2_array, DEFAULT_JARO_WINKLER_PREFIX_SCALE, DEFAULT_JARO_WINKLER_BONUS_THRESHOLD);
 }
