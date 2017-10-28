@@ -251,6 +251,31 @@ phrase_array *search_address_dictionaries_tokens(char *str, token_array *tokens,
     return phrases;
 }
 
+
+phrase_t search_address_dictionaries_substring(char *str, size_t len, char *lang) {
+    if (str == NULL) return NULL_PHRASE;
+    if (address_dict == NULL) {
+        log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
+        return NULL_PHRASE;
+    }
+
+    trie_prefix_result_t prefix = get_language_prefix(lang);
+
+    if (prefix.node_id == NULL_NODE_ID) {
+        log_debug("prefix.node_id == NULL_NODE_ID\n");
+        return NULL_PHRASE;
+    }
+
+    phrase_t phrase = trie_search_prefixes_from_index(address_dict->trie, str, len, prefix.node_id);
+    if (phrase.len == len) {
+        return phrase;
+    } else {
+        return NULL_PHRASE;
+    }
+
+}
+
+
 phrase_t search_address_dictionaries_prefix(char *str, size_t len, char *lang) {
     if (str == NULL) return NULL_PHRASE;
     if (address_dict == NULL) {
