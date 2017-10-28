@@ -85,6 +85,29 @@ static inline uint64_t get_normalize_string_options(libpostal_normalize_options_
     return normalize_string_options;
 }
 
+
+static inline size_t string_hyphen_prefix_len(char *str, size_t len) {
+    // Strip beginning hyphens
+    int32_t unichr;
+    uint8_t *ptr = (uint8_t *)str;
+    ssize_t char_len = utf8proc_iterate(ptr, len, &unichr);
+    if (utf8_is_hyphen(unichr)) {
+        return (size_t)char_len;
+    }
+    return 0;
+}
+
+static inline size_t string_hyphen_suffix_len(char *str, size_t len) {
+    // Strip beginning hyphens
+    int32_t unichr;
+    uint8_t *ptr = (uint8_t *)str;
+    ssize_t char_len = utf8proc_iterate_reversed(ptr, len, &unichr);
+    if (utf8_is_hyphen(unichr)) {
+        return (size_t)char_len;
+    }
+    return 0;
+}
+
 static void add_normalized_strings_token(cstring_array *strings, char *str, token_t token, libpostal_normalize_options_t options) {
 
     uint64_t normalize_token_options = get_normalize_token_options(options);
@@ -97,6 +120,17 @@ static void add_normalized_strings_token(cstring_array *strings, char *str, toke
             log_debug("str = %s, token = {%zu, %zu, %u}\n", str, token.offset, token.len, token.type);
             normalize_token(strings, str, token, normalize_token_options);
         } else if (is_word_token(token.type)) {
+
+            size_t prefix_hyphen_len = string_hyphen_prefix_len(str + token.offset, token.len);
+            if (prefix_hyphen_len > 0) {
+                token.offset += prefix_hyphen_len;
+            }
+
+            size_t suffix_hyphen_len = string_hyphen_suffix_len(str + token.offset, token.len);
+            if (suffix_hyphen_len > 0) {
+                token.len -= suffix_hyphen_len;
+            }
+
             normalize_token(strings, str, token, normalize_token_options);
 
             if (options.replace_word_hyphens) {
@@ -114,10 +148,17 @@ static void add_normalized_strings_token(cstring_array *strings, char *str, toke
         } else if (is_numeric_token(token.type)) {
             normalize_token(strings, str, token, normalize_token_options);
 
-            if (options.replace_numeric_hyphens) {
-                normalize_token_options |= NORMALIZE_TOKEN_REPLACE_HYPHENS;
+            if (options.replace_word_hyphens || options.replace_numeric_hyphens) {
+                if (options.replace_word_hyphens) {
+                    normalize_token_options |= NORMALIZE_TOKEN_REPLACE_HYPHENS;
+                }
+
+                if (options.replace_numeric_hyphens) {
+                    normalize_token_options |= NORMALIZE_TOKEN_REPLACE_NUMERIC_HYPHENS;
+                }
+
                 normalize_token(strings, str, token, normalize_token_options);
-                normalize_token_options ^= NORMALIZE_TOKEN_REPLACE_HYPHENS;
+                normalize_token_options ^= NORMALIZE_TOKEN_REPLACE_HYPHENS | NORMALIZE_TOKEN_REPLACE_NUMERIC_HYPHENS;
             }
 
             if (options.delete_numeric_hyphens) {
@@ -126,17 +167,351 @@ static void add_normalized_strings_token(cstring_array *strings, char *str, toke
                 normalize_token_options ^= NORMALIZE_TOKEN_DELETE_HYPHENS;
             }
         }
-        
+
         if (is_numeric_token(token.type) && options.split_alpha_from_numeric && numeric_starts_with_alpha(str, token)) {
             normalize_token_options |= NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC;
             normalize_token(strings, str, token, normalize_token_options);
             normalize_token_options ^= NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC;
         }
-
     } else {
         cstring_array_add_string(strings, " ");
     }
 }
+
+static void add_postprocessed_string(cstring_array *strings, char *str, libpostal_normalize_options_t options) {
+    cstring_array_add_string(strings, str);
+
+    if (options.roman_numerals) {
+        char *numex_replaced = replace_numeric_expressions(str, LATIN_LANGUAGE_CODE);
+        if (numex_replaced != NULL) {
+            cstring_array_add_string(strings, numex_replaced);
+            free(numex_replaced);
+        }
+
+    }
+
+}
+
+
+
+static address_expansion_array *get_affix_expansions(phrase_t phrase, libpostal_normalize_options_t options) {
+    uint32_t expansion_index = phrase.data;
+    address_expansion_value_t *value = address_dictionary_get_expansions(expansion_index);
+    if (value != NULL && value->components & options.address_components) {
+        return value->expansions;
+    }
+
+    return NULL;
+}
+
+static inline void cat_affix_expansion(char_array *key, char *str, address_expansion_t expansion, token_t token, phrase_t phrase, libpostal_normalize_options_t options) {
+    if (expansion.canonical_index != NULL_CANONICAL_INDEX) {
+        char *canonical = address_dictionary_get_canonical(expansion.canonical_index);
+        uint64_t normalize_string_options = get_normalize_string_options(options);
+        char *canonical_normalized = normalize_string_latin(canonical, strlen(canonical), normalize_string_options);
+        canonical = canonical_normalized != NULL ? canonical_normalized : canonical;
+
+        char_array_cat(key, canonical);
+        if (canonical_normalized != NULL) {
+            free(canonical_normalized);
+        }
+    } else {
+        char_array_cat_len(key, str + token.offset + phrase.start, phrase.len);
+    }
+}
+
+
+static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t token, phrase_t prefix, phrase_t suffix, libpostal_normalize_options_t options, bool with_period) {
+    cstring_array *strings = tree->strings;
+
+    size_t skip_period = with_period ? 1 : 0;
+
+    bool have_suffix = suffix.len > 0 && suffix.len < token.len;
+    bool have_prefix = prefix.len > 0 && prefix.len + with_period < token.len;
+
+    if (!have_suffix && !have_prefix) {
+        return false;
+    }
+
+    address_expansion_array *prefix_expansions = NULL;
+    address_expansion_array *suffix_expansions = NULL;
+
+    address_expansion_t prefix_expansion;
+    address_expansion_t suffix_expansion;
+
+    char *expansion;
+
+    size_t num_strings = 0;
+    char *root_word = NULL;
+    size_t root_len;
+    token_t root_token;
+    cstring_array *root_strings = NULL;
+    int add_space = 0;
+    int spaces = 0;
+
+    size_t prefix_start, prefix_end, root_end, suffix_start;
+
+    if (have_prefix) {
+        prefix_expansions = get_affix_expansions(prefix, options);
+        if (prefix_expansions == NULL) have_prefix = false;
+    }
+
+    if (have_suffix) {
+        suffix_expansions = get_affix_expansions(suffix, options);
+        if (suffix_expansions == NULL) have_suffix = false;
+    }
+
+    if (!have_suffix && !have_prefix) {
+        return false;
+    }
+
+    char_array *key = char_array_new_size(token.len);
+
+    if (have_prefix && have_suffix) {
+        for (size_t i = 0; i < prefix_expansions->n; i++) {
+            prefix_expansion = prefix_expansions->a[i];
+            char_array_clear(key);
+
+            cat_affix_expansion(key, str, prefix_expansion, token, prefix, options);
+            prefix_start = key->n - 1;
+
+            add_space = (int)prefix_expansion.separable || with_period;
+            if (prefix.len + skip_period + suffix.len < token.len && !prefix_expansion.separable) {
+                add_space = suffix_expansion.separable || with_period;
+            }
+
+            for (spaces = skip_period; spaces <= add_space; spaces++) {
+                key->n = prefix_start;
+                if (spaces) {
+                    char_array_cat(key, " ");
+                }
+
+                prefix_end = key->n;
+
+                if (prefix.len + skip_period + suffix.len < token.len) {
+                    root_len = token.len - suffix.len - prefix.len - skip_period;
+                    size_t root_start = token.offset + prefix.len + skip_period;
+                    size_t prefix_hyphen_len = string_hyphen_prefix_len(str + root_start, root_len);
+                    root_start += prefix_hyphen_len;
+                    root_len -= prefix_hyphen_len;
+                    size_t suffix_hyphen_len = string_hyphen_suffix_len(str + root_start, root_len);
+                    root_len -= suffix_hyphen_len;
+                    root_token = (token_t){root_start, root_len, token.type};
+                    root_strings = cstring_array_new_size(root_len);
+                    add_normalized_strings_token(root_strings, str, root_token, options);
+                    num_strings = cstring_array_num_strings(root_strings);
+
+                    for (size_t j = 0; j < num_strings; j++) {
+                        key->n = prefix_end;
+                        root_word = cstring_array_get_string(root_strings, j);
+                        char_array_cat(key, root_word);
+                        root_end = key->n - 1;
+
+                        for (size_t k = 0; k < suffix_expansions->n; k++) {
+                            key->n = root_end;
+                            suffix_expansion = suffix_expansions->a[k];
+
+                            int add_suffix_space = suffix_expansion.separable;
+
+                            suffix_start = key->n;
+                            for (int suffix_spaces = skip_period; suffix_spaces <= add_suffix_space; suffix_spaces++) {
+                                key->n = suffix_start;
+                                if (suffix_spaces) {
+                                    char_array_cat(key, " ");
+                                }
+
+                                cat_affix_expansion(key, str, suffix_expansion, token, suffix, options);
+
+                                expansion = char_array_get_string(key);
+                                cstring_array_add_string(strings, expansion);
+
+                            }
+
+
+                        }
+                    }
+
+                    cstring_array_destroy(root_strings);
+                    root_strings = NULL;
+
+                } else {
+                    for (size_t j = 0; j < suffix_expansions->n; j++) {
+                        key->n = prefix_end - skip_period;
+                        suffix_expansion = suffix_expansions->a[j];
+
+                        cat_affix_expansion(key, str, suffix_expansion, token, suffix, options);
+
+                        expansion = char_array_get_string(key);
+                        cstring_array_add_string(tree->strings, expansion);
+                    }
+                }
+            }
+
+        }
+    } else if (have_suffix) {
+        log_debug("suffix.start=%" PRId32 "\n", suffix.start);
+        root_len = suffix.start;
+        root_token = (token_t){token.offset, root_len, token.type};
+        log_debug("root_len=%zu\n", root_len);
+        log_debug("root_token = {%zu, %zu, %u}\n", root_token.offset, root_token.len, root_token.type);
+
+        root_strings = cstring_array_new_size(root_len + 1);
+        add_normalized_strings_token(root_strings, str, root_token, options);
+        num_strings = cstring_array_num_strings(root_strings);
+
+        log_debug("num_strings = %zu\n", num_strings);
+
+        for (size_t j = 0; j < num_strings; j++) {
+            char_array_clear(key);
+            root_word = cstring_array_get_string(root_strings, j);
+            log_debug("root_word=%s\n", root_word);
+            char_array_cat(key, root_word);
+            root_end = key->n - 1;
+
+            for (size_t k = 0; k < suffix_expansions->n; k++) {
+                key->n = root_end;
+                suffix_expansion = suffix_expansions->a[k];
+
+                add_space = (suffix_expansion.separable || with_period) && suffix.len < token.len;
+                suffix_start = key->n;
+
+                for (int spaces = skip_period; spaces <= add_space; spaces++) {
+                    key->n = suffix_start;
+                    if (spaces) {
+                        char_array_cat(key, " ");
+                    }
+
+                    cat_affix_expansion(key, str, suffix_expansion, token, suffix, options);
+
+                    expansion = char_array_get_string(key);
+                    cstring_array_add_string(tree->strings, expansion);
+                }
+            }
+        }
+    } else if (have_prefix) {
+        if (prefix.len + skip_period <= token.len) {
+            root_len = token.len - prefix.len - skip_period;
+            size_t root_start = token.offset + prefix.len + skip_period;
+            size_t prefix_hyphen_len = string_hyphen_prefix_len(str + root_start, root_len);
+            root_start += prefix_hyphen_len;
+            root_len -= prefix_hyphen_len;
+            size_t suffix_hyphen_len = string_hyphen_suffix_len(str + root_start, root_len);
+            root_len -= suffix_hyphen_len;
+            root_token = (token_t){root_start, root_len, token.type};
+            root_strings = cstring_array_new_size(root_len);
+            add_normalized_strings_token(root_strings, str, root_token, options);
+            num_strings = cstring_array_num_strings(root_strings);
+
+        } else {
+            root_strings = cstring_array_new_size(token.len);
+            add_normalized_strings_token(root_strings, str, token, options);
+            num_strings = cstring_array_num_strings(root_strings);
+
+            for (size_t k = 0; k < num_strings; k++) {
+                root_word = cstring_array_get_string(root_strings, k);
+                cstring_array_add_string(tree->strings, root_word);
+            }
+
+            char_array_destroy(key);
+            cstring_array_destroy(root_strings);
+            return false;
+
+        }
+
+        for (size_t j = 0; j < prefix_expansions->n; j++) {
+            char_array_clear(key);
+            prefix_expansion = prefix_expansions->a[j];
+
+            cat_affix_expansion(key, str, prefix_expansion, token, prefix, options);
+            prefix_end = key->n - 1;
+
+            add_space = (prefix_expansion.separable || with_period) && prefix.len + skip_period < token.len;
+            for (int spaces = skip_period; spaces <= add_space; spaces++) {
+                key->n = prefix_end;
+                if (spaces) {
+                    char_array_cat(key, " ");
+                }
+                size_t prefix_space_len = key->n - spaces;
+                for (size_t k = 0; k < num_strings; k++) {
+                    key->n = prefix_space_len;
+                    root_word = cstring_array_get_string(root_strings, k);
+                    char_array_cat(key, root_word);
+
+                    expansion = char_array_get_string(key);
+                    cstring_array_add_string(tree->strings, expansion);
+                }
+
+            }
+        }
+    }
+
+    char_array_destroy(key);
+
+    if (root_strings != NULL) {
+        cstring_array_destroy(root_strings);
+    }
+
+    return true;
+
+}
+
+static inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, token_t token, libpostal_normalize_options_t options) {
+    phrase_t suffix = search_address_dictionaries_suffix(str + token.offset, token.len, lang);
+
+    phrase_t prefix = search_address_dictionaries_prefix(str + token.offset, token.len, lang);
+
+    if ((suffix.len == 0 && prefix.len == 0)) return false;
+
+    bool with_period = false;
+
+    return add_affix_expansions(tree, str, lang, token, prefix, suffix, options, with_period);
+}
+
+static inline bool expand_affixes_period(string_tree_t *tree, char *str, char *lang, token_t token, libpostal_normalize_options_t options) {
+    ssize_t first_period_index = string_next_period_len(str + token.offset, token.len);
+    if (first_period_index > 0) {
+        ssize_t next_period_index = string_next_period_len(str + token.offset + first_period_index + 1, token.len - first_period_index - 1);
+        // Token contains only one period or one + a final period                    
+        if (next_period_index < 0 || next_period_index == token.len - 1) {
+            phrase_t prefix = search_address_dictionaries_substring(str + token.offset, first_period_index, lang);
+
+            phrase_t suffix = search_address_dictionaries_substring(str + token.offset + first_period_index + 1, token.len - first_period_index - 1, lang);
+            if (suffix.len > 0) {
+                suffix.start = first_period_index + 1;
+            }
+
+            if (suffix.len == 0 && prefix.len == 0) return false;
+
+            bool with_period = true;
+
+            return add_affix_expansions(tree, str, lang, token, prefix, suffix, options, with_period);
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+static bool add_period_affixes_or_token(string_tree_t *tree, char *str, token_t token, libpostal_normalize_options_t options) {
+    bool have_period_affixes = false;
+    if (string_contains_period_len(str + token.offset, token.len)) {
+        for (size_t l = 0; l < options.num_languages; l++) {
+            char *lang = options.languages[l];
+            if (expand_affixes_period(tree, str, lang, token, options)) {
+                have_period_affixes = true;
+                break;
+            }
+        }
+    }
+
+    if (!have_period_affixes) {
+        string_tree_add_string_len(tree, str + token.offset, token.len);
+    }
+
+    return have_period_affixes;
+}
+
 
 static string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t options) {
     char_array *key = NULL;
@@ -252,7 +627,7 @@ static string_tree_t *add_string_alternatives(char *str, libpostal_normalize_opt
                     }
                     log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
 
-                    string_tree_add_string_len(tree, str + token.offset, token.len);
+                    bool have_period_affixes = add_period_affixes_or_token(tree, str, token, options);
                     last_added_was_whitespace = false;
                 } else if (!last_added_was_whitespace) {
                     log_debug("Adding pre-phrase whitespace\n");
@@ -444,7 +819,7 @@ static string_tree_t *add_string_alternatives(char *str, libpostal_normalize_opt
                 }
                 log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
 
-                string_tree_add_string_len(tree, str + token.offset, token.len);
+                bool have_period_affixes = add_period_affixes_or_token(tree, str, token, options);
                 last_added_was_whitespace = false;
             } else if (!last_added_was_whitespace) {
                 log_debug("Adding space IV\n");
@@ -479,7 +854,7 @@ static string_tree_t *add_string_alternatives(char *str, libpostal_normalize_opt
                     string_tree_finalize_token(tree);
                 }
 
-                string_tree_add_string_len(tree, str + token.offset, token.len);
+                bool have_period_affixes = add_period_affixes_or_token(tree, str, token, options);
                 last_added_was_whitespace = false;
             } else if (!last_added_was_whitespace) {
                 log_debug("Adding space VI\n");
@@ -503,275 +878,6 @@ static string_tree_t *add_string_alternatives(char *str, libpostal_normalize_opt
     return tree;
 }
 
-static void add_postprocessed_string(cstring_array *strings, char *str, libpostal_normalize_options_t options) {
-    cstring_array_add_string(strings, str);
-
-    if (options.roman_numerals) {
-        char *numex_replaced = replace_numeric_expressions(str, LATIN_LANGUAGE_CODE);
-        if (numex_replaced != NULL) {
-            cstring_array_add_string(strings, numex_replaced);
-            free(numex_replaced);
-        }
-
-    }
-
-}
-
-
-
-static address_expansion_array *get_affix_expansions(phrase_t phrase, libpostal_normalize_options_t options) {
-    uint32_t expansion_index = phrase.data;
-    address_expansion_value_t *value = address_dictionary_get_expansions(expansion_index);
-    if (value != NULL && value->components & options.address_components) {
-        return value->expansions;
-    }
-
-    return NULL;
-}
-
-static inline void cat_affix_expansion(char_array *key, char *str, address_expansion_t expansion, token_t token, phrase_t phrase, libpostal_normalize_options_t options) {
-    if (expansion.canonical_index != NULL_CANONICAL_INDEX) {
-        char *canonical = address_dictionary_get_canonical(expansion.canonical_index);
-        uint64_t normalize_string_options = get_normalize_string_options(options);
-        char *canonical_normalized = normalize_string_latin(canonical, strlen(canonical), normalize_string_options);
-        canonical = canonical_normalized != NULL ? canonical_normalized : canonical;
-
-        char_array_cat(key, canonical);
-        if (canonical_normalized != NULL) {
-            free(canonical_normalized);
-        }
-    } else {
-        char_array_cat_len(key, str + token.offset + phrase.start, phrase.len);
-    }
-}
-
-static bool add_affix_expansions(string_tree_t *tree, char *str, char *lang, token_t token, phrase_t prefix, phrase_t suffix, libpostal_normalize_options_t options) {
-    cstring_array *strings = tree->strings;
-
-    bool have_suffix = suffix.len > 0 && suffix.len < token.len;
-    bool have_prefix = prefix.len > 0 && prefix.len < token.len;
-
-    if (!have_suffix && !have_prefix) {
-        return false;
-    }
-
-    address_expansion_array *prefix_expansions = NULL;
-    address_expansion_array *suffix_expansions = NULL;
-
-    address_expansion_t prefix_expansion;
-    address_expansion_t suffix_expansion;
-
-    char *expansion;
-
-    size_t num_strings = 0;
-    char *root_word = NULL;
-    size_t root_len;
-    token_t root_token;
-    cstring_array *root_strings = NULL;
-    int add_space = 0;
-    int spaces = 0;
-
-    size_t prefix_start, prefix_end, root_end, suffix_start;
-
-    if (have_prefix) {
-        prefix_expansions = get_affix_expansions(prefix, options);
-        if (prefix_expansions == NULL) have_prefix = false;
-    }
-
-    if (have_suffix) {
-        suffix_expansions = get_affix_expansions(suffix, options);
-        if (suffix_expansions == NULL) have_suffix = false;
-    }
-
-    if (!have_suffix && !have_prefix) {
-        return false;
-    }
-
-    char_array *key = char_array_new_size(token.len);
-
-    if (have_prefix && have_suffix) {
-        for (size_t i = 0; i < prefix_expansions->n; i++) {
-            prefix_expansion = prefix_expansions->a[i];
-            char_array_clear(key);
-
-            cat_affix_expansion(key, str, prefix_expansion, token, prefix, options);
-            prefix_start = key->n - 1;
-
-            add_space = (int)prefix_expansion.separable;
-            if (prefix.len + suffix.len < token.len && !prefix_expansion.separable) {
-                add_space = suffix_expansion.separable;
-            }
-
-            for (spaces = 0; spaces <= add_space; spaces++) {
-                key->n = prefix_start;
-                if (spaces) {
-                    char_array_cat(key, " ");
-                }
-
-                prefix_end = key->n;
-
-                if (prefix.len + suffix.len < token.len) {
-                    root_len = token.len - suffix.len - prefix.len;
-                    root_token = (token_t){token.offset + prefix.len, root_len, token.type};
-                    root_strings = cstring_array_new_size(root_len);
-                    add_normalized_strings_token(root_strings, str, root_token, options);
-                    num_strings = cstring_array_num_strings(root_strings);
-
-                    for (size_t j = 0; j < num_strings; j++) {
-                        key->n = prefix_end;
-                        root_word = cstring_array_get_string(root_strings, j);
-                        char_array_cat(key, root_word);
-                        root_end = key->n - 1;
-
-                        for (size_t k = 0; k < suffix_expansions->n; k++) {
-                            key->n = root_end;
-                            suffix_expansion = suffix_expansions->a[k];
-
-                            int add_suffix_space = suffix_expansion.separable;
-
-                            suffix_start = key->n;
-                            for (int suffix_spaces = 0; suffix_spaces <= add_suffix_space; suffix_spaces++) {
-                                key->n = suffix_start;
-                                if (suffix_spaces) {
-                                    char_array_cat(key, " ");
-                                }
-
-                                cat_affix_expansion(key, str, suffix_expansion, token, suffix, options);
-
-                                expansion = char_array_get_string(key);
-                                cstring_array_add_string(strings, expansion);
-
-                            }
-
-
-                        }
-                    }
-
-                    cstring_array_destroy(root_strings);
-                    root_strings = NULL;
-
-                } else {
-                    for (size_t j = 0; j < suffix_expansions->n; j++) {
-                        key->n = prefix_end;
-                        suffix_expansion = suffix_expansions->a[j];
-
-                        cat_affix_expansion(key, str, suffix_expansion, token, suffix, options);
-
-                        expansion = char_array_get_string(key);
-                        cstring_array_add_string(tree->strings, expansion);
-                    }
-                }
-            }
-
-        }
-    } else if (have_suffix) {
-        log_debug("suffix.start=%" PRId32 "\n", suffix.start);
-        root_len = suffix.start;
-        root_token = (token_t){token.offset, root_len, token.type};
-        log_debug("root_len=%zu\n", root_len);
-        log_debug("root_token = {%zu, %zu, %u}\n", root_token.offset, root_token.len, root_token.type);
-
-        root_strings = cstring_array_new_size(root_len + 1);
-        add_normalized_strings_token(root_strings, str, root_token, options);
-        num_strings = cstring_array_num_strings(root_strings);
-
-        log_debug("num_strings = %zu\n", num_strings);
-
-        for (size_t j = 0; j < num_strings; j++) {
-            char_array_clear(key);
-            root_word = cstring_array_get_string(root_strings, j);
-            log_debug("root_word=%s\n", root_word);
-            char_array_cat(key, root_word);
-            root_end = key->n - 1;
-
-            for (size_t k = 0; k < suffix_expansions->n; k++) {
-                key->n = root_end;
-                suffix_expansion = suffix_expansions->a[k];
-
-                add_space = suffix_expansion.separable && suffix.len < token.len;
-                suffix_start = key->n;
-
-                for (int spaces = 0; spaces <= add_space; spaces++) {
-                    key->n = suffix_start;
-                    if (spaces) {
-                        char_array_cat(key, " ");
-                    }
-
-                    cat_affix_expansion(key, str, suffix_expansion, token, suffix, options);
-
-                    expansion = char_array_get_string(key);
-                    cstring_array_add_string(tree->strings, expansion);
-                }
-            }
-        }
-    } else if (have_prefix) {
-        if (prefix.len <= token.len) {
-            root_len = token.len - prefix.len;
-            root_token = (token_t){token.offset + prefix.len, root_len, token.type};
-            root_strings = cstring_array_new_size(root_len);
-            add_normalized_strings_token(root_strings, str, root_token, options);
-            num_strings = cstring_array_num_strings(root_strings);
-
-        } else {
-            root_strings = cstring_array_new_size(token.len);
-            add_normalized_strings_token(root_strings, str, token, options);
-            num_strings = cstring_array_num_strings(root_strings);
-
-            for (size_t k = 0; k < num_strings; k++) {
-                root_word = cstring_array_get_string(root_strings, k);
-                cstring_array_add_string(tree->strings, root_word);
-            }
-
-            char_array_destroy(key);
-            cstring_array_destroy(root_strings);
-            return false;
-
-        }
-
-        for (size_t j = 0; j < prefix_expansions->n; j++) {
-            char_array_clear(key);
-            prefix_expansion = prefix_expansions->a[j];
-
-            cat_affix_expansion(key, str, prefix_expansion, token, prefix, options);
-            prefix_end = key->n - 1;
-
-            add_space = prefix_expansion.separable && prefix.len < token.len;
-            for (int spaces = 0; spaces <= add_space; spaces++) {
-                key->n = prefix_end;
-                if (spaces) {
-                    char_array_cat(key, " ");
-                }
-                for (size_t k = 0; k < num_strings; k++) {
-                    root_word = cstring_array_get_string(root_strings, k);
-                    char_array_cat(key, root_word);
-
-                    expansion = char_array_get_string(key);
-                    cstring_array_add_string(tree->strings, expansion);
-                }
-
-            }
-        }
-    }
-
-    char_array_destroy(key);
-
-    if (root_strings != NULL) {
-        cstring_array_destroy(root_strings);
-    }
-
-    return true;
-
-}
-
-static inline bool expand_affixes(string_tree_t *tree, char *str, char *lang, token_t token, libpostal_normalize_options_t options) {
-    phrase_t suffix = search_address_dictionaries_suffix(str + token.offset, token.len, lang);
-
-    phrase_t prefix = search_address_dictionaries_prefix(str + token.offset, token.len, lang);
-
-    if ((suffix.len == 0 && prefix.len == 0)) return false;
-
-    return add_affix_expansions(tree, str, lang, token, prefix, suffix, options);
-}
 
 static inline bool normalize_ordinal_suffixes(string_tree_t *tree, char *str, char *lang, token_t token, size_t i, token_t prev_token, libpostal_normalize_options_t options) {
     size_t len_ordinal_suffix = ordinal_suffix_len(str + token.offset, token.len, lang);

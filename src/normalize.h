@@ -35,6 +35,7 @@ As well as normalizations for individual string tokens:
 #include "utf8proc/utf8proc.h"
 #include "unicode_scripts.h"
 #include "numex.h"
+#include "scanner.h"
 #include "transliterate.h"
 #include "trie.h"
 #include "tokens.h"
@@ -60,6 +61,7 @@ As well as normalizations for individual string tokens:
 #define NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC LIBPOSTAL_NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC
 #define NORMALIZE_TOKEN_REPLACE_DIGITS LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_DIGITS
 #define NORMALIZE_TOKEN_REPLACE_NUMERIC_TOKEN_LETTERS LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_NUMERIC_TOKEN_LETTERS
+#define NORMALIZE_TOKEN_REPLACE_NUMERIC_HYPHENS LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_NUMERIC_HYPHENS
 
 // Replace digits with capital D e.g. 10013 => DDDDD, intended for use with lowercased strings
 #define DIGIT_CHAR "D"

@@ -160,6 +160,12 @@ bool libpostal_setup_parser(void);
 bool libpostal_setup_parser_datadir(char *datadir);
 void libpostal_teardown_parser(void);
 
+bool libpostal_setup_language_classifier(void);
+bool libpostal_setup_language_classifier_datadir(char *datadir);
+void libpostal_teardown_language_classifier(void);
+
+/* Tokenization and token normalization APIs */
+
 typedef struct libpostal_token {
     size_t offset;
     size_t len;
@@ -190,6 +196,7 @@ libpostal_token_t *libpostal_tokenize(char *input, bool whitespace, size_t *n);
 #define LIBPOSTAL_NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC 1 << 6
 #define LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_DIGITS 1 << 7
 #define LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_NUMERIC_TOKEN_LETTERS 1 << 8
+#define LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_NUMERIC_HYPHENS 1 << 9
 
 #define LIBPOSTAL_NORMALIZE_DEFAULT_STRING_OPTIONS (LIBPOSTAL_NORMALIZE_STRING_LATIN_ASCII | LIBPOSTAL_NORMALIZE_STRING_COMPOSE | LIBPOSTAL_NORMALIZE_STRING_TRIM | LIBPOSTAL_NORMALIZE_STRING_REPLACE_HYPHENS | LIBPOSTAL_NORMALIZE_STRING_STRIP_ACCENTS | LIBPOSTAL_NORMALIZE_STRING_LOWERCASE)
 
@@ -208,10 +215,6 @@ typedef struct libpostal_normalized_token {
 } libpostal_normalized_token_t;
 
 libpostal_normalized_token_t *libpostal_normalized_tokens(char *input, uint64_t string_options, uint64_t token_options, bool whitespace, size_t *n);
-
-bool libpostal_setup_language_classifier(void);
-bool libpostal_setup_language_classifier_datadir(char *datadir);
-void libpostal_teardown_language_classifier(void);
 
 #ifdef __cplusplus
 }
