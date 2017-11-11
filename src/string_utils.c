@@ -390,6 +390,19 @@ uint32_array *unicode_codepoints(const char *str) {
     return a;
 }
 
+bool unicode_equals(uint32_array *u1_array, uint32_array *u2_array) {
+    size_t len1 = u1_array->n;
+    size_t len2 = u2_array->n;
+    if (len1 != len2) return false;
+
+    uint32_t *u1 = u1_array->a;
+    uint32_t *u2 = u2_array->a;
+    for (size_t i = 0; i < len1; i++) {
+        if (u1[i] != u2[i]) return false;
+    }
+    return true;
+}
+
 
 int utf8_compare_len(const char *str1, const char *str2, size_t len) {
     if (len == 0) return 0;

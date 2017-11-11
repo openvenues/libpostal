@@ -88,6 +88,7 @@ bool utf8_equal_ignore_separators(const char *str1, const char *str2);
 ssize_t utf8_len(const char *str, size_t len);
 
 uint32_array *unicode_codepoints(const char *str);
+bool unicode_equals(uint32_array *u1_array, uint32_array *u2_array);
 
 bool utf8_is_hyphen(int32_t ch);
 bool utf8_is_letter(int cat);
