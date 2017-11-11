@@ -1,6 +1,291 @@
 #include "string_similarity.h"
 #include "string_utils.h"
 
+#include <limits.h>
+
+static affine_gap_edits_t NULL_AFFINE_GAP_EDITS = {
+    .num_matches = 0,
+    .num_mismatches = 0,
+    .num_transpositions = 0,
+    .num_gap_opens = 0,
+    .num_gap_extensions = 0
+};
+
+typedef enum {
+    AFFINE_CHAR_MATCH,
+    AFFINE_CHAR_MISMATCH,
+    AFFINE_TRANSPOSITION,
+    AFFINE_GAP_OPEN,
+    AFFINE_GAP_EXTEND
+} affine_gap_op;
+
+static inline bool space_or_equivalent(int32_t c) {
+    int cat = utf8proc_category(c);
+    return utf8_is_whitespace(c) || utf8_is_hyphen(c) || utf8_is_punctuation(cat);
+}
+
+affine_gap_edits_t affine_gap_distance_unicode_costs(uint32_array *u1_array, uint32_array *u2_array, size_t start_gap_cost, size_t extend_gap_cost, size_t match_cost, size_t mismatch_cost, size_t transpose_cost) {
+    if (u1_array->n < u2_array->n) {
+        uint32_array *tmp_array = u1_array;
+        u1_array = u2_array;
+        u2_array = tmp_array;
+    }
+
+    size_t m = u1_array->n;
+    size_t n = u2_array->n;
+
+    uint32_t *u1 = u1_array->a;
+    uint32_t *u2 = u2_array->a;
+
+    affine_gap_edits_t edits = NULL_AFFINE_GAP_EDITS;
+
+    if (unicode_equals(u1_array, u2_array)) {
+        edits.num_matches = n;
+        return edits;
+    }
+
+    size_t num_bytes = (m + 1) * sizeof(size_t);
+
+    size_t *C = malloc(num_bytes);
+    if (C == NULL) {
+        return NULL_AFFINE_GAP_EDITS;
+    }
+
+    size_t *D = malloc(num_bytes);
+    if (D == NULL) {
+        free(C);
+        return NULL_AFFINE_GAP_EDITS;
+    }
+
+    affine_gap_edits_t *E = malloc((m + 1) * sizeof(affine_gap_edits_t));
+    if (E == NULL) {
+        free(C);
+        free(D);
+        return NULL_AFFINE_GAP_EDITS;
+    }
+
+    affine_gap_edits_t *ED = malloc((m + 1) * sizeof(affine_gap_edits_t));
+    if (ED == NULL) {
+        free(C);
+        free(D);
+        free(E);
+        return NULL_AFFINE_GAP_EDITS;
+    }
+
+    size_t e = 0, c = 0, s = 0;
+
+    C[0] = 0;
+    E[0] = NULL_AFFINE_GAP_EDITS;
+    size_t t = start_gap_cost;
+
+    affine_gap_edits_t base_edits = NULL_AFFINE_GAP_EDITS;
+    base_edits.num_gap_opens++;
+
+    for (size_t j = 1; j < m + 1; j++) {
+        t += extend_gap_cost;
+        C[j] = t;
+        D[j] = t + start_gap_cost;
+        base_edits.num_gap_extensions++;
+        E[j] = base_edits;
+        ED[j] = base_edits;
+    }
+
+    t = start_gap_cost;
+    base_edits = NULL_AFFINE_GAP_EDITS;
+    base_edits.num_gap_opens++;
+
+    affine_gap_edits_t current_edits = NULL_AFFINE_GAP_EDITS;
+    affine_gap_edits_t prev_char_edits = NULL_AFFINE_GAP_EDITS;
+    affine_gap_edits_t prev_row_prev_char_edits = NULL_AFFINE_GAP_EDITS;
+
+    bool in_gap = false;
+
+    for (size_t i = 1; i < n + 1; i++) {
+        // s = CC[0]
+        s = C[0];
+        uint32_t c2 = u2[i - 1];
+        // CC[0] = c = t = t + h
+        t += extend_gap_cost;
+        c = t;
+        C[0] = c;
+        
+        prev_row_prev_char_edits = E[0];
+        base_edits.num_gap_extensions++;
+        prev_char_edits = base_edits;
+        E[0] = prev_char_edits;
+
+        // e = t + g
+        e = t + start_gap_cost;
+
+        affine_gap_op op = AFFINE_GAP_OPEN;
+
+        ssize_t match_at = -1;
+
+        size_t min_at = 0;
+        size_t min_cost = SIZE_MAX;
+
+        for (size_t j = 1; j < m + 1; j++) {
+            // insertion
+            // e = min(e, c + g) + h
+            size_t min = e;
+            uint32_t c1 = u1[j - 1];
+
+            affine_gap_op insert_op = AFFINE_GAP_OPEN;
+
+            if ((c + start_gap_cost) < min) {
+                min = c + start_gap_cost;
+                insert_op = AFFINE_GAP_OPEN;
+            } else {
+                insert_op = AFFINE_GAP_EXTEND;
+            }
+
+            e = min + extend_gap_cost;
+
+            // deletion
+            // DD[j] = min(DD[j], CC[j] + g) + h
+
+            affine_gap_op delete_op = AFFINE_GAP_OPEN;
+
+            min = D[j];
+            affine_gap_edits_t delete_edits = ED[j];
+            affine_gap_edits_t delete_edits_stored = delete_edits;
+            delete_op = AFFINE_GAP_OPEN;
+            if (C[j] + start_gap_cost < min) {
+                min = C[j] + start_gap_cost;
+                
+                delete_edits = delete_edits_stored = E[j];
+                delete_edits_stored.num_gap_opens++;
+            }
+
+            D[j] = min + extend_gap_cost;
+            delete_edits_stored.num_gap_extensions++;
+            ED[j] = delete_edits_stored;
+
+            // Cost
+            // c = min(DD[j], e, s + w(a, b))
+
+            affine_gap_op current_op = delete_op;
+
+
+            min = D[j];
+
+            // Delete transition
+            current_edits = delete_edits;
+
+            if (e < min) {
+                min = e;
+                // Insert transition
+                current_op = insert_op;
+                current_edits = prev_char_edits;
+            }
+
+            bool both_separators = space_or_equivalent((int32_t)c1) && space_or_equivalent((int32_t)c2);
+
+            bool is_transpose = false;
+            size_t w = c1 != c2 && !both_separators ? mismatch_cost : match_cost;
+
+            if (c1 != c2 && j < m && utf8_is_letter(c2) && utf8_is_letter(c1) && c2 == u1[j] && i < n && c1 == u2[i]) {
+                w = transpose_cost;
+                is_transpose = true;
+            }
+
+            if (s + w < min) {
+                min = s + w;
+
+                // Match/mismatch/transpose transition
+                current_edits = prev_row_prev_char_edits;
+
+                if ((c1 == c2 || both_separators) && !is_transpose) {
+                    current_op = AFFINE_CHAR_MATCH;
+                } else if (!is_transpose) {
+                    current_op = AFFINE_CHAR_MISMATCH;
+                } else if (is_transpose) {
+                    current_op = AFFINE_TRANSPOSITION;
+                }
+            }
+
+            if (current_op == AFFINE_CHAR_MATCH) {
+                current_edits.num_matches++;
+            } else if (current_op == AFFINE_CHAR_MISMATCH) {
+                current_edits.num_mismatches++;
+            } else if (current_op == AFFINE_GAP_EXTEND) {
+                current_edits.num_gap_extensions++;
+            } else if (current_op == AFFINE_GAP_OPEN) {
+                current_edits.num_gap_opens++;
+                current_edits.num_gap_extensions++;
+            } else if (current_op == AFFINE_TRANSPOSITION) {
+                current_edits.num_transpositions++;
+            }
+
+            if (min < min_cost) {
+                op = current_op;
+                min_cost = min;
+                min_at = j;
+            }
+
+            c = min;
+            s = C[j];
+            C[j] = c;
+
+            prev_char_edits = current_edits;
+            prev_row_prev_char_edits = E[j];
+            E[j] = prev_char_edits;
+
+            // In the case of a transposition, duplicate costs for next character and advance by 2
+            if (current_op == AFFINE_TRANSPOSITION) {
+                E[j + 1] = E[j];
+                C[j + 1] = C[j];
+                j++;
+            }
+        }
+
+        if (op == AFFINE_TRANSPOSITION) {
+            i++;
+        }
+
+    }
+
+    affine_gap_edits_t ret = E[m];
+    free(C);
+    free(D);
+    free(E);
+    free(ED);
+
+    return ret;
+
+}
+
+affine_gap_edits_t affine_gap_distance_unicode(uint32_array *u1_array, uint32_array *u2_array) {
+    return affine_gap_distance_unicode_costs(u1_array, u2_array, DEFAULT_AFFINE_GAP_OPEN_COST, DEFAULT_AFFINE_GAP_EXTEND_COST, DEFAULT_AFFINE_GAP_MATCH_COST, DEFAULT_AFFINE_GAP_MISMATCH_COST, DEFAULT_AFFINE_GAP_TRANSPOSE_COST);
+}
+
+affine_gap_edits_t affine_gap_distance_costs(char *s1, char *s2, size_t start_gap_cost, size_t extend_gap_cost, size_t match_cost, size_t mismatch_cost, size_t transpose_cost) {
+    if (s1 == NULL || s2 == NULL) return NULL_AFFINE_GAP_EDITS;
+
+    uint32_array *u1_array = unicode_codepoints(s1);
+    if (u1_array == NULL) return NULL_AFFINE_GAP_EDITS;
+
+    uint32_array *u2_array = unicode_codepoints(s2);
+
+    if (u2_array == NULL) {
+        uint32_array_destroy(u1_array);
+        return NULL_AFFINE_GAP_EDITS;
+    }
+
+    affine_gap_edits_t affine_gap = affine_gap_distance_unicode_costs(u1_array, u2_array, start_gap_cost, extend_gap_cost, match_cost, mismatch_cost, transpose_cost);
+
+    uint32_array_destroy(u1_array);
+    uint32_array_destroy(u2_array);
+
+    return affine_gap;
+}
+
+
+affine_gap_edits_t affine_gap_distance(char *s1, char *s2) {
+    return affine_gap_distance_costs(s1, s2, DEFAULT_AFFINE_GAP_OPEN_COST, DEFAULT_AFFINE_GAP_EXTEND_COST, DEFAULT_AFFINE_GAP_MATCH_COST, DEFAULT_AFFINE_GAP_MISMATCH_COST, DEFAULT_AFFINE_GAP_TRANSPOSE_COST);
+}
+
+
 ssize_t damerau_levenshtein_distance_unicode(uint32_array *u1_array, uint32_array *u2_array, size_t replace_cost) {
     size_t len1 = u1_array->n;
     size_t len2 = u2_array->n;
