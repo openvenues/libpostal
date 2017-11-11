@@ -245,13 +245,13 @@ affine_gap_edits_t affine_gap_distance_unicode_costs(uint32_array *u1_array, uin
 
     }
 
-    affine_gap_edits_t ret = E[m];
+    edits = E[m];
     free(C);
     free(D);
     free(E);
     free(ED);
 
-    return ret;
+    return edits;
 
 }
 
@@ -259,7 +259,7 @@ affine_gap_edits_t affine_gap_distance_unicode(uint32_array *u1_array, uint32_ar
     return affine_gap_distance_unicode_costs(u1_array, u2_array, DEFAULT_AFFINE_GAP_OPEN_COST, DEFAULT_AFFINE_GAP_EXTEND_COST, DEFAULT_AFFINE_GAP_MATCH_COST, DEFAULT_AFFINE_GAP_MISMATCH_COST, DEFAULT_AFFINE_GAP_TRANSPOSE_COST);
 }
 
-affine_gap_edits_t affine_gap_distance_costs(char *s1, char *s2, size_t start_gap_cost, size_t extend_gap_cost, size_t match_cost, size_t mismatch_cost, size_t transpose_cost) {
+affine_gap_edits_t affine_gap_distance_costs(const char *s1, const char *s2, size_t start_gap_cost, size_t extend_gap_cost, size_t match_cost, size_t mismatch_cost, size_t transpose_cost) {
     if (s1 == NULL || s2 == NULL) return NULL_AFFINE_GAP_EDITS;
 
     uint32_array *u1_array = unicode_codepoints(s1);
@@ -272,17 +272,82 @@ affine_gap_edits_t affine_gap_distance_costs(char *s1, char *s2, size_t start_ga
         return NULL_AFFINE_GAP_EDITS;
     }
 
-    affine_gap_edits_t affine_gap = affine_gap_distance_unicode_costs(u1_array, u2_array, start_gap_cost, extend_gap_cost, match_cost, mismatch_cost, transpose_cost);
+    affine_gap_edits_t edits = affine_gap_distance_unicode_costs(u1_array, u2_array, start_gap_cost, extend_gap_cost, match_cost, mismatch_cost, transpose_cost);
 
     uint32_array_destroy(u1_array);
     uint32_array_destroy(u2_array);
 
-    return affine_gap;
+    return edits;
 }
 
 
-affine_gap_edits_t affine_gap_distance(char *s1, char *s2) {
+affine_gap_edits_t affine_gap_distance(const char *s1, const char *s2) {
     return affine_gap_distance_costs(s1, s2, DEFAULT_AFFINE_GAP_OPEN_COST, DEFAULT_AFFINE_GAP_EXTEND_COST, DEFAULT_AFFINE_GAP_MATCH_COST, DEFAULT_AFFINE_GAP_MISMATCH_COST, DEFAULT_AFFINE_GAP_TRANSPOSE_COST);
+}
+
+
+bool possible_abbreviation_unicode_with_edits(uint32_array *u1_array, uint32_array *u2_array, affine_gap_edits_t edits) {
+    size_t len1 = u1_array->n;
+    size_t len2 = u2_array->n;
+    if (len1 == 0 || len2 == 0) return false;
+
+    size_t min_len = len1 < len2 ? len1 : len2;
+
+    return edits.num_matches == min_len && u1_array->a[0] == u2_array->a[0];
+}
+
+inline bool possible_abbreviation_unicode(uint32_array *u1_array, uint32_array *u2_array) {
+    affine_gap_edits_t edits = affine_gap_distance_unicode(u1_array, u2_array);
+
+    return possible_abbreviation_unicode_with_edits(u1_array, u2_array, edits);
+}
+
+
+bool possible_abbreviation_unicode_strict(uint32_array *u1_array, uint32_array *u2_array) {
+    size_t len1 = u1_array->n;
+    size_t len2 = u2_array->n;
+    if (len1 == 0 || len2 == 0) return false;
+
+    size_t min_len = len1 < len2 ? len1 : len2;
+
+    ssize_t prefix_len = unicode_common_prefix(u1_array, u2_array);
+    if (prefix_len == min_len) return true;
+    ssize_t suffix_len = unicode_common_suffix(u1_array, u2_array);
+    return suffix_len > 0 && prefix_len > 0 && possible_abbreviation_unicode(u1_array, u2_array);
+}
+
+static bool possible_abbreviation_options(const char *s1, const char *s2, bool strict) {
+    if (s1 == NULL || s2 == NULL) return false;
+
+    uint32_array *u1_array = unicode_codepoints(s1);
+    if (u1_array == NULL) return false;
+
+    uint32_array *u2_array = unicode_codepoints(s2);
+
+    if (u2_array == NULL) {
+        uint32_array_destroy(u1_array);
+        return false;
+    }
+
+    bool abbrev = false;
+    if (!strict) {
+        abbrev = possible_abbreviation_unicode(u1_array, u2_array);
+    } else {
+        abbrev = possible_abbreviation_unicode_strict(u1_array, u2_array);
+    }
+
+    uint32_array_destroy(u1_array);
+    uint32_array_destroy(u2_array);
+
+    return abbrev;
+}
+
+inline bool possible_abbreviation(const char *s1, const char *s2) {
+    return possible_abbreviation_options(s1, s2, false);
+}
+
+inline bool possible_abbreviation_strict(const char *s1, const char *s2) {
+    return possible_abbreviation_options(s1, s2, true);
 }
 
 
