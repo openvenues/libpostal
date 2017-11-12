@@ -20,8 +20,14 @@ typedef struct affine_gap_edits {
     size_t num_gap_extensions;
 } affine_gap_edits_t;
 
-affine_gap_edits_t affine_gap_distance(char *s1, char *s2);
+affine_gap_edits_t affine_gap_distance(const char *s1, const char *s2);
 affine_gap_edits_t affine_gap_distance_unicode(uint32_array *u1_array, uint32_array *u2_array);
+
+bool possible_abbreviation(const char *s1, const char *s2);
+bool possible_abbreviation_strict(const char *s1, const char *s2);
+bool possible_abbreviation_unicode(uint32_array *u1_array, uint32_array *u2_array);
+bool possible_abbreviation_unicode_strict(uint32_array *u1_array, uint32_array *u2_array);
+bool possible_abbreviation_unicode_with_edits(uint32_array *u1_array, uint32_array *u2_array, affine_gap_edits_t edits);
 
 ssize_t damerau_levenshtein_distance(const char *s1, const char *s2);
 ssize_t damerau_levenshtein_distance_unicode(uint32_array *u1_array, uint32_array *u2_array, size_t replace_cost);
