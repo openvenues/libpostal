@@ -88,6 +88,7 @@ convento|conv.to|convto
 crematorio
 dentista
 diga
+dipartimento|dipart.o|dpmto
 dissalazione|dissal.ne|dissalne
 distilleria|distill.a|distilla
 dormitorio

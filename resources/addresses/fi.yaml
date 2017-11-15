@@ -1,0 +1,403 @@
+# fi.yaml
+# -------
+# Finnish language specification.
+
+components:
+    level:
+        null_probability: 0.97
+        alphanumeric_probability: 0.02
+        standalone_probability: 0.01
+
+    staircase:
+        null_probability: 0.9
+        alphanumeric_probability: 0.1
+
+    entrance:
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
+
+    unit:
+        null_probability: 0.75
+        alphanumeric_probability: 0.25
+
+    combinations:
+        -
+            components:
+                - staircase
+                - unit
+            label: unit
+            separators:
+                - separator: " "
+                  probability: 0.8
+                - separator: "-"
+                  probability: 0.1
+                - separator: "/"
+                  probability: 0.05
+                - separator: " - "
+                  probability: 0.05
+            probability: 0.85
+
+numbers:
+    default: &numero
+        canonical: numero
+        abbreviated: nro
+        sample: true
+        # Probabilities
+        canonical_probability: 0.1
+        abbreviated_probability: 0.5
+        sample_probability: 0.4
+        sample_exclude:
+            - "#"
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: "#"
+            direction: left
+
+        numeric_probability: 0.7
+        numeric_affix_probability: 0.3
+
+house_numbers:
+    alphanumeric:
+        default: *numero
+
+    alphanumeric_phrase_probability: 0.0001
+
+
+and:
+    default: &ja
+        canonical: ja
+        abbreviated: "&"
+        canonical_probability: 0.2
+        abbreviated_probability: 0.75
+        sample: true
+        sample_probability: 0.05
+
+cross_streets:
+    and: *ja
+    corner_of: &kulmassa
+        canonical: kulmassa
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    intersection:
+        default: *ja
+        probability: 0.7
+        alternatives:
+            - alternative: *kulmassa
+              probability: 0.3
+
+    between:
+        canonical: välillä
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probability: 0.5
+
+levels:
+    floor: &kerros
+        canonical: kerros
+        abbreviated: krs
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+        numeric:
+            direction: right
+            direction_probability: 0.9
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        numeric_probability: 0.4
+        ordinal_probability: 0.6
+
+    numbering_starts_at: 1
+
+    alphanumeric:
+        default: *kerros
+        numeric_probability: 0.99 # With this probability, pick an integer
+        alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
+        numeric_plus_alpha_probability: 0.0001 # e.g. 2A
+        alpha_plus_numeric_probability: 0.0001 # e.g. A2
+
+
+
+
+categories:
+    near:
+        default:
+            canonical: lähellä
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+    nearby:
+        default:
+            canonical: lähistöllä
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.7
+        alternatives:
+            - alternative:
+                canonical: lähellä
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+            - alternative:
+                canonical: tässä lähellä
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+            - alternative:
+                canonical: täällä
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+
+    near_me:
+        default:
+            canonical: lähellä minua
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+
+
+    # Probabilities of each phrase
+    near_probability: 0.7
+    nearby_probability: 0.2
+    near_me_probability: 0.1
+
+directions:
+    right: &oikea
+        canonical: oikea
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: o
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.8
+        numeric_affix_probability: 0.2
+    oikealla: &oikealla
+        canonical: oikealla
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: o
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.8
+        numeric_affix_probability: 0.2
+    left: &vasen
+        canonical: vasen
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: v
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.8
+        numeric_affix_probability: 0.2
+    vasemmalla: &vasemmalla
+        canonical: vasemmalla
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: v
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.8
+        numeric_affix_probability: 0.2
+    alternatives:
+        - alternative: *oikea
+          probability: 0.25
+        - alternative: *oikealla
+          probability: 0.25
+        - alternative: *vasen
+          probability: 0.25
+        - alternative: *vasemmalla
+          probability: 0.25
+
+cardinal_directions:
+    east: &itaan
+        canonical: itään
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    west: &lansi
+        canonical: länsi
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    north: &pohja
+        canonical: pohja
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+
+    south: &etela
+        canonical: etelä
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+
+    alternatives:
+        - alternative: *pohja
+          probability: 0.25
+        - alternative: *itaan
+          probability: 0.25
+        - alternative: *etela
+          probability: 0.25
+        - alternative: *lansi
+          probability: 0.25
+
+
+entrances:
+    sissepaas: &sisaankaynti
+        canonical: sisäänkäynti
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Portaikko 1, Portaikko A, etc.
+    alphanumeric: &entrance_alphanumeric
+        default: *sisaankaynti
+        numeric_probability: 0.1 # e.g. Portaikko 1
+        alpha_probability: 0.85 # e.g. Portaikko A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+staircases:
+    portaikko: &portaikko
+        canonical: portaikko
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    alphanumeric: &staircase_alphanumeric
+        default: *portaikko
+        alpha_probability: 1.0
+
+        directional:
+            direction: left
+            direction_probability: 0.85
+            modifier:
+                alternatives:
+                    - alternative: *pohja
+                    - alternative: *etela
+                    - alternative: *itaan
+                    - alternative: *lansi
+
+po_boxes:
+    postilokero: &postilokero
+        canonical: postilokero
+        abbreviated: pl
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.6
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2 # PL #1234
+    alphanumeric:
+        sample: false
+        default: *postilokero
+        numeric_probability: 0.9 # 123
+        alpha_probability: 0.05 # A
+        numeric_plus_alpha_probability: 0.04 # 123G
+        alpha_plus_numeric_probability: 0.01 # A123
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+units:
+    asunto: &asunto
+        canonical: asunto
+        abbreviated: as
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.7
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            null_phrase_probability: 0.3
+            # as nro 4
+            add_number_phrase: true
+            add_number_phrase_probability: 0.05
+    ruumi: &huone
+        canonical: huone
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    alphanumeric: &unit_alphanumeric
+        default: *asunto
+        probability: 0.9
+        alternatives:
+            - alternative: *huone
+              probability: 0.1
+        numeric_probability: 1.0 # e.g. as 1
+
+        # Separate random probability for adding directions like 2O, 2V, etc.
+        add_direction: true
+        add_direction_probability: 0.005
+
+        # Add directions for plain numbers
+        add_direction_numeric: true
+        # Add direction only e.g. asunto 
+        add_direction_standalone: true
+
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.05

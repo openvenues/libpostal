@@ -16,6 +16,5 @@ pole
 promenada
 terasa
 trať|trat
-trh
 ulica|ul
 ulička|ulicka

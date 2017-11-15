@@ -1,0 +1,78 @@
+magister administrasi bisnis|mab|m ab
+magister administrasi publi|map|m ap
+magister administrasi rumah sakit|mars|m a r s
+magister agama|mag|m ag
+magister akuntansi|mak|m ak
+magister epidemiolog|mepid|m epid
+magister farmasi|mfarm|m farmasi
+magister hukum|m h|mh
+magister humaniora|mhum|m hum
+magister ilmu biomedik|mbiomedik|m biomedik
+magister ilmu komputer|mkom|m kom
+magister kehutanan|mhut|m hut
+magister kenotariatan|mkn|m kn
+magister keperawatan|mkep|m kep
+magister kesehatan|mkes|m kes
+magister manajemen|mm|m m
+magister manajemen pendidikan|mmpd|m mpd
+magister manajemen sistem informasi|mmsi|m msi
+magister marine|mmar|m mar
+magister pendidikan|mpd|m pd
+magister psikologi|mpsi|m psi
+magister sains bidang ilmu pertahanan|msihan|m si han
+magister seni|msn|m sn
+magister statistik|mstat|m stat
+magister teknik|mt|m t
+magister teknologi informasi|mti|m ti
+magister veteriner|mvet|m vet
+sarjana administrasi bisnis|sab|s ab
+sarjana administrasi publik|sap|s ap
+sarjana agama|s ag|sag|sa g|s a g
+sarjana agroteknologi|sagr|s agr
+sarjana antropologi|sant|s ant
+sarjana arsitektur|sars|s ars
+sarjana desain|sds|s ds
+sarjana ekonomi islam|sei|s e i
+sarjana ekonomi|se|s e
+sarjana farmasi|sfarm|s farm
+sarjana hubungan internasional|shint|s h int|sh int
+sarjana hukum islam|shi|s h i|sh i|s hi
+sarjana hukum|sh|s h
+sarjana humaniora|shum|s hum
+sarjana ilmu gizi|sgz|s gz
+sarjana ilmu kelautan|skel|s kel
+sarjana ilmu kepolisian|s ik|sik|si k
+sarjana ilmu perpustakaan|sip|s ip
+sarjana ilmu politik|sarjana ilmu pemerintahan|sip|s i p
+sarjana ilmu psikologi|sikom|s i kom|si kom
+sarjana intelijen|sin|s in
+sarjana kedokteran gigi|skg|s kg
+sarjana kedokteran hewan|skh|s kh
+sarjana kedokteran|s ked|sked
+sarjana kehutanan|shut|s hut
+sarjana komputer|skom|s kom
+sarjana komunikasi dan pengembangan masyarakat|skpm|s kpm
+sarjana manajemen bisnis|smb|s mb
+sarjana pariwisata|spar|s par
+sarjana pendidikan islam|spdi|s pd i|s pdi
+sarjana pendidikan sekolah dasar|spdsd|s pd sd
+sarjana pendidikan|spd|s pd|sp d|s p d
+sarjana pertahanan|shan|s han
+sarjana pertanian|sp|s p
+sarjana peternakan|spt|s pt
+sarjana psikologi|s psi|spsi
+sarjana sains|s si|ssi
+sarjana sains|ssi|s si
+sarjana sains terapan pemerintahan|sstp|s stp
+sarjana sastra|ss|s s
+sarjana seni|s sn|ssn
+sarjana sistem informasi|ssi|s si
+sarjana sosial|ssos|s sos
+sarjana syari ah|s sy|ssy
+sarjana teknik|st|s t
+sarjana teknologi informasi|sti|s ti|s t i
+sarjana teknologi pertanian|stp|s tp|st p|s t p
+sarjana teologi islam|s thi|s th i|sthi
+sarjana teologi kristen|sthk|s th k|s thk
+sarjana teologi|s teol|steol
+sarjana terapan kepolisian|strk|s trk

@@ -1,0 +1,841 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	zračna luka
+aeroway	aerodrome	1	zračna lukas
+amenity	arts_centre	0	umjetnički centar
+amenity	arts_centre	1	umjetnički centars
+amenity	atm	0	bankomat
+amenity	atm	1	bankomats
+amenity	auditorium	0	auditorij
+amenity	auditorium	1	auditorijs
+amenity	bank	0	banka
+amenity	bank	1	bankas
+amenity	bar	0	bar
+amenity	bar	1	bars
+amenity	bench	0	klupa
+amenity	bench	1	klupas
+amenity	bicycle_parking	0	biciklistički parking
+amenity	bicycle_parking	1	biciklistički parkings
+amenity	bicycle_rental	0	rent a bicikl
+amenity	bicycle_rental	1	rent a bicikls
+amenity	brothel	0	bordel
+amenity	brothel	1	bordels
+amenity	bureau_de_change	0	mjenjačnica
+amenity	bureau_de_change	1	mjenjačnicas
+amenity	bus_station	0	autobusni kolodvor
+amenity	bus_station	1	autobusni kolodvors
+amenity	cafe	0	caffe bar
+amenity	cafe	1	caffe bars
+amenity	car_rental	0	rent-a-car
+amenity	car_rental	1	rent-a-cars
+amenity	car_sharing	0	carsharing
+amenity	car_sharing	1	carsharings
+amenity	car_wash	0	autopraonica
+amenity	car_wash	1	autopraonicas
+amenity	casino	0	casino
+amenity	casino	1	casinos
+amenity	cinema	0	kino
+amenity	cinema	1	kinos
+amenity	clinic	0	klinika
+amenity	clinic	1	klinikas
+amenity	club	0	klub
+amenity	club	1	klubs
+amenity	college	0	fakultet
+amenity	college	1	fakultets
+amenity	community_centre	0	društveni centar
+amenity	community_centre	1	društveni centars
+amenity	courthouse	0	sud
+amenity	courthouse	1	suds
+amenity	crematorium	0	krematorij
+amenity	crematorium	1	krematorijs
+amenity	dentist	0	zubar
+amenity	dentist	1	zubars
+amenity	doctors	0	doktor
+amenity	doctors	1	doktors
+amenity	dormitory	0	studentski dom
+amenity	dormitory	1	studentski doms
+amenity	drinking_water	0	pitka voda
+amenity	drinking_water	1	pitka vodas
+amenity	driving_school	0	autoškola
+amenity	driving_school	1	autoškolas
+amenity	embassy	0	veleposlanstvo
+amenity	embassy	1	veleposlanstvos
+amenity	emergency_phone	0	telefon (s.o.s)
+amenity	emergency_phone	1	telefon (s.o.s)s
+amenity	fast_food	0	fast food
+amenity	fast_food	1	fast foods
+amenity	ferry_terminal	0	trajektni terminal
+amenity	ferry_terminal	1	trajektni terminals
+amenity	fire_hydrant	0	hidrant
+amenity	fire_hydrant	1	hidrants
+amenity	fire_station	0	vatrogasna postaja
+amenity	fire_station	1	vatrogasna postajas
+amenity	fountain	0	fontana
+amenity	fountain	1	fontanas
+amenity	fuel	0	benzinska
+amenity	fuel	1	benzinskas
+amenity	grave_yard	0	groblje
+amenity	grave_yard	1	grobljes
+amenity	gym	0	fitness centar
+amenity	gym	1	fitness centars
+amenity	hall	0	hala
+amenity	hall	1	halas
+amenity	health_centre	0	zdravstveni centar
+amenity	health_centre	1	zdravstveni centars
+amenity	hospital	0	bolnica
+amenity	hospital	1	bolnicas
+amenity	hotel	0	hotel
+amenity	hotel	1	hotels
+amenity	hunting_stand	0	čeka
+amenity	hunting_stand	1	čekas
+amenity	ice_cream	0	slastičarna
+amenity	ice_cream	1	slastičarnas
+amenity	kindergarten	0	dječji vrtić
+amenity	kindergarten	1	dječji vrtićs
+amenity	library	0	knjižnica
+amenity	library	1	knjižnicas
+amenity	market	0	tržnica
+amenity	market	1	tržnicas
+amenity	marketplace	0	tržnica
+amenity	marketplace	1	tržnicas
+amenity	mountain_rescue	0	gss - gorska služba spašavanja
+amenity	mountain_rescue	1	gss - gorska služba spašavanjas
+amenity	nightclub	0	'noćni klub'
+amenity	nightclub	1	'noćni klub's
+amenity	nursery	0	čuvanje djece
+amenity	nursery	1	čuvanje djeces
+amenity	nursing_home	0	starački dom
+amenity	nursing_home	1	starački doms
+amenity	office	0	kancelarija
+amenity	office	1	kancelarijas
+amenity	park	0	park
+amenity	park	1	parks
+amenity	parking	0	parking
+amenity	parking	1	parkings
+amenity	pharmacy	0	ljekarna
+amenity	pharmacy	1	ljekarnas
+amenity	place_of_worship	0	crkva
+amenity	place_of_worship	1	crkvas
+amenity	police	0	policija
+amenity	police	1	policijas
+amenity	post_box	0	poštanski sandučić
+amenity	post_box	1	poštanski sandučićs
+amenity	post_office	0	pošta
+amenity	post_office	1	poštas
+amenity	preschool	0	predškolska ustanova
+amenity	preschool	1	predškolska ustanovas
+amenity	prison	0	zatvor
+amenity	prison	1	zatvors
+amenity	pub	0	pub
+amenity	pub	1	pubs
+amenity	public_building	0	ustanova
+amenity	public_building	1	ustanovas
+amenity	public_market	0	javna tržnica
+amenity	public_market	1	javna tržnicas
+amenity	reception_area	0	recepcija
+amenity	reception_area	1	recepcijas
+amenity	recycling	0	reciklažna točka
+amenity	recycling	1	reciklažna točkas
+amenity	restaurant	0	restoran
+amenity	restaurant	1	restorans
+amenity	retirement_home	0	dom za starije osobe
+amenity	retirement_home	1	dom za starije osobes
+amenity	sauna	0	sauna
+amenity	sauna	1	saunas
+amenity	school	0	škola
+amenity	school	1	školas
+amenity	shelter	0	sklonište
+amenity	shelter	1	skloništes
+amenity	shop	0	trgovina
+amenity	shop	1	trgovinas
+amenity	shopping	0	trgovački centar
+amenity	shopping	1	trgovački centars
+amenity	social_club	0	društveni klub
+amenity	social_club	1	društveni klubs
+amenity	studio	0	studio
+amenity	studio	1	studios
+amenity	supermarket	0	supermarket
+amenity	supermarket	1	supermarkets
+amenity	taxi	0	taxi
+amenity	taxi	1	taxis
+amenity	telephone	0	telefonska govornica
+amenity	telephone	1	telefonska govornicas
+amenity	theatre	0	kazalište
+amenity	theatre	1	kazalištes
+amenity	toilets	0	wc
+amenity	toilets	1	wcs
+amenity	townhall	0	gradsko poglavarstvo
+amenity	townhall	1	gradsko poglavarstvos
+amenity	university	0	sveučilište
+amenity	university	1	sveučilištes
+amenity	vending_machine	0	automat
+amenity	vending_machine	1	automats
+amenity	veterinary	0	veterinar
+amenity	veterinary	1	veterinars
+amenity	village_hall	0	seoski dom
+amenity	village_hall	1	seoski doms
+amenity	waste_basket	0	kanta za otpatke
+amenity	waste_basket	1	kanta za otpatkes
+amenity	wifi	0	wifi pristupna točka
+amenity	wifi	1	wifi pristupna točkas
+amenity	youth_centre	0	centar za mladež
+amenity	youth_centre	1	centar za mladežs
+boundary	administrative	0	administrativna granica
+boundary	administrative	1	administrativna granicas
+building	apartments	0	stambeni blok
+building	apartments	1	stambeni bloks
+building	block	0	blok zgrada
+building	block	1	blok zgradas
+building	bunker	0	bunker
+building	bunker	1	bunkers
+building	chapel	0	kapelica
+building	chapel	1	kapelicas
+building	church	0	crkva
+building	church	1	crkvas
+building	city_hall	0	gradska vjećnica
+building	city_hall	1	gradska vjećnicas
+building	commercial	0	poslovna zgrada
+building	commercial	1	poslovna zgradas
+building	dormitory	0	studentski dom
+building	dormitory	1	studentski doms
+building	entrance	0	ulaz
+building	entrance	1	ulazs
+building	faculty	0	zgrada fakulteta
+building	faculty	1	zgrada fakultetas
+building	farm	0	farma (zgrada)
+building	farm	1	farma (zgrada)s
+building	flats	0	stanovi
+building	flats	1	stanovis
+building	garage	0	garaža
+building	garage	1	garažas
+building	hall	0	dvorana
+building	hall	1	dvoranas
+building	hospital	0	bolnica
+building	hospital	1	bolnicas
+building	hotel	0	hotel
+building	hotel	1	hotels
+building	house	0	kuća
+building	house	1	kućas
+building	industrial	0	industrijska zgrada
+building	industrial	1	industrijska zgradas
+building	office	0	uredska zgrada
+building	office	1	uredska zgradas
+building	public	0	javna zgrada
+building	public	1	javna zgradas
+building	residential	0	stambena zgrada
+building	residential	1	stambena zgradas
+building	retail	0	maloprodajna zgrada
+building	retail	1	maloprodajna zgradas
+building	school	0	školska zgrada
+building	school	1	školska zgradas
+building	shop	0	trgovina
+building	shop	1	trgovinas
+building	stadium	0	stadion
+building	stadium	1	stadions
+building	store	0	trgovina
+building	store	1	trgovinas
+building	terrace	0	terasa
+building	terrace	1	terasas
+building	tower	0	toranj
+building	tower	1	toranjs
+building	train_station	0	željeznički kolodvor
+building	train_station	1	željeznički kolodvors
+building	university	0	zgrada sveučilišta
+building	university	1	zgrada sveučilištas
+building	&quot;yes&quot;	0	zgrada
+building	&quot;yes&quot;	1	zgradas
+highway	bridleway	0	konjička staza
+highway	bridleway	1	konjička stazas
+highway	bus_guideway	0	autobusna traka
+highway	bus_guideway	1	autobusna trakas
+highway	bus_stop	0	autobusno stajalište
+highway	bus_stop	1	autobusno stajalištes
+highway	byway	0	prečica
+highway	byway	1	prečicas
+highway	construction	0	autocesta u izgradnji
+highway	construction	1	autocesta u izgradnjis
+highway	cycleway	0	biciklistička staza
+highway	cycleway	1	biciklistička stazas
+highway	distance_marker	0	oznaka km
+highway	distance_marker	1	oznaka kms
+highway	emergency_access_point	0	s.o.s. točka
+highway	emergency_access_point	1	s.o.s. točkas
+highway	footway	0	pješačka staza
+highway	footway	1	pješačka stazas
+highway	ford	0	ford
+highway	ford	1	fords
+highway	gate	0	kapija
+highway	gate	1	kapijas
+highway	living_street	0	ulica smirenog prometa
+highway	living_street	1	ulica smirenog prometas
+highway	minor	0	drugorazredna cesta
+highway	minor	1	drugorazredna cestas
+highway	motorway	0	autocesta
+highway	motorway	1	autocestas
+highway	motorway_junction	0	čvor (autoputa)
+highway	motorway_junction	1	čvor (autoputa)s
+highway	motorway_link	0	autocesta (pristupna cesta)
+highway	motorway_link	1	autocesta (pristupna cesta)s
+highway	path	0	staza
+highway	path	1	stazas
+highway	pedestrian	0	pješački put
+highway	pedestrian	1	pješački puts
+highway	platform	0	platforma
+highway	platform	1	platformas
+highway	primary	0	državna cesta
+highway	primary	1	državna cestas
+highway	primary_link	0	državna cesta
+highway	primary_link	1	državna cestas
+highway	raceway	0	trkalište
+highway	raceway	1	trkalištes
+highway	residential	0	ulica
+highway	residential	1	ulicas
+highway	road	0	cesta
+highway	road	1	cestas
+highway	secondary	0	županijska cesta
+highway	secondary	1	županijska cestas
+highway	secondary_link	0	županijska cesta
+highway	secondary_link	1	županijska cestas
+highway	service	0	servisna cesta
+highway	service	1	servisna cestas
+highway	services	0	autocesta - usluge
+highway	services	1	autocesta - usluges
+highway	steps	0	stepenice
+highway	steps	1	stepenices
+highway	stile	0	prijelaz preko ograde
+highway	stile	1	prijelaz preko ogrades
+highway	tertiary	0	lokalna cesta
+highway	tertiary	1	lokalna cestas
+highway	track	0	makadam
+highway	track	1	makadams
+highway	trail	0	staza
+highway	trail	1	stazas
+highway	trunk	0	cesta rezervirana za motorna vozila
+highway	trunk	1	cesta rezervirana za motorna vozilas
+highway	trunk_link	0	cesta rezrevirana za mot. voz. - prilazna cesta
+highway	trunk_link	1	cesta rezrevirana za mot. voz. - prilazna cestas
+highway	unclassified	0	nerazvrstana cesta
+highway	unclassified	1	nerazvrstana cestas
+highway	unsurfaced	0	neasfaltirana cesta
+highway	unsurfaced	1	neasfaltirana cestas
+historic	archaeological_site	0	arheološko nalazište
+historic	archaeological_site	1	arheološko nalazištes
+historic	battlefield	0	bojno polje
+historic	battlefield	1	bojno poljes
+historic	boundary_stone	0	granični kamen
+historic	boundary_stone	1	granični kamens
+historic	building	0	zgrada
+historic	building	1	zgradas
+historic	castle	0	dvorac
+historic	castle	1	dvoracs
+historic	church	0	crkva
+historic	church	1	crkvas
+historic	house	0	kuća
+historic	house	1	kućas
+historic	icon	0	ikona
+historic	icon	1	ikonas
+historic	manor	0	zamak
+historic	manor	1	zamaks
+historic	memorial	0	spomen dom
+historic	memorial	1	spomen doms
+historic	mine	0	rudnik
+historic	mine	1	rudniks
+historic	monument	0	spomenik
+historic	monument	1	spomeniks
+historic	museum	0	muzej
+historic	museum	1	muzejs
+historic	ruins	0	ruševine
+historic	ruins	1	ruševines
+historic	tower	0	toranj
+historic	tower	1	toranjs
+historic	wayside_cross	0	krajputaš
+historic	wayside_cross	1	krajputašs
+historic	wayside_shrine	0	usputno svetište
+historic	wayside_shrine	1	usputno svetištes
+historic	wreck	0	olupina
+historic	wreck	1	olupinas
+landuse	allotments	0	vrtovi
+landuse	allotments	1	vrtovis
+landuse	basin	0	bazen
+landuse	basin	1	bazens
+landuse	brownfield	0	zemljište za prenamjenu
+landuse	brownfield	1	zemljište za prenamjenus
+landuse	cemetery	0	groblje
+landuse	cemetery	1	grobljes
+landuse	commercial	0	poslovno područje
+landuse	commercial	1	poslovno područjes
+landuse	conservation	0	zaštićeno područje
+landuse	conservation	1	zaštićeno područjes
+landuse	construction	0	gradilište
+landuse	construction	1	gradilištes
+landuse	farm	0	farma
+landuse	farm	1	farmas
+landuse	farmland	0	polje
+landuse	farmland	1	poljes
+landuse	farmyard	0	farma
+landuse	farmyard	1	farmas
+landuse	forest	0	šuma
+landuse	forest	1	šumas
+landuse	grass	0	trava
+landuse	grass	1	travas
+landuse	greenfield	0	greenfield zemljište
+landuse	greenfield	1	greenfield zemljištes
+landuse	industrial	0	industrijsko područje
+landuse	industrial	1	industrijsko područjes
+landuse	landfill	0	deponija
+landuse	landfill	1	deponijas
+landuse	meadow	0	livada
+landuse	meadow	1	livadas
+landuse	military	0	vojno područje
+landuse	military	1	vojno područjes
+landuse	mine	0	rudnik
+landuse	mine	1	rudniks
+landuse	mountain	0	planina
+landuse	mountain	1	planinas
+landuse	nature_reserve	0	rezervat prirode
+landuse	nature_reserve	1	rezervat prirodes
+landuse	park	0	park
+landuse	park	1	parks
+landuse	piste	0	pista
+landuse	piste	1	pistas
+landuse	plaza	0	plaza
+landuse	plaza	1	plazas
+landuse	quarry	0	kamenolom
+landuse	quarry	1	kamenoloms
+landuse	railway	0	željeznica
+landuse	railway	1	željeznicas
+landuse	recreation_ground	0	rekreacijsko područje
+landuse	recreation_ground	1	rekreacijsko područjes
+landuse	reservoir	0	rezervoar
+landuse	reservoir	1	rezervoars
+landuse	residential	0	stambeno područje
+landuse	residential	1	stambeno područjes
+landuse	retail	0	trgovina
+landuse	retail	1	trgovinas
+landuse	village_green	0	seoski travnjak
+landuse	village_green	1	seoski travnjaks
+landuse	vineyard	0	vinograd
+landuse	vineyard	1	vinograds
+landuse	wetland	0	močvara
+landuse	wetland	1	močvaras
+landuse	wood	0	šuma
+landuse	wood	1	šumas
+leisure	beach_resort	0	plaža
+leisure	beach_resort	1	plažas
+leisure	common	0	općinsko zemljište
+leisure	common	1	općinsko zemljištes
+leisure	fishing	0	ribičko područje
+leisure	fishing	1	ribičko područjes
+leisure	garden	0	vrt
+leisure	garden	1	vrts
+leisure	golf_course	0	golf igralište
+leisure	golf_course	1	golf igralištes
+leisure	ice_rink	0	klizalište
+leisure	ice_rink	1	klizalištes
+leisure	marina	0	marina
+leisure	marina	1	marinas
+leisure	miniature_golf	0	minigolf
+leisure	miniature_golf	1	minigolfs
+leisure	nature_reserve	0	rezervat prirode
+leisure	nature_reserve	1	rezervat prirodes
+leisure	park	0	park
+leisure	park	1	parks
+leisure	pitch	0	sportski teren
+leisure	pitch	1	sportski terens
+leisure	playground	0	igralište
+leisure	playground	1	igralištes
+leisure	recreation_ground	0	rekreacijski teren
+leisure	recreation_ground	1	rekreacijski terens
+leisure	slipway	0	navoz
+leisure	slipway	1	navozs
+leisure	sports_centre	0	sportski centar
+leisure	sports_centre	1	sportski centars
+leisure	stadium	0	stadion
+leisure	stadium	1	stadions
+leisure	swimming_pool	0	bazen
+leisure	swimming_pool	1	bazens
+leisure	track	0	staza za trčanje
+leisure	track	1	staza za trčanjes
+leisure	water_park	0	vodeni park
+leisure	water_park	1	vodeni parks
+natural	bay	0	zaljev
+natural	bay	1	zaljevs
+natural	beach	0	plaža
+natural	beach	1	plažas
+natural	cape	0	rt
+natural	cape	1	rts
+natural	cave_entrance	0	pećina (ulaz)
+natural	cave_entrance	1	pećina (ulaz)s
+natural	channel	0	kanal
+natural	channel	1	kanals
+natural	cliff	0	litica
+natural	cliff	1	liticas
+natural	coastline	0	obala
+natural	coastline	1	obalas
+natural	crater	0	krater
+natural	crater	1	kraters
+natural	feature	0	obilježje
+natural	feature	1	obilježjes
+natural	fell	0	brdo
+natural	fell	1	brdos
+natural	fjord	0	fjord
+natural	fjord	1	fjords
+natural	geyser	0	gejzir
+natural	geyser	1	gejzirs
+natural	glacier	0	glečer
+natural	glacier	1	glečers
+natural	heath	0	ravnica
+natural	heath	1	ravnicas
+natural	hill	0	brdo
+natural	hill	1	brdos
+natural	island	0	otok
+natural	island	1	otoks
+natural	land	0	zemlja
+natural	land	1	zemljas
+natural	marsh	0	močvara
+natural	marsh	1	močvaras
+natural	moor	0	močvara
+natural	moor	1	močvaras
+natural	mud	0	blato
+natural	mud	1	blatos
+natural	peak	0	vrh
+natural	peak	1	vrhs
+natural	point	0	točka
+natural	point	1	točkas
+natural	reef	0	greben
+natural	reef	1	grebens
+natural	ridge	0	greben
+natural	ridge	1	grebens
+natural	river	0	rijeka
+natural	river	1	rijekas
+natural	rock	0	stijena
+natural	rock	1	stijenas
+natural	scree	0	šljunak
+natural	scree	1	šljunaks
+natural	scrub	0	guštara
+natural	scrub	1	guštaras
+natural	shoal	0	sprud
+natural	shoal	1	spruds
+natural	spring	0	izvor
+natural	spring	1	izvors
+natural	strait	0	tjesnac
+natural	strait	1	tjesnacs
+natural	tree	0	drvo
+natural	tree	1	drvos
+natural	valley	0	dolina
+natural	valley	1	dolinas
+natural	volcano	0	vulkan
+natural	volcano	1	vulkans
+natural	water	0	voda
+natural	water	1	vodas
+natural	wetland	0	močvara
+natural	wetland	1	močvaras
+natural	wetlands	0	močvara
+natural	wetlands	1	močvaras
+natural	wood	0	šuma
+natural	wood	1	šumas
+place	city	0	grad
+place	city	1	grads
+place	country	0	država
+place	country	1	državas
+place	county	0	županija/grofovija
+place	county	1	županija/grofovijas
+place	farm	0	farma
+place	farm	1	farmas
+place	hamlet	0	zaseok
+place	hamlet	1	zaseoks
+place	house	0	kuća
+place	house	1	kućas
+place	houses	0	kuće
+place	houses	1	kućes
+place	island	0	otok
+place	island	1	otoks
+place	islet	0	otočić
+place	islet	1	otočićs
+place	locality	0	lokalitet
+place	locality	1	lokalitets
+place	moor	0	močvara
+place	moor	1	močvaras
+place	municipality	0	općina
+place	municipality	1	općinas
+place	postcode	0	poštanski broj
+place	postcode	1	poštanski brojs
+place	region	0	područje
+place	region	1	područjes
+place	sea	0	more
+place	sea	1	mores
+place	state	0	pokrajina / država (usa)
+place	state	1	pokrajina / država (usa)s
+place	subdivision	0	podgrupa
+place	subdivision	1	podgrupas
+place	suburb	0	predgrađe
+place	suburb	1	predgrađes
+place	town	0	grad
+place	town	1	grads
+place	unincorporated_area	0	slobodna zemlja
+place	unincorporated_area	1	slobodna zemljas
+place	village	0	selo
+place	village	1	selos
+railway	abandoned	0	napuštena pruga
+railway	abandoned	1	napuštena prugas
+railway	construction	0	pruga u izgradnji
+railway	construction	1	pruga u izgradnjis
+railway	disused	0	napuštena pruga
+railway	disused	1	napuštena prugas
+railway	disused_station	0	željeznička stanica (nije u upotrebi)
+railway	disused_station	1	željeznička stanica (nije u upotrebi)s
+railway	funicular	0	uspinjača
+railway	funicular	1	uspinjačas
+railway	halt	0	željeznička stanica
+railway	halt	1	željeznička stanicas
+railway	historic_station	0	povijesna željeznička stanica
+railway	historic_station	1	povijesna željeznička stanicas
+railway	junction	0	željeznički čvor
+railway	junction	1	željeznički čvors
+railway	level_crossing	0	pružni prijelaz
+railway	level_crossing	1	pružni prijelazs
+railway	light_rail	0	laka željeznica
+railway	light_rail	1	laka željeznicas
+railway	monorail	0	jednotračna pruga
+railway	monorail	1	jednotračna prugas
+railway	narrow_gauge	0	uskotračna pruga
+railway	narrow_gauge	1	uskotračna prugas
+railway	platform	0	željeznička platforma
+railway	platform	1	željeznička platformas
+railway	preserved	0	sačuvana pruga
+railway	preserved	1	sačuvana prugas
+railway	spur	0	pruga
+railway	spur	1	prugas
+railway	station	0	željeznički kolodvor
+railway	station	1	željeznički kolodvors
+railway	subway	0	podzemna - stanica
+railway	subway	1	podzemna - stanicas
+railway	subway_entrance	0	podzemna - ulaz
+railway	subway_entrance	1	podzemna - ulazs
+railway	switch	0	skretnica
+railway	switch	1	skretnicas
+railway	tram	0	tramvaj
+railway	tram	1	tramvajs
+railway	tram_stop	0	tramvajska stanica
+railway	tram_stop	1	tramvajska stanicas
+railway	yard	0	ranžirni kolodvor
+railway	yard	1	ranžirni kolodvors
+shop	alcohol	0	trgovina pićem
+shop	alcohol	1	trgovina pićems
+shop	apparel	0	trgovina odjećom
+shop	apparel	1	trgovina odjećoms
+shop	art	0	atelje
+shop	art	1	ateljes
+shop	bakery	0	pekara
+shop	bakery	1	pekaras
+shop	beauty	0	parfumerija
+shop	beauty	1	parfumerijas
+shop	beverages	0	trgovina pićem
+shop	beverages	1	trgovina pićems
+shop	bicycle	0	trgovina biciklima
+shop	bicycle	1	trgovina biciklimas
+shop	books	0	knjižara
+shop	books	1	knjižaras
+shop	butcher	0	mesnica
+shop	butcher	1	mesnicas
+shop	car	0	autokuća
+shop	car	1	autokućas
+shop	car_dealer	0	autokuća
+shop	car_dealer	1	autokućas
+shop	car_parts	0	autodijelovi
+shop	car_parts	1	autodijelovis
+shop	car_repair	0	autoservis
+shop	car_repair	1	autoserviss
+shop	carpet	0	trgovina tepisima
+shop	carpet	1	trgovina tepisimas
+shop	charity	0	dobrotvorna trgovina
+shop	charity	1	dobrotvorna trgovinas
+shop	chemist	0	ljekarna
+shop	chemist	1	ljekarnas
+shop	clothes	0	butik
+shop	clothes	1	butiks
+shop	computer	0	computer shop
+shop	computer	1	computer shops
+shop	confectionery	0	delikatesa
+shop	confectionery	1	delikatesas
+shop	convenience	0	minimarket
+shop	convenience	1	minimarkets
+shop	copyshop	0	kopiraona
+shop	copyshop	1	kopiraonas
+shop	cosmetics	0	parfumerija
+shop	cosmetics	1	parfumerijas
+shop	department_store	0	robna kuća
+shop	department_store	1	robna kućas
+shop	discount	0	diskont
+shop	discount	1	diskonts
+shop	doityourself	0	uradi sam
+shop	doityourself	1	uradi sams
+shop	drugstore	0	drogerija
+shop	drugstore	1	drogerijas
+shop	dry_cleaning	0	kemijska čistionica
+shop	dry_cleaning	1	kemijska čistionicas
+shop	electronics	0	trgovina elektronikom
+shop	electronics	1	trgovina elektronikoms
+shop	estate_agent	0	agencija za nekretnine
+shop	estate_agent	1	agencija za nekretnines
+shop	farm	0	poljo-apoteka
+shop	farm	1	poljo-apotekas
+shop	fashion	0	modna trgovina
+shop	fashion	1	modna trgovinas
+shop	fish	0	ribarnica
+shop	fish	1	ribarnicas
+shop	florist	0	cvjećarnica
+shop	florist	1	cvjećarnicas
+shop	food	0	trgovina prehranom
+shop	food	1	trgovina prehranoms
+shop	funeral_directors	0	pogrebno poduzeće
+shop	funeral_directors	1	pogrebno poduzećes
+shop	furniture	0	namještaj
+shop	furniture	1	namještajs
+shop	gallery	0	galerija
+shop	gallery	1	galerijas
+shop	garden_centre	0	vrtni centar
+shop	garden_centre	1	vrtni centars
+shop	general	0	trgovina mješovitom robom
+shop	general	1	trgovina mješovitom roboms
+shop	gift	0	poklon trgovina
+shop	gift	1	poklon trgovinas
+shop	greengrocer	0	voćarna
+shop	greengrocer	1	voćarnas
+shop	grocery	0	trgovina prehranom
+shop	grocery	1	trgovina prehranoms
+shop	hairdresser	0	frizer
+shop	hairdresser	1	frizers
+shop	hardware	0	željezar
+shop	hardware	1	željezars
+shop	hifi	0	hi-fi
+shop	hifi	1	hi-fis
+shop	insurance	0	osiguranje
+shop	insurance	1	osiguranjes
+shop	jewelry	0	zlatarna
+shop	jewelry	1	zlatarnas
+shop	kiosk	0	kiosk
+shop	kiosk	1	kiosks
+shop	laundry	0	praonica rublja
+shop	laundry	1	praonica rubljas
+shop	mall	0	trgovački centar
+shop	mall	1	trgovački centars
+shop	market	0	tržnica
+shop	market	1	tržnicas
+shop	mobile_phone	0	trgovina mobitelima
+shop	mobile_phone	1	trgovina mobitelimas
+shop	motorcycle	0	moto shop
+shop	motorcycle	1	moto shops
+shop	music	0	trgovina glazbom
+shop	music	1	trgovina glazboms
+shop	newsagent	0	novinar
+shop	newsagent	1	novinars
+shop	optician	0	optičar
+shop	optician	1	optičars
+shop	organic	0	trgovina zdrave hrane
+shop	organic	1	trgovina zdrave hranes
+shop	outdoor	0	trgovina za slobodno vrijeme
+shop	outdoor	1	trgovina za slobodno vrijemes
+shop	pet	0	trgovina za kućne ljubimce
+shop	pet	1	trgovina za kućne ljubimces
+shop	photo	0	fotograf
+shop	photo	1	fotografs
+shop	salon	0	salon
+shop	salon	1	salons
+shop	shoes	0	trgovina obućom
+shop	shoes	1	trgovina obućoms
+shop	shopping_centre	0	trgovački centar
+shop	shopping_centre	1	trgovački centars
+shop	sports	0	trgovina sportskom opremom
+shop	sports	1	trgovina sportskom opremoms
+shop	stationery	0	papirnica
+shop	stationery	1	papirnicas
+shop	supermarket	0	supermarket
+shop	supermarket	1	supermarkets
+shop	toys	0	trgovina igračkama
+shop	toys	1	trgovina igračkamas
+shop	travel_agency	0	putnička agencija
+shop	travel_agency	1	putnička agencijas
+shop	video	0	videoteka
+shop	video	1	videotekas
+shop	wine	0	vinoteka
+shop	wine	1	vinotekas
+tourism	alpine_hut	0	alpska kuća
+tourism	alpine_hut	1	alpska kućas
+tourism	artwork	0	umjetničko djelo
+tourism	artwork	1	umjetničko djelos
+tourism	attraction	0	atrakcija
+tourism	attraction	1	atrakcijas
+tourism	bed_and_breakfast	0	'noćenje i doručak'
+tourism	bed_and_breakfast	1	'noćenje i doručak's
+tourism	cabin	0	koliba
+tourism	cabin	1	kolibas
+tourism	camp_site	0	kamp
+tourism	camp_site	1	kamps
+tourism	caravan_site	0	kamp-kućice (mjesto)
+tourism	caravan_site	1	kamp-kućice (mjesto)s
+tourism	chalet	0	planinska kuća
+tourism	chalet	1	planinska kućas
+tourism	guest_house	0	apartman
+tourism	guest_house	1	apartmans
+tourism	hostel	0	hostel
+tourism	hostel	1	hostels
+tourism	hotel	0	hotel
+tourism	hotel	1	hotels
+tourism	information	0	informacije
+tourism	information	1	informacijes
+tourism	lean_to	0	lean to
+tourism	lean_to	1	lean tos
+tourism	motel	0	motel
+tourism	motel	1	motels
+tourism	museum	0	muzej
+tourism	museum	1	muzejs
+tourism	picnic_site	0	piknik-mjesto
+tourism	picnic_site	1	piknik-mjestos
+tourism	theme_park	0	tematski park
+tourism	theme_park	1	tematski parks
+tourism	valley	0	dolina
+tourism	valley	1	dolinas
+tourism	viewpoint	0	vidikovac
+tourism	viewpoint	1	vidikovacs
+tourism	zoo	0	zoo
+tourism	zoo	1	zoos
+waterway	boatyard	0	brodogradilište
+waterway	boatyard	1	brodogradilištes
+waterway	canal	0	kanal
+waterway	canal	1	kanals
+waterway	connector	0	spoj vodnih puteva
+waterway	connector	1	spoj vodnih putevas
+waterway	dam	0	brana
+waterway	dam	1	branas
+waterway	derelict_canal	0	zanemaren kanal
+waterway	derelict_canal	1	zanemaren kanals
+waterway	ditch	0	jarak
+waterway	ditch	1	jaraks
+waterway	dock	0	dok
+waterway	dock	1	doks
+waterway	drain	0	odvod
+waterway	drain	1	odvods
+waterway	lock	0	ustava
+waterway	lock	1	ustavas
+waterway	lock_gate	0	ustava
+waterway	lock_gate	1	ustavas
+waterway	mineral_spring	0	mineralni izvor
+waterway	mineral_spring	1	mineralni izvors
+waterway	mooring	0	sidrište
+waterway	mooring	1	sidrištes
+waterway	rapids	0	brzaci
+waterway	rapids	1	brzacis
+waterway	river	0	rijeka
+waterway	river	1	rijekas
+waterway	riverbank	0	riječna obala
+waterway	riverbank	1	riječna obalas
+waterway	stream	0	potok
+waterway	stream	1	potoks
+waterway	wadi	0	suho korito rijeke
+waterway	wadi	1	suho korito rijekes
+waterway	water_point	0	točka vodotoka
+waterway	water_point	1	točka vodotokas
+waterway	waterfall	0	vodopad
+waterway	waterfall	1	vodopads
+waterway	weir	0	brana
+waterway	weir	1	branas

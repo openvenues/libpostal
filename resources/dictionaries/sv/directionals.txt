@@ -1,4 +1,8 @@
-norra|n:a|n
-östra|ostra|oestra|ö:a|o:a|ö|o
-södra|sodra|soedra|s:a|s
-västra|vastra|vaestra|v:a|v
+norr|n
+norra|n:a
+öst|ost|oest|ö|o
+östra|ostra|oestra|ö:a|o:a
+söd|s|sod|soed
+södra|sodra|soedra|s:a
+väst|vast|vaest|v
+västra|vastra|vaestra|v:a

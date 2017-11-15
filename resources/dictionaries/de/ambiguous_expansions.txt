@@ -1,12 +1,15 @@
 a
 b
+ch
 d
 g
 h
 i
 k
+l
 n
 o
+r
 s
 u
 v

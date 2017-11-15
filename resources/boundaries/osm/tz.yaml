@@ -1,0 +1,26 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "5": "state_district"
+        "7": "state_district"
+        "9": "city"
+
+    overrides:
+        id:
+            relation:
+                # Dar es Salaam
+                "1600803": "city"
+
+
+        contained_by:
+            relation:   
+                # Dar es Salaam
+                "1600803":
+                    admin_level:
+                        "9": "city_district"
+
+        use_admin_center:
+            - id: 1600803 # Dar es Salaam
+              type: relation
+              probability: 0.9

@@ -1,3 +1,4 @@
+abteilung|abt
 altersheim
 altstoffsammelzentrum|asz|a s z
 apotheke
@@ -16,7 +17,6 @@ bunker
 büro|buro|buero
 bustenhalter|bh
 busbahnhof
-brunnen
 café|cafe
 casino
 denkmal|dkm
@@ -42,7 +42,6 @@ geselligkeitsverein
 gesundheitszentrum
 gericht
 grundschule
-gymnasium
 hafen
 halle
 haus

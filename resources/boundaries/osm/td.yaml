@@ -1,0 +1,10 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+
+    overrides:
+        id:
+            relation:
+                # N'Djamena
+                "3718330": "city"

@@ -1,0 +1,565 @@
+---
+  whole_words_only: true
+  default_separator: ""
+  rules:
+    - 
+      name: "nulle"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "viens"
+      value: 1
+      type: "cardinal"
+      multiply_gte: 1000000
+    - 
+      name: "viena"
+      value: 1
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "divi"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "divas"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "trīs"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "tris"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "četri"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "cetri"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "četras"
+      value: 4
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "cetras"
+      value: 4
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "pieci"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "piecas"
+      value: 5
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "seši"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sesi"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sešas"
+      value: 6
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "sesas"
+      value: 6
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "septiņi"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "septini"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "septiņas"
+      value: 7
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "septinas"
+      value: 7
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "astoņi"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "astoni"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "astoņas"
+      value: 8
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "astonas"
+      value: 8
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "deviņi"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "devini"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "deviņas"
+      value: 9
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "devinas"
+      value: 9
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "desmit"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "vienpadsmit"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "divpadsmit"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "trīspadsmit"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "trispadsmit"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "četrpadsmit"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "cetrpadsmit"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "piecpadsmit"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "sešpadsmit"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sespadsmit"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "septiņpadsmit"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "septinpadsmit"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "astoņpadsmit"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "astonpadsmit"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "deviņpadsmit"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "devinpadsmit"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "divdesmit"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trīsdesmit"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trisdesmit"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "četrdesmit"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "cetrdesmit"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "piecdesmit"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sešdesmit"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sesdesmit"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "septiņdesmit"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "septindesmit"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "astoņdesmit"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "astondesmit"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "deviņdesmit"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "devindesmit"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "simt"
+      value: 100
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "divsimt"
+      value: 200
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "trīssimt"
+      value: 300
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "trissimt"
+      value: 300
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "četrsimt"
+      value: 400
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "cetrsimt"
+      value: 400
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "piecsimt"
+      value: 500
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "sešsimt"
+      value: 600
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "sessimt"
+      value: 600
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "septiņsimt"
+      value: 700
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "septinsimt"
+      value: 700
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "astoņsimt"
+      value: 800
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "astonsimt"
+      value: 800
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "deviņsimt"
+      value: 900
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "devinsimt"
+      value: 900
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "tūkstoš"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "tukstos"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "tūkstoši"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "tukstosi"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "divtūkstoš"
+      value: 2000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "divtukstos"
+      value: 2000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "trīstūkstoš"
+      value: 3000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "tristukstos"
+      value: 3000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "četrtūkstoš"
+      value: 4000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "cetrtukstos"
+      value: 4000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "piectūkstoš"
+      value: 5000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "piectukstos"
+      value: 5000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "seštūkstoš"
+      value: 6000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "sestukstos"
+      value: 6000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "septiņtūkstoš"
+      value: 7000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "septintukstos"
+      value: 7000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "astoņtūkstoš"
+      value: 8000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "astontukstos"
+      value: 8000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "deviņtūkstoš"
+      value: 9000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "devintukstos"
+      value: 9000
+      type: "cardinal"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "miljons"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+      right_separator: " "
+    - 
+      name: "miljoni"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "miljards"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+      right_separator: " "
+    - 
+      name: "miljardi"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "biljons"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+      right_separator: " "
+    - 
+      name: "biljoni"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "biljards"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+      right_separator: " "
+    - 
+      name: "biljardi"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "."
+        "1":
+          - "."
+        "2":
+          - "."
+        "3":
+          - "."
+        "4":
+          - "."
+        "5":
+          - "."
+        "6":
+          - "."
+        "7":
+          - "."
+        "8":
+          - "."
+        "9":
+          - "."
+

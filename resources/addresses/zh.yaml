@@ -1,0 +1,292 @@
+# zh.yaml
+# -------
+# Chinese language specification (default is mainland China, Hong Kong below)
+
+whitespace: false
+
+components:
+    level:
+        null_probability: 0.85 # Probability of doing nothing if no floor number is specified
+        alphanumeric_probability: 0.15
+
+    unit:
+        # If no unit number is specified
+        null_probability: 0.6
+        alphanumeric_probability: 0.4
+
+numbers:
+    default: &hao
+        canonical: 号
+        numeric_affix:
+            affix: 号
+            direction: right
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    probability: 0.8
+    alternatives:
+        - alternative: &hao_traditional
+            canonical: 號
+            numeric_affix:
+                affix: 號
+                direction: right
+            numeric_probability: 0.0
+            numeric_affix_probability: 1.0
+          probability: 0.2
+
+house_numbers:
+    alphanumeric:
+        default: *hao
+        probability: 0.8
+        alternatives:
+            - alternative: *hao_traditional
+              probability: 0.2
+    alphanumeric_phrase_probability: 0.6
+
+levels:
+    lou: &lou
+        canonical: 楼
+        numeric_affix:
+            affix: 楼
+            direction: right
+            add_number_phrase: true
+            add_number_phrase_probability: 0.5
+            digits:
+                ascii_probability: 0.6
+                unicode_full_width_probability: 0.1
+                spellout_probability: 0.3
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    lou_traditional: &lou_traditional
+        canonical: 樓
+        numeric_affix:
+            affix: 樓
+            direction: right
+            add_number_phrase: true
+            add_number_phrase_probability: 0.5
+            digits:
+                ascii_probability: 0.6
+                unicode_full_width_probability: 0.1
+                spellout_probability: 0.3
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    ceng: &ceng
+        canonical: 层
+        numeric_affix:
+            affix: 层
+            direction: right
+            add_number_phrase: true
+            add_number_phrase_probability: 0.5
+            digits:
+                ascii_probability: 0.6
+                unicode_full_width_probability: 0.1
+                spellout_probability: 0.3
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    ceng_traditional: &ceng_traditional
+        canonical: 層
+        numeric_affix:
+            affix: 層
+            direction: right
+            add_number_phrase: true
+            add_number_phrase_probability: 0.5
+            digits:
+                ascii_probability: 0.6
+                unicode_full_width_probability: 0.1
+                spellout_probability: 0.3
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+    numbering_starts_at: 1
+
+    alphanumeric:
+        default: *lou
+        probability: 0.85
+        alternatives:
+            - alternative: *lou_traditional
+              probability: 0.05
+            - alternative: *ceng
+              probability: 0.08
+            - alternative: *ceng_traditional
+              probability: 0.02
+        numeric_probability: 1.0
+
+po_boxes:
+    youzheng_xinxiang: &youzheng_xinxiang
+        canonical: 邮政信箱
+        numeric_affix:
+            affix: 邮政信箱
+            direction: left
+            digits:
+                ascii_probability: 0.3
+                unicode_full_width_probability: 0.5
+                spellout_probability: 0.2
+            use_number_phrase: true
+            use_number_phrase_probability: 0.8
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    youzheng_xinxiang_traditional: &youzheng_xinxiang_traditional
+        canonical: 郵政信箱
+        numeric_affix:
+            affix: 郵政信箱
+            direction: left
+            digits:
+                ascii_probability: 0.3
+                unicode_full_width_probability: 0.5
+                spellout_probability: 0.2
+            use_number_phrase: true
+            use_number_phrase_probability: 0.8
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+
+    alphanumeric:
+        default: *youzheng_xinxiang
+        probability: 0.9
+        alternatives:
+            - alternative: *youzheng_xinxiang_traditional
+              probability: 0.1
+        numeric_probability: 1.0
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+postcodes:
+    alphanumeric:
+        default: &youbian
+            canonical: 邮编
+            numeric_affix:
+                affix: 邮编
+                direction: left
+            # null_probability means the chance of doing nothing e.g. just the postal code
+            null_probability: 0.9
+            numeric_probability: 0.0
+            numeric_affix_probability: 0.1
+        probability: 0.9
+        alternatives:
+            - alternative: &youbian_traditional
+                canonical: 郵編
+                numeric_affix:
+                    affix: 郵編
+                    direction: left
+                # null_probability means the chance of doing nothing e.g. just the postal code
+                null_probability: 0.9
+                numeric_probability: 0.0
+                numeric_affix_probability: 0.1
+              probability: 0.1
+
+units:
+    shi: &shi
+        canonical: 室
+        numeric_affix:
+            affix: 室
+            direction: right
+            add_number_phrase: true
+            add_number_phrase_probability: 0.5
+            digits:
+                ascii_probability: 0.6
+                unicode_full_width_probability: 0.1
+                spellout_probability: 0.3
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+    alphanumeric:
+        default: *shi
+        numeric_probability: 1.0
+        use_positive_numbers_probability: 1.0
+        # If we have a floor number (from building:levels), use it
+        use_floor_probability: 0.8
+
+
+countries:
+    # Hong Kong
+    hk:
+        components:
+            # Floor number a little more common in Hong Kong than mainland China
+            level:
+                null_probability: 0.75
+                alphanumeric_probability: 0.25
+
+        numbers: &numbers_prefer_traditional
+            default: *hao_traditional
+            probability: 0.7
+            alternatives:
+                - alternative: *hao
+                  probability: 0.3
+
+        house_numbers: &house_number_prefer_traditional
+            alphanumeric:
+                default: *hao_traditional
+                probability: 0.7
+                alternatives:
+                    - alternative: *hao
+                      probability: 0.3
+            alphanumeric_phrase_probability: 0.6
+
+        levels: &levels_prefer_traditional
+            alphanumeric:
+                default: *lou_traditional
+                probability: 0.75
+                alternatives:
+                    - alternative: *lou
+                      probability: 0.15
+                    - alternative: *ceng_traditional
+                      probability: 0.06
+                    - alternative: *ceng
+                      probability: 0.04
+                numeric_probability: 1.0
+
+        po_boxes: &po_boxes_prefer_traditional
+            alphanumeric:
+                default: *youzheng_xinxiang_traditional
+                probability: 0.75
+                alternatives:
+                    - alternative: *youzheng_xinxiang
+                      probability: 0.25
+                numeric_probability: 1.0
+
+
+        postcodes: &postcodes_prefer_traditional
+            alphanumeric:
+                default: *youbian_traditional
+                probability: 0.75
+                alternatives:
+                    - alternative: *youbian
+                      probability: 0.25
+
+    # Macau
+    mo:
+        numbers: *numbers_prefer_traditional
+        house_numbers: *house_number_prefer_traditional
+        levels: *levels_prefer_traditional
+        po_boxes: *po_boxes_prefer_traditional
+        postcodes: *postcodes_prefer_traditional
+
+        units:
+            alphanumeric_probability:
+                numeric_probability: 0.9
+                alpha_probability: 0.1
+
+
+    # Taiwan
+    tw:
+        numbers: *numbers_prefer_traditional
+        house_numbers: *house_number_prefer_traditional
+        levels: *levels_prefer_traditional
+        po_boxes: *po_boxes_prefer_traditional
+        postcodes: *postcodes_prefer_traditional
+
+        units:
+            alphanumeric_probability:
+                numeric_probability: 0.9
+                alpha_probability: 0.1

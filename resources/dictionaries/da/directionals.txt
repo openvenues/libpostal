@@ -1,3 +1,4 @@
+centrum|c
 nordre|ndr
 nord|n
 nordøst|nø

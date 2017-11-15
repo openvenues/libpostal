@@ -12,5 +12,7 @@ kalea|k
 kale
 karrika
 korridorea
-pasealekua
-plaza
+pasealekua|pas
+plaza|pl
+zeharbidea|zehb
+zumardia|zum

@@ -1,0 +1,10 @@
+prefixes:
+    # Note: "ciudad de" should not be included as it's part of proper names
+    - colonia
+    - municipio nuestra senora de
+
+prefixes_similarity_only:
+    - ciudad de
+
+suffixes:
+    - colonia

@@ -1,3 +1,2 @@
-casella postale|cp|c.p.|c.p|c p|cpt
+casella postale|cp|c.p.|c.p|c p|cpt|cas pos
 presso|co|c \ o|c / o
-

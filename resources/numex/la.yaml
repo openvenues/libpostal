@@ -1,0 +1,151 @@
+---
+  whole_words_only: true
+  default_separator: ""
+  rules:
+    - 
+      name: "i"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "ii"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "iii"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "iv"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "v"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "vi"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "vii"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "viii"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "ix"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "x"
+      value: 10
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "xx"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "xxx"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "xl"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "l"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "lx"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "lxx"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "lxxx"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "xc"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "c"
+      value: 100
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "cc"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "ccc"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "cd"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "d"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dc"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dcc"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dccc"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "cm"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "m"
+      value: 1000
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "mm"
+      value: 2000
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "mmm"
+      value: 3000
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "mmmm"
+      value: 4000
+      type: "cardinal"
+      right: "add"
+

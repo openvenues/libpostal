@@ -1,0 +1,120 @@
+names:
+    keys:
+        default: name
+        probability: 0.75
+        alternatives:
+            - alternative: short_name # e.g. NYC
+              probability: 0.12
+            - alternative: alt_name # e.g. New York (instead of New York City)
+              probability: 0.12
+            - alternative: official_name # e.g. United Kingdom of Great Britain and Northern Ireland
+              probability: 0.01
+
+    components:
+        country:
+            keys:
+                default: name
+                probability: 0.87
+                alternatives:
+                    - alternative: ISO3166-1:alpha2
+                      probability: 0.02
+                    - alternative: ISO3166-1:alpha3
+                      probability: 0.01
+                    - alternative: short_name
+                      probability: 0.04
+                    - alternative: alt_name
+                      probability: 0.04
+                    - alternative: int_name
+                      probability: 0.01
+                    - alternative: official_name # e.g. United Kingdom of Great Britain and Northern Ireland
+                      probability: 0.01
+
+    regex_replacements:
+        - country: fr
+          pattern: "(?:lyon|paris|marseilles?) ([\\d]+(?:e|er|ème|eme) arrondissement)"
+          replace_with_group: 1
+          replace_probability: 0.5
+
+    prefixes:
+        language:
+            ru:
+                city:
+                    default:
+                        prefix: г.
+                    probability: 0.35
+                    alternatives:
+                        - alternative:
+                              prefix: г
+                          probability: 0.1
+                        - alternative:
+                              prefix: город
+                          probability: 0.05
+
+    # This section overrides place names
+    exceptions:
+        # Boroughs of New York City
+        - id: 2552485 # New York County (don't use Manhattan)
+          type: relation
+          default: name # New York County
+          probability: 1.0
+        - id: 369518 # Kings County (don't use Brooklyn)
+          type: relation
+          default: name # Kings County
+          probability: 1.0
+        - id: 369519 # Queens County (don't use Queens)
+          type: relation
+          default: name # Queens County
+          probability: 1.0
+        - id: 2552450 # Bronx County (don't use The Bronx)
+          type: relation
+          default: name # Bronx County
+          probability: 1.0
+        - id: 962876 # Richmond County (don't use Staten Island)
+          type: relation
+          default: name # Richmond County
+          probability: 1.0
+        - id: 6577227 # Kingston Parish (always use Kingston)
+          type: relation
+          default: name # Kingston
+          probability: 1.0
+        - id: 30674098 # Sao Paulo
+          type: node
+          default: name
+          probability: 0.9
+          alternatives:
+              - alternative: alt_name
+                probability: 0.09
+              - alternative: official_name
+                probability: 0.01
+        - id: 298285 # Sao Paulo (relation)
+          type: relation
+          default: name
+          probability: 0.9
+          alternatives:
+              - alternative: alt_name
+                probability: 0.09
+              - alternative: official_name
+                probability: 0.01
+        - id: 556706 # New Zealand
+          type: relation
+          default: name:en
+          probability: 0.77
+          alternatives:
+              - alternative: name
+                probability: 0.1
+              - alternative: ISO3166-1:alpha2
+                probability: 0.02
+              - alternative: ISO3166-1:alpha3
+                probability: 0.01
+              - alternative: short_name
+                probability: 0.04
+              - alternative: alt_name
+                probability: 0.04
+              - alternative: int_name
+                probability: 0.01
+              - alternative: official_name
+                probability: 0.01
+        - id: 2383266 # Melbourne (city center)
+          type: relation
+          default: alt_name # Melbourne
+          probability: 1.0

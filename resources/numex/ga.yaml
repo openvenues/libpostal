@@ -1,0 +1,407 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "a náid"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "a naid"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "náid"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "naid"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "a haon"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "haon"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "aon"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "a dó"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "a do"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "dó"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "do"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "dhá"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "dha"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "a trí"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "a tri"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "trí"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "tri"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "a ceathair"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "ceathair"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "ceithre"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "a cúig"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "a cúig"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "a cuig"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "cúig"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "cuig"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "a sé"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "a se"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sé"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "se"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "a seacht"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "seacht"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "a hocht"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "hocht"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "ocht"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "a naoi"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "naoi"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "a deich"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "deich"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "déag"
+      value: 10
+      type: "cardinal"
+      left: "add"
+    - 
+      name: "deag"
+      value: 10
+      type: "cardinal"
+      left: "add"
+    - 
+      name: "dhéag"
+      value: 10
+      type: "cardinal"
+      left: "add"
+    - 
+      name: "dheag"
+      value: 10
+      type: "cardinal"
+      left: "add"
+    - 
+      name: "fiche"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "tríocha"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "triocha"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "daichead"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "caoga"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seasca"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seachtó"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seachto"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "ochtó"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "ochto"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "nócha"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "nocha"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "céad"
+      value: 100
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dhá chéad"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dha chead"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trí chéad"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "tri chead"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "ceithre chéad"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "ceithre chead"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "cúig chéad"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "cuig chead"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sé chéad"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "se chead"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seacht gcéad"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seacht gcead"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "ocht gcéad"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "ocht gcead"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "naoi gcéad"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "naoi gcead"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "míle"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "mile"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "mhíle"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "mhile"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milliún"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milliun"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billiún"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billiun"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "dtrilliún"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "dtrilliun"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "thrilliún"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "thrilliun"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "quadrilliún"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "quadrilliun"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+  stopwords:
+    - "is"
+

@@ -1087,7 +1087,7 @@ transliteration_table_t *transliteration_table_init(void) {
     transliteration_table_t *trans_table = get_transliteration_table();
 
     if (trans_table == NULL) {
-        trans_table = malloc(sizeof(transliteration_table_t));
+        trans_table = calloc(1, sizeof(transliteration_table_t));
 
         trans_table->trie = trie_new();
         if (trans_table->trie == NULL) {
@@ -1626,7 +1626,9 @@ bool transliteration_table_read(FILE *f) {
 
     log_debug("num_steps = %zu\n", (size_t)num_steps);
 
-    step_array_resize(trans_table->steps, (size_t)num_steps);
+    if (!step_array_resize(trans_table->steps, (size_t)num_steps)) {
+        goto exit_trans_table_load_error;
+    }
 
     log_debug("resized\n");
 
@@ -1653,7 +1655,9 @@ bool transliteration_table_read(FILE *f) {
 
     log_debug("num_replacements = %zu\n", (size_t)num_replacements);
 
-    transliteration_replacement_array_resize(trans_table->replacements, (size_t)num_replacements);
+    if (!transliteration_replacement_array_resize(trans_table->replacements, (size_t)num_replacements)) {
+        goto exit_trans_table_load_error;
+    }
 
     log_debug("resized\n");
 
@@ -1675,7 +1679,9 @@ bool transliteration_table_read(FILE *f) {
 
     log_debug("num_replacement_tokens = %zu\n", (size_t)num_replacement_tokens);
 
-    uint32_array_resize(trans_table->replacement_strings->indices, (size_t)num_replacement_tokens);
+    if (!uint32_array_resize(trans_table->replacement_strings->indices, (size_t)num_replacement_tokens)) {
+        goto exit_trans_table_load_error;
+    }
 
     log_debug("resized\n");
 
@@ -1698,7 +1704,9 @@ bool transliteration_table_read(FILE *f) {
 
     log_debug("replacement_strings_len = %zu\n", (size_t)replacement_strings_len);
 
-    char_array_resize(trans_table->replacement_strings->str, (size_t)replacement_strings_len);
+    if (!char_array_resize(trans_table->replacement_strings->str, (size_t)replacement_strings_len)) {
+        goto exit_trans_table_load_error;
+    }
 
     log_debug("resized\n");
 
@@ -1718,7 +1726,9 @@ bool transliteration_table_read(FILE *f) {
 
     log_debug("num_revisit_tokens = %zu\n", (size_t)num_revisit_tokens);
 
-    uint32_array_resize(trans_table->revisit_strings->indices, (size_t)num_revisit_tokens);
+    if (!uint32_array_resize(trans_table->revisit_strings->indices, (size_t)num_revisit_tokens)) {
+        goto exit_trans_table_load_error;
+    }
 
     log_debug("resized\n");
 
@@ -1739,7 +1749,9 @@ bool transliteration_table_read(FILE *f) {
 
     log_debug("revisit_strings_len = %zu\n", (size_t)revisit_strings_len);
 
-    char_array_resize(trans_table->revisit_strings->str, (size_t)revisit_strings_len);
+    if (!char_array_resize(trans_table->revisit_strings->str, (size_t)revisit_strings_len)) {
+        goto exit_trans_table_load_error;
+    }
 
     log_debug("resized\n");
 

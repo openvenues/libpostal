@@ -1,8 +1,8 @@
 północ|polnoc|płn|pln
 północny wschód|polnocny wschod|pn.-wsch.|pn-wsch|pn wsch|płn.-wsch.|płn-wsch|płn wsch|pln.-wsch.|pln-wsch|pln wsch
 północny zachód|polnocny zachod|pn.-zach.|pn-zach|pn zach|płn.-zach.|płn-zach|płn zach|pln.-zach.|pln-zach|pln zach
-wschód|wschod
+wschód|wschod|w|wsch
 południe|poludnie|pd|płd|pld
 południowy wschód|poludniowy wschod|pd.-wsch.|pd-wsch|pd wsch|płd.-wsch.|płd-wsch|płd wsch|pld.-wsch.|pld-wsch|pld wsch
 południowy zachód|poludniowy zachod|pd.-zach.|pd-zach|pd zach|płd.-zach.|płd-zach|płd zach|pld.-zach.|pld-zach|pld zach
-zachód|zachod
+zachód|zachod|z|zach

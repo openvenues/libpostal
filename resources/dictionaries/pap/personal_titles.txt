@@ -1,2 +1,2 @@
 san
-santa
+santa|sta

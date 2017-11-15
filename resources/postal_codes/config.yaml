@@ -1,0 +1,300 @@
+global:
+    # Validate using google I18N regexes
+    validate_postcode: false
+    # Strip other components like city, state, etc. from the postcode
+    strip_components: false
+
+    # Add country code to the beginning of the string
+    add_country_code: false
+    country_code_probablity: 0.0
+    country_code_hyphen_probability: 0.0
+
+
+use_country_code_seldomly: &use_country_code_seldomly
+    add_country_code: true
+    country_code_probablity: 0.1
+    country_code_hyphen_probability: 0.8
+
+use_country_code_sometimes: &use_country_code_sometimes
+    add_country_code: true
+    country_code_probablity: 0.4
+    country_code_hyphen_probability: 0.8
+
+use_country_code_frequently: &use_country_code_frequently
+    add_country_code: true
+    country_code_probablity: 0.7
+    country_code_hyphen_probability: 0.8
+
+
+countries:
+    # Albania
+    al: *use_country_code_seldomly
+
+    # Austria
+    at:         
+        <<: *use_country_code_seldomly
+        country_code_phrase:
+            default: AT
+            probability: 0.6
+            alternatives:
+                - alternative: A
+                  probability: 0.4
+
+    # Åland Islands (same as Finland)
+    ax: *use_country_code_frequently
+
+    # Azerbaijan
+    az: *use_country_code_frequently
+
+    # Barbados
+    bb: *use_country_code_frequently
+
+    # Belgium
+    be: 
+        <<: *use_country_code_seldomly
+        country_code_phrase:
+            default: BE
+            probability: 0.6
+            alternatives:
+                - alternative: B
+                  probability: 0.4
+
+    # Bulgaria
+    bg: *use_country_code_seldomly
+
+    # Bosnia and Herzegovina
+    bs: *use_country_code_seldomly
+
+    # Canada
+    ca:
+        validate_postcode: true
+
+    # Switzerland
+    ch: *use_country_code_seldomly
+
+    # Cyprus
+    cy: *use_country_code_seldomly
+
+    # Czech Republic
+    cz: *use_country_code_seldomly
+
+    # Germany
+    de:        
+        <<: *use_country_code_seldomly
+        country_code_phrase:
+            default: DE
+            probability: 0.6
+            alternatives:
+                - alternative: D
+                  probability: 0.4
+
+    # Denmark
+    dk: *use_country_code_seldomly
+
+    # Estonia
+    ee: *use_country_code_seldomly
+
+    # Spain
+    es: 
+        <<: *use_country_code_seldomly
+        country_code_phrase:
+            default: ES
+            probability: 0.6
+            alternatives:
+                - alternative: E
+                  probability: 0.4
+
+    # Finland
+    fi: *use_country_code_frequently
+
+    # France
+    fr:
+        <<: *use_country_code_seldomly
+        country_code_phrase:
+            default: FR
+            probability: 0.6
+            alternatives:
+                - alternative: F
+                  probability: 0.4
+
+    # United Kingdom
+    gb:
+        validate_postcode: true
+
+    # Guernsey
+    gg:
+        validate_postcode: true
+
+    # Greece
+    gr: *use_country_code_seldomly
+
+    # Honduras
+    hn: *use_country_code_frequently
+
+    # Croatia
+    hr: *use_country_code_frequently
+
+    # Hungary
+    hu:
+        <<: *use_country_code_seldomly
+        country_code_phrase:
+            default: HU
+            probability: 0.6
+            alternatives:
+                - alternative: H
+                  probability: 0.4
+
+    # Isle of Man
+    im:
+        validate_postcode: true
+
+    # Iceland
+    is: *use_country_code_seldomly
+
+    # Italy
+    it:
+        <<: *use_country_code_seldomly
+        country_code_phrase:
+            default: IT
+            probability: 0.6
+            alternatives:
+                - alternative: I
+                  probability: 0.4
+
+    # Jersey
+    je:
+        validate_postcode: true
+
+    # Cayman Islands
+    ky: *use_country_code_frequently
+
+    # Saint Lucia
+    lc: *use_country_code_frequently
+
+    # Lithuania
+    lt: *use_country_code_frequently
+
+    # Luxembourg
+    lu:
+        <<: *use_country_code_sometimes
+        country_code_phrase:
+            default: L
+            probability: 0.7
+            alternatives:
+                - alternative: LU
+                  probability: 0.3
+
+    # Latvia
+    lv: *use_country_code_frequently
+
+    # Monaco
+    mc: *use_country_code_seldomly
+
+    # Moldova
+    md: *use_country_code_frequently
+
+    # Montenegro
+    me: *use_country_code_seldomly
+
+    # Macedonia
+    mk: *use_country_code_seldomly
+
+    # Malta
+    mt: 
+        <<: *use_country_code_seldomly
+        country_code_phrase:
+            default: MT
+            probability: 0.6
+            alternatives:
+                - alternative: M
+                  probability: 0.4
+
+    # Netherlands
+    nl: *use_country_code_seldomly
+
+    # Norway
+    "no":
+        <<: *use_country_code_seldomly
+        country_code_phrase:
+            default: "NO"
+            probability: 0.6
+            alternatives:
+                - alternative: N
+                  probability: 0.4
+
+    # Peru
+    pe: *use_country_code_seldomly
+
+    # Poland
+    pl: *use_country_code_seldomly
+
+    # Portugal
+    pt: 
+        <<: *use_country_code_seldomly
+        country_code_phrase:
+            default: PT
+            probability: 0.6
+            alternatives:
+                - alternative: P
+                  probability: 0.4
+
+    # Réunion
+    re: *use_country_code_seldomly
+
+    # Romania
+    ro: *use_country_code_seldomly
+
+    # Serbia
+    rs: *use_country_code_seldomly
+
+    # Sweden
+    se:
+        <<: *use_country_code_sometimes
+        country_code_phrase:
+            default: SE
+            probability: 0.6
+            alternatives:
+                - alternative: S
+                  probability: 0.4
+
+    # Slovenia
+    si: *use_country_code_frequently
+
+    # Svalbard and Jan Mayen
+    sj: *use_country_code_seldomly
+
+    # Slovakia
+    sk: *use_country_code_seldomly
+
+    # San Marino
+    sm: *use_country_code_seldomly
+
+    # Turkey
+    tr: *use_country_code_seldomly
+
+    us:
+        validate_postcode: true
+        strip_components: true
+        override_regex: "(\\d{5})(?:[ \\-]?(\\d{4}))?"
+
+    # Vatican
+    va: 
+        <<: *use_country_code_seldomly
+        country_code_phrase:
+            default: VA
+            probability: 0.6
+            alternatives:
+                - alternative: V
+                  probability: 0.4
+
+    # Saint Vincent and the Grenadines
+    vc: *use_country_code_frequently
+
+    # British Virgin Islands
+    vg: *use_country_code_frequently
+
+    # Samoa
+    ws: *use_country_code_frequently
+
+    # Kosovo
+    xk: *use_country_code_seldomly

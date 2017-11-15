@@ -1,0 +1,7 @@
+---
+  admin_level: 
+    "2": "country"
+    "3": "country_region"
+    "4": "state"
+    "5": "state"
+

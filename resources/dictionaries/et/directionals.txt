@@ -2,7 +2,8 @@ edelasse
 ida
 kagu
 kirde
-lääs
+lääs|laas
 loe
-louna|l
-põhja|pohja|p
+lõuna|louna|l
+põhi|pohi|p
+põhja|pohja

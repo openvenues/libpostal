@@ -1,0 +1,22 @@
+admin_codes:
+    admin1: city
+
+overrides:
+    id:
+        # Districts of Ljubljana (suburbs in OSM)
+        "3196350": "suburb" # Opština Ljubljana-Vič-Rudnik
+        "3196352": "suburb" # Opština [historical] Ljubljana-Šiška
+        "3196355": "suburb" # Opština Ljubljana-Moste-Polje
+        "3196356": "suburb" # Opština Ljubljana-Center
+        "3196357": "suburb" # Opčina Ljubljana-Bežigrad
+        "9794374": "suburb" # Črnuče District
+        "9794375": "suburb" # Dravlje District
+        "9794376": "suburb" # Golovec District
+        "9794377": "suburb" # Jarše District
+        "9794378": "suburb" # Posavje District
+        "9794379": "suburb" # Rožnik District
+        "9794380": "suburb" # Sostro District
+        "9794381": "suburb" # Šentvid District
+        "9794382": "suburb" # Šmarna Gora District
+        "9794384": "suburb" # Trnovo District
+        "9794386": "suburb" # Vič District

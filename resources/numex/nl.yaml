@@ -1,0 +1,682 @@
+---
+  whole_words_only: true
+  default_separator: ""
+  rules:
+    - 
+      name: "nul"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "een"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "twee"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "drie"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "vier"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "vijf"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "zes"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "zeven"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "acht"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "negen"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "tien"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "elf"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "twaalf"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "dertien"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "veertien"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "vijftien"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "zestien"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "zeventien"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "achttien"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "negentien"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "twintig"
+      value: 20
+      type: "cardinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­twintig"
+      value: 22
+      type: "cardinal"
+    - 
+      name: "drie­ën­twintig"
+      value: 23
+      type: "cardinal"
+    - 
+      name: "dertig"
+      value: 30
+      type: "cardinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­dertig"
+      value: 32
+      type: "cardinal"
+    - 
+      name: "drie­ën­dertig"
+      value: 33
+      type: "cardinal"
+    - 
+      name: "veertig"
+      value: 40
+      type: "cardinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­veertig"
+      value: 42
+      type: "cardinal"
+    - 
+      name: "drie­ën­veertig"
+      value: 43
+      type: "cardinal"
+    - 
+      name: "vijftig"
+      value: 50
+      type: "cardinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­vijftig"
+      value: 52
+      type: "cardinal"
+    - 
+      name: "drie­ën­vijftig"
+      value: 53
+      type: "cardinal"
+    - 
+      name: "zestig"
+      value: 60
+      type: "cardinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­zestig"
+      value: 62
+      type: "cardinal"
+    - 
+      name: "drie­ën­zestig"
+      value: 60
+      type: "cardinal"
+    - 
+      name: "zeventig"
+      value: 70
+      type: "cardinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­zeventig"
+      value: 72
+      type: "cardinal"
+    - 
+      name: "drie­ën­zeventig"
+      value: 73
+      type: "cardinal"
+    - 
+      name: "tachtig"
+      value: 80
+      type: "cardinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­tachtig"
+      value: 82
+      type: "cardinal"
+    - 
+      name: "drie­ën­tachtig"
+      value: 83
+      type: "cardinal"
+    - 
+      name: "negentig"
+      value: 90
+      type: "cardinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "twee­ën­negentig"
+      value: 92
+      type: "cardinal"
+    - 
+      name: "drie­ën­negentig"
+      value: 93
+      type: "cardinal"
+    - 
+      name: "honderd"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "duizend"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miljoen"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "miljard"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "biljoen"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "biljard"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "nulste"
+      value: 0
+      type: "ordinal"
+    - 
+      name: "eerste"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "tweede"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "derde"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "vierde"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "vijfde"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "zesde"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "achtste"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "negende"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "tiende"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "elfde"
+      value: 11
+      type: "ordinal"
+    - 
+      name: "twaalfde"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "dertiende"
+      value: 13
+      type: "ordinal"
+    - 
+      name: "veertiende"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "vijftiende"
+      value: 15
+      type: "ordinal"
+    - 
+      name: "zestiende"
+      value: 16
+      type: "ordinal"
+    - 
+      name: "zeventiende"
+      value: 17
+      type: "ordinal"
+    - 
+      name: "achttiende"
+      value: 18
+      type: "ordinal"
+    - 
+      name: "negentiende"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "twintigste"
+      value: 20
+      type: "ordinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "twintigste"
+      value: 20
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "twintigste"
+      value: 20
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "dertigste"
+      value: 30
+      type: "ordinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "veerigste"
+      value: 40
+      type: "ordinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "vijftigste"
+      value: 50
+      type: "ordinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "zestigste"
+      value: 60
+      type: "ordinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "zeventigste"
+      value: 70
+      type: "ordinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "tachtigste"
+      value: 80
+      type: "ordinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "negentigste"
+      value: 90
+      type: "ordinal"
+      left: "add"
+      left_separator: "en"
+    - 
+      name: "honderdste"
+      value: 100
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "duizenddste"
+      value: 1000
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "miljoenste"
+      value: 1000000
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "miljardste"
+      value: 1000000000
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "biljoenste"
+      value: 1000000000000
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "biljardste"
+      value: 1000000000000000
+      type: "ordinal"
+      left: "multiply"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "e"
+          - "ste"
+        "1":
+          - "e"
+          - "ste"
+        "2":
+          - "e"
+          - "de"
+        "3":
+          - "e"
+          - "de"
+        "4":
+          - "e"
+          - "de"
+        "5":
+          - "e"
+          - "de"
+        "6":
+          - "e"
+          - "de"
+        "7":
+          - "e"
+          - "de"
+        "8":
+          - "e"
+          - "ste"
+        "9":
+          - "e"
+          - "de"
+        "10":
+          - "e"
+          - "de"
+        "11":
+          - "e"
+          - "de"
+        "12":
+          - "e"
+          - "de"
+        "13":
+          - "e"
+          - "de"
+        "14":
+          - "e"
+          - "de"
+        "15":
+          - "e"
+          - "de"
+        "16":
+          - "e"
+          - "de"
+        "17":
+          - "e"
+          - "de"
+        "18":
+          - "e"
+          - "de"
+        "19":
+          - "e"
+          - "de"
+        "21":
+          - "e"
+          - "ste"
+        "22":
+          - "e"
+          - "ste"
+        "23":
+          - "e"
+          - "ste"
+        "24":
+          - "e"
+          - "ste"
+        "25":
+          - "e"
+          - "ste"
+        "26":
+          - "e"
+          - "ste"
+        "27":
+          - "e"
+          - "ste"
+        "28":
+          - "e"
+          - "ste"
+        "29":
+          - "e"
+          - "ste"
+        "31":
+          - "e"
+          - "ste"
+        "32":
+          - "e"
+          - "ste"
+        "33":
+          - "e"
+          - "ste"
+        "34":
+          - "e"
+          - "ste"
+        "35":
+          - "e"
+          - "ste"
+        "36":
+          - "e"
+          - "ste"
+        "37":
+          - "e"
+          - "ste"
+        "38":
+          - "e"
+          - "ste"
+        "39":
+          - "e"
+          - "ste"
+        "41":
+          - "e"
+          - "ste"
+        "42":
+          - "e"
+          - "ste"
+        "43":
+          - "e"
+          - "ste"
+        "44":
+          - "e"
+          - "ste"
+        "45":
+          - "e"
+          - "ste"
+        "46":
+          - "e"
+          - "ste"
+        "47":
+          - "e"
+          - "ste"
+        "48":
+          - "e"
+          - "ste"
+        "49":
+          - "e"
+          - "ste"
+        "51":
+          - "e"
+          - "ste"
+        "52":
+          - "e"
+          - "ste"
+        "53":
+          - "e"
+          - "ste"
+        "54":
+          - "e"
+          - "ste"
+        "55":
+          - "e"
+          - "ste"
+        "56":
+          - "e"
+          - "ste"
+        "57":
+          - "e"
+          - "ste"
+        "58":
+          - "e"
+          - "ste"
+        "59":
+          - "e"
+          - "ste"
+        "61":
+          - "e"
+          - "ste"
+        "62":
+          - "e"
+          - "ste"
+        "63":
+          - "e"
+          - "ste"
+        "64":
+          - "e"
+          - "ste"
+        "65":
+          - "e"
+          - "ste"
+        "66":
+          - "e"
+          - "ste"
+        "67":
+          - "e"
+          - "ste"
+        "68":
+          - "e"
+          - "ste"
+        "69":
+          - "e"
+          - "ste"
+        "71":
+          - "e"
+          - "ste"
+        "72":
+          - "e"
+          - "ste"
+        "73":
+          - "e"
+          - "ste"
+        "74":
+          - "e"
+          - "ste"
+        "75":
+          - "e"
+          - "ste"
+        "76":
+          - "e"
+          - "ste"
+        "77":
+          - "e"
+          - "ste"
+        "78":
+          - "e"
+          - "ste"
+        "79":
+          - "e"
+          - "ste"
+        "81":
+          - "e"
+          - "ste"
+        "82":
+          - "e"
+          - "ste"
+        "83":
+          - "e"
+          - "ste"
+        "84":
+          - "e"
+          - "ste"
+        "85":
+          - "e"
+          - "ste"
+        "86":
+          - "e"
+          - "ste"
+        "87":
+          - "e"
+          - "ste"
+        "88":
+          - "e"
+          - "ste"
+        "89":
+          - "e"
+          - "ste"
+        "91":
+          - "e"
+          - "ste"
+        "92":
+          - "e"
+          - "ste"
+        "93":
+          - "e"
+          - "ste"
+        "94":
+          - "e"
+          - "ste"
+        "95":
+          - "e"
+          - "ste"
+        "96":
+          - "e"
+          - "ste"
+        "97":
+          - "e"
+          - "ste"
+        "98":
+          - "e"
+          - "ste"
+        "99":
+          - "e"
+          - "ste"
+  stopwords:
+    - "en"
+

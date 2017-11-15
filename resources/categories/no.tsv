@@ -1,0 +1,7 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	flyplass
+aeroway	aerodrome	1	flyplasser
+amenity	arts_centre	0	kunstsenter
+amenity	arts_centre	1	kunstsentre
+amenity	atm	0	minibank
+amenity	atm	1	minibanker

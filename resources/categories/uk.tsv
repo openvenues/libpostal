@@ -1,0 +1,837 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	аеропорт
+aeroway	aerodrome	1	аеропортs
+amenity	arts_centre	0	мистецький центр
+amenity	arts_centre	1	мистецький центрs
+amenity	atm	0	банкомат
+amenity	atm	1	банкоматs
+amenity	auditorium	0	конференц-зала
+amenity	auditorium	1	конференц-залаs
+amenity	bank	0	банк
+amenity	bank	1	банкs
+amenity	bar	0	бар
+amenity	bar	1	барs
+amenity	bench	0	лавка
+amenity	bench	1	лавкаs
+amenity	bicycle_parking	0	місце стоянки для велосипедів
+amenity	bicycle_parking	1	місце стоянки для велосипедівs
+amenity	bicycle_rental	0	прокат велосипедів
+amenity	bicycle_rental	1	прокат велосипедівs
+amenity	brothel	0	бордель
+amenity	brothel	1	бордельs
+amenity	bureau_de_change	0	обмін валют
+amenity	bureau_de_change	1	обмін валютs
+amenity	bus_station	0	автовокзал
+amenity	bus_station	1	автовокзалs
+amenity	cafe	0	кафе
+amenity	cafe	1	кафеs
+amenity	car_rental	0	прокат автомобілів
+amenity	car_rental	1	прокат автомобілівs
+amenity	car_sharing	0	прокат авто
+amenity	car_sharing	1	прокат автоs
+amenity	car_wash	0	автомийка
+amenity	car_wash	1	автомийкаs
+amenity	casino	0	казино
+amenity	casino	1	казиноs
+amenity	cinema	0	кинотеатр
+amenity	cinema	1	кинотеатрs
+amenity	clinic	0	клініка
+amenity	clinic	1	клінікаs
+amenity	club	0	клуб
+amenity	club	1	клубs
+amenity	college	0	коледж
+amenity	college	1	коледжs
+amenity	community_centre	0	громадський центр
+amenity	community_centre	1	громадський центрs
+amenity	courthouse	0	суд
+amenity	courthouse	1	судs
+amenity	crematorium	0	крематорій
+amenity	crematorium	1	крематорійs
+amenity	dentist	0	стоматологія
+amenity	dentist	1	стоматологіяs
+amenity	doctors	0	лікарі
+amenity	doctors	1	лікаріs
+amenity	dormitory	0	гуртожиток
+amenity	dormitory	1	гуртожитокs
+amenity	drinking_water	0	питна вода
+amenity	drinking_water	1	питна водаs
+amenity	driving_school	0	автошкола
+amenity	driving_school	1	автошколаs
+amenity	embassy	0	амбасада
+amenity	embassy	1	амбасадаs
+amenity	emergency_phone	0	телефон для екстрених викликів
+amenity	emergency_phone	1	телефон для екстрених викликівs
+amenity	fast_food	0	забігайлівка
+amenity	fast_food	1	забігайлівкаs
+amenity	ferry_terminal	0	поромна станція
+amenity	ferry_terminal	1	поромна станціяs
+amenity	fire_hydrant	0	пожежний гідрант
+amenity	fire_hydrant	1	пожежний гідрантs
+amenity	fire_station	0	пожежна станція
+amenity	fire_station	1	пожежна станціяs
+amenity	fountain	0	фонтан
+amenity	fountain	1	фонтанs
+amenity	fuel	0	пальне
+amenity	fuel	1	пальнеs
+amenity	grave_yard	0	цвинтар
+amenity	grave_yard	1	цвинтарs
+amenity	gym	0	тренажерний зал
+amenity	gym	1	тренажерний залs
+amenity	hall	0	зала
+amenity	hall	1	залаs
+amenity	health_centre	0	центр здоров'я
+amenity	health_centre	1	центр здоров'яs
+amenity	hospital	0	лікарня
+amenity	hospital	1	лікарняs
+amenity	hotel	0	готель
+amenity	hotel	1	готельs
+amenity	hunting_stand	0	мисливська вежа
+amenity	hunting_stand	1	мисливська вежаs
+amenity	ice_cream	0	морозиво
+amenity	ice_cream	1	морозивоs
+amenity	kindergarten	0	дитячий садок
+amenity	kindergarten	1	дитячий садокs
+amenity	library	0	бібліотека
+amenity	library	1	бібліотекаs
+amenity	market	0	ринок
+amenity	market	1	ринокs
+amenity	marketplace	0	ринок
+amenity	marketplace	1	ринокs
+amenity	mountain_rescue	0	гірські рятувальники
+amenity	mountain_rescue	1	гірські рятувальникиs
+amenity	nightclub	0	нічний клуб
+amenity	nightclub	1	нічний клубs
+amenity	nursery	0	дитсадок
+amenity	nursery	1	дитсадокs
+amenity	nursing_home	0	будинок престарілих
+amenity	nursing_home	1	будинок престарілихs
+amenity	office	0	офіс
+amenity	office	1	офісs
+amenity	park	0	парк
+amenity	park	1	паркs
+amenity	parking	0	автостоянка
+amenity	parking	1	автостоянкаs
+amenity	pharmacy	0	аптека
+amenity	pharmacy	1	аптекаs
+amenity	place_of_worship	0	культова споруда
+amenity	place_of_worship	1	культова спорудаs
+amenity	police	0	міліція (поліція)
+amenity	police	1	міліція (поліція)s
+amenity	post_box	0	поштова скриня
+amenity	post_box	1	поштова скриняs
+amenity	post_office	0	пошта
+amenity	post_office	1	поштаs
+amenity	preschool	0	дошкільний заклад
+amenity	preschool	1	дошкільний закладs
+amenity	prison	0	в'язниця
+amenity	prison	1	в'язницяs
+amenity	pub	0	паб
+amenity	pub	1	пабs
+amenity	public_building	0	громадський заклад
+amenity	public_building	1	громадський закладs
+amenity	public_market	0	базар
+amenity	public_market	1	базарs
+amenity	reception_area	0	зона прийому
+amenity	reception_area	1	зона прийомуs
+amenity	recycling	0	місце переробки відходів
+amenity	recycling	1	місце переробки відходівs
+amenity	restaurant	0	ресторан
+amenity	restaurant	1	ресторанs
+amenity	retirement_home	0	будинки для людей похилого віку
+amenity	retirement_home	1	будинки для людей похилого вікуs
+amenity	sauna	0	сауна
+amenity	sauna	1	саунаs
+amenity	school	0	школа
+amenity	school	1	школаs
+amenity	shelter	0	укриття
+amenity	shelter	1	укриттяs
+amenity	shop	0	магазин
+amenity	shop	1	магазинs
+amenity	shopping	0	шопінг
+amenity	shopping	1	шопінгs
+amenity	social_club	0	клуб за інтересами
+amenity	social_club	1	клуб за інтересамиs
+amenity	studio	0	студія
+amenity	studio	1	студіяs
+amenity	supermarket	0	супермаркет
+amenity	supermarket	1	супермаркетs
+amenity	taxi	0	таксі
+amenity	taxi	1	таксіs
+amenity	telephone	0	телефон
+amenity	telephone	1	телефонs
+amenity	theatre	0	театр
+amenity	theatre	1	театрs
+amenity	toilets	0	туалет
+amenity	toilets	1	туалетs
+amenity	townhall	0	міськвиконком
+amenity	townhall	1	міськвиконкомs
+amenity	university	0	університет
+amenity	university	1	університетs
+amenity	vending_machine	0	торговий автомат
+amenity	vending_machine	1	торговий автоматs
+amenity	veterinary	0	ветлікарня
+amenity	veterinary	1	ветлікарняs
+amenity	village_hall	0	сільрада
+amenity	village_hall	1	сільрадаs
+amenity	waste_basket	0	контейнер для сміття
+amenity	waste_basket	1	контейнер для сміттяs
+amenity	wifi	0	wifi-зона
+amenity	wifi	1	wifi-зонаs
+amenity	youth_centre	0	молодіжний центр
+amenity	youth_centre	1	молодіжний центрs
+boundary	administrative	0	адміністративний кордон
+boundary	administrative	1	адміністративний кордонs
+building	apartments	0	житловий масив
+building	apartments	1	житловий масивs
+building	block	0	квартал
+building	block	1	кварталs
+building	bunker	0	бункер
+building	bunker	1	бункерs
+building	chapel	0	каплиця
+building	chapel	1	каплицяs
+building	church	0	храм
+building	church	1	храмs
+building	city_hall	0	мерія
+building	city_hall	1	меріяs
+building	commercial	0	комерційна нерухомість
+building	commercial	1	комерційна нерухомістьs
+building	dormitory	0	гуртожиток
+building	dormitory	1	гуртожитокs
+building	entrance	0	вхід у будівлю
+building	entrance	1	вхід у будівлюs
+building	faculty	0	факультет
+building	faculty	1	факультетs
+building	farm	0	ферма
+building	farm	1	фермаs
+building	flats	0	оселі
+building	flats	1	оселіs
+building	garage	0	гараж
+building	garage	1	гаражs
+building	hall	0	зала
+building	hall	1	залаs
+building	hospital	0	лікарня
+building	hospital	1	лікарняs
+building	hotel	0	готель
+building	hotel	1	готельs
+building	house	0	будинок
+building	house	1	будинокs
+building	industrial	0	промислова споруда
+building	industrial	1	промислова спорудаs
+building	office	0	офісний будинок
+building	office	1	офісний будинокs
+building	public	0	суспільна будівля
+building	public	1	суспільна будівляs
+building	residential	0	житловий будинок
+building	residential	1	житловий будинокs
+building	retail	0	центр роздрібної торгівлі
+building	retail	1	центр роздрібної торгівліs
+building	school	0	школа
+building	school	1	школаs
+building	shop	0	магазин
+building	shop	1	магазинs
+building	stadium	0	стадіон
+building	stadium	1	стадіонs
+building	store	0	склад
+building	store	1	складs
+building	terrace	0	тераса
+building	terrace	1	терасаs
+building	tower	0	башта
+building	tower	1	баштаs
+building	train_station	0	залізнична станція
+building	train_station	1	залізнична станціяs
+building	university	0	університет
+building	university	1	університетs
+building	&quot;yes&quot;	0	будівля
+building	&quot;yes&quot;	1	будівляs
+highway	bridleway	0	дорога для їзди верхи
+highway	bridleway	1	дорога для їзди верхиs
+highway	bus_stop	0	автобусна зупинка
+highway	bus_stop	1	автобусна зупинкаs
+highway	byway	0	боковий шлях
+highway	byway	1	боковий шляхs
+highway	construction	0	будівництво автомагітсралі
+highway	construction	1	будівництво автомагітсраліs
+highway	cycleway	0	велосипедна доріжка
+highway	cycleway	1	велосипедна доріжкаs
+highway	distance_marker	0	верстовий камінь
+highway	distance_marker	1	верстовий каміньs
+highway	emergency_access_point	0	пункт швидкої допомоги
+highway	emergency_access_point	1	пункт швидкої допомогиs
+highway	footway	0	пішохідна доріжка
+highway	footway	1	пішохідна доріжкаs
+highway	ford	0	броди
+highway	ford	1	бродиs
+highway	gate	0	ворота
+highway	gate	1	воротаs
+highway	living_street	0	житлова зона
+highway	living_street	1	житлова зонаs
+highway	minor	0	другорядна дорога
+highway	minor	1	другорядна дорогаs
+highway	motorway	0	автомагістраль
+highway	motorway	1	автомагістральs
+highway	motorway_junction	0	в'їзд на автомагістраль
+highway	motorway_junction	1	в'їзд на автомагістральs
+highway	motorway_link	0	з’єднання з автомагістраллю
+highway	motorway_link	1	з’єднання з автомагістраллюs
+highway	path	0	алея
+highway	path	1	алеяs
+highway	pedestrian	0	пішохідна дорога
+highway	pedestrian	1	пішохідна дорогаs
+highway	platform	0	платформа
+highway	platform	1	платформаs
+highway	primary	0	головна дорога
+highway	primary	1	головна дорогаs
+highway	primary_link	0	з’єднання з головною дорогою
+highway	primary_link	1	з’єднання з головною дорогоюs
+highway	raceway	0	гоночна траса
+highway	raceway	1	гоночна трасаs
+highway	residential	0	жила вулиця
+highway	residential	1	жила вулицяs
+highway	road	0	дорога
+highway	road	1	дорогаs
+highway	secondary	0	другорядна дорога
+highway	secondary	1	другорядна дорогаs
+highway	secondary_link	0	з’єднання з другорядною дорогою
+highway	secondary_link	1	з’єднання з другорядною дорогоюs
+highway	service	0	службова дорога
+highway	service	1	службова дорогаs
+highway	services	0	придорожній сервіс
+highway	services	1	придорожній сервісs
+highway	steps	0	стежка
+highway	steps	1	стежкаs
+highway	stile	0	турнікет
+highway	stile	1	турнікетs
+highway	tertiary	0	третьорядна дорога
+highway	tertiary	1	третьорядна дорогаs
+highway	track	0	неасфальтований шлях.
+highway	track	1	неасфальтований шлях.s
+highway	trail	0	стежка
+highway	trail	1	стежкаs
+highway	trunk	0	шосе
+highway	trunk	1	шосеs
+highway	trunk_link	0	з’їзд з/на шосе
+highway	trunk_link	1	з’їзд з/на шосеs
+highway	unclassified	0	дорога без класифікації
+highway	unclassified	1	дорога без класифікаціїs
+highway	unsurfaced	0	дорога без покриття
+highway	unsurfaced	1	дорога без покриттяs
+historic	archaeological_site	0	археологічні дослідження
+historic	archaeological_site	1	археологічні дослідженняs
+historic	battlefield	0	поле битви
+historic	battlefield	1	поле битвиs
+historic	boundary_stone	0	прикордонний камінь
+historic	boundary_stone	1	прикордонний каміньs
+historic	building	0	будівля
+historic	building	1	будівляs
+historic	castle	0	за́мок
+historic	castle	1	за́мокs
+historic	church	0	храм
+historic	church	1	храмs
+historic	house	0	дім
+historic	house	1	дімs
+historic	manor	0	маєток
+historic	manor	1	маєтокs
+historic	memorial	0	меморіал
+historic	memorial	1	меморіалs
+historic	mine	0	копальня
+historic	mine	1	копальняs
+historic	monument	0	пам’ятник
+historic	monument	1	пам’ятникs
+historic	museum	0	музей
+historic	museum	1	музейs
+historic	ruins	0	руїни
+historic	ruins	1	руїниs
+historic	tower	0	башта
+historic	tower	1	баштаs
+historic	wayside_cross	0	придорожній хрест
+historic	wayside_cross	1	придорожній хрестs
+historic	wayside_shrine	0	придорожній храм
+historic	wayside_shrine	1	придорожній храмs
+historic	wreck	0	місце катастрофи
+historic	wreck	1	місце катастрофиs
+landuse	allotments	0	сади-городи
+landuse	allotments	1	сади-городиs
+landuse	basin	0	резервуар
+landuse	basin	1	резервуарs
+landuse	brownfield	0	очищена територія під забудову
+landuse	brownfield	1	очищена територія під забудовуs
+landuse	cemetery	0	кладовище
+landuse	cemetery	1	кладовищеs
+landuse	commercial	0	торгівельно-офісна територія
+landuse	commercial	1	торгівельно-офісна територіяs
+landuse	conservation	0	заповідник
+landuse	conservation	1	заповідникs
+landuse	construction	0	будівництво
+landuse	construction	1	будівництвоs
+landuse	farm	0	ферма
+landuse	farm	1	фермаs
+landuse	farmland	0	ферма
+landuse	farmland	1	фермаs
+landuse	farmyard	0	фермерське подвір'я
+landuse	farmyard	1	фермерське подвір'яs
+landuse	forest	0	ліс
+landuse	forest	1	лісs
+landuse	grass	0	трава
+landuse	grass	1	траваs
+landuse	greenfield	0	знесення під забудову
+landuse	greenfield	1	знесення під забудовуs
+landuse	industrial	0	промзона
+landuse	industrial	1	промзонаs
+landuse	landfill	0	звалище
+landuse	landfill	1	звалищеs
+landuse	meadow	0	луг
+landuse	meadow	1	лугs
+landuse	military	0	військова зона
+landuse	military	1	військова зонаs
+landuse	mine	0	копальня
+landuse	mine	1	копальняs
+landuse	mountain	0	гори
+landuse	mountain	1	гориs
+landuse	nature_reserve	0	заповідник
+landuse	nature_reserve	1	заповідникs
+landuse	park	0	парк
+landuse	park	1	паркs
+landuse	piste	0	лижня
+landuse	piste	1	лижняs
+landuse	plaza	0	ринкова площа
+landuse	plaza	1	ринкова площаs
+landuse	quarry	0	кар’єр
+landuse	quarry	1	кар’єрs
+landuse	railway	0	залізниця
+landuse	railway	1	залізницяs
+landuse	recreation_ground	0	база відпочинку
+landuse	recreation_ground	1	база відпочинкуs
+landuse	reservoir	0	водосховище
+landuse	reservoir	1	водосховищеs
+landuse	residential	0	житловий квартал
+landuse	residential	1	житловий кварталs
+landuse	retail	0	роздрібна торгівля
+landuse	retail	1	роздрібна торгівляs
+landuse	village_green	0	сільська галявина
+landuse	village_green	1	сільська галявинаs
+landuse	vineyard	0	виноградник
+landuse	vineyard	1	виноградникs
+landuse	wetland	0	болота
+landuse	wetland	1	болотаs
+landuse	wood	0	гай
+landuse	wood	1	гайs
+leisure	beach_resort	0	пляжний курорт
+leisure	beach_resort	1	пляжний курортs
+leisure	common	0	громадська земля
+leisure	common	1	громадська земляs
+leisure	fishing	0	район риболовлі
+leisure	fishing	1	район риболовліs
+leisure	garden	0	сад
+leisure	garden	1	садs
+leisure	golf_course	0	поле для гольфу
+leisure	golf_course	1	поле для гольфуs
+leisure	ice_rink	0	ковзанка
+leisure	ice_rink	1	ковзанкаs
+leisure	marina	0	гавань для екскурсійних суден
+leisure	marina	1	гавань для екскурсійних суденs
+leisure	miniature_golf	0	міні-гольф
+leisure	miniature_golf	1	міні-гольфs
+leisure	nature_reserve	0	заповідник
+leisure	nature_reserve	1	заповідникs
+leisure	park	0	парк
+leisure	park	1	паркs
+leisure	pitch	0	спортмайданчик
+leisure	pitch	1	спортмайданчикs
+leisure	playground	0	дитячий майданчик
+leisure	playground	1	дитячий майданчикs
+leisure	recreation_ground	0	база відпочинку
+leisure	recreation_ground	1	база відпочинкуs
+leisure	slipway	0	сліп (спуск на воду)
+leisure	slipway	1	сліп (спуск на воду)s
+leisure	sports_centre	0	спортивний центр
+leisure	sports_centre	1	спортивний центрs
+leisure	stadium	0	стадіон
+leisure	stadium	1	стадіонs
+leisure	swimming_pool	0	басейн
+leisure	swimming_pool	1	басейнs
+leisure	track	0	бігова доріжка
+leisure	track	1	бігова доріжкаs
+leisure	water_park	0	аквапарку
+leisure	water_park	1	аквапаркуs
+natural	bay	0	затока
+natural	bay	1	затокаs
+natural	beach	0	пляж
+natural	beach	1	пляжs
+natural	cape	0	мис
+natural	cape	1	мисs
+natural	cave_entrance	0	входу в печеру
+natural	cave_entrance	1	входу в печеруs
+natural	channel	0	канал
+natural	channel	1	каналs
+natural	cliff	0	скеля
+natural	cliff	1	скеляs
+natural	coastline	0	узбережжя
+natural	coastline	1	узбережжяs
+natural	crater	0	кратер
+natural	crater	1	кратерs
+natural	feature	0	елемент
+natural	feature	1	елементs
+natural	fell	0	вирубка
+natural	fell	1	вирубкаs
+natural	fjord	0	фіорд
+natural	fjord	1	фіордs
+natural	geyser	0	гейзер
+natural	geyser	1	гейзерs
+natural	glacier	0	льодовик
+natural	glacier	1	льодовикs
+natural	heath	0	степ
+natural	heath	1	степs
+natural	hill	0	пагорб
+natural	hill	1	пагорбs
+natural	island	0	острів
+natural	island	1	острівs
+natural	land	0	земля
+natural	land	1	земляs
+natural	marsh	0	болото
+natural	marsh	1	болотоs
+natural	moor	0	торф
+natural	moor	1	торфs
+natural	mud	0	грязюка
+natural	mud	1	грязюкаs
+natural	peak	0	пік
+natural	peak	1	пікs
+natural	point	0	точка
+natural	point	1	точкаs
+natural	reef	0	риф
+natural	reef	1	рифs
+natural	ridge	0	гірський хребет
+natural	ridge	1	гірський хребетs
+natural	river	0	ріка
+natural	river	1	рікаs
+natural	rock	0	скеля
+natural	rock	1	скеляs
+natural	scree	0	щебінь
+natural	scree	1	щебіньs
+natural	scrub	0	чагарник
+natural	scrub	1	чагарникs
+natural	shoal	0	мілина
+natural	shoal	1	мілинаs
+natural	spring	0	джерело
+natural	spring	1	джерелоs
+natural	strait	0	перешийок
+natural	strait	1	перешийокs
+natural	tree	0	дерево
+natural	tree	1	деревоs
+natural	valley	0	долина
+natural	valley	1	долинаs
+natural	volcano	0	вулкан
+natural	volcano	1	вулканs
+natural	water	0	вода
+natural	water	1	водаs
+natural	wetland	0	водно-болотні угіддя
+natural	wetland	1	водно-болотні угіддяs
+natural	wetlands	0	водно-болотні угіддя
+natural	wetlands	1	водно-болотні угіддяs
+natural	wood	0	гай
+natural	wood	1	гайs
+place	city	0	місто
+place	city	1	містоs
+place	country	0	країна
+place	country	1	країнаs
+place	county	0	район
+place	county	1	районs
+place	farm	0	ферма
+place	farm	1	фермаs
+place	hamlet	0	хутір
+place	hamlet	1	хутірs
+place	house	0	будинок
+place	house	1	будинокs
+place	houses	0	дома
+place	houses	1	домаs
+place	island	0	острів
+place	island	1	острівs
+place	islet	0	острівець
+place	islet	1	острівецьs
+place	locality	0	населений пункт
+place	locality	1	населений пунктs
+place	moor	0	мур
+place	moor	1	мурs
+place	municipality	0	муніципалітет
+place	municipality	1	муніципалітетs
+place	postcode	0	індекс
+place	postcode	1	індексs
+place	region	0	район
+place	region	1	районs
+place	sea	0	море
+place	sea	1	мореs
+place	state	0	область/штат
+place	state	1	область/штатs
+place	subdivision	0	підрозділ
+place	subdivision	1	підрозділs
+place	suburb	0	передмістя
+place	suburb	1	передмістяs
+place	town	0	місто
+place	town	1	містоs
+place	unincorporated_area	0	неприєднанні території
+place	unincorporated_area	1	неприєднанні територіїs
+place	village	0	село
+place	village	1	селоs
+railway	abandoned	0	кинуті колії
+railway	abandoned	1	кинуті коліїs
+railway	construction	0	будівництво колії
+railway	construction	1	будівництво коліїs
+railway	disused	0	покинута колія
+railway	disused	1	покинута коліяs
+railway	disused_station	0	покинута залізнична станція
+railway	disused_station	1	покинута залізнична станціяs
+railway	funicular	0	фунікулер
+railway	funicular	1	фунікулерs
+railway	halt	0	зупинка поїзда
+railway	halt	1	зупинка поїздаs
+railway	historic_station	0	історична залізнична станція
+railway	historic_station	1	історична залізнична станціяs
+railway	junction	0	переїзд
+railway	junction	1	переїздs
+railway	level_crossing	0	залізничний переїзд
+railway	level_crossing	1	залізничний переїздs
+railway	light_rail	0	швидкісний трамвай
+railway	light_rail	1	швидкісний трамвайs
+railway	monorail	0	монорейка
+railway	monorail	1	монорейкаs
+railway	narrow_gauge	0	вузькоколійка
+railway	narrow_gauge	1	вузькоколійкаs
+railway	platform	0	залізнична платформа
+railway	platform	1	залізнична платформаs
+railway	preserved	0	законсервовані колії
+railway	preserved	1	законсервовані коліїs
+railway	spur	0	залізнична гілка
+railway	spur	1	залізнична гілкаs
+railway	station	0	залізнична станція
+railway	station	1	залізнична станціяs
+railway	subway	0	станція метро
+railway	subway	1	станція метроs
+railway	subway_entrance	0	вхід в метро
+railway	subway_entrance	1	вхід в метроs
+railway	switch	0	стрілка
+railway	switch	1	стрілкаs
+railway	tram	0	трамвайні колії
+railway	tram	1	трамвайні коліїs
+railway	tram_stop	0	трамвайна зупинка
+railway	tram_stop	1	трамвайна зупинкаs
+railway	yard	0	депо
+railway	yard	1	депоs
+shop	alcohol	0	спритні напої
+shop	alcohol	1	спритні напоїs
+shop	apparel	0	одяг
+shop	apparel	1	одягs
+shop	art	0	художній салон
+shop	art	1	художній салонs
+shop	bakery	0	хліб
+shop	bakery	1	хлібs
+shop	beauty	0	салон краси
+shop	beauty	1	салон красиs
+shop	beverages	0	напої
+shop	beverages	1	напоїs
+shop	bicycle	0	веломагазин
+shop	bicycle	1	веломагазинs
+shop	books	0	книгарня
+shop	books	1	книгарняs
+shop	butcher	0	м’ясо
+shop	butcher	1	м’ясоs
+shop	car	0	автомагазин
+shop	car	1	автомагазинs
+shop	car_dealer	0	автосалон
+shop	car_dealer	1	автосалонs
+shop	car_parts	0	автозапчастини
+shop	car_parts	1	автозапчастиниs
+shop	car_repair	0	авто майстерня
+shop	car_repair	1	авто майстерняs
+shop	carpet	0	килими
+shop	carpet	1	килимиs
+shop	charity	0	соціальний магазин
+shop	charity	1	соціальний магазинs
+shop	chemist	0	хімтовари
+shop	chemist	1	хімтовариs
+shop	clothes	0	одяг
+shop	clothes	1	одягs
+shop	computer	0	комп’ютерна крамниця
+shop	computer	1	комп’ютерна крамницяs
+shop	confectionery	0	кондитерська
+shop	confectionery	1	кондитерськаs
+shop	convenience	0	мінімаркет
+shop	convenience	1	мінімаркетs
+shop	copyshop	0	послуги копіювання
+shop	copyshop	1	послуги копіюванняs
+shop	cosmetics	0	магазин косметики
+shop	cosmetics	1	магазин косметикиs
+shop	department_store	0	універмаг
+shop	department_store	1	універмагs
+shop	discount	0	уцінені товари
+shop	discount	1	уцінені товариs
+shop	doityourself	0	зроби сам
+shop	doityourself	1	зроби самs
+shop	drugstore	0	аптека
+shop	drugstore	1	аптекаs
+shop	dry_cleaning	0	хімчистка
+shop	dry_cleaning	1	хімчисткаs
+shop	electronics	0	магазин електроніки
+shop	electronics	1	магазин електронікиs
+shop	estate_agent	0	агентство нерухомості
+shop	estate_agent	1	агентство нерухомостіs
+shop	farm	0	сільпо
+shop	farm	1	сільпоs
+shop	fashion	0	модний одяг
+shop	fashion	1	модний одягs
+shop	fish	0	риба
+shop	fish	1	рибаs
+shop	florist	0	квіти
+shop	florist	1	квітиs
+shop	food	0	продовольчі товари
+shop	food	1	продовольчі товариs
+shop	funeral_directors	0	ритуальні послуги
+shop	funeral_directors	1	ритуальні послугиs
+shop	furniture	0	меблі
+shop	furniture	1	мебліs
+shop	gallery	0	галерея
+shop	gallery	1	галереяs
+shop	garden_centre	0	сад та город
+shop	garden_centre	1	сад та городs
+shop	general	0	універсам
+shop	general	1	універсамs
+shop	gift	0	подарунки
+shop	gift	1	подарункиs
+shop	greengrocer	0	овочі, фрукти
+shop	greengrocer	1	овочі, фруктиs
+shop	grocery	0	бакалія
+shop	grocery	1	бакаліяs
+shop	hairdresser	0	перукар
+shop	hairdresser	1	перукарs
+shop	hardware	0	хозтовари
+shop	hardware	1	хозтовариs
+shop	hifi	0	аудіо-техніка
+shop	hifi	1	аудіо-технікаs
+shop	insurance	0	страхування
+shop	insurance	1	страхуванняs
+shop	jewelry	0	ювелірний магазин
+shop	jewelry	1	ювелірний магазинs
+shop	kiosk	0	кіоск
+shop	kiosk	1	кіоскs
+shop	laundry	0	пральня
+shop	laundry	1	пральняs
+shop	mall	0	торгівельно-розважальний центр
+shop	mall	1	торгівельно-розважальний центрs
+shop	market	0	магазин
+shop	market	1	магазинs
+shop	mobile_phone	0	мобільні телефони
+shop	mobile_phone	1	мобільні телефониs
+shop	motorcycle	0	мотоцикли
+shop	motorcycle	1	мотоциклиs
+shop	music	0	музика
+shop	music	1	музикаs
+shop	newsagent	0	газетний кіоск
+shop	newsagent	1	газетний кіоскs
+shop	optician	0	оптика
+shop	optician	1	оптикаs
+shop	organic	0	продовольчий магазин
+shop	organic	1	продовольчий магазинs
+shop	outdoor	0	виносна торгівля
+shop	outdoor	1	виносна торгівляs
+shop	pet	0	зоомагазин
+shop	pet	1	зоомагазинs
+shop	photo	0	фотомагазин
+shop	photo	1	фотомагазинs
+shop	salon	0	салон
+shop	salon	1	салонs
+shop	shoes	0	взуття
+shop	shoes	1	взуттяs
+shop	shopping_centre	0	торговий центр
+shop	shopping_centre	1	торговий центрs
+shop	sports	0	спортивні товари
+shop	sports	1	спортивні товариs
+shop	stationery	0	канцтовари
+shop	stationery	1	канцтовариs
+shop	supermarket	0	супермаркет
+shop	supermarket	1	супермаркетs
+shop	toys	0	іграшки
+shop	toys	1	іграшкиs
+shop	travel_agency	0	туристична агенція
+shop	travel_agency	1	туристична агенціяs
+shop	video	0	відео
+shop	video	1	відеоs
+shop	wine	0	вино
+shop	wine	1	виноs
+tourism	alpine_hut	0	гірський притулок
+tourism	alpine_hut	1	гірський притулокs
+tourism	artwork	0	образотворче мистецтво
+tourism	artwork	1	образотворче мистецтвоs
+tourism	attraction	0	цікаві місця
+tourism	attraction	1	цікаві місцяs
+tourism	bed_and_breakfast	0	ліжко та сніданок
+tourism	bed_and_breakfast	1	ліжко та сніданокs
+tourism	cabin	0	кабіна
+tourism	cabin	1	кабінаs
+tourism	camp_site	0	турбаза
+tourism	camp_site	1	турбазаs
+tourism	caravan_site	0	майданчик для трейлерів
+tourism	caravan_site	1	майданчик для трейлерівs
+tourism	chalet	0	шале
+tourism	chalet	1	шалеs
+tourism	guest_house	0	гостьовий будинок
+tourism	guest_house	1	гостьовий будинокs
+tourism	hostel	0	хостел
+tourism	hostel	1	хостелs
+tourism	hotel	0	готель
+tourism	hotel	1	готельs
+tourism	information	0	інформація
+tourism	information	1	інформаціяs
+tourism	lean_to	0	навіс
+tourism	lean_to	1	навісs
+tourism	motel	0	мотель
+tourism	motel	1	мотельs
+tourism	museum	0	музей
+tourism	museum	1	музейs
+tourism	picnic_site	0	місце для пікніків
+tourism	picnic_site	1	місце для пікніківs
+tourism	theme_park	0	тематичний парк
+tourism	theme_park	1	тематичний паркs
+tourism	valley	0	долина
+tourism	valley	1	долинаs
+tourism	viewpoint	0	оглядовий майданчик
+tourism	viewpoint	1	оглядовий майданчикs
+tourism	zoo	0	зоопарк
+tourism	zoo	1	зоопаркs
+waterway	boatyard	0	верф
+waterway	boatyard	1	верфs
+waterway	canal	0	канал
+waterway	canal	1	каналs
+waterway	connector	0	з’єднання водних шляхів
+waterway	connector	1	з’єднання водних шляхівs
+waterway	dam	0	дамба
+waterway	dam	1	дамбаs
+waterway	derelict_canal	0	покинутий канал
+waterway	derelict_canal	1	покинутий каналs
+waterway	ditch	0	рів
+waterway	ditch	1	рівs
+waterway	dock	0	док
+waterway	dock	1	докs
+waterway	drain	0	дренажний канал
+waterway	drain	1	дренажний каналs
+waterway	lock	0	шлюз
+waterway	lock	1	шлюзs
+waterway	lock_gate	0	шлюзові ворота
+waterway	lock_gate	1	шлюзові воротаs
+waterway	mineral_spring	0	мінеральне джерело
+waterway	mineral_spring	1	мінеральне джерелоs
+waterway	mooring	0	якірна стоянка
+waterway	mooring	1	якірна стоянкаs
+waterway	rapids	0	пороги
+waterway	rapids	1	порогиs
+waterway	river	0	ріка
+waterway	river	1	рікаs
+waterway	riverbank	0	берег ріки
+waterway	riverbank	1	берег рікиs
+waterway	stream	0	струмок
+waterway	stream	1	струмокs
+waterway	wadi	0	пересохле русло
+waterway	wadi	1	пересохле руслоs
+waterway	water_point	0	пункт водопостачання
+waterway	water_point	1	пункт водопостачанняs
+waterway	waterfall	0	водоспад
+waterway	waterfall	1	водоспадs
+waterway	weir	0	ставок
+waterway	weir	1	ставокs

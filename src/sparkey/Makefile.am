@@ -1,4 +1,5 @@
-CFLAGS = -I/usr/local/include -O2 -Wall -Wextra -Wfloat-equal -Wshadow -Wpointer-arith -Werror -pedantic
+CFLAGS_CONF = @CFLAGS@
+CFLAGS = -I/usr/local/include -O2 -Wall -Wextra -Wfloat-equal -Wshadow -Wpointer-arith -Werror -pedantic $(CFLAGS_CONF)
 
 noinst_LTLIBRARIES = libsparkey.la
 libsparkey_la_SOURCES = endiantools.h hashheader.h logheader.h \

@@ -105,7 +105,7 @@ reyes
 san|s
 santa|stª|st.ª|sta|st.a
 sant|st
-santo|stº|sto|st.o|st.º
+santo|stº|st°|sto|st.o|st.º|st.°
 sargento|sarg|sgto|sargto
 sargento ayudante|sarg ay|sgto ay|sargto ay
 sargento mayor|sm|s.m.|s.m|s m|sarg my|sgto my|sargto my

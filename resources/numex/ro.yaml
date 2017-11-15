@@ -1,0 +1,260 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "zero"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "unu"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "una"
+      value: 1
+      type: "cardinal"
+      multiply_gte: 100
+    - 
+      name: "doi"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "trei"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "patru"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "cinci"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "şase"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sase"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "şapte"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "sapte"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "opt"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "nouă"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "noua"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "zece"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "unsprezece"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "doisprezece"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "treisprezece"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "patrusprezece"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "cincisprezece"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "şasesprezece"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sasesprezece"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "şaptesprezece"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "saptesprezece"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "optsprezece"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "nouăsprezece"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "nouasprezece"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "douăzeci"
+      value: 20
+      type: "cardinal"
+      right: "add"
+      right_separator: " şi "
+    - 
+      name: "treizeci"
+      value: 30
+      type: "cardinal"
+      right: "add"
+      right_separator: " si "
+    - 
+      name: "patruzeci"
+      value: 40
+      type: "cardinal"
+      right: "add"
+      right_separator: " şi "
+    - 
+      name: "cincizeci"
+      value: 50
+      type: "cardinal"
+      right: "add"
+      right_separator: " şi "
+    - 
+      name: "şasezeci"
+      value: 60
+      type: "cardinal"
+      right: "add"
+      right_separator: " şi "
+    - 
+      name: "sasezeci"
+      value: 60
+      type: "cardinal"
+      right: "add"
+      right_separator: " si "
+    - 
+      name: "şaptezeci"
+      value: 70
+      type: "cardinal"
+      right: "add"
+      right_separator: " şi "
+    - 
+      name: "saptezeci"
+      value: 70
+      type: "cardinal"
+      right: "add"
+      right_separator: " si "
+    - 
+      name: "optzeci"
+      value: 80
+      type: "cardinal"
+      right: "add"
+      right_separator: " şi "
+    - 
+      name: "nouăzeci"
+      value: 90
+      type: "cardinal"
+      right: "add"
+      right_separator: " şi "
+    - 
+      name: "nouazeci"
+      value: 90
+      type: "cardinal"
+      right: "add"
+      right_separator: " si "
+    - 
+      name: "sută"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "suta"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "sute"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "mie"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "mii"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milion"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milioane"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliard"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliarde"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilion"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "mbilioane"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliard"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliarde"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+  stopwords:
+    - "şi"
+    - "si"
+

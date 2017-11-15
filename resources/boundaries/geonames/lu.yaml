@@ -1,0 +1,4 @@
+admin_codes:
+    # The admin1 names don't appear to exist in OSM, but would be states otherwise
+    admin1: state
+    admin2: state_district

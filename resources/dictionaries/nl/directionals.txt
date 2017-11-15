@@ -1,12 +1,20 @@
 noord|n
+noorden|n
+noordelijke
 noordoost|noord oost|no|n.o.|n.o|n o
 noordoosten|noord oosten|no|n.o.|n.o|n o
 noordwest|noord west|nw|n.w.|n.w|n w
 noordwesten|noord westen|nw|n.w.|n.w|n w
 oost|o
+oosten|o
+oostelijke
 west|w
+westen|w
+westelijke
 zuidoost|zuid oost|zo|z.o.|z.o|z o
 zuidoosten|zuid oosten|zo|z.o.|z.o|z o
 zuidwest|zw|z.w.|z.w|z w
 zuidwesten|zw|z.w.|z.w|z w
 zuid|z
+zuiden|z
+zuidlijke

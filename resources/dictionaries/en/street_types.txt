@@ -25,7 +25,7 @@ bend|bnd
 block|blk|blck
 bluff|blf|bluf|bluffs
 boardwalk|bwk|bwlk|board walk
-boulevard|bd|bde|blv|blvd|blvde|blvrd|boulavard|boul|boulv|bvd|boulevarde
+boulevard|blvd|bd|bde|blv|bl|blvde|blvrd|boulavard|boul|boulv|bvd|boulevarde
 bottom|bot|bottm|btm|bttm
 bottoms|bttms|btms|bottms
 boundary|bdy
@@ -109,7 +109,7 @@ divide|div
 diversion|divers
 down|dn
 downs|dns|dwns
-drive|dr|drv|dv|dve
+drive|dr|drv|dv|dve|d
 driveway|drwy|dvwy|dwy|dway|drvwy
 drove|drov
 easement|esmt
@@ -183,7 +183,7 @@ impasse|imp
 inlet|inlt
 interchange|intg|intchg|inter change
 intersection|intn|inter section|intsctn
-interstate|inter state|i
+interstate|inter state|i|ih|i h
 island|is|id|i|isl|isld
 islands|iss|ids|islds
 isle
@@ -255,7 +255,7 @@ pike|pk
 pine|pne|pn
 pines|pns|pnes
 pond
-place|pl|pla|plc
+place|pl|pla|plc|plac
 plain|pln|pl
 plains|plns|pls
 plateau|plat|plt
@@ -277,7 +277,6 @@ quadrant|qdrt|qd
 quay|quy|qy
 quays|quys|qys
 radial|radl
-railroad right of way|rr row|rr-row|rrrow|rr.row|rr r / o / w
 ramble|ra|rmbl
 ramp|rmp
 ranae|ran
@@ -295,12 +294,12 @@ ride
 ridge|rdge|rdg
 ridges|rdgs
 ridgeway|rgwy|rdgwy|ridge way
-right of way|rowy|rightofway|rofw|row|r o w|r of w|r / o / w
+right of way|rowy|rightofway|rofw|row|r o w|r of w
 ring
 rise|ri
 riverway|rvwy
 riviera|rvra
-road|raod|rd
+road|rd|ro|r|roa|raod
 roads|raods|rds
 roadside|rdsd|road side
 roadway|rdwy|rdw|rdy
@@ -313,7 +312,8 @@ roundabout
 route|rt|rte
 row|rw
 run|rn
-service road|svc rd|svc road|service rd
+rural route|rr|r.r|r r
+service road|svc rd|svc road|service rd|sv rd|svrd
 serviceway|swy|svwy|svcwy
 shoal|shl
 shoals|shls
@@ -340,7 +340,7 @@ steps|stps
 strand|stra|strnd|strd
 strands|strnds|strds
 stravenue|stra|strav
-street|st|str
+street|st|str|stre|stree
 streets|sts
 strip|strp
 subdivision|subdiv
@@ -379,8 +379,8 @@ turnpike|tpk|tpke
 underpass|upas|upass|ups|under pass
 union|un
 unions|uns
-us highway|us hwy
-us route|us rte
+us highway|us hwy|u s hwy
+us route|us rte|u s rte
 vale|va|vl
 valley|vlly|vly|vy
 valleys|vlys|vllys

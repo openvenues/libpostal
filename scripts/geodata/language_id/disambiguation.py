@@ -1,4 +1,5 @@
 import os
+import six
 import sys
 
 from collections import defaultdict, OrderedDict
@@ -14,6 +15,7 @@ from geodata.string_utils import wide_iter, wide_ord
 from geodata.i18n.unicode_properties import get_chars_by_script, get_script_languages
 from geodata.text.normalize import normalized_tokens, normalize_string
 from geodata.text.tokenize import tokenize
+from geodata.text.token_types import token_types
 
 WELL_REPRESENTED_LANGUAGES = set(['en', 'fr', 'it', 'de', 'nl', 'es', 'pt'])
 
@@ -31,15 +33,15 @@ WELL_REPRESENTED_LANGUAGE_COUNTRIES = {
     'pt': set(['pt', 'br']),
 }
 
-char_scripts = []
-script_languages = {}
+char_scripts = get_chars_by_script()
+script_languages = {script: set(langs) for script, langs in six.iteritems(get_script_languages())}
+lang_scripts = defaultdict(set)
 
+for script, langs in six.iteritems(script_languages):
+    for lang in langs:
+        lang_scripts[lang].add(script)
 
-def init_disambiguation():
-    global char_scripts, script_languages
-    char_scripts[:] = []
-    char_scripts.extend(get_chars_by_script())
-    script_languages.update({script: set(langs) for script, langs in get_script_languages().iteritems()})
+lang_scripts = dict(lang_scripts)
 
 UNKNOWN_SCRIPT = 'Unknown'
 COMMON_SCRIPT = 'Common'
@@ -74,9 +76,7 @@ UNKNOWN_LANGUAGE = 'unk'
 AMBIGUOUS_LANGUAGE = 'xxx'
 
 
-def disambiguate_language(text, languages):
-    text = safe_decode(text)
-    valid_languages = OrderedDict(languages)
+def disambiguate_language_script(text, languages):
     script_langs = {}
     read_len = 0
     while read_len < len(text):
@@ -86,9 +86,30 @@ def disambiguate_language(text, languages):
             script_langs[script] = set(script_valid)
 
             if script_len == len(text) and len(script_valid) == 1:
-                return script_valid[0]
+                return script_valid[0], script_langs
 
         read_len += script_len
+
+    return UNKNOWN_LANGUAGE, script_langs
+
+LATIN_TRANSLITERATED_SCRIPTS = {'Arabic', 'Cyrllic'}
+
+
+def has_non_latin_script(languages):
+    for lang, is_default in languages:
+        scripts = lang_scripts.get(lang, set())
+        if LATIN_SCRIPT not in scripts or scripts & LATIN_TRANSLITERATED_SCRIPTS:
+            return True
+    return False
+
+
+def disambiguate_language(text, languages, scripts_only=False):
+    text = safe_decode(text)
+    valid_languages = OrderedDict(languages)
+
+    language_script, script_langs = disambiguate_language_script(text, languages)
+    if language_script is not UNKNOWN_LANGUAGE:
+        return language_script
 
     num_defaults = sum((1 for lang, default in valid_languages.iteritems() if default))
 
@@ -100,7 +121,7 @@ def disambiguate_language(text, languages):
     seen_languages = set()
 
     for t, c, l, data in street_types_gazetteer.filter(tokens):
-        if c is PHRASE:
+        if c == token_types.PHRASE:
             valid = OrderedDict()
             data = [safe_decode(d).split(u'|') for d in data]
             potentials = set([l for l, d, i, c in data if l in valid_languages])

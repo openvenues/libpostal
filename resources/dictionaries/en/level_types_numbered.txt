@@ -1,0 +1,4 @@
+floor|fl|flr|/ f
+level|lev|levl|lvel|lvl|l|/ l
+platform|pf
+storey

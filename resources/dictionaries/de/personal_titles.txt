@@ -15,4 +15,4 @@ mitglied des landtages|mdl
 oberburgermeister|ob|obgm
 pater
 professor|prof
-sankt|st
+sankt|st|skt

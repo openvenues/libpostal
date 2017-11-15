@@ -1,0 +1,16 @@
+garasi|grsi
+gedung|gdg|gd
+gudang|gdng
+hangar|hngr
+kamar|kmr
+kantor
+kavling|kav|kv
+kebun|kebon|kbn
+kios
+pabrik|pabrk|pbrk
+parkiran|park
+rukun tetangga|rt
+rukun warga|rw
+stasiun
+toko|tko
+vila|vla|vl

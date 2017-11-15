@@ -1,0 +1,42 @@
+альфа-банк|альфабанк|альфа банк
+alfa-bank|alfabank|alfa bank
+азс
+azs
+билайн
+dns
+dns shop
+сбербанк
+sberbank
+сбербанк россии
+евросеть
+euroset
+эльдорадо
+лукойл
+lukoil
+мария-ра
+maria-ra
+монетка
+monetka
+пятёрочка|пятерочка
+pyatorochka
+роснефть
+rosneft
+ростелеком
+rostelecom
+газпром нефть|газпромнефть
+gazprom neft|gazprom-neft|gazpromneft
+почта россии
+роспечать
+rospechat
+россельхозбанк
+rosselkhozbank
+связной
+svyaznoy
+татнефть
+tatneft
+теремок
+teremok
+втб24
+vtb24
+макдоналдс
+makdonalds

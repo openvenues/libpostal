@@ -1,0 +1,826 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "cero"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "un"
+      value: 1
+      type: "cardinal"
+      multiply_gte: 1000000
+    - 
+      name: "uno"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "dos"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "tres"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "cuatro"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "cinco"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "seis"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "siete"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "ocho"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "nueve"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "diez"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "once"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "doce"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "trece"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "catorce"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "quince"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "dieciseis"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "diecisiete"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "dieciocho"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "diecinueve"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "veinte"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "veintiun"
+      value: 21
+      type: "cardinal"
+    -
+      name: "veintidós"
+      value: 22
+      type: "cardinal"
+    -
+      name: "veintidos"
+      value: 22
+      type: "cardinal"
+    -
+      name: "veintitrés"
+      value: 23
+      type: "cardinal"
+    -
+      name: "veintitres"
+      value: 23
+      type: "cardinal"
+    -
+      name: "veinticuatro"
+      value: 24
+      type: "cardinal"
+    -
+      name: "veinticinco"
+      value: 25
+      type: "cardinal"
+    -
+      name: "veintiséis"
+      value: 26
+      type: "cardinal"
+    -
+      name: "veintiseis"
+      value: 26
+      type: "cardinal"
+    -
+      name: "veintisiete"
+      value: 27
+      type: "cardinal"
+    -
+      name: "veintiocho"
+      value: 28
+      type: "cardinal"
+    -
+      name: "veintinueve"
+      value: 29
+      type: "cardinal"
+    - 
+      name: "treinta"
+      value: 30
+      type: "cardinal"
+      right: "add"
+      right_separator: " y "
+    - 
+      name: "cuarenta"
+      value: 40
+      type: "cardinal"
+      right: "add"
+      right_separator: " y "
+    - 
+      name: "cincuenta"
+      value: 50
+      type: "cardinal"
+      right: "add"
+      right_separator: " y "
+    - 
+      name: "sesenta"
+      value: 60
+      type: "cardinal"
+      right: "add"
+      right_separator: " y "
+    - 
+      name: "setenta"
+      value: 70
+      type: "cardinal"
+      right: "add"
+      right_separator: " y "
+    - 
+      name: "ochenta"
+      value: 80
+      type: "cardinal"
+      right: "add"
+      right_separator: " y "
+    - 
+      name: "noventa"
+      value: 90
+      type: "cardinal"
+      right: "add"
+      right_separator: " y "
+    - 
+      name: "cien"
+      value: 100
+      type: "cardinal"
+      exact_multiple_only: true
+    - 
+      name: "ciento"
+      value: 100
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "doscientos"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "doscientas"
+      value: 200
+      type: "cardinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "trescientos"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trescientas"
+      value: 300
+      type: "cardinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "cuatrocientos"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "cuatrocientas"
+      value: 400
+      type: "cardinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "quinientos"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "quinientas"
+      value: 500
+      type: "cardinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "seiscientos"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seiscientas"
+      value: 600
+      type: "cardinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "setecientos"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "setecientas"
+      value: 700
+      type: "cardinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "ochocientos"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "ocho­cientas"
+      value: 800
+      type: "cardinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "novecientos"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "novecientas"
+      value: 900
+      type: "cardinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "mil"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milion"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliones"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilion"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliones"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "primer"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "primero"
+      value: 1
+      type: "ordinal"
+      gender: "m"
+    - 
+      name: "primera"
+      value: 1
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "segundo"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "segunda"
+      value: 2
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "tercer"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "tercero"
+      value: 3
+      type: "ordinal"
+      gender: "m"
+    - 
+      name: "tercera"
+      value: 3
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "cuarto"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "cuarta"
+      value: 4
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "quinto"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "sexto"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "sexta"
+      value: 6
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "septimo"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "septima"
+      value: 7
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "octavo"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "octava"
+      value: 8
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "noveno"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "novena"
+      value: 9
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "decimo"
+      value: 10
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "decima"
+      value: 10
+      type: "ordinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "undecimo"
+      value: 11
+      type: "ordinal"
+    - 
+      name: "decimoprimera"
+      value: 11
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "duodecimo"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "decimosegunda"
+      value: 12
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "decimotercero"
+      value: 13
+      type: "ordinal"
+    - 
+      name: "decimotercera"
+      value: 13
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "decimocuarto"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "decimocuarta"
+      value: 14
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "decimoquinto"
+      value: 15
+      type: "ordinal"
+    - 
+      name: "decimoquinta"
+      value: 15
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "decimosexto"
+      value: 16
+      type: "ordinal"
+    - 
+      name: "decimosexta"
+      value: 16
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "decimoseptimo"
+      value: 17
+      type: "ordinal"
+      gender: "m"
+    - 
+      name: "decimoseptima"
+      value: 17
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "decimooctavo"
+      value: 18
+      type: "ordinal"
+      gender: "m"
+    - 
+      name: "decimooctava"
+      value: 18
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "decimonoveno"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "decimonovena"
+      value: 19
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "vigesimo"
+      value: 20
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "vigesima"
+      value: 20
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "trigesimo"
+      value: 30
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "trigesima"
+      value: 30
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "cuadragesimo"
+      value: 40
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "cuadragesima"
+      value: 40
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "quincuagesimo"
+      value: 50
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "quincuagesima"
+      value: 50
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "sexagesimo"
+      value: 60
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "sexagesima"
+      value: 60
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "septuagesimo"
+      value: 70
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "septuagesima"
+      value: 70
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "octogesimo"
+      value: 80
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "octogesima"
+      value: 80
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "nonagesimo"
+      value: 90
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "nonagesima"
+      value: 90
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "centesimo"
+      value: 100
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "centesima"
+      value: 100
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "ducentesimo"
+      value: 200
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "ducentesima"
+      value: 200
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "tricentesimo"
+      value: 300
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "tricentesima"
+      value: 300
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "cuadringentesimo"
+      value: 400
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "cuadringentesima"
+      value: 400
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "quingentesimo"
+      value: 500
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "quingentesima"
+      value: 500
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "sexcentesimo"
+      value: 600
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "sexcentesima"
+      value: 600
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "septingentesimo"
+      value: 700
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "septingentesima"
+      value: 700
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "octingesimo"
+      value: 800
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "octingesima"
+      value: 800
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "noningentesimo"
+      value: 900
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "noningentesima"
+      value: 900
+      type: "ordinal"
+      right: "add"
+      gender: "f"
+    - 
+      name: "milesimo"
+      value: 1000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milesima"
+      value: 1000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+      gender: "f"
+    - 
+      name: "millonesimo"
+      value: 1000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "millonesima"
+      value: 1000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+      gender: "f"
+    - 
+      name: "billonesimo"
+      value: 1000000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billonesima"
+      value: 1000000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+      gender: "f"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - ".º"
+          - "º"
+          - "o"
+          - "°"
+        "1":
+          - "ᵉʳ"
+          - "er"
+          - "r"
+          - "ro"
+          - ".º"
+          - "º"
+          - "o"
+          - "°"
+        "2":
+          - ".º"
+          - "º"
+          - "o"
+          - "°"
+        "3":
+          - "ᵉʳ"
+          - "er"
+          - "r"
+          - "ro"
+          - ".º"
+          - "º"
+          - "o"
+          - "°"
+        "4":
+          - ".º"
+          - "º"
+          - "o"
+          - "°"
+        "5":
+          - ".º"
+          - "º"
+          - "o"
+          - "°"
+        "6":
+          - ".º"
+          - "º"
+          - "o"
+          - "°"
+        "7":
+          - ".º"
+          - "º"
+          - "o"
+          - "°"
+        "8":
+          - ".º"
+          - "º"
+          - "o"
+          - "°"
+        "9":
+          - ".º"
+          - "º"
+          - "o"
+          - "°"
+    - 
+      gender: "f"
+      suffixes:
+        "0":
+          - ".ª"
+          - "ª"
+          - "a"
+        "1":
+          - ".ª"
+          - "ª"
+          - "a"
+          - "ra"
+          - "era"
+        "2":
+          - ".ª"
+          - "ª"
+          - "a"
+        "3":
+          - ".ª"
+          - "ª"
+          - "a"
+          - "ra"
+        "4":
+          - ".ª"
+          - "ª"
+          - "a"
+        "5":
+          - ".ª"
+          - "ª"
+          - "a"
+        "6":
+          - ".ª"
+          - "ª"
+          - "a"
+        "7":
+          - ".ª"
+          - "ª"
+          - "a"
+        "8":
+          - ".ª"
+          - "ª"
+          - "a"
+        "9":
+          - ".ª"
+          - "ª"
+          - "a"
+  stopwords:
+    - "y"

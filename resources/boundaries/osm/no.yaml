@@ -1,0 +1,9 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "7": "city"
+        "9": "city_district"
+
+    place:
+        "district": "city_district"

@@ -22,6 +22,7 @@ Each language can define one or more dictionaries (sometimes called "gazetteers"
 - **ambiguous_expansions.txt**: e.g. "E" could be expanded to "East" but could
 be "E Street", so if the string is encountered, it can either be left alone or expanded. In general, single-letter abbreviations in most languages should also be added to ambiguous_expansions.txt since single letters are also often initials
 - **building_types.txt**: strings indicating a building/house
+- **categories.txt**: category strings e.g. from [Nominatim Special Phrases](http://wiki.openstreetmap.org/wiki/Nominatim/Special_Phrases) expected to be used in searches like "restaurants in Manhattan". Singular and plural forms can be included here.
 - **company_types.txt**: company suffixes like "Inc" or "GmbH"
 - **concatenated_prefixes_separable.txt**: things like "Hinter..." which can
 be written either concatenated or as separate tokens
@@ -33,27 +34,39 @@ say, part of a street name
 suffix can be either concatenated to the main token or separated
 - **directionals.txt**: strings indicating directions (cardinal and
 lower/central/upper, etc.)
-- **level_types.txt**: strings indicating a particular floor
-- **no_number.txt**: strings like "no fixed address"
-- **nulls.txt**: strings meaning "not applicable"
-- **personal_suffixes.txt**: post-nominal suffixes, usually generational
-like Jr/Sr
-- **personal_titles.txt**: civilian, royal and military titles
+- **entrance.txt**: string indicating an entrance, usually just the word "entrance" and its appropriate abbreviations.
+- **given_names.txt**: a dictionary of given names derived from Wikipedia has been provided in the special "all" language directory. Western given names are usually abbreviated using the first letter but specifying them all would create too many potential variations. Instead of trying to expand "J" to every possible J name, it might be better to abbreviate possible given names and add those versions as alternate forms of the string for matching purposes.
+- **house_number.txt**: strings that may be added as part of the house/building number (for languages like Spanish where it's common to say "No. 123" or "No. Ext. 123" for the house/building number instead of just "123" as in English).
+- **level_types_basement.txt**: strings indicating a basement level.
+- **level_types_mezzanine.txt**: strings indicating a mezzanine level.
+- **level_types_numbered.txt**: strings indicating a numbered level of a building (numbered).
+- **level_types_standalone.txt**: strings indicating a level/floor of a building that can stand on their own without a number like "ground floor", etc.
+- **level_types_sub_basement.txt**: strings indicating a sub-basement level.
+- **no_number.txt**: strings like "sin número" used for houses with no number.
+- **nulls.txt**: strings meaning "not applicable" e.g. in spreadsheets or database fields that might have missing values
+- **organizations.txt**: e.g. common retail chains, organizational acronyms for government agencies, the United Nations, etc.
+- **people.txt**: abbreviations for specific people like MLK for Martin Luther King, Jr. or CDG for Charles du Galle
+- **personal_suffixes.txt**: post-nominal suffixes, usually generational e.g. Junior/Senior in English or der Jungere in German.
+- **personal_titles.txt**: civilian, royal, clerical, and military titles e.g. "Saint", "General", etc.
 - **place_names.txt**: strings found in names of places e.g. "theatre",
 "aquarium", "restaurant". [Nominatim Special Phrases](http://wiki.openstreetmap.org/wiki/Nominatim/Special_Phrases) is a great resource for this.
 - **post_office.txt**: strings like "p.o. box"
 - **qualifiers.txt**: strings like "township"
+- **staircase.txt**: strings indicating a staircase, usually just the word "staircase" or "stair".
 - **stopwords.txt**: prepositions and articles mostly, very common words
 which may be ignored in some contexts
 - **street_types.txt**: words like "street", "road", "drive" which indicate
 a thoroughfare and their respective abbreviations.
+- **surnames.txt**: a dictionary of surnames derived from Wikipedia has been provided in the special "all" language directory. If there are specific abbreviations for surnames in a language like Mdez. for Menendez, add them in the specific language's dictionary.
 - **synonyms.txt**: any miscellaneous synonyms/abbreviations e.g. "bros"
 expands to "brothers", etc. These have no special meaning and will essentially
 just be treated as string replacement.
 - **toponyms.txt**: abbreviations for certain abbreviations relating to
 toponyms like regions, places, etc. Note: GeoNames covers most of these.
 In most cases better to leave these alone
-- **unit_types.txt**: strings indicating an apartment or unit number
+- **unit_directions.txt**: phrases to indicate which side of the building the apartment/unit is on, usually along the lines of "left", "right", "front", "rear".
+- **unit_types_numbered.txt**: strings indicating a apartment or unit e.g. we expect a number to follow (or in some languages, precede) strings like "flat", "apt", "unit", etc.
+- **unit_types_standalone.txt**: for unit type that can stand on their own without an accompanying number e.g. "penthouse".
 
 Most of the dictionaries have been derived using the following process:
 

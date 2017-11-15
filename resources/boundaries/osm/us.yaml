@@ -1,0 +1,61 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "5": "city"
+        "6": "state_district"
+        "7": "city"
+        "8": "city"
+        "9": "city_district"
+        "10": "suburb"
+
+    overrides:
+        id:
+            node:
+                # Brooklyn
+                "158857828": "city_district"
+                # Bronx
+                "158903369": "city_district"
+                # Queens
+                "158863443": "city_district"
+                # Staten Island
+                "158851392": "city_district"
+                # New York county node
+                "316976731": null
+                # Manhattan node
+                "357644127": "city_district"
+            way:
+                # Manhattan
+                "400014249": "city_district"
+                # Oquossoc (would be city_district)
+                "294075882": "city"
+                # La Cresta (would be city_district)
+                "305337915": "city"
+            relation:
+                # Boothbay Harbour, Maine (would be city_district, part of city with same name)
+                "132812": null
+                # Narragansett Pier, RI (would be city_district)
+                "191221": "city"
+                # Alum Rock (would be city_district, node is suburb)
+                "113390": "suburb"
+                # Cambrian Park (would be city_district)
+                "113393": "suburb"
+                # East Foothills (would be city_district)
+                "113394": "city"
+                # Beecher, MI (would be city_district)
+                "134625": "city"
+                # Union Hill-Novelty Hill (would be city_district)
+                "237544": "city"
+                # Cypress Village (would be city_district, is a "village of Irvine", basically a neighborhood)
+                "1561608": "suburb"
+                # Portola Springs (would be city_district, is a "village of Irvine", basically a neighborhood)
+                "1536349": "suburb"
+                # Lower Peters Canyon (would be city_district, is a "village of Irvine", basically a neighborhood)
+                "1574023": "suburb"
+                # Walnut (would be city_district, is a "village of Irvine", basically a neighborhood)
+                "1559020": "suburb"
+                # Orchard Hills (would be city_district, is a "village of Irvine", basically a neighborhood)
+                "1539925": "suburb"
+                # Iron Horse (would be city_district)
+                "2317331": "suburb"
+

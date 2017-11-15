@@ -9,19 +9,24 @@
 #include "collections.h"
 #include "language_features.h"
 #include "logistic_regression.h"
+#include "matrix.h"
 #include "tokens.h"
+#include "sparse_matrix.h"
 #include "string_utils.h"
 #include "trie.h"
 
 #define LANGUAGE_CLASSIFIER_FILENAME "language_classifier.dat"
-#define LANGUAGE_CLASSIFIER_COUNTRY_FILENAME "language_classifier_country.dat"
 
 typedef struct language_classifier {
     size_t num_labels;
     size_t num_features;
     trie_t *features;
     cstring_array *labels;
-    matrix_t *weights;
+    matrix_type_t weights_type;
+    union {
+        double_matrix_t *dense;
+        sparse_matrix_t *sparse;
+    } weights;
 } language_classifier_t;
 
 

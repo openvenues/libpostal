@@ -21,36 +21,36 @@
 
 #define ALL_LANGUAGES "all"
 
-#define DEFAULT_ADDRESS_EXPANSION_PATH LIBPOSTAL_DATA_DIR PATH_SEPARATOR "address_expansions" PATH_SEPARATOR "address_dictionary.dat"
+#define ADDRESS_DICTIONARY_DATA_FILE "address_dictionary.dat"
+#define DEFAULT_ADDRESS_EXPANSION_PATH LIBPOSTAL_DATA_DIR PATH_SEPARATOR LIBPOSTAL_ADDRESS_EXPANSIONS_SUBDIR PATH_SEPARATOR ADDRESS_DICTIONARY_DATA_FILE
 
 #define NULL_CANONICAL_INDEX -1
-
-typedef union expansion_value {
-    uint32_t value;
-    struct {
-        uint32_t components:16;
-        uint32_t count:14;
-        uint32_t canonical:1;
-        uint32_t separable:1;
-    };
-} expansion_value_t;
 
 typedef struct address_expansion {
     int32_t canonical_index;
     char language[MAX_LANGUAGE_LEN];
     uint32_t num_dictionaries;
     uint16_t dictionary_ids[MAX_DICTIONARY_TYPES];
-    uint16_t address_components;
+    uint32_t address_components;
     bool separable;
 } address_expansion_t;
 
 VECTOR_INIT(address_expansion_array, address_expansion_t)
 
-KHASH_MAP_INIT_STR(str_expansions, address_expansion_array *)
+typedef struct address_expansion_value {
+    uint32_t components;
+    address_expansion_array *expansions;
+} address_expansion_value_t;
+
+address_expansion_value_t *address_expansion_value_new(void);
+address_expansion_value_t *address_expansion_value_new_with_expansion(address_expansion_t expansion);
+void address_expansion_value_destroy(address_expansion_value_t *self);
+
+VECTOR_INIT_FREE_DATA(address_expansion_value_array, address_expansion_value_t *, address_expansion_value_destroy)
 
 typedef struct address_dictionary {
     cstring_array *canonical;
-    khash_t(str_expansions) *expansions;
+    address_expansion_value_array *values;
     trie_t *trie;
 } address_dictionary_t;
 
@@ -66,7 +66,7 @@ bool search_address_dictionaries_tokens_with_phrases(char *str, token_array *tok
 phrase_t search_address_dictionaries_prefix(char *str, size_t len, char *lang);
 phrase_t search_address_dictionaries_suffix(char *str, size_t len, char *lang);
 
-address_expansion_array *address_dictionary_get_expansions(char *key);
+address_expansion_value_t *address_dictionary_get_expansions(uint32_t i);
 bool address_expansion_in_dictionary(address_expansion_t expansion, uint16_t dictionary_id);
 char *address_dictionary_get_canonical(uint32_t index);
 int32_t address_dictionary_next_canonical_index(void);
@@ -80,8 +80,5 @@ bool address_dictionary_save(char *path);
 
 bool address_dictionary_module_setup(char *filename);
 void address_dictionary_module_teardown(void);
-
-
- 
 
 #endif

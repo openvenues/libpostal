@@ -1,0 +1,4 @@
+oikea
+oikealla
+vasen
+vasemmalla

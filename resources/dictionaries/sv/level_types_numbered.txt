@@ -1,0 +1,7 @@
+plan
+trappa upp|tr upp
+trappa|tr
+trappor upp|tr upp
+trappor|tr
+våning|vån|vaan|vaning|vaaning
+våningen|vån|vaan|vaningen|vaaningen

@@ -1,0 +1,715 @@
+# de.yaml
+# -------
+# Note: this will only apply to the German language code, which encompasses Germany,
+# Austria, Switzerland (but not Swiss-German, which has its own language code),
+# Lichtenstein, Luxembourg (Luxembourgish has its own language code), and part of Belgium.
+
+
+components:
+    level:
+        null_probability: 0.85
+        alphanumeric_probability: 0.1
+        standalone_probability: 0.05
+
+    staircase:
+        null_probability: 0.99
+        alphanumeric_probability: 0.01
+
+    entrance:
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
+
+    unit:
+        null_probability: 0.9
+        alphanumeric_probability: 0.1
+
+    combinations:
+        # e.g. 2/34, more common way to specify a unit number in German
+        # if unit exists in the first place
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: /
+                  probability: 0.8
+                - separator: "-"
+                  probability: 0.1
+                - separator: " - "
+                  probability: 0.1
+            probability: 0.05
+
+
+numbers:
+    default: &nummer
+        canonical: nummer
+        abbreviated: nr
+        sample: true
+        # Probabilities
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        sample_exclude:
+            - "#"
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: "#"
+            direction: left
+
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.6
+
+
+house_numbers:
+    alphanumeric:
+        default: *nummer
+
+    alphanumeric_phrase_probability: 0.0001
+
+conscription_numbers:
+    alphanumeric:
+        default: 
+            canonical: konskriptionsnummer
+            abbreviated: konskr. nr
+            canonical_probability: 0.15
+            abbreviated_probability: 0.65
+            sample: true
+            sample_probability: 0.2
+            numeric:
+                direction: left
+
+and:
+    default: &und
+        canonical: und
+        abbreviated: "&"
+        canonical_probability: 0.2
+        abbreviated_probability: 0.75
+        sample: true
+        sample_probability: 0.05
+
+cross_streets:
+    and: *und
+    corner_of: &ecke_von
+        canonical: ecke von
+    at_the_corner_of: &an_der_ecke_von
+        canonical: an der ecke von
+    intersection:
+        default: *und
+        probability: 0.7
+        alternatives:
+            - alternative: *ecke_von
+              probability: 0.15
+            - alternative: *an_der_ecke_von
+              probability: 0.15
+
+    between:
+        canonical: zwischen
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probability: 0.5
+
+levels:
+    floor: &obergeschoss
+        canonical: obergeschoss
+        abbreviated: og
+        sample: true
+        add_number_phrase: true
+        add_number_phrase_probability: 0.1
+        canonical_probability: 0.5
+        abbreviated_probability: 0.4
+        sample_probability: 0.1
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: og
+            direction: right
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        numeric_probability: 0.3
+        numeric_affix_probability: 0.5
+        ordinal_probability: 0.2
+    etage: &etage
+        canonical: etage
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: right
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        numeric_probability: 0.4
+        ordinal_probability: 0.6
+    stock: &stock
+        canonical: stock
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: right
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        numeric_probability: 0.1
+        ordinal_probability: 0.9
+    erdgeschoss: &erdgeschoss
+        canonical: erdgeschoss
+        abbreviated: eg
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.6
+        sample_probability: 0.1
+    untergeschoss: &untergeschoss
+        canonical: untergeschoss
+        abbreviated: ug
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.5
+        sample_probability: 0.1
+        # e.g. Basement 1
+        numeric:
+            direction: left
+        # e.g. 1ug
+        numeric_affix:
+            affix: ug
+            direction: left
+        # e.g. 1. UG
+        ordinal:
+            direction: right
+        standalone_probability: 0.985
+        number_abs_value: true
+        number_min_abs_value: 1
+        numeric_probability: 0.005
+        numeric_affix_probability: 0.005
+        ordinal_probability: 0.005
+    unterste_etage: &unterste_etage
+        canonical: unterste etage
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+    oberste_etage: &oberste_etage
+        canonical: oberste etage
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+
+    aliases:
+        "<-1":
+            default: *untergeschoss
+        "-1":
+            default: *untergeschoss
+        "0":
+            default: *erdgeschoss
+            probability: 0.9
+            alternatives:
+                - alternative: *unterste_etage
+                  probability: 0.1
+        "top":
+            default: *obergeschoss
+            probability: 0.75
+            alternatives:
+                - alternative: *stock
+                  probability: 0.1
+                - alternative: *etage
+                  probability: 0.05
+                - alternative: *oberste_etage
+                  probability: 0.1
+
+    numbering_starts_at: 0
+
+    alphanumeric:
+        default: *obergeschoss
+        probability: 0.85
+        alternatives:
+            - alternative: *stock
+              probability: 0.1
+            - alternative: *etage
+              probability: 0.05
+        numeric_probability: 0.99 # With this probability, pick an integer
+        alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
+        numeric_plus_alpha_probability: 0.0001 # e.g. 2A
+        alpha_plus_numeric_probability: 0.0001 # e.g. A2
+
+categories:
+    near:
+        default:
+            canonical: nähe
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.5
+        alternatives:
+            - alternative:
+                canonical: bei
+              probability: 0.3
+            - alternative:
+                canonical: nah
+              probability: 0.15
+            - alternative:
+                canonical: nahe an
+              probability: 0.05
+    nearby:
+        default:
+            canonical: hier in der nähe
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.4
+        alternatives:
+            - alternative:
+                canonical: in der nähe
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.3
+            - alternative:
+                canonical: in der nähe hier
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+            - alternative: 
+                canonical: in der nähe von
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+            - alternative:
+                canonical: nahe gelegen
+              probability: 0.05
+            - alternative:
+                canonical: hier in der gegend
+              probability: 0.05
+
+    near_me:
+        default:
+            canonical: in meiner nähe
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.9
+        alternatives:
+            - alternative:
+                canonical: in der nähe zu mir
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+    # Don't worry about agreement
+    in:
+        default:
+            canonical: in
+        probability: 0.6
+        alternatives:
+            - alternative:
+                canonical: im
+              probability: 0.2
+            - alternative:
+                canonical: um
+              probability: 0.2
+
+
+    # Probabilities of each phrase
+    near_probability: 0.35
+    nearby_probability: 0.2
+    near_me_probability: 0.1
+    in_probability: 0.35
+
+
+directions:
+    right: &rechts
+        canonical: rechts
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: r
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.8
+        numeric_affix_probability: 0.2
+    left: &links
+        canonical: links
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: l
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.6
+    alternatives:
+        - alternative: *rechts
+          probability: 0.5
+        - alternative: *links
+          probability: 0.5
+
+
+cardinal_directions:
+    east: &ost
+        canonical: ost
+        abbreviated: o
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: o
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    west: &west
+        canonical: west
+        abbreviated: w
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: w
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    north: &nord
+        canonical: nord
+        abbreviated: n
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: n
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    south: &sud
+        canonical: süd
+        abbreviated: s
+        sample: true
+        canonical_probability: 0.75
+        abbreviated_probability: 0.1
+        sample_probability: 0.15
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: s
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    alternatives:
+        - alternative: *nord
+          probability: 0.25
+        - alternative: *ost
+          probability: 0.25
+        - alternative: *sud
+          probability: 0.25
+        - alternative: *west
+          probability: 0.25
+
+
+entrances:
+    eingang: &eingang
+        canonical: eingang
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Eingang 1, Eingang A, etc.
+    alphanumeric: &entrance_alphanumeric
+        default: *eingang
+        numeric_probability: 0.1 # e.g. Eingang 1
+        alpha_probability: 0.85 # e.g. Eingang A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+staircases:
+    stiege: &stiege
+        canonical: stiege
+        abbreviated: stg
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    treppe: &treppe
+        canonical: treppe
+        numeric:
+            direction: left
+
+    alphanumeric: &staircase_alphanumeric
+        default: *stiege
+        probability: 0.6
+        alternatives:
+            - alternative: *treppe
+              probability: 0.4
+        numeric_probability: 0.75
+        alpha_probability: 0.2
+        numeric_plus_alpha_probability: 0.025
+        alpha_plus_numeric_probability: 0.025
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: left
+            direction_probability: 0.85
+            modifier:
+                alternatives:
+                    - alternative: *nord
+                    - alternative: *sud
+                    - alternative: *ost
+                    - alternative: *west
+
+po_boxes:
+    postfach: &postfach
+        canonical: postfach
+        abbreviated: pf
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2 # PF No 1234
+        numeric_probability: 1.0
+    alphanumeric:
+        sample: false
+        default: *postfach
+        numeric_probability: 0.9 # Apdo 123
+        alpha_probability: 0.05 # Apdo A
+        numeric_plus_alpha_probability: 0.04 # Apdo 123G
+        alpha_plus_numeric_probability: 0.01 # Apdo A123
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+units:
+    halle: &halle
+        canonical: halle
+        numeric:
+            direction: left
+    wohnung: &wohnung
+        canonical: wohnung
+        abbreviated: whg
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.1
+        sample_probability: 0.3
+        plural:
+            canonical: wohnungen
+        numeric:
+            direction: left
+        # Wohnung nummer 4
+        add_number_phrase: true
+        add_number_phrase_probability: 0.2
+    haus: &haus
+        canonical: haus
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    wohnungsnummer: &wohnungsnummer
+        canonical: wohnungsnummer
+        sample: true
+        canonical_probability: 0.6
+        sample_probability: 0.4
+        numeric:
+            direction: left
+    appartement: &appartement
+        canonical: appartement
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    buro: &buro
+        canonical: büro
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    zimmer: &zimmer
+        canonical: zimmer
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    alphanumeric: &unit_alphanumeric
+        default: *wohnung
+        probability: 0.8
+        alternatives:
+            - alternative: *wohnungsnummer
+              probability: 0.1
+            - alternative: *appartement
+              probability: 0.05
+            - alternative: *haus
+              probability: 0.05
+
+        numeric_probability: 0.9 # e.g. Wohnung 1
+        numeric_plus_alpha_probability: 0.03 # e.g. 1A
+        alpha_plus_numeric_probability: 0.03 # e.g. A1
+        alpha_probability: 0.04 # e.g. Wohnung A
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        # Separate random probability for adding directions like 2R, 2L, etc.
+        add_direction: true
+        add_direction_probability: 0.1
+
+        # Add directions for plain numbers
+        add_direction_numeric: true
+        # Add direction only e.g. Wohnung Rechts
+        add_direction_standalone: true
+
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.1
+
+    zone:
+        residential: *unit_alphanumeric
+        commercial:
+            default: *buro
+            probability: 0.9
+            alternatives:
+                - alternative: *zimmer
+                  probability: 0.1
+        university:
+            default: *halle
+            probability: 0.9
+            alternatives:
+                - alternative: *zimmer
+                  probability: 0.1
+
+
+countries:
+    # Austria
+    at:
+        # Staircase and entrance numbers more common
+        components:
+            level:
+                null_probability: 0.6
+                alphanumeric_probability: 0.3
+                standalone_probability: 0.1
+            staircase:
+                null_probability: 0.9
+                alphanumeric_probability: 0.1
+
+            entrance:
+                null_probability: 0.99
+                alphanumeric_probability: 0.01
+
+            unit:
+                null_probability: 0.4
+                alphanumeric_probability: 0.6
+
+            # Combined apartment numbers are very common      
+            combinations:
+                # e.g. Neubaugasse 55/A/1/5
+                -
+                    components:
+                        - house_number
+                        - entrance
+                        - staircase
+                        - unit
+                    label: house_number
+                    separators:
+                        - separator: /
+                          probability: 0.98
+                        - separator: "-"
+                          probability: 0.02
+                    probability: 0.9
+                # e.g. Neubaugasse 55/1/5
+                -
+                    components:
+                        - house_number
+                        - staircase
+                        - unit
+                    label: house_number
+                    separators:
+                        - separator: /
+                          probability: 0.98
+                        - separator: "-"
+                          probability: 0.02
+                    probability: 0.8
+                # e.g. Neubaugasse 55/5
+                -
+                    components:
+                        - house_number
+                        - unit
+                    label: house_number
+                    probability: 0.7
+                    separators:
+                        - separator: /
+                          probability: 0.98
+                        - separator: "-"
+                          probability: 0.02
+
+        units:
+            top: &top
+                canonical: top
+                numeric:
+                    direction: left
+            alphanumeric: &austria_units_alphanumeric
+                default: *top
+                probability: 0.75
+                alternatives:
+                    - alternative: *haus
+                      probability: 0.15
+                    - alternative: *wohnung
+                      probability: 0.05
+                    - alternative: *wohnungsnummer
+                      probability: 0.025
+                    - alternative: *appartement
+                      probability: 0.025

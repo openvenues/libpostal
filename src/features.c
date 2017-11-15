@@ -12,7 +12,7 @@ void feature_array_add(cstring_array *features, size_t count, ...) {
     cstring_array_start_token(features);
 
     bool strip_separator = true;
-    char_array_append_vjoined(features->str, FEATURE_SEPARATOR_CHAR, strip_separator, count, args);
+    char_array_add_vjoined(features->str, FEATURE_SEPARATOR_CHAR, strip_separator, count, args);
     va_end(args);
 }
 

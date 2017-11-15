@@ -1,0 +1,32 @@
+---
+    admin_level: 
+        "2": "country"
+        "3": "country_region"
+        "4": "state"
+        "5": "state_district"
+        "6": "state_district"
+        "8": "city"
+        "9": "city_district"
+        "10": "suburb"
+
+    overrides:
+        id:
+            relation:
+                # Moscow
+                "102269": "city"
+                # St Petersburg
+                "337422": "city"
+        contained_by:
+            relation:
+                # Moscow
+                "102269":
+                    admin_level:
+                        "5": "city_district"
+                        "8": "suburb"
+                    global_overrides_last: true
+                # St Petersburg
+                "337422":
+                    admin_level:
+                        "5": "city_district"
+                        "8": "suburb"
+                    global_overrides_last: true

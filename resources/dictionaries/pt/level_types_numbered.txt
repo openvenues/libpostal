@@ -1,0 +1,3 @@
+andar
+nível|nivel
+piso|pi|p

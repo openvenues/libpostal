@@ -1,0 +1,160 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        # Prefecture-level cities
+        "5": "city"
+        "6": "state_district"
+        "8": "city"
+        "10": "city"
+
+    place:
+        "district": "state_district"
+
+    overrides:
+        id:
+            relation:
+                # Beijing
+                "912940": "city"
+
+                # Shanghai
+                "913067": "city"
+
+                # Tianjin
+                "912999": "city"
+
+                # Chongqing
+                "913069": "city"
+
+                # Yunnan Province - Lijiang City
+                "2729779": "city"
+                # Yunnan Province - Pu'er City
+                "2716205": "city"
+                # Yunnan Province - Zhaotong
+                "2402650": "city"
+                # Yunnan Province - Qujing
+                "2718030": "city"
+                # Yunnan Province - Kunming
+                "2723597": "city"
+                # Yunnan Province - Yuxi
+                "2723502": "city"
+                # Yunnan Province - Baoshan
+                "2727146": "city"
+                # Yunnan Province - Dali
+                "2727745": "city"
+                # Yunnan Province - Lincang
+                "2725393": "city"
+
+                # Qinghai Province - Xining City
+                "2707990": "city"
+                # Qinghai Province - Haidong City
+                "2707988": "city"
+
+                # Xinjiang Province - Ürümqi
+                "2752472": "city"
+                # Xinjiang Province - Karamay City
+                "2751491": "city"
+                # Xinjiang Province - Shihezi City
+                "3431881": "city"
+                # Xinjiang Province - Aral City
+                "2748887": "city"
+                # Xinjiang Province - Tumxuk City
+                "2748778": "city"
+                # Xinjiang Province - Wujiaqu City
+                "2752471": "city"
+
+                # Sichuan Province - Garzê Tibetan Autonomous Prefecture
+                "2049312": "state_district"
+                # Sichuan Province - Ngawa Tibetan and Qiang Autonomous Prefecture
+                "2110265": "state_district"
+                # Sichuan Province - Liangshan Yi Autonomous Prefecture
+                "2785750": "state_district"
+
+                # Guizhou Province - Qianxinan Buyei and Miao Autonomous Prefecture
+                "2781292": "state_district"
+                # Guizhou Province - Qiandongnan Miao and Dong Autonomous Prefecture
+                "2777847": "state_district"
+                # Guizhou Province - Qiannan Buyei and Miao Autonomous Prefecture
+                "2777425": "state_district"
+
+                # Gansu Province - Gannan Tibetan Autonomous Prefecture
+                "165639": "state_district"
+                # Gansu Province - Linxia Hui Autonomous Prefecture
+                "2697555": "state_district"
+
+                # Jilin Province - Yanbian Korean Autonomous Prefecture
+                "2761941": "state_district"
+
+                # Hubei Province - Enshi Tujia and Miao Autonomous Prefecture
+                "2984075": "state_district"
+
+                # Hunan Province - Xiangxi Tujia and Miao Autonomous Prefecture
+                "2972168": "state_district"
+
+                # Tibet Autonomous Region - Nagqu Prefecture
+                "2744938": "state_district"
+                # Tibet Autonomous Region - Ngari Prefecture
+                "1997914": "state_district"
+
+                # Heilongjiang Province - Da Hinggan Ling Prefecture
+                "199127": "state_district"
+
+                # Inner Mongolia Region - Hinggan League
+                "2753442": "state_district"
+                # Inner Mongolia Region - Xilingol League
+                "2753029": "state_district"
+                # Inner Mongolia Region - Alxa League
+                "2752743": "state_district"
+
+        contained_by:
+            relation:
+                # Xinjiang Province
+                "153310":
+                    admin_level:
+                        # Except the listed cities, all are prefectures
+                        "5": "state_district"
+                # Yunnan Province
+                "913094":
+                    admin_level:
+                        # Except the listed cities, all are prefectures
+                        "5": "state_district"
+
+                # Qinghai
+                "153269":
+                    admin_level:
+                        # Except the listed cities, all are prefectures
+                        "5": "state_district"
+
+                # Beijing
+                "912940":
+                    admin_level:
+                        "6": "city_district"
+
+                # Shanghai
+                "913067":
+                    admin_level:
+                        "6": "city_district"
+
+                # Tianjin
+                "912999":
+                    admin_level:
+                        "6": "city_district"
+
+                # Chongqing
+                "913069":
+                    admin_level:
+                        "6": "city_district"
+
+        use_admin_center:
+            - id: 912940 # Beijing
+              type: relation
+              probability: 0.6
+            - id: 913067 # Shanghai
+              type: relation
+              probability: 0.6
+            - id: 912999 # Tianjin
+              type: relation
+              probability: 0.6
+            - id: 913069 # Chongqing
+              type: relation
+              probability: 0.6

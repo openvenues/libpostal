@@ -14,6 +14,11 @@ casal|csl
 castelo|cast
 centro comercial|cc|c.c.|c.c|c c
 ciclo do ensino básico|ciclo do ensino basico|ceb|c.e.b.|c.e.b|c e b
+departamento|dep|depto
+departamentos|deps|deptos
+escadaria
+escadas|esc
+escadinhas|escnh
 escola
 escola básica|escola basica|eb|e.b.|e.b|e b
 estação|estacao
@@ -29,8 +34,9 @@ fonte|f.te|fte
 galeria|gal
 guarda nacional republicana|gnr|g.n.r.|g.n.r|g n r
 instituto|inst
-loja
-lojas
+loja|lj
+lojas|ljs
+loteamento|loteam
 museu|mus
 parque|pq|prq|parq
 pavilhão|pailhao|pav

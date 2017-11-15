@@ -28,8 +28,8 @@ int main(int argc, char **argv) {
     char *languages[argc - 2];
     for (int i = 0; i < argc - 2; i++) {
         char *arg = argv[i + 2];
-        if (strlen(arg) >= MAX_LANGUAGE_LEN) {
-            printf("arg %d was longer than a language code (%d chars). Make sure to quote the input string\n", i + 2, MAX_LANGUAGE_LEN - 1);
+        if (strlen(arg) >= LIBPOSTAL_MAX_LANGUAGE_LEN) {
+            printf("arg %d was longer than a language code (%d chars). Make sure to quote the input string\n", i + 2, LIBPOSTAL_MAX_LANGUAGE_LEN - 1);
         }
         languages[i] = arg;
     }
@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    normalize_options_t options = get_libpostal_default_options();
+    libpostal_normalize_options_t options = libpostal_get_default_options();
 
     options.num_languages = 1;
     options.languages = languages;
@@ -56,12 +56,8 @@ int main(int argc, char **argv) {
 
     clock_t t1 = clock();
     for (int i = 0; i < num_loops; i++) {
-        strings = expand_address(str, options, &num_expansions);
-        for (uint64_t i = 0; i < num_expansions; i++) {
-            normalized = strings[i];
-            free(normalized);
-        }
-        free(strings);
+        strings = libpostal_expand_address(str, options, &num_expansions);
+        libpostal_expansion_array_destroy(strings, num_expansions);
     }
     clock_t t2 = clock();
 

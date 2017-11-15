@@ -4,7 +4,7 @@ lange|l.
 lang|l.
 markt|mkt.
 pad
-plain|pln.
+plein|pln.
 singel|sngl.
 sloot
 straat|str.

@@ -8,6 +8,7 @@ fleuve|fl
 grand|gd|gr|g
 mont|mt|mnt
 petite|p|pt
+porche|pch
 rivière|riviere|riv
 village|vge
 villages|vges

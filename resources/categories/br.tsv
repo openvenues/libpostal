@@ -1,0 +1,841 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	aerborzh
+aeroway	aerodrome	1	aerborzhioù
+amenity	arts_centre	0	kreizenn arz
+amenity	arts_centre	1	kreizennoù arz
+amenity	atm	0	bilhedaouer
+amenity	atm	1	bilhedaouerioù
+amenity	auditorium	0	selaouva
+amenity	auditorium	1	selaouvaoù
+amenity	bank	0	ti-bank
+amenity	bank	1	ti-banks
+amenity	bar	0	tavarn
+amenity	bar	1	tavarns
+amenity	bench	0	skaoñ
+amenity	bench	1	skaoñs
+amenity	bicycle_parking	0	parklec'h evit ar beloioù
+amenity	bicycle_parking	1	parklec'h evit ar beloioùs
+amenity	bicycle_rental	0	feurmiñ beloioù
+amenity	bicycle_rental	1	feurmiñ beloioùs
+amenity	brothel	0	bordel
+amenity	brothel	1	bordels
+amenity	bureau_de_change	0	burev eskemm
+amenity	bureau_de_change	1	burev eskemms
+amenity	bus_station	0	arsav bus
+amenity	bus_station	1	arsav buss
+amenity	cafe	0	kafedi
+amenity	cafe	1	kafedis
+amenity	car_rental	0	feurmiñ kirri
+amenity	car_rental	1	feurmiñ kirris
+amenity	car_sharing	0	leur genweturañ
+amenity	car_sharing	1	leur genweturañs
+amenity	car_wash	0	gwalc'hiñ kirri
+amenity	car_wash	1	gwalc'hiñ kirris
+amenity	casino	0	kazino
+amenity	casino	1	kazinos
+amenity	cinema	0	sinema
+amenity	cinema	1	sinemas
+amenity	clinic	0	klinikenn
+amenity	clinic	1	klinikenns
+amenity	club	0	klub
+amenity	club	1	klubs
+amenity	college	0	skol-veur pe skol-uhel
+amenity	college	1	skol-veur pe skol-uhels
+amenity	community_centre	0	sal liezimplij
+amenity	community_centre	1	sal liezimplijs
+amenity	courthouse	0	lez-varn
+amenity	courthouse	1	lez-varns
+amenity	crematorium	0	krematoriom
+amenity	crematorium	1	krematorioms
+amenity	dentist	0	dentour
+amenity	dentist	1	dentours
+amenity	doctors	0	mezeien
+amenity	doctors	1	mezeiens
+amenity	dormitory	0	kouskva
+amenity	dormitory	1	kouskvas
+amenity	drinking_water	0	dour mat da evañ
+amenity	drinking_water	1	dour mat da evañs
+amenity	driving_school	0	skol bleinañ
+amenity	driving_school	1	skol bleinañs
+amenity	embassy	0	kannati
+amenity	embassy	1	kannatis
+amenity	emergency_phone	0	pellgomzer evit an trummadoù
+amenity	emergency_phone	1	pellgomzer evit an trummadoùs
+amenity	fast_food	0	fast food
+amenity	fast_food	1	fast foods
+amenity	ferry_terminal	0	porzh karrlistri
+amenity	ferry_terminal	1	porzh karrlistris
+amenity	fire_hydrant	0	dour evit an tan
+amenity	fire_hydrant	1	dour evit an tans
+amenity	fire_station	0	kazarn pomperien
+amenity	fire_station	1	kazarn pomperiens
+amenity	fountain	0	feunteun
+amenity	fountain	1	feunteuns
+amenity	fuel	0	trelosk
+amenity	fuel	1	trelosks
+amenity	grave_yard	0	bered
+amenity	grave_yard	1	bereds
+amenity	gym	0	fitness/jiminas
+amenity	gym	1	fitness/jiminass
+amenity	hall	0	sal
+amenity	hall	1	sals
+amenity	health_centre	0	kreizenn yec'hed
+amenity	health_centre	1	kreizenn yec'heds
+amenity	hospital	0	ospital
+amenity	hospital	1	ospitals
+amenity	hotel	0	leti
+amenity	hotel	1	letis
+amenity	hunting_stand	0	stand tennañ
+amenity	hunting_stand	1	stand tennañs
+amenity	ice_cream	0	dienn skorn
+amenity	ice_cream	1	dienn skorns
+amenity	kindergarten	0	liorzh ar vugale
+amenity	kindergarten	1	liorzh ar vugales
+amenity	library	0	levraoueg
+amenity	library	1	levraouegs
+amenity	market	0	marc'had
+amenity	market	1	marc'hads
+amenity	marketplace	0	marc'hallac'h
+amenity	marketplace	1	marc'hallac'hs
+amenity	mountain_rescue	0	sikourioù er menezioù
+amenity	mountain_rescue	1	sikourioù er menezioùs
+amenity	nightclub	0	klub-noz
+amenity	nightclub	1	klub-nozs
+amenity	nursery	0	diwallerezh
+amenity	nursery	1	diwallerezhs
+amenity	nursing_home	0	ti yec'hed
+amenity	nursing_home	1	ti yec'heds
+amenity	office	0	burev
+amenity	office	1	burevs
+amenity	park	0	park
+amenity	park	1	parks
+amenity	parking	0	parklec'h
+amenity	parking	1	parklec'hs
+amenity	pharmacy	0	apotikerezh
+amenity	pharmacy	1	apotikerezhs
+amenity	place_of_worship	0	lec'h azeuliñ
+amenity	place_of_worship	1	lec'h azeuliñs
+amenity	police	0	polis
+amenity	police	1	poliss
+amenity	post_box	0	boest-lizheroù
+amenity	post_box	1	boest-lizheroùs
+amenity	post_office	0	ti-post
+amenity	post_office	1	ti-posts
+amenity	preschool	0	rakskol
+amenity	preschool	1	rakskols
+amenity	prison	0	toull-bac'h
+amenity	prison	1	toull-bac'hs
+amenity	pub	0	tavarn
+amenity	pub	1	tavarns
+amenity	public_building	0	savadur foran
+amenity	public_building	1	savadur forans
+amenity	public_market	0	marc'had foran
+amenity	public_market	1	marc'had forans
+amenity	reception_area	0	tachenn degemer
+amenity	reception_area	1	tachenn degemers
+amenity	recycling	0	lec'h adaozañ
+amenity	recycling	1	lec'h adaozañs
+amenity	restaurant	0	preti
+amenity	restaurant	1	pretis
+amenity	retirement_home	0	ti-retredidi
+amenity	retirement_home	1	ti-retredidis
+amenity	sauna	0	saona
+amenity	sauna	1	saonas
+amenity	school	0	skol
+amenity	school	1	skols
+amenity	shelter	0	gwasked
+amenity	shelter	1	gwaskeds
+amenity	shop	0	stal
+amenity	shop	1	stals
+amenity	shopping	0	prenadennoù
+amenity	shopping	1	prenadennoùs
+amenity	social_club	0	klub sokial
+amenity	social_club	1	klub sokials
+amenity	studio	0	studio
+amenity	studio	1	studios
+amenity	supermarket	0	gourmarc'had
+amenity	supermarket	1	gourmarc'hads
+amenity	taxi	0	taksi
+amenity	taxi	1	taksis
+amenity	telephone	0	pellgomzer foran
+amenity	telephone	1	pellgomzer forans
+amenity	theatre	0	c'hoariva
+amenity	theatre	1	c'hoarivas
+amenity	toilets	0	privezioù
+amenity	toilets	1	privezioùs
+amenity	townhall	0	ti-kêr
+amenity	townhall	1	ti-kêrs
+amenity	university	0	skol-veur
+amenity	university	1	skol-veurs
+amenity	vending_machine	0	ingaler emgefre
+amenity	vending_machine	1	ingaler emgefres
+amenity	veterinary	0	surjianerezh evit al loened
+amenity	veterinary	1	surjianerezh evit al loeneds
+amenity	village_hall	0	sal ar gumun
+amenity	village_hall	1	sal ar gumuns
+amenity	waste_basket	0	pod-lastez
+amenity	waste_basket	1	pod-lastezs
+amenity	wifi	0	moned wifi
+amenity	wifi	1	moned wifis
+amenity	youth_centre	0	kreizenn evit ar re yaouank
+amenity	youth_centre	1	kreizenn evit ar re yaouanks
+boundary	administrative	0	bevennoù melestradurel
+boundary	administrative	1	bevennoù melestradurels
+building	apartments	0	kendi
+building	apartments	1	kendis
+building	block	0	kendi
+building	block	1	kendis
+building	bunker	0	bunker
+building	bunker	1	bunkers
+building	chapel	0	chapel
+building	chapel	1	chapels
+building	church	0	iliz
+building	church	1	ilizs
+building	city_hall	0	ti-kêr
+building	city_hall	1	ti-kêrs
+building	commercial	0	savadur gant burevioù
+building	commercial	1	savadur gant burevioùs
+building	dormitory	0	kouskva
+building	dormitory	1	kouskvas
+building	entrance	0	dont-tre ar savadur
+building	entrance	1	dont-tre ar savadurs
+building	faculty	0	savadur kevrenn
+building	faculty	1	savadur kevrenns
+building	farm	0	savadur feurm
+building	farm	1	savadur feurms
+building	flats	0	ranndioù
+building	flats	1	ranndioùs
+building	garage	0	karrdi
+building	garage	1	karrdis
+building	hall	0	sal
+building	hall	1	sals
+building	hospital	0	savadur ospital
+building	hospital	1	savadur ospitals
+building	hotel	0	leti
+building	hotel	1	letis
+building	house	0	ti
+building	house	1	tis
+building	industrial	0	savadurioù greantel
+building	industrial	1	savadurioù greantels
+building	office	0	savadur burevioù
+building	office	1	savadur burevioùs
+building	public	0	savadur foran
+building	public	1	savadur forans
+building	residential	0	savadur annez
+building	residential	1	savadur annezs
+building	retail	0	stal
+building	retail	1	stals
+building	school	0	savadur skol
+building	school	1	savadur skols
+building	shop	0	stal
+building	shop	1	stals
+building	stadium	0	stad
+building	stadium	1	stads
+building	store	0	stal
+building	store	1	stals
+building	terrace	0	savenn
+building	terrace	1	savenns
+building	tower	0	tour
+building	tower	1	tours
+building	train_station	0	porzh-houarn
+building	train_station	1	porzh-houarns
+building	university	0	savadur skol-veur
+building	university	1	savadur skol-veurs
+building	&quot;yes&quot;	0	savadur
+building	&quot;yes&quot;	1	savadurs
+highway	bridleway	0	hent evit ar varc'hegerien
+highway	bridleway	1	hent evit ar varc'hegeriens
+highway	bus_guideway	0	hent kirri boutin hentet
+highway	bus_guideway	1	hent kirri boutin hentets
+highway	bus_stop	0	arsav bus
+highway	bus_stop	1	arsav buss
+highway	byway	0	hent eil renk
+highway	byway	1	hent eil renks
+highway	construction	0	gourhent o vezañ savet
+highway	construction	1	gourhent o vezañ savets
+highway	cycleway	0	roudenn divrodegoù
+highway	cycleway	1	roudenn divrodegoùs
+highway	distance_marker	0	bonn kilometroù
+highway	distance_marker	1	bonn kilometroùs
+highway	emergency_access_point	0	poent moned trummadoù
+highway	emergency_access_point	1	poent moned trummadoùs
+highway	footway	0	gwenodenn evit an droadeien
+highway	footway	1	gwenodenn evit an droadeiens
+highway	ford	0	roudour
+highway	ford	1	roudours
+highway	gate	0	dor
+highway	gate	1	dors
+highway	living_street	0	straed annez
+highway	living_street	1	straed annezs
+highway	minor	0	hent dister
+highway	minor	1	hent disters
+highway	motorway	0	gourhent
+highway	motorway	1	gourhents
+highway	motorway_junction	0	liammadur gourhent
+highway	motorway_junction	1	liammadur gourhents
+highway	motorway_link	0	hentoù gourhentet
+highway	motorway_link	1	hentoù gourhentets
+highway	path	0	gwenodenn
+highway	path	1	gwenodenns
+highway	pedestrian	0	hent evit an droadeien
+highway	pedestrian	1	hent evit an droadeiens
+highway	platform	0	leurenn
+highway	platform	1	leurenns
+highway	primary	0	hent kentañ renk
+highway	primary	1	hent kentañ renks
+highway	primary_link	0	hent kentañ
+highway	primary_link	1	hent kentañs
+highway	raceway	0	redva
+highway	raceway	1	redvas
+highway	residential	0	takad annezet
+highway	residential	1	takad annezets
+highway	road	0	hent
+highway	road	1	hents
+highway	secondary	0	hent eil renk
+highway	secondary	1	hent eil renks
+highway	secondary_link	0	hent a-eil
+highway	secondary_link	1	hent a-eils
+highway	service	0	hent ar servijoù
+highway	service	1	hent ar servijoùs
+highway	services	0	servijoù gourhent
+highway	services	1	servijoù gourhents
+highway	steps	0	diri
+highway	steps	1	diris
+highway	stile	0	skalier
+highway	stile	1	skaliers
+highway	tertiary	0	hent trede renk
+highway	tertiary	1	hent trede renks
+highway	track	0	roudenn
+highway	track	1	roudenns
+highway	trail	0	roudenn
+highway	trail	1	roudenns
+highway	trunk	0	hent-tizh
+highway	trunk	1	hent-tizhs
+highway	trunk_link	0	hent-tizh
+highway	trunk_link	1	hent-tizhs
+highway	unclassified	0	hent bihan
+highway	unclassified	1	hent bihans
+highway	unsurfaced	0	hent nann-gwisket
+highway	unsurfaced	1	hent nann-gwiskets
+historic	archaeological_site	0	lec'hienn henoniel
+historic	archaeological_site	1	lec'hienn henoniels
+historic	battlefield	0	takad emgann
+historic	battlefield	1	takad emganns
+historic	boundary_stone	0	bonn harzoù
+historic	boundary_stone	1	bonn harzoùs
+historic	building	0	savadur
+historic	building	1	savadurs
+historic	castle	0	kastell
+historic	castle	1	kastells
+historic	church	0	iliz
+historic	church	1	ilizs
+historic	house	0	ti
+historic	house	1	tis
+historic	icon	0	arlun
+historic	icon	1	arluns
+historic	manor	0	maner
+historic	manor	1	maners
+historic	memorial	0	kounlec'h
+historic	memorial	1	kounlec'hs
+historic	mine	0	mengleuz
+historic	mine	1	mengleuzs
+historic	monument	0	monumant
+historic	monument	1	monumants
+historic	museum	0	mirdi
+historic	museum	1	mirdis
+historic	ruins	0	dismantroù
+historic	ruins	1	dismantroùs
+historic	tower	0	tour
+historic	tower	1	tours
+historic	wayside_cross	0	kroaz
+historic	wayside_cross	1	kroazs
+historic	wayside_shrine	0	ti-pediñ
+historic	wayside_shrine	1	ti-pediñs
+historic	wreck	0	peñse
+historic	wreck	1	peñses
+landuse	allotments	0	liorzhoù familh
+landuse	allotments	1	liorzhoù familhs
+landuse	basin	0	poull
+landuse	basin	1	poulls
+landuse	brownfield	0	tachenn rezet
+landuse	brownfield	1	tachenn rezets
+landuse	cemetery	0	bered
+landuse	cemetery	1	bereds
+landuse	commercial	0	takad kenwerzh
+landuse	commercial	1	takad kenwerzhs
+landuse	conservation	0	tachenn gwarezet
+landuse	conservation	1	tachenn gwarezets
+landuse	construction	0	savadur
+landuse	construction	1	savadurs
+landuse	farm	0	atant
+landuse	farm	1	atants
+landuse	farmland	0	tachennoù labour-douar
+landuse	farmland	1	tachennoù labour-douars
+landuse	farmyard	0	mereuri
+landuse	farmyard	1	mereuris
+landuse	forest	0	koadeg
+landuse	forest	1	koadegs
+landuse	grass	0	geot
+landuse	grass	1	geots
+landuse	greenfield	0	tachenn da sevel tiez
+landuse	greenfield	1	tachenn da sevel tiezs
+landuse	industrial	0	takad greantel
+landuse	industrial	1	takad greantels
+landuse	landfill	0	diskarg
+landuse	landfill	1	diskargs
+landuse	meadow	0	prad
+landuse	meadow	1	prads
+landuse	military	0	takad milourel
+landuse	military	1	takad milourels
+landuse	mine	0	mengleuz
+landuse	mine	1	mengleuzs
+landuse	mountain	0	menez
+landuse	mountain	1	menezs
+landuse	nature_reserve	0	gwarezva natur
+landuse	nature_reserve	1	gwarezva naturs
+landuse	park	0	park
+landuse	park	1	parks
+landuse	piste	0	roudenn
+landuse	piste	1	roudenns
+landuse	plaza	0	plasenn
+landuse	plaza	1	plasenns
+landuse	quarry	0	mengleuz
+landuse	quarry	1	mengleuzs
+landuse	railway	0	hent-houarn
+landuse	railway	1	hent-houarns
+landuse	recreation_ground	0	tachenn c'hoari
+landuse	recreation_ground	1	tachenn c'hoaris
+landuse	reservoir	0	mirlenn
+landuse	reservoir	1	mirlenns
+landuse	residential	0	takad annez
+landuse	residential	1	takad annezs
+landuse	retail	0	takad kenwerzh
+landuse	retail	1	takad kenwerzhs
+landuse	village_green	0	tachenn foran gant geot
+landuse	village_green	1	tachenn foran gant geots
+landuse	vineyard	0	gwinieg
+landuse	vineyard	1	gwiniegs
+landuse	wetland	0	takad gleborek
+landuse	wetland	1	takad gleboreks
+landuse	wood	0	koad
+landuse	wood	1	koads
+leisure	beach_resort	0	kêr-gouronkañ
+leisure	beach_resort	1	kêr-gouronkañs
+leisure	common	0	tachenn kumun
+leisure	common	1	tachenn kumuns
+leisure	fishing	0	takad pesketa
+leisure	fishing	1	takad pesketas
+leisure	garden	0	liorzh
+leisure	garden	1	liorzhs
+leisure	golf_course	0	tachenn golf
+leisure	golf_course	1	tachenn golfs
+leisure	ice_rink	0	poull-ruzikat
+leisure	ice_rink	1	poull-ruzikats
+leisure	marina	0	porzh-bageal
+leisure	marina	1	porzh-bageals
+leisure	miniature_golf	0	golfig
+leisure	miniature_golf	1	golfigs
+leisure	nature_reserve	0	gwarezva natur
+leisure	nature_reserve	1	gwarezva naturs
+leisure	park	0	park
+leisure	park	1	parks
+leisure	pitch	0	tachenn sport
+leisure	pitch	1	tachenn sports
+leisure	playground	0	tachenn c'hoari
+leisure	playground	1	tachenn c'hoaris
+leisure	recreation_ground	0	tachenn c'hoari
+leisure	recreation_ground	1	tachenn c'hoaris
+leisure	slipway	0	kal
+leisure	slipway	1	kals
+leisure	sports_centre	0	kreizenn sport
+leisure	sports_centre	1	kreizenn sports
+leisure	stadium	0	stad
+leisure	stadium	1	stads
+leisure	swimming_pool	0	poull-neuial
+leisure	swimming_pool	1	poull-neuials
+leisure	track	0	roudenn redek
+leisure	track	1	roudenn redeks
+leisure	water_park	0	kreizenn dour
+leisure	water_park	1	kreizenn dours
+natural	bay	0	bae
+natural	bay	1	baes
+natural	beach	0	traezhenn
+natural	beach	1	traezhenns
+natural	cape	0	kab
+natural	cape	1	kabs
+natural	cave_entrance	0	treuzoù mougev
+natural	cave_entrance	1	treuzoù mougevs
+natural	channel	0	kanol
+natural	channel	1	kanols
+natural	cliff	0	tornaod
+natural	cliff	1	tornaods
+natural	coastline	0	arvor
+natural	coastline	1	arvors
+natural	crater	0	toull-diskarg
+natural	crater	1	toull-diskargs
+natural	feature	0	elfenn
+natural	feature	1	elfenns
+natural	fell	0	fell
+natural	fell	1	fells
+natural	fjord	0	fjord
+natural	fjord	1	fjords
+natural	geyser	0	geiser
+natural	geyser	1	geisers
+natural	glacier	0	skorneg
+natural	glacier	1	skornegs
+natural	heath	0	brug
+natural	heath	1	brugs
+natural	hill	0	torgenn
+natural	hill	1	torgenns
+natural	island	0	enez
+natural	island	1	enezs
+natural	land	0	douar
+natural	land	1	douars
+natural	marsh	0	geun
+natural	marsh	1	geuns
+natural	moor	0	lanneier
+natural	moor	1	lanneiers
+natural	mud	0	fank
+natural	mud	1	fanks
+natural	peak	0	pikern
+natural	peak	1	pikerns
+natural	point	0	poent
+natural	point	1	poents
+natural	reef	0	karreg
+natural	reef	1	karregs
+natural	ridge	0	kribenn
+natural	ridge	1	kribenns
+natural	river	0	stêr
+natural	river	1	stêrs
+natural	rock	0	roc'h
+natural	rock	1	roc'hs
+natural	scree	0	disac'hadur
+natural	scree	1	disac'hadurs
+natural	scrub	0	strouezh
+natural	scrub	1	strouezhs
+natural	shoal	0	klosenn
+natural	shoal	1	klosenns
+natural	spring	0	lamm-dour
+natural	spring	1	lamm-dours
+natural	strait	0	strizh-mor
+natural	strait	1	strizh-mors
+natural	tree	0	gwezenn
+natural	tree	1	gwezenns
+natural	valley	0	traoñienn
+natural	valley	1	traoñienns
+natural	volcano	0	menez-tan
+natural	volcano	1	menez-tans
+natural	water	0	dour
+natural	water	1	dours
+natural	wetland	0	takad gleborek
+natural	wetland	1	takad gleboreks
+natural	wetlands	0	takadoù gleborek
+natural	wetlands	1	takadoù gleboreks
+natural	wood	0	koad
+natural	wood	1	koads
+place	city	0	meurgêr
+place	city	1	meurgêrs
+place	country	0	bro
+place	country	1	bros
+place	county	0	kontelezh
+place	county	1	kontelezhs
+place	farm	0	atant
+place	farm	1	atants
+place	hamlet	0	pennkêr
+place	hamlet	1	pennkêrs
+place	house	0	ti
+place	house	1	tis
+place	houses	0	tiez
+place	houses	1	tiezs
+place	island	0	enez
+place	island	1	enezs
+place	islet	0	enezennig
+place	islet	1	enezennigs
+place	locality	0	lec'hiadenn
+place	locality	1	lec'hiadenns
+place	moor	0	lanneg
+place	moor	1	lannegs
+place	municipality	0	kumun
+place	municipality	1	kumuns
+place	postcode	0	kod post
+place	postcode	1	kod posts
+place	region	0	rannvro
+place	region	1	rannvros
+place	sea	0	mor
+place	sea	1	mors
+place	state	0	stad
+place	state	1	stads
+place	subdivision	0	eilrannad
+place	subdivision	1	eilrannads
+place	suburb	0	karter
+place	suburb	1	karters
+place	town	0	kêr
+place	town	1	kêrs
+place	unincorporated_area	0	takad diaoz
+place	unincorporated_area	1	takad diaozs
+place	village	0	kêriadenn
+place	village	1	kêriadenns
+railway	abandoned	0	hent-houarn dilezet
+railway	abandoned	1	hent-houarn dilezets
+railway	construction	0	hent-houarn war sevel
+railway	construction	1	hent-houarn war sevels
+railway	disused	0	hent-houarn dizimplijet
+railway	disused	1	hent-houarn dizimplijets
+railway	disused_station	0	porzh-houarn dizimplijet
+railway	disused_station	1	porzh-houarn dizimplijets
+railway	funicular	0	hent-houarn fundren
+railway	funicular	1	hent-houarn fundrens
+railway	halt	0	chom a-sav an tren
+railway	halt	1	chom a-sav an trens
+railway	historic_station	0	lec'h chom a-sav istorel an tren
+railway	historic_station	1	lec'h chom a-sav istorel an trens
+railway	junction	0	kej hent-houarn
+railway	junction	1	kej hent-houarns
+railway	level_crossing	0	treuzenn hent-houarn
+railway	level_crossing	1	treuzenn hent-houarns
+railway	light_rail	0	hent-houarn bihan
+railway	light_rail	1	hent-houarn bihans
+railway	monorail	0	monorail
+railway	monorail	1	monorails
+railway	narrow_gauge	0	hent-houarn strizh
+railway	narrow_gauge	1	hent-houarn strizhs
+railway	platform	0	pondalez hent-houarn
+railway	platform	1	pondalez hent-houarns
+railway	preserved	0	hent-houarn miret
+railway	preserved	1	hent-houarn mirets
+railway	spur	0	hent-houarn kevreañ
+railway	spur	1	hent-houarn kevreañs
+railway	station	0	porzh-houarn
+railway	station	1	porzh-houarns
+railway	subway	0	arsav metro
+railway	subway	1	arsav metros
+railway	subway_entrance	0	dont-tre ar metro
+railway	subway_entrance	1	dont-tre ar metros
+railway	switch	0	hentoù-houarn heñchañ
+railway	switch	1	hentoù-houarn heñchañs
+railway	tram	0	tramgarr
+railway	tram	1	tramgarrs
+railway	tram_stop	0	lec'h chom a-sav an tram
+railway	tram_stop	1	lec'h chom a-sav an trams
+railway	yard	0	hent rummañ
+railway	yard	1	hent rummañs
+shop	alcohol	0	gwezher alkool
+shop	alcohol	1	gwezher alkools
+shop	apparel	0	stal dilhad
+shop	apparel	1	stal dilhads
+shop	art	0	stal arz
+shop	art	1	stal arzs
+shop	bakery	0	baraerezh
+shop	bakery	1	baraerezhs
+shop	beauty	0	stal produioù kened
+shop	beauty	1	stal produioù keneds
+shop	beverages	0	stal evajoù
+shop	beverages	1	stal evajoùs
+shop	bicycle	0	stal marc'hoù-houarn
+shop	bicycle	1	stal marc'hoù-houarns
+shop	books	0	levrdi
+shop	books	1	levrdis
+shop	butcher	0	kiger
+shop	butcher	1	kigers
+shop	car	0	stal kirri
+shop	car	1	stal kirris
+shop	car_dealer	0	gwerzher kirri
+shop	car_dealer	1	gwerzher kirris
+shop	car_parts	0	pezhioù evit ar c'hirri
+shop	car_parts	1	pezhioù evit ar c'hirris
+shop	car_repair	0	dresañ kirri
+shop	car_repair	1	dresañ kirris
+shop	carpet	0	stal pallennoù
+shop	carpet	1	stal pallennoùs
+shop	charity	0	stal madobererezh
+shop	charity	1	stal madobererezhs
+shop	chemist	0	stal produioù yec'hederezh
+shop	chemist	1	stal produioù yec'hederezhs
+shop	clothes	0	stal dilhad
+shop	clothes	1	stal dilhads
+shop	computer	0	stal urzhiataerioù
+shop	computer	1	stal urzhiataerioùs
+shop	confectionery	0	koñfizerezh
+shop	confectionery	1	koñfizerezhs
+shop	convenience	0	ispiserezh
+shop	convenience	1	ispiserezhs
+shop	copyshop	0	stal luc'heilañ
+shop	copyshop	1	stal luc'heilañs
+shop	cosmetics	0	stal gwezeladoù
+shop	cosmetics	1	stal gwezeladoùs
+shop	department_store	0	gour stalioù
+shop	department_store	1	gour stalioùs
+shop	discount	0	stal discount
+shop	discount	1	stal discounts
+shop	doityourself	0	stal bitellat
+shop	doityourself	1	stal bitellats
+shop	drugstore	0	apotikerezh
+shop	drugstore	1	apotikerezhs
+shop	dry_cleaning	0	netadur sec'h
+shop	dry_cleaning	1	netadur sec'hs
+shop	electronics	0	stal traoù eletronek
+shop	electronics	1	stal traoù eletroneks
+shop	estate_agent	0	kourater tiez
+shop	estate_agent	1	kourater tiezs
+shop	farm	0	stal evit al labour-douar
+shop	farm	1	stal evit al labour-douars
+shop	fashion	0	stal giz
+shop	fashion	1	stal gizs
+shop	fish	0	peskerezh
+shop	fish	1	peskerezhs
+shop	florist	0	bokedour
+shop	florist	1	bokedours
+shop	food	0	stal voued
+shop	food	1	stal voueds
+shop	funeral_directors	0	kañvlidoù
+shop	funeral_directors	1	kañvlidoùs
+shop	furniture	0	stal arrebeuri
+shop	furniture	1	stal arrebeuris
+shop	gallery	0	palier
+shop	gallery	1	paliers
+shop	garden_centre	0	stal liorzhañ
+shop	garden_centre	1	stal liorzhañs
+shop	general	0	stal hollek
+shop	general	1	stal holleks
+shop	gift	0	stal profoù
+shop	gift	1	stal profoùs
+shop	greengrocer	0	gwerzher frouezh ha legumaj
+shop	greengrocer	1	gwerzher frouezh ha legumajs
+shop	grocery	0	ispiserezh
+shop	grocery	1	ispiserezhs
+shop	hairdresser	0	perukenner
+shop	hairdresser	1	perukenners
+shop	hardware	0	stal urzhiataerezh
+shop	hardware	1	stal urzhiataerezhs
+shop	hifi	0	stal hi-fi
+shop	hifi	1	stal hi-fis
+shop	insurance	0	asurañs
+shop	insurance	1	asurañss
+shop	jewelry	0	bravigerezh
+shop	jewelry	1	bravigerezhs
+shop	kiosk	0	kiosk
+shop	kiosk	1	kiosks
+shop	laundry	0	kanndi
+shop	laundry	1	kanndis
+shop	mall	0	palier kenwerzh
+shop	mall	1	palier kenwerzhs
+shop	market	0	marc'had
+shop	market	1	marc'hads
+shop	mobile_phone	0	stal pellgomzerioù hezoug
+shop	mobile_phone	1	stal pellgomzerioù hezougs
+shop	motorcycle	0	stal marc'hoù-tan
+shop	motorcycle	1	stal marc'hoù-tans
+shop	music	0	stal sonerezh
+shop	music	1	stal sonerezhs
+shop	newsagent	0	gwerzher kazetennoù
+shop	newsagent	1	gwerzher kazetennoùs
+shop	optician	0	luneder
+shop	optician	1	luneders
+shop	organic	0	stal boued bio
+shop	organic	1	stal boued bios
+shop	outdoor	0	stal obererezhioù en diavaez
+shop	outdoor	1	stal obererezhioù en diavaezs
+shop	pet	0	stal loened
+shop	pet	1	stal loeneds
+shop	photo	0	stal luc'hskeudenniñ
+shop	photo	1	stal luc'hskeudenniñs
+shop	salon	0	saloñs
+shop	salon	1	saloñss
+shop	shoes	0	stal voteier
+shop	shoes	1	stal voteiers
+shop	shopping_centre	0	kreizenn-genwerzh
+shop	shopping_centre	1	kreizenn-genwerzhs
+shop	sports	0	stal sport
+shop	sports	1	stal sports
+shop	stationery	0	paperaerezh
+shop	stationery	1	paperaerezhs
+shop	supermarket	0	gourmarc'had
+shop	supermarket	1	gourmarc'hads
+shop	toys	0	stal c'hoarielloù
+shop	toys	1	stal c'hoarielloùs
+shop	travel_agency	0	ajañs-veaj
+shop	travel_agency	1	ajañs-veajs
+shop	video	0	stal videoioù
+shop	video	1	stal videoioùs
+shop	wine	0	kavour gwin
+shop	wine	1	kavour gwins
+tourism	alpine_hut	0	ti repu
+tourism	alpine_hut	1	ti repus
+tourism	artwork	0	oberenn arz
+tourism	artwork	1	oberenn arzs
+tourism	attraction	0	tra zedennus
+tourism	attraction	1	tra zedennuss
+tourism	bed_and_breakfast	0	bod ha boued
+tourism	bed_and_breakfast	1	bod ha boueds
+tourism	cabin	0	kabanenn
+tourism	cabin	1	kabanenns
+tourism	camp_site	0	tachenn gampiñ
+tourism	camp_site	1	tachenn gampiñs
+tourism	caravan_site	0	tachenn karavanennoù
+tourism	caravan_site	1	tachenn karavanennoùs
+tourism	chalet	0	ti-menez
+tourism	chalet	1	ti-menezs
+tourism	guest_house	0	ti ostizien
+tourism	guest_house	1	ti ostiziens
+tourism	hostel	0	herberc'h
+tourism	hostel	1	herberc'hs
+tourism	hotel	0	leti
+tourism	hotel	1	letis
+tourism	information	0	titouroù
+tourism	information	1	titouroùs
+tourism	lean_to	0	stand
+tourism	lean_to	1	stands
+tourism	motel	0	motel
+tourism	motel	1	motels
+tourism	museum	0	mirdi
+tourism	museum	1	mirdis
+tourism	picnic_site	0	lec'hienn biknikañ
+tourism	picnic_site	1	lec'hienn biknikañs
+tourism	theme_park	0	park tematek
+tourism	theme_park	1	park temateks
+tourism	valley	0	traoñienn
+tourism	valley	1	traoñienns
+tourism	viewpoint	0	gwelva
+tourism	viewpoint	1	gwelvas
+tourism	zoo	0	zoo
+tourism	zoo	1	zoos
+waterway	boatyard	0	chanter bigi
+waterway	boatyard	1	chanter bigis
+waterway	canal	0	kanol
+waterway	canal	1	kanols
+waterway	connector	0	kevreadur dourredennoù
+waterway	connector	1	kevreadur dourredennoùs
+waterway	dam	0	chaoser
+waterway	dam	1	chaosers
+waterway	derelict_canal	0	kanol dilezet
+waterway	derelict_canal	1	kanol dilezets
+waterway	ditch	0	foz
+waterway	ditch	1	fozs
+waterway	dock	0	dok
+waterway	dock	1	doks
+waterway	drain	0	dizourer
+waterway	drain	1	dizourers
+waterway	lock	0	skluz
+waterway	lock	1	skluzs
+waterway	lock_gate	0	dor skluz
+waterway	lock_gate	1	dor skluzs
+waterway	mineral_spring	0	mammenn dour melar
+waterway	mineral_spring	1	mammenn dour melars
+waterway	mooring	0	fes
+waterway	mooring	1	fess
+waterway	rapids	0	taranoù
+waterway	rapids	1	taranoùs
+waterway	river	0	stêr
+waterway	river	1	stêrs
+waterway	riverbank	0	strad ar stêr
+waterway	riverbank	1	strad ar stêrs
+waterway	stream	0	gwazh-dour
+waterway	stream	1	gwazh-dours
+waterway	wadi	0	oued
+waterway	wadi	1	oueds
+waterway	water_point	0	lec'h dour
+waterway	water_point	1	lec'h dours
+waterway	waterfall	0	lamm-dour
+waterway	waterfall	1	lamm-dours
+waterway	weir	0	stankell
+waterway	weir	1	stankells

@@ -1,0 +1,4 @@
+admin_codes:
+    admin1: state
+    # These are mostly admin_level=6, which maps to city in OSM
+    admin2: city

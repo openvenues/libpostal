@@ -1,0 +1,795 @@
+# sv.yaml
+# -------
+# Swedish language specification.
+
+components:
+    level:
+        null_probability: 0.85
+        alphanumeric_probability: 0.1
+        standalone_probability: 0.05
+
+    staircase:
+        null_probability: 0.99
+        alphanumeric_probability: 0.01
+
+    entrance:
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
+
+    unit:
+        null_probability: 0.75
+        alphanumeric_probability: 0.25
+
+numbers:
+    default: &nummer
+        canonical: nummer
+        abbreviated: nr
+        sample: true
+        # Probabilities
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        sample_exclude:
+            - "#"
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: "#"
+            direction: left
+
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.6
+
+
+house_numbers:
+    alphanumeric:
+        default: *nummer
+
+    alphanumeric_phrase_probability: 0.0001
+
+
+and:
+    default: &och
+        canonical: och
+        abbreviated: "&"
+        canonical_probability: 0.2
+        abbreviated_probability: 0.75
+        sample: true
+        sample_probability: 0.05
+
+cross_streets:
+    and: *och
+    corner_of: &hornet_av
+        canonical: hörnet av
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    at_the_corner_of: &i_hornet_av
+        canonical: i hörnet av
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    intersection:
+        default: *och
+        probability: 0.7
+        alternatives:
+            - alternative: *hornet_av
+              probability: 0.15
+            - alternative: *i_hornet_av
+              probability: 0.15
+
+    between:
+        canonical: mellan
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probability: 0.5
+
+
+levels:
+    vaningen: &vaningen
+        canonical: våningen
+        abbreviated: vån
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.3
+        sample_probability: 0.2
+        ordinal:
+            direction: right
+        numeric_probability: 0.0
+        ordinal_probability: 1.0
+    vaning: &vaning
+        canonical: våning
+        abbreviated: vån
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.3
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            direction_probability: 0.9
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        ordinal:
+            direction: left
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        numeric_probability: 0.8
+        ordinal_probability: 0.2
+    plan: &plan
+        canonical: plan
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    entreplan: &entreplan
+        canonical: entréplan
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    trappa_upp: &trappa_upp
+        canonical: trappa upp
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        number_min_abs_value: 2
+        number_max_abs_value: 2
+        number_subtract_abs_value: 1
+        numeric_probability: 0.8
+        ordinal_probability: 0.2
+    trappor_upp: &trappor_upp
+        canonical: trappor upp
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        number_min_abs_value: 3
+        number_subtract_abs_value: 1
+        numeric_probability: 0.8
+        ordinal_probability: 0.2
+    trappa: &trappa
+        canonical: trappa
+        abbreviated: tr
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.6
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        number_min_abs_value: 2
+        number_max_abs_value: 2
+        number_subtract_abs_value: 1
+        numeric_probability: 0.8
+        ordinal_probability: 0.2
+    trappor: &trappor
+        canonical: trappor
+        abbreviated: tr
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.6
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        number_min_abs_value: 3
+        number_subtract_abs_value: 1
+        numeric_probability: 0.8
+        ordinal_probability: 0.2
+    bottenvaning: &bottenvaning
+        canonical: bottenvåning
+        abbreviated: bv
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+    vindsvaningen: &vindsvaningen
+        canonical: vindsvåningen
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        standalone_probability: 1.0
+    vinds: &vinds
+        canonical: vinds
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        standalone_probability: 1.0
+    kallare: &kallare
+        canonical: källare
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        # e.g. 1 källare
+        numeric:
+            direction: right
+            direction_probability: 0.8
+        # e.g. k1
+        numeric_affix:
+            affix: k
+            direction: left
+        # e.g. 1:a k
+        ordinal:
+            direction: right
+        standalone_probability: 0.9
+        number_abs_value: true
+        number_min_abs_value: 1
+        numeric_probability: 0.005
+        numeric_affix_probability: 0.09
+        ordinal_probability: 0.005
+    aliases:
+        "<-1":
+            default: *kallare
+            probability: 0.95
+            alternatives:
+                - alternative: *vaning
+                  probability: 0.025
+                - alternative: *vaningen
+                  probability: 0.025
+        "-1":
+            default: *kallare
+            probability: 0.9
+            alternatives:
+                - alternative: *vaning
+                  probability: 0.05
+                - alternative: *vaningen
+                  probability: 0.05
+        "0":
+            default: *bottenvaning
+            probability: 0.6
+            alternatives:
+                - alternative: *entreplan
+                  probability: 0.2
+                - alternative: *vaningen
+                  probability: 0.1
+                - alternative: *vaning
+                  probability: 0.1
+        "1":
+            default: *bottenvaning
+            probability: 0.6
+            alternatives:
+                - alternative: *entreplan
+                  probability: 0.2
+                - alternative: *vaningen
+                  probability: 0.1
+                - alternative: *vaning
+                  probability: 0.1
+        "top":
+            default: *vaningen
+            probability: 0.35
+            alternatives:
+                - alternative: *vaning
+                  probability: 0.35
+                - alternative: *trappor_upp
+                  probability: 0.1
+                - alternative: *trappor
+                  probability: 0.1
+                - alternative: *vindsvaningen
+                  probability: 0.05
+                - alternative: *vinds
+                  probability: 0.05
+
+    numbering_starts_at: 1
+
+    alphanumeric:
+        default: *vaningen
+        probability: 0.25
+        alternatives:
+            - alternative: *vaning
+              probability: 0.2
+            - alternative: *plan
+              probability: 0.05
+            - alternative: *trappa_upp
+              probability: 0.125
+            - alternative: *trappa
+              probability: 0.125
+            - alternative: *trappor_upp
+              probability: 0.125
+            - alternative: *trappor
+              probability: 0.125
+        numeric_probability: 0.99 # With this probability, pick an integer
+        alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
+        numeric_plus_alpha_probability: 0.0001 # e.g. 2A
+        alpha_plus_numeric_probability: 0.0001 # e.g. A2
+
+
+categories:
+    near:
+        default:
+            canonical: i närheten av
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.8
+        alternatives:
+            - alternative:
+                canonical: nära
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.2
+    nearby:
+        default:
+            canonical: i närheten
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.4
+        alternatives:
+            - alternative:
+                canonical: runt här
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.2
+            - alternative:
+                canonical: nära här
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+            - alternative:
+                canonical: nära här
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+            - alternative:
+                canonical: nära
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+            - alternative: 
+                canonical: omkring här
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.1
+    near_me:
+        default:
+            canonical: nära mig
+            sample: true
+            canonical_probability: 0.8
+            sample_probability: 0.2
+        probability: 0.8
+        alternatives:
+            - alternative:
+                canonical: i närheten av mig
+                sample: true
+                canonical_probability: 0.8
+                sample_probability: 0.2
+              probability: 0.2
+
+    in:
+        default:
+            canonical: i
+        probability: 0.8
+        alternatives:
+            - alternative:
+                canonical: på
+              probability: 0.2
+
+
+    # Probabilities of each phrase
+    near_probability: 0.35
+    nearby_probability: 0.2
+    near_me_probability: 0.1
+    in_probability: 0.35
+
+
+directions:
+    right: &hoger
+        canonical: höger
+        sample: true
+        canonical_probability: 0.1
+        sample_probability: 0.9
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: h
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.8
+        numeric_affix_probability: 0.2
+    left: &vanster
+        canonical: vänster
+        sample: true
+        canonical_probability: 0.1
+        sample_probability: 0.9
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: v
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.8
+        numeric_affix_probability: 0.2
+    alternatives:
+        - alternative: *hoger
+          probability: 0.5
+        - alternative: *vanster
+          probability: 0.5
+
+cardinal_directions:
+    east: &ost
+        canonical: öst
+        abbreviated: ö
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: ö
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    eastern: &ostra
+        canonical: östra
+        abbreviated: ö:a
+        canonical_probability: 0.9
+        abbreviated_probability: 0.1
+        numeric:
+            direction: right
+
+    west: &vast
+        canonical: väst
+        abbreviated: v
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: v
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    western: &vastra
+        canonical: västra
+        abbreviated: v:a
+        canonical_probability: 0.9
+        abbreviated_probability: 0.1
+        numeric:
+            direction: right
+
+    north: &norr
+        canonical: norr
+        abbreviated: n
+        canonical_probability: 0.95
+        abbreviated_probability: 0.05
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: n
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    northern: &norra
+        canonical: norra
+        abbreviated: n:a
+        canonical_probability: 0.9
+        abbreviated_probability: 0.1
+
+    south: &sod
+        canonical: söd
+        abbreviated: s
+        sample: true
+        canonical_probability: 0.75
+        abbreviated_probability: 0.1
+        sample_probability: 0.15
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: s
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    southern: &sodra
+        canonical: södra
+        abbreviated: s:a
+        canonical_probability: 0.9
+        abbreviated_probability: 0.1
+
+    alternatives:
+        - alternative: *norr
+          probability: 0.25
+        - alternative: *ost
+          probability: 0.25
+        - alternative: *sod
+          probability: 0.25
+        - alternative: *vast
+          probability: 0.25
+
+entrances:
+    ingang: &ingang
+        canonical: ingång
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    entre: &entre
+        canonical: entré
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Eingang 1, Eingang A, etc.
+    alphanumeric: &entrance_alphanumeric
+        default: *ingang
+        probability: 0.6
+        alternatives:
+            - alternative: *entre
+              probability: 0.4
+        numeric_probability: 0.1 # e.g. Eingang 1
+        alpha_probability: 0.85 # e.g. Eingang A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+staircases:
+    uppgang: &uppgang
+        canonical: uppgång
+        abbreviated: u
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    uppgang_hoger: &uppgang_hoger
+        canonical: uppgång höger
+        abbreviated: uh
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.5
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    uppgang_vanster: &uppgang_vanster
+        canonical: uppgång vänster
+        abbreviated: uv
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.5
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    alphanumeric: &staircase_alphanumeric
+        default: *uppgang
+        probability: 0.6
+        alternatives:
+            - alternative: *uppgang_hoger
+              probability: 0.2
+            - alternative: *uppgang_vanster
+              probability: 0.2
+        numeric_probability: 0.75
+        alpha_probability: 0.2
+        numeric_plus_alpha_probability: 0.025
+        alpha_plus_numeric_probability: 0.025
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: left
+            direction_probability: 0.85
+            modifier:
+                alternatives:
+                    - alternative: *norr
+                    - alternative: *sod
+                    - alternative: *ost
+                    - alternative: *vast
+
+po_boxes:
+    box: &box
+        canonical: box
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2 # Box No 1234
+    postlada: &postlada
+        canonical: postlåda
+        abbreviated: pl
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2 # Pl No 1234
+
+    alphanumeric:
+        sample: false
+        default: *box
+        probability: 0.9
+        alternatives:
+            - alternative: *postlada
+              probability: 0.1
+        numeric_probability: 0.9 # Box 123
+        alpha_probability: 0.05 # Box A
+        numeric_plus_alpha_probability: 0.04 # Box 123G
+        alpha_plus_numeric_probability: 0.01 # Box A123
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.1
+        - length: 5
+          probability: 0.5
+        - length: 6
+          probability: 0.05
+
+
+
+units:
+    lagenhet: &lagenhet
+        canonical: lägenhet
+        abbreviated: lgh
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.5
+        sample_probability: 0.3
+        numeric:
+            direction: left
+            null_phrase_probability: 0.1
+            # Lejlighed nummer 4
+            add_number_phrase: true
+            add_number_phrase_probability: 0.05
+    bostad: &bostad
+        canonical: bostad
+        abbreviated: bst
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.05
+    lagenhetsnummer: &lagenhetsnummer
+        canonical: lägenhetsnummer
+        abbreviated: lgh nr
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    hus: &hus
+        canonical: hus
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    rum: &rum
+        canonical: rum
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    alphanumeric: &unit_alphanumeric
+        default: *lagenhet
+        probability: 0.75
+        alternatives:
+            - alternative: *lagenhetsnummer
+              probability: 0.05
+            - alternative: *hus
+              probability: 0.1
+            - alternative: *rum
+              probability: 0.1
+        numeric_probability: 0.95 # e.g. Lägenhet 1
+        alpha_probability: 0.05 # e.g. Lgh A
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        # Separate random probability for adding directions like 2H, 2V, etc.
+        add_direction: true
+        add_direction_probability: 0.005
+
+        # Add directions for plain numbers
+        add_direction_numeric: true
+        # Add direction only e.g. Lejlighed Igjen
+        add_direction_standalone: true
+
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.2
+
+        # Use the actual floor phrase as long as the whole phrase is numeric
+        # Has the effect of creating Bolignummer-style units
+        use_floor_affix_unit_num_digits: 2
+
+        # In Swedish addresses, the ground level is 10, floors are 11, 12, ... basements are 9, 8, ...
+        use_floor_ground_starts_at: 10
+        # For single digit floors, use 09, 08, etc.
+        use_floor_floor_num_digits: 2
+
+
+countries:
+    # Swedish addresses in Finland
+    fi:
+        units:
+            alphanumeric:
+                default: *bostad
+                probability: 1.0
+                alternatives: []
+
+                add_direction: false
+                add_direction_numeric: false
+                add_direction_standalone: false
+
+                use_floor_probability: 0.1
+
+                use_floor_affix_unit_num_digits: 0
+
+                use_floor_ground_starts_at: 1
+                use_floor_floor_num_digits: 2

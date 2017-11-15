@@ -73,7 +73,11 @@ compras
 concesionario
 concesionario de automóviles|concesionario de automoviles
 consultorio médico|consultorio medico
+conjunto|cjto|conj|cto
+cooperativa|coop
 copistería|copisteria
+corral|crral
+corralillo|crrlo
 correos
 corretaje
 convento|cnvto
@@ -83,12 +87,15 @@ crematorio
 dehesa|dhsa
 de capital variable|de cv|de c v
 dentista
+dirección|dir
 diseminado|disem
 discoteca|disco
+dormitorios
 droguería|drogueria
 dulcería|dulceria
 embajada
 enfermería|enfermeria
+escaleras|escas
 escuela
 escuelas
 estación|estacion|estcn
@@ -96,7 +103,9 @@ estación de autobuses|estacion de autobuses|estcn de autobuses
 estación de tren|estacion de tren|estcn de tren
 estacionamiento|estto
 estadio
+estancias|estancs|ests
 estudio
+extensión|ext|extension
 fábrica|fabrica|fca|fbrca
 farmacia
 ferretería|ferreteria
@@ -113,6 +122,7 @@ gimnasio
 golfito
 grandes almacenes
 granja|granj
+habitación|hab|habitacion
 hacienda|hda
 heladería|heladeria
 hipódromo|hipodromo|hipod
@@ -124,9 +134,9 @@ iglesia|igl|igla
 iglesias|iglas
 inmobiliaria
 instituto|inst
-jardín|jardin|jdin|jard
-jardines|jdins|jards
-jardines de infancia
+jardín|jdin|jard|jardin
+jardín de infancia|jardin de infancia
+jardínes|jdins|jards|jardines
 joyería|joyeria
 juguetería|jugueteria
 juzgado
@@ -135,7 +145,8 @@ kiosko de prensa
 lavandería|lavanderia
 librería|libreria
 licorería|licoreria
-mansión|mansion
+mansión|mans|mansion
+mansiónes|manses|mansiones
 mercado|merc
 mercado público|mercado publico|merc público|merc publico
 minigolf
@@ -169,6 +180,8 @@ piscina
 playa
 policía|policia
 polideportivo
+preescolar
+preescolar comunitario
 prisión|prision
 pub
 puebla|pbla
@@ -185,6 +198,7 @@ rescate de montaña|rescate de montana
 residencia de estudiantes
 residencia de jubilados
 residencia de la tercera edad
+residencial|resid|res
 restaurante
 ruinas
 salón de acto|salon de acto
@@ -212,6 +226,7 @@ villas|vlas
 videotienda
 vivero
 viñedo|vinedo
+viviendas|vvdas
 zapatería|zapateria
 zona comercial
 zona industrial

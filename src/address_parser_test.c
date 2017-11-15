@@ -1,7 +1,6 @@
 #include "address_parser.h"
 #include "address_parser_io.h"
 #include "address_dictionary.h"
-#include "averaged_perceptron_trainer.h"
 #include "collections.h"
 #include "constants.h"
 #include "file_utils.h"
@@ -19,28 +18,53 @@ typedef struct address_parser_test_results {
 } address_parser_test_results_t;
 
 
-uint32_t get_class_index(address_parser_t *parser, char *name) {
+static uint32_t address_parser_num_classes(address_parser_t *parser) {
+    if (parser->model_type == ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON) {
+        averaged_perceptron_t *ap = parser->model.ap;
+        return parser->model.ap->num_classes;
+    } else if (parser->model_type == ADDRESS_PARSER_TYPE_CRF) {
+        return parser->model.crf->num_classes;
+    }
+    return 0;
+}
+
+static cstring_array *address_parser_class_strings(address_parser_t *parser) {
+    if (parser->model_type == ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON) {
+        cstring_array *classes = parser->model.ap->classes;
+        return parser->model.ap->classes;
+    } else if (parser->model_type == ADDRESS_PARSER_TYPE_CRF) {
+        return parser->model.crf->classes;
+    }
+    return NULL;
+}
+
+static uint32_t address_parser_get_class_index(address_parser_t *parser, char *name) {
     uint32_t i;
     char *str;
 
-    cstring_array_foreach(parser->model->classes, i, str, {
-        if (strcmp(name, str) == 0) {
-            return i;
-        }
-    })
+    cstring_array *classes = address_parser_class_strings(parser);
+    uint32_t num_classes = address_parser_num_classes(parser);
+    if (classes != NULL) {
+        cstring_array_foreach(classes, i, str, {
+            if (strcmp(name, str) == 0) {
+                return i;
+            }
+        })
+    }
 
-    return parser->model->num_classes;
+    return num_classes;
 }
+
 
 #define EMPTY_ADDRESS_PARSER_TEST_RESULT (address_parser_test_results_t){0, 0, 0, 0, NULL}
 
-bool address_parser_test(address_parser_t *parser, char *filename, address_parser_test_results_t *result) {
+bool address_parser_test(address_parser_t *parser, char *filename, address_parser_test_results_t *result, bool print_errors) {
     if (filename == NULL) {
         log_error("Filename was NULL\n");
         return NULL;
     }
 
-    uint32_t num_classes = parser->model->num_classes;
+    uint32_t num_classes = address_parser_num_classes(parser);
 
     result->confusion = calloc(num_classes * num_classes, sizeof(uint32_t));
 
@@ -59,6 +83,8 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
 
     bool logged = false;
 
+    cstring_array *token_labels = cstring_array_new();
+
     while (address_parser_data_set_next(data_set)) {
         char *language = char_array_get_string(data_set->language);
         if (string_equals(language, UNKNOWN_LANGUAGE) || string_equals(language, AMBIGUOUS_LANGUAGE)) {
@@ -68,15 +94,15 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
 
         address_parser_context_fill(context, parser, data_set->tokenized_str, language, country);
 
-        cstring_array *token_labels = cstring_array_new_size(data_set->tokenized_str->strings->str->n);
+        cstring_array_clear(token_labels);
 
         char *prev_label = NULL;
 
-        address_parser_response_t *response = NULL;
-
         size_t starting_errors = result->num_errors;
 
-        if (averaged_perceptron_tagger_predict(parser->model, parser, context, context->features, token_labels, &address_parser_features, data_set->tokenized_str)) {
+        bool prediction_success = address_parser_predict(parser, context, token_labels, &address_parser_features, data_set->tokenized_str);
+
+        if (prediction_success) {
             uint32_t i;
             char *predicted;
             cstring_array_foreach(token_labels, i, predicted, {
@@ -85,19 +111,24 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
                 if (strcmp(predicted, truth) != 0) {
                     result->num_errors++;
 
-                    uint32_t predicted_index = get_class_index(parser, predicted);
-                    uint32_t truth_index = get_class_index(parser, truth);
+                    uint32_t predicted_index = address_parser_get_class_index(parser, predicted);
+                    uint32_t truth_index = address_parser_get_class_index(parser, truth);
 
                     result->confusion[predicted_index * num_classes + truth_index]++;
 
+                    if (print_errors) {
+                        printf("%s\t%s\t%d\t%s\n", predicted, truth, i, data_set->tokenized_str->str);
+                    }
                 }
                 result->num_predictions++;
 
             })
 
+        } else {
+            log_error("Error in prediction\n");
+            tokenized_string_destroy(data_set->tokenized_str);
+            break;
         }
-
-        cstring_array_destroy(token_labels);
 
         if (result->num_errors > starting_errors) {
             result->num_address_errors++;
@@ -114,12 +145,14 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
 
     }
 
+    cstring_array_destroy(token_labels);
+
     address_parser_data_set_destroy(data_set);
     address_parser_context_destroy(context);
 
+
     return true;
 }
-
 
 int main(int argc, char **argv) {
     char *address_parser_dir = LIBPOSTAL_ADDRESS_PARSER_DIR;
@@ -129,10 +162,28 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    char *filename = argv[1];
+    size_t position = 0;
+    
+    bool print_errors = false;
 
-    if (argc > 2) {
-        address_parser_dir = argv[2];
+    ssize_t arg_iterations;
+
+    char *filename = NULL;
+    char *addres_parser_dir = NULL;
+
+    for (int i = 1; i < argc; i++) {
+        char *arg = argv[i];
+
+        if (string_equals(arg, "--print-errors")) {
+            print_errors = true;
+            continue;
+        } else if (position == 0) {
+            filename = arg;
+            position++;
+        } else if (position == 1) {
+            address_parser_dir = arg;
+            position++;
+        }
     }
 
     if (!address_dictionary_module_setup(NULL)) {
@@ -142,12 +193,13 @@ int main(int argc, char **argv) {
 
     log_info("address dictionary module loaded\n");
 
-    if (!geodb_module_setup(NULL)) {
-        log_error("Could not load geodb dictionaries\n");
+    // Needs to load for normalization
+    if (!transliteration_module_setup(NULL)) {
+        log_error("Could not load transliteration module\n");
         exit(EXIT_FAILURE);
     }
 
-    log_info("geodb module loaded\n");
+    log_info("transliteration module loaded\n");
 
     if (!address_parser_load(address_parser_dir)) {
         log_error("Could not initialize parser\n");
@@ -158,9 +210,15 @@ int main(int argc, char **argv) {
 
     address_parser_t *parser = get_address_parser();
 
+    if (parser->model_type == ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON) {
+        printf("averaged perceptron parser\n");
+    } else if (parser->model_type == ADDRESS_PARSER_TYPE_CRF) {
+        printf("crf parser\n");
+    }
+
     address_parser_test_results_t results = EMPTY_ADDRESS_PARSER_TEST_RESULT;
 
-    if (!address_parser_test(parser, filename, &results)) {
+    if (!address_parser_test(parser, filename, &results, print_errors)) {
         log_error("Error in training\n");
         exit(EXIT_FAILURE);
     }
@@ -170,27 +228,34 @@ int main(int argc, char **argv) {
 
 
     printf("Confusion matrix:\n\n");
-    uint32_t num_classes = parser->model->num_classes;
-    for (uint32_t i = 0; i < num_classes; i++) {
-        for (uint32_t j = 0; j < num_classes; j++) {
-            if (i == j) {
-                continue;
-            }
-            uint32_t class_errors = results.confusion[i * num_classes + j];
+    uint32_t num_classes = address_parser_num_classes(parser);
 
-            if (class_errors > 0) {
-                char *predicted = cstring_array_get_string(parser->model->classes, i);
-                char *truth = cstring_array_get_string(parser->model->classes, j);
+    size_t *confusion_sorted = uint32_array_argsort(results.confusion, num_classes * num_classes);
 
-                printf("(%s, %s): %d\n", predicted, truth, class_errors);
-            }
+    for (ssize_t k = num_classes * num_classes - 1; k >= 0; k--) {
+        uint32_t idx = confusion_sorted[k];
+
+        uint32_t i = idx / num_classes;
+        uint32_t j = idx % num_classes;
+
+        uint32_t class_errors = results.confusion[idx];
+
+        if (i == j) continue;
+
+        if (class_errors > 0) {
+            cstring_array *classes = address_parser_class_strings(parser);
+            char *predicted = cstring_array_get_string(classes, i);
+            char *truth = cstring_array_get_string(classes, j);
+
+            printf("(%s, %s): %d\n", predicted, truth, class_errors);
         }
+
     }
 
     free(results.confusion);
+    free(confusion_sorted);
 
     address_parser_module_teardown();
-
+    transliteration_module_teardown();
     address_dictionary_module_teardown();
-    geodb_module_teardown();
 }

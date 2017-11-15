@@ -1,0 +1,37 @@
+prefixes:
+    - ōaza
+    - ō-aza
+    - oaza
+    - aza
+    - koaza
+
+suffixes:
+    - ken
+    - to
+    - dō
+    - do
+    - fu
+    - gun
+    - shi
+    - machi
+    - chō
+    - cho
+    - mura
+    - ku
+    - aza
+    - oaza
+    - koaza
+
+suffixes_no_whitespace:
+    - 県 # ken
+    - 都 # to
+    - 道 # dō
+    - 府 # fu
+    - 郡 # gun
+    - 市 # shi
+    - 町 # machi
+    - 村 # mura
+    - 区 # ku
+    - 字 # aza
+    - 大字 # ōaza
+    - 小字 # koaza

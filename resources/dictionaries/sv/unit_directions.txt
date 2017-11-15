@@ -1,0 +1,4 @@
+höger|hoger
+vänster|vanster
+till höger|till hoger|t.h|th
+till vänster|till vanster|t.v|tv

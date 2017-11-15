@@ -1,0 +1,76 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "6": "state_district"
+        "8": "city_district"
+
+    overrides:
+        id:
+            relation:
+                # Auckland
+                "2094141": "city"
+                # Wellington
+                "4266321": "city"
+                # Christchurch
+                "1640161": "city"
+                # Hamilton
+                "2595124": "city"
+                # Dunedin
+                "4426790": "city"
+                # Tauranga
+                "4266815": "city"
+                # Lower Hutt
+                "4266371": "city"
+                # Palmerston North
+                "3440209": "city"
+                # Napier
+                "2731991": "city"
+                # Porirua
+                "4266370": "city"
+                # Invercargill
+                "1656388": "city"
+                # Nelson
+                "4266962": "city"
+                # Upper Hutt
+                "4266375": "city"
+
+        use_admin_center:
+            - id: 2094141 # Auckland
+              type: relation
+            - id: 4266321 # Wellington
+              type: relation
+              probability: 0.7
+            - id: 1640161 # Christchurch
+              type: relation
+              probability: 0.7
+            - id: 2595124 # Hamilton
+              type: relation
+              probability: 0.7
+            - id: 4426790 # Dunedin
+              type: relation
+              probability: 0.7
+            - id: 4266815 # Tauranga
+              type: relation
+              probability: 0.7
+            - id: 4266371 # Lower Hutt
+              type: relation
+              probability: 0.7
+            - id: 3440209 # Palmerston North
+              type: relation
+              probability: 0.7
+            - id: 2731991 # Napier
+              type: relation
+              probability: 0.7
+            - id: 4266370 # Porirua
+              type: relation
+              probability: 0.7
+            - id: 1656388 # Invercargill
+              type: relation
+              probability: 0.7
+            - id: 4266962 # Nelson
+              type: relation
+            - id: 4266375 # Upper Hutt
+              type: relation
+              probability: 0.7
+

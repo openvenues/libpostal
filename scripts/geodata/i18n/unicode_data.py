@@ -69,7 +69,7 @@ def parse_unicode_data():
     Parse UnicodeData.txt into namedtuples using UNIDATA_FIELDS
     '''
     if not os.path.exists(LOCAL_UNIDATA_FILE):
-        download_file(UNIDATA)
+        download_file(UNIDATA_URL, LOCAL_UNIDATA_FILE)
     unidata_file = open(LOCAL_UNIDATA_FILE)
 
     for line in csv.reader(unidata_file, delimiter=';'):

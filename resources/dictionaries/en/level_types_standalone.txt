@@ -1,0 +1,12 @@
+ground|g|gd
+ground floor|gdfl|gd fl|gd/fl|gd / fl|gf|g / f
+ground level|gd lvl|g lvl|g level|gd level|ground lvl|gd / lvl|gl|g / l
+lobby
+lower ground floor|lg|lgf|lgfl|l / g|l / gf|l / g / f|l / g / fl
+lower level|lwr level|lower lvl|lwr lvl
+podium|pd
+podium level|podium lev|podium levl|podium lvel|podium lvl|podium l|pd level|pd lev|pd levl|pd lvel|pd lvl|pd l
+rooftop|rt|rf|r / t
+top floor|top fl|top / f|tf|t.f|t f|t / f
+upper ground floor|ug|ugf|ugfl|ug / f|ug / fl
+upper|uppr|upr

@@ -1,15 +1,19 @@
 import os
 import subprocess
+import six
 
 
-def download_file(url, dest):
+def download_file(url, dest, retries=3, retry_delay=5):
     ensure_dir(os.path.dirname(dest))
-    return subprocess.call(['wget', url, '-O', dest, '--quiet']) == 0
+    return subprocess.check_output(['curl', url, '-L', '-w', '%{http_code}',
+                                    '--retry', six.text_type(retries),
+                                    '--retry-delay', six.text_type(retry_delay),
+                                    '-o', dest, '--silent']) == '200'
 
 
 def unzip_file(filename, dest):
     ensure_dir(dest)
-    subprocess.call(['unzip', '-o', filename, '-d', dest])
+    return subprocess.check_call(['unzip', '-o', filename, '-d', dest]) == 0
 
 
 def remove_file(filename):

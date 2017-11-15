@@ -33,6 +33,7 @@ As well as normalizations for individual string tokens:
 #include "string_utils.h"
 #include "utf8proc/utf8proc.h"
 #include "unicode_scripts.h"
+#include "numex.h"
 #include "transliterate.h"
 #include "trie.h"
 #include "tokens.h"
@@ -45,6 +46,9 @@ As well as normalizations for individual string tokens:
 #define NORMALIZE_STRING_LOWERCASE 1 << 4
 #define NORMALIZE_STRING_TRIM 1 << 5
 #define NORMALIZE_STRING_REPLACE_HYPHENS 1 << 6
+#define NORMALIZE_STRING_COMPOSE 1 << 7
+#define NORMALIZE_STRING_SIMPLE_LATIN_ASCII 1 << 8
+#define NORMALIZE_STRING_REPLACE_NUMEX 1 << 9
 
 #define NORMALIZE_TOKEN_REPLACE_HYPHENS 1 << 0
 #define NORMALIZE_TOKEN_DELETE_HYPHENS 1 << 1

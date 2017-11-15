@@ -38,10 +38,10 @@ Utilities for manipulating strings in C.
 #define UTF8PROC_OPTIONS_NFKC UTF8PROC_OPTIONS_NFC | UTF8PROC_COMPAT
 
 // Strip accents
-#define UTF8PROC_OPTIONS_STRIP_ACCENTS UTF8PROC_OPTIONS_BASE | UTF8PROC_STRIPMARK
+#define UTF8PROC_OPTIONS_STRIP_ACCENTS UTF8PROC_OPTIONS_BASE | UTF8PROC_DECOMPOSE | UTF8PROC_STRIPMARK
 
 // Lowercase
-#define UTF8PROC_OPTIONS_LOWERCASE UTF8PROC_OPTIONS_BASE | UTF8PROC_CASEFOLD
+#define UTF8PROC_OPTIONS_CASE_FOLD UTF8PROC_OPTIONS_BASE | UTF8PROC_CASEFOLD
 
 
 // ASCII string methods
@@ -55,7 +55,9 @@ void string_lower(char *s);
 bool string_is_upper(char *s);
 void string_upper(char *s);
 
-void string_replace(char *s, char c1, char c2);
+char *string_replace_char(char *str, char c1, char c2);
+bool string_replace_with_array(char *str, char *replace, char *with, char_array *result);
+char *string_replace(char *str, char *replace, char *with);
 
 bool string_starts_with(const char *str, const char *start);
 bool string_ends_with(const char *str, const char *ending);
@@ -68,7 +70,12 @@ uint32_t string_translate(char *str, size_t len, char *word_chars, char *word_re
 char *utf8_reversed_string(const char *s); // returns a copy, caller frees
 ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *dst);
 
-char *utf8_lower(const char *s); // returns a copy, caller frees
+// Casing functions return a copy, caller frees
+char *utf8_lower_options(const char *s, utf8proc_option_t options);
+char *utf8_lower(const char *s);
+char *utf8_upper_options(const char *s, utf8proc_option_t options);
+char *utf8_lower(const char *s);
+
 int utf8_compare(const char *str1, const char *str2);
 int utf8_compare_len(const char *str1, const char *str2, size_t len);
 size_t utf8_common_prefix(const char *str1, const char *str2);
@@ -83,15 +90,16 @@ bool utf8_is_letter_or_number(int cat);
 bool utf8_is_punctuation(int cat);
 bool utf8_is_symbol(int cat);
 bool utf8_is_separator(int cat);
+bool utf8_is_whitespace(int32_t ch);
 
+bool string_is_digit(char *str, size_t len);
 bool string_is_ignorable(char *str, size_t len);
 
+ssize_t string_next_hyphen_index(char *str, size_t len);
 bool string_contains_hyphen(char *str);
 bool string_contains_hyphen_len(char *str, size_t len);
 
-size_t string_ltrim(char *str);
-size_t string_rtrim(char *str);
-size_t string_trim(char *str);
+char *string_trim(char *str);
 
 /* char_array is a dynamic character array defined in collections.h
 but has a few additional methods related to string manipulation.
@@ -136,7 +144,7 @@ void char_array_cat_vprintf(char_array *array, char *format, va_list args);
 void char_array_cat_printf(char_array *array, char *format, ...);
 
 // Mainly for paths or delimited strings
-void char_array_append_vjoined(char_array *array, char *separator, bool strip_separator, int count, va_list args);
+void char_array_add_vjoined(char_array *array, char *separator, bool strip_separator, int count, va_list args);
 void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...);
 void char_array_cat_joined(char_array *array, char *separator, bool strip_separator, int count, ...);
 
@@ -180,6 +188,8 @@ char **cstring_array_to_strings(cstring_array *self);
 
 // Split on delimiter
 cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, size_t *count);
+// Split on delimiter, ignore multiple consecutive delimiters
+cstring_array *cstring_array_split_ignore_consecutive(char *str, const char *separator, size_t separator_len, size_t *count);
 
 // Split on delimiter by replacing (single character) separator with the NUL byte in the original string
 cstring_array *cstring_array_split_no_copy(char *str, char separator, size_t *count);
@@ -259,12 +269,8 @@ void string_tree_destroy(string_tree_t *self);
 
 typedef struct string_tree_iterator {
     string_tree_t *tree;
-    bool single_path;
     uint32_t *path;
-    uint32_t *num_alternatives;
     uint32_t num_tokens;
-    uint32_t cursor;
-    int8_t direction;           // 1 or -1
     uint32_t remaining;
 } string_tree_iterator_t;
 

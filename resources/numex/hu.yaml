@@ -1,0 +1,330 @@
+---
+  whole_words_only: true
+  default_separator: ""
+  rules:
+    - 
+      name: "nulla"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "egy"
+      value: 1
+      type: "cardinal"
+      multiply_gte: 1000000
+    - 
+      name: "kettő"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "ketto"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "két"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "ket"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "három"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "harom"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "négy"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "negy"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "öt"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "ot"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "hat"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "hét"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "het"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "nyolc"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "kilenc"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "tíz"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "tiz"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "tizen­"
+      value: 10
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "húsz"
+      value: 20
+      type: "cardinal"
+    - 
+      name: "husz"
+      value: 20
+      type: "cardinal"
+    - 
+      name: "huszon­"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "harminc"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "negyven"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "ötven"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "otven"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "hatvan"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "hetven"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "nyolcvan"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kilencven"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "száz"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "szaz"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "ezer"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " "
+    - 
+      name: "millió"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "millio"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milliárd"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milliard"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billió"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billio"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billiárd"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billiard"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "nulla"
+      value: 0
+      type: "ordinal"
+    - 
+      name: "edik"
+      value: 0
+      type: "ordinal"
+    - 
+      name: "első"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "elso"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "egyedik"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "második"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "masodik"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "kettedik"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "harmadik"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "negyedik"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "ötödik"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "hatodik"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "hetedik"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "nyolcadik"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "kilencedik"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "tizedik"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "huszadik"
+      value: 20
+      type: "ordinal"
+    - 
+      name: "harmincadik"
+      value: 30
+      type: "ordinal"
+    - 
+      name: "hatvanadik"
+      value: 60
+      type: "ordinal"
+    - 
+      name: "nyolcvanadik"
+      value: 80
+      type: "ordinal"
+    - 
+      name: "századik"
+      value: 100
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "szazadik"
+      value: 100
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milliomodik"
+      value: 1000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "."
+        "1":
+          - "."
+        "2":
+          - "."
+        "3":
+          - "."
+        "4":
+          - "."
+        "5":
+          - "."
+        "6":
+          - "."
+        "7":
+          - "."
+        "8":
+          - "."
+        "9":
+          - "."
+  stopwords:
+    - "és"
+    - "es"

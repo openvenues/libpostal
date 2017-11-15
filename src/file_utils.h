@@ -9,6 +9,7 @@
 #include <sys/types.h>
 
 #include "libpostal_config.h"
+#include "string_utils.h"
 
 #ifdef HAVE_DIRENT_H
 #include <dirent.h>
@@ -53,13 +54,23 @@
 
 char *file_getline(FILE * f);
 
+bool file_exists(char *filename);
+
 bool is_relative_path(struct dirent *ent);
+
+char *path_join(int n, ...);
+char *path_vjoin(int n, va_list args);
 
 uint64_t file_deserialize_uint64(unsigned char *buf);
 bool file_read_uint64(FILE *file, uint64_t *value);
 bool file_write_uint64(FILE *file, uint64_t value);
 
 bool file_read_uint64_array(FILE *file, uint64_t *value, size_t n);
+
+bool file_read_float(FILE *file, float *value);
+bool file_write_float(FILE *file, float value);
+
+bool file_read_float_array(FILE *file, float *value, size_t n);
 
 bool file_read_double(FILE *file, double *value);
 bool file_write_double(FILE *file, double value);

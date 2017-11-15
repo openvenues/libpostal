@@ -1,0 +1,1031 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "ноль"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "один"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "одна"
+      value: 1
+      type: "cardinal"
+      gender: "f"
+      multiply_gte: 1000
+    - 
+      name: "одной"
+      value: 1
+      type: "cardinal"
+      gender: "f"
+      category: "genitive"
+    - 
+      name: "одно"
+      value: 1
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "два"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "две"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "двух"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "три"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "трех"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "четыре"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "четырех"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "пять"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "пяти"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "шесть"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "шести"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "семь"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "семи"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "восемь"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "восьми"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "девять"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "девяти"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "десять"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "одиннадцать"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "одиннадцати"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "двенадцать"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "двенадцати"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "тринадцать"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "тринадцати"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "четырнадцать"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "четырнадцати"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "пятнадцать"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "пятнадцати"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "шестнадцать"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "шестнадцати"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "семнадцать"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "семнадцати"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "восемнадцать"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "восемнадцати"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "девятнадцать"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "девятнадцати"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "двадцать"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "двадцати"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "двадцатиодно"
+      value: 21
+      type: "cardinal"
+    - 
+      name: "тридцать"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "тридцати"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "тридцатиодно"
+      value: 31
+      type: "cardinal"
+    - 
+      name: "сорок"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "сорока"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "сорокаодно"
+      value: 41
+      type: "cardinal"
+    - 
+      name: "пятидесят"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "пятидесяти"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "пятидесятиодно"
+      value: 51
+      type: "cardinal"
+    - 
+      name: "шестьдесят"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "шестидесяти"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "шестидесятиодно"
+      value: 61
+      type: "cardinal"
+    - 
+      name: "семьдесят"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "семидесяти"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "семидесятиодно"
+      value: 71
+      type: "cardinal"
+    - 
+      name: "восемьдесят"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "восьмидесяти"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "восьмидесятиодно"
+      value: 81
+      type: "cardinal"
+    - 
+      name: "девяносто"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "девяноста"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "девяностоодно"
+      value: 91
+      type: "cardinal"
+    - 
+      name: "сто"
+      value: 100
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "ста"
+      value: 100
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "двести"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "двухсот"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "триста"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "трехсот"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "четыреста"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "четырехсот"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "пятьсот"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "пятисот"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "шестьсот"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "шестисот"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "семьсот"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "семисот"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "восемьсот"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "восьмисот"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "девятьсот"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "девятисот"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "тысяча"
+      value: 1000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "тысячи"
+      value: 1000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "тысяч"
+      value: 1000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "миллион"
+      value: 1000000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "миллиона"
+      value: 1000000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "миллионов"
+      value: 1000000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "миллиард"
+      value: 1000000000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "миллиарда"
+      value: 1000000000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "миллиардов"
+      value: 1000000000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "триллион"
+      value: 1000000000000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "триллиона"
+      value: 1000000000000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "триллионов"
+      value: 1000000000000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "квадриллион"
+      value: 1000000000000000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "квадриллиона"
+      value: 1000000000000000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "квадриллионов"
+      value: 1000000000000000
+      type: "cardinal"
+      right: "add"
+      left: "multiply"
+    - 
+      name: "нулевой"
+      value: 0
+      type: "ordinal"
+    - 
+      name: "первый"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "второй"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "третий"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "четвертый"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "пятый"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "шестой"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "седьмой"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "восьмой"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "девятый"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "десятый"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "одиннадцатый"
+      value: 11
+      type: "ordinal"
+    - 
+      name: "двенадцатый"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "тринадцатый"
+      value: 13
+      type: "ordinal"
+    - 
+      name: "четырнадцатый"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "пятнадцатый"
+      value: 15
+      type: "ordinal"
+    - 
+      name: "шестнадцатый"
+      value: 16
+      type: "ordinal"
+    - 
+      name: "семнадцатый"
+      value: 17
+      type: "ordinal"
+    - 
+      name: "восемнадцатый"
+      value: 18
+      type: "ordinal"
+    - 
+      name: "девятнадцатый"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "двадцатый"
+      value: 20
+      type: "ordinal"
+    - 
+      name: "двадцатый"
+      value: 20
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "тридцатый"
+      value: 30
+      type: "ordinal"
+    - 
+      name: "сороковой"
+      value: 40
+      type: "ordinal"
+    - 
+      name: "пятидесятый"
+      value: 50
+      type: "ordinal"
+    - 
+      name: "шестидесятый"
+      value: 60
+      type: "ordinal"
+    - 
+      name: "семидесятый"
+      value: 70
+      type: "ordinal"
+    - 
+      name: "восьмидесятый"
+      value: 80
+      type: "ordinal"
+    - 
+      name: "девяностый"
+      value: 90
+      type: "ordinal"
+    - 
+      name: "сотый"
+      value: 100
+      type: "ordinal"
+    - 
+      name: "тысячный"
+      value: 1000
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "тысяча"
+      value: 1000
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "нулевое"
+      value: 0
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "первое"
+      value: 1
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "второе"
+      value: 2
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "третье"
+      value: 3
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "четвертое"
+      value: 4
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "пятое"
+      value: 5
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "шестое"
+      value: 6
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "седьмое"
+      value: 7
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "восьмое"
+      value: 8
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "девятое"
+      value: 9
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "десятое"
+      value: 10
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "одиннадцатое"
+      value: 11
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "двенадцатое"
+      value: 12
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "тринадцатое"
+      value: 13
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "четырнадцатое"
+      value: 14
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "пятнадцатое"
+      value: 15
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "шестнадцатое"
+      value: 16
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "семнадцатое"
+      value: 17
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "восемнадцатое"
+      value: 18
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "девятнадцатое"
+      value: 19
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "двадцатое"
+      value: 20
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "тридцатое"
+      value: 30
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "сороковое"
+      value: 40
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "пятидесятое"
+      value: 50
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "шестидесятое"
+      value: 60
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "семидесятое"
+      value: 70
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "восемьдесятое"
+      value: 80
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "девяностое"
+      value: 90
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "сотое"
+      value: 100
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "тысячное"
+      value: 1000
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "ноль"
+      value: 0
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "первая"
+      value: 1
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "вторая"
+      value: 2
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "третья"
+      value: 3
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "четвертая"
+      value: 4
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "пятая"
+      value: 5
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "шестая"
+      value: 6
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "седьмая"
+      value: 7
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "восьмая"
+      value: 8
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "девятая"
+      value: 9
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "десятая"
+      value: 10
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "одиннадцатая"
+      value: 11
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "двенадцатая"
+      value: 12
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "тринадцатая"
+      value: 13
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "четырнадцатая"
+      value: 14
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "пятнадцатая"
+      value: 15
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "шестнадцатая"
+      value: 16
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "семнадцатая"
+      value: 17
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "восемнадцатая"
+      value: 18
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "девятнадцатая"
+      value: 19
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "двадцатая"
+      value: 20
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "двадцатая"
+      value: 20
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "тридцатая"
+      value: 30
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "сороковая"
+      value: 40
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "пятидесятая"
+      value: 50
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "шестидесятая"
+      value: 60
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "семидесятая"
+      value: 70
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "восьмидесятая"
+      value: 80
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "девяностая"
+      value: 90
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "сотая"
+      value: 100
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "тысячная"
+      value: 1000
+      type: "ordinal"
+      gender: "f"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "й"
+          - "-й"
+        "1":
+          - "й"
+          - "-й"
+        "2":
+          - "й"
+          - "-й"
+        "3":
+          - "й"
+          - "-й"
+        "4":
+          - "й"
+          - "-й"
+        "5":
+          - "й"
+          - "-й"
+        "6":
+          - "й"
+          - "-й"
+        "7":
+          - "й"
+          - "-й"
+        "8":
+          - "й"
+          - "-й"
+        "9":
+          - "й"
+          - "-й"
+    - 
+      gender: "f"
+      suffixes:
+        "0":
+          - "я"
+          - "-я"
+          - "ая"
+          - "-ая"
+        "1":
+          - "я"
+          - "-я"
+          - "ая"
+          - "-ая"
+        "2":
+          - "я"
+          - "-я"
+          - "ая"
+          - "-ая"
+        "3":
+          - "я"
+          - "-я"
+        "4":
+          - "я"
+          - "-я"
+          - "ая"
+          - "-ая"
+        "5":
+          - "я"
+          - "-я"
+          - "ая"
+          - "-ая"
+        "6":
+          - "я"
+          - "-я"
+          - "ая"
+          - "-ая"
+        "7":
+          - "я"
+          - "-я"
+          - "ая"
+          - "-ая"
+        "8":
+          - "я"
+          - "-я"
+          - "ая"
+          - "-ая"
+        "9":
+          - "я"
+          - "-я"
+          - "ая"
+          - "-ая"
+        "13":
+          - "я"
+          - "-я"
+          - "ая"
+          - "-ая"
+    - 
+      gender: "n"
+      suffixes:
+        "0":
+          - "е"
+          - "-е"
+        "1":
+          - "е"
+          - "-е"
+        "2":
+          - "е"
+          - "-е"
+        "3":
+          - "е"
+          - "-е"
+          - "ье"
+          - "-ье"
+        "4":
+          - "е"
+          - "-е"
+        "5":
+          - "е"
+          - "-е"
+        "6":
+          - "е"
+          - "-е"
+        "7":
+          - "е"
+          - "-е"
+        "8":
+          - "е"
+          - "-е"
+        "9":
+          - "е"
+          - "-е"
+        "13":
+          - "е"
+          - "-е"
+  stopwords:
+    - "и"
+

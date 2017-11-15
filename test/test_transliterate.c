@@ -24,6 +24,7 @@ TEST test_transliterators(void) {
     CHECK_CALL(test_transliteration("russian-latin-bgn", "улица", "ulitsa"));
     CHECK_CALL(test_transliteration("hebrew-latin", "רחוב", "rẖwb"));
     CHECK_CALL(test_transliteration("latin-ascii", "foo &amp; bar", "foo & bar"));
+    CHECK_CALL(test_transliteration("latin-ascii-simple", "eschenbräu bräurei triftstraße 67½ &amp; foo", "eschenbräu bräurei triftstraße 67½ & foo"));
     CHECK_CALL(test_transliteration("han-latin", "街𠀀abcdef", "jiēhēabcdef"));
     CHECK_CALL(test_transliteration("katakana-latin", "ドウ", "dou"));
     CHECK_CALL(test_transliteration("hiragana-latin", "どう", "dou"));

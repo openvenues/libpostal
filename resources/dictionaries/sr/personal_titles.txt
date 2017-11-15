@@ -1,6 +1,14 @@
-војводе
-владике
 доктор|др
-генерала
+doktor|dr
+генерала|ген
+generala|gen
 краља
+kralja
 кнеза
+kneza
+светог|св
+svetor|sv
+владике
+vladike
+војводе
+vojvode

@@ -1,0 +1,26 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "5": "state_district"
+        "6": "state_district"
+        "7": "city"
+        "8": "city"
+        "9": "suburb"
+        "10": "suburb"
+
+    overrides:
+        id:
+            # Buenos Aires (state boundary coterminous with city)
+            "3082668": null
+        contained_by:
+            relation:
+                # Buenos Aires
+                "1224652":
+                    admin_level:
+                        "5": "city_district"
+                        "9": "suburb"
+                # Rosario
+                "3594027":
+                    admin_level:
+                        "9": "city_district"

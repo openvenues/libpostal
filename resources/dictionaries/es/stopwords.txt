@@ -13,7 +13,6 @@ el
 en
 encima
 enfrente
-entre
 junta
 hasta
 la

@@ -1,20 +1,21 @@
-import ujson as json
+import six
 
 from collections import *
 from marisa_trie import BytesTrie
+from geodata.encoding import safe_encode, safe_decode
 
 SENTINEL = None
 
 
 class PhraseFilter(object):
-    def __init__(self):
-        self.configured = False
+    def __init__(self, phrases):
+        if hasattr(phrases, 'items'):
+            phrases = six.iteritems(phrases)
+        vals = [(safe_decode(key), self.serialize(val)) for key, val in phrases]
+        self.trie = BytesTrie(vals)
 
-    def configure(self, *args, **kw):
-        pass
-
-    serialize = json.dumps
-    deserialize = json.loads
+    serialize = staticmethod(safe_encode)
+    deserialize = staticmethod(safe_decode)
 
     def filter(self, tokens):
         def return_item(item):

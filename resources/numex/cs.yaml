@@ -1,0 +1,426 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "nula"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "jeden"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "jedno"
+      value: 1
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "jedna"
+      value: 1
+      type: "cardinal"
+      gender: "f"
+      multiply_gte: 100
+    - 
+      name: "dva"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "dvě"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "dve"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "tři"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "tri"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "čtyři"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "ctyri"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "pět"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "pet"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "šest"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sest"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sedm"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "osm"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "devět"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "devet"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "deset"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "jedenáct"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "jedenact"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "dvanáct"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "dvanact"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "třináct"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "trinact"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "čtrnáct"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "ctrnact"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "patnáct"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "patnact"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "šestnáct"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sestnact"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sedmnáct"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "sedmnact"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "osmnáct"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "osmnact"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "devatenáct"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "devatenact"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "dvacet"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "třicet"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "tricet"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "čtyřicet"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "ctyricet"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "padesát"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "padesat"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "šedesát"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sedesat"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sedmdesát"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sedmdesat"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "osmdesát"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "osmdesat"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "devadesát"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "devadesat"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sto"
+      value: 100
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "stě"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "ste"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "sta"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tisíc"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tisic"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tisíce"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tisice"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milión"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milion"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milióny"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliony"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliónů"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milionu"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliarda"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliardy"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliardů"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliardu"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilión"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilion"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilióny"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliony"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliónů"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilionu"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliarda"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliardy"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliardů"
+      value: 100000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliardu"
+      value: 100000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "."
+        "1":
+          - "."
+        "2":
+          - "."
+        "3":
+          - "."
+        "4":
+          - "."
+        "5":
+          - "."
+        "6":
+          - "."
+        "7":
+          - "."
+        "8":
+          - "."
+        "9":
+          - "."

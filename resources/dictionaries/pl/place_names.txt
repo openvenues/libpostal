@@ -4,6 +4,7 @@ bazylika
 biblioteka|bibl|b-ka|bka
 biblioteka narodowa|bn
 biblioteczka|bczka|b-czka
+departament|dep
 farmacja|farm
 fabryka|f-ka
 gimnazjum|gim
@@ -16,6 +17,7 @@ kościół|kosciol
 liceum|lic
 muzeum
 muzeum narodowe|mn
+oddział|oddz
 opat|op
 organizacja|organ
 ośrodek|ośr

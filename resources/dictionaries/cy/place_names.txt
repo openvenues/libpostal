@@ -1,10 +1,22 @@
+banc
 castell
+capel
+coleg
 efail
 eglwys
 felin
+fferm
+fflat
+fflatiau
 ffynnon
+gwesty
+maes awyr
 pont|bont
-sarn
-stad
 rhodfa'r|rhodfar
+sarn
+sinema
+stad
+sŵ
+swyddfa
+treath
 ysgol

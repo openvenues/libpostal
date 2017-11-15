@@ -1,0 +1,441 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	aeroporto
+aeroway	aerodrome	1	aeroporti
+amenity	animal_boarding	0	pensione per animali
+amenity	animal_boarding	1	pensioni per animali
+amenity	animal_shelter	0	rifugio per animali
+amenity	animal_shelter	1	rifugio per animali
+amenity	atm	0	bancomat
+amenity	atm	1	bancomat
+amenity	bank	0	banca
+amenity	bank	1	banche
+amenity	bar	0	bar
+amenity	bar	1	bar
+amenity	bench	0	panchina
+amenity	bench	1	panchine
+amenity	bicycle_parking	0	parcheggio per biciclette
+amenity	bicycle_parking	1	parcheggi per biciclette
+amenity	bicycle_rental	0	stazione del bikesharing
+amenity	bicycle_rental	1	stazioni del bikesharing
+amenity	brothel	0	bordello
+amenity	brothel	1	bordelli
+amenity	bureau_de_change	0	cambiavalute
+amenity	bureau_de_change	1	cambiavalute
+amenity	bureau_de_change	0	cambia valute
+amenity	bureau_de_change	1	cambia valute
+amenity	cafe	0	caffè
+amenity	cafe	1	caffè
+amenity	car_rental	0	autonoleggio
+amenity	car_rental	1	autonoleggi
+amenity	car_sharing	0	stazione del carsharing
+amenity	car_sharing	1	stazioni del carsharing
+amenity	car_wash	0	autolavaggio
+amenity	car_wash	1	autolavaggi
+amenity	casino	0	casinò
+amenity	casino	1	casinò
+amenity	charging_station	0	stazione di ricarica elettrica
+amenity	charging_station	1	stazioni di ricarica elettrica
+amenity	charging_station	0	stazione di ricarica
+amenity	charging_station	1	stazioni di ricarica
+amenity	charging_station	0	colonnina di ricarica
+amenity	charging_station	1	colonnine di ricarica
+amenity	cinema	0	cinema
+amenity	cinema	1	cinema
+amenity	college	0	scuola superiore
+amenity	college	1	scuole superiori
+amenity	courthouse	0	tribunale
+amenity	courthouse	1	tribunali
+amenity	crematorium	0	crematorio
+amenity	crematorium	1	crematori
+amenity	dentist	0	dentista
+amenity	dentist	1	dentisti
+amenity	dormitory	0	dormitorio
+amenity	dormitory	1	dormitori
+amenity	drinking_water	0	acqua
+amenity	drinking_water	0	acqua potabile
+amenity	drinking_water	1	fontanelle
+amenity	drinking_water	0	fontanella
+amenity	driving_school	0	scuola guida
+amenity	driving_school	1	scuole guida
+amenity	embassy	0	ambasciata
+amenity	embassy	1	ambasciate
+amenity	emergency_phone	0	colonnina sos
+amenity	emergency_phone	1	colonnine sos
+amenity	fast_food	0	fast food
+amenity	fast_food	1	fast food
+amenity	ferry_terminal	0	terminal traghetto
+amenity	ferry_terminal	1	terminal traghetti
+amenity	fire_hydrant	0	pompa antincendio
+amenity	fire_hydrant	1	pompe antincendio
+amenity	fire_station	0	vigili del fuoco
+amenity	fire_station	1	vigili del fuoco
+amenity	fire_station	0	pompieri
+amenity	fire_station	1	pompieri
+amenity	fuel	0	stazione di rifornimento
+amenity	fuel	1	stazioni di rifornimento
+amenity	grave_yard	0	cimitero
+amenity	grave_yard	1	cimiteri
+amenity	hospital	0	ospedale
+amenity	hospital	1	ospedali
+amenity	hotel	0	hotel
+amenity	hotel	1	hotel
+amenity	hotel	0	albergo
+amenity	hotel	1	alberghi
+amenity	hunting_stand	0	postazione di caccia
+amenity	hunting_stand	1	postazioni di caccia
+amenity	ice_cream	0	gelateria
+amenity	ice_cream	1	gelaterie
+amenity	kindergarten	0	asilo infantile
+amenity	kindergarten	1	asili infantili
+amenity	library	0	biblioteca
+amenity	library	1	biblioteche
+amenity	mountain_rescue	0	soccorso alpino
+amenity	mountain_rescue	1	soccorsi alpini
+amenity	nursery	0	asilo nido
+amenity	nursery	1	asili nido
+amenity	parking	0	parcheggio
+amenity	parking	1	parcheggi
+amenity	pharmacy	0	farmacia
+amenity	pharmacy	1	farmacie
+amenity	place_of_worship	0	luogo di culto
+amenity	place_of_worship	1	luoghi di culto
+amenity	police	1	forze dell'ordine
+amenity	police	0	polizia
+amenity	police	1	carabinieri
+amenity	post_box	0	cassetta postale
+amenity	post_box	1	cassette postali
+amenity	post_box	0	cassetta delle lettere
+amenity	post_box	1	cassette delle lettere
+amenity	post_office	0	ufficio postale
+amenity	post_office	1	uffici postali
+amenity	prison	0	prigione
+amenity	prison	1	prigioni
+amenity	pub	0	pub
+amenity	pub	1	pub
+amenity	public_building	0	edificio pubblico
+amenity	public_building	1	edifici pubblici
+amenity	restaurant	0	ristorante
+amenity	restaurant	1	ristoranti
+amenity	sauna	0	sauna
+amenity	sauna	1	saune
+amenity	school	0	scuola
+amenity	school	1	scuole
+amenity	shelter	0	pensilina/ricovero
+amenity	shelter	1	pensiline/ricoveri
+amenity	supermarket	0	supermercato
+amenity	supermarket	1	supermercati
+amenity	taxi	0	taxi
+amenity	taxi	1	taxi
+amenity	telephone	0	telefono pubblico
+amenity	telephone	1	telefoni pubblici
+amenity	theatre	0	teatro
+amenity	theatre	1	teatri
+amenity	toilets	0	gabinetto pubblico
+amenity	toilets	1	gabinetti pubblici
+amenity	townhall	0	municipio
+amenity	townhall	1	municipi
+amenity	university	0	università
+amenity	university	1	università
+amenity	vending_machine	0	distributore automatico
+amenity	vending_machine	1	distributori automatici
+amenity	veterinary	0	veterinario
+amenity	veterinary	1	veterinari
+amenity	wifi	0	punto di accesso wifi
+amenity	wifi	1	punti di accesso wifi
+building	church	0	chiesa
+building	church	1	chiese
+building	dormitory	0	dormitorio
+building	dormitory	1	dormitori
+highway	bridleway	0	percorso per equitazione
+highway	bridleway	1	percorsi per equitazione
+highway	bus_guideway	0	autobus guidato
+highway	bus_guideway	1	autobus guidati
+highway	bus_stop	0	fermata autobus
+highway	bus_stop	1	fermate autobus
+highway	byway	0	byway (uk)
+highway	byway	1	byway (uk)
+highway	construction	0	strada in costruzione
+highway	construction	1	strade in costruzione
+highway	cycleway	0	percorso ciclabile
+highway	cycleway	1	percorsi ciclabili
+highway	emergency_access_point	0	colonnina sos
+highway	emergency_access_point	1	colonnine sos
+highway	footway	0	percorso pedonale
+highway	footway	1	percorsi pedonali
+highway	ford	0	guado
+highway	ford	1	guadi
+highway	gate	0	cancello
+highway	gate	1	cancelli
+highway	motorway	0	autostrada/tangenziale
+highway	motorway	1	autostrade/tangenziali
+highway	motorway_junction	0	svincolo
+highway	motorway_junction	1	svincoli
+highway	pedestrian	0	percorso pedonale
+highway	pedestrian	1	percorsi pedonali
+highway	primary	0	strada primaria
+highway	primary	1	strade primarie
+highway	primary_link	0	strada primaria
+highway	primary_link	1	strade primarie
+highway	residential	0	strada residenziale
+highway	residential	1	strade residenziali
+highway	secondary	0	strada secondaria
+highway	secondary	1	strade secondarie
+highway	secondary_link	0	strada secondaria
+highway	secondary_link	1	strade secondarie
+highway	service	0	strada di servizio
+highway	service	1	strade di servizio
+highway	services	0	stazione di servizio
+highway	services	1	stazioni di servizio
+highway	steps	0	scala
+highway	steps	1	scale
+highway	stile	0	scaletta
+highway	stile	1	scalette
+highway	tertiary	0	strada terziaria
+highway	tertiary	1	strade terziarie
+highway	trail	0	percorso escursionistico
+highway	trail	1	percorsi escursionistici
+highway	unclassified	0	strada non classificata
+highway	unclassified	1	strade non classificate
+historic	archaeological_site	0	sito archeologico
+historic	archaeological_site	1	siti archeologici
+historic	building	0	edificio
+historic	building	1	edifici
+historic	castle	0	castello
+historic	castle	1	castelli
+historic	church	0	chiesa
+historic	church	1	chiese
+historic	mine	0	miniera
+historic	mine	1	miniere
+historic	monument	0	monumento
+historic	monument	1	monumenti
+historic	museum	0	museo
+historic	museum	1	musei
+historic	ruins	0	rovine
+historic	ruins	1	rovine
+historic	tower	0	torre
+historic	tower	1	torri
+landuse	cemetery	0	cimitero
+landuse	cemetery	1	cimiteri
+landuse	grass	0	prato
+landuse	grass	1	prati
+landuse	industrial	0	zona industriale
+landuse	industrial	1	zone industriali
+landuse	residential	0	area residenziale
+landuse	residential	1	aree residenziali
+leisure	common	0	area comune (uk)
+leisure	common	1	aree comuni (uk)
+leisure	dog_park	0	area cani
+leisure	dog_park	1	aree cani
+leisure	fishing	0	riserva di pesca
+leisure	fishing	1	riserve di pesca
+leisure	garden	0	giardino
+leisure	garden	1	giardini
+leisure	golf_course	0	campo da golf
+leisure	golf_course	1	campi da golf
+leisure	ice_rink	0	pista di ghiaccio
+leisure	ice_rink	1	piste di ghiaccio
+leisure	marina	0	porto turistico
+leisure	marina	1	porti turistici
+leisure	miniature_golf	0	minigolf
+leisure	miniature_golf	1	minigolf
+leisure	nature_reserve	0	riserva naturale
+leisure	nature_reserve	1	riserve naturali
+leisure	park	0	parco
+leisure	park	1	parchi
+leisure	pitch	0	campo sportivo
+leisure	pitch	1	campi sportivi
+leisure	playground	0	parco giochi
+leisure	playground	1	parchi giochi
+leisure	recreation_ground	0	area di svago
+leisure	recreation_ground	1	aree di svago
+leisure	slipway	0	rampa di alaggio
+leisure	slipway	1	rampe di alaggio
+leisure	sports_centre	0	centro sportivo
+leisure	sports_centre	1	centri sportivi
+leisure	stadium	0	stadio
+leisure	stadium	1	stadi
+leisure	swimming_pool	0	piscina
+leisure	swimming_pool	1	piscine
+leisure	track	0	pista da corsa
+leisure	track	1	piste da corsa
+leisure	water_park	0	parco acquatico
+leisure	water_park	1	parchi acquatici
+natural	bay	0	baia
+natural	bay	1	baie
+natural	beach	0	spiaggia
+natural	beach	1	spiagge
+natural	cape	0	capo
+natural	cape	1	capi
+natural	cave_entrance	0	entrata di grotta/caverna
+natural	cave_entrance	1	entrate di grotte/caverne
+natural	channel	0	canale
+natural	channel	1	canali
+natural	cliff	0	rupe
+natural	cliff	1	rupi
+natural	coastline	0	linea di costa
+natural	coastline	1	linee di costa
+natural	crater	0	cratere
+natural	crater	1	crateri
+natural	feature	0	caratteristica
+natural	feature	1	caratteristiche
+natural	fell	0	prato alpino
+natural	fell	1	prati alpini
+natural	fjord	0	fiordo
+natural	fjord	1	fiordi
+natural	geyser	0	geyser
+natural	geyser	1	geyser
+natural	glacier	0	ghiacciaio
+natural	glacier	1	ghiacciai
+natural	heath	0	brughiera
+natural	heath	1	brughiere
+natural	hill	0	collina
+natural	hill	1	colline
+natural	island	0	isola
+natural	island	1	isole
+natural	marsh	0	palude alluvionale
+natural	marsh	1	paludi alluvionali
+natural	mud	0	zona fangosa (sabbie mobili)
+natural	mud	1	zone fangose (sabbie mobili)
+natural	peak	0	picco montuoso
+natural	peak	1	picchi montuosi
+natural	reef	0	scogliera
+natural	reef	1	scogliere
+natural	ridge	0	cresta montuosa
+natural	ridge	1	creste montuose
+natural	river	0	fiume
+natural	river	1	fiumi
+natural	rock	0	roccia
+natural	rock	1	rocce
+natural	scree	0	ghiaione
+natural	scree	1	ghiaioni
+natural	scrub	0	boscaglia
+natural	scrub	1	boscaglie
+natural	shoal	0	secca
+natural	shoal	1	secche
+natural	spring	0	sorgente
+natural	spring	1	sorgenti
+natural	tree	0	albero
+natural	tree	1	alberi
+natural	valley	0	valle
+natural	valley	1	valli
+natural	volcano	0	vulcano
+natural	volcano	1	vulcani
+natural	wetland	0	zona umida
+natural	wetland	1	zone umide
+natural	wetlands	0	zona umida
+natural	wetlands	1	zone umide
+natural	wood	0	bosco
+natural	wood	1	boschi
+place	city	0	città
+place	city	1	città
+place	country	0	nazione
+place	country	1	nazioni
+place	county	0	contea
+place	county	1	contee
+place	farm	0	area agricola
+place	farm	1	aree agricole
+place	hamlet	0	borgo
+place	hamlet	1	borghi
+place	house	0	casa
+place	house	1	case
+place	houses	0	gruppo di case
+place	houses	1	gruppi di case
+place	island	0	isola
+place	island	1	isole
+place	islet	0	isoletta
+place	islet	1	isolette
+place	locality	0	località
+place	locality	1	località
+place	municipality	0	comune
+place	municipality	1	comuni
+place	postcode	0	cap
+place	postcode	1	cap
+place	region	0	provincia
+place	region	1	province
+place	sea	0	mare
+place	sea	1	mari
+place	state	0	regione
+place	state	1	regioni
+place	subdivision	0	suddivisione
+place	subdivision	1	suddivisioni
+place	suburb	0	quartiere
+place	suburb	1	quartieri
+place	town	0	paese
+place	town	1	paesi
+place	village	0	frazione
+place	village	1	frazioni
+shop	bakery	0	panetteria
+shop	bakery	1	panetterie
+shop	bicycle	0	negozio di biciclette
+shop	bicycle	1	negozi di biciclette
+shop	books	0	libreria
+shop	books	1	librerie
+shop	butcher	0	macellaio
+shop	butcher	1	macellai
+shop	car	0	concessionaria
+shop	car	1	concessionarie
+shop	dry_cleaning	0	lavasecco
+shop	dry_cleaning	1	lavasecchi
+shop	estate_agent	0	agenzia immobiliare
+shop	estate_agent	1	agenzie immobiliari
+shop	florist	0	fioraio
+shop	florist	1	fiorai
+shop	food	0	alimentari
+shop	food	1	alimentari
+shop	greengrocer	0	fruttivendolo
+shop	greengrocer	1	fruttivendoli
+shop	grocery	0	fruttivendolo
+shop	grocery	1	fruttivendoli
+shop	insurance	0	assicurazioni
+shop	insurance	1	assicurazioni
+shop	jewelry	0	gioielleria
+shop	jewelry	1	gioiellerie
+shop	laundry	0	lavanderia
+shop	laundry	1	lavanderie
+shop	newsagent	0	edicola
+shop	optician	0	ottico
+shop	optician	1	ottici
+shop	supermarket	0	supermercato
+shop	supermarket	1	supermercati
+shop	travel_agency	0	agenzia di viaggi
+shop	travel_agency	1	agenzie di viaggi
+shop	travel_agency	0	agenzia viaggi
+shop	travel_agency	1	agenzie viaggi
+shop	travel_agency	0	agenzia viaggio
+shop	travel_agency	1	agenzie viaggio
+tourism	alpine_hut	0	rifugio alpino
+tourism	alpine_hut	1	rifugi alpini
+tourism	artwork	0	opera d'arte
+tourism	artwork	1	opere d'arte
+tourism	attraction	0	attrazione turistica
+tourism	attraction	1	attrazioni turistiche
+tourism	bed_and_breakfast	0	bed and breakfast
+tourism	bed_and_breakfast	1	bed and breakfast
+tourism	camp_site	0	campeggio
+tourism	camp_site	1	campeggi
+tourism	caravan_site	0	area caravan e camper
+tourism	caravan_site	1	aree caravan e camper
+tourism	chalet	0	casetta (chalet)
+tourism	chalet	1	casette (chalet)
+tourism	guest_house	0	guest house
+tourism	guest_house	1	guest house
+tourism	hostel	0	ostello
+tourism	hostel	1	ostelli
+tourism	hotel	0	hotel
+tourism	hotel	1	alberghi
+tourism	information	0	informazioni
+tourism	information	1	informazioni
+tourism	motel	0	motel
+tourism	motel	1	motel
+tourism	museum	0	museo
+tourism	museum	1	musei
+tourism	picnic_site	0	area picnic
+tourism	picnic_site	1	aree picnic
+tourism	theme_park	0	parco divertimenti
+tourism	theme_park	1	parchi divertimenti
+tourism	viewpoint	0	punto panoramico
+tourism	viewpoint	1	punti panoramici
+tourism	zoo	0	zoo
+tourism	zoo	1	zoo
+amenity	fuel	0	benzinaio
+amenity	fuel	1	benzinai

@@ -3,9 +3,9 @@ asociación civil|asociacion civil|ac|a c
 banco|bco|b.co
 club atlético|club atletico
 club de fútbol|club de futbol|cf|c f|c.f.|c.f
-compañia|compania|cia|c.ia|ca|c.a|comp
-compañia anónima|compania anonima|ca|c a
-compañia por acciónes|compania por acciones|c por a|cxa|c x a
+compañía|compania|cía|cia|c.ía|c.ia|ca|c.a|comp
+compañía anónima|compania anonima|ca|c a
+compañía por acciónes|compania por acciones|c por a|cxa|c x a
 empresa|empr|emp
 empresa individual de responsabilidad limitada|eirl|e i r l
 empresa publica|ep|e.p.|e.p|e p
@@ -45,5 +45,5 @@ sociedad limitada unipersonal|slu|s.l.u.|s.l.u|s l u
 sociedad port acciónes|sociedad por acciones|spa|s.p.a.|s.p.a|s p a
 unión deportiva|union deportiva|ud|u.d.|u.d|u d
 unión|union
-y compañia|y compania|& compania|& compañia|y cia|& cia
+y compañía|y compania|& compania|& compañía|y cía|y cia|& cía|& cia
 y sucesores|& sucesores

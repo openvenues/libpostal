@@ -1,0 +1,940 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "нула"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "nula"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "један"
+      value: 1
+      type: "cardinal"
+      multiply_gte: 1000000
+    - 
+      name: "jedan"
+      value: 1
+      type: "cardinal"
+      multiply_gte: 1000000
+    - 
+      name: "једна"
+      value: 1
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "jedna"
+      value: 1
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "једно"
+      value: 1
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "jedno"
+      value: 1
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "два"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "dva"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "две"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "dve"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "три"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "tri"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "четири"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "četiri"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "cetiri"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "пет"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "pet"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "шест"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "šest"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sest"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "седам"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "sedam"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "осам"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "osam"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "девет"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "devet"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "десет"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "deset"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "једанаест"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "jedanaest"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "дванаест"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "dvanaest"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "тринаест"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "trinaest"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "четрнаест"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "četrnaest"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "cetrnaest"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "петнаест"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "petnaest"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "шеснаест"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "šesnaest"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sesnaest"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "седамнаест"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "sedamnaest"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "осамнаест"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "osamnaest"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "деветнаест"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "devetnaest"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "двадесет"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dvadeset"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "тридесет"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trideset"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "четрдесет"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "četrdeset"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "cetrdeset"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "педесет"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "pedeset"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "шездесет"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "šezdeset"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sezdeset"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "седамдесет"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sedamdeset"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "осамдесет"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "osamdeset"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "деведесет"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "devedeset"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "сто"
+      value: 100
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sto"
+      value: 100
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "двеста"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dvesta"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "триста"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trista"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "четиристо"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "četiristo"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "cetiristo"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "петсто"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "petsto"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "шестсто"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "šeststo"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seststo"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "седамсто"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sedamsto"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "осамсто"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "osamsto"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "деветсто"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "devetsto"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "хиљаду"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "hiljadu"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "хиљаде"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "hiljade"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "хиљада"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "hiljada"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "милион"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "milion"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "милиона"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliona"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "милијарду"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "milijardu"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "милијарде"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milijarde"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "милијарди"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milijardi"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "билион"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "bilion"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "билиона"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliona"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "билијарда"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "bilijarda"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "билијарде"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilijarde"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "билијарди"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilijardi"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "нулте"
+      value: 0
+      type: "ordinal"
+    - 
+      name: "nulte"
+      value: 0
+      type: "ordinal"
+    - 
+      name: "први"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "prvi"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "други"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "drugi"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "трећи"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "treći"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "treci"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "четврти"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "četvrti"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "cetvrti"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "пети"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "peti"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "шести"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "šesti"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "sesti"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "седми"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "sedmi"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "осми"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "osmi"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "девети"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "deveti"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "десети"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "deseti"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "једанаести"
+      value: 11
+      type: "ordinal"
+    - 
+      name: "jedanaesti"
+      value: 11
+      type: "ordinal"
+    - 
+      name: "дванаести"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "dvanaesti"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "тринаести"
+      value: 13
+      type: "ordinal"
+    - 
+      name: "trinaesti"
+      value: 13
+      type: "ordinal"
+    - 
+      name: "четрнаести"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "četrnaesti"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "cetrnaesti"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "петнаести"
+      value: 15
+      type: "ordinal"
+    - 
+      name: "petnaesti"
+      value: 15
+      type: "ordinal"
+    - 
+      name: "шеснаести"
+      value: 16
+      type: "ordinal"
+    - 
+      name: "šesnaesti"
+      value: 16
+      type: "ordinal"
+    - 
+      name: "sesnaesti"
+      value: 16
+      type: "ordinal"
+    - 
+      name: "седамнаести"
+      value: 17
+      type: "ordinal"
+    - 
+      name: "sedamnaesti"
+      value: 17
+      type: "ordinal"
+    - 
+      name: "осамнаести"
+      value: 18
+      type: "ordinal"
+    - 
+      name: "osamnaesti"
+      value: 18
+      type: "ordinal"
+    - 
+      name: "деветнаести"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "devetnaesti"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "двадесети"
+      value: 20
+      type: "ordinal"
+    - 
+      name: "dvadeseti"
+      value: 20
+      type: "ordinal"
+    - 
+      name: "тридесети"
+      value: 30
+      type: "ordinal"
+    - 
+      name: "trideseti"
+      value: 30
+      type: "ordinal"
+    - 
+      name: "четрдесети"
+      value: 40
+      type: "ordinal"
+    - 
+      name: "četrdeseti"
+      value: 40
+      type: "ordinal"
+    - 
+      name: "cetrdeseti"
+      value: 40
+      type: "ordinal"
+    - 
+      name: "педесети"
+      value: 50
+      type: "ordinal"
+    - 
+      name: "pedeseti"
+      value: 50
+      type: "ordinal"
+    - 
+      name: "шездесети"
+      value: 60
+      type: "ordinal"
+    - 
+      name: "šezdeseti"
+      value: 60
+      type: "ordinal"
+    - 
+      name: "sezdeseti"
+      value: 60
+      type: "ordinal"
+    - 
+      name: "седамдесети"
+      value: 70
+      type: "ordinal"
+    - 
+      name: "sedamdeseti"
+      value: 70
+      type: "ordinal"
+    - 
+      name: "осамдесетица"
+      value: 80
+      type: "ordinal"
+    - 
+      name: "osamdeseti"
+      value: 80
+      type: "ordinal"
+    - 
+      name: "деведесетина"
+      value: 90
+      type: "ordinal"
+    - 
+      name: "devedeseti"
+      value: 90
+      type: "ordinal"
+    - 
+      name: "стоти"
+      value: 100
+      type: "ordinal"
+    - 
+      name: "stoti"
+      value: 100
+      type: "ordinal"
+    - 
+      name: "двестати"
+      value: 200
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "dvestati"
+      value: 200
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "тристати"
+      value: 300
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "tristati"
+      value: 300
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "четиристоти"
+      value: 400
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "četristoti"
+      value: 400
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "cetristoti"
+      value: 400
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "петстоти"
+      value: 500
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "petstoti"
+      value: 500
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "шестстоти"
+      value: 600
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "šeststoti"
+      value: 600
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "seststoti"
+      value: 600
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "седамстоти"
+      value: 700
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "sedamstoti"
+      value: 700
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "осамстоти"
+      value: 800
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "osamstoti"
+      value: 800
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "деветстоти"
+      value: 900
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "devetstoti"
+      value: 900
+      type: "ordinal"
+      right: "add"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "."
+        "1":
+          - "."
+        "2":
+          - "."
+        "3":
+          - "."
+        "4":
+          - "."
+        "5":
+          - "."
+        "6":
+          - "."
+        "7":
+          - "."
+        "8":
+          - "."
+        "9":
+          - "."

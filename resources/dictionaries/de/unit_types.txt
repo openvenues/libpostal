@@ -1,7 +1,0 @@
-abteilung|abt
-buro
-nummer|nr|#
-stiege|stg
-wohnung|whg
-zahl|z
-zimmer|zi

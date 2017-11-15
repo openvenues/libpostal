@@ -1,2 +1,39 @@
 barcelona|barna|bar.na
+buenos aires|bs as|bs.as
+capital federal|cap fed
+ciudad de méxico|c méx|c mex|c de méx|c de mex|ciudad de mexico
+distrito federal|df|d.f|d f
+distrito capital|dc|d.c|d c
+distrito nacional|dn|d.n|d n
 madrid|madd
+aguascalientes|ag
+baja california|bn
+baja california sur|bs
+campeche|cm
+chiapas|cp
+chihuahua|ch
+coahuila|ca
+colima|cl
+durango|du
+guanajuato|gt
+guerrero|gr
+hidalgo|hi
+jalisco|ja
+méxico|mexico|mx
+michoacán|michoacan|mc
+morelos|mr
+nayarit|na
+nuevo león|nuevo leon|nl
+oaxaca|oa
+puebla|pu
+querétaro|queretaro|qe
+quintana roo|qr
+san luis potosí|san luis potosi|sl
+sinaloa|si
+sonora|so
+tabasco|tb
+tamaulipas|tm
+tlaxcala|tl
+veracruz|ve
+yucatán|yucatan|yu
+zacatecas|za

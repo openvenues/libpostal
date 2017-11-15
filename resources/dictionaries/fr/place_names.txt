@@ -19,6 +19,7 @@ bunker
 bureau
 bureau de change
 bureau de poste
+bureau parc|bureau prc
 bureaux
 café|cafe
 camping|cpg
@@ -31,6 +32,7 @@ centre pour la jeunesse
 centre de santé|centre de sante
 chapelle|chp
 château|chateau
+chez
 cimetière|cimetiere
 cinéma|cinema
 clinique
@@ -44,13 +46,17 @@ crème glacée|creme glacee
 crématorium|crematorium
 darse|dars
 dentiste
+département|dept|departement
 docteurs
 dortoir
 dortoirs
-école
-école de conduite
+école|ecole
+école de conduite|ecole de conduite
+école élémentaire|ecole elementaire
+école maternelle|ecole maternelle
 église|eglise|egl|égl
 établissement d'enseignement supérieur|etablissement d'enseignement superieur|établissement denseignement supérieur|etablissement denseignement superieur
+escaliers|escs
 étang|etang
 ferme|frm
 fermes|frms
@@ -108,10 +114,11 @@ pont
 ponts
 port
 poterne|pot|potrn
-porte|pte
 préscolaire|prescolaire
 prison
 refuge
+résidence|rés|residence|res
+résidences|residences
 restaurant
 restauration rapide
 ruines
@@ -133,7 +140,7 @@ villa|vla
 villas|vlas
 zone artisanale|za|z.a.|z.a|z a
 zone d'activites|zone dactivites|za|z.a.|z.a|z a
-zone artisanale commerciale|zac|z.a.c.|z.a.c|z a c
+zone artisanale et commerciale|zac|z.a.c.|z.a.c|z a c|zone artisanale commerciale
 zone d'aménagement concerté|zone d'amenagement concerte|zone daménagement concerté|zone damenagement concerte|zac|z.a.c.|z.a.c|z a c
 zone d'aménagement différé|zone d'amenagement differe|zone daménagement différé|zone damenagement differe|zad|z.a.d.|z.a.d|z a d
 zone industrielle|zi|z.i.|z.i|z i

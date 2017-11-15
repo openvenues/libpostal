@@ -82,75 +82,94 @@ int main(int argc, char **argv) {
             char *str_key = char_array_get_string(key);
 
             trie_add(numex_table->trie, str_key, value);
+
+            if (string_contains_hyphen(str_key)) {
+                char *replaced = string_replace_char(str_key, '-', ' ');
+                trie_add(numex_table->trie, replaced, value);
+                free(replaced);
+            }
+
         }
 
         for (j = ordinal_indicator_index; j < ordinal_indicator_index + num_ordinal_indicators; j++) {
-            value = numex_table->ordinal_indicators->n;
-            ordinal_indicator_t ordinal_source = ordinal_indicator_rules[j];
+            for (int ordinal_phrases = 0; ordinal_phrases <= 1; ordinal_phrases++) {
+                value = numex_table->ordinal_indicators->n;
+                ordinal_indicator_t ordinal_source = ordinal_indicator_rules[j];
 
-            if (ordinal_source.key == NULL) {
-                log_error("ordinal source key was NULL at index %d\n", j);
-                exit(EXIT_FAILURE);
-            }
+                if (ordinal_source.key == NULL) {
+                    log_error("ordinal source key was NULL at index %d\n", j);
+                    exit(EXIT_FAILURE);
+                }
 
-            char *ordinal_indicator_key = strdup(ordinal_source.key);
-            if (ordinal_indicator_key == NULL) {
-                log_error("Error in strdup\n");
-                exit(EXIT_FAILURE);
-            }
-
-            char *suffix = NULL;
-            if (ordinal_source.suffix != NULL) {
-                suffix = strdup(ordinal_source.suffix);
-                if (suffix == NULL) {
+                char *ordinal_indicator_key = strdup(ordinal_source.key);
+                if (ordinal_indicator_key == NULL) {
                     log_error("Error in strdup\n");
                     exit(EXIT_FAILURE);
                 }
-            }
-            ordinal_indicator_t *ordinal = ordinal_indicator_new(ordinal_indicator_key, ordinal_source.gender, ordinal_source.category, suffix);
-            ordinal_indicator_array_push(numex_table->ordinal_indicators, ordinal);            
 
-            char_array_clear(key);
-            char_array_cat(key, lang);
-            char_array_cat(key, ORDINAL_NAMESPACE_PREFIX);
+                char *suffix = NULL;
+                if (ordinal_source.suffix != NULL) {
+                    suffix = strdup(ordinal_source.suffix);
+                    if (suffix == NULL) {
+                        log_error("Error in strdup\n");
+                        exit(EXIT_FAILURE);
+                    }
+                }
 
-            switch (ordinal_source.gender) {
-                case GENDER_MASCULINE:
-                    char_array_cat(key, GENDER_MASCULINE_PREFIX);
-                    break;
-                case GENDER_FEMININE:
-                    char_array_cat(key, GENDER_FEMININE_PREFIX);
-                    break;
-                case GENDER_NEUTER:
-                    char_array_cat(key, GENDER_NEUTER_PREFIX);
-                    break;
-                case GENDER_NONE:
-                default:
-                    char_array_cat(key, GENDER_NONE_PREFIX);
-            }
+                char_array_clear(key);
+                char_array_cat(key, lang);
 
-            switch (ordinal_source.category) {
-                case CATEGORY_PLURAL:
-                    char_array_cat(key, CATEGORY_PLURAL_PREFIX);
-                    break;
-                case CATEGORY_DEFAULT:
-                default:
-                    char_array_cat(key, CATEGORY_DEFAULT_PREFIX);
+                if (!ordinal_phrases) {
+                    ordinal_indicator_t *ordinal = ordinal_indicator_new(ordinal_indicator_key, ordinal_source.gender, ordinal_source.category, suffix);
+                    ordinal_indicator_array_push(numex_table->ordinal_indicators, ordinal);            
 
-            }
+                    char_array_cat(key, ORDINAL_NAMESPACE_PREFIX);
+                } else {
+                    char_array_cat(key, ORDINAL_PHRASE_NAMESPACE_PREFIX);
+                }
 
-            char_array_cat(key, NAMESPACE_SEPARATOR_CHAR);
+                switch (ordinal_source.gender) {
+                    case GENDER_MASCULINE:
+                        char_array_cat(key, GENDER_MASCULINE_PREFIX);
+                        break;
+                    case GENDER_FEMININE:
+                        char_array_cat(key, GENDER_FEMININE_PREFIX);
+                        break;
+                    case GENDER_NEUTER:
+                        char_array_cat(key, GENDER_NEUTER_PREFIX);
+                        break;
+                    case GENDER_NONE:
+                    default:
+                        char_array_cat(key, GENDER_NONE_PREFIX);
+                }
 
-            char *reversed = utf8_reversed_string(ordinal_source.key);
-            char_array_cat(key, reversed);
-            free(reversed);
+                switch (ordinal_source.category) {
+                    case CATEGORY_PLURAL:
+                        char_array_cat(key, CATEGORY_PLURAL_PREFIX);
+                        break;
+                    case CATEGORY_DEFAULT:
+                    default:
+                        char_array_cat(key, CATEGORY_DEFAULT_PREFIX);
 
-            char *str_key = char_array_get_string(key);
+                }
 
-            if (trie_get(numex_table->trie, str_key) == NULL_NODE_ID) {
-                trie_add(numex_table->trie, str_key, value);
-            } else {
-                log_warn("Key exists: %s, skipping\n", str_key);                            
+                char_array_cat(key, NAMESPACE_SEPARATOR_CHAR);
+
+                char *key_str = ordinal_source.key;
+
+                if (ordinal_phrases) {
+                    key_str = suffix;
+                }
+
+                char *reversed = utf8_reversed_string(key_str);
+                char_array_cat(key, reversed);
+                free(reversed);
+
+                char *str_key = char_array_get_string(key);
+
+                if (trie_get(numex_table->trie, str_key) == NULL_NODE_ID) {
+                    trie_add(numex_table->trie, str_key, value);
+                }
             }
         }
 

@@ -4,23 +4,23 @@ alquería|alqueria|alque
 andador|andad
 angosta|angta
 apeadero|apdro
-autopista|auto|autop
+autopista|auto|autop|aut|ap
 autovía|autovia|autov
-avenida|av|avd|avda
+avenida|av|avd|avda|av /
+avenida calle|ac|av cl|av| cll|av calle
+avenida carrera|ak|av cr|av cra|avda cra|avda cr
 bajada|bjada
 banda|bda
 barranco|branc
 barranquillo|bqllo
 barriada|barda
-barrio|bo
-bloque|blque|bloq|blq
 boulevard|blvd|bvd
 brazal|brzal
-bulevar|bulev|blev|blv|bv
-calle|c|cl|cll|c/|c /|ca
+bulevar|bulev|blev|blv|bv|bl
+calle|c|cl|cll|c /|ca|call
 calleja|cllja
 callejón|callejon|callej|cjón|cjon|cllon|cllón|cj
-calle privada|calle priv|c priv|cl priv|cll priv|c/priv|c / priv
+calle privada|calle priv|c priv|cl priv|cll priv|c / priv
 callejuela|cjla
 callizo|cllzo
 calzada|czada|calz
@@ -32,24 +32,27 @@ caminito|cmt
 camping|campg
 cantera|cantr
 cantón|canton|cant
-carrera|cra|carra|carr
-carretera|ctra|cr
+carrera|cra|carra|carr|cr|kra|kr
+carretera|ctra|cr|ct
 carreterín|carreterin|ctrin
 carretil|crtil
 carril|crril
 cerrada|cda|cer
 cinturón|cinturon|cint
+circular|cq
 circuito|cto
+circunvalar|cv|crv|cirv
 circunvalación|circunvalacion|ccvcn
 corredor|crrdo
 costanilla|cstan
 costera
 cuesta|custa
-diagonal|diag
+diagonal|diag|dg
 diseminado|disem
 espalda|eslda
 estrada|estda
 explanada|expla
+extensión|ext|extension
 extramuros|extrm
 galería|galeria|gale
 glorieta|gta|g
@@ -68,16 +71,18 @@ particular|parti
 partida|ptda
 pasadizo|pzo
 pasaje|psaje|psj
-paseo|pº|po|pso|pseo|pas|ps|p|p.o|p.º
+paseo|pº|p°|po|pso|pseo|pas|ps|p|p.o|p.º|p.°
 paseo maritimo|psmar|ps mar
 paso
 pasillo|psllo
 peatonal|peat
 periferico|perif
-plaza|pl|plza|pza|p.za
+plaza|pl|plza|pza|p.za|pz
 plazoleta|pzta|plzta|plta
 plazuela|plzla
 poblado|pbdo
+polígono residencial|poligono residencial|políg res|polig res|pol.res|pol res|pgres|pg res|pr|p.r.|p.r|p r
+polígono industrial|poligono industrial|políg ind|polig ind|pol.ind|pol ind|pgind|pg ind|pi|p.i.|p.i|p i
 prolongación|prolongacion|prol
 puebla|pbla
 pueblo|pblo
@@ -95,7 +100,7 @@ sendera|sedra
 sendero|send|sedro
 subida|sbida
 tránsito|transito|trans
-transversal|trval|trvsal
+transversal|trval|trvsal|tv|tr
 trasera|tras
 travesía|travesia|trva|trvsía|trvsia
 vereda|vreda|ver

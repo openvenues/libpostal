@@ -1,0 +1,4802 @@
+global:
+    cldr_country_probability: 0.5
+    localized_name_probability: 0.6
+    iso_alpha_2_code_probability: 0.2
+    iso_alpha_3_code_probability: 0.1
+    iso_3166_name_probability: 0.1
+
+    abbreviate_street_probability: 0.3
+    separate_street_probability: 0.2
+    abbreviate_unit_probability: 0.3
+    separate_unit_probability: 0.2
+
+    abbreviate_toponym_probability: 0.3
+
+    address_only_probability: 0.1
+    place_only_probability: 0.2
+    place_and_postcode_probability: 0.1
+
+    pre_release_downloads: []
+
+    fields: &default_fields
+        NUMBER:
+            component: house_number
+        STREET:
+            component: road
+        CITY:
+            component: city
+        POSTCODE:
+            component: postcode
+
+    fields_no_postcode: &fields_no_postcode
+        NUMBER:
+            component: house_number
+        STREET:
+            component: road
+        CITY:
+            component: city
+
+    fields_with_state: &fields_with_state
+        <<: *default_fields
+        REGION:
+            component: state
+
+    fields_with_unit: &fields_with_unit
+        <<: *default_fields
+        UNIT:
+            component: unit
+
+    fields_with_state_and_unit: &fields_with_state_and_unit
+        <<: *default_fields
+        REGION:
+            component: state
+        UNIT:
+            component: unit
+
+    ignore_simple_units: &ignore_simple_units
+        - &simple_unit_regex "^(?:[A-Z]?\-?[0-9]*(?:[\\s]*/[\\s]*[0-9]*)?|[0-9]*(?:[\\s]*/[\\s]*[0-9]*)?-?[A-Z]?|[A-Z]*[0-9]+[A-Z]?/[0-9]*[A-Z][0-9]*|[0-9]*[A-Z][0-9*]/[0-9]+[A-Z]?)$"
+
+    # Turned off by default to avoid performance penalty for reverse geocoding
+    add_osm_boundaries: false
+    add_osm_neighborhoods: true
+    osm_neighborhood_overrides_city: false
+
+    house_number_strip_commas: false
+
+    # Units have strong restrictions, have to be a number or hyphenated number
+    non_numeric_units: false
+
+    # This is fine for many countries
+    numeric_postcodes_only: true
+
+countries:
+    ar:
+        language: es
+        files:
+            - filename: city_of_buenos_aires.csv
+              add_osm_boundaries: true
+              city_replacements:
+                  city: Buenos Aires
+
+    at:
+        language: de
+        add_osm_boundaries: true
+        files:
+            - filename: 31254.csv
+            - filename: 31255.csv
+            - filename: 31256.csv
+            - filename: city_of_vienna.csv
+            - filename: tirol.csv
+
+    au:
+        fields: *fields_with_state_and_unit
+        osm_neighborhood_overrides_city: true
+        files:
+            - filename: countrywide.csv
+              non_numeric_units: true
+
+    be:
+        files:
+            - filename: flanders.csv
+              language: nl
+        subdirs:
+            bru:
+                files:
+                    - filename: brussels-fr.csv
+                      language: fr
+                    - filename: brussels-nl.csv
+                      language: nl
+
+    bm:
+        cldr_country_probability: 1.0
+        files:
+            - filename: territory_wide.csv
+
+    br:
+        subdirs:
+            ac:
+                add:
+                    state: AC
+                files:
+                    - filename: statewide.csv
+
+            al:
+                add:
+                    state: AL
+                files:
+                    - filename: statewide.csv
+
+            am:
+                add:
+                    state: AM
+                files:
+                    - filename: statewide.csv
+
+            ap:
+                add:
+                    state: AP
+                files:
+                    - filename: statewide.csv
+
+            ba:
+                add:
+                    state: BA
+                files:
+                    - filename: statewide.csv
+
+            ce:
+                add:
+                    state: CE
+                files:
+                    - filename: statewide.csv
+
+            df:
+                add:
+                    state: DF
+                files:
+                    - filename: statewide.csv
+                      # Cities and postcodes only
+                      fields:
+                          CITY:
+                              component: city
+                          POSTCODE:
+                              component: postcode
+            es:
+                add:
+                    state: ES
+                files:
+                    - filename: vitoria.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Vitória
+                    - filename: statewide.csv
+
+            go:
+                add:
+                    state: GO
+                files:
+                    - filename: statewide.csv
+
+            ma:
+                add:
+                    state: MA
+                files:
+                    - filename: statewide.csv
+
+            mg:
+                add:
+                    state: MG
+                files:
+                    - filename: statewide.csv
+
+            ms:
+                add:
+                    state: MS
+                files:
+                    - filename: statewide.csv
+
+            mt:
+                add:
+                    state: MT
+                files:
+                    - filename: statewide.csv
+
+            pa:
+                add:
+                    state: PA
+                files:
+                    - filename: statewide.csv
+
+            pb:
+                add:
+                    state: PB
+                files:
+                    - filename: statewide.csv
+
+            pe:
+                add:
+                    state: PE
+                files:
+                    - filename: recife.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Recife
+                    - filename: statewide.csv
+
+            pi:
+                add:
+                    state: PI
+                files:
+                    - filename: statewide.csv
+
+            pr:
+                add:
+                    state: PR
+                files:
+                    - filename: statewide.csv
+
+            rj:
+                add:
+                    state: RJ
+                files:
+                    - filename: rio_de_janeiro.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Rio de Janeiro
+                    - filename: statewide.csv
+
+            rn:
+                add:
+                    state: RN
+                files:
+                    - filename: statewide.csv
+
+            ro:
+                add:
+                    state: RO
+                files:
+                    - filename: statewide.csv
+
+            ro:
+                add:
+                    state: RO
+                files:
+                    - filename: statewide.csv
+
+            rr:
+                add:
+                    state: RR
+                files:
+                    - filename: statewide.csv
+
+            rs:
+                add:
+                    state: RS
+                files:
+                    - filename: statewide.csv
+
+            sc:
+                add:
+                    state: SC
+                files:
+                    - filename: joinville.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Joinville
+                    - filename: statewide.csv
+
+            se:
+                add:
+                    state: SE
+                files:
+                    - filename: statewide.csv
+
+            sp:
+                add:
+                    state: SP
+                files:
+                    - filename: statewide.csv
+
+            to:
+                add:
+                    state: TO
+                files:
+                    - filename: statewide.csv
+
+    by:
+        subdirs:
+            brest:
+                add:
+                    state: Брестская область
+                files:
+                    - filename: regionwide.csv
+                      language: ru
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+            grodno:
+                add:
+                    state: Гродненская область
+                files:
+                    - filename: regionwide.csv
+                      language: ru
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+            mogilev:
+                add:
+                    state: Могилёвская область
+                files:
+                    - filename: regionwide.csv
+                      language: ru
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+            vitebsk:
+                add:
+                    state: Витебская область
+                files:
+                    - filename: regionwide.csv
+                      language: ru
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+
+    ca:
+        cldr_country_probability: 0.3
+        ignore_fields_containing:
+            city:
+                - "\\bcounty\\b"
+            road:
+                - "\\bp\\.?\\s*o\\.?\\s*box\\b"
+            postcode:
+                - "\\bx1x1x1\\b"
+
+        subdirs:
+            ab:
+                add:
+                    state: AB
+                language: en
+                files:
+                    - filename: airdrie.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Airdrie
+                    - filename: banff.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Banff
+                    - filename: calgary.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Calgary
+                    - filename: city_of_edmonton.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Edmonton
+                    - filename: grande_prairie.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Grande Prairie
+                    - filename: strathcona-county.csv
+
+            bc:
+                add:
+                    state: British Columbia
+                language: en
+                files:
+                    - filename: capital-regional-district.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Capital Regional District
+                    - filename: cowichan_valley.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Cowichan Valley Regional District
+                    - filename: columbia-shuswap.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Columbia-Shuswap Regional District
+                    - filename: kamloops.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Kamloops
+                    - filename: kelowna.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Kelowna
+                    - filename: langley.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Langley
+                    - filename: nanaimo.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Nanaimo
+                    - filename: north_cowichan.csv
+                    - filename: prince_george.csv
+                    - filename: province.csv
+                    - filename: sunshine_coast.csv
+                    - filename: thompson-nicola-regional-district.csv
+                    - filename: vancouver.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Vancouver
+                    - filename: vernon.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Vernon
+                    - filename: victoria.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Victoria
+                    - filename: west_kelowna.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: West Kelowna
+
+            mb:
+                add:
+                    state: MB
+                files:
+                    - filename: brandon.csv
+
+            nb:
+                add:
+                    state: NB
+                files:
+                    - filename: province.csv
+                      add_osm_boundaries: true
+
+            nl:
+                add:
+                    state: NL
+                files:
+                    - filename: city_of_st_johns.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: St. John's
+
+            ns:
+                add:
+                    state: NS
+                language: en
+                files:
+                    - filename: halifax.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Halifax
+                    - filename: province.csv
+                      add_osm_boundaries: true
+
+            "on":
+                add:
+                    state: "ON"
+                files:
+                    - filename: adelaide.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Adelaide-Metcalfe
+                    - filename: amherstburg.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Amherstburg
+                    - filename: belleville.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Belleville
+                    - filename: brant.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          # Weird but correct
+                          city: County of Brant
+                    - filename: bruce.csv
+                      city_replacements:
+                          state_district: Bruce County
+                    - filename: chatham_kent.csv
+                    - filename: city_of_ajax.csv
+                    - filename: city_of_brampton.csv
+                    - filename: city_of_burlington.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Burlington
+                    - filename: city_of_guelph.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Guelph
+                    - filename: city_of_hamilton.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Hamilton
+                    - filename: city_of_hanover.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Hanover
+                    - filename: city_of_kingston.csv
+                    - filename: city_of_kitchener.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Kitchener
+                    - filename: city_of_oakville.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Oakville
+                    - filename: city_of_ottawa.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Ottawa
+                    - filename: city_of_sault_ste_marie.csv
+                    - filename: city_of_thunder_bay.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Thunder Bay
+                    - filename: city_of_toronto.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Toronto
+                    - filename: city_of_welland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Welland
+                    - filename: city_of_windsor.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Windsor
+                    - filename: cobourg.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Cobourg
+                    - filename: couchicing.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Couchiching First Nation
+                    - filename: dufferin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Dufferin County
+                    - filename: elgin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Elgin County
+                    - filename: essex.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Essex County
+                    - filename: grey.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Grey County
+                    - filename: grey_dufferin.csv
+                    - filename: haldimand.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Haldimand County
+                    - filename: haliburton.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Haliburton County
+                    - filename: halton.csv
+                    - filename: hastings.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Hastings County
+                    - filename: lambton.csv
+                      city_replacements:
+                          state_district: Lambtom County
+                    - filename: lasalle.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: LaSalle
+                    - filename: leeds_grenville.csv
+                      city_replacements:
+                          state_district: United Counties of Leeds and Grenville
+                    - filename: lennoxaddington.csv
+                      city_replacements:
+                          state_district: Lennox and Addington County
+                    - filename: lucan_biddulph.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Lucan Biddulph
+                    - filename: middlesex_centre.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Middlesex Centre
+                    - filename: muskoka.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: District of Muskoka
+                    - filename: newbury.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Newbury
+                    - filename: niagara_region.csv
+                    - filename: norfolk.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Norfolk County
+                    - filename: north_glengarry.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: North Glengarry
+                    - filename: north_middlesex.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: North Middlesex
+                    - filename: northumberland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Northumberland County
+                    - filename: oxford.csv
+                    - filename: parry_sound.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Parry Sound
+                    - filename: peel-region.csv
+                    - filename: perth.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Perth County
+                    - filename: peterborough.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Peterborough
+                    - filename: prescott_russell.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: United Counties of Prescott and Russell
+                    - filename: prince_edward.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Prince Edward County
+                    - filename: quinte_west.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Quinte West
+                    - filename: rainy_river.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Rainy River
+                    - filename: renfrew.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Renfew County
+                    - filename: seguin.csv
+                    - filename: seine_river.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Seine River First Nation
+                    - filename: simcoe.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Simcoe County
+                    - filename: southwest-middlesex.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Southwest Middlesex
+                    - filename: stormont_dundas_glengarry.csv
+                      city_replacements:
+                          state_district: "United Counties of Stormont, Dundas and Glengarry"
+                    - filename: stratford.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Stratford
+                    - filename: strathroy-caradoc.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Strathroy-Caradoc
+                    - filename: thames_centre.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Thames Centre
+                    - filename: town_of_oakville.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Oakville
+                    - filename: township_of_durham.csv
+                    - filename: waterloo.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Waterloo
+                    - filename: west_parry_sound_district.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Parry Sound
+                    - filename: york.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: York Region
+
+            pe:
+                add:
+                    state: PE
+                language: en
+                files:
+                    - filename: province.csv
+                      add_osm_boundaries: true
+
+            qc:
+                add:
+                    state: QC
+                language: fr
+                files:
+                    - filename: gatineau.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Gatineau
+                    - filename: longueuil.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Longueuil
+                    - filename: montreal.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Montréal
+                    - filename: laval.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Laval
+
+            sk:
+                add:
+                    state: SK
+                language: en
+                files:
+                    - filename: regina.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Regina
+                    - filename: saskatoon.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Saskatoon
+
+            yk:
+                add:
+                    state: Yukon
+                language: en
+                files:
+                    - filename: whitehorse.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Whitehorse
+
+    ch:
+        files:
+            - filename: aargau.csv
+              add_osm_boundaries: true
+              language: de
+              add:
+                  state: AG
+            - filename: bern.csv
+              add:
+                  state: BE
+            - filename: basel-land.csv
+              language: de
+              add:
+                  state: BL
+            - filename: basel-stadt.csv
+              language: de
+              add:
+                  state: BS
+            - filename: fribourg.csv
+              add:
+                  state: FR
+            - filename: geneva.csv
+              language: fr
+              add:
+                  state: GE
+            - filename: glarus.csv
+              language: de
+              add:
+                  state: GL
+            - filename: grisons.csv
+              add:
+                  state: GR
+            - filename: luzern.csv
+              add:
+                  state: LU
+            - filename: schaffhausen.csv
+              language: de
+              add:
+                  state: SH
+            - filename: schwyz.csv
+              language: de
+              add:
+                  state: SZ
+            - filename: solothurn.csv
+              language: de
+              add:
+                  state: SO
+            - filename: uri.csv
+              language: de
+              add:
+                  state: UR
+            - filename: zurich.csv
+              language: de
+              add:
+                  state: ZH
+
+    cn:
+        subdirs:
+            42:
+                files:
+                    - filename: wuhan.csv
+                      language: zh
+                      add_osm_boundaries: true
+                      add:
+                          city: 武汉市
+                      fields:
+                          <<: *default_fields
+                          DISTRICT:
+                              component: city_district
+
+    co:
+        files:
+            - filename: bogota.csv
+              add_osm_boundaries: true
+              city_replacements:
+                  city: Bogotá
+        subdirs:
+            ant:
+                files:
+                    - filename: medellin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Medellín
+
+    cz:
+        files:
+            - filename: countrywide.csv
+
+    cw:
+        files:
+            - filename: countrywide.csv
+              add_osm_boundaries: true
+
+    de:
+        postcode_length: 5
+        files:
+            - filename: berlin.csv
+        subdirs:
+            he:
+                files:
+                    - filename: city_of_frankfurtammain.csv
+                    - filename: city_of_kassel.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Kassel
+            hh:
+                files:
+                    - filename: statewide.csv
+            ni:
+                files:
+                    - filename: bentheim.csv
+            nw:
+                files:
+                    - filename: city_of_cologne.csv
+                    - filename: city_of_wuppertal.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Wuppertal
+                    - filename: kreis_viersen.csv
+                    - filename: statewide.csv
+            sn:
+                files:
+                    - filename: statewide.csv
+
+            th:
+                files:
+                    - filename: statewide.csv
+
+    es:
+        add_osm_boundaries: true
+        postcode_length: 5
+        files:
+            - filename: 25829.csv
+            - filename: 25830.csv
+            - filename: 25831.csv
+            - filename: 32628.csv
+
+    fi:
+        add_osm_boundaries: true
+        ignore_rows_missing_fields:
+            - road
+        files:
+            - filename: ahvenanmaa-fi.csv
+              language: fi
+            - filename: ahvenanmaa-sv.csv
+              language: sv
+            - filename: etelä-karjala-fi.csv
+              language: fi
+            - filename: etelä-pohjanmaa-fi.csv
+              language: fi
+            - filename: etelä-savo-fi.csv
+              language: fi
+            - filename: kainuu-fi.csv
+              language: fi
+            - filename: kanta-häme-fi.csv
+              language: fi
+            - filename: keski-pohjanmaa-fi.csv
+              language: fi
+            - filename: keski-pohjanmaa-sv.csv
+              language: sv
+            - filename: keski-suomi-fi.csv
+              language: fi
+            - filename: kymeenlaakso-fi.csv
+              language: fi
+            - filename: kymeenlaakso-sv.csv
+              language: sv
+            - filename: lappi-fi.csv
+              language: fi
+            - filename: päijät-häme-fi.csv
+              language: fi
+            - filename: pirkanmaa-fi.csv
+              language: fi
+            - filename: pohjanmaa-fi.csv
+              language: fi
+            - filename: pohjanmaa-sv.csv
+              language: sv
+            - filename: pohjois-karjala-fi.csv
+              language: fi
+            - filename: pohjois-pohjanmaa-fi.csv
+              language: fi
+            - filename: pohjois-savo-fi.csv
+              language: fi
+            - filename: satakunta-fi.csv
+              language: fi
+            - filename: uusimaa-fi.csv
+              language: fi
+            - filename: uusimaa-sv.csv
+              language: sv
+            - filename: varsinais-suomi-fi.csv
+              language: fi
+            - filename: varsinais-suomi-sv.csv
+              language: sv
+
+    fr:
+        postcode_length: 5
+        alias_fields_containing:
+            city:
+                - pattern: "(?:lyon|paris|marseilles?) ([\\d]+(?:e|er|ème|eme) arrondissement)"
+                  component: city_district
+        files:
+            - filename: ain.csv
+            - filename: aisne.csv
+            - filename: allier.csv
+            - filename: alpes_de_haute_provence.csv
+            - filename: alpes_maritimes.csv
+            - filename: ardeche.csv
+            - filename: ardennes.csv
+            - filename: ariege.csv
+            - filename: aube.csv
+            - filename: aveyron.csv
+            - filename: bas_rhin.csv
+            - filename: bouches_du_rhone.csv
+            - filename: calvados.csv
+            - filename: cantal.csv
+            - filename: charente.csv
+            - filename: charente_maritime.csv
+            - filename: cher.csv
+            - filename: correze.csv
+            - filename: corse_du_sud.csv
+            - filename: cote_dor.csv
+            - filename: cotes_darmor.csv
+            - filename: creuse.csv
+            - filename: deux_sevres.csv
+            - filename: dordogne.csv
+            - filename: doubs.csv
+            - filename: drome.csv
+            - filename: essonne.csv
+            - filename: eure.csv
+            - filename: finistere.csv
+            - filename: gard.csv
+            - filename: gers.csv
+            - filename: gironde.csv
+              # Guadeloupe - overseas department (treated as a country in libpostal)
+            - filename: guadeloupe.csv
+              cldr_country_probability: 1.0
+              override_country_dir: gp
+              # French Guiana - overseas department (treated as a country in libpostal)
+            - filename: guyane.csv
+              cldr_country_probability: 1.0
+              override_country_dir: gf
+            - filename: haute_corse.csv
+            - filename: haute_garonne.csv
+            - filename: haute_loire.csv
+            - filename: haute_marne.csv
+            - filename: haute_rhin.csv
+            - filename: hautes_alpes.csv
+            - filename: haute_saone.csv
+            - filename: haute_savoie.csv
+            - filename: hautes_pyrenees.csv
+            - filename: haute_vienne.csv
+            - filename: hauts_de_seine.csv
+            - filename: herault.csv
+            - filename: ille_et_vilaine.csv
+            - filename: indre.csv
+            - filename: indre_et_loire.csv
+            - filename: isere.csv
+            - filename: jura.csv
+            - filename: landes.csv
+              # Réunion - overseas department (treated as a country in libpostal)
+            - filename: la_reunion.csv
+              cldr_country_probability: 1.0
+              override_country_dir: re
+            - filename: loire_atlantique.csv
+            - filename: loire.csv
+            - filename: loir_et_cher.csv
+            - filename: loiret.csv
+            - filename: lot.csv
+            - filename: lozere.csv
+            - filename: maine_et_loire.csv
+            - filename: manche.csv
+            - filename: marne.csv
+              # Martinique - overseas department (treated as a country in libpostal)
+            - filename: martinique.csv
+              cldr_country_probability: 1.0
+              override_country_dir: mq
+              # Mayotte - overseas department (treated as a country in libpostal)
+            - filename: mayenne.csv
+            - filename: mayotte.csv
+              cldr_country_probability: 1.0
+              override_country_dir: yt
+            - filename: meurthe_et_moselle.csv
+            - filename: meuse.csv
+            - filename: montpellier.csv
+              add_osm_boundaries: true
+              city_replacements:
+                  city: Montpellier
+            - filename: morbihan.csv
+            - filename: moselle.csv
+            - filename: nievre.csv
+            - filename: nord.csv
+            - filename: oise.csv
+            - filename: orne.csv
+            - filename: paris.csv
+            - filename: pas_de_calais.csv
+            - filename: puy_de_dome.csv
+            - filename: pyrenees_atlantiques.csv
+            - filename: rhone.csv
+            - filename: saone_et_loire.csv
+            - filename: sarthe.csv
+            - filename: savoie.csv
+            - filename: seien_et_marne.csv
+            - filename: seine_maritime.csv
+            - filename: seine_saint_denis.csv
+            - filename: somme.csv
+            - filename: tarn.csv
+            - filename: tarn_et_garonne.csv
+            - filename: territoire_de_belfort.csv
+            - filename: val_de_marne.csv
+            - filename: val_doise.csv
+            - filename: var.csv
+            - filename: vaucluse.csv
+            - filename: vendee.csv
+            - filename: vienne.csv
+            - filename: yonne.csv
+            - filename: yvelines.csv
+
+    gr:
+        subdirs:
+            b:
+                files:
+                    - filename: municipality_of_kalamaria.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Θεσσαλονίκη
+
+    il:
+        files:
+            - filename: countrywide-hebrew.csv
+              language: he
+            - filename: countrywide-latin.csv
+              language: en
+
+    is:
+        files:
+            - filename: countrywide.csv
+              add_osm_boundaries: true
+              city_replacements:
+                  country: Ísland
+
+    it:
+        postcode_length: 5
+        osm_neighborhood_overrides_city: true
+        files:
+            - filename: countrywide.csv
+              fields:
+                  <<: *default_fields
+                  DISTRICT:
+                      component: state_district
+                      value_map:
+                          "AGRIGENTO": AG
+                          "ALESSANDRIA": AL
+                          "ANCONA": AN
+                          "AOSTA": AO
+                          "AREZZO": AR
+                          "ASCOLI PICENO": AP
+                          "ASTI": AT
+                          "AVELLINO": AV
+                          "BARI": BA
+                          "BARLETTA-ANDRIA-TRANI": BT
+                          "BELLUNO": BL
+                          "BENEVENTO": BN
+                          "BERGAMO": BG
+                          "BIELLA": BI
+                          "BOLOGNA": BO
+                          "BOLZANO/BOZEN": BZ
+                          "BRESCIA": BS
+                          "BRINDISI": BR
+                          "CAGLIARI": CA
+                          "CALTANISSETTA": CL
+                          "CAMPOBASSO": CB
+                          "CARBONIA-IGLESIAS": CI
+                          "CASERTA": CE
+                          "CATANIA": CT
+                          "CATANZARO": CZ
+                          "CHIETI": CH
+                          "COMO": CO
+                          "COSENZA": CS
+                          "CREMONA": CR
+                          "CROTONE": KR
+                          "CUNEO": CN
+                          "ENNA": EN
+                          "FERMO": FM
+                          "FERRARA": FE
+                          "FIRENZE": FI
+                          "FOGGIA": FG
+                          "FORLI'-CESENA": FC
+                          "FROSINONE": FR
+                          "GENOVA": GE
+                          "GORIZIA": GO
+                          "GROSSETO": GR
+                          "IMPERIA": IM
+                          "ISERNIA": IS
+                          "LA SPEZIA": SP
+                          "L'AQUILA": AQ
+                          "LATINA": LT
+                          "LECCE": LE
+                          "LECCO": LC
+                          "LIVORNO": LI
+                          "LODI": LO
+                          "LUCCA": LU
+                          "MACERATA": MC
+                          "MANTOVA": MN
+                          "MASSA-CARRARA": MS
+                          "MATERA": MT
+                          "MEDIO CAMPIDANO": VS
+                          "MESSINA": ME
+                          "MILANO": MI
+                          "MODENA": MO
+                          "MONZA E DELLA BRIANZA": MB
+                          "NAPOLI": NA
+                          "NOVARA": "NO"
+                          "NUORO": NU
+                          "OGLIASTRA": OG
+                          "OLBIA-TEMPIO": OT
+                          "ORISTANO": OR
+                          "PADOVA": PD
+                          "PALERMO": PA
+                          "PARMA": PR
+                          "PAVIA": PV
+                          "PERUGIA": PG
+                          "PESARO E URBINO": PU
+                          "PESCARA": PE
+                          "PIACENZA": PC
+                          "PISA": PI
+                          "PISTOIA": PT
+                          "PORDENONE": PN
+                          "POTENZA": PZ
+                          "PRATO": PO
+                          "RAGUSA": RG
+                          "RAVENNA": RA
+                          "REGGIO DI CALABRIA": RC
+                          "REGGIO NELL'EMILIA": RE
+                          "RIETI": RI
+                          "RIMINI": RN
+                          "ROMA": RM
+                          "ROVIGO": RO
+                          "SALERNO": SA
+                          "SASSARI": SS
+                          "SAVONA": SV
+                          "SIENA": SI
+                          "SIRACUSA": SR
+                          "SONDRIO": SO
+                          "TARANTO": TA
+                          "TERAMO": TE
+                          "TERNI": TR
+                          "TORINO": TO
+                          "TRAPANI": TP
+                          "TRENTO": TN
+                          "TREVISO": TV
+                          "TRIESTE": TS
+                          "UDINE": UD
+                          "VARESE": VA
+                          "VENEZIA": VE
+                          "VERBANO-CUSIO-OSSOLA": VB
+                          "VERCELLI": VC
+                          "VERONA": VR
+                          "VIBO VALENTIA": VV
+                          "VICENZA": VI
+                          "VITERBO": VT
+
+        subdirs:
+            "04":
+                files:
+                    - filename: acerra.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Acerra
+            # Piemonte
+            21:
+                files:
+                    - filename: statewide.csv
+            # Trentino-Alto Adige/Südtirol
+            32:
+                files:
+                    - filename: south-tyrol-de.json
+                      language: de
+                    - filename: south-tyrol-it.json
+                      language: it
+            # Veneto
+            34:
+                files:
+                    - filename: venice.csv
+                      add_osm_boundaries: true
+            # Friuli-Venezia Giulia
+            36:
+                files:
+                    - filename: statewide.csv
+            # Emilia-Romagna
+            45:
+                files:
+                    - filename: bo.csv
+                    - filename: bologna.csv
+                    - filename: fc.csv
+                    - filename: fe.csv
+                    - filename: ferrara.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Ferrara
+                    - filename: mo.csv
+                    - filename: pc.csv
+                    - filename: pr.csv
+                    - filename: ra.csv
+                    - filename: re.csv
+                    - filename: rn.csv
+            # Toscana
+            52:
+                files:
+                    - filename: firenze.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Firenze
+                    - filename: statewide.csv
+            # Sicilia
+            82:
+                files:
+                    - filename: statewide.csv
+            # Sardegna
+            88:
+                files:
+                    - filename: statewide.csv
+
+    jm:
+        cldr_country_probability: 0.9
+        files:
+            - filename: august_town.csv
+            - filename: countrywide.csv
+              ignore_fields_containing:
+                  city:
+                      - "^\\s*S\\s*$"
+                  state:
+                      - "^\\s*KINGSTON\\s*$"
+
+    jp:
+        language: ja
+        fields:
+            NUMBER:
+                component: house_number
+            STREET:
+                component: suburb
+        files:
+            - filename: aichi.csv
+            - filename: akita.csv
+            - filename: aomori.csv
+            - filename: chiba.csv
+            - filename: ehime.csv
+            - filename: fukui.csv
+            - filename: fukuoka.csv
+            - filename: fukushima.csv
+            - filename: gifu.csv
+            - filename: gunma.csv
+            - filename: hiroshima.csv
+            - filename: hokkaido.csv
+            - filename: hyogo.csv
+            - filename: ibaraki.csv
+            - filename: ishikawa.csv
+            - filename: iwate.csv
+            - filename: kagawa.csv
+            - filename: kagoshima.csv
+            - filename: kanagawa.csv
+            - filename: kochi.csv
+            - filename: kumamoto.csv
+            - filename: kyoto.csv
+            - filename: mie.csv
+            - filename: miyagi.csv
+            - filename: miyazaki.csv
+            - filename: nagano.csv
+            - filename: nagasaki.csv
+            - filename: nara.csv
+            - filename: niigata.csv
+            - filename: oita.csv
+            - filename: okayama.csv
+            - filename: okinawa.csv
+            - filename: osaka.csv
+            - filename: saga.csv
+            - filename: saitama.csv
+            - filename: shiga.csv
+            - filename: shimane.csv
+            - filename: shizuoka.csv
+            - filename: tochigi.csv
+            - filename: tokushima.csv
+            - filename: tokyo.csv
+            - filename: tottori.csv
+            - filename: toyama.csv
+            - filename: wakayama.csv
+            - filename: yamagata.csv
+            - filename: yamaguchi.csv
+            - filename: yamanashi.csv
+
+    kr:
+        subdirs:
+            seoul:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: chongnogu-old.csv
+                    - filename: chunggu-old.csv
+                    - filename: chungnanggu-old.csv
+                    - filename: kangbukku-old.csv
+                    - filename: kangdonggu-old.csv
+                    - filename: kangnamgu-old.csv
+                    - filename: kangseogu-old.csv
+                    - filename: keumcheongu-old.csv
+                    - filename: kurogu-old.csv
+                    - filename: kwanakku-old.csv
+                    - filename: kwangjingu-old.csv
+                    - filename: mapogu-old.csv
+                    - filename: noweongu-old.csv
+                    - filename: seochogu-old.csv
+                    - filename: seodaemungu-old.csv
+                    - filename: seongbukku-old.csv
+                    - filename: seongdonggu-old.csv
+                    - filename: songpagu-old.csv
+                    - filename: tobonggu-old.csv
+                    - filename: tongdaemungu-old.csv
+                    - filename: tongjakku-old.csv
+                    - filename: yangcheongu-old.csv
+                    - filename: yeongdeungpogu-old.csv
+                    - filename: yongsangu-old.csv
+
+            # Seoul
+            11:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Busan
+            26:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Daegu
+            27:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Incheon
+            28:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Gwangju
+            29:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Daejeon
+            30:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Ulsan
+            31:
+                language: ko
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *default_fields
+                    CITY:
+                        component: city_district
+                    DISTRICT:
+                        component: suburb
+                    REGION:
+                        component: city
+                files:
+                    - filename: provincewide.csv
+
+            # Gyeonggi
+            41:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # Gangwon
+            42:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # North Chungcheong
+            43:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # South Chungcheong
+            44:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # North Jeolla
+            45:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # South Jeolla
+            46:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # North Gyeongsang
+            47:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # South Gyeongsang
+            48:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+            # Jeju
+            49:
+                language: ko
+                add_osm_boundaries: true
+                add_osm_neighborhoods: false
+                fields:
+                    <<: *fields_with_state
+                    DISTRICT:
+                        component: suburb
+                files:
+                    - filename: provincewide.csv
+
+            # Sejong
+            50:
+                language: ko
+                add_osm_boundaries: true
+                files:
+                    - filename: provincewide.csv
+
+    kw:
+        add_osm_boundaries: true
+        files:
+            - filename: countrywide-arabic.csv
+              language: ar
+            - filename: countrywide-latin.csv
+              language: en
+
+    kz:
+        language: ru
+        files:
+            - filename: asa-statewide.csv
+              add_osm_boundaries: true
+              city_replacements:
+                  city: Алматы
+            - filename: ala-statewide.csv
+              add_osm_boundaries: true
+
+    li:
+        cldr_country_probability: 0.9
+        files:
+            - filename: countrywide.csv
+
+    lt:
+        cldr_country_probability: 0.8
+        files:
+            - filename: city_of_vilnius.csv
+            - filename: countrywide.csv
+
+    lu:
+        cldr_country_probability: 0.8
+        files:
+            - filename: countrywide.csv
+
+    lv:
+        files:
+            - filename: city_of_riga.csv
+
+    mx:
+        language: es
+        postcode_length: 5
+        files:
+            - filename: countrywide.csv
+              add_osm_boundaries: true
+        subdirs:
+            aguascalientes:
+                add:
+                    state: AG
+                files:
+                    - filename: statewide.csv
+
+            baja-california:
+                add:
+                    state: BN
+                files:
+                    - filename: statewide.csv
+
+            baja-california-sur:
+                add:
+                    state: BS
+                files:
+                    - filename: statewide.csv
+
+            campeche:
+                add:
+                    state: CM
+                files:
+                    - filename: statewide.csv
+
+            chiapas:
+                add:
+                    state: CP
+                files:
+                    - filename: statewide.csv
+
+            chihuahua:
+                add:
+                    state: CH
+                files:
+                    - filename: statewide.csv
+
+            coahuila-de-zaragoza:
+                add:
+                    state: CA
+                files:
+                    - filename: statewide.csv
+
+            colima:
+                add:
+                    state: CL
+                files:
+                    - filename: statewide.csv
+
+            distrito-federal:
+                add:
+                    city: Ciudad de México
+                    state: Distrito Federal
+                files:
+                    - filename: statewide.csv
+                      fields:
+                          <<: *default_fields
+                          CITY:
+                              component: city_district
+                      add_osm_boundaries: true
+
+            durango:
+                add:
+                    state: DU
+                files:
+                    - filename: statewide.csv
+
+            guanajuato:
+                add:
+                    state: GT
+                files:
+                    - filename: statewide.csv
+
+            guerrero:
+                add:
+                    state: GR
+                files:
+                    - filename: statewide.csv
+
+            hidalgo:
+                add:
+                    state: HI
+                files:
+                    - filename: statewide.csv
+
+            jalisco:
+                add:
+                    state: JA
+                files:
+                    - filename: statewide.csv
+
+            méxico:
+                add:
+                    state: MX
+                files:
+                    - filename: statewide.csv
+
+            michoacán-de-ocampo:
+                add:
+                    state: MC
+                files:
+                    - filename: statewide.csv
+
+            morelos:
+                add:
+                    state: MR
+                files:
+                    - filename: statewide.csv
+
+            nayarit:
+                add:
+                    state: NA
+                files:
+                    - filename: statewide.csv
+
+            nuevo-león:
+                add:
+                    state: NL
+                files:
+                    - filename: statewide.csv
+
+            oaxaca:
+                add:
+                    state: OA
+                files:
+                    - filename: statewide.csv
+
+            puebla:
+                add:
+                    state: PU
+                files:
+                    - filename: statewide.csv
+
+            querétaro:
+                add:
+                    state: QE
+                files:
+                    - filename: statewide.csv
+
+            quintana-roo:
+                add:
+                    state: QR
+                files:
+                    - filename: statewide.csv
+
+            san-luis-potosí:
+                add:
+                    state: SL
+                files:
+                    - filename: statewide.csv
+
+            sinaloa:
+                add:
+                    state: SI
+                files:
+                    - filename: statewide.csv
+
+            sonora:
+                add:
+                    state: SO
+                files:
+                    - filename: statewide.csv
+
+            tabasco:
+                add:
+                    state: TB
+                files:
+                    - filename: statewide.csv
+
+            tamaulipas:
+                add:
+                    state: TM
+                files:
+                    - filename: statewide.csv
+
+            tlaxcala:
+                add:
+                    state: TL
+                files:
+                    - filename: statewide.csv
+
+            veracruz-de-ignacio-de-la-llave:
+                add:
+                    state: VE
+                files:
+                    - filename: statewide.csv
+
+            yucatán:
+                add:
+                    state: YU
+                files:
+                    - filename: statewide.csv
+
+            zacatecas:
+                add:
+                    state: ZA
+                files:
+                    - filename: statewide.csv
+
+    nl:
+        files:
+            - filename: countrywide.csv
+
+    "no":
+        files:
+            - filename: countrywide.csv
+
+    nz:
+        add_osm_boundaries: true
+        files:
+            - filename: countrywide.csv
+            - filename: city_of_palmerston_north.csv
+
+    pl:
+        files:
+            - filename: dolnoslaskie.csv
+            - filename: kujawsko-pomorskie.csv
+            - filename: lodzkie.csv
+            - filename: lubelskie.csv
+            - filename: lubuskie.csv
+            - filename: malopolski.csv
+            - filename: mazowieckie.csv
+            - filename: opolskie.csv
+            - filename: podkarpackie.csv
+            - filename: podlaskie.csv
+            - filename: pomorskie.csv
+            - filename: slaskie.csv
+            - filename: swietokrzyskie.csv
+            - filename: warminsko-mazurskie.csv
+            - filename: wielkopolskie.csv
+            - filename: zachodniopomorskie.csv
+
+    ru:
+        language: ru
+        subdirs:
+            ce:
+                add:
+                    state: Чечня
+                files:
+                    - filename: argun.csv
+                    - filename: gikalo.csv
+                    - filename: grozny.csv
+                      city_replacements:
+                          city: Грозный
+                    - filename: gudermes.csv
+                    - filename: kurchaloy.csv
+
+            ko:
+                add:
+                    state: Республика Коми
+                files:
+                    - filename: statewide.csv
+
+            mow:
+                add:
+                    state: Московская область
+                files:
+                    - filename: statewide.csv
+
+            nvs:
+                add:
+                    state: Новосибирская область
+                files:
+                    - filename: statewide.csv
+
+            vgg:
+                add:
+                    state: Волгоградская область
+                files:
+                    - filename: statewide.csv
+                      ignore_fields_containing:
+                          postcode:
+                              - "^[0-9]{1,5}$"
+
+    se:
+        files:
+            - filename: municipality_of_alingsas.csv
+            - filename: municipality_of_gislaved.csv
+            - filename: municipality_of_helsingborg.csv
+            - filename: municipality_of_hoganas.csv
+            - filename: municipality_of_kalmar.csv
+            - filename: municipality_of_kristinehamn.csv
+            - filename: municipality_of_Österåker.csv
+            - filename: municipality_of_malmo.csv
+            - filename: municipality_of_nacka.csv
+              add_osm_boundaries: true
+            - filename: municipality_of_savsjö.csv
+            - filename: municipality_of_stockholm.csv
+            - filename: municipality_of_vasteras.csv
+            - filename: municipality_of_vaxholm.csv
+            - filename: municipality_of_vaxjo.csv
+
+    sg:
+        cldr_country_probability: 0.8
+        files:
+            - filename: countrywide.csv
+              add_osm_boundaries: true
+
+    sk:
+        files:
+            - filename: countrywide.csv
+
+    ua:
+        subdirs:
+            12:
+                files:
+                    - filename: city_of_dnipropetrovsk.csv
+                      add_osm_boundaries: true
+                      language: uk
+                      city_replacements:
+                          city: Дніпро
+    us:
+        cldr_country_probability: 0.05
+        ignore_fields_containing:
+            city:
+                - "\\bcounty\\b"
+            road:
+                - "\\bp\\.?\\s*o\\.?\\s*box\\b"
+            postcode:
+                - "^[0-9]{1,4}$"
+
+        subdirs:
+            ak:
+                add:
+                    state: AK
+                files:
+                    - filename: anchorage.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Anchorage
+                    - filename: city_of_juneau.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Juneau
+                    - filename: fairbanks_north_star_borough.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Fairbanks North Star Borough
+                    - filename: ketchikan.csv
+                    - filename: kenai_peninsula_borough.csv
+                    - filename: kodiak_island_borough.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Kodiak Island Borough
+                    - filename: matanuska_susitna_borough.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Matanuska-Susitna Borough
+                    - filename: yakutat_borough.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Yakutat
+
+            al:
+                add:
+                    state: AL
+                files:
+                    - filename: baldwin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Baldwin County
+                    - filename: calhoun.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Calhoun County
+                    - filename: city_of_auburn.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Auburn
+                    - filename: city_of_huntsville.csv
+                    - filename: city_of_mobile.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Mobile
+                    - filename: etowah.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Etowah County
+                    - filename: jefferson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Jefferson County
+                    - filename: madison.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Madison County
+                    - filename: montgomery.csv
+                    - filename: pike.csv
+                      city_replacements:
+                          state_district: Pike County
+                    - filename: shelby.csv
+                      # Don't add OSM boundaries by default, only use county as backup
+                      city_replacements:
+                          state_district: Shelby County
+                    - filename: st_clair.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Saint Clair County
+                    - filename: talladega.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Talladega County
+                    - filename: tuscaloosa.csv
+
+            ar:
+                add:
+                    state: AR
+                files:
+                    - filename: city_of_fayetteville.csv
+                    - filename: statewide.csv
+
+            az:
+                add:
+                    state: AZ
+                files:
+                    - filename: city_of_glendale.csv
+                    - filename: city_of_mesa.csv
+                    - filename: city_of_scottsdale.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Scotsdale
+                    - filename: coconino.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Coconino County
+                    - filename: cochise.csv
+                      house_number_strip_commas: true
+                    - filename: gila.csv
+                    - filename: maricopa.csv
+                    - filename: pima.csv
+                    - filename: pinal.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Pinal County
+                    - filename: yavapai.csv
+                    - filename: yuma.csv
+
+            ca:
+                add:
+                    state: CA
+                files:
+                    - filename: alameda.csv
+                    - filename: amador.csv
+                    - filename: berkeley.csv
+                    - filename: butte.csv
+                    - filename: city_of_anaheim.csv
+                      city_replacements:
+                          city: Anaheim
+                    - filename: city_of_bakersfield.csv
+                    - filename: city_of_carson.csv
+                    - filename: city_of_cupertino.csv
+                    - filename: city_of_hayward.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Hayward
+                    - filename: city_of_long_beach.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Long Beach
+                    - filename: city_of_mountain_view.csv
+                    - filename: city_of_orange.csv
+                    - filename: city_of_san_jose.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: San Jose
+                    - filename: city_of_san_luis_obispo.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: San Luis Obispo
+                    - filename: city_of_temecula.csv
+                    - filename: colusa.csv
+                    - filename: contra_costa.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Contra Costa County
+                    - filename: del_norte.csv
+                    - filename: el_dorado.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: El Dorado County
+                    - filename: fresno.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Fresno County
+                    - filename: glenn.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Glenn County
+                    - filename: humboldt.csv
+                      city_replacements:
+                          state_district: Humboldt County
+                    - filename: inyo.csv
+                    - filename: kern.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Kern County
+                      ignore_fields_containing:
+                          road:
+                              - "^[A-Z0-9]$"
+                    - filename: kings.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Kings County
+                    - filename: lake.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Lake County
+                    - filename: lassen.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Lassen County
+                    - filename: los_angeles.csv
+                    - filename: madera.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Madera County
+                    - filename: mendocino.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Mendocino County
+                    - filename: merced.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Merced County
+                    - filename: mono.csv
+                    - filename: monterey.csv
+                    - filename: napa.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Napa County
+                    - filename: nevada.csv
+                    - filename: palo_alto.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Palo Alto
+                    - filename: placer.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Placer County
+                    - filename: plumas.csv
+                    - filename: riverside.csv
+                    - filename: sacramento.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Sacramento County
+                    - filename: san_benito.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: San Benito County
+                    - filename: san_bernardino.csv
+                    - filename: san_diego.csv
+                    - filename: san_francisco.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: San Francisco
+                    - filename: san_joaquin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: San Joaquin County
+                    - filename: san_luis_obispo.csv
+                    - filename: san_mateo.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: San Mateo County
+                    - filename: santa_barbara.csv
+                    - filename: santa_clara.csv
+                    - filename: santa_cruz.csv
+                    - filename: shasta.csv
+                    - filename: solano.csv
+                    - filename: sonoma.csv
+                    - filename: stanislaus.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Stanislaus County
+                    - filename: tehama.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Tehama County
+                    - filename: trinity.csv
+                    - filename: tulare.csv
+                    - filename: tuolumne.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Tuolumne County
+                    - filename: ventura.csv
+                    - filename: yolo.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Yolo County
+                    - filename: yuba.csv
+            co:
+                add:
+                    state: CO
+                files:
+                    - filename: arapahoe.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Arapahoe County
+                    - filename: boulder.csv
+                    - filename: broomfield.csv
+                    - filename: city_of_arvada.csv
+                    - filename: city_of_aurora.csv
+                    - filename: city_of_boulder.csv
+                    - filename: city_of_commerce_city.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                    - filename: city_of_erie.csv
+                    - filename: city_of_fort_collins.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Fort Collins
+                    - filename: city_of_greeley.csv
+                    - filename: city_of_loveland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Loveland
+                    - filename: clear_creek.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Clear Creek County
+                    - filename: conejos.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Conejos County
+                    - filename: delta.csv
+                    - filename: denver.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Denver
+                    - filename: douglas.csv
+                    - filename: eagle.csv
+                    - filename: el_paso.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: El Paso County
+                    - filename: fremont.csv
+                      city_replacements:
+                          state_district: Fremont County
+                    - filename: garfield.csv
+                    - filename: gilpin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Gilpin County
+                    - filename: grand.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Grand County
+                    - filename: gunnison.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Gunnison County
+                    - filename: jefferson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Jefferson County
+                    - filename: la_plata.csv
+                    - filename: mesa.csv
+                    - filename: mineral.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Mineral County
+                    - filename: moffat.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Moffat County
+                    - filename: montezuma.csv
+                    - filename: montrose.csv
+                    - filename: park.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Park County
+                    - filename: pitkin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Pitkin County
+                    - filename: pueblo.csv
+                    - filename: rio_blanco.csv
+                    - filename: routt.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Routt County
+                    - filename: sanmiguel.csv
+                    - filename: teller.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Teller County
+                    - filename: washington.csv
+                    - filename: weld.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Weld County
+
+            ct:
+                add:
+                    state: CT
+                files:
+                    - filename: statewide.csv
+                    - filename: city_of_hartford.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Hartford
+                    - filename: city_of_manchester.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Manchester
+                    - filename: city_of_waterbury.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Waterbury
+                    - filename: city_of_watertown.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Watertown
+                    - filename: town_of_avon.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Avon
+                    - filename: town_of_easton_monroe.csv
+                    - filename: town_of_fairfield.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Fairfield
+                    - filename: town_of_groton.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Groton
+
+            dc:
+                add:
+                    state: District of Columbia
+                files:
+                    - filename: statewide.csv
+
+            de:
+                add:
+                    state: DE
+                files:
+                    - filename: kent.csv
+                    - filename: new_castle.csv
+                    - filename: sussex.csv
+
+            fl:
+                add:
+                    state: FL
+                files:
+                    - filename: alachua.csv
+                    - filename: bay.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Bay County
+                    - filename: brevard.csv
+                    - filename: broward.csv
+                    - filename: charlotte.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Charlotte County
+                    - filename: citrus.csv
+                    - filename: city_of_lakeland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Lakeland
+                    - filename: clay.csv
+                    - filename: collier.csv
+                    - filename: desoto.csv
+                    - filename: duval.csv
+                    - filename: gulf.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Gulf County
+                    - filename: hernando.csv
+                    - filename: highlands.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Highlands County
+                    - filename: hillsborough.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Hillsborough County
+                    - filename: lake.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Lake County
+                    - filename: lee.csv
+                    - filename: leon.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Leon County
+                    - filename: manatee.csv
+                    - filename: miami.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Miami-Dade County
+                    - filename: orange_county.csv
+                    - filename: osceola.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Osceola County
+                    - filename: palm_beach_county.csv
+                    - filename: pinellas.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Pinellas County
+                    - filename: sarasota.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Sarasota County
+                    - filename: seminole.csv
+                    - filename: statewide.csv
+                    - filename: volusia.csv
+                    - filename: walton.csv
+
+            ga:
+                add:
+                    state: GA
+                # By default every county in Georgia needs OSM boundary info unless specified
+                add_osm_boundaries: true
+                # Note: files that are left out are deliberate, a lot of merged fields, decal numbers, etc.
+                files:
+                    - filename: appling.csv
+                      city_replacements:
+                          state_district: Appling County
+                    - filename: bacon.csv
+                      city_replacements:
+                          state_district: Bacon County
+                    - filename: bartow.csv
+                      city_replacements:
+                          state_district: Bartow County
+                    - filename: ben_hill.csv
+                      city_replacements:
+                          state_district: Ben Hill County
+                    - filename: berrien.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Berrien County
+                    - filename: bibb.csv
+                      city_replacements:
+                          state_district: Bibb County
+                    - filename: bleckley.csv
+                      city_replacements:
+                          state_district: Bleckley County
+                    - filename: brooks.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Brooks County
+                    - filename: bryan.csv
+                      city_replacements:
+                          state_district: Bryan County
+                    - filename: burke.csv
+                      city_replacements:
+                          state_district: Burke County
+                    - filename: calhoun.csv
+                      city_replacements:
+                          state_district: Calhoun County
+                    - filename: candler.csv
+                      city_replacements:
+                          state_district: Candler County
+                    - filename: carroll.csv
+                      city_replacements:
+                          state_district: Carroll County
+                    - filename: charlton.csv
+                      city_replacements:
+                          state_district: Charlton County
+                    - filename: chatham.csv
+                      fields: *fields_with_state_and_unit
+                      city_replacements:
+                          state_district: Chatham County
+                    - filename: city_of_alma.csv
+                      city_replacements:
+                          city: Alma
+                    - filename: city_of_atlanta.csv
+                      add_osm_boundaries: false
+                    - filename: city_of_johns_creek.csv
+                      add_osm_boundaries: false
+                      fields: *fields_with_state_and_unit
+                    - filename: city_of_sandy_springs.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Sandy Springs
+                    - filename: city_of_marietta.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Marietta
+                    - filename: city_of_savannah.csv
+                      add_osm_boundaries: true
+                      fields: *fields_with_state
+                      ignore_fields_containing:
+                          state:
+                            - "^[\\s]*(?!ga)"
+                      city_replacements:
+                          city: Savannah
+                    - filename: clayton.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Clayton County
+                    - filename: cobb.csv
+                      city_replacements:
+                          state_district: Cobb County
+                    - filename: coffee.csv
+                      city_replacements:
+                          state_district: Coffee County
+                    - filename: colquitt.csv
+                      city_replacements:
+                          state_district: Colquitt County
+                    - filename: cook.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Cook County
+                    - filename: dekalb.csv
+                      add_osm_boundaries: false
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      city_replacements:
+                          state_district: DeKalb County
+                      ignore_fields_containing:
+                          unit:
+                              # Ignore unit number without a type e.g. "123" or "A"
+                              - *simple_unit_regex
+                              # Ignore units like "Fl 2" as that's a level in our parlance
+                              - "\\bfl\\b"
+                    - filename: dooly.csv
+                      city_replacements:
+                          state_district: Dooly County
+                    - filename: dougherty.csv
+                      city_replacements:
+                          state_district: Dougherty County
+                    - filename: douglas.csv
+                      city_replacements:
+                          state_district: Douglas County
+                    - filename: echols.csv
+                      city_replacements:
+                          state_district: Echols County
+                    - filename: evans.csv
+                      city_replacements:
+                          state_district: Evans County
+                    - filename: fayette.csv
+                      add_osm_boundaries: false
+                      fields:
+                          <<: *fields_with_unit
+                          CITY:
+                              component: city
+                              value_map:
+                                  BRK: Brooks
+                                  FAY: Fayetteville
+                                  JBO: Jonesboro
+                                  PTC: Peachtree City
+                                  SEN: Senoia
+                                  TYR: Tyrone
+                      non_numeric_units: true
+                      city_replacements:
+                          state_district: Fayette County
+                    - filename: forsyth.csv
+                      add_osm_boundaries: false
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      city_replacements:
+                          state_district: Forsyth County
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                    - filename: fulton.csv
+                      add_osm_boundaries: false
+                      fields: *fields_with_state_and_unit
+                    - filename: gordon.csv
+                      city_replacements:
+                          state_district: Gordon County
+                    - filename: gwinnett.csv
+                      add_osm_boundaries: false
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      city_replacements:
+                          state_district: Gwinnett County
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                    - filename: habersham.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Habersham County
+                    - filename: hall.csv
+                      city_replacements:
+                          state_district: Hall County
+                    - filename: harris.csv
+                      city_replacements:
+                          state_district: Harris County
+                    - filename: heard.csv
+                      city_replacements:
+                          state_district: Heard County
+                    - filename: henry.csv
+                      city_replacements:
+                          state_district: Henry County
+                    - filename: houston.csv
+                      city_replacements:
+                          state_district: Houston County
+                    - filename: irwin.csv
+                      city_replacements:
+                          state_district: Irwin County
+                    - filename: jackson.csv
+                      city_replacements:
+                          state_district: Jackson County
+                    - filename: jefferson.csv
+                      city_replacements:
+                          state_district: Jefferson County
+                    - filename: johnson.csv
+                      city_replacements:
+                          state_district: Johnson County
+                    - filename: jones.csv
+                      city_replacements:
+                          state_district: Jones County
+                    - filename: lanier.csv
+                      city_replacements:
+                          state_district: Lanier County
+                    - filename: laurens.csv
+                      city_replacements:
+                          state_district: Laurens County
+                    - filename: limestone.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Limestone County
+                    - filename: long.csv
+                      city_replacements:
+                          state_district: Long County
+                    - filename: mcintosh.csv
+                      city_replacements:
+                          state_district: McIntosh County
+                    - filename: miller.csv
+                      city_replacements:
+                          state_district: Miller County
+                    - filename: mitchell.csv
+                      city_replacements:
+                          state_district: Mitchell County
+                    - filename: muscogee.csv
+                      city_replacements:
+                          state_district: Muscogee County
+                    - filename: newton.csv
+                      add_osm_boundaries: false
+                      city_replacements:
+                          state_district: Newton County
+                    - filename: paulding.csv
+                      city_replacements:
+                          state_district: Paulding County
+                    - filename: pierce.csv
+                      city_replacements:
+                          state_district: Pierce County
+                    - filename: quitman.csv
+                      city_replacements:
+                          state_district: Quitman County
+                    - filename: randolph.csv
+                      city_replacements:
+                          state_district: Randolph County
+                    - filename: richmond.csv
+                      add_osm_boundaries: false
+                    - filename: stewart.csv
+                      city_replacements:
+                          state_district: Stewart County
+                    - filename: sumter.csv
+                      city_replacements:
+                          state_district: Sumter County
+                    - filename: tattnall.csv
+                      city_replacements:
+                          state_district: Tattnall County
+                    - filename: thomas.csv
+                      city_replacements:
+                          state_district: Thomas County
+                    - filename: tift.csv
+                      city_replacements:
+                          state_district: Tift County
+                    - filename: toombs.csv
+                      city_replacements:
+                          state_district: Toombs County
+                    - filename: troup.csv
+                      city_replacements:
+                          state_district: Troup County
+                    - filename: turner.csv
+                      city_replacements:
+                          state_district: Turner County
+                    - filename: twiggs.csv
+                      city_replacements:
+                          state_district: Twiggs County
+                    - filename: wheeler.csv
+                      city_replacements:
+                          state_district: Wheeler County
+                    - filename: wilkinson.csv
+                      city_replacements:
+                          state_district: Wilkinson County
+
+            # Placeholder for Hawaii, no files with proper addresses yet
+            hi:
+                add:
+                    state: HI
+                files:
+                    - filename: honolulu.csv
+                    - filename: kauai.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          island: Kauai
+                          state_district: Kauai County
+                      ignore_fields_containing:
+                          unit:
+                              - "\\n"
+                    - filename: maui.csv
+                      add:
+                          island: Maui
+                          state_district: Maui County
+
+            ia:
+                add:
+                    state: IA
+                files:
+                    - filename: adair.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Adair County
+                    - filename: benton.csv
+                    - filename: boone.csv
+                    - filename: bremer.csv
+                    - filename: buchanan.csv
+                    - filename: buena_vista.csv
+                    - filename: calhoun.csv
+                    - filename: carroll.csv
+                    - filename: cass.csv
+                    - filename: cherokee.csv
+                    - filename: clarke.csv
+                    - filename: clay.csv
+                    - filename: crawford.csv
+                    - filename: dallas.csv
+                    - filename: decatur.csv
+                    - filename: delaware.csv
+                    - filename: des_moines.csv
+                    - filename: dickinson.csv
+                    - filename: dubuque.csv
+                    - filename: emmet.csv
+                    - filename: franklin.csv
+                    - filename: fremont.csv
+                    - filename: greene.csv
+                    - filename: guthrie.csv
+                    - filename: hamilton.csv
+                    - filename: howard.csv
+                    - filename: humboldt.csv
+                    - filename: ida.csv
+                    - filename: jasper.csv
+                    - filename: johnson.csv
+                    - filename: kossuth.csv
+                    - filename: linn.csv
+                    - filename: lucas.csv
+                    - filename: lyon.csv
+                    - filename: madison.csv
+                    - filename: marion.csv
+                    - filename: marshall.csv
+                    - filename: mills.csv
+                    - filename: monona.csv
+                    - filename: monroe.csv
+                    - filename: montgomery.csv
+                    - filename: palo_alto.csv
+                    - filename: pocahontas.csv
+                    - filename: polk.csv
+                    - filename: pottawattamie.csv
+                    - filename: sac.csv
+                    - filename: shelby.csv
+                    - filename: sioux.csv
+                    - filename: story.csv
+                    - filename: webster.csv
+                    - filename: winnebago.csv
+                    - filename: winneshiek.csv
+                    - filename: wright.csv
+
+            id:
+                add:
+                    state: ID
+                files:
+                    - filename: ada.csv
+                    - filename: bannock.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Bannock County
+                    - filename: bingham.csv
+                      postcode_length: 5
+                    - filename: blaine.csv
+                      postcode_length: 5
+                    - filename: bonner.csv
+                    - filename: bonneville.csv
+                    - filename: city_of_boise.csv
+                    - filename: custer.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Custer County
+                    - filename: fremont.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Fremont County
+                    - filename: jefferson.csv
+                    - filename: kootenai.csv
+                    - filename: latah.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Latah County
+                    - filename: madison.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Madison County
+                    - filename: nez_perce.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Nez Perce County
+                    - filename: post_falls.csv
+
+            il:
+                add:
+                    state: IL
+                files:
+                    - filename: alexander.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Alexander County
+                    - filename: boone.csv
+                    - filename: champaign.csv
+                    - filename: city_of_aurora.csv
+                    - filename: city_of_chicago.csv
+                    - filename: city_of_east_peoria.csv
+                    - filename: city_of_naperville.csv
+                    - filename: city-of-ofallon.csv
+                    - filename: city_of_schaumburg.csv
+                    - filename: city_of_west_peoria.csv
+                    - filename: coles.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Coles County
+                    - filename: cook.csv
+                    - filename: cumberland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Cumberland County
+                    - filename: douglas.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Douglas County
+                    - filename: dupage.csv
+                    - filename: effingham.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Effingham County
+                    - filename: jersey.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Jersey County
+                    - filename: kane.csv
+                    - filename: kankakee.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Kankakee County
+                    - filename: kendall.csv
+                    - filename: knox.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Knox County
+                    - filename: lake.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Lake County
+                    - filename: lawrence.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Lawrence County
+                    - filename: logan.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Logan County
+                    - filename: macon.csv
+                    - filename: macoupin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Macoupin County
+                    - filename: marshall.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Marshall County
+                    - filename: massac.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Massac County
+                    - filename: mchenry.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: McHenry County
+                    - filename: menard.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Menard County
+                    - filename: morgan.csv
+                    - filename: moultrie.csv
+                    - filename: piatt.csv
+                    - filename: putnam.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Putnam County
+                    - filename: randolph.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Randolph County
+                    - filename: schuyler.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Schuyler County
+                    - filename: shelby.csv
+                    - filename: st_clair.csv
+                    - filename: stephenson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Stephenson County
+                    - filename: tazewell.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Tazewell County
+                    - filename: vermilion.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Vermilion County
+                    - filename: whiteside.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Whiteside County
+                    - filename: williamson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Williamson County
+                    - filename: winnebago.csv
+                    - filename: woodford.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Woodford County
+
+            in:
+                add:
+                    state: IN
+                files:
+                    - filename: adams.csv
+                    - filename: allen.csv
+                      city_replacements:
+                          state_district: Allen County
+                    - filename: bartholomew.csv
+                    - filename: benton.csv
+                    - filename: cass.csv
+                    - filename: city-of-hobart.csv
+                    - filename: clark.csv
+                    - filename: elkhart.csv
+                    - filename: floyd.csv
+                    - filename: grant.csv
+                    - filename: hamilton.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Hamilton County
+                    - filename: hendricks.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Hendricks County
+                    - filename: jay.csv
+                    - filename: laporte.csv
+                    - filename: lawrence.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Lawrence County
+                    - filename: madison.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Madison County
+                    - filename: marion_county.csv
+                    - filename: martin.csv
+                    - filename: miami.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Miami County
+                    - filename: monroe.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Monroe County
+                    - filename: morgan.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Morgan County
+                    - filename: orange.csv
+                    - filename: owen.csv
+                    - filename: porter.csv
+                    - filename: statewide.csv
+                    - filename: st_joseph.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Saint Joseph County
+                    - filename: tippecanoe.csv
+                      fields:
+                          <<: *default_fields
+                          CITY:
+                              component: city
+                              value_map:
+                                  "LAF": "LAFAYETTE"
+                    - filename: white.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: White County
+
+            ks:
+                add:
+                    state: KS
+                files:
+                    - filename: allen_county.csv
+                    - filename: anderson_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Anderson County
+                    - filename: atchison_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Atchison County
+                    - filename: barber_county.csv
+                    - filename: barton_county.csv
+                    - filename: bourbon_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Bourbon County
+                    - filename: butler.csv
+                    - filename: chautauqua_county.csv
+                    - filename: city_of_lenexa.csv
+                    - filename: city_of_olathe.csv
+                    - filename: city_of_salina.csv
+                    - filename: coffey_county.csv
+                    - filename: cowley_county.csv
+                    - filename: crawford_county.csv
+                    - filename: doniphan_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Doniphan County
+                    - filename: douglas.csv
+                    - filename: edwards_county.csv
+                    - filename: elk_county.csv
+                    - filename: franklin_county.csv
+                    - filename: geary_county.csv
+                    - filename: greenwood_county.csv
+                    - filename: harper_county.csv
+                    - filename: harvey_county.csv
+                    - filename: jackson_county.csv
+                    - filename: jefferson_county.csv
+                    - filename: kearny_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Kearny County
+                    - filename: kingman_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Kingman County
+                    - filename: lane_county.csv
+                    - filename: lawrence.csv
+                    - filename: linn_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Linn County
+                    - filename: marion_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Marion County
+                    - filename: meade_county.csv
+                    - filename: nemaha_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Nemaha County
+                    - filename: osage_county.csv
+                    - filename: pawnee_county.csv
+                    - filename: pottawatomie_county.csv
+                    - filename: reno_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Reno County
+                    - filename: riley_county.csv
+                    - filename: rush_county.csv
+                    - filename: scott_county.csv
+                    - filename: shawnee_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Shawnee County
+                    - filename: sumner_county.csv
+                    - filename: thomas_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Thomas County
+                    - filename: wabaunsee_county.csv
+
+            ky:
+                add:
+                    state: KY
+                files:
+                    - filename: boyd.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Boyd County
+                    - filename: campbell.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Campbell County
+                    - filename: city_of_paducah.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Paducah
+                    - filename: city_of_owensboro.csv
+                    - filename: clark.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Clark County
+                    - filename: hardin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Hardin County
+                    - filename: henderson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Henderson County
+                    - filename: jefferson.csv
+                    - filename: kenton.csv
+                      city_replacements:
+                          state_district: Kenton County
+                    - filename: lexington-fayette.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Lexington
+                    - filename: madison.csv
+                    - filename: mccracken.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: McCracken County
+                    - filename: meade.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Meade County
+                    - filename: oldham.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Oldham County
+                    - filename: pendleton.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Pendleton County
+                    - filename: scott.csv
+                    - filename: warren.csv
+
+            la:
+                add:
+                    state: LA
+                files:
+                    - filename: ascension.csv
+                    - filename: assumption.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Assumption Parish
+                    - filename: beauregard.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Beauregard Parish
+                    - filename: bienville.csv
+                    - filename: caddo.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Caddo Parish
+                    - filename: city_of_alexandria.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Alexandria
+                    - filename: city_of_bossier.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Bossier
+                    - filename: city_of_denham_springs.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Denham Springs
+                    - filename: city_of_new_iberia.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: New Iberia
+                    - filename: city_of_new_orleans.csv
+                      city_replacements:
+                          city: New Orleans
+                    - filename: claiborne.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Claiborne Parish
+                    - filename: concordia.csv
+                    - filename: desoto.csv
+                    - filename: east_baton_rouge_parish.csv
+                    - filename: iberia.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Iberia Parish
+                    - filename: jefferson_parish.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Jefferson Parish
+                    - filename: lafayette.csv
+                    - filename: natchitoches.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Natchitoches Parish
+                    - filename: orleans_parish.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Orleans Parish
+                    - filename: pointe_coupee.csv
+                    - filename: red_river_parish.csv
+                    - filename: st_charles_parish.csv
+                    - filename: st_james.csv
+                    - filename: st_john_the_baptist_parish.csv
+                    - filename: st_martin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Saint Martin Parish
+                    - filename: terrebonne.csv
+                    - filename: washington.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Washington Parish
+                    - filename: webster.csv
+                    - filename: west_feliciana.csv
+
+            ma:
+                add:
+                    state: MA
+                files:
+                    - filename: statewide.csv
+                    - filename: city_of_boston.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Boston
+                    - filename: city_of_cambridge.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Cambridge
+                    - filename: town_of_newton.csv
+
+            md:
+                add:
+                    state: MD
+                files:
+                    - filename: statewide.csv
+
+            me:
+                add:
+                    state: ME
+                files:
+                    - filename: statewide.csv
+
+            mi:
+                add:
+                    state: MI
+                files:
+                    - filename: city_of_rochester.csv
+                    - filename: city_of_flint.csv
+                    - filename: city_of_monroe.csv
+                    - filename: city_of_tecumseh.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Tecumseh
+                    - filename: detroit.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Detroit
+                    - filename: eaton.csv
+                    - filename: genesee.csv
+                    - filename: kent.csv
+                      add_osm_boundaries: true
+                      numeric_postcodes_only: true
+                      city_replacements:
+                          state_district: Kent County
+                    - filename: macomb.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Macomb County
+                    - filename: muskegon.csv
+                    - filename: newaygo.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Newaygo County
+                    - filename: ottawa.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Ottawa County
+                    - filename: semcog.csv
+                      add_osm_boundaries: true
+                    - filename: troy.csv
+                    - filename: washtenaw.csv
+
+            mn:
+                add:
+                    state: MN
+                files:
+                    - filename: aitkin.csv
+                    - filename: anoka.csv
+                    - filename: becker.csv
+                    - filename: beltrami.csv
+                    - filename: big_stone.csv
+                    - filename: carver.csv
+                    - filename: cass.csv
+                    - filename: chippewa.csv
+                    - filename: chisago.csv
+                    - filename: clay.csv
+                    - filename: clearwater.csv
+                    - filename: cook.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Cook County
+                    - filename: crow_wing.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Crow Wing County
+                    - filename: dakota.csv
+                    - filename: dodge.csv
+                    - filename: fillmore.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Fillmore County
+                    - filename: goodhue.csv
+                    - filename: hennepin.csv
+                    - filename: hubbard.csv
+                    - filename: itasca.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Itasca County
+                    - filename: kandiyohi.csv
+                    - filename: kittson.csv
+                    - filename: koochiching.csv
+                    - filename: marshall.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Marshall County
+                    - filename: norman.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Norman County
+                    - filename: olmsted.csv
+                    - filename: pennington.csv
+                    - filename: pope.csv
+                    - filename: ramsey.csv
+                    - filename: red_lake.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Red Lake County
+                    - filename: rice.csv
+                      city_replacements:
+                          state_district: Rice County
+                    - filename: roseau.csv
+                    - filename: scott.csv
+                    - filename: sherburne.csv
+                    - filename: sibley.csv
+                    - filename: stearns.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Stearns County
+                    - filename: st_louis.csv
+                      city_replacements:
+                          state_district: Saint Louis County
+                      ignore_fields_containing:
+                          city:
+                              - "^ut "
+                    - filename: wadena.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Wadena County
+                    - filename: waseca.csv
+                    - filename: washington.csv
+                    - filename: yellow_medicine.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Yellow Medicine County
+            mo:
+                add:
+                    state: MO
+                files:
+                    - filename: bates.csv
+                    - filename: boone.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                    - filename: city_of_cape_girardeau.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                    - filename: city_of_columbia.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit:
+                              - *simple_unit_regex
+                              # Too ambiguous
+                              - "^park$"
+                    - filename: city_of_kansas_city.csv
+                    - filename: city_of_perryville.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Perryville
+                    - filename: city_of_st_louis.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Saint Louis
+                    - filename: cole.csv
+                    - filename: greene.csv
+                    - filename: jackson.csv
+                    - filename: new_madrid.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: New Madrid County
+                    - filename: st_louis_county.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                    - filename: st_charles.csv
+                      city_replacements:
+                          state_district: Saint Charles County
+                    - filename: vernon.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Vernon County
+
+            ms:
+                add:
+                    state: MS
+                files:
+                    - filename: city_of_biloxi.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Biloxi
+                    - filename: city_of_diamondhead.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Diamondhead
+                    - filename: city_of_diberville.csv
+                    - filename: city_of_hattiesburg.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Hattiesburg
+                    - filename: city_of_ocean_springs.csv
+                    - filename: city_of_pascagoula.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Pascagoula
+                    - filename: city_of_pelahatchie.csv
+                    - filename: city_of_vicksburg.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Vicksburg
+                    - filename: desoto.csv
+                    - filename: hancock.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Hancock County
+                    - filename: harrison.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Harrison County
+                    - filename: hinds.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Hinds County
+                    - filename: jackson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Jackson County
+                    - filename: pontotoc.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Pontotoc County
+                    - filename: rankin.csv
+                    - filename: simpson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Simpson County
+                    - filename: warren.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Warren County
+
+            mt:
+                add:
+                    state: MT
+                files:
+                    - filename: statewide.csv
+
+            nc:
+                add:
+                    state: North Carolina
+                files:
+                    - filename: alamance.csv
+                      ignore_fields_containing:
+                          city:
+                              - "county"
+                      city_replacements:
+                          state_district: Almance County
+                    - filename: alleghany.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Alleghany County
+                    - filename: anson.csv
+                    - filename: avery.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Avery County
+                    - filename: beaufort.csv
+                    - filename: bladen.csv
+                    - filename: buncombe.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Buncombe County
+                    - filename: burke.csv
+                    - filename: cabarrus.csv
+                    - filename: camden.csv
+                    - filename: carteret.csv
+                    - filename: cary.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Cary
+                    - filename: caswell.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Caswell County
+                    - filename: chatham.csv
+                    - filename: city_of_carolina_beach.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Carolina Beach
+                    - filename: city_of_elizabeth_city.csv
+                    - filename: city_of_king.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: King
+                    - filename: city_of_salisbury.csv
+                    - filename: cleveland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Cleveland County
+                    - filename: columbus.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Columbus County
+                    - filename: craven.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Craven County
+                    - filename: cumberland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Cumberland County
+                    - filename: davie.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Davie County
+                    - filename: durham.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Durham County
+                    - filename: forsyth.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Forsyth County
+                    - filename: franklin.csv
+                    - filename: granville.csv
+                    - filename: guilford.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Guilford County
+                    - filename: harnett.csv
+                    - filename: haywood.csv
+                    - filename: henderson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Henderson County
+                    - filename: iredell.csv
+                    - filename: lee.csv
+                    - filename: lincoln.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Lincoln County
+                    - filename: madison.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Madison County
+                    - filename: mecklenburg.csv
+                    - filename: montgomery.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Montgomery County
+                    - filename: moore.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Moore County
+                    - filename: new_hanover.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: New Hanover County
+                    - filename: onslow.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Onslow County
+                    - filename: orange.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Orange County
+                    - filename: polk.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Polk County
+                    - filename: rowan.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Rowan County
+                    - filename: rutherford.csv
+                    - filename: sampson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Sampson County
+                    - filename: stanly.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Stanly County
+                    - filename: surry.csv
+                    - filename: town_of_chapel_hill.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Chapel Hill
+                    - filename: union.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Union County
+                    - filename: wake.csv
+                    - filename: washington.csv
+                    - filename: wayne.csv
+                    - filename: wilson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Wilson County
+                    - filename: yadkin.csv
+
+            nd:
+                add:
+                    state: North Dakota
+                files:
+                    - filename: city_of_bismarck.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Bismarck
+                    - filename: city_of_fargo.csv
+                    - filename: dickinson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Dickinson
+                    - filename: grand_forks.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Grand Forks
+                    - filename: richland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Richland County
+                    - filename: stark_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Stark County
+                    - filename: stutsman.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Stutsman County
+                    - filename: ward.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Ward County
+                    - filename: williams.csv
+
+            ne:
+                add:
+                    state: NE
+                # By default every county in Georgia needs OSM boundary info unless specified
+                add_osm_boundaries: true
+                files:
+                    - filename: antelope.csv
+                      city_replacements:
+                          state_district: Antelope County
+                    - filename: blaine.csv
+                      city_replacements:
+                          state_district: Blaine County
+                    - filename: brown.csv
+                      city_replacements:
+                          state_district: Brown County
+                    - filename: cass.csv
+                      city_replacements:
+                          state_district: Cass County
+                    - filename: custer.csv
+                      city_replacements:
+                          state_district: Custer County
+                    - filename: dixon.csv
+                      city_replacements:
+                          state_district: Dixon County
+                    - filename: frontier.csv
+                      city_replacements:
+                          state_district: Frontier County
+                    - filename: gage.csv
+                      city_replacements:
+                          state_district: Gage County
+                    - filename: harlan.csv
+                      city_replacements:
+                          state_district: Harlan County
+                    - filename: hitchcock.csv
+                      city_replacements:
+                          state_district: Hitchcock County
+                    - filename: holt.csv
+                      city_replacements:
+                          state_district: Holt County
+                    - filename: howard.csv
+                      city_replacements:
+                          state_district: Howard County
+                    - filename: johnson.csv
+                      city_replacements:
+                          state_district: Johnson County
+                    - filename: keith.csv
+                      city_replacements:
+                          state_district: Keith County
+                    - filename: keya_paha.csv
+                      city_replacements:
+                          state_district: Keya Paha County
+                    - filename: lancaster.csv
+                      city_replacements:
+                          state_district: Lancaster County
+                    - filename: madison.csv
+                      city_replacements:
+                          state_district: Madison County
+                    - filename: omaha.csv
+                    - filename: otoe.csv
+                      city_replacements:
+                          state_district: Otoe County
+                    - filename: perkins.csv
+                      city_replacements:
+                          state_district: Perkins County
+                    - filename: phelps.csv
+                      city_replacements:
+                          state_district: Phelps County
+                    - filename: pierce.csv
+                      city_replacements:
+                          state_district: Pierce County
+                    - filename: polk.csv
+                      city_replacements:
+                          state_district: Polk County
+                    - filename: red_willow.csv
+                      city_replacements:
+                          state_district: Red Willow County
+                    - filename: richardson.csv
+                      city_replacements:
+                          state_district: Richardson County
+                    - filename: rock.csv
+                      city_replacements:
+                          state_district: Rock County
+                    - filename: saline.csv
+                      city_replacements:
+                          state_district: Saline County
+                    - filename: sarpy.csv
+                    - filename: seward.csv
+                      city_replacements:
+                          state_district: Seward County
+                    - filename: sheridan.csv
+                      city_replacements:
+                          state_district: Sheridan County
+                    - filename: sherman.csv
+                      city_replacements:
+                          state_district: Sherman County
+                    - filename: valley.csv
+                      city_replacements:
+                          state_district: Valley County
+
+            nh:
+                add:
+                    state: New Hampshire
+                files:
+                    - filename: statewide.csv
+
+            nj:
+                add:
+                    state: New Jersey
+                files:
+                    - filename: statewide.csv
+                      add_osm_boundaries: true
+                      postcode_length: 5
+
+            nm:
+                add:
+                    state: New Mexico
+                files:
+                    - filename: albuquerque.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Albuquerque
+                    - filename: bernalillo.csv
+                    - filename: city_of_carlsbad.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Carlsbad                    
+                    - filename: city_of_las_cruces.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Las Cruces
+                    - filename: city_of_ruidoso.csv
+                    - filename: city_of_santa_fe.csv
+                    - filename: dona_ana-2.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Doña Ana County
+                    - filename: dona_ana.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Doña Ana County
+                    - filename: los_alamos.csv
+                    - filename: luna.csv
+                    - filename: san_juan.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: San Juan County
+                    - filename: taos.csv
+
+            nv:
+                add:
+                    state: NV
+                files:
+                    - filename: carson_city.csv
+                    - filename: churchill.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Churchill County
+                    - filename: clark.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Clark County
+                    - filename: douglas.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Douglas County
+                    - filename: elko.csv
+                    - filename: henderson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Henderson
+                    - filename: lyon.csv
+                    - filename: storey.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Storey County
+                    - filename: washoe.csv
+
+            ny:
+                add:
+                    state: New York
+                files:
+                    # Note: uses New York as the city for all 5 boroughs of NYC, which
+                    # is correct and what the OSM data uses as well. We store boroughs
+                    # in the neighborhoods index and label them "city_district" so boroughs
+                    # can still show up in this data set, but if it were listing city=Brooklyn
+                    # and so forth, we'd have to stick add_osm_boundaries on statewide.csv
+                    - filename: statewide.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                    - filename: broome.csv
+                    - filename: city_of_new_york.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: New York City
+                    - filename: city_of_rochester.csv
+                    - filename: erie.csv
+                      fields: *fields_no_postcode
+                    - filename: orange.csv
+                      city_replacements:
+                          state_district: Orange County
+                    - filename: westchester.csv
+
+            oh:
+              add:
+                state: OH
+              files:
+                  - filename: adams.csv
+                  - filename: allen.csv
+                  - filename: ashland.csv
+                  - filename: ashtabula.csv
+                  - filename: athens.csv
+                  - filename: auglaize.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Auglaize County
+                  - filename: belmont.csv
+                    city_replacements:
+                        state_district: Belmont County
+                  - filename: brown.csv
+                  - filename: butler.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Butler County
+                  - filename: carroll.csv
+                  - filename: champaign.csv
+                  - filename: city_of_perrysburg.csv
+                  - filename: clark.csv
+                  - filename: clermont.csv
+                  - filename: clinton.csv
+                  - filename: columbiana.csv
+                  - filename: coshocton.csv
+                  - filename: crawford.csv
+                  - filename: cuyahoga.csv
+                  - filename: darke.csv
+                  - filename: defiance.csv
+                  - filename: delaware.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Delaware County
+                  - filename: erie.csv
+                  - filename: fairfield.csv
+                  - filename: fayette.csv
+                  - filename: franklin.csv
+                  - filename: fulton.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Fulton County
+                  - filename: gallia.csv
+                  - filename: geauga.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Geauga County
+                  - filename: greene.csv
+                  - filename: guernsey.csv
+                  - filename: hancock.csv
+                  - filename: hardin.csv
+                  - filename: harrison.csv
+                  - filename: henry.csv
+                  - filename: highland.csv
+                  - filename: hocking.csv
+                  - filename: holmes.csv
+                  - filename: huron.csv
+                  - filename: jackson.csv
+                  - filename: jefferson.csv
+                  - filename: knox.csv
+                  - filename: lake.csv
+                  - filename: lawrence.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Lawrence County
+                  - filename: licking.csv
+                  - filename: logan.csv
+                  - filename: lorain.csv
+                  - filename: lucas.csv
+                  - filename: madison.csv
+                  - filename: mahoning.csv
+                  - filename: marion.csv
+                  - filename: medina.csv
+                  - filename: meigs.csv
+                  - filename: mercer.csv
+                  - filename: miami.csv
+                  - filename: monroe.csv
+                  - filename: montgomery.csv
+                  - filename: morgan.csv
+                  - filename: morrow.csv
+                  - filename: muskingum.csv
+                  - filename: noble.csv
+                  - filename: ottawa.csv
+                  - filename: paulding.csv
+                  - filename: perry.csv
+                  - filename: pickaway.csv
+                  - filename: pike.csv
+                  - filename: portage.csv
+                  - filename: preble.csv
+                  - filename: putnam.csv
+                  - filename: richland.csv
+                  - filename: ross.csv
+                  - filename: sandusky.csv
+                  - filename: scioto.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Scioto County
+                  - filename: seneca.csv
+                  - filename: shelby.csv
+                  - filename: stark.csv
+                  - filename: summit.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Summit County
+                  - filename: toledo.csv
+                  - filename: trumbull.csv
+                  - filename: tuscarawas.csv
+                  - filename: union.csv
+                  - filename: van_wert.csv
+                  - filename: vinton.csv
+                  - filename: warren.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Warren County
+                  - filename: washington.csv
+                  - filename: wayne.csv
+                  - filename: williams.csv
+                  - filename: wood.csv
+                  - filename: wyandot.csv
+
+            ok:
+                add:
+                    state: OK
+                files:
+                    - filename: acog-counties.csv
+                      ignore_fields_containing:
+                          city:
+                              - "^[\\s]*rural[\\s]*$"
+                    - filename: carter-county.csv
+                    - filename: city_of_lawton.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Lawton
+                    - filename: city_of_muskogee.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Muskogee
+                    - filename: oklahoma.csv
+                      add_osm_boundaries: true
+                      ignore_fields_containing:
+                          # Intersections, not valid house numbers
+                          house_number:
+                              - "^99999$"
+                      city_replacements:
+                          state_district: Oklahoma County
+
+            or:
+                add:
+                    state: OR
+                files:
+                    - filename: baker.csv
+                    - filename: benton.csv
+                    - filename: clackamas.csv
+                      ignore_fields_containing:
+                          road:
+                              - "^\\sNO SITUS\\s*$"
+                          city:
+                              - "^\\ADDRESS\\s*$"
+                    - filename: city_of_albany.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                    - filename: city_of_corvallis.csv
+                    - filename: city_of_salem.csv
+                    - filename: clatsop.csv
+                    - filename: coos.csv
+                    - filename: crook.csv
+                    - filename: curry.csv
+                    - filename: deschutes.csv
+                    - filename: douglas.csv
+                    - filename: grant.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Grant County
+                      ignore_fields_containing:
+                          postcode:
+                              - "[a-z]"
+                    - filename: gresham.csv
+                    - filename: hood_river.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Hood River County
+                    - filename: jackson.csv
+                    - filename: jefferson.csv
+                    - filename: josephine.csv
+                    - filename: klamath.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Klamath County
+                    - filename: lake.csv
+                    - filename: lane.csv
+                    - filename: linn.csv
+                    - filename: malheur.csv
+                    - filename: marion.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Marion County
+                    - filename: marion_and_polk.csv
+                      add_osm_boundaries: true
+                    - filename: multnomah.csv
+                    - filename: oregon_city.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Oregon City
+                    - filename: portland.csv
+                    - filename: sherman.csv
+                    - filename: tillamook.csv
+                    - filename: umatilla.csv
+                    - filename: wallowa.csv
+                    - filename: wasco.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Wasco County
+                    - filename: washington.csv
+                    - filename: wheeler.csv
+                    - filename: yarnhill.csv
+
+            pa:
+                add:
+                    state: PA
+                files:
+                    - filename: adams.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                    - filename: allegheny.csv
+                    - filename: armstrong.csv
+                    - filename: bedford.csv
+                    - filename: berks.csv
+                    - filename: bucks.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Bucks County
+                    - filename: butler.csv
+                    - filename: cameron.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Cameron County
+                    - filename: centre.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Centre County
+                    - filename: chester.csv
+                      fields: *fields_with_unit
+                      add_osm_boundaries: true
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                      city_replacements:
+                          state_district: Chester County
+                    - filename: clearfield.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Clearfield County
+                    - filename: clinton.csv
+                    - filename: crawford.csv
+                    - filename: cumberland.csv
+                    - filename: dauphin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Dauphin County
+                    - filename: erie.csv
+                    - filename: forest.csv
+                    - filename: franklin.csv
+                    - filename: fulton.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Fulton County
+                    - filename: juniata.csv
+                    - filename: lancaster.csv
+                    - filename: lawrence.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Lawrence County
+                    - filename: lehigh.csv
+                    - filename: lycoming.csv
+                    - filename: mckean.csv
+                    - filename: mercer.csv
+                    - filename: monroe.csv
+                    - filename: northampton.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Northampton County
+                    - filename: northumberland.csv
+                    - filename: perry.csv
+                    - filename: philadelphia.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Philadelphia
+                    - filename: pike.csv
+                    - filename: potter.csv
+                    - filename: snyder.csv
+                      city_replacements:
+                          state_district: Snyder County
+                    - filename: somerset.csv
+                    - filename: sullivan.csv
+                    - filename: tioga.csv
+                    - filename: union.csv
+                    - filename: venango.csv
+                    - filename: wayne.csv
+                    - filename: york.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: York County
+                      ignore_fields_containing:
+                          road:
+                              - "\\blot\\b"
+
+            pr:
+                # Don't add state=PR, Puerto Rico is treated as a country in libpostal
+                cldr_country_probability: 1.0
+                iso_alpha_2_code_probability: 0.7
+                iso_alpha_3_code_probability: 0.1
+                localized_name_probability: 0.2
+                override_country_dir: pr
+                language: es
+                files:
+                    - filename: statewide.csv
+                      # postcodes should be like 00901
+                      postcode_length: 5
+
+            ri:
+                add:
+                    state: Rhode Island
+                files:
+                    - filename: statewide.csv
+
+            sc:
+                add:
+                    state: South Carolina
+                files:
+                    - filename: aiken.csv
+                    - filename: anderson.csv
+                    - filename: beaufort.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Beaufort County
+                    - filename: calhoun.csv
+                    - filename: charleston.csv
+                    - filename: chesterfield.csv
+                    - filename: city_of_charleston.csv
+                    - filename: colleton.csv
+                    - filename: darlington.csv
+                    - filename: dorchester.csv
+                    - filename: florence.csv
+                    - filename: georgetown.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Georgetown County
+                    - filename: greenville.csv
+                    - filename: greenwood.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Greenwood County
+                    - filename: hilton_head_island.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Hilton Head Island
+                    - filename: horry.csv
+                    - filename: laurens.csv
+                    - filename: newberry.csv
+                    - filename: orangeburg.csv
+                      city_replacements:
+                          state_district: Orangeburg County
+                      ignore_fields_containing:
+                          city:
+                              - "\\bunspecified\\b"
+                    - filename: pickens.csv
+                      city_replacements:
+                          state_district: Pickens County
+                    - filename: saluda.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Saluda County
+                    - filename: sumter.csv
+                    - filename: union.csv
+                    - filename: york.csv
+
+            sd:
+                add:
+                    state: South Dakota
+                files:
+                    - filename: city_of_sioux_falls.csv
+                    - filename: fall_river.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Fall River County
+                    - filename: statewide.csv
+
+            tn:
+                add:
+                    state: TN
+                files:
+                    - filename: blount.csv
+                    - filename: cheatham.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Cheatham County
+                    - filename: city_of_chattanooga.csv
+                    - filename: city_of_memphis.csv
+                    - filename: city_of_murfreesboro.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Murfreesboro
+                    - filename: city_of_nashville.csv
+                    - filename: city_of_spring_hill.csv
+                    - filename: franklin.csv
+                    - filename: hamilton.csv
+                      city_replacements:
+                          state_district: Hamilton County
+                    - filename: putnam.csv
+                    - filename: sevier.csv
+                    - filename: shelby.csv
+                    - filename: statewide.csv
+                      add_osm_boundaries: true
+                    - filename: williamson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Williamson County
+
+            tx:
+                add:
+                    state: TX
+                files:
+                    - filename: anderson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Anderson County
+                    - filename: austin.csv
+                    - filename: bastrop.csv
+                    - filename: bexar.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Bexar County
+                    - filename: brazoria.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Brazoria County
+                    - filename: brazos.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Brazos County
+                    - filename: burleson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Burleson County
+                    - filename: camp.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Camp County
+                    - filename: capcog.csv
+                    - filename: carson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Carson County
+                    - filename: city_of_abilene.csv
+                    - filename: city_of_amarillo.csv
+                    - filename: city_of_austin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Austin
+                    - filename: city_of_beaumont.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Beaumont
+                    - filename: city_of_carrollton.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Carrollton
+                    - filename: city_of_denton.csv
+                    - filename: city_of_flower_mound.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Flower Mound
+                    - filename: city_of_killeen.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Killeen
+                    - filename: city_of_mckinney.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: McKinney
+                    - filename: city_of_palestine.csv
+                    - filename: city_of_pearland.csv
+                    - filename: city_of_pflugerville.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Pflugerville
+                    - filename: city_of_sherman.csv
+                    - filename: city_of_sugar_land.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Sugar Land
+                    - filename: city_of_temple.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Temple
+                    - filename: city_of_waco.csv
+                    - filename: colleyville.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Colleyville
+                    - filename: colorado.csv
+                    - filename: comal.csv
+                    - filename: comanche.csv
+                    - filename: coryell.csv
+                    - filename: dallam.csv
+                    - filename: dallas.csv
+                    - filename: delta.csv
+                    - filename: denton.csv
+                    - filename: desoto.csv
+                    - filename: dimmit.csv
+                    - filename: duval.csv
+                    - filename: ellis.csv
+                    - filename: fannin.csv
+                    - filename: fayette.csv
+                    - filename: fisher.csv
+                      city_replacements:
+                          state_district: Fisher County
+                    - filename: freestone.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Freestone County
+                    - filename: galveston.csv
+                    - filename: gaines.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Gaines County
+                    - filename: gillespie.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Gillespie County
+                    - filename: gray.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Gray County
+                    - filename: houston.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          # City of Houston, not Houston County
+                          city: Houston
+                    - filename: howard.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Howard County
+                    - filename: hunt.csv
+                    - filename: hurst.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Hurst County
+                    - filename: johnson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Johnson County
+                    - filename: kaufman.csv
+                    - filename: kendall.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Kendall County
+                    - filename: lamar.csv
+                    - filename: lasalle.csv
+                    - filename: lubbock.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Lubbock County
+                    - filename: madison.csv
+                    - filename: maverick.csv
+                    - filename: mcmullen.csv
+                    - filename: midland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Midland County
+                    - filename: milam.csv
+                    - filename: montgomery.csv
+                    - filename: moore.csv
+                    - filename: nacogdoches.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Nacogdoches County
+                    - filename: new_braunfels.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: New Braunfels
+                    - filename: nolan.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Nolan County
+                    - filename: north_richland_hills.csv
+                      add_osm_boundaries: true
+                    - filename: ochiltree.csv
+                    - filename: odessa.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Odessa
+                    - filename: orange.csv
+                    - filename: parmer.csv
+                    - filename: plano.csv
+                    - filename: redriver.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Red River County
+                    - filename: rockwall.csv
+                      city_replacements:
+                          city: Rockwall
+                    - filename: round_rock.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Round Rock
+                    - filename: runnels.csv
+                    - filename: san_antonio.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: San Antonio
+                    - filename: shackelford.csv
+                    - filename: statewide.csv
+                      add_osm_boundaries: true
+                    - filename: tarrant-county.csv
+                    - filename: texoma-counties.csv
+                      add_osm_boundaries: true
+                    - filename: titus.csv
+                    - filename: uvalde.csv
+                    - filename: vanzandt.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Van Zandt County
+                    - filename: walker.csv
+                    - filename: wharton.csv
+                    - filename: williamson.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Williamson County
+                    - filename: wood.csv
+                    - filename: zavala.csv
+
+            ut:
+                add:
+                    state: UT
+                files:
+                    - filename: duchesne.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Duchesne County
+                    - filename: statewide.csv
+
+            va:
+                add:
+                    state: VA
+                files:
+                    - filename: statewide.csv
+                      postcode_strip_non_digit_chars: true
+
+            vt:
+                add:
+                    state: VT
+                files:
+                    - filename: statewide.csv
+            wa:
+                add:
+                    state: WA
+                files:
+                    - filename: bellingham.csv
+                    - filename: chelan.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit:
+                              - *simple_unit_regex
+                              - "\\bbsmt\\b"
+                    - filename: city_of_bellevue.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Bellevue
+                    - filename: city_of_richland.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Richland
+                    - filename: city_of_tacoma.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Tacoma
+                    - filename: city_of_spokane.csv
+                    - filename: city_of_yakima.csv
+                    - filename: clallam.csv
+                    - filename: clark.csv
+                    - filename: cowlitz.csv
+                    - filename: douglas.csv
+                    - filename: franklin.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Franklin County
+                    - filename: garfield.csv
+                    - filename: grant.csv
+                    - filename: island.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Island County
+                    - filename: jefferson.csv
+                    - filename: king.csv
+                    - filename: kitsap.csv
+                    - filename: kittitas.csv
+                    - filename: lewis.csv
+                    - filename: mason.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Mason County
+                    - filename: okanogan.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Okanogan County
+                    - filename: pacific.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Pacific County
+                    - filename: pierce.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Pierce County
+                    - filename: seattle.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Seattle
+                    - filename: skagit.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Skagitt County
+                    - filename: snohomish_county.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Snohomish County
+                    - filename: snohomish.csv
+                    - filename: spokane.csv
+                    - filename: thurston.csv
+                      fields: *fields_with_unit
+                      non_numeric_units: true
+                      ignore_fields_containing:
+                          unit: *ignore_simple_units
+                    - filename: walla_walla.csv
+
+            wi:
+                add:
+                    state: WI
+                files:
+                    - filename: adams.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Adams County
+                    - filename: bayfield.csv
+                    - filename: calumet.csv
+                    - filename: city_of_milwaukee.csv
+                    - filename: city_of_shorewood.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          city: Shorewood
+                    - filename: columbia.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Columbia County
+                    - filename: crawford.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Crawford County
+                    - filename: fond_du_lac.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Fond du Lac County
+                    - filename: green.csv
+                    - filename: green_lake.csv
+                    - filename: iron.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Iron County
+                    - filename: juneau.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Juneau County
+                    - filename: kenosha.csv
+                    - filename: kewaunee.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Kewaunee County
+                    - filename: la_crosse.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: La Crosse County
+                    - filename: lincoln.csv
+                    - filename: manitowoc.csv
+                    - filename: milwaukee.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Milwaukee County
+                    - filename: oneida.csv
+                    - filename: outagamie.csv
+                    - filename: pierce.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Pierce County
+                    - filename: portage.csv
+                    - filename: richland.csv
+                    - filename: rock.csv
+                    - filename: sauk.csv
+                    - filename: statewide.csv
+                    - filename: st_croix.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Saint Croix County
+                    - filename: trempealeau.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Trempealeau County
+                    - filename: vernon.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Vernon County
+                    - filename: vilas.csv
+                    - filename: walworth.csv
+                    - filename: waukesha.csv
+                      add_osm_boundaries: true
+                      city_replacements:
+                          state_district: Waukesha County
+                    - filename: waupaca.csv
+                    - filename: waushara.csv
+
+            wv:
+                add:
+                    state: West Virginia
+                files:
+                    - filename: hancock.csv
+                    - filename: harrison.csv
+                    - filename: raleigh.csv
+                    - filename: statewide.csv
+                      add_osm_boundaries: true
+
+            wy:
+                add:
+                    state: WY
+                files:
+                  - filename: albany.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Albany County
+                  - filename: campbell.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Campbell County
+                  - filename: city_of_gillette.csv
+                  - filename: city_of_wright.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        city: Wright
+                  - filename: crook.csv
+                  - filename: fremont.csv
+                  - filename: goshen.csv
+                  - filename: hot_springs.csv
+                  - filename: laramie.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Laramie County
+                  - filename: lincoln.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Lincoln County
+                  - filename: natrona.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Natrona County
+                  - filename: park.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Park County
+                  - filename: sublette.csv
+                    add_osm_boundaries: true
+                    city_replacements:
+                        state_district: Sublette County
+                  - filename: teton.csv
+                    add_osm_boundaries: true
+                    fields: *fields_with_unit
+                    ignore_fields_containing:
+                        unit: *ignore_simple_units
+                    city_replacements:
+                        state_district: Teton County
+
+    uy:
+        subdirs:
+            mo:
+                files:
+                    - filename: montevideo.csv
+                      add_osm_boundaries: true
+
+    za:
+        subdirs:
+            ec:
+                files:
+                    - filename: nelson_mandela_bay.csv
+                      add_osm_boundaries: true
+            nl:
+                files:
+                    - filename: ethekwini.csv
+                      add_osm_boundaries: true
+            wc:
+                files:
+                    - filename: cape_town.csv
+                      city_replacements:
+                          city: Cape Town
+                      add_osm_boundaries: true

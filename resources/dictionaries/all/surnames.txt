@@ -21173,7 +21173,8 @@ Mendelssohn
 Mendenhall
 Menderes
 Mendes da Costa
-Mendez/Mendes
+Mendez
+Mendes
 Mendieta
 Mendizabal
 Mendonça
@@ -28710,7 +28711,8 @@ Coșovei
 Cha
 Chand
 Chandra
-Chandrakar /chandraker
+Chandrakar
+Chandraker
 Chandrasekaran
 Chandratre
 Chandola

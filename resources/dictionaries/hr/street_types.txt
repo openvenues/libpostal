@@ -7,5 +7,6 @@ most
 prilaz
 put
 šetalište|setaliste
+stube
 trg
 ulica|ul

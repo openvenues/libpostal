@@ -1,1 +1,28 @@
+banka
+divadlo
+dom
+dom kultúry|dom kultury
+domov
+gymnázium|gymnazium
+hradná|hradna
+kaplnka
+kaviareň|kaviaren
+kino
+knižnica|kniznica
+kostol
+krčma|krcma
+kultúrny dom|kulturny dom
+lekáreň|lekaren
+materská škola|materska skola
+nemocnica
+obecný úrad|obecny urad
+reštaurácia|restauracia
 školská|skolska
+štadión|stadion
+stanica
+stredná odborná škola|stredna odborna skola
+továrenská|tovarenska
+trh
+umelecká škola|umelecka skola
+úrad|urad
+základná škola|sakladna skola

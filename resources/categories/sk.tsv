@@ -1,0 +1,777 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	letisko
+aeroway	aerodrome	1	letiskos
+amenity	arts_centre	0	kultúrne stredisko
+amenity	arts_centre	1	kultúrne strediskos
+amenity	atm	0	bankomat
+amenity	atm	1	bankomats
+amenity	bank	0	banka
+amenity	bank	1	bankas
+amenity	bar	0	bar
+amenity	bar	1	bars
+amenity	bench	0	lavička
+amenity	bench	1	lavičkas
+amenity	bicycle_parking	0	parkovisko bicyklov
+amenity	bicycle_parking	1	parkovisko bicyklovs
+amenity	bicycle_rental	0	požičovňa bicyklov
+amenity	bicycle_rental	1	požičovňa bicyklovs
+amenity	brothel	0	nevestinec
+amenity	brothel	1	nevestinecs
+amenity	bureau_de_change	0	zmenáreň
+amenity	bureau_de_change	1	zmenáreňs
+amenity	bus_station	0	autobusová stanica
+amenity	bus_station	1	autobusová stanicas
+amenity	cafe	0	kaviareň
+amenity	cafe	1	kaviareňs
+amenity	car_rental	0	požičovňa áut
+amenity	car_rental	1	požičovňa áuts
+amenity	car_sharing	0	autopožičovňa
+amenity	car_sharing	1	autopožičovňas
+amenity	car_wash	0	autoumývareň
+amenity	car_wash	1	autoumývareňs
+amenity	casino	0	kasíno
+amenity	casino	1	kasínos
+amenity	cinema	0	kino
+amenity	cinema	1	kinos
+amenity	clinic	0	poliklinika
+amenity	clinic	1	poliklinikas
+amenity	club	0	klub
+amenity	club	1	klubs
+amenity	college	0	vysoká škola
+amenity	college	1	vysoká školas
+amenity	community_centre	0	kultúrne stredisko
+amenity	community_centre	1	kultúrne strediskos
+amenity	courthouse	0	súd
+amenity	courthouse	1	súds
+amenity	crematorium	0	krematórium
+amenity	crematorium	1	krematóriums
+amenity	dentist	0	zubár
+amenity	dentist	1	zubárs
+amenity	dormitory	0	študentský domov
+amenity	dormitory	1	študentský domovs
+amenity	drinking_water	0	pitná voda
+amenity	drinking_water	1	pitná vodas
+amenity	driving_school	0	autoškola
+amenity	driving_school	1	autoškolas
+amenity	embassy	0	veľvyslanectvo
+amenity	embassy	1	veľvyslanectvos
+amenity	emergency_phone	0	núdzový telefón
+amenity	emergency_phone	1	núdzový telefóns
+amenity	fast_food	0	rýchle občerstvenie
+amenity	fast_food	1	rýchle občerstvenies
+amenity	ferry_terminal	0	terminál trajektu
+amenity	ferry_terminal	1	terminál trajektus
+amenity	fire_hydrant	0	požiarny hydrant
+amenity	fire_hydrant	1	požiarny hydrants
+amenity	fire_station	0	požiarna stanica
+amenity	fire_station	1	požiarna stanicas
+amenity	fountain	0	fontána
+amenity	fountain	1	fontánas
+amenity	fuel	0	benzínová pumpa
+amenity	fuel	1	benzínová pumpas
+amenity	grave_yard	0	cintorín
+amenity	grave_yard	1	cintoríns
+amenity	gym	0	fitnes centrum / telocvičňa
+amenity	gym	1	fitnes centrum / telocvičňas
+amenity	health_centre	0	zdravotné stredisko
+amenity	health_centre	1	zdravotné strediskos
+amenity	hospital	0	nemocnica
+amenity	hospital	1	nemocnicas
+amenity	hotel	0	hotel
+amenity	hotel	1	hotels
+amenity	hunting_stand	0	poľovnícky posed
+amenity	hunting_stand	1	poľovnícky poseds
+amenity	ice_cream	0	zmrzlina
+amenity	ice_cream	1	zmrzlinas
+amenity	kindergarten	0	materská škola
+amenity	kindergarten	1	materská školas
+amenity	library	0	knižnica
+amenity	library	1	knižnicas
+amenity	market	0	obchod
+amenity	market	1	obchods
+amenity	marketplace	0	tržnica
+amenity	marketplace	1	tržnicas
+amenity	mountain_rescue	0	horská služba
+amenity	mountain_rescue	1	horská službas
+amenity	nightclub	0	'nočný klub'
+amenity	nightclub	1	'nočný klub's
+amenity	nursery	0	jasle
+amenity	nursery	1	jasles
+amenity	nursing_home	0	sanatórium
+amenity	nursing_home	1	sanatóriums
+amenity	office	0	úrad
+amenity	office	1	úrads
+amenity	park	0	park
+amenity	park	1	parks
+amenity	parking	0	parkovisko
+amenity	parking	1	parkoviskos
+amenity	pharmacy	0	lekáreň
+amenity	pharmacy	1	lekáreňs
+amenity	place_of_worship	0	kostol
+amenity	place_of_worship	1	kostols
+amenity	police	0	polícia
+amenity	police	1	polícias
+amenity	post_box	0	poštová schránka
+amenity	post_box	1	poštová schránkas
+amenity	post_office	0	pošta
+amenity	post_office	1	poštas
+amenity	preschool	0	škôlka
+amenity	preschool	1	škôlkas
+amenity	prison	0	väzenie
+amenity	prison	1	väzenies
+amenity	pub	0	krčma
+amenity	pub	1	krčmas
+amenity	public_building	0	verejná budova
+amenity	public_building	1	verejná budovas
+amenity	recycling	0	recyklačké miesto
+amenity	recycling	1	recyklačké miestos
+amenity	restaurant	0	reštaurácia
+amenity	restaurant	1	reštaurácias
+amenity	retirement_home	0	domov dôchodcov
+amenity	retirement_home	1	domov dôchodcovs
+amenity	sauna	0	sauna
+amenity	sauna	1	saunas
+amenity	school	0	škola
+amenity	school	1	školas
+amenity	shelter	0	altánok
+amenity	shelter	1	altánoks
+amenity	shop	0	obchod
+amenity	shop	1	obchods
+amenity	social_club	0	spoločenský klub
+amenity	social_club	1	spoločenský klubs
+amenity	studio	0	ateliér
+amenity	studio	1	ateliérs
+amenity	supermarket	0	supermarket
+amenity	supermarket	1	supermarkets
+amenity	taxi	0	taxi
+amenity	taxi	1	taxis
+amenity	telephone	0	verejný telefón
+amenity	telephone	1	verejný telefóns
+amenity	theatre	0	divadlo
+amenity	theatre	1	divadlos
+amenity	toilets	0	wc
+amenity	toilets	1	wcs
+amenity	townhall	0	radnica
+amenity	townhall	1	radnicas
+amenity	university	0	univerzita
+amenity	university	1	univerzitas
+amenity	vending_machine	0	predajný automat
+amenity	vending_machine	1	predajný automats
+amenity	veterinary	0	veterinárna ordinácia
+amenity	veterinary	1	veterinárna ordinácias
+amenity	waste_basket	0	odpadkový kôš
+amenity	waste_basket	1	odpadkový kôšs
+amenity	wifi	0	prístup wi-fi
+amenity	wifi	1	prístup wi-fis
+amenity	youth_centre	0	mládežnícke centrum
+amenity	youth_centre	1	mládežnícke centrums
+boundary	administrative	0	administratívne hranice
+boundary	administrative	1	administratívne hranices
+building	apartments	0	bytový dom
+building	apartments	1	bytový doms
+building	bunker	0	bunker
+building	bunker	1	bunkers
+building	chapel	0	kaplnka
+building	chapel	1	kaplnkas
+building	church	0	kostol,cirkev
+building	church	1	kostol,cirkevs
+building	city_hall	0	radnica,magistrát
+building	city_hall	1	radnica,magistráts
+building	commercial	0	komerčné budovy
+building	commercial	1	komerčné budovys
+building	dormitory	0	študentský domov
+building	dormitory	1	študentský domovs
+building	faculty	0	budovy fakulty
+building	faculty	1	budovy fakultys
+building	farm	0	hospodárska budova
+building	farm	1	hospodárska budovas
+building	flats	0	byty
+building	flats	1	bytys
+building	garage	0	garáž
+building	garage	1	garážs
+building	hall	0	sála
+building	hall	1	sálas
+building	hospital	0	nemocničné budovy
+building	hospital	1	nemocničné budovys
+building	hotel	0	hotel
+building	hotel	1	hotels
+building	house	0	dom
+building	house	1	doms
+building	industrial	0	priemyselné budovy
+building	industrial	1	priemyselné budovys
+building	office	0	administratívna budova
+building	office	1	administratívna budovas
+building	public	0	verejná budova
+building	public	1	verejná budovas
+building	residential	0	obytné budovy
+building	residential	1	obytné budovys
+building	retail	0	maloobchodné budovy
+building	retail	1	maloobchodné budovys
+building	school	0	škola
+building	school	1	školas
+building	shop	0	obchod
+building	shop	1	obchods
+building	stadium	0	štadión
+building	stadium	1	štadións
+building	store	0	obchod
+building	store	1	obchods
+building	terrace	0	radová zástavba
+building	terrace	1	radová zástavbas
+building	tower	0	veža
+building	tower	1	vežas
+building	train_station	0	železničná stanica
+building	train_station	1	železničná stanicas
+building	university	0	univerzitné budovy
+building	university	1	univerzitné budovys
+building	&quot;yes&quot;	0	budova
+building	&quot;yes&quot;	1	budovas
+highway	bridleway	0	cesta pre kone
+highway	bridleway	1	cesta pre kones
+highway	bus_guideway	0	bus so sprievodcom
+highway	bus_guideway	1	bus so sprievodcoms
+highway	bus_stop	0	zastávka autobusu
+highway	bus_stop	1	zastávka autobusus
+highway	byway	0	byway (súkromná cesta)
+highway	byway	1	byway (súkromná cesta)s
+highway	construction	0	cesta vo výstavbe
+highway	construction	1	cesta vo výstavbes
+highway	cycleway	0	cyklistický chodník
+highway	cycleway	1	cyklistický chodníks
+highway	distance_marker	0	distance marker (kilometrovník)
+highway	distance_marker	1	distance marker (kilometrovník)s
+highway	emergency_access_point	0	stanica prvej pomoci
+highway	emergency_access_point	1	stanica prvej pomocis
+highway	footway	0	chodník
+highway	footway	1	chodníks
+highway	ford	0	brod
+highway	ford	1	brods
+highway	gate	0	brána
+highway	gate	1	bránas
+highway	living_street	0	obytná zóna
+highway	living_street	1	obytná zónas
+highway	minor	0	vedľajšia cesta
+highway	minor	1	vedľajšia cestas
+highway	motorway	0	diaľnica
+highway	motorway	1	diaľnicas
+highway	motorway_junction	0	motorway junction (diaľničná križovatka)
+highway	motorway_junction	1	motorway junction (diaľničná križovatka)s
+highway	motorway_link	0	diaľnica
+highway	motorway_link	1	diaľnicas
+highway	path	0	cesta
+highway	path	1	cestas
+highway	pedestrian	0	chodník pre chodcov
+highway	pedestrian	1	chodník pre chodcovs
+highway	platform	0	nástupište
+highway	platform	1	nástupištes
+highway	primary	0	cesta i. triedy
+highway	primary	1	cesta i. triedys
+highway	primary_link	0	cesta i. triedy
+highway	primary_link	1	cesta i. triedys
+highway	residential	0	residential(obytný)
+highway	residential	1	residential(obytný)s
+highway	road	0	cesta
+highway	road	1	cestas
+highway	secondary	0	cesta ii. triedy
+highway	secondary	1	cesta ii. triedys
+highway	secondary_link	0	cesta ii. triedy
+highway	secondary_link	1	cesta ii. triedys
+highway	service	0	service road (prístupová komunikácia)
+highway	service	1	service road (prístupová komunikácia)s
+highway	steps	0	schody
+highway	steps	1	schodys
+highway	stile	0	schodíky cez ohradu
+highway	stile	1	schodíky cez ohradus
+highway	tertiary	0	cesta iii. triedy
+highway	tertiary	1	cesta iii. triedys
+highway	track	0	nespevnené cesty
+highway	track	1	nespevnené cestys
+highway	trunk	0	cesta pre motorové vozidlá
+highway	trunk	1	cesta pre motorové vozidlás
+highway	trunk_link	0	cesta pre motorové vozidlá
+highway	trunk_link	1	cesta pre motorové vozidlás
+highway	unclassified	0	neklasifikovaná cesta
+highway	unclassified	1	neklasifikovaná cestas
+highway	unsurfaced	0	nespevnená cesta
+highway	unsurfaced	1	nespevnená cestas
+historic	archaeological_site	0	archeologické nálezisko
+historic	archaeological_site	1	archeologické náleziskos
+historic	battlefield	0	bojisko
+historic	battlefield	1	bojiskos
+historic	boundary_stone	0	hraničný kameň
+historic	boundary_stone	1	hraničný kameňs
+historic	building	0	budova
+historic	building	1	budovas
+historic	castle	0	hrad
+historic	castle	1	hrads
+historic	church	0	kostol
+historic	church	1	kostols
+historic	house	0	dom
+historic	house	1	doms
+historic	manor	0	šľachtické sídlo
+historic	manor	1	šľachtické sídlos
+historic	memorial	0	pomník
+historic	memorial	1	pomníks
+historic	mine	0	baňa
+historic	mine	1	baňas
+historic	monument	0	pamätník
+historic	monument	1	pamätníks
+historic	museum	0	múzeum
+historic	museum	1	múzeums
+historic	ruins	0	ruina
+historic	ruins	1	ruinas
+historic	tower	0	veža
+historic	tower	1	vežas
+historic	wayside_cross	0	božie muky
+historic	wayside_cross	1	božie mukys
+historic	wayside_shrine	0	malá kaplnka pri ceste
+historic	wayside_shrine	1	malá kaplnka pri cestes
+historic	wreck	0	zrúcanina
+historic	wreck	1	zrúcaninas
+landuse	allotments	0	záhradkárske osady
+landuse	allotments	1	záhradkárske osadys
+landuse	basin	0	basin (vodná nádrž)
+landuse	basin	1	basin (vodná nádrž)s
+landuse	cemetery	0	cintorín
+landuse	cemetery	1	cintoríns
+landuse	commercial	0	obchodná štvrť
+landuse	commercial	1	obchodná štvrťs
+landuse	construction	0	stavba
+landuse	construction	1	stavbas
+landuse	farm	0	farma
+landuse	farm	1	farmas
+landuse	farmyard	0	dvor
+landuse	farmyard	1	dvors
+landuse	forest	0	les
+landuse	forest	1	less
+landuse	grass	0	tráva
+landuse	grass	1	trávas
+landuse	industrial	0	priemyslová oblasť
+landuse	industrial	1	priemyslová oblasťs
+landuse	landfill	0	skládka odpadu
+landuse	landfill	1	skládka odpadus
+landuse	meadow	0	lúka
+landuse	meadow	1	lúkas
+landuse	military	0	vojenský priestor
+landuse	military	1	vojenský priestors
+landuse	mine	0	baňa
+landuse	mine	1	baňas
+landuse	mountain	0	hora
+landuse	mountain	1	horas
+landuse	nature_reserve	0	prírodná rezervácia
+landuse	nature_reserve	1	prírodná rezervácias
+landuse	park	0	park
+landuse	park	1	parks
+landuse	piste	0	zjazdovka
+landuse	piste	1	zjazdovkas
+landuse	plaza	0	námestie
+landuse	plaza	1	námesties
+landuse	quarry	0	lom
+landuse	quarry	1	loms
+landuse	railway	0	železnica
+landuse	railway	1	železnicas
+landuse	residential	0	residential area (obytná oblasť)
+landuse	residential	1	residential area (obytná oblasť)s
+landuse	retail	0	retail (obchodná zóna)
+landuse	retail	1	retail (obchodná zóna)s
+landuse	village_green	0	verejná zeleň
+landuse	village_green	1	verejná zeleňs
+landuse	vineyard	0	vinica
+landuse	vineyard	1	vinicas
+landuse	wetland	0	mokrina
+landuse	wetland	1	mokrinas
+landuse	wood	0	drevo
+landuse	wood	1	drevos
+leisure	common	0	verejné priestranstvo
+leisure	common	1	verejné priestranstvos
+leisure	fishing	0	rybolov (športový)
+leisure	fishing	1	rybolov (športový)s
+leisure	garden	0	záhrada
+leisure	garden	1	záhradas
+leisure	golf_course	0	golfové ihrisko
+leisure	golf_course	1	golfové ihriskos
+leisure	ice_rink	0	umelé klzisko
+leisure	ice_rink	1	umelé klziskos
+leisure	marina	0	prístav pre jachty
+leisure	marina	1	prístav pre jachtys
+leisure	miniature_golf	0	mini golf
+leisure	miniature_golf	1	mini golfs
+leisure	nature_reserve	0	prírodná rezervácia
+leisure	nature_reserve	1	prírodná rezervácias
+leisure	park	0	park
+leisure	park	1	parks
+leisure	pitch	0	športové ihrisko
+leisure	pitch	1	športové ihriskos
+leisure	playground	0	detské ihrisko
+leisure	playground	1	detské ihriskos
+leisure	recreation_ground	0	rekreačná oblasť
+leisure	recreation_ground	1	rekreačná oblasťs
+leisure	slipway	0	lodný sklz
+leisure	slipway	1	lodný sklzs
+leisure	sports_centre	0	športové stredisko
+leisure	sports_centre	1	športové strediskos
+leisure	stadium	0	štadión
+leisure	stadium	1	štadións
+leisure	swimming_pool	0	plaváreň
+leisure	swimming_pool	1	plaváreňs
+leisure	track	0	bežecká dráha
+leisure	track	1	bežecká dráhas
+leisure	water_park	0	aquapark
+leisure	water_park	1	aquaparks
+natural	bay	0	zátoka, záliv
+natural	bay	1	zátoka, zálivs
+natural	beach	0	pláž
+natural	beach	1	plážs
+natural	cape	0	mys
+natural	cape	1	myss
+natural	cave_entrance	0	vstup do jaskyne
+natural	cave_entrance	1	vstup do jaskynes
+natural	channel	0	kanál
+natural	channel	1	kanáls
+natural	cliff	0	útes, kamenná stena
+natural	cliff	1	útes, kamenná stenas
+natural	coastline	0	pobrežie
+natural	coastline	1	pobrežies
+natural	crater	0	kráter
+natural	crater	1	kráters
+natural	feature	0	vlastnosť
+natural	feature	1	vlastnosťs
+natural	fell	0	horská pastvina
+natural	fell	1	horská pastvinas
+natural	fjord	0	fjord
+natural	fjord	1	fjords
+natural	geyser	0	gejzír
+natural	geyser	1	gejzírs
+natural	glacier	0	ľadovec
+natural	glacier	1	ľadovecs
+natural	heath	0	vresovisko
+natural	heath	1	vresoviskos
+natural	hill	0	kopec
+natural	hill	1	kopecs
+natural	island	0	ostrov
+natural	island	1	ostrovs
+natural	marsh	0	bažina
+natural	marsh	1	bažinas
+natural	moor	0	močiar
+natural	moor	1	močiars
+natural	mud	0	bahno
+natural	mud	1	bahnos
+natural	peak	0	vrchol
+natural	peak	1	vrchols
+natural	point	0	bod
+natural	point	1	bods
+natural	reef	0	bradlo, skalisko
+natural	reef	1	bradlo, skaliskos
+natural	ridge	0	hrebeň
+natural	ridge	1	hrebeňs
+natural	river	0	rieka
+natural	river	1	riekas
+natural	rock	0	skala
+natural	rock	1	skalas
+natural	scree	0	sutina
+natural	scree	1	sutinas
+natural	scrub	0	rúbanisko
+natural	scrub	1	rúbaniskos
+natural	shoal	0	plytčina
+natural	shoal	1	plytčinas
+natural	spring	0	prameň
+natural	spring	1	prameňs
+natural	strait	0	úžina
+natural	strait	1	úžinas
+natural	tree	0	strom
+natural	tree	1	stroms
+natural	valley	0	dolina
+natural	valley	1	dolinas
+natural	volcano	0	sopka
+natural	volcano	1	sopkas
+natural	water	0	voda
+natural	water	1	vodas
+natural	wetland	0	mokrina
+natural	wetland	1	mokrinas
+natural	wetlands	0	mokrina
+natural	wetlands	1	mokrinas
+natural	wood	0	les
+natural	wood	1	less
+place	city	0	mesto nad 100 tis.
+place	city	1	mesto nad 100 tis.s
+place	country	0	štát
+place	country	1	štáts
+place	county	0	okres
+place	county	1	okress
+place	farm	0	farma
+place	farm	1	farmas
+place	hamlet	0	osada do 200
+place	hamlet	1	osada do 200s
+place	house	0	budova
+place	house	1	budovas
+place	houses	0	budovy
+place	houses	1	budovys
+place	island	0	ostrov
+place	island	1	ostrovs
+place	islet	0	ostrovček
+place	islet	1	ostrovčeks
+place	locality	0	oblasť
+place	locality	1	oblasťs
+place	moor	0	močiar
+place	moor	1	močiars
+place	municipality	0	obecný úrad
+place	municipality	1	obecný úrads
+place	postcode	0	psč
+place	postcode	1	psčs
+place	region	0	región
+place	region	1	regións
+place	sea	0	more
+place	sea	1	mores
+place	state	0	štát
+place	state	1	štáts
+place	subdivision	0	pododdelenie
+place	subdivision	1	pododdelenies
+place	suburb	0	mestský obvod
+place	suburb	1	mestský obvods
+place	town	0	mesto 10 tis.-100 tis.
+place	town	1	mesto 10 tis.-100 tis.s
+place	unincorporated_area	0	nezaradená oblasť
+place	unincorporated_area	1	nezaradená oblasťs
+place	village	0	obec 200-10 tis.
+place	village	1	obec 200-10 tis.s
+railway	abandoned	0	opustená železnica
+railway	abandoned	1	opustená železnicas
+railway	construction	0	železnica vo výstavbe
+railway	construction	1	železnica vo výstavbes
+railway	disused	0	nepoužívaná železnica
+railway	disused	1	nepoužívaná železnicas
+railway	disused_station	0	nepoužívaná železničná stanica
+railway	disused_station	1	nepoužívaná železničná stanicas
+railway	funicular	0	lanová dráha
+railway	funicular	1	lanová dráhas
+railway	halt	0	zastávka vlaku
+railway	halt	1	zastávka vlakus
+railway	historic_station	0	zastávka historickej železnice
+railway	historic_station	1	zastávka historickej železnices
+railway	junction	0	železničný uzol
+railway	junction	1	železničný uzols
+railway	level_crossing	0	železničný prejazd
+railway	level_crossing	1	železničný prejazds
+railway	light_rail	0	ľahká železnica
+railway	light_rail	1	ľahká železnicas
+railway	monorail	0	jednokoľajka
+railway	monorail	1	jednokoľajkas
+railway	narrow_gauge	0	úzkokoľajná železnica
+railway	narrow_gauge	1	úzkokoľajná železnicas
+railway	platform	0	železničné nástupište
+railway	platform	1	železničné nástupištes
+railway	preserved	0	historická železnica
+railway	preserved	1	historická železnicas
+railway	spur	0	železničná vlečka
+railway	spur	1	železničná vlečkas
+railway	station	0	železničná stanica
+railway	station	1	železničná stanicas
+railway	subway	0	stanica metra
+railway	subway	1	stanica metras
+railway	subway_entrance	0	vchod do metra
+railway	subway_entrance	1	vchod do metras
+railway	switch	0	železničná výhybka
+railway	switch	1	železničná výhybkas
+railway	tram	0	električka
+railway	tram	1	električkas
+railway	tram_stop	0	zastávka električky
+railway	tram_stop	1	zastávka električkys
+railway	yard	0	železničné depo
+railway	yard	1	železničné depos
+shop	alcohol	0	mimo povolenia
+shop	alcohol	1	mimo povolenias
+shop	apparel	0	odevy
+shop	apparel	1	odevys
+shop	art	0	obchod s umením
+shop	art	1	obchod s umeníms
+shop	bakery	0	pekáreň
+shop	bakery	1	pekáreňs
+shop	beauty	0	salón krásy
+shop	beauty	1	salón krásys
+shop	beverages	0	občerstvenie
+shop	beverages	1	občerstvenies
+shop	bicycle	0	obchod s bicylkami
+shop	bicycle	1	obchod s bicylkamis
+shop	books	0	kníhkupectvo
+shop	books	1	kníhkupectvos
+shop	butcher	0	mäsiarstvo
+shop	butcher	1	mäsiarstvos
+shop	car_dealer	0	obchod s autami
+shop	car_dealer	1	obchod s autamis
+shop	car_parts	0	mototechna
+shop	car_parts	1	mototechnas
+shop	car_repair	0	autoservis
+shop	car_repair	1	autoserviss
+shop	carpet	0	obchod s kobercami
+shop	carpet	1	obchod s kobercamis
+shop	charity	0	charitatívny obchod
+shop	charity	1	charitatívny obchods
+shop	chemist	0	lekáreň
+shop	chemist	1	lekáreňs
+shop	clothes	0	obchod s konfekciou
+shop	clothes	1	obchod s konfekcious
+shop	computer	0	obchod s počítačmi
+shop	computer	1	obchod s počítačmis
+shop	confectionery	0	cukráreň
+shop	confectionery	1	cukráreňs
+shop	department_store	0	obchodný dom
+shop	department_store	1	obchodný doms
+shop	doityourself	0	urob si sám
+shop	doityourself	1	urob si sáms
+shop	drugstore	0	lekáreň
+shop	drugstore	1	lekáreňs
+shop	dry_cleaning	0	chemická čistiareň
+shop	dry_cleaning	1	chemická čistiareňs
+shop	electronics	0	elektro
+shop	electronics	1	elektros
+shop	estate_agent	0	realitná kancelária
+shop	estate_agent	1	realitná kancelárias
+shop	farm	0	poľnonákup
+shop	farm	1	poľnonákups
+shop	fish	0	obchod s rybami
+shop	fish	1	obchod s rybamis
+shop	florist	0	kvetinárstvo
+shop	florist	1	kvetinárstvos
+shop	food	0	obchod s potravinami
+shop	food	1	obchod s potravinamis
+shop	funeral_directors	0	pohrebníctvo
+shop	funeral_directors	1	pohrebníctvos
+shop	furniture	0	nábytok
+shop	furniture	1	nábytoks
+shop	gallery	0	galéria
+shop	gallery	1	galérias
+shop	garden_centre	0	záhradnícke centrum
+shop	garden_centre	1	záhradnícke centrums
+shop	general	0	zmiešaný tovar
+shop	general	1	zmiešaný tovars
+shop	gift	0	suveníry
+shop	gift	1	suvenírys
+shop	greengrocer	0	obchod so zeleninou
+shop	greengrocer	1	obchod so zeleninous
+shop	grocery	0	potraviny
+shop	grocery	1	potravinys
+shop	hairdresser	0	kaderníctvo,holičstvo
+shop	hairdresser	1	kaderníctvo,holičstvos
+shop	hardware	0	železiarstvo
+shop	hardware	1	železiarstvos
+shop	hifi	0	hi-fi
+shop	hifi	1	hi-fis
+shop	insurance	0	poisťovňa
+shop	insurance	1	poisťovňas
+shop	jewelry	0	zlatníctvo
+shop	jewelry	1	zlatníctvos
+shop	kiosk	0	novinový stánok
+shop	kiosk	1	novinový stánoks
+shop	laundry	0	práčovňa
+shop	laundry	1	práčovňas
+shop	mall	0	pešia zóna
+shop	mall	1	pešia zónas
+shop	mobile_phone	0	obchod s mobilnými telefónmi
+shop	mobile_phone	1	obchod s mobilnými telefónmis
+shop	motorcycle	0	motocyklový obchod
+shop	motorcycle	1	motocyklový obchods
+shop	music	0	hudobniny
+shop	music	1	hudobninys
+shop	optician	0	očná optika
+shop	optician	1	očná optikas
+shop	organic	0	obchod so zdravou výživou
+shop	organic	1	obchod so zdravou výživous
+shop	outdoor	0	turistický obchod
+shop	outdoor	1	turistický obchods
+shop	pet	0	chovprodukt
+shop	pet	1	chovprodukts
+shop	photo	0	fotokino
+shop	photo	1	fotokinos
+shop	salon	0	salón
+shop	salon	1	salóns
+shop	shoes	0	obuva
+shop	shoes	1	obuvas
+shop	shopping_centre	0	nákupné stredisko
+shop	shopping_centre	1	nákupné strediskos
+shop	sports	0	športový obchod
+shop	sports	1	športový obchods
+shop	stationery	0	papierníctvo
+shop	stationery	1	papierníctvos
+shop	supermarket	0	supermarket
+shop	supermarket	1	supermarkets
+shop	toys	0	hračkárstvo
+shop	toys	1	hračkárstvos
+shop	travel_agency	0	cestovná kancelária
+shop	travel_agency	1	cestovná kancelárias
+shop	wine	0	mimo povolenia
+shop	wine	1	mimo povolenias
+tourism	alpine_hut	0	vysokohorská chata
+tourism	alpine_hut	1	vysokohorská chatas
+tourism	artwork	0	umelecké dielo
+tourism	artwork	1	umelecké dielos
+tourism	attraction	0	atrakcia
+tourism	attraction	1	atrakcias
+tourism	bed_and_breakfast	0	nocľah a raňajky
+tourism	bed_and_breakfast	1	nocľah a raňajkys
+tourism	cabin	0	malá chata
+tourism	cabin	1	malá chatas
+tourism	camp_site	0	kemping
+tourism	camp_site	1	kempings
+tourism	caravan_site	0	autokemping
+tourism	caravan_site	1	autokempings
+tourism	chalet	0	veľká chata
+tourism	chalet	1	veľká chatas
+tourism	guest_house	0	penzión
+tourism	guest_house	1	penzións
+tourism	hostel	0	ubytovňa, internát
+tourism	hostel	1	ubytovňa, internáts
+tourism	hotel	0	hotel
+tourism	hotel	1	hotels
+tourism	information	0	informácie
+tourism	information	1	informácies
+tourism	lean_to	0	prístrešok
+tourism	lean_to	1	prístrešoks
+tourism	motel	0	motel
+tourism	motel	1	motels
+tourism	museum	0	múzeum
+tourism	museum	1	múzeums
+tourism	picnic_site	0	výletné miesto
+tourism	picnic_site	1	výletné miestos
+tourism	theme_park	0	zábavný park
+tourism	theme_park	1	zábavný parks
+tourism	valley	0	údolie
+tourism	valley	1	údolies
+tourism	viewpoint	0	rozhľadňa, výhliadka
+tourism	viewpoint	1	rozhľadňa, výhliadkas
+tourism	zoo	0	zoo
+tourism	zoo	1	zoos
+waterway	boatyard	0	lodenica
+waterway	boatyard	1	lodenicas
+waterway	canal	0	kanál
+waterway	canal	1	kanáls
+waterway	dam	0	priehrada,hrádza
+waterway	dam	1	priehrada,hrádzas
+waterway	derelict_canal	0	opustený kanál
+waterway	derelict_canal	1	opustený kanáls
+waterway	ditch	0	priekopa
+waterway	ditch	1	priekopas
+waterway	dock	0	dok
+waterway	dock	1	doks
+waterway	drain	0	odvodňovací kanál
+waterway	drain	1	odvodňovací kanáls
+waterway	lock	0	plavebná komora
+waterway	lock	1	plavebná komoras
+waterway	lock_gate	0	brána plavebnej komory
+waterway	lock_gate	1	brána plavebnej komorys
+waterway	mineral_spring	0	minerálny prameň
+waterway	mineral_spring	1	minerálny prameňs
+waterway	mooring	0	kotvisko
+waterway	mooring	1	kotviskos
+waterway	river	0	rieka
+waterway	river	1	riekas
+waterway	riverbank	0	breh rieky
+waterway	riverbank	1	breh riekys
+waterway	stream	0	potok
+waterway	stream	1	potoks
+waterway	wadi	0	občasné riečisko(vádí)
+waterway	wadi	1	občasné riečisko(vádí)s
+waterway	water_point	0	vodný bod
+waterway	water_point	1	vodný bods
+waterway	waterfall	0	vodopád
+waterway	waterfall	1	vodopáds
+waterway	weir	0	splav
+waterway	weir	1	splavs

@@ -1,0 +1,10 @@
+квартира|кв
+kvartira|kv
+кабинет|каб|к-т|к
+kabinet|kab|k-t|k
+литера|лит
+litera|lit
+офис|оф
+ofis|of
+помещение|пом
+pomeshhenie|pom

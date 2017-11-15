@@ -1,0 +1,841 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	مطار
+aeroway	aerodrome	1	مطارs
+amenity	arts_centre	0	مركز فني/ثقافي
+amenity	arts_centre	1	مركز فني/ثقافيs
+amenity	atm	0	صراف آلي
+amenity	atm	1	صراف آليs
+amenity	auditorium	0	قاعة محاضرات
+amenity	auditorium	1	قاعة محاضراتs
+amenity	bank	0	مصرف
+amenity	bank	1	مصرفs
+amenity	bar	0	حانة
+amenity	bar	1	حانةs
+amenity	bench	0	مقعد
+amenity	bench	1	مقعدs
+amenity	bicycle_parking	0	موقف دراجات
+amenity	bicycle_parking	1	موقف دراجاتs
+amenity	bicycle_rental	0	تأجير دراجة
+amenity	bicycle_rental	1	تأجير دراجةs
+amenity	brothel	0	بيت دعارة
+amenity	brothel	1	بيت دعارةs
+amenity	bureau_de_change	0	مكتب صرافة
+amenity	bureau_de_change	1	مكتب صرافةs
+amenity	bus_station	0	محطة حافلات
+amenity	bus_station	1	محطة حافلاتs
+amenity	cafe	0	مقهى
+amenity	cafe	1	مقهىs
+amenity	car_rental	0	تأجير سيارات
+amenity	car_rental	1	تأجير سياراتs
+amenity	car_sharing	0	مشاركة سيارات
+amenity	car_sharing	1	مشاركة سياراتs
+amenity	car_wash	0	غسيل سيارات
+amenity	car_wash	1	غسيل سياراتs
+amenity	casino	0	نادي قمار
+amenity	casino	1	نادي قمارs
+amenity	cinema	0	سينما
+amenity	cinema	1	سينماs
+amenity	clinic	0	عيادة
+amenity	clinic	1	عيادةs
+amenity	club	0	نادي
+amenity	club	1	ناديs
+amenity	college	0	كلّية
+amenity	college	1	كلّيةs
+amenity	community_centre	0	مركز اجتماع
+amenity	community_centre	1	مركز اجتماعs
+amenity	courthouse	0	محكمة
+amenity	courthouse	1	محكمةs
+amenity	crematorium	0	محرقة جثث
+amenity	crematorium	1	محرقة جثثs
+amenity	dentist	0	طبيب أسنان
+amenity	dentist	1	طبيب أسنانs
+amenity	doctors	0	أطباء
+amenity	doctors	1	أطباءs
+amenity	dormitory	0	عنبر نوم
+amenity	dormitory	1	عنبر نومs
+amenity	drinking_water	0	مياه عذبة
+amenity	drinking_water	1	مياه عذبةs
+amenity	driving_school	0	مدرسة تعليم قيادة
+amenity	driving_school	1	مدرسة تعليم قيادةs
+amenity	embassy	0	سفارة
+amenity	embassy	1	سفارةs
+amenity	emergency_phone	0	هاتف طوارئ
+amenity	emergency_phone	1	هاتف طوارئs
+amenity	fast_food	0	وجبات سريعة
+amenity	fast_food	1	وجبات سريعةs
+amenity	ferry_terminal	0	مرسى عبّارة
+amenity	ferry_terminal	1	مرسى عبّارةs
+amenity	fire_hydrant	0	مواد مكافحة حرائق
+amenity	fire_hydrant	1	مواد مكافحة حرائقs
+amenity	fire_station	0	فوج إطفاء
+amenity	fire_station	1	فوج إطفاءs
+amenity	fountain	0	نافورة
+amenity	fountain	1	نافورةs
+amenity	fuel	0	وقود
+amenity	fuel	1	وقودs
+amenity	grave_yard	0	مقبرة
+amenity	grave_yard	1	مقبرةs
+amenity	gym	0	مركز للرشاقة/الرياضة
+amenity	gym	1	مركز للرشاقة/الرياضةs
+amenity	hall	0	قاعة
+amenity	hall	1	قاعةs
+amenity	health_centre	0	مركز صحي
+amenity	health_centre	1	مركز صحيs
+amenity	hospital	0	مستشفى
+amenity	hospital	1	مستشفىs
+amenity	hotel	0	فندق
+amenity	hotel	1	فندقs
+amenity	hunting_stand	0	مربط للصيد
+amenity	hunting_stand	1	مربط للصيدs
+amenity	ice_cream	0	مثلجات
+amenity	ice_cream	1	مثلجاتs
+amenity	kindergarten	0	حضانة أطفال
+amenity	kindergarten	1	حضانة أطفالs
+amenity	library	0	مكتبة
+amenity	library	1	مكتبةs
+amenity	market	0	سوق
+amenity	market	1	سوقs
+amenity	marketplace	0	سوق
+amenity	marketplace	1	سوقs
+amenity	mountain_rescue	0	للإنقاذ في الجبل
+amenity	mountain_rescue	1	للإنقاذ في الجبلs
+amenity	nightclub	0	نادي ليلي
+amenity	nightclub	1	نادي ليليs
+amenity	nursery	0	رعاية تمريضية
+amenity	nursery	1	رعاية تمريضيةs
+amenity	nursing_home	0	دار رعاية مسنين/معاقين
+amenity	nursing_home	1	دار رعاية مسنين/معاقينs
+amenity	office	0	مكتب
+amenity	office	1	مكتبs
+amenity	park	0	منتزه
+amenity	park	1	منتزهs
+amenity	parking	0	موقف سيارات
+amenity	parking	1	موقف سياراتs
+amenity	pharmacy	0	صيدلية
+amenity	pharmacy	1	صيدليةs
+amenity	place_of_worship	0	معبد
+amenity	place_of_worship	1	معبدs
+amenity	police	0	شرطة
+amenity	police	1	شرطةs
+amenity	post_box	0	صندوق بريد
+amenity	post_box	1	صندوق بريدs
+amenity	post_office	0	مكتب بريد
+amenity	post_office	1	مكتب بريدs
+amenity	preschool	0	روضة أطفال
+amenity	preschool	1	روضة أطفالs
+amenity	prison	0	سجن
+amenity	prison	1	سجنs
+amenity	pub	0	حانة
+amenity	pub	1	حانةs
+amenity	public_building	0	مبنى عام
+amenity	public_building	1	مبنى عامs
+amenity	public_market	0	سوق عمومي
+amenity	public_market	1	سوق عموميs
+amenity	reception_area	0	منطقة استقبال
+amenity	reception_area	1	منطقة استقبالs
+amenity	recycling	0	نقطة إعادة تصنيع
+amenity	recycling	1	نقطة إعادة تصنيعs
+amenity	restaurant	0	مطعم
+amenity	restaurant	1	مطعمs
+amenity	retirement_home	0	بيت مسنين
+amenity	retirement_home	1	بيت مسنينs
+amenity	sauna	0	حمّام بخاري حار
+amenity	sauna	1	حمّام بخاري حارs
+amenity	school	0	مدرسة
+amenity	school	1	مدرسةs
+amenity	shelter	0	ملجأ
+amenity	shelter	1	ملجأs
+amenity	shop	0	متجر/دكان/حانوت
+amenity	shop	1	متجر/دكان/حانوتs
+amenity	shopping	0	التسوق
+amenity	shopping	1	التسوقs
+amenity	social_club	0	نادي اجتماعي
+amenity	social_club	1	نادي اجتماعيs
+amenity	studio	0	ستوديو
+amenity	studio	1	ستوديوs
+amenity	supermarket	0	سوبرماركت
+amenity	supermarket	1	سوبرماركتs
+amenity	taxi	0	سيارة أجرة
+amenity	taxi	1	سيارة أجرةs
+amenity	telephone	0	هاتف عمومي
+amenity	telephone	1	هاتف عموميs
+amenity	theatre	0	مسرح
+amenity	theatre	1	مسرحs
+amenity	toilets	0	مراحيض
+amenity	toilets	1	مراحيضs
+amenity	townhall	0	مبنى بلدية
+amenity	townhall	1	مبنى بلديةs
+amenity	university	0	جامعة
+amenity	university	1	جامعةs
+amenity	vending_machine	0	آلة بيع
+amenity	vending_machine	1	آلة بيعs
+amenity	veterinary	0	جراحة بيطرية
+amenity	veterinary	1	جراحة بيطريةs
+amenity	village_hall	0	مبنى/دار القرية
+amenity	village_hall	1	مبنى/دار القريةs
+amenity	waste_basket	0	سلة نفايات
+amenity	waste_basket	1	سلة نفاياتs
+amenity	wifi	0	نقطة اتصال لاسلكية واي فاي
+amenity	wifi	1	نقطة اتصال لاسلكية واي فايs
+amenity	youth_centre	0	مركز نشاطات للشباب
+amenity	youth_centre	1	مركز نشاطات للشبابs
+boundary	administrative	0	حدود إدارية
+boundary	administrative	1	حدود إداريةs
+building	apartments	0	مجموعة شقق
+building	apartments	1	مجموعة شققs
+building	block	0	مجمع مباني
+building	block	1	مجمع مبانيs
+building	bunker	0	ملجأ محصن
+building	bunker	1	ملجأ محصنs
+building	chapel	0	معبد/مصلى
+building	chapel	1	معبد/مصلىs
+building	church	0	كنيسة
+building	church	1	كنيسةs
+building	city_hall	0	دار/قاعة البلدية
+building	city_hall	1	دار/قاعة البلديةs
+building	commercial	0	مبنى تجاري
+building	commercial	1	مبنى تجاريs
+building	dormitory	0	عنبر نوم
+building	dormitory	1	عنبر نومs
+building	entrance	0	مدخل مبنى
+building	entrance	1	مدخل مبنىs
+building	faculty	0	مبنى كلية
+building	faculty	1	مبنى كليةs
+building	farm	0	مبنى مزرعة
+building	farm	1	مبنى مزرعةs
+building	flats	0	شقق
+building	flats	1	شققs
+building	garage	0	مرآب
+building	garage	1	مرآبs
+building	hall	0	قاعة
+building	hall	1	قاعةs
+building	hospital	0	مبنى مستشفى
+building	hospital	1	مبنى مستشفىs
+building	hotel	0	فندق
+building	hotel	1	فندقs
+building	house	0	منزل
+building	house	1	منزلs
+building	industrial	0	مبنى صناعي
+building	industrial	1	مبنى صناعيs
+building	office	0	مبنى مكتب
+building	office	1	مبنى مكتبs
+building	public	0	مبنى عام
+building	public	1	مبنى عامs
+building	residential	0	مبنى سكني
+building	residential	1	مبنى سكنيs
+building	retail	0	مبنى بيع بالمفرق
+building	retail	1	مبنى بيع بالمفرقs
+building	school	0	مبنى مدرسة
+building	school	1	مبنى مدرسةs
+building	shop	0	متجر
+building	shop	1	متجرs
+building	stadium	0	مدرج ألعاب رياضية
+building	stadium	1	مدرج ألعاب رياضيةs
+building	store	0	مخزن
+building	store	1	مخزنs
+building	terrace	0	صف منازل
+building	terrace	1	صف منازلs
+building	tower	0	برج
+building	tower	1	برجs
+building	train_station	0	محطة قطار
+building	train_station	1	محطة قطارs
+building	university	0	مبنى جامعة
+building	university	1	مبنى جامعةs
+building	&quot;yes&quot;	0	مبنى
+building	&quot;yes&quot;	1	مبنىs
+highway	bridleway	0	مسلك خيول
+highway	bridleway	1	مسلك خيولs
+highway	bus_guideway	0	مسار خاص للحافلات
+highway	bus_guideway	1	مسار خاص للحافلاتs
+highway	bus_stop	0	موقف حافلات
+highway	bus_stop	1	موقف حافلاتs
+highway	byway	0	طريق فرعي
+highway	byway	1	طريق فرعيs
+highway	construction	0	طريق سريع قيد الإنشاء
+highway	construction	1	طريق سريع قيد الإنشاءs
+highway	cycleway	0	مسار دراجات
+highway	cycleway	1	مسار دراجاتs
+highway	distance_marker	0	إشارة مسافة
+highway	distance_marker	1	إشارة مسافةs
+highway	emergency_access_point	0	نقطة دخول طوارئ
+highway	emergency_access_point	1	نقطة دخول طوارئs
+highway	footway	0	ممر للمشاة
+highway	footway	1	ممر للمشاةs
+highway	ford	0	مخاضة
+highway	ford	1	مخاضةs
+highway	gate	0	بوّابة
+highway	gate	1	بوّابةs
+highway	living_street	0	شارع سكني
+highway	living_street	1	شارع سكنيs
+highway	minor	0	طريق غير هام
+highway	minor	1	طريق غير هامs
+highway	motorway	0	طريق سريع
+highway	motorway	1	طريق سريعs
+highway	motorway_junction	0	تقاطع طرقات سريعة
+highway	motorway_junction	1	تقاطع طرقات سريعةs
+highway	motorway_link	0	طريق سريع
+highway	motorway_link	1	طريق سريعs
+highway	path	0	مسار
+highway	path	1	مسارs
+highway	pedestrian	0	طريق للمشاة
+highway	pedestrian	1	طريق للمشاةs
+highway	platform	0	منصة
+highway	platform	1	منصةs
+highway	primary	0	طريق أولي
+highway	primary	1	طريق أوليs
+highway	primary_link	0	طريق أولي
+highway	primary_link	1	طريق أوليs
+highway	raceway	0	حلبة سباق
+highway	raceway	1	حلبة سباقs
+highway	residential	0	طريق سكني
+highway	residential	1	طريق سكنيs
+highway	road	0	طريق
+highway	road	1	طريقs
+highway	secondary	0	طريق ثانوي
+highway	secondary	1	طريق ثانويs
+highway	secondary_link	0	طريق ثانوي
+highway	secondary_link	1	طريق ثانويs
+highway	service	0	طريق خدمة
+highway	service	1	طريق خدمةs
+highway	services	0	خدمات الطرق السريعة
+highway	services	1	خدمات الطرق السريعةs
+highway	steps	0	درج
+highway	steps	1	درجs
+highway	stile	0	مرقى لعبور جدار
+highway	stile	1	مرقى لعبور جدارs
+highway	tertiary	0	طريق فرعي
+highway	tertiary	1	طريق فرعيs
+highway	track	0	مسار
+highway	track	1	مسارs
+highway	trail	0	درب
+highway	trail	1	دربs
+highway	trunk	0	طريق رئيسي
+highway	trunk	1	طريق رئيسيs
+highway	trunk_link	0	طريق رئيسي
+highway	trunk_link	1	طريق رئيسيs
+highway	unclassified	0	طريق غير مصنّف
+highway	unclassified	1	طريق غير مصنّفs
+highway	unsurfaced	0	طريق غير معبد
+highway	unsurfaced	1	طريق غير معبدs
+historic	archaeological_site	0	موقع أثري
+historic	archaeological_site	1	موقع أثريs
+historic	battlefield	0	ساحة معركة
+historic	battlefield	1	ساحة معركةs
+historic	boundary_stone	0	حجر/صخرة تعليم حدود
+historic	boundary_stone	1	حجر/صخرة تعليم حدودs
+historic	building	0	مبنى
+historic	building	1	مبنىs
+historic	castle	0	قلعة
+historic	castle	1	قلعةs
+historic	church	0	كنيسة
+historic	church	1	كنيسةs
+historic	house	0	منزل
+historic	house	1	منزلs
+historic	icon	0	أيقونة
+historic	icon	1	أيقونةs
+historic	manor	0	عزبة
+historic	manor	1	عزبةs
+historic	memorial	0	نصب تذكاري
+historic	memorial	1	نصب تذكاريs
+historic	mine	0	منجم
+historic	mine	1	منجمs
+historic	monument	0	ضريح
+historic	monument	1	ضريحs
+historic	museum	0	متحف
+historic	museum	1	متحفs
+historic	ruins	0	أطلال
+historic	ruins	1	أطلالs
+historic	tower	0	برج
+historic	tower	1	برجs
+historic	wayside_cross	0	صليب تذكاري
+historic	wayside_cross	1	صليب تذكاريs
+historic	wayside_shrine	0	مزار جانب طريق
+historic	wayside_shrine	1	مزار جانب طريقs
+historic	wreck	0	حطام
+historic	wreck	1	حطامs
+landuse	allotments	0	حصص سكنية
+landuse	allotments	1	حصص سكنيةs
+landuse	basin	0	حوض
+landuse	basin	1	حوضs
+landuse	brownfield	0	أرض مخلفات
+landuse	brownfield	1	أرض مخلفاتs
+landuse	cemetery	0	مقبرة
+landuse	cemetery	1	مقبرةs
+landuse	commercial	0	منطقة تجارية
+landuse	commercial	1	منطقة تجاريةs
+landuse	conservation	0	محمية طبيعية
+landuse	conservation	1	محمية طبيعيةs
+landuse	construction	0	ورشة بناء
+landuse	construction	1	ورشة بناءs
+landuse	farm	0	مزرعة
+landuse	farm	1	مزرعةs
+landuse	farmland	0	أرض زراعية
+landuse	farmland	1	أرض زراعيةs
+landuse	farmyard	0	فناء مزرعة
+landuse	farmyard	1	فناء مزرعةs
+landuse	forest	0	غابة
+landuse	forest	1	غابةs
+landuse	grass	0	عشب
+landuse	grass	1	عشبs
+landuse	greenfield	0	حقول خضراء
+landuse	greenfield	1	حقول خضراءs
+landuse	industrial	0	منطقة صناعية
+landuse	industrial	1	منطقة صناعيةs
+landuse	landfill	0	مكب نفايات
+landuse	landfill	1	مكب نفاياتs
+landuse	meadow	0	مرج
+landuse	meadow	1	مرجs
+landuse	military	0	منطقة عسكرية
+landuse	military	1	منطقة عسكريةs
+landuse	mine	0	منجم
+landuse	mine	1	منجمs
+landuse	mountain	0	جبل
+landuse	mountain	1	جبلs
+landuse	nature_reserve	0	محمية طبيعية
+landuse	nature_reserve	1	محمية طبيعيةs
+landuse	park	0	منتزه
+landuse	park	1	منتزهs
+landuse	piste	0	منطقة تزحلق
+landuse	piste	1	منطقة تزحلقs
+landuse	plaza	0	ساحة
+landuse	plaza	1	ساحةs
+landuse	quarry	0	كسّارة
+landuse	quarry	1	كسّارةs
+landuse	railway	0	سكة حديدية
+landuse	railway	1	سكة حديديةs
+landuse	recreation_ground	0	ميدان ألعاب
+landuse	recreation_ground	1	ميدان ألعابs
+landuse	reservoir	0	خزان
+landuse	reservoir	1	خزانs
+landuse	residential	0	منطقة سكنية
+landuse	residential	1	منطقة سكنيةs
+landuse	retail	0	بيع بالمفرق
+landuse	retail	1	بيع بالمفرقs
+landuse	village_green	0	أرض خضراء
+landuse	village_green	1	أرض خضراءs
+landuse	vineyard	0	كرم عنب
+landuse	vineyard	1	كرم عنبs
+landuse	wetland	0	أرض رطبة
+landuse	wetland	1	أرض رطبةs
+landuse	wood	0	حرج
+landuse	wood	1	حرجs
+leisure	beach_resort	0	شاطئ منتجع
+leisure	beach_resort	1	شاطئ منتجعs
+leisure	common	0	أرض مشاع
+leisure	common	1	أرض مشاعs
+leisure	fishing	0	منطقة صيد سمك
+leisure	fishing	1	منطقة صيد سمكs
+leisure	garden	0	حديقة
+leisure	garden	1	حديقةs
+leisure	golf_course	0	ملعب غولف
+leisure	golf_course	1	ملعب غولفs
+leisure	ice_rink	0	حلبة تزلج على الجليد
+leisure	ice_rink	1	حلبة تزلج على الجليدs
+leisure	marina	0	مارينا
+leisure	marina	1	ماريناs
+leisure	miniature_golf	0	جولف مصغر
+leisure	miniature_golf	1	جولف مصغرs
+leisure	nature_reserve	0	محمية طبيعية
+leisure	nature_reserve	1	محمية طبيعيةs
+leisure	park	0	منتزه
+leisure	park	1	منتزهs
+leisure	pitch	0	ملعب رياضي
+leisure	pitch	1	ملعب رياضيs
+leisure	playground	0	ملعب
+leisure	playground	1	ملعبs
+leisure	recreation_ground	0	ميدان ألعاب
+leisure	recreation_ground	1	ميدان ألعابs
+leisure	slipway	0	مزلقة
+leisure	slipway	1	مزلقةs
+leisure	sports_centre	0	مركز رياضي
+leisure	sports_centre	1	مركز رياضيs
+leisure	stadium	0	مدرج ألعاب رياضية
+leisure	stadium	1	مدرج ألعاب رياضيةs
+leisure	swimming_pool	0	بركة سباحة
+leisure	swimming_pool	1	بركة سباحةs
+leisure	track	0	مضمار سباق
+leisure	track	1	مضمار سباقs
+leisure	water_park	0	منتزه ألعاب مائية
+leisure	water_park	1	منتزه ألعاب مائيةs
+natural	bay	0	خليج
+natural	bay	1	خليجs
+natural	beach	0	شاطئ
+natural	beach	1	شاطئs
+natural	cape	0	رأس (أرض داخلة في البحر(
+natural	cape	1	رأس (أرض داخلة في البحر(s
+natural	cave_entrance	0	مدخل كهف
+natural	cave_entrance	1	مدخل كهفs
+natural	channel	0	قناة
+natural	channel	1	قناةs
+natural	cliff	0	جرف
+natural	cliff	1	جرفs
+natural	coastline	0	خط ساحلي
+natural	coastline	1	خط ساحليs
+natural	crater	0	فوهة بركان
+natural	crater	1	فوهة بركانs
+natural	feature	0	ميزة
+natural	feature	1	ميزةs
+natural	fell	0	منحدر
+natural	fell	1	منحدرs
+natural	fjord	0	مضيق بحري
+natural	fjord	1	مضيق بحريs
+natural	geyser	0	نافورة ماء حار
+natural	geyser	1	نافورة ماء حارs
+natural	glacier	0	نهر/بحر جليدي
+natural	glacier	1	نهر/بحر جليديs
+natural	heath	0	أرض بور
+natural	heath	1	أرض بورs
+natural	hill	0	تلة
+natural	hill	1	تلةs
+natural	island	0	جزيرة
+natural	island	1	جزيرةs
+natural	land	0	أرض
+natural	land	1	أرضs
+natural	marsh	0	سبخة
+natural	marsh	1	سبخةs
+natural	moor	0	أرض جرداء
+natural	moor	1	أرض جرداءs
+natural	mud	0	وحل
+natural	mud	1	وحلs
+natural	peak	0	ذروة
+natural	peak	1	ذروةs
+natural	point	0	نقطة
+natural	point	1	نقطةs
+natural	reef	0	سلسلة صخور قرب سطح الماء
+natural	reef	1	سلسلة صخور قرب سطح الماءs
+natural	ridge	0	أرض مرتفعة
+natural	ridge	1	أرض مرتفعةs
+natural	river	0	نهر
+natural	river	1	نهرs
+natural	rock	0	صخرة
+natural	rock	1	صخرةs
+natural	scree	0	أرض حصاة
+natural	scree	1	أرض حصاةs
+natural	scrub	0	أشجار منخفضة
+natural	scrub	1	أشجار منخفضةs
+natural	shoal	0	مياه ضحلة
+natural	shoal	1	مياه ضحلةs
+natural	spring	0	نبع
+natural	spring	1	نبعs
+natural	strait	0	مضيق جبلي
+natural	strait	1	مضيق جبليs
+natural	tree	0	شجرة
+natural	tree	1	شجرةs
+natural	valley	0	وادي
+natural	valley	1	واديs
+natural	volcano	0	بركان
+natural	volcano	1	بركانs
+natural	water	0	ماء
+natural	water	1	ماءs
+natural	wetland	0	أرض رطبة
+natural	wetland	1	أرض رطبةs
+natural	wetlands	0	أراضي رطبة
+natural	wetlands	1	أراضي رطبةs
+natural	wood	0	حرج
+natural	wood	1	حرجs
+place	city	0	مدينة
+place	city	1	مدينةs
+place	country	0	دولة
+place	country	1	دولةs
+place	county	0	مقاطعة
+place	county	1	مقاطعةs
+place	farm	0	مزرعة
+place	farm	1	مزرعةs
+place	hamlet	0	كفر
+place	hamlet	1	كفرs
+place	house	0	منزل
+place	house	1	منزلs
+place	houses	0	منازل
+place	houses	1	منازلs
+place	island	0	جزيرة
+place	island	1	جزيرةs
+place	islet	0	جزيرة صغيرة
+place	islet	1	جزيرة صغيرةs
+place	locality	0	محلة
+place	locality	1	محلةs
+place	moor	0	أرض جرداء
+place	moor	1	أرض جرداءs
+place	municipality	0	بلدية
+place	municipality	1	بلديةs
+place	postcode	0	الرمز البريدي
+place	postcode	1	الرمز البريديs
+place	region	0	منطقة
+place	region	1	منطقةs
+place	sea	0	بحر
+place	sea	1	بحرs
+place	state	0	ولاية
+place	state	1	ولايةs
+place	subdivision	0	التقسيم الفرعي
+place	subdivision	1	التقسيم الفرعيs
+place	suburb	0	ضاحية
+place	suburb	1	ضاحيةs
+place	town	0	بلدة
+place	town	1	بلدةs
+place	unincorporated_area	0	مساحة غير منظمة
+place	unincorporated_area	1	مساحة غير منظمةs
+place	village	0	قرية
+place	village	1	قريةs
+railway	abandoned	0	سكة حديد مهجورة
+railway	abandoned	1	سكة حديد مهجورةs
+railway	construction	0	سكة حديدية تحت الإنشاء
+railway	construction	1	سكة حديدية تحت الإنشاءs
+railway	disused	0	سكة حديد مهجورة
+railway	disused	1	سكة حديد مهجورةs
+railway	disused_station	0	محطة سكة حديد مهجورة
+railway	disused_station	1	محطة سكة حديد مهجورةs
+railway	funicular	0	سكة حديدية معلقة
+railway	funicular	1	سكة حديدية معلقةs
+railway	halt	0	موقف قطار
+railway	halt	1	موقف قطارs
+railway	historic_station	0	محطة سكة حديد تاريخية
+railway	historic_station	1	محطة سكة حديد تاريخيةs
+railway	junction	0	تقاطع سكك حديدية
+railway	junction	1	تقاطع سكك حديديةs
+railway	level_crossing	0	تقاطع سكك حديدية
+railway	level_crossing	1	تقاطع سكك حديديةs
+railway	light_rail	0	قطار خفيف
+railway	light_rail	1	قطار خفيفs
+railway	monorail	0	قطار ذات سكة حديد واحدة
+railway	monorail	1	قطار ذات سكة حديد واحدةs
+railway	narrow_gauge	0	سكة حديد ضيقة
+railway	narrow_gauge	1	سكة حديد ضيقةs
+railway	platform	0	رصيف محطة قطار
+railway	platform	1	رصيف محطة قطارs
+railway	preserved	0	سكة حديدية تراثية
+railway	preserved	1	سكة حديدية تراثيةs
+railway	spur	0	خط تفرع سكة حديدية
+railway	spur	1	خط تفرع سكة حديديةs
+railway	station	0	محطة قطار
+railway	station	1	محطة قطارs
+railway	subway	0	محطة مترو الأنفاق
+railway	subway	1	محطة مترو الأنفاقs
+railway	subway_entrance	0	مدخل مترو
+railway	subway_entrance	1	مدخل متروs
+railway	switch	0	مبدل السكة الحديدية
+railway	switch	1	مبدل السكة الحديديةs
+railway	tram	0	سكة ترام
+railway	tram	1	سكة ترامs
+railway	tram_stop	0	موقف ترام
+railway	tram_stop	1	موقف ترامs
+railway	yard	0	فناء سكة حديد
+railway	yard	1	فناء سكة حديدs
+shop	alcohol	0	متجر كحول للبيع الخارجي
+shop	alcohol	1	متجر كحول للبيع الخارجيs
+shop	apparel	0	متجر ملابس
+shop	apparel	1	متجر ملابسs
+shop	art	0	متجر فن
+shop	art	1	متجر فنs
+shop	bakery	0	مخبز
+shop	bakery	1	مخبزs
+shop	beauty	0	صالون تجميل
+shop	beauty	1	صالون تجميلs
+shop	beverages	0	متجر مشروبات
+shop	beverages	1	متجر مشروباتs
+shop	bicycle	0	متجر دراجات
+shop	bicycle	1	متجر دراجاتs
+shop	books	0	متجر كتب
+shop	books	1	متجر كتبs
+shop	butcher	0	جزار
+shop	butcher	1	جزارs
+shop	car	0	متجر سيارات
+shop	car	1	متجر سياراتs
+shop	car_dealer	0	تاجر سيارات
+shop	car_dealer	1	تاجر سياراتs
+shop	car_parts	0	قطع غيار سيارات
+shop	car_parts	1	قطع غيار سياراتs
+shop	car_repair	0	مرآب سيارات
+shop	car_repair	1	مرآب سياراتs
+shop	carpet	0	معرض سجاد
+shop	carpet	1	معرض سجادs
+shop	charity	0	متجر جمعية خيرية
+shop	charity	1	متجر جمعية خيريةs
+shop	chemist	0	صيدلي
+shop	chemist	1	صيدليs
+shop	clothes	0	متجر ألبسة
+shop	clothes	1	متجر ألبسةs
+shop	computer	0	متجر كمبيوتر
+shop	computer	1	متجر كمبيوترs
+shop	confectionery	0	متجر الحلويات
+shop	confectionery	1	متجر الحلوياتs
+shop	convenience	0	متجر للأغراض اليومية
+shop	convenience	1	متجر للأغراض اليوميةs
+shop	copyshop	0	محل تصوير مستندات
+shop	copyshop	1	محل تصوير مستنداتs
+shop	cosmetics	0	بائع مستحضرات تجميل
+shop	cosmetics	1	بائع مستحضرات تجميلs
+shop	department_store	0	متجر متعدد الأقسام
+shop	department_store	1	متجر متعدد الأقسامs
+shop	discount	0	محل رخصة
+shop	discount	1	محل رخصةs
+shop	doityourself	0	براعة منزلية
+shop	doityourself	1	براعة منزليةs
+shop	drugstore	0	صيدلية
+shop	drugstore	1	صيدليةs
+shop	dry_cleaning	0	تنظيف جاف
+shop	dry_cleaning	1	تنظيف جافs
+shop	electronics	0	متجر إلكترونيات
+shop	electronics	1	متجر إلكترونياتs
+shop	estate_agent	0	وكيل عقاري
+shop	estate_agent	1	وكيل عقاريs
+shop	farm	0	متجر منتوجات زراعية
+shop	farm	1	متجر منتوجات زراعيةs
+shop	fashion	0	متجر أزياء
+shop	fashion	1	متجر أزياءs
+shop	fish	0	متجر أسماك
+shop	fish	1	متجر أسماكs
+shop	florist	0	بائع زهور
+shop	florist	1	بائع زهورs
+shop	food	0	دكان مأكولات
+shop	food	1	دكان مأكولاتs
+shop	funeral_directors	0	وكلاء ترتيبات جنازة
+shop	funeral_directors	1	وكلاء ترتيبات جنازةs
+shop	furniture	0	أثاث
+shop	furniture	1	أثاثs
+shop	gallery	0	معرض
+shop	gallery	1	معرضs
+shop	garden_centre	0	متجر للسلع الزراعية
+shop	garden_centre	1	متجر للسلع الزراعيةs
+shop	general	0	متجر عام
+shop	general	1	متجر عامs
+shop	gift	0	متجر هدايا
+shop	gift	1	متجر هداياs
+shop	greengrocer	0	محل خضروات
+shop	greengrocer	1	محل خضرواتs
+shop	grocery	0	بقالة
+shop	grocery	1	بقالةs
+shop	hairdresser	0	مزين/مصفف شعر
+shop	hairdresser	1	مزين/مصفف شعرs
+shop	hardware	0	متجر عتاد
+shop	hardware	1	متجر عتادs
+shop	hifi	0	متجر هاي فاي
+shop	hifi	1	متجر هاي فايs
+shop	insurance	0	بوليصات تأمين
+shop	insurance	1	بوليصات تأمينs
+shop	jewelry	0	متجر مجوهرات
+shop	jewelry	1	متجر مجوهراتs
+shop	kiosk	0	كشك
+shop	kiosk	1	كشكs
+shop	laundry	0	مصبغة
+shop	laundry	1	مصبغةs
+shop	mall	0	مركز تسوق
+shop	mall	1	مركز تسوقs
+shop	market	0	سوق
+shop	market	1	سوقs
+shop	mobile_phone	0	متجر هواتف محمولة
+shop	mobile_phone	1	متجر هواتف محمولةs
+shop	motorcycle	0	متجر دراجات نارية
+shop	motorcycle	1	متجر دراجات ناريةs
+shop	music	0	متجر موسيقى
+shop	music	1	متجر موسيقىs
+shop	newsagent	0	وكالة أنباء
+shop	newsagent	1	وكالة أنباءs
+shop	optician	0	نظاراتي
+shop	optician	1	نظاراتيs
+shop	organic	0	متجر أغذية عضوية
+shop	organic	1	متجر أغذية عضويةs
+shop	outdoor	0	متجر للنشاطات الخارجية
+shop	outdoor	1	متجر للنشاطات الخارجيةs
+shop	pet	0	متجر حيوانات أليفة
+shop	pet	1	متجر حيوانات أليفةs
+shop	photo	0	متجر صور
+shop	photo	1	متجر صورs
+shop	salon	0	صالون
+shop	salon	1	صالونs
+shop	shoes	0	متجر أحذية
+shop	shoes	1	متجر أحذيةs
+shop	shopping_centre	0	مركز التسوق
+shop	shopping_centre	1	مركز التسوقs
+shop	sports	0	متجر رياضة
+shop	sports	1	متجر رياضةs
+shop	stationery	0	محل قرطاسية
+shop	stationery	1	محل قرطاسيةs
+shop	supermarket	0	سوبرماركت
+shop	supermarket	1	سوبرماركتs
+shop	toys	0	متجر ألعاب
+shop	toys	1	متجر ألعابs
+shop	travel_agency	0	وكالة سفر
+shop	travel_agency	1	وكالة سفرs
+shop	video	0	متجر فيديو
+shop	video	1	متجر فيديوs
+shop	wine	0	متجر نبيذ للبيع الخارجي
+shop	wine	1	متجر نبيذ للبيع الخارجيs
+tourism	alpine_hut	0	كوخ جبلي
+tourism	alpine_hut	1	كوخ جبليs
+tourism	artwork	0	عمل فني
+tourism	artwork	1	عمل فنيs
+tourism	attraction	0	معلم سياحي
+tourism	attraction	1	معلم سياحيs
+tourism	bed_and_breakfast	0	سرير وفطار
+tourism	bed_and_breakfast	1	سرير وفطارs
+tourism	cabin	0	حُجرة أو مقصورة
+tourism	cabin	1	حُجرة أو مقصورةs
+tourism	camp_site	0	موقع تخييم
+tourism	camp_site	1	موقع تخييمs
+tourism	caravan_site	0	موقع قافلة
+tourism	caravan_site	1	موقع قافلةs
+tourism	chalet	0	شاليه
+tourism	chalet	1	شاليهs
+tourism	guest_house	0	بيت ضيافة
+tourism	guest_house	1	بيت ضيافةs
+tourism	hostel	0	سكن شباب
+tourism	hostel	1	سكن شبابs
+tourism	hotel	0	فندق
+tourism	hotel	1	فندقs
+tourism	information	0	معلومات
+tourism	information	1	معلوماتs
+tourism	lean_to	0	كوخ منحدر
+tourism	lean_to	1	كوخ منحدرs
+tourism	motel	0	نُزل
+tourism	motel	1	نُزلs
+tourism	museum	0	متحف
+tourism	museum	1	متحفs
+tourism	picnic_site	0	موقع بيك نيك
+tourism	picnic_site	1	موقع بيك نيكs
+tourism	theme_park	0	حديقة ملاهي
+tourism	theme_park	1	حديقة ملاهيs
+tourism	valley	0	وادي
+tourism	valley	1	واديs
+tourism	viewpoint	0	موقع كاشف
+tourism	viewpoint	1	موقع كاشفs
+tourism	zoo	0	حديقة حيوانات
+tourism	zoo	1	حديقة حيواناتs
+waterway	boatyard	0	حوض سفن
+waterway	boatyard	1	حوض سفنs
+waterway	canal	0	قناة
+waterway	canal	1	قناةs
+waterway	connector	0	قناة مائية
+waterway	connector	1	قناة مائيةs
+waterway	dam	0	سدّ
+waterway	dam	1	سدّs
+waterway	derelict_canal	0	قناة مهجورة
+waterway	derelict_canal	1	قناة مهجورةs
+waterway	ditch	0	خندق
+waterway	ditch	1	خندقs
+waterway	dock	0	مرسى
+waterway	dock	1	مرسىs
+waterway	drain	0	مسرب
+waterway	drain	1	مسربs
+waterway	lock	0	قفل
+waterway	lock	1	قفلs
+waterway	lock_gate	0	هويس
+waterway	lock_gate	1	هويسs
+waterway	mineral_spring	0	نبع مياه معدنية
+waterway	mineral_spring	1	نبع مياه معدنيةs
+waterway	mooring	0	مرسى
+waterway	mooring	1	مرسىs
+waterway	rapids	0	منحدرات نهرية
+waterway	rapids	1	منحدرات نهريةs
+waterway	river	0	نهر
+waterway	river	1	نهرs
+waterway	riverbank	0	ضفة نهر
+waterway	riverbank	1	ضفة نهرs
+waterway	stream	0	جدول
+waterway	stream	1	جدولs
+waterway	wadi	0	وادي
+waterway	wadi	1	واديs
+waterway	water_point	0	نقطة ماء شفة
+waterway	water_point	1	نقطة ماء شفةs
+waterway	waterfall	0	شلال
+waterway	waterfall	1	شلالs
+waterway	weir	0	هدار (سدّ منخفض)
+waterway	weir	1	هدار (سدّ منخفض)s

@@ -9,7 +9,7 @@ static inline bool averaged_perceptron_get_feature_id(averaged_perceptron_t *sel
 inline double_array *averaged_perceptron_predict_scores(averaged_perceptron_t *self, cstring_array *features) {
     if (self->scores == NULL || self->scores->n == 0) self->scores = double_array_new_zeros((size_t)self->num_classes);
 
-    double_array_set(self->scores->a, self->scores->n, 0.0);
+    double_array_zero(self->scores->a, self->scores->n);
 
     double *scores = self->scores->a;
 
@@ -30,7 +30,6 @@ inline double_array *averaged_perceptron_predict_scores(averaged_perceptron_t *s
             uint32_t class_id = indices[col];
             scores[class_id] += data[col];
         }
-
     })
 
     return self->scores;   
@@ -39,7 +38,7 @@ inline double_array *averaged_perceptron_predict_scores(averaged_perceptron_t *s
 inline double_array *averaged_perceptron_predict_scores_counts(averaged_perceptron_t *self, khash_t(str_uint32) *feature_counts) {
     if (self->scores == NULL || self->scores->n == 0) self->scores = double_array_new_zeros((size_t)self->num_classes);
 
-    double_array_set(self->scores->a, self->scores->n, 0.0);
+    double_array_zero(self->scores->a, self->scores->n);
 
     double *scores = self->scores->a;
 
@@ -93,7 +92,7 @@ averaged_perceptron_t *averaged_perceptron_read(FILE *f) {
         return NULL;
     }
 
-    averaged_perceptron_t *perceptron = malloc(sizeof(averaged_perceptron_t));
+    averaged_perceptron_t *perceptron = calloc(1, sizeof(averaged_perceptron_t));
 
     if (!file_read_uint32(f, &perceptron->num_features) ||
         !file_read_uint32(f, &perceptron->num_classes) ||
@@ -107,6 +106,10 @@ averaged_perceptron_t *averaged_perceptron_read(FILE *f) {
     }
 
     perceptron->scores = double_array_new_zeros((size_t)perceptron->num_classes);
+
+    if (perceptron->scores == NULL) {
+        goto exit_perceptron_created;
+    }
 
     uint64_t classes_str_len;
 

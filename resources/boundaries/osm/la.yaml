@@ -1,0 +1,15 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "6": "state_district"
+
+    overrides:
+        id:
+            relation:
+                "5831666": "city"
+        contained_by:
+            relation:
+                "5831666":
+                    admin_level:
+                        "6": "city_district"

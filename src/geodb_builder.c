@@ -338,7 +338,7 @@ void geodb_builder_destroy(geodb_builder_t *self) {
 }
 
 geodb_builder_t *geodb_builder_new(char *log_filename) {
-    geodb_builder_t *builder = malloc(sizeof(geodb_builder_t));
+    geodb_builder_t *builder = calloc(1, sizeof(geodb_builder_t));
 
     if (builder == NULL) return NULL;
 
@@ -379,23 +379,24 @@ exit_destroy_builder:
 /*
 Map of geonames boundary types to address components
 */
+
 uint16_t get_address_component(uint32_t boundary_type) {
     if (boundary_type == GEONAMES_LOCALITY) {
-        return ADDRESS_LOCALITY;
+        return GEONAMES_ADDRESS_COMPONENT_LOCALITY;
     } else if (boundary_type == GEONAMES_NEIGHBORHOOD) {
-        return ADDRESS_NEIGHBORHOOD;
+        return GEONAMES_ADDRESS_COMPONENT_NEIGHBORHOOD;
     } else if (boundary_type == GEONAMES_ADMIN1) {
-        return ADDRESS_ADMIN1;
+        return GEONAMES_ADDRESS_COMPONENT_ADMIN1;
     } else if (boundary_type == GEONAMES_COUNTRY) {
-        return ADDRESS_COUNTRY;
+        return GEONAMES_ADDRESS_COMPONENT_COUNTRY;
     } else if (boundary_type == GEONAMES_ADMIN2) {
-        return ADDRESS_ADMIN2;
+        return GEONAMES_ADDRESS_COMPONENT_ADMIN2;
     } else if (boundary_type == GEONAMES_ADMIN3) {
-        return ADDRESS_ADMIN3;
+        return GEONAMES_ADDRESS_COMPONENT_ADMIN3;
     } else if (boundary_type == GEONAMES_ADMIN4) {
-        return ADDRESS_ADMIN4;
+        return GEONAMES_ADDRESS_COMPONENT_ADMIN4;
     } else if (boundary_type == GEONAMES_ADMIN_OTHER) {
-        return ADDRESS_ADMIN_OTHER;
+        return GEONAMES_ADDRESS_COMPONENT_ADMIN_OTHER;
     } else {
         return 0;
     }
@@ -574,7 +575,7 @@ void import_geonames(geodb_builder_t *self, char *filename) {
 
     char id_string[INT32_MAX_STRING_SIZE + 1];
 
-    int normalize_utf8_options = NORMALIZE_STRING_DECOMPOSE | NORMALIZE_STRING_LOWERCASE | NORMALIZE_STRING_TRIM;
+    int normalize_utf8_options = NORMALIZE_STRING_COMPOSE | NORMALIZE_STRING_LOWERCASE | NORMALIZE_STRING_TRIM;
     //int normalize_latin_options = normalize_utf8_options | NORMALIZE_STRING_LATIN_ASCII;
 
     int i = 0;
@@ -764,7 +765,7 @@ void import_geonames_postal_codes(geodb_builder_t *self, char *filename) {
             exit(EXIT_FAILURE);
         }
 
-        geodb_builder_add_name(self, utf8_normalized, is_canonical, ADDRESS_POSTAL_CODE);
+        geodb_builder_add_name(self, utf8_normalized, is_canonical, GEONAMES_ADDRESS_COMPONENT_POSTCODE);
 
         char_array_clear(serialized);
         if (!gn_postal_code_serialize(pc, serialized)) {

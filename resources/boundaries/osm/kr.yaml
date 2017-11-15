@@ -1,0 +1,58 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "6": "state_district"
+        "7": "city_district"
+        "8": "city_district"
+        "9": "suburb"
+        "10": "suburb"
+
+
+    city_admin_level: &city_admin_level
+        admin_level:
+            "6": "city_district"
+            "7": "suburb"
+            "8": "suburb"
+        global_overrides_last: true
+
+    overrides:
+        id:
+            relation:
+                # Seoul
+                "2297418": "city"
+                # Busan
+                "2396450": "city"
+                # Daegu
+                "2395674": "city"
+                # Incheon
+                "2297419": "city"
+                # Gwangju
+                "2399220": "city"
+                # Daejeon
+                "2349984": "city"
+                # Ulsan
+                "2395867": "city"
+                # Sejong
+                "2349795": "city"
+
+
+        contained_by:
+            relation:
+                # Seoul
+                "2297418": *city_admin_level
+                # Busan
+                "2396450": *city_admin_level
+                # Daegu
+                "2395674": *city_admin_level
+                # Incheon
+                "2297419": *city_admin_level
+                # Gwangju
+                "2399220": *city_admin_level
+                # Daejeon
+                "2349984": *city_admin_level
+                # Ulsan
+                "2395867": *city_admin_level
+                # Sejong
+                "2349795": *city_admin_level
+

@@ -1,6 +1,6 @@
 οδός
 odós|odos|odhos
-λεωφόρος
-leoforos
-πλατεία|πλατεια
-plateía|plateia
+λεωφόρος|λεωφορος|λ|λεωφ
+leofóros|leoforos|l|leof
+πλατεία|πλατεια|πλ
+plateía|plateia|pl

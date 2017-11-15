@@ -117,8 +117,9 @@ hebrew_word_double_quote = ({hebrew_letter_chars}+{double_quote})+{hebrew_letter
 
 // WB11 and WB12 (modified slightly)
 possible_numeric_chars = ({numeric_chars}|{letter}|{non_breaking_dash}|{hyphen}|{mid_num_letter_chars}|{single_quote});
-number = ({non_breaking_dash}?(({numeric_chars}+({mid_number_chars}|{mid_num_letter_chars})*)*){numeric_chars}+);
-numeric = (({non_breaking_dash}?|((({numeric_chars}|{letter})+{possible_numeric_chars}*)*)){numeric_chars}+({possible_numeric_chars}*({numeric_chars}|{letter})+)*);
+number = ({non_breaking_dash}?((({numeric_chars}|{number_or_digit_chars})+({mid_number_chars}|{mid_num_letter_chars}))*)({numeric_chars}|{number_or_digit_chars})+);
+numeric = (({non_breaking_dash}|((({numeric_chars}|{number_or_digit_chars}|{letter})+{possible_numeric_chars}*)*))({numeric_chars}|{number_or_digit_chars})+({possible_numeric_chars}*({numeric_chars}|{number_or_digit_chars}|{letter})+)*);
+
 
 // WB13
 katakana = {katakana_chars}+;

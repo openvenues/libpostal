@@ -10,34 +10,34 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
-#define MAX_LANGUAGE_LEN 4
+#define LIBPOSTAL_MAX_LANGUAGE_LEN 4
 
 /* 
 Address dictionaries
 */
 // Bit set, should be able to keep it at a short (uint16_t)
-#define ADDRESS_NONE 0
-#define ADDRESS_ANY (1 << 0)
-#define ADDRESS_NAME (1 << 1)
-#define ADDRESS_HOUSE_NUMBER (1 << 2)
-#define ADDRESS_STREET (1 << 3)
-#define ADDRESS_UNIT (1 << 4)
+#define LIBPOSTAL_ADDRESS_NONE 0
+#define LIBPOSTAL_ADDRESS_ANY (1 << 0)
+#define LIBPOSTAL_ADDRESS_NAME (1 << 1)
+#define LIBPOSTAL_ADDRESS_HOUSE_NUMBER (1 << 2)
+#define LIBPOSTAL_ADDRESS_STREET (1 << 3)
+#define LIBPOSTAL_ADDRESS_UNIT (1 << 4)
+#define LIBPOSTAL_ADDRESS_LEVEL (1 << 5)
+#define LIBPOSTAL_ADDRESS_STAIRCASE (1 << 6)
+#define LIBPOSTAL_ADDRESS_ENTRANCE (1 << 7)
 
-#define ADDRESS_LOCALITY (1 << 7)
-#define ADDRESS_ADMIN1 (1 << 8)
-#define ADDRESS_ADMIN2 (1 << 9)
-#define ADDRESS_ADMIN3 (1 << 10)
-#define ADDRESS_ADMIN4 (1 << 11)
-#define ADDRESS_ADMIN_OTHER (1 << 12)
-#define ADDRESS_COUNTRY (1 << 13)
-#define ADDRESS_POSTAL_CODE (1 << 14)
-#define ADDRESS_NEIGHBORHOOD (1 << 15)
-#define ADDRESS_ALL ((1 << 16) - 1)
+#define LIBPOSTAL_ADDRESS_CATEGORY (1 << 8)
+#define LIBPOSTAL_ADDRESS_NEAR (1 << 9)
 
-typedef struct normalize_options {
+#define LIBPOSTAL_ADDRESS_TOPONYM (1 << 13)
+#define LIBPOSTAL_ADDRESS_POSTAL_CODE (1 << 14)
+#define LIBPOSTAL_ADDRESS_PO_BOX (1 << 15)
+#define LIBPOSTAL_ADDRESS_ALL ((1 << 16) - 1)
+
+typedef struct libpostal_normalize_options {
     // List of language codes
     char **languages;  
-    int num_languages;
+    size_t num_languages;
     uint16_t address_components;
 
     // String options
@@ -60,44 +60,47 @@ typedef struct normalize_options {
     bool expand_numex;
     bool roman_numerals;
 
-} normalize_options_t;
+} libpostal_normalize_options_t;
 
-normalize_options_t get_libpostal_default_options(void);
+libpostal_normalize_options_t libpostal_get_default_options(void);
 
-char **expand_address(char *input, normalize_options_t options, size_t *n);
+char **libpostal_expand_address(char *input, libpostal_normalize_options_t options, size_t *n);
 
-void expansion_array_destroy(char **expansions, size_t n);
+void libpostal_expansion_array_destroy(char **expansions, size_t n);
 
 /*
 Address parser
 */
 
-typedef struct address_parser_response {
+typedef struct libpostal_address_parser_response {
     size_t num_components;
     char **components;
     char **labels;
-} address_parser_response_t;
+} libpostal_address_parser_response_t;
 
-typedef struct address_parser_options {
+typedef struct libpostal_address_parser_options {
     char *language;
     char *country;
-} address_parser_options_t;
+} libpostal_address_parser_options_t;
 
-void address_parser_response_destroy(address_parser_response_t *self);
+void libpostal_address_parser_response_destroy(libpostal_address_parser_response_t *self);
 
-address_parser_options_t get_libpostal_address_parser_default_options(void);
+libpostal_address_parser_options_t libpostal_get_address_parser_default_options(void);
 
-address_parser_response_t *parse_address(char *address, address_parser_options_t options);
+libpostal_address_parser_response_t *libpostal_parse_address(char *address, libpostal_address_parser_options_t options);
 
 // Setup/teardown methods
 
 bool libpostal_setup(void);
+bool libpostal_setup_datadir(char *datadir);
 void libpostal_teardown(void);
 
 bool libpostal_setup_parser(void);
+bool libpostal_setup_parser_datadir(char *datadir);
 void libpostal_teardown_parser(void);
 
 bool libpostal_setup_language_classifier(void);
+bool libpostal_setup_language_classifier_datadir(char *datadir);
 void libpostal_teardown_language_classifier(void);
 
 #ifdef __cplusplus

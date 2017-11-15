@@ -1,0 +1,19 @@
+---
+    admin_level: 
+        "2": "country"
+        "3": "country"
+        "4": "state"
+        "6": "state_district"
+        "7": "city"
+        "8": "city"
+        "9": "city_district"
+        "10": "suburb"
+        "11": "suburb"
+
+    overrides:
+        id:
+            relation:
+                # Rotterdam, listed as admin_level=10
+                "1411101": "city"
+                # Amsterdam, listed as admin_level=10
+                "271110": "city"

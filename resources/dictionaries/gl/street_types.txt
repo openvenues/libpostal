@@ -15,7 +15,7 @@ prazuela|przla
 rambla|rbla
 ronda|rda
 rotonda|rtda
-rúa|rua|r
+rúa|rua|r|ru
 rúas|ruas|rs
 ruela
 sendeiro

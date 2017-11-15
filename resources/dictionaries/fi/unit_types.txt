@@ -1,4 +1,0 @@
-asunto|as
-bostad|bst
-kerostallo
-porras

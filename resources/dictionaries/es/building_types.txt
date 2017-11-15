@@ -1,7 +1,15 @@
 caserío|caserio|csrio
 casa
+casita
 chalet|chlet
 complejo|compj|compl|complj
 condominio|cond
+conjunto|cjto|conj|cto
+cooperativa|coop
+cortijo|crtjo
 edificio|edifc|edfc|edif
-viviendas|vvdas
+estancia|estanc|est
+local|loc|lc
+residencial|resid|res
+torre|to
+vivienda|vvda

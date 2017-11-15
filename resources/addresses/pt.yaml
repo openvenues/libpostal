@@ -1,0 +1,1054 @@
+# pt.yaml
+# -------
+# Note: default config is for Portugal (country overrides for Brasil, Angola, etc.)
+
+components:
+    level:
+        # If no floor number is specified
+        null_probability: 0.6
+        alphanumeric_probability: 0.35
+        standalone_probability: 0.05
+
+    staircase:
+        null_probability: 0.99
+        alphanumeric_probability: 0.01
+
+    entrance:
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
+
+    unit:
+        # If no unit number is specified
+        null_probability: 0.7
+        alphanumeric_probability: 0.25
+        standalone_probability: 0.05
+
+
+    combinations:
+        -
+            components:
+                - house_number
+                - staircase
+                - unit
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 0.9
+                - separator: " - "
+                  probability: 0.05
+                - separator: /
+                  probability: 0.05
+            probability: 0.005
+        # For unit types like 2/34 (more common in Canada and Australia)
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 0.9
+                - separator: " - "
+                  probability: 0.05
+                - separator: /
+                  probability: 0.05
+            probability: 0.005
+        -
+            components:
+                - house_number
+                - level
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 0.9
+                - separator: " - "
+                  probability: 0.05
+                - separator: /
+                  probability: 0.05
+            probability: 0.005
+
+
+numbers:
+    default: &numero
+        canonical: número
+        abbreviated: "nº"
+        sample: true
+        canonical_probability: 0.1
+        abbreviated_probability: 0.7
+        sample_probability: 0.2
+        sample_exclude:
+            - "#"
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: "#" # e.g. #3, #2F, etc.
+            probability: 0.5
+            alternatives:
+                - alternative: 
+            direction: left # affix goes on the number's left
+
+        # Probabilities for numbers
+        numeric_probability: 0.7
+        numeric_affix_probability: 0.3
+
+and:
+    default: &e
+        canonical: e
+        abbreviated: "&"
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability:  0.4
+        sample_probability: 0.1
+
+
+house_numbers:
+    # sem número (s/n) addresses
+    no_number: 
+        default:
+            canonical: sem número
+            abbreviated: s/n
+            sample: true
+            canonical_probability: 0.1
+            abbreviated_probability: 0.7
+            sample_probability: 0.2
+    alphanumeric:
+        default: *numero
+    alphanumeric_phrase_probability: 0.1
+    no_number_probability: 0.1 # With this probability, use sem número if no house_number is specified
+
+levels:
+    floor: &andar
+        canonical: andar
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true # Occasionally add variation of "number", e.g. Andar No 2
+            add_number_phrase_probability: 0.05
+        # e.g. 2o andar
+        ordinal:
+            direction: right
+            direction_probability: 0.95 # Let it vary occasionally e.g. Andar 2o
+            standalone_probability: 0.2 # Let e.g. 5º be the entire floor string
+            # If ordinal is selected, chance of e.g. just using 2o without Andar
+            null_phrase_probability: 0.6
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        numeric_probability: 0.2
+        ordinal_probability: 0.8
+    nivel: &nivel
+        canonical: nível
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true # Occasionally add variation of "number", e.g. No 2
+            add_number_phrase_probability: 0.05
+        # e.g. 2o piso
+        ordinal:
+            direction: right
+            direction_probability: 0.95
+            standalone_probability: 0.2
+            null_phrase_probability: 0.6
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        numeric_probability: 0.2
+        ordinal_probability: 0.8
+
+    # Less common, used more in commercial buildings
+    piso: &piso
+        canonical: piso
+        abbreviated: p
+        sample: true
+        canonical_probability: 0.8
+        abbreviated_probability: 0.1
+        sample_probability: 0.1
+        numeric:
+            direction: left
+            add_number_phrase: true # Occasionally add variation of "number", e.g. Piso No 2
+            add_number_phrase_probability: 0.05
+        numeric_affix:
+            affix: p
+            direction: left # P2
+        # e.g. 2o piso
+        ordinal:
+            direction: right
+            direction_probability: 0.95 # Let it vary occasionally e.g. Piso 2o
+            standalone_probability: 0.2 # Let e.g. 5º be the entire floor string
+            # If ordinal is selected, chance of e.g. just using 2o without Piso
+            null_phrase_probability: 0.6
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        numeric_probability: 0.2
+        numeric_affix_probability: 0.05
+        ordinal_probability: 0.75
+    # Ground floor
+    rez_do_chao: &rez_do_chao
+        canonical: rés-do-chão
+        abbreviated: r/c
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+    andar_terreo: &andar_terreo
+        canonical: andar terréo
+        abbreviated: at
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+    pavimento_terreo: &pavimento_terreo
+        canonical: pavimento terréo
+        abbreviated: pt
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+    terreo: &terreo
+        canonical: terréo
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+    baixos: &baixos
+        canonical: baixos
+        abbreviated: bxs
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
+        sample_probability: 0.1
+    # Used when floor number is < 0 (starts at -1 in all countries)
+    cave: &cave
+        canonical: cave
+        abbreviated: c/v
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.3
+        sample_probability: 0.2
+        # e.g. cave 1
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: cv
+            direction: left
+        # e.g. 2o cave
+        ordinal:
+            direction: right
+        standalone_probability: 0.985
+        number_abs_value: true
+        number_min_abs_value: 1
+        numeric_probability: 0.005
+        numeric_affix_probability: 0.005
+        ordinal_probability: 0.005
+    sub_cave: &sub_cave
+        canonical: sub cave
+        abbreviated: scv
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.3
+        sample_probability: 0.3
+        # e.g. sub cave 1
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: scv
+            direction: left
+        # e.g. segundo sub cave
+        ordinal:
+            direction: right
+        number_abs_value: true
+        number_min_abs_value: 2
+        # cave 2 == sub-cave 1
+        number_subtract_abs_value: 1
+        standalone_probability: 0.985
+        numeric_probability: 0.005
+        numeric_affix_probability: 0.005
+        ordinal_probability: 0.005
+    mezanino: &mezanino
+        canonical: mezanino
+        half_floors: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        sample: true
+        # e.g. mezanino 2
+        numeric:
+            direction: left
+        # e.g. segundo entresuelo
+        ordinal:
+            direction: right
+        numeric_probability: 0.1
+        ordinal_probability: 0.2
+        standalone_probability: 0.6
+    aliases:
+        "<-1":
+            default: *cave
+            probability: 0.6
+            alternatives:
+                - alternative: *sub_cave
+                  probability: 0.3995
+                - alternative: *andar
+                  probability: 0.0005
+        "-1":
+            default: *cave
+            probability: 0.9995
+            alternatives:
+                - alternative: *andar
+                  probability: 0.0005
+        # Special token for half-floors
+        half_floors:
+            default: *mezanino
+        "0":
+            default: *rez_do_chao
+            probability: 0.6
+            alternatives:
+                - alternative: *baixos
+                  probability: 0.34
+                  # Andar / Piso 0 is uncommon
+                - alternative: *andar
+                  probability: 0.05
+                - alternative: *piso
+                  probability: 0.01
+
+    numbering_starts_at: 0
+
+    alphanumeric:
+        default: *andar
+        probability: 0.95
+        alternatives:
+            - alternative: *piso
+              probability: 0.05
+        add_number_phrase: true
+        add_number_phrase_probability: 0.05
+        numeric_probability: 0.99
+        alpha_probability: 0.01
+
+blocks:
+    alphanumeric:
+        default:
+            canonical: bloco
+            abbreviated: blc
+            sample: true
+            canonical_probability: 0.6
+            abbreviated_probability: 0.2
+            sample_probability: 0.2
+            numeric:
+                direction: left
+
+categories:
+    near:
+        default:
+            canonical: perto de
+        probability: 0.8
+        alternatives:
+            - alternative:
+                  canonical: perto do
+              probability: 0.1
+            - alternative:
+                  canonical: perto
+              probability: 0.1
+    nearby:
+        default:
+            canonical: perto
+        probability: 0.5
+        alternatives:
+            - alternative:
+                  canonical: próximo
+              probability: 0.05
+            - alternative:
+                  canonical: proximo
+              probability: 0.05
+            - alternative:
+                  canonical: perto daqui
+              probability: 0.1
+            - alternative:
+                  canonical: aqui perto
+              probability: 0.1
+            - alternative:
+                  canonical: aqui
+              probability: 0.1
+            - alternative:
+                  canonical: por aqui
+              probability: 0.1
+    near_me:
+        default:
+            canonical: perto de mim
+    in:
+        default:
+            canonical: em
+        probability: 0.7
+        alternatives:
+            - alternative:
+                canonical: de
+              probability: 0.1
+            - alternative:
+                canonical: na
+              probability: 0.1
+            - alternative:
+                canonical: "no"
+              probability: 0.1
+    # Probabilities of each phrase
+    near_probability: 0.35
+    nearby_probability: 0.2
+    near_me_probability: 0.1
+    in_probability: 0.35
+
+cross_streets:
+    and: *e
+    con: &com
+        canonical: com
+    em: &em
+        canonical: em
+    corner_of: &esquina_da
+        canonical: esquina da
+        abbreviated: esq da
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.2
+        sample_probability: 0.3
+    at_the_corner_of: &na_esquina_da
+        canonical: na esquina da
+        abbreviated: na esq da
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.2
+        sample_probability: 0.3
+    corner: &esquina
+        canonical: esquina
+        abbreviated: esq
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.2
+        sample_probability: 0.3
+    intersection:
+        default: *e
+        probability: 0.55
+        alternatives:
+            - alternative: *com
+              probability: 0.2
+            - alternative: *em
+              probability: 0.1
+            - alternative: *esquina_da
+              probability: 0.1
+            - alternative: *na_esquina_da
+              probability: 0.05
+
+    between:
+        canonical: entre
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probabililty: 0.5
+
+po_boxes:
+    apartado: &apartado
+        canonical: apartado
+        abbreviated: apdo
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.3
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4 # Apdo No 1234
+        numeric_probability: 1.0
+    alphanumeric:
+        sample: false
+        default: *apartado
+        numeric_probability: 0.9 # Apdo 123
+        alpha_probability: 0.05 # Apdo A
+        numeric_plus_alpha_probability: 0.04 # Apdo 123G
+        alpha_plus_numeric_probability: 0.01 # Apdo A123
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+directions:
+    right: &direito
+        canonical: direito
+        abbreviated: dto
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: d
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.6
+    left: &esquerdo
+        canonical: esquerdo
+        abbreviated: esq
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: e
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.6
+    rear: &traseiro
+        canonical: traseiro
+        abbreviated: tras
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    front: &frente
+        canonical: frente
+        abbreviated: ft
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    alternatives:
+        - alternative: *direito
+          probability: 0.45
+        - alternative: *esquerdo
+          probability: 0.45
+        - alternative: *traseiro
+          probability: 0.05
+        - alternative: *frente
+          probability: 0.05
+
+    anteroposterior:
+        alternatives:
+            - alternative: *frente
+              probability: 0.5
+            - alternative: *traseiro
+              probability: 0.5
+
+    lateral:
+        alternatives:
+            - alternative: *direito
+              probability: 0.5
+            - alternative: *esquerdo
+              probability: 0.5
+
+cardinal_directions:
+    east: &este
+        canonical: este
+        abbreviated: e
+        canonical_probability: 0.4
+        abbreviated_probability: 0.6 
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: e
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    west: &oeste
+        canonical: oeste
+        abbreviated: w
+        canonical_probability: 0.4
+        abbreviated_probability: 0.6
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: w
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    north: &norte
+        canonical: norte
+        abbreviated: n
+        canonical_probability: 0.4
+        abbreviated_probability: 0.6
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: n
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    south: &sul
+        canonical: sul
+        abbreviated: s
+        canonical_probability: 0.4
+        abbreviated_probability: 0.6
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: s
+            direction: right
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.5
+
+    alternatives:
+        - alternative: *norte
+          probability: 0.25
+        - alternative: *este
+          probability: 0.25
+        - alternative: *sul
+          probability: 0.25
+        - alternative: *oeste
+          probability: 0.25
+
+entrances:
+    entrada: &entrada
+        canonical: entrada
+        abbreviated: entr
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.2
+        sample_probability: 0.3
+        numeric:
+            direction: left
+
+    # Entrance 1, Entrance A, etc.
+    alphanumeric:
+        default: *entrada
+        numeric_probability: 0.1 # e.g. Entrance 1
+        alpha_probability: 0.85 # e.g. Entrnace A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            modifier:
+                alternatives:
+                    - alternative: *norte
+                    - alternative: *sul
+                    - alternative: *este
+                    - alternative: *oeste
+                    - alternative: *direito
+                    - alternative: *esquerdo
+                    - alternative: *traseiro
+                    - alternative: *frente
+
+staircases:
+    escadaria: &escadaria
+        canonical: escadaria
+        abbreviated: esc
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+
+    alphanumeric:
+        # For alphanumerics, Stair A, Stair 1, etc.
+        default: *escadaria
+        numeric_probability: 0.6 # e.g. Escadaria 1
+        alpha_probability: 0.35 # e.g. Escadaria A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: right # e.g. Escadaria Esq
+            direction_probability: 0.8
+            modifier:
+                alternatives:
+                    - alternative: *norte
+                    - alternative: *sul
+                    - alternative: *este
+                    - alternative: *oeste
+                    - alternative: *direito
+                    - alternative: *esquerdo
+                    - alternative: *traseiro
+                    - alternative: *frente
+
+units:
+    apartment: &apartamento
+        canonical: apartamento
+        abbreviated: apto
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    door: &porta
+        canonical: porta
+        abbreviated: pta
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.4
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+            gender: f
+            direction_probability: 0.95 # Let it vary occasionally e.g. Pta 2a
+        numeric_probability: 0.45
+        ordinal_probability: 0.55
+    letra: &letra
+        canonical: letra
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
+    office: &escritorio
+        canonical: escritório
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    conjunto: &conjunto
+        canonical: conjunto
+        abbreviated: conj
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.3
+        sample_probability: 0.3
+    suite: &suite
+        canonical: suite
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+        numeric:
+            direction: left
+    lot: &lote
+        canonical: lote
+        abbreviated: lt
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+    parcel: &parcela
+        canonical: parcela
+    casa: &casa
+        canonical: casa
+        numeric:
+            direction: left
+    moradia: &moradia
+        canonical: moradia
+        numeric:
+            direction: left
+    room: &sala
+        canonical: sala
+        numeric:
+            direction: left
+    unidade: &unidade
+        canonical: unidade
+        abbreviated: un
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.1
+        sample_probability: 0.2
+
+    alphanumeric: &unit_alphanumeric
+        default: *apartamento
+        probability: 0.8
+        sample: true
+        alternatives:
+            - alternative: *sala
+              probability: 0.1
+            - alternative: *porta
+              probability: 0.05
+            - alternative: *casa
+              probability: 0.04
+            - alternative: *moradia
+              probability: 0.01
+
+        # Separate random probability for adding directions like 2o Izq, 2 Dcha, etc.
+        add_direction: true
+        add_direction_probability: 0.1
+        add_direction_numeric: true # Only for numbers
+        add_direction_standalone: true # A unit can be as simple as "D"
+
+        numeric_probability: 0.9 # e.g. Dpto 1
+        numeric_plus_alpha_probability: 0.01 # e.g. Dpto 1A
+        alpha_plus_numeric_probability: 0.01 # e.g. Dpto A1
+        alpha_probability: 0.08 # e.g. Dpto A
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        alpha:
+            default: *apartamento
+            probability: 0.8
+            alternatives:
+                - alternative: *sala
+                  probability: 0.1
+                - alternative: *casa
+                  probability: 0.02
+                - alternative: *moradia
+                  probability: 0.01
+                - alternative: *porta
+                  probability: 0.05
+                - alternative: *letra
+                  probability: 0.015
+                - alternative: *unidade
+                  probability: 0.005
+
+    zones:
+        residential: *unit_alphanumeric
+        commercial:
+            default: *sala
+            probability: 0.6
+            alternatives:
+                - alternative: *escritorio
+                  probability: 0.2
+                - alternative: *suite
+                  probability: 0.2
+
+            numeric_probability: 0.9 # e.g. escritório 1
+            numeric_plus_alpha_probability: 0.01 # e.g. escritório 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. escritório A1
+            alpha_probability: 0.08 # e.g. escritório A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1
+
+            alpha:
+                default: *sala
+                probability: 0.7
+                alternatives:
+                    - alternative: *escritorio
+                      probability: 0.15
+                    - alternative: *suite
+                      probability: 0.1
+                    - alternative: *letra
+                      probability: 0.05
+
+        industrial:
+            default: *lote
+            probability: 0.5
+            alternatives:
+                - alternative: *escritorio
+                  probability: 0.3
+                - alternative: *sala
+                  probability: 0.19
+                - alternative: *parcela
+                  probability: 0.01
+
+            numeric_probability: 0.9 # e.g. Lote 1
+            numeric_plus_alpha_probability: 0.01 # e.g. Lote 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. Lote A1
+            alpha_probability: 0.08 # e.g. Lote A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1
+
+        university:
+            default: *sala
+            probability: 0.9
+            alternatives:
+                - alternative: *porta
+                  probability: 0.1
+
+            numeric_probability: 0.9 # e.g. Sala 1
+            numeric_plus_alpha_probability: 0.01 # e.g. Sala 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. Sala A1
+            alpha_probability: 0.08 # e.g. Sala A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1
+
+            alpha:
+                default: *sala
+                probability: 0.9
+                alternatives:
+                    - alternative: *porta
+                      probability: 0.08
+                    - alternative: *letra
+                      probability: 0.02
+
+    allotments:
+        lot:
+            default: *lote
+            numeric_probability: 0.8
+            alphanumeric_probability: 0.1
+            alpha_probability: 0.1
+        parcel:
+            default: *parcela
+            numeric_probability: 0.3
+            alphanumeric_probability: 0.3
+            alpha_probability: 0.4
+        lot_probability: 0.9
+        parcel_probability: 0.06
+        lot_plus_parcel_probability: 0.02
+        parcel_plus_lot_probability: 0.02
+
+
+countries:
+    # Brasil
+    br:
+        levels:
+            numbering_starts_at: 1
+            aliases:
+                "0": &ground_floor_brasil
+                    default: *andar_terreo
+                    probability: 0.4
+                    alternatives:
+                        - alternative: *terreo
+                          probability: 0.2
+                        - alternative: *baixos
+                          probability: 0.2
+                        - alternative: *rez_do_chao
+                          probability: 0.13
+                        - alternative: *pavimento_terreo
+                          probability: 0.01
+                          # Andar / Piso 0 is uncommon
+                        - alternative: *andar
+                          probability: 0.05
+                        - alternative: *piso
+                          probability: 0.01
+                "1": *ground_floor_brasil
+
+        postcodes:
+            alphanumeric:
+                default:
+                    canonical: código de endereçamento postal
+                    abbreviated: cep
+                    sample: true
+                    canonical_probability: 0.001
+                    abbreviated_probability: 0.949
+                    sample_probability: 0.05
+
+                    numeric:
+                        # Postcodes in Brazil are sometimes prefixed by CEP
+                        direction: left
+
+                    numeric_affix:
+                        affix: cep
+                        direction: left
+                    # null_probability means the chance of doing nothing e.g. just the postal code
+                    null_probability: 0.7
+                    numeric_probability: 0.18
+                    numeric_affix_probability: 0.12
+                    strict_numeric: true
+
+        po_boxes: &po_boxes_caixa_postal
+            alphanumeric:
+                default:
+                    canonical: caixa postal
+                    abbreviated: cp
+                    sample: true
+                    canonical_probability: 0.1
+                    abbreviated_probability: 0.6
+                    sample_probability: 0.3
+                    numeric:
+                        direction: left
+
+        units:
+            zones:
+                commercial:
+                    default: *conjunto
+                    probability: 0.8
+                    alternatives:
+                        - alternative: *sala
+                          probability: 0.1
+                        - alternative: *suite
+                          probability: 0.05
+                        - alternative: *escritorio
+                          probability: 0.05
+
+                    alpha:
+                        default: *conjunto
+                        probability: 0.75
+                        alternatives:
+                            - alternative: *sala
+                              probability: 0.1
+                            - alternative: *suite
+                              probability: 0.05
+                            - alternative: *escritorio
+                              probability: 0.05
+                            - alternative: *letra
+                              probability: 0.05
+
+    # Angola
+    ao:
+        postcodes: &postcodes_codigo_postal
+            alphanumeric:
+                default:
+                    canonical: código postal
+                    abbreviated: cp
+                    sample: true
+                    canonical_probability: 0.001
+                    abbreviated_probability: 0.949
+                    sample_probability: 0.05
+
+                    numeric:
+                        direction: left
+
+                    numeric_affix:
+                        affix: cp
+                        direction: left
+                    # null_probability means the chance of doing nothing e.g. just the postal code
+                    null_probability: 0.7
+                    numeric_probability: 0.18
+                    numeric_affix_probability: 0.12
+                    strict_numeric: true
+
+        po_boxes: *po_boxes_caixa_postal
+
+    # Mozambique
+    mz:
+        postcodes: *postcodes_codigo_postal
+        po_boxes: *po_boxes_caixa_postal
+
+    # Cape Verde
+    cv:
+        po_boxes: *po_boxes_caixa_postal
+
+
+    # East Timor
+    tl:
+        po_boxes: *po_boxes_caixa_postal
+
+    # São Tome and Principe
+    st:
+        po_boxes: *po_boxes_caixa_postal
+
+    # Guinea-Bissau
+    gw:
+        po_boxes: *po_boxes_caixa_postal
+
+    # Macau
+    mo:
+        po_boxes: *po_boxes_caixa_postal

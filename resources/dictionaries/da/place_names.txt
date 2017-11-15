@@ -2,5 +2,6 @@ akademi|akad
 bro
 broen
 centralpark
+departement|dep
 gaard|gård
 park

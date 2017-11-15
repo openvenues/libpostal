@@ -1,0 +1,28 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "6": "state_district"
+        "8": "city_district"
+        "10": "city"
+
+    place:
+        "district": "state_district"
+
+    overrides:
+        id:
+            relation:
+                # Bangkok
+                "92277": "city"
+        contained_by:
+            relation:
+                "92277":
+                    global_overrides_last: true
+                    admin_level:
+                        "6": "city_district"
+                        "8": "suburb"
+
+        use_admin_center:
+            - id: 92277 # Bangkok
+              type: relation
+              probability: 0.85

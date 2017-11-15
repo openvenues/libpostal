@@ -1,0 +1,7 @@
+appartement|apt|app
+büro|buro|buero
+haus
+top
+wohnung|whg|w|/ w|/ / w
+wohnungsnummer
+zimmer|zi

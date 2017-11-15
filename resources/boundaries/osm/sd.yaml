@@ -1,0 +1,16 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "8": "state_district"
+        "9": "city"
+        "10": "suburb"
+
+    overrides:
+        contained_by:
+            relation:
+                # al-Khartum
+                "3774673":
+                    admin_level:
+                        # Khartoum
+                        "8": "city"

@@ -1,0 +1,22 @@
+set -e
+
+if [ "$#" -lt 3 ]; then
+    echo "Usage: chunked_shuffle filename parts outfile"
+    exit 1
+fi
+
+filename=$1
+parts=$2
+outfile=$3
+
+awk -v parts=$parts -v filename=$filename 'BEGIN{srand();} { print > filename"."int(rand() * parts) }' $filename
+
+tmp_outfile=$filename.out
+> $tmp_outfile
+
+for i in $(seq 0 $[$parts - 1]); do
+    shuf $filename.$i >> $tmp_outfile
+    rm $filename.$i
+done
+
+mv $tmp_outfile $outfile

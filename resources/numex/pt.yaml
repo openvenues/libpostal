@@ -1,0 +1,959 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "um"
+      value: 1
+      type: "cardinal"
+      multiply_gte: 1000000
+    - 
+      name: "uma"
+      value: 1
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "dois"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "duas"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "três"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "tres"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "quatro"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "cinco"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "seis"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sete"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "oito"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "nove"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "dez"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "onze"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "doze"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "treze"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "catorze"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "quinze"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "dezesseis"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "dezessete"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "dezoito"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "dezenove"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "vinte"
+      value: 20
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "trinta"
+      value: 30
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "quarenta"
+      value: 40
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "cinquenta"
+      value: 50
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "sessenta"
+      value: 60
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "setenta"
+      value: 70
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "oitenta"
+      value: 80
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "noventa"
+      value: 90
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "cem"
+      value: 100
+      type: "cardinal"
+      right: "add"
+      exact_multiple_only: true
+    - 
+      name: "cento"
+      value: 100
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "duzentos"
+      value: 200
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "trezentos"
+      value: 300
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "quatrocentos"
+      value: 400
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "quinhentos"
+      value: 500
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "seiscentos"
+      value: 600
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "setecentos"
+      value: 700
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "oitocentos"
+      value: 800
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "novecentos"
+      value: 900
+      type: "cardinal"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "mil"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "milhão"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "milhao"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "milhões"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "milhoes"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "bilhão"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "bilhao"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "bilhões"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "bilhoes"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "trilhão"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "trilhao"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "trilhões"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "trilhoes"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "quatrilhão"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "quatrilhao"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "quatrilhões"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "quatrilhoes"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+      right_separator: " e "
+    - 
+      name: "primeiro"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "segundo"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "terceiro"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "quarto"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "quinto"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "sexto"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "sétimo"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "setimo"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "oitavo"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "nono"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "décimo"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "decimo"
+      value: 10
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "vigésimo"
+      value: 20
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "vigesimo"
+      value: 20
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "trigésimo"
+      value: 30
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "trigesimo"
+      value: 30
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "quadragésimo"
+      value: 40
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "quadragesimo"
+      value: 40
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "quinquagésimo"
+      value: 50
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "quinquagesimo"
+      value: 50
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "sexagésimo"
+      value: 60
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "sexagesimo"
+      value: 60
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "septuagésimo"
+      value: 70
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "septuagesimo"
+      value: 70
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "octogésimo"
+      value: 80
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "octogesimo"
+      value: 80
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "nonagésimo"
+      value: 90
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "nonagesimo"
+      value: 90
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "centésimo"
+      value: 100
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "centesimo"
+      value: 100
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "ducentésimo"
+      value: 200
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "ducentesimo"
+      value: 200
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "tricentésimo"
+      value: 300
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "tricentesimo"
+      value: 300
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "quadrigentésimo"
+      value: 400
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "quadrigentesimo"
+      value: 400
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "quingentésimo"
+      value: 500
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "quingentesimo"
+      value: 500
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "sexcentésimo"
+      value: 600
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "sexcentesimo"
+      value: 600
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "septingentésimo"
+      value: 700
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "septingentesimo"
+      value: 700
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "octingentésimo"
+      value: 800
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "octingentesimo"
+      value: 800
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "noningentésimo"
+      value: 900
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "noningentesimo"
+      value: 900
+      type: "ordinal"
+      right: "add"
+    - 
+      name: "milésimo"
+      value: 1000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milesimo"
+      value: 1000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milionésimo"
+      value: 1000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milionesimo"
+      value: 1000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilionésimo"
+      value: 1000000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bilionesimo"
+      value: 1000000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "trilionésimo"
+      value: 1000000000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "trilionesimo"
+      value: 1000000000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "quadrilionésimo"
+      value: 1000000000000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "quadrilionesimo"
+      value: 1000000000000000
+      type: "ordinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "primeira"
+      value: 1
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "segunda"
+      value: 2
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "terceira"
+      value: 3
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "quarta"
+      value: 4
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "quinta"
+      value: 5
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "sexta"
+      value: 6
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "sétima"
+      value: 7
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "setima"
+      value: 7
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "oitava"
+      value: 8
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "nona"
+      value: 9
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "décima"
+      value: 10
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "decima"
+      value: 10
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "vigésima"
+      value: 20
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "vigesima"
+      value: 20
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "trigésima"
+      value: 30
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "trigesima"
+      value: 30
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "quadragésima"
+      value: 40
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "quadragesima"
+      value: 40
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "quinquagésima"
+      value: 50
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "quinquagesima"
+      value: 50
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "sexagésima"
+      value: 60
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "sexagesima"
+      value: 60
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "septuagésima"
+      value: 70
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "septuagesima"
+      value: 70
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "octogésima"
+      value: 80
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "octogesima"
+      value: 80
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "nonagésima"
+      value: 90
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "nonagesima"
+      value: 90
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "centésima"
+      value: 100
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "centesima"
+      value: 100
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "ducentésima"
+      value: 200
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "ducentesima"
+      value: 200
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "tricentésima"
+      value: 300
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "tricentesima"
+      value: 300
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "quadrigentésima"
+      value: 400
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "quadrigentesima"
+      value: 400
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "quingentésima"
+      value: 500
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "quingentesima"
+      value: 500
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "sexcentésima"
+      value: 600
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "sexcentesima"
+      value: 600
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "septingentésima"
+      value: 700
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "septingentesima"
+      value: 700
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "octingentésima"
+      value: 800
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "octingentesima"
+      value: 800
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "noningentésima"
+      value: 900
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "noningentesima"
+      value: 900
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "milésima"
+      value: 1000
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "milesima"
+      value: 1000
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "milionésima"
+      value: 1000000
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "milionesima"
+      value: 1000000
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "bilionésima"
+      value: 1000000000
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "bilionesima"
+      value: 1000000000
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "trilionésima"
+      value: 1000000000000
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "trilionesima"
+      value: 1000000000000
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "quadrilionésima"
+      value: 1000000000000000
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "quadrilionesima"
+      value: 1000000000000000
+      type: "ordinal"
+      gender: "f"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "º"
+          - "o"
+          - "°"
+        "1":
+          - "º"
+          - "o"
+          - "°"
+        "2":
+          - "º"
+          - "o"
+          - "°"
+        "3":
+          - "º"
+          - "o"
+          - "°"
+        "4":
+          - "º"
+          - "o"
+          - "°"
+        "5":
+          - "º"
+          - "o"
+          - "°"
+        "6":
+          - "º"
+          - "o"
+          - "°"
+        "7":
+          - "º"
+          - "o"
+          - "°"
+        "8":
+          - "º"
+          - "o"
+          - "°"
+        "9":
+          - "º"
+          - "o"
+          - "°"
+    - 
+      gender: "f"
+      suffixes:
+        "0":
+          - "ª"
+          - "a"
+        "1":
+          - "ª"
+          - "a"
+        "2":
+          - "ª"
+          - "a"
+        "3":
+          - "ª"
+          - "a"
+        "4":
+          - "ª"
+          - "a"
+        "5":
+          - "ª"
+          - "a"
+        "6":
+          - "ª"
+          - "a"
+        "7":
+          - "ª"
+          - "a"
+        "8":
+          - "ª"
+          - "a"
+        "9":
+          - "ª"
+          - "a"
+  stopwords:
+    - "e"
+

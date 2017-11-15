@@ -1,0 +1,115 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "dim"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "un"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "dau"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "dwy"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "tri"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "tair"
+      value: 3
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "pedwar"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "pedair"
+      value: 4
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "pump"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "pum"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "chwech"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "chwe"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "saith"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "wyth"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "naw"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "deg"
+      value: 10
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "ddeg"
+      value: 10
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "cant"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "mil"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "miliwn"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "biliwn"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "triliwn"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "kwadriliwn"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+

@@ -1,0 +1,95 @@
+key	value	is_plural	phrase
+aeroway	aerodrome 	0	aeroporto
+aeroway	aerodrome	1	aeroportos
+amenity	atm	0	caixa eletrônico
+amenity	atm	1	caixas eletrônicos
+amenity	atm	0	caixa multibanco
+amenity	atm	1	caixas multibanco
+amenity	atm	0	caixa de multibanco
+amenity	atm	1	caixas de multibanco
+amenity	atm	0	multibanco
+amenity	atm	1	multibancos
+amenity	atm	0	multicaixa
+amenity	atm	1	multicaixas
+amenity	bank	0	agência bancária
+amenity	bank	1	agências bancárias
+amenity	bank	0	banco
+amenity	bank	1	bancos
+amenity	bar	0	bar
+amenity	bar	1	bares
+amenity	bureau_de_change	0	câmbio
+amenity	bureau_de_change	1	câmbios
+amenity	bureau_de_change	0	cambista
+amenity	bureau_de_change	1	cambistas
+amenity	bus_station	0	estação de autocarros
+amenity	bus_station	1	estações de autocarros 
+amenity	bus_station	0	estação de camionagem
+amenity	bus_station	1	estações de camionagem 
+amenity	bus_station	0	estação de ônibus
+amenity	bus_station	1	estações de ônibus 
+amenity	bus_station	0	estação rodoviária
+amenity	bus_station	1	estações rodoviárias 
+amenity	bus_station	0	rodoviária
+amenity	bus_station	1	rodoviárias 
+amenity	bus_station	0	terminal rodoviário
+amenity	bus_station	1	terminais rodoviários 
+amenity	pub	0	bar
+amenity	pub	1	bares
+amenity	school	0	escola
+amenity	school	1	escolas
+amenity	townhall	0	câmara municipal
+amenity	townhall	1	câmaras municipais
+amenity	townhall	0	município
+amenity	townhall	1	municípios
+amenity	university	0	universidade
+amenity	university	1	universidades
+highway	bus_stop	0	paragem de autocarro
+highway	bus_stop	0	paragem de autocarros
+highway	bus_stop	1	paragens de autocarro
+highway	bus_stop	1	paragens de autocarros
+highway	bus_stop	0	parada de ônibus
+highway	bus_stop	1	paradas de ônibus
+highway	bus_stop	0	ponto de ônibus
+highway	bus_stop	1	pontos de ônibus
+highway	bus_stop	0	ponto de parada
+highway	bus_stop	1	pontos de parada
+highway	road	0	estrada
+highway	road	1	estradas
+historic	castle	0	castelo
+historic	castle	1	castelos
+historic	ruins	0	ruína
+historic	ruins	1	ruínas
+natural	beach	0	praia
+natural	beach	1	praias
+natural	island	0	ilha
+natural	island	1	ilhas
+natural	islet	0	ilhéu
+natural	islet	1	ilhéus
+natural	river	0	rio
+natural	river	1	rios
+place	postcode	0	código postal
+place	postcode	1	códigos postais
+railway	funicular	0	funicular
+railway	funicular	1	funiculares
+railway	level_crossing	0	passagem de nível
+railway	level_crossing	1	passagens de nível
+railway	station	0	estação
+railway	station	1	estações
+railway	station	0	estação de comboio
+railway	station	1	estações de comboio 
+railway	station	0	estação de comboios
+railway	station	1	estações de comboios 
+railway	station	0	estação ferroviária
+railway	station	1	estações ferroviárias 
+railway	station	0	estação de metro
+railway	station	1	estações de metro 
+railway	station	0	estação de metrô
+railway	station	1	estações de metrô 
+railway	station	0	estação de metropolitano
+railway	station	1	estações de metropolitano 
+railway	station	0	estação de trem
+railway	station	1	estações de trem 
+railway	station	0	estação de trens
+railway	station	1	estações de trens 
+tourism	museum	0	museu
+tourism	museum	1	museus

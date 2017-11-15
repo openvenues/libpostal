@@ -39,12 +39,14 @@ orchard|orch
 paradise|pde|pdse
 port|pt|prt
 park|pk|prk
-river|r|riv|rvr
+rear of|r / o|r o
+river|riv|rvr|rivr
 slope|slpe|slp
+springs|spgs|sprngs
 stream|strm|stm
 triangle|tri
 upper|up|upr|uppr
-village|vlg
+village|vlg|vlge|vilg|vilge
 ville|vl
 villages|vlgs
 wood|wd

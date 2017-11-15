@@ -1,0 +1,177 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "5": "state_district"
+        "6": "state_district"
+        "8": "city"
+        "10": "city"
+    designation: 
+        non_metropolitan_county: "state_district"
+        non_metropolitan_district: "state_district"
+        unitary_authority: "state_district"
+        civil_parish: "city"
+    _DESCRIPTIO_:
+        "Civil Parish or Community": "city"
+    overrides:
+        id:
+            relation:
+                # London
+                "65606": "city"
+                # City of London
+                "51800": "city"
+                # Aberdeen
+                "1900654": "city"
+                # Basildon
+                "76516": "city"
+                # Bedford
+                "158396": "city"
+                # Blackpool
+                "148603": "city"
+                # Bolsover
+                "108323": "city"
+                # Boston
+                "58553": "city"
+                # Bournemouth
+                "130884": "city"
+                # Brentwood
+                "76515": "city"
+                # Bristol
+                "57539": "city"
+                # Brighton and Hove
+                "114085": "city"
+                # Bromsgrove
+                "1875338": "city"
+                "1875160": "city"
+                # Burnley
+                "149101": "city"
+                # Canterbury
+                "448590": "city"
+                # Cardiff
+                "1625787": "city"
+                # Chelmsford
+                "176965": "city"
+                # Chester
+                "1441701": "city"
+                # Chesterfield
+                "138738": "city"
+                # Chichester
+                "114677": "city"
+                # Chorley
+                "148744": "city"
+                # Colchester
+                "76493": "city"
+                # Corby
+                "310064": "city"
+                # Coventry
+                "162370": "city"
+                # Darlington
+                "153377": "city"
+                # Daventry
+                "1637109": "city"
+                # Derby
+                "142308": "city"
+                # Dundee
+                "1921173": "city"
+                # Eastleigh
+                "127815": "city"
+                # Edinburgh
+                "1920901": "city"
+                # Exeter
+                "2154556": "city"
+                # Glasgow
+                "1906767": "city"
+                # Guildford
+                "108787": "city"
+                # Harrogate
+                "150872": "city"
+                # Hartlepool
+                "153375": "city"
+                # Havant
+                "127165": "city"
+                # Kingston-upon-Hull
+                "60148": "city"
+                # Leicester
+                "162353": "city"
+                # Lichfield
+                "168501": "city"
+                # Luton
+                "158392": "city"
+                # Kettering
+                "310065": "city"
+                # Maldon
+                "1551151": "city"
+                # Mansfield
+                "154006": "city"
+                # Middlesbrough
+                "150988": "city"
+                # Milton Keynes
+                "172504": "city"
+                # Nottingham
+                "123292": "city"
+                # Norwich
+                "172506": "city"
+                # Oxford
+                "394037": "city"
+                # Peterborough
+                "161640": "city"
+                # Plymouth
+                "189924": "city"
+                # Poole
+                "130891": "city"
+                # Portsmouth
+                "127167": "city"
+                # Reading
+                "115074": "city"
+                # Redditch
+                "1875340": "city"
+                # St Albans
+                "2683265": "city"
+                # Scarborough
+                "149163": "city"
+                # Selby
+                "135523": "city"
+                # Slough
+                "117097": "city"
+                # Southend-on-Sea
+                "76489": "city"
+                # Southampton
+                "127864": "city"
+                # Stafford
+                "165225": "city"
+                # Stevenage
+                "2684172": "city"
+                # Stirling
+                "1905258": "city"
+                # Stoke-on-Trent
+                "163183": "city"
+                # Swansea
+                "87944": "city"
+                # Swindon
+                "110212": "city"
+                # Tamworth
+                "165856": "city"
+                # Warrington
+                "147278": "city"
+                # Wellingsborough
+                "1637026": "city"
+                # Winchester
+                "127238": "city"
+                # Wolverhampton
+                "173722": "city"
+                # Wokingham
+                "114311": "city"
+                # York
+                "134353": "city"
+
+        contained_by:
+            relation:
+                # Greater London (includes London and City of London)
+                "175342":
+                    admin_level:
+                        "6": "city"
+                        "8": "city_district"
+                # West Midlands (county)
+                "57517":
+                    admin_level:
+                        "6": "city"

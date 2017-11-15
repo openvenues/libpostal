@@ -1,0 +1,6 @@
+admin_codes:
+    admin1: state_district
+    # The notion of a "barrio" in the official sense in PR is not quite a
+    # municipality, and has no current official purpose, but might be useful
+    # to have the name + "barrio" version available in libpostal
+    admin2: city

@@ -1,17 +1,23 @@
 amiral|am
 baron
 baronne
-capitaine|capte
+capitaine|capte|capt
+caporal|capl
 chez|chz
 colonel|col|cel
 commandant|cdt
+commander|cmdr|cdr
+commodore|cmdre
 comte|cte
 comtesse|ctesse
+contre amiral|contre-amiral|contreamiral|cam|c am
 docteur|dr
 docteurs|drs
 frère|frere
-général|general|gal
-lieutenant colonel|lt col
+général|general|gén|gen|gal
+lieutenant commander|lieutenant cmdr|lcdr|l cdr|ltcdr|lt cdr|lcmdr|l cmdr|ltcmdr|lt cmdr
+lieutenant colonel|lt col|lcol|l col
+lieutenant général|lgén|lgen|l gén|l gen|leiutenant general
 lieutenant|lt
 madame|mme
 mesdames|mmes
@@ -21,26 +27,31 @@ maître|maitre|me
 maîtres|maitres
 maîtresse|maitresse
 major|maj
+major général|mgén|mgen|m gén|m gen|major general
 maréchal|marechal|mal
 marquis|mis
 marquise|mise
 messieurs|mm|mrs
 monseigneur|mgr
 monsieur|m|mr
+notre-dame|n.-d|n-d|notre-dame|nd|n d
 père|pere
 professeur|prof|pr
+professeure|profe|pre
+professeures|profes|pres
 professeurs|profs|prs
-révérend
-révérend père|rp|r.p.|r.p|r p
-révérend père jésuit|reverende pere jesuit|rpj|r.p.j.|r.p.j|r p j
+révérend|rév|reverend|rev
+révérend père|rp|r.p.|r.p|r p|rév père|rev pere|reverend pere
+révérend père jésuit|reverend pere jesuit|rpj|r.p.j.|r.p.j|r p j|rév père jésuit|rev pere jesuit
 sa saintete|ss|s.s.|s.s|s s
 saint|st
 sainte|ste
+sergente|sgt
 son altesse|sa|s.a.|s.a|s a
 son altesse impériale|son altesse imperiale|sai|s.a.i.|s.a.i|s a i
 son altesse royale|sar|s.a.r.|s.a.r|s a r
 son eminence|s em
 son excellence|se|s.e.|s.e|s e|s exc
-sous lieutenant|souslieutenant|slt|s lt
+sous lieutenant|sous-lieutenant|souslieutenant|slt|s lt
 veuve|vve
-vice amiral|viceamiral|vam|v am
+vice amiral|vice-amiral|viceamiral|vam|v am

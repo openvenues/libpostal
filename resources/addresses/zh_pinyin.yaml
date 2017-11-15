@@ -1,0 +1,153 @@
+# zh_pinyin.yaml
+# --------------
+# Chinese (Pinyin)
+
+whitespace: false
+
+components:
+    level:
+        null_probability: 0.85 # Probability of doing nothing if no floor number is specified
+        alphanumeric_probability: 0.15
+
+    unit:
+        # If no unit number is specified
+        null_probability: 0.6
+        alphanumeric_probability: 0.4
+
+numbers:
+    default: &hao
+        canonical: hao
+        numeric_affix:
+            affix: -hao
+            upper_case: false
+            direction: right
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+house_numbers:
+    alphanumeric:
+        default: *hao
+    alphanumeric_phrase_probability: 0.6
+
+levels:
+    lou: &lou
+        canonical: lóu
+        numeric_affix:
+            affix: -lóu
+            upper_case: false
+            direction: right
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    lou_no_accent: &lou_no_accent
+        canonical: lou
+        numeric_affix:
+            affix: -lou
+            upper_case: false
+            direction: right
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    ceng: &ceng
+        canonical: céng
+        numeric_affix:
+            affix: -céng
+            upper_case: false
+            direction: right
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+    ceng_no_accent: &ceng_no_accent
+        canonical: ceng
+        numeric_affix:
+            affix: -ceng
+            upper_case: false
+            direction: right
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+    numbering_starts_at: 1
+
+    alphanumeric:
+        default: *lou
+        probability: 0.85
+        alternatives:
+            - alternative: *lou_no_accent
+              probability: 0.05
+            - alternative: *ceng
+              probability: 0.08
+            - alternative: *ceng_no_accent
+              probability: 0.02
+        numeric_probability: 1.0
+
+po_boxes:
+    youzheng_xinxiang: &youzheng_xinxiang
+        canonical: youzheng xinxiang
+        numeric:
+            direction: left
+        numeric_probability: 1.0
+
+    alphanumeric:
+        default: *youzheng_xinxiang
+        numeric_probability: 1.0
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+postcodes:
+    alphanumeric:
+        default: &youbian
+            canonical: yóubiān
+            numeric:
+                direction: left
+            # null_probability means the chance of doing nothing e.g. just the postal code
+            null_probability: 0.9
+            numeric_probability: 0.1
+        probability: 0.9
+        alternatives:
+            - alternative: &youbian_no_accent
+                canonical: youbian
+                numeric:
+                    direction: left
+                # null_probability means the chance of doing nothing e.g. just the postal code
+                null_probability: 0.9
+                numeric_probability: 0.1
+              probability: 0.1
+
+units:
+    shi: &shi
+        canonical: shì
+        numeric_affix:
+            affix: -shì
+            upper_case: false
+            direction: right
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+    shi_no_accent: &shi_no_accent
+        canonical: shi
+        numeric_affix:
+            affix: -shi
+            upper_case: false
+            direction: right
+        numeric_probability: 0.0
+        numeric_affix_probability: 1.0
+
+    alphanumeric:
+        default: *shi
+        probability: 0.8
+        alternatives:
+            - alternative: *shi_no_accent
+              probability: 0.2
+        numeric_probability: 1.0
+        use_positive_numbers_probability: 1.0
+        # If we have a floor number (from building:levels), use it
+        use_floor_probability: 0.8

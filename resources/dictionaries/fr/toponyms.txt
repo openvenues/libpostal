@@ -6,8 +6,8 @@ terre-neuve-et-labrador|nl|terre neuve et labrador
 nouvelle-écosse|ns|nouvelle écosse|nouvelle-ecosse|nouvelle ecosse
 territoires du nord-ouest|nt|territoires du nord ouest
 nunavut|nu
-ontario|on
-île-du-prince-édouard|pe|île du prince édouard|ile-du-prince-edouard|ile du prince edouard
+ontario|on|ont
+île-du-prince-édouard|îpé|î p é|île du prince édouard|ile-du-prince-edouard|ile du prince edouard
 québec|qc|quebec
 saskatchewan|sk
 yukon|yt

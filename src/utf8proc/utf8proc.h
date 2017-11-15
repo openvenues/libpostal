@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2015 Steven G. Johnson, Jiahao Chen, Peter Colberg, Tony Kelman, Scott P. Jones, and other contributors.
  * Copyright (c) 2009 Public Software Group e. V., Berlin, Germany
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -28,7 +27,7 @@
  * utf8proc is a free/open-source (MIT/expat licensed) C library
  * providing Unicode normalization, case-folding, and other operations
  * for strings in the UTF-8 encoding, supporting Unicode version
- * 8.0.0.  See the utf8proc home page (http://julialang.org/utf8proc/)
+ * 7.0.0.  See the utf8proc home page (http://julialang.org/utf8proc/)
  * for downloads and other information, or the source code on github
  * (https://github.com/JuliaLang/utf8proc).
  *
@@ -130,10 +129,6 @@ extern "C" {
 
 #ifndef SSIZE_MAX
 #define SSIZE_MAX ((size_t)SIZE_MAX/2)
-#endif
-
-#ifndef UINT16_MAX
-#  define UINT16_MAX ~(utf8proc_uint16_t)0
 #endif
 
 /**
@@ -242,8 +237,8 @@ typedef struct utf8proc_property_struct {
    * @see utf8proc_decomp_type_t.
    */
   utf8proc_propval_t decomp_type;
-  utf8proc_uint16_t decomp_mapping;
-  utf8proc_uint16_t casefold_mapping;
+  const utf8proc_int32_t *decomp_mapping;
+  const utf8proc_int32_t *casefold_mapping;
   utf8proc_int32_t uppercase_mapping;
   utf8proc_int32_t lowercase_mapping;
   utf8proc_int32_t titlecase_mapping;

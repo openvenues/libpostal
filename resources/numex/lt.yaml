@@ -1,0 +1,365 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "nulis"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "vienas"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "viena"
+      value: 1
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "du"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "dvi"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "trys"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "keturi"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "keturios"
+      value: 4
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "penki"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "penkios"
+      value: 5
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "šeši"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "sesi"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "šešios"
+      value: 6
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "sesios"
+      value: 6
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "septyni"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "septynios"
+      value: 7
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "aštuoni"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "astuoni"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "aštuonios"
+      value: 8
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "astuonios"
+      value: 8
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "devyni"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "devynios"
+      value: 9
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "dešimt"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "desimt"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "vienuolika"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "dvylika"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "trylika"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "keturiolika"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "penkiolika"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "šešiolika"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "sesiolika"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "septyniolika"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "aštuoniolika"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "astuoniolika"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "devyniolika"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "dvidešimt"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "dvidesimt"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trisdešimt"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "trisdesimt"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "keturiasdešimt"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "keturiasdesimt"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "penkiasdešimt"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "penkiasdesimt"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "šešiasdešimt"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "sesiasdesimt"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "septyniasdešimt"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "septyniasdesimt"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "aštuoniasdešimt"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "astuoniasdesimt"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "devyniasdešimt"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "devyniasdesimt"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "šimtas"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "simtas"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "šimtai"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "simtai"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tūkstantis"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tukstantis"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tūkstančiai"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tukstanciai"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tūkstančių"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "tukstanciu"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milijonas"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milijonu"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milijardas"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milijardu"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "trilijonas"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "trilijonu"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "kvadrilijonas"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "kvadrilijonu"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "."
+        "1":
+          - "."
+        "2":
+          - "."
+        "3":
+          - "."
+        "4":
+          - "."
+        "5":
+          - "."
+        "6":
+          - "."
+        "7":
+          - "."
+        "8":
+          - "."
+        "9":
+          - "."
+

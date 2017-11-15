@@ -13,13 +13,15 @@ address_dictionary_t *get_address_dictionary(void) {
     return address_dict;
 }
 
-address_expansion_array *address_dictionary_get_expansions(char *key) {
-    if (address_dict == NULL || address_dict->expansions == NULL) {
+address_expansion_value_t *address_dictionary_get_expansions(uint32_t i) {
+    if (address_dict == NULL || address_dict->values == NULL || i > address_dict->values->n) {
+        log_error("i=%" PRIu32 ", address_dict->values->n=%zu\n", i, address_dict->values->n);
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
         return NULL;
     }
-    khiter_t k = kh_get(str_expansions, address_dict->expansions, key);
-    return k != kh_end(address_dict->expansions) ? kh_value(address_dict->expansions, k) : NULL;
+
+    return address_dict->values->a[i];
+
 }
 
 inline bool address_expansion_in_dictionary(address_expansion_t expansion, uint16_t dictionary_id) {
@@ -61,22 +63,51 @@ char *address_dictionary_get_canonical(uint32_t index) {
     return cstring_array_get_string(address_dict->canonical, index);    
 }
 
+address_expansion_value_t *address_expansion_value_new(void) {
+    address_expansion_value_t *self = malloc(sizeof(address_expansion_value_t));
+
+    if (self == NULL) return NULL;
+
+    address_expansion_array *expansions = address_expansion_array_new();
+    if (expansions == NULL) {
+        free(self);
+        return NULL;
+    }
+
+    self->components = 0;
+    self->expansions = expansions;
+
+    return self;
+}
+
+address_expansion_value_t *address_expansion_value_new_with_expansion(address_expansion_t expansion) {
+    address_expansion_value_t *self = address_expansion_value_new();
+    if (self == NULL) return NULL;
+
+    address_expansion_array_push(self->expansions, expansion);
+    self->components = expansion.address_components;
+
+    return self;
+}
+
+void address_expansion_value_destroy(address_expansion_value_t *self) {
+    if (self == NULL) return;
+    if (self->expansions != NULL) {
+        address_expansion_array_destroy(self->expansions);
+    }
+
+    free(self);
+}
+
 bool address_dictionary_add_expansion(char *name, char *language, address_expansion_t expansion) {
-    if (address_dict == NULL || address_dict->expansions == NULL) {
+    if (address_dict == NULL || address_dict->values == NULL) {
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
         return false;
     }
 
     if (name == NULL) return false;
 
-    int ret;
-
     char *key;
-    bool free_key = false;
-
-    expansion_value_t value;
-    value.value = 0;
-    value.canonical = expansion.canonical_index == -1;
 
     bool is_prefix = false;
     bool is_suffix = false;
@@ -95,17 +126,15 @@ bool address_dictionary_add_expansion(char *name, char *language, address_expans
         }
     }
 
-    value.separable = expansion.separable;
-
     char_array *array = char_array_new_size(strlen(name));
+    if (array == NULL) {
+        return false;    
+    }
 
     if (language != NULL) {
         char_array_cat(array, language);
         char_array_cat(array, NAMESPACE_SEPARATOR_CHAR);
     }
-
-    size_t namespace_len = array->n;
-    char *trie_key = NULL;
 
     if (!is_suffix && !is_prefix) {
         char_array_cat(array, name);
@@ -120,48 +149,23 @@ bool address_dictionary_add_expansion(char *name, char *language, address_expans
     key = char_array_to_string(array);
 
     log_debug("key=%s\n", key);
-    address_expansion_array *expansions = address_dictionary_get_expansions(key);
 
-    if (expansions == NULL) {
-        expansions = address_expansion_array_new_size(1);
-        address_expansion_array_push(expansions, expansion);
-        khiter_t k = kh_put(str_expansions, address_dict->expansions, strdup(key), &ret);
-        if (ret < 0) goto exit_key_created;
-        kh_value(address_dict->expansions, k) = expansions;
+    uint32_t expansion_index;
+    address_expansion_value_t *value;
 
-        value.count = 1;
-        value.components = expansion.address_components;
-        log_debug("value.count=%d, value.components=%d\n", value.count, value.components);
+    if (trie_get_data(address_dict->trie, key, &expansion_index)) {
+        value = address_dict->values->a[expansion_index];
+        value->components |= expansion.address_components;
+        address_expansion_array_push(value->expansions, expansion);
+    } else {
+        value = address_expansion_value_new_with_expansion(expansion);
+        expansion_index = (uint32_t)address_dict->values->n;
+        address_expansion_value_array_push(address_dict->values, value);
 
-        if (!trie_add(address_dict->trie, key, value.value)) {
+        if (!trie_add(address_dict->trie, key, expansion_index)) {
             log_warn("Key %s could not be added to trie\n", key);
             goto exit_key_created;;
         }
-    } else {
-        uint32_t node_id = trie_get(address_dict->trie, key);
-        log_debug("node_id=%d\n", node_id);
-        if (node_id != NULL_NODE_ID) {
-            if (!trie_get_data_at_index(address_dict->trie, node_id, &value.value)) {
-                log_warn("get_data_at_index returned false\n");
-                goto exit_key_created;
-            }
-
-            log_debug("value.count=%d, value.components=%d\n", value.count, value.components);
-
-            if (value.count <= 0) {
-                log_warn("value.count=%d\n", value.count);
-            }
-
-            value.count++;
-            value.components |= expansion.address_components;
-
-            if (!trie_set_data_at_index(address_dict->trie, node_id, value.value)) {
-                log_warn("set_data_at_index returned false for node_id=%d and value=%d\n", node_id, value.value);
-                goto exit_key_created;
-            }
-        }
-
-        address_expansion_array_push(expansions, expansion);
     }
 
     free(key);
@@ -284,7 +288,7 @@ phrase_t search_address_dictionaries_suffix(char *str, size_t len, char *lang) {
 bool address_dictionary_init(void) {
     if (address_dict != NULL) return false;
 
-    address_dict = malloc(sizeof(address_dictionary_t));
+    address_dict = calloc(1, sizeof(address_dictionary_t));
     if (address_dict == NULL) return false;
 
     address_dict->canonical = cstring_array_new();
@@ -293,8 +297,8 @@ bool address_dictionary_init(void) {
         goto exit_destroy_address_dict;
     }
 
-    address_dict->expansions = kh_init(str_expansions);
-    if (address_dict->expansions == NULL) {
+    address_dict->values = address_expansion_value_array_new();
+    if (address_dict->values == NULL) {
         goto exit_destroy_address_dict;
     }
 
@@ -318,17 +322,9 @@ void address_dictionary_destroy(address_dictionary_t *self) {
         cstring_array_destroy(self->canonical);
     }
 
-    if (self->expansions != NULL) {
-        const char *key;
-        address_expansion_array *expansions;
-        kh_foreach(self->expansions, key, expansions, {
-            free((char *)key);
-            address_expansion_array_destroy(expansions);
-        })
+    if (self->values != NULL) {
+        address_expansion_value_array_destroy(self->values);
     }
-
-    kh_destroy(str_expansions, self->expansions);
-
 
     if (self->trie != NULL) {
         trie_destroy(self->trie);
@@ -365,7 +361,7 @@ static bool address_expansion_read(FILE *f, address_expansion_t *expansion) {
         }
     }
 
-    if (!file_read_uint16(f, &expansion->address_components)) {
+    if (!file_read_uint32(f, &expansion->address_components)) {
         return false;
     }
 
@@ -376,8 +372,39 @@ static bool address_expansion_read(FILE *f, address_expansion_t *expansion) {
     return true;
 }
 
+static address_expansion_value_t *address_expansion_value_read(FILE *f) {
+    if (f == NULL) return NULL;
 
-static bool address_expansion_write(FILE *f, address_expansion_t expansion) {
+    address_expansion_value_t *value = address_expansion_value_new();
+
+    if (!file_read_uint32(f, &value->components)) {
+        goto exit_expansion_value_created;
+    }
+
+    uint32_t num_expansions;
+
+    if (!file_read_uint32(f, &num_expansions)) {
+        goto exit_expansion_value_created;
+    }
+
+    address_expansion_t expansion;
+
+    for (size_t i = 0; i < num_expansions; i++) {
+        if (!address_expansion_read(f, &expansion)) {
+            goto exit_expansion_value_created;
+        }
+        address_expansion_array_push(value->expansions, expansion);
+    }
+
+    return value;
+
+exit_expansion_value_created:
+    address_expansion_value_destroy(value);
+    return NULL;
+}
+
+
+static bool address_expansion_write(address_expansion_t expansion, FILE *f) {
     if (f == NULL) return false;
 
     uint32_t language_len = (uint32_t)strlen(expansion.language) + 1;
@@ -396,7 +423,7 @@ static bool address_expansion_write(FILE *f, address_expansion_t expansion) {
         }
     }
 
-    if (!file_write_uint16(f, expansion.address_components)) {
+    if (!file_write_uint32(f, expansion.address_components)) {
         return false;
     }
 
@@ -406,6 +433,29 @@ static bool address_expansion_write(FILE *f, address_expansion_t expansion) {
 
     return true;
 }
+
+static bool address_expansion_value_write(address_expansion_value_t *value, FILE *f) {
+    if (value == NULL || value->expansions == NULL || f == NULL) return false;
+    if (!file_write_uint32(f, value->components)) {
+        return false;
+    }
+
+    uint32_t num_expansions = value->expansions->n;
+
+    if (!file_write_uint32(f, num_expansions)) {
+        return false;
+    }
+
+    for (size_t i = 0; i < num_expansions; i++) {
+        address_expansion_t expansion = value->expansions->a[i];
+        if (!address_expansion_write(expansion, f)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 
 bool address_dictionary_write(FILE *f) {
     if (address_dict == NULL || f == NULL) return false;
@@ -423,39 +473,18 @@ bool address_dictionary_write(FILE *f) {
         return false;
     }
 
-    uint32_t num_keys = (uint32_t) kh_size(address_dict->expansions);
+    uint32_t num_values = (uint32_t) address_dict->values->n;
 
-    if (!file_write_uint32(f, num_keys)) {
+    if (!file_write_uint32(f, num_values)) {
         return false;
     }
 
-    const char *key;
-    address_expansion_array *expansions;
-
-    kh_foreach(address_dict->expansions, key, expansions, {
-        uint32_t key_len = (uint32_t) strlen(key) + 1;
-        if (!file_write_uint32(f, key_len)) {
+    for (size_t i = 0; i < num_values; i++) {
+        address_expansion_value_t *value = address_dict->values->a[i];
+        if (!address_expansion_value_write(value, f)) {
             return false;
         }
-
-        if (!file_write_chars(f, key, key_len)) {
-            return false;
-        }
-
-        uint32_t num_expansions = expansions->n;
-
-        if (!file_write_uint32(f, num_expansions)) {
-            return false;
-        }
-
-
-        for (size_t i = 0; i < num_expansions; i++) {
-            address_expansion_t expansion = expansions->a[i];
-            if (!address_expansion_write(f, expansion)) {
-                return false;
-            }
-        }
-    })
+    }
 
     if (!trie_write(address_dict->trie, f)) {
         return false;
@@ -497,61 +526,20 @@ bool address_dictionary_read(FILE *f) {
 
     address_dict->canonical = cstring_array_from_char_array(array);
 
-    uint32_t num_keys;
+    uint32_t num_values;
 
-    if (!file_read_uint32(f, &num_keys)) {
-        return false;
+    if (!file_read_uint32(f, &num_values)) {
+        goto exit_address_dict_created;
     }
 
-    address_dict->expansions = kh_init(str_expansions);
+    address_dict->values = address_expansion_value_array_new_size(num_values);
 
-    uint32_t key_len;
-    uint32_t num_expansions;
-    char *key;
-    address_expansion_array *expansions;
-
-    for (uint32_t i = 0; i < num_keys; i++) {
-        if (!file_read_uint32(f, &key_len)) {
+    for (uint32_t i = 0; i < num_values; i++) {
+        address_expansion_value_t *value = address_expansion_value_read(f);
+        if (value == NULL) {
             goto exit_address_dict_created;
         }
-
-        key = malloc(key_len);
-        if (key == NULL) {
-            goto exit_address_dict_created;
-        }
-
-        if (!file_read_chars(f, key, key_len)) {
-            free(key);
-            goto exit_address_dict_created;
-        }
-
-        if (!file_read_uint32(f, &num_expansions)) {
-            free(key);
-            goto exit_address_dict_created;
-        }
-
-        expansions = address_expansion_array_new_size(num_expansions);
-        if (expansions == NULL) {
-            free(key);
-            goto exit_address_dict_created;
-        }
-
-        address_expansion_t expansion;
-
-        for (uint32_t j = 0; j < num_expansions; j++) {
-            if (!address_expansion_read(f, &expansion)) {
-                free(key);
-                address_expansion_array_destroy(expansions);
-                goto exit_address_dict_created;
-            }
-            address_expansion_array_push(expansions, expansion);
-        }
-
-        int ret;
-
-        khiter_t k = kh_put(str_expansions, address_dict->expansions, key, &ret);
-        if (ret < 0) goto exit_address_dict_created;
-        kh_value(address_dict->expansions, k) = expansions;
+        address_expansion_value_array_push(address_dict->values, value);
     }
 
     address_dict->trie = trie_read(f);

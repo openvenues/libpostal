@@ -56,7 +56,7 @@ int bloom_filter_add(bloom_filter_t *self, const char *key, size_t len) {
 }
 
 bloom_filter_t *bloom_filter_new(uint64_t capacity, double error) {
-    bloom_filter_t *bloom = malloc(sizeof(bloom_filter_t));
+    bloom_filter_t *bloom = calloc(1, sizeof(bloom_filter_t));
 
     if (bloom == NULL) {
         return NULL;

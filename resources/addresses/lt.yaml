@@ -1,0 +1,391 @@
+# lt.yaml
+# -------
+# Lithuanian language specification.
+
+components:
+    level:
+        null_probability: 0.97
+        alphanumeric_probability: 0.02
+        standalone_probability: 0.01
+
+    staircase:
+        null_probability: 0.99
+        alphanumeric_probability: 0.01
+
+    entrance:
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
+
+    unit:
+        null_probability: 0.75
+        alphanumeric_probability: 0.25
+
+    combinations:
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: "-"
+                  probability: 0.95
+                - separator: " - "
+                  probability: 0.05
+            probability: 0.8
+
+
+numbers:
+    default: &numeris
+        canonical: numeris
+        abbreviated: nr
+        sample: true
+        # Probabilities
+        canonical_probability: 0.3
+        abbreviated_probability: 0.5
+        sample_probability: 0.2
+        sample_exclude:
+            - "#"
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: "#"
+            direction: left
+
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.6
+
+
+and:
+    default: &ir
+        canonical: ir
+        abbreviated: "&"
+        canonical_probability: 0.2
+        abbreviated_probability: 0.75
+        sample: true
+        sample_probability: 0.05
+
+
+cross_streets:
+    and: *ir
+    corner_of: &kampelis
+        canonical: kampelis
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    intersection:
+        default: *ir
+        probability: 0.7
+        alternatives:
+            - alternative: *kampelis
+              probability: 0.3
+
+    between:
+        canonical: nuo
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probability: 0.5
+
+
+levels:
+    aukstas: &aukstas
+        canonical: aukštas
+        abbreviated: auk
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.3
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            direction_probability: 0.9
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.3
+                roman_numeral_probability: 0.7
+        numeric_probability: 0.2
+        ordinal_probability: 0.8
+    aukste: &aukste
+        <<: *aukstas
+        canonical: aukšte
+    # Ground floor
+    pirmas_aukstas: &pirmas_aukstas
+        canonical: pirmas aukštas
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    rusys: &rusys
+        canonical: rūsys
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        standalone_probability: 1.0
+        number_abs_value: true
+        number_min_abs_value: 1
+    rusyje: &rusyje
+        canonical: rūsyje
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        # e.g. rūsyje 1
+        numeric:
+            direction: left
+            direction_probability: 0.8
+        # e.g. r1
+        numeric_affix:
+            affix: r
+            direction: left
+        # e.g. 1. rūsyje
+        ordinal:
+            direction: right
+            digits:
+                ascii_probability: 0.7
+                roman_numeral_probability: 0.3
+        number_abs_value: true
+        number_min_abs_value: 1
+        numeric_probability: 0.5
+        numeric_affix_probability: 0.1
+        ordinal_probability: 0.4
+    aliases:
+        "<-1":
+            default: *rusyje
+        "-1":
+            default: *rusys
+        "0": &ground_floor
+            default: *pirmas_aukstas
+            probability: 0.6
+            alternatives:
+                - alternative: *aukste
+                  probability: 0.3
+                - alternative: *aukstas
+                  probability: 0.1
+        "1": *ground_floor
+
+    numbering_starts_at: 1
+
+    alphanumeric:
+        default: *aukstas
+        numeric_probability: 0.99 # With this probability, pick an integer
+        alpha_probability: 0.0098 # With this probability, pick a letter e.g. A
+        numeric_plus_alpha_probability: 0.0001 # e.g. 2A
+        alpha_plus_numeric_probability: 0.0001 # e.g. A2
+
+directions:
+    right: &desineje
+        canonical: dešinėje
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    left: &kaireje
+        canonical: kairėje
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+    alternatives:
+        - alternative: *desineje
+          probability: 0.5
+        - alternative: *kaireje
+          probability: 0.5
+
+cardinal_directions:
+    east: &rytai
+        canonical: rytai
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+
+    west: &vakarai
+        canonical: vakarai
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+
+    north: &siaure
+        canonical: šiaurė
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+
+    south: &pietus
+        canonical: pietūs
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: right
+
+    alternatives:
+        - alternative: *siaure
+          probability: 0.25
+        - alternative: *rytai
+          probability: 0.25
+        - alternative: *pietus
+          probability: 0.25
+        - alternative: *vakarai
+          probability: 0.25
+
+
+entrances:
+    wejscie: &iejimas
+        canonical: įėjimas
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # įėjimas 1, įėjimas A, etc.
+    alphanumeric: &entrance_alphanumeric
+        default: *iejimas
+        numeric_probability: 0.1 # e.g. įėjimas 1
+        alpha_probability: 0.85 # e.g. įėjimas A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+staircases:
+    laiptai: &laiptai
+        canonical: laiptai
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    alphanumeric: &staircase_alphanumeric
+        default: *laiptai
+        numeric_probability: 0.75
+        alpha_probability: 0.2
+        numeric_plus_alpha_probability: 0.025
+        alpha_plus_numeric_probability: 0.025
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: left
+            direction_probability: 0.85
+            modifier:
+                alternatives:
+                    - alternative: *siaure
+                    - alternative: *rytai
+                    - alternative: *pietus
+                    - alternative: *vakarai
+
+
+po_boxes:
+    pasto_dezute: &pasto_dezute
+        canonical: pašto dėžutė
+        abbreviated: p d
+        sample: true
+        canonical_probability: 0.1
+        abbreviated_probability: 0.4
+        sample_probability: 0.5
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2 # pašto dėžutė 1234
+    alphanumeric:
+        default: *pasto_dezute
+        numeric_probability: 0.95 # P. d. 123
+        alpha_probability: 0.01 # pašto dėžutė A
+        numeric_plus_alpha_probability: 0.03 # P. d. 123G
+        alpha_plus_numeric_probability: 0.01 # P. d. A123
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+units:
+    butas: &butas
+        canonical: butas
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    biuro: &biuro
+        canonical: biuro
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    kambarys: &kambarys
+        canonical: kambarys
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+    alphanumeric: &unit_alphanumeric
+        default: *butas
+        numeric_probability: 0.9 # e.g. butas 1
+        numeric_plus_alpha_probability: 0.03 # e.g. 1A
+        alpha_plus_numeric_probability: 0.03 # e.g. A1
+        alpha_probability: 0.04 # e.g. butas A
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.01
+
+    zones:
+        commercial: &commercial_unit_types
+            default: *biuro
+            numeric_probability: 0.95 # e.g. biuro 1
+            numeric_plus_alpha_probability: 0.01 # e.g. biuro 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. biuro A1
+            alpha_probability: 0.03 # e.g. biuro A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1
+        university:
+            default: *kambarys
+            numeric_probability: 0.95 # e.g. kambarys 1
+            numeric_plus_alpha_probability: 0.01 # e.g. kambarys 1A
+            alpha_plus_numeric_probability: 0.01 # e.g. kambarys A1
+            alpha_probability: 0.03 # e.g. kambarys A
+            alpha_plus_numeric:
+                whitespace_probability: 0.1
+            numeric_plus_alpha:
+                whitespace_probability: 0.1

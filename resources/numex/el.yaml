@@ -1,0 +1,2302 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "μηδέν"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "μηδεν"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "ένας"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "ενας"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "ένα"
+      value: 1
+      type: "cardinal"
+      gender: "n"
+      multiply_gte: 1000000
+    - 
+      name: "ενα"
+      value: 1
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "δύο"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "δυο"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "τρεις"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "τρία"
+      value: 3
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "τρια"
+      value: 3
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "τέσσερις"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "τεσσερις"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "τέσσερα"
+      value: 4
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "τεσσερα"
+      value: 4
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "πέντε"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "πεντε"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "έξι"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "εξι"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "επτά"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "επτα"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "οκτώ"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "οκτω"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "εννέα"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "εννεα"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "δέκα"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "δεκα"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "έντεκα"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "εντεκα"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "δώδεκα"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "δωδεκα"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "δεκα­τρεις"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "δεκα­τρία"
+      value: 13
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "δεκα­τρια"
+      value: 13
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "δεκα­τέσσερις"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "δεκα­τεσσερις"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "δεκατέσσερα"
+      value: 14
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "δεκατεσσερα"
+      value: 14
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "δεκα­πέντε"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "δεκα­πεντε"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "δεκα­έξι"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "δεκα­εξι"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "δεκα­επτά"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "δεκα­επτα"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "δεκα­οκτώ"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "δεκα­οκτω"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "δεκα­εννέα"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "δεκα­εννεα"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "είκοσι"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "εικοσι"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "τριάντα"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "τριαντα"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "σαράντα"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "σαραντα"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "πενήντα"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "πενηντα"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "εξήντα"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "εξηντα"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "εβδομήντα"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "εβδομηντα"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "ογδόντα"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "ογδοντα"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "εννενήντα"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "εννενηντα"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "εκατό"
+      value: 100
+      type: "cardinal"
+      right: "add"
+      right_separator: "ν "
+    - 
+      name: "εκατο"
+      value: 100
+      type: "cardinal"
+      right: "add"
+      right_separator: "ν "
+    - 
+      name: "διακόσιοι"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "διακοσιοι"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "διακόσιες"
+      value: 200
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "διακοσιες"
+      value: 200
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "διακόσια"
+      value: 200
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "διακοσια"
+      value: 200
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "τριακόσιοι"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "τριακοσιοι"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "τριακόσιες"
+      value: 300
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "τριακοσιες"
+      value: 300
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "τριακόσια"
+      value: 300
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "τριακοσια"
+      value: 300
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "τετρακόσιοι"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "τετρακοσιοι"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "τετρακόσιες"
+      value: 400
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "τετρακοσιες"
+      value: 400
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "τετρακόσια"
+      value: 400
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "τετρακοσια"
+      value: 400
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "πεντακόσιοι"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "πεντακοσιοι"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "πεντακόσιες"
+      value: 500
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "πεντακοσιες"
+      value: 500
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "πεντακόσια"
+      value: 500
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "πεντακοσια"
+      value: 500
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "εξακόσιοι"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "εξακοσιοι"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "εξακόσιες"
+      value: 600
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "εξακοσιες"
+      value: 600
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "εξακόσια"
+      value: 600
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "εξακοσια"
+      value: 600
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "επτακόσιοι"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "επτακοσιοι"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "επτακόσιες"
+      value: 700
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "επτακοσιες"
+      value: 700
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "επτακόσια"
+      value: 700
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "επτακοσια"
+      value: 700
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "οκτακόσιοι"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "οκτακοσιοι"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "οκτακόσιες"
+      value: 800
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "οκτακοσιες"
+      value: 800
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "οκτακόσια"
+      value: 800
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "οκτακοσια"
+      value: 800
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "εννιακόσιοι"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "εννιακοσιοι"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "εννιακόσιες"
+      value: 900
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "εννιακοσιες"
+      value: 900
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "εννιακόσια"
+      value: 900
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "εννιακοσια"
+      value: 900
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "χίλιοι"
+      value: 1000
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "χιλιοι"
+      value: 1000
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "χίλιες"
+      value: 1000
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "χιλιες"
+      value: 1000
+      type: "cardinal"
+      gender: "f"
+      right: "add"
+    - 
+      name: "χίλια"
+      value: 1000
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "χιλια"
+      value: 1000
+      type: "cardinal"
+      gender: "n"
+      right: "add"
+    - 
+      name: "χίλιάδες"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "χιλιαδες"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "εκατομμύριο"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "εκατομμυριο"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "εκατομμύρια"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "εκατομμυρια"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "δισεκατομμύριο"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "δισεκατομμυριο"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "δισεκατομμύρια"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "δισεκατομμυρια"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "τρισεκατομμύριο"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "τρισεκατομμυριο"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "τρισεκατομμύρια"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "τρισεκατομμυρια"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "τετράκις εκατομμύριο"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "τετρακις εκατομμυριο"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "τετράκις εκατομμύρια"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "τετρακις εκατομμυρια"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "μηδενικός"
+      value: 0
+      type: "ordinal"
+    - 
+      name: "μηδενικος"
+      value: 0
+      type: "ordinal"
+    - 
+      name: "πρώτος"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "πρωτος"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "δεύτερος"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "δευτερος"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "τρίτος"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "τριτος"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "τέταρτος"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "τεταρτος"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "πέμπτος"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "πεμπτος"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "έκτος"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "εκτος"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "έβδομος"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "εβδομος"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "όγδοος"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "ογδοος"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "ένατος"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "ενατος"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "δέκατος"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "δεκατος"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "ενδέκατος"
+      value: 11
+      type: "ordinal"
+    - 
+      name: "ενδεκατος"
+      value: 11
+      type: "ordinal"
+    - 
+      name: "δωδέκατος"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "δωδεκατος"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "δέκατος"
+      value: 13
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εικοστός"
+      value: 20
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εικοστος"
+      value: 20
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τριακοστός"
+      value: 30
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τριακοστος"
+      value: 30
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τεσσαρακοστός"
+      value: 40
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τεσσαρακοστος"
+      value: 40
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "πεντηκοστός"
+      value: 50
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "πεντηκοστος"
+      value: 50
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εξηκοστός"
+      value: 60
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εξηκοστος"
+      value: 60
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εβδομηκοστός"
+      value: 70
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εβδομηκοστος"
+      value: 70
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "ογδοηκοστός"
+      value: 80
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "ογδοηκοστος"
+      value: 80
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εννενηκοστός"
+      value: 90
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εννενηκοστος"
+      value: 90
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εκατοστός"
+      value: 100
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εκατοστος"
+      value: 100
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "διακοσιοστός"
+      value: 200
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "διακοσιοστος"
+      value: 200
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τριακοσιοστός"
+      value: 300
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τριακοσιοστος"
+      value: 300
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τετρακοσιοστός"
+      value: 400
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τετρακοσιοστος"
+      value: 400
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "πεντακοσιοστός"
+      value: 500
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "πεντακοσιοστος"
+      value: 500
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εξακοσιοστός"
+      value: 600
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εξακοσιοστος"
+      value: 600
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "επτακοσιοστός"
+      value: 700
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "επτακοσιοστος"
+      value: 700
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "οκτακοσιοστός"
+      value: 800
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "οκτακοσιοστος"
+      value: 800
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εννεακοσιοστός"
+      value: 900
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εννεακοσιοστος"
+      value: 900
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "χιλιοστός"
+      value: 1000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "χιλιοστός"
+      value: 1000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "χιλιοστος"
+      value: 1000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "χιλιοστος"
+      value: 1000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "δισχιλιοστός"
+      value: 2000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "δισχιλιοστος"
+      value: 2000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τρισχιλιοστός"
+      value: 3000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τρισχιλιοστος"
+      value: 3000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τετράκις χιλιοστός"
+      value: 4000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τετρακις χιλιοστος"
+      value: 4000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "πεντάκις χιλιοστός"
+      value: 5000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "πεντακις χιλιοστος"
+      value: 5000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εξάκις χιλιοστός"
+      value: 6000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εξακις χιλιοστος"
+      value: 6000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "επτάκις χιλιοστός"
+      value: 7000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "επτακις χιλιοστος"
+      value: 7000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "οκτάκις χιλιοστός"
+      value: 8000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "οκτακις χιλιοστος"
+      value: 8000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εννεάκις χιλιοστός"
+      value: 9000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εννεακις χιλιοστος"
+      value: 9000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "δεκάκις χιλιοστός"
+      value: 10000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "δεκακις χιλιοστος"
+      value: 10000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εκατομμυριοστός"
+      value: 1000000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εκατομμυριοστός"
+      value: 1000000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εκατομμυριοστος"
+      value: 1000000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "εκατομμυριοστος"
+      value: 1000000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "δισεκατομμυριοστός"
+      value: 1000000000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "δισεκατομμυριοστος"
+      value: 1000000000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τρισεκατομμυριοστός"
+      value: 1000000000000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τρισεκατομμυριοστος"
+      value: 1000000000000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τετράκις εκατομμυριοστός"
+      value: 1000000000000000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "τετρακις εκατομμυριοστος"
+      value: 1000000000000000
+      type: "ordinal"
+      left: "add"
+    - 
+      name: "μηδενική"
+      value: 0
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "μηδενικη"
+      value: 0
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "πρώτη"
+      value: 1
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "πρωτη"
+      value: 1
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "δεύτερη"
+      value: 2
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "δευτερη"
+      value: 2
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "τρίτη"
+      value: 3
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "τριτη"
+      value: 3
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "τέταρτη"
+      value: 4
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "τεταρτη"
+      value: 4
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "πέμπτη"
+      value: 5
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "πεμπτη"
+      value: 5
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "έκτη"
+      value: 6
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "εκτη"
+      value: 6
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "έβδομη"
+      value: 7
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "εβδομη"
+      value: 7
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "όγδοη"
+      value: 8
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "ογδοη"
+      value: 8
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "ένατη"
+      value: 9
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "ενατη"
+      value: 9
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "δέκατη"
+      value: 10
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "δέκατη"
+      value: 10
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "δεκατη"
+      value: 10
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "δεκατη"
+      value: 10
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "ενδέκατη"
+      value: 11
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "ενδεκατη"
+      value: 11
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "δωδέκατη"
+      value: 12
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "δωδεκατη"
+      value: 12
+      type: "ordinal"
+      gender: "f"
+    - 
+      name: "εικοστή"
+      value: 20
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εικοστη"
+      value: 20
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τριακοστή"
+      value: 30
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τριακοστη"
+      value: 30
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τεσσαρακοστή"
+      value: 40
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τεσσαρακοστη"
+      value: 40
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "πεντηκοστή"
+      value: 50
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "πεντηκοστη"
+      value: 50
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εξηκοστή"
+      value: 60
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εξηκοστη"
+      value: 60
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εβδομηκοστή"
+      value: 70
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εβδομηκοστη"
+      value: 70
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "ογδοηκοστή"
+      value: 80
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "ογδοηκοστη"
+      value: 80
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εννενηκοστή"
+      value: 90
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εννενηκοστη"
+      value: 90
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εκατοστή"
+      value: 100
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εκατοστη"
+      value: 100
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "διακοσιοστή"
+      value: 200
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "διακοσιοστη"
+      value: 200
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τριακοσιοστή"
+      value: 300
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τριακοσιοστη"
+      value: 300
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τρετρακοσιοστή"
+      value: 400
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τρετρακοσιοστη"
+      value: 400
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "πεντακοσιοστή"
+      value: 500
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "πεντακοσιοστη"
+      value: 500
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εξακοσιοστή"
+      value: 600
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εξακοσιοστη"
+      value: 600
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "επτακοσιοστή"
+      value: 700
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "επτακοσιοστη"
+      value: 700
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "οκτακοσιοστή"
+      value: 800
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "οκτακοσιοστη"
+      value: 800
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εννεακοσιοστή"
+      value: 900
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εννεακοσιοστη"
+      value: 900
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "χιλιοστή"
+      value: 1000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "χιλιοστη"
+      value: 1000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "χιλιοστη"
+      value: 1000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "δισχιλιοστή"
+      value: 2000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "δισχιλιοστη"
+      value: 2000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τρισχιλιοστή"
+      value: 3000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τρισχιλιοστη"
+      value: 3000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τετράκις χιλιοστή"
+      value: 4000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τετρακις χιλιοστη"
+      value: 4000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "πεντάκις χιλιοστή"
+      value: 5000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "πεντακις χιλιοστη"
+      value: 5000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εξάκις χιλιοστή"
+      value: 6000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εξακις χιλιοστη"
+      value: 6000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "επτάκις χιλιοστή"
+      value: 7000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "επτακις χιλιοστη"
+      value: 7000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "οκτάκις χιλιοστή"
+      value: 8000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "οκτακις χιλιοστη"
+      value: 8000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εννεάκις χιλιοστή"
+      value: 9000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εννεακις χιλιοστη"
+      value: 9000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "δεκάκις χιλιοστή"
+      value: 10000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "δεκακις χιλιοστη"
+      value: 10000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εκατομμυριοστή"
+      value: 1000000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εκατομμυριοστή"
+      value: 1000000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εκατομμυριοστη"
+      value: 1000000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "εκατομμυριοστη"
+      value: 1000000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "δισεκατομμυριοστή"
+      value: 1000000000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "δισεκατομμυριοστη"
+      value: 1000000000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τρισεκατομμυριοστή"
+      value: 1000000000000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τρισεκατομμυριοστη"
+      value: 1000000000000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τετράκις εκατομμυριοστή"
+      value: 1000000000000000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τετράκις εκατομμυριοστό"
+      value: 1000000000000000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "τετρακις εκατομμυριοστη"
+      value: 1000000000000000
+      type: "ordinal"
+      gender: "f"
+      left: "add"
+    - 
+      name: "μηδενικό"
+      value: 0
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "μηδενικο"
+      value: 0
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "πρώτο"
+      value: 1
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "πρωτο"
+      value: 1
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "δεύτερο"
+      value: 2
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "δευτερο"
+      value: 2
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "τρίτο"
+      value: 3
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "τριτο"
+      value: 3
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "τέταρτο"
+      value: 4
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "τεταρτο"
+      value: 4
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "πέμπτο"
+      value: 5
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "πεμπτο"
+      value: 5
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "έκτο"
+      value: 6
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "εκτο"
+      value: 6
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "έβδομο"
+      value: 7
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "εβδομο"
+      value: 7
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "όγδο"
+      value: 8
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "ογδο"
+      value: 8
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "ένατο"
+      value: 9
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "ενατο"
+      value: 9
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "δέκατο"
+      value: 10
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "δεκατο"
+      value: 10
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "ενδέκατο"
+      value: 11
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "ενδεκατο"
+      value: 11
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "δωδέκατο"
+      value: 12
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "δωδεκατο"
+      value: 12
+      type: "ordinal"
+      gender: "n"
+    - 
+      name: "εικοστό"
+      value: 20
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εικοστο"
+      value: 20
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τριακοστό"
+      value: 30
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τριακοστο"
+      value: 30
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τεσσαρακοστό"
+      value: 40
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τεσσαρακοστο"
+      value: 40
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "πεντηκοστό"
+      value: 50
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "πεντηκοστο"
+      value: 50
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εξηκοστό"
+      value: 60
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εξηκοστο"
+      value: 60
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εβδομηκοστό"
+      value: 70
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εβδομηκοστο"
+      value: 70
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "ογδοηκοστό"
+      value: 80
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "ογδοηκοστο"
+      value: 80
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εννενηκοστό"
+      value: 90
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εννενηκοστο"
+      value: 90
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εκατοστό"
+      value: 100
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εκατοστο"
+      value: 100
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "διακοσιοστό"
+      value: 200
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "διακοσιοστο"
+      value: 200
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τριακοσιοστό"
+      value: 300
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τριακοσιοστο"
+      value: 300
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τετρακοσιοστό"
+      value: 400
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τετρακοσιοστο"
+      value: 400
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "πεντακοσιοστό"
+      value: 500
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "πεντακοσιοστο"
+      value: 500
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εξακοσιοστός"
+      value: 600
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εξακοσιοστος"
+      value: 600
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "επτακοσιοστό"
+      value: 700
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "επτακοσιοστο"
+      value: 700
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "οκτακοσιοστό"
+      value: 800
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "οκτακοσιοστο"
+      value: 800
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εννεακοσιοστό"
+      value: 900
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εννεακοσιοστο"
+      value: 900
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "χιλιοστό"
+      value: 1000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "χιλιοστό"
+      value: 1000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "χιλιοστο"
+      value: 1000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "χιλιοστο"
+      value: 1000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "δισχιλιοστό"
+      value: 2000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "δισχιλιοστο"
+      value: 2000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τρισχιλιοστό"
+      value: 3000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τρισχιλιοστο"
+      value: 3000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τετράκις χιλιοστό"
+      value: 4000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τετρακις χιλιοστο"
+      value: 4000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "πεντάκις χιλιοστό"
+      value: 5000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "πεντακις χιλιοστο"
+      value: 5000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εξάκις χιλιοστό"
+      value: 6000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εξακις χιλιοστο"
+      value: 6000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "επτάκις χιλιοστό"
+      value: 7000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "επτακις χιλιοστο"
+      value: 7000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "οκτάκις χιλιοστό"
+      value: 8000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "οκτακις χιλιοστο"
+      value: 8000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εννεάκις χιλιοστό"
+      value: 9000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εννεακις χιλιοστο"
+      value: 9000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "δεκάκις χιλιοστό"
+      value: 10000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "δεκακις χιλιοστο"
+      value: 10000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εκατομμυριοστό"
+      value: 1000000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εκατομμυριοστό"
+      value: 1000000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εκατομμυριοστο"
+      value: 1000000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "εκατομμυριοστο"
+      value: 1000000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "δισεκατομμυριοστό"
+      value: 1000000000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "δισεκατομμυριοστο"
+      value: 1000000000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τρισεκατομμυριοστό"
+      value: 1000000000000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τρισεκατομμυριοστο"
+      value: 1000000000000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+    - 
+      name: "τετρακις εκατομμυριοστο"
+      value: 1000000000000000
+      type: "ordinal"
+      gender: "n"
+      left: "add"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "ος"
+          - "ός"
+          - "ης"
+        "1":
+          - "ος"
+          - "ός"
+          - "ης"
+        "2":
+          - "ος"
+          - "ός"
+          - "ης"
+        "3":
+          - "ος"
+          - "ός"
+          - "ης"
+        "4":
+          - "ος"
+          - "ός"
+          - "ης"
+        "5":
+          - "ος"
+          - "ός"
+          - "ης"
+        "6":
+          - "ος"
+          - "ός"
+          - "ης"
+        "7":
+          - "ος"
+          - "ός"
+          - "ης"
+        "8":
+          - "ος"
+          - "ός"
+          - "ης"
+        "9":
+          - "ος"
+          - "ός"
+          - "ης"
+    - 
+      gender: "f"
+      suffixes:
+        "0":
+          - "ή"
+          - "η"
+        "1":
+          - "η"
+        "2":
+          - "η"
+        "3":
+          - "η"
+        "4":
+          - "η"
+        "5":
+          - "η"
+        "6":
+          - "η"
+        "7":
+          - "η"
+        "8":
+          - "η"
+        "9":
+          - "η"
+    - 
+      gender: "n"
+      suffixes:
+        "0":
+          - "ό"
+          - "ο"
+        "1":
+          - "ο"
+        "2":
+          - "ο"
+        "3":
+          - "ο"
+        "4":
+          - "ο"
+        "5":
+          - "ο"
+        "6":
+          - "ο"
+        "7":
+          - "ο"
+        "8":
+          - "ο"
+        "9":
+          - "ο"
+

@@ -1,0 +1,7 @@
+---
+  admin_level: 
+    "2": "country"
+    "5": "state"
+    "6": "city"
+    "10": "suburb"
+

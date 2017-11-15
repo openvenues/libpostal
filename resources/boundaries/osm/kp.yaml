@@ -1,0 +1,16 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "5": "state_district"
+        "6": "state_district"
+        "8": "city"
+
+
+    overrides:
+        contained_by:
+            relation:
+                "356443":
+                    admin_level:
+                        # Pyongyang
+                        "5": "city_district"

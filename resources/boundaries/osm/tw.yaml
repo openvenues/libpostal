@@ -1,0 +1,19 @@
+---
+  admin_level: 
+    "2": "country"
+    # Except for the streamlined provinces, admin_level=4 is for special cities
+    "4": "city"
+    "5": "city_district"
+    "6": "state_district"
+    "7": "city_district"
+    # County-controlled cities
+    "8": "city"
+    "9": "suburb"
+
+    overrides:
+        id:
+            relation:
+                # Taiwan Province
+                "3777248": "state"
+                # Fujian Province
+                "3777250": "state"

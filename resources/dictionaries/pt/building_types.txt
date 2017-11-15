@@ -1,4 +1,7 @@
 bloco|bl
+condominio
 edifício|edificio|edf|edif
+habitação|habitacao|hab
+residencia|res
 torre|tr
-vivenda|vv
+vivenda|vv|vvda

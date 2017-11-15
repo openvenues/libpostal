@@ -1,0 +1,342 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "zero"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "oh"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "one"
+      value: 1
+      type: "cardinal"
+      multiply_gte: 100
+    - 
+      name: "two"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "three"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "four"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "five"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "six"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "seven"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "eight"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "nine"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "ten"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "eleven"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "twelve"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "thirteen"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "fourteen"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "fifteen"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "sixteen"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "seventeen"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "eighteen"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "nineteen"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "twenty"
+      value: 20
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "thirty"
+      value: 30
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "forty"
+      value: 40
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "fourty"
+      value: 40
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "fifty"
+      value: 50
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "sixty"
+      value: 60
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "seventy"
+      value: 70
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "eighty"
+      value: 80
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "ninety"
+      value: 90
+      type: "cardinal"
+      right: "add"
+      right_separator: "-"
+    - 
+      name: "hundred"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "thousand"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "million"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "billion"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "first"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "second"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "third"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "fourth"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "fifth"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "sixth"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "seventh"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "eighth"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "ninth"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "tenth"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "eleventh"
+      value: 11
+      type: "ordinal"
+    - 
+      name: "twelvth"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "twelveth"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "twelfth"
+      value: 12
+      type: "ordinal"
+    - 
+      name: "thirteenth"
+      value: 13
+      type: "ordinal"
+    - 
+      name: "fourteenth"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "forteenth"
+      value: 14
+      type: "ordinal"
+    - 
+      name: "fifteenth"
+      value: 15
+      type: "ordinal"
+    - 
+      name: "sixteenth"
+      value: 16
+      type: "ordinal"
+    - 
+      name: "seventeenth"
+      value: 17
+      type: "ordinal"
+    - 
+      name: "eighteenth"
+      value: 18
+      type: "ordinal"
+    - 
+      name: "nineteenth"
+      value: 19
+      type: "ordinal"
+    - 
+      name: "twentieth"
+      value: 20
+      type: "ordinal"
+    - 
+      name: "thirtieth"
+      value: 30
+      type: "ordinal"
+    - 
+      name: "fortieth"
+      value: 40
+      type: "ordinal"
+    - 
+      name: "fourtieth"
+      value: 40
+      type: "ordinal"
+    - 
+      name: "fiftieth"
+      value: 50
+      type: "ordinal"
+    - 
+      name: "sixtieth"
+      value: 60
+      type: "ordinal"
+    - 
+      name: "seventieth"
+      value: 70
+      type: "ordinal"
+    - 
+      name: "eightieth"
+      value: 80
+      type: "ordinal"
+    - 
+      name: "ninetieth"
+      value: 90
+      type: "ordinal"
+    - 
+      name: "hundredth"
+      value: 100
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "thousandth"
+      value: 1000
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "millionth"
+      value: 1000000
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "billionth"
+      value: 1000000000
+      type: "ordinal"
+      left: "multiply"
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "th"
+        "1":
+          - "st"
+        "2":
+          - "nd"
+        "3":
+          - "rd"
+        "4":
+          - "th"
+        "5":
+          - "th"
+        "6":
+          - "th"
+        "7":
+          - "th"
+        "8":
+          - "th"
+        "9":
+          - "th"
+        "11":
+          - "th"
+        "12":
+          - "th"
+        "13":
+          - "th"
+  stopwords:
+    - "and"
+

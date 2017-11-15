@@ -32,8 +32,30 @@ char *file_getline(FILE * f)
     return ret;
 }
 
+bool file_exists(char *filename) {
+    FILE *f = fopen(filename, "r");
+    bool exists = f != NULL;
+    if (exists) fclose(f);
+    return exists;
+}
+
 bool is_relative_path(struct dirent *ent) {
     return strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0;
+}
+
+char *path_vjoin(int n, va_list args) {
+    char_array *path = char_array_new();
+    if (path == NULL) return NULL;
+    char_array_add_vjoined(path, PATH_SEPARATOR, true, n, args);
+    return char_array_to_string(path);
+}
+
+char *path_join(int n, ...) {
+    va_list args;
+    va_start(args, n);
+    char *path = path_vjoin(n, args);
+    va_end(args);
+    return path;
 }
 
 inline uint64_t file_deserialize_uint64(unsigned char *buf) {
@@ -132,6 +154,48 @@ bool file_write_double(FILE *file, double value) {
     return file_write_uint64(file, ud.u);
 }
 
+typedef union {
+    uint32_t u;
+    float f;
+} uint32_float_t;
+
+bool file_read_float(FILE *file, float *value) {
+    uint32_float_t uf;
+
+    if (!file_read_uint32(file, &uf.u)) {
+        return false;
+    }
+    *value = uf.f;
+    return true;
+}
+
+bool file_read_float_array(FILE *file, float *value, size_t n) {
+    unsigned char *buf = malloc(n * sizeof(uint32_t));
+
+    if (buf == NULL) return false;
+
+    bool ret = false;
+
+    if (fread(buf, sizeof(uint32_t), n, file) == n) {
+        uint32_float_t uf;
+
+        for (size_t i = 0, byte_offset = 0; i < n; i++, byte_offset += sizeof(uint32_t)) {
+            unsigned char *ptr = buf + byte_offset;
+            uf.u = file_deserialize_uint32(ptr);
+            value[i] = uf.f;
+        }
+        ret = true;
+    }
+    free(buf);
+    return ret;
+}
+
+bool file_write_float(FILE *file, float value) {
+    uint32_float_t uf;
+    uf.f = value;
+    return file_write_uint32(file, uf.u);
+
+}
 
 inline uint32_t file_deserialize_uint32(unsigned char *buf) {
     return (buf[0] << 24) | (buf[1] << 16) | (buf[2] << 8) | buf[3];

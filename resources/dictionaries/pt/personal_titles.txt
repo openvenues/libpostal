@@ -35,20 +35,20 @@ embaixador|emb
 eminencia|ema|em.a
 eminentissimo|emmo|em.mo
 enfermeira|enfª|enfa|enf.ª|enf.a
-enfermeiro|enfº|enfo|enf|enf.º|enf.o
+enfermeiro|enfº|enf°|enfo|enf|enf.º|enf.°|enf.o
 engenheira|engª|enga|eng.ª|eng.a
-engenheiro|engº|eng.º|eng|engo|eng.o
+engenheiro|engº|eng°|eng.º|eng.°|eng|engo|eng.o
 excelencia|exª|exa|ex.ª|ex.a
 excelentissima|exmª|exma|ex.mª|ex.ma
-excelentissimo|exmº|exmo|ex.mº|ex.mo
+excelentissimo|exmº|exm°|exmo|ex.mº|ex.m°|ex.mo
 frei|fr
 general|gen|gal|g.al
 governador|gov|govdor|govd.or|gov.dor
 ilustrissima|ilmª|ilma|il.mª|il.ma
-ilustrissimo|ilmº|ilmo|il.mº|il.mo
+ilustrissimo|ilmº|ilm°|ilmo|il.mº|il.m°|il.mo
 infante|inf
 irmã|irma|imª|ima|im
-irmão|irmao|imº|imo|im
+irmão|irmao|imº|im°|imo|im
 juiz|jz
 maestra|mta|mtra|mstra
 maestro|mto|mtro|mstro
@@ -69,7 +69,7 @@ padre|pe|p.e
 pastor|pr
 prefeito|pref
 presidente|presid|pres
-professor|prof|profº
+professor|prof|profº|prof°
 professora|profa|prof.a|profª|prof.ª
 professoras|profas
 professores|profs
@@ -78,7 +78,7 @@ reverendo|revdo|rev.do
 reverendissima|revma|rev.ma
 reverendissimo|revmo|rev.mo
 santa|stª|sta|st.ª|st.a
-santo|stº|sto|st|st.º|st.o
+santo|stº|st°|sto|st|st.º|st.°|st.o
 são|sao|s
 sargento|sarg|sgto|sargto
 sargento ajudante|sarg ajte|sarg aj.te

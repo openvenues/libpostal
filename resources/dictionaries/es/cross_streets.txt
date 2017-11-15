@@ -1,0 +1,9 @@
+&
+y
+en
+con
+x
+esquina|esq
+en la esquina de|en la esq de
+esquina de|esq de
+entre|entre /|e /

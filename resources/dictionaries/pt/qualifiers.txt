@@ -1,4 +1,4 @@
-bairro|b|bº|bo|brº|bro
+bairro|b|bº|b°|bo|brº|br°|bro
 distrito|dtto|dist
 divisao|div
 quadra|q|qd

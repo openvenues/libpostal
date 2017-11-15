@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 '''
-reverse_geocoder.py
+reverse_geocode.py
 -------------------
 
 In-memory reverse geocoder using polygons from Quattroshapes or OSM.
@@ -18,6 +17,7 @@ import os
 import re
 import requests
 import shutil
+import six
 import subprocess
 import sys
 import tempfile
@@ -28,13 +28,15 @@ this_dir = os.path.realpath(os.path.dirname(__file__))
 sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.coordinates.conversion import latlon_to_decimal
+from goedata.countries.constants import Countries
 from geodata.encoding import safe_decode
-from geodata.file_utils import ensure_dir
+from geodata.file_utils import ensure_dir, download_file
 from geodata.i18n.unicode_properties import get_chars_by_script
+from geodata.i18n.languages import *
 from geodata.i18n.word_breaks import ideographic_scripts
 from geodata.names.deduping import NameDeduper
-from geodata.osm.extract import parse_osm, OSM_NAME_TAGS
-from geodata.osm.osm_admin_boundaries import OSMAdminPolygonReader
+from geodata.osm.extract import parse_osm, osm_type_and_id, NODE, WAY, RELATION, OSM_NAME_TAGS
+from geodata.osm.admin_boundaries import *
 from geodata.polygons.index import *
 from geodata.statistics.tf_idf import IDFIndex
 
@@ -51,348 +53,6 @@ def str_id(v):
     if v <= 0:
         return None
     return str(v)
-
-
-class NeighborhoodDeduper(NameDeduper):
-    # Lossless conversions only
-    replacements = {
-        u'saint': u'st',
-        u'and': u'&',
-    }
-
-    discriminative_words = set([
-        # Han numbers
-        u'〇', u'一',
-        u'二', u'三',
-        u'四', u'五',
-        u'六', u'七',
-        u'八', u'九',
-        u'十', u'百',
-        u'千', u'万',
-        u'億', u'兆',
-        u'京', u'第',
-
-        # Roman numerals
-        u'i', u'ii',
-        u'iii', u'iv',
-        u'v', u'vi',
-        u'vii', u'viii',
-        u'ix', u'x',
-        u'xi', u'xii',
-        u'xiii', u'xiv',
-        u'xv', u'xvi',
-        u'xvii', u'xviii',
-        u'xix', u'xx',
-
-        # English directionals
-        u'north', u'south',
-        u'east', u'west',
-        u'northeast', u'northwest',
-        u'southeast', u'southwest',
-
-        # Spanish, Portguese and Italian directionals
-        u'norte', u'nord', u'sur', u'sul', u'sud',
-        u'est', u'este', u'leste', u'oeste', u'ovest',
-
-        # New in various languages
-        u'new',
-        u'nova',
-        u'novo',
-        u'nuevo',
-        u'nueva',
-        u'nuovo',
-        u'nuova',
-
-        # Qualifiers
-        u'heights',
-        u'hills',
-
-        u'upper', u'lower',
-        u'little', u'great',
-
-        u'park',
-        u'parque',
-
-        u'village',
-
-    ])
-
-    stopwords = set([
-        u'cp',
-        u'de',
-        u'la',
-        u'urbanizacion',
-        u'do',
-        u'da',
-        u'dos',
-        u'del',
-        u'community',
-        u'bairro',
-        u'barrio',
-        u'le',
-        u'el',
-        u'mah',
-        u'раион',
-        u'vila',
-        u'villa',
-        u'kampung',
-        u'ahupua`a',
-
-    ])
-
-
-class NeighborhoodReverseGeocoder(RTreePolygonIndex):
-    '''
-    Neighborhoods are very important in cities like NYC, SF, Chicago, London
-    and many others. We want the address parser to be trained with addresses
-    that sufficiently capture variations in address patterns, including
-    neighborhoods. Quattroshapes neighborhood data (in the US at least)
-    is not great in terms of names, mostly becasue GeoPlanet has so many
-    incorrect names. The neighborhoods project, also known as Zetashapes
-    has very accurate polygons with correct names, but only for a handful
-    of cities. OSM usually lists neighborhoods and some other local admin
-    areas like boroughs as points rather than polygons.
-
-    This index merges all of the above data sets in prioritized order
-    (Zetashapes > OSM > Quattroshapes) to provide unified point-in-polygon
-    tests for neighborhoods. The properties vary by source but each has
-    source has least a "name" key which in practice is what we care about.
-    '''
-    NEIGHBORHOODS_REPO = 'https://github.com/blackmad/neighborhoods'
-
-    SCRATCH_DIR = '/tmp'
-
-    DUPE_THRESHOLD = 0.9
-
-    source_priorities = {
-        'zetashapes': 0,     # Best names/polygons
-        'osm_zeta': 1,       # OSM names matched with Zetashapes polygon
-        'osm_quattro': 2,    # OSM names matched with Quattroshapes polygon
-        'quattroshapes': 3,  # Good results in some countries/areas
-    }
-
-    level_priorities = {
-        'neighborhood': 0,
-        'local_admin': 1,
-    }
-
-    regex_replacements = [
-        # Paris arrondissements, listed like "PARIS-1ER-ARRONDISSEMENT" in Quqttroshapes
-        (re.compile('^paris-(?=[\d])', re.I), ''),
-    ]
-
-    @classmethod
-    def clone_repo(cls, path):
-        subprocess.check_call(['rm', '-rf', path])
-        subprocess.check_call(['git', 'clone', cls.NEIGHBORHOODS_REPO, path])
-
-    @classmethod
-    def create_zetashapes_neighborhoods_index(cls):
-        scratch_dir = cls.SCRATCH_DIR
-        repo_path = os.path.join(scratch_dir, 'neighborhoods')
-        cls.clone_repo(repo_path)
-
-        neighborhoods_dir = os.path.join(scratch_dir, 'neighborhoods', 'index')
-        ensure_dir(neighborhoods_dir)
-
-        index = GeohashPolygonIndex()
-
-        have_geonames = set()
-        is_neighborhood = set()
-
-        for filename in os.listdir(repo_path):
-            path = os.path.join(repo_path, filename)
-            base_name = filename.split('.')[0].split('gn-')[-1]
-            if filename.endswith('.geojson') and filename.startswith('gn-'):
-                have_geonames.add(base_name)
-            elif filename.endswith('metadata.json'):
-                data = json.load(open(os.path.join(repo_path, filename)))
-                if data.get('neighborhoodNoun', [None])[0] in (None, 'rione'):
-                    is_neighborhood.add(base_name)
-
-        for filename in os.listdir(repo_path):
-            if not filename.endswith('.geojson'):
-                continue
-            base_name = filename.rsplit('.geojson')[0]
-            if base_name in have_geonames:
-                f = open(os.path.join(repo_path, 'gn-{}'.format(filename)))
-            elif base_name in is_neighborhood:
-                f = open(os.path.join(repo_path, filename))
-            else:
-                continue
-            index.add_geojson_like_file(json.load(f)['features'])
-
-        return index
-
-    @classmethod
-    def count_words(cls, s):
-        doc = defaultdict(int)
-        for t, c in NeighborhoodDeduper.content_tokens(s):
-            doc[t] += 1
-        return doc
-
-    @classmethod
-    def create_from_osm_and_quattroshapes(cls, filename, quattroshapes_dir, output_dir, scratch_dir=SCRATCH_DIR):
-        '''
-        Given an OSM file (planet or some other bounds) containing neighborhoods
-        as points (some suburbs have boundaries)
-
-        and their dependencies, create an R-tree index for coarse-grained
-        reverse geocoding.
-
-        Note: the input file is expected to have been created using
-        osmfilter. Use fetch_osm_address_data.sh for planet or copy the
-        admin borders commands if using other geometries.
-        '''
-        index = cls(save_dir=output_dir)
-
-        ensure_dir(scratch_dir)
-
-        logger = logging.getLogger('neighborhoods')
-        logger.setLevel(logging.INFO)
-
-        qs_scratch_dir = os.path.join(scratch_dir, 'qs_neighborhoods')
-        ensure_dir(qs_scratch_dir)
-        logger.info('Creating Quattroshapes neighborhoods')
-
-        qs = QuattroshapesNeighborhoodsReverseGeocoder.create_neighborhoods_index(quattroshapes_dir, qs_scratch_dir)
-        logger.info('Creating Zetashapes neighborhoods')
-        zs = cls.create_zetashapes_neighborhoods_index()
-
-        logger.info('Creating IDF index')
-        idf = IDFIndex()
-
-        char_scripts = get_chars_by_script()
-
-        for idx in (zs, qs):
-            for i, (props, poly) in enumerate(idx.polygons):
-                name = props.get('name')
-                if name is not None:
-                    doc = cls.count_words(name)
-                    idf.update(doc)
-
-        for key, attrs, deps in parse_osm(filename):
-            for k, v in attrs.iteritems():
-                if any((k.startswith(name_key) for name_key in OSM_NAME_TAGS)):
-                    doc = cls.count_words(v)
-                    idf.update(doc)
-
-        qs.matched = [False] * qs.i
-        zs.matched = [False] * zs.i
-
-        logger.info('Matching OSM points to neighborhood polygons')
-        # Parse OSM and match neighborhood/suburb points to Quattroshapes/Zetashapes polygons
-        num_polys = 0
-        for node_id, attrs, deps in parse_osm(filename):
-            try:
-                lat, lon = latlon_to_decimal(attrs['lat'], attrs['lon'])
-            except ValueError:
-                continue
-
-            osm_name = attrs.get('name')
-            if not osm_name:
-                continue
-
-            is_neighborhood = attrs.get('place') == 'neighbourhood'
-
-            ranks = []
-            osm_names = []
-
-            for key in OSM_NAME_TAGS:
-                name = attrs.get(key)
-                if name:
-                    osm_names.append(name)
-
-            for name_key in OSM_NAME_TAGS:
-                osm_names.extend([v for k, v in attrs.iteritems() if k.startswith('{}:'.format(name_key))])
-
-            for idx in (zs, qs):
-                candidates = idx.get_candidate_polygons(lat, lon, return_all=True)
-
-                if candidates:
-                    max_sim = 0.0
-                    arg_max = None
-
-                    normalized_qs_names = {}
-
-                    for osm_name in osm_names:
-
-                        contains_ideographs = any(((char_scripts[ord(c)] or '').lower() in ideographic_scripts
-                                                   for c in safe_decode(osm_name)))
-
-                        for i in candidates:
-                            props, poly = idx.polygons[i]
-                            name = normalized_qs_names.get(i)
-                            if not name:
-                                name = props.get('name')
-                                if not name:
-                                    continue
-                                for pattern, repl in cls.regex_replacements:
-                                    name = pattern.sub(repl, name)
-                                normalized_qs_names[i] = name
-
-                            if is_neighborhood and idx is qs and props.get(QuattroshapesReverseGeocoder.LEVEL) != 'neighborhood':
-                                continue
-
-                            if not contains_ideographs:
-                                sim = NeighborhoodDeduper.compare(osm_name, name, idf)
-                            else:
-                                # Many Han/Hangul characters are common, shouldn't use IDF
-                                sim = NeighborhoodDeduper.compare_ideographs(osm_name, name)
-
-                            if sim > max_sim:
-                                max_sim = sim
-                                arg_max = (max_sim, props, poly.context, idx, i)
-
-                    if arg_max:
-                        ranks.append(arg_max)
-
-            ranks.sort(key=operator.itemgetter(0), reverse=True)
-            if ranks and ranks[0][0] >= cls.DUPE_THRESHOLD:
-                score, props, poly, idx, i = ranks[0]
-
-                if idx is zs:
-                    attrs['polygon_type'] = 'neighborhood'
-                    source = 'osm_zeta'
-                else:
-                    level = props.get(QuattroshapesReverseGeocoder.LEVEL, None)
-                    source = 'osm_quattro'
-                    if level == 'neighborhood':
-                        attrs['polygon_type'] = 'neighborhood'
-                    else:
-                        attrs['polygon_type'] = 'local_admin'
-
-                attrs['source'] = source
-                index.index_polygon(poly)
-                index.add_polygon(poly, attrs)
-                idx.matched[i] = True
-
-            num_polys += 1
-            if num_polys % 1000 == 0 and num_polys > 0:
-                logger.info('did {} neighborhoods'.format(num_polys))
-
-        for idx, source in ((zs, 'zetashapes'), (qs, 'quattroshapes')):
-            for i, (props, poly) in enumerate(idx.polygons):
-                if idx.matched[i]:
-                    continue
-                props['source'] = source
-                if idx is zs or props.get(QuattroshapesReverseGeocoder.LEVEL, None) == 'neighborhood':
-                    props['polygon_type'] = 'neighborhood'
-                else:
-                    # We don't actually care about local admin polygons unless they match OSM
-                    continue
-                index.index_polygon(poly.context)
-                index.add_polygon(poly.context, props)
-
-        return index
-
-    def priority(self, i):
-        props, p = self.polygons[i]
-        return (self.level_priorities[props['polygon_type']], self.source_priorities[props['source']])
-
-    def get_candidate_polygons(self, lat, lon):
-        candidates = super(NeighborhoodReverseGeocoder, self).get_candidate_polygons(lat, lon)
-        return sorted(candidates, key=self.priority)
 
 
 class QuattroshapesReverseGeocoder(RTreePolygonIndex):
@@ -418,6 +78,11 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
     LOCAL_ADMIN = 'localadmin'
     LOCALITY = 'locality'
     NEIGHBORHOOD = 'neighborhood'
+
+    PRIORITIES_FILENAME = 'priorities.json'
+
+    persistent_polygons = True
+    cache_size = 100000
 
     sorted_levels = (COUNTRY,
                      ADMIN1_REGION,
@@ -541,14 +206,14 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
 
                 poly_type = rec['geometry']['type']
                 if poly_type == 'Polygon':
-                    poly = Polygon(rec['geometry']['coordinates'][0])
+                    poly = cls.to_polygon(rec['geometry']['coordinates'][0])
                     index.index_polygon(poly)
                     poly = index.simplify_polygon(poly)
                     index.add_polygon(poly, dict(rec['properties']), include_only_properties=include_props)
                 elif poly_type == 'MultiPolygon':
                     polys = []
                     for coords in rec['geometry']['coordinates']:
-                        poly = Polygon(coords[0])
+                        poly = cls.to_polygon(coords[0])
                         polys.append(poly)
                         index.index_polygon(poly)
 
@@ -578,26 +243,24 @@ class QuattroshapesReverseGeocoder(RTreePolygonIndex):
                                           output_dir, index_filename=index_filename,
                                           polys_filename=polys_filename)
 
+    def setup(self):
+        self.priorities = []
+
+    def index_polygon_properties(self, properties):
+        self.priorities.append(self.sort_levels.get(properties[self.LEVEL], 0))
+
+    def load_polygon_properties(self, d):
+        self.priorities = json.load(open(os.path.join(d, self.PRIORITIES_FILENAME)))
+
+    def save_polygon_properties(self, d):
+        json.dump(self.priorities, open(os.path.join(d, self.PRIORITIES_FILENAME), 'w'))
+
     def sort_level(self, i):
-        props, p = self.polygons[i]
-        return self.sort_levels.get(props[self.LEVEL], 0)
+        return self.priorities[i]
 
     def get_candidate_polygons(self, lat, lon):
         candidates = super(QuattroshapesReverseGeocoder, self).get_candidate_polygons(lat, lon)
         return sorted(candidates, key=self.sort_level, reverse=True)
-
-
-class QuattroshapesNeighborhoodsReverseGeocoder(GeohashPolygonIndex, QuattroshapesReverseGeocoder):
-    @classmethod
-    def create_neighborhoods_index(cls, quattroshapes_dir,
-                                   output_dir,
-                                   index_filename=None,
-                                   polys_filename=DEFAULT_POLYS_FILENAME):
-        local_admin_filename = os.path.join(quattroshapes_dir, cls.LOCAL_ADMIN_FILENAME)
-        neighborhoods_filename = os.path.join(quattroshapes_dir, cls.NEIGHBORHOODS_FILENAME)
-        return cls.create_from_shapefiles([local_admin_filename, neighborhoods_filename],
-                                          output_dir, index_filename=index_filename,
-                                          polys_filename=polys_filename)
 
 
 class OSMReverseGeocoder(RTreePolygonIndex):
@@ -618,9 +281,25 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
     ADMIN_LEVEL = 'admin_level'
 
+    ADMIN_LEVELS_FILENAME = 'admin_levels.json'
+
+    polygon_reader = OSMAdminPolygonReader
+
+    persistent_polygons = True
+    # Cache almost everything
+    cache_size = 250000
+    simplify_polygons = False
+
+    fix_invalid_polygons = True
+
     include_property_patterns = set([
+        'id',
+        'type',
         'name',
         'name:*',
+        'ISO3166-1:alpha2',
+        'ISO3166-1:alpha3',
+        'ISO3166-2',
         'int_name',
         'official_name',
         'official_name:*',
@@ -630,6 +309,8 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         'short_name:*',
         'admin_level',
         'place',
+        'population',
+        'designation',
         'wikipedia',
         'wikipedia:*',
     ])
@@ -649,20 +330,30 @@ class OSMReverseGeocoder(RTreePolygonIndex):
         '''
         index = cls(save_dir=output_dir, index_filename=index_filename)
 
-        reader = OSMAdminPolygonReader(filename)
+        reader = cls.polygon_reader(filename)
         polygons = reader.polygons()
-
-        handler = logging.StreamHandler(sys.stderr)
-        reader.logger.addHandler(handler)
-        reader.logger.setLevel(logging.INFO)
 
         logger = logging.getLogger('osm.reverse_geocode')
 
-        for relation_id, props, outer_polys, inner_polys in polygons:
-            props = {k: v for k, v in props.iteritems() if k in cls.include_property_patterns
-                     or (':' in k and '{}:*'.format(k.split(':', 1)[0]) in cls.include_property_patterns)}
+        for element_id, props, admin_center, outer_polys, inner_polys in polygons:
+            props = {k: v for k, v in six.iteritems(props)
+                     if k in cls.include_property_patterns or (six.u(':') in k and
+                     six.u('{}:*').format(k.split(six.u(':'), 1)[0]) in cls.include_property_patterns)}
 
-            props['id'] = relation_id
+            id_type, element_id = osm_type_and_id(element_id)
+
+            test_point = None
+
+            if admin_center:
+                admin_center_props = {k: v for k, v in six.iteritems(admin_center)
+                                      if k in ('id', 'type', 'lat', 'lon') or k in cls.include_property_patterns or (six.u(':') in k and
+                                      six.u('{}:*').format(k.split(six.u(':'), 1)[0]) in cls.include_property_patterns)}
+
+                if cls.fix_invalid_polygons:
+                    center_lat, center_lon = latlon_to_decimal(admin_center_props['lat'], admin_center_props['lon'])
+                    test_point = Point(center_lon, center_lat)
+
+                props['admin_center'] = admin_center_props
 
             if inner_polys and not outer_polys:
                 logger.warn('inner polygons with no outer')
@@ -682,12 +373,8 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                 # Validate inner polygons (holes)
                 for p in inner_polys:
                     poly = cls.to_polygon(p)
-                    if poly is None or not poly.bounds or len(poly.bounds) != 4:
+                    if poly is None or not poly.bounds or len(poly.bounds) != 4 or not poly.is_valid:
                         continue
-                    if not poly.is_valid:
-                        poly = cls.fix_polygon(poly)
-                        if poly is None or not poly.bounds or len(poly.bounds) != 4:
-                            continue
 
                     if poly.type != 'MultiPolygon':
                         inner.append(poly)
@@ -696,7 +383,7 @@ class OSMReverseGeocoder(RTreePolygonIndex):
 
                 # Validate outer polygons
                 for p in outer_polys:
-                    poly = cls.to_polygon(p)
+                    poly = cls.to_polygon(p, test_point=test_point)
                     if poly is None or not poly.bounds or len(poly.bounds) != 4:
                         continue
 
@@ -705,16 +392,11 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                         # Figure out which outer polygon contains each inner polygon
                         interior = [p2 for p2 in inner if poly.contains(p2)]
                     except TopologicalError:
-                        poly = cls.fix_polygon(poly)
-                        if poly is None or not poly.bounds or len(poly.bounds) != 4:
-                            continue
-                        if poly.is_valid:
-                            interior = [p2 for p2 in inner if poly.contains(p2)]
+                        continue
 
                     if interior:
                         # Polygon with holes constructor
-                        poly = Polygon(p, [zip(*p2.exterior.coords.xy) for p2 in interior])
-                        poly = cls.fix_polygon(poly)
+                        poly = cls.to_polygon(p, [zip(*p2.exterior.coords.xy) for p2 in interior], test_point=test_point)
                         if poly is None or not poly.bounds or len(poly.bounds) != 4:
                             continue
                     # R-tree only stores the bounding box, so add the whole polygon
@@ -732,22 +414,128 @@ class OSMReverseGeocoder(RTreePolygonIndex):
                     poly = multi[0]
                 else:
                     continue
-            poly = index.simplify_polygon(poly)
+            if index.simplify_polygons:
+                poly = index.simplify_polygon(poly)
             index.add_polygon(poly, props)
 
         return index
 
-    def sort_level(self, i):
-        props, p = self.polygons[i]
-        admin_level = props.get(self.ADMIN_LEVEL, 0)
+    def setup(self):
+        self.admin_levels = []
+
+    def index_polygon_properties(self, properties):
+        admin_level = properties.get(self.ADMIN_LEVEL, 0)
         try:
-            return int(admin_level)
+            admin_level = int(admin_level)
         except ValueError:
-            return 0
+            admin_level = 0
+        self.admin_levels.append(admin_level)
+
+    def load_polygon_properties(self, d):
+        self.admin_levels = json.load(open(os.path.join(d, self.ADMIN_LEVELS_FILENAME)))
+
+    def save_polygon_properties(self, d):
+        json.dump(self.admin_levels, open(os.path.join(d, self.ADMIN_LEVELS_FILENAME), 'w'))
+
+    def sort_level(self, i):
+        return self.admin_levels[i]
 
     def get_candidate_polygons(self, lat, lon):
         candidates = super(OSMReverseGeocoder, self).get_candidate_polygons(lat, lon)
         return sorted(candidates, key=self.sort_level, reverse=True)
+
+
+class OSMSubdivisionReverseGeocoder(OSMReverseGeocoder):
+    persistent_polygons = True
+    cache_size = 10000
+    simplify_polygons = False
+    polygon_reader = OSMSubdivisionPolygonReader
+    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['landuse', 'place', 'amenity'])
+
+
+class OSMBuildingReverseGeocoder(OSMReverseGeocoder):
+    persistent_polygons = True
+    cache_size = 10000
+    simplify_polygons = False
+
+    fix_invalid_polygons = False
+
+    polygon_reader = OSMBuildingPolygonReader
+    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['building', 'building:levels', 'building:part', 'addr:*'])
+
+
+class OSMPostalCodeReverseGeocoder(OSMReverseGeocoder):
+    persistent_polygons = True
+    cache_size = 10000
+    simplify_polygons = False
+    polygon_reader = OSMPostalCodesPolygonReader
+    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['postal_code'])
+
+
+class OSMAirportReverseGeocoder(OSMReverseGeocoder):
+    persistent_polygons = True
+    cache_size = 10000
+    simplify_polygons = False
+    polygon_reader = OSMAirportsPolygonReader
+    include_property_patterns = OSMReverseGeocoder.include_property_patterns | set(['iata', 'aerodrome', 'aerodrome:type', 'city_served'])
+
+
+class OSMCountryReverseGeocoder(OSMReverseGeocoder):
+    persistent_polygons = True
+    cache_size = 10000
+    simplify_polygons = False
+    polygon_reader = OSMCountryPolygonReader
+
+    @classmethod
+    def country_and_languages_from_components(cls, osm_components):
+        country = None
+        for c in osm_components:
+            country = c.get('ISO3166-1:alpha2')
+            if country:
+                break
+        else:
+            # See if there's an ISO3166-2 code that matches
+            # in case the country polygon is wacky
+            for c in osm_components:
+                admin1 = c.get('ISO3166-2')
+                if admin1:
+                    # If so, and if the country is valid, use that
+                    country = admin1[:2]
+                    if not Countries.is_valid_country_code(country.lower()):
+                        return None, []
+                    break
+
+        country = country.lower()
+
+        regional = None
+
+        for c in osm_components:
+            place_id = '{}:{}'.format(c.get('type', 'relation'), c.get('id', '0'))
+
+            regional = get_regional_languages(country, 'osm', place_id)
+
+            if regional:
+                break
+
+        languages = []
+        if not regional:
+            languages = get_country_languages(country).items()
+        else:
+            if not all(regional.values()):
+                languages = get_country_languages(country)
+                languages.update(regional)
+                languages = languages.items()
+            else:
+                languages = regional.items()
+
+        default_languages = sorted(languages, key=operator.itemgetter(1), reverse=True)
+
+        return country, default_languages
+
+    def country_and_languages(self, lat, lon):
+        osm_components = self.point_in_poly(lat, lon, return_all=True)
+        return self.country_and_languages_from_components(osm_components)
+
 
 if __name__ == '__main__':
     # Handle argument parsing here
@@ -759,22 +547,40 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--osm-admin-file',
                         help='Path to OSM borders file (with dependencies, .osm format)')
 
-    parser.add_argument('-n', '--osm-neighborhoods-file',
-                        help='Path to OSM neighborhoods file (no dependencies, .osm format)')
+    parser.add_argument('-s', '--osm-subdivisions-file',
+                        help='Path to OSM subdivisions file (with dependencies, .osm format)')
+
+    parser.add_argument('-b', '--osm-building-polygons-file',
+                        help='Path to OSM building polygons file (with dependencies, .osm format)')
+
+    parser.add_argument('-p', '--osm-postal-code-polygons-file',
+                        help='Path to OSM postal code polygons file (with dependencies, .osm format)')
+
+    parser.add_argument('-r', '--osm-airport-polygons-file',
+                        help='Path to OSM airport polygons file (with dependencies, .osm format)')
+
+    parser.add_argument('-c', '--osm-country-polygons-file',
+                        help='Path to OSM country polygons file (with dependencies, .osm format)')
 
     parser.add_argument('-o', '--out-dir',
                         default=os.getcwd(),
                         help='Output directory')
 
+    logging.basicConfig(level=logging.INFO)
+
     args = parser.parse_args()
     if args.osm_admin_file:
         index = OSMReverseGeocoder.create_from_osm_file(args.osm_admin_file, args.out_dir)
-    elif args.osm_neighborhoods_file and args.quattroshapes_dir:
-        index = NeighborhoodReverseGeocoder.create_from_osm_and_quattroshapes(
-            args.osm_neighborhoods_file,
-            args.quattroshapes_dir,
-            args.out_dir
-        )
+    elif args.osm_subdivisions_file:
+        index = OSMSubdivisionReverseGeocoder.create_from_osm_file(args.osm_subdivisions_file, args.out_dir)
+    elif args.osm_building_polygons_file:
+        index = OSMBuildingReverseGeocoder.create_from_osm_file(args.osm_building_polygons_file, args.out_dir)
+    elif args.osm_country_polygons_file:
+        index = OSMCountryReverseGeocoder.create_from_osm_file(args.osm_country_polygons_file, args.out_dir)
+    elif args.osm_postal_code_polygons_file:
+        index = OSMPostalCodeReverseGeocoder.create_from_osm_file(args.osm_postal_code_polygons_file, args.out_dir)
+    elif args.osm_airport_polygons_file:
+        index = OSMAirportReverseGeocoder.create_from_osm_file(args.osm_airport_polygons_file, args.out_dir)
     elif args.quattroshapes_dir:
         index = QuattroshapesReverseGeocoder.create_with_quattroshapes(args.quattroshapes_dir, args.out_dir)
     else:

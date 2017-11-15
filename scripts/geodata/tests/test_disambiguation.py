@@ -95,11 +95,6 @@ regional_test_cases = [
 
 
 class TestNormalization(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        init_languages()
-        street_types_gazetteer.configure()
-
     def test_countries(self):
         for s, country, expected in country_test_cases:
             languages = get_country_languages(country)

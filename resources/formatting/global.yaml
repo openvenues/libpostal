@@ -1,0 +1,957 @@
+global:
+    categories:
+        place_direction: right
+        direction_probability: 0.9
+
+    language_code_replacements:
+        ja_rm: en
+        ko_rm: en
+        zh_pinyin: en        
+
+    # Former Soviet states sometimes write addresses generai-to-specific
+    invert_probability: 0.0
+
+    insertions:
+        # For each component, insertions are mutually exclusive
+        # They don't have to sum to 1 (especially for components
+        # likely to be found in most addresses)
+        postcode:
+            postcode_before_city:
+                before: city
+                probability: 0.001
+
+            postcode_after_city:
+                after: city
+                probability: 0.0001
+
+            postcode_before_city_district:
+                before: city_district
+                probability: 0.0001
+
+            postcode_before_suburb:
+                before: suburb
+                probability: 0.0001
+
+            postcode_before_state_district:
+                before: state
+                probability: 0.0001
+
+            postcode_before_state:
+                before: state
+                probability: 0.0001
+
+            postcode_before_country:
+                before: country
+                probability: 0.05
+
+            postcode_after_country:
+                after: country
+                probability: 0.01
+
+            postcode_last:
+                last: true
+                probability: 0.01
+
+        # PO Box should be the same in most countries
+        po_box:
+            po_box_before_suburb:
+                before: suburb
+                probability: 0.7
+
+            po_box_after_house:
+                after: house
+                probability: 0.2
+
+            po_box_first:
+                first: true
+                probability: 0.1
+
+        care_of:
+            care_of_after_attention:
+                after: attention
+                probability: 0.9
+            care_of_after_house:
+                after: house
+                probability: 0.1
+
+        subdivision:
+            subdivision_before_suburb:
+                before: suburb
+                probability: 1.0
+
+# Overrides for languages (better for e.g. covering all French-speaking countries)
+languages:
+    continental_european_languages:
+        insertions: &continental_european_template_insertions
+            house_number:
+                house_number_before_road:
+                    before: road
+                    probability: 0.01
+
+            postcode:
+                postcode_first:
+                    first: true
+                    probability: 0.001
+
+            building:
+                building_after_house_number:
+                    after: house_number
+                    probability: 0.8
+                building_after_house:
+                    after: house
+                    probability: 0.05
+                building_before_suburb:
+                    before: suburb
+                    probability: 0.15
+                conditional:
+                    - component: subdivision
+                      probabilities:
+                          building_after_house_number:
+                              after: house_number
+                              probability: 0.8
+                          building_before_subdivision:
+                              before: subdivision
+                              probability: 0.2
+
+            entrance:
+                # e.g. Calle Foo 3, entrada 1
+                entrance_after_house_number:
+                    after: house_number
+                    probability: 0.8
+                entrance_after_house:
+                    after: house
+                    probability: 0.2
+                conditional:
+                    - component: building
+                      probabilities:
+                          entrance_after_building:
+                              after: building
+                              probability: 0.9
+
+            staircase:
+                # e.g. 123 East 45th St, Staircase C, NYC
+                staircase_after_house_number:
+                    after: house_number
+                    probability: 0.9
+                staircase_after_house:
+                    after: house
+                    probability: 0.1
+                conditional:
+                    - component: entrance
+                      probabilities:
+                          # default: 0.1
+                          staircase_after_entrance:
+                              after: entrance
+                              probability: 0.9
+                    - component: building
+                      probabilities:
+                          # default: 0.1
+                          staircase_after_building:
+                              after: building
+                              probability: 0.9
+
+            level:
+                # e.g. Calle Ruiz de Alarcón 23 piso 3
+                level_after_house_number:
+                    after: house_number
+                    probability: 0.95
+                # e.g. Piso 3, Museo del Prado, Calle Ruiz de Alarcón 23
+                level_before_house:
+                    before: house
+                    probability: 0.03
+                # e.g. Museo del Prado, Bajos, Calle Ruiz de Alarcón 23
+                level_before_road:
+                    before: road
+                    probability: 0.02
+
+                conditional:
+                    - component: staircase
+                      probabilities:
+                          level_after_staircase:
+                              after: staircase
+                              probability: 0.99
+                    - component: entrance
+                      probabilities:
+                          level_after_entrance:
+                              after: entrance
+                              probability: 0.99
+                    - component: building
+                      probabilities:
+                          level_after_building:
+                              after: building
+                              probability: 0.99
+
+            unit: &continental_european_unit_insertions
+                unit_after_house_number:
+                    after: house_number
+                    probability: 0.9
+                unit_before_road:
+                    before: road
+                    probability: 0.1
+                conditional:
+                    - component: level
+                      probabilities:
+                          # default: 0.02
+                          # e.g. Piso 3 Dpto 12 (most common)
+                          unit_after_level:
+                              after: level
+                              probability: 0.93
+                          # e.g. Apto 6, 2o piso (less common)
+                          unit_before_level:
+                              before: level
+                              probability: 0.05
+                    - component: staircase
+                      probabilities:
+                          # default: 0.1
+                          unit_after_staircase:
+                              after: staircase
+                              probability: 0.9
+                    - component: entrance
+                      probabilities:
+                          # default: 0.1
+                          unit_after_entrance:
+                              after: entrance
+                              probability: 0.9
+                    - component: building
+                      probabilities:
+                          # default: 0.1
+                          unit_after_building:
+                              after: building
+                              probability: 0.9
+
+    en:
+        insertions: &english_template_insertions
+            building:
+                building_after_house:
+                    after: house
+                    probability: 0.6
+                building_after_road:
+                    after: road
+                    probability: 0.3
+                building_before_suburb:
+                    before: suburb
+                    probability: 0.1
+                conditional:
+                    - component: subdivision
+                      probabilities:
+                          building_after_house:
+                              after: house
+                              probability: 0.6
+                          building_after_road:
+                              after: road
+                              probability: 0.2
+                          building_before_subdivision:
+                              before: subdivision
+                              probability: 0.2
+            entrance:
+                # e.g. 123 East 45th St, 6th Floor, NYC
+                entrance_after_road:
+                    after: road
+                    probability: 0.75
+                entrance_before_house:
+                    before: house
+                    probability: 0.1
+                # e.g. Da Vinci House, 1st Floor, 44 Saffron Hill, London
+                entrance_before_house_number:
+                    before: house_number
+                    probability: 0.15
+                conditional:
+                    - component: building
+                      probabilities:
+                          # default: 0.8
+                          entrance_after_building:
+                              after: building
+                              probability: 0.2
+
+            staircase:
+                # e.g. 123 East 45th St, Staircase C, NYC
+                staircase_after_road:
+                    after: road
+                    probability: 0.5
+                # e.g. Floor 1, Da Vinci House, 44 Saffron Hill, London
+                staircase_before_house:
+                    before: house
+                    probability: 0.1
+                # e.g. Da Vinci House, 1st Floor, 44 Saffron Hill, London
+                staircase_before_house_number:
+                    before: house_number
+                    probability: 0.4
+                conditional:
+                    - component: entrance
+                      probabilities:
+                          # default: 0.1
+                          staircase_after_entrance:
+                              after: entrance
+                              probability: 0.9
+
+            level:
+                # e.g. 123 East 45th St, 6th Floor, NYC
+                level_after_road:
+                    after: road
+                    probability: 0.5
+                # e.g. Floor 1, Da Vinci House, 44 Saffron Hill, London
+                level_before_house:
+                    before: house
+                    probability: 0.25
+                # e.g. Da Vinci House, 1st Floor, 44 Saffron Hill, London
+                level_before_house_number:
+                    before: house_number
+                    probability: 0.25
+
+                conditional:
+                    - component: staircase
+                      probabilities:
+                          # default: 0.4
+                          level_after_staircase:
+                              after: staircase
+                              probability: 0.6
+                    - component: entrance
+                      probabilities:
+                          # default: 0.4
+                          level_after_entrance:
+                              after: entrance
+                              probability: 0.6
+
+            unit:
+                # e.g. Flat 18, Da Vinci House, 44 Saffron Hill, London
+                unit_before_house:
+                    before: house
+                    probability: 0.2
+
+                # e.g. Da Vinci House, Flat 18, 44 Saffron Hill, London
+                unit_before_house_number:
+                    before: house_number
+                    probability: 0.6
+
+                # e.g. Da Vinci House, 44 Saffron Hill, Flat 18, London (not as common in UK)
+                unit_after_road:
+                    after: road
+                    probability: 0.2
+
+                conditional:
+                    - component: level
+                      probabilities:
+                          unit_before_house:
+                              before: house
+                              probability: 0.1
+                          # e.g. Da Vinci House, Flat 18, 44 Saffron Hill, London
+                          unit_before_house_number:
+                              before: house_number
+                              probability: 0.1
+                          # e.g. Floor 5, Apt 6
+                          unit_after_level:
+                              after: level
+                              probability: 0.79
+                          # e.g. Apt. 6, 5/F (less common)
+                          unit_before_level:
+                              before: level
+                              probability: 0.01
+
+    # Spanish
+    es:
+        insertions: *continental_european_template_insertions
+
+    # French - exceptions for countries (including France itself) below
+    fr:
+        insertions: *continental_european_template_insertions
+
+    # Portuguese
+    pt:
+        insertions: *continental_european_template_insertions
+
+    # Italian
+    it:
+        insertions: *continental_european_template_insertions
+
+    # German
+    de:
+        insertions: *continental_european_template_insertions
+
+    # Dutch
+    nl:
+        insertions: *continental_european_template_insertions
+
+    # Danish
+    da:
+        insertions: *continental_european_template_insertions
+
+    # Swedish
+    sv:
+        insertions: *continental_european_template_insertions
+
+    # Norwegian
+    nb:
+        insertions: *continental_european_template_insertions
+
+    # Polish
+    pl:
+        insertions:
+            <<: *continental_european_template_insertions
+            unit:
+                <<: *continental_european_unit_insertions
+                unit_after_house_number:
+                    after: house_number
+                    probability: 1.0
+                unit_before_road:
+                    before: road
+                    probability: 0.0
+
+    # Russian
+    ru:
+        insertions: *continental_european_template_insertions
+
+    # Czech
+    cs:
+        insertions: *continental_european_template_insertions
+
+    # Slovakian
+    sk:
+        insertions: *continental_european_template_insertions
+
+    # Estonian
+    et:
+        insertions: *continental_european_template_insertions
+
+    # Finnish
+    fi:
+        insertions: *continental_european_template_insertions
+
+    # Romanian
+    ro:
+        insertions: *continental_european_template_insertions
+
+    # Hungarian
+    hu:
+        insertions:
+            <<: *continental_european_template_insertions
+            # e.g. 1075, Budapest Kazinczy utca 14
+            postcode:
+                postcode_before_city:
+                    before: city
+                    probability: 0.5
+
+    # Ukrainian
+    uk:
+        insertions: *continental_european_template_insertions
+
+    # Lithuanian
+    lt:
+        insertions: *continental_european_template_insertions
+
+    # Latvian
+    lv:
+        insertions: *continental_european_template_insertions
+
+    # Serbian
+    sr:
+        insertions: *continental_european_template_insertions
+
+    # Croatian
+    hr:
+        insertions: *continental_european_template_insertions
+
+    # Slovenian
+    sl:
+        insertions: *continental_european_template_insertions
+
+    # Bosnian
+    bs:
+        insertions: *continental_european_template_insertions
+
+    # Hebrew - Israel basically uses the same format as continental Europe
+    he:
+        insertions: *continental_european_template_insertions
+
+    # Basque
+    eu: 
+        insertions: *continental_european_template_insertions
+
+    # Catalan
+    ca: 
+        insertions: *continental_european_template_insertions
+
+    # Bulgarian
+    bg:
+        insertions: *continental_european_template_insertions
+
+    # Greek
+    el:
+        insertions: *continental_european_template_insertions
+
+    # Icelandic
+    is:
+        insertions: *continental_european_template_insertions
+
+countries:
+
+    # Malaysia (islands are bigger than states)
+    my:
+        admin_components:
+            island:
+                after:
+                    - road
+                    - suburb
+                    - city_district
+                    - city
+                    - state_district
+                    - state
+                before:
+                    - country
+
+    # United Kingdom, in case language is unknown
+    gb:
+      insertions:
+          <<: *english_template_insertions
+          postcode:
+              postcode_before_suburb:
+                  before: suburb
+                  probability: 0.1
+              postcode_before_city:
+                  before: city
+                  probability: 0.1
+
+    us:
+        insertions: &us_template_insertions
+            <<: *english_template_insertions
+            entrance:
+                entrance_after_road:
+                    after: road
+                    probability: 0.8
+                entrance_before_house_number:
+                    before: house_number
+                    probability: 0.2
+                conditional:
+                    - component: building
+                      probabilities:
+                          # default: 0.8
+                          entrance_after_building:
+                              after: building
+                              probability: 0.2
+
+            staircase:
+                # e.g. 123 East 45th St, Staircase C, NYC
+                staircase_after_road:
+                    after: road
+                    probability: 0.7
+                # e.g. Da Vinci House, 1st Floor, 44 Saffron Hill, London
+                staircase_before_house_number:
+                    before: house_number
+                    probability: 0.3
+                conditional:
+                    - component: entrance
+                      probabilities:
+                          # default: 0.1
+                          staircase_after_entrance:
+                              after: entrance
+                              probability: 0.9
+
+
+            level:
+                # e.g. 123 East 45th St, 6th Floor, NYC
+                level_after_road:
+                    after: road
+                    probability: 0.9
+                # e.g. Da Vinci House, 1st Floor, 44 Saffron Hill, London
+                level_before_house_number:
+                    before: house_number
+                    probability: 0.1
+
+                conditional:
+                    - component: staircase
+                      probabilities:
+                          # default: 0.4
+                          level_after_staircase:
+                              after: staircase
+                              probability: 0.6
+                    - component: entrance
+                      probabilities:
+                          # default: 0.4
+                          level_after_entrance:
+                              after: entrance
+                              probability: 0.6
+
+            unit:
+                # e.g. Da Vinci House, Flat 18, 44 Saffron Hill, London
+                unit_before_house_number:
+                    before: house_number
+                    probability: 0.1
+
+                # e.g. Da Vinci House, 44 Saffron Hill, Flat 18, London (not as common in UK)
+                unit_after_road:
+                    after: road
+                    probability: 0.9
+
+                conditional:
+                    - component: level
+                      # default: 0.1
+                      probabilities:
+                          # e.g. Floor 5, Apt 6
+                          unit_after_level:
+                              after: level
+                              probability: 0.8
+                          # e.g. Apt. 6, 5/F (less common)
+                          unit_before_level:
+                              before: level
+                              probability: 0.1
+    # American Samoa
+    as:
+        insertions: *us_template_insertions
+
+    # Federated States of Micronesia
+    fm:
+        insertions: *us_template_insertions
+
+    # Guam
+    gu:
+        insertions: *us_template_insertions
+
+    # Marshall Islands
+    mh:
+        insertions: *us_template_insertions
+
+    # Northern Mariana Islands
+    mp:
+        insertions: *us_template_insertions
+
+    # Puerto Rico
+    pr:
+        insertions: 
+            <<: *us_template_insertions
+            postcode:
+                postcode_after_country:
+                    probability: 0.85
+
+    # U.S. Minor Outlying Islands
+    um:
+        insertions: *us_template_insertions
+
+    # U.S. Virgin Islands
+    vi:
+        insertions: *us_template_insertions
+
+    # Canada
+    ca:
+        insertions: *us_template_insertions
+
+    fr:
+        insertions: &france_template_insertions
+            <<: *english_template_insertions
+            house_number:
+                house_number_after_road:
+                    after: road
+                    probability: 0.01
+
+            level:
+                level_after_road:
+                    after: road
+                    probability: 0.95
+                level_before_house:
+                    before: house
+                    probability: 0.01
+                level_before_house_number:
+                    before: house_number
+                    probability: 0.04
+
+                conditional:
+                    - component: staircase
+                      probabilities:
+                          level_after_staircase:
+                              after: staircase
+                              probability: 0.95
+                    - component: entrance
+                      probabilities:
+                          # default: 0.4
+                          level_after_entrance:
+                              after: entrance
+                              probability: 0.95
+
+            unit:
+                unit_before_house:
+                    before: house
+                    probability: 0.02
+
+                # e.g. Da Vinci House, Flat 18, 44 Saffron Hill, London
+                unit_before_house_number:
+                    before: house_number
+                    probability: 0.03
+
+                # e.g. Da Vinci House, 44 Saffron Hill, Flat 18, London (not as common in UK)
+                unit_after_road:
+                    after: road
+                    probability: 0.95
+
+                conditional:
+                    - component: level
+                      probabilities:
+                          unit_before_house:
+                              before: house
+                              probability: 0.005
+                          # e.g. Da Vinci House, Flat 18, 44 Saffron Hill, London
+                          unit_before_house_number:
+                              before: house_number
+                              probability: 0.01
+                          # e.g. Floor 5, Apt 6
+                          unit_after_level:
+                              after: level
+                              probability: 0.98
+                          # e.g. Apt. 6, 5/F (less common)
+                          unit_before_level:
+                              before: level
+                              probability: 0.005
+
+    # Andorra, uses same template as France
+    ad_ca:
+        insetions: *france_template_insertions
+
+    # Algeria
+    dz_fr:
+        insertions: *france_template_insertions
+
+    # Luxembourg
+    lu_fr:
+        insertions: *france_template_insertions
+
+    # Monaco
+    mc:
+        insertions: *france_template_insertions
+
+    # Senegal
+    sn:
+        insertions: *france_template_insertions
+
+    # Tunisia
+    tn_fr:
+        insertions: *france_template_insertions
+
+    east_asia_insertions: &east_asia_insertions
+        postcode: {}
+
+        building:
+            building_after_house_number:
+                after: house_number
+                probability: 1.0
+
+        entrance:
+            # e.g. Calle Foo 3, entrada 1
+            entrance_after_house_number:
+                after: house_number
+                probability: 1.0
+            conditional:
+                - component: building
+                  probabilities:
+                      entrance_after_building:
+                          after: building
+                          probability: 1.0
+
+        staircase:
+            # e.g. 123 East 45th St, Staircase C, NYC
+            staircase_after_house_number:
+                after: house_number
+                probability: 1.0
+            conditional:
+                - component: entrance
+                  probabilities:
+                      # default: 0.1
+                      staircase_after_entrance:
+                          after: entrance
+                          probability: 1.0
+                - component: building
+                  probabilities:
+                      # default: 0.1
+                      staircase_after_building:
+                          after: building
+                          probability: 1.0
+
+        level:
+            # e.g. Calle Ruiz de Alarcón 23 piso 3
+            level_after_house_number:
+                after: house_number
+                probability: 1.0
+
+            conditional:
+                - component: staircase
+                  probabilities:
+                      level_after_staircase:
+                          after: staircase
+                          probability: 1.0
+                - component: entrance
+                  probabilities:
+                      level_after_entrance:
+                          after: entrance
+                          probability: 1.0
+                - component: building
+                  probabilities:
+                      level_after_building:
+                          after: building
+                          probability: 1.0
+
+        unit:
+            unit_after_house_number:
+                after: house_number
+                probability: 1.0
+            conditional:
+                - component: level
+                  probabilities:
+                      unit_after_level:
+                          after: level
+                          probability: 0.95
+                      unit_before_level:
+                          before: level
+                          probability: 0.05
+                - component: staircase
+                  probabilities:
+                      unit_after_staircase:
+                          after: staircase
+                          probability: 1.0
+                - component: entrance
+                  probabilities:
+                      unit_after_entrance:
+                          after: entrance
+                          probability: 1.0
+                - component: building
+                  probabilities:
+                      unit_after_building:
+                          after: building
+                          probability: 1.0
+
+        po_box:
+            po_box_before_suburb: {}
+            po_box_after_suburb:
+                after: house_number
+                probability: 0.7
+
+            po_box_after_house: {}
+            po_box_before_house:
+                before: house
+                probability: 0.2
+
+            po_box_first: {}
+            po_box_last:
+                last: true
+                probability: 0.1
+
+        care_of: {}
+
+        subdivision:
+            subdivision_before_suburb: {}
+            subdivision_after_suburb:
+                after: suburb
+                probability: 1.0
+
+    # China
+    cn:
+        insertions: *east_asia_insertions
+
+    cn_en:
+        insertions: *us_template_insertions
+
+    # Hong Kong
+    hk:
+        insertions: *east_asia_insertions
+
+    hk_en:
+        insertions: *english_template_insertions
+
+    # Taiwan
+    tw:
+        insertions: *east_asia_insertions
+
+    tw_en:
+        insertions: *us_template_insertions
+
+    # Japan
+    jp:
+        insertions: *east_asia_insertions
+
+    jp_en:
+        insertions: *us_template_insertions
+
+    # South Korea
+    kr:
+        insertions: *east_asia_insertions
+
+    kr_en:
+        insertions: *us_template_insertions
+
+    former_ussr:
+        insertions: &former_ussr_insertions
+            postcode:
+                postcode_before_city:
+                    before: city
+                    probability: 0.2
+
+
+    # Russia
+    ru:
+        invert_probability: 0.2
+        insertions: *former_ussr_insertions
+
+    # Ukraine
+    ua:
+        invert_probability: 0.2
+        insertions: *former_ussr_insertions
+
+    # Belarus (using inverted by default)
+    by:
+        invert_probability: 0.4
+        insertions: *former_ussr_insertions
+
+    # Kazakhstan (using inverted by default)
+    kz:
+        invert_probability: 0.4
+        insertions: *former_ussr_insertions
+
+    # Kyrgyzstan (using inverted by default)
+    kg:
+        invert_probability: 0.4
+        insertions: *former_ussr_insertions
+
+    # Latvia
+    lv:
+        invert_probability: 0.2
+        insertions: *former_ussr_insertions
+
+    # Lithuania
+    lt:
+        invert_probability: 0.2
+        insertions: *former_ussr_insertions
+
+    # Estonia
+    ee:
+        invert_probability: 0.2
+        insertions: *former_ussr_insertions
+
+    # Armenia
+    am:
+        invert_probability: 0.2
+        insertions: *former_ussr_insertions
+
+    # Azerbaijan
+    az:
+        invert_probability: 0.2
+        insertions: *former_ussr_insertions
+
+    # Georgia
+    ge:
+        invert_probability: 0.2
+        insertions: *former_ussr_insertions
+
+    # Moldova
+    md:
+        invert_probability: 0.2
+        insertions: *former_ussr_insertions
+
+    # Uzbekistan
+    uz:
+        invert_probability: 0.2
+        insertions: *former_ussr_insertions
+
+    # Tajikistan
+    tj:
+        invert_probability: 0.2
+        insertions: *former_ussr_insertions
+
+    # Turkmenistan
+    tm:
+        invert_probability: 0.2
+        insertions: *former_ussr_insertions

@@ -27,6 +27,7 @@ Currently we're not implementing edge types, graph traversal, etc.
 #include "collections.h"
 #include "file_utils.h"
 #include "vector.h"
+#include "vector_math.h"
 
 typedef enum {
     GRAPH_DIRECTED,
@@ -55,7 +56,10 @@ void graph_clear(graph_t *self);
 void graph_append_edge(graph_t *self, uint32_t col);
 void graph_append_edges(graph_t *self, uint32_t *col, size_t n);
 
+void graph_finalize_vertex_no_sort(graph_t *self);
 void graph_finalize_vertex(graph_t *self);
+
+bool graph_has_edge(graph_t *self, uint32_t i, uint32_t j);
 
 bool graph_write(graph_t *self, FILE *f);
 bool graph_save(graph_t *self, char *path);

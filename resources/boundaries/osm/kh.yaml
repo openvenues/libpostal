@@ -1,0 +1,10 @@
+---
+    admin_level: 
+        "2": "country"
+        "4": "state"
+        "6": "suburb"
+    overrides:
+        id:
+            relation:
+                # Phnom Penh
+                "2199033": "city"

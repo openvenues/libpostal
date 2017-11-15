@@ -1,0 +1,10 @@
+---
+  admin_level: 
+    "2": "country"
+    # Abkhazia, though this is politically sensitive
+    "3": "state"
+    "4": "state"
+    "6": "state_district"
+    "8": "city"
+    "9": "city_district"
+

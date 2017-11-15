@@ -80,11 +80,60 @@ inline void string_upper(char *s) {
     for (; *s; ++s) *s = toupper(*s);
 }
 
-inline void string_replace(char *s, char c1, char c2) {
-    for (; *s; ++s) {
-        if (*s == c1) *s = c2;
+inline char *string_replace_char(char *str, char c1, char c2) {
+    char *repl = strdup(str);
+    if (repl == NULL) return NULL;
+    char *ptr = repl;
+    for (; *ptr; ++ptr) {
+        if (*ptr == c1) *ptr = c2;
     }
+    return repl;
 }
+
+bool string_replace_with_array(char *str, char *replace, char *with, char_array *result) {
+    if (str == NULL) return false;
+    if (result == NULL) return false;
+
+    if (replace == NULL) {
+        replace = "";
+    }
+
+    size_t len_replace = strlen(replace);
+    if (len_replace == 0) {
+        return true;        
+    }
+
+    if (with == NULL) {
+        with = "";
+    }
+
+    size_t len_with = strlen(with);
+
+    char *temp;
+    char *start = str;
+
+    for (size_t count = 0; (temp = strstr(start, replace)); count++) {
+        char_array_cat_len(result, start, temp - start);
+        char_array_cat_len(result, with, len_with);
+        start = temp + len_replace;
+    }
+
+    char_array_cat(result, start);
+
+    return true;
+}
+
+char *string_replace(char *str, char *replace, char *with) {
+    if (str == NULL) return NULL;
+
+    char_array *array = char_array_new_size(strlen(str));
+    if (!string_replace_with_array(str, replace, with, array)) {
+        char_array_destroy(array);
+        return NULL;
+    }
+    return char_array_to_string(array);
+}
+
 
 inline bool string_is_upper(char *s) {
     for (; *s; ++s) {
@@ -103,7 +152,6 @@ inline bool string_is_lower(char *s) {
     }
     return true;
 }
-
 
 uint32_t string_translate(char *str, size_t len, char *word_chars, char *word_repls, size_t trans_len) {
     uint32_t num_replacements = 0;
@@ -171,13 +219,73 @@ error_free_output:
     return NULL;
 }
 
-char *utf8_lower(const char *s) {
-    ssize_t len = (ssize_t)strlen(s);
-    uint8_t *dest;
+typedef enum casing_option {
+    UTF8_LOWER,
+    UTF8_UPPER
+} casing_option_t;
 
-    utf8proc_map((const uint8_t *)s, len, &dest, UTF8PROC_OPTIONS_LOWERCASE);
-    return (char *)dest;
+char *utf8_case(const char *s, casing_option_t casing, utf8proc_option_t options) {
+    ssize_t len = (ssize_t)strlen(s);
+    utf8proc_uint8_t *str = (utf8proc_uint8_t *)s;
+
+    utf8proc_ssize_t result;
+    result = utf8proc_decompose(str, len, NULL, 0, options);
+
+    if (result < 0) return NULL;
+    utf8proc_int32_t *buffer = (utf8proc_int32_t *) malloc(result * sizeof(utf8proc_int32_t) + 1);
+    if (buffer == NULL) return NULL;
+
+    result = utf8proc_decompose(str, len, buffer, result, options);
+    if (result < 0) {
+        free(buffer);
+        return NULL;
+    }
+
+    for (utf8proc_ssize_t i = 0; i < result; i++) {
+        utf8proc_int32_t uc = buffer[i];
+        utf8proc_int32_t norm = uc;
+
+        if (casing == UTF8_LOWER) {
+            norm = utf8proc_tolower(uc);
+        } else if (casing == UTF8_UPPER) {
+            norm = utf8proc_toupper(uc);
+        }
+        buffer[i] = norm;
+    }
+
+    result = utf8proc_reencode(buffer, result, options);
+    if (result < 0) {
+        free(buffer);
+        return NULL;
+    }
+
+    utf8proc_int32_t *newptr = (utf8proc_int32_t *) realloc(buffer, (size_t)result+1);
+    if (newptr != NULL) {
+        buffer = newptr;
+    } else {
+        free(buffer);
+        return NULL;
+    }
+
+    return (char *)buffer;
 }
+
+inline char *utf8_lower_options(const char *s, utf8proc_option_t options) {
+    return utf8_case(s, UTF8_LOWER, options);
+}
+
+inline char *utf8_lower(const char *s) {
+    return utf8_case(s, UTF8_LOWER, UTF8PROC_OPTIONS_NFC);
+}
+
+inline char *utf8_upper_options(const char *s, utf8proc_option_t options) {
+    return utf8_case(s, UTF8_UPPER, options);
+}
+
+inline char *utf8_upper(const char *s) {
+    return utf8_case(s, UTF8_UPPER, UTF8PROC_OPTIONS_NFC);
+}
+
 
 inline bool utf8_is_letter(int cat) {
     return cat == UTF8PROC_CATEGORY_LL || cat == UTF8PROC_CATEGORY_LU        \
@@ -214,6 +322,18 @@ inline bool utf8_is_symbol(int cat) {
 
 inline bool utf8_is_separator(int cat) {
     return cat == UTF8PROC_CATEGORY_ZS || cat == UTF8PROC_CATEGORY_ZL || cat == UTF8PROC_CATEGORY_ZP;
+}
+
+inline bool utf8_is_whitespace(int32_t ch) {
+    int cat = utf8proc_category(ch);
+    return utf8_is_separator(cat) || 
+           ch == 9 || // character tabulation
+           ch == 10 || // line feed
+           ch == 11 || // line tabulation
+           ch == 12 || // form feed
+           ch == 13 || // carriage return
+           ch == 133 // next line
+           ;
 }
 
 int utf8_compare_len(const char *str1, const char *str2, size_t len) {
@@ -361,6 +481,32 @@ inline size_t utf8_common_prefix_ignore_separators(const char *str1, const char 
     return utf8_common_prefix_len_ignore_separators(str1, str2, strlen(str2));
 }
 
+bool string_is_digit(char *str, size_t len) {
+    uint8_t *ptr = (uint8_t *)str;
+    size_t idx = 0;
+
+    bool ignorable = true;
+
+    while (idx < len) {
+        int32_t ch;
+        ssize_t char_len = utf8proc_iterate(ptr, len, &ch);
+
+        if (char_len <= 0) break;
+        if (ch == 0) break;
+        if (!(utf8proc_codepoint_valid(ch))) return false;
+
+        int cat = utf8proc_category(ch);
+        if (cat != UTF8PROC_CATEGORY_ND) {
+            return false;
+        }
+
+        ptr += char_len;
+        idx += char_len;
+    }
+
+    return true;
+}
+
 bool string_is_ignorable(char *str, size_t len) {
     uint8_t *ptr = (uint8_t *)str;
     size_t idx = 0;
@@ -387,7 +533,7 @@ bool string_is_ignorable(char *str, size_t len) {
     return true;
 }
 
-bool string_contains_hyphen_len(char *str, size_t len) {
+ssize_t string_next_hyphen_index(char *str, size_t len) {
     uint8_t *ptr = (uint8_t *)str;
     int32_t codepoint;
     ssize_t idx = 0;
@@ -395,24 +541,27 @@ bool string_contains_hyphen_len(char *str, size_t len) {
     while (idx < len) {
         ssize_t char_len = utf8proc_iterate(ptr, len, &codepoint);
         
-        if (char_len <= 0) break;
+        if (char_len <= 0 || codepoint == 0) break;
 
-        if (utf8_is_hyphen(codepoint)) return true;
+        if (utf8_is_hyphen(codepoint)) return idx;
         ptr += char_len;
         idx += char_len;
     }
-    return false;
+    return -1;
+}
+
+inline bool string_contains_hyphen_len(char *str, size_t len) {
+    return string_next_hyphen_index(str, len) >= 0;
 }
 
 inline bool string_contains_hyphen(char *str) {
-    return string_contains_hyphen_len(str, strlen(str));
+    return string_next_hyphen_index(str, strlen(str)) >= 0;
 }
 
-size_t string_rtrim(char *str) {
+size_t string_right_spaces_len(char *str, size_t len) {
     size_t spaces = 0;
 
     uint8_t *ptr = (uint8_t *)str;
-    ssize_t len = strlen(str);
     int32_t ch = 0;
     ssize_t index = len;
 
@@ -421,27 +570,22 @@ size_t string_rtrim(char *str) {
 
         if (ch <= 0) break;
 
-        int cat = utf8proc_category(ch);
-        if (!utf8_is_separator(cat)) {
+        if (!utf8_is_whitespace(ch)) {
             break;
         }
 
         index -= char_len;
-        spaces++;
-    }
-
-    if (spaces > 0) {
-        *(str + index) = '\0';
+        spaces += char_len;
     }
 
     return spaces;
+
 }
 
-size_t string_ltrim(char *str) {
+size_t string_left_spaces_len(char *str, size_t len) {
     size_t spaces = 0;
 
     uint8_t *ptr = (uint8_t *)str;
-    size_t len = strlen(str);
     int32_t ch = 0;
     ssize_t index = 0;
 
@@ -450,26 +594,23 @@ size_t string_ltrim(char *str) {
 
         if (ch <= 0) break;
 
-        int cat = utf8proc_category(ch);
-        if (!utf8_is_separator(cat)) {
+        if (!utf8_is_whitespace(ch)) {
             break;
         }
         index += char_len;
         ptr += char_len;
-        spaces++;
-    }
-
-    if (spaces > 0) {
-        memmove(str, str + index, len + 1 - index);
+        spaces += char_len;
     }
 
     return spaces;
 }
 
-inline size_t string_trim(char *str) {
-    size_t spaces = string_ltrim(str);
-    spaces += string_rtrim(str);
-    return spaces;
+char *string_trim(char *str) {
+    size_t len = strlen(str);
+    size_t left_spaces = string_left_spaces_len(str, len);
+    size_t right_spaces = string_right_spaces_len(str, len);
+    char *ret = strndup(str + left_spaces, len - left_spaces - right_spaces);
+    return ret;
 }
 
 char_array *char_array_from_string(char *str) {
@@ -595,7 +736,7 @@ inline void char_array_add_len(char_array *array, char *str, size_t len) {
 }
 
 
-void char_array_append_vjoined(char_array *array, char *separator, bool strip_separator, int count, va_list args) {
+void char_array_add_vjoined(char_array *array, char *separator, bool strip_separator, int count, va_list args) {
     if (count <= 0) {
         return;        
     }
@@ -625,7 +766,7 @@ void char_array_append_vjoined(char_array *array, char *separator, bool strip_se
 inline void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...) {
     va_list args;
     va_start(args, count);
-    char_array_append_vjoined(array, separator, strip_separator, count, args);
+    char_array_add_vjoined(array, separator, strip_separator, count, args);
     va_end(args);
 }
 
@@ -633,7 +774,7 @@ inline void char_array_cat_joined(char_array *array, char *separator, bool strip
     char_array_strip_nul_byte(array);
     va_list args;
     va_start(args, count);
-    char_array_append_vjoined(array, separator, strip_separator, count, args);
+    char_array_add_vjoined(array, separator, strip_separator, count, args);
     va_end(args);
 }
 
@@ -710,15 +851,19 @@ cstring_array *cstring_array_new_size(size_t size) {
 }
 
 cstring_array *cstring_array_from_char_array(char_array *str) {
+    if (str == NULL) return NULL;
+    if (str->n == 0)
+        return cstring_array_new();
+
     cstring_array *array = malloc(sizeof(cstring_array));
     if (array == NULL) return NULL;
 
     array->str = str;
     array->indices = uint32_array_new_size(1);
+
     uint32_array_push(array->indices, 0);
     char *ptr = str->a;
-    uint32_t i = 0;
-    for (i = 0; i < str->n - 1; i++, ptr++) {
+    for (uint32_t i = 0; i < str->n - 1; i++, ptr++) {
         if (*ptr == '\0') {
             uint32_array_push(array->indices, i + 1);
         }
@@ -829,17 +974,25 @@ inline int64_t cstring_array_token_length(cstring_array *self, uint32_t i) {
     }
 }
 
-cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, size_t *count) {
+static cstring_array *cstring_array_split_options(char *str, const char *separator, size_t separator_len, bool ignore_consecutive, size_t *count) {
     *count = 0;
     char_array *array = char_array_new_size(strlen(str));
 
+    bool last_was_separator = false;
+    bool first_char = false;
+
     while (*str) {
         if ((separator_len == 1 && *str == separator[0]) || (memcmp(str, separator, separator_len) == 0)) {
-            char_array_push(array, '\0');
+            if (first_char && (!ignore_consecutive || !last_was_separator)) {
+                char_array_push(array, '\0');
+            }
             str += separator_len;
+            last_was_separator = true;
         } else {
             char_array_push(array, *str);
             str++;
+            last_was_separator = false;
+            first_char = true;
         }
     }
     char_array_push(array, '\0');
@@ -849,6 +1002,17 @@ cstring_array *cstring_array_split(char *str, const char *separator, size_t sepa
 
     return string_array;
 }
+
+
+cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, size_t *count) {
+    return cstring_array_split_options(str, separator, separator_len, false, count);
+}
+
+
+cstring_array *cstring_array_split_ignore_consecutive(char *str, const char *separator, size_t separator_len, size_t *count) {
+    return cstring_array_split_options(str, separator, separator_len, true, count);
+}
+
 
 cstring_array *cstring_array_split_no_copy(char *str, char separator, size_t *count) {
     *count = 0;
@@ -952,7 +1116,8 @@ inline uint32_t string_tree_num_strings(string_tree_t *self) {
 
 inline uint32_t string_tree_num_alternatives(string_tree_t *self, uint32_t i) {
     if (i >= self->token_indices->n) return 0;
-    return self->token_indices->a[i + 1] - self->token_indices->a[i];
+    uint32_t n = self->token_indices->a[i + 1] - self->token_indices->a[i];
+    return n > 0 ? n : 1;
 }
 
 void string_tree_destroy(string_tree_t *self) {
@@ -969,10 +1134,6 @@ void string_tree_destroy(string_tree_t *self) {
     free(self);
 }
 
-#define STRING_TREE_ITER_DIRECTION_LEFT -1
-#define STRING_TREE_ITER_DIRECTION_RIGHT 1
-
-
 string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
     string_tree_iterator_t *self = malloc(sizeof(string_tree_iterator_t));
     self->tree = tree;
@@ -983,8 +1144,6 @@ string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
     // calloc since the first path through the tree is all zeros
     self->path = calloc(num_tokens, sizeof(uint32_t));
 
-    self->num_alternatives = calloc(num_tokens, sizeof(uint32_t));
-
     uint32_t permutations = 1;
     uint32_t num_strings;
 
@@ -992,7 +1151,6 @@ string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
         // N + 1 indices stored in token_indices, so this is always valid
         num_strings = string_tree_num_alternatives(tree, i);
         if (num_strings > 0) {
-            self->num_alternatives[i] = num_strings;
             // 1 or more strings in the string_tree means use those instead of the actual token
             permutations *= num_strings;
         }
@@ -1000,65 +1158,31 @@ string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
 
     if (permutations > 1) {
         self->remaining = (uint32_t)permutations;
-        self->single_path = false;
     } else{
         self->remaining = 1;
-        self->single_path = true;
     }
-
-    // Start on the right going backward
-    self->cursor = self->num_tokens - 1;
-    self->direction = -1;
 
     return self;
 }
 
-static inline void string_tree_iterator_switch_direction(string_tree_iterator_t *self) {
-    self->direction *= -1;
-}
-
-static inline void string_tree_iterator_reset_right(string_tree_iterator_t *self) {
-    size_t offset = self->cursor + 1;
-    size_t num_bytes = self->num_tokens - offset;
-    memset(self->path + offset, 0, sizeof(uint32_t) * num_bytes);
-}
-
-static int string_tree_iterator_do_iteration(string_tree_iterator_t *self) {
-    uint32_t num_alternatives;
-    int32_t direction = self->direction;
-
-    uint32_t sentinel = (direction == STRING_TREE_ITER_DIRECTION_LEFT ? -1 : self->num_tokens); 
-
-    for (uint32_t cursor = self->cursor; cursor != sentinel; cursor += direction) {
-        self->cursor = cursor;
-        num_alternatives = self->num_alternatives[cursor];
-        if (num_alternatives > 1 && self->path[cursor] < num_alternatives - 1) {
-            self->path[cursor]++;
-            if (direction == STRING_TREE_ITER_DIRECTION_LEFT && self->cursor < self->num_tokens - 1) {
-                string_tree_iterator_reset_right(self);
-                self->cursor++;
-            }
-            string_tree_iterator_switch_direction(self);
-            self->remaining--;
-            return 1;
-        }
-    }
-    
-    return -1;
-}
-
 void string_tree_iterator_next(string_tree_iterator_t *self) {
-    if (!self->single_path && string_tree_iterator_do_iteration(self) == -1 && self->remaining > 0) {
-        string_tree_iterator_switch_direction(self);
-        if (string_tree_iterator_do_iteration(self) == -1) {
+    if (self->remaining > 0) {
+        int i;
+        for (i = self->num_tokens - 1; i >= 0; i--) {
+            self->path[i]++;
+            if (self->path[i] == string_tree_num_alternatives(self->tree, i)) {
+                self->path[i] = 0;
+            } else {
+                self->remaining--;
+                break;
+            }
+        }
+
+        if (i < 0) {
             self->remaining = 0;
         }
-    } else if (self->single_path) {       
-        self->remaining--;
-        return;
     }
 }
-
 
 char *string_tree_iterator_get_string(string_tree_iterator_t *self, uint32_t i) {
     if (i >= self->num_tokens) {
@@ -1071,7 +1195,7 @@ char *string_tree_iterator_get_string(string_tree_iterator_t *self, uint32_t i) 
 }
 
 bool string_tree_iterator_done(string_tree_iterator_t *self) {
-    return self->remaining > 0;
+    return self->remaining == 0;
 }
 
 void string_tree_iterator_destroy(string_tree_iterator_t *self) {
@@ -1079,10 +1203,6 @@ void string_tree_iterator_destroy(string_tree_iterator_t *self) {
 
     if (self->path) {
         free(self->path);
-    }
-
-    if (self->num_alternatives) {
-        free(self->num_alternatives);
     }
 
     free(self);

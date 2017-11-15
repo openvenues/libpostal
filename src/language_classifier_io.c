@@ -23,7 +23,6 @@ language_classifier_data_set_t *language_classifier_data_set_init(char *filename
     return data_set;
 }
 
-
 bool language_classifier_data_set_next(language_classifier_data_set_t *self) {
     if (self == NULL) return false;
 
@@ -36,11 +35,11 @@ bool language_classifier_data_set_next(language_classifier_data_set_t *self) {
 
     cstring_array *fields = cstring_array_split(line, TAB_SEPARATOR, TAB_SEPARATOR_LEN, &token_count);
 
-    free(line);
-
     if (token_count != LANGUAGE_CLASSIFIER_FILE_NUM_TOKENS) {
-        log_error("Token count did not match, ected %d, got %zu\n", LANGUAGE_CLASSIFIER_FILE_NUM_TOKENS, token_count);
+        log_error("Token count did not match, expected %d, got %zu, line=%s\n", LANGUAGE_CLASSIFIER_FILE_NUM_TOKENS, token_count, line);
     }
+
+    free(line);
 
     char *language = cstring_array_get_string(fields, LANGUAGE_CLASSIFIER_FIELD_LANGUAGE);
     char *country = cstring_array_get_string(fields, LANGUAGE_CLASSIFIER_FIELD_COUNTRY);

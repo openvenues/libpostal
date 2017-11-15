@@ -1,0 +1,8 @@
+апартман|ап|апт
+apartman|ap|apt
+канцеларија
+kancelarija
+соба
+soba
+стан
+stan

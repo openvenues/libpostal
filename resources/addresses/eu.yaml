@@ -1,0 +1,375 @@
+# eu.yaml
+# -------
+# Basque language specification
+
+components:
+    level:
+        # If no floor number is specified
+        null_probability: 0.8
+        alphanumeric_probability: 0.2
+
+    staircase:
+        null_probability: 0.99
+        alphanumeric_probability: 0.01
+
+    entrance:
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
+
+    unit:
+        # If no unit number is specified
+        null_probability: 0.4
+        alphanumeric_probability: 0.6
+
+    combinations:
+        -
+            components:
+                - level
+                - unit
+            label: unit
+            separators:
+                - separator: "-"
+                  probability: 0.85
+                - separator: "/"
+                  probability: 0.15
+            probability: 0.7
+
+
+and:
+    default: &eta
+        canonical: eta
+        abbreviated: "&"
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability:  0.4
+        sample_probability: 0.1
+
+house_numbers:
+    # zenbakirik gabe (zk.g) addresses
+    no_number: 
+        default:
+            canonical: zenbakirik gabe
+            abbreviated: zk.g
+            sample: true
+            canonical_probability: 0.1
+            abbreviated_probability: 0.6
+            sample_probability: 0.3
+
+    no_number_probability: 0.1 # With this probability, use sense número if no house_number is specified
+
+levels:
+    floor: &solairua
+        canonical: solairua
+        abbreviated: sol
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.3
+        sample_probability: 0.2
+        numeric:
+            direction: left
+        # e.g. 2. solairua
+        ordinal:
+            direction: right
+        numeric_probability: 0.25
+        ordinal_probability: 0.75
+    # Ground floor
+    beheko_solairua: &beheko_solairua
+        canonical: beheko solairua
+        abbreviated: beheko sol
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
+        sample_probability: 0.1
+    behe_solairua: &behe_solairua
+        canonical: behe-solairua
+        abbreviated: behe-sol
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
+        sample_probability: 0.1
+    aliases:
+        "0":
+            default: *beheko_solairua
+            probability: 0.5
+            alternatives:
+                - alternative: *behe_solairua
+                  probability: 0.4
+                - alternative: *solairua
+                  probability: 0.1
+
+    numbering_starts_at: 0
+
+    alphanumeric:
+        default: *solairua
+        numeric_probability: 0.99
+        alpha_probability: 0.01
+
+blocks:
+    alphanumeric:
+        default:
+            canonical: blokea
+            abbreviated: bl
+            sample: true
+            canonical_probability: 0.6
+            abbreviated_probability: 0.2
+            sample_probability: 0.2
+            numeric:
+                direction: left
+            ordinal:
+                direction: right
+            numeric_probability: 0.2
+            ordinal_probability: 0.8
+
+categories:
+    near:
+        default:
+            canonical: gertu
+
+    nearby:
+        default:
+            canonical: gertuko
+        probability: 0.7
+        alternatives:
+            - alternative:
+                  canonical: hemen gertu
+              probability: 0.2
+            - alternative:
+                  canonical: hemen
+              probability: 0.1
+    near_me:
+        default:
+            canonical: me gertu
+
+    # Probabilities of each phrase
+    near_probability: 0.7
+    nearby_probability: 0.2
+    near_me_probability: 0.1
+
+cross_streets:
+    and: *eta
+    txoko: &txoko
+        canonical: txoko
+        sample: true
+        canonical_probability: 0.7
+        sample_probability: 0.3
+
+    intersection:
+        default: *eta
+        probability: 0.8
+        alternatives:
+            - alternative: *txoko
+              probability: 0.2
+
+    between:
+        canonical: arteko
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        parentheses_probabililty: 0.5
+
+
+po_boxes:
+    posta_kutxa: &posta_kutxa
+        canonical: posta-kutxa
+        abbreviated: p.-ku
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.4
+        sample_probability: 0.4
+        numeric:
+            direction: left
+        numeric_probability: 1.0
+    alphanumeric:
+        sample: false
+        default: *posta_kutxa
+        numeric_probability: 0.9 # P.-Ku  123
+        alpha_probability: 0.05 # P.-Ku  A
+        numeric_plus_alpha_probability: 0.04 # P.-Ku  123G
+        alpha_plus_numeric_probability: 0.01 # P.-Ku  A123
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+
+postcodes:
+    alphanumeric:
+        default:
+            canonical: posta-kodea
+            abbreviated: p.-k
+            sample: true
+            canonical_probability: 0.01
+            abbreviated_probability: 0.9
+            sample_probability: 0.09
+
+            numeric:
+                direction: left
+
+            numeric_affix:
+                affix: p.-k.
+                direction: left
+            # null_probability means the chance of doing nothing e.g. just the postal code
+            null_probability: 0.7
+            numeric_probability: 0.18
+            numeric_affix_probability: 0.12
+            strict_numeric: true
+
+directions:
+    right: &eskuina
+        canonical: eskuina
+        abbreviated: esk
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: esk.
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.9
+        numeric_affix_probability: 0.1
+    left: &ezkerkada
+        canonical: ezkerkada
+        abbreviated: ezk
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: ezk.
+            direction: right
+            whitespace_probability: 0.1
+        numeric_probability: 0.9
+        numeric_affix_probability: 0.1
+    ezkerreko: &ezkerreko
+        canonical: ezkerreko
+        abbreviated: ezk.-ko
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.5
+        sample_probability: 0.3
+        numeric:
+            direction: left
+
+    alternatives:
+        - alternative: *eskuina
+          probability: 0.5
+        - alternative: *ezkerkada
+          probability: 0.5
+
+
+entrances:
+    sarrera: &sarrera
+        canonical: sarrera
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+
+    # Sarrera 1, Sarrera A, etc.
+    alphanumeric:
+        default: *sarrera
+        numeric_probability: 0.1 # e.g. Sarrera 1
+        alpha_probability: 0.85 # e.g. Sarrera A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: left
+            modifier:
+                alternatives:
+                    - alternative: *eskuina
+                    - alternative: *ezkerreko
+
+staircases:
+    eskailera: &eskailera
+        canonical: eskailera
+        abbreviated: eskra
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+
+    alphanumeric:
+        # For alphanumerics, Eskra A, Eskra 1, etc.
+        default: *eskailera
+        numeric_probability: 0.6 # e.g. Eskra 1
+        alpha_probability: 0.35 # e.g. Eskra A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: left # e.g. Ezk.-ko Eskra
+            modifier:
+                alternatives:
+                    - alternative: *eskuina
+                    - alternative: *ezkerreko
+
+units:
+    flat: &apartamentu
+        canonical: apartamentu
+        abbreviated: aptu
+        sample: true
+        canonical_probability: 0.3
+        abbreviated_probability: 0.4
+        sample_probability: 0.3
+        numeric:
+            direction: left
+            # If it's just puerta B, many times it's just e.g. 3o B for "tercero piso puerta B"
+            null_phrase_probability: 0.15
+        ordinal:
+            direction: right
+        numeric_probability: 0.6
+        ordinal_probability: 0.4
+
+    alphanumeric: &unit_alphanumeric
+        default: *apartamentu
+
+        # Separate random probability for adding directions like 2. Ezk, 2 Esk, etc.
+        add_direction: true
+        add_direction_probability: 0.1
+        add_direction_numeric: true # Only for numbers
+        add_direction_standalone: true # A unit can be as simple as "D"
+
+        numeric_probability: 0.7 # e.g. 1
+        numeric_plus_alpha_probability: 0.01 # e.g. 1A
+        alpha_plus_numeric_probability: 0.01 # e.g. A1
+        alpha_probability: 0.28 # e.g. A
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1

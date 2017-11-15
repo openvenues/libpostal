@@ -1,0 +1,319 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "sıfır"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "sifir"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "bir"
+      value: 1
+      type: "cardinal"
+      multiply_gte: 1000000
+    - 
+      name: "iki"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "üç"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "uc"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "dört"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "dort"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "beş"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "bes"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "altı"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "alti"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "yedi"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "sekiz"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "dokuz"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "on"
+      value: 10
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "yirmi"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "otuz"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kırk"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "kirk"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "elli"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "altmış"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "altmis"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "yetmiş"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "yetmis"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "seksen"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "doksan"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "yüz"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "yuz"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "bin"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milyon"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "milyar"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "trilyon"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "katrilyon"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "sıfırıncı"
+      value: 0
+      type: "ordinal"
+    - 
+      name: "sifirinci"
+      value: 0
+      type: "ordinal"
+    - 
+      name: "birinci"
+      value: 1
+      type: "ordinal"
+    - 
+      name: "ikinci"
+      value: 2
+      type: "ordinal"
+    - 
+      name: "üçüncü"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "ucuncu"
+      value: 3
+      type: "ordinal"
+    - 
+      name: "dördüncü"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "dorduncu"
+      value: 4
+      type: "ordinal"
+    - 
+      name: "beşinci"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "besinci"
+      value: 5
+      type: "ordinal"
+    - 
+      name: "altıncı"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "altinci"
+      value: 6
+      type: "ordinal"
+    - 
+      name: "yedinci"
+      value: 7
+      type: "ordinal"
+    - 
+      name: "sekizinci"
+      value: 8
+      type: "ordinal"
+    - 
+      name: "dokuzuncu"
+      value: 9
+      type: "ordinal"
+    - 
+      name: "onuncu"
+      value: 10
+      type: "ordinal"
+    - 
+      name: "yirminci"
+      value: 20
+      type: "ordinal"
+    - 
+      name: "otuzuncu"
+      value: 30
+      type: "ordinal"
+    - 
+      name: "kırkıncı"
+      value: 40
+      type: "ordinal"
+    - 
+      name: "kirkinci"
+      value: 40
+      type: "ordinal"
+    - 
+      name: "ellinci"
+      value: 50
+      type: "ordinal"
+    - 
+      name: "altmışıncı"
+      value: 60
+      type: "ordinal"
+    - 
+      name: "altmisinci"
+      value: 60
+      type: "ordinal"
+    - 
+      name: "yetmişinci"
+      value: 70
+      type: "ordinal"
+    - 
+      name: "yetmisinci"
+      value: 70
+      type: "ordinal"
+    - 
+      name: "sekseninci"
+      value: 80
+      type: "ordinal"
+    - 
+      name: "doksanıncı"
+      value: 90
+      type: "ordinal"
+    - 
+      name: "doksaninci"
+      value: 90
+      type: "ordinal"
+    - 
+      name: "yüzüncü"
+      value: 100
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "yuzuncu"
+      value: 100
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "bininci"
+      value: 1000
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "milyonuncu"
+      value: 1000000
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "milyarıncı"
+      value: 1000000000
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "milyarinci"
+      value: 1000000000
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "trilyonuncu"
+      value: 1000000000000
+      type: "ordinal"
+      left: "multiply"
+    - 
+      name: "katrilyonuncu"
+      value: 1000000000000000
+      type: "ordinal"
+      left: "multiply"
+

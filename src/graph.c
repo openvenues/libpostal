@@ -1,7 +1,8 @@
 #include "graph.h"
+#include "klib/ksort.h"
 
 graph_t *graph_new_dims(graph_type_t type, uint32_t m, uint32_t n, size_t nnz, bool fixed_rows) {
-    graph_t *graph = malloc(sizeof(graph_t));
+    graph_t *graph = calloc(1, sizeof(graph_t));
     graph->m = m;
     graph->fixed_rows = fixed_rows;
     graph->n = n;
@@ -65,13 +66,62 @@ inline void graph_clear(graph_t *self) {
     uint32_array_clear(self->indices);
 }
 
-inline void graph_finalize_vertex(graph_t *self) {
+inline void graph_finalize_vertex_no_sort(graph_t *self) {
     uint32_array_push(self->indptr, (uint32_t)self->indices->n);
     if (!self->fixed_rows) {
         self->m++;
         graph_set_size(self);
     }
 }
+
+void graph_finalize_vertex(graph_t *self) {
+    size_t start = 0;
+    if (self->indptr->n > 0) {
+        start = self->indptr->a[self->indptr->n - 1];
+    }
+
+    size_t end = self->indices->n;
+    size_t len = end - start;
+
+    if (len > 1) {
+        ks_introsort(uint32_t, len, self->indices->a + start);
+    }
+    graph_finalize_vertex_no_sort(self);
+}
+
+bool graph_has_edge(graph_t *self, uint32_t i, uint32_t j) {
+    if (i > self->m || j > self->n || i >= self->indptr->n - 1) return false;
+
+    uint32_t *indptr = self->indptr->a;
+    uint32_t *indices = self->indices->a;
+
+    uint32_t row_start = indptr[i];
+    uint32_t row_end = indptr[i + 1];
+    uint32_t len = row_end - row_start;
+    if (len == 0) return false;
+
+    // Simple binary search, array is sorted
+    ssize_t lo = (ssize_t)row_start;
+    ssize_t hi = (ssize_t)row_end - 1;
+
+    bool found = false;
+
+    while (lo <= hi) {
+        size_t mid = (lo + hi) / 2;
+        uint64_t val = indices[mid];
+        if (val < j) {
+            lo = mid + 1;
+        } else if (val > j) {
+            hi = mid - 1;
+        } else {
+            found = true;
+            break;
+        }
+    }
+
+    return found;
+}
+
 
 inline void graph_append_edge(graph_t *self, uint32_t col) {
     uint32_array_push(self->indices, col);

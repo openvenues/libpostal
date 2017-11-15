@@ -1,4 +1,0 @@
-departament|dep
-mieszkanie|m
-oddział|oddz
-pokój|pok

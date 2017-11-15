@@ -1,0 +1,91 @@
+---
+  default_separator: ""
+  rules:
+    - 
+      name: "영"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "일"
+      value: 1
+      type: "cardinal"
+    - 
+      name: "이"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "삼"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "사"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "오"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "육"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "칠"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "팔"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "구"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "십"
+      value: 10
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "백"
+      value: 100
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "천"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "만"
+      value: 10000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "억"
+      value: 100000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "조"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "경"
+      value: 10000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "번째"
+      value: 0
+      type: "ordinal_indicator"
+      left: "add"
+

@@ -1,20 +1,34 @@
 aldea
+ampliación|amplicacion|ampl|amp
 auzoa
 barriada|barda
-barrio|bo|brio|brrio
+barrio|bo|brio|brrio|bº|b°|b.º|b.°|b /|br
 barrios|bos|brios|brrios
-bloque|blque|bloq|blq
+bloque|blque|bloq|blq|bl|bq|blo
 colonia|col
+comuna
+conjunto|cjto|conj|cto
 ciudad|cdad|cd
+cuadra|cuadr
 distrito|dtto
+distrito postal|dp|d p|dtto postal
 estado|edo
+extrarradio|extrr
+extramuros|extrm
 isla|isl|is
 islas|isls|iss
+kilómetro|km|kilometro|kilom
+manzana|mz
+núcleo|ncleo|nucleo
+partida|ptda
+poblado|pbdo|pob|pobl
 polígono|poligono|políg|polig|pol
 polígono residencial|poligono residencial|políg res|polig res|pol.res|pol res|pgres|pg res|pr|p.r.|p.r|p r
 polígono industrial|poligono industrial|políg ind|polig ind|pol.ind|pol ind|pgind|pg ind|pi|p.i.|p.i|p i
+provincia|pcia
 punto kilométrico|punto kilometrico|pk|p.k.|p k
 sección|seccion|secc|sccn|scn|sec
 sector|sect
-urbanización|urbanizacion|urb
-zona|zna
+urbanización|urbanizacion|urb|ur
+vecindario|vecin
+zona|zna|zn

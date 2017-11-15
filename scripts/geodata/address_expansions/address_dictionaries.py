@@ -66,15 +66,27 @@ gazetteer_types = {
     'academic_degrees': 'DICTIONARY_ACADEMIC_DEGREE',
     'ambiguous_expansions': 'DICTIONARY_AMBIGUOUS_EXPANSION',
     'building_types': 'DICTIONARY_BUILDING_TYPE',
+    'categories': 'DICTIONARY_CATEGORY',
+    'categories_plural': 'DICTIONARY_CATEGORY_PLURAL',
+    'chains': 'DICTIONARY_CHAIN',
     'company_types': 'DICTIONARY_COMPANY_TYPE',
     'concatenated_prefixes_separable': 'DICTIONARY_CONCATENATED_PREFIX_SEPARABLE',
     'concatenated_suffixes_inseparable': 'DICTIONARY_CONCATENATED_SUFFIX_INSEPARABLE',
     'concatenated_suffixes_separable': 'DICTIONARY_CONCATENATED_SUFFIX_SEPARABLE',
+    'cross_streets': 'DICTIONARY_CROSS_STREET',
     'directionals': 'DICTIONARY_DIRECTIONAL',
     'elisions': 'DICTIONARY_ELISION',
+    'entrances': 'DICTIONARY_ENTRANCE',
     'given_names': 'DICTIONARY_GIVEN_NAME',
-    'level_types': 'DICTIONARY_LEVEL',
-    'no_number': 'DICTIONARY_NO_ADDRESS',
+    'house_numbers': 'DICTIONARY_HOUSE_NUMBER',
+    'level_types_basement': 'DICTIONARY_LEVEL_BASEMENT',
+    'level_types_mezzanine': 'DICTIONARY_LEVEL_MEZZANINE',
+    'level_types_numbered': 'DICTIONARY_LEVEL_NUMBERED',
+    'level_types_standalone': 'DICTIONARY_LEVEL_STANDALONE',
+    'level_types_sub_basement': 'DICTIONARY_LEVEL_SUB_BASEMENT',
+    'near': 'DICTIONARY_NEAR',
+    'no_number': 'DICTIONARY_NO_NUMBER',
+    'number': 'DICTIONARY_NUMBER',
     'nulls': 'DICTIONARY_NULL',
     'organizations': 'DICTIONARY_NAMED_ORGANIZATION',
     'people': 'DICTIONARY_NAMED_PERSON',
@@ -82,13 +94,17 @@ gazetteer_types = {
     'personal_titles': 'DICTIONARY_PERSONAL_TITLE',
     'place_names': 'DICTIONARY_PLACE_NAME',
     'post_office': 'DICTIONARY_POST_OFFICE',
+    'postcodes': 'DICTIONARY_POSTAL_CODE',
     'qualifiers': 'DICTIONARY_QUALIFIER',
+    'staircases': 'DICTIONARY_STAIRCASE',
     'stopwords': 'DICTIONARY_STOPWORD',
     'street_types': 'DICTIONARY_STREET_TYPE',
     'surnames': 'DICTIONARY_SURNAME',
     'synonyms': 'DICTIONARY_SYNONYM',
     'toponyms': 'DICTIONARY_TOPONYM',
-    'unit_types': 'DICTIONARY_UNIT',
+    'unit_directions': 'DICTIONARY_UNIT_DIRECTION',
+    'unit_types_numbered': 'DICTIONARY_UNIT_NUMBERED',
+    'unit_types_standalone': 'DICTIONARY_UNIT_STANDALONE',
 
 }
 
@@ -97,9 +113,70 @@ class InvalidAddressFileException(Exception):
     pass
 
 
+def read_dictionary_file(path):
+    for i, line in enumerate(open(path)):
+        line = safe_decode(line.rstrip())
+        if not line.strip():
+            continue
+
+        if u'}' in line:
+            raise InvalidAddressFileException(u'Found }} in file: {}, line {}'.format(path, i+1))
+        phrases = line.split(u'|')
+
+        if sum((1 for p in phrases if len(p.strip()) == 0)) > 0:
+            raise InvalidAddressFileException(u'Found blank synonym in: {}, line {}'.format(path, i+1))
+
+        yield phrases
+
 
 def quote_string(s):
     return u'"{}"'.format(safe_decode(s).replace('\\', '\\\\').replace('"', '\\"'))
+
+
+class AddressPhraseDictionaries(object):
+    def __init__(self, base_dir=ADDRESS_EXPANSIONS_DIR):
+        self.base_dir = base_dir
+        self.languages = []
+
+        self.language_dictionaries = defaultdict(list)
+        self.phrases = defaultdict(list)
+
+        for language in os.listdir(base_dir):
+            language_dir = os.path.join(base_dir, language)
+            if not os.path.isdir(language_dir):
+                continue
+
+            self.languages.append(language)
+
+            for filename in os.listdir(language_dir):
+                if not filename.endswith('.txt'):
+                    raise InvalidAddressFileException(u'Invalid extension for file {}/{}, must be .txt'.format(language_dir, filename))
+                dictionary_name = filename.split('.')[0].lower()
+
+                if dictionary_name not in gazetteer_types:
+                    raise InvalidAddressFileException(u'Invalid filename for file {}/{}. Must be one of {{{}}}'.format(language_dir, filename, ', '.join(sorted(gazetteer_types))))
+                self.language_dictionaries[language].append(dictionary_name)
+
+                path = os.path.join(language_dir, filename)
+                for i, line in enumerate(open(path)):
+                    line = safe_decode(line.rstrip())
+                    if not line.strip():
+                        continue
+
+                    if u'}' in line:
+                        raise InvalidAddressFileException(u'Found }} in file: {}, line {}'.format(path, i+1))
+                    phrases = line.split(u'|')
+
+                    if sum((1 for p in phrases if len(p.strip()) == 0)) > 0:
+                        raise InvalidAddressFileException(u'Found blank synonym in: {}, line {}'.format(path, i+1))
+
+                    self.phrases[(language, dictionary_name)].append(phrases)
+
+        self.language_dictionaries = dict(self.language_dictionaries)
+        self.phrases = dict(self.phrases)
+
+
+address_phrase_dictionaries = AddressPhraseDictionaries()
 
 
 def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_file=ADDRESS_DATA_FILE, header_file=ADDRESS_HEADER_FILE):
@@ -109,39 +186,17 @@ def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_
 
     max_dictionary_types = 0
 
-    for language in os.listdir(base_dir):
-        language_dir = os.path.join(base_dir, language)
-        if not os.path.isdir(language_dir):
-            continue
-
+    for language in address_phrase_dictionaries.languages:
         num_language_rules = 0
         language_index = len(expansion_rules)
 
         language_canonical_dictionaries = defaultdict(list)
         canonical_indices = {}
 
-        for filename in os.listdir(language_dir):
-            dictionary_name = filename.rstrip('.txt').lower()
-            if '.' in dictionary_name:
-                raise InvalidAddressFileException(u'Invalid extension for file {}/{}, must be .txt'.format(language, filename))
-
-            if dictionary_name not in gazetteer_types:
-                raise InvalidAddressFileException(u'Invalid filename for file {}/{}. Must be one of {{{}}}'.format(language, filename, ', '.join(gazetteer_types)))
-
+        for dictionary_name in address_phrase_dictionaries.language_dictionaries[language]:
             dictionary_type = gazetteer_types[dictionary_name]
 
-            f = open(os.path.join(language_dir, filename))
-            for i, line in enumerate(f):
-                line = safe_decode(line.rstrip())
-                if not line.strip():
-                    continue
-
-                if u'}' in line:
-                    raise InvalidAddressFileException(u'Found }} in file: {}/{}, line {}'.format(language, filename, i+1))
-                phrases = line.split(u'|')
-                if sum((1 for p in phrases if len(p.strip()) == 0)) > 0:
-                    raise InvalidAddressFileException(u'Found blank synonym in: {}/{}, line {}'.format(language, filename, i+1))
-
+            for phrases in address_phrase_dictionaries.phrases[(language, dictionary_name)]:
                 canonical = phrases[0]
                 if len(phrases) > 1:
                     canonical_index = canonical_indices.get(canonical, None)
@@ -187,7 +242,6 @@ def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_
     out = open(output_file, 'w')
     out.write(safe_encode(data_file))
     out.close()
-
 
 
 if __name__ == '__main__':

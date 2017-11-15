@@ -1,0 +1,419 @@
+---
+  whole_words_only: true
+  rules:
+    - 
+      name: "нуль"
+      value: 0
+      type: "cardinal"
+    - 
+      name: "один"
+      value: 1
+      type: "cardinal"
+      multiply_gte: 1000000
+    - 
+      name: "одна"
+      value: 1
+      type: "cardinal"
+      gender: "f"
+      multiply_gte: 1000
+    - 
+      name: "одне"
+      value: 1
+      type: "cardinal"
+      gender: "n"
+    - 
+      name: "два"
+      value: 2
+      type: "cardinal"
+    - 
+      name: "дві"
+      value: 2
+      type: "cardinal"
+      gender: "f"
+    - 
+      name: "три"
+      value: 3
+      type: "cardinal"
+    - 
+      name: "чотири"
+      value: 4
+      type: "cardinal"
+    - 
+      name: "пʼять"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "п'ять"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "пять"
+      value: 5
+      type: "cardinal"
+    - 
+      name: "шість"
+      value: 6
+      type: "cardinal"
+    - 
+      name: "сім"
+      value: 7
+      type: "cardinal"
+    - 
+      name: "вісім"
+      value: 8
+      type: "cardinal"
+    - 
+      name: "девʼять"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "дев'ять"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "девять"
+      value: 9
+      type: "cardinal"
+    - 
+      name: "десять"
+      value: 10
+      type: "cardinal"
+    - 
+      name: "одинадцять"
+      value: 11
+      type: "cardinal"
+    - 
+      name: "дванадцять"
+      value: 12
+      type: "cardinal"
+    - 
+      name: "тринадцять"
+      value: 13
+      type: "cardinal"
+    - 
+      name: "чотирнадцять"
+      value: 14
+      type: "cardinal"
+    - 
+      name: "пʼятнадцять"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "п'ятнадцять"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "пятнадцять"
+      value: 15
+      type: "cardinal"
+    - 
+      name: "шістнадцять"
+      value: 16
+      type: "cardinal"
+    - 
+      name: "сімнадцять"
+      value: 17
+      type: "cardinal"
+    - 
+      name: "вісімнадцять"
+      value: 18
+      type: "cardinal"
+    - 
+      name: "девʼятнадцять"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "дев'ятнадцять"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "девятнадцять"
+      value: 19
+      type: "cardinal"
+    - 
+      name: "двадцять"
+      value: 20
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "тридцять"
+      value: 30
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "сорок"
+      value: 40
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "пʼятдесят"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "п'ятдесят"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "пятдесят"
+      value: 50
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "шістдесят"
+      value: 60
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "сімдесят"
+      value: 70
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "вісімдесят"
+      value: 80
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "девʼяносто"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "дев'яносто"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "девяносто"
+      value: 90
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "сто"
+      value: 100
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "двісті"
+      value: 200
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "триста"
+      value: 300
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "чотириста"
+      value: 400
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "пʼятсот"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "п'ятсот"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "пятсот"
+      value: 500
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "шістсот"
+      value: 600
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "сімсот"
+      value: 700
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "вісімсот"
+      value: 800
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "девʼятсот"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "дев'ятсот"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "девятсот"
+      value: 900
+      type: "cardinal"
+      right: "add"
+    - 
+      name: "тисяча"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "тисячі"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "тисяч"
+      value: 1000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "мільйон"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "мільион"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "мільйони"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "мільиони"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "мільйонів"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "мільионів"
+      value: 1000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "мільярд"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "мільярди"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "мільярдів"
+      value: 1000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "більйон"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "більион"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "більйони"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "більиони"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "більйонів"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "більионів"
+      value: 1000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "більярд"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "більярди"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+    - 
+      name: "більярдів"
+      value: 1000000000000000
+      type: "cardinal"
+      left: "multiply"
+      right: "add"
+
+  ordinal_indicators:
+    - 
+      suffixes:
+        "0":
+          - "й"
+          - "-й"
+        "1":
+          - "й"
+          - "-й"
+        "2":
+          - "й"
+          - "-й"
+        "3":
+          - "й"
+          - "-й"
+        "4":
+          - "й"
+          - "-й"
+        "5":
+          - "й"
+          - "-й"
+        "6":
+          - "й"
+          - "-й"
+        "7":
+          - "й"
+          - "-й"
+        "8":
+          - "й"
+          - "-й"
+        "9":
+          - "й"
+          - "-й"
+  stopwords:
+    - "і"

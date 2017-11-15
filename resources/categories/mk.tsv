@@ -1,0 +1,841 @@
+key	value	is_plural	phrase
+aeroway	aerodrome	0	аеродром
+aeroway	aerodrome	1	аеродромs
+amenity	arts_centre	0	дом на уметности
+amenity	arts_centre	1	дом на уметностиs
+amenity	atm	0	банкомат
+amenity	atm	1	банкоматs
+amenity	auditorium	0	аудиториум
+amenity	auditorium	1	аудиториумs
+amenity	bank	0	банка
+amenity	bank	1	банкаs
+amenity	bar	0	бар
+amenity	bar	1	барs
+amenity	bench	0	клупа
+amenity	bench	1	клупаs
+amenity	bicycle_parking	0	велосипедско паркирање
+amenity	bicycle_parking	1	велосипедско паркирањеs
+amenity	bicycle_rental	0	изнајмување велосипеди
+amenity	bicycle_rental	1	изнајмување велосипедиs
+amenity	brothel	0	бордел
+amenity	brothel	1	борделs
+amenity	bureau_de_change	0	менувачница
+amenity	bureau_de_change	1	менувачницаs
+amenity	bus_station	0	автобуска станица
+amenity	bus_station	1	автобуска станицаs
+amenity	cafe	0	кафуле
+amenity	cafe	1	кафулеs
+amenity	car_rental	0	рент-а-кар
+amenity	car_rental	1	рент-а-карs
+amenity	car_sharing	0	изнајмување автомобил
+amenity	car_sharing	1	изнајмување автомобилs
+amenity	car_wash	0	автоперална
+amenity	car_wash	1	автопералнаs
+amenity	casino	0	казино
+amenity	casino	1	казиноs
+amenity	cinema	0	кино
+amenity	cinema	1	киноs
+amenity	clinic	0	клиника
+amenity	clinic	1	клиникаs
+amenity	club	0	клуб
+amenity	club	1	клубs
+amenity	college	0	колеџ
+amenity	college	1	колеџs
+amenity	community_centre	0	центар на заедница
+amenity	community_centre	1	центар на заедницаs
+amenity	courthouse	0	суд
+amenity	courthouse	1	судs
+amenity	crematorium	0	крематориум
+amenity	crematorium	1	крематориумs
+amenity	dentist	0	забар
+amenity	dentist	1	забарs
+amenity	doctors	0	доктори
+amenity	doctors	1	докториs
+amenity	dormitory	0	студентски дом
+amenity	dormitory	1	студентски домs
+amenity	drinking_water	0	питка вода
+amenity	drinking_water	1	питка водаs
+amenity	driving_school	0	автошкола
+amenity	driving_school	1	автошколаs
+amenity	embassy	0	амбасада
+amenity	embassy	1	амбасадаs
+amenity	emergency_phone	0	итен телефон
+amenity	emergency_phone	1	итен телефонs
+amenity	fast_food	0	брза храна
+amenity	fast_food	1	брза хранаs
+amenity	ferry_terminal	0	ферибот-терминал
+amenity	ferry_terminal	1	ферибот-терминалs
+amenity	fire_hydrant	0	противпожарен хидрант
+amenity	fire_hydrant	1	противпожарен хидрантs
+amenity	fire_station	0	пожарна
+amenity	fire_station	1	пожарнаs
+amenity	fountain	0	фонтана
+amenity	fountain	1	фонтанаs
+amenity	fuel	0	гориво
+amenity	fuel	1	горивоs
+amenity	grave_yard	0	гробишта
+amenity	grave_yard	1	гробиштаs
+amenity	gym	0	теретана / фитнес
+amenity	gym	1	теретана / фитнесs
+amenity	hall	0	соборна сала
+amenity	hall	1	соборна салаs
+amenity	health_centre	0	здравствен центар
+amenity	health_centre	1	здравствен центарs
+amenity	hospital	0	болница
+amenity	hospital	1	болницаs
+amenity	hotel	0	хотел
+amenity	hotel	1	хотелs
+amenity	hunting_stand	0	ловечка кула
+amenity	hunting_stand	1	ловечка кулаs
+amenity	ice_cream	0	сладолед
+amenity	ice_cream	1	сладоледs
+amenity	kindergarten	0	градинка
+amenity	kindergarten	1	градинкаs
+amenity	library	0	библиотека
+amenity	library	1	библиотекаs
+amenity	market	0	пазар
+amenity	market	1	пазарs
+amenity	marketplace	0	пазар
+amenity	marketplace	1	пазарs
+amenity	mountain_rescue	0	планинарско спасување
+amenity	mountain_rescue	1	планинарско спасувањеs
+amenity	nightclub	0	ноќен клуб
+amenity	nightclub	1	ноќен клубs
+amenity	nursery	0	јасли
+amenity	nursery	1	јаслиs
+amenity	nursing_home	0	старечки дом
+amenity	nursing_home	1	старечки домs
+amenity	office	0	канцеларија
+amenity	office	1	канцеларијаs
+amenity	park	0	парк
+amenity	park	1	паркs
+amenity	parking	0	паркинг
+amenity	parking	1	паркингs
+amenity	pharmacy	0	аптека
+amenity	pharmacy	1	аптекаs
+amenity	place_of_worship	0	верски објект
+amenity	place_of_worship	1	верски објектs
+amenity	police	0	полиција
+amenity	police	1	полицијаs
+amenity	post_box	0	поштенско сандаче
+amenity	post_box	1	поштенско сандачеs
+amenity	post_office	0	пошта
+amenity	post_office	1	поштаs
+amenity	preschool	0	претшколска установа
+amenity	preschool	1	претшколска установаs
+amenity	prison	0	затвор
+amenity	prison	1	затворs
+amenity	pub	0	пивница
+amenity	pub	1	пивницаs
+amenity	public_building	0	јавен објект
+amenity	public_building	1	јавен објектs
+amenity	public_market	0	градски пазар
+amenity	public_market	1	градски пазарs
+amenity	reception_area	0	рецепција
+amenity	reception_area	1	рецепцијаs
+amenity	recycling	0	рециклирање
+amenity	recycling	1	рециклирањеs
+amenity	restaurant	0	ресторан
+amenity	restaurant	1	ресторанs
+amenity	retirement_home	0	старечки дом
+amenity	retirement_home	1	старечки домs
+amenity	sauna	0	сауна
+amenity	sauna	1	саунаs
+amenity	school	0	училиште
+amenity	school	1	училиштеs
+amenity	shelter	0	засолниште
+amenity	shelter	1	засолништеs
+amenity	shop	0	дуќан
+amenity	shop	1	дуќанs
+amenity	shopping	0	дуќани
+amenity	shopping	1	дуќаниs
+amenity	social_club	0	друштвен клуб
+amenity	social_club	1	друштвен клубs
+amenity	studio	0	студио
+amenity	studio	1	студиоs
+amenity	supermarket	0	супермаркет
+amenity	supermarket	1	супермаркетs
+amenity	taxi	0	такси
+amenity	taxi	1	таксиs
+amenity	telephone	0	телефонска говорница
+amenity	telephone	1	телефонска говорницаs
+amenity	theatre	0	театар
+amenity	theatre	1	театарs
+amenity	toilets	0	тоалет
+amenity	toilets	1	тоалетs
+amenity	townhall	0	градски дом
+amenity	townhall	1	градски домs
+amenity	university	0	универзитет
+amenity	university	1	универзитетs
+amenity	vending_machine	0	вендинг-машина
+amenity	vending_machine	1	вендинг-машинаs
+amenity	veterinary	0	ветеринарна клиника
+amenity	veterinary	1	ветеринарна клиникаs
+amenity	village_hall	0	месна заедница
+amenity	village_hall	1	месна заедницаs
+amenity	waste_basket	0	корпа за отпадоци
+amenity	waste_basket	1	корпа за отпадоциs
+amenity	wifi	0	безжичен интернет
+amenity	wifi	1	безжичен интернетs
+amenity	youth_centre	0	младински центар
+amenity	youth_centre	1	младински центарs
+boundary	administrative	0	административна граница
+boundary	administrative	1	административна границаs
+building	apartments	0	станбен блок
+building	apartments	1	станбен блокs
+building	block	0	блок згради
+building	block	1	блок зградиs
+building	bunker	0	бункер
+building	bunker	1	бункерs
+building	chapel	0	капела
+building	chapel	1	капелаs
+building	church	0	црква
+building	church	1	цркваs
+building	city_hall	0	градски дом
+building	city_hall	1	градски домs
+building	commercial	0	комерцијална зграда
+building	commercial	1	комерцијална зградаs
+building	dormitory	0	студентски дом
+building	dormitory	1	студентски домs
+building	entrance	0	влез во зграда
+building	entrance	1	влез во зградаs
+building	faculty	0	факултетски објект
+building	faculty	1	факултетски објектs
+building	farm	0	земјоделски објект
+building	farm	1	земјоделски објектs
+building	flats	0	станови
+building	flats	1	становиs
+building	garage	0	гаража
+building	garage	1	гаражаs
+building	hall	0	сала
+building	hall	1	салаs
+building	hospital	0	болничка зграда
+building	hospital	1	болничка зградаs
+building	hotel	0	хотел
+building	hotel	1	хотелs
+building	house	0	куќа
+building	house	1	куќаs
+building	industrial	0	индустриски објект
+building	industrial	1	индустриски објектs
+building	office	0	деловна зграда
+building	office	1	деловна зградаs
+building	public	0	јавен објект
+building	public	1	јавен објектs
+building	residential	0	станбена зграда
+building	residential	1	станбена зградаs
+building	retail	0	продажен објект
+building	retail	1	продажен објектs
+building	school	0	школско здание
+building	school	1	школско зданиеs
+building	shop	0	дуќан
+building	shop	1	дуќанs
+building	stadium	0	стадион
+building	stadium	1	стадионs
+building	store	0	продавница
+building	store	1	продавницаs
+building	terrace	0	тераса
+building	terrace	1	терасаs
+building	tower	0	кула
+building	tower	1	кулаs
+building	train_station	0	железничка станица
+building	train_station	1	железничка станицаs
+building	university	0	универзитетска зграда
+building	university	1	универзитетска зградаs
+building	&quot;yes&quot;	0	зграда
+building	&quot;yes&quot;	1	зградаs
+highway	bridleway	0	коњски пат
+highway	bridleway	1	коњски патs
+highway	bus_guideway	0	автобуски шини
+highway	bus_guideway	1	автобуски шиниs
+highway	bus_stop	0	автобуска постојка
+highway	bus_stop	1	автобуска постојкаs
+highway	byway	0	спореден пат
+highway	byway	1	спореден патs
+highway	construction	0	автопат во изградба
+highway	construction	1	автопат во изградбаs
+highway	cycleway	0	велосипедска патека
+highway	cycleway	1	велосипедска патекаs
+highway	distance_marker	0	бележник на растојание
+highway	distance_marker	1	бележник на растојаниеs
+highway	emergency_access_point	0	прва помош
+highway	emergency_access_point	1	прва помошs
+highway	footway	0	тротоар
+highway	footway	1	тротоарs
+highway	ford	0	брод
+highway	ford	1	бродs
+highway	gate	0	порта
+highway	gate	1	портаs
+highway	living_street	0	маалска улица
+highway	living_street	1	маалска улицаs
+highway	minor	0	помал спореден пат
+highway	minor	1	помал спореден патs
+highway	motorway	0	автопат
+highway	motorway	1	автопатs
+highway	motorway_junction	0	клучка
+highway	motorway_junction	1	клучкаs
+highway	motorway_link	0	приклучен пат
+highway	motorway_link	1	приклучен патs
+highway	path	0	патека
+highway	path	1	патекаs
+highway	pedestrian	0	пешачка патека
+highway	pedestrian	1	пешачка патекаs
+highway	platform	0	платформа
+highway	platform	1	платформаs
+highway	primary	0	главен пат
+highway	primary	1	главен патs
+highway	primary_link	0	главен пат
+highway	primary_link	1	главен патs
+highway	raceway	0	тркачка патека
+highway	raceway	1	тркачка патекаs
+highway	residential	0	станбен
+highway	residential	1	станбенs
+highway	road	0	пат
+highway	road	1	патs
+highway	secondary	0	спореден пат
+highway	secondary	1	спореден патs
+highway	secondary_link	0	спореден пат
+highway	secondary_link	1	спореден патs
+highway	service	0	помошен пат
+highway	service	1	помошен патs
+highway	services	0	крајпатен сервис
+highway	services	1	крајпатен сервисs
+highway	steps	0	скалила
+highway	steps	1	скалилаs
+highway	stile	0	тарабен премин
+highway	stile	1	тарабен преминs
+highway	tertiary	0	третостепен пат
+highway	tertiary	1	третостепен патs
+highway	track	0	полски пат
+highway	track	1	полски патs
+highway	trail	0	патека
+highway	trail	1	патекаs
+highway	trunk	0	магистрала
+highway	trunk	1	магистралаs
+highway	trunk_link	0	магистрала
+highway	trunk_link	1	магистралаs
+highway	unclassified	0	некласификуван пат
+highway	unclassified	1	некласификуван патs
+highway	unsurfaced	0	неасфалтиран пат
+highway	unsurfaced	1	неасфалтиран патs
+historic	archaeological_site	0	археолошки локалитет
+historic	archaeological_site	1	археолошки локалитетs
+historic	battlefield	0	бојно поле
+historic	battlefield	1	бојно полеs
+historic	boundary_stone	0	граничен камен
+historic	boundary_stone	1	граничен каменs
+historic	building	0	зграда
+historic	building	1	зградаs
+historic	castle	0	замок
+historic	castle	1	замокs
+historic	church	0	црква
+historic	church	1	цркваs
+historic	house	0	куќа
+historic	house	1	куќаs
+historic	icon	0	икона
+historic	icon	1	иконаs
+historic	manor	0	велепоседнички дом
+historic	manor	1	велепоседнички домs
+historic	memorial	0	споменик
+historic	memorial	1	споменикs
+historic	mine	0	рудник
+historic	mine	1	рудникs
+historic	monument	0	споменик
+historic	monument	1	споменикs
+historic	museum	0	музеј
+historic	museum	1	музејs
+historic	ruins	0	рушевини
+historic	ruins	1	рушевиниs
+historic	tower	0	кула
+historic	tower	1	кулаs
+historic	wayside_cross	0	крајпатен крст
+historic	wayside_cross	1	крајпатен крстs
+historic	wayside_shrine	0	параклис
+historic	wayside_shrine	1	параклисs
+historic	wreck	0	бродолом
+historic	wreck	1	бродоломs
+landuse	allotments	0	парцели
+landuse	allotments	1	парцелиs
+landuse	basin	0	басен
+landuse	basin	1	басенs
+landuse	brownfield	0	угар
+landuse	brownfield	1	угарs
+landuse	cemetery	0	гробишта
+landuse	cemetery	1	гробиштаs
+landuse	commercial	0	комерцијално подрачје
+landuse	commercial	1	комерцијално подрачјеs
+landuse	conservation	0	заштитено земјиште
+landuse	conservation	1	заштитено земјиштеs
+landuse	construction	0	градилиште
+landuse	construction	1	градилиштеs
+landuse	farm	0	фарма
+landuse	farm	1	фармаs
+landuse	farmland	0	обработливо земјиште
+landuse	farmland	1	обработливо земјиштеs
+landuse	farmyard	0	земјоделски двор
+landuse	farmyard	1	земјоделски дворs
+landuse	forest	0	шума
+landuse	forest	1	шумаs
+landuse	grass	0	трева
+landuse	grass	1	треваs
+landuse	greenfield	0	неискористено земјиште
+landuse	greenfield	1	неискористено земјиштеs
+landuse	industrial	0	индустриско подрачје
+landuse	industrial	1	индустриско подрачјеs
+landuse	landfill	0	депонија
+landuse	landfill	1	депонијаs
+landuse	meadow	0	ливада
+landuse	meadow	1	ливадаs
+landuse	military	0	воено подрачје
+landuse	military	1	воено подрачјеs
+landuse	mine	0	рудник
+landuse	mine	1	рудникs
+landuse	mountain	0	планина
+landuse	mountain	1	планинаs
+landuse	nature_reserve	0	природен резерват
+landuse	nature_reserve	1	природен резерватs
+landuse	park	0	парк
+landuse	park	1	паркs
+landuse	piste	0	писта
+landuse	piste	1	пистаs
+landuse	plaza	0	плоштадче
+landuse	plaza	1	плоштадчеs
+landuse	quarry	0	каменолом
+landuse	quarry	1	каменоломs
+landuse	railway	0	железница
+landuse	railway	1	железницаs
+landuse	recreation_ground	0	рекреативен терен
+landuse	recreation_ground	1	рекреативен теренs
+landuse	reservoir	0	резервоар
+landuse	reservoir	1	резервоарs
+landuse	residential	0	станбено подрачје
+landuse	residential	1	станбено подрачјеs
+landuse	retail	0	дуќани
+landuse	retail	1	дуќаниs
+landuse	village_green	0	селско зеленило
+landuse	village_green	1	селско зеленилоs
+landuse	vineyard	0	лозници
+landuse	vineyard	1	лознициs
+landuse	wetland	0	мочуриште
+landuse	wetland	1	мочуриштеs
+landuse	wood	0	шума
+landuse	wood	1	шумаs
+leisure	beach_resort	0	крајбрежно одморалиште
+leisure	beach_resort	1	крајбрежно одморалиштеs
+leisure	common	0	општествена земја
+leisure	common	1	општествена земјаs
+leisure	fishing	0	рибарење
+leisure	fishing	1	рибарењеs
+leisure	garden	0	градина
+leisure	garden	1	градинаs
+leisure	golf_course	0	голф-терен
+leisure	golf_course	1	голф-теренs
+leisure	ice_rink	0	лизгалиште
+leisure	ice_rink	1	лизгалиштеs
+leisure	marina	0	марина
+leisure	marina	1	маринаs
+leisure	miniature_golf	0	миниголф
+leisure	miniature_golf	1	миниголфs
+leisure	nature_reserve	0	природен резерват
+leisure	nature_reserve	1	природен резерватs
+leisure	park	0	парк
+leisure	park	1	паркs
+leisure	pitch	0	спортски терен
+leisure	pitch	1	спортски теренs
+leisure	playground	0	детско игралиште
+leisure	playground	1	детско игралиштеs
+leisure	recreation_ground	0	разонодно место
+leisure	recreation_ground	1	разонодно местоs
+leisure	slipway	0	испуст
+leisure	slipway	1	испустs
+leisure	sports_centre	0	спортски центар
+leisure	sports_centre	1	спортски центарs
+leisure	stadium	0	стадион
+leisure	stadium	1	стадионs
+leisure	swimming_pool	0	базен
+leisure	swimming_pool	1	базенs
+leisure	track	0	спортска патека
+leisure	track	1	спортска патекаs
+leisure	water_park	0	аквапарк
+leisure	water_park	1	аквапаркs
+natural	bay	0	залив
+natural	bay	1	заливs
+natural	beach	0	плажа
+natural	beach	1	плажаs
+natural	cape	0	‘рт
+natural	cape	1	‘ртs
+natural	cave_entrance	0	влез во пештера
+natural	cave_entrance	1	влез во пештераs
+natural	channel	0	канал
+natural	channel	1	каналs
+natural	cliff	0	гребен
+natural	cliff	1	гребенs
+natural	coastline	0	крајбрежје
+natural	coastline	1	крајбрежјеs
+natural	crater	0	кратер
+natural	crater	1	кратерs
+natural	feature	0	елемент
+natural	feature	1	елементs
+natural	fell	0	фел
+natural	fell	1	фелs
+natural	fjord	0	фјорд
+natural	fjord	1	фјордs
+natural	geyser	0	гејзер
+natural	geyser	1	гејзерs
+natural	glacier	0	глечер
+natural	glacier	1	глечерs
+natural	heath	0	голет
+natural	heath	1	голетs
+natural	hill	0	рид
+natural	hill	1	ридs
+natural	island	0	остров
+natural	island	1	островs
+natural	land	0	земја
+natural	land	1	земјаs
+natural	marsh	0	бара
+natural	marsh	1	бараs
+natural	moor	0	пустара
+natural	moor	1	пустараs
+natural	mud	0	кал
+natural	mud	1	калs
+natural	peak	0	врв
+natural	peak	1	врвs
+natural	point	0	точка
+natural	point	1	точкаs
+natural	reef	0	гребен
+natural	reef	1	гребенs
+natural	ridge	0	срт
+natural	ridge	1	сртs
+natural	river	0	река
+natural	river	1	рекаs
+natural	rock	0	карпа
+natural	rock	1	карпаs
+natural	scree	0	сип
+natural	scree	1	сипs
+natural	scrub	0	честак
+natural	scrub	1	честакs
+natural	shoal	0	плитко место
+natural	shoal	1	плитко местоs
+natural	spring	0	извор
+natural	spring	1	изворs
+natural	strait	0	проток
+natural	strait	1	протокs
+natural	tree	0	дрво
+natural	tree	1	дрвоs
+natural	valley	0	долина
+natural	valley	1	долинаs
+natural	volcano	0	вулкан
+natural	volcano	1	вулканs
+natural	water	0	вода
+natural	water	1	водаs
+natural	wetland	0	мочуриште
+natural	wetland	1	мочуриштеs
+natural	wetlands	0	мочуриште
+natural	wetlands	1	мочуриштеs
+natural	wood	0	шума
+natural	wood	1	шумаs
+place	city	0	град
+place	city	1	градs
+place	country	0	земја
+place	country	1	земјаs
+place	county	0	грофовија
+place	county	1	грофовијаs
+place	farm	0	фарма
+place	farm	1	фармаs
+place	hamlet	0	селце
+place	hamlet	1	селцеs
+place	house	0	куќа
+place	house	1	куќаs
+place	houses	0	куќи
+place	houses	1	куќиs
+place	island	0	остров
+place	island	1	островs
+place	islet	0	островче
+place	islet	1	островчеs
+place	locality	0	месност
+place	locality	1	месностs
+place	moor	0	пустара
+place	moor	1	пустараs
+place	municipality	0	општина
+place	municipality	1	општинаs
+place	postcode	0	поштенски број
+place	postcode	1	поштенски бројs
+place	region	0	регион
+place	region	1	регионs
+place	sea	0	море
+place	sea	1	мореs
+place	state	0	покраина
+place	state	1	покраинаs
+place	subdivision	0	админ. подрачје
+place	subdivision	1	админ. подрачјеs
+place	suburb	0	населба
+place	suburb	1	населбаs
+place	town	0	град
+place	town	1	градs
+place	unincorporated_area	0	нездружено подрачје
+place	unincorporated_area	1	нездружено подрачјеs
+place	village	0	село
+place	village	1	селоs
+railway	abandoned	0	напуштена железничка линија
+railway	abandoned	1	напуштена железничка линијаs
+railway	construction	0	железничка линија во изградба
+railway	construction	1	железничка линија во изградбаs
+railway	disused	0	напуштена железничка линија
+railway	disused	1	напуштена железничка линијаs
+railway	disused_station	0	напуштена железничка станица
+railway	disused_station	1	напуштена железничка станицаs
+railway	funicular	0	жичена железница
+railway	funicular	1	жичена железницаs
+railway	halt	0	железничка постојка
+railway	halt	1	железничка постојкаs
+railway	historic_station	0	историска железничка станица
+railway	historic_station	1	историска железничка станицаs
+railway	junction	0	железнички јазол
+railway	junction	1	железнички јазолs
+railway	level_crossing	0	надвозник
+railway	level_crossing	1	надвозникs
+railway	light_rail	0	лека железница
+railway	light_rail	1	лека железницаs
+railway	monorail	0	едношинска линија
+railway	monorail	1	едношинска линијаs
+railway	narrow_gauge	0	теснолинејка
+railway	narrow_gauge	1	теснолинејкаs
+railway	platform	0	железнички перон
+railway	platform	1	железнички перонs
+railway	preserved	0	зачувана железничка линија
+railway	preserved	1	зачувана железничка линијаs
+railway	spur	0	железнички огранок
+railway	spur	1	железнички огранокs
+railway	station	0	железничка станица
+railway	station	1	железничка станицаs
+railway	subway	0	метро станица
+railway	subway	1	метро станицаs
+railway	subway_entrance	0	влез во метро
+railway	subway_entrance	1	влез во метроs
+railway	switch	0	железнички пунктови
+railway	switch	1	железнички пунктовиs
+railway	tram	0	трамвајска линија
+railway	tram	1	трамвајска линијаs
+railway	tram_stop	0	трамвајска постојка
+railway	tram_stop	1	трамвајска постојкаs
+railway	yard	0	железничко депо
+railway	yard	1	железничко депоs
+shop	alcohol	0	алкохол на црно
+shop	alcohol	1	алкохол на црноs
+shop	apparel	0	облека
+shop	apparel	1	облекаs
+shop	art	0	уметнички дуќан
+shop	art	1	уметнички дуќанs
+shop	bakery	0	пекара
+shop	bakery	1	пекараs
+shop	beauty	0	козметика
+shop	beauty	1	козметикаs
+shop	beverages	0	пијалоци
+shop	beverages	1	пијалоциs
+shop	bicycle	0	продавница за велосипеди
+shop	bicycle	1	продавница за велосипедиs
+shop	books	0	книжарница
+shop	books	1	книжарницаs
+shop	butcher	0	месарница
+shop	butcher	1	месарницаs
+shop	car	0	автосалон
+shop	car	1	автосалонs
+shop	car_dealer	0	автосалон
+shop	car_dealer	1	автосалонs
+shop	car_parts	0	автоделови
+shop	car_parts	1	автоделовиs
+shop	car_repair	0	автосервис
+shop	car_repair	1	автосервисs
+shop	carpet	0	дуќан за теписи
+shop	carpet	1	дуќан за теписиs
+shop	charity	0	добротворна продавница
+shop	charity	1	добротворна продавницаs
+shop	chemist	0	аптека
+shop	chemist	1	аптекаs
+shop	clothes	0	дуќан за облека
+shop	clothes	1	дуќан за облекаs
+shop	computer	0	компјутерска продавница
+shop	computer	1	компјутерска продавницаs
+shop	confectionery	0	слаткарница
+shop	confectionery	1	слаткарницаs
+shop	convenience	0	бакалница
+shop	convenience	1	бакалницаs
+shop	copyshop	0	фотокопир
+shop	copyshop	1	фотокопирs
+shop	cosmetics	0	козметика
+shop	cosmetics	1	козметикаs
+shop	department_store	0	стоковна куќа
+shop	department_store	1	стоковна куќаs
+shop	discount	0	распродажен дуќан
+shop	discount	1	распродажен дуќанs
+shop	doityourself	0	направи-сам
+shop	doityourself	1	направи-самs
+shop	drugstore	0	аптека
+shop	drugstore	1	аптекаs
+shop	dry_cleaning	0	хемиско чистење
+shop	dry_cleaning	1	хемиско чистењеs
+shop	electronics	0	електронска опрема
+shop	electronics	1	електронска опремаs
+shop	estate_agent	0	недвижности
+shop	estate_agent	1	недвижностиs
+shop	farm	0	земјоделски дуќан
+shop	farm	1	земјоделски дуќанs
+shop	fashion	0	бутик
+shop	fashion	1	бутикs
+shop	fish	0	рибарница
+shop	fish	1	рибарницаs
+shop	florist	0	цвеќара
+shop	florist	1	цвеќараs
+shop	food	0	продавница за храна
+shop	food	1	продавница за хранаs
+shop	funeral_directors	0	погребална служба
+shop	funeral_directors	1	погребална службаs
+shop	furniture	0	мебел
+shop	furniture	1	мебелs
+shop	gallery	0	галерија
+shop	gallery	1	галеријаs
+shop	garden_centre	0	градинарски центар
+shop	garden_centre	1	градинарски центарs
+shop	general	0	колонијал
+shop	general	1	колонијалs
+shop	gift	0	дуќан за подароци
+shop	gift	1	дуќан за подароциs
+shop	greengrocer	0	пиљара
+shop	greengrocer	1	пиљараs
+shop	grocery	0	бакалница
+shop	grocery	1	бакалницаs
+shop	hairdresser	0	фризер
+shop	hairdresser	1	фризерs
+shop	hardware	0	алат и опрема
+shop	hardware	1	алат и опремаs
+shop	hifi	0	аудиосистеми
+shop	hifi	1	аудиосистемиs
+shop	insurance	0	осигурително
+shop	insurance	1	осигурителноs
+shop	jewelry	0	јувелир
+shop	jewelry	1	јувелирs
+shop	kiosk	0	трафика
+shop	kiosk	1	трафикаs
+shop	laundry	0	пералница
+shop	laundry	1	пералницаs
+shop	mall	0	трговски центар
+shop	mall	1	трговски центарs
+shop	market	0	пазар
+shop	market	1	пазарs
+shop	mobile_phone	0	мобилни телефони
+shop	mobile_phone	1	мобилни телефониs
+shop	motorcycle	0	моторцикли
+shop	motorcycle	1	моторциклиs
+shop	music	0	музички дуќан
+shop	music	1	музички дуќанs
+shop	newsagent	0	весникара
+shop	newsagent	1	весникараs
+shop	optician	0	оптичар
+shop	optician	1	оптичарs
+shop	organic	0	здрава храна
+shop	organic	1	здрава хранаs
+shop	outdoor	0	дуќан на отворено
+shop	outdoor	1	дуќан на отвореноs
+shop	pet	0	домашни миленици
+shop	pet	1	домашни миленициs
+shop	photo	0	фотографски дуќан
+shop	photo	1	фотографски дуќанs
+shop	salon	0	салон
+shop	salon	1	салонs
+shop	shoes	0	обувки
+shop	shoes	1	обувкиs
+shop	shopping_centre	0	трговски центар
+shop	shopping_centre	1	трговски центарs
+shop	sports	0	спортски дуќан
+shop	sports	1	спортски дуќанs
+shop	stationery	0	прибор и репроматеријали
+shop	stationery	1	прибор и репроматеријалиs
+shop	supermarket	0	супермаркет
+shop	supermarket	1	супермаркетs
+shop	toys	0	продавница за играчки
+shop	toys	1	продавница за играчкиs
+shop	travel_agency	0	туристичка агенција
+shop	travel_agency	1	туристичка агенцијаs
+shop	video	0	видеотека
+shop	video	1	видеотекаs
+shop	wine	0	алкохолни пијалоци
+shop	wine	1	алкохолни пијалоциs
+tourism	alpine_hut	0	планинска куќарка
+tourism	alpine_hut	1	планинска куќаркаs
+tourism	artwork	0	уметничко дело
+tourism	artwork	1	уметничко делоs
+tourism	attraction	0	атракција
+tourism	attraction	1	атракцијаs
+tourism	bed_and_breakfast	0	полупансион
+tourism	bed_and_breakfast	1	полупансионs
+tourism	cabin	0	колиба
+tourism	cabin	1	колибаs
+tourism	camp_site	0	камп
+tourism	camp_site	1	кампs
+tourism	caravan_site	0	автокамп
+tourism	caravan_site	1	автокампs
+tourism	chalet	0	брвнара
+tourism	chalet	1	брвнараs
+tourism	guest_house	0	пансион
+tourism	guest_house	1	пансионs
+tourism	hostel	0	хостел
+tourism	hostel	1	хостелs
+tourism	hotel	0	хотел
+tourism	hotel	1	хотелs
+tourism	information	0	информации
+tourism	information	1	информацииs
+tourism	lean_to	0	прилепена стреа
+tourism	lean_to	1	прилепена стреаs
+tourism	motel	0	мотел
+tourism	motel	1	мотелs
+tourism	museum	0	музеј
+tourism	museum	1	музејs
+tourism	picnic_site	0	излетничко место
+tourism	picnic_site	1	излетничко местоs
+tourism	theme_park	0	забавен парк
+tourism	theme_park	1	забавен паркs
+tourism	valley	0	долина
+tourism	valley	1	долинаs
+tourism	viewpoint	0	видиковец
+tourism	viewpoint	1	видиковецs
+tourism	zoo	0	зоолошка
+tourism	zoo	1	зоолошкаs
+waterway	boatyard	0	чамцоградилиште
+waterway	boatyard	1	чамцоградилиштеs
+waterway	canal	0	канал
+waterway	canal	1	каналs
+waterway	connector	0	слив
+waterway	connector	1	сливs
+waterway	dam	0	брана
+waterway	dam	1	бранаs
+waterway	derelict_canal	0	запуштен канал
+waterway	derelict_canal	1	запуштен каналs
+waterway	ditch	0	канач
+waterway	ditch	1	каначs
+waterway	dock	0	док
+waterway	dock	1	докs
+waterway	drain	0	одвод
+waterway	drain	1	одводs
+waterway	lock	0	каналска брана
+waterway	lock	1	каналска бранаs
+waterway	lock_gate	0	каналска капија
+waterway	lock_gate	1	каналска капијаs
+waterway	mineral_spring	0	минерален извор
+waterway	mineral_spring	1	минерален изворs
+waterway	mooring	0	сидриште
+waterway	mooring	1	сидриштеs
+waterway	rapids	0	брзак
+waterway	rapids	1	брзакs
+waterway	river	0	река
+waterway	river	1	рекаs
+waterway	riverbank	0	кеј
+waterway	riverbank	1	кејs
+waterway	stream	0	поток
+waterway	stream	1	потокs
+waterway	wadi	0	вади
+waterway	wadi	1	вадиs
+waterway	water_point	0	пристап до вода
+waterway	water_point	1	пристап до водаs
+waterway	waterfall	0	водопад
+waterway	waterfall	1	водопадs
+waterway	weir	0	јаз
+waterway	weir	1	јазs

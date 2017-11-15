@@ -1,1 +1,28 @@
 lisboa|lxa|lx.a|lex.a|lexa
+acre|ac
+alagoas|al
+amapá|amapa|ap
+amazonas|am
+bahia|ba
+ceará|ceara|ce
+distrito federal|df
+espírito santo|espirito santo|es
+goiás|goias|go
+maranhão|maranhao|ma
+mato grosso|mt
+mato grosso do sul|ms
+minas gerais|mg
+pará|para|pa
+paraíba|paraiba|pb
+paraná|parana|pr
+pernambuco|pe
+piauí|piaui|pi
+rio de janeiro|rj
+rio grande do norte|rn
+rio grande do sul|rs
+rondônia|rondonia|ro
+roraima|rr
+santa catarina|sc
+são paulo|sao paulo|sp
+sergipe|se
+tocantins|to

@@ -1,0 +1,1468 @@
+# en.yaml
+# -------
+# Supplement to the per-country address formats for English around the world.
+# These configs are mostly used to generate training data we don't have from OSM
+# like flat/apartment numbers, intersections, etc. The configs aren't directly used by
+# the parser model itself, but can influence it as they affect its input.
+
+# Note: by default, we use the UK conventions for English as they cover more countries.
+# US/Canada-specific conventions and any others (e.g. Hong Kong, Australia) go in the
+# country overrides section. Each country can create its own copy of the entire top-level
+# structure and it will be recursively merged with the defaults.
+
+# Components
+# ==========
+# How likely we are to generate a component at random (on its own or conditional on other components)
+
+components:
+    entrance:
+        null_probability: 0.9995
+        alphanumeric_probability: 0.0005
+        conditional:
+            - component: staircase
+              probabilities:
+                  null_probability: 0.99995
+                  alphanumeric_probability: 0.00005
+            - component: level
+              probabilities:
+                  null_probability: 0.9995
+                  alphanumeric_probability: 0.0005
+
+    staircase:
+        null_probability: 0.999
+        alphanumeric_probability: 0.001
+
+    level:
+        null_probability: 0.85 # Probability of doing nothing if no floor number is specified
+        alphanumeric_probability: 0.15 # Probability of generating an alphanumeric floor if none was specified
+
+        # Conditional probabilities
+        conditional:
+            # e.g. given that we have unit already (natural or generated)
+            - component: unit
+              probabilities:
+                  null_probability: 0.95
+                  alphanumeric_probability: 0.05
+            - component: staircase
+              probabilities:
+                  null_probability: 0.6
+                  alphanumeric_probability: 0.4
+
+    unit:
+        # If no unit number is specified
+        null_probability: 0.4
+        alphanumeric_probability: 0.55
+        standalone_probability: 0.05
+        conditional:
+            - component: level
+              probabilities:
+                  null_probability: 0.95
+                  alphanumeric_probability: 0.05
+            - component: staircase
+              probabilities:
+                  null_probability: 0.7
+                  alphanumeric_probability: 0.3
+
+    combinations:
+        # For unit types like 2/34 (more common in Canada and Australia)
+        -
+            components:
+                - house_number
+                - unit
+            label: house_number
+            separators:
+                - separator: /
+                  probability: 0.8
+                - separator: "-"
+                  probability: 0.1
+                - separator: " - "
+                  probability: 0.1
+            probability: 0.005
+
+# Number
+# ======
+# Number, No., #, etc. can be used in both floor and apartment numbers,
+# so we'll define it separately
+
+numbers:
+    default: &number
+        canonical: number # canonical word in libpostal dictionary
+        abbreviated: "no" # most common abbreviated form ("no" is a boolean in YAML, needs to be quoted)
+        sample: true # Randomly sample other variations (e.g. num, nr)
+        # Probabilities
+        canonical_probability: 0.3 # With this probability, use the canonical
+        abbreviated_probability: 0.5 # With this probability, use the abbreviated form
+        sample_probability: 0.2 # With  this probability, sample other variations
+        sample_exclude:
+            - "#" # Used in numeric affix. Needs to be quoted, otherwise it's a comment
+        numeric:
+            direction: left
+        numeric_affix:
+            affix: "#" # e.g. #3, #2F, etc.
+            direction: left # affix goes on the number's left
+
+        # Probabilities for numbers
+        numeric_probability: 0.4 # With this probability, use the standard numeric
+        numeric_affix_probability: 0.6 # With this probability, use e.g. #3 instead of No. 3
+
+# And
+# ===
+# The word for "and". Used both in intersections and phrases like "Units 1 & 2", etc.
+
+and:
+    default: &and
+        canonical: and
+        abbreviated: "&"
+        canonical_probability: 0.2
+        abbreviated_probability: 0.75
+        sample: true
+        sample_probability: 0.05
+
+
+# Floor/level
+# ===========
+# OSM doesn't usually concern itself with the address beyond the front door
+# yet many real-world addresses will have qualifying strings like "6th floor"
+# and we'd like the parser to handle those.
+#
+# When we do get floor numbers in OSM addresses, it's usually in the form of the
+# addr:floor or level tag, where the value is typically an integer or a half-floor
+# (to indicate mezzanines). Those tags are relatively scarce in OSM, but many OSM
+# addresses do have a building:levels tag. If we know there are 20 floors in the
+# building, we can randomly sample numbers <= the # of floors and come up with plausible
+# sounding addresses (i.e. a Floor 20 address is not as likely outside major cities).
+#
+# We're not done yet, because the integer value by itself isn't what people use when
+# writing addresses. This part of the config helps us rewrite the raw integer floor
+# numers as the sort of natural language text used in addresses like "Fl #1". The config
+# is designed to be cross-lingual, so we can use the same structure with different words
+# and do this for addresses in pretty much any language.
+
+levels:
+    # Numbered floors
+    floor: &floor
+        canonical: floor
+        abbreviated: fl
+        canonical_probability: 0.5 # With this probability, use canonical version
+        abbreviated_probability: 0.4 # With this probability, use abbreviated version
+        sample_probability: 0.1 # With this probability, sample from the other forms
+        sample_exclude:
+            - / f # Exclude this abbreviation since it's used as an affix
+        sample: true
+        plural:
+            canonical: floors
+            abbreviated: fls
+        # e.g. Floor 1
+        numeric:
+            direction: left # Floor/Fl goes to the left of the number
+            direction_probability: 0.8 # With 1 - this probability, Floor/Fl goes on the other side of the number
+            add_number_phrase: true # Occasionally add variation of "number", e.g. Floor No. 1
+            add_number_phrase_probability: 0.4 # With this probability, use Floor No. 1 or Floor #1 vs. Floor 1
+        # e.g. 2/F, 3/F
+        numeric_affix:
+            affix: /f
+            direction: right # affix goes to number's right (always)
+        # e.g. 1st Floor
+        ordinal:
+            direction: right # canonical or abbreviated form goes to the ordinal's right
+            digits:
+                ascii_probability: 0.8
+                spellout_probability: 0.2
+        # Probabilities
+        numeric_probability: 0.75 # Use the simple number e.g. Floor 1 (or Floor No. 1)
+        numeric_affix_probability: 0.05 # Use the 2/F (less common)
+        ordinal_probability: 0.2 # Use the ordinal e.g. 1st Floor
+    # The word "level" is also occasionally used
+    level: &level
+        canonical: level
+        plural: levels
+        abbreviated: lvl
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.3
+        sample_probability: 0.2
+        sample_exclude:
+            - / l # Exclude this abbreviation since it's used as an affix
+        numeric:
+            direction: left # Level/Lvl goes to the left of the number
+            direction_probability: 0.8 # With 1 - this probability, Level/Lvl goes on the other side of the number
+            add_number_phrase: true # Occasionally add variation of "number", e.g. Level No. 1
+            add_number_phrase_probability: 0.4 # With this probability, use Level No. 1 or Level #1 vs. Level 1
+        # e.g. 2/L, 3/L (ambiguous with left)
+        numeric_affix:
+            affix: /l
+            direction: right
+        ordinal:
+            direction: right
+        numeric_probability: 0.4
+        numeric_affix_probability: 0.05
+        ordinal_probability: 0.55
+    platform: &platform
+        canonical: platform
+        plural: platforms
+        abbreviated: pf
+        canonical_probability: 0.7
+        abbreviated_probability: 0.3
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        numeric_probability: 0.5 # e.g. Platform 1
+        ordinal_probability: 0.5 # e.g. 1st Platform
+    storey: &storey
+        canonical: storey
+        plural: storeys
+        numeric:
+            direction: left
+        ordinal:
+            direction: right
+        numeric_probability: 0.025 # e.g. Storey 2, less common
+        ordinal_probability: 0.975 # e.g. 2nd Storey, more common
+    # Special instructions for ground floor
+    ground_floor: &ground_floor
+        canonical: ground floor
+        abbreviated: g/f
+        canonical_probability: 0.4
+        abbreviated_probability: 0.4
+        sample_probability: 0.2
+        sample: true
+    ground: &ground
+        canonical: ground
+        abbreviated: g
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.1
+        sample_probability: 0.3
+    ground_level: &ground_level
+        canonical: ground level
+        abbreviated: g/l
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.2
+        sample_probability: 0.4
+    # Special instructions for lower ground floor (added randomly, not an alias for a floor number)
+    lower_ground_floor: &lower_ground_floor
+        canonical: lower ground floor
+        abbreviated: lg
+        sample: true
+        # Probabilities
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
+        sample_probability: 0.1
+    # Special instructions for upper ground floor (added randomly, not an alias for a floor number)
+    upper_ground_floor: &upper_ground_floor
+        canonical: upper ground floor
+        abbreviated: ug
+        sample: true
+        # Probabilities
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+    upper: &upper
+        canonical: upper
+        abbreviated: uppr
+        sample: true
+        canonical_probability: 0.8
+        abbreviated_probability: 0.1
+        sample_probability: 0.1
+    lower_level: &lower_level
+        canonical: lower level
+        abbreviated: lwr lvl
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.1
+        sample_probability: 0.2
+    lobby: &lobby
+        canonical: lobby
+    upstairs: &upstairs
+        canonical: upstairs
+    downstairs: &downstairs
+        canonical: downstairs
+    # Special instructions for podium level (added randomly)
+    podium_level: &podium_level
+        canonical: podium level
+        abbreviated: pd lvl
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+    podium: &podium
+        canonical: podium
+        abbreviated: pd
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.2
+        sample_probability: 0.2
+    # Used when floor number is < 0 (starts at -1 in all countries)
+    basement: &basement
+        canonical: basement
+        abbreviated: bsmt
+        sample: true
+        # e.g. Basement 1
+        numeric:
+            direction: left
+        # e.g. B1
+        numeric_affix:
+            affix: b
+            direction: left
+        # e.g. 2nd Basement
+        ordinal:
+            direction: right
+        standalone_probability: 0.985
+        number_abs_value: true
+        number_min_abs_value: 1
+        numeric_probability: 0.005
+        numeric_affix_probability: 0.005
+        ordinal_probability: 0.005
+    cellar: &cellar
+        canonical: cellar
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+    # Floor number of <= -2 can be basement 2, sub-basement, sub-basement 1, etc.
+    sub_basement: &sub_basement
+        canonical: sub basement
+        abbreviated: sb
+        sample: true
+        # e.g. Sub-basement 1
+        numeric:
+            direction: left
+        # e.g. SB1
+        numeric_affix:
+            affix: sb
+            direction: left
+        # e.g. 2nd Sub-basement
+        ordinal:
+            direction: right
+        number_abs_value: true
+        number_min_abs_value: 2
+        # Basement 2 == Sub-basement 1
+        number_subtract_abs_value: 1
+        standalone_probability: 0.985
+        numeric_probability: 0.005
+        numeric_affix_probability: 0.005
+        ordinal_probability: 0.005
+    top_floor: &top_floor
+        canonical: top floor
+        abbreviated: tf
+        sample: true
+        canonical_probability: 0.6
+        abbreviated_probability: 0.3
+        sample_probability: 0.1
+    # Mezzanine level (floor number {0.5, 1.5, ...}, also be added at random)
+    mezzanine: &mezzanine
+        canonical: mezzanine
+        abbreviated: mezz
+        sample: true
+        canonical_probability: 0.8
+        abbreviated_probability: 0.1
+        sample_probability: 0.1
+        # Mezzanine/Mezz 2 or Mezzanine/Mezz A
+        numeric:
+            direction: left
+        # M2
+        numeric_affix:
+            affix: m
+            direction: left
+        # 2nd Mezzanine
+        ordinal:
+            direction: right
+        # Floor 0.5 is just plain mezzanine, no number
+        number_abs_value: true
+        number_min_abs_value: 1
+        standalone_probability: 0.5
+        numeric_probability: 0.1
+        numeric_affix_probability: 0.1
+        ordinal_probability: 0.3
+    mezzanine_floor: &mezzanine_floor
+        canonical: mezzanine floor
+        abbreviated: mezz floor
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+    mezzanine_level: &mezzanine_level
+        canonical: mezzanine level
+        abbreviated: mezz level
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+    lower_mezzanine: &lower_mezzanine
+        canonical: lower mezzanine
+        abbreviated: lower mezz
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+    upper_mezzanine: &upper_mezzanine
+        canonical: upper mezzanine
+        abbreviated: upper mezz
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+        # Should be at least level 1.5
+        number_min_abs_value: 1
+    aliases:
+        "<-1":
+            default: *basement
+            probability: 0.6
+            alternatives:
+                - alternative: *sub_basement
+                  probability: 0.3995
+                - alternative: *floor
+                  probability: 0.0005
+        "-1":
+            default: *basement
+            probability: 0.7
+            alternatives:
+                - alternative: *cellar
+                  probability: 0.1
+                - alternative: *lower_ground_floor
+                  probability: 0.1
+                - alternative: *downstairs
+                  probability: 0.0495
+                - alternative: *lower_level
+                  probability: 0.05
+                - alternative: *floor
+                  probability: 0.0005
+        # Special token for half-floors
+        half_floors:
+            default: *mezzanine
+            probability: 0.8
+            alternatives:
+                - alternative: *mezzanine_floor
+                  probability: 0.1
+                - alternative: *mezzanine_level
+                  probability: 0.1
+            aliases:
+                "1":
+                    default: *upper_mezzanine
+                    probability: 0.5
+                    alternatives:
+                        - alternative: *mezzanine
+                          probability: 0.5
+        half_floors_negative:
+            default: *lower_mezzanine
+        "0":
+            default: *ground_floor
+            probability: 0.9
+            alternatives:
+                - alternative: *ground
+                  probability: 0.02
+                - alternative: *ground_level
+                  probability: 0.01
+                - alternative: *lower_ground_floor
+                  probability: 0.025
+                - alternative: *upper_ground_floor
+                  probability: 0.025
+                - alternative: *lobby
+                  probability: 0.005
+                - alternative: *floor
+                  # Floor 0 is uncommon
+                  probability: 0.01
+                - alternative: *level
+                  probability: 0.005
+        "1":
+            # Most of the time just say 1st Floor
+            default: *floor
+            probability: 0.9
+            alternatives:
+                - alternative: *upper_ground_floor
+                  probability: 0.075
+                - alternative: *podium_level
+                  probability: 0.01
+                - alternative: *podium
+                  probability: 0.005
+                - alternative: *upstairs
+                  probability: 0.01
+        top:
+            default: *floor
+            probability: 0.85
+            alternatives:
+                - alternative: *level
+                  probability: 0.1
+                - alternative: *top_floor
+                  probability: 0.05
+
+    # Integer for whether floors start at 0 or 1
+    numbering_starts_at: 0
+
+    # Associated phrases for alphanumeric floors (Floor 1, Floor A)
+    alphanumeric:
+        default: *floor
+        probability: 0.8
+        add_number_phrase: true
+        add_number_phrase_probability: 0.3
+        alternatives:
+            - alternative: *level
+              probability: 0.15
+            - alternative: *platform
+              probability: 0.025
+            - alternative: *storey
+              probability: 0.025
+        numeric_probability: 0.96 # With this probability, pick an integer
+        alpha_probability: 0.0098 # With this probability, pick a letter e.g. Floor A
+        numeric_plus_alpha_probability: 0.0001 # e.g. Floor 2A
+        alpha_plus_numeric_probability: 0.0001 # e.g. Floor A2
+        hyphenated_number_probability: 0.03 # e.g. 11-10
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        hyphenated_number:
+            range_probability: 0.5
+            direction: right
+            direction_probability: 0.6
+
+# Intersections
+# =============
+# For constructing intersections like 5th Avenue & Broadway
+# In OSM, a node that's part of two ways is an intersection.
+#
+# These simple rules make it possible to create training examples
+# like: 26th/road Street/road and/intersection 6th/road Avenue/road
+
+cross_streets:
+    # 26th & 6th Avenue
+    and: *and
+    # 26th @ Broadway
+    at: &at
+        canonical: at
+        abbreviated: "@"
+        canonical_probability: 0.7
+        abbreviated_probability: 0.3
+        sample: true
+    corner_of: &corner_of
+        canonical: corner of
+
+    at_the_corner_of: &at_the_corner_of
+        canonical: at the corner of
+
+    x: &x
+        canonical: x
+
+    intersection:
+        default: *and
+        probability: 0.7
+        alternatives:
+            - alternative: *at
+              probability: 0.125
+            - alternative: *x
+              probability: 0.025
+            - alternative: *corner_of
+              probability: 0.1
+            - alternative: *at_the_corner_of
+              probability: 0.05
+
+    # 26th betw 5th Ave and 6th Ave
+    between:
+        canonical: between
+        abbreviated: betw
+        canonical_probability: 0.5
+        abbreviated_probability: 0.5
+        sample: true
+        parentheses_probability: 0.5 # Probability of using parentheses e.g. (between 5th and 6th)
+
+# PO Box addresses
+# ================
+# For PO box addresses, there's almost no data in OSM, so we'll need to
+# generate them somewhat randomly.
+#
+# The strategy is: for every amenity=post_office, generate a number of PO box
+# addresses using random numbers (and some alpha-numerics so we capture patterns
+# like PO Box 1Q, etc.) It doesn't matter if the post boxes themselves actually
+# exist, as long as they cover the patterns of digits we expect in real addresses.
+# The parser cares more about how many digits a number has and the surrounding 
+# words/phrases than the specific number i.e. numbers in the range 1000-9999
+# can simply be normalized to DDDD.
+
+po_boxes:
+    po_box: &po_box
+        canonical: post office box
+        abbreviated: p.o. box
+        sample: true
+        canonical_probability: 0.01
+        abbreviated_probability: 0.95
+        sample_probability: 0.04
+
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4 # PO Box #1234
+
+    box: &box
+        canonical: box
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4 # Box #1234
+
+    private_mail_box: &private_mail_box
+        canonical: private mail box
+        abbreviated: pmb
+        prefer_abbreviated: true
+        sample: true
+        canonical_probability: 0.01
+        abbreviated_probability: 0.95
+        sample_probability: 0.04
+
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4 # PMB #1234
+
+    alphanumeric:
+        # Don't sample all the forms in post_office.txt as many of the PO box
+        # phrases appear only in Australia
+        sample: false
+        default: *po_box
+        probability: 0.995
+        alternatives:
+            - alternative: *box
+              probability: 0.005
+
+        numeric_probability: 0.9 # PO Box 123
+        alpha_probability: 0.05 # PO Box A
+        numeric_plus_alpha_probability: 0.04 # PO Box 123G
+        alpha_plus_numeric_probability: 0.01 # PO Box A123
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+    digits:
+        - length: 1
+          probability: 0.05
+        - length: 2
+          probability: 0.1
+        - length: 3
+          probability: 0.2
+        - length: 4
+          probability: 0.5
+        - length: 5
+          probability: 0.1
+        - length: 6
+          probability: 0.05
+
+    zones:
+        # Overrides for commercial/office areas (landuse=commercial in OSM)
+        commercial:
+            default: *po_box
+            probability: 0.7
+            alternatives:
+                - alternative: *private_mail_box
+                  probability: 0.2
+                - alternative: *box
+                  probability: 0.1
+
+# Categories
+# ==========
+# Use the operators "in" and "near" for building category queries
+# such as "restaurants in Hackney, London"
+
+categories:
+    near:
+        default:
+            canonical: near
+        probability: 0.8
+        alternatives:
+            - alternative:
+                  canonical: around
+              probability: 0.2
+    nearby:
+        default:
+            canonical: nearby
+        probability: 0.6
+        alternatives:
+            - alternative:
+                  canonical: near here
+              probability: 0.3
+            - alternative:
+                  canonical: around here
+              probability: 0.1
+    near_me:
+        default:
+            canonical: near me
+    in:
+        default:
+            canonical: in
+    # Probabilities of each phrase
+    near_probability: 0.35
+    nearby_probability: 0.2
+    near_me_probability: 0.1
+    in_probability: 0.35
+
+# Directions
+# ==========
+# Unit types, stairways, etc. may have a direction associated
+# with them whether it's right/left or a cardinal direction
+# like "East Entrance".
+
+directions:
+    right: &right
+        canonical: right
+        abbreviated: r
+        canonical_probability: 0.7
+        abbreviated_probability: 0.3
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: r
+            direction: right
+            whitespace_probability: 0.05
+        numeric_probability: 0.05
+        numeric_affix_probability: 0.95
+    left: &left
+        canonical: left
+        abbreviated: l
+        canonical_probability: 0.7
+        abbreviated_probability: 0.3
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: l
+            direction: right
+            whitespace_probability: 0.05
+        numeric_probability: 0.05
+        numeric_affix_probability: 0.95
+    rear: &rear
+        canonical: rear
+        abbreviated: r
+        canonical_probability: 0.8
+        abbreviated_probability: 0.2
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: r
+            direction: right
+            whitespace_probability: 0.05
+        numeric_probability: 0.05
+        numeric_affix_probability: 0.95
+    front: &front
+        canonical: front
+        abbreviated: frnt
+        canonical_probability: 0.8
+        abbreviated_probability: 0.2
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: f
+            direction: right
+            whitespace_probability: 0.05
+        numeric_probability: 0.05
+        numeric_affix_probability: 0.95
+    alternatives:
+        - alternative: *right
+          probability: 0.45
+        - alternative: *left
+          probability: 0.45
+        - alternative: *front
+          probability: 0.05
+        - alternative: *rear
+          probability: 0.05
+
+    anteroposterior:
+        alternatives:
+            - alternative: *front
+              probability: 0.5
+            - alternative: *rear
+              probability: 0.5
+
+    lateral:
+        alternatives:
+            - alternative: *left
+              probability: 0.5
+            - alternative: *right
+              probability: 0.5
+
+
+
+cardinal_directions:
+    east: &east
+        canonical: east
+        abbreviated: e
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: e
+            direction: right
+        numeric_probability: 0.6
+        numeric_affix_probability: 0.4
+    west: &west
+        canonical: west
+        abbreviated: w
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: w
+            direction: right
+        numeric_probability: 0.6
+        numeric_affix_probability: 0.4
+    north: &north
+        canonical: north
+        abbreviated: n
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: n
+            direction: right
+        numeric_probability: 0.6
+        numeric_affix_probability: 0.4
+    south: &south
+        canonical: south
+        abbreviated: s
+        sample: true
+        canonical_probability: 0.7
+        abbreviated_probability: 0.2
+        sample_probability: 0.1
+        numeric:
+            direction: right
+        numeric_affix:
+            affix: s
+            direction: right
+        numeric_probability: 0.6
+        numeric_affix_probability: 0.4
+
+    alternatives:
+        - alternative: *north
+          probability: 0.25
+        - alternative: *east
+          probability: 0.25
+        - alternative: *south
+          probability: 0.25
+        - alternative: *west
+          probability: 0.25
+
+# Entrance
+# ========
+# For deriving strings like "North Entrance"
+
+entrances:
+    entrance: &entrance
+        canonical: entrance
+        abbreviated: ent
+        sample: true
+        canonical_probability: 0.8
+        abbreviated_probability: 0.2
+        numeric:
+            direction: left
+
+    # Entrance 1, Entrance A, etc.
+    alphanumeric: &entrance_alphanumeric
+        default: *entrance
+        numeric_probability: 0.1 # e.g. Entrance 1
+        alpha_probability: 0.85 # e.g. Entrnace A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            modifier:
+                direction: left # e.g. North Entrance
+                direction_probability: 0.9
+                alternatives:
+                    - alternative: *north
+                    - alternative: *south
+                    - alternative: *east
+                    - alternative: *west
+                    - alternative: *right
+                    - alternative: *left
+                    - alternative: *rear
+                    - alternative: *front
+                    - alternative:
+                          canonical: freight
+
+# Staircase
+# =========
+# For deriving strings like "Staircase A" in apartment buildings
+
+staircases:
+    stair: &stair
+        canonical: stair
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
+
+    staircase: &staircase
+        canonical: staircase
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
+
+    stairway: &stairway
+        canonical: stairway
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
+
+    stairwell: &stairwell
+        canonical: stairwell
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        numeric:
+            direction: left
+
+    alphanumeric: &staircase_alphanumeric
+        # For alphanumerics, Stair A, Stair 1, etc.
+        default: *stair
+        probability: 0.4
+        alternatives:
+            - alternative: *staircase
+              probability: 0.2
+            - alternative: *stairway
+              probability: 0.2
+            - alternative: *stairwell
+              probability: 0.2
+        numeric_probability: 0.1 # e.g. Staircase 1
+        alpha_probability: 0.85 # e.g. Staircase A
+        numeric_plus_alpha_probability: 0.025 # e.g. 1A
+        alpha_plus_numeric_probability: 0.025 # e.g. A1
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.1
+
+        numeric_plus_alpha:
+            whitespace_probability: 0.1
+
+        directional:
+            direction: left # e.g. Left Staircase, North Tower
+            direction_probability: 0.7
+            modifier:
+                alternatives:
+                    - alternative: *north
+                    - alternative: *south
+                    - alternative: *east
+                    - alternative: *west
+                    - alternative: *right
+                    - alternative: *left
+                    - alternative: *rear
+                    - alternative: *front
+
+# Unit types
+# ==========
+# Unit information is common in residential addresses, offices, business parks, etc.
+# Just like thoroughfare types (Street, Avenue, etc.), there are many common ways to
+# refer to the 
+
+units:
+    # Special terms
+    suite: &suite
+        canonical: suite
+        abbreviated: ste
+        sample: true        
+        canonical_probability: 0.4
+        abbreviated_probability: 0.4
+        sample_probability: 0.2
+        plural:
+            canonical: suites
+            abbreviated: stes
+            canonical_probability: 0.6
+            abbreviated_probability: 0.4
+        numeric:
+            direction: left
+            # Suite #101 and Suite No. 101 as opposed to Suite 101
+            add_number_phrase: true
+            add_number_phrase_probability: 0.5
+    penthouse: &penthouse
+        canonical: penthouse
+        abbreviated: ph
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.3
+        sample_probability: 0.2
+        plural:
+            canonical: penthouses
+        standalone_probability: 1.0
+    penthouse_numeric: &penthouse_numeric
+        <<: *penthouse
+        numeric:
+            direction: left
+            # Penthouse #1 and Penthouse No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+        numeric_probability: 1.0
+        standalone_probability: 0.0
+    top_left: &top_left
+        canonical: top left
+        abbreviated: t/l
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.3
+        sample_probability: 0.3
+    top_right: &top_right
+        canonical: top right
+        abbreviated: t/r
+        sample: true
+        canonical_probability: 0.4
+        abbreviated_probability: 0.3
+        sample_probability: 0.3
+    top_floor_right: &top_floor_right
+        canonical: top floor right
+        abbreviated: tfr
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.5
+        sample_probability: 0.3
+    top_floor_left: &top_floor_left
+        canonical: top floor left
+        abbreviated: tfl
+        sample: true
+        canonical_probability: 0.2
+        abbreviated_probability: 0.5
+        sample_probability: 0.3
+    office: &office
+        canonical: office
+        abbreviated: ofc
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.3
+        sample_probability: 0.2
+        plural:
+            canonical: offices
+            abbreviated: ofcs
+            canonical_probability: 0.4
+            abbreviated_probability: 0.6
+        numeric:
+            direction: left
+            # Office #1 and Office No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.7
+    door: &door
+        canonical: door
+        sample: true
+        canonical_probability: 0.8
+        sample_probability: 0.2
+        plural:
+            canonical: doors
+        numeric:
+            direction: left
+            # Door #1 and Door No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.2
+    room: &room
+        canonical: room
+        abbreviated: rm
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.5
+        plural:
+            canonical: rooms
+            abbreviated: rms
+            canonical_probability: 0.6
+            abbreviated_probability: 0.4
+        numeric:
+            direction: left
+            # Room #1 and Room No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.6
+    hall: &hall
+        canonical: hall
+        plural:
+            canonical: halls
+        numeric:
+            direction: left
+            # Room #1 and Room No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.6
+    apartment: &apartment
+        canonical: apartment
+        abbreviated: apt
+        prefer_abbreviated: true
+        sample: true
+        canonical_probability: 0.15
+        abbreviated_probability: 0.6
+        sample_probability: 0.25
+        plural:
+            canonical: apartments
+            abbreviated: apts
+            canonical_probability: 0.2
+            abbreviated: 0.8
+        numeric:
+            direction: left
+            # Apt #1 and Apt No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4
+    flat: &flat
+        canonical: flat
+        abbreviated: flt
+        sample: true
+        canonical_probability: 0.8
+        abbreviated_probability: 0.15
+        sample_probability: 0.05
+        plural:
+            canonical: flats
+            abbreviated: flts
+            canonical_probability: 0.8
+            abbreviated_probability: 0.2
+        numeric:
+            direction: left
+            # Flat #1 and Flat No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4
+    lot: &lot
+        canonical: lot
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        plural:
+            canonical: lots
+        numeric:
+            direction: left
+            # Lot #1 and Lot No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.6
+    parcel: &parcel
+        canonical: parcel
+        sample: true
+        canonical_probability: 0.9
+        sample_probability: 0.1
+        plural:
+            canonical: parcels
+        numeric:
+            direction: left
+            add_number_phrase: true
+            add_number_phrase_probability: 0.6
+    unit: &unit
+        canonical: unit
+        abbreviated: u
+        sample: true
+        canonical_probability: 0.8
+        abbreviated_probability: 0.1
+        sample_probability: 0.1
+        plural:
+            canonical: units
+        numeric:
+            direction: left
+            # Unit #1 and Unit No. 1
+            add_number_phrase: true
+            add_number_phrase_probability: 0.4
+    alphanumeric: &unit_alphanumeric
+        # Many unit types that apply only in Australia
+        # For most English-speaking countries, only use the terms defined above
+        sample: false
+        default: *flat
+        probability: 0.4
+        alternatives:
+            - alternative: *unit
+              probability: 0.25
+              # e.g. just plain #3 or No. 4
+            - alternative: *number
+              probability: 0.2
+            - alternative: *lot
+              probability: 0.03
+            - alternative: *door
+              probability: 0.01
+            - alternative: *penthouse_numeric
+              probability: 0.01
+            - alternative: *apartment
+              probability: 0.1
+        numeric_probability: 0.87 # e.g. Flat 1
+        numeric_plus_alpha_probability: 0.03 # e.g. 1A
+        alpha_plus_numeric_probability: 0.03 # e.g. A1
+        alpha_probability: 0.04 # e.g. Flat A
+        hyphenated_number_probability: 0.03 # e.g. 11-10
+
+        alpha_plus_numeric:
+            whitespace_probability: 0.2
+            hyphen_probability: 0.2
+        numeric_plus_alpha:
+            whitespace_probability: 0.2
+            hyphen_probability: 0.2
+        hyphenated_number:
+            range_probability: 0.5
+            direction: right
+            direction_probability: 0.6
+
+        # Separate random probability for adding directions like 2L, 2R, etc.
+        add_direction: true
+        add_direction_probability: 0.1
+
+        # Add directions for plain numbers
+        add_direction_numeric: true
+        # Add direction only e.g. Unit Left
+        add_direction_standalone: true
+
+        # Separate random probability for adding quadrant units like 2RF 2RR 2LF 2LR
+        add_quadrant: true
+        add_quadrant_probability: 0.001
+        add_quadrant_first_direction: lateral
+
+        add_quadrant_numeric: true
+        add_quadrant_standalone: true
+
+        # If there are 10 floors, create unit numbers like #301 or #1032
+        use_floor_probability: 0.35
+
+    zones:
+        residential: *unit_alphanumeric
+        commercial:
+            default: *office
+            probability: 0.6
+            alternatives:
+                - alternative: *number
+                  probability: 0.2
+                - alternative: *suite
+                  probability: 0.2
+        industrial:
+            default: *lot
+            probability: 0.5
+            alternatives:
+                - alternative: *suite
+                  probability: 0.3
+                - alternative: *unit
+                  probability: 0.19
+                - alternative: *parcel
+                  probability: 0.01
+        university:
+            default: *room
+            probability: 0.9
+            alternatives:
+                - alternative: *hall
+                  probability: 0.1
+
+    allotments:
+        lot:
+            default: *lot
+            numeric_probability: 0.8
+            alphanumeric_probability: 0.1
+            alpha_probability: 0.1
+        parcel:
+            default: *parcel
+            numeric_probability: 0.3
+            alphanumeric_probability: 0.3
+            alpha_probability: 0.4
+        lot_probability: 0.9
+        parcel_probability: 0.06
+        lot_plus_parcel_probability: 0.02
+        parcel_plus_lot_probability: 0.02
+
+    standalone:
+        sample: false
+        default: *penthouse
+        probability: 0.4
+        alternatives:
+            - alternative: *top_right
+              probability: 0.15
+            - alternative: *top_left
+              probability: 0.15
+            - alternative: *top_floor_left
+              probability: 0.15
+            - alternative: *top_floor_right
+              probability: 0.15
+
+# Country-specific overrides
+# ==========================
+# For each country, we allow a copy of the structures listed above
+# in order to override the default values
+countries:
+    # United States
+    us:
+        levels:
+            storey: &story
+                canonical: story
+                numeric:
+                    direction: left
+                ordinal:
+                    direction: right
+                numeric_probability: 0.025 # e.g. Story 2, less common
+                ordinal_probability: 0.975 # e.g. 2nd Story, more common
+            alphanumeric:
+                default: *floor
+                probability: 0.8
+                alternatives:
+                    - alternative: *level
+                      probability: 0.15
+                    - alternative: *platform
+                      probability: 0.025
+                    - alternative: *story
+                      probability: 0.025
+            numbering_starts_at: 1
+            aliases: &us_floor_aliases
+                "1":
+                    default: *floor
+                    probability: 0.6
+                    alternatives:
+                        - alternative: *ground_floor
+                          probability: 0.3
+                        - alternative: *upper_ground_floor
+                          probability: 0.1
+                "2":
+                    # Most of the time just say 2nd Floor
+                    default: *floor
+                    probability: 0.9
+                    alternatives:
+                        - alternative: *upstairs
+                          probability: 0.1
+        po_boxes:
+            concatenate_postcode:
+                po_box_max_digits: 4 # For PO boxes with max n digits
+                direction: left # Concatenate on the left side of the PO box
+                postcode_digits:
+                    length: 2 # use this many digits from the postal code
+                    direction: right
+            concatenate_postcode_probability: 0.01
+        postcodes:
+            concatenate_po_box:
+                append:
+                    separator: "-" # Use a hyphen separator
+                    direction: right # To the right of the postcode
+                digits:
+                    length: 4 # number of digits to append to the ZIP code
+                    pad:
+                        direction: left # left pad
+                        character: "0" # pad with 0s, e.g. for PO Box 52, use -0052
+            concatenate_po_box_probability: 0.1
+        units:
+            alphanumeric: &us_units_alphanumeric
+                default: *apartment
+                probability: 0.6
+                alternatives:
+                    - alternative: *unit
+                      probability: 0.15
+                    - alternative: *number
+                      probability: 0.2
+                    - alternative: *lot
+                      probability: 0.03
+                    - alternative: *door
+                      probability: 0.005
+                    - alternative: *penthouse_numeric
+                      probability: 0.005
+                    - alternative: *flat
+                      probability: 0.01 # See this e.g. in Milwaukee with Polish flats
+
+            zones: &us_zones
+                residential: *us_units_alphanumeric
+                commercial:
+                    # Suite is much more common in the US and Canada
+                    default: *suite
+                    probability: 0.5
+                    alternatives:
+                        - alternative: *number
+                          probability: 0.2
+                        - alternative: *office
+                          probability: 0.3
+
+    # Canada
+    # Specifically Canadian English. If the address is in French it will use fr.yaml
+    ca:
+        components:
+            combinations:
+                -
+                    components:
+                        - unit
+                        - house_number
+                    label: house_number
+                    separators:
+                        - separator: /
+                          probability: 0.04
+                        - separator: "-"
+                          probability: 0.95
+                        - separator: " - "
+                          probability: 0.01
+                    probability: 0.1
+        levels:
+            # Note: Canadian English uses "storey" keeping with the British convention, so no need to change that
+
+            # In Canada first floor is the ground floor, as in the US
+            numbering_starts_at: 1
+            aliases: *us_floor_aliases
+        # For (English-speaking) Canada, use the same unit types as in the US
+        units: 
+            alphanumeric: *us_units_alphanumeric
+            zones: *us_zones
+
+            # For unit types like 2/34
+            combined:
+                component: house_number
+                direction: left # Apartment number goes to the left of the house number
+                separators:
+                    - separator: /
+                      probability: 0.2
+                    - separator: "-"
+                      probability: 0.4
+                    - separator: " - "
+                      probability: 0.4
+
+            standalone_probability: 0.15
+            combined_probability: 0.1
+    # Australia
+    au:
+        po_boxes: &australia_po_boxes
+            alphanumeric:
+                default: *po_box
+                alternatives: []
+                probability: 0.95
+                # Australia has many strings for this e.g. Roadside Mail Bag
+                sample: true
+                sample_probability: 0.05
+                numeric:
+                    direction: left
+        units: &australia_unit_types
+            alphanumeric:
+                # Australia has all kinds of unit types (e.g. Marine Berth) not used elsewhere
+                sample: true
+                default: *flat
+                # Reduce the default's probability to make room for sampling
+                probability: 0.39
+                sample_probability: 0.01
+                numeric:
+                    direction: left
+            standalone:
+                default: *penthouse
+                sample: true
+                # Reduce the default's probability to make room for sampling
+                probability: 0.39
+                sample_probability: 0.01
+                standalone_probability: 1.0
+
+            # For unit types like 2/34
+            combined:
+                component: house_number
+                direction: right # Apartment number goes to the right of the house number
+                separators:
+                    - separator: /
+                      probability: 0.8
+                    - separator: "-"
+                      probability: 0.1
+                    - separator: " - "
+                      probability: 0.1
+
+            standalone_probability: 0.15
+            combined_probability: 0.1
+
+    # New Zealand - same rules as Australia
+    nz:
+        po_boxes: *australia_po_boxes
+        units: *australia_unit_types
+
+

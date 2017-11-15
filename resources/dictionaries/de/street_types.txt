@@ -5,7 +5,7 @@ bad
 bahnhof|bhf|bf
 boulevard|bd
 brücke|br|brucke|bruecke
-buhl|buehl
+bühl|buhl|buehl
 chaussee|ch
 damm|d
 forsthaus|fh
@@ -24,10 +24,13 @@ pfad
 platz|pl
 quelle|qu
 rundwanderweg|rww
+siedlung|sdlg
 steg
+stiege|stg
 straße|str|strasse
 ufer
 untere|u
 unterer
 unteres
 weg|w
+wiese|ws

@@ -1,10 +1,12 @@
 abril|abr
+batalhao|btl
 agosto|ago
 dezembro|dezbro|dezbr.o|dezb.ro|dez.bro|dez|10bro|10.bro|10b.ro|10br.o
 educacao|educ
 fevereiro|fev|fevro|fev.ro
 informacao|inf|inform
 janeiro|janero|janro|janr.o|jan.ro|jan
+jardim|jrd|jard|jd
 junho|jun
 julho|jul
 março|mar
@@ -13,6 +15,7 @@ monte|mnt|mte|mnte
 liberdade|liberde|liberd.e
 novembro|9bro|9.bro|9b.ro|9br.o|nov
 outubro|8bro|8.bro|8b.ro|8br.o|out
+pátio|patio|pto
 ribeira|ra|r.a|riba|ribra|ribr.a
 ribeiro|ro|r.o|ribo|ribro|ribr.o
 setembro|7bro|7.bro|7b.ro|7br.o|set
