@@ -4,6 +4,7 @@ kondominium|kondo
 pangsapuri|p/puri
 dewan
 rumah|rmh
+rumah kediaman
 rumah pangsa
 residensi|residen
 menara
