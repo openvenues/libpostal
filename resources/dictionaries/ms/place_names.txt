@@ -1,145 +1,145 @@
+aiskrim
 akademi
-hospital
-hospital haiwan
-pangkalan tentera udara
-lapangan terbang|lpg terbang
 akuarium
 arked
-galeri seni
-pusat seni
+asrama
 auditorum
+balai bomba
+balai polis
+bangunan perbandaran
 bank
 berek
-pantai
-salon kecantikan
-kedai buku
-kafe
-kampus
-tempat letak kereta
-tapak letak kereta
-parkir
-kasino
-istana
-kiropraktik
-gereja
-pawagam
+biara
+bilik|blk
+bilik kebal
+dapur
+dermaga
+dewan
 dewan bandar
-klinik
-kelab
-rumah kelab
-kolej
-jawatankuasa|jawatan kuasa
-pusat
-pusat komuniti
-komuniti
-kompleks
+dewan bandar
 dewan konsert
-mahkamah
-pusat kebudayaan
+dewan muzik
+doktor-doktor
+doktor haiwan|dr haiwan
 empangan
-studio tarian
+farmasi
+galeri
+galeri seni
+garaj
+gereja
+gim|gimnasium
+hospital
+hospital haiwan
+hostel
+ibu pejabat|ibu pej
+institut
+istana
+jabatan bomba
+jabatan polis
+jawatankuasa|jawatan kuasa
+jelapang
+jeti
+kafe
+kampung|kampong|kg
+kampus
+kasino
+kawasan perindustrian|kaw perindustri|kawasan industri
+kedai
+kedai buku
+kedutaan
+kejururawatan
+kelab
+kelab golf
+kelab malam
+kelab sosial
+kilang
+kiropraktik
+kitar semula
+klinik
+kolam renang
+kolam renang awam
+kolej
+kompleks
+kompleks
+komuniti
+kuarters|kuarter
+ladang pertanian|ladang
+lapangan terbang|lpg terbang
+liga
+mahkamah
+makmal
+masjid
+mata air
+menara
+menara pejabat
+misi
+monumen
+muzium
+nurseri
+padang golf
+pagar
+panggung
+panggung wayang gambar|pawagam
+pangkalan tentera udara
+pantai
+parkir
+pasar
+pasaran
+pasar raya|pasaraya
+pasar tani|pasar petani
+pawagam
+pediatrik
+pejabat
+pejabat pos
+pelabuhan
+pelabuhan
 pembangunan
 pengedar
-doktor-doktor
-asrama
-sekolah rendah|sekolah ren|sek rendah|sek ren
-kedutaan
-kilang
-pasar tani|pasar petani
-ladang pertanian|ladang
-jabatan bomba
-balai bomba
-pusat kecergasan
-rumah pangsa|pangsapuri|p/puri
-mata air
-garaj
-taman
-galeri
-stesen minyak
+penjara
+penjara
+perpustakaan
+perubatan
 pintu gerbang
 pintu pagar
-pagar
-padang golf
-kelab golf
-tanah perkuburan
-gim|gimnasium
-dewan
-pelabuhan
-ibu pejabat|ibu pej
-pusat kesihatan
-rumah kediaman
-rumah orang tua
-rumah sakit
-hostel
-rumah|rmh
-aiskrim
-taman perindustrian|taman industri|tmn ind|tmn perindustrian
-kawasan perindustrian|kaw perindustri|kawasan industri
-institut
-penjara
-jeti
-taman didikan kanak-kanak|tadika
-dapur
-liga
-perpustakaan
-pasaran
-perubatan
-misi
-biara
-monumen
-bangunan perbandaran
-muzium
-dewan muzik
-kelab malam
-kejururawatan
-pusat kejururawatan
-pusat penjagaan
-sekolah menegah|sekolah men|sek menengah|sek men
-makmal
-pasar
-panggung wayang gambar|pawagam
-taman negara
-nurseri
-pejabat
-menara pejabat
-pediatrik
-pusat seni persembahan
-farmasi
-dermaga
-jabatan polis
-balai polis
 politeknik
-pelabuhan
-pejabat pos
-presint
 pra sekolah
-penjara
-kolam renang awam
-kitar semula
-restoran
-bilik|blk
-pusat membeli-belah|pusat beli-belah
-kedai
-kelab sosial
-stor
-pasar raya|pasaraya
-kolam renang
-teh
-teres
-panggung
-menara
-dewan bandar
-universiti
-bilik kebal
-doktor haiwan|dr haiwan
-veterinar
-kampung|kampong|kg
-pusat belia
-kompleks
-residen
-surau
+presint
+pusat
 pusat bandar|pusat bandaraya
-kuarters|kuarter
-jelapang
-masjid
+pusat belia
+pusat kebudayaan
+pusat kecergasan
+pusat kejururawatan
+pusat kesihatan
+pusat komuniti
+pusat membeli-belah|pusat beli-belah
+pusat penjagaan
+pusat seni
+pusat seni persembahan
+residen
+restoran
+rumah kediaman
+rumah kelab
+rumah orang tua
+rumah pangsa|pangsapuri|p/puri
+rumah|rmh
+rumah sakit
+salon kecantikan
+sekolah menegah|sekolah men|sek menengah|sek men
+sekolah rendah|sekolah ren|sek rendah|sek ren
 sekolah|sek
+stesen minyak
+stor
+studio tarian
+surau
+taman
+taman didikan kanak-kanak|tadika
+taman negara
+taman perindustrian|taman industri|tmn ind|tmn perindustrian
+tanah perkuburan
+tapak letak kereta
+teh
+tempat letak kereta
+teres
+universiti
+veterinar
