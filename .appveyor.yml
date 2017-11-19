@@ -16,11 +16,8 @@ environment:
     MSYSTEM: MINGW64
     BIT: 64
 
-install:
-  -'%APPVEYOR_BUILD_FOLDER%\win_install.bat'
-
 build_script:
   - '%APPVEYOR_BUILD_FOLDER%\win_build.bat'
 
 test_script:
-  - 'echo No tests yet'
+  - '%APPVEYOR_BUILD_FOLDER%\test\test_libpostal.exe'
