@@ -57,7 +57,7 @@ static libpostal_normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
         .roman_numerals = true
 };
 
-libpostal_normalize_options_t libpostal_get_default_options(void) {
+LIBPOSTAL_EXPORT libpostal_normalize_options_t libpostal_get_default_options(void) {
     return LIBPOSTAL_DEFAULT_OPTIONS;
 }
 
@@ -942,7 +942,7 @@ static void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_
     char_array_destroy(temp_string);
 }
 
-char **libpostal_expand_address(char *input, libpostal_normalize_options_t options, size_t *n) {
+LIBPOSTAL_EXPORT char **libpostal_expand_address(char *input, libpostal_normalize_options_t options, size_t *n) {
     options.address_components |= LIBPOSTAL_ADDRESS_ANY;
 
     uint64_t normalize_string_options = get_normalize_string_options(options);
@@ -1021,14 +1021,14 @@ char **libpostal_expand_address(char *input, libpostal_normalize_options_t optio
 
 }
 
-void libpostal_expansion_array_destroy(char **expansions, size_t n) {
+LIBPOSTAL_EXPORT void libpostal_expansion_array_destroy(char **expansions, size_t n) {
     for (size_t i = 0; i < n; i++) {
         free(expansions[i]);
     }
     free(expansions);
 }
 
-void libpostal_address_parser_response_destroy(libpostal_address_parser_response_t *self) {
+LIBPOSTAL_EXPORT void libpostal_address_parser_response_destroy(libpostal_address_parser_response_t *self) {
     if (self == NULL) return;
 
     for (size_t i = 0; i < self->num_components; i++) {
@@ -1057,11 +1057,11 @@ static libpostal_address_parser_options_t LIBPOSTAL_ADDRESS_PARSER_DEFAULT_OPTIO
     .country = NULL
 };
 
-inline libpostal_address_parser_options_t libpostal_get_address_parser_default_options(void) {
+LIBPOSTAL_EXPORT inline libpostal_address_parser_options_t libpostal_get_address_parser_default_options(void) {
     return LIBPOSTAL_ADDRESS_PARSER_DEFAULT_OPTIONS;
 }
 
-libpostal_address_parser_response_t *libpostal_parse_address(char *address, libpostal_address_parser_options_t options) {
+LIBPOSTAL_EXPORT libpostal_address_parser_response_t *libpostal_parse_address(char *address, libpostal_address_parser_options_t options) {
     libpostal_address_parser_response_t *parsed = address_parser_parse(address, options.language, options.country);
 
     if (parsed == NULL) {
@@ -1073,7 +1073,7 @@ libpostal_address_parser_response_t *libpostal_parse_address(char *address, libp
     return parsed;
 }
 
-bool libpostal_setup_datadir(char *datadir) {
+LIBPOSTAL_EXPORT bool libpostal_setup_datadir(char *datadir) {
     char *transliteration_path = NULL;
     char *numex_path = NULL;
     char *address_dictionary_path = NULL;
@@ -1114,11 +1114,11 @@ bool libpostal_setup_datadir(char *datadir) {
     return true;
 }
 
-bool libpostal_setup(void) {
+LIBPOSTAL_EXPORT bool libpostal_setup(void) {
     return libpostal_setup_datadir(NULL);
 }
 
-bool libpostal_setup_language_classifier_datadir(char *datadir) {
+LIBPOSTAL_EXPORT bool libpostal_setup_language_classifier_datadir(char *datadir) {
     char *language_classifier_dir = NULL;
 
     if (datadir != NULL) {
@@ -1137,11 +1137,11 @@ bool libpostal_setup_language_classifier_datadir(char *datadir) {
     return true;
 }
 
-bool libpostal_setup_language_classifier(void) {
+LIBPOSTAL_EXPORT bool libpostal_setup_language_classifier(void) {
     return libpostal_setup_language_classifier_datadir(NULL);
 }
 
-bool libpostal_setup_parser_datadir(char *datadir) {
+LIBPOSTAL_EXPORT bool libpostal_setup_parser_datadir(char *datadir) {
     char *parser_dir = NULL;
 
     if (datadir != NULL) {
@@ -1160,11 +1160,11 @@ bool libpostal_setup_parser_datadir(char *datadir) {
     return true;
 }
 
-bool libpostal_setup_parser(void) {
+LIBPOSTAL_EXPORT bool libpostal_setup_parser(void) {
     return libpostal_setup_parser_datadir(NULL);
 }
 
-void libpostal_teardown(void) {
+LIBPOSTAL_EXPORT void libpostal_teardown(void) {
     transliteration_module_teardown();
 
     numex_module_teardown();
@@ -1172,10 +1172,10 @@ void libpostal_teardown(void) {
     address_dictionary_module_teardown();
 }
 
-void libpostal_teardown_language_classifier(void) {
+LIBPOSTAL_EXPORT void libpostal_teardown_language_classifier(void) {
     language_classifier_module_teardown();
 }
 
-void libpostal_teardown_parser(void) {
+LIBPOSTAL_EXPORT void libpostal_teardown_parser(void) {
     address_parser_module_teardown();
 }

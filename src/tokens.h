@@ -11,6 +11,7 @@
 #include "string_utils.h"
 #include "token_types.h"
 #include "vector.h"
+#include "strndup.h"
 
 typedef struct token {
     size_t offset;

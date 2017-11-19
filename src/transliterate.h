@@ -12,6 +12,7 @@
 #include "trie.h"
 #include "trie_search.h"
 #include "unicode_scripts.h"
+#include "strndup.h"
 
 #define LATIN_ASCII "latin-ascii"
 #define LATIN_ASCII_SIMPLE "latin-ascii-simple"
