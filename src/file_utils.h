@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <sys/types.h>
 
+#include "export.h"
 #include "libpostal_config.h"
 #include "string_utils.h"
 
@@ -52,7 +53,7 @@
 #define COMMA_SEPARATOR ","
 #define COMMA_SEPARATOR_LEN strlen(COMMA_SEPARATOR)
 
-char *file_getline(FILE * f);
+LIBPOSTAL_EXPORT char *file_getline(FILE * f);
 
 bool file_exists(char *filename);
 

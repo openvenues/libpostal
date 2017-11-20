@@ -465,7 +465,7 @@ inline bool trie_search_tokens_with_phrases(trie_t *self, char *str, token_array
     return trie_search_tokens_from_index(self, str, tokens, ROOT_NODE_ID, phrases);
 }
 
-inline phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens) {
+LIBPOSTAL_EXPORT inline phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens) {
     phrase_array *phrases = NULL;
     if (!trie_search_tokens_with_phrases(self, str, tokens, &phrases)) {
         return NULL;

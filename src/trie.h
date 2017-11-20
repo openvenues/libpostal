@@ -33,6 +33,7 @@
 #include "klib/kvec.h"
 #include "log/log.h"
 #include "string_utils.h"
+#include "export.h"
 
 #define TRIE_SIGNATURE 0xABABABAB
 #define NULL_NODE_ID 0
@@ -79,7 +80,7 @@ typedef struct trie {
 } trie_t;
 
 trie_t *trie_new_alphabet(uint8_t *alphabet, uint32_t alphabet_size);
-trie_t *trie_new(void);
+LIBPOSTAL_EXPORT trie_t *trie_new(void);
 
 uint32_t trie_get_char_index(trie_t *self, unsigned char c);
 uint32_t trie_get_transition_index(trie_t *self, trie_node_t node, unsigned char c);
@@ -97,7 +98,7 @@ trie_data_node_t trie_get_data_node(trie_t *self, trie_node_t node);
 bool trie_set_data_node(trie_t *self, uint32_t index, trie_data_node_t data_node);
 
 bool trie_get_data_at_index(trie_t *self, uint32_t index,  uint32_t *data);
-bool trie_get_data(trie_t *self, char *key, uint32_t *data);
+LIBPOSTAL_EXPORT bool trie_get_data(trie_t *self, char *key, uint32_t *data);
 bool trie_set_data_at_index(trie_t *self, uint32_t index, uint32_t data);
 bool trie_set_data(trie_t *self, char *key, uint32_t data);
 
@@ -113,7 +114,7 @@ int32_t trie_separate_tail(trie_t *self, uint32_t from_index, unsigned char *tai
 void trie_tail_merge(trie_t *self, uint32_t old_node_id, unsigned char *suffix, uint32_t data);
 
 bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, size_t len, uint32_t data);
-bool trie_add(trie_t *self, char *key, uint32_t data);
+LIBPOSTAL_EXPORT bool trie_add(trie_t *self, char *key, uint32_t data);
 bool trie_add_len(trie_t *self, char *key, size_t len, uint32_t data);
 bool trie_add_suffix(trie_t *self, char *key, uint32_t data);
 bool trie_add_suffix_at_index(trie_t *self, char *key, uint32_t start_node_id, uint32_t data);
@@ -146,7 +147,7 @@ bool trie_save(trie_t *self, char *path);
 trie_t *trie_read(FILE *file);
 trie_t *trie_load(char *path);
 
-void trie_destroy(trie_t *self);
+LIBPOSTAL_EXPORT void trie_destroy(trie_t *self);
 
 
  

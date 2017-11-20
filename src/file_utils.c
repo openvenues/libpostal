@@ -1,6 +1,6 @@
 #include "file_utils.h"
 
-char *file_getline(FILE * f)
+LIBPOSTAL_EXPORT char *file_getline(FILE * f)
 {
     char buf[BUFSIZ];
 

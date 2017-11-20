@@ -19,6 +19,7 @@
 #include "tokens.h"
 #include "trie.h"
 #include "trie_search.h"
+#include "export.h"
 
 #define NUMEX_DATA_FILE "numex.dat"
 #define DEFAULT_NUMEX_PATH LIBPOSTAL_DATA_DIR PATH_SEPARATOR "numex" PATH_SEPARATOR NUMEX_DATA_FILE
@@ -146,7 +147,7 @@ typedef struct numex_result {
 
 VECTOR_INIT(numex_result_array, numex_result_t)
 
-char *replace_numeric_expressions(char *str, char *lang);
+LIBPOSTAL_EXPORT char *replace_numeric_expressions(char *str, char *lang);
 numex_result_array *convert_numeric_expressions(char *str, char *lang);
 size_t ordinal_suffix_len(char *s, size_t len, char *lang);
 size_t possible_ordinal_digit_len(char *str, size_t len);
@@ -155,9 +156,9 @@ bool numex_table_write(FILE *file);
 bool numex_table_save(char *filename);
 
 bool numex_module_init(void);
-bool numex_module_setup(char *filename);
-void numex_module_teardown(void);
+LIBPOSTAL_EXPORT bool numex_module_setup(char *filename);
+LIBPOSTAL_EXPORT void numex_module_teardown(void);
 
- 
+
 
 #endif

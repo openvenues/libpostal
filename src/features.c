@@ -1,7 +1,7 @@
 #include "features.h"
 
 
-void feature_array_add(cstring_array *features, size_t count, ...) {
+LIBPOSTAL_EXPORT void feature_array_add(cstring_array *features, size_t count, ...) {
     if (count <= 0) {
         return;        
     }

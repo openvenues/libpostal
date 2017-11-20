@@ -57,7 +57,7 @@ inline size_t string_common_suffix(const char *str1, const char *str2) {
     return common_suffix;
 }
 
-inline bool string_starts_with(const char *str, const char *start) {
+LIBPOSTAL_EXPORT inline bool string_starts_with(const char *str, const char *start) {
     for (; *start; str++, start++)
         if (*str != *start)
             return false;
@@ -71,7 +71,7 @@ inline bool string_ends_with(const char *str, const char *ending) {
     return str_len < end_len ? false : !strcmp(str + str_len - end_len, ending);
 }
 
-inline bool string_equals(const char *s1, const char *s2) {
+LIBPOSTAL_EXPORT inline bool string_equals(const char *s1, const char *s2) {
     if (s1 == NULL || s2  == NULL) return false;
     return strcmp(s1, s2) == 0;
 }
@@ -168,7 +168,7 @@ uint32_t string_translate(char *str, size_t len, char *word_chars, char *word_re
     return num_replacements;
 }
 
-ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *dst) {
+LIBPOSTAL_EXPORT ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *dst) {
     ssize_t len = 0;
 
     const uint8_t *ptr = str + start;
@@ -187,7 +187,7 @@ ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *ds
     return ret_len;
 }
 
-char *utf8_reversed_string(const char *s) {
+LIBPOSTAL_EXPORT char *utf8_reversed_string(const char *s) {
     int32_t unich;
     ssize_t len, remaining;
 
@@ -477,7 +477,7 @@ size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *st
 
 }
 
-inline size_t utf8_common_prefix_ignore_separators(const char *str1, const char *str2) {
+LIBPOSTAL_EXPORT inline size_t utf8_common_prefix_ignore_separators(const char *str1, const char *str2) {
     return utf8_common_prefix_len_ignore_separators(str1, str2, strlen(str2));
 }
 
@@ -605,7 +605,7 @@ size_t string_left_spaces_len(char *str, size_t len) {
     return spaces;
 }
 
-char *string_trim(char *str) {
+LIBPOSTAL_EXPORT char *string_trim(char *str) {
     size_t len = strlen(str);
     size_t left_spaces = string_left_spaces_len(str, len);
     size_t right_spaces = string_right_spaces_len(str, len);
@@ -629,14 +629,14 @@ char_array *char_array_from_string_no_copy(char *str, size_t n) {
     return array;
 }
 
-inline char *char_array_get_string(char_array *array) {
+LIBPOSTAL_EXPORT inline char *char_array_get_string(char_array *array) {
     if (array->n == 0 || array->a[array->n - 1] != '\0') {
         char_array_terminate(array);
     }
     return array->a;
 }
 
-inline char *char_array_to_string(char_array *array) {
+LIBPOSTAL_EXPORT inline char *char_array_to_string(char_array *array) {
     if (array->n == 0 || array->a[array->n - 1] != '\0') {
         char_array_terminate(array);
     }
@@ -661,7 +661,7 @@ inline size_t char_array_len(char_array *array) {
     }
 }
 
-inline void char_array_append(char_array *array, char *str) {
+LIBPOSTAL_EXPORT inline void char_array_append(char_array *array, char *str) {
     while(*str) {
         char_array_push(array, *str++);
     }    
@@ -695,11 +695,11 @@ inline void char_array_append_reversed(char_array *array, char *str) {
     char_array_append_reversed_len(array, str, len);
 }
 
-inline void char_array_terminate(char_array *array) {
+LIBPOSTAL_EXPORT inline void char_array_terminate(char_array *array) {
     char_array_push(array, '\0');
 }
 
-inline void char_array_cat(char_array *array, char *str) {
+LIBPOSTAL_EXPORT inline void char_array_cat(char_array *array, char *str) {
     char_array_strip_nul_byte(array);
     char_array_append(array, str);
     char_array_terminate(array);
@@ -712,7 +712,7 @@ inline void char_array_cat_len(char_array *array, char *str, size_t len) {
 }
 
 
-inline void char_array_cat_reversed(char_array *array, char *str) {
+LIBPOSTAL_EXPORT inline void char_array_cat_reversed(char_array *array, char *str) {
     char_array_strip_nul_byte(array);
     char_array_append_reversed(array, str);
     char_array_terminate(array);
@@ -763,7 +763,7 @@ void char_array_add_vjoined(char_array *array, char *separator, bool strip_separ
 
 }
 
-inline void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...) {
+LIBPOSTAL_EXPORT inline void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...) {
     va_list args;
     va_start(args, count);
     char_array_add_vjoined(array, separator, strip_separator, count, args);
@@ -807,14 +807,14 @@ void char_array_cat_vprintf(char_array *array, char *format, va_list args) {
     }
 }
 
-void char_array_cat_printf(char_array *array, char *format, ...) {
+LIBPOSTAL_EXPORT void char_array_cat_printf(char_array *array, char *format, ...) {
     va_list args;
     va_start(args, format);
     char_array_cat_vprintf(array, format, args);
     va_end(args);
 }
 
-cstring_array *cstring_array_new(void) {
+LIBPOSTAL_EXPORT cstring_array *cstring_array_new(void) {
     cstring_array *array = malloc(sizeof(cstring_array));
     if (array == NULL) return NULL;
 
@@ -833,7 +833,7 @@ cstring_array *cstring_array_new(void) {
     return array;
 }
 
-void cstring_array_destroy(cstring_array *self) {
+LIBPOSTAL_EXPORT void cstring_array_destroy(cstring_array *self) {
     if (self == NULL) return;
     if (self->indices) {
         uint32_array_destroy(self->indices);
@@ -888,7 +888,7 @@ inline size_t cstring_array_used(cstring_array *self) {
     return self->str->n;
 }
 
-inline size_t cstring_array_num_strings(cstring_array *self) {
+LIBPOSTAL_EXPORT inline size_t cstring_array_num_strings(cstring_array *self) {
     if (self == NULL) return 0;
     return self->indices->n;
 }
@@ -957,13 +957,13 @@ inline int32_t cstring_array_get_offset(cstring_array *self, uint32_t i) {
     return (int32_t)self->indices->a[i];
 }
 
-inline char *cstring_array_get_string(cstring_array *self, uint32_t i) {
+LIBPOSTAL_EXPORT inline char *cstring_array_get_string(cstring_array *self, uint32_t i) {
     int32_t data_index = cstring_array_get_offset(self, i);
     if (data_index < 0) return NULL;
     return self->str->a + data_index;
 }
 
-inline int64_t cstring_array_token_length(cstring_array *self, uint32_t i) {
+LIBPOSTAL_EXPORT inline int64_t cstring_array_token_length(cstring_array *self, uint32_t i) {
     if (INVALID_INDEX(i, self->indices->n)) {
         return -1;
     }
@@ -1014,7 +1014,7 @@ cstring_array *cstring_array_split_ignore_consecutive(char *str, const char *sep
 }
 
 
-cstring_array *cstring_array_split_no_copy(char *str, char separator, size_t *count) {
+LIBPOSTAL_EXPORT cstring_array *cstring_array_split_no_copy(char *str, char separator, size_t *count) {
     *count = 0;
     char *ptr = str;
     size_t len = strlen(str);
@@ -1033,7 +1033,7 @@ cstring_array *cstring_array_split_no_copy(char *str, char separator, size_t *co
 }
 
 
-char **cstring_array_to_strings(cstring_array *self) {
+LIBPOSTAL_EXPORT char **cstring_array_to_strings(cstring_array *self) {
     char **strings = malloc(self->indices->n * sizeof(char *));
 
     for (int i = 0; i < cstring_array_num_strings(self); i++) {
@@ -1072,7 +1072,7 @@ string_tree_t *string_tree_new_size(size_t size) {
 
 #define DEFAULT_STRING_TREE_SIZE 8
 
-string_tree_t *string_tree_new(void) {
+LIBPOSTAL_EXPORT string_tree_t *string_tree_new(void) {
     return string_tree_new_size((size_t)DEFAULT_STRING_TREE_SIZE);
 }
 
@@ -1084,12 +1084,12 @@ inline char *string_tree_get_alternative(string_tree_t *self, size_t token_index
     return cstring_array_get_string(self->strings, token_start + alternative);
 }
 
-inline void string_tree_finalize_token(string_tree_t *self) {
+LIBPOSTAL_EXPORT inline void string_tree_finalize_token(string_tree_t *self) {
     uint32_array_push(self->token_indices, (uint32_t)cstring_array_num_strings(self->strings));
 }
 
 // terminated
-inline void string_tree_add_string(string_tree_t *self, char *str) {
+LIBPOSTAL_EXPORT inline void string_tree_add_string(string_tree_t *self, char *str) {
     cstring_array_add_string(self->strings, str);
 }
 
@@ -1114,13 +1114,13 @@ inline uint32_t string_tree_num_strings(string_tree_t *self) {
     return (uint32_t)cstring_array_num_strings(self->strings);
 }
 
-inline uint32_t string_tree_num_alternatives(string_tree_t *self, uint32_t i) {
+LIBPOSTAL_EXPORT inline uint32_t string_tree_num_alternatives(string_tree_t *self, uint32_t i) {
     if (i >= self->token_indices->n) return 0;
     uint32_t n = self->token_indices->a[i + 1] - self->token_indices->a[i];
     return n > 0 ? n : 1;
 }
 
-void string_tree_destroy(string_tree_t *self) {
+LIBPOSTAL_EXPORT void string_tree_destroy(string_tree_t *self) {
     if (self == NULL) return;
 
     if (self->token_indices != NULL) {
@@ -1134,7 +1134,7 @@ void string_tree_destroy(string_tree_t *self) {
     free(self);
 }
 
-string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
+LIBPOSTAL_EXPORT string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
     string_tree_iterator_t *self = malloc(sizeof(string_tree_iterator_t));
     self->tree = tree;
 
@@ -1165,7 +1165,7 @@ string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree) {
     return self;
 }
 
-void string_tree_iterator_next(string_tree_iterator_t *self) {
+LIBPOSTAL_EXPORT void string_tree_iterator_next(string_tree_iterator_t *self) {
     if (self->remaining > 0) {
         int i;
         for (i = self->num_tokens - 1; i >= 0; i--) {
@@ -1194,11 +1194,11 @@ char *string_tree_iterator_get_string(string_tree_iterator_t *self, uint32_t i) 
     return cstring_array_get_string(self->tree->strings, base_index + offset);
 }
 
-bool string_tree_iterator_done(string_tree_iterator_t *self) {
+LIBPOSTAL_EXPORT bool string_tree_iterator_done(string_tree_iterator_t *self) {
     return self->remaining == 0;
 }
 
-void string_tree_iterator_destroy(string_tree_iterator_t *self) {
+LIBPOSTAL_EXPORT void string_tree_iterator_destroy(string_tree_iterator_t *self) {
     if (self == NULL) return;
 
     if (self->path) {

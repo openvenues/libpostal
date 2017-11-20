@@ -5,12 +5,13 @@
 #include <stdarg.h>
 #include "collections.h"
 #include "string_utils.h"
+#include "export.h"
 
 #define FEATURE_SEPARATOR_CHAR "|"
 
 // Add feature to array
 
-void feature_array_add(cstring_array *features, size_t count, ...);
+LIBPOSTAL_EXPORT void feature_array_add(cstring_array *features, size_t count, ...);
 
 // Add feature using printf format
 void feature_array_add_printf(cstring_array *features, char *format, ...);

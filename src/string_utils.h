@@ -17,6 +17,7 @@ Utilities for manipulating strings in C.
 #include "utf8proc/utf8proc.h"
 #include "vector.h"
 #include "strndup.h"
+#include "export.h"
 
 #define MAX_UTF8_CHAR_SIZE 4
 
@@ -60,16 +61,16 @@ char *string_replace_char(char *str, char c1, char c2);
 bool string_replace_with_array(char *str, char *replace, char *with, char_array *result);
 char *string_replace(char *str, char *replace, char *with);
 
-bool string_starts_with(const char *str, const char *start);
+LIBPOSTAL_EXPORT bool string_starts_with(const char *str, const char *start);
 bool string_ends_with(const char *str, const char *ending);
 
-bool string_equals(const char *s1, const char *s2);
+LIBPOSTAL_EXPORT bool string_equals(const char *s1, const char *s2);
 
 uint32_t string_translate(char *str, size_t len, char *word_chars, char *word_repls, size_t trans_len);
 
 // UTF-8 string methods
-char *utf8_reversed_string(const char *s); // returns a copy, caller frees
-ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *dst);
+LIBPOSTAL_EXPORT char *utf8_reversed_string(const char *s); // returns a copy, caller frees
+LIBPOSTAL_EXPORT ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *dst);
 
 // Casing functions return a copy, caller frees
 char *utf8_lower_options(const char *s, utf8proc_option_t options);
@@ -81,7 +82,7 @@ int utf8_compare(const char *str1, const char *str2);
 int utf8_compare_len(const char *str1, const char *str2, size_t len);
 size_t utf8_common_prefix(const char *str1, const char *str2);
 size_t utf8_common_prefix_len(const char *str1, const char *str2, size_t len);
-size_t utf8_common_prefix_ignore_separators(const char *str1, const char *str2);
+LIBPOSTAL_EXPORT size_t utf8_common_prefix_ignore_separators(const char *str1, const char *str2);
 size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *str2, size_t len);
 
 bool utf8_is_hyphen(int32_t ch);
@@ -100,7 +101,7 @@ ssize_t string_next_hyphen_index(char *str, size_t len);
 bool string_contains_hyphen(char *str);
 bool string_contains_hyphen_len(char *str, size_t len);
 
-char *string_trim(char *str);
+LIBPOSTAL_EXPORT char *string_trim(char *str);
 
 /* char_array is a dynamic character array defined in collections.h
 but has a few additional methods related to string manipulation.
@@ -113,40 +114,40 @@ char_array *char_array_from_string(char *str);
 char_array *char_array_from_string_no_copy(char *str, size_t n);
 
 // Gets the underlying C string for a char_array
-char *char_array_get_string(char_array *array);
+LIBPOSTAL_EXPORT char *char_array_get_string(char_array *array);
 
 // Frees the char_array and returns a standard NUL-terminated string
-char *char_array_to_string(char_array *array);
+LIBPOSTAL_EXPORT char *char_array_to_string(char_array *array);
 
 // Can use strlen(array->a) but this is faster
 size_t char_array_len(char_array *array);
 
 // append_* methods do not NUL-terminate
-void char_array_append(char_array *array, char *str);
+LIBPOSTAL_EXPORT void char_array_append(char_array *array, char *str);
 void char_array_append_len(char_array *array, char *str, size_t len);
 void char_array_append_reversed(char_array *array, char *str);
 void char_array_append_reversed_len(char_array *array, char *str, size_t len);
 // add NUL terminator to a char_array
 void char_array_strip_nul_byte(char_array *array);
-void char_array_terminate(char_array *array);
+LIBPOSTAL_EXPORT void char_array_terminate(char_array *array);
 
 // add_* methods NUL-terminate without stripping NUL-byte
 void char_array_add(char_array *array, char *str);
 void char_array_add_len(char_array *array, char *str, size_t len);
 
 // Similar to strcat but with dynamic resizing, guaranteed NUL-terminated
-void char_array_cat(char_array *array, char *str);
+LIBPOSTAL_EXPORT void char_array_cat(char_array *array, char *str);
 void char_array_cat_len(char_array *array, char *str, size_t len);
-void char_array_cat_reversed(char_array *array, char *str);
+LIBPOSTAL_EXPORT void char_array_cat_reversed(char_array *array, char *str);
 void char_array_cat_reversed_len(char_array *array, char *str, size_t len);
 
 // Similar to cat methods but with printf args
 void char_array_cat_vprintf(char_array *array, char *format, va_list args);
-void char_array_cat_printf(char_array *array, char *format, ...);
+LIBPOSTAL_EXPORT void char_array_cat_printf(char_array *array, char *format, ...);
 
 // Mainly for paths or delimited strings
 void char_array_add_vjoined(char_array *array, char *separator, bool strip_separator, int count, va_list args);
-void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...);
+LIBPOSTAL_EXPORT void char_array_add_joined(char_array *array, char *separator, bool strip_separator, int count, ...);
 void char_array_cat_joined(char_array *array, char *separator, bool strip_separator, int count, ...);
 
 
@@ -171,13 +172,13 @@ typedef struct {
     char_array *str;
 } cstring_array;
 
-cstring_array *cstring_array_new(void);
+LIBPOSTAL_EXPORT cstring_array *cstring_array_new(void);
 
 cstring_array *cstring_array_new_size(size_t size);
 
 size_t cstring_array_capacity(cstring_array *self);
 size_t cstring_array_used(cstring_array *self);
-size_t cstring_array_num_strings(cstring_array *self);
+LIBPOSTAL_EXPORT size_t cstring_array_num_strings(cstring_array *self);
 void cstring_array_resize(cstring_array *self, size_t size);
 void cstring_array_clear(cstring_array *self);
 
@@ -185,7 +186,7 @@ cstring_array *cstring_array_from_char_array(char_array *str);
 cstring_array *cstring_array_from_strings(char **strings, size_t n);
 
 // Convert cstring_array to an array of n C strings and destroy the cstring_array
-char **cstring_array_to_strings(cstring_array *self);
+LIBPOSTAL_EXPORT char **cstring_array_to_strings(cstring_array *self);
 
 // Split on delimiter
 cstring_array *cstring_array_split(char *str, const char *separator, size_t separator_len, size_t *count);
@@ -193,7 +194,7 @@ cstring_array *cstring_array_split(char *str, const char *separator, size_t sepa
 cstring_array *cstring_array_split_ignore_consecutive(char *str, const char *separator, size_t separator_len, size_t *count);
 
 // Split on delimiter by replacing (single character) separator with the NUL byte in the original string
-cstring_array *cstring_array_split_no_copy(char *str, char separator, size_t *count);
+LIBPOSTAL_EXPORT cstring_array *cstring_array_split_no_copy(char *str, char separator, size_t *count);
 
 uint32_t cstring_array_start_token(cstring_array *self);
 uint32_t cstring_array_add_string(cstring_array *self, char *str);
@@ -207,10 +208,10 @@ void cstring_array_cat_string_len(cstring_array *self, char *str, size_t len);
 
 void cstring_array_terminate(cstring_array *self);
 int32_t cstring_array_get_offset(cstring_array *self, uint32_t i);
-char *cstring_array_get_string(cstring_array *self, uint32_t i);
-int64_t cstring_array_token_length(cstring_array *self, uint32_t i); 
+LIBPOSTAL_EXPORT char *cstring_array_get_string(cstring_array *self, uint32_t i);
+LIBPOSTAL_EXPORT int64_t cstring_array_token_length(cstring_array *self, uint32_t i); 
 
-void cstring_array_destroy(cstring_array *self);
+LIBPOSTAL_EXPORT void cstring_array_destroy(cstring_array *self);
 
 #define cstring_array_foreach(array, i, s, code) {                                      \
     for (int __si = 0; __si < array->indices->n; __si++) {                              \
@@ -246,16 +247,16 @@ typedef struct string_tree {
     cstring_array *strings;
 } string_tree_t;
 
-string_tree_t *string_tree_new(void);
+LIBPOSTAL_EXPORT string_tree_t *string_tree_new(void);
 string_tree_t *string_tree_new_size(size_t size);
 
 // get
 char *string_tree_get_alternative(string_tree_t *self, size_t token_index, uint32_t alternative);
 
 // finalize
-void string_tree_finalize_token(string_tree_t *self);
+LIBPOSTAL_EXPORT void string_tree_finalize_token(string_tree_t *self);
 // terminated
-void string_tree_add_string(string_tree_t *self, char *str);
+LIBPOSTAL_EXPORT void string_tree_add_string(string_tree_t *self, char *str);
 void string_tree_add_string_len(string_tree_t *self, char *str, size_t len);
 // unterminated
 void string_tree_append_string(string_tree_t *self, char *str);
@@ -264,9 +265,9 @@ void string_tree_append_string_len(string_tree_t *self, char *str, size_t len);
 uint32_t string_tree_num_tokens(string_tree_t *self);
 uint32_t string_tree_num_strings(string_tree_t *self);
 
-uint32_t string_tree_num_alternatives(string_tree_t *self, uint32_t i);
+LIBPOSTAL_EXPORT uint32_t string_tree_num_alternatives(string_tree_t *self, uint32_t i);
 
-void string_tree_destroy(string_tree_t *self);
+LIBPOSTAL_EXPORT void string_tree_destroy(string_tree_t *self);
 
 typedef struct string_tree_iterator {
     string_tree_t *tree;
@@ -275,11 +276,11 @@ typedef struct string_tree_iterator {
     uint32_t remaining;
 } string_tree_iterator_t;
 
-string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree);
-void string_tree_iterator_next(string_tree_iterator_t *self);
+LIBPOSTAL_EXPORT string_tree_iterator_t *string_tree_iterator_new(string_tree_t *tree);
+LIBPOSTAL_EXPORT void string_tree_iterator_next(string_tree_iterator_t *self);
 char *string_tree_iterator_get_string(string_tree_iterator_t *self, uint32_t i);
-bool string_tree_iterator_done(string_tree_iterator_t *self);
-void string_tree_iterator_destroy(string_tree_iterator_t *self);
+LIBPOSTAL_EXPORT bool string_tree_iterator_done(string_tree_iterator_t *self);
+LIBPOSTAL_EXPORT void string_tree_iterator_destroy(string_tree_iterator_t *self);
 
 
 #define string_tree_iterator_foreach_token(iter, s, code) {                             \

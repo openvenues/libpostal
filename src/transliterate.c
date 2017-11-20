@@ -665,7 +665,7 @@ static char *replace_groups(trie_t *trie, char *str, char *replacement, group_ca
     return char_array_to_string(ret);
 }
 
-char *transliterate(char *trans_name, char *str, size_t len) {
+LIBPOSTAL_EXPORT char *transliterate(char *trans_name, char *str, size_t len) {
     if (trans_name == NULL || str == NULL) return NULL;
 
     transliteration_table_t *trans_table = get_transliteration_table();
@@ -1977,7 +1977,7 @@ bool transliteration_module_init(void) {
     return trans_table != NULL;
 }
 
-bool transliteration_module_setup(char *filename) {
+LIBPOSTAL_EXPORT bool transliteration_module_setup(char *filename) {
     if (trans_table == NULL) {
         return transliteration_table_load(filename == NULL ? DEFAULT_TRANSLITERATION_PATH : filename);
     }
@@ -1986,7 +1986,7 @@ bool transliteration_module_setup(char *filename) {
 }
 
 
-void transliteration_module_teardown(void) {
+LIBPOSTAL_EXPORT void transliteration_module_teardown(void) {
     transliteration_table_destroy();
     trans_table = NULL;
 }
