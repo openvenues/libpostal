@@ -21,3 +21,10 @@ build_script:
 
 test_script:
   - '%APPVEYOR_BUILD_FOLDER%\test\test_libpostal.exe'
+
+after_build:
+  - 7z a libpostal.zip %APPVEYOR_BUILD_FOLDER%\libpostal.dll %APPVEYOR_BUILD_FOLDER%\libpostal.def %APPVEYOR_BUILD_FOLDER%\libpostal.exp %APPVEYOR_BUILD_FOLDER%\libpostal.lib
+
+artifacts:
+  - path: libpostal.zip
+    name: libpostal

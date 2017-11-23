@@ -19,4 +19,6 @@ IF %COMPILER%==msys2 (
   bash -lc "cd $APPVEYOR_BUILD_FOLDER && ./configure --datadir=/c"
   bash -lc "cd $APPVEYOR_BUILD_FOLDER && make"
   bash -lc "cd $APPVEYOR_BUILD_FOLDER && make install"
+  bash -lc "cd $APPVEYOR_BUILD_FOLDER && cp src/.libs/libpostal-*.dll libpostal.dll"
+  "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\lib.exe" /def:libpostal.def /out:libpostal.lib /machine:x64
 )
