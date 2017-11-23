@@ -16,7 +16,6 @@ Utilities for manipulating strings in C.
 #include "collections.h"
 #include "utf8proc/utf8proc.h"
 #include "vector.h"
-#include "strndup.h"
 #include "export.h"
 
 #define MAX_UTF8_CHAR_SIZE 4

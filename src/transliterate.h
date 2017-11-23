@@ -12,7 +12,6 @@
 #include "trie.h"
 #include "trie_search.h"
 #include "unicode_scripts.h"
-#include "strndup.h"
 #include "export.h"
 
 #define LATIN_ASCII "latin-ascii"

@@ -1,7 +1,7 @@
 #ifndef TOKENS_H
 #define TOKENS_H
 
- 
+
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -11,7 +11,6 @@
 #include "string_utils.h"
 #include "token_types.h"
 #include "vector.h"
-#include "strndup.h"
 
 typedef struct token {
     size_t offset;
@@ -36,6 +35,6 @@ char *tokenized_string_get_token(tokenized_string_t *self, uint32_t index);
 void tokenized_string_destroy(tokenized_string_t *self);
 
 
- 
+
 
 #endif

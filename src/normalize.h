@@ -38,7 +38,6 @@ As well as normalizations for individual string tokens:
 #include "trie.h"
 #include "tokens.h"
 #include "vector.h"
-#include "strndup.h"
 
 #define NORMALIZE_STRING_LATIN_ASCII 1 << 0
 #define NORMALIZE_STRING_TRANSLITERATE 1 << 1

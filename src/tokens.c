@@ -1,4 +1,5 @@
 #include "tokens.h"
+#include "strndup.h"
 
 
 tokenized_string_t *tokenized_string_new(void) {
