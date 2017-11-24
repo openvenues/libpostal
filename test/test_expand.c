@@ -82,6 +82,8 @@ TEST test_expansions(void) {
     CHECK_CALL(test_expansion_contains_with_languages("123 Main St. #2f", "123 main street number 2f", options, 1, "en"));
     CHECK_CALL(test_expansion_contains_with_languages("120 E 96th St", "120 east 96 street", options, 1, "en"));
     CHECK_CALL(test_expansion_contains_with_languages("120 E Ninety-sixth St", "120 east 96 street", options, 1, "en"));
+    CHECK_CALL(test_expansion_contains_with_languages("4998 Vanderbilt Dr, Columbus, OH 43213", "4998 vanderbilt drive columbus ohio 43213", options, 1, "en"));
+    CHECK_CALL(test_expansion_contains_with_languages("Nineteen oh one W El Segundo Blvd", "1901 west el segundo boulevard", options, 1, "en"));
     CHECK_CALL(test_expansion_contains_with_languages("S St. NW", "s street northwest", options, 1, "en"));
     CHECK_CALL(test_expansion_contains_with_languages("Marktstrasse", "markt strasse", options, 1, "de"));
     CHECK_CALL(test_expansion_contains_with_languages("Hoofdstraat", "hoofdstraat", options, 1, "nl"));

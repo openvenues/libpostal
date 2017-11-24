@@ -709,6 +709,8 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
     bool possible_complete_token = false;
     bool complete_token = false;
 
+    bool prev_rule_was_number = false;
+
     log_debug("Converting numex for str=%s, lang=%s\n", str, lang);
 
     while (idx < len) {
@@ -851,8 +853,27 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 number_finished = true;
                 advance_index = false;
                 state = start_state;
+                prev_rule_was_number = true;
                 rule = prev_rule = NUMEX_NULL_RULE;
                 prev_result_len = 0;
+            } else if (rule.left_context_type == NUMEX_LEFT_CONTEXT_CONCAT_ONLY_IF_NUMBER && !prev_rule_was_number) {
+                log_debug("LEFT_CONTEXT_CONCAT_ONLY_IF_NUMBER, no context\n");
+                prev_rule = rule;
+                last_was_separator = false;
+                rule = NUMEX_NULL_RULE;
+                prev_result_len = result.len;
+                result = NULL_NUMEX_RESULT;
+                stopword_phrase = NULL_PHRASE;
+                state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
+                last_was_stopword = false;
+                continue;
+            } else if (rule.left_context_type == NUMEX_LEFT_CONTEXT_CONCAT_ONLY_IF_NUMBER && prev_rule_was_number) {
+                last_was_separator = false;
+                number_finished = true;
+                state = start_state;
+                last_was_stopword = false;
+                prev_rule_was_number = true;
+                log_debug("LEFT_CONTEXT_CONCAT_ONLY_IF_NUMBER, value = %" PRId64 "\n", result.value);
             } else if (rule.rule_type != NUMEX_STOPWORD) {
                 result.value = rule.value;
                 log_debug("Got number, result.value=%" PRId64 "\n", result.value);
@@ -863,6 +884,9 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
                 continue;
             }
+
+
+            prev_rule_was_number = prev_rule_was_number || prev_rule.rule_type != NUMEX_NULL;
 
             if (rule.rule_type != NUMEX_STOPWORD) {
                 prev_rule = rule;
@@ -895,7 +919,6 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
             if (prev_rule.rule_type != NUMEX_NULL) {
                 number_finished = true;
             }
-
         }
 
         if (!set_rule) {
@@ -1137,7 +1160,6 @@ char *replace_numeric_expressions(char *str, char *lang) {
                 char_array_append(replacement, ordinal_suffix);
             }
         }
-     
         start = result.start + result.len;
     }
 
