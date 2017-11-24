@@ -50,7 +50,8 @@ typedef enum {
 typedef enum {
     NUMEX_LEFT_CONTEXT_NONE,
     NUMEX_LEFT_CONTEXT_ADD,
-    NUMEX_LEFT_CONTEXT_MULTIPLY
+    NUMEX_LEFT_CONTEXT_MULTIPLY,
+    NUMEX_LEFT_CONTEXT_CONCAT_ONLY_IF_NUMBER
 } numex_left_context;
 
 typedef enum {

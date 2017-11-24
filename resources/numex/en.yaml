@@ -9,6 +9,7 @@
       name: "oh"
       value: 0
       type: "cardinal"
+      left: "concat_only_if_number"
     - 
       name: "one"
       value: 1
