@@ -12,7 +12,6 @@
 #include "trie.h"
 #include "trie_search.h"
 #include "unicode_scripts.h"
-#include "export.h"
 
 #define LATIN_ASCII "latin-ascii"
 #define LATIN_ASCII_SIMPLE "latin-ascii-simple"
@@ -152,7 +151,7 @@ void transliterator_destroy(transliterator_t *self);
 bool transliteration_table_add_transliterator(transliterator_t *trans);
 
 transliterator_t *get_transliterator(char *name);
-LIBPOSTAL_EXPORT char *transliterate(char *trans_name, char *str, size_t len);
+char *transliterate(char *trans_name, char *str, size_t len);
 
 bool transliteration_table_add_script_language(script_language_t script_language, transliterator_index_t index);
 transliterator_index_t get_transliterator_index_for_script_language(script_t script, char *language);
@@ -172,7 +171,7 @@ bool transliteration_table_save(char *filename);
 
 // Module setup/teardown
 bool transliteration_module_init(void);
-LIBPOSTAL_EXPORT bool transliteration_module_setup(char *filename);
-LIBPOSTAL_EXPORT void transliteration_module_teardown(void);
+bool transliteration_module_setup(char *filename);
+void transliteration_module_teardown(void);
 
 #endif

@@ -9,7 +9,18 @@ extern "C" {
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include "export.h"
+
+#ifdef _WIN32
+#ifdef LIBPOSTAL_EXPORTS
+#define LIBPOSTAL_EXPORT __declspec(dllexport)
+#else
+#define LIBPOSTAL_EXPORT __declspec(dllimport)
+#endif
+#elif __GNUC__ >= 4
+#define LIBPOSTAL_EXPORT __attribute__ ((visibility("default")))
+#else
+#define LIBPOSTAL_EXPORT
+#endif
 
 #define LIBPOSTAL_MAX_LANGUAGE_LEN 4
 

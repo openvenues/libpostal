@@ -255,7 +255,7 @@ void tokenize_add_tokens(token_array *tokens, const char *input, size_t len, boo
 
 }
 
-LIBPOSTAL_EXPORT token_array *tokenize_keep_whitespace(const char *input) {
+token_array *tokenize_keep_whitespace(const char *input) {
     token_array *tokens = token_array_new();
     tokenize_add_tokens(tokens, input, strlen(input), true);
     return tokens;

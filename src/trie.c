@@ -96,7 +96,7 @@ trie_t *trie_new_alphabet(uint8_t *alphabet, uint32_t alphabet_size) {
     return self;
 }
 
-LIBPOSTAL_EXPORT trie_t *trie_new(void) {
+trie_t *trie_new(void) {
     return trie_new_alphabet(DEFAULT_ALPHABET, sizeof(DEFAULT_ALPHABET));
 }
 
@@ -661,7 +661,7 @@ bool trie_add_at_index(trie_t *self, uint32_t node_id, char *key, size_t len, ui
 }
 
 
-LIBPOSTAL_EXPORT inline bool trie_add(trie_t *self, char *key, uint32_t data) {
+inline bool trie_add(trie_t *self, char *key, uint32_t data) {
     size_t len = strlen(key);
     if (len == 0) return false;
     return trie_add_at_index(self, ROOT_NODE_ID, key, len + 1, data);
@@ -754,7 +754,7 @@ inline bool trie_get_data_at_index(trie_t *self, uint32_t index,  uint32_t *data
      return true;    
 }
 
-LIBPOSTAL_EXPORT inline bool trie_get_data(trie_t *self, char *key, uint32_t *data) {
+inline bool trie_get_data(trie_t *self, char *key, uint32_t *data) {
      uint32_t node_id = trie_get(self, key);
      return trie_get_data_at_index(self, node_id, data);
 }
@@ -899,7 +899,7 @@ inline uint32_t trie_num_keys(trie_t *self) {
 /*
 Destructor
 */
-LIBPOSTAL_EXPORT void trie_destroy(trie_t *self) {
+void trie_destroy(trie_t *self) {
     if (!self)
         return;
 

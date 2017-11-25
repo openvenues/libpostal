@@ -16,7 +16,6 @@
 #include "tokens.h"
 #include "vector.h"
 #include "utf8proc/utf8proc.h"
-#include "export.h"
 
 typedef struct phrase {
     uint32_t start;
@@ -32,7 +31,7 @@ VECTOR_INIT(phrase_array, phrase_t)
 phrase_array *trie_search(trie_t *self, char *text);
 bool trie_search_from_index(trie_t *self, char *text, uint32_t start_node_id, phrase_array **phrases);
 bool trie_search_with_phrases(trie_t *self, char *text, phrase_array **phrases);
-LIBPOSTAL_EXPORT phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens);
+phrase_array *trie_search_tokens(trie_t *self, char *str, token_array *tokens);
 bool trie_search_tokens_from_index(trie_t *self, char *str, token_array *tokens, uint32_t start_node_id, phrase_array **phrases);
 bool trie_search_tokens_with_phrases(trie_t *self, char *text, token_array *tokens, phrase_array **phrases);
 phrase_t trie_search_suffixes_from_index(trie_t *self, char *word, size_t len, uint32_t start_node_id);

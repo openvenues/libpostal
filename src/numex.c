@@ -599,7 +599,7 @@ bool numex_module_init(void) {
 Must be called only once before the module can be used
 */
 
-LIBPOSTAL_EXPORT bool numex_module_setup(char *filename) {
+bool numex_module_setup(char *filename) {
     if (numex_table == NULL) {
         return numex_table_load(filename == NULL ? DEFAULT_NUMEX_PATH : filename);
     }
@@ -610,7 +610,7 @@ LIBPOSTAL_EXPORT bool numex_module_setup(char *filename) {
 Called once when done with the module (usually at
 the end of a main method)
 */
-LIBPOSTAL_EXPORT void numex_module_teardown(void) {
+void numex_module_teardown(void) {
     numex_table_destroy();
     numex_table = NULL;
 }
@@ -1101,7 +1101,7 @@ size_t ordinal_suffix_len(char *str, size_t len, char *lang) {
     return 0;
 }
 
-LIBPOSTAL_EXPORT char *replace_numeric_expressions(char *str, char *lang) {
+char *replace_numeric_expressions(char *str, char *lang) {
     numex_result_array *results = convert_numeric_expressions(str, lang);
     if (results == NULL) return NULL;
 
