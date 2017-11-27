@@ -73,23 +73,23 @@ int main(int argc, char **argv) {
 
             cstring_array_destroy(command);
             goto next_input;
-        } /*else if (string_starts_with(input, ".print_features")) {
+        } else if (string_starts_with(input, ".print_features")) {
             size_t num_tokens = 0;
             cstring_array *command = cstring_array_split(input, " ", 1, &num_tokens);
             if (cstring_array_num_strings(command) > 1) {
                 char *flag = cstring_array_get_string(command, 1);
                 if (string_compare_case_insensitive(flag, "off") == 0) {
-                    parser->options.print_features = false;
+                    libpostal_parser_print_features(false);
                 } else if (string_compare_case_insensitive(flag, "on") == 0) {
-                    parser->options.print_features = true;
+                    libpostal_parser_print_features(true);
                 }
             } else {
-                parser->options.print_features = true;
+                libpostal_parser_print_features(true);
             }
 
             cstring_array_destroy(command);
             goto next_input;
-        }*/ else if (strlen(input) == 0) {
+        } else if (strlen(input) == 0) {
             goto next_input;
         }
 

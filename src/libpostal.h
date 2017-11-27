@@ -101,6 +101,8 @@ LIBPOSTAL_EXPORT libpostal_address_parser_options_t libpostal_get_address_parser
 
 LIBPOSTAL_EXPORT libpostal_address_parser_response_t *libpostal_parse_address(char *address, libpostal_address_parser_options_t options);
 
+LIBPOSTAL_EXPORT bool libpostal_parser_print_features(bool print_features);
+
 // Setup/teardown methods
 
 LIBPOSTAL_EXPORT bool libpostal_setup(void);

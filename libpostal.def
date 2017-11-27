@@ -5,6 +5,7 @@ libpostal_expansion_array_destroy
 libpostal_address_parser_response_destroy
 libpostal_get_address_parser_default_options
 libpostal_parse_address
+libpostal_parser_print_features
 libpostal_setup
 libpostal_setup_datadir
 libpostal_teardown
