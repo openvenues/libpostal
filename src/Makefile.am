@@ -34,8 +34,8 @@ libpostal_CFLAGS = $(CFLAGS_O3)
 bench_SOURCES = bench.c
 bench_LDADD = libpostal.la libscanner.la $(CBLAS_LIBS)
 bench_CFLAGS = $(CFLAGS_O3)
-address_parser_SOURCES = address_parser_cli.c json_encode.c linenoise/linenoise.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c graph.c graph_builder.c float_utils.c averaged_perceptron_tagger.c address_dictionary.c normalize.c numex.c features.c unicode_scripts.c transliterate.c trie.c trie_search.c trie_utils.c string_utils.c tokens.c file_utils.c utf8proc/utf8proc.c ngrams.c language_classifier.c language_features.c logistic_regression.c logistic.c minibatch.c
-address_parser_LDADD = libpostal.la libscanner.la $(CBLAS_LIBS)
+address_parser_SOURCES = strndup.c address_parser_cli.c json_encode.c linenoise/linenoise.c string_utils.c utf8proc/utf8proc.c
+address_parser_LDADD = libpostal.la $(CBLAS_LIBS)
 address_parser_CFLAGS = $(CFLAGS_O3)
 
 build_address_dictionary_SOURCES = strndup.c address_dictionary_builder.c address_dictionary.c file_utils.c string_utils.c trie.c trie_search.c utf8proc/utf8proc.c
