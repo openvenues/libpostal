@@ -14,6 +14,12 @@
 
 //I've rearranged the source into a header-only implementation for drand48()   -Benjamin Kusin
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifndef HAVE_DRAND48
+
 #include <math.h>
 #include "drand48.h"
 
@@ -68,3 +74,5 @@ double drand48(void)
 {
 	return erand48(_rand48_seed);
 }
+
+#endif // HAVE_DRAND48

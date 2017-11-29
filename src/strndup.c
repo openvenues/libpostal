@@ -1,4 +1,7 @@
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
+
 #ifndef HAVE_STRNDUP
 
 #include <stdlib.h>
