@@ -12,8 +12,6 @@
  * to anyone/anything when using this software.
 */
 
-//I've rearranged the source into a header-only implementation for drand48()   -Benjamin Kusin
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
