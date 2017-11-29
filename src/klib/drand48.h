@@ -12,10 +12,14 @@
  * to anyone/anything when using this software.
 */
 
-//I've rearranged the source into a header-only implementation for drand48()   -Benjamin Kusin
-
 #ifndef _DRAND48_H
 #define _DRAND48_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifndef HAVE_DRAND48
 
 #define	RAND48_SEED_0	(0x330e)
 #define	RAND48_SEED_1	(0xabcd)
@@ -37,5 +41,7 @@ double erand48(unsigned short xseed[3]);
 
 double drand48(void);
 
+#endif // HAVE_DRAND48
 
 #endif  // _DRAND48_H
+
