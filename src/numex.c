@@ -709,6 +709,8 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
     bool possible_complete_token = false;
     bool complete_token = false;
 
+    bool prev_rule_was_number = false;
+
     log_debug("Converting numex for str=%s, lang=%s\n", str, lang);
 
     while (idx < len) {
@@ -844,22 +846,41 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                        FLOOR_LOG_BASE(rule.value, prev_rule.radix) < FLOOR_LOG_BASE(prev_rule.value, prev_rule.radix)) {
                 result.value += rule.value;
                 log_debug("Last token was RIGHT_CONTEXT_ADD, value=%" PRId64 "\n", result.value);
-            } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD) {
+            } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD && (!whole_tokens_only || complete_token)) {
                 log_debug("Had previous token with no context, finishing previous rule before returning\n");
-                if (!whole_tokens_only || complete_token) {
-                    result.len = prev_result_len;
-                    number_finished = true;
-                    complete_token = false;
-                    advance_index = false;
-                    state = start_state;
-                    rule = prev_rule = NUMEX_NULL_RULE;
-                    prev_result_len = 0;
-                } else {
-                    rule = NUMEX_NULL_RULE;
-                    last_was_separator = false;
-                    state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
-                    continue;
-                }
+                result.len = prev_result_len;
+                number_finished = true;
+                complete_token = false;
+                advance_index = false;
+                state = start_state;
+                prev_rule_was_number = true;
+                rule = prev_rule = NUMEX_NULL_RULE;
+                prev_result_len = 0;
+            } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD && whole_tokens_only && !complete_token) {
+                log_debug("whole_tokens_only = %d, complete_token = %d\n", whole_tokens_only, complete_token);
+                rule = NUMEX_NULL_RULE;
+                last_was_separator = false;
+                prev_rule_was_number = false;
+                state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
+                continue;                
+            } else if (rule.left_context_type == NUMEX_LEFT_CONTEXT_CONCAT_ONLY_IF_NUMBER && !prev_rule_was_number) {
+                log_debug("LEFT_CONTEXT_CONCAT_ONLY_IF_NUMBER, no context\n");
+                prev_rule = rule;
+                last_was_separator = false;
+                rule = NUMEX_NULL_RULE;
+                prev_result_len = result.len;
+                result = NULL_NUMEX_RESULT;
+                stopword_phrase = NULL_PHRASE;
+                state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
+                last_was_stopword = false;
+                continue;
+            } else if (rule.left_context_type == NUMEX_LEFT_CONTEXT_CONCAT_ONLY_IF_NUMBER && prev_rule_was_number) {
+                last_was_separator = false;
+                number_finished = true;
+                state = start_state;
+                last_was_stopword = false;
+                prev_rule_was_number = true;
+                log_debug("LEFT_CONTEXT_CONCAT_ONLY_IF_NUMBER, value = %" PRId64 "\n", result.value);
             } else if (rule.rule_type != NUMEX_STOPWORD) {
                 result.value = rule.value;
                 log_debug("Got number, result.value=%" PRId64 "\n", result.value);
@@ -870,6 +891,8 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
                 continue;
             }
+
+            prev_rule_was_number = prev_rule_was_number || prev_rule.rule_type != NUMEX_NULL;
 
             if (rule.rule_type != NUMEX_STOPWORD) {
                 prev_rule = rule;
@@ -903,7 +926,6 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
             if (prev_rule.rule_type != NUMEX_NULL) {
                 number_finished = true;
             }
-
         }
 
         if (!set_rule) {
@@ -926,6 +948,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
             log_debug("Adding phrase, value=%" PRId64 "\n", result.value);
             result = NULL_NUMEX_RESULT;
             number_finished = false;
+            rule = prev_rule = NUMEX_NULL_RULE;
         }
 
         prev_state = state;
@@ -1150,7 +1173,6 @@ char *replace_numeric_expressions(char *str, char *lang) {
                 char_array_append(replacement, ordinal_suffix);
             }
         }
-     
         start = result.start + result.len;
     }
 

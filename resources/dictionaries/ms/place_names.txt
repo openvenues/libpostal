@@ -1,4 +1,145 @@
+aiskrim
+akademi
+akuarium
+arked
+asrama
+auditorum
+balai bomba
+balai polis
+bangunan perbandaran
+bank
+berek
+biara
+bilik|blk
+bilik kebal
+dapur
+dermaga
+dewan
+dewan bandar
+dewan bandar
+dewan konsert
+dewan muzik
+doktor-doktor
+doktor haiwan|dr haiwan
+empangan
+farmasi
+galeri
+galeri seni
+garaj
+gereja
+gim|gimnasium
+hospital
+hospital haiwan
+hostel
+ibu pejabat|ibu pej
+institut
+istana
+jabatan bomba
+jabatan polis
+jawatankuasa|jawatan kuasa
 jelapang
+jeti
+kafe
+kampung|kampong|kg
+kampus
+kasino
+kawasan perindustrian|kaw perindustri|kawasan industri
+kedai
+kedai buku
+kedutaan
+kejururawatan
+kelab
+kelab golf
+kelab malam
+kelab sosial
+kilang
+kiropraktik
+kitar semula
+klinik
+kolam renang
+kolam renang awam
+kolej
+kompleks
+kompleks
+komuniti
+kuarters|kuarter
+ladang pertanian|ladang
+lapangan terbang|lpg terbang
+liga
+mahkamah
+makmal
 masjid
+mata air
+menara
+menara pejabat
+misi
+monumen
+muzium
+nurseri
+padang golf
+pagar
+panggung
+panggung wayang gambar|pawagam
+pangkalan tentera udara
+pantai
+parkir
 pasar
-sekolah
+pasaran
+pasar raya|pasaraya
+pasar tani|pasar petani
+pawagam
+pediatrik
+pejabat
+pejabat pos
+pelabuhan
+pelabuhan
+pembangunan
+pengedar
+penjara
+penjara
+perpustakaan
+perubatan
+pintu gerbang
+pintu pagar
+politeknik
+pra sekolah
+presint
+pusat
+pusat bandar|pusat bandaraya
+pusat belia
+pusat kebudayaan
+pusat kecergasan
+pusat kejururawatan
+pusat kesihatan
+pusat komuniti
+pusat membeli-belah|pusat beli-belah
+pusat penjagaan
+pusat seni
+pusat seni persembahan
+residen
+restoran
+rumah kediaman
+rumah kelab
+rumah orang tua
+rumah pangsa|pangsapuri|p/puri
+rumah|rmh
+rumah sakit
+salon kecantikan
+sekolah menegah|sekolah men|sek menengah|sek men
+sekolah rendah|sekolah ren|sek rendah|sek ren
+sekolah|sek
+stesen minyak
+stor
+studio tarian
+surau
+taman
+taman didikan kanak-kanak|tadika
+taman negara
+taman perindustrian|taman industri|tmn ind|tmn perindustrian
+tanah perkuburan
+tapak letak kereta
+teh
+tempat letak kereta
+teres
+universiti
+veterinar

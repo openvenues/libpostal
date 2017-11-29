@@ -133,7 +133,7 @@ download_file() {
         for subdir in $subdirs; do
             rm -rf $data_dir/$subdir;
         done
-        tar -xvzf $local_path -C $data_dir;
+        tar -xvzf $local_path --no-same-owner -C $data_dir;
         rm $local_path;
     else
         echo "libpostal $name up to date"

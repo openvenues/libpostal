@@ -1,8 +1,8 @@
 # libpostal: international street address NLP
 
 [![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal) [![License](https://img.shields.io/github/license/openvenues/libpostal.svg)](https://github.com/openvenues/libpostal/blob/master/LICENSE)
-[![OpenCollective](https://opencollective.com/libpostal/sponsors/badge.svg)](#sponsors)
-[![OpenCollective](https://opencollective.com/libpostal/backers/badge.svg)](#backers) 
+[![OpenCollective Sponsors](https://opencollective.com/libpostal/sponsors/badge.svg)](#sponsors)
+[![OpenCollective Backers](https://opencollective.com/libpostal/backers/badge.svg)](#backers)
 
 libpostal is a C library for parsing/normalizing street addresses around the world using statistical NLP and open data. The goal of this project is to understand location-based strings in every language, everywhere. For a more comprehensive overview of the research behind libpostal, be sure to check out the (lengthy) introductory blog posts:
 

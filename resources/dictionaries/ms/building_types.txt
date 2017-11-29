@@ -1,9 +1,10 @@
 apartment|aparment|apartmen|apt
 bangunan|bgn
+dewan
 kondominium|kondo
 pangsapuri|p/puri
-dewan
-rumah|rmh
-rumah pangsa
 residensi|residen
+rumah|rmh
+rumah kediaman
+rumah pangsa
 menara

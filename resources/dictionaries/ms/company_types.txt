@@ -1,6 +1,8 @@
 bank
-syarikat
-kelab bola sepak
 berhad|bhd
-sendirian berhad|sdn bhd
+kelab
+kelab bola sepak
 persatuan
+sendirian berhad|sdn bhd
+syarikat
+yayasan
