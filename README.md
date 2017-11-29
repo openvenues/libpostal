@@ -1,6 +1,8 @@
 # libpostal: international street address NLP
 
-[![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal) [![License](https://img.shields.io/github/license/openvenues/libpostal.svg)](https://github.com/openvenues/libpostal/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/openvenues/libpostal?branch=master&svg=true)](https://ci.appveyor.com/project/albarrentine/libpostal/branch/master)
+[![License](https://img.shields.io/github/license/openvenues/libpostal.svg)](https://github.com/openvenues/libpostal/blob/master/LICENSE)
 [![OpenCollective Sponsors](https://opencollective.com/libpostal/sponsors/badge.svg)](#sponsors)
 [![OpenCollective Backers](https://opencollective.com/libpostal/backers/badge.svg)](#backers)
 
@@ -135,6 +137,39 @@ For example, if you write a program called app.c, you can compile it like this:
 
 ```
 gcc app.c `pkg-config --cflags --libs libpostal`
+```
+
+**On Windows (MSys2/MinGW)**
+
+For Windows the build procedure currently requires MSys2 and MinGW. This can be downloaded from http://msys2.org. Please follow the instructions on the MSys2 website for installation.
+
+Please ensure Msys2 is up-to-date by running:
+```
+pacman -Syu
+```
+
+Install the following prerequisites:
+```
+pacman -S autoconf automake curl git make libtool gcc mingw-w64-x86_64-gcc
+```
+
+Then to build the C library:
+```
+git clone https://github.com/openvenues/libpostal
+cd libpostal
+cp -rf windows/* ./
+./bootstrap.sh
+./configure --datadir=[...some dir with a few GB of space...]
+make
+make install
+```
+Notes: When setting the datadir, the `C:` drive would be entered as `/c`. The libpostal build script automatically add `libpostal` on the end of the path, so '/c' would become `C:\libpostal\` on Windows.
+
+The compiled .dll will be in the `src/.libs/` directory and should be called `libpostal-1.dll`.
+
+If you require a .lib import library to link this to your application. You can generate one using the Visual Studio `lib.exe` tool and the `libpostal.def` definition file:
+```
+lib.exe /def:libpostal.def /out:libpostal.lib /machine:x64
 ```
 
 Examples of parsing

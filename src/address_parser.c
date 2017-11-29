@@ -49,6 +49,13 @@ address_parser_t *get_address_parser(void) {
     return parser;
 }
 
+bool address_parser_print_features(bool print_features) {
+    if (parser == NULL) return false;
+
+    parser->options.print_features = print_features;
+    return true;
+}
+
 bool address_parser_save(address_parser_t *self, char *output_dir) {
     if (self == NULL || output_dir == NULL) return false;
 

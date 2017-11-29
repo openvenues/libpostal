@@ -10,6 +10,18 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
+#ifdef _WIN32
+#ifdef LIBPOSTAL_EXPORTS
+#define LIBPOSTAL_EXPORT __declspec(dllexport)
+#else
+#define LIBPOSTAL_EXPORT __declspec(dllimport)
+#endif
+#elif __GNUC__ >= 4
+#define LIBPOSTAL_EXPORT __attribute__ ((visibility("default")))
+#else
+#define LIBPOSTAL_EXPORT
+#endif
+
 #define LIBPOSTAL_MAX_LANGUAGE_LEN 4
 
 /* 
@@ -62,11 +74,11 @@ typedef struct libpostal_normalize_options {
 
 } libpostal_normalize_options_t;
 
-libpostal_normalize_options_t libpostal_get_default_options(void);
+LIBPOSTAL_EXPORT libpostal_normalize_options_t libpostal_get_default_options(void);
 
-char **libpostal_expand_address(char *input, libpostal_normalize_options_t options, size_t *n);
+LIBPOSTAL_EXPORT char **libpostal_expand_address(char *input, libpostal_normalize_options_t options, size_t *n);
 
-void libpostal_expansion_array_destroy(char **expansions, size_t n);
+LIBPOSTAL_EXPORT void libpostal_expansion_array_destroy(char **expansions, size_t n);
 
 /*
 Address parser
@@ -83,25 +95,27 @@ typedef struct libpostal_address_parser_options {
     char *country;
 } libpostal_address_parser_options_t;
 
-void libpostal_address_parser_response_destroy(libpostal_address_parser_response_t *self);
+LIBPOSTAL_EXPORT void libpostal_address_parser_response_destroy(libpostal_address_parser_response_t *self);
 
-libpostal_address_parser_options_t libpostal_get_address_parser_default_options(void);
+LIBPOSTAL_EXPORT libpostal_address_parser_options_t libpostal_get_address_parser_default_options(void);
 
-libpostal_address_parser_response_t *libpostal_parse_address(char *address, libpostal_address_parser_options_t options);
+LIBPOSTAL_EXPORT libpostal_address_parser_response_t *libpostal_parse_address(char *address, libpostal_address_parser_options_t options);
+
+LIBPOSTAL_EXPORT bool libpostal_parser_print_features(bool print_features);
 
 // Setup/teardown methods
 
-bool libpostal_setup(void);
-bool libpostal_setup_datadir(char *datadir);
-void libpostal_teardown(void);
+LIBPOSTAL_EXPORT bool libpostal_setup(void);
+LIBPOSTAL_EXPORT bool libpostal_setup_datadir(char *datadir);
+LIBPOSTAL_EXPORT void libpostal_teardown(void);
 
-bool libpostal_setup_parser(void);
-bool libpostal_setup_parser_datadir(char *datadir);
-void libpostal_teardown_parser(void);
+LIBPOSTAL_EXPORT bool libpostal_setup_parser(void);
+LIBPOSTAL_EXPORT bool libpostal_setup_parser_datadir(char *datadir);
+LIBPOSTAL_EXPORT void libpostal_teardown_parser(void);
 
-bool libpostal_setup_language_classifier(void);
-bool libpostal_setup_language_classifier_datadir(char *datadir);
-void libpostal_teardown_language_classifier(void);
+LIBPOSTAL_EXPORT bool libpostal_setup_language_classifier(void);
+LIBPOSTAL_EXPORT bool libpostal_setup_language_classifier_datadir(char *datadir);
+LIBPOSTAL_EXPORT void libpostal_teardown_language_classifier(void);
 
 #ifdef __cplusplus
 }

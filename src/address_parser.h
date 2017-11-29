@@ -215,6 +215,7 @@ address_parser_t *address_parser_new_options(parser_options_t options);
 address_parser_t *get_address_parser(void);
 bool address_parser_load(char *dir);
 
+bool address_parser_print_features(bool print_features);
 libpostal_address_parser_response_t *address_parser_parse(char *address, char *language, char *country);
 void address_parser_destroy(address_parser_t *self);
 

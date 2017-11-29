@@ -3,6 +3,7 @@
 #include "file_utils.h"
 
 #include "log/log.h"
+#include "strndup.h"
 
 #define TRANSLITERATION_TABLE_SIGNATURE 0xAAAAAAAA
 
