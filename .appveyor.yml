@@ -1,10 +1,14 @@
 version: 1.0.{build}
-
 image: Visual Studio 2015
-platform: x64
 
 environment:
   matrix:
+  - COMPILER: msys2
+    PLATFORM: x86
+    MSYS2_ARCH: x86
+    MSYS2_DIR: msys64
+    MSYSTEM: MINGW32
+    BIT: 32
   - COMPILER: msys2
     PLATFORM: x64
     MSYS2_ARCH: x86_64
@@ -13,14 +17,38 @@ environment:
     BIT: 64
 
 build_script:
-  - '%APPVEYOR_BUILD_FOLDER%\win_build.bat'
+- cmd: cd %APPVEYOR_BUILD_FOLDER%
+- ps: |
+    Write-Host "Compiler: $Env:COMPILER"
+    Write-Host "Architecture: $Env:MSYS2_ARCH"
+    Write-Host "Platform: $Env:PLATFORM"
+    Write-Host "MSYS2 Directory: $Env:MSYS2_DIR"
+    Write-Host "MSYS2 System: $Env:MSYSTEM"
+
+    if ($Env:COMPILER -eq "msys2") {
+      $Env:Path = "C:\$Env:MSYS2_DIR\$Env:MSYSTEM\bin;C:\$Env:MSYS2_DIR\usr\bin;$Env:Path"
+      $Env:WDIR = $Env:APPVEYOR_BUILD_FOLDER -replace "\\", "/"
+      bash -lc "cd $Env:WDIR && cp -rf ./windows/* ./"
+      bash -lc "cd $Env:WDIR && ./bootstrap.sh"
+      bash -lc "cd $Env:WDIR && ./configure --datadir=/c"
+      bash -lc "cd $Env:WDIR && make"
+      bash -lc "cd $Env:WDIR && make install"
+      bash -lc "cd $Env:WDIR && cp src/.libs/libpostal-*.dll libpostal.dll"
+      & 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\lib.exe' /def:libpostal.def /out:libpostal.lib /machine:$Env:PLATFORM
+      7z a libpostal.zip $Env:APPVEYOR_BUILD_FOLDER\libpostal.dll $Env:APPVEYOR_BUILD_FOLDER\libpostal.def $Env:APPVEYOR_BUILD_FOLDER\libpostal.exp $Env:APPVEYOR_BUILD_FOLDER\libpostal.lib $Env:APPVEYOR_BUILD_FOLDER\src\libpostal.h
+      if ($Env:BIT -eq "32") {
+        $Paths = @(
+          (Join-Path $Env:APPVEYOR_BUILD_FOLDER "src"),
+          (Join-Path $Env:APPVEYOR_BUILD_FOLDER "src\.libs"),
+          (Join-Path $Env:APPVEYOR_BUILD_FOLDER "test"),
+          (Join-Path $Env:APPVEYOR_BUILD_FOLDER "test\.libs"))
+        Get-ChildItem -Path $Paths | ?{ $_.Name -Match '\.(exe|dll)$' } | % { & 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\editbin.exe' /NOLOGO /LARGEADDRESSAWARE $_.FullName }
+      }
+    }
 
 test_script:
-  - '%APPVEYOR_BUILD_FOLDER%\test\test_libpostal.exe'
-
-after_build:
-  - 7z a libpostal.zip %APPVEYOR_BUILD_FOLDER%\libpostal.dll %APPVEYOR_BUILD_FOLDER%\libpostal.def %APPVEYOR_BUILD_FOLDER%\libpostal.exp %APPVEYOR_BUILD_FOLDER%\libpostal.lib %APPVEYOR_BUILD_FOLDER%\src\libpostal.h
+- '%APPVEYOR_BUILD_FOLDER%\test\test_libpostal.exe'
 
 artifacts:
-  - path: libpostal.zip
-    name: libpostal
+- path: libpostal.zip
+  name: libpostal
