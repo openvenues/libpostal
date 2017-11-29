@@ -1,4 +1,5 @@
 #include "normalize.h"
+#include "strndup.h"
 
 #define FULL_STOP_CODEPOINT 0x002e
 #define APOSTROPHE_CODEPOINT 0x0027

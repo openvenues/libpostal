@@ -1,35 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "address_parser.h"
-#include "averaged_perceptron_tagger.h"
-#include "address_dictionary.h"
-#include "collections.h"
-#include "constants.h"
-#include "file_utils.h"
 #include "json_encode.h"
 #include "libpostal.h"
-#include "normalize.h"
-#include "scanner.h"
-#include "shuffle.h"
-#include "tokens.h"
 
 #include "linenoise/linenoise.h"
 #include "log/log.h"
-
-bool load_address_parser_dependencies(void) {
-    if (!address_dictionary_module_setup(NULL)) {
-        log_error("Could not load address dictionaries\n");
-        return false;
-    }
-
-    log_info("address dictionary module loaded\n");
-
-    return true;
-}
+#include "strndup.h"
 
 int main(int argc, char **argv) {
-    char *address_parser_dir = LIBPOSTAL_ADDRESS_PARSER_DIR;
+    char *address_parser_dir = NULL;
     char *history_file = "address_parser.history";
 
     if (argc > 1) {
@@ -38,7 +18,7 @@ int main(int argc, char **argv) {
 
     printf("Loading models...\n");
 
-    if (!libpostal_setup() || !address_parser_module_setup(address_parser_dir)) {
+    if (!libpostal_setup() || !libpostal_setup_parser_datadir(address_parser_dir)) {
         exit(EXIT_FAILURE);
     }
 
@@ -54,8 +34,6 @@ int main(int argc, char **argv) {
 
     char *input = NULL;
 
-    address_parser_t *parser = get_address_parser();
-
     while((input = linenoise("> ")) != NULL) {
 
         if (input[0] != '\0') {
@@ -63,7 +41,7 @@ int main(int argc, char **argv) {
             linenoiseHistorySave(history_file); /* Save the history on disk. */
         }
 
-        if (strcmp(input, ".exit") == 0) {
+        if (strncmp(input, ".exit", 5) == 0) {
             printf("Fin!\n");
             free(input);
             break;
@@ -101,12 +79,12 @@ int main(int argc, char **argv) {
             if (cstring_array_num_strings(command) > 1) {
                 char *flag = cstring_array_get_string(command, 1);
                 if (string_compare_case_insensitive(flag, "off") == 0) {
-                    parser->options.print_features = false;
+                    libpostal_parser_print_features(false);
                 } else if (string_compare_case_insensitive(flag, "on") == 0) {
-                    parser->options.print_features = true;
+                    libpostal_parser_print_features(true);
                 }
             } else {
-                parser->options.print_features = true;
+                libpostal_parser_print_features(true);
             }
 
             cstring_array_destroy(command);
@@ -117,6 +95,9 @@ int main(int argc, char **argv) {
 
         libpostal_address_parser_response_t *parsed;
         libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
+
+        if (country != NULL) options.country = country;
+        if (language != NULL) options.language = language;
 
         if ((parsed = libpostal_parse_address(input, options))) {
             printf("\n");

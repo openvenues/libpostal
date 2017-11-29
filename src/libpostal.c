@@ -1191,6 +1191,10 @@ libpostal_address_parser_response_t *libpostal_parse_address(char *address, libp
     return parsed;
 }
 
+bool libpostal_parser_print_features(bool print_features) {
+    return address_parser_print_features(print_features);
+}
+
 bool libpostal_setup_datadir(char *datadir) {
     char *transliteration_path = NULL;
     char *numex_path = NULL;

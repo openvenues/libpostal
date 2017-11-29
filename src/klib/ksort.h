@@ -45,6 +45,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include "drand48.h"
 
 typedef struct {
     void *left, *right;

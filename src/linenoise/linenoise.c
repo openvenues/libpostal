@@ -105,7 +105,6 @@
  *
  */
 
-#include <termios.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -114,7 +113,12 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <sys/types.h>
+
+#ifndef _WIN32
+#include <termios.h>
 #include <sys/ioctl.h>
+#endif //_WIN32
+
 #include <unistd.h>
 #include "linenoise.h"
 
@@ -123,8 +127,10 @@
 static char *unsupported_term[] = {"dumb","cons25","emacs",NULL};
 static linenoiseCompletionCallback *completionCallback = NULL;
 
+#ifndef _WIN32
 static struct termios orig_termios; /* In order to restore at exit.*/
 static int rawmode = 0; /* For atexit() function to check if restore is needed*/
+#endif //_WIN32
 static int mlmode = 0;  /* Multi line mode. Default is single line. */
 static int atexit_registered = 0; /* Register atexit just 1 time. */
 static int history_max_len = LINENOISE_DEFAULT_HISTORY_MAX_LEN;
@@ -150,25 +156,25 @@ struct linenoiseState {
 };
 
 enum KEY_ACTION{
-	KEY_NULL = 0,	    /* NULL */
-	CTRL_A = 1,         /* Ctrl+a */
-	CTRL_B = 2,         /* Ctrl-b */
-	CTRL_C = 3,         /* Ctrl-c */
-	CTRL_D = 4,         /* Ctrl-d */
-	CTRL_E = 5,         /* Ctrl-e */
-	CTRL_F = 6,         /* Ctrl-f */
-	CTRL_H = 8,         /* Ctrl-h */
-	TAB = 9,            /* Tab */
-	CTRL_K = 11,        /* Ctrl+k */
-	CTRL_L = 12,        /* Ctrl+l */
-	ENTER = 13,         /* Enter */
-	CTRL_N = 14,        /* Ctrl-n */
-	CTRL_P = 16,        /* Ctrl-p */
-	CTRL_T = 20,        /* Ctrl-t */
-	CTRL_U = 21,        /* Ctrl+u */
-	CTRL_W = 23,        /* Ctrl+w */
-	ESC = 27,           /* Escape */
-	BACKSPACE =  127    /* Backspace */
+    KEY_NULL = 0,       /* NULL */
+    CTRL_A = 1,         /* Ctrl+a */
+    CTRL_B = 2,         /* Ctrl-b */
+    CTRL_C = 3,         /* Ctrl-c */
+    CTRL_D = 4,         /* Ctrl-d */
+    CTRL_E = 5,         /* Ctrl-e */
+    CTRL_F = 6,         /* Ctrl-f */
+    CTRL_H = 8,         /* Ctrl-h */
+    TAB = 9,            /* Tab */
+    CTRL_K = 11,        /* Ctrl+k */
+    CTRL_L = 12,        /* Ctrl+l */
+    ENTER = 13,         /* Enter */
+    CTRL_N = 14,        /* Ctrl-n */
+    CTRL_P = 16,        /* Ctrl-p */
+    CTRL_T = 20,        /* Ctrl-t */
+    CTRL_U = 21,        /* Ctrl+u */
+    CTRL_W = 23,        /* Ctrl+w */
+    ESC = 27,           /* Escape */
+    BACKSPACE =  127    /* Backspace */
 };
 
 static void linenoiseAtExit(void);
@@ -207,7 +213,13 @@ static int isUnsupportedTerm(void) {
     char *term = getenv("TERM");
     int j;
 
-    if (term == NULL) return 0;
+    if (term == NULL) {
+#ifdef _WIN32
+        return 1;
+#else
+        return 0;
+#endif // _WIN32
+    }
     for (j = 0; unsupported_term[j]; j++)
         if (!strcasecmp(term,unsupported_term[j])) return 1;
     return 0;
@@ -215,6 +227,7 @@ static int isUnsupportedTerm(void) {
 
 /* Raw mode: 1960 magic shit. */
 static int enableRawMode(int fd) {
+#ifndef _WIN32
     struct termios raw;
 
     if (!isatty(STDIN_FILENO)) goto fatal;
@@ -247,12 +260,17 @@ static int enableRawMode(int fd) {
 fatal:
     errno = ENOTTY;
     return -1;
+#else
+    return 0;
+#endif //_WIN32
 }
 
 static void disableRawMode(int fd) {
+#ifndef _WIN32
     /* Don't even check the return value as it's too late. */
     if (rawmode && tcsetattr(fd,TCSAFLUSH,&orig_termios) != -1)
         rawmode = 0;
+#endif //_WIN32
 }
 
 /* Use the ESC [6n escape sequence to query the horizontal cursor position
@@ -283,9 +301,13 @@ static int getCursorPosition(int ifd, int ofd) {
 /* Try to get the number of columns in the current terminal, or assume 80
  * if it fails. */
 static int getColumns(int ifd, int ofd) {
+#ifndef _WIN32
     struct winsize ws;
 
     if (ioctl(1, TIOCGWINSZ, &ws) == -1 || ws.ws_col == 0) {
+#else
+    if(1) {
+#endif //_WIN32
         /* ioctl() failed. Try to query the terminal itself. */
         int start, cols;
 
@@ -307,9 +329,12 @@ static int getColumns(int ifd, int ofd) {
             }
         }
         return cols;
-    } else {
+    }
+#ifndef _WIN32
+     else {
         return ws.ws_col;
     }
+#endif //_WIN32
 
 failed:
     return 80;

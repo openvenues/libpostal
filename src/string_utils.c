@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "log/log.h"
 #include "string_utils.h"
+#include "strndup.h"
 
 #define INVALID_INDEX(i, n) ((i) < 0 || (i) >= (n))
 
