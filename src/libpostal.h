@@ -186,7 +186,7 @@ typedef struct libpostal_token {
     uint16_t type;
 } libpostal_token_t;
 
-libpostal_token_t *libpostal_tokenize(char *input, bool whitespace, size_t *n);
+LIBPOSTAL_EXPORT libpostal_token_t *libpostal_tokenize(char *input, bool whitespace, size_t *n);
 
 // Normalize string options
 #define LIBPOSTAL_NORMALIZE_STRING_LATIN_ASCII 1 << 0
@@ -220,7 +220,7 @@ libpostal_token_t *libpostal_tokenize(char *input, bool whitespace, size_t *n);
 
 #define LIBPOSTAL_NORMALIZE_DEFAULT_TOKEN_OPTIONS_NUMERIC (LIBPOSTAL_NORMALIZE_DEFAULT_TOKEN_OPTIONS | LIBPOSTAL_NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC)
 
-char *libpostal_normalize_string(char *input, uint64_t options);
+LIBPOSTAL_EXPORT char *libpostal_normalize_string(char *input, uint64_t options);
 
 
 typedef struct libpostal_normalized_token {
