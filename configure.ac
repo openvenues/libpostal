@@ -48,7 +48,7 @@ AC_TYPE_UINT8_T
 AC_CHECK_TYPES([ptrdiff_t])
 
 # Checks for library functions.
-AC_CHECK_FUNCS([malloc realloc getcwd gettimeofday memmove memset regcomp setlocale sqrt strdup strndup])
+AC_CHECK_FUNCS([malloc realloc getcwd gettimeofday memmove memset regcomp setlocale sqrt strdup strndup drand48])
 
 AC_CONFIG_FILES([Makefile
                  libpostal.pc

@@ -17,13 +17,17 @@
 #ifndef _DRAND48_H
 #define _DRAND48_H
 
-#define	RAND48_SEED_0	(0x330e)
-#define	RAND48_SEED_1	(0xabcd)
-#define	RAND48_SEED_2	(0x1234)
-#define	RAND48_MULT_0	(0xe66d)
-#define	RAND48_MULT_1	(0xdeec)
-#define	RAND48_MULT_2	(0x0005)
-#define	RAND48_ADD	    (0x000b)
+#include <config.h>
+
+#ifndef HAVE_DRAND48
+
+#define	RAND48_SEED_0 (0x330e)
+#define	RAND48_SEED_1 (0xabcd)
+#define	RAND48_SEED_2 (0x1234)
+#define	RAND48_MULT_0 (0xe66d)
+#define	RAND48_MULT_1 (0xdeec)
+#define	RAND48_MULT_2 (0x0005)
+#define	RAND48_ADD    (0x000b)
 
 unsigned short _rand48_seed[3];
 
@@ -37,5 +41,5 @@ double erand48(unsigned short xseed[3]);
 
 double drand48(void);
 
-
-#endif  // _DRAND48_H
+#endif // HAVE_DRAND48
+#endif // _DRAND48_H
