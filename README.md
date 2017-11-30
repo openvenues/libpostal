@@ -118,7 +118,7 @@ git clone https://github.com/openvenues/libpostal
 cd libpostal
 ./bootstrap.sh
 ./configure --datadir=[...some dir with a few GB of space...]
-make
+make -j4
 sudo make install
 
 # On Linux it's probably a good idea to run
@@ -163,7 +163,7 @@ cd libpostal
 cp -rf windows/* ./
 ./bootstrap.sh
 ./configure --datadir=[...some dir with a few GB of space...]
-make
+make -j4
 make install
 ```
 Notes: When setting the datadir, the `C:` drive would be entered as `/c`. The libpostal build script automatically add `libpostal` on the end of the path, so '/c' would become `C:\libpostal\` on Windows.
