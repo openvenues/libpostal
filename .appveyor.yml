@@ -1,6 +1,10 @@
 version: 1.0.{build}
 image: Visual Studio 2015
 
+branches:
+  only:
+  - master
+
 environment:
   matrix:
   - COMPILER: msys2
@@ -31,7 +35,7 @@ build_script:
       bash -lc "cd $Env:WDIR && cp -rf ./windows/* ./"
       bash -lc "cd $Env:WDIR && ./bootstrap.sh"
       bash -lc "cd $Env:WDIR && ./configure --datadir=/c"
-      bash -lc "cd $Env:WDIR && make"
+      bash -lc "cd $Env:WDIR && make -j4"
       bash -lc "cd $Env:WDIR && make install"
       bash -lc "cd $Env:WDIR && cp src/.libs/libpostal-*.dll libpostal.dll"
       & 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\lib.exe' /def:libpostal.def /out:libpostal.lib /machine:$Env:PLATFORM
