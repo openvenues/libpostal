@@ -1,9 +1,6 @@
 version: 1.0.{build}
 image: Visual Studio 2015
-
-branches:
-  only:
-  - master
+skip_branch_with_pr: true
 
 environment:
   matrix:
@@ -36,10 +33,9 @@ build_script:
       bash -lc "cd $Env:WDIR && ./bootstrap.sh"
       bash -lc "cd $Env:WDIR && ./configure --datadir=/c"
       bash -lc "cd $Env:WDIR && make -j4"
-      bash -lc "cd $Env:WDIR && make install"
+      bash -lc "cd $Env:WDIR && make check"
       bash -lc "cd $Env:WDIR && cp src/.libs/libpostal-*.dll libpostal.dll"
       & 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\lib.exe' /def:libpostal.def /out:libpostal.lib /machine:$Env:PLATFORM
-      7z a libpostal.zip $Env:APPVEYOR_BUILD_FOLDER\libpostal.dll $Env:APPVEYOR_BUILD_FOLDER\libpostal.def $Env:APPVEYOR_BUILD_FOLDER\libpostal.exp $Env:APPVEYOR_BUILD_FOLDER\libpostal.lib $Env:APPVEYOR_BUILD_FOLDER\src\libpostal.h
       if ($Env:BIT -eq "32") {
         $Paths = @(
           (Join-Path $Env:APPVEYOR_BUILD_FOLDER "src"),
@@ -48,6 +44,7 @@ build_script:
           (Join-Path $Env:APPVEYOR_BUILD_FOLDER "test\.libs"))
         Get-ChildItem -Path $Paths | ?{ $_.Name -Match '\.(exe|dll)$' } | % { & 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\editbin.exe' /NOLOGO /LARGEADDRESSAWARE $_.FullName }
       }
+      7z a libpostal.zip $Env:APPVEYOR_BUILD_FOLDER\libpostal.dll $Env:APPVEYOR_BUILD_FOLDER\libpostal.def $Env:APPVEYOR_BUILD_FOLDER\libpostal.exp $Env:APPVEYOR_BUILD_FOLDER\libpostal.lib $Env:APPVEYOR_BUILD_FOLDER\src\libpostal.h
     }
 
 test_script:

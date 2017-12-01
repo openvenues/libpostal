@@ -91,8 +91,8 @@ Individual users can also help support open geo NLP research by making a monthly
 <a href="https://opencollective.com/libpostal/backer/28/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/28/avatar.svg"></a>
 <a href="https://opencollective.com/libpostal/backer/29/website" target="_blank"><img src="https://opencollective.com/libpostal/backer/29/avatar.svg"></a>
 
-Installation
-------------
+Installation (Mac/Linux)
+------------------------
 
 Before you install, make sure you have the following prerequisites:
 
@@ -118,7 +118,7 @@ git clone https://github.com/openvenues/libpostal
 cd libpostal
 ./bootstrap.sh
 ./configure --datadir=[...some dir with a few GB of space...]
-make
+make -j4
 sudo make install
 
 # On Linux it's probably a good idea to run
@@ -139,7 +139,10 @@ For example, if you write a program called app.c, you can compile it like this:
 gcc app.c `pkg-config --cflags --libs libpostal`
 ```
 
-**On Windows (MSys2/MinGW)**
+Installation (Windows)
+----------------------
+
+**MSys2/MinGW**
 
 For Windows the build procedure currently requires MSys2 and MinGW. This can be downloaded from http://msys2.org. Please follow the instructions on the MSys2 website for installation.
 
@@ -160,7 +163,7 @@ cd libpostal
 cp -rf windows/* ./
 ./bootstrap.sh
 ./configure --datadir=[...some dir with a few GB of space...]
-make
+make -j4
 make install
 ```
 Notes: When setting the datadir, the `C:` drive would be entered as `/c`. The libpostal build script automatically add `libpostal` on the end of the path, so '/c' would become `C:\libpostal\` on Windows.
@@ -674,6 +677,12 @@ Contributing
 Bug reports, issues and pull requests are welcome. Please read the [contributing guide](CONTRIBUTING.md) before submitting your issue, bug report, or pull request.
 
 Submit issues at: https://github.com/openvenues/libpostal/issues.
+
+
+Shoutouts
+---------
+
+Special thanks to @BenK10 for the initial Windows build and @AeroXuk for integrating it seamlessly into the project and setting up an Appveyor build.
 
 License
 -------
