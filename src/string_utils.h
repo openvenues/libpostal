@@ -91,6 +91,7 @@ uint32_array *unicode_codepoints(const char *str);
 bool unicode_equals(uint32_array *u1_array, uint32_array *u2_array);
 
 bool utf8_is_hyphen(int32_t ch);
+bool utf8_is_period(int32_t ch);
 bool utf8_is_letter(int cat);
 bool utf8_is_number(int cat);
 bool utf8_is_digit(int cat);

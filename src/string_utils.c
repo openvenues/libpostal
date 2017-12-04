@@ -314,6 +314,12 @@ inline bool utf8_is_hyphen(int32_t ch) {
     return cat == UTF8PROC_CATEGORY_PD || ch == 0x2212;
 }
 
+#define PERIOD_CODEPOINT 46
+
+inline bool utf8_is_period(int32_t codepoint) {
+    return codepoint == PERIOD_CODEPOINT;
+}
+
 inline bool utf8_is_punctuation(int cat) {
     return cat == UTF8PROC_CATEGORY_PD || cat == UTF8PROC_CATEGORY_PE        \
            || cat == UTF8PROC_CATEGORY_PF || cat == UTF8PROC_CATEGORY_PI    \
@@ -702,8 +708,6 @@ ssize_t string_next_codepoint_len(char *str, uint32_t codepoint, size_t len) {
 ssize_t string_next_codepoint(char *str, uint32_t codepoint) {
     return string_next_codepoint_len(str, codepoint, strlen(str));
 }
-
-#define PERIOD_CODEPOINT 46
 
 ssize_t string_next_period_len(char *str, size_t len) {
     return string_next_codepoint_len(str, PERIOD_CODEPOINT, len);

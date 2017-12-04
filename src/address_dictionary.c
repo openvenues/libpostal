@@ -35,6 +35,24 @@ inline bool address_expansion_in_dictionary(address_expansion_t expansion, uint1
 }
 
 
+bool address_phrase_in_dictionary(phrase_t phrase, uint16_t dictionary_id) {
+    address_expansion_value_t *value = address_dictionary_get_expansions(phrase.data);
+    if (value == NULL) return false;
+
+    address_expansion_array *expansions = value->expansions;
+    if (expansions == NULL) return false;
+
+    address_expansion_t *expansions_array = expansions->a;
+
+    for (size_t i = 0; i < expansions->n; i++) {
+        address_expansion_t expansion = expansions_array[i];
+        if (address_expansion_in_dictionary(expansion, dictionary_id)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 int32_t address_dictionary_next_canonical_index(void) {
     if (address_dict == NULL || address_dict->canonical == NULL) {
