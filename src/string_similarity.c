@@ -184,7 +184,7 @@ affine_gap_edits_t affine_gap_distance_unicode_costs(uint32_array *u1_array, uin
             bool is_transpose = false;
             size_t w = c1 != c2 && !both_separators ? mismatch_cost : match_cost;
 
-            if (c1 != c2 && j < m && utf8_is_letter(c2) && utf8_is_letter(c1) && c2 == u1[j] && i < n && c1 == u2[i]) {
+            if (c1 != c2 && utf8_is_letter(utf8proc_category(c2)) && utf8_is_letter(utf8proc_category(c1)) && i < n && c2 == u1[i] && j < m && c1 == u2[j]) {
                 w = transpose_cost;
                 is_transpose = true;
             }
