@@ -410,6 +410,47 @@ bool unicode_equals(uint32_array *u1_array, uint32_array *u2_array) {
     return true;
 }
 
+size_t unicode_common_prefix(uint32_array *u1_array, uint32_array *u2_array) {
+    size_t len1 = u1_array->n;
+    size_t len2 = u2_array->n;
+
+    size_t min_len = len1 <= len2 ? len1 : len2;
+
+    uint32_t *u1 = u1_array->a;
+    uint32_t *u2 = u2_array->a;
+    size_t common_prefix = 0;
+
+    for (size_t i = 0; i < min_len; i++) {
+        if (u1[i] == u2[i]) {
+            common_prefix++;
+        } else {
+            break;
+        }
+    }
+    return common_prefix;
+}
+
+size_t unicode_common_suffix(uint32_array *u1_array, uint32_array *u2_array) {
+    size_t len1 = u1_array->n;
+    size_t len2 = u2_array->n;
+
+    size_t min_len = len1 <= len2 ? len1 : len2;
+
+    uint32_t *u1 = u1_array->a;
+    uint32_t *u2 = u2_array->a;
+    size_t common_suffix = 0;
+
+    for (size_t i = 0; i < min_len; i++) {
+        if (u1[len1 - i - 1] == u2[len2 - i - 1]) {
+            common_suffix++;
+        } else {
+            break;
+        }
+    }
+    return common_suffix;
+}
+
+
 
 int utf8_compare_len(const char *str1, const char *str2, size_t len) {
     if (len == 0) return 0;
@@ -747,6 +788,28 @@ size_t string_right_spaces_len(char *str, size_t len) {
 
     return spaces;
 
+}
+
+inline size_t string_hyphen_prefix_len(char *str, size_t len) {
+    // Strip beginning hyphens
+    int32_t unichr;
+    uint8_t *ptr = (uint8_t *)str;
+    ssize_t char_len = utf8proc_iterate(ptr, len, &unichr);
+    if (utf8_is_hyphen(unichr)) {
+        return (size_t)char_len;
+    }
+    return 0;
+}
+
+inline size_t string_hyphen_suffix_len(char *str, size_t len) {
+    // Strip ending hyphens
+    int32_t unichr;
+    uint8_t *ptr = (uint8_t *)str;
+    ssize_t char_len = utf8proc_iterate_reversed(ptr, len, &unichr);
+    if (utf8_is_hyphen(unichr)) {
+        return (size_t)char_len;
+    }
+    return 0;
 }
 
 size_t string_left_spaces_len(char *str, size_t len) {

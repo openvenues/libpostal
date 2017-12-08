@@ -89,6 +89,8 @@ ssize_t utf8_len(const char *str, size_t len);
 
 uint32_array *unicode_codepoints(const char *str);
 bool unicode_equals(uint32_array *u1_array, uint32_array *u2_array);
+size_t unicode_common_prefix(uint32_array *u1_array, uint32_array *u2_array);
+size_t unicode_common_suffix(uint32_array *u1_array, uint32_array *u2_array);
 
 bool utf8_is_hyphen(int32_t ch);
 bool utf8_is_period(int32_t ch);
@@ -118,6 +120,9 @@ bool string_contains_period_len(char *str, size_t len);
 bool string_contains_period(char *str);
 
 char *string_trim(char *str);
+
+size_t string_hyphen_prefix_len(char *str, size_t len);
+size_t string_hyphen_suffix_len(char *str, size_t len);
 
 /* char_array is a dynamic character array defined in collections.h
 but has a few additional methods related to string manipulation.
