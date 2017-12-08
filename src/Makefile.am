@@ -12,7 +12,7 @@ DEFAULT_INCLUDES = -I.. -I/usr/local/include
 CFLAGS =
 
 lib_LTLIBRARIES = libpostal.la
-libpostal_la_SOURCES = strndup.c libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c trie_utils.c string_utils.c file_utils.c utf8proc/utf8proc.c cmp/cmp.c normalize.c numex.c features.c unicode_scripts.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c averaged_perceptron_tagger.c graph.c graph_builder.c language_classifier.c language_features.c logistic_regression.c logistic.c minibatch.c float_utils.c ngrams.c
+libpostal_la_SOURCES = strndup.c libpostal.c expand.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c trie_utils.c string_utils.c file_utils.c utf8proc/utf8proc.c cmp/cmp.c normalize.c numex.c features.c unicode_scripts.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c averaged_perceptron_tagger.c graph.c graph_builder.c language_classifier.c language_features.c logistic_regression.c logistic.c minibatch.c float_utils.c ngrams.c
 libpostal_la_LIBADD = libscanner.la $(CBLAS_LIBS)
 libpostal_la_CFLAGS = $(CFLAGS_O2) -D LIBPOSTAL_EXPORTS
 libpostal_la_LDFLAGS = -version-info @LIBPOSTAL_SO_VERSION@ -no-undefined
