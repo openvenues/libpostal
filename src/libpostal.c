@@ -48,6 +48,10 @@ char **libpostal_expand_address(char *input, libpostal_normalize_options_t optio
     return expand_address(input, options, n);
 }
 
+char **libpostal_expand_address_root(char *input, libpostal_normalize_options_t options, size_t *n) {
+    return expand_address_root(input, options, n);
+}
+
 void libpostal_expansion_array_destroy(char **expansions, size_t n) {
     expansion_array_destroy(expansions, n);
 }

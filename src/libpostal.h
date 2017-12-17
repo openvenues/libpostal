@@ -138,6 +138,7 @@ typedef struct libpostal_normalize_options {
 LIBPOSTAL_EXPORT libpostal_normalize_options_t libpostal_get_default_options(void);
 
 LIBPOSTAL_EXPORT char **libpostal_expand_address(char *input, libpostal_normalize_options_t options, size_t *n);
+LIBPOSTAL_EXPORT char **libpostal_expand_address_root(char *input, libpostal_normalize_options_t options, size_t *n);
 
 LIBPOSTAL_EXPORT void libpostal_expansion_array_destroy(char **expansions, size_t n);
 
