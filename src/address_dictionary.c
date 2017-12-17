@@ -1,5 +1,6 @@
 #include <dirent.h>
 #include <limits.h>
+#include <stdarg.h>
 
 #include "address_dictionary.h"
 
@@ -54,6 +55,20 @@ bool address_phrase_in_dictionary(phrase_t phrase, uint16_t dictionary_id) {
 }
 
 
+bool address_phrase_in_dictionaries(phrase_t phrase, size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    bool in_dictionary = false;
+    for (size_t i = 0; i < n; i++) {
+        uint16_t dictionary_id = va_arg(args, uint16_t);
+        in_dictionary = address_phrase_in_dictionary(phrase, dictionary_id);
+        if (in_dictionary) break;
+    }
+    va_end(args);
+    return in_dictionary;
+}
+
+
 int32_t address_dictionary_next_canonical_index(void) {
     if (address_dict == NULL || address_dict->canonical == NULL) {
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
@@ -80,6 +95,32 @@ char *address_dictionary_get_canonical(uint32_t index) {
     } 
     return cstring_array_get_string(address_dict->canonical, index);    
 }
+
+inline bool address_expansions_have_canonical_interpretation(address_expansion_array *expansions) {
+    if (expansions == NULL) return false;
+
+    address_expansion_t *expansions_array = expansions->a;
+
+    for (size_t i = 0; i < expansions->n; i++) {
+        address_expansion_t expansion = expansions_array[i];
+        if (expansion.canonical_index == NULL_CANONICAL_INDEX) {
+            return true;
+        }
+    }
+    return false;
+
+}
+
+inline bool address_phrase_has_canonical_interpretation(phrase_t phrase) {
+    address_expansion_value_t *value = address_dictionary_get_expansions(phrase.data);
+    if (value == NULL) return false;
+
+    address_expansion_array *expansions = value->expansions;
+
+    return address_expansions_have_canonical_interpretation(expansions);
+}
+
+
 
 address_expansion_value_t *address_expansion_value_new(void) {
     address_expansion_value_t *self = malloc(sizeof(address_expansion_value_t));
