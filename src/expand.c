@@ -803,6 +803,8 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
             log_debug("have_strictly_ignorable_abbreviation = %d\n", have_strictly_ignorable_abbreviation);
         }
 
+        bool skipped_last_edge_phrase = false;
+
         for (size_t i = 0; i < phrases->n; i++) {
             phrase_lang = phrases->a[i];
 
@@ -882,19 +884,21 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                 address_expansion_array *expansions = value->expansions;
 
                 if (expansions != NULL) {
-                    bool current_phrase_have_ambiguous = address_phrase_in_dictionary(phrase, DICTIONARY_AMBIGUOUS_EXPANSION);
+                    bool current_phrase_have_ambiguous = delete_phrases && address_phrase_in_dictionary(phrase, DICTIONARY_AMBIGUOUS_EXPANSION);
                     bool added_pre_phrase_space = false;
                     bool current_phrase_have_ignorable = delete_phrases && address_phrase_is_ignorable_for_components(phrase, options.address_components);
                     bool current_phrase_have_edge_ignorable = false;
 
-                    bool current_phrase_have_unambiguous = address_phrase_contains_unambiguous_expansion(phrase);
+                    bool current_phrase_have_canonical = delete_phrases && address_phrase_has_canonical_interpretation(phrase);
+
+                    bool current_phrase_have_unambiguous = delete_phrases && address_phrase_contains_unambiguous_expansion(phrase);
 
                     /*
                     Edge phrase handling. This is primarily for handling pre-directionals/post-directionals
                     in English and other languages.
                     */
                     bool skip_edge_phrase = false;
-                    bool other_phrase_have_edge_ignorable = false;
+                    bool other_phrase_is_ignorable = false;
 
                     if (delete_phrases) {
                         phrase_language_t other_phrase_lang;
@@ -918,19 +922,21 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                                     if (other_phrase.start >= phrase.start + phrase.len && string_equals(other_phrase_lang.language, phrase_lang.language)) {
                                         if (other_phrase.start + other_phrase.len == num_tokens) {
                                             skip_edge_phrase = false;
-                                            if (current_phrase_have_edge_ignorable) {
+                                            if (current_phrase_have_edge_ignorable || (current_phrase_have_ambiguous && current_phrase_have_canonical)) {
                                                 // don't delete the "E" in "E St"
                                                 log_debug("initial phrase is edge ignorable out of two phrases. Checking next phrase is ignorable.\n");
+
                                                 skip_edge_phrase = !(address_phrase_is_ignorable_for_components(other_phrase, options.address_components) && !(address_phrase_has_canonical_interpretation(other_phrase) && address_phrase_is_possible_root_for_components(other_phrase, options.address_components)));
+                                                log_debug("skip_edge_phrase = %d\n", skip_edge_phrase);
                                             } else {
                                                 log_debug("initial phrase is not edge-ignorable out of two phrases. Checking next phrase is edge ignorable.\n");
                                                 // delete "Avenue" in "Avenue E"
-                                                other_phrase_have_edge_ignorable = address_phrase_is_edge_ignorable_for_components(other_phrase, options.address_components);
-                                                skip_edge_phrase = other_phrase_have_edge_ignorable && address_phrase_is_ignorable_for_components(phrase, options.address_components) && !(address_phrase_has_canonical_interpretation(phrase) && address_phrase_is_possible_root_for_components(phrase, options.address_components));
+                                                other_phrase_is_ignorable = address_phrase_is_edge_ignorable_for_components(other_phrase, options.address_components) || (address_phrase_in_dictionary(other_phrase, DICTIONARY_AMBIGUOUS_EXPANSION) && address_phrase_has_canonical_interpretation(other_phrase));
+                                                skip_edge_phrase = other_phrase_is_ignorable && address_phrase_is_ignorable_for_components(phrase, options.address_components) && !(address_phrase_has_canonical_interpretation(phrase) && address_phrase_is_possible_root_for_components(phrase, options.address_components));
                                                 
                                             }
                                         } else {
-                                            // If we encounter an ignorable phrase 
+                                            // If we encounter an ignorable phrase like St and we're _not_ the end of the string e.g. "E St SE", this is probably a legit token instead of a pre-directional
                                             skip_edge_phrase = address_phrase_is_possible_root_for_components(other_phrase, options.address_components) && address_phrase_has_canonical_interpretation(other_phrase);
                                             log_debug("phrase is possible root = %d\n", skip_edge_phrase);
                                         }
@@ -956,16 +962,15 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                                         if (other_phrase.start == 0) {
                                             //other_phrase_invalid = address_phrase_is_ignorable_for_components(other_phrase, options.address_components) && !address_phrase_has_canonical_interpretation(other_phrase) && !address_phrase_is_possible_root_for_components(other_phrase, options.address_components);
                                             skip_edge_phrase = false;
-                                            if (current_phrase_have_edge_ignorable) {
+                                            if (current_phrase_have_edge_ignorable || (current_phrase_have_ambiguous && current_phrase_have_canonical)) {
                                                 // don't delete the "E" in "Avenue E"
                                                 log_debug("final phrase is edge ignorable out of two phrases. Checking previous phrase is ignorable.\n");
                                                 skip_edge_phrase = !(address_phrase_is_ignorable_for_components(other_phrase, options.address_components) && !(address_phrase_has_canonical_interpretation(other_phrase) && address_phrase_is_possible_root_for_components(other_phrase, options.address_components)));
-                                                //skip_edge_phrase = !other_phrase_invalid;                                            
                                             } else {
                                                 log_debug("final phrase is not edge-ignorable out of two phrases. Checking previous phrase is edge ignorable.\n");
                                                 // delete "St" in "E St"
-                                                other_phrase_have_edge_ignorable = address_phrase_is_edge_ignorable_for_components(other_phrase, options.address_components);
-                                                skip_edge_phrase = other_phrase_have_edge_ignorable && address_phrase_is_ignorable_for_components(phrase, options.address_components) && !(address_phrase_has_canonical_interpretation(phrase) && address_phrase_is_possible_root_for_components(phrase, options.address_components));
+                                                other_phrase_is_ignorable = address_phrase_is_edge_ignorable_for_components(other_phrase, options.address_components) || (address_phrase_in_dictionary(other_phrase, DICTIONARY_AMBIGUOUS_EXPANSION) && address_phrase_has_canonical_interpretation(other_phrase));
+                                                skip_edge_phrase = other_phrase_is_ignorable && address_phrase_is_ignorable_for_components(phrase, options.address_components) && !(address_phrase_has_canonical_interpretation(phrase) && address_phrase_is_possible_root_for_components(phrase, options.address_components));
                                                 //skip_edge_phrase = address_phrase_is_edge_ignorable_for_components(other_phrase, options.address_components);
                                             }
                                         }
@@ -976,10 +981,17 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                         }
                     }
 
+                    if (phrase.start == prev_phrase.start && phrase.len == prev_phrase.len && skipped_last_edge_phrase) {
+                        skip_edge_phrase = true;
+                    }
+
                     for (size_t j = 0; j < expansions->n; j++) {
                         if (skip_edge_phrase) {
+                            skipped_last_edge_phrase = true;
                             log_debug("skip edge phrase\n");
                             continue;
+                        } else {
+                            skipped_last_edge_phrase = false;
                         }
 
                         address_expansion_t expansion = expansions->a[j];
@@ -998,7 +1010,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                             current_phrase_expandable = current_phrase_expandable || current_phrase_have_ambiguous;
 
                             // Edge phrase calculations from above
-                            if (current_phrase_have_edge_ignorable || other_phrase_have_edge_ignorable) {
+                            if (current_phrase_have_edge_ignorable || other_phrase_is_ignorable) {
                                 log_debug("current_phrase_have_edge_ignorable\n");
                                 log_debug("skip_edge_phrase = %d\n", skip_edge_phrase);
                                 current_phrase_ignorable = skip_edge_phrase;
