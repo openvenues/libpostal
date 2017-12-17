@@ -38,14 +38,18 @@ bool expand_affixes(string_tree_t *tree, char *str, char *lang, token_t token, l
 bool expand_affixes_period(string_tree_t *tree, char *str, char *lang, token_t token, libpostal_normalize_options_t options);
 bool add_period_affixes_or_token(string_tree_t *tree, char *str, token_t token, libpostal_normalize_options_t options);
 
-string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t options);
-
 bool normalize_ordinal_suffixes(string_tree_t *tree, char *str, char *lang, token_t token, size_t i, token_t prev_token, libpostal_normalize_options_t options);
 
 void add_normalized_strings_tokenized(string_tree_t *tree, char *str, token_array *tokens, libpostal_normalize_options_t options);
 
-void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_strings, char *str, libpostal_normalize_options_t options);
+typedef enum {
+    EXPAND_PHRASES,
+    KEEP_PHRASES,
+    DELETE_PHRASES
+} expansion_phrase_option_t;
+
 char **expand_address(char *input, libpostal_normalize_options_t options, size_t *n);
+char **expand_address_phrase_option(char *input, libpostal_normalize_options_t options, size_t *n, expansion_phrase_option_t phrase_option);
 char **expand_address_root(char *input, libpostal_normalize_options_t options, size_t *n);
 void expansion_array_destroy(char **expansions, size_t n);
 

@@ -449,31 +449,235 @@ bool add_period_affixes_or_token(string_tree_t *tree, char *str, token_t token, 
 }
 
 
-string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t options) {
+inline uint32_t gazetter_ignorable_components(uint16_t dictionary_id) {
+    switch (dictionary_id) {
+        case DICTIONARY_ACADEMIC_DEGREE:
+            return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
+        case DICTIONARY_BUILDING_TYPE:
+            return LIBPOSTAL_ADDRESS_HOUSE_NUMBER | LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_UNIT;
+        case DICTIONARY_COMPANY_TYPE:
+            return LIBPOSTAL_ADDRESS_NAME;
+        case DICTIONARY_DIRECTIONAL:
+            return LIBPOSTAL_ADDRESS_STREET;
+        case DICTIONARY_ELISION:
+            return LIBPOSTAL_ADDRESS_ANY;
+        case DICTIONARY_ENTRANCE:
+            return LIBPOSTAL_ADDRESS_ENTRANCE;
+        case DICTIONARY_HOUSE_NUMBER:
+            return LIBPOSTAL_ADDRESS_HOUSE_NUMBER;
+        case DICTIONARY_LEVEL_NUMBERED:
+            return LIBPOSTAL_ADDRESS_LEVEL;
+        case DICTIONARY_LEVEL_STANDALONE:
+            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_LEVEL;
+        case DICTIONARY_LEVEL_MEZZANINE:
+            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_LEVEL;
+        case DICTIONARY_LEVEL_BASEMENT:
+            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_LEVEL;
+        case DICTIONARY_LEVEL_SUB_BASEMENT:
+            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_LEVEL;
+        case DICTIONARY_NUMBER:
+            return LIBPOSTAL_ADDRESS_HOUSE_NUMBER | LIBPOSTAL_ADDRESS_UNIT | LIBPOSTAL_ADDRESS_LEVEL | LIBPOSTAL_ADDRESS_STAIRCASE | LIBPOSTAL_ADDRESS_ENTRANCE | LIBPOSTAL_ADDRESS_STREET;
+        case DICTIONARY_NO_NUMBER:
+            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_HOUSE_NUMBER;
+        case DICTIONARY_PERSONAL_TITLE:
+            return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
+        case DICTIONARY_PLACE_NAME:
+            return LIBPOSTAL_ADDRESS_NAME;
+        case DICTIONARY_POST_OFFICE:
+            return LIBPOSTAL_ADDRESS_PO_BOX;
+        case DICTIONARY_POSTAL_CODE:
+            return LIBPOSTAL_ADDRESS_POSTAL_CODE;
+        case DICTIONARY_QUALIFIER:
+            return LIBPOSTAL_ADDRESS_TOPONYM;
+        case DICTIONARY_STAIRCASE:
+            return LIBPOSTAL_ADDRESS_STAIRCASE;
+        case DICTIONARY_STOPWORD:
+            return LIBPOSTAL_ADDRESS_ANY;
+        case DICTIONARY_STREET_TYPE:
+            return LIBPOSTAL_ADDRESS_STREET;
+        case DICTIONARY_UNIT_NUMBERED:
+            return LIBPOSTAL_ADDRESS_UNIT;
+        case DICTIONARY_UNIT_STANDALONE:
+            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_UNIT;
+        case DICTIONARY_UNIT_DIRECTION:
+            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_UNIT;
+        default:
+            return LIBPOSTAL_ADDRESS_NONE;
+    }
+}
+
+inline uint32_t gazetter_edge_ignorable_components(uint16_t dictionary_id) {
+    switch (dictionary_id) {
+        // Pre/post directionals can be removed if there are non-phrase tokens
+        case DICTIONARY_DIRECTIONAL:
+            return LIBPOSTAL_ADDRESS_STREET;
+        default:
+            return LIBPOSTAL_ADDRESS_NONE;
+    }
+}
+
+inline uint32_t gazetter_possible_root_components(uint16_t dictionary_id) {
+    switch (dictionary_id) {
+        case DICTIONARY_ACADEMIC_DEGREE:
+            return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
+        case DICTIONARY_PERSONAL_TITLE:
+            return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
+        case DICTIONARY_NUMBER:
+            return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
+        case DICTIONARY_PLACE_NAME:
+            return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
+        case DICTIONARY_QUALIFIER:
+            return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
+        case DICTIONARY_SYNONYM:
+            return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
+        case DICTIONARY_TOPONYM:
+            return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
+        default:
+            return LIBPOSTAL_ADDRESS_NONE;
+    }
+}
+
+inline bool address_expansion_is_ignorable_for_components(address_expansion_t expansion, uint32_t address_components) {
+    for (uint32_t j = 0; j < expansion.num_dictionaries; j++) {
+        uint16_t dictionary_id = expansion.dictionary_ids[j];
+        if (gazetter_ignorable_components(dictionary_id) & address_components) {
+            return true;
+        }
+    }
+    return false;
+}
+
+inline bool address_expansion_is_edge_ignorable_for_components(address_expansion_t expansion, uint32_t address_components) {
+    for (uint32_t j = 0; j < expansion.num_dictionaries; j++) {
+        uint16_t dictionary_id = expansion.dictionary_ids[j];
+        if (gazetter_edge_ignorable_components(dictionary_id) & address_components) {
+            return true;
+        }
+    }
+    return false;
+}
+
+inline bool address_expansion_is_possible_root_for_components(address_expansion_t expansion, uint32_t address_components) {
+    for (uint32_t j = 0; j < expansion.num_dictionaries; j++) {
+        uint16_t dictionary_id = expansion.dictionary_ids[j];
+        if (gazetter_possible_root_components(dictionary_id) & address_components) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool address_phrase_is_ignorable_for_components(phrase_t phrase, uint32_t address_components) {
+    uint32_t expansion_index = phrase.data;
+    address_expansion_value_t *value = address_dictionary_get_expansions(expansion_index);
+
+    if (value == NULL) return false;
+
+    address_expansion_array *expansions = value->expansions;
+    if (expansions == NULL) return false;
+
+    for (size_t i = 0; i < expansions->n; i++) {
+        address_expansion_t expansion = expansions->a[i];
+
+        if (address_expansion_is_ignorable_for_components(expansion, address_components)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+bool address_phrase_is_edge_ignorable_for_components(phrase_t phrase, uint32_t address_components) {
+    uint32_t expansion_index = phrase.data;
+    address_expansion_value_t *value = address_dictionary_get_expansions(expansion_index);
+
+    if (value == NULL) return false;
+
+    address_expansion_array *expansions = value->expansions;
+    if (expansions == NULL) return false;
+
+    for (size_t i = 0; i < expansions->n; i++) {
+        address_expansion_t expansion = expansions->a[i];
+
+        if (address_expansion_is_edge_ignorable_for_components(expansion, address_components)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+bool address_phrase_is_possible_root_for_components(phrase_t phrase, uint32_t address_components) {
+    uint32_t expansion_index = phrase.data;
+    address_expansion_value_t *value = address_dictionary_get_expansions(expansion_index);
+
+    if (value == NULL) return false;
+
+    address_expansion_array *expansions = value->expansions;
+    if (expansions == NULL) return false;
+
+    for (size_t i = 0; i < expansions->n; i++) {
+        address_expansion_t expansion = expansions->a[i];
+
+        if (address_expansion_is_possible_root_for_components(expansion, address_components)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
+bool address_phrase_contains_unambiguous_expansion(phrase_t phrase) {
+    address_expansion_value_t *value = address_dictionary_get_expansions(phrase.data);
+    if (value == NULL) return false;
+
+    address_expansion_array *expansions = value->expansions;
+    if (expansions == NULL) return false;
+
+    address_expansion_t *expansions_array = expansions->a;
+
+    for (size_t i = 0; i < expansions->n; i++) {
+        address_expansion_t expansion = expansions_array[i];
+        if (!address_expansion_in_dictionary(expansion, DICTIONARY_AMBIGUOUS_EXPANSION)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
+
+// Delete non-canonical phrases only
+
+string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normalize_options_t options, expansion_phrase_option_t phrase_option) {
     char_array *key = NULL;
 
     log_debug("input=%s\n", str);
-    token_array *tokens = tokenize_keep_whitespace(str);
+    token_array *token_array = tokenize_keep_whitespace(str);
 
-    if (tokens == NULL) {
+    if (token_array == NULL) {
         return NULL;
     }
 
     size_t len = strlen(str);
 
-    log_debug("tokenized, num tokens=%zu\n", tokens->n);
+    token_t *tokens = token_array->a;
+    size_t num_tokens = token_array->n;
+
+    log_debug("tokenized, num tokens=%zu\n", num_tokens);
 
     bool last_was_punctuation = false;
 
     phrase_language_array *phrases = NULL;
     phrase_array *lang_phrases = NULL;
 
-
     for (size_t i = 0; i < options.num_languages; i++)  {
         char *lang = options.languages[i];
         log_debug("lang=%s\n", lang);
 
-        lang_phrases = search_address_dictionaries_tokens(str, tokens, lang);
+        lang_phrases = search_address_dictionaries_tokens(str, token_array, lang);
         
         if (lang_phrases == NULL) { 
             log_debug("lang_phrases NULL\n");
@@ -494,7 +698,7 @@ string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t 
     }
 
 
-    lang_phrases = search_address_dictionaries_tokens(str, tokens, ALL_LANGUAGES);
+    lang_phrases = search_address_dictionaries_tokens(str, token_array, ALL_LANGUAGES);
     if (lang_phrases != NULL) {
         phrases = phrases != NULL ? phrases : phrase_language_array_new_size(lang_phrases->n);
 
@@ -526,6 +730,79 @@ string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t 
 
         key = key != NULL ? key : char_array_new_size(DEFAULT_KEY_LEN);
 
+        log_debug("phrase_option = %d\n", phrase_option);
+
+        bool delete_phrases = phrase_option == DELETE_PHRASES;
+        bool expand_phrases = phrase_option == EXPAND_PHRASES;
+
+        size_t num_phrases = phrases->n;
+
+        bool have_non_phrase_tokens = false;
+        bool have_canonical_phrases = false;
+        bool have_ambiguous = false;
+        bool have_strictly_ignorable = false;
+        bool have_strictly_ignorable_abbreviation = false;
+
+        size_t prev_phrase_end = 0;
+
+        if (delete_phrases) {
+            for (size_t i = 0; i < num_phrases; i++) {
+                phrase_lang = phrases->a[i];
+                phrase = phrase_lang.phrase;
+
+                log_debug("phrase.start = %zu, prev_phrase_end = %zu\n", phrase.start, prev_phrase_end);
+
+                token_t inter_token;
+                if (phrase.start > prev_phrase_end) {
+                    for (size_t j = prev_phrase_end; j < phrase.start; j++) {
+                        inter_token = tokens[j];
+                        if (!is_punctuation(inter_token.type) && !is_whitespace(inter_token.type)) {
+                            log_debug("have_non_phrase_tokens\n");
+                            have_non_phrase_tokens = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (i == num_phrases - 1 && phrase.start + phrase.len < num_tokens) {
+                    for (size_t j = phrase.start + phrase.len; j < num_tokens; j++) {
+                        inter_token = tokens[j];
+                        if (!is_punctuation(inter_token.type) && !is_whitespace(inter_token.type)) {
+                            have_non_phrase_tokens = true;
+                            break;
+                        }
+                    }
+                }
+
+                bool phrase_is_ambiguous = address_phrase_in_dictionary(phrase, DICTIONARY_AMBIGUOUS_EXPANSION);
+                bool phrase_is_strictly_ignorable = address_phrase_is_ignorable_for_components(phrase, options.address_components) && !phrase_is_ambiguous;
+                bool phrase_is_canonical = address_phrase_has_canonical_interpretation(phrase);
+
+                have_non_phrase_tokens = have_non_phrase_tokens || (!phrase_is_strictly_ignorable && !phrase_is_ambiguous);
+                have_strictly_ignorable = have_strictly_ignorable || phrase_is_strictly_ignorable;
+                have_strictly_ignorable_abbreviation = have_strictly_ignorable_abbreviation || (phrase_is_strictly_ignorable && !phrase_is_canonical);
+                if (have_strictly_ignorable_abbreviation) {
+                    log_debug("have_strictly_ignorable=%zu, phrase_is_canonical=%zu\n", have_strictly_ignorable, phrase_is_canonical);
+                }
+
+                have_canonical_phrases = have_canonical_phrases || (phrase_is_canonical && !phrase_is_ambiguous);
+                have_ambiguous = have_ambiguous || phrase_is_ambiguous;
+
+                if (have_non_phrase_tokens) {
+                    break;
+                }
+
+                prev_phrase_end = phrase.start + phrase.len;
+            }
+
+
+            log_debug("have_non_phrase_tokens = %d\n", have_non_phrase_tokens);
+            log_debug("have_canonical_phrases = %d\n", have_canonical_phrases);
+            log_debug("have_ambiguous = %d\n", have_ambiguous);
+            log_debug("have_strictly_ignorable = %d\n", have_strictly_ignorable);
+            log_debug("have_strictly_ignorable_abbreviation = %d\n", have_strictly_ignorable_abbreviation);
+        }
+
         for (size_t i = 0; i < phrases->n; i++) {
             phrase_lang = phrases->a[i];
 
@@ -550,54 +827,47 @@ string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t 
             log_debug("start=%zu, end=%zu\n", start, end);
             for (size_t j = start; j < end; j++) {
                 log_debug("Adding token %zu\n", j);
-                token_t token = tokens->a[j];
+                token_t token = tokens[j];
                 if (is_punctuation(token.type)) {
                     last_was_punctuation = true;
                     continue;
                 }
 
                 if (token.type != WHITESPACE) {
-                    if (phrase.start > 0 && last_was_punctuation && !last_added_was_whitespace) {
+                    if ((phrase.start > 0 && last_was_punctuation) || (!last_added_was_whitespace && string_tree_num_strings(tree) > 0) ) {
+                        log_debug("Adding space\n");
                         string_tree_add_string(tree, " ");
                         string_tree_finalize_token(tree);
                     }
                     log_debug("Adding previous token, %.*s\n", (int)token.len, str + token.offset);
 
                     bool have_period_affixes = add_period_affixes_or_token(tree, str, token, options);
+                    string_tree_finalize_token(tree);
                     last_added_was_whitespace = false;
-                } else if (!last_added_was_whitespace) {
+                } else if (!delete_phrases && !last_added_was_whitespace && string_tree_num_strings(tree) > 0 ) {
                     log_debug("Adding pre-phrase whitespace\n");
                     last_added_was_whitespace = true;
                     string_tree_add_string(tree, " ");
+                    string_tree_finalize_token(tree);
                 } else {
                     continue;
                 }
 
                 last_was_punctuation = false;
-                string_tree_finalize_token(tree);       
             }
 
-            if (phrase.start > 0 && start < end) {
-                token_t prev_token = tokens->a[phrase.start - 1];
-                log_debug("last_added_was_whitespace=%d\n", last_added_was_whitespace);
-                if (!last_added_was_whitespace && phrase.start - 1 > 0 && (!is_ideographic(prev_token.type) || last_was_punctuation))  {
-                    log_debug("Adding space III\n");
-                    string_tree_add_string(tree, " ");
-                    last_added_was_whitespace = true;
-                    string_tree_finalize_token(tree);
-                }
-            }
+            size_t added_expansions = 0;
+            token_t token;
 
             uint32_t expansion_index = phrase.data;
             address_expansion_value_t *value = address_dictionary_get_expansions(expansion_index);
 
-            token_t token;
+            bool expansion_valid_components = value->components & options.address_components;
 
-            size_t added_expansions = 0;
-            if ((value->components & options.address_components) > 0) {
+            if (expansion_valid_components) {
                 key->n = namespace_len;
                 for (size_t j = phrase.start; j < phrase.start + phrase.len; j++) {
-                    token = tokens->a[j];
+                    token = tokens[j];
                     if (token.type != WHITESPACE) {
                         char_array_cat_len(key, str + token.offset, token.len);
                         last_added_was_whitespace = false;
@@ -612,22 +882,175 @@ string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t 
                 address_expansion_array *expansions = value->expansions;
 
                 if (expansions != NULL) {
-                    for (size_t j = 0; j < expansions->n; j++) {
-                        address_expansion_t expansion = expansions->a[j];
+                    bool current_phrase_have_ambiguous = address_phrase_in_dictionary(phrase, DICTIONARY_AMBIGUOUS_EXPANSION);
+                    bool added_pre_phrase_space = false;
+                    bool current_phrase_have_ignorable = delete_phrases && address_phrase_is_ignorable_for_components(phrase, options.address_components);
+                    bool current_phrase_have_edge_ignorable = false;
 
-                        if ((expansion.address_components & options.address_components) == 0 && !address_expansion_in_dictionary(expansion, DICTIONARY_AMBIGUOUS_EXPANSION)) {
+                    bool current_phrase_have_unambiguous = address_phrase_contains_unambiguous_expansion(phrase);
+
+                    /*
+                    Edge phrase handling. This is primarily for handling pre-directionals/post-directionals
+                    in English and other languages.
+                    */
+                    bool skip_edge_phrase = false;
+                    bool other_phrase_have_edge_ignorable = false;
+
+                    if (delete_phrases) {
+                        phrase_language_t other_phrase_lang;
+                        phrase_t other_phrase;
+
+                        log_debug("i = %zu, phrase.start = %u\n", i, phrase.start);
+                        if (i == 0 && phrase.start == 0 && phrase.start + phrase.len < num_tokens) {
+                            current_phrase_have_edge_ignorable = address_phrase_is_edge_ignorable_for_components(phrase, options.address_components);
+                            // Delete "E" in "E 125th St"
+                            if (current_phrase_have_edge_ignorable) {
+                                log_debug("edge-ignorable phrase [%u, %u]\n", phrase.start, phrase.start + phrase.len);
+                                skip_edge_phrase = true;
+                            }
+
+                            if (!skip_edge_phrase || !have_non_phrase_tokens) {
+                                for (size_t other_i = i + 1; other_i < phrases->n; other_i++) {
+                                    other_phrase_lang = phrases->a[other_i];
+                                    other_phrase = other_phrase_lang.phrase;
+                                    log_debug("phrase.start + phrase.len = %u\n", phrase.start + phrase.len);
+                                    log_debug("other_phrase.start = %u, other_phrase.len = %u, lang=%s\n", other_phrase.start, other_phrase.len, other_phrase_lang.language);
+                                    if (other_phrase.start >= phrase.start + phrase.len && string_equals(other_phrase_lang.language, phrase_lang.language)) {
+                                        if (other_phrase.start + other_phrase.len == num_tokens) {
+                                            skip_edge_phrase = false;
+                                            if (current_phrase_have_edge_ignorable) {
+                                                // don't delete the "E" in "E St"
+                                                log_debug("initial phrase is edge ignorable out of two phrases. Checking next phrase is ignorable.\n");
+                                                skip_edge_phrase = !(address_phrase_is_ignorable_for_components(other_phrase, options.address_components) && !(address_phrase_has_canonical_interpretation(other_phrase) && address_phrase_is_possible_root_for_components(other_phrase, options.address_components)));
+                                            } else {
+                                                log_debug("initial phrase is not edge-ignorable out of two phrases. Checking next phrase is edge ignorable.\n");
+                                                // delete "Avenue" in "Avenue E"
+                                                other_phrase_have_edge_ignorable = address_phrase_is_edge_ignorable_for_components(other_phrase, options.address_components);
+                                                skip_edge_phrase = other_phrase_have_edge_ignorable && address_phrase_is_ignorable_for_components(phrase, options.address_components) && !(address_phrase_has_canonical_interpretation(phrase) && address_phrase_is_possible_root_for_components(phrase, options.address_components));
+                                                
+                                            }
+                                        } else {
+                                            // If we encounter an ignorable phrase 
+                                            skip_edge_phrase = address_phrase_is_possible_root_for_components(other_phrase, options.address_components) && address_phrase_has_canonical_interpretation(other_phrase);
+                                            log_debug("phrase is possible root = %d\n", skip_edge_phrase);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        } else if (phrases->n > 1 && i == phrases->n - 1 && phrase.start + phrase.len == num_tokens && phrase.start > 0) {
+                            current_phrase_have_edge_ignorable = address_phrase_is_edge_ignorable_for_components(phrase, options.address_components);
+                            if (current_phrase_have_edge_ignorable) {
+                                log_debug("edge-ignorable phrase [%u, %u]\n", phrase.start, phrase.start + phrase.len);
+                                skip_edge_phrase = true;
+                            }
+
+                            log_debug("have_non_phrase_tokens = %d\n", have_non_phrase_tokens);
+                            if (!skip_edge_phrase || !have_non_phrase_tokens) {
+                                for (ssize_t other_j = i - 1; other_j >= 0; other_j--) {
+                                    other_phrase_lang = phrases->a[other_j];
+                                    other_phrase = other_phrase_lang.phrase;
+                                    log_debug("phrase.start + phrase.len = %u\n", phrase.start + phrase.len);
+                                    log_debug("other_phrase.start = %u, other_phrase.len = %u, lang=%s\n", other_phrase.start, other_phrase.len, other_phrase_lang.language);
+                                    if (other_phrase.start + other_phrase.len <= phrase.start && string_equals(other_phrase_lang.language, phrase_lang.language)) {
+                                        if (other_phrase.start == 0) {
+                                            //other_phrase_invalid = address_phrase_is_ignorable_for_components(other_phrase, options.address_components) && !address_phrase_has_canonical_interpretation(other_phrase) && !address_phrase_is_possible_root_for_components(other_phrase, options.address_components);
+                                            skip_edge_phrase = false;
+                                            if (current_phrase_have_edge_ignorable) {
+                                                // don't delete the "E" in "Avenue E"
+                                                log_debug("final phrase is edge ignorable out of two phrases. Checking previous phrase is ignorable.\n");
+                                                skip_edge_phrase = !(address_phrase_is_ignorable_for_components(other_phrase, options.address_components) && !(address_phrase_has_canonical_interpretation(other_phrase) && address_phrase_is_possible_root_for_components(other_phrase, options.address_components)));
+                                                //skip_edge_phrase = !other_phrase_invalid;                                            
+                                            } else {
+                                                log_debug("final phrase is not edge-ignorable out of two phrases. Checking previous phrase is edge ignorable.\n");
+                                                // delete "St" in "E St"
+                                                other_phrase_have_edge_ignorable = address_phrase_is_edge_ignorable_for_components(other_phrase, options.address_components);
+                                                skip_edge_phrase = other_phrase_have_edge_ignorable && address_phrase_is_ignorable_for_components(phrase, options.address_components) && !(address_phrase_has_canonical_interpretation(phrase) && address_phrase_is_possible_root_for_components(phrase, options.address_components));
+                                                //skip_edge_phrase = address_phrase_is_edge_ignorable_for_components(other_phrase, options.address_components);
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    for (size_t j = 0; j < expansions->n; j++) {
+                        if (skip_edge_phrase) {
+                            log_debug("skip edge phrase\n");
                             continue;
                         }
 
-                        if (expansion.canonical_index != NULL_CANONICAL_INDEX) {
+                        address_expansion_t expansion = expansions->a[j];
+
+                        bool current_phrase_ignorable = false;
+                        bool current_phrase_expandable = expand_phrases && expansion.canonical_index != NULL_CANONICAL_INDEX;
+
+                        bool is_ambiguous = address_expansion_in_dictionary(expansion, DICTIONARY_AMBIGUOUS_EXPANSION);
+
+                        if (delete_phrases) {
+                            bool is_ignorable = address_expansion_is_ignorable_for_components(expansion, options.address_components);
+                            bool is_canonical = expansion.canonical_index == NULL_CANONICAL_INDEX;
+
+                            log_debug("is_ignorable = %d, is_canonical = %d, is_ambiguous = %d, current_phrase_have_ambiguous = %d, current_phrase_have_unambiguous = %d, have_strictly_ignorable = %d, current_phrase_have_ignorable=%d\n", is_ignorable, is_canonical, is_ambiguous, current_phrase_have_ambiguous, current_phrase_have_unambiguous, have_strictly_ignorable, current_phrase_have_ignorable);
+
+                            current_phrase_expandable = current_phrase_expandable || current_phrase_have_ambiguous;
+
+                            // Edge phrase calculations from above
+                            if (current_phrase_have_edge_ignorable || other_phrase_have_edge_ignorable) {
+                                log_debug("current_phrase_have_edge_ignorable\n");
+                                log_debug("skip_edge_phrase = %d\n", skip_edge_phrase);
+                                current_phrase_ignorable = skip_edge_phrase;
+                            // Delete "Avenue" in "5th Avenue"
+                            } else if (is_ignorable && is_canonical && !current_phrase_have_ambiguous) {
+                                log_debug("is_ignorable && is_canonical && !current_phrase_have_ambiguous\n");
+                                current_phrase_ignorable = have_non_phrase_tokens || string_tree_num_tokens(tree) > 0;
+                                log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
+                            // Delete "Ave" in "5th Ave" or "Pl" in "Park Pl S"
+                            } else if (is_ignorable && !is_canonical && !is_ambiguous && !current_phrase_have_ambiguous) {
+                                log_debug("is_ignorable && !is_canonical && !current_phrase_have_ambiguous\n");
+                                current_phrase_ignorable = have_non_phrase_tokens || have_canonical_phrases || have_ambiguous;
+                                log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
+                            } else if (current_phrase_have_ambiguous && (have_non_phrase_tokens || have_canonical_phrases)) {
+                                log_debug("have_non_phrase_tokens = %d, have_canonical_phrases = %d\n", have_non_phrase_tokens, have_canonical_phrases);
+                                current_phrase_ignorable = is_ignorable || (is_ambiguous && have_non_phrase_tokens && current_phrase_have_ignorable && current_phrase_have_unambiguous);
+
+                                log_debug("current_phrase_have_ambiguous && have_non_phrase_tokens\n");
+                                log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
+                            }
+
+                            if (!current_phrase_ignorable && !last_added_was_whitespace && string_tree_num_tokens(tree) > 0 && !added_pre_phrase_space) {
+                                log_debug("Adding space\n");
+                                string_tree_add_string(tree, " ");
+                                string_tree_finalize_token(tree);
+                                last_added_was_whitespace = true;
+                                added_pre_phrase_space = true;
+                            }
+
+                        }
+
+                        if (current_phrase_ignorable) {
+                            continue;
+                        }
+
+                        if (delete_phrases) {
+                            current_phrase_expandable = !current_phrase_ignorable;
+                        }
+
+                        log_debug("expand_phrases = %d\n", expand_phrases);
+
+                        log_debug("expansion.canonical_index = %d\n", expansion.canonical_index);
+
+                        if (expansion.canonical_index != NULL_CANONICAL_INDEX && current_phrase_expandable) {
+                            log_debug("expansion.canonical_index != NULL_CANONICAL_INDEX, delete_phrases = %d, phrase_option = %d\n", delete_phrases, phrase_option);
                             char *canonical = address_dictionary_get_canonical(expansion.canonical_index);
                             char *canonical_normalized = normalize_string_latin(canonical, strlen(canonical), normalize_string_options);
 
                             canonical = canonical_normalized != NULL ? canonical_normalized : canonical;
 
-
-                            if (phrase.start + phrase.len < tokens->n - 1) {
-                                token_t next_token = tokens->a[phrase.start + phrase.len];
+                            if (phrase.start + phrase.len < num_tokens - 1) {
+                                token_t next_token = tokens[phrase.start + phrase.len];
                                 if (!is_numeric_token(next_token.type)) {
                                     log_debug("non-canonical phrase, adding canonical string\n");
                                     string_tree_add_string(tree, canonical);
@@ -643,18 +1066,17 @@ string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t 
                             } else {
                                 string_tree_add_string(tree, canonical);
                                 last_added_was_whitespace = false;
-
                             }
 
                             if (canonical_normalized != NULL) {
                                 free(canonical_normalized);
                             }
-                        } else {
+                        } else if (expansion.canonical_index == NULL_CANONICAL_INDEX || !current_phrase_expandable) {
                             log_debug("canonical phrase, adding canonical string\n");
 
                             uint32_t start_index = cstring_array_start_token(tree->strings);
                             for (size_t k = phrase.start; k < phrase.start + phrase.len; k++) {
-                                token = tokens->a[k];
+                                token = tokens[k];
                                 if (token.type != WHITESPACE) {
                                     cstring_array_append_string_len(tree->strings, str + token.offset, token.len);
                                     last_added_was_whitespace = false;
@@ -665,19 +1087,30 @@ string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t 
                                 }
                             }
                             cstring_array_terminate(tree->strings);
+                        } else {
+                            continue;
                         }
 
                         added_expansions++;
                     }
 
-
                 }
             }
 
-            if (added_expansions == 0) {
+            log_debug("expansion_valid_components == %d\n", expansion_valid_components);
+
+            if (added_expansions == 0 && (!delete_phrases || !expansion_valid_components)) {
+                if (!last_added_was_whitespace && string_tree_num_strings(tree) > 0) {
+                    log_debug("Adding space\n");
+                    string_tree_add_string(tree, " ");
+                    string_tree_finalize_token(tree);
+                    last_added_was_whitespace = true;
+                }
+
                 uint32_t start_index = cstring_array_start_token(tree->strings);
+
                 for (size_t j = phrase.start; j < phrase.start + phrase.len; j++) {
-                    token = tokens->a[j];
+                    token = tokens[j];
 
                     if (token.type != WHITESPACE) {
                         log_debug("Adding canonical token, %.*s\n", (int)token.len, str + token.offset);
@@ -691,31 +1124,25 @@ string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t 
 
                 }
 
-                if (phrase.start + phrase.len < tokens->n - 1) {
-                    token_t next_token = tokens->a[phrase.start + phrase.len + 1];
-                    if (next_token.type != WHITESPACE && !last_added_was_whitespace && !is_ideographic(next_token.type)) {
-                        cstring_array_append_string(tree->strings, " ");
-                        last_added_was_whitespace = true;
-                    }
-                }
-
                 cstring_array_terminate(tree->strings);
 
             }
 
-            log_debug("i=%zu\n", i);
-            bool end_of_phrase = false;
-            if (i < phrases->n - 1) {
-                phrase_t next_phrase = phrases->a[i + 1].phrase;
-                end_of_phrase = (next_phrase.start != phrase.start || next_phrase.len != phrase.len);
-            } else {
-                end_of_phrase = true;
-            }
+            if (!delete_phrases || !expansion_valid_components || added_expansions > 0) {
+                log_debug("i=%zu\n", i);
+                bool end_of_phrase = false;
+                if (i < phrases->n - 1) {
+                    phrase_t next_phrase = phrases->a[i + 1].phrase;
+                    end_of_phrase = (next_phrase.start != phrase.start || next_phrase.len != phrase.len);
+                } else {
+                    end_of_phrase = true;
+                }
 
-            log_debug("end_of_phrase=%d\n", end_of_phrase);
-            if (end_of_phrase) {                
-                log_debug("finalize at i=%zu\n", i);
-                string_tree_finalize_token(tree);
+                log_debug("end_of_phrase=%d\n", end_of_phrase);
+                if (end_of_phrase) {                
+                    log_debug("finalize at i=%zu\n", i);
+                    string_tree_finalize_token(tree);
+                }
             }
 
             start = phrase.start + phrase.len;
@@ -725,11 +1152,11 @@ string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t 
 
         char_array_destroy(key);
 
-        end = (int)tokens->n;
+        end = (int)num_tokens;
 
-        if (phrase.start + phrase.len > 0 && phrase.start + phrase.len <= end - 1) {
-            token_t next_token = tokens->a[phrase.start + phrase.len];
-            if (next_token.type != WHITESPACE && !last_added_was_whitespace && !is_ideographic(next_token.type)) {
+        if (phrase.start + phrase.len > 0 && phrase.start + phrase.len <= end - 1 && !last_added_was_whitespace) {
+            token_t next_token = tokens[phrase.start + phrase.len];
+            if (next_token.type != WHITESPACE && !last_added_was_whitespace && string_tree_num_tokens(tree) > 0 && !is_ideographic(next_token.type)) {
                 log_debug("space after phrase\n");
                 string_tree_add_string(tree, " ");
                 last_added_was_whitespace = true;
@@ -740,7 +1167,7 @@ string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t 
 
         for (size_t j = start; j < end; j++) {
             log_debug("On token %zu\n", j);
-            token_t token = tokens->a[j];
+            token_t token = tokens[j];
             if (is_punctuation(token.type)) {
                 log_debug("last_was_punctuation\n");
                 last_was_punctuation = true;
@@ -757,7 +1184,7 @@ string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t 
 
                 bool have_period_affixes = add_period_affixes_or_token(tree, str, token, options);
                 last_added_was_whitespace = false;
-            } else if (!last_added_was_whitespace) {
+            } else if (!last_added_was_whitespace && string_tree_num_tokens(tree) > 0) {
                 log_debug("Adding space IV\n");
                 string_tree_add_string(tree, " ");
                 last_added_was_whitespace = true;
@@ -773,10 +1200,10 @@ string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t 
 
 
     } else {
-
-        for (size_t j = 0; j < tokens->n; j++) {
+        log_debug("phrases NULL\n");
+        for (size_t j = 0; j < num_tokens; j++) {
             log_debug("On token %zu\n", j);
-            token_t token = tokens->a[j];
+            token_t token = tokens[j];
             if (is_punctuation(token.type)) {
                 log_debug("punctuation, skipping\n");
                 last_was_punctuation = true;
@@ -809,11 +1236,10 @@ string_tree_t *add_string_alternatives(char *str, libpostal_normalize_options_t 
         phrase_language_array_destroy(phrases);
     }
 
-    token_array_destroy(tokens);
+    token_array_destroy(token_array);
 
     return tree;
 }
-
 
 inline bool normalize_ordinal_suffixes(string_tree_t *tree, char *str, char *lang, token_t token, size_t i, token_t prev_token, libpostal_normalize_options_t options) {
     size_t len_ordinal_suffix = ordinal_suffix_len(str + token.offset, token.len, lang);
@@ -895,7 +1321,7 @@ inline void add_normalized_strings_tokenized(string_tree_t *tree, char *str, tok
 }
 
 
-void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_strings, char *str, libpostal_normalize_options_t options) {
+void expand_alternative_phrase_option(cstring_array *strings, khash_t(str_set) *unique_strings, char *str, libpostal_normalize_options_t options, expansion_phrase_option_t phrase_option) {
     size_t len = strlen(str);
     token_array *tokens = tokenize_keep_whitespace(str);
     string_tree_t *token_tree = string_tree_new_size(len);
@@ -939,7 +1365,7 @@ void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_strings
 
         int ret;
         log_debug("Adding alternatives for single normalization\n");
-        alternatives = add_string_alternatives(tokenized_str, options);
+        alternatives = add_string_alternatives_phrase_option(tokenized_str, options, phrase_option);
 
         log_debug("num strings = %" PRIu32 "\n", string_tree_num_strings(alternatives));
 
@@ -998,7 +1424,7 @@ void expand_alternative(cstring_array *strings, khash_t(str_set) *unique_strings
 
 
 
-char **expand_address(char *input, libpostal_normalize_options_t options, size_t *n) {
+char **expand_address_phrase_option(char *input, libpostal_normalize_options_t options, size_t *n, expansion_phrase_option_t phrase_option) {
     options.address_components |= LIBPOSTAL_ADDRESS_ANY;
 
     uint64_t normalize_string_options = get_normalize_string_options(options);
@@ -1028,7 +1454,7 @@ char **expand_address(char *input, libpostal_normalize_options_t options, size_t
 
     if (string_tree_num_strings(tree) == 1) {
         char *normalized = string_tree_get_alternative(tree, 0, 0);
-        expand_alternative(strings, unique_strings, normalized, options);
+        expand_alternative_phrase_option(strings, unique_strings, normalized, options, phrase_option);
 
     } else {
         log_debug("Adding alternatives for multiple normalizations\n");
@@ -1049,7 +1475,7 @@ char **expand_address(char *input, libpostal_normalize_options_t options, size_t
             char_array_terminate(temp_string);
             token = char_array_get_string(temp_string);
             log_debug("current permutation = %s\n", token);
-            expand_alternative(strings, unique_strings, token, options);
+            expand_alternative_phrase_option(strings, unique_strings, token, options, phrase_option);
         }
 
         string_tree_iterator_destroy(iter);
@@ -1076,6 +1502,16 @@ char **expand_address(char *input, libpostal_normalize_options_t options, size_t
     return cstring_array_to_strings(strings);
 
 }
+
+char **expand_address(char *input, libpostal_normalize_options_t options, size_t *n) {
+    return expand_address_phrase_option(input, options, n, EXPAND_PHRASES);
+}
+
+char **expand_address_root(char *input, libpostal_normalize_options_t options, size_t *n) {
+    return expand_address_phrase_option(input, options, n, DELETE_PHRASES);
+}
+
+
 
 void expansion_array_destroy(char **expansions, size_t n) {
     for (size_t i = 0; i < n; i++) {
