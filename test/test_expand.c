@@ -186,6 +186,36 @@ TEST test_house_number_root_expansions(void) {
     PASS();
 }
 
+TEST test_level_root_expansions(void) {
+    libpostal_normalize_options_t options = libpostal_get_default_options();
+    options.address_components = LIBPOSTAL_ADDRESS_LEVEL | LIBPOSTAL_ADDRESS_ANY;
+
+    // English - normal cases
+    CHECK_CALL(test_root_expansion_contains_with_languages("1st Fl", "1", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("1st Floor", "1", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("First Fl", "1", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("First Floor", "1", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("2nd Fl", "2", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("2nd Floor", "2", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("Second Fl", "2", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("Second Floor", "2", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("Fl #1", "1", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("Fl No. 1", "1", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("Floor No. 1", "1", options, 1, "en"));
+
+    // Specifiers
+    CHECK_CALL(test_root_expansion_contains_with_languages("SB 1", "sub basement 1", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("Bsmt", "basement", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("Bsmt 1", "basement 1", options, 1, "en"));
+
+    CHECK_CALL(test_root_expansion_contains_with_languages("1G", "1 ground", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("G", "ground", options, 1, "en"));
+
+    PASS();
+}
+
+
+
 TEST test_expansions_language_classifier(void) {
     libpostal_normalize_options_t options = libpostal_get_default_options();
 
@@ -229,6 +259,7 @@ SUITE(libpostal_expansion_tests) {
     RUN_TEST(test_expansions);
     RUN_TEST(test_street_root_expansions);
     RUN_TEST(test_house_number_root_expansions);
+    RUN_TEST(test_level_root_expansions);
     RUN_TEST(test_expansions_language_classifier);
     RUN_TEST(test_expansions_no_options);
 
