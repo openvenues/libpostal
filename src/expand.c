@@ -449,7 +449,7 @@ bool add_period_affixes_or_token(string_tree_t *tree, char *str, token_t token, 
 }
 
 
-inline uint32_t gazetter_ignorable_components(uint16_t dictionary_id) {
+inline uint32_t gazetteer_ignorable_components(uint16_t dictionary_id) {
     switch (dictionary_id) {
         case DICTIONARY_ACADEMIC_DEGREE:
             return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
@@ -468,17 +468,17 @@ inline uint32_t gazetter_ignorable_components(uint16_t dictionary_id) {
         case DICTIONARY_LEVEL_NUMBERED:
             return LIBPOSTAL_ADDRESS_LEVEL;
         case DICTIONARY_LEVEL_STANDALONE:
-            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_LEVEL;
+            return LIBPOSTAL_ADDRESS_ALL ^ (LIBPOSTAL_ADDRESS_LEVEL | LIBPOSTAL_ADDRESS_ANY);
         case DICTIONARY_LEVEL_MEZZANINE:
-            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_LEVEL;
+            return LIBPOSTAL_ADDRESS_ALL ^ (LIBPOSTAL_ADDRESS_LEVEL| LIBPOSTAL_ADDRESS_ANY);
         case DICTIONARY_LEVEL_BASEMENT:
-            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_LEVEL;
+            return LIBPOSTAL_ADDRESS_ALL ^ (LIBPOSTAL_ADDRESS_LEVEL | LIBPOSTAL_ADDRESS_ANY);
         case DICTIONARY_LEVEL_SUB_BASEMENT:
-            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_LEVEL;
+            return LIBPOSTAL_ADDRESS_ALL ^ (LIBPOSTAL_ADDRESS_LEVEL | LIBPOSTAL_ADDRESS_ANY);
         case DICTIONARY_NUMBER:
             return LIBPOSTAL_ADDRESS_HOUSE_NUMBER | LIBPOSTAL_ADDRESS_UNIT | LIBPOSTAL_ADDRESS_LEVEL | LIBPOSTAL_ADDRESS_STAIRCASE | LIBPOSTAL_ADDRESS_ENTRANCE | LIBPOSTAL_ADDRESS_STREET;
         case DICTIONARY_NO_NUMBER:
-            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_HOUSE_NUMBER;
+            return LIBPOSTAL_ADDRESS_ALL ^ (LIBPOSTAL_ADDRESS_HOUSE_NUMBER | LIBPOSTAL_ADDRESS_ANY);
         case DICTIONARY_PERSONAL_TITLE:
             return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
         case DICTIONARY_PLACE_NAME:
@@ -498,15 +498,15 @@ inline uint32_t gazetter_ignorable_components(uint16_t dictionary_id) {
         case DICTIONARY_UNIT_NUMBERED:
             return LIBPOSTAL_ADDRESS_UNIT;
         case DICTIONARY_UNIT_STANDALONE:
-            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_UNIT;
+            return LIBPOSTAL_ADDRESS_ALL ^ (LIBPOSTAL_ADDRESS_UNIT | LIBPOSTAL_ADDRESS_ANY);
         case DICTIONARY_UNIT_DIRECTION:
-            return LIBPOSTAL_ADDRESS_ANY ^ LIBPOSTAL_ADDRESS_UNIT;
+            return LIBPOSTAL_ADDRESS_ALL ^ (LIBPOSTAL_ADDRESS_UNIT | LIBPOSTAL_ADDRESS_ANY);
         default:
             return LIBPOSTAL_ADDRESS_NONE;
     }
 }
 
-inline uint32_t gazetter_edge_ignorable_components(uint16_t dictionary_id) {
+inline uint32_t gazetteer_edge_ignorable_components(uint16_t dictionary_id) {
     switch (dictionary_id) {
         // Pre/post directionals can be removed if there are non-phrase tokens
         case DICTIONARY_DIRECTIONAL:
@@ -516,7 +516,25 @@ inline uint32_t gazetter_edge_ignorable_components(uint16_t dictionary_id) {
     }
 }
 
-inline uint32_t gazetter_possible_root_components(uint16_t dictionary_id) {
+inline uint32_t gazetteer_specifier_components(uint16_t dictionary_id) {
+    switch (dictionary_id) {
+        case DICTIONARY_LEVEL_STANDALONE:
+            return LIBPOSTAL_ADDRESS_LEVEL;
+        case DICTIONARY_LEVEL_MEZZANINE:
+            return LIBPOSTAL_ADDRESS_LEVEL;
+        case DICTIONARY_LEVEL_BASEMENT:
+            return LIBPOSTAL_ADDRESS_LEVEL;
+        case DICTIONARY_LEVEL_SUB_BASEMENT:
+            return LIBPOSTAL_ADDRESS_LEVEL;
+        case DICTIONARY_UNIT_STANDALONE:
+            return LIBPOSTAL_ADDRESS_UNIT;
+        default:
+            return LIBPOSTAL_ADDRESS_NONE;
+    }
+}
+
+
+inline uint32_t gazetteer_possible_root_components(uint16_t dictionary_id) {
     switch (dictionary_id) {
         case DICTIONARY_ACADEMIC_DEGREE:
             return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
@@ -537,37 +555,58 @@ inline uint32_t gazetter_possible_root_components(uint16_t dictionary_id) {
     }
 }
 
-inline bool address_expansion_is_ignorable_for_components(address_expansion_t expansion, uint32_t address_components) {
+typedef enum {
+    GAZETTEER_MATCH_IGNORABLE,
+    GAZETTEER_MATCH_EDGE_IGNORABLE,
+    GAZETTEER_MATCH_POSSIBLE_ROOT,
+    GAZETTEER_MATCH_SPECIFIER
+} gazetteer_match_type_t;
+
+
+inline bool address_expansion_matches_type_for_components(address_expansion_t expansion, uint32_t address_components, gazetteer_match_type_t match_type) {
     for (uint32_t j = 0; j < expansion.num_dictionaries; j++) {
         uint16_t dictionary_id = expansion.dictionary_ids[j];
-        if (gazetter_ignorable_components(dictionary_id) & address_components) {
+        uint32_t components = 0;
+        switch (match_type) {
+            case GAZETTEER_MATCH_IGNORABLE:
+                components =  gazetteer_ignorable_components(dictionary_id);
+                break;
+            case GAZETTEER_MATCH_EDGE_IGNORABLE:
+                components =  gazetteer_edge_ignorable_components(dictionary_id);
+                break;
+            case GAZETTEER_MATCH_POSSIBLE_ROOT:
+                components =  gazetteer_possible_root_components(dictionary_id);
+                break;
+            case GAZETTEER_MATCH_SPECIFIER:
+                components =  gazetteer_specifier_components(dictionary_id);
+                break;
+            default:
+                break;
+        }
+        if (components & address_components) {
             return true;
         }
     }
     return false;
+}
+
+inline bool address_expansion_is_ignorable_for_components(address_expansion_t expansion, uint32_t address_components) {
+    return address_expansion_matches_type_for_components(expansion, address_components, GAZETTEER_MATCH_IGNORABLE);
 }
 
 inline bool address_expansion_is_edge_ignorable_for_components(address_expansion_t expansion, uint32_t address_components) {
-    for (uint32_t j = 0; j < expansion.num_dictionaries; j++) {
-        uint16_t dictionary_id = expansion.dictionary_ids[j];
-        if (gazetter_edge_ignorable_components(dictionary_id) & address_components) {
-            return true;
-        }
-    }
-    return false;
+    return address_expansion_matches_type_for_components(expansion, address_components, GAZETTEER_MATCH_EDGE_IGNORABLE);
 }
 
 inline bool address_expansion_is_possible_root_for_components(address_expansion_t expansion, uint32_t address_components) {
-    for (uint32_t j = 0; j < expansion.num_dictionaries; j++) {
-        uint16_t dictionary_id = expansion.dictionary_ids[j];
-        if (gazetter_possible_root_components(dictionary_id) & address_components) {
-            return true;
-        }
-    }
-    return false;
+    return address_expansion_matches_type_for_components(expansion, address_components, GAZETTEER_MATCH_POSSIBLE_ROOT);
 }
 
-bool address_phrase_is_ignorable_for_components(phrase_t phrase, uint32_t address_components) {
+inline bool address_expansion_is_specifier_for_components(address_expansion_t expansion, uint32_t address_components) {
+    return address_expansion_matches_type_for_components(expansion, address_components, GAZETTEER_MATCH_SPECIFIER);
+}
+
+bool address_phrase_matches_type_for_components(phrase_t phrase, uint32_t address_components, gazetteer_match_type_t match_type) {
     uint32_t expansion_index = phrase.data;
     address_expansion_value_t *value = address_dictionary_get_expansions(expansion_index);
 
@@ -579,54 +618,29 @@ bool address_phrase_is_ignorable_for_components(phrase_t phrase, uint32_t addres
     for (size_t i = 0; i < expansions->n; i++) {
         address_expansion_t expansion = expansions->a[i];
 
-        if (address_expansion_is_ignorable_for_components(expansion, address_components)) {
+        if (address_expansion_matches_type_for_components(expansion, address_components, match_type)) {
             return true;
         }
     }
     return false;
 }
 
+inline bool address_phrase_is_ignorable_for_components(phrase_t phrase, uint32_t address_components) {
+    return address_phrase_matches_type_for_components(phrase, address_components, GAZETTEER_MATCH_IGNORABLE);
+}
 
-bool address_phrase_is_edge_ignorable_for_components(phrase_t phrase, uint32_t address_components) {
-    uint32_t expansion_index = phrase.data;
-    address_expansion_value_t *value = address_dictionary_get_expansions(expansion_index);
-
-    if (value == NULL) return false;
-
-    address_expansion_array *expansions = value->expansions;
-    if (expansions == NULL) return false;
-
-    for (size_t i = 0; i < expansions->n; i++) {
-        address_expansion_t expansion = expansions->a[i];
-
-        if (address_expansion_is_edge_ignorable_for_components(expansion, address_components)) {
-            return true;
-        }
-    }
-    return false;
+inline bool address_phrase_is_edge_ignorable_for_components(phrase_t phrase, uint32_t address_components) {
+    return address_phrase_matches_type_for_components(phrase, address_components, GAZETTEER_MATCH_EDGE_IGNORABLE);
 }
 
 
-bool address_phrase_is_possible_root_for_components(phrase_t phrase, uint32_t address_components) {
-    uint32_t expansion_index = phrase.data;
-    address_expansion_value_t *value = address_dictionary_get_expansions(expansion_index);
-
-    if (value == NULL) return false;
-
-    address_expansion_array *expansions = value->expansions;
-    if (expansions == NULL) return false;
-
-    for (size_t i = 0; i < expansions->n; i++) {
-        address_expansion_t expansion = expansions->a[i];
-
-        if (address_expansion_is_possible_root_for_components(expansion, address_components)) {
-            return true;
-        }
-    }
-    return false;
+inline bool address_phrase_is_possible_root_for_components(phrase_t phrase, uint32_t address_components) {
+    return address_phrase_matches_type_for_components(phrase, address_components, GAZETTEER_MATCH_POSSIBLE_ROOT);
 }
 
-
+inline bool address_phrase_is_specifier_for_components(phrase_t phrase, uint32_t address_components) {
+    return address_phrase_matches_type_for_components(phrase, address_components, GAZETTEER_MATCH_SPECIFIER);
+}
 
 bool address_phrase_contains_unambiguous_expansion(phrase_t phrase) {
     address_expansion_value_t *value = address_dictionary_get_expansions(phrase.data);
@@ -645,9 +659,6 @@ bool address_phrase_contains_unambiguous_expansion(phrase_t phrase) {
     }
     return false;
 }
-
-
-
 
 // Delete non-canonical phrases only
 
@@ -889,7 +900,10 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                     bool current_phrase_have_ignorable = delete_phrases && address_phrase_is_ignorable_for_components(phrase, options.address_components);
                     bool current_phrase_have_edge_ignorable = false;
 
+                    bool current_phrase_have_specifier = delete_phrases && address_phrase_is_specifier_for_components(phrase, options.address_components);
                     bool current_phrase_have_canonical = delete_phrases && address_phrase_has_canonical_interpretation(phrase);
+
+                    log_debug("current_phrase_have_specifier = %d\n", current_phrase_have_specifier);
 
                     bool current_phrase_have_unambiguous = delete_phrases && address_phrase_contains_unambiguous_expansion(phrase);
 
@@ -1009,11 +1023,20 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
 
                             current_phrase_expandable = current_phrase_expandable || current_phrase_have_ambiguous;
 
+                            if (!is_canonical) {
+                                char *canon = address_dictionary_get_canonical(expansion.canonical_index);
+                                log_debug("canonical = %s\n", canon);
+                            }
+
                             // Edge phrase calculations from above
                             if (current_phrase_have_edge_ignorable || other_phrase_is_ignorable) {
                                 log_debug("current_phrase_have_edge_ignorable\n");
                                 log_debug("skip_edge_phrase = %d\n", skip_edge_phrase);
                                 current_phrase_ignorable = skip_edge_phrase;
+                            // Don't delete "PH" in "PH 1" for unit expansions
+                            } else if (is_ignorable && have_non_phrase_tokens && current_phrase_have_specifier) {
+                                log_debug("current_phrase_have_specifier\n");
+                                current_phrase_ignorable = false;
                             // Delete "Avenue" in "5th Avenue"
                             } else if (is_ignorable && is_canonical && !current_phrase_have_ambiguous) {
                                 log_debug("is_ignorable && is_canonical && !current_phrase_have_ambiguous\n");
@@ -1026,10 +1049,12 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                                 log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
                             } else if (current_phrase_have_ambiguous && (have_non_phrase_tokens || have_canonical_phrases)) {
                                 log_debug("have_non_phrase_tokens = %d, have_canonical_phrases = %d\n", have_non_phrase_tokens, have_canonical_phrases);
-                                current_phrase_ignorable = is_ignorable || (is_ambiguous && have_non_phrase_tokens && current_phrase_have_ignorable && current_phrase_have_unambiguous);
+                                current_phrase_ignorable = is_ignorable || (current_phrase_have_ambiguous && have_non_phrase_tokens && current_phrase_have_ignorable && current_phrase_have_unambiguous);
 
                                 log_debug("current_phrase_have_ambiguous && have_non_phrase_tokens\n");
                                 log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
+                            } else {
+                                log_debug("none of the above\n");
                             }
 
                             if (!current_phrase_ignorable && !last_added_was_whitespace && string_tree_num_tokens(tree) > 0 && !added_pre_phrase_space) {
@@ -1064,11 +1089,11 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                             if (phrase.start + phrase.len < num_tokens - 1) {
                                 token_t next_token = tokens[phrase.start + phrase.len];
                                 if (!is_numeric_token(next_token.type)) {
-                                    log_debug("non-canonical phrase, adding canonical string\n");
+                                    log_debug("non-canonical phrase, adding canonical string: %s\n", canonical);
                                     string_tree_add_string(tree, canonical);
                                     last_added_was_whitespace = false;
                                 } else {
-                                    log_debug("adding canonical with cstring_array methods\n");
+                                    log_debug("adding canonical with cstring_array methods: %s\n", canonical);
                                     uint32_t start_index = cstring_array_start_token(tree->strings);
                                     cstring_array_append_string(tree->strings, canonical);
                                     cstring_array_append_string(tree->strings, " ");
@@ -1076,6 +1101,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                                     cstring_array_terminate(tree->strings);
                                 }
                             } else {
+                                log_debug("adding canonical: %s\n", canonical);
                                 string_tree_add_string(tree, canonical);
                                 last_added_was_whitespace = false;
                             }
@@ -1223,7 +1249,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
             }
 
             if (token.type != WHITESPACE) {
-                if (last_was_punctuation && !last_added_was_whitespace) {
+                if (last_was_punctuation && !last_added_was_whitespace && string_tree_num_strings(tree) > 0) {
                     log_debug("Adding space V\n");
                     string_tree_add_string(tree, " ");
                     string_tree_finalize_token(tree);
@@ -1231,7 +1257,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
 
                 bool have_period_affixes = add_period_affixes_or_token(tree, str, token, options);
                 last_added_was_whitespace = false;
-            } else if (!last_added_was_whitespace) {
+            } else if (!last_added_was_whitespace && string_tree_num_strings(tree) > 0) {
                 log_debug("Adding space VI\n");
                 string_tree_add_string(tree, " ");
                 last_added_was_whitespace = true;
