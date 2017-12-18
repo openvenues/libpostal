@@ -169,6 +169,23 @@ TEST test_street_root_expansions(void) {
     PASS();
 }
 
+
+TEST test_house_number_root_expansions(void) {
+    libpostal_normalize_options_t options = libpostal_get_default_options();
+    options.address_components = LIBPOSTAL_ADDRESS_HOUSE_NUMBER | LIBPOSTAL_ADDRESS_ANY;
+
+    // English - normal cases
+    CHECK_CALL(test_root_expansion_contains("1A", "1 a", options));
+    CHECK_CALL(test_root_expansion_contains("A1", "a 1", options));
+    CHECK_CALL(test_root_expansion_contains("1", "1", options));
+    CHECK_CALL(test_root_expansion_contains_with_languages("# 1", "1", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("No. 1", "1", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("House No. 1", "1", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("House #1", "1", options, 1, "en"));
+
+    PASS();
+}
+
 TEST test_expansions_language_classifier(void) {
     libpostal_normalize_options_t options = libpostal_get_default_options();
 
@@ -211,6 +228,7 @@ SUITE(libpostal_expansion_tests) {
 
     RUN_TEST(test_expansions);
     RUN_TEST(test_street_root_expansions);
+    RUN_TEST(test_house_number_root_expansions);
     RUN_TEST(test_expansions_language_classifier);
     RUN_TEST(test_expansions_no_options);
 
