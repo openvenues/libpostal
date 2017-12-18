@@ -104,7 +104,7 @@ void add_normalized_strings_token(cstring_array *strings, char *str, token_t tok
             }
         }
 
-        if (is_numeric_token(token.type) && options.split_alpha_from_numeric && numeric_starts_with_alpha(str, token)) {
+        if (is_numeric_token(token.type) && options.split_alpha_from_numeric) {
             normalize_token_options |= NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC;
             normalize_token(strings, str, token, normalize_token_options);
             normalize_token_options ^= NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC;
