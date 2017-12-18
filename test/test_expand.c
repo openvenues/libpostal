@@ -242,6 +242,17 @@ TEST test_unit_root_expansions(void) {
     PASS();
 }
 
+
+TEST test_po_box_root_expansions(void) {
+    libpostal_normalize_options_t options = libpostal_get_default_options();
+    options.address_components = LIBPOSTAL_ADDRESS_PO_BOX | LIBPOSTAL_ADDRESS_ANY;
+
+    CHECK_CALL(test_root_expansion_contains_with_languages("PO Box 1234", "1234", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("PO Box #1234", "1234", options, 1, "en"));
+
+    PASS();
+}
+
 TEST test_expansions_language_classifier(void) {
     libpostal_normalize_options_t options = libpostal_get_default_options();
 
@@ -287,6 +298,7 @@ SUITE(libpostal_expansion_tests) {
     RUN_TEST(test_house_number_root_expansions);
     RUN_TEST(test_level_root_expansions);
     RUN_TEST(test_unit_root_expansions);
+    RUN_TEST(test_po_box_root_expansions);
     RUN_TEST(test_expansions_language_classifier);
     RUN_TEST(test_expansions_no_options);
 
