@@ -4,6 +4,7 @@
 #include <stdarg.h>
 
 #include "greatest.h"
+#include "../src/string_utils.h"
 #include "../src/libpostal.h"
 
 SUITE(libpostal_expansion_tests);
@@ -167,7 +168,6 @@ TEST test_street_root_expansions(void) {
     CHECK_CALL(test_root_expansion_contains("C/ Ocho", "8", options));
     PASS();
 }
-
 
 TEST test_expansions_language_classifier(void) {
     libpostal_normalize_options_t options = libpostal_get_default_options();
