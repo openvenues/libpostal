@@ -1428,13 +1428,27 @@ void expand_alternative_phrase_option(cstring_array *strings, khash_t(str_set) *
                 char_array_terminate(temp_string);
 
                 token = char_array_get_string(temp_string);
+
+                size_t token_len = strlen(token);
+
+                if (token_len == 0) continue;
+
+                size_t left_spaces = string_left_spaces_len(token, token_len);
+                size_t right_spaces = string_right_spaces_len(token, token_len);
+
+                if (left_spaces + right_spaces == token_len) {
+                    continue;
+                }
+
                 log_debug("full string=%s\n", token);
                 khiter_t k = kh_get(str_set, unique_strings, token);
 
                 if (k == kh_end(unique_strings)) {
+                    char *dupe_token = strndup(str + left_spaces, len - left_spaces - right_spaces);
+
                     log_debug("doing postprocessing\n");
                     add_postprocessed_string(strings, token, options);
-                    k = kh_put(str_set, unique_strings, strdup(token), &ret);
+                    k = kh_put(str_set, unique_strings, dupe_token, &ret);
                 }
 
                 log_debug("iter->remaining = %d\n", iter->remaining);
