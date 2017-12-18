@@ -8,14 +8,21 @@
 
 SUITE(libpostal_expansion_tests);
 
-static greatest_test_res test_expansion_contains(char *input, char *output, libpostal_normalize_options_t options) {
+static greatest_test_res test_expansion_contains_phrase_option(char *input, char *output, libpostal_normalize_options_t options, bool root) {
     size_t num_expansions;
-    char **expansions = libpostal_expand_address(input, options, &num_expansions);
+
+    char **expansions = NULL;
+    if (!root) {
+        expansions = libpostal_expand_address(input, options, &num_expansions);
+    } else {
+        expansions = libpostal_expand_address_root(input, options, &num_expansions);
+    }
 
     bool contains_expansion = false;
     char *expansion;
     for (size_t i = 0; i < num_expansions; i++) {
         expansion = expansions[i];
+        printf("expansion = %s\n", expansion);
         if (string_equals(output, expansion)) {
             contains_expansion = true;
             break;
@@ -38,15 +45,26 @@ static greatest_test_res test_expansion_contains(char *input, char *output, libp
     PASS();
 }
 
-static greatest_test_res test_expansion_contains_with_languages(char *input, char *output, libpostal_normalize_options_t options, size_t num_languages, ...) {
+static greatest_test_res test_expansion_contains(char *input, char *output, libpostal_normalize_options_t options) {
+    bool root = false;
+    CHECK_CALL(test_expansion_contains_phrase_option(input, output, options, root));
+
+    PASS();
+}
+
+static greatest_test_res test_root_expansion_contains(char *input, char *output, libpostal_normalize_options_t options) {
+    bool root = true;
+    CHECK_CALL(test_expansion_contains_phrase_option(input, output, options, root));
+
+    PASS();
+}
+
+static greatest_test_res test_expansion_contains_phrase_option_with_languages(char *input, char *output, libpostal_normalize_options_t options, bool root, size_t num_languages, va_list args) {
     char **languages = NULL;
     
     size_t i;
 
     if (num_languages > 0) {
-        va_list args;
-
-        va_start(args, num_languages);
         languages = malloc(sizeof(char *) * num_languages);
         char *lang;
 
@@ -56,8 +74,6 @@ static greatest_test_res test_expansion_contains_with_languages(char *input, cha
             languages[i] = strdup(lang);
         }
 
-        va_end(args);
-
         options.num_languages = num_languages;
         options.languages = (char **)languages;
     } else {
@@ -65,7 +81,7 @@ static greatest_test_res test_expansion_contains_with_languages(char *input, cha
         options.num_languages = 0;
     }
 
-    CHECK_CALL(test_expansion_contains(input, output, options));
+    CHECK_CALL(test_expansion_contains_phrase_option(input, output, options, root));
     if (languages != NULL) {
         for (i = 0; i < num_languages; i++) {
             free(languages[i]);
@@ -74,6 +90,36 @@ static greatest_test_res test_expansion_contains_with_languages(char *input, cha
     }
     PASS();
 }
+
+
+
+static greatest_test_res test_expansion_contains_with_languages(char *input, char *output, libpostal_normalize_options_t options, size_t num_languages, ...) {
+    bool root = false;
+    if (num_languages > 0) {
+        va_list args;
+        va_start(args, num_languages);
+        CHECK_CALL(test_expansion_contains_phrase_option_with_languages(input, output, options, root, num_languages, args));
+        va_end(args);
+    } else {
+        CHECK_CALL(test_expansion_contains_phrase_option_with_languages(input, output, options, root, num_languages, NULL));
+    }
+    PASS();
+}
+
+
+static greatest_test_res test_root_expansion_contains_with_languages(char *input, char *output, libpostal_normalize_options_t options, size_t num_languages, ...) {
+   bool root = true;
+   if (num_languages > 0) {
+        va_list args;
+        va_start(args, num_languages);
+        CHECK_CALL(test_expansion_contains_phrase_option_with_languages(input, output, options, root, num_languages, args));
+        va_end(args);
+    } else {
+        CHECK_CALL(test_expansion_contains_phrase_option_with_languages(input, output, options, root, num_languages, NULL));
+    }
+    PASS();
+}
+
 
 
 TEST test_expansions(void) {
@@ -90,6 +136,38 @@ TEST test_expansions(void) {
     CHECK_CALL(test_expansion_contains_with_languages("มงแตร", "มงแตร", options, 1, "th"));
     PASS();
 }
+
+TEST test_street_root_expansions(void) {
+    libpostal_normalize_options_t options = libpostal_get_default_options();
+    options.address_components = LIBPOSTAL_ADDRESS_STREET | LIBPOSTAL_ADDRESS_ANY;
+
+    // English - normal cases
+    CHECK_CALL(test_root_expansion_contains("Malcolm X Blvd", "malcolm x", options));
+    CHECK_CALL(test_root_expansion_contains("E 106th St", "106", options));
+    CHECK_CALL(test_root_expansion_contains("S Park Ave", "park", options));
+    CHECK_CALL(test_root_expansion_contains("Park South", "park", options));
+    CHECK_CALL(test_root_expansion_contains("Rev Dr. MLK Dr S", "martin luther king junior", options));
+    CHECK_CALL(test_root_expansion_contains("Rev Dr. Martin Luther King Jr Dr S", "martin luther king junior", options));
+    CHECK_CALL(test_root_expansion_contains("East 6th Street", "6th", options));
+
+    // English - edge cases
+    CHECK_CALL(test_root_expansion_contains("Avenue B", "b", options));
+    CHECK_CALL(test_root_expansion_contains("Avenue C", "c", options));
+    CHECK_CALL(test_root_expansion_contains("Avenue D", "d", options));
+    CHECK_CALL(test_root_expansion_contains("Avenue E", "e", options));
+    CHECK_CALL(test_root_expansion_contains("Avenue N", "n", options));
+    CHECK_CALL(test_root_expansion_contains("U St SE", "u", options));
+    CHECK_CALL(test_root_expansion_contains("S Park", "park", options));
+    CHECK_CALL(test_root_expansion_contains("Park S", "park", options));
+    CHECK_CALL(test_root_expansion_contains("Avenue Rd", "avenue", options));
+    CHECK_CALL(test_root_expansion_contains("Broadway", "broadway", options));
+    CHECK_CALL(test_root_expansion_contains("E Broadway", "east", options));
+
+    // Spanish
+    CHECK_CALL(test_root_expansion_contains("C/ Ocho", "8", options));
+    PASS();
+}
+
 
 TEST test_expansions_language_classifier(void) {
     libpostal_normalize_options_t options = libpostal_get_default_options();
@@ -132,6 +210,7 @@ SUITE(libpostal_expansion_tests) {
     }
 
     RUN_TEST(test_expansions);
+    RUN_TEST(test_street_root_expansions);
     RUN_TEST(test_expansions_language_classifier);
     RUN_TEST(test_expansions_no_options);
 
