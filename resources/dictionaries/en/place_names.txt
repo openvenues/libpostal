@@ -267,6 +267,7 @@ stadium
 station|sta|stn
 steakhouse
 store|stor
+stores
 studio
 studios
 subdivision
