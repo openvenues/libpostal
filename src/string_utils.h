@@ -208,6 +208,8 @@ void cstring_array_clear(cstring_array *self);
 cstring_array *cstring_array_from_char_array(char_array *str);
 cstring_array *cstring_array_from_strings(char **strings, size_t n);
 
+bool cstring_array_extend(cstring_array *array, cstring_array *other);
+
 // Convert cstring_array to an array of n C strings and destroy the cstring_array
 char **cstring_array_to_strings(cstring_array *self);
 
@@ -284,6 +286,8 @@ void string_tree_add_string_len(string_tree_t *self, char *str, size_t len);
 // unterminated
 void string_tree_append_string(string_tree_t *self, char *str);
 void string_tree_append_string_len(string_tree_t *self, char *str, size_t len);
+
+void string_tree_clear(string_tree_t *self);
 
 uint32_t string_tree_num_tokens(string_tree_t *self);
 uint32_t string_tree_num_strings(string_tree_t *self);

@@ -1110,6 +1110,18 @@ cstring_array *cstring_array_from_strings(char **strings, size_t n) {
     return array;
 }
 
+bool cstring_array_extend(cstring_array *array, cstring_array *other) {
+    if (array == NULL || other == NULL) return false;
+    size_t n = cstring_array_num_strings(other);
+
+    for (size_t i = 0; i < n; i++) {
+        char *s_i = cstring_array_get_string(other, i);
+        cstring_array_add_string(array, s_i);
+    }
+    return true;
+}
+
+
 inline size_t cstring_array_capacity(cstring_array *self) {
     return self->str->m;
 }
@@ -1316,6 +1328,12 @@ inline char *string_tree_get_alternative(string_tree_t *self, size_t token_index
 
 inline void string_tree_finalize_token(string_tree_t *self) {
     uint32_array_push(self->token_indices, (uint32_t)cstring_array_num_strings(self->strings));
+}
+
+void string_tree_clear(string_tree_t *self) {
+    uint32_array_clear(self->token_indices);
+    uint32_array_push(self->token_indices, 0);
+    cstring_array_clear(self->strings);
 }
 
 // terminated
