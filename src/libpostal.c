@@ -11,6 +11,7 @@
 #include "expand.h"
 
 #include "language_classifier.h"
+#include "near_dupe.h"
 #include "normalize.h"
 #include "scanner.h"
 #include "string_utils.h"
@@ -45,15 +46,52 @@ libpostal_normalize_options_t libpostal_get_default_options(void) {
 }
 
 char **libpostal_expand_address(char *input, libpostal_normalize_options_t options, size_t *n) {
-    return expand_address(input, options, n);
+    cstring_array *strings = expand_address(input, options, n);
+    return cstring_array_to_strings(strings);
 }
 
 char **libpostal_expand_address_root(char *input, libpostal_normalize_options_t options, size_t *n) {
-    return expand_address_root(input, options, n);
+    cstring_array *strings = expand_address_root(input, options, n);
+    return cstring_array_to_strings(strings);
 }
 
 void libpostal_expansion_array_destroy(char **expansions, size_t n) {
     expansion_array_destroy(expansions, n);
+}
+
+#define DEFAULT_NEAR_DUPE_GEOHASH_PRECISION 6
+
+static libpostal_near_dupe_hash_options_t LIBPOSTAL_NEAR_DUPE_HASH_DEFAULT_OPTIONS = {
+    .with_name = true,
+    .with_address = true,
+    .with_unit = false,
+    .with_city_or_equivalent = true,
+    .with_small_containing_boundaries = true,
+    .with_postal_code = true,
+    .with_latlon = false,
+    .latitude = 0.0,
+    .longitude = 0.0,
+    .geohash_precision = DEFAULT_NEAR_DUPE_GEOHASH_PRECISION,
+    .name_and_address_keys = true,
+    .name_only_keys = false,
+    .address_only_keys = false
+};
+
+libpostal_near_dupe_hash_options_t libpostal_near_dupe_hash_default_options(void) {
+    return LIBPOSTAL_NEAR_DUPE_HASH_DEFAULT_OPTIONS;
+}
+
+char **libpostal_near_dupe_hashes(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t *num_hashes) {
+    cstring_array *strings = near_dupe_hashes(num_components, labels, values, options);
+    *num_hashes = cstring_array_num_strings(strings);
+    return cstring_array_to_strings(strings);
+}
+
+
+char **libpostal_near_dupe_hashes_languages(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages, size_t *num_hashes) {
+    cstring_array *strings = near_dupe_hashes_languages(num_components, labels, values, options, num_languages, languages);
+    *num_hashes = cstring_array_num_strings(strings);
+    return cstring_array_to_strings(strings);
 }
 
 void libpostal_address_parser_response_destroy(libpostal_address_parser_response_t *self) {

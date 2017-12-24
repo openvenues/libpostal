@@ -152,6 +152,8 @@ typedef struct libpostal_address_parser_response {
     char **labels;
 } libpostal_address_parser_response_t;
 
+typedef libpostal_address_parser_response_t libpostal_parsed_address_components_t;
+
 typedef struct libpostal_address_parser_options {
     char *language;
     char *country;
@@ -164,6 +166,32 @@ LIBPOSTAL_EXPORT libpostal_address_parser_options_t libpostal_get_address_parser
 LIBPOSTAL_EXPORT libpostal_address_parser_response_t *libpostal_parse_address(char *address, libpostal_address_parser_options_t options);
 
 LIBPOSTAL_EXPORT bool libpostal_parser_print_features(bool print_features);
+
+
+/*
+Deduping
+*/
+
+typedef struct libpostal_near_dupe_hash_options {
+    bool with_name;
+    bool with_address;
+    bool with_unit;
+    bool with_city_or_equivalent;
+    bool with_small_containing_boundaries;
+    bool with_postal_code;
+    bool with_latlon;
+    double latitude;
+    double longitude;
+    size_t geohash_precision;
+    bool name_and_address_keys;
+    bool name_only_keys;
+    bool address_only_keys;
+} libpostal_near_dupe_hash_options_t;
+
+
+LIBPOSTAL_EXPORT libpostal_near_dupe_hash_options_t libpostal_near_dupe_hash_default_options(void);
+LIBPOSTAL_EXPORT char **libpostal_near_dupe_hashes(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t *num_hashes);
+LIBPOSTAL_EXPORT char **libpostal_near_dupe_hashes_languages(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages, size_t *num_hashes);
 
 // Setup/teardown methods
 
