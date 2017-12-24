@@ -1,3 +1,5 @@
+associates|assoc
+association|assoc
 bank
 b corporation|b corp|bcorp
 charitable incorporated organization|cio|c i o
@@ -34,7 +36,7 @@ limited liability limited partnership|lllp|l l l p
 limited liability partnership|llp|l l p
 limited partnership|lp|l p
 look through company|look through co|lookthrough company|lookthrough co|ltc
-national association|na|n a
+national association|na|n a|nat assoc|natl assoc
 national trust and savings association|national trust & savings association|nt & sa|nt and sa|nt sa|ntsa
 no liability|nl|n l
 nonprofit|non profit
