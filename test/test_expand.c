@@ -163,6 +163,14 @@ TEST test_street_root_expansions(void) {
     CHECK_CALL(test_root_expansion_contains("Avenue Rd", "avenue", options));
     CHECK_CALL(test_root_expansion_contains("Broadway", "broadway", options));
     CHECK_CALL(test_root_expansion_contains("E Broadway", "east", options));
+    CHECK_CALL(test_root_expansion_contains("E Center St", "center", options));
+    CHECK_CALL(test_root_expansion_contains("E Ctr St", "center", options));
+    CHECK_CALL(test_root_expansion_contains("E Center Street", "center", options));
+    CHECK_CALL(test_root_expansion_contains("E Ctr Street", "center", options));
+    CHECK_CALL(test_root_expansion_contains("Center St E", "center", options));
+    CHECK_CALL(test_root_expansion_contains("Ctr St E", "center", options));
+    CHECK_CALL(test_root_expansion_contains("Center Street E", "center", options));
+    CHECK_CALL(test_root_expansion_contains("Ctr Street E", "center", options));
 
     // Spanish
     CHECK_CALL(test_root_expansion_contains("C/ Ocho", "8", options));
