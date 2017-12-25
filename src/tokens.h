@@ -14,6 +14,8 @@
 
 typedef libpostal_token_t token_t;
 
+#define NULL_TOKEN (token_t){0, 0, END}
+
 VECTOR_INIT(token_array, token_t)
 
 typedef struct tokenized_string {
