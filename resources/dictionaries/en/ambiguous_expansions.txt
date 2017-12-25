@@ -16,9 +16,6 @@ apt
 arc
 art
 arty
-ave
-avens
-aves
 ba
 bc
 bot
