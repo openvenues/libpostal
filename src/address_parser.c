@@ -1770,6 +1770,10 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
 
             token_array_destroy(tokens);
             tokenized_string_destroy(tokenized_str);
+
+            if (is_normalized) {
+                free(normalized);
+            }
             return response;
         }
     }
