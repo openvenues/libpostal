@@ -30,6 +30,7 @@ maine|me
 manitoba|mb
 maryland|md
 massachusetts|ma
+melbourne|melb
 michigan|mi
 minnesota|mn
 mississippi|ms
