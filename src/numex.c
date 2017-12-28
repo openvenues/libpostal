@@ -439,7 +439,7 @@ bool numex_table_read(FILE *f) {
 
     log_debug("read num_languages = %" PRIu64 "\n", num_languages);
 
-    int i = 0;
+    size_t i = 0;
 
     numex_language_t *language;
 
@@ -541,7 +541,7 @@ bool numex_table_write(FILE *f) {
 
     numex_rule_t rule;
 
-    int i = 0;
+    size_t i = 0;
 
     for (i = 0; i < num_rules; i++) {
         rule = numex_table->rules->a[i];
@@ -1137,9 +1137,75 @@ size_t ordinal_suffix_len(char *str, size_t len, char *lang) {
     return 0;
 }
 
+
+
+static inline bool is_roman_numeral_char(char c) {
+    return (c == 'i' ||
+            c == 'v' ||
+            c == 'x' ||
+            c == 'l' ||
+            c == 'c' ||
+            c == 'd' ||
+            c == 'm' ||
+            c == 'I' ||
+            c == 'V' ||
+            c == 'X' ||
+            c == 'L' ||
+            c == 'C' ||
+            c == 'D' ||
+            c == 'M');
+}
+
+static inline bool is_likely_single_roman_numeral_char(char c) {
+    return (c == 'i' ||
+            c == 'v' ||
+            c == 'x' ||
+            c == 'I' ||
+            c == 'V' ||
+            c == 'X');
+}
+
+
+bool is_valid_roman_numeral(char *str, size_t len) {
+    char *copy = strndup(str, len);
+    if (copy == NULL) return false;
+
+    numex_result_array *results = convert_numeric_expressions(copy, LATIN_LANGUAGE_CODE);
+    if (results == NULL) {
+        free(copy);
+        return false;
+    }
+
+    bool ret = results->n == 1 && results->a[0].len == len;
+    numex_result_array_destroy(results);
+    free(copy);
+    return ret;
+}
+
+bool is_likely_roman_numeral_len(char *str, size_t len) {
+    bool seen_roman = false;
+    for (size_t i = 0; i < len; i++) {
+        char c = *(str + i);
+        if (c == 0) break;
+        if ((len <= 2 && is_likely_single_roman_numeral_char(c)) || (len > 2 && is_roman_numeral_char(c))) {
+            seen_roman = true;
+        } else {
+            return false;
+        }
+    }
+
+    return seen_roman && is_valid_roman_numeral(str, len);
+}
+
+inline bool is_likely_roman_numeral(char *str) {
+    return is_likely_roman_numeral_len(str, strlen(str));
+}
+
 char *replace_numeric_expressions(char *str, char *lang) {
     numex_result_array *results = convert_numeric_expressions(str, lang);
     if (results == NULL) return NULL;
+
+    bool is_latin = string_equals(lang, LATIN_LANGUAGE_CODE);
 
     size_t len = strlen(str);
 
@@ -1147,10 +1213,36 @@ char *replace_numeric_expressions(char *str, char *lang) {
     size_t start = 0;
     size_t end = 0;
 
-    for (int i = 0; i < results->n; i++) {
-        numex_result_t result = results->a[i];
+    bool have_valid_numex = false;
+    numex_result_t result = NULL_NUMEX_RESULT;
+
+    for (size_t i = 0; i < results->n; i++) {
+        result = results->a[i];
 
         if (result.len == 0) {
+            continue;
+        }
+
+        if (is_latin && result.len <= 2 && !is_likely_roman_numeral_len(str + result.start, result.len)) {
+            continue;
+        }
+        have_valid_numex = true;
+        break;
+    }
+
+    if (!have_valid_numex) {
+        numex_result_array_destroy(results);
+        return NULL;
+    }
+
+    for (size_t i = 0; i < results->n; i++) {
+        result = results->a[i];
+
+        if (result.len == 0) {
+            continue;
+        }
+
+        if (is_latin && result.len <= 2 && !is_likely_roman_numeral_len(str + result.start, result.len)) {
             continue;
         }
 
@@ -1184,56 +1276,3 @@ char *replace_numeric_expressions(char *str, char *lang) {
     return char_array_to_string(replacement);
 }
 
-
-static inline bool is_roman_numeral_char(char c) {
-    return (c == 'i' ||
-            c == 'v' ||
-            c == 'x' ||
-            c == 'l' ||
-            c == 'c' ||
-            c == 'd' ||
-            c == 'm' ||
-            c == 'I' ||
-            c == 'V' ||
-            c == 'X' ||
-            c == 'L' ||
-            c == 'C' ||
-            c == 'D' ||
-            c == 'M');
-}
-
-bool is_valid_roman_numeral(char *str, size_t len) {
-    char *copy = strndup(str, len);
-    if (copy == NULL) return false;
-
-    numex_result_array *results = convert_numeric_expressions(copy, LATIN_LANGUAGE_CODE);
-    if (results == NULL) {
-        free(copy);
-        return false;
-    }
-
-    bool ret = results->n == 1 && results->a[0].len == len;
-    numex_result_array_destroy(results);
-    free(copy);
-    return ret;
-}
-
-bool is_roman_numeral_len(char *str, size_t len) {
-    size_t i = 0;
-    bool seen_roman = false;
-    for (size_t i = 0; i < len; i++) {
-        char c = *(str + i);
-        if (c == 0) break;
-        if (is_roman_numeral_char(c)) {
-            seen_roman = true;
-        } else {
-            return false;
-        }
-    }
-
-    return seen_roman && is_valid_roman_numeral(str, len);
-}
-
-inline bool is_roman_numeral(char *str) {
-    return is_roman_numeral_len(str, strlen(str));
-}
