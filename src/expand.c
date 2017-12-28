@@ -67,7 +67,7 @@ inline size_t valid_ordinal_suffix_len(char *str, token_t token, token_t prev_to
         }
         ssize_t prev_char_len = utf8proc_iterate_reversed(ptr, start, &unichr);
         if (prev_char_len <= 0) return 0;
-        if (!utf8_is_digit(utf8proc_category(unichr)) && !is_roman_numeral_len(str + token_offset, token_len)) {
+        if (!utf8_is_digit(utf8proc_category(unichr)) && !is_likely_roman_numeral_len(str + token_offset, token_len)) {
             return 0;
         }
     } else {
@@ -932,7 +932,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                 }
 
                 if (token.type != WHITESPACE) {
-                    if ((phrase.start > 0 && last_was_punctuation) || (!last_added_was_whitespace && string_tree_num_strings(tree) > 0) ) {
+                    if ((phrase.start > 0 && last_was_punctuation) || (!last_added_was_whitespace && string_tree_num_tokens(tree) > 0) ) {
                         log_debug("Adding space\n");
                         string_tree_add_string(tree, " ");
                         string_tree_finalize_token(tree);
@@ -942,7 +942,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                     bool have_period_affixes = add_period_affixes_or_token(tree, str, token, options);
                     string_tree_finalize_token(tree);
                     last_added_was_whitespace = false;
-                } else if (!delete_phrases && !last_added_was_whitespace && string_tree_num_strings(tree) > 0 ) {
+                } else if (!delete_phrases && !last_added_was_whitespace && string_tree_num_tokens(tree) > 0 ) {
                     log_debug("Adding pre-phrase whitespace\n");
                     last_added_was_whitespace = true;
                     string_tree_add_string(tree, " ");
@@ -1065,12 +1065,14 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                                             if (current_phrase_have_edge_ignorable || (current_phrase_have_ambiguous && current_phrase_have_canonical)) {
                                                 // don't delete the "E" in "Avenue E"
                                                 log_debug("final phrase is edge ignorable out of two phrases. Checking previous phrase is ignorable.\n");
-                                                skip_edge_phrase = !(address_phrase_is_ignorable_for_components(other_phrase, options.address_components) && !(address_phrase_has_canonical_interpretation(other_phrase) && address_phrase_is_possible_root_for_components(other_phrase, options.address_components)));
+
+                                                skip_edge_phrase = !(address_phrase_is_ignorable_for_components(other_phrase, options.address_components) && !(address_phrase_has_canonical_interpretation(other_phrase) && address_phrase_is_possible_root_for_components(other_phrase, options.address_components))) && string_tree_num_tokens(tree) > 0;
                                             } else {
                                                 log_debug("final phrase is not edge-ignorable out of two phrases. Checking previous phrase is edge ignorable.\n");
                                                 // delete "St" in "E St"
                                                 other_phrase_is_ignorable = address_phrase_is_edge_ignorable_for_components(other_phrase, options.address_components) || (address_phrase_in_dictionary(other_phrase, DICTIONARY_AMBIGUOUS_EXPANSION) && address_phrase_has_canonical_interpretation(other_phrase));
                                                 skip_edge_phrase = other_phrase_is_ignorable && address_phrase_is_ignorable_for_components(phrase, options.address_components) && !(address_phrase_has_canonical_interpretation(phrase) && address_phrase_is_possible_root_for_components(phrase, options.address_components));
+
                                                 //skip_edge_phrase = address_phrase_is_edge_ignorable_for_components(other_phrase, options.address_components);
                                             }
                                         }
@@ -1224,7 +1226,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
             log_debug("expansion_valid_components == %d\n", expansion_valid_components);
 
             if (added_expansions == 0 && (!delete_phrases || !expansion_valid_components)) {
-                if (!last_added_was_whitespace && string_tree_num_strings(tree) > 0) {
+                if (!last_added_was_whitespace && string_tree_num_tokens(tree) > 0) {
                     log_debug("Adding space\n");
                     string_tree_add_string(tree, " ");
                     string_tree_finalize_token(tree);
@@ -1322,7 +1324,6 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
 
         }
 
-
     } else {
         log_debug("phrases NULL\n");
         for (size_t j = 0; j < num_tokens; j++) {
@@ -1335,7 +1336,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
             }
 
             if (token.type != WHITESPACE) {
-                if (last_was_punctuation && !last_added_was_whitespace && string_tree_num_strings(tree) > 0) {
+                if (last_was_punctuation && !last_added_was_whitespace && string_tree_num_tokens(tree) > 0) {
                     log_debug("Adding space V\n");
                     string_tree_add_string(tree, " ");
                     string_tree_finalize_token(tree);
@@ -1343,7 +1344,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
 
                 bool have_period_affixes = add_period_affixes_or_token(tree, str, token, options);
                 last_added_was_whitespace = false;
-            } else if (!last_added_was_whitespace && string_tree_num_strings(tree) > 0) {
+            } else if (!last_added_was_whitespace && string_tree_num_tokens(tree) > 0) {
                 log_debug("Adding space VI\n");
                 string_tree_add_string(tree, " ");
                 last_added_was_whitespace = true;
@@ -1368,15 +1369,18 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
 inline bool normalize_ordinal_suffixes(string_tree_t *tree, char *str, char *lang, token_t token, size_t i, token_t prev_token, libpostal_normalize_options_t options) {
     size_t len_ordinal_suffix = valid_ordinal_suffix_len(str, token, prev_token, lang);
 
-    cstring_array *strings = tree->strings;
-    // Add the original form first. When this function returns true,
-    // add_normalized_strings_token won't be called a second time.
-    add_normalized_strings_token(strings, str, token, options);
+    if (len_ordinal_suffix > 0) {
+        cstring_array *strings = tree->strings;
+        // Add the original form first. When this function returns true,
+        // add_normalized_strings_token won't be called a second time.
+        add_normalized_strings_token(strings, str, token, options);
+        token_t normalized_token = token;
+        normalized_token.len = token.len - len_ordinal_suffix;
+        add_normalized_strings_token(strings, str, normalized_token, options);
+        return true;
+    }
 
-    token_t normalized_token = token;
-    normalized_token.len = token.len - len_ordinal_suffix;
-    add_normalized_strings_token(strings, str, normalized_token, options);
-    return true;
+    return false;
 }
 
 inline void add_normalized_strings_tokenized(string_tree_t *tree, char *str, token_array *tokens, libpostal_normalize_options_t options) {
