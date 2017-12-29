@@ -45,7 +45,7 @@ inline uint64_t get_normalize_string_options(libpostal_normalize_options_t optio
 }
 
 
-inline size_t valid_ordinal_suffix_len(char *str, token_t token, token_t prev_token, char *lang) {
+static inline size_t valid_ordinal_suffix_len(char *str, token_t token, token_t prev_token, char *lang) {
     size_t len_ordinal_suffix = ordinal_suffix_len(str + token.offset, token.len, lang);
 
     int32_t unichr = 0;
@@ -495,7 +495,7 @@ bool add_period_affixes_or_token(string_tree_t *tree, char *str, token_t token, 
 }
 
 
-inline uint32_t gazetteer_ignorable_components(uint16_t dictionary_id) {
+static inline uint32_t gazetteer_ignorable_components(uint16_t dictionary_id) {
     switch (dictionary_id) {
         case DICTIONARY_ACADEMIC_DEGREE:
             return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
@@ -553,7 +553,7 @@ inline uint32_t gazetteer_ignorable_components(uint16_t dictionary_id) {
 }
 
 
-inline uint32_t gazetteer_valid_components(uint16_t dictionary_id) {
+static inline uint32_t gazetteer_valid_components(uint16_t dictionary_id) {
     switch (dictionary_id) {
         case DICTIONARY_DIRECTIONAL:
             return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET | LIBPOSTAL_ADDRESS_CATEGORY | LIBPOSTAL_ADDRESS_NEAR | LIBPOSTAL_ADDRESS_TOPONYM | LIBPOSTAL_ADDRESS_UNIT | LIBPOSTAL_ADDRESS_LEVEL | LIBPOSTAL_ADDRESS_STAIRCASE | LIBPOSTAL_ADDRESS_ENTRANCE;
@@ -568,7 +568,7 @@ inline uint32_t gazetteer_valid_components(uint16_t dictionary_id) {
     }
 }
 
-inline uint32_t gazetteer_edge_ignorable_components(uint16_t dictionary_id) {
+static inline uint32_t gazetteer_edge_ignorable_components(uint16_t dictionary_id) {
     switch (dictionary_id) {
         // Pre/post directionals can be removed if there are non-phrase tokens
         case DICTIONARY_DIRECTIONAL:
@@ -582,7 +582,7 @@ inline uint32_t gazetteer_edge_ignorable_components(uint16_t dictionary_id) {
     }
 }
 
-inline uint32_t gazetteer_specifier_components(uint16_t dictionary_id) {
+static inline uint32_t gazetteer_specifier_components(uint16_t dictionary_id) {
     switch (dictionary_id) {
         case DICTIONARY_LEVEL_STANDALONE:
             return LIBPOSTAL_ADDRESS_LEVEL;
@@ -600,7 +600,7 @@ inline uint32_t gazetteer_specifier_components(uint16_t dictionary_id) {
 }
 
 
-inline uint32_t gazetteer_possible_root_components(uint16_t dictionary_id) {
+static inline uint32_t gazetteer_possible_root_components(uint16_t dictionary_id) {
     switch (dictionary_id) {
         case DICTIONARY_ACADEMIC_DEGREE:
             return LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_STREET;
@@ -632,7 +632,7 @@ typedef enum {
 } gazetteer_match_type_t;
 
 
-inline bool address_expansion_matches_type_for_components(address_expansion_t expansion, uint32_t address_components, gazetteer_match_type_t match_type) {
+static inline bool address_expansion_matches_type_for_components(address_expansion_t expansion, uint32_t address_components, gazetteer_match_type_t match_type) {
     for (uint32_t j = 0; j < expansion.num_dictionaries; j++) {
         uint16_t dictionary_id = expansion.dictionary_ids[j];
         uint32_t components = 0;
@@ -662,23 +662,23 @@ inline bool address_expansion_matches_type_for_components(address_expansion_t ex
     return false;
 }
 
-inline bool address_expansion_is_ignorable_for_components(address_expansion_t expansion, uint32_t address_components) {
+bool address_expansion_is_ignorable_for_components(address_expansion_t expansion, uint32_t address_components) {
     return address_expansion_matches_type_for_components(expansion, address_components, GAZETTEER_MATCH_IGNORABLE);
 }
 
-inline bool address_expansion_is_edge_ignorable_for_components(address_expansion_t expansion, uint32_t address_components) {
+bool address_expansion_is_edge_ignorable_for_components(address_expansion_t expansion, uint32_t address_components) {
     return address_expansion_matches_type_for_components(expansion, address_components, GAZETTEER_MATCH_EDGE_IGNORABLE);
 }
 
-inline bool address_expansion_is_possible_root_for_components(address_expansion_t expansion, uint32_t address_components) {
+bool address_expansion_is_possible_root_for_components(address_expansion_t expansion, uint32_t address_components) {
     return address_expansion_matches_type_for_components(expansion, address_components, GAZETTEER_MATCH_POSSIBLE_ROOT);
 }
 
-inline bool address_expansion_is_specifier_for_components(address_expansion_t expansion, uint32_t address_components) {
+bool address_expansion_is_specifier_for_components(address_expansion_t expansion, uint32_t address_components) {
     return address_expansion_matches_type_for_components(expansion, address_components, GAZETTEER_MATCH_SPECIFIER);
 }
 
-inline bool address_expansion_is_valid_for_components(address_expansion_t expansion, uint32_t address_components) {
+bool address_expansion_is_valid_for_components(address_expansion_t expansion, uint32_t address_components) {
     return address_expansion_matches_type_for_components(expansion, address_components, GAZETTEER_MATCH_VALID_COMPONENTS);
 }
 

@@ -169,7 +169,7 @@ cstring_array *expanded_component_combined(char *input, libpostal_normalize_opti
     }       
 }
 
-inline cstring_array *expanded_component_root_with_fallback(char *input, libpostal_normalize_options_t options, size_t *n) {
+static inline cstring_array *expanded_component_root_with_fallback(char *input, libpostal_normalize_options_t options, size_t *n) {
     cstring_array *root_expansions = expand_address_root(input, options, n);
     if (*n > 0) {
         return root_expansions;

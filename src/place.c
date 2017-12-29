@@ -1,7 +1,7 @@
 #include "place.h"
 #include "address_parser.h"
 
-inline bool is_address_text_component(char *label) {
+static inline bool is_address_text_component(char *label) {
     return (string_equals(label, ADDRESS_PARSER_LABEL_HOUSE) ||
             string_equals(label, ADDRESS_PARSER_LABEL_ROAD) ||
             string_equals(label, ADDRESS_PARSER_LABEL_METRO_STATION) ||
