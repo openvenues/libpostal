@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "collections.h"
 #include "libpostal.h"
+#include "trie_search.h"
 
 /*
 This is a variant of Soft-TFIDF as described in:
@@ -41,6 +42,7 @@ typedef struct soft_tfidf_options {
 
 soft_tfidf_options_t soft_tfidf_default_options(void);
 
+double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char **tokens1, double *token_scores1, phrase_array *phrases1, size_t num_tokens2, char **tokens2, double *token_scores2, phrase_array *phrases2, phrase_array *acronym_alignments, soft_tfidf_options_t options);
 double soft_tfidf_similarity(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, soft_tfidf_options_t options);
 
 #endif
