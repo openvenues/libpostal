@@ -438,8 +438,8 @@ double jaro_distance_unicode(uint32_array *u1_array, uint32_array *u2_array) {
     size_t max_len = len1 > len2 ? len1 : len2;
     size_t match_distance = (max_len / 2) - 1;
 
-    uint8_t *u1_matches = calloc(len2, sizeof(uint8_t));
-    uint8_t *u2_matches = calloc(len1, sizeof(uint8_t));
+    uint8_t *u1_matches = calloc(len1, sizeof(uint8_t));
+    uint8_t *u2_matches = calloc(len2, sizeof(uint8_t));
 
     uint32_t *u1 = u1_array->a;
     uint32_t *u2 = u2_array->a;
