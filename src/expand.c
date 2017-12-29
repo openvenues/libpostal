@@ -1128,7 +1128,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                             // Delete "Avenue" in "5th Avenue"
                             } else if (is_ignorable && is_canonical && !current_phrase_have_ambiguous) {
                                 log_debug("is_ignorable && is_canonical && !current_phrase_have_ambiguous\n");
-                                current_phrase_ignorable = have_non_phrase_tokens || string_tree_num_tokens(tree) > 0 || (have_possible_root && !current_phrase_have_possible_root);
+                                current_phrase_ignorable = have_non_phrase_tokens || (have_possible_root && !current_phrase_have_possible_root) || string_tree_num_tokens(tree) > 0;
                                 log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
                             // Delete "Ave" in "5th Ave" or "Pl" in "Park Pl S"
                             } else if (is_ignorable && !is_canonical && !is_ambiguous && !current_phrase_have_ambiguous) {
