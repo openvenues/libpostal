@@ -1,5 +1,33 @@
 #include "acronyms.h"
 
+static uint32_array *stopword_tokens(const char *str, token_array *tokens, size_t num_languages, char **languages) {
+    size_t len = tokens->n;
+    uint32_array *stopwords_array = uint32_array_new_zeros(len);
+
+    uint32_t *stopwords = stopwords_array->a;
+
+    for (size_t l = 0; l < num_languages; l++) {
+        char *lang = languages[l];
+        phrase_array *lang_phrases = search_address_dictionaries_tokens((char *)str, tokens, lang);
+
+        if (lang_phrases != NULL) {
+            size_t num_lang_phrases = lang_phrases->n;
+            for (size_t p = 0; p < num_lang_phrases; p++) {
+                phrase_t phrase = lang_phrases->a[p];
+
+                if (address_phrase_in_dictionary(phrase, DICTIONARY_STOPWORD)) {
+                    for (size_t stop_idx = phrase.start; stop_idx < phrase.start + phrase.len; stop_idx++) {
+                        stopwords[stop_idx] = 1;
+                    }
+                }
+            }
+            phrase_array_destroy(lang_phrases);
+        }
+    }
+
+    return stopwords_array;
+}
+
 phrase_array *acronym_token_alignments(const char *s1, token_array *tokens1, const char *s2, token_array *tokens2, size_t num_languages, char **languages) {
     if (s1 == NULL || tokens1 == NULL || s2 == NULL || tokens2 == NULL) {
         return NULL;
@@ -28,28 +56,12 @@ phrase_array *acronym_token_alignments(const char *s1, token_array *tokens1, con
     token_t *t1 = tokens1->a;
     token_t *t2 = tokens2->a;
 
-    uint32_array *stopwords_array = uint32_array_new_zeros(len2);
+    uint32_array *stopwords_array = stopword_tokens(s2, tokens2, num_languages, languages);
+    if (stopwords_array == NULL) {
+        return NULL;
+    }
 
     uint32_t *stopwords = stopwords_array->a;
-
-    for (size_t l = 0; l < num_languages; l++) {
-        char *lang = languages[l];
-        phrase_array *lang_phrases = search_address_dictionaries_tokens((char *)s2, tokens2, lang);
-
-        if (lang_phrases != NULL) {
-            size_t num_lang_phrases = lang_phrases->n;
-            for (size_t p = 0; p < num_lang_phrases; p++) {
-                phrase_t phrase = lang_phrases->a[p];
-
-                if (address_phrase_in_dictionary(phrase, DICTIONARY_STOPWORD)) {
-                    for (size_t stop_idx = phrase.start; stop_idx < phrase.start + phrase.len; stop_idx++) {
-                        stopwords[stop_idx] = 1;
-                    }
-                }
-            }
-            phrase_array_destroy(lang_phrases);
-        }
-    }
 
     ssize_t acronym_start = -1;
     ssize_t acronym_token_pos = -1;
@@ -136,5 +148,3 @@ phrase_array *acronym_token_alignments(const char *s1, token_array *tokens1, con
 
     return alignments;   
 }
-
-
