@@ -8,6 +8,7 @@
 
 #include "address_dictionary.h"
 #include "address_parser.h"
+#include "dedupe.h"
 #include "expand.h"
 
 #include "language_classifier.h"
@@ -107,6 +108,47 @@ char **libpostal_place_languages(size_t num_components, char **labels, char **va
     language_classifier_response_destroy(lang_response);
     return languages;
 }
+
+libpostal_duplicate_status_t libpostal_is_name_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
+    return is_name_duplicate(value1, value2, options);
+}
+
+libpostal_duplicate_status_t libpostal_is_street_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
+    return is_street_duplicate(value1, value2, options);
+}
+
+libpostal_duplicate_status_t libpostal_is_house_number_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
+    return is_house_number_duplicate(value1, value2, options);
+}
+
+libpostal_duplicate_status_t libpostal_is_po_box_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
+    return is_po_box_duplicate(value1, value2, options);
+}
+
+libpostal_duplicate_status_t libpostal_is_unit_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
+    return is_unit_duplicate(value1, value2, options);
+}
+
+libpostal_duplicate_status_t libpostal_is_floor_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
+    return is_floor_duplicate(value1, value2, options);
+}
+
+libpostal_duplicate_status_t libpostal_is_postal_code_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
+    return is_postal_code_duplicate(value1, value2, options);
+}
+
+libpostal_duplicate_status_t libpostal_is_toponym_duplicate(size_t num_components1, char **labels1, char **values1, size_t num_components2, char **labels2, char **values2, libpostal_duplicate_options_t options) {
+    return is_toponym_duplicate(num_components1, labels1, values1, num_components2, labels2, values2, options);
+}
+
+libpostal_duplicate_status_similarity_t libpostal_is_name_duplicate_fuzzy(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_duplicate_similarity_options_t options) {
+    return is_name_duplicate_fuzzy(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, options);
+}
+
+libpostal_duplicate_status_similarity_t libpostal_is_street_duplicate_fuzzy(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_duplicate_similarity_options_t options) {
+    return is_street_duplicate_fuzzy(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, options);
+}
+
 
 void libpostal_address_parser_response_destroy(libpostal_address_parser_response_t *self) {
     if (self == NULL) return;

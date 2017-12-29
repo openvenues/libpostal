@@ -200,6 +200,47 @@ LIBPOSTAL_EXPORT char **libpostal_near_dupe_hashes_languages(size_t num_componen
 
 LIBPOSTAL_EXPORT char **libpostal_place_languages(size_t num_components, char **labels, char **values, size_t *num_languages);
 
+// Pairwise dupe methods
+
+typedef enum {
+    LIBPOSTAL_NULL_DUPLICATE_STATUS = -1,
+    LIBPOSTAL_NON_DUPLICATE = 0,
+    LIBPOSTAL_POSSIBLE_DUPLICATE_NEEDS_REVIEW = 3,
+    LIBPOSTAL_LIKELY_DUPLICATE = 6,
+    LIBPOSTAL_EXACT_DUPLICATE = 9,
+} libpostal_duplicate_status_t;
+
+typedef struct libpostal_duplicate_options {
+    size_t num_languages;
+    char **languages;
+} libpostal_duplicate_options_t;
+
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_name_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_street_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_house_number_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_po_box_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_unit_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_floor_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_postal_code_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_toponym_duplicate(size_t num_components1, char **labels1, char **values1, size_t num_components2, char **labels2, char **values2, libpostal_duplicate_options_t options);
+
+// Pairwise fuzzy dupe methods, return status & similarity
+
+typedef struct libpostal_duplicate_similarity_options {
+    size_t num_languages;
+    char **languages;
+    double needs_review_threshold;
+    double likely_dupe_threshold;
+} libpostal_duplicate_similarity_options_t;
+
+typedef struct libpostal_duplicate_status_similarity {
+    libpostal_duplicate_status_t status;
+    double similarity;
+} libpostal_duplicate_status_similarity_t;
+
+LIBPOSTAL_EXPORT libpostal_duplicate_status_similarity_t libpostal_is_name_duplicate_fuzzy(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_duplicate_similarity_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_similarity_t libpostal_is_street_duplicate_fuzzy(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_duplicate_similarity_options_t options);
+
 // Setup/teardown methods
 
 LIBPOSTAL_EXPORT bool libpostal_setup(void);
