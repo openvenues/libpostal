@@ -79,7 +79,7 @@ static libpostal_near_dupe_hash_options_t LIBPOSTAL_NEAR_DUPE_HASH_DEFAULT_OPTIO
     .address_only_keys = false
 };
 
-libpostal_near_dupe_hash_options_t libpostal_near_dupe_hash_default_options(void) {
+libpostal_near_dupe_hash_options_t libpostal_get_near_dupe_hash_default_options(void) {
     return LIBPOSTAL_NEAR_DUPE_HASH_DEFAULT_OPTIONS;
 }
 
@@ -107,6 +107,22 @@ char **libpostal_place_languages(size_t num_components, char **labels, char **va
 
     language_classifier_response_destroy(lang_response);
     return languages;
+}
+
+static libpostal_duplicate_options_t LIBPOSTAL_DUPLICATE_DEFAULT_OPTIONS = {
+    .num_languages = 0,
+    .languages = NULL
+};
+
+libpostal_duplicate_options_t libpostal_get_default_duplicate_options(void) {
+    return LIBPOSTAL_DUPLICATE_DEFAULT_OPTIONS;
+}
+
+libpostal_duplicate_options_t libpostal_get_duplicate_options_with_languages(size_t num_languages, char **languages) {
+    libpostal_duplicate_options_t options = LIBPOSTAL_DUPLICATE_DEFAULT_OPTIONS;
+    options.num_languages = num_languages;
+    options.languages = languages;
+    return options;
 }
 
 libpostal_duplicate_status_t libpostal_is_name_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
@@ -141,11 +157,34 @@ libpostal_duplicate_status_t libpostal_is_toponym_duplicate(size_t num_component
     return is_toponym_duplicate(num_components1, labels1, values1, num_components2, labels2, values2, options);
 }
 
-libpostal_duplicate_status_similarity_t libpostal_is_name_duplicate_fuzzy(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_duplicate_similarity_options_t options) {
+#define DEFAULT_FUZZY_DUPLICATE_NEEDS_REVIEW_THRESHOLD 0.7
+#define DEFAULT_FUZZY_DUPLICATE_LIKELY_DUPE_THRESHOLD 0.9
+
+static libpostal_fuzzy_duplicate_options_t DEFAULT_FUZZY_DUPLICATE_OPTIONS = {
+    .num_languages = 0,
+    .languages = NULL,
+    .needs_review_threshold = DEFAULT_FUZZY_DUPLICATE_NEEDS_REVIEW_THRESHOLD,
+    .likely_dupe_threshold = DEFAULT_FUZZY_DUPLICATE_LIKELY_DUPE_THRESHOLD
+};
+
+
+libpostal_fuzzy_duplicate_options_t libpostal_get_default_fuzzy_duplicate_options(void) {
+    return DEFAULT_FUZZY_DUPLICATE_OPTIONS;
+}
+
+libpostal_fuzzy_duplicate_options_t libpostal_get_default_fuzzy_duplicate_options_with_languages(size_t num_languages, char **languages) {
+    libpostal_fuzzy_duplicate_options_t options = DEFAULT_FUZZY_DUPLICATE_OPTIONS;
+    options.num_languages = num_languages;
+    options.languages = languages;
+    return options;
+}
+
+
+libpostal_fuzzy_duplicate_status_t libpostal_is_name_duplicate_fuzzy(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_fuzzy_duplicate_options_t options) {
     return is_name_duplicate_fuzzy(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, options);
 }
 
-libpostal_duplicate_status_similarity_t libpostal_is_street_duplicate_fuzzy(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_duplicate_similarity_options_t options) {
+libpostal_fuzzy_duplicate_status_t libpostal_is_street_duplicate_fuzzy(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_fuzzy_duplicate_options_t options) {
     return is_street_duplicate_fuzzy(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, options);
 }
 

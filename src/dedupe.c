@@ -263,7 +263,7 @@ bool have_ideographic_word_tokens(token_array *token_array) {
     return false;
 }
 
-libpostal_duplicate_status_similarity_t is_fuzzy_duplicate(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_duplicate_similarity_options_t options, libpostal_normalize_options_t normalize_options, soft_tfidf_options_t soft_tfidf_options, bool do_acronyms) {
+libpostal_fuzzy_duplicate_status_t is_fuzzy_duplicate(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_fuzzy_duplicate_options_t options, libpostal_normalize_options_t normalize_options, soft_tfidf_options_t soft_tfidf_options, bool do_acronyms) {
     normalize_options.num_languages = options.num_languages;
     normalize_options.languages = options.languages;
 
@@ -362,10 +362,10 @@ libpostal_duplicate_status_similarity_t is_fuzzy_duplicate(size_t num_tokens1, c
         free(joined2);
     }
 
-    return (libpostal_duplicate_status_similarity_t){dupe_status, max_sim};
+    return (libpostal_fuzzy_duplicate_status_t){dupe_status, max_sim};
 }
 
-inline libpostal_duplicate_status_similarity_t is_name_duplicate_fuzzy(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_duplicate_similarity_options_t options) {
+inline libpostal_fuzzy_duplicate_status_t is_name_duplicate_fuzzy(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_fuzzy_duplicate_options_t options) {
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
     normalize_options.address_components = LIBPOSTAL_ADDRESS_NAME;
 
@@ -377,7 +377,7 @@ inline libpostal_duplicate_status_similarity_t is_name_duplicate_fuzzy(size_t nu
 }
 
 
-inline libpostal_duplicate_status_similarity_t is_street_duplicate_fuzzy(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_duplicate_similarity_options_t options) {
+inline libpostal_fuzzy_duplicate_status_t is_street_duplicate_fuzzy(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_fuzzy_duplicate_options_t options) {
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
     normalize_options.address_components = LIBPOSTAL_ADDRESS_STREET;
 

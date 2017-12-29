@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    libpostal_near_dupe_hash_options_t options = libpostal_near_dupe_hash_default_options();
+    libpostal_near_dupe_hash_options_t options = libpostal_get_near_dupe_hash_default_options();
 
     cstring_array *labels_array = cstring_array_new();
     cstring_array *values_array = cstring_array_new();
