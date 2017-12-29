@@ -1,22 +1,43 @@
 alabama|al
-alberta|ab
 alaska|ak
+alberta|ab
 arizona|az
 arkansas|ar
 australian antarctic territory|aat
 australian capital territory|act
+bedfordshire|bedford|beds
+berkshire|berks
 british columbia|bc
+buckinghamshire|buckingham|bucks
+buckinghamshire|bucks
 california|ca
+cambridgeshire|cambridge|cambs
+carmarthenshire|carms
+cheshire|chester|ches
+clackmannanshire|clacks
 colorado|co
 connecticut|ct
+cornwall|corn
+cumberland|cumb
 delaware|de
+denbighshire|denbs
+derbyshire|derby|derbys|derbs
+devon|devonshire|dev
 district of columbia|dc
+dorset|dorsetshire|dor
+durham|county durham|co dur
+flintshire|flints
 florida|fl
 georgia|ga
+gloucestershire|gloucester|glos|gloucs
+hampshire|southampton|southamptonshire|hants
 hawaii|hi
-hong kong|hk|h k|h.k
+herefordshire|hereford|here|heref
+hertfordshire|herts
 hong kong island|hk island|h k island|h.k island
 hong kong special administrative region|hksar|hk sar|h k s a r|h.k.s.a.r|h.k s.a.r|hk s.a.r|hk s a r
+hong kong|hk|h k|h.k
+huntingdonshire|huntingdon|hunts
 idaho|id
 illinois|il
 indiana|in
@@ -25,6 +46,9 @@ jervis bay territory|jbt
 kansas|ks
 kentucky|ky
 kowloon|kln
+lancashire|lancaster|lancs
+leicestershire|leicester|leics
+lincolnshire|lincoln|lincs
 louisiana|la
 maine|me
 manitoba|mb
@@ -32,9 +56,11 @@ maryland|md
 massachusetts|ma
 melbourne|melb
 michigan|mi
+middlesex|middx|mddx|m'sex|mx
 minnesota|mn
 mississippi|ms
 missouri|mo
+monmouthshire|mons
 montana|mt
 nebraska|ne
 nevada|nv
@@ -46,25 +72,39 @@ new south wales|nsw
 new territories|nt
 new york|ny
 newfoundland|nl
+norfolk|norf
 north carolina|nc
 north dakota|nd
+northamptonshire|northampton|northants
 northern territory|nt
-nova scotia|ns
+northumberland|northumb|northd
 northwest territories|nt|nwt
+nottinghamshire|nottingham|notts
+nova scotia|ns
 nunavut|nu
 ohio|oh
 oklahoma|ok
 ontario|on
 oregon|or
+oxfordshire|oxford|oxon
+pembrokeshire|pembs
 pennsylvania|pa
 prince edward island|pe|pei
 quebec|qc
 queensland|qld
 rhode island|ri
+rutland|rutlandshire|rut
 saskatchewan|sk
+shropshire|salop|shrops
+somerset|somersetshire|som
 south carolina|sc
 south dakota|sd
 southern australia|sa
+staffordshire|stafford|staffs|staf
+staffordshire|staffs
+suffolk|suff
+surrey|sy
+sussex|ssx|sx
 tasmania|tas
 tennessee|tn
 texas|tx
@@ -72,9 +112,14 @@ utah|ut
 vermont|vt
 victoria|vic
 virginia|va
+warwickshire|warwick|warks|warw|war
 washington|wa
 west virginia|wv
 western australia|wa
+westmorland|westm
+wiltshire|wilts
 wisconsin|wi
+worcestershire|worcester|worsts|worcs
 wyoming|wy
+yorkshire|yorks|york
 yukon|yt|the yukon|yukon territory
