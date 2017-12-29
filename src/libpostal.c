@@ -13,6 +13,7 @@
 #include "language_classifier.h"
 #include "near_dupe.h"
 #include "normalize.h"
+#include "place.h"
 #include "scanner.h"
 #include "string_utils.h"
 #include "token_types.h"
@@ -92,6 +93,19 @@ char **libpostal_near_dupe_hashes_languages(size_t num_components, char **labels
     cstring_array *strings = near_dupe_hashes_languages(num_components, labels, values, options, num_languages, languages);
     *num_hashes = cstring_array_num_strings(strings);
     return cstring_array_to_strings(strings);
+}
+
+
+char **libpostal_place_languages(size_t num_components, char **labels, char **values, size_t *num_languages) {
+    language_classifier_response_t *lang_response = place_languages(num_components, labels, values);
+
+    char **languages = lang_response->languages;
+    lang_response->languages = NULL;
+    *num_languages = lang_response->num_languages;
+    lang_response->num_languages = 0;
+
+    language_classifier_response_destroy(lang_response);
+    return languages;
 }
 
 void libpostal_address_parser_response_destroy(libpostal_address_parser_response_t *self) {

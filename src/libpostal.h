@@ -172,6 +172,9 @@ LIBPOSTAL_EXPORT bool libpostal_parser_print_features(bool print_features);
 Deduping
 */
 
+
+// Near-dupe hashing methods
+
 typedef struct libpostal_near_dupe_hash_options {
     bool with_name;
     bool with_address;
@@ -192,6 +195,10 @@ typedef struct libpostal_near_dupe_hash_options {
 LIBPOSTAL_EXPORT libpostal_near_dupe_hash_options_t libpostal_near_dupe_hash_default_options(void);
 LIBPOSTAL_EXPORT char **libpostal_near_dupe_hashes(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t *num_hashes);
 LIBPOSTAL_EXPORT char **libpostal_near_dupe_hashes_languages(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages, size_t *num_hashes);
+
+// Dupe language classification
+
+LIBPOSTAL_EXPORT char **libpostal_place_languages(size_t num_components, char **labels, char **values, size_t *num_languages);
 
 // Setup/teardown methods
 
