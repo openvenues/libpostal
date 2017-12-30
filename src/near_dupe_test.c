@@ -102,13 +102,15 @@ int main(int argc, char **argv) {
 
     size_t num_near_dupe_hashes = 0;
     char **near_dupe_hashes = libpostal_near_dupe_hashes_languages(num_components, labels, values, options, num_languages, languages, &num_near_dupe_hashes);
+    if (near_dupe_hashes != NULL) {
+        for (size_t i = 0; i < num_near_dupe_hashes; i++) {
+            char *near_dupe_hash = near_dupe_hashes[i];
+            printf("%s\n", near_dupe_hash);
+        }
 
-    for (size_t i = 0; i < num_near_dupe_hashes; i++) {
-        char *near_dupe_hash = near_dupe_hashes[i];
-        printf("%s\n", near_dupe_hash);
+        libpostal_expansion_array_destroy(near_dupe_hashes, num_near_dupe_hashes);
     }
 
-    libpostal_expansion_array_destroy(near_dupe_hashes, num_near_dupe_hashes);
     libpostal_expansion_array_destroy(labels, num_components);
     libpostal_expansion_array_destroy(values, num_components);
 
