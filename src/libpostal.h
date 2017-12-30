@@ -237,7 +237,7 @@ typedef struct libpostal_fuzzy_duplicate_options {
     double likely_dupe_threshold;
 } libpostal_fuzzy_duplicate_options_t;
 
-typedef struct libpostal_duplicate_status_similarity {
+typedef struct libpostal_fuzzy_duplicate_status {
     libpostal_duplicate_status_t status;
     double similarity;
 } libpostal_fuzzy_duplicate_status_t;
