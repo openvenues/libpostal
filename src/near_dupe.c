@@ -185,23 +185,24 @@ static cstring_array *geohash_and_neighbors(double latitude, double longitude, s
     if (geohash_precision == 0) return NULL;
 
     if (geohash_precision > MAX_GEOHASH_PRECISION) geohash_precision = MAX_GEOHASH_PRECISION;
+    size_t geohash_len = geohash_precision + 1;
 
-    char geohash[geohash_precision + 1];
-    if (geohash_encode(latitude, longitude, geohash, geohash_precision) != GEOHASH_OK) {
+    char geohash[geohash_len];
+    if (geohash_encode(latitude, longitude, geohash, geohash_len) != GEOHASH_OK) {
         return NULL;
     }
 
-    size_t neighbors_size = geohash_precision * 8 + 1;
+    size_t neighbors_size = geohash_len * 8;
     char neighbors[neighbors_size];
 
     int num_strings = 0;
 
     if (geohash_neighbors(geohash, neighbors, neighbors_size, &num_strings) == GEOHASH_OK && num_strings == 8) {
-        cstring_array *strings = cstring_array_new_size(9 * geohash_precision + 1);
+        cstring_array *strings = cstring_array_new_size(9 * geohash_len);
         cstring_array_add_string(strings, geohash);
 
         for (int i = 0; i < num_strings; i++) {
-            char *neighbor = neighbors + geohash_precision * i;
+            char *neighbor = neighbors + geohash_len * i;
             cstring_array_add_string(strings, neighbor);
         }
         return strings;
@@ -209,6 +210,8 @@ static cstring_array *geohash_and_neighbors(double latitude, double longitude, s
 
     return NULL;
 }
+
+#define MAX_NAME_TOKENS 50
 
 
 cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normalize_options) {
@@ -276,7 +279,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
 
                     k = kh_get(str_set, unique_strings, dm_primary);
 
-                    if (k == kh_end(unique_strings)) {
+                    if (k == kh_end(unique_strings) && kh_size(unique_strings) <= MAX_NAME_TOKENS) {
                         log_debug("adding dm_primary = %s\n", dm_primary);
                         cstring_array_add_string(strings, dm_primary);
                         k = kh_put(str_set, unique_strings, strdup(dm_primary), &ret);
@@ -289,7 +292,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
 
                         k = kh_get(str_set, unique_strings, dm_secondary);
 
-                        if (k == kh_end(unique_strings)) {
+                        if (k == kh_end(unique_strings) && kh_size(unique_strings) <= MAX_NAME_TOKENS) {
                             log_debug("adding dm_secondary = %s\n", dm_secondary);
                             cstring_array_add_string(strings, dm_secondary);
                             k = kh_put(str_set, unique_strings, strdup(dm_secondary), &ret);
@@ -326,6 +329,8 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
     char_array_destroy(token_string_array);
     token_array_destroy(token_array);
     char_array_destroy(combined_words_no_whitespace);
+
+    cstring_array_destroy(name_expansions);
 
     const char *key;
 
@@ -394,11 +399,32 @@ static inline void add_string_hash_permutations(cstring_array *near_dupe_hashes,
 
 
 cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages) {
+    if (!options.with_latlon && !options.with_city_or_equivalent && !options.with_postal_code) return NULL;
+
     place_t *place = place_from_components(num_components, labels, values);
     log_debug("created place\n");
     if (place == NULL) return NULL;
 
-    size_t n = 0;
+    bool have_valid_geo = options.with_latlon;
+
+    if (!have_valid_geo && options.with_postal_code && place->postal_code != NULL) {
+        have_valid_geo = true;
+    }
+
+    if (!have_valid_geo && options.with_city_or_equivalent && (place->city != NULL || place->city_district != NULL || place->suburb != NULL || place->island != NULL)) {
+        have_valid_geo = true;
+    }
+
+    if (!have_valid_geo && options.with_small_containing_boundaries && (place->state_district != NULL)) {
+        have_valid_geo = true;
+    }
+
+
+    if (!have_valid_geo) {
+        log_debug("no valid geo\n");
+        place_destroy(place);
+        return NULL;
+    }
 
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
 
@@ -413,7 +439,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
             normalize_options.languages = lang_response->languages;
          }
     } else {
-        normalize_options.num_languages = languages;
+        normalize_options.num_languages = num_languages;
         normalize_options.languages = languages;
     }
 
@@ -531,7 +557,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
             }
         }
 
-        if (place->state_district != NULL) {
+        if (place->state_district != NULL && options.with_small_containing_boundaries) {
             size_t num_state_district_expansions = 0;
             cstring_array *state_district_expansions = expand_address_root(place->state_district, normalize_options, &num_state_district_expansions);
             if (containing_expansions == NULL) {
@@ -559,8 +585,6 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
     if (num_geohash_expansions == 0 && num_postal_code_expansions == 0 && place_expansions == NULL && containing_expansions == NULL) {
         return NULL;
     }
-
-    bool added = false;
 
     num_name_expansions = name_expansions != NULL ? cstring_array_num_strings(name_expansions) : 0;
     num_street_expansions = street_expansions != NULL ? cstring_array_num_strings(street_expansions) : 0;
@@ -879,6 +903,10 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
             }
         }
 
+    }
+
+    if (place != NULL) {
+        place_destroy(place);
     }
 
     if (tree != NULL) {
