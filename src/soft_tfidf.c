@@ -214,7 +214,6 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
     for (size_t i = 0; i < len1; i++) {
         uint32_array *t1u = t1_tokens_unicode[i];
         uint32_array *t2u;
-        char *t1 = tokens1[i];
         double t1_score = token_scores1[i];
 
         double max_sim = 0.0;
@@ -237,7 +236,6 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
         double t2_score;
 
         for (size_t j = 0; j < len2; j++) {
-            char *t2 = tokens2[j];
             t2u = t2_tokens_unicode[j];
             int64_t pm2 = phrase_memberships2 != NULL ? phrase_memberships2[j] : NULL_PHRASE_MEMBERSHIP;
             phrase_t p2 = pm2 >= 0 ? phrases2->a[pm2] : NULL_PHRASE;
