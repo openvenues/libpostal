@@ -49,11 +49,13 @@ libpostal_normalize_options_t libpostal_get_default_options(void) {
 
 char **libpostal_expand_address(char *input, libpostal_normalize_options_t options, size_t *n) {
     cstring_array *strings = expand_address(input, options, n);
+    if (strings == NULL) return NULL;
     return cstring_array_to_strings(strings);
 }
 
 char **libpostal_expand_address_root(char *input, libpostal_normalize_options_t options, size_t *n) {
     cstring_array *strings = expand_address_root(input, options, n);
+    if (strings == NULL) return NULL;
     return cstring_array_to_strings(strings);
 }
 
@@ -85,6 +87,10 @@ libpostal_near_dupe_hash_options_t libpostal_get_near_dupe_hash_default_options(
 
 char **libpostal_near_dupe_hashes(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t *num_hashes) {
     cstring_array *strings = near_dupe_hashes(num_components, labels, values, options);
+    if (strings == NULL) {
+        *num_hashes = 0;
+        return NULL;
+    }
     *num_hashes = cstring_array_num_strings(strings);
     return cstring_array_to_strings(strings);
 }
@@ -92,6 +98,10 @@ char **libpostal_near_dupe_hashes(size_t num_components, char **labels, char **v
 
 char **libpostal_near_dupe_hashes_languages(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages, size_t *num_hashes) {
     cstring_array *strings = near_dupe_hashes_languages(num_components, labels, values, options, num_languages, languages);
+    if (strings == NULL) {
+        *num_hashes = 0;
+        return NULL;
+    }
     *num_hashes = cstring_array_num_strings(strings);
     return cstring_array_to_strings(strings);
 }
@@ -99,6 +109,10 @@ char **libpostal_near_dupe_hashes_languages(size_t num_components, char **labels
 
 char **libpostal_place_languages(size_t num_components, char **labels, char **values, size_t *num_languages) {
     language_classifier_response_t *lang_response = place_languages(num_components, labels, values);
+    if (lang_response == NULL) {
+        *num_languages = 0;
+        return NULL;
+    }
 
     char **languages = lang_response->languages;
     lang_response->languages = NULL;
