@@ -84,8 +84,6 @@ libpostal_duplicate_status_t is_duplicate(char *value1, char *value2, libpostal_
     normalize_options.num_languages = options.num_languages;
     normalize_options.languages = options.languages;
 
-    normalize_options.address_components |= LIBPOSTAL_ADDRESS_ANY;
-
     if (root_comparison_first) {
         if (address_component_equals_root(value1, value2, normalize_options)) {
             return root_comparison_status;
@@ -104,14 +102,14 @@ libpostal_duplicate_status_t is_duplicate(char *value1, char *value2, libpostal_
 
 libpostal_duplicate_status_t is_name_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
-    normalize_options.address_components = LIBPOSTAL_ADDRESS_NAME;
+    normalize_options.address_components = LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_ANY;
     bool root_comparison_first = false;
     libpostal_duplicate_status_t root_comparison_status = LIBPOSTAL_POSSIBLE_DUPLICATE_NEEDS_REVIEW;
     return is_duplicate(value1, value2, normalize_options, options, root_comparison_first, root_comparison_status);
 }
 libpostal_duplicate_status_t is_street_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
-    normalize_options.address_components = LIBPOSTAL_ADDRESS_STREET;
+    normalize_options.address_components = LIBPOSTAL_ADDRESS_STREET | LIBPOSTAL_ADDRESS_ANY;
     bool root_comparison_first = false;
     libpostal_duplicate_status_t root_comparison_status = LIBPOSTAL_POSSIBLE_DUPLICATE_NEEDS_REVIEW;
     return is_duplicate(value1, value2, normalize_options, options, root_comparison_first, root_comparison_status);
@@ -119,7 +117,7 @@ libpostal_duplicate_status_t is_street_duplicate(char *value1, char *value2, lib
 
 libpostal_duplicate_status_t is_house_number_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
-    normalize_options.address_components = LIBPOSTAL_ADDRESS_HOUSE_NUMBER;
+    normalize_options.address_components = LIBPOSTAL_ADDRESS_HOUSE_NUMBER | LIBPOSTAL_ADDRESS_ANY;
     bool root_comparison_first = true;
     libpostal_duplicate_status_t root_comparison_status = LIBPOSTAL_EXACT_DUPLICATE;
     return is_duplicate(value1, value2, normalize_options, options, root_comparison_first, root_comparison_status);
@@ -127,7 +125,7 @@ libpostal_duplicate_status_t is_house_number_duplicate(char *value1, char *value
 
 libpostal_duplicate_status_t is_unit_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
-    normalize_options.address_components = LIBPOSTAL_ADDRESS_UNIT;
+    normalize_options.address_components = LIBPOSTAL_ADDRESS_UNIT | LIBPOSTAL_ADDRESS_ANY;
     bool root_comparison_first = true;
     libpostal_duplicate_status_t root_comparison_status = LIBPOSTAL_EXACT_DUPLICATE;
     return is_duplicate(value1, value2, normalize_options, options, root_comparison_first, root_comparison_status);
@@ -135,7 +133,7 @@ libpostal_duplicate_status_t is_unit_duplicate(char *value1, char *value2, libpo
 
 libpostal_duplicate_status_t is_floor_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
-    normalize_options.address_components = LIBPOSTAL_ADDRESS_LEVEL;
+    normalize_options.address_components = LIBPOSTAL_ADDRESS_LEVEL | LIBPOSTAL_ADDRESS_ANY;
     bool root_comparison_first = true;
     libpostal_duplicate_status_t root_comparison_status = LIBPOSTAL_EXACT_DUPLICATE;
     return is_duplicate(value1, value2, normalize_options, options, root_comparison_first, root_comparison_status);
@@ -143,7 +141,7 @@ libpostal_duplicate_status_t is_floor_duplicate(char *value1, char *value2, libp
 
 libpostal_duplicate_status_t is_po_box_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
-    normalize_options.address_components = LIBPOSTAL_ADDRESS_PO_BOX;
+    normalize_options.address_components = LIBPOSTAL_ADDRESS_PO_BOX | LIBPOSTAL_ADDRESS_ANY;
     bool root_comparison_first = true;
     libpostal_duplicate_status_t root_comparison_status = LIBPOSTAL_EXACT_DUPLICATE;
     return is_duplicate(value1, value2, normalize_options, options, root_comparison_first, root_comparison_status);
@@ -151,7 +149,7 @@ libpostal_duplicate_status_t is_po_box_duplicate(char *value1, char *value2, lib
 
 libpostal_duplicate_status_t is_postal_code_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
-    normalize_options.address_components = LIBPOSTAL_ADDRESS_POSTAL_CODE;
+    normalize_options.address_components = LIBPOSTAL_ADDRESS_POSTAL_CODE | LIBPOSTAL_ADDRESS_ANY;
     bool root_comparison_first = true;
     libpostal_duplicate_status_t root_comparison_status = LIBPOSTAL_EXACT_DUPLICATE;
     return is_duplicate(value1, value2, normalize_options, options, root_comparison_first, root_comparison_status);
@@ -159,7 +157,7 @@ libpostal_duplicate_status_t is_postal_code_duplicate(char *value1, char *value2
 
 libpostal_duplicate_status_t is_toponym_duplicate(size_t num_components1, char **labels1, char **values1, size_t num_components2, char **labels2, char **values2, libpostal_duplicate_options_t options) {
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
-    normalize_options.address_components = LIBPOSTAL_ADDRESS_TOPONYM;
+    normalize_options.address_components = LIBPOSTAL_ADDRESS_TOPONYM | LIBPOSTAL_ADDRESS_ANY;
 
     place_t *place1 = place_from_components(num_components1, labels1, values1);
     place_t *place2 = place_from_components(num_components2, labels2, values2);
@@ -169,27 +167,37 @@ libpostal_duplicate_status_t is_toponym_duplicate(size_t num_components1, char *
 
     if (place1->city != NULL && place2->city != NULL) {
         city_match = address_component_equals(place1->city, place2->city, normalize_options);
-        dupe_status = LIBPOSTAL_EXACT_DUPLICATE;
+        if (city_match) {
+            dupe_status = LIBPOSTAL_EXACT_DUPLICATE;
+        }
     }
 
     if (!city_match && place1->city == NULL && place1->city_district != NULL && place2->city != NULL) {
         city_match = address_component_equals(place1->city_district, place2->city, normalize_options);        
-        dupe_status = LIBPOSTAL_LIKELY_DUPLICATE;
+        if (city_match) {
+            dupe_status = LIBPOSTAL_LIKELY_DUPLICATE;
+        }
     }
 
     if (!city_match && place1->city == NULL && place1->suburb != NULL && place2->city != NULL) {
         city_match = address_component_equals(place1->suburb, place2->city, normalize_options);        
-        dupe_status = LIBPOSTAL_POSSIBLE_DUPLICATE_NEEDS_REVIEW;
+        if (city_match) {
+            dupe_status = LIBPOSTAL_POSSIBLE_DUPLICATE_NEEDS_REVIEW;
+        }
     }
 
     if (!city_match && place2->city == NULL && place2->city_district != NULL && place1->city != NULL) {
         city_match = address_component_equals(place1->city, place2->city_district, normalize_options);        
-        dupe_status = LIBPOSTAL_LIKELY_DUPLICATE;
+        if (city_match) {
+            dupe_status = LIBPOSTAL_LIKELY_DUPLICATE;
+        }
     }
 
     if (!city_match && place2->city == NULL && place2->suburb != NULL && place1->city != NULL) {
         city_match = address_component_equals(place1->suburb, place2->suburb, normalize_options);        
-        dupe_status = LIBPOSTAL_POSSIBLE_DUPLICATE_NEEDS_REVIEW;
+        if (city_match) {
+            dupe_status = LIBPOSTAL_POSSIBLE_DUPLICATE_NEEDS_REVIEW;
+        }
     }
 
     if (!city_match) {
@@ -389,3 +397,4 @@ inline libpostal_fuzzy_duplicate_status_t is_street_duplicate_fuzzy(size_t num_t
 
     return is_fuzzy_duplicate(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, options, normalize_options, soft_tfidf_options, do_acronyms);
 }
+
