@@ -185,7 +185,7 @@ typedef struct libpostal_near_dupe_hash_options {
     bool with_latlon;
     double latitude;
     double longitude;
-    size_t geohash_precision;
+    uint32_t geohash_precision;
     bool name_and_address_keys;
     bool name_only_keys;
     bool address_only_keys;
