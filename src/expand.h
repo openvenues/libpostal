@@ -42,6 +42,14 @@ bool normalize_ordinal_suffixes(string_tree_t *tree, char *str, char *lang, toke
 
 void add_normalized_strings_tokenized(string_tree_t *tree, char *str, token_array *tokens, libpostal_normalize_options_t options);
 
+
+bool address_phrase_is_ignorable_for_components(phrase_t phrase, uint32_t address_components);
+bool address_phrase_is_edge_ignorable_for_components(phrase_t phrase, uint32_t address_components);
+bool address_phrase_is_possible_root_for_components(phrase_t phrase, uint32_t address_components);
+bool address_phrase_is_specifier_for_components(phrase_t phrase, uint32_t address_components);
+bool address_phrase_is_valid_for_components(phrase_t phrase, uint32_t address_components);
+
+
 typedef enum {
     EXPAND_PHRASES,
     KEEP_PHRASES,
