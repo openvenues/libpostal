@@ -520,6 +520,8 @@ double jaro_distance(const char *s1, const char *s2) {
     return jaro;
 }
 
+#define MAX_JARO_WINKLER_PREFIX 4
+
 double jaro_winkler_distance_unicode_prefix_threshold(uint32_array *u1_array, uint32_array *u2_array, double prefix_scale, double bonus_threshold) {
     double jaro = jaro_distance_unicode(u1_array, u2_array);
 
@@ -533,15 +535,20 @@ double jaro_winkler_distance_unicode_prefix_threshold(uint32_array *u1_array, ui
 
     size_t m = len1 < len2 ? len1 : len2;
 
-    size_t i = 0;
-    for (; i < m; i++) {
+    size_t shared_prefix = 0;
+    for (size_t i = 0; i < m; i++) {
         if (u1[i] != u2[i]) break;
+        shared_prefix++;
+        if (shared_prefix > MAX_JARO_WINKLER_PREFIX) {
+            shared_prefix = MAX_JARO_WINKLER_PREFIX;
+            break;
+        }
     }
 
     double jaro_winkler = jaro;
 
     if (jaro >= bonus_threshold) {
-        jaro_winkler += (1.0 - jaro_winkler) * i * prefix_scale;
+        jaro_winkler += (1.0 - jaro) * shared_prefix * prefix_scale;
     }
 
     return jaro_winkler > 1.0 ? 1.0 : jaro_winkler;
