@@ -439,7 +439,7 @@ bool numex_table_read(FILE *f) {
 
     log_debug("read num_languages = %" PRIu64 "\n", num_languages);
 
-    int i = 0;
+    size_t i = 0;
 
     numex_language_t *language;
 
@@ -541,7 +541,7 @@ bool numex_table_write(FILE *f) {
 
     numex_rule_t rule;
 
-    int i = 0;
+    size_t i = 0;
 
     for (i = 0; i < num_rules; i++) {
         rule = numex_table->rules->a[i];
@@ -848,14 +848,21 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 log_debug("Last token was RIGHT_CONTEXT_ADD, value=%" PRId64 "\n", result.value);
             } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD && (!whole_tokens_only || complete_token)) {
                 log_debug("Had previous token with no context, finishing previous rule before returning\n");
-
                 result.len = prev_result_len;
                 number_finished = true;
+                complete_token = false;
                 advance_index = false;
                 state = start_state;
                 prev_rule_was_number = true;
                 rule = prev_rule = NUMEX_NULL_RULE;
                 prev_result_len = 0;
+            } else if (prev_rule.rule_type != NUMEX_NULL && rule.rule_type != NUMEX_STOPWORD && whole_tokens_only && !complete_token) {
+                log_debug("whole_tokens_only = %d, complete_token = %d\n", whole_tokens_only, complete_token);
+                rule = NUMEX_NULL_RULE;
+                last_was_separator = false;
+                prev_rule_was_number = false;
+                state.state = NUMEX_SEARCH_STATE_SKIP_TOKEN;
+                continue;                
             } else if (rule.left_context_type == NUMEX_LEFT_CONTEXT_CONCAT_ONLY_IF_NUMBER && !prev_rule_was_number) {
                 log_debug("LEFT_CONTEXT_CONCAT_ONLY_IF_NUMBER, no context\n");
                 prev_rule = rule;
@@ -885,7 +892,6 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 continue;
             }
 
-
             prev_rule_was_number = prev_rule_was_number || prev_rule.rule_type != NUMEX_NULL;
 
             if (rule.rule_type != NUMEX_STOPWORD) {
@@ -903,6 +909,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
                 if (rule.right_context_type == NUMEX_RIGHT_CONTEXT_NONE && !whole_tokens_only) {
                     number_finished = true;
                 }
+
                 log_debug("rule is ordinal\n");
             } 
 
@@ -941,6 +948,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
             log_debug("Adding phrase, value=%" PRId64 "\n", result.value);
             result = NULL_NUMEX_RESULT;
             number_finished = false;
+            rule = prev_rule = NUMEX_NULL_RULE;
         }
 
         prev_state = state;
@@ -1060,6 +1068,7 @@ size_t possible_ordinal_digit_len(char *str, size_t len) {
     int32_t ch;
 
     size_t digit_len = 0;
+    bool seen_first_digit = false;
 
     while (idx < len) {
         ssize_t char_len = utf8proc_iterate(ptr, len, &ch);
@@ -1071,8 +1080,12 @@ size_t possible_ordinal_digit_len(char *str, size_t len) {
         // 0-9 only for this
         is_digit = ch >= 48 && ch <= 57;
 
-        if ((idx == 0 && !is_digit) || (idx > 0 && is_digit && !last_was_digit)) {
+        if ((seen_first_digit && is_digit && !last_was_digit)) {
             return 0;
+        }
+
+        if (is_digit && !seen_first_digit) {
+            seen_first_digit = true;
         }
 
         if (is_digit) {
@@ -1124,9 +1137,75 @@ size_t ordinal_suffix_len(char *str, size_t len, char *lang) {
     return 0;
 }
 
+
+
+static inline bool is_roman_numeral_char(char c) {
+    return (c == 'i' ||
+            c == 'v' ||
+            c == 'x' ||
+            c == 'l' ||
+            c == 'c' ||
+            c == 'd' ||
+            c == 'm' ||
+            c == 'I' ||
+            c == 'V' ||
+            c == 'X' ||
+            c == 'L' ||
+            c == 'C' ||
+            c == 'D' ||
+            c == 'M');
+}
+
+static inline bool is_likely_single_roman_numeral_char(char c) {
+    return (c == 'i' ||
+            c == 'v' ||
+            c == 'x' ||
+            c == 'I' ||
+            c == 'V' ||
+            c == 'X');
+}
+
+
+bool is_valid_roman_numeral(char *str, size_t len) {
+    char *copy = strndup(str, len);
+    if (copy == NULL) return false;
+
+    numex_result_array *results = convert_numeric_expressions(copy, LATIN_LANGUAGE_CODE);
+    if (results == NULL) {
+        free(copy);
+        return false;
+    }
+
+    bool ret = results->n == 1 && results->a[0].len == len;
+    numex_result_array_destroy(results);
+    free(copy);
+    return ret;
+}
+
+bool is_likely_roman_numeral_len(char *str, size_t len) {
+    bool seen_roman = false;
+    for (size_t i = 0; i < len; i++) {
+        char c = *(str + i);
+        if (c == 0) break;
+        if ((len <= 2 && is_likely_single_roman_numeral_char(c)) || (len > 2 && is_roman_numeral_char(c))) {
+            seen_roman = true;
+        } else {
+            return false;
+        }
+    }
+
+    return seen_roman && is_valid_roman_numeral(str, len);
+}
+
+inline bool is_likely_roman_numeral(char *str) {
+    return is_likely_roman_numeral_len(str, strlen(str));
+}
+
 char *replace_numeric_expressions(char *str, char *lang) {
     numex_result_array *results = convert_numeric_expressions(str, lang);
     if (results == NULL) return NULL;
+
+    bool is_latin = string_equals(lang, LATIN_LANGUAGE_CODE);
 
     size_t len = strlen(str);
 
@@ -1134,10 +1213,36 @@ char *replace_numeric_expressions(char *str, char *lang) {
     size_t start = 0;
     size_t end = 0;
 
-    for (int i = 0; i < results->n; i++) {
-        numex_result_t result = results->a[i];
+    bool have_valid_numex = false;
+    numex_result_t result = NULL_NUMEX_RESULT;
+
+    for (size_t i = 0; i < results->n; i++) {
+        result = results->a[i];
 
         if (result.len == 0) {
+            continue;
+        }
+
+        if (is_latin && result.len <= 2 && !is_likely_roman_numeral_len(str + result.start, result.len)) {
+            continue;
+        }
+        have_valid_numex = true;
+        break;
+    }
+
+    if (!have_valid_numex) {
+        numex_result_array_destroy(results);
+        return NULL;
+    }
+
+    for (size_t i = 0; i < results->n; i++) {
+        result = results->a[i];
+
+        if (result.len == 0) {
+            continue;
+        }
+
+        if (is_latin && result.len <= 2 && !is_likely_roman_numeral_len(str + result.start, result.len)) {
             continue;
         }
 
@@ -1170,3 +1275,4 @@ char *replace_numeric_expressions(char *str, char *lang) {
 
     return char_array_to_string(replacement);
 }
+

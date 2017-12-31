@@ -12,11 +12,9 @@
 #include "token_types.h"
 #include "vector.h"
 
-typedef struct token {
-    size_t offset;
-    size_t len;
-    uint16_t type;
-} token_t;
+typedef libpostal_token_t token_t;
+
+#define NULL_TOKEN (token_t){0, 0, END}
 
 VECTOR_INIT(token_array, token_t)
 

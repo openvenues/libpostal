@@ -105,7 +105,14 @@ typedef enum {
 
 #define ADDRESS_PARSER_LABEL_HOUSE "house"
 #define ADDRESS_PARSER_LABEL_HOUSE_NUMBER "house_number"
+#define ADDRESS_PARSER_LABEL_PO_BOX "po_box"
+#define ADDRESS_PARSER_LABEL_BUILDING "building"
+#define ADDRESS_PARSER_LABEL_ENTRANCE "entrance"
+#define ADDRESS_PARSER_LABEL_STAIRCASE "staircase"
+#define ADDRESS_PARSER_LABEL_LEVEL "level"
+#define ADDRESS_PARSER_LABEL_UNIT "unit"
 #define ADDRESS_PARSER_LABEL_ROAD "road"
+#define ADDRESS_PARSER_LABEL_METRO_STATION "metro_station"
 #define ADDRESS_PARSER_LABEL_SUBURB "suburb"
 #define ADDRESS_PARSER_LABEL_CITY_DISTRICT "city_district"
 #define ADDRESS_PARSER_LABEL_CITY "city"
@@ -117,6 +124,8 @@ typedef enum {
 #define ADDRESS_PARSER_LABEL_COUNTRY  "country"
 #define ADDRESS_PARSER_LABEL_WORLD_REGION "world_region"
 
+#define ADDRESS_PARSER_LABEL_WEBSITE "website"
+#define ADDRESS_PARSER_LABEL_TELEPHONE "phone"
 
 typedef union address_parser_types {
     uint32_t value;

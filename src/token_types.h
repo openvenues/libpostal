@@ -1,64 +1,60 @@
 #ifndef TOKEN_TYPES_H
 #define TOKEN_TYPES_H
 
+#include "libpostal.h"
+
 // Doing these as #defines so we can duplicate the values exactly in Python
 
-#define END 0                   // Null byte
 
-// Word types
-#define WORD 1                  // Any letter-only word (includes all unicode letters)
-#define ABBREVIATION 2          // Loose abbreviations (roughly anything containing a "." as we don't care about sentences in addresses)
-#define IDEOGRAPHIC_CHAR 3      // For languages that don't separate on whitespace (e.g. Chinese, Japanese, Korean), separate by character
-#define HANGUL_SYLLABLE 4       // Hangul syllable sequences which contain more than one codepoint
-#define ACRONYM 5               // Specifically things like U.N. where we may delete internal periods
+#define END LIBPOSTAL_TOKEN_TYPE_END
 
-#define PHRASE 10               // Not part of the first stage tokenizer, but may be used after phrase parsing
+#define WORD LIBPOSTAL_TOKEN_TYPE_WORD
+#define ABBREVIATION LIBPOSTAL_TOKEN_TYPE_ABBREVIATION
+#define IDEOGRAPHIC_CHAR LIBPOSTAL_TOKEN_TYPE_IDEOGRAPHIC_CHAR
+#define HANGUL_SYLLABLE LIBPOSTAL_TOKEN_TYPE_HANGUL_SYLLABLE
+#define ACRONYM LIBPOSTAL_TOKEN_TYPE_ACRONYM
+#define PHRASE LIBPOSTAL_TOKEN_TYPE_PHRASE
 
-// Special tokens
-#define EMAIL 20                // Make sure emails are tokenized altogether
-#define URL 21                  // Make sure urls are tokenized altogether
-#define US_PHONE 22             // US phone number (with or without country code)
-#define INTL_PHONE 23           // A non-US phone number (must have country code)
+#define EMAIL LIBPOSTAL_TOKEN_TYPE_EMAIL
+#define URL LIBPOSTAL_TOKEN_TYPE_URL
+#define US_PHONE LIBPOSTAL_TOKEN_TYPE_US_PHONE
+#define INTL_PHONE LIBPOSTAL_TOKEN_TYPE_INTL_PHONE
 
-// Numbers and numeric types
-#define NUMERIC 50              // Any sequence containing a digit
-#define ORDINAL 51              // 1st, 2nd, 1er, 1 etc.
-#define ROMAN_NUMERAL 52        // II, III, VI, etc.
-#define IDEOGRAPHIC_NUMBER 53   // All numeric ideographic characters, includes e.g. Han numbers and chars like "²"
+#define NUMERIC LIBPOSTAL_TOKEN_TYPE_NUMERIC
+#define ORDINAL LIBPOSTAL_TOKEN_TYPE_ORDINAL
+#define ROMAN_NUMERAL LIBPOSTAL_TOKEN_TYPE_ROMAN_NUMERAL
+#define IDEOGRAPHIC_NUMBER LIBPOSTAL_TOKEN_TYPE_IDEOGRAPHIC_NUMBER
 
+#define PERIOD LIBPOSTAL_TOKEN_TYPE_PERIOD
+#define EXCLAMATION LIBPOSTAL_TOKEN_TYPE_EXCLAMATION
+#define QUESTION_MARK LIBPOSTAL_TOKEN_TYPE_QUESTION_MARK
+#define COMMA LIBPOSTAL_TOKEN_TYPE_COMMA
+#define COLON LIBPOSTAL_TOKEN_TYPE_COLON
+#define SEMICOLON LIBPOSTAL_TOKEN_TYPE_SEMICOLON
+#define PLUS LIBPOSTAL_TOKEN_TYPE_PLUS
+#define AMPERSAND LIBPOSTAL_TOKEN_TYPE_AMPERSAND
+#define AT_SIGN LIBPOSTAL_TOKEN_TYPE_AT_SIGN
+#define POUND LIBPOSTAL_TOKEN_TYPE_POUND
+#define ELLIPSIS LIBPOSTAL_TOKEN_TYPE_ELLIPSIS
+#define DASH LIBPOSTAL_TOKEN_TYPE_DASH
+#define BREAKING_DASH LIBPOSTAL_TOKEN_TYPE_BREAKING_DASH
+#define HYPHEN LIBPOSTAL_TOKEN_TYPE_HYPHEN
+#define PUNCT_OPEN LIBPOSTAL_TOKEN_TYPE_PUNCT_OPEN
+#define PUNCT_CLOSE LIBPOSTAL_TOKEN_TYPE_PUNCT_CLOSE
+#define DOUBLE_QUOTE LIBPOSTAL_TOKEN_TYPE_DOUBLE_QUOTE
+#define SINGLE_QUOTE LIBPOSTAL_TOKEN_TYPE_SINGLE_QUOTE
+#define OPEN_QUOTE LIBPOSTAL_TOKEN_TYPE_OPEN_QUOTE
+#define CLOSE_QUOTE LIBPOSTAL_TOKEN_TYPE_CLOSE_QUOTE
+#define SLASH LIBPOSTAL_TOKEN_TYPE_SLASH
+#define BACKSLASH LIBPOSTAL_TOKEN_TYPE_BACKSLASH
+#define GREATER_THAN LIBPOSTAL_TOKEN_TYPE_GREATER_THAN
+#define LESS_THAN LIBPOSTAL_TOKEN_TYPE_LESS_THAN
 
-// Punctuation types, may separate a phrase
-#define PERIOD 100
-#define EXCLAMATION 101
-#define QUESTION_MARK 102
-#define COMMA 103
-#define COLON 104
-#define SEMICOLON 105
-#define PLUS 106
-#define AMPERSAND 107
-#define AT_SIGN 108
-#define POUND 109
-#define ELLIPSIS 110
-#define DASH 111
-#define BREAKING_DASH 112
-#define HYPHEN 113
-#define PUNCT_OPEN 114
-#define PUNCT_CLOSE 115
-#define DOUBLE_QUOTE 119
-#define SINGLE_QUOTE 120
-#define OPEN_QUOTE 121
-#define CLOSE_QUOTE 122
-#define SLASH 124
-#define BACKSLASH 125
-#define GREATER_THAN 126
-#define LESS_THAN 127
+#define OTHER LIBPOSTAL_TOKEN_TYPE_OTHER
+#define WHITESPACE LIBPOSTAL_TOKEN_TYPE_WHITESPACE
+#define NEWLINE LIBPOSTAL_TOKEN_TYPE_NEWLINE
 
-// Non-letters and whitespace
-#define OTHER 200
-#define WHITESPACE 300
-#define NEWLINE 301
-
-#define INVALID_CHAR 500
+#define INVALID_CHAR LIBPOSTAL_TOKEN_TYPE_INVALID_CHAR
 
 
 #define is_word_token(type) ((type) == WORD || (type) == ABBREVIATION || (type) == ACRONYM || (type) == IDEOGRAPHIC_CHAR || (type) == HANGUL_SYLLABLE)

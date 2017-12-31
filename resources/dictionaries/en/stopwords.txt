@@ -1,10 +1,14 @@
-and
+a
+and|&
 all
 at
 between|betw|btwn|btw|btween|b / t
 by
+for
+in
 of
+on
 the
 to
 via
-opposite
+opposite|opp

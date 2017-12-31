@@ -1,4 +1,4 @@
 a
 az
 egy
-és|es
+és|es|&

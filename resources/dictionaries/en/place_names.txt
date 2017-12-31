@@ -252,6 +252,8 @@ salon
 sanctuary|sanct
 sauna
 secondary school
+service|svc
+services|svcs|svc
 shelter
 sheriff's department|sherrifs department|sheriff's dept|sherrifs dept
 sherrif's office|sherffis office|sheriff's ofc|sheriffs ofc
@@ -267,6 +269,7 @@ stadium
 station|sta|stn
 steakhouse
 store|stor
+stores
 studio
 studios
 subdivision

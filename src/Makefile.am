@@ -12,7 +12,7 @@ DEFAULT_INCLUDES = -I.. -I/usr/local/include
 CFLAGS =
 
 lib_LTLIBRARIES = libpostal.la
-libpostal_la_SOURCES = strndup.c libpostal.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c trie_utils.c string_utils.c file_utils.c utf8proc/utf8proc.c cmp/cmp.c normalize.c numex.c features.c unicode_scripts.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c averaged_perceptron_tagger.c graph.c graph_builder.c language_classifier.c language_features.c logistic_regression.c logistic.c minibatch.c float_utils.c ngrams.c
+libpostal_la_SOURCES = strndup.c libpostal.c expand.c address_dictionary.c transliterate.c tokens.c trie.c trie_search.c trie_utils.c string_utils.c file_utils.c utf8proc/utf8proc.c normalize.c numex.c features.c unicode_scripts.c address_parser.c address_parser_io.c averaged_perceptron.c crf.c crf_context.c sparse_matrix.c averaged_perceptron_tagger.c graph.c graph_builder.c language_classifier.c language_features.c logistic_regression.c logistic.c minibatch.c float_utils.c ngrams.c place.c near_dupe.c double_metaphone.c geohash/geohash.c dedupe.c string_similarity.c acronyms.c soft_tfidf.c jaccard.c
 libpostal_la_LIBADD = libscanner.la $(CBLAS_LIBS)
 libpostal_la_CFLAGS = $(CFLAGS_O2) -D LIBPOSTAL_EXPORTS
 libpostal_la_LDFLAGS = -version-info @LIBPOSTAL_SO_VERSION@ -no-undefined
@@ -26,7 +26,7 @@ noinst_LTLIBRARIES = libscanner.la
 libscanner_la_SOURCES = klib/drand48.c scanner.c
 libscanner_la_CFLAGS = $(CFLAGS_O0) -D LIBPOSTAL_EXPORTS $(CFLAGS_SCANNER_EXTRA)
 
-noinst_PROGRAMS = libpostal bench address_parser address_parser_train address_parser_test build_address_dictionary build_numex_table build_trans_table address_parser_train address_parser_test language_classifier_train language_classifier language_classifier_test
+noinst_PROGRAMS = libpostal bench address_parser address_parser_train address_parser_test build_address_dictionary build_numex_table build_trans_table address_parser_train address_parser_test language_classifier_train language_classifier language_classifier_test near_dupe_test
 
 libpostal_SOURCES = strndup.c main.c json_encode.c file_utils.c string_utils.c utf8proc/utf8proc.c
 libpostal_LDADD = libpostal.la
@@ -37,6 +37,11 @@ bench_CFLAGS = $(CFLAGS_O3)
 address_parser_SOURCES = strndup.c address_parser_cli.c json_encode.c linenoise/linenoise.c string_utils.c utf8proc/utf8proc.c
 address_parser_LDADD = libpostal.la $(CBLAS_LIBS)
 address_parser_CFLAGS = $(CFLAGS_O3)
+
+near_dupe_test_SOURCES = strndup.c near_dupe_test.c string_utils.c utf8proc/utf8proc.c
+near_dupe_test_LDADD = libpostal.la
+near_dupe_test_CFLAGS = $(CFLAGS_O3)
+
 
 build_address_dictionary_SOURCES = strndup.c address_dictionary_builder.c address_dictionary.c file_utils.c string_utils.c trie.c trie_search.c utf8proc/utf8proc.c
 build_address_dictionary_CFLAGS = $(CFLAGS_O3)

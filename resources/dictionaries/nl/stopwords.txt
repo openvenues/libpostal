@@ -9,7 +9,7 @@ der
 die
 dit
 een
-en
+en|&
 hem
 het
 hoe

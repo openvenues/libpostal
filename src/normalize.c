@@ -401,9 +401,12 @@ void add_normalized_token(char_array *array, char *str, token_t token, uint64_t 
         char *append_if_not_numeric = NULL;
 
         int32_t ch;
+        int32_t next_ch;
         ssize_t char_len;
+        ssize_t next_char_len;
 
         bool last_was_letter = false;
+        bool last_was_number = false;
         bool append_char = true;
 
         while (idx < len) {
@@ -417,13 +420,21 @@ void add_normalized_token(char_array *array, char *str, token_t token, uint64_t 
             bool is_letter = utf8_is_letter(cat);
             bool is_number = utf8_is_number(cat);
 
+            next_char_len = utf8proc_iterate(ptr + char_len, len, &next_ch);
+            int next_cat = utf8proc_category(next_ch);
+            bool next_is_number = utf8_is_number(next_cat);
+            bool next_is_letter = utf8_is_letter(next_cat);
+
+
             bool is_full_stop = ch == FULL_STOP_CODEPOINT;
 
-            if (is_hyphen && last_was_letter && options & NORMALIZE_TOKEN_REPLACE_HYPHENS) {
+            bool is_hyphen_between_letter_and_number = is_hyphen && ((next_is_number && last_was_letter) || (next_is_letter && last_was_number));
+
+            if (is_hyphen && options & NORMALIZE_TOKEN_REPLACE_HYPHENS && (!(last_was_number && next_is_number) || options & NORMALIZE_TOKEN_REPLACE_NUMERIC_HYPHENS)) {
                 char_array_append(array, " ");
                 append_char = false;
             } else if (is_hyphen && options & NORMALIZE_TOKEN_DELETE_HYPHENS) {
-                append_char = false;
+                append_char = !is_hyphen_between_letter_and_number;
             }
 
             if ((is_hyphen || is_full_stop) && token.type == NUMERIC && options & NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC && last_was_letter) {
@@ -444,7 +455,7 @@ void add_normalized_token(char_array *array, char *str, token_t token, uint64_t 
                 append_char = false;
             }
 
-            if (options & NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC && token.type == NUMERIC && last_was_letter && is_number && !alpha_numeric_split) {
+            if (options & NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC && token.type == NUMERIC && ((last_was_letter && is_number) || (last_was_number && is_letter)) && !alpha_numeric_split) {
                 char_array_append(array, " ");
                 alpha_numeric_split = true;
             }
@@ -482,7 +493,7 @@ void add_normalized_token(char_array *array, char *str, token_t token, uint64_t 
             append_char = true;
 
             last_was_letter = is_letter;
-
+            last_was_number = is_number;
         }
     }
 

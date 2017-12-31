@@ -15,7 +15,7 @@ du
 en
 en face de
 entre
-et
+et|&
 l'
 la
 le

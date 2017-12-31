@@ -26,4 +26,4 @@ por
 sin
 un
 una
-y
+y|&

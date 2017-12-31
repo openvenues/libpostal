@@ -23,7 +23,7 @@ naer
 nærmest
 naermest
 nest
-og
+og|&
 overfor
 over
 på

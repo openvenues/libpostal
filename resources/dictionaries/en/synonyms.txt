@@ -18,6 +18,8 @@ greater|grtr|gtr
 greens|grns
 groves|grvs
 heights|hghts|hgts|hieghts|ht|hts|hgths
+hill|hl
+hills|hls
 international|intl|int'l
 lake|lk
 lakes|lks

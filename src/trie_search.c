@@ -633,6 +633,8 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, size_t len, u
     trie_data_node_t data_node;
     trie_node_t terminal_node;
 
+    bool phrase_at_hyphen = false;
+
     while (idx < len) {
         char_len = utf8proc_iterate(ptr, len, &codepoint);
         log_debug("char_len = %zu, char=%d\n", char_len, codepoint);
@@ -653,7 +655,7 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, size_t len, u
         for (i = 0; i < char_len; i++) {
             node_id = trie_get_transition_index(self, last_node, *char_ptr);
             node = trie_get_node(self, node_id);
-            log_debug("At idx=%zu, char=%.*s\n", i, (int)char_len, char_ptr);
+            log_debug("At idx=%u, i=%zu, char=%.*s\n", idx, i, (int)char_len, char_ptr);
 
             if (node.check != last_node_id) {
                 log_debug("node.check = %d and last_node_id = %d\n", node.check, last_node_id);
@@ -665,7 +667,12 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, size_t len, u
                 }
 
                 if (is_hyphen && node.check != last_node_id) {
-                    log_debug("No space transition\n");
+                    log_debug("No space transition, phrase_len=%zu\n", phrase_len);
+                    if (phrase_len > 0 && phrase_len == idx) {
+                        log_debug("phrase_at_hyphen\n");
+                        phrase_at_hyphen = true;
+                    }
+
                     ptr += char_len;
                     idx += char_len;
                     separator_char_len = char_len;
@@ -720,10 +727,20 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, size_t len, u
                 log_debug("match_len=%zu\n", match_len);
                 
                 if (tail_match_len == current_tail_len - tail_pos) {
+                    if (phrase_at_hyphen) {
+                        char_len = utf8proc_iterate(ptr + char_len, len, &codepoint);
+                        if (char_len > 0 && utf8proc_codepoint_valid(codepoint)) {
+                            int cat = utf8proc_category(codepoint);
+
+                            if (codepoint != 0 && !utf8_is_hyphen(codepoint) && !utf8_is_separator(cat) && !utf8_is_punctuation(cat)) {
+                                return (phrase_t){phrase_start, phrase_len, value};
+                            }
+                        }
+                    }
                     if (first_char) phrase_start = idx;
                     phrase_len = (uint32_t)(idx + match_len) - phrase_start;
 
-                    log_debug("tail match! phrase_len=%u\n", phrase_len);
+                    log_debug("tail match! phrase_len=%u, len=%zu\n", phrase_len, len);
                     value = data_node.data;
                     return (phrase_t){phrase_start, phrase_len, value};
                 } else {

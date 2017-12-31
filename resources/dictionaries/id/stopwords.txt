@@ -1,5 +1,5 @@
 berlawanan|lawanan|lwnn
-dan|dn|n
+dan|dn|n|en|&
 dari|dr
 dekat|dkt
 di

@@ -60,6 +60,26 @@ TEST test_utf8_compare_ignore_separators(void) {
     PASS();
 }
 
+TEST test_utf8_equal_ignore_separators(void) {
+    char *str1 = "Bünderstraße  ";
+    char *str2 = "Bünder-straße";
+
+    bool equal = utf8_common_prefix_ignore_separators(str1, str2);
+    ASSERT(equal);
+
+    str1 = " Bünder-straße ";
+    str2 = "Bünder straße";
+    equal = utf8_common_prefix_ignore_separators(str1, str2);
+    ASSERT(equal);
+
+    str1 = "Bünder-straße-a";
+    str2 = "Bünder straße aa";
+    equal = utf8_common_prefix_ignore_separators(str1, str2);
+    ASSERT_FALSE(equal);
+
+    PASS();
+}
+
 TEST test_feature_array_add(void) {
     cstring_array *features = cstring_array_new();
     if (features == NULL) {

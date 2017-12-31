@@ -16,6 +16,7 @@ intill
 mellan
 motliggande
 närmast|naermast
+och|&
 över|oever
 på|paa
 på andra sidan|paa andra sidan

@@ -74,7 +74,7 @@ ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *ds
 char *utf8_lower_options(const char *s, utf8proc_option_t options);
 char *utf8_lower(const char *s);
 char *utf8_upper_options(const char *s, utf8proc_option_t options);
-char *utf8_lower(const char *s);
+char *utf8_upper(const char *s);
 
 int utf8_compare(const char *str1, const char *str2);
 int utf8_compare_len(const char *str1, const char *str2, size_t len);
@@ -83,9 +83,20 @@ size_t utf8_common_prefix_len(const char *str1, const char *str2, size_t len);
 size_t utf8_common_prefix_ignore_separators(const char *str1, const char *str2);
 size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *str2, size_t len);
 
+bool utf8_equal_ignore_separators(const char *str1, const char *str2);
+
+ssize_t utf8_len(const char *str, size_t len);
+
+uint32_array *unicode_codepoints(const char *str);
+bool unicode_equals(uint32_array *u1_array, uint32_array *u2_array);
+size_t unicode_common_prefix(uint32_array *u1_array, uint32_array *u2_array);
+size_t unicode_common_suffix(uint32_array *u1_array, uint32_array *u2_array);
+
 bool utf8_is_hyphen(int32_t ch);
+bool utf8_is_period(int32_t ch);
 bool utf8_is_letter(int cat);
 bool utf8_is_number(int cat);
+bool utf8_is_digit(int cat);
 bool utf8_is_letter_or_number(int cat);
 bool utf8_is_punctuation(int cat);
 bool utf8_is_symbol(int cat);
@@ -99,7 +110,21 @@ ssize_t string_next_hyphen_index(char *str, size_t len);
 bool string_contains_hyphen(char *str);
 bool string_contains_hyphen_len(char *str, size_t len);
 
+ssize_t string_next_codepoint_len(char *str, uint32_t codepoint, size_t len);
+ssize_t string_next_codepoint(char *str, uint32_t codepoint);
+
+ssize_t string_next_period_len(char *str, size_t len);
+ssize_t string_next_period(char *str);
+
+bool string_contains_period_len(char *str, size_t len);
+bool string_contains_period(char *str);
+
+size_t string_left_spaces_len(char *str, size_t len);
+size_t string_right_spaces_len(char *str, size_t len);
 char *string_trim(char *str);
+
+size_t string_hyphen_prefix_len(char *str, size_t len);
+size_t string_hyphen_suffix_len(char *str, size_t len);
 
 /* char_array is a dynamic character array defined in collections.h
 but has a few additional methods related to string manipulation.
@@ -183,6 +208,8 @@ void cstring_array_clear(cstring_array *self);
 cstring_array *cstring_array_from_char_array(char_array *str);
 cstring_array *cstring_array_from_strings(char **strings, size_t n);
 
+bool cstring_array_extend(cstring_array *array, cstring_array *other);
+
 // Convert cstring_array to an array of n C strings and destroy the cstring_array
 char **cstring_array_to_strings(cstring_array *self);
 
@@ -259,6 +286,8 @@ void string_tree_add_string_len(string_tree_t *self, char *str, size_t len);
 // unterminated
 void string_tree_append_string(string_tree_t *self, char *str);
 void string_tree_append_string_len(string_tree_t *self, char *str, size_t len);
+
+void string_tree_clear(string_tree_t *self);
 
 uint32_t string_tree_num_tokens(string_tree_t *self);
 uint32_t string_tree_num_strings(string_tree_t *self);

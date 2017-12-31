@@ -63,15 +63,20 @@ bool search_address_dictionaries_with_phrases(char *str, char *lang, phrase_arra
 phrase_array *search_address_dictionaries_tokens(char *str, token_array *tokens, char *lang);
 bool search_address_dictionaries_tokens_with_phrases(char *str, token_array *tokens, char *lang, phrase_array **phrases);
 
+phrase_t search_address_dictionaries_substring(char *str, size_t len, char *lang);
 phrase_t search_address_dictionaries_prefix(char *str, size_t len, char *lang);
 phrase_t search_address_dictionaries_suffix(char *str, size_t len, char *lang);
 
 address_expansion_value_t *address_dictionary_get_expansions(uint32_t i);
 bool address_expansion_in_dictionary(address_expansion_t expansion, uint16_t dictionary_id);
+bool address_phrase_in_dictionary(phrase_t phrase, uint16_t dictionary_id);
+bool address_phrase_in_dictionaries(phrase_t phrase, size_t n, ...);
 char *address_dictionary_get_canonical(uint32_t index);
 int32_t address_dictionary_next_canonical_index(void);
 bool address_dictionary_add_canonical(char *canonical);
 bool address_dictionary_add_expansion(char *key, char *language, address_expansion_t expansion);
+bool address_expansions_have_canonical_interpretation(address_expansion_array *expansions);
+bool address_phrase_has_canonical_interpretation(phrase_t phrase);
 
 void address_dictionary_destroy(address_dictionary_t *self);
 
