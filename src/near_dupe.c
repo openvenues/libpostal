@@ -243,7 +243,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
         tokenize_add_tokens(token_array, expansion, strlen(expansion), keep_whitespace);
         size_t num_tokens = token_array->n;
         token_t *tokens = token_array->a;
-        token_t prev_token;
+        token_t prev_token = NULL_TOKEN;
         char *token_str;
         for (size_t j = 0; j < num_tokens; j++) {
             token_t token = tokens[j];

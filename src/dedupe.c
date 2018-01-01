@@ -31,8 +31,6 @@ bool expansions_intersect(cstring_array *expansions1, cstring_array *expansions2
 
 
 bool address_component_equals_root_option(char *s1, char *s2, libpostal_normalize_options_t options, bool root) {
-    uint64_t normalize_string_options = get_normalize_string_options(options);
-
     size_t n1, n2;
     cstring_array *expansions1 = NULL;
     cstring_array *expansions2 = NULL;
@@ -72,7 +70,7 @@ static inline bool address_component_equals_root(char *s1, char *s2, libpostal_n
 }
 
 
-static inline bool address_component_equals_root_fallback(char *s1, char *s2, libpostal_normalize_options_t options, bool root) {
+static inline bool address_component_equals_root_fallback(char *s1, char *s2, libpostal_normalize_options_t options) {
     return address_component_equals_root(s1, s2, options) || address_component_equals(s1, s2, options);
 }
 
@@ -107,6 +105,7 @@ libpostal_duplicate_status_t is_name_duplicate(char *value1, char *value2, libpo
     libpostal_duplicate_status_t root_comparison_status = LIBPOSTAL_POSSIBLE_DUPLICATE_NEEDS_REVIEW;
     return is_duplicate(value1, value2, normalize_options, options, root_comparison_first, root_comparison_status);
 }
+
 libpostal_duplicate_status_t is_street_duplicate(char *value1, char *value2, libpostal_duplicate_options_t options) {
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
     normalize_options.address_components = LIBPOSTAL_ADDRESS_STREET | LIBPOSTAL_ADDRESS_ANY;
@@ -158,6 +157,8 @@ libpostal_duplicate_status_t is_postal_code_duplicate(char *value1, char *value2
 libpostal_duplicate_status_t is_toponym_duplicate(size_t num_components1, char **labels1, char **values1, size_t num_components2, char **labels2, char **values2, libpostal_duplicate_options_t options) {
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
     normalize_options.address_components = LIBPOSTAL_ADDRESS_TOPONYM | LIBPOSTAL_ADDRESS_ANY;
+    normalize_options.num_languages = options.num_languages;
+    normalize_options.languages = options.languages;
 
     place_t *place1 = place_from_components(num_components1, labels1, values1);
     place_t *place2 = place_from_components(num_components2, labels2, values2);
