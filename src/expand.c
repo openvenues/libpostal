@@ -1106,6 +1106,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                         if (delete_phrases) {
                             bool is_ignorable = address_expansion_is_ignorable_for_components(expansion, options.address_components);
                             bool is_canonical = expansion.canonical_index == NULL_CANONICAL_INDEX;
+                            bool is_valid_for_components = address_expansion_is_valid_for_components(expansion, options.address_components);
 
                             log_debug("is_ignorable = %d, is_canonical = %d, is_ambiguous = %d, current_phrase_have_ambiguous = %d, current_phrase_have_unambiguous = %d, have_strictly_ignorable = %d, current_phrase_have_ignorable=%d, current_phrase_have_possible_root=%d\n", is_ignorable, is_canonical, is_ambiguous, current_phrase_have_ambiguous, current_phrase_have_unambiguous, have_strictly_ignorable, current_phrase_have_ignorable, current_phrase_have_possible_root);
 
@@ -1140,6 +1141,10 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                                 current_phrase_ignorable = (is_ignorable && !(have_possible_root && !current_phrase_have_possible_root)) || (current_phrase_have_ambiguous && have_non_phrase_tokens && current_phrase_have_ignorable && current_phrase_have_unambiguous);
 
                                 log_debug("current_phrase_have_ambiguous && have_non_phrase_tokens\n");
+                                log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
+                            } else if (!is_valid_for_components) {
+                                log_debug("!is_valid_for_components\n");
+                                current_phrase_ignorable = current_phrase_have_ignorable;
                                 log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
                             } else {
                                 log_debug("none of the above\n");
