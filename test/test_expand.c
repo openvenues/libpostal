@@ -234,6 +234,11 @@ TEST test_unit_root_expansions(void) {
     CHECK_CALL(test_root_expansion_contains_with_languages("Apt #101", "101", options, 1, "en"));
     CHECK_CALL(test_root_expansion_contains_with_languages("Apartment 101", "101", options, 1, "en"));
     CHECK_CALL(test_root_expansion_contains_with_languages("Apartment #101", "101", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("Ste 101", "101", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("Ste No 101", "101", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("Ste #101", "101", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("Suite 101", "101", options, 1, "en"));
+    CHECK_CALL(test_root_expansion_contains_with_languages("Suite #101", "101", options, 1, "en"));
 
     // Specifiers
     CHECK_CALL(test_root_expansion_contains_with_languages("PH 1", "penthouse 1", options, 1, "en"));
