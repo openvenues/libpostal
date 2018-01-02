@@ -1755,14 +1755,14 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
             label = strdup(ADDRESS_PARSER_LABEL_POSTAL_CODE);
         }
 
-        response = address_parser_response_new();
-
         // Implicit: if most_common is not one of the above, ignore and parse regularly
         if (label != NULL) {
             char **single_label = malloc(sizeof(char *));
             single_label[0] = label;
             char **single_component = malloc(sizeof(char *));
             single_component[0] = strdup(normalized);
+
+            response = address_parser_response_new();
 
             response->num_components = 1;
             response->labels = single_label;
