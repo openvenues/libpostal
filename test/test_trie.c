@@ -49,6 +49,8 @@ TEST test_trie(void) {
     ASSERT(phrase.start == 2);
     ASSERT(phrase.len == 1);
 
+    phrase_array_destroy(phrases);
+    token_array_destroy(tokens);
     trie_destroy(trie);
 
     PASS();
