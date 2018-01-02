@@ -1232,6 +1232,7 @@ char *replace_numeric_expressions(char *str, char *lang) {
 
     if (!have_valid_numex) {
         numex_result_array_destroy(results);
+        char_array_destroy(replacement);
         return NULL;
     }
 

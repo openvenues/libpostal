@@ -135,6 +135,15 @@ TEST test_expansions(void) {
     CHECK_CALL(test_expansion_contains_with_languages("Marktstrasse", "markt strasse", options, 1, "de"));
     CHECK_CALL(test_expansion_contains_with_languages("Hoofdstraat", "hoofdstraat", options, 1, "nl"));
     CHECK_CALL(test_expansion_contains_with_languages("มงแตร", "มงแตร", options, 1, "th"));
+
+    PASS();
+}
+
+TEST test_expansion_for_invalid_input(void) {
+    size_t num_expansions;
+
+    // This is tested as the input caused a segfault in expand_alternative_phrase_option
+    libpostal_expand_address("bob-ad1233@blah.co", libpostal_get_default_options(), &num_expansions);
     PASS();
 }
 
@@ -314,6 +323,7 @@ SUITE(libpostal_expansion_tests) {
     RUN_TEST(test_po_box_root_expansions);
     RUN_TEST(test_expansions_language_classifier);
     RUN_TEST(test_expansions_no_options);
+    RUN_TEST(test_expansion_for_invalid_input);
 
     libpostal_teardown();
     libpostal_teardown_language_classifier();

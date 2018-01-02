@@ -1491,8 +1491,12 @@ void expand_alternative_phrase_option(cstring_array *strings, khash_t(str_set) *
             for (; !string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
                 char_array_clear(temp_string);
                 string_tree_iterator_foreach_token(iter, token, {
-                    log_debug("token=%s\n", token);
-                    char_array_append(temp_string, token);
+                    if (token == NULL) {
+                        log_debug("token=NULL\n");
+                    } else {
+                        log_debug("token=%s\n", token);
+                        char_array_append(temp_string, token);
+                    }
                 })
                 char_array_terminate(temp_string);
 
