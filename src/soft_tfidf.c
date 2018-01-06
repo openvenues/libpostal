@@ -7,9 +7,10 @@
 
 static soft_tfidf_options_t DEFAULT_SOFT_TFIDF_OPTIONS = {
     .jaro_winkler_min = 0.9,
+    .jaro_winkler_min_length = 4,
     .damerau_levenshtein_max = 1,
     .damerau_levenshtein_min_length = 4,
-    .use_abbreviations = true
+    .possible_affine_gap_abbreviations = true
 };
 
 
@@ -53,7 +54,7 @@ bool compare_canonical(address_expansion_t e1, char **tokens1, phrase_t match1, 
                 return false;
             }
         }
-        return true;
+        return canonical_index == canonical_len;
     }
 }
 
@@ -112,7 +113,7 @@ bool phrases_have_same_canonical(size_t num_tokens1, char **tokens1, size_t num_
 }
 
 
-double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char **tokens1, double *token_scores1, phrase_array *phrases1, size_t num_tokens2, char **tokens2, double *token_scores2, phrase_array *phrases2, phrase_array *acronym_alignments, soft_tfidf_options_t options) {
+double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char **tokens1, double *token_scores1, phrase_array *phrases1, size_t num_tokens2, char **tokens2, double *token_scores2, phrase_array *phrases2, phrase_array *acronym_alignments, soft_tfidf_options_t options, size_t *num_matches) {
     if (token_scores1 == NULL || token_scores2 == NULL) return 0.0;
 
     if (num_tokens1 > num_tokens2) {
@@ -205,19 +206,23 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
     }
 
     double jaro_winkler_min = options.jaro_winkler_min;
+    size_t jaro_winkler_min_length = options.jaro_winkler_min_length;
     size_t damerau_levenshtein_max = options.damerau_levenshtein_max;
     size_t damerau_levenshtein_min_length = options.damerau_levenshtein_min_length;
-    bool use_damerau_levenshtein = damerau_levenshtein_max > 0 && len1 >= damerau_levenshtein_min_length;
 
-    bool use_abbreviations = options.use_abbreviations;
+    bool possible_affine_gap_abbreviations = options.possible_affine_gap_abbreviations;
+
+    size_t matched_tokens = 0;
 
     for (size_t i = 0; i < len1; i++) {
         uint32_array *t1u = t1_tokens_unicode[i];
         uint32_array *t2u;
         double t1_score = token_scores1[i];
 
+        size_t t1_len = t1u->n;
+
         double max_sim = 0.0;
-        size_t min_dist = t1u->n;
+        size_t min_dist = t1_len;
         size_t argmax_sim = 0;
         size_t argmin_dist = 0;
         double argmin_dist_sim = 0.0;
@@ -230,6 +235,10 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
         int64_t pm1 = phrase_memberships1 != NULL ? phrase_memberships1[i] : NULL_PHRASE_MEMBERSHIP;
         phrase_t p1 = pm1 >= 0 ? phrases1->a[pm1] : NULL_PHRASE;
         phrase_t argmax_phrase = NULL_PHRASE;
+    
+        bool use_jaro_winkler = t1_len >= jaro_winkler_min_length;
+        bool use_damerau_levenshtein = damerau_levenshtein_max > 0 && t1_len >= damerau_levenshtein_min_length;
+        log_debug("use_jaro_winkler = %d, use_damerau_levenshtein=%d\n", use_jaro_winkler, use_damerau_levenshtein);
 
         canonical_match_t best_canonical_phrase_response = CANONICAL_NO_MATCH;
 
@@ -243,6 +252,7 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
             canonical_match_t canonical_response = CANONICAL_NO_MATCH;
             if (p1.len > 0 && p2.len > 0 && phrases_have_same_canonical(num_tokens1, tokens1, num_tokens2, tokens2, p1, p2, &canonical_response)) {
                 if (canonical_response > best_canonical_phrase_response) {
+                    log_debug("canonical_response = %d\n", canonical_response);
                     best_canonical_phrase_response = canonical_response;
                     argmax_sim = j;
                     argmax_phrase = p2;
@@ -275,7 +285,7 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
             }
 
             double jaro_winkler = jaro_winkler_distance_unicode(t1u, t2u);
-            if (jaro_winkler > max_sim) {
+            if (use_jaro_winkler && jaro_winkler > max_sim) {
                 max_sim = jaro_winkler;
                 argmax_sim = j;
             }
@@ -291,7 +301,7 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
                 }
             }
 
-            if (use_abbreviations) {
+            if (possible_affine_gap_abbreviations) {
                 bool is_abbreviation = possible_abbreviation_unicode(t1u, t2u);
                 if (is_abbreviation) {
                     last_abbreviation = j;
@@ -310,27 +320,38 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
                 log_debug("have max sim = %f\n", max_sim);
                 t2_score = token_scores2[argmax_sim];
                 total_sim += max_sim * t1_score * t2_score;
+                matched_tokens++;
             } else if (use_damerau_levenshtein && min_dist <= damerau_levenshtein_max) {
                 log_debug("levenshtein\n");
                 t2_score = token_scores2[argmin_dist];
                 total_sim += argmin_dist_sim * t1_score * t2_score;
-            } else if (use_abbreviations && have_abbreviation) {
+                matched_tokens++;
+            } else if (possible_affine_gap_abbreviations && have_abbreviation) {
                 log_debug("have abbreviation\n");
                 t2_score = token_scores2[last_abbreviation];
                 total_sim += last_abbreviation_sim * t1_score * t2_score;
+                matched_tokens++;
             }
         } else if (have_phrase_match) {
             for (size_t p = argmax_phrase.start; p < argmax_phrase.start + argmax_phrase.len; p++) {
                 t2_score = token_scores2[p];
                 total_sim += max_sim * t1_score * t2_score;
             }
+            matched_tokens++;
+            log_debug("have_phrase_match\n");
         } else {
             for (size_t p = acronym_phrase.start; p < acronym_phrase.start + acronym_phrase.len; p++) {
                 t2_score = token_scores2[p];
                 total_sim += max_sim * t1_score * t2_score;
             }
+            log_debug("have_acronym_match\n");
+            matched_tokens++;
         }
     }
+
+    log_debug("matched_tokens = %zu\n", matched_tokens);
+
+    *num_matches = matched_tokens;
 
 return_soft_tfidf_score:
     if (t1_tokens_unicode != NULL) {
@@ -369,6 +390,6 @@ return_soft_tfidf_score:
 }
 
 
-double soft_tfidf_similarity(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, soft_tfidf_options_t options) {
-    return soft_tfidf_similarity_with_phrases_and_acronyms(num_tokens1, tokens1, token_scores1, NULL, num_tokens2, tokens2, token_scores2, NULL, NULL, options);
+double soft_tfidf_similarity(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, soft_tfidf_options_t options, size_t *num_matches) {
+    return soft_tfidf_similarity_with_phrases_and_acronyms(num_tokens1, tokens1, token_scores1, NULL, num_tokens2, tokens2, token_scores2, NULL, NULL, options, num_matches);
 }

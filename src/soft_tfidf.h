@@ -35,14 +35,15 @@ defined as either:
 
 typedef struct soft_tfidf_options {
     double jaro_winkler_min;
+    size_t jaro_winkler_min_length;
     size_t damerau_levenshtein_max;
     size_t damerau_levenshtein_min_length;
-    bool use_abbreviations;
+    bool possible_affine_gap_abbreviations;
 } soft_tfidf_options_t;
 
 soft_tfidf_options_t soft_tfidf_default_options(void);
 
-double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char **tokens1, double *token_scores1, phrase_array *phrases1, size_t num_tokens2, char **tokens2, double *token_scores2, phrase_array *phrases2, phrase_array *acronym_alignments, soft_tfidf_options_t options);
-double soft_tfidf_similarity(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, soft_tfidf_options_t options);
+double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char **tokens1, double *token_scores1, phrase_array *phrases1, size_t num_tokens2, char **tokens2, double *token_scores2, phrase_array *phrases2, phrase_array *acronym_alignments, soft_tfidf_options_t options, size_t *num_matches);
+double soft_tfidf_similarity(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, soft_tfidf_options_t options, size_t *num_matches);
 
 #endif
