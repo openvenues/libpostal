@@ -272,7 +272,7 @@ bool have_ideographic_word_tokens(token_array *token_array) {
     return false;
 }
 
-libpostal_fuzzy_duplicate_status_t is_fuzzy_duplicate(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_fuzzy_duplicate_options_t options, libpostal_normalize_options_t normalize_options, soft_tfidf_options_t soft_tfidf_options, bool do_acronyms) {
+libpostal_fuzzy_duplicate_status_t is_fuzzy_duplicate(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_fuzzy_duplicate_options_t options, libpostal_normalize_options_t normalize_options, soft_tfidf_options_t soft_tfidf_options, bool do_acronyms, libpostal_duplicate_status_t subset_dupe_status) {
     normalize_options.num_languages = options.num_languages;
     normalize_options.languages = options.languages;
 
@@ -299,6 +299,9 @@ libpostal_fuzzy_duplicate_status_t is_fuzzy_duplicate(size_t num_tokens1, char *
 
     bool is_ideographic = have_ideographic_word_tokens(token_array1) && have_ideographic_word_tokens(token_array2);
 
+    size_t min_len = num_tokens1 < num_tokens2 ? num_tokens1 : num_tokens2;
+    size_t num_matches = 0;
+
     if (!is_ideographic) {
         if (do_acronyms) {
             acronym_alignments = acronym_token_alignments(joined1, token_array1, joined2, token_array2, num_languages, languages);
@@ -315,16 +318,26 @@ libpostal_fuzzy_duplicate_status_t is_fuzzy_duplicate(size_t num_tokens1, char *
 
                 search_address_dictionaries_tokens_with_phrases(joined1, token_array1, lang, &phrases1);
                 search_address_dictionaries_tokens_with_phrases(joined2, token_array2, lang, &phrases2);
-            
-                double sim = soft_tfidf_similarity_with_phrases_and_acronyms(num_tokens1, tokens1, token_scores1, phrases1, num_tokens2, tokens2, token_scores2, phrases2, acronym_alignments, soft_tfidf_options);
+
+                size_t matches_i = 0;
+
+                double sim = soft_tfidf_similarity_with_phrases_and_acronyms(num_tokens1, tokens1, token_scores1, phrases1, num_tokens2, tokens2, token_scores2, phrases2, acronym_alignments, soft_tfidf_options, &matches_i);
                 if (sim > max_sim) {
                     max_sim = sim;
                 }
+
+                if (matches_i > num_matches) {
+                    num_matches = matches_i;
+                }
             }
         } else if (do_acronyms) {
-            max_sim = soft_tfidf_similarity_with_phrases_and_acronyms(num_tokens1, tokens1, token_scores1, phrases1, num_tokens2, tokens2, token_scores2, phrases2, acronym_alignments, soft_tfidf_options);
+            max_sim = soft_tfidf_similarity_with_phrases_and_acronyms(num_tokens1, tokens1, token_scores1, phrases1, num_tokens2, tokens2, token_scores2, phrases2, acronym_alignments, soft_tfidf_options, &num_matches);
         } else {
-            max_sim = soft_tfidf_similarity(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, soft_tfidf_options);
+            max_sim = soft_tfidf_similarity(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, soft_tfidf_options, &num_matches);
+        }
+
+        if (num_matches == min_len) {
+            dupe_status = subset_dupe_status;
         }
     } else {
         max_sim = jaccard_similarity_string_arrays(num_tokens1, tokens1, num_tokens2, tokens2);
@@ -382,7 +395,9 @@ inline libpostal_fuzzy_duplicate_status_t is_name_duplicate_fuzzy(size_t num_tok
 
     soft_tfidf_options_t soft_tfidf_options = soft_tfidf_default_options();
 
-    return is_fuzzy_duplicate(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, options, normalize_options, soft_tfidf_options, do_acronyms);
+    libpostal_duplicate_status_t subset_dupe_status = LIBPOSTAL_NON_DUPLICATE;
+
+    return is_fuzzy_duplicate(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, options, normalize_options, soft_tfidf_options, do_acronyms, subset_dupe_status);
 }
 
 
@@ -395,7 +410,10 @@ inline libpostal_fuzzy_duplicate_status_t is_street_duplicate_fuzzy(size_t num_t
     bool do_acronyms = false;
 
     soft_tfidf_options_t soft_tfidf_options = soft_tfidf_default_options();
+    soft_tfidf_options.possible_affine_gap_abbreviations = false;
 
-    return is_fuzzy_duplicate(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, options, normalize_options, soft_tfidf_options, do_acronyms);
+    libpostal_duplicate_status_t subset_dupe_status = LIBPOSTAL_LIKELY_DUPLICATE;
+
+    return is_fuzzy_duplicate(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, options, normalize_options, soft_tfidf_options, do_acronyms, subset_dupe_status);
 }
 
