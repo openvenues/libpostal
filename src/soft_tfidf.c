@@ -285,7 +285,7 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
             }
 
             double jaro_winkler = jaro_winkler_distance_unicode(t1u, t2u);
-            if (use_jaro_winkler && jaro_winkler > max_sim) {
+            if (jaro_winkler > max_sim) {
                 max_sim = jaro_winkler;
                 argmax_sim = j;
             }
@@ -316,7 +316,7 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
         // Jaro-Winkler is still used to calculate similarity
 
         if (!have_acronym_match && !have_phrase_match) {
-            if (max_sim > jaro_winkler_min || double_equals(max_sim, jaro_winkler_min)) {
+            if (use_jaro_winkler && (max_sim > jaro_winkler_min || double_equals(max_sim, jaro_winkler_min))) {
                 log_debug("have max sim = %f\n", max_sim);
                 t2_score = token_scores2[argmax_sim];
                 total_sim += max_sim * t1_score * t2_score;
