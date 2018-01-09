@@ -1142,7 +1142,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
 
                                 log_debug("current_phrase_have_ambiguous && have_non_phrase_tokens\n");
                                 log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
-                            } else if (!is_valid_for_components) {
+                            } else if (!is_valid_for_components && !is_ambiguous) {
                                 log_debug("!is_valid_for_components\n");
                                 current_phrase_ignorable = current_phrase_have_ignorable;
                                 log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
