@@ -231,8 +231,6 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
 
     char_array *combined_words_no_whitespace = char_array_new();
 
-    bool keep_whitespace = false;
-
     khash_t(str_set) *unique_strings = kh_init(str_set);
     khiter_t k;
     int ret = 0;
@@ -240,11 +238,14 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
     for (size_t i = 0; i < num_expansions; i++) {
         char *expansion = cstring_array_get_string(name_expansions, i);
         log_debug("expansion = %s\n", expansion);
+        bool keep_whitespace = false;
         tokenize_add_tokens(token_array, expansion, strlen(expansion), keep_whitespace);
         size_t num_tokens = token_array->n;
         token_t *tokens = token_array->a;
         token_t prev_token = NULL_TOKEN;
         char *token_str;
+        char_array_clear(combined_words_no_whitespace);
+
         for (size_t j = 0; j < num_tokens; j++) {
             token_t token = tokens[j];
             bool ideogram = is_ideographic(token.type);
@@ -258,6 +259,8 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
                 log_debug("cat ideogram\n");
                 char_array_cat_len(token_string_array, expansion + prev_token.offset, prev_token.len);
             }
+
+            char_array_cat_len(combined_words_no_whitespace, expansion + token.offset, token.len);
 
             // For Latin script, add double metaphone of the words
             if (is_latin && !is_numeric_token(token.type) && !ideogram && !is_punctuation(token.type)) {
@@ -321,6 +324,18 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
             }
 
             prev_token = token;
+        }
+
+        char *combined = char_array_get_string(combined_words_no_whitespace);
+        log_debug("combined = %s\n", combined);
+        k = kh_get(str_set, unique_strings, combined);
+
+        if (k == kh_end(unique_strings)) {
+            cstring_array_add_string(strings, combined);
+            k = kh_put(str_set, unique_strings, strdup(combined), &ret);
+            if (ret < 0) {
+                break;
+            }
         }
 
         token_array_clear(token_array);
