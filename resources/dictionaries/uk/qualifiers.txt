@@ -2,7 +2,7 @@
 blok|bl
 квартал|кварт|кв|кв-л
 kvartal|kvart|kv|kv-l
-област|обл
+область|обл
 oblast|obl
-раион|р-н
+район|р-н
 raion|r-n
