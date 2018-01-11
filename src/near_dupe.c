@@ -383,7 +383,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
                             char_array_cat_len(acronym_with_stopwords, normalized + token.offset, ch_len);
                             char_array_cat_len(acronym_no_stopwords, normalized + token.offset, ch_len);
 
-                            if (!(last_was_stopword && j == num_tokens - 1)) {
+                            if (!(last_was_stopword && sub_acronym_no_stopwords->n == 0 && j == num_tokens - 1)) {
                                 char_array_cat_len(sub_acronym_with_stopwords, normalized + token.offset, ch_len);
                                 char_array_cat_len(sub_acronym_no_stopwords, normalized + token.offset, ch_len);
                             }
@@ -398,20 +398,30 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
                                 char_array_cat_len(acronym_no_stopwords, normalized + token.offset, ch_len);
                             }
 
-                            if ((num_stopwords_encountered % 2 == 0 || last_was_punctuation) && acronym_no_stopwords->n > 1) {
-                                acronym = char_array_get_string(sub_acronym_with_stopwords);
-                                log_debug("sub acronym stopwords = %s\n", acronym);
+                            if ((num_stopwords_encountered % 2 == 0 || last_was_punctuation)) {
+                                if (sub_acronym_no_stopwords->n > 1) {
+                                    acronym = char_array_get_string(sub_acronym_with_stopwords);
+                                    log_debug("sub acronym stopwords = %s\n", acronym);
 
-                                char_array_clear(sub_acronym_with_stopwords);
+                                    char_array_clear(sub_acronym_with_stopwords);
 
-                                add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+                                    add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
 
-                                acronym = char_array_get_string(sub_acronym_no_stopwords);
-                                log_debug("sub acronym no stopwords = %s\n", acronym);
-                                add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
-                                char_array_clear(sub_acronym_no_stopwords);
-                            } else if (!((last_was_stopword || last_was_punctuation) && j == num_tokens - 1)) {
+                                    acronym = char_array_get_string(sub_acronym_no_stopwords);
+                                    log_debug("sub acronym no stopwords = %s\n", acronym);
+                                    add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+                                    char_array_clear(sub_acronym_no_stopwords);
+                                } else if (!(last_was_stopword || last_was_punctuation) && j == num_tokens - 1) {
+                                    char_array_cat_len(sub_acronym_with_stopwords, normalized + token.offset, ch_len);
+                                    if (!is_stopword) {
+                                        char_array_cat_len(sub_acronym_no_stopwords, normalized + token.offset, ch_len);
+                                    }
+                                }
+                            } else {
                                 char_array_cat_len(sub_acronym_with_stopwords, normalized + token.offset, ch_len);
+                                if (!is_stopword) {
+                                    char_array_cat_len(sub_acronym_no_stopwords, normalized + token.offset, ch_len);
+                                }
                             }
 
                             last_was_stopword = is_stopword;
@@ -438,7 +448,6 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
         acronym = char_array_get_string(acronym_no_stopwords);
         log_debug("acronym no stopwords = %s\n", acronym);
         add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
-
     }
 
     if (sub_acronym_no_stopwords->n > 0) {
