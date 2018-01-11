@@ -1,9 +1,12 @@
 #include "acronyms.h"
 
-static uint32_array *stopword_tokens(const char *str, token_array *tokens, size_t num_languages, char **languages) {
-    size_t len = tokens->n;
-    uint32_array *stopwords_array = uint32_array_new_zeros(len);
+bool stopword_positions(uint32_array *stopwords_array, const char *str, token_array *tokens, size_t num_languages, char **languages) {
+    if (stopwords_array == NULL) return false;
+    if (stopwords_array->n != tokens->n) {
+        uint32_array_resize_fixed(stopwords_array, tokens->n);
+    }
 
+    uint32_array_zero(stopwords_array->a, stopwords_array->n);
     uint32_t *stopwords = stopwords_array->a;
 
     for (size_t l = 0; l < num_languages; l++) {
@@ -25,8 +28,9 @@ static uint32_array *stopword_tokens(const char *str, token_array *tokens, size_
         }
     }
 
-    return stopwords_array;
+    return true;
 }
+
 
 phrase_array *acronym_token_alignments(const char *s1, token_array *tokens1, const char *s2, token_array *tokens2, size_t num_languages, char **languages) {
     if (s1 == NULL || tokens1 == NULL || s2 == NULL || tokens2 == NULL) {
@@ -56,10 +60,12 @@ phrase_array *acronym_token_alignments(const char *s1, token_array *tokens1, con
     token_t *t1 = tokens1->a;
     token_t *t2 = tokens2->a;
 
-    uint32_array *stopwords_array = stopword_tokens(s2, tokens2, num_languages, languages);
+    uint32_array *stopwords_array = uint32_array_new_zeros(tokens2->n);
     if (stopwords_array == NULL) {
         return NULL;
     }
+
+    stopword_positions(stopwords_array, s2, tokens2, num_languages, languages);
 
     uint32_t *stopwords = stopwords_array->a;
 

@@ -3,6 +3,8 @@
 #include "log/log.h"
 
 #include "near_dupe.h"
+
+#include "acronyms.h"
 #include "double_metaphone.h"
 #include "expand.h"
 #include "features.h"
@@ -211,6 +213,58 @@ static cstring_array *geohash_and_neighbors(double latitude, double longitude, s
     return NULL;
 }
 
+
+static inline bool add_string_to_array_if_unique(char *str, cstring_array *strings, khash_t(str_set) *unique_strings) {
+    khiter_t k = kh_get(str_set, unique_strings, str);
+    int ret = 0;
+    if (k == kh_end(unique_strings)) {
+        cstring_array_add_string(strings, str);
+        k = kh_put(str_set, unique_strings, strdup(str), &ret);
+
+        if (ret < 0) {
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+
+
+static inline bool add_double_metaphone_to_array_if_unique(char *str, cstring_array *strings, khash_t(str_set) *unique_strings) {
+    if (str == NULL) return false;
+    double_metaphone_codes_t *dm_codes = double_metaphone(str);
+    if (dm_codes == NULL) {
+        return false;
+    }
+    char *dm_primary = dm_codes->primary;
+    char *dm_secondary = dm_codes->secondary;
+
+    if (!string_equals(dm_primary, "")) {
+        add_string_to_array_if_unique(dm_primary, strings, unique_strings);
+
+        if (!string_equals(dm_secondary, dm_primary)) {
+            add_string_to_array_if_unique(dm_secondary, strings, unique_strings);
+        }
+    }
+    double_metaphone_codes_destroy(dm_codes);
+
+    return true;
+}
+
+static inline bool add_double_metaphone_or_token_if_unique(char *str, cstring_array *strings, khash_t(str_set) *unique_strings) {
+    if (str == NULL) return false;
+    size_t len = strlen(str);
+    string_script_t token_script = get_string_script(str, len);
+    bool is_latin = token_script.len == len && token_script.script == SCRIPT_LATIN;
+
+    if (is_latin) {
+        return add_double_metaphone_to_array_if_unique(str, strings, unique_strings);
+    } else {
+        return add_string_to_array_if_unique(str, strings, unique_strings);
+    }
+}
+
+
 #define MAX_NAME_TOKENS 50
 
 
@@ -229,16 +283,22 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
     cstring_array *strings = cstring_array_new_size(len);
     token_array *token_array = token_array_new();
 
+    uint32_array *stopwords_array = uint32_array_new();
+
     char_array *combined_words_no_whitespace = char_array_new();
 
+    char_array *acronym_with_stopwords = char_array_new();
+    char_array *acronym_no_stopwords = char_array_new();
+    char_array *sub_acronym_with_stopwords = char_array_new();
+    char_array *sub_acronym_no_stopwords = char_array_new();
+
     khash_t(str_set) *unique_strings = kh_init(str_set);
-    khiter_t k;
-    int ret = 0;
+    bool keep_whitespace = false;
 
     for (size_t i = 0; i < num_expansions; i++) {
         char *expansion = cstring_array_get_string(name_expansions, i);
         log_debug("expansion = %s\n", expansion);
-        bool keep_whitespace = false;
+        token_array_clear(token_array);
         tokenize_add_tokens(token_array, expansion, strlen(expansion), keep_whitespace);
         size_t num_tokens = token_array->n;
         token_t *tokens = token_array->a;
@@ -270,80 +330,140 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
 
                 log_debug("token_str = %s\n", token_str);
 
-                double_metaphone_codes_t *dm_codes = double_metaphone(token_str);
-                if (dm_codes == NULL) {
-                    prev_token = token;
-                    continue;
-                }
-                char *dm_primary = dm_codes->primary;
-                char *dm_secondary = dm_codes->secondary;
-
-                if (!string_equals(dm_primary, "")) {
-
-                    k = kh_get(str_set, unique_strings, dm_primary);
-
-                    if (k == kh_end(unique_strings) && kh_size(unique_strings) <= MAX_NAME_TOKENS) {
-                        log_debug("adding dm_primary = %s\n", dm_primary);
-                        cstring_array_add_string(strings, dm_primary);
-                        k = kh_put(str_set, unique_strings, strdup(dm_primary), &ret);
-                        if (ret < 0) {
-                            break;
-                        }
-                    }
-
-                    if (!string_equals(dm_secondary, dm_primary)) {
-
-                        k = kh_get(str_set, unique_strings, dm_secondary);
-
-                        if (k == kh_end(unique_strings) && kh_size(unique_strings) <= MAX_NAME_TOKENS) {
-                            log_debug("adding dm_secondary = %s\n", dm_secondary);
-                            cstring_array_add_string(strings, dm_secondary);
-                            k = kh_put(str_set, unique_strings, strdup(dm_secondary), &ret);
-                            if (ret < 0) {
-                                break;
-                            }
-                        }
-                    }
-                }
-                double_metaphone_codes_destroy(dm_codes);
+                add_double_metaphone_to_array_if_unique(token_str, strings, unique_strings);
             // For non-Latin words (Arabic, Cyrllic, etc.) just add the word
             // For ideograms, we do two-character shingles, so only add the first character if the string has one token
             } else if (!ideogram || j > 0 || num_tokens == 1) {
                 char_array_cat_len(token_string_array, expansion + token.offset, token.len);
                 token_str = char_array_get_string(token_string_array);
                 log_debug("token_str = %s\n", token_str);
-                k = kh_get(str_set, unique_strings, token_str);
 
-                if (k == kh_end(unique_strings)) {
-                    cstring_array_add_string(strings, token_str);
-                    k = kh_put(str_set, unique_strings, strdup(token_str), &ret);
-                    if (ret < 0) {
-                        break;
-                    }
-                }
+                add_string_to_array_if_unique(token_str, strings, unique_strings);
             }
 
             prev_token = token;
         }
 
-        char *combined = char_array_get_string(combined_words_no_whitespace);
-        log_debug("combined = %s\n", combined);
-        k = kh_get(str_set, unique_strings, combined);
+        if (combined_words_no_whitespace->n > 0) {
+            char *combined = char_array_get_string(combined_words_no_whitespace);
+            add_string_to_array_if_unique(combined, strings, unique_strings);
+        }
 
-        if (k == kh_end(unique_strings)) {
-            cstring_array_add_string(strings, combined);
-            k = kh_put(str_set, unique_strings, strdup(combined), &ret);
-            if (ret < 0) {
-                break;
+    }
+
+    token_array_clear(token_array);
+    char *normalized = libpostal_normalize_string(name, LIBPOSTAL_NORMALIZE_DEFAULT_STRING_OPTIONS);
+    char *acronym = NULL;
+    if (normalized != NULL) {
+        keep_whitespace = false;
+        tokenize_add_tokens(token_array, normalized, strlen(normalized), keep_whitespace);
+        stopword_positions(stopwords_array, (const char *)normalized, token_array, normalize_options.num_languages, normalize_options.languages);
+        uint32_t *stopwords = stopwords_array->a;
+
+        size_t num_tokens = token_array->n;
+        token_t *tokens = token_array->a;
+        num_tokens = token_array->n;
+
+        if (num_tokens > 1) {
+            size_t num_stopwords_encountered = 0;
+            bool last_was_stopword = false;
+            bool last_was_punctuation = false;
+
+            for (size_t j = 0; j < num_tokens; j++) {
+                token_t token = tokens[j];
+                // Make sure it's a non-ideographic word token
+                if (is_word_token(token.type) && !is_ideographic(token.type)) {
+                    uint8_t *ptr = (uint8_t *)normalized;
+                    int32_t ch = 0;
+                    ssize_t ch_len = utf8proc_iterate(ptr + token.offset, token.len, &ch);
+                    if (ch_len > 0 && utf8_is_letter(utf8proc_category(ch))) {
+                        bool is_stopword = stopwords[j] == 1;
+
+                        if (!is_stopword && !last_was_punctuation) {
+                            char_array_cat_len(acronym_with_stopwords, normalized + token.offset, ch_len);
+                            char_array_cat_len(acronym_no_stopwords, normalized + token.offset, ch_len);
+
+                            if (!(last_was_stopword && j == num_tokens - 1)) {
+                                char_array_cat_len(sub_acronym_with_stopwords, normalized + token.offset, ch_len);
+                                char_array_cat_len(sub_acronym_no_stopwords, normalized + token.offset, ch_len);
+                            }
+                            last_was_stopword = false;
+                        } else {
+                            if (!last_was_stopword && is_stopword) {
+                                num_stopwords_encountered++;
+                            }
+
+                            char_array_cat_len(acronym_with_stopwords, normalized + token.offset, ch_len);
+                            if (!is_stopword) {
+                                char_array_cat_len(acronym_no_stopwords, normalized + token.offset, ch_len);
+                            }
+
+                            if ((num_stopwords_encountered % 2 == 0 || last_was_punctuation) && acronym_no_stopwords->n > 1) {
+                                acronym = char_array_get_string(sub_acronym_with_stopwords);
+                                log_debug("sub acronym stopwords = %s\n", acronym);
+
+                                char_array_clear(sub_acronym_with_stopwords);
+
+                                add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+
+                                acronym = char_array_get_string(sub_acronym_no_stopwords);
+                                log_debug("sub acronym no stopwords = %s\n", acronym);
+                                add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+                                char_array_clear(sub_acronym_no_stopwords);
+                            } else if (!((last_was_stopword || last_was_punctuation) && j == num_tokens - 1)) {
+                                char_array_cat_len(sub_acronym_with_stopwords, normalized + token.offset, ch_len);
+                            }
+
+                            last_was_stopword = is_stopword;
+                        }
+                        last_was_punctuation = false;
+                    } 
+                } else if (is_punctuation(token.type)) {
+                    log_debug("punctuation\n");
+                    last_was_punctuation = true;
+                }
             }
         }
 
-        token_array_clear(token_array);
+        free(normalized);
     }
+
+    if (acronym_no_stopwords->n > 0) {
+        acronym = char_array_get_string(acronym_with_stopwords);
+        log_debug("acronym with stopwords = %s\n", acronym);
+        add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+    }
+
+    if (acronym_with_stopwords->n > 0) {
+        acronym = char_array_get_string(acronym_no_stopwords);
+        log_debug("acronym no stopwords = %s\n", acronym);
+        add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+
+    }
+
+    if (sub_acronym_no_stopwords->n > 0) {
+        acronym = char_array_get_string(sub_acronym_with_stopwords);
+        log_debug("final sub acronym stopwords = %s\n", acronym);
+        add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+    }
+
+    if (sub_acronym_with_stopwords->n > 0) {
+        acronym = char_array_get_string(sub_acronym_no_stopwords);
+        log_debug("final sub acronym no stopwords = %s\n", acronym);
+        add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+    }
+
+
 
     char_array_destroy(token_string_array);
     token_array_destroy(token_array);
     char_array_destroy(combined_words_no_whitespace);
+    char_array_destroy(acronym_with_stopwords);
+    char_array_destroy(acronym_no_stopwords);
+    char_array_destroy(sub_acronym_with_stopwords);
+    char_array_destroy(sub_acronym_no_stopwords);
+
+    uint32_array_destroy(stopwords_array);
 
     cstring_array_destroy(name_expansions);
 
@@ -375,7 +495,7 @@ static inline void add_string_arrays_to_tree(string_tree_t *tree, size_t n, va_l
 static inline void add_hashes_from_tree(cstring_array *near_dupe_hashes, char *prefix, string_tree_t *tree) {
     string_tree_iterator_t *iter = string_tree_iterator_new(tree);
     if (iter->num_tokens > 0) {
-        log_debug("iter->num_tokens = %zu\n", iter->num_tokens);
+        log_debug("iter->num_tokens = %u\n", iter->num_tokens);
 
         for (; !string_tree_iterator_done(iter); string_tree_iterator_next(iter)) {
 
@@ -407,7 +527,7 @@ static inline void add_string_hash_permutations(cstring_array *near_dupe_hashes,
     add_string_arrays_to_tree(tree, n, args);
     va_end(args);
 
-    log_debug("string_tree_num_strings(tree)=%zu\n", string_tree_num_strings(tree));
+    log_debug("string_tree_num_strings(tree)=%u\n", string_tree_num_strings(tree));
 
     add_hashes_from_tree(near_dupe_hashes, prefix, tree);
 }
