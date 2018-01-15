@@ -7,6 +7,7 @@ static inline bool averaged_perceptron_get_feature_id(averaged_perceptron_t *sel
 }
 
 inline double_array *averaged_perceptron_predict_scores(averaged_perceptron_t *self, cstring_array *features) {
+    // Possible leak
     if (self->scores == NULL || self->scores->n == 0) self->scores = double_array_new_zeros((size_t)self->num_classes);
 
     double_array_zero(self->scores->a, self->scores->n);
