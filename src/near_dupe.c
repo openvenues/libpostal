@@ -9,6 +9,7 @@
 #include "expand.h"
 #include "features.h"
 #include "float_utils.h"
+#include "ngrams.h"
 #include "place.h"
 #include "scanner.h"
 #include "string_utils.h"
@@ -229,8 +230,24 @@ static inline bool add_string_to_array_if_unique(char *str, cstring_array *strin
     return false;
 }
 
+static inline bool add_quadgrams_or_string_to_array_if_unique(char *str, cstring_array *strings, khash_t(str_set) *unique_strings, cstring_array *ngrams) {
+    if (str == NULL || strings == NULL || unique_strings == NULL || ngrams == NULL) return false;
+    cstring_array_clear(ngrams);
+    bool prefix = false;
+    bool suffix = false;
+    if (add_ngrams(ngrams, 4, str, strlen(str), prefix, suffix)) {
+        size_t i;
+        char *gram;
+        cstring_array_foreach(ngrams, i, gram, {
+            if (!add_string_to_array_if_unique(gram, strings, unique_strings)) return false;
+        });
+    } else {
+        return add_string_to_array_if_unique(str, strings, unique_strings);
+    }
+    return true;
+}
 
-static inline bool add_double_metaphone_to_array_if_unique(char *str, cstring_array *strings, khash_t(str_set) *unique_strings) {
+static inline bool add_double_metaphone_to_array_if_unique(char *str, cstring_array *strings, khash_t(str_set) *unique_strings, cstring_array *ngrams) {
     if (str == NULL) return false;
     double_metaphone_codes_t *dm_codes = double_metaphone(str);
     if (dm_codes == NULL) {
@@ -240,10 +257,10 @@ static inline bool add_double_metaphone_to_array_if_unique(char *str, cstring_ar
     char *dm_secondary = dm_codes->secondary;
 
     if (!string_equals(dm_primary, "")) {
-        add_string_to_array_if_unique(dm_primary, strings, unique_strings);
+        add_quadgrams_or_string_to_array_if_unique(dm_primary, strings, unique_strings, ngrams);
 
         if (!string_equals(dm_secondary, dm_primary)) {
-            add_string_to_array_if_unique(dm_secondary, strings, unique_strings);
+            add_quadgrams_or_string_to_array_if_unique(dm_secondary, strings, unique_strings, ngrams);
         }
     }
     double_metaphone_codes_destroy(dm_codes);
@@ -251,16 +268,16 @@ static inline bool add_double_metaphone_to_array_if_unique(char *str, cstring_ar
     return true;
 }
 
-static inline bool add_double_metaphone_or_token_if_unique(char *str, cstring_array *strings, khash_t(str_set) *unique_strings) {
+static inline bool add_double_metaphone_or_token_if_unique(char *str, cstring_array *strings, khash_t(str_set) *unique_strings, cstring_array *ngrams) {
     if (str == NULL) return false;
     size_t len = strlen(str);
     string_script_t token_script = get_string_script(str, len);
     bool is_latin = token_script.len == len && token_script.script == SCRIPT_LATIN;
 
     if (is_latin) {
-        return add_double_metaphone_to_array_if_unique(str, strings, unique_strings);
+        return add_double_metaphone_to_array_if_unique(str, strings, unique_strings, ngrams);
     } else {
-        return add_string_to_array_if_unique(str, strings, unique_strings);
+        return add_quadgrams_or_string_to_array_if_unique(str, strings, unique_strings, ngrams);
     }
 }
 
@@ -291,6 +308,8 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
     char_array *acronym_no_stopwords = char_array_new();
     char_array *sub_acronym_with_stopwords = char_array_new();
     char_array *sub_acronym_no_stopwords = char_array_new();
+
+    cstring_array *ngrams = cstring_array_new();
 
     khash_t(str_set) *unique_strings = kh_init(str_set);
     bool keep_whitespace = false;
@@ -330,7 +349,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
 
                 log_debug("token_str = %s\n", token_str);
 
-                add_double_metaphone_to_array_if_unique(token_str, strings, unique_strings);
+                add_double_metaphone_to_array_if_unique(token_str, strings, unique_strings, ngrams);
             // For non-Latin words (Arabic, Cyrllic, etc.) just add the word
             // For ideograms, we do two-character shingles, so only add the first character if the string has one token
             } else if (!ideogram || j > 0 || num_tokens == 1) {
@@ -338,15 +357,19 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
                 token_str = char_array_get_string(token_string_array);
                 log_debug("token_str = %s\n", token_str);
 
-                add_string_to_array_if_unique(token_str, strings, unique_strings);
-            }
+                if (!ideogram) {
+                    add_quadgrams_or_string_to_array_if_unique(token_str, strings, unique_strings, ngrams);
+                } else {
+                    add_string_to_array_if_unique(token_str, strings, unique_strings);
+                }
+            } 
 
             prev_token = token;
         }
 
         if (combined_words_no_whitespace->n > 0) {
             char *combined = char_array_get_string(combined_words_no_whitespace);
-            add_string_to_array_if_unique(combined, strings, unique_strings);
+            add_double_metaphone_or_token_if_unique(combined, strings, unique_strings, ngrams);
         }
 
     }
@@ -405,11 +428,11 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
 
                                     char_array_clear(sub_acronym_with_stopwords);
 
-                                    add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+                                    add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings, ngrams);
 
                                     acronym = char_array_get_string(sub_acronym_no_stopwords);
                                     log_debug("sub acronym no stopwords = %s\n", acronym);
-                                    add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+                                    add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings, ngrams);
                                     char_array_clear(sub_acronym_no_stopwords);
                                 } else if (!(last_was_stopword || last_was_punctuation) && j == num_tokens - 1) {
                                     char_array_cat_len(sub_acronym_with_stopwords, normalized + token.offset, ch_len);
@@ -441,25 +464,25 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
     if (acronym_no_stopwords->n > 0) {
         acronym = char_array_get_string(acronym_with_stopwords);
         log_debug("acronym with stopwords = %s\n", acronym);
-        add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+        add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings, ngrams);
     }
 
     if (acronym_with_stopwords->n > 0) {
         acronym = char_array_get_string(acronym_no_stopwords);
         log_debug("acronym no stopwords = %s\n", acronym);
-        add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+        add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings, ngrams);
     }
 
     if (sub_acronym_no_stopwords->n > 0) {
         acronym = char_array_get_string(sub_acronym_with_stopwords);
         log_debug("final sub acronym stopwords = %s\n", acronym);
-        add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+        add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings, ngrams);
     }
 
     if (sub_acronym_with_stopwords->n > 0) {
         acronym = char_array_get_string(sub_acronym_no_stopwords);
         log_debug("final sub acronym no stopwords = %s\n", acronym);
-        add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings);
+        add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings, ngrams);
     }
 
 
@@ -471,6 +494,8 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
     char_array_destroy(acronym_no_stopwords);
     char_array_destroy(sub_acronym_with_stopwords);
     char_array_destroy(sub_acronym_no_stopwords);
+
+    cstring_array_destroy(ngrams);
 
     uint32_array_destroy(stopwords_array);
 
