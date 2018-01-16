@@ -721,6 +721,10 @@ ssize_t string_next_hyphen_index(char *str, size_t len) {
     return -1;
 }
 
+inline bool string_contains(char *str, char *sub) {
+    return str != NULL && sub != NULL && strstr(str, sub) != NULL;
+}
+
 inline bool string_contains_hyphen_len(char *str, size_t len) {
     return string_next_hyphen_index(str, len) >= 0;
 }

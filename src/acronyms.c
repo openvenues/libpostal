@@ -1,4 +1,62 @@
 #include "acronyms.h"
+#include "token_types.h"
+
+
+bool existing_acronym_phrase_positions(uint32_array *existing_acronyms_array, const char *str, token_array *token_array, size_t num_languages, char **languages) {
+    if (existing_acronyms_array == NULL || token_array == NULL) return false;
+    size_t num_tokens = token_array->n;
+    if (existing_acronyms_array->n != num_tokens) {
+        uint32_array_resize_fixed(existing_acronyms_array, num_tokens);
+    }
+
+    uint32_array_zero(existing_acronyms_array->a, existing_acronyms_array->n);
+    uint32_t *existing_acronyms = existing_acronyms_array->a;
+
+    token_t *tokens = token_array->a;
+    for (size_t i = 0; i < num_tokens; i++) {
+        token_t token = tokens[i];
+        if (token.type == ACRONYM) {
+            existing_acronyms[i] = 1;
+        }
+    }
+
+    for (size_t l = 0; l < num_languages; l++) {
+        char *lang = languages[l];
+        phrase_array *lang_phrases = search_address_dictionaries_tokens((char *)str, token_array, lang);
+
+        if (lang_phrases != NULL) {
+            size_t num_lang_phrases = lang_phrases->n;
+            for (size_t p = 0; p < num_lang_phrases; p++) {
+                phrase_t phrase = lang_phrases->a[p];
+
+                address_expansion_value_t *value = address_dictionary_get_expansions(phrase.data);
+                if (value == NULL) continue;
+
+                address_expansion_array *expansions_array = value->expansions;
+                if (expansions_array == NULL) continue;
+
+                size_t num_expansions = expansions_array->n;
+                address_expansion_t *expansions = expansions_array->a;
+
+                for (size_t i = 0; i < num_expansions; i++) {
+                    address_expansion_t expansion = expansions[i];
+                    if (expansion.canonical_index != NULL_CANONICAL_INDEX) {
+                        char *canonical = address_dictionary_get_canonical(expansion.canonical_index);
+                        if (string_contains(canonical, " ")) {
+                            for (size_t j = phrase.start; j < phrase.start + phrase.len; j++) {
+                                existing_acronyms[j] = 1;
+                            }
+                        }
+                    }
+                }
+
+            }
+            phrase_array_destroy(lang_phrases);
+        }
+    }
+
+    return true;
+}
 
 bool stopword_positions(uint32_array *stopwords_array, const char *str, token_array *tokens, size_t num_languages, char **languages) {
     if (stopwords_array == NULL) return false;
