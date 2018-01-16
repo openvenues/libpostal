@@ -623,6 +623,8 @@ static inline uint32_t gazetteer_possible_root_components(uint16_t dictionary_id
     }
 }
 
+static const uint16_t NUMERIC_ADDRESS_COMPONENTS = (LIBPOSTAL_ADDRESS_HOUSE_NUMBER | LIBPOSTAL_ADDRESS_UNIT | LIBPOSTAL_ADDRESS_LEVEL | LIBPOSTAL_ADDRESS_PO_BOX | LIBPOSTAL_ADDRESS_POSTAL_CODE | LIBPOSTAL_ADDRESS_STAIRCASE | LIBPOSTAL_ADDRESS_ENTRANCE | LIBPOSTAL_ADDRESS_STREET);
+
 typedef enum {
     GAZETTEER_MATCH_IGNORABLE,
     GAZETTEER_MATCH_EDGE_IGNORABLE,
@@ -831,6 +833,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
         size_t num_phrases = phrases->n;
 
         bool have_non_phrase_tokens = false;
+        bool have_non_phrase_word_tokens = false;
         bool have_canonical_phrases = false;
         bool have_ambiguous = false;
         bool have_possible_root = false;
@@ -853,6 +856,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                         if (!is_punctuation(inter_token.type) && !is_whitespace(inter_token.type)) {
                             log_debug("have_non_phrase_tokens\n");
                             have_non_phrase_tokens = true;
+                            have_non_phrase_word_tokens = have_non_phrase_word_tokens || is_word_token(inter_token.type);
                             break;
                         }
                     }
@@ -863,6 +867,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                         inter_token = tokens[j];
                         if (!is_punctuation(inter_token.type) && !is_whitespace(inter_token.type)) {
                             have_non_phrase_tokens = true;
+                            have_non_phrase_word_tokens = have_non_phrase_word_tokens || is_word_token(inter_token.type);
                             break;
                         }
                     }
@@ -873,6 +878,19 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                 bool phrase_is_canonical = address_phrase_has_canonical_interpretation(phrase);
 
                 have_non_phrase_tokens = have_non_phrase_tokens || (!phrase_is_strictly_ignorable && !phrase_is_ambiguous);
+                log_debug("have_non_phrase_word_tokens = %d, phrase_is_strictly_ignorable = %d, phrase_is_ambiguous = %d\n", have_non_phrase_word_tokens, phrase_is_strictly_ignorable, phrase_is_ambiguous);
+                if (!have_non_phrase_word_tokens && !phrase_is_strictly_ignorable && !phrase_is_ambiguous) {
+                    for (size_t j = phrase.start; j < phrase.start + phrase.len; j++) {
+                        token_t pt = tokens[j];
+                        if (is_word_token(pt.type)) {
+                            log_debug("have_non_phrase_word_tokens\n");
+                            have_non_phrase_word_tokens = true;
+                            break;
+                        }
+                    }
+                }
+
+
                 have_strictly_ignorable = have_strictly_ignorable || phrase_is_strictly_ignorable;
                 have_strictly_ignorable_abbreviation = have_strictly_ignorable_abbreviation || (phrase_is_strictly_ignorable && !phrase_is_canonical);
                 if (have_strictly_ignorable_abbreviation) {
@@ -883,10 +901,6 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
 
                 have_canonical_phrases = have_canonical_phrases || (phrase_is_canonical && !phrase_is_ambiguous);
                 have_ambiguous = have_ambiguous || phrase_is_ambiguous;
-
-                if (have_non_phrase_tokens) {
-                    break;
-                }
 
                 prev_phrase_end = phrase.start + phrase.len;
             }
@@ -961,6 +975,8 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
             address_expansion_value_t *value = address_dictionary_get_expansions(expansion_index);
 
             bool expansion_valid_components = (value->components & options.address_components) || address_phrase_is_valid_for_components(phrase, options.address_components);
+
+            bool is_numeric_component = (value->components & options.address_components & NUMERIC_ADDRESS_COMPONENTS);
 
             if (expansion_valid_components) {
                 key->n = namespace_len;
@@ -1136,11 +1152,9 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                                 log_debug("is_ignorable && !is_canonical && !current_phrase_have_ambiguous\n");
                                 current_phrase_ignorable = have_non_phrase_tokens || (have_possible_root && !current_phrase_have_possible_root) || string_tree_num_tokens(tree) > 0;
                                 log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
-                            } else if (current_phrase_have_ambiguous && (have_non_phrase_tokens || have_canonical_phrases || have_possible_root)) {
-                                log_debug("have_non_phrase_tokens = %d, have_canonical_phrases = %d\n", have_non_phrase_tokens, have_canonical_phrases);
-                                current_phrase_ignorable = (is_ignorable && !(have_possible_root && !current_phrase_have_possible_root)) || (current_phrase_have_ambiguous && have_non_phrase_tokens && current_phrase_have_ignorable && current_phrase_have_unambiguous);
-
-                                log_debug("current_phrase_have_ambiguous && have_non_phrase_tokens\n");
+                            } else if (current_phrase_have_ambiguous && (have_non_phrase_word_tokens || is_numeric_component || have_canonical_phrases || have_possible_root)) {
+                                log_debug("current_phrase_have_ambiguous && have_non_phrase_tokens = %d, have_canonical_phrases = %d, have_possible_root = %d, have_non_phrase_word_tokens = %d, is_numeric_component = %d, have_non_phrase_tokens = %d\n", have_non_phrase_tokens, have_canonical_phrases, have_possible_root, have_non_phrase_word_tokens, is_numeric_component, have_non_phrase_tokens);
+                                current_phrase_ignorable = (is_ignorable && !(have_possible_root && !current_phrase_have_possible_root)) || (current_phrase_have_ambiguous && (have_non_phrase_word_tokens || (is_numeric_component && have_non_phrase_tokens)) && current_phrase_have_ignorable && current_phrase_have_unambiguous);
                                 log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
                             } else if (!is_valid_for_components && !is_ambiguous) {
                                 log_debug("!is_valid_for_components\n");
