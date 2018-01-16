@@ -9,6 +9,7 @@
 #include "expand.h"
 #include "features.h"
 #include "float_utils.h"
+#include "normalize.h"
 #include "ngrams.h"
 #include "place.h"
 #include "scanner.h"
@@ -183,7 +184,6 @@ static inline cstring_array *expanded_component_root_with_fallback(char *input, 
     }
 }
 
-
 static cstring_array *geohash_and_neighbors(double latitude, double longitude, size_t geohash_precision) {
     if (geohash_precision == 0) return NULL;
 
@@ -301,6 +301,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
     token_array *token_array = token_array_new();
 
     uint32_array *stopwords_array = uint32_array_new();
+    uint32_array *existing_acronyms_array = uint32_array_new();
 
     char_array *combined_words_no_whitespace = char_array_new();
 
@@ -332,6 +333,9 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
             string_script_t token_script = get_string_script(expansion + token.offset, token.len);
             bool is_latin = token_script.len == token.len && token_script.script == SCRIPT_LATIN;
 
+            bool is_common_script = token_script.len == token.len && token_script.script == SCRIPT_COMMON;
+            bool is_numeric = is_numeric_token(token.type);
+
             char_array_clear(token_string_array);
             // For ideograms, since the "words" are characters, we use shingles of two characters
             if (ideogram && j > 0 && is_ideographic(prev_token.type)) {
@@ -342,7 +346,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
             char_array_cat_len(combined_words_no_whitespace, expansion + token.offset, token.len);
 
             // For Latin script, add double metaphone of the words
-            if (is_latin && !is_numeric_token(token.type) && !ideogram && !is_punctuation(token.type)) {
+            if (is_latin && !(is_numeric && is_common_script) && !ideogram && !is_punctuation(token.type)) {
                 char_array_clear(token_string_array);
                 char_array_cat_len(token_string_array, expansion + token.offset, token.len);
                 token_str = char_array_get_string(token_string_array);
@@ -357,7 +361,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
                 token_str = char_array_get_string(token_string_array);
                 log_debug("token_str = %s\n", token_str);
 
-                if (!ideogram) {
+                if (!ideogram && !(is_numeric || is_common_script)) {
                     add_quadgrams_or_string_to_array_if_unique(token_str, strings, unique_strings, ngrams);
                 } else {
                     add_string_to_array_if_unique(token_str, strings, unique_strings);
@@ -381,7 +385,10 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
         keep_whitespace = false;
         tokenize_add_tokens(token_array, normalized, strlen(normalized), keep_whitespace);
         stopword_positions(stopwords_array, (const char *)normalized, token_array, normalize_options.num_languages, normalize_options.languages);
+        existing_acronym_phrase_positions(existing_acronyms_array, (const char *)normalized, token_array, normalize_options.num_languages, normalize_options.languages);
+
         uint32_t *stopwords = stopwords_array->a;
+        uint32_t *existing_acronyms = existing_acronyms_array->a;
 
         size_t num_tokens = token_array->n;
         token_t *tokens = token_array->a;
@@ -392,15 +399,39 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
             bool last_was_stopword = false;
             bool last_was_punctuation = false;
 
+            bool any_existing_acronyms = false;
+            char_array *temp_norm_token = NULL;
+            for (size_t j = 0; j < num_tokens; j++) {
+                if (existing_acronyms[j] > 0) {
+                    any_existing_acronyms = true;
+                    temp_norm_token = char_array_new();
+                    break;
+                }
+            }
+
             for (size_t j = 0; j < num_tokens; j++) {
                 token_t token = tokens[j];
                 // Make sure it's a non-ideographic word token
-                if (is_word_token(token.type) && !is_ideographic(token.type)) {
+                if (!is_ideographic(token.type)) {
                     uint8_t *ptr = (uint8_t *)normalized;
                     int32_t ch = 0;
                     ssize_t ch_len = utf8proc_iterate(ptr + token.offset, token.len, &ch);
                     if (ch_len > 0 && utf8_is_letter(utf8proc_category(ch))) {
                         bool is_stopword = stopwords[j] == 1;
+
+                        if (existing_acronyms[j] > 0 && !is_stopword) {
+                            uint64_t token_options = NORMALIZE_TOKEN_DELETE_FINAL_PERIOD | NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS;
+                            add_normalized_token(temp_norm_token, normalized, token, token_options);
+                            char *norm_acronym_token = char_array_get_string(temp_norm_token);
+
+                            char_array_cat(acronym_with_stopwords, norm_acronym_token);
+                            char_array_cat(acronym_no_stopwords, norm_acronym_token);
+                            char_array_cat(sub_acronym_with_stopwords, norm_acronym_token);
+                            char_array_cat(sub_acronym_no_stopwords, norm_acronym_token);
+                            last_was_stopword = false;
+                            last_was_punctuation = false;
+                            continue;
+                        }
 
                         if (!is_stopword && !last_was_punctuation) {
                             char_array_cat_len(acronym_with_stopwords, normalized + token.offset, ch_len);
@@ -456,6 +487,10 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
                     last_was_punctuation = true;
                 }
             }
+
+            if (temp_norm_token != NULL) {
+                char_array_destroy(temp_norm_token);
+            }
         }
 
         free(normalized);
@@ -486,7 +521,6 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
     }
 
 
-
     char_array_destroy(token_string_array);
     token_array_destroy(token_array);
     char_array_destroy(combined_words_no_whitespace);
@@ -498,6 +532,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
     cstring_array_destroy(ngrams);
 
     uint32_array_destroy(stopwords_array);
+    uint32_array_destroy(existing_acronyms_array);
 
     cstring_array_destroy(name_expansions);
 
