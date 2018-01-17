@@ -378,7 +378,7 @@ Libpostal is designed to be used by higher-level languages.  If you don't see yo
 
 **Unofficial language bindings**
 
-- Java: [javacpp-presets-libpostal](https://github.com/bytedeco/javacpp-presets/tree/1.4/libpostal)
+- Java: [javacpp-presets-libpostal](https://github.com/bytedeco/javacpp-presets/tree/master/libpostal)
 - LuaJIT: [lua-resty-postal](https://github.com/bungle/lua-resty-postal)
 - Perl: [Geo::libpostal](https://metacpan.org/pod/Geo::libpostal)
 - Elixir: [Expostal](https://github.com/SweetIQ/expostal)
