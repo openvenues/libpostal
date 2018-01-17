@@ -411,8 +411,9 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
 
             for (size_t j = 0; j < num_tokens; j++) {
                 token_t token = tokens[j];
+                bool is_punct = is_punctuation(token.type);
                 // Make sure it's a non-ideographic word token
-                if (!is_ideographic(token.type)) {
+                if (!is_ideographic(token.type) && !is_punct) {
                     uint8_t *ptr = (uint8_t *)normalized;
                     int32_t ch = 0;
                     ssize_t ch_len = utf8proc_iterate(ptr + token.offset, token.len, &ch);
@@ -457,14 +458,17 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
                                     acronym = char_array_get_string(sub_acronym_with_stopwords);
                                     log_debug("sub acronym stopwords = %s\n", acronym);
 
-                                    char_array_clear(sub_acronym_with_stopwords);
-
                                     add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings, ngrams);
+                                    char_array_clear(sub_acronym_with_stopwords);
+                                    char_array_cat_len(sub_acronym_with_stopwords, normalized + token.offset, ch_len);
 
                                     acronym = char_array_get_string(sub_acronym_no_stopwords);
                                     log_debug("sub acronym no stopwords = %s\n", acronym);
                                     add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings, ngrams);
                                     char_array_clear(sub_acronym_no_stopwords);
+                                    if (!is_stopword) {
+                                        char_array_cat_len(sub_acronym_no_stopwords, normalized + token.offset, ch_len);
+                                    }
                                 } else if (!(last_was_stopword || last_was_punctuation) && j == num_tokens - 1) {
                                     char_array_cat_len(sub_acronym_with_stopwords, normalized + token.offset, ch_len);
                                     if (!is_stopword) {
@@ -482,7 +486,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
                         }
                         last_was_punctuation = false;
                     } 
-                } else if (is_punctuation(token.type)) {
+                } else if (is_punct) {
                     log_debug("punctuation\n");
                     last_was_punctuation = true;
                 }
