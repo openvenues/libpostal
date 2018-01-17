@@ -117,7 +117,7 @@ download_file() {
 
     if [ $(curl -sI $url -z "$(cat $updated_path)" --remote-time -w %{http_code} -o /dev/null | grep "^200$") ]; then
         echo "New libpostal $name available"
-        content_length=$(curl -I $url 2> /dev/null | awk '/^Content-Length:/ { print $2 }' | tr -d '[[:space:]]')
+        content_length=$(curl -I $url 2> /dev/null | awk 'tolower($0) ~ /^content-length:/ { print $2 }' | tr -d '[[:space:]]')
 
         if [ $content_length -ge $LARGE_FILE_SIZE ]; then
             download_multipart $url $local_path $content_length
