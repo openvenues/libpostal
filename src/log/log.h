@@ -18,6 +18,7 @@
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
 /* safe readable version of errno */
+// TODO(horgh): strerror() is not thread safe
 #define clean_errno() (errno == 0 ? "None" : strerror(errno))
 
 #if defined (LOG_NO_COLORS) || defined (_WIN32)
