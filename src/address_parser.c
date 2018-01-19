@@ -294,11 +294,6 @@ bool address_parser_load(char *dir) {
 
     fclose(postal_codes_file);
 
-    parser->context = address_parser_context_new();
-    if (parser->context == NULL) {
-        goto exit_address_parser_created;
-    }
-
     char_array_destroy(path);
     return true;
 
@@ -315,10 +310,6 @@ void address_parser_destroy(address_parser_t *self) {
         averaged_perceptron_destroy(self->model.ap);
     } else if (self->model_type == ADDRESS_PARSER_TYPE_CRF && self->model.crf != NULL) {
         crf_destroy(self->model.crf);
-    }
-
-    if (self->context != NULL) {
-        address_parser_context_destroy(self->context);
     }
 
     if (self->vocab != NULL) {
@@ -1662,12 +1653,16 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
     if (address == NULL) return NULL;
 
     address_parser_t *parser = get_address_parser();
-    if (parser == NULL || parser->context == NULL) {
+    if (parser == NULL) {
         log_error("parser is not setup, call libpostal_setup_address_parser()\n");
         return NULL;
     }
 
-    address_parser_context_t *context = parser->context;
+    address_parser_context_t *const context = address_parser_context_new();
+    if (!context) {
+        log_error("error creating address parser context\n");
+        return NULL;
+    }
 
     char *normalized = address_parser_normalize_string(address);
     bool is_normalized = normalized != NULL;
@@ -1774,6 +1769,7 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
             if (is_normalized) {
                 free(normalized);
             }
+            address_parser_context_destroy(context);
             return response;
         }
     }
@@ -1835,6 +1831,7 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
         free(normalized);
     }
 
+    address_parser_context_destroy(context);
     return response;
 }
 
