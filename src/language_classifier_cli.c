@@ -4,6 +4,7 @@
 
 #include "address_dictionary.h"
 #include "language_classifier.h"
+#include "transliterate.h"
 
 
 int main(int argc, char **argv) {
@@ -22,7 +23,7 @@ int main(int argc, char **argv) {
         address = strdup(argv[1]);
     }
 
-    if (!address_dictionary_module_setup(NULL) || !language_classifier_module_setup(dir)) {
+    if (!address_dictionary_module_setup(NULL) || !transliteration_module_setup(NULL) || !language_classifier_module_setup(dir)) {
         log_error("Could not load language classifiers\n");
         exit(EXIT_FAILURE);
     }
