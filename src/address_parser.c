@@ -202,7 +202,7 @@ bool address_parser_load(char *dir) {
                 parser->model.crf = crf_model;
             } else {
                 char_array_destroy(path);
-                log_error("Averaged perceptron model could not be loaded\n");
+                log_error("CRF model could not be loaded\n");
                 return false;
             }
         } else {
