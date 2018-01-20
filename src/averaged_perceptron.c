@@ -10,6 +10,8 @@ inline double_array *averaged_perceptron_predict_scores(averaged_perceptron_t *s
     // Possible leak
     if (self->scores == NULL || self->scores->n == 0) self->scores = double_array_new_zeros((size_t)self->num_classes);
 
+    // TODO(horgh): Mutating scores makes this not thread safe. We could
+    // allocate it each call to resolve this.
     double_array_zero(self->scores->a, self->scores->n);
 
     double *scores = self->scores->a;
