@@ -1674,6 +1674,8 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
 
     tokenized_string_t *tokenized_str = tokenized_string_new_from_str_size(normalized, strlen(normalized), tokens->n);
 
+    // It seems like we might be needing to clear context->separators somewhere
+    // (in the case where we re-use the context).
     for (size_t i = 0; i < tokens->n; i++) {
         token_t token = tokens->a[i];
         if (ADDRESS_PARSER_IS_SEPARATOR(token.type)) {
@@ -1704,6 +1706,8 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
 
     language = NULL;
     country = NULL;
+    // We could probably do less work in this function if we are allocating a
+    // new context each call.
     address_parser_context_fill(context, parser, tokenized_str, language, country);
 
     libpostal_address_parser_response_t *response = NULL;
