@@ -490,7 +490,9 @@ static inline void remez9_0_log2_sse(double *values, size_t num)
     }                                                                          \
                                                                                \
     static inline void name##_exp(type *array, size_t n) {                     \
-        remez9_0_log2_sse(array, n);                                           \
+        for (size_t i = 0; i < n; i++) {                                       \
+            array[i] = exp(array[i]);                                          \
+        }                                                                      \
     }                                                                          \
                                                                                \
     static inline type name##_sum_log(type *array, size_t n) {                 \
