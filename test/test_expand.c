@@ -31,8 +31,6 @@ static greatest_test_res test_expansion_contains_phrase_option(char *input, char
 
     }
 
-    libpostal_expansion_array_destroy(expansions, num_expansions);
-
     if (!contains_expansion) {
         printf("Expansions should contain %s, got {", output);
         for (size_t i = 0; i < num_expansions; i++) {
@@ -42,6 +40,8 @@ static greatest_test_res test_expansion_contains_phrase_option(char *input, char
         printf("}\n");
         FAIL();
     }
+
+    libpostal_expansion_array_destroy(expansions, num_expansions);
 
     PASS();
 }
@@ -143,7 +143,8 @@ TEST test_expansion_for_non_address_input(void) {
     size_t num_expansions;
 
     // This is tested as the input caused a segfault in expand_alternative_phrase_option
-    libpostal_expand_address("ida-b@wells.co", libpostal_get_default_options(), &num_expansions);
+    char **expansions = libpostal_expand_address("ida-b@wells.co", libpostal_get_default_options(), &num_expansions);
+    libpostal_expansion_array_destroy(expansions, num_expansions);
     PASS();
 }
 
