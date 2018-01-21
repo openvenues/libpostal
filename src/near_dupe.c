@@ -518,7 +518,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
         add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings, ngrams);
     }
 
-    if (sub_acronym_with_stopwords->n > 0) {
+    if (sub_acronym_no_stopwords->n > 0) {
         acronym = char_array_get_string(sub_acronym_no_stopwords);
         log_debug("final sub acronym no stopwords = %s\n", acronym);
         add_double_metaphone_or_token_if_unique(acronym, strings, unique_strings, ngrams);
