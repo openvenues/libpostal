@@ -768,7 +768,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
             transliteration_state_t prev_state = start_state;
             transliteration_state_t prev2_state = start_state;
 
-            transliteration_state_t repeat_state_end;
+            transliteration_state_t repeat_state_end = start_state;
 
             bool in_repeat = false;
 
