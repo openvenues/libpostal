@@ -941,10 +941,6 @@ crf_t *crf_averaged_perceptron_trainer_finalize(crf_averaged_perceptron_trainer_
 
     crf->state_trans_features = state_trans_features;
 
-    crf->viterbi = uint32_array_new();
-
-    crf->context = crf_context_new(CRF_CONTEXT_VITERBI | CRF_CONTEXT_MARGINALS, num_classes, CRF_CONTEXT_DEFAULT_NUM_ITEMS);
-
     crf_averaged_perceptron_trainer_destroy(self);
 
     return crf;

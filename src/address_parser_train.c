@@ -328,13 +328,6 @@ address_parser_t *address_parser_init(char *filename) {
         return NULL;
     }
 
-    address_parser_context_t *context = address_parser_context_new();
-    if (context == NULL) {
-        log_error("Error allocating context\n");
-        return NULL;
-    }
-    parser->context = context;
-
     khash_t(str_uint32) *vocab = kh_init(str_uint32);
     if (vocab == NULL) {
         log_error("Could not allocate vocab\n");
@@ -1052,7 +1045,11 @@ bool address_parser_train_epoch(address_parser_t *self, void *trainer, char *fil
         return false;
     }
 
-    address_parser_context_t *context = self->context;
+    address_parser_context_t *const context = address_parser_context_new();
+    if (!context) {
+        log_error("error creating address parser context\n");
+        return false;
+    }
 
     size_t examples = 0;
     uint64_t errors = address_parser_train_num_errors(self, trainer);
@@ -1097,6 +1094,7 @@ bool address_parser_train_epoch(address_parser_t *self, void *trainer, char *fil
 exit_epoch_training_started:
     address_parser_data_set_destroy(data_set);
 
+    address_parser_context_destroy(context);
     return true;
 }
 
