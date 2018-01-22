@@ -202,12 +202,12 @@
         return result;                                                                                  \
     }                                                                                                   \
                                                                                                         \
-    static inline unsigned_type name##_l2_norm(type *array, size_t n) {                                 \
+    static inline double name##_l2_norm(type *array, size_t n) {                                        \
         unsigned_type result = 0;                                                                       \
         for (size_t i = 0; i < n; i++) {                                                                \
             result += array[i] * array[i];                                                              \
         }                                                                                               \
-        return result;                                                                                  \
+        return sqrt((double)result);                                                                    \
     }                                                                                                   \
                                                                                                         \
     static inline double name##_mean(type *array, size_t n) {                                           \
