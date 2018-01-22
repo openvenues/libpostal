@@ -1,4 +1,5 @@
 #include "soft_tfidf.h"
+#include <math.h>
 #include "address_dictionary.h"
 #include "float_utils.h"
 #include "string_similarity.h"
@@ -221,6 +222,8 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
 
         size_t t1_len = t1u->n;
 
+        log_debug("t1 = %s\n", tokens1[i]);
+
         double max_sim = 0.0;
         size_t min_dist = t1_len;
         size_t argmax_sim = 0;
@@ -244,8 +247,16 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
 
         double t2_score;
 
+        log_debug("p1.len = %zu, i = %zu, p1.start = %zu\n", p1.len, i, p1.start);
+        if (p1.len > 0 && i > p1.start) {
+            log_debug("skipping token\n");
+            continue;
+        }
+
         for (size_t j = 0; j < len2; j++) {
             t2u = t2_tokens_unicode[j];
+
+            log_debug("t2 = %s\n", tokens2[j]);
             int64_t pm2 = phrase_memberships2 != NULL ? phrase_memberships2[j] : NULL_PHRASE_MEMBERSHIP;
             phrase_t p2 = pm2 >= 0 ? phrases2->a[pm2] : NULL_PHRASE;
 
@@ -317,36 +328,50 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
 
         if (!have_acronym_match && !have_phrase_match) {
             if (use_jaro_winkler && (max_sim > jaro_winkler_min || double_equals(max_sim, jaro_winkler_min))) {
-                log_debug("have max sim = %f\n", max_sim);
+                log_debug("jaro-winkler, max_sim = %f\n", max_sim);
                 t2_score = token_scores2[argmax_sim];
                 total_sim += max_sim * t1_score * t2_score;
                 matched_tokens++;
             } else if (use_damerau_levenshtein && min_dist <= damerau_levenshtein_max) {
-                log_debug("levenshtein\n");
+                log_debug("levenshtein, argmin_dist_sim = %f\n", argmin_dist_sim);
                 t2_score = token_scores2[argmin_dist];
                 total_sim += argmin_dist_sim * t1_score * t2_score;
                 matched_tokens++;
             } else if (possible_affine_gap_abbreviations && have_abbreviation) {
-                log_debug("have abbreviation\n");
+                log_debug("have abbreviation, last_abbreviation_sim = %f\n", last_abbreviation_sim);
                 t2_score = token_scores2[last_abbreviation];
                 total_sim += last_abbreviation_sim * t1_score * t2_score;
                 matched_tokens++;
             }
         } else if (have_phrase_match) {
+            double p2_score = 0.0;
             for (size_t p = argmax_phrase.start; p < argmax_phrase.start + argmax_phrase.len; p++) {
                 t2_score = token_scores2[p];
-                total_sim += max_sim * t1_score * t2_score;
+                p2_score += t2_score * t2_score;
             }
-            matched_tokens++;
+
+            double p1_score = 0.0;
+
+            for (size_t p = p1.start; p < p1.start + p1.len; p++) {
+                double t1_score_p = token_scores1[p];
+                p1_score += t1_score_p * t1_score_p;
+            }
+
+            total_sim += sqrt(p1_score) * sqrt(p2_score);
+
+            matched_tokens += p1.len;
             log_debug("have_phrase_match\n");
         } else {
             for (size_t p = acronym_phrase.start; p < acronym_phrase.start + acronym_phrase.len; p++) {
                 t2_score = token_scores2[p];
-                total_sim += max_sim * t1_score * t2_score;
+                total_sim += t1_score * t2_score;
             }
+
             log_debug("have_acronym_match\n");
             matched_tokens++;
         }
+
+        log_debug("total sim = %f\n", total_sim);
     }
 
     log_debug("matched_tokens = %zu\n", matched_tokens);
@@ -386,7 +411,10 @@ return_soft_tfidf_score:
         int64_array_destroy(acronym_memberships_array);
     }
 
-    return total_sim;
+    double norm = double_array_l2_norm(token_scores1, num_tokens1) * double_array_l2_norm(token_scores2, num_tokens2);
+    log_debug("total_sim = %f, norm = %f\n", total_sim, norm);
+
+    return total_sim / norm;
 }
 
 
