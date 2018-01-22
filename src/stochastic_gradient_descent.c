@@ -295,7 +295,7 @@ double stochastic_gradient_descent_reg_cost(sgd_trainer_t *self, uint32_array *u
         double *theta_i = double_matrix_get_row(theta, row);
 
         if (reg_type == REGULARIZATION_L2 && row >= i_start) {
-            cost += double_array_l2_norm(theta_i, n);
+            cost += double_array_sum_sq(theta_i, n);
         } else if (reg_type == REGULARIZATION_L1 && row >= i_start) {
             cost += double_array_l1_norm(theta_i, n);
         }

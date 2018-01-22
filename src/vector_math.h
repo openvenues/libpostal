@@ -210,6 +210,14 @@
         return sqrt((double)result);                                                                    \
     }                                                                                                   \
                                                                                                         \
+    static inline unsigned_type name##_sum_sq(type *array, size_t n) {                                  \
+        unsigned_type result = 0;                                                                       \
+        for (size_t i = 0; i < n; i++) {                                                                \
+            result += array[i] * array[i];                                                              \
+        }                                                                                               \
+        return result;                                                                                  \
+    }                                                                                                   \
+                                                                                                        \
     static inline double name##_mean(type *array, size_t n) {                                           \
         unsigned_type sum = name##_sum(array, n);                                                       \
         return (double)sum / n;                                                                         \

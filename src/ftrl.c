@@ -208,7 +208,7 @@ double ftrl_reg_cost(ftrl_trainer_t *self, double_matrix_t *theta, uint32_array 
         if (row_idx >= i_start) {
             double *theta_i = double_matrix_get_row(theta, i);
 
-            l2_cost += double_array_l2_norm(theta_i, n);
+            l2_cost += double_array_sum_sq(theta_i, n);
             l1_cost += double_array_l1_norm(theta_i, n);
         }
     }
