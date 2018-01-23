@@ -362,10 +362,13 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
             matched_tokens += p1.len;
             log_debug("have_phrase_match\n");
         } else {
+            double acronym_score = 0.0;
             for (size_t p = acronym_phrase.start; p < acronym_phrase.start + acronym_phrase.len; p++) {
                 t2_score = token_scores2[p];
-                total_sim += t1_score * t2_score;
+                acronym_score += t2_score * t2_score;
             }
+
+            total_sim += t1_score * sqrt(acronym_score);
 
             log_debug("have_acronym_match\n");
             matched_tokens++;
