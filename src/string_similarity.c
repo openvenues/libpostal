@@ -299,7 +299,9 @@ bool possible_abbreviation_unicode_with_edits(uint32_array *u1_array, uint32_arr
 inline bool possible_abbreviation_unicode(uint32_array *u1_array, uint32_array *u2_array) {
     affine_gap_edits_t edits = affine_gap_distance_unicode(u1_array, u2_array);
 
-    return possible_abbreviation_unicode_with_edits(u1_array, u2_array, edits);
+    ssize_t prefix_len = unicode_common_prefix(u1_array, u2_array);
+
+    return prefix_len > 0 && possible_abbreviation_unicode_with_edits(u1_array, u2_array, edits);
 }
 
 

@@ -39,6 +39,8 @@ typedef struct soft_tfidf_options {
     size_t damerau_levenshtein_max;
     size_t damerau_levenshtein_min_length;
     bool possible_affine_gap_abbreviations;
+    size_t strict_abbreviation_min_length;
+    double strict_abbreviation_sim;
 } soft_tfidf_options_t;
 
 soft_tfidf_options_t soft_tfidf_default_options(void);
