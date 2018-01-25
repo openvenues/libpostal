@@ -216,6 +216,9 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
 
     bool possible_affine_gap_abbreviations = options.possible_affine_gap_abbreviations;
 
+    double norm1_offset = 0.0;
+    double norm2_offset = 0.0;
+
     size_t matched_tokens = 0;
 
     for (size_t i = 0; i < len1; i++) {
@@ -345,10 +348,21 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
                 if (have_abbreviation && argmax_sim == last_abbreviation) {
                     double abbrev_sim = last_abbreviation_sim > max_sim ? last_abbreviation_sim : max_sim;
                     log_debug("have abbreviation, max(max_sim, last_abbreviation_sim) = %f\n", abbrev_sim);
-                    double max_score = t1_score > t2_score ? t1_score : t2_score;
+                    double max_score = 0.0;
+                    if (t1_score > t2_score || double_equals(t1_score, t2_score)) {
+                        norm2_offset += (t1_score * t1_score) - (t2_score * t2_score);
+                        log_debug("t1_score >= t2_score, norm2_offset = %f\n", norm2_offset);
+                        max_score = t1_score;
+                    } else {
+                        norm1_offset += (t2_score * t2_score) - (t1_score * t1_score);
+                        log_debug("t2_score > t1_score, norm1_offset = %f\n", norm1_offset);
+                        max_score = t2_score;
+                    }
+
                     jaro_winkler_sim = abbrev_sim * max_score * max_score;
                 } else {
-                     jaro_winkler_sim = max_sim * t1_score * t2_score;
+                    jaro_winkler_sim = max_sim * t1_score * t2_score;
+                    log_debug("t1_score = %f, t2_score = %f, jaro_winkler_sim = %f\n", t1_score, t2_score, jaro_winkler_sim);
                 }
                 total_sim += jaro_winkler_sim;
                 matched_tokens++;
@@ -391,9 +405,20 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
                 acronym_score += t2_score * t2_score;
             }
 
-            acronym_score = sqrt(acronym_score);
+            double norm_acronym_score = sqrt(acronym_score);
 
-            double max_acronym_score = t1_score > acronym_score ? t1_score : acronym_score;
+            double max_acronym_score = 0.0;
+            if (t1_score > norm_acronym_score || double_equals(t1_score, norm_acronym_score)) {
+                norm2_offset += (t1_score * t1_score) - acronym_score;
+                log_debug("t1_score >= norm_acronym_score, norm2_offset = %f\n", norm2_offset);
+                max_acronym_score = t1_score;
+            } else {
+                norm1_offset += acronym_score - (t1_score * t1_score);
+                log_debug("norm_acronym_score > t1_score, norm1_offset = %f\n", norm1_offset);
+                max_acronym_score = norm_acronym_score;
+            }
+
+            log_debug("max_acronym_score = %f\n", max_acronym_score);
 
             total_sim += max_acronym_score * max_acronym_score;
 
@@ -441,8 +466,8 @@ return_soft_tfidf_score:
         int64_array_destroy(acronym_memberships_array);
     }
 
-    double norm = double_array_l2_norm(token_scores1, num_tokens1) * double_array_l2_norm(token_scores2, num_tokens2);
-    log_debug("total_sim = %f, norm = %f\n", total_sim, norm);
+    double norm = sqrt(double_array_sum_sq(token_scores1, num_tokens1) + norm1_offset) * sqrt(double_array_sum_sq(token_scores2, num_tokens2) + norm2_offset);
+    log_debug("total_sim = %f, norm1_offset = %f, norm2_offset = %f, norm = %f\n", total_sim, norm1_offset, norm2_offset, norm);
 
     double total_sim_norm = total_sim / norm;
     return total_sim_norm > 1.0 ? 1.0 : total_sim_norm;
