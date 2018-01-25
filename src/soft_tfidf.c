@@ -243,6 +243,8 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
         bool use_damerau_levenshtein = damerau_levenshtein_max > 0 && t1_len >= damerau_levenshtein_min_length;
         log_debug("use_jaro_winkler = %d, use_damerau_levenshtein=%d\n", use_jaro_winkler, use_damerau_levenshtein);
 
+        bool have_equal = false;
+
         canonical_match_t best_canonical_phrase_response = CANONICAL_NO_MATCH;
 
         double t2_score;
@@ -276,6 +278,7 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
             if (unicode_equals(t1u, t2u)) {
                 max_sim = 1.0;
                 argmax_sim = j;
+                have_equal = true;
                 break;
             }
 
@@ -327,7 +330,7 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
         // Jaro-Winkler is still used to calculate similarity
 
         if (!have_acronym_match && !have_phrase_match) {
-            if (use_jaro_winkler && (max_sim > jaro_winkler_min || double_equals(max_sim, jaro_winkler_min))) {
+            if (have_equal || (use_jaro_winkler && (max_sim > jaro_winkler_min || double_equals(max_sim, jaro_winkler_min)))) {
                 log_debug("jaro-winkler, max_sim = %f\n", max_sim);
                 t2_score = token_scores2[argmax_sim];
                 total_sim += max_sim * t1_score * t2_score;
