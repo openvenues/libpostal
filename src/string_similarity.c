@@ -376,7 +376,9 @@ ssize_t damerau_levenshtein_distance_unicode(uint32_array *u1_array, uint32_arra
 
     for (size_t x = 1; x <= len2; x++) {
         column[0] = x;
-        for (size_t y = 1, last_diag = x - 1; y <= len1; y++) {
+        last_diag = x - 1;
+
+        for (size_t y = 1; y <= len1; y++) {
             size_t old_diag = column[y];
             size_t cost = (u1[y - 1] == u2[x - 1] ? 0 : 1);
 
@@ -389,15 +391,15 @@ ssize_t damerau_levenshtein_distance_unicode(uint32_array *u1_array, uint32_arra
             if (v3 < min) min = v3;
 
             if (x > 1 && y > 1 && u1[y - 1] == u2[x - 2] && u1[y - 2] == u2[x - 1]) {
-                size_t v4 = transpose_diag + cost;
+                size_t v4 = transpose_diag;
                 if (v4 < min) min = v4;
             }
 
             column[y] = min;
 
             last_diag = old_diag;
+            transpose_diag = last_diag;
         }
-        transpose_diag = last_diag;
     }
 
     size_t dist = column[len1];
