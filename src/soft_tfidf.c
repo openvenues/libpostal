@@ -115,11 +115,20 @@ bool phrases_have_same_canonical(size_t num_tokens1, char **tokens1, size_t num_
     return same_canonical;
 }
 
+static inline size_t sum_token_lengths(size_t num_tokens, char **tokens) {
+    size_t n = 0;
+    for (size_t i = 0; i < num_tokens; i++) {
+        char *token = tokens[i];
+        n += strlen(token);
+    }
+    return n;
+}
+
 
 double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char **tokens1, double *token_scores1, phrase_array *phrases1, size_t num_tokens2, char **tokens2, double *token_scores2, phrase_array *phrases2, phrase_array *acronym_alignments, soft_tfidf_options_t options, size_t *num_matches) {
     if (token_scores1 == NULL || token_scores2 == NULL) return 0.0;
 
-    if (num_tokens1 > num_tokens2) {
+    if (num_tokens1 > num_tokens2 || (num_tokens1 == num_tokens2 && sum_token_lengths(num_tokens1, tokens1) > sum_token_lengths(num_tokens2, tokens2))) {
         double *tmp_scores = token_scores1;
         token_scores1 = token_scores2;
         token_scores2 = tmp_scores;
