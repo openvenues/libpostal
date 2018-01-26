@@ -227,6 +227,70 @@ exit_destroy_places:
 
 }
 
+static khash_t(int_set) *single_letters_set(size_t num_tokens, char **tokens) {
+    khash_t(int_set) *letters = NULL;
+    for (size_t i = 0; i < num_tokens; i++) {
+        char *token = tokens[i];
+        size_t len = strlen(token);
+
+        uint8_t *ptr = (uint8_t *)token;
+        int32_t ch;
+        ssize_t char_len;
+        char_len = utf8proc_iterate(ptr, len, &ch);
+        if (char_len == len && utf8_is_letter(utf8proc_category(ch))) {
+            if (letters == NULL) {
+                letters = kh_init(int_set);
+            }
+            int ret = 0;
+            kh_put(int_set, letters, ch, &ret);
+            if (ret < 0) {
+                kh_destroy(int_set, letters);
+                return NULL;
+            }
+        }
+    }
+    return letters;
+}
+
+
+static bool have_symmetric_difference_in_single_letters(size_t num_tokens1, char **tokens1, size_t num_tokens2, char **tokens2) {
+    khash_t(int_set) *letters1 = single_letters_set(num_tokens1, tokens1);
+    khash_t(int_set) *letters2 = single_letters_set(num_tokens2, tokens2);
+
+    bool disjoint = false;
+    if (letters1 != NULL && letters2 != NULL) {
+        int32_t ch;
+        size_t num_missing1 = 0;
+        khiter_t k;
+        kh_foreach_key(letters1, ch, {
+            k = kh_get(int_set, letters2, ch);
+            if (k == kh_end(letters2)) {
+                num_missing1++;
+            }
+        });
+
+        size_t num_missing2 = 0;
+        kh_foreach_key(letters2, ch, {
+            k = kh_get(int_set, letters1, ch);
+            if (k == kh_end(letters1)) {
+                num_missing2++;
+            }
+        });
+
+        disjoint = num_missing1 > 0 && num_missing2 > 0;
+    }
+
+    if (letters1 != NULL) {
+        kh_destroy(int_set, letters1);
+    }
+
+    if (letters2 != NULL) {
+        kh_destroy(int_set, letters2);
+    }
+
+    return disjoint;
+}
+
 char *joined_string_and_tokens_from_strings(char **strings, size_t num_strings, token_array *tokens) {
     if (tokens == NULL || strings == NULL || num_strings == 0) return NULL;
     token_array_clear(tokens);
@@ -351,9 +415,17 @@ libpostal_fuzzy_duplicate_status_t is_fuzzy_duplicate(size_t num_tokens1, char *
     if (dupe_status == LIBPOSTAL_NON_DUPLICATE) {
         if (max_sim > options.likely_dupe_threshold || double_equals(max_sim, options.likely_dupe_threshold)) {
             dupe_status = LIBPOSTAL_LIKELY_DUPLICATE;
+
+            // Make sure we're not calling "A & B Jewelry" a duplicate of "B & C Jewelry"
+            // simply because single letters tend to be low-information. In this case, demote
+            // the document to needs review as a precaution
+            if (have_symmetric_difference_in_single_letters(num_tokens1, tokens1, num_tokens2, tokens2)) {
+                dupe_status = LIBPOSTAL_POSSIBLE_DUPLICATE_NEEDS_REVIEW;
+            }
         } else if (max_sim > options.needs_review_threshold || double_equals(max_sim, options.needs_review_threshold)) {
             dupe_status = LIBPOSTAL_POSSIBLE_DUPLICATE_NEEDS_REVIEW;
         }
+
     }
 
     if (phrases1 != NULL) {
