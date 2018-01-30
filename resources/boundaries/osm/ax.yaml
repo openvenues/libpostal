@@ -1,5 +1,5 @@
 ---
-  admin_level: 
-    "3": "country"
-    "8": "state"
+  admin_level:
+    "3": "state"
+    "8": "city"
 
