@@ -1,6 +1,13 @@
 ---
-  admin_level: 
+  admin_level:
     "2": "country"
     "6": "state"
-    "7": "city"
+    "7": "state_district"
     "8": "city"
+    overrides:
+        id:
+            relation:
+                # Bashkia Peqin
+                "1250584": "city"
+                # Bashkia Belsh
+                "1250565": "city"

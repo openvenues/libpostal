@@ -1,5 +1,5 @@
 ---
-    admin_level: 
+    admin_level:
         "2": "country"
         "4": "state"
         "6": "state_district"
@@ -12,4 +12,22 @@
             relation:
                 # Vienna
                 "109166": "city"
+                # Linz
+                "86708": "city"
+                # Steyr
+                "90143": "city"
+                # Salzburg
+                "86538": "city"
+                # Rust
+                "78752": "city"
+                # Eisenstadt
+                "79747": "city"
+                # Graz
+                "34719": "city"
+                # Klagenfurt
+                "105870": "city"
+                # Villach
+                "106163": "city"
+                # Innsbruck
+                "4835169": "city"
 
