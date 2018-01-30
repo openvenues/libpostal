@@ -2,4 +2,6 @@
   admin_level: 
     "2": "country"
     "4": "state"
-
+    "6": "state_district" # really partial
+    "8": "city" # really partial, overlaps 6
+    "9": "city_district" # almost nothing

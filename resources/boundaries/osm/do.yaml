@@ -3,5 +3,5 @@
     "2": "country"
     "4": "state"
     "6": "city"
-    "7": "city"
-    "8": "city"
+    #"7": "city" # some data but fucked up, and level 6 is clean
+    #"8": "city" # some data but fucked up, and level 6 is clean

@@ -1,10 +1,10 @@
 ---
   admin_level: 
     "2": "country"
-    "3": "country_region"
-    "4": "state"
-    "5": "state_district"
-    "6": "city"
+    "3": "country_region"  # water included
+    "4": "state"           # water included, some missing (eg Zamboanga city)
+    "5": "state_district"  # partial, only few areas
+    "6": "city"            # partial, quite large, water included
     "7": "city_district"
     "8": "city_district"
     "9": "city_district"

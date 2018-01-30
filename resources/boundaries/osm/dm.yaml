@@ -2,3 +2,5 @@
   admin_level: 
     "2": "country"
     "4": "state"
+  overrides:
+    fallback_city: "4"

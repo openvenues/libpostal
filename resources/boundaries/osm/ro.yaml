@@ -1,8 +1,10 @@
 ---
   admin_level: 
     "2": "country"
-    "3": "country_region"
-    "4": "state"
-    "5": "city_district"
-    "6": "city"
+    #"3": "country_region" no data
+    "4": "state" # full covering
+    #"5": "city_district" no data
+    #"6": "city" # almost no data, no main cities
 
+  overrides:
+    fallback_city: "4"

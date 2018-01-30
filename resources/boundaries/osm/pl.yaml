@@ -3,9 +3,9 @@
     "2": "country"
     "4": "state"
     "6": "state_district"
-    "7": "state_district"
-    "8": "city"
+    "7": "state_district"   # full covering
+    "8": "city"             # lots of uncovered areas, but most cities seem ok
     "9": "city_district"
-    "10": "city"
+    #"10": "city"           # very partial, subdivision of 8, does not fill holes of 8 
     "11": "suburb"
 

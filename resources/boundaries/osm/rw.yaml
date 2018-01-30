@@ -3,4 +3,14 @@
         "2": "country"
         "4": "state"
         "6": "state_district"
-        "8": "state_district"
+        "8": "state_district" # good covering, except Kigali 
+
+    overrides:
+      fallback_city: "8"
+
+      id:
+          relation:
+              # Kigali, from level 4
+              "3963733": "city"
+              "3963734": "city"
+              "3963721": "city"
