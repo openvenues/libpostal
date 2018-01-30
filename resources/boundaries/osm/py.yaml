@@ -3,5 +3,11 @@
     "2": "country"
     "3": "country_region"
     "4": "state"
-    "8": "city"
+    "8": "city"  # not full covering, sometimes looks more like state_district than city
     "10": "suburb"
+
+  overrides:
+    id:
+        relation:
+            # Asuncion
+            "3654543": "city" # admin_level 4

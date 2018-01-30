@@ -2,5 +2,8 @@
   admin_level: 
     "2": "country"
     "4": "state"
-    "5": "city"
-    "9": "city"
+    # "5": "city" # only one city
+    # "7": "city" # only two aeras, not really cities
+    # "9": "city" # only one village
+  overrides:
+    fallback_city: "4"
