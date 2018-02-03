@@ -941,8 +941,10 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
             if (postal_code_expansions != NULL) {
                 add_string_hash_permutations(near_dupe_hashes, NAME_PO_BOX_POSTCODE_KEY_PREFIX, tree, 3, name_expansions, po_box_expansions, postal_code_expansions);
             }
+        }
+
         // Only name
-        } else if (options.name_only_keys) {
+        if (options.name_only_keys) {
             // Have name and unit, some university addresses
             if (have_unit) {
                 if (geohash_expansions != NULL) {
