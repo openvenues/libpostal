@@ -45,7 +45,7 @@ butte|btte|bte
 bypass|bypa|byps|bps|byp
 byway|bywy
 camp|cp
-cape|cpe
+cape|cpe|cp
 canyon|cyn|cnyn
 caravan|cvan|cvn|c van
 causeway|csway|cswy|causewy|caus|cause|cway
@@ -148,7 +148,7 @@ formation|form|fmtn
 freeway|frwy|fw|fwy|fway
 front|frnt
 frontage|frtg|fr
-gap
+gap|gp
 garden|gdn|grd|grdn
 gardens|gdns|grds|grdns
 gate|ga|gte
@@ -162,7 +162,7 @@ green|grn|gn
 ground|grnd
 grounds|grnds
 grove|gr|grv|grve|gro
-gulch
+gulch|glch
 gully|gly
 hanger|hngr
 harbor|harbour|hbr|hrbr
@@ -205,12 +205,12 @@ light|lgt|lt
 limits|lmts
 line|ln
 link|lnk|lk
-little|lit|ltl|lt
+little|ltl|lttl|littl|litl|lit|lt
 loaf|lf
 lookout|lkt|look out
 loop|lp
 loops|lps
-lot
+lot|lt
 lynne|lynn
 mall|ml
 manor|mnr

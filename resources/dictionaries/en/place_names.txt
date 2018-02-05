@@ -1,3 +1,4 @@
+abbey|abby
 academy
 aerodome
 aged care center|aged care centre|aged care|centre for aged care|center for aged care|center for the aged|centre for the aged|aged care facilities
@@ -24,13 +25,16 @@ bar
 barn
 barbecue|barbeque|bar be que|bar be cue|bbq
 barracks|barrack|baracks
+bay
 bazaar
-beach
+beach|bch
 beauty salon
 boarding house|bhouse|bh|board house
+boardwalk|bwk|bwlk|board walk
 bistro
 boathouse
 book store|bookstore
+bowling alley
 brewery
 business park|bus pk|biz pk|bus prk|biz prk
 cafe|café
@@ -284,6 +288,7 @@ theatre
 theatres
 theaters
 tower|twr
+towers|twrs
 town hall
 townhouse|town house
 townhouses|town houses
