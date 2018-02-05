@@ -1,43 +1,42 @@
 academy
 aerodome
 aged care center|aged care centre|aged care|centre for aged care|center for aged care|center for the aged|centre for the aged|aged care facilities
-amphitheatre|amphitheater
-animal hospital|animal hosp
-animal shelter
-annex|anex|annx|anx
-annexe
 air force base|afb
 air national guard base|angb
 airport|aprt
+amphitheatre|amphitheater
+animal hospital|animal hosp
+animal shelter
+annex|annexe|anex|annx|anx
 apartments|apts|appartments
 aquarium
 arcade
 arms
 art gallery|arts gallery
-arts center
-arts centre
+arts center|arts centre
 auditorium
 bakery
 ballroom
 bank
 bar
-barn
 barbecue|barbeque|bar be que|bar be cue|bbq
+barn
 barracks|barrack|baracks
 bazaar
 beach
 beauty salon
-boarding house|bhouse|bh|board house
 bistro
+boarding house|bhouse|bh|board house
 boathouse
 book store|bookstore
 brewery
 business park|bus pk|biz pk|bus prk|biz prk
 cafe|café
 campus
-caravan park|carvn|cvp|caravn park|c van park|cvan park|caravan resort|van park|caratel|caravan par|carav park|carvn park|cara park
 car park|carpark
 car wash|carwash
+caravan park|carvn|cvp|caravn park|c van park|cvan park|caravan resort|van park|caratel|caravan par|carav park|carvn park|cara park
+care home|care centre|care center|ch
 casino
 castle|cst
 cemetery
@@ -73,10 +72,10 @@ cottages|cotts|cottgs
 country club|country clb|cty clb
 courthouse|court house
 creamery
-crematorium
 credit union
-culture center|culture centre
+crematorium
 cultural center|cultural centre
+culture center|culture centre
 dam|dm
 dance studio
 day care
@@ -93,16 +92,16 @@ distributor|dstr|distrib|dstrb
 district|dist
 doctors
 dojo
-dormitory|dorm
 dormitories|dorms
+dormitory|dorm
 elementary school|primary school|public school|ps|p s
 embassy
 estate
 ex services complex
 factory|fcty|fty|fy
 family practice
-farmer's market|farmers market
 farm|frm
+farmer's market|farmers market
 farmhouse
 fire department|fd|f d
 fire station
@@ -112,33 +111,32 @@ foreshore
 forge
 fort|ft
 fountain
+gallery
 gaol
 garage
 garden
-gallery
 gas station
 gate
 geriatric unit
-golf course
 golf club
+golf course
 graveyard|grave yard
 green|grn|gn
 grill
 ground
 gym|gymnasium
 hall
-harbor
-harbour
+harbor|harbour
 headquarters
 health center|health centre
+high school|hs|h s
+home for the aged
 home|hm|hme|hom
 homes
-home for the aged
-hospital|hos|hosp|hospice|hosptl|hsp|hsptl
 hospital for women
+hospital|hos|hosp|hospice|hosptl|hsp|hsptl
 hostel|host|hostl|hstel|hstl
 hotel|hot|hotl|htel
-hostel
 house
 houses|hses
 hub
@@ -150,57 +148,54 @@ institute|inst
 jail
 jcc|jewish community center|jewish community centre
 jetty|jtty|jty
+junior high school|jr high school|jhs|j h s|jr hs|jr h s
 kennel
 kindergarten
+kiosk
 kitchen
+lab
+laboratory
+labs
 league
 library
 lodge|ldge|lodg|ldg
 lot
 lounge
-mall|mll
 maison
+mall|mll
 manor|mnr
 manors|mnrs
-marina
-marketplace|mktpl|mktplc
 mansion
 mansions
+marina
+market|mkt|mrkt
+marketplace|mktpl|mktplc
 masonic home
 masonic homes
 medical|med
 memorial|mem
+middle school|ms|m s
 mission|msn
 monastery|monastry
 monument
 motel|mot|motl|mtel
+movie theater|movie theatre
 municipal building|municipal bldg|mun building|mun bldg|mpal building|mpal bldg
 museum|mus
 music hall
-night club|nightclub
-nursing
-nursing center|nursing centre
-nursing home|nh|nhome|nrs|nrsg|nsg|nurs|nrsng hm|n h|nrs home|n home|nursing hom|nursing ho|nursing h
-high school|hs|h s
-junior high school|jr high school|jhs|j h s|jr hs|jr h s
-kiosk
-laboratory
-lab
-labs
-market|mkt|mrkt
-middle school|ms|m s
-movie theater
-movie theatre
 national park|np|natl park|natl pk|natl prk|nat'l park|nat'l pk|nat'l prk
 national recreation area|nra|natl rec area|nat'l rec area
 national wildlife refuge area|nwra|natl wildlife refuge area|nat'l wildlife refuge area
+night club|nightclub
 nursery
 nurses home|nurses home|nurse home
-nursing home
-office|ofc
-offices|ofcs
+nursing
+nursing center|nursing centre
+nursing home|nursing & residential home|nursing & care home|nh|nhome|nrs|nrsg|nsg|nurs|nrsng hm|n h|nrs home|n home|nursing hom|nursing ho|nursing h
 office tower|ofc twr|office twr|ofc tower
 office towers|ofc twrs|office twrs|ofc towers
+office|ofc
+offices|ofcs
 opera house
 oval
 parish
@@ -210,8 +205,7 @@ parking lot
 pavilion
 pediatric
 penitentiary
-performing arts centre
-performing arts center
+performing arts center|performing arts centre
 pharmacy|pharm
 pier
 playhouse
@@ -221,34 +215,37 @@ police station
 polytechnic
 port|pt|prt
 post office|po|postoffice
-precinct|pct
 pre school|preschool|pre-school
+precinct|pct
 pre-kindergarten|prekindergarten|pre-k|prek|pre k
-primary school
 primary care
+primary school
 prison
-pub
+pub|public house
 public market
 public pool
 public school|ps
-raceway
-racing track
 racecourse
+raceway
+racing track|race track|racing circuit|race circuit
 recycling
-retreat|rtt
-rotary|rty
 reservation|res|resrv|resv|rsrv|rserv|rs
 reserve|res|resrv|resv|rsrv|rserv|rserve|rsrve
 reservoir|res
+residential care home|residential care|residentail unit|residential home
 resort
+respite center|respite centre|respite service|respite
+rest home
 restaurant
-retirement home|retirement village|ret village|masonic retirement village|retirement|ret vill|retirement home|retirement v|rh|r h
+retirement home|retirement lodge|retirement village|ret village|masonic retirement village|retirement|ret vill|retirement home|retirement v|rh|r h
+retreat|rtt
 roadhouse
 roller rink
 room
+rotary|rty
 ruins
-saloon
 salon
+saloon
 sanctuary|sanct
 sauna
 secondary school
@@ -257,8 +254,8 @@ services|svcs|svc
 shelter
 sheriff's department|sherrifs department|sheriff's dept|sherrifs dept
 sherrif's office|sherffis office|sheriff's ofc|sheriffs ofc
-shopping center|shoppingcenter|shoppingcentre|shopping|shoppingtown|shopping town|shopping centre|shctr|sh ctr|s / centre|shp / centre
 shop|shp
+shopping center|shoppingcenter|shoppingcentre|shopping|shoppingtown|shopping town|shopping centre|shctr|sh ctr|s / centre|shp / centre
 showground
 sisters
 social club
@@ -274,34 +271,36 @@ studio
 studios
 subdivision
 supermarket|super market
+supported home
+supported homes
 swimming pool
 tavern
 tea
 terminal|term
 terrace
 theater
+theaters
 theatre
 theatres
-theaters
 tower|twr
 town hall
 townhouse|town house
 townhouses|town houses
 trailer park|tlpk
-university|uni|univ|univers|unvrsty
 units
+university|uni|univ|univers|unvrsty
 urgent care
 vault
 velodrome
 vet
-veterinary
 veterinarian
 veterinarians
+veterinary
 vets
 villa|vll|vla
-villas|vlls|vlas
 village|vil|vge|vill|villag|villg|vlg|vlge|vllg
 villages|vlgs
+villas|vlls|vlas
 vineyard
 wine bar|winebar
 winery
