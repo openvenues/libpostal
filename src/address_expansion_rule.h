@@ -8,7 +8,7 @@
 #include "constants.h"
 #include "gazetteers.h"
 
-#define MAX_DICTIONARY_TYPES 4
+#define MAX_DICTIONARY_TYPES 5
 
 typedef struct address_expansion_rule {
     char *phrase;
