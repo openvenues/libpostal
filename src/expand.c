@@ -1005,6 +1005,8 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                     bool current_phrase_have_canonical = delete_phrases && address_phrase_has_canonical_interpretation(phrase);
                     bool current_phrase_have_possible_root = delete_phrases && address_phrase_is_possible_root_for_components(phrase, options.address_components);
 
+                    bool current_phrase_have_valid = address_phrase_is_valid_for_components(phrase, options.address_components);
+
                     log_debug("current_phrase_have_specifier = %d\n", current_phrase_have_specifier);
 
                     bool current_phrase_have_unambiguous = delete_phrases && address_phrase_contains_unambiguous_expansion(phrase);
@@ -1158,7 +1160,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                                 log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
                             } else if (!is_valid_for_components && !is_ambiguous) {
                                 log_debug("!is_valid_for_components\n");
-                                current_phrase_ignorable = current_phrase_have_ignorable;
+                                current_phrase_ignorable = current_phrase_have_ignorable || current_phrase_have_valid;
                                 log_debug("current_phrase_ignorable = %d\n", current_phrase_ignorable);
                             } else {
                                 log_debug("none of the above\n");
