@@ -28,6 +28,8 @@ TEST test_transliterators(void) {
     CHECK_CALL(test_transliteration("han-latin", "街𠀀abcdef", "jiēhēabcdef"));
     CHECK_CALL(test_transliteration("katakana-latin", "ドウ", "dou"));
     CHECK_CALL(test_transliteration("hiragana-latin", "どう", "dou"));
+    CHECK_CALL(test_transliteration("latin-ascii-simple", "at&t", "at&t"));
+    CHECK_CALL(test_transliteration("latin-ascii-simple", "at&amp;t", "at&t"));
 
     PASS();
 }

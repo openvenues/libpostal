@@ -938,6 +938,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                     if (context_no_match && !prev_state.empty_transition && prev_state.phrase_len > 0) {
                         log_debug("Previous phrase stays as is %.*s\n", (int)prev_state.phrase_len, str+prev_state.phrase_start);
                         char_array_cat_len(new_str, str + prev_state.phrase_start, prev_state.phrase_len);
+                        state = start_state;
                     }
                     
                     if (state.state == TRANS_STATE_BEGIN && !prev_state.empty_transition) {
