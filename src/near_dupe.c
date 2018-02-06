@@ -259,7 +259,7 @@ static inline bool add_double_metaphone_to_array_if_unique(char *str, cstring_ar
     if (!string_equals(dm_primary, "")) {
         add_quadgrams_or_string_to_array_if_unique(dm_primary, strings, unique_strings, ngrams);
 
-        if (!string_equals(dm_secondary, dm_primary)) {
+        if (!string_equals(dm_secondary, dm_primary) && !string_equals(dm_secondary, "")) {
             add_quadgrams_or_string_to_array_if_unique(dm_secondary, strings, unique_strings, ngrams);
         }
     }
