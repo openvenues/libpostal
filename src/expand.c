@@ -1120,11 +1120,11 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                         bool current_phrase_expandable = expand_phrases && expansion.canonical_index != NULL_CANONICAL_INDEX;
 
                         bool is_ambiguous = address_expansion_in_dictionary(expansion, DICTIONARY_AMBIGUOUS_EXPANSION);
+                        bool is_valid_for_components = address_expansion_is_valid_for_components(expansion, options.address_components);
 
                         if (delete_phrases) {
                             bool is_ignorable = address_expansion_is_ignorable_for_components(expansion, options.address_components);
                             bool is_canonical = expansion.canonical_index == NULL_CANONICAL_INDEX;
-                            bool is_valid_for_components = address_expansion_is_valid_for_components(expansion, options.address_components);
 
                             log_debug("is_ignorable = %d, is_canonical = %d, is_ambiguous = %d, current_phrase_have_ambiguous = %d, current_phrase_have_unambiguous = %d, have_strictly_ignorable = %d, current_phrase_have_ignorable=%d, current_phrase_have_possible_root=%d\n", is_ignorable, is_canonical, is_ambiguous, current_phrase_have_ambiguous, current_phrase_have_unambiguous, have_strictly_ignorable, current_phrase_have_ignorable, current_phrase_have_possible_root);
 
@@ -1182,6 +1182,8 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
 
                         if (delete_phrases) {
                             current_phrase_expandable = !current_phrase_ignorable;
+                        } else {
+                            current_phrase_expandable = is_valid_for_components;
                         }
 
                         log_debug("current_phrase_expandable = %d\n", current_phrase_expandable);
