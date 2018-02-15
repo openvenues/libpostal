@@ -10,7 +10,7 @@ env:
         - secure: "mh/WDQapGJb6MAFvgCjiMAAv1aa8gUaIs2Ohtx7yPrDBwsD8UqlyEM7ktGLZGQ1q/7OJ/Z6QfDMfJQwDKzxyUSY1yHZTNkP3QzkTt2D1Qyvi++O6EkGqSdSS6Lb3aID3IsEaye/yasJ+rxiRSp05O9+OYvhJlqRZnzaimiAv5KI="
         - secure: "OGNJ6Cj3trq4nASgm4BK331aij+FZ11St7/YF9rfxeQBwg4MCPH2+D0jvAULBHvJR7K2RmepX/FG5d4S+rtwKNGngg3ovPdd1MbwFltHpn5/KM+hxe7kCZx2+V9/FN+4YSyO0zSUDra6AXHOs72mfyrZoB3a36SS4lg2sAp33gU="
         - GH_REF=github.com/openvenues/libpostal
-        - DICTIONARIES_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "resources/dictionaries/.*/*.txt" | wc -l)
+        - DICTIONARIES_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "resources/dictionaries/.*/.*.txt\|src/gazetteer_data.c" | wc -l)
         - NUMEX_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "resources/numex\|src/numex_table_builder.c" | wc -l)
         - TRANSLIT_CHANGED=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "src/transliteration_data.c" | wc -l)
 compiler:
