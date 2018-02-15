@@ -1183,7 +1183,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                         if (delete_phrases) {
                             current_phrase_expandable = !current_phrase_ignorable;
                         } else {
-                            current_phrase_expandable = is_valid_for_components;
+                            current_phrase_expandable = (expansion.address_components & options.address_components);
                         }
 
                         log_debug("current_phrase_expandable = %d\n", current_phrase_expandable);
