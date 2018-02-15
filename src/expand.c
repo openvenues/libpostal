@@ -744,8 +744,6 @@ bool address_phrase_contains_unambiguous_expansion(phrase_t phrase) {
     return false;
 }
 
-// Delete non-canonical phrases only
-
 string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normalize_options_t options, expansion_phrase_option_t phrase_option) {
     char_array *key = NULL;
 
