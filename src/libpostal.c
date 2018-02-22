@@ -334,19 +334,24 @@ libpostal_token_t *libpostal_tokenize(char *input, bool whitespace, size_t *n) {
     return a;
 }
 
-char *libpostal_normalize_string(char *str, uint64_t options) {
+
+char *libpostal_normalize_string_languages(char *str, uint64_t options, size_t num_languages, char **languages) {
     if (options & LIBPOSTAL_NORMALIZE_STRING_LATIN_ASCII) {
-        return normalize_string_latin(str, strlen(str), options);
+        return normalize_string_latin_languages(str, strlen(str), options, num_languages, languages);
     } else {
-        return normalize_string_utf8(str, options);
+        return normalize_string_utf8_languages(str, options, num_languages, languages);
     }
 }
 
-libpostal_normalized_token_t *libpostal_normalized_tokens(char *input, uint64_t string_options, uint64_t token_options, bool whitespace, size_t *n) {
+inline char *libpostal_normalize_string(char *str, uint64_t options) {
+    return libpostal_normalize_string_languages(str, options, 0, NULL);
+}
+
+libpostal_normalized_token_t *libpostal_normalized_tokens_languages(char *input, uint64_t string_options, uint64_t token_options, bool whitespace, size_t num_languages, char **languages, size_t *n) {
     if (input == NULL) {
         return NULL;
     }
-    char *normalized = libpostal_normalize_string(input, string_options);
+    char *normalized = libpostal_normalize_string_languages(input, string_options, num_languages, languages);
     if (normalized == NULL) {
         return NULL;
     }
@@ -384,6 +389,11 @@ libpostal_normalized_token_t *libpostal_normalized_tokens(char *input, uint64_t 
     *n = num_tokens;
     return result;
 }
+
+inline libpostal_normalized_token_t *libpostal_normalized_tokens(char *input, uint64_t string_options, uint64_t token_options, bool whitespace, size_t *n) {
+    return libpostal_normalized_tokens_languages(input, string_options, token_options, whitespace, 0, NULL, n);
+}
+
 
 bool libpostal_setup_language_classifier(void) {
     return libpostal_setup_language_classifier_datadir(NULL);

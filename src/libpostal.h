@@ -304,6 +304,7 @@ LIBPOSTAL_EXPORT libpostal_token_t *libpostal_tokenize(char *input, bool whitesp
 
 #define LIBPOSTAL_NORMALIZE_DEFAULT_TOKEN_OPTIONS_NUMERIC (LIBPOSTAL_NORMALIZE_DEFAULT_TOKEN_OPTIONS | LIBPOSTAL_NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC)
 
+LIBPOSTAL_EXPORT char *libpostal_normalize_string_languages(char *input, uint64_t options, size_t num_languages, char **languages);
 LIBPOSTAL_EXPORT char *libpostal_normalize_string(char *input, uint64_t options);
 
 
@@ -312,7 +313,9 @@ typedef struct libpostal_normalized_token {
     libpostal_token_t token;
 } libpostal_normalized_token_t;
 
-libpostal_normalized_token_t *libpostal_normalized_tokens(char *input, uint64_t string_options, uint64_t token_options, bool whitespace, size_t *n);
+LIBPOSTAL_EXPORT libpostal_normalized_token_t *libpostal_normalized_tokens(char *input, uint64_t string_options, uint64_t token_options, bool whitespace, size_t *n);
+LIBPOSTAL_EXPORT libpostal_normalized_token_t *libpostal_normalized_tokens_languages(char *input, uint64_t string_options, uint64_t token_options, bool whitespace, size_t num_languages, char **languages, size_t *n);
+
 
 #ifdef __cplusplus
 }

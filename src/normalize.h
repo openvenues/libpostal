@@ -68,7 +68,10 @@ As well as normalizations for individual string tokens:
 
 char *normalize_string_utf8(char *str, uint64_t options);
 
+char *normalize_string_utf8_languages(char *str, uint64_t options, size_t num_languages, char **languages);
 char *normalize_string_latin(char *str, size_t len, uint64_t options);
+char *normalize_string_latin_languages(char *str, size_t len, uint64_t options, size_t num_languages, char **languages);
+
 
 // Takes NORMALIZE_TOKEN_* options
 void add_normalized_token(char_array *array, char *str, token_t token, uint64_t options);
