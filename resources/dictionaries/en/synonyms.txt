@@ -63,7 +63,6 @@ concourse|con|concs|concse|cnc
 connection|cntn|cxn
 connector|conr|cnctr|cntr
 copse|cps
-corner|cnr|crn|cor
 corners|cnrs|crns|cors
 corseo|cseo
 corso|cso
