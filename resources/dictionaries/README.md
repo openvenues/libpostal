@@ -55,6 +55,7 @@ lower/central/upper, etc.)
 - **staircase.txt**: strings indicating a staircase, usually just the word "staircase" or "stair".
 - **stopwords.txt**: prepositions and articles mostly, very common words
 which may be ignored in some contexts
+- **street_names.txt**: words which can be found in street names but are not thoroughfare types e.g. "spring" and their abbreviations. These would tend to be "core" words i.e. part of the base street name, although some can be thoroughfare types as well.
 - **street_types.txt**: words like "street", "road", "drive" which indicate
 a thoroughfare and their respective abbreviations.
 - **surnames.txt**: a dictionary of surnames derived from Wikipedia has been provided in the special "all" language directory. If there are specific abbreviations for surnames in a language like Mdez. for Menendez, add them in the specific language's dictionary.
