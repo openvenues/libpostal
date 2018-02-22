@@ -98,6 +98,7 @@ gazetteer_types = {
     'qualifiers': 'DICTIONARY_QUALIFIER',
     'staircases': 'DICTIONARY_STAIRCASE',
     'stopwords': 'DICTIONARY_STOPWORD',
+    'street_names': 'DICTIONARY_STREET_NAME',
     'street_types': 'DICTIONARY_STREET_TYPE',
     'surnames': 'DICTIONARY_SURNAME',
     'synonyms': 'DICTIONARY_SYNONYM',
