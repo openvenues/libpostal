@@ -588,3 +588,93 @@ inline double jaro_winkler_distance(const char *s1, const char *s2) {
 inline double jaro_winkler_distance_unicode(uint32_array *u1_array, uint32_array *u2_array) {
     return jaro_winkler_distance_unicode_prefix_threshold(u1_array, u2_array, DEFAULT_JARO_WINKLER_PREFIX_SCALE, DEFAULT_JARO_WINKLER_BONUS_THRESHOLD);
 }
+
+phrase_array *multi_word_token_alignments(const char *s1, token_array *tokens1, const char *s2, token_array *tokens2) {
+    if (s1 == NULL || tokens1 == NULL || s2 == NULL || tokens2 == NULL) {
+        return NULL;
+    }
+
+    size_t len1 = tokens1->n;
+    size_t len2 = tokens2->n;
+    if (len1 == 0 || len2 == 0 || len1 == len2) return NULL;
+
+    if (len1 > len2) {
+        const char *tmp_s = s1;
+        s1 = s2;
+        s2 = tmp_s;
+
+        token_array *tmp_t = tokens1;
+        tokens1 = tokens2;
+        tokens2 = tmp_t;
+
+        size_t tmp_l = len1;
+        len1 = len2;
+        len2 = tmp_l;
+    }
+
+    phrase_array *alignments = NULL;
+
+    token_t *t1 = tokens1->a;
+    token_t *t2 = tokens2->a;
+
+    ssize_t phrase_start = -1;
+    ssize_t phrase_token_pos = -1;
+
+    uint8_t *ptr1 = (uint8_t *)s1;
+    uint8_t *ptr2 = (uint8_t *)s2;
+
+    int32_t c1;
+    ssize_t c1_len;
+
+    for (size_t i = 0; i < len1; i++) {
+        token_t ti = t1[i];
+
+        c1_len = utf8proc_iterate(ptr1 + ti.offset, ti.len, &c1);
+        if (c1_len <= 0 || c1 == 0) {
+            break;
+        }
+
+        if (!(is_word_token(ti.type) || is_numeric_token(ti.type)) || is_ideographic(ti.type)) {
+            phrase_token_pos = -1;
+            continue;
+        }
+
+        size_t ti_pos = 0;
+
+        for (size_t j = 0; j < len2; j++) {
+            token_t tj = t2[j];
+
+            if (utf8_compare_len_case_insensitive(ptr1 + ti.offset + ti_pos, ptr2 + tj.offset, tj.len) == 0) {
+                ti_pos += tj.len;
+                if (phrase_start < 0) {
+                    phrase_start = j;
+                    phrase_token_pos = 0;
+                }
+                phrase_token_pos++;
+            } else {
+                phrase_token_pos = -1;
+                phrase_start = -1;
+                ti_pos = 0;
+                continue;
+            }
+
+            if (ti_pos == ti.len && j - phrase_start > 0) {
+                phrase_t phrase = (phrase_t){phrase_start, j - phrase_start + 1, i};
+                // got alignment
+                if (alignments == NULL) {
+                    alignments = phrase_array_new();
+                }
+
+                phrase_array_push(alignments, phrase);
+
+                ti_pos = 0;
+                phrase_token_pos = -1;
+                phrase_start = -1;
+            }
+        }
+
+    }
+
+    return alignments;
+}
+

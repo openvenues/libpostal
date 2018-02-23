@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #include "collections.h"
+#include "trie_search.h"
 
 #define DEFAULT_AFFINE_GAP_OPEN_COST 3
 #define DEFAULT_AFFINE_GAP_EXTEND_COST 2
@@ -43,5 +44,6 @@ double jaro_winkler_distance_unicode_prefix_threshold(uint32_array *u1_array, ui
 double jaro_winkler_distance(const char *s1, const char *s2);
 double jaro_winkler_distance_unicode(uint32_array *u1_array, uint32_array *u2_array);
 
+phrase_array *multi_word_token_alignments(const char *s1, token_array *tokens1, const char *s2, token_array *tokens2);
 
 #endif
