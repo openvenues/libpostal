@@ -452,7 +452,8 @@ size_t unicode_common_suffix(uint32_array *u1_array, uint32_array *u2_array) {
 
 
 
-int utf8_compare_len(const char *str1, const char *str2, size_t len) {
+
+int utf8_compare_len_option(const char *str1, const char *str2, size_t len, bool case_insensitive) {
     if (len == 0) return 0;
 
     int32_t c1, c2;
@@ -469,7 +470,7 @@ int utf8_compare_len(const char *str1, const char *str2, size_t len) {
 
         if (c1 == 0 || c2 == 0) break;
 
-        if (c1 == c2) {
+        if (c1 == c2 || (case_insensitive && utf8proc_tolower(c1) == utf8proc_tolower(c2))) {
             ptr1 += len1;
             ptr2 += len2;
             remaining -= len1;
@@ -484,8 +485,26 @@ int utf8_compare_len(const char *str1, const char *str2, size_t len) {
     return (int) c1 - c2;
 }
 
+inline int utf8_compare_len(const char *str1, const char *str2, size_t len) {
+    return utf8_compare_len_option(str1, str2, len, false);
+}
+
 inline int utf8_compare(const char *str1, const char *str2) {
-    return utf8_compare_len(str1, str2, strlen(str1));
+    size_t len1 = strlen(str1);
+    size_t len2 = strlen(str2);
+    size_t max_len = len1 >= len2 ? len1 : len2;
+    return utf8_compare_len_option(str1, str2, max_len, false);
+}
+
+inline int utf8_compare_len_case_insensitive(const char *str1, const char *str2, size_t len) {
+    return utf8_compare_len_option(str1, str2, len, true);
+}
+
+inline int utf8_compare_case_insensitive(const char *str1, const char *str2, size_t len) {
+    size_t len1 = strlen(str1);
+    size_t len2 = strlen(str2);
+    size_t max_len = len1 >= len2 ? len1 : len2;
+    return utf8_compare_len_option(str1, str2, max_len, true);
 }
 
 

@@ -78,6 +78,8 @@ char *utf8_upper(const char *s);
 
 int utf8_compare(const char *str1, const char *str2);
 int utf8_compare_len(const char *str1, const char *str2, size_t len);
+int utf8_compare_case_insensitive(const char *str1, const char *str2, size_t len);
+int utf8_compare_len_case_insensitive(const char *str1, const char *str2, size_t len);
 size_t utf8_common_prefix(const char *str1, const char *str2);
 size_t utf8_common_prefix_len(const char *str1, const char *str2, size_t len);
 size_t utf8_common_prefix_ignore_separators(const char *str1, const char *str2);
