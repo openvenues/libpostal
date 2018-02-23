@@ -7,6 +7,7 @@
 #include "place.h"
 #include "scanner.h"
 #include "soft_tfidf.h"
+#include "string_similarity.h"
 #include "token_types.h"
 
 bool expansions_intersect(cstring_array *expansions1, cstring_array *expansions2) {
@@ -357,7 +358,8 @@ libpostal_fuzzy_duplicate_status_t is_fuzzy_duplicate(size_t num_tokens1, char *
     char **languages = options.languages;
 
     phrase_array *acronym_alignments = NULL;
-    
+    phrase_array *multi_word_alignments = NULL;
+
     phrase_array *phrases1 = NULL;
     phrase_array *phrases2 = NULL;
 
@@ -370,6 +372,7 @@ libpostal_fuzzy_duplicate_status_t is_fuzzy_duplicate(size_t num_tokens1, char *
         if (do_acronyms) {
             acronym_alignments = acronym_token_alignments(joined1, token_array1, joined2, token_array2, num_languages, languages);
         }
+        multi_word_alignments = multi_word_token_alignments(joined1, token_array1, joined2, token_array2);
 
         if (num_languages > 0) {
             phrases1 = phrase_array_new();
@@ -385,7 +388,7 @@ libpostal_fuzzy_duplicate_status_t is_fuzzy_duplicate(size_t num_tokens1, char *
 
                 size_t matches_i = 0;
 
-                double sim = soft_tfidf_similarity_with_phrases_and_acronyms(num_tokens1, tokens1, token_scores1, phrases1, num_tokens2, tokens2, token_scores2, phrases2, acronym_alignments, soft_tfidf_options, &matches_i);
+                double sim = soft_tfidf_similarity_with_phrases_and_acronyms(num_tokens1, tokens1, token_scores1, phrases1, num_tokens2, tokens2, token_scores2, phrases2, acronym_alignments, multi_word_alignments, soft_tfidf_options, &matches_i);
                 if (sim > max_sim) {
                     max_sim = sim;
                 }
@@ -394,8 +397,8 @@ libpostal_fuzzy_duplicate_status_t is_fuzzy_duplicate(size_t num_tokens1, char *
                     num_matches = matches_i;
                 }
             }
-        } else if (do_acronyms) {
-            max_sim = soft_tfidf_similarity_with_phrases_and_acronyms(num_tokens1, tokens1, token_scores1, phrases1, num_tokens2, tokens2, token_scores2, phrases2, acronym_alignments, soft_tfidf_options, &num_matches);
+        } else if (do_acronyms || multi_word_alignments != NULL) {
+            max_sim = soft_tfidf_similarity_with_phrases_and_acronyms(num_tokens1, tokens1, token_scores1, phrases1, num_tokens2, tokens2, token_scores2, phrases2, acronym_alignments, multi_word_alignments, soft_tfidf_options, &num_matches);
         } else {
             max_sim = soft_tfidf_similarity(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, soft_tfidf_options, &num_matches);
         }
@@ -438,6 +441,10 @@ libpostal_fuzzy_duplicate_status_t is_fuzzy_duplicate(size_t num_tokens1, char *
 
     if (acronym_alignments != NULL) {
         phrase_array_destroy(acronym_alignments);
+    }
+
+    if (multi_word_alignments != NULL) {
+        phrase_array_destroy(multi_word_alignments);
     }
 
     if (token_array1 != NULL) {

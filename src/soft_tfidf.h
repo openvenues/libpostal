@@ -45,7 +45,7 @@ typedef struct soft_tfidf_options {
 
 soft_tfidf_options_t soft_tfidf_default_options(void);
 
-double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char **tokens1, double *token_scores1, phrase_array *phrases1, size_t num_tokens2, char **tokens2, double *token_scores2, phrase_array *phrases2, phrase_array *acronym_alignments, soft_tfidf_options_t options, size_t *num_matches);
+double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char **tokens1, double *token_scores1, phrase_array *phrases1, size_t num_tokens2, char **tokens2, double *token_scores2, phrase_array *phrases2, phrase_array *acronym_alignments, phrase_array *multi_word_alignments, soft_tfidf_options_t options, size_t *num_matches);
 double soft_tfidf_similarity(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, soft_tfidf_options_t options, size_t *num_matches);
 
 #endif
