@@ -152,6 +152,9 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang);
 size_t ordinal_suffix_len(char *s, size_t len, char *lang);
 size_t possible_ordinal_digit_len(char *str, size_t len);
 
+size_t valid_ordinal_suffix_len(char *str, token_t token, token_t prev_token, char *lang);
+bool add_ordinal_suffix_lengths(uint32_array *suffixes, char *str, token_array *tokens_array, char *lang);
+
 bool is_likely_roman_numeral(char *str);
 bool is_likely_roman_numeral_len(char *str, size_t len);
 

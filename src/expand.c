@@ -44,39 +44,6 @@ inline uint64_t get_normalize_string_options(libpostal_normalize_options_t optio
     return normalize_string_options;
 }
 
-
-static inline size_t valid_ordinal_suffix_len(char *str, token_t token, token_t prev_token, char *lang) {
-    size_t len_ordinal_suffix = ordinal_suffix_len(str + token.offset, token.len, lang);
-
-    int32_t unichr = 0;
-    const uint8_t *ptr = (const uint8_t *)str;
-
-    if (len_ordinal_suffix > 0) {
-        ssize_t start = 0;
-        size_t token_offset = token.offset;
-        size_t token_len = token.len;
-
-        if (len_ordinal_suffix < token.len) {
-            start = token.offset + token.len - len_ordinal_suffix;
-            token_offset = token.offset;
-            token_len = token.len - len_ordinal_suffix;
-        } else {
-            start = prev_token.offset + prev_token.len;
-            token_offset = prev_token.offset;
-            token_len = prev_token.len;
-        }
-        ssize_t prev_char_len = utf8proc_iterate_reversed(ptr, start, &unichr);
-        if (prev_char_len <= 0) return 0;
-        if (!utf8_is_digit(utf8proc_category(unichr)) && !is_likely_roman_numeral_len(str + token_offset, token_len)) {
-            return 0;
-        }
-    } else {
-        return 0;
-    }
-
-    return len_ordinal_suffix;
-}
-
 void add_normalized_strings_token(cstring_array *strings, char *str, token_t token, libpostal_normalize_options_t options) {
 
     uint64_t normalize_token_options = get_normalize_token_options(options);
@@ -173,8 +140,6 @@ void add_postprocessed_string(cstring_array *strings, char *str, libpostal_norma
     }
 
 }
-
-
 
 address_expansion_array *valid_affix_expansions(phrase_t phrase, libpostal_normalize_options_t options) {
     uint32_t expansion_index = phrase.data;
@@ -1657,7 +1622,6 @@ cstring_array *expand_address(char *input, libpostal_normalize_options_t options
 cstring_array *expand_address_root(char *input, libpostal_normalize_options_t options, size_t *n) {
     return expand_address_phrase_option(input, options, n, DELETE_PHRASES);
 }
-
 
 
 void expansion_array_destroy(char **expansions, size_t n) {
