@@ -30,7 +30,6 @@ int main(int argc, char **argv) {
     double longitude = 0.0;
     double latitude = 0.0;
 
-
     for (size_t i = 1; i < argc; i++) {
         char *arg = argv[i];
 
@@ -46,6 +45,14 @@ int main(int argc, char **argv) {
             options.name_only_keys = true;
         } else if (string_equals(arg, "--address-only-keys")) {
             options.address_only_keys = true;
+        } else if (string_equals(arg, "--name-only-keys")) {
+            options.name_only_keys = true;
+        } else if (string_equals(arg, "--use-city")) {
+            options.with_city_or_equivalent = true;
+        } else if (string_equals(arg, "--use-containing")) {
+            options.with_small_containing_boundaries = true;
+        } else if (string_equals(arg, "--use-postal-code")) {
+            options.with_postal_code = true;
         } else if (string_equals(arg, "--language")) {
             next_is_language = true;
         } else if (next_is_latitude) {
