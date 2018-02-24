@@ -114,7 +114,36 @@
 #define PO_BOX_CONTAINING_KEY_PREFIX PO_BOX_KEY_PREFIX CONTAINING_BOUNDARY_PREFIX
 #define PO_BOX_POSTCODE_KEY_PREFIX PO_BOX_KEY_PREFIX POSTCODE_KEY_PREFIX
 
-cstring_array *expanded_component_combined(char *input, libpostal_normalize_options_t options, size_t *n) {
+
+bool cstring_array_add_string_no_whitespace(cstring_array *strings, char *str) {
+    if (strings == NULL || str == NULL) return false;
+    size_t start = 0;
+
+    size_t len = strlen(str);
+
+    cstring_array_start_token(strings);
+
+    uint8_t *ptr =  (uint8_t *)str;
+    ssize_t char_len;
+    int32_t ch;
+    ssize_t token_len = -1;
+
+    while ((token_len = string_next_whitespace(str + start)) > 0) {
+        char_array_append_len(strings->str, str + start, token_len);
+        start += token_len;
+
+        char_len = utf8proc_iterate(ptr + start, len - start, &ch);
+        start += char_len;
+    }
+
+    char_array_append_len(strings->str, str + start, len - start);
+    char_array_terminate(strings->str);
+
+    return true;
+}
+
+
+cstring_array *expanded_component_combined(char *input, libpostal_normalize_options_t options, bool remove_spaces, size_t *n) {
     size_t num_expansions = 0;
     cstring_array *expansions = expand_address(input, options, &num_expansions);
 
@@ -155,7 +184,11 @@ cstring_array *expanded_component_combined(char *input, libpostal_normalize_opti
             k = kh_get(str_set, unique_strings, expansion);
 
             if (k == kh_end(unique_strings)) {
-                cstring_array_add_string(all_expansions, expansion);
+                if (remove_spaces) {
+                    cstring_array_add_string_no_whitespace(all_expansions, expansion);
+                } else {
+                    cstring_array_add_string(all_expansions, expansion);
+                }
                 k = kh_put(str_set, unique_strings, expansion, &ret);
                 if (ret < 0) {
                     break;
@@ -664,13 +697,15 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
         }
     }
 
+    bool remove_spaces = false;
 
     cstring_array *street_expansions = NULL;
     size_t num_street_expansions = 0;
     if (place->street != NULL) {
+        remove_spaces = true;
         log_debug("Doing street expansions for %s\n", place->street);
         normalize_options.address_components = LIBPOSTAL_ADDRESS_STREET | LIBPOSTAL_ADDRESS_ANY;
-        street_expansions = expanded_component_combined(place->street, normalize_options, &num_street_expansions);
+        street_expansions = expanded_component_combined(place->street, normalize_options, remove_spaces, &num_street_expansions);
         log_debug("Got %zu street expansions\n", num_street_expansions);
     }
 

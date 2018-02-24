@@ -789,6 +789,28 @@ inline bool string_contains_period(char *str) {
     return string_next_codepoint(str, string_next_codepoint(str, PERIOD_CODEPOINT)) >= 0;
 }
 
+ssize_t string_next_whitespace_len(char *str, size_t len) {
+    uint8_t *ptr = (uint8_t *)str;
+    int32_t ch;
+    ssize_t idx = 0;
+
+    while (idx < len) {
+        ssize_t char_len = utf8proc_iterate(ptr, len, &ch);
+
+        if (char_len <= 0 || ch == 0) break;
+
+        if (utf8_is_whitespace(ch)) return idx;
+        ptr += char_len;
+        idx += char_len;
+    }
+    return -1;
+}
+
+ssize_t string_next_whitespace(char *str) {
+    return string_next_whitespace_len(str, strlen(str));
+}
+
+
 size_t string_right_spaces_len(char *str, size_t len) {
     size_t spaces = 0;
 

@@ -122,6 +122,9 @@ ssize_t string_next_period(char *str);
 bool string_contains_period_len(char *str, size_t len);
 bool string_contains_period(char *str);
 
+ssize_t string_next_whitespace_len(char *str, size_t len);
+ssize_t string_next_whitespace(char *str);
+
 size_t string_left_spaces_len(char *str, size_t len);
 size_t string_right_spaces_len(char *str, size_t len);
 char *string_trim(char *str);
