@@ -11,7 +11,7 @@ approach|app|apch|appr
 arcade|arc
 arterial|artl
 artery|art|arty
-avenue|av|ave|aven|avenu|avn|avnu|avnue|ave.
+avenue|av|ave|aven|avenu|avn|avnu|avnue
 avenues|avs|aves|avens|avenus|avns|avnus|avnues
 autoroute|aut
 back|bk
@@ -54,7 +54,7 @@ center|centre|cetr|cntr|ctr|c|cen
 centers|ctrs
 centreway|cnwy
 chase|ch|chas
-circle|cir|circel|cir.
+circle|cir|circel
 circles|cirs
 circlet|clt
 circuit|crct|circ|cct|cirt|ci|circt
@@ -81,7 +81,7 @@ county highway|ch|c.h.|c.h|c h|c.hw|c hw|co.hw|co hw|cty.hw|cty hw|c.hgwy|c hgwy
 county road|cr|c.r.|c.r|c r|co.r|co r|c.rd|c rd|co.rd|co rd|cty.r|cty r|cty.rd|cty rd
 county route|cr|c.r.|c.r|c r|co.r|co r|c.rt|c rt|co.rt|co rt|cty.r|cty r|cty.rt|cty rt|c.rte|c rte|co.rte|co rte|cty.rte|cty rte|county touring route
 course|crse
-court|ct|crt|crt.|ct.
+court|ct|crt
 courts|crts|cts
 courtyard|cyd|ctyd
 cove|cov|ce|cv
@@ -110,7 +110,7 @@ divide|div
 diversion|divers
 down|dn
 downs|dns|dwns
-drive|dr|drv|dv|dve|d|dr.
+drive|dr|drv|dv|dve|d
 driveway|drwy|dvwy|dwy|dway|drvwy
 drove|drov
 easement|esmt
@@ -200,7 +200,7 @@ ladder|ladr
 lagoon|lagn|lgn|lagon
 land
 landing|ldg|lndg|landng
-lane|l|ln|la|la.|ln.
+lane|l|ln|la
 laneway|lnwy
 lees
 light|lgt|lt
@@ -258,7 +258,7 @@ pike|pk|pke
 pine|pne|pn
 pines|pns|pnes
 pond
-place|pl|pla|plc|plac|pl.
+place|pl|pla|plc|plac
 plain|pln|pl
 plains|plns|pls
 plateau|plat|plt
@@ -303,7 +303,7 @@ ring
 rise|ri
 riverway|rvwy
 riviera|rvra
-road|rd|ro|r|roa|raod|rd.
+road|rd|ro|r|roa|raod
 roads|raods|rds
 roadside|rdsd|road side
 roadway|rdwy|rdw|rdy
@@ -333,7 +333,7 @@ space|spc
 spring|spg|sprng|sprn
 springs|spgs|sprngs|spns
 spur|spr
-square|sq|sqr|sq.
+square|sq|sqr
 squares|sqs
 stairs|strs
 stairway|stwy|strwy|stair way|st.wy|st wy|str.way|str way
@@ -344,7 +344,7 @@ steps|stps
 strand|stra|strnd|strd
 strands|strnds|strds
 stravenue|stra|strav
-street|st|str|stre|stree|st.|strt
+street|st|str|stre|stree|strt
 streets|sts
 strip|strp
 subdivision|subdiv
@@ -368,7 +368,7 @@ townline|tline
 trace|trce|trc
 track|tr|trk|trak
 trafficway|trfy
-trail|tr|trl|tr.
+trail|tr|trl
 trailer|trlr
 tram
 tramway|tmwy
