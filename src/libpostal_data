@@ -3,23 +3,27 @@
 set -e
 
 if [ "$#" -lt 3 ]; then
-    echo "Usage: ./libpostal_data [upload|download] [base|geodb] data_dir"
+    echo "Usage: ./libpostal_data [upload|download] [base|parser|language_classifier|all] data_dir"
     exit 1
 fi
 
 LIBPOSTAL_VERSION_STRING="v1"
+LIBPOSTAL_RELEASE_VERSION_STRING="v1.0.0"
 
+LIBPOSTAL_REPO_NAME="openvenues/libpostal"
 LIBPOSTAL_S3_BUCKET_NAME="libpostal"
 LIBPOSTAL_S3_KEY="s3://$LIBPOSTAL_S3_BUCKET_NAME"
-LIBPOSTAL_S3_BUCKET_URL="https://$LIBPOSTAL_S3_BUCKET_NAME.s3.amazonaws.com"
-LIBPOSTAL_CLOUDFRONT_URL="https://d1p366rbd94x8u.cloudfront.net"
+
+GITHUB_API_URL="https://api.github.com"
+LIBPOSTAL_RELEASE_API_URL="$GITHUB_API_URL/repos/$LIBPOSTAL_REPO_NAME/releases"
+
 LIBPOSTAL_DATA_FILE="libpostal_data.tar.gz"
 LIBPOSTAL_PARSER_FILE="parser.tar.gz"
 LIBPOSTAL_LANG_CLASS_FILE="language_classifier.tar.gz"
 
-LIBPOSTAL_DATA_S3_PREFIX="data/$LIBPOSTAL_VERSION_STRING"
-LIBPOSTAL_PARSER_S3_PREFIX="models/address_parser"
-LIBPOSTAL_LANG_CLASS_S3_PREFIX="models/language_classifier"
+LIBPOSTAL_DATA_S3_PREFIX="$LIBPOSTAL_LATEST_MODEL_VERSION_STRING/parser.tar.gz"
+LIBPOSTAL_PARSER_S3_PREFIX="$LIBPOSTAL_LATEST_DATA_VERSION_STRING/libpostal_data.tar.gz"
+LIBPOSTAL_LANG_CLASS_S3_PREFIX="$LIBPOSTAL_LATEST_MODEL_VERSION_STRING/language_classifier.tar.gz"
 
 COMMAND=$1
 FILE=$2
@@ -58,7 +62,7 @@ kill_background_processes() {
 trap kill_background_processes INT
 
 PART_MSG='echo "Downloading part $1: filename=$5, offset=$2, max=$3"'
-PART_CURL='curl $4 --silent -H"Range:bytes=$2-$3" --retry 3 --retry-delay 2 -o $5'
+PART_CURL='curl -L $4 --silent -H"Range:bytes=$2-$3" --retry 3 --retry-delay 2 -o $5'
 DOWNLOAD_PART="$PART_MSG;$PART_CURL"
 
 
@@ -99,10 +103,12 @@ download_multipart() {
 download_file() {
     updated_path=$1
     data_dir=$2
-    prefix=$3
-    filename=$4
-    name=$5
-    shift 5
+    metadata_url=$3
+    url=$4
+    size=$5
+    filename=$6
+    name=$7
+    shift 7
     subdirs=$@
 
     local_path=$data_dir/$filename
@@ -113,16 +119,13 @@ download_file() {
 
     echo "Checking for new libpostal $name..."
 
-    url=$LIBPOSTAL_CLOUDFRONT_URL/$prefix/$filename
-
-    if [ $(curl -sI $url -z "$(cat $updated_path)" --remote-time -w %{http_code} -o /dev/null | grep "^200$") ]; then
+    if [ $(curl -LsI $metadata_url -z "$(cat $updated_path)" --remote-time -w %{http_code} -o /dev/null | grep "^200$") ]; then
         echo "New libpostal $name available"
-        content_length=$(curl -I $url 2> /dev/null | awk 'tolower($0) ~ /^content-length:/ { print $2 }' | tr -d '[[:space:]]')
 
-        if [ $content_length -ge $LARGE_FILE_SIZE ]; then
-            download_multipart $url $local_path $content_length
+        if [ $size -ge $LARGE_FILE_SIZE ]; then
+            download_multipart $url $local_path $size
         else
-            curl $url --retry 3 --retry-delay 2 -o $local_path
+            curl -L $url --retry 3 --retry-delay 2 -o $local_path
         fi
 
         if date -ud "@$(date -ur . +%s)" >/dev/null 2>&1; then
@@ -163,45 +166,59 @@ if [ $COMMAND = "download" ]; then
 
     mkdir -p $LIBPOSTAL_DATA_DIR
 
-    if [ $FILE = "base" ] || [ $FILE = "all" ]; then
-        download_file $LIBPOSTAL_DATA_UPDATED_PATH $LIBPOSTAL_DATA_DIR $LIBPOSTAL_DATA_S3_PREFIX $LIBPOSTAL_DATA_FILE "data file" $BASIC_MODULE_DIRS
-    fi
-    if [ $FILE = "parser" ] || [ $FILE = "all" ]; then
-        latest_parser=$(curl --silent "$LIBPOSTAL_S3_BUCKET_URL/$LIBPOSTAL_PARSER_S3_PREFIX/latest")
-        parser_s3_prefix="$LIBPOSTAL_PARSER_S3_PREFIX/$latest_parser"
-        download_file $LIBPOSTAL_PARSER_UPDATED_PATH $LIBPOSTAL_DATA_DIR $parser_s3_prefix $LIBPOSTAL_PARSER_FILE "parser data file" $PARSER_MODULE_DIR
-    fi
-    if [ $FILE = "language_classifier" ] || [ $FILE = "all" ]; then
-        latest_lang_class=$(curl --silent "$LIBPOSTAL_S3_BUCKET_URL/$LIBPOSTAL_LANG_CLASS_S3_PREFIX/latest")
-        lang_class_s3_prefix="$LIBPOSTAL_LANG_CLASS_S3_PREFIX/$latest_lang_class"
-        download_file $LIBPOSTAL_LANG_CLASS_UPDATED_PATH $LIBPOSTAL_DATA_DIR $lang_class_s3_prefix $LIBPOSTAL_LANG_CLASS_FILE "language classifier data file" $LANGUAGE_CLASSIFIER_MODULE_DIR
-    fi
+    release_id=$(curl -s $LIBPOSTAL_RELEASE_API_URL/tags/$LIBPOSTAL_RELEASE_VERSION_STRING | grep "\"id\"" | head -n1 | grep -o '[0-9][0-9]*')
+    release_assets="$(curl -s $LIBPOSTAL_RELEASE_API_URL/$release_id/assets)"
 
-    if [ "$LIBPOSTAL_DATA_DIR_VERSION" != "$LIBPOSTAL_VERSION_STRING" ]; then
-        echo $LIBPOSTAL_VERSION_STRING > $LIBPOSTAL_DATA_VERSION_FILE;
-    fi
+    asset_names=($(echo "$release_assets" | grep -o '"name": *"[^"]*"' | grep -o '"[^"]*"$' | tr -d '"'))
+    asset_metadata_urls=($(echo "$release_assets" | grep -o '"url": *"[^"]*/releases/assets/[0-9]*"' | grep -o '"[^"]*"$' | tr -d '"'))
+    asset_urls=($(echo "$release_assets" | grep -o '"browser_download_url": *"[^"]*"' | grep -o '"[^"]*"$' | tr -d '"'))
+
+    num_assets=${#asset_names[*]}
+
+    asset_sizes=($(echo "$release_assets" | grep -o '"size": *[0-9]*' | grep -o '[0-9]*$'))
+
+    for i in $(seq 0 $((num_assets - 1))); do
+        asset=${asset_names[i]};
+        asset_metadata_url=${asset_metadata_urls[i]};
+        asset_url=${asset_urls[i]};
+        asset_size=${asset_sizes[i]};
+
+        if [ $asset = $LIBPOSTAL_DATA_FILE ] && ([ $FILE = "base" ] || [ $FILE == "all" ]); then
+            download_file $LIBPOSTAL_DATA_UPDATED_PATH $LIBPOSTAL_DATA_DIR $asset_metadata_url $asset_url $asset_size $LIBPOSTAL_DATA_FILE "data file" $BASIC_MODULE_DIRS
+        fi
+        if [ $asset = $LIBPOSTAL_PARSER_FILE ] && ([ $FILE = "parser" ] || [ $FILE = "all" ]); then
+            download_file $LIBPOSTAL_PARSER_UPDATED_PATH $LIBPOSTAL_DATA_DIR $asset_metadata_url $asset_url $asset_size $LIBPOSTAL_PARSER_FILE "parser data file" $PARSER_MODULE_DIR
+        fi
+        if [ $asset = $LIBPOSTAL_LANG_CLASS_FILE ] && ([ $FILE = "language_classifier" ] || [ $FILE = "all" ]); then
+            download_file $LIBPOSTAL_LANG_CLASS_UPDATED_PATH $LIBPOSTAL_DATA_DIR $asset_metadata_url $asset_url $asset_size $LIBPOSTAL_LANG_CLASS_FILE "language classifier data file" $LANGUAGE_CLASSIFIER_MODULE_DIR
+        fi
+
+        if [ "$LIBPOSTAL_DATA_DIR_VERSION" != "$LIBPOSTAL_VERSION_STRING" ]; then
+            echo $LIBPOSTAL_VERSION_STRING > $LIBPOSTAL_DATA_VERSION_FILE;
+        fi
+    done
 
 elif [ $COMMAND = "upload" ]; then
+    echo "upload not implemented yet"
 
-    if [ $FILE = "base" ] || [ $FILE = "all" ]; then
-        tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $BASIC_MODULE_DIRS
-        aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $LIBPOSTAL_S3_KEY/$LIBPOSTAL_DATA_S3_PREFIX/
-    fi
+    #if [ $FILE = "base" ] || [ $FILE = "all" ]; then
+    #    tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $BASIC_MODULE_DIRS
+    #    aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $LIBPOSTAL_S3_KEY/$LIBPOSTAL_DATA_S3_PREFIX/
+    #fi
 
-    if [ $FILE = "parser" ] || [ $FILE = "all" ]; then
-        latest_parser=$(curl --silent $LIBPOSTAL_S3_BUCKET_URL/$LIBPOSTAL_PARSER_S3_PREFIX/latest)
-        tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_PARSER_FILE $PARSER_MODULE_DIR
-        parser_s3_dir="$LIBPOSTAL_S3_KEY/$LIBPOSTAL_PARSER_S3_PREFIX/$latest_parser/"
-        aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_PARSER_FILE $parser_s3_dir
-    fi
+    #if [ $FILE = "parser" ] || [ $FILE = "all" ]; then
+    #    latest_parser=$(curl --silent $LIBPOSTAL_S3_BUCKET_URL/$LIBPOSTAL_PARSER_S3_PREFIX/latest)
+    #    tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_PARSER_FILE $PARSER_MODULE_DIR
+    #    parser_s3_dir="$LIBPOSTAL_S3_KEY/$LIBPOSTAL_PARSER_S3_PREFIX/$latest_parser/"
+    #    aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_PARSER_FILE $parser_s3_dir
+    #fi
 
-    if [ $FILE = "language_classifier" ] || [ $FILE = "all" ]; then
-        latest_lang_class=$(curl --silent $LIBPOSTAL_S3_BUCKET_URL/$LIBPOSTAL_LANG_CLASS_S3_PREFIX/latest)
-        tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_LANG_CLASS_FILE $LANGUAGE_CLASSIFIER_MODULE_DIR
-        lang_class_s3_dir="$LIBPOSTAL_S3_KEY/$LIBPOSTAL_LANG_CLASS_S3_PREFIX/$latest_lang_class/"
-        aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_LANG_CLASS_FILE $lang_class_s3_dir
-    fi
-
+    #if [ $FILE = "language_classifier" ] || [ $FILE = "all" ]; then
+    #    latest_lang_class=$(curl --silent $LIBPOSTAL_S3_BUCKET_URL/$LIBPOSTAL_LANG_CLASS_S3_PREFIX/latest)
+    #    tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_LANG_CLASS_FILE $LANGUAGE_CLASSIFIER_MODULE_DIR
+    #    lang_class_s3_dir="$LIBPOSTAL_S3_KEY/$LIBPOSTAL_LANG_CLASS_S3_PREFIX/$latest_lang_class/"
+    #    aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_LANG_CLASS_FILE $lang_class_s3_dir
+    #fi
 else
     echo "Invalid command: $COMMAND"
     exit 1
