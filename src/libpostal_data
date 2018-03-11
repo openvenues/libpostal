@@ -169,16 +169,16 @@ if [ $COMMAND = "download" ]; then
     release_id=$(curl -s $LIBPOSTAL_RELEASE_API_URL/tags/$LIBPOSTAL_RELEASE_VERSION_STRING | grep "\"id\"" | head -n1 | grep -o '[0-9][0-9]*')
     release_assets="$(curl -s $LIBPOSTAL_RELEASE_API_URL/$release_id/assets)"
 
-    asset_names_tempfile="asset_names.tmp"
+    asset_names_tempfile="$LIBPOSTAL_DATA_DIR/asset_names.tmp"
     echo "$release_assets" | grep -o '"name": *"[^"]*"' | grep -o '"[^"]*"$' | tr -d '"' > $asset_names_file
-    asset_metadata_tempfile="asset_metadata.tmp"
+    asset_metadata_tempfile="$LIBPOSTAL_DATA_DIR/asset_metadata.tmp"
     echo "$release_assets" | grep -o '"url": *"[^"]*/releases/assets/[0-9]*"' | grep -o '"[^"]*"$' | tr -d '"' > $asset_metadata_tempfile
-    asset_urls_tempfile="asset_urls.tmp"
+    asset_urls_tempfile="$LIBPOSTAL_DATA_DIR/asset_urls.tmp"
     echo "$release_assets" | grep -o '"browser_download_url": *"[^"]*"' | grep -o '"[^"]*"$' | tr -d '"' > $asset_urls_tempfile
-    asset_sizes_tempfile="asset_sizes.tmp"
+    asset_sizes_tempfile="$LIBPOSTAL_DATA_DIR/asset_sizes.tmp"
     echo "$release_assets" | grep -o '"size": *[0-9]*' | grep -o '[0-9]*$' > $asset_sizes_tempfile
 
-    assets_tempfile="assets.tmp"
+    assets_tempfile="$LIBPOSTAL_DATA_DIR/assets.tmp"
     paste -d' ' $asset_names_tempfile $asset_metadata_tempfile $asset_urls_tempfile $asset_sizes_tempfile > $assets_tempfile
 
     rm $asset_names_tempfile $asset_metadata_tempfile $asset_urls_tempfile $asset_sizes_tempfile
