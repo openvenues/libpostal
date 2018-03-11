@@ -440,12 +440,12 @@ Training data
 
 In machine learning, large amounts of training data are often essential for getting good results. Many open-source machine learning projects either release only the model code (results reproducible if and only if you're Google), or a pre-baked model where the training conditions are unknown.
 
-Libpostal is a bit different because it's trained on open data that's available to everyone, so we've released the entire training pipeline (the [geodata](https://github.com/openvenues/libpostal/tree/master/scripts/geodata) package in this repo), as well as the resulting training data itself on S3. It's over 100GB unzipped.
+Libpostal is a bit different because it's trained on open data that's available to everyone, so we've released the entire training pipeline (the [geodata](https://github.com/openvenues/libpostal/tree/master/scripts/geodata) package in this repo), as well as the resulting training data itself on the Internet Archive. It's over 100GB unzipped.
 
-Training data are stored on S3 by the date they were created. There's also a file stored on S3 to point to the most recent training data. To always point to the latest data, use something like: ```latest=$(curl https://s3.amazonaws.com/libpostal/training_data/latest)``` and use that variable in place of the date.
+Training data are stored on archive.org by the date they were created. There's also a file stored in the main directory of this repo called `current_parser_training_set` which stores the date of the most recently created training set. To always point to the latest data, try something like: ```latest=$(cat current_parser_training_set)``` and use that variable in place of the date.
 
 ### Parser training sets ###
-All files can be found at https://d1p366rbd94x8u.cloudfront.net/training_data/$YYYY-MM-DD/parser/$FILE as gzip'd tab-separated values (TSV) files formatted like:```language\tcountry\taddress```.
+All files can be found at https://archive.org/download/libpostal-parser-training-data-YYYYMMDD/$FILE as gzip'd tab-separated values (TSV) files formatted like:```language\tcountry\taddress```.
 
 - **formatted_addresses_tagged.random.tsv.gz** (ODBL): OSM addresses. Apartments, PO boxes, categories, etc. are added primarily to these examples
 - **formatted_places_tagged.random.tsv.gz** (ODBL): every toponym in OSM (even cities represented as points, etc.), reverse-geocoded to its parent admins, possibly including postal codes if they're listed on the point/polygon. Every place gets a base level of representation and places with higher populations get proportionally more.
