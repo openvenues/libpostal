@@ -170,7 +170,7 @@ if [ $COMMAND = "download" ]; then
     release_assets="$(curl -s $LIBPOSTAL_RELEASE_API_URL/$release_id/assets)"
 
     asset_names_tempfile="$LIBPOSTAL_DATA_DIR/asset_names.tmp"
-    echo "$release_assets" | grep -o '"name": *"[^"]*"' | grep -o '"[^"]*"$' | tr -d '"' > $asset_names_file
+    echo "$release_assets" | grep -o '"name": *"[^"]*"' | grep -o '"[^"]*"$' | tr -d '"' > $asset_names_tempfile
     asset_metadata_tempfile="$LIBPOSTAL_DATA_DIR/asset_metadata.tmp"
     echo "$release_assets" | grep -o '"url": *"[^"]*/releases/assets/[0-9]*"' | grep -o '"[^"]*"$' | tr -d '"' > $asset_metadata_tempfile
     asset_urls_tempfile="$LIBPOSTAL_DATA_DIR/asset_urls.tmp"
