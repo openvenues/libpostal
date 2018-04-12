@@ -8,7 +8,7 @@ I was checking out the awesome libpostal, and saw something that could be improv
 
 ---
 #### Here's how I'm using libpostal
-<!-- Always interested to know how people use the library! What are you working on? Which orgnization? What's your use case? -->
+<!-- Always interested to know how people use the library! What are you working on? Which organization? What's your use case? -->
 
 ---
 #### Here's what I did
