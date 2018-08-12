@@ -494,7 +494,7 @@ language (IX => 9) which occur in the names of many monarchs, popes, etc.
 
 - **Fast, accurate tokenization/lexing**: clocked at > 1M tokens / sec,
 implements the TR-29 spec for UTF8 word segmentation, tokenizes East Asian
-languages chracter by character instead of on whitespace.
+languages character by character instead of on whitespace.
 
 - **UTF8 normalization**: optionally decompose UTF8 to NFD normalization form,
 strips accent marks e.g. à => a and/or applies Latin-ASCII transliteration.
