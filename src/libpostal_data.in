@@ -1,0 +1,205 @@
+#!/bin/sh
+
+set -e
+
+if [ "$#" -lt 3 ]; then
+    echo "Usage: ./libpostal_data [upload|download] [base|parser|language_classifier|all] data_dir"
+    exit 1
+fi
+
+COMMAND=$1
+FILE=$2
+LIBPOSTAL_DATA_DIR=$3
+
+MB=$((1024*1024))
+CHUNK_SIZE=$((64*$MB))
+
+# Not loving this approach but there appears to be no way to query the size
+# of a release asset without using the Github API
+LIBPOSTAL_DATA_FILE_CHUNKS=1
+LIBPOSTAL_PARSER_MODEL_CHUNKS=12
+LIBPOSTAL_LANG_CLASS_MODEL_CHUNKS=1
+
+LIBPOSTAL_DATA_DIR_VERSION_STRING="@LIBPOSTAL_DATA_DIR_VERSION_STRING@"
+
+LIBPOSTAL_DATA_FILE_LATEST_VERSION="@LIBPOSTAL_DATA_FILE_LATEST_VERSION@"
+LIBPOSTAL_PARSER_MODEL_LATEST_VERSION="@LIBPOSTAL_PARSER_MODEL_LATEST_VERSION@"
+LIBPOSTAL_LANG_CLASS_MODEL_LATEST_VERSION="@LIBPOSTAL_LANG_CLASS_MODEL_LATEST_VERSION@"
+
+LIBPOSTAL_REPO_NAME="openvenues/libpostal"
+
+LIBPOSTAL_DATA_FILE="libpostal_data.tar.gz"
+LIBPOSTAL_PARSER_FILE="parser.tar.gz"
+LIBPOSTAL_LANG_CLASS_FILE="language_classifier.tar.gz"
+
+LIBPOSTAL_BASE_URL="https://github.com/$LIBPOSTAL_REPO_NAME/releases/download"
+
+LIBPOSTAL_DATA_VERSION_FILE=$LIBPOSTAL_DATA_DIR/data_version
+LIBPOSTAL_DATA_DIR_VERSION=
+
+mkdir -p $LIBPOSTAL_DATA_DIR
+
+LIBPOSTAL_DATA_FILE_VERSION_PATH=$LIBPOSTAL_DATA_DIR/base_data_file_version
+LIBPOSTAL_PARSER_MODEL_VERSION_PATH=$LIBPOSTAL_DATA_DIR/parser_model_file_version
+LIBPOSTAL_LANG_CLASS_MODEL_VERSION_PATH=$LIBPOSTAL_DATA_DIR/language_classifier_model_file_version
+
+BASIC_MODULE_DIRS="address_expansions numex transliteration"
+PARSER_MODULE_DIR=address_parser
+LANGUAGE_CLASSIFIER_MODULE_DIR=language_classifier
+
+
+kill_background_processes() {
+    jobs -p | xargs kill;
+    exit
+}
+
+trap kill_background_processes INT
+
+PART_MSG='echo "Downloading part $1: filename=$5, offset=$2, max=$3"'
+PART_CURL='curl -L $4 --silent -H"Range:bytes=$2-$3" --retry 3 --retry-delay 2 -o $5'
+DOWNLOAD_PART="$PART_MSG;$PART_CURL"
+
+
+download_release_multipart() {
+    url=$1
+    filename=$2
+    num_chunks=$3
+
+    echo "Downloading multipart: $url, num_chunks=$num_chunks"
+    offset=0
+    i=0
+    while [ $i -lt $num_chunks ]; do
+        i=$((i+1))
+        part_filename="$filename.$i"
+        if [ $i -lt $num_chunks ]; then
+            max=$((offset+CHUNK_SIZE-1));
+        else
+            max="";
+        fi;
+        printf "%s\0%s\0%s\0%s\0%s\0" "$i" "$offset" "$max" "$url" "$part_filename"
+        offset=$((offset+CHUNK_SIZE))
+    done | xargs -0 -n 5 -P $NUM_WORKERS sh -c "$DOWNLOAD_PART" --
+
+    > $local_path
+
+    i=0
+    while [ $i -lt $num_chunks ]; do
+        i=$((i+1))
+        part_filename="$filename.$i"
+        cat $part_filename >> $local_path
+        rm $part_filename
+    done;
+
+}
+
+
+download_release() {
+    version_file_path=$1
+    version=$2
+    data_dir=$3
+    num_chunks=$4
+    filename=$5
+    name=$6
+    shift 6
+    subdirs=$@
+
+    echo $version_file_path
+    echo $version
+    echo $data_dir
+    echo $num_chunks
+    echo $filename
+    echo $name
+    echo $subdirs
+
+    local_path=$data_dir/$filename
+
+    url=$LIBPOSTAL_BASE_URL/$version/$filename
+
+    if [ ! -e $version_file_path ]; then
+        current_version=""
+    else
+        current_version="$(cat $version_path)"
+    fi;
+
+    echo "Checking for new libpostal $name..."
+
+    if [ $current_version -ne $version ]; then
+        echo "New libpostal $name available"
+
+        if [ $num_chunks -gt 1 ]; then
+            download_release_multipart $url $local_path $num_chunks
+        else
+            curl -L $url --retry 3 --retry-delay 2 -o $local_path
+        fi
+
+        if date -ud "@$(date -ur . +%s)" >/dev/null 2>&1; then
+            echo $(date -ud "$(date -ud "@$(date -ur $local_path +%s)") + 1 second") > $updated_path;
+        elif stat -f %Sm . >/dev/null 2>&1; then
+            echo $(date -ur $(stat -f %m $local_path) -v+1S) > $updated_path;
+        fi;
+        for subdir in $subdirs; do
+            rm -rf $data_dir/$subdir;
+        done
+        tar -xvzf $local_path --no-same-owner -C $data_dir;
+        rm $local_path;
+    else
+        echo "libpostal $name up to date"
+    fi
+}
+
+if [ $COMMAND = "download" ]; then
+    if [ -e $LIBPOSTAL_DATA_VERSION_FILE ]; then
+        LIBPOSTAL_DATA_DIR_VERSION=$(cat $LIBPOSTAL_DATA_VERSION_FILE)
+    fi
+
+    if [ "$LIBPOSTAL_DATA_DIR_VERSION" != "$LIBPOSTAL_DATA_DIR_VERSION_STRING" ]; then
+        echo "Old version of datadir detected, removing..."
+        for subdir in $BASIC_MODULE_DIRS $PARSER_MODULE_DIR $LANGUAGE_CLASSIFIER_MODULE_DIR; do
+            rm -rf $LIBPOSTAL_DATA_DIR/$subdir;
+        done
+
+        # Legacy, blow it away too to be nice
+        if [ -e $LIBPOSTAL_DATA_DIR/geodb ]; then
+            rm -rf $LIBPOSTAL_DATA_DIR/geodb;
+        fi
+
+        rm -f $LIBPOSTAL_DATA_DIR/last_updated*
+    fi
+
+    mkdir -p $LIBPOSTAL_DATA_DIR
+
+    if ([ $FILE = "base" ] || [ $FILE = "all" ]); then
+        download_release $LIBPOSTAL_DATA_FILE_VERSION_PATH $LIBPOSTAL_DATA_FILE_LATEST_VERSION $LIBPOSTAL_DATA_DIR $LIBPOSTAL_DATA_FILE_CHUNKS $LIBPOSTAL_DATA_FILE "data file" $BASIC_MODULE_DIRS
+    fi
+    if ([ $FILE = "parser" ] || [ $FILE = "all" ]); then
+        download_release $LIBPOSTAL_PARSER_MODEL_VERSION_PATH $LIBPOSTAL_PARSER_MODEL_LATEST_VERSION $LIBPOSTAL_DATA_DIR $LIBPOSTAL_PARSER_MODEL_CHUNKS $LIBPOSTAL_PARSER_FILE "parser data file" $PARSER_MODULE_DIR
+    fi
+    if ([ $FILE = "language_classifier" ] || [ $FILE = "all" ]); then
+        download_release $LIBPOSTAL_LANG_CLASS_MODEL_VERSION_PATH $LIBPOSTAL_LANG_CLASS_MODEL_LATEST_VERSION $LIBPOSTAL_DATA_DIR $LIBPOSTAL_LANG_CLASS_MODEL_CHUNKS $LIBPOSTAL_LANG_CLASS_FILE "language classifier data file" $LANGUAGE_CLASSIFIER_MODULE_DIR
+    fi
+
+elif [ $COMMAND = "upload" ]; then
+    echo "upload not implemented yet"
+
+    #if [ $FILE = "base" ] || [ $FILE = "all" ]; then
+    #    tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $BASIC_MODULE_DIRS
+    #    aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_DATA_FILE $LIBPOSTAL_S3_KEY/$LIBPOSTAL_DATA_S3_PREFIX/
+    #fi
+
+    #if [ $FILE = "parser" ] || [ $FILE = "all" ]; then
+    #    latest_parser=$(curl --silent $LIBPOSTAL_S3_BUCKET_URL/$LIBPOSTAL_PARSER_S3_PREFIX/latest)
+    #    tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_PARSER_FILE $PARSER_MODULE_DIR
+    #    parser_s3_dir="$LIBPOSTAL_S3_KEY/$LIBPOSTAL_PARSER_S3_PREFIX/$latest_parser/"
+    #    aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_PARSER_FILE $parser_s3_dir
+    #fi
+
+    #if [ $FILE = "language_classifier" ] || [ $FILE = "all" ]; then
+    #    latest_lang_class=$(curl --silent $LIBPOSTAL_S3_BUCKET_URL/$LIBPOSTAL_LANG_CLASS_S3_PREFIX/latest)
+    #    tar -C $LIBPOSTAL_DATA_DIR -cvzf $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_LANG_CLASS_FILE $LANGUAGE_CLASSIFIER_MODULE_DIR
+    #    lang_class_s3_dir="$LIBPOSTAL_S3_KEY/$LIBPOSTAL_LANG_CLASS_S3_PREFIX/$latest_lang_class/"
+    #    aws s3 cp --acl=public-read $LIBPOSTAL_DATA_DIR/$LIBPOSTAL_LANG_CLASS_FILE $lang_class_s3_dir
+    #fi
+else
+    echo "Invalid command: $COMMAND"
+    exit 1
+fi
