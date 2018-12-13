@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 m4_define(LIBPOSTAL_MAJOR_VERSION, [1])
-m4_define(LIBPOSTAL_MINOR_VERSION, [0])
-m4_define(LIBPOSTAL_PATCH_VERSION, [0])
+m4_define(LIBPOSTAL_MINOR_VERSION, [1])
+m4_define(LIBPOSTAL_PATCH_VERSION, [alpha])
 
 AC_INIT([libpostal], LIBPOSTAL_MAJOR_VERSION.LIBPOSTAL_MINOR_VERSION.LIBPOSTAL_PATCH_VERSION)
 
@@ -50,10 +50,21 @@ AC_CHECK_TYPES([ptrdiff_t])
 # Checks for library functions.
 AC_CHECK_FUNCS([malloc realloc drand48 getcwd gettimeofday memmove memset regcomp setlocale sqrt strdup strndup])
 
+AC_SUBST([LIBPOSTAL_DATA_DIR_VERSION_STRING], [v1])
+
+DATA_FILE_LATEST_VERSION=$(cat $srcdir/versions/base_data)
+PARSER_MODEL_LATEST_VERSION=$(cat $srcdir/versions/parser)
+LANG_CLASS_MODEL_LATEST_VERSION=$(cat $srcdir/versions/language_classifier)
+
+AC_SUBST([LIBPOSTAL_DATA_FILE_LATEST_VERSION], [$DATA_FILE_LATEST_VERSION])
+AC_SUBST([LIBPOSTAL_PARSER_MODEL_LATEST_VERSION], [$PARSER_MODEL_LATEST_VERSION])
+AC_SUBST([LIBPOSTAL_LANG_CLASS_MODEL_LATEST_VERSION], [$LANG_CLASS_MODEL_LATEST_VERSION])
+
 AC_CONFIG_FILES([Makefile
                  libpostal.pc
                  src/Makefile
-                 test/Makefile])
+                 src/libpostal_data
+                 test/Makefile],  [chmod +x src/libpostal_data])
 
 AC_CHECK_PROG([FOUND_SHUF], [shuf], [yes])
 AC_CHECK_PROG([FOUND_GSHUF], [gshuf], [yes])
