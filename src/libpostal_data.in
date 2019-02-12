@@ -136,20 +136,21 @@ download_release() {
 if [ $COMMAND = "download" ]; then
     if [ -e $LIBPOSTAL_DATA_VERSION_FILE ]; then
         LIBPOSTAL_DATA_DIR_VERSION=$(cat $LIBPOSTAL_DATA_VERSION_FILE)
-    fi
 
-    if [ "$LIBPOSTAL_DATA_DIR_VERSION" != "$LIBPOSTAL_DATA_DIR_VERSION_STRING" ]; then
-        echo "Old version of datadir detected, removing..."
-        for subdir in $BASIC_MODULE_DIRS $PARSER_MODULE_DIR $LANGUAGE_CLASSIFIER_MODULE_DIR; do
-            rm -rf $LIBPOSTAL_DATA_DIR/$subdir;
-        done
+        if [ "$LIBPOSTAL_DATA_DIR_VERSION" != "$LIBPOSTAL_DATA_DIR_VERSION_STRING" ]; then
+            echo "Old version of datadir detected, removing..."
+            for subdir in $BASIC_MODULE_DIRS $PARSER_MODULE_DIR $LANGUAGE_CLASSIFIER_MODULE_DIR; do
+                rm -rf $LIBPOSTAL_DATA_DIR/$subdir;
+            done
 
-        # Legacy, blow it away too to be nice
-        if [ -e $LIBPOSTAL_DATA_DIR/geodb ]; then
-            rm -rf $LIBPOSTAL_DATA_DIR/geodb;
+            # Legacy, blow it away too to be nice
+            if [ -e $LIBPOSTAL_DATA_DIR/geodb ]; then
+                rm -rf $LIBPOSTAL_DATA_DIR/geodb;
+            fi
+
+            rm -f $LIBPOSTAL_DATA_DIR/last_updated*
+            rm -f $LIBPOSTAL_DATA_DIR/*_version
         fi
-
-        rm -f $LIBPOSTAL_DATA_DIR/last_updated*
     fi
 
     mkdir -p $LIBPOSTAL_DATA_DIR
@@ -163,6 +164,8 @@ if [ $COMMAND = "download" ]; then
     if ([ $FILE = "language_classifier" ] || [ $FILE = "all" ]); then
         download_release $LIBPOSTAL_LANG_CLASS_MODEL_VERSION_PATH $LIBPOSTAL_LANG_CLASS_MODEL_LATEST_VERSION $LIBPOSTAL_DATA_DIR $LIBPOSTAL_LANG_CLASS_MODEL_CHUNKS $LIBPOSTAL_LANG_CLASS_FILE "language classifier data file" $LANGUAGE_CLASSIFIER_MODULE_DIR
     fi
+
+    echo "$LIBPOSTAL_DATA_DIR_VERSION_STRING" > $LIBPOSTAL_DATA_VERSION_FILE
 
 else
     echo "Invalid command: $COMMAND"
