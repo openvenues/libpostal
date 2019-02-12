@@ -123,7 +123,7 @@ download_release() {
 
     echo "Checking for new libpostal $name..."
 
-    if [ $current_version -ne $version ]; then
+    if [ "$current_version" != "$version" ]; then
         echo "New libpostal $name available"
 
         if [ $num_chunks -gt 1 ]; then
