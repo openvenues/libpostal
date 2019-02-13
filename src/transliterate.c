@@ -78,7 +78,7 @@ typedef struct {
 #define TRANSLITERATION_DEFAULT_STATE (transliteration_state_t){NULL_PREFIX_RESULT, TRANS_STATE_BEGIN, 0, 0, 0, 1, 1, 0, 0, 0, 0}
 
 
-static transliteration_replacement_t *get_replacement(trie_t *trie, trie_prefix_result_t result, char *str, size_t start_index) {
+static transliteration_replacement_t *get_replacement(trie_t *trie, trie_prefix_result_t result) {
     uint32_t node_id = result.node_id;
     if (node_id == NULL_NODE_ID) return NULL;
 
@@ -834,11 +834,11 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                         log_debug("Context match\n");
                         match_state = match_candidate_state;
                         match_state.state = TRANS_STATE_MATCH;
-                        replacement = get_replacement(trie, context_result, str, match_state.phrase_start);
+                        replacement = get_replacement(trie, context_result);
                     } else {
                         if (match_state.state == TRANS_STATE_MATCH) { 
                             log_debug("Context no match and previous match\n");
-                            replacement = get_replacement(trie, match_state.result, str, match_state.phrase_start);
+                            replacement = get_replacement(trie, match_state.result);
                             if (state.state != TRANS_STATE_PARTIAL_MATCH) {
                                 state.advance_index = false;
                             }
@@ -869,7 +869,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
                             if (match_state.state == TRANS_STATE_MATCH) {
                                 log_debug("Match no context\n");
-                                replacement = get_replacement(trie, match_state.result, str, match_state.phrase_start);
+                                replacement = get_replacement(trie, match_state.result);
                             } else {
 
                                 log_debug("Tried context for %s at char '%.*s', no match\n", str, (int)char_len, ptr);
@@ -934,14 +934,24 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                         match_state = TRANSLITERATION_DEFAULT_STATE;
                     }
 
+                    bool added_previous_phrase = false;
 
                     if (context_no_match && !prev_state.empty_transition && prev_state.phrase_len > 0) {
                         log_debug("Previous phrase stays as is %.*s\n", (int)prev_state.phrase_len, str+prev_state.phrase_start);
                         char_array_cat_len(new_str, str + prev_state.phrase_start, prev_state.phrase_len);
-                        state = start_state;
+                        added_previous_phrase = true;
+
+                        if (match_candidate_state.state != TRANS_STATE_PARTIAL_MATCH) {
+                            state = start_state;
+                        }
+
                     }
-                    
-                    if (state.state == TRANS_STATE_BEGIN && !prev_state.empty_transition) {
+
+                    if (match_candidate_state.state != TRANS_STATE_PARTIAL_MATCH && !prev_state.empty_transition && idx + char_len == len) {
+                        log_debug("No replacement for %.*s\n", (int)char_len, ptr);
+                        char_array_cat_len(new_str, str + idx, char_len);
+                        state = start_state;
+                    } else if (state.state == TRANS_STATE_BEGIN && !prev_state.empty_transition) {
                         log_debug("TRANS_STATE_BEGIN && !prev_state.empty_transition\n");
                         state.advance_index = false;
                     } else if (prev_state.empty_transition) {
