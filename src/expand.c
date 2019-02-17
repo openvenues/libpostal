@@ -878,6 +878,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
             log_debug("have_ambiguous = %d\n", have_ambiguous);
             log_debug("have_strictly_ignorable = %d\n", have_strictly_ignorable);
             log_debug("have_strictly_ignorable_abbreviation = %d\n", have_strictly_ignorable_abbreviation);
+
         }
 
         bool skipped_last_edge_phrase = false;
@@ -913,7 +914,7 @@ string_tree_t *add_string_alternatives_phrase_option(char *str, libpostal_normal
                 }
 
                 if (token.type != WHITESPACE) {
-                    if ((phrase.start > 0 && last_was_punctuation) || (!last_added_was_whitespace && string_tree_num_tokens(tree) > 0) ) {
+                    if ((phrase.start > 0 && last_was_punctuation) || (!last_added_was_whitespace && string_tree_num_tokens(tree) > 0) || (prev_phrase.start == phrase.start && prev_phrase.len == phrase.len) ) {
                         log_debug("Adding space\n");
                         string_tree_add_string(tree, " ");
                         string_tree_finalize_token(tree);
@@ -1536,6 +1537,29 @@ void expand_alternative_phrase_option(cstring_array *strings, khash_t(str_set) *
 
 
 
+void expand_alternative_phrase_option_languages(cstring_array *strings, khash_t(str_set) *unique_strings, char *str, libpostal_normalize_options_t options, expansion_phrase_option_t phrase_option) {
+    char **temp_languages = calloc(1, sizeof(char *));
+    libpostal_normalize_options_t temp_options = options;
+
+    for (size_t i = 0; i < options.num_languages; i++) {
+        char *lang = options.languages[i];
+
+        temp_languages[0] = lang;
+        temp_options.languages = temp_languages;
+        temp_options.num_languages = 1;
+        expand_alternative_phrase_option(strings, unique_strings, str, temp_options, phrase_option);
+    }
+
+    if (options.num_languages == 0) {
+        temp_options.languages = options.languages;
+        temp_options.num_languages = options.num_languages;
+        expand_alternative_phrase_option(strings, unique_strings, str, temp_options, phrase_option);
+    }
+
+    free(temp_languages);
+}
+
+
 cstring_array *expand_address_phrase_option(char *input, libpostal_normalize_options_t options, size_t *n, expansion_phrase_option_t phrase_option) {
     options.address_components |= LIBPOSTAL_ADDRESS_ANY;
 
@@ -1566,7 +1590,7 @@ cstring_array *expand_address_phrase_option(char *input, libpostal_normalize_opt
 
     if (string_tree_num_strings(tree) == 1) {
         char *normalized = string_tree_get_alternative(tree, 0, 0);
-        expand_alternative_phrase_option(strings, unique_strings, normalized, options, phrase_option);
+        expand_alternative_phrase_option_languages(strings, unique_strings, normalized, options, phrase_option);
 
     } else {
         log_debug("Adding alternatives for multiple normalizations\n");
@@ -1587,7 +1611,7 @@ cstring_array *expand_address_phrase_option(char *input, libpostal_normalize_opt
             char_array_terminate(temp_string);
             token = char_array_get_string(temp_string);
             log_debug("current permutation = %s\n", token);
-            expand_alternative_phrase_option(strings, unique_strings, token, options, phrase_option);
+            expand_alternative_phrase_option_languages(strings, unique_strings, token, options, phrase_option);
         }
 
         string_tree_iterator_destroy(iter);
@@ -1612,7 +1636,6 @@ cstring_array *expand_address_phrase_option(char *input, libpostal_normalize_opt
     *n = cstring_array_num_strings(strings);
 
     return strings;
-
 }
 
 cstring_array *expand_address(char *input, libpostal_normalize_options_t options, size_t *n) {
