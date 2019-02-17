@@ -144,6 +144,7 @@ bool cstring_array_add_string_no_whitespace(cstring_array *strings, char *str) {
 
 
 cstring_array *expanded_component_combined(char *input, libpostal_normalize_options_t options, bool remove_spaces, size_t *n) {
+    char *expansion;
     size_t num_expansions = 0;
     cstring_array *expansions = expand_address(input, options, &num_expansions);
 
@@ -160,7 +161,6 @@ cstring_array *expanded_component_combined(char *input, libpostal_normalize_opti
         return root_expansions;
     } else {
         khash_t(str_set) *unique_strings = kh_init(str_set);
-        char *expansion;
         khiter_t k;
         int ret;
 
@@ -640,7 +640,7 @@ static inline void add_string_hash_permutations(cstring_array *near_dupe_hashes,
 
 
 cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages) {
-    if (!options.with_latlon && !options.with_city_or_equivalent && !options.with_postal_code) return NULL;
+    if (!options.with_latlon && !options.with_city_or_equivalent && !options.with_small_containing_boundaries && !options.with_postal_code) return NULL;
 
     place_t *place = place_from_components(num_components, labels, values);
     log_debug("created place\n");
