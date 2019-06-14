@@ -167,6 +167,19 @@ LIBPOSTAL_EXPORT libpostal_address_parser_response_t *libpostal_parse_address(ch
 
 LIBPOSTAL_EXPORT bool libpostal_parser_print_features(bool print_features);
 
+/*
+Language classification
+*/
+
+typedef struct libpostal_language_classifier_response {
+    size_t num_languages;
+    char **languages;
+    double *probs;
+} libpostal_language_classifier_response_t;
+
+LIBPOSTAL_EXPORT libpostal_language_classifier_response_t *libpostal_classify_language(char *address);
+
+LIBPOSTAL_EXPORT void libpostal_language_classifier_response_destroy(libpostal_language_classifier_response_t *self);
 
 /*
 Deduping

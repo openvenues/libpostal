@@ -202,6 +202,30 @@ libpostal_fuzzy_duplicate_status_t libpostal_is_street_duplicate_fuzzy(size_t nu
     return is_street_duplicate_fuzzy(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, options);
 }
 
+libpostal_language_classifier_response_t *libpostal_classify_language(char *address) {
+    libpostal_language_classifier_response_t *response = classify_languages(address);
+
+    if (response == NULL) {
+        log_error("Language classification returned NULL\n");
+        return NULL;
+    }
+
+    return response;
+}
+
+void libpostal_language_classifier_response_destroy(libpostal_language_classifier_response_t *self) {
+    if (self == NULL) return;
+    if (self->languages != NULL) {
+        free(self->languages);
+    }
+
+    if (self->probs) {
+        free(self->probs);
+    }
+
+    free(self);
+}
+
 
 void libpostal_address_parser_response_destroy(libpostal_address_parser_response_t *self) {
     if (self == NULL) return;
