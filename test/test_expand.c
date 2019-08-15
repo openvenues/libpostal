@@ -132,6 +132,9 @@ TEST test_expansions(void) {
     CHECK_CALL(test_expansion_contains_with_languages("4998 Vanderbilt Dr, Columbus, OH 43213", "4998 vanderbilt drive columbus ohio 43213", options, 1, "en"));
     CHECK_CALL(test_expansion_contains_with_languages("Nineteen oh one W El Segundo Blvd", "1901 west el segundo boulevard", options, 1, "en"));
     CHECK_CALL(test_expansion_contains_with_languages("S St. NW", "s street northwest", options, 1, "en"));
+    CHECK_CALL(test_expansion_contains_with_languages("Quatre vingt douze Ave des Champs-Élysées", "92 avenue des champs-elysees", options, 1, "fr"));
+    CHECK_CALL(test_expansion_contains_with_languages("Quatre vingt douze Ave des Champs-Élysées", "92 avenue des champs elysees", options, 1, "fr"));
+    CHECK_CALL(test_expansion_contains_with_languages("Quatre vingt douze Ave des Champs-Élysées", "92 avenue des champselysees", options, 1, "fr"));
     CHECK_CALL(test_expansion_contains_with_languages("Marktstrasse", "markt strasse", options, 1, "de"));
     CHECK_CALL(test_expansion_contains_with_languages("Hoofdstraat", "hoofdstraat", options, 1, "nl"));
     CHECK_CALL(test_expansion_contains_with_languages("มงแตร", "มงแตร", options, 1, "th"));
