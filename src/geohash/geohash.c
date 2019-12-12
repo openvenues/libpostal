@@ -292,16 +292,28 @@ static int geohashstr_to_interleaved(char *r, size_t length, uint16_t *interleav
         if(j== 0) i[0]  = map[c[ 0]]<<11;
         if(j== 1) i[0] += map[c[ 1]]<< 6;
         if(j== 2) i[0] += map[c[ 2]]<< 1;
-        if(j== 3) i[0] += map[c[ 3]]>> 4;
+        if(j== 3) {
+            i[0] += map[c[ 3]]>> 4;
+            i[1]  = map[c[ 3]]<<12;
+        }
         if(j== 4) i[1] += map[c[ 4]]<< 7;
         if(j== 5) i[1] += map[c[ 5]]<< 2;
-        if(j== 6) i[1] += map[c[ 6]]>> 3;
+        if(j== 6) {
+            i[1] += map[c[ 6]]>> 3;
+            i[2]  = map[c[ 6]]<<13;
+        }
         if(j== 7) i[2] += map[c[ 7]]<< 8;
         if(j== 8) i[2] += map[c[ 8]]<< 3;
-        if(j== 9) i[2] += map[c[ 9]]>> 2;
+        if(j== 9) {
+            i[2] += map[c[ 9]]>> 2;
+            i[3]  = map[c[ 9]]<<14;
+        }
         if(j==10) i[3] += map[c[10]]<< 9;
         if(j==11) i[3] += map[c[11]]<< 4;
-        if(j==12) i[3] += map[c[12]]>> 1;
+        if(j==12) {
+            i[3] += map[c[12]]>> 1;
+            i[4]  = map[c[12]]<<15;
+        }
         if(j==13) i[4] += map[c[13]]<<10;
         if(j==14) i[4] += map[c[14]]<< 5;
         if(j==15) i[4] += map[c[15]]>> 0;
