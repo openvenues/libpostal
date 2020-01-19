@@ -21,10 +21,11 @@ the current value.
 #include "features.h"
 #include "tagger.h"
 #include "tokens.h"
+#include "address_dictionary.h"
 
 #define START "START"
 #define START2 "START2"
 
-bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *prev2_tag_features, cstring_array *labels, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features);
+bool averaged_perceptron_tagger_predict(address_dictionary_t *address_dict, averaged_perceptron_t *model, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *prev2_tag_features, cstring_array *labels, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features);
 
 #endif

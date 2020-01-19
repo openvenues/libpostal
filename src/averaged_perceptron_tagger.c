@@ -1,7 +1,7 @@
 #include "averaged_perceptron_tagger.h"
 #include "log/log.h"
 
-bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *prev2_tag_features, cstring_array *labels, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features) {
+bool averaged_perceptron_tagger_predict(address_dictionary_t *address_dict, averaged_perceptron_t *model, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *prev2_tag_features, cstring_array *labels, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features) {
 
     // Keep two tags of history in training
     char *prev = NULL;
@@ -22,12 +22,12 @@ bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagg
         }
 
         if (i > 1) {
-            prev2 = cstring_array_get_string(model->classes, prev2_id);            
+            prev2 = cstring_array_get_string(model->classes, prev2_id);
         }
 
         log_debug("prev=%s, prev2=%s\n", prev, prev2);
 
-        if (!feature_function(tagger, context, tokenized, i)) {
+        if (!feature_function(address_dict, tagger, context, tokenized, i)) {
             log_error("Could not add address parser features\n");
             return false;
         }
@@ -65,9 +65,7 @@ bool averaged_perceptron_tagger_predict(averaged_perceptron_t *model, void *tagg
 
         prev2_id = prev_id;
         prev_id = guess;
-
     }
 
     return true;
-
 }

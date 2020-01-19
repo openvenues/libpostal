@@ -143,14 +143,14 @@ bool cstring_array_add_string_no_whitespace(cstring_array *strings, char *str) {
 }
 
 
-cstring_array *expanded_component_combined(char *input, libpostal_normalize_options_t options, bool remove_spaces, size_t *n) {
+cstring_array *expanded_component_combined(libpostal_t *instance, char *input, libpostal_normalize_options_t options, bool remove_spaces, size_t *n) {
     char *expansion;
     size_t num_expansions = 0;
-    cstring_array *expansions = expand_address(input, options, &num_expansions);
+    cstring_array *expansions = expand_address(instance, input, options, &num_expansions);
 
     size_t num_root_expansions = 0;
-    cstring_array *root_expansions = expand_address_root(input, options, &num_root_expansions);
-    
+    cstring_array *root_expansions = expand_address_root(instance, input, options, &num_root_expansions);
+
     if (num_root_expansions == 0) {
         cstring_array_destroy(root_expansions);
         *n = num_expansions;
@@ -159,62 +159,60 @@ cstring_array *expanded_component_combined(char *input, libpostal_normalize_opti
         cstring_array_destroy(expansions);
         *n = num_root_expansions;
         return root_expansions;
-    } else {
-        khash_t(str_set) *unique_strings = kh_init(str_set);
-        khiter_t k;
-        int ret;
+    }
+    khash_t(str_set) *unique_strings = kh_init(str_set);
+    khiter_t k;
+    int ret;
 
-        cstring_array *all_expansions = cstring_array_new();
+    cstring_array *all_expansions = cstring_array_new();
 
-        for (size_t i = 0; i < num_expansions; i++) {
-            expansion = cstring_array_get_string(expansions, i);
-            k = kh_get(str_set, unique_strings, expansion);
+    for (size_t i = 0; i < num_expansions; i++) {
+        expansion = cstring_array_get_string(expansions, i);
+        k = kh_get(str_set, unique_strings, expansion);
 
-            if (k == kh_end(unique_strings)) {
+        if (k == kh_end(unique_strings)) {
+            cstring_array_add_string(all_expansions, expansion);
+            k = kh_put(str_set, unique_strings, expansion, &ret);
+            if (ret < 0) {
+                break;
+            }
+        }
+    }
+
+    for (size_t i = 0; i < num_root_expansions; i++) {
+        expansion = cstring_array_get_string(root_expansions, i);
+        k = kh_get(str_set, unique_strings, expansion);
+
+        if (k == kh_end(unique_strings)) {
+            if (remove_spaces) {
+                cstring_array_add_string_no_whitespace(all_expansions, expansion);
+            } else {
                 cstring_array_add_string(all_expansions, expansion);
-                k = kh_put(str_set, unique_strings, expansion, &ret);
-                if (ret < 0) {
-                    break;
-                }
+            }
+            k = kh_put(str_set, unique_strings, expansion, &ret);
+            if (ret < 0) {
+                break;
             }
         }
+    }
 
-        for (size_t i = 0; i < num_root_expansions; i++) {
-            expansion = cstring_array_get_string(root_expansions, i);
-            k = kh_get(str_set, unique_strings, expansion);
+    *n = cstring_array_num_strings(all_expansions);
 
-            if (k == kh_end(unique_strings)) {
-                if (remove_spaces) {
-                    cstring_array_add_string_no_whitespace(all_expansions, expansion);
-                } else {
-                    cstring_array_add_string(all_expansions, expansion);
-                }
-                k = kh_put(str_set, unique_strings, expansion, &ret);
-                if (ret < 0) {
-                    break;
-                }
-            }
-        }
+    kh_destroy(str_set, unique_strings);
+    cstring_array_destroy(root_expansions);
+    cstring_array_destroy(expansions);
 
-        *n = cstring_array_num_strings(all_expansions);
-
-        kh_destroy(str_set, unique_strings);
-        cstring_array_destroy(root_expansions);
-        cstring_array_destroy(expansions);
-
-        return all_expansions;
-    }       
+    return all_expansions;
 }
 
-static inline cstring_array *expanded_component_root_with_fallback(char *input, libpostal_normalize_options_t options, size_t *n) {
-    cstring_array *root_expansions = expand_address_root(input, options, n);
+static inline cstring_array *expanded_component_root_with_fallback(libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n) {
+    cstring_array *root_expansions = expand_address_root(instance, input, options, n);
     if (*n > 0) {
         return root_expansions;
-    } else {
-        cstring_array_destroy(root_expansions);
-        *n = 0;
-        return expand_address(input, options, n);
     }
+    cstring_array_destroy(root_expansions);
+    *n = 0;
+    return expand_address(instance, input, options, n);
 }
 
 static cstring_array *geohash_and_neighbors(double latitude, double longitude, size_t geohash_precision) {
@@ -318,10 +316,10 @@ static inline bool add_double_metaphone_or_token_if_unique(char *str, cstring_ar
 #define MAX_NAME_TOKENS 50
 
 
-cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normalize_options) {
+cstring_array *name_word_hashes(libpostal_t *instance, char *name, libpostal_normalize_options_t normalize_options) {
     normalize_options.address_components = LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_ANY;
     size_t num_expansions = 0;
-    cstring_array *name_expansions = expanded_component_root_with_fallback(name, normalize_options, &num_expansions);
+    cstring_array *name_expansions = expanded_component_root_with_fallback(instance, name, normalize_options, &num_expansions);
     if (num_expansions == 0) {
         cstring_array_destroy(name_expansions);
         return NULL;
@@ -412,13 +410,13 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
     }
 
     token_array_clear(token_array);
-    char *normalized = libpostal_normalize_string(name, LIBPOSTAL_NORMALIZE_DEFAULT_STRING_OPTIONS);
+    char *normalized = libpostal_normalize_string(instance, name, LIBPOSTAL_NORMALIZE_DEFAULT_STRING_OPTIONS);
     char *acronym = NULL;
     if (normalized != NULL) {
         keep_whitespace = false;
         tokenize_add_tokens(token_array, normalized, strlen(normalized), keep_whitespace);
-        stopword_positions(stopwords_array, (const char *)normalized, token_array, normalize_options.num_languages, normalize_options.languages);
-        existing_acronym_phrase_positions(existing_acronyms_array, (const char *)normalized, token_array, normalize_options.num_languages, normalize_options.languages);
+        stopword_positions(instance->address_dict, stopwords_array, (const char *)normalized, token_array, normalize_options.num_languages, normalize_options.languages);
+        existing_acronym_phrase_positions(instance->address_dict, existing_acronyms_array, (const char *)normalized, token_array, normalize_options.num_languages, normalize_options.languages);
 
         uint32_t *stopwords = stopwords_array->a;
         uint32_t *existing_acronyms = existing_acronyms_array->a;
@@ -639,7 +637,7 @@ static inline void add_string_hash_permutations(cstring_array *near_dupe_hashes,
 }
 
 
-cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages) {
+cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages) {
     if (!options.with_latlon && !options.with_city_or_equivalent && !options.with_small_containing_boundaries && !options.with_postal_code) return NULL;
 
     place_t *place = place_from_components(num_components, labels, values);
@@ -672,7 +670,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
     language_classifier_response_t *lang_response = NULL;
 
     if (num_languages == 0) {
-        lang_response = place_languages(num_components, labels, values);
+        lang_response = place_languages(instance, num_components, labels, values);
 
          if (lang_response != NULL) {
             log_debug("got %zu place languages\n", lang_response->num_languages);
@@ -690,7 +688,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
     size_t num_name_expansions = 0;
     if (place->name != NULL && options.with_name) {
         log_debug("Doing name expansions for %s\n", place->name);
-        name_expansions = name_word_hashes(place->name, normalize_options);
+        name_expansions = name_word_hashes(instance, place->name, normalize_options);
         if (name_expansions != NULL) {
             num_name_expansions = cstring_array_num_strings(name_expansions);
             log_debug("Got %zu name expansions\n", num_name_expansions);
@@ -705,7 +703,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
         remove_spaces = true;
         log_debug("Doing street expansions for %s\n", place->street);
         normalize_options.address_components = LIBPOSTAL_ADDRESS_STREET | LIBPOSTAL_ADDRESS_ANY;
-        street_expansions = expanded_component_combined(place->street, normalize_options, remove_spaces, &num_street_expansions);
+        street_expansions = expanded_component_combined(instance, place->street, normalize_options, remove_spaces, &num_street_expansions);
         log_debug("Got %zu street expansions\n", num_street_expansions);
     }
 
@@ -714,7 +712,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
     if (place->house_number != NULL) {
         log_debug("Doing house number expansions for %s\n", place->house_number);
         normalize_options.address_components = LIBPOSTAL_ADDRESS_HOUSE_NUMBER | LIBPOSTAL_ADDRESS_ANY;
-        house_number_expansions = expand_address_root(place->house_number, normalize_options, &num_house_number_expansions);
+        house_number_expansions = expand_address_root(instance, place->house_number, normalize_options, &num_house_number_expansions);
         log_debug("Got %zu house number expansions\n", num_house_number_expansions);
     }
 
@@ -723,7 +721,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
     if (place->unit != NULL && options.with_unit) {
         log_debug("Doing unit expansions for %s\n", place->unit);
         normalize_options.address_components = LIBPOSTAL_ADDRESS_UNIT | LIBPOSTAL_ADDRESS_ANY;
-        unit_expansions = expand_address_root(place->unit, normalize_options, &num_unit_expansions);
+        unit_expansions = expand_address_root(instance, place->unit, normalize_options, &num_unit_expansions);
         log_debug("Got %zu unit expansions\n", num_unit_expansions);
     }
 
@@ -731,21 +729,21 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
     size_t num_building_expansions = 0;
     if (place->building != NULL && options.with_unit) {
         normalize_options.address_components = LIBPOSTAL_ADDRESS_UNIT | LIBPOSTAL_ADDRESS_ANY;
-        building_expansions = expand_address_root(place->building, normalize_options, &num_building_expansions);
+        building_expansions = expand_address_root(instance, place->building, normalize_options, &num_building_expansions);
     }
 
     cstring_array *level_expansions = NULL;
     size_t num_level_expansions = 0;
     if (place->level != NULL && options.with_unit) {
         normalize_options.address_components = LIBPOSTAL_ADDRESS_LEVEL | LIBPOSTAL_ADDRESS_ANY;
-        level_expansions = expand_address_root(place->level, normalize_options, &num_level_expansions);
+        level_expansions = expand_address_root(instance, place->level, normalize_options, &num_level_expansions);
     }
 
     cstring_array *po_box_expansions = NULL;
     size_t num_po_box_expansions = 0;
     if (place->po_box != NULL) {
         normalize_options.address_components = LIBPOSTAL_ADDRESS_PO_BOX | LIBPOSTAL_ADDRESS_ANY;
-        po_box_expansions = expand_address_root(place->po_box, normalize_options, &num_po_box_expansions);
+        po_box_expansions = expand_address_root(instance, place->po_box, normalize_options, &num_po_box_expansions);
     }
 
     cstring_array *place_expansions = NULL;
@@ -756,7 +754,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
 
         if (place->city != NULL) {
             size_t num_city_expansions = 0;
-            cstring_array *city_expansions = expand_address_root(place->city, normalize_options, &num_city_expansions);
+            cstring_array *city_expansions = expand_address_root(instance, place->city, normalize_options, &num_city_expansions);
             if (place_expansions == NULL) {
                 place_expansions = city_expansions;
             } else if (city_expansions != NULL && num_city_expansions > 0) {
@@ -768,7 +766,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
 
         if (place->city_district != NULL) {
             size_t num_city_district_expansions = 0;
-            cstring_array *city_district_expansions = expand_address_root(place->city_district, normalize_options, &num_city_district_expansions);
+            cstring_array *city_district_expansions = expand_address_root(instance, place->city_district, normalize_options, &num_city_district_expansions);
             if (place_expansions == NULL) {
                 place_expansions = city_district_expansions;
             } else if (city_district_expansions != NULL && num_city_district_expansions > 0) {
@@ -779,7 +777,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
 
         if (place->suburb != NULL) {
             size_t num_suburb_expansions = 0;
-            cstring_array *suburb_expansions = expand_address_root(place->suburb, normalize_options, &num_suburb_expansions);
+            cstring_array *suburb_expansions = expand_address_root(instance, place->suburb, normalize_options, &num_suburb_expansions);
             if (place_expansions == NULL) {
                 place_expansions = suburb_expansions;
             } else if (suburb_expansions != NULL && num_suburb_expansions > 0) {
@@ -791,7 +789,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
 
         if (place->island != NULL) {
             size_t num_island_expansions = 0;
-            cstring_array *island_expansions = expand_address_root(place->island, normalize_options, &num_island_expansions);
+            cstring_array *island_expansions = expand_address_root(instance, place->island, normalize_options, &num_island_expansions);
             if (place_expansions == NULL) {
                 place_expansions = island_expansions;
             } else if (island_expansions != NULL && num_island_expansions > 0) {
@@ -802,7 +800,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
 
         if (place->state_district != NULL && options.with_small_containing_boundaries) {
             size_t num_state_district_expansions = 0;
-            cstring_array *state_district_expansions = expand_address_root(place->state_district, normalize_options, &num_state_district_expansions);
+            cstring_array *state_district_expansions = expand_address_root(instance, place->state_district, normalize_options, &num_state_district_expansions);
             if (containing_expansions == NULL) {
                 containing_expansions = state_district_expansions;
             } else if (state_district_expansions != NULL && num_state_district_expansions > 0) {
@@ -816,7 +814,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
     size_t num_postal_code_expansions = 0;
     if (options.with_postal_code && place->postal_code != NULL) {
         normalize_options.address_components = LIBPOSTAL_ADDRESS_POSTAL_CODE | LIBPOSTAL_ADDRESS_ANY;
-        postal_code_expansions = expand_address_root(place->postal_code, normalize_options, &num_postal_code_expansions);
+        postal_code_expansions = expand_address_root(instance, place->postal_code, normalize_options, &num_postal_code_expansions);
     }
 
     cstring_array *geohash_expansions = NULL;
@@ -1210,6 +1208,6 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
     return near_dupe_hashes;
 }
 
-inline cstring_array *near_dupe_hashes(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options) {
-    return near_dupe_hashes_languages(num_components, labels, values, options, 0, NULL);
+inline cstring_array *near_dupe_hashes(libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options) {
+    return near_dupe_hashes_languages(instance, num_components, labels, values, options, 0, NULL);
 }

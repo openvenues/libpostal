@@ -22,6 +22,7 @@ to predict the current transition matrix.
 #include "sparse_matrix.h"
 #include "tagger.h"
 #include "trie.h"
+#include "address_dictionary.h"
 
 typedef struct crf {
     uint32_t num_classes;
@@ -35,12 +36,10 @@ typedef struct crf {
     crf_context_t *context;
 } crf_t;
 
-bool crf_tagger_predict(crf_t *model, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *labels, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features);
+bool crf_tagger_predict(address_dictionary_t *address_dict, crf_t *model, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *labels, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features);
 
-bool crf_tagger_score(crf_t *self, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features);
-bool crf_tagger_score_viterbi(crf_t *self, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, double *score, bool print_features);
-
-bool crf_tagger_predict(crf_t *self, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *labels, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features);
+bool crf_tagger_score(address_dictionary_t *address_dict, crf_t *self, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features);
+bool crf_tagger_score_viterbi(address_dictionary_t *address_dict, crf_t *self, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, double *score, bool print_features);
 
 bool crf_write(crf_t *self, FILE *f);
 bool crf_save(crf_t *self, char *filename);

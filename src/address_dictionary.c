@@ -8,13 +8,7 @@
 
 #define ADDRESS_DICTIONARY_SETUP_ERROR "address_dictionary module not setup, call libpostal_setup() or address_dictionary_module_setup()\n"
 
-address_dictionary_t *address_dict = NULL;
-
-address_dictionary_t *get_address_dictionary(void) {
-    return address_dict;
-}
-
-address_expansion_value_t *address_dictionary_get_expansions(uint32_t i) {
+address_expansion_value_t *address_dictionary_get_expansions(address_dictionary_t *address_dict, uint32_t i) {
     if (address_dict == NULL || address_dict->values == NULL || i > address_dict->values->n) {
         log_error("i=%" PRIu32 ", address_dict->values->n=%zu\n", i, address_dict->values->n);
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
@@ -28,7 +22,7 @@ address_expansion_value_t *address_dictionary_get_expansions(uint32_t i) {
 inline bool address_expansion_in_dictionary(address_expansion_t expansion, uint16_t dictionary_id) {
     for (uint32_t i = 0; i < expansion.num_dictionaries; i++) {
         if (expansion.dictionary_ids[i] == dictionary_id) {
-             return true;
+            return true;
         }
     }
 
@@ -36,8 +30,8 @@ inline bool address_expansion_in_dictionary(address_expansion_t expansion, uint1
 }
 
 
-bool address_phrase_in_dictionary(phrase_t phrase, uint16_t dictionary_id) {
-    address_expansion_value_t *value = address_dictionary_get_expansions(phrase.data);
+bool address_phrase_in_dictionary(address_dictionary_t *address_dict, phrase_t phrase, uint16_t dictionary_id) {
+    address_expansion_value_t *value = address_dictionary_get_expansions(address_dict, phrase.data);
     if (value == NULL) return false;
 
     address_expansion_array *expansions = value->expansions;
@@ -55,13 +49,13 @@ bool address_phrase_in_dictionary(phrase_t phrase, uint16_t dictionary_id) {
 }
 
 
-bool address_phrase_in_dictionaries(phrase_t phrase, size_t n, ...) {
+bool address_phrase_in_dictionaries(address_dictionary_t *address_dict, phrase_t phrase, size_t n, ...) {
     va_list args;
     va_start(args, n);
     bool in_dictionary = false;
     for (size_t i = 0; i < n; i++) {
         uint16_t dictionary_id = va_arg(args, uint16_t);
-        in_dictionary = address_phrase_in_dictionary(phrase, dictionary_id);
+        in_dictionary = address_phrase_in_dictionary(address_dict, phrase, dictionary_id);
         if (in_dictionary) break;
     }
     va_end(args);
@@ -69,7 +63,7 @@ bool address_phrase_in_dictionaries(phrase_t phrase, size_t n, ...) {
 }
 
 
-int32_t address_dictionary_next_canonical_index(void) {
+int32_t address_dictionary_next_canonical_index(address_dictionary_t *address_dict) {
     if (address_dict == NULL || address_dict->canonical == NULL) {
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
         return -1;
@@ -77,7 +71,7 @@ int32_t address_dictionary_next_canonical_index(void) {
     return (int32_t)cstring_array_num_strings(address_dict->canonical);
 }
 
-bool address_dictionary_add_canonical(char *canonical) {
+bool address_dictionary_add_canonical(address_dictionary_t *address_dict, char *canonical) {
     if (address_dict == NULL || address_dict->canonical == NULL) {
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
         return false;
@@ -86,14 +80,14 @@ bool address_dictionary_add_canonical(char *canonical) {
     return true;
 }
 
-char *address_dictionary_get_canonical(uint32_t index) {
+char *address_dictionary_get_canonical(address_dictionary_t *address_dict, uint32_t index) {
     if (address_dict == NULL || address_dict->canonical == NULL) {
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
         return NULL;
     } else if (index > cstring_array_num_strings(address_dict->canonical)) {
         return NULL;
-    } 
-    return cstring_array_get_string(address_dict->canonical, index);    
+    }
+    return cstring_array_get_string(address_dict->canonical, index);
 }
 
 inline bool address_expansions_have_canonical_interpretation(address_expansion_array *expansions) {
@@ -111,8 +105,8 @@ inline bool address_expansions_have_canonical_interpretation(address_expansion_a
 
 }
 
-inline bool address_phrase_has_canonical_interpretation(phrase_t phrase) {
-    address_expansion_value_t *value = address_dictionary_get_expansions(phrase.data);
+inline bool address_phrase_has_canonical_interpretation(address_dictionary_t *address_dict, phrase_t phrase) {
+    address_expansion_value_t *value = address_dictionary_get_expansions(address_dict, phrase.data);
     if (value == NULL) return false;
 
     address_expansion_array *expansions = value->expansions;
@@ -158,7 +152,7 @@ void address_expansion_value_destroy(address_expansion_value_t *self) {
     free(self);
 }
 
-bool address_dictionary_add_expansion(char *name, char *language, address_expansion_t expansion) {
+bool address_dictionary_add_expansion(address_dictionary_t *address_dict, char *name, char *language, address_expansion_t expansion) {
     if (address_dict == NULL || address_dict->values == NULL) {
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
         return false;
@@ -187,7 +181,7 @@ bool address_dictionary_add_expansion(char *name, char *language, address_expans
 
     char_array *array = char_array_new_size(strlen(name));
     if (array == NULL) {
-        return false;    
+        return false;
     }
 
     if (language != NULL) {
@@ -236,7 +230,7 @@ exit_key_created:
     return false;
 }
 
-static trie_prefix_result_t get_language_prefix(char *lang) {
+static trie_prefix_result_t get_language_prefix(address_dictionary_t *address_dict, char *lang) {
     if (lang == NULL) {
         return ROOT_PREFIX_RESULT;
     }
@@ -256,14 +250,14 @@ static trie_prefix_result_t get_language_prefix(char *lang) {
     return prefix;
 }
 
-bool search_address_dictionaries_with_phrases(char *str, char *lang, phrase_array **phrases) {
+bool search_address_dictionaries_with_phrases(address_dictionary_t *address_dict, char *str, char *lang, phrase_array **phrases) {
     if (str == NULL) return false;
     if (address_dict == NULL) {
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
         return false;
     }
 
-    trie_prefix_result_t prefix = get_language_prefix(lang);
+    trie_prefix_result_t prefix = get_language_prefix(address_dict, lang);
 
     if (prefix.node_id == NULL_NODE_ID) {
         return false;
@@ -272,25 +266,25 @@ bool search_address_dictionaries_with_phrases(char *str, char *lang, phrase_arra
     return trie_search_from_index(address_dict->trie, str, prefix.node_id, phrases);
 }
 
-phrase_array *search_address_dictionaries(char *str, char *lang) {
+phrase_array *search_address_dictionaries(address_dictionary_t *address_dict, char *str, char *lang) {
     phrase_array *phrases = NULL;
 
-    if (!search_address_dictionaries_with_phrases(str, lang, &phrases)) {
+    if (!search_address_dictionaries_with_phrases(address_dict, str, lang, &phrases)) {
         return NULL;
-    }   
+    }
 
     return phrases;
 }
 
 
-bool search_address_dictionaries_tokens_with_phrases(char *str, token_array *tokens, char *lang, phrase_array **phrases) {
+bool search_address_dictionaries_tokens_with_phrases(address_dictionary_t *address_dict, char *str, token_array *tokens, char *lang, phrase_array **phrases) {
     if (str == NULL) return false;
     if (address_dict == NULL) {
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
         return false;
     }
 
-    trie_prefix_result_t prefix = get_language_prefix(lang);
+    trie_prefix_result_t prefix = get_language_prefix(address_dict, lang);
 
     if (prefix.node_id == NULL_NODE_ID) {
         return false;
@@ -300,10 +294,10 @@ bool search_address_dictionaries_tokens_with_phrases(char *str, token_array *tok
 }
 
 
-phrase_array *search_address_dictionaries_tokens(char *str, token_array *tokens, char *lang) {
+phrase_array *search_address_dictionaries_tokens(address_dictionary_t *address_dict, char *str, token_array *tokens, char *lang) {
     phrase_array *phrases = NULL;
 
-    if (!search_address_dictionaries_tokens_with_phrases(str, tokens, lang, &phrases)) {
+    if (!search_address_dictionaries_tokens_with_phrases(address_dict, str, tokens, lang, &phrases)) {
         return NULL;
     }
 
@@ -311,14 +305,14 @@ phrase_array *search_address_dictionaries_tokens(char *str, token_array *tokens,
 }
 
 
-phrase_t search_address_dictionaries_substring(char *str, size_t len, char *lang) {
+phrase_t search_address_dictionaries_substring(address_dictionary_t *address_dict, char *str, size_t len, char *lang) {
     if (str == NULL) return NULL_PHRASE;
     if (address_dict == NULL) {
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
         return NULL_PHRASE;
     }
 
-    trie_prefix_result_t prefix = get_language_prefix(lang);
+    trie_prefix_result_t prefix = get_language_prefix(address_dict, lang);
 
     if (prefix.node_id == NULL_NODE_ID) {
         log_debug("prefix.node_id == NULL_NODE_ID\n");
@@ -335,14 +329,14 @@ phrase_t search_address_dictionaries_substring(char *str, size_t len, char *lang
 }
 
 
-phrase_t search_address_dictionaries_prefix(char *str, size_t len, char *lang) {
+phrase_t search_address_dictionaries_prefix(address_dictionary_t *address_dict, char *str, size_t len, char *lang) {
     if (str == NULL) return NULL_PHRASE;
     if (address_dict == NULL) {
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
         return NULL_PHRASE;
     }
 
-    trie_prefix_result_t prefix = get_language_prefix(lang);
+    trie_prefix_result_t prefix = get_language_prefix(address_dict, lang);
 
     if (prefix.node_id == NULL_NODE_ID) {
         log_debug("prefix.node_id == NULL_NODE_ID\n");
@@ -352,14 +346,14 @@ phrase_t search_address_dictionaries_prefix(char *str, size_t len, char *lang) {
     return trie_search_prefixes_from_index_get_prefix_char(address_dict->trie, str, len, prefix.node_id);
 }
 
-phrase_t search_address_dictionaries_suffix(char *str, size_t len, char *lang) {
+phrase_t search_address_dictionaries_suffix(address_dictionary_t *address_dict, char *str, size_t len, char *lang) {
     if (str == NULL) return NULL_PHRASE;
     if (address_dict == NULL) {
         log_error(ADDRESS_DICTIONARY_SETUP_ERROR);
         return NULL_PHRASE;
     }
 
-    trie_prefix_result_t prefix = get_language_prefix(lang);
+    trie_prefix_result_t prefix = get_language_prefix(address_dict, lang);
 
     if (prefix.node_id == NULL_NODE_ID) {
         log_debug("prefix.node_id == NULL_NODE_ID\n");
@@ -369,10 +363,9 @@ phrase_t search_address_dictionaries_suffix(char *str, size_t len, char *lang) {
     return trie_search_suffixes_from_index_get_suffix_char(address_dict->trie, str, len, prefix.node_id);
 }
 
-bool address_dictionary_init(void) {
-    if (address_dict != NULL) return false;
+address_dictionary_t *address_dictionary_init() {
 
-    address_dict = calloc(1, sizeof(address_dictionary_t));
+    address_dictionary_t *address_dict = calloc(1, sizeof(address_dictionary_t));
     if (address_dict == NULL) return false;
 
     address_dict->canonical = cstring_array_new();
@@ -391,12 +384,11 @@ bool address_dictionary_init(void) {
         goto exit_destroy_address_dict;
     }
 
-    return true;
+    return address_dict;
 
 exit_destroy_address_dict:
     address_dictionary_destroy(address_dict);
-    address_dict = NULL;
-    return false;
+    return NULL;
 }
 
 void address_dictionary_destroy(address_dictionary_t *self) {
@@ -541,7 +533,7 @@ static bool address_expansion_value_write(address_expansion_value_t *value, FILE
 }
 
 
-bool address_dictionary_write(FILE *f) {
+bool address_dictionary_write(address_dictionary_t *address_dict, FILE *f) {
     if (address_dict == NULL || f == NULL) return false;
 
     if (!file_write_uint32(f, ADDRESS_DICTIONARY_SIGNATURE)) {
@@ -577,17 +569,15 @@ bool address_dictionary_write(FILE *f) {
     return true;
 }
 
-bool address_dictionary_read(FILE *f) {
-    if (address_dict != NULL) return false;
-
+address_dictionary_t *address_dictionary_read(FILE *f) {
     uint32_t signature;
 
     if (!file_read_uint32(f, &signature) || signature != ADDRESS_DICTIONARY_SIGNATURE) {
         return false;
     }
 
-    address_dict = malloc(sizeof(address_dictionary_t));
-    if (address_dict == NULL) return false;
+    address_dictionary_t *address_dict = malloc(sizeof(address_dictionary_t));
+    if (address_dict == NULL) return NULL;
 
     uint32_t canonical_str_len;
 
@@ -632,46 +622,42 @@ bool address_dictionary_read(FILE *f) {
         goto exit_address_dict_created;
     }
 
-    return true;
+    return address_dict;
 
 exit_address_dict_created:
     address_dictionary_destroy(address_dict);
-    return false;
+    return NULL;
 }
 
 
-bool address_dictionary_load(char *path) {
+address_dictionary_t *address_dictionary_load(char *path) {
     FILE *f = fopen(path, "rb");
     if (f == NULL) {
-        return false;
+        return NULL;
     }
 
-    bool ret_val = address_dictionary_read(f);
+    address_dictionary_t *ret_val = address_dictionary_read(f);
     fclose(f);
     return ret_val;
 }
 
-bool address_dictionary_save(char *path) {
+bool address_dictionary_save(address_dictionary_t *address_dict, char *path) {
     if (address_dict == NULL) return false;
 
     FILE *f = fopen(path, "wb");
 
-    bool ret_val = address_dictionary_write(f);
+    bool ret_val = address_dictionary_write(address_dict, f);
     fclose(f);
     return ret_val;
 }
 
-inline bool address_dictionary_module_setup(char *filename) {
-    if (address_dict == NULL) {
-        return address_dictionary_load(filename == NULL ? DEFAULT_ADDRESS_EXPANSION_PATH: filename);
-    }
-
-    return true;
+inline address_dictionary_t *address_dictionary_module_setup(char *filename) {
+    return address_dictionary_load(filename == NULL ? DEFAULT_ADDRESS_EXPANSION_PATH: filename);
 }
 
-void address_dictionary_module_teardown(void) {
+void address_dictionary_module_teardown(address_dictionary_t **address_dict) {
     if (address_dict != NULL) {
-        address_dictionary_destroy(address_dict);
+        address_dictionary_destroy(*address_dict);
+        *address_dict = NULL;
     }
-    address_dict = NULL;
 }

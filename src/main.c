@@ -13,15 +13,15 @@
 
 #define LIBPOSTAL_USAGE "Usage: ./libpostal address [...languages] [--json]\n"
 
-static inline void print_output(char *address, libpostal_normalize_options_t options, bool use_json, bool root_expansions) {
+static inline void print_output(libpostal_t *instance, char *address, libpostal_normalize_options_t options, bool use_json, bool root_expansions) {
     size_t num_expansions;
 
     char **expansions;
 
     if (!root_expansions) {
-        expansions = libpostal_expand_address(address, options, &num_expansions);
+        expansions = libpostal_expand_address(instance, address, options, &num_expansions);
     } else {
-        expansions = libpostal_expand_address_root(address, options, &num_expansions);
+        expansions = libpostal_expand_address_root(instance, address, options, &num_expansions);
     }
 
     char *normalized;
@@ -81,7 +81,8 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    if (!libpostal_setup() || (languages == NULL && !libpostal_setup_language_classifier())) {
+    libpostal_t *instance = libpostal_setup();
+    if (instance == NULL || (languages == NULL && !libpostal_setup_language_classifier())) {
         exit(EXIT_FAILURE);
     }
 
@@ -95,17 +96,17 @@ int main(int argc, char **argv) {
     if (address == NULL) {
         char *line;
         while ((line = file_getline(stdin)) != NULL) {
-            print_output(line, options, use_json, root_expansions);
+            print_output(instance, line, options, use_json, root_expansions);
             free(line);
         }
     } else {
-        print_output(address, options, use_json, root_expansions);
+        print_output(instance, address, options, use_json, root_expansions);
     }
 
     if (languages != NULL) {
         string_array_destroy(languages);
     }
 
-    libpostal_teardown();
+    libpostal_teardown(&instance);
     libpostal_teardown_language_classifier();
 }

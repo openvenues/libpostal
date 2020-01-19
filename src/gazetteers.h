@@ -9,7 +9,6 @@
 #include <stdint.h>
 
 #include "klib/kvec.h"
-#include "libpostal.h"
 #include "vector.h"
 
 typedef enum dictionary_type {

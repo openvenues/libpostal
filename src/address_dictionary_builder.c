@@ -17,12 +17,11 @@ int main(int argc, char **argv) {
         output_file = DEFAULT_ADDRESS_EXPANSION_PATH;
     }
 
-    if (!address_dictionary_init()) {
+    address_dictionary_t *address_dict = address_dictionary_init();
+    if (address_dict == NULL) {
         log_error("Error initializing address dictionary\n");
         exit(EXIT_FAILURE);
     }
-
-    address_dictionary_t *address_dict = get_address_dictionary();
 
     khash_t(int_uint32) *dictionary_components = kh_init(int_uint32);
 
@@ -137,8 +136,8 @@ int main(int argc, char **argv) {
                         if (k != kh_end(canonical_indices)) {
                             expansion.canonical_index = kh_value(canonical_indices, k);
                         } else {
-                            uint32_t canonical_index = address_dictionary_next_canonical_index();
-                            if (!address_dictionary_add_canonical(canonical)) {
+                            uint32_t canonical_index = address_dictionary_next_canonical_index(address_dict);
+                            if (!address_dictionary_add_canonical(address_dict, canonical)) {
                                 log_error("Error adding canonical string: %s\n", canonical);
                                 exit(EXIT_FAILURE);
                             }
@@ -156,14 +155,14 @@ int main(int argc, char **argv) {
                 if (add_affixes) {
                     // Add the phrase itself to the base namespace for existence checks
 
-                    if (!address_dictionary_add_expansion(expansion_rule.phrase, NULL, expansion)) {
+                    if (!address_dictionary_add_expansion(address_dict, expansion_rule.phrase, NULL, expansion)) {
                         log_error("Could not add expansion {%s}\n", expansion_rule.phrase);
                         exit(EXIT_FAILURE);
                     }
 
                     // Add phrase namespaced by language for language-specific matching
 
-                    if (!address_dictionary_add_expansion(expansion_rule.phrase, language, expansion)) {
+                    if (!address_dictionary_add_expansion(address_dict, expansion_rule.phrase, language, expansion)) {
                         log_error("Could not add language expansion {%s, %s}\n", language, expansion_rule.phrase);
                         exit(EXIT_FAILURE);
                     }
@@ -175,7 +174,7 @@ int main(int argc, char **argv) {
 
 
 
-    address_dictionary_save(output_file);
+    address_dictionary_save(address_dict, output_file);
 
     char_array_destroy(key);
 
@@ -184,5 +183,5 @@ int main(int argc, char **argv) {
     kh_destroy(str_uint32, canonical_indices);
     kh_destroy(str_uint32, phrase_address_components);
 
-    address_dictionary_module_teardown();
+    address_dictionary_module_teardown(&address_dict);
 }

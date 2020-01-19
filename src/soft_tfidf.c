@@ -21,7 +21,7 @@ soft_tfidf_options_t soft_tfidf_default_options(void) {
     return DEFAULT_SOFT_TFIDF_OPTIONS;
 }
 
-bool compare_canonical(address_expansion_t e1, char **tokens1, phrase_t match1, address_expansion_t e2, char **tokens2, phrase_t match2) {
+bool compare_canonical(address_dictionary_t *address_dict, address_expansion_t e1, char **tokens1, phrase_t match1, address_expansion_t e2, char **tokens2, phrase_t match2) {
     bool e1_canonical = e1.canonical_index == NULL_CANONICAL_INDEX;
     bool e2_canonical = e2.canonical_index == NULL_CANONICAL_INDEX;
 
@@ -37,7 +37,7 @@ bool compare_canonical(address_expansion_t e1, char **tokens1, phrase_t match1, 
         return true;
     } else {
         char **canonical_tokens = e1_canonical ? tokens1 : tokens2;
-        char *other_canonical = e1_canonical ? address_dictionary_get_canonical(e2.canonical_index) : address_dictionary_get_canonical(e1.canonical_index);
+        char *other_canonical = e1_canonical ? address_dictionary_get_canonical(address_dict, e2.canonical_index) : address_dictionary_get_canonical(address_dict, e1.canonical_index);
         phrase_t match = e1_canonical ? match1 : match2;
 
         size_t canonical_index = 0;
@@ -69,9 +69,9 @@ typedef enum {
     BOTH_CANONICAL
 } canonical_match_t;
 
-bool phrases_have_same_canonical(size_t num_tokens1, char **tokens1, size_t num_tokens2, char **tokens2, phrase_t match1, phrase_t match2, canonical_match_t *response) {
-    address_expansion_value_t *val1 = address_dictionary_get_expansions(match1.data);
-    address_expansion_value_t *val2 = address_dictionary_get_expansions(match2.data);
+bool phrases_have_same_canonical(address_dictionary_t *address_dict, size_t num_tokens1, char **tokens1, size_t num_tokens2, char **tokens2, phrase_t match1, phrase_t match2, canonical_match_t *response) {
+    address_expansion_value_t *val1 = address_dictionary_get_expansions(address_dict, match1.data);
+    address_expansion_value_t *val2 = address_dictionary_get_expansions(address_dict, match2.data);
 
     if (val1 == NULL || val2 == NULL) return false;
 
@@ -92,7 +92,7 @@ bool phrases_have_same_canonical(size_t num_tokens1, char **tokens1, size_t num_
         for (size_t j = 0; j < expansions_array2->n; j++) {
             address_expansion_t e2 = expansions2[j];
 
-            same_canonical = compare_canonical(e1, tokens1, match1, e2, tokens2, match2);
+            same_canonical = compare_canonical(address_dict, e1, tokens1, match1, e2, tokens2, match2);
             if (same_canonical) {
                 bool e1_canonical = e1.canonical_index == NULL_CANONICAL_INDEX;
                 bool e2_canonical = e2.canonical_index == NULL_CANONICAL_INDEX;
@@ -125,7 +125,7 @@ static inline size_t sum_token_lengths(size_t num_tokens, char **tokens) {
 }
 
 
-double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char **tokens1, double *token_scores1, phrase_array *phrases1, uint32_array *ordinal_suffixes1, size_t num_tokens2, char **tokens2, double *token_scores2, phrase_array *phrases2, uint32_array *ordinal_suffixes2, phrase_array *acronym_alignments, phrase_array *multi_word_alignments, soft_tfidf_options_t options, size_t *num_matches) {
+double soft_tfidf_similarity_with_phrases_and_acronyms(address_dictionary_t *address_dict, size_t num_tokens1, char **tokens1, double *token_scores1, phrase_array *phrases1, uint32_array *ordinal_suffixes1, size_t num_tokens2, char **tokens2, double *token_scores2, phrase_array *phrases2, uint32_array *ordinal_suffixes2, phrase_array *acronym_alignments, phrase_array *multi_word_alignments, soft_tfidf_options_t options, size_t *num_matches) {
     if (token_scores1 == NULL || token_scores2 == NULL) return 0.0;
 
     if (num_tokens1 > num_tokens2 || (num_tokens1 == num_tokens2 && sum_token_lengths(num_tokens1, tokens1) > sum_token_lengths(num_tokens2, tokens2))) {
@@ -286,7 +286,7 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
         }
 
         bool have_multi_word_match = false;
-        phrase_t multi_word_phrase = NULL_PHRASE;        
+        phrase_t multi_word_phrase = NULL_PHRASE;
 
         bool use_jaro_winkler = t1_len >= jaro_winkler_min_length;
         bool use_strict_abbreviation_sim = t1_len >= strict_abbreviation_min_length;
@@ -320,7 +320,7 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
             }
 
             canonical_match_t canonical_response = CANONICAL_NO_MATCH;
-            if (p1.len > 0 && p2.len > 0 && phrases_have_same_canonical(num_tokens1, tokens1, num_tokens2, tokens2, p1, p2, &canonical_response)) {
+            if (p1.len > 0 && p2.len > 0 && phrases_have_same_canonical(address_dict, num_tokens1, tokens1, num_tokens2, tokens2, p1, p2, &canonical_response)) {
                 if (canonical_response > best_canonical_phrase_response) {
                     log_debug("canonical_response = %d\n", canonical_response);
                     best_canonical_phrase_response = canonical_response;
@@ -587,6 +587,6 @@ return_soft_tfidf_score:
 }
 
 
-double soft_tfidf_similarity(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, soft_tfidf_options_t options, size_t *num_matches) {
-    return soft_tfidf_similarity_with_phrases_and_acronyms(num_tokens1, tokens1, token_scores1, NULL, NULL, num_tokens2, tokens2, token_scores2, NULL, NULL, NULL, NULL, options, num_matches);
+double soft_tfidf_similarity(address_dictionary_t *address_dict, size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, soft_tfidf_options_t options, size_t *num_matches) {
+    return soft_tfidf_similarity_with_phrases_and_acronyms(address_dict, num_tokens1, tokens1, token_scores1, NULL, NULL, num_tokens2, tokens2, token_scores2, NULL, NULL, NULL, NULL, options, num_matches);
 }

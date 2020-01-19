@@ -46,7 +46,6 @@ with the general error-driven averaged perceptron.
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "libpostal.h"
 #include "libpostal_config.h"
 
 #include "averaged_perceptron.h"
@@ -225,21 +224,21 @@ address_parser_t *get_address_parser(void);
 bool address_parser_load(char *dir);
 
 bool address_parser_print_features(bool print_features);
-libpostal_address_parser_response_t *address_parser_parse(char *address, char *language, char *country);
+libpostal_address_parser_response_t *address_parser_parse(libpostal_t *instance, char *address, char *language, char *country);
 void address_parser_destroy(address_parser_t *self);
 
-char *address_parser_normalize_string(char *str);
+char *address_parser_normalize_string(libpostal_t *instance, char *str);
 void address_parser_normalize_token(cstring_array *array, char *str, token_t token);
 
-bool address_parser_predict(address_parser_t *self, address_parser_context_t *context, cstring_array *token_labels, tagger_feature_function feature_function, tokenized_string_t *tokenized_str);
+bool address_parser_predict(address_dictionary_t *address_dict, address_parser_t *self, address_parser_context_t *context, cstring_array *token_labels, tagger_feature_function feature_function, tokenized_string_t *tokenized_str);
 
 address_parser_context_t *address_parser_context_new(void);
 void address_parser_context_destroy(address_parser_context_t *self);
 
-void address_parser_context_fill(address_parser_context_t *context, address_parser_t *parser, tokenized_string_t *tokenized_str, char *language, char *country);
+void address_parser_context_fill(address_dictionary_t *address_dict, address_parser_context_t *context, address_parser_t *parser, tokenized_string_t *tokenized_str, char *language, char *country);
 
 // Feature function
-bool address_parser_features(void *self, void *ctx, tokenized_string_t *str, uint32_t i);
+bool address_parser_features(address_dictionary_t *address_dict, void *self, void *ctx, tokenized_string_t *str, uint32_t i);
 
 // I/O methods
 

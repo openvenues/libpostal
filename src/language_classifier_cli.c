@@ -5,6 +5,7 @@
 #include "address_dictionary.h"
 #include "language_classifier.h"
 #include "transliterate.h"
+#include "libpostal.h"
 
 
 int main(int argc, char **argv) {
@@ -23,13 +24,20 @@ int main(int argc, char **argv) {
         address = strdup(argv[1]);
     }
 
-    if (!address_dictionary_module_setup(NULL) || !transliteration_module_setup(NULL) || !language_classifier_module_setup(dir)) {
+    address_dictionary_t *address_dict = address_dictionary_module_setup(NULL);
+    transliteration_table_t *trans_table = transliteration_module_setup(NULL);
+
+    libpostal_t instance = { 0 };
+    instance.address_dict = address_dict;
+    instance.trans_table = trans_table;
+
+    if (address_dict == NULL || trans_table == NULL || !language_classifier_module_setup(dir)) {
         log_error("Could not load language classifiers\n");
         exit(EXIT_FAILURE);
     }
 
 
-    language_classifier_response_t *response = classify_languages(address);
+    language_classifier_response_t *response = classify_languages(&instance, address);
     if (response == NULL) {
         printf("Could not classify language\n");
         exit(EXIT_FAILURE);
@@ -45,5 +53,5 @@ int main(int argc, char **argv) {
     language_classifier_response_destroy(response);
 
     language_classifier_module_teardown();
-    address_dictionary_module_teardown();
+    address_dictionary_module_teardown(&address_dict);
 }

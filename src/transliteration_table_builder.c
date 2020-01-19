@@ -244,9 +244,7 @@ int main(int argc, char **argv) {
     char *group_regex_str;
     size_t group_regex_len;
 
-    transliteration_module_init();
-
-    transliteration_table_t *trans_table = get_transliteration_table();
+    transliteration_table_t *trans_table = transliteration_module_init();
 
     trie_t *trie = trans_table->trie;
 
@@ -540,7 +538,7 @@ int main(int argc, char **argv) {
                         if (trie_get(trie, token) == NULL_NODE_ID) {
                             trie_add(trie, token, replacement_index);
                         } else {
-                            log_warn("Key exists: %s, skipping\n", token);                            
+                            log_warn("Key exists: %s, skipping\n", token);
                         }
                     } else {
                         char_array_cat(rule_key, context_start_char);
@@ -590,7 +588,7 @@ int main(int argc, char **argv) {
 
         char_array_destroy(trans_key);
 
-        if (!transliteration_table_add_transliterator(trans)) {
+        if (!transliteration_table_add_transliterator(trans_table, trans)) {
             goto exit_teardown;
         }
 
@@ -601,7 +599,7 @@ int main(int argc, char **argv) {
     for (int i = 0; i < num_source_scripts; i++) {
         script_transliteration_rule_t rule = script_transliteration_rules[i];
 
-        if (!transliteration_table_add_script_language(rule.script_language, rule.index)) {
+        if (!transliteration_table_add_script_language(trans_table, rule.script_language, rule.index)) {
             goto exit_teardown;
         }
 
@@ -617,15 +615,15 @@ int main(int argc, char **argv) {
 
     }
 
-    transliteration_table_write(f);
+    transliteration_table_write(trans_table, f);
     fclose(f);
-    transliteration_module_teardown();
+    transliteration_module_teardown(&trans_table);
     log_info("Done!\n");
     exit(EXIT_SUCCESS);
 
 exit_teardown:
     log_error("FAIL\n");
-    transliteration_module_teardown();
+    transliteration_module_teardown(&trans_table);
     exit(EXIT_FAILURE);
 
 }

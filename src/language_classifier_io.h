@@ -11,6 +11,7 @@
 #include "language_classifier.h"
 #include "scanner.h"
 #include "string_utils.h"
+#include "libpostal.h"
 
 #define AMBIGUOUS_LANGUAGE "xxx"
 #define UNKNOWN_LANGUAGE "unk"
@@ -39,11 +40,11 @@ typedef struct language_classifier_minibatch {
 } language_classifier_minibatch_t;
 
 language_classifier_data_set_t *language_classifier_data_set_init(char *filename);
-bool language_classifier_data_set_next(language_classifier_data_set_t *self);
+bool language_classifier_data_set_next(libpostal_t *instance, language_classifier_data_set_t *self);
 void language_classifier_data_set_destroy(language_classifier_data_set_t *self);
 
-language_classifier_minibatch_t *language_classifier_data_set_get_minibatch_with_size(language_classifier_data_set_t *self, khash_t(str_uint32) *labels, size_t batch_size);
-language_classifier_minibatch_t *language_classifier_data_set_get_minibatch(language_classifier_data_set_t *self, khash_t(str_uint32) *labels);
+language_classifier_minibatch_t *language_classifier_data_set_get_minibatch_with_size(libpostal_t *instance, language_classifier_data_set_t *self, khash_t(str_uint32) *labels, size_t batch_size);
+language_classifier_minibatch_t *language_classifier_data_set_get_minibatch(libpostal_t *instance, language_classifier_data_set_t *self, khash_t(str_uint32) *labels);
 void language_classifier_minibatch_destroy(language_classifier_minibatch_t *self);
 
 #endif

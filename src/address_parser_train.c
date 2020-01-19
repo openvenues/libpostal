@@ -60,7 +60,7 @@ typedef struct vocab_context {
     token_array *sub_tokens;
 } vocab_context_t;
 
-bool address_phrases_and_labels(address_parser_data_set_t *data_set, cstring_array *phrases, cstring_array *phrase_labels, vocab_context_t *ctx) {
+bool address_phrases_and_labels(address_dictionary_t *address_dict, address_parser_data_set_t *data_set, cstring_array *phrases, cstring_array *phrase_labels, vocab_context_t *ctx) {
     tokenized_string_t *tokenized_str = data_set->tokenized_str;
     if (tokenized_str == NULL) {
         log_error("tokenized_str == NULL\n");
@@ -113,7 +113,7 @@ bool address_phrases_and_labels(address_parser_data_set_t *data_set, cstring_arr
     char_array_clear(postal_code_token_builder);
 
     // One specific case where "CP" or "CEP" can be concatenated onto the front of the token
-    bool have_dictionary_phrases = search_address_dictionaries_tokens_with_phrases(tokenized_str->str, tokenized_str->tokens, language, &dictionary_phrases);
+    bool have_dictionary_phrases = search_address_dictionaries_tokens_with_phrases(address_dict, tokenized_str->str, tokenized_str->tokens, language, &dictionary_phrases);
     token_phrase_memberships(dictionary_phrases, phrase_memberships, tokenized_str->tokens->n);
 
     cstring_array_foreach(tokenized_str->strings, i, token, {
@@ -203,9 +203,9 @@ bool address_phrases_and_labels(address_parser_data_set_t *data_set, cstring_arr
             tokenize_add_tokens(sub_tokens, postal_code_normalized, strlen(postal_code_normalized), false);
 
             // One specific case where "CP" or "CEP" can be concatenated onto the front of the token
-            if (sub_tokens->n > 1 && search_address_dictionaries_tokens_with_phrases(postal_code_normalized, sub_tokens, language, &postal_code_dictionary_phrases) && postal_code_dictionary_phrases->n > 0) {
+            if (sub_tokens->n > 1 && search_address_dictionaries_tokens_with_phrases(address_dict, postal_code_normalized, sub_tokens, language, &postal_code_dictionary_phrases) && postal_code_dictionary_phrases->n > 0) {
                 phrase_t first_postal_code_phrase = postal_code_dictionary_phrases->a[0];
-                address_expansion_value_t *value = address_dictionary_get_expansions(first_postal_code_phrase.data);
+                address_expansion_value_t *value = address_dictionary_get_expansions(address_dict, first_postal_code_phrase.data);
                 if (value != NULL && value->components & LIBPOSTAL_ADDRESS_POSTAL_CODE) {
                     char_array_clear(token_builder);
                     size_t first_real_token_index = first_postal_code_phrase.start + first_postal_code_phrase.len;
@@ -239,7 +239,7 @@ bool address_phrases_and_labels(address_parser_data_set_t *data_set, cstring_arr
 
                     tokenize_add_tokens(sub_tokens, phrase, strlen(phrase), false);
 
-                    if (sub_tokens->n > 0 && search_address_dictionaries_tokens_with_phrases(phrase, sub_tokens, language, &dictionary_phrases) && dictionary_phrases->n > 0) {
+                    if (sub_tokens->n > 0 && search_address_dictionaries_tokens_with_phrases(address_dict, phrase, sub_tokens, language, &dictionary_phrases) && dictionary_phrases->n > 0) {
                         char_array_clear(sub_token_builder);
 
                         phrase_t current_phrase = NULL_PHRASE;
@@ -249,7 +249,7 @@ bool address_phrases_and_labels(address_parser_data_set_t *data_set, cstring_arr
                         for (size_t pc = 0; pc < dictionary_phrases->n; pc++) {
                             current_phrase = dictionary_phrases->a[pc];
 
-                            address_expansion_value_t *phrase_value = address_dictionary_get_expansions(current_phrase.data);
+                            address_expansion_value_t *phrase_value = address_dictionary_get_expansions(address_dict, current_phrase.data);
                             size_t current_phrase_end = current_phrase.start + current_phrase.len;
                             if (phrase_value != NULL && phrase_value->components & LIBPOSTAL_ADDRESS_POSTAL_CODE) {
                                 current_phrase_end = current_phrase.start;
@@ -309,7 +309,7 @@ bool address_phrases_and_labels(address_parser_data_set_t *data_set, cstring_arr
     return true;
 }
 
-address_parser_t *address_parser_init(char *filename) {
+address_parser_t *address_parser_init(libpostal_t *instance, char *filename) {
     if (filename == NULL) {
         log_error("Filename was NULL\n");
         return NULL;
@@ -443,7 +443,7 @@ address_parser_t *address_parser_init(char *filename) {
     tokenized_string_t *tokenized_str;
     token_array *tokens;
 
-    while (address_parser_data_set_next(data_set)) {
+    while (address_parser_data_set_next(instance, data_set)) {
         tokenized_str = data_set->tokenized_str;
 
         if (tokenized_str == NULL) {
@@ -451,7 +451,7 @@ address_parser_t *address_parser_init(char *filename) {
             goto exit_hashes_allocated;
         }
 
-        if (!address_phrases_and_labels(data_set, phrases, phrase_labels, vocab_context)) {
+        if (!address_phrases_and_labels(instance->address_dict, data_set, phrases, phrase_labels, vocab_context)) {
             log_error("Error in address phrases and labels\n");
             goto exit_hashes_allocated;
         }
@@ -555,7 +555,7 @@ address_parser_t *address_parser_init(char *filename) {
             char *normalized_phrase = NULL;
 
             if (!is_postal && string_contains_hyphen(phrase)) {
-                normalized_phrase = normalize_string_utf8(phrase, NORMALIZE_STRING_REPLACE_HYPHENS);
+                normalized_phrase = normalize_string_utf8(instance->numex_table, phrase, NORMALIZE_STRING_REPLACE_HYPHENS);
             }
 
             char *phrases[2];
@@ -1040,7 +1040,7 @@ static inline uint64_t address_parser_train_num_errors(address_parser_t *self, v
     return 0;
 }
 
-bool address_parser_train_epoch(address_parser_t *self, void *trainer, char *filename) {
+bool address_parser_train_epoch(libpostal_t *instance, address_parser_t *self, void *trainer, char *filename) {
     if (filename == NULL) {
         log_error("Filename was NULL\n");
         return false;
@@ -1061,14 +1061,14 @@ bool address_parser_train_epoch(address_parser_t *self, void *trainer, char *fil
 
     bool logged = false;
 
-    while (address_parser_data_set_next(data_set)) {
+    while (address_parser_data_set_next(instance, data_set)) {
         char *language = char_array_get_string(data_set->language);
         if (string_equals(language, UNKNOWN_LANGUAGE) || string_equals(language, AMBIGUOUS_LANGUAGE)) {
             language = NULL;
         }
         char *country = char_array_get_string(data_set->country);
 
-        address_parser_context_fill(context, self, data_set->tokenized_str, language, country);
+        address_parser_context_fill(instance->address_dict, context, self, data_set->tokenized_str, language, country);
 
         bool example_success = address_parser_train_example(self, trainer, context, data_set);
 
@@ -1101,7 +1101,7 @@ exit_epoch_training_started:
 }
 
 
-bool address_parser_train(address_parser_t *self, char *filename, address_parser_model_type_t model_type, uint32_t num_iterations, size_t min_updates) {
+bool address_parser_train(libpostal_t *instance, address_parser_t *self, char *filename, address_parser_model_type_t model_type, uint32_t num_iterations, size_t min_updates) {
     self->model_type = model_type;
     void *trainer;
     if (model_type == ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON) {
@@ -1129,7 +1129,7 @@ bool address_parser_train(address_parser_t *self, char *filename, address_parser
         log_info("Shuffle complete\n");
         #endif
         
-        if (!address_parser_train_epoch(self, trainer, filename)) {
+        if (!address_parser_train_epoch(instance, self, trainer, filename)) {
             log_error("Error in epoch\n");
             address_parser_trainer_destroy(self, trainer);
             return false;
@@ -1252,7 +1252,16 @@ int main(int argc, char **argv) {
 
     log_info("transliteration module loaded\n");
 
-    address_parser_t *parser = address_parser_init(filename);
+    address_dictionary_t *address_dict = address_dictionary_init();
+    transliteration_table_t *trans_table = transliteration_module_init();
+    numex_table_t *numex_table = numex_module_init();
+
+    libpostal_t instance = { 0 };
+    instance.address_dict = address_dict;
+    instance.trans_table = trans_table;
+    instance.numex_table = numex_table;
+
+    address_parser_t *parser = address_parser_init(&instance, filename);
 
     if (parser == NULL) {
         log_error("Could not initialize parser\n");
@@ -1261,7 +1270,7 @@ int main(int argc, char **argv) {
 
     log_info("Finished initialization\n");
 
-    if (!address_parser_train(parser, filename, model_type, num_iterations, min_updates)) {
+    if (!address_parser_train(&instance, parser, filename, model_type, num_iterations, min_updates)) {
         log_error("Error in training\n");
         exit(EXIT_FAILURE);
     }
@@ -1275,6 +1284,6 @@ int main(int argc, char **argv) {
 
     address_parser_destroy(parser);
 
-    address_dictionary_module_teardown();
+    address_dictionary_module_teardown(&address_dict);
     log_debug("Done\n");
 }

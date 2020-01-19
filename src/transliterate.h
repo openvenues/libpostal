@@ -143,35 +143,33 @@ typedef struct transliteration_table {
 
 
 // Primary API
-transliteration_table_t *get_transliteration_table(void);
-
 transliterator_t *transliterator_new(char *name, uint8_t internal, uint32_t steps_index, size_t steps_length);
 void transliterator_destroy(transliterator_t *self);
 
-bool transliteration_table_add_transliterator(transliterator_t *trans);
+bool transliteration_table_add_transliterator(transliteration_table_t *trans_table, transliterator_t *trans);
 
-transliterator_t *get_transliterator(char *name);
-char *transliterate(char *trans_name, char *str, size_t len);
+transliterator_t *get_transliterator(transliteration_table_t *trans_table, char *name);
+char *transliterate(transliteration_table_t *trans_table, char *trans_name, char *str, size_t len);
 
-bool transliteration_table_add_script_language(script_language_t script_language, transliterator_index_t index);
-transliterator_index_t get_transliterator_index_for_script_language(script_t script, char *language);
+bool transliteration_table_add_script_language(transliteration_table_t *trans_table, script_language_t script_language, transliterator_index_t index);
+transliterator_index_t get_transliterator_index_for_script_language(transliteration_table_t *trans_table, script_t script, char *language);
 
-#define foreach_transliterator(script, language, transliterator_var, code) do {                                                     \
-        transliteration_table_t *__trans_table = get_transliteration_table();                                                       \
-        transliterator_index_t __index = get_transliterator_index_for_script_language(script, language);                            \
+#define foreach_transliterator(__trans_table, script, language, transliterator_var, code) do {                                      \
+        transliterator_index_t __index = get_transliterator_index_for_script_language(__trans_table, script, language);                            \
         for (size_t __i = __index.transliterator_index; __i < __index.transliterator_index + __index.num_transliterators; __i++) {  \
-            transliterator_var = cstring_array_get_string(__trans_table->transliterator_names, (uint32_t)__i);                                \
+            transliterator_var = cstring_array_get_string(__trans_table->transliterator_names, (uint32_t)__i);                      \
             if (transliterator_var == NULL) break;                                                                                  \
             code;                                                                                                                   \
         }                                                                                                                           \
     } while (0);
 
-bool transliteration_table_write(FILE *file);
-bool transliteration_table_save(char *filename);
+bool transliteration_table_write(transliteration_table_t *trans_table, FILE *file);
+bool transliteration_table_save(transliteration_table_t *trans_table, char *filename);
 
 // Module setup/teardown
-bool transliteration_module_init(void);
-bool transliteration_module_setup(char *filename);
-void transliteration_module_teardown(void);
+transliteration_table_t *transliteration_module_init(void);
+transliteration_table_t *transliteration_module_setup(char *filename);
+void transliteration_table_destroy(transliteration_table_t *trans_table);
+void transliteration_module_teardown(transliteration_table_t **instance);
 
 #endif

@@ -14,6 +14,7 @@
 #include "sparse_matrix.h"
 #include "string_utils.h"
 #include "trie.h"
+#include "address_dictionary.h"
 
 #define LANGUAGE_CLASSIFIER_FILENAME "language_classifier.dat"
 
@@ -42,7 +43,7 @@ language_classifier_t *language_classifier_new(void);
 language_classifier_t *get_language_classifier(void);
 language_classifier_t *get_language_classifier_country(void);
 
-language_classifier_response_t *classify_languages(char *address);
+language_classifier_response_t *classify_languages(libpostal_t *instance, char *address);
 void language_classifier_response_destroy(language_classifier_response_t *self);
 
 void language_classifier_destroy(language_classifier_t *self);

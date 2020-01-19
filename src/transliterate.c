@@ -13,12 +13,6 @@
 #define NFKD "NFKD"
 #define STRIP_MARK "STRIP_MARK"
 
-static transliteration_table_t *trans_table = NULL;
-
-transliteration_table_t *get_transliteration_table(void) {
-    return trans_table;
-}
-
 transliterator_t *transliterator_new(char *name, uint8_t internal, uint32_t steps_index, size_t steps_length) {
     transliterator_t *trans = malloc(sizeof(transliterator_t));
 
@@ -43,7 +37,7 @@ void transliterator_destroy(transliterator_t *self) {
 }
 
 
-transliterator_t *get_transliterator(char *name) {
+transliterator_t *get_transliterator(transliteration_table_t *trans_table, char *name) {
     if (trans_table == NULL) {
         return NULL;
     }
@@ -78,7 +72,7 @@ typedef struct {
 #define TRANSLITERATION_DEFAULT_STATE (transliteration_state_t){NULL_PREFIX_RESULT, TRANS_STATE_BEGIN, 0, 0, 0, 1, 1, 0, 0, 0, 0}
 
 
-static transliteration_replacement_t *get_replacement(trie_t *trie, trie_prefix_result_t result) {
+static transliteration_replacement_t *get_replacement(transliteration_table_t *trans_table, trie_t *trie, trie_prefix_result_t result) {
     uint32_t node_id = result.node_id;
     if (node_id == NULL_NODE_ID) return NULL;
 
@@ -666,10 +660,8 @@ static char *replace_groups(trie_t *trie, char *str, char *replacement, group_ca
     return char_array_to_string(ret);
 }
 
-char *transliterate(char *trans_name, char *str, size_t len) {
+char *transliterate(transliteration_table_t *trans_table, char *trans_name, char *str, size_t len) {
     if (trans_name == NULL || str == NULL) return NULL;
-
-    transliteration_table_t *trans_table = get_transliteration_table();
 
     if (trans_table == NULL) {
         log_error("transliteration table is NULL. Call libpostal_setup() or transliteration_module_setup()\n");
@@ -699,7 +691,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
     log_debug("lower = %s\n", trans_name);
 
-    transliterator_t *transliterator = get_transliterator(trans_name);
+    transliterator_t *transliterator = get_transliterator(trans_table, trans_name);
     if (transliterator == NULL) {
         log_warn("transliterator \"%s\" does not exist\n", trans_name);
         if (allocated_trans_name) free(trans_name);
@@ -834,11 +826,11 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                         log_debug("Context match\n");
                         match_state = match_candidate_state;
                         match_state.state = TRANS_STATE_MATCH;
-                        replacement = get_replacement(trie, context_result);
+                        replacement = get_replacement(trans_table, trie, context_result);
                     } else {
                         if (match_state.state == TRANS_STATE_MATCH) { 
                             log_debug("Context no match and previous match\n");
-                            replacement = get_replacement(trie, match_state.result);
+                            replacement = get_replacement(trans_table, trie, match_state.result);
                             if (state.state != TRANS_STATE_PARTIAL_MATCH) {
                                 state.advance_index = false;
                             }
@@ -869,7 +861,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
                             if (match_state.state == TRANS_STATE_MATCH) {
                                 log_debug("Match no context\n");
-                                replacement = get_replacement(trie, match_state.result);
+                                replacement = get_replacement(trans_table, trie, match_state.result);
                             } else {
 
                                 log_debug("Tried context for %s at char '%.*s', no match\n", str, (int)char_len, ptr);
@@ -1038,7 +1030,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
             // Recursive call here shouldn't hurt too much, happens in only a few languages and only 2-3 calls deep
             log_debug("Got STEP_TYPE_TRANSFORM, step=%s\n", step_name);
             char *old_str = str;
-            str = transliterate(step_name, str, strlen(str));
+            str = transliterate(trans_table, step_name, str, strlen(str));
             log_debug("Transform result = %s\n", str);
             log_debug("str = %s\n", str);
             len = strlen(str);
@@ -1051,8 +1043,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
 }
 
-void transliteration_table_destroy(void) {
-    transliteration_table_t *trans_table = get_transliteration_table();
+void transliteration_table_destroy(transliteration_table_t *trans_table) {
     if (trans_table == NULL) return;
     if (trans_table->trie) {
         trie_destroy(trans_table->trie);
@@ -1095,63 +1086,58 @@ void transliteration_table_destroy(void) {
 }
 
 
-transliteration_table_t *transliteration_table_init(void) {
-    transliteration_table_t *trans_table = get_transliteration_table();
+transliteration_table_t *transliteration_table_init() {
+    transliteration_table_t *trans_table = calloc(1, sizeof(transliteration_table_t));
 
-    if (trans_table == NULL) {
-        trans_table = calloc(1, sizeof(transliteration_table_t));
+    trans_table->trie = trie_new();
+    if (trans_table->trie == NULL) {
+        goto exit_trans_table_created;
+    }
 
-        trans_table->trie = trie_new();
-        if (trans_table->trie == NULL) {
-            goto exit_trans_table_created;
-        }
+    trans_table->transliterators = kh_init(str_transliterator);
+    if (trans_table->transliterators == NULL) {
+        goto exit_trans_table_created;
+    }
 
-        trans_table->transliterators = kh_init(str_transliterator);
-        if (trans_table->transliterators == NULL) {
-            goto exit_trans_table_created;
-        }
+    trans_table->script_languages = kh_init(script_language_index);
+    if (trans_table->script_languages == NULL) {
+        goto exit_trans_table_created;
+    }
 
-        trans_table->script_languages = kh_init(script_language_index);
-        if (trans_table->script_languages == NULL) {
-            goto exit_trans_table_created;
-        }
+    trans_table->transliterator_names = cstring_array_new();
+    if (trans_table->transliterator_names == NULL) {
+        goto exit_trans_table_created;
+    }
 
-        trans_table->transliterator_names = cstring_array_new();
-        if (trans_table->transliterator_names == NULL) {
-            goto exit_trans_table_created;
-        }
+    trans_table->steps = step_array_new();
+    if (trans_table->steps == NULL) {
+        goto exit_trans_table_created;
+    }
 
-        trans_table->steps = step_array_new();
-        if (trans_table->steps == NULL) {
-            goto exit_trans_table_created;
-        }
+    trans_table->replacements = transliteration_replacement_array_new();
+    if (trans_table->replacements == NULL) {
+        goto exit_trans_table_created;
+    }
 
-        trans_table->replacements = transliteration_replacement_array_new();
-        if (trans_table->replacements == NULL) {
-            goto exit_trans_table_created;
-        }
+    trans_table->replacement_strings = cstring_array_new();
+    if (trans_table->replacement_strings == NULL) {
+        goto exit_trans_table_created;
+    }
 
-        trans_table->replacement_strings = cstring_array_new();
-        if (trans_table->replacement_strings == NULL) {
-            goto exit_trans_table_created;
-        }
-
-        trans_table->revisit_strings = cstring_array_new();
-        if (trans_table->revisit_strings == NULL) {
-            goto exit_trans_table_created;
-        }
-
+    trans_table->revisit_strings = cstring_array_new();
+    if (trans_table->revisit_strings == NULL) {
+        goto exit_trans_table_created;
     }
 
     return trans_table;
 
 exit_trans_table_created:
-   transliteration_table_destroy();
-   exit(1);
+   transliteration_table_destroy(trans_table);
+   return NULL;
 }
 
-transliteration_table_t *transliteration_table_new(void) {
-    transliteration_table_t *trans_table = transliteration_table_init();
+transliteration_table_t *transliteration_table_new() {
+    transliteration_table_t *trans_table = malloc(sizeof(transliteration_table_t));
     if (trans_table != NULL) {
         cstring_array_add_string(trans_table->replacement_strings, "");
         cstring_array_add_string(trans_table->revisit_strings, "");
@@ -1215,7 +1201,7 @@ void transliteration_replacement_destroy(transliteration_replacement_t *self) {
     free(self);
 }
 
-bool transliteration_table_add_transliterator(transliterator_t *trans) {
+bool transliteration_table_add_transliterator(transliteration_table_t *trans_table, transliterator_t *trans) {
     if (trans_table == NULL) {
         return false;
     }
@@ -1228,7 +1214,7 @@ bool transliteration_table_add_transliterator(transliterator_t *trans) {
     return true;
 }
 
-bool transliteration_table_add_script_language(script_language_t script_language, transliterator_index_t index) {
+bool transliteration_table_add_script_language(transliteration_table_t *trans_table, script_language_t script_language, transliterator_index_t index) {
     if (trans_table == NULL) {
         return false;
     }
@@ -1241,7 +1227,7 @@ bool transliteration_table_add_script_language(script_language_t script_language
     return true;
 }
 
-transliterator_index_t get_transliterator_index_for_script_language(script_t script, char *language) {
+transliterator_index_t get_transliterator_index_for_script_language(transliteration_table_t *trans_table, script_t script, char *language) {
     if (trans_table == NULL || language == NULL || strlen(language) >= MAX_LANGUAGE_LEN) {
         return NULL_TRANSLITERATOR_INDEX;
     }
@@ -1499,9 +1485,9 @@ bool transliteration_replacement_write(transliteration_replacement_t *replacemen
 
 }
 
-bool transliteration_table_read(FILE *f) {
+transliteration_table_t *transliteration_table_read(FILE *f) {
     if (f == NULL) {
-        return false;
+        return NULL;
     }
 
     uint32_t signature;
@@ -1509,10 +1495,14 @@ bool transliteration_table_read(FILE *f) {
     log_debug("Reading signature\n");
 
     if (!file_read_uint32(f, &signature) || signature != TRANSLITERATION_TABLE_SIGNATURE) {
-        return false;
+        return NULL;
     }
 
-    trans_table = transliteration_table_init();
+    transliteration_table_t *trans_table = transliteration_table_init();
+
+    if (!trans_table) {
+        return NULL;
+    }
 
     log_debug("Table initialized\n");
 
@@ -1537,7 +1527,7 @@ bool transliteration_table_read(FILE *f) {
         } else {
             log_debug("read trans with name: %s\n", trans->name);
         }
-        if (!transliteration_table_add_transliterator(trans)) {
+        if (!transliteration_table_add_transliterator(trans_table, trans)) {
             goto exit_trans_table_load_error;
         }
     }
@@ -1591,7 +1581,7 @@ bool transliteration_table_read(FILE *f) {
 
         log_debug("Adding script language key={%d, %s}, value={%zu, %zu}\n", script_language.script, script_language.language, index.transliterator_index, index.num_transliterators);
 
-        transliteration_table_add_script_language(script_language, index);
+        transliteration_table_add_script_language(trans_table, script_language, index);
     }
 
     uint64_t trans_table_num_strings;
@@ -1784,14 +1774,14 @@ bool transliteration_table_read(FILE *f) {
         goto exit_trans_table_load_error;
     }
 
-    return true;
+    return trans_table;
 
 exit_trans_table_load_error:
-    transliteration_table_destroy();
-    return false;
+    transliteration_table_destroy(trans_table);
+    return NULL;
 }
 
-bool transliteration_table_write(FILE *f) {
+bool transliteration_table_write(transliteration_table_t *trans_table, FILE *f) {
     if (f == NULL) {
         return false;
     }
@@ -1950,24 +1940,23 @@ bool transliteration_table_write(FILE *f) {
 
 }
 
-bool transliteration_table_load(char *filename) {
-    if (filename == NULL || trans_table != NULL) {
-        return false;
+transliteration_table_t *transliteration_table_load(char *filename) {
+    if (filename == NULL) {
+        return NULL;
     }
 
     FILE *f;
 
     if ((f = fopen(filename, "rb")) != NULL) {
-        bool ret = transliteration_table_read(f);
+        transliteration_table_t *trans_table = transliteration_table_read(f);
         fclose(f);
-        return ret;
-    } else {
-        return false;
+        return trans_table;
     }
+    return NULL;
 }
 
 
-bool transliteration_table_save(char *filename) {
+bool transliteration_table_save(transliteration_table_t *trans_table, char *filename) {
     if (trans_table == NULL || filename == NULL) {
         return false;
     }
@@ -1975,31 +1964,26 @@ bool transliteration_table_save(char *filename) {
     FILE *f;
 
     if ((f = fopen(filename, "wb")) != NULL) {
-        bool ret = transliteration_table_write(f);
+        bool ret = transliteration_table_write(trans_table, f);
         fclose(f);
         return ret;
-    } else {
-        return false;
     }
-
+    return false;
 }
 
-bool transliteration_module_init(void) {
-    trans_table = transliteration_table_new();
-    return trans_table != NULL;
+transliteration_table_t *transliteration_module_init(void) {
+    return transliteration_table_new();
 }
 
-bool transliteration_module_setup(char *filename) {
-    if (trans_table == NULL) {
-        return transliteration_table_load(filename == NULL ? DEFAULT_TRANSLITERATION_PATH : filename);
+transliteration_table_t *transliteration_module_setup(char *filename) {
+    return transliteration_table_load(filename == NULL ? DEFAULT_TRANSLITERATION_PATH : filename);
+}
+
+
+void transliteration_module_teardown(transliteration_table_t **trans_table) {
+    if (trans_table != NULL) {
+        transliteration_table_destroy(*trans_table);
+        *trans_table = NULL;
     }
-
-    return true;
-}
-
-
-void transliteration_module_teardown(void) {
-    transliteration_table_destroy();
-    trans_table = NULL;
 }
 

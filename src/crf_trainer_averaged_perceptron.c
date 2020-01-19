@@ -631,11 +631,13 @@ bool crf_averaged_perceptron_trainer_train_example(crf_averaged_perceptron_train
 
     bool add_if_missing = true;
 
+    address_dictionary_t *address_dict = address_dictionary_init();
+
     for (uint32_t i = 0; i < num_tokens; i++) {
         cstring_array_clear(features);
         cstring_array_clear(prev_tag_features);
 
-        if (!feature_function(tagger, tagger_context, tokenized, i)) {
+        if (!feature_function(address_dict, tagger, tagger_context, tokenized, i)) {
             log_error("Could not add address parser features\n");
             return false;
         }

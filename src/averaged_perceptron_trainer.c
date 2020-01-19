@@ -401,6 +401,8 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
 
     bool add_if_missing = true;
 
+    address_dictionary_t *address_dict = address_dictionary_init();
+
     for (uint32_t i = 0; i < num_tokens; i++) {
         cstring_array_clear(features);
         cstring_array_clear(prev_tag_features);
@@ -411,7 +413,7 @@ bool averaged_perceptron_trainer_train_example(averaged_perceptron_trainer_t *se
             log_error("label is NULL\n");
         }
 
-        if (!feature_function(tagger, context, tokenized, i)) {
+        if (!feature_function(address_dict, tagger, context, tokenized, i)) {
             log_error("Could not add address parser features\n");
             return false;
         }

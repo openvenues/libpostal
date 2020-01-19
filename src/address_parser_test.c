@@ -58,7 +58,7 @@ static uint32_t address_parser_get_class_index(address_parser_t *parser, char *n
 
 #define EMPTY_ADDRESS_PARSER_TEST_RESULT (address_parser_test_results_t){0, 0, 0, 0, NULL}
 
-bool address_parser_test(address_parser_t *parser, char *filename, address_parser_test_results_t *result, bool print_errors) {
+bool address_parser_test(libpostal_t *instance, address_parser_t *parser, char *filename, address_parser_test_results_t *result, bool print_errors) {
     if (filename == NULL) {
         log_error("Filename was NULL\n");
         return NULL;
@@ -85,14 +85,14 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
 
     cstring_array *token_labels = cstring_array_new();
 
-    while (address_parser_data_set_next(data_set)) {
+    while (address_parser_data_set_next(instance, data_set)) {
         char *language = char_array_get_string(data_set->language);
         if (string_equals(language, UNKNOWN_LANGUAGE) || string_equals(language, AMBIGUOUS_LANGUAGE)) {
             language = NULL;
         }
         char *country = char_array_get_string(data_set->country);
 
-        address_parser_context_fill(context, parser, data_set->tokenized_str, language, country);
+        address_parser_context_fill(instance->address_dict, context, parser, data_set->tokenized_str, language, country);
 
         cstring_array_clear(token_labels);
 
@@ -100,7 +100,7 @@ bool address_parser_test(address_parser_t *parser, char *filename, address_parse
 
         size_t starting_errors = result->num_errors;
 
-        bool prediction_success = address_parser_predict(parser, context, token_labels, &address_parser_features, data_set->tokenized_str);
+        bool prediction_success = address_parser_predict(instance->address_dict, parser, context, token_labels, &address_parser_features, data_set->tokenized_str);
 
         if (prediction_success) {
             uint32_t i;
@@ -186,15 +186,16 @@ int main(int argc, char **argv) {
         }
     }
 
-    if (!address_dictionary_module_setup(NULL)) {
+    address_dictionary_t *address_dict = address_dictionary_module_setup(NULL);
+    if (address_dict == NULL) {
         log_error("Could not load address dictionaries\n");
         exit(EXIT_FAILURE);
     }
 
     log_info("address dictionary module loaded\n");
 
-    // Needs to load for normalization
-    if (!transliteration_module_setup(NULL)) {
+    transliteration_table_t *trans_table = transliteration_module_setup(NULL);
+    if (trans_table == NULL) {
         log_error("Could not load transliteration module\n");
         exit(EXIT_FAILURE);
     }
@@ -208,6 +209,12 @@ int main(int argc, char **argv) {
 
     log_info("Finished initialization\n");
 
+    libpostal_t instance = { 0 };
+
+    instance.address_dict = address_dict;
+    instance.numex_table = numex_module_init();
+    instance.trans_table = trans_table;
+
     address_parser_t *parser = get_address_parser();
 
     if (parser->model_type == ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON) {
@@ -218,7 +225,7 @@ int main(int argc, char **argv) {
 
     address_parser_test_results_t results = EMPTY_ADDRESS_PARSER_TEST_RESULT;
 
-    if (!address_parser_test(parser, filename, &results, print_errors)) {
+    if (!address_parser_test(&instance, parser, filename, &results, print_errors)) {
         log_error("Error in training\n");
         exit(EXIT_FAILURE);
     }
@@ -256,6 +263,7 @@ int main(int argc, char **argv) {
     free(confusion_sorted);
 
     address_parser_module_teardown();
-    transliteration_module_teardown();
-    address_dictionary_module_teardown();
+    numex_module_teardown(&instance.numex_table);
+    transliteration_module_teardown(&trans_table);
+    address_dictionary_module_teardown(&address_dict);
 }

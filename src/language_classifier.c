@@ -59,20 +59,20 @@ void language_classifier_response_destroy(language_classifier_response_t *self) 
     free(self);
 }
 
-language_classifier_response_t *classify_languages(char *address) {
+language_classifier_response_t *classify_languages(libpostal_t *instance, char *address) {
     language_classifier_t *classifier = get_language_classifier();
-    
+
     if (classifier == NULL) {
         log_error(LANGUAGE_CLASSIFIER_SETUP_ERROR);
         return NULL;
     }
 
-    char *normalized = language_classifier_normalize_string(address);
+    char *normalized = language_classifier_normalize_string(instance, address);
 
     token_array *tokens = token_array_new();
     char_array *feature_array = char_array_new();
 
-    khash_t(str_double) *feature_counts = extract_language_features(normalized, NULL, tokens, feature_array);
+    khash_t(str_double) *feature_counts = extract_language_features(instance->address_dict, normalized, NULL, tokens, feature_array);
     if (feature_counts == NULL || kh_size(feature_counts) == 0) {
         token_array_destroy(tokens);
         char_array_destroy(feature_array);

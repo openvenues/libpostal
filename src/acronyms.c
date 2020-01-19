@@ -2,7 +2,7 @@
 #include "token_types.h"
 
 
-bool existing_acronym_phrase_positions(uint32_array *existing_acronyms_array, const char *str, token_array *token_array, size_t num_languages, char **languages) {
+bool existing_acronym_phrase_positions(address_dictionary_t *address_dict, uint32_array *existing_acronyms_array, const char *str, token_array *token_array, size_t num_languages, char **languages) {
     if (existing_acronyms_array == NULL || token_array == NULL) return false;
     size_t num_tokens = token_array->n;
     if (existing_acronyms_array->n != num_tokens) {
@@ -22,14 +22,14 @@ bool existing_acronym_phrase_positions(uint32_array *existing_acronyms_array, co
 
     for (size_t l = 0; l < num_languages; l++) {
         char *lang = languages[l];
-        phrase_array *lang_phrases = search_address_dictionaries_tokens((char *)str, token_array, lang);
+        phrase_array *lang_phrases = search_address_dictionaries_tokens(address_dict, (char *)str, token_array, lang);
 
         if (lang_phrases != NULL) {
             size_t num_lang_phrases = lang_phrases->n;
             for (size_t p = 0; p < num_lang_phrases; p++) {
                 phrase_t phrase = lang_phrases->a[p];
 
-                address_expansion_value_t *value = address_dictionary_get_expansions(phrase.data);
+                address_expansion_value_t *value = address_dictionary_get_expansions(address_dict, phrase.data);
                 if (value == NULL) continue;
 
                 address_expansion_array *expansions_array = value->expansions;
@@ -41,7 +41,7 @@ bool existing_acronym_phrase_positions(uint32_array *existing_acronyms_array, co
                 for (size_t i = 0; i < num_expansions; i++) {
                     address_expansion_t expansion = expansions[i];
                     if (expansion.canonical_index != NULL_CANONICAL_INDEX) {
-                        char *canonical = address_dictionary_get_canonical(expansion.canonical_index);
+                        char *canonical = address_dictionary_get_canonical(address_dict, expansion.canonical_index);
                         if (string_contains(canonical, " ")) {
                             for (size_t j = phrase.start; j < phrase.start + phrase.len; j++) {
                                 existing_acronyms[j] = 1;
@@ -58,7 +58,7 @@ bool existing_acronym_phrase_positions(uint32_array *existing_acronyms_array, co
     return true;
 }
 
-bool stopword_positions(uint32_array *stopwords_array, const char *str, token_array *tokens, size_t num_languages, char **languages) {
+bool stopword_positions(address_dictionary_t *address_dict, uint32_array *stopwords_array, const char *str, token_array *tokens, size_t num_languages, char **languages) {
     if (stopwords_array == NULL) return false;
     if (stopwords_array->n != tokens->n) {
         uint32_array_resize_fixed(stopwords_array, tokens->n);
@@ -69,14 +69,14 @@ bool stopword_positions(uint32_array *stopwords_array, const char *str, token_ar
 
     for (size_t l = 0; l < num_languages; l++) {
         char *lang = languages[l];
-        phrase_array *lang_phrases = search_address_dictionaries_tokens((char *)str, tokens, lang);
+        phrase_array *lang_phrases = search_address_dictionaries_tokens(address_dict, (char *)str, tokens, lang);
 
         if (lang_phrases != NULL) {
             size_t num_lang_phrases = lang_phrases->n;
             for (size_t p = 0; p < num_lang_phrases; p++) {
                 phrase_t phrase = lang_phrases->a[p];
 
-                if (address_phrase_in_dictionary(phrase, DICTIONARY_STOPWORD)) {
+                if (address_phrase_in_dictionary(address_dict, phrase, DICTIONARY_STOPWORD)) {
                     for (size_t stop_idx = phrase.start; stop_idx < phrase.start + phrase.len; stop_idx++) {
                         stopwords[stop_idx] = 1;
                     }
@@ -90,7 +90,7 @@ bool stopword_positions(uint32_array *stopwords_array, const char *str, token_ar
 }
 
 
-phrase_array *acronym_token_alignments(const char *s1, token_array *tokens1, const char *s2, token_array *tokens2, size_t num_languages, char **languages) {
+phrase_array *acronym_token_alignments(address_dictionary_t *address_dict, const char *s1, token_array *tokens1, const char *s2, token_array *tokens2, size_t num_languages, char **languages) {
     if (s1 == NULL || tokens1 == NULL || s2 == NULL || tokens2 == NULL) {
         return NULL;
     }
@@ -123,7 +123,7 @@ phrase_array *acronym_token_alignments(const char *s1, token_array *tokens1, con
         return NULL;
     }
 
-    stopword_positions(stopwords_array, s2, tokens2, num_languages, languages);
+    stopword_positions(address_dict, stopwords_array, s2, tokens2, num_languages, languages);
 
     uint32_t *stopwords = stopwords_array->a;
 
@@ -199,7 +199,7 @@ phrase_array *acronym_token_alignments(const char *s1, token_array *tokens1, con
                 }
 
                 phrase_array_push(alignments, phrase);
-        
+
                 ti_pos = 0;
                 acronym_token_pos = -1;
                 acronym_start = -1;
@@ -210,5 +210,5 @@ phrase_array *acronym_token_alignments(const char *s1, token_array *tokens1, con
 
     uint32_array_destroy(stopwords_array);
 
-    return alignments;   
+    return alignments;
 }

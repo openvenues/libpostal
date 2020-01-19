@@ -18,7 +18,8 @@ int main(int argc, char **argv) {
 
     printf("Loading models...\n");
 
-    if (!libpostal_setup() || !libpostal_setup_parser_datadir(address_parser_dir)) {
+    libpostal_t *instance = libpostal_setup();
+    if (!instance || !libpostal_setup_parser_datadir(address_parser_dir)) {
         exit(EXIT_FAILURE);
     }
 
@@ -99,7 +100,7 @@ int main(int argc, char **argv) {
         if (country != NULL) options.country = country;
         if (language != NULL) options.language = language;
 
-        if ((parsed = libpostal_parse_address(input, options))) {
+        if ((parsed = libpostal_parse_address(instance, input, options))) {
             printf("\n");
             printf("Result:\n\n");
             printf("{\n");
@@ -123,6 +124,6 @@ next_input:
         free(input);
     }
 
-    libpostal_teardown();
+    libpostal_teardown(&instance);
     libpostal_teardown_parser();
 }
