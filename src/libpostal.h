@@ -27,6 +27,8 @@ extern "C" {
 #define LIBPOSTAL_EXPORT
 #endif
 
+LIBPOSTAL_EXPORT const char *libpostal_get_version(void);
+
 typedef struct libpostal {
     transliteration_table_t *trans_table;
     numex_table_t *numex_table;

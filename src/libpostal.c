@@ -43,6 +43,10 @@ static libpostal_normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
         .roman_numerals = true
 };
 
+const char *libpostal_get_version(void) {
+    return "2.0.0";
+}
+
 libpostal_normalize_options_t libpostal_get_default_options(void) {
     return LIBPOSTAL_DEFAULT_OPTIONS;
 }
