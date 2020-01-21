@@ -202,7 +202,8 @@ int main(int argc, char **argv) {
 
     log_info("transliteration module loaded\n");
 
-    if (!address_parser_load(address_parser_dir)) {
+    address_parser_t *parser = address_parser_load(address_parser_dir);
+    if (parser == NULL) {
         log_error("Could not initialize parser\n");
         exit(EXIT_FAILURE);
     }
@@ -214,8 +215,6 @@ int main(int argc, char **argv) {
     instance.address_dict = address_dict;
     instance.numex_table = numex_module_init();
     instance.trans_table = trans_table;
-
-    address_parser_t *parser = get_address_parser();
 
     if (parser->model_type == ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON) {
         printf("averaged perceptron parser\n");
@@ -262,7 +261,7 @@ int main(int argc, char **argv) {
     free(results.confusion);
     free(confusion_sorted);
 
-    address_parser_module_teardown();
+    address_parser_module_teardown(&parser);
     numex_module_teardown(&instance.numex_table);
     transliteration_module_teardown(&trans_table);
     address_dictionary_module_teardown(&address_dict);

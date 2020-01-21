@@ -54,8 +54,6 @@ typedef struct address_dictionary {
     trie_t *trie;
 } address_dictionary_t;
 
-#include "libpostal.h"
-
 address_dictionary_t *address_dictionary_init(void);
 
 phrase_array *search_address_dictionaries(address_dictionary_t *address_dict, char *str, char *lang);

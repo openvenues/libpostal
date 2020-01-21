@@ -25,6 +25,8 @@ KSORT_INIT(phrase_language_array, phrase_language_t, ks_lt_phrase_language)
 uint64_t get_normalize_token_options(libpostal_normalize_options_t options);
 uint64_t get_normalize_string_options(libpostal_normalize_options_t options);
 
+#include "libpostal.h"
+
 void add_normalized_strings_token(numex_table_t *numex_table, cstring_array *strings, char *str, token_t token, libpostal_normalize_options_t options);
 void add_postprocessed_string(libpostal_t *instance, cstring_array *strings, char *str, libpostal_normalize_options_t options);
 

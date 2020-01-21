@@ -261,9 +261,9 @@ inline libpostal_address_parser_options_t libpostal_get_address_parser_default_o
     return LIBPOSTAL_ADDRESS_PARSER_DEFAULT_OPTIONS;
 }
 
-libpostal_address_parser_response_t *libpostal_parse_address(libpostal_t *instance, char *address, libpostal_address_parser_options_t options) {
+libpostal_address_parser_response_t *libpostal_parse_address(address_parser_t *parser, libpostal_t *instance, char *address, libpostal_address_parser_options_t options) {
     if (instance == NULL) return NULL;
-    libpostal_address_parser_response_t *parsed = address_parser_parse(instance, address, options.language, options.country);
+    libpostal_address_parser_response_t *parsed = address_parser_parse(parser, instance, address, options.language, options.country);
 
     if (parsed == NULL) {
         log_error("Parser returned NULL\n");
@@ -273,8 +273,8 @@ libpostal_address_parser_response_t *libpostal_parse_address(libpostal_t *instan
     return parsed;
 }
 
-bool libpostal_parser_print_features(bool print_features) {
-    return address_parser_print_features(print_features);
+bool libpostal_parser_print_features(address_parser_t *parser, bool print_features) {
+    return address_parser_print_features(parser, print_features);
 }
 
 libpostal_t *libpostal_setup_datadir(char *datadir) {
@@ -444,26 +444,26 @@ bool libpostal_setup_language_classifier(void) {
     return libpostal_setup_language_classifier_datadir(NULL);
 }
 
-bool libpostal_setup_parser_datadir(char *datadir) {
+address_parser_t *libpostal_setup_parser_datadir(char *datadir) {
     char *parser_dir = NULL;
 
     if (datadir != NULL) {
         parser_dir = path_join(2, datadir, LIBPOSTAL_ADDRESS_PARSER_SUBDIR);
     }
 
-    if (!address_parser_module_setup(parser_dir)) {
+    address_parser_t *parser = address_parser_module_setup(parser_dir);
+    if (parser == NULL) {
         log_error("Error loading address parser module, dir=%s\n", parser_dir);
-        return false;
     }
 
     if (parser_dir != NULL) {
         free(parser_dir);
     }
 
-    return true;
+    return parser;
 }
 
-bool libpostal_setup_parser(void) {
+address_parser_t *libpostal_setup_parser(void) {
     return libpostal_setup_parser_datadir(NULL);
 }
 
@@ -484,6 +484,6 @@ void libpostal_teardown_language_classifier(void) {
     language_classifier_module_teardown();
 }
 
-void libpostal_teardown_parser(void) {
-    address_parser_module_teardown();
+void libpostal_teardown_parser(address_parser_t **parser) {
+    address_parser_module_teardown(parser);
 }

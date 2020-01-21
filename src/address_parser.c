@@ -3,6 +3,7 @@
 #include "features.h"
 #include "ngrams.h"
 #include "scanner.h"
+#include "normalize.h"
 
 #include "graph_builder.h"
 
@@ -19,8 +20,6 @@
 #define UNKNOWN_NUMERIC "UNKNOWN_NUMERIC"
 
 #define DEFAULT_RARE_WORD_THRESHOLD 50
-
-static address_parser_t *parser = NULL;
 
 typedef enum {
     ADDRESS_PARSER_NULL_PHRASE,
@@ -45,11 +44,7 @@ address_parser_t *address_parser_new(void) {
     return address_parser_new_options(PARSER_DEFAULT_OPTIONS);
 }
 
-address_parser_t *get_address_parser(void) {
-    return parser;
-}
-
-bool address_parser_print_features(bool print_features) {
+bool address_parser_print_features(address_parser_t *parser, bool print_features) {
     if (parser == NULL) return false;
 
     parser->options.print_features = print_features;
@@ -163,8 +158,8 @@ static bool postal_code_context_exists(address_parser_t *self, uint32_t postal_c
     return graph_has_edge(g, postal_code_id, admin_id);
 }
 
-bool address_parser_load(char *dir) {
-    if (parser != NULL) return false;
+address_parser_t *address_parser_load(char *dir) {
+    address_parser_t *parser;
     if (dir == NULL) {
         dir = LIBPOSTAL_ADDRESS_PARSER_DIR;
     }
@@ -176,15 +171,14 @@ bool address_parser_load(char *dir) {
 
     if (file_exists(model_path)) {
         averaged_perceptron_t *ap_model = averaged_perceptron_load(model_path);
-        if (ap_model != NULL) {
-            parser = address_parser_new();
-            parser->model_type = ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON;
-            parser->model.ap = ap_model;
-        } else {
+        if (ap_model == NULL) {
             char_array_destroy(path);
             log_error("Averaged perceptron model could not be loaded\n");
-            return false;
+            return NULL;
         }
+        parser = address_parser_new();
+        parser->model_type = ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON;
+        parser->model.ap = ap_model;
     } else {
         model_path = NULL;
     }
@@ -203,7 +197,7 @@ bool address_parser_load(char *dir) {
             } else {
                 char_array_destroy(path);
                 log_error("Averaged perceptron model could not be loaded\n");
-                return false;
+                return NULL;
             }
         } else {
             model_path = NULL;
@@ -213,7 +207,7 @@ bool address_parser_load(char *dir) {
     if (parser == NULL) {
         char_array_destroy(path);
         log_error("Could not find parser model file of known type\n");
-        return false;
+        return NULL;
     }
 
     char_array_clear(path);
@@ -300,12 +294,12 @@ bool address_parser_load(char *dir) {
     }
 
     char_array_destroy(path);
-    return true;
+    return parser;
 
 exit_address_parser_created:
     address_parser_destroy(parser);
     char_array_destroy(path);
-    return false;
+    return NULL;
 }
 
 void address_parser_destroy(address_parser_t *self) {
@@ -344,7 +338,7 @@ void address_parser_destroy(address_parser_t *self) {
     free(self);
 }
 
-static inline uint32_t word_vocab_frequency(address_parser_t *parser, char *word) {   
+static inline uint32_t word_vocab_frequency(address_parser_t *parser, char *word) {
     uint32_t count = 0;
     bool has_key = trie_get_data(parser->vocab, word, &count);
     return count;
@@ -1658,10 +1652,9 @@ libpostal_address_parser_response_t *address_parser_response_new(void) {
     return response;
 }
 
-libpostal_address_parser_response_t *address_parser_parse(libpostal_t *instance, char *address, char *language, char *country) {
+libpostal_address_parser_response_t *address_parser_parse(address_parser_t *parser, libpostal_t *instance, char *address, char *language, char *country) {
     if (address == NULL) return NULL;
 
-    address_parser_t *parser = get_address_parser();
     if (parser == NULL || parser->context == NULL) {
         log_error("parser is not setup, call libpostal_setup_address_parser()\n");
         return NULL;
@@ -1840,16 +1833,13 @@ libpostal_address_parser_response_t *address_parser_parse(libpostal_t *instance,
 
 
 
-bool address_parser_module_setup(char *dir) {
-    if (parser == NULL) {
-        return address_parser_load(dir);
-    }
-    return true;
+address_parser_t *address_parser_module_setup(char *dir) {
+    return address_parser_load(dir);
 }
 
-void address_parser_module_teardown(void) {
+void address_parser_module_teardown(address_parser_t **parser) {
     if (parser != NULL) {
-        address_parser_destroy(parser);
+        address_parser_destroy(*parser);
+        *parser = NULL;
     }
-    parser = NULL;
 }
