@@ -35,7 +35,8 @@ int main(int argc, char **argv) {
     }
 
     libpostal_t *instance = libpostal_setup();
-    if (!instance) {
+    language_classifier_t *classifier = libpostal_setup_language_classifier();
+    if (instance == NULL || classifier == NULL) {
         exit(EXIT_FAILURE);
     }
 
@@ -57,7 +58,7 @@ int main(int argc, char **argv) {
 
     clock_t t1 = clock();
     for (int i = 0; i < num_loops; i++) {
-        strings = libpostal_expand_address(instance, str, options, &num_expansions);
+        strings = libpostal_expand_address(classifier, instance, str, options, &num_expansions);
         libpostal_expansion_array_destroy(strings, num_expansions);
     }
     clock_t t2 = clock();
@@ -69,4 +70,5 @@ int main(int argc, char **argv) {
     double tokens_per_second = (num_loops * num_tokens) / benchmark_time;
     printf("tokens/s = %f\n", tokens_per_second);
     libpostal_teardown(&instance);
+    libpostal_teardown_language_classifier(&classifier);
 }

@@ -173,7 +173,7 @@ phrase_array *search_geodb(char *str) {
 
     if (!search_geodb_with_phrases(str, &phrases)) {
         return NULL;
-    }   
+    }
 
     return phrases;
 }

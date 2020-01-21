@@ -57,9 +57,9 @@ typedef enum {
     DELETE_PHRASES
 } expansion_phrase_option_t;
 
-cstring_array *expand_address(libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n);
-cstring_array *expand_address_phrase_option(libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n, expansion_phrase_option_t phrase_option);
-cstring_array *expand_address_root(libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n);
+cstring_array *expand_address(language_classifier_t *classifier, libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n);
+cstring_array *expand_address_phrase_option(language_classifier_t *classifier, libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n, expansion_phrase_option_t phrase_option);
+cstring_array *expand_address_root(language_classifier_t *classifier, libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n);
 void expansion_array_destroy(char **expansions, size_t n);
 
 #endif

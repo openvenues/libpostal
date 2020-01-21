@@ -10,7 +10,7 @@
 #include "libpostal.h"
 
 
-double test_accuracy(libpostal_t *instance, char *filename) {
+double test_accuracy(libpostal_t *instance, language_classifier_t *classifier, char *filename) {
     language_classifier_data_set_t *data_set = language_classifier_data_set_init(filename);
     if (data_set == NULL) {
         log_error("Error creating data set\n");
@@ -22,7 +22,6 @@ double test_accuracy(libpostal_t *instance, char *filename) {
     uint32_t correct = 0;
     uint32_t total = 0;
 
-    language_classifier_t *classifier = get_language_classifier();
     trie_t *label_ids = trie_new_from_cstring_array(classifier->labels);
 
     while (language_classifier_data_set_next(instance, data_set)) {
@@ -34,7 +33,7 @@ double test_accuracy(libpostal_t *instance, char *filename) {
             continue;
         }
 
-        language_classifier_response_t *response = classify_languages(instance, address);
+        language_classifier_response_t *response = classify_languages(classifier, instance, address);
         if (response == NULL || response->num_languages == 0) {
             printf("%s\tNULL\t%s\n", language, address);
             continue;
@@ -83,8 +82,9 @@ int main(int argc, char **argv) {
     transliteration_table_t *trans_table = transliteration_module_setup(NULL);
     numex_table_t *numex_table = numex_module_setup(NULL);
     address_dictionary_t *address_dict = address_dictionary_module_setup(NULL);
+    language_classifier_t *classifier = language_classifier_module_setup(dir);
 
-    if (trans_table == NULL || numex_table == NULL || address_dict == NULL || !language_classifier_module_setup(dir)) {
+    if (trans_table == NULL || numex_table == NULL || address_dict == NULL || classifier == NULL) {
         log_error("Error setting up classifier\n");
     }
 
@@ -93,6 +93,6 @@ int main(int argc, char **argv) {
     instance.numex_table = numex_table;
     instance.address_dict = address_dict;
 
-    double accuracy = test_accuracy(&instance, filename);
+    double accuracy = test_accuracy(classifier, &instance, filename);
     log_info("Done. Accuracy: %f\n", accuracy);
 }

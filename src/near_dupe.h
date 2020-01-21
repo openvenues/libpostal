@@ -8,7 +8,7 @@
 #include "string_utils.h"
 #include "libpostal.h"
 
-cstring_array *near_dupe_hashes(libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options);
-cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages);
+cstring_array *near_dupe_hashes(language_classifier_t *classifier, libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options);
+cstring_array *near_dupe_hashes_languages(language_classifier_t *classifier, libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages);
 
 #endif

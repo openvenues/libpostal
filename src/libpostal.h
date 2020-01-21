@@ -35,11 +35,6 @@ typedef struct libpostal {
 
 LIBPOSTAL_EXPORT libpostal_normalize_options_t libpostal_get_default_options(void);
 
-LIBPOSTAL_EXPORT char **libpostal_expand_address(libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n);
-LIBPOSTAL_EXPORT char **libpostal_expand_address_root(libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n);
-
-LIBPOSTAL_EXPORT void libpostal_expansion_array_destroy(char **expansions, size_t n);
-
 /*
 Address parser
 */
@@ -77,24 +72,16 @@ typedef struct libpostal_language_classifier_response {
     double *probs;
 } libpostal_language_classifier_response_t;
 
-LIBPOSTAL_EXPORT libpostal_language_classifier_response_t *libpostal_classify_language(libpostal_t *instance, char *address);
+#include "language_classifier.h"
+
+LIBPOSTAL_EXPORT char **libpostal_expand_address(language_classifier_t *classifier, libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n);
+LIBPOSTAL_EXPORT char **libpostal_expand_address_root(language_classifier_t *classifier, libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n);
+
+LIBPOSTAL_EXPORT void libpostal_expansion_array_destroy(char **expansions, size_t n);
+
+LIBPOSTAL_EXPORT libpostal_language_classifier_response_t *libpostal_classify_language(language_classifier_t *classifier, libpostal_t *instance, char *address);
 
 LIBPOSTAL_EXPORT void libpostal_language_classifier_response_destroy(libpostal_language_classifier_response_t *self);
-
-/*
-Deduping
-*/
-
-
-// Near-dupe hashing methods
-
-LIBPOSTAL_EXPORT libpostal_near_dupe_hash_options_t libpostal_get_near_dupe_hash_default_options(void);
-LIBPOSTAL_EXPORT char **libpostal_near_dupe_hashes(libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t *num_hashes);
-LIBPOSTAL_EXPORT char **libpostal_near_dupe_hashes_languages(libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages, size_t *num_hashes);
-
-// Dupe language classification
-
-LIBPOSTAL_EXPORT char **libpostal_place_languages(libpostal_t *instance, size_t num_components, char **labels, char **values, size_t *num_languages);
 
 // Pairwise dupe methods
 
@@ -115,14 +102,14 @@ typedef struct libpostal_duplicate_options {
 LIBPOSTAL_EXPORT libpostal_duplicate_options_t libpostal_get_default_duplicate_options(void);
 LIBPOSTAL_EXPORT libpostal_duplicate_options_t libpostal_get_duplicate_options_with_languages(size_t num_languages, char **languages);
 
-LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_name_duplicate(libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
-LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_street_duplicate(libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
-LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_house_number_duplicate(libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
-LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_po_box_duplicate(libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
-LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_unit_duplicate(libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
-LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_floor_duplicate(libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
-LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_postal_code_duplicate(libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
-LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_toponym_duplicate(libpostal_t *instance, size_t num_components1, char **labels1, char **values1, size_t num_components2, char **labels2, char **values2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_name_duplicate(language_classifier_t *classifier, libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_street_duplicate(language_classifier_t *classifier, libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_house_number_duplicate(language_classifier_t *classifier, libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_po_box_duplicate(language_classifier_t *classifier, libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_unit_duplicate(language_classifier_t *classifier, libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_floor_duplicate(language_classifier_t *classifier, libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_postal_code_duplicate(language_classifier_t *classifier, libpostal_t *instance, char *value1, char *value2, libpostal_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_duplicate_status_t libpostal_is_toponym_duplicate(language_classifier_t *classifier, libpostal_t *instance, size_t num_components1, char **labels1, char **values1, size_t num_components2, char **labels2, char **values2, libpostal_duplicate_options_t options);
 
 // Pairwise fuzzy dupe methods, return status & similarity
 
@@ -141,8 +128,8 @@ typedef struct libpostal_fuzzy_duplicate_status {
 LIBPOSTAL_EXPORT libpostal_fuzzy_duplicate_options_t libpostal_get_default_fuzzy_duplicate_options(void);
 LIBPOSTAL_EXPORT libpostal_fuzzy_duplicate_options_t libpostal_get_default_fuzzy_duplicate_options_with_languages(size_t num_languages, char **languages);
 
-LIBPOSTAL_EXPORT libpostal_fuzzy_duplicate_status_t libpostal_is_name_duplicate_fuzzy(libpostal_t *instance, size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_fuzzy_duplicate_options_t options);
-LIBPOSTAL_EXPORT libpostal_fuzzy_duplicate_status_t libpostal_is_street_duplicate_fuzzy(libpostal_t *instance, size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_fuzzy_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_fuzzy_duplicate_status_t libpostal_is_name_duplicate_fuzzy(language_classifier_t *classifier, libpostal_t *instance, size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_fuzzy_duplicate_options_t options);
+LIBPOSTAL_EXPORT libpostal_fuzzy_duplicate_status_t libpostal_is_street_duplicate_fuzzy(language_classifier_t *classifier, libpostal_t *instance, size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_fuzzy_duplicate_options_t options);
 
 // Setup/teardown methods
 
@@ -154,9 +141,26 @@ LIBPOSTAL_EXPORT address_parser_t *libpostal_setup_parser(void);
 LIBPOSTAL_EXPORT address_parser_t *libpostal_setup_parser_datadir(char *datadir);
 LIBPOSTAL_EXPORT void libpostal_teardown_parser(address_parser_t **parser);
 
-LIBPOSTAL_EXPORT bool libpostal_setup_language_classifier(void);
-LIBPOSTAL_EXPORT bool libpostal_setup_language_classifier_datadir(char *datadir);
-LIBPOSTAL_EXPORT void libpostal_teardown_language_classifier(void);
+#include "language_classifier.h"
+
+LIBPOSTAL_EXPORT language_classifier_t *libpostal_setup_language_classifier(void);
+LIBPOSTAL_EXPORT language_classifier_t *libpostal_setup_language_classifier_datadir(char *datadir);
+LIBPOSTAL_EXPORT void libpostal_teardown_language_classifier(language_classifier_t **language_classifier);
+
+/*
+Deduping
+*/
+
+
+// Near-dupe hashing methods
+
+LIBPOSTAL_EXPORT libpostal_near_dupe_hash_options_t libpostal_get_near_dupe_hash_default_options(void);
+LIBPOSTAL_EXPORT char **libpostal_near_dupe_hashes(language_classifier_t *classifier, libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t *num_hashes);
+LIBPOSTAL_EXPORT char **libpostal_near_dupe_hashes_languages(language_classifier_t *classifier, libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages, size_t *num_hashes);
+
+// Dupe language classification
+
+LIBPOSTAL_EXPORT char **libpostal_place_languages(language_classifier_t *classifier, libpostal_t *instance, size_t num_components, char **labels, char **values, size_t *num_languages);
 
 /* Tokenization and token normalization APIs */
 

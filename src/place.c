@@ -17,7 +17,7 @@ static inline bool is_address_text_component(char *label) {
             );
 }
 
-language_classifier_response_t *place_languages(libpostal_t *instance, size_t num_components, char **labels, char **values) {
+language_classifier_response_t *place_languages(language_classifier_t *classifier, libpostal_t *instance, size_t num_components, char **labels, char **values) {
     if (num_components == 0 || values == NULL || labels == NULL) return NULL;
 
     language_classifier_response_t *lang_response = NULL;
@@ -56,7 +56,7 @@ language_classifier_response_t *place_languages(libpostal_t *instance, size_t nu
 
     char *combined_input = char_array_get_string(combined);
 
-    lang_response = classify_languages(instance, combined_input);
+    lang_response = classify_languages(classifier, instance, combined_input);
 
     char_array_destroy(combined);
     return lang_response;

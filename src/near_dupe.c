@@ -143,13 +143,13 @@ bool cstring_array_add_string_no_whitespace(cstring_array *strings, char *str) {
 }
 
 
-cstring_array *expanded_component_combined(libpostal_t *instance, char *input, libpostal_normalize_options_t options, bool remove_spaces, size_t *n) {
+cstring_array *expanded_component_combined(language_classifier_t *classifier, libpostal_t *instance, char *input, libpostal_normalize_options_t options, bool remove_spaces, size_t *n) {
     char *expansion;
     size_t num_expansions = 0;
-    cstring_array *expansions = expand_address(instance, input, options, &num_expansions);
+    cstring_array *expansions = expand_address(classifier, instance, input, options, &num_expansions);
 
     size_t num_root_expansions = 0;
-    cstring_array *root_expansions = expand_address_root(instance, input, options, &num_root_expansions);
+    cstring_array *root_expansions = expand_address_root(classifier, instance, input, options, &num_root_expansions);
 
     if (num_root_expansions == 0) {
         cstring_array_destroy(root_expansions);
@@ -205,14 +205,14 @@ cstring_array *expanded_component_combined(libpostal_t *instance, char *input, l
     return all_expansions;
 }
 
-static inline cstring_array *expanded_component_root_with_fallback(libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n) {
-    cstring_array *root_expansions = expand_address_root(instance, input, options, n);
+static inline cstring_array *expanded_component_root_with_fallback(language_classifier_t *classifier, libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n) {
+    cstring_array *root_expansions = expand_address_root(classifier, instance, input, options, n);
     if (*n > 0) {
         return root_expansions;
     }
     cstring_array_destroy(root_expansions);
     *n = 0;
-    return expand_address(instance, input, options, n);
+    return expand_address(classifier, instance, input, options, n);
 }
 
 static cstring_array *geohash_and_neighbors(double latitude, double longitude, size_t geohash_precision) {
@@ -316,10 +316,10 @@ static inline bool add_double_metaphone_or_token_if_unique(char *str, cstring_ar
 #define MAX_NAME_TOKENS 50
 
 
-cstring_array *name_word_hashes(libpostal_t *instance, char *name, libpostal_normalize_options_t normalize_options) {
+cstring_array *name_word_hashes(language_classifier_t *classifier, libpostal_t *instance, char *name, libpostal_normalize_options_t normalize_options) {
     normalize_options.address_components = LIBPOSTAL_ADDRESS_NAME | LIBPOSTAL_ADDRESS_ANY;
     size_t num_expansions = 0;
-    cstring_array *name_expansions = expanded_component_root_with_fallback(instance, name, normalize_options, &num_expansions);
+    cstring_array *name_expansions = expanded_component_root_with_fallback(classifier, instance, name, normalize_options, &num_expansions);
     if (num_expansions == 0) {
         cstring_array_destroy(name_expansions);
         return NULL;
@@ -637,7 +637,7 @@ static inline void add_string_hash_permutations(cstring_array *near_dupe_hashes,
 }
 
 
-cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages) {
+cstring_array *near_dupe_hashes_languages(language_classifier_t *classifier, libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages) {
     if (!options.with_latlon && !options.with_city_or_equivalent && !options.with_small_containing_boundaries && !options.with_postal_code) return NULL;
 
     place_t *place = place_from_components(num_components, labels, values);
@@ -670,7 +670,7 @@ cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_comp
     language_classifier_response_t *lang_response = NULL;
 
     if (num_languages == 0) {
-        lang_response = place_languages(instance, num_components, labels, values);
+        lang_response = place_languages(classifier, instance, num_components, labels, values);
 
          if (lang_response != NULL) {
             log_debug("got %zu place languages\n", lang_response->num_languages);
@@ -688,7 +688,7 @@ cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_comp
     size_t num_name_expansions = 0;
     if (place->name != NULL && options.with_name) {
         log_debug("Doing name expansions for %s\n", place->name);
-        name_expansions = name_word_hashes(instance, place->name, normalize_options);
+        name_expansions = name_word_hashes(classifier, instance, place->name, normalize_options);
         if (name_expansions != NULL) {
             num_name_expansions = cstring_array_num_strings(name_expansions);
             log_debug("Got %zu name expansions\n", num_name_expansions);
@@ -703,7 +703,7 @@ cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_comp
         remove_spaces = true;
         log_debug("Doing street expansions for %s\n", place->street);
         normalize_options.address_components = LIBPOSTAL_ADDRESS_STREET | LIBPOSTAL_ADDRESS_ANY;
-        street_expansions = expanded_component_combined(instance, place->street, normalize_options, remove_spaces, &num_street_expansions);
+        street_expansions = expanded_component_combined(classifier, instance, place->street, normalize_options, remove_spaces, &num_street_expansions);
         log_debug("Got %zu street expansions\n", num_street_expansions);
     }
 
@@ -712,7 +712,7 @@ cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_comp
     if (place->house_number != NULL) {
         log_debug("Doing house number expansions for %s\n", place->house_number);
         normalize_options.address_components = LIBPOSTAL_ADDRESS_HOUSE_NUMBER | LIBPOSTAL_ADDRESS_ANY;
-        house_number_expansions = expand_address_root(instance, place->house_number, normalize_options, &num_house_number_expansions);
+        house_number_expansions = expand_address_root(classifier, instance, place->house_number, normalize_options, &num_house_number_expansions);
         log_debug("Got %zu house number expansions\n", num_house_number_expansions);
     }
 
@@ -721,7 +721,7 @@ cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_comp
     if (place->unit != NULL && options.with_unit) {
         log_debug("Doing unit expansions for %s\n", place->unit);
         normalize_options.address_components = LIBPOSTAL_ADDRESS_UNIT | LIBPOSTAL_ADDRESS_ANY;
-        unit_expansions = expand_address_root(instance, place->unit, normalize_options, &num_unit_expansions);
+        unit_expansions = expand_address_root(classifier, instance, place->unit, normalize_options, &num_unit_expansions);
         log_debug("Got %zu unit expansions\n", num_unit_expansions);
     }
 
@@ -729,21 +729,21 @@ cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_comp
     size_t num_building_expansions = 0;
     if (place->building != NULL && options.with_unit) {
         normalize_options.address_components = LIBPOSTAL_ADDRESS_UNIT | LIBPOSTAL_ADDRESS_ANY;
-        building_expansions = expand_address_root(instance, place->building, normalize_options, &num_building_expansions);
+        building_expansions = expand_address_root(classifier, instance, place->building, normalize_options, &num_building_expansions);
     }
 
     cstring_array *level_expansions = NULL;
     size_t num_level_expansions = 0;
     if (place->level != NULL && options.with_unit) {
         normalize_options.address_components = LIBPOSTAL_ADDRESS_LEVEL | LIBPOSTAL_ADDRESS_ANY;
-        level_expansions = expand_address_root(instance, place->level, normalize_options, &num_level_expansions);
+        level_expansions = expand_address_root(classifier, instance, place->level, normalize_options, &num_level_expansions);
     }
 
     cstring_array *po_box_expansions = NULL;
     size_t num_po_box_expansions = 0;
     if (place->po_box != NULL) {
         normalize_options.address_components = LIBPOSTAL_ADDRESS_PO_BOX | LIBPOSTAL_ADDRESS_ANY;
-        po_box_expansions = expand_address_root(instance, place->po_box, normalize_options, &num_po_box_expansions);
+        po_box_expansions = expand_address_root(classifier, instance, place->po_box, normalize_options, &num_po_box_expansions);
     }
 
     cstring_array *place_expansions = NULL;
@@ -754,7 +754,7 @@ cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_comp
 
         if (place->city != NULL) {
             size_t num_city_expansions = 0;
-            cstring_array *city_expansions = expand_address_root(instance, place->city, normalize_options, &num_city_expansions);
+            cstring_array *city_expansions = expand_address_root(classifier, instance, place->city, normalize_options, &num_city_expansions);
             if (place_expansions == NULL) {
                 place_expansions = city_expansions;
             } else if (city_expansions != NULL && num_city_expansions > 0) {
@@ -766,7 +766,7 @@ cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_comp
 
         if (place->city_district != NULL) {
             size_t num_city_district_expansions = 0;
-            cstring_array *city_district_expansions = expand_address_root(instance, place->city_district, normalize_options, &num_city_district_expansions);
+            cstring_array *city_district_expansions = expand_address_root(classifier, instance, place->city_district, normalize_options, &num_city_district_expansions);
             if (place_expansions == NULL) {
                 place_expansions = city_district_expansions;
             } else if (city_district_expansions != NULL && num_city_district_expansions > 0) {
@@ -777,7 +777,7 @@ cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_comp
 
         if (place->suburb != NULL) {
             size_t num_suburb_expansions = 0;
-            cstring_array *suburb_expansions = expand_address_root(instance, place->suburb, normalize_options, &num_suburb_expansions);
+            cstring_array *suburb_expansions = expand_address_root(classifier, instance, place->suburb, normalize_options, &num_suburb_expansions);
             if (place_expansions == NULL) {
                 place_expansions = suburb_expansions;
             } else if (suburb_expansions != NULL && num_suburb_expansions > 0) {
@@ -789,7 +789,7 @@ cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_comp
 
         if (place->island != NULL) {
             size_t num_island_expansions = 0;
-            cstring_array *island_expansions = expand_address_root(instance, place->island, normalize_options, &num_island_expansions);
+            cstring_array *island_expansions = expand_address_root(classifier, instance, place->island, normalize_options, &num_island_expansions);
             if (place_expansions == NULL) {
                 place_expansions = island_expansions;
             } else if (island_expansions != NULL && num_island_expansions > 0) {
@@ -800,7 +800,7 @@ cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_comp
 
         if (place->state_district != NULL && options.with_small_containing_boundaries) {
             size_t num_state_district_expansions = 0;
-            cstring_array *state_district_expansions = expand_address_root(instance, place->state_district, normalize_options, &num_state_district_expansions);
+            cstring_array *state_district_expansions = expand_address_root(classifier, instance, place->state_district, normalize_options, &num_state_district_expansions);
             if (containing_expansions == NULL) {
                 containing_expansions = state_district_expansions;
             } else if (state_district_expansions != NULL && num_state_district_expansions > 0) {
@@ -814,7 +814,7 @@ cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_comp
     size_t num_postal_code_expansions = 0;
     if (options.with_postal_code && place->postal_code != NULL) {
         normalize_options.address_components = LIBPOSTAL_ADDRESS_POSTAL_CODE | LIBPOSTAL_ADDRESS_ANY;
-        postal_code_expansions = expand_address_root(instance, place->postal_code, normalize_options, &num_postal_code_expansions);
+        postal_code_expansions = expand_address_root(classifier, instance, place->postal_code, normalize_options, &num_postal_code_expansions);
     }
 
     cstring_array *geohash_expansions = NULL;
@@ -1208,6 +1208,6 @@ cstring_array *near_dupe_hashes_languages(libpostal_t *instance, size_t num_comp
     return near_dupe_hashes;
 }
 
-inline cstring_array *near_dupe_hashes(libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options) {
-    return near_dupe_hashes_languages(instance, num_components, labels, values, options, 0, NULL);
+inline cstring_array *near_dupe_hashes(language_classifier_t *classifier, libpostal_t *instance, size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options) {
+    return near_dupe_hashes_languages(classifier, instance, num_components, labels, values, options, 0, NULL);
 }

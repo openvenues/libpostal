@@ -1565,7 +1565,7 @@ void expand_alternative_phrase_option_languages(libpostal_t *instance, cstring_a
 }
 
 
-cstring_array *expand_address_phrase_option(libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n, expansion_phrase_option_t phrase_option) {
+cstring_array *expand_address_phrase_option(language_classifier_t *classifier, libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n, expansion_phrase_option_t phrase_option) {
     if (instance == NULL) return NULL;
     options.address_components |= LIBPOSTAL_ADDRESS_ANY;
 
@@ -1576,7 +1576,7 @@ cstring_array *expand_address_phrase_option(libpostal_t *instance, char *input, 
     language_classifier_response_t *lang_response = NULL;
 
     if (options.num_languages == 0) {
-         lang_response = classify_languages(instance, input);
+         lang_response = classify_languages(classifier, instance, input);
          if (lang_response != NULL) {
             options.num_languages = lang_response->num_languages;
             options.languages = lang_response->languages;
@@ -1644,12 +1644,12 @@ cstring_array *expand_address_phrase_option(libpostal_t *instance, char *input, 
     return strings;
 }
 
-cstring_array *expand_address(libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n) {
-    return expand_address_phrase_option(instance, input, options, n, EXPAND_PHRASES);
+cstring_array *expand_address(language_classifier_t *classifier, libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n) {
+    return expand_address_phrase_option(classifier, instance, input, options, n, EXPAND_PHRASES);
 }
 
-cstring_array *expand_address_root(libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n) {
-    return expand_address_phrase_option(instance, input, options, n, DELETE_PHRASES);
+cstring_array *expand_address_root(language_classifier_t *classifier, libpostal_t *instance, char *input, libpostal_normalize_options_t options, size_t *n) {
+    return expand_address_phrase_option(classifier, instance, input, options, n, DELETE_PHRASES);
 }
 
 

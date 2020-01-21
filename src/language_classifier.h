@@ -7,7 +7,6 @@
 #include <stdbool.h>
 
 #include "collections.h"
-#include "language_features.h"
 #include "logistic_regression.h"
 #include "matrix.h"
 #include "tokens.h"
@@ -37,13 +36,14 @@ typedef struct language_classifier_response {
     double *probs;
 } language_classifier_response_t;
 
+#include "language_features.h"
+
 // General usage
 
 language_classifier_t *language_classifier_new(void);
-language_classifier_t *get_language_classifier(void);
 language_classifier_t *get_language_classifier_country(void);
 
-language_classifier_response_t *classify_languages(libpostal_t *instance, char *address);
+language_classifier_response_t *classify_languages(language_classifier_t *classifier, libpostal_t *instance, char *address);
 void language_classifier_response_destroy(language_classifier_response_t *self);
 
 void language_classifier_destroy(language_classifier_t *self);
@@ -55,8 +55,8 @@ bool language_classifier_save(language_classifier_t *self, char *output_dir);
 
 // Module setup/teardown
 
-bool language_classifier_module_setup(char *dir);
-void language_classifier_module_teardown(void);
+language_classifier_t *language_classifier_module_setup(char *dir);
+void language_classifier_module_teardown(language_classifier_t **language_classifier);
 
 
 #endif
