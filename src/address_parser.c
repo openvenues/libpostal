@@ -3,6 +3,7 @@
 #include "features.h"
 #include "ngrams.h"
 #include "scanner.h"
+#include "normalize.h"
 
 #include "graph_builder.h"
 
@@ -19,8 +20,6 @@
 #define UNKNOWN_NUMERIC "UNKNOWN_NUMERIC"
 
 #define DEFAULT_RARE_WORD_THRESHOLD 50
-
-static address_parser_t *parser = NULL;
 
 typedef enum {
     ADDRESS_PARSER_NULL_PHRASE,
@@ -45,11 +44,7 @@ address_parser_t *address_parser_new(void) {
     return address_parser_new_options(PARSER_DEFAULT_OPTIONS);
 }
 
-address_parser_t *get_address_parser(void) {
-    return parser;
-}
-
-bool address_parser_print_features(bool print_features) {
+bool address_parser_print_features(address_parser_t *parser, bool print_features) {
     if (parser == NULL) return false;
 
     parser->options.print_features = print_features;
@@ -163,8 +158,8 @@ static bool postal_code_context_exists(address_parser_t *self, uint32_t postal_c
     return graph_has_edge(g, postal_code_id, admin_id);
 }
 
-bool address_parser_load(char *dir) {
-    if (parser != NULL) return false;
+address_parser_t *address_parser_load(char *dir) {
+    address_parser_t *parser;
     if (dir == NULL) {
         dir = LIBPOSTAL_ADDRESS_PARSER_DIR;
     }
@@ -176,15 +171,14 @@ bool address_parser_load(char *dir) {
 
     if (file_exists(model_path)) {
         averaged_perceptron_t *ap_model = averaged_perceptron_load(model_path);
-        if (ap_model != NULL) {
-            parser = address_parser_new();
-            parser->model_type = ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON;
-            parser->model.ap = ap_model;
-        } else {
+        if (ap_model == NULL) {
             char_array_destroy(path);
             log_error("Averaged perceptron model could not be loaded\n");
-            return false;
+            return NULL;
         }
+        parser = address_parser_new();
+        parser->model_type = ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON;
+        parser->model.ap = ap_model;
     } else {
         model_path = NULL;
     }
@@ -203,7 +197,7 @@ bool address_parser_load(char *dir) {
             } else {
                 char_array_destroy(path);
                 log_error("Averaged perceptron model could not be loaded\n");
-                return false;
+                return NULL;
             }
         } else {
             model_path = NULL;
@@ -213,7 +207,7 @@ bool address_parser_load(char *dir) {
     if (parser == NULL) {
         char_array_destroy(path);
         log_error("Could not find parser model file of known type\n");
-        return false;
+        return NULL;
     }
 
     char_array_clear(path);
@@ -300,12 +294,12 @@ bool address_parser_load(char *dir) {
     }
 
     char_array_destroy(path);
-    return true;
+    return parser;
 
 exit_address_parser_created:
     address_parser_destroy(parser);
     char_array_destroy(path);
-    return false;
+    return NULL;
 }
 
 void address_parser_destroy(address_parser_t *self) {
@@ -344,7 +338,7 @@ void address_parser_destroy(address_parser_t *self) {
     free(self);
 }
 
-static inline uint32_t word_vocab_frequency(address_parser_t *parser, char *word) {   
+static inline uint32_t word_vocab_frequency(address_parser_t *parser, char *word) {
     uint32_t count = 0;
     bool has_key = trie_get_data(parser->vocab, word, &count);
     return count;
@@ -358,8 +352,8 @@ static inline void address_parser_normalize_phrase_token(cstring_array *array, c
     normalize_token(array, str, token, ADDRESS_PARSER_NORMALIZE_ADMIN_TOKEN_OPTIONS);
 }
 
-inline char *address_parser_normalize_string(char *str) {
-    return normalize_string_latin(str, strlen(str), ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS);
+inline char *address_parser_normalize_string(libpostal_t *instance, char *str) {
+    return normalize_string_latin(instance, str, strlen(str), ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS);
 }
 
 
@@ -684,7 +678,7 @@ bool is_valid_component_phrase(cstring_array *strings, phrase_t phrase) {
     return valid;
 }
 
-void address_parser_context_fill(address_parser_context_t *context, address_parser_t *parser, tokenized_string_t *tokenized_str, char *language, char *country) {
+void address_parser_context_fill(address_dictionary_t *address_dict, address_parser_context_t *context, address_parser_t *parser, tokenized_string_t *tokenized_str, char *language, char *country) {
     uint32_t token_index;
     char *word;
     phrase_t phrase;
@@ -759,7 +753,7 @@ void address_parser_context_fill(address_parser_context_t *context, address_pars
 
     size_t num_tokens = tokens->n;
 
-    bool have_address_phrases = search_address_dictionaries_tokens_with_phrases(normalized_str, normalized_tokens, NULL, &address_dictionary_phrases);
+    bool have_address_phrases = search_address_dictionaries_tokens_with_phrases(address_dict, normalized_str, normalized_tokens, NULL, &address_dictionary_phrases);
     token_phrase_memberships(address_dictionary_phrases, address_phrase_memberships, num_tokens);
 
     phrase_array_clear(context->prefix_phrases);
@@ -769,10 +763,10 @@ void address_parser_context_fill(address_parser_context_t *context, address_pars
         token_t token = tokens->a[i];
         char *word_pre_norm = tokenized_string_get_token(tokenized_str, i);
 
-        phrase_t prefix_phrase = search_address_dictionaries_prefix(word_pre_norm, token.len, NULL);
+        phrase_t prefix_phrase = search_address_dictionaries_prefix(address_dict, word_pre_norm, token.len, NULL);
         phrase_array_push(context->prefix_phrases, prefix_phrase);
 
-        phrase_t suffix_phrase = search_address_dictionaries_suffix(word_pre_norm, token.len, NULL);
+        phrase_t suffix_phrase = search_address_dictionaries_suffix(address_dict, word_pre_norm, token.len, NULL);
         phrase_array_push(context->suffix_phrases, suffix_phrase);
     }
 
@@ -848,9 +842,9 @@ char *phrase_suffix(char *word, size_t len, phrase_t suffix_phrase, char_array *
     return suffix;
 }
 
-bool is_valid_dictionary_phrase(phrase_t phrase) {
+bool is_valid_dictionary_phrase(address_dictionary_t *address_dict, phrase_t phrase) {
     uint32_t expansion_index = phrase.data;
-    address_expansion_value_t *expansion_value = address_dictionary_get_expansions(expansion_index);
+    address_expansion_value_t *expansion_value = address_dictionary_get_expansions(address_dict, expansion_index);
 
     if (expansion_value == NULL) {
         log_warn("expansion_value is NULL for index %u\n", expansion_index);
@@ -880,7 +874,7 @@ static inline bool is_plain_word_phrase_type(address_parser_phrase_type_t type) 
     return type == ADDRESS_PARSER_NULL_PHRASE || type == ADDRESS_PARSER_SUFFIX_PHRASE || type == ADDRESS_PARSER_PREFIX_PHRASE;
 }
 
-static address_parser_phrase_t word_or_phrase_at_index(address_parser_t *parser, tokenized_string_t *tokenized, address_parser_context_t *context, uint32_t i, bool long_context) {
+static address_parser_phrase_t word_or_phrase_at_index(address_dictionary_t *address_dict, address_parser_t *parser, tokenized_string_t *tokenized, address_parser_context_t *context, uint32_t i, bool long_context) {
     phrase_t phrase;
     address_parser_phrase_t response;
     char *phrase_string = NULL;
@@ -889,7 +883,7 @@ static address_parser_phrase_t word_or_phrase_at_index(address_parser_t *parser,
     
     phrase_t component_phrase = phrase_at_index(context->component_phrases, context->component_phrase_memberships, i);
 
-    if (phrase.len > 0 && is_valid_dictionary_phrase(phrase) && component_phrase.len <= phrase.len) {
+    if (phrase.len > 0 && is_valid_dictionary_phrase(address_dict, phrase) && component_phrase.len <= phrase.len) {
         phrase_string = cstring_array_get_phrase(context->normalized, long_context ? context->long_context_phrase : context->context_phrase, phrase),
 
         response = (address_parser_phrase_t){
@@ -927,7 +921,7 @@ static address_parser_phrase_t word_or_phrase_at_index(address_parser_t *parser,
     // Suffixes like straße, etc.
     if (suffix_phrase.len > 0) {
         expansion_index = suffix_phrase.data;
-        expansion_value = address_dictionary_get_expansions(expansion_index);
+        expansion_value = address_dictionary_get_expansions(address_dict, expansion_index);
 
         if (expansion_value->components & LIBPOSTAL_ADDRESS_STREET) {
             response = (address_parser_phrase_t){
@@ -942,7 +936,7 @@ static address_parser_phrase_t word_or_phrase_at_index(address_parser_t *parser,
     // Prefixes like hinter, etc.
     if (prefix_phrase.len > 0) {
         expansion_index = prefix_phrase.data;
-        expansion_value = address_dictionary_get_expansions(expansion_index);
+        expansion_value = address_dictionary_get_expansions(address_dict, expansion_index);
 
         // Don't include elisions like l', d', etc. which are in the LIBPOSTAL_ADDRESS_ANY category
         if (expansion_value->components ^ LIBPOSTAL_ADDRESS_ANY) {
@@ -1086,7 +1080,7 @@ char *prev2: the predicted tag at index i - 2
 
 */
 
-bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenized, uint32_t idx) {
+bool address_parser_features(address_dictionary_t *address_dict, void *self, void *ctx, tokenized_string_t *tokenized, uint32_t idx) {
     if (self == NULL || ctx == NULL) return false;
 
     address_parser_t *parser = (address_parser_t *)self;
@@ -1165,9 +1159,9 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         last_index = (ssize_t)phrase.start - 1;
         next_index = (ssize_t)phrase.start + phrase.len;
 
-        if(is_valid_dictionary_phrase(phrase)) {
+        if(is_valid_dictionary_phrase(address_dict, phrase)) {
             uint32_t expansion_index = phrase.data;
-            address_expansion_value_t *expansion_value = address_dictionary_get_expansions(expansion_index);
+            address_expansion_value_t *expansion_value = address_dictionary_get_expansions(address_dict, expansion_index);
 
             if (expansion_value == NULL) {
                 log_warn("expansion_value is NULL for index %u\n", expansion_index);
@@ -1344,7 +1338,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         // Prefixes like hinter, etc.
         if (prefix_phrase.len > 0) {
             expansion_index = prefix_phrase.data;
-            expansion_value = address_dictionary_get_expansions(expansion_index);
+            expansion_value = address_dictionary_get_expansions(address_dict, expansion_index);
 
             // Don't include elisions like l', d', etc. which are in the LIBPOSTAL_ADDRESS_ANY category
             if (expansion_value->components ^ LIBPOSTAL_ADDRESS_ANY) {
@@ -1361,7 +1355,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
         // Suffixes like straße, etc.
         if (suffix_phrase.len > 0) {
             expansion_index = suffix_phrase.data;
-            expansion_value = address_dictionary_get_expansions(expansion_index);
+            expansion_value = address_dictionary_get_expansions(address_dict, expansion_index);
 
             if (expansion_value->components & LIBPOSTAL_ADDRESS_STREET) {
                 known_suffix = true;
@@ -1480,7 +1474,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     }
 
     if (last_index >= 0) {
-        address_parser_phrase_t prev_word_or_phrase = word_or_phrase_at_index(parser, tokenized, context, last_index, false);
+        address_parser_phrase_t prev_word_or_phrase = word_or_phrase_at_index(address_dict, parser, tokenized, context, last_index, false);
         char *prev_word = prev_word_or_phrase.str;
 
         if (is_plain_word_phrase_type(prev_word_or_phrase.type)) {
@@ -1505,7 +1499,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
     }
 
     if (next_index < num_tokens) {
-        address_parser_phrase_t next_word_or_phrase = word_or_phrase_at_index(parser, tokenized, context, next_index, false);
+        address_parser_phrase_t next_word_or_phrase = word_or_phrase_at_index(address_dict, parser, tokenized, context, next_index, false);
         char *next_word = next_word_or_phrase.str;
         size_t next_word_len = 1;
 
@@ -1554,7 +1548,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
                 token_t right_token = tokens->a[right_idx];
 
                 /* Check */
-                address_parser_phrase_t right_context_word_or_phrase = word_or_phrase_at_index(parser, tokenized, context, right_idx, true);
+                address_parser_phrase_t right_context_word_or_phrase = word_or_phrase_at_index(address_dict, parser, tokenized, context, right_idx, true);
                 address_parser_phrase_type_t right_context_phrase_type = right_context_word_or_phrase.type;
                 if (right_context_phrase_type != ADDRESS_PARSER_NULL_PHRASE &&
                     right_context_phrase_type != ADDRESS_PARSER_DICTIONARY_PHRASE &&
@@ -1576,7 +1570,7 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
                 if (right_context_phrase.len > 0) {
                     right_context_expansion_index = right_context_phrase.data;
-                    right_context_expansion_value = address_dictionary_get_expansions(right_context_expansion_index);
+                    right_context_expansion_value = address_dictionary_get_expansions(address_dict, right_context_expansion_index);
                     right_context_components = right_context_expansion_value->components;
 
                     char *right_affix_type = NULL;
@@ -1642,11 +1636,11 @@ bool address_parser_features(void *self, void *ctx, tokenized_string_t *tokenize
 
 }
 
-bool address_parser_predict(address_parser_t *self, address_parser_context_t *context, cstring_array *token_labels, tagger_feature_function feature_function, tokenized_string_t *tokenized_str) {
+bool address_parser_predict(address_dictionary_t *address_dict, address_parser_t *self, address_parser_context_t *context, cstring_array *token_labels, tagger_feature_function feature_function, tokenized_string_t *tokenized_str) {
     if (self->model_type == ADDRESS_PARSER_TYPE_GREEDY_AVERAGED_PERCEPTRON) {
-        return averaged_perceptron_tagger_predict(self->model.ap, self, context, context->features, context->prev_tag_features, context->prev2_tag_features, token_labels, feature_function, tokenized_str, self->options.print_features);
+        return averaged_perceptron_tagger_predict(address_dict, self->model.ap, self, context, context->features, context->prev_tag_features, context->prev2_tag_features, token_labels, feature_function, tokenized_str, self->options.print_features);
     } else if (self->model_type == ADDRESS_PARSER_TYPE_CRF) {
-        return crf_tagger_predict(self->model.crf, self, context, context->features, context->prev_tag_features, token_labels, feature_function, tokenized_str, self->options.print_features);
+        return crf_tagger_predict(address_dict, self->model.crf, self, context, context->features, context->prev_tag_features, token_labels, feature_function, tokenized_str, self->options.print_features);
     } else {
         log_error("Parser has unknown model type\n");
     }
@@ -1658,10 +1652,9 @@ libpostal_address_parser_response_t *address_parser_response_new(void) {
     return response;
 }
 
-libpostal_address_parser_response_t *address_parser_parse(char *address, char *language, char *country) {
+libpostal_address_parser_response_t *address_parser_parse(address_parser_t *parser, libpostal_t *instance, char *address, char *language, char *country) {
     if (address == NULL) return NULL;
 
-    address_parser_t *parser = get_address_parser();
     if (parser == NULL || parser->context == NULL) {
         log_error("parser is not setup, call libpostal_setup_address_parser()\n");
         return NULL;
@@ -1669,7 +1662,7 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
 
     address_parser_context_t *context = parser->context;
 
-    char *normalized = address_parser_normalize_string(address);
+    char *normalized = address_parser_normalize_string(instance, address);
     bool is_normalized = normalized != NULL;
     if (!is_normalized) {
         normalized = address;
@@ -1709,7 +1702,7 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
 
     language = NULL;
     country = NULL;
-    address_parser_context_fill(context, parser, tokenized_str, language, country);
+    address_parser_context_fill(instance->address_dict, context, parser, tokenized_str, language, country);
 
     libpostal_address_parser_response_t *response = NULL;
 
@@ -1782,7 +1775,7 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
 
     char *prev_label = NULL;
 
-    bool prediction_success = address_parser_predict(parser, context, token_labels, &address_parser_features, tokenized_str);
+    bool prediction_success = address_parser_predict(instance->address_dict, parser, context, token_labels, &address_parser_features, tokenized_str);
 
     if (prediction_success) {
         response = address_parser_response_new();
@@ -1840,16 +1833,13 @@ libpostal_address_parser_response_t *address_parser_parse(char *address, char *l
 
 
 
-bool address_parser_module_setup(char *dir) {
-    if (parser == NULL) {
-        return address_parser_load(dir);
-    }
-    return true;
+address_parser_t *address_parser_module_setup(char *dir) {
+    return address_parser_load(dir);
 }
 
-void address_parser_module_teardown(void) {
+void address_parser_module_teardown(address_parser_t **parser) {
     if (parser != NULL) {
-        address_parser_destroy(parser);
+        address_parser_destroy(*parser);
+        *parser = NULL;
     }
-    parser = NULL;
 }

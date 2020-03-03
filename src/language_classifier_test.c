@@ -7,9 +7,10 @@
 #include "language_classifier_io.h"
 #include "string_utils.h"
 #include "trie_utils.h"
+#include "libpostal.h"
 
 
-double test_accuracy(char *filename) {
+double test_accuracy(libpostal_t *instance, language_classifier_t *classifier, char *filename) {
     language_classifier_data_set_t *data_set = language_classifier_data_set_init(filename);
     if (data_set == NULL) {
         log_error("Error creating data set\n");
@@ -21,10 +22,9 @@ double test_accuracy(char *filename) {
     uint32_t correct = 0;
     uint32_t total = 0;
 
-    language_classifier_t *classifier = get_language_classifier();
     trie_t *label_ids = trie_new_from_cstring_array(classifier->labels);
 
-    while (language_classifier_data_set_next(data_set)) {
+    while (language_classifier_data_set_next(instance, data_set)) {
         char *address = char_array_get_string(data_set->address);
         char *language = char_array_get_string(data_set->language);
         
@@ -33,7 +33,7 @@ double test_accuracy(char *filename) {
             continue;
         }
 
-        language_classifier_response_t *response = classify_languages(address);
+        language_classifier_response_t *response = classify_languages(classifier, instance, address);
         if (response == NULL || response->num_languages == 0) {
             printf("%s\tNULL\t%s\n", language, address);
             continue;
@@ -79,10 +79,20 @@ int main(int argc, char **argv) {
         filename = argv[1];
     }
 
-    if (!language_classifier_module_setup(dir) || !address_dictionary_module_setup(NULL) || !transliteration_module_setup(NULL)) {
+    transliteration_table_t *trans_table = transliteration_module_setup(NULL);
+    numex_table_t *numex_table = numex_module_setup(NULL);
+    address_dictionary_t *address_dict = address_dictionary_module_setup(NULL);
+    language_classifier_t *classifier = language_classifier_module_setup(dir);
+
+    if (trans_table == NULL || numex_table == NULL || address_dict == NULL || classifier == NULL) {
         log_error("Error setting up classifier\n");
     }
 
-    double accuracy = test_accuracy(filename);
+    libpostal_t instance = { 0 };
+    instance.trans_table = trans_table;
+    instance.numex_table = numex_table;
+    instance.address_dict = address_dict;
+
+    double accuracy = test_accuracy(classifier, &instance, filename);
     log_info("Done. Accuracy: %f\n", accuracy);
 }

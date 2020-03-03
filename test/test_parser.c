@@ -14,8 +14,8 @@ typedef struct labeled_component {
     char *component;
 } labeled_component_t;
 
-static greatest_test_res test_parse_result_equals(char *input, libpostal_address_parser_options_t options, size_t output_len, ...) {
-    libpostal_address_parser_response_t *response = libpostal_parse_address(input, options);
+static greatest_test_res test_parse_result_equals(address_parser_t *parser, libpostal_t *instance, char *input, libpostal_address_parser_options_t options, size_t output_len, ...) {
+    libpostal_address_parser_response_t *response = libpostal_parse_address(parser, instance, input, options);
 
     va_list args;
 
@@ -67,10 +67,12 @@ static greatest_test_res test_parse_result_equals(char *input, libpostal_address
 
 
 
-TEST test_us_parses(void) {
+TEST test_us_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Black Alliance for Just Immigration 660 Nostrand Ave, Brooklyn, N.Y., 11216",
         options,
         6,
@@ -83,6 +85,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Planned Parenthood, 44 Court St, 6th Floor, Brooklyn 11201",
         options,
         6,
@@ -95,6 +99,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Congresswoman Yvette Clarke 222 Lenox Road, Ste 1 Brooklyn New York 11226",
         options,
         7,
@@ -108,6 +114,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "ACLU DC P.O. Box 11637 Washington, DC 20008 United States",
         options,
         6,
@@ -120,6 +128,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Make the Road New York 92-10 Roosevelt Avenue Jackson Heights Queens 11372",
         options,
         6,
@@ -132,6 +142,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Do the Right Thing Way, Bed-Stuy, BK",
         options,
         3,
@@ -141,6 +153,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "book stores near me",
         options,
         2,
@@ -149,6 +163,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "theatres in Fort Greene Brooklyn",
         options,
         4,
@@ -159,6 +175,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Rare venue name without any common venue tokens following it
         // Neighborhood name
         "Barboncino 781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA",
@@ -176,6 +194,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/pelias/pelias/issues/464
         "103 BEAL PKWY SE, FT WALTON BEACH, FL",
         options,
@@ -187,6 +207,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/pelias/pelias/issues/463
         "Canal Rd, Deltona FL",
         options,
@@ -197,6 +219,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/openvenues/libpostal/issues/125
         "123 Main St # 456 Oakland CA 94789",
         options,
@@ -211,6 +235,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "123 Main St Apt 456 Oakland CA 94789",
         options,
         6,
@@ -223,6 +249,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "123 Main St Apt #456 Oakland CA 94789",
         options,
         6,
@@ -235,6 +263,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "123 Main St Apt No. 456 Oakland CA 94789",
         options,
         6,
@@ -247,6 +277,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "whole foods nyc",
         options,
         2,
@@ -255,6 +287,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/pelias/pelias/issues/427
         "921 83 street, nyc",
         options,
@@ -265,6 +299,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/pelias/pelias/issues/424
         "30 w 26 st",
         options,
@@ -274,6 +310,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "30 West 26th Street Sixth Floor",
         options,
         3,
@@ -283,6 +321,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "30 W 26th St 6th Fl",
         options,
         3,
@@ -292,6 +332,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/pelias/pelias/issues/440
         "301 Commons Park S, Stamford, CT 06902",
         options,
@@ -304,6 +346,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/151
         // House number range
         "912-914 8TH ST, CLARKSTON, WA 99403",
@@ -317,6 +361,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/151
         "2120 E Hill Street #104 Signal Hill CA 90755",
         options,
@@ -330,6 +376,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/151
         // space between mc and carroll
         "1036-1038 MC CARROLL ST CLARKSTON WA 99403",
@@ -343,6 +391,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/151
         // hyphenated house number
         "2455-B W BENCH RD OTHELLO WA 99344",
@@ -356,6 +406,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/151
         // city name is part of street
         "473 Boston Rd, Wilbraham, MA",
@@ -368,6 +420,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/45
         // House number is a valid postcode but not in context
         // Postcode is a ZIP+4 so have to rely on masked digits
@@ -383,6 +437,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/21
         // PO box example
         "PO Box 1, Seattle, WA 98103",
@@ -396,6 +452,8 @@ TEST test_us_parses(void) {
 
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "4411 Stone Way North Seattle, King County, WA 98103",
         options,
         6,
@@ -408,6 +466,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // newline
         "452 Maxwell Ave, Apt 3A\nRochester, NY 14619",
         options,
@@ -421,6 +481,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "1600 Pennsylvania Ave NW, Washington DC 20500",
         options,
         5,
@@ -432,6 +494,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "1600 Pennsylvania Ave NW, Washington D.C 20500",
         options,
         5,
@@ -444,6 +508,8 @@ TEST test_us_parses(void) {
 
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "1600 Pennsylvania Ave NW, Washington D.C. 20500",
         options,
         5,
@@ -455,6 +521,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Queens address
         "99-40 63rd Rd, Queens, NY 11374",
         options,
@@ -467,6 +535,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Prefix directional
         "351 NW North St, Chehalis, WA 98532-1900",
         options,
@@ -479,6 +549,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // full state name
         "2501 N Blackwelder Ave, Oklahoma City, Oklahoma 73106",
         options,
@@ -491,6 +563,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // disambiguation: less common form of Indiana, usually a state
         "1011 South Dr, Indiana, Pennsylvania 15705",
         options,
@@ -503,6 +577,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Different form of N.Y.
         "444 South 5th St Apt. 3A Brooklyn, N.Y. 11211",
         options,
@@ -516,6 +592,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Atrium Mall, 640 Arthur Kill Rd, Staten Island, NY 10312",
         options,
         6,
@@ -528,6 +606,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "5276 Old Mill Rd NE, Bainbridge Island, WA 98110",
         options,
         5,
@@ -539,6 +619,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "1400 West Transport Road, Fayetteville, AR, 72704",
         options,
         5,
@@ -550,6 +632,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "10 Amelia Village Circle, Fernandina Beach, FL, 32034",
         options,
         5,
@@ -561,6 +645,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // highway address
         "5850 US Highway 431, STE 1, Albertville, AL, 35950-2049",
         options,
@@ -575,6 +661,8 @@ TEST test_us_parses(void) {
 
     // Tests of simple place names
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/openvenues/libpostal/issues/114
         "Columbus, OH",
         options,
@@ -584,6 +672,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/openvenues/libpostal/issues/114
         "San Francisco CA",
         options,
@@ -593,6 +683,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Common alternative name for San Francicso
         "SF CA",
         options,
@@ -602,6 +694,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Carmel-by-the-Sea hyphenated
         "Carmel-by-the-Sea, CA",
         options,
@@ -611,6 +705,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Carmel-by-the-Sea de-hyphenated
         "Carmel by the Sea, CA",
         options,
@@ -622,6 +718,8 @@ TEST test_us_parses(void) {
     // Disambiguation tests
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/53
         // Manhattan as city_district
         "Manhattan, NY",
@@ -632,6 +730,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Manhattan, Kansas - city
         "Manhattan, KS",
         options,
@@ -641,6 +741,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Brooklyn, NY - city_district
         "Brooklyn, NY",
         options,
@@ -650,6 +752,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Brooklyn, Connecticut - city
         "Brooklyn, CT 06234",
         options,
@@ -660,6 +764,8 @@ TEST test_us_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Here Brooklyn CT means "Brooklyn Court", a small street in Oregon
         "18312 SE Brooklyn CT Gresham OR",
         options,
@@ -673,10 +779,12 @@ TEST test_us_parses(void) {
     PASS();
 }
 
-TEST test_ca_parses(void) {
+TEST test_ca_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/55
         "332 Menzies Street, Victoria, BC V8V 2G9",
         options,
@@ -691,6 +799,8 @@ TEST test_ca_parses(void) {
     // Montreal / Montréal
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "123 Main St SE\nMontreal QC H3Z 2Y7",
         options,
         5,
@@ -702,6 +812,8 @@ TEST test_ca_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "123 Main St SE Montréal QC H3Z 2Y7",
         options,
         5,
@@ -713,6 +825,8 @@ TEST test_ca_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/pelias/pelias/issues/275
         "LaSalle Montréal QC",
         options,
@@ -723,6 +837,8 @@ TEST test_ca_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/pelias/pelias/issues/275
         "LaSalle Montreal QC",
         options,
@@ -736,10 +852,12 @@ TEST test_ca_parses(void) {
     PASS();
 }
 
-TEST test_jm_parses(void) {
+TEST test_jm_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/openvenues/libpostal/issues/113
         // Kingston postcode, rare case where single-digit number is a postcode
         // Uses W.I for "West Indies"
@@ -755,6 +873,8 @@ TEST test_jm_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/openvenues/libpostal/issues/113
         // Fractional house number
         "16 1/2 Windward Road, Kingston 2, Jamaica",
@@ -769,6 +889,8 @@ TEST test_jm_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "16½ Windward Road Kingston 2 Jamaica, West Indies",
         options,
         6,
@@ -784,11 +906,13 @@ TEST test_jm_parses(void) {
 }
 
 
-TEST test_gb_parses(void) {
+TEST test_gb_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "The Book Club 100-106 Leonard St, Shoreditch, London, Greater London, England, EC2A 4RH, United Kingdom",
         options,
         9,
@@ -804,6 +928,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "The Book Club 100-106 Leonard St Shoreditch London EC2A 4RH United Kingdom",
         options,
         7,
@@ -817,6 +943,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/openownership/data-standard/issues/18
         "Aston House, Cornwall Avenue, London, N3 1LF",
         options,
@@ -828,6 +956,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/39
         "318 Upper Street, N1 2XQ London",
         options,
@@ -839,6 +969,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/39
         "21, Kingswood Road SW2 4JE, London",
         options,
@@ -850,6 +982,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From Moz tests
         "1 Riverside Dr Liverpool, Merseyside L3 4EN",
         options,
@@ -862,6 +996,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Stocks Ln, Knutsford, Cheshire East WA16 9EX, UK",
         options,
         5,
@@ -873,6 +1009,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Royal Opera House, Bow St, Covent Garden, London, WC2E 9DD, United Kingdom",
         options,
         6,
@@ -885,6 +1023,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "1A Egmont Road, Middlesbrough, TS4 2HT",
         options,
         4,
@@ -895,6 +1035,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "0 Egmont Road, Middlesbrough, TS4 2HT",
         options,
         4,
@@ -905,6 +1047,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "-1 Priory Road, Newbury, RG14 7QS",
         options,
         4,
@@ -915,6 +1059,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Idas Court, 4-6 Princes Road, Hull, HU5 2RD",
         options,
         5,
@@ -926,6 +1072,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Flat 14, Ziggurat Building, 60-66 Saffron Hill, London, EC1N 8QX, United Kingdom",
         options,
         7,
@@ -939,6 +1087,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Flat 18, Da Vinci House, 44 Saffron Hill, London, EC1N 8FH, United Kingdom",
         options,
         7,
@@ -952,6 +1102,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "22B Derwent Parade, South Ockendon RM15 5EE, United Kingdom",
         options,
         5,
@@ -963,6 +1115,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Unit with no house number
         "Unit 26 Roper Close, Canterbury, CT2 7EP",
         options,
@@ -974,6 +1128,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Strange road name
         "Lorem House, The Marina, Lowestoft NR32 1HH, United Kingdom",
         options,
@@ -986,6 +1142,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "St Johns Centre, Rope Walk, Bedford, Bedfordshire, MK42 0XE, United Kingdom",
         options,
         6,
@@ -998,6 +1156,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "St Johns Centre, 8 Rope Walk, Bedford, Bedfordshire, MK42 0XE, United Kingdom",
         options,
         7,
@@ -1011,6 +1171,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Studio might be a unit, may change this later
         "Studio J, 4th Floor,,8 Lower Ormond St, Manchester M1 5QF, United Kingdom",
         options,
@@ -1025,6 +1187,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Victoria Institute, The Blvd, ST6 6BD, United Kingdom",
         options,
         4,
@@ -1035,6 +1199,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "29 Lottbridge Drove, Eastbourne, East Sussex BN23 6QD",
         options,
         5,
@@ -1046,6 +1212,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Stoke-on-Trent, United Kingdom",
         options,
         2,
@@ -1054,6 +1222,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "The Rushes, Loughborough, Leicestershire LE11 5BG, United Kingdom",
         options,
         5,
@@ -1065,6 +1235,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "The Old Manor, 11-12 Sparrow Hill, Loughborough LE11 1BT, United Kingdom",
         options,
         6,
@@ -1077,6 +1249,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Stockwell Head, Hinckley LE10 1RD, United Kingdom",
         options,
         4,
@@ -1087,6 +1261,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Admiral Retail Park Lottbridge Drove, Eastbourne, East Sussex BN23 6QD",
         options,
         5,
@@ -1098,6 +1274,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // odd structure, county abbreviation
         "12 Newgate Shopping Centre, George St, Bishop Auckland, Co. Durham, DL14 7JQ",
         options,
@@ -1111,6 +1289,8 @@ TEST test_gb_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Castle Court Shopping Centre Castle Street Caerphilly CF83 1NY",
         options,
         4,
@@ -1123,10 +1303,12 @@ TEST test_gb_parses(void) {
     PASS();
 }
 
-TEST test_im_parses(void) {
+TEST test_im_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Multiple house names
         "Lloyds Bank International Limited, PO Box 111, Peveril Buildings, Peveril Square, Douglas, Isle of Man IM99 1JJ",
         options,
@@ -1143,10 +1325,12 @@ TEST test_im_parses(void) {
     PASS();
 }
 
-TEST test_nz_parses(void) {
+TEST test_nz_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "wellington new zealand",
         options,
         2,
@@ -1157,9 +1341,11 @@ TEST test_nz_parses(void) {
     PASS();
 }
 
-TEST test_fr_parses(void) {
+TEST test_fr_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/pelias/pelias/issues/426
         "Chambéry",
         options,
@@ -1168,6 +1354,8 @@ TEST test_fr_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/pelias/pelias/issues/426
         "Chambery",
         options,
@@ -1176,6 +1364,8 @@ TEST test_fr_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/openvenues/libpostal/issues/114
         "Paris, France",
         options,
@@ -1185,6 +1375,8 @@ TEST test_fr_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Variant of above
         "Paris",
         options,
@@ -1193,6 +1385,8 @@ TEST test_fr_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Variant of above
         "Paris, FR",
         options,
@@ -1202,6 +1396,8 @@ TEST test_fr_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Arrondissement Roman numerals
         "IXe arrondissement Paris",
         options,
@@ -1211,6 +1407,8 @@ TEST test_fr_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Arrondissement Arabic numerals
         "9e arrondissement Paris",
         options,
@@ -1223,11 +1421,13 @@ TEST test_fr_parses(void) {
 }
 
 
-TEST test_es_parses(void) {
+TEST test_es_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     // Use Spanish toponym
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Museo del Prado C. de Ruiz de Alarcón, 23 28014 Madrid, España",
         options,
         6,
@@ -1241,6 +1441,8 @@ TEST test_es_parses(void) {
 
     // Use English toponym
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Museo del Prado C. de Ruiz de Alarcón, 23 28014 Madrid, Spain",
         options,
         6,
@@ -1253,6 +1455,8 @@ TEST test_es_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Spanish-style floor number
         "Paseo de la Castellana, 185 - 5º, 28046 Madrid Madrid",
         options,
@@ -1268,10 +1472,12 @@ TEST test_es_parses(void) {
     PASS();
 }
 
-TEST test_co_parses(void) {
+TEST test_co_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Cra 18#63-64 B Chapinero Bogotá DC Colombia",
         options,
         5,
@@ -1283,6 +1489,8 @@ TEST test_co_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Bogotá Colombia",
         options,
         2,
@@ -1292,6 +1500,8 @@ TEST test_co_parses(void) {
 
     // Test with country code (could also be Colorado, company, etc.)
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Bogotá CO",
         options,
         2,
@@ -1301,6 +1511,8 @@ TEST test_co_parses(void) {
 
     // Same tests without accent
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Cra 18#63-64 B Chapinero Bogota DC Colombia",
         options,
         5,
@@ -1312,6 +1524,8 @@ TEST test_co_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Bogota Colombia",
         options,
         2,
@@ -1320,6 +1534,8 @@ TEST test_co_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Bogota CO",
         options,
         2,
@@ -1331,11 +1547,13 @@ TEST test_co_parses(void) {
     PASS();
 }
 
-TEST test_mx_parses(void) {
+TEST test_mx_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     // From: https://github.com/openvenues/libpostal/issues/126
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "LÓPEZ MATEOS, 106, 21840, MEXICALI, baja-california, mx",
         options,
         6,
@@ -1348,6 +1566,8 @@ TEST test_mx_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "LORENZO DE ZOVELA, 1126, 22715, PLAYAS DE ROSARITO, baja-california, mx",
         options,
         6,
@@ -1363,10 +1583,12 @@ TEST test_mx_parses(void) {
 }
 
 
-TEST test_br_parses(void) {
+TEST test_br_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Brazil address with sem número (s/n) and CEP used with postal code
         "Theatro Municipal de São Paulo Pç. Ramos de Azevedo, s/n São Paulo - SP, CEP 01037-010",
         options,
@@ -1382,10 +1604,12 @@ TEST test_br_parses(void) {
     PASS();
 }
 
-TEST test_cn_parses(void) {
+TEST test_cn_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/openvenues/libpostal/issues/71
         // Level, unit, road name containing a city (Hong Kong)
         "中国，山东省，青岛市 香港东路6号，5号楼，8号室 李小方 先生收",
@@ -1405,10 +1629,12 @@ TEST test_cn_parses(void) {
 
 
 
-TEST test_jp_parses(void) {
+TEST test_jp_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Example of a Kanji address
         "〒601-8446京都市西九条高畠町25-1京都醸造株式会社",
         options,
@@ -1421,6 +1647,8 @@ TEST test_jp_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Ban-go style house number, level and unit
         "日本〒113-0001文京区4丁目3番2号3階323号室",
         options,
@@ -1435,6 +1663,8 @@ TEST test_jp_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/openvenues/libpostal/issues/123
         // University (slightly ambiguous i.e. the 2nd "Osaka" can be part of a campus name)
         // English toponyms
@@ -1448,6 +1678,8 @@ TEST test_jp_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/openvenues/libpostal/issues/62
         // Romaji
         // Has road name (I think?)
@@ -1464,10 +1696,12 @@ TEST test_jp_parses(void) {
     PASS();
 }
 
-TEST test_kr_parses(void) {
+TEST test_kr_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // English/Romanized Korean, ro + gil address, English unit
         "Suite 1005, 36, Teheran-ro 87-gil, Gangnam-gu Seoul 06164 Republic of Korea",
         options,
@@ -1483,10 +1717,12 @@ TEST test_kr_parses(void) {
     PASS();
 }
 
-TEST test_my_parses(void) {
+TEST test_my_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/openvenues/libpostal/issues/121
         // Not adding the block format yet in case we change how it's parsed
         "IBS Centre Jalan Chan Sow Lin, 55200 Kuala Lumpur, Malaysia",
@@ -1502,10 +1738,12 @@ TEST test_my_parses(void) {
     PASS();
 }
 
-TEST test_za_parses(void) {
+TEST test_za_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Contains HTML entity which should be normalized
         // Contains 4-digit postcode, which can be confusable with a house number
         "Double Shot Tea &amp; Coffee 15 Melle St. Braamfontein Johannesburg, 2001, South Africa",
@@ -1523,10 +1761,12 @@ TEST test_za_parses(void) {
 
 }
 
-TEST test_de_parses(void) {
+TEST test_de_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         /* Contains German concatenated street suffix
 
            N.B. We may want to move ä => ae out of the Latin-ASCII transliterator
@@ -1545,6 +1785,8 @@ TEST test_de_parses(void) {
 
     // Test transliterated versions
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Eschenbrau Braurei Triftstrasse 67 13353 Berlin Deutschland",
         options,
         6,
@@ -1557,6 +1799,8 @@ TEST test_de_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Eschenbraeu Braeurei Triftstrasse 67 13353 Berlin DE",
         options,
         6,
@@ -1572,10 +1816,12 @@ TEST test_de_parses(void) {
 }
 
 
-TEST test_at_parses(void) {
+TEST test_at_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Eduard Sueß Gasse 9",
         options,
         2,
@@ -1584,6 +1830,8 @@ TEST test_at_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Eduard-Sueß Gasse 9",
         options,
         2,
@@ -1592,6 +1840,8 @@ TEST test_at_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Eduard-Sueß-Gasse 9",
         options,
         2,
@@ -1600,6 +1850,8 @@ TEST test_at_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Eduard Sueß-Gasse 9",
         options,
         2,
@@ -1609,6 +1861,8 @@ TEST test_at_parses(void) {
 
     // From https://github.com/openvenues/libpostal/issues/128
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Wien, Österreich",
         options,
         2,
@@ -1618,6 +1872,8 @@ TEST test_at_parses(void) {
 
     // Transliterations
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Wien, Osterreich",
         options,
         2,
@@ -1626,6 +1882,8 @@ TEST test_at_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Wien, Oesterreich",
         options,
         2,
@@ -1634,6 +1892,8 @@ TEST test_at_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // English names
         "Vienna, Austria",
         options,
@@ -1646,9 +1906,11 @@ TEST test_at_parses(void) {
 }
 
 
-TEST test_nl_parses(void) {
+TEST test_nl_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/162
         "Nieuwe Binnenweg 17-19, Oude Westen, Rotterdam NL",
         options,
@@ -1661,6 +1923,8 @@ TEST test_nl_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Nieuwe Binnenweg 17-19, Oude Westen, Rotterdam",
         options,
         4,
@@ -1671,6 +1935,8 @@ TEST test_nl_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Oude Westen, Rotterdam",
         options,
         2,
@@ -1679,6 +1945,8 @@ TEST test_nl_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/75
         "Olympia 1 A begane gro",
         options,
@@ -1691,10 +1959,12 @@ TEST test_nl_parses(void) {
     PASS();
 }
 
-TEST test_da_parses(void) {
+TEST test_da_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "Valdemarsgade 42 4 t.v. København, 1665 Danmark",
         options,
         6,
@@ -1709,10 +1979,12 @@ TEST test_da_parses(void) {
     PASS();
 }
 
-TEST test_fi_parses(void) {
+TEST test_fi_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         "1 Hämeenkatu, Tampere, Finland",
         options,
         4,
@@ -1723,6 +1995,8 @@ TEST test_fi_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/111
         "Pitkämäentie",
         options,
@@ -1733,10 +2007,12 @@ TEST test_fi_parses(void) {
     PASS();
 }
 
-TEST test_no_parses(void) {
+TEST test_no_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From: https://github.com/openvenues/libpostal/issues/39#issuecomment-221027220
         "Sars gate 2A, 562 OSLO",
         options,
@@ -1750,10 +2026,12 @@ TEST test_no_parses(void) {
     PASS();
 }
 
-TEST test_se_parses(void) {
+TEST test_se_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Uses the "en trappa upp" (one floor up) form in Swedish addresses
         "Storgatan 1, 1 trappa upp, 112 01 Stockholm Sweden",
         options,
@@ -1768,10 +2046,12 @@ TEST test_se_parses(void) {
     PASS();
 }
 
-TEST test_hu_parses(void) {
+TEST test_hu_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Hungarian, 4-digit postal code
         "Szimpla Kert 1075 Budapest kazinczy utca, 14",
         options,
@@ -1785,10 +2065,12 @@ TEST test_hu_parses(void) {
     PASS();
 }
 
-TEST test_ro_parses(void) {
+TEST test_ro_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Romanian address with staircase
         "str. Pacienței, nr. 9 sc. M et. 7 ap. 96 Brașov, 505722 România",
         options,
@@ -1806,10 +2088,12 @@ TEST test_ro_parses(void) {
 }
 
 
-TEST test_ru_parses(void) {
+TEST test_ru_parses(address_parser_t *parser, libpostal_t *instance) {
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Contains Cyrillic with abbreviations
         // Contains 6 digit postcode
         // Contains script change, English toponyms
@@ -1825,6 +2109,8 @@ TEST test_ru_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/openvenues/libpostal/issues/138
         "Петрозаводск Карелия Российская Федерация",
         options,
@@ -1836,6 +2122,8 @@ TEST test_ru_parses(void) {
 
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // From https://github.com/openvenues/libpostal/issues/138
         "Автолюбителейроезд 24 Петрозаводск Карелия Российская Федерация 185013",
         options,
@@ -1849,6 +2137,8 @@ TEST test_ru_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Old Soviet format, from https://github.com/openvenues/libpostal/issues/125#issuecomment-269319652
         // Uses "г."" prefix for the city
         // Uses "д." for house number
@@ -1864,6 +2154,8 @@ TEST test_ru_parses(void) {
     ));
 
     CHECK_CALL(test_parse_result_equals(
+        parser,
+        instance,
         // Uses genitive place names, see https://github.com/openvenues/libpostal/issues/125#issuecomment-269438636
         "188541, г. Сосновый Бор Ленинградской области",
         options,
@@ -1877,37 +2169,39 @@ TEST test_ru_parses(void) {
 }
 
 SUITE(libpostal_parser_tests) {
-    if (!libpostal_setup() || !libpostal_setup_parser()) {
+    libpostal_t *instance = libpostal_setup();
+    address_parser_t *parser = libpostal_setup_parser();
+    if (instance == NULL || parser == NULL) {
         printf("Could not setup libpostal\n");
         exit(EXIT_FAILURE);
     }
 
-    RUN_TEST(test_us_parses);
-    RUN_TEST(test_jm_parses);
-    RUN_TEST(test_gb_parses);
-    RUN_TEST(test_im_parses);
-    RUN_TEST(test_nz_parses);
-    RUN_TEST(test_fr_parses);
-    RUN_TEST(test_es_parses);
-    RUN_TEST(test_co_parses);
-    RUN_TEST(test_mx_parses);
-    RUN_TEST(test_br_parses);
-    RUN_TEST(test_cn_parses);
-    RUN_TEST(test_jp_parses);
-    RUN_TEST(test_kr_parses);
-    RUN_TEST(test_my_parses);
-    RUN_TEST(test_za_parses);
-    RUN_TEST(test_de_parses);
-    RUN_TEST(test_at_parses);
-    RUN_TEST(test_nl_parses);
-    RUN_TEST(test_da_parses);
-    RUN_TEST(test_fi_parses);
-    RUN_TEST(test_no_parses);
-    RUN_TEST(test_se_parses);
-    RUN_TEST(test_hu_parses);
-    RUN_TEST(test_ro_parses);
-    RUN_TEST(test_ru_parses);
+    RUN_TEST(test_us_parses, parser, instance);
+    RUN_TEST(test_jm_parses, parser, instance);
+    RUN_TEST(test_gb_parses, parser, instance);
+    RUN_TEST(test_im_parses, parser, instance);
+    RUN_TEST(test_nz_parses, parser, instance);
+    RUN_TEST(test_fr_parses, parser, instance);
+    RUN_TEST(test_es_parses, parser, instance);
+    RUN_TEST(test_co_parses, parser, instance);
+    RUN_TEST(test_mx_parses, parser, instance);
+    RUN_TEST(test_br_parses, parser, instance);
+    RUN_TEST(test_cn_parses, parser, instance);
+    RUN_TEST(test_jp_parses, parser, instance);
+    RUN_TEST(test_kr_parses, parser, instance);
+    RUN_TEST(test_my_parses, parser, instance);
+    RUN_TEST(test_za_parses, parser, instance);
+    RUN_TEST(test_de_parses, parser, instance);
+    RUN_TEST(test_at_parses, parser, instance);
+    RUN_TEST(test_nl_parses, parser, instance);
+    RUN_TEST(test_da_parses, parser, instance);
+    RUN_TEST(test_fi_parses, parser, instance);
+    RUN_TEST(test_no_parses, parser, instance);
+    RUN_TEST(test_se_parses, parser, instance);
+    RUN_TEST(test_hu_parses, parser, instance);
+    RUN_TEST(test_ro_parses, parser, instance);
+    RUN_TEST(test_ru_parses, parser, instance);
 
-    libpostal_teardown();
-    libpostal_teardown_parser();
+    libpostal_teardown(&instance);
+    libpostal_teardown_parser(&parser);
 }

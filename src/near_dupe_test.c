@@ -10,7 +10,9 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    if (!libpostal_setup() || !libpostal_setup_language_classifier()) {
+    libpostal_t *instance = libpostal_setup();
+    language_classifier_t *classifier = libpostal_setup_language_classifier();
+    if (instance == NULL || classifier == NULL) {
         exit(EXIT_FAILURE);
     }
 
@@ -108,7 +110,7 @@ int main(int argc, char **argv) {
     char **values = cstring_array_to_strings(values_array);
 
     size_t num_near_dupe_hashes = 0;
-    char **near_dupe_hashes = libpostal_near_dupe_hashes_languages(num_components, labels, values, options, num_languages, languages, &num_near_dupe_hashes);
+    char **near_dupe_hashes = libpostal_near_dupe_hashes_languages(classifier, instance, num_components, labels, values, options, num_languages, languages, &num_near_dupe_hashes);
     if (near_dupe_hashes != NULL) {
         for (size_t i = 0; i < num_near_dupe_hashes; i++) {
             char *near_dupe_hash = near_dupe_hashes[i];
@@ -125,7 +127,7 @@ int main(int argc, char **argv) {
         libpostal_expansion_array_destroy(languages, num_languages);
     }
 
-    libpostal_teardown();
-    libpostal_teardown_language_classifier();
+    libpostal_teardown(&instance);
+    libpostal_teardown_language_classifier(&classifier);
 
 }

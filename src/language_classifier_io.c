@@ -23,7 +23,7 @@ language_classifier_data_set_t *language_classifier_data_set_init(char *filename
     return data_set;
 }
 
-bool language_classifier_data_set_next(language_classifier_data_set_t *self) {
+bool language_classifier_data_set_next(libpostal_t *instance, language_classifier_data_set_t *self) {
     if (self == NULL) return false;
 
     char *line = file_getline(self->f);
@@ -47,7 +47,7 @@ bool language_classifier_data_set_next(language_classifier_data_set_t *self) {
 
     log_debug("Doing: %s\n", address);
 
-    char *normalized = language_classifier_normalize_string(address);
+    char *normalized = language_classifier_normalize_string(instance, address);
     bool is_normalized = normalized != NULL;
     if (!is_normalized) {
         log_debug("could not normalize\n");
@@ -120,12 +120,12 @@ inline bool language_classifier_language_is_valid(char *language) {
     return !string_equals(language, AMBIGUOUS_LANGUAGE) && !string_equals(language, UNKNOWN_LANGUAGE);
 }
 
-language_classifier_minibatch_t *language_classifier_data_set_get_minibatch_with_size(language_classifier_data_set_t *self, khash_t(str_uint32) *labels, size_t batch_size) {
+language_classifier_minibatch_t *language_classifier_data_set_get_minibatch_with_size(libpostal_t *instance, language_classifier_data_set_t *self, khash_t(str_uint32) *labels, size_t batch_size) {
     size_t in_batch = 0;
 
     language_classifier_minibatch_t *minibatch = NULL;
 
-    while (in_batch < batch_size && language_classifier_data_set_next(self)) {
+    while (in_batch < batch_size && language_classifier_data_set_next(instance, self)) {
         char *address = char_array_get_string(self->address);
         if (strlen(address) == 0) {
             continue;
@@ -152,7 +152,7 @@ language_classifier_minibatch_t *language_classifier_data_set_get_minibatch_with
         }
 
         if (labels != NULL) {
-            khash_t(str_double) *feature_counts = extract_language_features(address, country, self->tokens, self->feature_array);
+            khash_t(str_double) *feature_counts = extract_language_features(instance->address_dict, address, country, self->tokens, self->feature_array);
             if (feature_counts == NULL) {
                 log_error("Could not extract features for: %s\n", address);
                 language_classifier_minibatch_destroy(minibatch);
@@ -160,7 +160,7 @@ language_classifier_minibatch_t *language_classifier_data_set_get_minibatch_with
             }
             feature_count_array_push(minibatch->features, feature_counts);
         }
-    
+
         cstring_array_add_string(minibatch->labels, language);
         in_batch++;
     }
@@ -168,8 +168,8 @@ language_classifier_minibatch_t *language_classifier_data_set_get_minibatch_with
     return minibatch;
 }
 
-inline language_classifier_minibatch_t *language_classifier_data_set_get_minibatch(language_classifier_data_set_t *self, khash_t(str_uint32) *labels) {
-    return language_classifier_data_set_get_minibatch_with_size(self, labels, LANGUAGE_CLASSIFIER_DEFAULT_BATCH_SIZE);
+inline language_classifier_minibatch_t *language_classifier_data_set_get_minibatch(libpostal_t *instance, language_classifier_data_set_t *self, khash_t(str_uint32) *labels) {
+    return language_classifier_data_set_get_minibatch_with_size(instance, self, labels, LANGUAGE_CLASSIFIER_DEFAULT_BATCH_SIZE);
 }
 
 void language_classifier_data_set_destroy(language_classifier_data_set_t *self) {

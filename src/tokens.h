@@ -12,6 +12,13 @@
 #include "token_types.h"
 #include "vector.h"
 
+
+typedef struct libpostal_token {
+    size_t offset;
+    size_t len;
+    uint16_t type;
+} libpostal_token_t;
+
 typedef libpostal_token_t token_t;
 
 #define NULL_TOKEN (token_t){0, 0, END}

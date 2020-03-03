@@ -15,8 +15,6 @@
 
 #define MIN_PROB (0.05 - DBL_EPSILON)
 
-static language_classifier_t *language_classifier = NULL;
-
 void language_classifier_destroy(language_classifier_t *self) {
     if (self == NULL) return;
 
@@ -42,10 +40,6 @@ language_classifier_t *language_classifier_new(void) {
     return language_classifier;
 }
 
-language_classifier_t *get_language_classifier(void) {
-    return language_classifier;
-}
-
 void language_classifier_response_destroy(language_classifier_response_t *self) {
     if (self == NULL) return;
     if (self->languages != NULL) {
@@ -59,20 +53,18 @@ void language_classifier_response_destroy(language_classifier_response_t *self) 
     free(self);
 }
 
-language_classifier_response_t *classify_languages(char *address) {
-    language_classifier_t *classifier = get_language_classifier();
-    
+language_classifier_response_t *classify_languages(language_classifier_t *classifier, libpostal_t *instance, char *address) {
     if (classifier == NULL) {
         log_error(LANGUAGE_CLASSIFIER_SETUP_ERROR);
         return NULL;
     }
 
-    char *normalized = language_classifier_normalize_string(address);
+    char *normalized = language_classifier_normalize_string(instance, address);
 
     token_array *tokens = token_array_new();
     char_array *feature_array = char_array_new();
 
-    khash_t(str_double) *feature_counts = extract_language_features(normalized, NULL, tokens, feature_array);
+    khash_t(str_double) *feature_counts = extract_language_features(instance->address_dict, normalized, NULL, tokens, feature_array);
     if (feature_counts == NULL || kh_size(feature_counts) == 0) {
         token_array_destroy(tokens);
         char_array_destroy(feature_array);
@@ -281,10 +273,8 @@ bool language_classifier_save(language_classifier_t *self, char *path) {
 
 // Module setup/teardown
 
-bool language_classifier_module_setup(char *dir) {
-    if (language_classifier != NULL) {
-        return true;
-    }
+language_classifier_t *language_classifier_module_setup(char *dir) {
+    language_classifier_t *language_classifier = NULL;
 
     if (dir == NULL) {
         dir = LIBPOSTAL_LANGUAGE_CLASSIFIER_DIR;
@@ -302,13 +292,12 @@ bool language_classifier_module_setup(char *dir) {
     }
 
     char_array_destroy(path);
-    return true;
+    return language_classifier;
 }
 
-void language_classifier_module_teardown(void) {
+void language_classifier_module_teardown(language_classifier_t **language_classifier) {
     if (language_classifier != NULL) {
-        language_classifier_destroy(language_classifier);
+        language_classifier_destroy(*language_classifier);
+        *language_classifier = NULL;
     }
-    language_classifier = NULL;
 }
-

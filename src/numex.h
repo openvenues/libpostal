@@ -16,7 +16,6 @@
 #include "constants.h"
 #include "klib/khash.h"
 #include "string_utils.h"
-#include "tokens.h"
 #include "trie.h"
 #include "trie_search.h"
 
@@ -127,14 +126,12 @@ typedef struct {
     ordinal_indicator_array *ordinal_indicators;
 } numex_table_t;
 
-numex_table_t *get_numex_table(void);
-
 numex_language_t *numex_language_new(char *name, bool whole_tokens_only, size_t rules_index, size_t num_rules, size_t ordinals_index, size_t num_ordinals);
 void numex_language_destroy(numex_language_t *self);
 
-bool numex_table_add_language(numex_language_t *language);
+bool numex_table_add_language(numex_table_t *numex_table, numex_language_t *language);
 
-numex_language_t *get_numex_language(char *name);
+numex_language_t *get_numex_language(numex_table_t *numex_table, char *name);
 
 typedef struct numex_result {
     int64_t value;
@@ -147,24 +144,25 @@ typedef struct numex_result {
 
 VECTOR_INIT(numex_result_array, numex_result_t)
 
-char *replace_numeric_expressions(char *str, char *lang);
-numex_result_array *convert_numeric_expressions(char *str, char *lang);
-size_t ordinal_suffix_len(char *s, size_t len, char *lang);
+char *replace_numeric_expressions(numex_table_t *numex_table, char *str, char *lang);
+numex_result_array *convert_numeric_expressions(numex_table_t *numex_table, char *str, char *lang);
+size_t ordinal_suffix_len(numex_table_t *numex_table, char *s, size_t len, char *lang);
 size_t possible_ordinal_digit_len(char *str, size_t len);
 
-size_t valid_ordinal_suffix_len(char *str, token_t token, token_t prev_token, char *lang);
-bool add_ordinal_suffix_lengths(uint32_array *suffixes, char *str, token_array *tokens_array, char *lang);
+size_t valid_ordinal_suffix_len(numex_table_t *numex_table, char *str, token_t token, token_t prev_token, char *lang);
+bool add_ordinal_suffix_lengths(numex_table_t *numex_table, uint32_array *suffixes, char *str, token_array *tokens_array, char *lang);
 
-bool is_likely_roman_numeral(char *str);
-bool is_likely_roman_numeral_len(char *str, size_t len);
+bool is_likely_roman_numeral(numex_table_t *numex_table, char *str);
+bool is_likely_roman_numeral_len(numex_table_t *numex_table, char *str, size_t len);
 
-bool numex_table_write(FILE *file);
-bool numex_table_save(char *filename);
+bool numex_table_write(numex_table_t *numex_table, FILE *file);
+bool numex_table_save(numex_table_t *numex_table, char *filename);
 
-bool numex_module_init(void);
-bool numex_module_setup(char *filename);
-void numex_module_teardown(void);
+numex_table_t *numex_module_init(void);
+numex_table_t *numex_module_setup(char *filename);
+void numex_table_destroy(numex_table_t *numex);
+void numex_module_teardown(numex_table_t **numex_table);
 
- 
+
 
 #endif

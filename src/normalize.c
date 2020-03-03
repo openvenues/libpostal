@@ -4,12 +4,12 @@
 #define FULL_STOP_CODEPOINT 0x002e
 #define APOSTROPHE_CODEPOINT 0x0027
 
-char *normalize_replace_numex(char *str, size_t num_languages, char **languages) {
+char *normalize_replace_numex(numex_table_t *numex_table, char *str, size_t num_languages, char **languages) {
     char *numex_normalized = NULL;
 
     for (size_t i = 0; i < num_languages; i++) {
         char *lang = languages[i];
-        char *numex_replaced = replace_numeric_expressions(numex_normalized == NULL ? str : numex_normalized, lang);
+        char *numex_replaced = replace_numeric_expressions(numex_table, numex_normalized == NULL ? str : numex_normalized, lang);
         if (numex_replaced != NULL) {
             if (numex_normalized != NULL) {
                 free(numex_normalized);
@@ -21,7 +21,7 @@ char *normalize_replace_numex(char *str, size_t num_languages, char **languages)
     return numex_normalized;
 }
 
-char *normalize_string_utf8_languages(char *str, uint64_t options, size_t num_languages, char **languages) {
+char *normalize_string_utf8_languages(numex_table_t *numex_table, char *str, uint64_t options, size_t num_languages, char **languages) {
     int utf8proc_options = UTF8PROC_OPTIONS_BASE | UTF8PROC_IGNORE | UTF8PROC_NLF2LF | UTF8PROC_STRIPCC;
     uint8_t *utf8proc_normalized = NULL;
 
@@ -94,7 +94,7 @@ char *normalize_string_utf8_languages(char *str, uint64_t options, size_t num_la
     }
 
     if (options & NORMALIZE_STRING_REPLACE_NUMEX && num_languages > 0) {
-        char *numex_normalized = normalize_replace_numex(str, num_languages, languages);
+        char *numex_normalized = normalize_replace_numex(numex_table, str, num_languages, languages);
         if (numex_normalized != NULL) {
             if (normalized_allocated) {
                 free(normalized);
@@ -109,12 +109,14 @@ char *normalize_string_utf8_languages(char *str, uint64_t options, size_t num_la
     return normalized;
 }
 
-char *normalize_string_utf8(char *str, uint64_t options) {
-    return normalize_string_utf8_languages(str, options, 0, NULL);
+char *normalize_string_utf8(numex_table_t *numex_table, char *str, uint64_t options) {
+    return normalize_string_utf8_languages(numex_table, str, options, 0, NULL);
 }
 
 
-char *normalize_string_latin_languages(char *str, size_t len, uint64_t options, size_t num_languages, char **languages) {
+char *normalize_string_latin_languages(libpostal_t *instance, char *str, size_t len, uint64_t options, size_t num_languages, char **languages) {
+    if (instance == NULL) return NULL;
+
     char *transliterated = NULL;
     char *latin_transliterator = NULL;
 
@@ -125,27 +127,25 @@ char *normalize_string_latin_languages(char *str, size_t len, uint64_t options, 
     }
 
     if (latin_transliterator != NULL) {
-        transliterated = transliterate(latin_transliterator, str, len);
+        transliterated = transliterate(instance->trans_table, latin_transliterator, str, len);
     }
 
     char *utf8_normalized;
     if (transliterated == NULL) {
-        utf8_normalized = normalize_string_utf8_languages(str, options, num_languages, languages);
+        utf8_normalized = normalize_string_utf8_languages(instance->numex_table, str, options, num_languages, languages);
     } else {
-        utf8_normalized = normalize_string_utf8_languages(transliterated, options, num_languages, languages);
+        utf8_normalized = normalize_string_utf8_languages(instance->numex_table, transliterated, options, num_languages, languages);
         free(transliterated);
-        transliterated = NULL;
     }
 
     return utf8_normalized;
 }
 
-char *normalize_string_latin(char *str, size_t len, uint64_t options) {
-    return normalize_string_latin_languages(str, len, options, 0, NULL);
+char *normalize_string_latin(libpostal_t *instance, char *str, size_t len, uint64_t options) {
+    return normalize_string_latin_languages(instance, str, len, options, 0, NULL);
 }
 
-void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t options, size_t num_languages, char **languages) {
-    
+void add_latin_alternatives(numex_table_t *numex_table, transliteration_table_t *trans_table, string_tree_t *tree, char *str, size_t len, uint64_t options, size_t num_languages, char **languages) {
     char *transliterated = NULL;
     char *utf8_normalized = NULL;
     char *prev_string = NULL;
@@ -156,9 +156,9 @@ void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t
     }
 
     if (options & NORMALIZE_STRING_LATIN_ASCII) {
-        transliterated = transliterate(latin_transliterator, str, len);
+        transliterated = transliterate(trans_table, latin_transliterator, str, len);
         if (transliterated != NULL) {
-            utf8_normalized = normalize_string_utf8_languages(transliterated, options, num_languages, languages);
+            utf8_normalized = normalize_string_utf8_languages(numex_table, transliterated, options, num_languages, languages);
             free(transliterated);
             transliterated = NULL;
         }
@@ -171,11 +171,11 @@ void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t
     }
 
     char *str_copy = strndup(str, len);
-    utf8_normalized = normalize_string_utf8_languages(str_copy, options, num_languages, languages);
+    utf8_normalized = normalize_string_utf8_languages(numex_table, str_copy, options, num_languages, languages);
     free(str_copy);
 
     if (options & NORMALIZE_STRING_LATIN_ASCII && utf8_normalized != NULL) {
-        transliterated = transliterate(latin_transliterator, utf8_normalized, strlen(utf8_normalized));
+        transliterated = transliterate(trans_table, latin_transliterator, utf8_normalized, strlen(utf8_normalized));
         free(utf8_normalized);
     } else {
         transliterated = utf8_normalized;
@@ -197,9 +197,11 @@ void add_latin_alternatives(string_tree_t *tree, char *str, size_t len, uint64_t
 }
 
 
-string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t num_languages, char **languages) {
+string_tree_t *normalize_string_languages(libpostal_t *instance, char *str, uint64_t options, size_t num_languages, char **languages) {
     size_t len = strlen(str);
     string_tree_t *tree = string_tree_new_size(len);
+    transliteration_table_t *trans_table = instance->trans_table;
+    numex_table_t *numex_table = instance->numex_table;
 
     size_t consumed = 0;
 
@@ -223,14 +225,14 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
 
         // Shortcut if the string is all ASCII
         if (options & NORMALIZE_STRING_LOWERCASE && is_ascii && script_len == len) {
-            char *html_escaped = transliterate(HTML_ESCAPE, str, len);
+            char *html_escaped = transliterate(trans_table, HTML_ESCAPE, str, len);
             if (html_escaped != NULL) {
                 str = html_escaped;
             }
 
             options ^= NORMALIZE_STRING_COMPOSE | NORMALIZE_STRING_DECOMPOSE | NORMALIZE_STRING_STRIP_ACCENTS | NORMALIZE_STRING_LATIN_ASCII;
 
-            utf8_normalized = normalize_string_utf8_languages(str, options, num_languages, languages);
+            utf8_normalized = normalize_string_utf8_languages(numex_table, str, options, num_languages, languages);
             if (utf8_normalized != NULL) {
                 if (html_escaped != NULL) {
                     free(html_escaped);
@@ -252,7 +254,7 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
         if (script == SCRIPT_LATIN && num_languages > 0 && !have_latin_transliterator) {
             for (size_t i = 0; i < num_languages; i++) {
                 lang = languages[i];
-                foreach_transliterator(script, lang, trans_name, {
+                foreach_transliterator(trans_table, script, lang, trans_name, {
                     if (!string_equals(trans_name, LATIN_ASCII)) {
                         have_latin_transliterator = true;
                         break;
@@ -280,7 +282,7 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
     }
 
     if (!have_latin_transliterator) {
-        add_latin_alternatives(tree, str, len, options, num_languages, languages);
+        add_latin_alternatives(instance->numex_table, trans_table, tree, str, len, options, num_languages, languages);
     }
 
     size_t transliterate_scripts = kh_size(scripts);
@@ -294,12 +296,12 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
             script = (script_t)key;
             for (size_t i = 0; i < num_languages; i++) {
                 lang = languages[i];
-                foreach_transliterator(script, lang, trans_name, {
+                foreach_transliterator(trans_table, script, lang, trans_name, {
                     string_tree_add_string(transliterators, trans_name);
                 })
             }
 
-            foreach_transliterator(script, "", trans_name, {
+            foreach_transliterator(trans_table, script, "", trans_name, {
                 string_tree_add_string(transliterators, trans_name);
             })
             string_tree_finalize_token(transliterators);
@@ -314,7 +316,7 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
             char *transliterated = str;
             string_tree_iterator_foreach_token(trans_iter, trans_name, {
                 log_debug("Doing %s\n", trans_name);
-                transliterated = transliterate(trans_name, transliterated, strlen(transliterated));
+                transliterated = transliterate(trans_table, trans_name, transliterated, strlen(transliterated));
                 if (transliterated == NULL) {
                     transliterated = prev != NULL ? prev : str;
                     continue;
@@ -325,7 +327,7 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
                 prev = transliterated;
             })
 
-            add_latin_alternatives(tree, transliterated, strlen(transliterated), options, num_languages, languages);
+            add_latin_alternatives(instance->numex_table, trans_table, tree, transliterated, strlen(transliterated), options, num_languages, languages);
             if (transliterated != str) {
                 free(transliterated);
             }
@@ -333,23 +335,21 @@ string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t nu
 
         string_tree_iterator_destroy(trans_iter);
         string_tree_destroy(transliterators);
-
     }
 
     if (have_latin_transliterator) {
-        add_latin_alternatives(tree, str, len, options, num_languages, languages);
+        add_latin_alternatives(instance->numex_table, trans_table, tree, str, len, options, num_languages, languages);
     }
-    
+
     kh_destroy(int_set, scripts);
-    
+
     string_tree_finalize_token(tree);
 
     return tree;
-
 }
 
-inline string_tree_t *normalize_string(char *str, uint64_t options) {
-    return normalize_string_languages(str, options, 0, NULL);
+inline string_tree_t *normalize_string(libpostal_t *instance, char *str, uint64_t options) {
+    return normalize_string_languages(instance, str, options, 0, NULL);
 }
 
 bool numeric_starts_with_alpha(char *str, token_t token) {

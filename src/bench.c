@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
- 
+
 #ifdef TIME_WITH_SYS_TIME
 #include <sys/time.h>
 #include <time.h>
@@ -34,7 +34,9 @@ int main(int argc, char **argv) {
         languages[i] = arg;
     }
 
-    if (!libpostal_setup()) {
+    libpostal_t *instance = libpostal_setup();
+    language_classifier_t *classifier = libpostal_setup_language_classifier();
+    if (instance == NULL || classifier == NULL) {
         exit(EXIT_FAILURE);
     }
 
@@ -56,7 +58,7 @@ int main(int argc, char **argv) {
 
     clock_t t1 = clock();
     for (int i = 0; i < num_loops; i++) {
-        strings = libpostal_expand_address(str, options, &num_expansions);
+        strings = libpostal_expand_address(classifier, instance, str, options, &num_expansions);
         libpostal_expansion_array_destroy(strings, num_expansions);
     }
     clock_t t2 = clock();
@@ -67,5 +69,6 @@ int main(int argc, char **argv) {
     printf("addresses/s = %f\n", addresses_per_second);
     double tokens_per_second = (num_loops * num_tokens) / benchmark_time;
     printf("tokens/s = %f\n", tokens_per_second);
-    libpostal_teardown();
+    libpostal_teardown(&instance);
+    libpostal_teardown_language_classifier(&classifier);
 }

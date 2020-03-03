@@ -13,14 +13,7 @@
 
 #define FLOOR_LOG_BASE(num, base) floor((log((float)num) / log((float)base)) + FLT_EPSILON)
 
-numex_table_t *numex_table = NULL;
-
-numex_table_t *get_numex_table(void) {
-    return numex_table;
-}
-
-void numex_table_destroy(void) {
-    numex_table_t *numex_table = get_numex_table();
+void numex_table_destroy(numex_table_t *numex_table) {
     if (numex_table == NULL) return;
 
     if (numex_table->trie != NULL) {
@@ -48,40 +41,35 @@ void numex_table_destroy(void) {
 }
 
 numex_table_t *numex_table_init(void) {
-    numex_table_t *numex_table = get_numex_table();
+    numex_table_t *numex_table = calloc(1, sizeof(numex_table_t));
 
-    if (numex_table == NULL) {
-        numex_table = calloc(1, sizeof(numex_table_t));
+    if (numex_table == NULL) return NULL;
 
-        if (numex_table == NULL) return NULL;
-
-        numex_table->trie = trie_new();
-        if (numex_table->trie == NULL) {
-            goto exit_numex_table_created;
-        }
+    numex_table->trie = trie_new();
+    if (numex_table->trie == NULL) {
+        goto exit_numex_table_created;
+    }
 
 
-        numex_table->languages = kh_init(str_numex_language);
-        if (numex_table->languages == NULL) {
-            goto exit_numex_table_created;
-        }
+    numex_table->languages = kh_init(str_numex_language);
+    if (numex_table->languages == NULL) {
+        goto exit_numex_table_created;
+    }
 
-        numex_table->rules = numex_rule_array_new();
-        if (numex_table->rules == NULL) {
-            goto exit_numex_table_created;
-        }
+    numex_table->rules = numex_rule_array_new();
+    if (numex_table->rules == NULL) {
+        goto exit_numex_table_created;
+    }
 
-        numex_table->ordinal_indicators = ordinal_indicator_array_new();
-        if (numex_table->ordinal_indicators == NULL) {
-            goto exit_numex_table_created;
-        }
-
+    numex_table->ordinal_indicators = ordinal_indicator_array_new();
+    if (numex_table->ordinal_indicators == NULL) {
+        goto exit_numex_table_created;
     }
 
     return numex_table;
 exit_numex_table_created:
-    numex_table_destroy();
-    exit(1);
+    numex_table_destroy(numex_table);
+    return NULL;
 }
 
 numex_table_t *numex_table_new(void) {
@@ -120,7 +108,7 @@ void numex_language_destroy(numex_language_t *self) {
     free(self);
 }
 
-bool numex_table_add_language(numex_language_t *language) {
+bool numex_table_add_language(numex_table_t *numex_table, numex_language_t *language) {
     if (numex_table == NULL) {
         log_error(NUMEX_SETUP_ERROR);
         return false;
@@ -133,7 +121,7 @@ bool numex_table_add_language(numex_language_t *language) {
     return true;
 }
 
-numex_language_t *get_numex_language(char *name) {
+numex_language_t *get_numex_language(numex_table_t *numex_table, char *name) {
     if (numex_table == NULL) {
         log_error(NUMEX_SETUP_ERROR);
         return NULL;
@@ -409,14 +397,13 @@ bool ordinal_indicator_write(ordinal_indicator_t *ordinal, FILE *f) {
     }
 
     return true;
-
 }
 
 
-bool numex_table_read(FILE *f) {
+numex_table_t *numex_table_read(FILE *f) {
     if (f == NULL) {
         log_warn("FILE pointer was NULL in numex_table_read\n");
-        return false;
+        return NULL;
     }
 
     uint32_t signature;
@@ -424,10 +411,10 @@ bool numex_table_read(FILE *f) {
     log_debug("Reading signature\n");
 
     if (!file_read_uint32(f, &signature) || signature != NUMEX_TABLE_SIGNATURE) {
-        return false;
+        return NULL;
     }
 
-    numex_table = numex_table_init();
+    numex_table_t *numex_table = numex_table_init();
 
     log_debug("Numex table initialized\n");
 
@@ -445,7 +432,7 @@ bool numex_table_read(FILE *f) {
 
     for (i = 0; i < num_languages; i++) {
         language = numex_language_read(f);
-        if (language == NULL || !numex_table_add_language(language)) {
+        if (language == NULL || !numex_table_add_language(numex_table, language)) {
             goto exit_numex_table_load_error;
         }
     }
@@ -497,24 +484,24 @@ bool numex_table_read(FILE *f) {
 
     log_debug("read trie\n");
 
-    return true;
+    return numex_table;
 
 exit_numex_table_load_error:
-    numex_table_destroy();
-    return false;
+    numex_table_destroy(numex_table);
+    return NULL;
 }
 
-bool numex_table_load(char *filename) {
+numex_table_t *numex_table_load(char *filename) {
     FILE *f;
     if ((f = fopen(filename, "rb")) == NULL) {
         return NULL;
     }
-    bool ret = numex_table_read(f);
+    numex_table_t *ret = numex_table_read(f);
     fclose(f);
     return ret;
 }
 
-bool numex_table_write(FILE *f) {
+bool numex_table_write(numex_table_t *numex_table, FILE *f) {
     if (!file_write_uint32(f, (uint32_t)NUMEX_TABLE_SIGNATURE)) {
         return false;
     }
@@ -574,7 +561,7 @@ bool numex_table_write(FILE *f) {
     return true;
 }
 
-bool numex_table_save(char *filename) {
+bool numex_table_save(numex_table_t *numex_table, char *filename) {
     if (numex_table == NULL || filename == NULL) {
         return false;
     }
@@ -582,7 +569,7 @@ bool numex_table_save(char *filename) {
     FILE *f;
 
     if ((f = fopen(filename, "wb")) != NULL) {
-        bool ret = numex_table_write(f);
+        bool ret = numex_table_write(numex_table, f);
         fclose(f);
         return ret;
     } else {
@@ -590,29 +577,27 @@ bool numex_table_save(char *filename) {
     }
 }
 
-bool numex_module_init(void) {
-    numex_table = numex_table_new();
-    return numex_table != NULL;
+numex_table_t *numex_module_init(void) {
+    return numex_table_new();
 }
 
 /* Initializes numex trie/module
 Must be called only once before the module can be used
 */
 
-bool numex_module_setup(char *filename) {
-    if (numex_table == NULL) {
-        return numex_table_load(filename == NULL ? DEFAULT_NUMEX_PATH : filename);
-    }
-    return true;
+numex_table_t *numex_module_setup(char *filename) {
+    return numex_table_load(filename == NULL ? DEFAULT_NUMEX_PATH : filename);
 }
 
 /* Teardown method for the module
 Called once when done with the module (usually at
 the end of a main method)
 */
-void numex_module_teardown(void) {
-    numex_table_destroy();
-    numex_table = NULL;
+void numex_module_teardown(numex_table_t **table) {
+    if (table != NULL) {
+        numex_table_destroy(*table);
+        *table = NULL;
+    }
 }
 
 #define NULL_NUMEX_RESULT (numex_result_t) {0, GENDER_NONE, CATEGORY_DEFAULT, false, 0, 0}
@@ -632,12 +617,12 @@ typedef struct numex_search_state {
 #define NULL_NUMEX_SEARCH_STATE (numex_search_state_t) {NULL_NODE_ID, NUMEX_SEARCH_STATE_BEGIN}
 
 
-static inline numex_rule_t get_numex_rule(size_t i) {
+static inline numex_rule_t get_numex_rule(numex_table_t *numex_table, size_t i) {
     if (i >= numex_table->rules->n) return NUMEX_NULL_RULE;
     return numex_table->rules->a[i];
 }
 
-numex_result_array *convert_numeric_expressions(char *str, char *lang) {
+numex_result_array *convert_numeric_expressions(numex_table_t *numex_table, char *str, char *lang) {
     if (numex_table == NULL) {
         log_error(NUMEX_SETUP_ERROR);
         return NULL;
@@ -646,7 +631,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
     trie_t *trie = numex_table->trie;
     if (trie == NULL) return NULL;
 
-    numex_language_t *language = get_numex_language(lang);
+    numex_language_t *language = get_numex_language(numex_table, lang);
 
     if (language == NULL) return NULL;
 
@@ -799,7 +784,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
 
         log_debug("phrase.len=%u, phrase.data=%d\n", phrase.len, phrase.data);
 
-        rule = get_numex_rule((size_t)phrase.data);
+        rule = get_numex_rule(numex_table, (size_t)phrase.data);
         log_debug("rule.value=%" PRId64 "\n", rule.value);
 
         if (rule.rule_type != NUMEX_NULL) {
@@ -958,8 +943,8 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
     return results;
 }
 
-static trie_prefix_result_t get_ordinal_namespace_prefix(trie_t *trie, char *lang, char *ns, gender_t gender, grammatical_category_t category, bool use_default_if_not_found) {
-    numex_language_t *language = get_numex_language(lang);
+static trie_prefix_result_t get_ordinal_namespace_prefix(numex_table_t *numex_table, trie_t *trie, char *lang, char *ns, gender_t gender, grammatical_category_t category, bool use_default_if_not_found) {
+    numex_language_t *language = get_numex_language(numex_table, lang);
 
     if (language == NULL) {
         return NULL_PREFIX_RESULT;
@@ -1023,7 +1008,7 @@ static trie_prefix_result_t get_ordinal_namespace_prefix(trie_t *trie, char *lan
     return prefix;
 }
 
-static char *get_ordinal_suffix(char *numeric_string, size_t len, char *lang, gender_t gender, grammatical_category_t category) {
+static char *get_ordinal_suffix(numex_table_t *numex_table, char *numeric_string, size_t len, char *lang, gender_t gender, grammatical_category_t category) {
     if (numex_table == NULL) {
         log_error(NUMEX_SETUP_ERROR);
         return NULL;
@@ -1035,7 +1020,7 @@ static char *get_ordinal_suffix(char *numeric_string, size_t len, char *lang, ge
     }
 
     bool use_default_if_not_found = true;
-    trie_prefix_result_t prefix = get_ordinal_namespace_prefix(trie, lang, ORDINAL_NAMESPACE_PREFIX, gender, category, use_default_if_not_found);
+    trie_prefix_result_t prefix = get_ordinal_namespace_prefix(numex_table, trie, lang, ORDINAL_NAMESPACE_PREFIX, gender, category, use_default_if_not_found);
 
     if (prefix.node_id == NULL_NODE_ID) {
         return NULL;
@@ -1100,7 +1085,7 @@ size_t possible_ordinal_digit_len(char *str, size_t len) {
     return digit_len;
 }
 
-size_t ordinal_suffix_len(char *str, size_t len, char *lang) {
+size_t ordinal_suffix_len(numex_table_t *numex_table, char *str, size_t len, char *lang) {
     if (str == NULL || len == 0) {
         return 0;
     }
@@ -1120,7 +1105,7 @@ size_t ordinal_suffix_len(char *str, size_t len, char *lang) {
     // Default (GENDER_NONE and CATEGORY_DEFAULT) are at the end of the enums, so iterate backward
     for (int gender = NUM_GENDERS - 1; gender >= 0; gender--) {
         for (int category = NUM_CATEGORIES - 1; category >= 0; category--) {
-            trie_prefix_result_t prefix = get_ordinal_namespace_prefix(trie, lang, ORDINAL_PHRASE_NAMESPACE_PREFIX, gender, category, use_default_if_not_found);
+            trie_prefix_result_t prefix = get_ordinal_namespace_prefix(numex_table, trie, lang, ORDINAL_PHRASE_NAMESPACE_PREFIX, gender, category, use_default_if_not_found);
 
             if (prefix.node_id == NULL_NODE_ID) {
                 continue;
@@ -1137,8 +1122,8 @@ size_t ordinal_suffix_len(char *str, size_t len, char *lang) {
     return 0;
 }
 
-size_t valid_ordinal_suffix_len(char *str, token_t token, token_t prev_token, char *lang) {
-    size_t len_ordinal_suffix = ordinal_suffix_len(str + token.offset, token.len, lang);
+size_t valid_ordinal_suffix_len(numex_table_t *numex_table, char *str, token_t token, token_t prev_token, char *lang) {
+    size_t len_ordinal_suffix = ordinal_suffix_len(numex_table, str + token.offset, token.len, lang);
 
     int32_t unichr = 0;
     const uint8_t *ptr = (const uint8_t *)str;
@@ -1159,7 +1144,7 @@ size_t valid_ordinal_suffix_len(char *str, token_t token, token_t prev_token, ch
         }
         ssize_t prev_char_len = utf8proc_iterate_reversed(ptr, start, &unichr);
         if (prev_char_len <= 0) return 0;
-        if (!utf8_is_digit(utf8proc_category(unichr)) && !is_likely_roman_numeral_len(str + token_offset, token_len)) {
+        if (!utf8_is_digit(utf8proc_category(unichr)) && !is_likely_roman_numeral_len(numex_table, str + token_offset, token_len)) {
             return 0;
         }
     } else {
@@ -1169,14 +1154,14 @@ size_t valid_ordinal_suffix_len(char *str, token_t token, token_t prev_token, ch
     return len_ordinal_suffix;
 }
 
-bool add_ordinal_suffix_lengths(uint32_array *suffixes, char *str, token_array *tokens_array, char *lang) {
+bool add_ordinal_suffix_lengths(numex_table_t *numex_table, uint32_array *suffixes, char *str, token_array *tokens_array, char *lang) {
     if (suffixes == NULL || str == NULL || tokens_array == NULL) return false;
     size_t n = tokens_array->n;
     token_t *tokens = tokens_array->a;
     token_t prev_token = NULL_TOKEN;
     for (size_t i = 0; i < n; i++) {
         token_t token = tokens[i];
-        size_t suffix_len = valid_ordinal_suffix_len(str, token, prev_token, lang);
+        size_t suffix_len = valid_ordinal_suffix_len(numex_table, str, token, prev_token, lang);
         uint32_array_push(suffixes, (uint32_t)suffix_len);
         prev_token = token;
     }
@@ -1212,11 +1197,11 @@ static inline bool is_likely_single_roman_numeral_char(char c) {
 }
 
 
-bool is_valid_roman_numeral(char *str, size_t len) {
+bool is_valid_roman_numeral(numex_table_t *numex_table, char *str, size_t len) {
     char *copy = strndup(str, len);
     if (copy == NULL) return false;
 
-    numex_result_array *results = convert_numeric_expressions(copy, LATIN_LANGUAGE_CODE);
+    numex_result_array *results = convert_numeric_expressions(numex_table, copy, LATIN_LANGUAGE_CODE);
     if (results == NULL) {
         free(copy);
         return false;
@@ -1228,7 +1213,7 @@ bool is_valid_roman_numeral(char *str, size_t len) {
     return ret;
 }
 
-bool is_likely_roman_numeral_len(char *str, size_t len) {
+bool is_likely_roman_numeral_len(numex_table_t *numex_table, char *str, size_t len) {
     bool seen_roman = false;
     for (size_t i = 0; i < len; i++) {
         char c = *(str + i);
@@ -1240,15 +1225,15 @@ bool is_likely_roman_numeral_len(char *str, size_t len) {
         }
     }
 
-    return seen_roman && is_valid_roman_numeral(str, len);
+    return seen_roman && is_valid_roman_numeral(numex_table, str, len);
 }
 
-inline bool is_likely_roman_numeral(char *str) {
-    return is_likely_roman_numeral_len(str, strlen(str));
+inline bool is_likely_roman_numeral(numex_table_t *numex_table, char *str) {
+    return is_likely_roman_numeral_len(numex_table, str, strlen(str));
 }
 
-char *replace_numeric_expressions(char *str, char *lang) {
-    numex_result_array *results = convert_numeric_expressions(str, lang);
+char *replace_numeric_expressions(numex_table_t *numex_table, char *str, char *lang) {
+    numex_result_array *results = convert_numeric_expressions(numex_table, str, lang);
     if (results == NULL) return NULL;
 
     bool is_latin = string_equals(lang, LATIN_LANGUAGE_CODE);
@@ -1269,7 +1254,7 @@ char *replace_numeric_expressions(char *str, char *lang) {
             continue;
         }
 
-        if (is_latin && result.len <= 2 && !is_likely_roman_numeral_len(str + result.start, result.len)) {
+        if (is_latin && result.len <= 2 && !is_likely_roman_numeral_len(numex_table, str + result.start, result.len)) {
             continue;
         }
         have_valid_numex = true;
@@ -1289,7 +1274,7 @@ char *replace_numeric_expressions(char *str, char *lang) {
             continue;
         }
 
-        if (is_latin && result.len <= 2 && !is_likely_roman_numeral_len(str + result.start, result.len)) {
+        if (is_latin && result.len <= 2 && !is_likely_roman_numeral_len(numex_table, str + result.start, result.len)) {
             continue;
         }
 
@@ -1307,7 +1292,7 @@ char *replace_numeric_expressions(char *str, char *lang) {
         char_array_append(replacement, numeric_string);
 
         if (result.is_ordinal) {
-            char *ordinal_suffix = get_ordinal_suffix(numeric_string, strlen(numeric_string), lang, result.gender, result.category);
+            char *ordinal_suffix = get_ordinal_suffix(numex_table, numeric_string, strlen(numeric_string), lang, result.gender, result.category);
             if (ordinal_suffix != NULL) {
                 char_array_append(replacement, ordinal_suffix);
             }

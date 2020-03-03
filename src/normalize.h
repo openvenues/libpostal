@@ -28,9 +28,9 @@ As well as normalizations for individual string tokens:
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "libpostal_types.h"
 #include "constants.h"
 #include "klib/khash.h"
-#include "libpostal.h"
 #include "string_utils.h"
 #include "utf8proc/utf8proc.h"
 #include "unicode_scripts.h"
@@ -40,37 +40,15 @@ As well as normalizations for individual string tokens:
 #include "trie.h"
 #include "tokens.h"
 #include "vector.h"
+#include "normalize_types.h"
 
-#define NORMALIZE_STRING_LATIN_ASCII LIBPOSTAL_NORMALIZE_STRING_LATIN_ASCII
-#define NORMALIZE_STRING_TRANSLITERATE LIBPOSTAL_NORMALIZE_STRING_TRANSLITERATE
-#define NORMALIZE_STRING_STRIP_ACCENTS LIBPOSTAL_NORMALIZE_STRING_STRIP_ACCENTS
-#define NORMALIZE_STRING_DECOMPOSE LIBPOSTAL_NORMALIZE_STRING_DECOMPOSE
-#define NORMALIZE_STRING_LOWERCASE LIBPOSTAL_NORMALIZE_STRING_LOWERCASE
-#define NORMALIZE_STRING_TRIM LIBPOSTAL_NORMALIZE_STRING_TRIM
-#define NORMALIZE_STRING_REPLACE_HYPHENS LIBPOSTAL_NORMALIZE_STRING_REPLACE_HYPHENS
-#define NORMALIZE_STRING_COMPOSE LIBPOSTAL_NORMALIZE_STRING_COMPOSE
-#define NORMALIZE_STRING_SIMPLE_LATIN_ASCII LIBPOSTAL_NORMALIZE_STRING_SIMPLE_LATIN_ASCII
-#define NORMALIZE_STRING_REPLACE_NUMEX LIBPOSTAL_NORMALIZE_STRING_REPLACE_NUMEX
+#include "libpostal.h"
 
-#define NORMALIZE_TOKEN_REPLACE_HYPHENS LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_HYPHENS
-#define NORMALIZE_TOKEN_DELETE_HYPHENS LIBPOSTAL_NORMALIZE_TOKEN_DELETE_HYPHENS
-#define NORMALIZE_TOKEN_DELETE_FINAL_PERIOD LIBPOSTAL_NORMALIZE_TOKEN_DELETE_FINAL_PERIOD
-#define NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS LIBPOSTAL_NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS
-#define NORMALIZE_TOKEN_DROP_ENGLISH_POSSESSIVES LIBPOSTAL_NORMALIZE_TOKEN_DROP_ENGLISH_POSSESSIVES
-#define NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE LIBPOSTAL_NORMALIZE_TOKEN_DELETE_OTHER_APOSTROPHE
-#define NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC LIBPOSTAL_NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC
-#define NORMALIZE_TOKEN_REPLACE_DIGITS LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_DIGITS
-#define NORMALIZE_TOKEN_REPLACE_NUMERIC_TOKEN_LETTERS LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_NUMERIC_TOKEN_LETTERS
-#define NORMALIZE_TOKEN_REPLACE_NUMERIC_HYPHENS LIBPOSTAL_NORMALIZE_TOKEN_REPLACE_NUMERIC_HYPHENS
+char *normalize_string_utf8(numex_table_t *numex_table, char *str, uint64_t options);
 
-// Replace digits with capital D e.g. 10013 => DDDDD, intended for use with lowercased strings
-#define DIGIT_CHAR "D"
-
-char *normalize_string_utf8(char *str, uint64_t options);
-
-char *normalize_string_utf8_languages(char *str, uint64_t options, size_t num_languages, char **languages);
-char *normalize_string_latin(char *str, size_t len, uint64_t options);
-char *normalize_string_latin_languages(char *str, size_t len, uint64_t options, size_t num_languages, char **languages);
+char *normalize_string_utf8_languages(numex_table_t *numex_table, char *str, uint64_t options, size_t num_languages, char **languages);
+char *normalize_string_latin(libpostal_t *instance, char *str, size_t len, uint64_t options);
+char *normalize_string_latin_languages(libpostal_t *instance, char *str, size_t len, uint64_t options, size_t num_languages, char **languages);
 
 
 // Takes NORMALIZE_TOKEN_* options
@@ -80,8 +58,8 @@ void normalize_token(cstring_array *array, char *str, token_t token, uint64_t op
 bool numeric_starts_with_alpha(char *str, token_t token);
 
 // Takes NORMALIZE_STRING_* options
-string_tree_t *normalize_string(char *str, uint64_t options);
-string_tree_t *normalize_string_languages(char *str, uint64_t options, size_t num_languages, char **languages);
+string_tree_t *normalize_string(libpostal_t *instance, char *str, uint64_t options);
+string_tree_t *normalize_string_languages(libpostal_t *instance, char *str, uint64_t options, size_t num_languages, char **languages);
  
 
 #endif

@@ -297,12 +297,12 @@ typedef enum {
 #define GREATEST_RUN_SUITE(S_NAME) greatest_run_suite(S_NAME, #S_NAME)
 
 /* Run a test in the current suite. */
-#define GREATEST_RUN_TEST(TEST)                                         \
+#define GREATEST_RUN_TEST(TEST, ...)                                    \
     do {                                                                \
         if (greatest_pre_test(#TEST) == 1) {                            \
             greatest_test_res res = GREATEST_SAVE_CONTEXT();            \
             if (res == GREATEST_TEST_RES_PASS) {                        \
-                res = TEST();                                           \
+                res = TEST(__VA_ARGS__);                                \
             }                                                           \
             greatest_post_test(#TEST, res);                             \
         } else if (GREATEST_LIST_ONLY()) {                              \

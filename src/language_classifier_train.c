@@ -58,7 +58,7 @@ static double DEFAULT_BETA = 1.0;
 
 #define HYPERPARAMETER_EPOCHS 5
 
-logistic_regression_trainer_t *language_classifier_init_params(char *filename, double feature_count_threshold, uint32_t label_count_threshold, size_t minibatch_size, logistic_regression_optimizer_type optim_type, regularization_type_t reg_type) {
+logistic_regression_trainer_t *language_classifier_init_params(libpostal_t *instance, char *filename, double feature_count_threshold, uint32_t label_count_threshold, size_t minibatch_size, logistic_regression_optimizer_type optim_type, regularization_type_t reg_type) {
     if (filename == NULL) {
         log_error("Filename was NULL\n");
         return NULL;
@@ -73,7 +73,7 @@ logistic_regression_trainer_t *language_classifier_init_params(char *filename, d
     size_t num_batches = 0;
 
     // Count features and labels
-    while ((minibatch = language_classifier_data_set_get_minibatch_with_size(data_set, NULL, minibatch_size)) != NULL) {
+    while ((minibatch = language_classifier_data_set_get_minibatch_with_size(instance, data_set, NULL, minibatch_size)) != NULL) {
         if (!count_labels_minibatch(label_counts, minibatch->labels)) {
             log_error("Counting minibatch labeles failed\n");
             exit(EXIT_FAILURE);
@@ -107,7 +107,7 @@ logistic_regression_trainer_t *language_classifier_init_params(char *filename, d
     kh_destroy(str_uint32, label_counts);
 
     // Run through the training set again, counting only features which co-occur with valid classes
-    while ((minibatch = language_classifier_data_set_get_minibatch(data_set, label_ids)) != NULL) {
+    while ((minibatch = language_classifier_data_set_get_minibatch(instance, data_set, label_ids)) != NULL) {
         if (!count_features_minibatch(feature_counts, minibatch->features, true)){
             log_error("Counting minibatch features failed\n");
             exit(EXIT_FAILURE);
@@ -159,19 +159,19 @@ logistic_regression_trainer_t *language_classifier_init_params(char *filename, d
     return trainer;
 }
 
-logistic_regression_trainer_t *language_classifier_init_optim_reg(char *filename, size_t minibatch_size, logistic_regression_optimizer_type optim_type, regularization_type_t reg_type) {
-    return language_classifier_init_params(filename, LANGUAGE_CLASSIFIER_FEATURE_COUNT_THRESHOLD, LANGUAGE_CLASSIFIER_LABEL_COUNT_THRESHOLD, minibatch_size, optim_type, reg_type);
+logistic_regression_trainer_t *language_classifier_init_optim_reg(libpostal_t *instance, char *filename, size_t minibatch_size, logistic_regression_optimizer_type optim_type, regularization_type_t reg_type) {
+    return language_classifier_init_params(instance, filename, LANGUAGE_CLASSIFIER_FEATURE_COUNT_THRESHOLD, LANGUAGE_CLASSIFIER_LABEL_COUNT_THRESHOLD, minibatch_size, optim_type, reg_type);
 }
 
-logistic_regression_trainer_t *language_classifier_init_sgd_reg(char *filename, size_t minibatch_size, regularization_type_t reg_type) {
-    return language_classifier_init_params(filename, LANGUAGE_CLASSIFIER_FEATURE_COUNT_THRESHOLD, LANGUAGE_CLASSIFIER_LABEL_COUNT_THRESHOLD, minibatch_size, LOGISTIC_REGRESSION_OPTIMIZER_SGD, reg_type);
+logistic_regression_trainer_t *language_classifier_init_sgd_reg(libpostal_t *instance, char *filename, size_t minibatch_size, regularization_type_t reg_type) {
+    return language_classifier_init_params(instance, filename, LANGUAGE_CLASSIFIER_FEATURE_COUNT_THRESHOLD, LANGUAGE_CLASSIFIER_LABEL_COUNT_THRESHOLD, minibatch_size, LOGISTIC_REGRESSION_OPTIMIZER_SGD, reg_type);
 }
 
-logistic_regression_trainer_t *language_classifier_init_ftrl(char *filename, size_t minibatch_size) {
-    return language_classifier_init_params(filename, LANGUAGE_CLASSIFIER_FEATURE_COUNT_THRESHOLD, LANGUAGE_CLASSIFIER_LABEL_COUNT_THRESHOLD, minibatch_size, LOGISTIC_REGRESSION_OPTIMIZER_FTRL, REGULARIZATION_NONE);
+logistic_regression_trainer_t *language_classifier_init_ftrl(libpostal_t *instance, char *filename, size_t minibatch_size) {
+    return language_classifier_init_params(instance, filename, LANGUAGE_CLASSIFIER_FEATURE_COUNT_THRESHOLD, LANGUAGE_CLASSIFIER_LABEL_COUNT_THRESHOLD, minibatch_size, LOGISTIC_REGRESSION_OPTIMIZER_FTRL, REGULARIZATION_NONE);
 }
 
-double compute_cv_accuracy(logistic_regression_trainer_t *trainer, char *filename) {
+double compute_cv_accuracy(libpostal_t *instance, logistic_regression_trainer_t *trainer, char *filename) {
     language_classifier_data_set_t *data_set = language_classifier_data_set_init(filename);
 
     language_classifier_minibatch_t *minibatch;
@@ -181,7 +181,7 @@ double compute_cv_accuracy(logistic_regression_trainer_t *trainer, char *filenam
 
     double_matrix_t *p_y = double_matrix_new_zeros(LANGUAGE_CLASSIFIER_DEFAULT_BATCH_SIZE, trainer->num_labels);
 
-    while ((minibatch = language_classifier_data_set_get_minibatch(data_set, trainer->label_ids)) != NULL) {
+    while ((minibatch = language_classifier_data_set_get_minibatch(instance, data_set, trainer->label_ids)) != NULL) {
         sparse_matrix_t *x = feature_matrix(trainer->feature_ids, minibatch->features);
         uint32_array *y = label_vector(trainer->label_ids, minibatch->labels);
 
@@ -235,7 +235,7 @@ double compute_cv_accuracy(logistic_regression_trainer_t *trainer, char *filenam
 
 
 
-double compute_total_cost(logistic_regression_trainer_t *trainer, char *filename, ssize_t compute_batches) {
+double compute_total_cost(libpostal_t *instance, logistic_regression_trainer_t *trainer, char *filename, ssize_t compute_batches) {
     language_classifier_data_set_t *data_set = language_classifier_data_set_init(filename);
 
     language_classifier_minibatch_t *minibatch;
@@ -247,7 +247,7 @@ double compute_total_cost(logistic_regression_trainer_t *trainer, char *filename
     // Need to regularize the weights
     double_matrix_t *theta = logistic_regression_trainer_get_regularized_weights(trainer);
 
-    while ((minibatch = language_classifier_data_set_get_minibatch(data_set, trainer->label_ids)) != NULL) {
+    while ((minibatch = language_classifier_data_set_get_minibatch(instance, data_set, trainer->label_ids)) != NULL) {
 
         double batch_cost = logistic_regression_trainer_minibatch_cost(trainer, minibatch->features, minibatch->labels);
         total_cost += batch_cost;
@@ -273,7 +273,7 @@ double compute_total_cost(logistic_regression_trainer_t *trainer, char *filename
 }
 
 
-bool language_classifier_train_epoch(logistic_regression_trainer_t *trainer, char *filename, char *cv_filename, ssize_t train_batches, size_t minibatch_size) {
+bool language_classifier_train_epoch(libpostal_t *instance, logistic_regression_trainer_t *trainer, char *filename, char *cv_filename, ssize_t train_batches, size_t minibatch_size) {
     if (filename == NULL) {
         log_error("Filename was NULL\n");
         return false;
@@ -303,7 +303,7 @@ bool language_classifier_train_epoch(logistic_regression_trainer_t *trainer, cha
     double train_cost = 0.0;
     double cv_accuracy = 0.0;
 
-    while ((minibatch = language_classifier_data_set_get_minibatch_with_size(data_set, trainer->label_ids, minibatch_size)) != NULL) {
+    while ((minibatch = language_classifier_data_set_get_minibatch_with_size(instance, data_set, trainer->label_ids, minibatch_size)) != NULL) {
         bool compute_cost = num_batches % COMPUTE_COST_INTERVAL == 0;
         bool compute_cv = num_batches % COMPUTE_CV_INTERVAL == 0 && num_batches > 0 && cv_filename != NULL;
 
@@ -322,7 +322,7 @@ bool language_classifier_train_epoch(logistic_regression_trainer_t *trainer, cha
         }
 
         if (compute_cv) {
-            cv_accuracy = compute_cv_accuracy(trainer, cv_filename);
+            cv_accuracy = compute_cv_accuracy(instance, trainer, cv_filename);
             log_info("cv accuracy=%f\n", cv_accuracy);
         }
 
@@ -344,7 +344,7 @@ bool language_classifier_train_epoch(logistic_regression_trainer_t *trainer, cha
     return true;
 }
 
-static double language_classifier_cv_cost(logistic_regression_trainer_t *trainer, char *filename, char *cv_filename, size_t minibatch_size, bool *diverged) {
+static double language_classifier_cv_cost(libpostal_t *instance, logistic_regression_trainer_t *trainer, char *filename, char *cv_filename, size_t minibatch_size, bool *diverged) {
     ssize_t cost_batches;
     char *cost_file;
 
@@ -356,19 +356,19 @@ static double language_classifier_cv_cost(logistic_regression_trainer_t *trainer
         cost_batches = -1;
     }
 
-    double initial_cost = compute_total_cost(trainer, cost_file, cost_batches);
+    double initial_cost = compute_total_cost(instance, trainer, cost_file, cost_batches);
 
     for (size_t k = 0; k < HYPERPARAMETER_EPOCHS; k++) {
         trainer->epochs = k;
 
-        if (!language_classifier_train_epoch(trainer, filename, NULL, LANGUAGE_CLASSIFIER_HYPERPARAMETER_BATCHES, minibatch_size)) {
+        if (!language_classifier_train_epoch(instance, trainer, filename, NULL, LANGUAGE_CLASSIFIER_HYPERPARAMETER_BATCHES, minibatch_size)) {
             log_error("Error in epoch\n");
             logistic_regression_trainer_destroy(trainer);
             exit(EXIT_FAILURE);
         }
     }
 
-    double final_cost = compute_total_cost(trainer, cost_file, cost_batches);
+    double final_cost = compute_total_cost(instance, trainer, cost_file, cost_batches);
 
     *diverged = final_cost > initial_cost;
     log_info("final_cost = %f, initial_cost = %f\n", final_cost, initial_cost);
@@ -395,7 +395,7 @@ VECTOR_INIT(language_classifier_ftrl_param_array, language_classifier_ftrl_param
    of the solution with the lowest cross-validation error.
 */
 
-language_classifier_sgd_params_t language_classifier_parameter_sweep_sgd(logistic_regression_trainer_t *trainer, char *filename, char *cv_filename, size_t minibatch_size) {
+language_classifier_sgd_params_t language_classifier_parameter_sweep_sgd(libpostal_t *instance, logistic_regression_trainer_t *trainer, char *filename, char *cv_filename, size_t minibatch_size) {
     double best_cost = DBL_MAX;
 
     double default_lambda = 0.0;
@@ -438,7 +438,7 @@ language_classifier_sgd_params_t language_classifier_parameter_sweep_sgd(logisti
         log_info("Optimizing hyperparameters. Trying lambda=%.7f, gamma_0=%f\n", lambda, gamma_0);
 
         bool diverged = false;
-        cost = language_classifier_cv_cost(trainer, filename, cv_filename, minibatch_size, &diverged);
+        cost = language_classifier_cv_cost(instance, trainer, filename, cv_filename, minibatch_size, &diverged);
 
         if (!diverged) {
             language_classifier_sgd_param_array_push(all_params, params);
@@ -484,7 +484,7 @@ language_classifier_sgd_params_t language_classifier_parameter_sweep_sgd(logisti
 }
 
 
-language_classifier_ftrl_params_t language_classifier_parameter_sweep_ftrl(logistic_regression_trainer_t *trainer, char *filename, char *cv_filename, size_t minibatch_size) {
+language_classifier_ftrl_params_t language_classifier_parameter_sweep_ftrl(libpostal_t *instance, logistic_regression_trainer_t *trainer, char *filename, char *cv_filename, size_t minibatch_size) {
     double best_cost = DBL_MAX;
 
     language_classifier_ftrl_params_t best_params = (language_classifier_ftrl_params_t){DEFAULT_ALPHA, DEFAULT_L1, DEFAULT_L2};
@@ -513,7 +513,7 @@ language_classifier_ftrl_params_t language_classifier_parameter_sweep_ftrl(logis
         log_info("Optimizing hyperparameters. Trying lambda1=%.7f, lambda2=%.7f, alpha=%f\n", lambda1, lambda2, alpha);
 
         bool diverged = false;
-        cost = language_classifier_cv_cost(trainer, filename, cv_filename, minibatch_size, &diverged);
+        cost = language_classifier_cv_cost(instance, trainer, filename, cv_filename, minibatch_size, &diverged);
 
         if (!diverged) {
             language_classifier_ftrl_param_array_push(all_params, params);
@@ -569,13 +569,13 @@ language_classifier_ftrl_params_t language_classifier_parameter_sweep_ftrl(logis
 }
 
 
-static language_classifier_t *trainer_finalize(logistic_regression_trainer_t *trainer, char *test_filename) {
+static language_classifier_t *trainer_finalize(libpostal_t *instance, logistic_regression_trainer_t *trainer, char *test_filename) {
     if (trainer == NULL) return NULL;
 
     log_info("Done training\n");
 
     if (test_filename != NULL) {
-        double test_accuracy = compute_cv_accuracy(trainer, test_filename);
+        double test_accuracy = compute_cv_accuracy(instance, trainer, test_filename);
         log_info("Test accuracy = %f\n", test_accuracy);
     }
 
@@ -642,10 +642,10 @@ static language_classifier_t *trainer_finalize(logistic_regression_trainer_t *tr
 }
 
 
-language_classifier_t *language_classifier_train_sgd(char *filename, char *subset_filename, bool cross_validation_set, char *cv_filename, char *test_filename, uint32_t num_iterations, size_t minibatch_size, regularization_type_t reg_type) {
-    logistic_regression_trainer_t *trainer = language_classifier_init_sgd_reg(filename, minibatch_size, reg_type);
+language_classifier_t *language_classifier_train_sgd(libpostal_t *instance, char *filename, char *subset_filename, bool cross_validation_set, char *cv_filename, char *test_filename, uint32_t num_iterations, size_t minibatch_size, regularization_type_t reg_type) {
+    logistic_regression_trainer_t *trainer = language_classifier_init_sgd_reg(instance, filename, minibatch_size, reg_type);
 
-    language_classifier_sgd_params_t params = language_classifier_parameter_sweep_sgd(trainer, subset_filename, cv_filename, minibatch_size);
+    language_classifier_sgd_params_t params = language_classifier_parameter_sweep_sgd(instance, trainer, subset_filename, cv_filename, minibatch_size);
     log_info("Best params: lambda=%f, gamma_0=%f\n", params.lambda, params.gamma_0);
 
     if (!logistic_regression_trainer_reset_params_sgd(trainer, params.lambda, params.gamma_0)) {
@@ -668,20 +668,20 @@ language_classifier_t *language_classifier_train_sgd(char *filename, char *subse
 
         trainer->epochs = epoch;
 
-        if (!language_classifier_train_epoch(trainer, filename, cv_filename, -1, minibatch_size)) {
+        if (!language_classifier_train_epoch(instance, trainer, filename, cv_filename, -1, minibatch_size)) {
             log_error("Error in epoch\n");
             logistic_regression_trainer_destroy(trainer);
             return NULL;
         }
     }
 
-    return trainer_finalize(trainer, test_filename);
+    return trainer_finalize(instance, trainer, test_filename);
 }
 
-language_classifier_t *language_classifier_train_ftrl(char *filename, char *subset_filename, bool cross_validation_set, char *cv_filename, char *test_filename, uint32_t num_iterations, size_t minibatch_size) {
-    logistic_regression_trainer_t *trainer = language_classifier_init_ftrl(filename, minibatch_size);
+language_classifier_t *language_classifier_train_ftrl(libpostal_t *instance, char *filename, char *subset_filename, bool cross_validation_set, char *cv_filename, char *test_filename, uint32_t num_iterations, size_t minibatch_size) {
+    logistic_regression_trainer_t *trainer = language_classifier_init_ftrl(instance, filename, minibatch_size);
 
-    language_classifier_ftrl_params_t params = language_classifier_parameter_sweep_ftrl(trainer, subset_filename, cv_filename, minibatch_size);
+    language_classifier_ftrl_params_t params = language_classifier_parameter_sweep_ftrl(instance, trainer, subset_filename, cv_filename, minibatch_size);
     log_info("Best params: lambda1=%.7f, lambda2=%.7f, alpha=%f\n", params.lambda1, params.lambda2, params.alpha);
 
     if (!logistic_regression_trainer_reset_params_ftrl(trainer, params.alpha, DEFAULT_BETA, params.lambda1, params.lambda2)) {
@@ -704,14 +704,14 @@ language_classifier_t *language_classifier_train_ftrl(char *filename, char *subs
 
         trainer->epochs = epoch;
 
-        if (!language_classifier_train_epoch(trainer, filename, cv_filename, -1, minibatch_size)) {
+        if (!language_classifier_train_epoch(instance, trainer, filename, cv_filename, -1, minibatch_size)) {
             log_error("Error in epoch\n");
             logistic_regression_trainer_destroy(trainer);
             return NULL;
         }
     }
 
-    return trainer_finalize(trainer, test_filename);
+    return trainer_finalize(instance, trainer, test_filename);
 }
 
 
@@ -847,13 +847,21 @@ int main(int argc, char **argv) {
     log_warn("shuf must be installed to train address parser effectively. If this is a production machine, please install shuf. No shuffling will be performed.\n");
     #endif
 
-    if (!address_dictionary_module_setup(NULL)) {
+    address_dictionary_t *address_dict = address_dictionary_module_setup(NULL);
+    if (address_dict == NULL) {
         log_error("Could not load address dictionaries\n");
         exit(EXIT_FAILURE);
-    } else if (!transliteration_module_setup(NULL)) {
+    }
+
+    transliteration_table_t *trans_table = transliteration_module_setup(NULL);
+    if (trans_table == NULL) {
         log_error("Could not load transliteration module\n");
         exit(EXIT_FAILURE);
     }
+
+    libpostal_t instance = { 0 };
+    instance.address_dict = address_dict;
+    instance.trans_table = trans_table;
 
     char_array *temp_file = char_array_new();
     char_array_cat_printf(temp_file, "%s.tmp", filename);
@@ -895,9 +903,9 @@ int main(int argc, char **argv) {
     language_classifier_t *language_classifier = NULL;
 
     if (optim_type == LOGISTIC_REGRESSION_OPTIMIZER_SGD) {
-        language_classifier = language_classifier_train_sgd(filename, temp_filename, cross_validation_set, cv_filename, test_filename, num_epochs, minibatch_size, reg_type);
+        language_classifier = language_classifier_train_sgd(&instance, filename, temp_filename, cross_validation_set, cv_filename, test_filename, num_epochs, minibatch_size, reg_type);
     } else if (optim_type == LOGISTIC_REGRESSION_OPTIMIZER_FTRL) {
-        language_classifier = language_classifier_train_ftrl(filename, temp_filename, cross_validation_set, cv_filename, test_filename, num_epochs, minibatch_size);
+        language_classifier = language_classifier_train_ftrl(&instance, filename, temp_filename, cross_validation_set, cv_filename, test_filename, num_epochs, minibatch_size);
     }
 
     remove(temp_filename);
@@ -922,6 +930,7 @@ int main(int argc, char **argv) {
 
     log_info("Success!\n");
 
-    address_dictionary_module_teardown();
+    address_dictionary_module_teardown(&address_dict);
+    transliteration_module_teardown(&trans_table);
 
 }

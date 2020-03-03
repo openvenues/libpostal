@@ -27,17 +27,17 @@ bool address_parser_data_set_rewind(address_parser_data_set_t *self) {
 }
 
 
-bool address_parser_all_normalizations(cstring_array *strings, char *str, char *language) {
-    if (strings == NULL) return false;
+bool address_parser_all_normalizations(libpostal_t *instance, cstring_array *strings, char *str, char *language) {
+    if (strings == NULL || instance == NULL) return false;
 
-    char *lowercased = normalize_string_utf8(str, ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS);
+    char *lowercased = normalize_string_utf8(instance->numex_table, str, ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS);
     if (lowercased == NULL) {
         return false;
     }
 
     cstring_array_add_string(strings, lowercased);
 
-    char *latin_normalized = normalize_string_latin(str, strlen(str), ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS_LATIN);
+    char *latin_normalized = normalize_string_latin(instance, str, strlen(str), ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS_LATIN);
     if (latin_normalized != NULL) {
         if (!string_equals(latin_normalized, lowercased)) {
             cstring_array_add_string(strings, latin_normalized);
@@ -49,11 +49,11 @@ bool address_parser_all_normalizations(cstring_array *strings, char *str, char *
     char *transliterated = NULL;
     char *transliterated_utf8_normalized = NULL;
 
-    foreach_transliterator(SCRIPT_LATIN, language, trans_name, {
+    foreach_transliterator(instance->trans_table, SCRIPT_LATIN, language, trans_name, {
         if (!string_equals(trans_name, LATIN_ASCII)) {
-            transliterated = transliterate(trans_name, str, strlen(str));
+            transliterated = transliterate(instance->trans_table, trans_name, str, strlen(str));
             if (transliterated != NULL) {
-                transliterated_utf8_normalized = normalize_string_utf8(transliterated, ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS_UTF8);
+                transliterated_utf8_normalized = normalize_string_utf8(instance->numex_table, transliterated, ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS_UTF8);
                 if (transliterated_utf8_normalized != NULL) {
                     if (!string_equals(transliterated_utf8_normalized, lowercased)) {
                         cstring_array_add_string(strings, transliterated_utf8_normalized);
@@ -70,7 +70,7 @@ bool address_parser_all_normalizations(cstring_array *strings, char *str, char *
         }
     })
 
-    char *utf8_normalized = normalize_string_utf8(str, ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS_UTF8);
+    char *utf8_normalized = normalize_string_utf8(instance->numex_table, str, ADDRESS_PARSER_NORMALIZE_STRING_OPTIONS_UTF8);
     if (utf8_normalized != NULL) {
         if (!string_equals(utf8_normalized, lowercased)) {
             cstring_array_add_string(strings, utf8_normalized);
@@ -191,7 +191,7 @@ bool address_parser_data_set_tokenize_line(address_parser_data_set_t *self, char
 
 
 
-bool address_parser_data_set_next(address_parser_data_set_t *self) {
+bool address_parser_data_set_next(libpostal_t *instance, address_parser_data_set_t *self) {
     if (self == NULL) return false;
 
     cstring_array *fields = NULL;
@@ -227,7 +227,7 @@ bool address_parser_data_set_next(address_parser_data_set_t *self) {
 
         cstring_array_clear(self->normalizations);
 
-        if (!address_parser_all_normalizations(self->normalizations, address, language) || cstring_array_num_strings(self->normalizations) == 0) {
+        if (!address_parser_all_normalizations(instance, self->normalizations, address, language) || cstring_array_num_strings(self->normalizations) == 0) {
             log_error("Error during string normalization\n");
             return false;
         }

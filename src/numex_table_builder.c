@@ -22,17 +22,14 @@ int main(int argc, char **argv) {
 
     if (f == NULL) {
         log_error("File could not be opened, ensure directory exists: %s\n", filename);
-        numex_module_teardown();
         exit(1);
     }
 
-    if (!numex_module_init()) {
+    numex_table_t *numex_table = numex_module_init();
+    if (numex_table == NULL) {
         log_error("Numex table initialization unsuccessful\n");
-        numex_module_teardown();
         exit(1);
     }
-
-    numex_table_t *numex_table = get_numex_table();
 
     size_t num_languages = sizeof(numex_languages) / sizeof(numex_language_source_t);
 
@@ -41,7 +38,7 @@ int main(int argc, char **argv) {
 
     if (num_source_keys != num_source_rules) {
         log_error("num_sourcE_keys != num_source_rules, aborting\n");
-        numex_module_teardown();
+        numex_module_teardown(&numex_table);
         exit(1);
     }
 
@@ -180,20 +177,20 @@ int main(int argc, char **argv) {
         }
 
         numex_language_t *language = numex_language_new(name, lang_source.whole_tokens_only, lang_source.rule_index, lang_source.num_rules, lang_source.ordinal_indicator_index, lang_source.num_ordinal_indicators);
-        numex_table_add_language(language);
+        numex_table_add_language(numex_table, language);
 
     }
 
     char_array_destroy(key);
 
-    if (!numex_table_write(f)) {
+    if (!numex_table_write(numex_table, f)) {
         log_error("Error writing numex table\n");
         exit(1);
     }
 
     fclose(f);
 
-    numex_module_teardown();
+    numex_module_teardown(&numex_table);
 
     log_info("Done\n");
 }

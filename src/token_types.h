@@ -1,10 +1,9 @@
 #ifndef TOKEN_TYPES_H
 #define TOKEN_TYPES_H
 
-#include "libpostal.h"
+#include "libpostal_types.h"
 
 // Doing these as #defines so we can duplicate the values exactly in Python
-
 
 #define END LIBPOSTAL_TOKEN_TYPE_END
 

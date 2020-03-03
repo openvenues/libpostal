@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "libpostal.h"
 #include "language_classifier.h"
 
 typedef struct place {
@@ -32,7 +31,7 @@ typedef struct place {
     char *website;
 } place_t;
 
-language_classifier_response_t *place_languages(size_t num_components, char **labels, char **values);
+language_classifier_response_t *place_languages(language_classifier_t *classifier, libpostal_t *instance, size_t num_components, char **labels, char **values);
 
 place_t *place_new(void);
 

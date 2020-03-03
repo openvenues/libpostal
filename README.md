@@ -211,12 +211,14 @@ And an example with the C API:
 
 int main(int argc, char **argv) {
     // Setup (only called once at the beginning of your program)
-    if (!libpostal_setup() || !libpostal_setup_parser()) {
+    libpostal_t *instance = libpostal_setup();
+    address_parser_t *parser = libpostal_setup_parser();
+    if (instance == NULL || parser == NULL) {
         exit(EXIT_FAILURE);
     }
 
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
-    libpostal_address_parser_response_t *parsed = libpostal_parse_address("781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", options);
+    libpostal_address_parser_response_t *parsed = libpostal_parse_address(parser, instance, "781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", options);
 
     for (size_t i = 0; i < parsed->num_components; i++) {
         printf("%s: %s\n", parsed->labels[i], parsed->components[i]);
@@ -226,8 +228,8 @@ int main(int argc, char **argv) {
     libpostal_address_parser_response_destroy(parsed);
 
     // Teardown (only called once at the end of your program)
-    libpostal_teardown();
-    libpostal_teardown_parser();
+    libpostal_teardown(&instance);
+    libpostal_teardown_parser(&parser);
 }
 ```
 
@@ -308,13 +310,15 @@ The C API equivalent is a few more lines, but still fairly simple:
 
 int main(int argc, char **argv) {
     // Setup (only called once at the beginning of your program)
-    if (!libpostal_setup() || !libpostal_setup_language_classifier()) {
+    libpostal_t *instance = libpostal_setup();
+    language_classifier_t *classifier = libpostal_setup_language_classifier();
+    if (instance == NULL || classifier == NULL) {
         exit(EXIT_FAILURE);
     }
 
     size_t num_expansions;
     libpostal_normalize_options_t options = libpostal_get_default_options();
-    char **expansions = libpostal_expand_address("Quatre-vingt-douze Ave des Champs-Élysées", options, &num_expansions);
+    char **expansions = libpostal_expand_address(classifier, instance, "Quatre-vingt-douze Ave des Champs-Élysées", options, &num_expansions);
 
     for (size_t i = 0; i < num_expansions; i++) {
         printf("%s\n", expansions[i]);
@@ -324,8 +328,8 @@ int main(int argc, char **argv) {
     libpostal_expansion_array_destroy(expansions, num_expansions);
 
     // Teardown (only called once at the end of your program)
-    libpostal_teardown();
-    libpostal_teardown_language_classifier();
+    libpostal_teardown(&instance);
+    libpostal_teardown_language_classifier(&classifier);
 }
 ```
 
@@ -625,7 +629,7 @@ libpostal is written in modern, legible, C99 and uses the following conventions:
 - Generic containers (via [klib](https://github.com/attractivechaos/klib)) whenever possible
 - Data structrues take advantage of sparsity as much as possible
 - Efficient double-array trie implementation for most string dictionaries
-- Cross-platform as much as possible, particularly for *nix
+- Cross-platform as much as possible, particularly for \*nix
 
 Preprocessing (Python)
 ----------------------

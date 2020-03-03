@@ -14,8 +14,8 @@
 #define LANGUAGE_CLASSIFIER_NORMALIZE_STRING_OPTIONS NORMALIZE_STRING_LOWERCASE | NORMALIZE_STRING_LATIN_ASCII | NORMALIZE_STRING_REPLACE_HYPHENS
 #define LANGUAGE_CLASSIFIER_NORMALIZE_TOKEN_OPTIONS NORMALIZE_TOKEN_DELETE_FINAL_PERIOD | NORMALIZE_TOKEN_DELETE_ACRONYM_PERIODS | NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC
 
-inline char *language_classifier_normalize_string(char *str) {
-    return normalize_string_latin(str, strlen(str), LANGUAGE_CLASSIFIER_NORMALIZE_STRING_OPTIONS);
+inline char *language_classifier_normalize_string(libpostal_t *instance, char *str) {
+    return normalize_string_latin(instance, str, strlen(str), LANGUAGE_CLASSIFIER_NORMALIZE_STRING_OPTIONS);
 }
 
 
@@ -183,23 +183,22 @@ static void add_suffix_phrase_feature(khash_t(str_double) *features, char *prefi
     if (feature_array->n <= 1) return;
     char *feature = char_array_get_string(feature_array);
     feature_counts_add(features, feature, 1.0);
-
 }
 
 
-static void add_token_features(khash_t(str_double) *features, char *prefix, char_array *feature_array, char *str, token_t token) {
+static void add_token_features(address_dictionary_t *address_dict, khash_t(str_double) *features, char *prefix, char_array *feature_array, char *str, token_t token) {
     // Non-words don't convey any language information
     // TODO: ordinal number suffixes may be worth investigating
     if (!is_word_token(token.type)) {
         return;
     }
 
-    phrase_t prefix_phrase = search_address_dictionaries_prefix(str + token.offset, token.len, NULL);
+    phrase_t prefix_phrase = search_address_dictionaries_prefix(address_dict, str + token.offset, token.len, NULL);
     if (prefix_phrase.len > 0 && prefix_phrase.len < token.len) {
         add_prefix_phrase_feature(features, prefix, feature_array, str, prefix_phrase, token);
     }
 
-    phrase_t suffix_phrase = search_address_dictionaries_suffix(str + token.offset, token.len, NULL);
+    phrase_t suffix_phrase = search_address_dictionaries_suffix(address_dict, str + token.offset, token.len, NULL);
     if (suffix_phrase.len > 0 && suffix_phrase.len < token.len) {
         add_suffix_phrase_feature(features, prefix, feature_array, str, suffix_phrase, token);
     }
@@ -222,7 +221,7 @@ static void add_script_feature(khash_t(str_double) *features, char *prefix, char
 }
 
 
-khash_t(str_double) *extract_language_features(char *str, char *country, token_array *tokens, char_array *feature_array) {
+khash_t(str_double) *extract_language_features(address_dictionary_t *address_dict, char *str, char *country, token_array *tokens, char_array *feature_array) {
     if (str == NULL || tokens == NULL || feature_array == NULL) return NULL;
 
     char *feature;
@@ -275,7 +274,7 @@ khash_t(str_double) *extract_language_features(char *str, char *country, token_a
             char *phrase = NULL;
 
             // Search address dictionaries for any language
-            phrase_array *phrases = search_address_dictionaries_tokens(normalized_str, tokens, NULL);
+            phrase_array *phrases = search_address_dictionaries_tokens(address_dict, normalized_str, tokens, NULL);
             log_debug("normalized_str=%s\n", normalized_str);
 
             size_t i, j;
@@ -293,7 +292,7 @@ khash_t(str_double) *extract_language_features(char *str, char *country, token_a
             for (j = 0; j < tokens->n; j++) {
                 token = tokens->a[j];
                 
-                add_token_features(features, prefix, feature_array, normalized_str, token);
+                add_token_features(address_dict, features, prefix, feature_array, normalized_str, token);
             }
 
             if (str_script.script != SCRIPT_LATIN) {

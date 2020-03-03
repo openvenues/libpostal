@@ -12,7 +12,7 @@ static inline bool crf_get_state_trans_feature_id(crf_t *self, char *feature, ui
     return trie_get_data(self->state_trans_features, feature, feature_id);
 }
 
-bool crf_tagger_score(crf_t *self, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features) {
+bool crf_tagger_score(address_dictionary_t *address_dict, crf_t *self, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features) {
     if (self == NULL || feature_function == NULL || tokenized == NULL ) {
         return false;
     }
@@ -30,7 +30,7 @@ bool crf_tagger_score(crf_t *self, void *tagger, void *tagger_context, cstring_a
         cstring_array_clear(features);
         cstring_array_clear(prev_tag_features);
 
-        if (!feature_function(tagger, tagger_context, tokenized, t)) {
+        if (!feature_function(address_dict, tagger, tagger_context, tokenized, t)) {
             log_error("Could not add address parser features\n");
             return false;
         }
@@ -97,8 +97,8 @@ bool crf_tagger_score(crf_t *self, void *tagger, void *tagger_context, cstring_a
     return true;
 }
 
-bool crf_tagger_score_viterbi(crf_t *self, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, double *score, bool print_features) {
-    if (!crf_tagger_score(self, tagger, tagger_context, features, prev_tag_features, feature_function, tokenized, print_features)) {
+bool crf_tagger_score_viterbi(address_dictionary_t *address_dict, crf_t *self, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, double *score, bool print_features) {
+    if (!crf_tagger_score(address_dict, self, tagger, tagger_context, features, prev_tag_features, feature_function, tokenized, print_features)) {
         return false;
     }
 
@@ -113,11 +113,11 @@ bool crf_tagger_score_viterbi(crf_t *self, void *tagger, void *tagger_context, c
 }
 
 
-bool crf_tagger_predict(crf_t *self, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *labels, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features) {
+bool crf_tagger_predict(address_dictionary_t *address_dict, crf_t *self, void *tagger, void *context, cstring_array *features, cstring_array *prev_tag_features, cstring_array *labels, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features) {
     double score;
 
     if (labels == NULL) return false;
-    if (!crf_tagger_score_viterbi(self, tagger, context, features, prev_tag_features, feature_function, tokenized, &score, print_features)) {
+    if (!crf_tagger_score_viterbi(address_dict, self, tagger, context, features, prev_tag_features, feature_function, tokenized, &score, print_features)) {
         return false;
     }
 
