@@ -1,0 +1,13 @@
+name: docker builds
+on:
+  push:
+
+jobs:
+  build:
+  name: Build inside docker container
+  steps:
+  - name: build
+    env:
+      DOCKER_IMAGE_NAME: stuart/libpostal
+    run: |
+      docker build -t ${DOCKER_IMAGE_NAME} .
