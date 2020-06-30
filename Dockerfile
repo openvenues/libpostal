@@ -20,7 +20,7 @@ WORKDIR /output
 RUN tar -zcf address_parser.tgz usr/share/libpostal/address_parser && \
     rm -rf /output/usr/share/libpostal/address_parser
 # build deb package
-RUN export DEB_PACKAGE_VERSION=$(sed 's|^v||' /src/versions/parser)+git$(git rev-parse HEAD | head -c7) && \
+RUN export DEB_PACKAGE_VERSION=$(sed 's|^v||' /src/versions/parser)+git$(bash -c 'cd /src; git rev-parse HEAD | head -c7') && \
     envsubst '${DEB_PACKAGE_VERSION}' < /src/assets/fpm-deb-scripts/postinst.sh.tpl > /src/assets/fpm-deb-scripts/postinst.sh && \
     fpm -n ${DEB_PACKAGE_NAME} \
         -v ${DEB_PACKAGE_VERSION} \
