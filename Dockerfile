@@ -21,7 +21,7 @@ RUN tar -zcf address_parser.tgz usr/share/libpostal/address_parser && \
     rm -rf /output/usr/share/libpostal/address_parser
 # build deb package
 RUN export DEB_PACKAGE_VERSION=$(sed 's|^v||' versions/base_data)+git$(git rev-parse HEAD | head -c7) && \
-    envsubst '${DEB_PACKAGE_VERSION}' < /src/assets/fpm-deb-scripts/postinst.sh.tpl > /src/assets/fpm-deb-scripts/postinst.sh
+    envsubst '${DEB_PACKAGE_VERSION}' < /src/assets/fpm-deb-scripts/postinst.sh.tpl > /src/assets/fpm-deb-scripts/postinst.sh && \
     fpm -n ${DEB_PACKAGE_NAME} \
         -v ${DEB_PACKAGE_VERSION} \
         --description "${DEB_PACKAGE_DESC}" \
