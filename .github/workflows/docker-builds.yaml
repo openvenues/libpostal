@@ -10,7 +10,7 @@ jobs:
     - name: Make git short-commit available for the different steps
       id: metadata
       run: |
-        echo "::set-output name=commit::$(echo ${GITHUB_SHA:7})"
+        echo "::set-output name=commit::$(echo ${GITHUB_SHA} | head -c7)"
         echo "::set-output name=version::$(sed 's|^v||' versions/parser)"
     - name: Build
       env:
