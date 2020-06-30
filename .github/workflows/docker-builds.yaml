@@ -6,6 +6,7 @@ jobs:
     name: Build inside docker container
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - name: build
       env:
         DOCKER_IMAGE_NAME: stuart/libpostal
