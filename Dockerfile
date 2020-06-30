@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 ARG DEB_PACKAGE_NAME="libpostal"
 ARG DEB_PACKAGE_DESC="Debian wrapping for https://github.com/openvenues/libpostal"
 ARG DEB_PACKAGE_VERSION="0.0.1"
