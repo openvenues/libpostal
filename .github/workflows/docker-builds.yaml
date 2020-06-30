@@ -17,8 +17,7 @@ jobs:
         docker build -t ${DOCKER_IMAGE_NAME} .
         CID=$(docker create ${DOCKER_IMAGE_NAME})
         mkdir output
-        docker cp ${CID}:/output/*deb output/
-        docker cp ${CID}:/output/*tgz output/
+        docker cp ${CID}:/output ./
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
       with:
