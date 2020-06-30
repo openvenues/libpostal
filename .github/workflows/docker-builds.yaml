@@ -10,4 +10,7 @@ jobs:
       env:
         DOCKER_IMAGE_NAME: stuart/libpostal
       run: |
+        pwd
+        ls -hal
+        git status -sb
         docker build -t ${DOCKER_IMAGE_NAME} .
