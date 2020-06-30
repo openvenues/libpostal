@@ -25,6 +25,10 @@ jobs:
         name: output-artifacts
         path: output
   release:
+    name: Release OS packages+data on GH Releases
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Download artifacts
         uses: actions/download-artifact@v1
         with:
