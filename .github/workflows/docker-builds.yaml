@@ -45,7 +45,7 @@ jobs:
           draft: false
           prerelease: false
       - name: Upload .deb package release asset
-        id: upload-release-asset 
+        id: upload-deb-release-asset 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -55,7 +55,7 @@ jobs:
           asset_name: libpostal_1.0.0+{{ github.ref }}_amd64.deb #FIXME: find a way to dynamically set upstream version
           asset_content_type: application/vnd.debian.binary-package
       - name: Upload data release asset
-        id: upload-release-asset 
+        id: upload-data-release-asset 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
