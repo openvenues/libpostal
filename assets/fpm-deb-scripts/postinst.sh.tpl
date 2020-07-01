@@ -5,7 +5,11 @@ after_upgrade() {
 
 after_install() {
   echo "Installing ${GH_RELEASE}" data...
-  curl -sL https://github.com/StuartApp/libpostal/releases/download/${GH_RELEASE}/libpostal_${GH_RELEASE}.tar.gz
+  source /etc/lsb-release
+  if [ "${DISTRIB_ID}" == "Ubuntu" ]
+  then
+    curl -sL https://github.com/StuartApp/libpostal/releases/download/${GH_RELEASE}/ubuntu-${DISTRIB_RELEASE}-data-${GH_RELEASE}.tar.gz | tar -C / -zxf
+  fi
 }
 
 export GH_RELEASE=${DEB_PACKAGE_VERSION}
