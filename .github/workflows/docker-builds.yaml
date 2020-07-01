@@ -27,7 +27,7 @@ jobs:
           docker build \
             --build-arg UBUNTU_VERSION=${ubuver} \
             -t ${DOCKER_IMAGE_NAME}:${ubuver} .
-            CID=$(docker create ${DOCKER_IMAGE_NAME})
+            CID=$(docker create ${DOCKER_IMAGE_NAME}:${ubuver})
             docker cp ${CID}:/output ./output-ubuntu-${ubuver}
         done
     - name: Create Release
