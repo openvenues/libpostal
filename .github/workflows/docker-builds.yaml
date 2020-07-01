@@ -17,12 +17,12 @@ jobs:
     - name: Build
       env:
         DOCKER_IMAGE_NAME: stuart/libpostal
-        UBUNTU_VERSIONS: 16.04 18.04
+        UBUNTU_VERSIONS: "16.04 18.04"
       run: |
         pwd
         ls -hal
         git status -sb
-        for ubuver in ${UBUNTU_VERSION}
+        for ubuver in ${UBUNTU_VERSIONS}
         do
           docker build \
             --build-arg UBUNTU_VERSION=${ubuver} \
