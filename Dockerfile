@@ -1,4 +1,5 @@
-FROM ubuntu:18.04
+ARG UBUNTU_VERSION="18.04"
+FROM ubuntu:${UBUNTU_VERSION}
 ARG DEB_PACKAGE_NAME="libpostal"
 ARG DEB_PACKAGE_DESC="Debian wrapping for https://github.com/openvenues/libpostal"
 ARG DEB_PACKAGE_VERSION="0.0.1"
@@ -17,8 +18,8 @@ RUN bash bootstrap.sh && \
     make install
 # move out big files from the package
 WORKDIR /output
-RUN tar -zcf address_parser.tgz usr/share/libpostal/address_parser && \
-    rm -rf /output/usr/share/libpostal/address_parser
+RUN tar -zcf data.tgz usr/share/libpostal && \
+    rm -rf /output/usr/share/libpostal/*
 # build deb package
 RUN export DEB_PACKAGE_VERSION=$(sed 's|^v||' /src/versions/parser)+git$(bash -c 'cd /src; git rev-parse HEAD | head -c7') && \
     envsubst '${DEB_PACKAGE_VERSION}' < /src/assets/fpm-deb-scripts/postinst.sh.tpl > /src/assets/fpm-deb-scripts/postinst.sh && \
