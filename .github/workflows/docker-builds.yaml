@@ -43,7 +43,7 @@ jobs:
         draft: false
         prerelease: false
     - name: Upload .deb package release asseta (ubuntu-16.04)
-      id: upload-deb-release-asset-ubuntu-16.04
+      id: upload-deb-release-asset-ubuntu-16-04
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -53,7 +53,7 @@ jobs:
         asset_name: ubuntu-16.04-libpostal_${{ steps.metadata.outputs.version }}+git${{ steps.metadata.outputs.commit }}_amd64.deb #FIXME: find a way to dynamically set upstream version
         asset_content_type: application/vnd.debian.binary-package
     - name: Upload data release asset (ubuntu-16.04)
-      id: upload-data-release-asset-ubuntu-16.04
+    id: upload-data-release-asset-ubuntu-16-04
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -63,7 +63,7 @@ jobs:
         asset_name: ubuntu-16.04-data-${{ steps.metadata.outputs.version }}-${{ steps.metadata.outputs.commit }}.tar.gz #FIXME: find a way to dynamically set upstream version
         asset_content_type: application/tar+gzip
     - name: Upload .deb package release asseta (ubuntu-18.04)
-      id: upload-deb-release-asset-ubuntu-18.04
+      id: upload-deb-release-asset-ubuntu-18-04
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -73,7 +73,7 @@ jobs:
         asset_name: ubuntu-18.04-libpostal_${{ steps.metadata.outputs.version }}+git${{ steps.metadata.outputs.commit }}_amd64.deb #FIXME: find a way to dynamically set upstream version
         asset_content_type: application/vnd.debian.binary-package
     - name: Upload data release asset (ubuntu-18.04)
-      id: upload-data-release-asset-ubuntu-18.04
+      id: upload-data-release-asset-ubuntu-18-04
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
