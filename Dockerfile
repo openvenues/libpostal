@@ -1,5 +1,5 @@
-ARG UBUNTU_VERSION="18.04"
-FROM ubuntu:${UBUNTU_VERSION}
+ARG BASE_IMAGE="ubuntu:18.04"
+FROM ${BASE_IMAGE}
 ARG DEB_PACKAGE_NAME="libpostal"
 ARG DEB_PACKAGE_DESC="Debian wrapping for https://github.com/openvenues/libpostal"
 ARG DEB_PACKAGE_VERSION="0.0.1"
