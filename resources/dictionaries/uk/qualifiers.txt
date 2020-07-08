@@ -6,3 +6,5 @@ kvartal|kvart|kv|kv-l
 oblast|obl
 район|р-н
 raion|r-n
+місто|м
+misto|m
