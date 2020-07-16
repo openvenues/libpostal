@@ -1,10 +1,14 @@
 #!/bin/sh
 
 download_data() {
-  . /etc/lsb-release
+  if [ -e /etc/lsb-release ]; then . /etc/lsb-release; fi
+  if [ -e /etc/os-release ]; then . /etc/os-release; fi
   if [ "${DISTRIB_ID}" = "Ubuntu" ]
   then
-    curl -sL https://github.com/StuartApp/libpostal/releases/download/${GH_RELEASE}/ubuntu-${DISTRIB_RELEASE}-data-${GH_RELEASE}.tar.gz | tar -C / -zxf -
+    curl -sL https://github.com/StuartApp/libpostal/releases/download/${GH_RELEASE}/ubuntu_${DISTRIB_RELEASE}-data.tgz | tar -C / -zxf -
+  else
+    # we assume it's debian
+    curl -sL https://github.com/StuartApp/libpostal/releases/download/${GH_RELEASE}/debian_${VERSION_ID}-data.tgz | tar -C / -zxf -
   fi
 }
 
@@ -16,10 +20,12 @@ after_upgrade() {
 after_install() {
   echo "Installing data package '${GH_RELEASE}' from GH releases..."
   download_data
+  # workaround ruby_postal not using default include path
+  ln -nfs /usr/include/libpostal /usr/local/include/libpostal
 }
 
 export PACKAGE_VERSION=${DEB_PACKAGE_VERSION}
-export GH_RELEASE=$(echo ${PACKAGE_VERSION} | sed 's|+git|-|')
+export GH_RELEASE=$(echo ${PACKAGE_VERSION} | sed 's|-.+git|-|')
 
 if [ "${1}" = "configure" -a -z "${2}" ] || \
    [ "${1}" = "abort-remove" ]
