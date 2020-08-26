@@ -1,4 +1,5 @@
 #include "crf_context.h"
+#include "float_utils.h"
 
 crf_context_t *crf_context_new(int flag, size_t L, size_t T) {
     crf_context_t *context = malloc(sizeof(crf_context_t));
