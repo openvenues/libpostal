@@ -29,12 +29,6 @@
 #define	RAND48_MULT_2	(0x0005)
 #define	RAND48_ADD	    (0x000b)
 
-unsigned short _rand48_seed[3];
-
-unsigned short _rand48_mult[3];
-
-unsigned short _rand48_add;
-
 void _dorand48(unsigned short xseed[3]);
 
 double erand48(unsigned short xseed[3]);
