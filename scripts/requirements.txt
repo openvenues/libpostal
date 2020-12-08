@@ -1,7 +1,7 @@
 boto3==1.4.0
 botocore==1.4.53
 Fiona==1.6.3.post1
-PyYAML==3.11
+PyYAML>=4.2b1
 Rtree==0.8.2
 Shapely==1.5.14
 Unidecode==0.4.19
