@@ -150,8 +150,8 @@ cstring_array *expanded_component_combined(char *input, libpostal_normalize_opti
 
     size_t num_root_expansions = 0;
     cstring_array *root_expansions = expand_address_root(input, options, &num_root_expansions);
-    
-    if (num_root_expansions == 0) {
+
+    if (!options.root || num_root_expansions == 0) {
         cstring_array_destroy(root_expansions);
         *n = num_expansions;
         return expansions;
@@ -203,7 +203,7 @@ cstring_array *expanded_component_combined(char *input, libpostal_normalize_opti
         cstring_array_destroy(expansions);
 
         return all_expansions;
-    }       
+    }
 }
 
 static inline cstring_array *expanded_component_root_with_fallback(char *input, libpostal_normalize_options_t options, size_t *n) {
@@ -399,7 +399,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
                 } else {
                     add_string_to_array_if_unique(token_str, strings, unique_strings);
                 }
-            } 
+            }
 
             prev_token = token;
         }
@@ -518,7 +518,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
                             last_was_stopword = is_stopword;
                         }
                         last_was_punctuation = false;
-                    } 
+                    }
                 } else if (is_punct) {
                     log_debug("punctuation\n");
                     last_was_punctuation = true;
@@ -670,6 +670,8 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
 
     language_classifier_response_t *lang_response = NULL;
+
+    normalize_options.root = options.root;
 
     if (num_languages == 0) {
         lang_response = place_languages(num_components, labels, values);

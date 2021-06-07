@@ -40,7 +40,8 @@ static libpostal_normalize_options_t LIBPOSTAL_DEFAULT_OPTIONS = {
         .drop_english_possessives = true,
         .delete_apostrophes = true,
         .expand_numex = true,
-        .roman_numerals = true
+        .roman_numerals = true,
+        .root = true
 };
 
 libpostal_normalize_options_t libpostal_get_default_options(void) {
@@ -78,7 +79,8 @@ static libpostal_near_dupe_hash_options_t LIBPOSTAL_NEAR_DUPE_HASH_DEFAULT_OPTIO
     .geohash_precision = DEFAULT_NEAR_DUPE_GEOHASH_PRECISION,
     .name_and_address_keys = true,
     .name_only_keys = false,
-    .address_only_keys = false
+    .address_only_keys = false,
+    .root = true
 };
 
 libpostal_near_dupe_hash_options_t libpostal_get_near_dupe_hash_default_options(void) {
