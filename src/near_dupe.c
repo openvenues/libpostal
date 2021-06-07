@@ -671,8 +671,6 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
 
     language_classifier_response_t *lang_response = NULL;
 
-    normalize_options.root = options.root;
-
     if (num_languages == 0) {
         lang_response = place_languages(num_components, labels, values);
 
@@ -707,6 +705,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
         remove_spaces = true;
         log_debug("Doing street expansions for %s\n", place->street);
         normalize_options.address_components = LIBPOSTAL_ADDRESS_STREET | LIBPOSTAL_ADDRESS_ANY;
+        normalize_options.root = options.root;
         street_expansions = expanded_component_combined(place->street, normalize_options, remove_spaces, &num_street_expansions);
         log_debug("Got %zu street expansions\n", num_street_expansions);
     }
