@@ -7,6 +7,7 @@
 #include "language_classifier_io.h"
 #include "string_utils.h"
 #include "trie_utils.h"
+#include "transliterate.h"
 
 
 double test_accuracy(char *filename) {
