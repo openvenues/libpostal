@@ -106,7 +106,15 @@ sudo apt-get install curl autoconf automake libtool pkg-config
 sudo yum install curl autoconf automake libtool pkgconfig
 ```
 
-**On Mac OSX**
+**On macOS**
+
+Install with one command via [MacPorts](https://www.macports.org/):
+```
+port install libpostal
+```
+
+Or as follows with [Homebrew](https://brew.sh/):
+
 ```
 brew install curl autoconf automake libtool pkg-config
 ```
