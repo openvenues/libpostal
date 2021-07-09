@@ -209,7 +209,6 @@ typedef struct address_parser {
         averaged_perceptron_t *ap;
         crf_t *crf;
     } model;
-    address_parser_context_t *context;
     trie_t *vocab;
     trie_t *phrases;
     address_parser_types_array *phrase_types;
