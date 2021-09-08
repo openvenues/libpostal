@@ -116,9 +116,15 @@ Then to install the C library:
 ```
 git clone https://github.com/openvenues/libpostal
 cd libpostal
+
+# skip if installing for the first time
 make distclean
+
 ./bootstrap.sh
+
+# omit --datadir flag to install data in current directory
 ./configure --datadir=[...some dir with a few GB of space...]
+
 make -j4
 sudo make install
 
