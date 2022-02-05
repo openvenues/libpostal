@@ -8,3 +8,4 @@ otoyolu
 sokak|sk|sok
 sokağı|sokagi|sk|sok
 yolu|yol
+sahil yolu|sahilyolu|sahıl yolu|sahılyolu
