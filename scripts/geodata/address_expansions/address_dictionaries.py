@@ -159,7 +159,7 @@ class AddressPhraseDictionaries(object):
                 self.language_dictionaries[language].append(dictionary_name)
 
                 path = os.path.join(language_dir, filename)
-                for i, line in enumerate(open(path)):
+                for i, line in enumerate(open(path, encoding="utf8")):
                     line = safe_decode(line.rstrip())
                     if not line.strip():
                         continue
@@ -211,7 +211,7 @@ def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_
                 for i, p in enumerate(phrases):
                     language_canonical_dictionaries[p, canonical_index if i > 0 else -1].append(dictionary_type)
 
-        for (phrase, canonical_index), dictionary_types in language_canonical_dictionaries.iteritems():
+        for (phrase, canonical_index), dictionary_types in language_canonical_dictionaries.items():
             max_dictionary_types = max(max_dictionary_types, len(dictionary_types))
             rule_template = address_expansion_rule_template.format(phrase=quote_string(phrase),
                                                                    num_dictionaries=str(len(dictionary_types)),
@@ -227,7 +227,7 @@ def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_
     header = address_expansion_rule_header_template.format(
         max_dictionary_types=str(max_dictionary_types)
     )
-    out = open(header_file, 'w')
+    out = open(header_file, 'wb')
     out.write(safe_encode(header))
     out.close()
 
@@ -240,7 +240,7 @@ def create_address_expansion_rules_file(base_dir=ADDRESS_EXPANSIONS_DIR, output_
     '''.join(address_languages),
     )
 
-    out = open(output_file, 'w')
+    out = open(output_file, 'wb')
     out.write(safe_encode(data_file))
     out.close()
 
