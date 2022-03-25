@@ -204,8 +204,8 @@ typedef struct libpostal_near_dupe_hash_options {
     bool address_only_keys;
 } libpostal_near_dupe_hash_options_t;
 
-
 LIBPOSTAL_EXPORT libpostal_near_dupe_hash_options_t libpostal_get_near_dupe_hash_default_options(void);
+LIBPOSTAL_EXPORT char **libpostal_near_dupe_name_hashes(char *name, libpostal_normalize_options_t normalize_options, size_t *num_hashes);
 LIBPOSTAL_EXPORT char **libpostal_near_dupe_hashes(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t *num_hashes);
 LIBPOSTAL_EXPORT char **libpostal_near_dupe_hashes_languages(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t num_languages, char **languages, size_t *num_hashes);
 
