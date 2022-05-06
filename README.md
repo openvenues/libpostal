@@ -118,7 +118,7 @@ If you're using an M1 Mac, add `--disable-sse2` to the `./configure` command. Th
 ```
 git clone https://github.com/openvenues/libpostal
 cd libpostal
-make distclean
+[ -f Makefile ] && make distclean
 ./bootstrap.sh
 ./configure --datadir=[...some dir with a few GB of space...]
 make -j4
