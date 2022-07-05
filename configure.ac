@@ -92,18 +92,23 @@ case "$host_cpu" in
      ;;
 esac
 
-AC_ARG_ENABLE([hardware-optimizations],
-   AS_HELP_STRING([[[--disable-hardware-optimizations]]],
-      [Disable hardware optimizations (Intel SSE2 / ARM NEON)]),
-   [
-     # disable hardware optimization on all systems:
-     enable_arm_neon=no
-     AC_DEFINE([ARM_NEON], [0],
-       [Disable ARM_NEON optimizations])
-     enable_intel_sse=no
-     AC_DEFINE([INTEL_SSE], [0],
-       [Disable INTEL_SSE optimizations])
-   ])
+AC_ARG_ENABLE([neon],
+  AS_HELP_STRING([[[--disable-neon]]],
+    [Disable ARM NEON hardware optimizations]),
+  [
+   enable_arm_neon=no
+   AC_DEFINE([ARM_NEON], [0],
+     [Disable ARM_NEON optimizations])
+  ])
+
+AC_ARG_ENABLE([sse2],
+  AS_HELP_STRING([[[--disable-sse2]]],
+    [Disable Intel SSE2 hardware optimizations]),
+  [
+    enable_intel_sse=no
+    AC_DEFINE([INTEL_SSE], [0],
+      [Disable INTEL_SSE optimizations])
+  ])
 
 SIMDFLAGS=""
 
