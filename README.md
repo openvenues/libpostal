@@ -98,17 +98,17 @@ Before you install, make sure you have the following prerequisites:
 
 **On Ubuntu/Debian**
 ```
-sudo apt-get install curl autoconf automake libtool pkg-config
+sudo apt-get install curl tar autoconf automake libtool pkg-config
 ```
 
 **On CentOS/RHEL**
 ```
-sudo yum install curl autoconf automake libtool pkgconfig
+sudo yum install curl tar autoconf automake libtool pkgconfig
 ```
 
 **On Mac OSX**
 ```
-brew install curl autoconf automake libtool pkg-config
+brew install autoconf automake libtool pkg-config
 ```
 
 Then to install the C library:
