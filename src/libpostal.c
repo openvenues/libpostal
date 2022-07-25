@@ -80,7 +80,7 @@ static libpostal_near_dupe_hash_options_t LIBPOSTAL_NEAR_DUPE_HASH_DEFAULT_OPTIO
     .name_and_address_keys = true,
     .name_only_keys = false,
     .address_only_keys = false,
-    .root = true
+    .street_root = true
 };
 
 libpostal_near_dupe_hash_options_t libpostal_get_near_dupe_hash_default_options(void) {

@@ -205,7 +205,7 @@ typedef struct libpostal_near_dupe_hash_options {
     bool name_and_address_keys;
     bool name_only_keys;
     bool address_only_keys;
-    bool root;
+    bool street_root;
 } libpostal_near_dupe_hash_options_t;
 
 LIBPOSTAL_EXPORT libpostal_near_dupe_hash_options_t libpostal_get_near_dupe_hash_default_options(void);
