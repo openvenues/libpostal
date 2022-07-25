@@ -5,7 +5,7 @@ CFLAGS_O2 = $(CFLAGS_BASE) -O2
 CFLAGS_O3 = $(CFLAGS_BASE) -O3
 DEFAULT_INCLUDES = -I.. -I/usr/local/include
 
-CFLAGS = $(CFLAGS_BASE)
+CFLAGS = $(SIMDFLAGS) $(CFLAGS_BASE)
 
 TESTS = test_libpostal
 noinst_PROGRAMS = test_libpostal

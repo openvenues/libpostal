@@ -87,6 +87,17 @@ libpostal_near_dupe_hash_options_t libpostal_get_near_dupe_hash_default_options(
     return LIBPOSTAL_NEAR_DUPE_HASH_DEFAULT_OPTIONS;
 }
 
+char **libpostal_near_dupe_name_hashes(char *name, libpostal_normalize_options_t normalize_options, size_t *num_hashes) {
+    cstring_array *strings = name_word_hashes(name, normalize_options);
+    if (strings == NULL) {
+        *num_hashes = 0;
+        return NULL;
+    }
+    *num_hashes = cstring_array_num_strings(strings);
+    return cstring_array_to_strings(strings);
+}
+
+
 char **libpostal_near_dupe_hashes(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t *num_hashes) {
     cstring_array *strings = near_dupe_hashes(num_components, labels, values, options);
     if (strings == NULL) {

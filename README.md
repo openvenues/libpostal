@@ -116,6 +116,7 @@ Then to install the C library:
 ```
 git clone https://github.com/openvenues/libpostal
 cd libpostal
+make distclean
 ./bootstrap.sh
 ./configure --datadir=[...some dir with a few GB of space...]
 make -j4
@@ -382,6 +383,7 @@ Libpostal is designed to be used by higher-level languages.  If you don't see yo
 - LuaJIT: [lua-resty-postal](https://github.com/bungle/lua-resty-postal)
 - Perl: [Geo::libpostal](https://metacpan.org/pod/Geo::libpostal)
 - Elixir: [Expostal](https://github.com/SweetIQ/expostal)
+- Rust: [rustpostal](https://crates.io/crates/rustpostal)
 
 **Database extensions**
 

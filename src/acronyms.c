@@ -42,7 +42,8 @@ bool existing_acronym_phrase_positions(uint32_array *existing_acronyms_array, co
                     address_expansion_t expansion = expansions[i];
                     if (expansion.canonical_index != NULL_CANONICAL_INDEX) {
                         char *canonical = address_dictionary_get_canonical(expansion.canonical_index);
-                        if (string_contains(canonical, " ")) {
+                        bool is_possible_acronym = string_contains(canonical, " ") || (phrase.len == 1 && address_expansion_in_dictionary(expansion, DICTIONARY_DIRECTIONAL));
+                        if (is_possible_acronym) {
                             for (size_t j = phrase.start; j < phrase.start + phrase.len; j++) {
                                 existing_acronyms[j] = 1;
                             }

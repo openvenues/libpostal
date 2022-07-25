@@ -387,6 +387,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
                 log_debug("token_str = %s\n", token_str);
 
                 add_double_metaphone_to_array_if_unique(token_str, strings, unique_strings, ngrams);
+                add_quadgrams_or_string_to_array_if_unique(token_str, strings, unique_strings, ngrams);
             // For non-Latin words (Arabic, Cyrllic, etc.) just add the word
             // For ideograms, we do two-character shingles, so only add the first character if the string has one token
             } else if (!ideogram || j > 0 || num_tokens == 1) {
