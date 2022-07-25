@@ -85,7 +85,7 @@ typedef enum {
 } libpostal_token_type_t;
 
 
-/*
+/* 
 Address dictionaries
 */
 // Bit set, should be able to keep it at a short (uint16_t)
@@ -109,7 +109,7 @@ Address dictionaries
 
 typedef struct libpostal_normalize_options {
     // List of language codes
-    char **languages;
+    char **languages;  
     size_t num_languages;
     uint16_t address_components;
 
@@ -133,7 +133,7 @@ typedef struct libpostal_normalize_options {
     bool expand_numex;
     bool roman_numerals;
 
-    // Sxpansion options
+    // Expansion options
     bool root;
 
 } libpostal_normalize_options_t;

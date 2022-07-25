@@ -203,7 +203,7 @@ cstring_array *expanded_component_combined(char *input, libpostal_normalize_opti
         cstring_array_destroy(expansions);
 
         return all_expansions;
-    }
+    }       
 }
 
 static inline cstring_array *expanded_component_root_with_fallback(char *input, libpostal_normalize_options_t options, size_t *n) {
@@ -400,7 +400,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
                 } else {
                     add_string_to_array_if_unique(token_str, strings, unique_strings);
                 }
-            }
+            } 
 
             prev_token = token;
         }
@@ -519,7 +519,7 @@ cstring_array *name_word_hashes(char *name, libpostal_normalize_options_t normal
                             last_was_stopword = is_stopword;
                         }
                         last_was_punctuation = false;
-                    }
+                    } 
                 } else if (is_punct) {
                     log_debug("punctuation\n");
                     last_was_punctuation = true;
