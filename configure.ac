@@ -51,6 +51,7 @@ AC_CHECK_TYPES([ptrdiff_t])
 AC_CHECK_FUNCS([malloc realloc drand48 getcwd gettimeofday memmove memset regcomp setlocale sqrt strdup strndup])
 
 AC_SUBST([LIBPOSTAL_DATA_DIR_VERSION_STRING], [v1])
+AC_SUBST([LIBPOSTAL_SENZING_DATA_DIR_VERSION_STRING], [sz_v1])
 
 DATA_FILE_LATEST_VERSION=$(cat $srcdir/versions/base_data)
 PARSER_MODEL_LATEST_VERSION=$(cat $srcdir/versions/parser)
@@ -59,6 +60,15 @@ LANG_CLASS_MODEL_LATEST_VERSION=$(cat $srcdir/versions/language_classifier)
 AC_SUBST([LIBPOSTAL_DATA_FILE_LATEST_VERSION], [$DATA_FILE_LATEST_VERSION])
 AC_SUBST([LIBPOSTAL_PARSER_MODEL_LATEST_VERSION], [$PARSER_MODEL_LATEST_VERSION])
 AC_SUBST([LIBPOSTAL_LANG_CLASS_MODEL_LATEST_VERSION], [$LANG_CLASS_MODEL_LATEST_VERSION])
+
+# Senzing data
+SENZING_DATA_FILE_LATEST_VERSION=$(cat $srcdir/versions/senzing/base_data)
+SENZING_PARSER_MODEL_LATEST_VERSION=$(cat $srcdir/versions/senzing/parser)
+SENZING_LANG_CLASS_MODEL_LATEST_VERSION=$(cat $srcdir/versions/senzing/language_classifier)
+
+AC_SUBST([LIBPOSTAL_SENZING_DATA_FILE_LATEST_VERSION], [$DATA_FILE_LATEST_VERSION])
+AC_SUBST([LIBPOSTAL_SENZING_PARSER_MODEL_LATEST_VERSION], [$PARSER_MODEL_LATEST_VERSION])
+AC_SUBST([LIBPOSTAL_SENZING_LANG_CLASS_MODEL_LATEST_VERSION], [$LANG_CLASS_MODEL_LATEST_VERSION])
 
 AC_CONFIG_FILES([Makefile
                  libpostal.pc
@@ -133,6 +143,14 @@ AC_ARG_ENABLE([data-download],
                 no) DOWNLOAD_DATA=false ;;
                 *) AC_MSG_ERROR([bad value ${enableval} for --disable-data-download]) ;;
               esac], [DOWNLOAD_DATA=true])
+
+AC_ARG_ENABLE([senzing-datamodel],
+  AS_HELP_STRING([[[--enable-senzing-datamodel]]],
+    [Use Senzing data model in lieu of the default one]),
+  [
+     DATAMODEL="senzing"
+     AC_SUBST([LIBPOSTAL_DATA_MODEL], [$DATAMODEL])
+  ])
 
 
 AM_CONDITIONAL([DOWNLOAD_DATA], [test "x$DOWNLOAD_DATA" = "xtrue"])
