@@ -175,6 +175,16 @@ If you require a .lib import library to link this to your application. You can g
 lib.exe /def:libpostal.def /out:libpostal.lib /machine:x64
 ```
 
+Installation with an alternative data model
+-------------------------------------------
+
+An alternative data model is available for libposta. It is created by Senzing Inc. for improved parsing on US, UK and Singapore addresses and improved US rural route address handling.
+To enable this add `--enable-senzing-datamodel` to the conigure line during installation:
+```
+./configure --datadir=[...some dir with a few GB of space...] --enable-senzing-datamodel
+```
+
+
 Examples of parsing
 -------------------
 
