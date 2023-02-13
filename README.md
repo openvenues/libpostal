@@ -183,6 +183,7 @@ To enable this add `--enable-senzing-datamodel` to the conigure line during inst
 ```
 ./configure --datadir=[...some dir with a few GB of space...] --enable-senzing-datamodel
 ```
+Further information about this data model can be found at: https://github.com/Senzing/libpostal
 
 
 Examples of parsing
