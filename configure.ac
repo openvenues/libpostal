@@ -60,6 +60,17 @@ AC_SUBST([LIBPOSTAL_DATA_FILE_LATEST_VERSION], [$DATA_FILE_LATEST_VERSION])
 AC_SUBST([LIBPOSTAL_PARSER_MODEL_LATEST_VERSION], [$PARSER_MODEL_LATEST_VERSION])
 AC_SUBST([LIBPOSTAL_LANG_CLASS_MODEL_LATEST_VERSION], [$LANG_CLASS_MODEL_LATEST_VERSION])
 
+# Senzing data
+AC_SUBST([LIBPOSTAL_SENZING_DATA_DIR_VERSION_STRING], [v1])
+
+SENZING_DATA_FILE_LATEST_VERSION=$(cat $srcdir/versions/senzing/base_data)
+SENZING_PARSER_MODEL_LATEST_VERSION=$(cat $srcdir/versions/senzing/parser)
+SENZING_LANG_CLASS_MODEL_LATEST_VERSION=$(cat $srcdir/versions/senzing/language_classifier)
+
+AC_SUBST([LIBPOSTAL_SENZING_DATA_FILE_LATEST_VERSION], [$SENZING_DATA_FILE_LATEST_VERSION])
+AC_SUBST([LIBPOSTAL_SENZING_PARSER_MODEL_LATEST_VERSION], [$SENZING_PARSER_MODEL_LATEST_VERSION])
+AC_SUBST([LIBPOSTAL_SENZING_LANG_CLASS_MODEL_LATEST_VERSION], [$SENZING_LANG_CLASS_MODEL_LATEST_VERSION])
+
 AC_CONFIG_FILES([Makefile
                  libpostal.pc
                  src/Makefile
@@ -134,6 +145,13 @@ AC_ARG_ENABLE([data-download],
                 *) AC_MSG_ERROR([bad value ${enableval} for --disable-data-download]) ;;
               esac], [DOWNLOAD_DATA=true])
 
+AC_ARG_ENABLE([senzing-datamodel],
+  AS_HELP_STRING([[[--enable-senzing-datamodel]]],
+    [Use Senzing data model in lieu of the default one]),
+    [
+      DATAMODEL="senzing"
+      AC_SUBST([LIBPOSTAL_DATA_MODEL], [$DATAMODEL])
+    ])
 
 AM_CONDITIONAL([DOWNLOAD_DATA], [test "x$DOWNLOAD_DATA" = "xtrue"])
 
