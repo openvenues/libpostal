@@ -14,7 +14,7 @@ LIBPOSTAL_DATA_DIR=$3
 MB=$((1024*1024))
 CHUNK_SIZE=$((64*$MB))
 
-DATAMODEL="@LIBPOSTAL_DATA_MODEL@"
+DATAMODEL="@MODEL@"
 
 # Not loving this approach but there appears to be no way to query the size
 # of a release asset without using the Github API

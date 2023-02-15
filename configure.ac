@@ -145,13 +145,9 @@ AC_ARG_ENABLE([data-download],
                 *) AC_MSG_ERROR([bad value ${enableval} for --disable-data-download]) ;;
               esac], [DOWNLOAD_DATA=true])
 
-AC_ARG_ENABLE([senzing-datamodel],
-  AS_HELP_STRING([[[--enable-senzing-datamodel]]],
-    [Use Senzing data model in lieu of the default one]),
-    [
-      DATAMODEL="senzing"
-      AC_SUBST([LIBPOSTAL_DATA_MODEL], [$DATAMODEL])
-    ])
+AC_ARG_VAR(MODEL, [Option to use alternative data models. Currently available is "senzing" (MODEL=senzing). If this option is not set the default libpostal data model is used.])
+AS_VAR_IF([MODEL], [], [],
+  [AS_VAR_IF([MODEL], [senzing], [], [AC_MSG_FAILURE([Invalid MODEL value set])])])
 
 AM_CONDITIONAL([DOWNLOAD_DATA], [test "x$DOWNLOAD_DATA" = "xtrue"])
 
