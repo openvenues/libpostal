@@ -10,10 +10,10 @@
     "8": "city"
     "9": "suburb"
 
-    overrides:
-        id:
-            relation:
-                # Taiwan Province
-                "3777248": "state"
-                # Fujian Province
-                "3777250": "state"
+  overrides:
+    id:
+      relation:
+        # Taiwan Province
+        "3777248": "state"
+        # Fujian Province
+        "3777250": "state"
