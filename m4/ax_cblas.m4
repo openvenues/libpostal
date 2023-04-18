@@ -159,7 +159,7 @@ fi
 
 # Generic BLAS library? (for instance OpenBLAS)
 if test $ax_cblas_ok = no; then
-    AC_CHECK_LIB(cblas, cblas_dgemm, [ax_cblas_ok=yes; CBLAS_LIBS="-lblas"])
+    AC_CHECK_LIB(blas, cblas_dgemm, [ax_cblas_ok=yes; CBLAS_LIBS="-lblas"])
 fi
 
 AC_SUBST(CBLAS_LIBS)
