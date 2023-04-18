@@ -152,12 +152,17 @@ if test $ax_cblas_ok = no; then
             [], [-lblas])])
 fi
 
+# BLAS in OpenBLAS library?
+if test $ax_cblas_ok = no; then
+    AC_CHECK_LIB(openblas, cblas_dgemm, [ax_cblas_ok=yes; CBLAS_LIBS="-lopenblas"])
+fi
+
 # Generic CBLAS library?
 if test $ax_cblas_ok = no; then
     AC_CHECK_LIB(cblas, cblas_dgemm, [ax_cblas_ok=yes; CBLAS_LIBS="-lcblas"])
 fi
 
-# Generic BLAS library? (for instance OpenBLAS)
+# Generic BLAS library?
 if test $ax_cblas_ok = no; then
     AC_CHECK_LIB(blas, cblas_dgemm, [ax_cblas_ok=yes; CBLAS_LIBS="-lblas"])
 fi
