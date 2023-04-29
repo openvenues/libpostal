@@ -402,21 +402,15 @@ Libpostal is designed to be used by higher-level languages.  If you don't see yo
 - Elixir: [Expostal](https://github.com/SweetIQ/expostal)
 - Rust: [rustpostal](https://crates.io/crates/rustpostal)
 
-**Database extensions**
+**Unofficial database extensions**
 
 - PostgreSQL: [pgsql-postal](https://github.com/pramsey/pgsql-postal)
 
-**Unofficial REST API**
+**Unofficial servers**
 
-- Libpostal REST: [libpostal REST](https://github.com/johnlonganecker/libpostal-rest)
-
-**Libpostal REST Docker**
-
-- Libpostal REST Docker [Libpostal REST Docker](https://github.com/johnlonganecker/libpostal-rest-docker)
-
-**Libpostal ZeroMQ Docker**
-
-- Libpostal ZeroMQ Docker image: [pasupulaphani/libpostal-zeromq](https://hub.docker.com/r/pasupulaphani/libpostal-zeromq/) , Source: [Github](https://github.com/pasupulaphani/libpostal-docker) 
+- Libpostal REST Go Docker: [libpostal-rest-docker](https://github.com/johnlonganecker/libpostal-rest-docker)
+- Libpostal REST FastAPI Docker: [libpostal-fastapi](https://github.com/alpha-affinity/libpostal-fastapi)
+- Libpostal ZeroMQ Docker: [libpostal-zeromq](https://github.com/pasupulaphani/libpostal-docker)
 
 
 Tests
