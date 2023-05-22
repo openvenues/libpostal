@@ -198,7 +198,7 @@ bool file_write_float(FILE *file, float value) {
 }
 
 inline uint32_t file_deserialize_uint32(unsigned char *buf) {
-    return (buf[0] << 24) | (buf[1] << 16) | (buf[2] << 8) | buf[3];
+    return ((uint32_t)buf[0] << 24) | (buf[1] << 16) | (buf[2] << 8) | buf[3];
 }
 
 bool file_read_uint32(FILE *file, uint32_t *value) {
