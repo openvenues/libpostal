@@ -36,7 +36,7 @@ LIBPOSTAL_LANG_CLASS_FILE="language_classifier.tar.gz"
 
 LIBPOSTAL_BASE_URL="https://github.com/$LIBPOSTAL_REPO_NAME/releases/download"
 
-if [ $DATAMODEL == "senzing" ]; then
+if [ "$DATAMODEL" = "senzing" ]; then
     LIBPOSTAL_DATA_FILE_CHUNKS=1
     LIBPOSTAL_PARSER_MODEL_CHUNKS=1
     LIBPOSTAL_LANG_CLASS_MODEL_CHUNKS=1
