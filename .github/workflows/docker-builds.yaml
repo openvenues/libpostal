@@ -1,0 +1,64 @@
+name: docker builds
+on: [push, pull_request]
+
+env:
+  DOCKER_IMAGE_BASENAME: libpostal
+  BASE_IMAGES: "debian:8 debian:9 ubuntu:16.04 ubuntu:18.04"
+
+jobs:
+  build:
+    name: Build OS packages inside a docker container and create release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Make git short-commit available for the different steps
+      id: metadata
+      run: |
+        echo "::set-output name=commit::$(echo ${GITHUB_SHA} | head -c7)"
+        echo "::set-output name=version::$(sed 's|^v||' versions/parser)"
+    - name: Build
+      run: |
+        pwd
+        ls -hal
+        git status -sb
+        mkdir release-files
+        for base_image in ${BASE_IMAGES}
+        do
+          FS_SANITIZED_BASE_IMAGE=$(echo ${base_image} | sed 's|:|_|g')
+          OUTPUT_DIR=output-${FS_SANITIZED_BASE_IMAGE}
+
+          docker build \
+            --build-arg BASE_IMAGE=${base_image} \
+            -t ${DOCKER_IMAGE_BASENAME}/${base_image} .
+
+          CID=$(docker create ${DOCKER_IMAGE_BASENAME}/${base_image})
+          docker cp ${CID}:/output ${OUTPUT_DIR}
+
+          DEB_FILE=$(ls ${OUTPUT_DIR}/*deb)
+          DATA_FILE=$(ls ${OUTPUT_DIR}/*gz)
+          mv ${DEB_FILE} release-files/${FS_SANITIZED_BASE_IMAGE}-$(basename ${DEB_FILE})
+          mv ${DATA_FILE} release-files/${FS_SANITIZED_BASE_IMAGE}-$(basename ${DATA_FILE})
+        done
+    - name: Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_TAG: "${{ steps.metadata.outputs.version }}-${{ steps.metadata.outputs.commit }}"
+        RELEASE_NAME: "Release ${{ steps.metadata.outputs.version }}-${{ steps.metadata.outputs.commit }}"
+        RELEASE_NOTES: "Automatic release from GH action on this project."
+      run: |
+        sudo apt install -y npm
+        sudo npm install -g publish-release
+        set -x
+        GITHUB_OWNER=$(echo ${GITHUB_REPOSITORY} | awk -F/ '{print $1}')
+        GITHUB_REPO=$(echo ${GITHUB_REPOSITORY} | awk -F/ '{print $2}')
+        git tag ${RELEASE_TAG}
+        echo '{}' > package.json
+        publish-release \
+          --reuseRelease \
+          --tag ${RELEASE_TAG} \
+          --owner ${GITHUB_OWNER} \
+          --repo ${GITHUB_REPO} \
+          --token ${GITHUB_TOKEN} \
+          --name "${RELEASE_NAME}" \
+          --notes "${RELEASE_NOTES}" \
+          --assets $(ls release-files/* | xargs echo | sed 's| |,|g')
