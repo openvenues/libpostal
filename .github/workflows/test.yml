@@ -30,7 +30,7 @@ jobs:
           LIBPOSTAL_DATA_DIR: ${GITHUB_WORKSPACE}/data
         run: |
           ./bootstrap.sh
-          ./configure --datadir=$LIBPOSTAL_DATA_DIR
+          ./configure --datadir=$LIBPOSTAL_DATA_DIR --disable-sse2
           make
       - name: Test
         run: make check
