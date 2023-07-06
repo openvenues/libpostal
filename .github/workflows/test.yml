@@ -25,11 +25,12 @@ jobs:
         run: |
           brew update
           brew install curl autoconf automake libtool pkg-config
-      - name: Build and Test
+      - name: Build
         env:
           LIBPOSTAL_DATA_DIR: ${GITHUB_WORKSPACE}/data
         run: |
           ./bootstrap.sh
           ./configure --datadir=$LIBPOSTAL_DATA_DIR --disable-sse2
           make
-          make check
+      - name: Test
+        run: make check
