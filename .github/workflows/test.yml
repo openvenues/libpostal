@@ -23,8 +23,8 @@ jobs:
       - name: Install Dependencies MacOS
         if: runner.os == 'macOS'
         run: |
-          sudo brew update
-          sudo brew install curl autoconf automake libtool pkg-config
+          brew update
+          brew install curl autoconf automake libtool pkg-config
       - name: Build
         env:
           LIBPOSTAL_DATA_DIR: ${GITHUB_WORKSPACE}/data
