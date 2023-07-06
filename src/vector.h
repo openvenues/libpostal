@@ -21,27 +21,19 @@ static inline void *_aligned_realloc(void *p, size_t size, size_t alignment)
         return NULL;
     }
 
-    if (size == 0) {
+    if (p == NULL) {
         return NULL;
     }
 
-    void *rp = realloc(p, size);
-
-    /* If realloc result is not already at an aligned boundary,
-       _aligned_malloc a new block and copy the contents of the realloc'd
-       pointer to the aligned block, free the realloc'd pointer and return
-       the aligned pointer.
-    */
-    if ( ((size_t)rp & (alignment - 1)) != 0) {
-        void *p1 = _aligned_malloc(size, alignment);
-        if (p1 != NULL) {
-            memcpy(p1, rp, size);
-        }
-        free(rp);
-        rp = p1;
+    void *p1 = _aligned_malloc(size, alignment);
+    if (p1 == NULL) {
+        free(p);
+        return NULL;
     }
 
-    return rp;
+    memcpy(p1, p, size);
+    free(p);
+    return p1;
 }
 static inline void _aligned_free(void *p)
 {

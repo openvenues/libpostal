@@ -84,56 +84,19 @@ AS_IF([test "x$FOUND_SHUF" = xyes],  [AC_DEFINE([HAVE_SHUF], [1], [shuf availabl
 AS_IF([test "x$FOUND_GSHUF" = xyes],  [AC_DEFINE([HAVE_GSHUF], [1], [gshuf available])])
 
 # ------------------------------------------------------------------
-# Architecture-specific options
+# Checks for SSE2 build
 # ------------------------------------------------------------------
 
-# allow enabling hardware optimization on any system:
-case "$host_cpu" in
-   arm*|aarch64*)
-     enable_arm_neon=yes
-     enable_intel_sse=no
-     AC_DEFINE([ARM_NEON], [1],
-       [Enable ARM_NEON optimizations])
-     ;;
-   i?86|x86_64)
-     enable_intel_sse=yes
-     enable_arm_neon=no
-     AC_DEFINE([INTEL_SSE], [1],
-       [Enable Intel SSE optimizations])
-     ;;
-esac
-
-AC_ARG_ENABLE([neon],
-  AS_HELP_STRING([[[--disable-neon]]],
-    [Disable ARM NEON hardware optimizations]),
-  [
-   enable_arm_neon=no
-   AC_DEFINE([ARM_NEON], [0],
-     [Disable ARM_NEON optimizations])
-  ])
-
 AC_ARG_ENABLE([sse2],
-  AS_HELP_STRING([[[--disable-sse2]]],
-    [Disable Intel SSE2 hardware optimizations]),
-  [
-    enable_intel_sse=no
-    AC_DEFINE([INTEL_SSE], [0],
-      [Disable INTEL_SSE optimizations])
-  ])
+    AS_HELP_STRING(
+        [--disable-sse2],
+        [disable SSE2 optimization routines]
+        )
+    )
 
-SIMDFLAGS=""
-
-AS_IF([test "x$enable_intel_sse" != "xno"], [
-  SIMDFLAGS="-mfpmath=sse -msse2 -DINTEL_SSE"
+AS_IF([test "x$enable_sse2" != "xno"], [
+    CFLAGS="-mfpmath=sse -msse2 -DUSE_SSE ${CFLAGS}"
 ])
-
-AS_IF([test "x$enable_arm_neon" != "xno"], [
-  SIMDFLAGS="-march=armv8-a+fp+simd+crypto+crc -DARM_NEON"
-])
-
-CFLAGS="${SIMDFLAGS} ${CFLAGS}"
-
-AC_SUBST([SIMDFLAGS], [$SIMDFLAGS])
 
 AC_CHECK_HEADER(cblas.h, [AX_CBLAS])
 

@@ -40,8 +40,8 @@ crf_context_t *crf_context_new(int flag, size_t L, size_t T) {
     }
 
     if (context->flag & CRF_CONTEXT_MARGINALS) {
-#if defined(INTEL_SSE) || defined(ARM_NEON)
-        context->exp_state = double_matrix_new_aligned(T, L, 16);
+#if defined(USE_SSE)
+        context->exp_state = double_matrix_new_aligned(T, L, 32);
         if (context->exp_state == NULL) goto exit_context_created;
         double_matrix_zero(context->exp_state);
 #else
@@ -52,8 +52,8 @@ crf_context_t *crf_context_new(int flag, size_t L, size_t T) {
         context->mexp_state = double_matrix_new_zeros(T, L);
         if (context->mexp_state == NULL) goto exit_context_created;
 
-#if defined(INTEL_SSE) || defined(ARM_NEON)
-        context->exp_state_trans = double_matrix_new_aligned(T, L * L, 16);
+#if defined(USE_SSE)
+        context->exp_state_trans = double_matrix_new_aligned(T, L * L, 32);
         if (context->exp_state_trans == NULL) goto exit_context_created;
         double_matrix_zero(context->exp_state_trans);
 #else
@@ -64,8 +64,8 @@ crf_context_t *crf_context_new(int flag, size_t L, size_t T) {
         context->mexp_state_trans = double_matrix_new_zeros(T, L * L);
         if (context->mexp_state_trans == NULL) goto exit_context_created;
 
-#if defined(INTEL_SSE) || defined(ARM_NEON)
-        context->exp_trans = double_matrix_new_aligned(L, L, 16);
+#if defined(USE_SSE)
+        context->exp_trans = double_matrix_new_aligned(L, L, 32);
         if (context->exp_trans == NULL) goto exit_context_created;
         double_matrix_zero(context->exp_trans);
 #else
@@ -130,14 +130,14 @@ bool crf_context_set_num_items(crf_context_t *self, size_t T) {
 
     if (self->flag & CRF_CONTEXT_MARGINALS &&
         (
-#if defined(INTEL_SSE) || defined(ARM_NEON)
-            !double_matrix_resize_aligned(self->exp_state, T, L, 16) ||
+#if defined(USE_SSE)
+            !double_matrix_resize_aligned(self->exp_state, T, L, 32) ||
 #else
             !double_matrix_resize(self->exp_state, T, L) ||
 #endif
             !double_matrix_resize(self->mexp_state, T, L) ||
-#if defined(INTEL_SSE) || defined(ARM_NEON)
-            !double_matrix_resize_aligned(self->exp_state_trans, T, L * L, 16) ||
+#if defined(USE_SSE)
+            !double_matrix_resize_aligned(self->exp_state_trans, T, L * L, 32) ||
 #else
             !double_matrix_resize(self->exp_state_trans, T, L * L) ||            
 #endif
@@ -184,7 +184,7 @@ void crf_context_destroy(crf_context_t *self) {
     }
 
     if (self->exp_state != NULL) {
-#if defined(INTEL_SSE) || defined(ARM_NEON)
+#if defined(USE_SSE)
         double_matrix_destroy_aligned(self->exp_state);
 #else
         double_matrix_destroy(self->exp_state);
@@ -200,7 +200,7 @@ void crf_context_destroy(crf_context_t *self) {
     }
 
     if (self->exp_state_trans != NULL) {
-#if defined(INTEL_SSE) || defined(ARM_NEON)
+#if defined(USE_SSE)
         double_matrix_destroy_aligned(self->exp_state_trans);
 #else
         double_matrix_destroy(self->exp_state_trans);
@@ -216,7 +216,7 @@ void crf_context_destroy(crf_context_t *self) {
     }
 
     if (self->exp_trans != NULL) {
-#if defined(INTEL_SSE) || defined(ARM_NEON)
+#if defined(USE_SSE)
         double_matrix_destroy_aligned(self->exp_trans);
 #else
         double_matrix_destroy(self->exp_trans);
