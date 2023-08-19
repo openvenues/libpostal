@@ -7,7 +7,7 @@
 
 #if defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__)
 #include <malloc.h>
-static inline void *aligned_alloc(size_t size, size_t alignment) {
+static inline void *aligned_malloc(size_t size, size_t alignment) {
     return _aligned_malloc(size, alignment);
 }
 static inline void *aligned_resize(void *p, size_t old_size, size_t new_size, size_t alignment) {
