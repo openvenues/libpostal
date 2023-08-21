@@ -33,7 +33,7 @@ typedef enum {
     } name##_t;                                                                                                 \
                                                                                                                 \
     static name##_t *name##_new(size_t m, size_t n) {                                                           \
-        name##_t *matrix = malloc(sizeof(name##_t));                                                            \
+        name##_t *matrix = malloc(sizeof(name##_t));                                                \
                                                                                                                 \
         if (matrix == NULL) {                                                                                   \
             return NULL;                                                                                        \
@@ -62,7 +62,7 @@ typedef enum {
         matrix->m = m;                                                                                          \
         matrix->n = n;                                                                                          \
                                                                                                                 \
-        matrix->values = _aligned_malloc(sizeof(type) * m * n, alignment);                                      \
+        matrix->values = aligned_malloc(sizeof(type) * m * n, alignment);                                       \
         if (matrix->values == NULL) {                                                                           \
             free(matrix);                                                                                       \
             return NULL;                                                                                        \
@@ -86,7 +86,7 @@ typedef enum {
         if (self == NULL) return;                                                                               \
                                                                                                                 \
         if (self->values != NULL) {                                                                             \
-            _aligned_free(self->values);                                                                        \
+            aligned_free(self->values);                                                                         \
         }                                                                                                       \
                                                                                                                 \
         free(self);                                                                                             \
@@ -118,7 +118,7 @@ typedef enum {
         if (self == NULL) return false;                                                                         \
                                                                                                                 \
         if (m * n > (self->m * self->n)) {                                                                      \
-            type *ptr = _aligned_realloc(self->values, sizeof(type) * m * n, alignment);                        \
+            type *ptr = aligned_resize(self->values, sizeof(type) * self->m * self->n, sizeof(type) * m * n, alignment); \
             if (ptr == NULL) {                                                                                  \
                 return false;                                                                                   \
             }                                                                                                   \
