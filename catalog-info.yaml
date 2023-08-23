@@ -3,4 +3,4 @@ kind: Location
 metadata:
   name: libpostal
 spec:
-  owner: ship_r4_client_order_flow
+  owner: shiporderflow
