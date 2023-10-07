@@ -60,6 +60,17 @@ AC_SUBST([LIBPOSTAL_DATA_FILE_LATEST_VERSION], [$DATA_FILE_LATEST_VERSION])
 AC_SUBST([LIBPOSTAL_PARSER_MODEL_LATEST_VERSION], [$PARSER_MODEL_LATEST_VERSION])
 AC_SUBST([LIBPOSTAL_LANG_CLASS_MODEL_LATEST_VERSION], [$LANG_CLASS_MODEL_LATEST_VERSION])
 
+# Senzing data
+AC_SUBST([LIBPOSTAL_SENZING_DATA_DIR_VERSION_STRING], [v1])
+
+SENZING_DATA_FILE_LATEST_VERSION=$(cat $srcdir/versions/senzing/base_data)
+SENZING_PARSER_MODEL_LATEST_VERSION=$(cat $srcdir/versions/senzing/parser)
+SENZING_LANG_CLASS_MODEL_LATEST_VERSION=$(cat $srcdir/versions/senzing/language_classifier)
+
+AC_SUBST([LIBPOSTAL_SENZING_DATA_FILE_LATEST_VERSION], [$SENZING_DATA_FILE_LATEST_VERSION])
+AC_SUBST([LIBPOSTAL_SENZING_PARSER_MODEL_LATEST_VERSION], [$SENZING_PARSER_MODEL_LATEST_VERSION])
+AC_SUBST([LIBPOSTAL_SENZING_LANG_CLASS_MODEL_LATEST_VERSION], [$SENZING_LANG_CLASS_MODEL_LATEST_VERSION])
+
 AC_CONFIG_FILES([Makefile
                  libpostal.pc
                  src/Makefile
@@ -73,56 +84,19 @@ AS_IF([test "x$FOUND_SHUF" = xyes],  [AC_DEFINE([HAVE_SHUF], [1], [shuf availabl
 AS_IF([test "x$FOUND_GSHUF" = xyes],  [AC_DEFINE([HAVE_GSHUF], [1], [gshuf available])])
 
 # ------------------------------------------------------------------
-# Architecture-specific options
+# Checks for SSE2 build
 # ------------------------------------------------------------------
 
-# allow enabling hardware optimization on any system:
-case "$host_cpu" in
-   arm*|aarch64*)
-     enable_arm_neon=yes
-     enable_intel_sse=no
-     AC_DEFINE([ARM_NEON], [1],
-       [Enable ARM_NEON optimizations])
-     ;;
-   i?86|x86_64)
-     enable_intel_sse=yes
-     enable_arm_neon=no
-     AC_DEFINE([INTEL_SSE], [1],
-       [Enable Intel SSE optimizations])
-     ;;
-esac
-
-AC_ARG_ENABLE([neon],
-  AS_HELP_STRING([[[--disable-neon]]],
-    [Disable ARM NEON hardware optimizations]),
-  [
-   enable_arm_neon=no
-   AC_DEFINE([ARM_NEON], [0],
-     [Disable ARM_NEON optimizations])
-  ])
-
 AC_ARG_ENABLE([sse2],
-  AS_HELP_STRING([[[--disable-sse2]]],
-    [Disable Intel SSE2 hardware optimizations]),
-  [
-    enable_intel_sse=no
-    AC_DEFINE([INTEL_SSE], [0],
-      [Disable INTEL_SSE optimizations])
-  ])
+    AS_HELP_STRING(
+        [--disable-sse2],
+        [disable SSE2 optimization routines]
+        )
+    )
 
-SIMDFLAGS=""
-
-AS_IF([test "x$enable_intel_sse" != "xno"], [
-  SIMDFLAGS="-mfpmath=sse -msse2 -DINTEL_SSE"
+AS_IF([test "x$enable_sse2" != "xno"], [
+    CFLAGS="-mfpmath=sse -msse2 -DUSE_SSE ${CFLAGS}"
 ])
-
-AS_IF([test "x$enable_arm_neon" != "xno"], [
-  SIMDFLAGS="-march=armv8-a+fp+simd+crypto+crc -DARM_NEON"
-])
-
-CFLAGS="${SIMDFLAGS} ${CFLAGS}"
-
-AC_SUBST([SIMDFLAGS], [$SIMDFLAGS])
 
 AC_CHECK_HEADER(cblas.h, [AX_CBLAS])
 
@@ -134,6 +108,9 @@ AC_ARG_ENABLE([data-download],
                 *) AC_MSG_ERROR([bad value ${enableval} for --disable-data-download]) ;;
               esac], [DOWNLOAD_DATA=true])
 
+AC_ARG_VAR(MODEL, [Option to use alternative data models. Currently available is "senzing" (MODEL=senzing). If this option is not set the default libpostal data model is used.])
+AS_VAR_IF([MODEL], [], [],
+  [AS_VAR_IF([MODEL], [senzing], [], [AC_MSG_FAILURE([Invalid MODEL value set])])])
 
 AM_CONDITIONAL([DOWNLOAD_DATA], [test "x$DOWNLOAD_DATA" = "xtrue"])
 

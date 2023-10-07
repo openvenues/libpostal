@@ -8,10 +8,8 @@
 
 #define ks_lt_index(a, b) ((a).value < (b).value)
 
-#if   defined(INTEL_SSE)
+#if   defined(USE_SSE)
 #include <emmintrin.h>
-#elif defined(ARM_NEON)
-#include "sse2neon.h"
 #endif
 
 /*
@@ -340,7 +338,7 @@
 
 
 
-#if defined(INTEL_SSE) || defined(ARM_NEON)
+#if defined(USE_SSE)
 /*
 From https://github.com/herumi/fmath/blob/master/fastexp.cpp
 
