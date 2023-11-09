@@ -12,7 +12,7 @@ jobs:
   add-issue-to-community:
     uses: Senzing/build-resources/.github/workflows/add-to-project.yaml@main
     with:
-      project-number: "2"
+      project-number: "9"
       classic: true
     secrets:
       SENZING_GITHUB_ACCESS_TOKEN: ${{ secrets.SENZING_GITHUB_ACCESS_TOKEN }}
