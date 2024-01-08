@@ -22,7 +22,7 @@ The core library is written in pure C. Language bindings for [Python](https://gi
 Sponsors
 --------
 
-If your company is using libpostal, consider asking your organization to sponsor the project. Interpreting what humans mean when they refer to locations is far from a solved problem, and sponsorships help us pursue new frontiers in geospatial NLP. As a sponsor, your company logo will appear prominently on the Github repo page along with a link to your site. [Sponsorship info](https://opencollective.com/libpostal#sponsor)
+If your company is using libpostal, consider asking your organization to sponsor the project. Interpreting what humans mean when they refer to locations is far from a solved problem, and sponsorships help us pursue new frontiers in geospatial NLP. As a sponsor, your company logo will appear prominently on the GitHub repo page along with a link to your site. [Sponsorship info](https://opencollective.com/libpostal#sponsor)
 
 <a href="https://opencollective.com/libpostal/sponsor/0/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/libpostal/sponsor/1/website" target="_blank"><img src="https://opencollective.com/libpostal/sponsor/1/avatar.svg"></a>
@@ -474,8 +474,7 @@ optionally be separated so Rosenstraße and Rosen Straße are equivalent.
 "Main Street", "city": "New York", "state": "New York"}. The parser works
 for a wide variety of countries and languages, not just US/English. 
 The model is trained on over 1 billion addresses and address-like strings, using the
-templates in the [OpenCage address formatting repo](https://github.com/OpenCageData/address-formatting) to construct formatted,
-tagged traning examples for every inhabited country in the world. Many types of [normalizations](https://github.com/openvenues/libpostal/blob/master/scripts/geodata/addresses/components.py)
+templates in the [OpenCage address formatting repo](https://github.com/OpenCageData/address-formatting) to construct formatted, tagged training examples for every inhabited country in the world. Many types of [normalizations](https://github.com/openvenues/libpostal/blob/master/scripts/geodata/addresses/components.py)
 are performed to make the training data resemble real messy geocoder input as closely as possible.
 
 - **Language classification**: multinomial logistic regression
@@ -626,7 +625,7 @@ libpostal is written in modern, legible, C99 and uses the following conventions:
 - Confines almost all mallocs to *name*_new and all frees to *name*_destroy
 - Efficient existing implementations for simple things like hashtables
 - Generic containers (via [klib](https://github.com/attractivechaos/klib)) whenever possible
-- Data structrues take advantage of sparsity as much as possible
+- Data structures take advantage of sparsity as much as possible
 - Efficient double-array trie implementation for most string dictionaries
 - Cross-platform as much as possible, particularly for *nix
 
@@ -673,7 +672,7 @@ ways the address parser can be improved even further (in order of difficulty):
    when creating the training data that will ensure the model is trained to
    handle your use case without you having to do any manual data entry.
    If you see a pattern of obviously bad address parses, the best thing to
-   do is post an issue to Github.
+   do is post an issue to GitHub.
 
 Contributing
 ------------
