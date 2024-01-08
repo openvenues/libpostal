@@ -1,0 +1,6 @@
+version: "1"
+rules:                              # Array of rules
+  - base: main                      # Required. Target branch
+    upstream: openvenues:master     # Required. Must be in the same fork network.
+    mergeMethod: squash             # Optional, one of [none, merge, squash, rebase, hardreset], Default: none.
+label: ":arrow_heading_down: pull"  # Optional

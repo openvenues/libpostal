@@ -1,0 +1,24 @@
+---
+
+name: 'issue automation'
+
+on:
+  issues:
+    types:
+      - reopened
+      - opened
+
+jobs:
+  add-issue-to-community:
+    uses: Senzing/build-resources/.github/workflows/add-to-project.yaml@main
+    with:
+      project-number: "9"
+      classic: true
+    secrets:
+      SENZING_GITHUB_ACCESS_TOKEN: ${{ secrets.SENZING_GITHUB_ACCESS_TOKEN }}
+
+  add-issue-labels:
+    uses: Senzing/build-resources/.github/workflows/add-labels-to-issue.yaml@main
+    secrets:
+      ORG_MEMBERSHIP_TOKEN: ${{ secrets.ORG_MEMBERSHIP_TOKEN }}
+      SENZING_MEMBERS: ${{ secrets.SENZING_MEMBERS }}
