@@ -1,3 +1,5 @@
 # Default code owner
 
 * @Senzing/senzing-gdev
+
+/.github/ @Senzing/senzing-devsecops

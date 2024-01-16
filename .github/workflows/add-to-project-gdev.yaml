@@ -1,0 +1,17 @@
+name: 'add to project gdev'
+
+on:
+  issues:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  add-to-project:
+    secrets:
+      SENZING_GITHUB_ACCESS_TOKEN: ${{ secrets.SENZING_GITHUB_ACCESS_TOKEN }}
+    uses: Senzing/build-resources/.github/workflows/add-to-project.yaml@main
+    with:
+      classic: true
+      org: "senzing"
+      project-number: "9"
