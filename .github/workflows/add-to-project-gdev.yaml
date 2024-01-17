@@ -1,0 +1,20 @@
+name: 'add to project gdev'
+
+on:
+  issues:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  add-to-project:
+    name: Add to classic project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add to classic project
+        uses: senzing-factory/github-action-add-issue-to-project@main
+        with:
+          project: "https://github.com/orgs/Senzing/projects/9"
+          column_name: "Backlog"
+        env:
+          GITHUB_TOKEN: ${{ secrets.SENZING_GITHUB_ACCESS_TOKEN }}
