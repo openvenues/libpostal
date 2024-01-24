@@ -9,7 +9,7 @@
         id:
             relation:
                 # Auckland
-                "2094141": "city"
+                "17000522": "city"
                 # Wellington
                 "4266321": "city"
                 # Christchurch
@@ -31,12 +31,12 @@
                 # Invercargill
                 "1656388": "city"
                 # Nelson
-                "4266962": "city"
+                "17000449": "city"
                 # Upper Hutt
                 "4266375": "city"
 
         use_admin_center:
-            - id: 2094141 # Auckland
+            - id: 17000522 # Auckland
               type: relation
             - id: 4266321 # Wellington
               type: relation
@@ -68,7 +68,7 @@
             - id: 1656388 # Invercargill
               type: relation
               probability: 0.7
-            - id: 4266962 # Nelson
+            - id: 17000449 # Nelson
               type: relation
             - id: 4266375 # Upper Hutt
               type: relation
