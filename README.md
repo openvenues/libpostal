@@ -113,7 +113,7 @@ brew install curl autoconf automake libtool pkg-config
 
 Then to install the C library:
 
-If you're using an M1 Mac, add `--disable-sse2` to the `./configure` command. This will result in poorer performance but the build will succeed.
+If you're using an M1 Mac or ARM64-based linux distro, add `--disable-sse2` to the `./configure` command. This will result in poorer performance but the build will succeed.
 
 ```
 git clone https://github.com/openvenues/libpostal
