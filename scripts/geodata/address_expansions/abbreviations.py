@@ -4,7 +4,8 @@ import six
 
 from geodata.address_expansions.gazetteers import *
 from geodata.encoding import safe_decode, safe_encode
-from geodata.text.tokenize import tokenize_raw, token_types
+from geodata.text.token_types import token_types
+from geodata.text.tokenize import tokenize_raw
 from geodata.text.utils import non_breaking_dash_regex
 
 

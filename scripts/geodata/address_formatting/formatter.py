@@ -15,7 +15,8 @@ from geodata.address_formatting.aliases import Aliases
 from geodata.configs.utils import nested_get, recursive_merge
 from geodata.math.floats import isclose
 from geodata.math.sampling import weighted_choice, cdf
-from geodata.text.tokenize import tokenize, tokenize_raw, token_types
+from geodata.text.token_types import token_types
+from geodata.text.tokenize import tokenize_raw
 from geodata.encoding import safe_decode
 
 FORMATTER_GIT_REPO = 'https://github.com/OpenCageData/address-formatting'
@@ -304,7 +305,7 @@ class AddressFormatter(object):
         # If the probabilities don't sum to 1, add a "do nothing" action
         if not isclose(sum(probs), 1.0):
             probs.append(1.0 - sum(probs))
-            values.append((None, None, False))
+            values.append((None, None))
 
         return values, cdf(probs)
 

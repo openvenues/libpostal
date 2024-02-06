@@ -31,7 +31,7 @@ from geodata.categories.query import Category, NULL_CATEGORY_QUERY
 from geodata.chains.query import Chain, NULL_CHAIN_QUERY
 from geodata.coordinates.conversion import *
 from geodata.configs.utils import nested_get
-from geodata.countries.country_names import *
+from geodata.countries.names import *
 from geodata.language_id.disambiguation import *
 from geodata.language_id.sample import INTERNET_LANGUAGE_DISTRIBUTION
 from geodata.i18n.languages import *
@@ -300,7 +300,7 @@ class OSMAddressFormatter(object):
         return True
 
     def subdivision_components(self, latitude, longitude):
-        return self.subdivisions_rtree.point_in_poly(latitude, longitude, return_all=True)
+        return self.subdivisions_rtree.point_in_poly(latitude, longitude, return_all=True) if self.subdivisions_rtree else None
 
     def zone(self, subdivisions):
         for subdiv in subdivisions:
@@ -311,7 +311,7 @@ class OSMAddressFormatter(object):
         return None
 
     def building_components(self, latitude, longitude):
-        return self.buildings_rtree.point_in_poly(latitude, longitude, return_all=True)
+        return self.buildings_rtree.point_in_poly(latitude, longitude, return_all=True) if self.buildings_rtree else None
 
     def num_floors(self, buildings, key='building:levels'):
         max_floors = None
