@@ -119,7 +119,7 @@ If you're using an M1 Mac, add `--disable-sse2` to the `./configure` command. Th
 git clone https://github.com/openvenues/libpostal
 cd libpostal
 ./bootstrap.sh
-./configure --datadir=[...some dir with a few GB of space...]
+./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...]
 make -j4
 sudo make install
 
