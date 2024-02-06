@@ -1,1 +1,1 @@
-număr|numar|nr|nº|n°|#|№|no
+număr|numar|nr|nº|n°|#|№|no|numarul|numărul
