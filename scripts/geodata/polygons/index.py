@@ -226,7 +226,6 @@ class PolygonIndex(object):
     @classmethod
     def create_from_geojson_files(cls, inputs, output_dir,
                                   index_filename=None,
-                                  polys_filename=DEFAULT_POLYS_FILENAME,
                                   include_only_properties=None):
         index = cls(save_dir=output_dir, index_filename=index_filename or cls.INDEX_FILENAME)
         for input_file in inputs:
