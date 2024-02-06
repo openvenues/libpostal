@@ -10,10 +10,10 @@ calçada|calcada|cc
 calçadinha|caclcadinha|ccnh
 câmara municipal|camara municipal|cm|c.m.|c. m.
 caminho|cam|camno
-direito|dto
+direito|dto|dt
 esquerdo|esq
 estrada|estr
-astrada marginal|estr marg
+estrada marginal|estr marg
 estrada municipal|em|e m|estr m
 estrada nacional|en|e n|estr n
 estrada regional|er|e r|estr r
