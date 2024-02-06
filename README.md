@@ -539,6 +539,7 @@ Non-goals
 
 - Verifying that a location is a valid address
 - Actually geocoding addresses to a lat/lon (that requires a database/search index)
+- Extracting addresses from free text
 
 Raison d'être
 -------------
