@@ -1,0 +1,5 @@
+mandir|मन्दिर|मंदिर
+station
+police station
+post office
+office
