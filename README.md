@@ -180,7 +180,7 @@ lib.exe /def:libpostal.def /out:libpostal.lib /machine:x64
 Examples of parsing
 -------------------
 
-libpostal's international address parser uses machine learning (Conditional Random Fields) and is trained on over 1 billion addresses in every inhabited country on Earth. We use [OpenStreetMap](https://openstreetmap.org) and [OpenAddresses](https://openaddresses.io) as sources of structured addresses, and the OpenCage address format templates at: https://github.com/OpenCageData/address-formatting to construct the training data, supplementing with containing polygons, and generating sub-building components like apartment/floor numbers and PO boxes. We also add abbreviations, drop out components at random, etc. to make the parser as robust as possible to messy real-world input.
+Libpostal's international address parser uses machine learning (Conditional Random Fields) and is trained on over 1 billion addresses in every inhabited country on Earth. We use [OpenStreetMap](https://openstreetmap.org) and [OpenAddresses](https://openaddresses.io) as sources of structured addresses, and the OpenCage address format templates at: https://github.com/OpenCageData/address-formatting to construct the training data, supplementing with containing polygons, and generating sub-building components like apartment/floor numbers and PO boxes. We also add abbreviations, drop out components at random, etc. to make the parser as robust as possible to messy real-world input.
 
 These example parse results are taken from the interactive address_parser program 
 that builds with libpostal when you run ```make```. Note that the parser can handle
