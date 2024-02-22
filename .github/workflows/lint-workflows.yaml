@@ -1,0 +1,17 @@
+name: lint workflows
+
+on:
+  push:
+    branches-ignore: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: read
+  pull-requests: read
+  statuses: write
+
+jobs:
+  lint-workflows:
+    uses: senzing-factory/build-resources/.github/workflows/lint-workflows.yaml@v1

@@ -1,4 +1,4 @@
-name: 'add to project gdev'
+name: add to project gdev
 
 on:
   issues:
@@ -8,13 +8,14 @@ on:
 
 jobs:
   add-to-project:
-    name: Add to classic project
+    name: add issue to project
     runs-on: ubuntu-latest
+
     steps:
-      - name: Add to classic project
-        uses: senzing-factory/github-action-add-issue-to-project@main
-        with:
-          project: "https://github.com/orgs/Senzing/projects/9"
-          column_name: "Backlog"
+      - name: assign issue to project
         env:
           GITHUB_TOKEN: ${{ secrets.SENZING_GITHUB_ACCESS_TOKEN }}
+        uses: senzing-factory/github-action-add-issue-to-project@v1
+        with:
+          project: "https://github.com/orgs/Senzing/projects/${{ vars.SENZING_PROJECT_GDEV }}"
+          column_name: "Backlog"

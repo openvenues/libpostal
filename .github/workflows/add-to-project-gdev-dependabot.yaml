@@ -1,0 +1,23 @@
+name: add to project gdev dependabot
+
+on:
+  pull_request:
+    branches: [main]
+
+env:
+  CREATOR: ${{ github.event.pull_request.user.login }}
+  GITHUB_TOKEN: ${{ secrets.SENZING_GITHUB_ACCESS_TOKEN }}
+
+jobs:
+  add-to-project-dependabot:
+    name: add issue to Senzing Community project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: assign issue to project
+        env:
+          BOOL: ${{ contains( env.CREATOR, 'dependabot' ) }}
+        if: ${{ env.BOOL == 'true' }}
+        uses: senzing-factory/github-action-add-issue-to-project@v1
+        with:
+          project: "https://github.com/orgs/Senzing/projects/${{ vars.SENZING_PROJECT_GDEV }}"

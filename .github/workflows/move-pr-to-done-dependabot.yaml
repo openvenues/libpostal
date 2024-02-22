@@ -1,0 +1,12 @@
+name: move pr to done dependabot
+
+on:
+  pull_request:
+    branches: [main]
+    types: [closed]
+
+jobs:
+  move-pr-to-done-dependabot:
+    secrets:
+      SENZING_GITHUB_PROJECT_RW_TOKEN: ${{ secrets.SENZING_GITHUB_PROJECT_RW_TOKEN }}
+    uses: senzing-factory/build-resources/.github/workflows/move-pr-to-done.yaml@v1

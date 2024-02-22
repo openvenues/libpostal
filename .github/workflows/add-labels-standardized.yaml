@@ -1,4 +1,4 @@
-name: 'add labels standardized'
+name: add labels standardized
 
 on:
   issues:
