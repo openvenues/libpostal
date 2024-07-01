@@ -1,0 +1,8 @@
+{
+  "ignore": [
+    "**/resources/**",
+    "**/scripts/**",
+    "**/src/**",
+    "**/test/**"
+  ]
+}

@@ -14,4 +14,4 @@ permissions:
 
 jobs:
   lint-workflows:
-    uses: senzing-factory/build-resources/.github/workflows/lint-workflows.yaml@v1
+    uses: senzing-factory/build-resources/.github/workflows/lint-workflows.yaml@v2

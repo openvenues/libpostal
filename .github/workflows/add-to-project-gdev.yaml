@@ -6,16 +6,15 @@ on:
       - opened
       - reopened
 
+permissions:
+  repository-projects: write
+
 jobs:
   add-to-project:
-    name: add issue to project
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: assign issue to project
-        env:
-          GITHUB_TOKEN: ${{ secrets.SENZING_GITHUB_ACCESS_TOKEN }}
-        uses: senzing-factory/github-action-add-issue-to-project@v1
-        with:
-          project: "https://github.com/orgs/Senzing/projects/${{ vars.SENZING_PROJECT_GDEV }}"
-          column_name: "Backlog"
+    secrets:
+      SENZING_GITHUB_PROJECT_RW_TOKEN: ${{ secrets.SENZING_GITHUB_PROJECT_RW_TOKEN }}
+    uses: senzing-factory/build-resources/.github/workflows/add-to-project.yaml@v2
+    with:
+      classic: false
+      project-number: ${{ vars.SENZING_PROJECT_GDEV }}
+      org: ${{ vars.SENZING_GITHUB_ACCOUNT_NAME }}

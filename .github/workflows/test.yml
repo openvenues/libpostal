@@ -1,4 +1,4 @@
-name: Test
+name: test
 
 on:
   push:
@@ -7,11 +7,14 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build_and_test:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-13]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -30,7 +33,7 @@ jobs:
           LIBPOSTAL_DATA_DIR: ${GITHUB_WORKSPACE}/data
         run: |
           ./bootstrap.sh
-          ./configure --datadir=$LIBPOSTAL_DATA_DIR
+          ./configure --datadir="$LIBPOSTAL_DATA_DIR"
           make
       - name: Test
         run: make check
