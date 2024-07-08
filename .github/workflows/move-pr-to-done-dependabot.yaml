@@ -14,4 +14,4 @@ jobs:
       SENZING_GITHUB_PROJECT_RW_TOKEN: ${{ secrets.SENZING_GITHUB_PROJECT_RW_TOKEN }}
     uses: senzing-factory/build-resources/.github/workflows/move-pr-to-done-dependabot.yaml@v2
     with:
-      project: ${{ vars.SENZING_PROJECT_COMMUNITY }}
+      project: ${{ vars.SENZING_PROJECT_GDEV }}
