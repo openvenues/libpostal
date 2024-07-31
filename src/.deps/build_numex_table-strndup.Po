@@ -1,0 +1,6 @@
+build_numex_table-strndup.o: strndup.c /usr/include/stdc-predef.h \
+ ../config.h
+
+/usr/include/stdc-predef.h:
+
+../config.h:

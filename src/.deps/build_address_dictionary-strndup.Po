@@ -1,0 +1,6 @@
+build_address_dictionary-strndup.o: strndup.c /usr/include/stdc-predef.h \
+ ../config.h
+
+/usr/include/stdc-predef.h:
+
+../config.h:
