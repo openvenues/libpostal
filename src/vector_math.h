@@ -8,9 +8,14 @@
 
 #define ks_lt_index(a, b) ((a).value < (b).value)
 
-#if   defined(USE_SSE)
-#include <emmintrin.h>
+#if defined(USE_SSE)
+	#if defined(USE_NEON)
+		#include "sse2neon.h"	
+	#else
+		#include <emmintrin.h>
+	#endif
 #endif
+
 
 /*
     Useful macro definitions for memory alignment:

@@ -95,7 +95,17 @@ AC_ARG_ENABLE([sse2],
     )
 
 AS_IF([test "x$enable_sse2" != "xno"], [
-    CFLAGS="-mfpmath=sse -msse2 -DUSE_SSE ${CFLAGS}"
+    case "$build_cpu" in 
+	x86_64 | i?86)
+    		CFLAGS="-mfpmath=sse -msse2 -DUSE_SSE ${CFLAGS}"
+		;;
+	aarch64)
+		CFLAGS="-DUSE_SSE -DUSE_NEON ${CFLAGS}"
+		;;
+	*)
+		AC_MSG_ERROR([Architecture "$build_cpu" hasn't been tested for SSE, you must pass --disable-sse2 to ./configure])
+		;;
+    esac
 ])
 
 AC_CHECK_HEADER(cblas.h, [AX_CBLAS])
