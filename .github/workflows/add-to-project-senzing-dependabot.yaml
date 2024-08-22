@@ -1,4 +1,4 @@
-name: add to project gdev dependabot
+name: add to project senzing github organization dependabot
 
 on:
   pull_request:
@@ -13,4 +13,4 @@ jobs:
       SENZING_GITHUB_PROJECT_RW_TOKEN: ${{ secrets.SENZING_GITHUB_PROJECT_RW_TOKEN }}
     uses: senzing-factory/build-resources/.github/workflows/add-to-project-dependabot.yaml@v2
     with:
-      project: ${{ vars.SENZING_PROJECT_GDEV }}
+      project: ${{ vars.SENZING_GITHUB_ORGANIZATION_PROJECT }}

@@ -1,4 +1,4 @@
-name: add to project gdev
+name: add to project senzing github organization
 
 on:
   issues:
@@ -16,5 +16,5 @@ jobs:
     uses: senzing-factory/build-resources/.github/workflows/add-to-project.yaml@v2
     with:
       classic: false
-      project-number: ${{ vars.SENZING_PROJECT_GDEV }}
+      project-number: ${{ vars.SENZING_GITHUB_ORGANIZATION_PROJECT }}
       org: ${{ vars.SENZING_GITHUB_ACCOUNT_NAME }}
