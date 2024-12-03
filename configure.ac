@@ -94,7 +94,7 @@ AC_ARG_ENABLE([sse2],
         )
     )
 
-AS_IF([test "x$enable_sse2" != "xno"], [
+AS_IF([test "x$enable_sse2" != "xno" && test "x$(uname -m)" != "xarm64"], [
     CFLAGS="-mfpmath=sse -msse2 -DUSE_SSE ${CFLAGS}"
 ])
 
