@@ -11,7 +11,10 @@ jobs:
   build_and_test:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, macos-15]
+        os: 
+          - ubuntu-latest
+          - macos-15-large # x86_64
+          - macos-15 # arm64
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
