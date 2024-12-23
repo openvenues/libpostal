@@ -125,7 +125,7 @@ cd libpostal
 ./configure --datadir=[...some dir with a few GB of space...]
 
 # For Apple / ARM cpus and the default model
-./configure --datadir=/tmp --disable-sse2
+./configure --datadir=[...some dir with a few GB of space...] --disable-sse2
 
 # For the improved Senzing model:
 ./configure --datadir=[...some dir with a few GB of space...] MODEL=senzing
