@@ -850,6 +850,7 @@ uint32_t trie_get_from_index(trie_t *self, char *word, size_t len, uint32_t i) {
     trie_node_t node = trie_get_node(self, i);
     if (node.base == NULL_NODE_ID) return NULL_NODE_ID;
 
+    // Possibly uninitialized?
     uint32_t next_id;
 
     // Include NUL-byte. It may be stored if this phrase is a prefix of a longer one
