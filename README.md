@@ -98,7 +98,7 @@ Before you install, make sure you have the following prerequisites:
 
 **On Ubuntu/Debian**
 ```
-sudo apt-get install curl autoconf automake libtool pkg-config
+sudo apt-get install -y curl build-essential autoconf automake libtool pkg-config
 ```
 
 **On CentOS/RHEL**
@@ -118,9 +118,19 @@ If you're using an M1 Mac or ARM64-based linux distro, add `--disable-sse2` to t
 ```
 git clone https://github.com/openvenues/libpostal
 cd libpostal
+
 ./bootstrap.sh
+
+# For Intel/AMD processors and the default model
 ./configure --datadir=[...some dir with a few GB of space...]
-make -j4
+
+# For Apple / ARM cpus and the default model
+./configure --datadir=[...some dir with a few GB of space...] --disable-sse2
+
+# For the improved Senzing model:
+./configure --datadir=[...some dir with a few GB of space...] MODEL=senzing
+
+make -j8
 sudo make install
 
 # On Linux it's probably a good idea to run
