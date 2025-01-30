@@ -119,7 +119,7 @@ char **libpostal_near_dupe_hashes_languages(size_t num_components, char **labels
 
 
 char **libpostal_place_languages(size_t num_components, char **labels, char **values, size_t *num_languages) {
-    language_classifier_response_t *lang_response = place_languages(num_components, labels, values);
+    libpostal_language_classifier_response_t *lang_response = place_languages(num_components, labels, values);
     if (lang_response == NULL) {
         *num_languages = 0;
         return NULL;
