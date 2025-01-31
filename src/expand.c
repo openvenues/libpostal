@@ -15,6 +15,14 @@
 #include "token_types.h"
 #include "transliterate.h"
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifndef HAVE_STRNDUP
+#include "strndup.h"
+#endif
+
 
 #define DEFAULT_KEY_LEN 32
 
