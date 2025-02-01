@@ -22,6 +22,8 @@ AC_PROG_INSTALL
 LDFLAGS="$LDFLAGS -L/usr/local/lib"
 
 # Checks for libraries.
+AC_CHECK_LIB(json-c, json_tokener_parse)
+AM_CONDITIONAL([USE_LIBJSON_C], [test "$HAVE_JSON_C" -eq 1])
 AC_SEARCH_LIBS([log],
   [m],,[AC_MSG_ERROR([Could not find math library])])
 

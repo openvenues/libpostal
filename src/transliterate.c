@@ -734,6 +734,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
         step = trans_table->steps->a[i];
         step_name = step->name;
         if (step->type == STEP_RULESET && trans_node_id == NULL_NODE_ID) {
+            // TODO(horgh): Possible use after free
             log_warn("transliterator \"%s\" does not exist in trie\n", trans_name);
             free(str);
             return NULL;
@@ -793,6 +794,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
                     ch = (int32_t)*ptr;
                 } else if (char_len <= 0) {
                     log_warn("char_len=%zd at idx=%zu\n", char_len, idx);
+                    // TODO(horgh): Possible double free
                     free(trans_name);
                     free(str);
                     return NULL;
