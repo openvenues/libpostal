@@ -11,8 +11,9 @@
 
     overrides:
         id:
-            # Buenos Aires (state boundary coterminous with city)
-            "3082668": null
+            relation:
+                # Buenos Aires (state boundary coterminous with city)
+                "3082668": null
         contained_by:
             relation:
                 # Buenos Aires
