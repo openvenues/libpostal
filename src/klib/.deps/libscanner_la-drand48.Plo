@@ -1,0 +1,6 @@
+klib/libscanner_la-drand48.lo: klib/drand48.c /usr/include/stdc-predef.h \
+ ../config.h
+
+/usr/include/stdc-predef.h:
+
+../config.h:

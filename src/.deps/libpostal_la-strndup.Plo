@@ -1,0 +1,5 @@
+libpostal_la-strndup.lo: strndup.c /usr/include/stdc-predef.h ../config.h
+
+/usr/include/stdc-predef.h:
+
+../config.h:
