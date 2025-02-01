@@ -85,7 +85,7 @@ trie_t *trie_new_from_cstring_array(cstring_array *strings) {
     char *key;
     uint32_t i;
 
-    uint32_t next_id;
+    uint32_t next_id = 0;
 
     trie_t *trie = trie_new();
 
