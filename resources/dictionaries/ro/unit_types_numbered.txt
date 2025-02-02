@@ -1,4 +1,8 @@
-apartament|ap|apt|apart
+apartamentul|apartament|ap|apt|apart
 birou
+cladire|cladirea|clădire|clădirea
+corp|corpul
+complex
+interior|int
 lotul
 sală|sala
