@@ -17,10 +17,10 @@ static inline bool is_address_text_component(char *label) {
             );
 }
 
-language_classifier_response_t *place_languages(size_t num_components, char **labels, char **values) {
+libpostal_language_classifier_response_t *place_languages(size_t num_components, char **labels, char **values) {
     if (num_components == 0 || values == NULL || labels == NULL) return NULL;
 
-    language_classifier_response_t *lang_response = NULL;
+    libpostal_language_classifier_response_t *lang_response = NULL;
     
     char *label;
     char *value;

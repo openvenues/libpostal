@@ -5,6 +5,15 @@
 
 #include "log/log.h"
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifndef HAVE_STRNDUP
+#include "strndup.h"
+#endif
+
+
 #define NUMEX_TABLE_SIGNATURE 0xBBBBBBBB
 
 #define NUMEX_SETUP_ERROR "numex module not setup, call libpostal_setup() or numex_module_setup()\n"
