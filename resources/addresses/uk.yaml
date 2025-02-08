@@ -49,7 +49,7 @@ numbers:
 
 
 house_numbers:
-    budnyok: &budnyok
+    budynok: &budynok
         canonical: будинок
         abbreviated: буд
         sample: true
@@ -58,8 +58,8 @@ house_numbers:
         sample_probability: 0.1
         numeric:
             direction: left
-    budnyok_latin: &budnyok_latin
-        canonical: budnyok
+    budynok_latin: &budynok_latin
+        canonical: budynok
         abbreviated: bud
         sample: true
         canonical_probability: 0.6
@@ -88,10 +88,10 @@ house_numbers:
             direction: left
 
     alphanumeric:
-        default: *budnyok
+        default: *budynok
         probability: 0.65
         alternatives:
-            - alternative: *budnyok_latin
+            - alternative: *budynok_latin
               probability: 0.05
             - alternative: *dom
               probability: 0.25
