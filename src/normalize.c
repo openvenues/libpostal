@@ -434,7 +434,7 @@ void add_normalized_token(char_array *array, char *str, token_t token, uint64_t 
                 char_array_append(array, " ");
                 append_char = false;
             } else if (is_hyphen && options & NORMALIZE_TOKEN_DELETE_HYPHENS) {
-                append_char = !is_hyphen_between_letter_and_number;
+                append_char = is_hyphen_between_letter_and_number;
             }
 
             if ((is_hyphen || is_full_stop) && token.type == NUMERIC && options & NORMALIZE_TOKEN_SPLIT_ALPHA_FROM_NUMERIC && last_was_letter) {

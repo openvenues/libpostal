@@ -4,6 +4,8 @@
 
 #include "string_utils.h"
 
+#include "file_utils.h"
+
 // Run shuf/gshuf on a file in-place if the shuf command is available.
 bool shuffle_file(char *filename) {
     char *shuffle_command = NULL;

@@ -46,7 +46,7 @@ language_classifier_t *get_language_classifier(void) {
     return language_classifier;
 }
 
-void language_classifier_response_destroy(language_classifier_response_t *self) {
+void language_classifier_response_destroy(libpostal_language_classifier_response_t *self) {
     if (self == NULL) return;
     if (self->languages != NULL) {
         free(self->languages);
@@ -59,7 +59,7 @@ void language_classifier_response_destroy(language_classifier_response_t *self) 
     free(self);
 }
 
-language_classifier_response_t *classify_languages(char *address) {
+libpostal_language_classifier_response_t *classify_languages(char *address) {
     language_classifier_t *classifier = get_language_classifier();
     
     if (classifier == NULL) {
@@ -88,7 +88,7 @@ language_classifier_response_t *classify_languages(char *address) {
     size_t n = classifier->num_labels;
     double_matrix_t *p_y = double_matrix_new_zeros(1, n);
 
-    language_classifier_response_t *response = NULL;
+    libpostal_language_classifier_response_t *response = NULL;
     bool model_exp = false;
     if (classifier->weights_type == MATRIX_DENSE) {
         model_exp = logistic_regression_model_expectation(classifier->weights.dense, x, p_y);
@@ -129,7 +129,7 @@ language_classifier_response_t *classify_languages(char *address) {
 
         free(indices);
 
-        response = malloc(sizeof(language_classifier_response_t));
+        response = malloc(sizeof(libpostal_language_classifier_response_t));
         response->num_languages = num_languages;
         response->languages = languages;
         response->probs = probs;

@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
     }
 
 
-    language_classifier_response_t *response = classify_languages(address);
+    libpostal_language_classifier_response_t *response = classify_languages(address);
     if (response == NULL) {
         printf("Could not classify language\n");
         exit(EXIT_FAILURE);

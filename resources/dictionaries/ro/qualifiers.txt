@@ -1,1 +1,7 @@
 bloc|bl
+cartier|cartierul
+comuna|comunā
+kilometrul|kilometru|km
+sat|satul
+sector|sectorul|sect
+zona
