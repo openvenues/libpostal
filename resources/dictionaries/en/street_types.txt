@@ -54,7 +54,7 @@ center|centre|cetr|cntr|ctr|c|cen
 centers|ctrs
 centreway|cnwy
 chase|ch|chas
-circle|cir|circel
+circle|cir|circel|cirlce
 circles|cirs
 circlet|clt
 circuit|crct|circ|cct|cirt|ci|circt
