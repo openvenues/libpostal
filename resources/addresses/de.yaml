@@ -63,10 +63,23 @@ numbers:
 
 
 house_numbers:
+    gebaude: &gebaude
+        canonical: gebäude
+        abbreviated: geb
+        sample: true
+        canonical_probability: 0.5
+        abbreviated_probability: 0.5
+        sample_probability: 0.05
+        numeric:
+            direction: left
     alphanumeric:
         default: *nummer
+        probability: 0.95
+        alternatives:
+            - alternative: *gebaude
+              probability: 0.05
 
-    alphanumeric_phrase_probability: 0.0001
+    alphanumeric_phrase_probability: 0.05
 
 conscription_numbers:
     alphanumeric:
