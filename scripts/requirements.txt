@@ -13,7 +13,7 @@ distribute==0.7.3
 future==0.15.2
 futures==3.0.5
 ftfy==4.2.0
-gevent==1.1.2
+gevent==23.9.0
 greenlet==0.4.10
 jmespath==0.9.0
 leveldb==0.193
