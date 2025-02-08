@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 m4_define(LIBPOSTAL_MAJOR_VERSION, [1])
-m4_define(LIBPOSTAL_MINOR_VERSION, [0])
+m4_define(LIBPOSTAL_MINOR_VERSION, [1])
 m4_define(LIBPOSTAL_PATCH_VERSION, [0])
 
 AC_INIT([libpostal], LIBPOSTAL_MAJOR_VERSION.LIBPOSTAL_MINOR_VERSION.LIBPOSTAL_PATCH_VERSION)
@@ -50,10 +50,32 @@ AC_CHECK_TYPES([ptrdiff_t])
 # Checks for library functions.
 AC_CHECK_FUNCS([malloc realloc drand48 getcwd gettimeofday memmove memset regcomp setlocale sqrt strdup strndup])
 
+AC_SUBST([LIBPOSTAL_DATA_DIR_VERSION_STRING], [v1])
+
+DATA_FILE_LATEST_VERSION=$(cat $srcdir/versions/base_data)
+PARSER_MODEL_LATEST_VERSION=$(cat $srcdir/versions/parser)
+LANG_CLASS_MODEL_LATEST_VERSION=$(cat $srcdir/versions/language_classifier)
+
+AC_SUBST([LIBPOSTAL_DATA_FILE_LATEST_VERSION], [$DATA_FILE_LATEST_VERSION])
+AC_SUBST([LIBPOSTAL_PARSER_MODEL_LATEST_VERSION], [$PARSER_MODEL_LATEST_VERSION])
+AC_SUBST([LIBPOSTAL_LANG_CLASS_MODEL_LATEST_VERSION], [$LANG_CLASS_MODEL_LATEST_VERSION])
+
+# Senzing data
+AC_SUBST([LIBPOSTAL_SENZING_DATA_DIR_VERSION_STRING], [v1])
+
+SENZING_DATA_FILE_LATEST_VERSION=$(cat $srcdir/versions/senzing/base_data)
+SENZING_PARSER_MODEL_LATEST_VERSION=$(cat $srcdir/versions/senzing/parser)
+SENZING_LANG_CLASS_MODEL_LATEST_VERSION=$(cat $srcdir/versions/senzing/language_classifier)
+
+AC_SUBST([LIBPOSTAL_SENZING_DATA_FILE_LATEST_VERSION], [$SENZING_DATA_FILE_LATEST_VERSION])
+AC_SUBST([LIBPOSTAL_SENZING_PARSER_MODEL_LATEST_VERSION], [$SENZING_PARSER_MODEL_LATEST_VERSION])
+AC_SUBST([LIBPOSTAL_SENZING_LANG_CLASS_MODEL_LATEST_VERSION], [$SENZING_LANG_CLASS_MODEL_LATEST_VERSION])
+
 AC_CONFIG_FILES([Makefile
                  libpostal.pc
                  src/Makefile
-                 test/Makefile])
+                 src/libpostal_data
+                 test/Makefile], [chmod +x src/libpostal_data])
 
 AC_CHECK_PROG([FOUND_SHUF], [shuf], [yes])
 AC_CHECK_PROG([FOUND_GSHUF], [gshuf], [yes])
@@ -64,6 +86,7 @@ AS_IF([test "x$FOUND_GSHUF" = xyes],  [AC_DEFINE([HAVE_GSHUF], [1], [gshuf avail
 # ------------------------------------------------------------------
 # Checks for SSE2 build
 # ------------------------------------------------------------------
+
 AC_ARG_ENABLE([sse2],
     AS_HELP_STRING(
         [--disable-sse2],
@@ -71,7 +94,7 @@ AC_ARG_ENABLE([sse2],
         )
     )
 
-AS_IF([test "x$enable_sse2" != "xno"], [
+AS_IF([test "x$enable_sse2" != "xno" && test "x$(uname -m)" != "xarm64"], [
     CFLAGS="-mfpmath=sse -msse2 -DUSE_SSE ${CFLAGS}"
 ])
 
@@ -84,6 +107,10 @@ AC_ARG_ENABLE([data-download],
                 no) DOWNLOAD_DATA=false ;;
                 *) AC_MSG_ERROR([bad value ${enableval} for --disable-data-download]) ;;
               esac], [DOWNLOAD_DATA=true])
+
+AC_ARG_VAR(MODEL, [Option to use alternative data models. Currently available is "senzing" (MODEL=senzing). If this option is not set the default libpostal data model is used.])
+AS_VAR_IF([MODEL], [], [],
+  [AS_VAR_IF([MODEL], [senzing], [], [AC_MSG_FAILURE([Invalid MODEL value set])])])
 
 AM_CONDITIONAL([DOWNLOAD_DATA], [test "x$DOWNLOAD_DATA" = "xtrue"])
 

@@ -85,6 +85,17 @@ libpostal_near_dupe_hash_options_t libpostal_get_near_dupe_hash_default_options(
     return LIBPOSTAL_NEAR_DUPE_HASH_DEFAULT_OPTIONS;
 }
 
+char **libpostal_near_dupe_name_hashes(char *name, libpostal_normalize_options_t normalize_options, size_t *num_hashes) {
+    cstring_array *strings = name_word_hashes(name, normalize_options);
+    if (strings == NULL) {
+        *num_hashes = 0;
+        return NULL;
+    }
+    *num_hashes = cstring_array_num_strings(strings);
+    return cstring_array_to_strings(strings);
+}
+
+
 char **libpostal_near_dupe_hashes(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t *num_hashes) {
     cstring_array *strings = near_dupe_hashes(num_components, labels, values, options);
     if (strings == NULL) {
@@ -108,7 +119,7 @@ char **libpostal_near_dupe_hashes_languages(size_t num_components, char **labels
 
 
 char **libpostal_place_languages(size_t num_components, char **labels, char **values, size_t *num_languages) {
-    language_classifier_response_t *lang_response = place_languages(num_components, labels, values);
+    libpostal_language_classifier_response_t *lang_response = place_languages(num_components, labels, values);
     if (lang_response == NULL) {
         *num_languages = 0;
         return NULL;
@@ -200,6 +211,30 @@ libpostal_fuzzy_duplicate_status_t libpostal_is_name_duplicate_fuzzy(size_t num_
 
 libpostal_fuzzy_duplicate_status_t libpostal_is_street_duplicate_fuzzy(size_t num_tokens1, char **tokens1, double *token_scores1, size_t num_tokens2, char **tokens2, double *token_scores2, libpostal_fuzzy_duplicate_options_t options) {
     return is_street_duplicate_fuzzy(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, options);
+}
+
+libpostal_language_classifier_response_t *libpostal_classify_language(char *address) {
+    libpostal_language_classifier_response_t *response = classify_languages(address);
+
+    if (response == NULL) {
+        log_error("Language classification returned NULL\n");
+        return NULL;
+    }
+
+    return response;
+}
+
+void libpostal_language_classifier_response_destroy(libpostal_language_classifier_response_t *self) {
+    if (self == NULL) return;
+    if (self->languages != NULL) {
+        free(self->languages);
+    }
+
+    if (self->probs) {
+        free(self->probs);
+    }
+
+    free(self);
 }
 
 

@@ -1,0 +1,5 @@
+banca
+organizatie neguvernamentala|ong
+societate comerciala|sc
+societate cu raspundere limitata|srl
+societate pe actiuni|sa
