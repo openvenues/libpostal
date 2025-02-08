@@ -13,10 +13,16 @@
 
 #define LIBPOSTAL_USAGE "Usage: ./libpostal address [...languages] [--json]\n"
 
-static inline void print_output(char *address, libpostal_normalize_options_t options, bool use_json) {
+static inline void print_output(char *address, libpostal_normalize_options_t options, bool use_json, bool root_expansions) {
     size_t num_expansions;
 
-    char **expansions = libpostal_expand_address(address, options, &num_expansions);
+    char **expansions;
+
+    if (!root_expansions) {
+        expansions = libpostal_expand_address(address, options, &num_expansions);
+    } else {
+        expansions = libpostal_expand_address_root(address, options, &num_expansions);
+    }
 
     char *normalized;
 
@@ -45,9 +51,9 @@ int main(int argc, char **argv) {
     char *arg;
 
     char *address = NULL;
-    char *language = NULL;
 
     bool use_json = false;
+    bool root_expansions = false;
 
     string_array *languages = NULL;
 
@@ -58,6 +64,8 @@ int main(int argc, char **argv) {
             exit(EXIT_SUCCESS);
         } else if (string_equals(arg, "--json")) {
             use_json = true;
+        } else if (string_equals(arg, "--root")) {
+            root_expansions = true;
         } else if (address == NULL) {
             address = arg;
         } else if (!string_starts_with(arg, "-")) {
@@ -87,11 +95,11 @@ int main(int argc, char **argv) {
     if (address == NULL) {
         char *line;
         while ((line = file_getline(stdin)) != NULL) {
-            print_output(line, options, use_json);
+            print_output(line, options, use_json, root_expansions);
             free(line);
         }
     } else {
-        print_output(address, options, use_json);
+        print_output(address, options, use_json, root_expansions);
     }
 
     if (languages != NULL) {

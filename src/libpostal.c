@@ -85,6 +85,17 @@ libpostal_near_dupe_hash_options_t libpostal_get_near_dupe_hash_default_options(
     return LIBPOSTAL_NEAR_DUPE_HASH_DEFAULT_OPTIONS;
 }
 
+char **libpostal_near_dupe_name_hashes(char *name, libpostal_normalize_options_t normalize_options, size_t *num_hashes) {
+    cstring_array *strings = name_word_hashes(name, normalize_options);
+    if (strings == NULL) {
+        *num_hashes = 0;
+        return NULL;
+    }
+    *num_hashes = cstring_array_num_strings(strings);
+    return cstring_array_to_strings(strings);
+}
+
+
 char **libpostal_near_dupe_hashes(size_t num_components, char **labels, char **values, libpostal_near_dupe_hash_options_t options, size_t *num_hashes) {
     cstring_array *strings = near_dupe_hashes(num_components, labels, values, options);
     if (strings == NULL) {
@@ -108,7 +119,7 @@ char **libpostal_near_dupe_hashes_languages(size_t num_components, char **labels
 
 
 char **libpostal_place_languages(size_t num_components, char **labels, char **values, size_t *num_languages) {
-    language_classifier_response_t *lang_response = place_languages(num_components, labels, values);
+    libpostal_language_classifier_response_t *lang_response = place_languages(num_components, labels, values);
     if (lang_response == NULL) {
         *num_languages = 0;
         return NULL;
@@ -202,6 +213,30 @@ libpostal_fuzzy_duplicate_status_t libpostal_is_street_duplicate_fuzzy(size_t nu
     return is_street_duplicate_fuzzy(num_tokens1, tokens1, token_scores1, num_tokens2, tokens2, token_scores2, options);
 }
 
+libpostal_language_classifier_response_t *libpostal_classify_language(char *address) {
+    libpostal_language_classifier_response_t *response = classify_languages(address);
+
+    if (response == NULL) {
+        log_error("Language classification returned NULL\n");
+        return NULL;
+    }
+
+    return response;
+}
+
+void libpostal_language_classifier_response_destroy(libpostal_language_classifier_response_t *self) {
+    if (self == NULL) return;
+    if (self->languages != NULL) {
+        free(self->languages);
+    }
+
+    if (self->probs) {
+        free(self->probs);
+    }
+
+    free(self);
+}
+
 
 void libpostal_address_parser_response_destroy(libpostal_address_parser_response_t *self) {
     if (self == NULL) return;
@@ -261,20 +296,22 @@ bool libpostal_setup_datadir(char *datadir) {
         numex_path = path_join(3, datadir, LIBPOSTAL_NUMEX_SUBDIR, NUMEX_DATA_FILE);
         address_dictionary_path = path_join(3, datadir, LIBPOSTAL_ADDRESS_EXPANSIONS_SUBDIR, ADDRESS_DICTIONARY_DATA_FILE);
     }
+    
+    bool setup_succeed = true;
 
     if (!transliteration_module_setup(transliteration_path)) {
         log_error("Error loading transliteration module, dir=%s\n", transliteration_path);
-        return false;
+        setup_succeed = false;
     }
 
-    if (!numex_module_setup(numex_path)) {
+    if (setup_succeed && !numex_module_setup(numex_path)) {
         log_error("Error loading numex module, dir=%s\n", numex_path);
-        return false;
+        setup_succeed = false;
     }
 
-    if (!address_dictionary_module_setup(address_dictionary_path)) {
+    if (setup_succeed && !address_dictionary_module_setup(address_dictionary_path)) {
         log_error("Error loading dictionary module, dir=%s\n", address_dictionary_path);
-        return false;
+        setup_succeed = false;
     }
 
     if (transliteration_path != NULL) {
@@ -289,7 +326,7 @@ bool libpostal_setup_datadir(char *datadir) {
         free(address_dictionary_path);
     }
 
-    return true;
+    return setup_succeed;
 }
 
 bool libpostal_setup(void) {

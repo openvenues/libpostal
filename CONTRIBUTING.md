@@ -1,6 +1,6 @@
 ## Submitting Issues
 
-When submitting issues to libpostal, please repeect these guildelines:
+When submitting issues to libpostal, please respect these guidelines:
 
 - Be constructive. Try to help solve the problem.
 - Always search for existing issues before submitting one.

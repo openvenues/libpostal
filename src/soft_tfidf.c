@@ -157,8 +157,8 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
     uint32_array **t1_tokens_unicode = NULL;
     uint32_array **t2_tokens_unicode = NULL;
 
-    uint32_array *t1_unicode;
-    uint32_array *t2_unicode;
+    uint32_array *t1_unicode = NULL;
+    uint32_array *t2_unicode = NULL;
 
     int64_array *phrase_memberships_array1 = NULL;
     int64_array *phrase_memberships_array2 = NULL;
@@ -232,8 +232,8 @@ double soft_tfidf_similarity_with_phrases_and_acronyms(size_t num_tokens1, char 
         }
     }
 
-    uint32_t *suffixes1;
-    uint32_t *suffixes2;
+    uint32_t *suffixes1 = NULL;
+    uint32_t *suffixes2 = NULL;
 
     if (ordinal_suffixes1 != NULL && ordinal_suffixes2 != NULL) {
         suffixes1 = ordinal_suffixes1->a;

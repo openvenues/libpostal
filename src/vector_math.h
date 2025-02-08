@@ -8,7 +8,7 @@
 
 #define ks_lt_index(a, b) ((a).value < (b).value)
 
-#ifdef  USE_SSE
+#if   defined(USE_SSE)
 #include <emmintrin.h>
 #endif
 
@@ -338,7 +338,7 @@
 
 
 
-#ifdef USE_SSE
+#if defined(USE_SSE)
 /*
 From https://github.com/herumi/fmath/blob/master/fastexp.cpp
 

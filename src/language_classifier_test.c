@@ -7,6 +7,7 @@
 #include "language_classifier_io.h"
 #include "string_utils.h"
 #include "trie_utils.h"
+#include "transliterate.h"
 
 
 double test_accuracy(char *filename) {
@@ -33,7 +34,7 @@ double test_accuracy(char *filename) {
             continue;
         }
 
-        language_classifier_response_t *response = classify_languages(address);
+        libpostal_language_classifier_response_t *response = classify_languages(address);
         if (response == NULL || response->num_languages == 0) {
             printf("%s\tNULL\t%s\n", language, address);
             continue;
