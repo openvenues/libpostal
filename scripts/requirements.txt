@@ -10,7 +10,7 @@ click-plugins==1.0.3
 cligj==0.4.0
 cssselect==0.9.1
 distribute==0.7.3
-future==0.15.2
+future==0.18.3
 futures==3.0.5
 ftfy==4.2.0
 gevent==23.9.0
