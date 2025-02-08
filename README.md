@@ -415,6 +415,7 @@ Libpostal is designed to be used by higher-level languages.  If you don't see yo
 - Perl: [Geo::libpostal](https://metacpan.org/pod/Geo::libpostal)
 - Elixir: [Expostal](https://github.com/SweetIQ/expostal)
 - Haskell: [haskell-postal](http://github.com/netom/haskell-postal)
+- Rust: [rust-postal](https://github.com/pnordahl/rust-postal)
 - Rust: [rustpostal](https://crates.io/crates/rustpostal)
 
 **Unofficial database extensions**
