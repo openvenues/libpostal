@@ -1,6 +1,6 @@
 # libpostal: international street address NLP
 
-[![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal)
+[![Build Status](https://github.com/openvenues/libpostal/actions/workflows/test.yml/badge.svg)](https://github.com/openvenues/libpostal/actions)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/openvenues/libpostal?branch=master&svg=true)](https://ci.appveyor.com/project/albarrentine/libpostal/branch/master)
 [![License](https://img.shields.io/github/license/openvenues/libpostal.svg)](https://github.com/openvenues/libpostal/blob/master/LICENSE)
 [![OpenCollective Sponsors](https://opencollective.com/libpostal/sponsors/badge.svg)](#sponsors)
@@ -98,7 +98,7 @@ Before you install, make sure you have the following prerequisites:
 
 **On Ubuntu/Debian**
 ```
-sudo apt-get install curl autoconf automake libtool pkg-config
+sudo apt-get install -y curl build-essential autoconf automake libtool pkg-config
 ```
 
 **On CentOS/RHEL**
@@ -106,19 +106,46 @@ sudo apt-get install curl autoconf automake libtool pkg-config
 sudo yum install curl autoconf automake libtool pkgconfig
 ```
 
-**On Mac OSX**
+**On macOS**
+
+Install with one command via [MacPorts](https://www.macports.org/):
+```
+port install libpostal
+```
+
+Or as follows with [Homebrew](https://brew.sh/):
+
 ```
 brew install curl autoconf automake libtool pkg-config
 ```
 
 Then to install the C library:
 
+If you're using an M1 Mac, add `--disable-sse2` to the `./configure` command. This will result in poorer performance but the build will succeed.
+
 ```
 git clone https://github.com/openvenues/libpostal
 cd libpostal
+
+# skip if installing for the first time
+make distclean
+
 ./bootstrap.sh
-./configure --datadir=[...some dir with a few GB of space...]
+
+# omit --datadir flag to install data in current directory
+./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...]
 make -j4
+
+# For Intel/AMD processors and the default model
+./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...]
+
+# For Apple / ARM cpus and the default model
+./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...] --disable-sse2
+
+# For the improved Senzing model:
+./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...] MODEL=senzing
+
+make -j8
 sudo make install
 
 # On Linux it's probably a good idea to run
@@ -400,23 +427,19 @@ Libpostal is designed to be used by higher-level languages.  If you don't see yo
 - LuaJIT: [lua-resty-postal](https://github.com/bungle/lua-resty-postal)
 - Perl: [Geo::libpostal](https://metacpan.org/pod/Geo::libpostal)
 - Elixir: [Expostal](https://github.com/SweetIQ/expostal)
+- Haskell: [haskell-postal](http://github.com/netom/haskell-postal)
+- Rust: [rust-postal](https://github.com/pnordahl/rust-postal)
 - Rust: [rustpostal](https://crates.io/crates/rustpostal)
 
-**Database extensions**
+**Unofficial database extensions**
 
 - PostgreSQL: [pgsql-postal](https://github.com/pramsey/pgsql-postal)
 
-**Unofficial REST API**
+**Unofficial servers**
 
-- Libpostal REST: [libpostal REST](https://github.com/johnlonganecker/libpostal-rest)
-
-**Libpostal REST Docker**
-
-- Libpostal REST Docker [Libpostal REST Docker](https://github.com/johnlonganecker/libpostal-rest-docker)
-
-**Libpostal ZeroMQ Docker**
-
-- Libpostal ZeroMQ Docker image: [pasupulaphani/libpostal-zeromq](https://hub.docker.com/r/pasupulaphani/libpostal-zeromq/) , Source: [Github](https://github.com/pasupulaphani/libpostal-docker) 
+- Libpostal REST Go Docker: [libpostal-rest-docker](https://github.com/johnlonganecker/libpostal-rest-docker)
+- Libpostal REST FastAPI Docker: [libpostal-fastapi](https://github.com/alpha-affinity/libpostal-fastapi)
+- Libpostal ZeroMQ Docker: [libpostal-zeromq](https://github.com/pasupulaphani/libpostal-docker)
 
 
 Tests
@@ -491,7 +514,7 @@ optionally be separated so Rosenstraße and Rosen Straße are equivalent.
 for a wide variety of countries and languages, not just US/English. 
 The model is trained on over 1 billion addresses and address-like strings, using the
 templates in the [OpenCage address formatting repo](https://github.com/OpenCageData/address-formatting) to construct formatted,
-tagged traning examples for every inhabited country in the world. Many types of [normalizations](https://github.com/openvenues/libpostal/blob/master/scripts/geodata/addresses/components.py)
+tagged training examples for every inhabited country in the world. Many types of [normalizations](https://github.com/openvenues/libpostal/blob/master/scripts/geodata/addresses/components.py)
 are performed to make the training data resemble real messy geocoder input as closely as possible.
 
 - **Language classification**: multinomial logistic regression
@@ -513,7 +536,7 @@ language (IX => 9) which occur in the names of many monarchs, popes, etc.
 
 - **Fast, accurate tokenization/lexing**: clocked at > 1M tokens / sec,
 implements the TR-29 spec for UTF8 word segmentation, tokenizes East Asian
-languages chracter by character instead of on whitespace.
+languages character by character instead of on whitespace.
 
 - **UTF8 normalization**: optionally decompose UTF8 to NFD normalization form,
 strips accent marks e.g. à => a and/or applies Latin-ASCII transliteration.
@@ -537,6 +560,7 @@ Non-goals
 
 - Verifying that a location is a valid address
 - Actually geocoding addresses to a lat/lon (that requires a database/search index)
+- Extracting addresses from free text
 
 Raison d'être
 -------------
@@ -642,7 +666,7 @@ libpostal is written in modern, legible, C99 and uses the following conventions:
 - Confines almost all mallocs to *name*_new and all frees to *name*_destroy
 - Efficient existing implementations for simple things like hashtables
 - Generic containers (via [klib](https://github.com/attractivechaos/klib)) whenever possible
-- Data structrues take advantage of sparsity as much as possible
+- Data structures take advantage of sparsity as much as possible
 - Efficient double-array trie implementation for most string dictionaries
 - Cross-platform as much as possible, particularly for *nix
 

@@ -1,0 +1,36 @@
+name: Test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build_and_test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install curl autoconf automake libtool pkg-config
+      - name: Install Dependencies MacOS
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install curl autoconf automake libtool pkg-config
+      - name: Build
+        env:
+          LIBPOSTAL_DATA_DIR: ${GITHUB_WORKSPACE}/data
+        run: |
+          ./bootstrap.sh
+          ./configure --datadir=$LIBPOSTAL_DATA_DIR
+          make
+      - name: Test
+        run: make check

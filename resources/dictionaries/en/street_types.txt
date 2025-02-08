@@ -132,6 +132,7 @@ falls|fls
 fare
 farm|frm
 farms|frms
+farm to market|fm|farm-to-market
 fern
 ferry|fry|fy
 field|fld|fd

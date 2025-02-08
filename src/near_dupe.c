@@ -670,7 +670,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
 
     libpostal_normalize_options_t normalize_options = libpostal_get_default_options();
 
-    language_classifier_response_t *lang_response = NULL;
+    libpostal_language_classifier_response_t *lang_response = NULL;
 
     if (num_languages == 0) {
         lang_response = place_languages(num_components, labels, values);
