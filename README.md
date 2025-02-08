@@ -1,6 +1,6 @@
 # libpostal: international street address NLP
 
-[![Build Status](https://travis-ci.org/openvenues/libpostal.svg?branch=master)](https://travis-ci.org/openvenues/libpostal)
+[![Build Status](https://github.com/openvenues/libpostal/actions/workflows/test.yml/badge.svg)](https://github.com/openvenues/libpostal/actions)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/openvenues/libpostal?branch=master&svg=true)](https://ci.appveyor.com/project/albarrentine/libpostal/branch/master)
 [![License](https://img.shields.io/github/license/openvenues/libpostal.svg)](https://github.com/openvenues/libpostal/blob/master/LICENSE)
 [![OpenCollective Sponsors](https://opencollective.com/libpostal/sponsors/badge.svg)](#sponsors)
@@ -98,7 +98,7 @@ Before you install, make sure you have the following prerequisites:
 
 **On Ubuntu/Debian**
 ```
-sudo apt-get install curl autoconf automake libtool pkg-config
+sudo apt-get install -y curl build-essential autoconf automake libtool pkg-config
 ```
 
 **On CentOS/RHEL**
@@ -118,9 +118,19 @@ If you're using an M1 Mac, add `--disable-sse2` to the `./configure` command. Th
 ```
 git clone https://github.com/openvenues/libpostal
 cd libpostal
+
 ./bootstrap.sh
+
+# For Intel/AMD processors and the default model
 ./configure --datadir=[...some dir with a few GB of space...]
-make -j4
+
+# For Apple / ARM cpus and the default model
+./configure --datadir=[...some dir with a few GB of space...] --disable-sse2
+
+# For the improved Senzing model:
+./configure --datadir=[...some dir with a few GB of space...] MODEL=senzing
+
+make -j8
 sudo make install
 
 # On Linux it's probably a good idea to run

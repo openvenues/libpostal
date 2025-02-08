@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "libpostal.h"
+
 #include "collections.h"
 #include "language_features.h"
 #include "logistic_regression.h"
@@ -29,21 +31,14 @@ typedef struct language_classifier {
     } weights;
 } language_classifier_t;
 
-
-typedef struct language_classifier_response {
-    size_t num_languages;
-    char **languages;
-    double *probs;
-} language_classifier_response_t;
-
 // General usage
 
 language_classifier_t *language_classifier_new(void);
 language_classifier_t *get_language_classifier(void);
 language_classifier_t *get_language_classifier_country(void);
 
-language_classifier_response_t *classify_languages(char *address);
-void language_classifier_response_destroy(language_classifier_response_t *self);
+libpostal_language_classifier_response_t *classify_languages(char *address);
+void language_classifier_response_destroy(libpostal_language_classifier_response_t *self);
 
 void language_classifier_destroy(language_classifier_t *self);
 

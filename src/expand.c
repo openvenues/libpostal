@@ -1567,7 +1567,7 @@ cstring_array *expand_address_phrase_option(char *input, libpostal_normalize_opt
 
     size_t len = strlen(input);
 
-    language_classifier_response_t *lang_response = NULL;
+    libpostal_language_classifier_response_t *lang_response = NULL;
 
     if (options.num_languages == 0) {
          lang_response = classify_languages(input);
@@ -1627,7 +1627,7 @@ cstring_array *expand_address_phrase_option(char *input, libpostal_normalize_opt
     kh_destroy(str_set, unique_strings);
 
     if (lang_response != NULL) {
-        language_classifier_response_destroy(lang_response);
+        libpostal_language_classifier_response_destroy(lang_response);
     }
 
     char_array_destroy(temp_string);

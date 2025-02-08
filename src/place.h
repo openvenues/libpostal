@@ -32,7 +32,7 @@ typedef struct place {
     char *website;
 } place_t;
 
-language_classifier_response_t *place_languages(size_t num_components, char **labels, char **values);
+libpostal_language_classifier_response_t *place_languages(size_t num_components, char **labels, char **values);
 
 place_t *place_new(void);
 
