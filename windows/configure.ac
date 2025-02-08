@@ -75,6 +75,7 @@ AS_IF([test "x$FOUND_GSHUF" = xyes],  [AC_DEFINE([HAVE_GSHUF], [1], [gshuf avail
 # ------------------------------------------------------------------
 # Checks for SSE2 build
 # ------------------------------------------------------------------
+
 AC_ARG_ENABLE([sse2],
     AS_HELP_STRING(
         [--disable-sse2],
