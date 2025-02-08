@@ -127,18 +127,23 @@ If you're using an M1 Mac, add `--disable-sse2` to the `./configure` command. Th
 git clone https://github.com/openvenues/libpostal
 cd libpostal
 
+# skip if installing for the first time
+make distclean
+
 ./bootstrap.sh
+
+# omit --datadir flag to install data in current directory
 ./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...]
 make -j4
 
 # For Intel/AMD processors and the default model
-./configure --datadir=[...some dir with a few GB of space...]
+./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...]
 
 # For Apple / ARM cpus and the default model
-./configure --datadir=[...some dir with a few GB of space...] --disable-sse2
+./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...] --disable-sse2
 
 # For the improved Senzing model:
-./configure --datadir=[...some dir with a few GB of space...] MODEL=senzing
+./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...] MODEL=senzing
 
 make -j8
 sudo make install
