@@ -508,7 +508,7 @@ whitespace e.g. Chinese) are supported, as are Germanic languages where
 thoroughfare types are concatenated onto the end of the string, and may
 optionally be separated so Rosenstraße and Rosen Straße are equivalent.
 
-- **International address parsing**: [Conditional Random Field](http://blog.echen.me/2012/01/03/introduction-to-conditional-random-fields/) which parses
+- **International address parsing**: [Conditional Random Field](https://web.archive.org/web/20240104172655/http://blog.echen.me/2012/01/03/introduction-to-conditional-random-fields/) which parses
 "123 Main Street New York New York" into {"house_number": 123, "road":
 "Main Street", "city": "New York", "state": "New York"}. The parser works
 for a wide variety of countries and languages, not just US/English. 
