@@ -32,7 +32,7 @@ On Debian/Ubuntu:
 sudo apt-get install osmctools
 
 Or to compile:
-wget -O - http://m.m.i24.cc/osmfilter.c | cc -x c - -O3 -o osmfilter
+wget -O - http://m.m.i24.cc/osmfilter.c |cc -x c - -O3 -o osmfilter
 wget -O - http://m.m.i24.cc/osmconvert.c | cc -x c - -lz -O3 -o osmconvert
 EOF
 exit 127
@@ -43,22 +43,29 @@ PREV_DIR=`pwd`
 cd $OUT_DIR
 
 # Download planet as PBF
+# TODO: currently uses single mirror, randomly choose one instead
 echo "Started OSM download: `date`"
 
 PLANET_PBF="planet-latest.osm.pbf"
-wget --quiet https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf -O $OUT_DIR/$PLANET_PBF &
+JAPAN_PBF="japan-latest.osm.pbf"
+
+wget --quiet http://ftp5.gwdg.de/pub/misc/openstreetmap/planet.openstreetmap.org/pbf/planet-latest.osm.pbf -O $OUT_DIR/$PLANET_PBF &
+wget --quiet https://download.geofabrik.de/asia/japan-latest.osm.pbf -O $OUT_DIR/$JAPAN_PBF &
 
 wait
 
 echo "Converting to o5m: `date`"
 PLANET_O5M="planet-latest.o5m"
+JAPAN_O5M="japan-latest.o5m"
 
 # Needs to be in O5M for some of the subsequent steps to work whereas PBF is smaller for download
 osmconvert $PLANET_PBF -o=$PLANET_O5M &
+osmconvert $JAPAN_PBF -o=$JAPAN_O5M &
 
 wait
 
 rm $PLANET_PBF
+rm $JAPAN_PBF
 
 VALID_AEROWAY_KEYS="aeroway=aerodrome"
 VALID_AMENITY_KEYS="amenity=ambulance_station or amenity=animal_boarding or amenity=animal_shelter or amenity=arts_centre or amenity=auditorium or amenity=baby_hatch or amenity=bank or amenity=bar or amenity=bbq or amenity=biergarten or amenity=boathouse or amenity=boat_rental or amenity=boat_sharing or amenity=boat_storage or amenity=brothel or amenity=bureau_de_change or amenity=bus_station or amenity=cafe or amenity=car_rental or amenity=car_sharing or amenity=car_wash or amenity=casino or amenity=cemetery or amenity=charging_station or amenity=cinema or amenity=childcare or amenity=clinic or amenity=club or amenity=clock or amenity=college or amenity=community_center or amenity=community_centre or amenity=community_hall or amenity=concert_hall or amenity=conference_centre or amenity=courthouse or amenity=coworking_space or amenity=crematorium or amenity=crypt or amenity=culture_center or amenity=dancing_school or amenity=dentist or amenity=dive_centre or amenity=doctors or amenity=dojo or amenity=dormitory or amenity=driving_school or amenity=embassy or amenity=emergency_service or amenity=events_venue or amenity=exhibition_centre or amenity=fast_food or amenity=ferry_terminal or amenity=festival_grounds or amenity=fire_station or amenity=food_count or amenity=fountain or amenity=gambling or amenity=game_feeding or amenity=grave_yard or amenity=greenhouse or amenity=gym or amenity=hall or amenity=health_centre or amenity=hospice or amenity=hospital or amenity=hotel or amenity=hunting_stand or amenity=ice_cream or amenity=internet_cafe or amenity=kindergarten or amenity=kiosk or amenity=kneipp_water_cure or amenity=language_school or amenity=lavoir or amenity=library or amenity=love_hotel or amenity=market or amenity=marketplace or amenity=medical_centre or amenity=mobile_money_agent or amenity=monastery or amenity=money_transfer or amenity=mortuary or amenity=mountain_rescue or amenity=music_school or amenity=music_venue or amenity=nightclub or amenity=nursery or amenity=nursing_home or amenity=office or amenity=parish_hall or amenity=park or amenity=pharmacy or amenity=planetarium or amenity=place_of_worship or amenity=police or amenity=post_office or amenity=preschool or amenity=prison or amenity=pub or amenity=public_bath or amenity=public_bookcase or amenity=public_building or amenity=public_facility or amenity=public_hall or amenity=public_market or amenity=ranger_station or amenity=refugee_housing or amenity=register_office or amenity=research_institute or amenity=rescue_station or amenity=residential or amenity=Residential or amenity=restaurant or amenity=retirement_home or amenity=sacco or amenity=sanitary_dump_station or amenity=sanitorium or amenity=sauna or amenity=school or amenity=shelter or amenity=shop or amenity=shopping or amenity=shower or amenity=ski_rental or amenity=ski_school or amenity=social_centre or amenity=social_club or amenity=social_facility or amenity=spa or amenity=stables or amenity=stripclub or amenity=studio or amenity=supermarket or amenity=swimming_pool or amenity=swingerclub or amenity=townhall or amenity=theatre or amenity=training or amenity=trolley_bay or amenity=university or amenity=vehicle_inspection or amenity=veterinary or amenity=village_hall or amenity=vivarium or amenity=waste_transfer_station or amenity=whirlpool or amenity=winery or amenity=youth_centre"
@@ -77,27 +84,36 @@ VALID_VENUE_KEYS="( ( $VALID_AEROWAY_KEYS ) or ( $VALID_AMENITY_KEYS ) or ( $VAL
 # Address data set for use in parser, language detection
 echo "Filtering for records with address tags: `date`"
 PLANET_ADDRESSES_O5M="planet-addresses.o5m"
+JAPAN_ADDRESSES_O5M="japan-addresses.o5m"
 VALID_ADDRESSES="( ( ( name= or addr:housename= ) and ( ( building= and building!=yes )  or $VALID_VENUE_KEYS ) ) ) or ( ( addr:street= or addr:place= ) and ( name= or building= or building:levels= or addr:housename= or addr:housenumber= ) )"
+VALID_ADDRESSES_JAPAN="( addr:housenumber= or addr:street= ) or ( ( name= or name:ja= or addr:housename= ) and ( ( building= and building!=yes ) or $VALID_VENUE_KEYS ) )"
 osmfilter $PLANET_O5M --keep="$VALID_ADDRESSES" --drop-author --drop-version -o=$PLANET_ADDRESSES_O5M &
+osmfilter $JAPAN_O5M --keep="$VALID_ADDRESSES_JAPAN" --drop-author --drop-version -o=$JAPAN_ADDRESSES_O5M &
 
 wait
 
 PLANET_ADDRESSES_LATLONS="planet-addresses-latlons.o5m"
+JAPAN_ADDRESSES_LATLONS="japan-addresses-latlons.o5m"
 osmconvert $PLANET_ADDRESSES_O5M --max-objects=1000000000 --all-to-nodes -o=$PLANET_ADDRESSES_LATLONS &
+osmconvert $JAPAN_ADDRESSES_O5M --max-objects=1000000000 --all-to-nodes -o=$JAPAN_ADDRESSES_LATLONS &
 
 wait
 
 rm $PLANET_ADDRESSES_O5M
+rm $JAPAN_ADDRESSES_O5M
 PLANET_ADDRESSES="planet-addresses.osm"
 osmfilter $PLANET_ADDRESSES_LATLONS --keep="$VALID_ADDRESSES" -o=$PLANET_ADDRESSES_O5M &
+osmfilter $JAPAN_ADDRESSES_LATLONS --keep="$VALID_ADDRESSES_JAPAN" -o=$JAPAN_ADDRESSES_O5M &
 
 wait
 
-osmconvert $PLANET_ADDRESSES_O5M -o=$PLANET_ADDRESSES
+osmconvert $PLANET_ADDRESSES_O5M $JAPAN_ADDRESSES_O5M -o=$PLANET_ADDRESSES
 
 rm $PLANET_ADDRESSES_O5M
+rm $JAPAN_ADDRESSES_O5M
 
 rm $PLANET_ADDRESSES_LATLONS
+rm $JAPAN_ADDRESSES_LATLONS
 
 # Border data set for use in R-tree index/reverse geocoding, parsing, language detection
 echo "Filtering for borders: `date`"
@@ -259,6 +275,7 @@ rm $PLANET_WAYS_NODES_LATLON
 rm $PLANET_WAYS_O5M
 
 rm $PLANET_O5M
+rm $JAPAN_O5M
 
 echo "Completed : `date`"
 
