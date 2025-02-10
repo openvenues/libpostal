@@ -94,15 +94,15 @@ inline bool sparse_matrix_add_unique_columns_alias(sparse_matrix_t *matrix, khas
 }
 
 uint32_array *sparse_matrix_unique_columns(sparse_matrix_t *matrix) {
-    khash_t(int_set) *unique_columns = kh_init(int_set);
+    khash_t(int_uint32) *unique_columns = kh_init(int_uint32);
     uint32_array *ret = uint32_array_new();
 
     if (sparse_matrix_add_unique_columns(matrix, unique_columns, ret)) {
-        kh_destroy(int_set, unique_columns);
+        kh_destroy(int_uint32, unique_columns);
         return ret;
     }
 
-    kh_destroy(int_set, unique_columns);
+    kh_destroy(int_uint32, unique_columns);
     uint32_array_destroy(ret);
     return NULL;
 }

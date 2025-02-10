@@ -96,13 +96,13 @@ static greatest_test_res test_expansion_contains_phrase_option_with_languages(ch
 
 static greatest_test_res test_expansion_contains_with_languages(char *input, char *output, libpostal_normalize_options_t options, size_t num_languages, ...) {
     bool root = false;
+    va_list args;
     if (num_languages > 0) {
-        va_list args;
         va_start(args, num_languages);
         CHECK_CALL(test_expansion_contains_phrase_option_with_languages(input, output, options, root, num_languages, args));
         va_end(args);
     } else {
-        CHECK_CALL(test_expansion_contains_phrase_option_with_languages(input, output, options, root, num_languages, NULL));
+        CHECK_CALL(test_expansion_contains_phrase_option_with_languages(input, output, options, root, num_languages, args));
     }
     PASS();
 }
@@ -110,13 +110,13 @@ static greatest_test_res test_expansion_contains_with_languages(char *input, cha
 
 static greatest_test_res test_root_expansion_contains_with_languages(char *input, char *output, libpostal_normalize_options_t options, size_t num_languages, ...) {
    bool root = true;
+   va_list args;
    if (num_languages > 0) {
-        va_list args;
         va_start(args, num_languages);
         CHECK_CALL(test_expansion_contains_phrase_option_with_languages(input, output, options, root, num_languages, args));
         va_end(args);
     } else {
-        CHECK_CALL(test_expansion_contains_phrase_option_with_languages(input, output, options, root, num_languages, NULL));
+        CHECK_CALL(test_expansion_contains_phrase_option_with_languages(input, output, options, root, num_languages, args));
     }
     PASS();
 }
@@ -132,6 +132,9 @@ TEST test_expansions(void) {
     CHECK_CALL(test_expansion_contains_with_languages("4998 Vanderbilt Dr, Columbus, OH 43213", "4998 vanderbilt drive columbus ohio 43213", options, 1, "en"));
     CHECK_CALL(test_expansion_contains_with_languages("Nineteen oh one W El Segundo Blvd", "1901 west el segundo boulevard", options, 1, "en"));
     CHECK_CALL(test_expansion_contains_with_languages("S St. NW", "s street northwest", options, 1, "en"));
+    CHECK_CALL(test_expansion_contains_with_languages("Quatre vingt douze Ave des Champs-Élysées", "92 avenue des champs-elysees", options, 1, "fr"));
+    CHECK_CALL(test_expansion_contains_with_languages("Quatre vingt douze Ave des Champs-Élysées", "92 avenue des champs elysees", options, 1, "fr"));
+    CHECK_CALL(test_expansion_contains_with_languages("Quatre vingt douze Ave des Champs-Élysées", "92 avenue des champselysees", options, 1, "fr"));
     CHECK_CALL(test_expansion_contains_with_languages("Marktstrasse", "markt strasse", options, 1, "de"));
     CHECK_CALL(test_expansion_contains_with_languages("Hoofdstraat", "hoofdstraat", options, 1, "nl"));
     CHECK_CALL(test_expansion_contains_with_languages("มงแตร", "มงแตร", options, 1, "th"));
@@ -181,6 +184,9 @@ TEST test_street_root_expansions(void) {
     CHECK_CALL(test_root_expansion_contains("Ctr St E", "center", options));
     CHECK_CALL(test_root_expansion_contains("Center Street E", "center", options));
     CHECK_CALL(test_root_expansion_contains("Ctr Street E", "center", options));
+
+    CHECK_CALL(test_root_expansion_contains_with_languages("W. UNION STREET", "union", options, 2, "en", "es"));
+
 
     // Spanish
     CHECK_CALL(test_root_expansion_contains("C/ Ocho", "8", options));

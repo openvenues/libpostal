@@ -14,9 +14,8 @@ banda|bda
 barranco|branc
 barranquillo|bqllo
 barriada|barda
-boulevard|blvd|bvd
 brazal|brzal
-bulevar|bulev|blev|blv|bv|bl
+bulevar|bulev|blev|blv|bv|bl|br|boulevard|blvd|bvd
 calle|c|cl|cll|c /|ca|call
 calleja|cllja
 callejón|callejon|callej|cjón|cjon|cllon|cllón|cj

@@ -64,7 +64,7 @@ rhode island|ri
 saskatchewan|sk
 south carolina|sc
 south dakota|sd
-southern australia|sa
+south australia|sa
 tasmania|tas
 tennessee|tn
 texas|tx

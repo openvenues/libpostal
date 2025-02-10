@@ -4,10 +4,11 @@ colonel|col
 comandor
 contra amiral
 doctor|dr
-general|gen
+general|gen|g-ral
 major|maj
 locotenent
 locotenent colonel
+pictor
 profesor|prof
 sergent
 sublocotenent
