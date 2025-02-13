@@ -140,6 +140,7 @@ class Unit(NumberedComponent):
         if num_type == cls.NUMERIC:
             return safe_decode(number)
         elif num_type == cls.HYPHENATED_NUMBER:
+            number = int(number)
             number2 = weighted_choice(cls.positive_units, cls.positive_units_cdf)
             range_prob = float(address_config.get_property('units.alphanumeric.hyphenated_number.range_probability', language, country=country, default=0.5))
             direction = address_config.get_property('units.alphanumeric.hyphenated_number.direction', language, country=country, default='right')
