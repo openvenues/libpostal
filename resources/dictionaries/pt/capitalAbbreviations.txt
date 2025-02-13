@@ -1,0 +1,142 @@
+AeB|Aeroporto de Brasilia
+AE|Area Especial
+AEMN|Area de expansao dos Ministerios Norte
+AEMS|Area de Expansao dos Ministerios Sul
+AOS|Area Octogonal Sul
+AVP|Area Verde de Protecao
+AVPR|Area Verde de Protecao e Reserva
+BOT|Jardim Botanico
+CA|Centro de Abastecimento
+CEN|Cemiterio Norte
+CES|Cemiterio Sul
+CH|Chacaras
+CLN|Comercio Local Norte
+CLS|Comercio Local Sul
+CLSW|Comercio Local Sudoeste
+CRN|Comercio Residencial Norte
+CRS|Comercio Residencial Sul
+ECTB|Estrada Parque Contorno do Bosque
+EHT|Estrada Hoteis de Turismo
+EMI|Esplanada dos Ministerios
+EPAA|Estrada Parque Armazenagem
+EPAC|Estrada Parque Agrupamento de Cavalaria
+EPAR|Estrada Parque Aeroporto
+EPCL|Estrada Parque Ceilandia
+EPCT|Estrada Parque Contorno
+EPCV|Estrada Parque Cabeca de Veado
+EPDB|Estrada Parque Dom Bosco
+EPGU|Estrada Parque do Guara
+EPIA|Estrada Parque Industria e Abastecimento
+EPIG|Estrada Parque Industrias Graficas
+EPIN|Estrada Parque Industria
+EPIP|Estrada Parque do Ipe
+EPNB|Estrada Parque Nucleo Bandeirante
+EPPN|Estrada Parque Peninsula Norte
+EPPR|Estrada Parque Paranoa
+EPRO|Estrada Parque Roncador
+EPTG|Estrada Parque Taguatinga
+EPTM|Estrada Parque Tamandua
+EPTT|Estrada Parque Vargem Bonita
+EPVL|Estrada Parque do Vale
+EPVP|Estrada Parque Vicente Pires
+EQN|Entrequadra Norte
+EQS|Entrequadra Sul
+ERN|Eixo Rodoviario Norte
+ERS|Eixo Rodoviario Sul
+ERLN|Eixo Rodoviario Leste
+ERLS|Eixo Rodoviario Leste
+ERWN|Eixo Rodoviario Oeste
+ERWS|Eixo Rodoviario Oeste
+ESPM|Estrada Parque Setor de Policia
+ET|Esplanada da Torre
+ML|Mansoes do Lago
+PF|Parque Ferroviario
+PQEB|Parque Rural e Estacao Biologica
+PMU|Praca Municipal
+PR|Plataforma Rodoviaria
+PTP|Praca dos Tres Poderes
+PTS|Praca dos Tribunais Superiores
+QE|Quadra Externa
+QI|Quadra Interna
+QL|Quadra do Lago
+QRSW|Quadra Residencial Sudoeste
+SAA|Setor de Abastecimento e Armazenagem
+SAAN|Setor de Armazenagem e Abastecimento Norte
+SAAS|Setor de Armazenagem e Abastecimento Sul
+SAFS|Setor de Administracao Federal Sul
+SAI|Setor de Areas Isoladas
+SAIN|Setor de Areas Isoladas Norte
+SAIS|Setor de Areas Isoladas Sul
+SAI/SO|Setor de Areas Isoladas Sudoeste
+SAM|Setor de Autarquias Municipais
+SAN|Setor de Autarquias Norte
+SAS|Setor de Autarquias Sul
+SBN|Setor Bancario Norte
+SBS|Setor Bancario Sul
+SBO|Setor de Bosques
+SC|Setor Comercial
+SCN|Setor Comercial Norte
+SCEEN|Setor de Clubes Esportivos e Estadios Norte
+SCEES|Setor de Clubes Esportivos e Estadios Sul
+SCEN|Setor de Clubes Esportivos Norte
+SCES|Setor de Clubes Esportivos Sul
+SCRN|Setor Comercial Residencial Norte
+SCRS|Setor Comercial Residencial Sul
+SCS|Setor Comercial Sul
+SCTN|Setor Cultural Norte
+SCTS|Setor Cultural Sul
+SDN|Setor de Diversoes Norte
+SDS|Setor de Diversoes Sul
+SEN|Setor de Embaixadas Norte
+SES|Setor de Embaixadas Sul
+SEPN|Setor de Edificios Publicos Norte
+SEPS|Setor de Edificios Publicos Sul
+SGAN|Setor de Grande Areas Norte
+SGAS|Setor de Grandes Areas Sul
+SGCV|Setor de Garagem e Concessao de Veiculos
+SGO|Setor de Garagens Oficiais
+SHN|Setor Hoteleiro Norte
+SHS|Setor Hoteleiro Sul
+SHCE|Setor de Habitacoes Coletivas Economicas
+SHCAOS|Setor de Habitacoes Coletivas ­Area Octogonal Sul
+SHCG|Setor do Habitacoes Coletivas e Geminadas
+SHCS|Setor de Habitacoes Coletivas Sul
+SHCN|Setor de Habitacoes Coletivas Norte
+SHIG|Setor de Habitacoes Individuais Geminadas
+SHIN|Setor de Habitacoes Individuais Norte
+SHIP|Setor Hipico
+SHIS|Setor de Habitacoes Individuais Sul
+SHLN|Setor Hospitalar Local Norte
+SHLS|Setor Hospitalar Local Sul
+SHTN|Setor de Hoteis e Turismo Norte
+SHTS|Setor de Hoteis e Turismo Sul
+SIA|Setor de Industria e Abastecimento
+SIG|Setor de Industrias Graficas
+SIN|Setor de Inflamaveis
+SMAS|Setor de Multiplas Atividades Sul
+SMDB|Setor de Mansoes Dom Bosco
+SMHN|Setor Medico Hospitalar Norte
+SMHS|Setor Medico Hospitalar Sul
+SML|Setor de Mansoes do Lago
+SMLN|Setor de Mansoes Lago Norte
+SMU|Setor Militar Urbano
+SMPW|Setor de Mansoes Park Way
+SOFS|Setor de Oficinas Sul
+SOFN|Setor de Oficinas Norte
+SPA|Setor de Paiois
+SPMA|Setor de Postos e Moveis
+SPMN|Setor de Postos e Moteis Norte
+SPMS|Setor de Postos e Moteis Sul
+SPS|Setor Policial Sul
+SPP|Setor Palacio Presidencial
+SQN|Super Quadras Norte
+SQS|Super Quadras Sul
+SQSW|Superquadra Sudoeste
+SRES|Setor de Residencias Economicas Sul
+SRIA I|Setor Residencial lndustria e Abastecimento
+SRIA II|Setor Residencial lndustria e Abastecimento
+SRP|Setor de Recreacao Publica
+SRTN|Setor de Radio e Televisao Norte
+SRTS|Setor de Radio e Televisao Sul
+STRC|Setor de Transporte Rodoviario de Carga
+UnB|Universidade de Brasilia
