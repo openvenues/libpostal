@@ -113,13 +113,13 @@ Install with one command via [MacPorts](https://www.macports.org/):
 port install libpostal
 ```
 
-Or as follows with [Homebrew](https://brew.sh/):
+Or with [Homebrew](https://brew.sh/):
 
 ```
-brew install curl autoconf automake libtool pkg-config
+brew install libpostal
 ```
 
-Then to install the C library:
+To compile the C library from source:
 
 If you're using an M1 Mac, add `--disable-sse2` to the `./configure` command. This will result in poorer performance but the build will succeed.
 
