@@ -14,3 +14,12 @@ jobs:
     uses: senzing-factory/build-resources/.github/workflows/add-to-project-dependabot.yaml@v2
     with:
       project: ${{ vars.SENZING_GITHUB_ORGANIZATION_PROJECT }}
+
+  slack-notification:
+    needs: [add-to-project-dependabot]
+    if: ${{ always() && contains(fromJSON('["failure", "cancelled"]'), needs.add-to-project-dependabot.outputs.job-status) }}
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+    uses: senzing-factory/build-resources/.github/workflows/build-failure-slack-notification.yaml@v2
+    with:
+      job-status: ${{ needs.add-to-project-dependabot.outputs.job-status }}

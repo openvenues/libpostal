@@ -18,3 +18,12 @@ jobs:
       classic: false
       project-number: ${{ vars.SENZING_GITHUB_ORGANIZATION_PROJECT }}
       org: ${{ vars.SENZING_GITHUB_ACCOUNT_NAME }}
+
+  slack-notification:
+    needs: [add-to-project]
+    if: ${{ always() && contains(fromJSON('["failure", "cancelled"]'), needs.add-to-project.outputs.job-status) }}
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+    uses: senzing-factory/build-resources/.github/workflows/build-failure-slack-notification.yaml@v2
+    with:
+      job-status: ${{ needs.add-to-project.outputs.job-status }}
