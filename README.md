@@ -206,7 +206,7 @@ Installation with an alternative data model
 -------------------------------------------
 
 An alternative data model is available for libpostal. It is created by Senzing Inc. for improved parsing on US, UK and Singapore addresses and improved US rural route address handling.
-To enable this add `MODEL=senzing` to the conigure line during installation:
+To enable this add `MODEL=senzing` to the configure line during installation:
 ```
 ./configure --datadir=[...some dir with a few GB of space...] MODEL=senzing
 ```
