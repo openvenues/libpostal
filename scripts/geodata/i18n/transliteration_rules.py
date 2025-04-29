@@ -183,10 +183,6 @@ def replace_literal_space(m):
 regex_char_set_greedy = re.compile(r'\[(.*)\]', re.UNICODE)
 regex_char_set = re.compile(r'\[(.*?)(?<!\\)\]', re.UNICODE)
 
-char_class_regex_str = '\[(?:[^\[\]]*\[[^\[\]]*\][^\[\]]*)*[^\[\]]*\]'
-
-nested_char_class_regex = re.compile('\[(?:[^\[\]]*\[[^\[\]]*\][^\[\]]*)+[^\[\]]*\]', re.UNICODE)
-
 range_regex = re.compile(r'[\\]?([^\\])\-[\\]?([^\\])', re.UNICODE)
 var_regex = re.compile('[\s]*\$([A-Za-z_\-]+[A-Za-z_0-9\-]*)[\s]*')
 

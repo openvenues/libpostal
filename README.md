@@ -106,7 +106,15 @@ sudo apt-get install -y curl build-essential autoconf automake libtool pkg-confi
 sudo yum install curl autoconf automake libtool pkgconfig
 ```
 
-**On Mac OSX**
+**On macOS**
+
+Install with one command via [MacPorts](https://www.macports.org/):
+```
+port install libpostal
+```
+
+Or as follows with [Homebrew](https://brew.sh/):
+
 ```
 brew install curl autoconf automake libtool pkg-config
 ```
@@ -119,16 +127,23 @@ If you're using an M1 Mac or ARM64-based linux distro, add `--disable-sse2` to t
 git clone https://github.com/openvenues/libpostal
 cd libpostal
 
+# skip if installing for the first time
+make distclean
+
 ./bootstrap.sh
 
+# omit --datadir flag to install data in current directory
+./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...]
+make -j4
+
 # For Intel/AMD processors and the default model
-./configure --datadir=[...some dir with a few GB of space...]
+./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...]
 
 # For Apple / ARM cpus and the default model
-./configure --datadir=[...some dir with a few GB of space...] --disable-sse2
+./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...] --disable-sse2
 
 # For the improved Senzing model:
-./configure --datadir=[...some dir with a few GB of space...] MODEL=senzing
+./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...] MODEL=senzing
 
 make -j8
 sudo make install
@@ -394,23 +409,19 @@ Libpostal is designed to be used by higher-level languages.  If you don't see yo
 - LuaJIT: [lua-resty-postal](https://github.com/bungle/lua-resty-postal)
 - Perl: [Geo::libpostal](https://metacpan.org/pod/Geo::libpostal)
 - Elixir: [Expostal](https://github.com/SweetIQ/expostal)
+- Haskell: [haskell-postal](http://github.com/netom/haskell-postal)
+- Rust: [rust-postal](https://github.com/pnordahl/rust-postal)
 - Rust: [rustpostal](https://crates.io/crates/rustpostal)
 
-**Database extensions**
+**Unofficial database extensions**
 
 - PostgreSQL: [pgsql-postal](https://github.com/pramsey/pgsql-postal)
 
-**Unofficial REST API**
+**Unofficial servers**
 
-- Libpostal REST: [libpostal REST](https://github.com/johnlonganecker/libpostal-rest)
-
-**Libpostal REST Docker**
-
-- Libpostal REST Docker [Libpostal REST Docker](https://github.com/johnlonganecker/libpostal-rest-docker)
-
-**Libpostal ZeroMQ Docker**
-
-- Libpostal ZeroMQ Docker image: [pasupulaphani/libpostal-zeromq](https://hub.docker.com/r/pasupulaphani/libpostal-zeromq/) , Source: [Github](https://github.com/pasupulaphani/libpostal-docker) 
+- Libpostal REST Go Docker: [libpostal-rest-docker](https://github.com/johnlonganecker/libpostal-rest-docker)
+- Libpostal REST FastAPI Docker: [libpostal-fastapi](https://github.com/alpha-affinity/libpostal-fastapi)
+- Libpostal ZeroMQ Docker: [libpostal-zeromq](https://github.com/pasupulaphani/libpostal-docker)
 
 
 Tests
@@ -479,7 +490,7 @@ whitespace e.g. Chinese) are supported, as are Germanic languages where
 thoroughfare types are concatenated onto the end of the string, and may
 optionally be separated so Rosenstraße and Rosen Straße are equivalent.
 
-- **International address parsing**: [Conditional Random Field](http://blog.echen.me/2012/01/03/introduction-to-conditional-random-fields/) which parses
+- **International address parsing**: [Conditional Random Field](https://web.archive.org/web/20240104172655/http://blog.echen.me/2012/01/03/introduction-to-conditional-random-fields/) which parses
 "123 Main Street New York New York" into {"house_number": 123, "road":
 "Main Street", "city": "New York", "state": "New York"}. The parser works
 for a wide variety of countries and languages, not just US/English. 
@@ -506,7 +517,7 @@ language (IX => 9) which occur in the names of many monarchs, popes, etc.
 
 - **Fast, accurate tokenization/lexing**: clocked at > 1M tokens / sec,
 implements the TR-29 spec for UTF8 word segmentation, tokenizes East Asian
-languages chracter by character instead of on whitespace.
+languages character by character instead of on whitespace.
 
 - **UTF8 normalization**: optionally decompose UTF8 to NFD normalization form,
 strips accent marks e.g. à => a and/or applies Latin-ASCII transliteration.
@@ -530,6 +541,7 @@ Non-goals
 
 - Verifying that a location is a valid address
 - Actually geocoding addresses to a lat/lon (that requires a database/search index)
+- Extracting addresses from free text
 
 Raison d'être
 -------------
