@@ -474,3 +474,11 @@ void libpostal_teardown_language_classifier(void) {
 void libpostal_teardown_parser(void) {
     address_parser_module_teardown();
 }
+
+void libpostal_log_set_stream(FILE *stream) {
+    log_set_stream(stream);
+}
+
+FILE *libpostal_log_get_stream() {
+    return log_get_stream();
+}
