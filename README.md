@@ -11,7 +11,7 @@ libpostal is a C library for parsing/normalizing street addresses around the wor
 - **Original post**: [Statistical NLP on OpenStreetMap](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86)
 - **Follow-up for 1.0 release**: [Statistical NLP on OpenStreetMap: Part 2](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-part-2-80405b988718)
 
-<span>&#x1f1e7;&#x1f1f7;</span> <span>&#x1f1eb;&#x1f1ee;</span>  <span>&#x1f1f3;&#x1f1ec;</span> :jp: <span>&#x1f1fd;&#x1f1f0; </span> <span>&#x1f1e7;&#x1f1e9; </span> <span>&#x1f1f5;&#x1f1f1; </span> <span>&#x1f1fb;&#x1f1f3; </span> <span>&#x1f1e7;&#x1f1ea; </span> <span>&#x1f1f2;&#x1f1e6; </span> <span>&#x1f1fa;&#x1f1e6; </span> <span>&#x1f1ef;&#x1f1f2; </span> :ru: <span>&#x1f1ee;&#x1f1f3; </span> <span>&#x1f1f1;&#x1f1fb; </span> <span>&#x1f1e7;&#x1f1f4; </span> :de: <span>&#x1f1f8;&#x1f1f3; </span>  <span>&#x1f1e6;&#x1f1f2; </span> :kr: <span>&#x1f1f3;&#x1f1f4; </span>  <span>&#x1f1f2;&#x1f1fd; </span> <span>&#x1f1e8;&#x1f1ff; </span> <span>&#x1f1f9;&#x1f1f7; </span> :es: <span>&#x1f1f8;&#x1f1f8; </span> <span>&#x1f1ea;&#x1f1ea; </span> <span>&#x1f1e7;&#x1f1ed; </span> <span>&#x1f1f3;&#x1f1f1; </span> :cn:  <span>&#x1f1f5;&#x1f1f9; </span> <span>&#x1f1f5;&#x1f1f7; </span> :gb: <span>&#x1f1f5;&#x1f1f8; </span> 
+<span>&#x1f1e7;&#x1f1f7;</span> <span>&#x1f1eb;&#x1f1ee;</span>  <span>&#x1f1f3;&#x1f1ec;</span> :jp: <span>&#x1f1fd;&#x1f1f0; </span> <span>&#x1f1e7;&#x1f1e9; </span> <span>&#x1f1f5;&#x1f1f1; </span> <span>&#x1f1fb;&#x1f1f3; </span> <span>&#x1f1e7;&#x1f1ea; </span> <span>&#x1f1f2;&#x1f1e6; </span> <span>&#x1f1fa;&#x1f1e6; </span> <span>&#x1f1ef;&#x1f1f2; </span> :ru: <span>&#x1f1ee;&#x1f1f3; </span> <span>&#x1f1f1;&#x1f1fb; </span> <span>&#x1f1e7;&#x1f1f4; </span> :de: <span>&#x1f1f8;&#x1f1f3; </span>  <span>&#x1f1e6;&#x1f1f2; </span> :kr: <span>&#x1f1f3;&#x1f1f4; </span>  <span>&#x1f1f2;&#x1f1fd; </span> <span>&#x1f1e8;&#x1f1ff; </span> <span>&#x1f1f9;&#x1f1f7; </span> :es: <span>&#x1f1f8;&#x1f1f8; </span> <span>&#x1f1ea;&#x1f1ea; </span> <span>&#x1f1e7;&#x1f1ed; </span> <span>&#x1f1f3;&#x1f1f1; </span> :cn:  <span>&#x1f1f5;&#x1f1f9; </span> <span>&#x1f1f5;&#x1f1f7; </span> :gb: <span>&#x1f1f5;&#x1f1f8; </span>
 
 Addresses and the locations they represent are essential for any application dealing with maps (place search, transportation, on-demand/delivery services, check-ins, reviews). Yet even the simplest addresses are packed with local conventions, abbreviations and context, making them difficult to index/query effectively with traditional full-text search engines. This library helps convert the free-form addresses that humans use into clean normalized forms suitable for machine comparison and full-text indexing. Though libpostal is not itself a full geocoder, it can be used as a preprocessing step to make any geocoding application smarter, simpler, and more consistent internationally.
 
@@ -225,7 +225,7 @@ Examples of parsing
 
 libpostal's international address parser uses machine learning (Conditional Random Fields) and is trained on over 1 billion addresses in every inhabited country on Earth. We use [OpenStreetMap](https://openstreetmap.org) and [OpenAddresses](https://openaddresses.io) as sources of structured addresses, and the OpenCage address format templates at: https://github.com/OpenCageData/address-formatting to construct the training data, supplementing with containing polygons, and generating sub-building components like apartment/floor numbers and PO boxes. We also add abbreviations, drop out components at random, etc. to make the parser as robust as possible to messy real-world input.
 
-These example parse results are taken from the interactive address_parser program 
+These example parse results are taken from the interactive address_parser program
 that builds with libpostal when you run ```make```. Note that the parser can handle
 commas vs. no commas as well as various casings and permutations of components (if the input
 is e.g. just city or just city/postcode).
@@ -306,14 +306,14 @@ Examples of normalization
 -------------------------
 
 The expand_address API converts messy real-world addresses into normalized
-equivalents suitable for search indexing, hashing, etc. 
+equivalents suitable for search indexing, hashing, etc.
 
 Here's an interactive example using the Python binding:
 
 ![expand](https://cloud.githubusercontent.com/assets/238455/14115012/52990d14-f5a7-11e5-9797-159dacdf8c5f.gif)
 
 libpostal contains an OSM-trained language classifier to detect which language(s) are used in a given
-address so it can apply the appropriate normalizations. The only input needed is the raw address string. 
+address so it can apply the appropriate normalizations. The only input needed is the raw address string.
 Here's a short list of some less straightforward normalizations in various languages.
 
 | Input                               | Output (may be multiple in libpostal)   |
@@ -437,6 +437,7 @@ Libpostal is designed to be used by higher-level languages.  If you don't see yo
 
 **Unofficial servers**
 
+- Libpostal REST GO Server (need ~4Gb memory) with basic security: [postal_server](https://github.com/le0pard/postal_server)
 - Libpostal REST Go Docker: [libpostal-rest-docker](https://github.com/johnlonganecker/libpostal-rest-docker)
 - Libpostal REST FastAPI Docker: [libpostal-fastapi](https://github.com/alpha-affinity/libpostal-fastapi)
 - Libpostal ZeroMQ Docker: [libpostal-zeromq](https://github.com/pasupulaphani/libpostal-docker)
@@ -460,7 +461,7 @@ Data files
 
 libpostal needs to download some data files from S3. The basic files are on-disk
 representations of the data structures necessary to perform expansion. For address
-parsing, since model training takes a few days, we publish the fully trained model 
+parsing, since model training takes a few days, we publish the fully trained model
 to S3 and will update it automatically as new addresses get added to OSM, OpenAddresses, etc. Same goes for the language classifier model.
 
 Data files are automatically downloaded when you run make. To check for and download
@@ -511,7 +512,7 @@ optionally be separated so Rosenstraße and Rosen Straße are equivalent.
 - **International address parsing**: [Conditional Random Field](https://web.archive.org/web/20240104172655/http://blog.echen.me/2012/01/03/introduction-to-conditional-random-fields/) which parses
 "123 Main Street New York New York" into {"house_number": 123, "road":
 "Main Street", "city": "New York", "state": "New York"}. The parser works
-for a wide variety of countries and languages, not just US/English. 
+for a wide variety of countries and languages, not just US/English.
 The model is trained on over 1 billion addresses and address-like strings, using the
 templates in the [OpenCage address formatting repo](https://github.com/OpenCageData/address-formatting) to construct formatted,
 tagged training examples for every inhabited country in the world. Many types of [normalizations](https://github.com/openvenues/libpostal/blob/master/scripts/geodata/addresses/components.py)
@@ -522,13 +523,13 @@ trained (using the [FTRL-Proximal](https://research.google.com/pubs/archive/4115
 addresses. Labels are derived using point-in-polygon tests for both OSM countries
 and official/regional languages for countries and admin 1 boundaries
 respectively. So, for example, Spanish is the default language in Spain but
-in different regions e.g. Catalunya, Galicia, the Basque region, the respective 
+in different regions e.g. Catalunya, Galicia, the Basque region, the respective
 regional languages are the default. Dictionary-based disambiguation is employed in
 cases where the regional language is non-default e.g. Welsh, Breton, Occitan.
 The dictionaries are also used to abbreviate canonical phrases like "Calle" => "C/"
 (performed on both the language classifier and the address parser training sets)
 
-- **Numeric expression parsing** ("twenty first" => 21st, 
+- **Numeric expression parsing** ("twenty first" => 21st,
 "quatre-vingt-douze" => 92, again using data provided in CLDR), supports > 30
 languages. Handles languages with concatenated expressions e.g.
 milleottocento => 1800. Optionally normalizes Roman numerals regardless of the
@@ -543,9 +544,9 @@ strips accent marks e.g. à => a and/or applies Latin-ASCII transliteration.
 
 - **Transliteration**: e.g. улица => ulica or ulitsa. Uses all
 [CLDR transforms](http://www.unicode.org/repos/cldr/trunk/common/transforms/), the exact same source data as used by [ICU](http://site.icu-project.org/),
-though libpostal doesn't require pulling in all of ICU (might conflict 
+though libpostal doesn't require pulling in all of ICU (might conflict
 with your system's version). Note: some languages, particularly Hebrew, Arabic
-and Thai may not include vowels and thus will not often match a transliteration 
+and Thai may not include vowels and thus will not often match a transliteration
 done by a human. It may be possible to implement statistical transliterators
 for some of these languages.
 
@@ -570,7 +571,7 @@ places derived from terabytes of web pages from the [Common Crawl](http://common
 The Common Crawl is published monthly, and so even merging the results of
 two crawls produces significant duplicates.
 
-Deduping is a relatively well-studied field, and for text documents 
+Deduping is a relatively well-studied field, and for text documents
 like web pages, academic papers, etc. there exist pretty decent approximate
 similarity methods such as [MinHash](https://en.wikipedia.org/wiki/MinHash).
 
@@ -603,9 +604,9 @@ So it's not a geocoder?
 -----------------------
 
 If the above sounds a lot like geocoding, that's because it is in a way,
-only in the OpenVenues case, we have to geocode without a UI or a user 
-to select the correct address in an autocomplete dropdown. Given a database 
-of source addresses such as OpenAddresses or OpenStreetMap (or all of the above), 
+only in the OpenVenues case, we have to geocode without a UI or a user
+to select the correct address in an autocomplete dropdown. Given a database
+of source addresses such as OpenAddresses or OpenStreetMap (or all of the above),
 libpostal can be used to implement things like address deduping and server-side
 batch geocoding in settings like MapReduce or stream processing.
 
@@ -614,7 +615,7 @@ document search engines like Elasticsearch using giant synonyms files, scripting
 custom analyzers, tokenizers, and the like, geocoding can look like this:
 
 1. Run the addresses in your database through libpostal's expand_address
-2. Store the normalized string(s) in your favorite search engine, DB, 
+2. Store the normalized string(s) in your favorite search engine, DB,
    hashtable, etc.
 3. Run your user queries or fresh imports through libpostal and search
    the existing database using those strings
