@@ -381,6 +381,11 @@ const char *utf8proc_errmsg(utf8proc_ssize_t errcode);
 utf8proc_ssize_t utf8proc_iterate(const utf8proc_uint8_t *str, utf8proc_ssize_t strlen, utf8proc_int32_t *codepoint_ref);
 
 /**
+ * Functions the same as @ref utf8proc_iterate, but does not ever return a value less than 1.
+ */
+utf8proc_ssize_t utf8proc_iterate_non_negative(const utf8proc_uint8_t *str, utf8proc_ssize_t strlen, utf8proc_int32_t *codepoint_ref);
+
+/**
  * Check if a codepoint is valid (regardless of whether it has been
  * assigned a value by the current Unicode standard).
  *

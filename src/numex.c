@@ -724,7 +724,7 @@ numex_result_array *convert_numeric_expressions(char *str, char *lang) {
 
     while (idx < len) {
         if (state.state == NUMEX_SEARCH_STATE_SKIP_TOKEN) {
-            char_len = utf8proc_iterate(ptr, len, &codepoint);
+            char_len = utf8proc_iterate_non_negative(ptr, len, &codepoint);
             cat = utf8proc_category(codepoint);
 
             if (codepoint == 0) break;

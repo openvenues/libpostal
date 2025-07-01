@@ -315,6 +315,15 @@ TEST test_expansions_no_options(void) {
     PASS();
 }
 
+TEST tests_utf16_case(void) {
+    libpostal_normalize_options_t options = libpostal_get_default_options();
+    options.address_components = LIBPOSTAL_ADDRESS_STREET | LIBPOSTAL_ADDRESS_ANY;
+
+    // This first case really should be "5-19 nakamachi". idk why the N is uppercase.
+    CHECK_CALL(test_root_expansion_contains("5-19&#56256;&#56321; Nakamachi", "5-19 Nakamachi", options));
+    CHECK_CALL(test_root_expansion_contains("No. 𝟣𝟣", "no 𝟣𝟣", options));
+}
+
 
 SUITE(libpostal_expansion_tests) {
     if (!libpostal_setup() || !libpostal_setup_language_classifier()) {
@@ -331,6 +340,7 @@ SUITE(libpostal_expansion_tests) {
     RUN_TEST(test_expansions_language_classifier);
     RUN_TEST(test_expansions_no_options);
     RUN_TEST(test_expansion_for_non_address_input);
+    RUN_TEST(tests_utf16_case);
 
     libpostal_teardown();
     libpostal_teardown_language_classifier();

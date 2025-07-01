@@ -30,7 +30,7 @@ string_script_t get_string_script(char *str, size_t len) {
     bool is_ascii = true;
 
     while (idx < len) {
-        ssize_t char_len = utf8proc_iterate(ptr, len, &ch);
+        ssize_t char_len = utf8proc_iterate_non_negative(ptr, len, &ch);
 
         if (ch == 0) break;
 
@@ -43,7 +43,7 @@ string_script_t get_string_script(char *str, size_t len) {
         if (last_script != script && last_script != SCRIPT_UNKNOWN && !is_common_script(last_script)) {
             if (script_len < len) {
                 while (true) {
-                    char_len = utf8proc_iterate_reversed((const uint8_t *)str, idx, &ch);
+                    char_len = utf8proc_iterate_reversed_non_negative((const uint8_t *)str, idx, &ch);
                     if (ch == 0) break;
 
                     script = get_char_script((uint32_t)ch);

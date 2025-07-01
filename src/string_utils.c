@@ -188,6 +188,11 @@ ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *ds
     return ret_len;
 }
 
+ssize_t utf8proc_iterate_reversed_non_negative(const uint8_t *str, ssize_t start, int32_t *dst) {
+    ssize_t ret = utf8proc_iterate_reversed(str, start, dst);
+    return (ret < 1) ? 1 : ret;
+}
+
 char *utf8_reversed_string(const char *s) {
     int32_t unich;
     ssize_t len, remaining;

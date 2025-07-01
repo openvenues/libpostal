@@ -69,6 +69,7 @@ uint32_t string_translate(char *str, size_t len, char *word_chars, char *word_re
 // UTF-8 string methods
 char *utf8_reversed_string(const char *s); // returns a copy, caller frees
 ssize_t utf8proc_iterate_reversed(const uint8_t *str, ssize_t start, int32_t *dst);
+ssize_t utf8proc_iterate_reversed_non_negative(const uint8_t *str, ssize_t start, int32_t *dst);
 
 // Casing functions return a copy, caller frees
 char *utf8_lower_options(const char *s, utf8proc_option_t options);

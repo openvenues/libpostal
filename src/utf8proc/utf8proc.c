@@ -157,6 +157,13 @@ utf8proc_ssize_t utf8proc_iterate(
   return 4;
 }
 
+utf8proc_ssize_t utf8proc_iterate_non_negative(
+  const utf8proc_uint8_t *str, utf8proc_ssize_t strlen, utf8proc_int32_t *dst
+) {
+  utf8proc_ssize_t ret = utf8proc_iterate(str, strlen, dst);
+  return (ret < 1) ? 1 : ret;
+}
+
 utf8proc_bool utf8proc_codepoint_valid(utf8proc_int32_t uc) {
     return (((utf8proc_uint32_t)uc)-0xd800 > 0x07ff) && ((utf8proc_uint32_t)uc < 0x110000);
 }
@@ -639,4 +646,3 @@ utf8proc_uint8_t *utf8proc_NFKC(const utf8proc_uint8_t *str) {
     UTF8PROC_COMPOSE | UTF8PROC_COMPAT);
   return retval;
 }
-
