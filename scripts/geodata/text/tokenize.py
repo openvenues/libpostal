@@ -3,6 +3,9 @@ from geodata.text import _tokenize
 from geodata.text.token_types import token_types
 
 
+def tokenize_raw(s):
+    return _tokenize.tokenize(safe_decode(s))
+
 
 def tokenize(s, whitespace=False):
     u = safe_decode(s)
