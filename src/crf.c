@@ -12,14 +12,14 @@ static inline bool crf_get_state_trans_feature_id(crf_t *self, char *feature, ui
     return trie_get_data(self->state_trans_features, feature, feature_id);
 }
 
-bool crf_tagger_score(crf_t *self, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features) {
+bool crf_tagger_score(crf_t *self, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, bool print_features, crf_context_t *const crf_context) {
     if (self == NULL || feature_function == NULL || tokenized == NULL ) {
         return false;
     }
     size_t num_tokens = tokenized->tokens->n;
 
-    crf_context_t *crf_context = self->context;
     crf_context_set_num_items(crf_context, num_tokens);
+    // We might not need this if we allocate one each lookup
     crf_context_reset(crf_context, CRF_CONTEXT_RESET_ALL);
 
     if (!double_matrix_copy(self->trans_weights, crf_context->trans)) {
@@ -97,19 +97,24 @@ bool crf_tagger_score(crf_t *self, void *tagger, void *tagger_context, cstring_a
     return true;
 }
 
-bool crf_tagger_score_viterbi(crf_t *self, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, double *score, bool print_features) {
-    if (!crf_tagger_score(self, tagger, tagger_context, features, prev_tag_features, feature_function, tokenized, print_features)) {
-        return false;
+uint32_array *crf_tagger_score_viterbi(crf_t *self, void *tagger, void *tagger_context, cstring_array *features, cstring_array *prev_tag_features, tagger_feature_function feature_function, tokenized_string_t *tokenized, double *score, bool print_features, crf_context_t *const crf_context) {
+    if (!crf_tagger_score(self, tagger, tagger_context, features, prev_tag_features, feature_function, tokenized, print_features, crf_context)) {
+        return NULL;
     }
 
     size_t num_tokens = tokenized->tokens->n;
 
-    uint32_array_resize_fixed(self->viterbi, num_tokens);
-    double viterbi_score = crf_context_viterbi(self->context, self->viterbi->a);
+    uint32_array *const viterbi = uint32_array_new_size_fixed(num_tokens);
+    if (!viterbi) {
+        log_error("error allocating viterbi array");
+        return NULL;
+    }
+
+    double viterbi_score = crf_context_viterbi(crf_context, viterbi->a);
 
     *score = viterbi_score;
 
-    return true;
+    return viterbi;
 }
 
 
@@ -117,16 +122,27 @@ bool crf_tagger_predict(crf_t *self, void *tagger, void *context, cstring_array 
     double score;
 
     if (labels == NULL) return false;
-    if (!crf_tagger_score_viterbi(self, tagger, context, features, prev_tag_features, feature_function, tokenized, &score, print_features)) {
+
+    crf_context_t *const crf_context = crf_context_new(CRF_CONTEXT_VITERBI | CRF_CONTEXT_MARGINALS, self->num_classes, CRF_CONTEXT_DEFAULT_NUM_ITEMS);
+    if (!context) {
+        log_error("error creating crf context");
         return false;
     }
 
-    uint32_t *viterbi = self->viterbi->a;
+    uint32_array *viterbi = crf_tagger_score_viterbi(self, tagger, context, features, prev_tag_features, feature_function, tokenized, &score, print_features, crf_context);
+    if (!viterbi) {
+        crf_context_destroy(crf_context);
+        return false;
+    }
 
-    for (size_t i = 0; i < self->viterbi->n; i++) {
-        char *predicted = cstring_array_get_string(self->classes, viterbi[i]);
+    for (size_t i = 0; i < viterbi->n; i++) {
+        char *predicted = cstring_array_get_string(self->classes,
+                viterbi->a[i]);
         cstring_array_add_string(labels, predicted);
     }
+
+    crf_context_destroy(crf_context);
+    uint32_array_destroy(viterbi);
 
     return true;
 }
@@ -265,16 +281,6 @@ crf_t *crf_read(FILE *f) {
         goto exit_crf_created;
     }
 
-    crf->viterbi = uint32_array_new();
-    if (crf->viterbi == NULL) {
-        goto exit_crf_created;
-    }
-
-    crf->context = crf_context_new(CRF_CONTEXT_VITERBI | CRF_CONTEXT_MARGINALS, crf->num_classes, CRF_CONTEXT_DEFAULT_NUM_ITEMS);
-    if (crf->context == NULL) {
-        goto exit_crf_created;
-    }
-
     return crf;
 
 exit_crf_created:
@@ -316,14 +322,6 @@ void crf_destroy(crf_t *self) {
 
     if (self->trans_weights != NULL) {
         double_matrix_destroy(self->trans_weights);
-    }
-
-    if (self->viterbi != NULL) {
-        uint32_array_destroy(self->viterbi);
-    }
-
-    if (self->context != NULL) {
-        crf_context_destroy(self->context);
     }
 
     free(self);
