@@ -735,6 +735,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
         step_name = step->name;
         if (step->type == STEP_RULESET && trans_node_id == NULL_NODE_ID) {
             log_warn("transliterator \"%s\" does not exist in trie\n", trans_name);
+            if (allocated_trans_name) free(trans_name);
             free(str);
             return NULL;
         }
@@ -746,6 +747,7 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
             if (step_node_id == NULL_NODE_ID) {
                 log_warn("transliterator step \"%s\" does not exist\n", step_name);
+                if (allocated_trans_name) free(trans_name);
                 free(str);
                 return NULL;
             }
@@ -787,13 +789,9 @@ char *transliterate(char *trans_name, char *str, size_t len) {
             while (idx < len) {
                 log_debug("idx=%zu, ptr=%s\n", idx, ptr);
                 char_len = utf8proc_iterate(ptr, len, &ch);
-                if (char_len == UTF8PROC_ERROR_INVALIDUTF8) {
-                    log_warn("invalid UTF-8\n");
-                    char_len = 1;
-                    ch = (int32_t)*ptr;
-                } else if (char_len <= 0) {
-                    log_warn("char_len=%zd at idx=%zu\n", char_len, idx);
-                    free(trans_name);
+                if (char_len <= 0) {
+                    log_warn("invalid UTF-8 at position %zu in transliterating string: %.*s\n", idx, (int)len, str);
+                    if (allocated_trans_name) free(trans_name);
                     free(str);
                     return NULL;
                 }
@@ -1047,8 +1045,8 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
     }
 
+    if (allocated_trans_name) free(trans_name);
     return str;
-
 }
 
 void transliteration_table_destroy(void) {

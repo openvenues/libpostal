@@ -32,7 +32,7 @@ string_script_t get_string_script(char *str, size_t len) {
     while (idx < len) {
         ssize_t char_len = utf8proc_iterate(ptr, len, &ch);
 
-        if (ch == 0) break;
+        if (char_len <= 0 ||ch == 0) break;
 
         script = get_char_script((uint32_t)ch);
 
@@ -45,6 +45,11 @@ string_script_t get_string_script(char *str, size_t len) {
                 while (true) {
                     char_len = utf8proc_iterate_reversed((const uint8_t *)str, idx, &ch);
                     if (ch == 0) break;
+
+                    /* Note: don't need to check char_len < 0 here because we're rewinding
+                    ** previously valid UTF-8 characters and if anything invalid is detected,
+                    ** we break out of the outer loop.
+                    **/
 
                     script = get_char_script((uint32_t)ch);
                     if (!is_common_script(script)) {

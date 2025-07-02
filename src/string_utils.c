@@ -362,6 +362,7 @@ ssize_t utf8_len(const char *str, size_t len) {
 
     while (1) {
         char_len = utf8proc_iterate(ptr, -1, &ch);
+        if (char_len <= 0) break;
 
         if (ch == 0) break;
         remaining -= char_len;
@@ -387,6 +388,7 @@ uint32_array *unicode_codepoints(const char *str) {
 
     while (1) {
         char_len = utf8proc_iterate(ptr, -1, &ch);
+        if (char_len <= 0) break;
 
         if (ch == 0) break;
 
@@ -527,7 +529,8 @@ size_t utf8_common_prefix_len(const char *str1, const char *str2, size_t len) {
         len1 = utf8proc_iterate(ptr1, -1, &c1);
         len2 = utf8proc_iterate(ptr2, -1, &c2);
 
-        if (c1 <= 0 || c2 <= 0) break;
+        if (len1 <= 0 || len2 <= 0 || c1 <= 0 || c2 <= 0) break;
+
         if (c1 == c2) {
             ptr1 += len1;
             ptr2 += len2;
@@ -572,6 +575,9 @@ size_t utf8_common_prefix_len_ignore_separators(const char *str1, const char *st
         len1 = utf8proc_iterate(ptr1, -1, &c1);
         len2 = utf8proc_iterate(ptr2, -1, &c2);
 
+        /* Note: utf8 comparison can handle a non-valid UTF-8 sequence e.g. for trie
+        ** suffix comparison where we may be in the middle of a multi-byte character
+        **/
         if (len1 < 0 && len2 < 0 && *ptr1 == *ptr2) {
             ptr1++;
             ptr2++;
@@ -631,6 +637,9 @@ bool utf8_equal_ignore_separators_len(const char *str1, const char *str2, size_t
         len1 = utf8proc_iterate(ptr1, -1, &c1);
         len2 = utf8proc_iterate(ptr2, -1, &c2);
 
+        /* Note: utf8 comparison can handle a non-valid UTF-8 sequence e.g. for trie
+        ** suffix comparison where we may be in the middle of a multi-byte character
+        **/
         if (len1 < 0 && len2 < 0 && *ptr1 == *ptr2) {
             ptr1++;
             ptr2++;
@@ -821,7 +830,7 @@ size_t string_right_spaces_len(char *str, size_t len) {
     while (1) {
         ssize_t char_len = utf8proc_iterate_reversed(ptr, index, &ch);
 
-        if (ch <= 0) break;
+        if (char_len <= 0 || ch == 0) break;
 
         if (!utf8_is_whitespace(ch)) {
             break;
@@ -840,6 +849,7 @@ inline size_t string_hyphen_prefix_len(char *str, size_t len) {
     int32_t unichr;
     uint8_t *ptr = (uint8_t *)str;
     ssize_t char_len = utf8proc_iterate(ptr, len, &unichr);
+    if (char_len <= 0 || unichr == 0) return 0;
     if (utf8_is_hyphen(unichr)) {
         return (size_t)char_len;
     }
@@ -851,6 +861,7 @@ inline size_t string_hyphen_suffix_len(char *str, size_t len) {
     int32_t unichr;
     uint8_t *ptr = (uint8_t *)str;
     ssize_t char_len = utf8proc_iterate_reversed(ptr, len, &unichr);
+    if (char_len <= 0 || unichr == 0) return 0;
     if (utf8_is_hyphen(unichr)) {
         return (size_t)char_len;
     }
@@ -867,7 +878,7 @@ size_t string_left_spaces_len(char *str, size_t len) {
     while (1) {
         ssize_t char_len = utf8proc_iterate(ptr, len, &ch);
 
-        if (ch <= 0) break;
+        if (char_len <= 0 || ch == 0) break;
 
         if (!utf8_is_whitespace(ch)) {
             break;
