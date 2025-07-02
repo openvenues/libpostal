@@ -736,6 +736,8 @@ phrase_t trie_search_prefixes_from_index(trie_t *self, char *word, size_t len, u
                                 return (phrase_t){phrase_start, phrase_len, value};
                             }
                         }
+
+                        // Note: don't need to check the < 0 case because we're returning from this branch.
                     }
                     if (first_char) phrase_start = idx;
                     phrase_len = (uint32_t)(idx + match_len) - phrase_start;

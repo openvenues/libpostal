@@ -421,10 +421,14 @@ void add_normalized_token(char_array *array, char *str, token_t token, uint64_t 
             bool is_number = utf8_is_number(cat);
 
             next_char_len = utf8proc_iterate(ptr + char_len, len, &next_ch);
-            int next_cat = utf8proc_category(next_ch);
-            bool next_is_number = utf8_is_number(next_cat);
-            bool next_is_letter = utf8_is_letter(next_cat);
-
+            int next_cat = UTF8PROC_CATEGORY_CN;
+            bool next_is_number = false;
+            bool next_is_letter = false;
+            if (next_char_len > 0) {
+                next_cat = utf8proc_category(next_ch);
+                next_is_number = utf8_is_number(next_cat);
+                next_is_letter = utf8_is_letter(next_cat);
+            }
 
             bool is_full_stop = ch == FULL_STOP_CODEPOINT;
 
