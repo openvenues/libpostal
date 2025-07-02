@@ -715,8 +715,6 @@ char *transliterate(char *trans_name, char *str, size_t len) {
 
     uint32_t trans_node_id = result.node_id;
 
-    if (allocated_trans_name) free(trans_name);
-
     result = trie_get_prefix_from_index(trans_table->trie, NAMESPACE_SEPARATOR_CHAR, NAMESPACE_SEPARATOR_CHAR_LEN, result.node_id, result.tail_pos);
 
     trans_node_id = result.node_id;
