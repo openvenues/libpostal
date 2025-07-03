@@ -1,4 +1,4 @@
-requests==2.32.2
+requests==2.32.4
 six==1.10.0
 PyYAML==5.4
 ujson==5.4.0
