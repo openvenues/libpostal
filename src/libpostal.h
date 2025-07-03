@@ -133,6 +133,9 @@ typedef struct libpostal_normalize_options {
     bool expand_numex;
     bool roman_numerals;
 
+    // Expansion options
+    bool root;
+
 } libpostal_normalize_options_t;
 
 LIBPOSTAL_EXPORT libpostal_normalize_options_t libpostal_get_default_options(void);
@@ -202,6 +205,7 @@ typedef struct libpostal_near_dupe_hash_options {
     bool name_and_address_keys;
     bool name_only_keys;
     bool address_only_keys;
+    bool street_root;
 } libpostal_near_dupe_hash_options_t;
 
 LIBPOSTAL_EXPORT libpostal_near_dupe_hash_options_t libpostal_get_near_dupe_hash_default_options(void);
