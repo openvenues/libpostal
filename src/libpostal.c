@@ -214,7 +214,7 @@ libpostal_fuzzy_duplicate_status_t libpostal_is_street_duplicate_fuzzy(size_t nu
 }
 
 libpostal_language_classifier_response_t *libpostal_classify_language(char *address) {
-    libpostal_language_classifier_response_t *response = classify_languages(address);
+    libpostal_language_classifier_response_t *response = libpostal_classify_languages(address);
 
     if (response == NULL) {
         log_error("Language classification returned NULL\n");
