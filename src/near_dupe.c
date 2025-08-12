@@ -150,8 +150,8 @@ cstring_array *expanded_component_combined(char *input, libpostal_normalize_opti
 
     size_t num_root_expansions = 0;
     cstring_array *root_expansions = expand_address_root(input, options, &num_root_expansions);
-    
-    if (num_root_expansions == 0) {
+
+    if (!options.root || num_root_expansions == 0) {
         cstring_array_destroy(root_expansions);
         *n = num_expansions;
         return expansions;
@@ -706,6 +706,7 @@ cstring_array *near_dupe_hashes_languages(size_t num_components, char **labels, 
         remove_spaces = true;
         log_debug("Doing street expansions for %s\n", place->street);
         normalize_options.address_components = LIBPOSTAL_ADDRESS_STREET | LIBPOSTAL_ADDRESS_ANY;
+        normalize_options.root = options.street_root;
         street_expansions = expanded_component_combined(place->street, normalize_options, remove_spaces, &num_street_expansions);
         log_debug("Got %zu street expansions\n", num_street_expansions);
     }
