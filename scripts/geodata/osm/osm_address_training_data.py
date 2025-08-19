@@ -47,7 +47,6 @@ import ujson as json
 import HTMLParser
 
 from collections import defaultdict, OrderedDict
-from lxml import etree
 from itertools import ifilter, chain, combinations
 
 from shapely.geos import LOG as shapely_geos_logger
