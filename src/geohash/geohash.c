@@ -391,9 +391,7 @@ static int uint8s_plus_minus(uint8_t *src, uint8_t *dst, size_t length, int plus
         return 0;
     }
     unsigned int cell = (length-1)/8;
-    for (unsigned int i=0; i<cell; i++) {
-        dst[cell] = src[cell];
-    }
+    memcpy(dst, src, cell);
     uint8_t cell_offset = (8-length%8)%8;
     int up = 1;
     while (up) {
