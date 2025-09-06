@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-m4_define([LIBPOSTAL_VERSION], [1.1.1])
+m4_define([LIBPOSTAL_VERSION], [1.1.2])
 
 AC_INIT([libpostal], LIBPOSTAL_VERSION)
 
