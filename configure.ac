@@ -1,11 +1,9 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-m4_define(LIBPOSTAL_MAJOR_VERSION, [1])
-m4_define(LIBPOSTAL_MINOR_VERSION, [1])
-m4_define(LIBPOSTAL_PATCH_VERSION, [0])
+m4_define([LIBPOSTAL_VERSION], [1.1.0])
 
-AC_INIT([libpostal], LIBPOSTAL_MAJOR_VERSION.LIBPOSTAL_MINOR_VERSION.LIBPOSTAL_PATCH_VERSION)
+AC_INIT([libpostal], LIBPOSTAL_VERSION)
 
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -49,6 +47,28 @@ AC_CHECK_TYPES([ptrdiff_t])
 
 # Checks for library functions.
 AC_CHECK_FUNCS([malloc realloc drand48 getcwd gettimeofday memmove memset regcomp setlocale sqrt strdup strndup])
+
+AS_IF([:], [
+  vers='LIBPOSTAL_VERSION'
+
+  major=${vers%%.*}
+  rest=${vers#*.}
+  minor=${rest%%.*}
+  patch=${rest#*.}
+
+  case $major in (*[!0-9]*|'') AC_MSG_ERROR([Non-numeric major version in LIBPOSTAL_VERSION ('$major')]);; esac
+  case $minor in (*[!0-9]*|'') AC_MSG_ERROR([Non-numeric minor version in LIBPOSTAL_VERSION ('$minor')]);; esac
+  case $patch in (*[!0-9]*|'') AC_MSG_ERROR([Non-numeric patch version in LIBPOSTAL_VERSION ('$patch')]);; esac
+
+  AC_SUBST([LIBPOSTAL_MAJOR_VERSION], [$major])
+  AC_SUBST([LIBPOSTAL_MINOR_VERSION], [$minor])
+  AC_SUBST([LIBPOSTAL_PATCH_VERSION], [$patch])
+
+  AC_DEFINE_UNQUOTED([LIBPOSTAL_MAJOR_VERSION], [$major], [Major version])
+  AC_DEFINE_UNQUOTED([LIBPOSTAL_MINOR_VERSION], [$minor], [Minor version])
+  AC_DEFINE_UNQUOTED([LIBPOSTAL_PATCH_VERSION], [$patch], [Patch version])
+])
+
 
 AC_SUBST([LIBPOSTAL_DATA_DIR_VERSION_STRING], [v1])
 
@@ -127,6 +147,7 @@ AC_ARG_WITH(cflags-scanner-extra, [AS_HELP_STRING([--with-cflags-scanner-extra@<
 
 AC_MSG_NOTICE([extra cflags for scanner.c: $CFLAGS_SCANNER_EXTRA])
 AC_SUBST(CFLAGS_SCANNER_EXTRA)
+
 AC_SUBST(LIBPOSTAL_SO_VERSION, LIBPOSTAL_MAJOR_VERSION:LIBPOSTAL_MINOR_VERSION:LIBPOSTAL_PATCH_VERSION)
 
 AC_OUTPUT
