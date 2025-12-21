@@ -689,7 +689,7 @@ class AddressComponents(object):
 
         localized, iso_3166, alpha3, alpha2 = range(4)
         probs = cdf([localized_name_prob, iso_3166_name_prob, alpha_3_iso_code_prob, alpha_2_iso_code_prob])
-        value = weighted_choice(values, probs)
+        value = weighted_choice([localized, iso_3166, alpha3, alpha2], probs)
 
         country_name = country_code.upper()
 

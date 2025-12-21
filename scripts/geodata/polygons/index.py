@@ -161,7 +161,7 @@ class PolygonIndex(object):
             return None
 
         # Fix for polygons crossing the 180th meridian
-        lons = [lon for lon, lat in coords]
+        lons = [coordinate[0] for coordinate in coords]
         if (max(lons) - min(lons) > 180):
             coords = [(lon + 360.0 if lon < 0 else lon, lat) for lon, lat in coords]
             if holes:

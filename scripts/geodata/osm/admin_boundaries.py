@@ -242,7 +242,7 @@ class OSMPolygonReader(object):
 
                 self.way_indptr.append(len(self.way_deps))
 
-                if deps[0] == deps[-1] and self.include_polygon(props):
+                if deps and deps[0] == deps[-1] and self.include_polygon(props):
                     way_id_offset = WAY_OFFSET + way_id
                     if not properties_only:
                         outer_polys = self.create_polygons([way_id])

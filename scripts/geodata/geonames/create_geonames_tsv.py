@@ -44,7 +44,7 @@ sys.path.append(os.path.realpath(os.path.join(os.pardir, os.pardir)))
 
 from geodata.csv_utils import *
 from geodata.file_utils import *
-from geodata.countries.country_names import *
+from geodata.countries.names import *
 from geodata.encoding import safe_encode, safe_decode
 from geodata.geonames.paths import DEFAULT_GEONAMES_DB_PATH
 from geodata.i18n.languages import *
@@ -374,7 +374,7 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
 
     init_languages()
 
-    init_country_names()
+    country_names = CountryNames()
 
     wiki_titles = get_wikipedia_titles(db)
     logging.info('Fetched Wikipedia titles')
@@ -426,7 +426,7 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
 
                     is_orig_name = row[NAME_INDEX] == row[CANONICAL_NAME_INDEX] and row[LANGUAGE_INDEX] == ''
                     # Set the canonical for countries to the local name, see country_official_name in country_names.py
-                    country_canonical = country_localized_display_name(alpha2_code.lower())
+                    country_canonical = country_names.localized_name(alpha2_code.lower())
                     if not country_canonical or not country_canonical.strip():
                         raise ValueError('Could not get local canonical name for country code={}'.format(alpha2_code))
                     row[CANONICAL_NAME_INDEX] = country_canonical
@@ -557,9 +557,9 @@ def create_geonames_tsv(db, out_dir=DEFAULT_DATA_DIR):
                         alpha2_row[DUMMY_LANGUAGE_PRIORITY_INDEX] = 10
                         rows.append(map(encode_field, alpha2_row))
 
-                    if alpha2_code.lower() in country_alpha3_map and is_orig_name:
+                    if alpha2_code.lower() in country_names.country_alpha3_codes and is_orig_name:
                         alpha3_row = row[:]
-                        alpha3_row[NAME_INDEX] = country_code_alpha3_map[alpha2_code.lower()]
+                        alpha3_row[NAME_INDEX] = country_names.country_alpha3_codes[alpha2_code.lower()]
                         alpha3_row[DUMMY_LANGUAGE_PRIORITY_INDEX] = 10
                         rows.append(map(encode_field, alpha3_row))
 

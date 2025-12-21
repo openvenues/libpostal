@@ -505,7 +505,10 @@ class OSMCountryReverseGeocoder(OSMReverseGeocoder):
                         return None, []
                     break
 
-        country = country.lower()
+        try:
+            country = country.lower()
+        except AttributeError:
+            return None, []
 
         regional = None
 
