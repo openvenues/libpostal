@@ -329,6 +329,8 @@ typedef struct libpostal_normalized_token {
 LIBPOSTAL_EXPORT libpostal_normalized_token_t *libpostal_normalized_tokens(char *input, uint64_t string_options, uint64_t token_options, bool whitespace, size_t *n);
 LIBPOSTAL_EXPORT libpostal_normalized_token_t *libpostal_normalized_tokens_languages(char *input, uint64_t string_options, uint64_t token_options, bool whitespace, size_t num_languages, char **languages, size_t *n);
 
+LIBPOSTAL_EXPORT void libpostal_log_set_stream(FILE *stream);
+LIBPOSTAL_EXPORT FILE *libpostal_log_get_stream();
 
 #ifdef __cplusplus
 }
