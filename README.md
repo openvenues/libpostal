@@ -202,6 +202,37 @@ If you require a .lib import library to link this to your application. You can g
 lib.exe /def:libpostal.def /out:libpostal.lib /machine:x64
 ```
 
+Docker
+------
+
+A community-maintained multi-architecture Docker image provides libpostal as an HTTP service, supporting both `linux/amd64` (Intel/AMD) and `linux/arm64` (Apple Silicon, AWS Graviton, Oracle Ampere):
+
+```bash
+# GitHub Container Registry
+docker run -d -p 4400:4400 ghcr.io/mml555/libpostal-docker:latest
+
+# Docker Hub  
+docker run -d -p 4400:4400 mml555/libpostal:latest
+```
+
+The image includes HTTP endpoints for address parsing (`/parser`) and normalization (`/expand`):
+
+```bash
+# Parse an address
+curl -X POST http://localhost:4400/parser \
+  -H "Content-Type: application/json" \
+  -d '{"text": "123 Main St, New York, NY 10001"}'
+
+# Normalize/expand an address  
+curl -X POST http://localhost:4400/expand \
+  -H "Content-Type: application/json" \
+  -d '{"text": "123 Main St"}'
+```
+
+See [mml555/libpostal-docker](https://github.com/mml555/libpostal-docker) for full documentation, Docker Compose examples, and source code.
+
+```
+
 Installation with an alternative data model
 -------------------------------------------
 
