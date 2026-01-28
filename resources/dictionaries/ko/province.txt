@@ -1,0 +1,9 @@
+Jeju
+Gyeonggi
+Gangwon
+North Jeolla
+North Gyeongsang
+North Chungcheong
+South Chungcheong
+South Gyeongsang
+South Jeolla
