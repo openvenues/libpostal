@@ -53,6 +53,6 @@ jobs:
     if: ${{ always() && contains(fromJSON('["failure", "cancelled"]'), needs.build_and_test.outputs.status ) && github.ref_name == github.event.repository.default_branch }}
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-    uses: senzing-factory/build-resources/.github/workflows/build-failure-slack-notification.yaml@v3
+    uses: senzing-factory/build-resources/.github/workflows/build-failure-slack-notification.yaml@v4
     with:
       job-status: ${{ needs.build_and_test.outputs.status }}

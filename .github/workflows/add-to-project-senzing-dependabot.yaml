@@ -21,6 +21,6 @@ jobs:
     if: ${{ always() && contains(fromJSON('["failure", "cancelled"]'), needs.add-to-project-dependabot.outputs.job-status) }}
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-    uses: senzing-factory/build-resources/.github/workflows/build-failure-slack-notification.yaml@v3
+    uses: senzing-factory/build-resources/.github/workflows/build-failure-slack-notification.yaml@v4
     with:
       job-status: ${{ needs.add-to-project-dependabot.outputs.job-status }}
