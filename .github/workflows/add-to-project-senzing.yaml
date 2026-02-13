@@ -14,7 +14,7 @@ jobs:
       repository-projects: write
     secrets:
       SENZING_GITHUB_PROJECT_RW_TOKEN: ${{ secrets.SENZING_GITHUB_PROJECT_RW_TOKEN }}
-    uses: senzing-factory/build-resources/.github/workflows/add-to-project.yaml@v3
+    uses: senzing-factory/build-resources/.github/workflows/add-to-project.yaml@v4
     with:
       project-number: ${{ vars.SENZING_GITHUB_ORGANIZATION_PROJECT }}
       org: ${{ vars.SENZING_GITHUB_ACCOUNT_NAME }}
