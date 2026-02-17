@@ -14,14 +14,15 @@ jobs:
       issues: write
     secrets:
       ORG_MEMBERSHIP_TOKEN: ${{ secrets.ORG_MEMBERSHIP_TOKEN }}
-      SENZING_MEMBERS: ${{ secrets.SENZING_MEMBERS }}
+      MEMBERS: ${{ secrets.SENZING_MEMBERS }}
     uses: senzing-factory/build-resources/.github/workflows/add-labels-to-issue.yaml@v4
 
   slack-notification:
     needs: [add-issue-labels]
-    if: ${{ always() && contains(fromJSON('["failure", "cancelled"]'), needs.add-issue-labels.outputs.job-status) }}
+    if: ${{ always() && contains(fromJSON('["failure", "cancelled"]'), needs.add-issue-labels.result) }}
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
     uses: senzing-factory/build-resources/.github/workflows/build-failure-slack-notification.yaml@v4
     with:
-      job-status: ${{ needs.add-issue-labels.outputs.job-status }}
+      job-status: ${{ needs.add-issue-labels.result }}

@@ -11,16 +11,17 @@ jobs:
     permissions:
       repository-projects: write
     secrets:
-      SENZING_GITHUB_PROJECT_RW_TOKEN: ${{ secrets.SENZING_GITHUB_PROJECT_RW_TOKEN }}
+      PROJECT_RW_TOKEN: ${{ secrets.SENZING_GITHUB_PROJECT_RW_TOKEN }}
     uses: senzing-factory/build-resources/.github/workflows/add-to-project-dependabot.yaml@v4
     with:
       project: ${{ vars.SENZING_GITHUB_ORGANIZATION_PROJECT }}
 
   slack-notification:
     needs: [add-to-project-dependabot]
-    if: ${{ always() && contains(fromJSON('["failure", "cancelled"]'), needs.add-to-project-dependabot.outputs.job-status) }}
+    if: ${{ always() && contains(fromJSON('["failure", "cancelled"]'), needs.add-to-project-dependabot.result) }}
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
     uses: senzing-factory/build-resources/.github/workflows/build-failure-slack-notification.yaml@v4
     with:
-      job-status: ${{ needs.add-to-project-dependabot.outputs.job-status }}
+      job-status: ${{ needs.add-to-project-dependabot.result }}

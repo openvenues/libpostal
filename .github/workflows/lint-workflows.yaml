@@ -13,6 +13,6 @@ jobs:
     permissions:
       contents: read
       packages: read
-      pull-requests: read
+      pull-requests: write
       statuses: write
-    uses: senzing-factory/build-resources/.github/workflows/lint-workflows.yaml@v3
+    uses: senzing-factory/build-resources/.github/workflows/lint-workflows.yaml@v4
