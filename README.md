@@ -132,20 +132,21 @@ make distclean
 
 ./bootstrap.sh
 
-# omit --datadir flag to install data in current directory
-./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...]
-make -j4
+
+# Configure your build.
+# Omit --datadir flag to install data in current directory, or pass a directory with a few GB of free space.
+# Choose one depending on your environment:
 
 # For Intel/AMD processors and the default model
-./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...]
+./configure --datadir=[...Directory where "libpostal" exists or can be created...]
 
 # For Apple / ARM cpus and the default model
-./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...] --disable-sse2
+./configure --datadir=[...Directory where "libpostal" exists or can be created...] --disable-sse2
 
 # For the improved Senzing model:
-./configure --datadir=[...some dir with a few GB of space where a "libpostal" directory exists or can be created/modified...] MODEL=senzing
+./configure --datadir=[...Directory where "libpostal" exists or can be created...] MODEL=senzing
 
-make -j8
+make -j$(nproc)
 sudo make install
 
 # On Linux it's probably a good idea to run
