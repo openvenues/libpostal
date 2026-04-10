@@ -7,12 +7,14 @@ on:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 permissions: {}
 
 jobs:
   build_and_test:
-    outputs:
-      status: ${{ job.status }}
     permissions:
       contents: read
     runs-on: ${{ matrix.os }}
@@ -47,13 +49,10 @@ jobs:
 
       - name: Test
         run: make check
-
-  slack-notification:
-    needs: [build_and_test]
-    if: ${{ always() && contains(fromJSON('["failure", "cancelled"]'), needs.build_and_test.outputs.status ) && github.ref_name == github.event.repository.default_branch }}
-    secrets:
-      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
-    uses: senzing-factory/build-resources/.github/workflows/build-failure-slack-notification.yaml@v4
-    with:
-      job-status: ${{ needs.build_and_test.outputs.status }}
+      - name: Notify Slack on failure
+        if: (failure() || cancelled()) && github.ref_name == github.event.repository.default_branch
+        uses: senzing-factory/build-resources/slack-failure-notification@v4
+        with:
+          job-status: ${{ job.status }}
+          slack-channel: ${{ secrets.SLACK_CHANNEL }}
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
