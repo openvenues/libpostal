@@ -198,7 +198,7 @@ bool crf_save(crf_t *self, char *filename) {
 }
 
 
-crf_t *crf_read(FILE *f) {
+crf_t *crf_read(FILE *f, const char *path) {
     if (f == NULL) return NULL;
 
     uint32_t signature;
@@ -240,22 +240,22 @@ crf_t *crf_read(FILE *f) {
         goto exit_crf_created;
     }
 
-    crf->state_features = trie_read(f);
+    crf->state_features = trie_read_cached(f, path);
     if (crf->state_features == NULL) {
         goto exit_crf_created;
     }
 
-    crf->weights = sparse_matrix_read(f);
+    crf->weights = sparse_matrix_read_cached(f, path);
     if (crf->weights == NULL) {
         goto exit_crf_created;
     }
 
-    crf->state_trans_features = trie_read(f);
+    crf->state_trans_features = trie_read_cached(f, path);
     if (crf->state_trans_features == NULL) {
         goto exit_crf_created;
     }
 
-    crf->state_trans_weights = sparse_matrix_read(f);
+    crf->state_trans_weights = sparse_matrix_read_cached(f, path);
     if (crf->state_trans_weights == NULL) {
         goto exit_crf_created;
     }
@@ -286,7 +286,7 @@ crf_t *crf_load(char *filename) {
     if (filename == NULL) return NULL;
     FILE *f = fopen(filename, "rb");
     if (f == NULL) return NULL;
-    crf_t *crf = crf_read(f);
+    crf_t *crf = crf_read(f, filename);
     fclose(f);
     return crf;
 }

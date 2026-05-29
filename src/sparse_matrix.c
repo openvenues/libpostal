@@ -34,8 +34,152 @@ sparse_matrix_t *sparse_matrix_new(void) {
 }
 
 
+#define SPARSE_MATRIX_MMAP_MAGIC   0x53504D54U  /* "SPMT" */
+#define SPARSE_MATRIX_MMAP_VERSION 1U
+#define SPARSE_MATRIX_MMAP_SUFFIX  ".spcache"
+
+// Type-specific cache header (the CSR shape).
+typedef struct {
+    uint32_t m;
+    uint32_t n;
+} sparse_matrix_mmap_header_t;
+
+#ifndef _WIN32
+// Build a sparse matrix whose three CSR arrays point into a mapped cache. Takes
+// ownership of `base`: on failure it unmaps and returns NULL.
+static sparse_matrix_t *sparse_matrix_from_mmap(void *base, size_t map_len,
+        const sparse_matrix_mmap_header_t *th, file_mmap_array_ref_t *refs) {
+    sparse_matrix_t *sp = calloc(1, sizeof(sparse_matrix_t));
+    if (sp == NULL) {
+        file_mmap_cache_close(base, map_len);
+        return NULL;
+    }
+    sp->m = th->m;
+    sp->n = th->n;
+    sp->indptr = uint32_array_new_size(1);
+    sp->indices = uint32_array_new_size(1);
+    sp->data = double_array_new_size(1);
+    if (sp->indptr == NULL || sp->indices == NULL || sp->data == NULL) {
+        sparse_matrix_destroy(sp);   // is_mmap still false: frees owned wrappers
+        file_mmap_cache_close(base, map_len);
+        return NULL;
+    }
+    free(sp->indptr->a);
+    sp->indptr->a = (uint32_t *)refs[0].base;
+    sp->indptr->n = sp->indptr->m = refs[0].count;
+    free(sp->indices->a);
+    sp->indices->a = (uint32_t *)refs[1].base;
+    sp->indices->n = sp->indices->m = refs[1].count;
+    free(sp->data->a);
+    sp->data->a = (double *)refs[2].base;
+    sp->data->n = sp->data->m = refs[2].count;
+    sp->is_mmap = true;
+    sp->mmap_base = base;
+    sp->mmap_len = map_len;
+    return sp;
+}
+#endif
+
+sparse_matrix_t *sparse_matrix_read_cached(FILE *f, const char *path) {
+#ifndef _WIN32
+    if (path != NULL && file_mmap_cache_enabled()) {
+        off_t off = ftello(f);
+        struct stat st;
+        if (off >= 0 && fstat(fileno(f), &st) == 0) {
+            file_mmap_src_id_t src = file_mmap_src_id_from_stat(&st);
+            char *cache_path = file_mmap_cache_path(path, (uint64_t)off, SPARSE_MATRIX_MMAP_SUFFIX);
+            if (cache_path != NULL) {
+                file_mmap_array_ref_t refs[3] = {
+                    { .elem_size = sizeof(uint32_t) },
+                    { .elem_size = sizeof(uint32_t) },
+                    { .elem_size = sizeof(double) },
+                };
+                const void *th = NULL;
+                uint64_t disk = 0;
+                size_t map_len = 0;
+
+                // Warm path: map a valid cache and skip the matrix in the source.
+                void *base = file_mmap_cache_open(cache_path, SPARSE_MATRIX_MMAP_MAGIC,
+                        SPARSE_MATRIX_MMAP_VERSION, src, (uint64_t)off, &th,
+                        sizeof(sparse_matrix_mmap_header_t), refs, 3, &disk, &map_len);
+                if (base != NULL) {
+                    sparse_matrix_t *sp = sparse_matrix_from_mmap(base, map_len,
+                            (const sparse_matrix_mmap_header_t *)th, refs);
+                    if (sp != NULL) {
+                        if ((uint64_t)off + disk <= src.size &&
+                            fseeko(f, off + (off_t)disk, SEEK_SET) == 0) {
+                            free(cache_path);
+                            return sp;
+                        }
+                        sparse_matrix_destroy(sp);   // munmaps; fall back below
+                    }
+                    fseeko(f, off, SEEK_SET);
+                }
+
+                // Cold/stale path: read normally, then build + map the cache.
+                sparse_matrix_t *copy = sparse_matrix_read(f);
+                if (copy == NULL) {
+                    free(cache_path);
+                    return NULL;
+                }
+                off_t end = ftello(f);
+                if (end > off) {
+                    sparse_matrix_mmap_header_t hdr = { .m = copy->m, .n = copy->n };
+                    file_mmap_array_t arrays[3] = {
+                        { .data = copy->indptr->a,  .elem_size = sizeof(uint32_t), .count = copy->indptr->n },
+                        { .data = copy->indices->a, .elem_size = sizeof(uint32_t), .count = copy->indices->n },
+                        { .data = copy->data->a,    .elem_size = sizeof(double),   .count = copy->data->n },
+                    };
+                    if (file_mmap_cache_build(cache_path, SPARSE_MATRIX_MMAP_MAGIC,
+                            SPARSE_MATRIX_MMAP_VERSION, src, (uint64_t)off, (uint64_t)(end - off),
+                            &hdr, sizeof(hdr), arrays, 3)) {
+                        base = file_mmap_cache_open(cache_path, SPARSE_MATRIX_MMAP_MAGIC,
+                                SPARSE_MATRIX_MMAP_VERSION, src, (uint64_t)off, &th,
+                                sizeof(sparse_matrix_mmap_header_t), refs, 3, &disk, &map_len);
+                        if (base != NULL) {
+                            sparse_matrix_t *sp = sparse_matrix_from_mmap(base, map_len,
+                                    (const sparse_matrix_mmap_header_t *)th, refs);
+                            if (sp != NULL) {
+                                sparse_matrix_destroy(copy);
+                                free(cache_path);
+                                return sp;   // file already positioned past the matrix
+                            }
+                        }
+                    }
+                }
+                free(cache_path);
+                return copy;
+            }
+        }
+    }
+#else
+    (void)path;
+#endif
+    return sparse_matrix_read(f);
+}
+
 void sparse_matrix_destroy(sparse_matrix_t *self) {
     if (self == NULL) return;
+
+#ifndef _WIN32
+    if (self->is_mmap) {
+        if (self->indptr != NULL) {
+            self->indptr->a = NULL;
+            uint32_array_destroy(self->indptr);
+        }
+        if (self->indices != NULL) {
+            self->indices->a = NULL;
+            uint32_array_destroy(self->indices);
+        }
+        if (self->data != NULL) {
+            self->data->a = NULL;
+            double_array_destroy(self->data);
+        }
+        file_mmap_cache_close(self->mmap_base, self->mmap_len);
+        free(self);
+        return;
+    }
+#endif
 
     if (self->indptr != NULL) {
         uint32_array_destroy(self->indptr);
@@ -316,7 +460,9 @@ int sparse_matrix_dot_sparse(sparse_matrix_t *self, sparse_matrix_t *other, doub
 
 
 sparse_matrix_t *sparse_matrix_read(FILE *f) {
-    sparse_matrix_t *sp = malloc(sizeof(sparse_matrix_t));
+    // calloc so is_mmap/mmap_base/mmap_len start zeroed; sparse_matrix_destroy
+    // branches on is_mmap and would otherwise read uninitialized memory.
+    sparse_matrix_t *sp = calloc(1, sizeof(sparse_matrix_t));
     if (sp == NULL) return NULL;
 
     sp->indptr = NULL;

@@ -52,6 +52,11 @@ typedef struct {
     uint32_array *indptr;
     uint32_array *indices;
     double_array *data;
+    // When loaded via the mmap cache, indptr/indices/data point into a shared
+    // read-only mapping rather than being individually malloc'd.
+    bool is_mmap;
+    void *mmap_base;
+    size_t mmap_len;
 } sparse_matrix_t;
 
 
@@ -83,6 +88,11 @@ int sparse_matrix_dot_sparse(sparse_matrix_t *self, sparse_matrix_t *other, doub
 
 bool sparse_matrix_write(sparse_matrix_t *self, FILE *f);
 sparse_matrix_t *sparse_matrix_read(FILE *f);
+// Like sparse_matrix_read, but uses the optional shared mmap cache (see
+// file_utils.h, LIBPOSTAL_MMAP_CACHE) keyed on the source file `path` and the
+// matrix's offset. When caching is disabled or `path` is NULL this is just
+// sparse_matrix_read.
+sparse_matrix_t *sparse_matrix_read_cached(FILE *f, const char *path);
 
 #define sparse_matrix_foreach_row(sp, row_var, index_var, length_var, code) {   \
     uint32_t _row_start = 0, _row_end = 0;                                      \

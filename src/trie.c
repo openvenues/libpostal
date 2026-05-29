@@ -1,6 +1,10 @@
 #include "trie.h"
 #include <math.h>
 
+#ifndef _WIN32
+#include <unistd.h>
+#endif
+
 /* 
 * Maps the 256 characters (suitable for UTF-8 strings) to array indices
 * ordered by frequency of usage in Wikipedia titles.
@@ -903,6 +907,30 @@ void trie_destroy(trie_t *self) {
     if (!self)
         return;
 
+#ifndef _WIN32
+    if (self->is_mmap) {
+        // nodes/data/tail buffers live in the shared mapping: detach them before
+        // destroying the wrapper structs, then release the single mapping.
+        if (self->nodes) {
+            self->nodes->a = NULL;
+            trie_node_array_destroy(self->nodes);
+        }
+        if (self->data) {
+            self->data->a = NULL;
+            trie_data_array_destroy(self->data);
+        }
+        if (self->tail) {
+            self->tail->a = NULL;
+            uchar_array_destroy(self->tail);
+        }
+        if (self->alphabet)
+            free(self->alphabet);
+        file_mmap_cache_close(self->mmap_base, self->mmap_len);
+        free(self);
+        return;
+    }
+#endif
+
     if (self->alphabet)
         free(self->alphabet);
     if (self->nodes)
@@ -911,7 +939,7 @@ void trie_destroy(trie_t *self) {
         uchar_array_destroy(self->tail);
     if (self->data)
         trie_data_array_destroy(self->data);
-    
+
     free(self);
 }
 
@@ -1105,6 +1133,147 @@ exit_trie_created:
 exit_file_read:
     fseek(file, save_pos, SEEK_SET);
     return NULL;
+}
+
+#define TRIE_MMAP_MAGIC   0x54524945U  /* "TRIE" */
+#define TRIE_MMAP_VERSION 1U
+#define TRIE_MMAP_SUFFIX  ".trcache"
+
+// Type-specific cache header: the alphabet (needed to rebuild alpha_map) + counts.
+typedef struct {
+    uint32_t alphabet_size;
+    uint32_t num_keys;
+    uint8_t  alphabet[NUM_CHARS];
+} trie_mmap_header_t;
+
+#ifndef _WIN32
+// Build a trie whose nodes/data/tail arrays point into a mapped cache. Takes
+// ownership of `base`: on failure it unmaps and returns NULL.
+static trie_t *trie_from_mmap(void *base, size_t map_len,
+        const trie_mmap_header_t *th, file_mmap_array_ref_t *refs) {
+    if (th->alphabet_size == 0 || th->alphabet_size > NUM_CHARS) {
+        file_mmap_cache_close(base, map_len);
+        return NULL;
+    }
+    trie_t *trie = calloc(1, sizeof(trie_t));
+    if (trie == NULL) {
+        file_mmap_cache_close(base, map_len);
+        return NULL;
+    }
+    trie->alphabet = malloc(th->alphabet_size);
+    if (trie->alphabet == NULL) {
+        free(trie);
+        file_mmap_cache_close(base, map_len);
+        return NULL;
+    }
+    memcpy(trie->alphabet, th->alphabet, th->alphabet_size);
+    trie->alphabet_size = th->alphabet_size;
+    trie->num_keys = th->num_keys;
+    trie->null_node = NULL_NODE;
+    for (uint32_t i = 0; i < trie->alphabet_size; i++) {
+        trie->alpha_map[(uint8_t)trie->alphabet[i]] = (uint8_t)i;
+    }
+
+    trie->nodes = trie_node_array_new_size(1);
+    trie->data = trie_data_array_new_size(1);
+    trie->tail = uchar_array_new_size(1);
+    if (trie->nodes == NULL || trie->data == NULL || trie->tail == NULL) {
+        trie_destroy(trie);   // is_mmap still false: frees owned wrappers + alphabet
+        file_mmap_cache_close(base, map_len);
+        return NULL;
+    }
+    free(trie->nodes->a);
+    trie->nodes->a = (trie_node_t *)refs[0].base;
+    trie->nodes->n = trie->nodes->m = refs[0].count;
+    free(trie->data->a);
+    trie->data->a = (trie_data_node_t *)refs[1].base;
+    trie->data->n = trie->data->m = refs[1].count;
+    free(trie->tail->a);
+    trie->tail->a = (unsigned char *)refs[2].base;
+    trie->tail->n = trie->tail->m = refs[2].count;
+    trie->is_mmap = true;
+    trie->mmap_base = base;
+    trie->mmap_len = map_len;
+    return trie;
+}
+#endif
+
+trie_t *trie_read_cached(FILE *file, const char *path) {
+#ifndef _WIN32
+    if (path != NULL && file_mmap_cache_enabled()) {
+        off_t off = ftello(file);
+        struct stat st;
+        if (off >= 0 && fstat(fileno(file), &st) == 0) {
+            file_mmap_src_id_t src = file_mmap_src_id_from_stat(&st);
+            char *cache_path = file_mmap_cache_path(path, (uint64_t)off, TRIE_MMAP_SUFFIX);
+            if (cache_path != NULL) {
+                file_mmap_array_ref_t refs[3] = {
+                    { .elem_size = sizeof(trie_node_t) },
+                    { .elem_size = sizeof(trie_data_node_t) },
+                    { .elem_size = 1 },
+                };
+                const void *th = NULL;
+                uint64_t disk = 0;
+                size_t map_len = 0;
+
+                // Warm path: map a valid cache and skip the trie in the source.
+                void *base = file_mmap_cache_open(cache_path, TRIE_MMAP_MAGIC, TRIE_MMAP_VERSION,
+                        src, (uint64_t)off, &th, sizeof(trie_mmap_header_t), refs, 3, &disk, &map_len);
+                if (base != NULL) {
+                    trie_t *trie = trie_from_mmap(base, map_len, (const trie_mmap_header_t *)th, refs);
+                    if (trie != NULL) {
+                        if ((uint64_t)off + disk <= src.size &&
+                            fseeko(file, off + (off_t)disk, SEEK_SET) == 0) {
+                            free(cache_path);
+                            return trie;
+                        }
+                        trie_destroy(trie);   // munmaps; fall back below
+                    }
+                    fseeko(file, off, SEEK_SET);
+                }
+
+                // Cold/stale path: read normally, then build + map the cache.
+                trie_t *copy = trie_read(file);
+                if (copy == NULL) {
+                    free(cache_path);
+                    return NULL;
+                }
+                off_t end = ftello(file);
+                if (end > off) {
+                    trie_mmap_header_t hdr;
+                    memset(&hdr, 0, sizeof(hdr));
+                    hdr.alphabet_size = copy->alphabet_size;
+                    hdr.num_keys = copy->num_keys;
+                    if (copy->alphabet_size <= NUM_CHARS)
+                        memcpy(hdr.alphabet, copy->alphabet, copy->alphabet_size);
+                    file_mmap_array_t arrays[3] = {
+                        { .data = copy->nodes->a, .elem_size = sizeof(trie_node_t),      .count = copy->nodes->n },
+                        { .data = copy->data->a,  .elem_size = sizeof(trie_data_node_t), .count = copy->data->n },
+                        { .data = copy->tail->a,  .elem_size = 1,                        .count = copy->tail->n },
+                    };
+                    if (file_mmap_cache_build(cache_path, TRIE_MMAP_MAGIC, TRIE_MMAP_VERSION,
+                            src, (uint64_t)off, (uint64_t)(end - off), &hdr, sizeof(hdr), arrays, 3)) {
+                        base = file_mmap_cache_open(cache_path, TRIE_MMAP_MAGIC, TRIE_MMAP_VERSION,
+                                src, (uint64_t)off, &th, sizeof(trie_mmap_header_t), refs, 3, &disk, &map_len);
+                        if (base != NULL) {
+                            trie_t *trie = trie_from_mmap(base, map_len, (const trie_mmap_header_t *)th, refs);
+                            if (trie != NULL) {
+                                trie_destroy(copy);
+                                free(cache_path);
+                                return trie;   // file already positioned past the trie
+                            }
+                        }
+                    }
+                }
+                free(cache_path);
+                return copy;
+            }
+        }
+    }
+#else
+    (void)path;
+#endif
+    return trie_read(file);
 }
 
 trie_t *trie_load(char *path) {

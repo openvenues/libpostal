@@ -76,6 +76,12 @@ typedef struct trie {
     uint8_t alpha_map[NUM_CHARS];
     uint32_t alphabet_size;
     uint32_t num_keys;
+    // When loaded via the mmap cache, nodes/data/tail point into a shared
+    // read-only mapping rather than being individually malloc'd; trie_destroy
+    // then munmaps instead of freeing them.
+    bool is_mmap;
+    void *mmap_base;
+    size_t mmap_len;
 } trie_t;
 
 trie_t *trie_new_alphabet(uint8_t *alphabet, uint32_t alphabet_size);
@@ -144,6 +150,10 @@ bool trie_write(trie_t *self, FILE *file);
 bool trie_save(trie_t *self, char *path);
 
 trie_t *trie_read(FILE *file);
+// Like trie_read, but uses the optional shared mmap cache (see file_utils.h,
+// LIBPOSTAL_MMAP_CACHE) keyed on the source file `path` and the trie's offset
+// within it. When caching is disabled or `path` is NULL this is just trie_read.
+trie_t *trie_read_cached(FILE *file, const char *path);
 trie_t *trie_load(char *path);
 
 void trie_destroy(trie_t *self);

@@ -45,7 +45,10 @@ bool crf_tagger_predict(crf_t *self, void *tagger, void *context, cstring_array 
 bool crf_write(crf_t *self, FILE *f);
 bool crf_save(crf_t *self, char *filename);
 
-crf_t *crf_read(FILE *f);
+// `path` is the source file path, used for the optional shared mmap cache of the
+// model's tries and weight matrices (see LIBPOSTAL_MMAP_CACHE in file_utils.h).
+// Pass NULL to disable caching for this read.
+crf_t *crf_read(FILE *f, const char *path);
 crf_t *crf_load(char *filename);
 
 void crf_destroy(crf_t *self);
